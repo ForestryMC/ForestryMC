@@ -1,0 +1,149 @@
+/*******************************************************************************
+ * Copyright 2011-2014 by SirSengir
+ * 
+ * This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+ * 
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/.
+ ******************************************************************************/
+package forestry.core.gui.slots;
+
+import java.util.Collection;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.genetics.ISpeciesRoot;
+import forestry.core.config.Defaults;
+import forestry.core.config.ForestryItem;
+import forestry.core.interfaces.ICrafter;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StackUtils;
+
+/**
+ * Slot which only specific items. (With permission by RichardG.)
+ *
+ * @author Richard
+ */
+public class SlotCustom extends SlotForestry {
+
+	protected Object[] items;
+	private boolean exclusion;
+	private ICrafter crafter;
+	private String blockedTexture = "slots/blocked";
+
+	public SlotCustom(IInventory iinventory, int i, int j, int k, boolean exclusion) {
+		super(iinventory, i, j, k);
+		items = new Object[0];
+		this.exclusion = exclusion;
+	}
+
+	/*public SlotCustom(IInventory iinventory, ArrayList items, int i, int j, int k) {
+		this(iinventory, i, j, k, items.toArray());
+	}*/
+
+	public SlotCustom(IInventory iinventory, Collection<?> items, int i, int j, int k) {
+		this(iinventory, i, j, k, items.toArray());
+	}
+
+	public SlotCustom(IInventory iinventory, int i, int j, int k, boolean exclusion, Object... items) {
+		this(iinventory, i, j, k, items);
+		this.exclusion = exclusion;
+	}
+
+	public SlotCustom(IInventory iinventory, int i, int j, int k, Object... items) {
+		super(iinventory, i, j, k);
+		this.items = items;
+	}
+
+	public SlotCustom setCrafter(ICrafter crafter) {
+		this.crafter = crafter;
+		return this;
+	}
+
+	@Override
+	public boolean isItemValid(ItemStack itemstack) {
+		if (itemstack == null)
+			return false;
+		if (!inventory.isItemValidForSlot(getSlotIndex(), itemstack))
+			return false;
+
+		if (exclusion)
+			return !determineValidity(itemstack);
+		else
+			return determineValidity(itemstack);
+	}
+
+	@Override
+	public boolean getHasStack() {
+		if (crafter != null && !crafter.canTakeStack(getSlotIndex()))
+			return false;
+		else
+			return super.getHasStack();
+	}
+
+	@Override
+	public ItemStack decrStackSize(int i) {
+		if (crafter != null && !crafter.canTakeStack(getSlotIndex()))
+			return null;
+		else
+			return super.decrStackSize(i);
+	}
+
+	@Override
+	public void onPickupFromSlot(EntityPlayer player, ItemStack itemStack) {
+		if (crafter != null)
+			crafter.takenFromSlot(getSlotIndex(), true, player);
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private boolean determineValidity(ItemStack itemstack) {
+		for (Object filter : items) {
+			if (filter == null)
+				continue;
+			if (filter instanceof Class) {
+				Block block = StackUtils.getBlock(itemstack);
+
+				if (block != null && ((Class) filter).isAssignableFrom(block.getClass())) return true;
+				if (((Class) filter).isAssignableFrom(itemstack.getItem().getClass())) return true;
+			} else if (filter instanceof ItemStack) {
+				if (((ItemStack) filter).getItemDamage() == Defaults.WILDCARD && itemstack.getItem() == ((ItemStack) filter).getItem())
+					return true;
+				else if (itemstack.isItemEqual((ItemStack) filter))
+					return true;
+			} else if (filter instanceof Block) {
+				if (StackUtils.equals((Block) filter, itemstack)) return true;
+			} else if (filter instanceof Item) {
+				if (itemstack.getItem() == (Item) filter) return true;
+			} else if (filter instanceof ForestryItem) {
+				if (((ForestryItem) filter).isItemEqual(itemstack)) return true;
+			} else if (filter instanceof ISpeciesRoot) {
+				if (((ISpeciesRoot) filter).isMember(itemstack)) return true;
+			} else {
+				throw new RuntimeException("invalid filter item specified: "+filter+" ("+filter.getClass()+")");
+			}
+		}
+
+		return false;
+	}
+
+	public SlotCustom setBlockedTexture(String ident) {
+		blockedTexture = ident;
+		return this;
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public IIcon getBackgroundIconIndex() {
+		if (!inventory.isItemValidForSlot(getSlotIndex(), null))
+			return TextureManager.getInstance().getDefault(blockedTexture);
+		else
+			return null;
+	}
+}

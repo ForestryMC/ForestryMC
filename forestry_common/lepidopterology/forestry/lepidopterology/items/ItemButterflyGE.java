@@ -1,0 +1,214 @@
+/*******************************************************************************
+ * Copyright 2011-2014 by SirSengir
+ * 
+ * This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+ * 
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/.
+ ******************************************************************************/
+package forestry.lepidopterology.items;
+
+import java.util.List;
+
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.core.Tabs;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IIndividual;
+import forestry.api.lepidopterology.EnumFlutterType;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.IButterflyNursery;
+import forestry.core.config.Config;
+import forestry.core.genetics.ItemGE;
+import forestry.core.network.PacketFXSignal;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.Utils;
+import forestry.lepidopterology.entities.EntityButterfly;
+import forestry.plugins.PluginLepidopterology;
+
+public class ItemButterflyGE extends ItemGE {
+
+	EnumFlutterType type;
+
+	public ItemButterflyGE(EnumFlutterType type) {
+		super();
+		setCreativeTab(Tabs.tabLepidopterology);
+		this.type = type;
+	}
+
+	@Override
+	protected int getDefaultPrimaryColour() {
+		return 0;
+	}
+
+	@Override
+	protected int getDefaultSecondaryColour() {
+		return 0;
+	}
+
+	@Override
+	protected IIndividual getIndividual(ItemStack itemstack) {
+		return PluginLepidopterology.butterflyInterface.getMember(itemstack);
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack itemstack) {
+
+		if (itemstack.getTagCompound() == null)
+			return "???";
+
+		IButterfly butterfly = PluginLepidopterology.butterflyInterface.getMember(itemstack);
+		if(butterfly == null)
+			return "???";
+
+		return butterfly.getDisplayName();
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
+		addCreativeItems(itemList, true);
+	}
+
+	public void addCreativeItems(List<ItemStack> itemList, boolean hideSecrets) {
+
+		for (IIndividual individual : PluginLepidopterology.butterflyInterface.getIndividualTemplates()) {
+			// Don't show secret butterflies unless ordered to.
+			if (hideSecrets && individual.isSecret() && !Config.isDebug)
+				continue;
+
+			itemList.add(PluginLepidopterology.butterflyInterface.getMemberStack(individual, type.ordinal()));
+		}
+	}
+
+	@Override
+	public boolean onEntityItemUpdate(EntityItem entityItem) {
+		if(type != EnumFlutterType.BUTTERFLY)
+			return false;
+		if(!Proxies.common.isSimulating(entityItem.worldObj) || entityItem.ticksExisted < 80)
+			return false;
+		if(entityItem.worldObj.getTotalWorldTime() % 24 != 0)
+			return false;
+
+		IButterfly butterfly = PluginLepidopterology.butterflyInterface.getMember(entityItem.getEntityItem());
+		if(butterfly == null)
+			return false;
+
+		if(!butterfly.canTakeFlight(entityItem.worldObj, entityItem.posX, entityItem.posY, entityItem.posZ))
+			return false;
+
+		if(entityItem.worldObj.countEntities(EntityButterfly.class) > PluginLepidopterology.entityConstraint)
+			return false;
+
+		if(Utils.spawnEntity(entityItem.worldObj, new EntityButterfly(entityItem.worldObj, butterfly), entityItem.posX, entityItem.posY, entityItem.posZ) != null) {
+			if(entityItem.getEntityItem().stackSize > 1)
+				entityItem.getEntityItem().stackSize--;
+			else
+				entityItem.setDead();
+			return true;
+		}
+
+		return false;
+	}
+
+	/* ICONS FOR SERUMS */
+	@Override
+	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
+		if (!itemstack.hasTagCompound())
+			return super.getColorFromItemStack(itemstack, renderPass);
+
+		return getColourFromSpecies(AlleleManager.alleleRegistry.getIndividual(itemstack).getGenome().getPrimary(), renderPass);
+	}
+
+	@Override
+	public int getColourFromSpecies(IAlleleSpecies species, int renderPass) {
+		if (species != null)
+			return species.getIconColour(renderPass);
+		else
+			return 0xffffff;
+
+	}
+
+	@Override
+	public boolean requiresMultipleRenderPasses() {
+		return true;
+	}
+
+	@Override
+	public int getRenderPasses(int metadata) {
+		return 2;
+	}
+
+	/* ICONS */
+	@SideOnly(Side.CLIENT)
+	private IIcon[] icons;
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerIcons(IIconRegister register) {
+		icons = new IIcon[2];
+		switch(this.type) {
+		case CATERPILLAR:
+			icons[0] = TextureManager.getInstance().registerTex(register, "caterpillar.body");
+			icons[1] = TextureManager.getInstance().registerTex(register, "caterpillar.body2");
+			break;
+		default:
+			icons[0] = TextureManager.getInstance().registerTex(register, "liquids/jar.contents");
+			icons[1] = TextureManager.getInstance().registerTex(register, "liquids/jar.bottle");
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public IIcon getIconFromDamageForRenderPass(int i, int j) {
+		if (j > 0)
+			return icons[1];
+		else
+			return icons[0];
+	}
+
+	@Override
+	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int par7, float facingX, float facingY, float facingZ) {
+
+		if (!Proxies.common.isSimulating(world))
+			return false;
+
+		IButterfly flutter = PluginLepidopterology.butterflyInterface.getMember(itemstack);
+		if(flutter == null)
+			return false;
+
+		if(type == EnumFlutterType.CATERPILLAR) {
+
+			TileEntity target = world.getTileEntity(x, y, z);
+			if(!(target instanceof IButterflyNursery))
+				return false;
+
+			IButterflyNursery pollinatable = (IButterflyNursery)target;
+			if(!pollinatable.canNurse(flutter))
+				return false;
+
+			pollinatable.setCaterpillar(flutter);
+			Proxies.common.sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.LEAF, world, x, y, z,
+					world.getBlock(x, y, z), 0);
+			if (!player.capabilities.isCreativeMode)
+				itemstack.stackSize--;
+			return true;
+
+		} else
+			return false;
+	}
+
+
+}

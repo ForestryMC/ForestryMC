@@ -1,0 +1,93 @@
+/*******************************************************************************
+ * Copyright 2011-2014 by SirSengir
+ * 
+ * This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+ * 
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/.
+ ******************************************************************************/
+package forestry.apiculture.genetics;
+
+import java.lang.reflect.Field;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IGenome;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.Vect;
+
+public class MutationEMC extends MutationReqRes {
+
+	int emcRequired = 0;
+	Class<?> condenserClass;
+	Field emcField;
+
+	public MutationEMC(IAllele allele0, IAllele allele1, IAllele[] template, int chance, ItemStack blockRequired, Class<?> condenserClass, Field emcField,
+			int emcRequired) {
+		super(allele0, allele1, template, chance, blockRequired);
+
+		this.condenserClass = condenserClass;
+		this.emcField = emcField;
+		this.emcRequired = emcRequired;
+	}
+
+	@Override
+	public float getChance(IBeeHousing housing, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
+		float chance = super.getChance(housing, allele0, allele1, genome0, genome1);
+
+		// If we don't have any chance, return at once.
+		if (chance <= 0)
+			return 0;
+
+		if (emcRequired <= 0)
+			return chance;
+
+		World world = housing.getWorld();
+
+		Vect[] possibleTargets = new Vect[] { new Vect(housing.getXCoord() + 1, housing.getYCoord(), housing.getZCoord()),
+				new Vect(housing.getXCoord() - 1, housing.getYCoord(), housing.getZCoord()),
+				new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord() + 1),
+				new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord() - 1) };
+
+		for (Vect target : possibleTargets) {
+			if (!world.blockExists(target.x, target.y, target.z))
+				continue;
+
+			TileEntity entity = world.getTileEntity(target.x, target.y, target.z);
+			if (entity == null)
+				continue;
+
+			if (!condenserClass.isInstance(entity)) {
+				Proxies.log.warning("Did not find a relay at " + target.toString());
+				continue;
+			}
+
+			int emc = 0;
+			try {
+				emc = emcField.getInt(entity);
+			} catch (Exception ex) {
+				Proxies.log.warning("Failed to fetch EMC information.");
+			}
+
+			if (emc < emcRequired * 80)
+				continue;
+
+			boolean removedEMC = false;
+			try {
+				emcField.set(entity, emc - (emcRequired * 80));
+				removedEMC = true;
+			} catch (Exception ex) {
+				Proxies.log.warning("Failed to set EMC information.");
+			}
+
+			if (removedEMC)
+				return chance;
+
+		}
+
+		return 0;
+	}
+}

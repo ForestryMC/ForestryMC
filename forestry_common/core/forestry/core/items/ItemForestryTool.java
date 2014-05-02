@@ -1,0 +1,81 @@
+/*******************************************************************************
+ * Copyright 2011-2014 by SirSengir
+ * 
+ * This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+ * 
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/.
+ ******************************************************************************/
+package forestry.core.items;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
+
+import forestry.core.proxy.Proxies;
+
+public class ItemForestryTool extends ItemForestry {
+
+	private final ItemStack remnants;
+	private final float efficiencyOnProperMaterial;
+	private final Block[] blocksEffectiveAgainst;
+
+	public ItemForestryTool(Block[] blocksEffectiveAgainst, ItemStack remnants) {
+		super();
+		this.blocksEffectiveAgainst = blocksEffectiveAgainst;
+		this.maxStackSize = 1;
+		efficiencyOnProperMaterial = 6F;
+		setMaxDamage(200);
+		this.remnants = remnants;
+	}
+
+	@Override
+	public float func_150893_a(ItemStack itemstack, Block block) {
+		for (int i = 0; i < blocksEffectiveAgainst.length; i++)
+			if (blocksEffectiveAgainst[i] == block)
+				return efficiencyOnProperMaterial;
+		return 1.0F;
+	}
+
+	@Override
+	public float getDigSpeed(ItemStack itemstack, Block block, int md) {
+		if (ForgeHooks.isToolEffective(itemstack, block, md))
+			return efficiencyOnProperMaterial;
+		return func_150893_a(itemstack, block);
+	}
+
+	@SubscribeEvent
+	public void onDestroyCurrentItem(PlayerDestroyItemEvent event) {
+		if (event.original == null || event.original.getItem() != this)
+			return;
+
+		if (Proxies.common.isSimulating(event.entityPlayer.worldObj)) {
+			EntityItem entity = new EntityItem(event.entityPlayer.worldObj, event.entityPlayer.posX, event.entityPlayer.posY, event.entityPlayer.posZ,
+					remnants.copy());
+			event.entityPlayer.worldObj.spawnEntityInWorld(entity);
+		}
+	}
+
+	@Override
+	public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block, int j, int k, int l, EntityLivingBase entityliving) {
+		itemstack.damageItem(1, entityliving);
+		return true;
+	}
+
+	/*@Override
+	public float getDamageVsEntity(Entity entity, ItemStack itemstack) {
+		return 1;
+	}*/
+
+	@Override
+	public boolean isFull3D() {
+		return true;
+	}
+
+}

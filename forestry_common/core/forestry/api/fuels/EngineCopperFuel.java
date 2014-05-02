@@ -1,0 +1,33 @@
+/*******************************************************************************
+ * Copyright 2011-2014 by SirSengir
+ * 
+ * This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+ * 
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/.
+ ******************************************************************************/
+package forestry.api.fuels;
+
+import net.minecraft.item.ItemStack;
+
+public class EngineCopperFuel {
+
+	/**
+	 * Item that is valid fuel for a peat-fired engine.
+	 */
+	public final ItemStack fuel;
+	/**
+	 * Power produced by this fuel per work cycle.
+	 */
+	public final int powerPerCycle;
+	/**
+	 * Amount of work cycles this item lasts before being consumed.
+	 */
+	public final int burnDuration;
+
+	public EngineCopperFuel(ItemStack fuel, int powerPerCycle, int burnDuration) {
+		this.fuel = fuel;
+		this.powerPerCycle = powerPerCycle;
+		this.burnDuration = burnDuration;
+	}
+
+}

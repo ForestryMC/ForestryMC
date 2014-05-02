@@ -1,0 +1,123 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		maven {
+			name = "forge"
+			url = "http://files.minecraftforge.net/maven"
+		}
+		maven {
+			name = "sonatype"
+			url = "https://oss.sonatype.org/content/repositories/snapshots/"
+		}
+	}
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:1.1-SNAPSHOT'
+	}
+}
+
+apply plugin: 'forge'
+
+ext.buildnumber = createBuildNumber()
+version = "2.4.0.0-" + buildnumber
+group= "net.sengir.forestry" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "forestry"
+
+ext.langDir = "../Forestry-Localization"
+ext.srcbcDir = "../BuildCraft/common"
+ext.srcIc2Dir = "../IC2/src"
+ext.srcCraftguideDir = "../CraftGuide/src"
+
+minecraft {
+	version = "1.7.2-10.12.0.1032"
+	assetDir = "eclipse/assets"
+	
+	replace '@VERSION@', project.version
+	replace '@BUILD_NUMBER@', project.buildnumber
+	replace '$___$', rndString()
+	replace '$____$', rndString()
+	replace '$_____$', rndString()
+	replace '$______$', rndString()
+	replace '$_______$', rndString()
+	replace '$________$', rndString()
+	replace '$_________$', rndString()
+	replace '$__________$', rndString()
+}
+
+sourceSets {
+	api {
+		java {
+			srcDir project.srcCraftguideDir
+			include '**/CraftGuide/api/**'
+		}
+	}
+	
+	main {
+		java {
+			srcDirs file('forestry_common').listFiles()
+			include 'forestry/**'
+			
+			srcDir project.srcbcDir
+			include 'buildcraft/api/**'
+			
+			srcDir project.srcIc2Dir
+			include 'api/**'
+		}
+		resources {
+			srcDir 'forestry_resources'
+			srcDir project.langDir
+		}
+	}
+}
+
+processResources {
+	// replace stuff in mcmod.info, nothing else
+	from(sourceSets.main.resources.srcDirs) {
+		include 'mcmod.info'
+				
+		// replace version and mcversion
+		expand 'version':project.version, 'mcversion':project.minecraft.version
+	}
+		
+	// copy everything else, thats not the mcmod.info
+	from(sourceSets.main.resources.srcDirs) {
+		exclude 'mcmod.info'
+		exclude '**/*.md'
+	}
+}
+
+task apiZip(type: Jar) {
+	from sourceSets.main.allSource
+	include 'forestry/api/**'
+	classifier = 'api'
+	extension = 'zip'
+}
+
+task deobfJar(type: Jar) {
+	from sourceSets.main.output
+	classifier = 'dev'
+}
+
+build.dependsOn apiZip, deobfJar
+
+def rndString() {
+	String AB = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+	Random rnd = new Random()
+	String ret = ""
+	int max = rnd.nextInt(18) + 3
+	
+	for (int i = 0; i < max; i++) {
+		ret += AB.charAt(rnd.nextInt(AB.length()))
+	}
+	
+	int rndStart = rnd.nextInt(6) + 2
+	rndStart = rndStart >= ret.length() - 4 ? 3 : rndStart;
+	
+	return ret.substring(0, rndStart).toLowerCase(Locale.ENGLISH) + ret.substring(rndStart)
+}
+
+def createBuildNumber() {
+	ant.buildnumber()
+
+	return ant.antProject.properties['build.number']
+}
+

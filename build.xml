@@ -1,0 +1,352 @@
+<project name="Forestry" basedir="../../../" default="main">
+	
+	<property name="build.dir"			value="build/forestry" />
+	<property name="classes.dir" 		value="${build.dir}/classes" />
+	<property name="api.dir"			value="${build.dir}/api" />
+	<property name="jar.dir"			value="build/jar" />
+	<property name="resource.dir"		value="build/mc.dev" />
+	
+	<property name="src.dir"			value="sources/forestry" />
+	<property name="lang.dir"			value="sources/forestry-localization" />
+	<property name="src.bc.dir"			value="sources/buildcraft" />
+	<property name="src.ic2.dir"		value="sources/ic2" />
+	<property name="src.craftguide.dir"	value="sources/CraftGuide/src" />
+	
+	<property name="forge.dir"			value="${build.dir}/forge" />
+	<property name="mcp.dir"			value="${forge.dir}/mcp" />
+	
+	<property name="clientsrc.dir"		value="${mcp.dir}/src/minecraft" />
+    
+	<property name="mc.version"			value="1.6.4"/>
+    <property name="forge.version"		value="9.11.1.942"/>
+    <property name="forestry.version"   value="2.3.1.1"/>
+    <property name="api.version"        value="2.3.1.0"/>
+
+	<!-- for local deployment only, not used by main -->
+	<property name="key.dir" 			value="forestryKey" />
+	<property name="deploy.type"		value="releases" />
+	<property name="deploy.root"		value="c:\users\kanzlei\Dropbox\Public\forestry" />
+	<property name="deploy.dir"			value="${deploy.root}\${deploy.type}" />
+	<property name="deploy.javadoc"		value="${deploy.root}\javadoc" />
+	<property name="share.dir"			value="c:\users\kanzlei\Dropbox\Shared\forestry" />
+	<property name="local.dir"			value="%appdata%\.minecraft\mods" />
+	
+	<!-- TARGETS -->
+	<target name="clean">
+		<delete dir="${clientsrc.dir}" />
+		<mkdir dir="${clientsrc.dir}" />
+		<copy todir="${clientsrc.dir}">
+			<fileset dir="${clientsrc.dir}.orig" />
+		</copy>
+		
+		<delete dir="${mcp.dir}/reobf" />
+	</target>
+	
+	<target name="forgeclean">
+		<!-- Extract Forge -->
+		<echo message="Unpacking Forge..." />
+        <unzip dest="${build.dir}">
+            <fileset dir="${resource.dir}">
+                <include name="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
+            </fileset>
+        </unzip>
+        
+        <chmod file="${forge.dir}/install.sh" perm="+x"/>
+		
+        <!-- Install forge -->
+		<echo message="Installing Forge..." />
+        <exec dir="${forge.dir}" executable="cmd" osfamily="windows">
+            <arg line="/c install.cmd"/>
+        </exec>
+        
+        <exec dir="${forge.dir}" executable="sh" osfamily="unix">
+            <arg value="install.sh" />
+        </exec>
+		
+		<mkdir dir="${clientsrc.dir}.orig" />
+		<copy todir="${clientsrc.dir}.orig">
+			<fileset dir="${clientsrc.dir}" />
+		</copy>
+	</target>
+
+	<target name="setup.base">
+		
+		<javac srcdir="${src.dir}/forestry_resources/" includes="RandString.java" failonerror="true" />
+		<java classpath="${src.dir}/forestry_resources/" classname="RandString" failonerror="true" />
+		
+		<loadfile property="rn.weird0" srcFile="${build.dir}/rnd.string.0.txt"/>
+		<loadfile property="rn.weird1" srcFile="${build.dir}/rnd.string.1.txt"/>
+		<loadfile property="rn.weird2" srcFile="${build.dir}/rnd.string.2.txt"/>
+		<loadfile property="rn.weird3" srcFile="${build.dir}/rnd.string.3.txt"/>
+		<loadfile property="rn.weird4" srcFile="${build.dir}/rnd.string.4.txt"/>
+		<loadfile property="rn.weird5" srcFile="${build.dir}/rnd.string.5.txt"/>
+		<loadfile property="rn.weird6" srcFile="${build.dir}/rnd.string.6.txt"/>
+		<loadfile property="rn.weird7" srcFile="${build.dir}/rnd.string.7.txt"/>		
+		
+		<!-- Pull localizations -->
+		<echo message="Pulling localizations..." />
+		<exec dir="${lang.dir}" executable="git" osfamily="windows" failonerror="true">
+			<arg line="pull" />
+		</exec>
+
+		<!-- Copy IC2 API -->
+		<echo message="Adding IC2 API..." />
+	    <copy todir="${clientsrc.dir}">
+	    	<fileset dir="${src.ic2.dir}" />
+	    </copy>
+		
+		<!-- Copy CraftGuide API -->
+		<echo message="Adding CraftGuide API..." />
+	    <copy todir="${clientsrc.dir}">
+	    	<fileset dir="${src.craftguide.dir}">
+				<include name="**/api/**" />
+			</fileset>
+	    </copy>
+		
+		<!-- Set build number -->
+		<buildnumber file="${src.dir}/forestry_resources/build.number"/>
+		
+		<!-- Copy Forestry source -->
+		<echo message="Adding Forestry..." />
+        <copy todir="${clientsrc.dir}">
+            <fileset dir="${src.dir}/forestry_common">
+                <include name="**/forestry/**" />
+            </fileset>
+		</copy>
+		
+		<!--<loadfile srcfile="${key.dir}/fingerprint.txt" property="key.fingerprint" />-->
+
+        <copy todir="${clientsrc.dir}" overwrite="true" failonerror="true">
+           <fileset dir="${src.dir}/forestry_common">
+                <include name="**/Version.java" />
+                <include name="**/package-info.java" />
+            </fileset>
+           	<filterset>
+            	<filter token="VERSION" value="${forestry.version}" />
+           		<filter token="BUILD_NUMBER" value="${build.number}" />
+           		<!--<filter token="FINGERPRINT" value="${key.fingerprint}" />-->
+           	</filterset>
+         </copy>
+
+        <copy todir="${clientsrc.dir}" overwrite="true" failonerror="true">
+           <fileset dir="${src.dir}/forestry_common">
+           		<include name="**/PluginCore.java" />
+            </fileset>
+           	<filterset begintoken="$" endtoken="$">
+            	<filter token="___" value="${rn.weird0}" />
+            	<filter token="____" value="${rn.weird1}" />
+            	<filter token="_____" value="${rn.weird2}" />
+            	<filter token="______" value="${rn.weird3}" />
+            	<filter token="_______" value="${rn.weird4}" />
+            	<filter token="________" value="${rn.weird5}" />
+            	<filter token="_________" value="${rn.weird6}" />
+            	<filter token="__________" value="${rn.weird7}" />
+           	</filterset>
+         </copy>
+
+	</target>
+	
+	<!-- SETUP FOR BC 3 -->
+	<target name="setup" depends="setup.base">
+		
+		<!-- Copy BC source -->
+		<echo message="Adding BuildCraft..." />
+        <copy todir="${clientsrc.dir}">
+            <fileset dir="${src.bc.dir}/common">
+                <exclude name="**/buildcraft/devel/*"/>
+            </fileset>
+        </copy>
+		<!-- Copy integration -->
+        <copy todir="${clientsrc.dir}">
+            <fileset dir="${src.dir}/pipes_common">
+                <include name="**/forestry/**" />
+            </fileset>
+        </copy>
+	</target>
+		
+	<!-- COMPILATION -->
+	<target name="compile">
+		
+        <!-- Recompile -->
+        <exec dir="${mcp.dir}" executable="cmd" osfamily="windows">
+            <arg line="/c recompile.bat"/>
+        </exec>
+        
+        <exec dir="${mcp.dir}" executable="sh" osfamily="unix">
+            <arg value="recompile.sh" />
+        </exec>
+        
+        <!-- Reobf -->
+        <exec dir="${mcp.dir}" executable="cmd" osfamily="windows">
+            <arg line="/c reobfuscate_srg.bat"/>
+        </exec>
+        
+        <exec dir="${mcp.dir}" executable="sh" osfamily="unix">
+            <arg value="reobfuscate_srg.sh" />
+        </exec>
+        
+		<!-- Copy unobfuscated classes for dev jar -->
+		<copy todir="${classes.dir}/unobf">
+            <fileset dir="${mcp.dir}/bin/minecraft">
+               	<include name="**/forestry/**" />
+               	<exclude name="**/forestry/api/**" />
+            </fileset>
+		</copy>
+        <copy todir="${classes.dir}/unobf_api">
+            <fileset dir="${mcp.dir}/bin/minecraft">
+               	<include name="**/forestry/api/**" />
+               	<include name="**/ic2/api/**" />
+               	<include name="**/buildcraft/api/**" />
+            </fileset>
+        </copy>
+        <copy todir="${classes.dir}/unobf_api">
+            <fileset dir="${src.dir}/forestry_resources">
+                <exclude name="build.xml"/>
+            	<exclude name="build.number"/>
+            	<exclude name="RandString.java"/>
+            	<exclude name="RandString.class"/>
+            </fileset>
+        </copy>
+        <copy todir="${classes.dir}/unobf_api" overwrite="true" failonerror="true">
+            <fileset dir="${src.dir}/forestry_resources">
+                <include name="mcmod.info"/>
+            </fileset>
+           	<filterset>
+        		<filter token="VERSION" value="${forestry.version}_dev (${build.number}_dev)" />
+       			<filter token="MCVERSION" value="${mc.version}" />
+            </filterset>
+        </copy>
+
+		<!-- Copy Forestry classes -->
+        <copy todir="${classes.dir}/client">
+            <fileset dir="${mcp.dir}/reobf/minecraft">
+               	<include name="**/forestry/**" />
+               	<exclude name="**/forestry/api/**" />
+            </fileset>
+        </copy>
+		
+		<!-- Copy Forestry resources -->
+        <copy todir="${classes.dir}/api">
+            <fileset dir="${src.dir}/forestry_resources">
+                <exclude name="build.xml"/>
+            	<exclude name="build.number"/>
+            	<exclude name="RandString.java"/>
+            	<exclude name="RandString.class"/>
+            </fileset>
+        </copy>
+        <copy todir="${classes.dir}/api" overwrite="true" failonerror="true">
+            <fileset dir="${src.dir}/forestry_resources">
+                <include name="mcmod.info"/>
+            </fileset>
+           	<filterset>
+        		<filter token="VERSION" value="${forestry.version} (${build.number})" />
+       			<filter token="MCVERSION" value="${mc.version}" />
+            </filterset>
+        </copy>
+    	<!-- Copy localizations -->
+    	<copy todir="${classes.dir}/api">
+    		<fileset dir="${lang.dir}">
+                <exclude name="README.md"/>
+    		</fileset>
+    	</copy>
+
+		<!-- Copy compiled API seperately to not sign them -->
+        <copy todir="${classes.dir}/api">
+            <fileset dir="${mcp.dir}/reobf/minecraft">
+               	<include name="**/forestry/api/**" />
+               	<include name="**/ic2/api/**" />
+               	<include name="**/buildcraft/api/**" />
+            </fileset>
+        </copy>
+	
+		<!-- Copy Forestry api -->
+    	<copy todir="${api.dir}" overwrite="true">
+        	<fileset dir="${src.dir}/forestry_common/core">
+            	<include name="**/forestry/api/**" />
+        	</fileset>
+         </copy>
+
+
+	</target>
+	
+	<target name="javadoc">
+		<javadoc
+			destdir="${deploy.javadoc}"
+			classpath="${mcp.dir}/bin/minecraft"
+			windowtitle="Forestry API ${forestry.version}"
+			author="true"
+			version="true">
+		    <packageset dir="${clientsrc.dir}/core" defaultexcludes="yes">
+		      <include name="forestry/api/**"/>
+		    </packageset>
+		</javadoc>
+	</target>
+	
+	<!-- Package the jars -->
+	<target name="package" depends="clean,setup,compile">
+		
+		<!--<loadfile srcfile="${key.dir}/pass.txt" property="key.pass" />-->
+			
+		<copy todir="${jar.dir}">
+            <fileset dir="${classes.dir}/client">
+                <include name="CHANGELOG.txt" />
+            </fileset>
+		</copy>
+		
+		<echo message="Packaging dev jar..." />
+        <jar destfile="${jar.dir}/forestry-A-${forestry.version}_dev.jar" basedir="${classes.dir}/unobf"/>
+		<!--<signjar jar="${jar.dir}/forestry-A-${forestry.version}_dev.jar" keystore="${key.dir}/forestryKey" alias="sirsengir" storepass="${key.pass}"/>-->
+		<zip update="true" destfile="${jar.dir}/forestry-A-${forestry.version}_dev.jar">
+			<fileset dir="${classes.dir}/unobf_api" />
+		</zip>
+		
+		<echo message="Packaging basic jar..." />
+        <jar destfile="${jar.dir}/forestry-A-${forestry.version}-${build.number}.jar" basedir="${classes.dir}/client"/>
+		<!--<echo message="Signing basic jar..." />
+		<signjar jar="${jar.dir}/forestry-A-${forestry.version}.jar" keystore="${key.dir}/forestryKey" alias="sirsengir" storepass="${key.pass}"/>-->
+
+		<echo message="Adding APIs to signed jar..." />
+		<zip update="true" destfile="${jar.dir}/forestry-A-${forestry.version}-${build.number}.jar">
+			<fileset dir="${classes.dir}/api" />
+		</zip>
+
+		<echo message="Packaging API source distribution..." />
+		<zip destfile="${jar.dir}/forestry-api-${api.version}.zip" basedir="${api.dir}" update="true" />
+	</target>
+	
+	<!-- Deploy to private share -->
+	<target name="deploy.private" depends="clean,package">		
+        <copy todir="${local.dir}">
+            <fileset dir="${jar.dir}">
+            	<include name="forestry-*.jar" />
+            </fileset>
+        </copy>
+        <copy todir="${share.dir}/${forestry.version}">
+            <fileset dir="${jar.dir}">
+            	<include name="forestry-*.jar" />
+            	<include name="forestry-api-*.zip" />
+            	<include name="CHANGELOG.txt" />
+            </fileset>
+        </copy>
+	</target>
+	
+	<!-- Deploy to public share -->
+	<target name="deploy.public" depends="deploy.private,javadoc">
+        <copy todir="${deploy.dir}/${forestry.version}">
+            <fileset dir="${jar.dir}">
+            	<include name="forestry-*.jar" />
+            	<include name="forestry-api-*.zip" />
+            </fileset>
+        </copy>
+		
+		<copy todir="${deploy.root}/changelog">
+			<fileset dir="${src.dir}/forestry_resources/changelog">
+				<include name="*" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<!-- Clean build target without copying of jars -->
+	<target name="main" depends="package" />
+	
+</project>

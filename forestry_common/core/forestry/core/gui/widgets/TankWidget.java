@@ -1,0 +1,113 @@
+/*******************************************************************************
+ * Copyright 2011-2014 by SirSengir
+ * 
+ * This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+ * 
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/.
+ ******************************************************************************/
+package forestry.core.gui.widgets;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+
+import net.minecraftforge.fluids.FluidStack;
+
+import buildcraft.api.tools.IToolPipette;
+import org.lwjgl.opengl.GL11;
+
+import forestry.core.gui.ContainerForestry;
+import forestry.core.gui.ContainerLiquidTanks;
+import forestry.core.gui.WidgetManager;
+import forestry.core.gui.tooltips.ToolTip;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.SpriteSheet;
+import forestry.core.utils.ForestryTank;
+
+/**
+ * Slot for liquid tanks
+ */
+public class TankWidget extends Widget {
+
+	protected int overlayTexX = 176;
+	protected int overlayTexY = 0;
+	protected int slot = 0;
+
+	public TankWidget(WidgetManager manager, int xPos, int yPos, int slot) {
+		super(manager, xPos, yPos);
+		this.slot = slot;
+		this.height = 58;
+	}
+
+	public TankWidget setOverlayOrigin(int x, int y) {
+		overlayTexX = x;
+		overlayTexY = y;
+		return this;
+	}
+
+	public ForestryTank getTank() {
+		return ((ContainerForestry) manager.gui.inventorySlots).getTank(slot);
+	}
+
+	@Override
+	public void draw(int startX, int startY) {
+		if (getTank() == null)
+			return;
+
+		FluidStack contents = getTank().getFluid();
+		if (contents == null || contents.amount <= 0)
+			return;
+		IIcon liquidIcon = contents.getFluid().getIcon(contents);
+		if (liquidIcon == null)
+			return;
+		int squaled = (contents.amount * height) / getTank().getCapacity();
+
+		Proxies.common.bindTexture(SpriteSheet.BLOCKS);
+		int start = 0;
+
+		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
+		while (true) {
+			int x = 0;
+
+			if (squaled > 16) {
+				x = 16;
+				squaled -= 16;
+			} else {
+				x = squaled;
+				squaled = 0;
+			}
+
+			manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos + height - x - start, liquidIcon, 16, 16 - (16 - x));
+			start = start + 16;
+
+			if (x == 0 || squaled == 0)
+				break;
+		}
+
+		Proxies.common.bindTexture(manager.gui.textureFile);
+		manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos, overlayTexX, overlayTexY, 16, 60);
+		GL11.glPopAttrib();
+	}
+
+	@Override
+	public ToolTip getToolTip() {
+		ForestryTank tank = getTank();
+		if (tank == null)
+			return null;
+		return tank.getToolTip();
+	}
+
+	@Override
+	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
+		ItemStack itemstack = manager.minecraft.thePlayer.inventory.getItemStack();
+		if (itemstack == null)
+			return;
+
+		Item held = itemstack.getItem();
+		if (held instanceof IToolPipette && manager.gui.inventorySlots instanceof ContainerLiquidTanks)
+			((ContainerLiquidTanks) manager.gui.inventorySlots).handlePipetteClick(slot, manager.minecraft.thePlayer);
+
+	}
+}

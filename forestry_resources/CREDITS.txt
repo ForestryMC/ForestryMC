@@ -1,0 +1,27 @@
+
+Forestry for Minecraft
+CREDITS
+
+I'd like to thank and mention the following people who helped in the making of this mod or whose own work made it possible:
+
+MCP Team, Searge    - MCP, without which modding Minecraft would be a pain
+SpaceToad           - Minecraft Forge, BuildCraft
+CPW					- FML, Forge
+IC2 Team            - IndustrialCraft 2 API
+Eloraam             - Minecraft Forge
+LexManos            - Minecraft Forge
+Krapht              - Input and generally being a great guy.
+Pahimar		    	- Input, BeeFX and see above.
+Binnie				- Addons, bugfixes
+Mistaqur			- Bugfixes, NEI plugin
+Player		    	- Input, general coding help, helping fix my EU net derps.
+Maeyanie			- Bukkit porting
+Dariys              - Testing, testing, testing and some more testing!
+Direwolf20          - Mod spotlights
+Stylez84            - Mod spotlight and testing
+Crocodine           - Flowcharts/Diagrams
+Ineedabettername    - Testing
+Killgore            - Testing
+Headhunter67        - Testing
+V4sh                - Sprite contribution and testing
+jimeowan            - Original localization class

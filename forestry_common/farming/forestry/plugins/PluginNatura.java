@@ -1,0 +1,107 @@
+/*******************************************************************************
+ * Copyright 2011-2014 by SirSengir
+ * 
+ * This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+ * 
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/.
+ ******************************************************************************/
+package forestry.plugins;
+
+import java.util.ArrayList;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+
+import cpw.mods.fml.common.event.FMLInterModComms;
+import cpw.mods.fml.common.registry.GameRegistry;
+
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.GameMode;
+import forestry.core.config.Defaults;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.LiquidHelper;
+
+public class PluginNatura extends NativePlugin {
+
+	private static final String NATURA = "Natura";
+	
+	public static Block logNatura;
+	public static Block logWillow;
+	
+	public static Block leavesNatura;
+	public static Block saplingNatura;
+	
+	@Override
+	public boolean isAvailable() {
+		return Proxies.common.isModLoaded(NATURA);
+	}
+
+	@Override
+	public void doInit() {
+		super.doInit();
+
+		logNatura = GameRegistry.findBlock(NATURA, "tree");
+		logWillow = GameRegistry.findBlock(NATURA, "willow");
+		leavesNatura = GameRegistry.findBlock(NATURA, "floraleaves");
+		saplingNatura = GameRegistry.findBlock(NATURA, "florasapling");
+		
+		if(saplingNatura != null)
+			FMLInterModComms.sendMessage(Defaults.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingNatura));
+	}
+	
+	@Override protected void registerItems() {}
+	@Override protected void registerBackpackItems() {}
+	@Override protected void registerCrates() {}
+	@Override
+	protected void registerRecipes() {
+		ItemStack seedBarley = GameRegistry.findItemStack(NATURA, "seedBarley", 1);
+		ItemStack seedCotton = GameRegistry.findItemStack(NATURA, "seedCotton", 1);
+		
+		ArrayList<ItemStack> seedList = new ArrayList<ItemStack>();
+		if (seedBarley != null)
+			seedList.add(seedBarley);
+		if (seedCotton != null)
+			seedList.add(seedCotton);
+		
+		int amount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");
+		for (int i = 0; i < seedList.size(); ++i) {
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[] { seedList.get(i) },
+					LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, amount));
+		}
+		
+		ItemStack berryBlight = GameRegistry.findItemStack(NATURA, "berryBlight", 1);
+		ItemStack berryDusk = GameRegistry.findItemStack(NATURA, "berryDusk", 1);
+		ItemStack berrySky = GameRegistry.findItemStack(NATURA, "berrySting", 1);
+		ItemStack berrySting = GameRegistry.findItemStack(NATURA, "berrySting", 1);
+		ItemStack berryRasp = GameRegistry.findItemStack(NATURA, "berryRasp", 1);
+		ItemStack berryBlue = GameRegistry.findItemStack(NATURA, "berryBlue", 1);
+		ItemStack berryBlack = GameRegistry.findItemStack(NATURA, "berryBlack", 1);
+		ItemStack berryMalo = GameRegistry.findItemStack(NATURA, "berryMalo", 1);
+		
+		ArrayList<ItemStack> berries = new ArrayList<ItemStack>();
+		if (berryBlight != null)
+			berries.add(berryBlight);
+		if (berryDusk != null)
+			berries.add(berryDusk);
+		if (berrySky != null)
+			berries.add(berrySky);
+		if (berrySting!= null)
+			berries.add(berrySting);
+		if (berryRasp != null)
+			berries.add(berryRasp);
+		if (berryBlue != null)
+			berries.add(berryBlue);
+		if (berryBlack != null)
+			berries.add(berryBlack);
+		if (berryMalo != null)
+			berries.add(berryMalo);
+		
+		amount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple") / 25;
+		amount = (amount > 1) ? amount : 1; // Produce at least 1 mb of juice.
+		for (int i = 0; i < berries.size(); ++i) {
+			RecipeManagers.squeezerManager.addRecipe(3, new ItemStack[] { berries.get(i) },
+					LiquidHelper.getLiquid(Defaults.LIQUID_JUICE, amount));
+		}
+	}
+
+}

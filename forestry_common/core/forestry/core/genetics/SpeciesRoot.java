@@ -1,0 +1,105 @@
+/*******************************************************************************
+ * Copyright 2011-2014 by SirSengir
+ * 
+ * This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+ * 
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/.
+ ******************************************************************************/
+package forestry.core.genetics;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Random;
+
+import net.minecraft.item.ItemStack;
+
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IChromosome;
+import forestry.api.genetics.IMutation;
+import forestry.api.genetics.ISpeciesRoot;
+
+public abstract class SpeciesRoot implements ISpeciesRoot {
+	
+	/* RESEARCH */
+	LinkedHashMap<ItemStack, Float> researchCatalysts = new LinkedHashMap<ItemStack, Float>();
+	
+	@Override
+	public Map<ItemStack, Float> getResearchCatalysts() {
+		return Collections.unmodifiableMap(researchCatalysts);
+	}
+
+	@Override
+	public void setResearchSuitability(ItemStack itemstack, float suitability) {
+		researchCatalysts.put(itemstack, suitability);
+	}
+
+	/* TEMPLATES */
+	public HashMap<String, IAllele[]> speciesTemplates = new HashMap<String, IAllele[]>();
+
+	@Override
+	public Map<String, IAllele[]> getGenomeTemplates() {
+		return speciesTemplates;
+	}
+	
+	@Override
+	public void registerTemplate(IAllele[] template) {
+		registerTemplate(template[0].getUID(), template);
+	}
+
+	@Override
+	public IAllele[] getRandomTemplate(Random rand) {
+		return speciesTemplates.values().toArray(new IAllele[0][])[rand.nextInt(speciesTemplates.values().size())];
+	}
+
+	@Override
+	public IAllele[] getTemplate(String identifier) {
+		return speciesTemplates.get(identifier);
+	}
+
+	/* MUTATIONS */
+	@Override
+	public Collection<? extends IMutation> getCombinations(IAllele other) {
+		ArrayList<IMutation> combinations = new ArrayList<IMutation>();
+		for (IMutation mutation : getMutations(false))
+			if (mutation.isPartner(other))
+				combinations.add(mutation);
+
+		return combinations;
+	}
+
+	@Override
+	public Collection<? extends IMutation> getPaths(IAllele result, int chromosomeOrdinal) {
+		ArrayList<IMutation> paths = new ArrayList<IMutation>();
+		for (IMutation mutation : getMutations(false))
+			if(mutation.getTemplate()[chromosomeOrdinal] == result)
+				paths.add(mutation);
+		
+		return paths;
+	}
+
+	/* GENOME CONVERSIONS */
+	@Override
+	public IChromosome[] templateAsChromosomes(IAllele[] template) {
+		Chromosome[] chromosomes = new Chromosome[template.length];
+		for (int i = 0; i < template.length; i++)
+			if (template[i] != null)
+				chromosomes[i] = new Chromosome(template[i]);
+
+		return chromosomes;
+	}
+
+	@Override
+	public IChromosome[] templateAsChromosomes(IAllele[] templateActive, IAllele[] templateInactive) {
+		Chromosome[] chromosomes = new Chromosome[templateActive.length];
+		for (int i = 0; i < templateActive.length; i++)
+			if (templateActive[i] != null)
+				chromosomes[i] = new Chromosome(templateActive[i], templateInactive[i]);
+
+		return chromosomes;
+	}
+
+}

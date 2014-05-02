@@ -1,0 +1,106 @@
+/*******************************************************************************
+ * Copyright 2011-2014 by SirSengir
+ * 
+ * This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+ * 
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/.
+ ******************************************************************************/
+package forestry.farming.logic;
+
+import java.util.Collection;
+import java.util.Stack;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
+import forestry.api.farming.Farmables;
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmable;
+import forestry.core.utils.StackUtils;
+import forestry.core.utils.Vect;
+
+public class FarmLogicPoale extends FarmLogic {
+
+	IFarmable[] germlings;
+
+	public FarmLogicPoale(IFarmHousing housing) {
+		super(housing);
+		germlings = Farmables.farmables.get("farmPoales").toArray(new IFarmable[0]);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon() {
+		return Items.reeds.getIconFromDamage(0);
+	}
+
+	@Override
+	public String getName() {
+		if (isManual)
+			return "Manual Reed Farm";
+		else
+			return "Managed Reed Farm";
+	}
+
+	@Override
+	public int getFertilizerConsumption() {
+		return 10;
+	}
+
+	@Override
+	public int getWaterConsumption(float hydrationModifier) {
+		return (int) (20 * hydrationModifier);
+	}
+
+	@Override
+	public boolean isAcceptedResource(ItemStack itemstack) {
+		if (isManual)
+			return false;
+
+		return StackUtils.equals(Blocks.sand, itemstack) || StackUtils.equals(Blocks.dirt, itemstack);
+	}
+
+	@Override
+	public boolean isAcceptedGermling(ItemStack itemstack) {
+		if (isManual)
+			return false;
+
+		return itemstack.getItem() == Items.reeds;
+	}
+
+	@Override
+	public Collection<ItemStack> collect() {
+		return null;
+	}
+
+	@Override
+	public boolean cultivate(int x, int y, int z, ForgeDirection direction, int extent) {
+		return false;
+	}
+
+	@Override
+	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
+
+		world = housing.getWorld();
+
+		Stack<ICrop> crops = new Stack<ICrop>();
+		for (int i = 0; i < extent; i++) {
+			Vect position = translateWithOffset(x, y + 1, z, direction, i);
+			for (IFarmable seed : germlings) {
+				ICrop crop = seed.getCropAt(world, position.x, position.y, position.z);
+				if (crop != null)
+					crops.push(crop);
+			}
+		}
+		return crops;
+	}
+
+}
