@@ -1,0 +1,8 @@
+.classpath
+.gradle/
+.nb-gradle/
+.settings/
+build/
+eclipse/
+.project
+gradle.properties
