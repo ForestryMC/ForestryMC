@@ -8,6 +8,7 @@
 package forestry.apiculture.genetics;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,9 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-
 import net.minecraftforge.common.BiomeDictionary;
-
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -247,7 +246,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 	private boolean checkBiomeHazard(World world, EnumTemperature temperature, EnumHumidity humidity, int x, int y, int z) {
 
-		return ClimateHelper.isWithinLimits(temperature, humidity,
+		return AlleleManager.climateHelper.isWithinLimits(temperature, humidity,
 				genome.getPrimary().getTemperature(), genome.getToleranceTemp(),
 				genome.getPrimary().getHumidity(), genome.getToleranceHumid());
 	}
@@ -315,12 +314,12 @@ public class Bee extends IndividualLiving implements IBee {
 		EnumTemperature temperature = genome.getPrimary().getTemperature();
 		EnumTolerance temperatureTolerance = genome.getToleranceTemp();
 
-		ArrayList<EnumTemperature> toleratedTemperatures = ClimateHelper.getToleratedTemperature(temperature, temperatureTolerance);
+		Collection<EnumTemperature> toleratedTemperatures = AlleleManager.climateHelper.getToleratedTemperature(temperature, temperatureTolerance);
 
 		EnumHumidity humidity = genome.getPrimary().getHumidity();
 		EnumTolerance humidityTolerance = genome.getToleranceHumid();
 
-		ArrayList<EnumHumidity> toleratedHumidities = ClimateHelper.getToleratedHumidity(humidity, humidityTolerance);
+		Collection<EnumHumidity> toleratedHumidities = AlleleManager.climateHelper.getToleratedHumidity(humidity, humidityTolerance);
 
 		ArrayList<Integer> biomeIdsTemp = new ArrayList<Integer>();
 		for (EnumTemperature temp : toleratedTemperatures)
@@ -353,9 +352,9 @@ public class Bee extends IndividualLiving implements IBee {
 					+ StringUtil.localize("bees.hybrid.adj.add") + " " + StringUtil.localize("gui.hybrid"));
 		list.add(genome.getActiveAllele(EnumBeeChromosome.SPEED.ordinal()).getName() + " " + StringUtil.localize("gui.worker"));
 		list.add(genome.getActiveAllele(EnumBeeChromosome.LIFESPAN.ordinal()).getName() + " " + StringUtil.localize("gui.life"));
-		list.add("\u00A7aT: " + ClimateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / "
+		list.add("\u00A7aT: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / "
 				+ StringUtil.capitalize(genome.getToleranceTemp().name()));
-		list.add("\u00A7aH: " + ClimateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / "
+		list.add("\u00A7aH: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / "
 				+ StringUtil.capitalize(genome.getToleranceHumid().name()));
 		list.add(StringUtil.localize(genome.getFlowerProvider().getDescription()));
 		if (genome.getNocturnal())

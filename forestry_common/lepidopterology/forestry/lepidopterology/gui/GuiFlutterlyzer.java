@@ -180,8 +180,8 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 		newLine();
 		newLine();
 
-		drawRow(StringUtil.localize("gui.climate"), ClimateHelper.toDisplay(butterfly.getGenome().getPrimary().getTemperature()),
-				ClimateHelper.toDisplay(butterfly.getGenome().getPrimary().getTemperature()), butterfly, EnumButterflyChromosome.SPECIES);
+		drawRow(StringUtil.localize("gui.climate"), AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getTemperature()),
+				AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getTemperature()), butterfly, EnumButterflyChromosome.SPECIES);
 
 		drawLine(StringUtil.localize("gui.temptol"), COLUMN_0);
 		drawToleranceInfo(butterfly.getGenome().getToleranceTemp(), COLUMN_1,
@@ -191,8 +191,8 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 
 		newLine();
 
-		drawRow(StringUtil.localize("gui.humidity"), ClimateHelper.toDisplay(butterfly.getGenome().getPrimary().getHumidity()),
-				ClimateHelper.toDisplay(butterfly.getGenome().getPrimary().getHumidity()), butterfly, EnumButterflyChromosome.SPECIES);
+		drawRow(StringUtil.localize("gui.humidity"), AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getHumidity()),
+				AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getHumidity()), butterfly, EnumButterflyChromosome.SPECIES);
 
 		drawLine(StringUtil.localize("gui.humidtol"), COLUMN_0);
 		drawToleranceInfo(butterfly.getGenome().getToleranceHumid(), COLUMN_1,

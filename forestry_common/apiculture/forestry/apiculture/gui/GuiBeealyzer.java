@@ -192,8 +192,8 @@ public class GuiBeealyzer extends GuiAlyzer {
 		newLine();
 		newLine();
 
-		drawRow(StringUtil.localize("gui.climate"), ClimateHelper.toDisplay(bee.getGenome().getPrimary().getTemperature()),
-				ClimateHelper.toDisplay(bee.getGenome().getSecondary().getTemperature()), bee, EnumBeeChromosome.SPECIES);
+		drawRow(StringUtil.localize("gui.climate"), AlleleManager.climateHelper.toDisplay(bee.getGenome().getPrimary().getTemperature()),
+				AlleleManager.climateHelper.toDisplay(bee.getGenome().getSecondary().getTemperature()), bee, EnumBeeChromosome.SPECIES);
 
 		drawLine(StringUtil.localize("gui.temptol"), COLUMN_0);
 		drawToleranceInfo(bee.getGenome().getToleranceTemp(), COLUMN_1,
@@ -203,8 +203,8 @@ public class GuiBeealyzer extends GuiAlyzer {
 
 		newLine();
 
-		drawRow(StringUtil.localize("gui.humidity"), ClimateHelper.toDisplay(bee.getGenome().getPrimary().getHumidity()),
-				ClimateHelper.toDisplay(bee.getGenome().getSecondary().getHumidity()), bee, EnumBeeChromosome.SPECIES);
+		drawRow(StringUtil.localize("gui.humidity"), AlleleManager.climateHelper.toDisplay(bee.getGenome().getPrimary().getHumidity()),
+				AlleleManager.climateHelper.toDisplay(bee.getGenome().getSecondary().getHumidity()), bee, EnumBeeChromosome.SPECIES);
 
 		drawLine(StringUtil.localize("gui.humidtol"), COLUMN_0);
 		drawToleranceInfo(bee.getGenome().getToleranceHumid(), COLUMN_1,

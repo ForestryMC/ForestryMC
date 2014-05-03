@@ -8,6 +8,7 @@
 package forestry.core.gui;
 
 import forestry.api.core.EnumTemperature;
+import forestry.api.genetics.AlleleManager;
 import forestry.core.genetics.ClimateHelper;
 import forestry.core.interfaces.IClimatised;
 import forestry.core.utils.StringUtil;
@@ -44,17 +45,17 @@ public class ClimateLedger extends Ledger {
 				manager.gui.fontColor.get("ledger.climate.header"));
 		manager.minecraft.fontRenderer.drawStringWithShadow(StringUtil.localize("gui.temperature") + ":", x + 22, y + 20,
 				manager.gui.fontColor.get("ledger.climate.subheader"));
-		manager.minecraft.fontRenderer.drawString(ClimateHelper.toDisplay(temperature) + " " + StringUtil.floatAsPercent(tile.getExactTemperature()), x + 22,
+		manager.minecraft.fontRenderer.drawString(AlleleManager.climateHelper.toDisplay(temperature) + " " + StringUtil.floatAsPercent(tile.getExactTemperature()), x + 22,
 				y + 32, manager.gui.fontColor.get("ledger.climate.text"));
 		manager.minecraft.fontRenderer.drawStringWithShadow(StringUtil.localize("gui.humidity") + ":", x + 22, y + 44,
 				manager.gui.fontColor.get("ledger.climate.subheader"));
-		manager.minecraft.fontRenderer.drawString(ClimateHelper.toDisplay(tile.getHumidity()) + " " + StringUtil.floatAsPercent(tile.getExactHumidity()),
+		manager.minecraft.fontRenderer.drawString(AlleleManager.climateHelper.toDisplay(tile.getHumidity()) + " " + StringUtil.floatAsPercent(tile.getExactHumidity()),
 				x + 22, y + 56, manager.gui.fontColor.get("ledger.climate.text"));
 	}
 
 	@Override
 	public String getTooltip() {
-		return "T: " + ClimateHelper.toDisplay(tile.getTemperature()) + " / H: " + ClimateHelper.toDisplay(tile.getHumidity());
+		return "T: " + AlleleManager.climateHelper.toDisplay(tile.getTemperature()) + " / H: " + AlleleManager.climateHelper.toDisplay(tile.getHumidity());
 	}
 
 }

@@ -8,6 +8,7 @@
 package forestry.apiculture.worldgen;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
@@ -20,9 +21,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
-
 import net.minecraftforge.common.ChestGenHooks;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;
@@ -30,6 +29,7 @@ import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.apiculture.gadgets.TileBeehouse;
 import forestry.core.config.Defaults;
@@ -323,7 +323,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		EnumTemperature beeTemperature = genome.getPrimary().getTemperature();
 		EnumTolerance temperatureTolerance = genome.getToleranceTemp();
 
-		ArrayList<EnumTemperature> toleratedTemperatures = ClimateHelper.getToleratedTemperature(beeTemperature, temperatureTolerance);
+		Collection<EnumTemperature> toleratedTemperatures = AlleleManager.climateHelper.getToleratedTemperature(beeTemperature, temperatureTolerance);
 		boolean validTemp = false;
 
 		validTemp = toleratedTemperatures.contains(EnumTemperature.getFromValue(temperature));
@@ -334,7 +334,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		EnumHumidity beeHumidity = genome.getPrimary().getHumidity();
 		EnumTolerance humidityTolerance = genome.getToleranceHumid();
 
-		ArrayList<EnumHumidity> toleratedHumidity = ClimateHelper.getToleratedHumidity(beeHumidity, humidityTolerance);
+		Collection<EnumHumidity> toleratedHumidity = AlleleManager.climateHelper.getToleratedHumidity(beeHumidity, humidityTolerance);
 
 		boolean validHumidity = false;
 

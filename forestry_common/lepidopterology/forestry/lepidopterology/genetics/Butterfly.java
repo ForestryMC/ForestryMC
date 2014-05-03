@@ -17,11 +17,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-
 import net.minecraftforge.common.BiomeDictionary;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IGenome;
@@ -73,9 +72,9 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		list.add("\u00A7e" + genome.getActiveAllele(EnumButterflyChromosome.SIZE.ordinal()).getName());
 		list.add("\u00A7f" + genome.getActiveAllele(EnumButterflyChromosome.SPEED.ordinal()).getName() + " " + StringUtil.localize("gui.flyer"));
 		list.add(genome.getActiveAllele(EnumButterflyChromosome.LIFESPAN.ordinal()).getName() + " " + StringUtil.localize("gui.life"));
-		list.add("\u00A7aT: " + ClimateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / "
+		list.add("\u00A7aT: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / "
 				+ StringUtil.capitalize(genome.getToleranceTemp().name()));
-		list.add("\u00A7aH: " + ClimateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / "
+		list.add("\u00A7aH: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / "
 				+ StringUtil.capitalize(genome.getToleranceHumid().name()));
 		list.add("\u00A7c" + GenericRatings.rateActivityTime(genome.getNocturnal(), genome.getPrimary().isNocturnal()));
 	}
@@ -168,7 +167,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	}
 	
 	private boolean isAcceptedEnvironment(BiomeGenBase biome) {
-		return ClimateHelper.isWithinLimits(EnumTemperature.getFromValue(biome.temperature),
+		return AlleleManager.climateHelper.isWithinLimits(EnumTemperature.getFromValue(biome.temperature),
 				EnumHumidity.getFromValue(biome.rainfall),
 				getGenome().getPrimary().getTemperature(), getGenome().getToleranceTemp(),
 				getGenome().getPrimary().getHumidity(), getGenome().getToleranceHumid());

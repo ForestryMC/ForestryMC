@@ -19,7 +19,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.Loader;
@@ -27,10 +26,8 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
-
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.core.PluginInfo;
 import forestry.api.core.Tabs;
@@ -56,6 +53,7 @@ import forestry.core.gadgets.TileAnalyzer;
 import forestry.core.gadgets.TileEscritoire;
 import forestry.core.genetics.Allele;
 import forestry.core.genetics.AlleleRegistry;
+import forestry.core.genetics.ClimateHelper;
 import forestry.core.genetics.ItemResearchNote;
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPickupHandler;
@@ -101,6 +99,7 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 
 		AlleleRegistry alleleRegistry = new AlleleRegistry();
 		AlleleManager.alleleRegistry = alleleRegistry;
+		AlleleManager.climateHelper = new ClimateHelper();
 		alleleRegistry.initialize();
 
 		Allele.initialize();
@@ -114,11 +113,6 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 		definitionEscritoire = ForestryBlock.core.addDefinition(new MachineDefinition(Defaults.DEFINITION_ESCRITOIRE_META, "forestry.Escritoire", TileEscritoire.class,
 				Proxies.render.getRenderEscritoire(), new IRecipe[0]));
 
-		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
-			$$______$$();
-
-
-
 		ForestryBlock.soil = new BlockSoil().setBlockName("soil");
 		Proxies.common.registerBlock(ForestryBlock.soil, ItemForestryBlock.class);
 		ForestryBlock.soil.setHarvestLevel("shovel", 0, 0);
@@ -129,9 +123,6 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 		ForestryBlock.resources.setHarvestLevel("pickaxe", 1, 0);
 		ForestryBlock.resources.setHarvestLevel("pickaxe", 1, 1);
 		ForestryBlock.resources.setHarvestLevel("pickaxe", 1, 2);
-
-		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
-			$$____$$();
 
 		OreDictionary.registerOre("oreApatite", new ItemStack(ForestryBlock.resources, 1, 0));
 		OreDictionary.registerOre("oreCopper", new ItemStack(ForestryBlock.resources, 1, 1));
@@ -151,11 +142,7 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 	@Override
 	public void doInit() {
 		super.doInit();
-		definitionAnalyzer.recipes = $$_____$$(ForestryBlock.core, Defaults.DEFINITION_ANALYZER_META);
-
-		for ($___$ prop : $________$) {
-			prop.$$_______$$();
-		}
+		definitionAnalyzer.recipes = createAlyzerRecipes(ForestryBlock.core, Defaults.DEFINITION_ANALYZER_META);
 
 		definitionAnalyzer.register();
 		definitionEscritoire.register();
@@ -222,56 +209,6 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 		// .setItemName("vialEmpty").setIconIndex(10);
 		ForestryItem.vialCatalyst.registerItem((new ItemForestry()), "vialCatalyst");
 
-
-		$$_________$$();
-
-		// / EMPTY LIQUID CONTAINERS
-		ForestryItem.waxCapsule.registerItem(new ItemLiquidContainer(EnumContainerType.CAPSULE, -1).setMaxStackSize(64), "waxCapsule");
-		ForestryItem.canEmpty.registerItem(new ItemLiquidContainer(EnumContainerType.CAN, -1).setMaxStackSize(64), "canEmpty");
-		ForestryItem.refractoryEmpty.registerItem(new ItemLiquidContainer(EnumContainerType.REFRACTORY, -1).setMaxStackSize(64), "refractoryEmpty");
-
-		// / BUCKETS
-		ForestryItem.bucketBiomass.registerItem(new ItemForestry().setContainerItem(Items.bucket).setMaxStackSize(1), "bucketBiomass");
-		ForestryItem.bucketBiofuel.registerItem(new ItemForestry().setContainerItem(Items.bucket).setMaxStackSize(1), "bucketBiofuel");
-
-		// / WAX CAPSULES
-		ForestryItem.waxCapsuleWater.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0x2432ec)), "waxCapsuleWater");
-		ForestryItem.waxCapsuleBiomass.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0x83d41c)), "waxCapsuleBiomass");
-		ForestryItem.waxCapsuleBiofuel.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0xff7909)), "waxCapsuleBiofuel");
-		ForestryItem.waxCapsuleOil.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0x404040)), "waxCapsuleOil");
-		ForestryItem.waxCapsuleFuel.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0xffff00)), "waxCapsuleFuel");
-		ForestryItem.waxCapsuleSeedOil.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0xffffa9)), "waxCapsuleSeedOil");
-		ForestryItem.waxCapsuleHoney.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0xffda47)).setDrink(Defaults.FOOD_HONEY_HEAL, Defaults.FOOD_HONEY_SATURATION), "waxCapsuleHoney");
-		ForestryItem.waxCapsuleJuice.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0x99d04e)).setDrink(Defaults.FOOD_JUICE_HEAL, Defaults.FOOD_JUICE_SATURATION), "waxCapsuleJuice");
-		ForestryItem.waxCapsuleIce.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0xdcffff)), "waxCapsuleIce");
-
-		// / CANS
-		ForestryItem.canWater.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0x2432ec)), "waterCan");
-		ForestryItem.canBiomass.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0x83d41c)), "biomassCan");
-		ForestryItem.canBiofuel.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0xff7909)), "biofuelCan");
-		ForestryItem.canOil.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0x404040)), "canOil");
-		ForestryItem.canFuel.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0xffff00)), "canFuel");
-		ForestryItem.canLava.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0xfd461f)), "canLava");
-		ForestryItem.canSeedOil.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0xffffa9)), "canSeedOil");
-		ForestryItem.canHoney.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0xffda47)).setDrink(Defaults.FOOD_HONEY_HEAL, Defaults.FOOD_HONEY_SATURATION), "canHoney");
-		ForestryItem.canJuice.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0x99d04e)).setDrink(Defaults.FOOD_JUICE_HEAL, Defaults.FOOD_JUICE_SATURATION), "canJuice");
-		ForestryItem.canIce.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0xdcffff)), "canIce");
-
-		// / REFRACTORY CAPSULES
-		ForestryItem.refractoryWater.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0x2432ec)), "refractoryWater");
-		ForestryItem.refractoryBiomass.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0x83d41c)), "refractoryBiomass");
-		ForestryItem.refractoryBiofuel.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0xff7909)), "refractoryBiofuel");
-		ForestryItem.refractoryOil.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0x404040)), "refractoryOil");
-		ForestryItem.refractoryFuel.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0xffff00)), "refractoryFuel");
-		ForestryItem.refractoryLava.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0xfd461f)), "refractoryLava");
-		ForestryItem.refractorySeedOil.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0xffffa9)), "refractorySeedOil");
-		ForestryItem.refractoryHoney.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0xffda47)).setDrink(Defaults.FOOD_HONEY_HEAL, Defaults.FOOD_HONEY_SATURATION), "refractoryHoney");
-		ForestryItem.refractoryJuice.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0x99d04e)).setDrink(Defaults.FOOD_JUICE_HEAL, Defaults.FOOD_JUICE_SATURATION), "refractoryJuice");
-		ForestryItem.refractoryIce.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0xdcffff)), "refractoryIce");
-
-	}
-
-	private void $$_________$$() {
 
 		// / PEAT PRODUCTION
 		ForestryItem.peat.registerItem((new ItemForestry()), "peat");
@@ -344,6 +281,50 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 
 		// FRUITS
 		ForestryItem.fruits.registerItem(new ItemFruit(), "fruits");
+
+		// / EMPTY LIQUID CONTAINERS
+		ForestryItem.waxCapsule.registerItem(new ItemLiquidContainer(EnumContainerType.CAPSULE, -1).setMaxStackSize(64), "waxCapsule");
+		ForestryItem.canEmpty.registerItem(new ItemLiquidContainer(EnumContainerType.CAN, -1).setMaxStackSize(64), "canEmpty");
+		ForestryItem.refractoryEmpty.registerItem(new ItemLiquidContainer(EnumContainerType.REFRACTORY, -1).setMaxStackSize(64), "refractoryEmpty");
+
+		// / BUCKETS
+		ForestryItem.bucketBiomass.registerItem(new ItemForestry().setContainerItem(Items.bucket).setMaxStackSize(1), "bucketBiomass");
+		ForestryItem.bucketBiofuel.registerItem(new ItemForestry().setContainerItem(Items.bucket).setMaxStackSize(1), "bucketBiofuel");
+
+		// / WAX CAPSULES
+		ForestryItem.waxCapsuleWater.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0x2432ec)), "waxCapsuleWater");
+		ForestryItem.waxCapsuleBiomass.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0x83d41c)), "waxCapsuleBiomass");
+		ForestryItem.waxCapsuleBiofuel.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0xff7909)), "waxCapsuleBiofuel");
+		ForestryItem.waxCapsuleOil.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0x404040)), "waxCapsuleOil");
+		ForestryItem.waxCapsuleFuel.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0xffff00)), "waxCapsuleFuel");
+		ForestryItem.waxCapsuleSeedOil.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0xffffa9)), "waxCapsuleSeedOil");
+		ForestryItem.waxCapsuleHoney.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0xffda47)).setDrink(Defaults.FOOD_HONEY_HEAL, Defaults.FOOD_HONEY_SATURATION), "waxCapsuleHoney");
+		ForestryItem.waxCapsuleJuice.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0x99d04e)).setDrink(Defaults.FOOD_JUICE_HEAL, Defaults.FOOD_JUICE_SATURATION), "waxCapsuleJuice");
+		ForestryItem.waxCapsuleIce.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0xdcffff)), "waxCapsuleIce");
+
+		// / CANS
+		ForestryItem.canWater.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0x2432ec)), "waterCan");
+		ForestryItem.canBiomass.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0x83d41c)), "biomassCan");
+		ForestryItem.canBiofuel.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0xff7909)), "biofuelCan");
+		ForestryItem.canOil.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0x404040)), "canOil");
+		ForestryItem.canFuel.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0xffff00)), "canFuel");
+		ForestryItem.canLava.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0xfd461f)), "canLava");
+		ForestryItem.canSeedOil.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0xffffa9)), "canSeedOil");
+		ForestryItem.canHoney.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0xffda47)).setDrink(Defaults.FOOD_HONEY_HEAL, Defaults.FOOD_HONEY_SATURATION), "canHoney");
+		ForestryItem.canJuice.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0x99d04e)).setDrink(Defaults.FOOD_JUICE_HEAL, Defaults.FOOD_JUICE_SATURATION), "canJuice");
+		ForestryItem.canIce.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0xdcffff)), "canIce");
+
+		// / REFRACTORY CAPSULES
+		ForestryItem.refractoryWater.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0x2432ec)), "refractoryWater");
+		ForestryItem.refractoryBiomass.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0x83d41c)), "refractoryBiomass");
+		ForestryItem.refractoryBiofuel.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0xff7909)), "refractoryBiofuel");
+		ForestryItem.refractoryOil.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0x404040)), "refractoryOil");
+		ForestryItem.refractoryFuel.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0xffff00)), "refractoryFuel");
+		ForestryItem.refractoryLava.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0xfd461f)), "refractoryLava");
+		ForestryItem.refractorySeedOil.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0xffffa9)), "refractorySeedOil");
+		ForestryItem.refractoryHoney.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0xffda47)).setDrink(Defaults.FOOD_HONEY_HEAL, Defaults.FOOD_HONEY_SATURATION), "refractoryHoney");
+		ForestryItem.refractoryJuice.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0x99d04e)).setDrink(Defaults.FOOD_JUICE_HEAL, Defaults.FOOD_JUICE_SATURATION), "refractoryJuice");
+		ForestryItem.refractoryIce.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0xdcffff)), "refractoryIce");
 
 	}
 
@@ -503,13 +484,7 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 		return 0;
 	}
 
-	/*@Override
-	 public boolean processIMCMessage(IMCMessage message) {
-	 if (message.key.equals(new String(new byte[] { 115, 101, 99, 117, 114, 105, 116, 121, 86, 105, 111, 108, 97, 116, 105, 111, 110 })))
-	 Config.invalidFingerprint = true;
-	 return false;
-	 }*/
-	public IRecipe[] $$_____$$(Block block, int meta) {
+	public IRecipe[] createAlyzerRecipes(Block block, int meta) {
 		ArrayList<IRecipe> recipes = new ArrayList<IRecipe>();
 		if (ForestryItem.beealyzer != null)
 			recipes.add(ShapedRecipeCustom.createShapedRecipe(new ItemStack(block, 1, meta), "XTX", " Y ", "X X", 'Y', ForestryItem.sturdyCasing, 'T', ForestryItem.beealyzer, 'X', "ingotBronze"));
@@ -520,89 +495,4 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 		return recipes.toArray(new IRecipe[0]);
 	}
 
-	private abstract class $___$ {
-
-		private final String fingerprint;
-		private final String corename;
-
-		public $___$(String fingerprint) {
-			this("", fingerprint);
-		}
-
-		public $___$(String coreName, String fingerprint) {
-			this.fingerprint = fingerprint;
-			this.corename = coreName;
-		}
-
-		protected String $$__________$$() {
-			return corename;
-		}
-
-		public void $$_______$$() {
-			try {
-				Class<?> core = Class.forName($$__________$$());
-				if (core != null) {
-					Certificate[] cert = core.getProtectionDomain().getCodeSource().getCertificates();
-					if (cert == null || !Utils.getFingerprint(cert[0]).equals(new String(fingerprint))) {
-						Proxies.log
-						.severe("%s failed validation. Halting runtime for security reasons. Please replace your mods with untampered versions from the official download sites.",
-								$$__________$$());
-						//Runtime.getRuntime().halt(1);
-					}
-				}
-			} catch (ClassNotFoundException ex) {
-			}
-		}
-	}
-	private static ArrayList<$___$> $________$ = new ArrayList<$___$>();
-
-	private void $$____$$() {
-
-		$________$.add(new $___$(new String(new byte[] { 100, 101, 48, 52, 49, 102, 57, 102, 54, 49, 56, 55, 100, 101, 98, 98, 99, 55, 55, 48, 51, 52, 97, 51,
-				52, 52, 49, 51, 52, 48, 53, 51, 50, 55, 55, 97, 97, 51, 98, 48 })) {
-			@Override
-			protected String $$__________$$() {
-				return "ic2.core.IC2";
-			}
-		});
-		$________$.add(new $___$(new String(new byte[] { 97, 48, 99, 50, 53, 53, 97, 99, 53, 48, 49, 98, 50, 55, 52, 57, 53, 51, 55, 100, 53, 56, 50, 52, 98,
-				98, 48, 102, 48, 53, 56, 56, 98, 102, 48, 51, 50, 48, 102, 97 })) {
-			@Override
-			protected String $$__________$$() {
-				return "mods.railcraft.common.core.Railcraft";
-			}
-		});
-	}
-
-	private void $$______$$() {
-		LinkedList<String> fossExceptions = new LinkedList<String>();
-		fossExceptions.add("logisticspipes.LogisticsPipes");
-		fossExceptions.add("com.pahimar.ee3.EquivalentExchange3");
-
-		for (ModContainer modContainer : Loader.instance().getModList()) {
-
-			Object modInstance = modContainer.getMod();
-			if (modInstance == null)
-				continue;
-			Mod modAnnotation = modInstance.getClass().getAnnotation(Mod.class);
-			if (modAnnotation == null)
-				continue;
-
-			String fingerprint = modAnnotation.certificateFingerprint();
-			if (fingerprint == null || fingerprint.equals("") || fingerprint.startsWith("@") || fingerprint.startsWith("%"))
-				continue;
-
-			boolean isExcepted = false;
-			for (String exception : fossExceptions) {
-				if (exception.startsWith(modInstance.getClass().getCanonicalName())) {
-					isExcepted = true;
-					break;
-				}
-			}
-
-			if (!isExcepted)
-				$________$.add(new $___$(modInstance.getClass().getCanonicalName(), fingerprint) {
-				});
-		}
-	}
 }
