@@ -12,6 +12,8 @@ buildscript {
 	}
 	dependencies {
 		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+		// https://github.com/ajoberstar/gradle-git
+		classpath 'org.ajoberstar:gradle-git:0.8.0'
 	}
 }
 
@@ -26,10 +28,10 @@ archivesBaseName = "forestry_" + mcversion
 
 ext.dirDest = './build/dist'
 ext.dirLang = "./lang"
+ext.dirApi = "./api"
 
-ext.srcCraftguideDir = "../CraftGuide/src"
-
-ext.apiForestry = "./api"
+ext.CraftGuideRepo = "https://github.com/Uristqwerty/CraftGuide.git"
+ext.CraftGuideTmp = "build/tmp/CraftGuide"
 
 minecraft {
 	version = mcversion + "-" + forgeversion
@@ -40,15 +42,19 @@ minecraft {
 }
 
 sourceSets {
+	api {
+		java {
+			srcDir CraftGuideTmp + "/src"
+			include '**/CraftGuide/api/**'
+		}
+	}
+	
 	main {
 		java {
-			srcDir project.srcCraftguideDir
-			include '**/CraftGuide/api/**'
-
 			srcDirs file('forestry_common').listFiles()
 			include 'forestry/**'
 
-			srcDir project.apiForestry
+			srcDir project.dirApi
 		}
 		resources {
 			srcDir 'forestry_resources'
@@ -115,7 +121,7 @@ def saveVersion() {
 	printNextVersion()
 }
 
-def printNextVersion(){
+def printNextVersion() {
 	println '*************************************************************'
 	println 'The next build will be version: ' +  project.version
 	println '*************************************************************'
@@ -137,6 +143,21 @@ task bumpMinor << {
 task bumpPatch << {
 	project.version_patch = Integer.parseInt(project.version_patch) + 1
 	saveVersion()
+}
+
+task initCraftGuide << {
+	def localRepo = file(CraftGuideTmp)
+
+	if (localRepo.exists()) {
+		println 'Updating CraftGuide repo'
+		def grgit = org.ajoberstar.grgit.Grgit.open(localRepo)
+		grgit.pull()
+		grgit.close()
+	} else {
+		println 'Cloning CraftGuide repo'
+		def grgit = org.ajoberstar.grgit.Grgit.clone(dir: localRepo, uri: CraftGuideRepo)
+		grgit.close()
+	}
 }
 
 jar {
@@ -237,25 +258,23 @@ task devJar ( type: Zip, dependsOn: devJarSigned ) {
 }
 
 task apiZip ( type: Zip ) {
-	from project.apiForestry
+	from project.dirApi
 	destinationDir = file(dirDest)
 	classifier = 'api'
 	extension = 'zip'
 }
 
-task releaseInit << {
-	println '*************************************************************'
-	println 'This build will be version: ' +  project.version
-	println '*************************************************************'
+task release(dependsOn: [apiZip, devJar, mainJar]) {
+	doLast {
+		println '*************************************************************'
+		println 'This build will be version: ' +  project.version
+		println '*************************************************************'
+	}
 }
 
-task release << {
+afterEvaluate {
+	compileApiJava.dependsOn initCraftGuide
 }
-
-release.dependsOn releaseInit, mainJar, devJar, apiZip
-mainJar.shouldRunAfter releaseInit
-devJar.shouldRunAfter releaseInit
-apiZip.shouldRunAfter releaseInit
 
 def loadProperties() {
 	println('loading application.properties')
