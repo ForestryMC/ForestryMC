@@ -7,8 +7,8 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
+import java.io.InputStream;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -27,6 +27,8 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 
 import net.minecraftforge.common.MinecraftForge;
+
+import io.netty.buffer.ByteBufInputStream;
 
 import forestry.api.core.ForestryEvent;
 import forestry.api.genetics.AlleleManager;
@@ -50,22 +52,18 @@ public class PacketHandler {
 
 	@SubscribeEvent
 	public void onPacket(ServerCustomPacketEvent event) {
-		byte[] data = new byte[event.packet.payload().readableBytes()];
-		event.packet.payload().readBytes(data);
-
-		onPacketData(data, ((NetHandlerPlayServer) event.handler).playerEntity);
+		onPacketData(new ByteBufInputStream(event.packet.payload()),
+				((NetHandlerPlayServer) event.handler).playerEntity);
 	}
 
 	@SubscribeEvent
 	public void onPacket(ClientCustomPacketEvent event) {
-		byte[] data = new byte[event.packet.payload().readableBytes()];
-		event.packet.payload().readBytes(data);
-
-		onPacketData(data, null);
+		onPacketData(new ByteBufInputStream(event.packet.payload()),
+				null);
 	}
 
-	public void onPacketData(byte[] bData, EntityPlayer player) {
-		DataInputStream data = new DataInputStream(new ByteArrayInputStream(bData));
+	public void onPacketData(InputStream is, EntityPlayer player) {
+		DataInputStream data = new DataInputStream(is);
 		PacketUpdate packetU;
 
 		try {
