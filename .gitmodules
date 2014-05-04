@@ -1,3 +1,6 @@
 [submodule "lang"]
 	path = lang
 	url = https://github.com/ForestryMC/Forestry-Localization.git
+[submodule "api"]
+	path = api
+	url = git@github.com:ForestryMC/ForestryAPI.git
