@@ -97,13 +97,21 @@ processResources {
 }
 
 runClient {
-	args "--username=${project.mcUsername}"
-	args "--password=${project.mcPassword}"
+	if (project.hasProperty('mcUsername')) {
+		args "--username=${project.mcUsername}"
+	}
+	if (project.hasProperty('mcPassword')) {
+		args "--password=${project.mcPassword}"
+	}
 }
 
 debugClient {
-	args "--username=${project.mcUsername}"
-	args "--password=${project.mcPassword}"
+	if (project.hasProperty('mcUsername')) {
+		args "--username=${project.mcUsername}"
+	}
+	if (project.hasProperty('mcPassword')) {
+		args "--password=${project.mcPassword}"
+	}
 }
 
 task echoVersion << {
