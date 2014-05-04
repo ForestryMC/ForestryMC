@@ -68,8 +68,9 @@ public class PluginIC2 implements IPlugin {
 
 	@Override
 	public void doInit() {
-
 		config = Config.config;
+
+		if (!isAvailable()) return;
 
 		initLiquidContainers();
 		initRubberChain();

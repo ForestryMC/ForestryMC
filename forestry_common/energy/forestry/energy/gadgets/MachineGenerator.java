@@ -50,10 +50,14 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 	private int tickCount = 0;
 
 	InventoryAdapter inventory = new InventoryAdapter(1, "Items");
-	protected BasicSource ic2EnergySource = new BasicSource(this, maxEnergy, 1);
+	protected BasicSource ic2EnergySource;
 
 	public MachineGenerator() {
 		setHints(Config.hints.get("generator"));
+
+		if (PluginIC2.instance.isAvailable()) {
+			ic2EnergySource = new BasicSource(this, maxEnergy, 1);
+		}
 	}
 
 	@Override
@@ -70,7 +74,7 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 
-		ic2EnergySource.writeToNBT(nbttagcompound);
+		if (ic2EnergySource != null) ic2EnergySource.writeToNBT(nbttagcompound);
 
 		NBTTagCompound NBTresourceSlot = new NBTTagCompound();
 		resourceTank.writeToNBT(NBTresourceSlot);
@@ -83,7 +87,7 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 
-		ic2EnergySource.readFromNBT(nbttagcompound);
+		if (ic2EnergySource != null) ic2EnergySource.readFromNBT(nbttagcompound);
 
 		resourceTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
 		if (nbttagcompound.hasKey("ResourceTank"))
@@ -94,14 +98,14 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 
 	@Override
 	public void onChunkUnload() {
-		ic2EnergySource.onChunkUnload();
+		if (ic2EnergySource != null) ic2EnergySource.onChunkUnload();
 
 		super.onChunkUnload();
 	}
 
 	@Override
 	public void invalidate() {
-		ic2EnergySource.invalidate();
+		if (ic2EnergySource != null) ic2EnergySource.invalidate();
 
 		super.invalidate();
 	}
@@ -121,7 +125,7 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 		}
 
 		// No work to be done if IC2 is unavailable.
-		if (!PluginIC2.instance.isAvailable()) {
+		if (ic2EnergySource == null) {
 			setErrorState(EnumErrorCode.NOENERGYNET);
 			return;
 		}
@@ -160,6 +164,8 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 	}
 
 	public int getStoredScaled(int i) {
+		if (ic2EnergySource == null) return 0;
+
 		return (int) (ic2EnergySource.getEnergyStored() * i) / maxEnergy;
 	}
 
@@ -178,13 +184,15 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 
 		switch (i) {
 		case 0:
-			ic2EnergySource.setEnergyStored(j);
+			if (ic2EnergySource != null) ic2EnergySource.setEnergyStored(j);
 			break;
 		}
 	}
 
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		iCrafting.sendProgressBarUpdate(container, 0, (short) ic2EnergySource.getEnergyStored());
+		if (ic2EnergySource != null) {
+			iCrafting.sendProgressBarUpdate(container, 0, (short) ic2EnergySource.getEnergyStored());
+		}
 	}
 
 	/* IINVENTORY */

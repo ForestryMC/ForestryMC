@@ -24,7 +24,6 @@ archivesBaseName = "forestry_" + mcversion
 ext.dirDest = './build/dist'
 ext.dirLang = "./lang"
 
-ext.srcIc2Dir = "../IC2/src"
 ext.srcCraftguideDir = "../CraftGuide/src"
 
 ext.apiForestry = "./api/forestry"
@@ -35,14 +34,6 @@ minecraft {
 
 	replace '@VERSION@', project.version
 	replace '@BUILD_NUMBER@', project.version_build
-	replace '$___$', rndString()
-	replace '$____$', rndString()
-	replace '$_____$', rndString()
-	replace '$______$', rndString()
-	replace '$_______$', rndString()
-	replace '$________$', rndString()
-	replace '$_________$', rndString()
-	replace '$__________$', rndString()
 }
 
 sourceSets {
@@ -54,9 +45,6 @@ sourceSets {
 			srcDirs file('forestry_common').listFiles()
 			include 'forestry/**'
 
-			srcDir project.srcIc2Dir
-			include '**/api/**'
-
 			srcDir project.apiForestry
 		}
 		resources {
@@ -66,12 +54,20 @@ sourceSets {
 	}
 }
 
-configurations{
+repositories {
+	maven {
+		name = "ic2"
+		url = "http://maven.ic2.player.to/"
+	}
+}
+
+configurations {
 	buildcraft
 	compile.extendsFrom buildcraft
 }
 
 dependencies {
+	compile 'net.industrial-craft:industrialcraft-2:2.1.470-experimental:api'
 	buildcraft 'com.mod-buildcraft:buildcraft:5.0.4.2942:dev'
 }
 
@@ -285,18 +281,3 @@ mainJar.shouldRunAfter releaseInit
 devJar.shouldRunAfter releaseInit
 apiZip.shouldRunAfter releaseInit
 
-def rndString() {
-	String AB = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-	Random rnd = new Random()
-	String ret = ""
-	int max = rnd.nextInt(18) + 3
-
-	for (int i = 0; i < max; i++) {
-		ret += AB.charAt(rnd.nextInt(AB.length()))
-	}
-
-	int rndStart = rnd.nextInt(6) + 2
-	rndStart = rndStart >= ret.length() - 4 ? 3 : rndStart;
-
-	return ret.substring(0, rndStart).toLowerCase(Locale.ENGLISH) + ret.substring(rndStart)
-}

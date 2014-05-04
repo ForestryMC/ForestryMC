@@ -52,13 +52,15 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
 	private final EuConfig euConfig = new EuConfig(Defaults.ENGINE_TIN_EU_FOR_CYCLE, Defaults.ENGINE_TIN_ENERGY_PER_CYCLE, Defaults.ENGINE_TIN_MAX_EU_STORED);
 
-	protected BasicSink ic2EnergySink = new BasicSink(this, euConfig.euStorage, 3);
+	protected BasicSink ic2EnergySink;
 
 	private final DelayTimer delayUpdateTimer = new DelayTimer();
 
 	public EngineTin() {
 		super(Defaults.ENGINE_TIN_HEAT_MAX, 10000, 400);
 		setHints(Config.hints.get("engine.tin"));
+
+		if (PluginIC2.instance.isAvailable()) ic2EnergySink = new BasicSink(this, euConfig.euStorage, 3);
 	}
 
 	@Override
@@ -71,7 +73,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 
-		ic2EnergySink.readFromNBT(nbttagcompound);
+		if (ic2EnergySink != null) ic2EnergySink.readFromNBT(nbttagcompound);
 		inventory.readFromNBT(nbttagcompound);
 		sockets.readFromNBT(nbttagcompound);
 
@@ -87,21 +89,21 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 
-		ic2EnergySink.writeToNBT(nbttagcompound);
+		if (ic2EnergySink != null) ic2EnergySink.writeToNBT(nbttagcompound);
 		inventory.writeToNBT(nbttagcompound);
 		sockets.writeToNBT(nbttagcompound);
 	}
 
 	@Override
 	public void onChunkUnload() {
-		ic2EnergySink.onChunkUnload();
+		if (ic2EnergySink != null) ic2EnergySink.onChunkUnload();
 
 		super.onChunkUnload();
 	}
 
 	@Override
 	public void invalidate() {
-		ic2EnergySink.invalidate();
+		if (ic2EnergySink != null) ic2EnergySink.invalidate();
 
 		super.invalidate();
 	}
@@ -143,7 +145,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	@Override
 	public void updateServerSide() {
 		// No work to be done if IC2 is unavailable.
-		if (!PluginIC2.instance.isAvailable()) {
+		if (ic2EnergySink == null) {
 			setErrorState(EnumErrorCode.NOENERGYNET);
 			return;
 		}
@@ -195,10 +197,12 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	// / STATE INFORMATION
 	@Override
 	public boolean isBurning() {
-		return mayBurn() && ic2EnergySink.canUseEnergy(euConfig.euForCycle);
+		return mayBurn() && ic2EnergySink != null && ic2EnergySink.canUseEnergy(euConfig.euForCycle);
 	}
 
 	public int getStorageScaled(int i) {
+		if (ic2EnergySink == null) return 0;
+
 		return Math.min(i, (int) (ic2EnergySink.getEnergyStored() * i) / ic2EnergySink.getCapacity());
 	}
 
@@ -232,7 +236,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 			heat = j;
 			break;
 		case 3:
-			ic2EnergySink.setEnergyStored(j);
+			if (ic2EnergySink != null) ic2EnergySink.setEnergyStored(j);
 			break;
 		}
 
@@ -243,7 +247,9 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		iCrafting.sendProgressBarUpdate(containerEngine, 0, currentOutput);
 		iCrafting.sendProgressBarUpdate(containerEngine, 1, (int)storedEnergy);
 		iCrafting.sendProgressBarUpdate(containerEngine, 2, heat);
-		iCrafting.sendProgressBarUpdate(containerEngine, 3, (short) ic2EnergySink.getEnergyStored());
+		if (ic2EnergySink != null) {
+			iCrafting.sendProgressBarUpdate(containerEngine, 3, (short) ic2EnergySink.getEnergyStored());
+		}
 	}
 
 	// / ENERGY CONFIG CHANGE
@@ -252,7 +258,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		euConfig.mjPerCycle += mjChange;
 		euConfig.euStorage += storageChange;
 
-		ic2EnergySink.setCapacity(euConfig.euStorage);
+		if (ic2EnergySink != null) ic2EnergySink.setCapacity(euConfig.euStorage);
 	}
 
 	/* IINVENTORY */
