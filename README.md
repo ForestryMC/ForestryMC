@@ -17,22 +17,7 @@ Forestry is a modification for the game Minecraft and known primarily for its fa
 
 The API and localization files reside in their own repository. It is pulled in automatically.
 
-You need to put the Ic2 and CraftGuide APIs in "../IC2/src/" and "../CraftGuide/src" respectively. Hopefully that can be automated in the future.
-
-You will need to define a "./gradle.properties" file.
-
-Sample properties file:
-```
-mcversion=1.7.2
-forgeversion=10.12.1.1061
-version_major=2
-version_minor=4
-version_patch=0
-version_revision=0
-version_build=0
-mcUsername=SirSengir
-mcPassword=password
-```
+You may want to adjust the "./gradle.properties" file to set your mc account as needed.
 
 To setup, open a command line and run "gradlew setupDecompWorkspace" and "gradlew eclipse".
 
