@@ -132,8 +132,8 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 		Proxies.common.registerBlock(ForestryBlock.glass, ItemForestryBlock.class);
 
 		/* SMELTING RECIPES */
-		FurnaceRecipes.smelting().func_151394_a(new ItemStack(ForestryBlock.resources, 1, 1), ForestryItem.ingotCopper.getItemStack(), 0.5f);
-		FurnaceRecipes.smelting().func_151394_a(new ItemStack(ForestryBlock.resources, 1, 2), ForestryItem.ingotTin.getItemStack(), 0.5f);
+		FurnaceRecipes.smelting().func_151394_a(new ItemStack(ForestryBlock.resources, 1), ForestryItem.ingotCopper.getItemStack(), 0.5f);
+		FurnaceRecipes.smelting().func_151394_a(new ItemStack(ForestryBlock.resources, 2), ForestryItem.ingotTin.getItemStack(), 0.5f);
 
 		GameRegistry.registerFuelHandler(this);
 
