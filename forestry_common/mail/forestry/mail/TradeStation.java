@@ -427,7 +427,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	/* IINVENTORY */
 	@Override
 	public void markDirty() {
-		this.markDirty();
+		super.markDirty();
 		inventory.markDirty();
 	}
 
