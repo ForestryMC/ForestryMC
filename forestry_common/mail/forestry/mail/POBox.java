@@ -83,7 +83,7 @@ public class POBox extends WorldSavedData implements IInventory {
 	/* IINVENTORY */
 	@Override
 	public void markDirty() {
-		this.markDirty();
+		super.markDirty();
 		letters.markDirty();
 	}
 
