@@ -33,10 +33,10 @@ public class ContainerTreealyzer extends ContainerItemInventory {
 		// Energy
 		this.addSlot(new SlotCustom(inventory, TreealyzerInventory.SLOT_ENERGY, 172, 8, new Object[] { ForestryItem.honeydew, ForestryItem.honeyDrop }));
 
-		// Bee to analyze
-		this.addSlot(new SlotCustom(inventory, TreealyzerInventory.SLOT_SPECIMEN, 172, 26,  ArrayUtils.addAll(AlleleManager.ersatzSaplings.keySet().toArray(new ItemStack[0]), ItemGermlingGE.class)));
+		// Tree to analyze
+		this.addSlot(new SlotCustom(inventory, TreealyzerInventory.SLOT_SPECIMEN, 172, 26, ItemGermlingGE.class));
 
-		// Analyzed bee
+		// Analyzed tree
 		this.addSlot(new SlotCustom(inventory, TreealyzerInventory.SLOT_ANALYZE_1, 172, 57, new Object[] { ItemGermlingGE.class }));
 		this.addSlot(new SlotCustom(inventory, TreealyzerInventory.SLOT_ANALYZE_2, 172, 75, new Object[] { ItemGermlingGE.class }));
 		this.addSlot(new SlotCustom(inventory, TreealyzerInventory.SLOT_ANALYZE_3, 172, 93, new Object[] { ItemGermlingGE.class }));
