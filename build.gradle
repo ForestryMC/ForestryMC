@@ -243,7 +243,7 @@ task devJar ( type: Zip, dependsOn: devJarSigned ) {
 	}
 
 	from(sourceSets.main.allSource) {
-		include '**/api/**'
+		include '**'
 	}
 
 	from(sourceSets.main.output) {
@@ -265,14 +265,21 @@ task devJar ( type: Zip, dependsOn: devJarSigned ) {
 	classifier = 'dev'
 }
 
-task apiZip ( type: Zip ) {
-	from project.dirApi
+task apiJar(type: Jar, dependsOn: 'classes') {
+	from (dirApi) {
+		include '**'
+	}
+	
+	from (sourceSets.main.output) {
+		include 'forestry/api/**'
+	}
+	
 	destinationDir = file(dirDest)
+	extension = 'jar'
 	classifier = 'api'
-	extension = 'zip'
 }
 
-task release(dependsOn: [apiZip, devJar, mainJar]) {
+task release(dependsOn: [apiJar, devJar, mainJar]) {
 	doLast {
 		println '*************************************************************'
 		println 'This build will be version: ' +  project.version
@@ -282,6 +289,30 @@ task release(dependsOn: [apiZip, devJar, mainJar]) {
 
 afterEvaluate {
 	compileApiJava.dependsOn initCraftGuide
+}
+
+artifacts {
+	archives apiJar
+	archives devJar
+}
+
+uploadArchives {
+	repositories {
+		if (project.hasProperty('mavenDir')) {
+			mavenDeployer {
+				repository(url: "file://"+mavenDir)
+				
+				addFilter('api') { artifact, file ->
+					file == apiJar.archivePath
+				}
+				addFilter('dev') { artifact, file ->
+					file == devJar.archivePath
+				}
+			}
+		} else {
+			println 'Archives upload disabled, gradle.properties is missing.'
+		}
+	}
 }
 
 def loadProperties() {
