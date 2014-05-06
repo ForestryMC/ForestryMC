@@ -126,7 +126,9 @@ public class ForestryCore {
 		FuelManager.rainSubstrate.put(ForestryItem.craftingMaterial.getItemStack(1, 4), new RainSubstrate(ForestryItem.craftingMaterial.getItemStack(1, 4), 0.075f));
 
 		// Set additional apiary flowers
-		FlowerManager.plainFlowers.add(new ItemStack(Blocks.red_flower));
+		for (int i=0; i<8; i++) {
+			FlowerManager.plainFlowers.add(new ItemStack(Blocks.red_flower, 1, i));
+		}
 		FlowerManager.plainFlowers.add(new ItemStack(Blocks.yellow_flower));
 
 		// Register gui handler
