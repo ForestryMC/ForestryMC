@@ -270,6 +270,8 @@ public enum ForestryItem {
 	}
 
 	public ItemStack getItemStack(int qty, int meta) {
+		if (item == null)
+			return null;
 		return new ItemStack(item, qty, meta);
 	}
 }
