@@ -22,7 +22,6 @@ import net.minecraft.util.WeightedRandomChestContent;
 
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameData;
@@ -169,56 +168,25 @@ public class PluginArboriculture extends NativePlugin implements IFuelHandler {
 		Proxies.common.registerBlock(ForestryBlock.log1, ItemWoodBlock.class);
 		ForestryBlock.log1.setHarvestLevel("axe", 0);
 
-		// Send to BC for facades
-		for (int i = 0; i < 4; i++) {
-			FMLInterModComms.sendMessage("BuildCraft|Transport", "add-facade",
-					GameData.blockRegistry.getNameForObject(ForestryBlock.log1) + "@" + i);
-		}
-
 		ForestryBlock.log2 = new BlockLog(LogCat.CAT1).setBlockName("for.log2");
 		Proxies.common.registerBlock(ForestryBlock.log2, ItemWoodBlock.class);
 		ForestryBlock.log2.setHarvestLevel("axe", 0);
-
-		for (int i = 0; i < 4; i++) {
-			FMLInterModComms.sendMessage("BuildCraft|Transport", "add-facade",
-					GameData.blockRegistry.getNameForObject(ForestryBlock.log2) + "@" + i);
-		}
 
 		ForestryBlock.log3 = new BlockLog(LogCat.CAT2).setBlockName("for.log3");
 		Proxies.common.registerBlock(ForestryBlock.log3, ItemWoodBlock.class);
 		ForestryBlock.log3.setHarvestLevel("axe", 0);
 
-		for (int i = 0; i < 4; i++) {
-			FMLInterModComms.sendMessage("BuildCraft|Transport", "add-facade",
-					GameData.blockRegistry.getNameForObject(ForestryBlock.log3) + "@" + i);
-		}
-
 		ForestryBlock.log4 = new BlockLog(LogCat.CAT3).setBlockName("for.log4");
 		Proxies.common.registerBlock(ForestryBlock.log4, ItemWoodBlock.class);
 		ForestryBlock.log4.setHarvestLevel("axe", 0);
-
-		for (int i = 0; i < 4; i++) {
-			FMLInterModComms.sendMessage("BuildCraft|Transport", "add-facade",
-					GameData.blockRegistry.getNameForObject(ForestryBlock.log4) + "@" + i);
-		}
 
 		ForestryBlock.log5 = new BlockLog(LogCat.CAT4).setBlockName("for.log5");
 		Proxies.common.registerBlock(ForestryBlock.log5, ItemWoodBlock.class);
 		ForestryBlock.log5.setHarvestLevel("axe", 0);
 
-		for (int i = 0; i < 4; i++) {
-			FMLInterModComms.sendMessage("BuildCraft|Transport", "add-facade",
-					GameData.blockRegistry.getNameForObject(ForestryBlock.log5) + "@" + i);
-		}
-
 		ForestryBlock.log6 = new BlockLog(LogCat.CAT5).setBlockName("for.log6");
 		Proxies.common.registerBlock(ForestryBlock.log6, ItemWoodBlock.class);
 		ForestryBlock.log6.setHarvestLevel("axe", 0);
-
-		for (int i = 0; i < 4; i++) {
-			FMLInterModComms.sendMessage("BuildCraft|Transport", "add-facade",
-					GameData.blockRegistry.getNameForObject(ForestryBlock.log6) + "@" + i);
-		}
 
 		ForestryBlock.log7 = new BlockLog(LogCat.CAT6).setBlockName("for.log7");
 		Proxies.common.registerBlock(ForestryBlock.log7, ItemWoodBlock.class);
@@ -267,12 +235,6 @@ public class PluginArboriculture extends NativePlugin implements IFuelHandler {
 				Defaults.WILDCARD));
 		OreDictionary.registerOre("plankWood", new ItemStack(ForestryBlock.planks2, 1,
 				Defaults.WILDCARD));
-
-		// Send to BC for facades
-		for (int i = 0; i < 16; i++) {
-			FMLInterModComms.sendMessage("BuildCraft|Transport", "add-facade",
-					GameData.blockRegistry.getNameForObject(ForestryBlock.planks1) + "@" + i);
-		}
 
 		ForestryBlock.slabs1 = new BlockSlab(SlabCat.CAT0).setBlockName("for.slabs1");
 		Proxies.common.registerBlock(ForestryBlock.slabs1, ItemWoodBlock.class);
