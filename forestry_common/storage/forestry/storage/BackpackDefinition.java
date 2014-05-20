@@ -72,11 +72,13 @@ public class BackpackDefinition implements IBackpackDefinition {
 	@Override
 	public boolean isValidItem(EntityPlayer player, ItemStack itemstack) {
 		for (ItemStack stack : getValidItems(player))
-			if (stack.getItemDamage() == Defaults.WILDCARD) {
-				if (stack.getItem() == itemstack.getItem())
+			if (stack != null) {
+				if (stack.getItemDamage() == Defaults.WILDCARD) {
+					if (stack.getItem() == itemstack.getItem())
+						return true;
+				} else if (stack.isItemEqual(itemstack))
 					return true;
-			} else if (stack.isItemEqual(itemstack))
-				return true;
+			}
 
 		return false;
 	}
