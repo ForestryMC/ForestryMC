@@ -52,7 +52,7 @@ public class ItemCrated extends Item implements IGenericCrate {
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 
 		if (Proxies.common.isSimulating(world)) {
-			if (contained == null)
+			if (contained == null  || itemstack.stackSize == 0)
 				return itemstack;
 
 			itemstack.stackSize--;
