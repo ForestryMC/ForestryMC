@@ -388,9 +388,7 @@ public class PluginStorage extends NativePlugin implements IOreDictionaryHandler
 		// [5] Set valid items in builder's backpack
 		builderItems.add(new ItemStack(Blocks.torch));
 		builderItems.add(new ItemStack(Blocks.redstone_torch));
-		builderItems.add(new ItemStack(Blocks.unlit_redstone_torch));
 		builderItems.add(new ItemStack(Blocks.redstone_lamp));
-		builderItems.add(new ItemStack(Blocks.lit_redstone_lamp));
 		builderItems.add(new ItemStack(ForestryBlock.candle));
 		builderItems.add(new ItemStack(ForestryBlock.stump));
 		builderItems.add(new ItemStack(Blocks.stonebrick, 1, Defaults.WILDCARD));

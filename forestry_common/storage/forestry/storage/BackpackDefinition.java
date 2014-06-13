@@ -61,7 +61,9 @@ public class BackpackDefinition implements IBackpackDefinition {
 
 	@Override
 	public void addValidItem(ItemStack validItem) {
-		this.validItems.add(validItem);
+		if (validItem.getItem() != null) {
+			this.validItems.add(validItem);
+		}
 	}
 
 	@Override
