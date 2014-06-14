@@ -7,6 +7,8 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -521,28 +523,36 @@ public class PluginStorage extends NativePlugin implements IOreDictionaryHandler
 
 			String[] ident = part.split("[:]+");
 
-			if (ident.length != 1 && ident.length != 2) {
-				Proxies.log.warning("Failed to add block/item of (" + part + ") to "+backpackIdent+" since it isn't formatted properly.");
+			if (ident.length != 2 && ident.length != 3) {
+				Proxies.log.warning("Failed to add block/item of (" + part + ") to "+backpackIdent+" since it isn't formatted properly. Suitable are <name>, <name>:<meta> or <name>:*, e.g. IC2:blockWall:*.");
 				continue;
 			}
 
-			Item item = GameData.itemRegistry.getObject(ident[0]);
+			String name = ident[0] + ":" + ident[1];
+			int meta;
+
+			if (ident.length == 2) {
+				meta = 0;
+			} else {
+				try {
+					meta = ident[2].equals("*") ? OreDictionary.WILDCARD_VALUE : NumberFormat.getIntegerInstance().parse(ident[2]).intValue();
+				} catch (ParseException e) {
+					Proxies.log.warning("Failed to add block/item of (" + part + ") to "+backpackIdent+" since its metadata isn't formatted properly. Suitable are integer values or *.");
+					continue;
+				}
+			}
+
+			Item item = GameData.getItemRegistry().getRaw(name);
 
 			if (item == null) {
-				Block block = GameData.blockRegistry.getObject(ident[0]);
+				Block block = GameData.getBlockRegistry().getRaw(name);
 
-				if (block == null || block == Blocks.air || Item.getItemFromBlock(block) == null) {
+				if (block == null || Item.getItemFromBlock(block) == null) {
 					Proxies.log.warning("Failed to add block/item of (" + part + ") to "+backpackIdent+" since it couldn't be found.");
 					continue;
 				}
 
 				item = Item.getItemFromBlock(block);
-			}
-
-			int meta = 0;
-
-			if (ident.length > 1) {
-				meta = ident[1].equals("*") ? OreDictionary.WILDCARD_VALUE : Integer.parseInt(ident[1]);
 			}
 
 			Proxies.log.finer("Adding block/item of (" + part + ") to "+backpackIdent+".");
