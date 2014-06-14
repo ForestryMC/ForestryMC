@@ -131,7 +131,7 @@ public class ProxyCommon {
 	}
 
 	public File getForestryRoot() {
-		return new File("./");
+		return new File(".");
 	}
 
 	public int getByBlockModelId() {
