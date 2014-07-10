@@ -17,6 +17,7 @@ public class SlotLocked extends SlotForestry {
 		super(par1iInventory, par2, par3, par4);
 		setCanAdjustPhantom(false);
 		setCanShift(false);
+		setPhantom();
 	}
 
 	@Override
