@@ -7,9 +7,7 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import java.security.cert.Certificate;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -19,15 +17,14 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
-import cpw.mods.fml.common.FMLCommonHandler;
+
 import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
+
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.core.PluginInfo;
 import forestry.api.core.Tabs;
@@ -77,7 +74,6 @@ import forestry.core.items.ItemWrench;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.ShapedRecipeCustom;
-import forestry.core.utils.Utils;
 
 @PluginInfo(pluginID = "Core", name = "Core", author = "SirSengir", url = Defaults.URL, description = "Core mechanics for Forestry. Required by all other plugins.")
 public class PluginCore extends NativePlugin implements IFuelHandler {

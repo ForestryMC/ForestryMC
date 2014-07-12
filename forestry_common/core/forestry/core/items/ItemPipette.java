@@ -60,7 +60,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 			if (contents == null)
 				return;
 
-			String descr = contents.getFluid().getLocalizedName();
+			String descr = contents.getFluid().getLocalizedName(contents);
 			if (Config.isDebug)
 				descr += " (" + contents.amount + ")";
 

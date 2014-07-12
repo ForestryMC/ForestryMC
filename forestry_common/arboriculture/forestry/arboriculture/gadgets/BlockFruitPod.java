@@ -60,7 +60,7 @@ public class BlockFruitPod extends BlockCocoa {
 	}
 
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
 		if(Proxies.common.isSimulating(world)) {
 			TileFruitPod tile = getPodTile(world, x, y, z);
 			if (tile != null) {
@@ -70,7 +70,7 @@ public class BlockFruitPod extends BlockCocoa {
 			}
 		}
 
-		return super.removedByPlayer(world, player, x, y, z);
+		return super.removedByPlayer(world, player, x, y, z, willHarvest);
 	}
 
 	@Override

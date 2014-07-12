@@ -85,9 +85,9 @@ public class PluginIC2 implements IPlugin {
 
 		if (rubbersapling != null && resin != null) {
 			String imc = String.format("farmArboreal@%s.%s.%s.%s",
-					GameData.blockRegistry.getNameForObject(StackUtils.getBlock(rubbersapling)),
+					GameData.getBlockRegistry().getNameForObject(StackUtils.getBlock(rubbersapling)),
 					rubbersapling.getItemDamage(),
-					GameData.itemRegistry.getNameForObject(resin.getItem()),
+					GameData.getItemRegistry().getNameForObject(resin.getItem()),
 					resin.getItemDamage());
 			Proxies.log.finest("Sending IMC '%s'.", imc);
 			FMLInterModComms.sendMessage(Defaults.MOD, "add-farmable-sapling", imc);

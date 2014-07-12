@@ -1127,10 +1127,10 @@ public class PluginApiculture extends NativePlugin {
 				continue;
 			}
 
-			Item item = GameData.itemRegistry.getObject(ident[0]);
+			Item item = GameData.getItemRegistry().getRaw(ident[0]);
 
 			if (item == null) {
-				Block block = GameData.blockRegistry.getObject(ident[0]);
+				Block block = GameData.getBlockRegistry().getRaw(ident[0]);
 
 				if (block == null || block == Blocks.air || Item.getItemFromBlock(block) == null) {
 					Proxies.log.warning("Failed to add flower of (" + part + ") to vanilla flower provider since it couldn't be found.");
@@ -1190,7 +1190,7 @@ public class PluginApiculture extends NativePlugin {
 		}
 		else if (message.key.equals("add-alveary-slab") && message.isStringMessage()) {
 			try {
-				Block block = GameData.blockRegistry.getObject(message.getStringValue());
+				Block block = GameData.getBlockRegistry().getRaw(message.getStringValue());
 
 				if (block == null || block == Blocks.air) {
 					Logger.getLogger("Forestry").log(Level.WARNING,

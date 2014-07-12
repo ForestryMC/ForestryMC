@@ -1046,7 +1046,7 @@ public class PluginArboriculture extends NativePlugin implements IFuelHandler {
 	@Override
 	public boolean processIMCMessage(IMCMessage message) {
 		if (message.key.equals("add-fence-block") && message.isStringMessage()) {
-			Block block = GameData.blockRegistry.getObject(message.getStringValue());
+			Block block = GameData.getBlockRegistry().getRaw(message.getStringValue());
 
 			if (block == null || block == Blocks.air) {
 				Proxies.log.warning("invalid add-fence-block IMC: can't resolve block name %s.", message.getStringValue());

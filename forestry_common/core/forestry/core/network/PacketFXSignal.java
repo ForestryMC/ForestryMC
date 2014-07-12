@@ -73,7 +73,7 @@ public class PacketFXSignal extends ForestryPacket {
 		data.writeInt(xCoord);
 		data.writeInt(yCoord);
 		data.writeInt(zCoord);
-		data.writeUTF(GameData.blockRegistry.getNameForObject(block));
+		data.writeUTF(GameData.getBlockRegistry().getNameForObject(block));
 		data.writeInt(meta);
 	}
 
@@ -84,7 +84,7 @@ public class PacketFXSignal extends ForestryPacket {
 		this.xCoord = data.readInt();
 		this.yCoord = data.readInt();
 		this.zCoord = data.readInt();
-		this.block = GameData.blockRegistry.getObject(data.readUTF());
+		this.block = GameData.getBlockRegistry().getRaw(data.readUTF());
 		this.meta = data.readInt();
 	}
 

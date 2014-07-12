@@ -69,7 +69,7 @@ public class ForestryTank extends FluidTank {
 				EnumRarity rarity = fluidType.getRarity();
 				if (rarity == null)
 					rarity = EnumRarity.common;
-				ToolTipLine fluidName = new ToolTipLine(fluidType.getLocalizedName(), rarity.rarityColor);
+				ToolTipLine fluidName = new ToolTipLine(fluidType.getLocalizedName(getFluid()), rarity.rarityColor);
 				fluidName.setSpacing(2);
 				toolTip.add(fluidName);
 				amount = getFluid().amount;

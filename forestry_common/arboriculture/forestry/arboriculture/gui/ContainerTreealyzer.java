@@ -7,12 +7,12 @@
  ******************************************************************************/
 package forestry.arboriculture.gui;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+
+import org.apache.commons.lang3.ArrayUtils;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.arboriculture.items.ItemGermlingGE;
 import forestry.arboriculture.items.ItemTreealyzer.TreealyzerInventory;

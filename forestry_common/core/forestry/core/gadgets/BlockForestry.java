@@ -36,10 +36,10 @@ public abstract class BlockForestry extends BlockContainer {
 	}
 
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
 		IOwnable tile = (IOwnable) world.getTileEntity(x, y, z);
 		if (!tile.isOwnable() || tile.allowsRemoval(player))
-			return super.removedByPlayer(world, player, x, y, z);
+			return super.removedByPlayer(world, player, x, y, z, willHarvest);
 		else
 			return false;
 	}

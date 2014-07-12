@@ -21,7 +21,9 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
+
 import net.minecraftforge.common.ChestGenHooks;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;
@@ -35,7 +37,6 @@ import forestry.apiculture.gadgets.TileBeehouse;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
-import forestry.core.genetics.ClimateHelper;
 import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginApiculture;
 

@@ -9,7 +9,6 @@ package forestry.core.gui;
 
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
-import forestry.core.genetics.ClimateHelper;
 import forestry.core.interfaces.IClimatised;
 import forestry.core.utils.StringUtil;
 

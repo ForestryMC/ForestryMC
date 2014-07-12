@@ -26,7 +26,6 @@ import forestry.api.lepidopterology.IButterfly;
 import forestry.core.config.ForestryItem;
 import forestry.core.genetics.AlleleBoolean;
 import forestry.core.genetics.AlleleTolerance;
-import forestry.core.genetics.ClimateHelper;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StackUtils;

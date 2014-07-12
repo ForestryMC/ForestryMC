@@ -13,6 +13,7 @@ import net.minecraft.util.IIcon;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 
@@ -86,7 +87,7 @@ public class GuiEngineBronze extends GuiEngine {
 			if (fluid == null)
 				return StringUtil.localize("gui.empty");
 
-			String tooltip = fluid.getLocalizedName();
+			String tooltip = fluid.getLocalizedName(new FluidStack(fluid, 1));
 			return tooltip;
 		}
 	}

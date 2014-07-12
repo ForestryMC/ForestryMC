@@ -18,7 +18,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+
 import net.minecraftforge.common.BiomeDictionary;
+
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -42,7 +44,6 @@ import forestry.api.genetics.IPollinatable;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Defaults;
 import forestry.core.genetics.Chromosome;
-import forestry.core.genetics.ClimateHelper;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
 import forestry.core.proxy.Proxies;

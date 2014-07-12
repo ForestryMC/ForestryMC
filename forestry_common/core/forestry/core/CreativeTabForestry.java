@@ -11,7 +11,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.core.ItemInterface;
+import cpw.mods.fml.common.registry.GameData;
+
 import forestry.api.core.Tabs;
 import forestry.core.utils.StringUtil;
 
@@ -35,14 +36,14 @@ public class CreativeTabForestry extends CreativeTabs {
 	public ItemStack getIconItemStack() {
 		switch (icon) {
 		case 1:
-			return ItemInterface.getItem("beeDroneGE");
+			return new ItemStack(GameData.getItemRegistry().getRaw("Forestry:beeDroneGE"));
 		case 2:
-			return ItemInterface.getItem("sapling");
+			return new ItemStack(GameData.getItemRegistry().getRaw("Forestry:sapling"));
 		case 3:
-			return ItemInterface.getItem("butterflyGE");
+			return new ItemStack(GameData.getItemRegistry().getRaw("Forestry:butterflyGE"));
 		case 0:
 		default:
-			return ItemInterface.getItem("fertilizerCompound");
+			return new ItemStack(GameData.getItemRegistry().getRaw("Forestry:fertilizerCompound"));
 		}
 	}
 

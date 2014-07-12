@@ -307,9 +307,9 @@ public class StackUtils {
 			return true;
 
 		if (oreDictionary) {
-			int idBase = OreDictionary.getOreID(base);
-			if (idBase >= 0) {
-				for (ItemStack itemstack : OreDictionary.getOres(idBase)) {
+			int[] idsBase = OreDictionary.getOreIDs(base);
+			for (int idBase : idsBase) {
+				for (ItemStack itemstack : OreDictionary.getOres(OreDictionary.getOreName(idBase))) {
 					if (comparison.getItem() == itemstack.getItem() && (itemstack.getItemDamage() == OreDictionary.WILDCARD_VALUE || comparison.getItemDamage() == itemstack.getItemDamage()))
 						return true;
 				}

@@ -222,13 +222,13 @@ public class PluginFarming extends NativePlugin {
 			}
 
 			try {
-				Block sapling = GameData.blockRegistry.getObject(items[0]);
+				Block sapling = GameData.getBlockRegistry().getRaw(items[0]);
 				if (sapling == null || sapling == Blocks.air) throw new RuntimeException("can't find block for "+items[0]);
 
 				if (items.length == 2) {
 					Farmables.farmables.get(tokens[0]).add(new FarmableGenericSapling(sapling, Integer.parseInt(items[1])));
 				} else {
-					Item windfall = GameData.itemRegistry.getObject(items[2]);
+					Item windfall = GameData.getItemRegistry().getRaw(items[2]);
 					if (windfall == null) throw new RuntimeException("can't find item for "+items[2]);
 
 					Farmables.farmables.get(tokens[0]).add(
@@ -261,9 +261,9 @@ public class PluginFarming extends NativePlugin {
 			}
 
 			try {
-				Item seed = GameData.itemRegistry.getObject(items[0]);
+				Item seed = GameData.getItemRegistry().getRaw(items[0]);
 				if (seed == null) throw new RuntimeException("can't find item for "+items[0]);
-				Block crop = GameData.blockRegistry.getObject(items[2]);
+				Block crop = GameData.getBlockRegistry().getRaw(items[2]);
 				if (crop == null || crop == Blocks.air) throw new RuntimeException("can't find block for "+items[2]);
 
 				Farmables.farmables.get(tokens[0]).add(

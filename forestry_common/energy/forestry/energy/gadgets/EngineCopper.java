@@ -284,7 +284,7 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 
 		String fuelItemName = nbttagcompound.getString("EngineFuelItem");
 
-		if (!fuelItemName.isEmpty()) fuelItem = GameData.itemRegistry.getObject(fuelItemName);
+		if (!fuelItemName.isEmpty()) fuelItem = GameData.getItemRegistry().getRaw(fuelItemName);
 
 		fuelItemMeta = nbttagcompound.getInteger("EngineFuelMeta");
 		burnTime = nbttagcompound.getInteger("EngineBurnTime");
@@ -304,7 +304,7 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 		super.writeToNBT(nbttagcompound);
 
 		if (fuelItem != null) {
-			nbttagcompound.setString("EngineFuelItem", GameData.itemRegistry.getNameForObject(fuelItem));
+			nbttagcompound.setString("EngineFuelItem", GameData.getItemRegistry().getNameForObject(fuelItem));
 		}
 
 		nbttagcompound.setInteger("EngineFuelMeta", fuelItemMeta);

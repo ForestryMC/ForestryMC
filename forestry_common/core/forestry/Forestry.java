@@ -38,7 +38,7 @@ import forestry.core.utils.ItemStackMap;
 		modid = Defaults.MOD,
 		name = "Forestry",
 		version = Version.VERSION,
-		dependencies = "required-after:Forge@[10.13.0.1152,);"
+		dependencies = "required-after:Forge@[10.13.0.1180,);"
 				+ "after:Buildcraft|Core;"
 				+ "after:ExtrabiomesXL;"
 				+ "after:BiomesOPlenty;"

@@ -60,7 +60,7 @@ public class ForestryPacket {
 		String itemName = data.readUTF();
 
 		if (!itemName.isEmpty()) {
-			Item item = GameData.itemRegistry.getObject(itemName);
+			Item item = GameData.getItemRegistry().getRaw(itemName);
 			byte stackSize = data.readByte();
 			short meta = data.readShort();
 			itemstack = new ItemStack(item, stackSize, meta);
@@ -77,7 +77,7 @@ public class ForestryPacket {
 		if (itemstack == null)
 			data.writeUTF("");
 		else {
-			data.writeUTF(GameData.itemRegistry.getNameForObject(itemstack.getItem()));
+			data.writeUTF(GameData.getItemRegistry().getNameForObject(itemstack.getItem()));
 			data.writeByte(itemstack.stackSize);
 			data.writeShort(itemstack.getItemDamage());
 
