@@ -185,7 +185,7 @@ public class PacketHandler {
 
 		ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(type);
 		if(root != null)
-			tracker = root.getBreedingTracker(Proxies.common.getRenderWorld(), player.getGameProfile().getId());
+			tracker = root.getBreedingTracker(Proxies.common.getRenderWorld(), player.getGameProfile());
 		if (tracker != null) {
 			tracker.decodeFromNBT(packet.getTagCompound());
 			MinecraftForge.EVENT_BUS.post(new ForestryEvent.SyncedBreedingTracker(tracker, player));

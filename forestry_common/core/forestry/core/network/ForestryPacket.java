@@ -7,6 +7,7 @@
  ******************************************************************************/
 package forestry.core.network;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -94,7 +95,7 @@ public class ForestryPacket {
 		else {
 			byte[] compressed = new byte[length];
 			data.readFully(compressed);
-			return CompressedStreamTools.decompress(compressed);
+			return CompressedStreamTools.readCompressed(new ByteArrayInputStream(compressed));
 		}
 
 	}

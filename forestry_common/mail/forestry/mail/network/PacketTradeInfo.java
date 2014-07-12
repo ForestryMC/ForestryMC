@@ -10,8 +10,11 @@ package forestry.mail.network;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.UUID;
 
 import net.minecraft.item.ItemStack;
+
+import com.mojang.authlib.GameProfile;
 
 import forestry.api.mail.TradeStationInfo;
 import forestry.core.network.ForestryPacket;
@@ -39,8 +42,14 @@ public class PacketTradeInfo extends ForestryPacket {
 
 		data.writeShort(0);
 
-		data.writeUTF(tradeInfo.moniker);
-		data.writeUTF(tradeInfo.owner);
+		data.writeLong(tradeInfo.moniker.getId().getMostSignificantBits());
+		data.writeLong(tradeInfo.moniker.getId().getLeastSignificantBits());
+		data.writeUTF(tradeInfo.moniker.getName());
+
+		data.writeLong(tradeInfo.owner.getId().getMostSignificantBits());
+		data.writeLong(tradeInfo.owner.getId().getLeastSignificantBits());
+		data.writeUTF(tradeInfo.owner.getName());
+
 		writeItemStack(tradeInfo.tradegood, data);
 		data.writeShort(tradeInfo.required.length);
 		for (int i = 0; i < tradeInfo.required.length; i++)
@@ -55,13 +64,11 @@ public class PacketTradeInfo extends ForestryPacket {
 		if (isNotNull < 0)
 			return;
 
-		String moniker;
-		String owner;
+		GameProfile moniker = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readUTF());
+		GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readUTF());
 		ItemStack tradegood;
 		ItemStack[] required;
 
-		moniker = data.readUTF();
-		owner = data.readUTF();
 		tradegood = readItemStack(data);
 		required = new ItemStack[data.readShort()];
 		for (int i = 0; i < required.length; i++)

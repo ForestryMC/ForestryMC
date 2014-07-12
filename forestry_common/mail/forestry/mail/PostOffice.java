@@ -9,11 +9,14 @@ package forestry.mail;
 
 import java.io.File;
 import java.util.LinkedHashMap;
+import java.util.UUID;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
+
+import com.mojang.authlib.GameProfile;
 
 import forestry.api.mail.EnumPostage;
 import forestry.api.mail.ILetter;
@@ -30,7 +33,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 
 	// / CONSTANTS
 	public static final String SAVE_NAME = "ForestryMail";
-	private int[] collectedPostage = new int[EnumPostage.values().length];
+	private final int[] collectedPostage = new int[EnumPostage.values().length];
 
 	// / CONSTRUCTOR
 	public PostOffice(String s) {
@@ -57,10 +60,10 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 	}
 
 	/* TRADE STATION MANAGMENT */
-	private LinkedHashMap<String, ITradeStation> activeTradeStations;
+	private LinkedHashMap<GameProfile, ITradeStation> activeTradeStations;
 
 	@Override
-	public LinkedHashMap<String, ITradeStation> getActiveTradeStations(World world) {
+	public LinkedHashMap<GameProfile, ITradeStation> getActiveTradeStations(World world) {
 		if (activeTradeStations == null)
 			refreshActiveTradeStations(world);
 
@@ -68,7 +71,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 	}
 
 	private void refreshActiveTradeStations(World world) {
-		activeTradeStations = new LinkedHashMap<String, ITradeStation>();
+		activeTradeStations = new LinkedHashMap<GameProfile, ITradeStation>();
 		if (world == null || world.getSaveHandler() == null)
 			return;
 		File worldSave = world.getSaveHandler().getMapFileFromName("dummy");
@@ -84,7 +87,10 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 			if (!str.endsWith(".dat"))
 				continue;
 
-			ITradeStation trade = PostManager.postRegistry.getTradeStation(world, str.replace(TradeStation.SAVE_NAME, "").replace(".dat", ""));
+			String[] parts = str.replace(TradeStation.SAVE_NAME, "").replace(".dat", "").split("_");
+			if (parts.length != 2) continue;
+
+			ITradeStation trade = PostManager.postRegistry.getTradeStation(world, new GameProfile(UUID.fromString(parts[0]), parts[1]));
 			if (trade == null)
 				continue;
 
@@ -164,7 +170,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 			IPostalCarrier carrier = PostManager.postRegistry.getCarrier(address.getType());
 			if (carrier == null)
 				continue;
-			state = carrier.deliverLetter(world, this, address.getIdentifier(), itemstack, doLodge);
+			state = carrier.deliverLetter(world, this, address.getProfile(), itemstack, doLodge);
 			if (!state.isOk())
 				break;
 		}

@@ -10,8 +10,11 @@ package forestry.core.network;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.UUID;
 
 import net.minecraftforge.common.util.ForgeDirection;
+
+import com.mojang.authlib.GameProfile;
 
 import forestry.core.EnumErrorCode;
 import forestry.core.gadgets.TileForestry;
@@ -24,7 +27,7 @@ public class PacketTileUpdate extends PacketUpdate {
 
 	private boolean isOwnable = false;
 	private EnumAccess access = EnumAccess.SHARED;
-	private String owner = null;
+	private GameProfile owner = null;
 
 	public PacketTileUpdate() {
 	}
@@ -42,8 +45,6 @@ public class PacketTileUpdate extends PacketUpdate {
 		isOwnable = tile.isOwnable();
 		access = tile.getAccess();
 		owner = tile.owner;
-		if (owner == null || owner.isEmpty())
-			owner = "";
 	}
 
 	@Override
@@ -58,7 +59,14 @@ public class PacketTileUpdate extends PacketUpdate {
 
 		if (isOwnable) {
 			data.writeInt(access.ordinal());
-			data.writeUTF(owner);
+			if (owner == null) {
+				data.writeBoolean(false);
+			} else {
+				data.writeBoolean(true);
+				data.writeLong(owner.getId().getMostSignificantBits());
+				data.writeLong(owner.getId().getLeastSignificantBits());
+				data.writeUTF(owner.getName());
+			}
 		} else
 			data.writeInt(-1);
 
@@ -79,7 +87,12 @@ public class PacketTileUpdate extends PacketUpdate {
 		isOwnable = ordinal >= 0;
 		if (isOwnable) {
 			access = EnumAccess.values()[ordinal];
-			owner = data.readUTF();
+
+			if (data.readBoolean()) {
+				owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readUTF());
+			} else {
+				owner = null;
+			}
 		}
 
 		super.readData(data);
@@ -97,7 +110,7 @@ public class PacketTileUpdate extends PacketUpdate {
 		return this.access;
 	}
 
-	public String getOwner() {
+	public GameProfile getOwner() {
 		return this.owner;
 	}
 }

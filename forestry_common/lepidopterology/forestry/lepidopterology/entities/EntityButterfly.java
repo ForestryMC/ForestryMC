@@ -305,7 +305,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 			return false;
 
 		if(Proxies.common.isSimulating(worldObj)) {
-			contained.getGenome().getPrimary().getRoot().getBreedingTracker(worldObj, player.getGameProfile().getId()).registerCatch(contained);
+			contained.getGenome().getPrimary().getRoot().getBreedingTracker(worldObj, player.getGameProfile()).registerCatch(contained);
 			StackUtils.dropItemStackAsEntity(PluginLepidopterology.butterflyInterface.getMemberStack(contained.copy(), EnumFlutterType.BUTTERFLY.ordinal()), worldObj, posX, posY, posZ);
 			setDead();
 		} else

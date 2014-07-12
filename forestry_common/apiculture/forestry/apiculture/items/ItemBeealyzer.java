@@ -98,8 +98,8 @@ public class ItemBeealyzer extends ItemInventoried {
 
 				bee.analyze();
 				if(player != null) {
-					PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, player.getGameProfile().getId()).registerSpecies(bee.getGenome().getPrimary());
-					PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, player.getGameProfile().getId()).registerSpecies(bee.getGenome().getSecondary());
+					PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(bee.getGenome().getPrimary());
+					PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(bee.getGenome().getSecondary());
 				}
 
 				NBTTagCompound nbttagcompound = new NBTTagCompound();

@@ -53,7 +53,7 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 
 		this.inventory = inventory;
 		this.speciesRoot = speciesRoot;
-		this.breedingTracker = speciesRoot.getBreedingTracker(player.worldObj, player.getGameProfile().getId());
+		this.breedingTracker = speciesRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
 	}
 
 	protected final int getColorCoding(boolean dominant) {

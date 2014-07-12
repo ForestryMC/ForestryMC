@@ -25,7 +25,6 @@ import forestry.core.config.ForestryItem;
 import forestry.core.genetics.AlleleArea;
 import forestry.core.genetics.AlleleBoolean;
 import forestry.core.genetics.AlleleTolerance;
-import forestry.core.genetics.ClimateHelper;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Vect;
@@ -47,7 +46,7 @@ public class GuiBeealyzer extends GuiAlyzer {
 		for (ItemStack beeStack : beeList)
 			iconStacks.put(PluginApiculture.beeInterface.getMember(beeStack).getIdent(), beeStack);
 
-		breedingTracker = PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, player.getGameProfile().getId());
+		breedingTracker = PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, player.getGameProfile());
 	}
 
 	@Override

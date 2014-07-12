@@ -19,17 +19,19 @@ import forestry.plugins.PluginArboriculture;
 
 public class CommandSpawnForest extends CommandMC {
 
+	@Override
 	public String getCommandName() {
 		return "spawnforest";
 	}
 
+	@Override
 	public String getCommandUsage(ICommandSender sender) {
 		return "/" + getCommandName() + " <player-name> <species-name>";
 	}
 
+	@Override
 	public void processCommand(ICommandSender sender, String[] arguments) {
-
-		EntityPlayer player = this.getPlayerFromName(sender.getCommandSenderName());
+		EntityPlayer player = getCommandSenderAsPlayer(sender);
 
 		int x = (int) player.posX - 16;
 		int y = (int) (player.posY);

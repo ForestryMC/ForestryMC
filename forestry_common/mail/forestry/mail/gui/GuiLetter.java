@@ -12,6 +12,7 @@ import java.util.Locale;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
 
+import com.mojang.authlib.GameProfile;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -92,8 +93,8 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 
 		address = new GuiTextField(this.fontRendererObj, guiLeft + 46, guiTop + 13, 93, 13);
 		if (container.getRecipient() != null) {
-			address.setText(container.getRecipient().getIdentifier());
-			this.setRecipient(container.getRecipient().getIdentifier(), container.getCarrierType());
+			address.setText(container.getRecipient().getProfile().getName());
+			this.setRecipient(container.getRecipient().getProfile().getName(), container.getCarrierType());
 		}
 
 		text = new GuiTextBox(this.fontRendererObj, guiLeft + 17, guiTop + 31, 122, 57);
@@ -230,7 +231,7 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 		if (this.isProcessedLetter)
 			return;
 
-		MailAddress recipient = new MailAddress(identifier, type);
+		MailAddress recipient = new MailAddress(new GameProfile(null, identifier), type);
 		container.setRecipient(recipient);
 		container.updateTradeInfo(this.mc.theWorld, recipient);
 	}

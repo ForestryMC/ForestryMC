@@ -9,6 +9,8 @@ package forestry.mail.proxy;
 
 import net.minecraft.world.World;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.PacketIds;
 import forestry.core.proxy.Proxies;
@@ -35,15 +37,15 @@ public class ClientProxyMail extends ProxyMail {
 		if (!Proxies.common.isSimulating(Proxies.common.getRenderWorld()))
 			Proxies.net.sendToServer(new ForestryPacket(PacketIds.POBOX_INFO_REQUEST));
 		else {
-			POBox pobox = PostRegistry.getPOBox(Proxies.common.getRenderWorld(), Proxies.common.getClientInstance().thePlayer.getGameProfile().getId());
+			POBox pobox = PostRegistry.getPOBox(Proxies.common.getRenderWorld(), Proxies.common.getClientInstance().thePlayer.getGameProfile());
 			if (pobox != null)
-				setPOBoxInfo(Proxies.common.getRenderWorld(), Proxies.common.getClientInstance().thePlayer.getGameProfile().getId(), pobox.getPOBoxInfo());
+				setPOBoxInfo(Proxies.common.getRenderWorld(), Proxies.common.getClientInstance().thePlayer.getGameProfile(), pobox.getPOBoxInfo());
 		}
 	}
 
 	@Override
-	public void setPOBoxInfo(World world, String playername, POBoxInfo info) {
-		if (Proxies.common.getClientInstance().thePlayer == null || !Proxies.common.getClientInstance().thePlayer.getGameProfile().getId().equals(playername))
+	public void setPOBoxInfo(World world, GameProfile playername, POBoxInfo info) {
+		if (Proxies.common.getClientInstance().thePlayer == null || !Proxies.common.getClientInstance().thePlayer.getGameProfile().equals(playername))
 			return;
 
 		GuiMailboxInfo.instance.setPOBoxInfo(info);

@@ -9,6 +9,8 @@ package forestry.core.interfaces;
 
 import net.minecraft.entity.player.EntityPlayer;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.core.utils.EnumAccess;
 
 public interface IOwnable {
@@ -17,7 +19,7 @@ public interface IOwnable {
 
 	boolean isOwned();
 
-	String getOwnerName();
+	GameProfile getOwnerName();
 
 	void setOwner(EntityPlayer player);
 

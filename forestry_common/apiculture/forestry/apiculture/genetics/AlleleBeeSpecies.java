@@ -19,6 +19,8 @@ import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -40,17 +42,17 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 	public IJubilanceProvider jubilanceProvider;
 
-	private IBeeRoot root;
-	
-	private HashMap<ItemStack, Integer> products = new HashMap<ItemStack, Integer>();
-	private HashMap<ItemStack, Integer> specialty = new HashMap<ItemStack, Integer>();
+	private final IBeeRoot root;
+
+	private final HashMap<ItemStack, Integer> products = new HashMap<ItemStack, Integer>();
+	private final HashMap<ItemStack, Integer> specialty = new HashMap<ItemStack, Integer>();
 
 	private String texture;
-	private int primaryColour;
-	private int secondaryColour;
+	private final int primaryColour;
+	private final int secondaryColour;
 
-	private String iconType = "default";
-	
+	private final String iconType = "default";
+
 	public AlleleBeeSpecies(String uid, boolean dominant, String name, IClassification branch, int primaryColor, int secondaryColor) {
 		this(uid, dominant, name, branch, null, primaryColor, secondaryColor);
 	}
@@ -74,12 +76,12 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	public IBeeRoot getRoot() {
 		return root;
 	}
-	
+
 	public AlleleBeeSpecies setEntityTexture(String texture) {
 		this.texture = Defaults.TEXTURE_PATH_ENTITIES + "/bees/" + texture + ".png";
 		return this;
 	}
-	
+
 	public AlleleBeeSpecies addProduct(ItemStack product, int chance) {
 		this.products.put(product, chance);
 		return this;
@@ -102,11 +104,11 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	}
 
 	private int getGeneticAdvancement(IAllele species, ArrayList<IAllele> exclude) {
-		
+
 		int own = 1;
 		int highest = 0;
 		exclude.add(species);
-		
+
 		for(IMutation mutation : getRoot().getPaths(species, EnumBeeChromosome.SPECIES.ordinal())) {
 			if(!exclude.contains(mutation.getAllele0())) {
 				int otherAdvance = getGeneticAdvancement(mutation.getAllele0(), exclude);
@@ -119,10 +121,10 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 					highest = otherAdvance;
 			}
 		}
-		
+
 		return own + (highest < 0 ? 0 : highest);
 	}
-	
+
 	@Override
 	public float getResearchSuitability(ItemStack itemstack) {
 		if(itemstack == null)
@@ -134,16 +136,16 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 		for(ItemStack stack : specialty.keySet())
 			if(stack.isItemEqual(itemstack))
 				return 1.0f;
-		
+
 		return super.getResearchSuitability(itemstack);
 	}
-	
+
 	@Override
-	public ItemStack[] getResearchBounty(World world, String researcher, IIndividual individual, int bountyLevel) {
+	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
 		ArrayList<ItemStack> bounty = new ArrayList<ItemStack>();
 		for(ItemStack stack : super.getResearchBounty(world, researcher, individual, bountyLevel))
 			bounty.add(stack);
-		
+
 		if(bountyLevel > 10) {
 			for(ItemStack stack : specialty.keySet()) {
 				bounty.add(StackUtils.copyWithRandomSize(stack, (int)((float)bountyLevel / 2), world.rand));
@@ -151,7 +153,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 		}
 		for(ItemStack stack : products.keySet()) {
 			bounty.add(StackUtils.copyWithRandomSize(stack, (int)((float)bountyLevel / 2), world.rand));
-		}				
+		}
 		return bounty.toArray(StackUtils.EMPTY_STACK_ARRAY);
 	}
 
@@ -203,7 +205,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 		for (int i = 0; i < EnumBeeType.values().length; i++) {
 			if(EnumBeeType.values()[i] == EnumBeeType.NONE)
 				continue;
-			
+
 			icons[i][0] = TextureManager.getInstance().registerTex(register, "bees/" + iconType + "/" + EnumBeeType.values()[i].toString().toLowerCase(Locale.ENGLISH) + ".outline");;
 			icons[i][1] = (EnumBeeType.values()[i] != EnumBeeType.LARVAE) ? body1
 					: TextureManager.getInstance().registerTex(register, "bees/" + iconType + "/" + EnumBeeType.values()[i].toString().toLowerCase(Locale.ENGLISH) + ".body");

@@ -79,7 +79,7 @@ public class AIButterflyInteract extends AIButterflyBase {
 					continue;
 
 				// We matched, replace the leaf block with ours and set the ersatz genome
-				((ITreeRoot)AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees")).setLeaves(entity.worldObj, entry.getValue(), "", rest.posX, rest.posY, rest.posZ);
+				((ITreeRoot)AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees")).setLeaves(entity.worldObj, entry.getValue(), null, rest.posX, rest.posY, rest.posZ);
 				// Now let's pollinate
 				nursery = (IButterflyNursery)entity.worldObj.getTileEntity(rest.posX, rest.posY, rest.posZ);
 			}
@@ -94,7 +94,7 @@ public class AIButterflyInteract extends AIButterflyBase {
 		if(entity.cooldownPollination > 0)
 			return false;
 
-		IPollinatable pollinatable = Utils.getOrCreatePollinatable("", entity.worldObj, rest.posX, rest.posY, rest.posZ);
+		IPollinatable pollinatable = Utils.getOrCreatePollinatable(null, entity.worldObj, rest.posX, rest.posY, rest.posZ);
 		if(pollinatable == null)
 			return false;
 

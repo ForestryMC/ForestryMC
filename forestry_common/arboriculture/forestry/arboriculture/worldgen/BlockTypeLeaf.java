@@ -9,15 +9,17 @@ package forestry.arboriculture.worldgen;
 
 import net.minecraft.world.World;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.api.world.ITreeGenData;
 import forestry.core.config.ForestryBlock;
 import forestry.core.worldgen.BlockType;
 
 public class BlockTypeLeaf extends BlockType {
 
-	private String owner;
+	private GameProfile owner;
 
-	public BlockTypeLeaf(String owner) {
+	public BlockTypeLeaf(GameProfile owner) {
 		super(ForestryBlock.leaves, 0);
 	}
 

@@ -179,7 +179,7 @@ public class BlockBase extends BlockForestry {
 		if (tile.allowsInteraction(player))
 			tile.openGui(player, tile);
 		else
-			player.addChatMessage(new ChatComponentTranslation("\u00A7c%s %s", new ChatComponentText(tile.getOwnerName()), new ChatComponentTranslation("chat.accesslocked")));
+			player.addChatMessage(new ChatComponentTranslation("\u00A7c%s %s", new ChatComponentText(tile.getOwnerName().getName()), new ChatComponentTranslation("chat.accesslocked")));
 		return true;
 	}
 

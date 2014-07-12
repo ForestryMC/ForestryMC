@@ -16,6 +16,8 @@ import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IIconProvider;
@@ -31,8 +33,8 @@ import forestry.core.utils.StringUtil;
 
 public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
 
-	private String name;
-	private String binomial;
+	private final String name;
+	private final String binomial;
 	private String description = null;
 	private int complexity = 3;
 	private boolean hasEffect = false;
@@ -93,7 +95,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
 	}
 
 	@Override
-	public ItemStack[] getResearchBounty(World world, String researcher, IIndividual individual, int bountyLevel) {
+	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
 
 		ItemStack research = null;
 		if (world.rand.nextFloat() < ((float) 10 / bountyLevel)) {

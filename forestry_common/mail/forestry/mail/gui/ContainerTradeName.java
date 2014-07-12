@@ -9,6 +9,9 @@ package forestry.mail.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.server.MinecraftServer;
+
+import com.mojang.authlib.GameProfile;
 
 import forestry.core.gui.ContainerForestry;
 import forestry.core.network.PacketIds;
@@ -29,13 +32,13 @@ public class ContainerTradeName extends ContainerForestry {
 		isLinked = machine.isLinked();
 	}
 
-	public String getMoniker() {
+	public GameProfile getMoniker() {
 		return machine.getMoniker();
 	}
 
 	public void setMoniker(String moniker) {
 
-		if (moniker == null || moniker.isEmpty())
+		if (moniker == null)
 			return;
 
 		PacketPayload payload = new PacketPayload(0, 0, 1);
@@ -43,12 +46,11 @@ public class ContainerTradeName extends ContainerForestry {
 
 		PacketUpdate packet = new PacketUpdate(PacketIds.TRADING_MONIKER_SET, payload);
 		Proxies.net.sendToServer(packet);
-
-		machine.setMoniker(moniker);
 	}
 
 	public void handleSetMoniker(PacketUpdate packet) {
-		machine.setMoniker(packet.payload.stringPayload[0]);
+		GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(packet.payload.stringPayload[0]);
+		machine.setMoniker(profile);
 	}
 
 	@Override

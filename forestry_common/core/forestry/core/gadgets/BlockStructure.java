@@ -71,7 +71,7 @@ public abstract class BlockStructure extends BlockForestry {
 		if (tile.allowsInteraction(player))
 			tile.openGui(player);
 		else
-			player.addChatMessage(new ChatComponentTranslation("\u00A7c%s %s", new ChatComponentText(tile.getOwnerName()), new ChatComponentTranslation("chat.accesslocked")));
+			player.addChatMessage(new ChatComponentTranslation("\u00A7c%s %s", new ChatComponentText(tile.getOwnerName().getName()), new ChatComponentTranslation("chat.accesslocked")));
 		return true;
 	}
 

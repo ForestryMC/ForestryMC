@@ -72,7 +72,7 @@ public class OwnerLedger extends Ledger {
 		manager.minecraft.fontRenderer.drawStringWithShadow(StringUtil.localize("gui.owner"), x + 22, y + 8, manager.gui.fontColor.get("ledger.owner.header"));
 
 		String owner;
-		if ((owner = tile.getOwnerName()) == null)
+		if ((owner = tile.getOwnerName().getName()) == null)
 			owner = StringUtil.localize("gui.derelict");
 
 		manager.minecraft.fontRenderer.drawString(owner, x + 22, y + 20, manager.gui.fontColor.get("ledger.owner.text"));

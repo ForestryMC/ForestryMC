@@ -20,6 +20,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraftforge.common.BiomeDictionary;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.api.core.IIconProvider;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
@@ -128,7 +130,7 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	}
 
 	@Override
-	public ItemStack[] getResearchBounty(World world, String researcher, IIndividual individual, int bountyLevel) {
+	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
 		return new ItemStack[] { getRoot().getMemberStack(individual.copy(), EnumFlutterType.SERUM.ordinal()) };
 	}
 

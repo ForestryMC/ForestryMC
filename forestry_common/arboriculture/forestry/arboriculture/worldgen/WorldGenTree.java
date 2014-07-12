@@ -7,6 +7,8 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.api.world.ITreeGenData;
 import forestry.core.worldgen.BlockType;
 import forestry.plugins.PluginArboriculture;
@@ -49,7 +51,7 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 	protected void generateAdjustedCylinder(int yCenter, float radius, int height, BlockType block, EnumReplaceMode replace) {
 		generateAdjustedCylinder(yCenter, 0, radius, height, block, replace);
 	}
-	
+
 	protected void generateAdjustedCylinder(int yCenter, int offset, float radius, int height, BlockType block, EnumReplaceMode replace) {
 		generateCylinder(getCenteredAt(yCenter, offset), radius + girth, height, block, replace);
 	}
@@ -83,7 +85,7 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 	}
 
 	@Override
-	public BlockType getLeaf(String owner) {
+	public BlockType getLeaf(GameProfile owner) {
 		return new BlockTypeLeaf(owner);
 	}
 

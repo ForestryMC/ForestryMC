@@ -15,6 +15,8 @@ import java.util.Set;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
 import forestry.api.mail.TradeStationInfo;
@@ -30,7 +32,7 @@ import forestry.mail.network.PacketTradeInfo;
 public class ContainerCatalogue extends ContainerForestry implements IGuiSelectable {
 
 	private final EntityPlayer player;
-	private final LinkedHashMap<String, ITradeStation> stations;
+	private final LinkedHashMap<GameProfile, ITradeStation> stations;
 	private TradeStationInfo currentTrade = null;
 	private Iterator<ITradeStation> iterator = null;
 
@@ -53,7 +55,7 @@ public class ContainerCatalogue extends ContainerForestry implements IGuiSelecta
 		this.player = player;
 
 		// Filter out any trade stations which do not actually offer anything.
-		stations = new LinkedHashMap<String, ITradeStation>();
+		stations = new LinkedHashMap<GameProfile, ITradeStation>();
 		rebuildStationsList();
 	}
 

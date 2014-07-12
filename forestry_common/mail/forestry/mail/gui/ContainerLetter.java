@@ -12,6 +12,7 @@ import java.util.Locale;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 
 import forestry.api.mail.ILetter;
@@ -90,7 +91,7 @@ public class ContainerLetter extends ContainerItemInventory {
 		if (Proxies.common.isSimulating(entityplayer.worldObj)) {
 			ILetter letter = letterInventory.getLetter();
 			if (!letter.isProcessed())
-				letter.setSender(new MailAddress(entityplayer.getGameProfile().getId()));
+				letter.setSender(new MailAddress(entityplayer.getGameProfile()));
 		}
 
 		super.onContainerClosed(entityplayer);
@@ -135,7 +136,7 @@ public class ContainerLetter extends ContainerItemInventory {
 
 		// / Send to server
 		PacketPayload payload = new PacketPayload(0, 0, 2);
-		payload.stringPayload[0] = this.getRecipient().getIdentifier();
+		payload.stringPayload[0] = getRecipient().getProfile().getName();
 		payload.stringPayload[1] = this.carrier;
 
 		PacketUpdate packet = new PacketUpdate(PacketIds.LETTER_RECIPIENT, payload);
@@ -143,7 +144,7 @@ public class ContainerLetter extends ContainerItemInventory {
 	}
 
 	public void handleSetRecipient(EntityPlayer player, PacketUpdate packet) {
-		MailAddress recipient = new MailAddress(packet.payload.stringPayload[0], packet.payload.stringPayload[1]);
+		MailAddress recipient = new MailAddress(MinecraftServer.getServer().func_152358_ax().func_152655_a(packet.payload.stringPayload[1]));
 		getLetter().setRecipient(recipient);
 		// Update the trading info
 		updateTradeInfo(player.worldObj, recipient);
@@ -187,7 +188,7 @@ public class ContainerLetter extends ContainerItemInventory {
 		if (!address.getType().equals(EnumAddressee.TRADER.toString().toLowerCase(Locale.ENGLISH)))
 			return;
 
-		ITradeStation station = PostManager.postRegistry.getTradeStation(world, address.getIdentifier());
+		ITradeStation station = PostManager.postRegistry.getTradeStation(world, address.getProfile());
 		if (station == null)
 			return;
 

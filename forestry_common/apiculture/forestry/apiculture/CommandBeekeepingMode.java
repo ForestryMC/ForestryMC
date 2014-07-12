@@ -23,7 +23,10 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
 
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IApiaristTracker;
@@ -90,7 +93,7 @@ public class CommandBeekeepingMode extends CommandMC {
 				throw new CommandException("A bekeeping mode called '%s' is not available.", desired);
 
 			PluginApiculture.beeInterface.setBeekeepingMode(world, mode.getName());
-			notifyAdmins(sender, "Beekeeping mode set to %s.", mode.getName());
+			func_152373_a(sender, this, "Beekeeping mode set to %s.", mode.getName());
 
 		} else if (arguments[0].matches("save")) {
 			if (arguments.length <= 1)
@@ -120,7 +123,8 @@ public class CommandBeekeepingMode extends CommandMC {
 		statistics.add("MODE: " + PluginApiculture.beeInterface.getBeekeepingMode(world).getName());
 		statistics.add("");
 
-		IApiaristTracker tracker = PluginApiculture.beeInterface.getBreedingTracker(world, player);
+		GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(player);
+		IApiaristTracker tracker = PluginApiculture.beeInterface.getBreedingTracker(world, profile);
 		if (tracker == null)
 			statistics.add("No statistics found.");
 		else {

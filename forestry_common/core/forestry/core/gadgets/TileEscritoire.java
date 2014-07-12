@@ -12,6 +12,8 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
@@ -77,7 +79,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 		return game;
 	}
 
-	public void processTurnResult(String researcher) {
+	public void processTurnResult(GameProfile gameProfile) {
 		if(!game.isWon())
 			return;
 
@@ -85,7 +87,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 		if(individual == null)
 			return;
 
-		for(ItemStack itemstack : individual.getGenome().getPrimary().getResearchBounty(worldObj, researcher, individual, game.getBountyLevel()))
+		for(ItemStack itemstack : individual.getGenome().getPrimary().getResearchBounty(worldObj, gameProfile, individual, game.getBountyLevel()))
 			inventory.addStack(itemstack, SLOT_RESULTS_1, SLOTS_RESULTS_COUNT, false, true);
 	}
 

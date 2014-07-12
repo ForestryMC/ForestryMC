@@ -146,7 +146,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 			if (!tree.canStay(world, x, y + yShift, z))
 				return false;
 
-			if (PluginArboriculture.treeInterface.plantSapling(world, tree, player.getGameProfile().getId(), x, y + yShift, z)) {
+			if (PluginArboriculture.treeInterface.plantSapling(world, tree, player.getGameProfile(), x, y + yShift, z)) {
 				Proxies.common.addBlockPlaceEffects(world, x, y, z, world.getBlock(x, y + yShift, z), 0);
 				if (!player.capabilities.isCreativeMode)
 					itemstack.stackSize--;

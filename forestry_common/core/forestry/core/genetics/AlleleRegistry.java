@@ -20,6 +20,8 @@ import java.util.Map.Entry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleHandler;
 import forestry.api.genetics.IAlleleRegistry;
@@ -40,7 +42,7 @@ public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
 	public static final int ALLELE_ARRAY_SIZE = 2048;
 
 	/* SPECIES ROOT */
-	private LinkedHashMap<String, ISpeciesRoot> rootMap = new LinkedHashMap<String, ISpeciesRoot>(16);
+	private final LinkedHashMap<String, ISpeciesRoot> rootMap = new LinkedHashMap<String, ISpeciesRoot>(16);
 
 	@Override
 	public void registerSpeciesRoot(ISpeciesRoot root) {
@@ -51,7 +53,7 @@ public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
 	public Map<String, ISpeciesRoot> getSpeciesRoot() {
 		return Collections.unmodifiableMap(rootMap);
 	}
-	
+
 	@Override
 	public ISpeciesRoot getSpeciesRoot(String uid) {
 		if(rootMap.containsKey(uid))
@@ -76,10 +78,12 @@ public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
 	}
 
 	/* INDIVIDUALS */
+	@Override
 	public boolean isIndividual(ItemStack stack) {
 		return getSpeciesRoot(stack) != null;
 	}
 
+	@Override
 	public IIndividual getIndividual(ItemStack stack) {
 		ISpeciesRoot root = getSpeciesRoot(stack);
 		if(root == null)
@@ -89,20 +93,20 @@ public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
 	}
 
 	/* ALLELES */
-	private LinkedHashMap<String, IAllele> alleleMap = new LinkedHashMap<String, IAllele>(ALLELE_ARRAY_SIZE);
-	private LinkedHashMap<String, IAllele> deprecatedAlleleMap = new LinkedHashMap<String, IAllele>(32);
-	private LinkedHashMap<String, IClassification> classificationMap = new LinkedHashMap<String, IClassification>(128);
-	private LinkedHashMap<String, IFruitFamily> fruitMap = new LinkedHashMap<String, IFruitFamily>(64);
+	private final LinkedHashMap<String, IAllele> alleleMap = new LinkedHashMap<String, IAllele>(ALLELE_ARRAY_SIZE);
+	private final LinkedHashMap<String, IAllele> deprecatedAlleleMap = new LinkedHashMap<String, IAllele>(32);
+	private final LinkedHashMap<String, IClassification> classificationMap = new LinkedHashMap<String, IClassification>(128);
+	private final LinkedHashMap<String, IFruitFamily> fruitMap = new LinkedHashMap<String, IFruitFamily>(64);
 
-	private HashMap<Integer, String> metaMapToUID = new HashMap<Integer, String>();
-	private HashMap<String, Integer> uidMapToMeta = new HashMap<String, Integer>();
+	private final HashMap<Integer, String> metaMapToUID = new HashMap<Integer, String>();
+	private final HashMap<String, Integer> uidMapToMeta = new HashMap<String, Integer>();
 
-	private HashMap<Integer, String> legacyMap = new HashMap<Integer, String>();
+	private final HashMap<Integer, String> legacyMap = new HashMap<Integer, String>();
 
 	/*
 	 * Internal HashSet of all alleleHandlers, which trigger when an allele or branch is registered
 	 */
-	private HashSet<IAlleleHandler> alleleHandlers = new HashSet<IAlleleHandler>();
+	private final HashSet<IAlleleHandler> alleleHandlers = new HashSet<IAlleleHandler>();
 
 	public void initialize() {
 
@@ -126,7 +130,7 @@ public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
 	public Map<String, IAllele> getRegisteredAlleles() {
 		return Collections.unmodifiableMap(alleleMap);
 	}
-	
+
 	@Override
 	public Map<String, IAllele> getDeprecatedAlleleReplacements() {
 		return Collections.unmodifiableMap(deprecatedAlleleMap);
@@ -149,18 +153,18 @@ public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
 		if (deprecatedAlleleMap.containsKey(deprecatedUID)) {
 			return;
 		}
-		
+
 		deprecatedAlleleMap.put(deprecatedUID, replacementAllele);
 	}
-	
+
 	@Override
 	public IAllele getAllele(String uid) {
 		IAllele allele = alleleMap.get(uid);
-		
+
 		if (allele == null) {
 			allele = deprecatedAlleleMap.get(uid);
 		}
-			
+
 		return allele;
 	}
 
@@ -265,7 +269,7 @@ public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
 	}
 
 	/* BLACKLIST */
-	private ArrayList<String> blacklist = new ArrayList<String>();
+	private final ArrayList<String> blacklist = new ArrayList<String>();
 
 	@Override
 	public void blacklistAllele(String uid) {
@@ -284,12 +288,12 @@ public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
 
 	/* RESEARCH */
 	@Override
-	public ItemStack getSpeciesNoteStack(String researcher, IAlleleSpecies species) {
+	public ItemStack getSpeciesNoteStack(GameProfile researcher, IAlleleSpecies species) {
 		return EnumNoteType.createSpeciesNoteStack(ForestryItem.researchNote.item(), researcher, species);
 	}
-	
+
 	@Override
-	public ItemStack getMutationNoteStack(String researcher, IMutation mutation) {
+	public ItemStack getMutationNoteStack(GameProfile researcher, IMutation mutation) {
 		return EnumNoteType.createMutationNoteStack(ForestryItem.researchNote.item(), researcher, mutation);
 	}
 

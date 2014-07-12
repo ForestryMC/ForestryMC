@@ -51,7 +51,7 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 		Vect min = new Vect(housing.getXCoord() + offset.x, housing.getYCoord() + offset.y, housing.getZCoord() + offset.z);
 		Vect max = new Vect(housing.getXCoord() + offset.x + area.x, housing.getYCoord() + offset.y + area.y, housing.getZCoord() + offset.z + area.z);
 
-		AxisAlignedBB hurtBox = AxisAlignedBB.getAABBPool().getAABB(min.x, min.y, min.z, max.x, max.y, max.z);
+		AxisAlignedBB hurtBox = AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
 
 		@SuppressWarnings("rawtypes")
 		List list = housing.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, hurtBox);

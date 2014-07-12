@@ -18,6 +18,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosomeType;
@@ -213,8 +215,8 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 
 	/* BREEDING TRACKER */
 	@Override
-	public ILepidopteristTracker getBreedingTracker(World world, String player) {
-		String filename = "LepidopteristTracker." + player;
+	public ILepidopteristTracker getBreedingTracker(World world, GameProfile player) {
+		String filename = "LepidopteristTracker." + (player == null ? "common" : player.getId());
 		LepidopteristTracker tracker = (LepidopteristTracker) world.loadItemData(LepidopteristTracker.class, filename);
 
 		// Create a tracker if there is none yet.

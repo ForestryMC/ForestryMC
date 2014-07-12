@@ -12,6 +12,8 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.slots.SlotClosed;
 import forestry.core.gui.slots.SlotCustom;
@@ -68,10 +70,10 @@ public class ContainerTrader extends ContainerForestry {
 	}
 
 	public boolean isLinked() {
-		return getMoniker() != null && !getMoniker().isEmpty();
+		return getMoniker() != null;
 	}
 
-	public String getMoniker() {
+	public GameProfile getMoniker() {
 		return machine.getMoniker();
 	}
 

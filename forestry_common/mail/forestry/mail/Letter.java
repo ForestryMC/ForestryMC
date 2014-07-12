@@ -191,7 +191,7 @@ public class Letter implements ILetter, INBTTagable {
 		if (recipient == null)
 			return false;
 
-		if (recipient.getIdentifier().isEmpty())
+		if (recipient.getProfile() == null)
 			return false;
 
 		return true;
@@ -230,7 +230,7 @@ public class Letter implements ILetter, INBTTagable {
 		for (MailAddress address : recipient) {
 			if (recipientString.length() > 0)
 				recipientString += ", ";
-			recipientString += address.getIdentifier();
+			recipientString += address.getProfile().getName();
 		}
 
 		return recipientString;
@@ -250,7 +250,7 @@ public class Letter implements ILetter, INBTTagable {
 	@Override
 	public void addTooltip(List list) {
 		if (this.sender != null)
-			list.add(StringUtil.localize("gui.mail.from") + ": " + this.sender.getIdentifier());
+			list.add(StringUtil.localize("gui.mail.from") + ": " + this.sender.getProfile().getName());
 		if (this.recipient != null && this.recipient.length > 0)
 			list.add(StringUtil.localize("gui.mail.to") + ": " + this.getRecipientString());
 	}

@@ -16,6 +16,8 @@ import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.api.mail.IPostOffice;
 import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.IPostalState;
@@ -27,16 +29,16 @@ import forestry.plugins.PluginMail;
 
 public class PostalCarrier implements IPostalCarrier {
 
-	private String uid;
-	private String iconID;
-	private EnumAddressee type;
-	
+	private final String uid;
+	private final String iconID;
+	private final EnumAddressee type;
+
 	public PostalCarrier(EnumAddressee type) {
 		uid = type.toString().toLowerCase(Locale.ENGLISH);
 		iconID = "mail/carrier." + uid;
 		this.type = type;
 	}
-	
+
 	@Override
 	public String getUID() {
 		return uid;
@@ -54,14 +56,14 @@ public class PostalCarrier implements IPostalCarrier {
 	}
 
 	@Override
-	public IPostalState deliverLetter(World world, IPostOffice office, String recipient, ItemStack letterstack, boolean doDeliver) {
+	public IPostalState deliverLetter(World world, IPostOffice office, GameProfile recipient, ItemStack letterstack, boolean doDeliver) {
 		if(type == EnumAddressee.TRADER)
 			return handleTradeLetter(world, office, recipient, letterstack, doDeliver);
 		else
 			return storeInPOBox(world, office, recipient, letterstack, doDeliver);
 	}
 
-	private IPostalState handleTradeLetter(World world, IPostOffice office, String recipient, ItemStack letterstack, boolean doLodge) {
+	private IPostalState handleTradeLetter(World world, IPostOffice office, GameProfile recipient, ItemStack letterstack, boolean doLodge) {
 		IPostalState state = EnumDeliveryState.NOT_MAILABLE;
 
 		ITradeStation trade = PostManager.postRegistry.getTradeStation(world, recipient);
@@ -73,7 +75,7 @@ public class PostalCarrier implements IPostalCarrier {
 		return state;
 	}
 
-	private EnumDeliveryState storeInPOBox(World world, IPostOffice office, String recipient, ItemStack letterstack, boolean doLodge) {
+	private EnumDeliveryState storeInPOBox(World world, IPostOffice office, GameProfile recipient, ItemStack letterstack, boolean doLodge) {
 
 		POBox pobox = PostRegistry.getPOBox(world, recipient);
 		if (pobox == null)

@@ -13,6 +13,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
@@ -24,6 +25,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import buildcraft.api.gates.ITrigger;
+import com.mojang.authlib.GameProfile;
 
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
@@ -104,8 +106,9 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 			access = EnumAccess.values()[nbttagcompound.getInteger("Access")];
 		else
 			access = EnumAccess.SHARED;
-		if (nbttagcompound.hasKey("Owner"))
-			owner = nbttagcompound.getString("Owner");
+		if (nbttagcompound.hasKey("owner")) {
+			owner = NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("owner"));
+		}
 
 		if (nbttagcompound.hasKey("Orientation"))
 			orientation = ForgeDirection.values()[nbttagcompound.getInteger("Orientation")];
@@ -118,8 +121,11 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 		nbttagcompound.setInteger("Access", access.ordinal());
-		if (owner != null)
-			nbttagcompound.setString("Owner", owner);
+		if (this.owner != null) {
+			NBTTagCompound nbt = new NBTTagCompound();
+			NBTUtil.func_152460_a(nbt, owner);
+			nbttagcompound.setTag("owner", nbt);
+		}
 		if (orientation != null)
 			nbttagcompound.setInteger("Orientation", orientation.ordinal());
 	}
@@ -201,7 +207,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		return errorState;
 	}
 	// / OWNERSHIP
-	public String owner = null;
+	public GameProfile owner = null;
 	private EnumAccess access = EnumAccess.SHARED;
 
 	@Override
@@ -246,24 +252,24 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 
 	@Override
 	public boolean isOwned() {
-		return owner != null && !owner.isEmpty();
+		return owner != null;
 	}
 
 	@Override
-	public String getOwnerName() {
+	public GameProfile getOwnerName() {
 		return owner;
 	}
 
 	public EntityPlayer getOwnerEntity() {
 		if (owner != null)
-			return worldObj.getPlayerEntityByName(owner);
+			return worldObj.func_152378_a(owner.getId());
 		else
 			return null;
 	}
 
 	@Override
 	public void setOwner(EntityPlayer player) {
-		this.owner = player.getGameProfile().getId();
+		this.owner = player.getGameProfile();
 	}
 
 	@Override
@@ -276,7 +282,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 
 	@Override
 	public boolean switchAccessRule(EntityPlayer player) {
-		if (owner != null && !owner.isEmpty() && !owner.equals(player.getGameProfile().getId()))
+		if (owner != null && !owner.equals(player.getGameProfile()))
 			return false;
 
 		if (access.ordinal() < EnumAccess.values().length - 1)

@@ -23,7 +23,10 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IArboristTracker;
@@ -90,7 +93,7 @@ public class CommandTreekeepingMode extends CommandMC {
 				throw new CommandException("A treekeeping mode called '%s' is not available.", desired);
 
 			PluginArboriculture.treeInterface.setTreekeepingMode(world, mode.getName());
-			notifyAdmins(sender, "Treekeeping mode set to %s.", mode.getName());
+			func_152373_a(sender, this, "Treekeeping mode set to %s.", mode.getName());
 
 		} else if (arguments[0].matches("save")) {
 			if (arguments.length <= 1)
@@ -120,7 +123,8 @@ public class CommandTreekeepingMode extends CommandMC {
 		statistics.add("MODE: " + PluginArboriculture.treeInterface.getTreekeepingMode(world).getName());
 		statistics.add("");
 
-		IArboristTracker tracker = PluginArboriculture.treeInterface.getBreedingTracker(world, player);
+		GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(player);
+		IArboristTracker tracker = PluginArboriculture.treeInterface.getBreedingTracker(world, profile);
 		if (tracker == null)
 			statistics.add("No statistics found.");
 		else {

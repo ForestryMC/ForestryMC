@@ -92,7 +92,7 @@ public class ContainerEscritoire extends ContainerForestry implements IGuiSelect
 				tile.probe();
 			} else {
 				tile.getGame().choose(packet.payload.intPayload[0]);
-				tile.processTurnResult(player.getGameProfile().getId());
+				tile.processTurnResult(player.getGameProfile());
 			}
 		}
 	}

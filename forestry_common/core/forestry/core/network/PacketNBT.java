@@ -7,6 +7,7 @@
  ******************************************************************************/
 package forestry.core.network;
 
+import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -42,7 +43,7 @@ public class PacketNBT extends ForestryPacket {
 		short length = data.readShort();
 		byte[] compressed = new byte[length];
 		data.readFully(compressed);
-		this.nbttagcompound = CompressedStreamTools.decompress(compressed);
+		this.nbttagcompound = CompressedStreamTools.readCompressed(new ByteArrayInputStream(compressed));
 	}
 
 	public NBTTagCompound getTagCompound() {

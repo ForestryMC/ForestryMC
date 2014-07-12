@@ -10,6 +10,8 @@ package forestry.mail.proxy;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.core.network.PacketIds;
 import forestry.core.proxy.Proxies;
 import forestry.mail.POBoxInfo;
@@ -23,17 +25,17 @@ public class ProxyMail {
 	public void resetMailboxInfo() {
 	}
 
-	public void setPOBoxInfo(World world, String playername, POBoxInfo info) {
+	public void setPOBoxInfo(World world, GameProfile playername, POBoxInfo info) {
 		for (int i = 0; i < world.playerEntities.size(); i++) {
 			EntityPlayerMP player = (EntityPlayerMP) world.playerEntities.get(i);
-			if (!player.getGameProfile().getId().equals(playername))
+			if (!player.getGameProfile().equals(playername))
 				continue;
 
 			Proxies.net.sendToPlayer(new PacketPOBoxInfo(PacketIds.POBOX_INFO, info), player);
 			break;
 		}
 	}
-	
+
 	public void addLocalizations() {
 	}
 

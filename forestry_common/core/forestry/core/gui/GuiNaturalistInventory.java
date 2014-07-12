@@ -53,7 +53,7 @@ public class GuiNaturalistInventory extends GuiForestry<TileForestry> {
 			iconStacks.put(individual.getIdent(), speciesRoot.getMemberStack(individual, 0));
 		}
 
-		breedingTracker = speciesRoot.getBreedingTracker(player.worldObj, player.getGameProfile().getId());
+		breedingTracker = speciesRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
 	}
 
 	@Override

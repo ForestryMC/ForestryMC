@@ -15,11 +15,13 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
 import buildcraft.api.gates.ITrigger;
 import buildcraft.api.inventory.ISpecialInventory;
+import com.mojang.authlib.GameProfile;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.mail.IStamps;
@@ -37,7 +39,7 @@ import forestry.plugins.PluginMail;
 public class MachineTrader extends TileBase implements ISpecialInventory, ISidedInventory {
 
 	@EntityNetData
-	public String moniker = "";
+	public GameProfile moniker;
 
 	@Override
 	public String getInventoryName() {
@@ -63,16 +65,20 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 
-		if (moniker != null)
-			nbttagcompound.setString("MNK", moniker);
+		if (this.moniker != null) {
+			NBTTagCompound nbt = new NBTTagCompound();
+			NBTUtil.func_152460_a(nbt, moniker);
+			nbttagcompound.setTag("moniker", nbt);
+		}
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 
-		if (nbttagcompound.hasKey("MNK"))
-			this.moniker = nbttagcompound.getString("MNK");
+		if (nbttagcompound.hasKey("moniker")) {
+			moniker = NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("moniker"));
+		}
 	}
 
 	/* UPDATING */
@@ -98,7 +104,7 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 	/* STATE INFORMATION */
 
 	public boolean isLinked() {
-		return getMoniker() != null && !getMoniker().isEmpty();
+		return getMoniker() != null;
 	}
 
 	private float percentOccupied(int startSlot, int countSlots) {
@@ -147,11 +153,11 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 	}
 
 	/* MONIKER */
-	public String getMoniker() {
+	public GameProfile getMoniker() {
 		return this.moniker;
 	}
 
-	public void setMoniker(String moniker) {
+	public void setMoniker(GameProfile moniker) {
 
 		if (Proxies.common.isSimulating(worldObj)) {
 			if (!PostManager.postRegistry.isValidTradeMoniker(worldObj, moniker)) {
@@ -179,7 +185,7 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 		if (!Proxies.common.isSimulating(worldObj))
 			return new InventoryAdapter(TradeStation.SLOT_SIZE, "INV");
 
-		if (this.moniker == null || this.moniker.isEmpty())
+		if (this.moniker == null)
 			return new InventoryAdapter(TradeStation.SLOT_SIZE, "INV");
 
 		return PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerName(), this.moniker);

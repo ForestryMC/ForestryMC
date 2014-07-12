@@ -120,7 +120,7 @@ public class GuiHandlerStorage extends GuiHandlerBase {
 				return null;
 
 			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot("rootBees");
-			speciesRoot.getBreedingTracker(world, player.getGameProfile().getId()).synchToPlayer(player);
+			speciesRoot.getBreedingTracker(world, player.getGameProfile()).synchToPlayer(player);
 			return new ContainerNaturalistBackpack(speciesRoot, player.inventory, new PagedInventory(ItemBackpack.class, Defaults.SLOTS_BACKPACK_APIARIST, equipped, x, y, z, cleanId), guiData, 25);
 
 		case BackpackGUI:
@@ -143,7 +143,7 @@ public class GuiHandlerStorage extends GuiHandlerBase {
 				return null;
 
 			speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies");
-			speciesRoot.getBreedingTracker(world, player.getGameProfile().getId()).synchToPlayer(player);
+			speciesRoot.getBreedingTracker(world, player.getGameProfile()).synchToPlayer(player);
 			return new ContainerNaturalistBackpack(speciesRoot, player.inventory, new PagedInventory(ItemBackpack.class, Defaults.SLOTS_BACKPACK_APIARIST, equipped, x, y, z, cleanId), guiData, 25);
 
 		default:

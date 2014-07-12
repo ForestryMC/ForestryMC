@@ -41,7 +41,7 @@ public abstract class GuiHandlerBase implements IGuiHandler {
 
 	public ContainerNaturalistInventory getNaturalistChestContainer(String rootUID, EntityPlayer player, World world, int x, int y, int z, int page) {
 		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(rootUID);
-		speciesRoot.getBreedingTracker(world, player.getGameProfile().getId()).synchToPlayer(player);
+		speciesRoot.getBreedingTracker(world, player.getGameProfile()).synchToPlayer(player);
 		return new ContainerNaturalistInventory(speciesRoot,
 				player.inventory, (TileNaturalistChest) getTileForestry(world, x, y, z), page, 25);
 	}

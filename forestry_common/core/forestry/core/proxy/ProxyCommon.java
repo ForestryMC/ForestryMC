@@ -140,7 +140,7 @@ public class ProxyCommon {
 
 	public boolean isOp(EntityPlayer player) {
 		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-		return server.getConfigurationManager().isPlayerOpped(player.getGameProfile().getId());
+		return server.getConfigurationManager().func_152596_g(player.getGameProfile());
 	}
 
 	public double getBlockReachDistance(EntityPlayer entityplayer) {

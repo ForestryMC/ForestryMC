@@ -100,7 +100,7 @@ public class MachineMailbox extends TileBase implements IMailContainer, ISpecial
 		if (!Proxies.common.isSimulating(worldObj))
 			return new InventoryAdapter(POBox.SLOT_SIZE, "Letters");
 
-		if (getOwnerName() == null || getOwnerName().isEmpty())
+		if (getOwnerName() == null)
 			return new InventoryAdapter(POBox.SLOT_SIZE, "Letters");
 
 		return PostRegistry.getOrCreatePOBox(worldObj, getOwnerName());

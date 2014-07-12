@@ -40,7 +40,7 @@ public class GuiTradeName extends GuiForestry<MachineTrader> {
 
 		moniker = new GuiTextField(this.fontRendererObj, guiLeft + 44, guiTop + 39, 90, 14);
 		if (container.getMoniker() != null)
-			moniker.setText(container.getMoniker());
+			moniker.setText(container.getMoniker().getName());
 	}
 
 	@Override

@@ -9,8 +9,11 @@ package forestry.arboriculture.gadgets;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+
+import com.mojang.authlib.GameProfile;
 
 import forestry.api.arboriculture.ITree;
 import forestry.arboriculture.genetics.Tree;
@@ -38,8 +41,9 @@ public abstract class TileTreeContainer extends TileEntity implements INetworked
 
 		if (nbttagcompound.hasKey("ContainedTree"))
 			containedTree = new Tree(nbttagcompound.getCompoundTag("ContainedTree"));
-		if (nbttagcompound.hasKey("Owner"))
-			owner = nbttagcompound.getString("Owner");
+		if (nbttagcompound.hasKey("owner")) {
+			owner = NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("owner"));
+		}
 
 	}
 
@@ -52,8 +56,11 @@ public abstract class TileTreeContainer extends TileEntity implements INetworked
 			containedTree.writeToNBT(subcompound);
 			nbttagcompound.setTag("ContainedTree", subcompound);
 		}
-		if (owner != null)
-			nbttagcompound.setString("Owner", owner);
+		if (this.owner != null) {
+			NBTTagCompound nbt = new NBTTagCompound();
+			NBTUtil.func_152460_a(nbt, owner);
+			nbttagcompound.setTag("owner", nbt);
+		}
 
 	}
 
@@ -103,7 +110,7 @@ public abstract class TileTreeContainer extends TileEntity implements INetworked
 	}
 
 	/* IOWNABLE */
-	public String owner = null;
+	public GameProfile owner = null;
 
 	@Override
 	public boolean allowsRemoval(EntityPlayer player) {
@@ -127,27 +134,27 @@ public abstract class TileTreeContainer extends TileEntity implements INetworked
 
 	@Override
 	public boolean isOwned() {
-		return owner != null && !owner.isEmpty();
+		return owner != null;
 	}
 
 	@Override
-	public String getOwnerName() {
+	public GameProfile getOwnerName() {
 		return owner;
 	}
 
 	@Override
 	public void setOwner(EntityPlayer player) {
-		this.owner = player.getGameProfile().getId();
+		this.owner = player.getGameProfile();
 	}
 
-	public void setOwner(String playername) {
+	public void setOwner(GameProfile playername) {
 		this.owner = playername;
 	}
 
 	@Override
 	public boolean isOwner(EntityPlayer player) {
 		if (owner != null)
-			return owner.equals(player.getGameProfile().getId());
+			return owner.equals(player.getGameProfile());
 		else
 			return false;
 	}

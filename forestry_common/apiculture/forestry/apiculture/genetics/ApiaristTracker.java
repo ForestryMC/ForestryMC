@@ -10,6 +10,8 @@ package forestry.apiculture.genetics;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
@@ -19,10 +21,10 @@ import forestry.plugins.PluginApiculture;
 public class ApiaristTracker extends BreedingTracker implements IApiaristTracker {
 
 	public ApiaristTracker(String s) {
-		this(s, "");
+		this(s, null);
 	}
-	
-	public ApiaristTracker(String s, String player) {
+
+	public ApiaristTracker(String s, GameProfile player) {
 		super(s, player);
 	}
 
@@ -60,7 +62,7 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 			return;
 		if(PluginApiculture.beeInterface.getCombinations(individual.getGenome().getPrimary()).size() > 0)
 			return;
-		
+
 		registerSpecies(individual.getGenome().getPrimary());
 	}
 
@@ -99,7 +101,7 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 
 	@Override
 	protected IBreedingTracker getCommonTracker(EntityPlayer player) {
-		return PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, "__COMMON_");
+		return PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, null);
 	}
 
 	@Override

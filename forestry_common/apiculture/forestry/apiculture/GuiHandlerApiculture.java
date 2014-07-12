@@ -159,6 +159,6 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 	}
 
 	private void synchApiaristTracker(World world, EntityPlayer player) {
-		PluginApiculture.beeInterface.getBreedingTracker(world, player.getGameProfile().getId()).synchToPlayer(player);
+		PluginApiculture.beeInterface.getBreedingTracker(world, player.getGameProfile()).synchToPlayer(player);
 	}
 }

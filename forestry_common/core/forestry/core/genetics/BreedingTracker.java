@@ -15,6 +15,8 @@ import net.minecraft.world.WorldSavedData;
 
 import net.minecraftforge.common.MinecraftForge;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.api.core.ForestryEvent;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -32,9 +34,9 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	private ArrayList<String> discoveredMutations = new ArrayList<String>();
 	private String modeName;
 
-	String username;
-	
-	public BreedingTracker(String s, String username) {
+	GameProfile username;
+
+	public BreedingTracker(String s, GameProfile username) {
 		super(s);
 		this.username = username;
 	}
@@ -131,11 +133,11 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 		discoveredMutations.add(String.format(MUTATION_FORMAT, mutation.getAllele0().getUID(), mutation.getAllele1().getUID(), mutation.getTemplate()[0].getUID()));
 		markDirty();
 		MinecraftForge.EVENT_BUS.post(new ForestryEvent.MutationDiscovered(
-				AlleleManager.alleleRegistry.getSpeciesRoot(this.getPacketTag()), 
-				username, 
+				AlleleManager.alleleRegistry.getSpeciesRoot(this.getPacketTag()),
+				username,
 				mutation, this));
 	}
-	
+
 	@Override
 	public void registerMutation(IAllele allele0, IAllele allele1) {
 		discoveredMutations.add(allele0.getUID() + "-" + allele1.getUID());
@@ -169,8 +171,8 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 		if (!discoveredSpecies.contains(species.getUID())) {
 			discoveredSpecies.add(species.getUID());
 			MinecraftForge.EVENT_BUS.post(new ForestryEvent.SpeciesDiscovered(
-					AlleleManager.alleleRegistry.getSpeciesRoot(this.getPacketTag()), 
-					username, 
+					AlleleManager.alleleRegistry.getSpeciesRoot(this.getPacketTag()),
+					username,
 					species, this));
 		}
 	}

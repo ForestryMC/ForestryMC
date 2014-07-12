@@ -10,9 +10,10 @@ package forestry.arboriculture.worldgen;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.gadgets.TileSapling;
-import forestry.core.config.Config;
 import forestry.core.utils.Utils;
 import forestry.core.utils.Vect;
 import forestry.core.worldgen.BlockType;
@@ -52,10 +53,10 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 
 	}
 
-	private String getOwner() {
+	private GameProfile getOwner() {
 		TileEntity tile = world.getTileEntity(startX, startY, startZ);
 		if (!(tile instanceof TileSapling))
-			return Config.fakeUserLogin;
+			return Utils.getForestryPlayerProfile();
 
 		return ((TileSapling) tile).getOwnerName();
 	}
@@ -66,7 +67,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 
 	public abstract boolean canGrow();
 
-	public abstract BlockType getLeaf(String owner);
+	public abstract BlockType getLeaf(GameProfile owner);
 
 	public abstract BlockType getWood();
 

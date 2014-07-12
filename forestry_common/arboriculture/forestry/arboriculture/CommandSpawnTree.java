@@ -22,17 +22,19 @@ public class CommandSpawnTree extends CommandMC {
 	public CommandSpawnTree() {
 	}
 
+	@Override
 	public String getCommandName() {
 		return "spawntree";
 	}
 
+	@Override
 	public String getCommandUsage(ICommandSender sender) {
 		return "/" + getCommandName() + " <player-name> <species-name>";
 	}
 
+	@Override
 	public void processCommand(ICommandSender sender, String[] arguments) {
-
-		EntityPlayer player = this.getPlayerFromName(sender.getCommandSenderName());
+		EntityPlayer player = getCommandSenderAsPlayer(sender);
 
 		int x = (int) player.posX;
 		int y = (int) (player.posY);

@@ -78,7 +78,7 @@ public class PacketHandlerMail implements IPacketHandler {
 	}
 
 	private void onPOBoxInfo(PacketPOBoxInfo packet) {
-		PluginMail.proxy.setPOBoxInfo(Proxies.common.getRenderWorld(), Proxies.common.getClientInstance().thePlayer.getGameProfile().getId(), packet.poboxInfo);
+		PluginMail.proxy.setPOBoxInfo(Proxies.common.getRenderWorld(), Proxies.common.getClientInstance().thePlayer.getGameProfile(), packet.poboxInfo);
 	}
 
 	private void onMonikerSet(EntityPlayer player, PacketUpdate packet) {
@@ -103,7 +103,7 @@ public class PacketHandlerMail implements IPacketHandler {
 	}
 
 	private void onPOBoxInfoRequest(EntityPlayer player) {
-		POBox pobox = PostRegistry.getPOBox(player.worldObj, player.getGameProfile().getId());
+		POBox pobox = PostRegistry.getPOBox(player.worldObj, player.getGameProfile());
 		if (pobox == null)
 			return;
 

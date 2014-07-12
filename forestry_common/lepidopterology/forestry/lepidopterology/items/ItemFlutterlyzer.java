@@ -99,8 +99,8 @@ public class ItemFlutterlyzer extends ItemInventoried {
 
 				butterfly.analyze();
 				if (player != null) {
-					PluginLepidopterology.butterflyInterface.getBreedingTracker(player.worldObj, player.getGameProfile().getId()).registerSpecies(butterfly.getGenome().getPrimary());
-					PluginLepidopterology.butterflyInterface.getBreedingTracker(player.worldObj, player.getGameProfile().getId()).registerSpecies(butterfly.getGenome().getSecondary());
+					PluginLepidopterology.butterflyInterface.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(butterfly.getGenome().getPrimary());
+					PluginLepidopterology.butterflyInterface.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(butterfly.getGenome().getSecondary());
 				}
 				NBTTagCompound nbttagcompound = new NBTTagCompound();
 				butterfly.writeToNBT(nbttagcompound);

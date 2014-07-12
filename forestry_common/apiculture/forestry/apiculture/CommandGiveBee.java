@@ -46,8 +46,7 @@ public class CommandGiveBee extends CommandMC {
 	@Override
 	public void processCommand(ICommandSender sender, String[] arguments) {
 		if (arguments.length >= 2) {
-
-			EntityPlayer player = getPlayerFromName(arguments[0]);
+			EntityPlayer player = getPlayer(sender, arguments[0]);
 
 			String parameter = arguments[1];
 
@@ -86,7 +85,7 @@ public class CommandGiveBee extends CommandMC {
 
 			ItemStack beestack = PluginApiculture.beeInterface.getMemberStack(bee, type.ordinal());
 			player.dropPlayerItemWithRandomChoice(beestack, true);
-			notifyAdmins(sender, "Player %s was given a %s bee.", player.getCommandSenderName(), ((IAlleleSpecies) template[0]).getName());
+			func_152373_a(sender, this, "Player %s was given a %s bee.", player.getCommandSenderName(), ((IAlleleSpecies) template[0]).getName());
 		} else
 			throw new WrongUsageException("/" + getCommandName() + " <player-name> <species-name>");
 	}

@@ -15,8 +15,11 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
+
+import com.mojang.authlib.GameProfile;
 
 import forestry.api.mail.EnumPostage;
 import forestry.api.mail.ILetter;
@@ -47,15 +50,15 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	public static final short SLOT_OUTPUTBUF_1 = 27;
 	public static final short SLOT_BUFFER_COUNT = 12;
 	// / MEMBER
-	private String owner;
-	private String moniker;
+	private GameProfile owner;
+	private GameProfile moniker;
 	private boolean isVirtual = false;
 	private boolean isInvalid = false;
 	private final InventoryAdapter inventory = new InventoryAdapter(SLOT_SIZE, "INV");
 
 	// / CONSTRUCTORS
-	public TradeStation(String owner, String moniker, boolean isMoniker) {
-		super(SAVE_NAME + moniker);
+	public TradeStation(GameProfile owner, GameProfile moniker, boolean isMoniker) {
+		super(SAVE_NAME + moniker.getId()+"_"+moniker.getName());
 		this.owner = owner;
 		this.moniker = moniker;
 	}
@@ -65,15 +68,19 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	@Override
-	public String getMoniker() {
+	public GameProfile getMoniker() {
 		return this.moniker;
 	}
 
 	// / SAVING & LOADING
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		this.owner = nbttagcompound.getString("OWN");
-		this.moniker = nbttagcompound.getString("MNK");
+		if (nbttagcompound.hasKey("owner")) {
+			owner = NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("owner"));
+		}
+		if (nbttagcompound.hasKey("moniker")) {
+			moniker = NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("moniker"));
+		}
 		this.isVirtual = nbttagcompound.getBoolean("VRT");
 		this.isInvalid = nbttagcompound.getBoolean("IVL");
 		inventory.readFromNBT(nbttagcompound);
@@ -81,9 +88,18 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		if (this.owner != null && !this.owner.isEmpty())
-			nbttagcompound.setString("OWN", this.owner);
-		nbttagcompound.setString("MNK", this.moniker);
+		if (this.owner != null) {
+			NBTTagCompound nbt = new NBTTagCompound();
+			NBTUtil.func_152460_a(nbt, owner);
+			nbttagcompound.setTag("owner", nbt);
+		}
+
+		if (this.moniker != null) {
+			NBTTagCompound nbt = new NBTTagCompound();
+			NBTUtil.func_152460_a(nbt, moniker);
+			nbttagcompound.setTag("moniker", nbt);
+		}
+
 		nbttagcompound.setBoolean("VRT", this.isVirtual);
 		nbttagcompound.setBoolean("IVL", this.isInvalid);
 		inventory.writeToNBT(nbttagcompound);
@@ -134,7 +150,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 	/* ILETTERHANDLER */
 	@Override
-	public IPostalState handleLetter(World world, String recipient, ItemStack letterstack, boolean doLodge) {
+	public IPostalState handleLetter(World world, GameProfile recipient, ItemStack letterstack, boolean doLodge) {
 
 		ILetter letter = PostManager.postRegistry.getLetter(letterstack);
 
@@ -209,9 +225,9 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		markDirty();
 
 		// Send confirmation message to seller
-		if (doLodge && owner != null && !owner.isEmpty()) {
+		if (doLodge && owner != null) {
 			ILetter confirm = new Letter(new MailAddress(this.moniker, EnumAddressee.TRADER.toString().toLowerCase(Locale.ENGLISH)), new MailAddress(this.owner));
-			confirm.setText(ordersToFill + " order(s) from " + letter.getSender().getIdentifier() + " were filled.");
+			confirm.setText(ordersToFill + " order(s) from " + letter.getSender().getProfile().getName() + " were filled.");
 			confirm.addStamps(ForestryItem.stamps.getItemStack(1, EnumPostage.P_1.ordinal()));
 			nbttagcompound = new NBTTagCompound();
 			confirm.writeToNBT(nbttagcompound);

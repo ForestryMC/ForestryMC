@@ -21,6 +21,8 @@ import net.minecraft.world.World;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -262,7 +264,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 			return activeBeekeepingMode;
 
 		// No beekeeping mode yet, get it.
-		IApiaristTracker tracker = getBreedingTracker(world, "__COMMON_");
+		IApiaristTracker tracker = getBreedingTracker(world, null);
 		String mode = tracker.getModeName();
 		if (mode == null || mode.isEmpty())
 			mode = PluginApiculture.beekeepingMode;
@@ -281,7 +283,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	@Override
 	public void setBeekeepingMode(World world, String name) {
 		activeBeekeepingMode = getBeekeepingMode(name);
-		getBreedingTracker(world, "__COMMON_").setModeName(name);
+		getBreedingTracker(world, null).setModeName(name);
 	}
 
 	@Override
@@ -296,8 +298,8 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
-	public IApiaristTracker getBreedingTracker(World world, String player) {
-		String filename = "ApiaristTracker." + player;
+	public IApiaristTracker getBreedingTracker(World world, GameProfile player) {
+		String filename = "ApiaristTracker." + (player == null ? "common" : player.getId());
 		ApiaristTracker tracker = (ApiaristTracker) world.loadItemData(ApiaristTracker.class, filename);
 
 		// Create a tracker if there is none yet.

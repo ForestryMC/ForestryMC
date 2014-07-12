@@ -28,7 +28,7 @@ public class AlleleEffectRepulsion extends AlleleEffectThrottled {
 		if (isHalted(storedData, housing))
 			return storedData;
 
-		if (housing.getOwnerName() == null || housing.getOwnerName().isEmpty())
+		if (housing.getOwnerName() == null)
 			return storedData;
 
 		AxisAlignedBB hurtBox = getBounding(genome, housing, 1.0f);

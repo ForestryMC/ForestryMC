@@ -16,12 +16,15 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import com.mojang.authlib.GameProfile;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -114,7 +117,7 @@ public class ItemResearchNote extends ItemForestry {
 				if(encoded == null)
 					return false;
 
-				IBreedingTracker tracker = encoded.getRoot().getBreedingTracker(world, player.getGameProfile().getId());
+				IBreedingTracker tracker = encoded.getRoot().getBreedingTracker(world, player.getGameProfile());
 				if(tracker.isDiscovered(encoded)) {
 					player.addChatMessage(new ChatComponentTranslation("chat.cannotmemorizeagain"));
 					return false;
@@ -132,7 +135,7 @@ public class ItemResearchNote extends ItemForestry {
 
 		}
 
-		public static ResearchNote createMutationNote(String researcher, IMutation mutation) {
+		public static ResearchNote createMutationNote(GameProfile researcher, IMutation mutation) {
 			NBTTagCompound compound = new NBTTagCompound();
 			compound.setString("ROT", mutation.getRoot().getUID());
 			compound.setString("AL0", mutation.getAllele0().getUID());
@@ -141,7 +144,7 @@ public class ItemResearchNote extends ItemForestry {
 			return new ResearchNote(researcher, MUTATION, compound);
 		}
 
-		public static ItemStack createMutationNoteStack(Item item, String researcher, IMutation mutation) {
+		public static ItemStack createMutationNoteStack(Item item, GameProfile researcher, IMutation mutation) {
 			ResearchNote note = createMutationNote(researcher, mutation);
 			NBTTagCompound compound = new NBTTagCompound();
 			note.writeToNBT(compound);
@@ -150,14 +153,14 @@ public class ItemResearchNote extends ItemForestry {
 			return created;
 		}
 
-		public static ResearchNote createSpeciesNote(String researcher, IAlleleSpecies species) {
+		public static ResearchNote createSpeciesNote(GameProfile researcher, IAlleleSpecies species) {
 			NBTTagCompound compound = new NBTTagCompound();
 			compound.setString("ROT", species.getRoot().getUID());
 			compound.setString("AL0", species.getUID());
 			return new ResearchNote(researcher, SPECIES, compound);
 		}
 
-		public static ItemStack createSpeciesNoteStack(Item item, String researcher, IAlleleSpecies species) {
+		public static ItemStack createSpeciesNoteStack(Item item, GameProfile researcher, IAlleleSpecies species) {
 			ResearchNote note = createSpeciesNote(researcher, species);
 			NBTTagCompound compound = new NBTTagCompound();
 			note.writeToNBT(compound);
@@ -170,11 +173,11 @@ public class ItemResearchNote extends ItemForestry {
 
 	public static class ResearchNote {
 
-		private String researcher = "fdssffd";
+		private GameProfile researcher;
 		private EnumNoteType type = EnumNoteType.NONE;
 		private NBTTagCompound inner;
 
-		public ResearchNote(String researcher, EnumNoteType type, NBTTagCompound inner) {
+		public ResearchNote(GameProfile researcher, EnumNoteType type, NBTTagCompound inner) {
 			this.researcher = researcher;
 			this.type = type;
 			this.inner = inner;
@@ -182,7 +185,9 @@ public class ItemResearchNote extends ItemForestry {
 
 		public ResearchNote(NBTTagCompound compound) {
 			if(compound != null) {
-				this.researcher = compound.getString("RES");
+				if (compound.hasKey("res")) {
+					researcher = NBTUtil.func_152459_a(compound.getCompoundTag("res"));
+				}
 				this.type = EnumNoteType.VALUES[compound.getByte("TYP")];
 				this.inner = compound.getCompoundTag("INN");
 			} else
@@ -190,7 +195,11 @@ public class ItemResearchNote extends ItemForestry {
 		}
 
 		public void writeToNBT(NBTTagCompound compound) {
-			compound.setString("RES", researcher);
+			if (this.researcher != null) {
+				NBTTagCompound nbt = new NBTTagCompound();
+				NBTUtil.func_152460_a(nbt, researcher);
+				compound.setTag("res", nbt);
+			}
 			compound.setByte("TYP", (byte)type.ordinal());
 			compound.setTag("INN", inner);
 		}

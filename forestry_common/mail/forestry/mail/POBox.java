@@ -11,7 +11,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.world.WorldSavedData;
+
+import com.mojang.authlib.GameProfile;
 
 import forestry.api.mail.ILetter;
 import forestry.api.mail.PostManager;
@@ -22,10 +25,10 @@ public class POBox extends WorldSavedData implements IInventory {
 	public static final String SAVE_NAME = "POBox_";
 	public static final short SLOT_SIZE = 84;
 
-	private String owner;
-	private InventoryAdapter letters = new InventoryAdapter(SLOT_SIZE, "Letters");
+	private GameProfile owner;
+	private final InventoryAdapter letters = new InventoryAdapter(SLOT_SIZE, "Letters");
 
-	public POBox(String owner, boolean isUser) {
+	public POBox(GameProfile owner, boolean isUser) {
 		super(SAVE_NAME + owner);
 		this.owner = owner;
 	}
@@ -36,17 +39,23 @@ public class POBox extends WorldSavedData implements IInventory {
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		owner = nbttagcompound.getString("Owner");
+		if (nbttagcompound.hasKey("owner")) {
+			owner = NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("owner"));
+		}
 		letters.readFromNBT(nbttagcompound);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound.setString("Owner", owner);
+		if (this.owner != null) {
+			NBTTagCompound nbt = new NBTTagCompound();
+			NBTUtil.func_152460_a(nbt, owner);
+			nbttagcompound.setTag("owner", nbt);
+		}
 		letters.writeToNBT(nbttagcompound);
 	}
 
-	public String getOwnerName() {
+	public GameProfile getOwnerName() {
 		return this.owner;
 	}
 

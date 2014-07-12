@@ -23,6 +23,8 @@ import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.api.arboriculture.EnumGrowthConditions;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleLeafEffect;
@@ -204,7 +206,7 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 	}
 
 	@Override
-	public void setLeaves(World world, String owner, int x, int y, int z) {
+	public void setLeaves(World world, GameProfile owner, int x, int y, int z) {
 		PluginArboriculture.treeInterface.setLeaves(world, this, owner, x, y, z);
 	}
 

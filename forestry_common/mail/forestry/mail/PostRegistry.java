@@ -9,12 +9,13 @@ package forestry.mail;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
 
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IPostOffice;
@@ -30,8 +31,8 @@ import forestry.plugins.PluginMail;
 public class PostRegistry implements IPostRegistry {
 
 	public static PostOffice cachedPostOffice;
-	public static HashMap<String, POBox> cachedPOBoxes = new HashMap<String, POBox>();
-	public static HashMap<String, ITradeStation> cachedTradeStations = new HashMap<String, ITradeStation>();
+	public static HashMap<GameProfile, POBox> cachedPOBoxes = new HashMap<GameProfile, POBox>();
+	public static HashMap<GameProfile, ITradeStation> cachedTradeStations = new HashMap<GameProfile, ITradeStation>();
 
 	/**
 	 * @param world
@@ -39,32 +40,32 @@ public class PostRegistry implements IPostRegistry {
 	 * @return true if the passed username is valid for poboxes.
 	 */
 	@Override
-	public boolean isValidPOBox(World world, String username) {
-		if (!username.matches("^[a-zA-Z0-9]+$"))
+	public boolean isValidPOBox(World world, GameProfile username) {
+		if (!username.getName().matches("^[a-zA-Z0-9]+$"))
 			return false;
 
 		return true;
 	}
 
-	public static POBox getPOBox(World world, String username) {
+	public static POBox getPOBox(World world, GameProfile username) {
 
-		if (cachedPOBoxes.containsKey(username.toLowerCase(Locale.ENGLISH)))
-			return cachedPOBoxes.get(username.toLowerCase(Locale.ENGLISH));
+		if (cachedPOBoxes.containsKey(username))
+			return cachedPOBoxes.get(username);
 
-		POBox pobox = (POBox) world.loadItemData(POBox.class, POBox.SAVE_NAME + username.toLowerCase(Locale.ENGLISH));
+		POBox pobox = (POBox) world.loadItemData(POBox.class, POBox.SAVE_NAME + username.getId());
 		if (pobox != null)
-			cachedPOBoxes.put(username.toLowerCase(Locale.ENGLISH), pobox);
+			cachedPOBoxes.put(username, pobox);
 		return pobox;
 	}
 
-	public static POBox getOrCreatePOBox(World world, String username) {
+	public static POBox getOrCreatePOBox(World world, GameProfile username) {
 		POBox pobox = getPOBox(world, username);
 
 		if (pobox == null) {
-			pobox = new POBox(username.toLowerCase(Locale.ENGLISH), true);
-			world.setItemData(POBox.SAVE_NAME + username.toLowerCase(Locale.ENGLISH), pobox);
+			pobox = new POBox(username, true);
+			world.setItemData(POBox.SAVE_NAME + username.getId(), pobox);
 			pobox.markDirty();
-			cachedPOBoxes.put(username.toLowerCase(Locale.ENGLISH), pobox);
+			cachedPOBoxes.put(username, pobox);
 			PluginMail.proxy.setPOBoxInfo(world, username, pobox.getPOBoxInfo());
 		}
 
@@ -77,8 +78,8 @@ public class PostRegistry implements IPostRegistry {
 	 * @return true if the passed moniker can be a moniker for a trade station
 	 */
 	@Override
-	public boolean isValidTradeMoniker(World world, String moniker) {
-		if (!moniker.matches("^[a-zA-Z0-9]+$"))
+	public boolean isValidTradeMoniker(World world, GameProfile moniker) {
+		if (!moniker.getName().matches("^[a-zA-Z0-9]+$"))
 			return false;
 
 		return true;
@@ -90,16 +91,16 @@ public class PostRegistry implements IPostRegistry {
 	 * @return true if the trade moniker has not yet been used before.
 	 */
 	@Override
-	public boolean isAvailableTradeMoniker(World world, String moniker) {
+	public boolean isAvailableTradeMoniker(World world, GameProfile moniker) {
 		return getTradeStation(world, moniker) == null;
 	}
 
 	@Override
-	public TradeStation getTradeStation(World world, String moniker) {
+	public TradeStation getTradeStation(World world, GameProfile moniker) {
 		if (cachedTradeStations.containsKey(moniker))
 			return (TradeStation)cachedTradeStations.get(moniker);
 
-		TradeStation trade = (TradeStation) world.loadItemData(TradeStation.class, TradeStation.SAVE_NAME + moniker);
+		TradeStation trade = (TradeStation) world.loadItemData(TradeStation.class, TradeStation.SAVE_NAME + moniker.getId()+"_"+moniker.getName());
 
 		// Only existing and valid mail orders are returned
 		if (trade != null && trade.isValid()) {
@@ -112,12 +113,12 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	@Override
-	public TradeStation getOrCreateTradeStation(World world, String owner, String moniker) {
+	public TradeStation getOrCreateTradeStation(World world, GameProfile owner, GameProfile moniker) {
 		TradeStation trade = getTradeStation(world, moniker);
 
 		if (trade == null) {
 			trade = new TradeStation(owner, moniker, true);
-			world.setItemData(TradeStation.SAVE_NAME + moniker, trade);
+			world.setItemData(TradeStation.SAVE_NAME + moniker.getId()+"_"+moniker.getName(), trade);
 			trade.markDirty();
 			cachedTradeStations.put(moniker, trade);
 			getPostOffice(world).registerTradeStation(trade);
@@ -127,8 +128,8 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	@Override
-	public void deleteTradeStation(World world, String moniker) {
-		TradeStation trade = (TradeStation)getTradeStation(world, moniker);
+	public void deleteTradeStation(World world, GameProfile moniker) {
+		TradeStation trade = getTradeStation(world, moniker);
 		if (trade == null)
 			return;
 
@@ -158,13 +159,13 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	/* CARRIER */
-	private HashMap<String, IPostalCarrier> carriers = new HashMap<String, IPostalCarrier>();
+	private final HashMap<String, IPostalCarrier> carriers = new HashMap<String, IPostalCarrier>();
 
 	@Override
 	public Map<String, IPostalCarrier> getRegisteredCarriers() {
 		return carriers;
 	}
-	
+
 	@Override
 	public void registerCarrier(IPostalCarrier carrier) {
 		carriers.put(carrier.getUID(), carrier);
@@ -188,7 +189,7 @@ public class PostRegistry implements IPostRegistry {
 
 		ItemStack mailstack = ForestryItem.letters.getItemStack(1, ItemLetter.encodeMeta(1, ItemLetter.getType(letter)));
 		mailstack.setTagCompound(nbttagcompound);
-		
+
 		return mailstack;
 	}
 

@@ -14,7 +14,10 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
 
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
@@ -103,7 +106,8 @@ public class CommandMail extends CommandMC {
 			throw new WrongUsageException("/" + getCommandName() + " virtualize <tradestation-name>");
 
 		World world = getWorld(sender, arguments);
-		ITradeStation trade = PostManager.postRegistry.getTradeStation(world, arguments[1]);
+		GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(arguments[1]);
+		ITradeStation trade = PostManager.postRegistry.getTradeStation(world, profile);
 		if (trade == null) {
 			sendChatMessage(sender, String.format("\u00a7cNo tradestation by the name of '%s' was found.", arguments[1]));
 			return;

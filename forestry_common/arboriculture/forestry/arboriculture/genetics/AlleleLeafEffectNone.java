@@ -19,7 +19,7 @@ import forestry.core.utils.Vect;
 public class AlleleLeafEffectNone extends Allele implements IAlleleLeafEffect {
 
 	int[] DEFAULT_EFFECT_AREA = new int[] { 12, 12, 12 };
-	
+
 	public AlleleLeafEffectNone(String uid) {
 		super(uid, true);
 	}
@@ -52,7 +52,7 @@ public class AlleleLeafEffectNone extends Allele implements IAlleleLeafEffect {
 		Vect min = new Vect(x + offset.x, y + offset.y, y + offset.z);
 		Vect max = new Vect(x + offset.x + area.x, y + offset.y + area.y, y + offset.z + area.z);
 
-		return AxisAlignedBB.getAABBPool().getAABB(min.x, min.y, min.z, max.x, max.y, max.z);
+		return AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
 	}
 
 }

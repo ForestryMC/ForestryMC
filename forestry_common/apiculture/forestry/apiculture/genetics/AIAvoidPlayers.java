@@ -17,15 +17,15 @@ import net.minecraft.util.Vec3;
 
 public class AIAvoidPlayers extends EntityAIBase {
 
-	private EntityCreature mob;
+	private final EntityCreature mob;
 
-	private float farSpeed;
-	private float nearSpeed;
-	private float minDistance;
+	private final float farSpeed;
+	private final float nearSpeed;
+	private final float minDistance;
 
 	private PathEntity pathing;
 
-	private PathNavigate pathNavigator;
+	private final PathNavigate pathNavigator;
 
 	private EntityPlayer player;
 
@@ -50,7 +50,7 @@ public class AIAvoidPlayers extends EntityAIBase {
 			return false;
 
 		Vec3 randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(mob, 16, 7,
-				mob.worldObj.getWorldVec3Pool().getVecFromPool(player.posX, player.posY, player.posZ));
+				Vec3.createVectorHelper(player.posX, player.posY, player.posZ));
 
 		if (randomTarget == null)
 			return false;

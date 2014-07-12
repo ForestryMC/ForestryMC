@@ -24,6 +24,8 @@ import net.minecraft.world.World;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
@@ -170,7 +172,7 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public boolean plantSapling(World world, ITree tree, String owner, int x, int y, int z) {
+	public boolean plantSapling(World world, ITree tree, GameProfile owner, int x, int y, int z) {
 
 		boolean placed = world.setBlock(x, y, z, ForestryBlock.saplingGE, 0, Defaults.FLAG_BLOCK_SYNCH);
 		if (!placed)
@@ -194,7 +196,7 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public boolean setLeaves(World world, IIndividual tree, String owner, int x, int y, int z) {
+	public boolean setLeaves(World world, IIndividual tree, GameProfile owner, int x, int y, int z) {
 
 		boolean placed = world.setBlock(x, y, z, ForestryBlock.leaves, 0, Defaults.FLAG_BLOCK_SYNCH);
 		if (!placed)
@@ -263,8 +265,8 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 
 	/* BREEDING TRACKER */
 	@Override
-	public IArboristTracker getBreedingTracker(World world, String player) {
-		String filename = "ArboristTracker." + player;
+	public IArboristTracker getBreedingTracker(World world, GameProfile player) {
+		String filename = "ArboristTracker." + (player == null ? "common" : player.getId());
 		ArboristTracker tracker = (ArboristTracker) world.loadItemData(ArboristTracker.class, filename);
 
 		// Create a tracker if there is none yet.
@@ -291,7 +293,7 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 			return activeTreekeepingMode;
 
 		// No Treekeeping mode yet, item it.
-		IArboristTracker tracker = getBreedingTracker(world, "__COMMON_");
+		IArboristTracker tracker = getBreedingTracker(world, null);
 		String mode = tracker.getModeName();
 		if (mode == null || mode.isEmpty())
 			mode = PluginArboriculture.treekeepingMode;
@@ -310,7 +312,7 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	@Override
 	public void setTreekeepingMode(World world, String name) {
 		activeTreekeepingMode = getTreekeepingMode(name);
-		getBreedingTracker(world, "__COMMON_").setModeName(name);
+		getBreedingTracker(world, null).setModeName(name);
 	}
 
 	@Override

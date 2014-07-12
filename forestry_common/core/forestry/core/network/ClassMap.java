@@ -11,6 +11,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.UUID;
+
+import com.mojang.authlib.GameProfile;
 
 import forestry.core.gadgets.TileForestry;
 
@@ -19,12 +22,13 @@ public class ClassMap {
 	@SuppressWarnings("rawtypes")
 	public static HashMap<Class, ClassMap> classMappers = new HashMap<Class, ClassMap>();
 
-	private LinkedList<Field> intMember = new LinkedList<Field>();
-	private LinkedList<Field> floatMember = new LinkedList<Field>();
-	private LinkedList<Field> booleanMember = new LinkedList<Field>();
-	private LinkedList<Field> stringMember = new LinkedList<Field>();
-	private LinkedList<Field> enumMember = new LinkedList<Field>();
-	private LinkedList<ClassMap> objectMember = new LinkedList<ClassMap>();
+	private final LinkedList<Field> intMember = new LinkedList<Field>();
+	private final LinkedList<Field> floatMember = new LinkedList<Field>();
+	private final LinkedList<Field> booleanMember = new LinkedList<Field>();
+	private final LinkedList<Field> stringMember = new LinkedList<Field>();
+	private final LinkedList<Field> enumMember = new LinkedList<Field>();
+	private final LinkedList<Field> gameProfileMember = new LinkedList<Field>();
+	private final LinkedList<ClassMap> objectMember = new LinkedList<ClassMap>();
 
 	public int intSize;
 	public int floatSize;
@@ -66,6 +70,16 @@ public class ClassMap {
 		for (Field member : enumMember) {
 			intPayload[index.intIndex] = ((Enum) member.get(obj)).ordinal();
 			index.intIndex++;
+		}
+		for (Field member : gameProfileMember) {
+			GameProfile profile = (GameProfile) member.get(obj);
+			intPayload[index.intIndex] = (int) (profile.getId().getMostSignificantBits() >>> 32);
+			intPayload[index.intIndex + 1] = (int) profile.getId().getMostSignificantBits();
+			intPayload[index.intIndex + 2] = (int) (profile.getId().getLeastSignificantBits() >>> 32);
+			intPayload[index.intIndex + 3] = (int) profile.getId().getLeastSignificantBits();
+			index.intIndex += 4;
+			stringPayload[index.stringIndex] = profile.getName();
+			index.stringIndex++;
 		}
 
 		// Handle subobjects
@@ -123,6 +137,15 @@ public class ClassMap {
 			member.set(obj, stringPayload[index.stringIndex]);
 			index.stringIndex++;
 		}
+		for (Field member : gameProfileMember) {
+			GameProfile profile = new GameProfile(new UUID((long) intPayload[index.intIndex] << 32 | intPayload[index.intIndex + 1],
+					(long) intPayload[index.intIndex + 2] << 32 | intPayload[index.intIndex + 3]),
+					stringPayload[index.stringIndex]);
+			index.intIndex += 4;
+			index.stringIndex++;
+
+			member.set(obj, profile);
+		}
 
 		for (ClassMap map : objectMember) {
 			boolean isNull = intPayload[index.intIndex] == 0;
@@ -168,6 +191,10 @@ public class ClassMap {
 					} else if (Enum.class.isAssignableFrom(memberClass)) {
 						intSize++;
 						enumMember.add(field);
+					} else if (GameProfile.class.isAssignableFrom(memberClass)) {
+						intSize += 4;
+						stringSize++;
+						gameProfileMember.add(field);
 					} else {
 						// If we are none of the above we assume to be another
 						// mapable object

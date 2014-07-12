@@ -134,7 +134,7 @@ public class GuiCatalogue extends GuiForestry<TileForestry> {
 		case 5:
 			TradeStationInfo info = container.getTradeInfo();
 			if(info != null) {
-				SessionVars.setStringVar("mail.letter.recipient", info.moniker);
+				SessionVars.setStringVar("mail.letter.recipient", info.moniker.getName());
 				SessionVars.setStringVar("mail.letter.addressee", EnumAddressee.TRADER.toString().toLowerCase(Locale.ENGLISH));
 			}
 			mc.displayGuiScreen((GuiScreen)null);

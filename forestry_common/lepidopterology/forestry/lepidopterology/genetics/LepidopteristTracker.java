@@ -9,6 +9,8 @@ package forestry.lepidopterology.genetics;
 
 import net.minecraft.entity.player.EntityPlayer;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.api.lepidopterology.IButterfly;
@@ -19,16 +21,16 @@ import forestry.plugins.PluginLepidopterology;
 public class LepidopteristTracker extends BreedingTracker implements ILepidopteristTracker {
 
 	public LepidopteristTracker(String s) {
-		this(s, "");
+		this(s, null);
 	}
-	
-	public LepidopteristTracker(String s, String player) {
+
+	public LepidopteristTracker(String s, GameProfile player) {
 		super(s, player);
 	}
 
 	@Override
 	protected IBreedingTracker getCommonTracker(EntityPlayer player) {
-		return PluginLepidopterology.butterflyInterface.getBreedingTracker(player.worldObj, "__COMMON_");
+		return PluginLepidopterology.butterflyInterface.getBreedingTracker(player.worldObj, null);
 	}
 
 	@Override

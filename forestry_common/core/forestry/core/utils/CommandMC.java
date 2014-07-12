@@ -9,10 +9,8 @@ package forestry.core.utils;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
@@ -39,15 +37,6 @@ public abstract class CommandMC extends CommandBase {
 		} else
 			return MinecraftServer.getServer().worldServerForDimension(0);
 
-	}
-
-	protected EntityPlayer getPlayerFromName(String name) {
-		EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(name);
-
-		if (player == null)
-			throw new PlayerNotFoundException();
-		else
-			return player;
 	}
 
 	protected String[] getPlayers() {

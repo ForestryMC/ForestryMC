@@ -104,8 +104,8 @@ public class ItemTreealyzer extends ItemInventoried {
 
 				tree.analyze();
 				if (player != null) {
-					PluginArboriculture.treeInterface.getBreedingTracker(player.worldObj, player.getGameProfile().getId()).registerSpecies(tree.getGenome().getPrimary());
-					PluginArboriculture.treeInterface.getBreedingTracker(player.worldObj, player.getGameProfile().getId()).registerSpecies(tree.getGenome().getSecondary());
+					PluginArboriculture.treeInterface.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(tree.getGenome().getPrimary());
+					PluginArboriculture.treeInterface.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(tree.getGenome().getSecondary());
 				}
 				NBTTagCompound nbttagcompound = new NBTTagCompound();
 				tree.writeToNBT(nbttagcompound);

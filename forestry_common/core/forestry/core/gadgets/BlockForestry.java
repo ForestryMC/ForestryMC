@@ -67,6 +67,6 @@ public abstract class BlockForestry extends BlockContainer {
 
 		TileForestry tile = (TileForestry) world.getTileEntity(i, j, k);
 		if (entityliving instanceof EntityPlayer)
-			tile.owner = ((EntityPlayer) entityliving).getGameProfile().getId();
+			tile.owner = ((EntityPlayer) entityliving).getGameProfile();
 	}
 }
