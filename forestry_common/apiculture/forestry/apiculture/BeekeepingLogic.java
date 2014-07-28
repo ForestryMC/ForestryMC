@@ -50,13 +50,10 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		breedingTime = nbttagcompound.getInteger("BreedingTime");
 		throttle = nbttagcompound.getInteger("Throttle");
 
-		NBTTagList nbttaglist = new NBTTagList();
-		while (!spawn.isEmpty()) {
-			NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-			spawn.pop().writeToNBT(nbttagcompound1);
-			nbttaglist.appendTag(nbttagcompound1);
+		NBTTagList nbttaglist = nbttagcompound.getTagList("Offspring", 10);
+		for (int i = 0; i < nbttaglist.tagCount(); i++) {
+			spawn.add(ItemStack.loadItemStackFromNBT(nbttaglist.getCompoundTagAt(i)));
 		}
-		nbttagcompound.setTag("Offspring", nbttaglist);
 
 	}
 
@@ -65,11 +62,14 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		nbttagcompound.setInteger("BreedingTime", breedingTime);
 		nbttagcompound.setInteger("Throttle", throttle);
 
-		NBTTagList nbttaglist = nbttagcompound.getTagList("Offspring", 10);
-		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			spawn.add(ItemStack.loadItemStackFromNBT(nbttaglist.getCompoundTagAt(i)));
+		NBTTagList nbttaglist = new NBTTagList();
+		while (!spawn.isEmpty()) {
+			NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+			spawn.pop().writeToNBT(nbttagcompound1);
+			nbttaglist.appendTag(nbttagcompound1);
 		}
-
+		nbttagcompound.setTag("Offspring", nbttaglist);
+		
 	}
 
 	// / STATE INFORMATION
