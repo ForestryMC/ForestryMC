@@ -62,10 +62,11 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		nbttagcompound.setInteger("BreedingTime", breedingTime);
 		nbttagcompound.setInteger("Throttle", throttle);
 
+		Stack<ItemStack> spawnCopy = (Stack)spawn.clone();
 		NBTTagList nbttaglist = new NBTTagList();
-		while (!spawn.isEmpty()) {
+		while (!spawnCopy.isEmpty()) {
 			NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-			spawn.pop().writeToNBT(nbttagcompound1);
+			spawnCopy.pop().writeToNBT(nbttagcompound1);
 			nbttaglist.appendTag(nbttagcompound1);
 		}
 		nbttagcompound.setTag("Offspring", nbttaglist);
