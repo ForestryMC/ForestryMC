@@ -10,6 +10,8 @@ package forestry.apiculture.gadgets;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
@@ -18,11 +20,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-
 import net.minecraftforge.common.util.ForgeDirection;
-
 import buildcraft.api.inventory.ISpecialInventory;
-
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
@@ -835,5 +834,11 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 	@Override
 	public boolean isOwnable() {
 		return true;
+	}
+	
+	/* IHousing */
+	@Override
+	public GameProfile getOwnerName() {
+		return this.getOwnerProfile();
 	}
 }

@@ -171,7 +171,7 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 			}
 
 			this.moniker = moniker;
-			PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerName(), this.moniker);
+			PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerProfile(), this.moniker);
 			setErrorState(EnumErrorCode.OK);
 			sendNetworkUpdate();
 		} else
@@ -188,7 +188,7 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 		if (this.moniker == null)
 			return new InventoryAdapter(TradeStation.SLOT_SIZE, "INV");
 
-		return PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerName(), this.moniker);
+		return PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerProfile(), this.moniker);
 	}
 
 	/* ISPECIALINVENTORY */

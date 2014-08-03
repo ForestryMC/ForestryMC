@@ -14,9 +14,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
-
 import forestry.api.core.ITileStructure;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.StringUtil;
 
 public abstract class BlockStructure extends BlockForestry {
 
@@ -68,10 +68,17 @@ public abstract class BlockStructure extends BlockForestry {
 			if (!((ITileStructure) tile).isIntegratedIntoStructure())
 				return false;
 
-		if (tile.allowsInteraction(player))
+		if (tile.allowsInteraction(player)) {
 			tile.openGui(player);
-		else
-			player.addChatMessage(new ChatComponentTranslation("\u00A7c%s %s", new ChatComponentText(tile.getOwnerName().getName()), new ChatComponentTranslation("chat.accesslocked")));
+		}
+		else {
+			String ownerName = StringUtil.localize("gui.derelict");
+			
+			if (tile.getOwnerProfile() != null)
+				ownerName = tile.getOwnerProfile().getName();
+
+			player.addChatMessage(new ChatComponentTranslation("\u00A7c%s %s", new ChatComponentText(ownerName), new ChatComponentTranslation("chat.accesslocked")));
+		}
 		return true;
 	}
 

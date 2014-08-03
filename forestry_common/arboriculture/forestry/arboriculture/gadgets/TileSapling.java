@@ -57,7 +57,7 @@ public class TileSapling extends TileTreeContainer {
 
 		WorldGenerator generator = this.getTree().getTreeGenerator(worldObj, xCoord, yCoord, zCoord, bonemealed);
 		if (generator.generate(worldObj, worldObj.rand, xCoord, yCoord, zCoord)) {
-			PluginArboriculture.treeInterface.getBreedingTracker(worldObj, getOwnerName()).registerBirth(getTree());
+			PluginArboriculture.treeInterface.getBreedingTracker(worldObj, getOwnerProfile()).registerBirth(getTree());
 			return 2;
 		}
 

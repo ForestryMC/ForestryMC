@@ -54,7 +54,7 @@ public class ContainerMailbox extends ContainerForestry {
 		ItemStack stack = super.slotClick(slotIndex, button, par3, player);
 
 		if (Proxies.common.isSimulating(player.worldObj) && mailinventory != null)
-			PluginMail.proxy.setPOBoxInfo(mailbox.getWorldObj(), mailbox.getOwnerName(), mailinventory.getPOBoxInfo());
+			PluginMail.proxy.setPOBoxInfo(mailbox.getWorldObj(), mailbox.getOwnerProfile(), mailinventory.getPOBoxInfo());
 
 		return stack;
 	}

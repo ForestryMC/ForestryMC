@@ -11,7 +11,6 @@ import java.util.Locale;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
-
 import forestry.core.interfaces.IOwnable;
 import forestry.core.network.PacketCoordinates;
 import forestry.core.network.PacketIds;
@@ -71,11 +70,12 @@ public class OwnerLedger extends Ledger {
 
 		manager.minecraft.fontRenderer.drawStringWithShadow(StringUtil.localize("gui.owner"), x + 22, y + 8, manager.gui.fontColor.get("ledger.owner.header"));
 
-		String owner;
-		if ((owner = tile.getOwnerName().getName()) == null)
-			owner = StringUtil.localize("gui.derelict");
-
-		manager.minecraft.fontRenderer.drawString(owner, x + 22, y + 20, manager.gui.fontColor.get("ledger.owner.text"));
+		String ownerName = StringUtil.localize("gui.derelict");
+		
+		if (tile.getOwnerProfile() != null)
+			ownerName = tile.getOwnerProfile().getName();
+		
+		manager.minecraft.fontRenderer.drawString(ownerName, x + 22, y + 20, manager.gui.fontColor.get("ledger.owner.text"));
 
 		if (!playerIsOwner)
 			return;
@@ -90,8 +90,8 @@ public class OwnerLedger extends Ledger {
 
 	@Override
 	public String getTooltip() {
-		if (tile.getOwnerName() != null)
-			return StringUtil.localize("gui.owner") + ": " + tile.getOwnerName();
+		if (tile.getOwnerProfile() != null)
+			return StringUtil.localize("gui.owner") + ": " + tile.getOwnerProfile().getName();
 		else
 			return StringUtil.localize("gui.derelict");
 	}

@@ -138,7 +138,7 @@ public abstract class TileTreeContainer extends TileEntity implements INetworked
 	}
 
 	@Override
-	public GameProfile getOwnerName() {
+	public GameProfile getOwnerProfile() {
 		return owner;
 	}
 

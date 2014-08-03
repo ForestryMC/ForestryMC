@@ -349,11 +349,6 @@ public class TileMachine extends TileForestry implements ISpecialInventory, ICli
 		return 0;
 	}
 
-	// @Override
-	// public boolean canAccess(String username) {
-	// return isOwned() && getOwnerName().equals(username);
-	// }
-
 	@Override
 	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
 		if (getAccess() == EnumAccess.PRIVATE)

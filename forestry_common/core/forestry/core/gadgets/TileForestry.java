@@ -256,7 +256,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	@Override
-	public GameProfile getOwnerName() {
+	public GameProfile getOwnerProfile() {
 		return owner;
 	}
 
@@ -275,14 +275,14 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	@Override
 	public boolean isOwner(EntityPlayer player) {
 		if (owner != null)
-			return owner.equals(player.getGameProfile().getId());
+			return owner.getId().compareTo(player.getPersistentID()) == 0;
 		else
 			return false;
 	}
 
 	@Override
 	public boolean switchAccessRule(EntityPlayer player) {
-		if (owner != null && !owner.equals(player.getGameProfile()))
+		if (!isOwner(player))
 			return false;
 
 		if (access.ordinal() < EnumAccess.values().length - 1)

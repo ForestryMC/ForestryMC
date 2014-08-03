@@ -19,7 +19,7 @@ public interface IOwnable {
 
 	boolean isOwned();
 
-	GameProfile getOwnerName();
+	GameProfile getOwnerProfile();
 
 	void setOwner(EntityPlayer player);
 

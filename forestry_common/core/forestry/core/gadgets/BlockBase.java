@@ -24,18 +24,16 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.IFluidHandler;
-
 import forestry.core.interfaces.IOwnable;
 import forestry.core.items.ItemNBTTile;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.LiquidHelper;
+import forestry.core.utils.StringUtil;
 
 public class BlockBase extends BlockForestry {
 
@@ -176,10 +174,18 @@ public class BlockBase extends BlockForestry {
 		if (!Proxies.common.isSimulating(world))
 			return true;
 
-		if (tile.allowsInteraction(player))
+		if (tile.allowsInteraction(player)) {
 			tile.openGui(player, tile);
-		else
-			player.addChatMessage(new ChatComponentTranslation("\u00A7c%s %s", new ChatComponentText(tile.getOwnerName().getName()), new ChatComponentTranslation("chat.accesslocked")));
+		}
+		else {
+			String ownerName = StringUtil.localize("gui.derelict");
+			
+			if (tile.getOwnerProfile() != null)
+				ownerName = tile.getOwnerProfile().getName();
+
+
+			player.addChatMessage(new ChatComponentTranslation("\u00A7c%s %s", new ChatComponentText(ownerName), new ChatComponentTranslation("chat.accesslocked")));
+		}
 		return true;
 	}
 

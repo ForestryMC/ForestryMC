@@ -233,8 +233,6 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 			if ((chance = mutation.getChance(nursery, allele0, allele1, genome0, genome1)) > 0)
 				if (world.rand.nextFloat()*100 < chance) {
-					//IApiaristTracker breedingTracker = PluginApiculture.beeInterface.getBreedingTracker(world, housing.getOwnerName());
-					//breedingTracker.registerMutation(mutation);
 					return PluginLepidopterology.butterflyInterface.templateAsChromosomes(mutation.getTemplate());
 				}
 		}

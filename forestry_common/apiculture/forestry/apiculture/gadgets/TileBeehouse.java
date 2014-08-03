@@ -7,6 +7,8 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -14,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
@@ -434,5 +435,11 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	@Override
 	public boolean onEggLaid(IBee queen) {
 		return false;
+	}
+	
+	/* IHousing */
+	@Override
+	public GameProfile getOwnerName() {
+		return this.getOwnerProfile();
 	}
 }

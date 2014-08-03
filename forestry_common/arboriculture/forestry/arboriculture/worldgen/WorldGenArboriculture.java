@@ -58,7 +58,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 		if (!(tile instanceof TileSapling))
 			return Utils.getForestryPlayerProfile();
 
-		return ((TileSapling) tile).getOwnerName();
+		return ((TileSapling) tile).getOwnerProfile();
 	}
 
 	public abstract void preGenerate();

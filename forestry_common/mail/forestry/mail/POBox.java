@@ -55,7 +55,7 @@ public class POBox extends WorldSavedData implements IInventory {
 		letters.writeToNBT(nbttagcompound);
 	}
 
-	public GameProfile getOwnerName() {
+	public GameProfile getOwnerProfile() {
 		return this.owner;
 	}
 

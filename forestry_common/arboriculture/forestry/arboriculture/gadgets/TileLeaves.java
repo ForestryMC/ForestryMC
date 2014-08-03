@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,12 +21,9 @@ import net.minecraft.network.Packet;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraftforge.common.EnumPlantType;
-
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafTickHandler;
@@ -422,4 +421,9 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		return !isDestroyed() && caterpillar == null;
 	}
 
+	/* IHousing */
+	@Override
+	public GameProfile getOwnerName() {
+		return this.getOwnerProfile();
+	}
 }
