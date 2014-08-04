@@ -103,8 +103,19 @@ public class Chromosome implements IChromosome {
 	public void overrideInvalidAlleles(IAllele template, Class<? extends IAllele> chromosomeClass) {
 		if (primary == null || !chromosomeClass.isInstance(primary))
 			primary = template;
+		
 		if (secondary == null || !chromosomeClass.isInstance(secondary))
 			secondary = template;
+	}
+	
+	public boolean hasInvalidAlleles(Class<? extends IAllele> chromosomeClass) {
+		if (primary == null || !chromosomeClass.isInstance(primary))
+			return true;
+		
+		if (secondary == null || !chromosomeClass.isInstance(secondary))
+			return true;
+		
+		return false;
 	}
 
 	/* HELPER FUNCTIONS */

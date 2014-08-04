@@ -46,11 +46,16 @@ public abstract class Genome implements IGenome {
 		for (int i = 0; i < nbttaglist.tagCount(); i++) {
 			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 			byte byte0 = nbttagcompound1.getByte(SLOT_TAG);
+			
 			if (byte0 >= 0 && byte0 < chromosomes.length) {
 				Chromosome chromosome = Chromosome.loadChromosomeFromNBT(nbttagcompound1);
 				chromosomes[byte0] = chromosome;
+				
 				if (Config.clearInvalidChromosomes)
 					chromosome.overrideInvalidAlleles(getDefaultTemplate()[byte0], getSpeciesRoot().getKaryotype()[byte0].getAlleleClass());
+				
+				if (chromosome.hasInvalidAlleles(getSpeciesRoot().getKaryotype()[byte0].getAlleleClass()))
+					throw new RuntimeException("Found Chromosome with invalid Alleles. See config option \"genetics.clear.invalid.chromosomes\".");
 			}
 		}
 	}

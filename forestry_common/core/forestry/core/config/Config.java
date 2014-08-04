@@ -209,7 +209,7 @@ public class Config {
 		applePickup = Boolean.parseBoolean(appleHarvest.Value);
 
 		Property clearGenome = config.get("genetics.clear.invalid.chromosomes", CATEGORY_COMMON, clearInvalidChromosomes);
-		clearGenome.Comment = "NEW: set to true to clear chromosomes which contain invalid alleles. might rescue your save if it is crashing after removal of a bee addon.";
+		clearGenome.Comment = "set to true to clear chromosomes which contain invalid alleles. might rescue your save if it is crashing after the removal of a bee addon.";
 		clearInvalidChromosomes = Boolean.parseBoolean(clearGenome.Value);
 
 		Property dungeonLootRarity = config.get("difficulty.dungeonloot.rare", CATEGORY_COMMON, false);
