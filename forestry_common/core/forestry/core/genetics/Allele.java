@@ -134,10 +134,12 @@ public class Allele implements IAllele {
 	public static AlleleSpecies treeSpruce;
 	public static AlleleSpecies treePine;
 	public static AlleleSpecies treeJungle;
-
+	public static AlleleSpecies treeAcacia;
+	public static AlleleSpecies treeDarkOak;
+	
 	public static AlleleSpecies treeLarch;
 	public static AlleleSpecies treeTeak;
-	public static AlleleSpecies treeAcacia;
+	public static AlleleSpecies treeDesertAcacia;
 	public static AlleleSpecies treeLime;
 	public static AlleleSpecies treeChestnut;
 	public static AlleleSpecies treeWenge;

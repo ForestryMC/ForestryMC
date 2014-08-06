@@ -19,7 +19,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.WeightedRandomChestContent;
-
+import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
@@ -27,11 +29,6 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
-
-import net.minecraftforge.common.ChestGenHooks;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.OreDictionary;
-
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeRoot;
@@ -94,11 +91,13 @@ import forestry.arboriculture.items.ItemTreealyzer;
 import forestry.arboriculture.items.ItemWoodBlock;
 import forestry.arboriculture.proxy.ProxyArboriculture;
 import forestry.arboriculture.worldgen.WorldGenAcacia;
+import forestry.arboriculture.worldgen.WorldGenAcaciaVanilla;
 import forestry.arboriculture.worldgen.WorldGenBalsa;
 import forestry.arboriculture.worldgen.WorldGenBaobab;
 import forestry.arboriculture.worldgen.WorldGenBirch;
 import forestry.arboriculture.worldgen.WorldGenCherry;
 import forestry.arboriculture.worldgen.WorldGenChestnut;
+import forestry.arboriculture.worldgen.WorldGenDarkOak;
 import forestry.arboriculture.worldgen.WorldGenDate;
 import forestry.arboriculture.worldgen.WorldGenEbony;
 import forestry.arboriculture.worldgen.WorldGenGiganteum;
@@ -710,6 +709,11 @@ public class PluginArboriculture extends NativePlugin implements IFuelHandler {
 		Allele.treeOak = new AlleleTreeSpecies("treeOak", false, "Apple Oak", quercus, "robur",
 				proxy.getFoliageColorBasic(), WorldGenOak.class, new ItemStack(Blocks.log, 1, 0)).addFruitFamily(pomes)
 				.setVanillaMap(0).setIsSecret();
+		
+		Allele.treeDarkOak = new AlleleTreeSpecies("treeDarkOak", false, "Dark Oak", quercus, "velutina",
+				proxy.getFoliageColorBasic(), WorldGenDarkOak.class, new ItemStack(Blocks.log2, 1, 1)).addFruitFamily(pomes)
+				.setVanillaMap(5);
+		
 		Allele.treeBirch = new AlleleTreeSpecies("treeBirch", false, "Silver Birch", betula,
 				"pendula", proxy.getFoliageColorBirch(), 0xb0c648, WorldGenBirch.class, new ItemStack(Blocks.log, 1, 2))
 		.setVanillaMap(2).setIsSecret();
@@ -799,8 +803,13 @@ public class PluginArboriculture extends NativePlugin implements IFuelHandler {
 		// Shorea superba
 
 		// Malva
-		Allele.treeAcacia = new AlleleTreeSpecies("treeAcacia", true, "Desert Acacia", acacia,
-				"erioloba", 0x616101, 0xb3b302, WorldGenAcacia.class, new ItemStack(ForestryBlock.log1, 1, 2)).addFruitFamily(jungle)
+		
+		Allele.treeAcacia = new AlleleTreeSpecies("treeAcaciaVanilla", true, "Acacia", acacia,
+				"aneura", 0x616101, 0xb3b302, WorldGenAcaciaVanilla.class, new ItemStack(Blocks.log2, 1, 0)).addFruitFamily(jungle)
+				.addFruitFamily(nux).setVanillaMap(4);
+		
+		Allele.treeDesertAcacia = new AlleleTreeSpecies("treeAcacia", true, "Desert Acacia", acacia,
+				"erioloba", 0x748C1C, 0xb3b302, WorldGenAcacia.class, new ItemStack(ForestryBlock.log1, 1, 2)).addFruitFamily(jungle)
 				.addFruitFamily(nux);
 		Allele.treeBalsa = new AlleleTreeSpecies("treeBalsa", true, "Balsa", ochroma, "pyramidale",
 				0x59ac00, 0xfeff8f, WorldGenBalsa.class, new ItemStack(ForestryBlock.log3, 1, 3)).addFruitFamily(jungle).addFruitFamily(nux);
@@ -867,6 +876,8 @@ public class PluginArboriculture extends NativePlugin implements IFuelHandler {
 		treeInterface.registerTemplate(TreeTemplates.getBirchTemplate());
 		treeInterface.registerTemplate(TreeTemplates.getSpruceTemplate());
 		treeInterface.registerTemplate(TreeTemplates.getJungleTemplate());
+		treeInterface.registerTemplate(TreeTemplates.getAcaciaTemplate());
+		treeInterface.registerTemplate(TreeTemplates.getDarkOakTemplate());
 
 		treeInterface.registerTemplate(TreeTemplates.getLimeTemplate());
 		treeInterface.registerTemplate(TreeTemplates.getCherryTemplate());
@@ -879,7 +890,7 @@ public class PluginArboriculture extends NativePlugin implements IFuelHandler {
 		treeInterface.registerTemplate(TreeTemplates.getGiganteumTemplate());
 
 		treeInterface.registerTemplate(TreeTemplates.getBalsaTemplate());
-		treeInterface.registerTemplate(TreeTemplates.getAcaciaTemplate());
+		treeInterface.registerTemplate(TreeTemplates.getDesertAcaciaTemplate());
 		treeInterface.registerTemplate(TreeTemplates.getWengeTemplate());
 		treeInterface.registerTemplate(TreeTemplates.getBaobabTemplate());
 
@@ -921,6 +932,10 @@ public class PluginArboriculture extends NativePlugin implements IFuelHandler {
 				TreeTemplates.templateAsGenome(TreeTemplates.getBirchTemplate())));
 		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 3), new Tree(
 				TreeTemplates.templateAsGenome(TreeTemplates.getJungleTemplate())));
+		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 4), new Tree(
+				TreeTemplates.templateAsGenome(TreeTemplates.getAcaciaTemplate())));
+		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 5), new Tree(
+				TreeTemplates.templateAsGenome(TreeTemplates.getDarkOakTemplate())));
 	}
 
 	private void createMutations() {
@@ -978,12 +993,12 @@ public class PluginArboriculture extends NativePlugin implements IFuelHandler {
 		TreeTemplates.balsaA = new TreeMutation(Allele.treeTeak, Allele.treeLime,
 				TreeTemplates.getBalsaTemplate(), 10);
 		TreeTemplates.acaciaA = new TreeMutation(Allele.treeTeak, Allele.treeBalsa,
-				TreeTemplates.getAcaciaTemplate(), 10);
-		TreeTemplates.wengeA = new TreeMutation(Allele.treeAcacia, Allele.treeBalsa,
+				TreeTemplates.getDesertAcaciaTemplate(), 10);
+		TreeTemplates.wengeA = new TreeMutation(Allele.treeDesertAcacia, Allele.treeBalsa,
 				TreeTemplates.getWengeTemplate(), 10);
 		TreeTemplates.baobabA = new TreeMutation(Allele.treeBalsa, Allele.treeWenge,
 				TreeTemplates.getBaobabTemplate(), 10);
-		TreeTemplates.mahoeA = new TreeMutation(Allele.treeBirch, Allele.treeAcacia,
+		TreeTemplates.mahoeA = new TreeMutation(Allele.treeBirch, Allele.treeDesertAcacia,
 				TreeTemplates.getMahoeTemplate(), 5);
 
 		TreeTemplates.willowA = new TreeMutation(Allele.treeOak, Allele.treeBirch,

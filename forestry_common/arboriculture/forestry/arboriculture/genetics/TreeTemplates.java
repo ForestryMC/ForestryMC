@@ -114,6 +114,21 @@ public class TreeTemplates {
 		alleles[EnumTreeChromosome.MATURATION.ordinal()] = Allele.maturationFast;
 		return alleles;
 	}
+	
+	public static IAllele[] getAcaciaTemplate() {
+		IAllele[] alleles = getDefaultTemplate();
+		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeAcacia;
+		return alleles;
+	}
+	
+	public static IAllele[] getDarkOakTemplate() {
+		IAllele[] alleles = getDefaultTemplate();
+		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeDarkOak;
+		alleles[EnumTreeChromosome.FERTILITY.ordinal()] = Allele.saplingsAverage;
+		alleles[EnumTreeChromosome.MATURATION.ordinal()] = Allele.maturationFaster;
+		alleles[EnumTreeChromosome.GIRTH.ordinal()] = Allele.int2;
+		return alleles;
+	}
 
 	public static IAllele[] getBalsaTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
@@ -230,9 +245,9 @@ public class TreeTemplates {
 		return alleles;
 	}
 
-	public static IAllele[] getAcaciaTemplate() {
+	public static IAllele[] getDesertAcaciaTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeAcacia;
+		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeDesertAcacia;
 		alleles[EnumTreeChromosome.PLANT.ordinal()] = Allele.plantTypeDesert;
 		return alleles;
 	}
