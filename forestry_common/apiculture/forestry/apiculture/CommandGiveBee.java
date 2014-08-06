@@ -83,6 +83,9 @@ public class CommandGiveBee extends CommandMC {
 
 			IBee bee = PluginApiculture.beeInterface.getBee(player.worldObj, genome);
 
+			if(this.type == EnumBeeType.QUEEN)
+				bee.mate(bee);
+			
 			ItemStack beestack = PluginApiculture.beeInterface.getMemberStack(bee, type.ordinal());
 			player.dropPlayerItemWithRandomChoice(beestack, true);
 			func_152373_a(sender, this, "Player %s was given a %s bee.", player.getCommandSenderName(), ((IAlleleSpecies) template[0]).getName());
