@@ -1,9 +1,28 @@
-.classpath
-.gradle/
-.nb-gradle/
-.settings/
-build/
-eclipse/
-.project
+# ForgeGradle
+/.gradle
+/.nb-gradle
+/build
+/eclipse
+/libs
+/run
 gradle.properties
+
+# Eclipse
+.classpath
+.project
+/.settings
+/bin
+
+# IntelliJ
+/.idea
+*.iml
+*.ipr
+*.iws
+/out
+
+# Mac Stuff
+.DS_Store
+*.command
+
+# Other
 *~
