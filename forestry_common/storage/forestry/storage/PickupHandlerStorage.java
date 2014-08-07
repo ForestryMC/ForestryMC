@@ -11,7 +11,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.gui.ContainerNaturalistInventory;
+import forestry.storage.gui.ContainerNaturalistBackpack;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.storage.gui.ContainerBackpack;
 import forestry.storage.items.ItemBackpack;
@@ -27,7 +27,7 @@ public class PickupHandlerStorage implements IPickupHandler {
 
 		// Do not pick up if a backpack is open // FIXME: Must not contain
 		// anything from apiculture
-		if (player.openContainer instanceof ContainerBackpack || player.openContainer instanceof ContainerNaturalistInventory)
+		if (player.openContainer instanceof ContainerBackpack || player.openContainer instanceof ContainerNaturalistBackpack)
 			return true;
 
 		// Make sure to top off manually placed itemstacks in player
