@@ -32,7 +32,7 @@ public class ClientProxyMail extends ProxyMail {
 
 	@Override
 	public void resetMailboxInfo() {
-		if (Proxies.common.getClientInstance().thePlayer == null)
+		if (Proxies.common.getClientInstance().thePlayer == null || Proxies.common.getClientInstance().theWorld == null)
 			return;
 
 		GuiMailboxInfo.instance = new GuiMailboxInfo();
