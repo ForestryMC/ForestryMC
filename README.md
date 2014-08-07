@@ -33,4 +33,4 @@ Bugfixes are generally welcome. If you want to contribute something which change
 
 ### License & Copyright
 
-Forestry is (c) 2011 - 2014 SirSengir and licensed under CC BY-NC-ND 3.0. See the LICENSE.txt for all the gory details or go to http://creativecommons.org/licenses/by-nc-nd/3.0/ for more information. Forestry also contains code contributed by CovertJaguar, Player, MysteriousAges, Binnie, RichardG, cpw and others.
+Forestry is (c) 2011 - 2014 SirSengir and licensed under LGPL v3. See the LICENSE.txt for all the gory details or go to http://www.gnu.org/licenses/gpl-3.0.txt for more information. Forestry also contains code contributed by CovertJaguar, Player, MysteriousAges, Binnie, RichardG, cpw and others.

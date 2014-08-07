@@ -1,9 +1,12 @@
 /*******************************************************************************
- * Copyright 2011-2014 by SirSengir
+ * Copyright (c) 2011-2014 SirSengir.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser Public License v3
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/gpl-3.0.txt
  * 
- * This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
- * 
- * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/.
+ * Various Contributors including, but not limited to:
+ * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.lepidopterology.proxy;
 
