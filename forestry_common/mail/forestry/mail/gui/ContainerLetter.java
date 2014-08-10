@@ -13,11 +13,12 @@ package forestry.mail.gui;
 import java.util.Iterator;
 import java.util.Locale;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
-
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.ITradeStation;
@@ -134,6 +135,9 @@ public class ContainerLetter extends ContainerItemInventory {
 	}
 
 	public void setRecipient(MailAddress address) {
+		if (address == null)
+			return;
+		
 		getLetter().setRecipient(address);
 		carrier = address.getType();
 
@@ -147,10 +151,19 @@ public class ContainerLetter extends ContainerItemInventory {
 	}
 
 	public void handleSetRecipient(EntityPlayer player, PacketUpdate packet) {
-		MailAddress recipient = new MailAddress(MinecraftServer.getServer().func_152358_ax().func_152655_a(packet.payload.stringPayload[1]));
+		String identifier = packet.payload.stringPayload[0];
+		
+		GameProfile recipientProfile = MinecraftServer.getServer().func_152358_ax().func_152655_a(identifier);
+
+		if (recipientProfile == null)
+			return;
+		
+		MailAddress recipient = new MailAddress(recipientProfile);
 		getLetter().setRecipient(recipient);
+		
 		// Update the trading info
 		updateTradeInfo(player.worldObj, recipient);
+		
 		// Update trade info on client
 		Proxies.net.sendToPlayer(new PacketTradeInfo(PacketIds.TRADING_INFO, tradeInfo), player);
 	}

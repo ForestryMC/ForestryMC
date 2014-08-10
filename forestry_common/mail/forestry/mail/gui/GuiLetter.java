@@ -221,7 +221,8 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 
 		String recipient = SessionVars.getStringVar("mail.letter.recipient");
 		String type = SessionVars.getStringVar("mail.letter.addressee");
-		if(type != null) {
+		
+		if (recipient != null && type != null) {
 			address.setText(recipient);
 			setRecipient(recipient, type);
 		}
@@ -232,6 +233,12 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 
 	private void setRecipient(String identifier, String type) {
 		if (this.isProcessedLetter)
+			return;
+		
+		if (identifier == null || identifier == "" )
+			return;
+
+		if (type == null || type == "" )
 			return;
 
 		MailAddress recipient = new MailAddress(new GameProfile(null, identifier), type);
