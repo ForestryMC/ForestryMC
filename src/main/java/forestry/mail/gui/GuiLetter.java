@@ -16,6 +16,7 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
 
 import com.mojang.authlib.GameProfile;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -214,6 +215,11 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 		Keyboard.enableRepeatEvents(false);
 		super.onGuiClosed();
 	}
+	
+	@Override
+	protected boolean checkHotbarKeys(int key) {
+		return false;
+	}
 
 	private void setFromSessionVars() {
 		if(SessionVars.getStringVar("mail.letter.recipient") == null)
@@ -221,7 +227,8 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 
 		String recipient = SessionVars.getStringVar("mail.letter.recipient");
 		String type = SessionVars.getStringVar("mail.letter.addressee");
-		if(type != null) {
+		
+		if (recipient != null && type != null) {
 			address.setText(recipient);
 			setRecipient(recipient, type);
 		}
@@ -232,6 +239,12 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 
 	private void setRecipient(String identifier, String type) {
 		if (this.isProcessedLetter)
+			return;
+		
+		if (identifier == null || identifier == "" )
+			return;
+
+		if (type == null || type == "" )
 			return;
 
 		MailAddress recipient = new MailAddress(new GameProfile(null, identifier), type);
