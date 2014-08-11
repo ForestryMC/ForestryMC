@@ -16,6 +16,7 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
 
 import com.mojang.authlib.GameProfile;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -213,6 +214,11 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 		setText();
 		Keyboard.enableRepeatEvents(false);
 		super.onGuiClosed();
+	}
+	
+	@Override
+	protected boolean checkHotbarKeys(int key) {
+		return false;
 	}
 
 	private void setFromSessionVars() {
