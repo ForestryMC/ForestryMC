@@ -23,6 +23,7 @@ import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.InventoryAdapter;
 import forestry.mail.gadgets.MachineTrader;
+import org.apache.commons.lang3.StringUtils;
 
 public class ContainerTradeName extends ContainerForestry {
 
@@ -35,13 +36,13 @@ public class ContainerTradeName extends ContainerForestry {
 		isLinked = machine.isLinked();
 	}
 
-	public GameProfile getMoniker() {
+	public String getMoniker() {
 		return machine.getMoniker();
 	}
 
 	public void setMoniker(String moniker) {
 
-		if (moniker == null)
+		if (StringUtils.isBlank(moniker))
 			return;
 
 		PacketPayload payload = new PacketPayload(0, 0, 1);
@@ -52,8 +53,7 @@ public class ContainerTradeName extends ContainerForestry {
 	}
 
 	public void handleSetMoniker(PacketUpdate packet) {
-		GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(packet.payload.stringPayload[0]);
-		machine.setMoniker(profile);
+		machine.setMoniker(packet.payload.stringPayload[0]);
 	}
 
 	@Override

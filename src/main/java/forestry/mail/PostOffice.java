@@ -63,10 +63,10 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 	}
 
 	/* TRADE STATION MANAGMENT */
-	private LinkedHashMap<GameProfile, ITradeStation> activeTradeStations;
+	private LinkedHashMap<MailAddress, ITradeStation> activeTradeStations;
 
 	@Override
-	public LinkedHashMap<GameProfile, ITradeStation> getActiveTradeStations(World world) {
+	public LinkedHashMap<MailAddress, ITradeStation> getActiveTradeStations(World world) {
 		if (activeTradeStations == null)
 			refreshActiveTradeStations(world);
 
@@ -74,7 +74,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 	}
 
 	private void refreshActiveTradeStations(World world) {
-		activeTradeStations = new LinkedHashMap<GameProfile, ITradeStation>();
+		activeTradeStations = new LinkedHashMap<MailAddress, ITradeStation>();
 		if (world == null || world.getSaveHandler() == null)
 			return;
 		File worldSave = world.getSaveHandler().getMapFileFromName("dummy");
@@ -90,10 +90,8 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 			if (!str.endsWith(".dat"))
 				continue;
 
-			String[] parts = str.replace(TradeStation.SAVE_NAME, "").replace(".dat", "").split("_");
-			if (parts.length != 2) continue;
-
-			ITradeStation trade = PostManager.postRegistry.getTradeStation(world, new GameProfile(UUID.fromString(parts[0]), parts[1]));
+			MailAddress address = new MailAddress(str.replace(TradeStation.SAVE_NAME, "").replace(".dat", ""));
+			ITradeStation trade = PostManager.postRegistry.getTradeStation(world, address);
 			if (trade == null)
 				continue;
 
@@ -106,8 +104,8 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 		if (activeTradeStations == null)
 			return;
 
-		if (!activeTradeStations.containsKey(trade.getMoniker()))
-			activeTradeStations.put(trade.getMoniker(), trade);
+		if (!activeTradeStations.containsKey(trade.getAddress()))
+			activeTradeStations.put(trade.getAddress(), trade);
 
 	}
 
@@ -116,7 +114,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 		if (activeTradeStations == null)
 			return;
 
-		activeTradeStations.remove(trade.getMoniker());
+		activeTradeStations.remove(trade.getAddress());
 	}
 
 	// / STAMP MANAGMENT
@@ -173,7 +171,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 			IPostalCarrier carrier = PostManager.postRegistry.getCarrier(address.getType());
 			if (carrier == null)
 				continue;
-			state = carrier.deliverLetter(world, this, address.getProfile(), itemstack, doLodge);
+			state = carrier.deliverLetter(world, this, address, itemstack, doLodge);
 			if (!state.isOk())
 				break;
 		}

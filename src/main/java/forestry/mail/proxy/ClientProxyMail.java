@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.mail.proxy;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
+import forestry.api.mail.MailAddress;
+import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -39,15 +42,22 @@ public class ClientProxyMail extends ProxyMail {
 		if (!Proxies.common.isSimulating(Proxies.common.getRenderWorld()))
 			Proxies.net.sendToServer(new ForestryPacket(PacketIds.POBOX_INFO_REQUEST));
 		else {
-			POBox pobox = PostRegistry.getPOBox(Proxies.common.getRenderWorld(), Proxies.common.getClientInstance().thePlayer.getGameProfile());
+			MailAddress address = new MailAddress(Proxies.common.getClientInstance().thePlayer.getGameProfile());
+			POBox pobox = PostRegistry.getPOBox(Proxies.common.getRenderWorld(), address);
 			if (pobox != null)
-				setPOBoxInfo(Proxies.common.getRenderWorld(), Proxies.common.getClientInstance().thePlayer.getGameProfile(), pobox.getPOBoxInfo());
+				setPOBoxInfo(Proxies.common.getRenderWorld(), address, pobox.getPOBoxInfo());
 		}
 	}
 
 	@Override
-	public void setPOBoxInfo(World world, GameProfile playername, POBoxInfo info) {
-		if (Proxies.common.getClientInstance().thePlayer == null || !Proxies.common.getClientInstance().thePlayer.getGameProfile().equals(playername))
+	public void setPOBoxInfo(World world, MailAddress address, POBoxInfo info) {
+		if (!address.isPlayer())
+			throw new IllegalArgumentException("POBox address must be a player");
+
+		GameProfile playerProfile = (GameProfile)address.getIdentifier();
+
+		EntityClientPlayerMP player = Proxies.common.getClientInstance().thePlayer;
+		if (player == null || !player.getGameProfile().equals(playerProfile))
 			return;
 
 		GuiMailboxInfo.instance.setPOBoxInfo(info);

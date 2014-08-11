@@ -12,6 +12,8 @@ package forestry.mail.gadgets;
 
 import java.util.LinkedList;
 
+import forestry.api.mail.MailAddress;
+import forestry.core.utils.StringUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -38,11 +40,12 @@ import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.StackUtils;
 import forestry.mail.TradeStation;
 import forestry.plugins.PluginMail;
+import org.apache.commons.lang3.StringUtils;
 
 public class MachineTrader extends TileBase implements ISpecialInventory, ISidedInventory {
 
 	@EntityNetData
-	public GameProfile moniker;
+	public String moniker = "";
 
 	@Override
 	public String getInventoryName() {
@@ -59,8 +62,10 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 
 	@Override
 	public void onRemoval() {
-		if (isLinked())
-			PostManager.postRegistry.deleteTradeStation(worldObj, moniker);
+		if (isLinked()) {
+			MailAddress address = new MailAddress(moniker);
+			PostManager.postRegistry.deleteTradeStation(worldObj, address);
+		}
 	}
 
 	/* SAVING & LOADING */
@@ -68,10 +73,8 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 
-		if (this.moniker != null) {
-			NBTTagCompound nbt = new NBTTagCompound();
-			NBTUtil.func_152460_a(nbt, moniker);
-			nbttagcompound.setTag("moniker", nbt);
+		if (moniker != null) {
+			nbttagcompound.setString("moniker", moniker);
 		}
 	}
 
@@ -80,7 +83,7 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 		super.readFromNBT(nbttagcompound);
 
 		if (nbttagcompound.hasKey("moniker")) {
-			moniker = NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("moniker"));
+			moniker = nbttagcompound.getString("moniker");
 		}
 	}
 
@@ -91,8 +94,6 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 		if (worldObj.getTotalWorldTime() % 40 * 10 != 0)
 			return;
 
-		setErrorState(EnumErrorCode.OK);
-
 		if (!hasPaperMin(0.0f) || !hasInputBufMin(0.0f)) {
 			setErrorState(EnumErrorCode.NORESOURCE);
 			return;
@@ -102,12 +103,13 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 			return;
 		}
 
+		setErrorState(EnumErrorCode.OK);
 	}
 
 	/* STATE INFORMATION */
 
 	public boolean isLinked() {
-		return getMoniker() != null;
+		return StringUtils.isNotBlank(getMoniker());
 	}
 
 	private float percentOccupied(int startSlot, int countSlots) {
@@ -156,25 +158,27 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 	}
 
 	/* MONIKER */
-	public GameProfile getMoniker() {
+	public String getMoniker() {
 		return this.moniker;
 	}
 
-	public void setMoniker(GameProfile moniker) {
+	public void setMoniker(String moniker) {
 
 		if (Proxies.common.isSimulating(worldObj)) {
-			if (!PostManager.postRegistry.isValidTradeMoniker(worldObj, moniker)) {
+			MailAddress address = new MailAddress(moniker);
+
+			if (!PostManager.postRegistry.isValidTradeAddress(worldObj, address)) {
 				setErrorState(EnumErrorCode.NOTALPHANUMERIC);
 				return;
 			}
 
-			if (!PostManager.postRegistry.isAvailableTradeMoniker(worldObj, moniker)) {
+			if (!PostManager.postRegistry.isAvailableTradeAddress(worldObj, address)) {
 				setErrorState(EnumErrorCode.NOTUNIQUE);
 				return;
 			}
 
 			this.moniker = moniker;
-			PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerProfile(), this.moniker);
+			PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerProfile(), address);
 			setErrorState(EnumErrorCode.OK);
 			sendNetworkUpdate();
 		} else
@@ -188,10 +192,11 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 		if (!Proxies.common.isSimulating(worldObj))
 			return new InventoryAdapter(TradeStation.SLOT_SIZE, "INV");
 
-		if (this.moniker == null)
+		if (StringUtils.isBlank(this.moniker))
 			return new InventoryAdapter(TradeStation.SLOT_SIZE, "INV");
 
-		return PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerProfile(), this.moniker);
+		MailAddress address = new MailAddress(this.moniker);
+		return PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerProfile(), address);
 	}
 
 	/* ISPECIALINVENTORY */
