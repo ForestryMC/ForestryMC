@@ -35,7 +35,7 @@ ext.CraftGuideTmp = "build/tmp/CraftGuide"
 
 minecraft {
 	version = mcversion + "-" + forgeversion
-	assetDir = "eclipse/assets"
+	runDir = "run"
 
 	replace '@VERSION@', project.version
 	replace '@BUILD_NUMBER@', getBuildNumber()
@@ -51,13 +51,9 @@ sourceSets {
 	
 	main {
 		java {
-			srcDirs file('forestry_common').listFiles()
-			include 'forestry/**'
-
 			srcDir project.dirApi
 		}
 		resources {
-			srcDir 'forestry_resources'
 			srcDir project.dirLang
 		}
 	}
@@ -76,11 +72,16 @@ configurations {
 }
 
 dependencies {
-	compile 'net.industrial-craft:industrialcraft-2:2.2.508-experimental:api'
-	buildcraft 'com.mod-buildcraft:buildcraft:5.0.4.2942:dev'
+	compile 'net.industrial-craft:industrialcraft-2:2.2.575-experimental:api'
+	buildcraft 'com.mod-buildcraft:buildcraft:6.0.17:dev'
 }
 
 processResources {
+
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
 	// replace stuff in mcmod.info, nothing else
 	from(sourceSets.main.resources.srcDirs) {
 		include 'mcmod.info'
@@ -172,7 +173,7 @@ jar {
 	destinationDir = file("build/tmp")
 	archiveName = "main.jar"
 
-	from {
+    from {
 		configurations.buildcraft.collect {
 			it.isDirectory() ? it : zipTree(it).matching {
 				include '**/api/**'
