@@ -12,6 +12,7 @@ package forestry.mail.gadgets;
 
 import java.util.LinkedList;
 
+import forestry.api.mail.MailAddress;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -72,21 +73,6 @@ public class MachineMailbox extends TileBase implements IMailContainer, ISpecial
 			player.openGui(ForestryAPI.instance, GuiId.MailboxGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
-	/* SAVING & LOADING */
-	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
-
-		nbttagcompound.setBoolean("LNK", this.isLinked);
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-
-		this.isLinked = nbttagcompound.getBoolean("LNK");
-	}
-
 	/* UPDATING */
 	@Override
 	public void updateServerSide() {
@@ -106,7 +92,8 @@ public class MachineMailbox extends TileBase implements IMailContainer, ISpecial
 		if (getOwnerProfile() == null)
 			return new InventoryAdapter(POBox.SLOT_SIZE, "Letters");
 
-		return PostRegistry.getOrCreatePOBox(worldObj, getOwnerProfile());
+		MailAddress address = new MailAddress(getOwnerProfile());
+		return PostRegistry.getOrCreatePOBox(worldObj, address);
 	}
 
 	private IPostalState tryDispatchLetter(ItemStack letterstack, boolean dispatchLetter) {

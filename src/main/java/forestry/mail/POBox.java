@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.mail;
 
+import forestry.api.mail.MailAddress;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -31,9 +32,12 @@ public class POBox extends WorldSavedData implements IInventory {
 	private GameProfile owner;
 	private final InventoryAdapter letters = new InventoryAdapter(SLOT_SIZE, "Letters");
 
-	public POBox(GameProfile owner, boolean isUser) {
-		super(SAVE_NAME + owner);
-		this.owner = owner;
+	public POBox(MailAddress address, boolean isUser) {
+		super(SAVE_NAME + address);
+		if (!address.isPlayer()) {
+			throw new IllegalArgumentException("POBox address must be a player");
+		}
+		this.owner = (GameProfile)address.getIdentifier();
 	}
 
 	public POBox(String savename) {

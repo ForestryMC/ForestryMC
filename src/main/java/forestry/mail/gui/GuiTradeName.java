@@ -14,6 +14,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.InventoryPlayer;
 
+import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.input.Keyboard;
 
 import forestry.core.config.Defaults;
@@ -43,7 +44,7 @@ public class GuiTradeName extends GuiForestry<MachineTrader> {
 
 		moniker = new GuiTextField(this.fontRendererObj, guiLeft + 44, guiTop + 39, 90, 14);
 		if (container.getMoniker() != null)
-			moniker.setText(container.getMoniker().getName());
+			moniker.setText(container.getMoniker());
 	}
 
 	@Override
@@ -96,7 +97,9 @@ public class GuiTradeName extends GuiForestry<MachineTrader> {
 	}
 
 	private void setMoniker() {
-		container.setMoniker(this.moniker.getText());
+		String monikerText = this.moniker.getText();
+		if (StringUtils.isNotBlank(monikerText))
+			container.setMoniker(monikerText);
 	}
 
 }

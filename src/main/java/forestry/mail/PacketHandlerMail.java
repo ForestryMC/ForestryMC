@@ -12,6 +12,7 @@ package forestry.mail;
 
 import java.io.DataInputStream;
 
+import forestry.api.mail.MailAddress;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 
@@ -81,7 +82,8 @@ public class PacketHandlerMail implements IPacketHandler {
 	}
 
 	private void onPOBoxInfo(PacketPOBoxInfo packet) {
-		PluginMail.proxy.setPOBoxInfo(Proxies.common.getRenderWorld(), Proxies.common.getClientInstance().thePlayer.getGameProfile(), packet.poboxInfo);
+		MailAddress address = new MailAddress(Proxies.common.getClientInstance().thePlayer.getGameProfile());
+		PluginMail.proxy.setPOBoxInfo(Proxies.common.getRenderWorld(), address, packet.poboxInfo);
 	}
 
 	private void onMonikerSet(EntityPlayer player, PacketUpdate packet) {
@@ -106,7 +108,8 @@ public class PacketHandlerMail implements IPacketHandler {
 	}
 
 	private void onPOBoxInfoRequest(EntityPlayer player) {
-		POBox pobox = PostRegistry.getPOBox(player.worldObj, player.getGameProfile());
+		MailAddress address = new MailAddress(player.getGameProfile());
+		POBox pobox = PostRegistry.getPOBox(player.worldObj, address);
 		if (pobox == null)
 			return;
 

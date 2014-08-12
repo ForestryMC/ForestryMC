@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.mail.proxy;
 
+import forestry.api.mail.MailAddress;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 
@@ -28,10 +29,15 @@ public class ProxyMail {
 	public void resetMailboxInfo() {
 	}
 
-	public void setPOBoxInfo(World world, GameProfile playername, POBoxInfo info) {
+	public void setPOBoxInfo(World world, MailAddress address, POBoxInfo info) {
+		if (!address.isPlayer())
+			throw new IllegalArgumentException("address must be a player");
+
+		GameProfile playerProfile = (GameProfile)address.getIdentifier();
+
 		for (int i = 0; i < world.playerEntities.size(); i++) {
 			EntityPlayerMP player = (EntityPlayerMP) world.playerEntities.get(i);
-			if (!player.getGameProfile().equals(playername))
+			if (!player.getGameProfile().equals(playerProfile))
 				continue;
 
 			Proxies.net.sendToPlayer(new PacketPOBoxInfo(PacketIds.POBOX_INFO, info), player);

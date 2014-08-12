@@ -15,6 +15,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 
+import forestry.api.mail.MailAddress;
 import net.minecraft.item.ItemStack;
 
 import com.mojang.authlib.GameProfile;
@@ -45,9 +46,8 @@ public class PacketTradeInfo extends ForestryPacket {
 
 		data.writeShort(0);
 
-		data.writeLong(tradeInfo.moniker.getId().getMostSignificantBits());
-		data.writeLong(tradeInfo.moniker.getId().getLeastSignificantBits());
-		data.writeUTF(tradeInfo.moniker.getName());
+		String moniker = tradeInfo.address.getIdentifierName();
+		data.writeUTF(moniker);
 
 		data.writeLong(tradeInfo.owner.getId().getMostSignificantBits());
 		data.writeLong(tradeInfo.owner.getId().getLeastSignificantBits());
@@ -67,7 +67,7 @@ public class PacketTradeInfo extends ForestryPacket {
 		if (isNotNull < 0)
 			return;
 
-		GameProfile moniker = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readUTF());
+		String moniker = data.readUTF();
 		GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readUTF());
 		ItemStack tradegood;
 		ItemStack[] required;
@@ -77,7 +77,8 @@ public class PacketTradeInfo extends ForestryPacket {
 		for (int i = 0; i < required.length; i++)
 			required[i] = readItemStack(data);
 
-		this.tradeInfo = new TradeStationInfo(moniker, owner, tradegood, required, EnumStationState.values()[data.readShort()]);
+		MailAddress address = new MailAddress(moniker);
+		this.tradeInfo = new TradeStationInfo(address, owner, tradegood, required, EnumStationState.values()[data.readShort()]);
 	}
 
 }

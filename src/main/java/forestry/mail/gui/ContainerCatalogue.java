@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
+import forestry.api.mail.MailAddress;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 
@@ -35,7 +36,7 @@ import forestry.mail.network.PacketTradeInfo;
 public class ContainerCatalogue extends ContainerForestry implements IGuiSelectable {
 
 	private final EntityPlayer player;
-	private final LinkedHashMap<GameProfile, ITradeStation> stations;
+	private final LinkedHashMap<MailAddress, ITradeStation> stations;
 	private TradeStationInfo currentTrade = null;
 	private Iterator<ITradeStation> iterator = null;
 
@@ -58,7 +59,7 @@ public class ContainerCatalogue extends ContainerForestry implements IGuiSelecta
 		this.player = player;
 
 		// Filter out any trade stations which do not actually offer anything.
-		stations = new LinkedHashMap<GameProfile, ITradeStation>();
+		stations = new LinkedHashMap<MailAddress, ITradeStation>();
 		rebuildStationsList();
 	}
 
@@ -79,7 +80,7 @@ public class ContainerCatalogue extends ContainerForestry implements IGuiSelecta
 					continue;
 			}
 
-			stations.put(station.getMoniker(), station);
+			stations.put(station.getAddress(), station);
 		}
 		maxItPos = stations.size();
 		resetIteration();
@@ -129,7 +130,7 @@ public class ContainerCatalogue extends ContainerForestry implements IGuiSelecta
 
 		while(iterator.hasNext()) {
 			ITradeStation current = iterator.next();
-			if(!current.getMoniker().equals(currentTrade.moniker)) {
+			if(!current.getAddress().equals(currentTrade.address)) {
 				currentItPos++;
 				previous = current;
 				continue;

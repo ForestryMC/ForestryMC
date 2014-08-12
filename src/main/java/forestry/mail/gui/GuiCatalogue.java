@@ -93,10 +93,10 @@ public class GuiCatalogue extends GuiForestry<TileForestry> {
 
 	private void drawTradePreview(int x, int y) {
 
-		fontRendererObj.drawString("\u00A7l\u00A7n" + container.getTradeInfo().moniker, x, y, fontColor.get("gui.book"));
+		fontRendererObj.drawString("\u00A7l\u00A7n" + container.getTradeInfo().address.getIdentifierName(), x, y, fontColor.get("gui.book"));
 
 		TradeStationInfo info = container.getTradeInfo();
-		fontRendererObj.drawString(String.format(StringUtil.localize("gui.mail.willtrade"), info.owner), x, y + 18, fontColor.get("gui.book"));
+		fontRendererObj.drawString(String.format(StringUtil.localize("gui.mail.willtrade"), info.owner.getName()), x, y + 18, fontColor.get("gui.book"));
 
 		itemRender.renderItemAndEffectIntoGUI(fontRendererObj, mc.renderEngine, info.tradegood, x, y + 28);
 		itemRender.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, info.tradegood, x, y + 28);
@@ -137,8 +137,8 @@ public class GuiCatalogue extends GuiForestry<TileForestry> {
 		case 5:
 			TradeStationInfo info = container.getTradeInfo();
 			if(info != null) {
-				SessionVars.setStringVar("mail.letter.recipient", info.moniker.getName());
-				SessionVars.setStringVar("mail.letter.addressee", EnumAddressee.TRADER.toString().toLowerCase(Locale.ENGLISH));
+				SessionVars.setStringVar("mail.letter.recipient", info.address.getIdentifierName());
+				SessionVars.setStringVar("mail.letter.addressee", EnumAddressee.asString(EnumAddressee.TRADER));
 			}
 			mc.displayGuiScreen((GuiScreen)null);
 			break;

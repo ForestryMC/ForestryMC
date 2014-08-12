@@ -12,6 +12,7 @@ package forestry.mail;
 
 import java.util.Locale;
 
+import forestry.api.mail.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -21,11 +22,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.mail.IPostOffice;
-import forestry.api.mail.IPostalCarrier;
-import forestry.api.mail.IPostalState;
-import forestry.api.mail.ITradeStation;
-import forestry.api.mail.PostManager;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginMail;
@@ -59,14 +55,14 @@ public class PostalCarrier implements IPostalCarrier {
 	}
 
 	@Override
-	public IPostalState deliverLetter(World world, IPostOffice office, GameProfile recipient, ItemStack letterstack, boolean doDeliver) {
+	public IPostalState deliverLetter(World world, IPostOffice office, MailAddress recipient, ItemStack letterstack, boolean doDeliver) {
 		if(type == EnumAddressee.TRADER)
 			return handleTradeLetter(world, office, recipient, letterstack, doDeliver);
 		else
 			return storeInPOBox(world, office, recipient, letterstack, doDeliver);
 	}
 
-	private IPostalState handleTradeLetter(World world, IPostOffice office, GameProfile recipient, ItemStack letterstack, boolean doLodge) {
+	private IPostalState handleTradeLetter(World world, IPostOffice office, MailAddress recipient, ItemStack letterstack, boolean doLodge) {
 		IPostalState state = EnumDeliveryState.NOT_MAILABLE;
 
 		ITradeStation trade = PostManager.postRegistry.getTradeStation(world, recipient);
@@ -78,7 +74,7 @@ public class PostalCarrier implements IPostalCarrier {
 		return state;
 	}
 
-	private EnumDeliveryState storeInPOBox(World world, IPostOffice office, GameProfile recipient, ItemStack letterstack, boolean doLodge) {
+	private EnumDeliveryState storeInPOBox(World world, IPostOffice office, MailAddress recipient, ItemStack letterstack, boolean doLodge) {
 
 		POBox pobox = PostRegistry.getPOBox(world, recipient);
 		if (pobox == null)

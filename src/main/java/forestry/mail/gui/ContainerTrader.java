@@ -76,7 +76,7 @@ public class ContainerTrader extends ContainerForestry {
 		return getMoniker() != null;
 	}
 
-	public GameProfile getMoniker() {
+	public String getMoniker() {
 		return machine.getMoniker();
 	}
 

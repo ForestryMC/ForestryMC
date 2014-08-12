@@ -64,8 +64,8 @@ public abstract class TileBase extends TileForestry implements IHintSource {
 
 		try {
 			classmap.setData(this, payload.intPayload, payload.floatPayload, payload.stringPayload, new IndexInPayload(0, 0, 0));
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
 		}
 
 		return payload;

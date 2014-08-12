@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.mail;
 
+import java.util.Locale;
+
 public enum EnumAddressee {
 	PLAYER, TRADER;
 	
@@ -20,5 +22,9 @@ public enum EnumAddressee {
 		}
 		
 		return null;
+	}
+
+	public static String asString(EnumAddressee addressee) {
+		return addressee.toString().toLowerCase(Locale.ENGLISH);
 	}
 }

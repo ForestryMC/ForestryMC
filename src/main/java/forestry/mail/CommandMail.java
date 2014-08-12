@@ -12,6 +12,7 @@ package forestry.mail;
 
 import java.util.List;
 
+import forestry.api.mail.MailAddress;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -96,7 +97,7 @@ public class CommandMail extends CommandMC {
 				demand = StringUtil.append(", ", demand, dmd.stackSize + "x" + dmd.getDisplayName());
 		}
 
-		return String.format("%s%-12s | %-20s | %s", entry, info.moniker, tradegood, demand);
+		return String.format("%s%-12s | %-20s | %s", entry, info.address.getIdentifierName(), tradegood, demand);
 	}
 
 	private void commandVirtualize(ICommandSender sender, String[] arguments) {
@@ -109,14 +110,14 @@ public class CommandMail extends CommandMC {
 			throw new WrongUsageException("/" + getCommandName() + " virtualize <tradestation-name>");
 
 		World world = getWorld(sender, arguments);
-		GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(arguments[1]);
-		ITradeStation trade = PostManager.postRegistry.getTradeStation(world, profile);
+		MailAddress address = new MailAddress(arguments[1]);
+		ITradeStation trade = PostManager.postRegistry.getTradeStation(world, address);
 		if (trade == null) {
 			sendChatMessage(sender, String.format("\u00a7cNo tradestation by the name of '%s' was found.", arguments[1]));
 			return;
 		}
 
 		trade.setVirtual(!trade.isVirtual());
-		sendChatMessage(sender, String.format("\u00A7aSet virtualization for '%s' to %s.", trade.getMoniker(), trade.isVirtual()));
+		sendChatMessage(sender, String.format("\u00A7aSet virtualization for '%s' to %s.", trade.getAddress().getIdentifierName(), trade.isVirtual()));
 	}
 }

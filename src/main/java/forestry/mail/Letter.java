@@ -22,6 +22,7 @@ import forestry.api.mail.IStamps;
 import forestry.api.mail.MailAddress;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 
 public class Letter implements ILetter, INBTTagable {
 
@@ -194,7 +195,7 @@ public class Letter implements ILetter, INBTTagable {
 		if (recipient == null)
 			return false;
 
-		if (recipient.getProfile() == null)
+		if (StringUtils.isBlank(recipient.getIdentifierName()))
 			return false;
 
 		return true;
@@ -233,7 +234,7 @@ public class Letter implements ILetter, INBTTagable {
 		for (MailAddress address : recipient) {
 			if (recipientString.length() > 0)
 				recipientString += ", ";
-			recipientString += address.getProfile().getName();
+			recipientString += address.getIdentifierName();
 		}
 
 		return recipientString;
@@ -252,8 +253,8 @@ public class Letter implements ILetter, INBTTagable {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void addTooltip(List list) {
-		if (this.sender != null && this.sender.getProfile() != null)
-			list.add(StringUtil.localize("gui.mail.from") + ": " + this.sender.getProfile().getName());
+		if (this.sender != null && StringUtils.isNotBlank(this.sender.getIdentifierName()))
+			list.add(StringUtil.localize("gui.mail.from") + ": " + this.sender.getIdentifierName());
 		if (this.recipient != null && this.recipient.length > 0)
 			list.add(StringUtil.localize("gui.mail.to") + ": " + this.getRecipientString());
 	}

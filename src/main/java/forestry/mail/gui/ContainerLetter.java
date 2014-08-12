@@ -143,7 +143,7 @@ public class ContainerLetter extends ContainerItemInventory {
 
 		// / Send to server
 		PacketPayload payload = new PacketPayload(0, 0, 2);
-		payload.stringPayload[0] = getRecipient().getProfile().getName();
+		payload.stringPayload[0] = getRecipient().getIdentifierName();
 		payload.stringPayload[1] = this.carrier;
 
 		PacketUpdate packet = new PacketUpdate(PacketIds.LETTER_RECIPIENT, payload);
@@ -151,14 +151,9 @@ public class ContainerLetter extends ContainerItemInventory {
 	}
 
 	public void handleSetRecipient(EntityPlayer player, PacketUpdate packet) {
-		String identifier = packet.payload.stringPayload[0];
-		
-		GameProfile recipientProfile = MinecraftServer.getServer().func_152358_ax().func_152655_a(identifier);
-
-		if (recipientProfile == null)
-			return;
-		
-		MailAddress recipient = new MailAddress(recipientProfile);
+		String identifierName = packet.payload.stringPayload[0];
+		String type = packet.payload.stringPayload[1];
+		MailAddress recipient = MailAddress.makeMailAddress(identifierName, type);
 		getLetter().setRecipient(recipient);
 		
 		// Update the trading info
@@ -201,10 +196,10 @@ public class ContainerLetter extends ContainerItemInventory {
 		if (!Proxies.common.isSimulating(world))
 			return;
 
-		if (!address.getType().equals(EnumAddressee.TRADER.toString().toLowerCase(Locale.ENGLISH)))
+		if (!address.getType().equals(EnumAddressee.asString(EnumAddressee.TRADER)))
 			return;
 
-		ITradeStation station = PostManager.postRegistry.getTradeStation(world, address.getProfile());
+		ITradeStation station = PostManager.postRegistry.getTradeStation(world, address);
 		if (station == null)
 			return;
 
