@@ -15,8 +15,7 @@ import java.util.Locale;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
 
-import com.mojang.authlib.GameProfile;
-
+import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -96,9 +95,10 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 		Keyboard.enableRepeatEvents(true);
 
 		address = new GuiTextField(this.fontRendererObj, guiLeft + 46, guiTop + 13, 93, 13);
-		if (container.getRecipient() != null) {
-			address.setText(container.getRecipient().getProfile().getName());
-			this.setRecipient(container.getRecipient().getProfile().getName(), container.getCarrierType());
+		MailAddress recipient = container.getRecipient();
+		if (recipient != null) {
+			address.setText(recipient.getIdentifierName());
+			setRecipient(recipient);
 		}
 
 		text = new GuiTextBox(this.fontRendererObj, guiLeft + 17, guiTop + 31, 122, 57);
@@ -155,8 +155,13 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 		}
 
 		// Check for focus changes
-		if (addressFocus != address.isFocused())
-			setRecipient(this.address.getText(), container.getCarrierType());
+		if (addressFocus != address.isFocused()) {
+			String recipient = this.address.getText();
+			if (StringUtils.isNotBlank(recipient)) {
+				MailAddress recipientAddress = MailAddress.makeMailAddress(recipient, container.getCarrierType());
+				setRecipient(recipientAddress);
+			}
+		}
 		addressFocus = address.isFocused();
 		if (textFocus != text.isFocused())
 			setText();
@@ -210,7 +215,9 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 
 	@Override
 	public void onGuiClosed() {
-		setRecipient(this.address.getText(), container.getCarrierType());
+		MailAddress recipientAddress = MailAddress.makeMailAddress(this.address.getText(), container.getCarrierType());
+
+		setRecipient(recipientAddress);
 		setText();
 		Keyboard.enableRepeatEvents(false);
 		super.onGuiClosed();
@@ -230,26 +237,20 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 		
 		if (recipient != null && type != null) {
 			address.setText(recipient);
-			setRecipient(recipient, type);
+			MailAddress recipientAddress = MailAddress.makeMailAddress(recipient, type);
+			setRecipient(recipientAddress);
 		}
 
 		SessionVars.clearStringVar("mail.letter.recipient");
 		SessionVars.clearStringVar("mail.letter.addressee");
 	}
 
-	private void setRecipient(String identifier, String type) {
-		if (this.isProcessedLetter)
-			return;
-		
-		if (identifier == null || identifier == "" )
+	private void setRecipient(MailAddress recipientAddress) {
+		if (this.isProcessedLetter || recipientAddress == null)
 			return;
 
-		if (type == null || type == "" )
-			return;
-
-		MailAddress recipient = new MailAddress(new GameProfile(null, identifier), type);
-		container.setRecipient(recipient);
-		container.updateTradeInfo(this.mc.theWorld, recipient);
+		container.setRecipient(recipientAddress);
+		container.updateTradeInfo(this.mc.theWorld, recipientAddress);
 	}
 
 	private void setText() {

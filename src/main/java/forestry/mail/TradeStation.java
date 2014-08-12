@@ -36,6 +36,7 @@ import forestry.core.config.ForestryItem;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.StackUtils;
 import forestry.mail.items.ItemLetter;
+import org.apache.commons.lang3.StringUtils;
 
 public class TradeStation extends WorldSavedData implements ITradeStation, IInventory {
 
@@ -54,16 +55,19 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	public static final short SLOT_BUFFER_COUNT = 12;
 	// / MEMBER
 	private GameProfile owner;
-	private GameProfile moniker;
+	private MailAddress address;
 	private boolean isVirtual = false;
 	private boolean isInvalid = false;
 	private final InventoryAdapter inventory = new InventoryAdapter(SLOT_SIZE, "INV");
 
 	// / CONSTRUCTORS
-	public TradeStation(GameProfile owner, GameProfile moniker, boolean isMoniker) {
-		super(SAVE_NAME + moniker.getId()+"_"+moniker.getName());
+	public TradeStation(GameProfile owner, MailAddress address, boolean isMoniker) {
+		super(SAVE_NAME + address);
+		if (address.isPlayer()) {
+			throw new IllegalArgumentException("TradeStation address must not be a player");
+		}
 		this.owner = owner;
-		this.moniker = moniker;
+		this.address = address;
 	}
 
 	public TradeStation(String savename) {
@@ -71,8 +75,8 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	@Override
-	public GameProfile getMoniker() {
-		return this.moniker;
+	public MailAddress getAddress() {
+		return this.address;
 	}
 
 	// / SAVING & LOADING
@@ -81,9 +85,13 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		if (nbttagcompound.hasKey("owner")) {
 			owner = NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("owner"));
 		}
-		if (nbttagcompound.hasKey("moniker")) {
-			moniker = NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("moniker"));
+
+		if (nbttagcompound.hasKey("address")) {
+			if (this.address == null)
+				this.address = new MailAddress("temp");
+			this.address.readFromNBT(nbttagcompound.getCompoundTag("address"));
 		}
+
 		this.isVirtual = nbttagcompound.getBoolean("VRT");
 		this.isInvalid = nbttagcompound.getBoolean("IVL");
 		inventory.readFromNBT(nbttagcompound);
@@ -97,10 +105,10 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			nbttagcompound.setTag("owner", nbt);
 		}
 
-		if (this.moniker != null) {
+		if (this.address != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
-			NBTUtil.func_152460_a(nbt, moniker);
-			nbttagcompound.setTag("moniker", nbt);
+			this.address.writeToNBT(nbt);
+			nbttagcompound.setTag("address", nbt);
 		}
 
 		nbttagcompound.setBoolean("VRT", this.isVirtual);
@@ -148,12 +156,12 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 				state = EnumStationState.INSUFFICIENT_TRADE_GOOD;
 		}
 
-		return new TradeStationInfo(moniker, owner, inventory.getStackInSlot(SLOT_TRADEGOOD), condensedRequired, state);
+		return new TradeStationInfo(address, owner, inventory.getStackInSlot(SLOT_TRADEGOOD), condensedRequired, state);
 	}
 
 	/* ILETTERHANDLER */
 	@Override
-	public IPostalState handleLetter(World world, GameProfile recipient, ItemStack letterstack, boolean doLodge) {
+	public IPostalState handleLetter(World world, MailAddress recipient, ItemStack letterstack, boolean doLodge) {
 
 		ILetter letter = PostManager.postRegistry.getLetter(letterstack);
 
@@ -182,7 +190,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		}
 
 		// Prepare and send letter
-		ILetter mail = new Letter(new MailAddress(this.moniker, EnumAddressee.TRADER.toString().toLowerCase(Locale.ENGLISH)), letter.getSender());
+		ILetter mail = new Letter(this.address, letter.getSender());
 		mail.setText("Please find your order attached.");
 		for (int i = 0; i < ordersToFill; i++) {
 			mail.addAttachment(inventory.getStackInSlot(SLOT_TRADEGOOD).copy());
@@ -229,8 +237,8 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 		// Send confirmation message to seller
 		if (doLodge && owner != null) {
-			ILetter confirm = new Letter(new MailAddress(this.moniker, EnumAddressee.TRADER.toString().toLowerCase(Locale.ENGLISH)), new MailAddress(this.owner));
-			confirm.setText(ordersToFill + " order(s) from " + letter.getSender().getProfile().getName() + " were filled.");
+			ILetter confirm = new Letter(this.address, new MailAddress(this.owner));
+			confirm.setText(ordersToFill + " order(s) from " + letter.getSender().getIdentifierName() + " were filled.");
 			confirm.addStamps(ForestryItem.stamps.getItemStack(1, EnumPostage.P_1.ordinal()));
 			nbttagcompound = new NBTTagCompound();
 			confirm.writeToNBT(nbttagcompound);

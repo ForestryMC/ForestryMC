@@ -40,7 +40,7 @@ public class GuiTrader extends GuiForestry<MachineTrader> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		fontRendererObj.drawString(container.getMoniker().getName(), guiLeft + 19, guiTop + 22, fontColor.get("gui.mail.text"));
+		fontRendererObj.drawString(container.getMoniker(), guiLeft + 19, guiTop + 22, fontColor.get("gui.mail.text"));
 
 	}
 }

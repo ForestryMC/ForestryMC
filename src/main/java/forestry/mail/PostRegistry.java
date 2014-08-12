@@ -34,42 +34,45 @@ import forestry.plugins.PluginMail;
 public class PostRegistry implements IPostRegistry {
 
 	public static PostOffice cachedPostOffice;
-	public static HashMap<GameProfile, POBox> cachedPOBoxes = new HashMap<GameProfile, POBox>();
-	public static HashMap<GameProfile, ITradeStation> cachedTradeStations = new HashMap<GameProfile, ITradeStation>();
+	public static HashMap<MailAddress, POBox> cachedPOBoxes = new HashMap<>();
+	public static HashMap<MailAddress, ITradeStation> cachedTradeStations = new HashMap<>();
 
 	/**
 	 * @param world
-	 * @param username
-	 * @return true if the passed username is valid for poboxes.
+	 * @param address
+	 * @return true if the passed address is valid for poboxes.
 	 */
 	@Override
-	public boolean isValidPOBox(World world, GameProfile username) {
-		if (!username.getName().matches("^[a-zA-Z0-9]+$"))
+	public boolean isValidPOBox(World world, MailAddress address) {
+		if (!address.isPlayer())
+			return false;
+		GameProfile userProfile = ((GameProfile)address.getIdentifier());
+		if (!userProfile.getName().matches("^[a-zA-Z0-9]+$"))
 			return false;
 
 		return true;
 	}
 
-	public static POBox getPOBox(World world, GameProfile username) {
+	public static POBox getPOBox(World world, MailAddress address) {
 
-		if (cachedPOBoxes.containsKey(username))
-			return cachedPOBoxes.get(username);
+		if (cachedPOBoxes.containsKey(address))
+			return cachedPOBoxes.get(address);
 
-		POBox pobox = (POBox) world.loadItemData(POBox.class, POBox.SAVE_NAME + username.getId());
+		POBox pobox = (POBox) world.loadItemData(POBox.class, POBox.SAVE_NAME + address);
 		if (pobox != null)
-			cachedPOBoxes.put(username, pobox);
+			cachedPOBoxes.put(address, pobox);
 		return pobox;
 	}
 
-	public static POBox getOrCreatePOBox(World world, GameProfile username) {
-		POBox pobox = getPOBox(world, username);
+	public static POBox getOrCreatePOBox(World world, MailAddress address) {
+		POBox pobox = getPOBox(world, address);
 
 		if (pobox == null) {
-			pobox = new POBox(username, true);
-			world.setItemData(POBox.SAVE_NAME + username.getId(), pobox);
+			pobox = new POBox(address, true);
+			world.setItemData(POBox.SAVE_NAME + address, pobox);
 			pobox.markDirty();
-			cachedPOBoxes.put(username, pobox);
-			PluginMail.proxy.setPOBoxInfo(world, username, pobox.getPOBoxInfo());
+			cachedPOBoxes.put(address, pobox);
+			PluginMail.proxy.setPOBoxInfo(world, address, pobox.getPOBoxInfo());
 		}
 
 		return pobox;
@@ -77,12 +80,15 @@ public class PostRegistry implements IPostRegistry {
 
 	/**
 	 * @param world
-	 * @param moniker
-	 * @return true if the passed moniker can be a moniker for a trade station
+	 * @param address
+	 * @return true if the passed address can be an address for a trade station
 	 */
 	@Override
-	public boolean isValidTradeMoniker(World world, GameProfile moniker) {
-		if (!moniker.getName().matches("^[a-zA-Z0-9]+$"))
+	public boolean isValidTradeAddress(World world, MailAddress address) {
+		if (address.isPlayer())
+			return false;
+		String moniker = (String)address.getIdentifier();
+		if (!moniker.matches("^[a-zA-Z0-9]+$"))
 			return false;
 
 		return true;
@@ -90,24 +96,24 @@ public class PostRegistry implements IPostRegistry {
 
 	/**
 	 * @param world
-	 * @param moniker
+	 * @param address
 	 * @return true if the trade moniker has not yet been used before.
 	 */
 	@Override
-	public boolean isAvailableTradeMoniker(World world, GameProfile moniker) {
-		return getTradeStation(world, moniker) == null;
+	public boolean isAvailableTradeAddress(World world, MailAddress address) {
+		return getTradeStation(world, address) == null;
 	}
 
 	@Override
-	public TradeStation getTradeStation(World world, GameProfile moniker) {
-		if (cachedTradeStations.containsKey(moniker))
-			return (TradeStation)cachedTradeStations.get(moniker);
+	public TradeStation getTradeStation(World world, MailAddress address) {
+		if (cachedTradeStations.containsKey(address))
+			return (TradeStation)cachedTradeStations.get(address);
 
-		TradeStation trade = (TradeStation) world.loadItemData(TradeStation.class, TradeStation.SAVE_NAME + moniker.getId()+"_"+moniker.getName());
+		TradeStation trade = (TradeStation) world.loadItemData(TradeStation.class, TradeStation.SAVE_NAME + address);
 
 		// Only existing and valid mail orders are returned
 		if (trade != null && trade.isValid()) {
-			cachedTradeStations.put(moniker, trade);
+			cachedTradeStations.put(address, trade);
 			getPostOffice(world).registerTradeStation(trade);
 			return trade;
 		}
@@ -116,14 +122,14 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	@Override
-	public TradeStation getOrCreateTradeStation(World world, GameProfile owner, GameProfile moniker) {
-		TradeStation trade = getTradeStation(world, moniker);
+	public TradeStation getOrCreateTradeStation(World world, GameProfile owner, MailAddress address) {
+		TradeStation trade = getTradeStation(world, address);
 
 		if (trade == null) {
-			trade = new TradeStation(owner, moniker, true);
-			world.setItemData(TradeStation.SAVE_NAME + moniker.getId()+"_"+moniker.getName(), trade);
+			trade = new TradeStation(owner, address, true);
+			world.setItemData(TradeStation.SAVE_NAME + address, trade);
 			trade.markDirty();
-			cachedTradeStations.put(moniker, trade);
+			cachedTradeStations.put(address, trade);
 			getPostOffice(world).registerTradeStation(trade);
 		}
 
@@ -131,14 +137,14 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	@Override
-	public void deleteTradeStation(World world, GameProfile moniker) {
-		TradeStation trade = getTradeStation(world, moniker);
+	public void deleteTradeStation(World world, MailAddress address) {
+		TradeStation trade = getTradeStation(world, address);
 		if (trade == null)
 			return;
 
 		// Need to be marked as invalid since WorldSavedData seems to do some caching of its own.
 		trade.invalidate();
-		cachedTradeStations.remove(moniker);
+		cachedTradeStations.remove(address);
 		getPostOffice(world).deregisterTradeStation(trade);
 		File file = world.getSaveHandler().getMapFileFromName(trade.mapName);
 		file.delete();
