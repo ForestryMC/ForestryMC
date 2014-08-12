@@ -43,16 +43,17 @@ import forestry.core.render.TextureManager;
 import forestry.core.utils.ItemInventory;
 import forestry.core.utils.StringUtil;
 import forestry.storage.BackpackMode;
+import java.util.EnumSet;
 
 public class ItemBackpack extends ItemInventoried {
 
 	IBackpackDefinition info;
-	byte type;
+	EnumBackpackType type;
 
-	public ItemBackpack(IBackpackDefinition info, int type) {
+	public ItemBackpack(IBackpackDefinition info, EnumBackpackType type) {
 		super();
 		this.info = info;
-		this.type = (byte) type;
+		this.type = type;
 		setMaxStackSize(1);
 	}
 
@@ -250,10 +251,11 @@ public class ItemBackpack extends ItemInventoried {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
-		if (type > 1)
-			return StringUtil.localize("storage.backpack.t2adj") + " " + info.getName();
-		else
+		try {
+			return info.getName(itemstack);
+		} catch (Error er) {
 			return info.getName();
+		}
 	}
 
 	/* ICONS */
@@ -263,13 +265,14 @@ public class ItemBackpack extends ItemInventoried {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerIcons(IIconRegister register) {
-		icons = new IIcon[EnumBackpackType.values().length][6];
+		icons = new IIcon[2][6];
 
-		for (int i = 0; i < EnumBackpackType.values().length; i++) {
+		for (EnumBackpackType t : EnumSet.of(EnumBackpackType.T1, EnumBackpackType.T2)) {
+			int i = t.ordinal() - 1;
 			icons[i][0] = TextureManager.getInstance().registerTex(
-					register, "backpacks/" + EnumBackpackType.values()[i].toString().toLowerCase(Locale.ENGLISH) + ".cloth");
+					register, "backpacks/" + t.toString().toLowerCase(Locale.ENGLISH) + ".cloth");
 			icons[i][1] = TextureManager.getInstance().registerTex(
-					register, "backpacks/" + EnumBackpackType.values()[i].toString().toLowerCase(Locale.ENGLISH) + ".outline");
+					register, "backpacks/" + t.toString().toLowerCase(Locale.ENGLISH) + ".outline");
 			icons[i][2] = TextureManager.getInstance().registerTex(register, "backpacks/neutral");
 			icons[i][3] = TextureManager.getInstance().registerTex(register, "backpacks/locked");
 			icons[i][4] = TextureManager.getInstance().registerTex(register, "backpacks/receive");
@@ -303,9 +306,7 @@ public class ItemBackpack extends ItemInventoried {
 	@Override
 	public IIcon getIconFromDamageForRenderPass(int i, int j) {
 
-		int iconType = type;
-		if (type > 0)
-			iconType--;
+		int iconType = type.ordinal() - 1;
 
 		if (j == 0)
 			return icons[iconType][0];
@@ -322,13 +323,13 @@ public class ItemBackpack extends ItemInventoried {
 			return icons[iconType][2];
 	}
 
-	public static int getSlotsForType(int type) {
+	public static int getSlotsForType(EnumBackpackType type) {
 		switch (type) {
-		case 0:
+		case APIARIST:
 			return Defaults.SLOTS_BACKPACK_APIARIST;
-		case 2:
+		case T2:
 			return Defaults.SLOTS_BACKPACK_T2;
-		case 1:
+		case T1:
 		default:
 			return Defaults.SLOTS_BACKPACK_DEFAULT;
 		}

@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.storage.EnumBackpackType;
 import forestry.plugins.PluginApiculture;
 import forestry.plugins.PluginLepidopterology;
 import forestry.storage.BackpackDefinition;
@@ -46,7 +47,7 @@ public class ItemNaturalistBackpack extends ItemBackpack {
 	private final int guiId;
 
 	public ItemNaturalistBackpack(int guiId, BackpackDefinition definition) {
-		super(definition, 0);
+		super(definition, EnumBackpackType.APIARIST);
 		this.guiId = guiId;
 	}
 

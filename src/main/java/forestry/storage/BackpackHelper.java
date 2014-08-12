@@ -23,7 +23,7 @@ public class BackpackHelper implements IBackpackInterface {
 	@Override
 	public Item addBackpack(IBackpackDefinition definition, EnumBackpackType type) {
 		BackpackManager.definitions.put(definition.getKey(), definition);
-		return new ItemBackpack(definition, type.ordinal() + 1);
+		return new ItemBackpack(definition, type);
 	}
 
 }
