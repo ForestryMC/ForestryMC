@@ -34,8 +34,8 @@ import forestry.plugins.PluginMail;
 public class PostRegistry implements IPostRegistry {
 
 	public static PostOffice cachedPostOffice;
-	public static HashMap<MailAddress, POBox> cachedPOBoxes = new HashMap<>();
-	public static HashMap<MailAddress, ITradeStation> cachedTradeStations = new HashMap<>();
+	public static HashMap<MailAddress, POBox> cachedPOBoxes = new HashMap<MailAddress, POBox>();
+	public static HashMap<MailAddress, ITradeStation> cachedTradeStations = new HashMap<MailAddress, ITradeStation>();
 
 	/**
 	 * @param world

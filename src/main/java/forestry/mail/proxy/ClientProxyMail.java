@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.mail.proxy;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import forestry.api.mail.MailAddress;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.world.World;
