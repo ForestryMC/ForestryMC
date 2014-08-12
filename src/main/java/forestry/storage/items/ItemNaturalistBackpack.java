@@ -4,13 +4,11 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.storage.items;
-
-import java.util.ArrayList;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -55,10 +53,5 @@ public class ItemNaturalistBackpack extends ItemBackpack {
 	@Override
 	public void openGui(EntityPlayer player, ItemStack itemstack) {
 		player.openGui(ForestryAPI.instance, guiId, player.worldObj, (int) player.posX, (int) player.posY, (int) player.posZ);
-	}
-
-	@Override
-	public ArrayList<ItemStack> getValidItems(EntityPlayer player) {
-		return null;
 	}
 }

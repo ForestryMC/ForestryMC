@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.storage.items;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -190,7 +189,7 @@ public class ItemBackpack extends ItemInventoried {
 			if (targetStack == null)
 				continue;
 
-			if(!info.isValidItem(player, targetStack))
+			if (!info.isValidItem(player, targetStack))
 				continue;
 
 			ItemStack remaining = InvTools.moveItemStack(targetStack, backpackInventory);
@@ -215,15 +214,11 @@ public class ItemBackpack extends ItemInventoried {
 		return stack.getItem() == this;
 	}
 
-	public Collection<ItemStack> getValidItems(EntityPlayer player) {
-		return info.getValidItems(player);
-	}
-
 	public int getBackpackSize() {
 		return getSlotsForType(type);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
 		ItemInventory inventory = new ItemInventory(ItemBackpack.class, getBackpackSize(), itemstack);

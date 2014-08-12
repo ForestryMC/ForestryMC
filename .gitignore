@@ -26,3 +26,4 @@ gradle.properties
 
 # Other
 *~
+.nb-gradle-properties

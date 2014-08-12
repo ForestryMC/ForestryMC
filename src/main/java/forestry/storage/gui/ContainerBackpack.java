@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -15,13 +15,13 @@ import net.minecraft.item.ItemStack;
 
 import forestry.core.config.Defaults;
 import forestry.core.gui.ContainerItemInventory;
-import forestry.core.gui.slots.SlotCustom;
+import forestry.core.gui.slots.SlotForestry;
 import forestry.core.utils.ItemInventory;
 import forestry.storage.items.ItemBackpack;
 
 public class ContainerBackpack extends ContainerItemInventory {
 
-	public ContainerBackpack(EntityPlayer player, ItemInventory inventory) {
+	public ContainerBackpack(final EntityPlayer player, ItemInventory inventory) {
 		super(inventory, player);
 
 		int lines = 0;
@@ -44,7 +44,14 @@ public class ContainerBackpack extends ContainerItemInventory {
 		for (int j = 0; j < lines; j++)
 			for (int k = 0; k < columns; k++) {
 				int slot = k + j * columns;
-				addSlot(new SlotCustom(inventory, ((ItemBackpack) inventory.parent.getItem()).getValidItems(player), slot, startX + k * 18, startY + j * 18));
+				addSlot(new SlotForestry(inventory, slot, startX + k * 18, startY + j * 18) {
+
+					@Override
+					public boolean isItemValid(ItemStack stack) {
+						return isAcceptedItem(player, stack);
+					}
+
+				});
 			}
 
 		// Player inventory

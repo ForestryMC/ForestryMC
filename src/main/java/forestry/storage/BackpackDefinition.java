@@ -20,6 +20,7 @@ import forestry.core.config.Defaults;
 import forestry.core.utils.StringUtil;
 
 public class BackpackDefinition implements IBackpackDefinition {
+
 	final String name;
 
 	final int primaryColor; // - c03384
@@ -64,12 +65,10 @@ public class BackpackDefinition implements IBackpackDefinition {
 
 	@Override
 	public void addValidItem(ItemStack validItem) {
-		if (validItem.getItem() != null) {
+		if (validItem.getItem() != null)
 			this.validItems.add(validItem);
-		}
 	}
 
-	@Override
 	public ArrayList<ItemStack> getValidItems(EntityPlayer player) {
 		return validItems;
 	}
@@ -77,13 +76,12 @@ public class BackpackDefinition implements IBackpackDefinition {
 	@Override
 	public boolean isValidItem(EntityPlayer player, ItemStack itemstack) {
 		for (ItemStack stack : getValidItems(player))
-			if (stack != null && stack.getItem() != null ) {
+			if (stack != null && stack.getItem() != null)
 				if (stack.getItemDamage() == Defaults.WILDCARD) {
 					if (stack.getItem() == itemstack.getItem())
 						return true;
 				} else if (stack.isItemEqual(itemstack))
 					return true;
-			}
 
 		return false;
 	}
