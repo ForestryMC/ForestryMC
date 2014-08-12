@@ -39,10 +39,10 @@ public class TextureManager implements ITextureManager {
 
 	String[] defaultIconNames = new String[] { "habitats/desert", "habitats/end", "habitats/forest", "habitats/hills", "habitats/jungle", "habitats/mushroom",
 			"habitats/nether", "habitats/ocean", "habitats/plains", "habitats/snow", "habitats/swamp", "habitats/taiga", "misc/access.private",
-			"misc/access.viewable", "misc/access.shared", "misc/empty", "misc/energy", "misc/hint", "misc/liquid",
+			"misc/access.viewable", "misc/access.shared", "misc/energy", "misc/hint",
 			"analyzer/anything", "analyzer/bee", "analyzer/cave", "analyzer/closed", "analyzer/drone", "analyzer/flyer",
 			"analyzer/item", "analyzer/nocturnal", "analyzer/princess", "analyzer/pure_breed", "analyzer/pure_cave",
-			"analyzer/pure_flyer", "analyzer/pure_nocturnal", "analyzer/queen", "analyzer/natural",
+			"analyzer/pure_flyer", "analyzer/pure_nocturnal", "analyzer/queen",
 			"particles/ember", "particles/flame", "particles/poison", "particles/swarm_bee", "errors/errored",
 			"slots/blocked", "slots/blocked_2", "slots/liquid", "slots/container", "slots/locked",
 			"mail/carrier.player", "mail/carrier.trader" };
