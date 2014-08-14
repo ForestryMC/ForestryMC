@@ -16,6 +16,7 @@ import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestry;
 import forestry.core.utils.StringUtil;
 import forestry.mail.gadgets.MachineTrader;
+import forestry.api.mail.MailAddress;
 
 public class GuiTrader extends GuiForestry<MachineTrader> {
 
@@ -40,7 +41,6 @@ public class GuiTrader extends GuiForestry<MachineTrader> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		fontRendererObj.drawString(container.getMoniker(), guiLeft + 19, guiTop + 22, fontColor.get("gui.mail.text"));
-
+		fontRendererObj.drawString(container.getAddress().getName(), guiLeft + 19, guiTop + 22, fontColor.get("gui.mail.text"));
 	}
 }

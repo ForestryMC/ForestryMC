@@ -15,10 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.world.WorldSavedData;
-
-import com.mojang.authlib.GameProfile;
 
 import forestry.api.mail.ILetter;
 import forestry.api.mail.PostManager;
@@ -29,15 +26,15 @@ public class POBox extends WorldSavedData implements IInventory {
 	public static final String SAVE_NAME = "POBox_";
 	public static final short SLOT_SIZE = 84;
 
-	private GameProfile owner;
+	private MailAddress address;
 	private final InventoryAdapter letters = new InventoryAdapter(SLOT_SIZE, "Letters");
 
-	public POBox(MailAddress address, boolean isUser) {
+	public POBox(MailAddress address) {
 		super(SAVE_NAME + address);
 		if (!address.isPlayer()) {
 			throw new IllegalArgumentException("POBox address must be a player");
 		}
-		this.owner = (GameProfile)address.getIdentifier();
+		this.address = address;
 	}
 
 	public POBox(String savename) {
@@ -46,24 +43,20 @@ public class POBox extends WorldSavedData implements IInventory {
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		if (nbttagcompound.hasKey("owner")) {
-			owner = NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("owner"));
+		if (nbttagcompound.hasKey("address")) {
+			this.address = MailAddress.loadFromNBT(nbttagcompound.getCompoundTag("address"));
 		}
 		letters.readFromNBT(nbttagcompound);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		if (this.owner != null) {
+		if (this.address != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
-			NBTUtil.func_152460_a(nbt, owner);
-			nbttagcompound.setTag("owner", nbt);
+			this.address.writeToNBT(nbt);
+			nbttagcompound.setTag("address", nbt);
 		}
 		letters.writeToNBT(nbttagcompound);
-	}
-
-	public GameProfile getOwnerProfile() {
-		return this.owner;
 	}
 
 	public boolean storeLetter(ItemStack letterstack) {

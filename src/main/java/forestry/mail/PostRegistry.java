@@ -38,19 +38,13 @@ public class PostRegistry implements IPostRegistry {
 	public static HashMap<MailAddress, ITradeStation> cachedTradeStations = new HashMap<MailAddress, ITradeStation>();
 
 	/**
-	 * @param world
-	 * @param address
-	 * @return true if the passed address is valid for poboxes.
+	 * @param world the Minecraft world the PO box will be in
+	 * @param address the potential address of the PO box
+	 * @return true if the passed address is valid for PO Boxes.
 	 */
 	@Override
 	public boolean isValidPOBox(World world, MailAddress address) {
-		if (!address.isPlayer())
-			return false;
-		GameProfile userProfile = ((GameProfile)address.getIdentifier());
-		if (!userProfile.getName().matches("^[a-zA-Z0-9]+$"))
-			return false;
-
-		return true;
+		return address.isPlayer() && address.getName().matches("^[a-zA-Z0-9]+$");
 	}
 
 	public static POBox getPOBox(World world, MailAddress address) {
@@ -68,7 +62,7 @@ public class PostRegistry implements IPostRegistry {
 		POBox pobox = getPOBox(world, address);
 
 		if (pobox == null) {
-			pobox = new POBox(address, true);
+			pobox = new POBox(address);
 			world.setItemData(POBox.SAVE_NAME + address, pobox);
 			pobox.markDirty();
 			cachedPOBoxes.put(address, pobox);
@@ -79,25 +73,19 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	/**
-	 * @param world
-	 * @param address
+	 * @param world the Minecraft world the Trader will be in
+	 * @param address the potential address of the Trader
 	 * @return true if the passed address can be an address for a trade station
 	 */
 	@Override
 	public boolean isValidTradeAddress(World world, MailAddress address) {
-		if (address.isPlayer())
-			return false;
-		String moniker = (String)address.getIdentifier();
-		if (!moniker.matches("^[a-zA-Z0-9]+$"))
-			return false;
-
-		return true;
+		return !address.isPlayer() && address.getName().matches("^[a-zA-Z0-9]+$");
 	}
 
 	/**
-	 * @param world
-	 * @param address
-	 * @return true if the trade moniker has not yet been used before.
+	 * @param world the Minecraft world the Trader will be in
+	 * @param address the potential address of the Trader
+	 * @return true if the trade address has not yet been used before.
 	 */
 	@Override
 	public boolean isAvailableTradeAddress(World world, MailAddress address) {
@@ -126,7 +114,7 @@ public class PostRegistry implements IPostRegistry {
 		TradeStation trade = getTradeStation(world, address);
 
 		if (trade == null) {
-			trade = new TradeStation(owner, address, true);
+			trade = new TradeStation(owner, address);
 			world.setItemData(TradeStation.SAVE_NAME + address, trade);
 			trade.markDirty();
 			cachedTradeStations.put(address, trade);
@@ -159,7 +147,7 @@ public class PostRegistry implements IPostRegistry {
 
 		// Create office if there is none yet
 		if (office == null) {
-			office = new PostOffice();
+			office = new PostOffice(world);
 			world.setItemData(PostOffice.SAVE_NAME, office);
 		}
 

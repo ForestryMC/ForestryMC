@@ -167,7 +167,7 @@ public class ClassMap {
 
 	@SuppressWarnings("rawtypes")
 	public ClassMap(final Class targetClass) {
-		Field[] fields = targetClass.getFields();
+		Field[] fields = targetClass.getDeclaredFields();
 
 		try {
 			for (Field field : fields) {
@@ -175,6 +175,7 @@ public class ClassMap {
 				if (!isNetworkedMember(field))
 					continue;
 
+				field.setAccessible(true);
 				Type type = field.getGenericType();
 
 				if (type instanceof Class && !((Class) type).isArray()) {

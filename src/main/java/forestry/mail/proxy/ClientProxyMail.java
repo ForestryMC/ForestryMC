@@ -11,10 +11,7 @@
 package forestry.mail.proxy;
 
 import forestry.api.mail.MailAddress;
-import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.world.World;
-
-import com.mojang.authlib.GameProfile;
 
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.PacketIds;
@@ -50,15 +47,7 @@ public class ClientProxyMail extends ProxyMail {
 
 	@Override
 	public void setPOBoxInfo(World world, MailAddress address, POBoxInfo info) {
-		if (!address.isPlayer())
-			throw new IllegalArgumentException("POBox address must be a player");
-
-		GameProfile playerProfile = (GameProfile)address.getIdentifier();
-
-		EntityClientPlayerMP player = Proxies.common.getClientInstance().thePlayer;
-		if (player == null || !player.getGameProfile().equals(playerProfile))
-			return;
-
-		GuiMailboxInfo.instance.setPOBoxInfo(info);
+		if (address.isClientPlayer(world))
+			GuiMailboxInfo.instance.setPOBoxInfo(info);
 	}
 }
