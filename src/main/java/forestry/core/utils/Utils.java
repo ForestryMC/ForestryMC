@@ -320,7 +320,7 @@ public class Utils {
 
 	public static int addRGBComponents(int colour, int r, int g, int b) {
 		r = ((colour & 0xff0000) >> 16) + r;
-		g = ((colour & 0xff00) >> 8) + b;
+		g = ((colour & 0xff00) >> 8) + g;
 		b = ((colour & 0xff)) + b;
 
 		r = r <= 255 ? r : 255;
