@@ -307,6 +307,8 @@ public class ItemBackpack extends ItemInventoried {
 	public IIcon getIconFromDamageForRenderPass(int i, int j) {
 
 		int iconType = type.ordinal() - 1;
+		if(iconType < 0)
+			iconType=0;
 
 		if (j == 0)
 			return icons[iconType][0];
