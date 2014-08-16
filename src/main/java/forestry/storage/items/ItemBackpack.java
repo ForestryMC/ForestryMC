@@ -47,8 +47,8 @@ import java.util.EnumSet;
 
 public class ItemBackpack extends ItemInventoried {
 
-	IBackpackDefinition info;
-	EnumBackpackType type;
+	private final IBackpackDefinition info;
+	private final EnumBackpackType type;
 
 	public ItemBackpack(IBackpackDefinition info, EnumBackpackType type) {
 		super();
@@ -260,24 +260,22 @@ public class ItemBackpack extends ItemInventoried {
 
 	/* ICONS */
 	@SideOnly(Side.CLIENT)
-	private IIcon[][] icons;
+	private IIcon[] icons;
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerIcons(IIconRegister register) {
-		icons = new IIcon[2][6];
+		icons = new IIcon[6];
 
-		for (EnumBackpackType t : EnumSet.of(EnumBackpackType.T1, EnumBackpackType.T2)) {
-			int i = t.ordinal() - 1;
-			icons[i][0] = TextureManager.getInstance().registerTex(
-					register, "backpacks/" + t.toString().toLowerCase(Locale.ENGLISH) + ".cloth");
-			icons[i][1] = TextureManager.getInstance().registerTex(
-					register, "backpacks/" + t.toString().toLowerCase(Locale.ENGLISH) + ".outline");
-			icons[i][2] = TextureManager.getInstance().registerTex(register, "backpacks/neutral");
-			icons[i][3] = TextureManager.getInstance().registerTex(register, "backpacks/locked");
-			icons[i][4] = TextureManager.getInstance().registerTex(register, "backpacks/receive");
-			icons[i][5] = TextureManager.getInstance().registerTex(register, "backpacks/resupply");
-		}
+		EnumBackpackType t = type == EnumBackpackType.APIARIST ? EnumBackpackType.T1 : type;
+		String typeTag = "backpacks/" + t.toString().toLowerCase(Locale.ENGLISH);
+
+		icons[0] = TextureManager.getInstance().registerTex(register, typeTag + ".cloth");
+		icons[1] = TextureManager.getInstance().registerTex(register, typeTag + ".outline");
+		icons[2] = TextureManager.getInstance().registerTex(register, "backpacks/neutral");
+		icons[3] = TextureManager.getInstance().registerTex(register, "backpacks/locked");
+		icons[4] = TextureManager.getInstance().registerTex(register, "backpacks/receive");
+		icons[5] = TextureManager.getInstance().registerTex(register, "backpacks/resupply");
 	}
 
 	// Return true to enable color overlay - client side only
@@ -305,22 +303,19 @@ public class ItemBackpack extends ItemInventoried {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIconFromDamageForRenderPass(int i, int j) {
-
-		int iconType = type.ordinal() - 1;
-
 		if (j == 0)
-			return icons[iconType][0];
+			return icons[0];
 		if (j == 1)
-			return icons[iconType][1];
+			return icons[1];
 
 		if (i > 2)
-			return icons[iconType][5];
+			return icons[5];
 		else if (i > 1)
-			return icons[iconType][4];
+			return icons[4];
 		else if (i > 0)
-			return icons[iconType][3];
+			return icons[3];
 		else
-			return icons[iconType][2];
+			return icons[2];
 	}
 
 	public static int getSlotsForType(EnumBackpackType type) {
