@@ -98,7 +98,7 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 			setErrorState(EnumErrorCode.NORESOURCE);
 			return;
 		}
-		if (!hasPostageMin(2)) {
+		if (!hasPostageMin(3)) { // Assumes that the trade station owner should have a notice.
 			setErrorState(EnumErrorCode.NOSTAMPS);
 			return;
 		}
