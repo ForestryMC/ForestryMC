@@ -81,5 +81,11 @@ public abstract class WorldGenHive extends WorldGenerator {
 
 		ForestryBlock.beehives.onBlockAdded(world, x, y, z);
 		world.markBlockForUpdate(x, y, z);
+
+		postGen(world, x, y, z, meta);
+	}
+
+	protected void postGen(World world, int x, int y, int z, int meta) {
+		ForestryBlock.beehives.onBlockPlaced(world, x, y, z, 0, 0.0f, 0.0f, 0.0f, meta);
 	}
 }
