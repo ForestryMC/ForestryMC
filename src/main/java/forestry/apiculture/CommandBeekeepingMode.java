@@ -104,12 +104,12 @@ public class CommandBeekeepingMode extends CommandMC {
 
 			saveStatistics(sender, arguments);
 		} else if (arguments[0].matches("help")) {
-			sendChatMessage(sender, StringUtil.localizeAndFormat("chat.command.bees.help.0", this.getCommandName()));
-			sendChatMessage(sender, StringUtil.localize("chat.command.bees.help.1"));
-			sendChatMessage(sender, StringUtil.localize("chat.command.bees.help.2"));
-			sendChatMessage(sender, StringUtil.localize("chat.command.bees.help.3"));
-			sendChatMessage(sender, StringUtil.localize("chat.command.bees.help.4"));
-			sendChatMessage(sender, StringUtil.localize("chat.command.bees.help.5"));
+			sendChatMessage(sender, StringUtil.localizeAndFormat("chat.bees.command.help.0", this.getCommandName()));
+			sendChatMessage(sender, StringUtil.localize("chat.bees.command.help.1"));
+			sendChatMessage(sender, StringUtil.localize("chat.bees.command.help.2"));
+			sendChatMessage(sender, StringUtil.localize("chat.bees.command.help.3"));
+			sendChatMessage(sender, StringUtil.localize("chat.bees.command.help.4"));
+			sendChatMessage(sender, StringUtil.localize("chat.bees.command.help.5"));
 		}
 	}
 
