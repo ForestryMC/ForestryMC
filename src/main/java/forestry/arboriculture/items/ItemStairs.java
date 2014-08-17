@@ -70,7 +70,6 @@ public class ItemStairs extends ItemForestryBlock {
 	public String getItemStackDisplayName(ItemStack itemstack) {
 
 		WoodType type = WoodType.getFromCompound(itemstack.getTagCompound());
-
-		return getWoodNameIS(type) + " " + StringUtil.localize(getUnlocalizedName());
+		return StringUtil.localize(getUnlocalizedName() + "." + type.ordinal());
 	}
 }

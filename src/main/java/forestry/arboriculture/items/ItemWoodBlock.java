@@ -37,7 +37,9 @@ public class ItemWoodBlock extends ItemForestryBlock {
 
 		if (this.getBlock() instanceof IWoodTyped) {
 			IWoodTyped block = (IWoodTyped) getBlock();
-			return getWoodNameIS(block.getWoodType(itemstack.getItemDamage())) + " " + StringUtil.localize("tile." + block.getBlockKind());
+			int meta = itemstack.getItemDamage();
+			WoodType woodType = block.getWoodType(meta);
+			return StringUtil.localize("tile." + block.getBlockKind() + "." + woodType.ordinal());
 		} else
 			return StringUtil.localize(getUnlocalizedName(itemstack));
 	}
