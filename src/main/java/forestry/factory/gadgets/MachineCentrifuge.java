@@ -58,6 +58,11 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 			this.timePerItem = timePerItem;
 			this.resource = resource;
 			this.products = products;
+
+			for (ItemStack item : products.keySet()) {
+				if (item == null)
+					throw new IllegalArgumentException("Tried to register a null product of " + resource);
+			}
 		}
 
 		public boolean matches(ItemStack res) {
