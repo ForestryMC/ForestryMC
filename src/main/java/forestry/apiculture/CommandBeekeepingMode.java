@@ -78,7 +78,7 @@ public class CommandBeekeepingMode extends CommandMC {
 	public void processCommand(ICommandSender sender, String[] arguments) {
 
 		if (arguments.length <= 0)
-			throw new WrongUsageException("Type '" + this.getCommandUsage(sender) + "' for help.");
+			throw new WrongUsageException(StringUtil.localizeAndFormat("chat.help",this.getCommandUsage(sender)));
 
 		if (arguments[0].matches("list"))
 			listModes(sender, arguments);
@@ -93,10 +93,10 @@ public class CommandBeekeepingMode extends CommandMC {
 
 			IBeekeepingMode mode = PluginApiculture.beeInterface.getBeekeepingMode(desired);
 			if (mode == null)
-				throw new CommandException("A bekeeping mode called '%s' is not available.", desired);
+				throw new CommandException(StringUtil.localize("chat.bees.command.beekeeping.error"), desired);
 
 			PluginApiculture.beeInterface.setBeekeepingMode(world, mode.getName());
-			func_152373_a(sender, this, "Beekeeping mode set to %s.", mode.getName());
+			func_152373_a(sender, this, StringUtil.localize("chat.bees.command.beekeeping.set"), mode.getName());
 
 		} else if (arguments[0].matches("save")) {
 			if (arguments.length <= 1)

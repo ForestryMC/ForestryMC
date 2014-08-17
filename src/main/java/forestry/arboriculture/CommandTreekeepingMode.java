@@ -78,7 +78,7 @@ public class CommandTreekeepingMode extends CommandMC {
 	public void processCommand(ICommandSender sender, String[] arguments) {
 
 		if (arguments.length <= 0)
-			throw new WrongUsageException("Type '" + this.getCommandUsage(sender) + "' for help.");
+			throw new WrongUsageException(StringUtil.localizeAndFormat("chat.help",this.getCommandUsage(sender)));
 
 		if (arguments[0].matches("list"))
 			listModes(sender, arguments);
@@ -93,10 +93,10 @@ public class CommandTreekeepingMode extends CommandMC {
 
 			ITreekeepingMode mode = PluginArboriculture.treeInterface.getTreekeepingMode(desired);
 			if (mode == null)
-				throw new CommandException("A treekeeping mode called '%s' is not available.", desired);
+				throw new CommandException(StringUtil.localize("chat.trees.command.treekeeping.error"), desired);
 
 			PluginArboriculture.treeInterface.setTreekeepingMode(world, mode.getName());
-			func_152373_a(sender, this, "Treekeeping mode set to %s.", mode.getName());
+			func_152373_a(sender, this, StringUtil.localize("chat.trees.command.treekeeping.set"), mode.getName());
 
 		} else if (arguments[0].matches("save")) {
 			if (arguments.length <= 1)

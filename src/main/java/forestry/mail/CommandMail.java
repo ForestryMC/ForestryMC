@@ -56,7 +56,7 @@ public class CommandMail extends CommandMC {
 	@Override
 	public void processCommand(ICommandSender sender, String[] arguments) {
 		if (arguments.length <= 0)
-			throw new WrongUsageException("Type '" + this.getCommandUsage(sender) + "' for help.");
+			throw new WrongUsageException(StringUtil.localizeAndFormat("chat.help",this.getCommandUsage(sender)));
 
 		if (arguments[0].matches("trades")) {
 			commandTrades(sender, arguments);
@@ -102,7 +102,7 @@ public class CommandMail extends CommandMC {
 
 	private void commandVirtualize(ICommandSender sender, String[] arguments) {
 		if ((sender instanceof EntityPlayer && !Proxies.common.isOp((EntityPlayer) sender)) || (!sender.canCommandSenderUseCommand(4, getCommandName()))) {
-			sendChatMessage(sender, "\u00a7cYou do not have permission to use this command.");
+			sendChatMessage(sender, "\u00a7c" + StringUtil.localize("chat.command.noperms"));
 			return;
 		}
 
@@ -113,7 +113,7 @@ public class CommandMail extends CommandMC {
 		MailAddress address = new MailAddress(arguments[1]);
 		ITradeStation trade = PostManager.postRegistry.getTradeStation(world, address);
 		if (trade == null) {
-			sendChatMessage(sender, String.format("\u00a7cNo tradestation by the name of '%s' was found.", arguments[1]));
+			sendChatMessage(sender, String.format("\u00a7c" + StringUtil.localize("chat.mail.command.no_tradestation"), arguments[1]));
 			return;
 		}
 
