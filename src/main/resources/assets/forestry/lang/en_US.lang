@@ -465,6 +465,9 @@ item.fruit.lemon=Lemon
 item.fruit.plum=Plum
 item.fruit.papaya=Papaya
 item.fruit.dates=Date
+item.research.note=%s's Notes
+item.research.note.error.0=It is impossible to decipher the washed out scribbles.
+item.research.note.error.1=The note has become unreadable and is worthless.
 itemGroup.forestry=Forestry
 itemGroup.arboriculture=Arboriculture
 itemGroup.apiculture=Apiculture
@@ -1000,3 +1003,11 @@ item.catalogue=Catalogue
 ####################
 
 item.PipeItemsPropolis.name=Apiarist's Pipe
+
+###########################
+# CUSTOM BEE SPECIES NAMES
+###########################
+# Syntax:
+# bees.custom.<type>.<species>=New custom name
+# Example:
+# bees.custom.drone.forest=Forest Drone

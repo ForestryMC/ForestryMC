@@ -13,6 +13,7 @@ package forestry.core.genetics;
 import java.util.ArrayList;
 import java.util.List;
 
+import forestry.core.utils.StringUtil;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -211,8 +212,8 @@ public class ItemResearchNote extends ItemForestry {
 		public void addTooltip(List list) {
 			ArrayList<String> tooltips = type.getTooltip(inner);
 			if(tooltips.size() <= 0) {
-				list.add("\u00A7o\u00A7cIt is impossible to decipher the washed out scribbles.");
-				list.add("The note has become unreadable and is worthless.");
+				list.add("\u00A7o\u00A7c" + StringUtil.localize("item.research.note.error.0"));
+				list.add(StringUtil.localize("item.research.note.error.1"));
 				return;
 			}
 
@@ -232,7 +233,7 @@ public class ItemResearchNote extends ItemForestry {
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
 		ResearchNote note = new ResearchNote(itemstack.getTagCompound());
-		return String.format("%s's Notes", note.researcher);
+		return StringUtil.localizeAndFormat("item.research.note", note.researcher);
 	}
 
 	@SuppressWarnings("rawtypes")
