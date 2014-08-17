@@ -48,12 +48,17 @@ public enum WoodType {
 	@SideOnly(Side.CLIENT)
 	public static void registerIcons(IIconRegister register) {
 		icons = new IIcon[3][VALUES.length];
-		for (int i = 0; i < VALUES.length; i++)
-			icons[0][i] = TextureManager.getInstance().registerTex(register, "wood/planks." + VALUES[i].toString().toLowerCase(Locale.ENGLISH));
-		for (int i = 0; i < VALUES.length; i++)
-			icons[1][i] = TextureManager.getInstance().registerTex(register, "wood/bark." + VALUES[i].toString().toLowerCase(Locale.ENGLISH));
-		for (int i = 0; i < VALUES.length; i++)
-			icons[2][i] = TextureManager.getInstance().registerTex(register, "wood/heart." + VALUES[i].toString().toLowerCase(Locale.ENGLISH));
+		for (int i = 0; i < VALUES.length; i++) {
+			WoodType woodType = VALUES[i];
+			String woodName = woodType.toString().toLowerCase(Locale.ENGLISH);
+
+			if (woodType.hasPlank)
+				icons[0][i] = TextureManager.getInstance().registerTex(register, "wood/planks." + woodName);
+			else
+				icons[0][i] = null;
+			icons[1][i] = TextureManager.getInstance().registerTex(register, "wood/bark." + woodName);
+			icons[2][i] = TextureManager.getInstance().registerTex(register, "wood/heart." + woodName);
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
