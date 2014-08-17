@@ -1007,3 +1007,7 @@ item.PipeItemsPropolis.name=Apiarist's Pipe
 ###########################
 # CUSTOM BEE SPECIES NAMES
 ###########################
+# Syntax:
+# bees.custom.<type>.<species>=New custom name
+# Example:
+# bees.custom.drone.forest=Forest Drone
