@@ -37,6 +37,7 @@ import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginApiculture;
+import net.minecraft.util.StatCollector;
 
 public class ItemBeeGE extends ItemGE {
 
@@ -72,6 +73,9 @@ public class ItemBeeGE extends ItemGE {
 			return StringUtil.localize(type.getName());
 
 		IBee individual = new Bee(itemstack.getTagCompound());
+        if(StatCollector.canTranslate("bees.custom." + type.getName() + "." + individual.getDisplayName())){
+            return StringUtil.localize("bees.custom." + type.getName() + "." + individual.getDisplayName());
+        }
 		return StringUtil.localize(type.getName() + ".grammar").replaceAll("%SPECIES", individual.getDisplayName()).replaceAll("%TYPE", StringUtil.localize(type.getName() + ".type"));
 	}
 
