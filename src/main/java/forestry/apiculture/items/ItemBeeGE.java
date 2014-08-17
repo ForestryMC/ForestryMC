@@ -72,7 +72,7 @@ public class ItemBeeGE extends ItemGE {
 			return StringUtil.localize(type.getName());
 
 		IBee individual = new Bee(itemstack.getTagCompound());
-        return StringUtil.localize(type.getName() + ".grammar").replaceAll("%SPECIES", individual.getDisplayName()).replaceAll("%TYPE", StringUtil.localize(type.getName() + ".type"));
+		return StringUtil.localize(type.getName() + ".grammar").replaceAll("%SPECIES", individual.getDisplayName()).replaceAll("%TYPE", StringUtil.localize(type.getName() + ".type"));
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
