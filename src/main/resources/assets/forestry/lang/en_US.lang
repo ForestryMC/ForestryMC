@@ -473,6 +473,9 @@ storage.backpack.forester=Forester's Backpack
 storage.backpack.hunter=Hunter's Backpack
 storage.backpack.miner=Miner's Backpack
 storage.backpack.t2adj=Woven
+storage.backpack.mode.locked=(LOCKED)
+storage.backpack.mode.receiving=(RECEIVING)
+storage.backpack.mode.resupply=(RESUPPLY)
 tile.for.engine.0=Electrical Engine
 tile.for.engine.1=Peat-fired Engine
 tile.for.engine.2=Biogas Engine
@@ -538,6 +541,11 @@ trigger.lowInput=Input
 trigger.lowStamps=Stamps
 trigger.mailBuffer=Buffer
 usage.engine.tin=In Electrical Engines
+chat.command.help.0=Format: '/%s <command> <arguments>'
+chat.command.help.1=Available commands:
+chat.command.help.2=- version : Version information.
+chat.command.help.3=- plugins : list of Forestry plugins.
+chat.command.help.4=- plugins info <plugin-name>: information on plugin.
 
 ####################
 # APICULTURE
@@ -704,6 +712,12 @@ tile.stump.0=Candle Stump
 tile.for.apiculture.0=Apiary
 tile.for.apiculture.1=Apiarist's Chest
 tile.for.apiculture.2=Bee House
+chat.command.bees.help.0=Format: '/%s <command> <arguments>'
+chat.command.bees.help.1=Available commands:
+chat.command.bees.help.2=- list [<world-#>]: lists current and available beekeeping modes.
+chat.command.bees.help.3=- info <mode-name> : information on beekeeping mode.
+chat.command.bees.help.4=- set [<world-#>] <mode-name>: set beekeeping mode for world.
+chat.command.bees.help.5=- save [<world-#>] <player-name>: save beekeeping statistics for the given player.
 
 ####################
 # ARBORICULTURE
@@ -869,6 +883,12 @@ tile.for.stairs.21=Plum Stairs
 tile.for.stairs.22=Maple Stairs
 tile.for.stairs.23=Citrus Stairs
 tile.for.arboriculture.0=Arborist's Chest
+chat.command.trees.help.0=Format: '/%s <command> <arguments>'
+chat.command.trees.help.1=Available commands:
+chat.command.trees.help.2=- list [<world-#>]: lists current and available treekeeping modes.
+chat.command.trees.help.3=- info <mode-name> : information on treekeeping mode.
+chat.command.trees.help.4=- set [<world-#>] <mode-name>: set treekeeping mode for world.
+chat.command.trees.help.5=- save [<world-#>] <player-name>: save treekeeping statistics for the given player.
 
 ####################
 # FARMING
@@ -970,6 +990,10 @@ gui.mail.address.copy=Use
 gui.mail.tradefor=for
 gui.mail.notrades=No trades available.
 item.catalogue=Catalogue
+chat.command.mail.help.0=Format: '/%s <command> <arguments>'
+chat.command.mail.help.1=Available commands:
+chat.command.mail.help.2=- trades : A list of all trade stations.
+chat.command.mail.help.3=- virtualize <tradestation-name>: Toggle virtual mode on specified trade station.
 
 ####################
 # PIPES

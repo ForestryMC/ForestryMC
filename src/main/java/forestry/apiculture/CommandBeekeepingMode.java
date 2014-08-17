@@ -104,12 +104,12 @@ public class CommandBeekeepingMode extends CommandMC {
 
 			saveStatistics(sender, arguments);
 		} else if (arguments[0].matches("help")) {
-			sendChatMessage(sender, "Format: '/" + this.getCommandName() + " <command> <arguments>'");
-			sendChatMessage(sender, "Available commands:");
-			sendChatMessage(sender, "- list [<world-#>]: lists current and available beekeeping modes.");
-			sendChatMessage(sender, "- info <mode-name> : information on beekeeping mode.");
-			sendChatMessage(sender, "- set [<world-#>] <mode-name>: set beekeeping mode for world.");
-			sendChatMessage(sender, "- save [<world-#>] <player-name>: save beekeeping statistics for the given player.");
+			sendChatMessage(sender, StringUtil.localizeAndFormat("chat.command.bees.help.0", this.getCommandName()));
+			sendChatMessage(sender, StringUtil.localize("chat.command.bees.help.1"));
+			sendChatMessage(sender, StringUtil.localize("chat.command.bees.help.2"));
+			sendChatMessage(sender, StringUtil.localize("chat.command.bees.help.3"));
+			sendChatMessage(sender, StringUtil.localize("chat.command.bees.help.4"));
+			sendChatMessage(sender, StringUtil.localize("chat.command.bees.help.5"));
 		}
 	}
 
