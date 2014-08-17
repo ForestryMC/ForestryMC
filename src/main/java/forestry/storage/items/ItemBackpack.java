@@ -240,11 +240,11 @@ public class ItemBackpack extends ItemInventoried {
 
 		BackpackMode mode = getMode(itemstack);
 		if (mode == BackpackMode.LOCKED)
-			list.add("(LOCKED)");
+			list.add(StringUtil.localize("storage.backpack.mode.locked"));
 		else if (mode == BackpackMode.RECEIVE)
-			list.add("(RECEIVING)");
+			list.add(StringUtil.localize("storage.backpack.mode.receiving"));
 		else if (mode == BackpackMode.RESUPPLY)
-			list.add("(RESUPPLY)");
+			list.add(StringUtil.localize("storage.backpack.mode.resupply"));
 		list.add(occupied + "/" + getBackpackSize() + " " + StringUtil.localize("gui.slots"));
 
 	}

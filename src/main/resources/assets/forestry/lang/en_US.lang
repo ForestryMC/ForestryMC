@@ -9,6 +9,11 @@ beverage.effect.antidote=Antidote
 chat.accesslocked=is the owner of this machine and has locked access.
 chat.memorizednote=You memorize the note and dispose of the crumpled scrap of paper.
 chat.cannotmemorizeagain=You already memorized this information.
+chat.command.help.0=Format: '/%s <command> <arguments>'
+chat.command.help.1=Available commands:
+chat.command.help.2=- version : Version information.
+chat.command.help.3=- plugins : list of Forestry plugins.
+chat.command.help.4=- plugins info <plugin-name>: information on plugin.
 circuit.dampener.1=Fire Dampener
 circuit.electric.choke.1=Electric Choke
 circuit.electric.efficiency.1=Electric Efficiency
@@ -473,6 +478,9 @@ storage.backpack.forester=Forester's Backpack
 storage.backpack.hunter=Hunter's Backpack
 storage.backpack.miner=Miner's Backpack
 storage.backpack.t2adj=Woven
+storage.backpack.mode.locked=(LOCKED)
+storage.backpack.mode.receiving=(RECEIVING)
+storage.backpack.mode.resupply=(RESUPPLY)
 tile.for.engine.0=Electrical Engine
 tile.for.engine.1=Peat-fired Engine
 tile.for.engine.2=Biogas Engine
@@ -639,6 +647,12 @@ beemode.normal.desc=Recommended mode for the normal player.
 beemode.hard.desc=Reducing mutation rate slightly while increasing lifespan of individual queens by 50 %.
 beemode.hardcore.desc=Halves mutation rate, increases lifespan of individual queens by 500 % and reduces fertility by 20 %.
 beemode.insane.desc=Cuts mutation rate to 20 %, increases lifespan tenfold and reduces fertility by 40 %.
+chat.bees.command.help.0=Format: '/%s <command> <arguments>'
+chat.bees.command.help.1=Available commands:
+chat.bees.command.help.2=- list [<world-#>]: lists current and available beekeeping modes.
+chat.bees.command.help.3=- info <mode-name> : information on beekeeping mode.
+chat.bees.command.help.4=- set [<world-#>] <mode-name>: set beekeeping mode for world.
+chat.bees.command.help.5=- save [<world-#>] <player-name>: save beekeeping statistics for the given player.
 description.speciesForest=One of the most common pests in forests; Mostly docile.|Beekeeping 101
 description.speciesMeadows=Infests mostly plains in temperate climates; Mostly docile.|Beekeeping 101
 description.speciesCommon=Considered the beginner apiarist's badge of participation.|Beekeeping 101
@@ -709,6 +723,12 @@ tile.for.apiculture.2=Bee House
 # ARBORICULTURE
 ####################
 
+chat.trees.command.help.0=Format: '/%s <command> <arguments>'
+chat.trees.command.help.1=Available commands:
+chat.trees.command.help.2=- list [<world-#>]: lists current and available treekeeping modes.
+chat.trees.command.help.3=- info <mode-name> : information on treekeeping mode.
+chat.trees.command.help.4=- set [<world-#>] <mode-name>: set treekeeping mode for world.
+chat.trees.command.help.5=- save [<world-#>] <player-name>: save treekeeping statistics for the given player.
 gui.maturity=Matures
 gui.treealyzer=Treealyzer
 gui.treealyzer.help=Supply sapling and provide honey or honeydew as catalyst.
@@ -947,6 +967,10 @@ tile.for.lepidopterology.0=Lepidopterist's Chest
 # MAIL
 ####################
 
+chat.mail.command.help.0=Format: '/%s <command> <arguments>'
+chat.mail.command.help.1=Available commands:
+chat.mail.command.help.2=- trades : A list of all trade stations.
+chat.mail.command.help.3=- virtualize <tradestation-name>: Toggle virtual mode on specified trade station.
 chat.mail.no_mailbox=Recipient has no mailbox.
 chat.mail.not_mailable=Letter is not sendable.
 chat.mail.not_postpaid=Letter is not sufficiently stamped.

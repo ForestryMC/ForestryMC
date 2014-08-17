@@ -65,10 +65,10 @@ public class CommandMail extends CommandMC {
 			commandVirtualize(sender, arguments);
 			return;
 		} else if (arguments[0].matches("help")) {
-			sendChatMessage(sender, "Format: '" + this.getCommandName() + " <command> <arguments>'");
-			sendChatMessage(sender, "Available commands:");
-			sendChatMessage(sender, "- trades : A list of all trade stations.");
-			sendChatMessage(sender, "- virtualize <tradestation-name>: Toggle virtual mode on specified trade station.");
+			sendChatMessage(sender, StringUtil.localizeAndFormat("chat.mail.command.help.0", this.getCommandName()));
+			sendChatMessage(sender, StringUtil.localize("chat.mail.command.help.1"));
+			sendChatMessage(sender, StringUtil.localize("chat.mail.command.help.2"));
+			sendChatMessage(sender, StringUtil.localize("chat.mail.command.help.3"));
 			return;
 		}
 

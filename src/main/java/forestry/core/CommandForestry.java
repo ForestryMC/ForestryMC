@@ -12,6 +12,7 @@ package forestry.core;
 
 import java.util.List;
 
+import forestry.core.utils.StringUtil;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -61,11 +62,11 @@ public class CommandForestry extends CommandMC {
 			commandPlugins(sender, arguments);
 			return;
 		} else if (arguments[0].matches("help")) {
-			sendChatMessage(sender, "Format: '" + this.getCommandName() + " <command> <arguments>'");
-			sendChatMessage(sender, "Available commands:");
-			sendChatMessage(sender, "- version : Version information.");
-			sendChatMessage(sender, "- plugins : list of Forestry plugins.");
-			sendChatMessage(sender, "- plugins info <plugin-name>: information on plugin.");
+			sendChatMessage(sender, StringUtil.localizeAndFormat("chat.command.help.0", this.getCommandName()));
+			sendChatMessage(sender, StringUtil.localize("chat.command.help.1"));
+			sendChatMessage(sender, StringUtil.localize("chat.command.help.2"));
+			sendChatMessage(sender, StringUtil.localize("chat.command.help.3"));
+			sendChatMessage(sender, StringUtil.localize("chat.command.help.4"));
 			return;
 		}
 
