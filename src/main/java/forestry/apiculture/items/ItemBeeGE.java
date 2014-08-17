@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -72,7 +72,7 @@ public class ItemBeeGE extends ItemGE {
 			return StringUtil.localize(type.getName());
 
 		IBee individual = new Bee(itemstack.getTagCompound());
-		return individual.getDisplayName() + StringUtil.localize(type.getName() + ".adj.add") + " " + StringUtil.localize(type.getName());
+        return StringUtil.localize(type.getName() + ".grammar").replaceAll("%SPECIES", individual.getDisplayName()).replaceAll("%TYPE", StringUtil.localize(type.getName() + ".type"));
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
