@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.core.config.Defaults;
+import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.IDescriptiveRecipe;
 
@@ -222,6 +223,8 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 				hashmap.put(character, new ItemStack((Item) materials[index + 1]));
 			else if (materials[index + 1] instanceof ForestryItem)
 				hashmap.put(character, ((ForestryItem) materials[index + 1]).getItemStack());
+			else if (materials[index + 1] instanceof ForestryBlock)
+				hashmap.put(character, ((ForestryBlock) materials[index + 1]).getItemStack());
 			else if (materials[index + 1] instanceof Block)
 				hashmap.put(character, new ItemStack((Block) materials[index + 1], 1, Defaults.WILDCARD));
 			else if (materials[index + 1] instanceof ItemStack)
