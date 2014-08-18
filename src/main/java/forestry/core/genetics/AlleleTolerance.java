@@ -12,6 +12,7 @@ package forestry.core.genetics;
 
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlleleTolerance;
+import forestry.core.utils.StringUtil;
 
 public class AlleleTolerance extends Allele implements IAlleleTolerance {
 
@@ -33,37 +34,37 @@ public class AlleleTolerance extends Allele implements IAlleleTolerance {
 	public String getName() {
 		switch(value) {
 		case BOTH_1:
-			return "Both 1";
+			return StringUtil.localize("gui.beealyzer.tolerance.both1");
 		case BOTH_2:
-			return "Both 2";
+			return StringUtil.localize("gui.beealyzer.tolerance.both2");
 		case BOTH_3:
-			return "Both 3";
+			return StringUtil.localize("gui.beealyzer.tolerance.both3");
 		case BOTH_4:
-			return "Both 4";
+			return StringUtil.localize("gui.beealyzer.tolerance.both4");
 		case BOTH_5:
-			return "Both 5";
+			return StringUtil.localize("gui.beealyzer.tolerance.both5");
 		case DOWN_1:
-			return "Down 1";
+			return StringUtil.localize("gui.beealyzer.tolerance.down1");
 		case DOWN_2:
-			return "Down 2";
+			return StringUtil.localize("gui.beealyzer.tolerance.down2");
 		case DOWN_3:
-			return "Down 3";
+			return StringUtil.localize("gui.beealyzer.tolerance.down3");
 		case DOWN_4:
-			return "Down 4";
+			return StringUtil.localize("gui.beealyzer.tolerance.down4");
 		case DOWN_5:
-			return "Down 5";
+			return StringUtil.localize("gui.beealyzer.tolerance.down5");
 		case NONE:
-			return "None";
+			return StringUtil.localize("gui.beealyzer.tolerance.none");
 		case UP_1:
-			return "Up 1";
+			return StringUtil.localize("gui.beealyzer.tolerance.up1");
 		case UP_2:
-			return "Up 2";
+			return StringUtil.localize("gui.beealyzer.tolerance.up2");
 		case UP_3:
-			return "Up 3";
+			return StringUtil.localize("gui.beealyzer.tolerance.up3");
 		case UP_4:
-			return "Up 4";
+			return StringUtil.localize("gui.beealyzer.tolerance.up4");
 		case UP_5:
-			return "Up 5";
+			return StringUtil.localize("gui.beealyzer.tolerance.up5");
 		default:
 			return "";
 		
