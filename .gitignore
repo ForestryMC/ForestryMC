@@ -3,7 +3,7 @@
 
 # folders
 !/forestry_techne
-!/gradle
+!/gradle/wrapper
 !/src
 
 # files
