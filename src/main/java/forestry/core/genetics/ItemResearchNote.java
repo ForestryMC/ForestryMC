@@ -212,8 +212,8 @@ public class ItemResearchNote extends ItemForestry {
 		public void addTooltip(List list) {
 			ArrayList<String> tooltips = type.getTooltip(inner);
 			if(tooltips.size() <= 0) {
-				list.add("\u00A7o\u00A7c" + StringUtil.localize("item.research.note.error.0"));
-				list.add(StringUtil.localize("item.research.note.error.1"));
+				list.add("\u00A7o\u00A7c" + StringUtil.localize("researchNote.error.0"));
+				list.add(StringUtil.localize("researchNote.error.1"));
 				return;
 			}
 

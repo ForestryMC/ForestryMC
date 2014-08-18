@@ -279,7 +279,7 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 		IAlleleTreeSpecies primary = genome.getPrimary();
 		IAlleleTreeSpecies secondary = genome.getSecondary();
 		if (!isPureBred(EnumTreeChromosome.SPECIES))
-			list.add("\u00A79" + primary.getName() + "-" + secondary.getName() + " " + StringUtil.localize("gui.hybrid"));
+			list.add("\u00A79" + StringUtil.localize("trees.hybrid").replaceAll("%PRIMARY",primary.getName()).replaceAll("%SECONDARY",secondary.getName()));
 		list.add(String.format("\u00A76S: %s, \u00A7cM: %s", genome.getActiveAllele(EnumTreeChromosome.SAPPINESS.ordinal()).getName(), genome.getActiveAllele(EnumTreeChromosome.MATURATION.ordinal()).getName()));
 		list.add(String.format("\u00A7dH: %s, \u00A7bG: %sx%s", genome.getActiveAllele(EnumTreeChromosome.HEIGHT.ordinal()).getName(), genome.getGirth(), genome.getGirth()));
 
