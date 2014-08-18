@@ -208,8 +208,7 @@ public class ForestryCore {
 		LiquidHelper.injectLiquidContainer(Defaults.LIQUID_MILK, Defaults.BUCKET_VOLUME, new ItemStack(Items.milk_bucket), new ItemStack(Items.bucket));
 
 		// Lava
-		LiquidHelper.injectTinContainer(Defaults.LIQUID_LAVA, Defaults.BUCKET_VOLUME, ForestryItem.canLava.getItemStack(),
-				ForestryItem.canEmpty.getItemStack());
+		LiquidHelper.injectTinContainer(Defaults.LIQUID_LAVA, Defaults.BUCKET_VOLUME, ForestryItem.canLava.getItemStack(), ForestryItem.canEmpty.getItemStack());
 		LiquidHelper.injectRefractoryContainer(Defaults.LIQUID_LAVA, Defaults.BUCKET_VOLUME, ForestryItem.refractoryLava.getItemStack(), ForestryItem.refractoryEmpty.getItemStack());
 
 		// Water
