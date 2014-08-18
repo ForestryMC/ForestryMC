@@ -13,6 +13,7 @@ package forestry.apiculture.gui;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import forestry.core.utils.StringUtil;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 
@@ -57,8 +58,8 @@ public class GuiImprinter extends GuiForestry<TileForestry> {
 		container.updateContainer(Proxies.common.getRenderWorld());
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		int offset = (138 - fontRendererObj.getStringWidth("GENOME IMPRINTER")) / 2;
-		fontRendererObj.drawString("GENOME IMPRINTER", startX + 8 + offset, startY + 16, fontColor.get("gui.screen"));
+		int offset = (138 - fontRendererObj.getStringWidth(StringUtil.localize("gui.imprinter.name"))) / 2;
+		fontRendererObj.drawString(StringUtil.localize("gui.imprinter.name"), startX + 8 + offset, startY + 16, fontColor.get("gui.screen"));
 
 		IAlleleBeeSpecies primary = inventory.getPrimary();
 		drawBeeSpeciesIcon(primary, startX + 12, startY + 32);
@@ -68,7 +69,7 @@ public class GuiImprinter extends GuiForestry<TileForestry> {
 		drawBeeSpeciesIcon(secondary, startX + 12, startY + 52);
 		fontRendererObj.drawString(secondary.getName(), startX + 32, startY + 56, fontColor.get("gui.screen"));
 
-		String youCheater = "(You Cheater!)";
+		String youCheater = StringUtil.localize("gui.imprinter.cheater");
 		offset = (138 - fontRendererObj.getStringWidth(youCheater)) / 2;
 		fontRendererObj.drawString(youCheater, startX + 8 + offset, startY + 76, fontColor.get("gui.screen"));
 

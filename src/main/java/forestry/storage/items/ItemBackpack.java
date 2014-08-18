@@ -245,7 +245,7 @@ public class ItemBackpack extends ItemInventoried {
 			list.add(StringUtil.localize("storage.backpack.mode.receiving"));
 		else if (mode == BackpackMode.RESUPPLY)
 			list.add(StringUtil.localize("storage.backpack.mode.resupply"));
-		list.add(occupied + "/" + getBackpackSize() + " " + StringUtil.localize("gui.slots"));
+		list.add(StringUtil.localize("gui.slots").replaceAll("%USED", String.valueOf(occupied)).replaceAll("%SIZE", String.valueOf(getBackpackSize())));
 
 	}
 

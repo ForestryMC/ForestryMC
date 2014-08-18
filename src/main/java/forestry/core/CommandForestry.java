@@ -53,7 +53,7 @@ public class CommandForestry extends CommandMC {
 	public void processCommand(ICommandSender sender, String[] arguments) {
 
 		if (arguments.length <= 0)
-			throw new WrongUsageException("Type '" + this.getCommandUsage(sender) + "' for help.");
+			throw new WrongUsageException(StringUtil.localizeAndFormat("chat.help",this.getCommandUsage(sender)));
 
 		if (arguments[0].matches("version")) {
 			commandVersion(sender, arguments);
@@ -76,7 +76,7 @@ public class CommandForestry extends CommandMC {
 	private void commandVersion(ICommandSender sender, String[] arguments) {
 		String colour = Version.isOutdated() ? "\u00A7c" : "\u00A7a";
 
-		sendChatMessage(sender, String.format(colour + "Forestry %s for Minecraft %s (Latest: %s).", Version.getVersion(),
+		sendChatMessage(sender, String.format(colour + StringUtil.localize("chat.version"), Version.getVersion(),
 				Proxies.common.getMinecraftVersion(), Version.getRecommendedVersion()));
 		if (Version.isOutdated())
 			for (String updateLine : Version.getChangelog())
@@ -123,7 +123,7 @@ public class CommandForestry extends CommandMC {
 		}
 
 		if (found == null)
-			throw new CommandException("No information available for plugin " + arguments[2] + ".");
+			throw new CommandException(StringUtil.localizeAndFormat("chat.plugins.error",arguments[2]));
 
 		String entry = "\u00A7c";
 		if (found.isAvailable())
