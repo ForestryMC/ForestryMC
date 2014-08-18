@@ -268,14 +268,14 @@ public class PluginStorage extends NativePlugin implements IOreDictionaryHandler
 		definition = new BackpackDefinition("adventurer", 0x7fb8c2)
 				.setValidItems(BackpackManager.backpackItems[4]);
 		BackpackManager.definitions.put(definition.getKey(), definition);
-		ForestryItem.adventurerBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "adventurerBackpack");
-		ForestryItem.adventurerBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "adventurerBackpackT2");
+		ForestryItem.adventurerBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "adventurerBag");
+		ForestryItem.adventurerBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "adventurerBagT2");
 
 		definition = new BackpackDefinition("builder", 0xdd3a3a)
 				.setValidItems(BackpackManager.backpackItems[5]);
 		BackpackManager.definitions.put(definition.getKey(), definition);
-		ForestryItem.builderBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "builderBackpack");
-		ForestryItem.builderBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "builderBackpackT2");
+		ForestryItem.builderBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "builderBag");
+		ForestryItem.builderBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "builderBag");
 
 	}
 

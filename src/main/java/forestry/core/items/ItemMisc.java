@@ -49,7 +49,7 @@ public class ItemMisc extends ItemForestry {
 		if (stack.getItemDamage() >= definition.length || stack.getItemDamage() < 0)
 			return "item.forestry.unknown";
 		else
-			return super.getUnlocalizedName(stack) + "." + definition[stack.getItemDamage()].toLowerCase(Locale.ENGLISH);
+			return super.getUnlocalizedName(stack) + "." + definition[stack.getItemDamage()];
 	}
 
 	/* ICONS */
