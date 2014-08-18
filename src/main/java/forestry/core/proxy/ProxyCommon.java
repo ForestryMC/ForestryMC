@@ -44,6 +44,7 @@ import forestry.core.network.PacketCoordinates;
 import forestry.core.network.PacketFXSignal;
 import forestry.core.network.PacketIds;
 import forestry.core.render.SpriteSheet;
+import forestry.core.utils.StringUtil;
 
 public class ProxyCommon {
 
@@ -56,11 +57,11 @@ public class ProxyCommon {
 	}
 
 	public void registerBlock(Block block, Class<? extends ItemBlock> itemClass) {
-		GameRegistry.registerBlock(block, itemClass, block.getUnlocalizedName());
+		GameRegistry.registerBlock(block, itemClass, StringUtil.cleanBlockName(block));
 	}
 
 	public void registerItem(Item item) {
-		GameRegistry.registerItem(item, item.getUnlocalizedName().replace("item.", ""));
+		GameRegistry.registerItem(item, StringUtil.cleanItemName(item));
 	}
 
 	/**

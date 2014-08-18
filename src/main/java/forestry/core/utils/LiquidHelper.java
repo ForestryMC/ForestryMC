@@ -36,8 +36,8 @@ import forestry.core.render.TextureManager;
 
 public class LiquidHelper {
 
-	private static LinkedList<String> myLiquids = new LinkedList<String>();
-	private static HashMap<String, Fluid> liquidMap = new HashMap<String, Fluid>();
+	private static final LinkedList<String> myLiquids = new LinkedList<String>();
+	private static final HashMap<String, Fluid> liquidMap = new HashMap<String, Fluid>();
 
 	public static boolean isEmptyLiquidData() {
 		return FluidContainerRegistry.getRegisteredFluidContainerData().length <= 0;

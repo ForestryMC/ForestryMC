@@ -24,6 +24,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.Defaults;
+import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.ICrafter;
 import forestry.core.render.TextureManager;
@@ -126,6 +127,8 @@ public class SlotCustom extends SlotForestry {
 				if (itemstack.getItem() == (Item) filter) return true;
 			} else if (filter instanceof ForestryItem) {
 				if (((ForestryItem) filter).isItemEqual(itemstack)) return true;
+			} else if (filter instanceof ForestryBlock) {
+				if (((ForestryBlock) filter).isItemEqual(itemstack)) return true;
 			} else if (filter instanceof ISpeciesRoot) {
 				if (((ISpeciesRoot) filter).isMember(itemstack)) return true;
 			} else {
