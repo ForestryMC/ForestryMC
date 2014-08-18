@@ -275,7 +275,7 @@ public class PluginStorage extends NativePlugin implements IOreDictionaryHandler
 				.setValidItems(BackpackManager.backpackItems[5]);
 		BackpackManager.definitions.put(definition.getKey(), definition);
 		ForestryItem.builderBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "builderBag");
-		ForestryItem.builderBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "builderBag");
+		ForestryItem.builderBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "builderBagT2");
 
 	}
 
