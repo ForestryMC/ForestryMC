@@ -271,7 +271,7 @@ public class GuiBeealyzer extends GuiAlyzer {
 		if (bee.getGeneration() >= 0) {
 			newLine();
 
-			displayText = StringUtil.localize("gui.beealyzer.generations", bee.getGeneration());
+			displayText = StringUtil.localizeAndFormat("gui.beealyzer.generations", bee.getGeneration());
 			// offset = (int)(((158 - fontRendererObj.getStringWidth(origin)) / 2)*(1/factor));
 			drawCenteredLine(displayText, 8, 158, fontColor.get("gui.beealyzer.binomial"));
 		}

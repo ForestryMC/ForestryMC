@@ -78,7 +78,7 @@ public class CommandTreekeepingMode extends CommandMC {
 	public void processCommand(ICommandSender sender, String[] arguments) {
 
 		if (arguments.length <= 0)
-			throw new WrongUsageException(StringUtil.localize("chat.help",this.getCommandUsage(sender)));
+			throw new WrongUsageException(StringUtil.localizeAndFormat("chat.help", this.getCommandUsage(sender)));
 
 		if (arguments[0].matches("list"))
 			listModes(sender, arguments);
@@ -104,7 +104,7 @@ public class CommandTreekeepingMode extends CommandMC {
 
 			saveStatistics(sender, arguments);
 		} else if (arguments[0].matches("help")) {
-			sendChatMessage(sender, StringUtil.localize("chat.trees.command.help.0", this.getCommandName()));
+			sendChatMessage(sender, StringUtil.localizeAndFormat("chat.trees.command.help.0", this.getCommandName()));
 			sendChatMessage(sender, StringUtil.localize("chat.trees.command.help.1"));
 			sendChatMessage(sender, StringUtil.localize("chat.trees.command.help.2"));
 			sendChatMessage(sender, StringUtil.localize("chat.trees.command.help.3"));

@@ -53,7 +53,7 @@ public class CommandForestry extends CommandMC {
 	public void processCommand(ICommandSender sender, String[] arguments) {
 
 		if (arguments.length <= 0)
-			throw new WrongUsageException(StringUtil.localize("chat.help",this.getCommandUsage(sender)));
+			throw new WrongUsageException(StringUtil.localizeAndFormat("chat.help", this.getCommandUsage(sender)));
 
 		if (arguments[0].matches("version")) {
 			commandVersion(sender, arguments);
@@ -62,7 +62,7 @@ public class CommandForestry extends CommandMC {
 			commandPlugins(sender, arguments);
 			return;
 		} else if (arguments[0].matches("help")) {
-			sendChatMessage(sender, StringUtil.localize("chat.command.help.0", this.getCommandName()));
+			sendChatMessage(sender, StringUtil.localizeAndFormat("chat.command.help.0", this.getCommandName()));
 			sendChatMessage(sender, StringUtil.localize("chat.command.help.1"));
 			sendChatMessage(sender, StringUtil.localize("chat.command.help.2"));
 			sendChatMessage(sender, StringUtil.localize("chat.command.help.3"));
@@ -123,7 +123,7 @@ public class CommandForestry extends CommandMC {
 		}
 
 		if (found == null)
-			throw new CommandException(StringUtil.localize("chat.plugins.error",arguments[2]));
+			throw new CommandException(StringUtil.localizeAndFormat("chat.plugins.error", arguments[2]));
 
 		String entry = "\u00A7c";
 		if (found.isAvailable())
