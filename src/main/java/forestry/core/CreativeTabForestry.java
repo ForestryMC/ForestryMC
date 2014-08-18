@@ -41,16 +41,16 @@ public class CreativeTabForestry extends CreativeTabs {
 		Item iconItem;
 		switch (icon) {
 		case 1:
-			iconItem = GameRegistry.findItem("Forestry", "for.beeDroneGE");
+			iconItem = GameRegistry.findItem("Forestry", "beeDroneGE");
 			break;
 		case 2:
-			iconItem = GameRegistry.findItem("Forestry", "for.sapling");
+			iconItem = GameRegistry.findItem("Forestry", "sapling");
 			break;
 		case 3:
-			iconItem = GameRegistry.findItem("Forestry", "for.butterflyGE");
+			iconItem = GameRegistry.findItem("Forestry", "butterflyGE");
 			break;
 		default:
-			iconItem = GameRegistry.findItem("Forestry", "for.fertilizerCompound");
+			iconItem = GameRegistry.findItem("Forestry", "fertilizerCompound");
 			break;
 		}
 		if (iconItem == null)
