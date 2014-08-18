@@ -139,7 +139,7 @@ public class PluginManager {
 		for (int i = 0; i < tokens.length; i++) {
 			if (tokens[i] == null)
 				break;
-            if (tokens[i].equals("production"))
+            if (tokens[i].equals("production") || tokens[i].equals("classes"))
                 inIdea = true;
 			if (!tokens[i].equals("bin") && !inIdea)
 				continue;

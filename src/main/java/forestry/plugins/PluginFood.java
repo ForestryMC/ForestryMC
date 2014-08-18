@@ -64,7 +64,7 @@ public class PluginFood extends NativePlugin {
 		ForestryItem.beverage.registerItem(new ItemBeverage(
 				new BeverageInfo("meadShort", "glass", 0xec9a19, 0xffffff, 1, 0.2f, true),
 				new BeverageInfo("meadCurative", "glass", 0xc5feff, 0xffffff, 1, 0.2f, true)),
-				"shortMead");
+				"beverage");
 		ForestryItem.ambrosia.registerItem(new ItemAmbrosia().setIsDrink(), "ambrosia");
 		ForestryItem.honeyPot.registerItem(new ItemForestryFood(2, 0.2f).setIsDrink(), "honeyPot");
 

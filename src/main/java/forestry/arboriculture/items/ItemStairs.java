@@ -64,7 +64,7 @@ public class ItemStairs extends ItemForestryBlock {
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		WoodType type = WoodType.getFromCompound(stack.getTagCompound());
-		return super.getUnlocalizedName(stack) + "." + type.ordinal(); //To change body of generated methods, choose Tools | Templates.
+		return getBlock().getUnlocalizedName() + "." + type.ordinal(); //To change body of generated methods, choose Tools | Templates.
 	}
 
 }

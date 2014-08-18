@@ -64,7 +64,7 @@ public class ItemStamps extends ItemOverlay implements IStamps {
 		if (itemstack.getItemDamage() < 0 || itemstack.getItemDamage() >= stampInfo.length)
 			return null;
 
-		return super.getUnlocalizedName(itemstack) + "." + stampInfo[itemstack.getItemDamage()].name;
+		return super.getUnlocalizedName(itemstack);
 	}
 
 
