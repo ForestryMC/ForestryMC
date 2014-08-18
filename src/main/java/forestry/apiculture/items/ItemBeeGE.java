@@ -73,7 +73,7 @@ public class ItemBeeGE extends ItemGE {
 			return super.getItemStackDisplayName(itemstack);
 
 		IBee individual = new Bee(itemstack.getTagCompound());
-        String customBeeKey = "bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.","");
+		String customBeeKey = "bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.","");
 		if(StatCollector.canTranslate(customBeeKey)){
 			return StringUtil.localize(customBeeKey);
 		}
