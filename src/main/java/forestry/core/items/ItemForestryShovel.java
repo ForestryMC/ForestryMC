@@ -18,11 +18,11 @@ import forestry.core.config.ForestryBlock;
 
 public class ItemForestryShovel extends ItemForestryTool {
 
-	private static Block blocksEffectiveAgainst[];
+	private static final Block blocksEffectiveAgainst[];
 
 	static {
 		blocksEffectiveAgainst = (new Block[] { Blocks.grass, Blocks.dirt, Blocks.sand, Blocks.gravel, Blocks.snow_layer, Blocks.snow, Blocks.clay,
-				Blocks.farmland, ForestryBlock.soil });
+				Blocks.farmland, ForestryBlock.soil.block() });
 	}
 
 	public ItemForestryShovel( ItemStack remnants) {

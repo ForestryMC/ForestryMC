@@ -45,7 +45,7 @@ public class FarmableVanillaShroom extends FarmableGenericSapling {
 			meta = 1;
 
 		Proxies.common.addBlockPlaceEffects(world, x, y, z, Blocks.brown_mushroom, 0);
-		return world.setBlock(x, y, z, ForestryBlock.mushroom, meta, Defaults.FLAG_BLOCK_SYNCH);
+		return ForestryBlock.mushroom.setBlock(world, x, y, z, meta, Defaults.FLAG_BLOCK_SYNCH);
 	}
 
 }

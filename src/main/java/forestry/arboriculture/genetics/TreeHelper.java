@@ -79,7 +79,7 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	public int getSpeciesCount() {
 		if (treeSpeciesCount < 0) {
 			treeSpeciesCount = 0;
-			Iterator<Entry<String, IAllele> > it = AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet().iterator();
+			Iterator<Entry<String, IAllele>> it = AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet().iterator();
 			while (it.hasNext()) {
 				Entry<String, IAllele> entry = it.next();
 				if (entry.getValue() instanceof IAlleleTreeSpecies)
@@ -109,12 +109,12 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	/* TREE SPECIFIC */
 	@Override
 	public EnumGermlingType getType(ItemStack stack) {
-		if(stack == null)
+		if (stack == null)
 			return EnumGermlingType.NONE;
 
-		if(ForestryItem.sapling.isItemEqual(stack))
+		if (ForestryItem.sapling.isItemEqual(stack))
 			return EnumGermlingType.SAPLING;
-		else if(ForestryItem.pollenFertile.isItemEqual(stack))
+		else if (ForestryItem.pollenFertile.isItemEqual(stack))
 			return EnumGermlingType.POLLEN;
 
 		return EnumGermlingType.NONE;
@@ -161,7 +161,7 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 			germlingItem = ForestryItem.pollenFertile.item();
 			break;
 		default:
-			return null;
+			throw new RuntimeException("Cannot instantiate a tree of type " + type);
 		}
 
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
@@ -177,11 +177,11 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	@Override
 	public boolean plantSapling(World world, ITree tree, GameProfile owner, int x, int y, int z) {
 
-		boolean placed = world.setBlock(x, y, z, ForestryBlock.saplingGE, 0, Defaults.FLAG_BLOCK_SYNCH);
+		boolean placed = world.setBlock(x, y, z, ForestryBlock.saplingGE.block(), 0, Defaults.FLAG_BLOCK_SYNCH);
 		if (!placed)
 			return false;
 
-		if (world.getBlock(x, y, z) != ForestryBlock.saplingGE)
+		if (!ForestryBlock.saplingGE.isBlockEqual(world, x, y, z))
 			return false;
 
 		TileEntity tile = world.getTileEntity(x, y, z);
@@ -201,11 +201,11 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	@Override
 	public boolean setLeaves(World world, IIndividual tree, GameProfile owner, int x, int y, int z) {
 
-		boolean placed = world.setBlock(x, y, z, ForestryBlock.leaves, 0, Defaults.FLAG_BLOCK_SYNCH);
+		boolean placed = ForestryBlock.leaves.setBlock(world, x, y, z, 0, Defaults.FLAG_BLOCK_SYNCH);
 		if (!placed)
 			return false;
 
-		if (world.getBlock(x, y, z) != ForestryBlock.leaves)
+		if (!ForestryBlock.leaves.isBlockEqual(world, x, y, z))
 			return false;
 
 		TileEntity tile = world.getTileEntity(x, y, z);
@@ -228,11 +228,11 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 		int direction = BlockUtil.getDirectionalMetadata(world, x, y, z);
 		if (direction < 0)
 			return false;
-		boolean placed = world.setBlock(x, y, z, ForestryBlock.pods, direction, Defaults.FLAG_BLOCK_SYNCH);
+		boolean placed = ForestryBlock.pods.setBlock(world, x, y, z, direction, Defaults.FLAG_BLOCK_SYNCH);
 		if (!placed)
 			return false;
 
-		if (world.getBlock(x, y, z) != ForestryBlock.pods)
+		if (!ForestryBlock.pods.isBlockEqual(world, x, y, z))
 			return false;
 
 		TileFruitPod pod = BlockFruitPod.getPodTile(world, x, y, z);
@@ -366,7 +366,7 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele1().getUID()))
 			return;
 
-		treeMutations.add((ITreeMutation)mutation);
+		treeMutations.add((ITreeMutation) mutation);
 	}
 
 	/* ILEAFTICKHANDLER */
@@ -391,6 +391,5 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	public IChromosomeType getKaryotypeKey() {
 		return EnumTreeChromosome.SPECIES;
 	}
-
 
 }

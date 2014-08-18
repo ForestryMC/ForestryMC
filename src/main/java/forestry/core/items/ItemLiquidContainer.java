@@ -39,6 +39,7 @@ import forestry.core.utils.StringUtil;
 public class ItemLiquidContainer extends Item {
 
 	public static enum EnumContainerType {
+
 		GLASS, JAR, CAN, CAPSULE, REFRACTORY
 	}
 
@@ -133,11 +134,11 @@ public class ItemLiquidContainer extends Item {
 			Block targetedBlock = world.getBlock(i, j, k);
 			//int targetedMeta = world.getBlockMetadata(i, j, k);
 
-			if(!(targetedBlock instanceof IFluidBlock))
+			if (!(targetedBlock instanceof IFluidBlock))
 				return itemstack;
 			IFluidBlock fluidBlock = (IFluidBlock) targetedBlock;
 			FluidStack drainable = fluidBlock.drain(world, i, j, k, false);
-			if(drainable == null || drainable.amount <= 0)
+			if (drainable == null || drainable.amount <= 0)
 				return itemstack;
 
 			// Check whether there is valid container for the liquid.
@@ -190,15 +191,9 @@ public class ItemLiquidContainer extends Item {
 	 * public ItemLiquidContainer setPotionEffect(int i, int j, int k, float f) { potionId = i; potionDuration = j; potionAmplifier = k; potionEffectProbability
 	 * = f; return this; }
 	 */
-
 	public ItemLiquidContainer setAlwaysEdible() {
 		isAlwaysEdible = true;
 		return this;
-	}
-
-	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
-		return StringUtil.localize(getUnlocalizedName(itemstack));
 	}
 
 	/* ICONS */
@@ -235,5 +230,4 @@ public class ItemLiquidContainer extends Item {
 		else
 			return 0xffffff;
 	}
-
 }

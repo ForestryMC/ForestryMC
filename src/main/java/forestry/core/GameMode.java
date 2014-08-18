@@ -52,11 +52,11 @@ public class GameMode implements IGameMode {
 	private final ItemStack recipeCompostOutputWheat = ForestryItem.fertilizerBio.getItemStack(4);
 	private final ItemStack recipeCompostOutputAsh = ForestryItem.fertilizerBio.getItemStack(1);
 
-	private final ItemStack recipeHumusOutputFertilizer = new ItemStack(ForestryBlock.soil, 8, 0);
-	private final ItemStack recipeHumusOutputCompost = new ItemStack(ForestryBlock.soil, 8, 0);
+	private final ItemStack recipeHumusOutputFertilizer = ForestryBlock.soil.getItemStack(8);
+	private final ItemStack recipeHumusOutputCompost = ForestryBlock.soil.getItemStack(8);
 
-	private final ItemStack recipeBogEarthOutputBucket = new ItemStack(ForestryBlock.soil, 6, 1);
-	private final ItemStack recipeBogEarthOutputCans = new ItemStack(ForestryBlock.soil, 8, 1);
+	private final ItemStack recipeBogEarthOutputBucket = ForestryBlock.soil.getItemStack(6, 1);
+	private final ItemStack recipeBogEarthOutputCans = ForestryBlock.soil.getItemStack(8, 1);
 
 	private final ItemStack recipeCanOutput = ForestryItem.canEmpty.getItemStack(12);
 	private final ItemStack recipeCapsuleOutput = ForestryItem.waxCapsule.getItemStack(4);
@@ -96,7 +96,7 @@ public class GameMode implements IGameMode {
 		initSetting("recipe.output.fertilizer.apatite", recipeFertilizerOutputApatite, "amount of fertilizer yielded by the recipe using apatite.");
 		initSetting("recipe.output.fertilizer.ash", recipeFertilizerOutputAsh, "amount of fertilizer yielded by the recipe using ash.");
 		initSetting("recipe.output.compost.wheat", recipeCompostOutputWheat, "amount of compost yielded by the recipe using wheat.");
-		initSetting("recipe.output.compost.ash", recipeCompostOutputAsh,  "amount of compost yielded by the recipe using ash.");
+		initSetting("recipe.output.compost.ash", recipeCompostOutputAsh, "amount of compost yielded by the recipe using ash.");
 		initSetting("recipe.output.humus.fertilizer", recipeHumusOutputFertilizer, "amount of humus yielded by the recipe using fertilizer.");
 		initSetting("recipe.output.humus.compost", recipeHumusOutputCompost, "amount of humus yielded by the recipe using compost.");
 		initSetting("recipe.output.bogearth.bucket", recipeBogEarthOutputBucket, "amount of bog earth yielded by the recipe using buckets.");
@@ -137,7 +137,7 @@ public class GameMode implements IGameMode {
 
 	private void initSetting(String ident, int def, int max, String comment) {
 		Property property = Config.config.get(ident, category, def);
-		if(max < 0) {
+		if (max < 0) {
 			property.Comment = comment;
 			integerSettings.put(ident, Integer.parseInt(property.Value));
 		} else {
@@ -150,7 +150,7 @@ public class GameMode implements IGameMode {
 
 	private void initSetting(String ident, float def, float max, String comment) {
 		Property property = Config.config.get(ident, category, def);
-		if(max < 0) {
+		if (max < 0) {
 			property.Comment = comment;
 			floatSettings.put(ident, Float.parseFloat(property.Value));
 		} else {
@@ -169,7 +169,7 @@ public class GameMode implements IGameMode {
 
 	@Override
 	public int getIntegerSetting(String ident) {
-		if(integerSettings.containsKey(ident))
+		if (integerSettings.containsKey(ident))
 			return integerSettings.get(ident);
 		Proxies.log.warning("No such setting: " + ident);
 		return -1;
@@ -177,7 +177,7 @@ public class GameMode implements IGameMode {
 
 	@Override
 	public float getFloatSetting(String ident) {
-		if(floatSettings.containsKey(ident))
+		if (floatSettings.containsKey(ident))
 			return floatSettings.get(ident);
 		Proxies.log.warning("No such setting: " + ident);
 		return 1;
@@ -185,7 +185,7 @@ public class GameMode implements IGameMode {
 
 	@Override
 	public boolean getBooleanSetting(String ident) {
-		if(booleanSettings.containsKey(ident))
+		if (booleanSettings.containsKey(ident))
 			return booleanSettings.get(ident);
 		Proxies.log.warning("No such setting: " + ident);
 		return false;
@@ -193,7 +193,7 @@ public class GameMode implements IGameMode {
 
 	@Override
 	public ItemStack getStackSetting(String ident) {
-		if(stackSettings.containsKey(ident))
+		if (stackSettings.containsKey(ident))
 			return stackSettings.get(ident);
 		Proxies.log.warning("No such setting: " + ident);
 		return new ItemStack(Items.apple, 1);

@@ -10,9 +10,13 @@
  ******************************************************************************/
 package forestry.core.config;
 
+import forestry.core.proxy.Proxies;
 import net.minecraft.block.Block;
-
-import forestry.core.gadgets.BlockBase;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * Allows direct access to Forestry's blocks. Will be populated during BaseMod.load().
@@ -24,61 +28,101 @@ import forestry.core.gadgets.BlockBase;
  * @author SirSengir
  * 
  */
-public class ForestryBlock {
+public enum ForestryBlock {
 
 	/**
 	 * 0 - Humus 1 - Bog Earth
 	 */
-	public static Block soil;
+	soil,
 	/**
 	 * 0 - Apatite Ore 1 - Copper Ore 2 - Tin Ore
 	 */
-	public static Block resources;
+	resources,
 	/**
 	 * 0 - Legacy 1 - Forest Hive 2 - Meadows Hive
 	 */
-	public static Block beehives;
+	beehives,
+	mushroom,
+	candle,
+	stump,
+	glass,
+	planks1,
+	planks2,
+	slabs1,
+	slabs2,
+	slabs3,
+	slabs4,
+	log1,
+	log2,
+	log3,
+	log4,
+	log5,
+	log6,
+	log7,
+	log8,
+	fences1,
+	fences2,
+	stairs,
+	saplingGE,
+	leaves,
+	pods,
+	arboriculture,
+	alveary,
+	farm,
+	core,
+	apiculture,
+	mail,
+	engine,
+	factoryTESR,
+	factoryPlain,
+	lepidopterology;
+	private Block block;
 
-	public static Block mushroom;
-	public static Block candle;
-	public static Block stump;
-	public static Block glass;
+	public void registerBlock(Block block, Class<? extends ItemBlock> itemClass, String name) {
+		this.block = block;
+		block.setBlockName("for." + name);
+		Proxies.common.registerBlock(block, itemClass);
+	}
 
-	public static Block planks1;
-	public static Block planks2;
-	public static Block slabs1;
-	public static Block slabs2;
-	public static Block slabs3;
-	public static Block slabs4;
-	public static Block log1;
-	public static Block log2;
-	public static Block log3;
-	public static Block log4;
-	public static Block log5;
-	public static Block log6;
-	public static Block log7;
-	public static Block log8;
+	public boolean isItemEqual(ItemStack stack) {
+		return stack != null && isBlockEqual(Block.getBlockFromItem(stack.getItem()));
+	}
 
-	public static Block fences1;
-	public static Block fences2;
-	public static Block stairs;
+	public boolean isBlockEqual(Block i) {
+		return i != null && Block.isEqualTo(block, i);
+	}
 
-	public static Block saplingGE;
-	public static Block leaves;
-	public static Block pods;
+	public boolean isBlockEqual(World world, int x, int y, int z) {
+		return isBlockEqual(world.getBlock(x, y, z));
+	}
+	
+	public Item item(){
+		return Item.getItemFromBlock(block);
+	}
 
-	public static BlockBase arboriculture;
+	public Block block() {
+		return block;
+	}
 
-	public static Block alveary;
-	public static Block farm;
+	public ItemStack getWildcard() {
+		return getItemStack(1, OreDictionary.WILDCARD_VALUE);
+	}
 
-	public static BlockBase core;
-	public static BlockBase apiculture;
-	public static BlockBase mail;
+	public ItemStack getItemStack() {
+		return getItemStack(1, 0);
+	}
 
-	public static BlockBase engine;
-	public static BlockBase factoryTESR;
-	public static BlockBase factoryPlain;
+	public ItemStack getItemStack(int qty) {
+		return getItemStack(qty, 0);
+	}
 
-	public static BlockBase lepidopterology;
+	public ItemStack getItemStack(int qty, int meta) {
+		if (block == null)
+			return null;
+		return new ItemStack(block, qty, meta);
+	}
+
+	public boolean setBlock(World world, int x, int y, int z, int meta, int flag) {
+		return world.setBlock(x, y, z, block, meta, flag);
+	}
 }

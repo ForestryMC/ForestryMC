@@ -32,8 +32,9 @@ import forestry.core.utils.Vect;
 public class FarmLogicPeat extends FarmLogicWatered {
 
 	public FarmLogicPeat(IFarmHousing housing) {
-		super(housing, new ItemStack[] { new ItemStack(ForestryBlock.soil, 1, 1) },
-				new ItemStack[] { new ItemStack(ForestryBlock.soil, 1, 1) }, new ItemStack[] { new ItemStack(Blocks.dirt), new ItemStack(Blocks.grass) });
+		super(housing, new ItemStack[]{ForestryBlock.soil.getItemStack(1, 1)},
+				new ItemStack[]{ForestryBlock.soil.getItemStack(1, 1)},
+				new ItemStack[]{new ItemStack(Blocks.dirt), new ItemStack(Blocks.grass)});
 	}
 
 	@Override
@@ -64,16 +65,16 @@ public class FarmLogicPeat extends FarmLogicWatered {
 			Vect position = translateWithOffset(x, y, z, direction, i);
 			ItemStack occupant = getAsItemStack(position);
 
-			if (StackUtils.getBlock(occupant) != ForestryBlock.soil)
+			if (!ForestryBlock.soil.isBlockEqual(StackUtils.getBlock(occupant)))
 				continue;
 			int type = occupant.getItemDamage() & 0x03;
 			int maturity = occupant.getItemDamage() >> 2;
 
-		if (type != 1)
-			continue;
+			if (type != 1)
+				continue;
 
-		if (maturity >= 3)
-			crops.push(new CropPeat(world, position));
+			if (maturity >= 3)
+				crops.push(new CropPeat(world, position));
 
 		}
 		return crops;

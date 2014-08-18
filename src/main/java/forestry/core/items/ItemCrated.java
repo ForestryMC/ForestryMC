@@ -81,18 +81,18 @@ public class ItemCrated extends Item implements IGenericCrate {
 		return itemstack;
 	}
 
-	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
-		if (contained != null)
-			return StringUtil.localize("item.crated.adj") + " " + Proxies.common.getDisplayName(contained);
-		else
-			return StringUtil.localize("item.crated.unknown");
-	}
+//	@Override
+//	public String getItemStackDisplayName(ItemStack itemstack) {
+//		if (contained != null)
+//			return StringUtil.localize("item.crated.adj") + " " + Proxies.common.getDisplayName(contained);
+//		else
+//			return StringUtil.localize("item.crated.unknown");
+//	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerIcons(IIconRegister register) {
-		itemIcon = TextureManager.getInstance().registerTex(register, "crates/" + getUnlocalizedName().replace("item.crated", "").toLowerCase(Locale.ENGLISH));
+		itemIcon = TextureManager.getInstance().registerTex(register, "crates/" + getUnlocalizedName().replace("item.for.crated", "").toLowerCase(Locale.ENGLISH));
 	}
 
 }

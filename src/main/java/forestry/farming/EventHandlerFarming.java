@@ -30,10 +30,10 @@ public class EventHandlerFarming {
 			return;
 
 		Block block = event.world.getBlock(event.x, event.y, event.z);
-		if (block != ForestryBlock.mushroom)
+		if (!ForestryBlock.mushroom.isBlockEqual(block))
 			return;
 
-		((BlockMushroom) ForestryBlock.mushroom).func_149878_d(event.world, event.x, event.y, event.z, event.world.rand);
+		((BlockMushroom) ForestryBlock.mushroom.block()).func_149878_d(event.world, event.x, event.y, event.z, event.world.rand);
 		event.setResult(Result.ALLOW);
 	}
 }

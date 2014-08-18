@@ -148,38 +148,37 @@ public class PluginStorage extends NativePlugin implements IOreDictionaryHandler
 	}
 
 	public static void scanForItems() {
-		for (Object id : Block.blockRegistry.getKeys()) {
+		for (Object id : Block.blockRegistry.getKeys())
 			try {
 				Block block = (Block) Block.blockRegistry.getObject(id);
 
-				if (block instanceof IPlantable ||
-						block instanceof IShearable ||
-						block instanceof BlockLog ||
-						block instanceof BlockMelon ||
-						block instanceof BlockPumpkin)
+				if (block instanceof IPlantable
+						|| block instanceof IShearable
+						|| block instanceof BlockLog
+						|| block instanceof BlockMelon
+						|| block instanceof BlockPumpkin)
 					addBackpackItem("forester", block);
-				if (block instanceof BlockStairs || block.getRenderType() == 10 ||
-						block instanceof BlockFence || block.getRenderType() == 11 ||
-						block instanceof BlockFenceGate || block.getRenderType() == 21 ||
-						block instanceof BlockWall || block.getRenderType() == 32 ||
-						block instanceof BlockBasePressurePlate ||
-						block instanceof BlockLever ||
-						block instanceof BlockButton ||
-						block instanceof BlockTorch ||
-						block instanceof BlockRedstoneDiode ||
-						block instanceof BlockChest || block.getRenderType() == 22 ||
-						block instanceof BlockWorkbench ||
-						block instanceof BlockFurnace ||
-						block instanceof BlockLadder || block.getRenderType() == 8 ||
-						block instanceof BlockTrapDoor ||
-						block.getUnlocalizedName().contains("door"))
+				if (block instanceof BlockStairs || block.getRenderType() == 10
+						|| block instanceof BlockFence || block.getRenderType() == 11
+						|| block instanceof BlockFenceGate || block.getRenderType() == 21
+						|| block instanceof BlockWall || block.getRenderType() == 32
+						|| block instanceof BlockBasePressurePlate
+						|| block instanceof BlockLever
+						|| block instanceof BlockButton
+						|| block instanceof BlockTorch
+						|| block instanceof BlockRedstoneDiode
+						|| block instanceof BlockChest || block.getRenderType() == 22
+						|| block instanceof BlockWorkbench
+						|| block instanceof BlockFurnace
+						|| block instanceof BlockLadder || block.getRenderType() == 8
+						|| block instanceof BlockTrapDoor
+						|| block.getUnlocalizedName().contains("door"))
 					addBackpackItem("builder", block);
 			} catch (Throwable error) {
 				error.printStackTrace();
 			}
-		}
 
-		for (Object id : Item.itemRegistry.getKeys()) {
+		for (Object id : Item.itemRegistry.getKeys())
 			try {
 				Item item = (Item) Item.itemRegistry.getObject(id);
 
@@ -192,7 +191,6 @@ public class PluginStorage extends NativePlugin implements IOreDictionaryHandler
 			} catch (Throwable error) {
 				error.printStackTrace();
 			}
-		}
 	}
 
 	@Override
@@ -257,7 +255,7 @@ public class PluginStorage extends NativePlugin implements IOreDictionaryHandler
 		ForestryItem.diggerBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "diggerBagT2");
 
 		definition = new BackpackDefinition("forester", 0x347427)
-		.setValidItems(BackpackManager.backpackItems[2]);
+				.setValidItems(BackpackManager.backpackItems[2]);
 		BackpackManager.definitions.put(definition.getKey(), definition);
 		ForestryItem.foresterBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "foresterBag");
 		ForestryItem.foresterBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "foresterBagT2");
@@ -268,13 +266,13 @@ public class PluginStorage extends NativePlugin implements IOreDictionaryHandler
 		ForestryItem.hunterBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "hunterBagT2");
 
 		definition = new BackpackDefinition("adventurer", 0x7fb8c2)
-		.setValidItems(BackpackManager.backpackItems[4]);
+				.setValidItems(BackpackManager.backpackItems[4]);
 		BackpackManager.definitions.put(definition.getKey(), definition);
 		ForestryItem.adventurerBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "adventurerBackpack");
 		ForestryItem.adventurerBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "adventurerBackpackT2");
 
 		definition = new BackpackDefinition("builder", 0xdd3a3a)
-		.setValidItems(BackpackManager.backpackItems[5]);
+				.setValidItems(BackpackManager.backpackItems[5]);
 		BackpackManager.definitions.put(definition.getKey(), definition);
 		ForestryItem.builderBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "builderBackpack");
 		ForestryItem.builderBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "builderBackpackT2");
@@ -346,7 +344,7 @@ public class PluginStorage extends NativePlugin implements IOreDictionaryHandler
 		foresterItems.add(new ItemStack(Items.pumpkin_seeds));
 		foresterItems.add(new ItemStack(Items.melon_seeds));
 		foresterItems.add(new ItemStack(Items.wheat));
-		foresterItems.add(new ItemStack(ForestryBlock.saplingGE, 1));
+		foresterItems.add(ForestryBlock.saplingGE.getWildcard());
 
 		// [3] Set valid items in hunter's backpack
 		hunterItems.add(new ItemStack(Items.feather));
@@ -389,13 +387,12 @@ public class PluginStorage extends NativePlugin implements IOreDictionaryHandler
 		hunterItems.add(new ItemStack(Items.iron_horse_armor));
 
 		// [4] Set valid items in adventurer's backpack
-
 		// [5] Set valid items in builder's backpack
 		builderItems.add(new ItemStack(Blocks.torch));
 		builderItems.add(new ItemStack(Blocks.redstone_torch));
 		builderItems.add(new ItemStack(Blocks.redstone_lamp));
-		builderItems.add(new ItemStack(ForestryBlock.candle));
-		builderItems.add(new ItemStack(ForestryBlock.stump));
+		builderItems.add(ForestryBlock.candle.getWildcard());
+		builderItems.add(ForestryBlock.stump.getWildcard());
 		builderItems.add(new ItemStack(Blocks.stonebrick, 1, Defaults.WILDCARD));
 		builderItems.add(new ItemStack(Blocks.sandstone, 1, 1));
 		builderItems.add(new ItemStack(Blocks.sandstone, 1, 2));
@@ -445,54 +442,54 @@ public class PluginStorage extends NativePlugin implements IOreDictionaryHandler
 
 		// Apiarist's Backpack
 		Proxies.common.addRecipe(ForestryItem.apiaristBackpack.getItemStack(),
-				new Object[] { "X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
-			"stickWood", 'Y', new ItemStack(ForestryBlock.apiculture, 1, Defaults.DEFINITION_APIARISTCHEST_META) });
+				new Object[]{"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
+					"stickWood", 'Y', ForestryBlock.apiculture.getItemStack(1, Defaults.DEFINITION_APIARISTCHEST_META)});
 		// Lepidopterist's Backpack
 		Proxies.common.addRecipe(ForestryItem.lepidopteristBackpack.getItemStack(),
-				new Object[] { "X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
-			"stickWood", 'Y', new ItemStack(ForestryBlock.lepidopterology, 1, Defaults.DEFINITION_LEPICHEST_META) });
+				new Object[]{"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
+					"stickWood", 'Y', ForestryBlock.lepidopterology.getItemStack(1, Defaults.DEFINITION_LEPICHEST_META)});
 		// Miner's Backpack
 		Proxies.common.addRecipe(ForestryItem.minerBackpack.getItemStack(),
-				new Object[] { "X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
-			Items.iron_ingot, 'Y', Blocks.chest });
+				new Object[]{"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
+					Items.iron_ingot, 'Y', Blocks.chest});
 		// Digger's Backpack
 		Proxies.common.addRecipe(ForestryItem.diggerBackpack.getItemStack(),
-				new Object[] { "X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
-			Blocks.stone, 'Y', Blocks.chest });
+				new Object[]{"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
+					Blocks.stone, 'Y', Blocks.chest});
 		// Forester's Backpack
-		Proxies.common.addRecipe(ForestryItem.foresterBackpack.getItemStack(), new Object[] { "X#X", "VYV", "X#X", '#', Blocks.wool,
-			'X', Items.string, 'V', "logWood", 'Y', Blocks.chest });
+		Proxies.common.addRecipe(ForestryItem.foresterBackpack.getItemStack(), new Object[]{"X#X", "VYV", "X#X", '#', Blocks.wool,
+			'X', Items.string, 'V', "logWood", 'Y', Blocks.chest});
 		// Hunter's Backpack
 		Proxies.common.addRecipe(ForestryItem.hunterBackpack.getItemStack(),
-				new Object[] { "X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
-			Items.feather, 'Y', Blocks.chest });
+				new Object[]{"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
+					Items.feather, 'Y', Blocks.chest});
 		// Adventurer's Backpack
-		Proxies.common.addRecipe(ForestryItem.adventurerBackpack.getItemStack(), new Object[] { "X#X", "VYV", "X#X", '#', Blocks.wool,
-			'X', Items.string, 'V', Items.bone, 'Y', Blocks.chest });
+		Proxies.common.addRecipe(ForestryItem.adventurerBackpack.getItemStack(), new Object[]{"X#X", "VYV", "X#X", '#', Blocks.wool,
+			'X', Items.string, 'V', Items.bone, 'Y', Blocks.chest});
 		// Builder's Backpack
-		Proxies.common.addRecipe(ForestryItem.builderBackpack.getItemStack(), new Object[] { "X#X", "VYV", "X#X", '#', Blocks.wool,
-			'X', Items.string, 'V', Items.clay_ball, 'Y', Blocks.chest });
+		Proxies.common.addRecipe(ForestryItem.builderBackpack.getItemStack(), new Object[]{"X#X", "VYV", "X#X", '#', Blocks.wool,
+			'X', Items.string, 'V', Items.clay_ball, 'Y', Blocks.chest});
 
 		// / CARPENTER
 		// / BACKPACKS T2
 		RecipeManagers.carpenterManager.addRecipe(200, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.minerBackpackT2.getItemStack(),
-				new Object[] { "WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
-			ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.minerBackpack });
+				new Object[]{"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
+					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.minerBackpack});
 		RecipeManagers.carpenterManager.addRecipe(200, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.diggerBackpackT2.getItemStack(),
-				new Object[] { "WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
-			ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.diggerBackpack });
+				new Object[]{"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
+					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.diggerBackpack});
 		RecipeManagers.carpenterManager.addRecipe(200, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.foresterBackpackT2.getItemStack(),
-				new Object[] { "WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
-			ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.foresterBackpack });
+				new Object[]{"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
+					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.foresterBackpack});
 		RecipeManagers.carpenterManager.addRecipe(200, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.hunterBackpackT2.getItemStack(),
-				new Object[] { "WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
-			ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.hunterBackpack });
+				new Object[]{"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
+					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.hunterBackpack});
 		RecipeManagers.carpenterManager.addRecipe(200, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.adventurerBackpackT2.getItemStack(),
-				new Object[] { "WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
-			ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.adventurerBackpack });
+				new Object[]{"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
+					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.adventurerBackpack});
 		RecipeManagers.carpenterManager.addRecipe(200, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.builderBackpackT2.getItemStack(),
-				new Object[] { "WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
-			ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.builderBackpack });
+				new Object[]{"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
+					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.builderBackpack});
 
 	}
 
@@ -527,23 +524,22 @@ public class PluginStorage extends NativePlugin implements IOreDictionaryHandler
 			String[] ident = part.split("[:]+");
 
 			if (ident.length != 2 && ident.length != 3) {
-				Proxies.log.warning("Failed to add block/item of (" + part + ") to "+backpackIdent+" since it isn't formatted properly. Suitable are <name>, <name>:<meta> or <name>:*, e.g. IC2:blockWall:*.");
+				Proxies.log.warning("Failed to add block/item of (" + part + ") to " + backpackIdent + " since it isn't formatted properly. Suitable are <name>, <name>:<meta> or <name>:*, e.g. IC2:blockWall:*.");
 				continue;
 			}
 
 			String name = ident[0] + ":" + ident[1];
 			int meta;
 
-			if (ident.length == 2) {
+			if (ident.length == 2)
 				meta = 0;
-			} else {
+			else
 				try {
 					meta = ident[2].equals("*") ? OreDictionary.WILDCARD_VALUE : NumberFormat.getIntegerInstance().parse(ident[2]).intValue();
 				} catch (ParseException e) {
-					Proxies.log.warning("Failed to add block/item of (" + part + ") to "+backpackIdent+" since its metadata isn't formatted properly. Suitable are integer values or *.");
+					Proxies.log.warning("Failed to add block/item of (" + part + ") to " + backpackIdent + " since its metadata isn't formatted properly. Suitable are integer values or *.");
 					continue;
 				}
-			}
 
 			Item item = GameData.getItemRegistry().getRaw(name);
 
@@ -551,14 +547,14 @@ public class PluginStorage extends NativePlugin implements IOreDictionaryHandler
 				Block block = GameData.getBlockRegistry().getRaw(name);
 
 				if (block == null || Item.getItemFromBlock(block) == null) {
-					Proxies.log.warning("Failed to add block/item of (" + part + ") to "+backpackIdent+" since it couldn't be found.");
+					Proxies.log.warning("Failed to add block/item of (" + part + ") to " + backpackIdent + " since it couldn't be found.");
 					continue;
 				}
 
 				item = Item.getItemFromBlock(block);
 			}
 
-			Proxies.log.finer("Adding block/item of (" + part + ") to "+backpackIdent+".");
+			Proxies.log.finer("Adding block/item of (" + part + ") to " + backpackIdent + ".");
 			target.addValidItem(new ItemStack(item, 1, meta));
 		}
 	}

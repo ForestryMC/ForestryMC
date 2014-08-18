@@ -31,7 +31,7 @@ public class FarmRenderingHandler extends OverlayRenderingHandler {
 
 		// Render the plain block.
 		renderer.renderStandardBlock(block, x, y, z);
-		renderFarmOverlay(world, (BlockFarm) ForestryBlock.farm, x, y, z, renderer, 0xffffff);
+		renderFarmOverlay(world, (BlockFarm) ForestryBlock.farm.block(), x, y, z, renderer, 0xffffff);
 
 		return true;
 	}

@@ -46,9 +46,9 @@ public class FarmLogicArboreal extends FarmLogicHomogenous {
 	}
 
 	public FarmLogicArboreal(IFarmHousing housing) {
-		super(housing, new ItemStack[] { new ItemStack(Blocks.dirt) }, new ItemStack[] { new ItemStack(ForestryBlock.soil, 1, 0),
-				new ItemStack(ForestryBlock.soil, 1, Defaults.WILDCARD) }, new ItemStack[] { new ItemStack(Blocks.sand) }, Farmables.farmables.get(
-						"farmArboreal").toArray(new IFarmable[0]));
+		super(housing, new ItemStack[]{new ItemStack(Blocks.dirt)},
+				new ItemStack[]{ForestryBlock.soil.getItemStack(), ForestryBlock.soil.getItemStack(1, Defaults.WILDCARD)},
+				new ItemStack[]{new ItemStack(Blocks.sand)}, Farmables.farmables.get("farmArboreal").toArray(new IFarmable[0]));
 	}
 
 	@Override
@@ -222,10 +222,9 @@ public class FarmLogicArboreal extends FarmLogicHomogenous {
 				//ForgeDirection reverse = direction.getOpposite();
 				Vect soilBelow = new Vect(position.x, position.y - 1, position.z);
 				//Vect soilPrevious = new Vect(position.x * reverse.offsetX, position.y - 1, position.z * reverse.offsetZ);
-				for (ItemStack grnd : ground) {
-					if(StackUtils.isIdenticalItem(grnd, getAsItemStack(soilBelow)))
+				for (ItemStack grnd : ground)
+					if (StackUtils.isIdenticalItem(grnd, getAsItemStack(soilBelow)))
 						return plantSapling(position);
-				}
 				//if (!ground[0].itemID == getAsItemStack(soilPrevious).itemID && ground[0].itemID == getAsItemStack(soilBelow).itemID)
 
 				//if (ground[0].isItemEqual(getAsItemStack(soilBelow)))

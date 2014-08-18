@@ -95,12 +95,13 @@ public class PluginFactory extends NativePlugin {
 		// Init still manager
 		RecipeManagers.craftingProviders.add(RecipeManagers.stillManager = new MachineStill.RecipeManager());
 
-		ForestryBlock.factoryTESR = new BlockBase(Material.iron, true);
-		ForestryBlock.factoryTESR.setBlockName("for.factory");
-		Proxies.common.registerBlock(ForestryBlock.factoryTESR, ItemForestryBlock.class);
+		ForestryBlock.factoryTESR.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "factory");
 
-		definitionBottler = ForestryBlock.factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_BOTTLER_META, "forestry.Bottler", MachineBottler.class,
-				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/bottler_"), ShapedRecipeCustom.createShapedRecipe(new ItemStack(ForestryBlock.factoryTESR, 1, Defaults.DEFINITION_BOTTLER_META),
+		BlockBase factoryTESR = ((BlockBase) ForestryBlock.factoryTESR.block());
+
+		definitionBottler = factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_BOTTLER_META, "forestry.Bottler", MachineBottler.class,
+				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/bottler_"), ShapedRecipeCustom.createShapedRecipe(
+						ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_BOTTLER_META),
 						"X#X",
 						"#Y#",
 						"X#X",
@@ -108,8 +109,9 @@ public class PluginFactory extends NativePlugin {
 						'X', ForestryItem.canEmpty,
 						'Y', ForestryItem.sturdyCasing)));
 
-		definitionCarpenter = ForestryBlock.factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_CARPENTER_META, "forestry.Carpenter", MachineCarpenter.class,
-				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/carpenter_"), ShapedRecipeCustom.createShapedRecipe(new ItemStack(ForestryBlock.factoryTESR, 1, Defaults.DEFINITION_CARPENTER_META),
+		definitionCarpenter = factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_CARPENTER_META, "forestry.Carpenter", MachineCarpenter.class,
+				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/carpenter_"), ShapedRecipeCustom.createShapedRecipe(
+						ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_CARPENTER_META),
 						"X#X",
 						"XYX",
 						"X#X",
@@ -117,8 +119,9 @@ public class PluginFactory extends NativePlugin {
 						'X', "ingotBronze",
 						'Y', ForestryItem.sturdyCasing)));
 
-		definitionCentrifuge = ForestryBlock.factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_CENTRIFUGE_META, "forestry.Centrifuge", MachineCentrifuge.class,
-				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/centrifuge_"), ShapedRecipeCustom.createShapedRecipe(new ItemStack(ForestryBlock.factoryTESR, 1, Defaults.DEFINITION_CENTRIFUGE_META),
+		definitionCentrifuge = factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_CENTRIFUGE_META, "forestry.Centrifuge", MachineCentrifuge.class,
+				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/centrifuge_"), ShapedRecipeCustom.createShapedRecipe(
+						ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_CENTRIFUGE_META),
 						"X#X",
 						"XYX",
 						"X#X",
@@ -126,8 +129,9 @@ public class PluginFactory extends NativePlugin {
 						'X', "ingotCopper",
 						'Y', ForestryItem.sturdyCasing.getItemStack())));
 
-		definitionFermenter = ForestryBlock.factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_FERMENTER_META, "forestry.Fermenter", MachineFermenter.class,
-				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/fermenter_"), ShapedRecipeCustom.createShapedRecipe(new ItemStack(ForestryBlock.factoryTESR, 1, Defaults.DEFINITION_FERMENTER_META),
+		definitionFermenter = factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_FERMENTER_META, "forestry.Fermenter", MachineFermenter.class,
+				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/fermenter_"), ShapedRecipeCustom.createShapedRecipe(
+						ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_FERMENTER_META),
 						"X#X",
 						"#Y#",
 						"X#X",
@@ -135,8 +139,9 @@ public class PluginFactory extends NativePlugin {
 						'X', "gearBronze",
 						'Y', ForestryItem.sturdyCasing)));
 
-		definitionMoistener = ForestryBlock.factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_MOISTENER_META, "forestry.Moistener", MachineMoistener.class,
-				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/moistener_"), ShapedRecipeCustom.createShapedRecipe(new ItemStack(ForestryBlock.factoryTESR, 1, Defaults.DEFINITION_MOISTENER_META),
+		definitionMoistener = factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_MOISTENER_META, "forestry.Moistener", MachineMoistener.class,
+				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/moistener_"), ShapedRecipeCustom.createShapedRecipe(
+						ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_MOISTENER_META),
 						"X#X",
 						"#Y#",
 						"X#X",
@@ -144,8 +149,9 @@ public class PluginFactory extends NativePlugin {
 						'X', "gearCopper",
 						'Y', ForestryItem.sturdyCasing)));
 
-		definitionSqueezer = ForestryBlock.factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_SQUEEZER_META, "forestry.Squeezer", MachineSqueezer.class,
-				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/squeezer_"), ShapedRecipeCustom.createShapedRecipe(new ItemStack(ForestryBlock.factoryTESR, 1, Defaults.DEFINITION_SQUEEZER_META),
+		definitionSqueezer = factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_SQUEEZER_META, "forestry.Squeezer", MachineSqueezer.class,
+				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/squeezer_"), ShapedRecipeCustom.createShapedRecipe(
+						ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_SQUEEZER_META),
 						"X#X",
 						"XYX",
 						"X#X",
@@ -153,8 +159,9 @@ public class PluginFactory extends NativePlugin {
 						'X', "ingotTin",
 						'Y', ForestryItem.sturdyCasing.getItemStack())));
 
-		definitionStill = ForestryBlock.factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_STILL_META, "forestry.Still", MachineStill.class,
-				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/still_"), ShapedRecipeCustom.createShapedRecipe(new ItemStack(ForestryBlock.factoryTESR, 1, Defaults.DEFINITION_STILL_META),
+		definitionStill = factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_STILL_META, "forestry.Still", MachineStill.class,
+				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/still_"), ShapedRecipeCustom.createShapedRecipe(
+						ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_STILL_META),
 						"X#X",
 						"#Y#",
 						"X#X",
@@ -162,8 +169,9 @@ public class PluginFactory extends NativePlugin {
 						'X', Items.redstone,
 						'Y', ForestryItem.sturdyCasing)));
 
-		definitionRainmaker = ForestryBlock.factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_RAINMAKER_META, "forestry.Rainmaker", MillRainmaker.class,
-				Proxies.render.getRenderMill(Defaults.TEXTURE_PATH_BLOCKS + "/rainmaker_"), ShapedRecipeCustom.createShapedRecipe(new ItemStack(ForestryBlock.factoryTESR, 1, Defaults.DEFINITION_RAINMAKER_META),
+		definitionRainmaker = factoryTESR.addDefinition(new MachineDefinition(Defaults.DEFINITION_RAINMAKER_META, "forestry.Rainmaker", MillRainmaker.class,
+				Proxies.render.getRenderMill(Defaults.TEXTURE_PATH_BLOCKS + "/rainmaker_"), ShapedRecipeCustom.createShapedRecipe(
+						ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_RAINMAKER_META),
 						"X#X",
 						"#Y#",
 						"X#X",
@@ -171,39 +179,41 @@ public class PluginFactory extends NativePlugin {
 						'X', "gearTin",
 						'Y', ForestryItem.hardenedCasing)));
 
-		ForestryBlock.factoryPlain = new BlockBase(Material.iron);
-		ForestryBlock.factoryPlain.setBlockName("for.factory2");
-		Proxies.common.registerBlock(ForestryBlock.factoryPlain, ItemNBTTile.class);
+		ForestryBlock.factoryPlain.registerBlock(new BlockBase(Material.iron), ItemNBTTile.class, "factory2");
 
-		definitionFabricator = ForestryBlock.factoryPlain.addDefinition(new MachineDefinition(Defaults.DEFINITION_FABRICATOR_META, "forestry.Fabricator", MachineFabricator.class,
-				ShapedRecipeCustom.createShapedRecipe(new ItemStack(ForestryBlock.factoryPlain,
-						1, Defaults.DEFINITION_FABRICATOR_META),
+		BlockBase factoryPlain = ((BlockBase) ForestryBlock.factoryPlain.block());
+
+		definitionFabricator = factoryPlain.addDefinition(new MachineDefinition(Defaults.DEFINITION_FABRICATOR_META, "forestry.Fabricator", MachineFabricator.class,
+				ShapedRecipeCustom.createShapedRecipe(
+						ForestryBlock.factoryPlain.getItemStack(1, Defaults.DEFINITION_FABRICATOR_META),
 						"X#X",
 						"#Y#",
 						"XZX",
 						'#', Blocks.glass,
 						'X', Items.gold_ingot,
 						'Y', ForestryItem.sturdyCasing,
-						'Z', Blocks.chest)).setFaces(0, 1, 2, 3, 4, 4));
+						'Z', Blocks.chest))
+				.setFaces(0, 1, 2, 3, 4, 4));
 
-		definitionRaintank = ForestryBlock.factoryPlain.addDefinition(new MachineDefinition(Defaults.DEFINITION_RAINTANK_META, "forestry.Raintank", MachineRaintank.class,
-				ShapedRecipeCustom.createShapedRecipe(new ItemStack(ForestryBlock.factoryPlain, 1, Defaults.DEFINITION_RAINTANK_META),
+		definitionRaintank = factoryPlain.addDefinition(new MachineDefinition(Defaults.DEFINITION_RAINTANK_META, "forestry.Raintank", MachineRaintank.class,
+				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.factoryPlain.getItemStack(1, Defaults.DEFINITION_RAINTANK_META),
 						"X#X",
 						"XYX",
 						"X#X",
 						'#', Blocks.glass,
 						'X', Items.iron_ingot,
 						'Y', ForestryItem.sturdyCasing))
-		.setFaces(0, 1, 0, 0, 0, 0));
+				.setFaces(0, 1, 0, 0, 0, 0));
 
-		definitionWorktable = ForestryBlock.factoryPlain.addDefinition(new MachineNBTDefinition(Defaults.DEFINITION_WORKTABLE_META, "forestry.Worktable", TileWorktable.class,
-				ShapedRecipeCustom.createShapedRecipe(new ItemStack(ForestryBlock.factoryPlain, 1, Defaults.DEFINITION_WORKTABLE_META),
+		definitionWorktable = factoryPlain.addDefinition(new MachineNBTDefinition(Defaults.DEFINITION_WORKTABLE_META, "forestry.Worktable", TileWorktable.class,
+				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.factoryPlain.getItemStack(1, Defaults.DEFINITION_WORKTABLE_META),
 						"B",
 						"W",
 						"C",
 						'B', Items.book,
 						'W', Blocks.crafting_table,
-						'C', Blocks.chest)).setFaces(0, 1, 2, 3, 4, 4));
+						'C', Blocks.chest))
+				.setFaces(0, 1, 2, 3, 4, 4));
 	}
 
 	@Override
@@ -246,55 +256,54 @@ public class PluginFactory extends NativePlugin {
 	protected void registerRecipes() {
 
 		// / FABRICATOR
-		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 0), new Object[] {
-			" X ", "#X#", "XXX", '#', Items.redstone, 'X', "ingotCopper" });
-		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 1), new Object[] {
-			" X ", "#X#", "XXX", '#', Items.redstone, 'X', "ingotTin" });
-		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 2), new Object[] {
-			" X ", "#X#", "XXX", '#', Items.redstone, 'X', "ingotBronze" });
-		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 3), new Object[] {
-			" X ", "#X#", "XXX", '#', Items.redstone, 'X', Items.iron_ingot });
-		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 4), new Object[] {
-			" X ", "#X#", "XXX", '#', Items.redstone, 'X', Items.gold_ingot });
-		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 5), new Object[] {
-			" X ", "#X#", "XXX", '#', Items.redstone, 'X', Items.diamond });
-		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 6), new Object[] {
-			" X ", "#X#", "XXX", '#', Items.redstone, 'X', Blocks.obsidian });
-		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 7), new Object[] {
-			" X ", "#X#", "XXX", '#', Items.redstone, 'X', Items.blaze_powder });
+		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 0), new Object[]{
+			" X ", "#X#", "XXX", '#', Items.redstone, 'X', "ingotCopper"});
+		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 1), new Object[]{
+			" X ", "#X#", "XXX", '#', Items.redstone, 'X', "ingotTin"});
+		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 2), new Object[]{
+			" X ", "#X#", "XXX", '#', Items.redstone, 'X', "ingotBronze"});
+		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 3), new Object[]{
+			" X ", "#X#", "XXX", '#', Items.redstone, 'X', Items.iron_ingot});
+		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 4), new Object[]{
+			" X ", "#X#", "XXX", '#', Items.redstone, 'X', Items.gold_ingot});
+		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 5), new Object[]{
+			" X ", "#X#", "XXX", '#', Items.redstone, 'X', Items.diamond});
+		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 6), new Object[]{
+			" X ", "#X#", "XXX", '#', Items.redstone, 'X', Blocks.obsidian});
+		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 7), new Object[]{
+			" X ", "#X#", "XXX", '#', Items.redstone, 'X', Items.blaze_powder});
 		if (PluginIC2.rubber != null)
 			RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 8),
-					new Object[] { " X ", "#X#", "XXX", '#', Items.redstone, 'X', PluginIC2.rubber });
-		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 9), new Object[] {
-			" X ", "#X#", "XXX", '#', Items.redstone, 'X', Items.emerald });
+					new Object[]{" X ", "#X#", "XXX", '#', Items.redstone, 'X', PluginIC2.rubber});
+		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 9), new Object[]{
+			" X ", "#X#", "XXX", '#', Items.redstone, 'X', Items.emerald});
 		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 10),
-				new Object[] { " X ", "#X#", "XXX", '#', Items.redstone, 'X', "gemApatite" });
+				new Object[]{" X ", "#X#", "XXX", '#', Items.redstone, 'X', "gemApatite"});
 		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 11),
-				new Object[] { " X ", "#X#", "XXX", '#', Items.redstone, 'X', new ItemStack(Items.dye, 1, 4) });
+				new Object[]{" X ", "#X#", "XXX", '#', Items.redstone, 'X', new ItemStack(Items.dye, 1, 4)});
 
-		String[] dyes = { "dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime",
-				"dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite" };
+		String[] dyes = {"dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime",
+			"dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite"};
 
 		if (ForestryItem.propolis != null)
-			for (int i = 0; i < 16; i++) {
+			for (int i = 0; i < 16; i++)
 				RecipeManagers.fabricatorManager.addRecipe(ForestryItem.waxCast.getItemStack(1, Defaults.WILDCARD), LiquidHelper.getLiquid(Defaults.LIQUID_GLASS,
-						Defaults.BUCKET_VOLUME), new ItemStack(ForestryBlock.glass, 1, 15 - i), new Object[] { "#", "X", '#', dyes[i],
-					'X', ForestryItem.propolis.getItemStack(1, Defaults.WILDCARD) });
-			}
+						Defaults.BUCKET_VOLUME), ForestryBlock.glass.getItemStack(1, 15 - i), new Object[]{"#", "X", '#', dyes[i],
+							'X', ForestryItem.propolis.getItemStack(1, Defaults.WILDCARD)});
 
 		// / SQUEEZER
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[] { new ItemStack(Items.apple) }, LiquidHelper.getLiquid(Defaults.LIQUID_JUICE, GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple")),
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.apple)}, LiquidHelper.getLiquid(Defaults.LIQUID_JUICE, GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple")),
 				ForestryItem.mulch.getItemStack(), GameMode.getGameMode().getIntegerSetting("squeezer.mulch.apple"));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[] { new ItemStack(Items.wheat_seeds) }, LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, GameMode
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.wheat_seeds)}, LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, GameMode
 				.getGameMode().getIntegerSetting("squeezer.liquid.seed")));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[] { new ItemStack(Items.pumpkin_seeds) }, LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, GameMode
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.pumpkin_seeds)}, LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, GameMode
 				.getGameMode().getIntegerSetting("squeezer.liquid.seed")));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[] { new ItemStack(Items.melon_seeds) }, LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, GameMode
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.melon_seeds)}, LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, GameMode
 				.getGameMode().getIntegerSetting("squeezer.liquid.seed")));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[] { ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.cobblestone) },
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.cobblestone)},
 				LiquidHelper.getLiquid(Defaults.LIQUID_LAVA, 1600));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[] { new ItemStack(Blocks.cactus) }, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 500));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[] { new ItemStack(Items.snowball), ForestryItem.craftingMaterial.getItemStack(4, 5) },
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Blocks.cactus)}, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 500));
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{new ItemStack(Items.snowball), ForestryItem.craftingMaterial.getItemStack(4, 5)},
 				LiquidHelper.getLiquid(Defaults.LIQUID_ICE, 4000));
 
 		// STILL
@@ -325,80 +334,108 @@ public class PluginFactory extends NativePlugin {
 
 		// / CARPENTER
 		RecipeManagers.carpenterManager.addRecipe(50, LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, 250), null, ForestryItem.impregnatedCasing.getItemStack(),
-				new Object[] { "###", "# #", "###", '#', "logWood" });
-		RecipeManagers.carpenterManager.addRecipe(50, LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, 500), null, new ItemStack(ForestryBlock.core, 1, Defaults.DEFINITION_ESCRITOIRE_META),
-				new Object[] { "#  ", "###", "# #", '#', "plankWood" });
+				"###",
+				"# #",
+				"###",
+				'#', "logWood");
+		RecipeManagers.carpenterManager.addRecipe(50, LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, 500), null,
+				ForestryBlock.core.getItemStack(1, Defaults.DEFINITION_ESCRITOIRE_META),
+				"#  ",
+				"###",
+				"# #",
+				'#', "plankWood");
 
 		// RESOURCES
-		RecipeManagers.carpenterManager.addRecipe(10, LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, 100), null, ForestryItem.stickImpregnated.getItemStack(2),
-				new Object[] { "#", "#", '#', "logWood" });
-		RecipeManagers.carpenterManager.addRecipe(5, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 250), null, ForestryItem.woodPulp.getItemStack(4),
-				new Object[] { "#", '#', "logWood" });
-		RecipeManagers.carpenterManager.addRecipe(5, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 250), null, new ItemStack(Items.paper, 1), new Object[] { "#",
-			"#", '#', "pulpWood" });
-		RecipeManagers.carpenterManager.addRecipe(5, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, new ItemStack(ForestryBlock.soil, 9, 0),
-				new Object[] { "###", "#X#", "###", '#', Blocks.dirt, 'X', ForestryItem.mulch });
-		RecipeManagers.carpenterManager.addRecipe(5, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, new ItemStack(ForestryBlock.soil, 8, 1),
-				new Object[] { "#X#", "XYX", "#X#", '#', Blocks.dirt, 'X', Blocks.sand, 'Y',
-			ForestryItem.mulch });
+		RecipeManagers.carpenterManager.addRecipe(10, LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, 100), null,
+				ForestryItem.stickImpregnated.getItemStack(2),
+				"#",
+				"#",
+				'#', "logWood");
+		RecipeManagers.carpenterManager.addRecipe(5, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 250), null,
+				ForestryItem.woodPulp.getItemStack(4),
+				"#",
+				'#', "logWood");
+		RecipeManagers.carpenterManager.addRecipe(5, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 250), null,
+				new ItemStack(Items.paper, 1),
+				"#",
+				"#",
+				'#', "pulpWood");
+		RecipeManagers.carpenterManager.addRecipe(5, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null,
+				ForestryBlock.soil.getItemStack(9),
+				"###",
+				"#X#",
+				"###",
+				'#', Blocks.dirt,
+				'X', ForestryItem.mulch);
+		RecipeManagers.carpenterManager.addRecipe(5, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null,
+				ForestryBlock.soil.getItemStack(8, 1),
+				"#X#",
+				"XYX", "#X#",
+				'#', Blocks.dirt,
+				'X', Blocks.sand,
+				'Y', ForestryItem.mulch);
 		RecipeManagers.carpenterManager.addRecipe(75, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 5000), null, ForestryItem.hardenedCasing.getItemStack(),
-				new Object[] { "# #", " Y ", "# #", '#', Items.diamond, 'Y', ForestryItem.sturdyCasing });
+				"# #",
+				" Y ",
+				"# #",
+				'#', Items.diamond,
+				'Y', ForestryItem.sturdyCasing);
 
 		// / CHIPSETS
 		RecipeManagers.carpenterManager.addRecipe(20, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.circuitboards.getItemStack(1, 0),
-				new Object[] { "R R", "R#R", "R R", '#', "ingotTin", 'R', Items.redstone });
+				new Object[]{"R R", "R#R", "R R", '#', "ingotTin", 'R', Items.redstone});
 		RecipeManagers.carpenterManager.addRecipe(40, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.circuitboards.getItemStack(1, 1),
-				new Object[] { "R#R", "R#R", "R#R", '#', "ingotBronze", 'R', Items.redstone });
+				new Object[]{"R#R", "R#R", "R#R", '#', "ingotBronze", 'R', Items.redstone});
 		RecipeManagers.carpenterManager.addRecipe(80, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.circuitboards.getItemStack(1, 2),
-				new Object[] { "R#R", "R#R", "R#R", '#', Items.iron_ingot, 'R', Items.redstone });
+				new Object[]{"R#R", "R#R", "R#R", '#', Items.iron_ingot, 'R', Items.redstone});
 		RecipeManagers.carpenterManager.addRecipe(80, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.circuitboards.getItemStack(1, 3),
-				new Object[] { "R#R", "R#R", "R#R", '#', Items.gold_ingot, 'R', Items.redstone });
+				new Object[]{"R#R", "R#R", "R#R", '#', Items.gold_ingot, 'R', Items.redstone});
 		RecipeManagers.carpenterManager.addRecipe(40, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.solderingIron.getItemStack(),
-				new Object[] { " # ", "# #", "  B", '#', Items.iron_ingot, 'B', "ingotBronze" });
+				new Object[]{" # ", "# #", "  B", '#', Items.iron_ingot, 'B', "ingotBronze"});
 		// ForestryCore.oreHandler.registerCarpenterRecipe(solderingIron);
 
 		// RAIN SUBSTRATES
 		RecipeManagers.carpenterManager.addRecipe(5, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.iodineCharge.getItemStack(),
-				new Object[] { "Z#Z", "#Y#", "X#X", '#', ForestryItem.pollen, 'X', Items.gunpowder,
-			'Y', ForestryItem.canEmpty, 'Z', ForestryItem.honeyDrop });
+				new Object[]{"Z#Z", "#Y#", "X#X", '#', ForestryItem.pollen, 'X', Items.gunpowder,
+					'Y', ForestryItem.canEmpty, 'Z', ForestryItem.honeyDrop});
 		// ForestryCore.oreHandler.registerCarpenterRecipe(iodineCapsule);
 		RecipeManagers.carpenterManager.addRecipe(
 				5,
 				LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000),
 				null,
 				ForestryItem.craftingMaterial.getItemStack(1, 4),
-				new Object[] { "Z#Z", "#Y#", "X#X", '#', ForestryItem.royalJelly, 'X', Items.gunpowder,
-					'Y', ForestryItem.canEmpty, 'Z', ForestryItem.honeydew });
+				new Object[]{"Z#Z", "#Y#", "X#X", '#', ForestryItem.royalJelly, 'X', Items.gunpowder,
+					'Y', ForestryItem.canEmpty, 'Z', ForestryItem.honeydew});
 		// ForestryCore.oreHandler.registerCarpenterRecipe(dissipationCharge);
 
 		// Ender pearl
-		RecipeManagers.carpenterManager.addRecipe(100, null, new ItemStack(Items.ender_pearl, 1), new Object[] { " # ", "###", " # ", '#',
-			ForestryItem.craftingMaterial.getItemStack(1, 1) });
+		RecipeManagers.carpenterManager.addRecipe(100, null, new ItemStack(Items.ender_pearl, 1), new Object[]{" # ", "###", " # ", '#',
+			ForestryItem.craftingMaterial.getItemStack(1, 1)});
 		// Woven Silk
 		RecipeManagers.carpenterManager.addRecipe(10, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 500), null, ForestryItem.craftingMaterial.getItemStack(1, 3),
-				new Object[] { "###", "###", "###", '#', ForestryItem.craftingMaterial.getItemStack(1, 2) });
+				new Object[]{"###", "###", "###", '#', ForestryItem.craftingMaterial.getItemStack(1, 2)});
 
 		// Boxes
 		RecipeManagers.carpenterManager.addRecipe(5, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.carton.getItemStack(2),
-				new Object[] { " # ", "# #", " # ", '#', "pulpWood" });
+				new Object[]{" # ", "# #", " # ", '#', "pulpWood"});
 		RecipeManagers.carpenterManager.addRecipe(20, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.crate.getItemStack(24),
-				new Object[] { " # ", "# #", " # ", '#', "logWood" });
+				new Object[]{" # ", "# #", " # ", '#', "logWood"});
 
 		// Assembly Kits
-		RecipeManagers.carpenterManager.addRecipe(20, null, ForestryItem.carton.getItemStack(), ForestryItem.kitPickaxe.getItemStack(), new Object[] {
+		RecipeManagers.carpenterManager.addRecipe(20, null, ForestryItem.carton.getItemStack(), ForestryItem.kitPickaxe.getItemStack(), new Object[]{
 			"###",
 			" X ",
 			" X ",
 			'#', "ingotBronze",
-			'X', "stickWood" });
+			'X', "stickWood"});
 
 		RecipeManagers.carpenterManager.addRecipe(20, null, ForestryItem.carton.getItemStack(), ForestryItem.kitShovel.getItemStack(),
-				new Object[] { " # ", " X ", " X ", '#', "ingotBronze", 'X', "stickWood" });
+				new Object[]{" # ", " X ", " X ", '#', "ingotBronze", 'X', "stickWood"});
 
 		// Reclamation
 		RecipeManagers.carpenterManager.addRecipe(null, ForestryItem.ingotBronze.getItemStack(2, ForestryItem.ingotBronze.item().getMaxDamage()),
-				new Object[] { "#", '#', ForestryItem.brokenBronzePickaxe });
-		RecipeManagers.carpenterManager.addRecipe(null, ForestryItem.ingotBronze.getItemStack(), new Object[] { "#", '#', ForestryItem.brokenBronzeShovel });
+				new Object[]{"#", '#', ForestryItem.brokenBronzePickaxe});
+		RecipeManagers.carpenterManager.addRecipe(null, ForestryItem.ingotBronze.getItemStack(), new Object[]{"#", '#', ForestryItem.brokenBronzeShovel});
 
 		// Crating and uncrating condensed
 		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedWood.getItemStack());

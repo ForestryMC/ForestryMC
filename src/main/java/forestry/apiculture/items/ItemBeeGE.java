@@ -70,7 +70,7 @@ public class ItemBeeGE extends ItemGE {
 	public String getItemStackDisplayName(ItemStack itemstack) {
 
 		if (itemstack.getTagCompound() == null)
-			return StringUtil.localize(type.getName());
+			return super.getItemStackDisplayName(itemstack);
 
 		IBee individual = new Bee(itemstack.getTagCompound());
 		if(StatCollector.canTranslate("bees.custom." + type.getName() + "." + individual.getDisplayName())){

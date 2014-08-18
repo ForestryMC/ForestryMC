@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodType;
 import forestry.core.items.ItemForestryBlock;
-import forestry.core.utils.StringUtil;
 
 public class ItemWoodBlock extends ItemForestryBlock {
 
@@ -28,20 +27,16 @@ public class ItemWoodBlock extends ItemForestryBlock {
 		return damage & 3;
 	}
 
-	private String getWoodNameIS(WoodType type) {
-		return StringUtil.localize("wood." + type.ordinal());
-	}
-
 	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
+	public String getUnlocalizedName(ItemStack itemstack) {
 
 		if (this.getBlock() instanceof IWoodTyped) {
 			IWoodTyped block = (IWoodTyped) getBlock();
 			int meta = itemstack.getItemDamage();
 			WoodType woodType = block.getWoodType(meta);
-			return StringUtil.localize("tile." + block.getBlockKind() + "." + woodType.ordinal());
-		} else
-			return StringUtil.localize(getUnlocalizedName(itemstack));
+			return "tile.for." + block.getBlockKind() + "." + woodType.ordinal();
+		}
+		return super.getUnlocalizedName(itemstack);
 	}
 
 }

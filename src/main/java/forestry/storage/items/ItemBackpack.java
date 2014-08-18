@@ -43,7 +43,6 @@ import forestry.core.render.TextureManager;
 import forestry.core.utils.ItemInventory;
 import forestry.core.utils.StringUtil;
 import forestry.storage.BackpackMode;
-import java.util.EnumSet;
 
 public class ItemBackpack extends ItemInventoried {
 

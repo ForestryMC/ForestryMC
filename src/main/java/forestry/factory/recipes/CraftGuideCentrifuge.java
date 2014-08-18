@@ -44,7 +44,7 @@ public class CraftGuideCentrifuge implements RecipeProvider {
 		if (ForestryBlock.factoryTESR == null)
 			return;
 
-		ItemStack machine = new ItemStack(ForestryBlock.factoryTESR, 1, Defaults.DEFINITION_CENTRIFUGE_META);
+		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_CENTRIFUGE_META);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
 		for (MachineCentrifuge.Recipe recipe : MachineCentrifuge.RecipeManager.recipes) {
@@ -52,9 +52,8 @@ public class CraftGuideCentrifuge implements RecipeProvider {
 			@SuppressWarnings("unchecked")
 			Entry<ItemStack, Integer>[] entries = recipe.products.entrySet().toArray(new Entry[0]);
 
-			for (int i = 0; i < Math.min(entries.length, 9); i++) {
-				array[i] = entries[i].getValue() > 0 ? new Object[] { entries[i].getKey(), entries[i].getValue() } : null;
-			}
+			for (int i = 0; i < Math.min(entries.length, 9); i++)
+				array[i] = entries[i].getValue() > 0 ? new Object[]{entries[i].getKey(), entries[i].getValue()} : null;
 
 			array[9] = recipe.resource;
 			array[10] = machine;

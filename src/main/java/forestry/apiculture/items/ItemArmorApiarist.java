@@ -44,15 +44,10 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArm
 			return Defaults.ID + ":" + Defaults.TEXTURE_APIARIST_ARMOR_PRIMARY;
 	}
 
-	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
-		return StringUtil.localize(getUnlocalizedName(itemstack));
-	}
-
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerIcons(IIconRegister register) {
-		itemIcon = TextureManager.getInstance().registerTex(register, getUnlocalizedName().replace("item.", ""));
+		itemIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this));
 	}
 
 	@SideOnly(Side.CLIENT)

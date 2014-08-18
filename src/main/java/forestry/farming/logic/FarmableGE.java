@@ -30,7 +30,7 @@ public class FarmableGE implements IFarmable {
 		if (world.isAirBlock(x, y, z))
 			return false;
 
-		return world.getBlock(x, y, z) == ForestryBlock.saplingGE;
+		return ForestryBlock.saplingGE.isBlockEqual(world, x, y, z);
 	}
 
 	@Override

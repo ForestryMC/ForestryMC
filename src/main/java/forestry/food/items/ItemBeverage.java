@@ -32,7 +32,6 @@ import forestry.core.CreativeTabForestry;
 import forestry.core.config.Config;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
 
 public class ItemBeverage extends Item {
 
@@ -169,7 +168,7 @@ public class ItemBeverage extends Item {
 		return itemstack;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
 		for (int i = 0; i < beverages.length; i++)
@@ -177,7 +176,7 @@ public class ItemBeverage extends Item {
 				itemList.add(new ItemStack(this, 1, i));
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
 		int meta = itemstack.getItemDamage();
@@ -190,8 +189,8 @@ public class ItemBeverage extends Item {
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
-		return StringUtil.localize("item.beverage." + beverages[itemstack.getItemDamage()].name);
+	public String getUnlocalizedName(ItemStack stack) {
+		return super.getUnlocalizedName(stack) + "." + beverages[stack.getItemDamage()].name;
 	}
 
 	/* ICONS */

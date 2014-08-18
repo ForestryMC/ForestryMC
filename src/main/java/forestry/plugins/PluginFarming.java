@@ -40,6 +40,7 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.ISaveEventHandler;
+import forestry.core.items.ItemForestryBlock;
 import forestry.core.proxy.Proxies;
 import forestry.core.triggers.Trigger;
 import forestry.core.utils.ShapedRecipeCustom;
@@ -106,7 +107,7 @@ public class PluginFarming extends NativePlugin {
 
 		Farmables.farmInterface = new FarmHelper();
 
-		ForestryBlock.mushroom = new BlockMushroom();
+		ForestryBlock.mushroom.registerBlock(new BlockMushroom(), ItemForestryBlock.class, "mushroom");
 
 		Farmables.farmables.put("farmArboreal", new ArrayList<IFarmable>());
 		Farmables.farmables.get("farmArboreal").add(new FarmableVanillaSapling());
@@ -137,11 +138,10 @@ public class PluginFarming extends NativePlugin {
 		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(Items.potato), Blocks.potatoes, 7));
 		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(Items.carrot), Blocks.carrots, 7));
 
-		ForestryBlock.farm = new BlockFarm().setBlockName("ffarm");
-		Proxies.common.registerBlock(ForestryBlock.farm, ItemFarmBlock.class);
+		ForestryBlock.farm.registerBlock(new BlockFarm(), ItemFarmBlock.class, "ffarm");
 		/*Item.itemsList[ForestryBlock.farm] = null;
-		Item.itemsList[ForestryBlock.farm] = (new ItemFarmBlock(ForestryBlock.farm - 256, "ffarm"));*/
-		ForestryBlock.farm.setHarvestLevel("pickaxe", 0);
+		 Item.itemsList[ForestryBlock.farm] = (new ItemFarmBlock(ForestryBlock.farm - 256, "ffarm"));*/
+		ForestryBlock.farm.block().setHarvestLevel("pickaxe", 0);
 
 		proxy.initializeRendering();
 
@@ -171,24 +171,24 @@ public class PluginFarming extends NativePlugin {
 		GameRegistry.registerTileEntity(TileValve.class, "forestry.FarmValve");
 		GameRegistry.registerTileEntity(TileControl.class, "forestry.FarmControl");
 
-		Circuit.farmArborealManaged = new CircuitFarmLogic("managedArboreal", FarmLogicArboreal.class, new String[] { "Arboreal Plants" });
-		Circuit.farmShroomManaged = new CircuitFarmLogic("managedShroom", FarmLogicShroom.class, new String[] { "Mushrooms" });
-		Circuit.farmPeatManaged = new CircuitFarmLogic("managedPeat", FarmLogicPeat.class, new String[] { "Peat Bog" });
-		Circuit.farmCerealManaged = new CircuitFarmLogic("managedCereal", FarmLogicCereal.class, new String[] { "Crops" });
-		Circuit.farmVegetableManaged = new CircuitFarmLogic("managedVegetable", FarmLogicVegetable.class, new String[] { "Vegetables" });
-		Circuit.farmInfernalManaged = new CircuitFarmLogic("managedInfernal", FarmLogicInfernal.class, new String[] { "Infernal Crops" });
+		Circuit.farmArborealManaged = new CircuitFarmLogic("managedArboreal", FarmLogicArboreal.class, new String[]{"Arboreal Plants"});
+		Circuit.farmShroomManaged = new CircuitFarmLogic("managedShroom", FarmLogicShroom.class, new String[]{"Mushrooms"});
+		Circuit.farmPeatManaged = new CircuitFarmLogic("managedPeat", FarmLogicPeat.class, new String[]{"Peat Bog"});
+		Circuit.farmCerealManaged = new CircuitFarmLogic("managedCereal", FarmLogicCereal.class, new String[]{"Crops"});
+		Circuit.farmVegetableManaged = new CircuitFarmLogic("managedVegetable", FarmLogicVegetable.class, new String[]{"Vegetables"});
+		Circuit.farmInfernalManaged = new CircuitFarmLogic("managedInfernal", FarmLogicInfernal.class, new String[]{"Infernal Crops"});
 
-		Circuit.farmPeatManual = new CircuitFarmLogic("manualPeat", FarmLogicPeat.class, new String[] { "Peat Bog" }).setManual();
-		Circuit.farmShroomManual = new CircuitFarmLogic("manualShroom", FarmLogicShroom.class, new String[] { "Mushrooms" }).setManual();
-		Circuit.farmCerealManual = new CircuitFarmLogic("manualCereal", FarmLogicCereal.class, new String[] { "Crops" }).setManual();
-		Circuit.farmVegetableManual = new CircuitFarmLogic("manualVegetable", FarmLogicVegetable.class, new String[] { "Vegetables" }).setManual();
-		Circuit.farmSucculentManual = new CircuitFarmLogic("manualSucculent", FarmLogicSucculent.class, new String[] { "Succulents" }).setManual();
-		Circuit.farmPoalesManual = new CircuitFarmLogic("manualPoales", FarmLogicPoale.class, new String[] { "Reeds" }).setManual();
-		Circuit.farmGourdManual = new CircuitFarmLogic("manualGourd", FarmLogicGourd.class, new String[] { "Gourds" }).setManual();
-		Circuit.farmCocoaManual = new CircuitFarmLogic("manualCocoa", FarmLogicCocoa.class, new String[] { "Cocoa Plantation" }).setManual();
+		Circuit.farmPeatManual = new CircuitFarmLogic("manualPeat", FarmLogicPeat.class, new String[]{"Peat Bog"}).setManual();
+		Circuit.farmShroomManual = new CircuitFarmLogic("manualShroom", FarmLogicShroom.class, new String[]{"Mushrooms"}).setManual();
+		Circuit.farmCerealManual = new CircuitFarmLogic("manualCereal", FarmLogicCereal.class, new String[]{"Crops"}).setManual();
+		Circuit.farmVegetableManual = new CircuitFarmLogic("manualVegetable", FarmLogicVegetable.class, new String[]{"Vegetables"}).setManual();
+		Circuit.farmSucculentManual = new CircuitFarmLogic("manualSucculent", FarmLogicSucculent.class, new String[]{"Succulents"}).setManual();
+		Circuit.farmPoalesManual = new CircuitFarmLogic("manualPoales", FarmLogicPoale.class, new String[]{"Reeds"}).setManual();
+		Circuit.farmGourdManual = new CircuitFarmLogic("manualGourd", FarmLogicGourd.class, new String[]{"Gourds"}).setManual();
+		Circuit.farmCocoaManual = new CircuitFarmLogic("manualCocoa", FarmLogicCocoa.class, new String[]{"Cocoa Plantation"}).setManual();
 
-		Circuit.farmOrchardManual = new CircuitFarmLogic("manualOrchard", FarmLogicOrchard.class, new String[] { "Orchard" });
-		Circuit.farmRubberManual = new CircuitFarmLogic("manualRubber", FarmLogicRubber.class, new String[] { "Rubber Plantation" });
+		Circuit.farmOrchardManual = new CircuitFarmLogic("manualOrchard", FarmLogicOrchard.class, new String[]{"Orchard"});
+		Circuit.farmRubberManual = new CircuitFarmLogic("manualRubber", FarmLogicRubber.class, new String[]{"Rubber Plantation"});
 
 		MinecraftForge.EVENT_BUS.register(new EventHandlerFarming());
 	}
@@ -224,13 +224,15 @@ public class PluginFarming extends NativePlugin {
 
 			try {
 				Block sapling = GameData.getBlockRegistry().getRaw(items[0]);
-				if (sapling == null || sapling == Blocks.air) throw new RuntimeException("can't find block for "+items[0]);
+				if (sapling == null || sapling == Blocks.air)
+					throw new RuntimeException("can't find block for " + items[0]);
 
-				if (items.length == 2) {
+				if (items.length == 2)
 					Farmables.farmables.get(tokens[0]).add(new FarmableGenericSapling(sapling, Integer.parseInt(items[1])));
-				} else {
+				else {
 					Item windfall = GameData.getItemRegistry().getRaw(items[2]);
-					if (windfall == null) throw new RuntimeException("can't find item for "+items[2]);
+					if (windfall == null)
+						throw new RuntimeException("can't find item for " + items[2]);
 
 					Farmables.farmables.get(tokens[0]).add(
 							new FarmableGenericSapling(sapling, Integer.parseInt(items[1]),
@@ -263,9 +265,11 @@ public class PluginFarming extends NativePlugin {
 
 			try {
 				Item seed = GameData.getItemRegistry().getRaw(items[0]);
-				if (seed == null) throw new RuntimeException("can't find item for "+items[0]);
+				if (seed == null)
+					throw new RuntimeException("can't find item for " + items[0]);
 				Block crop = GameData.getBlockRegistry().getRaw(items[2]);
-				if (crop == null || crop == Blocks.air) throw new RuntimeException("can't find block for "+items[2]);
+				if (crop == null || crop == Blocks.air)
+					throw new RuntimeException("can't find block for " + items[2]);
 
 				Farmables.farmables.get(tokens[0]).add(
 						new FarmableGenericCrop(new ItemStack(seed, 1, Integer.parseInt(items[1])),
@@ -311,7 +315,7 @@ public class PluginFarming extends NativePlugin {
 	@Override
 	protected void registerRecipes() {
 
-		ItemStack basic = new ItemStack(ForestryBlock.farm, 1, 0);
+		ItemStack basic = ForestryBlock.farm.getItemStack(1, 0);
 		for (EnumFarmBlock block : EnumFarmBlock.values()) {
 			NBTTagCompound compound = new NBTTagCompound();
 			block.saveToCompound(compound);
@@ -321,16 +325,16 @@ public class PluginFarming extends NativePlugin {
 
 		}
 
-		ItemStack gearbox = new ItemStack(ForestryBlock.farm, 1, 2);
+		ItemStack gearbox = ForestryBlock.farm.getItemStack(1, 2);
 		ShapedRecipeCustom.buildRecipe(gearbox, " # ", "TTT", '#', basic, 'T', "gearTin").setPreserveNBT();
 
-		ItemStack hatch = new ItemStack(ForestryBlock.farm, 1, 3);
+		ItemStack hatch = ForestryBlock.farm.getItemStack(1, 3);
 		ShapedRecipeCustom.buildRecipe(hatch, " # ", "TDT", '#', basic, 'T', "gearTin", 'D', Blocks.trapdoor).setPreserveNBT();
 
-		ItemStack valve = new ItemStack(ForestryBlock.farm, 1, 4);
+		ItemStack valve = ForestryBlock.farm.getItemStack(1, 4);
 		ShapedRecipeCustom.buildRecipe(valve, " # ", "XTX", '#', basic, 'T', "gearTin", 'X', Blocks.glass).setPreserveNBT();
 
-		ItemStack control = new ItemStack(ForestryBlock.farm, 1, 5);
+		ItemStack control = ForestryBlock.farm.getItemStack(1, 5);
 		ShapedRecipeCustom.buildRecipe(control, " # ", "XTX", '#', basic, 'T', ForestryItem.tubes.getItemStack(1, 4), 'X', Items.redstone).setPreserveNBT();
 
 		// Circuits

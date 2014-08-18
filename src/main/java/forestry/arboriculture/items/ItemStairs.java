@@ -21,7 +21,6 @@ import forestry.arboriculture.gadgets.TileStairs;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.items.ItemForestryBlock;
-import forestry.core.utils.StringUtil;
 
 public class ItemStairs extends ItemForestryBlock {
 
@@ -40,13 +39,13 @@ public class ItemStairs extends ItemForestryBlock {
 
 	private boolean placeStairs(World world, EntityPlayer player, ItemStack stack, WoodType type, int x, int y, int z, int metadata) {
 
-		boolean placed = world.setBlock(x, y, z, ForestryBlock.stairs, metadata, Defaults.FLAG_BLOCK_SYNCH);
+		boolean placed = ForestryBlock.stairs.setBlock(world, x, y, z, metadata, Defaults.FLAG_BLOCK_SYNCH);
 		if (!placed)
 			return false;
 
 		Block block = world.getBlock(x, y, z);
 
-		if (block != ForestryBlock.stairs)
+		if (!ForestryBlock.stairs.isBlockEqual(block))
 			return false;
 
 		block.onBlockPlacedBy(world, x, y, z, player, stack);
@@ -62,14 +61,10 @@ public class ItemStairs extends ItemForestryBlock {
 		return true;
 	}
 
-	private String getWoodNameIS(WoodType type) {
-		return StringUtil.localize("wood." + type.ordinal());
-	}
-
 	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
-
-		WoodType type = WoodType.getFromCompound(itemstack.getTagCompound());
-		return StringUtil.localize(getUnlocalizedName() + "." + type.ordinal());
+	public String getUnlocalizedName(ItemStack stack) {
+		WoodType type = WoodType.getFromCompound(stack.getTagCompound());
+		return super.getUnlocalizedName(stack) + "." + type.ordinal(); //To change body of generated methods, choose Tools | Templates.
 	}
+
 }

@@ -56,7 +56,7 @@ public class CommandMail extends CommandMC {
 	@Override
 	public void processCommand(ICommandSender sender, String[] arguments) {
 		if (arguments.length <= 0)
-			throw new WrongUsageException(StringUtil.localizeAndFormat("chat.help",this.getCommandUsage(sender)));
+			throw new WrongUsageException(StringUtil.localize("chat.help",this.getCommandUsage(sender)));
 
 		if (arguments[0].matches("trades")) {
 			commandTrades(sender, arguments);
@@ -65,7 +65,7 @@ public class CommandMail extends CommandMC {
 			commandVirtualize(sender, arguments);
 			return;
 		} else if (arguments[0].matches("help")) {
-			sendChatMessage(sender, StringUtil.localizeAndFormat("chat.mail.command.help.0", this.getCommandName()));
+			sendChatMessage(sender, StringUtil.localize("chat.mail.command.help.0", this.getCommandName()));
 			sendChatMessage(sender, StringUtil.localize("chat.mail.command.help.1"));
 			sendChatMessage(sender, StringUtil.localize("chat.mail.command.help.2"));
 			sendChatMessage(sender, StringUtil.localize("chat.mail.command.help.3"));

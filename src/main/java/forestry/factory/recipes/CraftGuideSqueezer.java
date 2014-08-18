@@ -44,7 +44,7 @@ public class CraftGuideSqueezer implements RecipeProvider {
 		if (ForestryBlock.factoryTESR == null)
 			return;
 
-		ItemStack machine = new ItemStack(ForestryBlock.factoryTESR, 1, Defaults.DEFINITION_SQUEEZER_META);
+		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_SQUEEZER_META);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
 		for (MachineSqueezer.Recipe recipe : MachineSqueezer.RecipeManager.recipes) {

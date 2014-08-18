@@ -71,7 +71,7 @@ public class ItemOverlay extends ItemForestry {
 		return false;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
 		for (int i = 0; i < overlays.length; i++)
@@ -88,9 +88,9 @@ public class ItemOverlay extends ItemForestry {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerIcons(IIconRegister register) {
-		primaryIcon = TextureManager.getInstance().registerTex(register, getUnlocalizedName().replace("item.", "") + ".0");
-		if(overlays[0].secondaryColor != 0)
-			secondaryIcon = TextureManager.getInstance().registerTex(register, getUnlocalizedName().replace("item.", "") + ".1");
+		primaryIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this) + ".0");
+		if (overlays[0].secondaryColor != 0)
+			secondaryIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this) + ".1");
 	}
 
 	@Override
@@ -113,11 +113,11 @@ public class ItemOverlay extends ItemForestry {
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
-		if (itemstack.getItemDamage() < 0 || itemstack.getItemDamage() >= overlays.length)
+	public String getUnlocalizedName(ItemStack stack) {
+		if (stack.getItemDamage() < 0 || stack.getItemDamage() >= overlays.length)
 			return null;
 
-		return StringUtil.localize(getUnlocalizedName() + "." + overlays[itemstack.getItemDamage()].name);
+		return super.getUnlocalizedName(stack) + "." + overlays[stack.getItemDamage()].name;
 	}
 
 	@Override

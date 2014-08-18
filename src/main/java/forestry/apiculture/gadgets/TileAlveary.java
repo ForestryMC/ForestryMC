@@ -47,10 +47,9 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	/* UPDATING */
 	@Override
 	public void initialize() {
-		Block block = worldObj.getBlock(xCoord, yCoord, zCoord);
-		if (block != ForestryBlock.alveary) {
+		if (!ForestryBlock.alveary.isBlockEqual(worldObj, xCoord, yCoord, zCoord)) {
 			Proxies.log.info("Updating alveary block at %s/%s/%s.", xCoord, yCoord, zCoord);
-			worldObj.setBlock(xCoord, yCoord, zCoord, ForestryBlock.alveary, componentBlockMeta, Defaults.FLAG_BLOCK_SYNCH);
+			worldObj.setBlock(xCoord, yCoord, zCoord, ForestryBlock.alveary.block(), componentBlockMeta, Defaults.FLAG_BLOCK_SYNCH);
 			validate();
 			worldObj.setTileEntity(xCoord, yCoord, zCoord, this);
 		}
@@ -114,7 +113,8 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 		structureLogic.writeToNBT(nbttagcompound);
 	}
 
-	protected void createInventory() {}
+	protected void createInventory() {
+	}
 
 	@Override
 	public void fromPacketPayload(PacketPayload payload) {

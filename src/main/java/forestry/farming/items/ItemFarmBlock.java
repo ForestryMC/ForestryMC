@@ -18,10 +18,10 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.gadgets.IStructureBlockItem;
-import forestry.core.utils.StringUtil;
 import forestry.farming.gadgets.TileFarm.EnumFarmBlock;
 
 public class ItemFarmBlock extends ItemBlock implements IStructureBlockItem {
+
 	public ItemFarmBlock(Block block) {
 		super(block);
 		setHasSubtypes(true);
@@ -32,7 +32,7 @@ public class ItemFarmBlock extends ItemBlock implements IStructureBlockItem {
 		return i;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List info, boolean par4) {
 		if (!itemstack.hasTagCompound())
@@ -42,12 +42,7 @@ public class ItemFarmBlock extends ItemBlock implements IStructureBlockItem {
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
-		return StringUtil.localize(getUnlocalizedName(itemstack));
-	}
-
-	@Override
 	public String getUnlocalizedName(ItemStack itemstack) {
-		return "tile.ffarm." + itemstack.getItemDamage();
+		return super.getUnlocalizedName(itemstack) + "." + itemstack.getItemDamage();
 	}
 }

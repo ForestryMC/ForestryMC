@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
 import forestry.core.config.Defaults;
+import forestry.core.config.ForestryBlock;
 
 public class BlockType {
 
@@ -23,6 +24,11 @@ public class BlockType {
 
 	public BlockType(Block block, int meta) {
 		this.block = block;
+		this.meta = meta;
+	}
+
+	public BlockType(ForestryBlock block, int meta) {
+		this.block = block.block();
 		this.meta = meta;
 	}
 

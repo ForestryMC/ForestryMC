@@ -42,7 +42,7 @@ public class ItemCandleBlock extends ItemForestryBlock {
 
 	@Override
 	public String getUnlocalizedName(ItemStack itemStack) {
-		String value = "tile.candle";
+		String value = getBlock().getUnlocalizedName();
 		if (itemStack.hasTagCompound() && itemStack.getTagCompound().hasKey(BlockCandle.colourTagName)) {
 			value = value + ".dyed";
 		}

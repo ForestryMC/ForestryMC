@@ -28,6 +28,7 @@ import forestry.api.core.IToolPipette;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.render.TextureManager;
+import forestry.core.utils.StringUtil;
 
 public class ItemPipette extends ItemForestry implements IToolPipette {
 
@@ -134,7 +135,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 		return filled;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
 		PipetteContents contained = new PipetteContents(itemstack.getTagCompound());
@@ -150,14 +151,13 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerIcons(IIconRegister register) {
-		primaryIcon = TextureManager.getInstance().registerTex(register, getUnlocalizedName().replace("item.", "") + ".0");
-		secondaryIcon = TextureManager.getInstance().registerTex(register, getUnlocalizedName().replace("item.", "") + ".1");
+		primaryIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this) + ".0");
+		secondaryIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this) + ".1");
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIconFromDamage(int damage) {
-
 		if (damage <= 0)
 			return primaryIcon;
 		else

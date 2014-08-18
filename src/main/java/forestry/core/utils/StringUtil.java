@@ -10,16 +10,42 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import java.util.IllegalFormatException;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 
 public class StringUtil {
 
 	public static String localize(String key) {
-		return StatCollector.translateToLocal(key);
+		return StatCollector.translateToLocal(key).replace("\\n", "\n").replace("@", "%").replace("\\%", "@");
 	}
 
-	public static String localizeAndFormat(String key, Object... args) {
-		return StatCollector.translateToLocalFormatted(key, args);
+	public static String localize(String key, Object... args) {
+		String text = StringUtil.localize(key);
+
+		try {
+			return String.format(text, args);
+		} catch (IllegalFormatException ex) {
+			return "Format error: " + text;
+		}
+	}
+
+	public static String cleanTags(String tag) {
+		return tag.replaceAll("[Ff]orestry\\p{Punct}", "").replaceAll("\\.[Ff]or\\p{Punct}", ".").replaceFirst("^tile\\.", "").replaceFirst("^item\\.", "");
+	}
+
+	public static String cleanItemName(ItemStack stack) {
+		return cleanTags(stack.getUnlocalizedName());
+	}
+
+	public static String cleanItemName(Item item) {
+		return cleanTags(item.getUnlocalizedName());
+	}
+
+	public static String cleanBlockName(Block block) {
+		return cleanTags(block.getUnlocalizedName());
 	}
 
 	public static String capitalize(String s) {

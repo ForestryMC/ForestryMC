@@ -48,7 +48,7 @@ public class CraftGuideFermenter implements RecipeProvider {
 		if (ForestryBlock.factoryTESR == null)
 			return;
 
-		ItemStack machine = new ItemStack(ForestryBlock.factoryTESR, 1, Defaults.DEFINITION_FERMENTER_META);
+		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_FERMENTER_META);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 		List<Object> fuels = new ArrayList<Object>(FuelManager.fermenterFuel.keySet());
 

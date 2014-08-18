@@ -154,7 +154,7 @@ public class TileMachine extends TileForestry implements ISpecialInventory, ICli
 		machineMap.put(Defaults.ID_PACKAGE_MACHINE_STILL, PluginFactory.definitionStill);
 		machineMap.put(Defaults.ID_PACKAGE_MACHINE_APIARY, PluginApiculture.definitionApiary);
 		machineMap.put(4, PluginEnergy.definitionGenerator);
-		definitionMap.put(ForestryBlock.factoryTESR, machineMap);
+		definitionMap.put(ForestryBlock.factoryTESR.block(), machineMap);
 
 		HashMap<Integer, MachineDefinition> millMap = new HashMap<Integer, MachineDefinition>();
 		millMap.put(Defaults.ID_PACKAGE_MILL_MAILBOX, PluginMail.definitionMailbox);
@@ -163,13 +163,13 @@ public class TileMachine extends TileForestry implements ISpecialInventory, ICli
 		millMap.put(Defaults.ID_PACKAGE_MILL_APIARIST_CHEST, PluginApiculture.definitionChest);
 		millMap.put(Defaults.ID_PACKAGE_MILL_ANALYZER, PluginCore.definitionAnalyzer);
 		millMap.put(Defaults.ID_PACKAGE_MILL_RAINMAKER, PluginFactory.definitionRainmaker);
-		definitionMap.put(ForestryBlock.factoryPlain, millMap);
+		definitionMap.put(ForestryBlock.factoryPlain.block(), millMap);
 
 		HashMap<Integer, MachineDefinition> engineMap = new HashMap<Integer, MachineDefinition>();
 		engineMap.put(0, PluginEnergy.definitionEngineBronze);
 		engineMap.put(1, PluginEnergy.definitionEngineCopper);
 		engineMap.put(2, PluginEnergy.definitionEngineTin);
-		definitionMap.put(ForestryBlock.engine, engineMap);
+		definitionMap.put(ForestryBlock.engine.block(), engineMap);
 
 	}
 

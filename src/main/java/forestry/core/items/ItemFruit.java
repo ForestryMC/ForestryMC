@@ -25,12 +25,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
 
 public class ItemFruit extends ItemForestryFood {
 
 	public static enum EnumFruit {
 		CHERRY("cropCherry"), WALNUT("cropWalnut"), CHESTNUT("cropChestnut"), LEMON("cropLemon"), PLUM("cropPlum"), DATES("cropDate"), PAPAYA("cropPapaya");//, COCONUT("cropCoconut");
+		public static final EnumFruit[] VALUES = values();
 
 		final String oreDict;
 
@@ -41,9 +41,9 @@ public class ItemFruit extends ItemForestryFood {
 		private static IIcon[] icons;
 
 		public static void registerIcons(IIconRegister register) {
-			icons = new IIcon[values().length];
-			for (int i = 0; i < values().length; i++)
-				icons[i] = TextureManager.getInstance().registerTex(register, "fruits/" + values()[i].toString().toLowerCase(Locale.ENGLISH));
+			icons = new IIcon[VALUES.length];
+			for (int i = 0; i < VALUES.length; i++)
+				icons[i] = TextureManager.getInstance().registerTex(register, "fruits/" + VALUES[i].toString().toLowerCase(Locale.ENGLISH));
 		}
 
 		public IIcon getIcon() {
@@ -93,11 +93,11 @@ public class ItemFruit extends ItemForestryFood {
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
-		if (itemstack.getItemDamage() < 0 || itemstack.getItemDamage() >= EnumFruit.values().length)
+	public String getUnlocalizedName(ItemStack stack) {
+		if (stack.getItemDamage() < 0 || stack.getItemDamage() >= EnumFruit.VALUES.length)
 			return null;
 
-		return StringUtil.localize("item.fruit." + EnumFruit.values()[itemstack.getItemDamage()].toString().toLowerCase(Locale.ENGLISH));
+		return super.getUnlocalizedName(stack) + "." + EnumFruit.VALUES[stack.getItemDamage()].name().toLowerCase(Locale.ENGLISH);
 	}
 
 }

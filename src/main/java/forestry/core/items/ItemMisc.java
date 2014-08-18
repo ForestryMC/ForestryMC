@@ -22,11 +22,11 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
+import java.util.Locale;
 
 public class ItemMisc extends ItemForestry {
 
-	String[] definition = new String[] { "pulsatingDust", "pulsatingMesh", "silkWisp", "wovenSilk", "dissipationCharge", "iceShard", "scentedPaneling" };
+	String[] definition = new String[]{"pulsatingDust", "pulsatingMesh", "silkWisp", "wovenSilk", "dissipationCharge", "iceShard", "scentedPaneling"};
 
 	public ItemMisc() {
 		super();
@@ -45,11 +45,11 @@ public class ItemMisc extends ItemForestry {
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
-		if (itemstack.getItemDamage() >= definition.length || itemstack.getItemDamage() < 0)
-			return StringUtil.localize("item.unknown");
+	public String getUnlocalizedName(ItemStack stack) {
+		if (stack.getItemDamage() >= definition.length || stack.getItemDamage() < 0)
+			return "item.forestry.unknown";
 		else
-			return StringUtil.localize("item." + definition[itemstack.getItemDamage()]);
+			return super.getUnlocalizedName(stack) + "." + definition[stack.getItemDamage()].toLowerCase(Locale.ENGLISH);
 	}
 
 	/* ICONS */
@@ -74,7 +74,7 @@ public class ItemMisc extends ItemForestry {
 			return icons[damage];
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
 		for (int i = 0; i < 7; i++)

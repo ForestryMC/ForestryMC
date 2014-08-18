@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.proxy.Proxies;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * Allows direct access to Forestry's items. Will be populated during
@@ -248,7 +249,7 @@ public enum ForestryItem {
 
 	public void registerItem(Item item, String name) {
 		this.item = item;
-		item.setUnlocalizedName(name);
+		item.setUnlocalizedName("for." + name);
 		Proxies.common.registerItem(item);
 	}
 
@@ -262,6 +263,10 @@ public enum ForestryItem {
 
 	public Item item() {
 		return item;
+	}
+
+	public ItemStack getWildcard() {
+		return getItemStack(1, OreDictionary.WILDCARD_VALUE);
 	}
 
 	public ItemStack getItemStack() {

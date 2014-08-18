@@ -44,7 +44,7 @@ public class CraftGuideCarpenter implements RecipeProvider {
 		if (ForestryBlock.factoryTESR == null)
 			return;
 
-		ItemStack machine = new ItemStack(ForestryBlock.factoryTESR, 1, Defaults.DEFINITION_CARPENTER_META);
+		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_CARPENTER_META);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
 		for (MachineCarpenter.Recipe recipe : MachineCarpenter.RecipeManager.recipes) {

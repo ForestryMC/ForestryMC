@@ -60,11 +60,11 @@ public class ItemStamps extends ItemOverlay implements IStamps {
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
+	public String getUnlocalizedName(ItemStack itemstack) {
 		if (itemstack.getItemDamage() < 0 || itemstack.getItemDamage() >= stampInfo.length)
 			return null;
 
-		return StringUtil.localize(getUnlocalizedName()) + " " + stampInfo[itemstack.getItemDamage()].name;
+		return super.getUnlocalizedName(itemstack) + "." + stampInfo[itemstack.getItemDamage()].name;
 	}
 
 

@@ -99,31 +99,32 @@ public class PluginMail extends NativePlugin {
 		highBuffer75 = new TriggerBuffer("mail.lowBuffer.75", 0.75f);
 		highBuffer90 = new TriggerBuffer("mail.lowBuffer.90", 0.90f);
 
-		ForestryBlock.mail = new BlockBase(Material.iron);
-		ForestryBlock.mail.setBlockName("for.mail");
-		Proxies.common.registerBlock(ForestryBlock.mail, ItemForestryBlock.class);
+		ForestryBlock.mail.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "mail");
 
-		ShapedRecipeCustom recipe = ShapedRecipeCustom.createShapedRecipe(new ItemStack(ForestryBlock.mail, 1, Defaults.DEFINITION_MAILBOX_META),
+		ShapedRecipeCustom recipe = ShapedRecipeCustom.createShapedRecipe(ForestryBlock.mail.getItemStack(1, Defaults.DEFINITION_MAILBOX_META),
 				" # ", "#Y#", "XXX",
 				'#', "ingotTin",
 				'X', Blocks.chest,
 				'Y', ForestryItem.sturdyCasing);
-		definitionMailbox = ForestryBlock.mail.addDefinition(new MachineDefinition(Defaults.DEFINITION_MAILBOX_META, "forestry.Mailbox", MachineMailbox.class, recipe).setFaces(0, 1, 2, 2, 2, 2, 0, 7));
 
+		BlockBase mail = ((BlockBase) ForestryBlock.mail.block());
 
-		recipe = ShapedRecipeCustom.createShapedRecipe(new ItemStack(ForestryBlock.mail, 1, Defaults.DEFINITION_TRADESTATION_META),
-				"Z#Z", "#Y#", "XWX",
+		definitionMailbox = mail.addDefinition(new MachineDefinition(Defaults.DEFINITION_MAILBOX_META, "forestry.Mailbox", MachineMailbox.class, recipe).setFaces(0, 1, 2, 2, 2, 2, 0, 7));
+
+		recipe = ShapedRecipeCustom.createShapedRecipe(
+				ForestryBlock.mail.getItemStack(1, Defaults.DEFINITION_TRADESTATION_META),
+				"Z#Z",
+				"#Y#",
+				"XWX",
 				'#', ForestryItem.tubes.getItemStack(1, 2),
 				'X', Blocks.chest,
 				'Y', ForestryItem.sturdyCasing,
 				'Z', ForestryItem.tubes.getItemStack(1, 3),
 				'W', ForestryItem.circuitboards.getItemStack(1, 2));
-		definitionTradestation = ForestryBlock.mail.addDefinition(new MachineDefinition(Defaults.DEFINITION_TRADESTATION_META, "forestry.Tradestation", MachineTrader.class, recipe).setFaces(0, 1, 2, 3, 4, 4, 0, 7));
+		definitionTradestation = mail.addDefinition(new MachineDefinition(Defaults.DEFINITION_TRADESTATION_META, "forestry.Tradestation", MachineTrader.class, recipe).setFaces(0, 1, 2, 3, 4, 4, 0, 7));
 
-		definitionPhilatelist = ForestryBlock.mail.addDefinition(new MachineDefinition(Defaults.DEFINITION_PHILATELIST_META, "forestry.Philatelist", MachinePhilatelist.class)
-		.setFaces(0, 1, 2, 3, 2, 2, 0, 7));
-
-
+		definitionPhilatelist = mail.addDefinition(new MachineDefinition(Defaults.DEFINITION_PHILATELIST_META, "forestry.Philatelist", MachinePhilatelist.class)
+				.setFaces(0, 1, 2, 3, 2, 2, 0, 7));
 
 		PostManager.postRegistry = new PostRegistry();
 		PostManager.postRegistry.registerCarrier(new PostalCarrier(EnumAddressee.PLAYER));
@@ -157,11 +158,11 @@ public class PluginMail extends NativePlugin {
 	@Override
 	protected void registerItems() {
 
-		stampDefinitions = new StampInfo[] {
-				new StampInfo("1n", EnumPostage.P_1, ForestryItem.apatite, 0x4a8ca7, 0xffffff), new StampInfo("2n", EnumPostage.P_2, "ingotCopper", 0xe8c814, 0xffffff),
-				new StampInfo("5n", EnumPostage.P_5, "ingotTin", 0x9c0707, 0xffffff), new StampInfo("10n", EnumPostage.P_10, Items.gold_ingot, 0x7bd1b8, 0xffffff),
-				new StampInfo("20n", EnumPostage.P_20, Items.diamond, 0xff9031, 0xfff7dd), new StampInfo("50n", EnumPostage.P_50, Items.emerald, 0x6431d7, 0xfff7dd),
-				new StampInfo("100n", EnumPostage.P_100, Items.nether_star, 0xd731ba, 0xfff7dd) }; //new StampInfo("200n", EnumPostage.P_200, Item.netherStar, 0xcd9831, 0xfff7dd)};
+		stampDefinitions = new StampInfo[]{
+			new StampInfo("1n", EnumPostage.P_1, ForestryItem.apatite, 0x4a8ca7, 0xffffff), new StampInfo("2n", EnumPostage.P_2, "ingotCopper", 0xe8c814, 0xffffff),
+			new StampInfo("5n", EnumPostage.P_5, "ingotTin", 0x9c0707, 0xffffff), new StampInfo("10n", EnumPostage.P_10, Items.gold_ingot, 0x7bd1b8, 0xffffff),
+			new StampInfo("20n", EnumPostage.P_20, Items.diamond, 0xff9031, 0xfff7dd), new StampInfo("50n", EnumPostage.P_50, Items.emerald, 0x6431d7, 0xfff7dd),
+			new StampInfo("100n", EnumPostage.P_100, Items.nether_star, 0xd731ba, 0xfff7dd)}; //new StampInfo("200n", EnumPostage.P_200, Item.netherStar, 0xcd9831, 0xfff7dd)};
 
 		/* STAMPS */
 		ForestryItem.stamps.registerItem(new ItemStamps(stampDefinitions), "stamps");
@@ -186,25 +187,24 @@ public class PluginMail extends NativePlugin {
 		// Letters
 		Proxies.common.addShapelessRecipe(ForestryItem.letters.getItemStack(), Items.paper, ForestryItem.propolis.getItemStack(1, Defaults.WILDCARD));
 
-		if (Config.craftingStampsEnabled) {
+		if (Config.craftingStampsEnabled)
 			for (int i = 0; i < stampDefinitions.length; i++) {
 				if (Config.collectorStamps.contains(stampDefinitions[i].name))
 					continue;
 
-				Proxies.common.addRecipe(ForestryItem.stamps.getItemStack(9, i), new Object[] { "XXX", "###", "ZZZ", 'X',
-					stampDefinitions[i].getCraftingIngredient(), '#', Items.paper, 'Z', ForestryItem.honeyDrop });
+				Proxies.common.addRecipe(ForestryItem.stamps.getItemStack(9, i), new Object[]{"XXX", "###", "ZZZ", 'X',
+					stampDefinitions[i].getCraftingIngredient(), '#', Items.paper, 'Z', ForestryItem.honeyDrop});
 				RecipeManagers.carpenterManager.addRecipe(10, LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, 300), null, ForestryItem.stamps.getItemStack(9, i),
-						new Object[] { "XXX", "###", 'X', stampDefinitions[i].getCraftingIngredient(), '#', Items.paper });
+						new Object[]{"XXX", "###", 'X', stampDefinitions[i].getCraftingIngredient(), '#', Items.paper});
 			}
-		}
 
 		// Recycling
-		Proxies.common.addRecipe(new ItemStack(Items.paper), new Object[] { "###", '#', ForestryItem.letters.getItemStack(1, Defaults.WILDCARD) });
+		Proxies.common.addRecipe(new ItemStack(Items.paper), new Object[]{"###", '#', ForestryItem.letters.getItemStack(1, Defaults.WILDCARD)});
 
 		// Carpenter
-		RecipeManagers.carpenterManager.addRecipe(10, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 250), null, ForestryItem.letters.getItemStack(), new Object[] { "###", "###", '#', ForestryItem.woodPulp });
+		RecipeManagers.carpenterManager.addRecipe(10, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 250), null, ForestryItem.letters.getItemStack(), new Object[]{"###", "###", '#', ForestryItem.woodPulp});
 
-		Proxies.common.addShapelessRecipe(ForestryItem.catalogue.getItemStack(), new Object[] { ForestryItem.stamps.getItemStack(1, Defaults.WILDCARD), new ItemStack(Items.book) });
+		Proxies.common.addShapelessRecipe(ForestryItem.catalogue.getItemStack(), new Object[]{ForestryItem.stamps.getItemStack(1, Defaults.WILDCARD), new ItemStack(Items.book)});
 	}
 
 	@Override
@@ -219,6 +219,6 @@ public class PluginMail extends NativePlugin {
 
 	@Override
 	public ICommand[] getConsoleCommands() {
-		return new ICommand[] { new CommandMail() };
+		return new ICommand[]{new CommandMail()};
 	}
 }

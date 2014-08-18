@@ -104,36 +104,31 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 
 		Allele.initialize();
 
-		ForestryBlock.core = new BlockBase(Material.iron, true);
-		ForestryBlock.core.setBlockName("for.core");
-		Proxies.common.registerBlock(ForestryBlock.core, ItemForestryBlock.class);
+		ForestryBlock.core.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "core");
 
-		definitionAnalyzer = ForestryBlock.core.addDefinition(new MachineDefinition(Defaults.DEFINITION_ANALYZER_META, "forestry.Analyzer", TileAnalyzer.class,
+		definitionAnalyzer = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_ANALYZER_META, "forestry.Analyzer", TileAnalyzer.class,
 				PluginApiculture.proxy.getRendererAnalyzer(Defaults.TEXTURE_PATH_BLOCKS + "/analyzer_")));
-		definitionEscritoire = ForestryBlock.core.addDefinition(new MachineDefinition(Defaults.DEFINITION_ESCRITOIRE_META, "forestry.Escritoire", TileEscritoire.class,
+		definitionEscritoire = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_ESCRITOIRE_META, "forestry.Escritoire", TileEscritoire.class,
 				Proxies.render.getRenderEscritoire()));
 
-		ForestryBlock.soil = new BlockSoil().setBlockName("soil");
-		Proxies.common.registerBlock(ForestryBlock.soil, ItemForestryBlock.class);
-		ForestryBlock.soil.setHarvestLevel("shovel", 0, 0);
-		ForestryBlock.soil.setHarvestLevel("shovel", 0, 1);
+		ForestryBlock.soil.registerBlock(new BlockSoil(), ItemForestryBlock.class, "soil");
+		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, 0);
+		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, 1);
 
-		ForestryBlock.resources = new BlockResource().setBlockName("resources");
-		Proxies.common.registerBlock(ForestryBlock.resources, ItemForestryBlock.class);
-		ForestryBlock.resources.setHarvestLevel("pickaxe", 1, 0);
-		ForestryBlock.resources.setHarvestLevel("pickaxe", 1, 1);
-		ForestryBlock.resources.setHarvestLevel("pickaxe", 1, 2);
+		ForestryBlock.resources.registerBlock(new BlockResource(), ItemForestryBlock.class, "resources");
+		ForestryBlock.resources.block().setHarvestLevel("pickaxe", 1, 0);
+		ForestryBlock.resources.block().setHarvestLevel("pickaxe", 1, 1);
+		ForestryBlock.resources.block().setHarvestLevel("pickaxe", 1, 2);
 
-		OreDictionary.registerOre("oreApatite", new ItemStack(ForestryBlock.resources, 1, 0));
-		OreDictionary.registerOre("oreCopper", new ItemStack(ForestryBlock.resources, 1, 1));
-		OreDictionary.registerOre("oreTin", new ItemStack(ForestryBlock.resources, 1, 2));
+		OreDictionary.registerOre("oreApatite", ForestryBlock.resources.getItemStack(1, 0));
+		OreDictionary.registerOre("oreCopper", ForestryBlock.resources.getItemStack(1, 1));
+		OreDictionary.registerOre("oreTin", ForestryBlock.resources.getItemStack(1, 2));
 
-		ForestryBlock.glass = new BlockStainedGlass().setBlockName("stained");
-		Proxies.common.registerBlock(ForestryBlock.glass, ItemForestryBlock.class);
+		ForestryBlock.glass.registerBlock(new BlockStainedGlass(), ItemForestryBlock.class, "stained");
 
 		/* SMELTING RECIPES */
-		FurnaceRecipes.smelting().func_151394_a(new ItemStack(ForestryBlock.resources, 1, 1), ForestryItem.ingotCopper.getItemStack(), 0.5f);
-		FurnaceRecipes.smelting().func_151394_a(new ItemStack(ForestryBlock.resources, 1, 2), ForestryItem.ingotTin.getItemStack(), 0.5f);
+		FurnaceRecipes.smelting().func_151394_a(ForestryBlock.resources.getItemStack(1, 1), ForestryItem.ingotCopper.getItemStack(), 0.5f);
+		FurnaceRecipes.smelting().func_151394_a(ForestryBlock.resources.getItemStack(1, 2), ForestryItem.ingotTin.getItemStack(), 0.5f);
 
 		GameRegistry.registerFuelHandler(this);
 
@@ -142,14 +137,14 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 	@Override
 	public void doInit() {
 		super.doInit();
-		definitionAnalyzer.recipes = createAlyzerRecipes(ForestryBlock.core, Defaults.DEFINITION_ANALYZER_META);
+		definitionAnalyzer.recipes = createAlyzerRecipes(ForestryBlock.core.block(), Defaults.DEFINITION_ANALYZER_META);
 
 		definitionAnalyzer.register();
 		definitionEscritoire.register();
 		crashCallable = new ForestryModEnvWarningCallable();
 
-        RecipeSorter.register("forestry:shapedrecipecustom", ShapedRecipeCustom.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
-    }
+		RecipeSorter.register("forestry:shapedrecipecustom", ShapedRecipeCustom.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
+	}
 
 	@Override
 	public boolean isAvailable() {
@@ -210,7 +205,6 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 		// Config.CATEGORY_ITEM, Defaults.ID_ITEM_VIAL_EMPTY)))
 		// .setItemName("vialEmpty").setIconIndex(10);
 		ForestryItem.vialCatalyst.registerItem((new ItemForestry()), "vialCatalyst");
-
 
 		// / PEAT PRODUCTION
 		ForestryItem.peat.registerItem((new ItemForestry()), "peat");
@@ -348,8 +342,8 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 		ForestryItem.cratedNetherrack.registerItem(new ItemCrated(new ItemStack(Blocks.netherrack)), "cratedNetherrack");
 		ForestryItem.cratedSoulsand.registerItem(new ItemCrated(new ItemStack(Blocks.soul_sand)), "cratedSoulsand");
 		ForestryItem.cratedSandstone.registerItem(new ItemCrated(new ItemStack(Blocks.sandstone)), "cratedSandstone");
-		ForestryItem.cratedBogearth.registerItem(new ItemCrated(new ItemStack(ForestryBlock.soil, 1, 1)), "cratedBogearth");
-		ForestryItem.cratedHumus.registerItem(new ItemCrated(new ItemStack(ForestryBlock.soil, 1, 0)), "cratedHumus");
+		ForestryItem.cratedBogearth.registerItem(new ItemCrated(ForestryBlock.soil.getItemStack(1, 1)), "cratedBogearth");
+		ForestryItem.cratedHumus.registerItem(new ItemCrated(ForestryBlock.soil.getItemStack(1, 0)), "cratedHumus");
 		ForestryItem.cratedNetherbrick.registerItem(new ItemCrated(new ItemStack(Blocks.nether_brick)), "cratedNetherbrick");
 		ForestryItem.cratedPeat.registerItem(new ItemCrated(ForestryItem.peat.getItemStack()), "cratedPeat");
 		ForestryItem.cratedApatite.registerItem(new ItemCrated(ForestryItem.apatite.getItemStack()), "cratedApatite");
@@ -388,9 +382,8 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 	protected void registerRecipes() {
 
 		/* BRONZE INGOTS */
-		if (Config.getCraftingBronzeEnabled()) {
+		if (Config.getCraftingBronzeEnabled())
 			Proxies.common.addShapelessRecipe(ForestryItem.ingotBronze.getItemStack(4), "ingotTin", "ingotCopper", "ingotCopper", "ingotCopper");
-		}
 
 		/* STURDY MACHINE */
 		Proxies.common.addRecipe(ForestryItem.sturdyCasing.getItemStack(), "###", "# #", "###", '#', "ingotBronze");
@@ -473,7 +466,7 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 
 	@Override
 	public ICommand[] getConsoleCommands() {
-		return new ICommand[] { new CommandForestry() };
+		return new ICommand[]{new CommandForestry()};
 	}
 
 	@Override

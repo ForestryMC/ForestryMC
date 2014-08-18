@@ -35,7 +35,7 @@ public class WorldGenerator implements IWorldGenerator {
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 
 		if (apatiteGenerator == null) {
-			apatiteGenerator = new WorldGenMinableMeta(ForestryBlock.resources, 0, 36);
+			apatiteGenerator = new WorldGenMinableMeta(ForestryBlock.resources.block(), 0, 36);
 			copperGenerator = new WorldGenMinableMeta(ForestryBlock.resources, 1, 6);
 			tinGenerator = new WorldGenMinableMeta(ForestryBlock.resources, 2, 6);
 		}

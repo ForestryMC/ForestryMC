@@ -64,28 +64,27 @@ public abstract class WorldGenHive extends WorldGenerator {
 		Block block = world.getBlock(x, y, z);
 		if (block == null)
 			return false;
-		for (Block testBlock : blocks) {
+		for (Block testBlock : blocks)
 			if (block.isReplaceableOreGen(world, x, y, z, testBlock))
 				return true;
-		}
 		return false;
 	}
 
 	protected void setHive(World world, int x, int y, int z, int meta) {
-		boolean placed = world.setBlock(x, y, z, ForestryBlock.beehives, meta, Defaults.FLAG_BLOCK_SYNCH);
+		boolean placed = world.setBlock(x, y, z, ForestryBlock.beehives.block(), meta, Defaults.FLAG_BLOCK_SYNCH);
 		if (!placed)
 			return;
 
-		if (world.getBlock(x, y, z) != ForestryBlock.beehives)
+		if (!ForestryBlock.beehives.isBlockEqual(world, x, y, z))
 			return;
 
-		ForestryBlock.beehives.onBlockAdded(world, x, y, z);
+		ForestryBlock.beehives.block().onBlockAdded(world, x, y, z);
 		world.markBlockForUpdate(x, y, z);
 
 		postGen(world, x, y, z, meta);
 	}
 
 	protected void postGen(World world, int x, int y, int z, int meta) {
-		ForestryBlock.beehives.onBlockPlaced(world, x, y, z, 0, 0.0f, 0.0f, 0.0f, meta);
+		ForestryBlock.beehives.block().onBlockPlaced(world, x, y, z, 0, 0.0f, 0.0f, 0.0f, meta);
 	}
 }

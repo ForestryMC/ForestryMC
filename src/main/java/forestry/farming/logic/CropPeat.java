@@ -30,7 +30,7 @@ public class CropPeat extends Crop {
 
 	@Override
 	protected boolean isCrop(Vect pos) {
-		return getBlock(pos) == ForestryBlock.soil && (getBlockMeta(pos) & 0x03) == 1;
+		return  ForestryBlock.soil.isBlockEqual(getBlock(pos)) && (getBlockMeta(pos) & 0x03) == 1;
 	}
 
 	@Override

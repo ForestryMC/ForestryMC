@@ -10,22 +10,16 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.core.CreativeTabForestry;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
 
-public class ItemForestryFood extends Item {
+public class ItemForestryFood extends ItemForestry {
 
 	private boolean isAlwaysEdible = false;
 	private boolean isDrink = false;
@@ -96,17 +90,6 @@ public class ItemForestryFood extends Item {
 	public ItemForestryFood setAlwaysEdible() {
 		isAlwaysEdible = true;
 		return this;
-	}
-
-	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
-		return StringUtil.localize(getUnlocalizedName(itemstack));
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerIcons(IIconRegister register) {
-		itemIcon = TextureManager.getInstance().registerTex(register, getUnlocalizedName().replace("item.", ""));
 	}
 
 }

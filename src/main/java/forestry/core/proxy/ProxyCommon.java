@@ -38,6 +38,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import forestry.Forestry;
 import forestry.core.TickHandlerCoreServer;
 import forestry.core.config.Defaults;
+import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.network.PacketCoordinates;
 import forestry.core.network.PacketFXSignal;
@@ -97,11 +98,11 @@ public class ProxyCommon {
 	}
 
 	private void cleanRecipe(Object... obj) {
-		for (int i = 0; i < obj.length; i++) {
-			if (obj[i] instanceof ForestryItem) {
+		for (int i = 0; i < obj.length; i++)
+			if (obj[i] instanceof ForestryItem)
 				obj[i] = ((ForestryItem) obj[i]).item();
-			}
-		}
+			else if (obj[i] instanceof ForestryBlock)
+				obj[i] = ((ForestryBlock) obj[i]).block();
 	}
 
 	public void addSmelting(ItemStack res, ItemStack prod) {

@@ -40,7 +40,7 @@ public class CraftGuideStill implements RecipeProvider {
 		if (ForestryBlock.factoryTESR == null)
 			return;
 
-		ItemStack machine = new ItemStack(ForestryBlock.factoryTESR, 1, Defaults.DEFINITION_STILL_META);
+		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_STILL_META);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
 		for (MachineStill.Recipe recipe : MachineStill.RecipeManager.recipes) {

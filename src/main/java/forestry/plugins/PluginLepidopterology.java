@@ -91,15 +91,21 @@ public class PluginLepidopterology extends NativePlugin {
 	public void preInit() {
 		super.preInit();
 
-		ForestryBlock.lepidopterology = new BlockBase(Material.iron);
-		ForestryBlock.lepidopterology.setBlockName("for.lepidopterology").setCreativeTab(Tabs.tabLepidopterology);
-		Proxies.common.registerBlock(ForestryBlock.lepidopterology, ItemForestryBlock.class);
+		ForestryBlock.lepidopterology.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "lepidopterology");
+		ForestryBlock.lepidopterology.block().setCreativeTab(Tabs.tabLepidopterology);
 
-		definitionChest = ForestryBlock.lepidopterology.addDefinition((new MachineDefinition(Defaults.DEFINITION_LEPICHEST_META, "forestry.LepiChest", TileLepidopteristChest.class,
-				ShapedRecipeCustom.createShapedRecipe(new ItemStack(ForestryBlock.lepidopterology, 1, Defaults.DEFINITION_LEPICHEST_META), new Object[] { " # ", "XYX", "XXX", '#', Blocks.glass, 'X',
-					ForestryItem.butterflyGE.getItemStack(1, Defaults.WILDCARD), 'Y', Blocks.chest }))
-		.setFaces(0, 1, 2, 3, 4, 4, 0, 7)));
+		BlockBase lepidopterology = ((BlockBase) ForestryBlock.lepidopterology.block());
 
+		definitionChest = lepidopterology.addDefinition((new MachineDefinition(Defaults.DEFINITION_LEPICHEST_META, "forestry.LepiChest", TileLepidopteristChest.class,
+				ShapedRecipeCustom.createShapedRecipe(
+						ForestryBlock.lepidopterology.getItemStack(1, Defaults.DEFINITION_LEPICHEST_META),
+						" # ",
+						"XYX",
+						"XXX",
+						'#', Blocks.glass,
+						'X', ForestryItem.butterflyGE.getItemStack(1, Defaults.WILDCARD),
+						'Y', Blocks.chest))
+				.setFaces(0, 1, 2, 3, 4, 4, 0, 7)));
 
 		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginLepidopterology.butterflyInterface = new ButterflyHelper());
 		createAlleles();
@@ -129,7 +135,7 @@ public class PluginLepidopterology extends NativePlugin {
 
 		((ITreeRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees")).registerLeafTickHandler(new ButterflySpawner());
 
-        RecipeSorter.register("forestry:lepidopterologymating", MatingRecipe.class, RecipeSorter.Category.SHAPELESS, "before:minecraft:shapeless");
+		RecipeSorter.register("forestry:lepidopterologymating", MatingRecipe.class, RecipeSorter.Category.SHAPELESS, "before:minecraft:shapeless");
 	}
 
 	@Override
@@ -154,8 +160,8 @@ public class PluginLepidopterology extends NativePlugin {
 		CraftingManager.getInstance().getRecipeList().add(new MatingRecipe());
 
 		RecipeManagers.carpenterManager.addRecipe(100, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 2000), null, ForestryItem.flutterlyzer.getItemStack(),
-				new Object[] { "X#X", "X#X", "RDR", Character.valueOf('#'), Blocks.glass_pane, Character.valueOf('X'), "ingotBronze", Character.valueOf('R'),
-			Items.redstone, Character.valueOf('D'), Items.diamond });
+				new Object[]{"X#X", "X#X", "RDR", Character.valueOf('#'), Blocks.glass_pane, Character.valueOf('X'), "ingotBronze", Character.valueOf('R'),
+					Items.redstone, Character.valueOf('D'), Items.diamond});
 	}
 
 	private void createAlleles() {
@@ -216,7 +222,7 @@ public class PluginLepidopterology extends NativePlugin {
 		Allele.lepiCitrusSwallow = new AlleleButterflySpecies("lepiCitrusSwallow", false, "Citrus Swallowtail", papilio, "demodocus", 0xeae389).setRarity(1.0f)
 				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
 		Allele.lepiEmeraldPeacock = new AlleleButterflySpecies("lepiEmeraldPeacock", true, "Emerald Peacock", papilio, "palinurus", 0x7cfe80)
-		.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
+				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
 		Allele.lepiThoasSwallow = new AlleleButterflySpecies("lepiThoasSwallow", false, "Thoas Swallowtail", papilio, "thoas", 0xeac783).setRarity(0.2f)
 				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
 		Allele.lepiSpicebush = new AlleleButterflySpecies("lepiSpicebush", true, "Spicebush Swallowtail", papilio, "troilus", 0xeefeff).setRarity(0.5f);
@@ -240,7 +246,7 @@ public class PluginLepidopterology extends NativePlugin {
 		IClassification cethosia = createButterflyBranch(nymphalidae, "Cethosia");
 
 		Allele.lepiGlasswing = new AlleleButterflySpecies("lepiGlasswing", true, "Glasswing", greta, "oto", 0x583732)
-		.setTemperature(EnumTemperature.WARM);
+				.setTemperature(EnumTemperature.WARM);
 
 		Allele.lepiSpeckledWood = new AlleleButterflySpecies("lepiSpeckledWood", true, "Speckled Wood", pararge, "aegeria", 0x947245).setRarity(1.0f);
 		Allele.lepiMadeiranSpeckledWood = new AlleleButterflySpecies("lepiMSpeckledWood", true, "Madeiran Speckled Wood", pararge, "xiphia", 0x402919).setRarity(0.5f);
@@ -251,7 +257,7 @@ public class PluginLepidopterology extends NativePlugin {
 		Allele.lepiPeleidesBlueMorpho = new AlleleButterflySpecies("lepiPBlueMorpho", true, "Peleides Blue Morpho", morpho, "peleides", 0x6ecce8).setRarity(0.25f)
 				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
 		Allele.lepiRhetenorBlueMorpho = new AlleleButterflySpecies("lepiRBlueMorpho", true, "Rhetenor Blue Morpho", morpho, "rhetenor", 0x00bef8)
-		.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
+				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
 
 		Allele.lepiComma = new AlleleButterflySpecies("lepiComma", true, "Comma", polygonia, "c-album", 0xf89505).setRarity(0.3f);
 		Allele.lepiBatesia = new AlleleButterflySpecies("lepiBatesia", true, "Painted Beauty", batesia, "hypochlora", 0xfe7763).setRarity(0.3f)

@@ -42,13 +42,13 @@ public class VillageHandlerArboriculture implements IVillageTradeHandler {
 		Block plankBlock;
 		int meta;
 		if(!sells.hasPlank) {
-			plankBlock = ForestryBlock.planks1;
+			plankBlock = ForestryBlock.planks1.block();
 			meta = 0;
 		} else if(sells.ordinal() > 15) {
-			plankBlock = ForestryBlock.planks2;
+			plankBlock = ForestryBlock.planks2.block();
 			meta = sells.ordinal() - 16;
 		} else {
-			plankBlock = ForestryBlock.planks1;
+			plankBlock = ForestryBlock.planks1.block();
 			meta = sells.ordinal();
 		}
 

@@ -124,7 +124,7 @@ public class BlockSoil extends Block {
 		for (int i = -1; i < 2; i++)
 			for (int j = -1; j < 2; j++) {
 				Block block = world.getBlock(x + i, y + 1, z + j);
-				if (block == Blocks.log || block == Blocks.sapling || block == ForestryBlock.saplingGE)
+				if (block == Blocks.log || block == Blocks.sapling || block == ForestryBlock.saplingGE.block())
 					// We are not returning true if we are the base of a
 					// sapling.
 					if (i == 0 && j == 0)

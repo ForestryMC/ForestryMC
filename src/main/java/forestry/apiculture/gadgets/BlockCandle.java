@@ -41,6 +41,7 @@ import forestry.core.ForestryClient;
 import forestry.core.config.Defaults;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
+import forestry.core.utils.StringUtil;
 
 public class BlockCandle extends BlockTorch {
 
@@ -84,7 +85,7 @@ public class BlockCandle extends BlockTorch {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		String fileBase = this.getUnlocalizedName().replace("tile.", "");
+		String fileBase = StringUtil.cleanBlockName(this);
 		this.blockIcon = TextureManager.getInstance().registerTex(register, "stump");
 		this.litStump = TextureManager.getInstance().registerTex(register, fileBase + "StumpLit");
 		this.litTip = TextureManager.getInstance().registerTex(register, fileBase + "TipLit");

@@ -30,8 +30,6 @@ public class ItemForestry extends Item {
 	private boolean isBonemeal = false;
 
 	public ItemForestry() {
-		super();
-		maxStackSize = 64;
 		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
 
@@ -53,14 +51,9 @@ public class ItemForestry extends Item {
 		return super.onItemUse(itemstack, player, world, x, y, z, par7, par8, par9, par10);
 	}
 
-	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
-		return StringUtil.localize(getUnlocalizedName(itemstack));
-	}
-
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerIcons(IIconRegister register) {
-		itemIcon = TextureManager.getInstance().registerTex(register, getUnlocalizedName().replace("item.", ""));
+		itemIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this));
 	}
 }

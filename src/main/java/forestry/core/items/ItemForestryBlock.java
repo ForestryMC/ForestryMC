@@ -14,10 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.utils.StringUtil;
-
 public class ItemForestryBlock extends ItemBlock {
-
 
 	public ItemForestryBlock(Block block) {
 		super(block);
@@ -32,11 +29,6 @@ public class ItemForestryBlock extends ItemBlock {
 
 	protected Block getBlock() {
 		return field_150939_a;
-	}
-
-	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
-		return StringUtil.localize(getUnlocalizedName(itemstack));
 	}
 
 	@Override

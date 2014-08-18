@@ -17,7 +17,9 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.storage.IBackpackDefinition;
 import forestry.core.config.Defaults;
-import forestry.core.utils.StringUtil;
+import net.minecraft.item.Item;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
 
 public class BackpackDefinition implements IBackpackDefinition {
 
@@ -45,12 +47,22 @@ public class BackpackDefinition implements IBackpackDefinition {
 
 	@Override
 	public String getName() {
-		return StringUtil.localize("storage.backpack." + name);
+		return "Update Forestry!";
 	}
 
 	@Override
 	public String getName(ItemStack backpack) {
-		return getName();
+		Item item = backpack.getItem();
+		String display = ("" + StatCollector.translateToLocal(item.getUnlocalizedNameInefficiently(backpack) + ".name")).trim();
+
+		if (backpack.stackTagCompound != null && backpack.stackTagCompound.hasKey("display", 10)) {
+			NBTTagCompound nbt = backpack.stackTagCompound.getCompoundTag("display");
+
+			if (nbt.hasKey("Name", 8))
+				display = nbt.getString("Name");
+		}
+
+		return display;
 	}
 
 	@Override

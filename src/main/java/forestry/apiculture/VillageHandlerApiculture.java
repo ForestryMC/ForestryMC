@@ -49,8 +49,7 @@ public class VillageHandlerApiculture implements IVillageCreationHandler, IVilla
 	public void manipulateTradesForVillager(EntityVillager villager, MerchantRecipeList recipeList, Random random) {
 		recipeList.add(new MerchantRecipe(ForestryItem.beePrincessGE.getItemStack(1, Defaults.WILDCARD), new ItemStack(Items.emerald, 1)));
 		recipeList.add(new MerchantRecipe(new ItemStack(Items.wheat, 2), ItemHoneycomb.getRandomComb(1, random, false)));
-		recipeList.add(new MerchantRecipe(new ItemStack(Blocks.log, 24, Defaults.WILDCARD), new ItemStack(ForestryBlock.apiculture, 1,
-				Defaults.DEFINITION_APIARY_META)));
+		recipeList.add(new MerchantRecipe(new ItemStack(Blocks.log, 24, Defaults.WILDCARD), ForestryBlock.apiculture.getItemStack(1, Defaults.DEFINITION_APIARY_META)));
 		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 1), ForestryItem.frameProven.getItemStack(6)));
 		recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 12), ForestryItem.beePrincessGE.getItemStack(1, Defaults.WILDCARD),
 				PluginApiculture.beeInterface.getMemberStack(

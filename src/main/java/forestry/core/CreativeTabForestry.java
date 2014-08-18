@@ -15,9 +15,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.registry.GameData;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.core.Tabs;
-import forestry.core.utils.StringUtil;
+import forestry.core.config.ForestryItem;
 
 public class CreativeTabForestry extends CreativeTabs {
 
@@ -37,17 +38,24 @@ public class CreativeTabForestry extends CreativeTabs {
 
 	@Override
 	public ItemStack getIconItemStack() {
+		Item iconItem;
 		switch (icon) {
 		case 1:
-			return new ItemStack(GameData.getItemRegistry().getRaw("Forestry:beeDroneGE"));
+			iconItem = GameRegistry.findItem("Forestry", "for.beeDroneGE");
+			break;
 		case 2:
-			return new ItemStack(GameData.getItemRegistry().getRaw("Forestry:sapling"));
+			iconItem = GameRegistry.findItem("Forestry", "for.sapling");
+			break;
 		case 3:
-			return new ItemStack(GameData.getItemRegistry().getRaw("Forestry:butterflyGE"));
-		case 0:
+			iconItem = GameRegistry.findItem("Forestry", "for.butterflyGE");
+			break;
 		default:
-			return new ItemStack(GameData.getItemRegistry().getRaw("Forestry:fertilizerCompound"));
+			iconItem = GameRegistry.findItem("Forestry", "for.fertilizerCompound");
+			break;
 		}
+		if (iconItem == null)
+			iconItem = ForestryItem.wrench.item();
+		return new ItemStack(iconItem);
 	}
 
 	@Override

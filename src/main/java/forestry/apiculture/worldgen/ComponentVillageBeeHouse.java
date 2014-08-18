@@ -45,15 +45,15 @@ import forestry.plugins.PluginApiculture;
 
 public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
-	protected ItemStack[] buildingBlocks = new ItemStack[] { new ItemStack(ForestryBlock.planks1, 1, 15), new ItemStack(Blocks.log, 1, 0), };
+	protected ItemStack[] buildingBlocks = new ItemStack[]{ForestryBlock.planks1.getItemStack(1, 15), new ItemStack(Blocks.log, 1, 0),};
 	protected int averageGroundLevel = -1;
 	protected boolean isInDesert = false;
 	protected boolean hasChest = false;
 
 	public ComponentVillageBeeHouse() {
 		// Populate buildingblocks with some defaults so it doesn't explode.
-		buildingBlocks[0] = new ItemStack(ForestryBlock.planks1);
-		buildingBlocks[1] = new ItemStack(ForestryBlock.log1);
+		buildingBlocks[0] = ForestryBlock.planks1.getItemStack();
+		buildingBlocks[1] = ForestryBlock.log1.getItemStack();
 	}
 
 	public ComponentVillageBeeHouse(StructureVillagePieces.Start startPiece, int componentType, Random random, StructureBoundingBox boundingBox, int coordBaseMode) {
@@ -61,21 +61,21 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
 		isInDesert = startPiece.inDesert;
 
-		buildingBlocks[0] = new ItemStack(ForestryBlock.planks1, 1, random.nextInt(16));
+		buildingBlocks[0] = ForestryBlock.planks1.getItemStack(1, random.nextInt(16));
 
 		Block woodBlock;
 		switch (random.nextInt(4)) {
 		case 1:
-			woodBlock = ForestryBlock.log2;
+			woodBlock = ForestryBlock.log2.block();
 			break;
 		case 2:
-			woodBlock = ForestryBlock.log3;
+			woodBlock = ForestryBlock.log3.block();
 			break;
 		case 3:
-			woodBlock = ForestryBlock.log4;
+			woodBlock = ForestryBlock.log4.block();
 			break;
 		default:
-			woodBlock = ForestryBlock.log1;
+			woodBlock = ForestryBlock.log1.block();
 			break;
 		}
 
@@ -83,17 +83,16 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 	}
 
 	/*@Override
-	protected void func_143012_a(NBTTagCompound par1nbtTagCompound) {
-		super.func_143012_a(par1nbtTagCompound);
-		par1nbtTagCompound.setBoolean("Chest", this.hasChest);
-	}
+	 protected void func_143012_a(NBTTagCompound par1nbtTagCompound) {
+	 super.func_143012_a(par1nbtTagCompound);
+	 par1nbtTagCompound.setBoolean("Chest", this.hasChest);
+	 }
 
-	@Override
-	protected void func_143011_b(NBTTagCompound par1nbtTagCompound) {
-		super.func_143011_b(par1nbtTagCompound);
-		this.hasChest = par1nbtTagCompound.getBoolean("Chest");
-	}*/
-
+	 @Override
+	 protected void func_143011_b(NBTTagCompound par1nbtTagCompound) {
+	 super.func_143011_b(par1nbtTagCompound);
+	 this.hasChest = par1nbtTagCompound.getBoolean("Chest");
+	 }*/
 	@SuppressWarnings("rawtypes")
 	public static ComponentVillageBeeHouse buildComponent(StructureVillagePieces.Start startPiece, List par1List, Random random, int par3, int par4, int par5,
 			int par6, int par7) {
@@ -171,12 +170,10 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		this.placeBlockAtCurrentPosition(world, Blocks.glass_pane, 0, 6, 2, 5, structBoundingBox);
 
 		// Table/Bench
-		if (random.nextInt(10) < 1) {
-			this.placeBlockAtCurrentPosition(world, new ItemStack(ForestryBlock.core, 1, Defaults.DEFINITION_ESCRITOIRE_META), 1, 1, 3, structBoundingBox);
-		}
-		else {
+		if (random.nextInt(10) < 1)
+			this.placeBlockAtCurrentPosition(world, ForestryBlock.core.getItemStack(1, Defaults.DEFINITION_ESCRITOIRE_META), 1, 1, 3, structBoundingBox);
+		else
 			this.placeBlockAtCurrentPosition(world, buildingBlocks[0], 1, 1, 3, structBoundingBox);
-		}
 
 		this.placeBlockAtCurrentPosition(world, Blocks.air, 0, 2, 1, 0, structBoundingBox);
 		this.placeBlockAtCurrentPosition(world, Blocks.air, 0, 2, 2, 0, structBoundingBox);
@@ -268,12 +265,12 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		int yCoord = this.getYWithOffset(y);
 		int zCoord = this.getZWithOffset(x, z);
 
-		if (box.isVecInside(xCoord, yCoord, zCoord) && world.getBlock(xCoord, yCoord, zCoord) != ForestryBlock.apiculture
+		if (box.isVecInside(xCoord, yCoord, zCoord) && !ForestryBlock.apiculture.isBlockEqual(world, xCoord, yCoord, zCoord)
 				&& world.blockExists(xCoord, yCoord - 1, zCoord)) {
 
-			world.setBlock(xCoord, yCoord, zCoord, ForestryBlock.apiculture, Defaults.DEFINITION_APIARY_META,
+			world.setBlock(xCoord, yCoord, zCoord, ForestryBlock.apiculture.block(), Defaults.DEFINITION_APIARY_META,
 					Defaults.FLAG_BLOCK_SYNCH);
-			ForestryBlock.apiculture.onBlockAdded(world, xCoord, yCoord, zCoord);
+			ForestryBlock.apiculture.block().onBlockAdded(world, xCoord, yCoord, zCoord);
 
 			TileEntity tile = world.getTileEntity(xCoord, yCoord, zCoord);
 			if (tile instanceof TileBeehouse) {

@@ -33,15 +33,15 @@ public class StructureLogicAlveary extends StructureLogic {
 			"FAAAF", "FABAF", "FCCCF", "FFFFF", "FFFFF", "FAAAF", "FAAAF", "FBMBF", "FCCCF", "FFFFF", "FFFFF", "FAAAF", "FAAAF", "FABAF", "FCCCF", "FFFFF",
 			"FFFFF", "FFFFF", "FFFFF", "FFFFF", "FFFFF", "FFFFF").setOffsets(-2, -3, -2);
 
-	public static HashSet<Block> slabBlocks = new HashSet<Block>();
+	public static final HashSet<Block> slabBlocks = new HashSet<Block>();
 	static {
 		slabBlocks.add(Blocks.stone_slab);
 		slabBlocks.add(Blocks.wooden_slab);
-		slabBlocks.add(ForestryBlock.slabs1);
-		slabBlocks.add(ForestryBlock.slabs2);
-		slabBlocks.add(ForestryBlock.slabs3);
+		slabBlocks.add(ForestryBlock.slabs1.block());
+		slabBlocks.add(ForestryBlock.slabs2.block());
+		slabBlocks.add(ForestryBlock.slabs3.block());
 		if (ForestryBlock.slabs4 != null)
-			slabBlocks.add(ForestryBlock.slabs4);
+			slabBlocks.add(ForestryBlock.slabs4.block());
 	}
 
 	public StructureLogicAlveary(ITileStructure structure) {
