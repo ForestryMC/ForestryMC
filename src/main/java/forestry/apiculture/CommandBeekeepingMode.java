@@ -160,12 +160,12 @@ public class CommandBeekeepingMode extends CommandMC {
 				file.getParentFile().mkdirs();
 
 			if (!file.exists() && !file.createNewFile()) {
-				sendChatMessage(sender, "Log file could not be created. Failed to save statistics.");
+				sendChatMessage(sender, StringUtil.localize("chat.bees.command.stats.error1"));
 				return;
 			}
 
 			if (!file.canWrite()) {
-				sendChatMessage(sender, "Cannot write to log file. Failed to save statistics.");
+				sendChatMessage(sender, StringUtil.localize("chat.bees.command.stats.error2"));
 				return;
 			}
 
@@ -180,11 +180,11 @@ public class CommandBeekeepingMode extends CommandMC {
 			writer.close();
 
 		} catch (Exception ex) {
-			sendChatMessage(sender, "Write operation threw an exception. Failed to save statistics.");
+			sendChatMessage(sender, StringUtil.localize("chat.bees.command.stats.error3"));
 			ex.printStackTrace();
 		}
 
-		sendChatMessage(sender, "Saved statistics for player " + player);
+		sendChatMessage(sender, StringUtil.localizeAndFormat("chat.bees.command.stats.saved", player));
 	}
 
 	private String generateSpeciesListEntry(IAlleleBeeSpecies species, IApiaristTracker tracker) {
@@ -204,7 +204,7 @@ public class CommandBeekeepingMode extends CommandMC {
 	private void listModes(ICommandSender sender, String[] arguments) {
 		World world = getWorld(sender, arguments);
 
-		sendChatMessage(sender, "Current: " + PluginApiculture.beeInterface.getBeekeepingMode(world).getName() + " (#" + world.getWorldInfo().getSaveVersion() + ")");
+		sendChatMessage(sender, StringUtil.localize("chat.bees.command.mode.current").replaceAll("%MODE", PluginApiculture.beeInterface.getBeekeepingMode(world).getName()).replaceAll("%WORLD", String.valueOf(world.getWorldInfo().getSaveVersion())));
 
 		String help = "";
 		for (IBeekeepingMode mode : PluginApiculture.beeInterface.getBeekeepingModes()) {
@@ -212,7 +212,7 @@ public class CommandBeekeepingMode extends CommandMC {
 				help += ", ";
 			help += mode.getName();
 		}
-		sendChatMessage(sender, "Available modes: " + help);
+		sendChatMessage(sender, StringUtil.localizeAndFormat("chat.bees.command.mode.help", help));
 		return;
 	}
 
