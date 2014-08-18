@@ -62,7 +62,7 @@ public class ItemCircuitBoard extends ItemForestryMultiPass {
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		EnumCircuitBoardType type = EnumCircuitBoardType.values()[stack.getItemDamage()];
-		return "item.circuitboard." + type.toString().toLowerCase(Locale.ENGLISH);
+		return "item.for.circuitboard." + type.toString().toLowerCase(Locale.ENGLISH);
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
