@@ -1,29 +1,20 @@
-# ForgeGradle
-/.gradle
-/.nb-gradle
-/build
-/eclipse
-/libs
-/run
-gradle.properties
+# everything
+/*
 
-# Eclipse
-.classpath
-.project
-/.settings
-/bin
+# folders
+!/forestry_techne
+!/gradle
+!/src
 
-# IntelliJ
-/.idea
-*.iml
-*.ipr
-*.iws
-/out
-
-# Mac Stuff
-.DS_Store
-*.command
-
-# Other
-*~
-.nb-gradle-properties
+# files
+!/.gitignore
+!/.gitmodules
+!/CLA.txt
+!/CONTRIBUTING.md
+!/LICENSE.txt
+!/README.md
+!/application.properties
+!/build.gradle
+!/build.xml
+!/gradlew
+!/gradlew.bat
