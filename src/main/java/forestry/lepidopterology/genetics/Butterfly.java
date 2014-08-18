@@ -69,7 +69,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		IAlleleButterflySpecies primary = genome.getPrimary();
 		IAlleleButterflySpecies secondary = genome.getSecondary();
 		if (!isPureBred(EnumButterflyChromosome.SPECIES.ordinal()))
-			list.add("\u00A79" + StringUtil.localize("gui.hybrid") + ":" + primary.getName() + "-" + secondary.getName());
+			list.add("\u00A79" + StringUtil.localize("butterflies.hybrid").replaceAll("%PRIMARY",primary.getName()).replaceAll("%SECONDARY",secondary.getName()));
 
 		if(getMate() != null)
 			list.add("\u00A7c" + StringUtil.localize("gui.fecundated").toUpperCase(Locale.ENGLISH));

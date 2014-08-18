@@ -352,8 +352,7 @@ public class Bee extends IndividualLiving implements IBee {
 		IAlleleBeeSpecies primary = genome.getPrimary();
 		IAlleleBeeSpecies secondary = genome.getSecondary();
 		if (!isPureBred(EnumBeeChromosome.SPECIES.ordinal()))
-			list.add("\u00A79" + primary.getName() + StringUtil.localize("bees.hyphen.adj.add") + "-" + secondary.getName()
-					+ StringUtil.localize("bees.hybrid.adj.add") + " " + StringUtil.localize("gui.hybrid"));
+			list.add("\u00A79" + StringUtil.localize("bees.hybrid").replaceAll("%PRIMARY",primary.getName()).replaceAll("%SECONDARY",secondary.getName()));
 		list.add(genome.getActiveAllele(EnumBeeChromosome.SPEED.ordinal()).getName() + " " + StringUtil.localize("gui.worker"));
 		list.add(genome.getActiveAllele(EnumBeeChromosome.LIFESPAN.ordinal()).getName() + " " + StringUtil.localize("gui.life"));
 		list.add("\u00A7aT: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / "

@@ -77,7 +77,7 @@ public class ItemBeeGE extends ItemGE {
 		if(StatCollector.canTranslate(customBeeKey)){
 			return StringUtil.localize(customBeeKey);
 		}
-		return StringUtil.localize("bees." + type.getName() + ".grammar").replaceAll("%SPECIES", individual.getDisplayName()).replaceAll("%TYPE", StringUtil.localize("bees." + type.getName() + ".type"));
+		return StringUtil.localize("bees.grammar." + type.getName()).replaceAll("%SPECIES", individual.getDisplayName()).replaceAll("%TYPE", StringUtil.localize("bees.grammar." + type.getName() + ".type"));
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
