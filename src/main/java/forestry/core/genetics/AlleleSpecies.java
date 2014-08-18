@@ -63,10 +63,10 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
 		return StringUtil.localize(name);
 	}
 
-    @Override
-    public String getUnlocalizedName() {
-        return name;
-    }
+	@Override
+	public String getUnlocalizedName() {
+		return name;
+	}
 
 	@Override
 	public String getDescription() {

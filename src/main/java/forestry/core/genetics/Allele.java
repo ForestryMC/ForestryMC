@@ -691,10 +691,10 @@ public class Allele implements IAllele {
 		return StringUtil.localize(name);
 	}
 
-    @Override
-    public String getUnlocalizedName() {
-        return name;
-    }
+	@Override
+	public String getUnlocalizedName() {
+		return name;
+	}
 	
 	public Allele setName(String string) {
 		name = string;
