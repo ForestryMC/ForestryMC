@@ -233,7 +233,7 @@ public class ItemResearchNote extends ItemForestry {
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
 		ResearchNote note = new ResearchNote(itemstack.getTagCompound());
-		return StringUtil.localizeAndFormat(getUnlocalizedName(itemstack) + ".name", note.researcher);
+		return StringUtil.localizeAndFormat(getUnlocalizedName(itemstack) + ".name", note.researcher.getName());
 	}
 
 	@SuppressWarnings("rawtypes")
