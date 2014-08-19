@@ -637,26 +637,26 @@ public class PluginArboriculture extends NativePlugin implements IFuelHandler {
 		IFruitFamily nux = new FruitFamily("nuts", "Nux");
 
 		// Deciduous
-		Allele.treeOak = new AlleleTreeSpecies("treeOak", false, "Apple Oak", quercus, "robur",
+		Allele.treeOak = new AlleleTreeSpecies("treeOak", false, "appleOak", quercus, "robur",
 				proxy.getFoliageColorBasic(), WorldGenOak.class, new ItemStack(Blocks.log, 1, 0)).addFruitFamily(pomes)
 				.setVanillaMap(0).setIsSecret();
 
-		Allele.treeDarkOak = new AlleleTreeSpecies("treeDarkOak", false, "Dark Oak", quercus, "velutina",
+		Allele.treeDarkOak = new AlleleTreeSpecies("treeDarkOak", false, "darkOak", quercus, "velutina",
 				proxy.getFoliageColorBasic(), WorldGenDarkOak.class, new ItemStack(Blocks.log2, 1, 1)).addFruitFamily(pomes)
 				.setVanillaMap(5);
 
-		Allele.treeBirch = new AlleleTreeSpecies("treeBirch", false, "Silver Birch", betula,
+		Allele.treeBirch = new AlleleTreeSpecies("treeBirch", false, "silverBirch", betula,
 				"pendula", proxy.getFoliageColorBirch(), 0xb0c648, WorldGenBirch.class, new ItemStack(Blocks.log, 1, 2))
 				.setVanillaMap(2).setIsSecret();
-		Allele.treeLime = new AlleleTreeSpecies("treeLime", true, "Silver Lime", tilia,
+		Allele.treeLime = new AlleleTreeSpecies("treeLime", true, "silverLime", tilia,
 				"tomentosa", 0x5ea107, WorldGenLime.class, ForestryBlock.log1.getItemStack(1, 3)).addFruitFamily(nux)
 				.addFruitFamily(prunes).addFruitFamily(pomes);
 
 		// Nucifera
-		Allele.treeWalnut = new AlleleTreeSpecies("treeWalnut", true, "Common Walnut", juglans,
+		Allele.treeWalnut = new AlleleTreeSpecies("treeWalnut", true, "commonWalnut", juglans,
 				"regia", 0x798c55, 0xb0c648, WorldGenWalnut.class, ForestryBlock.log4.getItemStack(1, 1)).addFruitFamily(nux)
 				.addFruitFamily(prunes).addFruitFamily(pomes).setGirth(2);
-		Allele.treeChestnut = new AlleleTreeSpecies("treeChestnut", true, "Sweet Chestnut",
+		Allele.treeChestnut = new AlleleTreeSpecies("treeChestnut", true, "sweetChestnut",
 				castanea, "sativa", 0x5ea107, 0xb0c648, WorldGenChestnut.class, ForestryBlock.log2.getItemStack(1, 0)).addFruitFamily(nux)
 				.addFruitFamily(prunes).addFruitFamily(pomes).setGirth(2);
 
@@ -664,49 +664,49 @@ public class PluginArboriculture extends NativePlugin implements IFuelHandler {
 		// <CovertJaguar> fructifer, annifer, bifer, aurifer = bearing fruit,
 		// bearing fruit year round, bearing fruit twice a year, bearing golden
 		// fruit
-		Allele.treeCherry = new AlleleTreeSpecies("treeCherry", true, "Hill Cherry", prunus,
+		Allele.treeCherry = new AlleleTreeSpecies("treeCherry", true, "hillCherry", prunus,
 				"serrulata", 0xe691da, 0xe63e59, WorldGenCherry.class, ForestryBlock.log4.getItemStack(1, 3)).addFruitFamily(prunes)
 				.addFruitFamily(pomes);
-		Allele.treeLemon = new AlleleTreeSpecies("treeLemon", true, "Lemon", citrus, "limon",
+		Allele.treeLemon = new AlleleTreeSpecies("treeLemon", true, "lemon", citrus, "limon",
 				0x88af54, 0xa3b850, WorldGenLemon.class, ForestryBlock.log6.getItemStack(1, 3)).addFruitFamily(pomes).addFruitFamily(
 						prunes);
-		Allele.treePlum = new AlleleTreeSpecies("treePlum", true, "Plum", prunus, "domestica",
+		Allele.treePlum = new AlleleTreeSpecies("treePlum", true, "plum", prunus, "domestica",
 				0x589246, 0xa3b850, WorldGenPlum.class, ForestryBlock.log6.getItemStack(1, 1)).addFruitFamily(pomes)
 				.addFruitFamily(prunes);
 
 		// Maples
-		Allele.treeMaple = new AlleleTreeSpecies("treeMaple", true, "Sugar Maple", acer,
+		Allele.treeMaple = new AlleleTreeSpecies("treeMaple", true, "sugarMaple", acer,
 				"saccharum", 0xd4f425, 0x619a3c, WorldGenMaple.class, ForestryBlock.log6.getItemStack(1, 2)).addFruitFamily(prunes)
 				.addFruitFamily(pomes).setLeafIndices("maple");
 
-		Allele.treeSpruce = new AlleleTreeSpecies("treeSpruce", false, "Red Spruce", picea,
+		Allele.treeSpruce = new AlleleTreeSpecies("treeSpruce", false, "redSpruce", picea,
 				"abies", proxy.getFoliageColorPine(), 0x539d12, WorldGenSpruce.class, new ItemStack(Blocks.log, 1, 1))
 				.setLeafIndices("conifers").setVanillaMap(1).setIsSecret();
-		Allele.treeLarch = new AlleleTreeSpecies("treeLarch", true, "Mundane Larch", larix,
+		Allele.treeLarch = new AlleleTreeSpecies("treeLarch", true, "mundaneLarch", larix,
 				"decidua", 0x698f90, 0x569896, WorldGenLarch.class, ForestryBlock.log1.getItemStack(1, 0)).setLeafIndices("conifers");
-		Allele.treePine = new AlleleTreeSpecies("treePine", true, "Bull Pine", pinus, "sabiniana",
+		Allele.treePine = new AlleleTreeSpecies("treePine", true, "bullPine", pinus, "sabiniana",
 				0xfeff8f, 0xffd98f, WorldGenPine.class, ForestryBlock.log6.getItemStack(1, 0)).setLeafIndices("conifers");
 
-		Allele.treeSequioa = new AlleleTreeSpecies("treeSequioa", false, "Coast Sequoia", sequoia,
+		Allele.treeSequioa = new AlleleTreeSpecies("treeSequioa", false, "coastSequoia", sequoia,
 				"sempervirens", 0x418e71, 0x569896, WorldGenSequoia.class, ForestryBlock.log2.getItemStack(1, 3)).setLeafIndices(
 						"conifers").setGirth(3);
-		Allele.treeGiganteum = new AlleleTreeSpecies("treeGigant", false, "Giant Sequoia",
+		Allele.treeGiganteum = new AlleleTreeSpecies("treeGigant", false, "giantSequoia",
 				sequoiadendron, "giganteum", 0x738434, WorldGenGiganteum.class, ForestryBlock.log2.getItemStack(1, 3)).setLeafIndices(
 						"conifers").setGirth(4);
 
 		// Jungle
-		Allele.treeJungle = new AlleleTreeSpecies("treeJungle", false, "Jungle", tropical,
+		Allele.treeJungle = new AlleleTreeSpecies("treeJungle", false, "jungle", tropical,
 				"tectona", proxy.getFoliageColorBasic(), 0x539d12, WorldGenJungle.class, new ItemStack(Blocks.log, 1, 3))
 				.addFruitFamily(jungle).setLeafIndices("jungle").setVanillaMap(3).setIsSecret();
-		Allele.treeTeak = new AlleleTreeSpecies("treeTeak", true, "Teak", tectona, "grandis",
+		Allele.treeTeak = new AlleleTreeSpecies("treeTeak", true, "teak", tectona, "grandis",
 				0xfeff8f, 0xffd98f, WorldGenTeak.class, ForestryBlock.log1.getItemStack(1, 3)).addFruitFamily(jungle).setLeafIndices(
 						"jungle");
-		Allele.treeKapok = new AlleleTreeSpecies("treeKapok", true, "Kapok", ceiba, "pentandra",
+		Allele.treeKapok = new AlleleTreeSpecies("treeKapok", true, "kapok", ceiba, "pentandra",
 				0x89987b, 0x89aa9e, WorldGenKapok.class, ForestryBlock.log3.getItemStack(1, 0)).addFruitFamily(jungle)
 				.addFruitFamily(prunes).setLeafIndices("jungle");
 
 		// Ebony
-		Allele.treeEbony = new AlleleTreeSpecies("treeEbony", true, "Myrtle Ebony", diospyros,
+		Allele.treeEbony = new AlleleTreeSpecies("treeEbony", true, "myrtleEbony", diospyros,
 				"pentamera", 0xa2d24a, 0xc4d24a, WorldGenEbony.class, ForestryBlock.log3.getItemStack(1, 1)).addFruitFamily(jungle)
 				.addFruitFamily(prunes).setGirth(3).setLeafIndices("jungle");
 
@@ -722,7 +722,7 @@ public class PluginArboriculture extends NativePlugin implements IFuelHandler {
 		// Coromandel Ebony or East Indian Ebony (Diospyros melanoxylon) -
 		// " locally it is known as temburini or by its Hindi name tendu. In Orissa and Jharkhand it known as kendu."
 		// Mahogany
-		Allele.treeMahogany = new AlleleTreeSpecies("treeMahogony", true, "Yellow Meranti", shorea,
+		Allele.treeMahogany = new AlleleTreeSpecies("treeMahogony", true, "yellowMeranti", shorea,
 				"gibbosa", 0x8ab154, 0xa9b154, WorldGenMahogany.class, ForestryBlock.log3.getItemStack(1, 2)).addFruitFamily(jungle)
 				.setGirth(2).setLeafIndices("jungle");
 
@@ -732,43 +732,43 @@ public class PluginArboriculture extends NativePlugin implements IFuelHandler {
 		// Shorea smithiana (also called Light Red Meranti)
 		// Shorea superba
 		// Malva
-		Allele.treeAcacia = new AlleleTreeSpecies("treeAcaciaVanilla", true, "Acacia", acacia,
+		Allele.treeAcacia = new AlleleTreeSpecies("treeAcaciaVanilla", true, "acacia", acacia,
 				"aneura", 0x616101, 0xb3b302, WorldGenAcaciaVanilla.class, new ItemStack(Blocks.log2, 1, 0)).addFruitFamily(jungle)
 				.addFruitFamily(nux).setVanillaMap(4);
 
-		Allele.treeDesertAcacia = new AlleleTreeSpecies("treeAcacia", true, "Desert Acacia", acacia,
+		Allele.treeDesertAcacia = new AlleleTreeSpecies("treeAcacia", true, "desertAcacia", acacia,
 				"erioloba", 0x748C1C, 0xb3b302, WorldGenAcacia.class, ForestryBlock.log1.getItemStack(1, 2)).addFruitFamily(jungle)
 				.addFruitFamily(nux);
-		Allele.treeBalsa = new AlleleTreeSpecies("treeBalsa", true, "Balsa", ochroma, "pyramidale",
+		Allele.treeBalsa = new AlleleTreeSpecies("treeBalsa", true, "balsa", ochroma, "pyramidale",
 				0x59ac00, 0xfeff8f, WorldGenBalsa.class, ForestryBlock.log3.getItemStack(1, 3)).addFruitFamily(jungle).addFruitFamily(nux);
-		Allele.treeWenge = new AlleleTreeSpecies("treeWenge", true, "Wenge", millettia,
+		Allele.treeWenge = new AlleleTreeSpecies("treeWenge", true, "wenge", millettia,
 				"laurentii", 0xada157, 0xad8a57, WorldGenWenge.class, ForestryBlock.log2.getItemStack(1, 1)).addFruitFamily(jungle)
 				.addFruitFamily(nux).setGirth(2);
-		Allele.treeBaobab = new AlleleTreeSpecies("treeBaobab", true, "Grandidier's Baobab",
+		Allele.treeBaobab = new AlleleTreeSpecies("treeBaobab", true, "grandidierBaobab",
 				adansonia, "digitata", 0xfeff8f, 0xffd98f, WorldGenBaobab.class, ForestryBlock.log2.getItemStack(1, 2))
 				.addFruitFamily(jungle).addFruitFamily(nux).setGirth(3);
-		Allele.treeMahoe = new AlleleTreeSpecies("treeMahoe", true, "Blue Mahoe", talipariti,
+		Allele.treeMahoe = new AlleleTreeSpecies("treeMahoe", true, "blueMahoe", talipariti,
 				"elatum", 0xa0ba1b, 0x79a175, WorldGenMahoe.class, ForestryBlock.log5.getItemStack(1, 0)).addFruitFamily(jungle)
 				.addFruitFamily(pomes).addFruitFamily(prunes);
 
 		// Willows
-		Allele.treeWillow = new AlleleTreeSpecies("treeWillow", true, "White Willow", salix,
+		Allele.treeWillow = new AlleleTreeSpecies("treeWillow", true, "whiteWillow", salix,
 				"alba", 0xa3b8a5, 0xa3b850, WorldGenWillow.class, ForestryBlock.log4.getItemStack(1, 0)).addFruitFamily(nux)
 				.addFruitFamily(prunes).addFruitFamily(pomes).setLeafIndices("willow");
 
 		// Lauraceae
-		Allele.treeSipiri = new AlleleTreeSpecies("treeSipiri", true, "Sipiri", chlorocardium,
+		Allele.treeSipiri = new AlleleTreeSpecies("treeSipiri", true, "sipiri", chlorocardium,
 				"rodiei", 0x678911, 0x79a175, WorldGenGreenheart.class, ForestryBlock.log3.getItemStack(1, 2)).addFruitFamily(jungle);
 
 		// Unclassified
-		Allele.treePapaya = new AlleleTreeSpecies("treePapaya", true, "Papaya", carica, "papaya",
+		Allele.treePapaya = new AlleleTreeSpecies("treePapaya", true, "papaya", carica, "papaya",
 				0x6d9f58, 0x9ee67f, WorldGenPapaya.class, ForestryBlock.log5.getItemStack(1, 3)).addFruitFamily(jungle)
 				.addFruitFamily(nux).setLeafIndices("palm");
-		Allele.treeDate = new AlleleTreeSpecies("treeDate", true, "Date Palm", null, "dactylifera",
+		Allele.treeDate = new AlleleTreeSpecies("treeDate", true, "datePalm", null, "dactylifera",
 				0xcbcd79, 0xf0f38f, WorldGenDate.class, ForestryBlock.log4.getItemStack(1, 2)).addFruitFamily(jungle).addFruitFamily(nux)
 				.setLeafIndices("palm");
 
-		Allele.treePoplar = new AlleleTreeSpecies("treePoplar", true, "White Poplar", populus,
+		Allele.treePoplar = new AlleleTreeSpecies("treePoplar", true, "whitePoplar", populus,
 				"alba", 0xa3b8a5, 0x539d12, WorldGenPoplar.class, ForestryBlock.log5.getItemStack(1, 1)).addFruitFamily(pomes)
 				.addFruitFamily(prunes);
 

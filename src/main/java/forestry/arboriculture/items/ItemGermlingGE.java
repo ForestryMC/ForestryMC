@@ -12,12 +12,14 @@ package forestry.arboriculture.items;
 
 import java.util.List;
 
+import forestry.core.utils.StringUtil;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
@@ -78,7 +80,12 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 		if (!itemstack.hasTagCompound())
 			return "Unknown";
 		IIndividual individual = getIndividual(itemstack);
-		return individual.getDisplayName() + " " + type.getName();
+		String customTreeKey = "trees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getUnlocalizedName().replace("trees.species.","");
+		if(StatCollector.canTranslate("for." + customTreeKey)){
+			return StringUtil.localize(customTreeKey);
+		}
+		return StringUtil.localize("trees.grammar." + type.getName()).replaceAll("%SPECIES", individual.getDisplayName()).replaceAll("%TYPE", StringUtil.localize("trees.grammar." + type.getName() + ".type"));
+		//return individual.getDisplayName() + " " + type.getName();
 	}
 
 	@SuppressWarnings("rawtypes")
