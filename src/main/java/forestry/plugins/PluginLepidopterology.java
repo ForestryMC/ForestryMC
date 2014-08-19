@@ -229,7 +229,6 @@ public class PluginLepidopterology extends NativePlugin {
 		Allele.lepiBlackSwallow = new AlleleButterflySpecies("lepiBlackSwallow", true, "swallowtailB", papilio, "polyxenes", 0xeac783).setRarity(1.0f);
 
 		Allele.lepiZebraSwallow = new AlleleButterflySpecies("lepiZebraSwallow", true, "swallowtailZ", protographium, "marcellus", 0xeafeff).setRarity(0.5f);
-		Allele.lepiDianaFrit = new AlleleButterflySpecies("lepiDianaFrit", true, "dianaFritillary", protographium, "diana", 0xffac05).setRarity(0.6f);
 
 		/* NYMPHALIDAE */
 		IClassification pararge = createButterflyBranch(nymphalidae, "Pararge");
@@ -244,6 +243,7 @@ public class PluginLepidopterology extends NativePlugin {
 		IClassification heliconius = createButterflyBranch(nymphalidae, "Heliconius");
 		IClassification siproeta = createButterflyBranch(nymphalidae, "Siproeta");
 		IClassification cethosia = createButterflyBranch(nymphalidae, "Cethosia");
+		IClassification speyeria = createButterflyBranch(nymphalidae, "Speyeria");
 
 		Allele.lepiGlasswing = new AlleleButterflySpecies("lepiGlasswing", true, "glasswing", greta, "oto", 0x583732)
 				.setTemperature(EnumTemperature.WARM);
@@ -268,10 +268,12 @@ public class PluginLepidopterology extends NativePlugin {
 		Allele.lepiBlueDuke = new AlleleButterflySpecies("lepiBlueDuke", true, "blueDuke", bassarona, "durga", 0x304240).setRarity(0.5f)
 				.setTemperature(EnumTemperature.COLD);
 		Allele.lepiGlassyTiger = new AlleleButterflySpecies("lepiGlassyTiger", true, "glassyTiger", parantica, "aglea", 0x5b3935).setRarity(0.3f);
-		Allele.lepiPostman = new AlleleButterflySpecies("lepiPostman", true, "postman", heliconius, "melpmene", 0xf7302d).setRarity(0.3f);
+		Allele.lepiPostman = new AlleleButterflySpecies("lepiPostman", true, "postman", heliconius, "melpomene", 0xf7302d).setRarity(0.3f);
 		Allele.lepiMalachite = new AlleleButterflySpecies("lepiMalachite", true, "malachite", siproeta, "stelenes", 0xbdff53).setRarity(0.5f)
 				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
 		Allele.lepiLLacewing = new AlleleButterflySpecies("lepiLLacewing", true, "leopardLacewing", cethosia, "cyane", 0xfb8a06).setRarity(0.7f);
+
+		Allele.lepiDianaFrit = new AlleleButterflySpecies("lepiDianaFrit", true, "dianaFritillary", speyeria, "diana", 0xffac05).setRarity(0.6f);
 
 		Allele.butterflyNone = new AlleleEffectNone("bfNone", false);
 	}
