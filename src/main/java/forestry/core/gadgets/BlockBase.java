@@ -187,7 +187,7 @@ public class BlockBase extends BlockForestry {
 				ownerName = tile.getOwnerProfile().getName();
 
 
-			player.addChatMessage(new ChatComponentTranslation("\u00A7c%s %s", new ChatComponentText(ownerName), new ChatComponentTranslation("chat.accesslocked")));
+			player.addChatMessage(new ChatComponentTranslation("for.chat.accesslocked",ownerName));
 		}
 		return true;
 	}

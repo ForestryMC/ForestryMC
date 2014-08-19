@@ -189,13 +189,13 @@ public class PluginLepidopterology extends NativePlugin {
 		IClassification opisthograptis = createButterflyBranch(geometridae, "Opisthograptis");
 		IClassification chiasmia = createButterflyBranch(geometridae, "Chiasmia");
 
-		Allele.mothBrimstone = new AlleleButterflySpecies("mothBrimstone", true, "Brimstone", opisthograptis, "luteolata", 0xffea40).setNocturnal(true).setRarity(1.0f);
-		Allele.mothLatticedHeath = new AlleleButterflySpecies("mothLatticedHeath", true, "Latticed Heath", chiasmia, "clathrata", 0xf2f0be).setNocturnal(true).setRarity(0.5f);
+		Allele.mothBrimstone = new AlleleButterflySpecies("mothBrimstone", true, "brimstone", opisthograptis, "luteolata", 0xffea40).setNocturnal(true).setRarity(1.0f);
+		Allele.mothLatticedHeath = new AlleleButterflySpecies("mothLatticedHeath", true, "latticedHeath", chiasmia, "clathrata", 0xf2f0be).setNocturnal(true).setRarity(0.5f);
 
 		/* SATURNIIDAE */
 		IClassification attacus = createButterflyBranch(saturniidae, "Attacus");
 
-		Allele.mothAtlas = new AlleleButterflySpecies("mothAtlas", false, "Atlas", attacus, "atlas", 0xd96e3d).setNocturnal(true);
+		Allele.mothAtlas = new AlleleButterflySpecies("mothAtlas", false, "atlas", attacus, "atlas", 0xd96e3d).setNocturnal(true);
 
 		/* PIERIDAE */
 		IClassification pieris = createButterflyBranch(pieridae, "Pieris");
@@ -205,31 +205,30 @@ public class PluginLepidopterology extends NativePlugin {
 		IClassification pontia = createButterflyBranch(pieridae, "Pontia");
 		IClassification celastrina = createButterflyBranch(pieridae, "Celastrina");
 
-		Allele.lepiCabbageWhite = new AlleleButterflySpecies("lepiCabbageWhite", true, "Cabbage White", pieris, "rapae", 0xccffee).setRarity(1.0f);
-		Allele.lepiBrimstone = new AlleleButterflySpecies("lepiBrimstone", true, "Brimstone", gonepteryx, "rhamni", 0xf0ee38).setRarity(1.0f);
-		Allele.lepiAurora = new AlleleButterflySpecies("lepiAurora", true, "Orange Tip", anthocharis, "cardamines", 0xe34f05).setRarity(0.5f);
-		Allele.lepiPostillion = new AlleleButterflySpecies("lepiPostillion", true, "Postillion", colias, "croceus", 0xd77e04).setRarity(0.5f);
-		Allele.lepiPalaenoSulphur = new AlleleButterflySpecies("lepiPalaenoSulphur", true, "Palaeno Sulphur", colias, "palaeno", 0xf8fba3).setRarity(0.4f);
-		Allele.lepiReseda = new AlleleButterflySpecies("lepiReseda", true, "Reseda", pontia, "edusa", 0x747d48).setRarity(0.3f);
+		Allele.lepiCabbageWhite = new AlleleButterflySpecies("lepiCabbageWhite", true, "cabbageWhite", pieris, "rapae", 0xccffee).setRarity(1.0f);
+		Allele.lepiBrimstone = new AlleleButterflySpecies("lepiBrimstone", true, "brimstone", gonepteryx, "rhamni", 0xf0ee38).setRarity(1.0f);
+		Allele.lepiAurora = new AlleleButterflySpecies("lepiAurora", true, "orangeTip", anthocharis, "cardamines", 0xe34f05).setRarity(0.5f);
+		Allele.lepiPostillion = new AlleleButterflySpecies("lepiPostillion", true, "postillion", colias, "croceus", 0xd77e04).setRarity(0.5f);
+		Allele.lepiPalaenoSulphur = new AlleleButterflySpecies("lepiPalaenoSulphur", true, "palaenoSulphur", colias, "palaeno", 0xf8fba3).setRarity(0.4f);
+		Allele.lepiReseda = new AlleleButterflySpecies("lepiReseda", true, "reseda", pontia, "edusa", 0x747d48).setRarity(0.3f);
 
-		Allele.lepiSpringAzure = new AlleleButterflySpecies("lepiSpringAzure", true, "Spring Azure", celastrina, "argiolus", 0xb8cae2).setRarity(0.3f);
-		Allele.lepiGozoraAzure = new AlleleButterflySpecies("lepiGozoraAzure", true, "Gozora Azure", celastrina, "gozora", 0x6870e7).setRarity(0.2f);
+		Allele.lepiSpringAzure = new AlleleButterflySpecies("lepiSpringAzure", true, "springAzure", celastrina, "argiolus", 0xb8cae2).setRarity(0.3f);
+		Allele.lepiGozoraAzure = new AlleleButterflySpecies("lepiGozoraAzure", true, "gozoraAzure", celastrina, "gozora", 0x6870e7).setRarity(0.2f);
 
 		/* PAPILIONIDAE */
 		IClassification papilio = createButterflyBranch(papilionidae, "Papilio");
 		IClassification protographium = createButterflyBranch(papilionidae, "Protographium");
 
-		Allele.lepiCitrusSwallow = new AlleleButterflySpecies("lepiCitrusSwallow", false, "Citrus Swallowtail", papilio, "demodocus", 0xeae389).setRarity(1.0f)
+		Allele.lepiCitrusSwallow = new AlleleButterflySpecies("lepiCitrusSwallow", false, "swallowtailC", papilio, "demodocus", 0xeae389).setRarity(1.0f)
 				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
-		Allele.lepiEmeraldPeacock = new AlleleButterflySpecies("lepiEmeraldPeacock", true, "Emerald Peacock", papilio, "palinurus", 0x7cfe80)
+		Allele.lepiEmeraldPeacock = new AlleleButterflySpecies("lepiEmeraldPeacock", true, "emeraldPeacock", papilio, "palinurus", 0x7cfe80)
 				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
-		Allele.lepiThoasSwallow = new AlleleButterflySpecies("lepiThoasSwallow", false, "Thoas Swallowtail", papilio, "thoas", 0xeac783).setRarity(0.2f)
+		Allele.lepiThoasSwallow = new AlleleButterflySpecies("lepiThoasSwallow", false, "swallowtailT", papilio, "thoas", 0xeac783).setRarity(0.2f)
 				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
-		Allele.lepiSpicebush = new AlleleButterflySpecies("lepiSpicebush", true, "Spicebush Swallowtail", papilio, "troilus", 0xeefeff).setRarity(0.5f);
-		Allele.lepiBlackSwallow = new AlleleButterflySpecies("lepiBlackSwallow", true, "Black Swallowtail", papilio, "polyxenes", 0xeac783).setRarity(1.0f);
+		Allele.lepiSpicebush = new AlleleButterflySpecies("lepiSpicebush", true, "swallowtailS", papilio, "troilus", 0xeefeff).setRarity(0.5f);
+		Allele.lepiBlackSwallow = new AlleleButterflySpecies("lepiBlackSwallow", true, "swallowtailB", papilio, "polyxenes", 0xeac783).setRarity(1.0f);
 
-		Allele.lepiZebraSwallow = new AlleleButterflySpecies("lepiZebraSwallow", true, "Zebra Swallowtail", protographium, "marcellus", 0xeafeff).setRarity(0.5f);
-		Allele.lepiDianaFrit = new AlleleButterflySpecies("lepiDianaFrit", true, "Diana Fritillary", protographium, "diana", 0xffac05).setRarity(0.6f);
+		Allele.lepiZebraSwallow = new AlleleButterflySpecies("lepiZebraSwallow", true, "swallowtailZ", protographium, "marcellus", 0xeafeff).setRarity(0.5f);
 
 		/* NYMPHALIDAE */
 		IClassification pararge = createButterflyBranch(nymphalidae, "Pararge");
@@ -244,34 +243,37 @@ public class PluginLepidopterology extends NativePlugin {
 		IClassification heliconius = createButterflyBranch(nymphalidae, "Heliconius");
 		IClassification siproeta = createButterflyBranch(nymphalidae, "Siproeta");
 		IClassification cethosia = createButterflyBranch(nymphalidae, "Cethosia");
+		IClassification speyeria = createButterflyBranch(nymphalidae, "Speyeria");
 
-		Allele.lepiGlasswing = new AlleleButterflySpecies("lepiGlasswing", true, "Glasswing", greta, "oto", 0x583732)
+		Allele.lepiGlasswing = new AlleleButterflySpecies("lepiGlasswing", true, "glasswing", greta, "oto", 0x583732)
 				.setTemperature(EnumTemperature.WARM);
 
-		Allele.lepiSpeckledWood = new AlleleButterflySpecies("lepiSpeckledWood", true, "Speckled Wood", pararge, "aegeria", 0x947245).setRarity(1.0f);
-		Allele.lepiMadeiranSpeckledWood = new AlleleButterflySpecies("lepiMSpeckledWood", true, "Madeiran Speckled Wood", pararge, "xiphia", 0x402919).setRarity(0.5f);
-		Allele.lepiCanarySpeckledWood = new AlleleButterflySpecies("lepiCSpeckledWood", true, "Canary Speckled Wood", pararge, "xiphioides", 0x51372a).setRarity(0.5f);
+		Allele.lepiSpeckledWood = new AlleleButterflySpecies("lepiSpeckledWood", true, "speckledWood", pararge, "aegeria", 0x947245).setRarity(1.0f);
+		Allele.lepiMadeiranSpeckledWood = new AlleleButterflySpecies("lepiMSpeckledWood", true, "speckledWoodM", pararge, "xiphia", 0x402919).setRarity(0.5f);
+		Allele.lepiCanarySpeckledWood = new AlleleButterflySpecies("lepiCSpeckledWood", true, "speckledWoodC", pararge, "xiphioides", 0x51372a).setRarity(0.5f);
 
-		Allele.lepiMenelausBlueMorpho = new AlleleButterflySpecies("lepiMBlueMorpho", true, "Menelaus Blue Morpho", morpho, "menelaus", 0x72e1fd).setRarity(0.5f)
+		Allele.lepiMenelausBlueMorpho = new AlleleButterflySpecies("lepiMBlueMorpho", true, "blueMorphoM", morpho, "menelaus", 0x72e1fd).setRarity(0.5f)
 				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
-		Allele.lepiPeleidesBlueMorpho = new AlleleButterflySpecies("lepiPBlueMorpho", true, "Peleides Blue Morpho", morpho, "peleides", 0x6ecce8).setRarity(0.25f)
+		Allele.lepiPeleidesBlueMorpho = new AlleleButterflySpecies("lepiPBlueMorpho", true, "blueMorphoP", morpho, "peleides", 0x6ecce8).setRarity(0.25f)
 				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
-		Allele.lepiRhetenorBlueMorpho = new AlleleButterflySpecies("lepiRBlueMorpho", true, "Rhetenor Blue Morpho", morpho, "rhetenor", 0x00bef8)
+		Allele.lepiRhetenorBlueMorpho = new AlleleButterflySpecies("lepiRBlueMorpho", true, "blueMorphoR", morpho, "rhetenor", 0x00bef8)
 				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
 
-		Allele.lepiComma = new AlleleButterflySpecies("lepiComma", true, "Comma", polygonia, "c-album", 0xf89505).setRarity(0.3f);
-		Allele.lepiBatesia = new AlleleButterflySpecies("lepiBatesia", true, "Painted Beauty", batesia, "hypochlora", 0xfe7763).setRarity(0.3f)
+		Allele.lepiComma = new AlleleButterflySpecies("lepiComma", true, "comma", polygonia, "c-album", 0xf89505).setRarity(0.3f);
+		Allele.lepiBatesia = new AlleleButterflySpecies("lepiBatesia", true, "paintedBeauty", batesia, "hypochlora", 0xfe7763).setRarity(0.3f)
 				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
-		Allele.lepiBlueWing = new AlleleButterflySpecies("lepiBlueWing", true, "Blue Wing", myscelia, "ethusa", 0x3a93cc).setRarity(0.3f);
+		Allele.lepiBlueWing = new AlleleButterflySpecies("lepiBlueWing", true, "blueWing", myscelia, "ethusa", 0x3a93cc).setRarity(0.3f);
 
-		Allele.lepiMonarch = new AlleleButterflySpecies("lepiMonarch", true, "Monarch", danaus, "plexippus", 0xffa722).setRarity(0.2f);
-		Allele.lepiBlueDuke = new AlleleButterflySpecies("lepiBlueDuke", true, "Blue Duke", bassarona, "durga", 0x304240).setRarity(0.5f)
+		Allele.lepiMonarch = new AlleleButterflySpecies("lepiMonarch", true, "monarch", danaus, "plexippus", 0xffa722).setRarity(0.2f);
+		Allele.lepiBlueDuke = new AlleleButterflySpecies("lepiBlueDuke", true, "blueDuke", bassarona, "durga", 0x304240).setRarity(0.5f)
 				.setTemperature(EnumTemperature.COLD);
-		Allele.lepiGlassyTiger = new AlleleButterflySpecies("lepiGlassyTiger", true, "Glassy Tiger", parantica, "aglea", 0x5b3935).setRarity(0.3f);
-		Allele.lepiPostman = new AlleleButterflySpecies("lepiPostman", true, "Postman", heliconius, "melpmene", 0xf7302d).setRarity(0.3f);
-		Allele.lepiMalachite = new AlleleButterflySpecies("lepiMalachite", true, "Malachite", siproeta, "stelenes", 0xbdff53).setRarity(0.5f)
+		Allele.lepiGlassyTiger = new AlleleButterflySpecies("lepiGlassyTiger", true, "glassyTiger", parantica, "aglea", 0x5b3935).setRarity(0.3f);
+		Allele.lepiPostman = new AlleleButterflySpecies("lepiPostman", true, "postman", heliconius, "melpomene", 0xf7302d).setRarity(0.3f);
+		Allele.lepiMalachite = new AlleleButterflySpecies("lepiMalachite", true, "malachite", siproeta, "stelenes", 0xbdff53).setRarity(0.5f)
 				.setTemperature(EnumTemperature.WARM).setHumidity(EnumHumidity.DAMP);
-		Allele.lepiLLacewing = new AlleleButterflySpecies("lepiLLacewing", true, "Leopard Lacewing", cethosia, "cyane", 0xfb8a06).setRarity(0.7f);
+		Allele.lepiLLacewing = new AlleleButterflySpecies("lepiLLacewing", true, "leopardLacewing", cethosia, "cyane", 0xfb8a06).setRarity(0.7f);
+
+		Allele.lepiDianaFrit = new AlleleButterflySpecies("lepiDianaFrit", true, "dianaFritillary", speyeria, "diana", 0xffac05).setRarity(0.6f);
 
 		Allele.butterflyNone = new AlleleEffectNone("bfNone", false);
 	}

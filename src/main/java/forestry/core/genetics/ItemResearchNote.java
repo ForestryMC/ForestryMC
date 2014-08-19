@@ -11,7 +11,9 @@
 package forestry.core.genetics;
 
 import java.util.ArrayList;
+import java.util.IllegalFormatException;
 import java.util.List;
+import java.util.Locale;
 
 import forestry.core.utils.StringUtil;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -23,6 +25,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
@@ -84,10 +87,10 @@ public class ItemResearchNote extends ItemForestry {
 				if(encoded == null)
 					return tooltips;
 
-				tooltips.add("\u00A7aMutation discovered!");
-				tooltips.add(String.format("\u00A7e'%s'\u00A77 and \u00A7e'%s'\u00A77.", encoded.getAllele0().getName(), encoded.getAllele1().getName()));
-				tooltips.add(String.format("Chance for success is \u00A79%s\u00A77.", EnumMutateChance.rateChance(encoded.getBaseChance())));
-				tooltips.add(String.format("New species is \u00A7d'%s'\u00A77.", (encoded.getTemplate()[root.getKaryotypeKey().ordinal()].getName())));
+				tooltips.add(StringUtil.localize("researchNote.discovery.0"));
+				tooltips.add(StringUtil.localize("researchNote.discovery.1").replace("%SPEC1",encoded.getAllele0().getName()).replace("%SPEC2", encoded.getAllele1().getName()));
+				tooltips.add(StringUtil.localizeAndFormat("researchNote.discovery.2", StringUtil.localize("researchNote.chance." + EnumMutateChance.rateChance(encoded.getBaseChance()).toString().toLowerCase(Locale.ENGLISH))));
+				tooltips.add(StringUtil.localizeAndFormat("researchNote.discovery.3", (encoded.getTemplate()[root.getKaryotypeKey().ordinal()].getName())));
 
 				if(encoded.getSpecialConditions() != null && encoded.getSpecialConditions().size() > 0) {
 					for(String line : encoded.getSpecialConditions())
@@ -101,8 +104,8 @@ public class ItemResearchNote extends ItemForestry {
 				if(root == null)
 					return tooltips;
 
-				tooltips.add("\u00A7aSpecies researched!");
-				tooltips.add(String.format("\u00A7e'%s'\u00A77 (%s)", allele0.getName(), allele0.getBinomial()));
+				tooltips.add("researchNote.discovered.0");
+				tooltips.add(StringUtil.localizeAndFormat("researchNote.discovered.1", allele0.getName(), allele0.getBinomial()));
 			}
 
 			return tooltips;
@@ -123,7 +126,7 @@ public class ItemResearchNote extends ItemForestry {
 
 				IBreedingTracker tracker = encoded.getRoot().getBreedingTracker(world, player.getGameProfile());
 				if(tracker.isDiscovered(encoded)) {
-					player.addChatMessage(new ChatComponentTranslation("chat.cannotmemorizeagain"));
+					player.addChatMessage(new ChatComponentTranslation("for.chat.cannotmemorizeagain"));
 					return false;
 				}
 
@@ -131,7 +134,7 @@ public class ItemResearchNote extends ItemForestry {
 				tracker.registerSpecies((IAlleleSpecies)encoded.getAllele1());
 				tracker.registerSpecies((IAlleleSpecies)encoded.getTemplate()[root.getKaryotypeKey().ordinal()]);
 				tracker.registerMutation(encoded);
-				player.addChatMessage(new ChatComponentTranslation("chat.memorizednote"));
+				player.addChatMessage(new ChatComponentTranslation("for.chat.memorizednote"));
 				return true;
 			}
 
@@ -233,7 +236,7 @@ public class ItemResearchNote extends ItemForestry {
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
 		ResearchNote note = new ResearchNote(itemstack.getTagCompound());
-		return StringUtil.localizeAndFormat(getUnlocalizedName(itemstack) + ".name", note.researcher.getName());
+		return StringUtil.localizeAndFormatRaw(getUnlocalizedName(itemstack) + ".name", note.researcher.getName());
 	}
 
 	@SuppressWarnings("rawtypes")

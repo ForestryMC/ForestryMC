@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import forestry.core.utils.StringUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -38,7 +39,7 @@ public class GrowthProvider implements IGrowthProvider {
 
 	@Override
 	public String getDescription() {
-		return "Light";
+		return StringUtil.localize("gui.growth.normal");
 	}
 
 	@Override

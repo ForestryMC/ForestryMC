@@ -32,6 +32,7 @@ import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Vect;
 import forestry.plugins.PluginApiculture;
+import net.minecraft.util.StatCollector;
 
 public class GuiBeealyzer extends GuiAlyzer {
 
@@ -145,7 +146,10 @@ public class GuiBeealyzer extends GuiAlyzer {
 		newLine();
 		newLine();
 
-		drawSpeciesRow(StringUtil.localize("gui.species"), bee, EnumBeeChromosome.SPECIES);
+		String customPrimaryBeeKey = "bees.custom.beealyzer." + bee.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.", "");
+		String customSecondaryBeeKey = "bees.custom.beealyzer." + bee.getGenome().getSecondary().getUnlocalizedName().replace("bees.species.", "");
+
+		drawSpeciesRow(StringUtil.localize("gui.species"), bee, EnumBeeChromosome.SPECIES, checkCustomName(customPrimaryBeeKey), checkCustomName(customSecondaryBeeKey));
 
 		drawRow(StringUtil.localize("gui.lifespan"), bee.getGenome().getActiveAllele(EnumBeeChromosome.LIFESPAN.ordinal()).getName(),
 				bee.getGenome().getInactiveAllele(EnumBeeChromosome.LIFESPAN.ordinal()).getName(), bee,
@@ -158,9 +162,9 @@ public class GuiBeealyzer extends GuiAlyzer {
 				bee.getGenome().getInactiveAllele(EnumBeeChromosome.FLOWERING.ordinal()).getName(), bee,
 				EnumBeeChromosome.FLOWERING);
 
-		drawRow(StringUtil.localize("gui.flowers"), StringUtil.localize(bee.getGenome().getFlowerProvider().getDescription()),
-				StringUtil.localize(((IAlleleFlowers) bee.getGenome().getInactiveAllele(EnumBeeChromosome.FLOWER_PROVIDER.ordinal())).getProvider()
-						.getDescription()), bee, EnumBeeChromosome.FLOWER_PROVIDER);
+		drawRow(StringUtil.localize("gui.flowers"), bee.getGenome().getFlowerProvider().getDescription(),
+				((IAlleleFlowers) bee.getGenome().getInactiveAllele(EnumBeeChromosome.FLOWER_PROVIDER.ordinal())).getProvider()
+						.getDescription(), bee, EnumBeeChromosome.FLOWER_PROVIDER);
 
 		drawLine(StringUtil.localize("gui.fertility"), COLUMN_0);
 		drawFertilityInfo(bee.getGenome().getFertility(), COLUMN_1, getColorCoding(bee.getGenome().getActiveAllele(EnumBeeChromosome.FERTILITY.ordinal())
@@ -175,8 +179,8 @@ public class GuiBeealyzer extends GuiAlyzer {
 		drawRow(StringUtil.localize("gui.area"), area.toString(), ((AlleleArea) bee.getGenome().getInactiveAllele(EnumBeeChromosome.TERRITORY.ordinal()))
 				.getArea().toString(), bee, EnumBeeChromosome.TERRITORY);
 
-		drawRow(StringUtil.localize("gui.effect"), StringUtil.localize(bee.getGenome().getEffect().getName()),
-				StringUtil.localize(((IAlleleBeeEffect) bee.getGenome().getInactiveAllele(EnumBeeChromosome.EFFECT.ordinal())).getName()), bee,
+		drawRow(StringUtil.localize("gui.effect"), bee.getGenome().getEffect().getName(),
+				((IAlleleBeeEffect) bee.getGenome().getInactiveAllele(EnumBeeChromosome.EFFECT.ordinal())).getName(), bee,
 				EnumBeeChromosome.EFFECT);
 
 		newLine();

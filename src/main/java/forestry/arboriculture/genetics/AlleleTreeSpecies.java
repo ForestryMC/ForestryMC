@@ -12,6 +12,7 @@ package forestry.arboriculture.genetics;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
@@ -101,7 +102,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 
 	public AlleleTreeSpecies(String uid, boolean isDominant, String name, IClassification branch, String binomial, int primaryColor, int secondaryColor,
 			Class<? extends WorldGenArboriculture> generator, ItemStack wood) {
-		super(uid, isDominant, name, branch, binomial);
+		super(uid, isDominant, "trees.species." + name, branch, binomial);
 
 		this.root = (ITreeRoot)AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees");
 		this.generatorClass = generator;
