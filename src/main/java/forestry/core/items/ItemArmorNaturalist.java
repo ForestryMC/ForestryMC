@@ -34,7 +34,8 @@ public class ItemArmorNaturalist extends ItemArmor implements IArmorNaturalist {
 		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
 
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, int layer) {
+	@Override
+	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
 		return Defaults.ID + ":" + Defaults.TEXTURE_NATURALIST_ARMOR_PRIMARY;
 	}
 

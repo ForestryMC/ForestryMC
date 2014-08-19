@@ -85,7 +85,6 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 			return StringUtil.localize(customTreeKey);
 		}
 		return StringUtil.localize("trees.grammar." + type.getName()).replaceAll("%SPECIES", individual.getDisplayName()).replaceAll("%TYPE", StringUtil.localize("trees.grammar." + type.getName() + ".type"));
-		//return individual.getDisplayName() + " " + type.getName();
 	}
 
 	@SuppressWarnings("rawtypes")
