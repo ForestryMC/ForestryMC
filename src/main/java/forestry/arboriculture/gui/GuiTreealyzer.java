@@ -16,6 +16,7 @@ import java.util.Locale;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.EnumPlantType;
 
 import forestry.api.arboriculture.EnumTreeChromosome;
@@ -146,7 +147,10 @@ public class GuiTreealyzer extends GuiAlyzer {
 		newLine();
 		newLine();*/
 
-		drawSpeciesRow(StringUtil.localize("gui.species"), tree, EnumTreeChromosome.SPECIES);
+		String customPrimaryTreeKey = "trees.custom.treealyzer." + tree.getGenome().getPrimary().getUnlocalizedName().replace("trees.species.","");
+		String customSecondaryTreeKey = "trees.custom.treealyzer." + tree.getGenome().getSecondary().getUnlocalizedName().replace("trees.species.","");
+
+		drawSpeciesRow(StringUtil.localize("gui.species"), tree, EnumTreeChromosome.SPECIES, checkCustomName(customPrimaryTreeKey), checkCustomName(customSecondaryTreeKey));
 		newLine();
 
 		drawLine(StringUtil.localize("gui.saplings"), COLUMN_0);
@@ -264,9 +268,9 @@ public class GuiTreealyzer extends GuiAlyzer {
 				newLine();
 
 			if (families0.length > i)
-				drawLine(StringUtil.localize(families0[i].getName()), COLUMN_1, speciesDominance0);
+				drawLine(families0[i].getName(), COLUMN_1, speciesDominance0);
 			if (families1.length > i)
-				drawLine(StringUtil.localize(families1[i].getName()), COLUMN_2, speciesDominance1);
+				drawLine(families1[i].getName(), COLUMN_2, speciesDominance1);
 
 		}
 
@@ -296,9 +300,9 @@ public class GuiTreealyzer extends GuiAlyzer {
 		IFruitFamily secondary = ((IAlleleFruit) tree.getGenome().getInactiveAllele(EnumTreeChromosome.FRUITS.ordinal())).getProvider().getFamily();
 
 		if (primary != null)
-			drawLine(StringUtil.localize(primary.getName()), COLUMN_1, fruitDominance0);
+			drawLine(primary.getName(), COLUMN_1, fruitDominance0);
 		if (secondary != null)
-			drawLine(StringUtil.localize(secondary.getName()), COLUMN_2, fruitDominance1);
+			drawLine(secondary.getName(), COLUMN_2, fruitDominance1);
 
 		endPage();
 	}

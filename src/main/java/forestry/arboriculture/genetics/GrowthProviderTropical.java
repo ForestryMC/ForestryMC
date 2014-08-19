@@ -12,6 +12,7 @@ package forestry.arboriculture.genetics;
 
 import java.util.EnumSet;
 
+import forestry.core.utils.StringUtil;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.EnumGrowthConditions;
@@ -41,7 +42,7 @@ public class GrowthProviderTropical extends GrowthProvider {
 
 	@Override
 	public String getDescription() {
-		return "Tropical";
+		return StringUtil.localize("gui.growth.tropical");
 	}
 
 }

@@ -20,6 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
+import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 import forestry.api.apiculture.EnumBeeChromosome;
@@ -85,7 +86,7 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 				getColorCoding(individual.getGenome().getInactiveAllele(chromosome.ordinal()).isDominant()));
 	}
 
-	protected final void drawSpeciesRow(String text0, IIndividual individual, Enum<?> chromosome) {
+	protected final void drawSpeciesRow(String text0, IIndividual individual, Enum<?> chromosome, String customPrimaryName, String customSecondaryName) {
 		IAlleleSpecies primary = individual.getGenome().getPrimary();
 		IAlleleSpecies secondary = individual.getGenome().getSecondary();
 
@@ -97,12 +98,30 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 		drawItemStack(iconStacks.get(secondary.getUID()), adjustToFactor(guiLeft + column2 + columnwidth + 4), adjustToFactor(guiTop + getLineY()));
 		RenderHelper.disableStandardItemLighting();
 
-		drawSplitLine(primary.getName(), column1, columnwidth, individual, chromosome, false);
-		drawSplitLine(secondary.getName(), column2, columnwidth, individual, chromosome, true);
+		String primaryName;
+		String secondaryName;
+
+		primaryName = customPrimaryName == null ? primary.getName() : customPrimaryName;
+		secondaryName = customSecondaryName == null ? secondary.getName() : customSecondaryName;
+
+		drawSplitLine(primaryName, column1, columnwidth, individual, chromosome, false);
+		drawSplitLine(secondaryName, column2, columnwidth, individual, chromosome, true);
 
 		newLine();
 		newLine();
 
+	}
+
+	protected final void drawSpeciesRow(String text0, IIndividual individual, Enum<?> chromosome){
+		drawSpeciesRow(text0, individual, chromosome, null, null);
+	}
+
+	protected final String checkCustomName(String key){
+		if(StatCollector.canTranslate("for." + key)){
+			return StringUtil.localize(key);
+		} else {
+			return null;
+		}
 	}
 
 	protected final void drawAnalyticsPageClassification(IIndividual individual) {

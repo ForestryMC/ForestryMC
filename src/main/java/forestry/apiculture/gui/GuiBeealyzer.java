@@ -32,6 +32,7 @@ import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Vect;
 import forestry.plugins.PluginApiculture;
+import net.minecraft.util.StatCollector;
 
 public class GuiBeealyzer extends GuiAlyzer {
 
@@ -145,7 +146,10 @@ public class GuiBeealyzer extends GuiAlyzer {
 		newLine();
 		newLine();
 
-		drawSpeciesRow(StringUtil.localize("gui.species"), bee, EnumBeeChromosome.SPECIES);
+		String customPrimaryBeeKey = "bees.custom.beealyzer." + bee.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.","");
+		String customSecondaryBeeKey = "bees.custom.beealyzer." + bee.getGenome().getSecondary().getUnlocalizedName().replace("bees.species.","");
+
+		drawSpeciesRow(StringUtil.localize("gui.species"), bee, EnumBeeChromosome.SPECIES, checkCustomName(customPrimaryBeeKey), checkCustomName(customSecondaryBeeKey));
 
 		drawRow(StringUtil.localize("gui.lifespan"), bee.getGenome().getActiveAllele(EnumBeeChromosome.LIFESPAN.ordinal()).getName(),
 				bee.getGenome().getInactiveAllele(EnumBeeChromosome.LIFESPAN.ordinal()).getName(), bee,
