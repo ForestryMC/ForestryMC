@@ -32,6 +32,19 @@ public class StringUtil {
 		}
 	}
 
+	/**
+	* Same as localizeAndFormat, only without the "for." prefix. Used for specific items.
+	*/
+	public static String localizeAndFormatRaw(String key, Object... args) {
+		String text = StatCollector.translateToLocal(key).replace("\\n", "\n").replace("@", "%").replace("\\%", "@");
+
+		try {
+			return String.format(text, args);
+		} catch (IllegalFormatException ex) {
+			return "Format error: " + text;
+		}
+	}
+
 	public static String cleanTags(String tag) {
 		return tag.replaceAll("[Ff]orestry\\p{Punct}", "").replaceAll("\\.[Ff]or\\p{Punct}", ".").replaceFirst("^tile\\.", "").replaceFirst("^item\\.", "");
 	}

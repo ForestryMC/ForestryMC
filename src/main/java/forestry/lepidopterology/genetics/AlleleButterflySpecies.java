@@ -12,6 +12,7 @@ package forestry.lepidopterology.genetics;
 
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import net.minecraft.init.Items;
@@ -51,7 +52,7 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	private final Map<ItemStack, Float> caterpillarLoot = new HashMap<ItemStack, Float>();
 
 	public AlleleButterflySpecies(String uid, boolean isDominant, String name, IClassification branch, String binomial, int serumColour) {
-		super(uid, isDominant, name, branch, binomial);
+		super(uid, isDominant, "butterflies.species." + branch.getParent().getUID().substring((branch.getParent().getLevel().name().toLowerCase(Locale.ENGLISH)).length()+1) + "." + name, branch, binomial);
 		this.root = (IButterflyRoot)AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies");
 		this.serumColour = serumColour;
 		texture = "forestry:" + Defaults.TEXTURE_PATH_ENTITIES + "/butterflies/" + uid + ".png";

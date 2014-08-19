@@ -11,6 +11,7 @@
 package forestry.core.genetics;
 
 import java.util.ArrayList;
+import java.util.IllegalFormatException;
 import java.util.List;
 
 import forestry.core.utils.StringUtil;
@@ -23,6 +24,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
@@ -233,7 +235,7 @@ public class ItemResearchNote extends ItemForestry {
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
 		ResearchNote note = new ResearchNote(itemstack.getTagCompound());
-		return StringUtil.localizeAndFormat(getUnlocalizedName(itemstack) + ".name", note.researcher.getName());
+		return StringUtil.localizeAndFormatRaw(getUnlocalizedName(itemstack) + ".name", note.researcher.getName());
 	}
 
 	@SuppressWarnings("rawtypes")
