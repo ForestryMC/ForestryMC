@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import forestry.core.utils.StringUtil;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
@@ -39,7 +40,7 @@ public class AlleleLeafEffectNone extends Allele implements IAlleleLeafEffect {
 
 	@Override
 	public String getName() {
-		return "None";
+		return StringUtil.localize("arboriculture.effect.none");
 	}
 
 	@Override

@@ -196,8 +196,8 @@ public class GuiTreealyzer extends GuiAlyzer {
 
 		newLine();
 
-		drawRow(StringUtil.localize("gui.effect"), StringUtil.localize(tree.getGenome().getEffect().getName()),
-				StringUtil.localize(((IAlleleEffect) tree.getGenome().getInactiveAllele(EnumTreeChromosome.EFFECT.ordinal())).getName()), tree,
+		drawRow(StringUtil.localize("gui.effect"), tree.getGenome().getEffect().getName(),
+				((IAlleleEffect) tree.getGenome().getInactiveAllele(EnumTreeChromosome.EFFECT.ordinal())).getName(), tree,
 				EnumTreeChromosome.EFFECT);
 
 		newLine();
