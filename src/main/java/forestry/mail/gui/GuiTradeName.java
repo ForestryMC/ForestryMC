@@ -24,9 +24,9 @@ import forestry.mail.gadgets.MachineTrader;
 
 public class GuiTradeName extends GuiForestry<MachineTrader> {
 
-	private GuiTextField moniker;
+	private GuiTextField addressNameField;
 
-	private boolean monikerFocus;
+	private boolean addressNameFocus;
 
 	private final ContainerTradeName container;
 
@@ -42,20 +42,23 @@ public class GuiTradeName extends GuiForestry<MachineTrader> {
 	public void initGui() {
 		super.initGui();
 
-		moniker = new GuiTextField(this.fontRendererObj, guiLeft + 44, guiTop + 39, 90, 14);
-		if (container.getMoniker() != null)
-			moniker.setText(container.getMoniker());
+		addressNameField = new GuiTextField(this.fontRendererObj, guiLeft + 44, guiTop + 39, 90, 14);
+		if (container.getAddress() != null)
+			addressNameField.setText(container.getAddress().getName());
+		addressNameField.setFocused(true);
 	}
 
 	@Override
 	protected void keyTyped(char eventCharacter, int eventKey) {
 
 		// Set focus or enter text into address
-		if (this.moniker.isFocused()) {
-			if (eventKey == Keyboard.KEY_RETURN)
-				this.moniker.setFocused(false);
-			else
-				this.moniker.textboxKeyTyped(eventCharacter, eventKey);
+		if (addressNameField.isFocused()) {
+			if (eventKey == Keyboard.KEY_RETURN) {
+				addressNameFocus = true;
+				addressNameField.setFocused(false);
+			} else {
+				addressNameField.textboxKeyTyped(eventCharacter, eventKey);
+			}
 			return;
 		}
 
@@ -65,12 +68,11 @@ public class GuiTradeName extends GuiForestry<MachineTrader> {
 	@Override
 	protected void mouseClicked(int par1, int par2, int mouseButton) {
 		super.mouseClicked(par1, par2, mouseButton);
-		this.moniker.mouseClicked(par1, par2, mouseButton);
+		addressNameField.mouseClicked(par1, par2, mouseButton);
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
-
 		// Close gui screen if we linked up.
 		if (container.machine.isLinked()) {
 			this.mc.displayGuiScreen((GuiScreen) null);
@@ -78,28 +80,28 @@ public class GuiTradeName extends GuiForestry<MachineTrader> {
 		}
 
 		// Check for focus changes
-		if (monikerFocus != moniker.isFocused())
-			setMoniker();
-		monikerFocus = moniker.isFocused();
+		if (addressNameFocus && !addressNameField.isFocused())
+			this.setAddress();
+		addressNameFocus = addressNameField.isFocused();
 
 		super.drawGuiContainerBackgroundLayer(var1, var2, var3);
 
 		String prompt = StringUtil.localize("gui.mail.nametrader");
 		fontRendererObj.drawString(prompt, guiLeft + this.getCenteredOffset(prompt), guiTop + 16, fontColor.get("gui.mail.text"));
-		moniker.drawTextBox();
+		addressNameField.drawTextBox();
 
 	}
 
 	@Override
 	public void onGuiClosed() {
-		setMoniker();
+		setAddress();
 		super.onGuiClosed();
 	}
 
-	private void setMoniker() {
-		String monikerText = this.moniker.getText();
-		if (StringUtils.isNotBlank(monikerText))
-			container.setMoniker(monikerText);
+	private void setAddress() {
+		String address = addressNameField.getText();
+		if (StringUtils.isNotBlank(address))
+			container.setAddress(address);
 	}
 
 }

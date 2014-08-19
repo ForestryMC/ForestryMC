@@ -39,12 +39,9 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 	private final int[] collectedPostage = new int[EnumPostage.values().length];
 
 	// / CONSTRUCTOR
-	public PostOffice(String s) {
-		super(s);
-	}
-
-	public PostOffice() {
+	public PostOffice(World world) {
 		super(SAVE_NAME);
+		refreshActiveTradeStations(world);
 	}
 
 	@Override
@@ -67,9 +64,6 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 
 	@Override
 	public LinkedHashMap<MailAddress, ITradeStation> getActiveTradeStations(World world) {
-		if (activeTradeStations == null)
-			refreshActiveTradeStations(world);
-
 		return this.activeTradeStations;
 	}
 
@@ -101,19 +95,12 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 
 	@Override
 	public void registerTradeStation(ITradeStation trade) {
-		if (activeTradeStations == null)
-			return;
-
 		if (!activeTradeStations.containsKey(trade.getAddress()))
 			activeTradeStations.put(trade.getAddress(), trade);
-
 	}
 
 	@Override
 	public void deregisterTradeStation(ITradeStation trade) {
-		if (activeTradeStations == null)
-			return;
-
 		activeTradeStations.remove(trade.getAddress());
 	}
 

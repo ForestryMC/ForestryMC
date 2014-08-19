@@ -97,7 +97,7 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 		address = new GuiTextField(this.fontRendererObj, guiLeft + 46, guiTop + 13, 93, 13);
 		MailAddress recipient = container.getRecipient();
 		if (recipient != null) {
-			address.setText(recipient.getIdentifierName());
+			address.setText(recipient.getName());
 			setRecipient(recipient);
 		}
 

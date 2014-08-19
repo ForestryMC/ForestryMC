@@ -195,7 +195,7 @@ public class Letter implements ILetter, INBTTagable {
 		if (recipient == null)
 			return false;
 
-		if (StringUtils.isBlank(recipient.getIdentifierName()))
+		if (StringUtils.isBlank(recipient.getName()))
 			return false;
 
 		return true;
@@ -234,7 +234,7 @@ public class Letter implements ILetter, INBTTagable {
 		for (MailAddress address : recipient) {
 			if (recipientString.length() > 0)
 				recipientString += ", ";
-			recipientString += address.getIdentifierName();
+			recipientString += address.getName();
 		}
 
 		return recipientString;
@@ -253,8 +253,8 @@ public class Letter implements ILetter, INBTTagable {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void addTooltip(List list) {
-		if (this.sender != null && StringUtils.isNotBlank(this.sender.getIdentifierName()))
-			list.add(StringUtil.localize("gui.mail.from") + ": " + this.sender.getIdentifierName());
+		if (this.sender != null && StringUtils.isNotBlank(this.sender.getName()))
+			list.add(StringUtil.localize("gui.mail.from") + ": " + this.sender.getName());
 		if (this.recipient != null && this.recipient.length > 0)
 			list.add(StringUtil.localize("gui.mail.to") + ": " + this.getRecipientString());
 	}

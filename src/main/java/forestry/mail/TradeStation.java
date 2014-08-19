@@ -59,7 +59,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	private final InventoryAdapter inventory = new InventoryAdapter(SLOT_SIZE, "INV");
 
 	// / CONSTRUCTORS
-	public TradeStation(GameProfile owner, MailAddress address, boolean isMoniker) {
+	public TradeStation(GameProfile owner, MailAddress address) {
 		super(SAVE_NAME + address);
 		if (address.isPlayer()) {
 			throw new IllegalArgumentException("TradeStation address must not be a player");
@@ -85,9 +85,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		}
 
 		if (nbttagcompound.hasKey("address")) {
-			if (this.address == null)
-				this.address = new MailAddress("temp");
-			this.address.readFromNBT(nbttagcompound.getCompoundTag("address"));
+			address = MailAddress.loadFromNBT(nbttagcompound.getCompoundTag("address"));
 		}
 
 		this.isVirtual = nbttagcompound.getBoolean("VRT");
@@ -97,15 +95,15 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		if (this.owner != null) {
+		if (owner != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
 			NBTUtil.func_152460_a(nbt, owner);
 			nbttagcompound.setTag("owner", nbt);
 		}
 
-		if (this.address != null) {
+		if (address != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
-			this.address.writeToNBT(nbt);
+			address.writeToNBT(nbt);
 			nbttagcompound.setTag("address", nbt);
 		}
 
@@ -251,7 +249,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			nbttagcompound = new NBTTagCompound();
 
 			ILetter confirm = new Letter(this.address, new MailAddress(this.owner));
-			confirm.setText(ordersToFill + " order(s) from " + letter.getSender().getIdentifierName() + " were filled.");
+			confirm.setText(ordersToFill + " order(s) from " + letter.getSender().getName() + " were filled.");
 			confirm.addStamps(ForestryItem.stamps.getItemStack(1, EnumPostage.P_1.ordinal() - 1));
 			confirm.writeToNBT(nbttagcompound);
 					
