@@ -12,9 +12,6 @@ package forestry.mail.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.server.MinecraftServer;
-
-import com.mojang.authlib.GameProfile;
 
 import forestry.core.gui.ContainerForestry;
 import forestry.core.network.PacketIds;
@@ -23,6 +20,8 @@ import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.InventoryAdapter;
 import forestry.mail.gadgets.MachineTrader;
+import forestry.api.mail.MailAddress;
+
 import org.apache.commons.lang3.StringUtils;
 
 public class ContainerTradeName extends ContainerForestry {
@@ -36,24 +35,29 @@ public class ContainerTradeName extends ContainerForestry {
 		isLinked = machine.isLinked();
 	}
 
-	public String getMoniker() {
-		return machine.getMoniker();
+	public MailAddress getAddress() {
+		return machine.getAddress();
 	}
 
-	public void setMoniker(String moniker) {
+	public void setAddress(String addressName) {
 
-		if (StringUtils.isBlank(moniker))
+		if (StringUtils.isBlank(addressName))
 			return;
 
 		PacketPayload payload = new PacketPayload(0, 0, 1);
-		payload.stringPayload[0] = moniker;
+		payload.stringPayload[0] = addressName;
 
-		PacketUpdate packet = new PacketUpdate(PacketIds.TRADING_MONIKER_SET, payload);
+		PacketUpdate packet = new PacketUpdate(PacketIds.TRADING_ADDRESS_SET, payload);
 		Proxies.net.sendToServer(packet);
+
+		MailAddress address = new MailAddress(addressName);
+		machine.setAddress(address);
 	}
 
-	public void handleSetMoniker(PacketUpdate packet) {
-		machine.setMoniker(packet.payload.stringPayload[0]);
+	public void handleSetAddress(PacketUpdate packet) {
+		String addressName = packet.payload.stringPayload[0];
+		MailAddress address = new MailAddress(addressName);
+		machine.setAddress(address);
 	}
 
 	@Override

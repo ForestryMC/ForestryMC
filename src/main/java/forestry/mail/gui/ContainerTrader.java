@@ -15,14 +15,13 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 
-import com.mojang.authlib.GameProfile;
-
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.slots.SlotClosed;
 import forestry.core.gui.slots.SlotCustom;
 import forestry.mail.TradeStation;
 import forestry.mail.gadgets.MachineTrader;
 import forestry.mail.items.ItemStamps;
+import forestry.api.mail.MailAddress;
 
 public class ContainerTrader extends ContainerForestry {
 
@@ -73,11 +72,11 @@ public class ContainerTrader extends ContainerForestry {
 	}
 
 	public boolean isLinked() {
-		return getMoniker() != null;
+		return machine.isLinked();
 	}
 
-	public String getMoniker() {
-		return machine.getMoniker();
+	public MailAddress getAddress() {
+		return machine.getAddress();
 	}
 
 }

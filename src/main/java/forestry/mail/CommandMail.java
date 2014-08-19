@@ -94,7 +94,7 @@ public class CommandMail extends CommandMC {
 				demand = StringUtil.append(", ", demand, dmd.stackSize + "x" + dmd.getDisplayName());
 		}
 
-		return String.format("%s%-12s | %-20s | %s", entry, info.address.getIdentifierName(), tradegood, demand);
+		return String.format("%s%-12s | %-20s | %s", entry, info.address.getName(), tradegood, demand);
 	}
 
 	private void commandVirtualize(ICommandSender sender, String[] arguments) {
@@ -115,6 +115,6 @@ public class CommandMail extends CommandMC {
 		}
 
 		trade.setVirtual(!trade.isVirtual());
-		sendChatMessage(sender, String.format("\u00A7aSet virtualization for '%s' to %s.", trade.getAddress().getIdentifierName(), trade.isVirtual()));
+		sendChatMessage(sender, String.format("\u00A7aSet virtualization for '%s' to %s.", trade.getAddress().getName(), trade.isVirtual()));
 	}
 }

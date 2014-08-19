@@ -46,8 +46,7 @@ public class PacketTradeInfo extends ForestryPacket {
 
 		data.writeShort(0);
 
-		String moniker = tradeInfo.address.getIdentifierName();
-		data.writeUTF(moniker);
+		data.writeUTF(tradeInfo.address.getName());
 
 		data.writeLong(tradeInfo.owner.getId().getMostSignificantBits());
 		data.writeLong(tradeInfo.owner.getId().getLeastSignificantBits());
@@ -67,7 +66,7 @@ public class PacketTradeInfo extends ForestryPacket {
 		if (isNotNull < 0)
 			return;
 
-		String moniker = data.readUTF();
+		MailAddress address = new MailAddress(data.readUTF());
 		GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readUTF());
 		ItemStack tradegood;
 		ItemStack[] required;
@@ -77,7 +76,6 @@ public class PacketTradeInfo extends ForestryPacket {
 		for (int i = 0; i < required.length; i++)
 			required[i] = readItemStack(data);
 
-		MailAddress address = new MailAddress(moniker);
 		this.tradeInfo = new TradeStationInfo(address, owner, tradegood, required, EnumStationState.values()[data.readShort()]);
 	}
 

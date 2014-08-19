@@ -56,10 +56,10 @@ public class PacketHandlerMail implements IPacketHandler {
 				packet.readData(data);
 				onLetterText(player, packet);
 				break;
-			case PacketIds.TRADING_MONIKER_SET:
+			case PacketIds.TRADING_ADDRESS_SET:
 				packet = new PacketUpdate();
 				packet.readData(data);
-				onMonikerSet(player, packet);
+				onAddressSet(player, packet);
 				break;
 			case PacketIds.POBOX_INFO_REQUEST:
 				onPOBoxInfoRequest(player);
@@ -86,11 +86,11 @@ public class PacketHandlerMail implements IPacketHandler {
 		PluginMail.proxy.setPOBoxInfo(Proxies.common.getRenderWorld(), address, packet.poboxInfo);
 	}
 
-	private void onMonikerSet(EntityPlayer player, PacketUpdate packet) {
+	private void onAddressSet(EntityPlayer player, PacketUpdate packet) {
 		if (!(player.openContainer instanceof ContainerTradeName))
 			return;
 
-		((ContainerTradeName) player.openContainer).handleSetMoniker(packet);
+		((ContainerTradeName) player.openContainer).handleSetAddress(packet);
 	}
 
 	private void onLetterText(EntityPlayer player, PacketUpdate packet) {

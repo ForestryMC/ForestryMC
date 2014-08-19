@@ -13,11 +13,8 @@ package forestry.mail.gui;
 import java.util.Iterator;
 import java.util.Locale;
 
-import com.mojang.authlib.GameProfile;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IPostalCarrier;
@@ -143,7 +140,7 @@ public class ContainerLetter extends ContainerItemInventory {
 
 		// / Send to server
 		PacketPayload payload = new PacketPayload(0, 0, 2);
-		payload.stringPayload[0] = getRecipient().getIdentifierName();
+		payload.stringPayload[0] = getRecipient().getName();
 		payload.stringPayload[1] = this.carrier;
 
 		PacketUpdate packet = new PacketUpdate(PacketIds.LETTER_RECIPIENT, payload);
@@ -196,7 +193,7 @@ public class ContainerLetter extends ContainerItemInventory {
 		if (!Proxies.common.isSimulating(world))
 			return;
 
-		if (!address.getType().equals(EnumAddressee.asString(EnumAddressee.TRADER)))
+		if (address.isPlayer())
 			return;
 
 		ITradeStation station = PostManager.postRegistry.getTradeStation(world, address);

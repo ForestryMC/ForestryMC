@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import java.util.Locale;
-
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -93,7 +91,7 @@ public class GuiCatalogue extends GuiForestry<TileForestry> {
 
 	private void drawTradePreview(int x, int y) {
 
-		fontRendererObj.drawString("\u00A7l\u00A7n" + container.getTradeInfo().address.getIdentifierName(), x, y, fontColor.get("gui.book"));
+		fontRendererObj.drawString("\u00A7l\u00A7n" + container.getTradeInfo().address.getName(), x, y, fontColor.get("gui.book"));
 
 		TradeStationInfo info = container.getTradeInfo();
 		fontRendererObj.drawString(String.format(StringUtil.localize("gui.mail.willtrade"), info.owner.getName()), x, y + 18, fontColor.get("gui.book"));
@@ -137,7 +135,7 @@ public class GuiCatalogue extends GuiForestry<TileForestry> {
 		case 5:
 			TradeStationInfo info = container.getTradeInfo();
 			if(info != null) {
-				SessionVars.setStringVar("mail.letter.recipient", info.address.getIdentifierName());
+				SessionVars.setStringVar("mail.letter.recipient", info.address.getName());
 				SessionVars.setStringVar("mail.letter.addressee", EnumAddressee.asString(EnumAddressee.TRADER));
 			}
 			mc.displayGuiScreen((GuiScreen)null);
