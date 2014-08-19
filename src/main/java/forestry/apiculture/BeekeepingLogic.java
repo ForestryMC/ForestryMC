@@ -128,9 +128,9 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		// Princess available? Try to breed!
 		if (ForestryItem.beePrincessGE.isItemEqual(housing.getQueen())) {
 			if (ForestryItem.beeDroneGE.isItemEqual(housing.getDrone()))
-				housing.setErrorState(EnumErrorCode.NODRONE.ordinal());
-			else
 				housing.setErrorState(EnumErrorCode.OK.ordinal());
+			else
+				housing.setErrorState(EnumErrorCode.NODRONE.ordinal());
 			tickBreed();
 			return;
 		}
