@@ -147,8 +147,8 @@ public class GuiTreealyzer extends GuiAlyzer {
 		newLine();
 		newLine();*/
 
-		String customPrimaryTreeKey = "trees.custom.treealyzer." + tree.getGenome().getPrimary().getUnlocalizedName().replace("trees.species.","");
-		String customSecondaryTreeKey = "trees.custom.treealyzer." + tree.getGenome().getSecondary().getUnlocalizedName().replace("trees.species.","");
+		String customPrimaryTreeKey = "trees.custom.treealyzer." + tree.getGenome().getPrimary().getUnlocalizedName().replace("trees.species.", "");
+		String customSecondaryTreeKey = "trees.custom.treealyzer." + tree.getGenome().getSecondary().getUnlocalizedName().replace("trees.species.", "");
 
 		drawSpeciesRow(StringUtil.localize("gui.species"), tree, EnumTreeChromosome.SPECIES, checkCustomName(customPrimaryTreeKey), checkCustomName(customSecondaryTreeKey));
 		newLine();

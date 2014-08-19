@@ -146,8 +146,8 @@ public class GuiBeealyzer extends GuiAlyzer {
 		newLine();
 		newLine();
 
-		String customPrimaryBeeKey = "bees.custom.beealyzer." + bee.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.","");
-		String customSecondaryBeeKey = "bees.custom.beealyzer." + bee.getGenome().getSecondary().getUnlocalizedName().replace("bees.species.","");
+		String customPrimaryBeeKey = "bees.custom.beealyzer." + bee.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.", "");
+		String customSecondaryBeeKey = "bees.custom.beealyzer." + bee.getGenome().getSecondary().getUnlocalizedName().replace("bees.species.", "");
 
 		drawSpeciesRow(StringUtil.localize("gui.species"), bee, EnumBeeChromosome.SPECIES, checkCustomName(customPrimaryBeeKey), checkCustomName(customSecondaryBeeKey));
 
