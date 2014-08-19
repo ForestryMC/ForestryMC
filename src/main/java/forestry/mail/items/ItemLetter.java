@@ -190,7 +190,7 @@ public class ItemLetter extends ItemInventoried {
 				entityplayer.openGui(ForestryAPI.instance, GuiId.LetterGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY,
 						(int) entityplayer.posZ);
 			} else {
-				entityplayer.addChatMessage(new ChatComponentTranslation("chat.mail.wrongstacksize"));
+				entityplayer.addChatMessage(new ChatComponentTranslation("for.chat.mail.wrongstacksize"));
 			}
 
 		return itemstack;

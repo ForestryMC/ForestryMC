@@ -66,7 +66,7 @@ public class MachineMailbox extends TileBase implements IMailContainer, ISpecial
 		if (PostManager.postRegistry.isLetter(held)) {
 			IPostalState result = this.tryDispatchLetter(held, true);
 			if (!result.isOk())
-				player.addChatMessage(new ChatComponentTranslation("chat.mail." + result.getIdentifier()));
+				player.addChatMessage(new ChatComponentTranslation("for.chat.mail." + result.getIdentifier()));
 			else
 				held.stackSize--;
 		} else
