@@ -38,10 +38,13 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 	public static final String SAVE_NAME = "ForestryMail";
 	private final int[] collectedPostage = new int[EnumPostage.values().length];
 
-	// / CONSTRUCTOR
-	public PostOffice(World world) {
+	// CONSTRUCTORS
+	public PostOffice() {
 		super(SAVE_NAME);
-		refreshActiveTradeStations(world);
+	}
+	
+	public PostOffice(String s) {
+		super(s);
 	}
 
 	@Override
@@ -64,6 +67,9 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 
 	@Override
 	public LinkedHashMap<MailAddress, ITradeStation> getActiveTradeStations(World world) {
+		if (activeTradeStations == null)
+			refreshActiveTradeStations(world);
+		
 		return this.activeTradeStations;
 	}
 
@@ -95,12 +101,18 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 
 	@Override
 	public void registerTradeStation(ITradeStation trade) {
+		if (activeTradeStations == null)
+			return;
+		
 		if (!activeTradeStations.containsKey(trade.getAddress()))
 			activeTradeStations.put(trade.getAddress(), trade);
 	}
 
 	@Override
 	public void deregisterTradeStation(ITradeStation trade) {
+		if (activeTradeStations == null)
+			return;
+
 		activeTradeStations.remove(trade.getAddress());
 	}
 

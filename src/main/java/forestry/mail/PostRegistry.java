@@ -147,7 +147,7 @@ public class PostRegistry implements IPostRegistry {
 
 		// Create office if there is none yet
 		if (office == null) {
-			office = new PostOffice(world);
+			office = new PostOffice();
 			world.setItemData(PostOffice.SAVE_NAME, office);
 		}
 
