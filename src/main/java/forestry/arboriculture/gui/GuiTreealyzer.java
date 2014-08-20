@@ -16,9 +16,9 @@ import java.util.Locale;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.EnumPlantType;
 
+import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IAlleleGrowth;
@@ -61,6 +61,7 @@ public class GuiTreealyzer extends GuiAlyzer {
 
 		int page = 0;
 		ITree tree = null;
+		EnumGermlingType treeType = EnumGermlingType.SAPLING;
 		for (int k = 1; k < TreealyzerInventory.SLOT_ANALYZE_5 + 1; k++) {
 			if (k == TreealyzerInventory.SLOT_ENERGY)
 				continue;
@@ -68,6 +69,7 @@ public class GuiTreealyzer extends GuiAlyzer {
 			if (inventory.getStackInSlot(k) == null)
 				continue;
 			tree = PluginArboriculture.treeInterface.getMember(inventory.getStackInSlot(k));
+			treeType = PluginArboriculture.treeInterface.getType(inventory.getStackInSlot(k));
 			if (tree == null || !tree.isAnalyzed())
 				continue;
 
@@ -77,7 +79,7 @@ public class GuiTreealyzer extends GuiAlyzer {
 
 		switch (page) {
 		case 1:
-			drawAnalyticsPage1(tree);
+			drawAnalyticsPage1(tree, treeType);
 			break;
 		case 2:
 			drawAnalyticsPage2(tree);
@@ -126,7 +128,7 @@ public class GuiTreealyzer extends GuiAlyzer {
 		endPage();
 	}
 
-	private void drawAnalyticsPage1(ITree tree) {
+	private void drawAnalyticsPage1(ITree tree, EnumGermlingType type) {
 
 		startPage(COLUMN_0, COLUMN_1, COLUMN_2);
 
@@ -147,10 +149,12 @@ public class GuiTreealyzer extends GuiAlyzer {
 		newLine();
 		newLine();*/
 
-		String customPrimaryTreeKey = "trees.custom.treealyzer." + tree.getGenome().getPrimary().getUnlocalizedName().replace("trees.species.", "");
-		String customSecondaryTreeKey = "trees.custom.treealyzer." + tree.getGenome().getSecondary().getUnlocalizedName().replace("trees.species.", "");
+		{
+			String customPrimaryTreeKey = "trees.custom.treealyzer." + type.getName() + "." + tree.getGenome().getPrimary().getUnlocalizedName().replace("trees.species.", "");
+			String customSecondaryTreeKey = "trees.custom.treealyzer." + type.getName() + "." + tree.getGenome().getSecondary().getUnlocalizedName().replace("trees.species.", "");
 
-		drawSpeciesRow(StringUtil.localize("gui.species"), tree, EnumTreeChromosome.SPECIES, checkCustomName(customPrimaryTreeKey), checkCustomName(customSecondaryTreeKey));
+			drawSpeciesRow(StringUtil.localize("gui.species"), tree, EnumTreeChromosome.SPECIES, checkCustomName(customPrimaryTreeKey), checkCustomName(customSecondaryTreeKey));
+		}
 		newLine();
 
 		drawLine(StringUtil.localize("gui.saplings"), COLUMN_0);
