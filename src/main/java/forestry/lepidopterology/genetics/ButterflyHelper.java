@@ -76,7 +76,8 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 		return getType(stack) != EnumFlutterType.NONE;
 	}
 
-	private EnumFlutterType getType(ItemStack stack) {
+	@Override
+	public EnumFlutterType getType(ItemStack stack) {
 		if(stack == null)
 			return EnumFlutterType.NONE;
 
