@@ -12,12 +12,10 @@ package forestry.mail.gadgets;
 
 import java.util.LinkedList;
 
-import forestry.api.mail.MailAddress;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentTranslation;
 
 import net.minecraftforge.common.util.ForgeDirection;
@@ -28,16 +26,20 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IPostalState;
+import forestry.api.mail.MailAddress;
 import forestry.api.mail.PostManager;
+
 import forestry.core.config.Config;
 import forestry.core.gadgets.TileBase;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.InventoryAdapter;
+
 import forestry.mail.EnumDeliveryState;
 import forestry.mail.IMailContainer;
 import forestry.mail.POBox;
 import forestry.mail.PostRegistry;
+
 import forestry.plugins.PluginMail;
 
 public class MachineMailbox extends TileBase implements IMailContainer, ISpecialInventory, ISidedInventory {
@@ -89,10 +91,12 @@ public class MachineMailbox extends TileBase implements IMailContainer, ISpecial
 		if (!Proxies.common.isSimulating(worldObj))
 			return new InventoryAdapter(POBox.SLOT_SIZE, "Letters");
 
-		if (getOwnerProfile() == null)
+		EntityPlayer player = Proxies.common.getPlayer();
+		
+		if (player == null || player.getGameProfile() == null)
 			return new InventoryAdapter(POBox.SLOT_SIZE, "Letters");
 
-		MailAddress address = new MailAddress(getOwnerProfile());
+		MailAddress address = new MailAddress(player.getGameProfile());
 		return PostRegistry.getOrCreatePOBox(worldObj, address);
 	}
 
