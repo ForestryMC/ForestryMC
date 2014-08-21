@@ -359,7 +359,7 @@ public class Bee extends IndividualLiving implements IBee {
 				+ StringUtil.capitalize(genome.getToleranceTemp().name()));
 		list.add("\u00A7aH: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / "
 				+ StringUtil.capitalize(genome.getToleranceHumid().name()));
-		list.add(StringUtil.localize(genome.getFlowerProvider().getDescription()));
+		list.add(genome.getFlowerProvider().getDescription());
 		if (genome.getNocturnal())
 			list.add("\u00A7c" + GenericRatings.rateActivityTime(genome.getNocturnal(), false));
 	}
