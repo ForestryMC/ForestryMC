@@ -56,7 +56,7 @@ public class ForestryCore {
 		ForestryAPI.instance = basemod;
 		ForestryAPI.forestryConstants = new ForestryConstants();
 
-		PluginManager.loadPlugins(modLocation);
+		PluginManager.loadForestryPlugins();
 
 		// Register event handler
 		MinecraftForge.EVENT_BUS.register(new EventHandlerCore());
@@ -65,21 +65,7 @@ public class ForestryCore {
 		if (!Config.disableVersionCheck)
 			Version.versionCheck();
 
-		for (IPlugin plugin : PluginManager.plugins) {
-			if (plugin instanceof PluginCore)
-				plugin.preInit();
-		}
-
-		for (IPlugin plugin : PluginManager.plugins) {
-			if (plugin instanceof PluginCore)
-				continue;
-
-			if (plugin.isAvailable())
-				plugin.preInit();
-			else
-				Proxies.log.fine("Skipped plugin " + plugin.getClass() + " because preconditions were not met.");
-		}
-
+		PluginManager.runPreInit();
 	}
 
 	public void init(Object basemod) {
@@ -142,20 +128,12 @@ public class ForestryCore {
 		GameRegistry.registerTileEntity(TileEngine.class, "forestry.Engine");
 		GameRegistry.registerTileEntity(TileMachine.class, "forestry.Machine");
 
-
+        PluginManager.runInit();
 	}
 
 	public void postInit() {
 
-		for (IPlugin plugin : PluginManager.plugins) {
-			if (plugin.isAvailable())
-				plugin.doInit();
-		}
-
-		for (IPlugin plugin : PluginManager.plugins) {
-			if (plugin.isAvailable())
-				plugin.postInit();
-		}
+		PluginManager.runPostInit();
 
 		Proxies.common.registerTickHandlers();
 

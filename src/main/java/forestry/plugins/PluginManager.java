@@ -18,6 +18,8 @@ import java.util.Comparator;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import com.google.common.collect.Lists;
+
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -39,15 +41,104 @@ public class PluginManager {
 	 * registered object during ModsLoaded(). See {@link IPlugin} for further
 	 * details.
 	 */
-	public static ArrayList<IPlugin> plugins = new ArrayList<IPlugin>();
-	public static ArrayList<IGuiHandler> guiHandlers = new ArrayList<IGuiHandler>();
-	public static ArrayList<IPacketHandler> packetHandlers = new ArrayList<IPacketHandler>();
-	public static ArrayList<IPickupHandler> pickupHandlers = new ArrayList<IPickupHandler>();
-	public static ArrayList<ISaveEventHandler> saveEventHandlers = new ArrayList<ISaveEventHandler>();
-	public static ArrayList<IResupplyHandler> resupplyHandlers = new ArrayList<IResupplyHandler>();
-	public static ArrayList<IOreDictionaryHandler> dictionaryHandlers = new ArrayList<IOreDictionaryHandler>();
+    public static ArrayList<IPlugin> plugins = Lists.newArrayList();
+	public static ArrayList<IGuiHandler> guiHandlers = Lists.newArrayList();
+	public static ArrayList<IPacketHandler> packetHandlers = Lists.newArrayList();
+	public static ArrayList<IPickupHandler> pickupHandlers = Lists.newArrayList();
+	public static ArrayList<ISaveEventHandler> saveEventHandlers = Lists.newArrayList();
+	public static ArrayList<IResupplyHandler> resupplyHandlers = Lists.newArrayList();
+	public static ArrayList<IOreDictionaryHandler> dictionaryHandlers = Lists.newArrayList();
 
-	public static void loadPlugins(File modLocation) {
+    public static void addPlugin(IPlugin plugin) {
+        Proxies.log.fine("Loading plugin " + plugin.getClass().getSimpleName());
+        plugins.add(plugin);
+
+        if (plugin instanceof NativePlugin) {
+
+            NativePlugin nplugin = (NativePlugin) plugin;
+            IGuiHandler guiHandler = nplugin.getGuiHandler();
+            if (guiHandler != null)
+                guiHandlers.add(guiHandler);
+
+            IPacketHandler packetHandler = nplugin.getPacketHandler();
+            if (packetHandler != null)
+                packetHandlers.add(packetHandler);
+
+            IPickupHandler pickupHandler = nplugin.getPickupHandler();
+            if (pickupHandler != null)
+                pickupHandlers.add(pickupHandler);
+
+            ISaveEventHandler saveHandler = nplugin.getSaveEventHandler();
+            if (saveHandler != null)
+                saveEventHandlers.add(saveHandler);
+
+            IResupplyHandler resupplyHandler = nplugin.getResupplyHandler();
+            if (resupplyHandler != null)
+                resupplyHandlers.add(resupplyHandler);
+
+            IOreDictionaryHandler dictionaryHandler = nplugin.getDictionaryHandler();
+            if (dictionaryHandler != null)
+                dictionaryHandlers.add(dictionaryHandler);
+        }
+
+        if (plugin instanceof IFuelHandler)
+            GameRegistry.registerFuelHandler((IFuelHandler) plugin);
+    }
+
+    public static void loadForestryPlugins() {
+        addPlugin(new PluginCore());
+        addPlugin(new PluginApiculture());
+        addPlugin(new PluginArboriculture());
+        addPlugin(new PluginEnergy());
+        addPlugin(new PluginFactory());
+        addPlugin(new PluginFarming());
+        addPlugin(new PluginFood());
+        addPlugin(new PluginLepidopterology());
+        addPlugin(new PluginMail());
+        addPlugin(new PluginStorage());
+        addPlugin(new PluginBuildCraft());
+        addPlugin(new PluginEE());
+        addPlugin(new PluginFarmCraftory());
+        addPlugin(new PluginIC2());
+        addPlugin(new PluginNatura());
+    }
+
+    public static void runPreInit() {
+        for(IPlugin plugin : plugins) {
+            if(plugin instanceof PluginCore) {
+                plugin.preInit();
+                break;
+            }
+        }
+
+        for(IPlugin plugin : plugins) {
+            if(plugin instanceof PluginCore) {
+                continue;
+            }
+
+            if(plugin.isAvailable()) {
+                plugin.preInit();
+            } else {
+                Proxies.log.fine("Skipped plugin " + plugin.getClass() + " because preconditions were not met.");
+            }
+        }
+    }
+
+    public static void runInit() {
+        for (IPlugin plugin : plugins) {
+            if(plugin.isAvailable())
+                plugin.doInit();
+        }
+    }
+
+    public static void runPostInit() {
+        for (IPlugin plugin : plugins) {
+            if (plugin.isAvailable())
+                plugin.postInit();
+        }
+    }
+
+	/*public static void loadPlugins(File modLocation) {
 		loadIncludedPlugins(modLocation);
 		loadExternalPlugins(modLocation);
 	}
@@ -258,5 +349,5 @@ public class PluginManager {
 		} catch (Throwable ex) {
 			//			ex.printStackTrace();
 		}
-	}
+	}*/
 }
