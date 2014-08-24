@@ -10,8 +10,14 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StringUtil;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
@@ -19,7 +25,7 @@ import net.minecraft.world.World;
 
 import forestry.core.CreativeTabForestry;
 
-public class ItemForestryFood extends ItemForestry {
+public class ItemForestryFood extends ItemFood {
 
 	private boolean isAlwaysEdible = false;
 	private boolean isDrink = false;
@@ -37,10 +43,20 @@ public class ItemForestryFood extends ItemForestry {
 	}
 
 	public ItemForestryFood(int heal, float saturation) {
-		super();
+		super(0, 0, false);
 		healAmount = heal;
 		saturationModifier = saturation;
 		setCreativeTab(CreativeTabForestry.tabForestry);
+	}
+
+	@Override
+	public int func_150905_g(ItemStack p_150905_1_) {
+		return healAmount;
+	}
+
+	@Override
+	public float func_150906_h(ItemStack p_150906_1_) {
+		return saturationModifier;
 	}
 
 	@Override
@@ -90,6 +106,12 @@ public class ItemForestryFood extends ItemForestry {
 	public ItemForestryFood setAlwaysEdible() {
 		isAlwaysEdible = true;
 		return this;
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerIcons(IIconRegister register) {
+		itemIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this));
 	}
 
 }
