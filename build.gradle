@@ -24,7 +24,7 @@ loadProperties()
 
 version = version_major + '.' + version_minor + '.' + version_patch + '.' + getBuildNumber()
 group= "net.sengir.forestry" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "forestry_" + mcversion
+archivesBaseName = "forestry-allpower_" + mcversion
 
 ext.dirDest = './build/dist'
 ext.dirLang = "./lang"
@@ -64,16 +64,21 @@ repositories {
 		name = "ic2"
 		url = "http://maven.ic2.player.to/"
 	}
+    maven {
+        name = "bdew"
+        url = "http://jenkins.bdew.net/maven"
+    }
 }
 
 configurations {
-	buildcraft
-	compile.extendsFrom buildcraft
+	apis
+	compile.extendsFrom apis
 }
 
 dependencies {
-	compile 'net.industrial-craft:industrialcraft-2:2.2.575-experimental:api'
-	buildcraft 'com.mod-buildcraft:buildcraft:6.0.17:dev'
+	apis 'net.industrial-craft:industrialcraft-2:2.2.575-experimental:api'
+	apis 'com.mod-buildcraft:buildcraft:6.0.17:dev'
+    apis "net.bdew.thirdparty:CoFHLib:R1.0.1:api"
 }
 
 processResources {
@@ -174,7 +179,7 @@ jar {
 	archiveName = "main.jar"
 
     from {
-		configurations.buildcraft.collect {
+		configurations.apis.collect {
 			it.isDirectory() ? it : zipTree(it).matching {
 				include '**/api/**'
 			}
@@ -252,7 +257,7 @@ task devJar ( type: Zip, dependsOn: devJarSigned ) {
 	}
 
 	from {
-		configurations.buildcraft.collect {
+		configurations.apis.collect {
 			it.isDirectory() ? it : zipTree(it).matching {
 				include '**/api/**'
 			}
