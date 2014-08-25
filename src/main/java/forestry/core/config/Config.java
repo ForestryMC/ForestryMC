@@ -112,6 +112,10 @@ public class Config {
 	public static HashMap<String, String[]> hints = new HashMap<String, String[]>();
 	public static boolean disableEnergyStat = false;
 
+	// Power rations
+	public static double MJ_RF_Ratio = 10;
+	public static double MJ_EU_Ratio = 2.5;
+
 	@SuppressWarnings({ "all" })
 	public static void load() {
 
@@ -261,6 +265,9 @@ public class Config {
 		property = config.get("permissions.autoop", CATEGORY_COMMON, true);
 		property.Comment = "set to false to prevent Forestry's user from autooping.";
 		Config.fakeUserAutoop = Boolean.parseBoolean(property.Value);
+
+		Config.MJ_RF_Ratio = Double.parseDouble(config.get("MJ_RF_Ratio", CATEGORY_COMMON, 10F).Value);
+		Config.MJ_EU_Ratio = Double.parseDouble(config.get("MJ_EU_Ratio", CATEGORY_COMMON, 2.5F).Value);
 
 		registerClimates();
 		ForestryTrigger.initialize();

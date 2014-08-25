@@ -10,9 +10,16 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import cofh.api.energy.IEnergyHandler;
+import forestry.core.config.Config;
+import ic2.api.energy.event.EnergyTileLoadEvent;
+import ic2.api.energy.event.EnergyTileUnloadEvent;
+import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 
@@ -31,7 +38,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.ForestryTank;
 
-public abstract class TilePowered extends TileBase implements IPowerHandler, IRenderableMachine {
+public abstract class TilePowered extends TileBase implements IPowerHandler, IRenderableMachine, IEnergySink, IEnergyHandler {
 
 	public static int WORK_CYCLES = 4;
 
@@ -118,6 +125,11 @@ public abstract class TilePowered extends TileBase implements IPowerHandler, IRe
 		if (worldObj.isRemote)
 			return;
 
+		if (!ic2registered) {
+			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+			ic2registered = true;
+		}
+
 		if (workCounter >= WORK_CYCLES && worldObj.getTotalWorldTime() % 5 == 0) {
 			if (workCycle())
 				workCounter = 0;
@@ -136,20 +148,6 @@ public abstract class TilePowered extends TileBase implements IPowerHandler, IRe
 			workCounter++;
 		}
 
-		/*
-		 // Hard limit to 4 cycles / second.
-		 if (worldObj.getTotalWorldTime() % 5 * 10 != 0)
-		 return;
-
-		 PluginBuildCraft.instance.invokeUseEnergyMethod(powerHandler, powerHandler.getActivationEnergy(), powerHandler.getActivationEnergy(), false);
-
-		 // Do not consume energy if the boiler didn't do any work.
-		 if (!workCycle())
-		 return;
-
-		 // Use up energy since we did some work.
-		 PluginBuildCraft.instance.invokeUseEnergyMethod(powerHandler, powerHandler.getActivationEnergy(), powerHandler.getActivationEnergy(), true);
-		 */
 	}
 
 	public abstract boolean workCycle();
@@ -209,5 +207,78 @@ public abstract class TilePowered extends TileBase implements IPowerHandler, IRe
 	@Override
 	public EnumTankLevel getSecondaryLevel() {
 		return EnumTankLevel.EMPTY;
+	}
+
+	// ======= RF SUPPORT ===========
+
+	@Override
+	public int receiveEnergy(ForgeDirection forgeDirection, int i, boolean b) {
+		if (b)
+			return (int) Math.round(Math.min(powerHandler.getPowerReceiver().powerRequest() * Config.MJ_RF_Ratio, i));
+		else
+			return (int) Math.round(powerHandler.getPowerReceiver().receiveEnergy(
+					Type.PIPE, i / Config.MJ_RF_Ratio, forgeDirection) * Config.MJ_RF_Ratio);
+	}
+
+	@Override
+	public int extractEnergy(ForgeDirection forgeDirection, int i, boolean b) {
+		return 0;
+	}
+
+	@Override
+	public int getEnergyStored(ForgeDirection forgeDirection) {
+		return (int) Math.round(powerHandler.getEnergyStored() * Config.MJ_RF_Ratio);
+	}
+
+	@Override
+	public int getMaxEnergyStored(ForgeDirection forgeDirection) {
+		return (int) Math.round(powerHandler.getMaxEnergyStored() * Config.MJ_RF_Ratio);
+	}
+
+	@Override
+	public boolean canConnectEnergy(ForgeDirection forgeDirection) {
+		return true;
+	}
+
+	// ======== EU SUPPORT ============
+
+	private boolean ic2registered = false;
+
+	@Override
+	public void invalidate() {
+		if (ic2registered) {
+			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+			ic2registered = false;
+		}
+		super.invalidate();
+	}
+
+	@Override
+	public void onChunkUnload() {
+		if (ic2registered) {
+			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+			ic2registered = false;
+		}
+		super.onChunkUnload();
+	}
+
+	@Override
+	public double getDemandedEnergy() {
+		return powerHandler.getPowerReceiver().powerRequest() * Config.MJ_EU_Ratio;
+	}
+
+	@Override
+	public int getSinkTier() {
+		return 2;
+	}
+
+	@Override
+	public double injectEnergy(ForgeDirection forgeDirection, double v, double v2) {
+		return (v - powerHandler.getPowerReceiver().receiveEnergy(Type.PIPE, v / Config.MJ_EU_Ratio, forgeDirection) * Config.MJ_EU_Ratio) ;
+	}
+
+	@Override
+	public boolean acceptsEnergyFrom(TileEntity tileEntity, ForgeDirection forgeDirection) {
+		return true;
 	}
 }
