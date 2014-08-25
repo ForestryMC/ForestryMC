@@ -274,7 +274,7 @@ public abstract class TilePowered extends TileBase implements IPowerHandler, IRe
 
 	@Override
 	public double injectEnergy(ForgeDirection forgeDirection, double v, double v2) {
-		return (v - powerHandler.getPowerReceiver().receiveEnergy(Type.PIPE, v / Config.MJ_EU_Ratio, forgeDirection)) * Config.MJ_EU_Ratio;
+		return (v - powerHandler.getPowerReceiver().receiveEnergy(Type.PIPE, v / Config.MJ_EU_Ratio, forgeDirection) * Config.MJ_EU_Ratio) ;
 	}
 
 	@Override
