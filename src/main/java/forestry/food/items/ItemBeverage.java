@@ -134,7 +134,7 @@ public class ItemBeverage extends ItemForestryFood {
 		IBeverageEffect[] effects = beverage.loadEffects(itemstack);
 
 		itemstack.stackSize--;
-		entityplayer.getFoodStats().addStats(beverage.heal, beverage.saturation);
+		entityplayer.getFoodStats().func_151686_a(this, itemstack);
 		world.playSoundAtEntity(entityplayer, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
 
 		if (!Proxies.common.isSimulating(world))
