@@ -42,7 +42,7 @@ public class GrowthProviderTropical extends GrowthProvider {
 
 	@Override
 	public String getDescription() {
-		return StringUtil.localize("gui.growth.tropical");
+		return StringUtil.localize("growth.tropical");
 	}
 
 }

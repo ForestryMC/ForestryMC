@@ -102,7 +102,7 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 		startPage();
 
 		newLine();
-		String title = StringUtil.localize("item.flutterlyzer").toUpperCase();
+		String title = StringUtil.localize("gui.flutterlyzer").toUpperCase();
 		drawCenteredLine(title, 8, 158);
 		newLine();
 
