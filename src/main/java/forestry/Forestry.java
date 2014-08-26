@@ -15,10 +15,13 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCEvent;
+import cpw.mods.fml.common.event.FMLMissingMappingsEvent;
+import cpw.mods.fml.common.event.FMLMissingMappingsEvent.MissingMapping;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.GameRegistry.Type;
 import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.EngineCopperFuel;
 import forestry.api.fuels.FermenterFuel;
@@ -27,10 +30,15 @@ import forestry.api.fuels.MoistenerFuel;
 import forestry.api.fuels.RainSubstrate;
 import forestry.core.ForestryCore;
 import forestry.core.config.Defaults;
+import forestry.core.config.ForestryItem;
 import forestry.core.config.Version;
 import forestry.core.network.PacketHandler;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.FluidMap;
 import forestry.core.utils.ItemStackMap;
+import forestry.core.utils.StringUtil;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 
 /**
  * Forestry Minecraft Mod
@@ -42,10 +50,10 @@ import forestry.core.utils.ItemStackMap;
 		name = "Forestry",
 		version = Version.VERSION,
 		dependencies = "required-after:Forge@[10.13.0.1180,);"
-				+ "after:Buildcraft|Core;"
-				+ "after:ExtrabiomesXL;"
-				+ "after:BiomesOPlenty;"
-				+ "after:IC2")
+		+ "after:Buildcraft|Core;"
+		+ "after:ExtrabiomesXL;"
+		+ "after:BiomesOPlenty;"
+		+ "after:IC2")
 //, certificateFingerprint = Version.FINGERPRINT)
 public class Forestry {
 
@@ -95,5 +103,34 @@ public class Forestry {
 	@EventHandler
 	public void processIMCMessages(IMCEvent event) {
 		core.processIMCMessages(event.getMessages());
+	}
+
+	@EventHandler
+	public void missingMapping(FMLMissingMappingsEvent event) {
+		for (MissingMapping mapping : event.get())
+			if (mapping.type == Type.BLOCK) {
+				Block block = GameRegistry.findBlock(Defaults.MOD, StringUtil.cleanTags(mapping.name));
+				if (block != null) {
+					mapping.remap(block);
+					Proxies.log.warning("Remapping block " + mapping.name + " to " + StringUtil.cleanBlockName(block));
+				}
+			} else {
+				Block block = GameRegistry.findBlock(Defaults.MOD, StringUtil.cleanTags(mapping.name));
+				if (block != null) {
+					mapping.remap(Item.getItemFromBlock(block));
+					Proxies.log.warning("Remapping item " + mapping.name + " to " + StringUtil.cleanBlockName(block));
+					continue;
+				}
+				if (mapping.name.equals("builderBackpack"))
+					mapping.remap(ForestryItem.builderBackpack.item());
+				if (mapping.name.equals("builderBackpackT2"))
+					mapping.remap(ForestryItem.builderBackpackT2.item());
+				if (mapping.name.equals("adventurerBackpack"))
+					mapping.remap(ForestryItem.adventurerBackpack.item());
+				if (mapping.name.equals("adventurerBackpackT2"))
+					mapping.remap(ForestryItem.adventurerBackpackT2.item());
+				if (mapping.name.equals("shortMead"))
+					mapping.remap(ForestryItem.beverage.item());
+			}
 	}
 }
