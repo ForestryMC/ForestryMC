@@ -33,6 +33,7 @@ import net.minecraftforge.fluids.FluidStack;
 import buildcraft.api.gates.ITrigger;
 import buildcraft.api.power.PowerHandler;
 
+import cofh.api.energy.EnergyStorage;
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.IBottlerManager;
 import forestry.api.recipes.RecipeManagers;
@@ -161,6 +162,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	private int fillingTotalTime;
 
 	public MachineBottler() {
+        energyStorage = new EnergyStorage(4000);
 		setHints(Config.hints.get("bottler"));
 	}
 
@@ -175,10 +177,10 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	}
 
 
-	@Override
+	/*@Override //TODO
 	protected void configurePowerProvider(PowerHandler provider) {
 		provider.configure(50, 110, 5, 400);
-	}
+	}*/
 
 	/* SAVING & LOADING */
 	@Override

@@ -34,6 +34,7 @@ import net.minecraftforge.fluids.FluidStack;
 import buildcraft.api.gates.ITrigger;
 import buildcraft.api.power.PowerHandler;
 
+import cofh.api.energy.EnergyStorage;
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.ICarpenterManager;
 import forestry.core.EnumErrorCode;
@@ -230,6 +231,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	}
 
 	public MachineCarpenter() {
+        energyStorage = new EnergyStorage(4000);
 		setHints(Config.hints.get("carpenter"));
 		craftingInventory = new TileInventoryAdapter(this, 10, "CraftItems");
 		accessibleInventory = (TileInventoryAdapter) new TileInventoryAdapter(this, 30, "Items").configureSided(Defaults.FACINGS, SLOT_BOX, 20);
@@ -245,10 +247,10 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		player.openGui(ForestryAPI.instance, GuiId.CarpenterGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
-	@Override
+	/*@Override //TODO
 	protected void configurePowerProvider(PowerHandler provider) {
 		provider.configure(50, 110, 5, 400);
-	}
+	}*/
 
 	/* LOADING & SAVING */
 	@Override

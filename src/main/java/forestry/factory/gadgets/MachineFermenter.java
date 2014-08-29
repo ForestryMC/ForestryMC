@@ -29,6 +29,7 @@ import net.minecraftforge.fluids.FluidStack;
 import buildcraft.api.gates.ITrigger;
 import buildcraft.api.power.PowerHandler;
 
+import cofh.api.energy.EnergyStorage;
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
 import forestry.api.recipes.IFermenterManager;
@@ -193,6 +194,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 	public int fuelCurrentFerment = 0;
 
 	public MachineFermenter() {
+        energyStorage = new EnergyStorage(8000);
 		setHints(Config.hints.get("fermenter"));
 	}
 
@@ -206,10 +208,10 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		player.openGui(ForestryAPI.instance, GuiId.FermenterGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
-	@Override
+	/*@Override //TODO
 	protected void configurePowerProvider(PowerHandler provider) {
 		provider.configure(5, 200, 15, 800);
-	}
+	}*/
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {

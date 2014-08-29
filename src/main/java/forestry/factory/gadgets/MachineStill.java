@@ -29,6 +29,7 @@ import net.minecraftforge.fluids.FluidStack;
 import buildcraft.api.gates.ITrigger;
 import buildcraft.api.power.PowerHandler;
 
+import cofh.api.energy.EnergyStorage;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.recipes.IStillManager;
@@ -128,6 +129,7 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 	public int distillationTotalTime = 0;
 
 	public MachineStill() {
+        energyStorage = new EnergyStorage(8000);
 		setHints(Config.hints.get("still"));
 	}
 
@@ -141,10 +143,10 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 		player.openGui(ForestryAPI.instance, GuiId.StillGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
-	@Override
+	/*@Override //TODO
 	protected void configurePowerProvider(PowerHandler provider) {
 		provider.configure(50, 110, 5, 800);
-	}
+	}*/
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {

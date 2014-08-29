@@ -46,7 +46,6 @@ sourceSets {
 		java {
 			srcDir CraftGuideTmp + "/src"
 			include '**/CraftGuide/api/**'
-			include 'cofh/**'
 		}
 	}
 	

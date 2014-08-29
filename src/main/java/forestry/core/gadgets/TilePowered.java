@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
-import forestry.core.config.Config;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
@@ -23,13 +23,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 
-import buildcraft.api.power.PowerHandler;
-import buildcraft.api.power.PowerHandler.PowerReceiver;
-import buildcraft.api.power.PowerHandler.Type;
-
 import forestry.core.GameMode;
-import forestry.core.config.Defaults;
-import forestry.core.interfaces.IPowerHandler;
 import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.network.ClassMap;
 import forestry.core.network.IndexInPayload;
@@ -38,9 +32,10 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.ForestryTank;
 
-public abstract class TilePowered extends TileBase implements IPowerHandler, IRenderableMachine, IEnergySink, IEnergyHandler {
+public abstract class TilePowered extends TileBase implements IRenderableMachine, IEnergySink, IEnergyHandler {
 
 	public static int WORK_CYCLES = 4;
+    public static int ENERGY_PER_USE = 150; //Temporary
 
 	@Override
 	public PacketPayload getPacketPayload() {
@@ -76,7 +71,14 @@ public abstract class TilePowered extends TileBase implements IPowerHandler, IRe
 			ex.printStackTrace();
 		}
 	}
-	private final PowerHandler powerHandler;
+    protected EnergyStorage energyStorage;
+
+    public TilePowered() {
+        energyStorage = new EnergyStorage(5000);
+        energyStorage.setCapacity(Math.round(energyStorage.getMaxEnergyStored() * GameMode.getGameMode().getFloatSetting("energy.demand.modifier") * 10)); //TODO The *10 is temporary until the RF conversion is complete
+    }
+
+	/*private final PowerHandler powerHandler;
 
 	public TilePowered() {
 		powerHandler = new PowerHandler(this, Type.MACHINE);
@@ -95,7 +97,7 @@ public abstract class TilePowered extends TileBase implements IPowerHandler, IRe
 				Math.round(provider.getMaxEnergyReceived() * GameMode.getGameMode().getFloatSetting("energy.demand.modifier")),
 				Math.round(provider.getActivationEnergy() * GameMode.getGameMode().getFloatSetting("energy.demand.modifier")),
 				Math.round(provider.getMaxEnergyStored() * GameMode.getGameMode().getFloatSetting("energy.demand.modifier")));
-	}
+	}*/
 
 	/* STATE INFORMATION */
 	public abstract boolean isWorking();
@@ -113,16 +115,16 @@ public abstract class TilePowered extends TileBase implements IPowerHandler, IRe
 	}
 
 	/* IPOWERRECEPTOR */
-	@Override
+	/*@Override
 	public PowerHandler getPowerHandler() {
 		return powerHandler;
-	}
+	}*/
 	private int workCounter;
 
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		if (worldObj.isRemote)
+		if (worldObj.isRemote || !Proxies.common.isSimulating(worldObj))
 			return;
 
 		if (!ic2registered) {
@@ -130,51 +132,30 @@ public abstract class TilePowered extends TileBase implements IPowerHandler, IRe
 			ic2registered = true;
 		}
 
+        if (workCounter < WORK_CYCLES) {
+            energyStorage.modifyEnergyStored(-ENERGY_PER_USE); //TODO Make it continuous usage while doing work
+            workCounter++;
+        }
+
 		if (workCounter >= WORK_CYCLES && worldObj.getTotalWorldTime() % 5 == 0) {
 			if (workCycle())
 				workCounter = 0;
 		}
 	}
 
-	@Override
-	public void doWork(PowerHandler workProvider) {
-
-		if (!Proxies.common.isSimulating(worldObj))
-			return;
-
-		// Hard limit to 4 cycles / second.
-		if (workCounter < WORK_CYCLES) {
-			powerHandler.useEnergy(powerHandler.getActivationEnergy(), powerHandler.getActivationEnergy(), true);
-			workCounter++;
-		}
-
-	}
-
 	public abstract boolean workCycle();
-
-	@Override
-	public PowerReceiver getPowerReceiver(ForgeDirection side) {
-		return powerHandler.getPowerReceiver();
-	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		powerHandler.writeToNBT(nbt);
+		energyStorage.writeToNBT(nbt);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		powerHandler.readFromNBT(nbt);
+		energyStorage.readFromNBT(nbt);
 	}
-
-	/*
-	 @Override
-	 public int powerRequest(ForgeDirection direction) {
-	 float needed = powerProvider.getMaxEnergyStored() - powerProvider.getEnergyStored();
-	 return (int) Math.ceil(Math.min(powerProvider.getMaxEnergyReceived(), needed));
-	 } */
 
 	/* LIQUID CONTAINER HANDLING */
 	protected ItemStack bottleIntoContainer(ItemStack canStack, ItemStack outputStack, FluidContainerData container, ForestryTank tank) {
@@ -209,15 +190,9 @@ public abstract class TilePowered extends TileBase implements IPowerHandler, IRe
 		return EnumTankLevel.EMPTY;
 	}
 
-	// ======= RF SUPPORT ===========
-
 	@Override
-	public int receiveEnergy(ForgeDirection forgeDirection, int i, boolean b) {
-		if (b)
-			return (int) Math.round(Math.min(powerHandler.getPowerReceiver().powerRequest() * Config.MJ_RF_Ratio, i));
-		else
-			return (int) Math.round(powerHandler.getPowerReceiver().receiveEnergy(
-					Type.PIPE, i / Config.MJ_RF_Ratio, forgeDirection) * Config.MJ_RF_Ratio);
+	public int receiveEnergy(ForgeDirection forgeDirection, int maxReceive, boolean simulate) {
+        return energyStorage.receiveEnergy(maxReceive, simulate);
 	}
 
 	@Override
@@ -227,12 +202,12 @@ public abstract class TilePowered extends TileBase implements IPowerHandler, IRe
 
 	@Override
 	public int getEnergyStored(ForgeDirection forgeDirection) {
-		return (int) Math.round(powerHandler.getEnergyStored() * Config.MJ_RF_Ratio);
+		return energyStorage.getEnergyStored();
 	}
 
 	@Override
 	public int getMaxEnergyStored(ForgeDirection forgeDirection) {
-		return (int) Math.round(powerHandler.getMaxEnergyStored() * Config.MJ_RF_Ratio);
+		return energyStorage.getMaxEnergyStored();
 	}
 
 	@Override
@@ -264,7 +239,7 @@ public abstract class TilePowered extends TileBase implements IPowerHandler, IRe
 
 	@Override
 	public double getDemandedEnergy() {
-		return powerHandler.getPowerReceiver().powerRequest() * Config.MJ_EU_Ratio;
+        return (energyStorage.getMaxEnergyStored() - energyStorage.getEnergyStored()) / 4;
 	}
 
 	@Override
@@ -273,12 +248,12 @@ public abstract class TilePowered extends TileBase implements IPowerHandler, IRe
 	}
 
 	@Override
-	public double injectEnergy(ForgeDirection forgeDirection, double v, double v2) {
-		return (v - powerHandler.getPowerReceiver().receiveEnergy(Type.PIPE, v / Config.MJ_EU_Ratio, forgeDirection) * Config.MJ_EU_Ratio) ;
+	public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
+        return energyStorage.receiveEnergy((int)(amount * 4), false); //TODO May want to do something other than casting
 	}
 
 	@Override
-	public boolean acceptsEnergyFrom(TileEntity tileEntity, ForgeDirection forgeDirection) {
+	public boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction) {
 		return true;
 	}
 }

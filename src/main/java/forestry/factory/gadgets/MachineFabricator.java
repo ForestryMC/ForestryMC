@@ -27,6 +27,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import buildcraft.api.power.PowerHandler;
 
+import cofh.api.energy.EnergyStorage;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.recipes.IFabricatorManager;
@@ -237,12 +238,13 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 	private FluidStack pendingSmelt;
 
 	public MachineFabricator() {
+        energyStorage = new EnergyStorage(3300);
 	}
 
-	@Override
+	/*@Override //TODO
 	protected void configurePowerProvider(PowerHandler provider) {
 		provider.configure(50, 110, 5, 330);
-	}
+	}*/
 
 	@Override
 	public String getInventoryName() {
