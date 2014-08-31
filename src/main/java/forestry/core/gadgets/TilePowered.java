@@ -75,7 +75,7 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 
     public TilePowered() {
         energyStorage = new EnergyStorage(5000);
-        energyStorage.setCapacity(Math.round(energyStorage.getMaxEnergyStored() * GameMode.getGameMode().getFloatSetting("energy.demand.modifier") * 10)); //TODO The *10 is temporary until the RF conversion is complete
+        //energyStorage.setCapacity(Math.round(energyStorage.getMaxEnergyStored() * GameMode.getGameMode().getFloatSetting("energy.demand.modifier")));
     }
 
 	/*private final PowerHandler powerHandler;
@@ -114,11 +114,6 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 		return false;
 	}
 
-	/* IPOWERRECEPTOR */
-	/*@Override
-	public PowerHandler getPowerHandler() {
-		return powerHandler;
-	}*/
 	private int workCounter;
 
 	@Override
@@ -191,27 +186,27 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 	}
 
 	@Override
-	public int receiveEnergy(ForgeDirection forgeDirection, int maxReceive, boolean simulate) {
+	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
         return energyStorage.receiveEnergy(maxReceive, simulate);
 	}
 
 	@Override
-	public int extractEnergy(ForgeDirection forgeDirection, int i, boolean b) {
+	public int extractEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
 		return 0;
 	}
 
 	@Override
-	public int getEnergyStored(ForgeDirection forgeDirection) {
+	public int getEnergyStored(ForgeDirection from) {
 		return energyStorage.getEnergyStored();
 	}
 
 	@Override
-	public int getMaxEnergyStored(ForgeDirection forgeDirection) {
+	public int getMaxEnergyStored(ForgeDirection from) {
 		return energyStorage.getMaxEnergyStored();
 	}
 
 	@Override
-	public boolean canConnectEnergy(ForgeDirection forgeDirection) {
+	public boolean canConnectEnergy(ForgeDirection from) {
 		return true;
 	}
 
