@@ -45,9 +45,6 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 		super(AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies"), player,
 				new ContainerFlutterlyzer(player.inventory, inventory), inventory, 1, inventory.getSizeInventory());
 
-		xSize = 196;
-		ySize = 238;
-
 		ArrayList<ItemStack> butterflyList = new ArrayList<ItemStack>();
 		((ItemButterflyGE) ForestryItem.butterflyGE.item()).addCreativeItems(butterflyList, false);
 		for (ItemStack butterflyStack : butterflyList)

@@ -43,8 +43,8 @@ import forestry.core.utils.StringUtil;
 public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 
 	protected static final int COLUMN_0 = 12;
-	protected static final int COLUMN_1 = 52;
-	protected static final int COLUMN_2 = 108;
+	protected static final int COLUMN_1 = 85;
+	protected static final int COLUMN_2 = 150;
 
 	protected IInventory inventory;
 	protected ISpeciesRoot speciesRoot;
@@ -54,6 +54,9 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 
 	public GuiAlyzer(ISpeciesRoot speciesRoot, EntityPlayer player, ContainerForestry container, IInventory inventory, int pageMax, int pageSize) {
 		super(Defaults.TEXTURE_PATH_GUI + "/beealyzer.png", container);
+
+		xSize = 246;
+		ySize = 238;
 
 		this.inventory = inventory;
 		this.speciesRoot = speciesRoot;
@@ -94,8 +97,8 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 		int columnwidth = column2 - column1 - 16;
 
 		RenderHelper.enableStandardItemLighting();
-		drawItemStack(iconStacks.get(primary.getUID()), adjustToFactor(guiLeft + column1 + columnwidth + 2), adjustToFactor(guiTop + getLineY()));
-		drawItemStack(iconStacks.get(secondary.getUID()), adjustToFactor(guiLeft + column2 + columnwidth + 4), adjustToFactor(guiTop + getLineY()));
+		drawItemStack(iconStacks.get(primary.getUID()), adjustToFactor(guiLeft + column1 + columnwidth - 4), adjustToFactor(guiTop + getLineY()));
+		drawItemStack(iconStacks.get(secondary.getUID()), adjustToFactor(guiLeft + column2 + columnwidth - 2), adjustToFactor(guiTop + getLineY()));
 		RenderHelper.disableStandardItemLighting();
 
 		String primaryName;
@@ -151,9 +154,9 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 				continue;
 
 			drawLine(group.getScientific(), x, group.getLevel().getColour());
-			drawLine(group.getLevel().name(), 130, group.getLevel().getColour());
+			drawLine(group.getLevel().name(), 155, group.getLevel().getColour());
 			newLine();
-			x += 8;
+			x += 10;
 		}
 
 		// Add the species name
@@ -162,7 +165,7 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 			binomial = group.getScientific().substring(0, 1) + ". " + binomial.toLowerCase(Locale.ENGLISH);
 
 		drawLine(binomial, x, 0xebae85);
-		drawLine("SPECIES", 130, 0xebae85);
+		drawLine("SPECIES", 155, 0xebae85);
 
 		newLine();
 		newLine();
@@ -179,7 +182,7 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 			drawSplitLine(StringUtil.localize("gui.alyzer.nodescription"), 12, 156, 0x666666);
 		else {
 			String tokens[] = description.split("\\|");
-			drawSplitLine(tokens[0], 12, 152, 0x666666);
+			drawSplitLine(tokens[0], 12, 202, 0x666666);
 			if (tokens.length > 1)
 				fontRendererObj.drawStringWithShadow("- " + tokens[1], adjustToFactor(guiLeft + 160) - fontRendererObj.getStringWidth("- " + tokens[1]),
 						adjustToFactor(guiTop + 145 - 14), 0x99cc32);
@@ -222,7 +225,7 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 			}
 
 			x += columnWidth;
-			if (x > 150) {
+			if (x > columnWidth * 4) {
 				x = 0;
 				newLine();
 				newLine();
@@ -254,30 +257,29 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 				adjustToFactor(guiTop) + getLineY());
 		 */
 
-		int line = 0;
-		int column = 196;
+		int line = 247;
+		int column = 100;
 
 		switch (EnumMutateChance.rateChance(combination.getBaseChance())) {
-		case HIGHEST:
-			column = 226;
-			line = 9;
-			break;
-		case HIGHER:
-			column = 211;
-			line = 9;
-			break;
-		case HIGH:
-			line = 9;
-			break;
-		case NORMAL:
-			column = 226;
-			break;
-		case LOW:
-			column = 211;
-			break;
-		case LOWEST:
-		default:
-			break;
+			case HIGHEST:
+				column = 100;
+				break;
+			case HIGHER:
+				column = 100 + 15;
+				break;
+			case HIGH:
+				column = 100 + 15 * 2;
+				break;
+			case NORMAL:
+				column = 100 + 15 * 3;
+				break;
+			case LOW:
+				column = 100 + 15 * 4;
+				break;
+			case LOWEST:
+				column = 100 + 15 * 5;
+			default:
+				break;
 		}
 
 		Proxies.common.bindTexture(textureFile);
@@ -289,35 +291,34 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 
 		// Question marks
 		Proxies.common.bindTexture(textureFile);
-		drawTexturedModalRect(adjustToFactor(guiLeft) + x, adjustToFactor(guiTop) + getLineY(), 196, 18, 16, 16);
+		drawTexturedModalRect(adjustToFactor(guiLeft) + x, adjustToFactor(guiTop) + getLineY(), 78, 240, 16, 16);
 
 		Proxies.common.bindTexture(textureFile);
-		drawTexturedModalRect(adjustToFactor(guiLeft) + x + 32, adjustToFactor(guiTop) + getLineY(), 196, 18, 16, 16);
+		drawTexturedModalRect(adjustToFactor(guiLeft) + x + 32, adjustToFactor(guiTop) + getLineY(), 78, 240, 16, 16);
 
-		int line = 0;
-		int column = 196;
+		int line = 247;
+		int column = 100;
 
 		switch (EnumMutateChance.rateChance(combination.getBaseChance())) {
-		case HIGHEST:
-			column = 226;
-			line = 9;
-			break;
-		case HIGHER:
-			column = 211;
-			line = 9;
-			break;
-		case HIGH:
-			line = 9;
-			break;
-		case NORMAL:
-			column = 226;
-			break;
-		case LOW:
-			column = 211;
-			break;
-		case LOWEST:
-		default:
-			break;
+			case HIGHEST:
+				column = 100;
+				break;
+			case HIGHER:
+				column = 100 + 15;
+				break;
+			case HIGH:
+				column = 100 + 15 * 2;
+				break;
+			case NORMAL:
+				column = 100 + 15 * 3;
+				break;
+			case LOW:
+				column = 100 + 15 * 4;
+				break;
+			case LOWEST:
+				column = 100 + 15 * 5;
+			default:
+				break;
 		}
 
 		// Probability arrow
@@ -367,22 +368,22 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 
 	private void drawDownSymbol(int x, int y) {
 		Proxies.common.bindTexture(textureFile);
-		drawTexturedModalRect((int) ((guiLeft + x) * (1 / factor)), (int) ((guiTop + getLineY()) * (1 / factor)), 196, 34, 15, 9);
+		drawTexturedModalRect((int) ((guiLeft + x) * (1 / factor)), (int) ((guiTop + getLineY()) * (1 / factor)), 0, 247, 15, 9);
 	}
 
 	private void drawUpSymbol(int x, int y) {
 		Proxies.common.bindTexture(textureFile);
-		drawTexturedModalRect((int) ((guiLeft + x) * (1 / factor)), (int) ((guiTop + getLineY()) * (1 / factor)), 211, 34, 15, 9);
+		drawTexturedModalRect((int) ((guiLeft + x) * (1 / factor)), (int) ((guiTop + getLineY()) * (1 / factor)), 15, 247, 15, 9);
 	}
 
 	private void drawBothSymbol(int x, int y) {
 		Proxies.common.bindTexture(textureFile);
-		drawTexturedModalRect((int) ((guiLeft + x) * (1 / factor)), (int) ((guiTop + getLineY()) * (1 / factor)), 226, 34, 15, 9);
+		drawTexturedModalRect((int) ((guiLeft + x) * (1 / factor)), (int) ((guiTop + getLineY()) * (1 / factor)), 30, 247, 15, 9);
 	}
 
 	private void drawNoneSymbol(int x, int y) {
 		Proxies.common.bindTexture(textureFile);
-		drawTexturedModalRect((int) ((guiLeft + x) * (1 / factor)), (int) ((guiTop + getLineY()) * (1 / factor)), 241, 34, 15, 9);
+		drawTexturedModalRect((int) ((guiLeft + x) * (1 / factor)), (int) ((guiTop + getLineY()) * (1 / factor)), 45, 247, 15, 9);
 	}
 
 	protected void drawFertilityInfo(int fertility, int x, int textColor, int texOffset) {
@@ -390,7 +391,7 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		Proxies.common.bindTexture(textureFile);
-		drawTexturedModalRect((int) ((guiLeft + x + 19) * (1 / factor)), (int) ((guiTop + getLineY()) * (1 / factor)), 196, 43 + texOffset, 12, 9);
+		drawTexturedModalRect((int) ((guiLeft + x + 19) * (1 / factor)), (int) ((guiTop + getLineY()) * (1 / factor)), 60, 240 + texOffset, 12, 8);
 
 		drawLine(Integer.toString(fertility) + " x", x, textColor);
 	}

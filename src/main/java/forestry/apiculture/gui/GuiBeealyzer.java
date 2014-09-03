@@ -41,9 +41,6 @@ public class GuiBeealyzer extends GuiAlyzer {
 		super(AlleleManager.alleleRegistry.getSpeciesRoot("rootBees"), player,
 				new ContainerBeealyzer(player.inventory, inventory), inventory, 1, inventory.getSizeInventory());
 
-		xSize = 196;
-		ySize = 238;
-
 		ArrayList<ItemStack> beeList = new ArrayList<ItemStack>();
 		((ItemBeeGE) ForestryItem.beeDroneGE.item()).addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList)

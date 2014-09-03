@@ -46,9 +46,6 @@ public class GuiTreealyzer extends GuiAlyzer {
 		super(AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees"), player,
 				new ContainerTreealyzer(player.inventory, inventory), inventory, 1, inventory.getSizeInventory());
 
-		xSize = 196;
-		ySize = 238;
-
 		ArrayList<ItemStack> treeList = new ArrayList<ItemStack>();
 		((ItemGermlingGE) ForestryItem.sapling.item()).addCreativeItems(treeList, false);
 		for (ItemStack beeStack : treeList)
