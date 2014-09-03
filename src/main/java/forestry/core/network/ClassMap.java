@@ -76,10 +76,13 @@ public class ClassMap {
 		}
 		for (Field member : gameProfileMember) {
 			GameProfile profile = (GameProfile) member.get(obj);
-			intPayload[index.intIndex] = (int) (profile.getId().getMostSignificantBits() >>> 32);
-			intPayload[index.intIndex + 1] = (int) profile.getId().getMostSignificantBits();
-			intPayload[index.intIndex + 2] = (int) (profile.getId().getLeastSignificantBits() >>> 32);
-			intPayload[index.intIndex + 3] = (int) profile.getId().getLeastSignificantBits();
+			UUID profileID = profile.getId();
+			if (profileID == null)
+				profileID = new UUID(0,0);
+			intPayload[index.intIndex] = (int) profileID.getMostSignificantBits() >>> 32;
+			intPayload[index.intIndex + 1] = (int) profileID.getMostSignificantBits();
+			intPayload[index.intIndex + 2] = (int) profileID.getLeastSignificantBits() >>> 32;
+			intPayload[index.intIndex + 3] = (int) profileID.getLeastSignificantBits();
 			index.intIndex += 4;
 			stringPayload[index.stringIndex] = profile.getName();
 			index.stringIndex++;
