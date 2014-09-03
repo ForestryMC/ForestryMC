@@ -47,6 +47,10 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 		super(s);
 	}
 
+	public void setWorld(World world) {
+		refreshActiveTradeStations(world);
+	}
+
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		for (int i = 0; i < collectedPostage.length; i++) {
@@ -67,9 +71,6 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 
 	@Override
 	public LinkedHashMap<MailAddress, ITradeStation> getActiveTradeStations(World world) {
-		if (activeTradeStations == null)
-			refreshActiveTradeStations(world);
-		
 		return this.activeTradeStations;
 	}
 
@@ -101,18 +102,12 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 
 	@Override
 	public void registerTradeStation(ITradeStation trade) {
-		if (activeTradeStations == null)
-			return;
-		
 		if (!activeTradeStations.containsKey(trade.getAddress()))
 			activeTradeStations.put(trade.getAddress(), trade);
 	}
 
 	@Override
 	public void deregisterTradeStation(ITradeStation trade) {
-		if (activeTradeStations == null)
-			return;
-
 		activeTradeStations.remove(trade.getAddress());
 	}
 

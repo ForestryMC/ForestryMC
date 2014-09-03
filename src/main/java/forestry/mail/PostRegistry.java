@@ -151,6 +151,8 @@ public class PostRegistry implements IPostRegistry {
 			world.setItemData(PostOffice.SAVE_NAME, office);
 		}
 
+		office.setWorld(world);
+
 		cachedPostOffice = office;
 		return office;
 	}
