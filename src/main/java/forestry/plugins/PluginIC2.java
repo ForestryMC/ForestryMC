@@ -144,32 +144,40 @@ public class PluginIC2 implements IPlugin {
 
 		private void initRubberChain() {
 			treetap = IC2Items.getItem("treetap");
-			resin = IC2Items.getItem("resin");
 			rubberwood = IC2Items.getItem("rubberWood");
-			rubbersapling = IC2Items.getItem("rubberSapling");
-			rubberleaves = IC2Items.getItem("rubberLeaves");
+
+			resin = IC2Items.getItem("resin");
+			if (resin != null)
+				RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.propolis.getItemStack(), resin);
+			else
+				Proxies.log.fine("Missing IC2 resin, skipping centrifuge recipe for propolis to resin.");
+
 			fuelcanFilled = IC2Items.getItem("filledFuelCan");
 			fuelcanEmpty = IC2Items.getItem("fuelCan");
-			if (treetap == null || resin == null || rubberwood == null || rubbersapling == null || rubberleaves == null || fuelcanFilled == null
-					|| fuelcanEmpty == null) {
-				Proxies.log
-				.fine("Any of the following IC2 blocks and items could not be found: resin, rubber wood, saplings or leaves, filled fuel cans, empty fuel cans. Skipped adding rubber chain.");
-				return;
+			if (fuelcanEmpty != null && fuelcanFilled != null) {
+				ItemStack fuelcanStack = new ItemStack(fuelcanFilled.getItem(), 1, 0);
+				NBTTagCompound compound = new NBTTagCompound();
+				compound.setInteger("value", 15288);
+				fuelcanStack.setTagCompound(compound);
+				RecipeManagers.bottlerManager.addRecipe(20, LiquidHelper.getLiquid(Defaults.LIQUID_ETHANOL, Defaults.BOTTLER_FUELCAN_VOLUME), fuelcanEmpty, fuelcanStack);
+			} else {
+				Proxies.log.fine("Missing IC2 fuelcanEmpty or fuelcanFilled, skipping bottler recipe for ethanol to filled fuel can.");
 			}
 
-			// Add extra recipes
-			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.propolis.getItemStack(), resin);
-			ItemStack fuelcanStack = new ItemStack(fuelcanFilled.getItem(), 1, 0);
-			NBTTagCompound compound = new NBTTagCompound();
-			compound.setInteger("value", 15288);
-			fuelcanStack.setTagCompound(compound);
-			RecipeManagers.bottlerManager.addRecipe(20, LiquidHelper.getLiquid(Defaults.LIQUID_ETHANOL, Defaults.BOTTLER_FUELCAN_VOLUME), fuelcanEmpty, fuelcanStack);
+			rubbersapling = IC2Items.getItem("rubberSapling");
+			if (rubbersapling != null) {
+				RecipeUtil.injectLeveledRecipe(rubbersapling, GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Defaults.LIQUID_BIOMASS);
+				BackpackManager.backpackItems[2].add(rubbersapling);
+			} else {
+				Proxies.log.fine("Missing IC2 rubber sapling, skipping fermenter recipe for converting rubber sapling to biomass.");
+			}
 
-			RecipeUtil.injectLeveledRecipe(rubbersapling, GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Defaults.LIQUID_BIOMASS);
+			rubberleaves = IC2Items.getItem("rubberLeaves");
+			if (rubberleaves != null)
+				BackpackManager.backpackItems[2].add(rubberleaves);
+			else
+				Proxies.log.fine("Missing IC2 rubber leaves");
 
-			// Add backpack items
-			BackpackManager.backpackItems[2].add(rubbersapling);
-			BackpackManager.backpackItems[2].add(rubberleaves);
 			// Rubber wood is added via ore dictionary.
 		}
 
