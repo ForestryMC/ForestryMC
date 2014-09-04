@@ -21,6 +21,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
 import net.minecraft.util.StatCollector;
+import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.opengl.GL11;
 
 import forestry.api.apiculture.EnumBeeChromosome;
@@ -218,7 +219,7 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 
 		newLine();
 		String description = individual.getGenome().getPrimary().getDescription();
-		if (description == null || description.isEmpty())
+		if (StringUtils.isBlank(description) || description.startsWith("for.description."))
 			drawSplitLine(StringUtil.localize("gui.alyzer.nodescription"), 12, 208, 0x666666);
 		else {
 			String tokens[] = description.split("\\|");
