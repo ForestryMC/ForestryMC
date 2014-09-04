@@ -101,8 +101,10 @@ public class BlockResource extends Block {
 			return iconApatite;
 		else if (j == 1)
 			return iconCopper;
-		else
+		else if (j == 2)
 			return iconTin;
+		else
+			return null;
 	}
 
 }

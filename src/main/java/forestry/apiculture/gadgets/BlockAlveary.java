@@ -147,6 +147,8 @@ public class BlockAlveary extends BlockStructure {
 			return icons[BOTTOM];
 
 		switch (metadata) {
+		case TileAlvearyPlain.BLOCK_META:
+			return icons[PLAIN];
 		case 1:
 			return icons[ENTRANCE];
 		case TileAlvearySwarmer.BLOCK_META:
@@ -162,7 +164,7 @@ public class BlockAlveary extends BlockStructure {
 		case TileAlvearySieve.BLOCK_META:
 			return icons[SIEVE];
 		default:
-			return icons[PLAIN];
+			return null;
 		}
 
 	}
