@@ -50,6 +50,8 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 	protected ISpeciesRoot speciesRoot;
 	protected IBreedingTracker breedingTracker;
 
+	protected String guiName;
+
 	protected HashMap<String, ItemStack> iconStacks = new HashMap<String, ItemStack>();
 
 	public GuiAlyzer(ISpeciesRoot speciesRoot, EntityPlayer player, ContainerForestry container, IInventory inventory, int pageMax, int pageSize) {
@@ -127,6 +129,44 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 		}
 	}
 
+	protected void drawAnalyticsOverview() {
+
+		startPage();
+
+		newLine();
+		String title = StringUtil.localize(guiName).toUpperCase();
+		drawCenteredLine(title, 8, 208);
+		newLine();
+
+		fontRendererObj.drawSplitString(StringUtil.localize(guiName + ".help"), (int) ((guiLeft + COLUMN_0 + 4) * (1 / factor)),
+				(int) ((guiTop + 42) * (1 / factor)), (int) (195 * (1 / factor)), fontColor.get("gui.screen"));
+		newLine();
+		newLine();
+		newLine();
+		newLine();
+
+		drawLine(StringUtil.localize("gui.alyzer.overview") + ":", COLUMN_0 + 4);
+		newLine();
+		drawLine("I  : " + StringUtil.localize("gui.general"), COLUMN_0 + 4);
+		newLine();
+		drawLine("II : " + StringUtil.localize("gui.environment"), COLUMN_0 + 4);
+		newLine();
+		drawLine("III: " + StringUtil.localize("gui.produce"), COLUMN_0 + 4);
+		newLine();
+		drawLine("IV : " + StringUtil.localize("gui.evolution"), COLUMN_0 + 4);
+
+		newLine();
+
+		String mode = breedingTracker.getModeName();
+		if (mode != null && !mode.isEmpty()) {
+			newLine();
+			String rules = StringUtil.localize(guiName + ".behaviour") + ": " + StringUtil.capitalize(mode);
+			drawCenteredLine(rules, 8, 208, fontColor.get(guiName + ".binomial"));
+		}
+
+		endPage();
+	}
+
 	protected final void drawAnalyticsPageClassification(IIndividual individual) {
 
 		startPage();
@@ -172,19 +212,19 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 		drawLine(StringUtil.localize("gui.alyzer.authority") + ": " + individual.getGenome().getPrimary().getAuthority(), 12);
 		if (AlleleManager.alleleRegistry.isBlacklisted(individual.getIdent())) {
 			String extinct = ">> " + StringUtil.localize("gui.alyzer.extinct").toUpperCase() + " <<";
-			fontRendererObj.drawStringWithShadow(extinct, adjustToFactor(guiLeft + 160) - fontRendererObj.getStringWidth(extinct),
+			fontRendererObj.drawStringWithShadow(extinct, adjustToFactor(guiLeft + 208) - fontRendererObj.getStringWidth(extinct),
 					adjustToFactor(guiTop + getLineY()), fontColor.get("gui.beealyzer.dominant"));
 		}
 
 		newLine();
 		String description = individual.getGenome().getPrimary().getDescription();
 		if (description == null || description.isEmpty())
-			drawSplitLine(StringUtil.localize("gui.alyzer.nodescription"), 12, 156, 0x666666);
+			drawSplitLine(StringUtil.localize("gui.alyzer.nodescription"), 12, 208, 0x666666);
 		else {
 			String tokens[] = description.split("\\|");
-			drawSplitLine(tokens[0], 12, 202, 0x666666);
+			drawSplitLine(tokens[0], 12, 208, 0x666666);
 			if (tokens.length > 1)
-				fontRendererObj.drawStringWithShadow("- " + tokens[1], adjustToFactor(guiLeft + 160) - fontRendererObj.getStringWidth("- " + tokens[1]),
+				fontRendererObj.drawStringWithShadow("- " + tokens[1], adjustToFactor(guiLeft + 208) - fontRendererObj.getStringWidth("- " + tokens[1]),
 						adjustToFactor(guiTop + 145 - 14), 0x99cc32);
 		}
 
@@ -391,7 +431,7 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		Proxies.common.bindTexture(textureFile);
-		drawTexturedModalRect((int) ((guiLeft + x + 19) * (1 / factor)), (int) ((guiTop + getLineY()) * (1 / factor)), 60, 240 + texOffset, 12, 8);
+		drawTexturedModalRect((int) ((guiLeft + x + 14) * (1 / factor)), (int) ((guiTop + getLineY()) * (1 / factor)), 60, 240 + texOffset, 12, 8);
 
 		drawLine(Integer.toString(fertility) + " x", x, textColor);
 	}

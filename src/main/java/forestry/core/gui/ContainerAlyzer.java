@@ -17,7 +17,7 @@ public class ContainerAlyzer extends ContainerItemInventory {
 
 		this.inventory = inventory;
 
-		final int xPosLeftSlots = 222;
+		final int xPosLeftSlots = 223;
 
 		// Energy
 		this.addSlot(new SlotCustom(inventory, inventory.SLOT_ENERGY, xPosLeftSlots, 8, acceptedEnergy));
