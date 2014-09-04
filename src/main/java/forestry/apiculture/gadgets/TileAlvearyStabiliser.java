@@ -48,7 +48,7 @@ public class TileAlvearyStabiliser extends TileAlveary implements IBeeModifier {
 	
 	@Override
 	public String getInventoryName() {
-		return "tile.alveary.6";
+		return "alveary.6.name";
 	}
 
 	@Override

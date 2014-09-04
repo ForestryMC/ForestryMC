@@ -374,7 +374,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 
 	@Override
 	public String getInventoryName() {
-		return "factory2.2";
+		return "factory2.2.name";
 	}
 
 	@Override

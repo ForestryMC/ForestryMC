@@ -267,7 +267,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISpecialInventory
 
 	@Override
 	public String getInventoryName() {
-		return "tile.alveary.2";
+		return "alveary.2.name";
 	}
 
 	@Override

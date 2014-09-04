@@ -145,7 +145,7 @@ public class MachineMoistener extends TilePowered implements ISpecialInventory, 
 
 	@Override
 	public String getInventoryName() {
-		return "factory.4";
+		return "factory.4.name";
 	}
 
 	@Override

@@ -47,7 +47,7 @@ public class TileAlvearySieve extends TileAlveary implements ICrafter, IBeeListe
 
 	@Override
 	public String getInventoryName() {
-		return "tile.alveary.7";
+		return "alveary.7.name";
 	}
 
 	@Override

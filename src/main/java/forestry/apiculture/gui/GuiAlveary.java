@@ -30,7 +30,7 @@ public class GuiAlveary extends GuiForestry<TileAlvearyPlain> {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String title = StringUtil.localize("tile." + tile.getInventoryName());
+		String title = StringUtil.localizeTile(tile.getInventoryName());
 		this.fontRendererObj.drawString(title, getCenteredOffset(title), 6, fontColor.get("gui.title"));
 	}
 

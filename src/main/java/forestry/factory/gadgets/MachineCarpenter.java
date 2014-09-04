@@ -237,7 +237,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 	@Override
 	public String getInventoryName() {
-		return "factory.1";
+		return "factory.1.name";
 	}
 
 	@Override

@@ -31,6 +31,8 @@ import forestry.energy.gadgets.EngineBronze;
 
 public class GuiEngineBronze extends GuiEngine {
 
+	EngineBronze tile;
+
 	protected class BiogasSlot extends Widget {
 
 		EngineBronze engine;
@@ -106,7 +108,7 @@ public class GuiEngineBronze extends GuiEngine {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localize("tile.for.engine.2");
+		String name = StringUtil.localizeTile(tile.getInventoryName());
 		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
 	}
 

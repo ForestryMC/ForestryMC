@@ -405,12 +405,9 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 		return super.isUseableByPlayer(player);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public String getInventoryName() {
-		return super.getInventoryName();
+		return "engine.2.name";
 	}
 
 	/**

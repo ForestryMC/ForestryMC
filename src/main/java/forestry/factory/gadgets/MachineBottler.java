@@ -166,7 +166,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 
 	@Override
 	public String getInventoryName() {
-		return "factory.0";
+		return "factory.0.name";
 	}
 
 	@Override

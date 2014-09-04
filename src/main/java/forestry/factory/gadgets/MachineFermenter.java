@@ -198,7 +198,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 
 	@Override
 	public String getInventoryName() {
-		return "factory.3";
+		return "factory.3.name";
 	}
 
 	@Override

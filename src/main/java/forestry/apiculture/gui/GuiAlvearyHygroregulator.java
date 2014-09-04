@@ -29,7 +29,7 @@ public class GuiAlvearyHygroregulator extends GuiForestry<TileAlvearyHygroregula
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localize("tile.alveary.5");
+		String name = StringUtil.localizeTile(tile.getInventoryName());
 		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
 	}
 

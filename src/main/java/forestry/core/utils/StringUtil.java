@@ -19,17 +19,15 @@ import net.minecraft.util.StatCollector;
 public class StringUtil {
 
 	public static String localize(String key) {
-		return StatCollector.translateToLocal("for." + key).replace("\\n", "\n").replace("@", "%").replace("\\%", "@");
+		return StatCollector.translateToLocal("for." + key);
+	}
+
+	public static String localizeTile(String key) {
+		return StatCollector.translateToLocal("tile.for." + key);
 	}
 
 	public static String localizeAndFormat(String key, Object... args) {
-		String text = StringUtil.localize(key);
-
-		try {
-			return String.format(text, args);
-		} catch (IllegalFormatException ex) {
-			return "Format error: " + text;
-		}
+		return localizeAndFormatRaw("for." + key, args);
 	}
 
 	/**

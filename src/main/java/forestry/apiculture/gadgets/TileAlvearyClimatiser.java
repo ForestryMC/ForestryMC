@@ -138,7 +138,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IPowe
 
 	@Override
 	public String getInventoryName() {
-		return "tile.alveary.climatiser";
+		return "alveary.climatiser";
 	}
 
 	/* NETWORK */

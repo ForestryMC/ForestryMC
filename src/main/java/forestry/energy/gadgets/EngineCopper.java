@@ -397,12 +397,9 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 		return super.isUseableByPlayer(player);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public String getInventoryName() {
-		return super.getInventoryName();
+		return "engine.1.name";
 	}
 
 	/**

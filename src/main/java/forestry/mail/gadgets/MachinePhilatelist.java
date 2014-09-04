@@ -37,7 +37,7 @@ public class MachinePhilatelist extends TileBase implements IInventory {
 
 	@Override
 	public String getInventoryName() {
-		return "mail.2";
+		return "mail.2.name";
 	}
 
 	@Override

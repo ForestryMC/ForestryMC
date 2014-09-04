@@ -18,6 +18,8 @@ import forestry.energy.gadgets.EngineCopper;
 
 public class GuiEngineCopper extends GuiEngine {
 
+	EngineCopper tile;
+
 	public GuiEngineCopper(InventoryPlayer inventory, EngineCopper tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/peatengine.png", new ContainerEngineCopper(inventory, tile), tile);
 	}
@@ -25,7 +27,7 @@ public class GuiEngineCopper extends GuiEngine {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localize("tile.for.engine.1");
+		String name = StringUtil.localizeTile(tile.getInventoryName());
 		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
 		this.fontRendererObj.drawString("Inventory", 8, this.ySize - 96 + 2, fontColor.get("gui.title"));
 	}

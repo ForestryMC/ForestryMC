@@ -65,7 +65,7 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 
 	@Override
 	public String getInventoryName() {
-		return StringUtil.localize("engine.3");
+		return "engine.3.name";
 	}
 
 	@Override

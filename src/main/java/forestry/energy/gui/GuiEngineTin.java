@@ -20,6 +20,8 @@ import forestry.energy.gadgets.EngineTin;
 
 public class GuiEngineTin extends GuiEngine {
 
+	EngineTin tile;
+
 	public GuiEngineTin(InventoryPlayer inventory, EngineTin tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/electricalengine.png", new ContainerEngineTin(inventory, tile), tile);
 		widgetManager.add(new SocketWidget(this.widgetManager, 30, 40, tile, 0));
@@ -28,7 +30,7 @@ public class GuiEngineTin extends GuiEngine {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localize("tile.for.engine.0");
+		String name = StringUtil.localizeTile(tile.getInventoryName());
 		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
 	}
 

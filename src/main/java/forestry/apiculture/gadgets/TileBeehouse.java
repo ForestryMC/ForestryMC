@@ -70,7 +70,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 
 	@Override
 	public String getInventoryName() {
-		return "apiculture.2";
+		return "apiculture.2.name";
 	}
 
 	@Override

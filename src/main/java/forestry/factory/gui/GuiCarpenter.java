@@ -36,7 +36,7 @@ public class GuiCarpenter extends GuiForestry<MachineCarpenter> {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localize("tile.for." + tile.getInventoryName());
+		String name = StringUtil.localizeTile(tile.getInventoryName());
 		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
 	}
 
