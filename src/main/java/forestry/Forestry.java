@@ -121,15 +121,15 @@ public class Forestry {
 					Proxies.log.warning("Remapping item " + mapping.name + " to " + StringUtil.cleanBlockName(block));
 					continue;
 				}
-				if (mapping.name.equals("builderBackpack"))
+				if (mapping.name.contains("builderBackpack"))
 					mapping.remap(ForestryItem.builderBackpack.item());
-				if (mapping.name.equals("builderBackpackT2"))
+				if (mapping.name.contains("builderBackpackT2"))
 					mapping.remap(ForestryItem.builderBackpackT2.item());
-				if (mapping.name.equals("adventurerBackpack"))
+				if (mapping.name.contains("adventurerBackpack"))
 					mapping.remap(ForestryItem.adventurerBackpack.item());
-				if (mapping.name.equals("adventurerBackpackT2"))
+				if (mapping.name.contains("adventurerBackpackT2"))
 					mapping.remap(ForestryItem.adventurerBackpackT2.item());
-				if (mapping.name.equals("shortMead"))
+				if (mapping.name.contains("shortMead"))
 					mapping.remap(ForestryItem.beverage.item());
 			}
 	}
