@@ -49,7 +49,7 @@ import net.minecraft.item.Item;
 		modid = Defaults.MOD,
 		name = "Forestry",
 		version = Version.VERSION,
-		dependencies = "required-after:Forge@[10.13.0.1180,);"
+		dependencies = "required-after:Forge@[10.13.0.1208,);"
 		+ "after:Buildcraft|Core;"
 		+ "after:ExtrabiomesXL;"
 		+ "after:BiomesOPlenty;"
