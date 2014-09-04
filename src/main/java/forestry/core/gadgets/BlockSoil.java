@@ -248,7 +248,7 @@ public class BlockSoil extends Block {
 	public IIcon getIcon(int i, int j) {
 
 		int meta = j;
-		int type = meta & 0x03;
+		int type = meta & 0x0f;
 		int maturity = meta >> 2;
 
 			if (type == 1)
@@ -256,8 +256,10 @@ public class BlockSoil extends Block {
 					return iconBogEarth;
 				else
 					return iconPeat;
-			else
+			else if (type == 0)
 				return iconHumus;
+			else
+				return null;
 	}
 
 }

@@ -11,12 +11,15 @@
 package forestry.farming.gadgets;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -108,17 +111,26 @@ public class BlockMushroom extends BlockSapling {
 	/* ICONS */
 	@SideOnly(Side.CLIENT)
 	@Override
+	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+		list.add(new ItemStack(item, 1, 0));
+		list.add(new ItemStack(item, 1, 1));
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
 	public void registerBlockIcons(IIconRegister register) {
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIcon(int side, int meta) {
-		int type = meta & 0x03;
-		if (type > 0)
+		int type = meta & 0x0f;
+		if (type == 0)
+			return Blocks.brown_mushroom.getIcon(side, meta);
+		else if (type == 1)
 			return Blocks.red_mushroom.getIcon(side, meta);
 		else
-			return Blocks.brown_mushroom.getIcon(side, meta);
+			return null;
 	}
 
 }
