@@ -124,6 +124,9 @@ public class BlockLog extends Block implements IWoodTyped {
 		int oriented = meta & 12;
 
 		WoodType type = getWoodType(getTypeFromMeta(meta));
+		if (type == null)
+			return null;
+
 		switch (oriented) {
 		case 4:
 			if (side > 3)
@@ -195,7 +198,7 @@ public class BlockLog extends Block implements IWoodTyped {
 		if(meta + cat.ordinal() * 4 < WoodType.VALUES.length)
 			return WoodType.VALUES[meta + cat.ordinal() * 4];
 		else
-			return WoodType.LARCH;
+			return null;
 	}
 
 	@Override
