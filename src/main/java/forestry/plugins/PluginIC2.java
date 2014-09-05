@@ -59,6 +59,9 @@ public class PluginIC2 implements IPlugin {
 	public static ItemStack waterCell;
 	public static ItemStack rubber;
 	public static ItemStack scrap;
+	public static ItemStack silver;
+	public static ItemStack brass;
+	public static ItemStack uuMatter;
 	public static int fuelcanMeta;
 
 	public PluginIC2() {
@@ -182,21 +185,43 @@ public class PluginIC2 implements IPlugin {
 		}
 
 		private void initCrates() {
-			resin = IC2Items.getItem("resin");
-			rubber = IC2Items.getItem("rubber");
-			scrap = IC2Items.getItem("scrap");
 
 			// Add crates for the IC2 items that exist.
+
+			resin = IC2Items.getItem("resin");
 			if (resin != null) {
+				ForestryItem.cratedResin.registerItem(new ItemCrated(), "cratedResin");
 				((ItemCrated) ForestryItem.cratedResin.item()).setContained(ForestryItem.cratedResin.getItemStack(), resin);
 			}
 
+			rubber = IC2Items.getItem("rubber");
 			if (rubber != null) {
+				ForestryItem.cratedRubber.registerItem(new ItemCrated(), "cratedRubber");
 				((ItemCrated) ForestryItem.cratedRubber.item()).setContained(ForestryItem.cratedRubber.getItemStack(), rubber);
 			}
 
+			scrap = IC2Items.getItem("scrap");
 			if (scrap != null) {
+				ForestryItem.cratedScrap.registerItem(new ItemCrated(), "cratedScrap");
 				((ItemCrated) ForestryItem.cratedScrap.item()).setContained(ForestryItem.cratedScrap.getItemStack(), scrap);
+			}
+
+			uuMatter = IC2Items.getItem("matter");
+			if (uuMatter != null) {
+				ForestryItem.cratedUUM.registerItem(new ItemCrated(), "cratedUUM");
+				((ItemCrated) ForestryItem.cratedUUM.item()).setContained(ForestryItem.cratedUUM.getItemStack(), uuMatter);
+			}
+
+			silver = IC2Items.getItem("silverIngot");
+			if (silver != null) {
+				ForestryItem.cratedSilver.registerItem(new ItemCrated(), "cratedSilver");
+				((ItemCrated) ForestryItem.cratedSilver.item()).setContained(ForestryItem.cratedSilver.getItemStack(), silver);
+			}
+
+			brass = IC2Items.getItem("bronzeIngot");
+			if (brass != null) {
+				ForestryItem.cratedBrass.registerItem(new ItemCrated(), "cratedBrass");
+				((ItemCrated) ForestryItem.cratedBrass.item()).setContained(ForestryItem.cratedBrass.getItemStack(), brass);
 			}
 		}
 
