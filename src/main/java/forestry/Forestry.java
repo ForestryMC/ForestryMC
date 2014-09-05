@@ -119,18 +119,22 @@ public class Forestry {
 				if (block != null) {
 					mapping.remap(Item.getItemFromBlock(block));
 					Proxies.log.warning("Remapping item " + mapping.name + " to " + StringUtil.cleanBlockName(block));
-					continue;
-				}
-				if (mapping.name.contains("builderBackpack"))
+				} else if (mapping.name.equals("Forestry:builderBackpack")) {
 					mapping.remap(ForestryItem.builderBackpack.item());
-				if (mapping.name.contains("builderBackpackT2"))
+					Proxies.log.warning("Remapping item " + mapping.name + " to " + ForestryItem.builderBackpack.name());
+				} else if (mapping.name.equals("Forestry:builderBackpackT2")) {
 					mapping.remap(ForestryItem.builderBackpackT2.item());
-				if (mapping.name.contains("adventurerBackpack"))
+					Proxies.log.warning("Remapping item " + mapping.name + " to " + ForestryItem.builderBackpackT2.name());
+				} else if (mapping.name.equals("Forestry:adventurerBackpack")) {
 					mapping.remap(ForestryItem.adventurerBackpack.item());
-				if (mapping.name.contains("adventurerBackpackT2"))
+					Proxies.log.warning("Remapping item " + mapping.name + " to " + ForestryItem.adventurerBackpack.name());
+				} else if (mapping.name.equals("Forestry:adventurerBackpackT2")) {
 					mapping.remap(ForestryItem.adventurerBackpackT2.item());
-				if (mapping.name.contains("shortMead"))
+					Proxies.log.warning("Remapping item " + mapping.name + " to " + ForestryItem.adventurerBackpackT2.name());
+				} else if (mapping.name.equals("Forestry:shortMead")) {
 					mapping.remap(ForestryItem.beverage.item());
+					Proxies.log.warning("Remapping item " + mapping.name + " to " + ForestryItem.beverage.name());
+				}
 			}
 	}
 }
