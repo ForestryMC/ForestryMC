@@ -103,6 +103,7 @@ public class BlockLog extends Block implements IWoodTyped {
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
 		if(cat == LogCat.CAT6) {
+			itemList.add(new ItemStack(this, 1, 0));
 			return;
 		}
 
