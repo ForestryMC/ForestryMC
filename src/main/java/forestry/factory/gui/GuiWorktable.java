@@ -58,6 +58,7 @@ public class GuiWorktable extends GuiForestry<TileWorktable> {
 			//RenderHelper.disableStandardItemLighting();
 
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
+			GL11.glEnable(GL11.GL_BLEND);
 
 			if (worktable.getMemory().isLocked(slotNumber)) {
 				manager.gui.setZLevel(110f);
