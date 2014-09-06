@@ -104,16 +104,6 @@ public class PluginIC2 implements IPlugin {
 
 			// Remove some items from the recycler
 			registerBackpackItems();
-
-			if (rubbersapling != null && resin != null) {
-				String imc = String.format("farmArboreal@%s.%s.%s.%s",
-						GameData.getBlockRegistry().getNameForObject(StackUtils.getBlock(rubbersapling)),
-						rubbersapling.getItemDamage(),
-						GameData.getItemRegistry().getNameForObject(resin.getItem()),
-						resin.getItemDamage());
-				Proxies.log.finest("Sending IMC '%s'.", imc);
-				FMLInterModComms.sendMessage(Defaults.MOD, "add-farmable-sapling", imc);
-			}
 		}
 
 		private void initFermentation() {
@@ -131,18 +121,23 @@ public class PluginIC2 implements IPlugin {
 
 		private void initLiquidContainers() {
 			emptyCell = IC2Items.getItem("cell");
-			lavaCell = IC2Items.getItem("lavaCell");
-			waterCell = IC2Items.getItem("waterCell");
-			if (emptyCell == null || lavaCell == null || waterCell == null) {
-				Proxies.log.fine("Any of the following IC2 items could not be found: empty cell, water cell, lava cell. Skipped adding IC2 liquid containers.");
+			if (emptyCell == null) {
+				Proxies.log.fine("IC2 empty cell could not be found. Skipped adding IC2 liquid containers.");
 				return;
 			}
 
-			LiquidHelper.injectTinContainer(Defaults.LIQUID_LAVA, Defaults.BUCKET_VOLUME, lavaCell, emptyCell);
-			LiquidHelper.injectTinContainer(Defaults.LIQUID_WATER, Defaults.BUCKET_VOLUME, waterCell, emptyCell);
-			if (GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can").stackSize > 0)
-				Proxies.common
-				.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', waterCell, 'Y', Blocks.sand);
+			lavaCell = IC2Items.getItem("lavaCell");
+			if (lavaCell != null)
+				LiquidHelper.injectTinContainer(Defaults.LIQUID_LAVA, Defaults.BUCKET_VOLUME, lavaCell, emptyCell);
+
+			waterCell = IC2Items.getItem("waterCell");
+			if (waterCell != null) {
+				LiquidHelper.injectTinContainer(Defaults.LIQUID_WATER, Defaults.BUCKET_VOLUME, waterCell, emptyCell);
+
+				ItemStack bogEarthCan = GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can");
+				if (bogEarthCan.stackSize > 0)
+					Proxies.common.addRecipe(bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', waterCell, 'Y', Blocks.sand);
+			}
 		}
 
 		private void initRubberChain() {
@@ -155,6 +150,30 @@ public class PluginIC2 implements IPlugin {
 			else
 				Proxies.log.fine("Missing IC2 resin, skipping centrifuge recipe for propolis to resin.");
 
+			rubbersapling = IC2Items.getItem("rubberSapling");
+			if (rubbersapling != null) {
+				RecipeUtil.injectLeveledRecipe(rubbersapling, GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Defaults.LIQUID_BIOMASS);
+				BackpackManager.backpackItems[2].add(rubbersapling);
+			} else {
+				Proxies.log.fine("Missing IC2 rubber sapling, skipping fermenter recipe for converting rubber sapling to biomass.");
+			}
+
+			if (rubbersapling != null && resin != null) {
+				String saplingName = GameData.getBlockRegistry().getNameForObject(StackUtils.getBlock(rubbersapling));
+				String resinName = GameData.getItemRegistry().getNameForObject(resin.getItem());
+				String imc = String.format("farmArboreal@%s.%s.%s.%s",
+						saplingName, rubbersapling.getItemDamage(),
+						resinName, resin.getItemDamage());
+				Proxies.log.finest("Sending IMC '%s'.", imc);
+				FMLInterModComms.sendMessage(Defaults.MOD, "add-farmable-sapling", imc);
+			}
+
+			rubberleaves = IC2Items.getItem("rubberLeaves");
+			if (rubberleaves != null)
+				BackpackManager.backpackItems[2].add(rubberleaves);
+			else
+				Proxies.log.fine("Missing IC2 rubber leaves");
+
 			fuelcanFilled = IC2Items.getItem("filledFuelCan");
 			fuelcanEmpty = IC2Items.getItem("fuelCan");
 			if (fuelcanEmpty != null && fuelcanFilled != null) {
@@ -166,20 +185,6 @@ public class PluginIC2 implements IPlugin {
 			} else {
 				Proxies.log.fine("Missing IC2 fuelcanEmpty or fuelcanFilled, skipping bottler recipe for ethanol to filled fuel can.");
 			}
-
-			rubbersapling = IC2Items.getItem("rubberSapling");
-			if (rubbersapling != null) {
-				RecipeUtil.injectLeveledRecipe(rubbersapling, GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Defaults.LIQUID_BIOMASS);
-				BackpackManager.backpackItems[2].add(rubbersapling);
-			} else {
-				Proxies.log.fine("Missing IC2 rubber sapling, skipping fermenter recipe for converting rubber sapling to biomass.");
-			}
-
-			rubberleaves = IC2Items.getItem("rubberLeaves");
-			if (rubberleaves != null)
-				BackpackManager.backpackItems[2].add(rubberleaves);
-			else
-				Proxies.log.fine("Missing IC2 rubber leaves");
 
 			// Rubber wood is added via ore dictionary.
 		}
