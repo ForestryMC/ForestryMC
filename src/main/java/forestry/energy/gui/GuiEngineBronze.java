@@ -31,8 +31,6 @@ import forestry.energy.gadgets.EngineBronze;
 
 public class GuiEngineBronze extends GuiEngine {
 
-	EngineBronze tile;
-
 	protected class BiogasSlot extends Widget {
 
 		EngineBronze engine;
@@ -105,6 +103,10 @@ public class GuiEngineBronze extends GuiEngine {
 		widgetManager.add(new BiogasSlot(this.widgetManager, 30, 47, tile));
 	}
 
+	protected EngineBronze getEngine() {
+		return (EngineBronze)tile;
+	}
+
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
@@ -115,9 +117,8 @@ public class GuiEngineBronze extends GuiEngine {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		EngineBronze engine = (EngineBronze) tile;
 
-		int temp = engine.getOperatingTemperatureScaled(16);
+		int temp = getEngine().getOperatingTemperatureScaled(16);
 		if (temp > 16)
 			temp = 16;
 		if (temp > 0)

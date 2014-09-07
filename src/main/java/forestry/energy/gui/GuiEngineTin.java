@@ -20,11 +20,13 @@ import forestry.energy.gadgets.EngineTin;
 
 public class GuiEngineTin extends GuiEngine {
 
-	EngineTin tile;
-
 	public GuiEngineTin(InventoryPlayer inventory, EngineTin tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/electricalengine.png", new ContainerEngineTin(inventory, tile), tile);
 		widgetManager.add(new SocketWidget(this.widgetManager, 30, 40, tile, 0));
+	}
+
+	protected EngineTin getEngine() {
+		return (EngineTin)tile;
 	}
 
 	@Override
@@ -37,9 +39,13 @@ public class GuiEngineTin extends GuiEngine {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		EngineTin engine = (EngineTin) tile;
-		drawHealthMeter(guiLeft + 74, guiTop + 25, engine.getStorageScaled(46), engine.rateLevel(engine.getStorageScaled(100)));
 
+		EngineTin engine = getEngine();
+		int storageHeight = engine.getStorageScaled(46);
+		int storageMaxHeight = engine.getStorageScaled(100);
+		EnumTankLevel rated = engine.rateLevel(storageMaxHeight);
+
+		drawHealthMeter(guiLeft + 74, guiTop + 25, storageHeight, rated);
 	}
 
 	private void drawHealthMeter(int x, int y, int height, EnumTankLevel rated) {

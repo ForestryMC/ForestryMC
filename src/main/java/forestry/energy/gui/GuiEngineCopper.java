@@ -18,10 +18,12 @@ import forestry.energy.gadgets.EngineCopper;
 
 public class GuiEngineCopper extends GuiEngine {
 
-	EngineCopper tile;
-
 	public GuiEngineCopper(InventoryPlayer inventory, EngineCopper tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/peatengine.png", new ContainerEngineCopper(inventory, tile), tile);
+	}
+
+	protected EngineCopper getEngine() {
+		return (EngineCopper)tile;
 	}
 
 	@Override
@@ -35,8 +37,8 @@ public class GuiEngineCopper extends GuiEngine {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		EngineCopper engine = (EngineCopper) tile;
 
+		EngineCopper engine = getEngine();
 		int progress;
 		if (engine.isBurning()) {
 			progress = engine.getBurnTimeRemainingScaled(12);
