@@ -40,17 +40,18 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 	// / CONSTANTS
 	public static final String SAVE_NAME = "TradePO_";
-	public static final short SLOT_SIZE = 39;
 	public static final short SLOT_TRADEGOOD = 0;
+	public static final short SLOT_TRADEGOOD_COUNT = 1;
 	public static final short SLOT_EXCHANGE_1 = 1;
 	public static final short SLOT_EXCHANGE_COUNT = 4;
 	public static final short SLOT_LETTERS_1 = 5;
 	public static final short SLOT_LETTERS_COUNT = 6;
 	public static final short SLOT_STAMPS_1 = 11;
 	public static final short SLOT_STAMPS_COUNT = 4;
-	public static final short SLOT_INPUTBUF_1 = 15;
-	public static final short SLOT_OUTPUTBUF_1 = 27;
-	public static final short SLOT_BUFFER_COUNT = 12;
+	public static final short SLOT_BUFFER = 15;
+	public static final short SLOT_BUFFER_COUNT = 30;
+	public static final short SLOT_SIZE = SLOT_TRADEGOOD_COUNT + SLOT_EXCHANGE_COUNT + SLOT_LETTERS_COUNT + SLOT_STAMPS_COUNT + SLOT_BUFFER_COUNT;
+
 	// / MEMBER
 	private GameProfile owner;
 	private MailAddress address;
@@ -235,7 +236,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 				if (stack == null)
 					continue;
 				
-				inventory.tryAddStack(stack.copy(), SLOT_OUTPUTBUF_1, SLOT_BUFFER_COUNT, false);
+				inventory.tryAddStack(stack.copy(), SLOT_BUFFER, SLOT_BUFFER_COUNT, false);
 			}
 		}
 
@@ -275,7 +276,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 		// How many orders are fillable?
 		int itemCount = 0;
-		for (ItemStack stack : inventory.getStacks(SLOT_INPUTBUF_1, SLOT_BUFFER_COUNT)) {
+		for (ItemStack stack : inventory.getStacks(SLOT_BUFFER, SLOT_BUFFER_COUNT)) {
 			if (stack != null && stack.isItemEqual(tradegood) && ItemStack.areItemStackTagsEqual(stack, tradegood))
 				itemCount += stack.stackSize;
 		}
@@ -302,7 +303,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 		for (int j = 0; j < filled; j++) {
 			int toRemove = inventory.getStackInSlot(SLOT_TRADEGOOD).stackSize;
-			for (int i = SLOT_INPUTBUF_1; i < SLOT_INPUTBUF_1 + SLOT_BUFFER_COUNT; i++) {
+			for (int i = SLOT_BUFFER; i < SLOT_BUFFER + SLOT_BUFFER_COUNT; i++) {
 				ItemStack buffer = inventory.getStackInSlot(i);
 				if (buffer == null)
 					continue;

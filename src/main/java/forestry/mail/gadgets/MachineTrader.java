@@ -95,7 +95,7 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 		if (worldObj.getTotalWorldTime() % 40 * 10 != 0)
 			return;
 
-		if (!hasPaperMin(0.0f) || !hasInputBufMin(0.0f)) {
+		if (!hasPaperMin(0.0f) || !hasBufMin(0.0f)) {
 			setErrorState(EnumErrorCode.NORESOURCE);
 			return;
 		}
@@ -132,12 +132,8 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 		return percentOccupied(TradeStation.SLOT_LETTERS_1, TradeStation.SLOT_LETTERS_COUNT) > percentage;
 	}
 
-	public boolean hasInputBufMin(float percentage) {
-		return percentOccupied(TradeStation.SLOT_INPUTBUF_1, TradeStation.SLOT_BUFFER_COUNT) > percentage;
-	}
-
-	public boolean hasOutputBufMin(float percentage) {
-		return percentOccupied(TradeStation.SLOT_OUTPUTBUF_1, TradeStation.SLOT_BUFFER_COUNT) > percentage;
+	public boolean hasBufMin(float percentage) {
+		return percentOccupied(TradeStation.SLOT_BUFFER, TradeStation.SLOT_BUFFER_COUNT) > percentage;
 	}
 
 	public boolean hasPostageMin(int postage) {
@@ -231,7 +227,7 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 		if (!tradegood.isItemEqual(stack))
 			return 0;
 
-		return StackUtils.addToInventory(stack, inventory, doAdd, TradeStation.SLOT_INPUTBUF_1, TradeStation.SLOT_BUFFER_COUNT);
+		return StackUtils.addToInventory(stack, inventory, doAdd, TradeStation.SLOT_BUFFER, TradeStation.SLOT_BUFFER_COUNT);
 	}
 
 	@Override
@@ -242,7 +238,7 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 
 		ItemStack product = null;
 		IInventory inventory = getOrCreateTradeInventory();
-		for (int i = TradeStation.SLOT_OUTPUTBUF_1; i < TradeStation.SLOT_OUTPUTBUF_1 + TradeStation.SLOT_BUFFER_COUNT; i++) {
+		for (int i = TradeStation.SLOT_BUFFER; i < TradeStation.SLOT_BUFFER + TradeStation.SLOT_BUFFER_COUNT; i++) {
 			ItemStack stackSlot = inventory.getStackInSlot(i);
 			if (stackSlot == null)
 				continue;
@@ -278,7 +274,7 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 		if(!super.canTakeStackFromSide(slotIndex, itemstack, side))
 			return false;
 
-		if(slotIndex >= TradeStation.SLOT_OUTPUTBUF_1 && slotIndex < TradeStation.SLOT_OUTPUTBUF_1 + TradeStation.SLOT_BUFFER_COUNT)
+		if(slotIndex >= TradeStation.SLOT_BUFFER && slotIndex < TradeStation.SLOT_BUFFER + TradeStation.SLOT_BUFFER_COUNT)
 			return true;
 
 		return false;
@@ -298,7 +294,7 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 			return itemstack.getItem() instanceof IStamps;
 		}
 
-		if (slotIndex >= TradeStation.SLOT_INPUTBUF_1 && slotIndex < TradeStation.SLOT_BUFFER_COUNT) {
+		if (slotIndex >= TradeStation.SLOT_BUFFER && slotIndex < TradeStation.SLOT_BUFFER_COUNT) {
 			IInventory inventory = getOrCreateTradeInventory();
 			ItemStack tradegood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
 			if(tradegood == null)
