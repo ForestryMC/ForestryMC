@@ -95,7 +95,7 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 		if (worldObj.getTotalWorldTime() % 40 * 10 != 0)
 			return;
 
-		if (!hasPaperMin(0.0f) || !hasBufMin(0.0f)) {
+		if (!hasPaperMin(0.0f) || !hasInputBufMin(0.0f)) {
 			setErrorState(EnumErrorCode.NORESOURCE);
 			return;
 		}
@@ -113,27 +113,35 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 		return address.isValid();
 	}
 
-	private float percentOccupied(int startSlot, int countSlots) {
-		int max = 0;
+	private float percentOccupied(int startSlot, int countSlots, ItemStack item) {
+		int max = countSlots * 64;
 		int avail = 0;
 
 		IInventory tradeInventory = this.getOrCreateTradeInventory();
 		for (int i = startSlot; i < startSlot + countSlots; i++) {
-			max += 64;
-			if (tradeInventory.getStackInSlot(i) == null)
+			ItemStack itemInSlot = tradeInventory.getStackInSlot(i);
+			if (itemInSlot == null || (item != null && !StackUtils.isIdenticalItem(itemInSlot, item)))
 				continue;
-			avail += tradeInventory.getStackInSlot(i).stackSize;
+			avail += itemInSlot.stackSize;
 		}
 
 		return ((float) avail / (float) max);
 	}
 
 	public boolean hasPaperMin(float percentage) {
-		return percentOccupied(TradeStation.SLOT_LETTERS_1, TradeStation.SLOT_LETTERS_COUNT) > percentage;
+		return percentOccupied(TradeStation.SLOT_LETTERS_1, TradeStation.SLOT_LETTERS_COUNT, new ItemStack(Items.paper)) > percentage;
 	}
 
-	public boolean hasBufMin(float percentage) {
-		return percentOccupied(TradeStation.SLOT_BUFFER, TradeStation.SLOT_BUFFER_COUNT) > percentage;
+	public boolean hasInputBufMin(float percentage) {
+		IInventory inventory = getOrCreateTradeInventory();
+		ItemStack tradegood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
+		if (tradegood == null)
+			return true;
+		return percentOccupied(TradeStation.SLOT_BUFFER, TradeStation.SLOT_BUFFER_COUNT, tradegood) > percentage;
+	}
+
+	public boolean hasOutputBufMin(float percentage) {
+		return percentOccupied(TradeStation.SLOT_BUFFER, TradeStation.SLOT_BUFFER_COUNT, null) > percentage;
 	}
 
 	public boolean hasPostageMin(int postage) {

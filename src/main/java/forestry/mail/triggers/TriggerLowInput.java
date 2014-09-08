@@ -39,6 +39,6 @@ public class TriggerLowInput extends Trigger {
 		if (!(tile instanceof MachineTrader))
 			return false;
 
-		return !((MachineTrader) tile).hasBufMin(threshold);
+		return !((MachineTrader) tile).hasInputBufMin(threshold);
 	}
 }
