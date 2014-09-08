@@ -39,7 +39,7 @@ public class TriggerBuffer extends Trigger {
 		if (!(tile instanceof MachineTrader))
 			return false;
 
-		return ((MachineTrader) tile).hasOutputBufMin(threshold);
+		return ((MachineTrader) tile).hasBufMin(threshold);
 	}
 
 }
