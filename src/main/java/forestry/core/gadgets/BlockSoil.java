@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import forestry.core.IItemTyped;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -45,7 +46,7 @@ import forestry.core.render.TextureManager;
  * @author
  * 
  */
-public class BlockSoil extends Block {
+public class BlockSoil extends Block implements IItemTyped {
 
 	public enum SoilType {
 		HUMUS, BOG_EARTH, PEAT;
@@ -222,7 +223,7 @@ public class BlockSoil extends Block {
 		return false;
 	}
 
-	public static SoilType getTypeFromMeta(int meta) {
+	public SoilType getTypeFromMeta(int meta) {
 		int type = meta & 0x03;
 		int maturity = meta >> 2;
 
