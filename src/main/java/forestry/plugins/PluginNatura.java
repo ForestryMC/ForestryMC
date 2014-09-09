@@ -12,7 +12,9 @@ package forestry.plugins;
 
 import java.util.ArrayList;
 
+import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.event.FMLInterModComms;
@@ -33,6 +35,7 @@ public class PluginNatura extends NativePlugin {
 	
 	public static Block leavesNatura;
 	public static Block saplingNatura;
+	public static Block saplingNaturaRare;
 	
 	@Override
 	public boolean isAvailable() {
@@ -47,9 +50,20 @@ public class PluginNatura extends NativePlugin {
 		logWillow = GameRegistry.findBlock(NATURA, "willow");
 		leavesNatura = GameRegistry.findBlock(NATURA, "floraleaves");
 		saplingNatura = GameRegistry.findBlock(NATURA, "florasapling");
-		
+		saplingNaturaRare = GameRegistry.findBlock(NATURA, "Rare Sapling");
+
+		ArrayList<String> saplingItemKeys = new ArrayList<String>();
+
 		if(saplingNatura != null)
-			FMLInterModComms.sendMessage(Defaults.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingNatura));
+			saplingItemKeys.add("florasapling");
+		if(saplingNaturaRare != null)
+			saplingItemKeys.add("Rare Sapling");
+
+		for (String key : saplingItemKeys) {
+			Item saplingItem = GameRegistry.findItem(NATURA, key);
+			String saplingName = GameData.getItemRegistry().getNameForObject(saplingItem);
+			FMLInterModComms.sendMessage(Defaults.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
+		}
 	}
 	
 	@Override protected void registerItems() {}
