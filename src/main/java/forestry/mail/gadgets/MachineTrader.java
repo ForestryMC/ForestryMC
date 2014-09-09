@@ -137,6 +137,13 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 			return;
 		}
 
+		if (inventory instanceof TradeStation) {
+			if (!((TradeStation)inventory).canReceivePayment()) {
+				setErrorState(EnumErrorCode.NOSPACE);
+				return;
+			}
+		}
+
 		setErrorState(EnumErrorCode.OK);
 	}
 

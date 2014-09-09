@@ -76,17 +76,20 @@ public class InventoryAdapter implements IInventory, INBTTagable {
 	}
 
 	public boolean tryAddStacksCopy(ItemStack[] stacks, boolean all) {
+		return tryAddStacksCopy(stacks, 0, this.getSizeInventory(), all);
+	}
 
-		boolean addedAll = true;
+	public boolean tryAddStacksCopy(ItemStack[] stacks, int startSlot, int slots, boolean all) {
+
 		for (ItemStack stack : stacks) {
 			if (stack == null)
 				continue;
 
-			if (!tryAddStack(stack.copy(), all))
-				addedAll = false;
+			if (!tryAddStack(stack.copy(), startSlot, slots, all))
+				return false;
 		}
 
-		return addedAll;
+		return true;
 	}
 
 	public boolean tryAddStacks(ItemStack[] stacks, boolean all) {
@@ -121,7 +124,11 @@ public class InventoryAdapter implements IInventory, INBTTagable {
 	}
 
 	public boolean tryAddStack(ItemStack stack, int startSlot, int slots, boolean all, boolean doAdd) {
-		return addStack(stack, startSlot, slots, all, doAdd) > 0;
+		int added = addStack(stack, startSlot, slots, all, doAdd);
+		if (all)
+			return added == stack.stackSize;
+		else
+			return added > 0;
 	}
 
 	public int addStack(ItemStack stack, boolean all, boolean doAdd) {

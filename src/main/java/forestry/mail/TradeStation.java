@@ -286,13 +286,20 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		return (int) Math.floor(itemCount / tradegood.stackSize);
 	}
 
+	public boolean canReceivePayment() {
+		InventoryAdapter test = inventory.copy();
+		ItemStack [] payment = inventory.getStacks(SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT);
+
+		return test.tryAddStacksCopy(payment, SLOT_RECEIVE_BUFFER, SLOT_RECEIVE_BUFFER_COUNT, true);
+	}
+
 	private int countStorablePayment(int max, ItemStack[] exchange) {
 		
 		InventoryAdapter test = inventory.copy();
 		int count = 0;
 
 		for (int i = 0; i < max; i++) {
-			if (test.tryAddStacksCopy(exchange, true))
+			if (test.tryAddStacksCopy(exchange, SLOT_RECEIVE_BUFFER, SLOT_RECEIVE_BUFFER_COUNT, true))
 				count++;
 			else
 				break;
