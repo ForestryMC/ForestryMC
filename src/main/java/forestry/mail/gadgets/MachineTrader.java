@@ -89,18 +89,51 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 	}
 
 	/* UPDATING */
+
+	/**
+	 * The trade station should show errors for missing stamps and paper first.
+	 * Once it is able to send letters, it should display other error states.
+	 */
 	@Override
 	public void updateServerSide() {
 
-		if (worldObj.getTotalWorldTime() % 40 * 10 != 0)
+		if (!isLinked() || worldObj.getTotalWorldTime() % 4 != 0)
 			return;
 
-		if (!hasPaperMin(0.0f) || !hasInputBufMin(0.0f)) {
-			setErrorState(EnumErrorCode.NORESOURCE);
+		EnumErrorCode errorCode = EnumErrorCode.OK;
+
+		if (!hasPostageMin(3))
+			errorCode = EnumErrorCode.NOSTAMPS;
+
+		if (!hasPaperMin(2)) {
+			if (errorCode == EnumErrorCode.NOSTAMPS)
+				errorCode = EnumErrorCode.NOSTAMPSNOPAPER;
+			else
+				errorCode = EnumErrorCode.NOPAPER;
+		}
+
+		if (errorCode != EnumErrorCode.OK) {
+			setErrorState(errorCode);
 			return;
 		}
-		if (!hasPostageMin(3)) { // Assumes that the trade station owner should have a notice.
-			setErrorState(EnumErrorCode.NOSTAMPS);
+
+		IInventory inventory = getOrCreateTradeInventory();
+		ItemStack tradeGood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
+
+		if (tradeGood == null) {
+			setErrorState(EnumErrorCode.NOTRADE);
+			return;
+		}
+
+		boolean hasRequest = hasItemCount(TradeStation.SLOT_EXCHANGE_1, TradeStation.SLOT_EXCHANGE_COUNT, null, 1);
+		if (!hasRequest) {
+			setErrorState(EnumErrorCode.NOTRADE);
+			return;
+		}
+
+		boolean hasSupplies = hasItemCount(TradeStation.SLOT_BUFFER, TradeStation.SLOT_BUFFER_COUNT, tradeGood, tradeGood.stackSize);
+		if(!hasSupplies) {
+			setErrorState(EnumErrorCode.NOSUPPLIES);
 			return;
 		}
 
@@ -113,31 +146,60 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 		return address.isValid();
 	}
 
-	private float percentOccupied(int startSlot, int countSlots, ItemStack item) {
-		int max = countSlots * 64;
-		int avail = 0;
+	/**
+	 * Returns true if there are 'itemCount' of 'item' in the inventory
+	 * wildcard when item == null, counts all types of items
+	 */
+	private boolean hasItemCount(int startSlot, int countSlots, ItemStack item, int itemCount) {
+		int count = 0;
 
 		IInventory tradeInventory = this.getOrCreateTradeInventory();
 		for (int i = startSlot; i < startSlot + countSlots; i++) {
 			ItemStack itemInSlot = tradeInventory.getStackInSlot(i);
-			if (itemInSlot == null || (item != null && !StackUtils.isIdenticalItem(itemInSlot, item)))
+			if (itemInSlot == null)
 				continue;
-			avail += itemInSlot.stackSize;
+			if (item == null || StackUtils.isIdenticalItem(itemInSlot, item))
+				count += itemInSlot.stackSize;
+			if (count >= itemCount)
+				return true;
 		}
 
-		return ((float) avail / (float) max);
+		return false;
 	}
 
-	public boolean hasPaperMin(float percentage) {
-		return percentOccupied(TradeStation.SLOT_LETTERS_1, TradeStation.SLOT_LETTERS_COUNT, new ItemStack(Items.paper)) > percentage;
+	/**
+	 * Returns the percentage of the inventory that is occupied by 'item'
+	 * if item == null, returns the percentage occupied by all kinds of items
+	 */
+	private float percentOccupied(int startSlot, int countSlots, ItemStack item) {
+		int count = 0;
+		int total = 0;
+
+		IInventory tradeInventory = this.getOrCreateTradeInventory();
+		for (int i = startSlot; i < startSlot + countSlots; i++) {
+			ItemStack itemInSlot = tradeInventory.getStackInSlot(i);
+			if (itemInSlot == null) {
+				total += 64;
+			} else {
+				total += itemInSlot.getMaxStackSize();
+				if (item == null || StackUtils.isIdenticalItem(itemInSlot, item))
+					count += itemInSlot.stackSize;
+			}
+		}
+
+		return ((float)count / (float)total);
+	}
+
+	public boolean hasPaperMin(int count) {
+		return hasItemCount(TradeStation.SLOT_LETTERS_1, TradeStation.SLOT_LETTERS_COUNT, new ItemStack(Items.paper), count);
 	}
 
 	public boolean hasInputBufMin(float percentage) {
 		IInventory inventory = getOrCreateTradeInventory();
-		ItemStack tradegood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
-		if (tradegood == null)
+		ItemStack tradeGood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
+		if (tradeGood == null)
 			return true;
-		return percentOccupied(TradeStation.SLOT_BUFFER, TradeStation.SLOT_BUFFER_COUNT, tradegood) > percentage;
+		return percentOccupied(TradeStation.SLOT_BUFFER, TradeStation.SLOT_BUFFER_COUNT, tradeGood) > percentage;
 	}
 
 	public boolean hasOutputBufMin(float percentage) {
@@ -157,9 +219,11 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 				continue;
 
 			posted += ((IStamps) stamp.getItem()).getPostage(stamp).getValue() * stamp.stackSize;
+			if (posted >= postage)
+				return true;
 		}
 
-		return posted >= postage;
+		return false;
 	}
 
 	/* ADDRESS */
@@ -188,7 +252,6 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 			this.address = address;
 			PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerProfile(), address);
 			setErrorState(EnumErrorCode.OK);
-			sendNetworkUpdate();
 		} else
 			this.address = address;
 	}
@@ -409,8 +472,8 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 	@Override
 	public LinkedList<ITrigger> getCustomTriggers() {
 		LinkedList<ITrigger> res = new LinkedList<ITrigger>();
-		res.add(PluginMail.lowPaper25);
-		res.add(PluginMail.lowPaper10);
+		res.add(PluginMail.lowPaper64);
+		res.add(PluginMail.lowPaper32);
 		res.add(PluginMail.lowInput25);
 		res.add(PluginMail.lowInput10);
 		res.add(PluginMail.lowPostage40);

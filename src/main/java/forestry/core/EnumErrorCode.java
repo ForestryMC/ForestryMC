@@ -66,7 +66,7 @@ public enum EnumErrorCode {
 
 	NOHONEY("noHoney", 22),
 
-	NOTPOSTPAID("notPostpaid", 23),
+	NOTPOSTPAID("notPostpaid", "noStamps", 23),
 
 	NORECIPIENT("noRecipient", 24),
 
@@ -86,14 +86,28 @@ public enum EnumErrorCode {
 
 	CIRCUITMISMATCH("circuitMismatch", 26),
 
-	NOLIQUID("noLiquid", 29);
+	NOLIQUID("noLiquid", 29),
+
+	NOPAPER("noPaper", 30),
+
+	NOSTAMPSNOPAPER("noStampsNoPaper", "noStamps", 31),
+
+	NOSUPPLIES("noSupplies", "noResource", 32),
+
+	NOTRADE("noTrade", "noResource", 33);
 
 	private String name;
+	private String iconName;
 	@SideOnly(Side.CLIENT)
 	private IIcon icon;
 
 	private EnumErrorCode(String name, int iconIndex) {
+		this(name, name, iconIndex);
+	}
+
+	private EnumErrorCode(String name, String iconName, int iconIndex) {
 		this.name = name;
+		this.iconName = iconName;
 	}
 
 	public String getDescription() {
@@ -106,7 +120,7 @@ public enum EnumErrorCode {
 
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister register) {
-		icon = TextureManager.getInstance().registerTex(register, "errors/" + name);
+		icon = TextureManager.getInstance().registerTex(register, "errors/" + iconName);
 	}
 
 	@SideOnly(Side.CLIENT)

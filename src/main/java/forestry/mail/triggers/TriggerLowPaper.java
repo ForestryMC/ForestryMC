@@ -21,9 +21,9 @@ import forestry.mail.gadgets.MachineTrader;
 
 public class TriggerLowPaper extends Trigger {
 
-	float threshold;
+	int threshold;
 
-	public TriggerLowPaper(String tag, float threshold) {
+	public TriggerLowPaper(String tag, int threshold) {
 		super(tag, "lowPaper");
 		this.threshold = threshold;
 	}
