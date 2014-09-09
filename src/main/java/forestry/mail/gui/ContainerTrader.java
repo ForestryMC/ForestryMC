@@ -51,13 +51,15 @@ public class ContainerTrader extends ContainerForestry {
 			for (int j = 0; j < 2; j++)
 				addSlot(new SlotCustom(inventory, TradeStation.SLOT_LETTERS_1 + j + i * 2, 15 + j * 18, 73 + i * 18, new Object[] { Items.paper }));
 
-		// Buffer
-		final int bufRows = 6;
+		// Buffers
 		final int bufCols = 5;
-		for (int i = 0; i < bufRows; i++)
+		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < bufCols; j++)
-				addSlot(new Slot(inventory, TradeStation.SLOT_BUFFER + j + i * bufCols, 123 + j * 18, 19 + i * 18));
+				addSlot(new Slot(inventory, TradeStation.SLOT_RECEIVE_BUFFER + j + i * bufCols, 123 + j * 18, 19 + i * 18));
 
+		for (int i = 0; i < 2; i++)
+			for (int j = 0; j < bufCols; j++)
+				addSlot(new Slot(inventory, TradeStation.SLOT_SEND_BUFFER + j + i * bufCols, 123 + j * 18, (19 + (18 * 4)) + i * 18));
 
 		// Player inventory
 		for (int i = 0; i < 3; i++)
