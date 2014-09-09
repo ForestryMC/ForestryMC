@@ -193,7 +193,7 @@ public class InventoryAdapter implements IInventory, INBTTagable {
 				if (stack == null)
 					continue;
 
-				if (StackUtils.equals(Blocks.air, queried)) {
+				if (StackUtils.equals(Blocks.bedrock, queried)) {
 					itemCount += stack.stackSize;
 					continue;
 				}
