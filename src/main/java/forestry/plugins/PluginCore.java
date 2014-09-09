@@ -64,6 +64,7 @@ import forestry.core.items.ItemAssemblyKit;
 import forestry.core.items.ItemCrated;
 import forestry.core.items.ItemForestry;
 import forestry.core.items.ItemForestryBlock;
+import forestry.core.items.ItemSoilBlock;
 import forestry.core.items.ItemForestryPickaxe;
 import forestry.core.items.ItemForestryShovel;
 import forestry.core.items.ItemFruit;
@@ -111,7 +112,7 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 		definitionEscritoire = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_ESCRITOIRE_META, "forestry.Escritoire", TileEscritoire.class,
 				Proxies.render.getRenderEscritoire()));
 
-		ForestryBlock.soil.registerBlock(new BlockSoil(), ItemForestryBlock.class, "soil");
+		ForestryBlock.soil.registerBlock(new BlockSoil(), ItemSoilBlock.class, "soil");
 		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, 0);
 		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, 1);
 
