@@ -124,7 +124,7 @@ public class BlockLog extends Block implements IWoodTyped {
 
 		int oriented = meta & 12;
 
-		WoodType type = getWoodType(getTypeFromMeta(meta));
+		WoodType type = getWoodType(meta);
 		if (type == null)
 			return null;
 
@@ -161,7 +161,7 @@ public class BlockLog extends Block implements IWoodTyped {
 	/* PROPERTIES */
 	@Override
 	public float getBlockHardness(World world, int x, int y, int z) {
-		return getWoodType(getTypeFromMeta(world.getBlockMetadata(x, y, z))).getHardness();
+		return getWoodType(world.getBlockMetadata(x, y, z)).getHardness();
 	}
 
 	@Override
@@ -196,6 +196,7 @@ public class BlockLog extends Block implements IWoodTyped {
 
 	@Override
 	public WoodType getWoodType(int meta) {
+		meta = getTypeFromMeta(meta);
 		if(meta + cat.ordinal() * 4 < WoodType.VALUES.length)
 			return WoodType.VALUES[meta + cat.ordinal() * 4];
 		else
