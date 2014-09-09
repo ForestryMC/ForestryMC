@@ -40,7 +40,7 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.ISaveEventHandler;
-import forestry.core.items.ItemForestryBlock;
+import forestry.core.items.ItemTypedBlock;
 import forestry.core.proxy.Proxies;
 import forestry.core.triggers.Trigger;
 import forestry.core.utils.ShapedRecipeCustom;
@@ -107,7 +107,7 @@ public class PluginFarming extends NativePlugin {
 
 		Farmables.farmInterface = new FarmHelper();
 
-		ForestryBlock.mushroom.registerBlock(new BlockMushroom(), ItemForestryBlock.class, "mushroom");
+		ForestryBlock.mushroom.registerBlock(new BlockMushroom(), ItemTypedBlock.class, "mushroom");
 
 		Farmables.farmables.put("farmArboreal", new ArrayList<IFarmable>());
 		Farmables.farmables.get("farmArboreal").add(new FarmableVanillaSapling());

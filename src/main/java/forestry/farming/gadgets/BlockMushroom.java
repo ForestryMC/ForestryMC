@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import forestry.core.IItemTyped;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -32,7 +33,11 @@ import forestry.core.config.Defaults;
 import forestry.core.proxy.Proxies;
 import forestry.farming.worldgen.WorldGenBigMushroom;
 
-public class BlockMushroom extends BlockSapling {
+public class BlockMushroom extends BlockSapling implements IItemTyped {
+
+	public enum MushroomType {
+		BROWN, RED;
+	}
 
 	private final WorldGenerator[] generators;
 	private final ItemStack[] drops;
@@ -56,8 +61,9 @@ public class BlockMushroom extends BlockSapling {
 	public ArrayList<ItemStack> getDrops(World world, int X, int Y, int Z, int metadata, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 
-		int type = metadata & 0x03;
-		ret.add(drops[type]);
+		MushroomType type = getTypeFromMeta(metadata);
+
+		ret.add(drops[type.ordinal()]);
 
 		return ret;
 	}
@@ -74,13 +80,13 @@ public class BlockMushroom extends BlockSapling {
 			return;
 
 		int meta = world.getBlockMetadata(i, j, k);
-		int type = meta & 0x03;
+		MushroomType type = getTypeFromMeta(meta);
 		int maturity = meta >> 2;
 
 		tickGermling(world, i, j, k, random, type, maturity);
 	}
 
-	private void tickGermling(World world, int i, int j, int k, Random random, int type, int maturity) {
+	private void tickGermling(World world, int i, int j, int k, Random random, MushroomType type, int maturity) {
 
 		int lightvalue = world.getBlockLightValue(i, j + 1, k);
 
@@ -90,7 +96,7 @@ public class BlockMushroom extends BlockSapling {
 		if (maturity != 3) {
 			maturity = 3;
 			int matX = maturity << 2;
-			int meta = (matX | type);
+			int meta = (matX | type.ordinal());
 			world.setBlockMetadataWithNotify(i, j, k, meta, Defaults.FLAG_BLOCK_SYNCH);
 		} else if (lightvalue <= 7)
 			func_149878_d(world, i, j, k, random);
@@ -106,6 +112,14 @@ public class BlockMushroom extends BlockSapling {
 		world.setBlockToAir(i, j, k);
 		if (!generators[type].generate(world, random, i, j, k))
 			world.setBlock(i, j, k, this, type, 0);
+	}
+
+	@Override
+	public MushroomType getTypeFromMeta(int meta) {
+		meta %= 3;
+		if (meta >= MushroomType.values().length)
+			return null;
+		return MushroomType.values()[meta];
 	}
 
 	/* ICONS */
@@ -124,10 +138,11 @@ public class BlockMushroom extends BlockSapling {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIcon(int side, int meta) {
-		int type = meta & 0x0f;
-		if (type == 0)
+		MushroomType type = getTypeFromMeta(meta);
+
+		if (type == MushroomType.BROWN)
 			return Blocks.brown_mushroom.getIcon(side, meta);
-		else if (type == 1)
+		else if (type == MushroomType.RED)
 			return Blocks.red_mushroom.getIcon(side, meta);
 		else
 			return null;
