@@ -38,7 +38,7 @@ import forestry.core.triggers.Trigger;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.mail.CommandMail;
-import forestry.mail.EnumAddressee;
+import forestry.api.mail.EnumAddressee;
 import forestry.mail.GuiHandlerMail;
 import forestry.mail.PacketHandlerMail;
 import forestry.mail.PostRegistry;

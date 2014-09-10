@@ -16,12 +16,11 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 
 import forestry.core.gui.ContainerForestry;
-import forestry.core.gui.slots.SlotClosed;
 import forestry.core.gui.slots.SlotCustom;
 import forestry.mail.TradeStation;
 import forestry.mail.gadgets.MachineTrader;
 import forestry.mail.items.ItemStamps;
-import forestry.api.mail.MailAddress;
+import forestry.api.mail.IMailAddress;
 
 public class ContainerTrader extends ContainerForestry {
 
@@ -75,7 +74,7 @@ public class ContainerTrader extends ContainerForestry {
 		return machine.isLinked();
 	}
 
-	public MailAddress getAddress() {
+	public IMailAddress getAddress() {
 		return machine.getAddress();
 	}
 

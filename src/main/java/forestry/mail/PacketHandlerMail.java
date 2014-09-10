@@ -12,7 +12,6 @@ package forestry.mail;
 
 import java.io.DataInputStream;
 
-import forestry.api.mail.MailAddress;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 
@@ -24,7 +23,7 @@ import forestry.mail.gui.ContainerCatalogue;
 import forestry.mail.gui.ContainerLetter;
 import forestry.mail.gui.ContainerTradeName;
 import forestry.mail.network.PacketPOBoxInfo;
-import forestry.mail.network.PacketTradeInfo;
+import forestry.mail.network.PacketLetterInfo;
 import forestry.plugins.PluginMail;
 
 public class PacketHandlerMail implements IPacketHandler {
@@ -36,10 +35,10 @@ public class PacketHandlerMail implements IPacketHandler {
 
 			PacketUpdate packet;
 			switch (packetID) {
-			case PacketIds.TRADING_INFO:
-				PacketTradeInfo packetT = new PacketTradeInfo();
+			case PacketIds.LETTER_INFO:
+				PacketLetterInfo packetT = new PacketLetterInfo();
 				packetT.readData(data);
-				onTradeInfo(packetT);
+				onLetterInfo(packetT);
 				break;
 			case PacketIds.POBOX_INFO:
 				PacketPOBoxInfo packetP = new PacketPOBoxInfo();
@@ -70,11 +69,11 @@ public class PacketHandlerMail implements IPacketHandler {
 		}
 	}
 
-	private void onTradeInfo(PacketTradeInfo packet) {
+	private void onLetterInfo(PacketLetterInfo packet) {
 
 		Container container = Proxies.common.getClientInstance().thePlayer.openContainer;
 		if (container instanceof ContainerLetter) {
-			((ContainerLetter) container).handleTradeInfoUpdate(packet);
+			((ContainerLetter) container).handleLetterInfoUpdate(packet);
 		} else if(container instanceof ContainerCatalogue) {
 			((ContainerCatalogue) container).handleTradeInfoUpdate(packet);
 		}

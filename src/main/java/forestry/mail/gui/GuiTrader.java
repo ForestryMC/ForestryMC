@@ -16,7 +16,6 @@ import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestry;
 import forestry.core.utils.StringUtil;
 import forestry.mail.gadgets.MachineTrader;
-import forestry.api.mail.MailAddress;
 
 public class GuiTrader extends GuiForestry<MachineTrader> {
 

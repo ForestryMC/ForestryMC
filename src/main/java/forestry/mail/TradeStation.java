@@ -28,9 +28,9 @@ import forestry.api.mail.ILetter;
 import forestry.api.mail.IPostalState;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.ITradeStation;
-import forestry.api.mail.MailAddress;
 import forestry.api.mail.PostManager;
 import forestry.api.mail.TradeStationInfo;
+import forestry.api.mail.IMailAddress;
 import forestry.core.config.ForestryItem;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.StackUtils;
@@ -56,13 +56,13 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 	// / MEMBER
 	private GameProfile owner;
-	private MailAddress address;
+	private IMailAddress address;
 	private boolean isVirtual = false;
 	private boolean isInvalid = false;
 	private final InventoryAdapter inventory = new InventoryAdapter(SLOT_SIZE, "INV");
 
 	// / CONSTRUCTORS
-	public TradeStation(GameProfile owner, MailAddress address) {
+	public TradeStation(GameProfile owner, IMailAddress address) {
 		super(SAVE_NAME + address);
 		if (address.isPlayer()) {
 			throw new IllegalArgumentException("TradeStation address must not be a player");
@@ -76,7 +76,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	@Override
-	public MailAddress getAddress() {
+	public IMailAddress getAddress() {
 		return this.address;
 	}
 
@@ -163,7 +163,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 	/* ILETTERHANDLER */
 	@Override
-	public IPostalState handleLetter(World world, MailAddress recipient, ItemStack letterstack, boolean doLodge) {
+	public IPostalState handleLetter(World world, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
 		
 		boolean sendOwnerNotice = doLodge && owner != null;
 		

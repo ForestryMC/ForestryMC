@@ -12,7 +12,6 @@ package forestry.mail.gadgets;
 
 import java.util.LinkedList;
 
-import forestry.api.mail.MailAddress;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -28,6 +27,8 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
+import forestry.api.mail.IMailAddress;
+import forestry.mail.MailAddress;
 import forestry.core.EnumErrorCode;
 import forestry.core.gadgets.TileBase;
 import forestry.core.network.EntityNetData;
@@ -41,7 +42,7 @@ import forestry.plugins.PluginMail;
 public class MachineTrader extends TileBase implements ISpecialInventory, ISidedInventory {
 
 	@EntityNetData
-	public MailAddress address;
+	private MailAddress address;
 
 	public MachineTrader() {
 		address = new MailAddress();
@@ -234,11 +235,11 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 	}
 
 	/* ADDRESS */
-	public MailAddress getAddress() {
+	public IMailAddress getAddress() {
 		return address;
 	}
 
-	public void setAddress(MailAddress address) {
+	public void setAddress(IMailAddress address) {
 		if (address == null)
 			throw new NullPointerException("address must not be null");
 
@@ -256,11 +257,11 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 				return;
 			}
 
-			this.address = address;
+			this.address = new MailAddress(address);
 			PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerProfile(), address);
 			setErrorState(EnumErrorCode.OK);
 		} else
-			this.address = address;
+			this.address = new MailAddress(address);
 	}
 
 	/* TRADING */

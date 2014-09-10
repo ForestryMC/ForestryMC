@@ -12,6 +12,7 @@ package forestry.mail.gadgets;
 
 import java.util.LinkedList;
 
+import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -26,8 +27,8 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IPostalState;
-import forestry.api.mail.MailAddress;
 import forestry.api.mail.PostManager;
+import forestry.api.mail.IMailAddress;
 
 import forestry.core.config.Config;
 import forestry.core.gadgets.TileBase;
@@ -86,17 +87,21 @@ public class MachineMailbox extends TileBase implements IMailContainer, ISpecial
 
 	/* MAIL HANDLING */
 	public IInventory getOrCreateMailInventory() {
+		return getOrCreateMailInventory(null);
+	}
+	public IInventory getOrCreateMailInventory(EntityPlayer player) {
 
-		// Handle client side
-		if (!Proxies.common.isSimulating(worldObj))
+		GameProfile playerProfile;
+		if (player != null) {
+			playerProfile = player.getGameProfile();
+		} else {
+			playerProfile = getOwnerProfile();
+		}
+
+		if (playerProfile == null)
 			return new InventoryAdapter(POBox.SLOT_SIZE, "Letters");
 
-		EntityPlayer player = Proxies.common.getPlayer();
-		
-		if (player == null || player.getGameProfile() == null)
-			return new InventoryAdapter(POBox.SLOT_SIZE, "Letters");
-
-		MailAddress address = new MailAddress(player.getGameProfile());
+		IMailAddress address = PostManager.postRegistry.getMailAddress(playerProfile);
 		return PostRegistry.getOrCreatePOBox(worldObj, address);
 	}
 

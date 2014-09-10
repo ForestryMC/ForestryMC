@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.mail.proxy;
 
-import forestry.api.mail.MailAddress;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.world.World;
 
 import forestry.core.network.ForestryPacket;
@@ -20,6 +20,8 @@ import forestry.mail.POBox;
 import forestry.mail.POBoxInfo;
 import forestry.mail.PostRegistry;
 import forestry.mail.gui.GuiMailboxInfo;
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.PostManager;
 
 public class ClientProxyMail extends ProxyMail {
 
@@ -38,7 +40,8 @@ public class ClientProxyMail extends ProxyMail {
 		if (!Proxies.common.isSimulating(Proxies.common.getRenderWorld()))
 			Proxies.net.sendToServer(new ForestryPacket(PacketIds.POBOX_INFO_REQUEST));
 		else {
-			MailAddress address = new MailAddress(Proxies.common.getClientInstance().thePlayer.getGameProfile());
+			GameProfile profile = Proxies.common.getClientInstance().thePlayer.getGameProfile();
+			IMailAddress address = PostManager.postRegistry.getMailAddress(profile);
 			POBox pobox = PostRegistry.getPOBox(Proxies.common.getRenderWorld(), address);
 			if (pobox != null)
 				setPOBoxInfo(Proxies.common.getRenderWorld(), address, pobox.getPOBoxInfo());
@@ -46,7 +49,7 @@ public class ClientProxyMail extends ProxyMail {
 	}
 
 	@Override
-	public void setPOBoxInfo(World world, MailAddress address, POBoxInfo info) {
+	public void setPOBoxInfo(World world, IMailAddress address, POBoxInfo info) {
 		if (address.isClientPlayer(world))
 			GuiMailboxInfo.instance.setPOBoxInfo(info);
 	}
