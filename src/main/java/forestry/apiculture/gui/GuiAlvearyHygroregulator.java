@@ -14,23 +14,15 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.apiculture.gadgets.TileAlvearyHygroregulator;
 import forestry.core.config.Defaults;
-import forestry.core.gui.GuiForestry;
+import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
-import forestry.core.utils.StringUtil;
 
-public class GuiAlvearyHygroregulator extends GuiForestry<TileAlvearyHygroregulator> {
+public class GuiAlvearyHygroregulator extends GuiForestryTitled<TileAlvearyHygroregulator> {
 
 	public GuiAlvearyHygroregulator(InventoryPlayer inventory, TileAlvearyHygroregulator tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/hygroregulator.png", new ContainerAlvearyHygroregulator(inventory, tile));
+		super(Defaults.TEXTURE_PATH_GUI + "/hygroregulator.png", new ContainerAlvearyHygroregulator(inventory, tile), tile);
 
 		widgetManager.add(new TankWidget(this.widgetManager, 104, 17, 0));
-	}
-
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localizeTile(tile.getInventoryName());
-		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
 	}
 
 }

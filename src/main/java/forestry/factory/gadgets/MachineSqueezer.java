@@ -154,7 +154,7 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 
 	@Override
 	public String getInventoryName() {
-		return "factory.5.name";
+		return getUnlocalizedName();
 	}
 
 	@Override

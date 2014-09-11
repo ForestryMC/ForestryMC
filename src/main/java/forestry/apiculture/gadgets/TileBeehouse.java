@@ -69,11 +69,6 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	}
 
 	@Override
-	public String getInventoryName() {
-		return "apiculture.2.name";
-	}
-
-	@Override
 	public void openGui(EntityPlayer player, TileBase tile) {
 		player.openGui(ForestryAPI.instance, GuiId.BeehouseGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
 	}

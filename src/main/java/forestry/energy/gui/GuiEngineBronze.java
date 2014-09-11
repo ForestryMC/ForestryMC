@@ -108,13 +108,6 @@ public class GuiEngineBronze extends GuiEngine {
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localizeTile(tile.getInventoryName());
-		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
-	}
-
-	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 

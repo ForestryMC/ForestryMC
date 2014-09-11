@@ -53,7 +53,7 @@ public class MachineMailbox extends TileBase implements IMailContainer, ISpecial
 
 	@Override
 	public String getInventoryName() {
-		return "mail.0.name";
+		return getUnlocalizedName();
 	}
 
 	/* GUI */

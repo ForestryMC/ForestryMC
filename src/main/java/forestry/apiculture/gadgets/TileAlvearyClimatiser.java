@@ -136,10 +136,6 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IPowe
 		nbttagcompound.setInteger("Heating", transferTime);
 	}
 
-	@Override
-	public String getInventoryName() {
-		return "alveary.climatiser";
-	}
 
 	/* NETWORK */
 	@Override

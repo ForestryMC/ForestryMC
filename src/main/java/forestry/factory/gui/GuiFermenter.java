@@ -13,24 +13,16 @@ package forestry.factory.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.core.config.Defaults;
-import forestry.core.gui.GuiForestry;
+import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
-import forestry.core.utils.StringUtil;
 import forestry.factory.gadgets.MachineFermenter;
 
-public class GuiFermenter extends GuiForestry<MachineFermenter> {
+public class GuiFermenter extends GuiForestryTitled<MachineFermenter> {
 
 	public GuiFermenter(InventoryPlayer inventory, MachineFermenter tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/fermenter.png", new ContainerFermenter(inventory, tile), tile);
 		widgetManager.add(new TankWidget(this.widgetManager, 35, 19, 0));
 		widgetManager.add(new TankWidget(this.widgetManager, 125, 19, 1));
-	}
-
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localizeTile(tile.getInventoryName());
-		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
 	}
 
 	@Override

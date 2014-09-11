@@ -407,7 +407,7 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 
 	@Override
 	public String getInventoryName() {
-		return "engine.2.name";
+		return getUnlocalizedName();
 	}
 
 	/**

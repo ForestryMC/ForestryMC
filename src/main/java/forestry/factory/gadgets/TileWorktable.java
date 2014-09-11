@@ -366,11 +366,6 @@ public class TileWorktable extends TileBase implements ICrafter {
 	}
 
 	@Override
-	public String getInventoryName() {
-		return "factory2.2.name";
-	}
-
-	@Override
 	public void openGui(EntityPlayer player, TileBase tile) {
 		player.openGui(ForestryAPI.instance, GuiId.WorktableGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}

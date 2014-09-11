@@ -50,7 +50,7 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 
 	@Override
 	public String getInventoryName() {
-		return "mail.1.name";
+		return getUnlocalizedName();
 	}
 
 	@Override

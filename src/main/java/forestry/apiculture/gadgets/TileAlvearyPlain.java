@@ -584,7 +584,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 
 	@Override
 	public String getInventoryName() {
-		return "alveary.0.name";
+		return getUnlocalizedName();
 	}
 
 	@Override

@@ -313,7 +313,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 
 	@Override
 	public String getInventoryName() {
-		return "engine.0.name";
+		return getUnlocalizedName();
 	}
 
 	/**

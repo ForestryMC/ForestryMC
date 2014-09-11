@@ -148,7 +148,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 
 	@Override
 	public String getInventoryName() {
-		return "factory.2.name";
+		return getUnlocalizedName();
 	}
 
 	@Override

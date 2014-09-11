@@ -14,24 +14,16 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.apiculture.gadgets.TileAlvearyPlain;
 import forestry.core.config.Defaults;
-import forestry.core.gui.GuiForestry;
+import forestry.core.gui.GuiForestryTitled;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.StringUtil;
 import forestry.core.utils.Utils;
 
-public class GuiAlveary extends GuiForestry<TileAlvearyPlain> {
+public class GuiAlveary extends GuiForestryTitled<TileAlvearyPlain> {
 
 	public GuiAlveary(InventoryPlayer inventory, TileAlvearyPlain tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/alveary.png", new ContainerAlveary(inventory, tile), tile);
 
 		ySize = 190;
-	}
-
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String title = StringUtil.localizeTile(tile.getInventoryName());
-		this.fontRendererObj.drawString(title, getCenteredOffset(title), 6, fontColor.get("gui.title"));
 	}
 
 	@Override

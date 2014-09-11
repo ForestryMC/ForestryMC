@@ -46,10 +46,6 @@ public class TileAlvearyStabiliser extends TileAlveary implements IBeeModifier {
 		((IAlvearyComponent)getCentralTE()).registerBeeModifier(this);
 	}
 	
-	@Override
-	public String getInventoryName() {
-		return "alveary.6.name";
-	}
 
 	@Override
 	public boolean hasFunction() {

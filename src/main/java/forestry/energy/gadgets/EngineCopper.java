@@ -399,7 +399,7 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 
 	@Override
 	public String getInventoryName() {
-		return "engine.1.name";
+		return getUnlocalizedName();
 	}
 
 	/**

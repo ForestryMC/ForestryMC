@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Defaults;
-import forestry.core.gui.GuiForestry;
+import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.WidgetManager;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
@@ -28,7 +28,7 @@ import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 import forestry.factory.gadgets.TileWorktable;
 
-public class GuiWorktable extends GuiForestry<TileWorktable> {
+public class GuiWorktable extends GuiForestryTitled<TileWorktable> {
 
 	private class MemorizedSlot extends Widget {
 
@@ -118,7 +118,7 @@ public class GuiWorktable extends GuiForestry<TileWorktable> {
 	protected ContainerWorktable container;
 
 	public GuiWorktable(EntityPlayer player, TileWorktable tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/worktable.png", new ContainerWorktable(player, tile));
+		super(Defaults.TEXTURE_PATH_GUI + "/worktable.png", new ContainerWorktable(player, tile), tile);
 
 		ySize = 218;
 		worktable = tile;
@@ -139,10 +139,4 @@ public class GuiWorktable extends GuiForestry<TileWorktable> {
 		widgetManager.add(new MemorizedSlot(widgetManager, 128, 20, 7));
 	}
 
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localizeTile(tile.getInventoryName());
-		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
-	}
 }

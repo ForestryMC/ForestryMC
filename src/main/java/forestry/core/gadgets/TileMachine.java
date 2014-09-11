@@ -42,7 +42,7 @@ import forestry.plugins.PluginEnergy;
 import forestry.plugins.PluginFactory;
 import forestry.plugins.PluginMail;
 
-public class TileMachine extends TileForestry implements ISpecialInventory, IClimatised, IHintSource {
+public abstract class TileMachine extends TileForestry implements ISpecialInventory, IClimatised, IHintSource {
 
 	public TileMachine() {
 	}
@@ -301,7 +301,7 @@ public class TileMachine extends TileForestry implements ISpecialInventory, ICli
 
 	@Override
 	public String getInventoryName() {
-		return "[Unknown]";
+		return getUnlocalizedName();
 	}
 
 	@Override

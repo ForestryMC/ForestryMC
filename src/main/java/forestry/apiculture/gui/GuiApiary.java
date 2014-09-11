@@ -15,12 +15,11 @@ import net.minecraft.entity.player.InventoryPlayer;
 import forestry.apiculture.gadgets.TileApiary;
 import forestry.apiculture.gadgets.TileBeehouse;
 import forestry.core.config.Defaults;
-import forestry.core.gui.GuiForestry;
+import forestry.core.gui.GuiForestryTitled;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.StringUtil;
 import forestry.core.utils.Utils;
 
-public class GuiApiary extends GuiForestry<TileBeehouse> {
+public class GuiApiary extends GuiForestryTitled<TileBeehouse> {
 
 	public GuiApiary(InventoryPlayer inventory, TileApiary tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/apiary.png", new ContainerApiary(inventory, tile, true), tile);
@@ -32,13 +31,6 @@ public class GuiApiary extends GuiForestry<TileBeehouse> {
 		super(Defaults.TEXTURE_PATH_GUI + "/alveary.png", new ContainerApiary(inventory, tile, false), tile);
 
 		ySize = 190;
-	}
-
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localizeTile(tile.getInventoryName());
-		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
 	}
 
 	@Override
