@@ -50,14 +50,14 @@ public class PluginNatura extends NativePlugin {
 		logWillow = GameRegistry.findBlock(NATURA, "willow");
 		leavesNatura = GameRegistry.findBlock(NATURA, "floraleaves");
 		saplingNatura = GameRegistry.findBlock(NATURA, "florasapling");
-		saplingNaturaRare = GameRegistry.findBlock(NATURA, "Rare Sapling");
+		saplingNaturaRare = GameRegistry.findBlock(NATURA, "RareSapling");
 
 		ArrayList<String> saplingItemKeys = new ArrayList<String>();
 
 		if(saplingNatura != null)
 			saplingItemKeys.add("florasapling");
 		if(saplingNaturaRare != null)
-			saplingItemKeys.add("Rare Sapling");
+			saplingItemKeys.add("RareSapling");
 
 		for (String key : saplingItemKeys) {
 			Item saplingItem = GameRegistry.findItem(NATURA, key);
