@@ -115,6 +115,10 @@ public class ContainerWorktable extends ContainerForestry implements IContainerC
 		tile.setRecipe(craftMatrix);
 	}
 
+	public void clearRecipe() {
+		sendRecipeClick(0, tile.getMemory().capacity);
+	}
+
 	public void sendRecipeClick(int mouseButton, int recipeIndex) {
 		PacketPayload payload = new PacketPayload(2, 0, 0);
 		payload.intPayload[0] = mouseButton;

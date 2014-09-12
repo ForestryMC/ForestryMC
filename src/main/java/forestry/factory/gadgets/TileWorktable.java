@@ -193,6 +193,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 
 		private LinkedList<Recipe> recipes = new LinkedList<Recipe>();
 		private long lastUpdate;
+		public final int capacity = 9;
 
 		public long getLastUpdate() {
 			return lastUpdate;
@@ -204,10 +205,13 @@ public class TileWorktable extends TileBase implements ICrafter {
 			recipe.updateLastUse(world);
 
 			Recipe memory = getMemorized(crafting, world);
-			if (memory != null)
-				recipes.remove(memory);
+			if (memory != null) {
+				int index = recipes.indexOf(memory);
+				recipes.set(index, recipe);
+				return;
+			}
 
-			if (recipes.size() < 8) {
+			if (recipes.size() < capacity) {
 				recipes.add(recipe);
 				return;
 			}
@@ -413,7 +417,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 	}
 
 	public void chooseRecipe(int recipeIndex) {
-		if (recipeIndex == 9) {
+		if (recipeIndex >= memorized.capacity) {
 			for (int slot = 0; slot < craftingInventory.getSizeInventory(); slot++) {
 				craftingInventory.setInventorySlotContents(slot, null);
 			}
