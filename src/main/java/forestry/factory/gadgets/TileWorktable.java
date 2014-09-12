@@ -120,7 +120,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 		@Override
 		public ItemStack getCraftingResult(InventoryCrafting inventorycrafting) {
 			if (updateCachedIRecipe())
-				return cachedRecipe.getRecipeOutput();
+				return cachedRecipe.getCraftingResult(inventorycrafting);
 
 			return null;
 		}
@@ -193,29 +193,25 @@ public class TileWorktable extends TileBase implements ICrafter {
 
 		private LinkedList<Recipe> recipes = new LinkedList<Recipe>();
 		private long lastUpdate;
+		public final int capacity = 9;
 
 		public long getLastUpdate() {
 			return lastUpdate;
 		}
 
-		public Recipe getOrCreateRecipe(World world, InventoryCrafting crafting) {
-
-			Recipe memory = getMemorized(crafting, world);
-			if (memory != null) {
-				return memory;
-			}
-
-			return new Recipe(crafting);
-		}
-
-		public void memorizeRecipe(World world, Recipe recipe) {
+		public void memorizeRecipe(World world, Recipe recipe, InventoryCrafting crafting) {
 
 			lastUpdate = world.getTotalWorldTime();
 			recipe.updateLastUse(world);
 
-			if (recipes.contains(recipe))
+			Recipe memory = getMemorized(crafting, world);
+			if (memory != null) {
+				int index = recipes.indexOf(memory);
+				recipes.set(index, recipe);
 				return;
-			if (recipes.size() < 8) {
+			}
+
+			if (recipes.size() < capacity) {
 				recipes.add(recipe);
 				return;
 			}
@@ -361,6 +357,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 	}
 	/* MEMBERS */
 	private Recipe currentRecipe;
+	private InventoryCrafting currentCrafting;
 	private final RecipeMemory memorized;
 	private final TileInventoryAdapter craftingInventory;
 	private final TileInventoryAdapter accessibleInventory;
@@ -370,11 +367,6 @@ public class TileWorktable extends TileBase implements ICrafter {
 		accessibleInventory = new TileInventoryAdapter(this, 18, "Items");
 
 		memorized = new RecipeMemory();
-	}
-
-	@Override
-	public String getInventoryName() {
-		return "factory2.2";
 	}
 
 	@Override
@@ -425,7 +417,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 	}
 
 	public void chooseRecipe(int recipeIndex) {
-		if (recipeIndex == 9) {
+		if (recipeIndex >= memorized.capacity) {
 			for (int slot = 0; slot < craftingInventory.getSizeInventory(); slot++) {
 				craftingInventory.setInventorySlotContents(slot, null);
 			}
@@ -447,13 +439,19 @@ public class TileWorktable extends TileBase implements ICrafter {
 	public void setRecipe(InventoryCrafting crafting) {
 
 		IRecipe recipe = RECIPE_BRIDGE.getRecipe(crafting, worldObj);
-		currentRecipe = recipe != null ? memorized.getOrCreateRecipe(worldObj, crafting) : null;
-		updateCraftResult();
+		if (recipe == null) {
+			currentRecipe = null;
+			currentCrafting = null;
+		} else {
+			currentRecipe = new Recipe(crafting);
+			currentCrafting = crafting;
+		}
+		updateCraftResult(currentCrafting);
 	}
 
-	private void updateCraftResult() {
+	private void updateCraftResult(InventoryCrafting inventorycrafting) {
 		if (currentRecipe != null) {
-			ItemStack result = currentRecipe.getCraftingResult(null);
+			ItemStack result = currentRecipe.getCraftingResult(inventorycrafting);
 			if (result != null) {
 				craftingInventory.setInventorySlotContents(SLOT_CRAFTING_RESULT, result.copy());
 				return;
@@ -467,7 +465,10 @@ public class TileWorktable extends TileBase implements ICrafter {
 		// Need at least one matched set
 		if (currentRecipe == null)
 			return false;
-		return StackUtils.containsSets(currentRecipe.getMatrix().getStacks(SLOT_CRAFTING_1, 9), accessibleInventory.getStacks(SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT), currentRecipe.getRecipeOutput(), true, true) > 0;
+
+		ItemStack[] set = currentRecipe.getMatrix().getStacks();
+		ItemStack[] stock = accessibleInventory.getStacks();
+		return StackUtils.containsSets(set, stock, currentRecipe.getRecipeOutput(), true, true) > 0;
 	}
 
 	private void removeResources(EntityPlayer player) {
@@ -511,9 +512,9 @@ public class TileWorktable extends TileBase implements ICrafter {
 			return null;
 
 		if (Proxies.common.isSimulating(worldObj))
-			memorized.memorizeRecipe(worldObj, currentRecipe);
+			memorized.memorizeRecipe(worldObj, currentRecipe, currentCrafting);
 		removeResources(player);
-		updateCraftResult();
+		updateCraftResult(currentCrafting);
 		return currentRecipe.getRecipeOutput().copy();
 	}
 

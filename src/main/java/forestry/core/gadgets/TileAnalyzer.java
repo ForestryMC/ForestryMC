@@ -76,7 +76,7 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 
 	@Override
 	public String getInventoryName() {
-		return StringUtil.localize("core.0");
+		return getUnlocalizedName();
 	}
 
 	/* GUI */

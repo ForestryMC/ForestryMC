@@ -64,6 +64,7 @@ import forestry.core.items.ItemAssemblyKit;
 import forestry.core.items.ItemCrated;
 import forestry.core.items.ItemForestry;
 import forestry.core.items.ItemForestryBlock;
+import forestry.core.items.ItemTypedBlock;
 import forestry.core.items.ItemForestryPickaxe;
 import forestry.core.items.ItemForestryShovel;
 import forestry.core.items.ItemFruit;
@@ -111,7 +112,7 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 		definitionEscritoire = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_ESCRITOIRE_META, "forestry.Escritoire", TileEscritoire.class,
 				Proxies.render.getRenderEscritoire()));
 
-		ForestryBlock.soil.registerBlock(new BlockSoil(), ItemForestryBlock.class, "soil");
+		ForestryBlock.soil.registerBlock(new BlockSoil(), ItemTypedBlock.class, "soil");
 		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, 0);
 		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, 1);
 
@@ -354,9 +355,6 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 		ForestryItem.cratedWheat.registerItem(new ItemCrated(new ItemStack(Items.wheat)), "cratedWheat");
 		ForestryItem.cratedMycelium.registerItem(new ItemCrated(new ItemStack(Blocks.mycelium)), "cratedMycelium");
 		ForestryItem.cratedMulch.registerItem(new ItemCrated(ForestryItem.mulch.getItemStack()), "cratedMulch");
-		ForestryItem.cratedSilver.registerItem(new ItemCrated(), "cratedSilver");
-		ForestryItem.cratedBrass.registerItem(new ItemCrated(), "cratedBrass");
-		ForestryItem.cratedNikolite.registerItem(new ItemCrated(), "cratedNikolite");
 		ForestryItem.cratedCookies.registerItem(new ItemCrated(new ItemStack(Items.cookie)), "cratedCookies");
 		ForestryItem.cratedRedstone.registerItem(new ItemCrated(new ItemStack(Items.redstone)), "cratedRedstone");
 		ForestryItem.cratedLapis.registerItem(new ItemCrated(new ItemStack(Items.dye, 1, 4)), "cratedLapis");
@@ -365,10 +363,6 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 		ForestryItem.cratedGlowstone.registerItem(new ItemCrated(new ItemStack(Items.glowstone_dust)), "cratedGlowstone");
 		ForestryItem.cratedApples.registerItem(new ItemCrated(new ItemStack(Items.apple)), "cratedApples");
 		ForestryItem.cratedNetherwart.registerItem(new ItemCrated(new ItemStack(Items.nether_wart)), "cratedNetherwart");
-		ForestryItem.cratedResin.registerItem(new ItemCrated(), "cratedResin");
-		ForestryItem.cratedRubber.registerItem(new ItemCrated(), "cratedRubber");
-		ForestryItem.cratedScrap.registerItem(new ItemCrated(), "cratedScrap");
-		ForestryItem.cratedUUM.registerItem(new ItemCrated(), "cratedUUM");
 		ForestryItem.cratedPhosphor.registerItem(new ItemCrated(ForestryItem.phosphor.getItemStack()), "cratedPhosphor");
 		ForestryItem.cratedAsh.registerItem(new ItemCrated(ForestryItem.ash.getItemStack()), "cratedAsh");
 		ForestryItem.cratedCharcoal.registerItem(new ItemCrated(new ItemStack(Items.coal, 1, 1)), "cratedCharcoal");

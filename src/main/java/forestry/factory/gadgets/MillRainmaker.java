@@ -34,7 +34,7 @@ public class MillRainmaker extends Mill implements ISpecialInventory {
 
 	@Override
 	public String getInventoryName() {
-		return "Rainmaker";
+		return getUnlocalizedName();
 	}
 
 	@Override

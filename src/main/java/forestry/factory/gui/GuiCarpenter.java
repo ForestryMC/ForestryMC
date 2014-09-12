@@ -13,12 +13,11 @@ package forestry.factory.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.core.config.Defaults;
-import forestry.core.gui.GuiForestry;
+import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
-import forestry.core.utils.StringUtil;
 import forestry.factory.gadgets.MachineCarpenter;
 
-public class GuiCarpenter extends GuiForestry<MachineCarpenter> {
+public class GuiCarpenter extends GuiForestryTitled<MachineCarpenter> {
 
 	public GuiCarpenter(InventoryPlayer inventory, MachineCarpenter tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/carpenter.png", new ContainerCarpenter(inventory, tile), tile);
@@ -31,13 +30,6 @@ public class GuiCarpenter extends GuiForestry<MachineCarpenter> {
 	public void onGuiClosed() {
 		super.onGuiClosed();
 		inventorySlots.onContainerClosed(mc.thePlayer);
-	}
-
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localize("tile.for." + tile.getInventoryName());
-		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
 	}
 
 	@Override

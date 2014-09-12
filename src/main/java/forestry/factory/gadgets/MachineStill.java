@@ -135,7 +135,7 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 
 	@Override
 	public String getInventoryName() {
-		return "factory.6";
+		return getUnlocalizedName();
 	}
 
 	@Override

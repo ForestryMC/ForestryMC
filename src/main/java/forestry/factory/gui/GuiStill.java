@@ -13,24 +13,16 @@ package forestry.factory.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.core.config.Defaults;
-import forestry.core.gui.GuiForestry;
+import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
-import forestry.core.utils.StringUtil;
 import forestry.factory.gadgets.MachineStill;
 
-public class GuiStill extends GuiForestry<MachineStill> {
+public class GuiStill extends GuiForestryTitled<MachineStill> {
 
 	public GuiStill(InventoryPlayer inventory, MachineStill tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/still.png", new ContainerStill(inventory, tile), tile);
 		widgetManager.add(new TankWidget(this.widgetManager, 35, 15, 0));
 		widgetManager.add(new TankWidget(this.widgetManager, 125, 15, 1));
-	}
-
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localize("tile.for." + tile.getInventoryName());
-		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
 	}
 
 	@Override

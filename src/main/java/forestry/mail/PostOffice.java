@@ -12,14 +12,11 @@ package forestry.mail;
 
 import java.io.File;
 import java.util.LinkedHashMap;
-import java.util.UUID;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
-
-import com.mojang.authlib.GameProfile;
 
 import forestry.api.mail.EnumPostage;
 import forestry.api.mail.ILetter;
@@ -28,8 +25,8 @@ import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.IPostalState;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.ITradeStation;
-import forestry.api.mail.MailAddress;
 import forestry.api.mail.PostManager;
+import forestry.api.mail.IMailAddress;
 import forestry.core.config.ForestryItem;
 
 public class PostOffice extends WorldSavedData implements IPostOffice {
@@ -45,6 +42,10 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 	
 	public PostOffice(String s) {
 		super(s);
+	}
+
+	public void setWorld(World world) {
+		refreshActiveTradeStations(world);
 	}
 
 	@Override
@@ -63,18 +64,15 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 	}
 
 	/* TRADE STATION MANAGMENT */
-	private LinkedHashMap<MailAddress, ITradeStation> activeTradeStations;
+	private LinkedHashMap<IMailAddress, ITradeStation> activeTradeStations;
 
 	@Override
-	public LinkedHashMap<MailAddress, ITradeStation> getActiveTradeStations(World world) {
-		if (activeTradeStations == null)
-			refreshActiveTradeStations(world);
-		
+	public LinkedHashMap<IMailAddress, ITradeStation> getActiveTradeStations(World world) {
 		return this.activeTradeStations;
 	}
 
 	private void refreshActiveTradeStations(World world) {
-		activeTradeStations = new LinkedHashMap<MailAddress, ITradeStation>();
+		activeTradeStations = new LinkedHashMap<IMailAddress, ITradeStation>();
 		if (world == null || world.getSaveHandler() == null)
 			return;
 		File worldSave = world.getSaveHandler().getMapFileFromName("dummy");
@@ -101,18 +99,12 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 
 	@Override
 	public void registerTradeStation(ITradeStation trade) {
-		if (activeTradeStations == null)
-			return;
-		
 		if (!activeTradeStations.containsKey(trade.getAddress()))
 			activeTradeStations.put(trade.getAddress(), trade);
 	}
 
 	@Override
 	public void deregisterTradeStation(ITradeStation trade) {
-		if (activeTradeStations == null)
-			return;
-
 		activeTradeStations.remove(trade.getAddress());
 	}
 
@@ -166,8 +158,8 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 			return EnumDeliveryState.NOT_MAILABLE;
 
 		IPostalState state = EnumDeliveryState.NOT_MAILABLE;
-		for (MailAddress address : letter.getRecipients()) {
-			IPostalCarrier carrier = PostManager.postRegistry.getCarrier(address.getType());
+		for (IMailAddress address : letter.getRecipients()) {
+			IPostalCarrier carrier = PostManager.postRegistry.getCarrier(address.getType().toString());
 			if (carrier == null)
 				continue;
 			state = carrier.deliverLetter(world, this, address, itemstack, doLodge);

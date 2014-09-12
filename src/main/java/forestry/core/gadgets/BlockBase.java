@@ -242,7 +242,7 @@ public class BlockBase extends BlockForestry {
 	@Override
 	public IIcon getIcon(int side, int metadata) {
 		if (metadata >= definitions.size() || definitions.get(metadata) == null)
-			metadata = 0;
+			return null;
 		return definitions.get(metadata).getBlockTextureFromSideAndMetadata(side, metadata);
 	}
 

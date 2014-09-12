@@ -77,7 +77,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 
 	@Override
 	public String getInventoryName() {
-		return "tile.alveary.5";
+		return getUnlocalizedName();
 	}
 
 	/* UPDATING */

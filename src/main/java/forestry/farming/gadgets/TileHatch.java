@@ -240,6 +240,11 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 	public void closeInventory() {
 	}
 
+	@Override
+	public String getInventoryName() {
+		return getUnlocalizedName();
+	}
+
 	/**
 	 * TODO: just a specialsource workaround
 	 */

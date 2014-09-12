@@ -28,9 +28,9 @@ import forestry.api.mail.ILetter;
 import forestry.api.mail.IPostalState;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.ITradeStation;
-import forestry.api.mail.MailAddress;
 import forestry.api.mail.PostManager;
 import forestry.api.mail.TradeStationInfo;
+import forestry.api.mail.IMailAddress;
 import forestry.core.config.ForestryItem;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.StackUtils;
@@ -40,26 +40,29 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 	// / CONSTANTS
 	public static final String SAVE_NAME = "TradePO_";
-	public static final short SLOT_SIZE = 39;
 	public static final short SLOT_TRADEGOOD = 0;
+	public static final short SLOT_TRADEGOOD_COUNT = 1;
 	public static final short SLOT_EXCHANGE_1 = 1;
 	public static final short SLOT_EXCHANGE_COUNT = 4;
 	public static final short SLOT_LETTERS_1 = 5;
 	public static final short SLOT_LETTERS_COUNT = 6;
 	public static final short SLOT_STAMPS_1 = 11;
 	public static final short SLOT_STAMPS_COUNT = 4;
-	public static final short SLOT_INPUTBUF_1 = 15;
-	public static final short SLOT_OUTPUTBUF_1 = 27;
-	public static final short SLOT_BUFFER_COUNT = 12;
+	public static final short SLOT_RECEIVE_BUFFER = 15;
+	public static final short SLOT_RECEIVE_BUFFER_COUNT = 15;
+	public static final short SLOT_SEND_BUFFER = 30;
+	public static final short SLOT_SEND_BUFFER_COUNT = 10;
+	public static final short SLOT_SIZE = SLOT_TRADEGOOD_COUNT + SLOT_EXCHANGE_COUNT + SLOT_LETTERS_COUNT + SLOT_STAMPS_COUNT + SLOT_RECEIVE_BUFFER_COUNT + SLOT_SEND_BUFFER_COUNT;
+
 	// / MEMBER
 	private GameProfile owner;
-	private MailAddress address;
+	private IMailAddress address;
 	private boolean isVirtual = false;
 	private boolean isInvalid = false;
 	private final InventoryAdapter inventory = new InventoryAdapter(SLOT_SIZE, "INV");
 
 	// / CONSTRUCTORS
-	public TradeStation(GameProfile owner, MailAddress address) {
+	public TradeStation(GameProfile owner, IMailAddress address) {
 		super(SAVE_NAME + address);
 		if (address.isPlayer()) {
 			throw new IllegalArgumentException("TradeStation address must not be a player");
@@ -73,7 +76,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	@Override
-	public MailAddress getAddress() {
+	public IMailAddress getAddress() {
 		return this.address;
 	}
 
@@ -160,7 +163,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 	/* ILETTERHANDLER */
 	@Override
-	public IPostalState handleLetter(World world, MailAddress recipient, ItemStack letterstack, boolean doLodge) {
+	public IPostalState handleLetter(World world, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
 		
 		boolean sendOwnerNotice = doLodge && owner != null;
 		
@@ -235,7 +238,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 				if (stack == null)
 					continue;
 				
-				inventory.tryAddStack(stack.copy(), SLOT_OUTPUTBUF_1, SLOT_BUFFER_COUNT, false);
+				inventory.tryAddStack(stack.copy(), SLOT_RECEIVE_BUFFER, SLOT_RECEIVE_BUFFER_COUNT, false);
 			}
 		}
 
@@ -275,12 +278,19 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 		// How many orders are fillable?
 		int itemCount = 0;
-		for (ItemStack stack : inventory.getStacks(SLOT_INPUTBUF_1, SLOT_BUFFER_COUNT)) {
+		for (ItemStack stack : inventory.getStacks(SLOT_SEND_BUFFER, SLOT_SEND_BUFFER_COUNT)) {
 			if (stack != null && stack.isItemEqual(tradegood) && ItemStack.areItemStackTagsEqual(stack, tradegood))
 				itemCount += stack.stackSize;
 		}
 
 		return (int) Math.floor(itemCount / tradegood.stackSize);
+	}
+
+	public boolean canReceivePayment() {
+		InventoryAdapter test = inventory.copy();
+		ItemStack [] payment = inventory.getStacks(SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT);
+
+		return test.tryAddStacksCopy(payment, SLOT_RECEIVE_BUFFER, SLOT_RECEIVE_BUFFER_COUNT, true);
 	}
 
 	private int countStorablePayment(int max, ItemStack[] exchange) {
@@ -289,7 +299,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		int count = 0;
 
 		for (int i = 0; i < max; i++) {
-			if (test.tryAddStacksCopy(exchange, true))
+			if (test.tryAddStacksCopy(exchange, SLOT_RECEIVE_BUFFER, SLOT_RECEIVE_BUFFER_COUNT, true))
 				count++;
 			else
 				break;
@@ -302,7 +312,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 		for (int j = 0; j < filled; j++) {
 			int toRemove = inventory.getStackInSlot(SLOT_TRADEGOOD).stackSize;
-			for (int i = SLOT_INPUTBUF_1; i < SLOT_INPUTBUF_1 + SLOT_BUFFER_COUNT; i++) {
+			for (int i = SLOT_SEND_BUFFER; i < SLOT_SEND_BUFFER + SLOT_SEND_BUFFER_COUNT; i++) {
 				ItemStack buffer = inventory.getStackInSlot(i);
 				if (buffer == null)
 					continue;

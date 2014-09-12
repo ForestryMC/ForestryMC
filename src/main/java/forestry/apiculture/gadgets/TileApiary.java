@@ -30,7 +30,7 @@ public class TileApiary extends TileBeehouse implements ISidedInventory {
 
 	@Override
 	public String getInventoryName() {
-		return "apiculture.0";
+		return getUnlocalizedName();
 	}
 
 	@Override

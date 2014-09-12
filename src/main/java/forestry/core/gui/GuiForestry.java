@@ -53,10 +53,6 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer {
 	public ResourceLocation textureFile;
 	protected FontColour fontColor;
 
-	public GuiForestry(ContainerForestry container) {
-		this("", container);
-	}
-
 	public GuiForestry(String texture, ContainerForestry container) {
 		this(new ResourceLocation("forestry", texture), container, null);
 	}

@@ -25,19 +25,20 @@ public class GuiEngineTin extends GuiEngine {
 		widgetManager.add(new SocketWidget(this.widgetManager, 30, 40, tile, 0));
 	}
 
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localize("tile.for.engine.0");
-		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
+	protected EngineTin getEngine() {
+		return (EngineTin)tile;
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		EngineTin engine = (EngineTin) tile;
-		drawHealthMeter(guiLeft + 74, guiTop + 25, engine.getStorageScaled(46), engine.rateLevel(engine.getStorageScaled(100)));
 
+		EngineTin engine = getEngine();
+		int storageHeight = engine.getStorageScaled(46);
+		int storageMaxHeight = engine.getStorageScaled(100);
+		EnumTankLevel rated = engine.rateLevel(storageMaxHeight);
+
+		drawHealthMeter(guiLeft + 74, guiTop + 25, storageHeight, rated);
 	}
 
 	private void drawHealthMeter(int x, int y, int height, EnumTankLevel rated) {

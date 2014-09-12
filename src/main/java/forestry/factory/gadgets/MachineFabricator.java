@@ -248,7 +248,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 
 	@Override
 	public String getInventoryName() {
-		return "factory2.0";
+		return getUnlocalizedName();
 	}
 
 	@Override

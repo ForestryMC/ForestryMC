@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.mail.proxy;
 
-import forestry.api.mail.MailAddress;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
@@ -18,6 +17,7 @@ import forestry.core.network.PacketIds;
 import forestry.core.proxy.Proxies;
 import forestry.mail.POBoxInfo;
 import forestry.mail.network.PacketPOBoxInfo;
+import forestry.api.mail.IMailAddress;
 
 public class ProxyMail {
 
@@ -27,7 +27,7 @@ public class ProxyMail {
 	public void resetMailboxInfo() {
 	}
 
-	public void setPOBoxInfo(World world, MailAddress address, POBoxInfo info) {
+	public void setPOBoxInfo(World world, IMailAddress address, POBoxInfo info) {
 		EntityPlayer player = address.getPlayer(world);
 		if (player != null)
 			Proxies.net.sendToPlayer(new PacketPOBoxInfo(PacketIds.POBOX_INFO, info), player);

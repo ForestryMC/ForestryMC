@@ -34,6 +34,8 @@ public class ItemWoodBlock extends ItemForestryBlock {
 			IWoodTyped block = (IWoodTyped) getBlock();
 			int meta = itemstack.getItemDamage();
 			WoodType woodType = block.getWoodType(meta);
+			if (woodType == null)
+				return null;
 			return "tile.for." + block.getBlockKind() + "." + woodType.ordinal();
 		}
 		return super.getUnlocalizedName(itemstack);

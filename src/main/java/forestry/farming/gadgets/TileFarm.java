@@ -349,11 +349,6 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	public void removeListener(IFarmListener listener) {
 	}
 
-	@Override
-	public String getInventoryName() {
-		return "Farm";
-	}
-
 	/* INTERACTION */
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {

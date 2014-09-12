@@ -16,7 +16,6 @@ import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestry;
 import forestry.core.utils.StringUtil;
 import forestry.mail.gadgets.MachineTrader;
-import forestry.api.mail.MailAddress;
 
 public class GuiTrader extends GuiForestry<MachineTrader> {
 
@@ -33,8 +32,14 @@ public class GuiTrader extends GuiForestry<MachineTrader> {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localize("tile.for." + tile.getInventoryName());
+		String name = StringUtil.localizeTile(tile.getUnlocalizedName());
 		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.mail.text"));
+
+		String receive = StringUtil.localize("gui.mail.receive");
+		this.fontRendererObj.drawString(receive, getCenteredOffset(receive, 70) + 51, 45, fontColor.get("gui.mail.text"));
+
+		String send = StringUtil.localize("gui.mail.send");
+		this.fontRendererObj.drawString(send, getCenteredOffset(send, 70) + 51, 99, fontColor.get("gui.mail.text"));
 	}
 
 	@Override

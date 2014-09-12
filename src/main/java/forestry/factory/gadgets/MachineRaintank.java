@@ -70,7 +70,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 
 	@Override
 	public String getInventoryName() {
-		return "factory2.1";
+		return getUnlocalizedName();
 	}
 
 	@Override

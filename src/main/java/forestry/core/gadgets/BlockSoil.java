@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import forestry.core.IItemTyped;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -45,9 +46,13 @@ import forestry.core.render.TextureManager;
  * @author
  * 
  */
-public class BlockSoil extends Block {
+public class BlockSoil extends Block implements IItemTyped {
 
-	private final int degradeDelimiter = 3;
+	public enum SoilType {
+		HUMUS, BOG_EARTH, PEAT;
+	}
+
+	private static final int degradeDelimiter = 3;
 
 	public BlockSoil() {
 		super(Material.sand);
@@ -66,16 +71,15 @@ public class BlockSoil extends Block {
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 
-		int type = (metadata & 0x03);
-		int maturity = metadata >> 2;
+		SoilType type = getTypeFromMeta(metadata);
 
-		if (maturity >= this.degradeDelimiter && type == 1) {
+		if (type == SoilType.PEAT) {
 			ret.add(ForestryItem.peat.getItemStack());
 			ret.add(new ItemStack(Blocks.dirt));
-		} else if (type == 0)
+		} else if (type == SoilType.HUMUS)
 			ret.add(new ItemStack(Blocks.dirt));
 		else
-			ret.add(new ItemStack(this, 1, type));
+			ret.add(new ItemStack(this, 1, SoilType.BOG_EARTH.ordinal()));
 
 		return ret;
 	}
@@ -91,14 +95,13 @@ public class BlockSoil extends Block {
 			return;
 
 		int meta = world.getBlockMetadata(i, j, k);
-		int type = (meta & 0x03);
 
-		if (type == 0)
+		SoilType type = getTypeFromMeta(meta);
+
+		if (type == SoilType.HUMUS)
 			updateTickHumus(world, i, j, k, random);
-		else if (type == 1)
+		else if (type == SoilType.BOG_EARTH)
 			updateTickBogEarth(world, i, j, k, random);
-		else
-			Proxies.log.warning(this.getClass() + " with unknown type " + type + " encountered.");
 	}
 
 	private void updateTickHumus(World world, int i, int j, int k, Random random) {
@@ -155,17 +158,17 @@ public class BlockSoil extends Block {
 		int type = meta & 0x03;
 		int grade = meta >> 2;
 
-			// Increment (de)gradation
-			grade++;
+		// Increment (de)gradation
+		grade++;
 
-			// Repackage in format TTGG
-			meta = (grade << 2 | type);
+		// Repackage in format TTGG
+		meta = (grade << 2 | type);
 
-			if (grade >= this.degradeDelimiter)
-				world.setBlock(i, j, k, Blocks.sand, 0, Defaults.FLAG_BLOCK_SYNCH);
-			else
-				world.setBlockMetadataWithNotify(i, j, k, meta, Defaults.FLAG_BLOCK_SYNCH);
-			world.markBlockForUpdate(i, j, k);
+		if (grade >= this.degradeDelimiter)
+			world.setBlock(i, j, k, Blocks.sand, 0, Defaults.FLAG_BLOCK_SYNCH);
+		else
+			world.setBlockMetadataWithNotify(i, j, k, meta, Defaults.FLAG_BLOCK_SYNCH);
+		world.markBlockForUpdate(i, j, k);
 	}
 
 	public static boolean isMoistened(World world, int x, int y, int z) {
@@ -192,15 +195,15 @@ public class BlockSoil extends Block {
 		int type = meta & 0x03;
 		int maturity = meta >> 2;
 
-			if (maturity >= this.degradeDelimiter)
-				return;
+		if (maturity >= this.degradeDelimiter)
+			return;
 
-			// Increment (de)gradation
-			maturity++;
+		// Increment (de)gradation
+		maturity++;
 
-			meta = (maturity << 2 | type);
-			world.setBlockMetadataWithNotify(i, j, k, meta, Defaults.FLAG_BLOCK_SYNCH);
-			world.markBlockForUpdate(i, j, k);
+		meta = (maturity << 2 | type);
+		world.setBlockMetadataWithNotify(i, j, k, meta, Defaults.FLAG_BLOCK_SYNCH);
+		world.markBlockForUpdate(i, j, k);
 	}
 
 	@Override
@@ -210,13 +213,27 @@ public class BlockSoil extends Block {
 			return false;
 
 		int meta = world.getBlockMetadata(x, y, z);
+		SoilType type = getTypeFromMeta(meta);
 
-		return (meta & 0x03) == 0;
+		return type == SoilType.HUMUS;
 	}
 
 	@Override
 	protected boolean canSilkHarvest() {
 		return false;
+	}
+
+	public SoilType getTypeFromMeta(int meta) {
+		int type = meta & 0x03;
+		int maturity = meta >> 2;
+
+		if (type == 1)
+			if (maturity < degradeDelimiter)
+				return SoilType.BOG_EARTH;
+			else
+				return SoilType.PEAT;
+		else
+			return SoilType.HUMUS;
 	}
 
 	// / CREATIVE INVENTORY
@@ -245,19 +262,16 @@ public class BlockSoil extends Block {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int i, int j) {
+	public IIcon getIcon(int side, int meta) {
 
-		int meta = j;
-		int type = meta & 0x03;
-		int maturity = meta >> 2;
+		SoilType type = getTypeFromMeta(meta);
 
-			if (type == 1)
-				if (maturity < this.degradeDelimiter)
-					return iconBogEarth;
-				else
-					return iconPeat;
-			else
-				return iconHumus;
+		switch (type) {
+			case HUMUS: return iconHumus;
+			case BOG_EARTH: return iconBogEarth;
+			case PEAT: return iconPeat;
+		}
+		return null;
 	}
 
 }

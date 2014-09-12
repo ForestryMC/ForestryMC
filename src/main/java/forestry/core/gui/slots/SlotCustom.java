@@ -42,8 +42,8 @@ public class SlotCustom extends SlotForestry {
 	private ICrafter crafter;
 	private String blockedTexture = "slots/blocked";
 
-	public SlotCustom(IInventory iinventory, int i, int j, int k, boolean exclusion) {
-		super(iinventory, i, j, k);
+	public SlotCustom(IInventory iinventory, int slotIndex, int xPos, int yPos, boolean exclusion) {
+		super(iinventory, slotIndex, xPos, yPos);
 		items = new Object[0];
 		this.exclusion = exclusion;
 	}
@@ -52,17 +52,17 @@ public class SlotCustom extends SlotForestry {
 		this(iinventory, i, j, k, items.toArray());
 	}*/
 
-	public SlotCustom(IInventory iinventory, Collection<?> items, int i, int j, int k) {
-		this(iinventory, i, j, k, items.toArray());
+	public SlotCustom(IInventory iinventory, Collection<?> items, int slotIndex, int xPos, int yPos) {
+		this(iinventory, slotIndex, xPos, yPos, items.toArray());
 	}
 
-	public SlotCustom(IInventory iinventory, int i, int j, int k, boolean exclusion, Object... items) {
-		this(iinventory, i, j, k, items);
+	public SlotCustom(IInventory iinventory, int slotIndex, int xPos, int yPos, boolean exclusion, Object... items) {
+		this(iinventory, slotIndex, xPos, yPos, items);
 		this.exclusion = exclusion;
 	}
 
-	public SlotCustom(IInventory iinventory, int i, int j, int k, Object... items) {
-		super(iinventory, i, j, k);
+	public SlotCustom(IInventory iinventory, int slotIndex, int xPos, int yPos, Object... items) {
+		super(iinventory, slotIndex, xPos, yPos);
 		this.items = items;
 	}
 

@@ -49,7 +49,7 @@ import net.minecraft.item.Item;
 		modid = Defaults.MOD,
 		name = "Forestry",
 		version = Version.VERSION,
-		dependencies = "required-after:Forge@[10.13.0.1180,);"
+		dependencies = "required-after:Forge@[10.13.0.1207,);"
 		+ "after:Buildcraft|Core;"
 		+ "after:ExtrabiomesXL;"
 		+ "after:BiomesOPlenty;"
@@ -119,18 +119,22 @@ public class Forestry {
 				if (block != null) {
 					mapping.remap(Item.getItemFromBlock(block));
 					Proxies.log.warning("Remapping item " + mapping.name + " to " + StringUtil.cleanBlockName(block));
-					continue;
-				}
-				if (mapping.name.equals("builderBackpack"))
+				} else if (mapping.name.equals("Forestry:builderBackpack")) {
 					mapping.remap(ForestryItem.builderBackpack.item());
-				if (mapping.name.equals("builderBackpackT2"))
+					Proxies.log.warning("Remapping item " + mapping.name + " to " + ForestryItem.builderBackpack.name());
+				} else if (mapping.name.equals("Forestry:builderBackpackT2")) {
 					mapping.remap(ForestryItem.builderBackpackT2.item());
-				if (mapping.name.equals("adventurerBackpack"))
+					Proxies.log.warning("Remapping item " + mapping.name + " to " + ForestryItem.builderBackpackT2.name());
+				} else if (mapping.name.equals("Forestry:adventurerBackpack")) {
 					mapping.remap(ForestryItem.adventurerBackpack.item());
-				if (mapping.name.equals("adventurerBackpackT2"))
+					Proxies.log.warning("Remapping item " + mapping.name + " to " + ForestryItem.adventurerBackpack.name());
+				} else if (mapping.name.equals("Forestry:adventurerBackpackT2")) {
 					mapping.remap(ForestryItem.adventurerBackpackT2.item());
-				if (mapping.name.equals("shortMead"))
+					Proxies.log.warning("Remapping item " + mapping.name + " to " + ForestryItem.adventurerBackpackT2.name());
+				} else if (mapping.name.equals("Forestry:shortMead")) {
 					mapping.remap(ForestryItem.beverage.item());
+					Proxies.log.warning("Remapping item " + mapping.name + " to " + ForestryItem.beverage.name());
+				}
 			}
 	}
 }

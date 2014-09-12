@@ -56,9 +56,9 @@ public class TriggerLowSoil extends Trigger {
 			return false;
 
 		ItemStack filter;
-		if (parameter == null || parameter.getItemStack() == null)
-			filter = new ItemStack(Blocks.air, threshold, -1);
-		else {
+		if (parameter == null || parameter.getItemStack() == null) {
+			filter = new ItemStack(Blocks.bedrock, threshold);
+		} else {
 			filter = parameter.getItemStack().copy();
 			filter.stackSize = threshold;
 		}

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import forestry.api.mail.MailAddress;
+import forestry.api.mail.PostManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
@@ -22,6 +22,7 @@ import forestry.core.gui.slots.SlotClosed;
 import forestry.core.proxy.Proxies;
 import forestry.mail.POBox;
 import forestry.mail.gadgets.MachineMailbox;
+import forestry.api.mail.IMailAddress;
 import forestry.plugins.PluginMail;
 
 public class ContainerMailbox extends ContainerForestry {
@@ -35,7 +36,7 @@ public class ContainerMailbox extends ContainerForestry {
 		// Mailbox contents
 		this.mailbox = tile;
 
-		IInventory inv = mailbox.getOrCreateMailInventory();
+		IInventory inv = mailbox.getOrCreateMailInventory(player.player);
 		if (inv instanceof POBox)
 			mailinventory = (POBox) inv;
 
@@ -58,7 +59,7 @@ public class ContainerMailbox extends ContainerForestry {
 		ItemStack stack = super.slotClick(slotIndex, button, par3, player);
 
 		if (Proxies.common.isSimulating(player.worldObj) && mailinventory != null) {
-			MailAddress address = new MailAddress(mailbox.getOwnerProfile());
+			IMailAddress address = PostManager.postRegistry.getMailAddress(mailbox.getOwnerProfile());
 			PluginMail.proxy.setPOBoxInfo(mailbox.getWorldObj(), address, mailinventory.getPOBoxInfo());
 		}
 

@@ -20,7 +20,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import forestry.api.mail.IPostalCarrier;
-import forestry.api.mail.MailAddress;
+import forestry.api.mail.IMailAddress;
 import forestry.api.mail.PostManager;
 import forestry.core.config.Defaults;
 import forestry.core.config.SessionVars;
@@ -30,7 +30,7 @@ import forestry.core.gui.GuiTextBox;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
-import forestry.mail.EnumAddressee;
+import forestry.api.mail.EnumAddressee;
 import forestry.mail.items.ItemLetter.LetterInventory;
 
 public class GuiLetter extends GuiForestry<TileForestry> {
@@ -48,7 +48,7 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 
 			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
 			//mc.renderEngine.bindTexture(Defaults.TEXTURE_PATH_GUI + "/letter.png");
-			IPostalCarrier carrier = PostManager.postRegistry.getCarrier(container.getCarrierType());
+			IPostalCarrier carrier = PostManager.postRegistry.getCarrier(container.getCarrierType().toString());
 			if(carrier != null)
 				drawTexturedModelRectFromIcon(startX + xPos, startY + yPos - 5, carrier.getIcon(), 26, 26);
 
@@ -56,7 +56,7 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 
 		@Override
 		protected String getLegacyTooltip(EntityPlayer player) {
-			return StringUtil.localize("gui.addressee." + container.getCarrierType().toLowerCase(Locale.ENGLISH));
+			return StringUtil.localize("gui.addressee." + container.getCarrierType().toString());
 		}
 
 		@Override
@@ -95,10 +95,9 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 		Keyboard.enableRepeatEvents(true);
 
 		address = new GuiTextField(this.fontRendererObj, guiLeft + 46, guiTop + 13, 93, 13);
-		MailAddress recipient = container.getRecipient();
+		IMailAddress recipient = container.getRecipient();
 		if (recipient != null) {
 			address.setText(recipient.getName());
-			setRecipient(recipient);
 		}
 
 		text = new GuiTextBox(this.fontRendererObj, guiLeft + 17, guiTop + 31, 122, 57);
@@ -158,8 +157,8 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 		if (addressFocus != address.isFocused()) {
 			String recipient = this.address.getText();
 			if (StringUtils.isNotBlank(recipient)) {
-				MailAddress recipientAddress = MailAddress.makeMailAddress(recipient, container.getCarrierType());
-				setRecipient(recipientAddress);
+				EnumAddressee recipientType = container.getCarrierType();
+				setRecipient(recipient, recipientType);
 			}
 		}
 		addressFocus = address.isFocused();
@@ -174,7 +173,7 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 			fontRendererObj.drawSplitString(text.getText(), guiLeft + 20, guiTop + 34, 119, fontColor.get("gui.mail.lettertext"));
 		} else {
 			address.drawTextBox();
-			if (container.getCarrierType().equals(EnumAddressee.TRADER.toString().toLowerCase(Locale.ENGLISH)))
+			if (container.getCarrierType() == EnumAddressee.TRADER)
 				drawTradePreview(guiLeft + 18, guiTop + 32);
 			else
 				text.drawTextBox();
@@ -215,9 +214,9 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 
 	@Override
 	public void onGuiClosed() {
-		MailAddress recipientAddress = MailAddress.makeMailAddress(this.address.getText(), container.getCarrierType());
-
-		setRecipient(recipientAddress);
+		String recipientName = this.address.getText();
+		EnumAddressee recipientType = container.getCarrierType();
+		setRecipient(recipientName, recipientType);
 		setText();
 		Keyboard.enableRepeatEvents(false);
 		super.onGuiClosed();
@@ -233,24 +232,24 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 			return;
 
 		String recipient = SessionVars.getStringVar("mail.letter.recipient");
-		String type = SessionVars.getStringVar("mail.letter.addressee");
+		String typeName = SessionVars.getStringVar("mail.letter.addressee");
 		
-		if (recipient != null && type != null) {
+		if (StringUtils.isNotBlank(recipient) && StringUtils.isNotBlank(typeName)) {
 			address.setText(recipient);
-			MailAddress recipientAddress = MailAddress.makeMailAddress(recipient, type);
-			setRecipient(recipientAddress);
+
+			EnumAddressee type = EnumAddressee.fromString(typeName);
+			setRecipient(recipient, type);
 		}
 
 		SessionVars.clearStringVar("mail.letter.recipient");
 		SessionVars.clearStringVar("mail.letter.addressee");
 	}
 
-	private void setRecipient(MailAddress recipientAddress) {
-		if (this.isProcessedLetter || recipientAddress == null)
+	private void setRecipient(String recipientName, EnumAddressee type) {
+		if (this.isProcessedLetter || StringUtils.isBlank(recipientName) || type == null || type == EnumAddressee.INVALID)
 			return;
 
-		container.setRecipient(recipientAddress);
-		container.updateTradeInfo(this.mc.theWorld, recipientAddress);
+		container.setRecipient(recipientName, type);
 	}
 
 	private void setText() {

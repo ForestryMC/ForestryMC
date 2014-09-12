@@ -103,6 +103,7 @@ public class BlockLog extends Block implements IWoodTyped {
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
 		if(cat == LogCat.CAT6) {
+			itemList.add(new ItemStack(this, 1, 0));
 			return;
 		}
 
@@ -123,7 +124,10 @@ public class BlockLog extends Block implements IWoodTyped {
 
 		int oriented = meta & 12;
 
-		WoodType type = getWoodType(getTypeFromMeta(meta));
+		WoodType type = getWoodType(meta);
+		if (type == null)
+			return null;
+
 		switch (oriented) {
 		case 4:
 			if (side > 3)
@@ -157,7 +161,7 @@ public class BlockLog extends Block implements IWoodTyped {
 	/* PROPERTIES */
 	@Override
 	public float getBlockHardness(World world, int x, int y, int z) {
-		return getWoodType(getTypeFromMeta(world.getBlockMetadata(x, y, z))).getHardness();
+		return getWoodType(world.getBlockMetadata(x, y, z)).getHardness();
 	}
 
 	@Override
@@ -192,10 +196,11 @@ public class BlockLog extends Block implements IWoodTyped {
 
 	@Override
 	public WoodType getWoodType(int meta) {
+		meta = getTypeFromMeta(meta);
 		if(meta + cat.ordinal() * 4 < WoodType.VALUES.length)
 			return WoodType.VALUES[meta + cat.ordinal() * 4];
 		else
-			return WoodType.LARCH;
+			return null;
 	}
 
 	@Override

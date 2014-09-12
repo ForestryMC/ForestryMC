@@ -148,7 +148,7 @@ public class GuiFarm extends GuiForestry<TileFarmPlain> {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String title = StringUtil.localize("Farm");
+		String title = StringUtil.localize("gui.farm.title");
 		this.fontRendererObj.drawString(title, getCenteredOffset(title), 6, fontColor.get("gui.title"));
 	}
 

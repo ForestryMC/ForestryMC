@@ -155,6 +155,9 @@ public class BlockBeehives extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int i, int j) {
+		if (j == 0 || j >= 8)
+			return null;
+
 		if (i == 0 || i == 1) {
 			if (j * 2 < icons.length && icons[j * 2] != null)
 				return icons[j * 2];

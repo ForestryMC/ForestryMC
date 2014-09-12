@@ -54,6 +54,8 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 	public static final int SLOT_DRONE = 1;
 	public static final int SLOT_PRODUCT_1 = 2;
 	public static final int SLOT_PRODUCTION_COUNT = 7;
+	public static final int BLOCK_META = 0;
+
 	// / MEMBERS
 	protected IBeekeepingLogic beekeepingLogic;
 	protected int biomeId;
@@ -582,7 +584,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 
 	@Override
 	public String getInventoryName() {
-		return "alveary.0";
+		return getUnlocalizedName();
 	}
 
 	@Override

@@ -193,7 +193,7 @@ public class StackUtils {
 	 * without decreasing the source stack.
 	 *
 	 * @param stack
-	 * @param i
+	 * @param amount
 	 * @return
 	 */
 	public static ItemStack createSplitStack(ItemStack stack, int amount) {
@@ -308,6 +308,9 @@ public class StackUtils {
 	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, boolean oreDictionary, boolean craftingTools) {
 		if (isIdenticalItem(base, comparison))
 			return true;
+
+		if (base == null || comparison == null)
+			return false;
 
 		if (oreDictionary) {
 			int[] idsBase = OreDictionary.getOreIDs(base);

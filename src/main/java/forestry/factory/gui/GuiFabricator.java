@@ -13,24 +13,16 @@ package forestry.factory.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.core.config.Defaults;
-import forestry.core.gui.GuiForestry;
+import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.ReservoirWidget;
-import forestry.core.utils.StringUtil;
 import forestry.factory.gadgets.MachineFabricator;
 
-public class GuiFabricator extends GuiForestry<MachineFabricator> {
+public class GuiFabricator extends GuiForestryTitled<MachineFabricator> {
 
 	public GuiFabricator(InventoryPlayer player, MachineFabricator tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/fabricator.png", new ContainerFabricator(player, tile), tile);
 		this.ySize = 211;
 		widgetManager.add(new ReservoirWidget(this.widgetManager, 26, 48, 0));
-	}
-
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localize("tile.for." + tile.getInventoryName());
-		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
 	}
 
 	@Override

@@ -47,7 +47,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 	private final InventoryAdapter inventory;
 	@Override
 	public String getInventoryName() {
-		return StringUtil.localize("core.1");
+		return getUnlocalizedName();
 	}
 
 	public TileEscritoire() {

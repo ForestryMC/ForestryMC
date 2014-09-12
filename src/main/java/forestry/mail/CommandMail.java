@@ -12,7 +12,6 @@ package forestry.mail;
 
 import java.util.List;
 
-import forestry.api.mail.MailAddress;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;

@@ -16,12 +16,11 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 
 import forestry.core.gui.ContainerForestry;
-import forestry.core.gui.slots.SlotClosed;
 import forestry.core.gui.slots.SlotCustom;
 import forestry.mail.TradeStation;
 import forestry.mail.gadgets.MachineTrader;
 import forestry.mail.items.ItemStamps;
-import forestry.api.mail.MailAddress;
+import forestry.api.mail.IMailAddress;
 
 public class ContainerTrader extends ContainerForestry {
 
@@ -51,15 +50,15 @@ public class ContainerTrader extends ContainerForestry {
 			for (int j = 0; j < 2; j++)
 				addSlot(new SlotCustom(inventory, TradeStation.SLOT_LETTERS_1 + j + i * 2, 15 + j * 18, 73 + i * 18, new Object[] { Items.paper }));
 
-		// Input buffer
-		for (int i = 0; i < 6; i++)
-			for (int j = 0; j < 2; j++)
-				addSlot(new Slot(inventory, TradeStation.SLOT_INPUTBUF_1 + j + i * 2, 123 + j * 18, 19 + i * 18));
+		// Buffers
+		final int bufCols = 5;
+		for (int i = 0; i < 3; i++)
+			for (int j = 0; j < bufCols; j++)
+				addSlot(new Slot(inventory, TradeStation.SLOT_RECEIVE_BUFFER + j + i * bufCols, 123 + j * 18, 19 + i * 18));
 
-		// Output buffer
-		for (int i = 0; i < 6; i++)
-			for (int j = 0; j < 2; j++)
-				addSlot(new SlotClosed(inventory, TradeStation.SLOT_OUTPUTBUF_1 + j + i * 2, 177 + j * 18, 19 + i * 18));
+		for (int i = 0; i < 2; i++)
+			for (int j = 0; j < bufCols; j++)
+				addSlot(new Slot(inventory, TradeStation.SLOT_SEND_BUFFER + j + i * bufCols, 123 + j * 18, (19 + (18 * 4)) + i * 18));
 
 		// Player inventory
 		for (int i = 0; i < 3; i++)
@@ -75,7 +74,7 @@ public class ContainerTrader extends ContainerForestry {
 		return machine.isLinked();
 	}
 
-	public MailAddress getAddress() {
+	public IMailAddress getAddress() {
 		return machine.getAddress();
 	}
 

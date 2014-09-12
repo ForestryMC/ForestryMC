@@ -23,7 +23,7 @@ import forestry.core.config.SessionVars;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.GuiForestry;
 import forestry.core.utils.StringUtil;
-import forestry.mail.EnumAddressee;
+import forestry.api.mail.EnumAddressee;
 
 public class GuiCatalogue extends GuiForestry<TileForestry> {
 
@@ -136,7 +136,7 @@ public class GuiCatalogue extends GuiForestry<TileForestry> {
 			TradeStationInfo info = container.getTradeInfo();
 			if(info != null) {
 				SessionVars.setStringVar("mail.letter.recipient", info.address.getName());
-				SessionVars.setStringVar("mail.letter.addressee", EnumAddressee.asString(EnumAddressee.TRADER));
+				SessionVars.setStringVar("mail.letter.addressee", EnumAddressee.TRADER.toString());
 			}
 			mc.displayGuiScreen((GuiScreen)null);
 			break;

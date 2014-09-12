@@ -22,7 +22,7 @@ apply plugin: 'maven'
 
 loadProperties()
 
-version = "3.0.0.92-RF-" + System.getenv("DRONE_BUILD_NUMBER")
+version = "3.0.0.131-RF-" + System.getenv("DRONE_BUILD_NUMBER")
 group= "net.sengir.forestry" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "forestry_" + mcversion
 
@@ -73,7 +73,7 @@ configurations {
 
 dependencies {
 	apis 'net.industrial-craft:industrialcraft-2:2.2.575-experimental:api'
-	apis 'com.mod-buildcraft:buildcraft:6.0.17:dev'
+	apis 'com.mod-buildcraft:buildcraft:6.0.18:dev'
 }
 
 processResources {
