@@ -246,7 +246,7 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 	}
 
 	private void setRecipient(String recipientName, EnumAddressee type) {
-		if (this.isProcessedLetter || StringUtils.isBlank(recipientName) || type == null || type == EnumAddressee.INVALID)
+		if (this.isProcessedLetter || StringUtils.isBlank(recipientName) || type == null)
 			return;
 
 		container.setRecipient(recipientName, type);

@@ -46,11 +46,10 @@ public class PacketLetterInfo extends ForestryPacket {
 	@Override
 	public void writeData(DataOutputStream data) throws IOException {
 
-		if (type == null || type == EnumAddressee.INVALID) {
+		if (type == null) {
 			data.writeShort(-1);
 			return;
 		}
-
 		data.writeShort(0);
 
 		data.writeUTF(type.toString());

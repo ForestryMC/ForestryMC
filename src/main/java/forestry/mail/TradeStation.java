@@ -64,8 +64,8 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	// / CONSTRUCTORS
 	public TradeStation(GameProfile owner, IMailAddress address) {
 		super(SAVE_NAME + address);
-		if (address.isPlayer()) {
-			throw new IllegalArgumentException("TradeStation address must not be a player");
+		if (!address.isTrader()) {
+			throw new IllegalArgumentException("TradeStation address must be a trader");
 		}
 		this.owner = owner;
 		this.address = address;

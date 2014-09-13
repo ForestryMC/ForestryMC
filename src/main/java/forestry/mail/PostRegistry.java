@@ -80,7 +80,7 @@ public class PostRegistry implements IPostRegistry {
 	 */
 	@Override
 	public boolean isValidTradeAddress(World world, IMailAddress address) {
-		return !address.isPlayer() && address.getName().matches("^[a-zA-Z0-9]+$");
+		return address.isTrader() && address.getName().matches("^[a-zA-Z0-9]+$");
 	}
 
 	/**

@@ -139,7 +139,7 @@ public class ContainerLetter extends ContainerItemInventory {
 	}
 
 	public void setRecipient(String recipientName, EnumAddressee type) {
-		if (StringUtils.isBlank(recipientName) || type == EnumAddressee.INVALID)
+		if (StringUtils.isBlank(recipientName) || type == null)
 			return;
 
 		// / Send to server
