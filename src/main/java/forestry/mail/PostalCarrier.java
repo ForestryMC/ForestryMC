@@ -26,24 +26,22 @@ import forestry.plugins.PluginMail;
 
 public class PostalCarrier implements IPostalCarrier {
 
-	private final String uid;
 	private final String iconID;
 	private final EnumAddressee type;
 
 	public PostalCarrier(EnumAddressee type) {
-		uid = type.toString().toLowerCase(Locale.ENGLISH);
-		iconID = "mail/carrier." + uid;
+		iconID = "mail/carrier." + type;
 		this.type = type;
 	}
 
 	@Override
-	public String getUID() {
-		return uid;
+	public EnumAddressee getType() {
+		return type;
 	}
 
 	@Override
 	public String getName() {
-		return StringUtil.localize("gui.addressee." + uid);
+		return StringUtil.localize("gui.addressee." + type);
 	}
 
 	@Override

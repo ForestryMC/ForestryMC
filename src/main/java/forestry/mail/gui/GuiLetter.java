@@ -48,7 +48,7 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 
 			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
 			//mc.renderEngine.bindTexture(Defaults.TEXTURE_PATH_GUI + "/letter.png");
-			IPostalCarrier carrier = PostManager.postRegistry.getCarrier(container.getCarrierType().toString());
+			IPostalCarrier carrier = PostManager.postRegistry.getCarrier(container.getCarrierType());
 			if(carrier != null)
 				drawTexturedModelRectFromIcon(startX + xPos, startY + yPos - 5, carrier.getIcon(), 26, 26);
 

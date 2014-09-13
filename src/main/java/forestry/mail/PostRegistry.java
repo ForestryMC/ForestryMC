@@ -27,6 +27,7 @@ import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
 import forestry.api.mail.IMailAddress;
+import forestry.api.mail.EnumAddressee;
 import forestry.core.config.ForestryItem;
 import forestry.mail.items.ItemLetter;
 import forestry.plugins.PluginMail;
@@ -168,21 +169,21 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	/* CARRIER */
-	private final HashMap<String, IPostalCarrier> carriers = new HashMap<String, IPostalCarrier>();
+	private final HashMap<EnumAddressee, IPostalCarrier> carriers = new HashMap<EnumAddressee, IPostalCarrier>();
 
 	@Override
-	public Map<String, IPostalCarrier> getRegisteredCarriers() {
+	public Map<EnumAddressee, IPostalCarrier> getRegisteredCarriers() {
 		return carriers;
 	}
 
 	@Override
 	public void registerCarrier(IPostalCarrier carrier) {
-		carriers.put(carrier.getUID(), carrier);
+		carriers.put(carrier.getType(), carrier);
 	}
 
 	@Override
-	public IPostalCarrier getCarrier(String uid) {
-		return carriers.get(uid);
+	public IPostalCarrier getCarrier(EnumAddressee type) {
+		return carriers.get(type);
 	}
 
 	/* LETTERS */

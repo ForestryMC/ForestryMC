@@ -44,7 +44,7 @@ import forestry.mail.network.PacketLetterInfo;
 public class ContainerLetter extends ContainerItemInventory {
 
 	private final LetterInventory letterInventory;
-	private EnumAddressee carrier = EnumAddressee.PLAYER;
+	private EnumAddressee carrierType = EnumAddressee.PLAYER;
 	private TradeStationInfo tradeInfo = null;
 
 	public ContainerLetter(EntityPlayer player, LetterInventory inventory) {
@@ -88,7 +88,7 @@ public class ContainerLetter extends ContainerItemInventory {
 		if (letterInventory.getLetter() != null)
 			if (letterInventory.getLetter().getRecipients() != null)
 				if (letterInventory.getLetter().getRecipients().length > 0)
-					this.carrier = letterInventory.getLetter().getRecipients()[0].getType();
+					this.carrierType = letterInventory.getLetter().getRecipients()[0].getType();
 	}
 
 	@Override
@@ -115,17 +115,17 @@ public class ContainerLetter extends ContainerItemInventory {
 	}
 
 	public void setCarrierType(EnumAddressee type) {
-		this.carrier = type;
+		this.carrierType = type;
 	}
 
 	public EnumAddressee getCarrierType() {
-		return this.carrier;
+		return this.carrierType;
 	}
 
 	public void advanceCarrierType() {
 		Iterator<IPostalCarrier> it = PostManager.postRegistry.getRegisteredCarriers().values().iterator();
 		while(it.hasNext()) {
-			if(it.next().getUID().equals(carrier))
+			if(it.next().getType().equals(carrierType))
 				break;
 		}
 
@@ -135,8 +135,7 @@ public class ContainerLetter extends ContainerItemInventory {
 		else
 			postal = PostManager.postRegistry.getRegisteredCarriers().values().iterator().next();
 
-		EnumAddressee type = EnumAddressee.fromString(postal.getUID());
-		setCarrierType(type);
+		setCarrierType(postal.getType());
 	}
 
 	public void setRecipient(String recipientName, EnumAddressee type) {
@@ -222,7 +221,7 @@ public class ContainerLetter extends ContainerItemInventory {
 	}
 
 	public void handleLetterInfoUpdate(PacketLetterInfo packet) {
-		carrier = packet.type;
+		carrierType = packet.type;
 		if (packet.type == EnumAddressee.PLAYER) {
 			getLetter().setRecipient(packet.address);
 		} else if (packet.type == EnumAddressee.TRADER) {
