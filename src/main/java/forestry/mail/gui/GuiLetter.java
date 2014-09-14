@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import java.util.Locale;
+import java.util.ArrayList;
 
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
@@ -76,6 +76,8 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 	boolean addressFocus;
 	boolean textFocus;
 
+	protected ArrayList<Widget> tradeInfoWidgets;
+
 	private final ContainerLetter container;
 
 	public GuiLetter(EntityPlayer player, LetterInventory inventory) {
@@ -86,6 +88,7 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 		this.container = (ContainerLetter) inventorySlots;
 		this.isProcessedLetter = container.getLetter().isProcessed();
 		this.widgetManager.add(new AddresseeSlot(16, 12));
+		this.tradeInfoWidgets = new ArrayList<Widget>();
 	}
 
 	@Override
@@ -172,9 +175,10 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 			fontRendererObj.drawString(address.getText(), guiLeft + 49, guiTop + 16, fontColor.get("gui.mail.lettertext"));
 			fontRendererObj.drawSplitString(text.getText(), guiLeft + 20, guiTop + 34, 119, fontColor.get("gui.mail.lettertext"));
 		} else {
+			clearTradeInfoWidgets();
 			address.drawTextBox();
 			if (container.getCarrierType() == EnumAddressee.TRADER)
-				drawTradePreview(guiLeft + 18, guiTop + 32);
+				drawTradePreview(18, 32);
 			else
 				text.drawTextBox();
 		}
@@ -191,25 +195,30 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 			infoString = "chat.mail." + container.getTradeInfo().state.getIdentifier();
 
 		if (infoString != null) {
-			fontRendererObj.drawSplitString(StringUtil.localize(infoString), x, y, 119, fontColor.get("gui.mail.lettertext"));
+			fontRendererObj.drawSplitString(StringUtil.localize(infoString), guiLeft + x, guiTop + y, 119, fontColor.get("gui.mail.lettertext"));
 			return;
 		}
 
-		fontRendererObj.drawString(StringUtil.localize("gui.mail.pleasesend"), x, y, fontColor.get("gui.mail.lettertext"));
+		fontRendererObj.drawString(StringUtil.localize("gui.mail.pleasesend"), guiLeft + x, guiTop + y, fontColor.get("gui.mail.lettertext"));
 
-		itemRender.renderItemAndEffectIntoGUI(fontRendererObj, mc.renderEngine, container.getTradeInfo().tradegood, x, y + 10);
-		itemRender.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, container.getTradeInfo().tradegood, x, y + 10);
+		addTradeInfoWidget(new ItemStackWidget(x, y + 10, container.getTradeInfo().tradegood));
 
 		GL11.glDisable(GL11.GL_LIGHTING);
-		fontRendererObj.drawString(StringUtil.localize("gui.mail.foreveryattached"), x, y + 28, fontColor.get("gui.mail.lettertext"));
+		fontRendererObj.drawString(StringUtil.localize("gui.mail.foreveryattached"), guiLeft + x, guiTop + y + 28, fontColor.get("gui.mail.lettertext"));
 		GL11.glEnable(GL11.GL_LIGHTING);
 		for (int i = 0; i < container.getTradeInfo().required.length; i++) {
-			GL11.glDisable(GL11.GL_LIGHTING);
-			itemRender.renderItemAndEffectIntoGUI(fontRendererObj, mc.renderEngine, container.getTradeInfo().required[i], x + i * 18, y + 38);
-			itemRender.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, container.getTradeInfo().required[i], x + i * 18, y + 38);
-			GL11.glEnable(GL11.GL_LIGHTING);
+			addTradeInfoWidget(new ItemStackWidget(x + i * 18, y + 38, container.getTradeInfo().required[i]));
 		}
+	}
 
+	private void addTradeInfoWidget(Widget widget) {
+		tradeInfoWidgets.add(widget);
+		widgetManager.add(widget);
+	}
+
+	private void clearTradeInfoWidgets() {
+		for (Widget widget : tradeInfoWidgets)
+			widgetManager.remove(widget);
 	}
 
 	@Override
