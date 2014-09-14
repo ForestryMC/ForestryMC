@@ -9,6 +9,8 @@ Forestry is a modification for the game Minecraft and known primarily for its fa
 
 [Wiki](http://forestry.sengir.net/)
 
+[Latest Builds for 1.7.10](http://jenkins.ic2.player.to/job/Forestry/)
+
 [IRC #forestry on esper.net](http://webchat.esper.net/?nick=ForestryGithub...&channels=forestry&prompt=1)
 
 ### Building
