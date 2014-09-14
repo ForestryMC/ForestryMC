@@ -549,7 +549,7 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer {
 		public ItemStackWidget(int xPos, int yPos, ItemStack itemStack) {
 			super(widgetManager, xPos, yPos);
 
-			IIcon icon = itemStack.getItem().getIconFromDamage(itemStack.getItemDamage());
+			IIcon icon = itemStack.getItem().getIcon(itemStack, 0);
 
 			this.width = icon.getIconWidth();
 			this.height = icon.getIconHeight();
