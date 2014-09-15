@@ -31,11 +31,12 @@ import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleSpecies;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginArboriculture;
 
-public class BlockSapling extends BlockTreeContainer {
+public class BlockSapling extends BlockTreeContainer implements IAlleleSpeciesTyped {
 
 	public static TileSapling getSaplingTile(IBlockAccess world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(x, y, z);
@@ -120,22 +121,26 @@ public class BlockSapling extends BlockTreeContainer {
 		return ((saplingCategory + 1) * saplingsPerCategory) - 1;
 	}
 
-	public boolean hasAllele(IAlleleTreeSpecies allele) {
+	public boolean hasAllele(IAlleleSpecies allele) {
 		int index = alleles.indexOf(allele);
 		return index >= minAlleleIndex() && index <= maxAlleleIndex();
 	}
 
-	public int getMetaForAllele(IAlleleTreeSpecies allele) {
+	public int getMetaForAllele(IAlleleSpecies allele) {
 		if (!hasAllele(allele))
 			return -1;
 		return alleles.indexOf(allele) - minAlleleIndex();
 	}
 
-	public IAlleleTreeSpecies getAllele(int metadata) {
+	public IAlleleTreeSpecies getAlleleForMeta(int metadata) {
 		int index = minAlleleIndex() + metadata;
 		if (index >= alleles.size())
 			return null;
 		return alleles.get(index);
+	}
+
+	public String getBlockKind() {
+		return EnumGermlingType.SAPLING.getName();
 	}
 
 	@Override
@@ -146,7 +151,7 @@ public class BlockSapling extends BlockTreeContainer {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIcon(int side, int metadata) {
-		IAlleleTreeSpecies allele = getAllele(metadata);
+		IAlleleTreeSpecies allele = getAlleleForMeta(metadata);
 		return allele.getGermlingIcon(EnumGermlingType.SAPLING, 0);
 	}
 

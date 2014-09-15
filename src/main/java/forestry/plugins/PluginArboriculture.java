@@ -87,9 +87,9 @@ import forestry.arboriculture.genetics.TreeHelper;
 import forestry.arboriculture.genetics.TreeMutation;
 import forestry.arboriculture.genetics.TreeTemplates;
 import forestry.arboriculture.genetics.TreekeepingMode;
+import forestry.arboriculture.items.ItemAlleleSpeciesTyped;
 import forestry.arboriculture.items.ItemGermlingGE;
 import forestry.arboriculture.items.ItemGrafter;
-import forestry.arboriculture.items.ItemSapling;
 import forestry.arboriculture.items.ItemStairs;
 import forestry.arboriculture.items.ItemTreealyzer;
 import forestry.arboriculture.items.ItemWoodBlock;
@@ -234,8 +234,8 @@ public class PluginArboriculture extends NativePlugin implements IFuelHandler {
 		ForestryBlock.stairs.block().setHarvestLevel("axe", 0);
 
 		// Saplings
-		ForestryBlock.saplings1.registerBlock(new BlockSapling(0), ItemSapling.class, "saplings1");
-		ForestryBlock.saplings2.registerBlock(new BlockSapling(1), ItemSapling.class, "saplings2");
+		ForestryBlock.saplings1.registerBlock(new BlockSapling(0), ItemAlleleSpeciesTyped.class, "saplings1");
+		ForestryBlock.saplings2.registerBlock(new BlockSapling(1), ItemAlleleSpeciesTyped.class, "saplings2");
 
 		// Leaves
 		ForestryBlock.leaves.registerBlock(new BlockLeaves(), ItemForestryBlock.class, "leaves");

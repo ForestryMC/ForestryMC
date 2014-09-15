@@ -14,39 +14,46 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 
-import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.arboriculture.gadgets.BlockSapling;
+import forestry.api.genetics.IAlleleSpecies;
+import forestry.arboriculture.gadgets.IAlleleSpeciesTyped;
 import forestry.core.utils.StringUtil;
 import forestry.core.items.ItemForestryBlock;
 
-public class ItemSapling extends ItemForestryBlock {
+public class ItemAlleleSpeciesTyped extends ItemForestryBlock {
 
-	public ItemSapling(Block block) {
+	public ItemAlleleSpeciesTyped(Block block) {
 		super(block);
 	}
 
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
 		int meta = itemstack.getItemDamage();
-		BlockSapling saplingBlock = (BlockSapling)getBlock();
-		IAlleleTreeSpecies treeSpecies = saplingBlock.getAllele(meta);
+		IAlleleSpeciesTyped alleleTypedBlock = (IAlleleSpeciesTyped)getBlock();
+		IAlleleSpecies species = alleleTypedBlock.getAlleleForMeta(meta);
 
-		if (saplingBlock == null || treeSpecies == null)
+		if (alleleTypedBlock == null || species == null)
 			return super.getUnlocalizedName();
 
-		EnumGermlingType type = EnumGermlingType.SAPLING;
+		String blockKind = alleleTypedBlock.getBlockKind();
+		String customName;
+		String grammarPrefix;
 
-		String customName = "trees.custom.treealyzer." + type.getName() + "." + treeSpecies.getUnlocalizedName().replace("trees.species.", "");
+		if (species instanceof IAlleleTreeSpecies) {
+			customName = "trees.custom.treealyzer." + blockKind + "." + species.getUnlocalizedName().replace("trees.species.", "");
+			grammarPrefix = "trees.grammar.";
+		} else {
+			return super.getUnlocalizedName();
+		}
+
 		if(StatCollector.canTranslate("for." + customName)){
 			return customName;
 		}
 
-		String treeGrammar = StringUtil.localize("trees.grammar." + type.getName());
-		String typeName = StringUtil.localize("trees.grammar." + type.getName() + ".type");
-		String treeSpeciesName = treeSpecies.getName();
+		String grammar = StringUtil.localize(grammarPrefix + blockKind);
+		String typeName = StringUtil.localize(grammarPrefix + blockKind + ".type");
 
-		return treeGrammar.replaceAll("%SPECIES", treeSpeciesName).replaceAll("%TYPE", typeName);
+		return grammar.replaceAll("%SPECIES", species.getName()).replaceAll("%TYPE", typeName);
 	}
 
 }
