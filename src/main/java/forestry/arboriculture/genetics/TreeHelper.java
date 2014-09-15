@@ -18,6 +18,7 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map.Entry;
 
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -49,6 +50,7 @@ import forestry.arboriculture.gadgets.BlockFruitPod;
 import forestry.arboriculture.gadgets.TileFruitPod;
 import forestry.arboriculture.gadgets.TileLeaves;
 import forestry.arboriculture.gadgets.TileSapling;
+import forestry.arboriculture.gadgets.BlockSapling;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
@@ -174,14 +176,31 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 
 	}
 
+	public BlockSapling getBlockSaplingForAllele(IAlleleTreeSpecies treeAllele) {
+		for (ForestryBlock block : PluginArboriculture.saplings) {
+			BlockSapling sapling = (BlockSapling) (block.block());
+			if (sapling.hasAllele(treeAllele))
+				return sapling;
+		}
+		return null;
+	}
+
 	@Override
 	public boolean plantSapling(World world, ITree tree, GameProfile owner, int x, int y, int z) {
 
-		boolean placed = world.setBlock(x, y, z, ForestryBlock.saplingGE.block(), 0, Defaults.FLAG_BLOCK_SYNCH);
+		IAlleleTreeSpecies treeAllele = tree.getGenome().getPrimary();
+
+		BlockSapling blockSapling = getBlockSaplingForAllele(treeAllele);
+		if (blockSapling == null)
+			return false;
+
+		int meta = blockSapling.getMetaForAllele(treeAllele);
+		boolean placed = world.setBlock(x, y, z, blockSapling, meta, Defaults.FLAG_BLOCK_SYNCH);
 		if (!placed)
 			return false;
 
-		if (!ForestryBlock.saplingGE.isBlockEqual(world, x, y, z))
+		Block block = world.getBlock(x, y, z);
+		if (!Block.isEqualTo(block, blockSapling))
 			return false;
 
 		TileEntity tile = world.getTileEntity(x, y, z);

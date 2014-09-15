@@ -32,7 +32,6 @@ import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginArboriculture;
 
@@ -46,9 +45,16 @@ public class BlockSapling extends BlockTreeContainer {
 		return (TileSapling) tile;
 	}
 
-	public BlockSapling() {
+	private static final int saplingsPerCategory = 16;
+	public int saplingCategory;
+
+	ArrayList<IAlleleTreeSpecies> alleles;
+
+	public BlockSapling(int saplingCategory) {
 		super(Material.plants);
 
+		this.saplingCategory = saplingCategory;
+		this.alleles = new ArrayList<IAlleleTreeSpecies>();
 		float factor = 0.4F;
 		setBlockBounds(0.5F - factor, 0.0F, 0.5F - factor, 0.5F + factor, factor * 2.0F, 0.5F + factor);
 		setStepSound(soundTypeGrass);
@@ -83,37 +89,73 @@ public class BlockSapling extends BlockTreeContainer {
 
 	/* ICONS */
 	@SideOnly(Side.CLIENT)
-	private static IIcon defaultIcon;
-
-	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		defaultIcon = TextureManager.getInstance().registerTex(register, "germlings/sapling.treeBalsa");
-
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleTreeSpecies)
 				((IAlleleTreeSpecies) allele).getIconProvider().registerIcons(register);
 			if (allele instanceof IAlleleFruit)
 				((IAlleleFruit) allele).getProvider().registerIcons(register);
 		}
+		registerTreeAlleles();
+	}
 
+	private void registerTreeAlleles() {
+		if (!alleles.isEmpty())
+			return;
+
+		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+			if (allele instanceof IAlleleTreeSpecies) {
+				IAlleleTreeSpecies treeAllele = (IAlleleTreeSpecies) allele;
+				alleles.add(treeAllele);
+			}
+		}
+	}
+
+	private int minAlleleIndex() {
+		return saplingCategory * saplingsPerCategory;
+	}
+
+	private int maxAlleleIndex() {
+		return ((saplingCategory + 1) * saplingsPerCategory) - 1;
+	}
+
+	public boolean hasAllele(IAlleleTreeSpecies allele) {
+		int index = alleles.indexOf(allele);
+		return index >= minAlleleIndex() && index <= maxAlleleIndex();
+	}
+
+	public int getMetaForAllele(IAlleleTreeSpecies allele) {
+		if (!hasAllele(allele))
+			return -1;
+		return alleles.indexOf(allele) - minAlleleIndex();
+	}
+
+	public IAlleleTreeSpecies getAllele(int metadata) {
+		int index = minAlleleIndex() + metadata;
+		if (index >= alleles.size())
+			return null;
+		return alleles.get(index);
+	}
+
+	@Override
+	public int damageDropped(int meta) {
+		return meta;
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIcon(int side, int metadata) {
-		return defaultIcon;
+		IAlleleTreeSpecies allele = getAllele(metadata);
+		return allele.getGermlingIcon(EnumGermlingType.SAPLING, 0);
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 		TileSapling sapling = getSaplingTile(world, x, y, z);
-		if (sapling == null)
-			return defaultIcon;
-
-		if (sapling.getTree() == null)
-			return defaultIcon;
+		if (sapling == null || sapling.getTree() == null)
+			return null;
 
 		return sapling.getTree().getGenome().getPrimary().getGermlingIcon(EnumGermlingType.SAPLING, 0);
 	}
