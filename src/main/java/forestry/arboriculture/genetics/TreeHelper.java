@@ -18,6 +18,8 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map.Entry;
 
+import forestry.api.genetics.IAlleleSpecies;
+import forestry.arboriculture.gadgets.BlockLeaves;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -176,11 +178,20 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 
 	}
 
-	public BlockSapling getBlockSaplingForAllele(IAlleleTreeSpecies treeAllele) {
+	public static BlockSapling getBlockSaplingForAllele(IAlleleTreeSpecies treeAllele) {
 		for (ForestryBlock block : PluginArboriculture.saplings) {
 			BlockSapling sapling = (BlockSapling) (block.block());
 			if (sapling.hasAllele(treeAllele))
 				return sapling;
+		}
+		return null;
+	}
+
+	public static BlockLeaves getBlockLeavesForAllele(IAlleleSpecies treeAllele) {
+		for (ForestryBlock block : PluginArboriculture.leaves) {
+			BlockLeaves leaves = (BlockLeaves) (block.block());
+			if (leaves.hasAllele(treeAllele))
+				return leaves;
 		}
 		return null;
 	}
@@ -220,11 +231,21 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	@Override
 	public boolean setLeaves(World world, IIndividual tree, GameProfile owner, int x, int y, int z) {
 
-		boolean placed = ForestryBlock.leaves.setBlock(world, x, y, z, 0, Defaults.FLAG_BLOCK_SYNCH);
+
+		IAlleleSpecies treeAllele = tree.getGenome().getPrimary();
+
+		BlockLeaves blockLeaves = getBlockLeavesForAllele(treeAllele);
+		if (blockLeaves == null)
+			return false;
+
+		int meta = blockLeaves.getMetaForAllele(treeAllele);
+		boolean placed = world.setBlock(x, y, z, blockLeaves, meta, Defaults.FLAG_BLOCK_SYNCH);
+
 		if (!placed)
 			return false;
 
-		if (!ForestryBlock.leaves.isBlockEqual(world, x, y, z))
+		Block block = world.getBlock(x, y, z);
+		if (!Block.isEqualTo(block, blockLeaves))
 			return false;
 
 		TileEntity tile = world.getTileEntity(x, y, z);

@@ -166,6 +166,9 @@ public class PluginArboriculture extends NativePlugin implements IFuelHandler {
 			ForestryBlock.log5,
 			ForestryBlock.log6,
 			ForestryBlock.log7);
+	public static final EnumSet<ForestryBlock> leaves = EnumSet.of(
+			ForestryBlock.leaves1,
+			ForestryBlock.leaves2);
 	public static final EnumSet<ForestryBlock> saplings = EnumSet.of(
 			ForestryBlock.saplings1,
 			ForestryBlock.saplings2);
@@ -238,7 +241,8 @@ public class PluginArboriculture extends NativePlugin implements IFuelHandler {
 		ForestryBlock.saplings2.registerBlock(new BlockSapling(1), ItemAlleleSpeciesTyped.class, "saplings2");
 
 		// Leaves
-		ForestryBlock.leaves.registerBlock(new BlockLeaves(), ItemForestryBlock.class, "leaves");
+		ForestryBlock.leaves1.registerBlock(new BlockLeaves(0), ItemAlleleSpeciesTyped.class, "leaves1");
+		ForestryBlock.leaves2.registerBlock(new BlockLeaves(1), ItemAlleleSpeciesTyped.class, "leaves2");
 
 		// Pods
 		ForestryBlock.pods.registerBlock(new BlockFruitPod(), ItemForestryBlock.class, "pods");

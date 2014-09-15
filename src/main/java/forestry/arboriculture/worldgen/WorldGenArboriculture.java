@@ -15,6 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import com.mojang.authlib.GameProfile;
 
+import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.gadgets.TileSapling;
 import forestry.core.utils.Utils;
@@ -43,7 +44,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 		this.startZ = z;
 
 		this.spawnPods = tree.allowsFruitBlocks();
-		this.leaf = getLeaf(getOwner());
+		this.leaf = getLeaf(getOwner(), tree.getGenome().getPrimary());
 		this.wood = getWood();
 
 		preGenerate();
@@ -70,7 +71,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 
 	public abstract boolean canGrow();
 
-	public abstract BlockType getLeaf(GameProfile owner);
+	public abstract BlockType getLeaf(GameProfile owner, IAlleleTreeSpecies species);
 
 	public abstract BlockType getWood();
 
