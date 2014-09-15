@@ -87,6 +87,7 @@ import forestry.arboriculture.genetics.TreeHelper;
 import forestry.arboriculture.genetics.TreeMutation;
 import forestry.arboriculture.genetics.TreeTemplates;
 import forestry.arboriculture.genetics.TreekeepingMode;
+import forestry.arboriculture.items.ItemAlleleSpeciesTyped;
 import forestry.arboriculture.items.ItemGermlingGE;
 import forestry.arboriculture.items.ItemGrafter;
 import forestry.arboriculture.items.ItemStairs;
@@ -165,6 +166,12 @@ public class PluginArboriculture extends NativePlugin implements IFuelHandler {
 			ForestryBlock.log5,
 			ForestryBlock.log6,
 			ForestryBlock.log7);
+	public static final EnumSet<ForestryBlock> leaves = EnumSet.of(
+			ForestryBlock.leaves1,
+			ForestryBlock.leaves2);
+	public static final EnumSet<ForestryBlock> saplings = EnumSet.of(
+			ForestryBlock.saplings1,
+			ForestryBlock.saplings2);
 	private static final EnumSet<ForestryBlock> planks = EnumSet.of(
 			ForestryBlock.planks1,
 			ForestryBlock.planks2);
@@ -230,10 +237,12 @@ public class PluginArboriculture extends NativePlugin implements IFuelHandler {
 		ForestryBlock.stairs.block().setHarvestLevel("axe", 0);
 
 		// Saplings
-		ForestryBlock.saplingGE.registerBlock(new BlockSapling(), ItemForestryBlock.class, "saplingGE");
+		ForestryBlock.saplings1.registerBlock(new BlockSapling(0), ItemAlleleSpeciesTyped.class, "saplings1");
+		ForestryBlock.saplings2.registerBlock(new BlockSapling(1), ItemAlleleSpeciesTyped.class, "saplings2");
 
 		// Leaves
-		ForestryBlock.leaves.registerBlock(new BlockLeaves(), ItemForestryBlock.class, "leaves");
+		ForestryBlock.leaves1.registerBlock(new BlockLeaves(0), ItemAlleleSpeciesTyped.class, "leaves1");
+		ForestryBlock.leaves2.registerBlock(new BlockLeaves(1), ItemAlleleSpeciesTyped.class, "leaves2");
 
 		// Pods
 		ForestryBlock.pods.registerBlock(new BlockFruitPod(), ItemForestryBlock.class, "pods");

@@ -344,7 +344,8 @@ public class PluginStorage extends NativePlugin implements IOreDictionaryHandler
 		foresterItems.add(new ItemStack(Items.pumpkin_seeds));
 		foresterItems.add(new ItemStack(Items.melon_seeds));
 		foresterItems.add(new ItemStack(Items.wheat));
-		foresterItems.add(ForestryBlock.saplingGE.getWildcard());
+		foresterItems.add(ForestryBlock.saplings1.getWildcard());
+		foresterItems.add(ForestryBlock.saplings2.getWildcard());
 
 		// [3] Set valid items in hunter's backpack
 		hunterItems.add(new ItemStack(Items.feather));

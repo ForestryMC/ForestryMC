@@ -14,16 +14,18 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
+import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.world.ITreeGenData;
-import forestry.core.config.ForestryBlock;
+import forestry.arboriculture.genetics.TreeHelper;
 import forestry.core.worldgen.BlockType;
 
 public class BlockTypeLeaf extends BlockType {
 
 	private GameProfile owner;
 
-	public BlockTypeLeaf(GameProfile owner) {
-		super(ForestryBlock.leaves, 0);
+	public BlockTypeLeaf(GameProfile owner, IAlleleTreeSpecies species) {
+		super(TreeHelper.getBlockLeavesForAllele(species), 0);
+		this.owner = owner;
 	}
 
 	@Override

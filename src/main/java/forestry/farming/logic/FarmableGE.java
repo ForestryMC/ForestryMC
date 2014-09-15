@@ -17,7 +17,6 @@ import net.minecraft.world.World;
 import forestry.api.arboriculture.ITree;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
-import forestry.core.config.ForestryBlock;
 import forestry.core.utils.Utils;
 import forestry.core.utils.Vect;
 import forestry.plugins.PluginArboriculture;
@@ -30,7 +29,8 @@ public class FarmableGE implements IFarmable {
 		if (world.isAirBlock(x, y, z))
 			return false;
 
-		return ForestryBlock.saplingGE.isBlockEqual(world, x, y, z);
+		Block block = world.getBlock(x, y, z);
+		return PluginArboriculture.saplings.contains(block);
 	}
 
 	@Override

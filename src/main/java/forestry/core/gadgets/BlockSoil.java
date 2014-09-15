@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import forestry.core.IItemTyped;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -33,9 +32,10 @@ import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import forestry.plugins.PluginArboriculture;
+import forestry.core.IItemTyped;
 import forestry.core.CreativeTabForestry;
 import forestry.core.config.Defaults;
-import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
@@ -127,7 +127,7 @@ public class BlockSoil extends Block implements IItemTyped {
 		for (int i = -1; i < 2; i++)
 			for (int j = -1; j < 2; j++) {
 				Block block = world.getBlock(x + i, y + 1, z + j);
-				if (block == Blocks.log || block == Blocks.sapling || block == ForestryBlock.saplingGE.block())
+				if (block == Blocks.log || block == Blocks.sapling || PluginArboriculture.saplings.contains(block))
 					// We are not returning true if we are the base of a
 					// sapling.
 					if (i == 0 && j == 0)

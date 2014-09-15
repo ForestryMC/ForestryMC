@@ -12,6 +12,7 @@ package forestry.arboriculture.worldgen;
 
 import com.mojang.authlib.GameProfile;
 
+import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.world.ITreeGenData;
 import forestry.core.worldgen.BlockType;
 import forestry.plugins.PluginArboriculture;
@@ -88,8 +89,8 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 	}
 
 	@Override
-	public BlockType getLeaf(GameProfile owner) {
-		return new BlockTypeLeaf(owner);
+	public BlockType getLeaf(GameProfile owner, IAlleleTreeSpecies species) {
+		return new BlockTypeLeaf(owner, species);
 	}
 
 	@Override

@@ -32,9 +32,15 @@ import net.minecraftforge.common.util.ForgeDirection;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IToolGrafter;
 import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.core.IToolScoop;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
+import forestry.arboriculture.genetics.Tree;
+import forestry.arboriculture.genetics.TreeGenome;
 import forestry.core.config.Defaults;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
@@ -42,12 +48,18 @@ import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginArboriculture;
 import forestry.plugins.PluginLepidopterology;
 
-public class BlockLeaves extends BlockTreeContainer {
+public class BlockLeaves extends BlockTreeContainer implements IAlleleSpeciesTyped {
 
+	private static final int leavesPerCategory = 16;
+	public int leavesCategory;
 	int[] adjacentTreeBlocks;
+	ArrayList<IAlleleTreeSpecies> alleles;
 
-	public BlockLeaves() {
+	public BlockLeaves(int leavesCategory) {
 		super(Material.leaves);
+
+		this.leavesCategory = leavesCategory;
+		this.alleles = new ArrayList<IAlleleTreeSpecies>();
 		this.setTickRandomly(true);
 		this.setHardness(0.2F);
 		this.setLightOpacity(1);
@@ -189,12 +201,21 @@ public class BlockLeaves extends BlockTreeContainer {
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
 		defaultIcon = TextureManager.getInstance().registerTex(register, "leaves/deciduous.fancy");
+		registerTreeAlleles();
+	}
+
+	@Override
+	public int damageDropped(int meta) {
+		return meta;
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIcon(int side, int metadata) {
-		return defaultIcon;
+		IAlleleTreeSpecies allele = getAlleleForMeta(metadata);
+		Tree fakeTree = new Tree((TreeGenome)null);
+		short iconIndex = allele.getLeafIconIndex(fakeTree, Proxies.render.fancyGraphicsEnabled());
+		return TextureManager.getInstance().getIcon(iconIndex);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -205,6 +226,49 @@ public class BlockLeaves extends BlockTreeContainer {
 			return leaves.getIcon(Proxies.render.fancyGraphicsEnabled());
 
 		return defaultIcon;
+	}
+
+	/* IAlleleSpeciesTyped */
+	private void registerTreeAlleles() {
+		if (!alleles.isEmpty())
+			return;
+
+		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+			if (allele instanceof IAlleleTreeSpecies) {
+				IAlleleTreeSpecies treeAllele = (IAlleleTreeSpecies) allele;
+				alleles.add(treeAllele);
+			}
+		}
+	}
+
+	private int minAlleleIndex() {
+		return leavesCategory * leavesPerCategory;
+	}
+
+	private int maxAlleleIndex() {
+		return ((leavesCategory + 1) * leavesPerCategory) - 1;
+	}
+
+	public boolean hasAllele(IAlleleSpecies allele) {
+		int index = alleles.indexOf(allele);
+		return index >= minAlleleIndex() && index <= maxAlleleIndex();
+	}
+
+	public int getMetaForAllele(IAlleleSpecies allele) {
+		if (!hasAllele(allele))
+			return -1;
+		return alleles.indexOf(allele) - minAlleleIndex();
+	}
+
+	public IAlleleTreeSpecies getAlleleForMeta(int metadata) {
+		int index = minAlleleIndex() + metadata;
+		if (index >= alleles.size())
+			return null;
+		return alleles.get(index);
+	}
+
+	public String getBlockKind() {
+		return "leaves";
 	}
 
 	/* BREAKING, LEAF DECAY */
