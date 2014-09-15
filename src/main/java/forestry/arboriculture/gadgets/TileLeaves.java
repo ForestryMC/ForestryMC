@@ -277,16 +277,16 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	/* NETWORK */
 	@Override
 	public Packet getDescriptionPacket() {
-		return new PacketLeafUpdate(xCoord, yCoord, zCoord, this).getPacket();
+		return new PacketLeafUpdate(this).getPacket();
 	}
 
 	@Override
 	public void sendNetworkUpdate() {
-		Proxies.net.sendNetworkPacket(new PacketLeafUpdate(xCoord, yCoord, zCoord, this), xCoord, yCoord, zCoord);
+		Proxies.net.sendNetworkPacket(new PacketLeafUpdate(this), xCoord, yCoord, zCoord);
 	}
 
 	private void sendNetworkUpdateRipening() {
-		Proxies.net.sendNetworkPacket(new PacketLeafUpdate(xCoord, yCoord, zCoord, determineFruitColour()), xCoord, yCoord, zCoord);
+		Proxies.net.sendNetworkPacket(new PacketLeafUpdate(this, determineFruitColour()), xCoord, yCoord, zCoord);
 	}
 
 	@Override
@@ -296,6 +296,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if(packet.isRipeningUpdate()) {
 			colourFruits = packet.colourFruits;
 		} else {
+			readFromNBT(packet.getTagCompound());
 			isFruitLeaf = packet.isFruitLeaf();
 			isPollinatedState = packet.isPollinated();
 			textureIndexFancy = packet.textureIndexFancy;
