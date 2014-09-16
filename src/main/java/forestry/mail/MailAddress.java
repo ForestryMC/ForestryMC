@@ -32,11 +32,11 @@ public class MailAddress implements INBTTagable, IMailAddress {
 	@EntityNetData
 	private GameProfile gameProfile; // gameProfile is a fake GameProfile for traders, and real for players
 
-	private static final MailAddress invalidAddress = new MailAddress();
+	private static final GameProfile invalidGameProfile = new GameProfile(new UUID(0,0), "");
 
 	public MailAddress() {
-		this.type = EnumAddressee.INVALID;
-		this.gameProfile = new GameProfile(new UUID(0,0), "");
+		this.type = EnumAddressee.PLAYER;
+		this.gameProfile = invalidGameProfile;
 	}
 
 	public MailAddress(GameProfile gameProfile) {
@@ -101,20 +101,25 @@ public class MailAddress implements INBTTagable, IMailAddress {
 		return type == EnumAddressee.PLAYER;
 	}
 
+	public boolean isTrader() {
+		return type == EnumAddressee.TRADER;
+	}
+
 	public boolean isValid() {
-		return type != EnumAddressee.INVALID;
+		return !gameProfile.equals(invalidGameProfile);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		type = EnumAddressee.INVALID;
+		type = null;
 		if(nbttagcompound.hasKey("TP")) {
 			String typeName = nbttagcompound.getString("TP");
 			type = EnumAddressee.fromString(typeName);
 		}
 
-		if (!isValid()) {
-			gameProfile = invalidAddress.gameProfile;
+		if (type == null) {
+			type = EnumAddressee.PLAYER;
+			gameProfile = invalidGameProfile;
 		} else if(nbttagcompound.hasKey("profile")) {
 			NBTTagCompound profileTag = nbttagcompound.getCompoundTag("profile");
 			gameProfile = NBTUtil.func_152459_a(profileTag);

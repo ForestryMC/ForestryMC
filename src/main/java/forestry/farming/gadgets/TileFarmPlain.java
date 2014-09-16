@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.ItemStack;
@@ -757,7 +758,8 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	@Override
 	public void removeResources(ItemStack[] resources) {
-		inventory.removeResources(resources, SLOT_RESOURCES_1, SLOT_COUNT_RESERVOIRS);
+		EntityPlayer player = worldObj.getPlayerEntityByName(owner.getName());
+		inventory.removeSets(1, resources, SLOT_RESOURCES_1, SLOT_RESOURCES_1, player, false, true, true);
 	}
 
 	@Override

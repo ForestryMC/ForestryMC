@@ -399,8 +399,8 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 		FluidStack liquid = myRecipe.molten;
 
 		// Remove resources
-		if (removeFromInventory(1, inventory.getStacks(SLOT_CRAFTING_1, 9), false)) {
-			removeFromInventory(1, inventory.getStacks(SLOT_CRAFTING_1, 9), true);
+		if (removeFromInventory(1, inventory.getStacks(SLOT_CRAFTING_1, 9), player, false)) {
+			removeFromInventory(1, inventory.getStacks(SLOT_CRAFTING_1, 9), player, true);
 			moltenTank.drain(liquid.amount, true);
 		} else if (consumeRecipe) {
 			removeFromCraftMatrix(myRecipe);
@@ -430,39 +430,13 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 
 	}
 
-	private boolean removeFromInventory(int count, ItemStack[] set, boolean doRemove) {
-
-		boolean hasRemoved = true;
-		for (int i = 0; i < count; i++) {
-			ItemStack[] condensedSet = StackUtils.condenseStacks(set, 1, true);
-			for (ItemStack req : condensedSet)
-				for (int j = SLOT_INVENTORY_1; j < SLOT_INVENTORY_1 + SLOT_INVENTORY_COUNT; j++) {
-					ItemStack pol = inventory.getStackInSlot(j);
-					if (pol == null)
-						continue;
-					if (!StackUtils.isCraftingEquivalent(pol, req, true, false))
-						continue;
-
-					int available = pol.stackSize;
-					if (doRemove) {
-						inventory.decrStackSize(j, req.stackSize);
-					}
-					req.stackSize -= available;
-
-					if(req.stackSize <= 0)
-						break;
-				}
-
-			boolean hasLeft = false;
-			for (ItemStack req : condensedSet)
-				if (req != null && req.stackSize > 0)
-					hasLeft = true;
-			if (hasLeft)
-				hasRemoved = false;
-
+	private boolean removeFromInventory(int count, ItemStack[] set, EntityPlayer player, boolean doRemove) {
+		if (doRemove) {
+			return inventory.removeSets(count, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
+		} else {
+			ItemStack[] stock = inventory.getStacks(SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+			return StackUtils.containsSets(set, stock) >= count;
 		}
-
-		return hasRemoved;
 	}
 
 	@Override
@@ -529,10 +503,12 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 	@Override
 	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
 		ItemStack taken;
-		if (doRemove)
-			taken = this.takenFromSlot(SLOT_RESULT, false, null);
-		else
+		if (doRemove) {
+			EntityPlayer player = worldObj.getPlayerEntityByName(owner.getName());
+			taken = this.takenFromSlot(SLOT_RESULT, false, player);
+		} else {
 			taken = this.getResult();
+		}
 
 		if (taken != null)
 			return new ItemStack[] { taken };

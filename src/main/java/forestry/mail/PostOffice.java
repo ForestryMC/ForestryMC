@@ -159,20 +159,13 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 
 		IPostalState state = EnumDeliveryState.NOT_MAILABLE;
 		for (IMailAddress address : letter.getRecipients()) {
-			IPostalCarrier carrier = PostManager.postRegistry.getCarrier(address.getType().toString());
+			IPostalCarrier carrier = PostManager.postRegistry.getCarrier(address.getType());
 			if (carrier == null)
 				continue;
 			state = carrier.deliverLetter(world, this, address, itemstack, doLodge);
 			if (!state.isOk())
 				break;
 		}
-		/*
-		 for (MailAddress address : letter.getRecipients())
-		 if (address.isPlayer())
-		 state = storeInPOBox(world, address, itemstack, doLodge);
-		 else if (address.getType().equals(EnumAddressee.TRADER.toString()))
-		 state = handleTradeLetter(world, address, itemstack, doLodge);
-		 */
 
 		if (!state.isOk())
 			return state;

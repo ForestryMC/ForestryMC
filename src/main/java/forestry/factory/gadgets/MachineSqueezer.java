@@ -77,29 +77,7 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 		}
 
 		public boolean matches(ItemStack[] res) {
-			// No recipe without resource!
-			if (res == null || res.length <= 0)
-				return false;
-
-			boolean matchedAll = true;
-
-			for (ItemStack stack : resources) {
-				boolean matched = false;
-				for (ItemStack matchStack : res) {
-					if (matchStack == null)
-						continue;
-
-					// If the item matches, we need enough items
-					if (matchStack.isItemEqual(stack))
-						if (matchStack.stackSize >= stack.stackSize) {
-							matched = true;
-							break;
-						}
-				}
-				if (!matched)
-					matchedAll = false;
-			}
-			return matchedAll;
+			return StackUtils.containsSets(resources, res, null, true, true) > 0;
 		}
 	}
 
@@ -292,12 +270,13 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 			return true;
 		}
 
+		if (!removeResources(currentRecipe.resources))
+			return false;
+
 		// We are done, add products to queue
 		pendingLiquids.push(currentRecipe.liquid.copy());
 		if (currentRecipe.remnants != null && worldObj.rand.nextInt(100) < currentRecipe.chance)
 			pendingRemnants.push(currentRecipe.remnants.copy());
-
-		removeResources(currentRecipe.resources);
 
 		checkRecipe();
 		resetRecipe();
@@ -367,8 +346,9 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 		return inventory.tryAddStack(stack, SLOT_REMNANT, 1, true);
 	}
 
-	private void removeResources(ItemStack[] stacks) {
-		inventory.removeResources(stacks, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT);
+	private boolean removeResources(ItemStack[] stacks) {
+		EntityPlayer player = worldObj.getPlayerEntityByName(owner.getName());
+		return inventory.removeSets(1, stacks, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT, player, false, true, true);
 	}
 
 	@Override

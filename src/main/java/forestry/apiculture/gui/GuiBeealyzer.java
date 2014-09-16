@@ -243,6 +243,9 @@ public class GuiBeealyzer extends GuiAlyzer {
 
 	private void drawAnalyticsPage3(IBee bee, EnumBeeType type) {
 
+		float factor = this.factor;
+		this.setFactor(1.0f);
+
 		tempProductList = bee.getProduceList();
 
 		startPage(COLUMN_0, COLUMN_1, COLUMN_2);
@@ -253,8 +256,8 @@ public class GuiBeealyzer extends GuiAlyzer {
 
 		int x = COLUMN_0;
 		for (ItemStack stack : tempProductList) {
-			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, stack, (int) ((guiLeft + x) * (1 / factor)),
-					(int) ((guiTop + getLineY()) * (1 / factor)));
+			widgetManager.add(new ItemStackWidget(adjustToFactor(x), adjustToFactor(getLineY()), stack));
+
 			x += 18;
 			if (x > adjustToFactor(148)) {
 				x = COLUMN_0;
@@ -264,14 +267,14 @@ public class GuiBeealyzer extends GuiAlyzer {
 
 		newLine();
 		newLine();
+		newLine();
 
 		drawLine(StringUtil.localize("gui.beealyzer.specialty") + ":", COLUMN_0);
-		newLine();
 
 		x = COLUMN_0;
 		for (ItemStack stack : bee.getSpecialtyList()) {
-			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, stack, (int) ((guiLeft + x) * (1 / factor)),
-					(int) ((guiTop + getLineY()) * (1 / factor)));
+			widgetManager.add(new ItemStackWidget(adjustToFactor(x), adjustToFactor(getLineY()), stack));
+
 			x += 18;
 			if (x > adjustToFactor(148)) {
 				x = COLUMN_0;
@@ -280,6 +283,8 @@ public class GuiBeealyzer extends GuiAlyzer {
 		}
 
 		endPage();
+
+		this.setFactor(factor);
 	}
 
 }

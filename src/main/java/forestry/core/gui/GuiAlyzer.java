@@ -130,6 +130,12 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 		}
 	}
 
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
+		widgetManager.clear();
+	}
+
 	protected void drawAnalyticsOverview() {
 
 		startPage();
@@ -235,9 +241,11 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 
 	protected void drawAnalyticsPage4(IIndividual individual) {
 
+		float factor = this.factor;
+		this.setFactor(1.0f);
+
 		startPage(COLUMN_0, COLUMN_1, COLUMN_2);
 		drawLine(StringUtil.localize("gui.beealyzer.mutations") + ":", COLUMN_0);
-		newLine();
 		newLine();
 
 		RenderHelper.enableGUIStandardItemLighting();
@@ -266,7 +274,7 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 			}
 
 			x += columnWidth;
-			if (x > columnWidth * 4) {
+			if (x >= columnWidth * 4) {
 				x = 0;
 				newLine();
 				newLine();
@@ -274,73 +282,40 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 		}
 
 		endPage();
+
+		this.setFactor(factor);
 	}
 
 	protected void drawMutationInfo(IMutation combination, IAllele species, int x) {
 
-		drawItemStack(iconStacks.get(combination.getPartner(species).getUID()),
-				adjustToFactor(guiLeft) + x, adjustToFactor(guiTop) + getLineY());
-		/*
-		itemRenderer.renderItemIntoGUI(fontRendererObj, mc.renderEngine, iconStacks.get(combination.getPartner(species).getUID()), adjustToFactor(guiLeft) + x,
-				adjustToFactor(guiTop) + getLineY());
-		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, iconStacks.get(combination.getPartner(species).getUID()), adjustToFactor(guiLeft)
-				+ x, adjustToFactor(guiTop) + getLineY());
-		 */
+		ItemStack partnerBee = iconStacks.get(combination.getPartner(species).getUID());
+		widgetManager.add(new ItemStackWidget(x, getLineY(), partnerBee));
+
+		drawProbabilityArrow(combination.getBaseChance(), adjustToFactor(guiLeft) + x + 18, adjustToFactor(guiTop) + getLineY() + 4);
 
 		IAllele result = combination.getTemplate()[EnumBeeChromosome.SPECIES.ordinal()];
-
-		drawItemStack(iconStacks.get(result.getUID()),
-				adjustToFactor(guiLeft) + x + 33, adjustToFactor(guiTop) + getLineY());
-		/*
-		itemRenderer.renderItemIntoGUI(fontRendererObj, mc.renderEngine, iconStacks.get(result.getUID()), adjustToFactor(guiLeft) + x + 33, adjustToFactor(guiTop)
-				+ getLineY());
-		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, iconStacks.get(result.getUID()), adjustToFactor(guiLeft) + x + 33,
-				adjustToFactor(guiTop) + getLineY());
-		 */
-
-		int line = 247;
-		int column = 100;
-
-		switch (EnumMutateChance.rateChance(combination.getBaseChance())) {
-			case HIGHEST:
-				column = 100;
-				break;
-			case HIGHER:
-				column = 100 + 15;
-				break;
-			case HIGH:
-				column = 100 + 15 * 2;
-				break;
-			case NORMAL:
-				column = 100 + 15 * 3;
-				break;
-			case LOW:
-				column = 100 + 15 * 4;
-				break;
-			case LOWEST:
-				column = 100 + 15 * 5;
-			default:
-				break;
-		}
-
-		Proxies.common.bindTexture(textureFile);
-		drawTexturedModalRect(adjustToFactor(guiLeft) + x + 18, adjustToFactor(guiTop) + getLineY() + 4, column, line, 15, 9);
-
+		ItemStack resultBee = iconStacks.get(result.getUID());
+		widgetManager.add(new ItemStackWidget(x + 33, getLineY(), resultBee));
 	}
 
 	protected void drawUnknownMutation(IMutation combination, IAllele species, int x) {
 
-		// Question marks
-		Proxies.common.bindTexture(textureFile);
-		drawTexturedModalRect(adjustToFactor(guiLeft) + x, adjustToFactor(guiTop) + getLineY(), 78, 240, 16, 16);
+		drawQuestionMark(adjustToFactor(guiLeft) + x, adjustToFactor(guiTop) + getLineY());
 
-		Proxies.common.bindTexture(textureFile);
-		drawTexturedModalRect(adjustToFactor(guiLeft) + x + 32, adjustToFactor(guiTop) + getLineY(), 78, 240, 16, 16);
+		drawProbabilityArrow(combination.getBaseChance(), adjustToFactor(guiLeft) + x + 18, adjustToFactor(guiTop) + getLineY() + 4);
 
+		drawQuestionMark(adjustToFactor(guiLeft) + x + 32, adjustToFactor(guiTop) + getLineY());
+	}
+
+	protected void drawQuestionMark(int x, int y) {
+		Proxies.common.bindTexture(textureFile);
+		drawTexturedModalRect(x, y, 78, 240, 16, 16);
+	}
+
+	protected void drawProbabilityArrow(float chance, int x, int y) {
 		int line = 247;
 		int column = 100;
-
-		switch (EnumMutateChance.rateChance(combination.getBaseChance())) {
+		switch (EnumMutateChance.rateChance(chance)) {
 			case HIGHEST:
 				column = 100;
 				break;
@@ -364,8 +339,7 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 
 		// Probability arrow
 		Proxies.common.bindTexture(textureFile);
-		drawTexturedModalRect(adjustToFactor(guiLeft) + x + 18, adjustToFactor(guiTop) + getLineY() + 4, column, line, 15, 9);
-
+		drawTexturedModalRect(x, y, column, line, 15, 9);
 	}
 
 	protected void drawToleranceInfo(EnumTolerance tolerance, int x, int textColor) {

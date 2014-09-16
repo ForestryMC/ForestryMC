@@ -35,6 +35,7 @@ import forestry.core.gui.slots.SlotForestry;
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.tooltips.ToolTipLine;
+import forestry.core.gui.widgets.Widget;
 import forestry.core.interfaces.IClimatised;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IHintSource;
@@ -540,5 +541,32 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer {
 		itemRender.renderItemOverlayIntoGUI(font, this.mc.getTextureManager(), stack, xPos, yPos);
 		this.zLevel = 0.0F;
 		itemRender.zLevel = 0.0F;
+	}
+
+	protected class ItemStackWidget extends Widget {
+		ItemStack itemStack;
+
+		public ItemStackWidget(int xPos, int yPos, ItemStack itemStack) {
+			super(widgetManager, xPos, yPos);
+
+			IIcon icon = itemStack.getItem().getIcon(itemStack, 0);
+
+			this.width = icon.getIconWidth();
+			this.height = icon.getIconHeight();
+			this.itemStack = itemStack;
+		}
+
+		@Override
+		public void draw(int startX, int startY) {
+			itemRender.renderItemAndEffectIntoGUI(fontRendererObj, mc.renderEngine, itemStack, xPos + startX, yPos + startY);
+			itemRender.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, itemStack, xPos + startX, yPos + startY);
+		}
+
+		@Override
+		public ToolTip getToolTip() {
+			ToolTip tip = new ToolTip();
+			tip.add(itemStack.getDisplayName());
+			return tip;
+		}
 	}
 }

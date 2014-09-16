@@ -462,43 +462,14 @@ public class TileWorktable extends TileBase implements ICrafter {
 	}
 
 	private boolean validateResources() {
-		// Need at least one matched set
-		if (currentRecipe == null)
-			return false;
-
-		ItemStack[] set = currentRecipe.getMatrix().getStacks();
-		ItemStack[] stock = accessibleInventory.getStacks();
+		ItemStack[] set = craftingInventory.getStacks(SLOT_CRAFTING_1, 9);
+		ItemStack[] stock = accessibleInventory.getStacks(SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
 		return StackUtils.containsSets(set, stock, currentRecipe.getRecipeOutput(), true, true) > 0;
 	}
 
-	private void removeResources(EntityPlayer player) {
-		removeSets(1, craftingInventory.getStacks(SLOT_CRAFTING_1, 9), player);
-	}
-
-	private void removeSets(int count, ItemStack[] set, EntityPlayer player) {
-
-		for (int i = 0; i < count; i++) {
-			ItemStack[] condensedSet = StackUtils.condenseStacks(set);
-			for (ItemStack req : condensedSet) {
-				for (int j = SLOT_INVENTORY_1; j < SLOT_INVENTORY_1 + SLOT_INVENTORY_COUNT; j++) {
-					ItemStack pol = accessibleInventory.getStackInSlot(j);
-					if (pol == null)
-						continue;
-
-					if (!StackUtils.isCraftingEquivalent(pol, req, true, true))
-						continue;
-
-					ItemStack removed = accessibleInventory.decrStackSize(j, req.stackSize);
-					req.stackSize -= removed.stackSize;
-
-					if (req.getItem().hasContainerItem(req))
-						StackUtils.stowContainerItem(removed, accessibleInventory, j, player);
-					if (req.stackSize <= 0)
-						break;
-				}
-			}
-		}
-
+	private boolean removeResources(EntityPlayer player) {
+		ItemStack[] set = craftingInventory.getStacks(SLOT_CRAFTING_1, 9);
+		return accessibleInventory.removeSets(1, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
 	}
 
 	@Override
@@ -508,12 +479,12 @@ public class TileWorktable extends TileBase implements ICrafter {
 
 	@Override
 	public ItemStack takenFromSlot(int slotIndex, boolean consumeRecipe, EntityPlayer player) {
-		if (!validateResources())
+		if (!removeResources(player))
 			return null;
 
 		if (Proxies.common.isSimulating(worldObj))
 			memorized.memorizeRecipe(worldObj, currentRecipe, currentCrafting);
-		removeResources(player);
+
 		updateCraftResult(currentCrafting);
 		return currentRecipe.getRecipeOutput().copy();
 	}

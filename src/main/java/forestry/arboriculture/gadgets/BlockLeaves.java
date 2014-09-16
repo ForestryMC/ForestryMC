@@ -18,8 +18,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -35,6 +37,8 @@ import forestry.api.arboriculture.ITree;
 import forestry.api.core.IToolScoop;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
+import forestry.arboriculture.items.ItemLeavesBlock;
+import forestry.core.config.ForestryBlock;
 import forestry.core.config.Defaults;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
@@ -145,6 +149,20 @@ public class BlockLeaves extends BlockTreeContainer {
 				prod.add(stack);
 
 		return prod;
+	}
+
+	@Override
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+		TileLeaves leaves = getLeafTile(world, x, y, z);
+
+		NBTTagCompound nbttagcompound = new NBTTagCompound();
+		leaves.getTree().writeToNBT(nbttagcompound);
+
+		ItemLeavesBlock leavesItem = (ItemLeavesBlock)ForestryBlock.leaves.item();
+		ItemStack leavesStack = new ItemStack(leavesItem);
+		leavesStack.setTagCompound(nbttagcompound);
+
+		return leavesStack;
 	}
 
 	/* RENDERING */
