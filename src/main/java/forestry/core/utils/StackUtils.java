@@ -311,11 +311,11 @@ public class StackUtils {
 			if (base.getItemDamage() != comparison.getItemDamage())
 				return false;
 
-		// When the base stackTagCompound is null, treat it as a wildcard for crafting
-		if (base.stackTagCompound != null && !ItemStack.areItemStackTagsEqual(base, comparison))
-			return false;
-
-		return true;
+		// When the base stackTagCompound is null or empty, treat it as a wildcard for crafting
+		if (base.stackTagCompound == null || base.stackTagCompound.hasNoTags())
+			return true;
+		else
+			return ItemStack.areItemStackTagsEqual(base, comparison);
 	}
 
 	/**
