@@ -103,7 +103,7 @@ public class GuiWorktable extends GuiForestryTitled<TileWorktable> {
 	protected ContainerWorktable container;
 
 	public GuiWorktable(EntityPlayer player, TileWorktable tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/worktable.png", new ContainerWorktable(player, tile), tile);
+		super(Defaults.TEXTURE_PATH_GUI + "/worktable2.png", new ContainerWorktable(player, tile), tile);
 
 		ySize = 218;
 		worktable = tile;
