@@ -384,7 +384,8 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 				totalTime = 0;
 
 				// Remove resources
-				removeResources(currentRecipe);
+				if (!removeResources(currentRecipe))
+					return false;
 
 				// Update product display
 				if (activeContainer != null)
@@ -432,37 +433,29 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		return StackUtils.containsSets(craftingInventory.getStacks(SLOT_CRAFTING_1, 9), accessibleInventory.getStacks(SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT), null, true, false) > 0;
 	}
 
-	private void removeResources(Recipe recipe) {
+	private boolean removeResources(Recipe recipe) {
 
 		// Remove resources
-		if (recipe.liquid != null)
-			resourceTank.drain(recipe.liquid.amount, true);
+		if (recipe.liquid != null) {
+			FluidStack amountDrained = resourceTank.drain(recipe.liquid.amount, false);
+			if (amountDrained != null && amountDrained.amount == recipe.liquid.amount)
+				resourceTank.drain(recipe.liquid.amount, true);
+			else
+				return false;
+		}
 		// Remove boxes
-		if (recipe.box != null)
-			accessibleInventory.decrStackSize(SLOT_BOX, 1);
-
-		removeSets(1, craftingInventory.getStacks(SLOT_CRAFTING_1, 9));
-
-	}
-
-	private void removeSets(int count, ItemStack[] set) {
-
-		for (int i = 0; i < count; i++) {
-			ItemStack[] condensedSet = StackUtils.condenseStacks(set);
-			for (ItemStack req : condensedSet) {
-				for (int j = SLOT_INVENTORY_1; j < SLOT_INVENTORY_1 + SLOT_INVENTORY_COUNT; j++) {
-					ItemStack pol = accessibleInventory.getStackInSlot(j);
-					if (pol == null)
-						continue;
-					if (!StackUtils.isCraftingEquivalent(pol, req, true, false))
-						continue;
-
-					ItemStack removed = accessibleInventory.decrStackSize(j, req.stackSize);
-					req.stackSize -= removed.stackSize;
-				}
-			}
+		if (recipe.box != null) {
+			ItemStack removed = accessibleInventory.decrStackSize(SLOT_BOX, 1);
+			if (removed == null || removed.stackSize == 0)
+				return false;
 		}
 
+		return removeSets(1, craftingInventory.getStacks(SLOT_CRAFTING_1, 9));
+	}
+
+	private boolean removeSets(int count, ItemStack[] set) {
+		EntityPlayer player = worldObj.getPlayerEntityByName(owner.getName());
+		return accessibleInventory.removeSets(count, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
 	}
 
 	private boolean tryAddPending() {

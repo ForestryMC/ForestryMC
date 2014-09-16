@@ -267,7 +267,7 @@ public class StackUtils {
 	public static int containsSets(ItemStack[] set, ItemStack[] stock, ItemStack exclude, boolean oreDictionary, boolean craftingTools) {
 		int count = 0;
 
-		ItemStack[] condensedRequired = StackUtils.condenseStacks(set);
+		ItemStack[] condensedRequired = StackUtils.condenseStacks(set, -1, oreDictionary);
 		ItemStack[] condensedOffered = StackUtils.condenseStacks(stock, -1, oreDictionary);
 
 		for (ItemStack req : condensedRequired) {
@@ -298,6 +298,27 @@ public class StackUtils {
 	}
 
 	/**
+	 * Compare two item stacks for crafting equivalency without oreDictionary or craftingTools
+	 */
+	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison) {
+		if (base == null || comparison == null)
+			return false;
+
+		if (base.getItem() != comparison.getItem())
+			return false;
+
+		if (base.getItemDamage() != Defaults.WILDCARD)
+			if (base.getItemDamage() != comparison.getItemDamage())
+				return false;
+
+		// When the base stackTagCompound is null, treat it as a wildcard for crafting
+		if (base.stackTagCompound != null && !ItemStack.areItemStackTagsEqual(base, comparison))
+			return false;
+
+		return true;
+	}
+
+	/**
 	 * Compare two item stacks for crafting equivalency.
 	 *
 	 * @param base
@@ -306,7 +327,7 @@ public class StackUtils {
 	 * @return
 	 */
 	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, boolean oreDictionary, boolean craftingTools) {
-		if (isIdenticalItem(base, comparison))
+		if (isCraftingEquivalent(base, comparison))
 			return true;
 
 		if (base == null || comparison == null)
