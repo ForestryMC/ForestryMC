@@ -53,6 +53,7 @@ public class PluginBuildCraft implements IPlugin, ITriggerProvider {
 	public static Item wrench;
 	public static Item stoneGear;
 	public static Item pipeWaterproof;
+	public static final String validVersionRange = "[6.0.0,6.1.0)";
 
 	public PluginBuildCraft() {
 		if (PluginBuildCraft.instance == null)
@@ -64,7 +65,7 @@ public class PluginBuildCraft implements IPlugin, ITriggerProvider {
 	 */
 	@Override
 	public boolean isAvailable() {
-		return (Proxies.common.isModLoaded("BuildCraft|Core") && Proxies.common.isModLoaded("BuildCraft|Transport"));
+		return (Proxies.common.isModLoaded("BuildCraft|Core", validVersionRange) && Proxies.common.isModLoaded("BuildCraft|Transport", validVersionRange));
 	}
 
 	@Override
