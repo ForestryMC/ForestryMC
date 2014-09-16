@@ -243,6 +243,9 @@ public class ProxyCommon {
 	}
 
 	public boolean isModLoaded(String modname, String versionRangeString) {
+		if (!isModLoaded(modname))
+			return false;
+
 		if (versionRangeString != null) {
 			ModContainer mod = Loader.instance().getIndexedModList().get(modname);
 			ArtifactVersion modVersion = mod.getProcessedVersion();
@@ -254,7 +257,7 @@ public class ProxyCommon {
 				return false;
 		}
 
-		return isModLoaded(modname);
+		return true;
 	}
 
 	public Object instantiateIfModLoaded(String modname, String className) {
