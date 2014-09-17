@@ -10,13 +10,13 @@
  ******************************************************************************/
 package forestry.core.network;
 
+import forestry.core.fluids.tanks.StandardTank;
 import net.minecraft.nbt.NBTTagCompound;
 
-import forestry.core.utils.ForestryTank;
 
 public class PacketTankUpdate extends PacketNBT {
 	
-	public PacketTankUpdate(int tankSlot, ForestryTank tank) {
+	public PacketTankUpdate(int tankSlot, StandardTank tank) {
 		super(PacketIds.TANK_UPDATE);
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setByte("tank", (byte) tankSlot);

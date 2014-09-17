@@ -51,7 +51,7 @@ import forestry.core.interfaces.IHintSource;
 import forestry.core.interfaces.ISocketable;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.DelayTimer;
-import forestry.core.utils.ForestryTank;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
@@ -88,7 +88,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
 
-	private ForestryTank liquidTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
+	private StandardTank liquidTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 
 	private IFarmLogic harvestProvider; // The farm logic which supplied the pending crops.
 	private final Stack<ICrop> pendingCrops = new Stack<ICrop>();
@@ -121,7 +121,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 		refreshFarmLogics();
 
-		liquidTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
+		liquidTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 		if (nbttagcompound.hasKey("LiquidTank"))
 			liquidTank.readFromNBT(nbttagcompound.getCompoundTag("LiquidTank"));
 	}
@@ -667,7 +667,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	public void makeMaster() {
 		super.makeMaster();
 		if (liquidTank == null)
-			liquidTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
+			liquidTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 		refreshFarmLogics();
 	}
 
@@ -676,7 +676,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		super.onStructureReset();
 	}
 
-	public ForestryTank getTank() {
+	public StandardTank getTank() {
 		return liquidTank;
 	}
 

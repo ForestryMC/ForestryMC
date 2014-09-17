@@ -25,10 +25,10 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.core.ForestryAPI;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.ForestryTank;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
@@ -57,7 +57,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 
 	/* MEMBERS */
 	InventoryAdapter canInventory = new InventoryAdapter(1, "CanInv");
-	private ForestryTank liquidTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
+	private StandardTank liquidTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 
 	private HygroregulatorRecipe currentRecipe;
 	private int transferTime;
@@ -146,7 +146,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 
 		canInventory.readFromNBT(nbttagcompound);
 
-		liquidTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
+		liquidTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 		if (nbttagcompound.hasKey("LiquidTank"))
 			liquidTank.readFromNBT(nbttagcompound.getCompoundTag("LiquidTank"));
 
@@ -283,8 +283,8 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	}
 
 	@Override
-	public ForestryTank[] getTanks() {
-		return new ForestryTank[] { liquidTank };
+	public StandardTank[] getTanks() {
+		return new StandardTank[] { liquidTank };
 	}
 
 	/* SMP GUI */

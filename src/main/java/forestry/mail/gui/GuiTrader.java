@@ -22,7 +22,7 @@ public class GuiTrader extends GuiForestry<MachineTrader> {
 	private final ContainerTrader container;
 
 	public GuiTrader(InventoryPlayer inventoryplayer, MachineTrader tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/mailtrader.png", new ContainerTrader(inventoryplayer, tile), tile);
+		super(Defaults.TEXTURE_PATH_GUI + "/mailtrader2.png", new ContainerTrader(inventoryplayer, tile), tile);
 		this.xSize = 226;
 		this.ySize = 220;
 

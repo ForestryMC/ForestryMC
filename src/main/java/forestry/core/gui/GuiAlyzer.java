@@ -56,7 +56,7 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 	protected HashMap<String, ItemStack> iconStacks = new HashMap<String, ItemStack>();
 
 	public GuiAlyzer(ISpeciesRoot speciesRoot, EntityPlayer player, ContainerForestry container, IInventory inventory, int pageMax, int pageSize) {
-		super(Defaults.TEXTURE_PATH_GUI + "/beealyzer.png", container);
+		super(Defaults.TEXTURE_PATH_GUI + "/beealyzer2.png", container);
 
 		xSize = 246;
 		ySize = 238;

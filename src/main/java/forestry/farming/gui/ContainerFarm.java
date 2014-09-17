@@ -23,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.farming.IFarmLogic;
+import forestry.core.fluids.tanks.FakeTank;
 import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.slots.SlotCustom;
 import forestry.core.gui.slots.SlotForestry;
@@ -30,7 +31,7 @@ import forestry.core.gui.slots.SlotLiquidContainer;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.network.PacketTankUpdate;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.ForestryTank;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.utils.TileInventoryAdapter;
 import forestry.farming.gadgets.TileFarmPlain;
 import forestry.plugins.PluginFarming;
@@ -135,7 +136,7 @@ public class ContainerFarm extends ContainerSocketed {
 	public void updateProgressBar(int i, int j) {
 		tile.getGUINetworkData(i, j);
 	}
-	private Map<Integer, ForestryTank> syncedFluids = new HashMap<Integer, ForestryTank>();
+	private Map<Integer, StandardTank> syncedFluids = new HashMap<Integer, StandardTank>();
 
 	@Override
 	public void detectAndSendChanges() {
@@ -145,7 +146,7 @@ public class ContainerFarm extends ContainerSocketed {
 			tile.sendGUINetworkData(this, (ICrafting) crafters.get(i));
 		}
 
-		ForestryTank tank = tile.getTank();
+		StandardTank tank = tile.getTank();
 
 		// If null has been synced
 		if (tank.getFluid() == null && getTank(0).getFluidAmount() <= 0)
@@ -160,7 +161,7 @@ public class ContainerFarm extends ContainerSocketed {
 				Proxies.net.sendToPlayer(new PacketTankUpdate(0, tank), player);
 			}
 		}
-		syncedFluids.put(0, new ForestryTank(tank.getFluid() == null ? null : tank.getFluid().copy(), tank.getCapacity()));
+		syncedFluids.put(0, new StandardTank(tank.getFluid() == null ? null : tank.getFluid().copy(), tank.getCapacity()));
 
 	}
 
@@ -168,13 +169,13 @@ public class ContainerFarm extends ContainerSocketed {
 	public void onTankUpdate(NBTTagCompound nbt) {
 		int tankID = nbt.getByte("tank");
 		int capacity = nbt.getShort("capacity");
-		ForestryTank tank = new ForestryTank(capacity);
+		StandardTank tank = new StandardTank(capacity);
 		tank.readFromNBT(nbt);
 		syncedFluids.put(tankID, tank);
 	}
 
 	@Override
-	public ForestryTank getTank(int slot) {
-		return syncedFluids.get(slot) == null ? ForestryTank.FAKETANK : syncedFluids.get(slot);
+	public StandardTank getTank(int slot) {
+		return syncedFluids.get(slot) == null ? FakeTank.INSTANCE : syncedFluids.get(slot);
 	}
 }

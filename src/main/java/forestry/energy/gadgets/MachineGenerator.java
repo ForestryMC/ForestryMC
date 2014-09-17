@@ -28,17 +28,16 @@ import forestry.api.fuels.GeneratorFuel;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.ForestryTank;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
-import forestry.core.utils.StringUtil;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginIC2;
 
@@ -49,7 +48,7 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 	public static final int maxEnergy = 30000;
 
 	@EntityNetData
-	public ForestryTank resourceTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
+	public StandardTank resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 	private int tickCount = 0;
 
 	InventoryAdapter inventory = new InventoryAdapter(1, "Items");
@@ -92,7 +91,7 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 
 		if (ic2EnergySource != null) ic2EnergySource.readFromNBT(nbttagcompound);
 
-		resourceTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
+		resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 		if (nbttagcompound.hasKey("ResourceTank"))
 			resourceTank.readFromNBT(nbttagcompound.getCompoundTag("ResourceTank"));
 
@@ -286,7 +285,7 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 	}
 
 	@Override
-	public ForestryTank[] getTanks() {
-		return new ForestryTank[] { resourceTank };
+	public StandardTank[] getTanks() {
+		return new StandardTank[] { resourceTank };
 	}
 }

@@ -43,7 +43,7 @@ import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.ForestryTank;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
@@ -127,7 +127,7 @@ public class MachineMoistener extends TilePowered implements ISpecialInventory, 
 	}
 
 	@EntityNetData
-	public ForestryTank resourceTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
+	public StandardTank resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 	private final InventoryAdapter inventory = new InventoryAdapter(12, "Items");
 	//private ItemStack[] inventoryStacks = new ItemStack[12];
 	public MachineMoistener.Recipe currentRecipe;
@@ -190,7 +190,7 @@ public class MachineMoistener extends TilePowered implements ISpecialInventory, 
 		totalTime = nbttagcompound.getInteger("TotalTime");
 		productionTime = nbttagcompound.getInteger("ProductionTime");
 
-		resourceTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
+		resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 		if (nbttagcompound.hasKey("ResourceTank"))
 			resourceTank.readFromNBT(nbttagcompound.getCompoundTag("ResourceTank"));
 
@@ -687,8 +687,8 @@ public class MachineMoistener extends TilePowered implements ISpecialInventory, 
 	}
 
 	@Override
-	public ForestryTank[] getTanks() {
-		return new ForestryTank[] { resourceTank };
+	public StandardTank[] getTanks() {
+		return new StandardTank[] { resourceTank };
 	}
 
 	/* SMP GUI */

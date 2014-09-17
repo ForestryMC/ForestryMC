@@ -12,19 +12,20 @@ package forestry.arboriculture.genetics;
 
 import java.util.EnumSet;
 
-import forestry.core.utils.StringUtil;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.EnumGrowthConditions;
 import forestry.api.arboriculture.ITreeGenome;
+import forestry.core.utils.StringUtil;
 
 public class GrowthProviderTropical extends GrowthProvider {
 
 	@Override
 	public EnumGrowthConditions getGrowthConditions(ITreeGenome genome, World world, int xPos, int yPos, int zPos) {
 		EnumGrowthConditions light = getConditionFromLight(world, xPos, yPos, zPos);
-		EnumGrowthConditions moisture = getConditionsFromRainfall(world, xPos, yPos, zPos, 0.9f, 2.0f);
-		EnumGrowthConditions temperature = getConditionsFromTemperature(world, xPos, yPos, zPos, 1.2f, 1.9f);
+		EnumGrowthConditions moisture = getConditionsFromRainfall(world, xPos, yPos, zPos, BiomeGenBase.jungle.rainfall, 2.0f);
+		EnumGrowthConditions temperature = getConditionsFromTemperature(world, xPos, yPos, zPos, BiomeGenBase.jungle.temperature, BiomeGenBase.desert.temperature - 0.1f);
 
 		EnumSet<EnumGrowthConditions> conditions = EnumSet.of(light, moisture, temperature);
 

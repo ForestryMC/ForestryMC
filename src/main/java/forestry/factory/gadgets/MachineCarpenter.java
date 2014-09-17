@@ -41,6 +41,7 @@ import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
@@ -48,7 +49,6 @@ import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.ForestryTank;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.ShapedRecipeCustom;
@@ -215,7 +215,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 	/* MEMBER */
 	@EntityNetData
-	public ForestryTank resourceTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
+	public StandardTank resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 	private final TileInventoryAdapter craftingInventory;
 	private final TileInventoryAdapter accessibleInventory;
 	public MachineCarpenter.Recipe currentRecipe;
@@ -289,7 +289,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		packageTime = nbttagcompound.getInteger("PackageTime");
 		totalTime = nbttagcompound.getInteger("PackageTotalTime");
 
-		resourceTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
+		resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 		if (nbttagcompound.hasKey("ResourceTank"))
 			resourceTank.readFromNBT(nbttagcompound.getCompoundTag("ResourceTank"));
 
@@ -682,8 +682,8 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	}
 
 	@Override
-	public ForestryTank[] getTanks() {
-		return new ForestryTank[] { resourceTank };
+	public StandardTank[] getTanks() {
+		return new StandardTank[] { resourceTank };
 	}
 
 	// ITRIGGERPROVIDER

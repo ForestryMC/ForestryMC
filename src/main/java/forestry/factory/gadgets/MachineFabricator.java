@@ -38,7 +38,7 @@ import forestry.core.interfaces.ICrafter;
 import forestry.core.interfaces.ICraftingPlan;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.GuiId;
-import forestry.core.utils.ForestryTank;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.core.utils.StackUtils;
@@ -231,7 +231,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 
 	/* MEMBER */
 	private final InventoryAdapter inventory = new InventoryAdapter(30, "Items");
-	private ForestryTank moltenTank = new ForestryTank(2 * Defaults.BUCKET_VOLUME);
+	private StandardTank moltenTank = new StandardTank(2 * Defaults.BUCKET_VOLUME);
 	private int heat = 0;
 	private int guiMeltingPoint = 0;
 
@@ -286,7 +286,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 		heat = nbttagcompound.getInteger("Heat");
 
 		// Tank
-		moltenTank = new ForestryTank(Defaults.BUCKET_VOLUME * 2);
+		moltenTank = new StandardTank(Defaults.BUCKET_VOLUME * 2);
 		if (nbttagcompound.hasKey("MoltenTank"))
 			moltenTank.readFromNBT(nbttagcompound.getCompoundTag("MoltenTank"));
 
@@ -581,7 +581,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 
 	/* ILIQUIDCONTAINER */
 	@Override
-	public ForestryTank[] getTanks() {
-		return new ForestryTank[] { moltenTank };
+	public StandardTank[] getTanks() {
+		return new StandardTank[] { moltenTank };
 	}
 }

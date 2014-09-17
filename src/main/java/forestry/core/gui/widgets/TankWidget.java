@@ -19,13 +19,13 @@ import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
 import forestry.api.core.IToolPipette;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.WidgetManager;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
-import forestry.core.utils.ForestryTank;
 
 /**
  * Slot for liquid tanks
@@ -48,7 +48,7 @@ public class TankWidget extends Widget {
 		return this;
 	}
 
-	public ForestryTank getTank() {
+	public StandardTank getTank() {
 		return ((ContainerForestry) manager.gui.inventorySlots).getTank(slot);
 	}
 
@@ -96,7 +96,7 @@ public class TankWidget extends Widget {
 
 	@Override
 	public ToolTip getToolTip() {
-		ForestryTank tank = getTank();
+		StandardTank tank = getTank();
 		if (tank == null)
 			return null;
 		return tank.getToolTip();
