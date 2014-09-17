@@ -29,7 +29,7 @@ import forestry.core.network.IndexInPayload;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.ForestryTank;
+import forestry.core.fluids.tanks.StandardTank;
 
 public abstract class TilePowered extends TileBase implements IPowerHandler, IRenderableMachine {
 
@@ -179,7 +179,7 @@ public abstract class TilePowered extends TileBase implements IPowerHandler, IRe
 	 } */
 
 	/* LIQUID CONTAINER HANDLING */
-	protected ItemStack bottleIntoContainer(ItemStack canStack, ItemStack outputStack, FluidContainerData container, ForestryTank tank) {
+	protected ItemStack bottleIntoContainer(ItemStack canStack, ItemStack outputStack, FluidContainerData container, StandardTank tank) {
 		if (tank.getFluidAmount() < container.fluid.amount)
 			return outputStack;
 		if (canStack.stackSize <= 0)

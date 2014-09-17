@@ -18,7 +18,7 @@ import buildcraft.api.gates.ITriggerParameter;
 
 import forestry.api.core.ITileStructure;
 import forestry.core.triggers.Trigger;
-import forestry.core.utils.ForestryTank;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.farming.gadgets.TileFarmPlain;
 import forestry.farming.gadgets.TileHatch;
 
@@ -49,7 +49,7 @@ public class TriggerLowLiquid extends Trigger {
 		if (central == null || !(central instanceof TileFarmPlain))
 			return false;
 
-		ForestryTank tank = ((TileFarmPlain) central).getTank();
+		StandardTank tank = ((TileFarmPlain) central).getTank();
 		return ((float) tank.getFluidAmount() / tank.getCapacity()) <= threshold;
 	}
 }

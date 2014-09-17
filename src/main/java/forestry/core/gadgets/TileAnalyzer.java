@@ -38,7 +38,7 @@ import forestry.core.network.GuiId;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketInventoryStack;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.ForestryTank;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
@@ -67,7 +67,7 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 
 	public FluidStack resource = FluidRegistry.getFluidStack(Defaults.LIQUID_HONEY, HONEY_REQUIRED);
 	@EntityNetData
-	public ForestryTank resourceTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
+	public StandardTank resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 	private final Stack<ItemStack> pendingProducts = new Stack<ItemStack>();
 
 	/* CONSTRUCTOR */
@@ -441,8 +441,8 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 	}
 
 	@Override
-	public ForestryTank[] getTanks() {
-		return new ForestryTank[] { resourceTank };
+	public StandardTank[] getTanks() {
+		return new StandardTank[] { resourceTank };
 	}
 
 	/*

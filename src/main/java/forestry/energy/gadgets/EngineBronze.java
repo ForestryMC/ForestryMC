@@ -29,12 +29,12 @@ import forestry.api.fuels.FuelManager;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gadgets.Engine;
 import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.GuiId;
 import forestry.core.network.PacketPayload;
-import forestry.core.utils.ForestryTank;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.TileInventoryAdapter;
 
@@ -65,8 +65,8 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 		else
 			shutdown = false;
 	}
-	public ForestryTank fuelTank = new ForestryTank(Defaults.ENGINE_TANK_CAPACITY);
-	public ForestryTank heatingTank = new ForestryTank(Defaults.ENGINE_TANK_CAPACITY);
+	public StandardTank fuelTank = new StandardTank(Defaults.ENGINE_TANK_CAPACITY);
+	public StandardTank heatingTank = new StandardTank(Defaults.ENGINE_TANK_CAPACITY);
 	private final TileInventoryAdapter inventory;
 	public int burnTime;
 	public int totalTime;
@@ -99,7 +99,7 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 			FluidContainerData container = LiquidHelper.getLiquidContainer(inventory.getStackInSlot(SLOT_CAN));
 			if (container != null) {
 
-				ForestryTank tank = null;
+				StandardTank tank = null;
 
 				if (container.fluid.isFluidEqual(LiquidHelper.getLiquid(Defaults.LIQUID_LAVA, 1)))
 					tank = heatingTank;
@@ -284,8 +284,8 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 				currentFluidId = fluid.getID();
 		}
 
-		fuelTank = new ForestryTank(Defaults.ENGINE_TANK_CAPACITY);
-		heatingTank = new ForestryTank(Defaults.ENGINE_TANK_CAPACITY);
+		fuelTank = new StandardTank(Defaults.ENGINE_TANK_CAPACITY);
+		heatingTank = new StandardTank(Defaults.ENGINE_TANK_CAPACITY);
 		if (nbt.hasKey("FuelSlot")) {
 			fuelTank.readFromNBT(nbt.getCompoundTag("FuelSlot"));
 			heatingTank.readFromNBT(nbt.getCompoundTag("HeatingSlot"));
@@ -457,7 +457,7 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 	}
 
 	@Override
-	public ForestryTank[] getTanks() {
-		return new ForestryTank[] { fuelTank, heatingTank };
+	public StandardTank[] getTanks() {
+		return new StandardTank[] { fuelTank, heatingTank };
 	}
 }

@@ -25,97 +25,113 @@ import net.minecraftforge.fluids.FluidTank;
  */
 public class StandardTank extends FluidTank {
 
-    public static final int DEFAULT_COLOR = 0xFFFFFF;
-    public int colorCache = DEFAULT_COLOR;
-    private int tankIndex;
+	public static final int DEFAULT_COLOR = 0xFFFFFF;
+	public int colorCache = DEFAULT_COLOR;
+	private int tankIndex;
 
-    public StandardTank(int capacity) {
-        super(capacity);
-    }
+	public StandardTank(int capacity) {
+		super(capacity);
+	}
 
-    public StandardTank(int capacity, TileEntity tile) {
-        this(capacity);
-        this.tile = tile;
-    }
+	public StandardTank(FluidStack fluid, int capacity) {
+		this(capacity);
+		setFluid(fluid);
+	}
 
-    public void setTankIndex(int index) {
-        this.tankIndex = index;
-    }
+	public StandardTank(int capacity, TileEntity tile) {
+		this(capacity);
+		this.tile = tile;
+	}
 
-    public int getTankIndex() {
-        return tankIndex;
-    }
+	public StandardTank(FluidStack fluid, int capacity, TileEntity tile) {
+		this(capacity);
+		this.tile = tile;
+		setFluid(fluid);
+	}
 
-    @Override
-    public void setFluid(FluidStack fluid) {
-        super.setFluid(fluid);
-        colorCache = StandardTank.DEFAULT_COLOR;
-    }
+	public void setTankIndex(int index) {
+		this.tankIndex = index;
+	}
 
-    public int getColor() {
-        Fluid f = getFluidType();
-        if (f == null)
-            return DEFAULT_COLOR;
-        return f.getColor(getFluid());
-    }
+	public int getTankIndex() {
+		return tankIndex;
+	}
 
-    public boolean isEmpty() {
-        return getFluid() == null || getFluid().amount <= 0;
-    }
+	@Override
+	public void setFluid(FluidStack fluid) {
+		super.setFluid(fluid);
+		colorCache = StandardTank.DEFAULT_COLOR;
+	}
 
-    public boolean isFull() {
-        return getFluid() != null && getFluid().amount == getCapacity();
-    }
+	public int getColor() {
+		Fluid f = getFluidType();
+		if (f == null)
+			return DEFAULT_COLOR;
+		return f.getColor(getFluid());
+	}
 
-    public int getRemainingSpace() {
-        return capacity - getFluidAmount();
-    }
+	public boolean isEmpty() {
+		return getFluid() == null || getFluid().amount <= 0;
+	}
 
-    public Fluid getFluidType() {
-        return getFluid() != null ? getFluid().getFluid() : null;
-    }
+	public boolean isFull() {
+		return getFluid() != null && getFluid().amount == getCapacity();
+	}
 
-    @Override
-    public int fill(final FluidStack resource, final boolean doFill) {
-        if (resource == null)
-            return 0;
-        if (resource.amount <= 0)
-            return 0;
-        return super.fill(resource, doFill);
-    }
+	public int getRemainingSpace() {
+		return capacity - getFluidAmount();
+	}
 
-    @Override
-    public FluidStack drain(int maxDrain, boolean doDrain) {
-        if (maxDrain <= 0)
-            return null;
-        return super.drain(maxDrain, doDrain);
-    }
+	public Fluid getFluidType() {
+		return getFluid() != null ? getFluid().getFluid() : null;
+	}
 
-    public ToolTip getToolTip() {
-        return toolTip;
-    }
+	@Override
+	public int fill(final FluidStack resource, final boolean doFill) {
+		if (resource == null)
+			return 0;
+		if (resource.amount <= 0)
+			return 0;
+		return super.fill(resource, doFill);
+	}
 
-    protected void refreshTooltip() {
-        toolTip.clear();
-        int amount = 0;
-        if (getFluid() != null && getFluid().amount > 0 && getFluid().getFluid() != null) {
-            Fluid fluidType = getFluidType();
-            EnumRarity rarity = fluidType.getRarity();
-            if (rarity == null)
-                rarity = EnumRarity.common;
-            ToolTipLine fluidName = new ToolTipLine(fluidType.getLocalizedName(), rarity.rarityColor);
-            fluidName.setSpacing(2);
-            toolTip.add(fluidName);
-            amount = getFluid().amount;
-        }
-        toolTip.add(new ToolTipLine(String.format(Locale.ENGLISH, "%,d / %,d", amount, getCapacity())));
-    }
+	@Override
+	public FluidStack drain(int maxDrain, boolean doDrain) {
+		if (maxDrain <= 0)
+			return null;
+		return super.drain(maxDrain, doDrain);
+	}
 
-    protected final ToolTip toolTip = new ToolTip() {
-        @Override
-        public void refresh() {
-            refreshTooltip();
-        }
+	@Override
+	public String toString() {
+		return String.format("Tank: %s, %d/%d", fluid != null && fluid.getFluid() != null ? fluid.getFluid().getName() : "Empty", getFluidAmount(), getCapacity());
+	}
 
-    };
+	public ToolTip getToolTip() {
+		return toolTip;
+	}
+
+	protected void refreshTooltip() {
+		toolTip.clear();
+		int amount = 0;
+		if (getFluid() != null && getFluid().amount > 0 && getFluid().getFluid() != null) {
+			Fluid fluidType = getFluidType();
+			EnumRarity rarity = fluidType.getRarity();
+			if (rarity == null)
+				rarity = EnumRarity.common;
+			ToolTipLine fluidName = new ToolTipLine(fluidType.getLocalizedName(), rarity.rarityColor);
+			fluidName.setSpacing(2);
+			toolTip.add(fluidName);
+			amount = getFluid().amount;
+		}
+		toolTip.add(new ToolTipLine(String.format(Locale.ENGLISH, "%,d / %,d", amount, getCapacity())));
+	}
+
+	protected final ToolTip toolTip = new ToolTip() {
+		@Override
+		public void refresh() {
+			refreshTooltip();
+		}
+
+	};
 }

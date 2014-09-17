@@ -24,13 +24,14 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.api.core.IToolPipette;
+import forestry.core.fluids.tanks.FakeTank;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketTankUpdate;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.ForestryTank;
 
 public class ContainerLiquidTanks extends ContainerForestry {
 
@@ -79,14 +80,14 @@ public class ContainerLiquidTanks extends ContainerForestry {
 
 		}
 	}
-	private Map<Integer, ForestryTank> syncedFluids = new HashMap<Integer, ForestryTank>();
+	private Map<Integer, StandardTank> syncedFluids = new HashMap<Integer, StandardTank>();
 
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
 		for (int i = 0; i < tanks.getTanks().length; i++) {
-			ForestryTank tank = tanks.getTanks()[i];
+			StandardTank tank = tanks.getTanks()[i];
 
 			// If null has been synced
 			if (tank.getFluid() == null && getTank(i).getFluidAmount() <= 0)
@@ -102,7 +103,7 @@ public class ContainerLiquidTanks extends ContainerForestry {
 				}
 			}
 
-			syncedFluids.put(i, new ForestryTank(tank.getFluid() == null ? null : tank.getFluid().copy(), tank.getCapacity()));
+			syncedFluids.put(i, new StandardTank(tank.getFluid() == null ? null : tank.getFluid().copy(), tank.getCapacity()));
 
 		}
 	}
@@ -113,13 +114,13 @@ public class ContainerLiquidTanks extends ContainerForestry {
 		int capacity = nbt.getShort("capacity");
 		tanks.getTanks()[tankID].readFromNBT(nbt);
 
-		ForestryTank tank = new ForestryTank(capacity);
+		StandardTank tank = new StandardTank(capacity);
 		tank.readFromNBT(nbt);
 		syncedFluids.put(tankID, tank);
 	}
 
 	@Override
-	public ForestryTank getTank(int slot) {
-		return syncedFluids.get(slot) == null ? ForestryTank.FAKETANK : syncedFluids.get(slot);
+	public StandardTank getTank(int slot) {
+		return syncedFluids.get(slot) == null ? FakeTank.INSTANCE : syncedFluids.get(slot);
 	}
 }

@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.farming.gadgets;
 
+import forestry.core.fluids.tanks.FakeTank;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.utils.ForestryTank;
+import forestry.core.fluids.tanks.StandardTank;
 
 public class TileValve extends TileFarm implements ILiquidTankContainer {
 
@@ -33,7 +34,7 @@ public class TileValve extends TileFarm implements ILiquidTankContainer {
 	}
 
 	/* ILIQUIDTANKCONTAINER */
-	private ForestryTank getMasterTank() {
+	private StandardTank getMasterTank() {
 		if (!isIntegratedIntoStructure() || !hasMaster())
 			return null;
 
@@ -46,7 +47,7 @@ public class TileValve extends TileFarm implements ILiquidTankContainer {
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		ForestryTank tank = getMasterTank();
+		StandardTank tank = getMasterTank();
 		if (tank == null)
 			return 0;
 
@@ -55,7 +56,7 @@ public class TileValve extends TileFarm implements ILiquidTankContainer {
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		ForestryTank tank = getMasterTank();
+		StandardTank tank = getMasterTank();
 		if (tank == null)
 			return null;
 
@@ -63,12 +64,12 @@ public class TileValve extends TileFarm implements ILiquidTankContainer {
 	}
 
 	@Override
-	public ForestryTank[] getTanks() {
-		ForestryTank tank = getMasterTank();
+	public StandardTank[] getTanks() {
+		StandardTank tank = getMasterTank();
 		if (tank == null)
-			return ForestryTank.FAKETANK_ARRAY;
+			return FakeTank.ARRAY;
 
-		return new ForestryTank[] { tank };
+		return new StandardTank[] { tank };
 	}
 
 }

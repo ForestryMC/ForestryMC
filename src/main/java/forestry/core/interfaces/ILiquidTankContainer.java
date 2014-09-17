@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.core.interfaces;
 
+import forestry.core.fluids.tanks.StandardTank;
 import net.minecraftforge.fluids.IFluidHandler;
-
-import forestry.core.utils.ForestryTank;
 
 public interface ILiquidTankContainer extends IFluidHandler {
 
-	ForestryTank[] getTanks();
-	
+	StandardTank[] getTanks();
+
 }

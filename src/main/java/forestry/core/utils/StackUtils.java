@@ -29,6 +29,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.core.config.Defaults;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gadgets.TileForestry;
 
 public class StackUtils {
@@ -400,12 +401,12 @@ public class StackUtils {
 
 	}
 
-	public static void replenishByContainer(TileForestry tile, ItemStack inventoryStack, ForestryTank tank) {
+	public static void replenishByContainer(TileForestry tile, ItemStack inventoryStack, StandardTank tank) {
 		FluidContainerData container = LiquidHelper.getLiquidContainer(inventoryStack);
 		replenishByContainer(tile, inventoryStack, container, tank);
 	}
 
-	public static ItemStack replenishByContainer(TileForestry tile, ItemStack inventoryStack, FluidContainerData container, ForestryTank tank) {
+	public static ItemStack replenishByContainer(TileForestry tile, ItemStack inventoryStack, FluidContainerData container, StandardTank tank) {
 		if (container == null)
 			return inventoryStack;
 

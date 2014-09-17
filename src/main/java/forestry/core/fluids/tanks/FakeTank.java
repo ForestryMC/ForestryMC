@@ -11,18 +11,16 @@
 package forestry.core.fluids.tanks;
 
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidTank;
 
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class FakeTank extends FluidTank {
+public final class FakeTank extends StandardTank {
 
-    public static final IFluidTank INSTANCE = new FakeTank();
-    public static final IFluidTank[] ARRAY = new IFluidTank[]{INSTANCE};
+    public static final FakeTank INSTANCE = new FakeTank();
+    public static final FakeTank[] ARRAY = new FakeTank[]{INSTANCE};
     public static final FluidTankInfo[] INFO = new FluidTankInfo[]{INSTANCE.getInfo()};
 
     private FakeTank() {

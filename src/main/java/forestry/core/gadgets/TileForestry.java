@@ -33,6 +33,7 @@ import com.mojang.authlib.GameProfile;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.tanks.FakeTank;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.interfaces.IOwnable;
@@ -43,7 +44,7 @@ import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumAccess;
-import forestry.core.utils.ForestryTank;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.Vect;
 
@@ -355,14 +356,14 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	/* IFLUIDHANDLER BASICS */
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		if (this instanceof ILiquidTankContainer) {
-			ForestryTank[] tanks = ((ILiquidTankContainer) this).getTanks();
+			StandardTank[] tanks = ((ILiquidTankContainer) this).getTanks();
 			FluidTankInfo[] info = new FluidTankInfo[tanks.length];
 			for (int i = 0; i < info.length; i++) {
 				info[i] = tanks[i].getInfo();
 			}
 			return info;
 		}
-		return ForestryTank.DUMMY_TANKINFO_ARRAY;
+		return FakeTank.INFO;
 	}
 
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {

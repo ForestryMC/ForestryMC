@@ -31,11 +31,11 @@ import buildcraft.api.transport.IPipeTile.PipeType;
 
 import forestry.core.TemperatureState;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.ForestryTank;
 import forestry.plugins.PluginBuildCraft;
 
 public abstract class Engine extends TileBase implements IPowerHandler, IPipeConnection, IPowerEmitter {
@@ -96,7 +96,7 @@ public abstract class Engine extends TileBase implements IPowerHandler, IPipeCon
 		powerProvider.configure(10, 200, 10, 100000);
 	}
 
-	protected ItemStack replenishByContainer(ItemStack inventoryStack, FluidContainerData container, ForestryTank tank) {
+	protected ItemStack replenishByContainer(ItemStack inventoryStack, FluidContainerData container, StandardTank tank) {
 		if (container == null)
 			return inventoryStack;
 

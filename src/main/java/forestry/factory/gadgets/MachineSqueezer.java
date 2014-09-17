@@ -44,7 +44,7 @@ import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.ForestryTank;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
@@ -116,7 +116,7 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 
 	/* MEMBER */
 	@EntityNetData
-	public ForestryTank productTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
+	public StandardTank productTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 
 	private final InventoryAdapter inventory = new InventoryAdapter(12, "Items");
 	private Recipe currentRecipe;
@@ -211,7 +211,7 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 		}
 
 		// Product tank
-		productTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
+		productTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 		if (nbttagcompound.hasKey("ProductTank"))
 			productTank.readFromNBT(nbttagcompound.getCompoundTag("ProductTank"));
 
@@ -526,8 +526,8 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 	}
 
 	@Override
-	public ForestryTank[] getTanks() {
-		return new ForestryTank[] { productTank };
+	public StandardTank[] getTanks() {
+		return new StandardTank[] { productTank };
 	}
 
 	/* ITRIGGERPROVIDER */

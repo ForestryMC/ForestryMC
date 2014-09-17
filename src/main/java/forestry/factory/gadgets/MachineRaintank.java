@@ -35,7 +35,7 @@ import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.GuiId;
 import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.Fluids;
-import forestry.core.utils.ForestryTank;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
@@ -49,7 +49,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 	private static final FluidStack STACK_WATER = LiquidHelper.getLiquid(Defaults.LIQUID_WATER, Defaults.RAINTANK_AMOUNT_PER_UPDATE);
 
 	/* MEMBER */
-	public ForestryTank resourceTank = new ForestryTank(Defaults.RAINTANK_TANK_CAPACITY);
+	public StandardTank resourceTank = new StandardTank(Defaults.RAINTANK_TANK_CAPACITY);
 	private final InventoryAdapter inventory = new InventoryAdapter(3, "Items");
 	private boolean isValidBiome = true;
 	private int fillingTime;
@@ -97,7 +97,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 
 		isValidBiome = nbttagcompound.getBoolean("IsValidBiome");
 
-		resourceTank = new ForestryTank(Defaults.RAINTANK_TANK_CAPACITY);
+		resourceTank = new StandardTank(Defaults.RAINTANK_TANK_CAPACITY);
 		if (nbttagcompound.hasKey("ResourceTank"))
 			resourceTank.readFromNBT(nbttagcompound.getCompoundTag("ResourceTank"));
 
@@ -300,8 +300,8 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 	}
 
 	@Override
-	public ForestryTank[] getTanks() {
-		return new ForestryTank[] { resourceTank };
+	public StandardTank[] getTanks() {
+		return new StandardTank[] { resourceTank };
 	}
 
 	/* ITRIGGERPROVIDER */
