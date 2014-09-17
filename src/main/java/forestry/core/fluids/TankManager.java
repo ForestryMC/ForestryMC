@@ -13,6 +13,8 @@ package forestry.core.fluids;
 import com.google.common.collect.ForwardingList;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.inventory.ITileFilter;
+import forestry.core.network.PacketGuiInteger;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.NBTUtil;
 import forestry.core.utils.NBTUtil.NBTList;
 import java.io.DataInputStream;
@@ -144,7 +146,8 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 		}
 
 		player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA + 0, fluidId);
-		PacketBuilder.instance().sendGuiIntegerPacket((EntityPlayerMP) player, container.windowId, tankIndex * NETWORK_DATA + 1, fluidAmount);
+		PacketGuiInteger packet = new PacketGuiInteger(container.windowId, tankIndex * NETWORK_DATA + 1, fluidAmount);
+		Proxies.net.sendToPlayer(packet, (EntityPlayerMP)player);
 	}
 
 	public void updateGuiData(Container container, List crafters, int tankIndex) {
@@ -165,14 +168,19 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 					fluidAmount = fluidStack.amount;
 				}
 				crafter.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA + 0, fluidId);
-				PacketBuilder.instance().sendGuiIntegerPacket(player, container.windowId, tankIndex * NETWORK_DATA + 1, fluidAmount);
+				PacketGuiInteger packet = new PacketGuiInteger(container.windowId, tankIndex * NETWORK_DATA + 1, fluidAmount);
+				Proxies.net.sendToPlayer(packet, player);
 			} else if (fluidStack != null && prev != null) {
 				if (fluidStack.getFluid() != prev.getFluid())
 					crafter.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA + 0, fluidStack.fluidID);
-				if (fluidStack.amount != prev.amount)
-					PacketBuilder.instance().sendGuiIntegerPacket(player, container.windowId, tankIndex * NETWORK_DATA + 1, fluidStack.amount);
-				if (color != pColor)
-					PacketBuilder.instance().sendGuiIntegerPacket(player, container.windowId, tankIndex * NETWORK_DATA + 2, color);
+				if (fluidStack.amount != prev.amount) {
+					PacketGuiInteger packet = new PacketGuiInteger(container.windowId, tankIndex * NETWORK_DATA + 1, fluidStack.amount);
+					Proxies.net.sendToPlayer(packet, player);
+				}
+				if (color != pColor) {
+					PacketGuiInteger packet = new PacketGuiInteger(container.windowId, tankIndex * NETWORK_DATA + 2, color);
+					Proxies.net.sendToPlayer(packet, player);
+				}
 			}
 		}
 
@@ -269,10 +277,12 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 		return getTankInfo(ForgeDirection.UNKNOWN);
 	}
 
+	public FluidTankInfo getTankInfo(int tankIndex) {
+		return get(tankIndex).getInfo();
+	}
+
 	@Override
 	public StandardTank get(int tankIndex) {
-		if (tankIndex < 0 || tankIndex >= tanks.size())
-			return null;
 		return tanks.get(tankIndex);
 	}
 
