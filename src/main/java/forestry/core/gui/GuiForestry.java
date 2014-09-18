@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import java.awt.Color;
 import java.util.Collection;
 import java.util.List;
 
