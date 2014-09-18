@@ -589,6 +589,12 @@ public class PluginStorage extends NativePlugin implements IOreDictionaryHandler
 			minerItems.add(ore);
 		else if (name.startsWith("crystal"))
 			minerItems.add(ore);
+		else if (name.startsWith("cluster"))
+			minerItems.add(ore);
+		else if (name.startsWith("shard"))
+			minerItems.add(ore);
+		else if (name.startsWith("clump"))
+			minerItems.add(ore);
 		else if (name.matches("dropUranium"))
 			minerItems.add(ore);
 		else if (name.equals("treeLeaves") || name.equals("treeSapling") || name.equals("logWood"))
