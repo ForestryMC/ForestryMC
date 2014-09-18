@@ -111,15 +111,20 @@ public class StandardTank extends FluidTank {
 		return toolTip;
 	}
 
+	protected boolean hasFluid() {
+		FluidStack fluid = getFluid();
+		return fluid != null && fluid.amount > 0 && fluid.getFluid() != null;
+	}
+
 	protected void refreshTooltip() {
 		toolTip.clear();
 		int amount = 0;
-		if (getFluid() != null && getFluid().amount > 0 && getFluid().getFluid() != null) {
+		if (hasFluid()) {
 			Fluid fluidType = getFluidType();
 			EnumRarity rarity = fluidType.getRarity();
 			if (rarity == null)
 				rarity = EnumRarity.common;
-			ToolTipLine fluidName = new ToolTipLine(fluidType.getLocalizedName(), rarity.rarityColor);
+			ToolTipLine fluidName = new ToolTipLine(fluidType.getLocalizedName(getFluid()), rarity.rarityColor);
 			fluidName.setSpacing(2);
 			toolTip.add(fluidName);
 			amount = getFluid().amount;
