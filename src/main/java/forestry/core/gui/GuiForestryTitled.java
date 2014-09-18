@@ -27,8 +27,8 @@ public abstract class GuiForestryTitled<T extends TileForestry> extends GuiFores
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 		String name = StringUtil.localizeTile(tile.getUnlocalizedName());
 		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
+		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 	}
 }
