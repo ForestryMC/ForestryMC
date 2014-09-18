@@ -13,7 +13,8 @@ package forestry.plugins;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.fluids.FluidStack;
 
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -21,6 +22,7 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.core.PluginInfo;
+import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
 import forestry.core.GameMode;
 import forestry.core.circuits.Circuit;
@@ -146,10 +148,13 @@ public class PluginEnergy extends NativePlugin {
 		definitionGenerator.register();
 		definitionEngineClockwork.register();
 
-		GeneratorFuel.fuels.put(LiquidHelper.getLiquid(Defaults.LIQUID_ETHANOL, 1).getFluid().getID(), new GeneratorFuel(LiquidHelper.getLiquid(Defaults.LIQUID_ETHANOL, 1),
-				(int) (32 * GameMode.getGameMode().getFloatSetting("fuel.ethanol.generator")), 4));
-		GeneratorFuel.fuels.put(LiquidHelper.getLiquid(Defaults.LIQUID_BIOMASS, 1).getFluid().getID(), new GeneratorFuel(LiquidHelper.getLiquid(Defaults.LIQUID_BIOMASS, 1),
-				(int) (8 * GameMode.getGameMode().getFloatSetting("fuel.biomass.generator")), 1));
+		FluidStack ethanol = LiquidHelper.getLiquid(Defaults.LIQUID_ETHANOL, 1);
+		GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * GameMode.getGameMode().getFloatSetting("fuel.ethanol.generator")), 4);
+		FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
+
+		FluidStack biomass = LiquidHelper.getLiquid(Defaults.LIQUID_BIOMASS, 1);
+		GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * GameMode.getGameMode().getFloatSetting("fuel.biomass.generator")), 1);
+		FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
 
 		Circuit.energyElectricChoke1 = new CircuitElectricChoke("energyChoke1");
 		Circuit.energyFireDampener1 = new CircuitFireDampener("energyDampener1");

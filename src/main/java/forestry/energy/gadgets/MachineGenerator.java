@@ -24,6 +24,7 @@ import ic2.api.energy.prefab.BasicSource;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
+import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
@@ -119,7 +120,7 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 		if (inventory.getStackInSlot(SLOT_CAN) != null) {
 			FluidContainerData container = LiquidHelper.getLiquidContainer(inventory.getStackInSlot(SLOT_CAN));
 			if (container != null)
-				if (GeneratorFuel.fuels.containsKey(container.fluid.fluidID)) {
+				if (FuelManager.generatorFuel.containsKey(container.fluid)) {
 					inventory.setInventorySlotContents(SLOT_CAN, StackUtils.replenishByContainer(this, inventory.getStackInSlot(SLOT_CAN), container, resourceTank));
 					if (inventory.getStackInSlot(SLOT_CAN).stackSize <= 0)
 						inventory.setInventorySlotContents(SLOT_CAN, null);
@@ -134,9 +135,8 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 
 		ic2EnergySource.updateEntity();
 
-		if (resourceTank.getFluidAmount() > 0 &&
-				GeneratorFuel.fuels.containsKey(resourceTank.getFluid().fluidID)) {
-			GeneratorFuel fuel = GeneratorFuel.fuels.get(resourceTank.getFluid().fluidID);
+		if (resourceTank.getFluidAmount() > 0 && FuelManager.generatorFuel.containsKey(resourceTank.getFluid())) {
+			GeneratorFuel fuel = FuelManager.generatorFuel.get(resourceTank.getFluid());
 
 			if (resourceTank.getFluidAmount() >= fuel.fuelConsumed.amount &&
 					ic2EnergySource.getFreeCapacity() >= fuel.eu) {
@@ -239,7 +239,7 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 		if (container == null)
 			return 0;
 
-		if (!GeneratorFuel.fuels.containsKey(container.fluid.fluidID))
+		if (!FuelManager.generatorFuel.containsKey(container.fluid))
 			return 0;
 
 		if (inventory.getStackInSlot(SLOT_CAN) == null) {
@@ -272,7 +272,7 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
 		// We only accept water
-		if (!GeneratorFuel.fuels.containsKey(resource.fluidID))
+		if (!FuelManager.generatorFuel.containsKey(resource))
 			return 0;
 
 		int used = resourceTank.fill(resource, doFill);

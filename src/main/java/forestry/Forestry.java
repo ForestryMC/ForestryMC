@@ -26,6 +26,7 @@ import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.EngineCopperFuel;
 import forestry.api.fuels.FermenterFuel;
 import forestry.api.fuels.FuelManager;
+import forestry.api.fuels.GeneratorFuel;
 import forestry.api.fuels.MoistenerFuel;
 import forestry.api.fuels.RainSubstrate;
 import forestry.core.ForestryCore;
@@ -66,6 +67,7 @@ public class Forestry {
 		FuelManager.rainSubstrate = new ItemStackMap<RainSubstrate>();
 		FuelManager.bronzeEngineFuel = new FluidMap<EngineBronzeFuel>();
 		FuelManager.copperEngineFuel = new ItemStackMap<EngineCopperFuel>();
+		FuelManager.generatorFuel =  new FluidMap<GeneratorFuel>();
 	}
 	@SidedProxy(clientSide = "forestry.core.ForestryClient", serverSide = "forestry.core.ForestryCore")
 	public static ForestryCore core = new ForestryCore();
