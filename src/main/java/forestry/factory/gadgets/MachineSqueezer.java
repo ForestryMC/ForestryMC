@@ -11,6 +11,7 @@
 package forestry.factory.gadgets;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -89,12 +90,15 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 	public static class RecipeManager implements ISqueezerManager {
 		public static ArrayList<MachineSqueezer.Recipe> recipes = new ArrayList<MachineSqueezer.Recipe>();
 		public static HashSet<Fluid> recipeFluids = new HashSet<Fluid>();
+		public static HashSet<ItemStack> recipeInputs = new HashSet<ItemStack>();
 
 		@Override
 		public void addRecipe(int timePerItem, ItemStack[] resources, FluidStack liquid, ItemStack remnants, int chance) {
 			recipes.add(new MachineSqueezer.Recipe(timePerItem, resources, liquid, remnants, chance));
 			if (liquid != null)
 				recipeFluids.add(liquid.getFluid());
+			if (resources != null)
+				recipeInputs.addAll(Arrays.asList(resources));
 		}
 
 		@Override
@@ -110,6 +114,15 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 			}
 
 			return null;
+		}
+
+		public static boolean canUse(ItemStack itemStack) {
+			if (recipeInputs.contains(itemStack))
+				return true;
+			for (ItemStack recipeInput : recipeInputs)
+				if (StackUtils.isCraftingEquivalent(recipeInput, itemStack))
+					return true;
+			return false;
 		}
 
 		@Override
@@ -427,12 +440,22 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 		return super.hasCustomInventoryName();
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return super.isItemValidForSlot(slotIndex, itemstack);
+
+		if(slotIndex == SLOT_CAN_INPUT) {
+			return LiquidHelper.isEmptyContainer(itemstack);
+		}
+
+		if(slotIndex >= SLOT_RESOURCE_1 && slotIndex < SLOT_RESOURCE_1 + SLOTS_RESOURCE_COUNT) {
+			if (LiquidHelper.isEmptyContainer(itemstack))
+				return false;
+
+			if (RecipeManager.canUse(itemstack))
+				return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -481,19 +504,9 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 		if(!super.canPutStackFromSide(slotIndex, itemstack, side))
 			return false;
 
-		if(slotIndex == SLOT_CAN_INPUT) {
-			return LiquidHelper.isEmptyContainer(itemstack);
-		}
-
-		if(slotIndex >= SLOT_RESOURCE_1 && slotIndex < SLOT_RESOURCE_1 + SLOTS_RESOURCE_COUNT) {
-			if (LiquidHelper.isEmptyContainer(itemstack))
-				return false;
-			FluidStack fluid = LiquidHelper.getFluidStackInContainer(itemstack);
-			return fluid != null && productTank.accepts(fluid.getFluid());
-		}
-
-		return false;
+		return slotIndex == SLOT_CAN_INPUT || (slotIndex >= SLOT_RESOURCE_1 && slotIndex < SLOT_RESOURCE_1 + SLOTS_RESOURCE_COUNT);
 	}
+
 	/* ISPECIALINVENTORY */
 	@Override
 	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
