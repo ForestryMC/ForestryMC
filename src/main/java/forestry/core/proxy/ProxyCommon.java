@@ -12,6 +12,8 @@ package forestry.core.proxy;
 
 import java.io.File;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;
@@ -37,6 +39,8 @@ import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
 import cpw.mods.fml.common.versioning.VersionParser;
 import cpw.mods.fml.common.versioning.VersionRange;
 
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
@@ -151,6 +155,19 @@ public class ProxyCommon {
 	public boolean isOp(EntityPlayer player) {
 		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 		return server.getConfigurationManager().func_152596_g(player.getGameProfile());
+	}
+
+	/**
+	 * Get a player for a given World and GameProfile.
+	 * If they are not in the World, returns a FakePlayer.
+	 * Do not store references to the return value, to prevent worlds staying in memory.
+	 */
+	public EntityPlayer getPlayer(World world, GameProfile profile) {
+		EntityPlayer player = world.getPlayerEntityByName(profile.getName());
+		if (player != null)
+			return player;
+		else
+			return FakePlayerFactory.get((WorldServer)world, profile);
 	}
 
 	public double getBlockReachDistance(EntityPlayer entityplayer) {

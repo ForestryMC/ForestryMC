@@ -143,18 +143,11 @@ public class MailAddress implements INBTTagable, IMailAddress {
 		return address;
 	}
 
-	public EntityPlayer getPlayer(World world) {
-		if (!this.isPlayer())
-			return null;
-
-		return world.getPlayerEntityByName(this.gameProfile.getName());
-	}
-
 	public boolean isClientPlayer(World world) {
 		if (!this.isPlayer())
 			return false;
 
-		EntityPlayer addressPlayer = this.getPlayer(world);
+		EntityPlayer addressPlayer = Proxies.common.getPlayer(world, gameProfile);
 		EntityPlayer clientPlayer = Proxies.common.getPlayer();
 
 		return addressPlayer != null && clientPlayer != null && clientPlayer.equals(addressPlayer);

@@ -11,7 +11,9 @@
 package forestry.factory.gadgets;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Stack;
@@ -25,6 +27,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -46,10 +49,14 @@ import forestry.core.network.GuiId;
 import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.fluids.tanks.StandardTank;
+import forestry.core.fluids.tanks.FilteredTank;
+import forestry.core.fluids.TankManager;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
+import net.minecraftforge.fluids.FluidTankInfo;
 
 public class MachineSqueezer extends TilePowered implements ISpecialInventory, ISidedInventory, ILiquidTankContainer {
 
@@ -83,10 +90,16 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 
 	public static class RecipeManager implements ISqueezerManager {
 		public static ArrayList<MachineSqueezer.Recipe> recipes = new ArrayList<MachineSqueezer.Recipe>();
+		public static HashSet<Fluid> recipeFluids = new HashSet<Fluid>();
+		public static HashSet<ItemStack> recipeInputs = new HashSet<ItemStack>();
 
 		@Override
 		public void addRecipe(int timePerItem, ItemStack[] resources, FluidStack liquid, ItemStack remnants, int chance) {
 			recipes.add(new MachineSqueezer.Recipe(timePerItem, resources, liquid, remnants, chance));
+			if (liquid != null)
+				recipeFluids.add(liquid.getFluid());
+			if (resources != null)
+				recipeInputs.addAll(Arrays.asList(resources));
 		}
 
 		@Override
@@ -104,6 +117,15 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 			return null;
 		}
 
+		public static boolean canUse(ItemStack itemStack) {
+			if (recipeInputs.contains(itemStack))
+				return true;
+			for (ItemStack recipeInput : recipeInputs)
+				if (StackUtils.isCraftingEquivalent(recipeInput, itemStack))
+					return true;
+			return false;
+		}
+
 		@Override
 		public Map<Object[], Object[]> getRecipes() {
 			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
@@ -116,8 +138,9 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 	}
 
 	/* MEMBER */
+	private final TankManager tankManager;
 	@EntityNetData
-	public StandardTank productTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
+	public FilteredTank productTank;
 
 	private final InventoryAdapter inventory = new InventoryAdapter(12, "Items");
 	private Recipe currentRecipe;
@@ -130,6 +153,9 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 	public MachineSqueezer() {
         energyStorage = new EnergyStorage(4000);
 		setHints(Config.hints.get("squeezer"));
+		productTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluids);
+		productTank.tankMode = StandardTank.TankMode.OUTPUT;
+		tankManager = new TankManager(productTank);
 	}
 
 	@Override
@@ -182,10 +208,7 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 			}
 		nbttagcompound.setTag("PendingLiquids", nbttaglist);
 
-		// ProductTank
-		NBTTagCompound NBTproductSlot = new NBTTagCompound();
-		productTank.writeToNBT(NBTproductSlot);
-		nbttagcompound.setTag("ProductTank", NBTproductSlot);
+		tankManager.writeTanksToNBT(nbttagcompound);
 	}
 
 	@Override
@@ -212,10 +235,7 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 			pendingLiquids.add(FluidStack.loadFluidStackFromNBT(nbttagcompound1));
 		}
 
-		// Product tank
-		productTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
-		if (nbttagcompound.hasKey("ProductTank"))
-			productTank.readFromNBT(nbttagcompound.getCompoundTag("ProductTank"));
+		tankManager.readTanksFromNBT(nbttagcompound);
 
 		checkRecipe();
 	}
@@ -347,7 +367,7 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 	}
 
 	private boolean removeResources(ItemStack[] stacks) {
-		EntityPlayer player = worldObj.getPlayerEntityByName(owner.getName());
+		EntityPlayer player = Proxies.common.getPlayer(worldObj, owner);
 		return inventory.removeSets(1, stacks, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT, player, false, true, true);
 	}
 
@@ -379,6 +399,7 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 
 	/* SMP GUI */
 	public void getGUINetworkData(int i, int j) {
+		i -= tankManager.maxMessageId() + 1;
 		switch (i) {
 		case 0:
 			productionTime = j;
@@ -390,8 +411,9 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 	}
 
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		iCrafting.sendProgressBarUpdate(container, 0, productionTime);
-		iCrafting.sendProgressBarUpdate(container, 1, timePerItem);
+		int i = tankManager.maxMessageId() + 1;
+		iCrafting.sendProgressBarUpdate(container, i, productionTime);
+		iCrafting.sendProgressBarUpdate(container, i + 1, timePerItem);
 	}
 
 	/* IINVENTORY */
@@ -420,12 +442,22 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 		return super.hasCustomInventoryName();
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return super.isItemValidForSlot(slotIndex, itemstack);
+
+		if(slotIndex == SLOT_CAN_INPUT) {
+			return LiquidHelper.isEmptyContainer(itemstack);
+		}
+
+		if(slotIndex >= SLOT_RESOURCE_1 && slotIndex < SLOT_RESOURCE_1 + SLOTS_RESOURCE_COUNT) {
+			if (LiquidHelper.isEmptyContainer(itemstack))
+				return false;
+
+			if (RecipeManager.canUse(itemstack))
+				return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -474,16 +506,9 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 		if(!super.canPutStackFromSide(slotIndex, itemstack, side))
 			return false;
 
-		if(slotIndex == SLOT_CAN_INPUT) {
-			return LiquidHelper.isEmptyContainer(itemstack);
-		}
-
-		if(slotIndex >= SLOT_RESOURCE_1 && slotIndex < SLOT_RESOURCE_1 + SLOTS_RESOURCE_COUNT) {
-			return !LiquidHelper.isEmptyContainer(itemstack);
-		}
-
-		return false;
+		return slotIndex == SLOT_CAN_INPUT || (slotIndex >= SLOT_RESOURCE_1 && slotIndex < SLOT_RESOURCE_1 + SLOTS_RESOURCE_COUNT);
 	}
+
 	/* ISPECIALINVENTORY */
 	@Override
 	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
@@ -523,13 +548,37 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 
 	/* ILIQUIDCONTAINER IMPLEMENTATION */
 	@Override
-	public FluidStack drain(ForgeDirection from, int quantityMax, boolean doEmpty) {
-		return productTank.drain(quantityMax, doEmpty);
+	public TankManager getTankManager() {
+		return tankManager;
 	}
 
 	@Override
-	public StandardTank[] getTanks() {
-		return new StandardTank[] { productTank };
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		return tankManager.fill(from, resource, doFill);
+	}
+
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return tankManager.drain(from, resource, doDrain);
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return tankManager.drain(from, maxDrain, doDrain);
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return tankManager.canFill(from, fluid);
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return tankManager.canDrain(from, fluid);
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return tankManager.getTankInfo(from);
 	}
 
 	/* ITRIGGERPROVIDER */

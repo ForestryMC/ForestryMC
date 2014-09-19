@@ -21,6 +21,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
@@ -29,7 +30,9 @@ import forestry.api.fuels.FuelManager;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.StandardTank;
+import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.gadgets.Engine;
 import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ILiquidTankContainer;
@@ -65,8 +68,9 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 		else
 			shutdown = false;
 	}
-	public StandardTank fuelTank = new StandardTank(Defaults.ENGINE_TANK_CAPACITY);
-	public StandardTank heatingTank = new StandardTank(Defaults.ENGINE_TANK_CAPACITY);
+	public FilteredTank fuelTank;
+	public FilteredTank heatingTank;
+	private final TankManager tankManager;
 	private final TileInventoryAdapter inventory;
 	public int burnTime;
 	public int totalTime;
@@ -81,6 +85,16 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 		setHints(Config.hints.get("engine.bronze"));
 
 		inventory = new TileInventoryAdapter(this, 1, "Items");
+
+		fuelTank = new FilteredTank(Defaults.ENGINE_TANK_CAPACITY, FuelManager.bronzeEngineFuel.keySet());
+		fuelTank.tankMode = StandardTank.TankMode.INPUT;
+		heatingTank = new FilteredTank(Defaults.ENGINE_TANK_CAPACITY, FluidRegistry.LAVA);
+		heatingTank.tankMode = StandardTank.TankMode.INPUT;
+		this.tankManager = new TankManager(fuelTank, heatingTank);
+	}
+
+	public TankManager getTankManager() {
+		return tankManager;
 	}
 
 	@Override
@@ -101,9 +115,9 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 
 				StandardTank tank = null;
 
-				if (container.fluid.isFluidEqual(LiquidHelper.getLiquid(Defaults.LIQUID_LAVA, 1)))
+				if (heatingTank.accepts(container.fluid.getFluid()))
 					tank = heatingTank;
-				else if (FuelManager.bronzeEngineFuel.containsKey(container.fluid))
+				else if (fuelTank.accepts(container.fluid.getFluid()))
 					tank = fuelTank;
 
 				if (tank != null) {
@@ -219,7 +233,7 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 	 * Returns the fuel value (power per cycle) an item of the passed ItemStack
 	 * provides
 	 *
-	 * @param item
+	 * @param fluid
 	 * @return
 	 */
 	private int determineFuelValue(Fluid fluid) {
@@ -231,14 +245,29 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 
 	/**
 	 *
-	 * @param fuelid
+	 * @param fluid
 	 * @return Duration of burn cycle of one bucket
 	 */
-	private int determineBurnTime(Fluid item) {
-		if (FuelManager.bronzeEngineFuel.containsKey(item))
-			return FuelManager.bronzeEngineFuel.get(item).burnDuration;
+	private int determineBurnTime(Fluid fluid) {
+		if (FuelManager.bronzeEngineFuel.containsKey(fluid))
+			return FuelManager.bronzeEngineFuel.get(fluid).burnDuration;
 		else
 			return 0;
+	}
+
+	protected ItemStack replenishByContainer(ItemStack inventoryStack, FluidContainerData container, StandardTank tank) {
+		if (container == null)
+			return inventoryStack;
+
+		if (tank.fill(container.fluid, false) >= container.fluid.amount) {
+			tank.fill(container.fluid, true);
+			if (container.filledContainer != null && container.filledContainer.getItem().hasContainerItem(container.filledContainer))
+				inventoryStack = container.emptyContainer.copy();
+			else
+				inventoryStack.stackSize--;
+		}
+
+		return inventoryStack;
 	}
 
 	// / STATE INFORMATION
@@ -284,13 +313,7 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 				currentFluidId = fluid.getID();
 		}
 
-		fuelTank = new StandardTank(Defaults.ENGINE_TANK_CAPACITY);
-		heatingTank = new StandardTank(Defaults.ENGINE_TANK_CAPACITY);
-		if (nbt.hasKey("FuelSlot")) {
-			fuelTank.readFromNBT(nbt.getCompoundTag("FuelSlot"));
-			heatingTank.readFromNBT(nbt.getCompoundTag("HeatingSlot"));
-		}
-
+		tankManager.readTanksFromNBT(nbt);
 		inventory.readFromNBT(nbt);
 
 	}
@@ -310,21 +333,14 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 		if (fluid != null)
 			nbt.setString("currentFluid", fluid.getName());
 
-		NBTTagCompound nbtFuelSlot = new NBTTagCompound();
-		NBTTagCompound nbtHeatingSlot = new NBTTagCompound();
-
-		fuelTank.writeToNBT(nbtFuelSlot);
-		heatingTank.writeToNBT(nbtHeatingSlot);
-
-		nbt.setTag("FuelSlot", nbtFuelSlot);
-		nbt.setTag("HeatingSlot", nbtHeatingSlot);
-
+		tankManager.writeTanksToNBT(nbt);
 		inventory.writeToNBT(nbt);
 	}
 
 	/* GUI */
 	@Override
 	public void getGUINetworkData(int id, int data) {
+		id -= tankManager.maxMessageId() + 1;
 
 		switch (id) {
 		case 0:
@@ -350,12 +366,13 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 
 	@Override
 	public void sendGUINetworkData(Container containerEngine, ICrafting iCrafting) {
-		iCrafting.sendProgressBarUpdate(containerEngine, 0, burnTime);
-		iCrafting.sendProgressBarUpdate(containerEngine, 1, totalTime);
-		iCrafting.sendProgressBarUpdate(containerEngine, 2, currentOutput);
-		iCrafting.sendProgressBarUpdate(containerEngine, 3, (int) storedEnergy);
-		iCrafting.sendProgressBarUpdate(containerEngine, 4, heat);
-		iCrafting.sendProgressBarUpdate(containerEngine, 5, currentFluidId);
+		int i = tankManager.maxMessageId() + 1;
+		iCrafting.sendProgressBarUpdate(containerEngine, i, burnTime);
+		iCrafting.sendProgressBarUpdate(containerEngine, i + 1, totalTime);
+		iCrafting.sendProgressBarUpdate(containerEngine, i + 2, currentOutput);
+		iCrafting.sendProgressBarUpdate(containerEngine, i + 3, (int) storedEnergy);
+		iCrafting.sendProgressBarUpdate(containerEngine, i + 4, heat);
+		iCrafting.sendProgressBarUpdate(containerEngine, i + 5, currentFluidId);
 	}
 
 	/* IINVENTORY */
@@ -423,6 +440,13 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 	 */
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
+		if (slotIndex == SLOT_CAN) {
+			FluidStack fluid = LiquidHelper.getFluidStackInContainer(itemstack);
+			if (fluid == null || fluid.amount <= 0)
+				return false;
+			return fuelTank.accepts(fluid.getFluid()) || heatingTank.accepts(fluid.getFluid());
+		}
+
 		return super.isItemValidForSlot(slotIndex, itemstack);
 	}
 
@@ -441,23 +465,36 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 		return null;
 	}
 
-	// / ITANKCONTAINER
+	// IFluidHandler
+
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		// We only accept biomass and water as fuel
-		int used = 0;
-
-		if (FuelManager.bronzeEngineFuel.containsKey(resource))
-			used = fuelTank.fill(resource, doFill);
-
-		if (LiquidHelper.isLiquid(Defaults.LIQUID_LAVA, resource))
-			used = heatingTank.fill(resource, doFill);
-
-		return used;
+		return tankManager.fill(from, resource, doFill);
 	}
 
 	@Override
-	public StandardTank[] getTanks() {
-		return new StandardTank[] { fuelTank, heatingTank };
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return tankManager.drain(from, resource, doDrain);
 	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return tankManager.drain(from, maxDrain, doDrain);
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return tankManager.canFill(from, fluid);
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return tankManager.canDrain(from, fluid);
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return tankManager.getTankInfo(from);
+	}
+
 }

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
+import forestry.farming.gui.ContainerFarm;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -49,7 +51,12 @@ public class TankWidget extends Widget {
 	}
 
 	public StandardTank getTank() {
-		return ((ContainerForestry) manager.gui.inventorySlots).getTank(slot);
+		Container container = manager.gui.inventorySlots;
+		if (container instanceof ContainerLiquidTanks)
+			return ((ContainerLiquidTanks) container).getTank(slot);
+		else if (container instanceof ContainerFarm)
+			return ((ContainerFarm) container).getTank(slot);
+		return null;
 	}
 
 	@Override

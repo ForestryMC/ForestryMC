@@ -42,19 +42,6 @@ public class ContainerBottler extends ContainerLiquidTanks {
 
 	}
 
-	// @Override client side only
-	public void updateProgressBar(int i, int j) {
-		tile.getGUINetworkData(i, j);
-	}
-
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-
-		for (int i = 0; i < crafters.size(); i++)
-			tile.sendGUINetworkData(this, (ICrafting) crafters.get(i));
-	}
-
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
 		return tile.isUseableByPlayer(entityplayer);

@@ -11,6 +11,7 @@
 package forestry.farming.logic;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -18,7 +19,6 @@ import forestry.api.arboriculture.ITree;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
 import forestry.core.config.ForestryBlock;
-import forestry.core.utils.Utils;
 import forestry.core.utils.Vect;
 import forestry.plugins.PluginArboriculture;
 
@@ -44,8 +44,8 @@ public class FarmableGE implements IFarmable {
 	}
 
 	@Override
-	public boolean plantSaplingAt(ItemStack germling, World world, int x, int y, int z) {
-		return germling.copy().tryPlaceItemIntoWorld(Utils.getForestryPlayer(world, x, y, z), world, x, y - 1, z, 1, 0, 0, 0);
+	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
+		return germling.copy().tryPlaceItemIntoWorld(player, world, x, y - 1, z, 1, 0, 0, 0);
 	}
 
 	@Override

@@ -25,6 +25,12 @@ import net.minecraftforge.fluids.FluidTank;
  */
 public class StandardTank extends FluidTank {
 
+	// defines how the tank responds to IFluidHandler requests
+	public enum TankMode {
+		DEFAULT, OUTPUT, INPUT, INTERNAL
+	}
+
+	public TankMode tankMode = TankMode.DEFAULT;
 	public static final int DEFAULT_COLOR = 0xFFFFFF;
 	public int colorCache = DEFAULT_COLOR;
 	private int tankIndex;
@@ -92,7 +98,31 @@ public class StandardTank extends FluidTank {
 			return 0;
 		if (resource.amount <= 0)
 			return 0;
+		if (!accepts(resource.getFluid()))
+			return 0;
 		return super.fill(resource, doFill);
+	}
+
+	public boolean accepts(Fluid fluid) {
+		return true;
+	}
+
+	public boolean canBeFilledExternally() {
+		switch (tankMode) {
+			case DEFAULT:
+			case INPUT:
+				return true;
+		}
+		return false;
+	}
+
+	public boolean canBeDrainedExternally() {
+		switch (tankMode) {
+			case DEFAULT:
+			case OUTPUT:
+				return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -111,15 +141,20 @@ public class StandardTank extends FluidTank {
 		return toolTip;
 	}
 
+	protected boolean hasFluid() {
+		FluidStack fluid = getFluid();
+		return fluid != null && fluid.amount > 0 && fluid.getFluid() != null;
+	}
+
 	protected void refreshTooltip() {
 		toolTip.clear();
 		int amount = 0;
-		if (getFluid() != null && getFluid().amount > 0 && getFluid().getFluid() != null) {
+		if (hasFluid()) {
 			Fluid fluidType = getFluidType();
 			EnumRarity rarity = fluidType.getRarity();
 			if (rarity == null)
 				rarity = EnumRarity.common;
-			ToolTipLine fluidName = new ToolTipLine(fluidType.getLocalizedName(), rarity.rarityColor);
+			ToolTipLine fluidName = new ToolTipLine(fluidType.getLocalizedName(getFluid()), rarity.rarityColor);
 			fluidName.setSpacing(2);
 			toolTip.add(fluidName);
 			amount = getFluid().amount;

@@ -284,7 +284,7 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	@Override
 	public ITileStructure getCentralTE() {
 
-		if (!isIntegratedIntoStructure())
+		if (!isIntegratedIntoStructure() || !hasMaster())
 			return null;
 
 		if (!isMaster) {

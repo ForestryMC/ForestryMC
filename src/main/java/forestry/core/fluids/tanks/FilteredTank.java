@@ -14,7 +14,11 @@ import forestry.core.gui.tooltips.ToolTipLine;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  *
@@ -22,49 +26,66 @@ import net.minecraftforge.fluids.FluidStack;
  */
 public class FilteredTank extends StandardTank {
 
-    private final Fluid filter;
+	private HashSet<Fluid> filters;
 
-    public FilteredTank(int capacity, Fluid filter) {
-        this(capacity, filter, null);
-    }
+	public FilteredTank(int capacity, Fluid... filters) {
+		this(capacity, Arrays.asList(filters), null);
+	}
 
-    public FilteredTank(int capacity, Fluid filter, TileEntity tile) {
-        super(capacity, tile);
-        this.filter = filter;
-    }
+	public FilteredTank(int capacity, Collection<Fluid> filters) {
+		this(capacity, filters, null);
+	}
 
-    @Override
-    public int fill(FluidStack resource, boolean doFill) {
-        if (liquidMatchesFilter(resource))
-            return super.fill(resource, doFill);
-        return 0;
-    }
+	public FilteredTank(int capacity, Collection<Fluid> filters, TileEntity tile) {
+		super(capacity, tile);
+		this.filters = new HashSet<Fluid>(filters);
+	}
 
-    public Fluid getFilter() {
-        return filter;
-    }
+	public void addFilter(Fluid filter) {
+		if (!accepts(filter))
+			filters.add(filter);
+	}
 
-    public boolean liquidMatchesFilter(FluidStack resource) {
-        if (resource == null || filter == null)
-            return false;
-        return resource.getFluid() == filter;
-    }
+	@Override
+	public int fill(FluidStack resource, boolean doFill) {
+		if (liquidMatchesFilter(resource))
+			return super.fill(resource, doFill);
+		return 0;
+	}
 
-    @Override
-    protected void refreshTooltip() {
-        toolTip.clear();
-        int amount = 0;
-        if (filter != null) {
-            EnumRarity rarity = filter.getRarity();
-            if (rarity == null)
-                rarity = EnumRarity.common;
-            ToolTipLine name = new ToolTipLine(filter.getLocalizedName(), rarity.rarityColor);
-            name.setSpacing(2);
-            toolTip.add(name);
-            if (getFluid() != null)
-                amount = getFluid().amount;
-        }
-        toolTip.add(new ToolTipLine(String.format("%,d", amount) + " / " + String.format("%,d", getCapacity())));
-    }
+	@Override
+	public boolean accepts(Fluid fluid) {
+		return filters.contains(fluid);
+	}
+
+	public boolean liquidMatchesFilter(FluidStack resource) {
+		if (resource == null || filters == null)
+			return false;
+		return filters.contains(resource.getFluid());
+	}
+
+	@Override
+	protected void refreshTooltip() {
+		if (hasFluid()) {
+			super.refreshTooltip();
+			return;
+		}
+
+		toolTip.clear();
+		int amount = 0;
+		for (Fluid filter : filters) {
+			EnumRarity rarity = filter.getRarity();
+			if (rarity == null)
+				rarity = EnumRarity.common;
+			FluidStack filterFluidStack = FluidRegistry.getFluidStack(filter.getName(), 0);
+			ToolTipLine name = new ToolTipLine(filter.getLocalizedName(filterFluidStack), rarity.rarityColor);
+			name.setSpacing(2);
+			toolTip.add(name);
+			if (getFluid() != null)
+				amount = getFluid().amount;
+		}
+
+		toolTip.add(new ToolTipLine(String.format("%,d", amount) + " / " + String.format("%,d", getCapacity())));
+	}
 
 }

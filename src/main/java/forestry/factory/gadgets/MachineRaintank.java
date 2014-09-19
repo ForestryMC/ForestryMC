@@ -21,6 +21,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import buildcraft.api.gates.ITrigger;
@@ -35,11 +37,13 @@ import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.GuiId;
 import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.Fluids;
-import forestry.core.fluids.tanks.StandardTank;
+import forestry.core.fluids.TankManager;
+import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
+import net.minecraftforge.fluids.FluidTankInfo;
 
 public class MachineRaintank extends TileBase implements ISidedInventory, ILiquidTankContainer {
 
@@ -49,7 +53,8 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 	private static final FluidStack STACK_WATER = LiquidHelper.getLiquid(Defaults.LIQUID_WATER, Defaults.RAINTANK_AMOUNT_PER_UPDATE);
 
 	/* MEMBER */
-	public StandardTank resourceTank = new StandardTank(Defaults.RAINTANK_TANK_CAPACITY);
+	public FilteredTank resourceTank;
+	private final TankManager tankManager;
 	private final InventoryAdapter inventory = new InventoryAdapter(3, "Items");
 	private boolean isValidBiome = true;
 	private int fillingTime;
@@ -57,6 +62,9 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 
 	public MachineRaintank() {
 		setHints(Config.hints.get("raintank"));
+
+		resourceTank = new FilteredTank(Defaults.RAINTANK_TANK_CAPACITY, FluidRegistry.WATER);
+		tankManager = new TankManager(resourceTank);
 
 		// Raintanks in desert and snow biomes are useless
 		if (worldObj != null) {
@@ -84,10 +92,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 
 		nbttagcompound.setBoolean("IsValidBiome", isValidBiome);
 
-		NBTTagCompound NBTresourceSlot = new NBTTagCompound();
-		resourceTank.writeToNBT(NBTresourceSlot);
-		nbttagcompound.setTag("ResourceTank", NBTresourceSlot);
-
+		tankManager.writeTanksToNBT(nbttagcompound);
 		inventory.writeToNBT(nbttagcompound);
 	}
 
@@ -97,10 +102,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 
 		isValidBiome = nbttagcompound.getBoolean("IsValidBiome");
 
-		resourceTank = new StandardTank(Defaults.RAINTANK_TANK_CAPACITY);
-		if (nbttagcompound.hasKey("ResourceTank"))
-			resourceTank.readFromNBT(nbttagcompound.getCompoundTag("ResourceTank"));
-
+		tankManager.readTanksFromNBT(nbttagcompound);
 		inventory.readFromNBT(nbttagcompound);
 	}
 
@@ -267,6 +269,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 
 	/* SMP GUI */
 	public void getGUINetworkData(int i, int j) {
+		i -= tankManager.maxMessageId() + 1;
 		switch (i) {
 		case 0:
 			fillingTime = j;
@@ -275,33 +278,43 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 	}
 
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		iCrafting.sendProgressBarUpdate(container, 0, fillingTime);
+		int i = tankManager.maxMessageId() + 1;
+		iCrafting.sendProgressBarUpdate(container, i, fillingTime);
 	}
 
 	// / ILIQUIDCONTAINER IMPLEMENTATION
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		// We only accept water
-		if (!resource.isFluidEqual(STACK_WATER))
-			return 0;
-
-		int used = resourceTank.fill(resource, doFill);
-
-		if (doFill && used > 0)
-			// updateNetworkTime.markTime(worldObj);
-			sendNetworkUpdate();
-
-		return used;
+		return tankManager.fill(from, resource, doFill);
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, int quantityMax, boolean doEmpty) {
-		return resourceTank.drain(quantityMax, doEmpty);
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return tankManager.drain(from, resource, doDrain);
 	}
 
 	@Override
-	public StandardTank[] getTanks() {
-		return new StandardTank[] { resourceTank };
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return tankManager.drain(from, maxDrain, doDrain);
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return tankManager.canFill(from, fluid);
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return tankManager.canDrain(from, fluid);
+	}
+
+	@Override
+	public TankManager getTankManager() {
+		return tankManager;
+	}
+
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return tankManager.getTankInfo(from);
 	}
 
 	/* ITRIGGERPROVIDER */

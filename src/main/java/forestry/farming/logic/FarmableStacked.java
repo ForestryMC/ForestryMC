@@ -11,6 +11,7 @@
 package forestry.farming.logic;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -49,7 +50,7 @@ public class FarmableStacked implements IFarmable {
 	}
 
 	@Override
-	public boolean plantSaplingAt(ItemStack germling, World world, int x, int y, int z) {
+	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
 		return world.setBlock(x, y, z, block, 0, Defaults.FLAG_BLOCK_SYNCH);
 	}
 

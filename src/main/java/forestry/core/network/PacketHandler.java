@@ -141,10 +141,9 @@ public class PacketHandler {
 				packetTR.readData(data);
 				onGenomeTrackerUpdate(packetTR);
 				break;
-			case PacketIds.TANK_UPDATE:
-				PacketTankUpdate packetAB = new PacketTankUpdate();
-				packetAB.readData(data);
-				onTankUpdate(packetAB);
+			case PacketIds.GUI_INTEGER:
+				PacketGuiInteger packet = new PacketGuiInteger();
+				packet.readData(data);
 				break;
 			default:
 				for (forestry.core.interfaces.IPacketHandler handler : PluginManager.packetHandlers)
@@ -166,17 +165,6 @@ public class PacketHandler {
 
 	public void sendPacket(FMLProxyPacket packet, EntityPlayerMP player) {
 		channel.sendTo(packet, player);
-	}
-
-
-	private void onTankUpdate(PacketTankUpdate packetAB) {
-		assert FMLCommonHandler.instance().getEffectiveSide().isClient();
-
-		EntityPlayer player = Proxies.common.getPlayer();
-
-		if (player.openContainer instanceof ContainerForestry) {
-			((ContainerForestry)player.openContainer).onTankUpdate(packetAB.nbttagcompound);
-		}
 	}
 
 	private void onGenomeTrackerUpdate(PacketNBT packet) {

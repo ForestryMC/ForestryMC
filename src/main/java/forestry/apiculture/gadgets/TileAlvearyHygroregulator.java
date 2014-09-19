@@ -18,14 +18,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.core.ForestryAPI;
 import forestry.core.config.Defaults;
-import forestry.core.fluids.tanks.StandardTank;
+import forestry.core.fluids.TankManager;
+import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
@@ -57,7 +60,8 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 
 	/* MEMBERS */
 	InventoryAdapter canInventory = new InventoryAdapter(1, "CanInv");
-	private StandardTank liquidTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
+	private final TankManager tankManager;
+	private FilteredTank liquidTank;
 
 	private HygroregulatorRecipe currentRecipe;
 	private int transferTime;
@@ -65,9 +69,16 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	public TileAlvearyHygroregulator() {
 		super(BLOCK_META);
 
-		recipes = new HygroregulatorRecipe[] { new HygroregulatorRecipe(new FluidStack(LiquidHelper.getFluid(Defaults.LIQUID_WATER), 1), 1, 0.01f, -0.005f),
-				new HygroregulatorRecipe(new FluidStack(LiquidHelper.getFluid(Defaults.LIQUID_LAVA), 1), 10, -0.01f, +0.005f),
-				new HygroregulatorRecipe(new FluidStack(LiquidHelper.getFluid(Defaults.LIQUID_ICE), 1), 10, 0.02f, -0.01f) };
+		Fluid water = LiquidHelper.getFluid(Defaults.LIQUID_WATER);
+		Fluid lava = LiquidHelper.getFluid(Defaults.LIQUID_LAVA);
+		Fluid liquidIce = LiquidHelper.getFluid(Defaults.LIQUID_ICE);
+
+		liquidTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, water, lava, liquidIce);
+		tankManager = new TankManager(liquidTank);
+
+		recipes = new HygroregulatorRecipe[] { new HygroregulatorRecipe(new FluidStack(water, 1), 1, 0.01f, -0.005f),
+				new HygroregulatorRecipe(new FluidStack(lava, 1), 10, -0.01f, +0.005f),
+				new HygroregulatorRecipe(new FluidStack(liquidIce, 1), 10, 0.02f, -0.01f) };
 	}
 
 	@Override
@@ -146,9 +157,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 
 		canInventory.readFromNBT(nbttagcompound);
 
-		liquidTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
-		if (nbttagcompound.hasKey("LiquidTank"))
-			liquidTank.readFromNBT(nbttagcompound.getCompoundTag("LiquidTank"));
+		tankManager.readTanksFromNBT(nbttagcompound);
 
 		transferTime = nbttagcompound.getInteger("TransferTime");
 
@@ -164,9 +173,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 
 		canInventory.writeToNBT(nbttagcompound);
 
-		NBTTagCompound NBTresourceSlot = new NBTTagCompound();
-		liquidTank.writeToNBT(NBTresourceSlot);
-		nbttagcompound.setTag("LiquidTank", NBTresourceSlot);
+		tankManager.writeTanksToNBT(nbttagcompound);
 
 		nbttagcompound.setInteger("TransferTime", transferTime);
 		if (currentRecipe != null) {
@@ -268,30 +275,54 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	 */
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
+		if (slotIndex == 0) {
+			FluidStack fluid = LiquidHelper.getFluidStackInContainer(itemstack);
+			if (fluid == null || fluid.amount <= 0)
+				return false;
+			return liquidTank.accepts(fluid.getFluid());
+		}
+
 		return super.isItemValidForSlot(slotIndex, itemstack);
 	}
 
 	/* ILIQUIDTANKCONTAINER */
 	@Override
+	public TankManager getTankManager() {
+		return tankManager;
+	}
+
+	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		return liquidTank.fill(resource, doFill);
+		return tankManager.fill(from, resource, doFill);
+	}
+
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return tankManager.drain(from, resource, doDrain);
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return liquidTank.drain(maxDrain, doDrain);
+		return tankManager.drain(from, maxDrain, doDrain);
 	}
 
 	@Override
-	public StandardTank[] getTanks() {
-		return new StandardTank[] { liquidTank };
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return tankManager.canFill(from, fluid);
 	}
 
-	/* SMP GUI */
-	public void getGUINetworkData(int i, int j) {
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return tankManager.canDrain(from, fluid);
 	}
 
-	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return tankManager.getTankInfo(from);
 	}
 
+	@Override
+	public void getGUINetworkData(int messageId, int data) {}
+
+	@Override
+	public void sendGUINetworkData(Container container, ICrafting iCrafting) {}
 }

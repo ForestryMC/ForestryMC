@@ -12,10 +12,12 @@ package forestry.factory.gadgets;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Stack;
 
+import forestry.core.fluids.tanks.FilteredTank;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -25,10 +27,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
 
 import buildcraft.api.gates.ITrigger;
 import buildcraft.api.power.PowerHandler;
@@ -36,11 +39,11 @@ import buildcraft.api.power.PowerHandler;
 import cofh.api.energy.EnergyStorage;
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.IBottlerManager;
-import forestry.api.recipes.RecipeManagers;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.tanks.StandardTank;
+import forestry.core.fluids.TankManager;
 import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
@@ -87,10 +90,13 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 
 	public static class RecipeManager implements IBottlerManager {
 		public static ArrayList<MachineBottler.Recipe> recipes = new ArrayList<MachineBottler.Recipe>();
+		public static HashSet<Fluid> recipeFluids = new HashSet<Fluid>();
 
 		@Override
 		public void addRecipe(int cyclesPerUnit, FluidStack input, ItemStack can, ItemStack bottled) {
 			recipes.add(new MachineBottler.Recipe(cyclesPerUnit, input, can, bottled));
+			if (input != null)
+				recipeFluids.add(input.getFluid());
 		}
 
 		/**
@@ -114,8 +120,8 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 			if(FluidContainerRegistry.isEmptyContainer(empty)) {
 				ItemStack filled = FluidContainerRegistry.fillFluidContainer(res, empty);
 				if(filled != null) {
-					RecipeManagers.bottlerManager.addRecipe(CYCLES_FILLING_DEFAULT, FluidContainerRegistry.getFluidForFilledItem(filled), empty, filled);
-					return findMatchingRecipe(res, empty);
+					FluidStack fluidStack = FluidContainerRegistry.getFluidForFilledItem(filled);
+					return findMatchingRecipe(fluidStack, empty);
 				}
 			}
 
@@ -128,14 +134,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		 * @return true if any recipe has a matching input
 		 */
 		public static boolean isInput(FluidStack res) {
-			for (int i = 0; i < recipes.size(); i++) {
-				Recipe recipe = recipes.get(i);
-				if (recipe.hasInput(res))
-					return true;
-			}
-
-			return FluidRegistry.isFluidRegistered(res.getFluid());
-
+			return recipeFluids.contains(res.getFluid());
 		}
 
 		@Override
@@ -150,7 +149,8 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	}
 
 	@EntityNetData
-	public StandardTank resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
+	public FilteredTank resourceTank;
+	private final TankManager tankManager;
 
 	private final InventoryAdapter inventory = new InventoryAdapter(3, "Items");
 
@@ -164,6 +164,8 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	public MachineBottler() {
         energyStorage = new EnergyStorage(4000);
 		setHints(Config.hints.get("bottler"));
+		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluids);
+		tankManager = new TankManager(resourceTank);
 	}
 
 	@Override
@@ -191,10 +193,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		nbttagcompound.setInteger("FillingTotalTime", fillingTotalTime);
 		nbttagcompound.setBoolean("ProductPending", productPending);
 
-		NBTTagCompound NBTresourceSlot = new NBTTagCompound();
-		resourceTank.writeToNBT(NBTresourceSlot);
-		nbttagcompound.setTag("ResourceTank", NBTresourceSlot);
-
+		tankManager.writeTanksToNBT(nbttagcompound);
 		inventory.writeToNBT(nbttagcompound);
 
 		NBTTagList nbttaglist = new NBTTagList();
@@ -217,9 +216,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		fillingTotalTime = nbttagcompound.getInteger("FillingTotalTime");
 		productPending = nbttagcompound.getBoolean("ProductPending");
 
-		resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
-		if (nbttagcompound.hasKey("ResourceTank"))
-			resourceTank.readFromNBT(nbttagcompound.getCompoundTag("ResourceTank"));
+		tankManager.readTanksFromNBT(nbttagcompound);
 
 		inventory.readFromNBT(nbttagcompound);
 
@@ -373,7 +370,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 
 	/* SMP GUI */
 	public void getGUINetworkData(int i, int j) {
-
+		i -= tankManager.maxMessageId() + 1;
 		switch (i) {
 		case 0:
 			fillingTime = j;
@@ -385,8 +382,9 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	}
 
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		iCrafting.sendProgressBarUpdate(container, 0, fillingTime);
-		iCrafting.sendProgressBarUpdate(container, 1, fillingTotalTime);
+		int i = tankManager.maxMessageId() + 1;
+		iCrafting.sendProgressBarUpdate(container, i, fillingTime);
+		iCrafting.sendProgressBarUpdate(container, i + 1, fillingTotalTime);
 	}
 
 	/* IINVENTORY */
@@ -481,23 +479,37 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 
 	/* ILIQUIDCONTAINER */
 	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-
-		if (!RecipeManager.isInput(resource))
-			return 0;
-
-		int used = resourceTank.fill(resource, doFill);
-
-		if (doFill && used > 0)
-			// TODO: Slow down updates
-			sendNetworkUpdate();
-
-		return used;
+	public TankManager getTankManager() {
+		return tankManager;
 	}
 
 	@Override
-	public StandardTank[] getTanks() {
-		return new StandardTank[] { resourceTank };
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		return tankManager.fill(from, resource, doFill);
+	}
+
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return tankManager.drain(from, resource, doDrain);
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return tankManager.drain(from, maxDrain, doDrain);
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return tankManager.canFill(from, fluid);
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return tankManager.canDrain(from, fluid);
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return tankManager.getTankInfo(from);
 	}
 
 	// ITRIGGERPROVIDER

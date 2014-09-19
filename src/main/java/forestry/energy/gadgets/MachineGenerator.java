@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -24,11 +25,14 @@ import ic2.api.energy.prefab.BasicSource;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
+import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.tanks.StandardTank;
+import forestry.core.fluids.tanks.FilteredTank;
+import forestry.core.fluids.TankManager;
 import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.interfaces.IRenderableMachine;
@@ -40,6 +44,8 @@ import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginIC2;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 public class MachineGenerator extends TileBase implements ISpecialInventory, ILiquidTankContainer, IRenderableMachine {
 
@@ -48,7 +54,8 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 	public static final int maxEnergy = 30000;
 
 	@EntityNetData
-	public StandardTank resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
+	public FilteredTank resourceTank;
+	private final TankManager tankManager;
 	private int tickCount = 0;
 
 	InventoryAdapter inventory = new InventoryAdapter(1, "Items");
@@ -56,6 +63,9 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 
 	public MachineGenerator() {
 		setHints(Config.hints.get("generator"));
+
+		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, FuelManager.generatorFuel.keySet());
+		tankManager = new TankManager(resourceTank);
 
 		if (PluginIC2.instance.isAvailable()) {
 			ic2EnergySource = new BasicSource(this, maxEnergy, 1);
@@ -78,10 +88,7 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 
 		if (ic2EnergySource != null) ic2EnergySource.writeToNBT(nbttagcompound);
 
-		NBTTagCompound NBTresourceSlot = new NBTTagCompound();
-		resourceTank.writeToNBT(NBTresourceSlot);
-		nbttagcompound.setTag("ResourceTank", NBTresourceSlot);
-
+		tankManager.writeTanksToNBT(nbttagcompound);
 		inventory.writeToNBT(nbttagcompound);
 	}
 
@@ -91,10 +98,7 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 
 		if (ic2EnergySource != null) ic2EnergySource.readFromNBT(nbttagcompound);
 
-		resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
-		if (nbttagcompound.hasKey("ResourceTank"))
-			resourceTank.readFromNBT(nbttagcompound.getCompoundTag("ResourceTank"));
-
+		tankManager.readTanksFromNBT(nbttagcompound);
 		inventory.readFromNBT(nbttagcompound);
 	}
 
@@ -119,7 +123,8 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 		if (inventory.getStackInSlot(SLOT_CAN) != null) {
 			FluidContainerData container = LiquidHelper.getLiquidContainer(inventory.getStackInSlot(SLOT_CAN));
 			if (container != null)
-				if (GeneratorFuel.fuels.containsKey(container.fluid.fluidID)) {
+
+				if (resourceTank.accepts(container.fluid.getFluid())) {
 					inventory.setInventorySlotContents(SLOT_CAN, StackUtils.replenishByContainer(this, inventory.getStackInSlot(SLOT_CAN), container, resourceTank));
 					if (inventory.getStackInSlot(SLOT_CAN).stackSize <= 0)
 						inventory.setInventorySlotContents(SLOT_CAN, null);
@@ -134,9 +139,8 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 
 		ic2EnergySource.updateEntity();
 
-		if (resourceTank.getFluidAmount() > 0 &&
-				GeneratorFuel.fuels.containsKey(resourceTank.getFluid().fluidID)) {
-			GeneratorFuel fuel = GeneratorFuel.fuels.get(resourceTank.getFluid().fluidID);
+		if (resourceTank.getFluidAmount() > 0) {
+			GeneratorFuel fuel = FuelManager.generatorFuel.get(resourceTank.getFluid());
 
 			if (resourceTank.getFluidAmount() >= fuel.fuelConsumed.amount &&
 					ic2EnergySource.getFreeCapacity() >= fuel.eu) {
@@ -183,17 +187,16 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 
 	/* SMP GUI */
 	public void getGUINetworkData(int i, int j) {
-
-		switch (i) {
-		case 0:
+		int firstMessageId = tankManager.maxMessageId() + 1;
+		if (i == firstMessageId) {
 			if (ic2EnergySource != null) ic2EnergySource.setEnergyStored(j);
-			break;
 		}
 	}
 
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
+		int firstMessageId = tankManager.maxMessageId() + 1;
 		if (ic2EnergySource != null) {
-			iCrafting.sendProgressBarUpdate(container, 0, (short) ic2EnergySource.getEnergyStored());
+			iCrafting.sendProgressBarUpdate(container, firstMessageId, (short) ic2EnergySource.getEnergyStored());
 		}
 	}
 
@@ -239,7 +242,7 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 		if (container == null)
 			return 0;
 
-		if (!GeneratorFuel.fuels.containsKey(container.fluid.fluidID))
+		if (!FuelManager.generatorFuel.containsKey(container.fluid))
 			return 0;
 
 		if (inventory.getStackInSlot(SLOT_CAN) == null) {
@@ -268,24 +271,39 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 		return null;
 	}
 
-	/* ILIQUIDCONTAINER IMPLEMENTATION */
+	/* ILiquidTankContainer */
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		// We only accept water
-		if (!GeneratorFuel.fuels.containsKey(resource.fluidID))
-			return 0;
-
-		int used = resourceTank.fill(resource, doFill);
-
-		if (doFill && used > 0)
-			// TODO: Slow down updates
-			sendNetworkUpdate();
-
-		return used;
+		return tankManager.fill(from, resource, doFill);
 	}
 
 	@Override
-	public StandardTank[] getTanks() {
-		return new StandardTank[] { resourceTank };
+	public TankManager getTankManager() {
+		return tankManager;
 	}
+
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return tankManager.drain(from, resource, doDrain);
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return tankManager.drain(from, maxDrain, doDrain);
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return tankManager.canFill(from, fluid);
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return tankManager.canDrain(from, fluid);
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return tankManager.getTankInfo(from);
+	}
+
 }

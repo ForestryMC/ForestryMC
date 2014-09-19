@@ -206,11 +206,4 @@ public class ContainerForestry extends Container {
 	public boolean canInteractWith(EntityPlayer entityplayer) {
 		return inventory.isUseableByPlayer(entityplayer);
 	}
-
-	public void onTankUpdate(NBTTagCompound nbt) {
-	}
-
-	public StandardTank getTank(int slot) {
-		return FakeTank.INSTANCE;
-	}
 }

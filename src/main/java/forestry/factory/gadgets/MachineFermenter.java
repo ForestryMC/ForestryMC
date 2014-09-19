@@ -12,9 +12,11 @@ package forestry.factory.gadgets;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 
+import forestry.core.fluids.tanks.FilteredTank;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -23,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -45,10 +48,12 @@ import forestry.core.network.GuiId;
 import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.fluids.tanks.StandardTank;
+import forestry.core.fluids.TankManager;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
+import net.minecraftforge.fluids.FluidTankInfo;
 
 public class MachineFermenter extends TilePowered implements ISidedInventory, ILiquidTankContainer {
 
@@ -118,10 +123,16 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 	public static class RecipeManager implements IFermenterManager {
 
 		public static ArrayList<MachineFermenter.Recipe> recipes = new ArrayList<MachineFermenter.Recipe>();
+		public static HashSet<Fluid> recipeFluidInputs = new HashSet<Fluid>();
+		public static HashSet<Fluid> recipeFluidOutputs = new HashSet<Fluid>();
 
 		@Override
 		public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
 			recipes.add(new Recipe(resource, fermentationValue, modifier, output, liquid));
+			if (liquid != null)
+				recipeFluidInputs.add(liquid.getFluid());
+			if (output != null)
+				recipeFluidOutputs.add(output.getFluid());
 		}
 
 		@Override
@@ -152,21 +163,11 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		}
 
 		public static boolean isLiquidResource(FluidStack liquid) {
-			for (int i = 0; i < recipes.size(); i++) {
-				Recipe recipe = recipes.get(i);
-				if (recipe.liquid.isFluidEqual(liquid))
-					return true;
-			}
-			return false;
+			return recipeFluidInputs.contains(liquid.getFluid());
 		}
 
 		public static boolean isLiquidProduct(FluidStack liquid) {
-			for (int i = 0; i < recipes.size(); i++) {
-				Recipe recipe = recipes.get(i);
-				if (recipe.output.isFluidEqual(liquid))
-					return true;
-			}
-			return false;
+			return recipeFluidOutputs.contains(liquid.getFluid());
 		}
 
 		@Override
@@ -181,9 +182,12 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		}
 	}
 	@EntityNetData
-	public StandardTank resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
+	public FilteredTank resourceTank;
 	@EntityNetData
-	public StandardTank productTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
+	public FilteredTank productTank;
+
+	private final TankManager tankManager;
+
 	private final InventoryAdapter inventory = new InventoryAdapter(5, "Items");
 	private Recipe currentRecipe;
 	private float currentResourceModifier;
@@ -196,6 +200,11 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 	public MachineFermenter() {
         energyStorage = new EnergyStorage(8000);
 		setHints(Config.hints.get("fermenter"));
+		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluidInputs);
+		resourceTank.tankMode = StandardTank.TankMode.INPUT;
+		productTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluidOutputs);
+		productTank.tankMode = StandardTank.TankMode.OUTPUT;
+		tankManager = new TankManager(resourceTank, productTank);
 	}
 
 	@Override
@@ -223,15 +232,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		nbttagcompound.setInteger("FuelTotalTime", fuelTotalTime);
 		nbttagcompound.setInteger("FuelCurrentFerment", fuelCurrentFerment);
 
-		NBTTagCompound NBTresourceSlot = new NBTTagCompound();
-		NBTTagCompound NBTproductSlot = new NBTTagCompound();
-
-		resourceTank.writeToNBT(NBTresourceSlot);
-		productTank.writeToNBT(NBTproductSlot);
-
-		nbttagcompound.setTag("ResourceTank", NBTresourceSlot);
-		nbttagcompound.setTag("ProductTank", NBTproductSlot);
-
+		tankManager.writeTanksToNBT(nbttagcompound);
 		inventory.writeToNBT(nbttagcompound);
 
 	}
@@ -246,13 +247,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		fuelTotalTime = nbttagcompound.getInteger("FuelTotalTime");
 		fuelCurrentFerment = nbttagcompound.getInteger("FuelCurrentFerment");
 
-		resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
-		productTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
-		if (nbttagcompound.hasKey("ResourceTank")) {
-			resourceTank.readFromNBT(nbttagcompound.getCompoundTag("ResourceTank"));
-			productTank.readFromNBT(nbttagcompound.getCompoundTag("ProductTank"));
-		}
-
+		tankManager.readTanksFromNBT(nbttagcompound);
 		inventory.readFromNBT(nbttagcompound);
 	}
 
@@ -513,28 +508,25 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 
 	/* SMP GUI */
 	public void getGUINetworkData(int i, int j) {
+		int firstMessageId = tankManager.maxMessageId() + 1;
 
-		switch (i) {
-		case 0:
+		if (i == firstMessageId)
 			fuelBurnTime = j;
-			break;
-		case 1:
+		else if (i == firstMessageId + 1)
 			fuelTotalTime = j;
-			break;
-		case 2:
+		else if (i == firstMessageId + 2)
 			fermentationTime = j;
-			break;
-		case 3:
+		else  if (i == firstMessageId + 3)
 			fermentationTotalTime = j;
-			break;
-		}
 	}
 
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		iCrafting.sendProgressBarUpdate(container, 0, fuelBurnTime);
-		iCrafting.sendProgressBarUpdate(container, 1, fuelTotalTime);
-		iCrafting.sendProgressBarUpdate(container, 2, fermentationTime);
-		iCrafting.sendProgressBarUpdate(container, 3, fermentationTotalTime);
+		int firstMessageId = tankManager.maxMessageId() + 1;
+
+		iCrafting.sendProgressBarUpdate(container, firstMessageId, fuelBurnTime);
+		iCrafting.sendProgressBarUpdate(container, firstMessageId + 1, fuelTotalTime);
+		iCrafting.sendProgressBarUpdate(container, firstMessageId + 2, fermentationTime);
+		iCrafting.sendProgressBarUpdate(container, firstMessageId + 3, fermentationTotalTime);
 	}
 
 	/* INVENTORY */
@@ -665,20 +657,15 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		return super.getAccessibleSlotsFromSide(side);
 	}
 
-	// ILIQUIDCONTAINER IMPLEMENTATION
+	/* ILiquidTankContainer */
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		return resourceTank.fill(resource, doFill);
+	}
 
-		if (!RecipeManager.isLiquidResource(resource))
-			return 0;
-
-		int used = resourceTank.fill(resource, doFill);
-
-		if (doFill && used > 0)
-			// updateNetworkTime.markTime(worldObj);
-			sendNetworkUpdate();
-
-		return used;
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return tankManager.drain(from, resource, doDrain);
 	}
 
 	@Override
@@ -687,8 +674,22 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 	}
 
 	@Override
-	public StandardTank[] getTanks() {
-		return new StandardTank[] { resourceTank, productTank };
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return tankManager.canFill(from, fluid);
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return tankManager.canDrain(from, fluid);
+	}
+
+	@Override
+	public TankManager getTankManager() {
+		return tankManager;
+	}
+
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return tankManager.getTankInfo(from);
 	}
 
 	// ITRIGGERPROVIDER
