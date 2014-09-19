@@ -489,7 +489,7 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 			if (LiquidHelper.isEmptyContainer(itemstack))
 				return false;
 			FluidStack fluid = LiquidHelper.getFluidStackInContainer(itemstack);
-			return productTank.accepts(fluid.getFluid());
+			return fluid != null && productTank.accepts(fluid.getFluid());
 		}
 
 		return false;
