@@ -25,6 +25,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+
+import net.minecraftforge.common.util.FakePlayerFactory;
 
 import org.lwjgl.input.Keyboard;
 
@@ -94,7 +97,13 @@ public class ClientProxyCommon extends ProxyCommon {
 
 	@Override
 	public EntityPlayer getPlayer(World world, GameProfile profile) {
-		return world.getPlayerEntityByName(profile.getName());
+		EntityPlayer player = world.getPlayerEntityByName(profile.getName());
+		if (player != null)
+			return player;
+		else if (world instanceof WorldServer)
+			return FakePlayerFactory.get((WorldServer) world, profile);
+		else
+			return null;
 	}
 
 	@Override
