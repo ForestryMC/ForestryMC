@@ -790,7 +790,8 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			if (!germling.isGermling(inventory.getStackInSlot(i)))
 				continue;
 
-			if (!germling.plantSaplingAt(inventory.getStackInSlot(i), world, x, y, z))
+			EntityPlayer player = Proxies.common.getPlayer(world, owner);
+			if (!germling.plantSaplingAt(player, inventory.getStackInSlot(i), world, x, y, z))
 				continue;
 
 			inventory.decrStackSize(i, 1);

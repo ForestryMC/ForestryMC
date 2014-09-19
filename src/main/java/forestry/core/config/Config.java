@@ -104,9 +104,6 @@ public class Config {
 	// Mail
 	public static boolean mailAlertEnabled = true;
 
-	public static String fakeUserLogin = "[Forestry]";
-	public static boolean fakeUserAutoop = true;
-
 	// Hints
 	public static boolean disableHints = false;
 	public static HashMap<String, String[]> hints = new HashMap<String, String[]>();
@@ -253,14 +250,6 @@ public class Config {
 		disabledStructures.addAll(Arrays.asList(parseStructureKeys(property.Value)));
 		for (String str : disabledStructures)
 			Proxies.log.finer("Disabled structure '%s'.", str);
-
-		property = config.get("permissions.login", CATEGORY_COMMON, "[Forestry]");
-		property.Comment = "set the default login used by Forestry.";
-		Config.fakeUserLogin = property.Value;
-
-		property = config.get("permissions.autoop", CATEGORY_COMMON, true);
-		property.Comment = "set to false to prevent Forestry's user from autooping.";
-		Config.fakeUserAutoop = Boolean.parseBoolean(property.Value);
 
 		registerClimates();
 		ForestryTrigger.initialize();

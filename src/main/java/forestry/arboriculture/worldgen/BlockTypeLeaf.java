@@ -24,6 +24,7 @@ public class BlockTypeLeaf extends BlockType {
 
 	public BlockTypeLeaf(GameProfile owner) {
 		super(ForestryBlock.leaves, 0);
+		this.owner = owner;
 	}
 
 	@Override

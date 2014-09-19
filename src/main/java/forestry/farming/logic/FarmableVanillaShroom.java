@@ -11,6 +11,7 @@
 package forestry.farming.logic;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -39,7 +40,7 @@ public class FarmableVanillaShroom extends FarmableGenericSapling {
 	}
 
 	@Override
-	public boolean plantSaplingAt(ItemStack germling, World world, int x, int y, int z) {
+	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
 		int meta = 0;
 		if (StackUtils.equals(Blocks.red_mushroom, germling))
 			meta = 1;
