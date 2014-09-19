@@ -26,53 +26,53 @@ import java.util.HashSet;
  */
 public class FilteredTank extends StandardTank {
 
-    private HashSet<Fluid> filters;
+	private HashSet<Fluid> filters;
 
-    public FilteredTank(int capacity, Fluid... filters) {
-        this(capacity, Arrays.asList(filters), null);
-    }
+	public FilteredTank(int capacity, Fluid... filters) {
+		this(capacity, Arrays.asList(filters), null);
+	}
 
 	public FilteredTank(int capacity, Collection<Fluid> filters) {
 		this(capacity, filters, null);
 	}
 
-    public FilteredTank(int capacity, Collection<Fluid> filters, TileEntity tile) {
-        super(capacity, tile);
-        this.filters = new HashSet<Fluid>(filters);
-    }
+	public FilteredTank(int capacity, Collection<Fluid> filters, TileEntity tile) {
+		super(capacity, tile);
+		this.filters = new HashSet<Fluid>(filters);
+	}
 
 	public void addFilter(Fluid filter) {
 		if (!accepts(filter))
 			filters.add(filter);
 	}
 
-    @Override
-    public int fill(FluidStack resource, boolean doFill) {
-        if (liquidMatchesFilter(resource))
-            return super.fill(resource, doFill);
-        return 0;
-    }
+	@Override
+	public int fill(FluidStack resource, boolean doFill) {
+		if (liquidMatchesFilter(resource))
+			return super.fill(resource, doFill);
+		return 0;
+	}
 
 	@Override
 	public boolean accepts(Fluid fluid) {
 		return filters.contains(fluid);
 	}
 
-    public boolean liquidMatchesFilter(FluidStack resource) {
-        if (resource == null || filters == null)
-            return false;
+	public boolean liquidMatchesFilter(FluidStack resource) {
+		if (resource == null || filters == null)
+			return false;
 		return filters.contains(resource.getFluid());
-    }
+	}
 
-    @Override
-    protected void refreshTooltip() {
+	@Override
+	protected void refreshTooltip() {
 		if (hasFluid()) {
 			super.refreshTooltip();
 			return;
 		}
 
-        toolTip.clear();
-        int amount = 0;
+		toolTip.clear();
+		int amount = 0;
 		for (Fluid filter : filters) {
 			EnumRarity rarity = filter.getRarity();
 			if (rarity == null)
@@ -85,7 +85,7 @@ public class FilteredTank extends StandardTank {
 				amount = getFluid().amount;
 		}
 
-        toolTip.add(new ToolTipLine(String.format("%,d", amount) + " / " + String.format("%,d", getCapacity())));
-    }
+		toolTip.add(new ToolTipLine(String.format("%,d", amount) + " / " + String.format("%,d", getCapacity())));
+	}
 
 }
