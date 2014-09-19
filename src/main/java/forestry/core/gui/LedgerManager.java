@@ -117,4 +117,8 @@ public class LedgerManager {
 
 	}
 
+	public boolean ledgerOverlaps(int x, int y, int width, int height) {
+		return getAtPosition(x + width, y + height) != null || getAtPosition(x + width, y) != null || getAtPosition(x, y + height) != null || getAtPosition(x, y) != null;
+	}
+
 }

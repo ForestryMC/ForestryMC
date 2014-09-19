@@ -14,6 +14,10 @@ import java.awt.Color;
 import java.util.Collection;
 import java.util.List;
 
+import codechicken.nei.VisiblityData;
+import codechicken.nei.api.INEIGuiHandler;
+import codechicken.nei.api.TaggedInventoryArea;
+
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -45,7 +49,7 @@ import forestry.core.interfaces.IPowerHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.FontColour;
 
-public abstract class GuiForestry<T extends TileForestry> extends GuiContainer {
+public abstract class GuiForestry<T extends TileForestry> extends GuiContainer implements INEIGuiHandler {
 
 	/* WIDGETS */
 	protected WidgetManager widgetManager;
@@ -571,5 +575,23 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer {
 			tip.add(itemStack.getDisplayName());
 			return tip;
 		}
+	}
+
+	/* NEI */
+	@Override
+	public VisiblityData modifyVisiblity(GuiContainer gui, VisiblityData currentVisibility) { return null; }
+	@Override
+	public Iterable<Integer> getItemSpawnSlots(GuiContainer gui, ItemStack item) { return null; }
+	@Override
+	public List<TaggedInventoryArea> getInventoryAreas(GuiContainer gui) { return null; }
+	@Override
+	public boolean handleDragNDrop(GuiContainer gui, int mousex, int mousey, ItemStack draggedStack, int button) { return false; }
+
+	@Override
+	public boolean hideItemPanelSlot(GuiContainer gui, int x, int y, int w, int h) {
+		if (gui instanceof GuiForestry)
+			return ((GuiForestry)gui).ledgerManager.ledgerOverlaps(x, y, w, h);
+		else
+			return false;
 	}
 }
