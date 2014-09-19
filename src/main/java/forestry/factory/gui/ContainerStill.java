@@ -39,19 +39,6 @@ public class ContainerStill extends ContainerLiquidTanks {
 
 	}
 
-	// @Override client side only
-	public void updateProgressBar(int i, int j) {
-		processor.getGUINetworkData(i, j);
-	}
-
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-
-		for (int i = 0; i < crafters.size(); i++)
-			processor.sendGUINetworkData(this, (ICrafting) crafters.get(i));
-	}
-
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
 		return processor.isUseableByPlayer(entityplayer);

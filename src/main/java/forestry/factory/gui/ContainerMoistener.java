@@ -57,19 +57,6 @@ public class ContainerMoistener extends ContainerLiquidTanks implements IContain
 
 	}
 
-	// @Override client side only
-	public void updateProgressBar(int i, int j) {
-		tile.getGUINetworkData(i, j);
-	}
-
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-
-		for (int i = 0; i < crafters.size(); i++)
-			tile.sendGUINetworkData(this, (ICrafting) crafters.get(i));
-	}
-
 	@Override
 	public void onCraftMatrixChanged(IInventory iinventory, int slot) {
 		inventory.setInventorySlotContents(slot, iinventory.getStackInSlot(slot));

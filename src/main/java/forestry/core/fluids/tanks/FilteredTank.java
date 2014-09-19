@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 
 /**
  *
@@ -25,7 +26,7 @@ import java.util.Collection;
  */
 public class FilteredTank extends StandardTank {
 
-    private Collection<Fluid> filters;
+    private HashSet<Fluid> filters;
 
     public FilteredTank(int capacity, Fluid... filters) {
         this(capacity, Arrays.asList(filters), null);
@@ -37,8 +38,13 @@ public class FilteredTank extends StandardTank {
 
     public FilteredTank(int capacity, Collection<Fluid> filters, TileEntity tile) {
         super(capacity, tile);
-        this.filters = filters;
+        this.filters = new HashSet<Fluid>(filters);
     }
+
+	public void addFilter(Fluid filter) {
+		if (!accepts(filter))
+			filters.add(filter);
+	}
 
     @Override
     public int fill(FluidStack resource, boolean doFill) {
@@ -47,6 +53,7 @@ public class FilteredTank extends StandardTank {
         return 0;
     }
 
+	@Override
 	public boolean accepts(Fluid fluid) {
 		return filters.contains(fluid);
 	}

@@ -352,37 +352,4 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 			return getInternalInventory().getSizeInventorySide(side);
 
 	}
-
-	/* IFLUIDHANDLER BASICS */
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		if (this instanceof ILiquidTankContainer) {
-			StandardTank[] tanks = ((ILiquidTankContainer) this).getTanks();
-			FluidTankInfo[] info = new FluidTankInfo[tanks.length];
-			for (int i = 0; i < info.length; i++) {
-				info[i] = tanks[i].getInfo();
-			}
-			return info;
-		}
-		return FakeTank.INFO;
-	}
-
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		return 0;
-	}
-
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return null;
-	}
-
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return resource != null ? drain(from, resource.amount, doDrain) : null;
-	}
-
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return true;
-	}
-
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return true;
-	}
 }

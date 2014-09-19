@@ -23,7 +23,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import buildcraft.api.gates.ITrigger;
@@ -43,11 +45,13 @@ import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.fluids.tanks.StandardTank;
+import forestry.core.fluids.tanks.FilteredTank;
+import forestry.core.fluids.TankManager;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
+import net.minecraftforge.fluids.FluidTankInfo;
 
 public class MachineMoistener extends TilePowered implements ISpecialInventory, ISidedInventory, ILiquidTankContainer {
 
@@ -127,7 +131,8 @@ public class MachineMoistener extends TilePowered implements ISpecialInventory, 
 	}
 
 	@EntityNetData
-	public StandardTank resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
+	public FilteredTank resourceTank;
+	private final TankManager tankManager;
 	private final InventoryAdapter inventory = new InventoryAdapter(12, "Items");
 	//private ItemStack[] inventoryStacks = new ItemStack[12];
 	public MachineMoistener.Recipe currentRecipe;
@@ -141,6 +146,8 @@ public class MachineMoistener extends TilePowered implements ISpecialInventory, 
 
 	public MachineMoistener() {
 		setHints(Config.hints.get("moistener"));
+		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
+		tankManager = new TankManager(resourceTank);
 	}
 
 	@Override
@@ -162,11 +169,7 @@ public class MachineMoistener extends TilePowered implements ISpecialInventory, 
 		nbttagcompound.setInteger("TotalTime", totalTime);
 		nbttagcompound.setInteger("ProductionTime", productionTime);
 
-		NBTTagCompound NBTresourceSlot = new NBTTagCompound();
-
-		resourceTank.writeToNBT(NBTresourceSlot);
-		nbttagcompound.setTag("ResourceTank", NBTresourceSlot);
-
+		tankManager.writeTanksToNBT(nbttagcompound);
 		inventory.writeToNBT(nbttagcompound);
 
 		// Write pending product
@@ -190,10 +193,7 @@ public class MachineMoistener extends TilePowered implements ISpecialInventory, 
 		totalTime = nbttagcompound.getInteger("TotalTime");
 		productionTime = nbttagcompound.getInteger("ProductionTime");
 
-		resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
-		if (nbttagcompound.hasKey("ResourceTank"))
-			resourceTank.readFromNBT(nbttagcompound.getCompoundTag("ResourceTank"));
-
+		tankManager.readTanksFromNBT(nbttagcompound);
 		inventory.readFromNBT(nbttagcompound);
 
 		// Load pending product
@@ -215,7 +215,7 @@ public class MachineMoistener extends TilePowered implements ISpecialInventory, 
 		// Check if we have suitable water container waiting in the item slot
 		if (inventory.getStackInSlot(SLOT_PRODUCT) != null) {
 			FluidContainerData container = LiquidHelper.getLiquidContainer(inventory.getStackInSlot(SLOT_PRODUCT));
-			if (container != null && container.fluid.isFluidEqual(STACK_WATER)) {
+			if (container != null && resourceTank.accepts(container.fluid.getFluid())) {
 
 				inventory.setInventorySlotContents(SLOT_PRODUCT, StackUtils.replenishByContainer(this, inventory.getStackInSlot(SLOT_PRODUCT), container, resourceTank));
 				if (inventory.getStackInSlot(SLOT_PRODUCT).stackSize <= 0)
@@ -633,7 +633,7 @@ public class MachineMoistener extends TilePowered implements ISpecialInventory, 
 	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
 
 		FluidContainerData container = LiquidHelper.getLiquidContainer(stack);
-		if (container != null && container.fluid.isFluidEqual(STACK_WATER)) {
+		if (container != null && resourceTank.accepts(container.fluid.getFluid())) {
 			return inventory.addStack(stack, SLOT_PRODUCT, 1, false, doAdd);
 		}
 
@@ -675,24 +675,44 @@ public class MachineMoistener extends TilePowered implements ISpecialInventory, 
 		return StackUtils.EMPTY_STACK_ARRAY;
 	}
 
-	/* ILIQUIDCONTAINER */
+	/* ILiquidTankContainer */
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		int used = resourceTank.fill(resource, doFill);
-
-		if (doFill && used > 0)
-			sendNetworkUpdate();
-
-		return used;
+		return tankManager.fill(from, resource, doFill);
 	}
 
 	@Override
-	public StandardTank[] getTanks() {
-		return new StandardTank[] { resourceTank };
+	public TankManager getTankManager() {
+		return tankManager;
+	}
+
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return tankManager.drain(from, resource, doDrain);
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return tankManager.drain(from, maxDrain, doDrain);
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return tankManager.canFill(from, fluid);
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return tankManager.canDrain(from, fluid);
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return tankManager.getTankInfo(from);
 	}
 
 	/* SMP GUI */
 	public void getGUINetworkData(int i, int j) {
+		i -= tankManager.maxMessageId() + 1;
 
 		switch (i) {
 		case 0:
@@ -711,10 +731,11 @@ public class MachineMoistener extends TilePowered implements ISpecialInventory, 
 	}
 
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		iCrafting.sendProgressBarUpdate(container, 0, burnTime);
-		iCrafting.sendProgressBarUpdate(container, 1, totalTime);
-		iCrafting.sendProgressBarUpdate(container, 2, productionTime);
-		iCrafting.sendProgressBarUpdate(container, 3, timePerItem);
+		int i = tankManager.maxMessageId() + 1;
+		iCrafting.sendProgressBarUpdate(container, i, burnTime);
+		iCrafting.sendProgressBarUpdate(container, i + 1, totalTime);
+		iCrafting.sendProgressBarUpdate(container, i + 2, productionTime);
+		iCrafting.sendProgressBarUpdate(container, i + 3, timePerItem);
 	}
 
 	// ITRIGGERPROVIDER

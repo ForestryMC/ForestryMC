@@ -50,17 +50,4 @@ public class ContainerSqueezer extends ContainerLiquidTanks {
 			addSlot(new Slot(player, j1, 8 + j1 * 18, 142));
 	}
 
-	@Override
-	public void updateProgressBar(int i, int j) {
-		tile.getGUINetworkData(i, j);
-	}
-
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-
-		for (int i = 0; i < crafters.size(); i++)
-			tile.sendGUINetworkData(this, (ICrafting) crafters.get(i));
-	}
-
 }

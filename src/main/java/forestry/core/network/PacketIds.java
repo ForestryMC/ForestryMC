@@ -48,7 +48,6 @@ public class PacketIds {
 
 	public static final int LEAF_UPDATE = 90;
 	
-	public static final int TANK_UPDATE = 91;
 	public static final int GUI_INTEGER = 92;
 	
 	// Propolis pipe

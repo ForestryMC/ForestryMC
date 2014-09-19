@@ -10,28 +10,20 @@
  ******************************************************************************/
 package forestry.farming.gui;
 
-
-import java.util.HashMap;
-import java.util.Map;
-
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.farming.IFarmLogic;
-import forestry.core.fluids.tanks.FakeTank;
+import forestry.core.fluids.TankManager;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.slots.SlotCustom;
 import forestry.core.gui.slots.SlotForestry;
 import forestry.core.gui.slots.SlotLiquidContainer;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.core.network.PacketTankUpdate;
-import forestry.core.proxy.Proxies;
-import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.utils.TileInventoryAdapter;
 import forestry.farming.gadgets.TileFarmPlain;
 import forestry.plugins.PluginFarming;
@@ -135,47 +127,32 @@ public class ContainerFarm extends ContainerSocketed {
 	@Override
 	public void updateProgressBar(int i, int j) {
 		tile.getGUINetworkData(i, j);
+		TankManager tankManager = tile.getTankManager();
+		if (tankManager != null)
+			tankManager.processGuiUpdate(i, j);
 	}
-	private Map<Integer, StandardTank> syncedFluids = new HashMap<Integer, StandardTank>();
 
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
+		TankManager tankManager = tile.getTankManager();
+		if (tankManager != null)
+			tankManager.updateGuiData(this, crafters);
 
 		for (int i = 0; i < crafters.size(); i++) {
 			tile.sendGUINetworkData(this, (ICrafting) crafters.get(i));
 		}
-
-		StandardTank tank = tile.getTank();
-
-		// If null has been synced
-		if (tank.getFluid() == null && getTank(0).getFluidAmount() <= 0)
-			return;
-		// If fluid has been synced
-		if (tank.getFluid() != null && tank.getFluid().isFluidStackIdentical(getTank(0).getFluid()))
-			return;
-
-		for (int j = 0; j < this.crafters.size(); ++j) {
-			if (this.crafters.get(j) instanceof EntityPlayerMP) {
-				EntityPlayerMP player = (EntityPlayerMP) this.crafters.get(j);
-				Proxies.net.sendToPlayer(new PacketTankUpdate(0, tank), player);
-			}
-		}
-		syncedFluids.put(0, new StandardTank(tank.getFluid() == null ? null : tank.getFluid().copy(), tank.getCapacity()));
-
 	}
 
 	@Override
-	public void onTankUpdate(NBTTagCompound nbt) {
-		int tankID = nbt.getByte("tank");
-		int capacity = nbt.getShort("capacity");
-		StandardTank tank = new StandardTank(capacity);
-		tank.readFromNBT(nbt);
-		syncedFluids.put(tankID, tank);
+	public void addCraftingToCrafters(ICrafting iCrafting) {
+		super.addCraftingToCrafters(iCrafting);
+		TankManager tankManager = tile.getTankManager();
+		if (tankManager != null)
+			tankManager.initGuiData(this, iCrafting);
 	}
 
-	@Override
 	public StandardTank getTank(int slot) {
-		return syncedFluids.get(slot) == null ? FakeTank.INSTANCE : syncedFluids.get(slot);
+		return tile.getTankManager().get(slot);
 	}
 }

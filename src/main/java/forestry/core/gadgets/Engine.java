@@ -19,7 +19,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 
 import buildcraft.api.core.Position;
 import buildcraft.api.power.IPowerEmitter;
@@ -31,7 +30,6 @@ import buildcraft.api.transport.IPipeTile.PipeType;
 
 import forestry.core.TemperatureState;
 import forestry.core.config.Defaults;
-import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
@@ -52,7 +50,6 @@ public abstract class Engine extends TileBase implements IPowerHandler, IPipeCon
 		payload.intPayload[2] = heat;
 
 		payload.floatPayload[0] = pistonSpeedServer;
-
 		return payload;
 	}
 
@@ -96,20 +93,7 @@ public abstract class Engine extends TileBase implements IPowerHandler, IPipeCon
 		powerProvider.configure(10, 200, 10, 100000);
 	}
 
-	protected ItemStack replenishByContainer(ItemStack inventoryStack, FluidContainerData container, StandardTank tank) {
-		if (container == null)
-			return inventoryStack;
 
-		if (tank.fill(container.fluid, false) >= container.fluid.amount) {
-			tank.fill(container.fluid, true);
-			if (container.filledContainer != null && container.filledContainer.getItem().hasContainerItem(container.filledContainer))
-				inventoryStack = container.emptyContainer.copy();
-			else
-				inventoryStack.stackSize--;
-		}
-
-		return inventoryStack;
-	}
 
 	@Override
 	public void rotateAfterPlacement(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack itemstack) {
