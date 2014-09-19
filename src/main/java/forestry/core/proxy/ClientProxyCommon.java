@@ -12,6 +12,8 @@ package forestry.core.proxy;
 
 import java.io.File;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -88,6 +90,11 @@ public class ClientProxyCommon extends ProxyCommon {
 	@Override
 	public boolean isOp(EntityPlayer player) {
 		return true;
+	}
+
+	@Override
+	public EntityPlayer getPlayer(World world, GameProfile profile) {
+		return world.getPlayerEntityByName(profile.getName());
 	}
 
 	@Override

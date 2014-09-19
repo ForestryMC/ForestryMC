@@ -43,7 +43,7 @@ import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
-import forestry.core.fluids.tanks.StandardTank;
+import forestry.core.proxy.Proxies;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.TankManager;
 import forestry.core.gadgets.TileBase;
@@ -456,7 +456,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	}
 
 	private boolean removeSets(int count, ItemStack[] set) {
-		EntityPlayer player = worldObj.getPlayerEntityByName(owner.getName());
+		EntityPlayer player = Proxies.common.getPlayer(worldObj, owner);
 		return accessibleInventory.removeSets(count, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
 	}
 

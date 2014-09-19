@@ -39,6 +39,7 @@ import forestry.core.interfaces.ICrafter;
 import forestry.core.interfaces.ICraftingPlan;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.GuiId;
+import forestry.core.proxy.Proxies;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
@@ -505,7 +506,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
 		ItemStack taken;
 		if (doRemove) {
-			EntityPlayer player = worldObj.getPlayerEntityByName(owner.getName());
+			EntityPlayer player = Proxies.common.getPlayer(worldObj, owner);
 			taken = this.takenFromSlot(SLOT_RESULT, false, player);
 		} else {
 			taken = this.getResult();

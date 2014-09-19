@@ -49,6 +49,7 @@ import forestry.core.utils.EnumTankLevel;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.TankManager;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
@@ -351,7 +352,7 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 	}
 
 	private boolean removeResources(ItemStack[] stacks) {
-		EntityPlayer player = worldObj.getPlayerEntityByName(owner.getName());
+		EntityPlayer player = Proxies.common.getPlayer(worldObj, owner);
 		return inventory.removeSets(1, stacks, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT, player, false, true, true);
 	}
 

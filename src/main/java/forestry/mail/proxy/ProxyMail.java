@@ -28,7 +28,7 @@ public class ProxyMail {
 	}
 
 	public void setPOBoxInfo(World world, IMailAddress address, POBoxInfo info) {
-		EntityPlayer player = address.getPlayer(world);
+		EntityPlayer player = Proxies.common.getPlayer(world, address.getPlayerProfile());
 		if (player != null)
 			Proxies.net.sendToPlayer(new PacketPOBoxInfo(PacketIds.POBOX_INFO, info), player);
 	}
