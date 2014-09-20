@@ -20,8 +20,8 @@ public abstract class CircuitElectricChange extends Circuit {
 	int euChange = 7;
 	int mjChange = 2;
 
-	public CircuitElectricChange(String uid, boolean requiresDiscovery, String name, String[] descriptions) {
-		super(uid, requiresDiscovery, name, descriptions);
+	public CircuitElectricChange(String uid, boolean requiresDiscovery) {
+		super(uid, requiresDiscovery);
 	}
 
 	protected void configureChange(int euChange, int mjChange) {
