@@ -50,33 +50,19 @@ public class TileWorktable extends TileBase implements ICrafter {
 	private final static RecipeBridge RECIPE_BRIDGE = new RecipeBridge();
 
 	private static class RecipeBridge {
-
-		private final LinkedList<IRecipe> overrides = new LinkedList<IRecipe>();
-
-		public IRecipe getRecipe(InventoryCrafting crafting, World world) {
-			for (IRecipe recipe : overrides) {
-				if (recipe.matches(crafting, world))
-					return recipe;
-			}
-
-			for (Object obj : CraftingManager.getInstance().getRecipeList()) {
-				IRecipe recipe = (IRecipe) obj;
-				if (recipe.matches(crafting, world))
-					return recipe;
-			}
-
-			return null;
+		public ItemStack findMatchingRecipe(InventoryCrafting crafting, World world) {
+			return CraftingManager.getInstance().findMatchingRecipe(crafting, world);
 		}
 	}
 
 	/* RECIPE MEMORY */
-	public static final class Recipe implements IRecipe, INBTTagable {
+	public static final class Recipe implements INBTTagable {
 
 		private InventoryAdapter matrix;
 		private long lastUsed;
 		private boolean locked;
 		private World cachedWorld;
-		private IRecipe cachedRecipe;
+		private ItemStack cachedRecipeOutput;
 
 		public Recipe(InventoryCrafting crafting) {
 			this.matrix = new InventoryAdapter(new PlainInventory(crafting));
@@ -90,9 +76,9 @@ public class TileWorktable extends TileBase implements ICrafter {
 			this.cachedWorld = world;
 		}
 
-		private boolean updateCachedIRecipe() {
+		private boolean updateCachedRecipeOutput() {
 
-			if (cachedRecipe != null)
+			if (cachedRecipeOutput != null)
 				return true;
 
 			InventoryCrafting crafting = new InventoryCrafting(DUMMY_CONTAINER, 3, 3);
@@ -100,8 +86,8 @@ public class TileWorktable extends TileBase implements ICrafter {
 				crafting.setInventorySlotContents(i, matrix.getStackInSlot(i));
 			}
 
-			cachedRecipe = RECIPE_BRIDGE.getRecipe(crafting, cachedWorld);
-			return cachedRecipe != null;
+			cachedRecipeOutput = RECIPE_BRIDGE.findMatchingRecipe(crafting, cachedWorld);
+			return cachedRecipeOutput != null;
 		}
 
 		public void updateLastUse(World world) {
@@ -117,18 +103,16 @@ public class TileWorktable extends TileBase implements ICrafter {
 			return matrix;
 		}
 
-		@Override
 		public ItemStack getCraftingResult(InventoryCrafting inventorycrafting) {
-			if (updateCachedIRecipe())
-				return cachedRecipe.getCraftingResult(inventorycrafting);
+			if (updateCachedRecipeOutput())
+				return cachedRecipeOutput;
 
 			return null;
 		}
 
-		@Override
 		public ItemStack getRecipeOutput() {
-			if (updateCachedIRecipe())
-				return cachedRecipe.getRecipeOutput();
+			if (updateCachedRecipeOutput())
+				return cachedRecipeOutput;
 
 			return null;
 		}
@@ -141,20 +125,17 @@ public class TileWorktable extends TileBase implements ICrafter {
 			return this.locked;
 		}
 
-		@Override
 		public int getRecipeSize() {
 			return matrix.getSizeInventory();
 		}
 
-		@Override
-		public boolean matches(InventoryCrafting crafting, World world) {
-			if (crafting.getSizeInventory() != matrix.getSizeInventory())
+		public boolean hasSameOutput(InventoryCrafting crafting, World world) {
+
+			if (!updateCachedRecipeOutput())
 				return false;
 
-			if (!updateCachedIRecipe())
-				return false;
-
-			return cachedRecipe.matches(crafting, world);
+			ItemStack recipeOutput = RECIPE_BRIDGE.findMatchingRecipe(crafting, world);
+			return recipeOutput != null && cachedRecipeOutput.isItemEqual(recipeOutput);
 		}
 
 		@Override
@@ -261,7 +242,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 
 		private Recipe getMemorized(InventoryCrafting crafting, World world) {
 			for (Recipe recipe : recipes) {
-				if (recipe.matches(crafting, world))
+				if (recipe.hasSameOutput(crafting, world))
 					return recipe;
 			}
 
@@ -438,8 +419,8 @@ public class TileWorktable extends TileBase implements ICrafter {
 	/* CRAFTING */
 	public void setRecipe(InventoryCrafting crafting) {
 
-		IRecipe recipe = RECIPE_BRIDGE.getRecipe(crafting, worldObj);
-		if (recipe == null) {
+		ItemStack recipeOutput = RECIPE_BRIDGE.findMatchingRecipe(crafting, worldObj);
+		if (recipeOutput == null) {
 			currentRecipe = null;
 			currentCrafting = null;
 		} else {
@@ -481,11 +462,10 @@ public class TileWorktable extends TileBase implements ICrafter {
 		// in place of the ones in the saved crafting inventory.
 		// Check that the recipe it makes is the same as the currentRecipe.
 		InventoryCrafting crafting = new InventoryCrafting(DUMMY_CONTAINER, 3, 3);
-		InventoryAdapter recipeMatrix = currentRecipe.getMatrix();
 		ItemStack[] stockCopy = StackUtils.condenseStacks(stock);
 
-		for (int slot = 0; slot < recipeMatrix.getSizeInventory(); slot++) {
-			ItemStack recipeStack = recipeMatrix.getStackInSlot(slot);
+		for (int slot = 0; slot < currentCrafting.getSizeInventory(); slot++) {
+			ItemStack recipeStack = currentCrafting.getStackInSlot(slot);
 			if (recipeStack == null)
 				continue;
 
@@ -511,11 +491,11 @@ public class TileWorktable extends TileBase implements ICrafter {
 				}
 			}
 		}
-		IRecipe recipe = RECIPE_BRIDGE.getRecipe(crafting, worldObj);
-		if (recipe == null)
+		ItemStack recipeOutput = RECIPE_BRIDGE.findMatchingRecipe(crafting, worldObj);
+		if (recipeOutput == null)
 			return false;
 
-		return recipe.getRecipeOutput().isItemEqual(currentRecipe.getRecipeOutput());
+		return recipeOutput.isItemEqual(currentRecipe.getRecipeOutput());
 	}
 
 	private boolean removeResources(EntityPlayer player) {
