@@ -461,7 +461,9 @@ public class TileWorktable extends TileBase implements ICrafter {
 		craftingInventory.setInventorySlotContents(SLOT_CRAFTING_RESULT, null);
 	}
 
-	private boolean validateResources() {
+	private boolean canCraftCurrentRecipe() {
+		if (currentRecipe == null)
+			return false;
 		ItemStack[] set = craftingInventory.getStacks(SLOT_CRAFTING_1, 9);
 		ItemStack[] stock = accessibleInventory.getStacks(SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
 		return StackUtils.containsSets(set, stock, currentRecipe.getRecipeOutput(), true, true) > 0;
@@ -474,7 +476,9 @@ public class TileWorktable extends TileBase implements ICrafter {
 
 	@Override
 	public boolean canTakeStack(int slotIndex) {
-		return validateResources();
+		if (slotIndex == SLOT_CRAFTING_RESULT)
+			return canCraftCurrentRecipe();
+		return true;
 	}
 
 	@Override
