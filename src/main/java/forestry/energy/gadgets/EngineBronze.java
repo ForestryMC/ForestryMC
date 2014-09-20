@@ -238,7 +238,7 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 	 */
 	private int determineFuelValue(Fluid fluid) {
 		if (FuelManager.bronzeEngineFuel.containsKey(fluid))
-			return FuelManager.bronzeEngineFuel.get(fluid).powerPerCycle;
+			return FuelManager.bronzeEngineFuel.get(fluid).powerPerCycle * 10; //Too Lazy to change all the numbers to RF, so just doing this.
 		else
 			return 0;
 	}

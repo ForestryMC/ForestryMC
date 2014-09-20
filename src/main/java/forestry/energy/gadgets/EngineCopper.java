@@ -209,7 +209,7 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 	 */
 	private int determineFuelValue(ItemStack fuel) {
 		if (FuelManager.copperEngineFuel.containsKey(fuel))
-			return FuelManager.copperEngineFuel.get(fuel).powerPerCycle;
+			return FuelManager.copperEngineFuel.get(fuel).powerPerCycle * 10; //Too Lazy to change all the numbers to RF, so just doing this.
 		else
 			return 0;
 	}

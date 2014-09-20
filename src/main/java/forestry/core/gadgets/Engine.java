@@ -84,28 +84,10 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 		//powerProvider.configure(10, 200, 10, 100000);
 	}
 
-
-
 	@Override
 	public void rotateAfterPlacement(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack itemstack) {
 		rotateEngine();
 	}
-
-	/**
-     * @deprecated Use {@link cofh.api.energy.EnergyStorage#modifyEnergyStored(int)} instead
-	 */
-    @Deprecated
-	public void addEnergy(float addition) {
-        energyStorage.modifyEnergyStored((int)addition);
-	}
-
-	/**
-     * @deprecated Use {@link #extractEnergy(net.minecraftforge.common.util.ForgeDirection, int, boolean)} instead
-	 */
-    @Deprecated
-	public double extractEnergy(double min, double max, boolean doExtract) {
-        return energyStorage.extractEnergy((int)max, !doExtract);
-    }
 
 	/**
 	 * Adds heat
@@ -207,7 +189,7 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 		if (mayBurn())
 			burn();
 		else
-			extractEnergy(0, 2, true);
+			energyStorage.extractEnergy(2, false);
 
 	}
 
