@@ -264,13 +264,6 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		return owner;
 	}
 
-	public EntityPlayer getOwnerEntity() {
-		if (owner != null)
-			return worldObj.func_152378_a(owner.getId());
-		else
-			return null;
-	}
-
 	@Override
 	public void setOwner(EntityPlayer player) {
 		this.owner = player.getGameProfile();

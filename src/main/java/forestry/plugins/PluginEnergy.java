@@ -156,13 +156,11 @@ public class PluginEnergy extends NativePlugin {
 		GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * GameMode.getGameMode().getFloatSetting("fuel.biomass.generator")), 1);
 		FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
 
-		Circuit.energyElectricChoke1 = new CircuitElectricChoke("energyChoke1");
-		Circuit.energyFireDampener1 = new CircuitFireDampener("energyDampener1");
-		Circuit.energyElectricEfficiency1 = new CircuitElectricEfficiency("energyEfficiency1");
-		Circuit.energyElectricBoost1 = new CircuitElectricBoost("energyBoost1", 2, 7, 2, "electric.boost.1", new String[]{"Increases output by 2 MJ/t",
-			"Increases intake by 7 EU/t"});
-		Circuit.energyElectricBoost2 = new CircuitElectricBoost("energyBoost2", 2, 15, 4, "electric.boost.2", new String[]{"Increases output by 4 MJ/t",
-			"Increases intake by 15 EU/t"});
+		Circuit.energyElectricChoke1 = new CircuitElectricChoke("electric.choke.1");
+		Circuit.energyFireDampener1 = new CircuitFireDampener("dampener.1");
+		Circuit.energyElectricEfficiency1 = new CircuitElectricEfficiency("electric.efficiency.1");
+		Circuit.energyElectricBoost1 = new CircuitElectricBoost("electric.boost.1", 2, 7, 2);
+		Circuit.energyElectricBoost2 = new CircuitElectricBoost("electric.boost.2", 2, 15, 4);
 	}
 
 	@Override

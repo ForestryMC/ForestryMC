@@ -21,14 +21,10 @@ public abstract class Circuit implements ICircuit {
 	String uid;
 	int limit = 1;
 	boolean requiresDiscovery;
-	String name;
-	String[] descriptions;
 
-	public Circuit(String uid, boolean requiresDiscovery, String name, String[] descriptions) {
+	public Circuit(String uid, boolean requiresDiscovery) {
 		this.uid = uid;
 		this.requiresDiscovery = requiresDiscovery;
-		this.name = name;
-		this.descriptions = descriptions;
 
 		ChipsetManager.circuitRegistry.registerCircuit(this);
 	}
@@ -54,14 +50,23 @@ public abstract class Circuit implements ICircuit {
 
 	@Override
 	public String getName() {
-		return "circuit." + this.name;
+		return "circuit." + this.uid;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void addTooltip(List list) {
-		for (String description : descriptions)
-			list.add(" - " + StringUtil.localize(description));
+		list.add(StringUtil.localize(getName()));
+
+		int i = 1;
+		while (true) {
+			String unlocalizedDescription = getName() + ".description." + i;
+			String description = StringUtil.localize(unlocalizedDescription);
+			if (description.endsWith(unlocalizedDescription))
+				break;
+			list.add(" - " + description);
+			i++;
+		}
 	}
 
 	public static ICircuit energyElectricChoke1;

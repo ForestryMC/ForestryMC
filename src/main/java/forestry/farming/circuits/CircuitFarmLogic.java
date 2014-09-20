@@ -23,8 +23,8 @@ public class CircuitFarmLogic extends Circuit {
 	private Class<? extends FarmLogic> logicClass;
 	private boolean isManual = false;
 
-	public CircuitFarmLogic(String uid, Class<? extends FarmLogic> logicClass, String[] descriptions) {
-		super(uid, false, uid, descriptions);
+	public CircuitFarmLogic(String uid, Class<? extends FarmLogic> logicClass) {
+		super(uid, false);
 		this.logicClass = logicClass;
 		setLimit(4);
 	}
