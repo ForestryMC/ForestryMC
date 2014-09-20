@@ -255,7 +255,7 @@ public class StackUtils {
 	 * @return
 	 */
 	public static int containsSets(ItemStack[] set, ItemStack[] stock) {
-		return containsSets(set, stock, null, false, false);
+		return containsSets(set, stock, false, false);
 	}
 
 	/**
@@ -265,7 +265,7 @@ public class StackUtils {
 	 * @param stock
 	 * @return
 	 */
-	public static int containsSets(ItemStack[] set, ItemStack[] stock, ItemStack exclude, boolean oreDictionary, boolean craftingTools) {
+	public static int containsSets(ItemStack[] set, ItemStack[] stock, boolean oreDictionary, boolean craftingTools) {
 		int count = 0;
 
 		ItemStack[] condensedRequired = StackUtils.condenseStacks(set, -1, oreDictionary);
@@ -275,9 +275,6 @@ public class StackUtils {
 
 			boolean matched = false;
 			for (ItemStack offer : condensedOffered) {
-
-				if (exclude != null && isIdenticalItem(offer, exclude))
-					continue;
 
 				if (isCraftingEquivalent(req, offer, oreDictionary, craftingTools)) {
 					matched = true;

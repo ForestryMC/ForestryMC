@@ -207,7 +207,7 @@ public class InventoryAdapter implements IInventory, INBTTagable {
 		ItemStack[] condensedSet = StackUtils.condenseStacks(set, -1, false);
 
 		ItemStack[] stock = getStacks(firstSlotIndex, slotCount);
-		if (StackUtils.containsSets(condensedSet, stock, null, oreDictionary, craftingTools) < count)
+		if (StackUtils.containsSets(condensedSet, stock, oreDictionary, craftingTools) < count)
 			return false;
 
 		for (ItemStack stackToRemove : condensedSet) {

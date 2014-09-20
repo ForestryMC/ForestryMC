@@ -466,7 +466,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 			return false;
 		ItemStack[] set = craftingInventory.getStacks(SLOT_CRAFTING_1, 9);
 		ItemStack[] stock = accessibleInventory.getStacks(SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
-		return StackUtils.containsSets(set, stock, currentRecipe.getRecipeOutput(), true, true) > 0;
+		return StackUtils.containsSets(set, stock, true, true) > 0;
 	}
 
 	private boolean removeResources(EntityPlayer player) {

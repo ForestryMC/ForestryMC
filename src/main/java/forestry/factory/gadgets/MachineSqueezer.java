@@ -83,7 +83,7 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 		}
 
 		public boolean matches(ItemStack[] res) {
-			return StackUtils.containsSets(resources, res, null, true, true) > 0;
+			return StackUtils.containsSets(resources, res, true, true) > 0;
 		}
 	}
 

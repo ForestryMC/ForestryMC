@@ -432,7 +432,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 				return false;
 
 		// Need at least one matched set
-		return StackUtils.containsSets(craftingInventory.getStacks(SLOT_CRAFTING_1, 9), accessibleInventory.getStacks(SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT), null, true, false) > 0;
+		return StackUtils.containsSets(craftingInventory.getStacks(SLOT_CRAFTING_1, 9), accessibleInventory.getStacks(SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT), true, false) > 0;
 	}
 
 	private boolean removeResources(Recipe recipe) {
