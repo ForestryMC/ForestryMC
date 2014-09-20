@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.util.FakePlayer;
 
 import forestry.Forestry;
 import forestry.core.config.Defaults;
@@ -38,7 +39,7 @@ public class ProxyNetwork {
 	}
 
 	public void sendToPlayer(ForestryPacket packet, EntityPlayer entityplayer) {
-		if (!(entityplayer instanceof EntityPlayerMP))
+		if (!(entityplayer instanceof EntityPlayerMP) || (entityplayer instanceof FakePlayer))
 			return;
 
 		EntityPlayerMP player = (EntityPlayerMP) entityplayer;

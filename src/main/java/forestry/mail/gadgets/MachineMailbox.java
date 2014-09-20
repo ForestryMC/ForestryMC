@@ -18,6 +18,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -80,25 +81,15 @@ public class MachineMailbox extends TileBase implements IMailContainer, ISpecial
 	@Override
 	public void updateServerSide() {
 		if (!isLinked) {
-			getOrCreateMailInventory();
+			getOrCreateMailInventory(worldObj, getOwnerProfile());
 			isLinked = true;
 		}
 	}
 
 	/* MAIL HANDLING */
-	public IInventory getOrCreateMailInventory() {
-		return getOrCreateMailInventory(null);
-	}
-	public IInventory getOrCreateMailInventory(EntityPlayer player) {
 
-		GameProfile playerProfile;
-		if (player != null) {
-			playerProfile = player.getGameProfile();
-		} else {
-			playerProfile = getOwnerProfile();
-		}
-
-		if (playerProfile == null)
+	public IInventory getOrCreateMailInventory(World world, GameProfile playerProfile) {
+		if (!Proxies.common.isSimulating(world))
 			return new InventoryAdapter(POBox.SLOT_SIZE, "Letters");
 
 		IMailAddress address = PostManager.postRegistry.getMailAddress(playerProfile);
@@ -121,7 +112,7 @@ public class MachineMailbox extends TileBase implements IMailContainer, ISpecial
 	@Override
 	public boolean hasMail() {
 
-		IInventory mailInventory = getOrCreateMailInventory();
+		IInventory mailInventory = getOrCreateMailInventory(worldObj, getOwnerProfile());
 		for (int i = 0; i < mailInventory.getSizeInventory(); i++)
 			if (mailInventory.getStackInSlot(i) != null)
 				return true;
@@ -135,19 +126,6 @@ public class MachineMailbox extends TileBase implements IMailContainer, ISpecial
 		LinkedList<ITrigger> res = new LinkedList<ITrigger>();
 		res.add(PluginMail.triggerHasMail);
 		return res;
-	}
-
-	/* ISIDEDINVENTORY */
-	private static int[] slotIndices;
-
-	public int[] getSizeInventorySide(int side) {
-		IInventory inventory = getOrCreateMailInventory();
-		if(slotIndices == null) {
-			slotIndices = new int[inventory.getSizeInventory()];
-			for(int i = 0; i < inventory.getSizeInventory(); i++)
-				slotIndices[i] = i;
-		}
-		return slotIndices;
 	}
 
 	/* ISPECIALINVENTORY */
@@ -168,7 +146,7 @@ public class MachineMailbox extends TileBase implements IMailContainer, ISpecial
 	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
 
 		ItemStack product = null;
-		IInventory mailInventory = getOrCreateMailInventory();
+		IInventory mailInventory = getOrCreateMailInventory(worldObj, getOwnerProfile());
 
 		for (int i = 0; i < mailInventory.getSizeInventory(); i++) {
 			ItemStack slotStack = mailInventory.getStackInSlot(i);
