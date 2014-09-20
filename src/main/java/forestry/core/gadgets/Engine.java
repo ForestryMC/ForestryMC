@@ -20,14 +20,8 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import buildcraft.api.core.Position;
-import buildcraft.api.power.IPowerEmitter;
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerHandler;
-import buildcraft.api.power.PowerHandler.PowerReceiver;
-import buildcraft.api.transport.IPipeConnection;
-import buildcraft.api.transport.IPipeTile.PipeType;
-
+import cofh.api.energy.EnergyStorage;
+import cofh.api.energy.IEnergyHandler;
 import forestry.core.TemperatureState;
 import forestry.core.config.Defaults;
 import forestry.core.interfaces.IPowerHandler;
@@ -36,7 +30,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
 import forestry.plugins.PluginBuildCraft;
 
-public abstract class Engine extends TileBase implements IPowerHandler, IPipeConnection, IPowerEmitter {
+public abstract class Engine extends TileBase implements IEnergyHandler {
 
 	@Override
 	public PacketPayload getPacketPayload() {
@@ -46,7 +40,7 @@ public abstract class Engine extends TileBase implements IPowerHandler, IPipeCon
 			payload.intPayload[0] = 1;
 		else
 			payload.intPayload[0] = 0;
-		payload.intPayload[1] = (int) storedEnergy;
+		payload.intPayload[1] = energyStorage.getEnergyStored();
 		payload.intPayload[2] = heat;
 
 		payload.floatPayload[0] = pistonSpeedServer;
@@ -56,11 +50,8 @@ public abstract class Engine extends TileBase implements IPowerHandler, IPipeCon
 	@Override
 	public void fromPacketPayload(PacketPayload payload) {
 
-		if (payload.intPayload[0] > 0)
-			isActive = true;
-		else
-			isActive = false;
-		storedEnergy = payload.intPayload[1];
+        isActive = payload.intPayload[0] > 0;
+		energyStorage.setEnergyStored(payload.intPayload[1]);
 		heat = payload.intPayload[2];
 
 		pistonSpeedServer = payload.floatPayload[0];
@@ -78,19 +69,19 @@ public abstract class Engine extends TileBase implements IPowerHandler, IPipeCon
 	protected int currentOutput = 0;
 	public final int maxEnergy;
 	public final int maxEnergyExtracted;
-	public float storedEnergy;
 	public int heat;
 	protected final int maxHeat;
 	protected boolean forceCooldown = false;
 	public float progress;
-	private final PowerHandler powerProvider;
+    protected EnergyStorage energyStorage;
 
 	public Engine(int maxHeat, int maxEnergy, int maxEnergyExtracted) {
 		this.maxHeat = maxHeat;
-		this.maxEnergy = maxEnergy;
-		this.maxEnergyExtracted = maxEnergyExtracted;
-		powerProvider = new PowerHandler(this, PowerHandler.Type.ENGINE);
-		powerProvider.configure(10, 200, 10, 100000);
+		this.maxEnergy = maxEnergy * 10; //TODO Temporary until all are converted
+		this.maxEnergyExtracted = maxEnergyExtracted * 10;
+        energyStorage = new EnergyStorage(maxEnergy, maxEnergyExtracted);
+		//powerProvider = new PowerHandler(this, PowerHandler.Type.ENGINE);
+		//powerProvider.configure(10, 200, 10, 100000);
 	}
 
 
@@ -101,47 +92,20 @@ public abstract class Engine extends TileBase implements IPowerHandler, IPipeCon
 	}
 
 	/**
-	 * Adds energy
-	 *
-	 * @param addition
+     * @deprecated Use {@link cofh.api.energy.EnergyStorage#modifyEnergyStored(int)} instead
 	 */
+    @Deprecated
 	public void addEnergy(float addition) {
-		storedEnergy += addition;
-
-		if (storedEnergy > maxEnergy)
-			storedEnergy = maxEnergy;
+        energyStorage.modifyEnergyStored((int)addition);
 	}
 
 	/**
-	 *
-	 * @param min Minimum energy to extract. Will return 0 if storedEnergy less
-	 * than min.
-	 * @param max Maximum energy to extract.
-	 * @param doExtract Determines whether energy will actually be removed from
-	 * the engine.
-	 *
-	 * @return
+     * @deprecated Use {@link #extractEnergy(net.minecraftforge.common.util.ForgeDirection, int, boolean)} instead
 	 */
+    @Deprecated
 	public double extractEnergy(double min, double max, boolean doExtract) {
-		if (storedEnergy < min)
-			return 0;
-
-		double ceiling = max > maxEnergyExtracted ? maxEnergyExtracted : max;
-
-		double extracted;
-
-		if (storedEnergy >= ceiling) {
-			extracted = ceiling;
-			if (doExtract)
-				storedEnergy -= ceiling;
-		} else {
-			extracted = storedEnergy;
-			if (doExtract)
-				storedEnergy = 0;
-		}
-
-		return extracted;
-	}
+        return energyStorage.extractEnergy((int)max, !doExtract);
+    }
 
 	/**
 	 * Adds heat
@@ -185,6 +149,9 @@ public abstract class Engine extends TileBase implements IPowerHandler, IPipeCon
 
 	@Override
 	public void updateServerSide() {
+        //doWork appears to be called before updateServerSide, so it's contents have been moved to here.
+        energyStorage.modifyEnergyStored(energyStorage.getMaxReceive());
+
 		TemperatureState energyState = getTemperatureState();
 		if (energyState == TemperatureState.MELTING && heat > 0)
 			forceCooldown = true;
@@ -192,9 +159,10 @@ public abstract class Engine extends TileBase implements IPowerHandler, IPipeCon
 			forceCooldown = false;
 
 		// Determine targeted tile
-		Position posTarget = new Position(xCoord, yCoord, zCoord, this.getOrientation());
+		/*Position posTarget = new Position(xCoord, yCoord, zCoord, this.getOrientation());
 		posTarget.moveForwards(1.0);
-		TileEntity tile = worldObj.getTileEntity((int) posTarget.x, (int) posTarget.y, (int) posTarget.z);
+		TileEntity tile = worldObj.getTileEntity((int) posTarget.x, (int) posTarget.y, (int) posTarget.z);*/
+        TileEntity tile = worldObj.getTileEntity(xCoord + getOrientation().offsetX, yCoord + getOrientation().offsetY, zCoord + getOrientation().offsetZ);
 
 		float newPistonSpeed = getPistonSpeed();
 		if (newPistonSpeed != pistonSpeedServer) {
@@ -209,12 +177,12 @@ public abstract class Engine extends TileBase implements IPowerHandler, IPipeCon
 			if (progress > 0.5 && stagePiston == 1) {
 				stagePiston = 2;
 
-				if (BlockUtil.isPoweredTile(getOrientation().getOpposite(), tile)) {
-					IPowerReceptor receptor = (IPowerReceptor) tile;
-					double extractedEnergy = extractEnergy(receptor.getPowerReceiver(getOrientation().getOpposite()).getMinEnergyReceived(), receptor.getPowerReceiver(getOrientation().getOpposite()).getMaxEnergyReceived(),
-							true);
+				if (BlockUtil.isRFTile(getOrientation().getOpposite(), tile)) {
+					IEnergyHandler receptor = (IEnergyHandler) tile;
+					int extractedEnergy = extractEnergy(getOrientation(), energyStorage.getMaxExtract(), false); //TODO What should I pass in here?
 					if (extractedEnergy > 0)
-						PluginBuildCraft.instance.invokeReceiveEnergyMethod(PowerHandler.Type.ENGINE, receptor.getPowerReceiver(getOrientation().getOpposite()), extractedEnergy, getOrientation().getOpposite());
+						//PluginBuildCraft.instance.invokeReceiveEnergyMethod(PowerHandler.Type.ENGINE, receptor.getPowerReceiver(getOrientation().getOpposite()), extractedEnergy, getOrientation().getOpposite());
+                        receptor.receiveEnergy(getOrientation().getOpposite(), extractedEnergy, false);
 					// receptor.getPowerProvider().receiveEnergy(extractedEnergy);
 				}
 
@@ -224,8 +192,8 @@ public abstract class Engine extends TileBase implements IPowerHandler, IPipeCon
 			}
 
 		} else if (canPowerTo(tile)) { // If we are not already running, check if
-			IPowerReceptor receptor = (IPowerReceptor) tile;
-			if (extractEnergy(receptor.getPowerReceiver(getOrientation().getOpposite()).getMinEnergyReceived(), receptor.getPowerReceiver(getOrientation().getOpposite()).getMaxEnergyReceived(), false) > 0) {
+			IEnergyHandler receptor = (IEnergyHandler) tile;
+			if (extractEnergy(getOrientation(), energyStorage.getMaxExtract(), true) > 0) {
 				stagePiston = 1; // If we can transfer energy, start running
 				setActive(true);
 			} else
@@ -244,7 +212,7 @@ public abstract class Engine extends TileBase implements IPowerHandler, IPipeCon
 	}
 
 	private boolean canPowerTo(TileEntity tile) {
-		return isActivated() && BlockUtil.isPoweredTile(getOrientation().getOpposite(), tile);
+		return isActivated() && BlockUtil.isRFTile(getOrientation().getOpposite(), tile);
 	}
 
 	private void setActive(boolean isActive) {
@@ -261,12 +229,13 @@ public abstract class Engine extends TileBase implements IPowerHandler, IPipeCon
 		for (int i = getOrientation().ordinal() + 1; i <= getOrientation().ordinal() + 6; ++i) {
 			ForgeDirection orient = ForgeDirection.values()[i % 6];
 
-			Position pos = new Position(xCoord, yCoord, zCoord, orient);
+			/*Position pos = new Position(xCoord, yCoord, zCoord, orient);
 			pos.moveForwards(1.0F);
 
-			TileEntity tile = worldObj.getTileEntity((int) pos.x, (int) pos.y, (int) pos.z);
+			TileEntity tile = worldObj.getTileEntity((int) pos.x, (int) pos.y, (int) pos.z);*/
+            TileEntity tile = worldObj.getTileEntity(xCoord + orient.offsetX, yCoord + orient.offsetY, zCoord + orient.offsetZ);
 
-			if (BlockUtil.isPoweredTile(getOrientation().getOpposite(), tile)) {
+			if (BlockUtil.isRFTile(getOrientation().getOpposite(), tile)) {
 				setOrientation(orient);
 				worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, worldObj.getBlock(xCoord, yCoord, zCoord));
 				worldObj.func_147479_m(xCoord, yCoord, zCoord);
@@ -297,8 +266,12 @@ public abstract class Engine extends TileBase implements IPowerHandler, IPipeCon
 			return 0;
 	}
 
+    /**
+     * @deprecated Use {@link #getEnergyStored(net.minecraftforge.common.util.ForgeDirection)} instead
+     */
+    @Deprecated
 	public float getEnergyStored() {
-		return storedEnergy;
+		return energyStorage.getEnergyStored();
 	}
 
 	public int getHeat() {
@@ -356,12 +329,13 @@ public abstract class Engine extends TileBase implements IPowerHandler, IPipeCon
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
+        energyStorage.readFromNBT(nbt);
 
 		heat = nbt.getInteger("EngineHeat");
-		if (nbt.hasKey("EngineStoredEnergy"))
+		/*if (nbt.hasKey("EngineStoredEnergy"))
 			storedEnergy = nbt.getInteger("EngineStoredEnergy");
 		else
-			storedEnergy = nbt.getFloat("EngineStored");
+			storedEnergy = nbt.getFloat("EngineStored");*/
 
 		progress = nbt.getFloat("EngineProgress");
 		forceCooldown = nbt.getBoolean("ForceCooldown");
@@ -370,9 +344,10 @@ public abstract class Engine extends TileBase implements IPowerHandler, IPipeCon
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
+        energyStorage.writeToNBT(nbt);
 
 		nbt.setInteger("EngineHeat", heat);
-		nbt.setFloat("EngineStored", storedEnergy);
+		//nbt.setFloat("EngineStored", storedEnergy);
 		nbt.setFloat("EngineProgress", progress);
 		nbt.setBoolean("ForceCooldown", forceCooldown);
 	}
@@ -382,38 +357,37 @@ public abstract class Engine extends TileBase implements IPowerHandler, IPipeCon
 
 	public abstract void sendGUINetworkData(Container containerEngine, ICrafting iCrafting);
 
-	/* IPOWERRECEPTOR */
-	@Override
-	public PowerReceiver getPowerReceiver(ForgeDirection side) {
-		return powerProvider.getPowerReceiver();
-	}
-
-	@Override
-	public PowerHandler getPowerHandler() {
-		return powerProvider;
-	}
-
-	@Override
+	/*@Override
 	public void doWork(PowerHandler workProvider) {
 		if (!Proxies.common.isSimulating(worldObj))
 			return;
 
 		addEnergy((int) (PluginBuildCraft.instance.invokeUseEnergyMethod(workProvider, 1, maxEnergyReceived(), true) * 0.95F));
-	}
 
-	/* IPIPECONNECTION */
-	@Override
-	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection with) {
-		if (type == PipeType.POWER)
-			return ConnectOverride.DEFAULT;
-		if (with == getOrientation())
-			return ConnectOverride.DISCONNECT;
-		return ConnectOverride.DEFAULT;
-	}
+	}*/
 
-	/* IPOWEREMITTER */
-	@Override
-	public boolean canEmitPowerFrom(ForgeDirection side) {
-		return side == getOrientation();
-	}
+    @Override
+    public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+        return 0;
+    }
+
+    @Override
+    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+        return energyStorage.extractEnergy(maxExtract, simulate); //TODO
+    }
+
+    @Override
+    public int getEnergyStored(ForgeDirection from) {
+        return energyStorage.getEnergyStored();
+    }
+
+    @Override
+    public int getMaxEnergyStored(ForgeDirection from) {
+        return energyStorage.getMaxEnergyStored();
+    }
+
+    @Override
+    public boolean canConnectEnergy(ForgeDirection from) {
+        return from == getOrientation();
+    }
 }

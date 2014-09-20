@@ -109,10 +109,6 @@ public class Config {
 	public static HashMap<String, String[]> hints = new HashMap<String, String[]>();
 	public static boolean disableEnergyStat = false;
 
-	// Power rations
-	public static double MJ_RF_Ratio = 10;
-	public static double MJ_EU_Ratio = 2.5;
-
 	@SuppressWarnings({ "all" })
 	public static void load() {
 
@@ -255,8 +251,6 @@ public class Config {
 		for (String str : disabledStructures)
 			Proxies.log.finer("Disabled structure '%s'.", str);
 
-		Config.MJ_RF_Ratio = Double.parseDouble(config.get("MJ_RF_Ratio", CATEGORY_COMMON, 10F).Value);
-		Config.MJ_EU_Ratio = Double.parseDouble(config.get("MJ_EU_Ratio", CATEGORY_COMMON, 2.5F).Value);
 		registerClimates();
 		ForestryTrigger.initialize();
 

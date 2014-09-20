@@ -133,7 +133,7 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 
 			if (isActivated()) {
 				currentOutput = determineFuelValue(new ItemStack(fuelItem, 1, fuelItemMeta));
-				addEnergy(currentOutput);
+				energyStorage.modifyEnergyStored(currentOutput);
 			}
 		} else if (isActivated()) {
 			int fuelslot = getFuelSlot();
@@ -174,7 +174,7 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 
 		if (isBurning()) {
 			heat++;
-			if (((double) storedEnergy / (double) maxEnergy) > 0.5)
+			if (((double) energyStorage.getEnergyStored() / (double) maxEnergy) > 0.5)
 				heat++;
 		}
 
@@ -333,7 +333,7 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 			currentOutput = j;
 			break;
 		case 3:
-			storedEnergy = j;
+			energyStorage.setEnergyStored(j);
 			break;
 		case 4:
 			heat = j;
@@ -346,7 +346,7 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 		iCrafting.sendProgressBarUpdate(containerEngine, 0, burnTime);
 		iCrafting.sendProgressBarUpdate(containerEngine, 1, totalBurnTime);
 		iCrafting.sendProgressBarUpdate(containerEngine, 2, currentOutput);
-		iCrafting.sendProgressBarUpdate(containerEngine, 3, (int)storedEnergy);
+		iCrafting.sendProgressBarUpdate(containerEngine, 3, energyStorage.getEnergyStored());
 		iCrafting.sendProgressBarUpdate(containerEngine, 4, heat);
 	}
 

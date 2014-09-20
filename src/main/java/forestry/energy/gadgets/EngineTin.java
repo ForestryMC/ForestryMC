@@ -39,13 +39,13 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 
 	protected static class EuConfig {
 		public int euForCycle;
-		public int mjPerCycle;
+		public int rfPerCycle;
 		public int euStorage;
 		public int euMaxAccept = 512;
 
-		public EuConfig(int euForCycle, int mjPerCycle, int euStorage) {
+		public EuConfig(int euForCycle, int rfPerCycle, int euStorage) {
 			this.euForCycle = euForCycle;
-			this.mjPerCycle = mjPerCycle;
+			this.rfPerCycle = rfPerCycle;
 			this.euStorage = euStorage;
 		}
 	}
@@ -136,7 +136,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		int gain = 0;
 		if (isActivated() && isBurning()) {
 			gain++;
-			if (((double) storedEnergy / (double) maxEnergy) > 0.5)
+			if (((double) energyStorage.getEnergyStored() / (double) maxEnergy) > 0.5)
 				gain++;
 		}
 
@@ -184,8 +184,8 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 			return;
 
 		if (ic2EnergySink.useEnergy(euConfig.euForCycle)) {
-			currentOutput = euConfig.mjPerCycle;
-			addEnergy(euConfig.mjPerCycle);
+			currentOutput = euConfig.rfPerCycle;
+			energyStorage.modifyEnergyStored(euConfig.rfPerCycle);
 		}
 
 	}
@@ -233,7 +233,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 			currentOutput = j;
 			break;
 		case 1:
-			storedEnergy = j;
+			energyStorage.setEnergyStored(j);
 			break;
 		case 2:
 			heat = j;
@@ -248,7 +248,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	@Override
 	public void sendGUINetworkData(Container containerEngine, ICrafting iCrafting) {
 		iCrafting.sendProgressBarUpdate(containerEngine, 0, currentOutput);
-		iCrafting.sendProgressBarUpdate(containerEngine, 1, (int)storedEnergy);
+		iCrafting.sendProgressBarUpdate(containerEngine, 1, energyStorage.getEnergyStored());
 		iCrafting.sendProgressBarUpdate(containerEngine, 2, heat);
 		if (ic2EnergySink != null) {
 			iCrafting.sendProgressBarUpdate(containerEngine, 3, (short) ic2EnergySink.getEnergyStored());
@@ -258,7 +258,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	// / ENERGY CONFIG CHANGE
 	public void changeEnergyConfig(int euChange, int mjChange, int storageChange) {
 		euConfig.euForCycle += euChange;
-		euConfig.mjPerCycle += mjChange;
+		euConfig.rfPerCycle += mjChange;
 		euConfig.euStorage += storageChange;
 
 		if (ic2EnergySink != null) ic2EnergySink.setCapacity(euConfig.euStorage);

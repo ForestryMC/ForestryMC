@@ -201,8 +201,8 @@ public class Defaults {
 	public static final int ENGINE_COPPER_ASH_FOR_ITEM = 7500;
 
 	public static final int ENGINE_TIN_HEAT_MAX = 3000;
-	public static final int ENGINE_TIN_EU_FOR_CYCLE = 6;
-	public static final int ENGINE_TIN_ENERGY_PER_CYCLE = 2;
+	public static final int ENGINE_TIN_EU_FOR_CYCLE = 5; //Reduced from 6 to 5, as per the 4 RF to 1 EU ratio
+	public static final int ENGINE_TIN_ENERGY_PER_CYCLE = 20;
 	public static final int ENGINE_TIN_MAX_EU_STORED = 2 * ENGINE_TIN_EU_FOR_CYCLE;
 	public static final int ENGINE_TIN_MAX_EU_BATTERY = 100;
 

@@ -34,6 +34,7 @@ import buildcraft.api.transport.IPipeConnection.ConnectOverride;
 import buildcraft.api.transport.IPipeTile;
 import buildcraft.api.transport.IPipeTile.PipeType;
 
+import cofh.api.energy.IEnergyHandler;
 import forestry.core.config.Defaults;
 
 public class BlockUtil {
@@ -146,6 +147,10 @@ public class BlockUtil {
 		return false;
 	}
 
+    /**
+     * @deprecated To be removed when MJ is gone. Use {@link #isRFTile} for now.
+     */
+    @Deprecated
 	public static boolean isPoweredTile(ForgeDirection side, TileEntity tile) {
 		if (tile == null)
 			return false;
@@ -156,6 +161,17 @@ public class BlockUtil {
 		IPowerReceptor receptor = (IPowerReceptor) tile;
 		return receptor.getPowerReceiver(side) != null;
 	}
+
+    public static boolean isRFTile(ForgeDirection side, TileEntity tile) {
+        if (tile == null)
+            return false;
+
+        if (!(tile instanceof IEnergyHandler))
+            return false;
+
+        IEnergyHandler receptor = (IEnergyHandler) tile;
+        return receptor.canConnectEnergy(side);
+    }
 
 	public static boolean tryPlantPot(World world, int x, int y, int z, Block block) {
 
