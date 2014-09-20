@@ -464,9 +464,58 @@ public class TileWorktable extends TileBase implements ICrafter {
 	private boolean canCraftCurrentRecipe() {
 		if (currentRecipe == null)
 			return false;
+
+		// Need at least one matched set
 		ItemStack[] set = craftingInventory.getStacks(SLOT_CRAFTING_1, 9);
 		ItemStack[] stock = accessibleInventory.getStacks(SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
-		return StackUtils.containsSets(set, stock, true, true) > 0;
+		if (StackUtils.containsSets(set, stock, true, true) == 0)
+			return false;
+
+		// Check that it doesn't make a different recipe.
+		// For example:
+		// Wood Logs are all ore dictionary equivalent with each other,
+		// but an Oak Log shouldn't be able to make Ebony Wood Planks
+		// because it makes Oak Wood Planks using the same recipe.
+		// Strategy:
+		// Create a fake crafting inventory using items we have in stock
+		// in place of the ones in the saved crafting inventory.
+		// Check that the recipe it makes is the same as the currentRecipe.
+		InventoryCrafting crafting = new InventoryCrafting(DUMMY_CONTAINER, 3, 3);
+		InventoryAdapter recipeMatrix = currentRecipe.getMatrix();
+		ItemStack[] stockCopy = StackUtils.condenseStacks(stock);
+
+		for (int slot = 0; slot < recipeMatrix.getSizeInventory(); slot++) {
+			ItemStack recipeStack = recipeMatrix.getStackInSlot(slot);
+			if (recipeStack == null)
+				continue;
+
+			// Use crafting equivalent (not oredict) items first
+			for (ItemStack stockStack : stockCopy) {
+				if (stockStack.stackSize > 0 && StackUtils.isCraftingEquivalent(recipeStack, stockStack, false, false)) {
+					ItemStack stack = new ItemStack(stockStack.getItem(), 1, stockStack.getItemDamage());
+					stockStack.stackSize--;
+					crafting.setInventorySlotContents(slot, stack);
+					break;
+				}
+			}
+
+			// Use oredict items if crafting equivalent items aren't available
+			if (crafting.getStackInSlot(slot) == null) {
+				for (ItemStack stockStack : stockCopy) {
+					if (stockStack.stackSize > 0 && StackUtils.isCraftingEquivalent(recipeStack, stockStack, true, true)) {
+						ItemStack stack = new ItemStack(stockStack.getItem(), 1, stockStack.getItemDamage());
+						stockStack.stackSize--;
+						crafting.setInventorySlotContents(slot, stack);
+						break;
+					}
+				}
+			}
+		}
+		IRecipe recipe = RECIPE_BRIDGE.getRecipe(crafting, worldObj);
+		if (recipe == null)
+			return false;
+
+		return recipe.getRecipeOutput().isItemEqual(currentRecipe.getRecipeOutput());
 	}
 
 	private boolean removeResources(EntityPlayer player) {
