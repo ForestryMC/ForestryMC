@@ -31,8 +31,6 @@ import buildcraft.api.power.PowerHandler.PowerReceiver;
 import buildcraft.api.recipes.BuildcraftRecipes;
 import buildcraft.api.transport.IPipeTile;
 
-import forestry.api.core.IPlugin;
-import forestry.api.core.PluginInfo;
 import forestry.core.GameMode;
 import forestry.core.config.Config;
 import forestry.core.config.Configuration;
@@ -43,8 +41,8 @@ import forestry.core.gadgets.TileForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.LiquidHelper;
 
-@PluginInfo(pluginID = "BC6", name = "BuildCraft 6", author = "SirSengir", url = Defaults.URL, description = "Compatibility plugin for BuildCraft 6.")
-public class PluginBuildCraft implements IPlugin, ITriggerProvider {
+@Plugin(pluginID = "BC6", name = "BuildCraft 6", author = "SirSengir", url = Defaults.URL, description = "Compatibility plugin for BuildCraft 6.")
+public class PluginBuildCraft extends ForestryPlugin implements ITriggerProvider {
 
 	public static PluginBuildCraft instance;
 	public static Configuration config;
@@ -69,6 +67,11 @@ public class PluginBuildCraft implements IPlugin, ITriggerProvider {
 	}
 
 	@Override
+	public String getFailMessage() {
+		return "Compatible Buildcraft version not found";
+	}
+
+	@Override
 	public void doInit() {
 		config = Config.config;
 
@@ -90,10 +93,6 @@ public class PluginBuildCraft implements IPlugin, ITriggerProvider {
 		initStoneGear();
 		initWaterproof();
 		initLiquids();
-	}
-
-	@Override
-	public void postInit() {
 	}
 
 	private void initLiquids() {
@@ -155,9 +154,5 @@ public class PluginBuildCraft implements IPlugin, ITriggerProvider {
 			return ((TileForestry) tile).getCustomTriggers();
 
 		return null;
-	}
-
-	@Override
-	public void preInit() {
 	}
 }

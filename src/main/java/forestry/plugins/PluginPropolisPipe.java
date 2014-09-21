@@ -8,10 +8,8 @@
 package forestry.plugins;
 
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
-import forestry.api.core.PluginInfo;
 import forestry.core.config.Configuration;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
@@ -20,9 +18,10 @@ import forestry.core.proxy.Proxies;
 import forestry.pipes.GuiHandlerPipes;
 import forestry.pipes.network.PacketHandlerPipes;
 import forestry.pipes.proxy.ProxyPipes;
+import java.util.EnumSet;
 
-@PluginInfo(pluginID = "Pipes", name = "Pipes", author = "SirSengir", url = Defaults.URL, description = "Adds the apiarist's pipe for beekeeping if apiculture is enabled and BuildCraft 6 is present.")
-public class PluginPropolisPipe extends NativePlugin {
+@Plugin(pluginID = "Pipes", name = "Pipes", author = "SirSengir", url = Defaults.URL, description = "Adds the apiarist's pipe for beekeeping if apiculture is enabled and BuildCraft 6 is present.")
+public class PluginPropolisPipe extends ForestryPlugin {
 
 	public static ProxyPipes proxy;
 
@@ -42,14 +41,25 @@ public class PluginPropolisPipe extends NativePlugin {
 	}
 
 	@Override
+	public String getFailMessage() {
+		return "Buildcraft|Transport not found";
+	}
+
+	@Override
+	public EnumSet<PluginManager.Module> getDependancies() {
+		EnumSet<PluginManager.Module> deps = super.getDependancies();
+		deps.add(PluginManager.Module.BUILDCRAFT);
+		return deps;
+	}
+
+	@Override
 	public void preInit() {
 
 		/*config = new Configuration();
 
-		propolisPipeItemId = Integer.parseInt(PluginPropolisPipe.config.get("propolisPipe", CONFIG_CATEGORY, 14000).Value);
+		 propolisPipeItemId = Integer.parseInt(PluginPropolisPipe.config.get("propolisPipe", CONFIG_CATEGORY, 14000).Value);
 
-		config.save();*/
-
+		 config.save();*/
 	}
 
 	@Override
@@ -58,14 +68,14 @@ public class PluginPropolisPipe extends NativePlugin {
 
 	@Override
 	public void postInit() {
-        String proxyClass = "forestry.pipes.proxy.ProxyPipes";
-        if (FMLCommonHandler.instance().getSide().isClient())
-            proxyClass = "forestry.pipes.proxy.ClientProxyPipes";
+		String proxyClass = "forestry.pipes.proxy.ProxyPipes";
+		if (FMLCommonHandler.instance().getSide().isClient())
+			proxyClass = "forestry.pipes.proxy.ClientProxyPipes";
 
-        proxy = (ProxyPipes) Proxies.common.instantiateIfModLoaded("BuildCraft|Transport", PluginBuildCraft.validVersionRange, proxyClass);
+		proxy = (ProxyPipes) Proxies.common.instantiateIfModLoaded("BuildCraft|Transport", PluginBuildCraft.validVersionRange, proxyClass);
 
-        if (proxy == null)
-            return;
+		if (proxy == null)
+			return;
 
 		proxy.initPropolisPipe();
 		proxy.registerCraftingPropolis(ForestryItem.propolis.getItemStack());
@@ -80,7 +90,7 @@ public class PluginPropolisPipe extends NativePlugin {
 	public IPacketHandler getPacketHandler() {
 		return new PacketHandlerPipes();
 	}
-	
+
 	@Override
 	protected void registerItems() {
 	}

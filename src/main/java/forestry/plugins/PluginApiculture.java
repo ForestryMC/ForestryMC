@@ -52,7 +52,6 @@ import forestry.api.apiculture.IBeeRoot;
 import forestry.api.apiculture.IHiveDrop;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.core.PluginInfo;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -152,8 +151,8 @@ import forestry.core.triggers.Trigger;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.ShapedRecipeCustom;
 
-@PluginInfo(pluginID = "Apiculture", name = "Apiculture", author = "SirSengir", url = Defaults.URL, description = "Adds bees, beekeeping and bee products. Affects world generation.")
-public class PluginApiculture extends NativePlugin {
+@Plugin(pluginID = "Apiculture", name = "Apiculture", author = "SirSengir", url = Defaults.URL, description = "Adds bees, beekeeping and bee products. Affects world generation.")
+public class PluginApiculture extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.apiculture.proxy.ClientProxyApiculture", serverSide = "forestry.apiculture.proxy.ProxyApiculture")
 	public static ProxyApiculture proxy;
@@ -180,12 +179,7 @@ public class PluginApiculture extends NativePlugin {
 	public static MachineDefinition definitionChest;
 	public static MachineDefinition definitionBeehouse;
 
-	@Override
-	public boolean isAvailable() {
-		return !Config.disableApiculture;
-	}
-
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	public void preInit() {
 		super.preInit();
@@ -239,7 +233,7 @@ public class PluginApiculture extends NativePlugin {
 		ForestryBlock.beehives.block().setHarvestLevel("scoop", 0, 8);
 
 		// Init bee interface
-		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginApiculture.beeInterface = BeeManager.beeInterface = new BeeHelper());
+		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginApiculture.beeInterface = new BeeHelper());
 		BeeManager.villageBees = new ArrayList[]{new ArrayList<IBeeGenome>(), new ArrayList<IBeeGenome>()};
 
 		// Candles
@@ -756,7 +750,7 @@ public class PluginApiculture extends NativePlugin {
 		return beeItem;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	private void createHiveDropArrays() {
 
 		BeeManager.hiveDrops = new ArrayList[8];

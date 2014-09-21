@@ -29,7 +29,6 @@ import net.minecraftforge.common.MinecraftForge;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitLayout;
-import forestry.api.core.PluginInfo;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmable;
 import forestry.core.circuits.Circuit;
@@ -81,8 +80,8 @@ import forestry.farming.triggers.TriggerLowFertilizer;
 import forestry.farming.triggers.TriggerLowLiquid;
 import forestry.farming.triggers.TriggerLowSoil;
 
-@PluginInfo(pluginID = "Farming", name = "Farming", author = "SirSengir", url = Defaults.URL, description = "Adds automatic farms and harvesters for a wide variety of products.")
-public class PluginFarming extends NativePlugin {
+@Plugin(pluginID = "Farming", name = "Farming", author = "SirSengir", url = Defaults.URL, description = "Adds automatic farms and harvesters for a wide variety of products.")
+public class PluginFarming extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.farming.proxy.ClientProxyFarming", serverSide = "forestry.farming.proxy.ProxyFarming")
 	public static ProxyFarming proxy;
@@ -95,11 +94,6 @@ public class PluginFarming extends NativePlugin {
 	public static Trigger lowSoil32;
 	public static Trigger lowFertilizer50;
 	public static Trigger lowFertilizer25;
-
-	@Override
-	public boolean isAvailable() {
-		return !Config.disableFarming;
-	}
 
 	@Override
 	public void preInit() {

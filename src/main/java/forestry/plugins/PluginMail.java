@@ -19,7 +19,6 @@ import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.network.IGuiHandler;
 
-import forestry.api.core.PluginInfo;
 import forestry.api.mail.EnumPostage;
 import forestry.api.mail.PostManager;
 import forestry.api.recipes.RecipeManagers;
@@ -59,8 +58,8 @@ import forestry.mail.triggers.TriggerLowInput;
 import forestry.mail.triggers.TriggerLowPaper;
 import forestry.mail.triggers.TriggerLowStamps;
 
-@PluginInfo(pluginID = "Mail", name = "Mail", author = "SirSengir", url = Defaults.URL, description = "Adds Forestry's mail and trade system.")
-public class PluginMail extends NativePlugin {
+@Plugin(pluginID = "Mail", name = "Mail", author = "SirSengir", url = Defaults.URL, description = "Adds Forestry's mail and trade system.")
+public class PluginMail extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.mail.proxy.ClientProxyMail", serverSide = "forestry.mail.proxy.ProxyMail")
 	public static ProxyMail proxy;
@@ -77,11 +76,6 @@ public class PluginMail extends NativePlugin {
 	public static MachineDefinition definitionTradestation;
 	public static MachineDefinition definitionPhilatelist;
 	public static StampInfo[] stampDefinitions;
-
-	@Override
-	public boolean isAvailable() {
-		return !Config.disableMail;
-	}
 
 	@Override
 	public void preInit() {

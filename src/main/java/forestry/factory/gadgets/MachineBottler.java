@@ -12,12 +12,11 @@ package forestry.factory.gadgets;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Stack;
 
-import forestry.core.fluids.tanks.FilteredTank;
+import forestry.api.recipes.ICraftingProvider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -30,6 +29,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
@@ -38,7 +38,6 @@ import buildcraft.api.power.PowerHandler;
 
 import cofh.api.energy.EnergyStorage;
 import forestry.api.core.ForestryAPI;
-import forestry.api.recipes.IBottlerManager;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
@@ -88,16 +87,8 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		}
 	}
 
-	public static class RecipeManager implements IBottlerManager {
+	public static class RecipeManager implements ICraftingProvider {
 		public static ArrayList<MachineBottler.Recipe> recipes = new ArrayList<MachineBottler.Recipe>();
-		public static HashSet<Fluid> recipeFluids = new HashSet<Fluid>();
-
-		@Override
-		public void addRecipe(int cyclesPerUnit, FluidStack input, ItemStack can, ItemStack bottled) {
-			recipes.add(new MachineBottler.Recipe(cyclesPerUnit, input, can, bottled));
-			if (input != null)
-				recipeFluids.add(input.getFluid());
-		}
 
 		/**
 		 * 
@@ -116,12 +107,14 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 					return recipe;
 			}
 
-			// No custom recipe matched. See if the liquid dictionary has anything.
+			// No recipe matched. See if the liquid dictionary has anything.
 			if(FluidContainerRegistry.isEmptyContainer(empty)) {
 				ItemStack filled = FluidContainerRegistry.fillFluidContainer(res, empty);
 				if(filled != null) {
 					FluidStack fluidStack = FluidContainerRegistry.getFluidForFilledItem(filled);
-					return findMatchingRecipe(fluidStack, empty);
+					Recipe recipe = new Recipe(CYCLES_FILLING_DEFAULT, fluidStack, empty, filled);
+					recipes.add(recipe);
+					return recipe;
 				}
 			}
 
@@ -134,7 +127,9 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		 * @return true if any recipe has a matching input
 		 */
 		public static boolean isInput(FluidStack res) {
-			return recipeFluids.contains(res.getFluid());
+			if (res == null)
+				return false;
+			return FluidRegistry.isFluidRegistered(res.getFluid());
 		}
 
 		@Override
@@ -149,7 +144,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	}
 
 	@EntityNetData
-	public FilteredTank resourceTank;
+	public StandardTank resourceTank;
 	private final TankManager tankManager;
 
 	private final InventoryAdapter inventory = new InventoryAdapter(3, "Items");
@@ -164,7 +159,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	public MachineBottler() {
         energyStorage = new EnergyStorage(4000);
 		setHints(Config.hints.get("bottler"));
-		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluids);
+		resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 		tankManager = new TankManager(resourceTank);
 	}
 

@@ -17,12 +17,11 @@ import net.minecraft.world.chunk.IChunkProvider;
 
 import cpw.mods.fml.common.IWorldGenerator;
 
-import forestry.api.core.IPlugin;
 import forestry.core.config.Config;
 import forestry.core.config.ForestryBlock;
 import forestry.core.proxy.Proxies;
 import forestry.core.worldgen.WorldGenMinableMeta;
-import forestry.plugins.NativePlugin;
+import forestry.plugins.ForestryPlugin;
 import forestry.plugins.PluginManager;
 
 public class WorldGenerator implements IWorldGenerator {
@@ -73,9 +72,7 @@ public class WorldGenerator implements IWorldGenerator {
 			}
 
 		// / PLUGIN WORLD GENERATION
-		for (IPlugin plugin : PluginManager.plugins)
-			if (plugin.isAvailable() && plugin instanceof NativePlugin)
-				((NativePlugin) plugin).generateSurface(world, random, chunkX, chunkZ);
+		PluginManager.generateSurface(world, random, chunkX, chunkZ);
 	}
 
 }

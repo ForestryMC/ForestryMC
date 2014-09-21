@@ -11,7 +11,6 @@
 package forestry.apiculture.genetics;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -36,7 +35,6 @@ import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IEffectData;
@@ -234,7 +232,7 @@ public class Bee extends IndividualLiving implements IBee {
 			return EnumErrorCode.NOSKY.ordinal();
 
 		// / And finally biome check
-		if (!checkBiomeHazard(world, housing.getTemperature(), housing.getHumidity(), housing.getXCoord(), housing.getYCoord(), housing.getZCoord()))
+		if (!checkBiomeHazard(biome))
 			return EnumErrorCode.INVALIDBIOME.ordinal();
 
 		return EnumErrorCode.OK.ordinal();
@@ -248,8 +246,10 @@ public class Bee extends IndividualLiving implements IBee {
 		return !genome.getPrimary().isNocturnal() || genome.getNocturnal();
 	}
 
-	private boolean checkBiomeHazard(World world, EnumTemperature temperature, EnumHumidity humidity, int x, int y, int z) {
+	private boolean checkBiomeHazard(BiomeGenBase biome) {
 
+		EnumTemperature temperature = EnumTemperature.getFromValue(biome.temperature);
+		EnumHumidity humidity = EnumHumidity.getFromValue(biome.getFloatRainfall());
 		return AlleleManager.climateHelper.isWithinLimits(temperature, humidity,
 				genome.getPrimary().getTemperature(), genome.getToleranceTemp(),
 				genome.getPrimary().getHumidity(), genome.getToleranceHumid());
@@ -315,32 +315,16 @@ public class Bee extends IndividualLiving implements IBee {
 
 	@Override
 	public ArrayList<Integer> getSuitableBiomeIds() {
-		EnumTemperature temperature = genome.getPrimary().getTemperature();
-		EnumTolerance temperatureTolerance = genome.getToleranceTemp();
+		ArrayList<Integer> suitableBiomes = new ArrayList<Integer>();
+		for (BiomeGenBase biome : BiomeGenBase.getBiomeGenArray())
+			if (checkBiomeHazard(biome))
+				suitableBiomes.add(biome.biomeID);
 
-		Collection<EnumTemperature> toleratedTemperatures = AlleleManager.climateHelper.getToleratedTemperature(temperature, temperatureTolerance);
-
-		EnumHumidity humidity = genome.getPrimary().getHumidity();
-		EnumTolerance humidityTolerance = genome.getToleranceHumid();
-
-		Collection<EnumHumidity> toleratedHumidities = AlleleManager.climateHelper.getToleratedHumidity(humidity, humidityTolerance);
-
-		ArrayList<Integer> biomeIdsTemp = new ArrayList<Integer>();
-		for (EnumTemperature temp : toleratedTemperatures)
-			biomeIdsTemp.addAll(EnumTemperature.getBiomeIds(temp));
-
-		ArrayList<Integer> biomeIdsHumid = new ArrayList<Integer>();
-		for (EnumHumidity humid : toleratedHumidities)
-			biomeIdsHumid.addAll(EnumHumidity.getBiomeIds(humid));
-
-		biomeIdsTemp.retainAll(biomeIdsHumid);
-
-		return biomeIdsTemp;
+		return suitableBiomes;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void addTooltip(List list) {
+	public void addTooltip(List<String> list) {
 
 		// No info 4 u!
 		if (!isAnalyzed) {

@@ -49,13 +49,11 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.oredict.OreDictionary;
 
-import forestry.api.core.PluginInfo;
 import forestry.api.core.Tabs;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
-import forestry.core.config.Config;
 import forestry.core.config.Configuration;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
@@ -78,8 +76,8 @@ import forestry.storage.items.ItemNaturalistBackpack;
 import forestry.storage.items.ItemNaturalistBackpack.BackpackDefinitionApiarist;
 import forestry.storage.items.ItemNaturalistBackpack.BackpackDefinitionLepidopterist;
 
-@PluginInfo(pluginID = "Storage", name = "Storage", author = "SirSengir", url = Defaults.URL, description = "Adds backpacks and crates.")
-public class PluginStorage extends NativePlugin implements IOreDictionaryHandler {
+@Plugin(pluginID = "Storage", name = "Storage", author = "SirSengir", url = Defaults.URL, description = "Adds backpacks and crates.")
+public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandler {
 
 	private final ArrayList<ItemStack> minerItems = new ArrayList<ItemStack>();
 	private final ArrayList<ItemStack> diggerItems = new ArrayList<ItemStack>();
@@ -91,21 +89,13 @@ public class PluginStorage extends NativePlugin implements IOreDictionaryHandler
 	Configuration config;
 
 	@Override
-	public boolean isAvailable() {
-		return !Config.disableStorage;
-	}
-
-	@Override
 	public void preInit() {
 		BackpackManager.backpackInterface = new BackpackHelper();
-		super.preInit();
 		createBackpackArrays();
 	}
 
 	@Override
 	public void postInit() {
-		super.postInit();
-
 		scanForItems();
 
 		config = new Configuration();
@@ -493,7 +483,7 @@ public class PluginStorage extends NativePlugin implements IOreDictionaryHandler
 
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	private void createBackpackArrays() {
 
 		if (BackpackManager.backpackItems != null)

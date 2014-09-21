@@ -21,7 +21,7 @@ import forestry.plugins.PluginArboriculture;
 
 public class WorldGenHelper implements IWorldGenInterface {
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	public Class<? extends WorldGenerator>[] getTreeGenerators(String ident) {
 

@@ -19,11 +19,11 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 
-import forestry.api.core.IPlugin;
-import forestry.api.core.PluginInfo;
+import forestry.plugins.Plugin;
 import forestry.core.config.Version;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.CommandMC;
+import forestry.plugins.ForestryPlugin;
 import forestry.plugins.PluginManager;
 
 public class CommandForestry extends CommandMC {
@@ -96,10 +96,10 @@ public class CommandForestry extends CommandMC {
 
 		String pluginList = "";
 
-		for (IPlugin plugin : PluginManager.plugins) {
+		for (PluginManager.Module pluginModule : PluginManager.getLoadedModules()) {
 			if (!pluginList.isEmpty())
 				pluginList += ", ";
-			pluginList += makeListEntry(plugin);
+			pluginList += makeListEntry(pluginModule.instance());
 		}
 
 		sendChatMessage(sender, pluginList);
@@ -110,14 +110,14 @@ public class CommandForestry extends CommandMC {
 		if (arguments.length < 3)
 			throw new WrongUsageException("/" + getCommandName() + " plugins info <plugin-name>");
 
-		IPlugin found = null;
-		for (IPlugin plugin : PluginManager.plugins) {
-			PluginInfo info = plugin.getClass().getAnnotation(PluginInfo.class);
+		ForestryPlugin found = null;
+		for (PluginManager.Module pluginModule : PluginManager.getLoadedModules()) {
+			Plugin info = pluginModule.instance().getClass().getAnnotation(Plugin.class);
 			if (info == null)
 				continue;
 
 			if ((info.pluginID().equalsIgnoreCase(arguments[2]) || info.name().equalsIgnoreCase(arguments[2]))) {
-				found = plugin;
+				found = pluginModule.instance();
 				break;
 			}
 		}
@@ -128,7 +128,7 @@ public class CommandForestry extends CommandMC {
 		String entry = "\u00A7c";
 		if (found.isAvailable())
 			entry = "\u00A7a";
-		PluginInfo info = found.getClass().getAnnotation(PluginInfo.class);
+		Plugin info = found.getClass().getAnnotation(Plugin.class);
 		if (info != null) {
 			sendChatMessage(sender, entry + "Plugin: " + info.name());
 			if (!info.version().isEmpty())
@@ -143,12 +143,12 @@ public class CommandForestry extends CommandMC {
 
 	}
 
-	private String makeListEntry(IPlugin plugin) {
+	private String makeListEntry(ForestryPlugin plugin) {
 		String entry = "\u00A7c";
 		if (plugin.isAvailable())
 			entry = "\u00A7a";
 
-		PluginInfo info = plugin.getClass().getAnnotation(PluginInfo.class);
+		Plugin info = plugin.getClass().getAnnotation(Plugin.class);
 		if (info != null) {
 			entry += info.pluginID();
 			if (!info.version().isEmpty())

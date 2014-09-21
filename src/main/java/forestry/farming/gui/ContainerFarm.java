@@ -133,6 +133,7 @@ public class ContainerFarm extends ContainerSocketed {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		TankManager tankManager = tile.getTankManager();

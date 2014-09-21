@@ -21,7 +21,6 @@ import cpw.mods.fml.common.network.IGuiHandler;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitLayout;
-import forestry.api.core.PluginInfo;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
 import forestry.core.GameMode;
@@ -52,8 +51,8 @@ import forestry.energy.gadgets.EngineTin;
 import forestry.energy.gadgets.MachineGenerator;
 import forestry.energy.proxy.ProxyEnergy;
 
-@PluginInfo(pluginID = "Energy", name = "Energy", author = "SirSengir", url = Defaults.URL, description = "Adds several engines compatible with BuildCraft 3 as well as a generator for IC2.")
-public class PluginEnergy extends NativePlugin {
+@Plugin(pluginID = "Energy", name = "Energy", author = "SirSengir", url = Defaults.URL, description = "Adds several engines compatible with BuildCraft 3 as well as a generator for IC2.")
+public class PluginEnergy extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.energy.proxy.ClientProxyEnergy", serverSide = "forestry.energy.proxy.ProxyEnergy")
 	public static ProxyEnergy proxy;
@@ -62,11 +61,6 @@ public class PluginEnergy extends NativePlugin {
 	public static MachineDefinition definitionEngineBronze;
 	public static MachineDefinition definitionEngineClockwork;
 	public static MachineDefinition definitionGenerator;
-
-	@Override
-	public boolean isAvailable() {
-		return !Config.disableEnergy;
-	}
 
 	@Override
 	public void preInit() {

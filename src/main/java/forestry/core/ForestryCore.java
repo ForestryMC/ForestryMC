@@ -12,8 +12,6 @@ package forestry.core;
 
 import java.io.File;
 
-import net.minecraft.command.CommandHandler;
-import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -30,7 +28,6 @@ import com.google.common.collect.ImmutableList;
 
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.IPlugin;
 import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.EngineCopperFuel;
 import forestry.api.fuels.FermenterFuel;
@@ -46,8 +43,6 @@ import forestry.core.gadgets.TileMachine;
 import forestry.core.gadgets.TileMill;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.LiquidHelper;
-import forestry.plugins.NativePlugin;
-import forestry.plugins.PluginCore;
 import forestry.plugins.PluginManager;
 
 public class ForestryCore {
@@ -56,8 +51,6 @@ public class ForestryCore {
 		ForestryAPI.instance = basemod;
 		ForestryAPI.forestryConstants = new ForestryConstants();
 
-		PluginManager.loadPlugins(modLocation);
-
 		// Register event handler
 		MinecraftForge.EVENT_BUS.register(new EventHandlerCore());
 
@@ -65,21 +58,7 @@ public class ForestryCore {
 		if (!Config.disableVersionCheck)
 			Version.versionCheck();
 
-		for (IPlugin plugin : PluginManager.plugins) {
-			if (plugin instanceof PluginCore)
-				plugin.preInit();
-		}
-
-		for (IPlugin plugin : PluginManager.plugins) {
-			if (plugin instanceof PluginCore)
-				continue;
-
-			if (plugin.isAvailable())
-				plugin.preInit();
-			else
-				Proxies.log.fine("Skipped plugin " + plugin.getClass() + " because preconditions were not met.");
-		}
-
+		PluginManager.runPreInit();
 	}
 
 	public void init(Object basemod) {
@@ -129,9 +108,8 @@ public class ForestryCore {
 		FuelManager.rainSubstrate.put(ForestryItem.craftingMaterial.getItemStack(1, 4), new RainSubstrate(ForestryItem.craftingMaterial.getItemStack(1, 4), 0.075f));
 
 		// Set additional apiary flowers
-		for (int i=0; i<9; i++) {
+		for (int i = 0; i < 9; i++)
 			FlowerManager.plainFlowers.add(new ItemStack(Blocks.red_flower, 1, i));
-		}
 		FlowerManager.plainFlowers.add(new ItemStack(Blocks.yellow_flower));
 
 		// Register gui handler
@@ -142,20 +120,12 @@ public class ForestryCore {
 		GameRegistry.registerTileEntity(TileEngine.class, "forestry.Engine");
 		GameRegistry.registerTileEntity(TileMachine.class, "forestry.Machine");
 
-
+		PluginManager.runInit();
 	}
 
 	public void postInit() {
 
-		for (IPlugin plugin : PluginManager.plugins) {
-			if (plugin.isAvailable())
-				plugin.doInit();
-		}
-
-		for (IPlugin plugin : PluginManager.plugins) {
-			if (plugin.isAvailable())
-				plugin.postInit();
-		}
+		PluginManager.runPostInit();
 
 		Proxies.common.registerTickHandlers();
 
@@ -164,29 +134,11 @@ public class ForestryCore {
 	}
 
 	public void serverStarting(MinecraftServer server) {
-		CommandHandler commandManager = (CommandHandler) server.getCommandManager();
-		for (IPlugin plugin : PluginManager.plugins) {
-			if (plugin.isAvailable() && plugin instanceof NativePlugin) {
-				ICommand[] commands = ((NativePlugin) plugin).getConsoleCommands();
-				if (commands == null)
-					continue;
-				for (ICommand command : commands) {
-					commandManager.registerCommand(command);
-				}
-			}
-		}
+		PluginManager.serverStarting(server);
 	}
 
 	public void processIMCMessages(ImmutableList<IMCMessage> messages) {
-		for (IMCMessage message : messages) {
-			for (IPlugin plugin : PluginManager.plugins) {
-				if (!(plugin instanceof NativePlugin))
-					continue;
-
-				if (((NativePlugin) plugin).processIMCMessage(message))
-					break;
-			}
-		}
+		PluginManager.processIMCMessages(messages);
 	}
 
 	public String getPriorities() {

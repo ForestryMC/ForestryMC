@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.network.IGuiHandler;
 
-import forestry.api.core.PluginInfo;
 import forestry.api.food.BeverageManager;
 import forestry.api.food.IBeverageEffect;
 import forestry.core.config.Config;
@@ -33,13 +32,8 @@ import forestry.food.items.ItemBeverage;
 import forestry.food.items.ItemBeverage.BeverageInfo;
 import forestry.food.items.ItemInfuser;
 
-@PluginInfo(pluginID = "Food", name = "Food", author = "SirSengir", url = Defaults.URL, description = "Adds food.")
-public class PluginFood extends NativePlugin {
-
-	@Override
-	public boolean isAvailable() {
-		return !Config.disableFood;
-	}
+@Plugin(pluginID = "Food", name = "Food", author = "SirSengir", url = Defaults.URL, description = "Adds food.")
+public class PluginFood extends ForestryPlugin {
 
 	@Override
 	public void preInit() {

@@ -250,9 +250,8 @@ public class Letter implements ILetter, INBTTagable {
 		return text;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void addTooltip(List list) {
+	public void addTooltip(List<String> list) {
 		if (this.sender != null && StringUtils.isNotBlank(this.sender.getName()))
 			list.add(StringUtil.localize("gui.mail.from") + ": " + this.sender.getName());
 		if (this.recipient != null && this.recipient.length > 0)

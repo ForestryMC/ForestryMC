@@ -38,6 +38,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.FluidMap;
 import forestry.core.utils.ItemStackMap;
 import forestry.core.utils.StringUtil;
+import java.io.File;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 
@@ -60,6 +61,7 @@ public class Forestry {
 
 	@Mod.Instance(Defaults.MOD)
 	public static Forestry instance;
+	private File configFolder;
 
 	public Forestry() {
 		FuelManager.fermenterFuel = new ItemStackMap<FermenterFuel>();
@@ -67,7 +69,7 @@ public class Forestry {
 		FuelManager.rainSubstrate = new ItemStackMap<RainSubstrate>();
 		FuelManager.bronzeEngineFuel = new FluidMap<EngineBronzeFuel>();
 		FuelManager.copperEngineFuel = new ItemStackMap<EngineCopperFuel>();
-		FuelManager.generatorFuel =  new FluidMap<GeneratorFuel>();
+		FuelManager.generatorFuel = new FluidMap<GeneratorFuel>();
 	}
 	@SidedProxy(clientSide = "forestry.core.ForestryClient", serverSide = "forestry.core.ForestryCore")
 	public static ForestryCore core = new ForestryCore();
@@ -76,6 +78,8 @@ public class Forestry {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		packetHandler = new PacketHandler();
+		
+		configFolder = new File(event.getModConfigurationDirectory(), "forestry");
 
 		core.preInit(event.getSourceFile(), this);
 	}
@@ -95,6 +99,9 @@ public class Forestry {
 		core.serverStarting(event.getServer());
 	}
 
+	public File getConfigFolder() {
+		return configFolder;
+	}
 	/*@EventHandler
 	 public void fingerprintWarning(FMLFingerprintViolationEvent event) {
 	 Proxies.log.info("Fingerprint of the mod jar is invalid. The jar file was tampered with.");
@@ -102,6 +109,7 @@ public class Forestry {
 	 FMLInterModComms.sendMessage("Thaumcraft", "securityViolation", "Fingerprint of jar file did not match.");
 	 FMLInterModComms.sendMessage("IC2", "securityViolation", "Fingerprint of jar file did not match.");
 	 }*/
+
 	@EventHandler
 	public void processIMCMessages(IMCEvent event) {
 		core.processIMCMessages(event.getMessages());

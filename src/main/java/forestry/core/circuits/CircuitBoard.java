@@ -48,9 +48,8 @@ public class CircuitBoard implements ICircuitBoard {
 		return type.secondaryColor;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void addTooltip(List list) {
+	public void addTooltip(List<String> list) {
 		if (layout != null)
 			list.add("\u00A76" + layout.getUsage() + ":");
 

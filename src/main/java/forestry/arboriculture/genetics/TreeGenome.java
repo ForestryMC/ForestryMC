@@ -126,10 +126,6 @@ public class TreeGenome extends Genome implements ITreeGenome {
 
 	@Override
 	public int getGirth() {
-		if (getChromosomes()[EnumTreeChromosome.GIRTH.ordinal()] == null)
-			getChromosomes()[EnumTreeChromosome.GIRTH.ordinal()] = new Chromosome(translateGirth(getPrimary().getGirth()),
-					translateGirth(getSecondary().getGirth()));
-
 		return ((IAlleleInteger) getActiveAllele(EnumTreeChromosome.GIRTH.ordinal())).getValue();
 	}
 	

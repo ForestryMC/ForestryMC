@@ -21,12 +21,6 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Properties;
 
-import net.minecraft.world.biome.BiomeGenBase;
-
-import net.minecraftforge.common.BiomeDictionary;
-
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
 import forestry.core.proxy.Proxies;
 import forestry.core.triggers.ForestryTrigger;
 
@@ -41,17 +35,6 @@ public class Config {
 	public static HashSet<String> disabledStructures = new HashSet<String>();
 
 	public static boolean isDebug = false;
-
-	// Native Plugins
-	public static boolean disableApiculture = false;
-	public static boolean disableArboriculture = false;
-	public static boolean disableCultivation = false;
-	public static boolean disableEnergy = false;
-	public static boolean disableFactory = false;
-	public static boolean disableFarming = false;
-	public static boolean disableFood = false;
-	public static boolean disableMail = false;
-	public static boolean disableStorage = false;
 
 	public static boolean disablePermissions = false;
 	public static boolean disableNags = false;
@@ -109,7 +92,6 @@ public class Config {
 	public static HashMap<String, String[]> hints = new HashMap<String, String[]>();
 	public static boolean disableEnergyStat = false;
 
-	@SuppressWarnings({ "all" })
 	public static void load() {
 
 		setDebugMode();
@@ -251,7 +233,6 @@ public class Config {
 		for (String str : disabledStructures)
 			Proxies.log.finer("Disabled structure '%s'.", str);
 
-		registerClimates();
 		ForestryTrigger.initialize();
 
 		config.save();
@@ -320,41 +301,6 @@ public class Config {
 			return new String[0];
 		else
 			return list.split("[;]+");
-	}
-
-	private static void registerClimates() {
-
-		for (BiomeGenBase biome : BiomeGenBase.getBiomeGenArray()) {
-			if (biome == null)
-				continue;
-
-			if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.NETHER))
-				EnumTemperature.hellishBiomeIds.add(biome.biomeID);
-			else if (biome.temperature >= 2.0f)
-				EnumTemperature.hotBiomeIds.add(biome.biomeID);
-			else if (biome.temperature >= 1.2f)
-				EnumTemperature.warmBiomeIds.add(biome.biomeID);
-			else if (biome.temperature >= 0.2f)
-				EnumTemperature.normalBiomeIds.add(biome.biomeID);
-			else if (biome.temperature >= 0.15f)
-				EnumTemperature.coldBiomeIds.add(biome.biomeID);
-			else
-				EnumTemperature.icyBiomeIds.add(biome.biomeID);
-		}
-
-		// / HUMIDITY
-		for (BiomeGenBase biome : BiomeGenBase.getBiomeGenArray()) {
-			if (biome == null)
-				continue;
-
-			if (biome.rainfall >= 0.9f)
-				EnumHumidity.dampBiomeIds.add(biome.biomeID);
-			else if (biome.rainfall >= 0.3f)
-				EnumHumidity.normalBiomeIds.add(biome.biomeID);
-			else
-				EnumHumidity.aridBiomeIds.add(biome.biomeID);
-		}
-
 	}
 
 	public static boolean getOrCreateBooleanProperty(String key, String kind, boolean defaults) {

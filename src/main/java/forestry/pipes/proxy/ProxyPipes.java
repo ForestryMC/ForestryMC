@@ -31,6 +31,7 @@ public class ProxyPipes {
 		PluginPropolisPipe.pipeItemsPropolis = createPipe(PipeItemsPropolis.class, CreativeTabBuildCraft.PIPES);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Item createPipe(Class<? extends Pipe> clas, CreativeTabBuildCraft creativeTab) {
 
         return registerPipe(clas, creativeTab);
@@ -39,6 +40,7 @@ public class ProxyPipes {
     /**
      * Overriding the method in BlockGenericPipe to fix localizations.
      */
+	@SuppressWarnings("rawtypes")
     public static ItemPipe registerPipe(Class<? extends Pipe> clas, CreativeTabBuildCraft creativeTab) {
         ItemPipe item = null;
         try {

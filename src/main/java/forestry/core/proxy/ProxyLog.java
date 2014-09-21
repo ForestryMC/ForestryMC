@@ -12,18 +12,11 @@ package forestry.core.proxy;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import forestry.core.config.Defaults;
+import org.apache.logging.log4j.message.MessageFormatMessage;
 
 public class ProxyLog {
-
-	/* LOGGING */
-	private static Logger forestryLogger;
-
-	private void initLogger() {
-		forestryLogger = LogManager.getLogger(Defaults.MOD);
-	}
 
 	/* FINEST */
 	public void finest(String message) {
@@ -104,19 +97,8 @@ public class ProxyLog {
 	}
 
 	/* GENERIC */
-	public void log(Level logLevel, String message) {
-		if (forestryLogger == null)
-			initLogger();
-
-		forestryLogger.log(logLevel, message);
-	}
-
 	public void log(Level logLevel, String message, Object... params) {
-		log(logLevel, String.format(message, params));
-	}
-
-	public void log(Level logLevel, String message, Object param) {
-		log(logLevel, String.format(message, param));
+		LogManager.getLogger(Defaults.MOD).log(logLevel, new MessageFormatMessage(String.format(message, params), params));
 	}
 
 }

@@ -17,8 +17,6 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.BiomeDictionary;
 
-import forestry.api.core.IPlugin;
-import forestry.api.core.PluginInfo;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IMutation;
 import forestry.apiculture.genetics.AlleleBeeSpecies;
@@ -26,13 +24,12 @@ import forestry.apiculture.genetics.BeeTemplates;
 import forestry.apiculture.genetics.IJubilanceProvider;
 import forestry.apiculture.genetics.JubilanceReqRes;
 import forestry.apiculture.genetics.MutationEMC;
-import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.genetics.Allele;
 import forestry.core.proxy.Proxies;
 
-@PluginInfo(pluginID = "EqEx2", name = "Equivalent Exchange 2", author = "SirSengir", url = Defaults.URL, description = "Compatibility plugin for Equivalent Exchange 2. Enables the Omega branch of bees. Requires Apiculture to be enabled.")
-public class PluginEE implements IPlugin {
+@Plugin(pluginID = "EqEx2", name = "Equivalent Exchange 2", author = "SirSengir", url = Defaults.URL, description = "Compatibility plugin for Equivalent Exchange 2. Enables the Omega branch of bees. Requires Apiculture to be enabled.")
+public class PluginEE extends ForestryPlugin {
 
 	public IMutation darkenedA;
 	public IMutation reddenedA;
@@ -48,7 +45,12 @@ public class PluginEE implements IPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isModLoaded("mod_EE") && !Config.disableApiculture;
+		return Proxies.common.isModLoaded("mod_EE");
+	}
+
+	@Override
+	public String getFailMessage() {
+		return "Equivalent Exchange not found";
 	}
 
 	@Override
@@ -83,13 +85,4 @@ public class PluginEE implements IPlugin {
 				eeRelay3EMCField, 933888).restrictBiomeType(BiomeDictionary.Type.NETHER).restrictBiomeType(BiomeDictionary.Type.SANDY);
 
 	}
-
-	@Override
-	public void preInit() {
-	}
-
-	@Override
-	public void doInit() {
-	}
-
 }

@@ -123,6 +123,7 @@ public class BlockMushroom extends BlockSapling implements IItemTyped {
 	}
 
 	/* ICONS */
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {

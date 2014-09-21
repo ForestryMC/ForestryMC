@@ -15,7 +15,6 @@ import java.util.Locale;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.oredict.RecipeSorter;
 
@@ -25,7 +24,6 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.core.PluginInfo;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
@@ -43,7 +41,6 @@ import forestry.core.gadgets.MachineDefinition;
 import forestry.core.genetics.Allele;
 import forestry.core.genetics.Branch;
 import forestry.core.items.ItemForestryBlock;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.core.utils.Utils;
@@ -60,8 +57,8 @@ import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.items.ItemFlutterlyzer;
 import forestry.lepidopterology.proxy.ProxyLepidopterology;
 
-@PluginInfo(pluginID = "Lepidopterology", name = "Lepidopterology", author = "SirSengir", url = Defaults.URL, description = "Butterflies. Shiny.")
-public class PluginLepidopterology extends NativePlugin {
+@Plugin(pluginID = "Lepidopterology", name = "Lepidopterology", author = "SirSengir", url = Defaults.URL, description = "Butterflies. Shiny.")
+public class PluginLepidopterology extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.lepidopterology.proxy.ClientProxyLepidopterology", serverSide = "forestry.lepidopterology.proxy.ProxyLepidopterology")
 	public static ProxyLepidopterology proxy;
@@ -83,29 +80,9 @@ public class PluginLepidopterology extends NativePlugin {
 	public static MachineDefinition definitionChest;
 
 	@Override
-	public boolean isAvailable() {
-		return true;
-	}
-
-	@Override
 	public void preInit() {
-		super.preInit();
-
 		ForestryBlock.lepidopterology.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "lepidopterology");
 		ForestryBlock.lepidopterology.block().setCreativeTab(Tabs.tabLepidopterology);
-
-		BlockBase lepidopterology = ((BlockBase) ForestryBlock.lepidopterology.block());
-
-		definitionChest = lepidopterology.addDefinition((new MachineDefinition(Defaults.DEFINITION_LEPICHEST_META, "forestry.LepiChest", TileLepidopteristChest.class,
-				ShapedRecipeCustom.createShapedRecipe(
-						ForestryBlock.lepidopterology.getItemStack(1, Defaults.DEFINITION_LEPICHEST_META),
-						" # ",
-						"XYX",
-						"XXX",
-						'#', Blocks.glass,
-						'X', ForestryItem.butterflyGE.getItemStack(1, Defaults.WILDCARD),
-						'Y', Blocks.chest))
-				.setFaces(0, 1, 2, 3, 4, 4, 0, 7)));
 
 		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginLepidopterology.butterflyInterface = new ButterflyHelper());
 		createAlleles();
@@ -113,8 +90,6 @@ public class PluginLepidopterology extends NativePlugin {
 
 	@Override
 	public void doInit() {
-		super.doInit();
-
 		config = new Configuration();
 
 		Property property = config.get("entities.spawn.limit", CONFIG_CATEGORY, spawnConstraint);
@@ -131,6 +106,17 @@ public class PluginLepidopterology extends NativePlugin {
 		proxy.initializeRendering();
 		registerTemplates();
 
+		BlockBase lepidopterology = ((BlockBase) ForestryBlock.lepidopterology.block());
+		definitionChest = lepidopterology.addDefinition((new MachineDefinition(Defaults.DEFINITION_LEPICHEST_META, "forestry.LepiChest", TileLepidopteristChest.class,
+				ShapedRecipeCustom.createShapedRecipe(
+						ForestryBlock.lepidopterology.getItemStack(1, Defaults.DEFINITION_LEPICHEST_META),
+						" # ",
+						"XYX",
+						"XXX",
+						'#', Blocks.glass,
+						'X', ForestryItem.butterflyGE.getItemStack(1, Defaults.WILDCARD),
+						'Y', Blocks.chest))
+				.setFaces(0, 1, 2, 3, 4, 4, 0, 7)));
 		definitionChest.register();
 
 		((ITreeRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees")).registerLeafTickHandler(new ButterflySpawner());
@@ -144,14 +130,6 @@ public class PluginLepidopterology extends NativePlugin {
 		ForestryItem.butterflyGE.registerItem(new ItemButterflyGE(EnumFlutterType.BUTTERFLY), "butterflyGE");
 		ForestryItem.serumGE.registerItem(new ItemButterflyGE(EnumFlutterType.SERUM), "serumGE");
 		ForestryItem.caterpillarGE.registerItem(new ItemButterflyGE(EnumFlutterType.CATERPILLAR), "caterpillarGE");
-	}
-
-	@Override
-	protected void registerBackpackItems() {
-	}
-
-	@Override
-	protected void registerCrates() {
 	}
 
 	@SuppressWarnings("unchecked")

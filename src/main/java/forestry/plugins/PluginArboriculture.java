@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import cpw.mods.fml.common.IFuelHandler;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,6 @@ import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
-import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -35,8 +35,6 @@ import cpw.mods.fml.common.registry.VillagerRegistry;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeRoot;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.PluginInfo;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -126,7 +124,6 @@ import forestry.arboriculture.worldgen.WorldGenWalnut;
 import forestry.arboriculture.worldgen.WorldGenWenge;
 import forestry.arboriculture.worldgen.WorldGenWillow;
 import forestry.core.GameMode;
-import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
@@ -134,9 +131,7 @@ import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.genetics.Allele;
 import forestry.core.genetics.FruitFamily;
-import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPacketHandler;
-import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemForestryBlock;
 import forestry.core.items.ItemFruit.EnumFruit;
 import forestry.core.proxy.Proxies;
@@ -145,8 +140,8 @@ import forestry.core.utils.RecipeUtil;
 import forestry.core.utils.ShapedRecipeCustom;
 import java.util.EnumSet;
 
-@PluginInfo(pluginID = "Arboriculture", name = "Arboriculture", author = "Binnie & SirSengir", url = Defaults.URL, description = "Adds additional tree species and products.")
-public class PluginArboriculture extends NativePlugin implements IFuelHandler {
+@Plugin(pluginID = "Arboriculture", name = "Arboriculture", author = "Binnie & SirSengir", url = Defaults.URL, description = "Adds additional tree species and products.")
+public class PluginArboriculture extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.arboriculture.proxy.ClientProxyArboriculture", serverSide = "forestry.arboriculture.proxy.ProxyArboriculture")
 	public static ProxyArboriculture proxy;
@@ -176,11 +171,6 @@ public class PluginArboriculture extends NativePlugin implements IFuelHandler {
 	private static final EnumSet<ForestryBlock> fences = EnumSet.of(
 			ForestryBlock.fences1,
 			ForestryBlock.fences1);
-
-	@Override
-	public boolean isAvailable() {
-		return !Config.disableArboriculture;
-	}
 
 	@Override
 	public void preInit() {
@@ -255,7 +245,7 @@ public class PluginArboriculture extends NativePlugin implements IFuelHandler {
 				.setFaces(0, 1, 2, 3, 4, 4, 0, 7));
 
 		// Init tree interface
-		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginArboriculture.treeInterface = TreeManager.treeInterface = new TreeHelper());
+		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginArboriculture.treeInterface = new TreeHelper());
 
 		// Init rendering
 		proxy.initializeRendering();
@@ -959,27 +949,22 @@ public class PluginArboriculture extends NativePlugin implements IFuelHandler {
 	}
 
 	@Override
-	public ISaveEventHandler getSaveEventHandler() {
-		return null;
-	}
-
-	@Override
-	public IOreDictionaryHandler getDictionaryHandler() {
-		return null;
-	}
-
-	@Override
 	public ICommand[] getConsoleCommands() {
 		return new ICommand[]{new CommandSpawnTree(), new CommandSpawnForest(),
 			new CommandTreekeepingMode()};
 	}
 
 	@Override
-	public int getBurnTime(ItemStack fuel) {
-		if (ForestryItem.sapling.isItemEqual(fuel))
-			return 100;
+	public IFuelHandler getFuelHandler() {
+		return new IFuelHandler() {
+			@Override
+			public int getBurnTime(ItemStack fuel) {
+				if (ForestryItem.sapling.isItemEqual(fuel))
+					return 100;
 
-		return 0;
+				return 0;
+			}
+		};
 	}
 
 	@Override

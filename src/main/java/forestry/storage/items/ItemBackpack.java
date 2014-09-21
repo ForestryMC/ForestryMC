@@ -251,11 +251,7 @@ public class ItemBackpack extends ItemInventoried {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
-		try {
-			return info.getName(itemstack);
-		} catch (Error er) {
-			return info.getName();
-		}
+		return info.getName(itemstack);
 	}
 
 	/* ICONS */
