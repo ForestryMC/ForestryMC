@@ -26,20 +26,25 @@ import forestry.core.config.Defaults;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.LiquidHelper;
 
-public class PluginNatura extends NativePlugin {
+public class PluginNatura extends ForestryPlugin {
 
 	private static final String NATURA = "Natura";
-	
+
 	public static Block logNatura;
 	public static Block logWillow;
-	
+
 	public static Block leavesNatura;
 	public static Block saplingNatura;
 	public static Block saplingNaturaRare;
-	
+
 	@Override
 	public boolean isAvailable() {
 		return Proxies.common.isModLoaded(NATURA);
+	}
+
+	@Override
+	public String getFailMessage() {
+		return "Natura not found";
 	}
 
 	@Override
@@ -54,9 +59,9 @@ public class PluginNatura extends NativePlugin {
 
 		ArrayList<String> saplingItemKeys = new ArrayList<String>();
 
-		if(saplingNatura != null)
+		if (saplingNatura != null)
 			saplingItemKeys.add("florasapling");
-		if(saplingNaturaRare != null)
+		if (saplingNaturaRare != null)
 			saplingItemKeys.add("Rare Sapling");
 
 		for (String key : saplingItemKeys) {
@@ -65,27 +70,23 @@ public class PluginNatura extends NativePlugin {
 			FMLInterModComms.sendMessage(Defaults.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
 		}
 	}
-	
-	@Override protected void registerItems() {}
-	@Override protected void registerBackpackItems() {}
-	@Override protected void registerCrates() {}
+
 	@Override
 	protected void registerRecipes() {
 		ItemStack seedBarley = GameRegistry.findItemStack(NATURA, "seedBarley", 1);
 		ItemStack seedCotton = GameRegistry.findItemStack(NATURA, "seedCotton", 1);
-		
+
 		ArrayList<ItemStack> seedList = new ArrayList<ItemStack>();
 		if (seedBarley != null)
 			seedList.add(seedBarley);
 		if (seedCotton != null)
 			seedList.add(seedCotton);
-		
+
 		int amount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");
-		for (int i = 0; i < seedList.size(); ++i) {
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[] { seedList.get(i) },
+		for (int i = 0; i < seedList.size(); ++i)
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{seedList.get(i)},
 					LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, amount));
-		}
-		
+
 		ItemStack berryBlight = GameRegistry.findItemStack(NATURA, "berryBlight", 1);
 		ItemStack berryDusk = GameRegistry.findItemStack(NATURA, "berryDusk", 1);
 		ItemStack berrySky = GameRegistry.findItemStack(NATURA, "berrySting", 1);
@@ -94,7 +95,7 @@ public class PluginNatura extends NativePlugin {
 		ItemStack berryBlue = GameRegistry.findItemStack(NATURA, "berryBlue", 1);
 		ItemStack berryBlack = GameRegistry.findItemStack(NATURA, "berryBlack", 1);
 		ItemStack berryMalo = GameRegistry.findItemStack(NATURA, "berryMalo", 1);
-		
+
 		ArrayList<ItemStack> berries = new ArrayList<ItemStack>();
 		if (berryBlight != null)
 			berries.add(berryBlight);
@@ -102,7 +103,7 @@ public class PluginNatura extends NativePlugin {
 			berries.add(berryDusk);
 		if (berrySky != null)
 			berries.add(berrySky);
-		if (berrySting!= null)
+		if (berrySting != null)
 			berries.add(berrySting);
 		if (berryRasp != null)
 			berries.add(berryRasp);
@@ -112,13 +113,12 @@ public class PluginNatura extends NativePlugin {
 			berries.add(berryBlack);
 		if (berryMalo != null)
 			berries.add(berryMalo);
-		
+
 		amount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple") / 25;
 		amount = (amount > 1) ? amount : 1; // Produce at least 1 mb of juice.
-		for (int i = 0; i < berries.size(); ++i) {
-			RecipeManagers.squeezerManager.addRecipe(3, new ItemStack[] { berries.get(i) },
+		for (int i = 0; i < berries.size(); ++i)
+			RecipeManagers.squeezerManager.addRecipe(3, new ItemStack[]{berries.get(i)},
 					LiquidHelper.getLiquid(Defaults.LIQUID_JUICE, amount));
-		}
 	}
 
 }

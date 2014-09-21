@@ -23,14 +23,12 @@ import net.minecraft.item.crafting.IRecipe;
 
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 
 import forestry.api.circuits.ChipsetManager;
-import forestry.api.core.PluginInfo;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.core.CommandForestry;
@@ -56,7 +54,6 @@ import forestry.core.genetics.Allele;
 import forestry.core.genetics.AlleleRegistry;
 import forestry.core.genetics.ClimateHelper;
 import forestry.core.genetics.ItemResearchNote;
-import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemArmorNaturalist;
@@ -80,8 +77,8 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.ShapedRecipeCustom;
 
-@PluginInfo(pluginID = "Core", name = "Core", author = "SirSengir", url = Defaults.URL, description = "Core mechanics for Forestry. Required by all other plugins.")
-public class PluginCore extends NativePlugin implements IFuelHandler {
+@Plugin(pluginID = "Core", name = "Core", author = "SirSengir", url = Defaults.URL, description = "Core mechanics for Forestry. Required by all other plugins.")
+public class PluginCore extends ForestryPlugin {
 
 	public static MachineDefinition definitionAnalyzer;
 	public static MachineDefinition definitionEscritoire;
@@ -130,9 +127,6 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 		/* SMELTING RECIPES */
 		FurnaceRecipes.smelting().func_151394_a(ForestryBlock.resources.getItemStack(1, 1), ForestryItem.ingotCopper.getItemStack(), 0.5f);
 		FurnaceRecipes.smelting().func_151394_a(ForestryBlock.resources.getItemStack(1, 2), ForestryItem.ingotTin.getItemStack(), 0.5f);
-
-		GameRegistry.registerFuelHandler(this);
-
 	}
 
 	@Override
@@ -449,11 +443,6 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 	}
 
 	@Override
-	public IOreDictionaryHandler getDictionaryHandler() {
-		return null;
-	}
-
-	@Override
 	public IPickupHandler getPickupHandler() {
 		return new PickupHandlerCore();
 	}
@@ -464,13 +453,19 @@ public class PluginCore extends NativePlugin implements IFuelHandler {
 	}
 
 	@Override
-	public int getBurnTime(ItemStack fuel) {
-		if (fuel != null && fuel.getItem() == ForestryItem.peat.item())
-			return 2000;
-		if (fuel != null && fuel.getItem() == ForestryItem.bituminousPeat.item())
-			return 4200;
+	public IFuelHandler getFuelHandler() {
+		return new IFuelHandler() {
 
-		return 0;
+			@Override
+			public int getBurnTime(ItemStack fuel) {
+				if (fuel != null && fuel.getItem() == ForestryItem.peat.item())
+					return 2000;
+				if (fuel != null && fuel.getItem() == ForestryItem.bituminousPeat.item())
+					return 4200;
+
+				return 0;
+			}
+		};
 	}
 
 	public IRecipe[] createAlyzerRecipes(Block block, int meta) {

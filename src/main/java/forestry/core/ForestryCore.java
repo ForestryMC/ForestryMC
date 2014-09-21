@@ -12,8 +12,6 @@ package forestry.core;
 
 import java.io.File;
 
-import net.minecraft.command.CommandHandler;
-import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -30,7 +28,6 @@ import com.google.common.collect.ImmutableList;
 
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.IPlugin;
 import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.EngineCopperFuel;
 import forestry.api.fuels.FermenterFuel;
@@ -46,8 +43,6 @@ import forestry.core.gadgets.TileMachine;
 import forestry.core.gadgets.TileMill;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.LiquidHelper;
-import forestry.plugins.NativePlugin;
-import forestry.plugins.PluginCore;
 import forestry.plugins.PluginManager;
 
 public class ForestryCore {
@@ -55,8 +50,6 @@ public class ForestryCore {
 	public void preInit(File modLocation, Object basemod) {
 		ForestryAPI.instance = basemod;
 		ForestryAPI.forestryConstants = new ForestryConstants();
-
-		PluginManager.loadForestryPlugins();
 
 		// Register event handler
 		MinecraftForge.EVENT_BUS.register(new EventHandlerCore());
@@ -115,9 +108,8 @@ public class ForestryCore {
 		FuelManager.rainSubstrate.put(ForestryItem.craftingMaterial.getItemStack(1, 4), new RainSubstrate(ForestryItem.craftingMaterial.getItemStack(1, 4), 0.075f));
 
 		// Set additional apiary flowers
-		for (int i=0; i<9; i++) {
+		for (int i = 0; i < 9; i++)
 			FlowerManager.plainFlowers.add(new ItemStack(Blocks.red_flower, 1, i));
-		}
 		FlowerManager.plainFlowers.add(new ItemStack(Blocks.yellow_flower));
 
 		// Register gui handler
@@ -128,7 +120,7 @@ public class ForestryCore {
 		GameRegistry.registerTileEntity(TileEngine.class, "forestry.Engine");
 		GameRegistry.registerTileEntity(TileMachine.class, "forestry.Machine");
 
-        PluginManager.runInit();
+		PluginManager.runInit();
 	}
 
 	public void postInit() {
@@ -142,29 +134,11 @@ public class ForestryCore {
 	}
 
 	public void serverStarting(MinecraftServer server) {
-		CommandHandler commandManager = (CommandHandler) server.getCommandManager();
-		for (IPlugin plugin : PluginManager.plugins) {
-			if (plugin.isAvailable() && plugin instanceof NativePlugin) {
-				ICommand[] commands = ((NativePlugin) plugin).getConsoleCommands();
-				if (commands == null)
-					continue;
-				for (ICommand command : commands) {
-					commandManager.registerCommand(command);
-				}
-			}
-		}
+		PluginManager.serverStarting(server);
 	}
 
 	public void processIMCMessages(ImmutableList<IMCMessage> messages) {
-		for (IMCMessage message : messages) {
-			for (IPlugin plugin : PluginManager.plugins) {
-				if (!(plugin instanceof NativePlugin))
-					continue;
-
-				if (((NativePlugin) plugin).processIMCMessage(message))
-					break;
-			}
-		}
+		PluginManager.processIMCMessages(messages);
 	}
 
 	public String getPriorities() {

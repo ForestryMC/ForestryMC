@@ -10,25 +10,41 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 
 import com.google.common.collect.Lists;
 
 import cpw.mods.fml.common.IFuelHandler;
+import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
+import forestry.Forestry;
 
-import forestry.api.core.IPlugin;
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPacketHandler;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.IResupplyHandler;
 import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.proxy.Proxies;
+import java.io.File;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Random;
+import java.util.Set;
+import net.minecraft.command.CommandHandler;
+import net.minecraft.command.ICommand;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 
 public class PluginManager {
 
-    public static ArrayList<IPlugin> plugins = Lists.newArrayList();
+	public static final String MODULE_CONFIG_FILE_NAME = "modules.cfg";
+	public static final String CATEGORY_MODULES = "modules";
+
 	public static ArrayList<IGuiHandler> guiHandlers = Lists.newArrayList();
 	public static ArrayList<IPacketHandler> packetHandlers = Lists.newArrayList();
 	public static ArrayList<IPickupHandler> pickupHandlers = Lists.newArrayList();
@@ -36,305 +52,227 @@ public class PluginManager {
 	public static ArrayList<IResupplyHandler> resupplyHandlers = Lists.newArrayList();
 	public static ArrayList<IOreDictionaryHandler> dictionaryHandlers = Lists.newArrayList();
 
-    public static void addPlugin(IPlugin plugin) {
-        Proxies.log.fine("Loading plugin " + plugin.getClass().getSimpleName());
-        plugins.add(plugin);
+	private static final Set<Module> loadedModules = EnumSet.noneOf(Module.class);
+	private static final Set<Module> unloadedModules = EnumSet.allOf(Module.class);
+	private static Stage stage = Stage.SETUP;
 
-        if (plugin instanceof NativePlugin) {
+	public enum Stage {
 
-            NativePlugin nplugin = (NativePlugin) plugin;
-            IGuiHandler guiHandler = nplugin.getGuiHandler();
-            if (guiHandler != null)
-                guiHandlers.add(guiHandler);
-
-            IPacketHandler packetHandler = nplugin.getPacketHandler();
-            if (packetHandler != null)
-                packetHandlers.add(packetHandler);
-
-            IPickupHandler pickupHandler = nplugin.getPickupHandler();
-            if (pickupHandler != null)
-                pickupHandlers.add(pickupHandler);
-
-            ISaveEventHandler saveHandler = nplugin.getSaveEventHandler();
-            if (saveHandler != null)
-                saveEventHandlers.add(saveHandler);
-
-            IResupplyHandler resupplyHandler = nplugin.getResupplyHandler();
-            if (resupplyHandler != null)
-                resupplyHandlers.add(resupplyHandler);
-
-            IOreDictionaryHandler dictionaryHandler = nplugin.getDictionaryHandler();
-            if (dictionaryHandler != null)
-                dictionaryHandlers.add(dictionaryHandler);
-        }
-
-        if (plugin instanceof IFuelHandler)
-            GameRegistry.registerFuelHandler((IFuelHandler) plugin);
-    }
-
-    public static void loadForestryPlugins() {
-        addPlugin(new PluginCore());
-        addPlugin(new PluginApiculture());
-        addPlugin(new PluginArboriculture());
-        addPlugin(new PluginEnergy());
-        addPlugin(new PluginFactory());
-        addPlugin(new PluginFarming());
-        addPlugin(new PluginFood());
-        addPlugin(new PluginLepidopterology());
-        addPlugin(new PluginMail());
-        addPlugin(new PluginStorage());
-        addPlugin(new PluginBuildCraft());
-        addPlugin(new PluginEE());
-        addPlugin(new PluginFarmCraftory());
-        addPlugin(new PluginIC2());
-        addPlugin(new PluginNatura());
-    }
-
-    public static void runPreInit() {
-        for(IPlugin plugin : plugins) {
-            if(plugin instanceof PluginCore) {
-                plugin.preInit();
-                break;
-            }
-        }
-
-        for(IPlugin plugin : plugins) {
-            if(plugin instanceof PluginCore) {
-                continue;
-            }
-
-            if(plugin.isAvailable()) {
-                plugin.preInit();
-            } else {
-                Proxies.log.fine("Skipped plugin " + plugin.getClass() + " because preconditions were not met.");
-            }
-        }
-    }
-
-    public static void runInit() {
-        for (IPlugin plugin : plugins) {
-            if(plugin.isAvailable())
-                plugin.doInit();
-        }
-    }
-
-    public static void runPostInit() {
-        for (IPlugin plugin : plugins) {
-            if (plugin.isAvailable())
-                plugin.postInit();
-        }
-    }
-
-	/*public static void loadPlugins(File modLocation) {
-		loadIncludedPlugins(modLocation);
-		loadExternalPlugins(modLocation);
+		SETUP, PRE_INIT, INIT, POST_INIT, INIT_DISABLED, FINISHED;
 	}
 
-	private static void loadIncludedPlugins(File modLocation) {
+	public enum Module {
 
-		ClassLoader classLoader = ForestryCore.class.getClassLoader();
+		CORE(new PluginCore()),
+		APICULTURE(new PluginApiculture()),
+		ARBORICULTURE(new PluginArboriculture()),
+		ENERGY(new PluginEnergy()),
+		FACTORY(new PluginFactory()),
+		FARMING(new PluginFarming()),
+		FOOD(new PluginFood()),
+		LEPIDOPTEROLOGY(new PluginLepidopterology()),
+		MAIL(new PluginMail()),
+		STORAGE(new PluginStorage()),
+		BUILDCRAFT(new PluginBuildCraft()),
+		PROPOLIS_PIPE(new PluginPropolisPipe()),
+		EQUIVELENT_EXCHANGE(new PluginEE()),
+		FARM_CRAFTORY(new PluginFarmCraftory()),
+		INDUSTRIALCRAFT(new PluginIC2()),
+		NATURA(new PluginNatura()),;
 
-		// Internal plugin when Forestry is a jar or zip
-		if (modLocation.isFile() && (modLocation.getName().endsWith(".jar") || modLocation.getName().endsWith(".zip")))
-			loadPluginsFromFile(modLocation, classLoader);
-		else if (modLocation.isDirectory())
-			loadPluginsFromBin(modLocation, classLoader);
+		private final ForestryPlugin instance;
 
-	}
+		private Module(ForestryPlugin plugin) {
+			this.instance = plugin;
+		}
 
-	private static void loadExternalPlugins(File modLocation) {
+		public ForestryPlugin instance() {
+			return instance;
+		}
 
-		try {
-
-			File pluginDir = new File(Proxies.common.getForestryRoot() + "/mods");
-			ClassLoader classLoader = ForestryCore.class.getClassLoader();
-
-			// Abort if the plugin directory is not there.
-			if (!pluginDir.isDirectory())
-				return;
-
-			File[] fileList = pluginDir.listFiles();
-			if (fileList == null)
-				return;
-
-			for (File file : fileList) {
-
-				if (!file.isFile())
-					continue;
-
-				if (!file.getName().endsWith(".jar") && !file.getName().endsWith(".zip"))
-					continue;
-
-				if (file.getName().equals(modLocation.getName()))
-					continue;
-
-				loadPluginsFromFile(file, classLoader);
-
-			}
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		public boolean isEnabled() {
+			return isModuleLoaded(this);
 		}
 
 	}
 
-	private static void loadPluginsFromFile(File file, ClassLoader classLoader) {
+	public static Stage getStage() {
+		return stage;
+	}
 
-		String pluginName;
+	public static EnumSet<Module> getLoadedModules() {
+		return EnumSet.copyOf(loadedModules);
+	}
 
-		try {
-			ZipEntry entry = null;
-			FileInputStream fileIO = new FileInputStream(file);
-			ZipInputStream zipIO = new ZipInputStream(fileIO);
+	public static boolean isModuleLoaded(Module module) {
+		return loadedModules.contains(module);
+	}
 
-			while (true) {
-				entry = zipIO.getNextEntry();
-
-				if (entry == null) {
-					fileIO.close();
-					break;
-				}
-
-				String entryName = entry.getName();
-				File entryFile = new File(entryName);
-				pluginName = entryFile.getName();
-				if (!entry.isDirectory() && pluginName.startsWith("Plugin") && pluginName.endsWith(".class"))
-					PluginManager.addPlugin(classLoader, pluginName, entryFile.getPath().replace(File.separatorChar, '.'));
-
-			}
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
+	public static void addPlugin(ForestryPlugin plugin) {
 
 	}
 
-	private static String parseClassName(String binpath) {
+	public static void runPreInit() {
+		stage = Stage.SETUP;
+		Locale locale = Locale.getDefault();
+		Locale.setDefault(Locale.ENGLISH);
 
-		String[] tokens = binpath.split("[\\\\/]");
-		String packageName = "";
-        boolean inIdea = false;
+		Configuration config = new Configuration(new File(Forestry.instance.getConfigFolder(), MODULE_CONFIG_FILE_NAME));
 
-		for (int i = 0; i < tokens.length; i++) {
-			if (tokens[i] == null)
-				break;
-            if (tokens[i].equals("production") || tokens[i].equals("classes"))
-                inIdea = true;
-			if (!tokens[i].equals("bin") && !inIdea)
+		config.load();
+		config.addCustomCategoryComment(CATEGORY_MODULES, "Disabling these modules can greatly change how the mod functions.\n"
+				+ "Your milage may vary, please report any issues.");
+
+		Set<Module> toLoad = EnumSet.allOf(Module.class);
+		Iterator<Module> it = toLoad.iterator();
+		while (it.hasNext()) {
+			Module m = it.next();
+			if (m == Module.CORE)
 				continue;
-
-			// We are at bin, build the rest and return
-			for (int j = (inIdea ? i + 2 : i + 1); j < tokens.length; j++) {
-				if (packageName.length() > 0)
-					packageName += ".";
-				packageName += tokens[j];
+			if (!isEnabled(config, m)) {
+				it.remove();
+				Proxies.log.info("Module disabled: {0}", m);
+				continue;
 			}
-			break;
-		}
-
-		return packageName;
-	}
-
-	private static void loadPluginsFromBin(File bin, ClassLoader classLoader) {
-		File[] fileList = bin.listFiles();
-
-		// ensure consistent sorting across all platforms
-		Arrays.sort(fileList, new Comparator<File>() {
-			@Override
-			public int compare(File a, File b) {
-				return a.getName().toLowerCase().compareTo(b.getName().toLowerCase());
-			}
-		});
-
-		for (File file : fileList) {
-			String pluginName = file.getName();
-
-			if (file.isFile() && pluginName.startsWith("Plugin") && pluginName.endsWith(".class")) {
-				PluginManager.addPlugin(classLoader, pluginName, parseClassName(file.getPath()));
-			} else if (file.isDirectory()) {
-				loadPluginsFromBin(file, classLoader);
+			ForestryPlugin plugin = m.instance;
+			if (!plugin.isAvailable()) {
+				it.remove();
+				Proxies.log.info("Module {0} failed to load: {1}", plugin, plugin.getFailMessage());
+				continue;
 			}
 		}
-	}
-
-	public static void addPlugin(ClassLoader classLoader, String pluginName, String packageName) {
-
-		if (pluginName.equals("PluginManager.class") || pluginName.equals("PluginInfo.class"))
-			return;
-
-		String pluginClassName = packageName.replace(".class", "").replace("minecraft.", "");
-
-		try {
-
-			Class<?> pluginClass = null;
-			try {
-				pluginClass = classLoader.loadClass(pluginClassName);
-			} catch (Throwable error) {
-			}
-
-			if (pluginClass == null) {
-				pluginClass = Class.forName(pluginClassName);
-			}
-
-			if (pluginClass != null) {
-
-				Class<?> clz = pluginClass;
-				boolean isPlugin = false;
-				do {
-					for (Class<?> i : clz.getInterfaces()) {
-						if (i == IPlugin.class) {
-							isPlugin = true;
-							break;
-						}
-					}
-
-					clz = clz.getSuperclass();
-				} while (clz != null && !isPlugin);
-
-				if (!isPlugin)
-					return;
-
-				IPlugin plugin = (IPlugin) pluginClass.newInstance();
-				if (plugin != null) {
-
-					Proxies.log.fine("Found plugin " + plugin.toString());
-					plugins.add(plugin);
-
-					if (plugin instanceof NativePlugin) {
-
-						NativePlugin nplugin = (NativePlugin) plugin;
-						IGuiHandler guiHandler = nplugin.getGuiHandler();
-						if (guiHandler != null)
-							guiHandlers.add(guiHandler);
-
-						IPacketHandler packetHandler = nplugin.getPacketHandler();
-						if (packetHandler != null)
-							packetHandlers.add(packetHandler);
-
-						IPickupHandler pickupHandler = nplugin.getPickupHandler();
-						if (pickupHandler != null)
-							pickupHandlers.add(pickupHandler);
-
-						ISaveEventHandler saveHandler = nplugin.getSaveEventHandler();
-						if (saveHandler != null)
-							saveEventHandlers.add(saveHandler);
-
-						IResupplyHandler resupplyHandler = nplugin.getResupplyHandler();
-						if (resupplyHandler != null)
-							resupplyHandlers.add(resupplyHandler);
-
-						IOreDictionaryHandler dictionaryHandler = nplugin.getDictionaryHandler();
-						if (dictionaryHandler != null)
-							dictionaryHandlers.add(dictionaryHandler);
-					}
-
-					if (plugin instanceof IFuelHandler)
-						GameRegistry.registerFuelHandler((IFuelHandler) plugin);
-
+		boolean changed;
+		do {
+			changed = false;
+			it = toLoad.iterator();
+			while (it.hasNext()) {
+				Module m = it.next();
+				Set<Module> deps = m.instance().getDependancies();
+				if (!toLoad.containsAll(deps)) {
+					it.remove();
+					changed = true;
+					Proxies.log.warning("Module {0} is missing dependancies: {1}", m, deps);
+					continue;
 				}
 			}
+		} while (changed);
 
-		} catch (Throwable ex) {
-			//			ex.printStackTrace();
+		unloadedModules.removeAll(toLoad);
+		loadedModules.addAll(toLoad);
+
+		if (config.hasChanged())
+			config.save();
+
+		Locale.setDefault(locale);
+
+		stage = Stage.PRE_INIT;
+		for (Module m : loadedModules) {
+			ForestryPlugin plugin = m.instance;
+			loadPlugin(plugin);
+			Proxies.log.fine("Pre-Init Start: {0}", plugin);
+			plugin.preInit();
+			plugin.registerItems();
+			Proxies.log.fine("Pre-Init Complete: {0}", plugin);
 		}
-	}*/
+	}
+
+	private static void loadPlugin(ForestryPlugin plugin) {
+		Proxies.log.fine("Loading Plugin: {0}", plugin);
+
+		ForestryPlugin nplugin = (ForestryPlugin) plugin;
+		IGuiHandler guiHandler = nplugin.getGuiHandler();
+		if (guiHandler != null)
+			guiHandlers.add(guiHandler);
+
+		IPacketHandler packetHandler = nplugin.getPacketHandler();
+		if (packetHandler != null)
+			packetHandlers.add(packetHandler);
+
+		IPickupHandler pickupHandler = nplugin.getPickupHandler();
+		if (pickupHandler != null)
+			pickupHandlers.add(pickupHandler);
+
+		ISaveEventHandler saveHandler = nplugin.getSaveEventHandler();
+		if (saveHandler != null)
+			saveEventHandlers.add(saveHandler);
+
+		IResupplyHandler resupplyHandler = nplugin.getResupplyHandler();
+		if (resupplyHandler != null)
+			resupplyHandlers.add(resupplyHandler);
+
+		IOreDictionaryHandler dictionaryHandler = nplugin.getDictionaryHandler();
+		if (dictionaryHandler != null)
+			dictionaryHandlers.add(dictionaryHandler);
+
+		IFuelHandler fuelHandler = nplugin.getFuelHandler();
+		if (fuelHandler != null)
+			GameRegistry.registerFuelHandler((fuelHandler));
+	}
+
+	public static void runInit() {
+		stage = Stage.INIT;
+		for (Module m : loadedModules) {
+			ForestryPlugin plugin = m.instance;
+			Proxies.log.fine("Init Start: {0}", plugin);
+			plugin.registerBackpackItems();
+			plugin.registerCrates();
+			plugin.doInit();
+			Proxies.log.fine("Init Complete: {0}", plugin);
+		}
+	}
+
+	public static void runPostInit() {
+		stage = Stage.POST_INIT;
+		for (Module m : loadedModules) {
+			ForestryPlugin plugin = m.instance;
+			Proxies.log.fine("Post-Init Start: {0}", plugin);
+			plugin.registerRecipes();
+			plugin.postInit();
+			Proxies.log.fine("Post-Init Complete: {0}", plugin);
+		}
+
+		stage = Stage.INIT_DISABLED;
+		for (Module m : unloadedModules) {
+			ForestryPlugin plugin = m.instance;
+			Proxies.log.fine("Disabled-Init Start: {0}", plugin);
+			plugin.disabledInit();
+			Proxies.log.fine("Disabled-Init Complete: {0}", plugin);
+		}
+		stage = Stage.FINISHED;
+	}
+
+	public static void serverStarting(MinecraftServer server) {
+		CommandHandler commandManager = (CommandHandler) server.getCommandManager();
+
+		for (Module m : loadedModules) {
+			ForestryPlugin plugin = m.instance;
+			ICommand[] commands = plugin.getConsoleCommands();
+			if (commands == null)
+				continue;
+			for (ICommand command : commands)
+				commandManager.registerCommand(command);
+		}
+	}
+
+	public static void processIMCMessages(ImmutableList<FMLInterModComms.IMCMessage> messages) {
+		for (FMLInterModComms.IMCMessage message : messages)
+			for (Module m : loadedModules) {
+				ForestryPlugin plugin = m.instance;
+				if (plugin.processIMCMessage(message))
+					break;
+			}
+	}
+
+	public static void generateSurface(World world, Random rand, int chunkX, int chunkZ) {
+		for (Module m : loadedModules) {
+			ForestryPlugin plugin = m.instance;
+			plugin.generateSurface(world, rand, chunkX, chunkZ);
+		}
+	}
+
+	private static boolean isEnabled(Configuration config, Module m) {
+		boolean defaultValue = true;
+		Property prop = config.get(CATEGORY_MODULES, m.toString().toLowerCase(Locale.ENGLISH).replace('_', '.'), defaultValue);
+		return prop.getBoolean(true);
+	}
 }

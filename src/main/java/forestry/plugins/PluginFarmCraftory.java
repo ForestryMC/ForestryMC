@@ -18,18 +18,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-import cpw.mods.fml.common.network.IGuiHandler;
 
-import forestry.api.core.PluginInfo;
 import forestry.api.farming.Farmables;
 import forestry.core.config.Defaults;
-import forestry.core.interfaces.IOreDictionaryHandler;
-import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.proxy.Proxies;
 import forestry.farming.logic.FarmableFarmCraftory;
 
-@PluginInfo(pluginID = "FarmCraftory", name = "FarmCraftory", author = "SirSengir", url = Defaults.URL, description = "Enables compatibility with FarmCraftory. Adds crops and vegetables to farms.")
-public class PluginFarmCraftory extends NativePlugin {
+@Plugin(pluginID = "FarmCraftory", name = "FarmCraftory", author = "SirSengir", url = Defaults.URL, description = "Enables compatibility with FarmCraftory. Adds crops and vegetables to farms.")
+public class PluginFarmCraftory extends ForestryPlugin {
 
 	public static Block blockSingle;
 	public static Block blockMulti;
@@ -41,20 +37,25 @@ public class PluginFarmCraftory extends NativePlugin {
 	public static Method methodGrowthMulti;
 
 	public static HashMap<String, ItemStack> vegetableSeeds = new HashMap<String, ItemStack>();
-	public static final String[] seedIdentifiers = new String[] { "turnipSeedBag", "cabbageSeedBag", "onionSeedBag", "spinachSeedBag", "leekSeedBag",
-		"cucumberSeedBag", "tomatoSeedBag", "eggplantSeedBag", "greenPepperSeedBag", "yamSeedBag", "strawberrySeedBag", "pineappleSeedBag" };
+	public static final String[] seedIdentifiers = new String[]{"turnipSeedBag", "cabbageSeedBag", "onionSeedBag", "spinachSeedBag", "leekSeedBag",
+		"cucumberSeedBag", "tomatoSeedBag", "eggplantSeedBag", "greenPepperSeedBag", "yamSeedBag", "strawberrySeedBag", "pineappleSeedBag"};
 	public static HashMap<String, ItemStack> vegetableItems = new HashMap<String, ItemStack>();
-	public static final String[] vegetableIdentifiers = new String[] { "turnipItem", "cabbageItem", "onionItem", "spinachItem", "leekItem", "cucumberItem",
-		"tomatoItem", "eggplantItem", "greenPepperItem", "yamItem", "strawberryItem", "pineappleItem" };
+	public static final String[] vegetableIdentifiers = new String[]{"turnipItem", "cabbageItem", "onionItem", "spinachItem", "leekItem", "cucumberItem",
+		"tomatoItem", "eggplantItem", "greenPepperItem", "yamItem", "strawberryItem", "pineappleItem"};
 
 	public static HashMap<String, ItemStack> cerealSeeds = new HashMap<String, ItemStack>();
-	public static final String[] cseedIdentifiers = new String[] { "cornSeedBag" };
+	public static final String[] cseedIdentifiers = new String[]{"cornSeedBag"};
 	public static HashMap<String, ItemStack> cerealItems = new HashMap<String, ItemStack>();
-	public static final String[] cerealIdentifiers = new String[] { "cornItem" };
+	public static final String[] cerealIdentifiers = new String[]{"cornItem"};
 
 	@Override
 	public boolean isAvailable() {
 		return Proxies.common.isModLoaded("FarmCraftory");
+	}
+
+	@Override
+	public String getFailMessage() {
+		return "FarmCraftory not found";
 	}
 
 	@Override
@@ -126,37 +127,6 @@ public class PluginFarmCraftory extends NativePlugin {
 		}
 
 		return 0;
-	}
-
-	@Override
-	public IGuiHandler getGuiHandler() {
-		return null;
-	}
-
-	@Override
-	public ISaveEventHandler getSaveEventHandler() {
-		return null;
-	}
-
-	@Override
-	public IOreDictionaryHandler getDictionaryHandler() {
-		return null;
-	}
-
-	@Override
-	protected void registerItems() {
-	}
-
-	@Override
-	protected void registerBackpackItems() {
-	}
-
-	@Override
-	protected void registerCrates() {
-	}
-
-	@Override
-	protected void registerRecipes() {
 	}
 
 }

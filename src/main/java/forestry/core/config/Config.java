@@ -42,17 +42,6 @@ public class Config {
 
 	public static boolean isDebug = false;
 
-	// Native Plugins
-	public static boolean disableApiculture = false;
-	public static boolean disableArboriculture = false;
-	public static boolean disableCultivation = false;
-	public static boolean disableEnergy = false;
-	public static boolean disableFactory = false;
-	public static boolean disableFarming = false;
-	public static boolean disableFood = false;
-	public static boolean disableMail = false;
-	public static boolean disableStorage = false;
-
 	public static boolean disablePermissions = false;
 	public static boolean disableNags = false;
 	public static boolean disableVersionCheck = false;

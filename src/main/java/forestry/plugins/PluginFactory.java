@@ -19,7 +19,6 @@ import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.network.IGuiHandler;
 
-import forestry.api.core.PluginInfo;
 import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.GameMode;
@@ -53,8 +52,8 @@ import forestry.factory.gadgets.MillRainmaker;
 import forestry.factory.gadgets.TileWorktable;
 import forestry.factory.recipes.CraftGuideIntegration;
 
-@PluginInfo(pluginID = "Factory", name = "Factory", author = "SirSengir", url = Defaults.URL, description = "Adds a wide variety of machines to craft, produce and process products.")
-public class PluginFactory extends NativePlugin {
+@Plugin(pluginID = "Factory", name = "Factory", author = "SirSengir", url = Defaults.URL, description = "Adds a wide variety of machines to craft, produce and process products.")
+public class PluginFactory extends ForestryPlugin {
 
 	public static MachineDefinition definitionBottler;
 	public static MachineDefinition definitionCarpenter;
@@ -67,11 +66,6 @@ public class PluginFactory extends NativePlugin {
 	public static MachineDefinition definitionFabricator;
 	public static MachineDefinition definitionRaintank;
 	public static MachineDefinition definitionWorktable;
-
-	@Override
-	public boolean isAvailable() {
-		return !Config.disableFactory;
-	}
 
 	@Override
 	public void preInit() {
