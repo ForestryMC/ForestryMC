@@ -10,13 +10,7 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import com.google.common.collect.Lists;
 
@@ -25,7 +19,6 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.core.IPlugin;
-import forestry.core.ForestryCore;
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPacketHandler;
 import forestry.core.interfaces.IPickupHandler;
@@ -35,12 +28,6 @@ import forestry.core.proxy.Proxies;
 
 public class PluginManager {
 
-	/**
-	 * You can use the API from your own mod or write a simple plugin mod using
-	 * this plugin interface. Adding a plugin here will have Forestry call the
-	 * registered object during ModsLoaded(). See {@link IPlugin} for further
-	 * details.
-	 */
     public static ArrayList<IPlugin> plugins = Lists.newArrayList();
 	public static ArrayList<IGuiHandler> guiHandlers = Lists.newArrayList();
 	public static ArrayList<IPacketHandler> packetHandlers = Lists.newArrayList();
