@@ -50,8 +50,6 @@ public class PluginIC2 extends ForestryPlugin {
 	public static ItemStack rubbersapling;
 	public static ItemStack rubberwood;
 	public static ItemStack rubberleaves;
-	public static ItemStack fuelcanFilled;
-	public static ItemStack fuelcanEmpty;
 	public static ItemStack emptyCell;
 	public static ItemStack lavaCell;
 	public static ItemStack waterCell;
@@ -208,17 +206,6 @@ public class PluginIC2 extends ForestryPlugin {
 			BackpackManager.backpackItems[2].add(rubberleaves);
 		else
 			Proxies.log.fine("Missing IC2 rubber leaves");
-
-		fuelcanFilled = IC2Items.getItem("filledFuelCan");
-		fuelcanEmpty = IC2Items.getItem("fuelCan");
-		if (fuelcanEmpty != null && fuelcanFilled != null) {
-			ItemStack fuelcanStack = new ItemStack(fuelcanFilled.getItem(), 1, 0);
-			NBTTagCompound compound = new NBTTagCompound();
-			compound.setInteger("value", 15288);
-			fuelcanStack.setTagCompound(compound);
-			RecipeManagers.bottlerManager.addRecipe(20, LiquidHelper.getLiquid(Defaults.LIQUID_ETHANOL, Defaults.BOTTLER_FUELCAN_VOLUME), fuelcanEmpty, fuelcanStack);
-		} else
-			Proxies.log.fine("Missing IC2 fuelcanEmpty or fuelcanFilled, skipping bottler recipe for ethanol to filled fuel can.");
 
 		// Rubber wood is added via ore dictionary.
 	}
