@@ -15,6 +15,7 @@ public class ItemTypedBlock extends ItemForestryBlock {
 	}
 
 	@Override
+	@SuppressWarnings("rawtypes")
 	public String getUnlocalizedName(ItemStack itemstack) {
 		Block block = getBlock();
 		if (block instanceof IItemTyped) {

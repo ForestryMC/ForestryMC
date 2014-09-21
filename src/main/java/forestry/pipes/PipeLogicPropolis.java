@@ -31,11 +31,13 @@ import forestry.core.proxy.Proxies;
 
 public class PipeLogicPropolis {
 
+	@SuppressWarnings("rawtypes")
 	private Pipe pipe;
 	
 	private EnumFilterType[] typeFilter = new EnumFilterType[6];
 	private IAllele[][][] genomeFilter = new IAllele[6][3][2];
 
+	@SuppressWarnings("rawtypes")
 	public PipeLogicPropolis(Pipe pipe) {
 		this.pipe = pipe;
 		for (int i = 0; i < typeFilter.length; i++)
@@ -113,7 +115,7 @@ public class PipeLogicPropolis {
 	}
 
 	public ArrayList<IAllele[]> getGenomeFilters(ForgeDirection orientation) {
-		ArrayList<IAllele[]> filters = new ArrayList();
+		ArrayList<IAllele[]> filters = new ArrayList<IAllele[]>();
 
 		for (int i = 0; i < 3; i++)
 			if (genomeFilter[orientation.ordinal()][i] != null

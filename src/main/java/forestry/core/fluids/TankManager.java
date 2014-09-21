@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.nbt.NBTTagCompound;
@@ -170,21 +172,19 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 		Proxies.net.sendToPlayer(packet, (EntityPlayerMP)player);
 	}
 
-	public void updateGuiData(Container container, List crafters) {
+	public void updateGuiData(Container container, List<EntityPlayerMP> crafters) {
 		for (StandardTank tank : tanks)
 			updateGuiData(container, crafters, tank.getTankIndex());
 	}
 
-	public void updateGuiData(Container container, List crafters, int tankIndex) {
+	public void updateGuiData(Container container, List<EntityPlayerMP> crafters, int tankIndex) {
 		StandardTank tank = tanks.get(tankIndex);
 		FluidStack fluidStack = tank.getFluid();
 		FluidStack prev = prevFluidStacks.get(tankIndex);
 		int color = tank.getColor();
 		int pColor = prevColor.get(tankIndex);
 
-		for (Object crafter1 : crafters) {
-			ICrafting crafter = (ICrafting) crafter1;
-			EntityPlayerMP player = (EntityPlayerMP) crafter1;
+		for (EntityPlayerMP player : crafters) {
 			if (fluidStack == null ^ prev == null) {
 				int fluidId = -1;
 				int fluidAmount = 0;
@@ -192,12 +192,12 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 					fluidId = fluidStack.fluidID;
 					fluidAmount = fluidStack.amount;
 				}
-				crafter.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA + 0, fluidId);
+				player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA + 0, fluidId);
 				PacketGuiInteger packet = new PacketGuiInteger(container.windowId, tankIndex * NETWORK_DATA + 1, fluidAmount);
 				Proxies.net.sendToPlayer(packet, player);
 			} else if (fluidStack != null && prev != null) {
 				if (fluidStack.getFluid() != prev.getFluid())
-					crafter.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA + 0, fluidStack.fluidID);
+					player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA + 0, fluidStack.fluidID);
 				if (fluidStack.amount != prev.amount) {
 					PacketGuiInteger packet = new PacketGuiInteger(container.windowId, tankIndex * NETWORK_DATA + 1, fluidStack.amount);
 					Proxies.net.sendToPlayer(packet, player);

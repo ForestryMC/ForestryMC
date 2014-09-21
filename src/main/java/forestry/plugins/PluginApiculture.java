@@ -179,7 +179,7 @@ public class PluginApiculture extends ForestryPlugin {
 	public static MachineDefinition definitionChest;
 	public static MachineDefinition definitionBeehouse;
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	public void preInit() {
 		super.preInit();
@@ -750,7 +750,7 @@ public class PluginApiculture extends ForestryPlugin {
 		return beeItem;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	private void createHiveDropArrays() {
 
 		BeeManager.hiveDrops = new ArrayList[8];

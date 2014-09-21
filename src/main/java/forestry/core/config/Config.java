@@ -98,7 +98,6 @@ public class Config {
 	public static HashMap<String, String[]> hints = new HashMap<String, String[]>();
 	public static boolean disableEnergyStat = false;
 
-	@SuppressWarnings({ "all" })
 	public static void load() {
 
 		setDebugMode();

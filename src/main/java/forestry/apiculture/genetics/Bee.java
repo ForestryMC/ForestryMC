@@ -338,9 +338,8 @@ public class Bee extends IndividualLiving implements IBee {
 		return biomeIdsTemp;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void addTooltip(List list) {
+	public void addTooltip(List<String> list) {
 
 		// No info 4 u!
 		if (!isAnalyzed) {

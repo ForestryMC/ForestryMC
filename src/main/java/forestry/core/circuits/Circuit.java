@@ -53,9 +53,8 @@ public abstract class Circuit implements ICircuit {
 		return "circuit." + this.uid;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void addTooltip(List list) {
+	public void addTooltip(List<String> list) {
 		list.add(StringUtil.localize(getName()));
 
 		int i = 1;

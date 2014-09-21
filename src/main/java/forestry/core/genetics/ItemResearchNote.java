@@ -211,8 +211,7 @@ public class ItemResearchNote extends ItemForestry {
 			compound.setTag("INN", inner);
 		}
 
-		@SuppressWarnings({ "rawtypes", "unchecked" })
-		public void addTooltip(List list) {
+		public void addTooltip(List<String> list) {
 			ArrayList<String> tooltips = type.getTooltip(inner);
 			if(tooltips.size() <= 0) {
 				list.add("\u00A7o\u00A7c" + StringUtil.localize("researchNote.error.0"));
@@ -239,7 +238,7 @@ public class ItemResearchNote extends ItemForestry {
 		return StringUtil.localizeAndFormatRaw(getUnlocalizedName(itemstack) + ".name", note.researcher.getName());
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
 		ResearchNote note = new ResearchNote(itemstack.getTagCompound());

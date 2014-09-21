@@ -27,6 +27,7 @@ import net.minecraftforge.event.terraingen.TerrainGen;
  */
 public class HiveDecorator {
 
+	@SuppressWarnings("rawtypes")
 	public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "FORESTRY_HIVES", new Class[0], new Object[0]);
 	private static HiveDecorator instance;
 	private final WorldGenHiveForest forest = new WorldGenHiveForest();

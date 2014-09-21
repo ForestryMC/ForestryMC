@@ -20,6 +20,7 @@ import forestry.plugins.PluginApiculture;
 
 public class GuiHandlerPipes implements IGuiHandler {
 
+	@SuppressWarnings("rawtypes")
 	private Pipe getPipe(World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(x, y, z);
 		if (tile == null)
@@ -32,6 +33,7 @@ public class GuiHandlerPipes implements IGuiHandler {
 	}
 
 	@Override
+	@SuppressWarnings("rawtypes")
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 
 		if (id >= GuiId.values().length)

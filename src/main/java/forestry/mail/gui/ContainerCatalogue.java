@@ -46,7 +46,7 @@ public class ContainerCatalogue extends ContainerForestry implements IGuiSelecta
 	private int currentFilter = 1;
 
 	private static final String[] FILTER_NAMES = new String[] { "all", "online", "offline" };
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	private static final Set<EnumStationState>[] FILTERS = new EnumSet[] {
 		EnumSet.noneOf(EnumStationState.class),
 		EnumSet.of(EnumStationState.OK),

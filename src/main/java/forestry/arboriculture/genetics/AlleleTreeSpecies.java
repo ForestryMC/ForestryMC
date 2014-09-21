@@ -187,6 +187,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	}
 
 	@Override
+	@SuppressWarnings("rawtypes")
 	public WorldGenerator getGenerator(ITree tree, World world, int x, int y, int z) {
 		try {
 			return generatorClass.getConstructor(new Class[] { ITreeGenData.class }).newInstance(new Object[] { tree });
@@ -195,7 +196,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	public Class<? extends WorldGenerator>[] getGeneratorClasses() {
 		return new Class[] { generatorClass };

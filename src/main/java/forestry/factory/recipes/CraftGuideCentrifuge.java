@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import java.util.ArrayList;
 import java.util.Map.Entry;
 
 import net.minecraft.item.ItemStack;
@@ -49,11 +50,13 @@ public class CraftGuideCentrifuge implements RecipeProvider {
 
 		for (MachineCentrifuge.Recipe recipe : MachineCentrifuge.RecipeManager.recipes) {
 			Object[] array = new Object[11];
-			@SuppressWarnings("unchecked")
-			Entry<ItemStack, Integer>[] entries = recipe.products.entrySet().toArray(new Entry[0]);
 
-			for (int i = 0; i < Math.min(entries.length, 9); i++)
-				array[i] = entries[i].getValue() > 0 ? new Object[]{entries[i].getKey(), entries[i].getValue()} : null;
+			ArrayList<Entry<ItemStack, Integer>> entries = new ArrayList<Entry<ItemStack, Integer>>(recipe.products.entrySet());
+
+			for (int i = 0; i < Math.min(entries.size(), 9); i++) {
+				Entry<ItemStack, Integer> entry = entries.get(i);
+				array[i] = entry.getValue() > 0 ? new Object[]{entry.getKey(), entry.getValue()} : null;
+			}
 
 			array[9] = recipe.resource;
 			array[10] = machine;

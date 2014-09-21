@@ -78,6 +78,7 @@ public class ContainerLiquidTanks extends ContainerForestry {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		tile.getTankManager().updateGuiData(this, crafters);

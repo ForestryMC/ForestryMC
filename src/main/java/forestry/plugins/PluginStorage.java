@@ -483,7 +483,7 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	private void createBackpackArrays() {
 
 		if (BackpackManager.backpackItems != null)

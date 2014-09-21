@@ -40,6 +40,7 @@ public class CircuitFarmLogic extends Circuit {
 	}
 
 	@Override
+	@SuppressWarnings("rawtypes")
 	public void onInsertion(int slot, TileEntity tile) {
 		if (!isCircuitable(tile))
 			return;

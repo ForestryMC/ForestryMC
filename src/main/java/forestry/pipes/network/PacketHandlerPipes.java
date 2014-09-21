@@ -27,6 +27,7 @@ import forestry.pipes.gui.ContainerPropolisPipe;
 
 public class PacketHandlerPipes implements IPacketHandler {
 
+	@SuppressWarnings("rawtypes")
 	private Pipe getPipe(World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(x, y, z);
 		if (tile == null)
@@ -83,6 +84,7 @@ public class PacketHandlerPipes implements IPacketHandler {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void onTypeFilterChange(EntityPlayer player, PacketUpdate packet) {
 
 		Pipe pipe = getPipe(player.worldObj, packet.posX, packet.posY, packet.posZ);
@@ -94,6 +96,7 @@ public class PacketHandlerPipes implements IPacketHandler {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void onGenomeFilterChange(EntityPlayer player, PacketUpdate packet) {
 
 		Pipe pipe = getPipe(player.worldObj, packet.posX, packet.posY, packet.posZ);
@@ -104,6 +107,7 @@ public class PacketHandlerPipes implements IPacketHandler {
 			((PipeItemsPropolis) pipe).pipeLogic.handleGenomeFilterChange(packet.payload);
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void onRequestFilterSet(EntityPlayer player, PacketCoordinates packet) {
 
 		Pipe pipe = getPipe(player.worldObj, packet.posX, packet.posY, packet.posZ);

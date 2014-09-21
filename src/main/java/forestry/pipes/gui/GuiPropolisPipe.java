@@ -17,7 +17,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import buildcraft.transport.Pipe;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.genetics.AlleleManager;
@@ -27,6 +26,7 @@ import forestry.apiculture.items.ItemBeeGE;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
+import forestry.core.gadgets.TileForestry;
 import forestry.core.genetics.ItemGE;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.GuiForestry;
@@ -43,7 +43,7 @@ import forestry.plugins.PluginApiculture;
  * 
  * @author SirSengir
  */
-public class GuiPropolisPipe extends GuiForestry {
+public class GuiPropolisPipe<T extends TileForestry> extends GuiForestry<T> {
 
 	class TypeFilterSlot extends Widget {
 
@@ -164,9 +164,7 @@ public class GuiPropolisPipe extends GuiForestry {
 				change = null;
 			else if (getSpecies() == null) {
 
-				Iterator it = AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet().iterator();
-				while (it.hasNext()) {
-					Entry<String, IAllele> entry = (Entry<String, IAllele>) it.next();
+				for (Entry<String, IAllele> entry : AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet()) {
 					if (!(entry.getValue() instanceof IAlleleBeeSpecies))
 						continue;
 
@@ -176,9 +174,9 @@ public class GuiPropolisPipe extends GuiForestry {
 
 			} else {
 
-				Iterator it = AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet().iterator();
+				Iterator<Entry<String, IAllele>> it = AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet().iterator();
 				while (it.hasNext()) {
-					Entry<String, IAllele> entry = (Entry<String, IAllele>) it.next();
+					Entry<String, IAllele> entry = it.next();
 					if (!(entry.getValue() instanceof IAlleleBeeSpecies))
 						continue;
 
@@ -187,7 +185,7 @@ public class GuiPropolisPipe extends GuiForestry {
 						continue;
 
 					while (it.hasNext()) {
-						Entry<String, IAllele> entry2 = (Entry<String, IAllele>) it.next();
+						Entry<String, IAllele> entry2 = it.next();
 						if (!(entry2.getValue() instanceof IAlleleBeeSpecies))
 							continue;
 
