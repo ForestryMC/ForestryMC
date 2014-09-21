@@ -20,7 +20,6 @@ import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
@@ -187,7 +186,7 @@ public class PluginArboriculture extends ForestryPlugin {
 		for (ForestryBlock log : logs) {
 			log.block().setHarvestLevel("axe", 0);
 			OreDictionary.registerOre("logWood", log.getWildcard());
-			FurnaceRecipes.smelting().func_151393_a(log.block(), new ItemStack(Items.coal, 1, 1), 0.15F);
+			Proxies.common.addSmelting(log.getItemStack(), new ItemStack(Items.coal, 1, 1), 0.15F);
 		}
 
 		ForestryBlock.planks1.registerBlock(new BlockPlanks(PlankCat.CAT0), ItemWoodBlock.class, "planks");

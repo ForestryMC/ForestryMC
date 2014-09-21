@@ -116,6 +116,14 @@ public class ProxyCommon {
 	}
 
 	public void addSmelting(ItemStack res, ItemStack prod) {
+		addSmelting(res, prod, 0.0f);
+	}
+
+	public void addSmelting(ItemStack res, ItemStack prod, float xp) {
+		if (res == null || res.getItem() == null)
+			throw new IllegalArgumentException("Tried to register smelting recipe with null input");
+		if (prod == null || prod.getItem() == null)
+			throw new IllegalArgumentException("Tried to register smelting recipe with null output");
 		GameRegistry.addSmelting(res.getItem(), prod, 0.0f); // TODO: use full stack as arg?
 	}
 

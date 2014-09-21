@@ -18,7 +18,6 @@ import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 
 import cpw.mods.fml.common.IFuelHandler;
@@ -123,10 +122,6 @@ public class PluginCore extends ForestryPlugin {
 		OreDictionary.registerOre("oreTin", ForestryBlock.resources.getItemStack(1, 2));
 
 		ForestryBlock.glass.registerBlock(new BlockStainedGlass(), ItemForestryBlock.class, "stained");
-
-		/* SMELTING RECIPES */
-		FurnaceRecipes.smelting().func_151394_a(ForestryBlock.resources.getItemStack(1, 1), ForestryItem.ingotCopper.getItemStack(), 0.5f);
-		FurnaceRecipes.smelting().func_151394_a(ForestryBlock.resources.getItemStack(1, 2), ForestryItem.ingotTin.getItemStack(), 0.5f);
 	}
 
 	@Override
@@ -368,6 +363,10 @@ public class PluginCore extends ForestryPlugin {
 
 	@Override
 	protected void registerRecipes() {
+
+		/* SMELTING RECIPES */
+		Proxies.common.addSmelting(ForestryBlock.resources.getItemStack(1, 1), ForestryItem.ingotCopper.getItemStack(), 0.5f);
+		Proxies.common.addSmelting(ForestryBlock.resources.getItemStack(1, 2), ForestryItem.ingotTin.getItemStack(), 0.5f);
 
 		/* BRONZE INGOTS */
 		if (Config.getCraftingBronzeEnabled())

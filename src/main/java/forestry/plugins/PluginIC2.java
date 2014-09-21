@@ -58,7 +58,6 @@ public class PluginIC2 extends ForestryPlugin {
 	public static ItemStack silver;
 	public static ItemStack brass;
 	public static ItemStack uuMatter;
-	public static int fuelcanMeta;
 
 	public PluginIC2() {
 		if (PluginIC2.instance == null)
