@@ -132,7 +132,9 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 	@Override
 	public void updateServerSide() {
         //doWork appears to be called before updateServerSide, so it's contents have been moved to here.
-        energyStorage.modifyEnergyStored(energyStorage.getMaxReceive());
+        if(isActive) {
+            energyStorage.modifyEnergyStored(energyStorage.getMaxReceive());
+        }
 
 		TemperatureState energyState = getTemperatureState();
 		if (energyState == TemperatureState.MELTING && heat > 0)
@@ -246,14 +248,6 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 			return currentOutput;
 		else
 			return 0;
-	}
-
-    /**
-     * @deprecated Use {@link #getEnergyStored(net.minecraftforge.common.util.ForgeDirection)} instead
-     */
-    @Deprecated
-	public float getEnergyStored() {
-		return energyStorage.getEnergyStored();
 	}
 
 	public int getHeat() {
