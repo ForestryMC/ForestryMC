@@ -15,13 +15,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
@@ -38,7 +35,6 @@ import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.ForestryItem;
 import forestry.core.genetics.ItemResearchNote.EnumNoteType;
-import forestry.core.utils.IDAllocator;
 
 public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
 
@@ -169,40 +165,6 @@ public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
 		}
 
 		return allele;
-	}
-
-	@Override
-	public void reloadMetaMap(World world) {
-		metaMapToUID.clear();
-		uidMapToMeta.clear();
-
-		Iterator<Entry<String, IAllele>> it = alleleMap.entrySet().iterator();
-		while (it.hasNext()) {
-			Entry<String, IAllele> entry = it.next();
-			if (!(entry.getValue() instanceof IAlleleSpecies))
-				continue;
-
-			int meta = IDAllocator.getIDAllocator(world, "speciesMetaMap").getId(entry.getKey());
-			metaMapToUID.put(meta, entry.getKey());
-			uidMapToMeta.put(entry.getKey(), meta);
-
-		}
-	}
-
-	@Override
-	public IAllele getFromMetaMap(int meta) {
-		if (!metaMapToUID.containsKey(meta))
-			return null;
-
-		return getAllele(metaMapToUID.get(meta));
-	}
-
-	@Override
-	public int getFromUIDMap(String uid) {
-		if (!uidMapToMeta.containsKey(uid))
-			return 0;
-
-		return uidMapToMeta.get(uid);
 	}
 
 	/* CLASSIFICATIONS */

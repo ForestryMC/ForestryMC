@@ -12,12 +12,11 @@ package forestry.factory.gadgets;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Stack;
 
-import forestry.core.fluids.tanks.FilteredTank;
+import forestry.api.recipes.ICraftingProvider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -38,7 +37,6 @@ import buildcraft.api.gates.ITrigger;
 import buildcraft.api.power.PowerHandler;
 
 import forestry.api.core.ForestryAPI;
-import forestry.api.recipes.IBottlerManager;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
@@ -88,16 +86,8 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		}
 	}
 
-	public static class RecipeManager implements IBottlerManager {
+	public static class RecipeManager implements ICraftingProvider {
 		public static ArrayList<MachineBottler.Recipe> recipes = new ArrayList<MachineBottler.Recipe>();
-		public static HashSet<Fluid> recipeFluids = new HashSet<Fluid>();
-
-		@Override
-		public void addRecipe(int cyclesPerUnit, FluidStack input, ItemStack can, ItemStack bottled) {
-			recipes.add(new MachineBottler.Recipe(cyclesPerUnit, input, can, bottled));
-			if (input != null)
-				recipeFluids.add(input.getFluid());
-		}
 
 		/**
 		 * 

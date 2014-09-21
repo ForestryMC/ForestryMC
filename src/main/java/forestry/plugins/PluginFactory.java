@@ -72,8 +72,6 @@ public class PluginFactory extends ForestryPlugin {
 		super.preInit();
 
 		RecipeManagers.craftingProviders = new ArrayList<ICraftingProvider>();
-		// Init bottler manager
-		RecipeManagers.craftingProviders.add(RecipeManagers.bottlerManager = new MachineBottler.RecipeManager());
 		// Init carpenter manager
 		RecipeManagers.craftingProviders.add(RecipeManagers.carpenterManager = new MachineCarpenter.RecipeManager());
 		// Init centrifuge manager

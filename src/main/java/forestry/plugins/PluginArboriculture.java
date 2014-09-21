@@ -35,7 +35,6 @@ import cpw.mods.fml.common.registry.VillagerRegistry;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeRoot;
-import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -246,7 +245,7 @@ public class PluginArboriculture extends ForestryPlugin {
 				.setFaces(0, 1, 2, 3, 4, 4, 0, 7));
 
 		// Init tree interface
-		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginArboriculture.treeInterface = TreeManager.treeInterface = new TreeHelper());
+		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginArboriculture.treeInterface = new TreeHelper());
 
 		// Init rendering
 		proxy.initializeRendering();

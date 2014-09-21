@@ -22,7 +22,6 @@ import com.mojang.authlib.GameProfile;
 
 import forestry.api.core.ForestryEvent;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
@@ -139,12 +138,6 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 				AlleleManager.alleleRegistry.getSpeciesRoot(this.getPacketTag()),
 				username,
 				mutation, this));
-	}
-
-	@Override
-	public void registerMutation(IAllele allele0, IAllele allele1) {
-		discoveredMutations.add(allele0.getUID() + "-" + allele1.getUID());
-		markDirty();
 	}
 
 	@Override

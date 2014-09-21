@@ -233,7 +233,7 @@ public class PluginApiculture extends ForestryPlugin {
 		ForestryBlock.beehives.block().setHarvestLevel("scoop", 0, 8);
 
 		// Init bee interface
-		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginApiculture.beeInterface = BeeManager.beeInterface = new BeeHelper());
+		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginApiculture.beeInterface = new BeeHelper());
 		BeeManager.villageBees = new ArrayList[]{new ArrayList<IBeeGenome>(), new ArrayList<IBeeGenome>()};
 
 		// Candles

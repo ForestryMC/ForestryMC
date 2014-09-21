@@ -182,11 +182,6 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	}
 
 	@Override
-	public int getGirth() {
-		return girth;
-	}
-
-	@Override
 	@SuppressWarnings("rawtypes")
 	public WorldGenerator getGenerator(ITree tree, World world, int x, int y, int z) {
 		try {
