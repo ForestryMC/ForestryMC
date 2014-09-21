@@ -33,6 +33,7 @@ import com.mojang.authlib.GameProfile;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.tanks.FakeTank;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.interfaces.IOwnable;
@@ -43,7 +44,7 @@ import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumAccess;
-import forestry.core.utils.ForestryTank;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.Vect;
 
@@ -263,13 +264,6 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		return owner;
 	}
 
-	public EntityPlayer getOwnerEntity() {
-		if (owner != null)
-			return worldObj.func_152378_a(owner.getId());
-		else
-			return null;
-	}
-
 	@Override
 	public void setOwner(EntityPlayer player) {
 		this.owner = player.getGameProfile();
@@ -297,7 +291,14 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	/* NAME */
-	public abstract String getInventoryName();
+
+	/**
+	 * Gets the tile's unlocalized name, based on the block at the location of this entity (client-only).
+	 */
+	public String getUnlocalizedName() {
+		String blockUnlocalizedName = getBlockType().getUnlocalizedName().replace("tile.for.","");
+		return blockUnlocalizedName + "." + getBlockMetadata() + ".name";
+	}
 
 	public boolean hasCustomInventoryName() {
 		return true;
@@ -343,38 +344,5 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		else
 			return getInternalInventory().getSizeInventorySide(side);
 
-	}
-
-	/* IFLUIDHANDLER BASICS */
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		if (this instanceof ILiquidTankContainer) {
-			ForestryTank[] tanks = ((ILiquidTankContainer) this).getTanks();
-			FluidTankInfo[] info = new FluidTankInfo[tanks.length];
-			for (int i = 0; i < info.length; i++) {
-				info[i] = tanks[i].getInfo();
-			}
-			return info;
-		}
-		return ForestryTank.DUMMY_TANKINFO_ARRAY;
-	}
-
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		return 0;
-	}
-
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return null;
-	}
-
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return resource != null ? drain(from, resource.amount, doDrain) : null;
-	}
-
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return true;
-	}
-
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return true;
 	}
 }

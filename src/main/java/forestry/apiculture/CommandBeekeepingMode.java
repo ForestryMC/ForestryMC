@@ -204,7 +204,10 @@ public class CommandBeekeepingMode extends CommandMC {
 	private void listModes(ICommandSender sender, String[] arguments) {
 		World world = getWorld(sender, arguments);
 
-		sendChatMessage(sender, StringUtil.localize("chat.bees.command.mode.current").replaceAll("%MODE", PluginApiculture.beeInterface.getBeekeepingMode(world).getName()).replaceAll("%WORLD", String.valueOf(world.getWorldInfo().getSaveVersion())));
+		String message = StringUtil.localize("chat.bees.command.mode.current");
+		message = message.replaceAll("%MODE", PluginApiculture.beeInterface.getBeekeepingMode(world).getName());
+		message = message.replaceAll("%WORLD", String.valueOf(world.getWorldInfo().getSaveVersion()));
+		sendChatMessage(sender, message);
 
 		String help = "";
 		for (IBeekeepingMode mode : PluginApiculture.beeInterface.getBeekeepingModes()) {

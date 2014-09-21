@@ -12,6 +12,7 @@ package forestry.food.items;
 
 import java.util.List;
 
+import forestry.core.items.ItemForestryFood;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,12 +29,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.food.BeverageManager;
 import forestry.api.food.IBeverageEffect;
-import forestry.core.CreativeTabForestry;
 import forestry.core.config.Config;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 
-public class ItemBeverage extends Item {
+public class ItemBeverage extends ItemForestryFood {
 
 	public static class BeverageInfo {
 
@@ -113,10 +113,9 @@ public class ItemBeverage extends Item {
 	public BeverageInfo[] beverages;
 
 	public ItemBeverage(BeverageInfo... beverages) {
-		super();
+		super(1, 0.2f);
 		setMaxStackSize(1);
 		this.beverages = beverages;
-		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
 
 	/**
@@ -135,7 +134,7 @@ public class ItemBeverage extends Item {
 		IBeverageEffect[] effects = beverage.loadEffects(itemstack);
 
 		itemstack.stackSize--;
-		entityplayer.getFoodStats().addStats(beverage.heal, beverage.saturation);
+		entityplayer.getFoodStats().func_151686_a(this, itemstack);
 		world.playSoundAtEntity(entityplayer, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
 
 		if (!Proxies.common.isSimulating(world))
@@ -145,6 +144,20 @@ public class ItemBeverage extends Item {
 			effect.doEffect(world, entityplayer);
 
 		return itemstack;
+	}
+
+	@Override
+	public int func_150905_g(ItemStack itemstack) {
+		int meta = itemstack.getItemDamage();
+		BeverageInfo beverage = beverages[meta];
+		return beverage.heal;
+	}
+
+	@Override
+	public float func_150906_h(ItemStack itemstack) {
+		int meta = itemstack.getItemDamage();
+		BeverageInfo beverage = beverages[meta];
+		return beverage.saturation;
 	}
 
 	@Override

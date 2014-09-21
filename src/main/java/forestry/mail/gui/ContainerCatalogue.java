@@ -15,26 +15,27 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
-import forestry.api.mail.MailAddress;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
 import forestry.api.mail.TradeStationInfo;
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.EnumAddressee;
+import forestry.mail.network.PacketLetterInfo;
+import forestry.mail.EnumStationState;
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
-import forestry.mail.EnumStationState;
-import forestry.mail.network.PacketTradeInfo;
 
 public class ContainerCatalogue extends ContainerForestry implements IGuiSelectable {
 
 	private final EntityPlayer player;
-	private final LinkedHashMap<MailAddress, ITradeStation> stations;
+	private final LinkedHashMap<IMailAddress, ITradeStation> stations;
 	private TradeStationInfo currentTrade = null;
 	private Iterator<ITradeStation> iterator = null;
 
@@ -57,7 +58,7 @@ public class ContainerCatalogue extends ContainerForestry implements IGuiSelecta
 		this.player = player;
 
 		// Filter out any trade stations which do not actually offer anything.
-		stations = new LinkedHashMap<MailAddress, ITradeStation>();
+		stations = new LinkedHashMap<IMailAddress, ITradeStation>();
 		rebuildStationsList();
 	}
 
@@ -183,7 +184,7 @@ public class ContainerCatalogue extends ContainerForestry implements IGuiSelecta
 		needsSynch = true;
 	}
 
-	public void handleTradeInfoUpdate(PacketTradeInfo packet) {
+	public void handleTradeInfoUpdate(PacketLetterInfo packet) {
 		setTradeInfo(packet.tradeInfo);
 	}
 
@@ -207,7 +208,7 @@ public class ContainerCatalogue extends ContainerForestry implements IGuiSelecta
 				crafter.sendProgressBarUpdate(this, 2, currentFilter);
 			}
 
-			Proxies.net.sendToPlayer(new PacketTradeInfo(PacketIds.TRADING_INFO, currentTrade), player);
+			Proxies.net.sendToPlayer(new PacketLetterInfo(PacketIds.LETTER_INFO, EnumAddressee.TRADER, currentTrade, null), player);
 			needsSynch = false;
 		}
 	}

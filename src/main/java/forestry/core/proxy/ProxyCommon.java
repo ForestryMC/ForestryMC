@@ -12,6 +12,8 @@ package forestry.core.proxy;
 
 import java.io.File;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;
@@ -31,7 +33,14 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.common.versioning.ArtifactVersion;
+import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
+import cpw.mods.fml.common.versioning.VersionParser;
+import cpw.mods.fml.common.versioning.VersionRange;
 
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
@@ -148,6 +157,19 @@ public class ProxyCommon {
 		return server.getConfigurationManager().func_152596_g(player.getGameProfile());
 	}
 
+	/**
+	 * Get a player for a given World and GameProfile.
+	 * If they are not in the World, returns a FakePlayer.
+	 * Do not store references to the return value, to prevent worlds staying in memory.
+	 */
+	public EntityPlayer getPlayer(World world, GameProfile profile) {
+		EntityPlayer player = world.getPlayerEntityByName(profile.getName());
+		if (player != null)
+			return player;
+		else
+			return FakePlayerFactory.get((WorldServer)world, profile);
+	}
+
 	public double getBlockReachDistance(EntityPlayer entityplayer) {
 		return 4f;
 	}
@@ -237,9 +259,31 @@ public class ProxyCommon {
 		return Loader.isModLoaded(modname);
 	}
 
-	public Object instantiateIfModLoaded(String modname, String className) {
+	public boolean isModLoaded(String modname, String versionRangeString) {
+		if (!isModLoaded(modname))
+			return false;
 
-		if (isModLoaded(modname))
+		if (versionRangeString != null) {
+			ModContainer mod = Loader.instance().getIndexedModList().get(modname);
+			ArtifactVersion modVersion = mod.getProcessedVersion();
+
+			VersionRange versionRange = VersionParser.parseRange(versionRangeString);
+			DefaultArtifactVersion requiredVersion = new DefaultArtifactVersion(modname, versionRange);
+
+			if (!requiredVersion.containsVersion(modVersion))
+				return false;
+		}
+
+		return true;
+	}
+
+	public Object instantiateIfModLoaded(String modname, String className) {
+		return instantiateIfModLoaded(modname, null, className);
+	}
+
+	public Object instantiateIfModLoaded(String modname, String versionRangeString, String className) {
+
+		if (isModLoaded(modname, versionRangeString))
 			try {
 				Class<?> clas = Class.forName(className, true, Loader.instance().getModClassLoader());
 				return clas.newInstance();

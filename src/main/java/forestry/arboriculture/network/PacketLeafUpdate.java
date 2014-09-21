@@ -15,10 +15,10 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import forestry.arboriculture.gadgets.TileLeaves;
-import forestry.core.network.PacketCoordinates;
 import forestry.core.network.PacketIds;
+import forestry.core.network.PacketTileNBT;
 
-public class PacketLeafUpdate extends PacketCoordinates {
+public class PacketLeafUpdate extends PacketTileNBT {
 
 	public byte isRipeningUpdate = 0;
 	
@@ -33,8 +33,8 @@ public class PacketLeafUpdate extends PacketCoordinates {
 	public PacketLeafUpdate() {
 	}
 
-	public PacketLeafUpdate(int posX, int posY, int posZ, TileLeaves leaves) {
-		super(PacketIds.LEAF_UPDATE, posX, posY, posZ);
+	public PacketLeafUpdate(TileLeaves leaves) {
+		super(PacketIds.LEAF_UPDATE, leaves);
 
 		leafState = 0;
 		if(leaves.hasFruit())
@@ -48,8 +48,8 @@ public class PacketLeafUpdate extends PacketCoordinates {
 		colourFruits = leaves.determineFruitColour();
 	}
 
-	public PacketLeafUpdate(int posX, int posY, int posZ, int fruitColour) {
-		super(PacketIds.LEAF_UPDATE, posX, posY, posZ);
+	public PacketLeafUpdate(TileLeaves leaves, int fruitColour) {
+		super(PacketIds.LEAF_UPDATE, leaves);
 
 		isRipeningUpdate = 1;
 		colourFruits = fruitColour;

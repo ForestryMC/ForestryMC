@@ -22,19 +22,15 @@ public class GuiEngineCopper extends GuiEngine {
 		super(Defaults.TEXTURE_PATH_GUI + "/peatengine.png", new ContainerEngineCopper(inventory, tile), tile);
 	}
 
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localize("tile.for.engine.1");
-		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
-		this.fontRendererObj.drawString("Inventory", 8, this.ySize - 96 + 2, fontColor.get("gui.title"));
+	protected EngineCopper getEngine() {
+		return (EngineCopper)tile;
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		EngineCopper engine = (EngineCopper) tile;
 
+		EngineCopper engine = getEngine();
 		int progress;
 		if (engine.isBurning()) {
 			progress = engine.getBurnTimeRemainingScaled(12);

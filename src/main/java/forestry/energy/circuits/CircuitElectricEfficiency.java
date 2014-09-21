@@ -13,7 +13,7 @@ package forestry.energy.circuits;
 public class CircuitElectricEfficiency extends CircuitElectricChange {
 
 	public CircuitElectricEfficiency(String uid) {
-		super(uid, false, "electric.efficiency.1", new String[] { "Reduces intake by 1 EU/t" });
+		super(uid, false);
 		this.setLimit(1);
 		this.configureChange(-1, 0);
 	}

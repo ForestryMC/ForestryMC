@@ -15,12 +15,12 @@ package forestry.energy.gui;
 
 import forestry.core.gadgets.Engine;
 import forestry.core.gui.ContainerForestry;
-import forestry.core.gui.GuiForestry;
+import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.Ledger;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 
-public abstract class GuiEngine extends GuiForestry<Engine> {
+public abstract class GuiEngine extends GuiForestryTitled<Engine> {
 
 	protected class EngineLedger extends Ledger {
 

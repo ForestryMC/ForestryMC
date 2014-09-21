@@ -18,7 +18,7 @@ import forestry.energy.gadgets.EngineCopper;
 public class CircuitFireDampener extends Circuit {
 
 	public CircuitFireDampener(String uid) {
-		super(uid, false, "dampener.1", new String[] { "Reduces maximum output to 1 MJ/t", "Preserves fuel output" });
+		super(uid, false);
 	}
 
 	@Override

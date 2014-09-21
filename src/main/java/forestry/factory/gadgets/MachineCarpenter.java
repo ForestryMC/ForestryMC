@@ -12,6 +12,7 @@ package forestry.factory.gadgets;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -27,9 +28,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
 
 import buildcraft.api.gates.ITrigger;
 import buildcraft.api.power.PowerHandler;
@@ -40,6 +43,9 @@ import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
+import forestry.core.proxy.Proxies;
+import forestry.core.fluids.tanks.FilteredTank;
+import forestry.core.fluids.TankManager;
 import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
@@ -47,7 +53,6 @@ import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.ForestryTank;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.ShapedRecipeCustom;
@@ -141,6 +146,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	public static class RecipeManager implements ICarpenterManager {
 
 		public static ArrayList<MachineCarpenter.Recipe> recipes = new ArrayList<MachineCarpenter.Recipe>();
+		public static HashSet<Fluid> recipeFluids = new HashSet<Fluid>();
 
 		@Override
 		public void addCrating(ItemStack itemStack) {
@@ -170,6 +176,8 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		@Override
 		public void addRecipe(int packagingTime, FluidStack liquid, ItemStack box, ItemStack product, Object materials[]) {
 			recipes.add(new Recipe(packagingTime, liquid, box, ShapedRecipeCustom.createShapedRecipe(product, materials)));
+			if (liquid != null)
+				recipeFluids.add(liquid.getFluid());
 		}
 
 		public static Recipe findMatchingRecipe(FluidStack liquid, ItemStack item, InventoryCrafting inventorycrafting, World world) {
@@ -182,12 +190,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		}
 
 		public static boolean isResourceLiquid(FluidStack liquid) {
-			for (Recipe recipe : recipes) {
-				if (recipe.hasLiquid(liquid))
-					return true;
-			}
-
-			return false;
+			return recipeFluids.contains(liquid.getFluid());
 		}
 
 		public static boolean isBox(ItemStack resource) {
@@ -214,7 +217,8 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 	/* MEMBER */
 	@EntityNetData
-	public ForestryTank resourceTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
+	public FilteredTank resourceTank;
+	private final TankManager tankManager;
 	private final TileInventoryAdapter craftingInventory;
 	private final TileInventoryAdapter accessibleInventory;
 	public MachineCarpenter.Recipe currentRecipe;
@@ -231,13 +235,16 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 	public MachineCarpenter() {
 		setHints(Config.hints.get("carpenter"));
+		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluids);
 		craftingInventory = new TileInventoryAdapter(this, 10, "CraftItems");
 		accessibleInventory = (TileInventoryAdapter) new TileInventoryAdapter(this, 30, "Items").configureSided(Defaults.FACINGS, SLOT_BOX, 20);
+
+		tankManager = new TankManager(resourceTank);
 	}
 
 	@Override
 	public String getInventoryName() {
-		return "factory.1";
+		return getUnlocalizedName();
 	}
 
 	@Override
@@ -258,10 +265,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		nbttagcompound.setInteger("PackageTime", packageTime);
 		nbttagcompound.setInteger("PackageTotalTime", totalTime);
 
-		NBTTagCompound NBTresourceSlot = new NBTTagCompound();
-
-		resourceTank.writeToNBT(NBTresourceSlot);
-		nbttagcompound.setTag("ResourceTank", NBTresourceSlot);
+		tankManager.writeTanksToNBT(nbttagcompound);
 
 		craftingInventory.writeToNBT(nbttagcompound);
 		accessibleInventory.writeToNBT(nbttagcompound);
@@ -287,9 +291,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		packageTime = nbttagcompound.getInteger("PackageTime");
 		totalTime = nbttagcompound.getInteger("PackageTotalTime");
 
-		resourceTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
-		if (nbttagcompound.hasKey("ResourceTank"))
-			resourceTank.readFromNBT(nbttagcompound.getCompoundTag("ResourceTank"));
+		tankManager.readTanksFromNBT(nbttagcompound);
 
 		if (nbttagcompound.hasKey("CraftItems"))
 			craftingInventory.readFromNBT(nbttagcompound);
@@ -384,7 +386,8 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 				totalTime = 0;
 
 				// Remove resources
-				removeResources(currentRecipe);
+				if (!removeResources(currentRecipe))
+					return false;
 
 				// Update product display
 				if (activeContainer != null)
@@ -429,40 +432,34 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 				return false;
 
 		// Need at least one matched set
-		return StackUtils.containsSets(craftingInventory.getStacks(SLOT_CRAFTING_1, 9), accessibleInventory.getStacks(SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT), null, true, false) > 0;
+		ItemStack[] set = craftingInventory.getStacks(SLOT_CRAFTING_1, 9);
+		ItemStack[] stock = accessibleInventory.getStacks(SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+		return StackUtils.containsSets(set, stock, true, false) > 0;
 	}
 
-	private void removeResources(Recipe recipe) {
+	private boolean removeResources(Recipe recipe) {
 
 		// Remove resources
-		if (recipe.liquid != null)
-			resourceTank.drain(recipe.liquid.amount, true);
+		if (recipe.liquid != null) {
+			FluidStack amountDrained = resourceTank.drain(recipe.liquid.amount, false);
+			if (amountDrained != null && amountDrained.amount == recipe.liquid.amount)
+				resourceTank.drain(recipe.liquid.amount, true);
+			else
+				return false;
+		}
 		// Remove boxes
-		if (recipe.box != null)
-			accessibleInventory.decrStackSize(SLOT_BOX, 1);
-
-		removeSets(1, craftingInventory.getStacks(SLOT_CRAFTING_1, 9));
-
-	}
-
-	private void removeSets(int count, ItemStack[] set) {
-
-		for (int i = 0; i < count; i++) {
-			ItemStack[] condensedSet = StackUtils.condenseStacks(set);
-			for (ItemStack req : condensedSet) {
-				for (int j = SLOT_INVENTORY_1; j < SLOT_INVENTORY_1 + SLOT_INVENTORY_COUNT; j++) {
-					ItemStack pol = accessibleInventory.getStackInSlot(j);
-					if (pol == null)
-						continue;
-					if (!StackUtils.isCraftingEquivalent(pol, req, true, false))
-						continue;
-
-					ItemStack removed = accessibleInventory.decrStackSize(j, req.stackSize);
-					req.stackSize -= removed.stackSize;
-				}
-			}
+		if (recipe.box != null) {
+			ItemStack removed = accessibleInventory.decrStackSize(SLOT_BOX, 1);
+			if (removed == null || removed.stackSize == 0)
+				return false;
 		}
 
+		return removeSets(1, craftingInventory.getStacks(SLOT_CRAFTING_1, 9));
+	}
+
+	private boolean removeSets(int count, ItemStack[] set) {
+		EntityPlayer player = Proxies.common.getPlayer(worldObj, owner);
+		return accessibleInventory.removeSets(count, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
 	}
 
 	private boolean tryAddPending() {
@@ -609,7 +606,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 	/* SMP GUI */
 	public void getGUINetworkData(int i, int j) {
-
+		i -= tankManager.maxMessageId() + 1;
 		switch (i) {
 		case 0:
 			packageTime = j;
@@ -621,8 +618,9 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	}
 
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		iCrafting.sendProgressBarUpdate(container, 0, packageTime);
-		iCrafting.sendProgressBarUpdate(container, 1, totalTime);
+		int i = tankManager.maxMessageId() + 1;
+		iCrafting.sendProgressBarUpdate(container, i, packageTime);
+		iCrafting.sendProgressBarUpdate(container, i + 1, totalTime);
 	}
 
 	/* ISIDEDINVENTORY */
@@ -677,18 +675,40 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	// ILIQUIDCONTAINER IMPLEMENTATION
 	@Override
 	public int fill(ForgeDirection direction, FluidStack resource, boolean doFill) {
-		int used = resourceTank.fill(resource, doFill);
-
-		if (doFill && used > 0)
-			// TODO: Slow down updates
-			sendNetworkUpdate();
-
-		return used;
+		return tankManager.fill(direction, resource, doFill);
 	}
 
 	@Override
-	public ForestryTank[] getTanks() {
-		return new ForestryTank[] { resourceTank };
+	public TankManager getTankManager() {
+		return tankManager;
+	}
+
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return tankManager.drain(from, resource, doDrain);
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return tankManager.drain(from, maxDrain, doDrain);
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return tankManager.canFill(from, fluid);
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return tankManager.canDrain(from, fluid);
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return tankManager.getTankInfo(from);
+	}
+
+	public void resetProductDisplay(InventoryCrafting craftMatrix) {
+		setCurrentRecipe(RecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftMatrix, getWorldObj()));
 	}
 
 	// ITRIGGERPROVIDER

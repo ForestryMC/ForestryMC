@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
+import forestry.core.utils.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCraftResult;
@@ -25,6 +26,7 @@ import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.factory.gadgets.TileWorktable;
+import net.minecraft.item.ItemStack;
 
 public class ContainerWorktable extends ContainerForestry implements IContainerCrafting, IGuiSelectable {
 
@@ -91,10 +93,16 @@ public class ContainerWorktable extends ContainerForestry implements IContainerC
 
 	@Override
 	public void onCraftMatrixChanged(IInventory iinventory, int slot) {
-//		craftingInventory.setInventorySlotContents(slot, iinventory.getStackInSlot(slot));
-		if (slot < craftMatrix.getSizeInventory())
-			craftMatrix.setInventorySlotContents(slot, iinventory.getStackInSlot(slot));
-		updateRecipe();
+		if (slot >= craftMatrix.getSizeInventory())
+			return;
+
+		ItemStack stack = iinventory.getStackInSlot(slot);
+		ItemStack currentStack = craftMatrix.getStackInSlot(slot);
+
+		if (!StackUtils.isIdenticalItem(stack, currentStack)) {
+			craftMatrix.setInventorySlotContents(slot, stack);
+			updateRecipe();
+		}
 	}
 
 	private void updateMatrix() {
@@ -105,6 +113,10 @@ public class ContainerWorktable extends ContainerForestry implements IContainerC
 
 	private void updateRecipe() {
 		tile.setRecipe(craftMatrix);
+	}
+
+	public void clearRecipe() {
+		sendRecipeClick(0, tile.getMemory().capacity);
 	}
 
 	public void sendRecipeClick(int mouseButton, int recipeIndex) {

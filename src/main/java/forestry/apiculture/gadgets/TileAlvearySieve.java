@@ -45,10 +45,6 @@ public class TileAlvearySieve extends TileAlveary implements ICrafter, IBeeListe
 		player.openGui(ForestryAPI.instance, GuiId.AlvearySieveGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
 	}
 
-	@Override
-	public String getInventoryName() {
-		return "tile.alveary.7";
-	}
 
 	@Override
 	public boolean hasFunction() {

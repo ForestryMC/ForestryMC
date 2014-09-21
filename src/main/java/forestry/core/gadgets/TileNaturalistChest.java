@@ -37,7 +37,7 @@ public abstract class TileNaturalistChest extends TileBase implements IInventory
 
 	@Override
 	public String getInventoryName() {
-		return StringUtil.localize("tile.mill.3");
+		return getUnlocalizedName();
 	}
 
 	@Override

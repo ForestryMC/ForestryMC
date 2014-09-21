@@ -12,6 +12,7 @@ package forestry.farming.logic;
 
 import java.util.Map;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -20,7 +21,6 @@ import net.minecraft.world.World;
 import forestry.api.arboriculture.ITree;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
-import forestry.core.utils.Utils;
 import forestry.plugins.PluginArboriculture;
 
 public class FarmableVanillaSapling extends FarmableGenericSapling {
@@ -33,7 +33,7 @@ public class FarmableVanillaSapling extends FarmableGenericSapling {
 	}
 
 	@Override
-	public boolean plantSaplingAt(ItemStack germling, World world, int x, int y, int z) {
+	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
 		ITree tree = null;
 		for (Map.Entry<ItemStack, IIndividual> entry : AlleleManager.ersatzSaplings.entrySet())
 			if (entry.getKey().isItemEqual(germling) && entry.getValue() instanceof ITree) {
@@ -44,7 +44,7 @@ public class FarmableVanillaSapling extends FarmableGenericSapling {
 		if (tree == null)
 			return false;
 
-		return PluginArboriculture.treeInterface.plantSapling(world, tree, Utils.getForestryPlayerProfile(), x, y, z);
+		return PluginArboriculture.treeInterface.plantSapling(world, tree, player.getGameProfile(), x, y, z);
 	}
 
 }

@@ -21,10 +21,10 @@ import java.util.Map;
  * @param <T> The thing this map maps onto
  * @param <P> The stack class (i.e. ItemStack, FluidStack) used for lookups
  */
-public abstract class StackMap<P, T> extends HashMap<Object, T>{
+public abstract class StackMap<P, T> extends HashMap<P, T>{
 	
 	@Override
-	public final T put(Object key, T value) {
+	public final T put(P key, T value) {
 		if(isValidKey(key) && key != null && value != null)
 			return super.put(key, value);
 		return null;
@@ -36,7 +36,7 @@ public abstract class StackMap<P, T> extends HashMap<Object, T>{
 	public final boolean containsKey(Object key) {
 		P stack = getStack(key);
 		if(stack == null) return false;
-		for (Map.Entry<Object, T> entry : this.entrySet())
+		for (Map.Entry<P, T> entry : this.entrySet())
 			if (areEqual(stack, entry.getKey()))
 				return true;
 		return super.containsKey(key);
@@ -46,7 +46,7 @@ public abstract class StackMap<P, T> extends HashMap<Object, T>{
 	public final T get(Object key) {
 		P stack = getStack(key);
 		if(stack == null) return null;
-		for (Map.Entry<Object, T> entry : this.entrySet())
+		for (Map.Entry<P, T> entry : this.entrySet())
 			if (areEqual(stack, entry.getKey()))
 				return entry.getValue();
 		return super.get(key);

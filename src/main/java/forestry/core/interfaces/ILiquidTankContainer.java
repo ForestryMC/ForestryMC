@@ -10,12 +10,16 @@
  ******************************************************************************/
 package forestry.core.interfaces;
 
+import forestry.core.fluids.TankManager;
+import forestry.core.fluids.tanks.StandardTank;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraftforge.fluids.IFluidHandler;
-
-import forestry.core.utils.ForestryTank;
 
 public interface ILiquidTankContainer extends IFluidHandler {
 
-	ForestryTank[] getTanks();
-	
+	TankManager getTankManager();
+	void getGUINetworkData(int messageId, int data);
+	void sendGUINetworkData(Container container, ICrafting iCrafting);
+
 }

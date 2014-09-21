@@ -40,7 +40,7 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.ISaveEventHandler;
-import forestry.core.items.ItemForestryBlock;
+import forestry.core.items.ItemTypedBlock;
 import forestry.core.proxy.Proxies;
 import forestry.core.triggers.Trigger;
 import forestry.core.utils.ShapedRecipeCustom;
@@ -107,7 +107,7 @@ public class PluginFarming extends NativePlugin {
 
 		Farmables.farmInterface = new FarmHelper();
 
-		ForestryBlock.mushroom.registerBlock(new BlockMushroom(), ItemForestryBlock.class, "mushroom");
+		ForestryBlock.mushroom.registerBlock(new BlockMushroom(), ItemTypedBlock.class, "mushroom");
 
 		Farmables.farmables.put("farmArboreal", new ArrayList<IFarmable>());
 		Farmables.farmables.get("farmArboreal").add(new FarmableVanillaSapling());
@@ -171,24 +171,24 @@ public class PluginFarming extends NativePlugin {
 		GameRegistry.registerTileEntity(TileValve.class, "forestry.FarmValve");
 		GameRegistry.registerTileEntity(TileControl.class, "forestry.FarmControl");
 
-		Circuit.farmArborealManaged = new CircuitFarmLogic("managedArboreal", FarmLogicArboreal.class, new String[]{"Arboreal Plants"});
-		Circuit.farmShroomManaged = new CircuitFarmLogic("managedShroom", FarmLogicShroom.class, new String[]{"Mushrooms"});
-		Circuit.farmPeatManaged = new CircuitFarmLogic("managedPeat", FarmLogicPeat.class, new String[]{"Peat Bog"});
-		Circuit.farmCerealManaged = new CircuitFarmLogic("managedCereal", FarmLogicCereal.class, new String[]{"Crops"});
-		Circuit.farmVegetableManaged = new CircuitFarmLogic("managedVegetable", FarmLogicVegetable.class, new String[]{"Vegetables"});
-		Circuit.farmInfernalManaged = new CircuitFarmLogic("managedInfernal", FarmLogicInfernal.class, new String[]{"Infernal Crops"});
+		Circuit.farmArborealManaged = new CircuitFarmLogic("managedArboreal", FarmLogicArboreal.class);
+		Circuit.farmShroomManaged = new CircuitFarmLogic("managedShroom", FarmLogicShroom.class);
+		Circuit.farmPeatManaged = new CircuitFarmLogic("managedPeat", FarmLogicPeat.class);
+		Circuit.farmCerealManaged = new CircuitFarmLogic("managedCereal", FarmLogicCereal.class);
+		Circuit.farmVegetableManaged = new CircuitFarmLogic("managedVegetable", FarmLogicVegetable.class);
+		Circuit.farmInfernalManaged = new CircuitFarmLogic("managedInfernal", FarmLogicInfernal.class);
 
-		Circuit.farmPeatManual = new CircuitFarmLogic("manualPeat", FarmLogicPeat.class, new String[]{"Peat Bog"}).setManual();
-		Circuit.farmShroomManual = new CircuitFarmLogic("manualShroom", FarmLogicShroom.class, new String[]{"Mushrooms"}).setManual();
-		Circuit.farmCerealManual = new CircuitFarmLogic("manualCereal", FarmLogicCereal.class, new String[]{"Crops"}).setManual();
-		Circuit.farmVegetableManual = new CircuitFarmLogic("manualVegetable", FarmLogicVegetable.class, new String[]{"Vegetables"}).setManual();
-		Circuit.farmSucculentManual = new CircuitFarmLogic("manualSucculent", FarmLogicSucculent.class, new String[]{"Succulents"}).setManual();
-		Circuit.farmPoalesManual = new CircuitFarmLogic("manualPoales", FarmLogicPoale.class, new String[]{"Reeds"}).setManual();
-		Circuit.farmGourdManual = new CircuitFarmLogic("manualGourd", FarmLogicGourd.class, new String[]{"Gourds"}).setManual();
-		Circuit.farmCocoaManual = new CircuitFarmLogic("manualCocoa", FarmLogicCocoa.class, new String[]{"Cocoa Plantation"}).setManual();
+		Circuit.farmPeatManual = new CircuitFarmLogic("manualPeat", FarmLogicPeat.class).setManual();
+		Circuit.farmShroomManual = new CircuitFarmLogic("manualShroom", FarmLogicShroom.class).setManual();
+		Circuit.farmCerealManual = new CircuitFarmLogic("manualCereal", FarmLogicCereal.class).setManual();
+		Circuit.farmVegetableManual = new CircuitFarmLogic("manualVegetable", FarmLogicVegetable.class).setManual();
+		Circuit.farmSucculentManual = new CircuitFarmLogic("manualSucculent", FarmLogicSucculent.class).setManual();
+		Circuit.farmPoalesManual = new CircuitFarmLogic("manualPoales", FarmLogicPoale.class).setManual();
+		Circuit.farmGourdManual = new CircuitFarmLogic("manualGourd", FarmLogicGourd.class).setManual();
+		Circuit.farmCocoaManual = new CircuitFarmLogic("manualCocoa", FarmLogicCocoa.class).setManual();
 
-		Circuit.farmOrchardManual = new CircuitFarmLogic("manualOrchard", FarmLogicOrchard.class, new String[]{"Orchard"});
-		Circuit.farmRubberManual = new CircuitFarmLogic("manualRubber", FarmLogicRubber.class, new String[]{"Rubber Plantation"});
+		Circuit.farmOrchardManual = new CircuitFarmLogic("manualOrchard", FarmLogicOrchard.class);
+		Circuit.farmRubberManual = new CircuitFarmLogic("manualRubber", FarmLogicRubber.class);
 
 		MinecraftForge.EVENT_BUS.register(new EventHandlerFarming());
 	}

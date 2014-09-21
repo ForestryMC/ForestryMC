@@ -22,11 +22,6 @@ import forestry.core.utils.Utils;
 public abstract class TileBase extends TileForestry implements IHintSource {
 
 	@Override
-	public String getInventoryName() {
-		return null;
-	}
-
-	@Override
 	public boolean isOwnable() {
 		return true;
 	}

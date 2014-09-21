@@ -10,8 +10,13 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import java.awt.Color;
 import java.util.Collection;
 import java.util.List;
+
+import codechicken.nei.VisiblityData;
+import codechicken.nei.api.INEIGuiHandler;
+import codechicken.nei.api.TaggedInventoryArea;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -35,6 +40,7 @@ import forestry.core.gui.slots.SlotForestry;
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.tooltips.ToolTipLine;
+import forestry.core.gui.widgets.Widget;
 import forestry.core.interfaces.IClimatised;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IHintSource;
@@ -43,7 +49,7 @@ import forestry.core.interfaces.IPowerHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.FontColour;
 
-public abstract class GuiForestry<T extends TileForestry> extends GuiContainer {
+public abstract class GuiForestry<T extends TileForestry> extends GuiContainer implements INEIGuiHandler {
 
 	/* WIDGETS */
 	protected WidgetManager widgetManager;
@@ -52,10 +58,6 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer {
 	protected T tile;
 	public ResourceLocation textureFile;
 	protected FontColour fontColor;
-
-	public GuiForestry(ContainerForestry container) {
-		this("", container);
-	}
 
 	public GuiForestry(String texture, ContainerForestry container) {
 		this(new ResourceLocation("forestry", texture), container, null);
@@ -323,38 +325,40 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer {
 
 		int left = this.guiLeft;
 		int top = this.guiTop;
-		int lenght = 0;
+		int length = 0;
+		int height = 0;
 		int x;
 		int y;
 
 		for (ToolTipLine tip : toolTips) {
 			y = this.fontRendererObj.getStringWidth(tip.text);
 
-			if (y > lenght)
-				lenght = y;
+			height += 10 + tip.getSpacing();
+			if (y > length)
+				length = y;
 		}
 
 		x = mouseX - left + 12;
 		y = mouseY - top - 12;
-		int var14 = 8;
-
-		if (toolTips.size() > 1)
-			var14 += 2 + (toolTips.size() - 1) * 10;
 
 		this.zLevel = 300.0F;
 		itemRender.zLevel = 300.0F;
-		int var15 = -267386864;
-		this.drawGradientRect(x - 3, y - 4, x + lenght + 3, y - 3, var15, var15);
-		this.drawGradientRect(x - 3, y + var14 + 3, x + lenght + 3, y + var14 + 4, var15, var15);
-		this.drawGradientRect(x - 3, y - 3, x + lenght + 3, y + var14 + 3, var15, var15);
-		this.drawGradientRect(x - 4, y - 3, x - 3, y + var14 + 3, var15, var15);
-		this.drawGradientRect(x + lenght + 3, y - 3, x + lenght + 4, y + var14 + 3, var15, var15);
-		int var16 = 1347420415;
-		int var17 = (var16 & 16711422) >> 1 | var16 & -16777216;
-		this.drawGradientRect(x - 3, y - 3 + 1, x - 3 + 1, y + var14 + 3 - 1, var16, var17);
-		this.drawGradientRect(x + lenght + 2, y - 3 + 1, x + lenght + 3, y + var14 + 3 - 1, var16, var17);
-		this.drawGradientRect(x - 3, y - 3, x + lenght + 3, y - 3 + 1, var16, var16);
-		this.drawGradientRect(x - 3, y + var14 + 2, x + lenght + 3, y + var14 + 3, var17, var17);
+		Color backgroundColor = new Color(16, 0, 16, 240);
+		int backgroundColorInt = backgroundColor.getRGB();
+		this.drawGradientRect(x - 3, y - 4, x + length + 2, y - 3, backgroundColorInt, backgroundColorInt);
+		this.drawGradientRect(x - 3, y + height + 1, x + length + 2, y + height + 2, backgroundColorInt, backgroundColorInt);
+		this.drawGradientRect(x - 3, y - 3, x + length + 2, y + height + 1, backgroundColorInt, backgroundColorInt);
+		this.drawGradientRect(x - 4, y - 3, x - 3, y + height + 1, backgroundColorInt, backgroundColorInt);
+		this.drawGradientRect(x + length + 2, y - 3, x + length + 3, y + height + 1, backgroundColorInt, backgroundColorInt);
+
+		Color borderColorTop = new Color(80, 0, 255, 80);
+		int borderColorTopInt = borderColorTop.getRGB();
+		Color borderColorBottom = new Color((borderColorTopInt & 0xfefefe) >> 1 | borderColorTopInt & -0x1000000, true);
+		int borderColorBottomInt = borderColorBottom.getRGB();
+		this.drawGradientRect(x - 3, y - 3 + 1, x - 3 + 1, y + height, borderColorTopInt, borderColorBottomInt);
+		this.drawGradientRect(x + length + 1, y - 3 + 1, x + length + 2, y + height, borderColorTopInt, borderColorBottomInt);
+		this.drawGradientRect(x - 3, y - 3, x + length + 2, y - 3 + 1, borderColorTopInt, borderColorTopInt);
+		this.drawGradientRect(x - 3, y + height, x + length + 2, y + height + 1, borderColorBottomInt, borderColorBottomInt);
 
 		for (ToolTipLine tip : toolTips) {
 			String line = tip.text;
@@ -544,5 +548,50 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer {
 		itemRender.renderItemOverlayIntoGUI(font, this.mc.getTextureManager(), stack, xPos, yPos);
 		this.zLevel = 0.0F;
 		itemRender.zLevel = 0.0F;
+	}
+
+	protected class ItemStackWidget extends Widget {
+		ItemStack itemStack;
+
+		public ItemStackWidget(int xPos, int yPos, ItemStack itemStack) {
+			super(widgetManager, xPos, yPos);
+
+			IIcon icon = itemStack.getItem().getIcon(itemStack, 0);
+
+			this.width = icon.getIconWidth();
+			this.height = icon.getIconHeight();
+			this.itemStack = itemStack;
+		}
+
+		@Override
+		public void draw(int startX, int startY) {
+			itemRender.renderItemAndEffectIntoGUI(fontRendererObj, mc.renderEngine, itemStack, xPos + startX, yPos + startY);
+			itemRender.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, itemStack, xPos + startX, yPos + startY);
+		}
+
+		@Override
+		public ToolTip getToolTip() {
+			ToolTip tip = new ToolTip();
+			tip.add(itemStack.getDisplayName());
+			return tip;
+		}
+	}
+
+	/* NEI */
+	@Override
+	public VisiblityData modifyVisiblity(GuiContainer gui, VisiblityData currentVisibility) { return null; }
+	@Override
+	public Iterable<Integer> getItemSpawnSlots(GuiContainer gui, ItemStack item) { return null; }
+	@Override
+	public List<TaggedInventoryArea> getInventoryAreas(GuiContainer gui) { return null; }
+	@Override
+	public boolean handleDragNDrop(GuiContainer gui, int mousex, int mousey, ItemStack draggedStack, int button) { return false; }
+
+	@Override
+	public boolean hideItemPanelSlot(GuiContainer gui, int x, int y, int w, int h) {
+		if (gui instanceof GuiForestry)
+			return ((GuiForestry)gui).ledgerManager.ledgerOverlaps(x, y, w, h);
+		else
+			return false;
 	}
 }

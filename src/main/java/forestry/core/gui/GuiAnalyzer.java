@@ -16,22 +16,14 @@ import forestry.core.config.Defaults;
 import forestry.core.gadgets.TileAnalyzer;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.StringUtil;
 import forestry.core.utils.Utils;
 
-public class GuiAnalyzer extends GuiForestry<TileAnalyzer> {
+public class GuiAnalyzer extends GuiForestryTitled<TileAnalyzer> {
 
 	public GuiAnalyzer(InventoryPlayer inventory, TileAnalyzer tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/alyzer.png", new ContainerAnalyzer(inventory, tile), tile);
 		ySize = 176;
 		widgetManager.add(new TankWidget(this.widgetManager, 95, 24, 0));
-	}
-
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String title = StringUtil.localize("tile.for." + tile.getInventoryName());
-		this.fontRendererObj.drawString(title, getCenteredOffset(title), 6, fontColor.get("gui.title"));
 	}
 
 	@Override

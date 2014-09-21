@@ -13,21 +13,13 @@ package forestry.factory.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.core.config.Defaults;
-import forestry.core.gui.GuiForestry;
-import forestry.core.utils.StringUtil;
+import forestry.core.gui.GuiForestryTitled;
 import forestry.factory.gadgets.MachineCentrifuge;
 
-public class GuiCentrifuge extends GuiForestry<MachineCentrifuge> {
+public class GuiCentrifuge extends GuiForestryTitled<MachineCentrifuge> {
 
 	public GuiCentrifuge(InventoryPlayer inventory, MachineCentrifuge tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/centrifuge.png", new ContainerCentrifuge(inventory, tile), tile);
-	}
-
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localize("tile.for." + tile.getInventoryName());
-		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
 	}
 
 	@Override

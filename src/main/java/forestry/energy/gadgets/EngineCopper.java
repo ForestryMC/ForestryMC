@@ -204,7 +204,7 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 	/**
 	 * Returns the fuel value (power per cycle) an item of the passed ItemStack provides
 	 * 
-	 * @param item
+	 * @param fuel
 	 * @return
 	 */
 	private int determineFuelValue(ItemStack fuel) {
@@ -217,7 +217,7 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 	/**
 	 * Returns the fuel value (power per cycle) an item of the passed ItemStack provides
 	 * 
-	 * @param item
+	 * @param fuel
 	 * @return
 	 */
 	private int determineBurnDuration(ItemStack fuel) {
@@ -397,12 +397,9 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 		return super.isUseableByPlayer(player);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public String getInventoryName() {
-		return super.getInventoryName();
+		return getUnlocalizedName();
 	}
 
 	/**

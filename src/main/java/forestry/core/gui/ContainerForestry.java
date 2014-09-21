@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import forestry.core.fluids.tanks.FakeTank;
+import forestry.core.fluids.tanks.StandardTank;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -19,8 +21,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.core.gui.slots.SlotForestry;
-import forestry.core.utils.ForestryTank;
 import forestry.core.utils.StackUtils;
+import net.minecraftforge.fluids.IFluidTank;
 
 public class ContainerForestry extends Container {
 
@@ -203,12 +205,5 @@ public class ContainerForestry extends Container {
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
 		return inventory.isUseableByPlayer(entityplayer);
-	}
-
-	public void onTankUpdate(NBTTagCompound nbt) {
-	}
-
-	public ForestryTank getTank(int slot) {
-		return ForestryTank.FAKETANK;
 	}
 }

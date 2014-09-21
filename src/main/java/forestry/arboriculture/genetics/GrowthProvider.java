@@ -39,7 +39,7 @@ public class GrowthProvider implements IGrowthProvider {
 
 	@Override
 	public String getDescription() {
-		return StringUtil.localize("gui.growth.normal");
+		return StringUtil.localize("growth.normal");
 	}
 
 	@Override

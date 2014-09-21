@@ -22,14 +22,12 @@ public class StringUtil {
 		return StatCollector.translateToLocal("for." + key).replace("\\n", "\n").replace("@", "%").replace("\\%", "@");
 	}
 
-	public static String localizeAndFormat(String key, Object... args) {
-		String text = StringUtil.localize(key);
+	public static String localizeTile(String key) {
+		return StatCollector.translateToLocal("tile.for." + key).replace("\\n", "\n").replace("@", "%").replace("\\%", "@");
+	}
 
-		try {
-			return String.format(text, args);
-		} catch (IllegalFormatException ex) {
-			return "Format error: " + text;
-		}
+	public static String localizeAndFormat(String key, Object... args) {
+		return localizeAndFormatRaw("for." + key, args);
 	}
 
 	/**

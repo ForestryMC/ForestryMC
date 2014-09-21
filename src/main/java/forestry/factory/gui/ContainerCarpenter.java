@@ -12,7 +12,6 @@ package forestry.factory.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.Slot;
@@ -111,18 +110,8 @@ public class ContainerCarpenter extends ContainerLiquidTanks implements IContain
 	}
 
 	@Override
-	public void updateProgressBar(int i, int j) {
-		machine.getGUINetworkData(i, j);
-	}
-
-	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-
-		for (int i = 0; i < crafters.size(); i++) {
-			machine.sendGUINetworkData(this, (ICrafting) crafters.get(i));
-		}
-
 		updateProductSlot();
 	}
 
@@ -150,8 +139,7 @@ public class ContainerCarpenter extends ContainerLiquidTanks implements IContain
 
 	private void resetProductDisplay() {
 		if (machine != null) {
-			machine.setCurrentRecipe(MachineCarpenter.RecipeManager.findMatchingRecipe(machine.resourceTank.getFluid(), machine.getBoxStack(), craftMatrix,
-					machine.getWorldObj()));
+			machine.resetProductDisplay(craftMatrix);
 			updateProductSlot();
 		}
 	}

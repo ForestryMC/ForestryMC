@@ -42,7 +42,7 @@ public class ItemInventory implements IInventory, INBTTagable {
 		isItemInventory = true;
 
 		// Set an uid to identify the itemstack on SMP
-		setUID(true);
+		setUID(false);
 
 		readFromNBT(itemstack.getTagCompound());
 	}

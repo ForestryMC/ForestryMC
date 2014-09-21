@@ -51,7 +51,7 @@ public class Vect {
 
 	@Override
 	public String toString() {
-		return String.format("%sx%sx%s;", x, y, z);
+		return String.format("%sx%sx%s", x, y, z);
 	}
 
 	@Override

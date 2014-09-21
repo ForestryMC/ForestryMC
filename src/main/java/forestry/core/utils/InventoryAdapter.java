@@ -76,17 +76,20 @@ public class InventoryAdapter implements IInventory, INBTTagable {
 	}
 
 	public boolean tryAddStacksCopy(ItemStack[] stacks, boolean all) {
+		return tryAddStacksCopy(stacks, 0, this.getSizeInventory(), all);
+	}
 
-		boolean addedAll = true;
+	public boolean tryAddStacksCopy(ItemStack[] stacks, int startSlot, int slots, boolean all) {
+
 		for (ItemStack stack : stacks) {
 			if (stack == null)
 				continue;
 
-			if (!tryAddStack(stack.copy(), all))
-				addedAll = false;
+			if (!tryAddStack(stack.copy(), startSlot, slots, all))
+				return false;
 		}
 
-		return addedAll;
+		return true;
 	}
 
 	public boolean tryAddStacks(ItemStack[] stacks, boolean all) {
@@ -121,7 +124,11 @@ public class InventoryAdapter implements IInventory, INBTTagable {
 	}
 
 	public boolean tryAddStack(ItemStack stack, int startSlot, int slots, boolean all, boolean doAdd) {
-		return addStack(stack, startSlot, slots, all, doAdd) > 0;
+		int added = addStack(stack, startSlot, slots, all, doAdd);
+		if (all)
+			return added == stack.stackSize;
+		else
+			return added > 0;
 	}
 
 	public int addStack(ItemStack stack, boolean all, boolean doAdd) {
@@ -184,68 +191,60 @@ public class InventoryAdapter implements IInventory, INBTTagable {
 
 	/* CONTAINS */
 	public boolean contains(ItemStack[] query, int startSlot, int slots) {
-		for (ItemStack queried : query) {
-
-			int itemCount = 0;
-			for (int i = startSlot; i < startSlot + slots; i++) {
-				ItemStack stack = inventory.getStackInSlot(i);
-
-				if (stack == null)
-					continue;
-
-				if (StackUtils.equals(Blocks.air, queried)) {
-					itemCount += stack.stackSize;
-					continue;
-				}
-				if (queried.getItemDamage() < 0) {
-
-					if (stack.getItem() == queried.getItem())
-						itemCount += stack.stackSize;
-					continue;
-				}
-
-				if (stack.isItemEqual(queried) && ItemStack.areItemStackTagsEqual(stack, queried))
-					itemCount += stack.stackSize;
-			}
-
-			if (itemCount < queried.stackSize)
-				return false;
-
-		}
-
-		return true;
+		ItemStack[] stock = getStacks(startSlot, slots);
+		return StackUtils.containsSets(query, stock) > 0;
 	}
 
 	/* REMOVAL */
-	public void removeResources(ItemStack[] query, int startSlot, int slots) {
-		for (ItemStack queried : query) {
+	/**
+	 * Removes a set of items from an inventory.
+	 * Removes the exact items first if they exist, and then removes crafting equivalents.
+	 * If the inventory doesn't have all the required items, returns false without removing anything.
+	 * If stowContainer is true, items with containers will have their container stowed.
+	 */
+	public boolean removeSets(int count, ItemStack[] set, int firstSlotIndex, int slotCount, EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
 
-			ItemStack remain = queried.copy();
+		ItemStack[] condensedSet = StackUtils.condenseStacks(set, -1, false);
 
-			for (int i = startSlot; i < startSlot + slots; i++) {
-				ItemStack stack = inventory.getStackInSlot(i);
+		ItemStack[] stock = getStacks(firstSlotIndex, slotCount);
+		if (StackUtils.containsSets(condensedSet, stock, oreDictionary, craftingTools) < count)
+			return false;
 
-				if (stack == null)
-					continue;
+		for (ItemStack stackToRemove : condensedSet) {
+			stackToRemove.stackSize *= count;
 
-				if (queried.getItemDamage() < 0) {
+			// try to remove the exact stack first
+			removeStack(stackToRemove, firstSlotIndex, slotCount, player, stowContainer, false, false);
 
-					if (stack.getItem() == queried.getItem()) {
-						ItemStack removed = decrStackSize(i, remain.stackSize);
-						remain.stackSize -= removed.stackSize;
-					}
-
-				} else if (stack.isItemEqual(remain) && ItemStack.areItemStackTagsEqual(stack, remain)) {
-					ItemStack removed = decrStackSize(i, remain.stackSize);
-					remain.stackSize -= removed.stackSize;
-				}
-
-				if (remain.stackSize <= 0)
-					break;
-			}
-
+			// remove crafting equivalents next
+			if (stackToRemove.stackSize > 0)
+				removeStack(stackToRemove, firstSlotIndex, slotCount, player, stowContainer, oreDictionary, craftingTools);
 		}
+		return true;
+	}
 
+	/**
+	 * Private Helper for removeSetsFromInventory. Assumes removal is possible.
+	 */
+	private void removeStack(ItemStack stackToRemove, int firstSlotIndex, int slotCount, EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
+		for (int j = firstSlotIndex; j < firstSlotIndex + slotCount; j++) {
+			ItemStack stackInSlot = getStackInSlot(j);
+			if (stackInSlot == null)
+				continue;
+
+			if (!StackUtils.isCraftingEquivalent(stackToRemove, stackInSlot, oreDictionary, craftingTools))
+				continue;
+
+
+			ItemStack removed = decrStackSize(j, stackToRemove.stackSize);
+			stackToRemove.stackSize -= removed.stackSize;
+
+			if (stowContainer && stackToRemove.getItem().hasContainerItem(stackToRemove))
+				StackUtils.stowContainerItem(removed, this, j, player);
+
+			if (stackToRemove.stackSize == 0)
+				return;
+		}
 	}
 
 	/* IINVENTORY */

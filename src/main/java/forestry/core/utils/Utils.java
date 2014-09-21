@@ -60,42 +60,6 @@ import forestry.plugins.PluginArboriculture;
 
 public class Utils {
 
-	private static EntityPlayer modPlayer;
-
-	public static GameProfile getForestryPlayerProfile() {
-		return new GameProfile(UUID.nameUUIDFromBytes(Config.fakeUserLogin.getBytes(Charsets.UTF_8)),
-				Config.fakeUserLogin);
-	}
-
-	public static EntityPlayer getForestryPlayer(World world, int x, int y, int z) {
-		if (modPlayer == null) {
-			modPlayer = new EntityPlayer(world, getForestryPlayerProfile()) {
-				@Override
-				public boolean canCommandSenderUseCommand(int var1, String var2) {
-					return false;
-				}
-
-				@Override
-				public ChunkCoordinates getPlayerCoordinates() {
-					return null;
-				}
-
-				@Override
-				public void addChatMessage(IChatComponent var1) {
-				}
-			};
-			modPlayer.posX = x;
-			modPlayer.posY = y;
-			modPlayer.posZ = z;
-			Proxies.log.info("Created player '%s' for Forestry.", modPlayer.getGameProfile().getId());
-			if (Config.fakeUserAutoop) {
-				MinecraftServer.getServer().getConfigurationManager().func_152605_a(modPlayer.getGameProfile());
-				Proxies.log.info("Opped player '%s'.", modPlayer.getGameProfile().getId());
-			}
-		}
-
-		return modPlayer;
-	}
 	private static Random rand;
 
 	public static int getUID() {
@@ -320,7 +284,7 @@ public class Utils {
 
 	public static int addRGBComponents(int colour, int r, int g, int b) {
 		r = ((colour & 0xff0000) >> 16) + r;
-		g = ((colour & 0xff00) >> 8) + b;
+		g = ((colour & 0xff00) >> 8) + g;
 		b = ((colour & 0xff)) + b;
 
 		r = r <= 255 ? r : 255;

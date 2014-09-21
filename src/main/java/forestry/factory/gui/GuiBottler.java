@@ -13,23 +13,15 @@ package forestry.factory.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.core.config.Defaults;
-import forestry.core.gui.GuiForestry;
+import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
-import forestry.core.utils.StringUtil;
 import forestry.factory.gadgets.MachineBottler;
 
-public class GuiBottler extends GuiForestry<MachineBottler> {
+public class GuiBottler extends GuiForestryTitled<MachineBottler> {
 
 	public GuiBottler(InventoryPlayer inventory, MachineBottler processor) {
 		super(Defaults.TEXTURE_PATH_GUI + "/bottler.png", new ContainerBottler(inventory, processor), processor);
 		widgetManager.add(new TankWidget(this.widgetManager, 53, 17, 0));
-	}
-
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localize("tile.for." + tile.getInventoryName());
-		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
 	}
 
 	@Override

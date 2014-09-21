@@ -42,13 +42,13 @@ public class PacketIds {
 	public static final int LETTER_RECIPIENT = 80;
 	public static final int LETTER_TEXT = 81;
 	public static final int TRADING_ADDRESS_SET = 82;
-	public static final int TRADING_INFO = 83;
+	public static final int LETTER_INFO = 83;
 	public static final int POBOX_INFO = 85;
 	public static final int POBOX_INFO_REQUEST = 86;
 
 	public static final int LEAF_UPDATE = 90;
 	
-	public static final int TANK_UPDATE = 91;
+	public static final int GUI_INTEGER = 92;
 	
 	// Propolis pipe
 	public static final int PROP_SEND_FILTER_SET = 100;

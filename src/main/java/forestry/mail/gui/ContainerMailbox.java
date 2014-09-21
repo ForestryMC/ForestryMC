@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import forestry.api.mail.MailAddress;
+import forestry.api.mail.PostManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
@@ -22,9 +22,13 @@ import forestry.core.gui.slots.SlotClosed;
 import forestry.core.proxy.Proxies;
 import forestry.mail.POBox;
 import forestry.mail.gadgets.MachineMailbox;
+import forestry.api.mail.IMailAddress;
 import forestry.plugins.PluginMail;
 
 public class ContainerMailbox extends ContainerForestry {
+
+	public static final short SLOT_LETTERS = 0;
+	public static final short SLOT_LETTERS_COUNT = 7 * 12;
 
 	MachineMailbox mailbox;
 	POBox mailinventory;
@@ -35,7 +39,7 @@ public class ContainerMailbox extends ContainerForestry {
 		// Mailbox contents
 		this.mailbox = tile;
 
-		IInventory inv = mailbox.getOrCreateMailInventory();
+		IInventory inv = mailbox.getOrCreateMailInventory(player.player.worldObj, player.player.getGameProfile());
 		if (inv instanceof POBox)
 			mailinventory = (POBox) inv;
 
@@ -57,9 +61,11 @@ public class ContainerMailbox extends ContainerForestry {
 	public ItemStack slotClick(int slotIndex, int button, int par3, EntityPlayer player) {
 		ItemStack stack = super.slotClick(slotIndex, button, par3, player);
 
-		if (Proxies.common.isSimulating(player.worldObj) && mailinventory != null) {
-			MailAddress address = new MailAddress(mailbox.getOwnerProfile());
-			PluginMail.proxy.setPOBoxInfo(mailbox.getWorldObj(), address, mailinventory.getPOBoxInfo());
+		if (slotIndex >= SLOT_LETTERS && slotIndex < SLOT_LETTERS + SLOT_LETTERS_COUNT) {
+			if (Proxies.common.isSimulating(player.worldObj) && mailinventory != null) {
+				IMailAddress address = PostManager.postRegistry.getMailAddress(player.getGameProfile());
+				PluginMail.proxy.setPOBoxInfo(mailbox.getWorldObj(), address, mailinventory.getPOBoxInfo());
+			}
 		}
 
 		return stack;

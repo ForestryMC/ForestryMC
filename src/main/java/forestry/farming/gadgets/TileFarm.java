@@ -284,7 +284,7 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	@Override
 	public ITileStructure getCentralTE() {
 
-		if (!isIntegratedIntoStructure())
+		if (!isIntegratedIntoStructure() || !hasMaster())
 			return null;
 
 		if (!isMaster) {
@@ -347,11 +347,6 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 
 	@Override
 	public void removeListener(IFarmListener listener) {
-	}
-
-	@Override
-	public String getInventoryName() {
-		return "Farm";
 	}
 
 	/* INTERACTION */

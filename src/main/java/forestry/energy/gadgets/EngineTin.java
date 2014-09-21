@@ -311,12 +311,9 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		return super.isUseableByPlayer(player);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public String getInventoryName() {
-		return super.getInventoryName();
+		return getUnlocalizedName();
 	}
 
 	/**

@@ -19,7 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import forestry.api.core.INBTTagable;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IStamps;
-import forestry.api.mail.MailAddress;
+import forestry.api.mail.IMailAddress;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.StringUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -32,15 +32,15 @@ public class Letter implements ILetter, INBTTagable {
 
 	private boolean isProcessed = false;
 
-	private MailAddress sender;
-	private MailAddress[] recipient;
+	private IMailAddress sender;
+	private IMailAddress[] recipient;
 
 	private String text;
 	private InventoryAdapter inventory = new InventoryAdapter(22, "INV");
 
-	public Letter(MailAddress sender, MailAddress recipient) {
+	public Letter(IMailAddress sender, IMailAddress recipient) {
 		this.sender = sender;
-		this.recipient = new MailAddress[] { recipient };
+		this.recipient = new IMailAddress[] { recipient };
 	}
 
 	public Letter(NBTTagCompound nbttagcompound) {
@@ -191,7 +191,7 @@ public class Letter implements ILetter, INBTTagable {
 		if (getRecipients().length <= 0)
 			return false;
 
-		MailAddress recipient = getRecipients()[0];
+		IMailAddress recipient = getRecipients()[0];
 		if (recipient == null)
 			return false;
 
@@ -202,36 +202,36 @@ public class Letter implements ILetter, INBTTagable {
 	}
 
 	@Override
-	public void setSender(MailAddress address) {
+	public void setSender(IMailAddress address) {
 		this.sender = address;
 	}
 
 	@Override
-	public MailAddress getSender() {
+	public IMailAddress getSender() {
 		return sender;
 	}
 
-	public void setRecipients(MailAddress[] recipients) {
+	public void setRecipients(IMailAddress[] recipients) {
 		this.recipient = recipients;
 	}
 
 	@Override
-	public void setRecipient(MailAddress address) {
+	public void setRecipient(IMailAddress address) {
 		if (address == null)
-			this.recipient = new MailAddress[] {};
+			this.recipient = new IMailAddress[] {};
 		else
-			this.recipient = new MailAddress[] { address };
+			this.recipient = new IMailAddress[] { address };
 	}
 
 	@Override
-	public MailAddress[] getRecipients() {
+	public IMailAddress[] getRecipients() {
 		return recipient;
 	}
 
 	@Override
 	public String getRecipientString() {
 		String recipientString = "";
-		for (MailAddress address : recipient) {
+		for (IMailAddress address : recipient) {
 			if (recipientString.length() > 0)
 				recipientString += ", ";
 			recipientString += address.getName();

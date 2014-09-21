@@ -157,7 +157,8 @@ public class ItemBackpack extends ItemInventoried {
 			// Create our own backpack inventory
 			ItemInventory backpackInventory = new ItemInventory(ItemBackpack.class, getBackpackSize(), stack);
 
-			if (stack.getItemDamage() == 2)
+			BackpackMode mode = getMode(stack);
+			if (mode == BackpackMode.RECEIVE)
 				tryChestReceive(player, backpackInventory, inventory);
 			else
 				tryChestTransfer(backpackInventory, inventory);

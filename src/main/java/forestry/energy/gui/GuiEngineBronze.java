@@ -103,19 +103,15 @@ public class GuiEngineBronze extends GuiEngine {
 		widgetManager.add(new BiogasSlot(this.widgetManager, 30, 47, tile));
 	}
 
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localize("tile.for.engine.2");
-		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
+	protected EngineBronze getEngine() {
+		return (EngineBronze)tile;
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		EngineBronze engine = (EngineBronze) tile;
 
-		int temp = engine.getOperatingTemperatureScaled(16);
+		int temp = getEngine().getOperatingTemperatureScaled(16);
 		if (temp > 16)
 			temp = 16;
 		if (temp > 0)

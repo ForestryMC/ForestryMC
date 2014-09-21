@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Defaults;
-import forestry.core.gui.GuiForestry;
+import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.WidgetManager;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
@@ -28,7 +28,7 @@ import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 import forestry.factory.gadgets.TileWorktable;
 
-public class GuiWorktable extends GuiForestry<TileWorktable> {
+public class GuiWorktable extends GuiForestryTitled<TileWorktable> {
 
 	private class MemorizedSlot extends Widget {
 
@@ -58,6 +58,7 @@ public class GuiWorktable extends GuiForestry<TileWorktable> {
 			//RenderHelper.disableStandardItemLighting();
 
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
+			GL11.glEnable(GL11.GL_BLEND);
 
 			if (worktable.getMemory().isLocked(slotNumber)) {
 				manager.gui.setZLevel(110f);
@@ -81,67 +82,46 @@ public class GuiWorktable extends GuiForestry<TileWorktable> {
 		}
 	}
 
-	private class BookSlot extends Widget {
+	private class ClearWorktable extends Widget {
 
-		private final ItemStack BOOK = new ItemStack(Items.book);
-
-		public BookSlot(WidgetManager manager, int xPos, int yPos) {
+		public ClearWorktable(WidgetManager manager, int xPos, int yPos) {
 			super(manager, xPos, yPos);
+			width = 7;
+			height = 7;
 		}
 
 		@Override
 		public void draw(int startX, int startY) {
-			GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-			GL11.glDisable(GL11.GL_LIGHTING);
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
-			RenderHelper.enableGUIStandardItemLighting();
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-			manager.gui.drawItemStack(BOOK, startX + xPos, startY + yPos);
-
-			GL11.glPopAttrib();
-		}
-
-		@Override
-		protected String getLegacyTooltip(EntityPlayer player) {
-			return StringUtil.localize("gui.worktable.clear");
 		}
 
 		@Override
 		public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
-			container.sendRecipeClick(mouseButton, 9);
+			container.clearRecipe();
 		}
 	}
 	private final TileWorktable worktable;
 	protected ContainerWorktable container;
 
 	public GuiWorktable(EntityPlayer player, TileWorktable tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/worktable.png", new ContainerWorktable(player, tile));
+		super(Defaults.TEXTURE_PATH_GUI + "/worktable2.png", new ContainerWorktable(player, tile), tile);
 
 		ySize = 218;
 		worktable = tile;
 		this.tile = tile;
 		container = (ContainerWorktable) inventorySlots;
 
-		widgetManager.add(new BookSlot(widgetManager, 128, 38));
+		final int spacing = 18;
+		int slot = 0;
+		for (int y = 0; y < 3; y++) {
+			int yPos = 20 + (y * spacing);
+			for (int x = 0; x < 3; x++) {
+				int xPos = 110 + (x * spacing);
+				widgetManager.add(new MemorizedSlot(widgetManager, xPos, yPos, slot));
+				slot += 1;
+			}
+		}
 
-		widgetManager.add(new MemorizedSlot(widgetManager, 146, 20, 0));
-		widgetManager.add(new MemorizedSlot(widgetManager, 146, 38, 1));
-		widgetManager.add(new MemorizedSlot(widgetManager, 146, 56, 2));
-
-		widgetManager.add(new MemorizedSlot(widgetManager, 128, 56, 3));
-		widgetManager.add(new MemorizedSlot(widgetManager, 110, 56, 4));
-
-		widgetManager.add(new MemorizedSlot(widgetManager, 110, 38, 5));
-		widgetManager.add(new MemorizedSlot(widgetManager, 110, 20, 6));
-		widgetManager.add(new MemorizedSlot(widgetManager, 128, 20, 7));
+		widgetManager.add(new ClearWorktable(widgetManager, 66, 19));
 	}
 
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localize("tile.for." + tile.getInventoryName());
-		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
-	}
 }

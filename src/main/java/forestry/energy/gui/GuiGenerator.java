@@ -13,23 +13,15 @@ package forestry.energy.gui;
 import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.core.config.Defaults;
-import forestry.core.gui.GuiForestry;
+import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
-import forestry.core.utils.StringUtil;
 import forestry.energy.gadgets.MachineGenerator;
 
-public class GuiGenerator extends GuiForestry<MachineGenerator> {
+public class GuiGenerator extends GuiForestryTitled<MachineGenerator> {
 
 	public GuiGenerator(InventoryPlayer inventory, MachineGenerator tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/generator.png", new ContainerGenerator(inventory, tile), tile);
 		widgetManager.add(new TankWidget(this.widgetManager, 49, 17, 0));
-	}
-
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String title = StringUtil.localize("tile.for." + tile.getInventoryName());
-		this.fontRendererObj.drawString(title, getCenteredOffset(title), 6, fontColor.get("gui.title"));
 	}
 
 	@Override

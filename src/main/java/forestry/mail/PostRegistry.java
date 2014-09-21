@@ -25,8 +25,9 @@ import forestry.api.mail.IPostOffice;
 import forestry.api.mail.IPostRegistry;
 import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.ITradeStation;
-import forestry.api.mail.MailAddress;
 import forestry.api.mail.PostManager;
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.EnumAddressee;
 import forestry.core.config.ForestryItem;
 import forestry.mail.items.ItemLetter;
 import forestry.plugins.PluginMail;
@@ -34,8 +35,8 @@ import forestry.plugins.PluginMail;
 public class PostRegistry implements IPostRegistry {
 
 	public static PostOffice cachedPostOffice;
-	public static HashMap<MailAddress, POBox> cachedPOBoxes = new HashMap<MailAddress, POBox>();
-	public static HashMap<MailAddress, ITradeStation> cachedTradeStations = new HashMap<MailAddress, ITradeStation>();
+	public static HashMap<IMailAddress, POBox> cachedPOBoxes = new HashMap<IMailAddress, POBox>();
+	public static HashMap<IMailAddress, ITradeStation> cachedTradeStations = new HashMap<IMailAddress, ITradeStation>();
 
 	/**
 	 * @param world the Minecraft world the PO box will be in
@@ -43,11 +44,11 @@ public class PostRegistry implements IPostRegistry {
 	 * @return true if the passed address is valid for PO Boxes.
 	 */
 	@Override
-	public boolean isValidPOBox(World world, MailAddress address) {
+	public boolean isValidPOBox(World world, IMailAddress address) {
 		return address.isPlayer() && address.getName().matches("^[a-zA-Z0-9]+$");
 	}
 
-	public static POBox getPOBox(World world, MailAddress address) {
+	public static POBox getPOBox(World world, IMailAddress address) {
 
 		if (cachedPOBoxes.containsKey(address))
 			return cachedPOBoxes.get(address);
@@ -58,7 +59,7 @@ public class PostRegistry implements IPostRegistry {
 		return pobox;
 	}
 
-	public static POBox getOrCreatePOBox(World world, MailAddress address) {
+	public static POBox getOrCreatePOBox(World world, IMailAddress address) {
 		POBox pobox = getPOBox(world, address);
 
 		if (pobox == null) {
@@ -78,8 +79,8 @@ public class PostRegistry implements IPostRegistry {
 	 * @return true if the passed address can be an address for a trade station
 	 */
 	@Override
-	public boolean isValidTradeAddress(World world, MailAddress address) {
-		return !address.isPlayer() && address.getName().matches("^[a-zA-Z0-9]+$");
+	public boolean isValidTradeAddress(World world, IMailAddress address) {
+		return address.isTrader() && address.getName().matches("^[a-zA-Z0-9]+$");
 	}
 
 	/**
@@ -88,12 +89,12 @@ public class PostRegistry implements IPostRegistry {
 	 * @return true if the trade address has not yet been used before.
 	 */
 	@Override
-	public boolean isAvailableTradeAddress(World world, MailAddress address) {
+	public boolean isAvailableTradeAddress(World world, IMailAddress address) {
 		return getTradeStation(world, address) == null;
 	}
 
 	@Override
-	public TradeStation getTradeStation(World world, MailAddress address) {
+	public TradeStation getTradeStation(World world, IMailAddress address) {
 		if (cachedTradeStations.containsKey(address))
 			return (TradeStation)cachedTradeStations.get(address);
 
@@ -110,7 +111,7 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	@Override
-	public TradeStation getOrCreateTradeStation(World world, GameProfile owner, MailAddress address) {
+	public TradeStation getOrCreateTradeStation(World world, GameProfile owner, IMailAddress address) {
 		TradeStation trade = getTradeStation(world, address);
 
 		if (trade == null) {
@@ -125,7 +126,7 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	@Override
-	public void deleteTradeStation(World world, MailAddress address) {
+	public void deleteTradeStation(World world, IMailAddress address) {
 		TradeStation trade = getTradeStation(world, address);
 		if (trade == null)
 			return;
@@ -151,31 +152,43 @@ public class PostRegistry implements IPostRegistry {
 			world.setItemData(PostOffice.SAVE_NAME, office);
 		}
 
+		office.setWorld(world);
+
 		cachedPostOffice = office;
 		return office;
 	}
 
-	/* CARRIER */
-	private final HashMap<String, IPostalCarrier> carriers = new HashMap<String, IPostalCarrier>();
+	@Override
+	public IMailAddress getMailAddress(GameProfile gameProfile) {
+		return new MailAddress(gameProfile);
+	}
 
 	@Override
-	public Map<String, IPostalCarrier> getRegisteredCarriers() {
+	public IMailAddress getMailAddress(String traderName) {
+		return new MailAddress(traderName);
+	}
+
+	/* CARRIER */
+	private final HashMap<EnumAddressee, IPostalCarrier> carriers = new HashMap<EnumAddressee, IPostalCarrier>();
+
+	@Override
+	public Map<EnumAddressee, IPostalCarrier> getRegisteredCarriers() {
 		return carriers;
 	}
 
 	@Override
 	public void registerCarrier(IPostalCarrier carrier) {
-		carriers.put(carrier.getUID(), carrier);
+		carriers.put(carrier.getType(), carrier);
 	}
 
 	@Override
-	public IPostalCarrier getCarrier(String uid) {
-		return carriers.get(uid);
+	public IPostalCarrier getCarrier(EnumAddressee type) {
+		return carriers.get(type);
 	}
 
 	/* LETTERS */
 	@Override
-	public ILetter createLetter(MailAddress sender, MailAddress recipient) {
+	public ILetter createLetter(IMailAddress sender, IMailAddress recipient) {
 		return new Letter(sender, recipient);
 	}
 

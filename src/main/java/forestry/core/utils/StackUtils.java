@@ -29,6 +29,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.core.config.Defaults;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gadgets.TileForestry;
 
 public class StackUtils {
@@ -193,7 +194,7 @@ public class StackUtils {
 	 * without decreasing the source stack.
 	 *
 	 * @param stack
-	 * @param i
+	 * @param amount
 	 * @return
 	 */
 	public static ItemStack createSplitStack(ItemStack stack, int amount) {
@@ -254,7 +255,7 @@ public class StackUtils {
 	 * @return
 	 */
 	public static int containsSets(ItemStack[] set, ItemStack[] stock) {
-		return containsSets(set, stock, null, false, false);
+		return containsSets(set, stock, false, false);
 	}
 
 	/**
@@ -264,19 +265,16 @@ public class StackUtils {
 	 * @param stock
 	 * @return
 	 */
-	public static int containsSets(ItemStack[] set, ItemStack[] stock, ItemStack exclude, boolean oreDictionary, boolean craftingTools) {
+	public static int containsSets(ItemStack[] set, ItemStack[] stock, boolean oreDictionary, boolean craftingTools) {
 		int count = 0;
 
-		ItemStack[] condensedRequired = StackUtils.condenseStacks(set);
+		ItemStack[] condensedRequired = StackUtils.condenseStacks(set, -1, oreDictionary);
 		ItemStack[] condensedOffered = StackUtils.condenseStacks(stock, -1, oreDictionary);
 
 		for (ItemStack req : condensedRequired) {
 
 			boolean matched = false;
 			for (ItemStack offer : condensedOffered) {
-
-				if (exclude != null && isIdenticalItem(offer, exclude))
-					continue;
 
 				if (isCraftingEquivalent(req, offer, oreDictionary, craftingTools)) {
 					matched = true;
@@ -298,6 +296,27 @@ public class StackUtils {
 	}
 
 	/**
+	 * Compare two item stacks for crafting equivalency without oreDictionary or craftingTools
+	 */
+	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison) {
+		if (base == null || comparison == null)
+			return false;
+
+		if (base.getItem() != comparison.getItem())
+			return false;
+
+		if (base.getItemDamage() != Defaults.WILDCARD)
+			if (base.getItemDamage() != comparison.getItemDamage())
+				return false;
+
+		// When the base stackTagCompound is null or empty, treat it as a wildcard for crafting
+		if (base.stackTagCompound == null || base.stackTagCompound.hasNoTags())
+			return true;
+		else
+			return ItemStack.areItemStackTagsEqual(base, comparison);
+	}
+
+	/**
 	 * Compare two item stacks for crafting equivalency.
 	 *
 	 * @param base
@@ -306,8 +325,11 @@ public class StackUtils {
 	 * @return
 	 */
 	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, boolean oreDictionary, boolean craftingTools) {
-		if (isIdenticalItem(base, comparison))
+		if (isCraftingEquivalent(base, comparison))
 			return true;
+
+		if (base == null || comparison == null)
+			return false;
 
 		if (oreDictionary) {
 			int[] idsBase = OreDictionary.getOreIDs(base);
@@ -376,12 +398,12 @@ public class StackUtils {
 
 	}
 
-	public static void replenishByContainer(TileForestry tile, ItemStack inventoryStack, ForestryTank tank) {
+	public static void replenishByContainer(TileForestry tile, ItemStack inventoryStack, StandardTank tank) {
 		FluidContainerData container = LiquidHelper.getLiquidContainer(inventoryStack);
 		replenishByContainer(tile, inventoryStack, container, tank);
 	}
 
-	public static ItemStack replenishByContainer(TileForestry tile, ItemStack inventoryStack, FluidContainerData container, ForestryTank tank) {
+	public static ItemStack replenishByContainer(TileForestry tile, ItemStack inventoryStack, FluidContainerData container, StandardTank tank) {
 		if (container == null)
 			return inventoryStack;
 

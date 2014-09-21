@@ -10,35 +10,29 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.api.core.IToolPipette;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketPayload;
-import forestry.core.network.PacketTankUpdate;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.ForestryTank;
 
 public class ContainerLiquidTanks extends ContainerForestry {
 
-	private ILiquidTankContainer tanks;
+	private ILiquidTankContainer tile;
 
-	public ContainerLiquidTanks(IInventory inventory, ILiquidTankContainer tanks) {
+	public ContainerLiquidTanks(IInventory inventory, ILiquidTankContainer tile) {
 		super(inventory);
-		this.tanks = tanks;
+		this.tile = tile;
 	}
 
 	public void handlePipetteClick(int slot, EntityPlayer player) {
@@ -52,74 +46,52 @@ public class ContainerLiquidTanks extends ContainerForestry {
 			return;
 
 		if (!Proxies.common.isSimulating(player.worldObj)) {
-
 			PacketPayload payload = new PacketPayload(1, 0, 0);
 			payload.intPayload[0] = slot;
 			Proxies.net.sendToServer(new PacketUpdate(PacketIds.PIPETTE_CLICK, payload));
 			return;
-
 		}
 
 		IToolPipette pipette = (IToolPipette) held;
-		int liquidAmount = tanks.getTanks()[slot].getFluid().amount;
+		StandardTank tank = tile.getTankManager().get(slot);
+		int liquidAmount = tank.getFluid().amount;
+
 		if (pipette.canPipette(itemstack) && liquidAmount > 0) {
-
 			if (liquidAmount > 0) {
-				int filled = pipette.fill(itemstack, tanks.getTanks()[slot].drain(1000, false),
-						true);
-				tanks.getTanks()[slot].drain(filled, true);
+				FluidStack fillAmount = tank.drain(1000, false);
+				int filled = pipette.fill(itemstack, fillAmount, true);
+				tank.drain(filled, true);
 			}
-
 		} else {
-
-			IFluidTank tank = tanks.getTanks()[slot];
 			FluidStack potential = pipette.drain(itemstack, pipette.getCapacity(itemstack), false);
 			if (potential != null)
 				pipette.drain(itemstack, tank.fill(potential, true), true);
-
 		}
 	}
-	private Map<Integer, ForestryTank> syncedFluids = new HashMap<Integer, ForestryTank>();
+
+	@Override
+	public void updateProgressBar(int messageId, int data) {
+		super.updateProgressBar(messageId, data);
+
+		tile.getTankManager().processGuiUpdate(messageId, data);
+		tile.getGUINetworkData(messageId, data);
+	}
 
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-
-		for (int i = 0; i < tanks.getTanks().length; i++) {
-			ForestryTank tank = tanks.getTanks()[i];
-
-			// If null has been synced
-			if (tank.getFluid() == null && getTank(i).getFluidAmount() <= 0)
-				continue;
-			// If fluid has been synced
-			if (tank.getFluid() != null && tank.getFluid().isFluidStackIdentical(getTank(i).getFluid()))
-				continue;
-
-			for (int j = 0; j < this.crafters.size(); ++j) {
-				if (this.crafters.get(j) instanceof EntityPlayerMP) {
-					EntityPlayerMP player = (EntityPlayerMP) this.crafters.get(j);
-					Proxies.net.sendToPlayer(new PacketTankUpdate(i, tank), player);
-				}
-			}
-
-			syncedFluids.put(i, new ForestryTank(tank.getFluid() == null ? null : tank.getFluid().copy(), tank.getCapacity()));
-
-		}
+		tile.getTankManager().updateGuiData(this, crafters);
+		for (int i = 0; i < crafters.size(); i++)
+			tile.sendGUINetworkData(this, (ICrafting) crafters.get(i));
 	}
 
 	@Override
-	public void onTankUpdate(NBTTagCompound nbt) {
-		int tankID = nbt.getByte("tank");
-		int capacity = nbt.getShort("capacity");
-		tanks.getTanks()[tankID].readFromNBT(nbt);
-
-		ForestryTank tank = new ForestryTank(capacity);
-		tank.readFromNBT(nbt);
-		syncedFluids.put(tankID, tank);
+	public void addCraftingToCrafters(ICrafting icrafting) {
+		super.addCraftingToCrafters(icrafting);
+		tile.getTankManager().initGuiData(this, icrafting);
 	}
 
-	@Override
-	public ForestryTank getTank(int slot) {
-		return syncedFluids.get(slot) == null ? ForestryTank.FAKETANK : syncedFluids.get(slot);
+	public StandardTank getTank(int slot) {
+		return tile.getTankManager().get(slot);
 	}
 }

@@ -41,8 +41,7 @@ public class GuiBeealyzer extends GuiAlyzer {
 		super(AlleleManager.alleleRegistry.getSpeciesRoot("rootBees"), player,
 				new ContainerBeealyzer(player.inventory, inventory), inventory, 1, inventory.getSizeInventory());
 
-		xSize = 196;
-		ySize = 238;
+		guiName = "gui.beealyzer";
 
 		ArrayList<ItemStack> beeList = new ArrayList<ItemStack>();
 		((ItemBeeGE) ForestryItem.beeDroneGE.item()).addCreativeItems(beeList, false);
@@ -93,45 +92,6 @@ public class GuiBeealyzer extends GuiAlyzer {
 		default:
 			drawAnalyticsOverview();
 		}
-
-	}
-
-	private void drawAnalyticsOverview() {
-
-		startPage();
-
-		newLine();
-		String title = StringUtil.localize("gui.beealyzer").toUpperCase();
-		drawCenteredLine(title, 8, 158);
-		newLine();
-
-		fontRendererObj.drawSplitString(StringUtil.localize("gui.beealyzer.help"), (int) ((guiLeft + COLUMN_0 + 4) * (1 / factor)),
-				(int) ((guiTop + 42) * (1 / factor)), (int) (158 * (1 / factor)), fontColor.get("gui.screen"));
-		newLine();
-		newLine();
-		newLine();
-		newLine();
-
-		drawLine(StringUtil.localize("gui.beealyzer.overview") + ":", COLUMN_0 + 4);
-		newLine();
-		drawLine("I  : " + StringUtil.localize("gui.general"), COLUMN_0 + 4);
-		newLine();
-		drawLine("II : " + StringUtil.localize("gui.environment"), COLUMN_0 + 4);
-		newLine();
-		drawLine("III: " + StringUtil.localize("gui.produce"), COLUMN_0 + 4);
-		newLine();
-		drawLine("IV : " + StringUtil.localize("gui.evolution"), COLUMN_0 + 4);
-
-		newLine();
-
-		String mode = breedingTracker.getModeName();
-		if (mode != null && !mode.isEmpty()) {
-			newLine();
-			String rules = StringUtil.localize("gui.beealyzer.behaviour") + ": " + StringUtil.capitalize(mode);
-			drawLine(rules, 8 + getCenteredOffset(title, 158), fontColor.get("gui.beealyzer.binomial"));
-		}
-
-		endPage();
 
 	}
 
@@ -268,22 +228,23 @@ public class GuiBeealyzer extends GuiAlyzer {
 			if (!bee.isNatural())
 				displayText = "bees.stock.ignoble";
 			displayText = StringUtil.localize(displayText);
-			// int offset = (int)(((158 - fontRendererObj.getStringWidth(origin)) / 2)*(1/factor));
-			drawCenteredLine(displayText, 8, 158, fontColor.get("gui.beealyzer.binomial"));;
+			drawCenteredLine(displayText, 8, 208, fontColor.get("gui.beealyzer.binomial"));
 		}
 
 		if (bee.getGeneration() >= 0) {
 			newLine();
 
 			displayText = StringUtil.localizeAndFormat("gui.beealyzer.generations", bee.getGeneration());
-			// offset = (int)(((158 - fontRendererObj.getStringWidth(origin)) / 2)*(1/factor));
-			drawCenteredLine(displayText, 8, 158, fontColor.get("gui.beealyzer.binomial"));
+			drawCenteredLine(displayText, 8, 208, fontColor.get("gui.beealyzer.binomial"));
 		}
 
 		endPage();
 	}
 
 	private void drawAnalyticsPage3(IBee bee, EnumBeeType type) {
+
+		float factor = this.factor;
+		this.setFactor(1.0f);
 
 		tempProductList = bee.getProduceList();
 
@@ -295,8 +256,8 @@ public class GuiBeealyzer extends GuiAlyzer {
 
 		int x = COLUMN_0;
 		for (ItemStack stack : tempProductList) {
-			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, stack, (int) ((guiLeft + x) * (1 / factor)),
-					(int) ((guiTop + getLineY()) * (1 / factor)));
+			widgetManager.add(new ItemStackWidget(adjustToFactor(x), adjustToFactor(getLineY()), stack));
+
 			x += 18;
 			if (x > adjustToFactor(148)) {
 				x = COLUMN_0;
@@ -306,14 +267,14 @@ public class GuiBeealyzer extends GuiAlyzer {
 
 		newLine();
 		newLine();
+		newLine();
 
 		drawLine(StringUtil.localize("gui.beealyzer.specialty") + ":", COLUMN_0);
-		newLine();
 
 		x = COLUMN_0;
 		for (ItemStack stack : bee.getSpecialtyList()) {
-			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, stack, (int) ((guiLeft + x) * (1 / factor)),
-					(int) ((guiTop + getLineY()) * (1 / factor)));
+			widgetManager.add(new ItemStackWidget(adjustToFactor(x), adjustToFactor(getLineY()), stack));
+
 			x += 18;
 			if (x > adjustToFactor(148)) {
 				x = COLUMN_0;
@@ -322,6 +283,8 @@ public class GuiBeealyzer extends GuiAlyzer {
 		}
 
 		endPage();
+
+		this.setFactor(factor);
 	}
 
 }

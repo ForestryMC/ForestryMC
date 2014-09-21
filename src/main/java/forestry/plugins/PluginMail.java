@@ -38,7 +38,7 @@ import forestry.core.triggers.Trigger;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.mail.CommandMail;
-import forestry.mail.EnumAddressee;
+import forestry.api.mail.EnumAddressee;
 import forestry.mail.GuiHandlerMail;
 import forestry.mail.PacketHandlerMail;
 import forestry.mail.PostRegistry;
@@ -65,8 +65,8 @@ public class PluginMail extends NativePlugin {
 	@SidedProxy(clientSide = "forestry.mail.proxy.ClientProxyMail", serverSide = "forestry.mail.proxy.ProxyMail")
 	public static ProxyMail proxy;
 	public static Trigger triggerHasMail;
-	public static Trigger lowPaper25;
-	public static Trigger lowPaper10;
+	public static Trigger lowPaper64;
+	public static Trigger lowPaper32;
 	public static Trigger lowPostage40;
 	public static Trigger lowPostage20;
 	public static Trigger lowInput25;
@@ -90,8 +90,8 @@ public class PluginMail extends NativePlugin {
 		new TickHandlerMailClient();
 
 		triggerHasMail = new TriggerHasMail();
-		lowPaper25 = new TriggerLowPaper("mail.lowPaper.25", 0.25f);
-		lowPaper10 = new TriggerLowPaper("mail.lowPaper.10", 0.1f);
+		lowPaper64 = new TriggerLowPaper("mail.lowPaper.64", 64);
+		lowPaper32 = new TriggerLowPaper("mail.lowPaper.32", 32);
 		lowPostage40 = new TriggerLowStamps("mail.lowStamps.40", 40);
 		lowPostage20 = new TriggerLowStamps("mail.lowStamps.20", 20);
 		lowInput25 = new TriggerLowInput("mail.lowInput.25", 0.25f);

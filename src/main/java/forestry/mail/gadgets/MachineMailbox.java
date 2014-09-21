@@ -12,11 +12,13 @@ package forestry.mail.gadgets;
 
 import java.util.LinkedList;
 
+import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -26,8 +28,8 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IPostalState;
-import forestry.api.mail.MailAddress;
 import forestry.api.mail.PostManager;
+import forestry.api.mail.IMailAddress;
 
 import forestry.core.config.Config;
 import forestry.core.gadgets.TileBase;
@@ -52,7 +54,7 @@ public class MachineMailbox extends TileBase implements IMailContainer, ISpecial
 
 	@Override
 	public String getInventoryName() {
-		return "mail.0";
+		return getUnlocalizedName();
 	}
 
 	/* GUI */
@@ -79,24 +81,18 @@ public class MachineMailbox extends TileBase implements IMailContainer, ISpecial
 	@Override
 	public void updateServerSide() {
 		if (!isLinked) {
-			getOrCreateMailInventory();
+			getOrCreateMailInventory(worldObj, getOwnerProfile());
 			isLinked = true;
 		}
 	}
 
 	/* MAIL HANDLING */
-	public IInventory getOrCreateMailInventory() {
 
-		// Handle client side
-		if (!Proxies.common.isSimulating(worldObj))
+	public IInventory getOrCreateMailInventory(World world, GameProfile playerProfile) {
+		if (!Proxies.common.isSimulating(world))
 			return new InventoryAdapter(POBox.SLOT_SIZE, "Letters");
 
-		EntityPlayer player = Proxies.common.getPlayer();
-		
-		if (player == null || player.getGameProfile() == null)
-			return new InventoryAdapter(POBox.SLOT_SIZE, "Letters");
-
-		MailAddress address = new MailAddress(player.getGameProfile());
+		IMailAddress address = PostManager.postRegistry.getMailAddress(playerProfile);
 		return PostRegistry.getOrCreatePOBox(worldObj, address);
 	}
 
@@ -116,7 +112,7 @@ public class MachineMailbox extends TileBase implements IMailContainer, ISpecial
 	@Override
 	public boolean hasMail() {
 
-		IInventory mailInventory = getOrCreateMailInventory();
+		IInventory mailInventory = getOrCreateMailInventory(worldObj, getOwnerProfile());
 		for (int i = 0; i < mailInventory.getSizeInventory(); i++)
 			if (mailInventory.getStackInSlot(i) != null)
 				return true;
@@ -130,19 +126,6 @@ public class MachineMailbox extends TileBase implements IMailContainer, ISpecial
 		LinkedList<ITrigger> res = new LinkedList<ITrigger>();
 		res.add(PluginMail.triggerHasMail);
 		return res;
-	}
-
-	/* ISIDEDINVENTORY */
-	private static int[] slotIndices;
-
-	public int[] getSizeInventorySide(int side) {
-		IInventory inventory = getOrCreateMailInventory();
-		if(slotIndices == null) {
-			slotIndices = new int[inventory.getSizeInventory()];
-			for(int i = 0; i < inventory.getSizeInventory(); i++)
-				slotIndices[i] = i;
-		}
-		return slotIndices;
 	}
 
 	/* ISPECIALINVENTORY */
@@ -163,7 +146,7 @@ public class MachineMailbox extends TileBase implements IMailContainer, ISpecial
 	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
 
 		ItemStack product = null;
-		IInventory mailInventory = getOrCreateMailInventory();
+		IInventory mailInventory = getOrCreateMailInventory(worldObj, getOwnerProfile());
 
 		for (int i = 0; i < mailInventory.getSizeInventory(); i++) {
 			ItemStack slotStack = mailInventory.getStackInSlot(i);

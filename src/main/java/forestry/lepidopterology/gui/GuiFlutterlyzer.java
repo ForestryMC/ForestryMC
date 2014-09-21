@@ -45,8 +45,7 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 		super(AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies"), player,
 				new ContainerFlutterlyzer(player.inventory, inventory), inventory, 1, inventory.getSizeInventory());
 
-		xSize = 196;
-		ySize = 238;
+		guiName = "gui.flutterlyzer";
 
 		ArrayList<ItemStack> butterflyList = new ArrayList<ItemStack>();
 		((ItemButterflyGE) ForestryItem.butterflyGE.item()).addCreativeItems(butterflyList, false);
@@ -95,35 +94,6 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 			drawAnalyticsOverview();
 		}
 
-	}
-
-	private void drawAnalyticsOverview() {
-
-		startPage();
-
-		newLine();
-		String title = StringUtil.localize("item.flutterlyzer").toUpperCase();
-		drawCenteredLine(title, 8, 158);
-		newLine();
-
-		fontRendererObj.drawSplitString(StringUtil.localize("gui.flutterlyzer.help"), (int) ((guiLeft + COLUMN_0 + 4) * (1 / factor)),
-				(int) ((guiTop + 42) * (1 / factor)), (int) (158 * (1 / factor)), fontColor.get("gui.screen"));
-		newLine();
-		newLine();
-		newLine();
-		newLine();
-
-		drawLine(StringUtil.localize("gui.beealyzer.overview") + ":", COLUMN_0 + 4);
-		newLine();
-		drawLine("I  : " + StringUtil.localize("gui.general"), COLUMN_0 + 4);
-		newLine();
-		drawLine("II : " + StringUtil.localize("gui.environment"), COLUMN_0 + 4);
-		newLine();
-		drawLine("III: " + StringUtil.localize("gui.produce"), COLUMN_0 + 4);
-		newLine();
-		drawLine("IV : " + StringUtil.localize("gui.evolution"), COLUMN_0 + 4);
-
-		endPage();
 	}
 
 	private void drawAnalyticsPage1(IButterfly butterfly) {

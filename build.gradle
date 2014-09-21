@@ -73,7 +73,7 @@ configurations {
 
 dependencies {
 	compile 'net.industrial-craft:industrialcraft-2:2.2.575-experimental:api'
-	buildcraft 'com.mod-buildcraft:buildcraft:6.0.17:dev'
+	buildcraft 'com.mod-buildcraft:buildcraft:6.0.18:dev'
 }
 
 processResources {

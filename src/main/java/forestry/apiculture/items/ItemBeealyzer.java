@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import forestry.core.utils.AlyzerInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.IBee;
@@ -27,22 +27,11 @@ import forestry.core.interfaces.IHintSource;
 import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.ItemInventory;
 import forestry.plugins.PluginApiculture;
 
 public class ItemBeealyzer extends ItemInventoried {
 
-	public static class BeealyzerInventory extends ItemInventory implements IErrorSource, IHintSource {
-
-		public static final int SLOT_SPECIMEN = 0;
-		public static final int SLOT_ANALYZE_1 = 1;
-		public static final int SLOT_ANALYZE_2 = 2;
-		public static final int SLOT_ANALYZE_3 = 3;
-		public static final int SLOT_ANALYZE_4 = 4;
-		public static final int SLOT_ANALYZE_5 = 6;
-		public static final int SLOT_ENERGY = 5;
-
-		EntityPlayer player;
+	public static class BeealyzerInventory extends AlyzerInventory implements IErrorSource, IHintSource {
 
 		public BeealyzerInventory(EntityPlayer player) {
 			super(ItemBeealyzer.class, 7);
@@ -52,21 +41,6 @@ public class ItemBeealyzer extends ItemInventoried {
 		public BeealyzerInventory(EntityPlayer player, ItemStack itemStack) {
 			super(ItemBeealyzer.class, 7, itemStack);
 			this.player = player;
-		}
-
-		@Override
-		public void writeToNBT(NBTTagCompound nbttagcompound) {
-
-			NBTTagList nbttaglist = new NBTTagList();
-			for (int i = SLOT_ENERGY; i < SLOT_ENERGY + 1; i++)
-				if (inventoryStacks[i] != null) {
-					NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-					nbttagcompound1.setByte("Slot", (byte) i);
-					inventoryStacks[i].writeToNBT(nbttagcompound1);
-					nbttaglist.appendTag(nbttagcompound1);
-				}
-			nbttagcompound.setTag("Items", nbttaglist);
-
 		}
 
 		private boolean isEnergy(ItemStack itemstack) {

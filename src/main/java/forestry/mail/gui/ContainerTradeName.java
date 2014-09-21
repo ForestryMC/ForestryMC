@@ -20,7 +20,8 @@ import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.InventoryAdapter;
 import forestry.mail.gadgets.MachineTrader;
-import forestry.api.mail.MailAddress;
+import forestry.api.mail.PostManager;
+import forestry.api.mail.IMailAddress;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -35,7 +36,7 @@ public class ContainerTradeName extends ContainerForestry {
 		isLinked = machine.isLinked();
 	}
 
-	public MailAddress getAddress() {
+	public IMailAddress getAddress() {
 		return machine.getAddress();
 	}
 
@@ -50,13 +51,13 @@ public class ContainerTradeName extends ContainerForestry {
 		PacketUpdate packet = new PacketUpdate(PacketIds.TRADING_ADDRESS_SET, payload);
 		Proxies.net.sendToServer(packet);
 
-		MailAddress address = new MailAddress(addressName);
+		IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
 		machine.setAddress(address);
 	}
 
 	public void handleSetAddress(PacketUpdate packet) {
 		String addressName = packet.payload.stringPayload[0];
-		MailAddress address = new MailAddress(addressName);
+		IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
 		machine.setAddress(address);
 	}
 

@@ -10,11 +10,16 @@
  ******************************************************************************/
 package forestry.farming.gadgets;
 
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.utils.ForestryTank;
+import forestry.core.fluids.TankManager;
+import forestry.core.fluids.tanks.FakeTank;
+import net.minecraftforge.fluids.FluidTankInfo;
 
 public class TileValve extends TileFarm implements ILiquidTankContainer {
 
@@ -33,42 +38,74 @@ public class TileValve extends TileFarm implements ILiquidTankContainer {
 	}
 
 	/* ILIQUIDTANKCONTAINER */
-	private ForestryTank getMasterTank() {
-		if (!isIntegratedIntoStructure() || !hasMaster())
-			return null;
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		TankManager tankManager = getTankManager();
+		if (tankManager == null)
+			return FakeTank.INSTANCE.fill(resource, doFill);
 
-		TileFarmPlain central = (TileFarmPlain) getCentralTE();
-		if (central == null)
-			return null;
-
-		return central.getTank();
+		return tankManager.fill(from, resource, doFill);
 	}
 
 	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		ForestryTank tank = getMasterTank();
-		if (tank == null)
-			return 0;
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		TankManager tankManager = getTankManager();
+		if (tankManager == null)
+			return null;
 
-		return tank.fill(resource, doFill);
+		return tankManager.drain(from, resource, doDrain);
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		ForestryTank tank = getMasterTank();
-		if (tank == null)
-			return null;
+		TankManager tankManager = getTankManager();
+		if (tankManager == null)
+			return FakeTank.INSTANCE.drain(maxDrain, doDrain);
 
-		return tank.drain(maxDrain, doDrain);
+		return tankManager.drain(from, maxDrain, doDrain);
 	}
 
 	@Override
-	public ForestryTank[] getTanks() {
-		ForestryTank tank = getMasterTank();
-		if (tank == null)
-			return ForestryTank.FAKETANK_ARRAY;
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		TankManager tankManager = getTankManager();
+		if (tankManager == null)
+			return true;
 
-		return new ForestryTank[] { tank };
+		return tankManager.canFill(from, fluid);
 	}
 
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		TankManager tankManager = getTankManager();
+		if (tankManager == null)
+			return false;
+
+		return tankManager.canDrain(from, fluid);
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		TankManager tankManager = getTankManager();
+		if (tankManager == null)
+			return FakeTank.INFO;
+
+		return tankManager.getTankInfo(from);
+	}
+
+	@Override
+	public TankManager getTankManager() {
+		TileFarmPlain central = (TileFarmPlain) getCentralTE();
+		if (central == null)
+			return null;
+
+		return central.getTankManager();
+	}
+
+	@Override
+	public void getGUINetworkData(int messageId, int data) {
+	}
+
+	@Override
+	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
+	}
 }

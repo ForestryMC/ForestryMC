@@ -22,15 +22,18 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
 
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.core.EnumErrorCode;
+import forestry.core.fluids.TankManager;
 import forestry.core.config.Defaults;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.EntityNetData;
@@ -38,11 +41,10 @@ import forestry.core.network.GuiId;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketInventoryStack;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.ForestryTank;
+import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
-import forestry.core.utils.StringUtil;
 
 public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedInventory, ILiquidTankContainer {
 
@@ -65,18 +67,22 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 	private final short inputSlot1 = 2;
 	private final short outputSlot1 = 8;
 
-	public FluidStack resource = FluidRegistry.getFluidStack(Defaults.LIQUID_HONEY, HONEY_REQUIRED);
 	@EntityNetData
-	public ForestryTank resourceTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
+	public FilteredTank resourceTank;
+
+	private final TankManager tankManager;
+
 	private final Stack<ItemStack> pendingProducts = new Stack<ItemStack>();
 
 	/* CONSTRUCTOR */
 	public TileAnalyzer() {
+		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, FluidRegistry.getFluid(Defaults.LIQUID_HONEY));
+		tankManager = new TankManager(resourceTank);
 	}
 
 	@Override
 	public String getInventoryName() {
-		return StringUtil.localize("core.0");
+		return getUnlocalizedName();
 	}
 
 	/* GUI */
@@ -92,8 +98,7 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 
 		nbttagcompound.setInteger("AnalyzeTime", analyzeTime);
 
-		// / Resource tank
-		resourceTank.writeToNBT(nbttagcompound);
+		tankManager.writeTanksToNBT(nbttagcompound);
 
 		// / Pending Products
 		NBTTagList nbttaglist = new NBTTagList();
@@ -117,8 +122,7 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 
 		analyzeTime = nbttagcompound.getInteger("AnalyzeTime");
 
-		// / Resource tank
-		resourceTank.readFromNBT(nbttagcompound);
+		tankManager.readTanksFromNBT(nbttagcompound);
 
 		// / Pending Products
 		NBTTagList nbttaglist = nbttagcompound.getTagList("PendingProducts", 10);
@@ -146,7 +150,7 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 		// Check if we have suitable items waiting in the can slot
 		if (getStackInSlot(canSlot) != null) {
 			FluidContainerData container = LiquidHelper.getLiquidContainer(getStackInSlot(canSlot));
-			if (container != null && resource.isFluidEqual(container.fluid)) {
+			if (container != null && resourceTank.accepts(container.fluid.getFluid())) {
 
 				setInventorySlotContents(canSlot, StackUtils.replenishByContainer(this, getStackInSlot(canSlot), container, resourceTank));
 				if (getStackInSlot(canSlot).stackSize <= 0)
@@ -187,7 +191,7 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 				return;
 
 			// We need our liquid honey
-			if (resourceTank.getFluidAmount() < resource.amount) {
+			if (resourceTank.getFluidAmount() < HONEY_REQUIRED) {
 				setErrorState(EnumErrorCode.NORESOURCE);
 				return;
 			}
@@ -208,7 +212,7 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 
 				setInventorySlotContents(analyzeSlot, getStackInSlot(i));
 				setInventorySlotContents(i, null);
-				resourceTank.drain(resource.amount, true);
+				resourceTank.drain(HONEY_REQUIRED, true);
 				analyzeTime = TIME_TO_ANALYZE;
 				sendNetworkUpdate();
 				return;
@@ -251,6 +255,7 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 
 	/* SMP */
 	public void getGUINetworkData(int i, int j) {
+		i -= tankManager.maxMessageId() + 1;
 		switch (i) {
 		case 0:
 			analyzeTime = j;
@@ -259,7 +264,8 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 	}
 
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		iCrafting.sendProgressBarUpdate(container, 0, analyzeTime);
+		int i = tankManager.maxMessageId() + 1;
+		iCrafting.sendProgressBarUpdate(container, i, analyzeTime);
 
 	}
 
@@ -388,7 +394,7 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 		if (!AlleleManager.alleleRegistry.isIndividual(stack)) {
 
 			FluidContainerData container = LiquidHelper.getLiquidContainer(stack);
-			if (container == null || !container.fluid.isFluidEqual(resource))
+			if (container == null || !resourceTank.accepts(container.fluid.getFluid()))
 				return 0;
 
 			if (getStackInSlot(canSlot) == null) {
@@ -424,32 +430,38 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 
 	/* ILIQUIDCONTAINER */
 	@Override
+	public TankManager getTankManager() {
+		return tankManager;
+	}
+
+	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-
-		// We only accept what is already in the tank or valid ingredients
-		if (resourceTank.getFluidAmount() > 0 && !resourceTank.getFluid().isFluidEqual(resource))
-			return 0;
-		else if (!LiquidHelper.isLiquid(Defaults.LIQUID_HONEY, resource))
-			return 0;
-
-		int used = resourceTank.fill(resource, doFill);
-
-		if (doFill && used > 0)
-			sendNetworkUpdate();
-
-		return used;
+		return tankManager.fill(from, resource, doFill);
 	}
 
 	@Override
-	public ForestryTank[] getTanks() {
-		return new ForestryTank[] { resourceTank };
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return tankManager.drain(from, resource, doDrain);
 	}
 
-	/*
 	@Override
-	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) {
-		return resourceTank;
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return tankManager.drain(from, maxDrain, doDrain);
 	}
-	 */
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return tankManager.canFill(from, fluid);
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return tankManager.canDrain(from, fluid);
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return tankManager.getTankInfo(from);
+	}
 
 }

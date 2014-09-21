@@ -11,17 +11,23 @@
 package forestry.mail.gui;
 
 import java.util.Iterator;
-import java.util.Locale;
+import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.ITradeStation;
-import forestry.api.mail.MailAddress;
+import forestry.api.mail.IMailAddress;
 import forestry.api.mail.PostManager;
 import forestry.api.mail.TradeStationInfo;
+import forestry.api.mail.EnumAddressee;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotClosed;
 import forestry.core.gui.slots.SlotCustom;
@@ -29,17 +35,16 @@ import forestry.core.network.PacketIds;
 import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
-import forestry.mail.EnumAddressee;
 import forestry.mail.Letter;
 import forestry.mail.items.ItemLetter;
 import forestry.mail.items.ItemLetter.LetterInventory;
 import forestry.mail.items.ItemStamps;
-import forestry.mail.network.PacketTradeInfo;
+import forestry.mail.network.PacketLetterInfo;
 
 public class ContainerLetter extends ContainerItemInventory {
 
 	private final LetterInventory letterInventory;
-	private String carrier = EnumAddressee.PLAYER.toString().toLowerCase(Locale.ENGLISH);
+	private EnumAddressee carrierType = EnumAddressee.PLAYER;
 	private TradeStationInfo tradeInfo = null;
 
 	public ContainerLetter(EntityPlayer player, LetterInventory inventory) {
@@ -83,7 +88,7 @@ public class ContainerLetter extends ContainerItemInventory {
 		if (letterInventory.getLetter() != null)
 			if (letterInventory.getLetter().getRecipients() != null)
 				if (letterInventory.getLetter().getRecipients().length > 0)
-					this.carrier = letterInventory.getLetter().getRecipients()[0].getType();
+					this.carrierType = letterInventory.getLetter().getRecipients()[0].getType();
 	}
 
 	@Override
@@ -91,8 +96,10 @@ public class ContainerLetter extends ContainerItemInventory {
 
 		if (Proxies.common.isSimulating(entityplayer.worldObj)) {
 			ILetter letter = letterInventory.getLetter();
-			if (!letter.isProcessed())
-				letter.setSender(new MailAddress(entityplayer.getGameProfile()));
+			if (!letter.isProcessed()) {
+				IMailAddress sender = PostManager.postRegistry.getMailAddress(entityplayer.getGameProfile());
+				letter.setSender(sender);
+			}
 		}
 
 		super.onContainerClosed(entityplayer);
@@ -107,18 +114,18 @@ public class ContainerLetter extends ContainerItemInventory {
 		return letterInventory.getLetter();
 	}
 
-	public void setCarrierType(String type) {
-		this.carrier = type;
+	public void setCarrierType(EnumAddressee type) {
+		this.carrierType = type;
 	}
 
-	public String getCarrierType() {
-		return this.carrier;
+	public EnumAddressee getCarrierType() {
+		return this.carrierType;
 	}
 
 	public void advanceCarrierType() {
 		Iterator<IPostalCarrier> it = PostManager.postRegistry.getRegisteredCarriers().values().iterator();
 		while(it.hasNext()) {
-			if(it.next().getUID().equals(carrier))
+			if(it.next().getType().equals(carrierType))
 				break;
 		}
 
@@ -128,39 +135,49 @@ public class ContainerLetter extends ContainerItemInventory {
 		else
 			postal = PostManager.postRegistry.getRegisteredCarriers().values().iterator().next();
 
-		setCarrierType(postal.getUID());
+		setCarrierType(postal.getType());
 	}
 
-	public void setRecipient(MailAddress address) {
-		if (address == null)
+	public void setRecipient(String recipientName, EnumAddressee type) {
+		if (StringUtils.isBlank(recipientName) || type == null)
 			return;
-		
-		getLetter().setRecipient(address);
-		carrier = address.getType();
 
 		// / Send to server
-		PacketPayload payload = new PacketPayload(0, 0, 2);
-		payload.stringPayload[0] = getRecipient().getName();
-		payload.stringPayload[1] = this.carrier;
+		PacketPayload payload = new PacketPayload(0,0,2);
+		payload.stringPayload[0] = recipientName;
+		payload.stringPayload[1] = type.toString();
 
 		PacketUpdate packet = new PacketUpdate(PacketIds.LETTER_RECIPIENT, payload);
 		Proxies.net.sendToServer(packet);
 	}
 
 	public void handleSetRecipient(EntityPlayer player, PacketUpdate packet) {
-		String identifierName = packet.payload.stringPayload[0];
-		String type = packet.payload.stringPayload[1];
-		MailAddress recipient = MailAddress.makeMailAddress(identifierName, type);
+		String recipientName = packet.payload.stringPayload[0];
+		String typeName = packet.payload.stringPayload[1];
+
+		EnumAddressee type = EnumAddressee.fromString(typeName);
+		IMailAddress recipient;
+		if (type == EnumAddressee.PLAYER) {
+			GameProfile gameProfile = MinecraftServer.getServer().func_152358_ax().func_152655_a(recipientName);
+			if (gameProfile == null)
+				gameProfile = new GameProfile(new UUID(0, 0), recipientName);
+			recipient = PostManager.postRegistry.getMailAddress(gameProfile);
+		} else if (type == EnumAddressee.TRADER) {
+			recipient = PostManager.postRegistry.getMailAddress(recipientName);
+		} else {
+			return;
+		}
+
 		getLetter().setRecipient(recipient);
 		
 		// Update the trading info
 		updateTradeInfo(player.worldObj, recipient);
 		
-		// Update trade info on client
-		Proxies.net.sendToPlayer(new PacketTradeInfo(PacketIds.TRADING_INFO, tradeInfo), player);
+		// Update info on client
+		Proxies.net.sendToPlayer(new PacketLetterInfo(PacketIds.LETTER_INFO, type, tradeInfo, recipient), player);
 	}
 
-	public MailAddress getRecipient() {
+	public IMailAddress getRecipient() {
 		if (getLetter().getRecipients().length > 0)
 			return getLetter().getRecipients()[0];
 		else
@@ -188,7 +205,7 @@ public class ContainerLetter extends ContainerItemInventory {
 	}
 
 	/* Managing Trade info */
-	public void updateTradeInfo(World world, MailAddress address) {
+	public void updateTradeInfo(World world, IMailAddress address) {
 		// Updating is done by the server.
 		if (!Proxies.common.isSimulating(world))
 			return;
@@ -203,8 +220,13 @@ public class ContainerLetter extends ContainerItemInventory {
 		setTradeInfo(station.getTradeInfo());
 	}
 
-	public void handleTradeInfoUpdate(PacketTradeInfo packet) {
-		this.setTradeInfo(packet.tradeInfo);
+	public void handleLetterInfoUpdate(PacketLetterInfo packet) {
+		carrierType = packet.type;
+		if (packet.type == EnumAddressee.PLAYER) {
+			getLetter().setRecipient(packet.address);
+		} else if (packet.type == EnumAddressee.TRADER) {
+			this.setTradeInfo(packet.tradeInfo);
+		}
 	}
 
 	public TradeStationInfo getTradeInfo() {

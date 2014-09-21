@@ -38,7 +38,7 @@ public class PluginPropolisPipe extends NativePlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isModLoaded("BuildCraft|Transport");
+		return Proxies.common.isModLoaded("BuildCraft|Transport", PluginBuildCraft.validVersionRange);
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class PluginPropolisPipe extends NativePlugin {
         if (FMLCommonHandler.instance().getSide().isClient())
             proxyClass = "forestry.pipes.proxy.ClientProxyPipes";
 
-        proxy = (ProxyPipes) Proxies.common.instantiateIfModLoaded("BuildCraft|Transport", proxyClass);
+        proxy = (ProxyPipes) Proxies.common.instantiateIfModLoaded("BuildCraft|Transport", PluginBuildCraft.validVersionRange, proxyClass);
 
         if (proxy == null)
             return;

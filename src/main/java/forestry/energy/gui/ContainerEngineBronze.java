@@ -43,17 +43,4 @@ public class ContainerEngineBronze extends ContainerLiquidTanks {
 		return engine.isUseableByPlayer(entityplayer);
 	}
 
-	@Override
-	public void updateProgressBar(int i, int j) {
-		engine.getGUINetworkData(i, j);
-	}
-
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-
-		for (int i = 0; i < crafters.size(); i++)
-			engine.sendGUINetworkData(this, (ICrafting) crafters.get(i));
-	}
-
 }

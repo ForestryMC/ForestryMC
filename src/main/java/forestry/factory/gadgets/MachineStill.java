@@ -12,6 +12,7 @@ package forestry.factory.gadgets;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -42,11 +44,14 @@ import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.ForestryTank;
+import forestry.core.fluids.tanks.StandardTank;
+import forestry.core.fluids.tanks.FilteredTank;
+import forestry.core.fluids.TankManager;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
+import net.minecraftforge.fluids.FluidTankInfo;
 
 public class MachineStill extends TilePowered implements ISpecialInventory, ISidedInventory, ILiquidTankContainer {
 
@@ -84,10 +89,16 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 
 	public static class RecipeManager implements IStillManager {
 		public static ArrayList<MachineStill.Recipe> recipes = new ArrayList<MachineStill.Recipe>();
+		public static HashSet<Fluid> recipeFluidInputs = new HashSet<Fluid>();
+		public static HashSet<Fluid> recipeFluidOutputs = new HashSet<Fluid>();
 
 		@Override
 		public void addRecipe(int timePerUnit, FluidStack input, FluidStack output) {
 			recipes.add(new MachineStill.Recipe(timePerUnit, input, output));
+			if (input != null)
+				recipeFluidInputs.add(input.getFluid());
+			if (output != null)
+				recipeFluidOutputs.add(output.getFluid());
 		}
 
 		public static Recipe findMatchingRecipe(FluidStack item) {
@@ -100,7 +111,7 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 		}
 
 		public static boolean isInput(FluidStack res) {
-			return findMatchingRecipe(res) != null;
+			return recipeFluidInputs.contains(res.getFluid());
 		}
 
 		@Override
@@ -116,9 +127,10 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 
 	/* MEMBER */
 	@EntityNetData
-	public ForestryTank resourceTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
+	public FilteredTank resourceTank;
 	@EntityNetData
-	public ForestryTank productTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
+	public FilteredTank productTank;
+	private final TankManager tankManager;
 
 	private final InventoryAdapter inventory = new InventoryAdapter(3, "Items");
 
@@ -129,11 +141,16 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 
 	public MachineStill() {
 		setHints(Config.hints.get("still"));
+		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluidInputs);
+		resourceTank.tankMode = StandardTank.TankMode.INPUT;
+		productTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluidOutputs);
+		productTank.tankMode = StandardTank.TankMode.OUTPUT;
+		tankManager = new TankManager(resourceTank, productTank);
 	}
 
 	@Override
 	public String getInventoryName() {
-		return "factory.6";
+		return getUnlocalizedName();
 	}
 
 	@Override
@@ -153,15 +170,7 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 		nbttagcompound.setInteger("DistillationTime", distillationTime);
 		nbttagcompound.setInteger("DistillationTotalTime", distillationTotalTime);
 
-		NBTTagCompound NBTresourceSlot = new NBTTagCompound();
-		NBTTagCompound NBTproductSlot = new NBTTagCompound();
-
-		resourceTank.writeToNBT(NBTresourceSlot);
-		productTank.writeToNBT(NBTproductSlot);
-
-		nbttagcompound.setTag("ResourceTank", NBTresourceSlot);
-		nbttagcompound.setTag("ProductTank", NBTproductSlot);
-
+		tankManager.writeTanksToNBT(nbttagcompound);
 		inventory.writeToNBT(nbttagcompound);
 	}
 
@@ -172,13 +181,7 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 		distillationTime = nbttagcompound.getInteger("DistillationTime");
 		distillationTotalTime = nbttagcompound.getInteger("DistillationTotalTime");
 
-		resourceTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
-		productTank = new ForestryTank(Defaults.PROCESSOR_TANK_CAPACITY);
-		if (nbttagcompound.hasKey("ResourceTank")) {
-			resourceTank.readFromNBT(nbttagcompound.getCompoundTag("ResourceTank"));
-			productTank.readFromNBT(nbttagcompound.getCompoundTag("ProductTank"));
-		}
-
+		tankManager.readTanksFromNBT(nbttagcompound);
 		inventory.readFromNBT(nbttagcompound);
 
 		checkRecipe();
@@ -191,7 +194,7 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 		if (inventory.getStackInSlot(SLOT_CAN) != null) {
 			FluidContainerData container = LiquidHelper.getLiquidContainer(inventory.getStackInSlot(SLOT_CAN));
 
-			if (container != null && RecipeManager.isInput(container.fluid)) {
+			if (container != null && resourceTank.accepts(container.fluid.getFluid())) {
 
 				inventory.setInventorySlotContents(SLOT_CAN, StackUtils.replenishByContainer(this, inventory.getStackInSlot(SLOT_CAN), container, resourceTank));
 				if (inventory.getStackInSlot(SLOT_CAN).stackSize <= 0)
@@ -319,7 +322,7 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 
 	/* SMP GUI */
 	public void getGUINetworkData(int i, int j) {
-
+		i -= tankManager.maxMessageId() + 1;
 		switch (i) {
 		case 0:
 			distillationTime = j;
@@ -331,8 +334,9 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 	}
 
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		iCrafting.sendProgressBarUpdate(container, 0, distillationTime);
-		iCrafting.sendProgressBarUpdate(container, 1, distillationTotalTime);
+		int i = tankManager.maxMessageId() + 1;
+		iCrafting.sendProgressBarUpdate(container, i, distillationTime);
+		iCrafting.sendProgressBarUpdate(container, i + 1, distillationTotalTime);
 	}
 
 	/* ISPECIALINVENTORY */
@@ -341,7 +345,7 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 		int inventorySlot;
 
 		FluidContainerData container = LiquidHelper.getLiquidContainer(stack);
-		if (container != null && RecipeManager.isInput(container.fluid))
+		if (container != null && resourceTank.accepts(container.fluid.getFluid()))
 			inventorySlot = SLOT_CAN;
 		else if (LiquidHelper.isEmptyContainer(stack))
 			inventorySlot = SLOT_RESOURCE;
@@ -456,35 +460,45 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 
 		if(slotIndex == SLOT_CAN) {
 			FluidContainerData container = LiquidHelper.getLiquidContainer(itemstack);
-			return container != null && RecipeManager.isInput(container.fluid);
+			return container != null && resourceTank.accepts(container.fluid.getFluid());
 		}
 
 		return false;
 	}
 
-	/* ILIQUIDCONTAINER */
+	/* ILiquidTankContainer */
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		return tankManager.fill(from, resource, doFill);
+	}
 
-		if (!MachineStill.RecipeManager.isInput(resource))
-			return 0;
-
-		int used = resourceTank.fill(resource, doFill);
-
-		if (doFill && used > 0)
-			sendNetworkUpdate();
-
-		return used;
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return tankManager.drain(from, resource, doDrain);
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int quantityMax, boolean doEmpty) {
-		return productTank.drain(quantityMax, doEmpty);
+		return tankManager.drain(from, quantityMax, doEmpty);
 	}
 
 	@Override
-	public ForestryTank[] getTanks() {
-		return new ForestryTank[] { resourceTank, productTank };
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return tankManager.canFill(from, fluid);
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return tankManager.canDrain(from, fluid);
+	}
+
+	@Override
+	public TankManager getTankManager() {
+		return tankManager;
+	}
+
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return tankManager.getTankInfo(from);
 	}
 
 	/* ITRIGGERPROVIDER */
