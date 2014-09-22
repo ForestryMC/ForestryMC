@@ -20,12 +20,12 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 import forestry.core.TemperatureState;
 import forestry.core.config.Defaults;
 import forestry.core.network.PacketPayload;
 import forestry.core.utils.BlockUtil;
+import forestry.energy.EnergyManager;
 
 public abstract class Engine extends TileBase implements IEnergyHandler {
 
@@ -37,7 +37,7 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 			payload.intPayload[0] = 1;
 		else
 			payload.intPayload[0] = 0;
-		payload.intPayload[1] = energyStorage.getEnergyStored();
+		payload.intPayload[1] = energyManager.toPacketInt();
 		payload.intPayload[2] = heat;
 
 		payload.floatPayload[0] = pistonSpeedServer;
@@ -48,7 +48,7 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 	public void fromPacketPayload(PacketPayload payload) {
 
         isActive = payload.intPayload[0] > 0;
-		energyStorage.setEnergyStored(payload.intPayload[1]);
+		energyManager.fromPacketInt(payload.intPayload[1]);
 		heat = payload.intPayload[2];
 
 		pistonSpeedServer = payload.floatPayload[0];
@@ -70,15 +70,13 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 	protected final int maxHeat;
 	protected boolean forceCooldown = false;
 	public float progress;
-    protected EnergyStorage energyStorage;
+    protected EnergyManager energyManager;
 
 	public Engine(int maxHeat, int maxEnergy, int maxEnergyExtracted) {
 		this.maxHeat = maxHeat;
 		this.maxEnergy = maxEnergy;
 		this.maxEnergyExtracted = maxEnergyExtracted;
-        energyStorage = new EnergyStorage(maxEnergy, maxEnergyExtracted);
-		//powerProvider = new PowerHandler(this, PowerHandler.Type.ENGINE);
-		//powerProvider.configure(10, 200, 10, 100000);
+		energyManager = new EnergyManager(100, 2000, 100, 1000000);
 	}
 
 	@Override
@@ -101,10 +99,6 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 	public abstract int dissipateHeat();
 
 	public abstract int generateHeat();
-
-	public int maxEnergyReceived() {
-		return 200;
-	}
 
 	public boolean mayBurn() {
 		return !forceCooldown;
@@ -150,14 +144,7 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 			if (progress > 0.25 && stagePiston == 1) {
 				stagePiston = 2;
 
-				if (BlockUtil.isRFTile(getOrientation().getOpposite(), tile)) {
-					IEnergyHandler receptor = (IEnergyHandler) tile;
-					int extractable = extractEnergy(getOrientation(), energyStorage.getMaxExtract(), true);
-					if (extractable > 0) {
-						int extracted = receptor.receiveEnergy(getOrientation().getOpposite(), extractable, false);
-						extractEnergy(getOrientation(), extracted, false);
-					}
-				}
+				energyManager.sendEnergy(getOrientation(), tile);
 
 			} else if (progress >= 0.5) {
 				progress = 0;
@@ -179,7 +166,7 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 		if (mayBurn())
 			burn();
 		else
-			energyStorage.extractEnergy(20, false);
+			energyManager.drainEnergy(20);
 
 	}
 
@@ -201,10 +188,6 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 		for (int i = getOrientation().ordinal() + 1; i <= getOrientation().ordinal() + 6; ++i) {
 			ForgeDirection orient = ForgeDirection.values()[i % 6];
 
-			/*Position pos = new Position(xCoord, yCoord, zCoord, orient);
-			pos.moveForwards(1.0F);
-
-			TileEntity tile = worldObj.getTileEntity((int) pos.x, (int) pos.y, (int) pos.z);*/
             TileEntity tile = worldObj.getTileEntity(xCoord + orient.offsetX, yCoord + orient.offsetY, zCoord + orient.offsetZ);
 
 			if (BlockUtil.isRFTile(getOrientation().getOpposite(), tile)) {
@@ -293,13 +276,9 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-        energyStorage.readFromNBT(nbt);
+        energyManager.readFromNBT(nbt);
 
 		heat = nbt.getInteger("EngineHeat");
-		/*if (nbt.hasKey("EngineStoredEnergy"))
-			storedEnergy = nbt.getInteger("EngineStoredEnergy");
-		else
-			storedEnergy = nbt.getFloat("EngineStored");*/
 
 		progress = nbt.getFloat("EngineProgress");
 		forceCooldown = nbt.getBoolean("ForceCooldown");
@@ -308,10 +287,9 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-        energyStorage.writeToNBT(nbt);
+		energyManager.writeToNBT(nbt);
 
 		nbt.setInteger("EngineHeat", heat);
-		//nbt.setFloat("EngineStored", storedEnergy);
 		nbt.setFloat("EngineProgress", progress);
 		nbt.setBoolean("ForceCooldown", forceCooldown);
 	}
@@ -321,15 +299,6 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 
 	public abstract void sendGUINetworkData(Container containerEngine, ICrafting iCrafting);
 
-	/*@Override
-	public void doWork(PowerHandler workProvider) {
-		if (!Proxies.common.isSimulating(worldObj))
-			return;
-
-		addEnergy((int) (PluginBuildCraft.instance.invokeUseEnergyMethod(workProvider, 1, maxEnergyReceived(), true) * 0.95F));
-
-	}*/
-
     @Override
     public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
         return 0;
@@ -337,17 +306,17 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 
     @Override
     public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
-        return energyStorage.extractEnergy(maxExtract, simulate); //TODO
+        return energyManager.extractEnergy(from, maxExtract, simulate);
     }
 
     @Override
     public int getEnergyStored(ForgeDirection from) {
-        return energyStorage.getEnergyStored();
+        return energyManager.getEnergyStored(from);
     }
 
     @Override
     public int getMaxEnergyStored(ForgeDirection from) {
-        return energyStorage.getMaxEnergyStored();
+        return energyManager.getMaxEnergyStored(from);
     }
 
     @Override

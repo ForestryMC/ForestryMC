@@ -136,7 +136,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		int gain = 0;
 		if (isActivated() && isBurning()) {
 			gain++;
-			if (((double) energyStorage.getEnergyStored() / (double) maxEnergy) > 0.5)
+			if (((double) energyManager.getTotalEnergyStored() / (double) maxEnergy) > 0.5)
 				gain++;
 		}
 
@@ -185,7 +185,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 
 		if (ic2EnergySink.useEnergy(euConfig.euForCycle)) {
 			currentOutput = euConfig.rfPerCycle;
-			energyStorage.modifyEnergyStored(euConfig.rfPerCycle);
+			energyManager.generateEnergy(euConfig.rfPerCycle);
 		}
 
 	}
@@ -233,7 +233,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 			currentOutput = j;
 			break;
 		case 1:
-			energyStorage.setEnergyStored(j);
+			energyManager.fromPacketInt(j);
 			break;
 		case 2:
 			heat = j;
@@ -248,7 +248,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	@Override
 	public void sendGUINetworkData(Container containerEngine, ICrafting iCrafting) {
 		iCrafting.sendProgressBarUpdate(containerEngine, 0, currentOutput);
-		iCrafting.sendProgressBarUpdate(containerEngine, 1, energyStorage.getEnergyStored());
+		iCrafting.sendProgressBarUpdate(containerEngine, 1, energyManager.toPacketInt());
 		iCrafting.sendProgressBarUpdate(containerEngine, 2, heat);
 		if (ic2EnergySink != null) {
 			iCrafting.sendProgressBarUpdate(containerEngine, 3, (short) ic2EnergySink.getEnergyStored());

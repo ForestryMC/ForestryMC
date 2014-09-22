@@ -112,7 +112,7 @@ public class EngineClockwork extends Engine {
 			tension *= 0.9995f;
 		else
 			tension = 0;
-		energyStorage.modifyEnergyStored(ENGINE_CLOCKWORK_ENERGY_PER_CYCLE * (int)tension);
+		energyManager.generateEnergy(ENGINE_CLOCKWORK_ENERGY_PER_CYCLE * (int)tension);
 	}
 
 	@Override
@@ -142,7 +142,7 @@ public class EngineClockwork extends Engine {
 			return 0;
 		
 		float fromClockwork = (tension / ENGINE_CLOCKWORK_WIND_MAX) * Defaults.ENGINE_PISTON_SPEED_MAX;
-		return fromClockwork >= 0.01f ? fromClockwork : energyStorage.getEnergyStored() > 0 ? 0.01f : 0;
+		return fromClockwork >= 0.01f ? fromClockwork : energyManager.getTotalEnergyStored() > 0 ? 0.01f : 0;
 	}
 	
 	@Override public void getGUINetworkData(int i, int j) {}
