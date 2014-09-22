@@ -186,7 +186,6 @@ public class PluginArboriculture extends ForestryPlugin {
 		for (ForestryBlock log : logs) {
 			log.block().setHarvestLevel("axe", 0);
 			OreDictionary.registerOre("logWood", log.getWildcard());
-			Proxies.common.addSmelting(log.getItemStack(), new ItemStack(Items.coal, 1, 1), 0.15F);
 		}
 
 		ForestryBlock.planks1.registerBlock(new BlockPlanks(PlankCat.CAT0), ItemWoodBlock.class, "planks");
@@ -337,6 +336,9 @@ public class PluginArboriculture extends ForestryPlugin {
 
 	@Override
 	protected void registerRecipes() {
+
+		for (ForestryBlock log : logs)
+			Proxies.common.addSmelting(log.getItemStack(), new ItemStack(Items.coal, 1, 1), 0.15F);
 
 		// / Plank recipes
 		for (int i = 0; i < 4; i++)
