@@ -301,11 +301,15 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 
     @Override
     public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
-        return 0;
+		if (from == getOrientation())
+			return 0;
+		return energyManager.receiveEnergy(from, maxReceive, simulate);
     }
 
     @Override
     public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+		if (from != getOrientation())
+			return 0;
         return energyManager.extractEnergy(from, maxExtract, simulate);
     }
 
@@ -321,6 +325,6 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 
     @Override
     public boolean canConnectEnergy(ForgeDirection from) {
-        return from == getOrientation();
+        return energyManager.canConnectEnergy(from);
     }
 }
