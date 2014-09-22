@@ -119,6 +119,10 @@ public class EnergyManager implements IEnergyHandler {
 		return true;
 	}
 
+	public int getEnergyPerWork() {
+		return energyPerWork;
+	}
+
 	/**
 	 * Consumes one work cycle's worth of energy.
 	 * @return true if the energy to do work was consumed
