@@ -10,23 +10,22 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import cofh.api.energy.IEnergyHandler;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
-
+import forestry.core.fluids.tanks.StandardTank;
+import forestry.core.interfaces.IPowerHandler;
 import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.network.ClassMap;
+import forestry.core.network.EntityNetData;
 import forestry.core.network.IndexInPayload;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.fluids.tanks.StandardTank;
 import forestry.energy.EnergyManager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 
-public abstract class TilePowered extends TileBase implements IRenderableMachine, IEnergyHandler {
+public abstract class TilePowered extends TileBase implements IRenderableMachine, IPowerHandler {
 
 	public static int WORK_CYCLES = 4;
 
@@ -64,33 +63,13 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 			ex.printStackTrace();
 		}
 	}
+
     protected final EnergyManager energyManager;
 
 	public TilePowered(int minAcceptedEnergy, int maxTransfer, int energyPerWork, int capacity) {
 		this.energyManager = new EnergyManager(minAcceptedEnergy, maxTransfer, energyPerWork, capacity);
 		this.energyManager.setReceiveOnly();
     }
-
-	/*private final PowerHandler powerHandler;
-
-	public TilePowered() {
-		powerHandler = new PowerHandler(this, Type.MACHINE);
-		configurePowerProvider(powerHandler);
-		adjustPowerProvider(powerHandler);
-	}
-
-	protected void configurePowerProvider(PowerHandler provider) {
-		provider.configure(Defaults.MACHINE_MIN_ENERGY_RECEIVED, Defaults.MACHINE_MAX_ENERGY_RECEIVED,
-				Defaults.MACHINE_MIN_ACTIVATION_ENERGY, Defaults.MACHINE_MAX_ENERGY);
-	}
-
-	private void adjustPowerProvider(PowerHandler provider) {
-		provider.configure(
-				provider.getMinEnergyReceived(),
-				Math.round(provider.getMaxEnergyReceived() * GameMode.getGameMode().getFloatSetting("energy.demand.modifier")),
-				Math.round(provider.getActivationEnergy() * GameMode.getGameMode().getFloatSetting("energy.demand.modifier")),
-				Math.round(provider.getMaxEnergyStored() * GameMode.getGameMode().getFloatSetting("energy.demand.modifier")));
-	}*/
 
 	/* STATE INFORMATION */
 	public abstract boolean isWorking();
@@ -170,6 +149,12 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 	@Override
 	public EnumTankLevel getSecondaryLevel() {
 		return EnumTankLevel.EMPTY;
+	}
+
+	/* IPowerHandler */
+	@Override
+	public EnergyManager getEnergyManager() {
+		return energyManager;
 	}
 
 	@Override

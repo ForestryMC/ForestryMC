@@ -114,6 +114,14 @@ public class EnergyManager implements IEnergyHandler {
 		return energyStorage.getMaxEnergyStored();
 	}
 
+	public int getMaxEnergyStored() {
+		return energyStorage.getMaxEnergyStored();
+	}
+
+	public int getMaxEnergyReceived() {
+		return energyStorage.getMaxReceive();
+	}
+
 	@Override
 	public boolean canConnectEnergy(ForgeDirection from) {
 		return true;

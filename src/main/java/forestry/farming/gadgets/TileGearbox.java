@@ -10,21 +10,20 @@
  ******************************************************************************/
 package forestry.farming.gadgets;
 
-import cofh.api.energy.IEnergyHandler;
-
-import forestry.energy.EnergyManager;
-import net.minecraft.nbt.NBTTagCompound;
-
 import forestry.api.core.ITileStructure;
 import forestry.api.farming.IFarmHousing;
+import forestry.core.interfaces.IPowerHandler;
+import forestry.energy.EnergyManager;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileGearbox extends TileFarm implements IEnergyHandler {
+public class TileGearbox extends TileFarm implements IPowerHandler {
 
 	public static int WORK_CYCLES = 4;
 	private int activationDelay = 0;
 	private int previousDelays = 0;
 	private int workCounter;
+	private final EnergyManager energyManager;
 
 	public TileGearbox() {
 		energyManager = new EnergyManager(50, 200, 50, 10000);
@@ -60,9 +59,6 @@ public class TileGearbox extends TileFarm implements IEnergyHandler {
 		nbttagcompound.setInteger("PrevDelays", previousDelays);
 	}
 
-	/* POWER */
-	EnergyManager energyManager;
-
 	@Override
 	protected void updateServerSide() {
 		super.updateServerSide();
@@ -93,7 +89,12 @@ public class TileGearbox extends TileFarm implements IEnergyHandler {
 		}
 	}
 
-	/* IEnergyHandler */
+	/* IPowerHandler */
+	@Override
+	public EnergyManager getEnergyManager() {
+		return energyManager;
+	}
+
 	@Override
 	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
 		return energyManager.receiveEnergy(from, maxReceive, simulate);

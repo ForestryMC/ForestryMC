@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.core.interfaces;
 
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerHandler;
+import cofh.api.energy.IEnergyHandler;
+import forestry.energy.EnergyManager;
 
-public interface IPowerHandler extends IPowerReceptor {
-	PowerHandler getPowerHandler();
+public interface IPowerHandler extends IEnergyHandler {
+	EnergyManager getEnergyManager();
 }

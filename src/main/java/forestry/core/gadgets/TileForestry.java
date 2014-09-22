@@ -23,9 +23,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
 
 import buildcraft.api.gates.ITrigger;
 import com.mojang.authlib.GameProfile;
@@ -33,27 +30,20 @@ import com.mojang.authlib.GameProfile;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
-import forestry.core.fluids.tanks.FakeTank;
 import forestry.core.interfaces.IErrorSource;
-import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.interfaces.IOwnable;
-import forestry.core.interfaces.IPowerHandler;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.INetworkedEntity;
 import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumAccess;
-import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.Vect;
 
 public abstract class TileForestry extends TileEntity implements INetworkedEntity, IOwnable, IErrorSource {
 
 	protected boolean isInited = false;
-	protected int energyConsumed;
-	protected int energyLast;
-	protected int energyReceived;
 
 	public Vect Coords() {
 		return new Vect(xCoord, yCoord, zCoord);
@@ -90,13 +80,6 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 
 		if (!Proxies.common.isSimulating(worldObj))
 			return;
-
-		if (this instanceof IPowerHandler) {
-			IPowerHandler receptor = (IPowerHandler) this;
-			if (receptor.getPowerHandler() != null) {
-				receptor.getPowerHandler().update();
-			}
-		}
 	}
 
 	public abstract void initialize();

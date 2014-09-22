@@ -17,7 +17,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -26,8 +25,6 @@ import buildcraft.api.fuels.IronEngineFuel;
 import buildcraft.api.gates.ActionManager;
 import buildcraft.api.gates.ITrigger;
 import buildcraft.api.gates.ITriggerProvider;
-import buildcraft.api.power.PowerHandler;
-import buildcraft.api.power.PowerHandler.PowerReceiver;
 import buildcraft.api.recipes.BuildcraftRecipes;
 import buildcraft.api.transport.IPipeTile;
 
@@ -132,14 +129,6 @@ public class PluginBuildCraft extends ForestryPlugin implements ITriggerProvider
 		}
 
 		Proxies.common.addRecipe(new ItemStack(pipeWaterproof), "#", '#', ForestryItem.beeswax);
-	}
-
-	public double invokeUseEnergyMethod(PowerHandler workProvider, float min, float max, boolean doUse) {
-		return workProvider.useEnergy(min, max, doUse);
-	}
-
-	public void invokeReceiveEnergyMethod(PowerHandler.Type type, PowerReceiver receiver, double extractedEnergy, ForgeDirection from) {
-		receiver.receiveEnergy(type, extractedEnergy, from);
 	}
 
 	// / ITRIGGERPROVIDER
