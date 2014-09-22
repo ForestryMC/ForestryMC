@@ -147,7 +147,7 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 
 			progress += pistonSpeedServer;
 
-			if (progress > 0.5 && stagePiston == 1) {
+			if (progress > 0.25 && stagePiston == 1) {
 				stagePiston = 2;
 
 				if (BlockUtil.isRFTile(getOrientation().getOpposite(), tile)) {
@@ -159,7 +159,7 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 					}
 				}
 
-			} else if (progress >= 1) {
+			} else if (progress >= 0.5) {
 				progress = 0;
 				stagePiston = 0;
 			}
