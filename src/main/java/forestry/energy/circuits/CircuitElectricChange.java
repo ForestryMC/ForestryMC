@@ -18,15 +18,15 @@ import forestry.energy.gadgets.EngineTin;
 public abstract class CircuitElectricChange extends Circuit {
 
 	int euChange = 7;
-	int mjChange = 2;
+	int rfChange = 20;
 
 	public CircuitElectricChange(String uid, boolean requiresDiscovery) {
 		super(uid, requiresDiscovery);
 	}
 
-	protected void configureChange(int euChange, int mjChange) {
+	protected void configureChange(int euChange, int rfChange) {
 		this.euChange = euChange;
-		this.mjChange = mjChange;
+		this.rfChange = rfChange;
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public abstract class CircuitElectricChange extends Circuit {
 			return;
 
 		EngineTin engine = (EngineTin) tile;
-		engine.changeEnergyConfig(euChange, mjChange, 2 * euChange);
+		engine.changeEnergyConfig(euChange, rfChange, 2 * euChange);
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public abstract class CircuitElectricChange extends Circuit {
 			return;
 
 		EngineTin engine = (EngineTin) tile;
-		engine.changeEnergyConfig(-euChange, -mjChange, -(2 * euChange));
+		engine.changeEnergyConfig(-euChange, -rfChange, -(2 * euChange));
 	}
 
 	@Override

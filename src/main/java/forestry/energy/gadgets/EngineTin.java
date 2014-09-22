@@ -256,9 +256,9 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	}
 
 	// / ENERGY CONFIG CHANGE
-	public void changeEnergyConfig(int euChange, int mjChange, int storageChange) {
+	public void changeEnergyConfig(int euChange, int rfChange, int storageChange) {
 		euConfig.euForCycle += euChange;
-		euConfig.rfPerCycle += mjChange;
+		euConfig.rfPerCycle += rfChange;
 		euConfig.euStorage += storageChange;
 
 		if (ic2EnergySink != null) ic2EnergySink.setCapacity(euConfig.euStorage);

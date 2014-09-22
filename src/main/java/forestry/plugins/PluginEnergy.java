@@ -153,8 +153,8 @@ public class PluginEnergy extends ForestryPlugin {
 		Circuit.energyElectricChoke1 = new CircuitElectricChoke("electric.choke.1");
 		Circuit.energyFireDampener1 = new CircuitFireDampener("dampener.1");
 		Circuit.energyElectricEfficiency1 = new CircuitElectricEfficiency("electric.efficiency.1");
-		Circuit.energyElectricBoost1 = new CircuitElectricBoost("electric.boost.1", 2, 7, 2);
-		Circuit.energyElectricBoost2 = new CircuitElectricBoost("electric.boost.2", 2, 15, 4);
+		Circuit.energyElectricBoost1 = new CircuitElectricBoost("electric.boost.1", 2, 7, 20);
+		Circuit.energyElectricBoost2 = new CircuitElectricBoost("electric.boost.2", 2, 15, 40);
 	}
 
 	@Override

@@ -14,7 +14,7 @@ public class CircuitElectricChoke extends CircuitElectricChange {
 
 	public CircuitElectricChoke(String uid) {
 		super(uid, false);
-		this.configureChange(-2, -1);
+		this.configureChange(-2, -10);
 		this.setLimit(1);
 	}
 }
