@@ -12,14 +12,9 @@ package forestry.core.gadgets;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
-import ic2.api.energy.event.EnergyTileLoadEvent;
-import ic2.api.energy.event.EnergyTileUnloadEvent;
-import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 
@@ -32,7 +27,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.fluids.tanks.StandardTank;
 
-public abstract class TilePowered extends TileBase implements IRenderableMachine, IEnergySink, IEnergyHandler {
+public abstract class TilePowered extends TileBase implements IRenderableMachine, IEnergyHandler {
 
 	public static int WORK_CYCLES = 4;
 
@@ -136,11 +131,6 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 		if (!Proxies.common.isSimulating(worldObj))
 			return;
 
-		if (!ic2registered) {
-			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
-			ic2registered = true;
-		}
-
         if (workCounter < WORK_CYCLES && energyStorage.getEnergyStored() >= energyPerUse) {
             energyStorage.modifyEnergyStored(-energyPerUse); //TODO Make it continuous usage while doing work
             workCounter++;
@@ -221,48 +211,6 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 
 	@Override
 	public boolean canConnectEnergy(ForgeDirection from) {
-		return true;
-	}
-
-	// ======== EU SUPPORT ============
-
-	private boolean ic2registered = false;
-
-	@Override
-	public void invalidate() {
-		if (ic2registered) {
-			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
-			ic2registered = false;
-		}
-		super.invalidate();
-	}
-
-	@Override
-	public void onChunkUnload() {
-		if (ic2registered) {
-			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
-			ic2registered = false;
-		}
-		super.onChunkUnload();
-	}
-
-	@Override
-	public double getDemandedEnergy() {
-        return (energyStorage.getMaxEnergyStored() - energyStorage.getEnergyStored()) / 4;
-	}
-
-	@Override
-	public int getSinkTier() {
-		return 2;
-	}
-
-	@Override
-	public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
-        return energyStorage.receiveEnergy((int)(amount * 4), false); //TODO May want to do something other than casting
-	}
-
-	@Override
-	public boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction) {
 		return true;
 	}
 }
