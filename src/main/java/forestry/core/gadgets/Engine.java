@@ -77,8 +77,8 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 
 	public Engine(int maxHeat, int maxEnergy, int maxEnergyExtracted) {
 		this.maxHeat = maxHeat;
-		this.maxEnergy = maxEnergy * 10; //TODO Temporary until all are converted
-		this.maxEnergyExtracted = maxEnergyExtracted * 10;
+		this.maxEnergy = maxEnergy;
+		this.maxEnergyExtracted = maxEnergyExtracted;
         energyStorage = new EnergyStorage(maxEnergy, maxEnergyExtracted);
 		//powerProvider = new PowerHandler(this, PowerHandler.Type.ENGINE);
 		//powerProvider.configure(10, 200, 10, 100000);
@@ -191,7 +191,7 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 		if (mayBurn())
 			burn();
 		else
-			energyStorage.extractEnergy(2, false);
+			energyStorage.extractEnergy(20, false);
 
 	}
 

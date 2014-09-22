@@ -81,7 +81,7 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 	private boolean shutdown;
 
 	public EngineBronze() {
-		super(Defaults.ENGINE_BRONZE_HEAT_MAX, 30000, 500);
+		super(Defaults.ENGINE_BRONZE_HEAT_MAX, 300000, 5000);
 		setHints(Config.hints.get("engine.bronze"));
 
 		inventory = new TileInventoryAdapter(this, 1, "Items");
@@ -238,7 +238,7 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 	 */
 	private int determineFuelValue(Fluid fluid) {
 		if (FuelManager.bronzeEngineFuel.containsKey(fluid))
-			return FuelManager.bronzeEngineFuel.get(fluid).powerPerCycle * 10; //Too Lazy to change all the numbers to RF, so just doing this.
+			return FuelManager.bronzeEngineFuel.get(fluid).powerPerCycle;
 		else
 			return 0;
 	}

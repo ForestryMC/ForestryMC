@@ -61,7 +61,7 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 	private final TileInventoryAdapter inventory;
 
 	public EngineCopper() {
-		super(Defaults.ENGINE_COPPER_HEAT_MAX, 20000, 400);
+		super(Defaults.ENGINE_COPPER_HEAT_MAX, 200000, 4000);
 		setHints(Config.hints.get("engine.copper"));
 
 		ashForItem = Defaults.ENGINE_COPPER_ASH_FOR_ITEM;
@@ -209,7 +209,7 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 	 */
 	private int determineFuelValue(ItemStack fuel) {
 		if (FuelManager.copperEngineFuel.containsKey(fuel))
-			return FuelManager.copperEngineFuel.get(fuel).powerPerCycle * 10; //Too Lazy to change all the numbers to RF, so just doing this.
+			return FuelManager.copperEngineFuel.get(fuel).powerPerCycle;
 		else
 			return 0;
 	}

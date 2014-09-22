@@ -38,7 +38,7 @@ public class EngineClockwork extends Engine {
 	private short delay = 0;
 	
 	public EngineClockwork() {
-		super(ENGINE_CLOCKWORK_HEAT_MAX, 1000, 50);
+		super(ENGINE_CLOCKWORK_HEAT_MAX, 10000, 500);
 	}
 	
 	@Override

@@ -177,12 +177,12 @@ public class Defaults {
 	public static final int ENGINE_CYCLE_DURATION_SEED_OIL = 2500;
 	public static final int ENGINE_CYCLE_DURATION_BIOMASS = 2500;
 	public static final int ENGINE_CYCLE_DURATION_ETHANOL = 15000;
-	public static final int ENGINE_FUEL_VALUE_WATER = 1;
-	public static final int ENGINE_FUEL_VALUE_JUICE = 1;
-	public static final int ENGINE_FUEL_VALUE_HONEY = 2;
-	public static final int ENGINE_FUEL_VALUE_MILK = 1;
-	public static final int ENGINE_FUEL_VALUE_SEED_OIL = 3;
-	public static final int ENGINE_FUEL_VALUE_BIOMASS = 5;
+	public static final int ENGINE_FUEL_VALUE_WATER = 10;
+	public static final int ENGINE_FUEL_VALUE_JUICE = 10;
+	public static final int ENGINE_FUEL_VALUE_HONEY = 20;
+	public static final int ENGINE_FUEL_VALUE_MILK = 10;
+	public static final int ENGINE_FUEL_VALUE_SEED_OIL = 30;
+	public static final int ENGINE_FUEL_VALUE_BIOMASS = 50;
 	public static final int ENGINE_HEAT_VALUE_LAVA = 20;
 
 	public static final float ENGINE_PISTON_SPEED_MAX = 0.08f;
@@ -194,9 +194,9 @@ public class Defaults {
 	public static final int ENGINE_BRONZE_HEAT_GENERATION_ENERGY = 1;
 
 	public static final int ENGINE_COPPER_CYCLE_DURATION_PEAT = 5000;
-	public static final int ENGINE_COPPER_FUEL_VALUE_PEAT = 1;
+	public static final int ENGINE_COPPER_FUEL_VALUE_PEAT = 10;
 	public static final int ENGINE_COPPER_CYCLE_DURATION_BITUMINOUS_PEAT = 6000;
-	public static final int ENGINE_COPPER_FUEL_VALUE_BITUMINOUS_PEAT = 2;
+	public static final int ENGINE_COPPER_FUEL_VALUE_BITUMINOUS_PEAT = 20;
 	public static final int ENGINE_COPPER_HEAT_MAX = 10000;
 	public static final int ENGINE_COPPER_ASH_FOR_ITEM = 7500;
 

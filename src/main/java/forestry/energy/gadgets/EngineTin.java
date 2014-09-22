@@ -60,7 +60,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	private final DelayTimer delayUpdateTimer = new DelayTimer();
 
 	public EngineTin() {
-		super(Defaults.ENGINE_TIN_HEAT_MAX, 10000, 400);
+		super(Defaults.ENGINE_TIN_HEAT_MAX, 100000, 4000);
 		setHints(Config.hints.get("engine.tin"));
 
 		if (PluginIC2.instance.isAvailable()) ic2EnergySink = new BasicSink(this, euConfig.euStorage, 3);
