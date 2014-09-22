@@ -34,9 +34,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import buildcraft.api.gates.ITrigger;
-import buildcraft.api.power.PowerHandler;
 
-import cofh.api.energy.EnergyStorage;
 import forestry.api.core.ForestryAPI;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;

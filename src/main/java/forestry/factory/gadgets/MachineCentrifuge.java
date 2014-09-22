@@ -27,7 +27,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import buildcraft.api.gates.ITrigger;
-import buildcraft.api.power.PowerHandler;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
