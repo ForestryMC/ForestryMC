@@ -127,7 +127,7 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 			ic2registered = true;
 		}
 
-        if (workCounter < WORK_CYCLES) {
+        if (workCounter < WORK_CYCLES && energyStorage.getEnergyStored() >= ENERGY_PER_USE) {
             energyStorage.modifyEnergyStored(-ENERGY_PER_USE); //TODO Make it continuous usage while doing work
             workCounter++;
         }
