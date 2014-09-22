@@ -23,6 +23,7 @@ public abstract class Mill extends TilePowered {
 	public float progress;
 
 	public Mill() {
+		super(0, 0, 0, 0);
 		speed = 0.01F;
 	}
 

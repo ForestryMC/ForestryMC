@@ -151,7 +151,7 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 	private int timePerItem;
 
 	public MachineSqueezer() {
-        energyStorage = new EnergyStorage(4000);
+		super(500, 1100, 50, 4000);
 		setHints(Config.hints.get("squeezer"));
 		productTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluids);
 		productTank.tankMode = StandardTank.TankMode.OUTPUT;
@@ -167,11 +167,6 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 	public void openGui(EntityPlayer player, TileBase tile) {
 		player.openGui(ForestryAPI.instance, GuiId.SqueezerGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
-
-	/*@Override //TODO
-	protected void configurePowerProvider(PowerHandler provider) {
-		provider.configure(50, 110, 5, 400);
-	}*/
 
 	/* LOADING & SAVING */
 	@Override

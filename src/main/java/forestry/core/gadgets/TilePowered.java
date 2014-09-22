@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,7 +17,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 
-import forestry.core.GameMode;
 import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.network.ClassMap;
 import forestry.core.network.IndexInPayload;
@@ -26,6 +24,7 @@ import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.fluids.tanks.StandardTank;
+import forestry.energy.EnergyManager;
 
 public abstract class TilePowered extends TileBase implements IRenderableMachine, IEnergyHandler {
 
@@ -65,27 +64,12 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 			ex.printStackTrace();
 		}
 	}
-    protected EnergyStorage energyStorage;
-	public int energyPerUse;
+    protected final EnergyManager energyManager;
 
-	public TilePowered() {
-		this(5000, 150);
+	public TilePowered(int minAcceptedEnergy, int maxTransfer, int energyPerWork, int capacity) {
+		this.energyManager = new EnergyManager(minAcceptedEnergy, maxTransfer, energyPerWork, capacity);
+		this.energyManager.setReceiveOnly();
     }
-
-	public TilePowered(int defaultCapacity, int defaultEnergyPerUse) {
-		this(defaultCapacity, defaultEnergyPerUse, defaultCapacity);
-	}
-
-	public TilePowered(int defaultCapacity, int defaultEnergyPerUse, int defaultMaxTransfer) {
-		this.energyPerUse = scaleEnergyByDifficulty(defaultEnergyPerUse);
-		int capacity = scaleEnergyByDifficulty(defaultCapacity);
-		int maxTransfer = scaleEnergyByDifficulty(defaultMaxTransfer);
-		energyStorage = new EnergyStorage(capacity, maxTransfer);
-	}
-
-	private static int scaleEnergyByDifficulty(int energyPerUse) {
-		return Math.round(energyPerUse * GameMode.getGameMode().getFloatSetting("energy.demand.modifier"));
-	}
 
 	/*private final PowerHandler powerHandler;
 
@@ -131,8 +115,7 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 		if (!Proxies.common.isSimulating(worldObj))
 			return;
 
-        if (workCounter < WORK_CYCLES && energyStorage.getEnergyStored() >= energyPerUse) {
-            energyStorage.modifyEnergyStored(-energyPerUse); //TODO Make it continuous usage while doing work
+        if (workCounter < WORK_CYCLES && energyManager.consumeEnergyToDoWork()) {
             workCounter++;
         }
 
@@ -147,13 +130,13 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		energyStorage.writeToNBT(nbt);
+		energyManager.writeToNBT(nbt);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		energyStorage.readFromNBT(nbt);
+		energyManager.readFromNBT(nbt);
 	}
 
 	/* LIQUID CONTAINER HANDLING */
@@ -191,26 +174,26 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 
 	@Override
 	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
-        return energyStorage.receiveEnergy(maxReceive, simulate);
+        return energyManager.receiveEnergy(from, maxReceive, simulate);
 	}
 
 	@Override
 	public int extractEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
-		return 0;
+		return energyManager.extractEnergy(from, maxReceive, simulate);
 	}
 
 	@Override
 	public int getEnergyStored(ForgeDirection from) {
-		return energyStorage.getEnergyStored();
+		return energyManager.getEnergyStored(from);
 	}
 
 	@Override
 	public int getMaxEnergyStored(ForgeDirection from) {
-		return energyStorage.getMaxEnergyStored();
+		return energyManager.getMaxEnergyStored(from);
 	}
 
 	@Override
 	public boolean canConnectEnergy(ForgeDirection from) {
-		return true;
+		return energyManager.canConnectEnergy(from);
 	}
 }

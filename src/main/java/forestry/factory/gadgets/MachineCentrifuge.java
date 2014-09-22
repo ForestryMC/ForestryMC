@@ -143,6 +143,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 	private int timePerItem;
 
 	public MachineCentrifuge() {
+		super(400, 800, 40, Defaults.MACHINE_MAX_ENERGY);
 		setHints(Config.hints.get("centrifuge"));
 	}
 
@@ -155,11 +156,6 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 	public void openGui(EntityPlayer player, TileBase tile) {
 		player.openGui(ForestryAPI.instance, GuiId.CentrifugeGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
-
-	/*@Override //TODO
-	protected void configurePowerProvider(PowerHandler provider) {
-		provider.configure(40, 80, 4, Defaults.MACHINE_MAX_ENERGY);
-	}*/
 
 	/* LOADING & SAVING */
 	@Override

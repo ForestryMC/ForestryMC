@@ -157,7 +157,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	private int fillingTotalTime;
 
 	public MachineBottler() {
-        energyStorage = new EnergyStorage(4000);
+		super(500, 1100, 50, 4000);
 		setHints(Config.hints.get("bottler"));
 		resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 		tankManager = new TankManager(resourceTank);
@@ -172,12 +172,6 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	public void openGui(EntityPlayer player, TileBase tile) {
 		player.openGui(ForestryAPI.instance, GuiId.BottlerGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
-
-
-	/*@Override //TODO
-	protected void configurePowerProvider(PowerHandler provider) {
-		provider.configure(50, 110, 5, 400);
-	}*/
 
 	/* SAVING & LOADING */
 	@Override

@@ -145,6 +145,7 @@ public class MachineMoistener extends TilePowered implements ISpecialInventory, 
 	private ItemStack pendingProduct;
 
 	public MachineMoistener() {
+		super(0, 0, 0, 0);
 		setHints(Config.hints.get("moistener"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
 		tankManager = new TankManager(resourceTank);

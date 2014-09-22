@@ -210,10 +210,10 @@ public class Defaults {
 	public static final int PROCESSOR_TANK_CAPACITY = 10 * BUCKET_VOLUME;
 
 	public static final int MACHINE_LATENCY = 1000;
-	public static final int MACHINE_MIN_ENERGY_RECEIVED = 5;
-	public static final int MACHINE_MAX_ENERGY_RECEIVED = 40;
-	public static final int MACHINE_MIN_ACTIVATION_ENERGY = 15;
-	public static final int MACHINE_MAX_ENERGY = 500;
+	public static final int MACHINE_MIN_ENERGY_RECEIVED = 50;
+	public static final int MACHINE_MAX_ENERGY_RECEIVED = 400;
+	public static final int MACHINE_MIN_ACTIVATION_ENERGY = 150;
+	public static final int MACHINE_MAX_ENERGY = 5000;
 
 	public static final int RAINMAKER_RAIN_DURATION_IODINE = 10000;
 

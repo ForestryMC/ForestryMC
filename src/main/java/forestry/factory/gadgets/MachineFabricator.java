@@ -242,7 +242,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 	private FluidStack pendingSmelt;
 
 	public MachineFabricator() {
-		super(3300, 50, 1100);
+		super(500, 1100, 50, 3300);
 		Fluid liquidGlass = FluidRegistry.getFluid(Defaults.LIQUID_GLASS);
 		moltenTank = new FilteredTank(2 * Defaults.BUCKET_VOLUME, liquidGlass);
 		moltenTank.tankMode = StandardTank.TankMode.INTERNAL;
