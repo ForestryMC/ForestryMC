@@ -35,7 +35,6 @@ import forestry.core.fluids.tanks.StandardTank;
 public abstract class TilePowered extends TileBase implements IRenderableMachine, IEnergySink, IEnergyHandler {
 
 	public static int WORK_CYCLES = 4;
-    public static int ENERGY_PER_USE = 150; //Temporary
 
 	@Override
 	public PacketPayload getPacketPayload() {
@@ -72,11 +71,26 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 		}
 	}
     protected EnergyStorage energyStorage;
+	public int energyPerUse;
 
-    public TilePowered() {
-        energyStorage = new EnergyStorage(5000);
-        //energyStorage.setCapacity(Math.round(energyStorage.getMaxEnergyStored() * GameMode.getGameMode().getFloatSetting("energy.demand.modifier")));
+	public TilePowered() {
+		this(5000, 150);
     }
+
+	public TilePowered(int defaultCapacity, int defaultEnergyPerUse) {
+		this(defaultCapacity, defaultEnergyPerUse, defaultCapacity);
+	}
+
+	public TilePowered(int defaultCapacity, int defaultEnergyPerUse, int defaultMaxTransfer) {
+		this.energyPerUse = scaleEnergyByDifficulty(defaultEnergyPerUse);
+		int capacity = scaleEnergyByDifficulty(defaultCapacity);
+		int maxTransfer = scaleEnergyByDifficulty(defaultMaxTransfer);
+		energyStorage = new EnergyStorage(capacity, maxTransfer);
+	}
+
+	private static int scaleEnergyByDifficulty(int energyPerUse) {
+		return Math.round(energyPerUse * GameMode.getGameMode().getFloatSetting("energy.demand.modifier"));
+	}
 
 	/*private final PowerHandler powerHandler;
 
@@ -119,7 +133,7 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		if (worldObj.isRemote || !Proxies.common.isSimulating(worldObj))
+		if (!Proxies.common.isSimulating(worldObj))
 			return;
 
 		if (!ic2registered) {
@@ -127,8 +141,8 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 			ic2registered = true;
 		}
 
-        if (workCounter < WORK_CYCLES && energyStorage.getEnergyStored() >= ENERGY_PER_USE) {
-            energyStorage.modifyEnergyStored(-ENERGY_PER_USE); //TODO Make it continuous usage while doing work
+        if (workCounter < WORK_CYCLES && energyStorage.getEnergyStored() >= energyPerUse) {
+            energyStorage.modifyEnergyStored(-energyPerUse); //TODO Make it continuous usage while doing work
             workCounter++;
         }
 
