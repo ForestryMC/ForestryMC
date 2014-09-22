@@ -24,11 +24,8 @@ import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 import forestry.core.TemperatureState;
 import forestry.core.config.Defaults;
-import forestry.core.interfaces.IPowerHandler;
 import forestry.core.network.PacketPayload;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
-import forestry.plugins.PluginBuildCraft;
 
 public abstract class Engine extends TileBase implements IEnergyHandler {
 
@@ -131,11 +128,6 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 
 	@Override
 	public void updateServerSide() {
-        //doWork appears to be called before updateServerSide, so it's contents have been moved to here.
-        if(isActive) {
-            energyStorage.modifyEnergyStored(energyStorage.getMaxReceive());
-        }
-
 		TemperatureState energyState = getTemperatureState();
 		if (energyState == TemperatureState.MELTING && heat > 0)
 			forceCooldown = true;
@@ -143,9 +135,6 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 			forceCooldown = false;
 
 		// Determine targeted tile
-		/*Position posTarget = new Position(xCoord, yCoord, zCoord, this.getOrientation());
-		posTarget.moveForwards(1.0);
-		TileEntity tile = worldObj.getTileEntity((int) posTarget.x, (int) posTarget.y, (int) posTarget.z);*/
         TileEntity tile = worldObj.getTileEntity(xCoord + getOrientation().offsetX, yCoord + getOrientation().offsetY, zCoord + getOrientation().offsetZ);
 
 		float newPistonSpeed = getPistonSpeed();
@@ -163,11 +152,11 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 
 				if (BlockUtil.isRFTile(getOrientation().getOpposite(), tile)) {
 					IEnergyHandler receptor = (IEnergyHandler) tile;
-					int extractedEnergy = extractEnergy(getOrientation(), energyStorage.getMaxExtract(), false); //TODO What should I pass in here?
-					if (extractedEnergy > 0)
-						//PluginBuildCraft.instance.invokeReceiveEnergyMethod(PowerHandler.Type.ENGINE, receptor.getPowerReceiver(getOrientation().getOpposite()), extractedEnergy, getOrientation().getOpposite());
-                        receptor.receiveEnergy(getOrientation().getOpposite(), extractedEnergy, false);
-					// receptor.getPowerProvider().receiveEnergy(extractedEnergy);
+					int extractable = extractEnergy(getOrientation(), energyStorage.getMaxExtract(), true);
+					if (extractable > 0) {
+						int extracted = receptor.receiveEnergy(getOrientation().getOpposite(), extractable, false);
+						extractEnergy(getOrientation(), extracted, false);
+					}
 				}
 
 			} else if (progress >= 1) {
@@ -176,8 +165,7 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 			}
 
 		} else if (canPowerTo(tile)) { // If we are not already running, check if
-			IEnergyHandler receptor = (IEnergyHandler) tile;
-			if (extractEnergy(getOrientation(), energyStorage.getMaxExtract(), true) > 0) {
+			if (extractEnergy(getOrientation(), 1, true) > 0) {
 				stagePiston = 1; // If we can transfer energy, start running
 				setActive(true);
 			} else
