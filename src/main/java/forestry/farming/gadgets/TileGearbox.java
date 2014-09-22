@@ -10,37 +10,24 @@
  ******************************************************************************/
 package forestry.farming.gadgets;
 
+import cofh.api.energy.IEnergyHandler;
+
+import forestry.energy.EnergyManager;
 import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import buildcraft.api.power.PowerHandler;
-import buildcraft.api.power.PowerHandler.PowerReceiver;
-import buildcraft.api.power.PowerHandler.Type;
 
 import forestry.api.core.ITileStructure;
 import forestry.api.farming.IFarmHousing;
-import forestry.core.GameMode;
-import forestry.core.interfaces.IPowerHandler;
+import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileGearbox extends TileFarm implements IPowerHandler {
+public class TileGearbox extends TileFarm implements IEnergyHandler {
 
 	public static int WORK_CYCLES = 4;
-	public static int MIN_ENERGY_RECEIVED = 5;
-	public static int MAX_ENERGY_RECEIVED = 20;
-	public static int MIN_ACTIVATION_ENERGY = 5;
-	public static int MAX_ENERGY = 1000;
 	private int activationDelay = 0;
 	private int previousDelays = 0;
 	private int workCounter;
 
 	public TileGearbox() {
-		powerProvider = new PowerHandler(this, Type.MACHINE);
-		powerProvider.configurePowerPerdition(0, 100);
-		powerProvider.configure(MIN_ENERGY_RECEIVED,
-				Math.round(MAX_ENERGY_RECEIVED * GameMode.getGameMode().getFloatSetting("energy.demand.modifier")),
-				Math.round(MIN_ACTIVATION_ENERGY * GameMode.getGameMode().getFloatSetting("energy.demand.modifier")),
-				Math.round(MAX_ENERGY * GameMode.getGameMode().getFloatSetting("energy.demand.modifier")));
+		energyManager = new EnergyManager(50, 200, 50, 10000);
 
 		fixedType = TYPE_GEARS;
 	}
@@ -58,7 +45,7 @@ public class TileGearbox extends TileFarm implements IPowerHandler {
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
-		powerProvider.readFromNBT(nbttagcompound);
+		energyManager.readFromNBT(nbttagcompound);
 
 		activationDelay = nbttagcompound.getInteger("ActivationDelay");
 		previousDelays = nbttagcompound.getInteger("PrevDelays");
@@ -67,24 +54,14 @@ public class TileGearbox extends TileFarm implements IPowerHandler {
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
-		powerProvider.writeToNBT(nbttagcompound);
+		energyManager.writeToNBT(nbttagcompound);
 
 		nbttagcompound.setInteger("ActivationDelay", activationDelay);
 		nbttagcompound.setInteger("PrevDelays", previousDelays);
 	}
 
-	/* IPOWERRECEPTOR */
-	PowerHandler powerProvider;
-
-	@Override
-	public PowerReceiver getPowerReceiver(ForgeDirection side) {
-		return powerProvider.getPowerReceiver();
-	}
-
-	@Override
-	public PowerHandler getPowerHandler() {
-		return powerProvider;
-	}
+	/* POWER */
+	EnergyManager energyManager;
 
 	@Override
 	protected void updateServerSide() {
@@ -93,6 +70,11 @@ public class TileGearbox extends TileFarm implements IPowerHandler {
 		if (activationDelay > 0) {
 			activationDelay--;
 			return;
+		}
+
+		// Hard limit to 4 cycles / second.
+		if (workCounter < WORK_CYCLES && energyManager.consumeEnergyToDoWork()) {
+			workCounter++;
 		}
 
 		if (workCounter >= WORK_CYCLES && worldObj.getTotalWorldTime() % 5 == 0) {
@@ -111,12 +93,29 @@ public class TileGearbox extends TileFarm implements IPowerHandler {
 		}
 	}
 
+	/* IEnergyHandler */
 	@Override
-	public void doWork(PowerHandler workProvider) {
-		// Hard limit to 4 cycles / second.
-		if (workCounter < WORK_CYCLES) {
-			powerProvider.useEnergy(MIN_ACTIVATION_ENERGY, MIN_ACTIVATION_ENERGY, true);
-			workCounter++;
-		}
+	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+		return energyManager.receiveEnergy(from, maxReceive, simulate);
+	}
+
+	@Override
+	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+		return energyManager.extractEnergy(from, maxExtract, simulate);
+	}
+
+	@Override
+	public int getEnergyStored(ForgeDirection from) {
+		return energyManager.getEnergyStored(from);
+	}
+
+	@Override
+	public int getMaxEnergyStored(ForgeDirection from) {
+		return energyManager.getMaxEnergyStored(from);
+	}
+
+	@Override
+	public boolean canConnectEnergy(ForgeDirection from) {
+		return energyManager.canConnectEnergy(from);
 	}
 }
