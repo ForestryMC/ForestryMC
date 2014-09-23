@@ -179,32 +179,31 @@ public class PluginManager {
 	private static void loadPlugin(ForestryPlugin plugin) {
 		Proxies.log.fine("Loading Plugin: {0}", plugin);
 
-		ForestryPlugin nplugin = (ForestryPlugin) plugin;
-		IGuiHandler guiHandler = nplugin.getGuiHandler();
+		IGuiHandler guiHandler = plugin.getGuiHandler();
 		if (guiHandler != null)
 			guiHandlers.add(guiHandler);
 
-		IPacketHandler packetHandler = nplugin.getPacketHandler();
+		IPacketHandler packetHandler = plugin.getPacketHandler();
 		if (packetHandler != null)
 			packetHandlers.add(packetHandler);
 
-		IPickupHandler pickupHandler = nplugin.getPickupHandler();
+		IPickupHandler pickupHandler = plugin.getPickupHandler();
 		if (pickupHandler != null)
 			pickupHandlers.add(pickupHandler);
 
-		ISaveEventHandler saveHandler = nplugin.getSaveEventHandler();
+		ISaveEventHandler saveHandler = plugin.getSaveEventHandler();
 		if (saveHandler != null)
 			saveEventHandlers.add(saveHandler);
 
-		IResupplyHandler resupplyHandler = nplugin.getResupplyHandler();
+		IResupplyHandler resupplyHandler = plugin.getResupplyHandler();
 		if (resupplyHandler != null)
 			resupplyHandlers.add(resupplyHandler);
 
-		IOreDictionaryHandler dictionaryHandler = nplugin.getDictionaryHandler();
+		IOreDictionaryHandler dictionaryHandler = plugin.getDictionaryHandler();
 		if (dictionaryHandler != null)
 			dictionaryHandlers.add(dictionaryHandler);
 
-		IFuelHandler fuelHandler = nplugin.getFuelHandler();
+		IFuelHandler fuelHandler = plugin.getFuelHandler();
 		if (fuelHandler != null)
 			GameRegistry.registerFuelHandler((fuelHandler));
 	}

@@ -14,6 +14,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.proxy.Proxies;
+import forestry.plugins.PluginManager;
+import forestry.plugins.PluginManager.Stage;
+import java.util.EnumSet;
 import net.minecraftforge.oredict.OreDictionary;
 
 /**
@@ -248,6 +251,8 @@ public enum ForestryItem {
 	private Item item;
 
 	public void registerItem(Item item, String name) {
+		if (!EnumSet.of(Stage.PRE_INIT, Stage.INIT).contains(PluginManager.getStage()))
+			throw new RuntimeException("Tried to register Item outside of Pre-Init or Init");
 		this.item = item;
 		item.setUnlocalizedName("for." + name);
 		Proxies.common.registerItem(item);
