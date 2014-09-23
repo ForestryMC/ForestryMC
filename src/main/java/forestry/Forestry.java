@@ -53,12 +53,9 @@ import net.minecraft.item.Item;
 		version = Version.VERSION,
 		dependencies = "required-after:Forge@[10.13.0.1207,);"
 		+ "after:Buildcraft|Core;"
-		+ "after:Buildcraft|Transport;"
 		+ "after:ExtrabiomesXL;"
 		+ "after:BiomesOPlenty;"
-		+ "after:IC2;"
-		+ "after:Natura;"
-		+ "after:mod_EE")
+		+ "after:IC2")
 //, certificateFingerprint = Version.FINGERPRINT)
 public class Forestry {
 

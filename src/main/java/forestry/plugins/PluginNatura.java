@@ -26,11 +26,6 @@ import forestry.core.config.Defaults;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.LiquidHelper;
 
-@Plugin(pluginID = "Natura",
-		name = "Natura",
-		author = "SirSengir",
-		url = Defaults.URL,
-		description = "Adds support for Natura seeds, saplings, and berries.")
 public class PluginNatura extends ForestryPlugin {
 
 	private static final String NATURA = "Natura";

@@ -10,6 +10,19 @@
  ******************************************************************************/
 package forestry.energy.gadgets;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
+import net.minecraftforge.fluids.FluidStack;
+
+import ic2.api.energy.prefab.BasicSource;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.fuels.FuelManager;
@@ -17,8 +30,9 @@ import forestry.api.fuels.GeneratorFuel;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
-import forestry.core.fluids.TankManager;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.fluids.tanks.FilteredTank;
+import forestry.core.fluids.TankManager;
 import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.interfaces.IRenderableMachine;
@@ -30,18 +44,8 @@ import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginIC2;
-import forestry.plugins.PluginManager;
-import ic2.api.energy.prefab.BasicSource;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 public class MachineGenerator extends TileBase implements ISpecialInventory, ILiquidTankContainer, IRenderableMachine {
 
@@ -63,7 +67,7 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, FuelManager.generatorFuel.keySet());
 		tankManager = new TankManager(resourceTank);
 
-		if (PluginManager.isModuleLoaded(PluginIC2.class)) {
+		if (PluginIC2.instance.isAvailable()) {
 			ic2EnergySource = new BasicSource(this, maxEnergy, 1);
 		}
 	}

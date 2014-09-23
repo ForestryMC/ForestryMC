@@ -10,7 +10,20 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
 import buildcraft.api.gates.ITrigger;
+
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ISpecialInventory;
@@ -27,19 +40,7 @@ import forestry.plugins.PluginApiculture;
 import forestry.plugins.PluginCore;
 import forestry.plugins.PluginEnergy;
 import forestry.plugins.PluginFactory;
-import forestry.plugins.PluginIC2;
 import forestry.plugins.PluginMail;
-import forestry.plugins.PluginManager;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.HashMap;
-import java.util.LinkedList;
 
 public abstract class TileMachine extends TileForestry implements ISpecialInventory, IClimatised, IHintSource {
 
@@ -152,8 +153,7 @@ public abstract class TileMachine extends TileForestry implements ISpecialInvent
 		machineMap.put(Defaults.ID_PACKAGE_MACHINE_SQUEEZER, PluginFactory.definitionSqueezer);
 		machineMap.put(Defaults.ID_PACKAGE_MACHINE_STILL, PluginFactory.definitionStill);
 		machineMap.put(Defaults.ID_PACKAGE_MACHINE_APIARY, PluginApiculture.definitionApiary);
-		if (PluginManager.isModuleLoaded(PluginIC2.class))
-			machineMap.put(Defaults.ID_PACKAGE_MACHINE_GENERATOR, PluginIC2.definitionGenerator);
+		machineMap.put(4, PluginEnergy.definitionGenerator);
 		definitionMap.put(ForestryBlock.factoryTESR.block(), machineMap);
 
 		HashMap<Integer, MachineDefinition> millMap = new HashMap<Integer, MachineDefinition>();
@@ -168,8 +168,7 @@ public abstract class TileMachine extends TileForestry implements ISpecialInvent
 		HashMap<Integer, MachineDefinition> engineMap = new HashMap<Integer, MachineDefinition>();
 		engineMap.put(0, PluginEnergy.definitionEngineBronze);
 		engineMap.put(1, PluginEnergy.definitionEngineCopper);
-		if (PluginManager.isModuleLoaded(PluginIC2.class))
-			engineMap.put(2, PluginIC2.definitionEngineTin);
+		engineMap.put(2, PluginEnergy.definitionEngineTin);
 		definitionMap.put(ForestryBlock.engine.block(), engineMap);
 
 	}
