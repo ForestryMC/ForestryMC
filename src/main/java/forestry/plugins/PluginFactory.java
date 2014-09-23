@@ -22,7 +22,6 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.GameMode;
-import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
@@ -264,9 +263,6 @@ public class PluginFactory extends ForestryPlugin {
 			" X ", "#X#", "XXX", '#', Items.redstone, 'X', Blocks.obsidian});
 		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 7), new Object[]{
 			" X ", "#X#", "XXX", '#', Items.redstone, 'X', Items.blaze_powder});
-		if (PluginIC2.rubber != null)
-			RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 8),
-					new Object[]{" X ", "#X#", "XXX", '#', Items.redstone, 'X', PluginIC2.rubber});
 		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 9), new Object[]{
 			" X ", "#X#", "XXX", '#', Items.redstone, 'X', Items.emerald});
 		RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 10),

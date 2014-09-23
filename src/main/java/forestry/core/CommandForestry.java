@@ -13,6 +13,7 @@ package forestry.core;
 import java.util.List;
 
 import forestry.core.utils.StringUtil;
+import forestry.plugins.PluginModule;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -96,7 +97,7 @@ public class CommandForestry extends CommandMC {
 
 		String pluginList = "";
 
-		for (PluginManager.Module pluginModule : PluginManager.getLoadedModules()) {
+		for (PluginModule pluginModule : PluginManager.getLoadedModules()) {
 			if (!pluginList.isEmpty())
 				pluginList += ", ";
 			pluginList += makeListEntry(pluginModule.instance());
@@ -111,7 +112,7 @@ public class CommandForestry extends CommandMC {
 			throw new WrongUsageException("/" + getCommandName() + " plugins info <plugin-name>");
 
 		ForestryPlugin found = null;
-		for (PluginManager.Module pluginModule : PluginManager.getLoadedModules()) {
+		for (PluginModule pluginModule : PluginManager.getLoadedModules()) {
 			Plugin info = pluginModule.instance().getClass().getAnnotation(Plugin.class);
 			if (info == null)
 				continue;

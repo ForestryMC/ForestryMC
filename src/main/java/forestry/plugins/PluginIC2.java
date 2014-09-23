@@ -10,37 +10,54 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameData;
-
-import ic2.api.item.IC2Items;
-import ic2.api.recipe.RecipeInputItemStack;
-import ic2.api.recipe.Recipes;
-
+import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.ICircuitLayout;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
 import forestry.core.GameMode;
+import forestry.core.circuits.Circuit;
 import forestry.core.config.Config;
 import forestry.core.config.Configuration;
 import forestry.core.config.Defaults;
+import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
+import forestry.core.gadgets.BlockBase;
+import forestry.core.gadgets.MachineDefinition;
 import forestry.core.items.ItemCrated;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.RecipeUtil;
+import forestry.core.utils.ShapedRecipeCustom;
 import forestry.core.utils.StackUtils;
+import forestry.energy.gadgets.EngineDefinition;
+import forestry.energy.gadgets.EngineTin;
+import forestry.energy.gadgets.MachineGenerator;
+import forestry.farming.circuits.CircuitFarmLogic;
+import forestry.farming.logic.FarmLogicRubber;
+import ic2.api.item.IC2Items;
+import ic2.api.recipe.RecipeInputItemStack;
+import ic2.api.recipe.Recipes;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+
+import java.util.HashSet;
 
 @Plugin(pluginID = "IC2", name = "IndustrialCraft2", author = "SirSengir", url = Defaults.URL, description = "Compatibility plugin for IC2.")
 public class PluginIC2 extends ForestryPlugin {
 
 	public static PluginIC2 instance;
 	public static Configuration config;
+
 	// Ignore IC2?
 	public static boolean ignore;
+
+	// Forestry Stuff
+	public static MachineDefinition definitionGenerator;
+	public static MachineDefinition definitionEngineTin;
+
 	// IC2 stuff
 	public static ItemStack plantBall;
 	public static ItemStack compressedPlantBall;
@@ -75,6 +92,41 @@ public class PluginIC2 extends ForestryPlugin {
 	}
 
 	@Override
+	public HashSet<Class<? extends ForestryPlugin>> getDependencies() {
+		HashSet<Class<? extends ForestryPlugin>> dependencies = super.getDependencies();
+		dependencies.add(PluginFactory.class);
+		dependencies.add(PluginFarming.class);
+		dependencies.add(PluginEnergy.class);
+
+		return dependencies;
+	}
+
+	@Override
+	public void preInit() {
+
+		definitionEngineTin = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Defaults.DEFINITION_ENGINETIN_META, "forestry.EngineTin", EngineTin.class,
+				PluginEnergy.proxy.getRenderDefaultEngine(Defaults.TEXTURE_PATH_BLOCKS + "/engine_tin_"), ShapedRecipeCustom.createShapedRecipe(
+				ForestryBlock.engine.getItemStack(1, Defaults.DEFINITION_ENGINETIN_META),
+				"###",
+				" X ",
+				"YVY",
+				'#', "ingotTin",
+				'X', Blocks.glass,
+				'Y', "gearTin",
+				'V', Blocks.piston)));
+
+		definitionGenerator = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_GENERATOR_META, "forestry.Generator", MachineGenerator.class,
+				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/generator_"), ShapedRecipeCustom.createShapedRecipe(
+				ForestryBlock.engine.getItemStack(1, Defaults.DEFINITION_GENERATOR_META),
+				"X#X",
+				"XYX",
+				"X#X",
+				'#', Blocks.glass,
+				'X', Items.gold_ingot,
+				'Y', ForestryItem.sturdyCasing)));
+	}
+
+	@Override
 	public void doInit() {
 		config = Config.config;
 
@@ -82,9 +134,29 @@ public class PluginIC2 extends ForestryPlugin {
 		initRubberChain();
 		initFermentation();
 
+		definitionEngineTin.register();
+		definitionGenerator.register();
+
+		if (resin != null && rubberwood != null) {
+			Circuit.farmRubberManual = new CircuitFarmLogic("manualRubber", FarmLogicRubber.class);
+		}
+
 		// Remove some items from the recycler
 		Recipes.recyclerBlacklist.add(new RecipeInputItemStack(ForestryItem.beeQueenGE.getItemStack()));
 		Recipes.recyclerBlacklist.add(new RecipeInputItemStack(ForestryItem.beePrincessGE.getItemStack()));
+	}
+
+	@Override
+	public void registerRecipes() {
+		if (rubber != null) {
+			RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 8),
+					new Object[]{" X ", "#X#", "XXX", '#', Items.redstone, 'X', rubber});
+		}
+
+		if (Circuit.farmRubberManual != null) {
+			ICircuitLayout layoutManual = ChipsetManager.circuitRegistry.getLayout("forestry.farms.manual");
+			ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 8), Circuit.farmRubberManual);
+		}
 	}
 
 	@Override

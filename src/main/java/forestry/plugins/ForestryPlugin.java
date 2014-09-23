@@ -11,20 +11,18 @@
 package forestry.plugins;
 
 import cpw.mods.fml.common.IFuelHandler;
-import java.util.Random;
-
-import net.minecraft.command.ICommand;
-import net.minecraft.world.World;
-
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.network.IGuiHandler;
-
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPacketHandler;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.IResupplyHandler;
 import forestry.core.interfaces.ISaveEventHandler;
-import java.util.EnumSet;
+import net.minecraft.command.ICommand;
+import net.minecraft.world.World;
+
+import java.util.HashSet;
+import java.util.Random;
 
 public abstract class ForestryPlugin {
 
@@ -36,8 +34,11 @@ public abstract class ForestryPlugin {
 		return "";
 	}
 
-	public EnumSet<PluginManager.Module> getDependancies() {
-		return EnumSet.of(PluginManager.Module.CORE);
+	public HashSet<Class<? extends ForestryPlugin>> getDependencies() {
+		HashSet<Class<? extends ForestryPlugin>> dependencies = new HashSet<Class<? extends ForestryPlugin>>();
+		dependencies.add(PluginCore.class);
+
+		return dependencies;
 	}
 
 	protected void preInit() {

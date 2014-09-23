@@ -10,15 +10,8 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-
-import net.minecraftforge.fluids.FluidStack;
-
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.network.IGuiHandler;
-
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.fuels.FuelManager;
@@ -26,7 +19,6 @@ import forestry.api.fuels.GeneratorFuel;
 import forestry.core.GameMode;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitId;
-import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
@@ -50,17 +42,19 @@ import forestry.energy.gadgets.EngineDefinition;
 import forestry.energy.gadgets.EngineTin;
 import forestry.energy.gadgets.MachineGenerator;
 import forestry.energy.proxy.ProxyEnergy;
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraftforge.fluids.FluidStack;
 
 @Plugin(pluginID = "Energy", name = "Energy", author = "SirSengir", url = Defaults.URL, description = "Adds several engines compatible with BuildCraft 3 as well as a generator for IC2.")
 public class PluginEnergy extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.energy.proxy.ClientProxyEnergy", serverSide = "forestry.energy.proxy.ProxyEnergy")
 	public static ProxyEnergy proxy;
-	public static MachineDefinition definitionEngineTin;
 	public static MachineDefinition definitionEngineCopper;
 	public static MachineDefinition definitionEngineBronze;
 	public static MachineDefinition definitionEngineClockwork;
-	public static MachineDefinition definitionGenerator;
 
 	@Override
 	public void preInit() {
@@ -68,16 +62,6 @@ public class PluginEnergy extends ForestryPlugin {
 
 		ForestryBlock.engine.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "engine");
 
-		definitionEngineTin = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Defaults.DEFINITION_ENGINETIN_META, "forestry.EngineTin", EngineTin.class,
-				PluginEnergy.proxy.getRenderDefaultEngine(Defaults.TEXTURE_PATH_BLOCKS + "/engine_tin_"), ShapedRecipeCustom.createShapedRecipe(
-						ForestryBlock.engine.getItemStack(1, Defaults.DEFINITION_ENGINETIN_META),
-						"###",
-						" X ",
-						"YVY",
-						'#', "ingotTin",
-						'X', Blocks.glass,
-						'Y', "gearTin",
-						'V', Blocks.piston)));
 		definitionEngineCopper = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Defaults.DEFINITION_ENGINECOPPER_META, "forestry.EngineCopper", EngineCopper.class,
 				PluginEnergy.proxy.getRenderDefaultEngine(Defaults.TEXTURE_PATH_BLOCKS + "/engine_copper_"), ShapedRecipeCustom.createShapedRecipe(
 						ForestryBlock.engine.getItemStack(1, Defaults.DEFINITION_ENGINECOPPER_META),
@@ -98,16 +82,6 @@ public class PluginEnergy extends ForestryPlugin {
 						'X', Blocks.glass,
 						'Y', "gearBronze",
 						'V', Blocks.piston)));
-
-		definitionGenerator = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_GENERATOR_META, "forestry.Generator", MachineGenerator.class,
-				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/generator_"), ShapedRecipeCustom.createShapedRecipe(
-						ForestryBlock.engine.getItemStack(1, Defaults.DEFINITION_GENERATOR_META),
-						"X#X",
-						"XYX",
-						"X#X",
-						'#', Blocks.glass,
-						'X', Items.gold_ingot,
-						'Y', ForestryItem.sturdyCasing)));
 
 		ShapedRecipeCustom clockworkRecipe = null;
 		if (GameMode.getGameMode().getBooleanSetting("energy.engine.clockwork"))
@@ -136,10 +110,8 @@ public class PluginEnergy extends ForestryPlugin {
 	public void doInit() {
 		super.doInit();
 
-		definitionEngineTin.register();
 		definitionEngineCopper.register();
 		definitionEngineBronze.register();
-		definitionGenerator.register();
 		definitionEngineClockwork.register();
 
 		FluidStack ethanol = LiquidHelper.getLiquid(Defaults.LIQUID_ETHANOL, 1);

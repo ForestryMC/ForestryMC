@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.energy.gadgets;
 
+import forestry.plugins.PluginManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -63,7 +64,8 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		super(Defaults.ENGINE_TIN_HEAT_MAX, 10000, 400);
 		setHints(Config.hints.get("engine.tin"));
 
-		if (PluginIC2.instance.isAvailable()) ic2EnergySink = new BasicSink(this, euConfig.euStorage, 3);
+		if (PluginManager.isModuleLoaded(PluginIC2.class))
+			ic2EnergySink = new BasicSink(this, euConfig.euStorage, 3);
 	}
 
 	@Override

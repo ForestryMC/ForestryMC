@@ -19,6 +19,8 @@ import forestry.pipes.GuiHandlerPipes;
 import forestry.pipes.network.PacketHandlerPipes;
 import forestry.pipes.proxy.ProxyPipes;
 import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 
 @Plugin(pluginID = "Pipes", name = "Pipes", author = "SirSengir", url = Defaults.URL, description = "Adds the apiarist's pipe for beekeeping if apiculture is enabled and BuildCraft 6 is present.")
 public class PluginPropolisPipe extends ForestryPlugin {
@@ -46,10 +48,11 @@ public class PluginPropolisPipe extends ForestryPlugin {
 	}
 
 	@Override
-	public EnumSet<PluginManager.Module> getDependancies() {
-		EnumSet<PluginManager.Module> deps = super.getDependancies();
-		deps.add(PluginManager.Module.BUILDCRAFT);
-		return deps;
+	public HashSet<Class<? extends ForestryPlugin>> getDependencies() {
+		HashSet<Class<? extends ForestryPlugin>> dependencies = super.getDependencies();
+		dependencies.add(PluginBuildCraft.class);
+
+		return dependencies;
 	}
 
 	@Override
