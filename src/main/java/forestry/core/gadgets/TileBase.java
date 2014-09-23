@@ -18,6 +18,7 @@ import forestry.core.network.IndexInPayload;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Utils;
+import forestry.core.utils.EnumAccess;
 
 public abstract class TileBase extends TileForestry implements IHintSource {
 
@@ -90,7 +91,12 @@ public abstract class TileBase extends TileForestry implements IHintSource {
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return Utils.isUseableByPlayer(player, this, worldObj, xCoord, yCoord, zCoord);
+		if (!Utils.isUseableByPlayer(player, this, worldObj, xCoord, yCoord, zCoord))
+			return false;
+		if (getAccess() == EnumAccess.PRIVATE)
+			return owner.equals(player.getGameProfile());
+
+		return true;
 	}
 
 	public boolean canDrainWithBucket() {
