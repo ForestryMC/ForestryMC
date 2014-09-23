@@ -24,6 +24,7 @@ import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.farming.ICrop;
@@ -80,8 +81,6 @@ public class FarmLogicCocoa extends FarmLogic {
 	@Override
 	public boolean cultivate(int x, int y, int z, ForgeDirection direction, int extent) {
 
-		world = housing.getWorld();
-
 		Vect start = new Vect(x, y, z);
 		if (!lastExtentsCultivation.containsKey(start))
 			lastExtentsCultivation.put(start, 0);
@@ -104,8 +103,6 @@ public class FarmLogicCocoa extends FarmLogic {
 	@Override
 	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
 
-		world = housing.getWorld();
-
 		Collection<ICrop> crops = null;
 
 		Vect start = new Vect(x, y, z);
@@ -125,6 +122,8 @@ public class FarmLogicCocoa extends FarmLogic {
 	}
 
 	private boolean tryPlantingCocoa(Vect position) {
+
+		World world = getWorld();
 
 		Vect current = position;
 		while (isWoodBlock(current) && BlockLog.func_150165_c(getBlockMeta(current)) == 3) {
@@ -155,8 +154,8 @@ public class FarmLogicCocoa extends FarmLogic {
 		Block block = getBlock(position);
 
 		ICrop crop = null;
-		if (!block.isWood(world, position.x, position.y, position.z)) {
-			crop = cocoa.getCropAt(world, position.x, position.y, position.z);
+		if (!block.isWood(getWorld(), position.x, position.y, position.z)) {
+			crop = cocoa.getCropAt(getWorld(), position.x, position.y, position.z);
 			if (crop == null)
 				return crops;
 		}
@@ -179,6 +178,8 @@ public class FarmLogicCocoa extends FarmLogic {
 	}
 
 	private ArrayList<Vect> processHarvestBlock(Stack<ICrop> crops, Collection<Vect> seen, Vect start, Vect position) {
+
+		World world = getWorld();
 
 		ArrayList<Vect> candidates = new ArrayList<Vect>();
 

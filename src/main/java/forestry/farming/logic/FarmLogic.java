@@ -26,7 +26,6 @@ import forestry.core.utils.Vect;
 
 public abstract class FarmLogic implements IFarmLogic {
 
-	World world;
 	IFarmHousing housing;
 
 	boolean isManual;
@@ -40,30 +39,34 @@ public abstract class FarmLogic implements IFarmLogic {
 		return this;
 	}
 
+	protected World getWorld() {
+		return housing.getWorld();
+	}
+
 	@Override
 	public ResourceLocation getSpriteSheet() {
 		return SpriteSheet.ITEMS.getLocation();
 	}
 
 	protected final boolean isAirBlock(Vect position) {
-		return world.isAirBlock(position.x, position.y, position.z);
+		return getWorld().isAirBlock(position.x, position.y, position.z);
 	}
 
 	protected final boolean isWaterBlock(Vect position) {
-		return world.getBlock(position.x, position.y, position.z) == Blocks.water;
+		return getWorld().getBlock(position.x, position.y, position.z) == Blocks.water;
 	}
 
 	protected final boolean isWoodBlock(Vect position) {
 		Block block = getBlock(position);
-		return block.isWood(world, position.x, position.y, position.z);
+		return block.isWood(getWorld(), position.x, position.y, position.z);
 	}
 
 	protected final Block getBlock(Vect position) {
-		return world.getBlock(position.x, position.y, position.z);
+		return getWorld().getBlock(position.x, position.y, position.z);
 	}
 
 	protected final int getBlockMeta(Vect position) {
-		return world.getBlockMetadata(position.x, position.y, position.z);
+		return getWorld().getBlockMetadata(position.x, position.y, position.z);
 	}
 
 	protected final ItemStack getAsItemStack(Vect position) {
@@ -75,7 +78,7 @@ public abstract class FarmLogic implements IFarmLogic {
 	}
 
 	protected final void setBlock(Vect position, Block block, int meta) {
-		world.setBlock(position.x, position.y, position.z, block, meta, Defaults.FLAG_BLOCK_SYNCH);
+		getWorld().setBlock(position.x, position.y, position.z, block, meta, Defaults.FLAG_BLOCK_SYNCH);
 	}
 
 }

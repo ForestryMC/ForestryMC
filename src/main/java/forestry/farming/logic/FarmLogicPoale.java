@@ -21,6 +21,7 @@ import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.farming.Farmables;
@@ -91,8 +92,7 @@ public class FarmLogicPoale extends FarmLogic {
 
 	@Override
 	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
-
-		world = housing.getWorld();
+		World world = getWorld();
 
 		Stack<ICrop> crops = new Stack<ICrop>();
 		for (int i = 0; i < extent; i++) {

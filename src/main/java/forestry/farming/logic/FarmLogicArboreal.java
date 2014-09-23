@@ -27,6 +27,7 @@ import net.minecraft.util.ResourceLocation;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.farming.Farmables;
@@ -92,7 +93,7 @@ public class FarmLogicArboreal extends FarmLogicHomogenous {
 		Vect max = coords.add(offset).add(area);
 
 		AxisAlignedBB harvestBox = AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
-		List<Entity> list = housing.getWorld().getEntitiesWithinAABB(Entity.class, harvestBox);
+		List<Entity> list = getWorld().getEntitiesWithinAABB(Entity.class, harvestBox);
 
 		int i;
 		for (i = 0; i < list.size(); i++) {
@@ -118,8 +119,6 @@ public class FarmLogicArboreal extends FarmLogicHomogenous {
 	@Override
 	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
 
-		world = housing.getWorld();
-
 		Collection<ICrop> crops = null;
 
 		Vect start = new Vect(x, y, z);
@@ -139,6 +138,8 @@ public class FarmLogicArboreal extends FarmLogicHomogenous {
 	}
 
 	private Collection<ICrop> getHarvestBlocks(Vect position) {
+
+		World world = getWorld();
 
 		ArrayList<Vect> seen = new ArrayList<Vect>();
 		Stack<ICrop> crops = new Stack<ICrop>();
@@ -175,6 +176,8 @@ public class FarmLogicArboreal extends FarmLogicHomogenous {
 	protected int yOffset = 0;
 
 	private ArrayList<Vect> processHarvestBlock(IFarmable germling, Stack<ICrop> crops, Collection<Vect> seen, Vect start, Vect position) {
+
+		World world = getWorld();
 
 		ArrayList<Vect> candidates = new ArrayList<Vect>();
 
@@ -238,6 +241,7 @@ public class FarmLogicArboreal extends FarmLogicHomogenous {
 
 	private boolean plantSapling(Vect position) {
 
+		World world = getWorld();
 		for (IFarmable candidate : germlings)
 			if (housing.plantGermling(candidate, world, position.x, position.y, position.z))
 				return true;

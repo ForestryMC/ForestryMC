@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import net.minecraft.item.ItemStack;
 
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.farming.IFarmHousing;
@@ -61,7 +62,6 @@ public abstract class FarmLogicHomogenous extends FarmLogic {
 
 	@Override
 	public boolean cultivate(int x, int y, int z, ForgeDirection direction, int extent) {
-		world = housing.getWorld();
 
 		if (maintainSoil(x, y, z, direction, extent))
 			return true;
@@ -73,6 +73,7 @@ public abstract class FarmLogicHomogenous extends FarmLogic {
 	}
 
 	private boolean maintainSoil(int x, int yGround, int z, ForgeDirection direction, int extent) {
+		World world = getWorld();
 
 		if (!housing.hasResources(resource))
 			return false;

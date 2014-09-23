@@ -21,6 +21,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.farming.ICrop;
@@ -96,7 +97,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(x, y, z, direction, i);
-			if (!isAirBlock(position) && !Utils.isReplaceableBlock(world, position.x, position.y, position.z))
+			if (!isAirBlock(position) && !Utils.isReplaceableBlock(getWorld(), position.x, position.y, position.z))
 				continue;
 
 			ItemStack below = getAsItemStack(position.add(new Vect(0, -1, 0)));
@@ -112,6 +113,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 	}
 
 	private boolean trySetCrop(Vect position) {
+		World world = getWorld();
 
 		for (IFarmable candidate : seeds)
 			if (housing.plantGermling(candidate, world, position.x, position.y, position.z))
@@ -122,8 +124,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 
 	@Override
 	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
-
-		world = housing.getWorld();
+		World world = getWorld();
 
 		Stack<ICrop> crops = new Stack<ICrop>();
 		for (int i = 0; i < extent; i++) {
