@@ -86,6 +86,8 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	}
 
 	public AlleleBeeSpecies addProduct(ItemStack product, int chance) {
+		if (product == null || product.getItem() == null)
+			throw new IllegalArgumentException("Tried to add null product");
 		this.products.put(product, chance);
 		return this;
 	}

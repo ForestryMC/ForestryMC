@@ -247,9 +247,6 @@ public class PluginApiculture extends ForestryPlugin {
 		// Add triggers
 		triggerNoFrames = new TriggerNoFrames();
 
-		// Create bee alleles
-		createAlleles();
-
 		// Register village components with the Structure registry.
 		VillageHandlerApiculture.registerVillageComponents();
 	}
@@ -283,6 +280,7 @@ public class PluginApiculture extends ForestryPlugin {
 
 		apicultureConfig.save();
 
+		createAlleles();
 		createMutations();
 		registerBeehiveDrops();
 
