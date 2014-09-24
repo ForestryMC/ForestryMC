@@ -16,7 +16,7 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
-import forestry.arboriculture.gadgets.BlockLeaves;
+import forestry.arboriculture.gadgets.ForestryBlockLeaves;
 import forestry.arboriculture.gadgets.TileLeaves;
 import forestry.core.render.OverlayRenderingHandler;
 import forestry.plugins.PluginArboriculture;
@@ -37,7 +37,7 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler {
 		renderer.renderStandardBlock(block, x, y, z);
 
 		// Render overlay for fruit leaves.
-		TileLeaves tile = BlockLeaves.getLeafTile(world, x, y, z);
+		TileLeaves tile = ForestryBlockLeaves.getLeafTile(world, x, y, z);
 		IIcon fruitIcon = null;
 		int fruitColor = 0xffffff;
 		if (tile != null) {

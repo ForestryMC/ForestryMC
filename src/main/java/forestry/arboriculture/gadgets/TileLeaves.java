@@ -17,6 +17,7 @@ import java.util.EnumSet;
 
 import com.mojang.authlib.GameProfile;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -307,6 +308,15 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		}
 
 		worldObj.func_147479_m(xCoord, yCoord, zCoord);
+	}
+
+	/**
+	 * Called from Chunk.setBlockIDWithMetadata, determines if this tile entity should be re-created when the ID, or Metadata changes.
+	 * Use with caution as this will leave straggler TileEntities, or create conflicts with other TileEntities if not used properly.
+	 **/
+	@Override
+	public boolean shouldRefresh(Block oldBlock, Block newBlock, int oldMeta, int newMeta, World world, int x, int y, int z) {
+		return false;
 	}
 
 	/* IFRUITBEARER */

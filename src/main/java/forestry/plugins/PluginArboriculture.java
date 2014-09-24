@@ -59,7 +59,6 @@ import forestry.arboriculture.gadgets.BlockArbFence;
 import forestry.arboriculture.gadgets.BlockArbFence.FenceCat;
 import forestry.arboriculture.gadgets.BlockArbStairs;
 import forestry.arboriculture.gadgets.BlockFruitPod;
-import forestry.arboriculture.gadgets.BlockLeaves;
 import forestry.arboriculture.gadgets.BlockLog;
 import forestry.arboriculture.gadgets.BlockLog.LogCat;
 import forestry.arboriculture.gadgets.BlockPlanks;
@@ -67,6 +66,7 @@ import forestry.arboriculture.gadgets.BlockPlanks.PlankCat;
 import forestry.arboriculture.gadgets.BlockSapling;
 import forestry.arboriculture.gadgets.BlockSlab;
 import forestry.arboriculture.gadgets.BlockSlab.SlabCat;
+import forestry.arboriculture.gadgets.ForestryBlockLeaves;
 import forestry.arboriculture.gadgets.TileArboristChest;
 import forestry.arboriculture.gadgets.TileFruitPod;
 import forestry.arboriculture.gadgets.TileLeaves;
@@ -222,7 +222,7 @@ public class PluginArboriculture extends ForestryPlugin {
 		ForestryBlock.saplingGE.registerBlock(new BlockSapling(), ItemForestryBlock.class, "saplingGE");
 
 		// Leaves
-		ForestryBlock.leaves.registerBlock(new BlockLeaves(), ItemLeavesBlock.class, "leaves");
+		ForestryBlock.leaves.registerBlock(new ForestryBlockLeaves(), ItemLeavesBlock.class, "leaves");
 
 		// Pods
 		ForestryBlock.pods.registerBlock(new BlockFruitPod(), ItemForestryBlock.class, "pods");
