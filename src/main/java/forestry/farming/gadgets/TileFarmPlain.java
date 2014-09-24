@@ -335,7 +335,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			ForgeDirection direction = entry.getKey();
 			for (FarmTarget target : entry.getValue()) {
 
-				int yOffset = 0;
+				int yOffset;
 				for (yOffset = 2; yOffset > -3; yOffset--) {
 					Vect position = new Vect(target.getStart().x, target.getStart().y + yOffset, target.getStart().z);
 					if (StructureLogicFarm.bricks.contains(worldObj.getBlock(position.x, position.y, position.z)))
@@ -343,7 +343,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 				}
 				target.setYOffset(yOffset + 1);
 
-				int extent = 0;
+				int extent;
 				// Determine extent limit
 				int limit = allowedExtent;
 				if (target.getLimit() > 0)

@@ -32,6 +32,8 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Vect;
 import forestry.plugins.PluginIC2;
+import java.util.HashSet;
+import java.util.Set;
 
 public class FarmLogicRubber extends FarmLogic {
 
@@ -115,7 +117,7 @@ public class FarmLogicRubber extends FarmLogic {
 
 	private Collection<ICrop> getHarvestBlocks(Vect position) {
 
-		ArrayList<Vect> seen = new ArrayList<Vect>();
+		Set<Vect> seen = new HashSet<Vect>();
 		Stack<ICrop> crops = new Stack<ICrop>();
 
 		// Determine what type we want to harvest.
@@ -140,7 +142,7 @@ public class FarmLogicRubber extends FarmLogic {
 		return crops;
 	}
 
-	private ArrayList<Vect> processHarvestBlock(Stack<ICrop> crops, Collection<Vect> seen, Vect position) {
+	private ArrayList<Vect> processHarvestBlock(Stack<ICrop> crops, Set<Vect> seen, Vect position) {
 		World world = getWorld();
 
 		ArrayList<Vect> candidates = new ArrayList<Vect>();
@@ -152,14 +154,7 @@ public class FarmLogicRubber extends FarmLogic {
 				continue;
 
 			// See whether the given position has already been processed
-			boolean skip = false;
-			for (Vect prcs : seen)
-				if (candidate.equals(prcs)) {
-					skip = true;
-					break;
-				}
-
-			if (skip)
+			if (seen.contains(candidate))
 				continue;
 
 			Block block = getBlock(candidate);

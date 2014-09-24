@@ -31,6 +31,8 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.Vect;
+import java.util.HashSet;
+import java.util.Set;
 
 public class FarmLogicCocoa extends FarmLogic {
 
@@ -147,7 +149,7 @@ public class FarmLogicCocoa extends FarmLogic {
 
 	private Collection<ICrop> getHarvestBlocks(Vect position) {
 
-		ArrayList<Vect> seen = new ArrayList<Vect>();
+		Set<Vect> seen = new HashSet<Vect>();
 		Stack<ICrop> crops = new Stack<ICrop>();
 
 		// Determine what type we want to harvest.
@@ -177,7 +179,7 @@ public class FarmLogicCocoa extends FarmLogic {
 		return crops;
 	}
 
-	private ArrayList<Vect> processHarvestBlock(Stack<ICrop> crops, Collection<Vect> seen, Vect start, Vect position) {
+	private ArrayList<Vect> processHarvestBlock(Stack<ICrop> crops, Set<Vect> seen, Vect start, Vect position) {
 
 		World world = getWorld();
 
@@ -196,14 +198,7 @@ public class FarmLogicCocoa extends FarmLogic {
 						continue;
 
 					// See whether the given position has already been processed
-					boolean skip = false;
-					for (Vect prcs : seen)
-						if (candidate.equals(prcs)) {
-							skip = true;
-							break;
-						}
-
-					if (skip)
+					if (seen.contains(candidate))
 						continue;
 
 					ICrop crop = cocoa.getCropAt(world, candidate.x, candidate.y, candidate.z);

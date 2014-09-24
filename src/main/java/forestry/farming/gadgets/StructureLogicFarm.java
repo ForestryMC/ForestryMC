@@ -23,6 +23,7 @@ import forestry.core.gadgets.StructureLogic;
 import forestry.core.utils.Schemata;
 import forestry.core.utils.Schemata.EnumStructureBlock;
 import forestry.core.utils.Vect;
+import java.util.Set;
 
 public class StructureLogicFarm extends StructureLogic {
 
@@ -65,7 +66,7 @@ public class StructureLogicFarm extends StructureLogic {
 			"FFFFFFF", "FAAAAAF", "FAAAAAF", "FBBBBBF", "FAAAAAF", "FFFFFFF",
 			"FFFFFFF", "FFFFFFF", "FFFFFFF", "FFFFFFF", "FFFFFFF", "FFFFFFF").setOffsets(-3, -3, -3);
 
-	public static HashSet<Block> bricks = new HashSet<Block>();
+	public static final Set<Block> bricks = new HashSet<Block>();
 	static {
 		bricks.add(Blocks.brick_block);
 		bricks.add(Blocks.stonebrick);
