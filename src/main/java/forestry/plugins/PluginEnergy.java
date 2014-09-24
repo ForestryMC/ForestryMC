@@ -56,11 +56,9 @@ public class PluginEnergy extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.energy.proxy.ClientProxyEnergy", serverSide = "forestry.energy.proxy.ProxyEnergy")
 	public static ProxyEnergy proxy;
-	public static MachineDefinition definitionEngineTin;
 	public static MachineDefinition definitionEngineCopper;
 	public static MachineDefinition definitionEngineBronze;
 	public static MachineDefinition definitionEngineClockwork;
-	public static MachineDefinition definitionGenerator;
 
 	@Override
 	public void preInit() {
@@ -68,16 +66,6 @@ public class PluginEnergy extends ForestryPlugin {
 
 		ForestryBlock.engine.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "engine");
 
-		definitionEngineTin = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Defaults.DEFINITION_ENGINETIN_META, "forestry.EngineTin", EngineTin.class,
-				PluginEnergy.proxy.getRenderDefaultEngine(Defaults.TEXTURE_PATH_BLOCKS + "/engine_tin_"), ShapedRecipeCustom.createShapedRecipe(
-						ForestryBlock.engine.getItemStack(1, Defaults.DEFINITION_ENGINETIN_META),
-						"###",
-						" X ",
-						"YVY",
-						'#', "ingotTin",
-						'X', Blocks.glass,
-						'Y', "gearTin",
-						'V', Blocks.piston)));
 		definitionEngineCopper = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Defaults.DEFINITION_ENGINECOPPER_META, "forestry.EngineCopper", EngineCopper.class,
 				PluginEnergy.proxy.getRenderDefaultEngine(Defaults.TEXTURE_PATH_BLOCKS + "/engine_copper_"), ShapedRecipeCustom.createShapedRecipe(
 						ForestryBlock.engine.getItemStack(1, Defaults.DEFINITION_ENGINECOPPER_META),
@@ -98,16 +86,6 @@ public class PluginEnergy extends ForestryPlugin {
 						'X', Blocks.glass,
 						'Y', "gearBronze",
 						'V', Blocks.piston)));
-
-		definitionGenerator = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_GENERATOR_META, "forestry.Generator", MachineGenerator.class,
-				Proxies.render.getRenderDefaultMachine(Defaults.TEXTURE_PATH_BLOCKS + "/generator_"), ShapedRecipeCustom.createShapedRecipe(
-						ForestryBlock.engine.getItemStack(1, Defaults.DEFINITION_GENERATOR_META),
-						"X#X",
-						"XYX",
-						"X#X",
-						'#', Blocks.glass,
-						'X', Items.gold_ingot,
-						'Y', ForestryItem.sturdyCasing)));
 
 		ShapedRecipeCustom clockworkRecipe = null;
 		if (GameMode.getGameMode().getBooleanSetting("energy.engine.clockwork"))
@@ -136,10 +114,8 @@ public class PluginEnergy extends ForestryPlugin {
 	public void doInit() {
 		super.doInit();
 
-		definitionEngineTin.register();
 		definitionEngineCopper.register();
 		definitionEngineBronze.register();
-		definitionGenerator.register();
 		definitionEngineClockwork.register();
 
 		FluidStack ethanol = LiquidHelper.getLiquid(Defaults.LIQUID_ETHANOL, 1);

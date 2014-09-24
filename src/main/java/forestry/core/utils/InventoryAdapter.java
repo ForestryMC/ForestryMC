@@ -190,6 +190,11 @@ public class InventoryAdapter implements IInventory, INBTTagable {
 	}
 
 	/* CONTAINS */
+	public boolean contains(ItemStack query, int startSlot, int slots) {
+		ItemStack[] queryArray = new ItemStack[] {query};
+		return contains(queryArray, startSlot, slots);
+	}
+
 	public boolean contains(ItemStack[] query, int startSlot, int slots) {
 		ItemStack[] stock = getStacks(startSlot, slots);
 		return StackUtils.containsSets(query, stock) > 0;

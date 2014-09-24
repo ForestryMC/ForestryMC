@@ -41,6 +41,7 @@ import forestry.plugins.PluginCore;
 import forestry.plugins.PluginEnergy;
 import forestry.plugins.PluginFactory;
 import forestry.plugins.PluginMail;
+import forestry.plugins.PluginIC2;
 
 public abstract class TileMachine extends TileForestry implements ISpecialInventory, IClimatised, IHintSource {
 
@@ -153,7 +154,8 @@ public abstract class TileMachine extends TileForestry implements ISpecialInvent
 		machineMap.put(Defaults.ID_PACKAGE_MACHINE_SQUEEZER, PluginFactory.definitionSqueezer);
 		machineMap.put(Defaults.ID_PACKAGE_MACHINE_STILL, PluginFactory.definitionStill);
 		machineMap.put(Defaults.ID_PACKAGE_MACHINE_APIARY, PluginApiculture.definitionApiary);
-		machineMap.put(4, PluginEnergy.definitionGenerator);
+		if (PluginIC2.instance.isAvailable())
+			machineMap.put(Defaults.ID_PACKAGE_MACHINE_GENERATOR, PluginIC2.definitionGenerator);
 		definitionMap.put(ForestryBlock.factoryTESR.block(), machineMap);
 
 		HashMap<Integer, MachineDefinition> millMap = new HashMap<Integer, MachineDefinition>();
@@ -168,7 +170,8 @@ public abstract class TileMachine extends TileForestry implements ISpecialInvent
 		HashMap<Integer, MachineDefinition> engineMap = new HashMap<Integer, MachineDefinition>();
 		engineMap.put(0, PluginEnergy.definitionEngineBronze);
 		engineMap.put(1, PluginEnergy.definitionEngineCopper);
-		engineMap.put(2, PluginEnergy.definitionEngineTin);
+		if (PluginIC2.instance.isAvailable())
+			engineMap.put(2, PluginIC2.definitionEngineTin);
 		definitionMap.put(ForestryBlock.engine.block(), engineMap);
 
 	}

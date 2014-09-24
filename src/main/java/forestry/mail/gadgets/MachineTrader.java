@@ -24,7 +24,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import buildcraft.api.gates.ITrigger;
 
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.ISpecialInventory;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
 import forestry.api.mail.IMailAddress;
@@ -34,12 +33,13 @@ import forestry.core.gadgets.TileBase;
 import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.EnumAccess;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.StackUtils;
 import forestry.mail.TradeStation;
 import forestry.plugins.PluginMail;
 
-public class MachineTrader extends TileBase implements ISpecialInventory, ISidedInventory {
+public class MachineTrader extends TileBase implements ISidedInventory {
 
 	@EntityNetData
 	private MailAddress address;
@@ -277,114 +277,25 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 		return PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerProfile(), address);
 	}
 
-	/* ISPECIALINVENTORY */
+	/* ISIDEDINVENTORY */
+
+	/**
+	 * TODO: just a specialsource workaround
+	 */
 	@Override
-	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
-
-		if (!this.isLinked())
-			return 0;
-
-		IInventory inventory = getOrCreateTradeInventory();
-		ItemStack tradegood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
-
-		// Special handling for paper
-		if (stack.getItem() == Items.paper)
-			// Handle paper as resource if its not the trade good or pumped in from above or below
-			if ((tradegood != null && tradegood.getItem() != Items.paper) || from == ForgeDirection.DOWN || from == ForgeDirection.UP)
-				return StackUtils.addToInventory(stack, inventory, doAdd, TradeStation.SLOT_LETTERS_1, TradeStation.SLOT_LETTERS_COUNT);
-
-		// Special handling for stamps
-		if (stack.getItem() instanceof IStamps)
-			// Handle stamps as resource if its not the trade good or pumped in from above or below
-			if ((tradegood != null && !(tradegood.getItem() instanceof IStamps)) || from == ForgeDirection.DOWN || from == ForgeDirection.UP)
-				return StackUtils.addToInventory(stack, inventory, doAdd, TradeStation.SLOT_STAMPS_1, TradeStation.SLOT_STAMPS_COUNT);
-
-		// Everything else
-		if (tradegood == null)
-			return 0;
-
-		if (!tradegood.isItemEqual(stack))
-			return 0;
-
-		return StackUtils.addToInventory(stack, inventory, doAdd, TradeStation.SLOT_SEND_BUFFER, TradeStation.SLOT_SEND_BUFFER_COUNT);
+	protected boolean canTakeStackFromSide(int slotIndex, ItemStack itemstack, int side) {
+		return super.canTakeStackFromSide(slotIndex, itemstack, side);
 	}
 
+	/**
+	 * TODO: just a specialsource workaround
+	 */
 	@Override
-	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
-
-		if (!this.isLinked())
-			return new ItemStack[0];
-
-		ItemStack product = null;
-		IInventory inventory = getOrCreateTradeInventory();
-		for (int i = TradeStation.SLOT_RECEIVE_BUFFER; i < TradeStation.SLOT_RECEIVE_BUFFER + TradeStation.SLOT_RECEIVE_BUFFER_COUNT; i++) {
-			ItemStack stackSlot = inventory.getStackInSlot(i);
-			if (stackSlot == null)
-				continue;
-			if (stackSlot.stackSize <= 0)
-				continue;
-
-			product = inventory.decrStackSize(i, 1);
-			break;
-		}
-
-		if (product != null)
-			return new ItemStack[] { product };
-		else
-			return new ItemStack[0];
+	protected boolean canPutStackFromSide(int slotIndex, ItemStack itemstack, int side) {
+		return super.canPutStackFromSide(slotIndex, itemstack, side);
 	}
 
 	/* ISIDEDINVENTORY */
-	private static int[] slotIndices;
-
-	public int[] getSizeInventorySide(int side) {
-		IInventory inventory = getOrCreateTradeInventory();
-		if(slotIndices == null) {
-			slotIndices = new int[inventory.getSizeInventory()];
-			for(int i = 0; i < inventory.getSizeInventory(); i++)
-				slotIndices[i] = i;
-		}
-		return slotIndices;
-	}
-
-	@Override
-	protected boolean canTakeStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-
-		if(!super.canTakeStackFromSide(slotIndex, itemstack, side))
-			return false;
-
-		if(slotIndex >= TradeStation.SLOT_RECEIVE_BUFFER && slotIndex < TradeStation.SLOT_RECEIVE_BUFFER + TradeStation.SLOT_RECEIVE_BUFFER_COUNT)
-			return true;
-
-		return false;
-	}
-
-	@Override
-	protected boolean canPutStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-		if(!super.canPutStackFromSide(slotIndex, itemstack, side))
-			return false;
-
-		if (slotIndex >= TradeStation.SLOT_LETTERS_1 && slotIndex < TradeStation.SLOT_LETTERS_1 + TradeStation.SLOT_LETTERS_COUNT
-				&& itemstack.getItem() == Items.paper) {
-			return true;
-		}
-
-		if (slotIndex >= TradeStation.SLOT_STAMPS_1 && slotIndex < TradeStation.SLOT_STAMPS_COUNT) {
-			return itemstack.getItem() instanceof IStamps;
-		}
-
-		if (slotIndex >= TradeStation.SLOT_SEND_BUFFER && slotIndex < TradeStation.SLOT_SEND_BUFFER_COUNT) {
-			IInventory inventory = getOrCreateTradeInventory();
-			ItemStack tradegood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
-			if(tradegood == null)
-				return false;
-			return StackUtils.isIdenticalItem(tradegood, itemstack);
-		}
-
-		return false;
-	}
-
-	/* IINVENTORY */
 	@Override
 	public int getSizeInventory() {
 		return getOrCreateTradeInventory().getSizeInventory();
@@ -428,51 +339,41 @@ public class MachineTrader extends TileBase implements ISpecialInventory, ISided
 	public void closeInventory() {
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return super.isUseableByPlayer(player);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean hasCustomInventoryName() {
-		return super.hasCustomInventoryName();
+		return getOrCreateTradeInventory().hasCustomInventoryName();
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return super.isItemValidForSlot(slotIndex, itemstack);
+		return getOrCreateTradeInventory().isItemValidForSlot(slotIndex, itemstack);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
+		IInventory inventory = getOrCreateTradeInventory();
+		if (inventory instanceof TradeStation)
+			return ((TradeStation)getOrCreateTradeInventory()).canInsertItem(i, itemstack, j);
 		return super.canInsertItem(i, itemstack, j);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		IInventory inventory = getOrCreateTradeInventory();
+		if (inventory instanceof TradeStation) {
+			boolean permission = (getAccess() == EnumAccess.SHARED);
+			return ((TradeStation) getOrCreateTradeInventory()).canExtractItem(i, itemstack, j, permission);
+		}
 		return super.canExtractItem(i, itemstack, j);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
+		IInventory inventory = getOrCreateTradeInventory();
+		if (inventory instanceof TradeStation) {
+			boolean permission = (getAccess() == EnumAccess.SHARED);
+			return ((TradeStation) getOrCreateTradeInventory()).getAccessibleSlotsFromSide(side, permission);
+		}
 		return super.getAccessibleSlotsFromSide(side);
 	}
 

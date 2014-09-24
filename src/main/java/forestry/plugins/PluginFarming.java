@@ -182,7 +182,6 @@ public class PluginFarming extends ForestryPlugin {
 		Circuit.farmCocoaManual = new CircuitFarmLogic("manualCocoa", FarmLogicCocoa.class).setManual();
 
 		Circuit.farmOrchardManual = new CircuitFarmLogic("manualOrchard", FarmLogicOrchard.class);
-		Circuit.farmRubberManual = new CircuitFarmLogic("manualRubber", FarmLogicRubber.class);
 
 		MinecraftForge.EVENT_BUS.register(new EventHandlerFarming());
 	}

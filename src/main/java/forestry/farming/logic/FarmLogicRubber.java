@@ -23,6 +23,7 @@ import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.farming.ICrop;
@@ -95,8 +96,6 @@ public class FarmLogicRubber extends FarmLogic {
 		if (inActive)
 			return null;
 
-		world = housing.getWorld();
-
 		Collection<ICrop> crops = null;
 		Vect start = new Vect(x, y, z);
 		if (!lastExtents.containsKey(start))
@@ -126,7 +125,7 @@ public class FarmLogicRubber extends FarmLogic {
 
 		int meta = this.getBlockMeta(position);
 		if (meta >= 2 && meta <= 5)
-			crops.push(new CropRubber(world, block, meta, position));
+			crops.push(new CropRubber(getWorld(), block, meta, position));
 
 		ArrayList<Vect> candidates = processHarvestBlock(crops, seen, position);
 		ArrayList<Vect> temp = new ArrayList<Vect>();
@@ -142,6 +141,7 @@ public class FarmLogicRubber extends FarmLogic {
 	}
 
 	private ArrayList<Vect> processHarvestBlock(Stack<ICrop> crops, Collection<Vect> seen, Vect position) {
+		World world = getWorld();
 
 		ArrayList<Vect> candidates = new ArrayList<Vect>();
 

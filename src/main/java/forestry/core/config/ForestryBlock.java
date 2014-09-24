@@ -11,6 +11,9 @@
 package forestry.core.config;
 
 import forestry.core.proxy.Proxies;
+import forestry.plugins.PluginManager;
+import forestry.plugins.PluginManager.Stage;
+import java.util.EnumSet;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -79,6 +82,8 @@ public enum ForestryBlock {
 	private Block block;
 
 	public void registerBlock(Block block, Class<? extends ItemBlock> itemClass, String name) {
+		if (!EnumSet.of(Stage.PRE_INIT).contains(PluginManager.getStage()))
+			throw new RuntimeException("Tried to register Block outside of Pre-Init");
 		this.block = block;
 		block.setBlockName("for." + name);
 		Proxies.common.registerBlock(block, itemClass);
@@ -95,8 +100,8 @@ public enum ForestryBlock {
 	public boolean isBlockEqual(World world, int x, int y, int z) {
 		return isBlockEqual(world.getBlock(x, y, z));
 	}
-	
-	public Item item(){
+
+	public Item item() {
 		return Item.getItemFromBlock(block);
 	}
 

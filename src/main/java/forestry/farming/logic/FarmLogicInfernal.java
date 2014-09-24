@@ -21,6 +21,7 @@ import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.farming.Farmables;
@@ -65,8 +66,7 @@ public class FarmLogicInfernal extends FarmLogicHomogenous {
 
 	@Override
 	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
-
-		world = housing.getWorld();
+		World world = getWorld();
 
 		Stack<ICrop> crops = new Stack<ICrop>();
 		for (int i = 0; i < extent; i++) {
@@ -84,6 +84,7 @@ public class FarmLogicInfernal extends FarmLogicHomogenous {
 
 	@Override
 	protected boolean maintainGermlings(int x, int y, int z, ForgeDirection direction, int extent) {
+		World world = getWorld();
 
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(x, y, z, direction, i);
@@ -101,6 +102,7 @@ public class FarmLogicInfernal extends FarmLogicHomogenous {
 	}
 
 	private boolean trySetCrop(Vect position) {
+		World world = getWorld();
 
 		for (IFarmable candidate : germlings)
 			if (housing.plantGermling(candidate, world, position.x, position.y, position.z))

@@ -23,6 +23,7 @@ import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.farming.ICrop;
@@ -83,8 +84,6 @@ public class FarmLogicOrchard extends FarmLogic {
 	@Override
 	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
 
-		world = housing.getWorld();
-
 		Collection<ICrop> crops = null;
 
 		Vect start = new Vect(x, y, z);
@@ -113,7 +112,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		// Determine what type we want to harvest.
 		IFruitBearer bearer = getFruitBlock(position);
 		Block block = getBlock(position);
-		if ((!block.isWood(world, position.x, position.y, position.z)) && bearer == null)
+		if ((!block.isWood(getWorld(), position.x, position.y, position.z)) && bearer == null)
 			return crops;
 
 		ArrayList<Vect> candidates = processHarvestBlock(crops, seen, position, position);
@@ -131,6 +130,7 @@ public class FarmLogicOrchard extends FarmLogic {
 	}
 
 	private ArrayList<Vect> processHarvestBlock(Stack<ICrop> crops, Collection<Vect> seen, Vect start, Vect position) {
+		World world = getWorld();
 
 		ArrayList<Vect> candidates = new ArrayList<Vect>();
 
@@ -173,7 +173,7 @@ public class FarmLogicOrchard extends FarmLogic {
 	}
 
 	private IFruitBearer getFruitBlock(Vect position) {
-		TileEntity tile = world.getTileEntity(position.x, position.y, position.z);
+		TileEntity tile = getWorld().getTileEntity(position.x, position.y, position.z);
 		if (!(tile instanceof IFruitBearer))
 			return null;
 

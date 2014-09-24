@@ -631,7 +631,7 @@ public class PluginArboriculture extends ForestryPlugin {
 		// Deciduous
 		Allele.treeOak = new AlleleTreeSpecies("treeOak", false, "appleOak", quercus, "robur",
 				proxy.getFoliageColorBasic(), WorldGenOak.class, new ItemStack(Blocks.log, 1, 0)).addFruitFamily(pomes)
-				.setVanillaMap(0).setIsSecret();
+				.setVanillaMap(0);
 
 		Allele.treeDarkOak = new AlleleTreeSpecies("treeDarkOak", false, "darkOak", quercus, "velutina",
 				proxy.getFoliageColorBasic(), WorldGenDarkOak.class, new ItemStack(Blocks.log2, 1, 1)).addFruitFamily(pomes)
@@ -639,7 +639,7 @@ public class PluginArboriculture extends ForestryPlugin {
 
 		Allele.treeBirch = new AlleleTreeSpecies("treeBirch", false, "silverBirch", betula,
 				"pendula", proxy.getFoliageColorBirch(), 0xb0c648, WorldGenBirch.class, new ItemStack(Blocks.log, 1, 2))
-				.setVanillaMap(2).setIsSecret();
+				.setVanillaMap(2);
 		Allele.treeLime = new AlleleTreeSpecies("treeLime", true, "silverLime", tilia,
 				"tomentosa", 0x5ea107, WorldGenLime.class, ForestryBlock.log1.getItemStack(1, 3)).addFruitFamily(nux)
 				.addFruitFamily(prunes).addFruitFamily(pomes);
@@ -671,9 +671,10 @@ public class PluginArboriculture extends ForestryPlugin {
 				"saccharum", 0xd4f425, 0x619a3c, WorldGenMaple.class, ForestryBlock.log6.getItemStack(1, 2)).addFruitFamily(prunes)
 				.addFruitFamily(pomes).setLeafIndices("maple");
 
+		// Conifers
 		Allele.treeSpruce = new AlleleTreeSpecies("treeSpruce", false, "redSpruce", picea,
 				"abies", proxy.getFoliageColorPine(), 0x539d12, WorldGenSpruce.class, new ItemStack(Blocks.log, 1, 1))
-				.setLeafIndices("conifers").setVanillaMap(1).setIsSecret();
+				.setLeafIndices("conifers").setVanillaMap(1);
 		Allele.treeLarch = new AlleleTreeSpecies("treeLarch", true, "mundaneLarch", larix,
 				"decidua", 0x698f90, 0x569896, WorldGenLarch.class, ForestryBlock.log1.getItemStack(1, 0)).setLeafIndices("conifers");
 		Allele.treePine = new AlleleTreeSpecies("treePine", true, "bullPine", pinus, "sabiniana",
@@ -689,7 +690,7 @@ public class PluginArboriculture extends ForestryPlugin {
 		// Jungle
 		Allele.treeJungle = new AlleleTreeSpecies("treeJungle", false, "jungle", tropical,
 				"tectona", proxy.getFoliageColorBasic(), 0x539d12, WorldGenJungle.class, new ItemStack(Blocks.log, 1, 3))
-				.addFruitFamily(jungle).setLeafIndices("jungle").setVanillaMap(3).setIsSecret();
+				.addFruitFamily(jungle).setLeafIndices("jungle").setVanillaMap(3);
 		Allele.treeTeak = new AlleleTreeSpecies("treeTeak", true, "teak", tectona, "grandis",
 				0xfeff8f, 0xffd98f, WorldGenTeak.class, ForestryBlock.log1.getItemStack(1, 3)).addFruitFamily(jungle).setLeafIndices(
 						"jungle");

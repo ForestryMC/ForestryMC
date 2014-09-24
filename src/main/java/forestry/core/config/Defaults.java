@@ -125,6 +125,7 @@ public class Defaults {
 	public static final int ID_PACKAGE_MACHINE_STILL = 1;
 	public static final int ID_PACKAGE_MACHINE_BOTTLER = 2;
 	public static final int ID_PACKAGE_MACHINE_RAINTANK = 3;
+	public static final int ID_PACKAGE_MACHINE_GENERATOR = 4;
 	public static final int ID_PACKAGE_MACHINE_CARPENTER = 5;
 	public static final int ID_PACKAGE_MACHINE_MOISTENER = 6;
 	public static final int ID_PACKAGE_MACHINE_APIARY = 7;

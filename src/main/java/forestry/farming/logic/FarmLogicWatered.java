@@ -16,6 +16,7 @@ import java.util.Collection;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -68,8 +69,6 @@ public abstract class FarmLogicWatered extends FarmLogic {
 	@Override
 	public boolean cultivate(int x, int y, int z, ForgeDirection direction, int extent) {
 
-		world = housing.getWorld();
-
 		if (maintainSoil(x, y, z, direction, extent))
 			return true;
 
@@ -90,6 +89,8 @@ public abstract class FarmLogicWatered extends FarmLogic {
 	}
 
 	private boolean maintainSoil(int x, int y, int z, ForgeDirection direction, int extent) {
+
+		World world = getWorld();
 
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(x, y, z, direction, i);
@@ -132,6 +133,8 @@ public abstract class FarmLogicWatered extends FarmLogic {
 
 	private boolean maintainWater(int x, int y, int z, ForgeDirection direction, int extent) {
 		// Still not done, check water then
+		World world = getWorld();
+
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(x, y, z, direction, i);
 			if ((!isAirBlock(position) && !Utils.isReplaceableBlock(world, position.x, position.y, position.z))

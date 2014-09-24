@@ -110,7 +110,10 @@ public class BlockBase extends BlockForestry {
 		if (metadata >= definitions.size() || definitions.get(metadata) == null)
 			metadata = 0;
 
-		return definitions.get(metadata).createMachine();
+		MachineDefinition definition = definitions.get(metadata);
+		if (definition == null)
+			return null;
+		return definition.createMachine();
 	}
 
 	@Override
@@ -207,6 +210,9 @@ public class BlockBase extends BlockForestry {
 	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
 
 		IOwnable tile = (IOwnable) world.getTileEntity(x, y, z);
+		if (tile == null)
+			return world.setBlockToAir(x, y, z);
+
 		if (tile.isOwnable() && !tile.allowsRemoval(player))
 			return false;
 
@@ -234,6 +240,8 @@ public class BlockBase extends BlockForestry {
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
 		for (MachineDefinition def : definitions) {
+			if (def == null)
+				continue;
 			def.registerIcons(register);
 		}
 	}

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
@@ -36,7 +36,7 @@ import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.StackUtils;
 import forestry.mail.items.ItemLetter;
 
-public class TradeStation extends WorldSavedData implements ITradeStation, IInventory {
+public class TradeStation extends WorldSavedData implements ITradeStation, ISidedInventory {
 
 	// / CONSTANTS
 	public static final String SAVE_NAME = "TradePO_";
@@ -493,9 +493,9 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	@Override
-	public void setInventorySlotContents(int var1, ItemStack var2) {
+	public void setInventorySlotContents(int slot, ItemStack itemStack) {
 		this.markDirty();
-		inventory.setInventorySlotContents(var1, var2);
+		inventory.setInventorySlotContents(slot, itemStack);
 	}
 
 	@Override
@@ -530,7 +530,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer var1) {
-		return inventory.isUseableByPlayer(var1);
+		return var1.getGameProfile().equals(owner);
 	}
 
 	@Override
@@ -547,7 +547,63 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return true;
+	public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
+		if (itemStack == null || itemStack.getItem() == null)
+			return false;
+
+		if (slot >= SLOT_LETTERS_1 && slot < SLOT_LETTERS_1 + SLOT_LETTERS_COUNT)
+			return itemStack.getItem() == Items.paper;
+
+		if (slot >= SLOT_STAMPS_1 && slot < SLOT_STAMPS_1 + SLOT_STAMPS_COUNT)
+			return IStamps.class.isAssignableFrom(itemStack.getItem().getClass());
+
+		if (slot >= SLOT_SEND_BUFFER && slot < SLOT_SEND_BUFFER + SLOT_SEND_BUFFER_COUNT) {
+			ItemStack item = new ItemStack(itemStack.getItem(), 1, itemStack.getItemDamage());
+			return inventory.contains(item, SLOT_TRADEGOOD, SLOT_TRADEGOOD_COUNT);
+		}
+
+		return false;
 	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) {
+		return getAccessibleSlotsFromSide(side, false);
+	}
+
+	public int[] getAccessibleSlotsFromSide(int side, boolean permission) {
+
+		ArrayList<Integer> slots = new ArrayList<Integer>();
+
+		for (int i = SLOT_LETTERS_1; i < SLOT_LETTERS_1 + SLOT_LETTERS_COUNT; i++)
+			slots.add(i);
+		for (int i = SLOT_STAMPS_1; i < SLOT_STAMPS_1 + SLOT_STAMPS_COUNT; i++)
+			slots.add(i);
+		if (permission) {
+			for (int i = SLOT_RECEIVE_BUFFER; i < SLOT_RECEIVE_BUFFER + SLOT_RECEIVE_BUFFER_COUNT; i++)
+				slots.add(i);
+		}
+		for (int i = SLOT_SEND_BUFFER; i < SLOT_SEND_BUFFER + SLOT_SEND_BUFFER_COUNT; i++)
+			slots.add(i);
+
+		int[] slotsInt = new int[slots.size()];
+		for (int i = 0; i < slots.size(); i++)
+			slotsInt[i] = slots.get(i).intValue();
+
+		return slotsInt;
+	}
+
+	@Override
+	public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
+		return isItemValidForSlot(slot, itemStack);
+	}
+
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
+		return canExtractItem(slot, itemStack, side, false);
+	}
+
+	public boolean canExtractItem(int slot, ItemStack itemStack, int side, boolean permission) {
+		return permission && slot >= SLOT_RECEIVE_BUFFER && slot < SLOT_RECEIVE_BUFFER + SLOT_RECEIVE_BUFFER_COUNT;
+	}
+
 }

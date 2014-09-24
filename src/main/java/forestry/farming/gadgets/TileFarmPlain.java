@@ -764,7 +764,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	@Override
 	public void removeResources(ItemStack[] resources) {
 		EntityPlayer player = Proxies.common.getPlayer(worldObj, owner);
-		inventory.removeSets(1, resources, SLOT_RESOURCES_1, SLOT_RESOURCES_1, player, false, true, true);
+		inventory.removeSets(1, resources, SLOT_RESOURCES_1, SLOT_COUNT_RESERVOIRS, player, false, true, true);
 	}
 
 	@Override

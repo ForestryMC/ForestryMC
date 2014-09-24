@@ -249,7 +249,7 @@ public class Bee extends IndividualLiving implements IBee {
 	private boolean checkBiomeHazard(BiomeGenBase biome) {
 
 		EnumTemperature temperature = EnumTemperature.getFromValue(biome.temperature);
-		EnumHumidity humidity = EnumHumidity.getFromValue(biome.getFloatRainfall());
+		EnumHumidity humidity = EnumHumidity.getFromValue(biome.rainfall);
 		return AlleleManager.climateHelper.isWithinLimits(temperature, humidity,
 				genome.getPrimary().getTemperature(), genome.getToleranceTemp(),
 				genome.getPrimary().getHumidity(), genome.getToleranceHumid());

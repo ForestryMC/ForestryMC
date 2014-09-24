@@ -304,7 +304,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	protected boolean canTakeStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-		if (getAccess() == EnumAccess.PRIVATE)
+		if (getAccess() != EnumAccess.SHARED)
 			return false;
 
 		return true;
@@ -315,7 +315,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	protected boolean canPutStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-		if (getAccess() == EnumAccess.PRIVATE)
+		if (getAccess() != EnumAccess.SHARED)
 			return false;
 
 		return true;
