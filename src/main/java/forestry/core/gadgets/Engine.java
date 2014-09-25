@@ -47,7 +47,7 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 	@Override
 	public void fromPacketPayload(PacketPayload payload) {
 
-        isActive = payload.intPayload[0] > 0;
+		isActive = payload.intPayload[0] > 0;
 		energyManager.fromPacketInt(payload.intPayload[1]);
 		heat = payload.intPayload[2];
 
@@ -70,7 +70,7 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 	protected final int maxHeat;
 	protected boolean forceCooldown = false;
 	public float progress;
-    protected EnergyManager energyManager;
+	protected EnergyManager energyManager;
 
 	public Engine(int maxHeat, int maxEnergy, int maxEnergyExtracted) {
 		this.maxHeat = maxHeat;
@@ -129,7 +129,7 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 			forceCooldown = false;
 
 		// Determine targeted tile
-        TileEntity tile = worldObj.getTileEntity(xCoord + getOrientation().offsetX, yCoord + getOrientation().offsetY, zCoord + getOrientation().offsetZ);
+		TileEntity tile = worldObj.getTileEntity(xCoord + getOrientation().offsetX, yCoord + getOrientation().offsetY, zCoord + getOrientation().offsetZ);
 
 		float newPistonSpeed = getPistonSpeed();
 		if (newPistonSpeed != pistonSpeedServer) {
@@ -188,7 +188,7 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 		for (int i = getOrientation().ordinal() + 1; i <= getOrientation().ordinal() + 6; ++i) {
 			ForgeDirection orient = ForgeDirection.values()[i % 6];
 
-            TileEntity tile = worldObj.getTileEntity(xCoord + orient.offsetX, yCoord + orient.offsetY, zCoord + orient.offsetZ);
+			TileEntity tile = worldObj.getTileEntity(xCoord + orient.offsetX, yCoord + orient.offsetY, zCoord + orient.offsetZ);
 
 			if (BlockUtil.isRFTile(getOrientation().getOpposite(), tile)) {
 				setOrientation(orient);
@@ -276,7 +276,7 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-        energyManager.readFromNBT(nbt);
+		energyManager.readFromNBT(nbt);
 
 		heat = nbt.getInteger("EngineHeat");
 
@@ -299,32 +299,32 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 
 	public abstract void sendGUINetworkData(Container containerEngine, ICrafting iCrafting);
 
-    @Override
-    public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+	@Override
+	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
 		if (from == getOrientation())
 			return 0;
 		return energyManager.receiveEnergy(from, maxReceive, simulate);
-    }
+	}
 
-    @Override
-    public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+	@Override
+	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
 		if (from != getOrientation())
 			return 0;
-        return energyManager.extractEnergy(from, maxExtract, simulate);
-    }
+		return energyManager.extractEnergy(from, maxExtract, simulate);
+	}
 
-    @Override
-    public int getEnergyStored(ForgeDirection from) {
-        return energyManager.getEnergyStored(from);
-    }
+	@Override
+	public int getEnergyStored(ForgeDirection from) {
+		return energyManager.getEnergyStored(from);
+	}
 
-    @Override
-    public int getMaxEnergyStored(ForgeDirection from) {
-        return energyManager.getMaxEnergyStored(from);
-    }
+	@Override
+	public int getMaxEnergyStored(ForgeDirection from) {
+		return energyManager.getMaxEnergyStored(from);
+	}
 
-    @Override
-    public boolean canConnectEnergy(ForgeDirection from) {
-        return energyManager.canConnectEnergy(from);
-    }
+	@Override
+	public boolean canConnectEnergy(ForgeDirection from) {
+		return energyManager.canConnectEnergy(from);
+	}
 }

@@ -64,12 +64,12 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 		}
 	}
 
-    protected final EnergyManager energyManager;
+	protected final EnergyManager energyManager;
 
 	public TilePowered(int minAcceptedEnergy, int maxTransfer, int energyPerWork, int capacity) {
 		this.energyManager = new EnergyManager(minAcceptedEnergy, maxTransfer, energyPerWork, capacity);
 		this.energyManager.setReceiveOnly();
-    }
+	}
 
 	/* STATE INFORMATION */
 	public abstract boolean isWorking();
@@ -94,9 +94,9 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 		if (!Proxies.common.isSimulating(worldObj))
 			return;
 
-        if (workCounter < WORK_CYCLES && energyManager.consumeEnergyToDoWork()) {
-            workCounter++;
-        }
+		if (workCounter < WORK_CYCLES && energyManager.consumeEnergyToDoWork()) {
+			workCounter++;
+		}
 
 		if (workCounter >= WORK_CYCLES && worldObj.getTotalWorldTime() % 5 == 0) {
 			if (workCycle())
@@ -159,7 +159,7 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 
 	@Override
 	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
-        return energyManager.receiveEnergy(from, maxReceive, simulate);
+		return energyManager.receiveEnergy(from, maxReceive, simulate);
 	}
 
 	@Override

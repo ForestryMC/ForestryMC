@@ -147,16 +147,16 @@ public class BlockUtil {
 		return false;
 	}
 
-    public static boolean isRFTile(ForgeDirection side, TileEntity tile) {
-        if (tile == null)
-            return false;
+	public static boolean isRFTile(ForgeDirection side, TileEntity tile) {
+		if (tile == null)
+			return false;
 
-        if (!(tile instanceof IEnergyHandler))
-            return false;
+		if (!(tile instanceof IEnergyHandler))
+			return false;
 
-        IEnergyHandler receptor = (IEnergyHandler) tile;
-        return receptor.canConnectEnergy(side);
-    }
+		IEnergyHandler receptor = (IEnergyHandler) tile;
+		return receptor.canConnectEnergy(side);
+	}
 
 	public static boolean tryPlantPot(World world, int x, int y, int z, Block block) {
 
