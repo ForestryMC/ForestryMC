@@ -147,21 +147,6 @@ public class BlockUtil {
 		return false;
 	}
 
-    /**
-     * @deprecated To be removed when MJ is gone. Use {@link #isRFTile} for now.
-     */
-    @Deprecated
-	public static boolean isPoweredTile(ForgeDirection side, TileEntity tile) {
-		if (tile == null)
-			return false;
-
-		if (!(tile instanceof IPowerReceptor))
-			return false;
-
-		IPowerReceptor receptor = (IPowerReceptor) tile;
-		return receptor.getPowerReceiver(side) != null;
-	}
-
     public static boolean isRFTile(ForgeDirection side, TileEntity tile) {
         if (tile == null)
             return false;
