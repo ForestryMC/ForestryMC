@@ -92,6 +92,8 @@ public class TextureManager implements ITextureManager {
 
 	@Override
 	public IIcon getIcon(short texUID) {
+		if (texUID < 0)
+			return null;
 		if (texUID < textures.length)
 			return textures[texUID];
 

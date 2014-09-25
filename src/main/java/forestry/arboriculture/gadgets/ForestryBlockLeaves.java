@@ -17,6 +17,7 @@ import net.minecraft.block.BlockNewLeaf;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -65,41 +66,68 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 		return (TileLeaves) tile;
 	}
 
+	private static NBTTagCompound getTagCompoundForTree(IBlockAccess world, int x, int y, int z) {
+		TileLeaves leaves = getLeafTile(world, x, y, z);
+		ITree tree = leaves.getTree();
+
+		NBTTagCompound nbttagcompound = new NBTTagCompound();
+		if (tree == null)
+			return nbttagcompound;
+
+		tree.writeToNBT(nbttagcompound);
+		return nbttagcompound;
+	}
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-		list.add(new ItemStack(item, 1, 0));
+
+		for (ITree tree : PluginArboriculture.treeInterface.getIndividualTemplates()) {
+			NBTTagCompound treeNBT = new NBTTagCompound();
+			tree.writeToNBT(treeNBT);
+
+			ItemStack itemStack = new ItemStack(item, 1, 0);
+			itemStack.setTagCompound(treeNBT);
+
+			list.add(itemStack);
+		}
 	}
 
 	/* DROP HANDLING */
+	// Hack: 	When harvesting leaves we need to get the drops in onBlockHarvested,
+	// 			because Mojang destroys the block and tile before calling getDrops.
+	protected ThreadLocal<ArrayList<ItemStack>> drops = new ThreadLocal<ArrayList<ItemStack>>();
+
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-		
+	public void onBlockHarvested(World world, int x, int y, int z, int metadata, EntityPlayer player) {
+		int fortune = EnchantmentHelper.getFortuneModifier(player);
 		float saplingModifier = 1.0f;
-		int count = quantityDropped(metadata, fortune, world.rand);
 
 		if (Proxies.common.isSimulating(world)) {
-			EntityPlayer player = harvesters.get();
 			if (player != null) {
 				ItemStack held = player.inventory.getCurrentItem();
 				if (held != null && held.getItem() instanceof IToolGrafter) {
 					saplingModifier = ((IToolGrafter) held.getItem()).getSaplingModifier(held, world, player, x, y, z);
-					count = 1;
 					held.damageItem(1, player);
 					if (held.stackSize <= 0)
 						player.destroyCurrentEquippedItem();
 				}
 			}
 		}
-
-		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-
-		for(int i = 0; i < count; i++) {
-			ret.addAll(getLeafDrop(world, x, y, z, saplingModifier, fortune));
-		}
-		return ret;
+		drops.set(getLeafDrop(world, x, y, z, saplingModifier, fortune));
 	}
 
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+		ArrayList<ItemStack> ret = drops.get();
+		drops.remove();
+
+		// leaves not harvested, get drops normally
+		if (ret == null)
+			ret = getLeafDrop(world, x, y, z, 1.0f, fortune);
+
+		return ret;
+	}
 
 	private ArrayList<ItemStack> getLeafDrop(World world, int x, int y, int z, float saplingModifier, int fortune) {
 		ArrayList<ItemStack> prod = new ArrayList<ItemStack>();
@@ -127,19 +155,27 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-		TileLeaves leaves = getLeafTile(world, x, y, z);
-		ITree tree = leaves.getTree();
-		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		tree.writeToNBT(nbttagcompound);
 
 		ItemStack itemStack = super.getPickBlock(target, world, x, y, z);
-		itemStack.setTagCompound(nbttagcompound);
+		NBTTagCompound treeNBT = getTagCompoundForTree(world, x, y, z);
+		itemStack.setTagCompound(treeNBT);
 		return itemStack;
 	}
 
 	@Override
 	public boolean isShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
-		return false;
+		return true;
+	}
+
+	@Override
+	public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+		ArrayList<ItemStack> ret = super.onSheared(item, world, x, y, z, fortune);
+
+		NBTTagCompound treeNBT = getTagCompoundForTree(world, x, y, z);
+		for (ItemStack stack : ret)
+			stack.setTagCompound(treeNBT);
+
+		return ret;
 	}
 
 	/* RENDERING */

@@ -151,9 +151,16 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public void setTree(ITree tree) {
+		super.setTree(tree);
+
 		if (tree.canBearFruit())
 			isFruitLeaf = tree.getGenome().getFruitProvider().markAsFruitLeaf(tree.getGenome(), worldObj, xCoord, yCoord, zCoord);
-		super.setTree(tree);
+
+		textureIndexFancy = determineTextureIndex(true);
+		textureIndexPlain = determineTextureIndex(false);
+		textureIndexFruits = determineOverlayIndex();
+		colourLeaves = determineFoliageColour();
+		colourFruits = determineFruitColour();
 	}
 
 	/* INFORMATION */
@@ -316,6 +323,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	 **/
 	@Override
 	public boolean shouldRefresh(Block oldBlock, Block newBlock, int oldMeta, int newMeta, World world, int x, int y, int z) {
+		if (!Block.isEqualTo(oldBlock, newBlock))
+			return true;
 		return false;
 	}
 
