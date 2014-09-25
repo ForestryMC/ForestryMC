@@ -143,7 +143,8 @@ public class EnergyManager implements IEnergyHandler {
 	}
 
 	/**
-	 * Sends as much energy as it can to the tile at orientation
+	 * Sends as much energy as it can to the tile at orientation.
+	 * For power sources. Ignores canExtract()
 	 * @param orientation
 	 * @param tile
 	 * @return amount sent
@@ -153,7 +154,8 @@ public class EnergyManager implements IEnergyHandler {
 	}
 
 	/**
-	 * Sends amount of energy to the tile at orientation
+	 * Sends amount of energy to the tile at orientation.
+	 * For power sources. Ignores canExtract()
 	 * @param orientation
 	 * @param tile
 	 * @param amount
@@ -164,10 +166,10 @@ public class EnergyManager implements IEnergyHandler {
 		if (BlockUtil.isRFTile(orientation.getOpposite(), tile)) {
 			IEnergyHandler receptor = (IEnergyHandler) tile;
 
-			int extractable = extractEnergy(orientation, amount, true);
+			int extractable = energyStorage.extractEnergy(amount, true);
 			if (extractable > 0) {
 				sent = receptor.receiveEnergy(orientation.getOpposite(), extractable, false);
-				extractEnergy(orientation, sent, false);
+				energyStorage.extractEnergy(sent, false);
 			}
 		}
 		return sent;

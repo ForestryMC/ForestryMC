@@ -77,6 +77,9 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 		this.maxEnergy = maxEnergy;
 		this.maxEnergyExtracted = maxEnergyExtracted;
 		energyManager = new EnergyManager(100, 2000, 100, 1000000);
+
+		// allow engines to chain, but not have energy sucked out of them
+		energyManager.setReceiveOnly();
 	}
 
 	@Override
@@ -152,7 +155,7 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 			}
 
 		} else if (canPowerTo(tile)) { // If we are not already running, check if
-			if (extractEnergy(getOrientation(), 1, true) > 0) {
+			if (getEnergyStored(getOrientation()) > 0) {
 				stagePiston = 1; // If we can transfer energy, start running
 				setActive(true);
 			} else
