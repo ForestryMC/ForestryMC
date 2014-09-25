@@ -72,7 +72,7 @@ configurations {
 }
 
 dependencies {
-	apis 'net.industrial-craft:industrialcraft-2:2.2.575-experimental:api'
+	compile 'net.industrial-craft:industrialcraft-2:2.2.575-experimental:api'
 	apis 'com.mod-buildcraft:buildcraft:6.0.18:dev'
 }
 
