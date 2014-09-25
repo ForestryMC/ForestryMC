@@ -22,7 +22,7 @@ apply plugin: 'maven'
 
 loadProperties()
 
-version = "3.0.0.173-RF-" + System.getenv("DRONE_BUILD_NUMBER")
+version = version_major + '.' + version_minor + '.' + version_patch + '.' + getBuildNumber()
 group= "net.sengir.forestry" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "forestry_" + mcversion
 
