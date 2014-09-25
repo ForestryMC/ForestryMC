@@ -434,14 +434,18 @@ public class PluginApiculture extends ForestryPlugin {
 	protected void registerRecipes() {
 
 		// / APIARIST'S ARMOR
-		Proxies.common.addRecipe(ForestryItem.apiaristHat.getItemStack(), new Object[]{"###", "# #", '#',
-			ForestryItem.craftingMaterial.getItemStack(1, 3)});
-		Proxies.common.addRecipe(ForestryItem.apiaristChest.getItemStack(), new Object[]{"# #", "###", "###", '#',
-			ForestryItem.craftingMaterial.getItemStack(1, 3)});
-		Proxies.common.addRecipe(ForestryItem.apiaristLegs.getItemStack(), new Object[]{"###", "# #", "# #", '#',
-			ForestryItem.craftingMaterial.getItemStack(1, 3)});
-		Proxies.common.addRecipe(ForestryItem.apiaristBoots.getItemStack(), new Object[]{"# #", "# #", '#',
-			ForestryItem.craftingMaterial.getItemStack(1, 3)});
+		Proxies.common.addRecipe(ForestryItem.apiaristHat.getItemStack(),
+				"###", "# #",
+				'#', ForestryItem.craftingMaterial.getItemStack(1, 3));
+		Proxies.common.addRecipe(ForestryItem.apiaristChest.getItemStack(),
+				"# #", "###", "###",
+				'#', ForestryItem.craftingMaterial.getItemStack(1, 3));
+		Proxies.common.addRecipe(ForestryItem.apiaristLegs.getItemStack(),
+				"###", "# #", "# #",
+				'#', ForestryItem.craftingMaterial.getItemStack(1, 3));
+		Proxies.common.addRecipe(ForestryItem.apiaristBoots.getItemStack(),
+				"# #", "# #",
+				'#', ForestryItem.craftingMaterial.getItemStack(1, 3));
 
 		// / HABITAT LOCATOR
 		//Proxies.common.addRecipe(ForestryItem.biomeFinder.getItemStack(),
@@ -501,17 +505,17 @@ public class PluginApiculture extends ForestryPlugin {
 				'S', Items.string);
 
 		// FOOD STUFF
-		if (ForestryItem.honeyedSlice != null)
+		if (ForestryItem.honeyedSlice.item() != null)
 			Proxies.common.addRecipe(ForestryItem.honeyedSlice.getItemStack(4),
 					"###", "#X#", "###",
 					'#', ForestryItem.honeyDrop,
 					'X', Items.bread);
-		if (ForestryItem.honeyPot != null)
+		if (ForestryItem.honeyPot.item() != null)
 			Proxies.common.addRecipe(ForestryItem.honeyPot.getItemStack(1),
 					"# #", " X ", "# #",
 					'#', ForestryItem.honeyDrop,
 					'X', ForestryItem.waxCapsule);
-		if (ForestryItem.ambrosia != null)
+		if (ForestryItem.ambrosia.item() != null)
 			Proxies.common.addRecipe(ForestryItem.ambrosia.getItemStack(),
 					"#Y#", "XXX", "###",
 					'#', ForestryItem.honeydew,
@@ -524,13 +528,18 @@ public class PluginApiculture extends ForestryPlugin {
 
 		// / BITUMINOUS PEAT
 		Proxies.common.addRecipe(ForestryItem.bituminousPeat.getItemStack(),
-				new Object[]{" # ", "XYX", " # ", '#', "dustAsh", 'X', ForestryItem.peat, 'Y',
-					ForestryItem.propolis});
+				" # ", "XYX", " # ",
+				'#', "dustAsh",
+				'X', ForestryItem.peat,
+				'Y', ForestryItem.propolis);
 		// / TORCHES
 		Proxies.common.addRecipe(new ItemStack(Blocks.torch, 3),
-				new Object[]{" # ", " # ", " Y ", '#', ForestryItem.beeswax, 'Y', "stickWood"});
-		Proxies.common.addRecipe(ForestryItem.craftingMaterial.getItemStack(1, 1), new Object[]{"# #", " # ", "# #", '#',
-			ForestryItem.propolis.getItemStack(1, 2)});
+				" # ", " # ", " Y ",
+				'#', ForestryItem.beeswax,
+				'Y', "stickWood");
+		Proxies.common.addRecipe(ForestryItem.craftingMaterial.getItemStack(1, 1),
+				"# #", " # ", "# #",
+				'#', ForestryItem.propolis.getItemStack(1, 2));
 
 		// / CANDLES
 		RecipeManagers.carpenterManager.addRecipe(30, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 600), null, ForestryBlock.candle.getItemStack(24),
@@ -617,15 +626,17 @@ public class PluginApiculture extends ForestryPlugin {
 
 		// / CARPENTER
 		RecipeManagers.carpenterManager.addRecipe(100, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 2000), null, ForestryItem.beealyzer.getItemStack(),
-				new Object[]{"X#X", "X#X", "RDR", '#', Blocks.glass_pane, 'X', "ingotTin", 'R',
-					Items.redstone, 'D', Items.diamond});
-		RecipeManagers.carpenterManager.addRecipe(
-				50,
-				LiquidHelper.getLiquid(Defaults.LIQUID_HONEY, 500),
-				null,
-				ForestryItem.craftingMaterial.getItemStack(1, 6),
-				new Object[]{" J ", "###", "WPW", '#', "plankWood", 'J', ForestryItem.royalJelly,
-					'W', ForestryItem.beeswax, 'P', ForestryItem.pollen});
+				"X#X", "X#X", "RDR",
+				'#', Blocks.glass_pane,
+				'X', "ingotTin",
+				'R', Items.redstone,
+				'D', Items.diamond);
+		RecipeManagers.carpenterManager.addRecipe(50, LiquidHelper.getLiquid(Defaults.LIQUID_HONEY, 500), null, ForestryItem.craftingMaterial.getItemStack(1, 6),
+				" J ", "###", "WPW",
+				'#', "plankWood",
+				'J', ForestryItem.royalJelly,
+				'W', ForestryItem.beeswax,
+				'P', ForestryItem.pollen);
 
 		// / CENTRIFUGE
 		// Honey combs
@@ -1207,7 +1218,7 @@ public class PluginApiculture extends ForestryPlugin {
 				((BlockCandle) ForestryBlock.candle.block()).addItemToLightingList(value.getItem());
 			else
 				Logger.getLogger("Forestry").log(Level.WARNING,
-						"Recieved an invalid 'add-candle-lighting-id' request from mod %s. Please contact the author and report this issue.",
+						"Received an invalid 'add-candle-lighting-id' request from mod %s. Please contact the author and report this issue.",
 						message.getSender());
 			return true;
 		} else if (message.key.equals("add-alveary-slab") && message.isStringMessage())
@@ -1216,11 +1227,14 @@ public class PluginApiculture extends ForestryPlugin {
 
 				if (block == null || block == Blocks.air)
 					Logger.getLogger("Forestry").log(Level.WARNING,
-							"Recieved an invalid 'add-alveary-slab' request from mod %s. Please contact the author and report this issue.",
+							"Received an invalid 'add-alveary-slab' request from mod %s. Please contact the author and report this issue.",
 							message.getSender());
 				else
 					StructureLogicAlveary.slabBlocks.add(block);
 			} catch (Exception e) {
+				Logger.getLogger("Forestry").log(Level.WARNING,
+						"Received an invalid 'add-alveary-slab' request from mod %s. Please contact the author and report this issue.",
+						message.getSender());
 			}
 		return super.processIMCMessage(message);
 	}
