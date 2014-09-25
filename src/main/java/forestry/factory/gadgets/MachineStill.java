@@ -29,7 +29,6 @@ import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidStack;
 
 import buildcraft.api.gates.ITrigger;
-import buildcraft.api.power.PowerHandler;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
@@ -140,6 +139,7 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 	public int distillationTotalTime = 0;
 
 	public MachineStill() {
+		super(500, 1100, 50, 8000);
 		setHints(Config.hints.get("still"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluidInputs);
 		resourceTank.tankMode = StandardTank.TankMode.INPUT;
@@ -156,11 +156,6 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 	@Override
 	public void openGui(EntityPlayer player, TileBase tile) {
 		player.openGui(ForestryAPI.instance, GuiId.StillGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
-	}
-
-	@Override
-	protected void configurePowerProvider(PowerHandler provider) {
-		provider.configure(50, 110, 5, 800);
 	}
 
 	@Override

@@ -27,7 +27,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import buildcraft.api.gates.ITrigger;
-import buildcraft.api.power.PowerHandler;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
@@ -143,6 +142,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 	private int timePerItem;
 
 	public MachineCentrifuge() {
+		super(400, 800, 40, Defaults.MACHINE_MAX_ENERGY);
 		setHints(Config.hints.get("centrifuge"));
 	}
 
@@ -154,11 +154,6 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 	@Override
 	public void openGui(EntityPlayer player, TileBase tile) {
 		player.openGui(ForestryAPI.instance, GuiId.CentrifugeGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
-	}
-
-	@Override
-	protected void configurePowerProvider(PowerHandler provider) {
-		provider.configure(40, 80, 4, Defaults.MACHINE_MAX_ENERGY);
 	}
 
 	/* LOADING & SAVING */

@@ -178,12 +178,12 @@ public class Defaults {
 	public static final int ENGINE_CYCLE_DURATION_SEED_OIL = 2500;
 	public static final int ENGINE_CYCLE_DURATION_BIOMASS = 2500;
 	public static final int ENGINE_CYCLE_DURATION_ETHANOL = 15000;
-	public static final int ENGINE_FUEL_VALUE_WATER = 1;
-	public static final int ENGINE_FUEL_VALUE_JUICE = 1;
-	public static final int ENGINE_FUEL_VALUE_HONEY = 2;
-	public static final int ENGINE_FUEL_VALUE_MILK = 1;
-	public static final int ENGINE_FUEL_VALUE_SEED_OIL = 3;
-	public static final int ENGINE_FUEL_VALUE_BIOMASS = 5;
+	public static final int ENGINE_FUEL_VALUE_WATER = 10;
+	public static final int ENGINE_FUEL_VALUE_JUICE = 10;
+	public static final int ENGINE_FUEL_VALUE_HONEY = 20;
+	public static final int ENGINE_FUEL_VALUE_MILK = 10;
+	public static final int ENGINE_FUEL_VALUE_SEED_OIL = 30;
+	public static final int ENGINE_FUEL_VALUE_BIOMASS = 50;
 	public static final int ENGINE_HEAT_VALUE_LAVA = 20;
 
 	public static final float ENGINE_PISTON_SPEED_MAX = 0.08f;
@@ -195,15 +195,15 @@ public class Defaults {
 	public static final int ENGINE_BRONZE_HEAT_GENERATION_ENERGY = 1;
 
 	public static final int ENGINE_COPPER_CYCLE_DURATION_PEAT = 5000;
-	public static final int ENGINE_COPPER_FUEL_VALUE_PEAT = 1;
+	public static final int ENGINE_COPPER_FUEL_VALUE_PEAT = 10;
 	public static final int ENGINE_COPPER_CYCLE_DURATION_BITUMINOUS_PEAT = 6000;
-	public static final int ENGINE_COPPER_FUEL_VALUE_BITUMINOUS_PEAT = 2;
+	public static final int ENGINE_COPPER_FUEL_VALUE_BITUMINOUS_PEAT = 20;
 	public static final int ENGINE_COPPER_HEAT_MAX = 10000;
 	public static final int ENGINE_COPPER_ASH_FOR_ITEM = 7500;
 
 	public static final int ENGINE_TIN_HEAT_MAX = 3000;
-	public static final int ENGINE_TIN_EU_FOR_CYCLE = 6;
-	public static final int ENGINE_TIN_ENERGY_PER_CYCLE = 2;
+	public static final int ENGINE_TIN_EU_FOR_CYCLE = 5; //Reduced from 6 to 5, as per the 4 RF to 1 EU ratio
+	public static final int ENGINE_TIN_ENERGY_PER_CYCLE = 20;
 	public static final int ENGINE_TIN_MAX_EU_STORED = 2 * ENGINE_TIN_EU_FOR_CYCLE;
 	public static final int ENGINE_TIN_MAX_EU_BATTERY = 100;
 
@@ -211,10 +211,10 @@ public class Defaults {
 	public static final int PROCESSOR_TANK_CAPACITY = 10 * BUCKET_VOLUME;
 
 	public static final int MACHINE_LATENCY = 1000;
-	public static final int MACHINE_MIN_ENERGY_RECEIVED = 5;
-	public static final int MACHINE_MAX_ENERGY_RECEIVED = 40;
-	public static final int MACHINE_MIN_ACTIVATION_ENERGY = 15;
-	public static final int MACHINE_MAX_ENERGY = 500;
+	public static final int MACHINE_MIN_ENERGY_RECEIVED = 50;
+	public static final int MACHINE_MAX_ENERGY_RECEIVED = 400;
+	public static final int MACHINE_MIN_ACTIVATION_ENERGY = 150;
+	public static final int MACHINE_MAX_ENERGY = 5000;
 
 	public static final int RAINMAKER_RAIN_DURATION_IODINE = 10000;
 

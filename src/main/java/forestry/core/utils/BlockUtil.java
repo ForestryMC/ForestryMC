@@ -34,6 +34,7 @@ import buildcraft.api.transport.IPipeConnection.ConnectOverride;
 import buildcraft.api.transport.IPipeTile;
 import buildcraft.api.transport.IPipeTile.PipeType;
 
+import cofh.api.energy.IEnergyHandler;
 import forestry.core.config.Defaults;
 
 public class BlockUtil {
@@ -146,15 +147,15 @@ public class BlockUtil {
 		return false;
 	}
 
-	public static boolean isPoweredTile(ForgeDirection side, TileEntity tile) {
+	public static boolean isRFTile(ForgeDirection side, TileEntity tile) {
 		if (tile == null)
 			return false;
 
-		if (!(tile instanceof IPowerReceptor))
+		if (!(tile instanceof IEnergyHandler))
 			return false;
 
-		IPowerReceptor receptor = (IPowerReceptor) tile;
-		return receptor.getPowerReceiver(side) != null;
+		IEnergyHandler receptor = (IEnergyHandler) tile;
+		return receptor.canConnectEnergy(side);
 	}
 
 	public static boolean tryPlantPot(World world, int x, int y, int z, Block block) {

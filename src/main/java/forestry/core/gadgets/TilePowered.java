@@ -10,28 +10,22 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
-
-import buildcraft.api.power.PowerHandler;
-import buildcraft.api.power.PowerHandler.PowerReceiver;
-import buildcraft.api.power.PowerHandler.Type;
-
-import forestry.core.GameMode;
-import forestry.core.config.Defaults;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.network.ClassMap;
+import forestry.core.network.EntityNetData;
 import forestry.core.network.IndexInPayload;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.fluids.tanks.StandardTank;
+import forestry.energy.EnergyManager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 
-public abstract class TilePowered extends TileBase implements IPowerHandler, IRenderableMachine {
+public abstract class TilePowered extends TileBase implements IRenderableMachine, IPowerHandler {
 
 	public static int WORK_CYCLES = 4;
 
@@ -69,25 +63,12 @@ public abstract class TilePowered extends TileBase implements IPowerHandler, IRe
 			ex.printStackTrace();
 		}
 	}
-	private final PowerHandler powerHandler;
 
-	public TilePowered() {
-		powerHandler = new PowerHandler(this, Type.MACHINE);
-		configurePowerProvider(powerHandler);
-		adjustPowerProvider(powerHandler);
-	}
+	protected final EnergyManager energyManager;
 
-	protected void configurePowerProvider(PowerHandler provider) {
-		provider.configure(Defaults.MACHINE_MIN_ENERGY_RECEIVED, Defaults.MACHINE_MAX_ENERGY_RECEIVED,
-				Defaults.MACHINE_MIN_ACTIVATION_ENERGY, Defaults.MACHINE_MAX_ENERGY);
-	}
-
-	private void adjustPowerProvider(PowerHandler provider) {
-		provider.configure(
-				provider.getMinEnergyReceived(),
-				Math.round(provider.getMaxEnergyReceived() * GameMode.getGameMode().getFloatSetting("energy.demand.modifier")),
-				Math.round(provider.getActivationEnergy() * GameMode.getGameMode().getFloatSetting("energy.demand.modifier")),
-				Math.round(provider.getMaxEnergyStored() * GameMode.getGameMode().getFloatSetting("energy.demand.modifier")));
+	public TilePowered(int minAcceptedEnergy, int maxTransfer, int energyPerWork, int capacity) {
+		this.energyManager = new EnergyManager(minAcceptedEnergy, maxTransfer, energyPerWork, capacity);
+		this.energyManager.setReceiveOnly();
 	}
 
 	/* STATE INFORMATION */
@@ -105,18 +86,17 @@ public abstract class TilePowered extends TileBase implements IPowerHandler, IRe
 		return false;
 	}
 
-	/* IPOWERRECEPTOR */
-	@Override
-	public PowerHandler getPowerHandler() {
-		return powerHandler;
-	}
 	private int workCounter;
 
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		if (worldObj.isRemote)
+		if (!Proxies.common.isSimulating(worldObj))
 			return;
+
+		if (workCounter < WORK_CYCLES && energyManager.consumeEnergyToDoWork()) {
+			workCounter++;
+		}
 
 		if (workCounter >= WORK_CYCLES && worldObj.getTotalWorldTime() % 5 == 0) {
 			if (workCycle())
@@ -124,59 +104,19 @@ public abstract class TilePowered extends TileBase implements IPowerHandler, IRe
 		}
 	}
 
-	@Override
-	public void doWork(PowerHandler workProvider) {
-
-		if (!Proxies.common.isSimulating(worldObj))
-			return;
-
-		// Hard limit to 4 cycles / second.
-		if (workCounter < WORK_CYCLES) {
-			powerHandler.useEnergy(powerHandler.getActivationEnergy(), powerHandler.getActivationEnergy(), true);
-			workCounter++;
-		}
-
-		/*
-		 // Hard limit to 4 cycles / second.
-		 if (worldObj.getTotalWorldTime() % 5 * 10 != 0)
-		 return;
-
-		 PluginBuildCraft.instance.invokeUseEnergyMethod(powerHandler, powerHandler.getActivationEnergy(), powerHandler.getActivationEnergy(), false);
-
-		 // Do not consume energy if the boiler didn't do any work.
-		 if (!workCycle())
-		 return;
-
-		 // Use up energy since we did some work.
-		 PluginBuildCraft.instance.invokeUseEnergyMethod(powerHandler, powerHandler.getActivationEnergy(), powerHandler.getActivationEnergy(), true);
-		 */
-	}
-
 	public abstract boolean workCycle();
-
-	@Override
-	public PowerReceiver getPowerReceiver(ForgeDirection side) {
-		return powerHandler.getPowerReceiver();
-	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		powerHandler.writeToNBT(nbt);
+		energyManager.writeToNBT(nbt);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		powerHandler.readFromNBT(nbt);
+		energyManager.readFromNBT(nbt);
 	}
-
-	/*
-	 @Override
-	 public int powerRequest(ForgeDirection direction) {
-	 float needed = powerProvider.getMaxEnergyStored() - powerProvider.getEnergyStored();
-	 return (int) Math.ceil(Math.min(powerProvider.getMaxEnergyReceived(), needed));
-	 } */
 
 	/* LIQUID CONTAINER HANDLING */
 	protected ItemStack bottleIntoContainer(ItemStack canStack, ItemStack outputStack, FluidContainerData container, StandardTank tank) {
@@ -209,5 +149,36 @@ public abstract class TilePowered extends TileBase implements IPowerHandler, IRe
 	@Override
 	public EnumTankLevel getSecondaryLevel() {
 		return EnumTankLevel.EMPTY;
+	}
+
+	/* IPowerHandler */
+	@Override
+	public EnergyManager getEnergyManager() {
+		return energyManager;
+	}
+
+	@Override
+	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+		return energyManager.receiveEnergy(from, maxReceive, simulate);
+	}
+
+	@Override
+	public int extractEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+		return energyManager.extractEnergy(from, maxReceive, simulate);
+	}
+
+	@Override
+	public int getEnergyStored(ForgeDirection from) {
+		return energyManager.getEnergyStored(from);
+	}
+
+	@Override
+	public int getMaxEnergyStored(ForgeDirection from) {
+		return energyManager.getMaxEnergyStored(from);
+	}
+
+	@Override
+	public boolean canConnectEnergy(ForgeDirection from) {
+		return energyManager.canConnectEnergy(from);
 	}
 }

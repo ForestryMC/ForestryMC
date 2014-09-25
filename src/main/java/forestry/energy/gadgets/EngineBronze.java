@@ -81,7 +81,7 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 	private boolean shutdown;
 
 	public EngineBronze() {
-		super(Defaults.ENGINE_BRONZE_HEAT_MAX, 30000, 500);
+		super(Defaults.ENGINE_BRONZE_HEAT_MAX, 300000, 5000);
 		setHints(Config.hints.get("engine.bronze"));
 
 		inventory = new TileInventoryAdapter(this, 1, "Items");
@@ -167,7 +167,7 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 				if (burnTime > 0) {
 					burnTime--;
 					currentOutput = determineFuelValue(FluidRegistry.getFluid(currentFluidId));
-					addEnergy(currentOutput);
+					energyManager.generateEnergy(currentOutput);
 				} else {
 					burnTime = totalTime = this.determineBurnTime(fuelTank.getFluid().getFluid());
 					currentFluidId = fuelTank.getFluid().getFluid().getID();
@@ -353,7 +353,7 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 			currentOutput = data;
 			break;
 		case 3:
-			storedEnergy = data;
+			energyManager.fromPacketInt(data);
 			break;
 		case 4:
 			heat = data;
@@ -370,7 +370,7 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 		iCrafting.sendProgressBarUpdate(containerEngine, i, burnTime);
 		iCrafting.sendProgressBarUpdate(containerEngine, i + 1, totalTime);
 		iCrafting.sendProgressBarUpdate(containerEngine, i + 2, currentOutput);
-		iCrafting.sendProgressBarUpdate(containerEngine, i + 3, (int) storedEnergy);
+		iCrafting.sendProgressBarUpdate(containerEngine, i + 3, energyManager.toPacketInt());
 		iCrafting.sendProgressBarUpdate(containerEngine, i + 4, heat);
 		iCrafting.sendProgressBarUpdate(containerEngine, i + 5, currentFluidId);
 	}

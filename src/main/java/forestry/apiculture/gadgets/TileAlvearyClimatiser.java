@@ -10,20 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerHandler;
-import buildcraft.api.power.PowerHandler.PowerReceiver;
-import buildcraft.api.power.PowerHandler.Type;
-
+import cofh.api.energy.IEnergyHandler;
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.core.network.PacketPayload;
+import forestry.energy.EnergyManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
 
-public abstract class TileAlvearyClimatiser extends TileAlveary implements IPowerReceptor {
+public abstract class TileAlvearyClimatiser extends TileAlveary implements IEnergyHandler {
 
 	public static class ClimateControl {
 
@@ -37,7 +32,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IPowe
 			this.boundaryUp = boundaryUp;
 		}
 	}
-	PowerHandler powerProvider;
+	protected EnergyManager energyManager;
 	ClimateControl climateControl;
 	private int transferTime = 0;
 	private int animationDelay = 0;
@@ -47,8 +42,8 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IPowe
 	public TileAlvearyClimatiser(ClimateControl control, int textureOff, int textureOn, int componentBlockMeta) {
 		super(componentBlockMeta);
 		this.climateControl = control;
-		powerProvider = new PowerHandler(this, Type.MACHINE);
-		powerProvider.configure(10, 100, 25, 200);
+		energyManager = new EnergyManager(100, 1000, 250, 2000);
+		energyManager.setReceiveOnly();
 		this.textureOff = textureOff;
 		this.textureOn = textureOn;
 	}
@@ -62,13 +57,19 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IPowe
 	protected void updateServerSide() {
 		super.updateServerSide();
 
-		// BC Power
-		if (powerProvider != null) {
-			powerProvider.update();
-		}
-
 		if (!this.hasMaster())
 			return;
+
+		if (energyManager.consumeEnergyToDoWork()) {
+
+			transferTime = energyManager.getEnergyPerWork();
+
+			if (animationDelay <= 0) {
+				animationDelay = 100;
+				sendNetworkUpdate();
+			} else
+				animationDelay = 100;
+		}
 
 		if (transferTime > 0) {
 			transferTime--;
@@ -98,41 +99,18 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IPowe
 			return textureOff;
 	}
 
-	/* IPOWERRECEPTOR */
-	@Override
-	public void doWork(PowerHandler workProvider) {
-		if (!this.hasMaster())
-			return;
-
-		if (powerProvider.useEnergy(powerProvider.getActivationEnergy(), powerProvider.getEnergyStored(), false) < powerProvider.getActivationEnergy())
-			return;
-
-		transferTime = (int) Math.round(powerProvider.useEnergy(powerProvider.getActivationEnergy(), powerProvider.getEnergyStored(), true));
-
-		if (animationDelay <= 0) {
-			animationDelay = 100;
-			sendNetworkUpdate();
-		} else
-			animationDelay = 100;
-	}
-
-	@Override
-	public PowerReceiver getPowerReceiver(ForgeDirection side) {
-		return powerProvider.getPowerReceiver();
-	}
-
 	/* LOADING & SAVING */
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
-		powerProvider.readFromNBT(nbttagcompound);
+		energyManager.readFromNBT(nbttagcompound);
 		transferTime = nbttagcompound.getInteger("Heating");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
-		powerProvider.writeToNBT(nbttagcompound);
+		energyManager.writeToNBT(nbttagcompound);
 		nbttagcompound.setInteger("Heating", transferTime);
 	}
 
@@ -152,5 +130,31 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IPowe
 		PacketPayload payload = new PacketPayload(0, 1);
 		payload.shortPayload[0] = (short) animationDelay;
 		return payload;
+	}
+
+	/* IEnergyHandler */
+	@Override
+	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+		return energyManager.receiveEnergy(from, maxReceive, simulate);
+	}
+
+	@Override
+	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+		return energyManager.extractEnergy(from, maxExtract, simulate);
+	}
+
+	@Override
+	public int getEnergyStored(ForgeDirection from) {
+		return energyManager.getEnergyStored(from);
+	}
+
+	@Override
+	public int getMaxEnergyStored(ForgeDirection from) {
+		return energyManager.getMaxEnergyStored(from);
+	}
+
+	@Override
+	public boolean canConnectEnergy(ForgeDirection from) {
+		return energyManager.canConnectEnergy(from);
 	}
 }

@@ -27,8 +27,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import buildcraft.api.power.PowerHandler;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.recipes.IFabricatorManager;
@@ -238,23 +236,17 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 	private final TankManager tankManager;
 	private FilteredTank moltenTank;
 	private final InventoryAdapter inventory = new InventoryAdapter(30, "Items");
-	private final int moltenTankIndex;
 	private int heat = 0;
 	private int guiMeltingPoint = 0;
 
 	private FluidStack pendingSmelt;
 
 	public MachineFabricator() {
+		super(500, 1100, 50, 3300);
 		Fluid liquidGlass = FluidRegistry.getFluid(Defaults.LIQUID_GLASS);
 		moltenTank = new FilteredTank(2 * Defaults.BUCKET_VOLUME, liquidGlass);
 		moltenTank.tankMode = StandardTank.TankMode.INTERNAL;
 		tankManager = new TankManager(moltenTank);
-		moltenTankIndex = moltenTank.getTankIndex();
-	}
-
-	@Override
-	protected void configurePowerProvider(PowerHandler provider) {
-		provider.configure(50, 110, 5, 330);
 	}
 
 	@Override

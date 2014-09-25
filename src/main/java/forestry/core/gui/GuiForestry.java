@@ -96,7 +96,7 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		if (inventory instanceof IClimatised && ((IClimatised) inventory).isClimatized())
 			ledgerManager.add(new ClimateLedger(ledgerManager, (IClimatised) inventory));
 
-		if (!Config.disableEnergyStat && inventory instanceof IPowerHandler)
+		if (!Config.disableEnergyStat && inventory instanceof IPowerHandler && ((IPowerHandler) inventory).getEnergyManager().getMaxEnergyStored() > 0)
 			ledgerManager.add(new PowerLedger(ledgerManager, (IPowerHandler) inventory));
 
 		if (!Config.disableHints && inventory instanceof IHintSource && ((IHintSource) inventory).hasHints())

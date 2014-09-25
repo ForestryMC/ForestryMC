@@ -34,7 +34,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import buildcraft.api.gates.ITrigger;
-import buildcraft.api.power.PowerHandler;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.EnumErrorCode;
@@ -156,6 +155,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	private int fillingTotalTime;
 
 	public MachineBottler() {
+		super(500, 1100, 50, 4000);
 		setHints(Config.hints.get("bottler"));
 		resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 		tankManager = new TankManager(resourceTank);
@@ -169,12 +169,6 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	@Override
 	public void openGui(EntityPlayer player, TileBase tile) {
 		player.openGui(ForestryAPI.instance, GuiId.BottlerGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
-	}
-
-
-	@Override
-	protected void configurePowerProvider(PowerHandler provider) {
-		provider.configure(50, 110, 5, 400);
 	}
 
 	/* SAVING & LOADING */

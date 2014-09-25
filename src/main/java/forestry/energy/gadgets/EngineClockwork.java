@@ -29,7 +29,7 @@ public class EngineClockwork extends Engine {
 	private final static int WIND_DELAY = 10;
 	
 	private static final int ENGINE_CLOCKWORK_HEAT_MAX = 300000;
-	private static final float ENGINE_CLOCKWORK_ENERGY_PER_CYCLE = 0.25f;
+	private static final int ENGINE_CLOCKWORK_ENERGY_PER_CYCLE = 2;
 	private static final float ENGINE_CLOCKWORK_WIND_MAX = 8f;
 
 	private static final DamageSourceForestry damageSourceEngineClockwork = new DamageSourceForestry("engine.clockwork");
@@ -38,7 +38,7 @@ public class EngineClockwork extends Engine {
 	private short delay = 0;
 	
 	public EngineClockwork() {
-		super(ENGINE_CLOCKWORK_HEAT_MAX, 1000, 50);
+		super(ENGINE_CLOCKWORK_HEAT_MAX, 10000, 500);
 	}
 	
 	@Override
@@ -112,7 +112,7 @@ public class EngineClockwork extends Engine {
 			tension *= 0.9995f;
 		else
 			tension = 0;
-		addEnergy(ENGINE_CLOCKWORK_ENERGY_PER_CYCLE * tension);
+		energyManager.generateEnergy(ENGINE_CLOCKWORK_ENERGY_PER_CYCLE * (int)tension);
 	}
 
 	@Override
@@ -142,7 +142,7 @@ public class EngineClockwork extends Engine {
 			return 0;
 		
 		float fromClockwork = (tension / ENGINE_CLOCKWORK_WIND_MAX) * Defaults.ENGINE_PISTON_SPEED_MAX;
-		return fromClockwork >= 0.01f ? fromClockwork : storedEnergy > 0 ? 0.01f : 0;  
+		return fromClockwork >= 0.01f ? fromClockwork : energyManager.getTotalEnergyStored() > 0 ? 0.01f : 0;
 	}
 	
 	@Override public void getGUINetworkData(int i, int j) {}

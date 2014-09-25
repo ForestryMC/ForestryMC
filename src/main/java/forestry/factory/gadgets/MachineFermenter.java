@@ -30,7 +30,6 @@ import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidStack;
 
 import buildcraft.api.gates.ITrigger;
-import buildcraft.api.power.PowerHandler;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
@@ -197,6 +196,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 	public int fuelCurrentFerment = 0;
 
 	public MachineFermenter() {
+		super(50, 2000, 150, 8000);
 		setHints(Config.hints.get("fermenter"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluidInputs);
 		resourceTank.tankMode = StandardTank.TankMode.INPUT;
@@ -213,11 +213,6 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 	@Override
 	public void openGui(EntityPlayer player, TileBase tile) {
 		player.openGui(ForestryAPI.instance, GuiId.FermenterGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
-	}
-
-	@Override
-	protected void configurePowerProvider(PowerHandler provider) {
-		provider.configure(5, 200, 15, 800);
 	}
 
 	@Override

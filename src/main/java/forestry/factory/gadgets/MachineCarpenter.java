@@ -35,7 +35,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import buildcraft.api.gates.ITrigger;
-import buildcraft.api.power.PowerHandler;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.ICarpenterManager;
@@ -234,6 +233,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	}
 
 	public MachineCarpenter() {
+		super(500, 1100, 50, 4000);
 		setHints(Config.hints.get("carpenter"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluids);
 		craftingInventory = new TileInventoryAdapter(this, 10, "CraftItems");
@@ -250,11 +250,6 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	@Override
 	public void openGui(EntityPlayer player, TileBase tile) {
 		player.openGui(ForestryAPI.instance, GuiId.CarpenterGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
-	}
-
-	@Override
-	protected void configurePowerProvider(PowerHandler provider) {
-		provider.configure(50, 110, 5, 400);
 	}
 
 	/* LOADING & SAVING */

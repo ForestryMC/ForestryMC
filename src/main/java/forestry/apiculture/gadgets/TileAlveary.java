@@ -12,7 +12,6 @@ package forestry.apiculture.gadgets;
 
 import java.util.LinkedList;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;

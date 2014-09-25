@@ -61,7 +61,7 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 	private final TileInventoryAdapter inventory;
 
 	public EngineCopper() {
-		super(Defaults.ENGINE_COPPER_HEAT_MAX, 20000, 400);
+		super(Defaults.ENGINE_COPPER_HEAT_MAX, 200000, 4000);
 		setHints(Config.hints.get("engine.copper"));
 
 		ashForItem = Defaults.ENGINE_COPPER_ASH_FOR_ITEM;
@@ -133,7 +133,7 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 
 			if (isActivated()) {
 				currentOutput = determineFuelValue(new ItemStack(fuelItem, 1, fuelItemMeta));
-				addEnergy(currentOutput);
+				energyManager.generateEnergy(currentOutput);
 			}
 		} else if (isActivated()) {
 			int fuelslot = getFuelSlot();
@@ -174,7 +174,7 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 
 		if (isBurning()) {
 			heat++;
-			if (((double) storedEnergy / (double) maxEnergy) > 0.5)
+			if (((double) energyManager.getTotalEnergyStored() / (double) maxEnergy) > 0.5)
 				heat++;
 		}
 
@@ -333,7 +333,7 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 			currentOutput = j;
 			break;
 		case 3:
-			storedEnergy = j;
+			energyManager.fromPacketInt(j);
 			break;
 		case 4:
 			heat = j;
@@ -346,7 +346,7 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 		iCrafting.sendProgressBarUpdate(containerEngine, 0, burnTime);
 		iCrafting.sendProgressBarUpdate(containerEngine, 1, totalBurnTime);
 		iCrafting.sendProgressBarUpdate(containerEngine, 2, currentOutput);
-		iCrafting.sendProgressBarUpdate(containerEngine, 3, (int)storedEnergy);
+		iCrafting.sendProgressBarUpdate(containerEngine, 3, energyManager.toPacketInt());
 		iCrafting.sendProgressBarUpdate(containerEngine, 4, heat);
 	}
 

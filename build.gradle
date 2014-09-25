@@ -67,13 +67,13 @@ repositories {
 }
 
 configurations {
-	buildcraft
-	compile.extendsFrom buildcraft
+	apis
+	compile.extendsFrom apis
 }
 
 dependencies {
 	compile 'net.industrial-craft:industrialcraft-2:2.2.575-experimental:api'
-	buildcraft 'com.mod-buildcraft:buildcraft:6.0.18:dev'
+	apis 'com.mod-buildcraft:buildcraft:6.0.18:dev'
 }
 
 processResources {
@@ -174,7 +174,7 @@ jar {
 	archiveName = "main.jar"
 
     from {
-		configurations.buildcraft.collect {
+		configurations.apis.collect {
 			it.isDirectory() ? it : zipTree(it).matching {
 				include '**/api/**'
 			}
@@ -252,7 +252,7 @@ task devJar ( type: Zip, dependsOn: devJarSigned ) {
 	}
 
 	from {
-		configurations.buildcraft.collect {
+		configurations.apis.collect {
 			it.isDirectory() ? it : zipTree(it).matching {
 				include '**/api/**'
 			}

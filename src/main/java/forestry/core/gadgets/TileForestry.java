@@ -32,7 +32,6 @@ import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IOwnable;
-import forestry.core.interfaces.IPowerHandler;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.INetworkedEntity;
 import forestry.core.network.PacketPayload;
@@ -45,9 +44,6 @@ import forestry.core.utils.Vect;
 public abstract class TileForestry extends TileEntity implements INetworkedEntity, IOwnable, IErrorSource {
 
 	protected boolean isInited = false;
-	protected int energyConsumed;
-	protected int energyLast;
-	protected int energyReceived;
 
 	public Vect Coords() {
 		return new Vect(xCoord, yCoord, zCoord);
@@ -84,13 +80,6 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 
 		if (!Proxies.common.isSimulating(worldObj))
 			return;
-
-		if (this instanceof IPowerHandler) {
-			IPowerHandler receptor = (IPowerHandler) this;
-			if (receptor.getPowerHandler() != null) {
-				receptor.getPowerHandler().update();
-			}
-		}
 	}
 
 	public abstract void initialize();
