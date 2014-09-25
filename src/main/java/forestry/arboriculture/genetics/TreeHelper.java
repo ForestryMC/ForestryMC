@@ -208,16 +208,17 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 		if (!ForestryBlock.leaves.isBlockEqual(world, x, y, z))
 			return false;
 
+		TileLeaves tileLeaves = new TileLeaves();
+		tileLeaves.setTree((ITree) tree.copy());
+		tileLeaves.setOwner(owner);
+
+		world.setTileEntity(x, y, z, tileLeaves);
+
 		TileEntity tile = world.getTileEntity(x, y, z);
 		if (!(tile instanceof TileLeaves)) {
 			world.setBlockToAir(x, y, z);
 			return false;
 		}
-
-		TileLeaves leaves = (TileLeaves) tile;
-		leaves.setTree((ITree) tree.copy());
-		leaves.setOwner(owner);
-		world.markBlockForUpdate(x, y, z);
 
 		return true;
 	}

@@ -273,8 +273,9 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			// System.out.println(String.format("Adding %s to %s", potential.size(), direction));
 
 			// Set the maximum allowed extent.
-			if (potential.size() + 1 > allowedExtent)
-				allowedExtent = potential.size() + 1;
+			int size = potential.size() * 3;
+			if (size > allowedExtent)
+				allowedExtent = size;
 			targets.put(direction, potential.toArray(new FarmTarget[0]));
 		}
 

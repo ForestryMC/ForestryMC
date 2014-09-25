@@ -39,6 +39,7 @@ public class ClientProxyArboriculture extends ProxyArboriculture {
 		RenderingRegistry.registerBlockHandler(new FruitPodRenderingHandler());
 
 		MinecraftForgeClient.registerItemRenderer(ForestryBlock.stairs.item(), new StairItemRenderer());
+		MinecraftForgeClient.registerItemRenderer(ForestryBlock.leaves.item(), new LeavesRenderingHandler());
 	}
 
 	@Override

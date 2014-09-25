@@ -231,8 +231,8 @@ public class Bee extends IndividualLiving implements IBee {
 				&& !genome.getCaveDwelling() && !housing.isSunlightSimulated())
 			return EnumErrorCode.NOSKY.ordinal();
 
-		// / And finally biome check
-		if (!checkBiomeHazard(biome))
+		// / And finally climate check
+		if (!checkSuitableClimate(housing.getTemperature(), housing.getHumidity()))
 			return EnumErrorCode.INVALIDBIOME.ordinal();
 
 		return EnumErrorCode.OK.ordinal();
@@ -250,6 +250,13 @@ public class Bee extends IndividualLiving implements IBee {
 
 		EnumTemperature temperature = EnumTemperature.getFromValue(biome.temperature);
 		EnumHumidity humidity = EnumHumidity.getFromValue(biome.rainfall);
+		return AlleleManager.climateHelper.isWithinLimits(temperature, humidity,
+				genome.getPrimary().getTemperature(), genome.getToleranceTemp(),
+				genome.getPrimary().getHumidity(), genome.getToleranceHumid());
+	}
+
+	private boolean checkSuitableClimate(EnumTemperature temperature, EnumHumidity humidity) {
+
 		return AlleleManager.climateHelper.isWithinLimits(temperature, humidity,
 				genome.getPrimary().getTemperature(), genome.getToleranceTemp(),
 				genome.getPrimary().getHumidity(), genome.getToleranceHumid());
