@@ -35,8 +35,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 	private final IFarmable[] seeds;
 
 	public FarmLogicCrops(IFarmHousing housing, IFarmable[] seeds) {
-		super(housing, new ItemStack[] { new ItemStack(Blocks.dirt) }, new ItemStack[] { new ItemStack(Blocks.farmland) }, new ItemStack[] {
-				new ItemStack(Blocks.dirt), new ItemStack(Blocks.grass) });
+		super(housing, new ItemStack[] { new ItemStack(Blocks.dirt) }, new ItemStack[] { new ItemStack(Blocks.farmland) }, new ItemStack[] { new ItemStack(Blocks.grass) });
 
 		this.seeds = seeds;
 	}
