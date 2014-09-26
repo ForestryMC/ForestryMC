@@ -311,8 +311,6 @@ public class PluginArboriculture extends ForestryPlugin {
 
 	@Override
 	protected void registerBackpackItems() {
-		if (BackpackManager.backpackItems == null)
-			return;
 
 		for (ForestryBlock block : logs)
 			BackpackManager.definitions.get("forester").addValidItem(block.getWildcard());

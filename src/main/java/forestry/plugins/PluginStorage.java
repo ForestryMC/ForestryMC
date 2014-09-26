@@ -91,7 +91,15 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 	@Override
 	public void preInit() {
 		BackpackManager.backpackInterface = new BackpackHelper();
-		createBackpackArrays();
+
+		BackpackManager.backpackItems = new ArrayList[6];
+
+		BackpackManager.backpackItems[0] = minerItems;
+		BackpackManager.backpackItems[1] = diggerItems;
+		BackpackManager.backpackItems[2] = foresterItems;
+		BackpackManager.backpackItems[3] = hunterItems;
+		BackpackManager.backpackItems[4] = adventurerItems;
+		BackpackManager.backpackItems[5] = builderItems;
 	}
 
 	@Override
@@ -121,6 +129,12 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 
 		config.save();
 
+		BackpackManager.definitions.get("miner").addValidItems(minerItems);
+		BackpackManager.definitions.get("digger").addValidItems(diggerItems);
+		BackpackManager.definitions.get("forester").addValidItems(foresterItems);
+		BackpackManager.definitions.get("hunter").addValidItems(hunterItems);
+		BackpackManager.definitions.get("adventurer").addValidItems(adventurerItems);
+		BackpackManager.definitions.get("builder").addValidItems(builderItems);
 	}
 
 	public static void addBackpackItem(String pack, ItemStack stack) {
@@ -225,48 +239,43 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 
 	@Override
 	protected void registerItems() {
-		// / BACKPACKS
-		ForestryItem.apiaristBackpack.registerItem(new ItemNaturalistBackpack(GuiId.ApiaristBackpackGUI.ordinal(), new BackpackDefinitionApiarist("apiarist", 0xc4923d)).setCreativeTab(Tabs.tabApiculture), "apiaristBag");
-		BackpackDefinition definition = (BackpackDefinition) ((ItemBackpack) ForestryItem.apiaristBackpack.item()).getDefinition();
+		BackpackDefinition definition = new BackpackDefinitionApiarist("apiarist", 0xc4923d);
 		BackpackManager.definitions.put(definition.getKey(), definition);
+		ForestryItem.apiaristBackpack.registerItem(new ItemNaturalistBackpack(GuiId.ApiaristBackpackGUI.ordinal(), definition).setCreativeTab(Tabs.tabApiculture), "apiaristBag");
 
-		ForestryItem.lepidopteristBackpack.registerItem(new ItemNaturalistBackpack(GuiId.LepidopteristBackpackGUI.ordinal(), new BackpackDefinitionLepidopterist("lepidopterist", 0x995b31)).setCreativeTab(Tabs.tabLepidopterology), "lepidopteristBag");
-		definition = (BackpackDefinition) ((ItemBackpack) ForestryItem.lepidopteristBackpack.item()).getDefinition();
+		definition = new BackpackDefinitionLepidopterist("lepidopterist", 0x995b31);
 		BackpackManager.definitions.put(definition.getKey(), definition);
+		ForestryItem.lepidopteristBackpack.registerItem(new ItemNaturalistBackpack(GuiId.LepidopteristBackpackGUI.ordinal(), definition).setCreativeTab(Tabs.tabLepidopterology), "lepidopteristBag");
 
-		definition = new BackpackDefinition("miner", 0x36187d).setValidItems(BackpackManager.backpackItems[0]);
+		definition = new BackpackDefinition("miner", 0x36187d);
 		BackpackManager.definitions.put(definition.getKey(), definition);
 		ForestryItem.minerBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "minerBag");
 		ForestryItem.minerBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "minerBagT2");
 
-		definition = new BackpackDefinition("digger", 0x363cc5).setValidItems(BackpackManager.backpackItems[1]);
+		definition = new BackpackDefinition("digger", 0x363cc5);
 		BackpackManager.definitions.put(definition.getKey(), definition);
 		ForestryItem.diggerBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "diggerBag");
 		ForestryItem.diggerBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "diggerBagT2");
 
-		definition = new BackpackDefinition("forester", 0x347427)
-				.setValidItems(BackpackManager.backpackItems[2]);
+		definition = new BackpackDefinition("forester", 0x347427);
 		BackpackManager.definitions.put(definition.getKey(), definition);
 		ForestryItem.foresterBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "foresterBag");
 		ForestryItem.foresterBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "foresterBagT2");
 
-		definition = new BackpackDefinition("hunter", 0x412215).setValidItems(BackpackManager.backpackItems[3]);
+		definition = new BackpackDefinition("hunter", 0x412215);
 		BackpackManager.definitions.put(definition.getKey(), definition);
 		ForestryItem.hunterBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "hunterBag");
 		ForestryItem.hunterBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "hunterBagT2");
 
-		definition = new BackpackDefinition("adventurer", 0x7fb8c2)
-				.setValidItems(BackpackManager.backpackItems[4]);
+		definition = new BackpackDefinition("adventurer", 0x7fb8c2);
 		BackpackManager.definitions.put(definition.getKey(), definition);
 		ForestryItem.adventurerBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "adventurerBag");
 		ForestryItem.adventurerBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "adventurerBagT2");
 
-		definition = new BackpackDefinition("builder", 0xdd3a3a)
-				.setValidItems(BackpackManager.backpackItems[5]);
+		definition = new BackpackDefinition("builder", 0xdd3a3a);
 		BackpackManager.definitions.put(definition.getKey(), definition);
 		ForestryItem.builderBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "builderBag");
 		ForestryItem.builderBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "builderBagT2");
-
 	}
 
 	@Override
@@ -483,23 +492,6 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	private void createBackpackArrays() {
-
-		if (BackpackManager.backpackItems != null)
-			return;
-
-		BackpackManager.backpackItems = new ArrayList[6];
-
-		BackpackManager.backpackItems[0] = minerItems;
-		BackpackManager.backpackItems[1] = diggerItems;
-		BackpackManager.backpackItems[2] = foresterItems;
-		BackpackManager.backpackItems[3] = hunterItems;
-		BackpackManager.backpackItems[4] = adventurerItems;
-		BackpackManager.backpackItems[5] = builderItems;
-
-	}
-
 	@Override
 	protected void registerCrates() {
 	}
@@ -561,8 +553,6 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 
 	@Override
 	public void onOreRegistration(String name, ItemStack ore) {
-
-		createBackpackArrays();
 
 		if (ore == null) {
 			Proxies.log.warning("An ore/item of type %s was registered with the Forge ore dictionary, however the passed itemstack is null. Someone broke it. :(", name);

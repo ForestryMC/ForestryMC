@@ -11,12 +11,13 @@
 package forestry.storage;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import forestry.core.utils.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.storage.IBackpackDefinition;
-import forestry.core.config.Defaults;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -70,15 +71,15 @@ public class BackpackDefinition implements IBackpackDefinition {
 		return secondaryColor;
 	}
 
-	public BackpackDefinition setValidItems(ArrayList<ItemStack> validItems) {
-		this.validItems = validItems;
-		return this;
-	}
-
 	@Override
 	public void addValidItem(ItemStack validItem) {
 		if (validItem.getItem() != null)
 			this.validItems.add(validItem);
+	}
+
+	public void addValidItems(List<ItemStack> validItems) {
+		for (ItemStack validItem : validItems)
+			addValidItem(validItem);
 	}
 
 	public ArrayList<ItemStack> getValidItems(EntityPlayer player) {
@@ -88,12 +89,8 @@ public class BackpackDefinition implements IBackpackDefinition {
 	@Override
 	public boolean isValidItem(EntityPlayer player, ItemStack itemstack) {
 		for (ItemStack stack : getValidItems(player))
-			if (stack != null && stack.getItem() != null)
-				if (stack.getItemDamage() == Defaults.WILDCARD) {
-					if (stack.getItem() == itemstack.getItem())
-						return true;
-				} else if (stack.isItemEqual(itemstack))
-					return true;
+			if (StackUtils.isCraftingEquivalent(stack, itemstack, true, false))
+				return true;
 
 		return false;
 	}
