@@ -223,6 +223,7 @@ public class PluginArboriculture extends ForestryPlugin {
 
 		// Leaves
 		ForestryBlock.leaves.registerBlock(new ForestryBlockLeaves(), ItemLeavesBlock.class, "leaves");
+		OreDictionary.registerOre("treeLeaves", new ItemStack(ForestryBlock.leaves.item(), 1, OreDictionary.WILDCARD_VALUE));
 
 		// Pods
 		ForestryBlock.pods.registerBlock(new BlockFruitPod(), ItemForestryBlock.class, "pods");
