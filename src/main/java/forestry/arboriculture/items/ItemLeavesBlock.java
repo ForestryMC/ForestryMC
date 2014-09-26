@@ -55,7 +55,7 @@ public class ItemLeavesBlock extends ItemForestryBlock {
 		if (tree == null)
 			return false;
 		GameProfile owner = player.getGameProfile();
-		return PluginArboriculture.treeInterface.setLeaves(world, tree, owner, x, y, z);
+		return PluginArboriculture.treeInterface.setLeaves(world, tree, owner, x, y, z, true);
 	}
 
 }

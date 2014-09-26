@@ -63,6 +63,9 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	private boolean isPollinatedState;
 	private int ripeningTime;
 
+	// set true when placed by a player
+	private boolean isDecorative = false;
+
 	private int maturationTime;
 	private int encumbrance;
 
@@ -119,7 +122,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if(biomeId < 0)
 			updateBiome();
 
-		if(getTree() == null)
+		if (isDecorative || getTree() == null)
 			return;
 
 		boolean isDestroyed = isDestroyed();
@@ -202,6 +205,16 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		return ripeningTime;
 	}
 
+	public void setDecorative() {
+		isDecorative = true;
+		ripeningTime = getTree().getGenome().getFruitProvider().getRipeningPeriod();
+		colourFruits = determineFruitColour();
+	}
+
+	public boolean isDecorative() {
+		return isDecorative;
+	}
+
 	/* IPOLLINATABLE */
 	@Override
 	public EnumSet<EnumPlantType> getPlantType() {
@@ -213,7 +226,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public boolean canMateWith(IIndividual individual) {
-		if (getTree() == null)
+		if (getTree() == null || isDecorative)
 			return false;
 		if (getTree().getMate() != null)
 			return false;
@@ -225,7 +238,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public void mateWith(IIndividual individual) {
-		if (getTree() == null)
+		if (getTree() == null || isDecorative)
 			return;
 
 		getTree().mate((ITree) individual);
@@ -234,6 +247,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public IIndividual getPollen() {
+		if (isDecorative)
+			return null;
 		return getTree();
 	}
 
@@ -331,9 +346,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	/* IFRUITBEARER */
 	@Override
 	public Collection<ItemStack> pickFruit(ItemStack tool) {
-		if (!hasFruit())
-			return new ArrayList<ItemStack>();
-		if (getTree() == null)
+		if (!hasFruit() || isDecorative || getTree() == null)
 			return new ArrayList<ItemStack>();
 
 		ArrayList<ItemStack> picked = new ArrayList<ItemStack>(Arrays.asList(getTree().produceStacks(worldObj, xCoord, yCoord, zCoord, getRipeningTime())));
@@ -366,7 +379,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public void addRipeness(float add) {
-		if (getTree() == null)
+		if (getTree() == null || isDecorative)
 			return;
 		ripeningTime += getTree().getGenome().getFruitProvider().getRipeningPeriod() * add;
 		sendNetworkUpdateRipening();
@@ -436,6 +449,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public void setCaterpillar(IButterfly butterfly) {
+		if (isDecorative)
+			return;
 		maturationTime = 0;
 		caterpillar = butterfly;
 		sendNetworkUpdate();
@@ -443,7 +458,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public boolean canNurse(IButterfly butterfly) {
-		return !isDestroyed() && caterpillar == null;
+		return !isDecorative && !isDestroyed() && caterpillar == null;
 	}
 
 	/* IHousing */

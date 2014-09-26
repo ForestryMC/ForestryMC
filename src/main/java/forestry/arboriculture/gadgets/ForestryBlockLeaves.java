@@ -100,6 +100,9 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 
 	@Override
 	public void onBlockHarvested(World world, int x, int y, int z, int metadata, EntityPlayer player) {
+		if (getLeafTile(world, x, y, z).isDecorative())
+			return;
+
 		int fortune = EnchantmentHelper.getFortuneModifier(player);
 		float saplingModifier = 1.0f;
 
@@ -133,10 +136,7 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 		ArrayList<ItemStack> prod = new ArrayList<ItemStack>();
 
 		TileLeaves tile = getLeafTile(world, x, y, z);
-		if (tile == null)
-			return prod;
-
-		if (tile.getTree() == null)
+		if (tile == null || tile.getTree() == null || tile.isDecorative())
 			return prod;
 
 		// Add saplings
@@ -176,6 +176,13 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 			stack.setTagCompound(treeNBT);
 
 		return ret;
+	}
+
+	@Override
+	public void beginLeavesDecay(World world, int x, int y, int z) {
+		if (getLeafTile(world, x, y, z).isDecorative())
+			return;
+		super.beginLeavesDecay(world, x, y, z);
 	}
 
 	/* RENDERING */

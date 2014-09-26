@@ -161,6 +161,7 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 
 		TileLeaves leaves = new TileLeaves();
 		leaves.setTree(tree);
+		leaves.setDecorative();
 
 		IIcon leavesIcon = leaves.getIcon(Proxies.render.fancyGraphicsEnabled());
 		int color = leaves.determineFoliageColour();
@@ -205,8 +206,7 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 		if (!leaves.hasFruit())
 			return;
 
-		leaves.addRipeness(20);
-		int fruitColor = leaves.determineFruitColour();
+		int fruitColor = leaves.getFruitColour();
 		IIcon fruitTexture = leaves.getFruitTexture();
 		if (fruitTexture == null)
 			return;

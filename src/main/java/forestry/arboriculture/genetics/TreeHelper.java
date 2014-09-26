@@ -200,6 +200,11 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 
 	@Override
 	public boolean setLeaves(World world, IIndividual tree, GameProfile owner, int x, int y, int z) {
+		return setLeaves(world, tree, owner, x, y, z, false);
+	}
+
+	@Override
+	public boolean setLeaves(World world, IIndividual tree, GameProfile owner, int x, int y, int z, boolean decorative) {
 
 		boolean placed = ForestryBlock.leaves.setBlock(world, x, y, z, 0, Defaults.FLAG_BLOCK_SYNCH);
 		if (!placed)
@@ -211,6 +216,8 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 		TileLeaves tileLeaves = new TileLeaves();
 		tileLeaves.setTree((ITree) tree.copy());
 		tileLeaves.setOwner(owner);
+		if (decorative)
+			tileLeaves.setDecorative();
 
 		world.setTileEntity(x, y, z, tileLeaves);
 
