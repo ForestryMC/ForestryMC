@@ -15,6 +15,7 @@ import java.util.Locale;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,6 +28,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 
@@ -34,7 +36,6 @@ import forestry.core.CreativeTabForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.LiquidHelper;
-import forestry.core.utils.StringUtil;
 
 public class ItemLiquidContainer extends Item {
 
@@ -128,21 +129,28 @@ public class ItemLiquidContainer extends Item {
 		MovingObjectPosition movingobjectposition = this.getMovingObjectPositionFromPlayer(world, entityplayer, true);
 		if (movingobjectposition != null && movingobjectposition.typeOfHit == MovingObjectType.BLOCK) {
 
-			int i = movingobjectposition.blockX;
-			int j = movingobjectposition.blockY;
-			int k = movingobjectposition.blockZ;
-			Block targetedBlock = world.getBlock(i, j, k);
-			//int targetedMeta = world.getBlockMetadata(i, j, k);
+			int x = movingobjectposition.blockX;
+			int y = movingobjectposition.blockY;
+			int z = movingobjectposition.blockZ;
+			Block targetedBlock = world.getBlock(x, y, z);
 
-			if (!(targetedBlock instanceof IFluidBlock))
-				return itemstack;
-			IFluidBlock fluidBlock = (IFluidBlock) targetedBlock;
-			FluidStack drainable = fluidBlock.drain(world, i, j, k, false);
-			if (drainable == null || drainable.amount <= 0)
+			FluidStack fluid = null;
+
+			if (targetedBlock instanceof IFluidBlock) {
+				fluid = ((IFluidBlock)targetedBlock).drain(world, x, y, z, false);
+			} else {
+				if (targetedBlock == Blocks.water || targetedBlock == Blocks.flowing_water) {
+					fluid = new FluidStack(FluidRegistry.WATER, 1000);
+				} else if (targetedBlock == Blocks.lava || targetedBlock == Blocks.flowing_lava) {
+					fluid = new FluidStack(FluidRegistry.LAVA, 1000);
+				}
+			}
+
+			if (fluid == null || fluid.amount <= 0)
 				return itemstack;
 
 			// Check whether there is valid container for the liquid.
-			FluidContainerData container = LiquidHelper.getEmptyContainer(itemstack, drainable);
+			FluidContainerData container = LiquidHelper.getEmptyContainer(itemstack, fluid);
 			if (container == null)
 				return itemstack;
 
@@ -158,7 +166,12 @@ public class ItemLiquidContainer extends Item {
 				entityplayer.inventory.getStackInSlot(slot).stackSize++;
 
 			// Remove consumed liquid block in world
-			world.setBlockToAir(i, j, k);
+			if (targetedBlock instanceof IFluidBlock) {
+				((IFluidBlock)targetedBlock).drain(world, x, y, z, true);
+			} else {
+				world.setBlockToAir(x, y, z);
+			}
+
 			// Remove consumed empty container
 			itemstack.stackSize--;
 
