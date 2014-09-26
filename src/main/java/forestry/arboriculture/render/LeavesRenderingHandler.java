@@ -131,14 +131,14 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 		switch (type) {
 			case ENTITY:
-				renderLeafBlock((RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+				renderLeafBlock((RenderBlocks) data[0], item, 0f, 0f, 0f);
 				break;
 			case EQUIPPED:
 			case EQUIPPED_FIRST_PERSON:
-				renderLeafBlock((RenderBlocks) data[0], item, 0f, 0.0f, 0.0f);
+				renderLeafBlock((RenderBlocks) data[0], item, 0.5f, 0.5f, 0.5f);
 				break;
 			case INVENTORY:
-				renderLeafBlock((RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+				renderLeafBlock((RenderBlocks) data[0], item, 0f, 0f, 0f);
 				break;
 			default:
 		}
@@ -159,11 +159,15 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 		if (tree == null)
 			return;
 
+		GL11.glEnable(GL11.GL_BLEND);
+
 		TileLeaves leaves = new TileLeaves();
 		leaves.setTree(tree);
 		leaves.setDecorative();
 
 		IIcon leavesIcon = leaves.getIcon(Proxies.render.fancyGraphicsEnabled());
+		if (leavesIcon == null)
+			return;
 		int color = leaves.determineFoliageColour();
 
 		float r1 = (float)(color >> 16 & 255) / 255.0F;
@@ -171,8 +175,11 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 		float b1 = (float)(color & 255) / 255.0F;
 		GL11.glColor4f(r1, g1, b1, 1.0F);
 
+		GL11.glTranslatef(x, y, z);
+
 		block.setBlockBoundsForItemRender();
 		renderer.setRenderBoundsFromBlock(block);
+
 		GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
 		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 		tessellator.startDrawingQuads();
@@ -218,6 +225,7 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 
 		block.setBlockBoundsForItemRender();
 		renderer.setRenderBoundsFromBlock(block);
+
 		GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
 		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 		tessellator.startDrawingQuads();
