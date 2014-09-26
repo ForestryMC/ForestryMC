@@ -89,6 +89,7 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 	Configuration config;
 
 	@Override
+	@SuppressWarnings({"unchecked","rawtypes"})
 	public void preInit() {
 		BackpackManager.backpackInterface = new BackpackHelper();
 

@@ -12,6 +12,7 @@ package forestry.arboriculture.gadgets;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.BlockNewLeaf;
 import net.minecraft.block.ITileEntityProvider;
@@ -80,6 +81,7 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 
 	@SideOnly(Side.CLIENT)
 	@Override
+	@SuppressWarnings({"unchecked","rawtypes"})
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
 
 		for (ITree tree : PluginArboriculture.treeInterface.getIndividualTemplates()) {
@@ -183,6 +185,13 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 		if (getLeafTile(world, x, y, z).isDecorative())
 			return;
 		super.beginLeavesDecay(world, x, y, z);
+	}
+
+	@Override
+	public void updateTick(World world, int x, int y, int z, Random random) {
+		if (getLeafTile(world, x, y, z).isDecorative())
+			return;
+		super.updateTick(world, x, y, z, random);
 	}
 
 	/* RENDERING */
