@@ -36,6 +36,7 @@ import java.util.Set;
 import net.minecraft.command.CommandHandler;
 import net.minecraft.command.ICommand;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -121,7 +122,7 @@ public class PluginManager {
 
 		config.load();
 		config.addCustomCategoryComment(CATEGORY_MODULES, "Disabling these modules can greatly change how the mod functions.\n"
-				+ "Your milage may vary, please report any issues.");
+				+ "Your mileage may vary, please report any issues.");
 
 		Set<Module> toLoad = EnumSet.allOf(Module.class);
 		Iterator<Module> it = toLoad.iterator();
@@ -274,8 +275,11 @@ public class PluginManager {
 	}
 
 	private static boolean isEnabled(Configuration config, Module m) {
+		Plugin info = m.instance().getClass().getAnnotation(Plugin.class);
+
 		boolean defaultValue = true;
 		Property prop = config.get(CATEGORY_MODULES, m.toString().toLowerCase(Locale.ENGLISH).replace('_', '.'), defaultValue);
+		prop.comment = StatCollector.translateToLocal(info.unlocalizedDescription());
 		return prop.getBoolean(true);
 	}
 }
