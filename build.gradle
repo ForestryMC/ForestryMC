@@ -185,6 +185,7 @@ jar {
 task mainJarSigned ( type: Jar, dependsOn: 'reobf' ) {
 	from (zipTree(jar.getArchivePath())) {
 		exclude '**/api/**'
+		exclude '**/codechicken/**'
 	}
 
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -221,6 +222,7 @@ task mainJar ( type: Zip, dependsOn: mainJarSigned ) {
 task devJarSigned ( type: Jar, dependsOn: 'classes' ) {
 	from(sourceSets.main.output) {
 		exclude '**/api/**'
+		exclude '**/codechicken/**'
 	}
 
 	destinationDir = file("build/tmp")
