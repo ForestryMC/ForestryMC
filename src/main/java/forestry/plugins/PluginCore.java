@@ -365,6 +365,7 @@ public class PluginCore extends ForestryPlugin {
 	protected void registerRecipes() {
 
 		/* SMELTING RECIPES */
+		Proxies.common.addSmelting(ForestryBlock.resources.getItemStack(1, 0), ForestryItem.apatite.getItemStack(), 0.5f);
 		Proxies.common.addSmelting(ForestryBlock.resources.getItemStack(1, 1), ForestryItem.ingotCopper.getItemStack(), 0.5f);
 		Proxies.common.addSmelting(ForestryBlock.resources.getItemStack(1, 2), ForestryItem.ingotTin.getItemStack(), 0.5f);
 
