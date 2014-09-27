@@ -13,10 +13,16 @@ package forestry.plugins;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameData;
+import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.ICircuitLayout;
+import forestry.api.fuels.FuelManager;
+import forestry.api.fuels.GeneratorFuel;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
 import forestry.core.GameMode;
 import forestry.core.circuits.Circuit;
+import forestry.core.circuits.CircuitId;
+import forestry.core.circuits.CircuitLayout;
 import forestry.core.config.Config;
 import forestry.core.config.Configuration;
 import forestry.core.config.Defaults;
@@ -30,6 +36,10 @@ import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.RecipeUtil;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.core.utils.StackUtils;
+import forestry.energy.circuits.CircuitElectricBoost;
+import forestry.energy.circuits.CircuitElectricChoke;
+import forestry.energy.circuits.CircuitElectricEfficiency;
+import forestry.energy.circuits.CircuitFireDampener;
 import forestry.energy.gadgets.EngineDefinition;
 import forestry.energy.gadgets.EngineTin;
 import forestry.energy.gadgets.MachineGenerator;
@@ -41,6 +51,7 @@ import ic2.api.recipe.Recipes;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.util.EnumSet;
 
@@ -154,6 +165,15 @@ public class PluginIC2 extends ForestryPlugin {
 
 		Circuit.farmRubberManual = new CircuitFarmLogic("manualRubber", FarmLogicRubber.class);
 
+		ICircuitLayout layoutEngineTin = new CircuitLayout("engine.tin");
+		ChipsetManager.circuitRegistry.registerLayout(layoutEngineTin);
+
+		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_CHOKE_I, "forestry.energyChoke1");
+		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.FIRE_DAMPENER_I, "forestry.energyDampener1");
+		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_EFFICIENCY_I, "forestry.energyEfficiency1");
+		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_BOOST_I, "forestry.energyBoost1");
+		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_BOOST_II, "forestry.energyBoost2");
+
 		// Remove some items from the recycler
 		Recipes.recyclerBlacklist.add(new RecipeInputItemStack(ForestryItem.beeQueenGE.getItemStack()));
 		Recipes.recyclerBlacklist.add(new RecipeInputItemStack(ForestryItem.beePrincessGE.getItemStack()));
@@ -168,6 +188,20 @@ public class PluginIC2 extends ForestryPlugin {
 
 		definitionEngineTin.register();
 		definitionGenerator.register();
+
+		FluidStack ethanol = LiquidHelper.getLiquid(Defaults.LIQUID_ETHANOL, 1);
+		GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * GameMode.getGameMode().getFloatSetting("fuel.ethanol.generator")), 4);
+		FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
+
+		FluidStack biomass = LiquidHelper.getLiquid(Defaults.LIQUID_BIOMASS, 1);
+		GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * GameMode.getGameMode().getFloatSetting("fuel.biomass.generator")), 1);
+		FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
+
+		Circuit.energyElectricChoke1 = new CircuitElectricChoke("electric.choke.1");
+		Circuit.energyFireDampener1 = new CircuitFireDampener("dampener.1");
+		Circuit.energyElectricEfficiency1 = new CircuitElectricEfficiency("electric.efficiency.1");
+		Circuit.energyElectricBoost1 = new CircuitElectricBoost("electric.boost.1", 2, 7, 20);
+		Circuit.energyElectricBoost2 = new CircuitElectricBoost("electric.boost.2", 2, 15, 40);
 	}
 
 	@Override
@@ -264,6 +298,14 @@ public class PluginIC2 extends ForestryPlugin {
 			if (bogEarthCan.stackSize > 0)
 				Proxies.common.addRecipe(bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', waterCell, 'Y', Blocks.sand);
 		}
+
+		ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.engine.tin");
+
+		// / Solder Manager
+		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 0), Circuit.energyElectricChoke1);
+		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 1), Circuit.energyElectricBoost1);
+		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 2), Circuit.energyElectricBoost2);
+		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 3), Circuit.energyElectricEfficiency1);
 	}
 
 }

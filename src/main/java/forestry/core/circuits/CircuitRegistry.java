@@ -99,7 +99,6 @@ public class CircuitRegistry implements ICircuitRegistry {
 	}
 
 	public void initialize() {
-		registerLayout(new CircuitLayout("engine.tin"));
 	}
 	
 	
