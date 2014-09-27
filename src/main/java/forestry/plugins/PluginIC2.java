@@ -55,7 +55,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.EnumSet;
 
-@Plugin(pluginID = "IC2", name = "IndustrialCraft2", author = "SirSengir", url = Defaults.URL, description = "Compatibility plugin for IC2.")
+@Plugin(pluginID = "IC2", name = "IndustrialCraft2", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.ic2.description")
 public class PluginIC2 extends ForestryPlugin {
 
 	public static PluginIC2 instance;

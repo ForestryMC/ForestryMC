@@ -76,7 +76,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.ShapedRecipeCustom;
 
-@Plugin(pluginID = "Core", name = "Core", author = "SirSengir", url = Defaults.URL, description = "Core mechanics for Forestry. Required by all other plugins.")
+@Plugin(pluginID = "Core", name = "Core", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.core.description")
 public class PluginCore extends ForestryPlugin {
 
 	public static MachineDefinition definitionAnalyzer;

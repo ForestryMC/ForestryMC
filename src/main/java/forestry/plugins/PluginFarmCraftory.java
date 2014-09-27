@@ -24,7 +24,7 @@ import forestry.core.config.Defaults;
 import forestry.core.proxy.Proxies;
 import forestry.farming.logic.FarmableFarmCraftory;
 
-@Plugin(pluginID = "FarmCraftory", name = "FarmCraftory", author = "SirSengir", url = Defaults.URL, description = "Enables compatibility with FarmCraftory. Adds crops and vegetables to farms.")
+@Plugin(pluginID = "FarmCraftory", name = "FarmCraftory", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.farmcraftory.description")
 public class PluginFarmCraftory extends ForestryPlugin {
 
 	public static Block blockSingle;

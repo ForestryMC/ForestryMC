@@ -139,7 +139,7 @@ import forestry.core.utils.RecipeUtil;
 import forestry.core.utils.ShapedRecipeCustom;
 import java.util.EnumSet;
 
-@Plugin(pluginID = "Arboriculture", name = "Arboriculture", author = "Binnie & SirSengir", url = Defaults.URL, description = "Adds additional tree species and products.")
+@Plugin(pluginID = "Arboriculture", name = "Arboriculture", author = "Binnie & SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.arboriculture.description")
 public class PluginArboriculture extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.arboriculture.proxy.ClientProxyArboriculture", serverSide = "forestry.arboriculture.proxy.ProxyArboriculture")

@@ -51,7 +51,7 @@ import forestry.energy.gadgets.EngineTin;
 import forestry.energy.gadgets.MachineGenerator;
 import forestry.energy.proxy.ProxyEnergy;
 
-@Plugin(pluginID = "Energy", name = "Energy", author = "SirSengir", url = Defaults.URL, description = "Adds several engines compatible with BuildCraft 3 as well as a generator for IC2.")
+@Plugin(pluginID = "Energy", name = "Energy", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.energy.description")
 public class PluginEnergy extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.energy.proxy.ClientProxyEnergy", serverSide = "forestry.energy.proxy.ProxyEnergy")

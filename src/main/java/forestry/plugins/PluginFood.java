@@ -32,7 +32,7 @@ import forestry.food.items.ItemBeverage;
 import forestry.food.items.ItemBeverage.BeverageInfo;
 import forestry.food.items.ItemInfuser;
 
-@Plugin(pluginID = "Food", name = "Food", author = "SirSengir", url = Defaults.URL, description = "Adds food.")
+@Plugin(pluginID = "Food", name = "Food", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.food.description")
 public class PluginFood extends ForestryPlugin {
 
 	@Override

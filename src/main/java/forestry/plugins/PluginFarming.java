@@ -80,7 +80,7 @@ import forestry.farming.triggers.TriggerLowFertilizer;
 import forestry.farming.triggers.TriggerLowLiquid;
 import forestry.farming.triggers.TriggerLowSoil;
 
-@Plugin(pluginID = "Farming", name = "Farming", author = "SirSengir", url = Defaults.URL, description = "Adds automatic farms and harvesters for a wide variety of products.")
+@Plugin(pluginID = "Farming", name = "Farming", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.farming.description")
 public class PluginFarming extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.farming.proxy.ClientProxyFarming", serverSide = "forestry.farming.proxy.ProxyFarming")

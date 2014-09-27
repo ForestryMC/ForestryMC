@@ -38,7 +38,7 @@ import forestry.core.gadgets.TileForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.LiquidHelper;
 
-@Plugin(pluginID = "BC6", name = "BuildCraft 6", author = "SirSengir", url = Defaults.URL, description = "Compatibility plugin for BuildCraft 6.")
+@Plugin(pluginID = "BC6", name = "BuildCraft 6", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
 public class PluginBuildCraft extends ForestryPlugin implements ITriggerProvider {
 
 	public static PluginBuildCraft instance;

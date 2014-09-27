@@ -52,7 +52,7 @@ import forestry.factory.gadgets.MillRainmaker;
 import forestry.factory.gadgets.TileWorktable;
 import forestry.factory.recipes.CraftGuideIntegration;
 
-@Plugin(pluginID = "Factory", name = "Factory", author = "SirSengir", url = Defaults.URL, description = "Adds a wide variety of machines to craft, produce and process products.")
+@Plugin(pluginID = "Factory", name = "Factory", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.factory.description")
 public class PluginFactory extends ForestryPlugin {
 
 	public static MachineDefinition definitionBottler;

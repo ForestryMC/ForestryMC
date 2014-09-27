@@ -28,7 +28,7 @@ import forestry.core.config.Defaults;
 import forestry.core.genetics.Allele;
 import forestry.core.proxy.Proxies;
 
-@Plugin(pluginID = "EqEx2", name = "Equivalent Exchange 2", author = "SirSengir", url = Defaults.URL, description = "Compatibility plugin for Equivalent Exchange 2. Enables the Omega branch of bees. Requires Apiculture to be enabled.")
+@Plugin(pluginID = "EqEx2", name = "Equivalent Exchange 2", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.ee2.description")
 public class PluginEE extends ForestryPlugin {
 
 	public IMutation darkenedA;

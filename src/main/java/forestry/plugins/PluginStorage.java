@@ -76,7 +76,7 @@ import forestry.storage.items.ItemNaturalistBackpack;
 import forestry.storage.items.ItemNaturalistBackpack.BackpackDefinitionApiarist;
 import forestry.storage.items.ItemNaturalistBackpack.BackpackDefinitionLepidopterist;
 
-@Plugin(pluginID = "Storage", name = "Storage", author = "SirSengir", url = Defaults.URL, description = "Adds backpacks and crates.")
+@Plugin(pluginID = "Storage", name = "Storage", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.storage.description")
 public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandler {
 
 	private final ArrayList<ItemStack> minerItems = new ArrayList<ItemStack>();

@@ -58,7 +58,7 @@ import forestry.mail.triggers.TriggerLowInput;
 import forestry.mail.triggers.TriggerLowPaper;
 import forestry.mail.triggers.TriggerLowStamps;
 
-@Plugin(pluginID = "Mail", name = "Mail", author = "SirSengir", url = Defaults.URL, description = "Adds Forestry's mail and trade system.")
+@Plugin(pluginID = "Mail", name = "Mail", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.mail.description")
 public class PluginMail extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.mail.proxy.ClientProxyMail", serverSide = "forestry.mail.proxy.ProxyMail")

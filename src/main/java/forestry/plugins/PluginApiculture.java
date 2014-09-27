@@ -151,7 +151,7 @@ import forestry.core.triggers.Trigger;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.ShapedRecipeCustom;
 
-@Plugin(pluginID = "Apiculture", name = "Apiculture", author = "SirSengir", url = Defaults.URL, description = "Adds bees, beekeeping and bee products. Affects world generation.")
+@Plugin(pluginID = "Apiculture", name = "Apiculture", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.apiculture.description")
 public class PluginApiculture extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.apiculture.proxy.ClientProxyApiculture", serverSide = "forestry.apiculture.proxy.ProxyApiculture")
