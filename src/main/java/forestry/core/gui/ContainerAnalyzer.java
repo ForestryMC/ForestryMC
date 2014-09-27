@@ -10,18 +10,21 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import forestry.core.config.ForestryItem;
+import forestry.core.fluids.Fluids;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 
 import forestry.core.gadgets.TileAnalyzer;
 import forestry.core.genetics.ItemGE;
 import forestry.core.gui.slots.SlotCustom;
 import forestry.core.gui.slots.SlotLiquidContainer;
+import forestry.core.gui.slots.SlotOutput;
+import net.minecraft.item.ItemStack;
 
 public class ContainerAnalyzer extends ContainerLiquidTanks {
 
-	private TileAnalyzer tile;
+	private final TileAnalyzer tile;
 
 	public ContainerAnalyzer(InventoryPlayer player, TileAnalyzer tile) {
 		super(tile, tile);
@@ -31,18 +34,27 @@ public class ContainerAnalyzer extends ContainerLiquidTanks {
 		// Input buffer
 		for (int i = 0; i < 3; i++)
 			for (int k = 0; k < 2; k++)
-				addSlot(new SlotCustom(tile, TileAnalyzer.SLOT_INPUT_1 + i * 2 + k, 8 + k * 18, 28 + i * 18, new Object[] { ItemGE.class }));
+				addSlot(new SlotCustom(tile, TileAnalyzer.SLOT_INPUT_1 + i * 2 + k, 8 + k * 18, 28 + i * 18, ItemGE.class));
 
 		// Analyze slot
-		addSlot(new SlotCustom(tile, TileAnalyzer.SLOT_ANALYZE, 73, 59, new Object[] {}));
+		addSlot(new SlotCustom(tile, TileAnalyzer.SLOT_ANALYZE, 73, 59, new Object[]{}));
 
 		// Can slot
-		addSlot(new SlotLiquidContainer(tile, TileAnalyzer.SLOT_CAN, 143, 24));
+		addSlot(new SlotLiquidContainer(tile, TileAnalyzer.SLOT_CAN, 143, 24, false, Fluids.HONEY.get()) {
+
+			@Override
+			public boolean isItemValid(ItemStack stack) {
+				if (ForestryItem.honeyDrop.isItemEqual(stack))
+					return true;
+				return super.isItemValid(stack);
+			}
+
+		});
 
 		// Output buffer
 		for (int i = 0; i < 2; i++)
 			for (int k = 0; k < 2; k++)
-				addSlot(new SlotCustom(tile, TileAnalyzer.SLOT_OUTPUT_1 + i * 2 + k, 134 + k * 18, 48 + i * 18, new Object[] { ItemGE.class }));
+				addSlot(new SlotOutput(tile, TileAnalyzer.SLOT_OUTPUT_1 + i * 2 + k, 134 + k * 18, 48 + i * 18));
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++)

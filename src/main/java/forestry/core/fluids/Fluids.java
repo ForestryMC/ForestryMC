@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
+import forestry.core.config.Defaults;
 import java.util.Locale;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -23,57 +24,62 @@ import net.minecraftforge.fluids.FluidStack;
  */
 public enum Fluids {
 
-    WATER, LAVA, FUEL, BIOFUEL, CREOSOTE, STEAM, BIOETHANOL, COAL, PYROTHEUM;
-    private final String tag;
+	WATER, LAVA, FUEL, BIOMASS, BIOFUEL, CREOSOTE, STEAM, BIOETHANOL,
+	COAL, PYROTHEUM, HONEY, MILK, JUICE, ICE, GLASS, OIL, SEEDOIL, SHORT_MEAD(Defaults.LIQUID_MEAD);
+	private final String tag;
 
-    private Fluids() {
-        tag = name().toLowerCase(Locale.ENGLISH);
-    }
+	private Fluids() {
+		tag = name().toLowerCase(Locale.ENGLISH);
+	}
 
-    public String getTag() {
-        return tag;
-    }
+	private Fluids(String tag) {
+		this.tag = tag;
+	}
 
-    public Fluid get() {
-        return FluidRegistry.getFluid(tag);
-    }
+	public String getTag() {
+		return tag;
+	}
 
-    /**
-     * Gets a FluidStack filled with qty milliBuckets worth of Fluid.
-     *
-     * @param qty
-     * @return
-     */
-    public FluidStack get(int qty) {
-        return FluidRegistry.getFluidStack(tag, qty);
-    }
+	public Fluid get() {
+		return FluidRegistry.getFluid(tag);
+	}
 
-    /**
-     * Gets a FluidStack filled with n buckets worth of Fluid.
-     *
-     * @param n
-     * @return
-     */
-    public FluidStack getB(int n) {
-        return FluidRegistry.getFluidStack(tag, n * FluidContainerRegistry.BUCKET_VOLUME);
-    }
+	/**
+	 * Gets a FluidStack filled with qty milliBuckets worth of Fluid.
+	 *
+	 * @param qty
+	 * @return
+	 */
+	public FluidStack get(int qty) {
+		return FluidRegistry.getFluidStack(tag, qty);
+	}
 
-    public boolean is(Fluid fluid) {
-        return get() == fluid;
-    }
+	/**
+	 * Gets a FluidStack filled with n buckets worth of Fluid.
+	 *
+	 * @param n
+	 * @return
+	 */
+	public FluidStack getB(int n) {
+		return FluidRegistry.getFluidStack(tag, n * FluidContainerRegistry.BUCKET_VOLUME);
+	}
 
-    public boolean is(FluidStack fluidStack) {
-        return fluidStack != null && get() == fluidStack.getFluid();
-    }
+	public boolean is(Fluid fluid) {
+		return get() == fluid;
+	}
 
-    public boolean isContained(ItemStack containerStack) {
-        return containerStack != null && FluidHelper.containsFluid(containerStack, get());
-    }
+	public boolean is(FluidStack fluidStack) {
+		return fluidStack != null && get() == fluidStack.getFluid();
+	}
 
-    public static boolean areEqual(Fluid fluid, FluidStack fluidStack) {
-        if (fluidStack != null && fluid == fluidStack.getFluid())
-            return true;
-        return fluid == null && fluidStack == null;
-    }
+	public boolean isContained(ItemStack containerStack) {
+		return containerStack != null && FluidHelper.containsFluid(containerStack, get());
+	}
+
+	public static boolean areEqual(Fluid fluid, FluidStack fluidStack) {
+		if (fluidStack != null && fluid == fluidStack.getFluid())
+			return true;
+		return fluid == null && fluidStack == null;
+	}
 
 }

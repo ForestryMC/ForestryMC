@@ -31,6 +31,7 @@ public class Defaults {
 
 	public static final String DEFAULT_POWER_FRAMEWORK = "forestry.energy.BioPowerFramework";
 	public static final int BUCKET_VOLUME = 1000;
+	public static final int FLUID_PER_HONEY_DROP = 100;
 
 	public static final int[] FACINGS = { 0, 1, 2, 3, 4, 5 };
 	public static final int FACING_UP = 1;

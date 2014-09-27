@@ -10,48 +10,50 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
+import forestry.core.fluids.FluidHelper;
 
 import forestry.core.render.TextureManager;
+import net.minecraftforge.fluids.Fluid;
 
-public class SlotLiquidContainer extends SlotCustom {
+public class SlotLiquidContainer extends SlotForestry {
 
-	private final boolean isEmpty;
+	private final boolean allowEmpty;
+	private final Fluid[] fluids;
 
-	public SlotLiquidContainer(IInventory iinventory, int i, int j, int k) {
-		this(iinventory, i, j, k, false);
+	public SlotLiquidContainer(IInventory iinventory, int x, int y, int z) {
+		this(iinventory, x, y, z, false);
 	}
 
-	public SlotLiquidContainer(IInventory iinventory, int i, int j, int k, boolean isEmpty) {
-		super(iinventory, i, j, k, false);
+	public SlotLiquidContainer(IInventory iinventory, int x, int y, int z, boolean allowEmpty, Fluid... fluids) {
+		super(iinventory, x, y, z);
 
-		this.isEmpty = isEmpty;
-		List<ItemStack> container = new ArrayList<ItemStack>();
+		this.allowEmpty = allowEmpty;
+		this.fluids = fluids;
+	}
 
-		for (FluidContainerData cont : FluidContainerRegistry.getRegisteredFluidContainerData())
-			if (isEmpty)
-				container.add(cont.emptyContainer);
-			else
-				container.add(cont.filledContainer);
-
-		this.items = container.toArray();
+	@Override
+	public boolean isItemValid(ItemStack stack) {
+		if (allowEmpty)
+			return FluidHelper.isEmptyContainer(stack);
+		if (fluids.length > 0) {
+			for (Fluid fluid : fluids)
+				if (FluidHelper.containsFluid(stack, fluid))
+					return true;
+			return false;
+		}
+		return FluidHelper.isFilledContainer(stack);
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getBackgroundIconIndex() {
-		if(isEmpty)
+		if (allowEmpty)
 			return TextureManager.getInstance().getDefault("slots/container");
 		else
 			return TextureManager.getInstance().getDefault("slots/liquid");

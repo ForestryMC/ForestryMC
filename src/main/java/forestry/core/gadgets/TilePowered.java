@@ -14,7 +14,6 @@ import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.network.ClassMap;
-import forestry.core.network.EntityNetData;
 import forestry.core.network.IndexInPayload;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
@@ -119,6 +118,10 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 	}
 
 	/* LIQUID CONTAINER HANDLING */
+	/**
+	@deprecated Use FluidHelper
+	*/
+	@Deprecated
 	protected ItemStack bottleIntoContainer(ItemStack canStack, ItemStack outputStack, FluidContainerData container, StandardTank tank) {
 		if (tank.getFluidAmount() < container.fluid.amount)
 			return outputStack;

@@ -10,9 +10,9 @@ import net.minecraft.item.ItemStack;
 
 public class ContainerAlyzer extends ContainerItemInventory {
 
-	private AlyzerInventory inventory;
+	private final AlyzerInventory inventory;
 
-	protected ContainerAlyzer(InventoryPlayer inventoryplayer, AlyzerInventory inventory, Object[] acceptedEnergy, Object[] acceptedSpecimens) {
+	protected ContainerAlyzer(InventoryPlayer inventoryplayer, AlyzerInventory inventory, Object[] acceptedEnergy, Object... acceptedSpecimens) {
 		super(inventory, inventoryplayer.player);
 
 		this.inventory = inventory;
@@ -20,17 +20,17 @@ public class ContainerAlyzer extends ContainerItemInventory {
 		final int xPosLeftSlots = 223;
 
 		// Energy
-		this.addSlot(new SlotCustom(inventory, inventory.SLOT_ENERGY, xPosLeftSlots, 8, acceptedEnergy));
+		this.addSlot(new SlotCustom(inventory, AlyzerInventory.SLOT_ENERGY, xPosLeftSlots, 8, acceptedEnergy));
 
 		// Bee to analyze
-		this.addSlot(new SlotCustom(inventory, inventory.SLOT_SPECIMEN, xPosLeftSlots, 26, acceptedSpecimens));
+		this.addSlot(new SlotCustom(inventory, AlyzerInventory.SLOT_SPECIMEN, xPosLeftSlots, 26, acceptedSpecimens));
 
 		// Analyzed bee
-		this.addSlot(new SlotCustom(inventory, inventory.SLOT_ANALYZE_1, xPosLeftSlots, 57, acceptedSpecimens));
-		this.addSlot(new SlotCustom(inventory, inventory.SLOT_ANALYZE_2, xPosLeftSlots, 75, acceptedSpecimens));
-		this.addSlot(new SlotCustom(inventory, inventory.SLOT_ANALYZE_3, xPosLeftSlots, 93, acceptedSpecimens));
-		this.addSlot(new SlotCustom(inventory, inventory.SLOT_ANALYZE_4, xPosLeftSlots, 111, acceptedSpecimens));
-		this.addSlot(new SlotCustom(inventory, inventory.SLOT_ANALYZE_5, xPosLeftSlots, 129, acceptedSpecimens));
+		this.addSlot(new SlotCustom(inventory, AlyzerInventory.SLOT_ANALYZE_1, xPosLeftSlots, 57, acceptedSpecimens));
+		this.addSlot(new SlotCustom(inventory, AlyzerInventory.SLOT_ANALYZE_2, xPosLeftSlots, 75, acceptedSpecimens));
+		this.addSlot(new SlotCustom(inventory, AlyzerInventory.SLOT_ANALYZE_3, xPosLeftSlots, 93, acceptedSpecimens));
+		this.addSlot(new SlotCustom(inventory, AlyzerInventory.SLOT_ANALYZE_4, xPosLeftSlots, 111, acceptedSpecimens));
+		this.addSlot(new SlotCustom(inventory, AlyzerInventory.SLOT_ANALYZE_5, xPosLeftSlots, 129, acceptedSpecimens));
 
 		final int xPosPlayerInv = 43;
 		final int xSpacePlayerInv = 18;
@@ -62,7 +62,7 @@ public class ContainerAlyzer extends ContainerItemInventory {
 
 		// Last slot is the energy slot, so we don't save that one.
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
-			if (i == inventory.SLOT_ENERGY)
+			if (i == AlyzerInventory.SLOT_ENERGY)
 				continue;
 			ItemStack stack = inventory.getStackInSlot(i);
 			if (stack == null)
