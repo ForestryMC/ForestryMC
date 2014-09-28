@@ -124,7 +124,7 @@ public class ProxyCommon {
 			throw new IllegalArgumentException("Tried to register smelting recipe with null input");
 		if (prod == null || prod.getItem() == null)
 			throw new IllegalArgumentException("Tried to register smelting recipe with null output");
-		GameRegistry.addSmelting(res, prod, 0.0f);
+		GameRegistry.addSmelting(res, prod, xp);
 	}
 
 	public void dropItemPlayer(EntityPlayer player, ItemStack stack) {
