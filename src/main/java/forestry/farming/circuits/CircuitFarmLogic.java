@@ -45,7 +45,7 @@ public class CircuitFarmLogic extends Circuit {
 		if (!isCircuitable(tile))
 			return;
 
-		FarmLogic logic = null;
+		IFarmLogic logic = null;
 		try {
 			logic = logicClass.getConstructor(new Class[] { IFarmHousing.class }).newInstance(new Object[] { (IFarmHousing) tile });
 		} catch (Exception ex) {
@@ -53,7 +53,7 @@ public class CircuitFarmLogic extends Circuit {
 		}
 
 		if (logic != null) {
-			logic.setManual(isManual);
+			if(logic instanceof FarmLogic) ((FarmLogic)logic).setManual(isManual);
 			((IFarmHousing) tile).setFarmLogic(ForgeDirection.values()[slot + 2], logic);
 		}
 	}
