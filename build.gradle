@@ -211,6 +211,7 @@ task mainJar ( type: Zip, dependsOn: mainJarSigned ) {
 
 	from (zipTree(jar.getArchivePath())) {
 		include '**'
+        exclude '**/codechicken/**'
 	}
 
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -247,10 +248,12 @@ task devJar ( type: Zip, dependsOn: devJarSigned ) {
 
 	from(sourceSets.main.allSource) {
 		include '**'
+        exclude '**/codechicken/**'
 	}
 
 	from(sourceSets.main.output) {
 		include '**'
+        exclude '**/codechicken/**'
 	}
 
 	from {
