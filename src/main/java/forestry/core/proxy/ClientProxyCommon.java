@@ -96,17 +96,6 @@ public class ClientProxyCommon extends ProxyCommon {
 	}
 
 	@Override
-	public EntityPlayer getPlayer(World world, GameProfile profile) {
-		EntityPlayer player = world.getPlayerEntityByName(profile.getName());
-		if (player != null)
-			return player;
-		else if (world instanceof WorldServer)
-			return FakePlayerFactory.get((WorldServer) world, profile);
-		else
-			return null;
-	}
-
-	@Override
 	public double getBlockReachDistance(EntityPlayer entityplayer) {
 		if (entityplayer instanceof EntityPlayerSP)
 			return getClientInstance().playerController.getBlockReachDistance();
@@ -229,5 +218,10 @@ public class ClientProxyCommon extends ProxyCommon {
 	@Override
 	public EntityPlayer getPlayer() {
 		return Minecraft.getMinecraft().thePlayer;
+	}
+
+	@Override
+	public EntityPlayer getPlayer(World world, GameProfile profile) {
+		return super.getPlayer(world, profile);
 	}
 }
