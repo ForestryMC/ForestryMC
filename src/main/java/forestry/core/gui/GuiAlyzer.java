@@ -123,7 +123,7 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 	}
 
 	protected final String checkCustomName(String key){
-		if(StatCollector.canTranslate("for." + key)){
+		if(StringUtil.canTranslate("for." + key)){
 			return StringUtil.localize(key);
 		} else {
 			return null;

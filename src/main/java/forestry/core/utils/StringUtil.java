@@ -18,6 +18,10 @@ import net.minecraft.util.StatCollector;
 
 public class StringUtil {
 
+	public static boolean canTranslate(String key) {
+		return StatCollector.canTranslate(key);
+	}
+
 	public static String localize(String key) {
 		return StatCollector.translateToLocal("for." + key).replace("\\n", "\n").replace("@", "%").replace("\\%", "@");
 	}
