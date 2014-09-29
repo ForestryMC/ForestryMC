@@ -24,7 +24,6 @@ import forestry.plugins.PluginApiculture;
 
 public abstract class AlleleEffectThrottled extends Allele implements IAlleleBeeEffect {
 
-	private final String name;
 	private boolean isCombinable = false;
 	private final int throttle;
 	private boolean requiresWorkingQueen = false;
