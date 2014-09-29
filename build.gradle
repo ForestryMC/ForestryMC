@@ -78,9 +78,9 @@ dependencies {
 
 processResources {
 
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+	// this will ensure that this task is redone when the versions change.
+	inputs.property "version", project.version
+	inputs.property "mcversion", project.minecraft.version
 
 	// replace stuff in mcmod.info, nothing else
 	from(sourceSets.main.resources.srcDirs) {
@@ -173,7 +173,7 @@ jar {
 	destinationDir = file("build/tmp")
 	archiveName = "main.jar"
 
-    from {
+	from {
 		configurations.apis.collect {
 			it.isDirectory() ? it : zipTree(it).matching {
 				include '**/api/**'
@@ -211,7 +211,7 @@ task mainJar ( type: Zip, dependsOn: mainJarSigned ) {
 
 	from (zipTree(jar.getArchivePath())) {
 		include '**'
-        exclude '**/codechicken/**'
+		exclude '**/codechicken/**'
 	}
 
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -248,12 +248,12 @@ task devJar ( type: Zip, dependsOn: devJarSigned ) {
 
 	from(sourceSets.main.allSource) {
 		include '**'
-        exclude '**/codechicken/**'
+		exclude '**/codechicken/**'
 	}
 
 	from(sourceSets.main.output) {
 		include '**'
-        exclude '**/codechicken/**'
+		exclude '**/codechicken/**'
 	}
 
 	from {

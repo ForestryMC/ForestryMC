@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -21,7 +21,7 @@ public class SlotItemInventory extends Slot {
 
 	private final EntityPlayer player;
 	private ContainerItemInventory container;
-	
+
 	public SlotItemInventory(ContainerItemInventory container, IInventory inventory, EntityPlayer player, int par2, int par3, int par4) {
 		super(inventory, par2, par3, par4);
 		this.container = container;
@@ -29,9 +29,9 @@ public class SlotItemInventory extends Slot {
 	}
 
 	@Override
-    public void onSlotChange(ItemStack par1ItemStack, ItemStack par2ItemStack) {
-    	super.onSlotChange(par1ItemStack, par2ItemStack);
-    	container.saveInventory(player);
-    }
+	public void onSlotChange(ItemStack par1ItemStack, ItemStack par2ItemStack) {
+		super.onSlotChange(par1ItemStack, par2ItemStack);
+		container.saveInventory(player);
+	}
 
 }

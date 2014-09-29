@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -23,7 +23,6 @@ import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class InventoryManipulator {
@@ -110,14 +109,13 @@ public class InventoryManipulator {
 	}
 
 	/**
-	 *
 	 * @param slot
 	 * @param stack
 	 * @param available Amount we can move
 	 * @param doAdd
 	 * @return Return the number of items moved.
 	 */
-	 private int addToSlot(IInvSlot slot, ItemStack stack, int available, boolean doAdd) {
+	private int addToSlot(IInvSlot slot, ItemStack stack, int available, boolean doAdd) {
 		int max = Math.min(stack.getMaxStackSize(), inv.getInventoryStackLimit());
 
 		ItemStack stackInSlot = slot.getStackInSlot();
@@ -149,48 +147,48 @@ public class InventoryManipulator {
 			slot.setStackInSlot(stackInSlot);
 		}
 		return wanted;
-	 }
+	}
 
-	 public boolean canRemoveItem(IStackFilter filter) {
-		 return tryRemoveItem(filter) == null;
-	 }
+	public boolean canRemoveItem(IStackFilter filter) {
+		return tryRemoveItem(filter) == null;
+	}
 
-	 public ItemStack tryRemoveItem(IStackFilter filter) {
-		 for (IInvSlot slot : getSlots()) {
-			 ItemStack stack = slot.getStackInSlot();
-			 if (stack != null && slot.canTakeStackFromSlot(stack) && filter.matches(stack)) {
-				 ItemStack output = stack.copy();
-				 output.stackSize = 1;
-				 return output;
-			 }
-		 }
-		 return null;
-	 }
+	public ItemStack tryRemoveItem(IStackFilter filter) {
+		for (IInvSlot slot : getSlots()) {
+			ItemStack stack = slot.getStackInSlot();
+			if (stack != null && slot.canTakeStackFromSlot(stack) && filter.matches(stack)) {
+				ItemStack output = stack.copy();
+				output.stackSize = 1;
+				return output;
+			}
+		}
+		return null;
+	}
 
-	 public ItemStack removeItem(IStackFilter filter) {
-		 for (IInvSlot slot : getSlots()) {
-			 ItemStack stack = slot.getStackInSlot();
-			 if (stack != null && slot.canTakeStackFromSlot(stack) && filter.matches(stack)) {
-				 return slot.decreaseStackInSlot();
-			 }
-		 }
-		 return null;
-	 }
+	public ItemStack removeItem(IStackFilter filter) {
+		for (IInvSlot slot : getSlots()) {
+			ItemStack stack = slot.getStackInSlot();
+			if (stack != null && slot.canTakeStackFromSlot(stack) && filter.matches(stack)) {
+				return slot.decreaseStackInSlot();
+			}
+		}
+		return null;
+	}
 
-	 public ItemStack moveItem(IInventory dest, IStackFilter filter) {
-		 InventoryManipulator imDest = InventoryManipulator.get(dest);
-		 for (IInvSlot slot : getSlots()) {
-			 ItemStack stack = slot.getStackInSlot();
-			 if (stack != null && slot.canTakeStackFromSlot(stack) && filter.matches(stack)) {
-				 stack = stack.copy();
-				 stack.stackSize = 1;
-				 stack = imDest.addStack(stack);
-				 if (stack == null) {
-					 return slot.decreaseStackInSlot();
-				 }
-			 }
-		 }
-		 return null;
-	 }
+	public ItemStack moveItem(IInventory dest, IStackFilter filter) {
+		InventoryManipulator imDest = InventoryManipulator.get(dest);
+		for (IInvSlot slot : getSlots()) {
+			ItemStack stack = slot.getStackInSlot();
+			if (stack != null && slot.canTakeStackFromSlot(stack) && filter.matches(stack)) {
+				stack = stack.copy();
+				stack.stackSize = 1;
+				stack = imDest.addStack(stack);
+				if (stack == null) {
+					return slot.decreaseStackInSlot();
+				}
+			}
+		}
+		return null;
+	}
 
 }

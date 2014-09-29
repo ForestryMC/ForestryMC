@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -14,17 +14,16 @@ import forestry.core.gui.tooltips.ToolTip;
 
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IMultiButtonState {
 
-    public String getLabel();
+	public String getLabel();
 
-    public String name();
+	public String name();
 
-    public IButtonTextureSet getTextureSet();
+	public IButtonTextureSet getTextureSet();
 
-    public ToolTip getToolTip();
+	public ToolTip getToolTip();
 
 }

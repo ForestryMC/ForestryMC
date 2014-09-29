@@ -72,8 +72,8 @@ public class BlockStainedGlass extends BlockBreakable {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int meta) {
-        	Block block = world.getBlock(x, y, z);
-        	return block == this ? false : super.shouldSideBeRendered(world, x, y, z, meta);
+		Block block = world.getBlock(x, y, z);
+		return block == this ? false : super.shouldSideBeRendered(world, x, y, z, meta);
 	}
 
 	@Override

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -18,62 +18,61 @@ import com.google.common.collect.ForwardingList;
 import forestry.core.utils.StringUtil;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ToolTip extends ForwardingList<ToolTipLine> {
 
-    private final List<ToolTipLine> delegate = new ArrayList<ToolTipLine>();
-    private final long delay;
-    private long mouseOverStart;
+	private final List<ToolTipLine> delegate = new ArrayList<ToolTipLine>();
+	private final long delay;
+	private long mouseOverStart;
 
-    public ToolTip() {
-        this.delay = 0;
-    }
+	public ToolTip() {
+		this.delay = 0;
+	}
 
-    public ToolTip(int delay) {
-        this.delay = delay;
-    }
+	public ToolTip(int delay) {
+		this.delay = delay;
+	}
 
-    @Override
-    protected final List<ToolTipLine> delegate() {
-        return delegate;
-    }
+	@Override
+	protected final List<ToolTipLine> delegate() {
+		return delegate;
+	}
 
-    public boolean add(String line) {
-        return add(new ToolTipLine(line));
-    }
+	public boolean add(String line) {
+		return add(new ToolTipLine(line));
+	}
 
-    public void onTick(boolean mouseOver) {
-        if (delay == 0)
-            return;
-        if (mouseOver) {
-            if (mouseOverStart == 0)
-                mouseOverStart = System.currentTimeMillis();
-        } else
-            mouseOverStart = 0;
-    }
+	public void onTick(boolean mouseOver) {
+		if (delay == 0)
+			return;
+		if (mouseOver) {
+			if (mouseOverStart == 0)
+				mouseOverStart = System.currentTimeMillis();
+		} else
+			mouseOverStart = 0;
+	}
 
-    public boolean isReady() {
-        if (delay == 0)
-            return true;
-        if (mouseOverStart == 0)
-            return false;
-        return System.currentTimeMillis() - mouseOverStart >= delay;
-    }
+	public boolean isReady() {
+		if (delay == 0)
+			return true;
+		if (mouseOverStart == 0)
+			return false;
+		return System.currentTimeMillis() - mouseOverStart >= delay;
+	}
 
-    public void refresh() {
-    }
+	public void refresh() {
+	}
 
-    public List<String> convertToStrings() {
-        List<String> tips = new ArrayList<String>(size());
-        for (ToolTipLine line : this) {
-            tips.add(line.text);
-        }
-        return tips;
-    }
+	public List<String> convertToStrings() {
+		List<String> tips = new ArrayList<String>(size());
+		for (ToolTipLine line : this) {
+			tips.add(line.text);
+		}
+		return tips;
+	}
 
-    public static ToolTip buildToolTip(String tipTag, String... vars) {
+	public static ToolTip buildToolTip(String tipTag, String... vars) {
 		ToolTip toolTip = new ToolTip(750);
 		String text = StringUtil.localize(tipTag);
 		for (String var : vars) {
@@ -86,6 +85,6 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
 			toolTip.add(new ToolTipLine(tip));
 		}
 		return toolTip;
-    }
+	}
 
 }

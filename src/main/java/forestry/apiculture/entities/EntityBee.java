@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -28,13 +28,13 @@ import forestry.plugins.PluginApiculture;
 public class EntityBee extends EntityCreature implements IAnimals {
 
 	private static final String DEFAULT_TEXTURE = Defaults.TEXTURE_PATH_ENTITIES + "/bees/honeyBee.png";
-	
+
 	IBee contained;
 	IAlleleBeeSpecies species;
 	EnumBeeType type = EnumBeeType.DRONE;
-	
-    private String beeTexture = DEFAULT_TEXTURE;
-    private long lastUpdate;
+
+	private String beeTexture = DEFAULT_TEXTURE;
+	private long lastUpdate;
 
 	public EntityBee(World world) {
 		super(world);
@@ -43,49 +43,50 @@ public class EntityBee extends EntityCreature implements IAnimals {
 	private void resetAppearance() {
 		beeTexture = species.getEntityTexture();
 	}
-	
+
 	public EntityBee setIndividual(IBee bee) {
-		if(bee != null)
+		if (bee != null)
 			contained = bee;
 		else
 			contained = PluginApiculture.beeInterface.templateAsIndividual(PluginApiculture.beeInterface.getDefaultTemplate());
-		
+
 		//isImmuneToFire = contained.getGenome().getFireResist();
 		setSpecies(contained.getGenome().getPrimary());
 		//dataWatcher.updateObject(DATAWATCHER_ID_SPECIES, species.getUID());
 		//dataWatcher.updateObject(DATAWATCHER_ID_SCALE, (int)(contained.getSize() * 100));
 		return this;
 	}
-	
+
 	public IBee getBee() {
 		return contained;
 	}
-	
+
 	public EntityBee setType(EnumBeeType type) {
 		this.type = type;
 		return this;
 	}
-	
+
 	public EnumBeeType getType() {
 		return type;
 	}
-	
+
 	public EntityBee setSpecies(IAlleleBeeSpecies species) {
 		this.species = species;
 		resetAppearance();
 		lastUpdate = worldObj.getTotalWorldTime();
 		return this;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	private ResourceLocation textureResource;
 	private long lastTextureUpdate;
+
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getTexture() {
-		if(textureResource == null || lastTextureUpdate != lastUpdate)
+		if (textureResource == null || lastTextureUpdate != lastUpdate)
 			textureResource = new ForestryResource(beeTexture);
-		
+
 		return textureResource;
 	}
-	
+
 }
