@@ -11,6 +11,7 @@
 package forestry.mail.proxy;
 
 import com.mojang.authlib.GameProfile;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
 import forestry.core.network.ForestryPacket;
@@ -50,7 +51,8 @@ public class ClientProxyMail extends ProxyMail {
 
 	@Override
 	public void setPOBoxInfo(World world, IMailAddress address, POBoxInfo info) {
-		if (address.isClientPlayer(world))
+		EntityPlayer clientPlayer = Proxies.common.getPlayer();
+		if (clientPlayer != null && clientPlayer.getGameProfile().equals(address.getPlayerProfile()))
 			GuiMailboxInfo.instance.setPOBoxInfo(info);
 	}
 }
