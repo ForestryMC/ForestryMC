@@ -10,20 +10,18 @@
  ******************************************************************************/
 package forestry.farming.circuits;
 
-import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmLogic;
 import forestry.core.circuits.Circuit;
-import forestry.farming.logic.FarmLogic;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class CircuitFarmLogic extends Circuit {
 
-	private Class<? extends FarmLogic> logicClass;
+	private Class<? extends IFarmLogic> logicClass;
 	private boolean isManual = false;
 
-	public CircuitFarmLogic(String uid, Class<? extends FarmLogic> logicClass) {
+	public CircuitFarmLogic(String uid, Class<? extends IFarmLogic> logicClass) {
 		super(uid, false);
 		this.logicClass = logicClass;
 		setLimit(4);
@@ -39,23 +37,32 @@ public class CircuitFarmLogic extends Circuit {
 		return tile instanceof IFarmHousing;
 	}
 
+	IFarmHousing getCircuitable(TileEntity tile) {
+		if (!isCircuitable(tile))
+			return null;
+		return (IFarmHousing)tile;
+	}
+
 	@Override
 	@SuppressWarnings("rawtypes")
 	public void onInsertion(int slot, TileEntity tile) {
-		if (!isCircuitable(tile))
+		IFarmHousing housing = getCircuitable(tile);
+		if (housing == null)
 			return;
 
-		IFarmLogic logic = null;
+		IFarmLogic logic;
 		try {
-			logic = logicClass.getConstructor(new Class[] { IFarmHousing.class }).newInstance(new Object[] { (IFarmHousing) tile });
+			logic = logicClass.getConstructor(new Class[] { IFarmHousing.class }).newInstance(housing);
 		} catch (Exception ex) {
 			throw new RuntimeException("Failed to instantiate logic of class " + logicClass.getName() + ": " + ex.getMessage());
 		}
 
-		if (logic != null) {
-			if(logic instanceof FarmLogic) ((FarmLogic)logic).setManual(isManual);
-			((IFarmHousing) tile).setFarmLogic(ForgeDirection.values()[slot + 2], logic);
+		try {
+			logic.setManual(isManual);
+		} catch (Exception e) {
+			// uses older version of the API that doesn't implement setManual
 		}
+		housing.setFarmLogic(ForgeDirection.values()[slot + 2], logic);
 	}
 
 	@Override
