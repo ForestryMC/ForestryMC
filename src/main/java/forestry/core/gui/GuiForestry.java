@@ -18,6 +18,8 @@ import codechicken.nei.VisiblityData;
 import codechicken.nei.api.INEIGuiHandler;
 import codechicken.nei.api.TaggedInventoryArea;
 
+import cpw.mods.fml.common.Optional;
+
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -49,6 +51,7 @@ import forestry.core.interfaces.IPowerHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.FontColour;
 
+@Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = "NotEnoughItems")
 public abstract class GuiForestry<T extends TileForestry> extends GuiContainer implements INEIGuiHandler {
 
 	/* WIDGETS */
@@ -579,15 +582,23 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 
 	/* NEI */
 	@Override
+	@Optional.Method(modid = "NotEnoughItems")
 	public VisiblityData modifyVisiblity(GuiContainer gui, VisiblityData currentVisibility) { return null; }
+
 	@Override
+	@Optional.Method(modid = "NotEnoughItems")
 	public Iterable<Integer> getItemSpawnSlots(GuiContainer gui, ItemStack item) { return null; }
+
 	@Override
+	@Optional.Method(modid = "NotEnoughItems")
 	public List<TaggedInventoryArea> getInventoryAreas(GuiContainer gui) { return null; }
+
 	@Override
+	@Optional.Method(modid = "NotEnoughItems")
 	public boolean handleDragNDrop(GuiContainer gui, int mousex, int mousey, ItemStack draggedStack, int button) { return false; }
 
 	@Override
+	@Optional.Method(modid = "NotEnoughItems")
 	public boolean hideItemPanelSlot(GuiContainer gui, int x, int y, int w, int h) {
 		if (gui instanceof GuiForestry)
 			return ((GuiForestry)gui).ledgerManager.ledgerOverlaps(x, y, w, h);
