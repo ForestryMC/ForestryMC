@@ -425,13 +425,13 @@ public class Allele implements IAllele {
 		int10 = new AlleleInteger("i10d", 10, true);
 
 		// BEES // SPEED
-		speedSlowest = new AlleleFloat("speedSlowest", 0.3f, true).setName("gui.slowest");
-		speedSlower = new AlleleFloat("speedSlower", 0.6f, true).setName("gui.slower");
-		speedSlow = new AlleleFloat("speedSlow", 0.8f, true).setName("gui.slow");
-		speedNorm = new AlleleFloat("speedNorm", 1.0f).setName("gui.normal");
-		speedFast = new AlleleFloat("speedFast", 1.2f, true).setName("gui.fast");
-		speedFaster = new AlleleFloat("speedFaster", 1.4f).setName("gui.faster");
-		speedFastest = new AlleleFloat("speedFastest", 1.7f).setName("gui.fastest");
+		speedSlowest = new AlleleFloat("speedSlowest", 0.3f, true).setName("speed", "slowest");
+		speedSlower = new AlleleFloat("speedSlower", 0.6f, true).setName("speed", "slower");
+		speedSlow = new AlleleFloat("speedSlow", 0.8f, true).setName("speed", "slow");
+		speedNorm = new AlleleFloat("speedNorm", 1.0f).setName("speed", "normal");
+		speedFast = new AlleleFloat("speedFast", 1.2f, true).setName("speed", "fast");
+		speedFaster = new AlleleFloat("speedFaster", 1.4f).setName("speed", "faster");
+		speedFastest = new AlleleFloat("speedFastest", 1.7f).setName("speed", "fastest");
 
 		// BEES // LIFESPAN
 		lifespanShortest = new AlleleInteger("lifespanShortest", 10, false).setName("gui.shortestlife");
@@ -451,23 +451,23 @@ public class Allele implements IAllele {
 		fertilityMaximum = new AlleleInteger("fertilityMaximum", 4);
 
 		// TREES // HEIGHT
-		heightSmallest = new AlleleFloat("heightSmallest", 0.25f).setName("gui.smallest");
-		heightSmaller = new AlleleFloat("heightSmaller", 0.5f).setName("gui.smaller");
-		heightSmall = new AlleleFloat("heightSmall", 0.75f).setName("gui.small");
-		heightAverage = new AlleleFloat("heightMax10", 1.0f).setName("gui.average");
-		heightLarge = new AlleleFloat("heightLarge", 1.25f).setName("gui.large");
-		heightLarger = new AlleleFloat("heightLarger", 1.5f).setName("gui.larger");
-		heightLargest = new AlleleFloat("heightLargest", 1.75f).setName("gui.largest");
-		heightGigantic = new AlleleFloat("heightGigantic", 2.0f).setName("gui.gigantic");
+		heightSmallest = new AlleleFloat("heightSmallest", 0.25f).setName("height", "smallest");
+		heightSmaller = new AlleleFloat("heightSmaller", 0.5f).setName("height", "smaller");
+		heightSmall = new AlleleFloat("heightSmall", 0.75f).setName("height", "small");
+		heightAverage = new AlleleFloat("heightMax10", 1.0f).setName("height", "average");
+		heightLarge = new AlleleFloat("heightLarge", 1.25f).setName("height", "large");
+		heightLarger = new AlleleFloat("heightLarger", 1.5f).setName("height", "larger");
+		heightLargest = new AlleleFloat("heightLargest", 1.75f).setName("height", "largest");
+		heightGigantic = new AlleleFloat("heightGigantic", 2.0f).setName("height", "gigantic");
 
 		// BUTTERFLIES // SIZE
-		sizeSmallest = new AlleleFloat("sizeSmallest", 0.3f).setName("gui.smallest");
-		sizeSmaller = new AlleleFloat("sizeSmaller", 0.4f).setName("gui.smaller");
-		sizeSmall = new AlleleFloat("sizeSmall", 0.5f).setName("gui.small");
-		sizeAverage = new AlleleFloat("sizeAverage", 0.6f).setName("gui.average");
-		sizeLarge = new AlleleFloat("sizeLarge", 0.75f).setName("gui.large");
-		sizeLarger = new AlleleFloat("sizeLarger", 0.9f).setName("gui.larger");
-		sizeLargest = new AlleleFloat("sizeLargest", 1.0f).setName("gui.largest");
+		sizeSmallest = new AlleleFloat("sizeSmallest", 0.3f).setName("size", "smallest");
+		sizeSmaller = new AlleleFloat("sizeSmaller", 0.4f).setName("size", "smaller");
+		sizeSmall = new AlleleFloat("sizeSmall", 0.5f).setName("size", "small");
+		sizeAverage = new AlleleFloat("sizeAverage", 0.6f).setName("size", "average");
+		sizeLarge = new AlleleFloat("sizeLarge", 0.75f).setName("size", "large");
+		sizeLarger = new AlleleFloat("sizeLarger", 0.9f).setName("size", "larger");
+		sizeLargest = new AlleleFloat("sizeLargest", 1.0f).setName("size", "largest");
 
 		// BEES // TOLERANCE
 		toleranceNone = new AlleleTolerance("toleranceNone", EnumTolerance.NONE);
@@ -488,61 +488,61 @@ public class Allele implements IAllele {
 		toleranceDown5 = new AlleleTolerance("toleranceDown5", EnumTolerance.DOWN_5);
 
 		// TREES // FERTILITY
-		saplingsLowest = new AlleleFloat("saplingsLowest", 0.01f, true).setName("gui.lowest");
-		saplingsLower = new AlleleFloat("saplingsLower", 0.025f, true).setName("gui.lower");
-		saplingsLow = new AlleleFloat("saplingsLow", 0.035f, true).setName("gui.low");
-		saplingsAverage = new AlleleFloat("saplingsDefault", 0.05f, true).setName("gui.average");
-		saplingsHigh = new AlleleFloat("saplingsDouble", 0.1f, true).setName("gui.high");
-		saplingsHigher = new AlleleFloat("saplingsTriple", 0.2f, true).setName("gui.higher");
-		saplingsHighest = new AlleleFloat("saplingsHighest", 0.3f, true).setName("gui.highest");
+		saplingsLowest = new AlleleFloat("saplingsLowest", 0.01f, true).setName("saplings", "lowest");
+		saplingsLower = new AlleleFloat("saplingsLower", 0.025f, true).setName("saplings", "lower");
+		saplingsLow = new AlleleFloat("saplingsLow", 0.035f, true).setName("saplings", "low");
+		saplingsAverage = new AlleleFloat("saplingsDefault", 0.05f, true).setName("saplings", "average");
+		saplingsHigh = new AlleleFloat("saplingsDouble", 0.1f, true).setName("saplings", "high");
+		saplingsHigher = new AlleleFloat("saplingsTriple", 0.2f, true).setName("saplings", "higher");
+		saplingsHighest = new AlleleFloat("saplingsHighest", 0.3f, true).setName("saplings", "highest");
 
 		// TREES // YIELD
-		yieldLowest = new AlleleFloat("yieldLowest", 0.025f, true).setName("gui.lowest");
-		yieldLower = new AlleleFloat("yieldLower", 0.05f, true).setName("gui.lower");
-		yieldLow = new AlleleFloat("yieldLow", 0.1f, true).setName("gui.low");
-		yieldAverage = new AlleleFloat("yieldDefault", 0.2f, true).setName("gui.average");
-		yieldHigh = new AlleleFloat("yieldHigh", 0.3f, false).setName("gui.high");
-		yieldHigher = new AlleleFloat("yieldHigher", 0.35f, false).setName("gui.higher");
-		yieldHighest = new AlleleFloat("yieldHighest", 0.4f, false).setName("gui.highest");
+		yieldLowest = new AlleleFloat("yieldLowest", 0.025f, true).setName("yield", "lowest");
+		yieldLower = new AlleleFloat("yieldLower", 0.05f, true).setName("yield", "lower");
+		yieldLow = new AlleleFloat("yieldLow", 0.1f, true).setName("yield", "low");
+		yieldAverage = new AlleleFloat("yieldDefault", 0.2f, true).setName("yield", "average");
+		yieldHigh = new AlleleFloat("yieldHigh", 0.3f, false).setName("yield", "high");
+		yieldHigher = new AlleleFloat("yieldHigher", 0.35f, false).setName("yield", "higher");
+		yieldHighest = new AlleleFloat("yieldHighest", 0.4f, false).setName("yield", "highest");
 
 		// TREES // SAPPINESS
-		sappinessLowest = new AlleleFloat("sappinessLowest", 0.1f, true).setName("gui.lowest");
-		sappinessLower = new AlleleFloat("sappinessLower", 0.2f, true).setName("gui.lower");
-		sappinessLow = new AlleleFloat("sappinessLow", 0.3f, true).setName("gui.low");
-		sappinessAverage = new AlleleFloat("sappinessAverage", 0.4f, true).setName("gui.average");
-		sappinessHigh = new AlleleFloat("sappinessHigh", 0.6f, true).setName("gui.high");
-		sappinessHigher = new AlleleFloat("sappinessHigher", 0.8f, false).setName("gui.higher");
-		sappinessHighest = new AlleleFloat("sappinessHighest", 1.0f, false).setName("gui.highest");
+		sappinessLowest = new AlleleFloat("sappinessLowest", 0.1f, true).setName("sappiness", "lowest");
+		sappinessLower = new AlleleFloat("sappinessLower", 0.2f, true).setName("sappiness", "lower");
+		sappinessLow = new AlleleFloat("sappinessLow", 0.3f, true).setName("sappiness", "low");
+		sappinessAverage = new AlleleFloat("sappinessAverage", 0.4f, true).setName("sappiness", "average");
+		sappinessHigh = new AlleleFloat("sappinessHigh", 0.6f, true).setName("sappiness", "high");
+		sappinessHigher = new AlleleFloat("sappinessHigher", 0.8f, false).setName("sappiness", "higher");
+		sappinessHighest = new AlleleFloat("sappinessHighest", 1.0f, false).setName("sappiness", "highest");
 
 		// TREES // MATURATION TIME
-		maturationSlowest = new AlleleInteger("maturationSlowest", 10, true).setName("gui.slowest");
-		maturationSlower = new AlleleInteger("maturationSlower", 7).setName("gui.slower");
-		maturationSlow = new AlleleInteger("maturationSlow", 5, true).setName("gui.slow");
-		maturationAverage = new AlleleInteger("maturationAverage", 4).setName("gui.average");
-		maturationFast = new AlleleInteger("maturationFast", 3).setName("gui.fast");
-		maturationFaster = new AlleleInteger("maturationFaster", 2).setName("gui.faster");
-		maturationFastest = new AlleleInteger("maturationFastest", 1).setName("gui.fastest");
+		maturationSlowest = new AlleleInteger("maturationSlowest", 10, true).setName("maturity", "slowest");
+		maturationSlower = new AlleleInteger("maturationSlower", 7).setName("maturity", "slower");
+		maturationSlow = new AlleleInteger("maturationSlow", 5, true).setName("maturity", "slow");
+		maturationAverage = new AlleleInteger("maturationAverage", 4).setName("maturity", "average");
+		maturationFast = new AlleleInteger("maturationFast", 3).setName("maturity", "fast");
+		maturationFaster = new AlleleInteger("maturationFaster", 2).setName("maturity", "faster");
+		maturationFastest = new AlleleInteger("maturationFastest", 1).setName("maturity", "fastest");
 
 		// BEES // FLOWER GROWTH
-		floweringSlowest = new AlleleInteger("floweringSlowest", 5, true).setName("gui.slowest");
-		floweringSlower = new AlleleInteger("floweringSlower", 10).setName("gui.slower");
-		floweringSlow = new AlleleInteger("floweringSlow", 15).setName("gui.slow");
-		floweringAverage = new AlleleInteger("floweringAverage", 20).setName("gui.average");
-		floweringFast = new AlleleInteger("floweringFast", 25).setName("gui.fast");
-		floweringFaster = new AlleleInteger("floweringFaster", 30).setName("gui.faster");
-		floweringFastest = new AlleleInteger("floweringFastest", 35).setName("gui.fastest");
-		floweringMaximum = new AlleleInteger("floweringMaximum", 99, true).setName("gui.maximum");
+		floweringSlowest = new AlleleInteger("floweringSlowest", 5, true).setName("flowering", "slowest");
+		floweringSlower = new AlleleInteger("floweringSlower", 10).setName("flowering", "slower");
+		floweringSlow = new AlleleInteger("floweringSlow", 15).setName("flowering", "slow");
+		floweringAverage = new AlleleInteger("floweringAverage", 20).setName("flowering", "average");
+		floweringFast = new AlleleInteger("floweringFast", 25).setName("flowering", "fast");
+		floweringFaster = new AlleleInteger("floweringFaster", 30).setName("flowering", "faster");
+		floweringFastest = new AlleleInteger("floweringFastest", 35).setName("flowering", "fastest");
+		floweringMaximum = new AlleleInteger("floweringMaximum", 99, true).setName("flowering", "maximum");
 
 		// BOTH // TERRITORY
-		territoryDefault = new AlleleArea("territoryDefault", new int[] {9, 6, 9}).setName("gui.average");
-		territoryLarge = new AlleleArea("territoryLarge", new int[] {11, 8, 11}).setName("gui.large");
-		territoryLarger = new AlleleArea("territoryLarger", new int[] {13, 12, 13}).setName("gui.larger");
-		territoryLargest = new AlleleArea("territoryLargest", new int[] {15, 13, 15}).setName("gui.largest");
+		territoryDefault = new AlleleArea("territoryDefault", new int[] {9, 6, 9}).setName("territory", "average");
+		territoryLarge = new AlleleArea("territoryLarge", new int[] {11, 8, 11}).setName("territory", "large");
+		territoryLarger = new AlleleArea("territoryLarger", new int[] {13, 12, 13}).setName("territory", "larger");
+		territoryLargest = new AlleleArea("territoryLargest", new int[] {15, 13, 15}).setName("territory", "largest");
 
 		// TREES // PLANTS
 		plantTypeNone = new AllelePlantType("plantTypeNone", EnumSet.noneOf(EnumPlantType.class), true);
 		plantTypePlains = new AllelePlantType("plantTypePlains", EnumPlantType.Plains);
-		;
+
 		plantTypeDesert = new AllelePlantType("plantTypeDesert", EnumPlantType.Desert);
 		plantTypeBeach = new AllelePlantType("plantTypeBeach", EnumPlantType.Beach);
 		plantTypeCave = new AllelePlantType("plantTypeCave", EnumPlantType.Cave);
@@ -688,7 +688,7 @@ public class Allele implements IAllele {
 
 	@Override
 	public String getName() {
-		return StringUtil.localize(name);
+		return StringUtil.localize(getUnlocalizedName());
 	}
 
 	@Override

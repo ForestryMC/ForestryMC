@@ -12,7 +12,6 @@ package forestry.arboriculture.genetics;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;

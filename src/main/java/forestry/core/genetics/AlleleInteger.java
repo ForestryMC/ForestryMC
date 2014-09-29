@@ -11,6 +11,7 @@
 package forestry.core.genetics;
 
 import forestry.api.genetics.IAlleleInteger;
+import forestry.core.utils.StringUtil;
 
 public class AlleleInteger extends Allele implements IAlleleInteger {
 
@@ -28,6 +29,15 @@ public class AlleleInteger extends Allele implements IAlleleInteger {
 	@Override
 	public int getValue() {
 		return value;
+	}
+
+	public AlleleInteger setName(String customPrefix, String name) {
+		String customName = "gui." + customPrefix + "." + name;
+		if (StringUtil.canTranslate(customName))
+			this.name = customName;
+		else
+			this.name = "gui." + name;
+		return this;
 	}
 
 }

@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import forestry.core.utils.StringUtil;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.IAlleleBeeEffect;
@@ -46,8 +45,8 @@ public class AlleleEffectNone extends Allele implements IAlleleBeeEffect {
 	}
 
 	@Override
-	public String getName() {
-		return StringUtil.localize("apiculture.effect.none");
+	public String getUnlocalizedName() {
+		return "apiculture.effect.none";
 	}
 
 	@Override

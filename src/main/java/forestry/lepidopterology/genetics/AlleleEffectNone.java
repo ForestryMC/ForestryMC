@@ -14,7 +14,6 @@ import forestry.api.genetics.IEffectData;
 import forestry.api.lepidopterology.IAlleleButterflyEffect;
 import forestry.api.lepidopterology.IEntityButterfly;
 import forestry.core.genetics.Allele;
-import forestry.core.utils.StringUtil;
 
 public class AlleleEffectNone extends Allele implements IAlleleButterflyEffect {
 
@@ -33,8 +32,8 @@ public class AlleleEffectNone extends Allele implements IAlleleButterflyEffect {
 	}
 
 	@Override
-	public String getName() {
-		return StringUtil.localize("lepidopterology.effect.none");
+	public String getUnlocalizedName() {
+		return "lepidopterology.effect.none";
 	}
 
 	@Override

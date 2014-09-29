@@ -11,6 +11,7 @@
 package forestry.core.genetics;
 
 import forestry.api.genetics.IAlleleFloat;
+import forestry.core.utils.StringUtil;
 
 public class AlleleFloat extends Allele implements IAlleleFloat {
 
@@ -30,4 +31,12 @@ public class AlleleFloat extends Allele implements IAlleleFloat {
 		return value;
 	}
 
+	public AlleleFloat setName(String customPrefix, String name) {
+		String customName = "gui." + customPrefix + "." + name;
+		if (StringUtil.canTranslate(customName))
+			this.name = customName;
+		else
+			this.name = "gui." + name;
+		return this;
+	}
 }

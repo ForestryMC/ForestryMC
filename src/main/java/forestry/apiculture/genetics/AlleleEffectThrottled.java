@@ -19,7 +19,6 @@ import forestry.api.genetics.IEffectData;
 import forestry.core.EnumErrorCode;
 import forestry.core.genetics.Allele;
 import forestry.core.genetics.EffectData;
-import forestry.core.utils.StringUtil;
 import forestry.core.utils.Vect;
 import forestry.plugins.PluginApiculture;
 
@@ -36,11 +35,6 @@ public abstract class AlleleEffectThrottled extends Allele implements IAlleleBee
 		this.throttle = throttle;
 		this.isCombinable = isCombinable;
 		this.requiresWorkingQueen = requiresWorking;
-	}
-
-	@Override
-	public String getName() {
-		return StringUtil.localize(name);
 	}
 
 	public int getThrottle() {
