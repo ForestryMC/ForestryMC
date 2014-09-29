@@ -165,19 +165,6 @@ public class ProxyCommon {
 		return server.getConfigurationManager().func_152596_g(player.getGameProfile());
 	}
 
-	/**
-	 * Get a player for a given World and GameProfile.
-	 * If they are not in the World, returns a FakePlayer.
-	 * Do not store references to the return value, to prevent worlds staying in memory.
-	 */
-	public EntityPlayer getPlayer(World world, GameProfile profile) {
-		EntityPlayer player = world.getPlayerEntityByName(profile.getName());
-		if (player != null)
-			return player;
-		else
-			return FakePlayerFactory.get((WorldServer)world, profile);
-	}
-
 	public double getBlockReachDistance(EntityPlayer entityplayer) {
 		return 4f;
 	}
@@ -312,5 +299,24 @@ public class ProxyCommon {
 
 	public EntityPlayer getPlayer() {
 		return null;
+	}
+
+	/**
+	 * Get a player for a given World and GameProfile.
+	 * If they are not in the World, returns a FakePlayer.
+	 * Do not store references to the return value, to prevent worlds staying in memory.
+	 */
+	public EntityPlayer getPlayer(World world, GameProfile profile) {
+		if (world == null)
+			throw new IllegalArgumentException("World cannot be null");
+
+		if (profile == null || profile.getName() == null)
+			return FakePlayerFactory.getMinecraft((WorldServer)world);
+
+		EntityPlayer player = world.getPlayerEntityByName(profile.getName());
+		if (player != null)
+			return player;
+		else
+			return FakePlayerFactory.get((WorldServer)world, profile);
 	}
 }
