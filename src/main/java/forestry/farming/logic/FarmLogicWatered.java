@@ -83,7 +83,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 
 	private boolean isWaste(ItemStack stack) {
 		for (ItemStack block : waste)
-			if (block.isItemEqual(stack))
+			if (StackUtils.isCraftingEquivalent(block, stack))
 				return true;
 		return false;
 	}

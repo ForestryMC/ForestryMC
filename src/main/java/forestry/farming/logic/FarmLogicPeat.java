@@ -10,32 +10,30 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.Collection;
-import java.util.Stack;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
+import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Vect;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.Collection;
+import java.util.Stack;
 
 public class FarmLogicPeat extends FarmLogicWatered {
 
 	public FarmLogicPeat(IFarmHousing housing) {
 		super(housing, new ItemStack[]{ForestryBlock.soil.getItemStack(1, 1)},
 				new ItemStack[]{ForestryBlock.soil.getItemStack(1, 1)},
-				new ItemStack[]{new ItemStack(Blocks.dirt), new ItemStack(Blocks.grass)});
+				new ItemStack[]{new ItemStack(Blocks.dirt), new ItemStack(Blocks.grass), new ItemStack(Blocks.farmland, 1, Defaults.WILDCARD)});
 	}
 
 	@Override
