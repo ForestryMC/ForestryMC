@@ -25,7 +25,7 @@ public class ItemLeavesBlock extends ItemForestryBlock {
 			return type;
 		ITree tree = getTree(itemstack);
 		String customTreeKey = "trees.custom.leaves." + tree.getGenome().getPrimary().getUnlocalizedName().replace("trees.species.","");
-		if(StringUtil.canTranslate("for." + customTreeKey)){
+		if(StringUtil.canTranslate(customTreeKey)){
 			return StringUtil.localize(customTreeKey);
 		}
 		String grammar = StringUtil.localize("trees.grammar.leaves");
