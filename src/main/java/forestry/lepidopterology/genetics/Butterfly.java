@@ -10,23 +10,11 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-
-import net.minecraftforge.common.BiomeDictionary;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleTolerance;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
@@ -44,6 +32,17 @@ import forestry.core.utils.StackUtils;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginLepidopterology;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.BiomeDictionary;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class Butterfly extends IndividualLiving implements IButterfly {
 
@@ -76,10 +75,13 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		list.add("\u00A7e" + genome.getActiveAllele(EnumButterflyChromosome.SIZE.ordinal()).getName());
 		list.add("\u00A7f" + genome.getActiveAllele(EnumButterflyChromosome.SPEED.ordinal()).getName() + " " + StringUtil.localize("gui.flyer"));
 		list.add(genome.getActiveAllele(EnumButterflyChromosome.LIFESPAN.ordinal()).getName() + " " + StringUtil.localize("gui.life"));
-		list.add("\u00A7aT: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / "
-				+ StringUtil.capitalize(genome.getToleranceTemp().name()));
-		list.add("\u00A7aH: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / "
-				+ StringUtil.capitalize(genome.getToleranceHumid().name()));
+
+		IAlleleTolerance tempTolerance = (IAlleleTolerance)getGenome().getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE.ordinal());
+		list.add("\u00A7aT: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / " + tempTolerance.getName());
+
+		IAlleleTolerance humidTolerance = (IAlleleTolerance)getGenome().getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE.ordinal());
+		list.add("\u00A7aH: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / " + humidTolerance.getName());
+
 		list.add("\u00A7c" + GenericRatings.rateActivityTime(genome.getNocturnal(), genome.getPrimary().isNocturnal()));
 	}
 

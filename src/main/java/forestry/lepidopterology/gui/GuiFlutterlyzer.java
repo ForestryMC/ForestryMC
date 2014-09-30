@@ -10,25 +10,17 @@
  ******************************************************************************/
 package forestry.lepidopterology.gui;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleEffect;
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IAlleleInteger;
+import forestry.api.genetics.IAlleleTolerance;
 import forestry.api.genetics.IMutation;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.core.config.ForestryItem;
 import forestry.core.genetics.AlleleBoolean;
-import forestry.core.genetics.AlleleTolerance;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StackUtils;
@@ -36,6 +28,13 @@ import forestry.core.utils.StringUtil;
 import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.items.ItemFlutterlyzer.FlutterlyzerInventory;
 import forestry.plugins.PluginLepidopterology;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GuiFlutterlyzer extends GuiAlyzer {
 
@@ -155,22 +154,22 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 		drawRow(StringUtil.localize("gui.climate"), AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getTemperature()),
 				AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getTemperature()), butterfly, EnumButterflyChromosome.SPECIES);
 
+		IAlleleTolerance tempToleranceActive = (IAlleleTolerance)butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE.ordinal());
+		IAlleleTolerance tempToleranceInactive = (IAlleleTolerance)butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE.ordinal());
 		drawLine(StringUtil.localize("gui.temptol"), COLUMN_0);
-		drawToleranceInfo(butterfly.getGenome().getToleranceTemp(), COLUMN_1,
-				getColorCoding(butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE.ordinal()).isDominant()));
-		drawToleranceInfo(((AlleleTolerance) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE.ordinal())).getValue(), COLUMN_2,
-				getColorCoding(butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE.ordinal()).isDominant()));
+		drawToleranceInfo(tempToleranceActive, COLUMN_1);
+		drawToleranceInfo(tempToleranceInactive, COLUMN_2);
 
 		newLine();
 
 		drawRow(StringUtil.localize("gui.humidity"), AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getHumidity()),
 				AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getHumidity()), butterfly, EnumButterflyChromosome.SPECIES);
 
+		IAlleleTolerance humidToleranceActive = (IAlleleTolerance)butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE.ordinal());
+		IAlleleTolerance humidToleranceInactive = (IAlleleTolerance)butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE.ordinal());
 		drawLine(StringUtil.localize("gui.humidtol"), COLUMN_0);
-		drawToleranceInfo(butterfly.getGenome().getToleranceHumid(), COLUMN_1,
-				getColorCoding(butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE.ordinal()).isDominant()));
-		drawToleranceInfo(((AlleleTolerance) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE.ordinal())).getValue(), COLUMN_2,
-				getColorCoding(butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE.ordinal()).isDominant()));
+		drawToleranceInfo(humidToleranceActive, COLUMN_1);
+		drawToleranceInfo(humidToleranceInactive, COLUMN_2);
 
 		newLine();
 		newLine();
