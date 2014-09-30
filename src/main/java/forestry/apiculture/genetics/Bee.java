@@ -343,7 +343,14 @@ public class Bee extends IndividualLiving implements IBee {
 		IAlleleBeeSpecies secondary = genome.getSecondary();
 		if (!isPureBred(EnumBeeChromosome.SPECIES.ordinal()))
 			list.add("\u00A79" + StringUtil.localize("bees.hybrid").replaceAll("%PRIMARY",primary.getName()).replaceAll("%SECONDARY",secondary.getName()));
-		list.add(genome.getActiveAllele(EnumBeeChromosome.SPEED.ordinal()).getName() + " " + StringUtil.localize("gui.worker"));
+
+		IAllele speed = genome.getActiveAllele(EnumBeeChromosome.SPEED.ordinal());
+		String customWorker = "tooltip.worker." + speed.getUnlocalizedName().replaceFirst("gui.", "");
+		if (StringUtil.canTranslate(customWorker))
+			list.add(StringUtil.localize(customWorker));
+		else
+			list.add(speed.getName() + " " + StringUtil.localize("gui.worker"));
+
 		list.add(genome.getActiveAllele(EnumBeeChromosome.LIFESPAN.ordinal()).getName() + " " + StringUtil.localize("gui.life"));
 
 		IAlleleTolerance tempTolerance = (IAlleleTolerance)getGenome().getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal());
