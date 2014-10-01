@@ -23,6 +23,9 @@ apply plugin: 'maven'
 loadProperties()
 
 version = version_major + '.' + version_minor + '.' + version_patch + '.' + getBuildNumber()
+if (project.hasProperty('buildQualifier')) {
+	version = project.version + '-' + project.buildQualifier
+}
 group= "net.sengir.forestry" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "forestry_" + mcversion
 
