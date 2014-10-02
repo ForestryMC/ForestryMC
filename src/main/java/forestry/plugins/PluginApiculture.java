@@ -21,6 +21,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.IIcon;
@@ -136,6 +137,7 @@ import forestry.core.config.ForestryItem;
 import forestry.core.config.Property;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
+import forestry.core.gadgets.TileAnalyzer;
 import forestry.core.genetics.Allele;
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPacketHandler;
@@ -178,6 +180,7 @@ public class PluginApiculture extends ForestryPlugin {
 	public static MachineDefinition definitionApiary;
 	public static MachineDefinition definitionChest;
 	public static MachineDefinition definitionBeehouse;
+	public static MachineDefinition definitionAnalyzer;
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
@@ -220,6 +223,9 @@ public class PluginApiculture extends ForestryPlugin {
 						'#', "plankWood",
 						'C', "beeComb"))
 				.setFaces(0, 1, 2, 2, 4, 4, 0, 7));
+
+		definitionAnalyzer = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_ANALYZER_META, "forestry.Analyzer", TileAnalyzer.class,
+				PluginApiculture.proxy.getRendererAnalyzer(Defaults.TEXTURE_PATH_BLOCKS + "/analyzer_")));
 
 		ForestryBlock.beehives.registerBlock(new BlockBeehives(), ItemForestryBlock.class, "beehives");
 		ForestryBlock.beehives.block().setHarvestLevel("pickaxe", 1, 0);
@@ -295,9 +301,11 @@ public class PluginApiculture extends ForestryPlugin {
 
 		registerTemplates();
 
+		definitionAnalyzer.register();
 		definitionApiary.register();
 		definitionBeehouse.register();
 		definitionChest.register();
+
 		GameRegistry.registerTileEntity(TileAlvearyPlain.class, "forestry.Alveary");
 		GameRegistry.registerTileEntity(TileSwarm.class, "forestry.Swarm");
 		GameRegistry.registerTileEntity(TileAlvearySwarmer.class, "forestry.AlvearySwarmer");
@@ -689,6 +697,15 @@ public class PluginApiculture extends ForestryPlugin {
 		RecipeManagers.fermenterManager.addRecipe(ForestryItem.honeydew.getItemStack(), 500, 1.0f, LiquidHelper.getLiquid(Defaults.LIQUID_MEAD, 1),
 				LiquidHelper.getLiquid(Defaults.LIQUID_HONEY, 1));
 
+		// ANALYZER
+		definitionAnalyzer.recipes = createAlyzerRecipes(ForestryBlock.core.block(), Defaults.DEFINITION_ANALYZER_META);
+	}
+
+	public IRecipe[] createAlyzerRecipes(Block block, int meta) {
+		ArrayList<IRecipe> recipes = new ArrayList<IRecipe>();
+		recipes.add(ShapedRecipeCustom.createShapedRecipe(new ItemStack(block, 1, meta), "XTX", " Y ", "X X", 'Y', ForestryItem.sturdyCasing, 'T', ForestryItem.beealyzer, 'X', "ingotBronze"));
+		recipes.add(ShapedRecipeCustom.createShapedRecipe(new ItemStack(block, 1, meta), "XTX", " Y ", "X X", 'Y', ForestryItem.sturdyCasing, 'T', ForestryItem.treealyzer, 'X', "ingotBronze"));
+		return recipes.toArray(new IRecipe[recipes.size()]);
 	}
 
 	private void registerBeehiveDrops() {

@@ -163,7 +163,7 @@ public abstract class TileMachine extends TileForestry implements ISpecialInvent
 		millMap.put(Defaults.ID_PACKAGE_MILL_TRADER, PluginMail.definitionTradestation);
 		millMap.put(Defaults.ID_PACKAGE_MILL_PHILATELIST, PluginMail.definitionPhilatelist);
 		millMap.put(Defaults.ID_PACKAGE_MILL_APIARIST_CHEST, PluginApiculture.definitionChest);
-		millMap.put(Defaults.ID_PACKAGE_MILL_ANALYZER, PluginCore.definitionAnalyzer);
+		millMap.put(Defaults.ID_PACKAGE_MILL_ANALYZER, PluginApiculture.definitionAnalyzer);
 		millMap.put(Defaults.ID_PACKAGE_MILL_RAINMAKER, PluginFactory.definitionRainmaker);
 		definitionMap.put(ForestryBlock.factoryPlain.block(), millMap);
 

@@ -14,6 +14,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.SidedProxy;
@@ -179,26 +180,39 @@ public class PluginMail extends ForestryPlugin {
 	@Override
 	protected void registerRecipes() {
 		// Letters
-		Proxies.common.addShapelessRecipe(ForestryItem.letters.getItemStack(), Items.paper, ForestryItem.propolis.getItemStack(1, Defaults.WILDCARD));
+
+		Item stampGlue;
+		if (PluginManager.Module.APICULTURE.isEnabled()) {
+			Proxies.common.addShapelessRecipe(ForestryItem.letters.getItemStack(), Items.paper, ForestryItem.propolis.getItemStack(1, Defaults.WILDCARD));
+			stampGlue = ForestryItem.honeyDrop.item();
+		} else {
+			Proxies.common.addShapelessRecipe(ForestryItem.letters.getItemStack(), Items.paper, Items.slime_ball);
+			stampGlue = Items.slime_ball;
+		}
 
 		if (Config.craftingStampsEnabled)
 			for (int i = 0; i < stampDefinitions.length; i++) {
 				if (Config.collectorStamps.contains(stampDefinitions[i].name))
 					continue;
 
-				Proxies.common.addRecipe(ForestryItem.stamps.getItemStack(9, i), new Object[]{"XXX", "###", "ZZZ", 'X',
-					stampDefinitions[i].getCraftingIngredient(), '#', Items.paper, 'Z', ForestryItem.honeyDrop});
+				Proxies.common.addRecipe(ForestryItem.stamps.getItemStack(9, i),
+						"XXX", "###", "ZZZ",
+						'X', stampDefinitions[i].getCraftingIngredient(),
+						'#', Items.paper,
+						'Z', stampGlue);
 				RecipeManagers.carpenterManager.addRecipe(10, LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, 300), null, ForestryItem.stamps.getItemStack(9, i),
-						new Object[]{"XXX", "###", 'X', stampDefinitions[i].getCraftingIngredient(), '#', Items.paper});
+						"XXX", "###",
+						'X', stampDefinitions[i].getCraftingIngredient(),
+						'#', Items.paper);
 			}
 
 		// Recycling
-		Proxies.common.addRecipe(new ItemStack(Items.paper), new Object[]{"###", '#', ForestryItem.letters.getItemStack(1, Defaults.WILDCARD)});
+		Proxies.common.addRecipe(new ItemStack(Items.paper), "###", '#', ForestryItem.letters.getItemStack(1, Defaults.WILDCARD));
 
 		// Carpenter
-		RecipeManagers.carpenterManager.addRecipe(10, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 250), null, ForestryItem.letters.getItemStack(), new Object[]{"###", "###", '#', ForestryItem.woodPulp});
+		RecipeManagers.carpenterManager.addRecipe(10, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 250), null, ForestryItem.letters.getItemStack(), "###", "###", '#', ForestryItem.woodPulp);
 
-		Proxies.common.addShapelessRecipe(ForestryItem.catalogue.getItemStack(), new Object[]{ForestryItem.stamps.getItemStack(1, Defaults.WILDCARD), new ItemStack(Items.book)});
+		Proxies.common.addShapelessRecipe(ForestryItem.catalogue.getItemStack(), ForestryItem.stamps.getItemStack(1, Defaults.WILDCARD), new ItemStack(Items.book));
 	}
 
 	@Override

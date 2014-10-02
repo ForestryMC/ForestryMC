@@ -79,7 +79,6 @@ import forestry.core.utils.ShapedRecipeCustom;
 @Plugin(pluginID = "Core", name = "Core", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.core.description")
 public class PluginCore extends ForestryPlugin {
 
-	public static MachineDefinition definitionAnalyzer;
 	public static MachineDefinition definitionEscritoire;
 	// ICrashCallable for highlighting certain mods during crashes.
 	public static ForestryModEnvWarningCallable crashCallable;
@@ -103,8 +102,6 @@ public class PluginCore extends ForestryPlugin {
 
 		ForestryBlock.core.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "core");
 
-		definitionAnalyzer = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_ANALYZER_META, "forestry.Analyzer", TileAnalyzer.class,
-				PluginApiculture.proxy.getRendererAnalyzer(Defaults.TEXTURE_PATH_BLOCKS + "/analyzer_")));
 		definitionEscritoire = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_ESCRITOIRE_META, "forestry.Escritoire", TileEscritoire.class,
 				Proxies.render.getRenderEscritoire()));
 
@@ -127,9 +124,7 @@ public class PluginCore extends ForestryPlugin {
 	@Override
 	public void doInit() {
 		super.doInit();
-		definitionAnalyzer.recipes = createAlyzerRecipes(ForestryBlock.core.block(), Defaults.DEFINITION_ANALYZER_META);
 
-		definitionAnalyzer.register();
 		definitionEscritoire.register();
 		crashCallable = new ForestryModEnvWarningCallable();
 
@@ -466,16 +461,4 @@ public class PluginCore extends ForestryPlugin {
 			}
 		};
 	}
-
-	public IRecipe[] createAlyzerRecipes(Block block, int meta) {
-		ArrayList<IRecipe> recipes = new ArrayList<IRecipe>();
-		if (ForestryItem.beealyzer != null)
-			recipes.add(ShapedRecipeCustom.createShapedRecipe(new ItemStack(block, 1, meta), "XTX", " Y ", "X X", 'Y', ForestryItem.sturdyCasing, 'T', ForestryItem.beealyzer, 'X', "ingotBronze"));
-
-		if (ForestryItem.treealyzer != null)
-			recipes.add(ShapedRecipeCustom.createShapedRecipe(new ItemStack(block, 1, meta), "XTX", " Y ", "X X", 'Y', ForestryItem.sturdyCasing, 'T', ForestryItem.treealyzer, 'X', "ingotBronze"));
-
-		return recipes.toArray(new IRecipe[0]);
-	}
-
 }

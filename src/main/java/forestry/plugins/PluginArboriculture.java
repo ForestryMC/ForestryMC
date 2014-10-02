@@ -302,9 +302,11 @@ public class PluginArboriculture extends ForestryPlugin {
 		ForestryItem.sapling.registerItem(new ItemGermlingGE(EnumGermlingType.SAPLING), "sapling");
 		OreDictionary.registerOre("treeSapling", ForestryItem.sapling.getItemStack(1, -1));
 
-		ForestryItem.pollenFertile.registerItem(new ItemGermlingGE(EnumGermlingType.POLLEN), "pollenFertile");
+		if (PluginManager.Module.APICULTURE.isEnabled()) {
+			ForestryItem.pollenFertile.registerItem(new ItemGermlingGE(EnumGermlingType.POLLEN), "pollenFertile");
+			ForestryItem.treealyzer.registerItem(new ItemTreealyzer(), "treealyzer");
+		}
 
-		ForestryItem.treealyzer.registerItem(new ItemTreealyzer(), "treealyzer");
 		ForestryItem.grafter.registerItem(new ItemGrafter(4), "grafter");
 		ForestryItem.grafterProven.registerItem(new ItemGrafter(149), "grafterProven");
 
@@ -995,11 +997,13 @@ public class PluginArboriculture extends ForestryPlugin {
 		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getLarchTemplate(), EnumGermlingType.SAPLING), 1, 2, 4));
 		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getLimeTemplate(), EnumGermlingType.SAPLING), 1, 2, 4));
 
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getOakTemplate(), EnumGermlingType.POLLEN), 2, 3, 4));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getSpruceTemplate(), EnumGermlingType.POLLEN), 2, 3, 4));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getBirchTemplate(), EnumGermlingType.POLLEN), 2, 3, 4));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getLarchTemplate(), EnumGermlingType.POLLEN), 1, 2, 3));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getLimeTemplate(), EnumGermlingType.POLLEN), 1, 2, 3));
+		if (PluginManager.Module.APICULTURE.isEnabled()) {
+			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getOakTemplate(), EnumGermlingType.POLLEN), 2, 3, 4));
+			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getSpruceTemplate(), EnumGermlingType.POLLEN), 2, 3, 4));
+			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getBirchTemplate(), EnumGermlingType.POLLEN), 2, 3, 4));
+			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getLarchTemplate(), EnumGermlingType.POLLEN), 1, 2, 3));
+			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getLimeTemplate(), EnumGermlingType.POLLEN), 1, 2, 3));
+		}
 	}
 
 	private ItemStack getTreeItemFromTemplate(IAllele[] template, EnumGermlingType type) {

@@ -49,6 +49,7 @@ public class PluginPropolisPipe extends ForestryPlugin {
 	public EnumSet<PluginManager.Module> getDependancies() {
 		EnumSet<PluginManager.Module> deps = super.getDependancies();
 		deps.add(PluginManager.Module.BUILDCRAFT);
+		deps.add(PluginManager.Module.APICULTURE);
 		return deps;
 	}
 

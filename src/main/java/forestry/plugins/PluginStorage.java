@@ -391,12 +391,16 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 		hunterItems.add(new ItemStack(Items.iron_horse_armor));
 
 		// [4] Set valid items in adventurer's backpack
+
 		// [5] Set valid items in builder's backpack
+		if (PluginManager.Module.APICULTURE.isEnabled()) {
+			builderItems.add(ForestryBlock.candle.getWildcard());
+			builderItems.add(ForestryBlock.stump.getWildcard());
+		}
+
 		builderItems.add(new ItemStack(Blocks.torch));
 		builderItems.add(new ItemStack(Blocks.redstone_torch));
 		builderItems.add(new ItemStack(Blocks.redstone_lamp));
-		builderItems.add(ForestryBlock.candle.getWildcard());
-		builderItems.add(ForestryBlock.stump.getWildcard());
 		builderItems.add(new ItemStack(Blocks.stonebrick, 1, Defaults.WILDCARD));
 		builderItems.add(new ItemStack(Blocks.sandstone, 1, 1));
 		builderItems.add(new ItemStack(Blocks.sandstone, 1, 2));
@@ -444,14 +448,30 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 	@Override
 	protected void registerRecipes() {
 
-		// Apiarist's Backpack
-		Proxies.common.addRecipe(ForestryItem.apiaristBackpack.getItemStack(),
-				new Object[]{"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
-					"stickWood", 'Y', ForestryBlock.apiculture.getItemStack(1, Defaults.DEFINITION_APIARISTCHEST_META)});
-		// Lepidopterist's Backpack
-		Proxies.common.addRecipe(ForestryItem.lepidopteristBackpack.getItemStack(),
-				new Object[]{"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
-					"stickWood", 'Y', ForestryBlock.lepidopterology.getItemStack(1, Defaults.DEFINITION_LEPICHEST_META)});
+		if (PluginManager.Module.APICULTURE.isEnabled()) {
+			// Apiarist's Backpack
+			Proxies.common.addRecipe(ForestryItem.apiaristBackpack.getItemStack(),
+					"X#X",
+					"VYV",
+					"X#X",
+					'#', Blocks.wool,
+					'X', Items.string,
+					'V', "stickWood",
+					'Y', ForestryBlock.apiculture.getItemStack(1, Defaults.DEFINITION_APIARISTCHEST_META));
+		}
+
+		if (PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {
+			// Lepidopterist's Backpack
+			Proxies.common.addRecipe(ForestryItem.lepidopteristBackpack.getItemStack(),
+					"X#X",
+					"VYV",
+					"X#X",
+					'#', Blocks.wool,
+					'X', Items.string,
+					'V', "stickWood",
+					'Y', ForestryBlock.lepidopterology.getItemStack(1, Defaults.DEFINITION_LEPICHEST_META));
+		}
+
 		// Miner's Backpack
 		Proxies.common.addRecipe(ForestryItem.minerBackpack.getItemStack(),
 				new Object[]{"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
