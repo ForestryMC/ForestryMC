@@ -224,9 +224,8 @@ public class PluginCore extends ForestryPlugin {
 				new OverlayInfo("ex-8", 0xffffff, 0x444444), new OverlayInfo("ex-9", 0xffffff, 0xbfffdd), new OverlayInfo("ex-10", 0xffffff, 0x68ccee),
 				new OverlayInfo("ex-11", 0xffffff, 0x1c57c6)), "thermionicTubes");
 
-		// / CRATES AND CARTONS
+		// / CARTONS
 		ForestryItem.carton.registerItem((new ItemForestry()), "carton");
-		ForestryItem.crate.registerItem((new ItemForestry()), "crate");
 
 		// / CRAFTING CARPENTER
 		ForestryItem.stickImpregnated.registerItem((new ItemForestry()), "oakStick");

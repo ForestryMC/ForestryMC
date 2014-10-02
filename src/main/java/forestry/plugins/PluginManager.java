@@ -218,8 +218,12 @@ public class PluginManager {
 		for (Module m : loadedModules) {
 			ForestryPlugin plugin = m.instance;
 			Proxies.log.fine("Init Start: {0}", plugin);
-			plugin.registerBackpackItems();
-			plugin.registerCrates();
+
+			if (Module.STORAGE.isEnabled()) {
+				plugin.registerBackpackItems();
+				plugin.registerCrates();
+			}
+
 			plugin.doInit();
 			Proxies.log.fine("Init Complete: {0}", plugin);
 		}

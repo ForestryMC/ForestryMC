@@ -63,6 +63,7 @@ import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.IResupplyHandler;
 import forestry.core.interfaces.ISaveEventHandler;
+import forestry.core.items.ItemForestry;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.LiquidHelper;
@@ -71,7 +72,6 @@ import forestry.storage.BackpackHelper;
 import forestry.storage.GuiHandlerStorage;
 import forestry.storage.PickupHandlerStorage;
 import forestry.storage.ResupplyHandler;
-import forestry.storage.items.ItemBackpack;
 import forestry.storage.items.ItemNaturalistBackpack;
 import forestry.storage.items.ItemNaturalistBackpack.BackpackDefinitionApiarist;
 import forestry.storage.items.ItemNaturalistBackpack.BackpackDefinitionLepidopterist;
@@ -240,6 +240,10 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 
 	@Override
 	protected void registerItems() {
+		// CRATE
+		ForestryItem.crate.registerItem((new ItemForestry()), "crate");
+
+		// BACKPACKS
 		BackpackDefinition definition = new BackpackDefinitionApiarist("apiarist", 0xc4923d);
 		BackpackManager.definitions.put(definition.getKey(), definition);
 		ForestryItem.apiaristBackpack.registerItem(new ItemNaturalistBackpack(GuiId.ApiaristBackpackGUI.ordinal(), definition).setCreativeTab(Tabs.tabApiculture), "apiaristBag");
