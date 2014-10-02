@@ -385,8 +385,13 @@ public class PluginFactory extends ForestryPlugin {
 
 		// RAIN SUBSTRATES
 		RecipeManagers.carpenterManager.addRecipe(5, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.iodineCharge.getItemStack(),
-				new Object[]{"Z#Z", "#Y#", "X#X", '#', ForestryItem.pollen, 'X', Items.gunpowder,
-					'Y', ForestryItem.canEmpty, 'Z', ForestryItem.honeyDrop});
+				"Z#Z",
+				"#Y#",
+				"X#X",
+				'#', ForestryItem.pollenCluster,
+				'X', Items.gunpowder,
+				'Y', ForestryItem.canEmpty,
+				'Z', ForestryItem.honeyDrop);
 		// ForestryCore.oreHandler.registerCarpenterRecipe(iodineCapsule);
 		RecipeManagers.carpenterManager.addRecipe(
 				5,

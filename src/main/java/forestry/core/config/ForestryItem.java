@@ -100,7 +100,7 @@ public enum ForestryItem {
 	honeyDrop,
 	scoop,
 	beeswax,
-	pollen,
+	pollenCluster,
 	propolis,
 	honeydew,
 	royalJelly,

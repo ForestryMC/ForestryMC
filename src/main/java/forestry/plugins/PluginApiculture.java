@@ -376,11 +376,11 @@ public class PluginApiculture extends ForestryPlugin {
 				new OverlayInfo("omega", 0x191919, 0x4a8ca7).setIsSecret()), "honeyDrop");
 		OreDictionary.registerOre("dropHoney", ForestryItem.honeyDrop.getItemStack());
 
-		ForestryItem.pollen.registerItem(new ItemOverlay(Tabs.tabApiculture,
+		ForestryItem.pollenCluster.registerItem(new ItemOverlay(Tabs.tabApiculture,
 				new OverlayInfo("normal", 0xa28a25, 0xa28a25),
 				new OverlayInfo("crystalline", 0xffffff, 0xc5feff)),
 				"pollen");
-		OreDictionary.registerOre("itemPollen", ForestryItem.pollen.getItemStack());
+		OreDictionary.registerOre("itemPollen", ForestryItem.pollenCluster.getItemStack());
 
 		ForestryItem.propolis.registerItem(new ItemOverlay(Tabs.tabApiculture,
 				new OverlayInfo("normal", 0xc5b24e), new OverlayInfo("sticky", 0xc68e57), new OverlayInfo("pulsating", 0x2ccdb1).setIsSecret(),
@@ -414,7 +414,7 @@ public class PluginApiculture extends ForestryPlugin {
 	@Override
 	protected void registerCrates() {
 		ForestryItem.cratedBeeswax.registerItem(new ItemCrated(ForestryItem.beeswax.getItemStack()), "cratedBeeswax");
-		ForestryItem.cratedPollen.registerItem(new ItemCrated(ForestryItem.pollen.getItemStack()), "cratedPollen");
+		ForestryItem.cratedPollen.registerItem(new ItemCrated(ForestryItem.pollenCluster.getItemStack()), "cratedPollen");
 		ForestryItem.cratedPropolis.registerItem(new ItemCrated(ForestryItem.propolis.getItemStack()), "cratedPropolis");
 		ForestryItem.cratedHoneydew.registerItem(new ItemCrated(ForestryItem.honeydew.getItemStack()), "cratedHoneydew");
 		ForestryItem.cratedRoyalJelly.registerItem(new ItemCrated(ForestryItem.royalJelly.getItemStack()), "cratedRoyalJelly");
@@ -454,12 +454,12 @@ public class PluginApiculture extends ForestryPlugin {
 				"###", "YXY",
 				'#', ForestryItem.waxCapsule,
 				'X', Items.bone,
-				'Y', ForestryItem.pollen);
+				'Y', ForestryItem.pollenCluster);
 		Proxies.common.addRecipe(ForestryItem.vialCatalyst.getItemStack(3),
 				"###", "YXY",
 				'#', ForestryItem.canEmpty,
 				'X', Items.bone,
-				'Y', ForestryItem.pollen);
+				'Y', ForestryItem.pollenCluster);
 		Proxies.common.addRecipe(ForestryItem.vialCatalyst.getItemStack(),
 				"###", "YXY", "###",
 				'#', ForestryItem.honeyDrop,
@@ -473,12 +473,12 @@ public class PluginApiculture extends ForestryPlugin {
 		Proxies.common.addRecipe(ForestryItem.vialCatalyst.getItemStack(),
 				"###", "YXY", "###",
 				'#', ForestryItem.honeyDrop,
-				'Y', ForestryItem.pollen,
+				'Y', ForestryItem.pollenCluster,
 				'X', ForestryItem.waxCapsule);
 		Proxies.common.addRecipe(ForestryItem.vialCatalyst.getItemStack(),
 				"###", "YXY", "###",
 				'#', ForestryItem.honeyDrop,
-				'Y', ForestryItem.pollen,
+				'Y', ForestryItem.pollenCluster,
 				'X', ForestryItem.canEmpty);
 
 		// Bees
@@ -489,7 +489,7 @@ public class PluginApiculture extends ForestryPlugin {
 		Proxies.common.addRecipe(new ItemStack(Items.slime_ball),
 				"#X#", "#X#", "#X#",
 				'#', ForestryItem.propolis,
-				'X', ForestryItem.pollen);
+				'X', ForestryItem.pollenCluster);
 		Proxies.common.addRecipe(new ItemStack(Items.speckled_melon),
 				"#X#", "#Y#", "#X#",
 				'#', ForestryItem.honeyDrop,
@@ -636,7 +636,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'#', "plankWood",
 				'J', ForestryItem.royalJelly,
 				'W', ForestryItem.beeswax,
-				'P', ForestryItem.pollen);
+				'P', ForestryItem.pollenCluster);
 
 		// / CENTRIFUGE
 		// Honey combs
@@ -651,7 +651,7 @@ public class PluginApiculture extends ForestryPlugin {
 		RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 5), ForestryItem.honeydew.getItemStack(), ForestryItem.honeyDrop.getItemStack(), 40);
 		// Frozen combs
 		RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 4), new ItemStack[]{ForestryItem.beeswax.getItemStack(),
-			ForestryItem.honeyDrop.getItemStack(), new ItemStack(Items.snowball), ForestryItem.pollen.getItemStack(1, 1)}, new int[]{80, 70, 40, 20});
+			ForestryItem.honeyDrop.getItemStack(), new ItemStack(Items.snowball), ForestryItem.pollenCluster.getItemStack(1, 1)}, new int[]{80, 70, 40, 20});
 		// Silky combs
 		RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 6), ForestryItem.honeyDrop.getItemStack(), ForestryItem.propolis.getItemStack(1, 3), 80);
 		// Parched combs
@@ -853,7 +853,7 @@ public class PluginApiculture extends ForestryPlugin {
 		Allele.speciesUnweary = new AlleleBeeSpecies("speciesUnweary", true, "bees.species.unweary", industrious, "assiduus", 0x19ec5a, 0xffdc16).addProduct(
 				ForestryItem.beeComb.getItemStack(1, 3), 30).setIsSecret();
 		Allele.speciesIndustrious = new AlleleBeeSpecies("speciesIndustrious", false, "bees.species.industrious", industrious, "industria", 0xffffff, 0xffdc16)
-				.addProduct(ForestryItem.beeComb.getItemStack(1, 3), 20).addProduct(ForestryItem.pollen.getItemStack(), 15).setHasEffect().setIsSecret();
+				.addProduct(ForestryItem.beeComb.getItemStack(1, 3), 20).addProduct(ForestryItem.pollenCluster.getItemStack(), 15).setHasEffect().setIsSecret();
 
 		// Heroic Branch
 		Allele.speciesSteadfast = new AlleleBeeSpecies("speciesSteadfast", false, "bees.species.steadfast", heroic, "legio", 0x4d2b15, 0xffdc16)

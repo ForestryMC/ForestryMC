@@ -253,7 +253,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@SideOnly(Side.CLIENT)
 	public IIcon getGermlingIcon(EnumGermlingType type, int renderPass) {
 		if(type == EnumGermlingType.POLLEN)
-			return ForestryItem.pollen.item().getIconFromDamageForRenderPass(0, renderPass);
+			return ForestryItem.pollenCluster.item().getIconFromDamageForRenderPass(0, renderPass);
 
 		return icon;
 	}
