@@ -25,6 +25,6 @@ public class WorldGenHiveEnd extends WorldGenHive {
 		if (biome.biomeID != BiomeGenBase.sky.biomeID)
 			return false;
 
-		return tryPlaceGroundHive(world, x, y, z, 5, Blocks.end_stone);
+		return tryPlaceGroundHive(world, x, z, 5, Blocks.end_stone);
 	}
 }

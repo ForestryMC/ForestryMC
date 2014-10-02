@@ -28,11 +28,13 @@ public class WorldGenHiveSnow extends WorldGenHive {
 				&& EnumTemperature.getFromValue(biome.temperature) != EnumTemperature.COLD)
 			return false;
 
-		if (tryPlaceGroundHive(world, x, y, z, 6, Blocks.dirt, Blocks.grass)) {
-			world.setBlock(x, y + 1, z, Blocks.snow_layer, 0, 0);
-			return true;
-		}
+		return tryPlaceGroundHive(world, x, z, 6, Blocks.dirt, Blocks.grass, Blocks.snow);
+	}
 
-		return false;
+	@Override
+	protected void postGen(World world, int x, int y, int z, int meta) {
+		super.postGen(world, x, y, z, meta);
+		if (world.isAirBlock(x, y + 1, z))
+			world.setBlock(x, y + 1, z, Blocks.snow_layer, 0, 0);
 	}
 }

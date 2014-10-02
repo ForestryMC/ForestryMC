@@ -28,6 +28,6 @@ public class WorldGenHiveJungle extends WorldGenHive {
 				|| EnumHumidity.getFromValue(biome.rainfall) != EnumHumidity.DAMP)
 			return false;
 
-		return tryPlaceTreeHive(world, x, y, z, 4);
+		return tryPlaceTreeHive(world, x, z, 4);
 	}
 }

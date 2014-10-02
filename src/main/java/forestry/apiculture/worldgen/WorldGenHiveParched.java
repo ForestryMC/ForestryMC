@@ -29,6 +29,6 @@ public class WorldGenHiveParched extends WorldGenHive {
 				|| EnumHumidity.getFromValue(biome.rainfall) != EnumHumidity.ARID)
 			return false;
 
-		return tryPlaceGroundHive(world, x, y, z, 3, Blocks.sand, Blocks.sandstone);
+		return tryPlaceGroundHive(world, x, z, 3, Blocks.sand, Blocks.sandstone);
 	}
 }

@@ -57,21 +57,24 @@ public class HiveDecorator {
 	}
 
 	private void decorateHives(World world, Random rand, int worldX, int worldZ) {
-		genHive(world, rand, worldX, worldZ, 42, 3, forest);
-		genHive(world, rand, worldX, worldZ, 62, 4, jungle);
-		genHive(world, rand, worldX, worldZ, 42, 1, meadows);
-		genHive(world, rand, worldX, worldZ, 42, 1, parched);
-		genHive(world, rand, worldX, worldZ, 42, 4, end);
-		genHive(world, rand, worldX, worldZ, 42, 2, snow);
-		genHive(world, rand, worldX, worldZ, 42, 2, swamp);
+		genHive(world, rand, worldX, worldZ, 3, forest);
+		genHive(world, rand, worldX, worldZ, 4, jungle);
+		genHive(world, rand, worldX, worldZ, 1, meadows);
+		genHive(world, rand, worldX, worldZ, 1, parched);
+		genHive(world, rand, worldX, worldZ, 4, end);
+		genHive(world, rand, worldX, worldZ, 2, snow);
+		genHive(world, rand, worldX, worldZ, 2, swamp);
 	}
 
-	private void genHive(World world, Random rand, int worldX, int worldZ, int height, int attempts, WorldGenHive gen) {
-		for (int i = 0; i < attempts; i++) {
+	private void genHive(World world, Random rand, int worldX, int worldZ, int probability, WorldGenHive gen) {
+		if (probability < rand.nextInt(128))
+			return;
+
+		for (int tries = 0; tries < 4; tries ++) {
 			int randPosX = worldX + rand.nextInt(16);
-			int randPosY = height + rand.nextInt(50);
 			int randPosZ = worldZ + rand.nextInt(16);
-			if (gen.generate(world, rand, randPosX, randPosY, randPosZ))
+
+			if (gen.generate(world, rand, randPosX, 0, randPosZ))
 				return;
 		}
 	}

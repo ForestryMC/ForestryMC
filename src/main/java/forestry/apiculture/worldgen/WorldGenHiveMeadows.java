@@ -29,6 +29,6 @@ public class WorldGenHiveMeadows extends WorldGenHive {
 				|| EnumHumidity.getFromValue(biome.rainfall) != EnumHumidity.NORMAL)
 			return false;
 
-		return tryPlaceGroundHive(world, x, y, z, 2, Blocks.dirt, Blocks.grass);
+		return tryPlaceGroundHive(world, x, z, 2, Blocks.dirt, Blocks.grass);
 	}
 }

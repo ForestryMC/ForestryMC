@@ -28,7 +28,7 @@ public class WorldGenHiveForest extends WorldGenHive {
 				EnumHumidity.getFromValue(biome.rainfall) != EnumHumidity.NORMAL)
 			return false;
 
-		return tryPlaceTreeHive(world, x, y, z, 1);
+		return tryPlaceTreeHive(world, x, z, 1);
 	}
 
 }

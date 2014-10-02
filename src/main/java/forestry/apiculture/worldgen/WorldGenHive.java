@@ -13,11 +13,9 @@ package forestry.apiculture.worldgen;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
-
-import net.minecraftforge.common.IPlantable;
 
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
@@ -27,32 +25,16 @@ public abstract class WorldGenHive extends WorldGenerator {
 	@Override
 	public abstract boolean generate(World world, Random random, int x, int y, int z);
 
-	protected boolean tryPlaceTreeHive(World world, int x, int y, int z, int meta) {
-		if (!world.isAirBlock(x, y, z))
+	protected boolean tryPlaceTreeHive(World world, int x, int z, int meta) {
+
+		int y = getTopLeafHeight(world, x, z);
+		if (y == -1)
 			return false;
 
-		Block b = world.getBlock(x, y + 1, z);
-		if (b == null || !b.isLeaves(world, x, y + 1, z))
-			return false;
+		// get to the bottom of the leaves
+		do { y--; } while (world.getBlock(x, y, z).isLeaves(world, x, y, z));
 
-		if (world.isAirBlock(x, y - 1, z)) {
-			setHive(world, x, y, z, meta);
-			return true;
-		}
-		return false;
-	}
-
-	protected boolean tryPlaceGroundHive(World world, int x, int y, int z, int meta, Block... groundBlocks) {
-		if (!world.isAirBlock(x, y, z)) {
-			Block block = world.getBlock(x, y, z);
-			if (block != Blocks.snow_layer && !(block instanceof IPlantable))
-				return false;
-		}
-
-		if (!world.isAirBlock(x, y + 1, z))
-			return false;
-
-		if (isAcceptableBlock(world, x, y - 1, z, groundBlocks)) {
+		if (isReplaceableByHive(world, x, y, z)) {
 			setHive(world, x, y, z, meta);
 			return true;
 		}
@@ -60,12 +42,39 @@ public abstract class WorldGenHive extends WorldGenerator {
 		return false;
 	}
 
-	private boolean isAcceptableBlock(World world, int x, int y, int z, Block... blocks) {
+	private int getTopLeafHeight(World world, int x, int z) {
+		int y = world.getHeightValue(x, z) - 1;
+		if (world.getBlock(x, y, z).isLeaves(world, x, y, z))
+			return y;
+		return -1;
+	}
+
+	protected boolean tryPlaceGroundHive(World world, int x, int z, int meta, Block... groundBlocks) {
+
+		int y = world.getHeightValue(x, z);
+
+		if (isReplaceableByHive(world, x, y, z) && isAcceptableGround(world, x, y - 1, z, groundBlocks)) {
+			setHive(world, x, y, z, meta);
+			return true;
+		}
+		return false;
+	}
+
+	protected boolean isReplaceableByHive(World world, int x, int y, int z) {
+		Block block = world.getBlock(x, y, z);
+		Material material = block.getMaterial();
+		return (material.isReplaceable() && !material.isLiquid()) ||
+				material == Material.air ||
+				material == Material.grass ||
+				material == Material.plants;
+	}
+
+	private boolean isAcceptableGround(World world, int x, int y, int z, Block... blocks) {
 		Block block = world.getBlock(x, y, z);
 		if (block == null)
 			return false;
 		for (Block testBlock : blocks)
-			if (block.isReplaceableOreGen(world, x, y, z, testBlock))
+			if (block.getMaterial() == testBlock.getMaterial())
 				return true;
 		return false;
 	}

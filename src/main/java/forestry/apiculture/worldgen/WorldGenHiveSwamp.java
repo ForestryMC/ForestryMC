@@ -29,6 +29,6 @@ public class WorldGenHiveSwamp extends WorldGenHive {
 				|| EnumHumidity.getFromValue(biome.rainfall) != EnumHumidity.DAMP)
 			return false;
 
-		return tryPlaceGroundHive(world, x, y, z, 7, Blocks.dirt, Blocks.grass);
+		return tryPlaceGroundHive(world, x, z, 7, Blocks.dirt, Blocks.grass);
 	}
 }
