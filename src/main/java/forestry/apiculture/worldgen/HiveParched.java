@@ -25,6 +25,8 @@ public class HiveParched extends HiveGround {
 
 	@Override
 	public boolean isGoodClimate(BiomeGenBase biome, EnumTemperature temperature, EnumHumidity humidity) {
-		return temperature == EnumTemperature.HOT && humidity == EnumHumidity.ARID;
+		return super.isGoodClimate(biome, temperature, humidity) &&
+				temperature == EnumTemperature.HOT &&
+				humidity == EnumHumidity.ARID;
 	}
 }

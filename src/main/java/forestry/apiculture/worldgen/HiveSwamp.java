@@ -25,6 +25,8 @@ public class HiveSwamp extends HiveGround {
 
 	@Override
 	public boolean isGoodClimate(BiomeGenBase biome, EnumTemperature temperature, EnumHumidity humidity) {
-		return temperature == EnumTemperature.NORMAL && humidity == EnumHumidity.DAMP;
+		return super.isGoodClimate(biome, temperature, humidity) &&
+				temperature == EnumTemperature.NORMAL &&
+				humidity == EnumHumidity.DAMP;
 	}
 }

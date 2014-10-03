@@ -25,6 +25,7 @@ public class HiveEnd extends HiveGround {
 
 	@Override
 	public boolean isGoodClimate(BiomeGenBase biome, EnumTemperature temperature, EnumHumidity humidity) {
-		return biome.biomeID == BiomeGenBase.sky.biomeID;
+		return super.isGoodClimate(biome, temperature, humidity) &&
+				biome.biomeID == BiomeGenBase.sky.biomeID;
 	}
 }

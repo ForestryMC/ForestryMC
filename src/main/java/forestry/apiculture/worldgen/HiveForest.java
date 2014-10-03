@@ -24,6 +24,8 @@ public class HiveForest extends HiveTree {
 
 	@Override
 	public boolean isGoodClimate(BiomeGenBase biome, EnumTemperature temperature, EnumHumidity humidity) {
-		return temperature == EnumTemperature.NORMAL && humidity == EnumHumidity.NORMAL;
+		return super.isGoodClimate(biome, temperature, humidity) &&
+				temperature == EnumTemperature.NORMAL &&
+				humidity == EnumHumidity.NORMAL;
 	}
 }
