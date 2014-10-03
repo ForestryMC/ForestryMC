@@ -10,23 +10,6 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.command.ICommand;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.WeightedRandomChestContent;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
@@ -37,13 +20,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.ChestGenHooks;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.OreDictionary;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;
@@ -51,6 +27,8 @@ import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeRoot;
 import forestry.api.apiculture.IHiveDrop;
+import forestry.api.apiculture.hives.HiveManager;
+import forestry.api.apiculture.hives.IHive;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.Tabs;
@@ -128,6 +106,13 @@ import forestry.apiculture.items.ItemWaxCast;
 import forestry.apiculture.proxy.ProxyApiculture;
 import forestry.apiculture.trigger.TriggerNoFrames;
 import forestry.apiculture.worldgen.HiveDecorator;
+import forestry.apiculture.worldgen.HiveEnd;
+import forestry.apiculture.worldgen.HiveForest;
+import forestry.apiculture.worldgen.HiveJungle;
+import forestry.apiculture.worldgen.HiveMeadows;
+import forestry.apiculture.worldgen.HiveParched;
+import forestry.apiculture.worldgen.HiveSnow;
+import forestry.apiculture.worldgen.HiveSwamp;
 import forestry.core.GameMode;
 import forestry.core.config.Config;
 import forestry.core.config.Configuration;
@@ -152,6 +137,27 @@ import forestry.core.render.EntitySnowFX;
 import forestry.core.triggers.Trigger;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.ShapedRecipeCustom;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.command.ICommand;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Plugin(pluginID = "Apiculture", name = "Apiculture", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.apiculture.description")
 public class PluginApiculture extends ForestryPlugin {
@@ -237,6 +243,8 @@ public class PluginApiculture extends ForestryPlugin {
 		ForestryBlock.beehives.block().setHarvestLevel("scoop", 0, 6);
 		ForestryBlock.beehives.block().setHarvestLevel("scoop", 0, 7);
 		ForestryBlock.beehives.block().setHarvestLevel("scoop", 0, 8);
+
+		createHives();
 
 		// Init bee interface
 		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginApiculture.beeInterface = new BeeHelper());
@@ -345,7 +353,7 @@ public class PluginApiculture extends ForestryPlugin {
 	public void postInit() {
 		super.postInit();
 		registerDungeonLoot();
-
+		updateHiveDrops();
 	}
 
 	@Override
@@ -777,6 +785,7 @@ public class PluginApiculture extends ForestryPlugin {
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
+	@Deprecated // deprecated since 3.1. remove when BeeManager.hiveDrops is removed
 	private void createHiveDropArrays() {
 
 		BeeManager.hiveDrops = new ArrayList[8];
@@ -804,6 +813,47 @@ public class PluginApiculture extends ForestryPlugin {
 
 		swarmDrops = new ArrayList<IHiveDrop>();
 		BeeManager.hiveDrops[7] = swarmDrops;
+	}
+
+	private void createHives() {
+		HiveManager.addHive(new HiveForest(3));
+		HiveManager.addHive(new HiveMeadows(1));
+		HiveManager.addHive(new HiveParched(1));
+		HiveManager.addHive(new HiveJungle(4));
+		HiveManager.addHive(new HiveEnd(4));
+		HiveManager.addHive(new HiveSnow(2));
+		HiveManager.addHive(new HiveSwamp(2));
+	}
+
+	@Deprecated // deprecated since 3.1. remove when BeeManager.hiveDrops is removed
+	private void updateHiveDrops() {
+		IHive hive = HiveManager.getForestHive();
+		for (IHiveDrop drop : forestDrops)
+			hive.addDrop(drop);
+
+		hive = HiveManager.getMeadowsHive();
+		for (IHiveDrop drop : meadowsDrops)
+			hive.addDrop(drop);
+
+		hive = HiveManager.getDesertHive();
+		for (IHiveDrop drop : desertDrops)
+			hive.addDrop(drop);
+
+		hive = HiveManager.getJungleHive();
+		for (IHiveDrop drop : jungleDrops)
+			hive.addDrop(drop);
+
+		hive = HiveManager.getEndHive();
+		for (IHiveDrop drop : endDrops)
+			hive.addDrop(drop);
+
+		hive = HiveManager.getSnowHive();
+		for (IHiveDrop drop : snowDrops)
+			hive.addDrop(drop);
+
+		hive = HiveManager.getSwampHive();
+		for (IHiveDrop drop : swampDrops)
+			hive.addDrop(drop);
 	}
 
 	private void createAlleles() {

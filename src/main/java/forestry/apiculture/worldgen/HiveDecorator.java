@@ -10,16 +10,21 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
-import java.util.Random;
-
-import net.minecraft.world.World;
-
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-
+import forestry.api.apiculture.hives.HiveManager;
+import forestry.api.apiculture.hives.IHive;
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
+import forestry.core.config.Defaults;
+import net.minecraft.block.Block;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
 import net.minecraftforge.event.terraingen.TerrainGen;
+
+import java.util.Random;
 
 /**
  *
@@ -30,13 +35,6 @@ public class HiveDecorator {
 	@SuppressWarnings("rawtypes")
 	public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "FORESTRY_HIVES", new Class[0], new Object[0]);
 	private static HiveDecorator instance;
-	private final WorldGenHiveForest forest = new WorldGenHiveForest();
-	private final WorldGenHiveJungle jungle = new WorldGenHiveJungle();
-	private final WorldGenHiveMeadows meadows = new WorldGenHiveMeadows();
-	private final WorldGenHiveParched parched = new WorldGenHiveParched();
-	private final WorldGenHiveEnd end = new WorldGenHiveEnd();
-	private final WorldGenHiveSnow snow = new WorldGenHiveSnow();
-	private final WorldGenHiveSwamp swamp = new WorldGenHiveSwamp();
 
 	public static HiveDecorator instance() {
 		if (instance == null) {
@@ -57,25 +55,60 @@ public class HiveDecorator {
 	}
 
 	private void decorateHives(World world, Random rand, int worldX, int worldZ) {
-		genHive(world, rand, worldX, worldZ, 3, forest);
-		genHive(world, rand, worldX, worldZ, 4, jungle);
-		genHive(world, rand, worldX, worldZ, 1, meadows);
-		genHive(world, rand, worldX, worldZ, 1, parched);
-		genHive(world, rand, worldX, worldZ, 4, end);
-		genHive(world, rand, worldX, worldZ, 2, snow);
-		genHive(world, rand, worldX, worldZ, 2, swamp);
+		for (IHive hive : HiveManager.getHives())
+			genHive(world, rand, worldX, worldZ, hive);
 	}
 
-	private void genHive(World world, Random rand, int worldX, int worldZ, int probability, WorldGenHive gen) {
-		if (probability < rand.nextInt(128))
+	private void genHive(World world, Random rand, int worldX, int worldZ, IHive hive) {
+		if (hive.genChance() < rand.nextFloat() * 128.0f)
+			return;
+
+		BiomeGenBase biome = world.getBiomeGenForCoords(worldX, worldZ);
+		EnumTemperature temperature = EnumTemperature.getFromValue(biome.temperature);
+		EnumHumidity humidity = EnumHumidity.getFromValue(biome.rainfall);
+
+		if (!hive.isGoodClimate(biome, temperature, humidity))
 			return;
 
 		for (int tries = 0; tries < 4; tries ++) {
-			int randPosX = worldX + rand.nextInt(16);
-			int randPosZ = worldZ + rand.nextInt(16);
+			int x = worldX + rand.nextInt(16);
+			int z = worldZ + rand.nextInt(16);
 
-			if (gen.generate(world, rand, randPosX, 0, randPosZ))
+			if (tryGenHive(world, x, z, hive))
 				return;
 		}
+	}
+
+	private boolean tryGenHive(World world, int x, int z, IHive hive) {
+
+		int y = hive.getYForHive(world, x, z);
+
+		if (y < 0)
+			return false;
+
+		if (!hive.canReplace(world, x, y, z))
+			return false;
+
+		if (!hive.isGoodLocation(world, x, y, z))
+			return false;
+
+		return setHive(world, x, y, z, hive);
+	}
+
+	protected boolean setHive(World world, int x, int y, int z, IHive hive) {
+		Block hiveBlock = hive.getHiveBlock();
+		boolean placed = world.setBlock(x, y, z, hiveBlock, hive.getHiveMeta(), Defaults.FLAG_BLOCK_SYNCH);
+		if (!placed)
+			return false;
+
+		Block placedBlock = world.getBlock(x, y, z);
+		if (!Block.isEqualTo(hiveBlock, placedBlock))
+			return false;
+
+		hiveBlock.onBlockAdded(world, x, y, z);
+		world.markBlockForUpdate(x, y, z);
+
+		hive.postGen(world, x, y, z);
+		return true;
 	}
 }

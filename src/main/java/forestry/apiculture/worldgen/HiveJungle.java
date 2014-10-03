@@ -4,31 +4,26 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
-import java.util.Random;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-
+import forestry.api.apiculture.hives.HiveTree;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.core.config.ForestryBlock;
+import net.minecraft.world.biome.BiomeGenBase;
 
-public class WorldGenHiveMeadows extends WorldGenHive {
+public class HiveJungle extends HiveTree {
+
+	public HiveJungle(float genChance) {
+		super(ForestryBlock.beehives.block(), 4, genChance);
+	}
 
 	@Override
-	public boolean generate(World world, Random random, int x, int y, int z) {
-
-		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenAt(x, z);
-		if (EnumTemperature.getFromValue(biome.temperature) != EnumTemperature.NORMAL
-				|| EnumHumidity.getFromValue(biome.rainfall) != EnumHumidity.NORMAL)
-			return false;
-
-		return tryPlaceGroundHive(world, x, z, 2, Blocks.dirt, Blocks.grass);
+	public boolean isGoodClimate(BiomeGenBase biome, EnumTemperature temperature, EnumHumidity humidity) {
+		return temperature == EnumTemperature.WARM && humidity == EnumHumidity.DAMP;
 	}
 }
