@@ -816,13 +816,13 @@ public class PluginApiculture extends ForestryPlugin {
 	}
 
 	private void createHives() {
-		HiveManager.addHive(new HiveForest(3));
-		HiveManager.addHive(new HiveMeadows(1));
-		HiveManager.addHive(new HiveParched(1));
-		HiveManager.addHive(new HiveJungle(4));
-		HiveManager.addHive(new HiveEnd(4));
-		HiveManager.addHive(new HiveSnow(2));
-		HiveManager.addHive(new HiveSwamp(2));
+		HiveManager.put(HiveManager.forest, new HiveForest(3));
+		HiveManager.put(HiveManager.meadows, new HiveMeadows(1));
+		HiveManager.put(HiveManager.desert, new HiveParched(1));
+		HiveManager.put(HiveManager.jungle, new HiveJungle(4));
+		HiveManager.put(HiveManager.end, new HiveEnd(4));
+		HiveManager.put(HiveManager.snow, new HiveSnow(2));
+		HiveManager.put(HiveManager.swamp, new HiveSwamp(2));
 	}
 
 	@Deprecated // deprecated since 3.1. remove when BeeManager.hiveDrops is removed
