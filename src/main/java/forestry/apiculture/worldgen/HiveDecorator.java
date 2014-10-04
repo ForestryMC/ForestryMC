@@ -15,6 +15,7 @@ import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHive;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
@@ -56,7 +57,10 @@ public class HiveDecorator {
 
 	private void decorateHives(World world, Random rand, int worldX, int worldZ) {
 		for (IHive hive : HiveManager.getHives())
-			genHive(world, rand, worldX, worldZ, hive);
+			if (Config.generateBeehivesDebug)
+				genHiveDebug(world, worldX, worldZ, hive);
+			else
+				genHive(world, rand, worldX, worldZ, hive);
 	}
 
 	private void genHive(World world, Random rand, int worldX, int worldZ, IHive hive) {
@@ -76,6 +80,18 @@ public class HiveDecorator {
 			if (tryGenHive(world, x, z, hive))
 				return;
 		}
+	}
+
+	private void genHiveDebug(World world, int worldX, int worldZ, IHive hive) {
+		BiomeGenBase biome = world.getBiomeGenForCoords(worldX, worldZ);
+		EnumHumidity humidity = EnumHumidity.getFromValue(biome.rainfall);
+
+		if (!hive.isGoodBiome(biome) || !hive.isGoodHumidity(humidity))
+			return;
+
+		for (int x = 0; x < 16; x++)
+			for (int z = 0; z < 16; z++)
+				tryGenHive(world, worldX + x, worldZ + z, hive);
 	}
 
 	private boolean tryGenHive(World world, int x, int z, IHive hive) {

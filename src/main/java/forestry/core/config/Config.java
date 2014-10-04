@@ -27,6 +27,7 @@ import forestry.core.triggers.ForestryTrigger;
 public class Config {
 
 	public static final String CATEGORY_COMMON = "common";
+	public static final String CATEGORY_DEBUG = "debug";
 
 	public static Configuration config;
 
@@ -57,6 +58,7 @@ public class Config {
 	public static boolean generateTinOre = true;
 	public static boolean generateBeehives = true;
 	public static boolean generateBogEarth = false;
+	public static boolean generateBeehivesDebug = false;
 
 	// Performance
 	public static boolean enableBackpackResupply = true;
@@ -147,6 +149,10 @@ public class Config {
 		Property genBeehives = config.get("world.generate.beehives", CATEGORY_COMMON, true);
 		genBeehives.Comment = "set to false to force forestry to skip generating beehives in the world";
 		generateBeehives = Boolean.parseBoolean(genBeehives.Value);
+
+		Property genDebugBeehives = config.get("world.generate.beehives.debug", CATEGORY_DEBUG, false);
+		genDebugBeehives.Comment = "Set to true to force Forestry to try to generate a beehive at every possible location.";
+		generateBeehivesDebug = Boolean.parseBoolean(genDebugBeehives.Value);
 
 		Property genCopperOre = config.get("world.generate.copper", CATEGORY_COMMON, true);
 		genCopperOre.Comment = "set to false to force forestry to skip generating own copper ore blocks in the world";
