@@ -25,9 +25,8 @@ public class HiveSnow extends HiveGround {
 	}
 
 	@Override
-	public boolean isGoodClimate(BiomeGenBase biome, EnumTemperature temperature, EnumHumidity humidity) {
-		return super.isGoodClimate(biome, temperature, humidity) &&
-				(temperature == EnumTemperature.COLD || temperature == EnumTemperature.ICY);
+	public boolean isGoodTemperature(EnumTemperature temperature) {
+		return temperature == EnumTemperature.COLD || temperature == EnumTemperature.ICY;
 	}
 
 	@Override

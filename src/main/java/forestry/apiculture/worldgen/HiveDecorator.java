@@ -64,10 +64,9 @@ public class HiveDecorator {
 			return;
 
 		BiomeGenBase biome = world.getBiomeGenForCoords(worldX, worldZ);
-		EnumTemperature temperature = EnumTemperature.getFromValue(biome.temperature);
 		EnumHumidity humidity = EnumHumidity.getFromValue(biome.rainfall);
 
-		if (!hive.isGoodClimate(biome, temperature, humidity))
+		if (!hive.isGoodBiome(biome) || !hive.isGoodHumidity(humidity))
 			return;
 
 		for (int tries = 0; tries < 4; tries ++) {
@@ -87,6 +86,11 @@ public class HiveDecorator {
 			return false;
 
 		if (!hive.canReplace(world, x, y, z))
+			return false;
+
+		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+		EnumTemperature temperature = EnumTemperature.getFromValue(biome.getFloatTemperature(x, y, z));
+		if (!hive.isGoodTemperature(temperature))
 			return false;
 
 		if (!hive.isGoodLocation(world, x, y, z))
