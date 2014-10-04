@@ -65,7 +65,7 @@ public class TankWidget extends Widget {
 			return;
 
 		FluidStack contents = getTank().getFluid();
-		if (contents == null || contents.amount <= 0)
+		if (contents == null || contents.amount <= 0 || contents.getFluid() == null)
 			return;
 		IIcon liquidIcon = contents.getFluid().getIcon(contents);
 		if (liquidIcon == null)
