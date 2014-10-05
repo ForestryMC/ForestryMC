@@ -877,14 +877,14 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	@Override
 	public int[] getOffset() {
 		if (offset == null)
-			offset = new int[] { -10, -2, -10 };
+			offset = new int[]{-getArea()[0] / 2, -2, -getArea()[2] / 2};
 		return offset;
 	}
 
 	@Override
 	public int[] getArea() {
 		if (area == null)
-			area = new int[] { 21, 13, 21 };
+			area = new int[] { 7 + (allowedExtent * 2), 13, 7 + (allowedExtent * 2) };
 		return area;
 	}
 
