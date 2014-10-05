@@ -10,12 +10,17 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Stack;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.farming.Farmables;
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmable;
+import forestry.core.config.ForestryBlock;
+import forestry.core.gadgets.BlockSoil;
+import forestry.core.render.SpriteSheet;
+import forestry.core.utils.Vect;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
@@ -23,35 +28,40 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.api.farming.Farmables;
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryBlock;
-import forestry.core.render.SpriteSheet;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.Vect;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 
-public class FarmLogicArboreal extends FarmLogicHomogenous {
+public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
-	public FarmLogicArboreal(IFarmHousing housing, ItemStack[] resource, ItemStack[] ground, ItemStack[] waste, IFarmable[] germlings) {
-		super(housing, resource, ground, waste, germlings);
+	public FarmLogicArboreal(IFarmHousing housing, ItemStack[] resource, ItemStack ground, IFarmable[] germlings) {
+		super(housing, resource, ground, germlings);
 	}
 
 	public FarmLogicArboreal(IFarmHousing housing) {
-		super(housing, new ItemStack[]{new ItemStack(Blocks.dirt)},
-				new ItemStack[]{ForestryBlock.soil.getItemStack(), ForestryBlock.soil.getItemStack(1, Defaults.WILDCARD)},
-				new ItemStack[]{new ItemStack(Blocks.sand)}, Farmables.farmables.get("farmArboreal").toArray(new IFarmable[0]));
+		super(housing,
+				new ItemStack[]{new ItemStack(Blocks.dirt)},
+				ForestryBlock.soil.getItemStack(1, 0),
+				Farmables.farmables.get("farmArboreal").toArray(new IFarmable[0]));
+	}
+
+	@Override
+	public boolean isAcceptedGround(ItemStack itemStack) {
+		if (super.isAcceptedGround(itemStack))
+			return true;
+
+		Block block = BlockSoil.getBlockFromItem(itemStack.getItem());
+		if (block == null || !(block instanceof BlockSoil))
+			return false;
+		BlockSoil blockSoil = (BlockSoil)block;
+		return blockSoil.getTypeFromMeta(itemStack.getItemDamage()) == BlockSoil.SoilType.HUMUS;
 	}
 
 	@Override
@@ -217,20 +227,12 @@ public class FarmLogicArboreal extends FarmLogicHomogenous {
 			Vect position = translateWithOffset(x, ySaplings, z, direction, i);
 
 			if (isAirBlock(position)) {
-				//ForgeDirection reverse = direction.getOpposite();
-				Vect soilBelow = new Vect(position.x, position.y - 1, position.z);
-				//Vect soilPrevious = new Vect(position.x * reverse.offsetX, position.y - 1, position.z * reverse.offsetZ);
-				for (ItemStack grnd : ground)
-					if (StackUtils.isIdenticalItem(grnd, getAsItemStack(soilBelow)))
-						return plantSapling(position);
-				//if (!ground[0].itemID == getAsItemStack(soilPrevious).itemID && ground[0].itemID == getAsItemStack(soilBelow).itemID)
-
-				//if (ground[0].isItemEqual(getAsItemStack(soilBelow)))
-				//	return plantSapling(position);
+				Vect soilBelowPosition = new Vect(position.x, position.y - 1, position.z);
+				ItemStack soilBelow = getAsItemStack(soilBelowPosition);
+				if (isAcceptedGround(soilBelow))
+					return plantSapling(position);
 			}
-
 		}
-
 		return false;
 	}
 

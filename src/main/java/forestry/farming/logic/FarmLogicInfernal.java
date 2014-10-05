@@ -31,10 +31,12 @@ import forestry.api.farming.IFarmable;
 import forestry.core.utils.Utils;
 import forestry.core.utils.Vect;
 
-public class FarmLogicInfernal extends FarmLogicHomogenous {
+public class FarmLogicInfernal extends FarmLogicHomogeneous {
 
 	public FarmLogicInfernal(IFarmHousing housing) {
-		super(housing, new ItemStack[] { new ItemStack(Blocks.soul_sand) }, new ItemStack[] { new ItemStack(Blocks.soul_sand) }, new ItemStack[0],
+		super(housing,
+				new ItemStack[] { new ItemStack(Blocks.soul_sand) },
+				new ItemStack(Blocks.soul_sand),
 				Farmables.farmables.get("farmInfernal").toArray(new IFarmable[0]));
 	}
 
@@ -92,7 +94,7 @@ public class FarmLogicInfernal extends FarmLogicHomogenous {
 				continue;
 
 			ItemStack below = getAsItemStack(position.add(new Vect(0, -1, 0)));
-			if (ground[0].getItem() != below.getItem())
+			if (!isAcceptedGround(below))
 				continue;
 
 			return trySetCrop(position);

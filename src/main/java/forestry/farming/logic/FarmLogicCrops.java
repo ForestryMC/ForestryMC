@@ -10,34 +10,42 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Stack;
-
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmable;
+import forestry.core.config.Defaults;
+import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
+import forestry.core.utils.Vect;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
-import forestry.core.utils.Utils;
-import forestry.core.utils.Vect;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Stack;
 
 public abstract class FarmLogicCrops extends FarmLogicWatered {
 
 	private final IFarmable[] seeds;
+	private static ItemStack farmland = new ItemStack(Blocks.farmland, 1, Defaults.WILDCARD);
 
 	public FarmLogicCrops(IFarmHousing housing, IFarmable[] seeds) {
-		super(housing, new ItemStack[] { new ItemStack(Blocks.dirt) }, new ItemStack[] { new ItemStack(Blocks.farmland) }, new ItemStack[] { new ItemStack(Blocks.grass) });
+		super(housing,
+				new ItemStack[] { new ItemStack(Blocks.dirt) },
+				new ItemStack(Blocks.farmland));
 
 		this.seeds = seeds;
+	}
+
+	@Override
+	public boolean isAcceptedGround(ItemStack itemStack) {
+		return super.isAcceptedGround(itemStack) || StackUtils.isIdenticalItem(farmland, itemStack);
 	}
 
 	@Override
@@ -100,7 +108,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 				continue;
 
 			ItemStack below = getAsItemStack(position.add(new Vect(0, -1, 0)));
-			if (ground[0].getItem() != below.getItem())
+			if (ground.getItem() != below.getItem())
 				continue;
 			if (below.getItemDamage() <= 0)
 				continue;

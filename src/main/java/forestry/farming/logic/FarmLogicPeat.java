@@ -17,8 +17,10 @@ import forestry.api.farming.IFarmHousing;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
+import forestry.core.gadgets.BlockSoil;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Vect;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -32,8 +34,20 @@ public class FarmLogicPeat extends FarmLogicWatered {
 
 	public FarmLogicPeat(IFarmHousing housing) {
 		super(housing, new ItemStack[]{ForestryBlock.soil.getItemStack(1, 1)},
-				new ItemStack[]{ForestryBlock.soil.getItemStack(1, 1)},
-				new ItemStack[]{new ItemStack(Blocks.dirt), new ItemStack(Blocks.grass), new ItemStack(Blocks.farmland, 1, Defaults.WILDCARD)});
+				ForestryBlock.soil.getItemStack(1, 1));
+	}
+
+	@Override
+	public boolean isAcceptedGround(ItemStack itemStack) {
+		if (super.isAcceptedGround(itemStack))
+			return true;
+
+		Block block = BlockSoil.getBlockFromItem(itemStack.getItem());
+		if (block == null || !(block instanceof BlockSoil))
+			return false;
+		BlockSoil blockSoil = (BlockSoil)block;
+		BlockSoil.SoilType soilType = blockSoil.getTypeFromMeta(itemStack.getItemDamage());
+		return soilType == BlockSoil.SoilType.BOG_EARTH || soilType == BlockSoil.SoilType.PEAT;
 	}
 
 	@Override
@@ -63,17 +77,18 @@ public class FarmLogicPeat extends FarmLogicWatered {
 			Vect position = translateWithOffset(x, y, z, direction, i);
 			ItemStack occupant = getAsItemStack(position);
 
-			if (!ForestryBlock.soil.isBlockEqual(StackUtils.getBlock(occupant)))
-				continue;
-			int type = occupant.getItemDamage() & 0x03;
-			int maturity = occupant.getItemDamage() >> 2;
-
-			if (type != 1)
+			if (occupant == null)
 				continue;
 
-			if (maturity >= 3)
+			Block block = BlockSoil.getBlockFromItem(occupant.getItem());
+			if (block == null || !(block instanceof BlockSoil))
+				continue;
+
+			BlockSoil blockSoil = (BlockSoil)block;
+			BlockSoil.SoilType soilType = blockSoil.getTypeFromMeta(occupant.getItemDamage());
+
+			if (soilType == BlockSoil.SoilType.PEAT)
 				crops.push(new CropPeat(world, position));
-
 		}
 		return crops;
 	}

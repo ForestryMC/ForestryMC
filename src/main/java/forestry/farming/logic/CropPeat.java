@@ -10,17 +10,17 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
+import forestry.core.gadgets.BlockSoil;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.BlockUtil;
+import forestry.core.utils.Vect;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.Vect;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class CropPeat extends Crop {
 
@@ -30,17 +30,22 @@ public class CropPeat extends Crop {
 
 	@Override
 	protected boolean isCrop(Vect pos) {
-		return  ForestryBlock.soil.isBlockEqual(getBlock(pos)) && (getBlockMeta(pos) & 0x03) == 1;
+		Block block = getBlock(pos);
+		if (block == null || !(block instanceof BlockSoil))
+			return false;
+
+		BlockSoil blockSoil = (BlockSoil)block;
+		BlockSoil.SoilType soilType = blockSoil.getTypeFromMeta(getBlockMeta(pos));
+		return soilType == BlockSoil.SoilType.PEAT;
 	}
 
 	@Override
 	protected Collection<ItemStack> harvestBlock(Vect pos) {
-		ArrayList<ItemStack> list = new ArrayList<ItemStack>();
-		list.add(ForestryItem.peat.getItemStack());
+		ArrayList<ItemStack> drops = BlockUtil.getBlockItemStack(world, pos);
 
 		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, world.getBlock(pos.x, pos.y, pos.z), 0);
-		setBlock(pos, Blocks.dirt, 0);
-		return list;
+		setBlock(pos, Blocks.air, 0);
+		return drops;
 	}
 
 }

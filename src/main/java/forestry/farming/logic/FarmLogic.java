@@ -56,6 +56,10 @@ public abstract class FarmLogic implements IFarmLogic {
 		return getWorld().getBlock(position.x, position.y, position.z) == Blocks.water;
 	}
 
+	protected final boolean isWaterBlock(Block block) {
+		return block == Blocks.water;
+	}
+
 	protected final boolean isWoodBlock(Vect position) {
 		Block block = getBlock(position);
 		return block.isWood(getWorld(), position.x, position.y, position.z);

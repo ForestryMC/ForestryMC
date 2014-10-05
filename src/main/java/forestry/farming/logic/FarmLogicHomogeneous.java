@@ -10,34 +10,34 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
-
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmable;
+import forestry.core.utils.BlockUtil;
+import forestry.core.utils.StackUtils;
+import forestry.core.utils.Vect;
 import net.minecraft.item.ItemStack;
-
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
-import forestry.core.utils.Vect;
+import java.util.ArrayList;
 
-public abstract class FarmLogicHomogenous extends FarmLogic {
+public abstract class FarmLogicHomogeneous extends FarmLogic {
 
 	protected final ItemStack[] resource;
-	protected final ItemStack[] ground;
-	protected final ItemStack[] waste;
+	protected final ItemStack groundBlock;
 	protected final IFarmable[] germlings;
 
 	ArrayList<ItemStack> produce = new ArrayList<ItemStack>();
 
-	public FarmLogicHomogenous(IFarmHousing housing, ItemStack[] resource, ItemStack[] ground, ItemStack[] waste, IFarmable[] germlings) {
+	public FarmLogicHomogeneous(IFarmHousing housing, ItemStack[] resource, ItemStack groundBlock, IFarmable[] germlings) {
 		super(housing);
 		this.resource = resource;
-		this.ground = ground;
-		this.waste = waste;
+		this.groundBlock = groundBlock;
 		this.germlings = germlings;
+	}
+
+	public boolean isAcceptedGround(ItemStack itemStack) {
+		return StackUtils.isIdenticalItem(groundBlock, itemStack);
 	}
 
 	@Override
@@ -73,40 +73,21 @@ public abstract class FarmLogicHomogenous extends FarmLogic {
 	}
 
 	private boolean maintainSoil(int x, int yGround, int z, ForgeDirection direction, int extent) {
-		World world = getWorld();
-
 		if (!housing.hasResources(resource))
 			return false;
 
-		cycle: for (int i = 0; i < extent; i++) {
+		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(x, yGround, z, direction, i);
 
-			if (!isAirBlock(position) && !Utils.isReplaceableBlock(world, position.x, position.y, position.z)) {
+			ItemStack block = getAsItemStack(position);
+			if (isAcceptedGround(block))
+				continue;
 
-				ItemStack block = getAsItemStack(position);
+			produce.addAll(BlockUtil.getBlockItemStack(getWorld(), position));
 
-				for (ItemStack grnd : ground)
-					if (StackUtils.isIdenticalItem(grnd, block))
-						continue cycle;
-
-				boolean removedWaste = false;
-				if (waste.length > 0) {
-					for(ItemStack wste : waste) {
-						if(!wste.isItemEqual(block))
-							continue;
-						produce.add(wste.copy());
-						removedWaste = true;
-						break;
-					}
-				}
-				if(!removedWaste)
-					return false;
-			}
-
-			setBlock(position, StackUtils.getBlock(ground[0]), ground[0].getItemDamage());
+			setBlock(position, StackUtils.getBlock(groundBlock), groundBlock.getItemDamage());
 			housing.removeResources(resource);
 			return true;
-
 		}
 
 		return false;
