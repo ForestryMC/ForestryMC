@@ -244,13 +244,19 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 		ForestryItem.crate.registerItem((new ItemForestry()), "crate");
 
 		// BACKPACKS
-		BackpackDefinition definition = new BackpackDefinitionApiarist("apiarist", 0xc4923d);
-		BackpackManager.definitions.put(definition.getKey(), definition);
-		ForestryItem.apiaristBackpack.registerItem(new ItemNaturalistBackpack(GuiId.ApiaristBackpackGUI.ordinal(), definition).setCreativeTab(Tabs.tabApiculture), "apiaristBag");
+		BackpackDefinition definition;
 
-		definition = new BackpackDefinitionLepidopterist("lepidopterist", 0x995b31);
-		BackpackManager.definitions.put(definition.getKey(), definition);
-		ForestryItem.lepidopteristBackpack.registerItem(new ItemNaturalistBackpack(GuiId.LepidopteristBackpackGUI.ordinal(), definition).setCreativeTab(Tabs.tabLepidopterology), "lepidopteristBag");
+		if (PluginManager.Module.APICULTURE.isEnabled()) {
+			definition = new BackpackDefinitionApiarist("apiarist", 0xc4923d);
+			BackpackManager.definitions.put(definition.getKey(), definition);
+			ForestryItem.apiaristBackpack.registerItem(new ItemNaturalistBackpack(GuiId.ApiaristBackpackGUI.ordinal(), definition).setCreativeTab(Tabs.tabApiculture), "apiaristBag");
+		}
+
+		if (PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {
+			definition = new BackpackDefinitionLepidopterist("lepidopterist", 0x995b31);
+			BackpackManager.definitions.put(definition.getKey(), definition);
+			ForestryItem.lepidopteristBackpack.registerItem(new ItemNaturalistBackpack(GuiId.LepidopteristBackpackGUI.ordinal(), definition).setCreativeTab(Tabs.tabLepidopterology), "lepidopteristBag");
+		}
 
 		definition = new BackpackDefinition("miner", 0x36187d);
 		BackpackManager.definitions.put(definition.getKey(), definition);
