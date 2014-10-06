@@ -132,6 +132,7 @@ import forestry.core.items.ItemForestry;
 import forestry.core.items.ItemForestryBlock;
 import forestry.core.items.ItemOverlay;
 import forestry.core.items.ItemOverlay.OverlayInfo;
+import forestry.core.items.ItemScoop;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.EntitySnowFX;
 import forestry.core.triggers.Trigger;
@@ -421,6 +422,9 @@ public class PluginApiculture extends ForestryPlugin {
 		ForestryItem.apiaristLegs.registerItem(new ItemArmorApiarist(2), "apiaristLegs");
 		ForestryItem.apiaristBoots.registerItem(new ItemArmorApiarist(3), "apiaristBoots");
 
+		// TOOLS
+		ForestryItem.scoop.registerItem(new ItemScoop(), "scoop");
+		ForestryItem.scoop.item().setHarvestLevel("scoop", 3);
 	}
 
 	@Override

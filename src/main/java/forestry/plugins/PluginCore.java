@@ -171,8 +171,6 @@ public class PluginCore extends ForestryPlugin {
 		// / TOOLS
 		ForestryItem.wrench.registerItem((new ItemWrench()), "wrench");
 		ForestryItem.pipette.registerItem(new ItemPipette(), "pipette");
-		ForestryItem.scoop.registerItem(new ItemScoop(), "scoop");
-		ForestryItem.scoop.item().setHarvestLevel("scoop", 3);
 
 		// / MACHINES
 		ForestryItem.sturdyCasing.registerItem((new ItemForestry()), "sturdyMachine");
