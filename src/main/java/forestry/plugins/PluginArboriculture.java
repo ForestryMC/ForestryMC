@@ -339,7 +339,7 @@ public class PluginArboriculture extends ForestryPlugin {
 	protected void registerRecipes() {
 
 		for (ForestryBlock log : logs)
-			Proxies.common.addSmelting(log.getItemStack(), new ItemStack(Items.coal, 1, 1), 0.15F);
+			Proxies.common.addSmelting(new ItemStack(log.block(), 1, Defaults.WILDCARD), new ItemStack(Items.coal, 1, 1), 0.15F);
 
 		// / Plank recipes
 		for (int i = 0; i < 4; i++)
