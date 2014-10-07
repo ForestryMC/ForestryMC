@@ -16,7 +16,6 @@ import forestry.core.utils.BlockUtil;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Vect;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
@@ -79,8 +78,8 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(x, yGround, z, direction, i);
 
-			ItemStack block = getAsItemStack(position);
-			if (isAcceptedGround(block))
+			ItemStack stack = getAsItemStack(position);
+			if (isAcceptedGround(stack) || !canBreakGround(getBlock(position)))
 				continue;
 
 			produce.addAll(BlockUtil.getBlockItemStack(getWorld(), position));

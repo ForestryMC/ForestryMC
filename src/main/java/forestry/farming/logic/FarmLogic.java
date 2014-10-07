@@ -10,25 +10,28 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmLogic;
+import forestry.core.config.Defaults;
+import forestry.core.config.ForestryBlock;
+import forestry.core.render.SpriteSheet;
+import forestry.core.utils.Vect;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmLogic;
-import forestry.core.config.Defaults;
-import forestry.core.render.SpriteSheet;
-import forestry.core.utils.Vect;
+import java.util.HashSet;
 
 public abstract class FarmLogic implements IFarmLogic {
 
 	IFarmHousing housing;
 
 	boolean isManual;
+
+	static HashSet<Block> breakable = new HashSet<Block>();
 
 	public FarmLogic(IFarmHousing housing) {
 		this.housing = housing;
@@ -37,6 +40,20 @@ public abstract class FarmLogic implements IFarmLogic {
 	public FarmLogic setManual(boolean flag) {
 		isManual = flag;
 		return this;
+	}
+
+	public boolean canBreakGround(Block block) {
+		if (breakable.isEmpty()) {
+			breakable.add(Blocks.dirt);
+			breakable.add(Blocks.grass);
+			breakable.add(Blocks.farmland);
+			breakable.add(Blocks.mycelium);
+			breakable.add(Blocks.soul_sand);
+			breakable.add(Blocks.water);
+			breakable.add(Blocks.flowing_water);
+			breakable.add(ForestryBlock.soil.block());
+		}
+		return breakable.contains(block);
 	}
 
 	protected World getWorld() {
