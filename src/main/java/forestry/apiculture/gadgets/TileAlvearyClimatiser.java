@@ -42,7 +42,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 	public TileAlvearyClimatiser(ClimateControl control, int textureOff, int textureOn, int componentBlockMeta) {
 		super(componentBlockMeta);
 		this.climateControl = control;
-		energyManager = new EnergyManager(100, 1000, 250, 2000);
+		energyManager = new EnergyManager(1000, 250, 2000);
 		energyManager.setReceiveOnly();
 		this.textureOff = textureOff;
 		this.textureOn = textureOn;

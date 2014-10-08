@@ -139,7 +139,7 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 	public int distillationTotalTime = 0;
 
 	public MachineStill() {
-		super(500, 1100, 50, 8000);
+		super(1100, 50, 8000);
 		setHints(Config.hints.get("still"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluidInputs);
 		resourceTank.tankMode = StandardTank.TankMode.INPUT;

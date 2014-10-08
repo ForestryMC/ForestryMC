@@ -142,7 +142,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 	private int timePerItem;
 
 	public MachineCentrifuge() {
-		super(400, 800, 40, Defaults.MACHINE_MAX_ENERGY);
+		super(800, 40, Defaults.MACHINE_MAX_ENERGY);
 		setHints(Config.hints.get("centrifuge"));
 	}
 

@@ -14,13 +14,11 @@ public class EnergyManager implements IEnergyHandler {
 	}
 
 	private int energyPerWork;
-	private int minAcceptedEnergy;
 	protected EnergyStorage energyStorage;
 	private EnergyTransferMode mode = EnergyTransferMode.BOTH;
 
-	public EnergyManager(int minAcceptedEnergy, int maxTransfer, int energyPerWork, int capacity) {
+	public EnergyManager(int maxTransfer, int energyPerWork, int capacity) {
 		this.energyPerWork = scaleForDifficulty(energyPerWork);
-		this.minAcceptedEnergy = scaleForDifficulty(minAcceptedEnergy);
 		energyStorage = new EnergyStorage(scaleForDifficulty(capacity), scaleForDifficulty(maxTransfer), scaleForDifficulty(maxTransfer));
 	}
 
@@ -88,7 +86,7 @@ public class EnergyManager implements IEnergyHandler {
 	/* IEnergyHandler */
 	@Override
 	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
-		if (!canReceive() || maxReceive < minAcceptedEnergy)
+		if (!canReceive())
 			return 0;
 		return energyStorage.receiveEnergy(maxReceive, simulate);
 	}

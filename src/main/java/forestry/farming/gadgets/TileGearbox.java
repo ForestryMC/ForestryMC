@@ -26,7 +26,7 @@ public class TileGearbox extends TileFarm implements IPowerHandler {
 	private final EnergyManager energyManager;
 
 	public TileGearbox() {
-		energyManager = new EnergyManager(50, 200, 50, 10000);
+		energyManager = new EnergyManager(200, 50, 10000);
 
 		fixedType = TYPE_GEARS;
 	}

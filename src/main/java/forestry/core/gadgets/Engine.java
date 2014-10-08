@@ -76,7 +76,7 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 		this.maxHeat = maxHeat;
 		this.maxEnergy = maxEnergy;
 		this.maxEnergyExtracted = maxEnergyExtracted;
-		energyManager = new EnergyManager(100, 2000, 100, 1000000);
+		energyManager = new EnergyManager(2000, 100, 1000000);
 
 		// allow engines to chain, but not have energy sucked out of them
 		energyManager.setReceiveOnly();
