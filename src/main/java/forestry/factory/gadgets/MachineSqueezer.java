@@ -149,7 +149,7 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 	private int timePerItem;
 
 	public MachineSqueezer() {
-		super(500, 1100, 50, 4000);
+		super(1100, 50, 4000);
 		setHints(Config.hints.get("squeezer"));
 		productTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluids);
 		productTank.tankMode = StandardTank.TankMode.OUTPUT;

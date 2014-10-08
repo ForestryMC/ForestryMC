@@ -196,7 +196,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 	public int fuelCurrentFerment = 0;
 
 	public MachineFermenter() {
-		super(50, 2000, 150, 8000);
+		super(2000, 150, 8000);
 		setHints(Config.hints.get("fermenter"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluidInputs);
 		resourceTank.tankMode = StandardTank.TankMode.INPUT;

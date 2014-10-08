@@ -76,7 +76,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 	/* CONSTRUCTOR */
 	public TileAnalyzer() {
-		super(400, 800, 40, Defaults.MACHINE_MAX_ENERGY);
+		super(800, 40, Defaults.MACHINE_MAX_ENERGY);
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, Fluids.HONEY.get());
 		tankManager = new TankManager(resourceTank);
 	}

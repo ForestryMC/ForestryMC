@@ -65,8 +65,8 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 
 	protected final EnergyManager energyManager;
 
-	public TilePowered(int minAcceptedEnergy, int maxTransfer, int energyPerWork, int capacity) {
-		this.energyManager = new EnergyManager(minAcceptedEnergy, maxTransfer, energyPerWork, capacity);
+	public TilePowered(int maxTransfer, int energyPerWork, int capacity) {
+		this.energyManager = new EnergyManager(maxTransfer, energyPerWork, capacity);
 		this.energyManager.setReceiveOnly();
 	}
 

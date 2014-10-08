@@ -155,7 +155,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	private int fillingTotalTime;
 
 	public MachineBottler() {
-		super(500, 1100, 50, 4000);
+		super(1100, 50, 4000);
 		setHints(Config.hints.get("bottler"));
 		resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 		tankManager = new TankManager(resourceTank);

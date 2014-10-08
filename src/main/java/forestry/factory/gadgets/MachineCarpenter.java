@@ -233,7 +233,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	}
 
 	public MachineCarpenter() {
-		super(500, 1100, 50, 4000);
+		super(1100, 50, 4000);
 		setHints(Config.hints.get("carpenter"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluids);
 		craftingInventory = new TileInventoryAdapter(this, 10, "CraftItems");
