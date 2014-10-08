@@ -46,6 +46,7 @@ public abstract class FarmLogic implements IFarmLogic {
 		if (breakable.isEmpty()) {
 			breakable.add(Blocks.dirt);
 			breakable.add(Blocks.grass);
+			breakable.add(Blocks.sand);
 			breakable.add(Blocks.farmland);
 			breakable.add(Blocks.mycelium);
 			breakable.add(Blocks.soul_sand);
