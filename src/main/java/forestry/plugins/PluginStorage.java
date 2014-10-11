@@ -354,7 +354,9 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 		foresterItems.add(new ItemStack(Items.pumpkin_seeds));
 		foresterItems.add(new ItemStack(Items.melon_seeds));
 		foresterItems.add(new ItemStack(Items.wheat));
-		foresterItems.add(ForestryBlock.saplingGE.getWildcard());
+		if (PluginManager.Module.ARBORICULTURE.isEnabled()) {
+			foresterItems.add(ForestryBlock.saplingGE.getWildcard());
+		}
 
 		// [3] Set valid items in hunter's backpack
 		hunterItems.add(new ItemStack(Items.feather));

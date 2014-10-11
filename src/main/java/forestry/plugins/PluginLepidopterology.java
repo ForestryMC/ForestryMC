@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import java.util.EnumSet;
 import java.util.Locale;
 
 import net.minecraft.block.material.Material;
@@ -86,6 +87,13 @@ public class PluginLepidopterology extends ForestryPlugin {
 
 		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginLepidopterology.butterflyInterface = new ButterflyHelper());
 		createAlleles();
+	}
+
+	@Override
+	public EnumSet<PluginManager.Module> getDependancies() {
+		EnumSet<PluginManager.Module> deps = super.getDependancies();
+		deps.add(PluginManager.Module.ARBORICULTURE);
+		return deps;
 	}
 
 	@Override
