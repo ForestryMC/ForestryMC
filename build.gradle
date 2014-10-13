@@ -191,6 +191,7 @@ task mainJarSigned ( type: Jar, dependsOn: 'reobf' ) {
 	from (zipTree(jar.getArchivePath())) {
 		exclude '**/api/**'
 		exclude '**/codechicken/**'
+		exclude '**/old/lang/**'
 	}
 
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -217,6 +218,7 @@ task mainJar ( type: Zip, dependsOn: mainJarSigned ) {
 	from (zipTree(jar.getArchivePath())) {
 		include '**'
 		exclude '**/codechicken/**'
+		exclude '**/old/lang/**'
 	}
 
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -229,6 +231,7 @@ task devJarSigned ( type: Jar, dependsOn: 'classes' ) {
 	from(sourceSets.main.output) {
 		exclude '**/api/**'
 		exclude '**/codechicken/**'
+		exclude '**/old/lang/**'
 	}
 
 	destinationDir = file("build/tmp")
@@ -254,11 +257,13 @@ task devJar ( type: Zip, dependsOn: devJarSigned ) {
 	from(sourceSets.main.allSource) {
 		include '**'
 		exclude '**/codechicken/**'
+		exclude '**/old/lang/**'
 	}
 
 	from(sourceSets.main.output) {
 		include '**'
 		exclude '**/codechicken/**'
+		exclude '**/old/lang/**'
 	}
 
 	from {
