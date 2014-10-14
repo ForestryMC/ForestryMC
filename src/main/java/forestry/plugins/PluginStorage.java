@@ -390,7 +390,6 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 		hunterItems.add(new ItemStack(Items.speckled_melon));
 		hunterItems.add(new ItemStack(Items.fish));
 		hunterItems.add(new ItemStack(Items.cooked_fished));
-		hunterItems.add(new ItemStack(Items.lead));
 		hunterItems.add(new ItemStack(Items.fishing_rod));
 		hunterItems.add(new ItemStack(Items.name_tag));
 		hunterItems.add(new ItemStack(Items.saddle));
