@@ -44,6 +44,7 @@ public abstract class FarmLogic implements IFarmLogic {
 
 	public boolean canBreakGround(Block block) {
 		if (breakable.isEmpty()) {
+			breakable.add(Blocks.air);
 			breakable.add(Blocks.dirt);
 			breakable.add(Blocks.grass);
 			breakable.add(Blocks.sand);
