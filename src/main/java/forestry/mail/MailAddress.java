@@ -10,29 +10,23 @@
  ******************************************************************************/
 package forestry.mail;
 
+import com.mojang.authlib.GameProfile;
+import forestry.api.core.INBTTagable;
+import forestry.api.mail.EnumAddressee;
+import forestry.api.mail.IMailAddress;
+import forestry.core.network.EntityNetData;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
+
 import java.util.Locale;
 import java.util.UUID;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.world.World;
-import net.minecraft.entity.player.EntityPlayer;
-
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.core.INBTTagable;
-import forestry.core.proxy.Proxies;
-import forestry.core.network.EntityNetData;
-import forestry.api.mail.EnumAddressee;
-import forestry.api.mail.IMailAddress;
-
 public class MailAddress implements INBTTagable, IMailAddress {
+	private static final GameProfile invalidGameProfile = new GameProfile(new UUID(0, 0), "");
 	@EntityNetData
 	private EnumAddressee type;
 	@EntityNetData
 	private GameProfile gameProfile; // gameProfile is a fake GameProfile for traders, and real for players
-
-	private static final GameProfile invalidGameProfile = new GameProfile(new UUID(0,0), "");
 
 	public MailAddress() {
 		this.type = EnumAddressee.PLAYER;
@@ -52,7 +46,7 @@ public class MailAddress implements INBTTagable, IMailAddress {
 			throw new IllegalArgumentException("name must not be null");
 
 		this.type = EnumAddressee.TRADER;
-		this.gameProfile = new GameProfile(new UUID(0,0), name);
+		this.gameProfile = new GameProfile(new UUID(0, 0), name);
 	}
 
 	public MailAddress(IMailAddress address) {
@@ -65,12 +59,56 @@ public class MailAddress implements INBTTagable, IMailAddress {
 		}
 	}
 
+	public static MailAddress loadFromNBT(NBTTagCompound nbttagcompound) {
+		MailAddress address = new MailAddress();
+		address.readFromNBT(nbttagcompound);
+		return address;
+	}
+
+	@Override
 	public EnumAddressee getType() {
 		return type;
 	}
 
+	@Override
 	public String getName() {
 		return gameProfile.getName();
+	}
+
+	@Override
+	public boolean isValid() {
+		return !gameProfile.equals(invalidGameProfile);
+	}
+
+	@Override
+	public boolean isPlayer() {
+		return type == EnumAddressee.PLAYER;
+	}
+
+	@Override
+	public boolean isTrader() {
+		return type == EnumAddressee.TRADER;
+	}
+
+	@Override
+	public GameProfile getPlayerProfile() {
+		if (!this.isPlayer())
+			return null;
+		return gameProfile;
+	}
+
+	@Override
+	public int hashCode() {
+		return gameProfile.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof MailAddress))
+			return false;
+
+		MailAddress address = (MailAddress) o;
+		return address.gameProfile.equals(gameProfile);
 	}
 
 	@Override
@@ -84,35 +122,9 @@ public class MailAddress implements INBTTagable, IMailAddress {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (!(o instanceof MailAddress))
-			return false;
-
-		MailAddress address = (MailAddress)o;
-		return address.gameProfile.equals(gameProfile);
-	}
-
-	@Override
-	public int hashCode() {
-		return gameProfile.hashCode();
-	}
-
-	public boolean isPlayer() {
-		return type == EnumAddressee.PLAYER;
-	}
-
-	public boolean isTrader() {
-		return type == EnumAddressee.TRADER;
-	}
-
-	public boolean isValid() {
-		return !gameProfile.equals(invalidGameProfile);
-	}
-
-	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		type = null;
-		if(nbttagcompound.hasKey("TP")) {
+		if (nbttagcompound.hasKey("TP")) {
 			String typeName = nbttagcompound.getString("TP");
 			type = EnumAddressee.fromString(typeName);
 		}
@@ -120,7 +132,7 @@ public class MailAddress implements INBTTagable, IMailAddress {
 		if (type == null) {
 			type = EnumAddressee.PLAYER;
 			gameProfile = invalidGameProfile;
-		} else if(nbttagcompound.hasKey("profile")) {
+		} else if (nbttagcompound.hasKey("profile")) {
 			NBTTagCompound profileTag = nbttagcompound.getCompoundTag("profile");
 			gameProfile = NBTUtil.func_152459_a(profileTag);
 		}
@@ -135,17 +147,5 @@ public class MailAddress implements INBTTagable, IMailAddress {
 			NBTUtil.func_152460_a(profileNbt, gameProfile);
 			nbttagcompound.setTag("profile", profileNbt);
 		}
-	}
-
-	public static MailAddress loadFromNBT(NBTTagCompound nbttagcompound) {
-		MailAddress address = new MailAddress();
-		address.readFromNBT(nbttagcompound);
-		return address;
-	}
-
-	public GameProfile getPlayerProfile() {
-		if (!this.isPlayer())
-			return null;
-		return gameProfile;
 	}
 }
