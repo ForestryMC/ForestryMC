@@ -59,7 +59,7 @@ public class CircuitFarmLogic extends Circuit {
 
 		try {
 			logic.setManual(isManual);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			// uses older version of the API that doesn't implement setManual
 		}
 		housing.setFarmLogic(ForgeDirection.values()[slot + 2], logic);
