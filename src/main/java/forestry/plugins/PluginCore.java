@@ -10,23 +10,16 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import java.util.ArrayList;
-
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.network.IGuiHandler;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
-
+import cpw.mods.fml.common.IFuelHandler;
+import cpw.mods.fml.common.network.IGuiHandler;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
@@ -44,10 +37,10 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.BlockResource;
+import forestry.core.gadgets.BlockResourceStorageBlock;
 import forestry.core.gadgets.BlockSoil;
 import forestry.core.gadgets.BlockStainedGlass;
 import forestry.core.gadgets.MachineDefinition;
-import forestry.core.gadgets.TileAnalyzer;
 import forestry.core.gadgets.TileEscritoire;
 import forestry.core.genetics.Allele;
 import forestry.core.genetics.AlleleRegistry;
@@ -60,7 +53,6 @@ import forestry.core.items.ItemAssemblyKit;
 import forestry.core.items.ItemCrated;
 import forestry.core.items.ItemForestry;
 import forestry.core.items.ItemForestryBlock;
-import forestry.core.items.ItemTypedBlock;
 import forestry.core.items.ItemForestryPickaxe;
 import forestry.core.items.ItemForestryShovel;
 import forestry.core.items.ItemFruit;
@@ -70,7 +62,7 @@ import forestry.core.items.ItemMisc;
 import forestry.core.items.ItemOverlay;
 import forestry.core.items.ItemOverlay.OverlayInfo;
 import forestry.core.items.ItemPipette;
-import forestry.core.items.ItemScoop;
+import forestry.core.items.ItemTypedBlock;
 import forestry.core.items.ItemWrench;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ForestryModEnvWarningCallable;
@@ -117,6 +109,17 @@ public class PluginCore extends ForestryPlugin {
 		OreDictionary.registerOre("oreApatite", ForestryBlock.resources.getItemStack(1, 0));
 		OreDictionary.registerOre("oreCopper", ForestryBlock.resources.getItemStack(1, 1));
 		OreDictionary.registerOre("oreTin", ForestryBlock.resources.getItemStack(1, 2));
+		
+		ForestryBlock.resourceStorage.registerBlock(new BlockResourceStorageBlock(), ItemForestryBlock.class, "resourceStorage");
+		ForestryBlock.resourceStorage.block().setHarvestLevel("pickaxe", 0, 0);
+		ForestryBlock.resourceStorage.block().setHarvestLevel("pickaxe", 0, 1);
+		ForestryBlock.resourceStorage.block().setHarvestLevel("pickaxe", 0, 2);
+		ForestryBlock.resourceStorage.block().setHarvestLevel("pickaxe", 0, 3);
+
+		OreDictionary.registerOre("blockApatite", ForestryBlock.resourceStorage.getItemStack(1, 0));
+		OreDictionary.registerOre("blockCopper", ForestryBlock.resourceStorage.getItemStack(1, 1));
+		OreDictionary.registerOre("blockTin", ForestryBlock.resourceStorage.getItemStack(1, 2));
+		OreDictionary.registerOre("blockBronze", ForestryBlock.resourceStorage.getItemStack(1, 3));
 
 		ForestryBlock.glass.registerBlock(new BlockStainedGlass(), ItemForestryBlock.class, "stained");
 	}
@@ -432,6 +435,19 @@ public class PluginCore extends ForestryPlugin {
 
 		// / Pipette
 		Proxies.common.addRecipe(ForestryItem.pipette.getItemStack(), "  #", " X ", "X  ", 'X', Blocks.glass_pane, '#', new ItemStack(Blocks.wool, 1, Defaults.WILDCARD));
+		
+		// Storage Blocks
+		Proxies.common.addRecipe(ForestryBlock.resourceStorage.getItemStack(1, 0), "###", "###", "###", '#', "gemApatite");
+		Proxies.common.addShapelessRecipe(ForestryItem.apatite.getItemStack(9), "blockApatite");
+
+		Proxies.common.addRecipe(ForestryBlock.resourceStorage.getItemStack(1, 1), "###", "###", "###", '#', "ingotCopper");
+		Proxies.common.addShapelessRecipe(ForestryItem.ingotCopper.getItemStack(9), "blockCopper");
+		
+		Proxies.common.addRecipe(ForestryBlock.resourceStorage.getItemStack(1, 2), "###", "###", "###", '#', "ingotTin");
+		Proxies.common.addShapelessRecipe(ForestryItem.ingotTin.getItemStack(9), "blockTin");
+		
+		Proxies.common.addRecipe(ForestryBlock.resourceStorage.getItemStack(1, 3), "###", "###", "###", '#', "ingotBronze");
+		Proxies.common.addShapelessRecipe(ForestryItem.ingotBronze.getItemStack(9), "blockBronze");
 	}
 
 	@Override
