@@ -194,6 +194,9 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 			return;
 
 		super.updateTick(world, x, y, z, random);
+
+		if (world.rand.nextFloat() > 0.1)
+			return;
 		tileLeaves.onBlockTick();
 	}
 
