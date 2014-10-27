@@ -107,10 +107,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		AxisAlignedBB harvestBox = AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
 		List<Entity> list = getWorld().getEntitiesWithinAABB(Entity.class, harvestBox);
 
-		int i;
-		for (i = 0; i < list.size(); i++) {
-			Entity entity = list.get(i);
-
+		for (Entity entity : list) {
 			if (entity instanceof EntityItem) {
 				EntityItem item = (EntityItem) entity;
 				if (!item.isDead) {
