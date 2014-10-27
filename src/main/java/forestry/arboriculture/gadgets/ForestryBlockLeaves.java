@@ -189,9 +189,12 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random random) {
-		if (getLeafTile(world, x, y, z).isDecorative())
+		TileLeaves tileLeaves = getLeafTile(world, x, y, z);
+		if (tileLeaves == null || tileLeaves.isDecorative())
 			return;
+
 		super.updateTick(world, x, y, z, random);
+		tileLeaves.onBlockTick();
 	}
 
 	/* RENDERING */
