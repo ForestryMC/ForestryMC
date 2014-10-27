@@ -746,13 +746,12 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 					chipset.onRemoval(this);
 			}
 
+		sockets.setInventorySlotContents(slot, stack);
+		refreshFarmLogics();
+
 		if (stack == null) {
-			sockets.setInventorySlotContents(slot, stack);
-			refreshFarmLogics();
 			return;
 		}
-
-		sockets.setInventorySlotContents(slot, stack);
 
 		ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitboard(stack);
 		if (chipset != null)
