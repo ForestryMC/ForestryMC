@@ -65,7 +65,10 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 
 		resourceTank = new FilteredTank(Defaults.RAINTANK_TANK_CAPACITY, FluidRegistry.WATER);
 		tankManager = new TankManager(resourceTank);
+	}
 
+	@Override
+	public void validate() {
 		// Raintanks in desert and snow biomes are useless
 		if (worldObj != null) {
 			BiomeGenBase biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
@@ -74,6 +77,8 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 				isValidBiome = false;
 			}
 		}
+
+		super.validate();
 	}
 
 	@Override
