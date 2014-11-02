@@ -30,7 +30,7 @@ public class TriggerLowPaper extends Trigger {
 
 	@Override
 	public String getDescription() {
-		return super.getDescription() + " < " + threshold * 100 + "%";
+		return super.getDescription() + " < " + threshold;
 	}
 
 	@Override
