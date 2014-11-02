@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.triggers;
 
-import buildcraft.api.gates.ActionManager;
+import buildcraft.api.statements.StatementManager;
 
 public class ForestryTrigger {
 
@@ -27,20 +27,20 @@ public class ForestryTrigger {
 	public static Trigger hasWork;
 
 	public static void initialize() {
-		ActionManager.registerTrigger(lowFuel25 = new TriggerLowFuel("lowFuel.25", 0.25f));
-		ActionManager.registerTrigger(lowFuel10 = new TriggerLowFuel("lowFuel.10", 0.1f));
-		ActionManager.registerTrigger(lowResource25 = new TriggerLowResource("lowResources.25", 0.25f));
-		ActionManager.registerTrigger(lowResource10 = new TriggerLowResource("lowResources.10", 0.1f));
+		StatementManager.registerStatement(lowFuel25 = new TriggerLowFuel("lowFuel.25", 0.25f));
+		StatementManager.registerStatement(lowFuel10 = new TriggerLowFuel("lowFuel.10", 0.1f));
+		StatementManager.registerStatement(lowResource25 = new TriggerLowResource("lowResources.25", 0.25f));
+		StatementManager.registerStatement(lowResource10 = new TriggerLowResource("lowResources.10", 0.1f));
 
-		ActionManager.registerTrigger(lowSoil25 = new TriggerLowSoil("lowSoil.25", 0.25f));
-		ActionManager.registerTrigger(lowSoil10 = new TriggerLowSoil("lowSoil.10", 0.1f));
-		ActionManager.registerTrigger(lowGermlings25 = new TriggerLowGermlings("lowGermlings.25", 0.25f));
-		ActionManager.registerTrigger(lowGermlings10 = new TriggerLowGermlings("lowGermlings.10", 0.1f));
+		StatementManager.registerStatement(lowSoil25 = new TriggerLowSoil("lowSoil.25", 0.25f));
+		StatementManager.registerStatement(lowSoil10 = new TriggerLowSoil("lowSoil.10", 0.1f));
+		StatementManager.registerStatement(lowGermlings25 = new TriggerLowGermlings("lowGermlings.25", 0.25f));
+		StatementManager.registerStatement(lowGermlings10 = new TriggerLowGermlings("lowGermlings.10", 0.1f));
 
-		ActionManager.registerTrigger(missingQueen = new TriggerMissingQueen());
-		ActionManager.registerTrigger(missingDrone = new TriggerMissingDrone());
+		StatementManager.registerStatement(missingQueen = new TriggerMissingQueen());
+		StatementManager.registerStatement(missingDrone = new TriggerMissingDrone());
 
-		ActionManager.registerTrigger(hasWork = new TriggerHasWork());
+		StatementManager.registerStatement(hasWork = new TriggerHasWork());
 
 	}
 }

@@ -10,23 +10,8 @@
  ******************************************************************************/
 package forestry.energy.gadgets;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
+import buildcraft.api.statements.ITriggerExternal;
 import cpw.mods.fml.common.registry.GameData;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import buildcraft.api.gates.ITrigger;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.fuels.FuelManager;
@@ -42,6 +27,17 @@ import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.TileInventoryAdapter;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class EngineCopper extends Engine implements ISpecialInventory, ISidedInventory {
 
@@ -502,8 +498,8 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 
 	/* ITRIGGERPROVIDER */
 	@Override
-	public LinkedList<ITrigger> getCustomTriggers() {
-		LinkedList<ITrigger> res = new LinkedList<ITrigger>();
+	public LinkedList<ITriggerExternal> getCustomTriggers() {
+		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(ForestryTrigger.lowFuel25);
 		return res;
 	}

@@ -26,7 +26,7 @@ import net.minecraft.nbt.NBTTagList;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import buildcraft.api.gates.ITrigger;
+import buildcraft.api.statements.ITriggerExternal;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
@@ -468,8 +468,8 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 
 	/* ITRIGGERPROVIDER */
 	@Override
-	public LinkedList<ITrigger> getCustomTriggers() {
-		LinkedList<ITrigger> res = new LinkedList<ITrigger>();
+	public LinkedList<ITriggerExternal> getCustomTriggers() {
+		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(ForestryTrigger.lowResource25);
 		res.add(ForestryTrigger.lowResource10);
 		res.add(ForestryTrigger.hasWork);

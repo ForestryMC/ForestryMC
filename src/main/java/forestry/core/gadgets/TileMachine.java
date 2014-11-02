@@ -10,20 +10,6 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import buildcraft.api.gates.ITrigger;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ISpecialInventory;
@@ -37,11 +23,19 @@ import forestry.core.utils.EnumAccess;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginApiculture;
-import forestry.plugins.PluginCore;
 import forestry.plugins.PluginEnergy;
 import forestry.plugins.PluginFactory;
-import forestry.plugins.PluginMail;
 import forestry.plugins.PluginIC2;
+import forestry.plugins.PluginMail;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.HashMap;
 
 public abstract class TileMachine extends TileForestry implements ISpecialInventory, IClimatised, IHintSource {
 
@@ -379,11 +373,4 @@ public abstract class TileMachine extends TileForestry implements ISpecialInvent
 	// NEIGHBOUR CHANGE
 	public void onNeighborBlockChange() {
 	}
-
-	// ITRIGGERPROVIDER
-	@Override
-	public LinkedList<ITrigger> getCustomTriggers() {
-		return null;
-	}
-
 }

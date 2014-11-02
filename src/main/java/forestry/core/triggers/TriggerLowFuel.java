@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.core.triggers;
 
-import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import buildcraft.api.gates.ITriggerParameter;
-
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
 import forestry.core.gadgets.Engine;
 import forestry.core.gadgets.TilePowered;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TriggerLowFuel extends Trigger {
 
@@ -37,7 +35,7 @@ public class TriggerLowFuel extends Trigger {
 	 * Return true if the tile given in parameter activates the trigger, given the parameters.
 	 */
 	@Override
-	public boolean isTriggerActive(ForgeDirection direction, TileEntity tile, ITriggerParameter parameter) {
+	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
 
 		if (tile instanceof TilePowered)
 			return !((TilePowered) tile).hasFuelMin(threshold);

@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.mail.triggers;
 
-import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import buildcraft.api.gates.ITriggerParameter;
-
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
 import forestry.core.triggers.Trigger;
 import forestry.mail.IMailContainer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TriggerHasMail extends Trigger {
 
@@ -26,11 +24,12 @@ public class TriggerHasMail extends Trigger {
 	}
 
 	@Override
-	public boolean isTriggerActive(ForgeDirection direction, TileEntity tile, ITriggerParameter parameter) {
+	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
 
 		if (!(tile instanceof IMailContainer))
 			return false;
 
 		return ((IMailContainer) tile).hasMail();
 	}
+
 }

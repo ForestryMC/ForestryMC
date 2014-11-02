@@ -10,25 +10,22 @@
  ******************************************************************************/
 package forestry.farming.gadgets;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-
-import buildcraft.api.gates.ITrigger;
-
+import buildcraft.api.statements.ITriggerExternal;
 import forestry.api.core.ITileStructure;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginFarming;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class TileHatch extends TileFarm implements ISidedInventory {
 
@@ -329,11 +326,11 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 
 	/* ITRIGGERPROVIDER */
 	@Override
-	public LinkedList<ITrigger> getCustomTriggers() {
+	public LinkedList<ITriggerExternal> getCustomTriggers() {
 		if (!hasMaster())
 			return null;
 
-		LinkedList<ITrigger> list = new LinkedList<ITrigger>();
+		LinkedList<ITriggerExternal> list = new LinkedList<ITriggerExternal>();
 		list.add(PluginFarming.lowResourceLiquid50);
 		list.add(PluginFarming.lowResourceLiquid25);
 		list.add(PluginFarming.lowSoil128);

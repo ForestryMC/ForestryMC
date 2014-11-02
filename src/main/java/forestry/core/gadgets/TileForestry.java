@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import buildcraft.api.gates.ITrigger;
+import buildcraft.api.statements.ITriggerExternal;
 import com.mojang.authlib.GameProfile;
 
 import forestry.core.EnumErrorCode;
@@ -147,7 +147,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		fromPacketPayload(packet.payload);
 	}
 
-	public LinkedList<ITrigger> getCustomTriggers() {
+	public LinkedList<ITriggerExternal> getCustomTriggers() {
 		return null;
 	}
 

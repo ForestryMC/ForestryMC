@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.farming.triggers;
 
-import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import buildcraft.api.gates.ITriggerParameter;
-
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
 import forestry.api.core.ITileStructure;
-import forestry.core.triggers.Trigger;
 import forestry.core.fluids.TankManager;
+import forestry.core.triggers.Trigger;
 import forestry.farming.gadgets.TileFarmPlain;
 import forestry.farming.gadgets.TileHatch;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 public class TriggerLowLiquid extends Trigger {
@@ -42,7 +40,7 @@ public class TriggerLowLiquid extends Trigger {
 	 * the parameters.
 	 */
 	@Override
-	public boolean isTriggerActive(ForgeDirection direction, TileEntity tile, ITriggerParameter parameter) {
+	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
 		if (!(tile instanceof TileHatch))
 			return false;
 

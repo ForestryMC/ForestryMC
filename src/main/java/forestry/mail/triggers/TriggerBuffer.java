@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.mail.triggers;
 
-import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import buildcraft.api.gates.ITriggerParameter;
-
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
 import forestry.core.triggers.Trigger;
 import forestry.mail.gadgets.MachineTrader;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TriggerBuffer extends Trigger {
 
@@ -34,12 +32,11 @@ public class TriggerBuffer extends Trigger {
 	}
 
 	@Override
-	public boolean isTriggerActive(ForgeDirection direction, TileEntity tile, ITriggerParameter parameter) {
+	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
 
 		if (!(tile instanceof MachineTrader))
 			return false;
 
 		return ((MachineTrader) tile).hasOutputBufMin(threshold);
 	}
-
 }

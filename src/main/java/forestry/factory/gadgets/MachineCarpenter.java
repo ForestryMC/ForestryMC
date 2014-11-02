@@ -34,7 +34,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
-import buildcraft.api.gates.ITrigger;
+import buildcraft.api.statements.ITriggerExternal;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.ICarpenterManager;
@@ -708,8 +708,8 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 	// ITRIGGERPROVIDER
 	@Override
-	public LinkedList<ITrigger> getCustomTriggers() {
-		LinkedList<ITrigger> res = new LinkedList<ITrigger>();
+	public LinkedList<ITriggerExternal> getCustomTriggers() {
+		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(ForestryTrigger.hasWork);
 		return res;
 	}
