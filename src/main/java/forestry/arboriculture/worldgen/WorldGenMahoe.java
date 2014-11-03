@@ -31,11 +31,6 @@ public class WorldGenMahoe extends WorldGenTree {
 	}
 
 	@Override
-	public BlockType getWood() {
-		return new BlockType(ForestryBlock.log5, 0);
-	}
-
-	@Override
 	public void preGenerate() {
 		height = determineHeight(6, 3);
 		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));

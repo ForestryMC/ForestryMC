@@ -31,11 +31,6 @@ public class WorldGenLemon extends WorldGenTree {
 	}
 
 	@Override
-	public BlockType getWood() {
-		return new BlockType(ForestryBlock.log6, 3);
-	}
-
-	@Override
 	public void preGenerate() {
 		height = determineHeight(6, 3);
 		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));

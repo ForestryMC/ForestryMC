@@ -55,10 +55,4 @@ public class WorldGenSequoia extends WorldGenTree {
 		height = determineHeight(20, 5);
 		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
 	}
-
-	@Override
-	public BlockType getWood() {
-		return new BlockType(ForestryBlock.log2, 3);
-	}
-
 }

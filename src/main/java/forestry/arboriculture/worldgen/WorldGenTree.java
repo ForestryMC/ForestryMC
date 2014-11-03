@@ -12,9 +12,17 @@ package forestry.arboriculture.worldgen;
 
 import com.mojang.authlib.GameProfile;
 
+import forestry.api.arboriculture.EnumTreeChromosome;
+import forestry.api.genetics.IAlleleBoolean;
 import forestry.api.world.ITreeGenData;
+import forestry.arboriculture.gadgets.BlockFireproofLog;
+import forestry.arboriculture.gadgets.BlockLog;
+import forestry.core.config.ForestryBlock;
+import forestry.core.utils.StackUtils;
 import forestry.core.worldgen.BlockType;
 import forestry.plugins.PluginArboriculture;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 
 public abstract class WorldGenTree extends WorldGenArboriculture {
 
@@ -93,6 +101,22 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 	}
 
 	@Override
-	public abstract BlockType getWood();
+	public BlockType getWood() {
+		ItemStack woodStack = tree.getGenome().getPrimary().getLogStacks()[0];
 
+		Block block = StackUtils.getBlock(woodStack);
+		int meta = woodStack.getItemDamage();
+
+		// if we have a fireproof tree, return the fireproof log
+		if (block instanceof BlockLog) {
+			IAlleleBoolean fireproof = (IAlleleBoolean) tree.getGenome().getActiveAllele(EnumTreeChromosome.FIREPROOF.ordinal());
+			if (fireproof.getValue()) {
+				BlockLog blockLog = (BlockLog) block;
+				ForestryBlock fireproofLogBlock = BlockFireproofLog.getFireproofLog(blockLog);
+				return new BlockType(fireproofLogBlock.block(), meta);
+			}
+		}
+
+		return new BlockType(block, meta);
+	}
 }

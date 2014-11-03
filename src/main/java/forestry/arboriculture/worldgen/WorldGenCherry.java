@@ -40,10 +40,4 @@ public class WorldGenCherry extends WorldGenTree {
 		height = determineHeight(4, 4);
 		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
 	}
-
-	@Override
-	public BlockType getWood() {
-		return new BlockType(ForestryBlock.log4, 3);
-	}
-
 }

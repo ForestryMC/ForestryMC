@@ -29,11 +29,6 @@ public class WorldGenPapaya extends WorldGenTree {
 		generateSphere(getCenteredAt(yCenter, 0), 2 + rand.nextInt(girth), leaf, EnumReplaceMode.NONE);
 
 	}
-	
-	@Override
-	public BlockType getWood() {
-		return new BlockType(ForestryBlock.log5, 3);
-	}
 
 	@Override
 	public void preGenerate() {
