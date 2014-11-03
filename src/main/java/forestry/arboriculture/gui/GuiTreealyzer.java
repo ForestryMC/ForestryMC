@@ -13,6 +13,7 @@ package forestry.arboriculture.gui;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import forestry.core.genetics.AlleleBoolean;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
@@ -171,6 +172,18 @@ public class GuiTreealyzer extends GuiAlyzer {
 			sap = Allele.saplingsLowest.getName();
 
 		drawLine(sap, COLUMN_2, tree, EnumTreeChromosome.SAPPINESS, true);
+
+		newLine();
+
+		String yes = StringUtil.localize("yes");
+		String no = StringUtil.localize("no");
+
+		AlleleBoolean primaryFireproof = (AlleleBoolean)tree.getGenome().getActiveAllele(EnumTreeChromosome.FIREPROOF.ordinal());
+		AlleleBoolean secondaryFireproof = (AlleleBoolean)tree.getGenome().getInactiveAllele(EnumTreeChromosome.FIREPROOF.ordinal());
+
+		drawLine(StringUtil.localize("gui.fireproof"), COLUMN_0);
+		drawLine(StringUtil.readableBoolean(primaryFireproof.getValue(), yes, no), COLUMN_1, tree, EnumTreeChromosome.FIREPROOF, false);
+		drawLine(StringUtil.readableBoolean(secondaryFireproof.getValue(), yes, no), COLUMN_2, tree, EnumTreeChromosome.FIREPROOF, false);
 
 		newLine();
 

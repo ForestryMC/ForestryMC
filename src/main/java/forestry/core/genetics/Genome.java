@@ -10,13 +10,14 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-
+import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IGenome;
 import forestry.core.config.Config;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 public abstract class Genome implements IGenome {
 
@@ -59,6 +60,16 @@ public abstract class Genome implements IGenome {
 				
 				if (chromosome.hasInvalidAlleles(getSpeciesRoot().getKaryotype()[byte0].getAlleleClass()))
 					throw new RuntimeException("Found Chromosome with invalid Alleles. See config option \"genetics.clear.invalid.chromosomes\".");
+			}
+		}
+
+		// handle old saves that have missing chromosomes
+		IAlleleSpecies species = (IAlleleSpecies)chromosomes[EnumTreeChromosome.SPECIES.ordinal()].getActiveAllele();
+		if (species != null) {
+			IAllele[] template = getSpeciesRoot().getTemplate(species.getUID());
+			for (int i = 0; i < chromosomes.length; i++) {
+				if (chromosomes[i] == null)
+					chromosomes[i] = new Chromosome(template[i]);
 			}
 		}
 	}
