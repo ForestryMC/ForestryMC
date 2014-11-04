@@ -408,6 +408,10 @@ public class Allele implements IAllele {
 	public static Allele plantTypeNether;
 	public static Allele plantTypeCrop;
 
+	// / TREES // FIREPROOF
+	public static Allele fireproofFalse;
+	public static Allele fireproofTrue;
+
 	public static void initialize() {
 		// ALL // GENERIC
 		boolFalse = new AlleleBoolean("boolFalse", false);
@@ -549,6 +553,9 @@ public class Allele implements IAllele {
 		plantTypeWater = new AllelePlantType("plantTypeWater", EnumPlantType.Water);
 		plantTypeNether = new AllelePlantType("plantTypeNether", EnumPlantType.Nether);
 		plantTypeCrop = new AllelePlantType("plantTypeCrop", EnumPlantType.Crop);
+
+		fireproofFalse = new AlleleBoolean("fireproofFalse", false);
+		fireproofTrue = new AlleleBoolean("fireproofTrue", true);
 
 		// LEGACY MAPPINGS
 		ILegacyHandler legacy = (ILegacyHandler) AlleleManager.alleleRegistry;
