@@ -39,6 +39,8 @@ public abstract class ItemGE extends Item {
 
 	protected abstract IIndividual getIndividual(ItemStack itemstack);
 
+	protected abstract IAlleleSpecies getSpecies(ItemStack itemStack);
+
 	@Override
 	public boolean isDamageable() {
 		return false;
@@ -56,11 +58,8 @@ public abstract class ItemGE extends Item {
 
 	@Override
 	public boolean hasEffect(ItemStack itemstack, int pass) {
-		if (!itemstack.hasTagCompound())
-			return false;
-
-		IIndividual individual = getIndividual(itemstack);
-		return individual.hasEffect();
+		IAlleleSpecies species = getSpecies(itemstack);
+		return species != null && species.hasEffect();
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

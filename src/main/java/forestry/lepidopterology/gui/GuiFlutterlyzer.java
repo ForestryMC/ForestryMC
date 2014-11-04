@@ -25,6 +25,7 @@ import forestry.core.genetics.GenericRatings;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.StringUtil;
+import forestry.lepidopterology.genetics.ButterflyGenome;
 import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.items.ItemFlutterlyzer.FlutterlyzerInventory;
 import forestry.plugins.PluginLepidopterology;
@@ -49,7 +50,7 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 		ArrayList<ItemStack> butterflyList = new ArrayList<ItemStack>();
 		((ItemButterflyGE) ForestryItem.butterflyGE.item()).addCreativeItems(butterflyList, false);
 		for (ItemStack butterflyStack : butterflyList)
-			iconStacks.put(PluginLepidopterology.butterflyInterface.getMember(butterflyStack).getIdent(), butterflyStack);
+			iconStacks.put(ButterflyGenome.getSpecies(butterflyStack).getUID(), butterflyStack);
 
 	}
 

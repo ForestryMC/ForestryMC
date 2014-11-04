@@ -12,6 +12,7 @@ package forestry.arboriculture.genetics;
 
 import java.util.EnumSet;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.EnumPlantType;
@@ -43,6 +44,15 @@ public class TreeGenome extends Genome implements ITreeGenome {
 
 	public TreeGenome(NBTTagCompound nbttagcompound) {
 		super(nbttagcompound);
+	}
+
+	// NBT RETRIEVAL
+	public static IAlleleTreeSpecies getSpecies(ItemStack itemStack) {
+		IAllele speciesAllele = Genome.getPrimaryAllele(itemStack, EnumTreeChromosome.SPECIES);
+		if (speciesAllele instanceof IAlleleTreeSpecies)
+			return (IAlleleTreeSpecies)speciesAllele;
+		else
+			return null;
 	}
 
 	@Override

@@ -14,8 +14,11 @@ import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
+import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IGenome;
+import forestry.apiculture.items.ItemBeeGE;
 import forestry.core.config.Config;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
@@ -39,6 +42,38 @@ public abstract class Genome implements IGenome {
 		if(chromosomes.length != getDefaultTemplate().length)
 			throw new IllegalArgumentException(String.format("Tried to create a genome for '%s' from an invalid chromosome template.", getSpeciesRoot().getUID()));
 		this.chromosomes = chromosomes;
+	}
+
+	// NBT RETRIEVAL
+	public static Chromosome getChromosome(ItemStack itemStack, IChromosomeType chromosomeType) {
+		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
+		if (nbtTagCompound == null)
+			return null;
+
+		NBTTagCompound genome = nbtTagCompound.getCompoundTag("Genome");
+		if (genome == null)
+			return null;
+
+		NBTTagList chromosomes = genome.getTagList("Chromosomes", 10);
+		if (chromosomes == null)
+			return null;
+
+		for (int i = 0; i < chromosomes.tagCount(); i++) {
+			NBTTagCompound chromosomeTag = chromosomes.getCompoundTagAt(i);
+			byte byte0 = chromosomeTag.getByte(SLOT_TAG);
+
+			if (byte0 == chromosomeType.ordinal()) {
+				return Chromosome.loadChromosomeFromNBT(chromosomeTag);
+			}
+		}
+		return null;
+	}
+
+	public static IAllele getPrimaryAllele(ItemStack itemStack, IChromosomeType chromosomeType) {
+		Chromosome chromosome = getChromosome(itemStack, chromosomeType);
+		if (chromosome == null)
+			return null;
+		return chromosome.getPrimaryAllele();
 	}
 
 	// / SAVING & LOADING

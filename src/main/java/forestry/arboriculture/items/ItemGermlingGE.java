@@ -10,37 +10,36 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
-import java.util.List;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.EnumTreeChromosome;
+import forestry.api.arboriculture.IAlleleTreeSpecies;
+import forestry.api.arboriculture.ITree;
+import forestry.api.core.Tabs;
+import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.IPollinatable;
+import forestry.api.recipes.IVariableFermentable;
+import forestry.arboriculture.genetics.Tree;
+import forestry.arboriculture.genetics.TreeGenome;
+import forestry.core.config.Config;
+import forestry.core.genetics.ItemGE;
+import forestry.core.network.PacketFXSignal;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.SpriteSheet;
 import forestry.core.utils.StringUtil;
+import forestry.core.utils.Utils;
+import forestry.plugins.PluginArboriculture;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.api.arboriculture.ITree;
-import forestry.api.core.Tabs;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IPollinatable;
-import forestry.api.recipes.IVariableFermentable;
-import forestry.arboriculture.genetics.Tree;
-import forestry.core.config.Config;
-import forestry.core.genetics.ItemGE;
-import forestry.core.network.PacketFXSignal;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.SpriteSheet;
-import forestry.core.utils.Utils;
-import forestry.plugins.PluginArboriculture;
+import java.util.List;
 
 public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 
@@ -57,12 +56,17 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 		return new Tree(itemstack.getTagCompound());
 	}
 
-	private IAlleleTreeSpecies getPrimarySpecies(ItemStack itemstack) {
-		ITree tree = PluginArboriculture.treeInterface.getMember(itemstack);
-		if (tree == null)
-			return (IAlleleTreeSpecies) PluginArboriculture.treeInterface.getDefaultTemplate()[EnumTreeChromosome.SPECIES.ordinal()];
-		else
-			return tree.getGenome().getPrimary();
+	@Override
+	protected IAlleleTreeSpecies getSpecies(ItemStack itemStack) {
+		return TreeGenome.getSpecies(itemStack);
+	}
+
+	private IAlleleTreeSpecies getSpeciesOrDefault(ItemStack itemstack) {
+		IAlleleTreeSpecies treeSpecies = TreeGenome.getSpecies(itemstack);
+		if (treeSpecies == null)
+			treeSpecies = (IAlleleTreeSpecies) PluginArboriculture.treeInterface.getDefaultTemplate()[EnumTreeChromosome.SPECIES.ordinal()];
+
+		return treeSpecies;
 	}
 
 	@Override
@@ -79,12 +83,13 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 	public String getItemStackDisplayName(ItemStack itemstack) {
 		if (!itemstack.hasTagCompound())
 			return "Unknown";
-		IIndividual individual = getIndividual(itemstack);
-		String customTreeKey = "trees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getUnlocalizedName().replace("trees.species.","");
+		IAlleleSpecies species = getSpecies(itemstack);
+
+		String customTreeKey = "trees.custom." + type.getName() + "." + species.getUnlocalizedName().replace("trees.species.","");
 		if(StringUtil.canTranslate(customTreeKey)){
 			return StringUtil.localize(customTreeKey);
 		}
-		return StringUtil.localize("trees.grammar." + type.getName()).replaceAll("%SPECIES", individual.getDisplayName()).replaceAll("%TYPE", StringUtil.localize("trees.grammar." + type.getName() + ".type"));
+		return StringUtil.localize("trees.grammar." + type.getName()).replaceAll("%SPECIES", species.getName()).replaceAll("%TYPE", StringUtil.localize("trees.grammar." + type.getName() + ".type"));
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -106,7 +111,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
-		return getPrimarySpecies(itemstack).getGermlingColour(type, renderPass);
+		return getSpeciesOrDefault(itemstack).getGermlingColour(type, renderPass);
 	}
 
 	/* ICONS */
@@ -128,7 +133,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(ItemStack itemstack, int renderPass) {
-		IAlleleTreeSpecies species = getPrimarySpecies(itemstack);
+		IAlleleTreeSpecies species = getSpeciesOrDefault(itemstack);
 		return species.getGermlingIcon(type, renderPass);
 	}
 

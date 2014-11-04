@@ -10,14 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import forestry.core.utils.StringUtil;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.apiculture.IAlleleBeeSpecies;
+import forestry.apiculture.genetics.BeeGenome;
 import forestry.apiculture.items.ItemBeeGE;
 import forestry.apiculture.items.ItemImprinter.ImprinterInventory;
 import forestry.core.config.Defaults;
@@ -25,7 +19,12 @@ import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.GuiForestry;
 import forestry.core.proxy.Proxies;
-import forestry.plugins.PluginApiculture;
+import forestry.core.utils.StringUtil;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GuiImprinter extends GuiForestry<TileForestry> {
 
@@ -49,7 +48,7 @@ public class GuiImprinter extends GuiForestry<TileForestry> {
 		ArrayList<ItemStack> beeList = new ArrayList<ItemStack>();
 		((ItemBeeGE) ForestryItem.beeDroneGE.item()).addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList)
-			iconStacks.put(PluginApiculture.beeInterface.getMember(beeStack).getIdent(), beeStack);
+			iconStacks.put(BeeGenome.getSpecies(beeStack).getUID(), beeStack);
 
 	}
 

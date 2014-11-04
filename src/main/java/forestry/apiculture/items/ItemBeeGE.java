@@ -10,19 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import java.util.List;
-
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -33,11 +22,20 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.apiculture.genetics.Bee;
+import forestry.apiculture.genetics.BeeGenome;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginApiculture;
-import net.minecraft.util.StatCollector;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IIcon;
+
+import java.util.List;
 
 public class ItemBeeGE extends ItemGE {
 
@@ -54,6 +52,11 @@ public class ItemBeeGE extends ItemGE {
 	@Override
 	protected IIndividual getIndividual(ItemStack itemstack) {
 		return new Bee(itemstack.getTagCompound());
+	}
+
+	@Override
+	protected IAlleleSpecies getSpecies(ItemStack itemStack) {
+		return BeeGenome.getSpecies(itemStack);
 	}
 
 	@Override
@@ -131,7 +134,7 @@ public class ItemBeeGE extends ItemGE {
 		if (!itemstack.hasTagCompound())
 			return super.getColorFromItemStack(itemstack, renderPass);
 
-		return getColourFromSpecies(PluginApiculture.beeInterface.getMember(itemstack).getGenome().getPrimary(), renderPass);
+		return getColourFromSpecies(BeeGenome.getSpecies(itemstack), renderPass);
 	}
 
 	@Override
@@ -166,7 +169,7 @@ public class ItemBeeGE extends ItemGE {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIcon(ItemStack itemstack, int renderPass) {
-		return getIconFromSpecies(PluginApiculture.beeInterface.getMember(itemstack).getGenome().getPrimary(), renderPass);
+		return getIconFromSpecies(BeeGenome.getSpecies(itemstack), renderPass);
 	}
 
 	@SideOnly(Side.CLIENT)

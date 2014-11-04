@@ -18,6 +18,7 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleTolerance;
+import forestry.apiculture.genetics.BeeGenome;
 import forestry.apiculture.items.ItemBeeGE;
 import forestry.apiculture.items.ItemBeealyzer.BeealyzerInventory;
 import forestry.core.config.ForestryItem;
@@ -45,7 +46,7 @@ public class GuiBeealyzer extends GuiAlyzer {
 		ArrayList<ItemStack> beeList = new ArrayList<ItemStack>();
 		((ItemBeeGE) ForestryItem.beeDroneGE.item()).addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList)
-			iconStacks.put(PluginApiculture.beeInterface.getMember(beeStack).getIdent(), beeStack);
+			iconStacks.put(BeeGenome.getSpecies(beeStack).getUID(), beeStack);
 
 		breedingTracker = PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, player.getGameProfile());
 	}
