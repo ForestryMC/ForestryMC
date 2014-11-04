@@ -64,11 +64,12 @@ public abstract class Genome implements IGenome {
 		}
 
 		// handle old saves that have missing chromosomes
-		IAlleleSpecies species = (IAlleleSpecies)chromosomes[EnumTreeChromosome.SPECIES.ordinal()].getActiveAllele();
-		if (species != null) {
+		IChromosome speciesChromosome = chromosomes[EnumTreeChromosome.SPECIES.ordinal()];
+		if (speciesChromosome != null) {
+			IAlleleSpecies species = (IAlleleSpecies)speciesChromosome.getActiveAllele();
 			IAllele[] template = getSpeciesRoot().getTemplate(species.getUID());
 			for (int i = 0; i < chromosomes.length; i++) {
-				if (chromosomes[i] == null)
+				if ((chromosomes[i] == null) && (template[i] != null))
 					chromosomes[i] = new Chromosome(template[i]);
 			}
 		}
