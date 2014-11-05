@@ -74,11 +74,11 @@ public class PluginBuildCraft extends ForestryPlugin implements ITriggerProvider
 		PluginBuildCraft.ignore = Boolean.parseBoolean(buildcraftignore.Value);
 		BuildcraftFuelRegistry.coolant.addCoolant(LiquidHelper.getFluid(Defaults.LIQUID_ICE), 10.0f);
 
-		addIronEngineFuel(LiquidHelper.getLiquid(Defaults.LIQUID_ETHANOL, 1).getFluid(), 4,
+		addIronEngineFuel(LiquidHelper.getLiquid(Defaults.LIQUID_ETHANOL, 1).getFluid(), 40,
 				Defaults.ENGINE_CYCLE_DURATION_ETHANOL * GameMode.getGameMode().getFloatSetting("fuel.ethanol.combustion"));
 
 		// Add recipe for ethanol
-		addRefineryRecipe("forestry:BiomassToEthanol", LiquidHelper.getLiquid(Defaults.LIQUID_BIOMASS, 4), LiquidHelper.getLiquid(Defaults.LIQUID_ETHANOL, 1), 10, 1);
+		addRefineryRecipe("forestry:BiomassToEthanol", LiquidHelper.getLiquid(Defaults.LIQUID_BIOMASS, 4), LiquidHelper.getLiquid(Defaults.LIQUID_ETHANOL, 1), 100, 1);
 
 		// Add custom trigger handler
 		StatementManager.registerTriggerProvider(this);
