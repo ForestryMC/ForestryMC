@@ -50,6 +50,8 @@ public class TriggerLowLiquid extends Trigger {
 
 		TankManager tankManager = ((TileFarmPlain) central).getTankManager();
 		FluidTankInfo info = tankManager.getTankInfo(0);
+		if (info.fluid == null)
+			return true;
 		return ((float) info.fluid.amount / info.capacity) <= threshold;
 	}
 }
