@@ -275,6 +275,8 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 			setErrorState(EnumErrorCode.OK);
 		else if (inventory.getStackInSlot(SLOT_FUEL) == null && fuelBurnTime <= 0)
 			setErrorState(EnumErrorCode.NOFUEL);
+		else if (energyManager.getTotalEnergyStored() == 0)
+			setErrorState(EnumErrorCode.NOPOWER);
 		else
 			setErrorState(EnumErrorCode.NORECIPE);
 	}

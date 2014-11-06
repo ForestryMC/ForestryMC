@@ -356,6 +356,8 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			setErrorState(EnumErrorCode.NORECIPE);
 		else if (!validateResources())
 			setErrorState(EnumErrorCode.NORESOURCE);
+		else if (energyManager.getTotalEnergyStored() == 0)
+			setErrorState(EnumErrorCode.NOPOWER);
 		else
 			setErrorState(EnumErrorCode.OK);
 

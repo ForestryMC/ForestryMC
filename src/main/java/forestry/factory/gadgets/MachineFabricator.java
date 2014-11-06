@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import forestry.core.EnumErrorCode;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -328,6 +329,12 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 		}
 
 		this.dissipateHeat();
+
+		if (energyManager.getTotalEnergyStored() == 0 && heat == 0) {
+			setErrorState(EnumErrorCode.NOPOWER);
+		} else if (getErrorState() == EnumErrorCode.NOPOWER) {
+			setErrorState(EnumErrorCode.OK);
+		}
 	}
 
 	@Override

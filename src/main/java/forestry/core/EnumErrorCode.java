@@ -94,7 +94,9 @@ public enum EnumErrorCode {
 
 	NOSUPPLIES("noSupplies", "noResource", 32),
 
-	NOTRADE("noTrade", "noResource", 33);
+	NOTRADE("noTrade", "noResource", 33),
+
+	NOPOWER("noPower", "errored", 34);
 
 	private String name;
 	private String iconName;

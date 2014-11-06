@@ -206,6 +206,11 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 		checkRecipe();
 		if (getErrorState() == EnumErrorCode.NORECIPE && currentRecipe != null)
 			setErrorState(EnumErrorCode.OK);
+
+		if (energyManager.getTotalEnergyStored() == 0) {
+			setErrorState(EnumErrorCode.NOPOWER);
+			return;
+		}
 	}
 
 	@Override
