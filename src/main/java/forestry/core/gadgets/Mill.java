@@ -12,7 +12,7 @@ package forestry.core.gadgets;
 
 import forestry.core.network.EntityNetData;
 
-public abstract class Mill extends TilePowered {
+public abstract class Mill extends TileBase {
 
 	@EntityNetData
 	public int charge = 0;
@@ -23,7 +23,6 @@ public abstract class Mill extends TilePowered {
 	public float progress;
 
 	public Mill() {
-		super(0, 0, 0);
 		speed = 0.01F;
 	}
 
@@ -76,10 +75,4 @@ public abstract class Mill extends TilePowered {
 	}
 
 	protected abstract void activate();
-
-	@Override
-	public boolean isWorking() {
-		return charge != 0;
-	}
-
 }

@@ -24,6 +24,7 @@ import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
+import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.triggers.ForestryTrigger;
@@ -50,7 +51,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class MachineMoistener extends TilePowered implements ISpecialInventory, ISidedInventory, ILiquidTankContainer {
+public class MachineMoistener extends TileBase implements ISpecialInventory, ISidedInventory, ILiquidTankContainer, IRenderableMachine {
 
 	/* CONSTANTS */
 	private static final short SLOT_STASH_1 = 0;
@@ -142,7 +143,6 @@ public class MachineMoistener extends TilePowered implements ISpecialInventory, 
 	private ItemStack pendingProduct;
 
 	public MachineMoistener() {
-		super(0, 0, 0);
 		setHints(Config.hints.get("moistener"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
 		tankManager = new TankManager(resourceTank);
@@ -461,17 +461,10 @@ public class MachineMoistener extends TilePowered implements ISpecialInventory, 
 		}
 	}
 
-	@Override
-	public boolean workCycle() {
-		return false;
-	}
-
-	@Override
 	public boolean isWorking() {
 		return burnTime > 0 && resourceTank.getFluidAmount() > 0;
 	}
 
-	@Override
 	public boolean hasFuelMin(float percentage) {
 		int max = 0;
 		int avail = 0;
@@ -493,7 +486,6 @@ public class MachineMoistener extends TilePowered implements ISpecialInventory, 
 		return ((float) avail / (float) max) > percentage;
 	}
 
-	@Override
 	public boolean hasResourcesMin(float percentage) {
 		if (inventory.getStackInSlot(SLOT_RESOURCE) == null)
 			return false;
@@ -525,9 +517,15 @@ public class MachineMoistener extends TilePowered implements ISpecialInventory, 
 		return (resourceTank.getFluidAmount() * i) / Defaults.PROCESSOR_TANK_CAPACITY;
 	}
 
+	/* IRenderableMachine */
 	@Override
 	public EnumTankLevel getPrimaryLevel() {
 		return Utils.rateTankLevel(getResourceScaled(100));
+	}
+
+	@Override
+	public EnumTankLevel getSecondaryLevel() {
+		return EnumTankLevel.EMPTY;
 	}
 
 	/* IINVENTORY */
