@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
-import buildcraft.api.statements.ITriggerExternal;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.recipes.IStillManager;
@@ -25,7 +24,6 @@ import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
-import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
@@ -46,7 +44,6 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Map;
 
 public class MachineStill extends TilePowered implements ISpecialInventory, ISidedInventory, ILiquidTankContainer {
@@ -495,14 +492,6 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return tankManager.getTankInfo(from);
-	}
-
-	/* ITRIGGERPROVIDER */
-	@Override
-	public LinkedList<ITriggerExternal> getCustomTriggers() {
-		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
-		res.add(ForestryTrigger.hasWork);
-		return res;
 	}
 
 }

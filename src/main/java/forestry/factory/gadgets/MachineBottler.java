@@ -507,7 +507,6 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(ForestryTrigger.lowResource25);
 		res.add(ForestryTrigger.lowResource10);
-		res.add(ForestryTrigger.hasWork);
 		return res;
 	}
 

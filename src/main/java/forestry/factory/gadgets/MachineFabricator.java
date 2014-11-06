@@ -167,6 +167,22 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 			return null;
 		}
 
+		public static Recipe findMatchingRecipeIfSmelted(ItemStack plan, FluidStack liquid, ItemStack itemToMelt, ItemStack[] resources) {
+			Smelting smelting = findMatchingSmelting(itemToMelt);
+			if (smelting == null || (liquid != null && !smelting.matches(liquid)))
+				return findMatchingRecipe(plan, liquid, resources);
+
+			FluidStack liquidIfSmelted;
+			if (liquid != null) {
+				liquidIfSmelted = liquid.copy();
+				liquidIfSmelted.amount += smelting.getProduct().amount * itemToMelt.stackSize;
+			} else {
+				liquidIfSmelted = smelting.getProduct().copy();
+				liquidIfSmelted.amount *= itemToMelt.stackSize;
+			}
+			return findMatchingRecipe(plan, liquidIfSmelted, resources);
+		}
+
 		public static Recipe findMatchingRecipe(ItemStack plan, FluidStack liquid, ItemStack[] resources) {
 			ItemStack[][] gridResources = new ItemStack[3][3];
 			for (int i = 0; i < 3; i++)
@@ -304,7 +320,6 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 	/* UPDATING */
 	@Override
 	public void updateServerSide() {
-
 		// Add pending smelt
 		if (pendingSmelt != null) {
 
@@ -371,6 +386,11 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 		return myRecipe.internal.getIngredients();
 	}
 
+	private Recipe getRecipe() {
+		return RecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_PLAN), moltenTank.getFluid(),
+				inventory.getStacks(SLOT_CRAFTING_1, 9));
+	}
+
 	/* ICRAFTER */
 	@Override
 	public boolean canTakeStack(int slotIndex) {
@@ -379,8 +399,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 
 	@Override
 	public ItemStack getResult() {
-		Recipe myRecipe = RecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_PLAN), moltenTank.getFluid(),
-				inventory.getStacks(SLOT_CRAFTING_1, 9));
+		Recipe myRecipe = getRecipe();
 
 		if (myRecipe == null)
 			return null;
@@ -393,8 +412,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 		if(slotIndex != SLOT_RESULT)
 			return null;
 
-		Recipe myRecipe = RecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_PLAN), moltenTank.getFluid(),
-				inventory.getStacks(SLOT_CRAFTING_1, 9));
+		Recipe myRecipe = getRecipe();
 		if (myRecipe == null)
 			return null;
 
@@ -444,6 +462,13 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 	@Override
 	public boolean isWorking() {
 		return this.heat <= MAX_HEAT;
+	}
+
+	@Override
+	public boolean hasWork() {
+		Recipe recipe = RecipeManager.findMatchingRecipeIfSmelted(inventory.getStackInSlot(SLOT_PLAN), moltenTank.getFluid(), inventory.getStackInSlot(SLOT_METAL),
+				inventory.getStacks(SLOT_CRAFTING_1, 9));
+		return recipe != null;
 	}
 
 	public int getHeatScaled(int i) {

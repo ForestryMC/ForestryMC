@@ -24,7 +24,6 @@ public class ForestryTrigger {
 	public static Trigger lowGermlings10;
 	public static Trigger missingQueen;
 	public static Trigger missingDrone;
-	public static Trigger hasWork;
 
 	public static void initialize() {
 		StatementManager.registerStatement(lowFuel25 = new TriggerLowFuel("lowFuel.25", 0.25f));
@@ -39,8 +38,5 @@ public class ForestryTrigger {
 
 		StatementManager.registerStatement(missingQueen = new TriggerMissingQueen());
 		StatementManager.registerStatement(missingDrone = new TriggerMissingDrone());
-
-		StatementManager.registerStatement(hasWork = new TriggerHasWork());
-
 	}
 }

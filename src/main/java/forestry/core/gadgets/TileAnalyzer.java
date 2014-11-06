@@ -267,6 +267,16 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		return analyzeTime > 0;
 	}
 
+	@Override
+	public boolean hasWork() {
+		if (!pendingProducts.isEmpty())
+			return true;
+		if (analyzeTime > 0)
+			return true;
+
+		return getErrorState() == EnumErrorCode.OK ||getErrorState() == EnumErrorCode.NOPOWER;
+	}
+
 	public int getProgressScaled(int i) {
 		return (analyzeTime * i) / TIME_TO_ANALYZE;
 	}

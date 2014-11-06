@@ -692,7 +692,6 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		res.add(ForestryTrigger.lowFuel10);
 		res.add(ForestryTrigger.lowResource25);
 		res.add(ForestryTrigger.lowResource10);
-		res.add(ForestryTrigger.hasWork);
 		return res;
 	}
 }

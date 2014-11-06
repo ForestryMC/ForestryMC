@@ -10,24 +10,7 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Stack;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
 import buildcraft.api.statements.ITriggerExternal;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.recipes.ICentrifugeManager;
@@ -40,6 +23,20 @@ import forestry.core.network.GuiId;
 import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.StackUtils;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Stack;
 
 public class MachineCentrifuge extends TilePowered implements ISidedInventory, ISpecialInventory {
 
@@ -477,7 +474,6 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(ForestryTrigger.lowResource25);
 		res.add(ForestryTrigger.lowResource10);
-		res.add(ForestryTrigger.hasWork);
 		return res;
 	}
 }

@@ -325,7 +325,6 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(ForestryTrigger.lowResource25);
 		res.add(ForestryTrigger.lowResource10);
-		res.add(ForestryTrigger.hasWork);
 		return res;
 	}
 }
