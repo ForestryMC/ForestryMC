@@ -136,18 +136,8 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		inventory.readFromNBT(nbttagcompound);
 	}
 
-	/* WORKING */
 	@Override
-	public boolean workCycle() {
-		// If we add pending products, we skip to the next work cycle.
-		if (tryAddPending())
-			return false;
-
-		if (!pendingProducts.isEmpty()) {
-			setErrorState(EnumErrorCode.NOSPACE);
-			return false;
-		}
-
+	protected void updateServerSide() {
 		// Check if we have suitable items waiting in the can slot
 		FluidHelper.drainContainers(tankManager, this, SLOT_CAN);
 		ItemStack can = getStackInSlot(SLOT_CAN);
@@ -156,6 +146,51 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			resourceTank.fill(Fluids.HONEY.get(Defaults.FLUID_PER_HONEY_DROP), true);
 		}
 
+		for (int i = 0; i < invInput.getSizeInventory(); i++) {
+			ItemStack inputStack = invInput.getStackInSlot(i);
+			if (inputStack == null || !AlleleManager.alleleRegistry.isIndividual(inputStack))
+				continue;
+			// Analyzed bees in the input buffer are added to the output queue.
+			IIndividual individual = AlleleManager.alleleRegistry.getIndividual(inputStack);
+			if (individual.isAnalyzed()) {
+				pendingProducts.push(inputStack);
+				invInput.decrStackSize(i, inputStack.stackSize);
+			}
+		}
+
+		tryAddPending();
+		if (!pendingProducts.isEmpty()) {
+			setErrorState(EnumErrorCode.NOSPACE);
+			return;
+		}
+
+		if (analyzeTime == 0) {
+			// Look for bees in input slots.
+			IInvSlot slot = getInputSlot();
+			if (slot == null) {
+				// Nothing to analyze
+				setErrorState(EnumErrorCode.NOTHINGANALYZE);
+				return;
+			}
+		}
+
+		// We need our liquid honey
+		if (resourceTank.getFluidAmount() < HONEY_REQUIRED) {
+			setErrorState(EnumErrorCode.NORESOURCE);
+			return;
+		}
+
+		if (energyManager.getTotalEnergyStored() == 0) {
+			setErrorState(EnumErrorCode.NOPOWER);
+			return;
+		}
+
+		setErrorState(EnumErrorCode.OK);
+	}
+
+	/* WORKING */
+	@Override
+	public boolean workCycle() {
 		ItemStack stackToAnalyze = getStackInSlot(SLOT_ANALYZE);
 		if (analyzeTime > 0 && stackToAnalyze != null && AlleleManager.alleleRegistry.isIndividual(stackToAnalyze)) {
 
@@ -190,38 +225,27 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		if (stackToAnalyze != null)
 			return false;
 
-		// We need our liquid honey
-		if (resourceTank.getFluidAmount() < HONEY_REQUIRED) {
-			setErrorState(EnumErrorCode.NORESOURCE);
+		if (getErrorState() != EnumErrorCode.OK)
 			return false;
-		}
 
 		// Look for bees in input slots.
+		IInvSlot slot = getInputSlot();
+		ItemStack inputStack = slot.getStackInSlot();
+		setInventorySlotContents(SLOT_ANALYZE, inputStack);
+		slot.setStackInSlot(null);
+		resourceTank.drain(HONEY_REQUIRED, true);
+		analyzeTime = TIME_TO_ANALYZE;
+		sendNetworkUpdate();
+		return true;
+	}
+
+	private IInvSlot getInputSlot() {
 		for (IInvSlot slot : InventoryIterator.getIterable(invInput)) {
 			ItemStack inputStack = slot.getStackInSlot();
-			if (inputStack == null || !AlleleManager.alleleRegistry.isIndividual(inputStack))
-				continue;
-
-			// Analyzed bees in the input buffer are added to the output
-			// queue at once.
-			IIndividual individual = AlleleManager.alleleRegistry.getIndividual(inputStack);
-			if (individual.isAnalyzed()) {
-				pendingProducts.push(inputStack);
-				slot.setStackInSlot(null);
-				continue;
-			}
-
-			setInventorySlotContents(SLOT_ANALYZE, inputStack);
-			slot.setStackInSlot(null);
-			resourceTank.drain(HONEY_REQUIRED, true);
-			analyzeTime = TIME_TO_ANALYZE;
-			sendNetworkUpdate();
-			return true;
+			if (inputStack != null && AlleleManager.alleleRegistry.isIndividual(inputStack))
+				return slot;
 		}
-
-		// Nothing to analyze
-		setErrorState(EnumErrorCode.NOTHINGANALYZE);
-		return false;
+		return null;
 	}
 
 	private boolean tryAddPending() {
@@ -271,17 +295,6 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		int i = tankManager.maxMessageId() + 1;
 		iCrafting.sendProgressBarUpdate(container, i, analyzeTime);
 
-	}
-
-	@Override
-	public void sendNetworkUpdate() {
-		Proxies.net.sendNetworkPacket(new PacketInventoryStack(PacketIds.IINVENTORY_STACK, xCoord, yCoord, zCoord, SLOT_ANALYZE, inventory.getStackInSlot(SLOT_ANALYZE)),
-				xCoord, yCoord, zCoord);
-	}
-
-	@Override
-	public Packet getDescriptionPacket() {
-		return new PacketInventoryStack(PacketIds.IINVENTORY_STACK, xCoord, yCoord, zCoord, SLOT_ANALYZE, inventory.getStackInSlot(SLOT_ANALYZE)).getPacket();
 	}
 
 	/* ISIDEDINVENTORY */
