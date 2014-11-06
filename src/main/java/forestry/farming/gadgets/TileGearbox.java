@@ -12,6 +12,7 @@ package forestry.farming.gadgets;
 
 import forestry.api.core.ITileStructure;
 import forestry.api.farming.IFarmHousing;
+import forestry.core.EnumErrorCode;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.energy.EnergyManager;
 import net.minecraft.nbt.NBTTagCompound;
@@ -63,6 +64,16 @@ public class TileGearbox extends TileFarm implements IPowerHandler {
 	protected void updateServerSide() {
 		super.updateServerSide();
 		
+		if (energyManager.getTotalEnergyStored() == 0) {
+			ITileStructure central = getCentralTE();
+			if (!(central instanceof TileFarmPlain))
+				return;
+
+			TileFarmPlain centralHousing = (TileFarmPlain) central;
+			centralHousing.setErrorState(EnumErrorCode.NOPOWER);
+			return;
+		}
+
 		if (activationDelay > 0) {
 			activationDelay--;
 			return;
