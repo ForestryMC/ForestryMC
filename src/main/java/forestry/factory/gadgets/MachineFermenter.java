@@ -271,9 +271,13 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
 			return;
 
-		if (RecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid()) != null)
-			setErrorState(EnumErrorCode.OK);
-		else if (inventory.getStackInSlot(SLOT_FUEL) == null && fuelBurnTime <= 0)
+
+		if (RecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid()) != null) {
+			if (resourceTank.getFluidAmount() < fuelCurrentFerment)
+				setErrorState(EnumErrorCode.NORESOURCE);
+			else
+				setErrorState(EnumErrorCode.OK);
+		} else if (inventory.getStackInSlot(SLOT_FUEL) == null && fuelBurnTime <= 0)
 			setErrorState(EnumErrorCode.NOFUEL);
 		else if (energyManager.getTotalEnergyStored() == 0)
 			setErrorState(EnumErrorCode.NOPOWER);
@@ -297,13 +301,6 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 
 			// If we have burnTime left, just decrease it.
 		} else if (fuelBurnTime > 0) {
-			if (currentRecipe == null) {
-				/* there was a fail-safe check for this before, but it can
-				 never happen due to the 1st if clause unless there's some
-				 thread unsafe accessing going on which has to fixed otherwise. */
-				throw new NullPointerException("currentRecipe is null");
-			}
-
 			if (resourceTank.getFluidAmount() < fuelCurrentFerment)
 				return false;
 
@@ -449,7 +446,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 			if (RecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid()) == null)
 				return false;
 
-		if (resourceTank.getFluidAmount() <= 0)
+		if (resourceTank.getFluidAmount() <= fuelCurrentFerment)
 			return false;
 
 		if (productTank.getFluidAmount() >= productTank.getCapacity())
