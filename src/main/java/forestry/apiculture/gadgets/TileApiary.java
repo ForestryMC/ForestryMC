@@ -10,14 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import java.util.LinkedList;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-
-import buildcraft.api.gates.ITrigger;
-
+import buildcraft.api.statements.ITriggerExternal;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IHiveFrame;
 import forestry.api.core.ForestryAPI;
@@ -25,6 +18,11 @@ import forestry.core.gadgets.TileBase;
 import forestry.core.network.GuiId;
 import forestry.core.triggers.ForestryTrigger;
 import forestry.plugins.PluginApiculture;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+
+import java.util.LinkedList;
 
 public class TileApiary extends TileBeehouse implements ISidedInventory {
 
@@ -345,8 +343,8 @@ public class TileApiary extends TileBeehouse implements ISidedInventory {
 
 	/* ITRIGGERPROVIDER */
 	@Override
-	public LinkedList<ITrigger> getCustomTriggers() {
-		LinkedList<ITrigger> res = new LinkedList<ITrigger>();
+	public LinkedList<ITriggerExternal> getCustomTriggers() {
+		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(ForestryTrigger.missingQueen);
 		res.add(ForestryTrigger.missingDrone);
 		res.add(PluginApiculture.triggerNoFrames);

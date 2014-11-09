@@ -43,10 +43,4 @@ public class WorldGenMahogany extends WorldGenTree {
 		height = determineHeight(12, 6);
 		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
 	}
-
-	@Override
-	public BlockType getWood() {
-		return new BlockType(ForestryBlock.log3, 2);
-	}
-
 }

@@ -10,19 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-
-import net.minecraftforge.common.BiomeDictionary;
-
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -36,6 +23,7 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleTolerance;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFlowerProvider;
@@ -53,6 +41,17 @@ import forestry.core.utils.StringUtil;
 import forestry.core.utils.Utils;
 import forestry.core.utils.Vect;
 import forestry.plugins.PluginApiculture;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.BiomeDictionary;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Bee extends IndividualLiving implements IBee {
 
@@ -344,12 +343,22 @@ public class Bee extends IndividualLiving implements IBee {
 		IAlleleBeeSpecies secondary = genome.getSecondary();
 		if (!isPureBred(EnumBeeChromosome.SPECIES.ordinal()))
 			list.add("\u00A79" + StringUtil.localize("bees.hybrid").replaceAll("%PRIMARY",primary.getName()).replaceAll("%SECONDARY",secondary.getName()));
-		list.add(genome.getActiveAllele(EnumBeeChromosome.SPEED.ordinal()).getName() + " " + StringUtil.localize("gui.worker"));
+
+		IAllele speed = genome.getActiveAllele(EnumBeeChromosome.SPEED.ordinal());
+		String customWorker = "tooltip.worker." + speed.getUnlocalizedName().replaceFirst("gui.", "");
+		if (StringUtil.canTranslate(customWorker))
+			list.add(StringUtil.localize(customWorker));
+		else
+			list.add(speed.getName() + " " + StringUtil.localize("gui.worker"));
+
 		list.add(genome.getActiveAllele(EnumBeeChromosome.LIFESPAN.ordinal()).getName() + " " + StringUtil.localize("gui.life"));
-		list.add("\u00A7aT: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / "
-				+ StringUtil.capitalize(genome.getToleranceTemp().name()));
-		list.add("\u00A7aH: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / "
-				+ StringUtil.capitalize(genome.getToleranceHumid().name()));
+
+		IAlleleTolerance tempTolerance = (IAlleleTolerance)getGenome().getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal());
+		list.add("\u00A7aT: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / " + tempTolerance.getName());
+
+		IAlleleTolerance humidTolerance = (IAlleleTolerance)getGenome().getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal());
+		list.add("\u00A7aH: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / " + humidTolerance.getName());
+
 		list.add(genome.getFlowerProvider().getDescription());
 		if (genome.getNocturnal())
 			list.add("\u00A7c" + GenericRatings.rateActivityTime(genome.getNocturnal(), false));

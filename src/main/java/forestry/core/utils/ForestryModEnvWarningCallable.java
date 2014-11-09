@@ -39,7 +39,7 @@ public class ForestryModEnvWarningCallable implements ICrashCallable {
 		try {
 			@SuppressWarnings("unused")
 			Class<?> c = Class.forName("org.bukkit.Bukkit");
-			modIDs.add("Bukkit, MCPC+, or other Bukkit replacement");
+			modIDs.add("Bukkit, Cauldron, or other Bukkit replacement");
 		}
 		catch (Throwable t) {} // No need to do anything.
 

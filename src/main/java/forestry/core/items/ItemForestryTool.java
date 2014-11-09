@@ -26,7 +26,7 @@ import forestry.core.proxy.Proxies;
 public class ItemForestryTool extends ItemForestry {
 
 	private final ItemStack remnants;
-	private final float efficiencyOnProperMaterial;
+	protected float efficiencyOnProperMaterial;
 	private final Block[] blocksEffectiveAgainst;
 
 	public ItemForestryTool(Block[] blocksEffectiveAgainst, ItemStack remnants) {
@@ -58,7 +58,7 @@ public class ItemForestryTool extends ItemForestry {
 		if (event.original == null || event.original.getItem() != this)
 			return;
 
-		if (Proxies.common.isSimulating(event.entityPlayer.worldObj)) {
+		if (Proxies.common.isSimulating(event.entityPlayer.worldObj) && remnants != null) {
 			EntityItem entity = new EntityItem(event.entityPlayer.worldObj, event.entityPlayer.posX, event.entityPlayer.posY, event.entityPlayer.posZ,
 					remnants.copy());
 			event.entityPlayer.worldObj.spawnEntityInWorld(entity);

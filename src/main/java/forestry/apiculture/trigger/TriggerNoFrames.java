@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.trigger;
 
-import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import buildcraft.api.gates.ITriggerParameter;
-
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
 import forestry.apiculture.gadgets.TileApiary;
 import forestry.core.triggers.Trigger;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TriggerNoFrames extends Trigger {
 
@@ -29,7 +27,7 @@ public class TriggerNoFrames extends Trigger {
 	 * Return true if the tile given in parameter activates the trigger, given the parameters.
 	 */
 	@Override
-	public boolean isTriggerActive(ForgeDirection direction, TileEntity tile, ITriggerParameter parameter) {
+	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
 
 		if (!(tile instanceof TileApiary))
 			return false;

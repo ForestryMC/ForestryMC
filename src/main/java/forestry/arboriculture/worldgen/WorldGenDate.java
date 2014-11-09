@@ -33,11 +33,6 @@ public class WorldGenDate extends WorldGenTree {
 	}
 
 	@Override
-	public BlockType getWood() {
-		return new BlockType(ForestryBlock.log5, 2);
-	}
-
-	@Override
 	public void preGenerate() {
 		height = determineHeight(6, 2);
 		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));

@@ -534,21 +534,29 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			listener.hasCollected(collected, logic);
 
 		for (ItemStack produce : collected) {
-
-			// Germlings try to go into germling slots first.
-			if (logic.isAcceptedGermling(produce))
-				produce.stackSize -= inventory.addStack(produce, SLOT_GERMLINGS_1, SLOT_COUNT_RESERVOIRS, false, true);
-
-			if (produce.stackSize <= 0)
-				continue;
-			produce.stackSize -= inventory.addStack(produce, SLOT_PRODUCTION_1, SLOT_COUNT_PRODUCTION, false, true);
-			if (produce.stackSize <= 0)
-				continue;
-
+			addProduceToInventory(produce);
 			pendingProduce.push(produce);
 		}
 
 		return true;
+	}
+
+	private void addProduceToInventory(ItemStack produce) {
+
+		for (IFarmLogic logic : getFarmLogics()) {
+			// Germlings try to go into germling slots first.
+			if (logic.isAcceptedGermling(produce))
+				produce.stackSize -= inventory.addStack(produce, SLOT_GERMLINGS_1, SLOT_COUNT_RESERVOIRS, false, true);
+			if (produce.stackSize <= 0)
+				return;
+
+			if (logic.isAcceptedResource(produce))
+				produce.stackSize -= inventory.addStack(produce, SLOT_RESOURCES_1, SLOT_COUNT_RESERVOIRS, false, true);
+			if (produce.stackSize <= 0)
+				return;
+		}
+
+		produce.stackSize -= inventory.addStack(produce, SLOT_PRODUCTION_1, SLOT_COUNT_PRODUCTION, false, true);
 	}
 
 	private boolean cullCrop(ICrop crop, IFarmLogic provider) {
@@ -738,13 +746,12 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 					chipset.onRemoval(this);
 			}
 
+		sockets.setInventorySlotContents(slot, stack);
+		refreshFarmLogics();
+
 		if (stack == null) {
-			sockets.setInventorySlotContents(slot, stack);
-			refreshFarmLogics();
 			return;
 		}
-
-		sockets.setInventorySlotContents(slot, stack);
 
 		ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitboard(stack);
 		if (chipset != null)

@@ -51,7 +51,7 @@ import forestry.energy.gadgets.EngineTin;
 import forestry.energy.gadgets.MachineGenerator;
 import forestry.energy.proxy.ProxyEnergy;
 
-@Plugin(pluginID = "Energy", name = "Energy", author = "SirSengir", url = Defaults.URL, description = "Adds several engines compatible with BuildCraft 3 as well as a generator for IC2.")
+@Plugin(pluginID = "Energy", name = "Energy", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.energy.description")
 public class PluginEnergy extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.energy.proxy.ClientProxyEnergy", serverSide = "forestry.energy.proxy.ProxyEnergy")
@@ -102,12 +102,6 @@ public class PluginEnergy extends ForestryPlugin {
 
 		definitionEngineClockwork = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Defaults.DEFINITION_ENGINECLOCKWORK_META, "forestry.EngineClockwork", EngineClockwork.class,
 				PluginEnergy.proxy.getRenderDefaultEngine(Defaults.TEXTURE_PATH_BLOCKS + "/engine_clock_"), clockworkRecipe));
-
-		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_CHOKE_I, "forestry.energyChoke1");
-		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.FIRE_DAMPENER_I, "forestry.energyDampener1");
-		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_EFFICIENCY_I, "forestry.energyEfficiency1");
-		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_BOOST_I, "forestry.energyBoost1");
-		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_BOOST_II, "forestry.energyBoost2");
 	}
 
 	@Override
@@ -117,20 +111,6 @@ public class PluginEnergy extends ForestryPlugin {
 		definitionEngineCopper.register();
 		definitionEngineBronze.register();
 		definitionEngineClockwork.register();
-
-		FluidStack ethanol = LiquidHelper.getLiquid(Defaults.LIQUID_ETHANOL, 1);
-		GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * GameMode.getGameMode().getFloatSetting("fuel.ethanol.generator")), 4);
-		FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
-
-		FluidStack biomass = LiquidHelper.getLiquid(Defaults.LIQUID_BIOMASS, 1);
-		GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * GameMode.getGameMode().getFloatSetting("fuel.biomass.generator")), 1);
-		FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
-
-		Circuit.energyElectricChoke1 = new CircuitElectricChoke("electric.choke.1");
-		Circuit.energyFireDampener1 = new CircuitFireDampener("dampener.1");
-		Circuit.energyElectricEfficiency1 = new CircuitElectricEfficiency("electric.efficiency.1");
-		Circuit.energyElectricBoost1 = new CircuitElectricBoost("electric.boost.1", 2, 7, 20);
-		Circuit.energyElectricBoost2 = new CircuitElectricBoost("electric.boost.2", 2, 15, 40);
 	}
 
 	@Override
@@ -143,14 +123,6 @@ public class PluginEnergy extends ForestryPlugin {
 
 	@Override
 	protected void registerRecipes() {
-
-		ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.engine.tin");
-
-		// / Solder Manager
-		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 0), Circuit.energyElectricChoke1);
-		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 1), Circuit.energyElectricBoost1);
-		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 2), Circuit.energyElectricBoost2);
-		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 3), Circuit.energyElectricEfficiency1);
 	}
 
 	@Override

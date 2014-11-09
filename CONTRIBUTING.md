@@ -1,3 +1,16 @@
+How to submit a bug report to Forestry
+====================================
+Please make sure the bug has not already been reported by [searching the issues](https://github.com/ForestryMC/ForestryMC/issues?q=is%3Aissue).
+
+If you can, see if the bug still happens with the latest unstable build.  
+[The latest unstable builds are available here](http://jenkins.ic2.player.to/job/Forestry_Dev/)
+
+For crashes, you must post a link to the full crash report.  
+[gist.github.com](gist.github.com) or [pastebin.com](www.pastebin.com) are good places to upload them.  
+Full crash reports are located in [the minecraft data folder](http://hopper.minecraft.net/help/finding-minecraft-data-folder/), in "crash-reports".
+
+Thank you for reporting bugs!
+
 How to contribute to Forestry
 ====================================
 

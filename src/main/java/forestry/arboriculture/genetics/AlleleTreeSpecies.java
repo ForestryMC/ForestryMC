@@ -12,7 +12,6 @@ package forestry.arboriculture.genetics;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
@@ -254,7 +253,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@SideOnly(Side.CLIENT)
 	public IIcon getGermlingIcon(EnumGermlingType type, int renderPass) {
 		if(type == EnumGermlingType.POLLEN)
-			return ForestryItem.pollen.item().getIconFromDamageForRenderPass(0, renderPass);
+			return ForestryItem.pollenCluster.item().getIconFromDamageForRenderPass(0, renderPass);
 
 		return icon;
 	}

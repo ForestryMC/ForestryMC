@@ -41,6 +41,7 @@ public enum ForestryBlock {
 	 * 0 - Apatite Ore 1 - Copper Ore 2 - Tin Ore
 	 */
 	resources,
+	resourceStorage,
 	/**
 	 * 0 - Legacy 1 - Forest Hive 2 - Meadows Hive
 	 */
@@ -51,6 +52,8 @@ public enum ForestryBlock {
 	glass,
 	planks1,
 	planks2,
+	fireproofPlanks1,
+	fireproofPlanks2,
 	slabs1,
 	slabs2,
 	slabs3,
@@ -63,6 +66,14 @@ public enum ForestryBlock {
 	log6,
 	log7,
 	log8,
+	fireproofLog1,
+	fireproofLog2,
+	fireproofLog3,
+	fireproofLog4,
+	fireproofLog5,
+	fireproofLog6,
+	fireproofLog7,
+	fireproofLog8,
 	fences1,
 	fences2,
 	stairs,

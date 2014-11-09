@@ -32,11 +32,6 @@ public class WorldGenPoplar extends WorldGenTree {
 	}
 
 	@Override
-	public BlockType getWood() {
-		return new BlockType(ForestryBlock.log5, 1);
-	}
-
-	@Override
 	public void preGenerate() {
 		height = determineHeight(8, 3);
 		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));

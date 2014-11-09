@@ -10,14 +10,26 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Stack;
-
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.ISpecialInventory;
+import forestry.api.recipes.ISqueezerManager;
+import forestry.core.EnumErrorCode;
+import forestry.core.config.Config;
+import forestry.core.config.Defaults;
+import forestry.core.fluids.TankManager;
+import forestry.core.fluids.tanks.FilteredTank;
+import forestry.core.fluids.tanks.StandardTank;
+import forestry.core.gadgets.TileBase;
+import forestry.core.gadgets.TilePowered;
+import forestry.core.interfaces.ILiquidTankContainer;
+import forestry.core.network.EntityNetData;
+import forestry.core.network.GuiId;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.EnumTankLevel;
+import forestry.core.utils.InventoryAdapter;
+import forestry.core.utils.LiquidHelper;
+import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -25,36 +37,18 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidStack;
-
-import buildcraft.api.gates.ITrigger;
-
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.ISpecialInventory;
-import forestry.api.recipes.ISqueezerManager;
-import forestry.core.EnumErrorCode;
-import forestry.core.config.Config;
-import forestry.core.config.Defaults;
-import forestry.core.gadgets.TileBase;
-import forestry.core.gadgets.TilePowered;
-import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.network.EntityNetData;
-import forestry.core.network.GuiId;
-import forestry.core.triggers.ForestryTrigger;
-import forestry.core.utils.EnumTankLevel;
-import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.fluids.TankManager;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.InventoryAdapter;
-import forestry.core.utils.LiquidHelper;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
 import net.minecraftforge.fluids.FluidTankInfo;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Stack;
 
 public class MachineSqueezer extends TilePowered implements ISpecialInventory, ISidedInventory, ILiquidTankContainer {
 
@@ -256,6 +250,10 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 		if (getErrorState() == EnumErrorCode.NORECIPE && currentRecipe != null)
 			setErrorState(EnumErrorCode.OK);
 
+		if (energyManager.getTotalEnergyStored() == 0) {
+			setErrorState(EnumErrorCode.NOPOWER);
+			return;
+		}
 	}
 
 	@Override
@@ -573,13 +571,4 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return tankManager.getTankInfo(from);
 	}
-
-	/* ITRIGGERPROVIDER */
-	@Override
-	public LinkedList<ITrigger> getCustomTriggers() {
-		LinkedList<ITrigger> res = new LinkedList<ITrigger>();
-		res.add(ForestryTrigger.hasWork);
-		return res;
-	}
-
 }

@@ -11,6 +11,7 @@
 package forestry.core.genetics;
 
 import forestry.api.genetics.IAlleleArea;
+import forestry.core.utils.StringUtil;
 import forestry.core.utils.Vect;
 
 public class AlleleArea extends Allele implements IAlleleArea {
@@ -32,6 +33,15 @@ public class AlleleArea extends Allele implements IAlleleArea {
 
 	public Vect getArea() {
 		return new Vect(area);
+	}
+
+	public AlleleArea setName(String customPrefix, String name) {
+		String customName = "gui." + customPrefix + "." + name;
+		if (StringUtil.canTranslate(customName))
+			this.name = customName;
+		else
+			this.name = "gui." + name;
+		return this;
 	}
 
 }

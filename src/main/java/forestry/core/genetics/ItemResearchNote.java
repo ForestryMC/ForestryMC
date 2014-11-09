@@ -235,7 +235,12 @@ public class ItemResearchNote extends ItemForestry {
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
 		ResearchNote note = new ResearchNote(itemstack.getTagCompound());
-		return StringUtil.localizeAndFormatRaw(getUnlocalizedName(itemstack) + ".name", note.researcher.getName());
+		String researcherName;
+		if (note.researcher == null)
+			researcherName = "Sengir";
+		else
+			researcherName = note.researcher.getName();
+		return StringUtil.localizeAndFormatRaw(getUnlocalizedName(itemstack) + ".name", researcherName);
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})

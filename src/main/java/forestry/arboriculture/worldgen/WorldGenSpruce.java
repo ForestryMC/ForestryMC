@@ -42,10 +42,4 @@ public class WorldGenSpruce extends WorldGenTree {
 		height = determineHeight(5, 3);
 		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
 	}
-
-	@Override
-	public BlockType getWood() {
-		return new BlockType(Blocks.log, 1);
-	}
-
 }

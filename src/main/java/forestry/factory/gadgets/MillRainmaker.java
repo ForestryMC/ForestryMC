@@ -118,11 +118,6 @@ public class MillRainmaker extends Mill implements ISpecialInventory {
 	}
 
 	@Override
-	public boolean workCycle() {
-		return false;
-	}
-
-	@Override
 	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
 		if (charge != 0)
 			return 0;

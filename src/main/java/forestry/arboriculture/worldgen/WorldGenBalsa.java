@@ -46,10 +46,4 @@ public class WorldGenBalsa extends WorldGenTree {
 		height = determineHeight(6, 6);
 		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
 	}
-
-	@Override
-	public BlockType getWood() {
-		return new BlockType(ForestryBlock.log3, 3);
-	}
-
 }

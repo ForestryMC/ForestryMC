@@ -10,15 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import java.util.LinkedList;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-
-import buildcraft.api.gates.ITrigger;
-
+import buildcraft.api.statements.ITriggerExternal;
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
@@ -32,6 +24,12 @@ import forestry.core.proxy.Proxies;
 import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.TileInventoryAdapter;
 import forestry.core.utils.Utils;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+
+import java.util.LinkedList;
 
 public abstract class TileAlveary extends TileForestry implements IAlvearyComponent {
 
@@ -249,8 +247,8 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 
 	// / ITRIGGERPROVIDER
 	@Override
-	public LinkedList<ITrigger> getCustomTriggers() {
-		LinkedList<ITrigger> res = new LinkedList<ITrigger>();
+	public LinkedList<ITriggerExternal> getCustomTriggers() {
+		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(ForestryTrigger.missingQueen);
 		res.add(ForestryTrigger.missingDrone);
 		return res;

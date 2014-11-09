@@ -20,7 +20,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 public class ContainerBeealyzer extends ContainerAlyzer {
 
 	public ContainerBeealyzer(InventoryPlayer inventoryplayer, BeealyzerInventory inventory) {
-		super(inventoryplayer, inventory, new Object[] { ForestryItem.honeydew, ForestryItem.honeyDrop }, new Object[] { ItemBeeGE.class });
+		super(inventoryplayer, inventory, new Object[] { ForestryItem.honeydew, ForestryItem.honeyDrop }, ItemBeeGE.class);
 	}
 
 }

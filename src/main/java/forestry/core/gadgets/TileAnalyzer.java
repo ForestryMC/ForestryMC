@@ -23,18 +23,18 @@ import net.minecraft.network.Packet;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.ISpecialInventory;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.core.EnumErrorCode;
 import forestry.core.fluids.TankManager;
 import forestry.core.config.Defaults;
+import forestry.core.config.ForestryItem;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.Fluids;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
@@ -42,14 +42,17 @@ import forestry.core.network.PacketIds;
 import forestry.core.network.PacketInventoryStack;
 import forestry.core.proxy.Proxies;
 import forestry.core.fluids.tanks.FilteredTank;
+import forestry.core.inventory.InvTools;
+import forestry.core.inventory.wrappers.IInvSlot;
+import forestry.core.inventory.wrappers.InventoryIterator;
+import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.utils.InventoryAdapter;
-import forestry.core.utils.LiquidHelper;
-import forestry.core.utils.StackUtils;
+import net.minecraft.inventory.IInventory;
 
-public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedInventory, ILiquidTankContainer {
+public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankContainer {
 
 	/* CONSTANTS */
-	public static final int TIME_TO_ANALYZE = 500;
+	public static final int TIME_TO_ANALYZE = 125;
 	public static final int HONEY_REQUIRED = 100;
 
 	public static final short SLOT_ANALYZE = 0;
@@ -62,11 +65,6 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 
 	private int analyzeTime;
 
-	private final short analyzeSlot = 0;
-	private final short canSlot = 1;
-	private final short inputSlot1 = 2;
-	private final short outputSlot1 = 8;
-
 	@EntityNetData
 	public FilteredTank resourceTank;
 
@@ -74,9 +72,12 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 
 	private final Stack<ItemStack> pendingProducts = new Stack<ItemStack>();
 
+	private final IInventory invInput = new InventoryMapper(inventory, SLOT_INPUT_1, 6);
+
 	/* CONSTRUCTOR */
 	public TileAnalyzer() {
-		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, FluidRegistry.getFluid(Defaults.LIQUID_HONEY));
+		super(800, 40, Defaults.MACHINE_MAX_ENERGY);
+		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, Fluids.HONEY.get());
 		tankManager = new TankManager(resourceTank);
 	}
 
@@ -135,92 +136,116 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 		inventory.readFromNBT(nbttagcompound);
 	}
 
-	/* WORKING */
 	@Override
-	public void updateServerSide() {
-		// If we add pending products, we skip to the next work cycle.
-		if (tryAddPending())
-			return;
+	protected void updateServerSide() {
+		// Check if we have suitable items waiting in the can slot
+		FluidHelper.drainContainers(tankManager, this, SLOT_CAN);
+		ItemStack can = getStackInSlot(SLOT_CAN);
+		if (ForestryItem.honeyDrop.isItemEqual(can) && resourceTank.fill(Fluids.HONEY.get(Defaults.FLUID_PER_HONEY_DROP), false) == Defaults.FLUID_PER_HONEY_DROP) {
+			setInventorySlotContents(SLOT_CAN, InvTools.depleteItem(can));
+			resourceTank.fill(Fluids.HONEY.get(Defaults.FLUID_PER_HONEY_DROP), true);
+		}
 
+		for (int i = 0; i < invInput.getSizeInventory(); i++) {
+			ItemStack inputStack = invInput.getStackInSlot(i);
+			if (inputStack == null || !AlleleManager.alleleRegistry.isIndividual(inputStack))
+				continue;
+			// Analyzed bees in the input buffer are added to the output queue.
+			IIndividual individual = AlleleManager.alleleRegistry.getIndividual(inputStack);
+			if (individual.isAnalyzed()) {
+				pendingProducts.push(inputStack);
+				invInput.decrStackSize(i, inputStack.stackSize);
+			}
+		}
+
+		tryAddPending();
 		if (!pendingProducts.isEmpty()) {
 			setErrorState(EnumErrorCode.NOSPACE);
 			return;
 		}
 
-		// Check if we have suitable items waiting in the can slot
-		if (getStackInSlot(canSlot) != null) {
-			FluidContainerData container = LiquidHelper.getLiquidContainer(getStackInSlot(canSlot));
-			if (container != null && resourceTank.accepts(container.fluid.getFluid())) {
-
-				setInventorySlotContents(canSlot, StackUtils.replenishByContainer(this, getStackInSlot(canSlot), container, resourceTank));
-				if (getStackInSlot(canSlot).stackSize <= 0)
-					setInventorySlotContents(canSlot, null);
+		if (analyzeTime == 0) {
+			// Look for bees in input slots.
+			IInvSlot slot = getInputSlot();
+			if (slot == null) {
+				// Nothing to analyze
+				setErrorState(EnumErrorCode.NOTHINGANALYZE);
+				return;
 			}
 		}
 
-		if (analyzeTime > 0 && getStackInSlot(analyzeSlot) != null && AlleleManager.alleleRegistry.isIndividual(getStackInSlot(analyzeSlot))) {
+		// We need our liquid honey
+		if (resourceTank.getFluidAmount() < HONEY_REQUIRED) {
+			setErrorState(EnumErrorCode.NORESOURCE);
+			return;
+		}
+
+		if (energyManager.getTotalEnergyStored() == 0) {
+			setErrorState(EnumErrorCode.NOPOWER);
+			return;
+		}
+
+		setErrorState(EnumErrorCode.OK);
+	}
+
+	/* WORKING */
+	@Override
+	public boolean workCycle() {
+		ItemStack stackToAnalyze = getStackInSlot(SLOT_ANALYZE);
+		if (analyzeTime > 0 && stackToAnalyze != null && AlleleManager.alleleRegistry.isIndividual(stackToAnalyze)) {
 
 			analyzeTime--;
 
 			// Still not done
 			if (analyzeTime > 0) {
 				setErrorState(EnumErrorCode.OK);
-				return;
+				return true;
 			}
 
 			// Analyzation is done.
-			IIndividual individual = AlleleManager.alleleRegistry.getIndividual(getStackInSlot(analyzeSlot));
+			IIndividual individual = AlleleManager.alleleRegistry.getIndividual(stackToAnalyze);
 			// No bee, abort
 			if (individual == null)
-				return;
+				return false;
 
 			individual.analyze();
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
 			individual.writeToNBT(nbttagcompound);
-			getStackInSlot(analyzeSlot).setTagCompound(nbttagcompound);
+			stackToAnalyze.setTagCompound(nbttagcompound);
 
-			pendingProducts.push(getStackInSlot(analyzeSlot));
-			setInventorySlotContents(analyzeSlot, null);
+			pendingProducts.push(stackToAnalyze);
+			setInventorySlotContents(SLOT_ANALYZE, null);
 			sendNetworkUpdate();
-
-		} else {
-			analyzeTime = 0;
-
-			// Don't start if analyze slot already occupied
-			if (getStackInSlot(analyzeSlot) != null)
-				return;
-
-			// We need our liquid honey
-			if (resourceTank.getFluidAmount() < HONEY_REQUIRED) {
-				setErrorState(EnumErrorCode.NORESOURCE);
-				return;
-			}
-
-			// Look for bees in input slots.
-			for (int i = inputSlot1; i < outputSlot1; i++) {
-				if (getStackInSlot(i) == null || !AlleleManager.alleleRegistry.isIndividual(getStackInSlot(i)))
-					continue;
-
-				// Analyzed bees in the input buffer are added to the output
-				// queue at once.
-				IIndividual individual = AlleleManager.alleleRegistry.getIndividual(getStackInSlot(i));
-				if (individual.isAnalyzed()) {
-					pendingProducts.push(getStackInSlot(i));
-					setInventorySlotContents(i, null);
-					continue;
-				}
-
-				setInventorySlotContents(analyzeSlot, getStackInSlot(i));
-				setInventorySlotContents(i, null);
-				resourceTank.drain(HONEY_REQUIRED, true);
-				analyzeTime = TIME_TO_ANALYZE;
-				sendNetworkUpdate();
-				return;
-			}
-
-			// Nothing to analyze
-			setErrorState(EnumErrorCode.NOTHINGANALYZE);
+			return true;
 		}
+
+		analyzeTime = 0;
+
+		// Don't start if analyze slot already occupied
+		if (stackToAnalyze != null)
+			return false;
+
+		if (getErrorState() != EnumErrorCode.OK)
+			return false;
+
+		// Look for bees in input slots.
+		IInvSlot slot = getInputSlot();
+		ItemStack inputStack = slot.getStackInSlot();
+		setInventorySlotContents(SLOT_ANALYZE, inputStack);
+		slot.setStackInSlot(null);
+		resourceTank.drain(HONEY_REQUIRED, true);
+		analyzeTime = TIME_TO_ANALYZE;
+		sendNetworkUpdate();
+		return true;
+	}
+
+	private IInvSlot getInputSlot() {
+		for (IInvSlot slot : InventoryIterator.getIterable(invInput)) {
+			ItemStack inputStack = slot.getStackInSlot();
+			if (inputStack != null && AlleleManager.alleleRegistry.isIndividual(inputStack))
+				return slot;
+		}
+		return null;
 	}
 
 	private boolean tryAddPending() {
@@ -228,7 +253,7 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 			return false;
 
 		ItemStack next = pendingProducts.peek();
-		if (inventory.tryAddStack(next, outputSlot1, inventory.getSizeInventory() - outputSlot1, true)) {
+		if (inventory.tryAddStack(next, SLOT_OUTPUT_1, inventory.getSizeInventory() - SLOT_OUTPUT_1, true)) {
 			pendingProducts.pop();
 			return true;
 		}
@@ -237,8 +262,19 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 
 	/* STATE INFORMATION */
 	// @Override
+	@Override
 	public boolean isWorking() {
 		return analyzeTime > 0;
+	}
+
+	@Override
+	public boolean hasWork() {
+		if (!pendingProducts.isEmpty())
+			return true;
+		if (analyzeTime > 0)
+			return true;
+
+		return getErrorState() == EnumErrorCode.OK ||getErrorState() == EnumErrorCode.NOPOWER;
 	}
 
 	public int getProgressScaled(int i) {
@@ -250,10 +286,11 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 	}
 
 	public ItemStack getIndividualOnDisplay() {
-		return getStackInSlot(analyzeSlot);
+		return getStackInSlot(SLOT_ANALYZE);
 	}
 
 	/* SMP */
+	@Override
 	public void getGUINetworkData(int i, int j) {
 		i -= tankManager.maxMessageId() + 1;
 		switch (i) {
@@ -263,21 +300,11 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 		}
 	}
 
+	@Override
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
 		int i = tankManager.maxMessageId() + 1;
 		iCrafting.sendProgressBarUpdate(container, i, analyzeTime);
 
-	}
-
-	@Override
-	public void sendNetworkUpdate() {
-		Proxies.net.sendNetworkPacket(new PacketInventoryStack(PacketIds.IINVENTORY_STACK, xCoord, yCoord, zCoord, SLOT_ANALYZE, inventory.getStackInSlot(SLOT_ANALYZE)),
-				xCoord, yCoord, zCoord);
-	}
-
-	@Override
-	public Packet getDescriptionPacket() {
-		return new PacketInventoryStack(PacketIds.IINVENTORY_STACK, xCoord, yCoord, zCoord, SLOT_ANALYZE, inventory.getStackInSlot(SLOT_ANALYZE)).getPacket();
 	}
 
 	/* ISIDEDINVENTORY */
@@ -288,37 +315,64 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 
 	@Override
 	protected boolean canTakeStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-		if(!super.canTakeStackFromSide(slotIndex, itemstack, side))
+		if (!super.canTakeStackFromSide(slotIndex, itemstack, side))
 			return false;
 
 		return slotIndex >= SLOT_OUTPUT_1 && slotIndex < SLOT_OUTPUT_1 + 4;
 	}
 
 	@Override
-	protected boolean canPutStackFromSide(int slotIndex, ItemStack itemstack, int side) {
+	protected boolean canPutStackFromSide(int slotIndex, ItemStack stack, int side) {
 
-		if(!super.canPutStackFromSide(slotIndex, itemstack, side))
+		if (!super.canPutStackFromSide(slotIndex, stack, side))
 			return false;
 
-		if(slotIndex >= SLOT_INPUT_1 && slotIndex < SLOT_INPUT_1 + 6)
-			return AlleleManager.alleleRegistry.isIndividual(itemstack);
+		if (slotIndex >= SLOT_INPUT_1 && slotIndex < SLOT_INPUT_1 + 6)
+			return AlleleManager.alleleRegistry.isIndividual(stack);
 
-		if(slotIndex == SLOT_CAN) {
-			FluidContainerData container = LiquidHelper.getLiquidContainer(itemstack);
-			return container != null && LiquidHelper.isLiquid(Defaults.LIQUID_HONEY, container.fluid);
-		}
+		if (slotIndex == SLOT_CAN)
+			return Fluids.HONEY.isContained(stack);
 
 		return false;
 	}
 
-	@Override public int getSizeInventory() { return inventory.getSizeInventory(); }
-	@Override public ItemStack getStackInSlot(int i) { return inventory.getStackInSlot(i); }
-	@Override public ItemStack decrStackSize(int i, int j) { return inventory.decrStackSize(i, j); }
-	@Override public void setInventorySlotContents(int i, ItemStack itemstack) { inventory.setInventorySlotContents(i, itemstack); }
-	@Override public int getInventoryStackLimit() { return inventory.getInventoryStackLimit(); }
-	@Override public ItemStack getStackInSlotOnClosing(int slot) { return inventory.getStackInSlotOnClosing(slot); }
-	@Override public void openInventory() {}
-	@Override public void closeInventory() {}
+	@Override
+	public int getSizeInventory() {
+		return inventory.getSizeInventory();
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int i) {
+		return inventory.getStackInSlot(i);
+	}
+
+	@Override
+	public ItemStack decrStackSize(int i, int j) {
+		return inventory.decrStackSize(i, j);
+	}
+
+	@Override
+	public void setInventorySlotContents(int i, ItemStack itemstack) {
+		inventory.setInventorySlotContents(i, itemstack);
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		return inventory.getInventoryStackLimit();
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int slot) {
+		return inventory.getStackInSlotOnClosing(slot);
+	}
+
+	@Override
+	public void openInventory() {
+	}
+
+	@Override
+	public void closeInventory() {
+	}
 
 	/**
 	 * TODO: just a specialsource workaround
@@ -366,66 +420,6 @@ public class TileAnalyzer extends TileBase implements ISpecialInventory, ISidedI
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
 		return super.getAccessibleSlotsFromSide(side);
-	}
-
-	/* ISPECIALINVENTORY */
-	@Override
-	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
-
-		ItemStack product = null;
-
-		for (int i = outputSlot1; i < inventory.getSizeInventory(); i++) {
-			if (inventory.getStackInSlot(i) == null)
-				continue;
-
-			product = getStackInSlot(i).copy();
-			if (doRemove) {
-				getStackInSlot(i).stackSize = 0;
-				setInventorySlotContents(i, null);
-			}
-			break;
-		}
-		return new ItemStack[] { product };
-	}
-
-	@Override
-	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
-
-		if (!AlleleManager.alleleRegistry.isIndividual(stack)) {
-
-			FluidContainerData container = LiquidHelper.getLiquidContainer(stack);
-			if (container == null || !resourceTank.accepts(container.fluid.getFluid()))
-				return 0;
-
-			if (getStackInSlot(canSlot) == null) {
-				if (doAdd)
-					setInventorySlotContents(canSlot, stack.copy());
-
-				return stack.stackSize;
-			}
-
-			int space = getStackInSlot(canSlot).getMaxStackSize() - getStackInSlot(canSlot).stackSize;
-			if (space <= 0)
-				return 0;
-
-			if (doAdd) {
-				getStackInSlot(canSlot).stackSize += stack.stackSize;
-				if (getStackInSlot(canSlot).stackSize > getStackInSlot(canSlot).getMaxStackSize())
-					getStackInSlot(canSlot).stackSize = getStackInSlot(canSlot).getMaxStackSize();
-			}
-
-			return space;
-		}
-
-		for (int i = inputSlot1; i < outputSlot1; i++)
-			if (getStackInSlot(i) == null) {
-				if (doAdd)
-					setInventorySlotContents(i, stack.copy());
-
-				return stack.stackSize;
-			}
-
-		return 0;
 	}
 
 	/* ILIQUIDCONTAINER */

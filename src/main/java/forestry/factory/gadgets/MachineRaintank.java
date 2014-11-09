@@ -10,8 +10,23 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
-import java.util.LinkedList;
-
+import buildcraft.api.statements.ITriggerExternal;
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.ForestryAPI;
+import forestry.core.EnumErrorCode;
+import forestry.core.config.Config;
+import forestry.core.config.Defaults;
+import forestry.core.fluids.TankManager;
+import forestry.core.fluids.tanks.FilteredTank;
+import forestry.core.gadgets.TileBase;
+import forestry.core.interfaces.ILiquidTankContainer;
+import forestry.core.network.GuiId;
+import forestry.core.triggers.ForestryTrigger;
+import forestry.core.utils.Fluids;
+import forestry.core.utils.InventoryAdapter;
+import forestry.core.utils.LiquidHelper;
+import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -19,31 +34,13 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.biome.BiomeGenBase;
-
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-
-import buildcraft.api.gates.ITrigger;
-
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.ForestryAPI;
-import forestry.core.EnumErrorCode;
-import forestry.core.config.Config;
-import forestry.core.config.Defaults;
-import forestry.core.gadgets.TileBase;
-import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.network.GuiId;
-import forestry.core.triggers.ForestryTrigger;
-import forestry.core.utils.Fluids;
-import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.utils.InventoryAdapter;
-import forestry.core.utils.LiquidHelper;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
 import net.minecraftforge.fluids.FluidTankInfo;
+
+import java.util.LinkedList;
 
 public class MachineRaintank extends TileBase implements ISidedInventory, ILiquidTankContainer {
 
@@ -65,7 +62,10 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 
 		resourceTank = new FilteredTank(Defaults.RAINTANK_TANK_CAPACITY, FluidRegistry.WATER);
 		tankManager = new TankManager(resourceTank);
+	}
 
+	@Override
+	public void validate() {
 		// Raintanks in desert and snow biomes are useless
 		if (worldObj != null) {
 			BiomeGenBase biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
@@ -74,6 +74,8 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 				isValidBiome = false;
 			}
 		}
+
+		super.validate();
 	}
 
 	@Override
@@ -319,11 +321,10 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 
 	/* ITRIGGERPROVIDER */
 	@Override
-	public LinkedList<ITrigger> getCustomTriggers() {
-		LinkedList<ITrigger> res = new LinkedList<ITrigger>();
+	public LinkedList<ITriggerExternal> getCustomTriggers() {
+		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(ForestryTrigger.lowResource25);
 		res.add(ForestryTrigger.lowResource10);
-		res.add(ForestryTrigger.hasWork);
 		return res;
 	}
 }

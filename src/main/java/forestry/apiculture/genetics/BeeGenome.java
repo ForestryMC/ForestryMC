@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.nbt.NBTTagCompound;
-
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.genetics.EnumTolerance;
+import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IAlleleInteger;
@@ -29,6 +28,8 @@ import forestry.core.genetics.AlleleTolerance;
 import forestry.core.genetics.Genome;
 import forestry.core.utils.Vect;
 import forestry.plugins.PluginApiculture;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class BeeGenome extends Genome implements IBeeGenome {
 	/**
@@ -67,6 +68,15 @@ public class BeeGenome extends Genome implements IBeeGenome {
 
 	public BeeGenome(IChromosome[] chromosomes) {
 		super(chromosomes);
+	}
+
+	// NBT RETRIEVAL
+	public static IAlleleBeeSpecies getSpecies(ItemStack itemStack) {
+		IAllele speciesAllele = Genome.getPrimaryAllele(itemStack, EnumBeeChromosome.SPECIES);
+		if (speciesAllele instanceof IAlleleBeeSpecies)
+			return (IAlleleBeeSpecies)speciesAllele;
+		else
+			return null;
 	}
 
 	// / INFORMATION RETRIEVAL

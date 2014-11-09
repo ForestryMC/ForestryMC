@@ -10,24 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
-
-import net.minecraftforge.common.EnumPlantType;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.util.ForgeDirection;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.arboriculture.EnumGrowthConditions;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleLeafEffect;
@@ -37,6 +20,7 @@ import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreeMutation;
 import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleBoolean;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFruitFamily;
@@ -47,6 +31,21 @@ import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.Individual;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginArboriculture;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.List;
 
 public class Tree extends Individual implements ITree, ITreeGenData, IPlantable {
 
@@ -284,6 +283,10 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 		list.add(String.format("\u00A7dH: %s, \u00A7bG: %sx%s", genome.getActiveAllele(EnumTreeChromosome.HEIGHT.ordinal()).getName(), genome.getGirth(), genome.getGirth()));
 
 		list.add(String.format("\u00A7eS: %s, \u00A7fY: %s", genome.getActiveAllele(EnumTreeChromosome.FERTILITY.ordinal()).getName(), genome.getActiveAllele(EnumTreeChromosome.YIELD.ordinal()).getName()));
+
+		IAlleleBoolean primaryFireproof = (IAlleleBoolean)genome.getActiveAllele(EnumTreeChromosome.FIREPROOF.ordinal());
+		if (primaryFireproof.getValue())
+			list.add(String.format("\u00A7c%s", StatCollector.translateToLocal("for.gui.fireresist")));
 
 		IAllele fruit = getGenome().getActiveAllele(EnumTreeChromosome.FRUITS.ordinal());
 		if(fruit != Allele.fruitNone) {

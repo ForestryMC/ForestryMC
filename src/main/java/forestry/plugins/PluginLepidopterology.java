@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import java.util.EnumSet;
 import java.util.Locale;
 
 import net.minecraft.block.material.Material;
@@ -57,7 +58,7 @@ import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.items.ItemFlutterlyzer;
 import forestry.lepidopterology.proxy.ProxyLepidopterology;
 
-@Plugin(pluginID = "Lepidopterology", name = "Lepidopterology", author = "SirSengir", url = Defaults.URL, description = "Butterflies. Shiny.")
+@Plugin(pluginID = "Lepidopterology", name = "Lepidopterology", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.lepidopterology.description")
 public class PluginLepidopterology extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.lepidopterology.proxy.ClientProxyLepidopterology", serverSide = "forestry.lepidopterology.proxy.ProxyLepidopterology")
@@ -86,6 +87,13 @@ public class PluginLepidopterology extends ForestryPlugin {
 
 		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginLepidopterology.butterflyInterface = new ButterflyHelper());
 		createAlleles();
+	}
+
+	@Override
+	public EnumSet<PluginManager.Module> getDependancies() {
+		EnumSet<PluginManager.Module> deps = super.getDependancies();
+		deps.add(PluginManager.Module.ARBORICULTURE);
+		return deps;
 	}
 
 	@Override

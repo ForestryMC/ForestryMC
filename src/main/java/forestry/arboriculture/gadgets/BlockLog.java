@@ -38,18 +38,20 @@ public class BlockLog extends Block implements IWoodTyped {
 		CAT0, CAT1, CAT2, CAT3, CAT4, CAT5, CAT6, CAT7
 	}
 
-	private final LogCat cat;
+	protected final LogCat cat;
 
 	public BlockLog(LogCat cat) {
+		this(cat, Material.wood);
+	}
 
-		super(Material.wood);
+	protected BlockLog(LogCat cat, Material material) {
+		super(material);
 		this.cat = cat;
 
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setStepSound(soundTypeWood);
 		setCreativeTab(Tabs.tabArboriculture);
-
 	}
 
 	public static int getTypeFromMeta(int damage) {

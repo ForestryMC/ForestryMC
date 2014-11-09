@@ -27,8 +27,10 @@ import forestry.api.farming.IFarmable;
 public class FarmLogicShroom extends FarmLogicArboreal {
 
 	public FarmLogicShroom(IFarmHousing housing) {
-		super(housing, new ItemStack[] { new ItemStack(Blocks.mycelium) }, new ItemStack[] { new ItemStack(Blocks.mycelium) }, new ItemStack[] { new ItemStack(
-				Blocks.dirt), new ItemStack(Blocks.grass) }, Farmables.farmables.get("farmShroom").toArray(new IFarmable[0]));
+		super(housing,
+				new ItemStack[] { new ItemStack(Blocks.mycelium) },
+				new ItemStack(Blocks.mycelium),
+				Farmables.farmables.get("farmShroom").toArray(new IFarmable[0]));
 		yOffset = -1;
 	}
 

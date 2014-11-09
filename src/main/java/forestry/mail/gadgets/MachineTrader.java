@@ -10,24 +10,11 @@
  ******************************************************************************/
 package forestry.mail.gadgets;
 
-import java.util.LinkedList;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import buildcraft.api.gates.ITrigger;
-
+import buildcraft.api.statements.ITriggerExternal;
 import forestry.api.core.ForestryAPI;
+import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
-import forestry.api.mail.IMailAddress;
-import forestry.mail.MailAddress;
 import forestry.core.EnumErrorCode;
 import forestry.core.gadgets.TileBase;
 import forestry.core.network.EntityNetData;
@@ -36,8 +23,17 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumAccess;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.StackUtils;
+import forestry.mail.MailAddress;
 import forestry.mail.TradeStation;
 import forestry.plugins.PluginMail;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
+import java.util.LinkedList;
 
 public class MachineTrader extends TileBase implements ISidedInventory {
 
@@ -379,8 +375,8 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 
 	/* ITRIGGERPROVIDER */
 	@Override
-	public LinkedList<ITrigger> getCustomTriggers() {
-		LinkedList<ITrigger> res = new LinkedList<ITrigger>();
+	public LinkedList<ITriggerExternal> getCustomTriggers() {
+		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(PluginMail.lowPaper64);
 		res.add(PluginMail.lowPaper32);
 		res.add(PluginMail.lowInput25);

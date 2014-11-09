@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import java.util.ArrayList;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeEffect;
@@ -22,16 +17,21 @@ import forestry.api.apiculture.IBee;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IAlleleInteger;
+import forestry.api.genetics.IAlleleTolerance;
+import forestry.apiculture.genetics.BeeGenome;
 import forestry.apiculture.items.ItemBeeGE;
 import forestry.apiculture.items.ItemBeealyzer.BeealyzerInventory;
 import forestry.core.config.ForestryItem;
 import forestry.core.genetics.AlleleArea;
 import forestry.core.genetics.AlleleBoolean;
-import forestry.core.genetics.AlleleTolerance;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Vect;
 import forestry.plugins.PluginApiculture;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+
+import java.util.ArrayList;
 
 public class GuiBeealyzer extends GuiAlyzer {
 
@@ -46,7 +46,7 @@ public class GuiBeealyzer extends GuiAlyzer {
 		ArrayList<ItemStack> beeList = new ArrayList<ItemStack>();
 		((ItemBeeGE) ForestryItem.beeDroneGE.item()).addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList)
-			iconStacks.put(PluginApiculture.beeInterface.getMember(beeStack).getIdent(), beeStack);
+			iconStacks.put(BeeGenome.getSpecies(beeStack).getUID(), beeStack);
 
 		breedingTracker = PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, player.getGameProfile());
 	}
@@ -161,22 +161,22 @@ public class GuiBeealyzer extends GuiAlyzer {
 		drawRow(StringUtil.localize("gui.climate"), AlleleManager.climateHelper.toDisplay(bee.getGenome().getPrimary().getTemperature()),
 				AlleleManager.climateHelper.toDisplay(bee.getGenome().getSecondary().getTemperature()), bee, EnumBeeChromosome.SPECIES);
 
+		IAlleleTolerance tempToleranceActive = (IAlleleTolerance)bee.getGenome().getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal());
+		IAlleleTolerance tempToleranceInactive = (IAlleleTolerance)bee.getGenome().getInactiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal());
 		drawLine(StringUtil.localize("gui.temptol"), COLUMN_0);
-		drawToleranceInfo(bee.getGenome().getToleranceTemp(), COLUMN_1,
-				getColorCoding(bee.getGenome().getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal()).isDominant()));
-		drawToleranceInfo(((AlleleTolerance) bee.getGenome().getInactiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal())).getValue(), COLUMN_2,
-				getColorCoding(bee.getGenome().getInactiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal()).isDominant()));
+		drawToleranceInfo(tempToleranceActive, COLUMN_1);
+		drawToleranceInfo(tempToleranceInactive, COLUMN_2);
 
 		newLine();
 
 		drawRow(StringUtil.localize("gui.humidity"), AlleleManager.climateHelper.toDisplay(bee.getGenome().getPrimary().getHumidity()),
 				AlleleManager.climateHelper.toDisplay(bee.getGenome().getSecondary().getHumidity()), bee, EnumBeeChromosome.SPECIES);
 
+		IAlleleTolerance humidToleranceActive = (IAlleleTolerance)bee.getGenome().getActiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal());
+		IAlleleTolerance humidToleranceInactive = (IAlleleTolerance)bee.getGenome().getInactiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal());
 		drawLine(StringUtil.localize("gui.humidtol"), COLUMN_0);
-		drawToleranceInfo(bee.getGenome().getToleranceHumid(), COLUMN_1,
-				getColorCoding(bee.getGenome().getActiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal()).isDominant()));
-		drawToleranceInfo(((AlleleTolerance) bee.getGenome().getInactiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal())).getValue(), COLUMN_2,
-				getColorCoding(bee.getGenome().getInactiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal()).isDominant()));
+		drawToleranceInfo(humidToleranceActive, COLUMN_1);
+		drawToleranceInfo(humidToleranceInactive, COLUMN_2);
 
 		newLine();
 		newLine();

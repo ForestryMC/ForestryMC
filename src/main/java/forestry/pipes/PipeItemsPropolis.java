@@ -1,8 +1,8 @@
 /*******************************************************************************
  * Copyright 2011-2014 by SirSengir
- * 
+ *
  * This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
- * 
+ *
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/.
  ******************************************************************************/
 package forestry.pipes;
@@ -51,6 +51,7 @@ public class PipeItemsPropolis extends Pipe<PipeTransportItems> {
 		super.writeToNBT(nbt);
 		pipeLogic.writeToNBT(nbt);
 	}
+
 	IIconProvider provider;
 
 	@SideOnly(Side.CLIENT)
@@ -84,73 +85,73 @@ public class PipeItemsPropolis extends Pipe<PipeTransportItems> {
 		return true;
 	}
 
-    public void eventHandler(PipeEventItem.FindDest event) {
-        LinkedList<ForgeDirection> filteredOrientations = new LinkedList<ForgeDirection>();
-        LinkedList<ForgeDirection> typedOrientations = new LinkedList<ForgeDirection>();
-        LinkedList<ForgeDirection> defaultOrientations = new LinkedList<ForgeDirection>();
+	public void eventHandler(PipeEventItem.FindDest event) {
+		LinkedList<ForgeDirection> filteredOrientations = new LinkedList<ForgeDirection>();
+		LinkedList<ForgeDirection> typedOrientations = new LinkedList<ForgeDirection>();
+		LinkedList<ForgeDirection> defaultOrientations = new LinkedList<ForgeDirection>();
 
-        // We need a bee!
-        EnumFilterType type = EnumFilterType.getType(event.item.getItemStack());
-        IBee bee = null;
+		// We need a bee!
+		EnumFilterType type = EnumFilterType.getType(event.item.getItemStack());
+		IBee bee = null;
 
-        if (type != EnumFilterType.ITEM)
-            bee = PluginApiculture.beeInterface.getMember(event.item.getItemStack());
+		if (type != EnumFilterType.ITEM)
+			bee = PluginApiculture.beeInterface.getMember(event.item.getItemStack());
 
-        // Filtered outputs
-        for (ForgeDirection dir : event.destinations) {
+		// Filtered outputs
+		for (ForgeDirection dir : event.destinations) {
 
-            // Continue if this direction is closed.
-            if (pipeLogic.isClosed(dir))
-                continue;
+			// Continue if this direction is closed.
+			if (pipeLogic.isClosed(dir))
+				continue;
 
-            if (pipeLogic.isIndiscriminate(dir)) {
-                defaultOrientations.add(dir);
-                continue;
-            }
+			if (pipeLogic.isIndiscriminate(dir)) {
+				defaultOrientations.add(dir);
+				continue;
+			}
 
-            // We need to match the type for this orientation's filter
-            if (!pipeLogic.matchType(dir, type, bee))
-                continue;
+			// We need to match the type for this orientation's filter
+			if (!pipeLogic.matchType(dir, type, bee))
+				continue;
 
-            // Passing the type filter is enough for non-bee items.
-            if (type == EnumFilterType.ITEM) {
-                filteredOrientations.add(dir);
-                continue;
-            }
+			// Passing the type filter is enough for non-bee items.
+			if (type == EnumFilterType.ITEM) {
+				filteredOrientations.add(dir);
+				continue;
+			}
 
-            ArrayList<IAllele[]> filters = pipeLogic.getGenomeFilters(dir);
-            // If we have no genome filters, this is only a typed route.
-            if (filters.size() <= 0) {
-                typedOrientations.add(dir);
-                continue;
-            }
+			ArrayList<IAllele[]> filters = pipeLogic.getGenomeFilters(dir);
+			// If we have no genome filters, this is only a typed route.
+			if (filters.size() <= 0) {
+				typedOrientations.add(dir);
+				continue;
+			}
 
-            // Bees need to match one of the genome filters
-            for (IAllele[] pattern : filters) {
-                if (pipeLogic.matchAllele(pattern[0], bee.getIdent()) && pipeLogic.matchAllele(pattern[1], bee.getGenome().getSecondary().getUID()))
-                    filteredOrientations.add(dir);
-            }
-        }
+			// Bees need to match one of the genome filters
+			for (IAllele[] pattern : filters) {
+				if (pipeLogic.matchAllele(pattern[0], bee.getIdent()) && pipeLogic.matchAllele(pattern[1], bee.getGenome().getSecondary().getUID()))
+					filteredOrientations.add(dir);
+			}
+		}
 
-        event.destinations.clear();
+		event.destinations.clear();
 
-        if (filteredOrientations.size() > 0)
-            event.destinations.addAll(filteredOrientations);
-        else if (typedOrientations.size() > 0)
-            event.destinations.addAll(typedOrientations);
-        else
-            event.destinations.addAll(defaultOrientations);
-    }
+		if (filteredOrientations.size() > 0)
+			event.destinations.addAll(filteredOrientations);
+		else if (typedOrientations.size() > 0)
+			event.destinations.addAll(typedOrientations);
+		else
+			event.destinations.addAll(defaultOrientations);
+	}
 
-    public void eventHandler(PipeEventItem.Entered event) {
-        // A bit of speed to perhaps prevent bees from popping out of the pipe.
-        try {
-            event.item.setSpeed(TransportConstants.PIPE_NORMAL_SPEED * 20F);
-        } catch (Throwable error) {
-        }
-    }
+	public void eventHandler(PipeEventItem.Entered event) {
+		// A bit of speed to perhaps prevent bees from popping out of the pipe.
+		try {
+			event.item.setSpeed(TransportConstants.PIPE_NORMAL_SPEED * 20F);
+		} catch (Throwable error) {
+		}
+	}
 
-    public void eventHandler(PipeEventItem.AdjustSpeed event) {
-        transport.defaultReajustSpeed(event.item);
-    }
+	public void eventHandler(PipeEventItem.AdjustSpeed event) {
+		transport.defaultReajustSpeed(event.item);
+	}
 }

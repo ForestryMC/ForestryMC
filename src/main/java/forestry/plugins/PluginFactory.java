@@ -22,7 +22,6 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.GameMode;
-import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
@@ -40,7 +39,6 @@ import forestry.core.utils.ShapedRecipeCustom;
 import forestry.factory.GuiHandlerFactory;
 import forestry.factory.gadgets.MachineBottler;
 import forestry.factory.gadgets.MachineCarpenter;
-import forestry.factory.gadgets.MachineCarpenter.RecipeManager;
 import forestry.factory.gadgets.MachineCentrifuge;
 import forestry.factory.gadgets.MachineFabricator;
 import forestry.factory.gadgets.MachineFermenter;
@@ -52,7 +50,7 @@ import forestry.factory.gadgets.MillRainmaker;
 import forestry.factory.gadgets.TileWorktable;
 import forestry.factory.recipes.CraftGuideIntegration;
 
-@Plugin(pluginID = "Factory", name = "Factory", author = "SirSengir", url = Defaults.URL, description = "Adds a wide variety of machines to craft, produce and process products.")
+@Plugin(pluginID = "Factory", name = "Factory", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.factory.description")
 public class PluginFactory extends ForestryPlugin {
 
 	public static MachineDefinition definitionBottler;
@@ -274,7 +272,7 @@ public class PluginFactory extends ForestryPlugin {
 		String[] dyes = {"dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime",
 			"dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite"};
 
-		if (ForestryItem.propolis != null)
+		if (PluginManager.Module.APICULTURE.isEnabled())
 			for (int i = 0; i < 16; i++)
 				RecipeManagers.fabricatorManager.addRecipe(ForestryItem.waxCast.getItemStack(1, Defaults.WILDCARD), LiquidHelper.getLiquid(Defaults.LIQUID_GLASS,
 						Defaults.BUCKET_VOLUME), ForestryBlock.glass.getItemStack(1, 15 - i), new Object[]{"#", "X", '#', dyes[i],
@@ -384,18 +382,26 @@ public class PluginFactory extends ForestryPlugin {
 		// ForestryCore.oreHandler.registerCarpenterRecipe(solderingIron);
 
 		// RAIN SUBSTRATES
-		RecipeManagers.carpenterManager.addRecipe(5, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.iodineCharge.getItemStack(),
-				new Object[]{"Z#Z", "#Y#", "X#X", '#', ForestryItem.pollen, 'X', Items.gunpowder,
-					'Y', ForestryItem.canEmpty, 'Z', ForestryItem.honeyDrop});
-		// ForestryCore.oreHandler.registerCarpenterRecipe(iodineCapsule);
-		RecipeManagers.carpenterManager.addRecipe(
-				5,
-				LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000),
-				null,
-				ForestryItem.craftingMaterial.getItemStack(1, 4),
-				new Object[]{"Z#Z", "#Y#", "X#X", '#', ForestryItem.royalJelly, 'X', Items.gunpowder,
-					'Y', ForestryItem.canEmpty, 'Z', ForestryItem.honeydew});
-		// ForestryCore.oreHandler.registerCarpenterRecipe(dissipationCharge);
+		if (PluginManager.Module.APICULTURE.isEnabled()) {
+			RecipeManagers.carpenterManager.addRecipe(5, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.iodineCharge.getItemStack(),
+					"Z#Z",
+					"#Y#",
+					"X#X",
+					'#', ForestryItem.pollenCluster,
+					'X', Items.gunpowder,
+					'Y', ForestryItem.canEmpty,
+					'Z', ForestryItem.honeyDrop);
+			// ForestryCore.oreHandler.registerCarpenterRecipe(iodineCapsule);
+			RecipeManagers.carpenterManager.addRecipe(5, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.craftingMaterial.getItemStack(1, 4),
+					"Z#Z",
+					"#Y#",
+					"X#X",
+					'#', ForestryItem.royalJelly,
+					'X', Items.gunpowder,
+					'Y', ForestryItem.canEmpty,
+					'Z', ForestryItem.honeydew);
+			// ForestryCore.oreHandler.registerCarpenterRecipe(dissipationCharge);
+		}
 
 		// Ender pearl
 		RecipeManagers.carpenterManager.addRecipe(100, null, new ItemStack(Items.ender_pearl, 1), new Object[]{" # ", "###", " # ", '#',
@@ -427,59 +433,63 @@ public class PluginFactory extends ForestryPlugin {
 		RecipeManagers.carpenterManager.addRecipe(null, ForestryItem.ingotBronze.getItemStack(), new Object[]{"#", '#', ForestryItem.brokenBronzeShovel});
 
 		// Crating and uncrating condensed
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedWood.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedCobblestone.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedDirt.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedStone.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedBrick.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedCacti.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedSand.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedObsidian.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedNetherrack.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedSoulsand.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedSandstone.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedBogearth.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedHumus.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedNetherbrick.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedPeat.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedApatite.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedFertilizer.getItemStack());
-		((RecipeManager) RecipeManagers.carpenterManager).addCrating("ingotTin", ForestryItem.ingotTin.getItemStack(), ForestryItem.cratedTin.getItemStack());
-		((RecipeManager) RecipeManagers.carpenterManager).addCrating("ingotCopper", ForestryItem.ingotCopper.getItemStack(), ForestryItem.cratedCopper.getItemStack());
-		((RecipeManager) RecipeManagers.carpenterManager).addCrating("ingotBronze", ForestryItem.ingotBronze.getItemStack(), ForestryItem.cratedBronze.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedWheat.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedMycelium.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedMulch.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedCookies.getItemStack());
+		if (PluginManager.Module.STORAGE.isEnabled()) {
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedWood.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedCobblestone.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedDirt.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedStone.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedBrick.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedCacti.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedSand.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedObsidian.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedNetherrack.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedSoulsand.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedSandstone.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedBogearth.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedHumus.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedNetherbrick.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedPeat.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedApatite.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedFertilizer.getItemStack());
+			RecipeManagers.carpenterManager.addCrating("ingotTin", ForestryItem.ingotTin.getItemStack(), ForestryItem.cratedTin.getItemStack());
+			RecipeManagers.carpenterManager.addCrating("ingotCopper", ForestryItem.ingotCopper.getItemStack(), ForestryItem.cratedCopper.getItemStack());
+			RecipeManagers.carpenterManager.addCrating("ingotBronze", ForestryItem.ingotBronze.getItemStack(), ForestryItem.cratedBronze.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedWheat.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedMycelium.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedMulch.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedCookies.getItemStack());
 
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedHoneycombs.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedBeeswax.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedPollen.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedPropolis.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedHoneydew.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedRoyalJelly.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedCocoaComb.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedRedstone.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedLapis.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedReeds.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedClay.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedGlowstone.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedApples.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedNetherwart.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedRedstone.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedLapis.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedReeds.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedClay.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedGlowstone.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedApples.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedNetherwart.getItemStack());
 
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedSimmeringCombs.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedStringyCombs.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedFrozenCombs.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedDrippingCombs.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedRefractoryWax.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedPhosphor.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedAsh.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedCharcoal.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedGravel.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedCoal.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedSeeds.getItemStack());
-		RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedSaplings.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedPhosphor.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedAsh.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedCharcoal.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedGravel.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedCoal.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedSeeds.getItemStack());
+			RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedSaplings.getItemStack());
 
+			if (PluginManager.Module.APICULTURE.isEnabled()) {
+				RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedHoneycombs.getItemStack());
+				RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedBeeswax.getItemStack());
+				RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedPollen.getItemStack());
+				RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedPropolis.getItemStack());
+				RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedHoneydew.getItemStack());
+				RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedRoyalJelly.getItemStack());
+				RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedCocoaComb.getItemStack());
+				RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedSimmeringCombs.getItemStack());
+				RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedStringyCombs.getItemStack());
+				RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedFrozenCombs.getItemStack());
+				RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedDrippingCombs.getItemStack());
+				RecipeManagers.carpenterManager.addCrating(ForestryItem.cratedRefractoryWax.getItemStack());
+			}
+		}
 	}
 
 	@Override

@@ -10,14 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.gui;
 
-import java.util.ArrayList;
-import java.util.Locale;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.common.EnumPlantType;
-
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
@@ -29,14 +21,22 @@ import forestry.api.genetics.IAlleleEffect;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IFruitFamily;
+import forestry.arboriculture.genetics.TreeGenome;
 import forestry.arboriculture.items.ItemGermlingGE;
 import forestry.arboriculture.items.ItemTreealyzer.TreealyzerInventory;
 import forestry.core.config.ForestryItem;
 import forestry.core.genetics.Allele;
+import forestry.core.genetics.AlleleBoolean;
 import forestry.core.genetics.AllelePlantType;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginArboriculture;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.EnumPlantType;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class GuiTreealyzer extends GuiAlyzer {
 
@@ -50,8 +50,8 @@ public class GuiTreealyzer extends GuiAlyzer {
 
 		ArrayList<ItemStack> treeList = new ArrayList<ItemStack>();
 		((ItemGermlingGE) ForestryItem.sapling.item()).addCreativeItems(treeList, false);
-		for (ItemStack beeStack : treeList)
-			iconStacks.put(PluginArboriculture.treeInterface.getMember(beeStack).getIdent(), beeStack);
+		for (ItemStack treeStack : treeList)
+			iconStacks.put(TreeGenome.getSpecies(treeStack).getUID(), treeStack);
 	}
 
 	@Override
@@ -171,6 +171,18 @@ public class GuiTreealyzer extends GuiAlyzer {
 			sap = Allele.saplingsLowest.getName();
 
 		drawLine(sap, COLUMN_2, tree, EnumTreeChromosome.SAPPINESS, true);
+
+		newLine();
+
+		String yes = StringUtil.localize("yes");
+		String no = StringUtil.localize("no");
+
+		AlleleBoolean primaryFireproof = (AlleleBoolean)tree.getGenome().getActiveAllele(EnumTreeChromosome.FIREPROOF.ordinal());
+		AlleleBoolean secondaryFireproof = (AlleleBoolean)tree.getGenome().getInactiveAllele(EnumTreeChromosome.FIREPROOF.ordinal());
+
+		drawLine(StringUtil.localize("gui.fireproof"), COLUMN_0);
+		drawLine(StringUtil.readableBoolean(primaryFireproof.getValue(), yes, no), COLUMN_1, tree, EnumTreeChromosome.FIREPROOF, false);
+		drawLine(StringUtil.readableBoolean(secondaryFireproof.getValue(), yes, no), COLUMN_2, tree, EnumTreeChromosome.FIREPROOF, false);
 
 		newLine();
 

@@ -10,25 +10,12 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Stack;
-
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-
-import net.minecraft.util.StatCollector;
-import org.apache.commons.lang3.StringUtils;
-import org.lwjgl.opengl.GL11;
-
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IAlleleTolerance;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IClassification.EnumClassLevel;
@@ -40,6 +27,17 @@ import forestry.core.gadgets.TileForestry;
 import forestry.core.genetics.EnumMutateChance;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import org.apache.commons.lang3.StringUtils;
+import org.lwjgl.opengl.GL11;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Stack;
 
 public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 
@@ -123,7 +121,7 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 	}
 
 	protected final String checkCustomName(String key){
-		if(StatCollector.canTranslate("for." + key)){
+		if(StringUtil.canTranslate(key)){
 			return StringUtil.localize(key);
 		} else {
 			return null;
@@ -342,9 +340,10 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 		drawTexturedModalRect(x, y, column, line, 15, 9);
 	}
 
-	protected void drawToleranceInfo(EnumTolerance tolerance, int x, int textColor) {
-		int length = tolerance.toString().length();
-		String text = "(" + tolerance.toString().substring(length - 1) + ")";
+	protected void drawToleranceInfo(IAlleleTolerance toleranceAllele, int x) {
+		int textColor = getColorCoding(toleranceAllele.isDominant());
+		EnumTolerance tolerance = toleranceAllele.getValue();
+		String text = "(" + toleranceAllele.getName() + ")";
 
 		// Enable correct lighting.
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

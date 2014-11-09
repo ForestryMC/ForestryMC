@@ -10,17 +10,16 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import forestry.api.arboriculture.IAlleleTreeSpecies;
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmable;
+import forestry.arboriculture.genetics.TreeGenome;
+import forestry.core.config.ForestryBlock;
+import forestry.core.utils.Vect;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import forestry.api.arboriculture.ITree;
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.core.config.ForestryBlock;
-import forestry.core.utils.Vect;
-import forestry.plugins.PluginArboriculture;
 
 public class FarmableGE implements IFarmable {
 
@@ -50,7 +49,7 @@ public class FarmableGE implements IFarmable {
 
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
-		ITree tree = PluginArboriculture.treeInterface.getMember(itemstack);
+		IAlleleTreeSpecies tree = TreeGenome.getSpecies(itemstack);
 		return tree != null;
 	}
 

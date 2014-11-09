@@ -29,6 +29,7 @@ import forestry.core.items.ItemForestry;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.food.BeverageEffect;
+import forestry.plugins.PluginManager;
 
 public class ItemInfuser extends ItemForestry {
 
@@ -389,9 +390,11 @@ public class ItemInfuser extends ItemForestry {
 	}
 
 	public static void initialize() {
-		BeverageManager.ingredientManager.addIngredient(ForestryItem.pollen.getItemStack(1, 0), "Strong Curative");
-		BeverageManager.ingredientManager.addIngredient(ForestryItem.pollen.getItemStack(1, 1), "Weak Curative");
-		BeverageManager.infuserManager.addMixture(1, ForestryItem.pollen.getItemStack(1, 0), BeverageEffect.strongAntidote);
-		BeverageManager.infuserManager.addMixture(1, ForestryItem.pollen.getItemStack(1, 1), BeverageEffect.weakAntidote);
+		if (PluginManager.Module.APICULTURE.isEnabled()) {
+			BeverageManager.ingredientManager.addIngredient(ForestryItem.pollenCluster.getItemStack(1, 0), "Strong Curative");
+			BeverageManager.ingredientManager.addIngredient(ForestryItem.pollenCluster.getItemStack(1, 1), "Weak Curative");
+			BeverageManager.infuserManager.addMixture(1, ForestryItem.pollenCluster.getItemStack(1, 0), BeverageEffect.strongAntidote);
+			BeverageManager.infuserManager.addMixture(1, ForestryItem.pollenCluster.getItemStack(1, 1), BeverageEffect.weakAntidote);
+		}
 	}
 }

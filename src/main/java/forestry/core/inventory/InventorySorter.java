@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -15,16 +15,15 @@ import java.util.Comparator;
 import net.minecraft.inventory.IInventory;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public enum InventorySorter implements Comparator<IInventory> {
 
-    SIZE_DECENDING {
-        @Override
-        public int compare(IInventory inv1, IInventory inv2) {
-            return inv2.getSizeInventory() - inv1.getSizeInventory();
-        }
+	SIZE_DECENDING {
+		@Override
+		public int compare(IInventory inv1, IInventory inv2) {
+			return inv2.getSizeInventory() - inv1.getSizeInventory();
+		}
 
-    };
+	};
 }

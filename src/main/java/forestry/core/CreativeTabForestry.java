@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core;
 
+import forestry.plugins.PluginManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,9 +24,14 @@ import forestry.core.config.ForestryItem;
 public class CreativeTabForestry extends CreativeTabs {
 
 	static {
-		Tabs.tabApiculture = new CreativeTabForestry(1, "apiculture");
-		Tabs.tabArboriculture = new CreativeTabForestry(2, "arboriculture");
-		Tabs.tabLepidopterology = new CreativeTabForestry(3, "lepidopterology");
+		if (PluginManager.Module.APICULTURE.isEnabled())
+			Tabs.tabApiculture = new CreativeTabForestry(1, "apiculture");
+
+		if (PluginManager.Module.ARBORICULTURE.isEnabled())
+			Tabs.tabArboriculture = new CreativeTabForestry(2, "arboriculture");
+
+		if (PluginManager.Module.LEPIDOPTEROLOGY.isEnabled())
+			Tabs.tabLepidopterology = new CreativeTabForestry(3, "lepidopterology");
 	}
 	public static final CreativeTabs tabForestry = new CreativeTabForestry(0, "forestry");
 

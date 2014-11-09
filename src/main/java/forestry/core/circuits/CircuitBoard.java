@@ -69,8 +69,9 @@ public class CircuitBoard implements ICircuitBoard {
 		if (layout == null)
 			ChipsetManager.circuitRegistry.getDefaultLayout();
 
-		// FIXME: Legacy I
 		ArrayList<ICircuit> readcircuits = new ArrayList<ICircuit>();
+
+		// FIXME: Legacy I
 		if (nbttagcompound.hasKey("CS")) {
 
 			NBTTagList nbttaglist = nbttagcompound.getTagList("CS", 10);
@@ -100,12 +101,14 @@ public class CircuitBoard implements ICircuitBoard {
 		if (circuits != null)
 			return;
 
-		circuits = new ICircuit[4];
 		for (int i = 0; i < 4; i++) {
 			if (!nbttagcompound.hasKey("CA.I" + i))
 				continue;
-			circuits[i] = ChipsetManager.circuitRegistry.getCircuit(nbttagcompound.getString("CA.I" + i));
+			ICircuit circuit = ChipsetManager.circuitRegistry.getCircuit(nbttagcompound.getString("CA.I" + i));
+			if (circuit != null)
+				readcircuits.add(circuit);
 		}
+		circuits = readcircuits.toArray(new ICircuit[readcircuits.size()]);
 	}
 
 	@Override

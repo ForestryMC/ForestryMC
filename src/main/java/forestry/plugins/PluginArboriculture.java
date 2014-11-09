@@ -11,20 +11,6 @@
 package forestry.plugins;
 
 import cpw.mods.fml.common.IFuelHandler;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.command.ICommand;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.WeightedRandomChestContent;
-import net.minecraftforge.common.ChestGenHooks;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -58,6 +44,8 @@ import forestry.arboriculture.WoodType;
 import forestry.arboriculture.gadgets.BlockArbFence;
 import forestry.arboriculture.gadgets.BlockArbFence.FenceCat;
 import forestry.arboriculture.gadgets.BlockArbStairs;
+import forestry.arboriculture.gadgets.BlockFireproofLog;
+import forestry.arboriculture.gadgets.BlockFireproofPlanks;
 import forestry.arboriculture.gadgets.BlockFruitPod;
 import forestry.arboriculture.gadgets.BlockLog;
 import forestry.arboriculture.gadgets.BlockLog.LogCat;
@@ -137,9 +125,23 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.RecipeUtil;
 import forestry.core.utils.ShapedRecipeCustom;
-import java.util.EnumSet;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.command.ICommand;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.OreDictionary;
 
-@Plugin(pluginID = "Arboriculture", name = "Arboriculture", author = "Binnie & SirSengir", url = Defaults.URL, description = "Adds additional tree species and products.")
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
+@Plugin(pluginID = "Arboriculture", name = "Arboriculture", author = "Binnie & SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.arboriculture.description")
 public class PluginArboriculture extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.arboriculture.proxy.ClientProxyArboriculture", serverSide = "forestry.arboriculture.proxy.ProxyArboriculture")
@@ -160,9 +162,20 @@ public class PluginArboriculture extends ForestryPlugin {
 			ForestryBlock.log5,
 			ForestryBlock.log6,
 			ForestryBlock.log7);
+	public static final EnumSet<ForestryBlock> fireproofLogs = EnumSet.of(
+			ForestryBlock.fireproofLog1,
+			ForestryBlock.fireproofLog2,
+			ForestryBlock.fireproofLog3,
+			ForestryBlock.fireproofLog4,
+			ForestryBlock.fireproofLog5,
+			ForestryBlock.fireproofLog6,
+			ForestryBlock.fireproofLog7);
 	private static final EnumSet<ForestryBlock> planks = EnumSet.of(
 			ForestryBlock.planks1,
 			ForestryBlock.planks2);
+	private static final EnumSet<ForestryBlock> fireproofPlanks = EnumSet.of(
+			ForestryBlock.fireproofPlanks1,
+			ForestryBlock.fireproofPlanks2);
 	private static final EnumSet<ForestryBlock> slabs = EnumSet.of(
 			ForestryBlock.slabs1,
 			ForestryBlock.slabs2,
@@ -188,10 +201,31 @@ public class PluginArboriculture extends ForestryPlugin {
 			OreDictionary.registerOre("logWood", log.getWildcard());
 		}
 
+		ForestryBlock.fireproofLog1.registerBlock(new BlockFireproofLog(LogCat.CAT0), ItemWoodBlock.class, "fireproofLog1");
+		ForestryBlock.fireproofLog2.registerBlock(new BlockFireproofLog(LogCat.CAT1), ItemWoodBlock.class, "fireproofLog2");
+		ForestryBlock.fireproofLog3.registerBlock(new BlockFireproofLog(LogCat.CAT2), ItemWoodBlock.class, "fireproofLog3");
+		ForestryBlock.fireproofLog4.registerBlock(new BlockFireproofLog(LogCat.CAT3), ItemWoodBlock.class, "fireproofLog4");
+		ForestryBlock.fireproofLog5.registerBlock(new BlockFireproofLog(LogCat.CAT4), ItemWoodBlock.class, "fireproofLog5");
+		ForestryBlock.fireproofLog6.registerBlock(new BlockFireproofLog(LogCat.CAT5), ItemWoodBlock.class, "fireproofLog6");
+		ForestryBlock.fireproofLog7.registerBlock(new BlockFireproofLog(LogCat.CAT6), ItemWoodBlock.class, "fireproofLog7");
+
+		for (ForestryBlock fireproofLog : fireproofLogs) {
+			fireproofLog.block().setHarvestLevel("axe", 0);
+			OreDictionary.registerOre("logWood", fireproofLog.getWildcard());
+		}
+
 		ForestryBlock.planks1.registerBlock(new BlockPlanks(PlankCat.CAT0), ItemWoodBlock.class, "planks");
 		ForestryBlock.planks2.registerBlock(new BlockPlanks(PlankCat.CAT1), ItemWoodBlock.class, "planks2");
 
 		for (ForestryBlock plank : planks) {
+			plank.block().setHarvestLevel("axe", 0);
+			OreDictionary.registerOre("plankWood", plank.getWildcard());
+		}
+
+		ForestryBlock.fireproofPlanks1.registerBlock(new BlockFireproofPlanks(PlankCat.CAT0), ItemWoodBlock.class, "fireproofPlanks1");
+		ForestryBlock.fireproofPlanks2.registerBlock(new BlockFireproofPlanks(PlankCat.CAT1), ItemWoodBlock.class, "fireproofPlanks2");
+
+		for (ForestryBlock plank : fireproofPlanks) {
 			plank.block().setHarvestLevel("axe", 0);
 			OreDictionary.registerOre("plankWood", plank.getWildcard());
 		}
@@ -302,9 +336,11 @@ public class PluginArboriculture extends ForestryPlugin {
 		ForestryItem.sapling.registerItem(new ItemGermlingGE(EnumGermlingType.SAPLING), "sapling");
 		OreDictionary.registerOre("treeSapling", ForestryItem.sapling.getItemStack(1, -1));
 
-		ForestryItem.pollenFertile.registerItem(new ItemGermlingGE(EnumGermlingType.POLLEN), "pollenFertile");
+		if (PluginManager.Module.APICULTURE.isEnabled()) {
+			ForestryItem.pollenFertile.registerItem(new ItemGermlingGE(EnumGermlingType.POLLEN), "pollenFertile");
+			ForestryItem.treealyzer.registerItem(new ItemTreealyzer(), "treealyzer");
+		}
 
-		ForestryItem.treealyzer.registerItem(new ItemTreealyzer(), "treealyzer");
 		ForestryItem.grafter.registerItem(new ItemGrafter(4), "grafter");
 		ForestryItem.grafterProven.registerItem(new ItemGrafter(149), "grafterProven");
 
@@ -314,6 +350,9 @@ public class PluginArboriculture extends ForestryPlugin {
 	protected void registerBackpackItems() {
 
 		for (ForestryBlock block : logs)
+			BackpackManager.definitions.get("forester").addValidItem(block.getWildcard());
+
+		for (ForestryBlock block : fireproofLogs)
 			BackpackManager.definitions.get("forester").addValidItem(block.getWildcard());
 
 		BackpackManager.definitions.get("forester").addValidItem(ForestryItem.sapling.getWildcard());
@@ -352,6 +391,73 @@ public class PluginArboriculture extends ForestryPlugin {
 			Proxies.common.addShapelessRecipe(ForestryBlock.planks2.getItemStack(4, i), ForestryBlock.log5.getItemStack(1, i));
 		for (int i = 0; i < 4; i++)
 			Proxies.common.addShapelessRecipe(ForestryBlock.planks2.getItemStack(4, 4 + i), ForestryBlock.log6.getItemStack(1, i));
+
+		// Fabricator recipes
+		if (PluginManager.Module.FACTORY.isEnabled() && PluginManager.Module.APICULTURE.isEnabled()) {
+
+			// Fireproof log recipes
+			for (ForestryBlock forestryBlock : logs) {
+				BlockLog blockLog = (BlockLog) forestryBlock.block();
+				ForestryBlock fireproofLog = BlockFireproofLog.getFireproofLog(blockLog);
+
+				if (forestryBlock == ForestryBlock.log8)
+					continue;
+
+				for (int i = 0; i < 4; i++) {
+					if (forestryBlock == ForestryBlock.log7 && i > 0)
+						break;
+
+					ItemStack logStack = forestryBlock.getItemStack(1, i);
+					ItemStack fireproofLogStack = fireproofLog.getItemStack(1, i);
+					RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), fireproofLogStack, new Object[]{
+							" # ",
+							"#X#",
+							" # ",
+							'#', ForestryItem.refractoryWax,
+							'X', logStack});
+				}
+			}
+
+			// Fireproof plank recipes
+			ForestryBlock plank = ForestryBlock.planks1;
+			for (int i = 0; i < 16; i++) {
+				ForestryBlock fireproofPlank = BlockFireproofPlanks.getFireproofPlanks((BlockPlanks)plank.block());
+				ItemStack plankStack = plank.getItemStack(1, i);
+				ItemStack fireproofPlankStack = fireproofPlank.getItemStack(5, i);
+				RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), fireproofPlankStack, new Object[]{
+						"X#X",
+						"#X#",
+						"X#X",
+						'#', ForestryItem.refractoryWax,
+						'X', plankStack});
+			}
+			plank = ForestryBlock.planks2;
+			for (int i = 0; i < 8; i++) {
+				ForestryBlock fireproofPlank = BlockFireproofPlanks.getFireproofPlanks((BlockPlanks)plank.block());
+				ItemStack plankStack = plank.getItemStack(1, i);
+				ItemStack fireproofPlankStack = fireproofPlank.getItemStack(5, i);
+				RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), fireproofPlankStack, new Object[]{
+						"X#X",
+						"#X#",
+						"X#X",
+						'#', ForestryItem.refractoryWax,
+						'X', plankStack});
+			}
+		}
+
+		// / Fireproof Plank recipes
+		for (int i = 0; i < 4; i++)
+			Proxies.common.addShapelessRecipe(ForestryBlock.fireproofPlanks1.getItemStack(4, i), ForestryBlock.fireproofLog1.getItemStack(1, i));
+		for (int i = 0; i < 4; i++)
+			Proxies.common.addShapelessRecipe(ForestryBlock.fireproofPlanks1.getItemStack(4, 4 + i), ForestryBlock.fireproofLog2.getItemStack(1, i));
+		for (int i = 0; i < 4; i++)
+			Proxies.common.addShapelessRecipe(ForestryBlock.fireproofPlanks1.getItemStack(4, 8 + i), ForestryBlock.fireproofLog3.getItemStack(1, i));
+		for (int i = 0; i < 4; i++)
+			Proxies.common.addShapelessRecipe(ForestryBlock.fireproofPlanks1.getItemStack(4, 12 + i), ForestryBlock.fireproofLog4.getItemStack(1, i));
+		for (int i = 0; i < 4; i++)
+			Proxies.common.addShapelessRecipe(ForestryBlock.fireproofPlanks2.getItemStack(4, i), ForestryBlock.fireproofLog5.getItemStack(1, i));
+		for (int i = 0; i < 4; i++)
+			Proxies.common.addShapelessRecipe(ForestryBlock.fireproofPlanks2.getItemStack(4, 4 + i), ForestryBlock.fireproofLog6.getItemStack(1, i));
 
 		// Slab recipes
 		for (int i = 0; i < 8; i++)
@@ -995,11 +1101,13 @@ public class PluginArboriculture extends ForestryPlugin {
 		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getLarchTemplate(), EnumGermlingType.SAPLING), 1, 2, 4));
 		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getLimeTemplate(), EnumGermlingType.SAPLING), 1, 2, 4));
 
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getOakTemplate(), EnumGermlingType.POLLEN), 2, 3, 4));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getSpruceTemplate(), EnumGermlingType.POLLEN), 2, 3, 4));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getBirchTemplate(), EnumGermlingType.POLLEN), 2, 3, 4));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getLarchTemplate(), EnumGermlingType.POLLEN), 1, 2, 3));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getLimeTemplate(), EnumGermlingType.POLLEN), 1, 2, 3));
+		if (PluginManager.Module.APICULTURE.isEnabled()) {
+			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getOakTemplate(), EnumGermlingType.POLLEN), 2, 3, 4));
+			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getSpruceTemplate(), EnumGermlingType.POLLEN), 2, 3, 4));
+			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getBirchTemplate(), EnumGermlingType.POLLEN), 2, 3, 4));
+			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getLarchTemplate(), EnumGermlingType.POLLEN), 1, 2, 3));
+			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getLimeTemplate(), EnumGermlingType.POLLEN), 1, 2, 3));
+		}
 	}
 
 	private ItemStack getTreeItemFromTemplate(IAllele[] template, EnumGermlingType type) {

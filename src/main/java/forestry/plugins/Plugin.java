@@ -42,9 +42,9 @@ public @interface Plugin {
 	String version() default "";
 
 	/**
-	 * @return Short description what the plugin does.
+	 * @return Localization key for a short description what the plugin does.
 	 */
-	String description() default "";
+	String unlocalizedDescription() default "";
 
 	/**
 	 * @return Not used (yet?).

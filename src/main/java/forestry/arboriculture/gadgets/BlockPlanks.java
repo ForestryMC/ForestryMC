@@ -37,10 +37,14 @@ public class BlockPlanks extends Block implements IWoodTyped {
 		CAT0, CAT1
 	}
 
-	private final PlankCat cat;
+	protected final PlankCat cat;
 
 	public BlockPlanks(PlankCat cat) {
-		super(Material.wood);
+		this(cat, Material.wood);
+	}
+
+	protected BlockPlanks(PlankCat cat, Material material) {
+		super(material);
 		this.cat = cat;
 		setResistance(5.0F);
 		setStepSound(soundTypeWood);

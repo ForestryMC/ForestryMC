@@ -1,8 +1,8 @@
 /*******************************************************************************
  * Copyright 2011-2014 by SirSengir
- * 
+ *
  * This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
- * 
+ *
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/.
  ******************************************************************************/
 package forestry.pipes.proxy;
@@ -34,36 +34,36 @@ public class ProxyPipes {
 	@SuppressWarnings("rawtypes")
 	public Item createPipe(Class<? extends Pipe> clas, CreativeTabBuildCraft creativeTab) {
 
-        return registerPipe(clas, creativeTab);
+		return registerPipe(clas, creativeTab);
 	}
 
-    /**
-     * Overriding the method in BlockGenericPipe to fix localizations.
-     */
+	/**
+	 * Overriding the method in BlockGenericPipe to fix localizations.
+	 */
 	@SuppressWarnings("rawtypes")
-    public static ItemPipe registerPipe(Class<? extends Pipe> clas, CreativeTabBuildCraft creativeTab) {
-        ItemPipe item = null;
-        try {
-            Constructor<ItemPipe> ctor = ItemPipe.class.getDeclaredConstructor(CreativeTabBuildCraft.class);
-            ctor.setAccessible(true);
-            item = ctor.newInstance(creativeTab);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        assert item != null : "The ItemPipe instance must not be null";
-        item.setUnlocalizedName(clas.getSimpleName());
-        GameRegistry.registerItem(item, item.getUnlocalizedName());
+	public static ItemPipe registerPipe(Class<? extends Pipe> clas, CreativeTabBuildCraft creativeTab) {
+		ItemPipe item = null;
+		try {
+			Constructor<ItemPipe> ctor = ItemPipe.class.getDeclaredConstructor(CreativeTabBuildCraft.class);
+			ctor.setAccessible(true);
+			item = ctor.newInstance(creativeTab);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		assert item != null : "The ItemPipe instance must not be null";
+		item.setUnlocalizedName(clas.getSimpleName());
+		GameRegistry.registerItem(item, item.getUnlocalizedName());
 
-        BlockGenericPipe.pipes.put(item, clas);
+		BlockGenericPipe.pipes.put(item, clas);
 
-        Pipe dummyPipe = BlockGenericPipe.createPipe(item);
-        if (dummyPipe != null) {
-            item.setPipeIconIndex(dummyPipe.getIconIndexForItem());
-            TransportProxy.proxy.setIconProviderFromPipe(item, dummyPipe);
-        }
+		Pipe dummyPipe = BlockGenericPipe.createPipe(item);
+		if (dummyPipe != null) {
+			item.setPipeIconIndex(dummyPipe.getIconIndexForItem());
+			TransportProxy.proxy.setIconProviderFromPipe(item, dummyPipe);
+		}
 
-        return item;
-    }
+		return item;
+	}
 
 	public void registerCraftingPropolis(ItemStack resource) {
 		GameRegistry.addRecipe(new ItemStack(PluginPropolisPipe.pipeItemsPropolis), "#X#", '#', resource, 'X', BuildCraftTransport.pipeItemsDiamond);

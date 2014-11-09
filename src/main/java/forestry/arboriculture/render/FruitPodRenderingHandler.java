@@ -52,10 +52,10 @@ public class FruitPodRenderingHandler implements ISimpleBlockRenderingHandler {
 		double d1 = 15.0D;
 		double d2 = 4.0D;
 		double d3 = 4.0D + l1;
-        double d4 = (double)podIcon.getInterpolatedU(d0);
-        double d5 = (double)podIcon.getInterpolatedU(d1);
-        double d6 = (double)podIcon.getInterpolatedV(d2);
-        double d7 = (double)podIcon.getInterpolatedV(d3);
+		double d4 = (double) podIcon.getInterpolatedU(d0);
+		double d5 = (double) podIcon.getInterpolatedU(d1);
+		double d6 = (double) podIcon.getInterpolatedV(d2);
+		double d7 = (double) podIcon.getInterpolatedV(d3);
 		double d8 = 0.0D;
 		double d9 = 0.0D;
 
@@ -104,10 +104,10 @@ public class FruitPodRenderingHandler implements ISimpleBlockRenderingHandler {
 		if (maturity >= 2)
 			i2 = k1 - 1;
 
-        d4 = (double)podIcon.getMinU();
-        d5 = (double)podIcon.getInterpolatedU((double)i2);
-        d6 = (double)podIcon.getMinV();
-        d7 = (double)podIcon.getInterpolatedV((double)i2);
+		d4 = (double) podIcon.getMinU();
+		d5 = (double) podIcon.getInterpolatedU((double) i2);
+		d6 = (double) podIcon.getMinV();
+		d7 = (double) podIcon.getInterpolatedV((double) i2);
 
 		tessellator.addVertexWithUV(d10, d13, d15, d4, d7);
 		tessellator.addVertexWithUV(d11, d13, d15, d5, d7);
@@ -117,10 +117,10 @@ public class FruitPodRenderingHandler implements ISimpleBlockRenderingHandler {
 		tessellator.addVertexWithUV(d11, d12, d14, d5, d6);
 		tessellator.addVertexWithUV(d11, d12, d15, d5, d7);
 		tessellator.addVertexWithUV(d10, d12, d15, d4, d7);
-        d4 = (double)podIcon.getInterpolatedU(12.0D);
-        d5 = (double)podIcon.getMaxU();
-        d6 = (double)podIcon.getMinV();
-        d7 = (double)podIcon.getInterpolatedV(4.0D);
+		d4 = (double) podIcon.getInterpolatedU(12.0D);
+		d5 = (double) podIcon.getMaxU();
+		d6 = (double) podIcon.getMinV();
+		d7 = (double) podIcon.getInterpolatedV(4.0D);
 		d8 = 8.0D;
 		d9 = 0.0D;
 		double d16;

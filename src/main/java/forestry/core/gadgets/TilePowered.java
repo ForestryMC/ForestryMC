@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import buildcraft.api.tiles.IHasWork;
+import cpw.mods.fml.common.Optional;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.network.ClassMap;
-import forestry.core.network.EntityNetData;
 import forestry.core.network.IndexInPayload;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
@@ -25,7 +26,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 
-public abstract class TilePowered extends TileBase implements IRenderableMachine, IPowerHandler {
+@Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = "BuildCraft|Core")
+public abstract class TilePowered extends TileBase implements IRenderableMachine, IPowerHandler, IHasWork {
 
 	public static int WORK_CYCLES = 4;
 
@@ -82,9 +84,7 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 		return false;
 	}
 
-	public boolean hasWork() {
-		return false;
-	}
+	public abstract boolean hasWork();
 
 	private int workCounter;
 
@@ -119,6 +119,10 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 	}
 
 	/* LIQUID CONTAINER HANDLING */
+	/**
+	@deprecated Use FluidHelper
+	*/
+	@Deprecated
 	protected ItemStack bottleIntoContainer(ItemStack canStack, ItemStack outputStack, FluidContainerData container, StandardTank tank) {
 		if (tank.getFluidAmount() < container.fluid.amount)
 			return outputStack;

@@ -14,7 +14,6 @@ import java.util.Collection;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
@@ -36,7 +35,6 @@ import forestry.core.utils.StringUtil;
 
 public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
 
-	private final String name;
 	private final String binomial;
 	private String description = null;
 	private int complexity = 3;
@@ -56,16 +54,6 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
 		this.description = StringUtil.localize("description." + uid);
 
 		AlleleManager.alleleRegistry.registerAllele(this);
-	}
-
-	@Override
-	public String getName() {
-		return StringUtil.localize(name);
-	}
-
-	@Override
-	public String getUnlocalizedName() {
-		return name;
 	}
 
 	@Override

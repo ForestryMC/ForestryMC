@@ -25,6 +25,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.CommandMC;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.PluginManager;
+import net.minecraft.util.StatCollector;
 
 public class CommandForestry extends CommandMC {
 
@@ -137,8 +138,8 @@ public class CommandForestry extends CommandMC {
 				sendChatMessage(sender, "\u00A79Author(s): " + info.author());
 			if (!info.url().isEmpty())
 				sendChatMessage(sender, "\u00A79URL: " + info.url());
-			if (!info.description().isEmpty())
-				sendChatMessage(sender, info.description());
+			if (!info.unlocalizedDescription().isEmpty())
+				sendChatMessage(sender, StatCollector.translateToLocal(info.unlocalizedDescription()));
 		}
 
 	}

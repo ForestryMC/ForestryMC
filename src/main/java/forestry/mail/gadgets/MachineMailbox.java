@@ -10,39 +10,33 @@
  ******************************************************************************/
 package forestry.mail.gadgets;
 
-import java.util.LinkedList;
-
+import buildcraft.api.statements.ITriggerExternal;
 import com.mojang.authlib.GameProfile;
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.ISpecialInventory;
+import forestry.api.mail.ILetter;
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.IPostalState;
+import forestry.api.mail.PostManager;
+import forestry.core.config.Config;
+import forestry.core.gadgets.TileBase;
+import forestry.core.network.GuiId;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.InventoryAdapter;
+import forestry.mail.EnumDeliveryState;
+import forestry.mail.IMailContainer;
+import forestry.mail.POBox;
+import forestry.mail.PostRegistry;
+import forestry.plugins.PluginMail;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.util.ForgeDirection;
 
-import buildcraft.api.gates.ITrigger;
-
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.ISpecialInventory;
-import forestry.api.mail.ILetter;
-import forestry.api.mail.IPostalState;
-import forestry.api.mail.PostManager;
-import forestry.api.mail.IMailAddress;
-
-import forestry.core.config.Config;
-import forestry.core.gadgets.TileBase;
-import forestry.core.network.GuiId;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.InventoryAdapter;
-
-import forestry.mail.EnumDeliveryState;
-import forestry.mail.IMailContainer;
-import forestry.mail.POBox;
-import forestry.mail.PostRegistry;
-
-import forestry.plugins.PluginMail;
+import java.util.LinkedList;
 
 public class MachineMailbox extends TileBase implements IMailContainer, ISpecialInventory, ISidedInventory {
 
@@ -122,8 +116,8 @@ public class MachineMailbox extends TileBase implements IMailContainer, ISpecial
 
 	/* ITRIGGERPROVIDER */
 	@Override
-	public LinkedList<ITrigger> getCustomTriggers() {
-		LinkedList<ITrigger> res = new LinkedList<ITrigger>();
+	public LinkedList<ITriggerExternal> getCustomTriggers() {
+		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(PluginMail.triggerHasMail);
 		return res;
 	}

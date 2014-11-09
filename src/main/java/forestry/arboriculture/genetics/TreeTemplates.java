@@ -80,6 +80,7 @@ public class TreeTemplates {
 		alleles[EnumTreeChromosome.EFFECT.ordinal()] = Allele.leavesNone;
 		alleles[EnumTreeChromosome.MATURATION.ordinal()] = Allele.maturationAverage;
 		alleles[EnumTreeChromosome.GIRTH.ordinal()] = Allele.int1;
+		alleles[EnumTreeChromosome.FIREPROOF.ordinal()] = Allele.fireproofFalse;
 
 		return alleles;
 	}
@@ -149,6 +150,7 @@ public class TreeTemplates {
 		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLower;
 		alleles[EnumTreeChromosome.MATURATION.ordinal()] = Allele.maturationSlower;
 		alleles[EnumTreeChromosome.GIRTH.ordinal()] = Allele.int3;
+		alleles[EnumTreeChromosome.FIREPROOF.ordinal()] = Allele.fireproofTrue;
 		return alleles;
 	}
 
@@ -159,6 +161,7 @@ public class TreeTemplates {
 		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLowest;
 		alleles[EnumTreeChromosome.MATURATION.ordinal()] = Allele.maturationSlowest;
 		alleles[EnumTreeChromosome.GIRTH.ordinal()] = Allele.int4;
+		alleles[EnumTreeChromosome.FIREPROOF.ordinal()] = Allele.fireproofTrue;
 		return alleles;
 	}
 

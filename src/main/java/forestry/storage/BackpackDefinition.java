@@ -47,6 +47,11 @@ public class BackpackDefinition implements IBackpackDefinition {
 	}
 
 	@Override
+	public String getName() {
+		return "Update Forestry!";
+	}
+
+	@Override
 	public String getName(ItemStack backpack) {
 		Item item = backpack.getItem();
 		String display = ("" + StatCollector.translateToLocal(item.getUnlocalizedNameInefficiently(backpack) + ".name")).trim();

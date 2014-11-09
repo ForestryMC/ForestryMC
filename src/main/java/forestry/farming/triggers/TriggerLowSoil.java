@@ -10,18 +10,16 @@
  ******************************************************************************/
 package forestry.farming.triggers;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import buildcraft.api.gates.ITriggerParameter;
-
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
 import forestry.api.core.ITileStructure;
 import forestry.core.triggers.Trigger;
 import forestry.farming.gadgets.TileFarmPlain;
 import forestry.farming.gadgets.TileHatch;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TriggerLowSoil extends Trigger {
 
@@ -38,8 +36,13 @@ public class TriggerLowSoil extends Trigger {
 	}
 
 	@Override
-	public boolean hasParameter() {
-		return true;
+	public int maxParameters() {
+		return 1;
+	}
+
+	@Override
+	public int minParameters() {
+		return 0;
 	}
 
 	/**
@@ -47,7 +50,12 @@ public class TriggerLowSoil extends Trigger {
 	 * the parameters.
 	 */
 	@Override
-	public boolean isTriggerActive(ForgeDirection direction, TileEntity tile, ITriggerParameter parameter) {
+	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
+		IStatementParameter parameter = null;
+		if (parameters.length > 0) {
+			parameter = parameters[0];
+		}
+
 		if (!(tile instanceof TileHatch))
 			return false;
 

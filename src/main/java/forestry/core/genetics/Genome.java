@@ -10,13 +10,17 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
+import forestry.api.arboriculture.EnumTreeChromosome;
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IChromosome;
+import forestry.api.genetics.IChromosomeType;
+import forestry.api.genetics.IGenome;
+import forestry.apiculture.items.ItemBeeGE;
+import forestry.core.config.Config;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IChromosome;
-import forestry.api.genetics.IGenome;
-import forestry.core.config.Config;
 
 public abstract class Genome implements IGenome {
 
@@ -40,6 +44,38 @@ public abstract class Genome implements IGenome {
 		this.chromosomes = chromosomes;
 	}
 
+	// NBT RETRIEVAL
+	public static Chromosome getChromosome(ItemStack itemStack, IChromosomeType chromosomeType) {
+		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
+		if (nbtTagCompound == null)
+			return null;
+
+		NBTTagCompound genome = nbtTagCompound.getCompoundTag("Genome");
+		if (genome == null)
+			return null;
+
+		NBTTagList chromosomes = genome.getTagList("Chromosomes", 10);
+		if (chromosomes == null)
+			return null;
+
+		for (int i = 0; i < chromosomes.tagCount(); i++) {
+			NBTTagCompound chromosomeTag = chromosomes.getCompoundTagAt(i);
+			byte byte0 = chromosomeTag.getByte(SLOT_TAG);
+
+			if (byte0 == chromosomeType.ordinal()) {
+				return Chromosome.loadChromosomeFromNBT(chromosomeTag);
+			}
+		}
+		return null;
+	}
+
+	public static IAllele getPrimaryAllele(ItemStack itemStack, IChromosomeType chromosomeType) {
+		Chromosome chromosome = getChromosome(itemStack, chromosomeType);
+		if (chromosome == null)
+			return null;
+		return chromosome.getPrimaryAllele();
+	}
+
 	// / SAVING & LOADING
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
@@ -59,6 +95,17 @@ public abstract class Genome implements IGenome {
 				
 				if (chromosome.hasInvalidAlleles(getSpeciesRoot().getKaryotype()[byte0].getAlleleClass()))
 					throw new RuntimeException("Found Chromosome with invalid Alleles. See config option \"genetics.clear.invalid.chromosomes\".");
+			}
+		}
+
+		// handle old saves that have missing chromosomes
+		IChromosome speciesChromosome = chromosomes[EnumTreeChromosome.SPECIES.ordinal()];
+		if (speciesChromosome != null) {
+			IAlleleSpecies species = (IAlleleSpecies)speciesChromosome.getActiveAllele();
+			IAllele[] template = getSpeciesRoot().getTemplate(species.getUID());
+			for (int i = 0; i < chromosomes.length; i++) {
+				if ((chromosomes[i] == null) && (template[i] != null))
+					chromosomes[i] = new Chromosome(template[i]);
 			}
 		}
 	}

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
+import forestry.arboriculture.IWoodFireproof;
+import forestry.core.utils.StringUtil;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
@@ -23,22 +25,23 @@ public class ItemWoodBlock extends ItemForestryBlock {
 		super(block);
 	}
 
-	public static int getTypeFromMeta(int damage) {
-		return damage & 3;
-	}
-
 	@Override
-	public String getUnlocalizedName(ItemStack itemstack) {
-
+	public String getItemStackDisplayName(ItemStack itemstack) {
 		if (this.getBlock() instanceof IWoodTyped) {
 			IWoodTyped block = (IWoodTyped) getBlock();
 			int meta = itemstack.getItemDamage();
 			WoodType woodType = block.getWoodType(meta);
 			if (woodType == null)
 				return null;
-			return "tile.for." + block.getBlockKind() + "." + woodType.ordinal();
-		}
-		return super.getUnlocalizedName(itemstack);
-	}
 
+			String unlocalizedName = block.getBlockKind() + "." + woodType.ordinal() + ".name";
+			String displayName = StringUtil.localizeTile(unlocalizedName);
+
+			if (this.getBlock() instanceof IWoodFireproof)
+				displayName = StringUtil.localizeAndFormatRaw("tile.for.fireproof", displayName);
+
+			return displayName;
+		}
+		return super.getItemStackDisplayName(itemstack);
+	}
 }
