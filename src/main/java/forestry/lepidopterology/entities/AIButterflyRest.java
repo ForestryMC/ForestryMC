@@ -21,23 +21,23 @@ public class AIButterflyRest extends AIButterflyBase {
 		super(entity);
 		setMutexBits(3);
 	}
-	
+
 	@Override
 	public boolean shouldExecute() {
-		
-		if(entity.getExhaustion() < EntityButterfly.EXHAUSTION_REST
+
+		if (entity.getExhaustion() < EntityButterfly.EXHAUSTION_REST
 				&& entity.canFly())
 			return false;
-		
-		if(!entity.worldObj.isAirBlock((int)entity.posX, ((int)Math.floor(entity.posY)), (int)entity.posZ))
+
+		if (!entity.worldObj.isAirBlock((int) entity.posX, ((int) Math.floor(entity.posY)), (int) entity.posZ))
 			return false;
-		
-		ChunkCoordinates rest = new ChunkCoordinates((int)entity.posX, ((int)Math.floor(entity.posY)) - 1, (int)entity.posZ);
-		if(entity.worldObj.isAirBlock(rest.posX, rest.posY, rest.posZ))
+
+		ChunkCoordinates rest = new ChunkCoordinates((int) entity.posX, ((int) Math.floor(entity.posY)) - 1, (int) entity.posZ);
+		if (entity.worldObj.isAirBlock(rest.posX, rest.posY, rest.posZ))
 			return false;
-		if(Utils.isLiquidBlock(entity.worldObj, rest.posX, rest.posY, rest.posZ))
+		if (Utils.isLiquidBlock(entity.worldObj, rest.posX, rest.posY, rest.posZ))
 			return false;
-		if(!entity.getButterfly().isAcceptedEnvironment(entity.worldObj, rest.posX, rest.posY, rest.posZ))
+		if (!entity.getButterfly().isAcceptedEnvironment(entity.worldObj, rest.posX, rest.posY, rest.posZ))
 			return false;
 
 		entity.setDestination(null);
@@ -47,14 +47,11 @@ public class AIButterflyRest extends AIButterflyBase {
 
 	@Override
 	public boolean continueExecuting() {
-		if(entity.getExhaustion() <= 0 && entity.canFly())
+		if (entity.getExhaustion() <= 0 && entity.canFly())
 			return false;
-		if(entity.isInWater())
-			return false;
-		
-		return true;
+		return !entity.isInWater();
 	}
-	
+
 	@Override
 	public void startExecuting() {
 	}
