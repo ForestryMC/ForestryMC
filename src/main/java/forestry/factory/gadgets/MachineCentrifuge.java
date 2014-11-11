@@ -452,8 +452,8 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 			return stack.stackSize;
 		}
 
-		if (!inventory.getStackInSlot(SLOT_RESOURCE).isItemEqual(stack))
-			return 0;
+                if(!StackUtils.isIdenticalItem(inventory.getStackInSlot(SLOT_RESOURCE), stack))
+                        return 0;
 
 		int space = inventory.getStackInSlot(SLOT_RESOURCE).getMaxStackSize() - inventory.getStackInSlot(SLOT_RESOURCE).stackSize;
 		if (space <= 0)
