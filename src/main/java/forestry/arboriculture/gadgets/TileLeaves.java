@@ -96,7 +96,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			maturationTime = nbttagcompound.getInteger("CATMAT");
 			caterpillar = (IButterfly)AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies").getMember(nbttagcompound.getCompoundTag("CATER"));
 		}
-
+		isDecorative = nbttagcompound.getBoolean("Decorative");
 	}
 
 	@Override
@@ -114,7 +114,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			caterpillar.writeToNBT(subcompound);
 			nbttagcompound.setTag("CATER", subcompound);
 		}
-
+		nbttagcompound.setBoolean("Decorative", isDecorative);
 	}
 
 	@Override
