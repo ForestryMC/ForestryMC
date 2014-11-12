@@ -135,7 +135,7 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 		if (resource == null && compare == null)
 			return true;
 
-		if (resource == null && compare != null || resource != null && compare == null)
+		if (resource == null || compare == null)
 			return false;
 
 		if (compare.getItem() != resource.getItem())
