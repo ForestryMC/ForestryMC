@@ -446,13 +446,14 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 
 	@Override
 	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
-		if (inventory.getStackInSlot(SLOT_RESOURCE) == null) {
+		ItemStack resource = inventory.getStackInSlot(SLOT_RESOURCE);
+		if (resource == null) {
 			if (doAdd)
 				inventory.setInventorySlotContents(SLOT_RESOURCE, stack.copy());
 			return stack.stackSize;
 		}
 
-		if (!inventory.getStackInSlot(SLOT_RESOURCE).isItemEqual(stack))
+		if (!StackUtils.isIdenticalItem(resource, stack))
 			return 0;
 
 		int space = inventory.getStackInSlot(SLOT_RESOURCE).getMaxStackSize() - inventory.getStackInSlot(SLOT_RESOURCE).stackSize;
