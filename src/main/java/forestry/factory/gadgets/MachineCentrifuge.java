@@ -64,9 +64,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 		public boolean matches(ItemStack res) {
 			if (res == null && resource == null)
 				return true;
-			else if (res == null && resource != null)
-				return false;
-			else if (res != null && resource == null)
+			else if (res == null || resource == null)
 				return false;
 			else
 				return resource.isItemEqual(res);
@@ -428,10 +426,11 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 		ItemStack product = null;
 
 		for (int i = SLOT_PRODUCT_1; i < inventory.getSizeInventory(); i++) {
-			if (inventory.getStackInSlot(i) == null)
+			ItemStack stack = inventory.getStackInSlot(i);
+			if (stack == null)
 				continue;
 
-			product = new ItemStack(inventory.getStackInSlot(i).getItem(), 1, inventory.getStackInSlot(i).getItemDamage());
+			product = StackUtils.createSplitStack(stack, 1);
 			if (doRemove)
 				decrStackSize(i, 1);
 
@@ -446,24 +445,25 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 
 	@Override
 	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
-		if (inventory.getStackInSlot(SLOT_RESOURCE) == null) {
+		ItemStack resource = inventory.getStackInSlot(SLOT_RESOURCE);
+		if (resource == null) {
 			if (doAdd)
 				inventory.setInventorySlotContents(SLOT_RESOURCE, stack.copy());
 			return stack.stackSize;
 		}
 
-		if (!inventory.getStackInSlot(SLOT_RESOURCE).isItemEqual(stack))
+		if (!StackUtils.isIdenticalItem(resource, stack))
 			return 0;
 
-		int space = inventory.getStackInSlot(SLOT_RESOURCE).getMaxStackSize() - inventory.getStackInSlot(SLOT_RESOURCE).stackSize;
+		int space = resource.getMaxStackSize() - resource.stackSize;
 		if (space <= 0)
 			return 0;
 
 		if (doAdd)
 			if (stack.stackSize <= space)
-				inventory.getStackInSlot(SLOT_RESOURCE).stackSize += stack.stackSize;
+				resource.stackSize += stack.stackSize;
 			else
-				inventory.getStackInSlot(SLOT_RESOURCE).stackSize += space;
+				resource.stackSize += space;
 
 		return Math.min(stack.stackSize, space);
 	}
