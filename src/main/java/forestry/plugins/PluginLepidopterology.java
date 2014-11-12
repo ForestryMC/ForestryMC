@@ -48,6 +48,7 @@ import forestry.core.utils.Utils;
 import forestry.lepidopterology.ButterflySpawner;
 import forestry.lepidopterology.GuiHandlerLepidopterology;
 import forestry.lepidopterology.MatingRecipe;
+import forestry.lepidopterology.commands.CommandButterfly;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.gadgets.TileLepidopteristChest;
 import forestry.lepidopterology.genetics.AlleleButterflySpecies;
@@ -109,6 +110,8 @@ public class PluginLepidopterology extends ForestryPlugin {
 		entityConstraint = Integer.parseInt(property.Value);
 
 		config.save();
+
+		PluginCore.rootCommand.addChildCommand(new CommandButterfly());
 
 		Utils.registerEntity(EntityButterfly.class, "butterflyGE", 0, 0x000000, 0xffffff, 50, 1, true);
 		proxy.initializeRendering();
