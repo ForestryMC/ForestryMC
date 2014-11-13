@@ -22,39 +22,17 @@ import net.minecraft.world.World;
 public class CommandButterfly extends SubCommand {
 
 	public CommandButterfly() {
+		super("butterfly");
 		addAlias("bfly");
 		addChildCommand(new CommandButterflyKill());
-	}
-
-	@Override
-	public String getCommandName() {
-		return "butterfly";
-	}
-
-	@Override
-	public String getCommandFormat(ICommandSender sender) {
-		return "/" + getFullCommandString() + " <args>";
 	}
 
 	public static class CommandButterflyKill extends SubCommand {
 
 		public CommandButterflyKill() {
+			super("kill");
 			addAlias("killall");
-		}
-
-		@Override
-		public String getCommandName() {
-			return "kill";
-		}
-
-		@Override
-		public int getRequiredPermissionLevel() {
-			return 2;
-		}
-
-		@Override
-		public String getCommandFormat(ICommandSender sender) {
-			return "/" + getFullCommandString() + " [<dimension#>]";
+			setPermLevel(PermLevel.ADMIN);
 		}
 
 		@Override

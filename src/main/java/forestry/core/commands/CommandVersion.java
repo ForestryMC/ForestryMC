@@ -13,7 +13,8 @@ package forestry.core.commands;
 import net.minecraft.command.ICommandSender;
 import forestry.core.config.Version;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
 
 /**
  *
@@ -21,21 +22,19 @@ import forestry.core.utils.StringUtil;
  */
 public class CommandVersion extends SubCommand {
 
-	@Override
-	public String getCommandName() {
-		return "version";
-	}
-
-	@Override
-	public String getCommandFormat(ICommandSender sender) {
-		return "/" + getFullCommandString();
+	public CommandVersion() {
+		super("version");
 	}
 
 	@Override
 	public void processSubCommand(ICommandSender sender, String[] args) {
-		String colour = Version.isOutdated() ? "\u00A7c" : "\u00A7a";
+		ChatStyle style = new ChatStyle();
+		if (Version.isOutdated())
+			style.setColor(EnumChatFormatting.RED);
+		else
+			style.setColor(EnumChatFormatting.GREEN);
 
-		CommandHelpers.sendChatMessage(sender, String.format(colour + StringUtil.localize("chat.version"), Version.getVersion(), Proxies.common.getMinecraftVersion(), Version.getRecommendedVersion()));
+		CommandHelpers.sendLocalizedChatMessage(sender, style, "for.chat.version", Version.getVersion(), Proxies.common.getMinecraftVersion(), Version.getRecommendedVersion());
 		if (Version.isOutdated())
 			for (String updateLine : Version.getChangelog()) {
 				CommandHelpers.sendChatMessage(sender, "\u00A79" + updateLine);

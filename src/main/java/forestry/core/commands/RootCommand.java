@@ -74,11 +74,6 @@ public class RootCommand extends CommandBase implements IForestryCommand {
 	}
 
 	@Override
-	public String getCommandFormat(ICommandSender sender) {
-		return "/" + getFullCommandString() + " <args>";
-	}
-
-	@Override
 	public String getFullCommandString() {
 		return getCommandName();
 	}

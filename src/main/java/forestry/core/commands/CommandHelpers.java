@@ -17,6 +17,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
 /**
@@ -26,7 +28,6 @@ import net.minecraft.world.World;
 public class CommandHelpers {
 
 	public static World getWorld(ICommandSender sender, IForestryCommand command, String[] args, int worldArgIndex) {
-
 		// Handle passed in world argument
 		if (worldArgIndex < args.length)
 			try {
@@ -37,13 +38,15 @@ public class CommandHelpers {
 			} catch (Exception ex) {
 				throwWrongUsage(sender, command);
 			}
+		return getWorld(sender, command);
+	}
 
+	public static World getWorld(ICommandSender sender, IForestryCommand command) {
 		if (sender instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) sender;
 			return player.worldObj;
-		} else
-			return MinecraftServer.getServer().worldServerForDimension(0);
-
+		}
+		return MinecraftServer.getServer().worldServerForDimension(0);
 	}
 
 	public static String[] getPlayers() {
@@ -54,6 +57,22 @@ public class CommandHelpers {
 		sender.addChatMessage(new ChatComponentTranslation(locTag, args));
 	}
 
+	public static void sendLocalizedChatMessage(ICommandSender sender, ChatStyle chatStyle, String locTag, Object... args) {
+		ChatComponentTranslation chat = new ChatComponentTranslation(locTag, args);
+		chat.setChatStyle(chatStyle);
+		sender.addChatMessage(chat);
+	}
+
+	/**
+	 Avoid using this function if at all possible. Commands are processed on the server,
+	 which has no localization information.
+	
+	 StringUtil.localize() is NOT a valid alternative for sendLocalizedChatMessage().
+	 Messages will not be localized properly if you use StringUtil.localize().
+	
+	 @param sender
+	 @param message 
+	 */
 	public static void sendChatMessage(ICommandSender sender, String message) {
 		sender.addChatMessage(new ChatComponentText(message));
 	}
@@ -71,10 +90,14 @@ public class CommandHelpers {
 	}
 
 	public static void printHelp(ICommandSender sender, IForestryCommand command) {
-		sendLocalizedChatMessage(sender, "for.chat.command.format", command.getCommandFormat(sender));
-		sendLocalizedChatMessage(sender, "for.chat.command.aliases", command.getCommandAliases().toString().replace("[", "").replace("]", ""));
-		sendLocalizedChatMessage(sender, "for.chat.command.permlevel", command.getRequiredPermissionLevel());
-		sendLocalizedChatMessage(sender, "for.chat.command." + command.getFullCommandString().replace(" ", ".") + ".help");
+		ChatStyle header = new ChatStyle();
+		header.setColor(EnumChatFormatting.BLUE);
+		sendLocalizedChatMessage(sender, header, "for.chat.command." + command.getFullCommandString().replace(" ", ".") + ".format", command.getFullCommandString());
+		ChatStyle body = new ChatStyle();
+		body.setColor(EnumChatFormatting.GRAY);
+		sendLocalizedChatMessage(sender, body, "for.chat.command.aliases", command.getCommandAliases().toString().replace("[", "").replace("]", ""));
+		sendLocalizedChatMessage(sender, body, "for.chat.command.permlevel", command.getRequiredPermissionLevel());
+		sendLocalizedChatMessage(sender, body, "for.chat.command." + command.getFullCommandString().replace(" ", ".") + ".help");
 		if (!command.getChildren().isEmpty()) {
 			sendLocalizedChatMessage(sender, "for.chat.command.list");
 			for (SubCommand child : command.getChildren()) {

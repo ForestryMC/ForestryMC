@@ -25,17 +25,9 @@ import net.minecraft.util.StatCollector;
 public class CommandPlugins extends SubCommand {
 
 	public CommandPlugins() {
+		super("plugins");
+		addAlias("plug");
 		addChildCommand(new CommandPluginsInfo());
-	}
-
-	@Override
-	public String getCommandName() {
-		return "plugins";
-	}
-
-	@Override
-	public String getCommandFormat(ICommandSender sender) {
-		return "/" + getFullCommandString() + " [info <plugin-name>]";
 	}
 
 	@Override
@@ -74,9 +66,9 @@ public class CommandPlugins extends SubCommand {
 
 	public static class CommandPluginsInfo extends SubCommand {
 
-		@Override
-		public String getCommandName() {
-			return "info";
+		public CommandPluginsInfo() {
+			super("info");
+			addAlias("i");
 		}
 
 		@Override

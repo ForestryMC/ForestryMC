@@ -11,7 +11,6 @@
 package forestry.plugins;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -37,7 +36,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.triggers.Trigger;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.ShapedRecipeCustom;
-import forestry.mail.CommandMail;
 import forestry.api.mail.EnumAddressee;
 import forestry.mail.GuiHandlerMail;
 import forestry.mail.PacketHandlerMail;
@@ -45,6 +43,7 @@ import forestry.mail.PostRegistry;
 import forestry.mail.PostalCarrier;
 import forestry.mail.SaveEventHandlerMail;
 import forestry.mail.TickHandlerMailClient;
+import forestry.mail.commands.CommandMail;
 import forestry.mail.gadgets.MachineMailbox;
 import forestry.mail.gadgets.MachinePhilatelist;
 import forestry.mail.gadgets.MachineTrader;
@@ -73,7 +72,7 @@ public class PluginMail extends ForestryPlugin {
 	public static Trigger lowInput10;
 	public static Trigger highBuffer75;
 	public static Trigger highBuffer90;
-	public static MachineDefinition definitionMailbox;
+	public static MachineDefinition definitionMailbox;  
 	public static MachineDefinition definitionTradestation;
 	public static MachineDefinition definitionPhilatelist;
 	public static StampInfo[] stampDefinitions;
@@ -81,6 +80,8 @@ public class PluginMail extends ForestryPlugin {
 	@Override
 	public void preInit() {
 		super.preInit();
+		
+		PluginCore.rootCommand.addChildCommand(new CommandMail());
 
 		new TickHandlerMailClient();
 
@@ -223,10 +224,5 @@ public class PluginMail extends ForestryPlugin {
 	@Override
 	public IOreDictionaryHandler getDictionaryHandler() {
 		return null;
-	}
-
-	@Override
-	public ICommand[] getConsoleCommands() {
-		return new ICommand[]{new CommandMail()};
 	}
 }

@@ -30,7 +30,5 @@ public interface IForestryCommand extends ICommand {
 
 	SortedSet<SubCommand> getChildren();
 
-	String getCommandFormat(ICommandSender sender);
-
 	void printHelp(ICommandSender sender);
 }

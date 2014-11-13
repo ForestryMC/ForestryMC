@@ -24,7 +24,20 @@ import net.minecraft.command.ICommandSender;
  */
 public abstract class SubCommand implements IForestryCommand {
 
+	public enum PermLevel {
+
+		EVERYONE(0), ADMIN(2);
+		int permLevel;
+
+		private PermLevel(int permLevel) {
+			this.permLevel = permLevel;
+		}
+
+	}
+
+	private final String name;
 	private final List<String> aliases = new ArrayList<String>();
+	private PermLevel permLevel = PermLevel.EVERYONE;
 	private IForestryCommand parent;
 	private final SortedSet<SubCommand> children = new TreeSet<SubCommand>(new Comparator<SubCommand>() {
 
@@ -34,9 +47,19 @@ public abstract class SubCommand implements IForestryCommand {
 		}
 	});
 
-	public void addChildCommand(SubCommand child) {
+	public SubCommand(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public final String getCommandName() {
+		return name;
+	}
+
+	public SubCommand addChildCommand(SubCommand child) {
 		child.setParent(this);
 		children.add(child);
+		return this;
 	}
 
 	void setParent(IForestryCommand parent) {
@@ -66,16 +89,20 @@ public abstract class SubCommand implements IForestryCommand {
 	public final void processCommand(ICommandSender sender, String[] args) {
 		if (!CommandHelpers.processStandardCommands(sender, this, args))
 			processSubCommand(sender, args);
-
 	}
 
 	public void processSubCommand(ICommandSender sender, String[] args) {
 		CommandHelpers.throwWrongUsage(sender, this);
 	}
 
+	public SubCommand setPermLevel(PermLevel permLevel) {
+		this.permLevel = permLevel;
+		return this;
+	}
+
 	@Override
-	public int getRequiredPermissionLevel() {
-		return 0;
+	public final int getRequiredPermissionLevel() {
+		return permLevel.permLevel;
 	}
 
 	@Override
@@ -91,11 +118,6 @@ public abstract class SubCommand implements IForestryCommand {
 	@Override
 	public String getCommandUsage(ICommandSender sender) {
 		return "/" + getFullCommandString() + " help";
-	}
-
-	@Override
-	public String getCommandFormat(ICommandSender sender) {
-		return "/" + getFullCommandString() + " <args>";
 	}
 
 	@Override
