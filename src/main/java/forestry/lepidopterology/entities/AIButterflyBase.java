@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.util.ChunkCoordinates;
@@ -24,7 +25,7 @@ public abstract class AIButterflyBase extends EntityAIBase {
 	}
 
 	protected ChunkCoordinates getRandomDestination() {
-		if(entity.isInWater())
+		if (entity.isInWater())
 			return getRandomDestinationUpwards();
 
 		Vec3 randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 16, 7,
@@ -33,29 +34,31 @@ public abstract class AIButterflyBase extends EntityAIBase {
 		if (randomTarget == null)
 			return null;
 
-		ChunkCoordinates dest = new ChunkCoordinates((int)randomTarget.xCoord, (int)randomTarget.yCoord, (int)randomTarget.zCoord);
-		if(validateDestination(dest))
+		ChunkCoordinates dest = new ChunkCoordinates((int) randomTarget.xCoord, (int) randomTarget.yCoord, (int) randomTarget.zCoord);
+		if (validateDestination(dest, false))
 			return dest;
 		else
 			return null;
 	}
 
 	protected ChunkCoordinates getRandomDestinationUpwards() {
-		ChunkCoordinates dest = new ChunkCoordinates((int)entity.posX, (int)entity.posY + entity.worldObj.rand.nextInt(10) + 2, (int)entity.posZ);
-		if(validateDestination(dest))
+		ChunkCoordinates dest = new ChunkCoordinates((int) entity.posX, (int) entity.posY + entity.getRNG().nextInt(10) + 2, (int) entity.posZ);
+		if (validateDestination(dest, true))
 			return dest;
 		else
 			return null;
 	}
 
-	protected boolean validateDestination(ChunkCoordinates dest) {
-		if(!entity.worldObj.isAirBlock(dest.posX, dest.posY, dest.posZ) || dest.posY < 1)
+	protected boolean validateDestination(ChunkCoordinates dest, boolean allowFluids) {
+		if (dest.posY < 1)
 			return false;
-		if(!entity.getButterfly().isAcceptedEnvironment(entity.worldObj, dest.posX, dest.posY, dest.posZ))
+		Block block = entity.worldObj.getBlock(dest.posX, dest.posY, dest.posZ);
+		if (!allowFluids && block.getMaterial().isLiquid())
 			return false;
-
-		return true;
+		// getBlocksMovement is a bad name, getAllowsMovement would be a better name.
+		if (!block.getBlocksMovement(entity.worldObj, dest.posX, dest.posY, dest.posZ))
+			return false;
+		return entity.getButterfly().isAcceptedEnvironment(entity.worldObj, dest.posX, dest.posY, dest.posZ);
 	}
-
 
 }

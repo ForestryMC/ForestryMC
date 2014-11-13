@@ -10,10 +10,14 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import net.minecraft.util.ChunkCoordinates;
-
-import forestry.core.utils.Utils;
 import forestry.lepidopterology.entities.EntityButterfly.EnumButterflyState;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockFence;
+import net.minecraft.block.BlockFlower;
+import net.minecraft.block.BlockWall;
+import net.minecraft.block.IGrowable;
+import net.minecraft.block.material.Material;
+import net.minecraftforge.common.IPlantable;
 
 public class AIButterflyRest extends AIButterflyBase {
 
@@ -29,15 +33,19 @@ public class AIButterflyRest extends AIButterflyBase {
 				&& entity.canFly())
 			return false;
 
-		if (!entity.worldObj.isAirBlock((int) entity.posX, ((int) Math.floor(entity.posY)), (int) entity.posZ))
+		int x = (int) entity.posX;
+		int y = ((int) Math.floor(entity.posY));
+		int z = (int) entity.posZ;
+
+		if (!canLand(x, y, z))
 			return false;
 
-		ChunkCoordinates rest = new ChunkCoordinates((int) entity.posX, ((int) Math.floor(entity.posY)) - 1, (int) entity.posZ);
-		if (entity.worldObj.isAirBlock(rest.posX, rest.posY, rest.posZ))
+		y--;
+		if (entity.worldObj.isAirBlock(x, y, z))
 			return false;
-		if (Utils.isLiquidBlock(entity.worldObj, rest.posX, rest.posY, rest.posZ))
+		if (entity.worldObj.getBlock(x, y, z).getMaterial().isLiquid())
 			return false;
-		if (!entity.getButterfly().isAcceptedEnvironment(entity.worldObj, rest.posX, rest.posY, rest.posZ))
+		if (!entity.getButterfly().isAcceptedEnvironment(entity.worldObj, x, y, z))
 			return false;
 
 		entity.setDestination(null);
@@ -63,5 +71,34 @@ public class AIButterflyRest extends AIButterflyBase {
 	@Override
 	public void updateTask() {
 		entity.changeExhaustion(-1);
+	}
+
+	private boolean canLand(int x, int y, int z) {
+		Block block = entity.worldObj.getBlock(x, y, z);
+		// getBlocksMovement is a bad name, allowsMovement would be a better name.
+		if (!block.getBlocksMovement(entity.worldObj, x, y, z))
+			return false;
+		if (isPlant(block))
+			return true;
+		block = entity.worldObj.getBlock(x, y - 1, z);
+		return isRest(block) || block.isLeaves(entity.worldObj, x, y - 1, z);
+	}
+
+	private boolean isRest(Block block) {
+		if (block instanceof BlockFence)
+			return true;
+		return block instanceof BlockWall;
+	}
+
+	private boolean isPlant(Block block) {
+		if (block instanceof BlockFlower)
+			return true;
+		else if (block instanceof IPlantable)
+			return true;
+		else if (block instanceof IGrowable)
+			return true;
+		else if (block.getMaterial() == Material.plants)
+			return true;
+		return false;
 	}
 }

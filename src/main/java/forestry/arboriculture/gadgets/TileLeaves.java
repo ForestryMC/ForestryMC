@@ -393,7 +393,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 		boolean wasDestroyed = isDestroyed();
 		encumbrance += caterpillar.getGenome().getMetabolism();
-		wasDestroyed = !wasDestroyed && isDestroyed() ? true : false;
+		wasDestroyed = !wasDestroyed && isDestroyed();
 
 		if(maturationTime >= (float)caterpillar.getGenome().getLifespan() / (caterpillar.getGenome().getFertility()*2)
 				&& caterpillar.canTakeFlight(worldObj, xCoord, yCoord, zCoord)) {

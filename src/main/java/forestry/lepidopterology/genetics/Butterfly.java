@@ -162,9 +162,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	private boolean canFly(World world) {
 		if(world.isRaining() && !getGenome().getTolerantFlyer())
 			return false;
-		if(!isActiveThisTime(world.isDaytime()))
-			return false;
-		return true;
+		return isActiveThisTime(world.isDaytime());
 	}
 
 	@Override

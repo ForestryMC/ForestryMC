@@ -196,7 +196,7 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	/* MUTATIONS */
-	private static ArrayList<IButterflyMutation> butterflyMutations = new ArrayList<IButterflyMutation>();
+	private static final ArrayList<IButterflyMutation> butterflyMutations = new ArrayList<IButterflyMutation>();
 
 	@Override
 	public void registerMutation(IMutation mutation) {

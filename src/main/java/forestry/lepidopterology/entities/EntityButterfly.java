@@ -39,12 +39,21 @@ import forestry.core.utils.StackUtils;
 import forestry.lepidopterology.genetics.Butterfly;
 import forestry.lepidopterology.render.ButterflyItemRenderer;
 import forestry.plugins.PluginLepidopterology;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockFence;
+import net.minecraft.block.BlockFlower;
+import net.minecraft.block.BlockWall;
+import net.minecraft.block.IGrowable;
+import net.minecraft.block.material.Material;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.IPlantable;
 
 public class EntityButterfly extends EntityCreature implements IEntityButterfly {
 
 	public enum EnumButterflyState {
 
-		FLYING(true), GLIDING(true), RESTING(false), HOVER(false);
+		FLYING(true), GLIDING(true), RISING(true), RESTING(false), HOVER(false);
 
 		public static final EnumButterflyState[] VALUES = values();
 
@@ -110,10 +119,12 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 	private void setDefaults(IButterfly butterfly) {
 		contained = butterfly;
-		tasks.addTask(10, new AIButterflyWander(this));
-		tasks.addTask(9, new AIButterflyRest(this));
-		tasks.addTask(8, new AIButterflyInteract(this));
 		tasks.addTask(8, new AIButterflyFlee(this));
+		tasks.addTask(9, new AIButterflyMate(this));
+		tasks.addTask(10, new AIButterflyPollinate(this));
+		tasks.addTask(11, new AIButterflyRest(this));
+		tasks.addTask(12, new AIButterflyRise(this));
+		tasks.addTask(12, new AIButterflyWander(this));
 	}
 
 	@Override
@@ -179,6 +190,59 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 	public void setDestination(ChunkCoordinates destination) {
 		flightTarget = destination;
+	}
+
+	@Override
+	public float getBlockPathWeight(int x, int y, int z) {
+		float weight = 0.0f;
+
+		if (!getButterfly().isAcceptedEnvironment(worldObj, x, y, z))
+			weight -= 15.0f;
+
+		if (!worldObj.getEntitiesWithinAABB(EntityButterfly.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1)).isEmpty())
+			weight -= 1.0f;
+
+		int depth = getFluidDepth(x, z);
+		if (depth > 0)
+			weight -= 0.1f * depth;
+		else {
+			Block block = worldObj.getBlock(x, y, z);
+			if (block instanceof BlockFlower)
+				weight += 2.0f;
+			else if (block instanceof IPlantable)
+				weight += 1.5f;
+			else if (block instanceof IGrowable)
+				weight += 1.0f;
+			else if (block.getMaterial() == Material.plants)
+				weight += 1.0f;
+
+			block = worldObj.getBlock(x, y - 1, z);
+			if (block.isLeaves(worldObj, x, y - 1, z))
+				weight += 2.5f;
+			else if (block instanceof BlockFence)
+				weight += 1.0f;
+			else if (block instanceof BlockWall)
+				weight += 1.0f;
+		}
+
+		weight += worldObj.getLightBrightness(x, y, z);
+		return weight;
+	}
+
+	private int getFluidDepth(int x, int z) {
+		Chunk chunk = worldObj.getChunkFromBlockCoords(x, z);
+		int xx = x & 15;
+		int zz = z & 15;
+		int depth = 0;
+		for (int y = chunk.getTopFilledSegment() + 15; y > 0; --y) {
+			Block block = chunk.getBlock(xx, y, zz);
+			if (block.getMaterial().isLiquid())
+				depth++;
+			else if (!block.isAir(worldObj, x, y, z))
+				break;
+		}
+
+		return depth;
 	}
 
 	/* POLLEN */
@@ -337,8 +401,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	/* LOOT */
 	@Override
 	protected void dropFewItems(boolean playerKill, int lootLevel) {
-		for (ItemStack stack : contained.getLootDrop(this, playerKill, lootLevel))
+		for (ItemStack stack : contained.getLootDrop(this, playerKill, lootLevel)) {
 			StackUtils.dropItemStackAsEntity(stack, worldObj, posX, posY, posZ);
+		}
 
 		// Drop pollen if any
 		if (getPollen() != null)
