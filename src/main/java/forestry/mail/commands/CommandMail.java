@@ -93,7 +93,9 @@ public class CommandMail extends SubCommand {
 			MailAddress address = new MailAddress(args[0]);
 			ITradeStation trade = PostManager.postRegistry.getTradeStation(world, address);
 			if (trade == null) {
-				CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.mail.virtualize.no_tradestation", args[0]);
+				ChatStyle red = new ChatStyle();
+				red.setColor(EnumChatFormatting.RED);
+				CommandHelpers.sendLocalizedChatMessage(sender, red, "for.chat.command.forestry.mail.virtualize.no_tradestation", args[0]);
 				return;
 			}
 
