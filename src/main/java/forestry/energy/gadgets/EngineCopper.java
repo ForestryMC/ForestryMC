@@ -11,6 +11,7 @@
 package forestry.energy.gadgets;
 
 import buildcraft.api.statements.ITriggerExternal;
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameData;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
@@ -34,9 +35,11 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 
 public class EngineCopper extends Engine implements ISpecialInventory, ISidedInventory {
@@ -497,8 +500,9 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 	}
 
 	/* ITRIGGERPROVIDER */
+	@Optional.Method(modid = "BuildCraft|Core")
 	@Override
-	public LinkedList<ITriggerExternal> getCustomTriggers() {
+	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(ForestryTrigger.lowFuel25);
 		return res;

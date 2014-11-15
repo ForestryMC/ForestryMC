@@ -10,23 +10,12 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import java.util.LinkedList;
-
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.Packet;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
+import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.ITriggerExternal;
+import buildcraft.api.statements.ITriggerInternal;
+import buildcraft.api.statements.ITriggerProvider;
 import com.mojang.authlib.GameProfile;
-
+import cpw.mods.fml.common.Optional;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
@@ -40,8 +29,21 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumAccess;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.Vect;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.Packet;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
-public abstract class TileForestry extends TileEntity implements INetworkedEntity, IOwnable, IErrorSource {
+import java.util.Collection;
+
+@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraft|Core")
+public abstract class TileForestry extends TileEntity implements INetworkedEntity, IOwnable, IErrorSource, ITriggerProvider {
 
 	protected boolean isInited = false;
 
@@ -147,11 +149,20 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		fromPacketPayload(packet.payload);
 	}
 
-	public LinkedList<ITriggerExternal> getCustomTriggers() {
+	public void onRemoval() {
+	}
+
+	/* ITriggerProvider */
+	@Optional.Method(modid = "BuildCraft|Core")
+	@Override
+	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
 		return null;
 	}
 
-	public void onRemoval() {
+	@Optional.Method(modid = "BuildCraft|Core")
+	@Override
+	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
+		return null;
 	}
 
 	// / REDSTONE INFO

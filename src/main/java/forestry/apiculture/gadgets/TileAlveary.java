@@ -11,6 +11,7 @@
 package forestry.apiculture.gadgets;
 
 import buildcraft.api.statements.ITriggerExternal;
+import cpw.mods.fml.common.Optional;
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
@@ -28,7 +29,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.Collection;
 import java.util.LinkedList;
 
 public abstract class TileAlveary extends TileForestry implements IAlvearyComponent {
@@ -245,9 +248,10 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	public void removeBeeListener(IBeeListener event) {
 	}
 
-	// / ITRIGGERPROVIDER
+	/* ITRIGGERPROVIDER */
+	@Optional.Method(modid = "BuildCraft|Core")
 	@Override
-	public LinkedList<ITriggerExternal> getCustomTriggers() {
+	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(ForestryTrigger.missingQueen);
 		res.add(ForestryTrigger.missingDrone);

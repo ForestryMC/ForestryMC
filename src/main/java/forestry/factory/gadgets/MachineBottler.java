@@ -11,6 +11,7 @@
 package forestry.factory.gadgets;
 
 import buildcraft.api.statements.ITriggerExternal;
+import cpw.mods.fml.common.Optional;
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.ICraftingProvider;
 import forestry.core.EnumErrorCode;
@@ -36,6 +37,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -45,6 +47,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -501,9 +504,10 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		return tankManager.getTankInfo(from);
 	}
 
-	// ITRIGGERPROVIDER
+	/* ITRIGGERPROVIDER */
+	@Optional.Method(modid = "BuildCraft|Core")
 	@Override
-	public LinkedList<ITriggerExternal> getCustomTriggers() {
+	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(ForestryTrigger.lowResource25);
 		res.add(ForestryTrigger.lowResource10);

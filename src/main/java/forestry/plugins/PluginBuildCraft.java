@@ -129,13 +129,17 @@ public class PluginBuildCraft extends ForestryPlugin implements ITriggerProvider
 	// / ITRIGGERPROVIDER
 	@Override
 	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
+		TileEntity tile = container.getTile();
+		if (tile instanceof ITriggerProvider)
+			return ((ITriggerProvider) tile).getInternalTriggers(container);
+
 		return null;
 	}
 
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
-		if (tile instanceof TileForestry)
-			return ((TileForestry) tile).getCustomTriggers();
+		if (tile instanceof ITriggerProvider)
+			return ((ITriggerProvider) tile).getExternalTriggers(side, tile);
 
 		return null;
 	}

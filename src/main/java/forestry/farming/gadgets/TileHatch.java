@@ -11,7 +11,9 @@
 package forestry.farming.gadgets;
 
 import buildcraft.api.statements.ITriggerExternal;
+import cpw.mods.fml.common.Optional;
 import forestry.api.core.ITileStructure;
+import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.StackUtils;
@@ -21,10 +23,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 
 public class TileHatch extends TileFarm implements ISidedInventory {
@@ -325,8 +329,9 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 	}
 
 	/* ITRIGGERPROVIDER */
+	@Optional.Method(modid = "BuildCraft|Core")
 	@Override
-	public LinkedList<ITriggerExternal> getCustomTriggers() {
+	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
 		if (!hasMaster())
 			return null;
 

@@ -11,6 +11,7 @@
 package forestry.apiculture.gadgets;
 
 import buildcraft.api.statements.ITriggerExternal;
+import cpw.mods.fml.common.Optional;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IHiveFrame;
 import forestry.api.core.ForestryAPI;
@@ -21,7 +22,10 @@ import forestry.plugins.PluginApiculture;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.Collection;
 import java.util.LinkedList;
 
 public class TileApiary extends TileBeehouse implements ISidedInventory {
@@ -342,8 +346,9 @@ public class TileApiary extends TileBeehouse implements ISidedInventory {
 	//	}
 
 	/* ITRIGGERPROVIDER */
+	@Optional.Method(modid = "BuildCraft|Core")
 	@Override
-	public LinkedList<ITriggerExternal> getCustomTriggers() {
+	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(ForestryTrigger.missingQueen);
 		res.add(ForestryTrigger.missingDrone);

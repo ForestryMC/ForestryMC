@@ -11,6 +11,7 @@
 package forestry.factory.gadgets;
 
 import buildcraft.api.statements.ITriggerExternal;
+import cpw.mods.fml.common.Optional;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.ForestryAPI;
 import forestry.core.EnumErrorCode;
@@ -33,6 +34,7 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -40,6 +42,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
+import java.util.Collection;
 import java.util.LinkedList;
 
 public class MachineRaintank extends TileBase implements ISidedInventory, ILiquidTankContainer {
@@ -320,8 +323,9 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 	}
 
 	/* ITRIGGERPROVIDER */
+	@Optional.Method(modid = "BuildCraft|Core")
 	@Override
-	public LinkedList<ITriggerExternal> getCustomTriggers() {
+	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(ForestryTrigger.lowResource25);
 		res.add(ForestryTrigger.lowResource10);
