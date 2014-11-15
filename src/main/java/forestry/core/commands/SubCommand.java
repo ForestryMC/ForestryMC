@@ -81,8 +81,8 @@ public abstract class SubCommand implements IForestryCommand {
 	}
 
 	@Override
-	public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] p_71516_2_) {
-		return null;
+	public List<String> addTabCompletionOptions(ICommandSender sender, String[] incomplete) {
+		return CommandHelpers.addStandardTabCompletionOptions(this, sender, incomplete);
 	}
 
 	@Override
@@ -92,7 +92,7 @@ public abstract class SubCommand implements IForestryCommand {
 	}
 
 	public void processSubCommand(ICommandSender sender, String[] args) {
-		CommandHelpers.throwWrongUsage(sender, this);
+		printHelp(sender);
 	}
 
 	public SubCommand setPermLevel(PermLevel permLevel) {

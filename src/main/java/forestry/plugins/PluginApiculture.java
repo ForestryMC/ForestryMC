@@ -37,8 +37,7 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.recipes.RecipeManagers;
-import forestry.apiculture.CommandBeekeepingMode;
-import forestry.apiculture.CommandGiveBee;
+import forestry.apiculture.commands.CommandBeekeeping;
 import forestry.apiculture.FlowerProviderCacti;
 import forestry.apiculture.FlowerProviderEnd;
 import forestry.apiculture.FlowerProviderGourd;
@@ -264,6 +263,9 @@ public class PluginApiculture extends ForestryPlugin {
 
 		// Register village components with the Structure registry.
 		VillageHandlerApiculture.registerVillageComponents();
+
+		// Commands
+		PluginCore.rootCommand.addChildCommand(new CommandBeekeeping());
 	}
 
 	@Override
@@ -1273,12 +1275,6 @@ public class PluginApiculture extends ForestryPlugin {
 	@Override
 	public IOreDictionaryHandler getDictionaryHandler() {
 		return null;
-	}
-
-	@Override
-	public ICommand[] getConsoleCommands() {
-		return new ICommand[]{new CommandBeekeepingMode(), new CommandGiveBee(EnumBeeType.DRONE), new CommandGiveBee(EnumBeeType.PRINCESS),
-			new CommandGiveBee(EnumBeeType.QUEEN),};
 	}
 
 	@Override

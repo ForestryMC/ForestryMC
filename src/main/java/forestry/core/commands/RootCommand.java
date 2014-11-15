@@ -74,6 +74,11 @@ public class RootCommand extends CommandBase implements IForestryCommand {
 	}
 
 	@Override
+	public List addTabCompletionOptions(ICommandSender sender, String[] incomplete) {
+		return CommandHelpers.addStandardTabCompletionOptions(this, sender, incomplete);
+	}
+
+	@Override
 	public String getFullCommandString() {
 		return getCommandName();
 	}

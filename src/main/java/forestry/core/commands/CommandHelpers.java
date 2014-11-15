@@ -11,15 +11,20 @@
 package forestry.core.commands;
 
 import forestry.core.utils.StringUtil;
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -29,7 +34,7 @@ public class CommandHelpers {
 
 	public static World getWorld(ICommandSender sender, IForestryCommand command, String[] args, int worldArgIndex) {
 		// Handle passed in world argument
-		if (worldArgIndex < args.length)
+		if (worldArgIndex < args.length) {
 			try {
 				int dim = Integer.parseInt(args[worldArgIndex]);
 				World world = MinecraftServer.getServer().worldServerForDimension(dim);
@@ -38,15 +43,16 @@ public class CommandHelpers {
 			} catch (Exception ex) {
 				throwWrongUsage(sender, command);
 			}
+		}
 		return getWorld(sender, command);
 	}
 
 	public static World getWorld(ICommandSender sender, IForestryCommand command) {
-		if (sender instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) sender;
-			return player.worldObj;
-		}
-		return MinecraftServer.getServer().worldServerForDimension(0);
+		return sender.getEntityWorld();
+	}
+
+	public static EntityPlayerMP getPlayer(ICommandSender sender, String playerName) {
+		return CommandBase.getPlayer(sender, playerName);
 	}
 
 	public static String[] getPlayers() {
@@ -90,14 +96,26 @@ public class CommandHelpers {
 	}
 
 	public static void printHelp(ICommandSender sender, IForestryCommand command) {
+
+		String commandString = command.getFullCommandString().replace(" ", ".");
+
 		ChatStyle header = new ChatStyle();
 		header.setColor(EnumChatFormatting.BLUE);
-		sendLocalizedChatMessage(sender, header, "for.chat.command." + command.getFullCommandString().replace(" ", ".") + ".format", command.getFullCommandString());
+		sendLocalizedChatMessage(sender, header, "for.chat.command." + commandString + ".format", command.getFullCommandString());
+
 		ChatStyle body = new ChatStyle();
 		body.setColor(EnumChatFormatting.GRAY);
-		sendLocalizedChatMessage(sender, body, "for.chat.command.aliases", command.getCommandAliases().toString().replace("[", "").replace("]", ""));
-		sendLocalizedChatMessage(sender, body, "for.chat.command.permlevel", command.getRequiredPermissionLevel());
-		sendLocalizedChatMessage(sender, body, "for.chat.command." + command.getFullCommandString().replace(" ", ".") + ".help");
+
+		List<String> commandAliases = command.getCommandAliases();
+		if (commandAliases.size() > 0)
+			sendLocalizedChatMessage(sender, body, "for.chat.command.aliases", commandAliases.toString().replace("[", "").replace("]", ""));
+
+		int permLevel = command.getRequiredPermissionLevel();
+		if (permLevel > 0)
+			sendLocalizedChatMessage(sender, body, "for.chat.command.permlevel", permLevel);
+
+		sendLocalizedChatMessage(sender, body, "for.chat.command." + commandString + ".help");
+
 		if (!command.getChildren().isEmpty()) {
 			sendLocalizedChatMessage(sender, "for.chat.command.list");
 			for (SubCommand child : command.getChildren()) {
@@ -132,4 +150,31 @@ public class CommandHelpers {
 			}
 		return false;
 	}
+
+	@SuppressWarnings("unchecked")
+	public static List<String> getListOfStringsMatchingLastWord(String[] strings, String ... lastWords) {
+		return CommandBase.getListOfStringsMatchingLastWord(strings, lastWords);
+	}
+
+	public static List<String> addStandardTabCompletionOptions(IForestryCommand command, ICommandSender sender, String[] incomplete) {
+		if (incomplete.length > 1) {
+			String commandName = incomplete[0];
+			for (SubCommand child : command.getChildren()) {
+				if (CommandHelpers.matches(commandName, child)) {
+					String[] incompleteRemaining = Arrays.copyOfRange(incomplete, 1, incomplete.length);
+					return child.addTabCompletionOptions(sender, incompleteRemaining);
+				}
+			}
+		}
+
+		List<String> commandNames = new ArrayList<String>();
+		for (SubCommand child : command.getChildren()) {
+			commandNames.add(child.getCommandName());
+		}
+		commandNames.add("help");
+
+		String[] commandNamesArr = commandNames.toArray(new String[commandNames.size()]);
+		return CommandHelpers.getListOfStringsMatchingLastWord(incomplete, commandNamesArr);
+	}
+
 }
