@@ -54,8 +54,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 	}
 
 	public boolean isAcceptedGround(ItemStack ground) {
-		Block groundBlock = Block.getBlockFromItem(ground.getItem());
-		return isWaterBlock(groundBlock) || StackUtils.isIdenticalItem(this.ground, ground);
+		return StackUtils.isIdenticalItem(this.ground, ground);
 	}
 
 	@Override
@@ -91,10 +90,11 @@ public abstract class FarmLogicWatered extends FarmLogic {
 
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(x, y, z, direction, i);
-			if (!isAirBlock(position) && !Utils.isReplaceableBlock(world, position.x, position.y, position.z)) {
+			Block block = getBlock(position);
+			if (!isAirBlock(block) && !Utils.isReplaceableBlock(block)) {
 
-				ItemStack block = getAsItemStack(position);
-				if (!isAcceptedGround(block) && housing.hasResources(resource)) {
+				ItemStack blockStack = getAsItemStack(position);
+				if (!isAcceptedGround(blockStack) && housing.hasResources(resource)) {
 					produce.addAll(BlockUtil.getBlockItemStack(getWorld(), position));
 					setBlock(position, Blocks.air, 0);
 					return trySetSoil(position);
@@ -103,10 +103,10 @@ public abstract class FarmLogicWatered extends FarmLogic {
 				continue;
 			}
 
-			if (isManual || isWaterBlock(position))
+			if (isManual || isWaterSourceBlock(world, position))
 				continue;
 
-			if (trySetWater(position))
+			if (trySetWater(world, position))
 				return true;
 
 			return trySetSoil(position);
@@ -117,10 +117,11 @@ public abstract class FarmLogicWatered extends FarmLogic {
 
 	private boolean maintainWater(int x, int y, int z, ForgeDirection direction, int extent) {
 		// Still not done, check water then
+		World world = getWorld();
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(x, y, z, direction, i);
 
-			if (trySetWater(position))
+			if (trySetWater(world, position))
 				return true;
 		}
 
@@ -139,25 +140,25 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		return true;
 	}
 
-	private boolean trySetWater(Vect position) {
-		if (isWaterBlock(position) || !canPlaceWater(position))
+	private boolean trySetWater(World world, Vect position) {
+		if (isWaterSourceBlock(world, position) || !canPlaceWater(world, position))
 			return false;
 
 		if (!housing.hasLiquid(STACK_WATER))
 			return false;
 
-		produce.addAll(BlockUtil.getBlockItemStack(getWorld(), position));
+		produce.addAll(BlockUtil.getBlockItemStack(world, position));
 		setBlock(position, Blocks.water, 0);
 		housing.removeLiquid(STACK_WATER);
 		return true;
 	}
 
-	private boolean canPlaceWater(Vect position) {
+	private boolean canPlaceWater(World world, Vect position) {
 		// don't place water close to other water
 		for (int x = -2; x <= 2; x++) {
 			for (int z = -2; z <= 2; z++) {
 				Vect offsetPosition = position.add(new Vect(x, 0, z));
-				if (isWaterBlock(offsetPosition))
+				if (isWaterSourceBlock(world, offsetPosition))
 					return false;
 			}
 		}

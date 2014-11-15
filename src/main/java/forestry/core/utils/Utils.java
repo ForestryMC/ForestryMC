@@ -230,8 +230,12 @@ public class Utils {
 	public static boolean isReplaceableBlock(World world, int x, int y, int z) {
 		Block block = world.getBlock(x, y, z);
 
+		return isReplaceableBlock(block);
+	}
+
+	public static boolean isReplaceableBlock(Block block) {
 		return block == Blocks.vine || block == Blocks.tallgrass || block == Blocks.deadbush || block == Blocks.snow_layer
-				|| block.isReplaceable(world, x, y, z);
+				|| block.getMaterial().isReplaceable();
 	}
 
 	public static boolean isLiquidBlock(World world, int x, int y, int z) {
