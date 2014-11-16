@@ -356,7 +356,7 @@ public class Utils {
 		return ersatz;
 	}
 
-	public static IPollinatable getOrCreatePollinatable(GameProfile owner, World world, int x, int y, int z) {
+	public static IPollinatable getOrCreatePollinatable(GameProfile owner, World world, final int x, final int y, final int z) {
 		TileEntity tile = world.getTileEntity(x, y, z);
 
 		IPollinatable receiver = null;
@@ -364,21 +364,26 @@ public class Utils {
 			receiver = (IPollinatable) tile;
 		else if (!world.isAirBlock(x, y, z)) {
 
+			Block block = world.getBlock(x, y, z);
+			int meta = world.getBlockMetadata(x, y, z);
+
+			if (Blocks.leaves == block || Blocks.leaves2 == block) {
+				if ((meta & 4) != 0) {
+					// no-decay vanilla leaves. http://minecraft.gamepedia.com/Data_values#Leaves
+					// Treat them as decorative and don't pollinate.
+					return null;
+				}
+				meta = meta % 3;
+			}
+
 			// Test for ersatz genomes
 			for (Map.Entry<ItemStack, IIndividual> entry : AlleleManager.ersatzSpecimen.entrySet()) {
-				if (!StackUtils.equals(world.getBlock(x, y, z), entry.getKey()))
-					continue;
-
-				int meta = world.getBlockMetadata(x, y, z);
-				if (StackUtils.equals(Blocks.leaves, entry.getKey()))
-					meta = meta & 3;
-				if (entry.getKey().getItemDamage() != meta)
-					continue;
-
-				// We matched, replace the leaf block with ours and set the ersatz genome
-				PluginArboriculture.treeInterface.setLeaves(world, entry.getValue(), owner, x, y, z);
-				// Now let's pollinate
-				receiver = (IPollinatable) world.getTileEntity(x, y, z);
+				if (block == StackUtils.getBlock(entry.getKey()) && entry.getKey().getItemDamage() == meta) {
+					// We matched, replace the leaf block with ours and set the ersatz genome
+					PluginArboriculture.treeInterface.setLeaves(world, entry.getValue(), owner, x, y, z);
+					// Now let's pollinate
+					receiver = (IPollinatable) world.getTileEntity(x, y, z);
+				}
 			}
 
 		}
