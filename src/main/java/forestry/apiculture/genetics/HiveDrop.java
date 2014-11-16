@@ -42,22 +42,22 @@ public class HiveDrop implements IHiveDrop {
 	}
 	
 	private IBee createBee(World world) {
-		IBee bee = PluginApiculture.beeInterface.getBee(world, PluginApiculture.beeInterface.templateAsGenome(template));
-		if(world.rand.nextFloat() < ignobleShare)
-			bee.setIsNatural(false);
-		return bee;
+		return PluginApiculture.beeInterface.getBee(world, PluginApiculture.beeInterface.templateAsGenome(template));
 	}
 	
 	@Override
 	public ItemStack getPrincess(World world, int x, int y, int z, int fortune) {
-		return PluginApiculture.beeInterface.getMemberStack(createBee(world), EnumBeeType.PRINCESS.ordinal());
+		IBee bee = createBee(world);
+		if(world.rand.nextFloat() < ignobleShare)
+			bee.setIsNatural(false);
+
+		return PluginApiculture.beeInterface.getMemberStack(bee, EnumBeeType.PRINCESS.ordinal());
 	}
 
 	@Override
 	public ArrayList<ItemStack> getDrones(World world, int x, int y, int z, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		ret.add(PluginApiculture.beeInterface.getMemberStack(createBee(world),
-				EnumBeeType.DRONE.ordinal()));
+		ret.add(PluginApiculture.beeInterface.getMemberStack(createBee(world), EnumBeeType.DRONE.ordinal()));
 		return ret;
 	}
 
