@@ -16,7 +16,7 @@ import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.statements.ITriggerProvider;
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.Optional;
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.interfaces.IErrorSource;

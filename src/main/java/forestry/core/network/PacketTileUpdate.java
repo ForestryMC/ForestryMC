@@ -19,7 +19,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.utils.EnumAccess;
 

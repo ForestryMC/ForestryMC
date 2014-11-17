@@ -15,6 +15,8 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IMutation;
 import forestry.core.genetics.Allele;
 
+import java.util.Arrays;
+
 public class BeeTemplates {
 
 	// / MUTATIONS
@@ -98,24 +100,27 @@ public class BeeTemplates {
 	public static IMutation vengefulB;
 	public static IMutation avengingA;
 
+	public static IAllele[] defaultTemplate;
+
 	public static IAllele[] getDefaultTemplate() {
-		IAllele[] alleles = new IAllele[EnumBeeChromosome.values().length];
+		if (defaultTemplate == null) {
+			defaultTemplate = new IAllele[EnumBeeChromosome.values().length];
 
-		alleles[EnumBeeChromosome.SPECIES.ordinal()] = Allele.speciesForest;
-		alleles[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlowest;
-		alleles[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanShorter;
-		alleles[EnumBeeChromosome.FERTILITY.ordinal()] = Allele.fertilityNormal;
-		alleles[EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceNone;
-		alleles[EnumBeeChromosome.NOCTURNAL.ordinal()] = Allele.boolFalse;
-		alleles[EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceNone;
-		alleles[EnumBeeChromosome.TOLERANT_FLYER.ordinal()] = Allele.boolFalse;
-		alleles[EnumBeeChromosome.CAVE_DWELLING.ordinal()] = Allele.boolFalse;
-		alleles[EnumBeeChromosome.FLOWER_PROVIDER.ordinal()] = Allele.flowersVanilla;
-		alleles[EnumBeeChromosome.FLOWERING.ordinal()] = Allele.floweringSlowest;
-		alleles[EnumBeeChromosome.TERRITORY.ordinal()] = Allele.territoryDefault;
-		alleles[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectNone;
-
-		return alleles;
+			defaultTemplate[EnumBeeChromosome.SPECIES.ordinal()] = Allele.speciesForest;
+			defaultTemplate[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlowest;
+			defaultTemplate[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanShorter;
+			defaultTemplate[EnumBeeChromosome.FERTILITY.ordinal()] = Allele.fertilityNormal;
+			defaultTemplate[EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceNone;
+			defaultTemplate[EnumBeeChromosome.NOCTURNAL.ordinal()] = Allele.boolFalse;
+			defaultTemplate[EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceNone;
+			defaultTemplate[EnumBeeChromosome.TOLERANT_FLYER.ordinal()] = Allele.boolFalse;
+			defaultTemplate[EnumBeeChromosome.CAVE_DWELLING.ordinal()] = Allele.boolFalse;
+			defaultTemplate[EnumBeeChromosome.FLOWER_PROVIDER.ordinal()] = Allele.flowersVanilla;
+			defaultTemplate[EnumBeeChromosome.FLOWERING.ordinal()] = Allele.floweringSlowest;
+			defaultTemplate[EnumBeeChromosome.TERRITORY.ordinal()] = Allele.territoryDefault;
+			defaultTemplate[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectNone;
+		}
+		return Arrays.copyOf(defaultTemplate, defaultTemplate.length);
 	}
 
 	// / COMMON BRANCH

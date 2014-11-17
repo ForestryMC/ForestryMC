@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.interfaces;
 
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 
 public interface IErrorSource {
 

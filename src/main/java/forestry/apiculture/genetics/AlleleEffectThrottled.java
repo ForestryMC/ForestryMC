@@ -16,7 +16,7 @@ import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.genetics.Allele;
 import forestry.core.genetics.EffectData;
 import forestry.core.utils.Vect;

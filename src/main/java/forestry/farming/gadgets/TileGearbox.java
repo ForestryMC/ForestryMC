@@ -12,7 +12,7 @@ package forestry.farming.gadgets;
 
 import forestry.api.core.ITileStructure;
 import forestry.api.farming.IFarmHousing;
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.energy.EnergyManager;
