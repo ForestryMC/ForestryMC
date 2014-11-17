@@ -33,7 +33,7 @@ import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.core.*;
 import forestry.api.genetics.IIndividual;
 import forestry.apiculture.gui.ContainerAlveary;
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.IClimatised;

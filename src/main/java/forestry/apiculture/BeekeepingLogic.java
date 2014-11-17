@@ -23,7 +23,7 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IIndividual;
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.proxy.Proxies;
@@ -191,14 +191,23 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 	private boolean didSpawnPendingProducts() {
 		boolean didSpawnItem = true;
+		EnumErrorCode housingErrorState = null;
+
 		while (!spawn.isEmpty()) {
 			ItemStack next = spawn.peek();
 			if (housing.addProduct(next, true)) {
 				spawn.pop();
-				housing.setErrorState(EnumErrorCode.OK.ordinal());
+				housingErrorState = EnumErrorCode.OK;
 			} else {
-				housing.setErrorState(EnumErrorCode.NOSPACE.ordinal());
+				housingErrorState = EnumErrorCode.NOSPACE;
 				didSpawnItem = false;
+			}
+		}
+		if (housingErrorState != null) {
+			try {
+				housing.setErrorState(housingErrorState);
+			} catch (Error e) {
+				housing.setErrorState(housingErrorState.ordinal());
 			}
 		}
 		return didSpawnItem;
@@ -206,19 +215,27 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	
 	private boolean hasHealthyQueen() {
 		boolean hasQueen = true;
+		EnumErrorCode housingErrorState = null;
 
 		if (housing.getQueen() == null || !ForestryItem.beeQueenGE.isItemEqual(housing.getQueen())) {
-			housing.setErrorState(EnumErrorCode.NOQUEEN.ordinal());
+			housingErrorState = EnumErrorCode.NOQUEEN;
 			hasQueen = false;
 		} else {
 			IBee queen = PluginApiculture.beeInterface.getMember(housing.getQueen());
 			// Kill dying queens
 			if (!queen.isAlive()) {
 				killQueen(queen);
-				housing.setErrorState(EnumErrorCode.OK.ordinal());
+				housingErrorState = EnumErrorCode.OK;
 				hasQueen = false;
 			} else {
 				this.queen = queen;
+			}
+		}
+		if (housingErrorState != null) {
+			try {
+				housing.setErrorState(housingErrorState);
+			} catch (Error e) {
+				housing.setErrorState(housingErrorState.ordinal());
 			}
 		}
 		return hasQueen;
@@ -242,6 +259,24 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	private boolean queenCanWork() {
+		try {
+			boolean canWork = true;
+			// Not while raining, at night or without light
+			EnumErrorCode state = queen.canWork(housing);
+			if (state != EnumErrorCode.OK) {
+				housing.setErrorState(state);
+				canWork = false;
+			} else if (housing.getErrorState() != EnumErrorCode.NOFLOWER) {
+				housing.setErrorState(EnumErrorCode.OK);
+			}
+			return canWork;
+		} catch (Error e) {
+			return queenCanWorkDeprecated();
+		}
+	}
+
+	// fallback for outdated APIs
+	private boolean queenCanWorkDeprecated() {
 		boolean canWork = true;
 		// Not while raining, at night or without light
 		EnumErrorCode state = EnumErrorCode.values()[queen.isWorking(housing)];

@@ -30,7 +30,7 @@ import forestry.api.apiculture.IBee;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
 import forestry.apiculture.render.TextureBiomefinder;
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.IErrorSource;

@@ -25,7 +25,7 @@ import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ISolderManager;
 import forestry.api.core.ForestryAPI;
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.items.ItemForestry;
 import forestry.core.network.GuiId;

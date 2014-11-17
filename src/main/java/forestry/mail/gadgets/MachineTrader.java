@@ -16,7 +16,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.gadgets.TileBase;
 import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;

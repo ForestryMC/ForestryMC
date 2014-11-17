@@ -30,7 +30,7 @@ import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Defaults;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.GenericRatings;
@@ -46,7 +46,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.BiomeDictionary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -203,38 +202,43 @@ public class Bee extends IndividualLiving implements IBee {
 
 	@Override
 	public int isWorking(IBeeHousing housing) {
+		return canWork(housing).ordinal();
+	}
+
+	@Override
+	public EnumErrorCode canWork(IBeeHousing housing) {
 
 		World world = housing.getWorld();
 		// / Rain needs tolerant flyers
 		if (world.isRaining() && !genome.getTolerantFlyer() && housing.getHumidity() != EnumHumidity.ARID && !housing.isSealed())
-			return EnumErrorCode.ISRAINING.ordinal();
+			return EnumErrorCode.ISRAINING;
 
 		// / Night or darkness requires nocturnal species
 		if(world.isDaytime()) {
 			if(!canWorkDuringDay())
-				return EnumErrorCode.NOTNIGHT.ordinal();
+				return EnumErrorCode.NOTNIGHT;
 		} else if (!canWorkAtNight() && !housing.isSelfLighted())
-			return EnumErrorCode.NOTDAY.ordinal();
+			return EnumErrorCode.NOTDAY;
 
 		if (world.getBlockLightValue(housing.getXCoord(), housing.getYCoord() + 2, housing.getZCoord()) > Defaults.APIARY_MIN_LEVEL_LIGHT) {
 			if(!canWorkDuringDay())
-				return EnumErrorCode.NOTGLOOMY.ordinal();
+				return EnumErrorCode.NOTGLOOMY;
 		} else if(!canWorkAtNight() && !housing.isSelfLighted())
-			return EnumErrorCode.NOTLUCID.ordinal();
+			return EnumErrorCode.NOTLUCID;
 
 		// / No sky, except if in hell
 		BiomeGenBase biome = BiomeGenBase.getBiome(housing.getBiomeId());
 		if(biome == null)
-			return EnumErrorCode.NOSKY.ordinal();
+			return EnumErrorCode.NOSKY;
 		if (!EnumTemperature.isBiomeHellish(biome) && !world.canBlockSeeTheSky(housing.getXCoord(), housing.getYCoord() + 3, housing.getZCoord())
 				&& !genome.getCaveDwelling() && !housing.isSunlightSimulated())
-			return EnumErrorCode.NOSKY.ordinal();
+			return EnumErrorCode.NOSKY;
 
 		// / And finally climate check
 		if (!checkSuitableClimate(housing.getTemperature(), housing.getHumidity()))
-			return EnumErrorCode.INVALIDBIOME.ordinal();
+			return EnumErrorCode.INVALIDBIOME;
 
-		return EnumErrorCode.OK.ordinal();
+		return EnumErrorCode.OK;
 	}
 
 	private boolean canWorkAtNight() {
