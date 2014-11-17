@@ -226,7 +226,7 @@ public class Bee extends IndividualLiving implements IBee {
 		BiomeGenBase biome = BiomeGenBase.getBiome(housing.getBiomeId());
 		if(biome == null)
 			return EnumErrorCode.NOSKY.ordinal();
-		if (!BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.NETHER) && !world.canBlockSeeTheSky(housing.getXCoord(), housing.getYCoord() + 3, housing.getZCoord())
+		if (!EnumTemperature.isBiomeHellish(biome) && !world.canBlockSeeTheSky(housing.getXCoord(), housing.getYCoord() + 3, housing.getZCoord())
 				&& !genome.getCaveDwelling() && !housing.isSunlightSimulated())
 			return EnumErrorCode.NOSKY.ordinal();
 
