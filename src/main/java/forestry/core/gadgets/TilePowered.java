@@ -26,7 +26,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 
-@Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = "BuildCraft|Core")
+@Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = "BuildCraftAPI|tiles")
 public abstract class TilePowered extends TileBase implements IRenderableMachine, IPowerHandler, IHasWork {
 
 	public static int WORK_CYCLES = 4;

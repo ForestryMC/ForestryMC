@@ -42,7 +42,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.Collection;
 
-@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraft|Core")
+@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
 public abstract class TileForestry extends TileEntity implements INetworkedEntity, IOwnable, IErrorSource, ITriggerProvider {
 
 	protected boolean isInited = false;
@@ -153,13 +153,13 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	/* ITriggerProvider */
-	@Optional.Method(modid = "BuildCraft|Core")
+	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
 	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
 		return null;
 	}
 
-	@Optional.Method(modid = "BuildCraft|Core")
+	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
 		return null;

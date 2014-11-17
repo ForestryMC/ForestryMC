@@ -329,7 +329,7 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 	}
 
 	/* ITRIGGERPROVIDER */
-	@Optional.Method(modid = "BuildCraft|Core")
+	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
 		if (!hasMaster())
