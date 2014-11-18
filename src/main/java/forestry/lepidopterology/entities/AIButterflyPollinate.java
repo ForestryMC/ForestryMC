@@ -11,7 +11,6 @@
 package forestry.lepidopterology.entities;
 
 import forestry.api.genetics.IPollinatable;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.Utils;
 
 public class AIButterflyPollinate extends AIButterflyInteract {
@@ -45,10 +44,10 @@ public class AIButterflyPollinate extends AIButterflyInteract {
 			IPollinatable pollinatable = (IPollinatable) entity.worldObj.getTileEntity(rest.posX, rest.posY, rest.posZ);
 			if (entity.getPollen() == null) {
 				entity.setPollen(pollinatable.getPollen());
-				Proxies.log.finest("A butterfly '%s' grabbed a pollen '%s' at %s/%s/%s.", entity.getButterfly().getIdent(), entity.getPollen().getIdent(), rest.posX, rest.posY, rest.posZ);
+//				Proxies.log.finest("A butterfly '%s' grabbed a pollen '%s' at %s/%s/%s.", entity.getButterfly().getIdent(), entity.getPollen().getIdent(), rest.posX, rest.posY, rest.posZ);
 			} else if (pollinatable.canMateWith(entity.getPollen())) {
 				pollinatable.mateWith(entity.getPollen());
-				Proxies.log.finest("A butterfly '%s' unloaded pollen '%s' at %s/%s/%s.", entity.getButterfly().getIdent(), entity.getPollen().getIdent(), rest.posX, rest.posY, rest.posZ);
+//				Proxies.log.finest("A butterfly '%s' unloaded pollen '%s' at %s/%s/%s.", entity.getButterfly().getIdent(), entity.getPollen().getIdent(), rest.posX, rest.posY, rest.posZ);
 				entity.setPollen(null);
 			}
 			setHasInteracted();
