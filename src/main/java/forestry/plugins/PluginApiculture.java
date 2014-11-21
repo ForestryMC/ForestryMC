@@ -416,7 +416,7 @@ public class PluginApiculture extends ForestryPlugin {
 
 		// / BEE COMBS
 		ForestryItem.beeComb.registerItem(new ItemHoneycomb(), "beeCombs");
-		OreDictionary.registerOre("beeComb", ForestryItem.beeComb.getItemStack(1, Defaults.WILDCARD));
+		OreDictionary.registerOre("beeComb", ForestryItem.beeComb.getWildcard());
 
 		// / APIARIST'S CLOTHES
 		ForestryItem.apiaristHat.registerItem(new ItemArmorApiarist(0), "apiaristHelmet");

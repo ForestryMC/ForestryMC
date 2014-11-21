@@ -257,7 +257,7 @@ public class PluginArboriculture extends ForestryPlugin {
 
 		// Leaves
 		ForestryBlock.leaves.registerBlock(new ForestryBlockLeaves(), ItemLeavesBlock.class, "leaves");
-		OreDictionary.registerOre("treeLeaves", new ItemStack(ForestryBlock.leaves.item(), 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("treeLeaves", ForestryBlock.leaves.getWildcard());
 
 		// Pods
 		ForestryBlock.pods.registerBlock(new BlockFruitPod(), ItemForestryBlock.class, "pods");
@@ -334,7 +334,7 @@ public class PluginArboriculture extends ForestryPlugin {
 	protected void registerItems() {
 
 		ForestryItem.sapling.registerItem(new ItemGermlingGE(EnumGermlingType.SAPLING), "sapling");
-		OreDictionary.registerOre("treeSapling", ForestryItem.sapling.getItemStack(1, -1));
+		OreDictionary.registerOre("treeSapling", ForestryItem.sapling.getWildcard());
 
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
 			ForestryItem.pollenFertile.registerItem(new ItemGermlingGE(EnumGermlingType.POLLEN), "pollenFertile");
