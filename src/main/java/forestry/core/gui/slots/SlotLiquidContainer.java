@@ -26,12 +26,12 @@ public class SlotLiquidContainer extends SlotForestry {
 	private final boolean allowEmpty;
 	private final Fluid[] fluids;
 
-	public SlotLiquidContainer(IInventory iinventory, int x, int y, int z) {
-		this(iinventory, x, y, z, false);
+	public SlotLiquidContainer(IInventory iinventory, int slotIndex, int xPos, int yPos) {
+		this(iinventory, slotIndex, xPos, yPos, false);
 	}
 
-	public SlotLiquidContainer(IInventory iinventory, int x, int y, int z, boolean allowEmpty, Fluid... fluids) {
-		super(iinventory, x, y, z);
+	public SlotLiquidContainer(IInventory iinventory, int slotIndex, int xPos, int yPos, boolean allowEmpty, Fluid... fluids) {
+		super(iinventory, slotIndex, xPos, yPos);
 
 		this.allowEmpty = allowEmpty;
 		this.fluids = fluids;

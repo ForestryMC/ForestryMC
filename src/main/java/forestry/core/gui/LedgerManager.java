@@ -70,7 +70,7 @@ public class LedgerManager {
 
 	protected void drawLedgers() {
 
-		int xPos = 8;
+		int yPos = 8;
 		for (Ledger ledger : ledgers) {
 
 			ledger.update();
@@ -78,8 +78,8 @@ public class LedgerManager {
 				continue;
 
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			ledger.draw(gui.getSizeX(), xPos);
-			xPos += ledger.getHeight();
+			ledger.draw(gui.getSizeX(), yPos);
+			yPos += ledger.getHeight();
 		}
 	}
 
