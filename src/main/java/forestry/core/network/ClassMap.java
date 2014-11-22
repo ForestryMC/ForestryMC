@@ -79,9 +79,9 @@ public class ClassMap {
 			UUID profileID = profile.getId();
 			if (profileID == null)
 				profileID = new UUID(0,0);
-			intPayload[index.intIndex] = (int) profileID.getMostSignificantBits() >>> 32;
+			intPayload[index.intIndex] = (int) (profileID.getMostSignificantBits() >>> 32);
 			intPayload[index.intIndex + 1] = (int) profileID.getMostSignificantBits();
-			intPayload[index.intIndex + 2] = (int) profileID.getLeastSignificantBits() >>> 32;
+			intPayload[index.intIndex + 2] = (int) (profileID.getLeastSignificantBits() >>> 32);
 			intPayload[index.intIndex + 3] = (int) profileID.getLeastSignificantBits();
 			index.intIndex += 4;
 			stringPayload[index.stringIndex] = profile.getName();
