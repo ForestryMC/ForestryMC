@@ -201,9 +201,12 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 			loss++;
 
 		// Lose extra heat when using water as fuel.
-		EngineBronzeFuel fuel = FuelManager.bronzeEngineFuel.get(fuelTank.getFluid());
-		if (fuel != null)
-			loss = loss * fuel.dissipationMultiplier;
+		if (fuelTank.getFluidAmount() > 0) {
+			FluidStack fuelFluidStack = fuelTank.getFluid();
+			EngineBronzeFuel fuel = FuelManager.bronzeEngineFuel.get(fuelFluidStack.getFluid());
+			if (fuel != null)
+				loss = loss * fuel.dissipationMultiplier;
+		}
 
 		heat -= loss;
 		return loss;

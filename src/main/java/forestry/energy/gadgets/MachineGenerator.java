@@ -138,7 +138,7 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 		ic2EnergySource.updateEntity();
 
 		if (resourceTank.getFluidAmount() > 0) {
-			GeneratorFuel fuel = FuelManager.generatorFuel.get(resourceTank.getFluid());
+			GeneratorFuel fuel = FuelManager.generatorFuel.get(resourceTank.getFluid().getFluid());
 
 			if (resourceTank.getFluidAmount() >= fuel.fuelConsumed.amount &&
 					ic2EnergySource.getFreeCapacity() >= fuel.eu) {
@@ -240,7 +240,7 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 		if (container == null)
 			return 0;
 
-		if (!FuelManager.generatorFuel.containsKey(container.fluid))
+		if (container.fluid == null || !FuelManager.generatorFuel.containsKey(container.fluid.getFluid()))
 			return 0;
 
 		if (inventory.getStackInSlot(SLOT_CAN) == null) {
