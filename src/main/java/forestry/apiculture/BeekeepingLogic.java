@@ -109,7 +109,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 		this.queen = null;
 
-		if (!didSpawnPendingProducts()) {
+		if (!addPendingProducts()) {
 			return;
 		}
 		
@@ -122,8 +122,6 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		}
 
 		queenWorkTick();
-
-		return;
 	}
 
 	private void queenWorkTick() {
@@ -189,8 +187,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		housing.getQueen().setTagCompound(nbttagcompound);
 	}
 
-	private boolean didSpawnPendingProducts() {
-		boolean didSpawnItem = true;
+	private boolean addPendingProducts() {
 		EnumErrorCode housingErrorState = null;
 
 		while (!spawn.isEmpty()) {
@@ -200,9 +197,10 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 				housingErrorState = EnumErrorCode.OK;
 			} else {
 				housingErrorState = EnumErrorCode.NOSPACE;
-				didSpawnItem = false;
+				break;
 			}
 		}
+
 		if (housingErrorState != null) {
 			try {
 				housing.setErrorState(housingErrorState);
@@ -210,7 +208,8 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 				housing.setErrorState(housingErrorState.ordinal());
 			}
 		}
-		return didSpawnItem;
+
+		return housingErrorState != EnumErrorCode.NOSPACE;
 	}
 	
 	private boolean hasHealthyQueen() {
