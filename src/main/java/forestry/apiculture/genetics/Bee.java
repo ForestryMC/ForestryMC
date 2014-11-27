@@ -336,6 +336,16 @@ public class Bee extends IndividualLiving implements IBee {
 	}
 
 	@Override
+	public ArrayList<BiomeGenBase> getSuitableBiomes() {
+		ArrayList<BiomeGenBase> suitableBiomes = new ArrayList<BiomeGenBase>();
+		for (BiomeGenBase biome : BiomeGenBase.getBiomeGenArray())
+			if (checkBiomeHazard(biome))
+				suitableBiomes.add(biome);
+
+		return suitableBiomes;
+	}
+
+	@Override
 	public void addTooltip(List<String> list) {
 
 		// No info 4 u!

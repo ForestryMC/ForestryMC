@@ -20,6 +20,7 @@ import java.util.Stack;
 import java.util.TreeMap;
 
 import forestry.api.core.BiomeHelper;
+import forestry.core.utils.Utils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -104,9 +105,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	private boolean stage = false;
 
-	private int biomeId;
-	private float temperature;
-	private float humidity;
+	private BiomeGenBase biome;
 
 	private int hydrationDelay = 0;
 	private int ticksSinceRainfall = 0;
@@ -185,10 +184,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	}
 
 	private void setBiomeInformation() {
-		BiomeGenBase biome = worldObj.getBiomeGenForCoords(xCoord, zCoord);
-		this.biomeId = biome.biomeID;
-		this.temperature = biome.temperature;
-		this.humidity = biome.rainfall;
+		this.biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
 		setErrorState(EnumErrorCode.OK);
 	}
 
@@ -895,12 +891,6 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		case 0:
 			storedFertilizer = j;
 			break;
-		case 3:
-			this.temperature = (float) j / 100;
-			break;
-		case 4:
-			this.humidity = (float) j / 100;
-			break;
 		case 5:
 			ticksSinceRainfall = j;
 			break;
@@ -910,8 +900,6 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
 		int i = tankManager.maxMessageId() + 1;
 		iCrafting.sendProgressBarUpdate(container, i, storedFertilizer);
-		iCrafting.sendProgressBarUpdate(container, i + 3, Math.round(temperature * 100));
-		iCrafting.sendProgressBarUpdate(container, i + 4, Math.round(humidity * 100));
 		iCrafting.sendProgressBarUpdate(container, i + 5, ticksSinceRainfall);
 	}
 
@@ -921,11 +909,12 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	}
 
 	public float getHydrationTempModifier() {
+		float temperature = getExactTemperature();
 		return temperature > 0.8f ? temperature : 0.8f;
 	}
 
 	public float getHydrationHumidModifier() {
-		float mod = 1 / humidity;
+		float mod = 1 / getExactHumidity();
 		return mod < 2.0f ? mod : 2.0f;
 	}
 
@@ -945,7 +934,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	@Override
 	public EnumTemperature getTemperature() {
-		if (BiomeHelper.isBiomeHellish(biomeId))
+		if (BiomeHelper.isBiomeHellish(biome))
 			return EnumTemperature.HELLISH;
 
 		return EnumTemperature.getFromValue(getExactTemperature());
@@ -958,12 +947,12 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	@Override
 	public float getExactTemperature() {
-		return temperature;
+		return biome.temperature;
 	}
 
 	@Override
 	public float getExactHumidity() {
-		return humidity;
+		return biome.rainfall;
 	}
 
 	/* IHINTSOURCE */

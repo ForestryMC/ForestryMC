@@ -11,23 +11,15 @@
 package forestry.apiculture.gadgets;
 
 import com.mojang.authlib.GameProfile;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.api.core.EnumErrorCode;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.IIndividual;
-import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.TileBase;
@@ -40,6 +32,14 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginApiculture;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.BiomeDictionary;
 
 public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 
@@ -57,9 +57,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	// Inventory
 	protected InventoryAdapter inventory = new InventoryAdapter(12, "Items");
 	private final IBeekeepingLogic logic;
-	private int biomeId = -1;
-	private float temperature;
-	private float humidity;
+	private BiomeGenBase biome;
 	private int displayHealthMax = 0;
 	private int displayHealth = 0;
 
@@ -78,9 +76,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 
-		nbttagcompound.setFloat("Temp", temperature);
-		nbttagcompound.setFloat("Humidity", humidity);
-		nbttagcompound.setInteger("BiomeId", biomeId);
+		nbttagcompound.setInteger("BiomeId", biome.biomeID);
 
 		inventory.writeToNBT(nbttagcompound);
 		if (logic != null)
@@ -91,9 +87,8 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 
-		temperature = nbttagcompound.getFloat("Temp");
-		humidity = nbttagcompound.getFloat("Humidity");
-		biomeId = nbttagcompound.getInteger("BiomeId");
+		int biomeId = nbttagcompound.getInteger("BiomeId");
+		biome = BiomeGenBase.getBiome(biomeId);
 
 		inventory.readFromNBT(nbttagcompound);
 		logic.readFromNBT(nbttagcompound);
@@ -119,22 +114,22 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 
 	@Override
 	public EnumTemperature getTemperature() {
-		return EnumTemperature.getFromBiome(biomeId);
+		return EnumTemperature.getFromValue(getExactTemperature());
 	}
 
 	@Override
 	public EnumHumidity getHumidity() {
-		return EnumHumidity.getFromValue(humidity);
+		return EnumHumidity.getFromValue(getExactHumidity());
 	}
 
 	@Override
 	public float getExactTemperature() {
-		return this.temperature;
+		return biome.temperature;
 	}
 
 	@Override
 	public float getExactHumidity() {
-		return this.humidity;
+		return biome.rainfall;
 	}
 
 	/* UPDATING */
@@ -142,12 +137,12 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	public void updateClientSide() {
 
 		// / Multiplayer FX
-		if (PluginApiculture.beeInterface.isMated(inventory.getStackInSlot(SLOT_QUEEN)))
+		if (PluginApiculture.beeInterface.isMated(inventory.getStackInSlot(SLOT_QUEEN))) {
 			if (getErrorState() == EnumErrorCode.OK && worldObj.getTotalWorldTime() % 2 % 2 == 0) {
 				IBee displayQueen = PluginApiculture.beeInterface.getMember(inventory.getStackInSlot(SLOT_QUEEN));
 				displayQueen.doFX(logic.getEffectData(), this);
 			}
-		return;
+		}
 
 	}
 
@@ -242,20 +237,18 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	}
 
 	public int getTemperatureScaled(int i) {
-		return Math.round(i * (temperature / 2));
+		return Math.round(i * (getExactTemperature() / 2));
 	}
 
 	public int getHumidityScaled(int i) {
-		return Math.round(i * humidity);
+		return Math.round(i * getExactHumidity());
 	}
 
 	public void updateBiome() {
 		if (worldObj != null) {
 			BiomeGenBase biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
 			if (biome != null) {
-				this.biomeId = biome.biomeID;
-				this.temperature = biome.temperature;
-				this.humidity = biome.rainfall;
+				this.biome = biome;
 				setErrorState(EnumErrorCode.OK);
 			}
 		}
@@ -318,7 +311,12 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 
 	@Override
 	public int getBiomeId() {
-		return this.biomeId;
+		return biome.biomeID;
+	}
+
+	@Override
+	public BiomeGenBase getBiome() {
+		return biome;
 	}
 
 	@Override
