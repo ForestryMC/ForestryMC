@@ -797,7 +797,7 @@ public class PluginArboriculture extends ForestryPlugin {
 				"tectona", proxy.getFoliageColorBasic(), 0x539d12, WorldGenJungle.class, new ItemStack(Blocks.log, 1, 3))
 				.addFruitFamily(jungle).setLeafIndices("jungle").setVanillaMap(3);
 		Allele.treeTeak = new AlleleTreeSpecies("treeTeak", true, "teak", tectona, "grandis",
-				0xfeff8f, 0xffd98f, WorldGenTeak.class, ForestryBlock.log1.getItemStack(1, 3)).addFruitFamily(jungle).setLeafIndices(
+				0xfeff8f, 0xffd98f, WorldGenTeak.class, ForestryBlock.log1.getItemStack(1, 1)).addFruitFamily(jungle).setLeafIndices(
 						"jungle");
 		Allele.treeKapok = new AlleleTreeSpecies("treeKapok", true, "kapok", ceiba, "pentandra",
 				0x89987b, 0x89aa9e, WorldGenKapok.class, ForestryBlock.log3.getItemStack(1, 0)).addFruitFamily(jungle)
