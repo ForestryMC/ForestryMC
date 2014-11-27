@@ -24,7 +24,7 @@ import forestry.core.worldgen.WorldGenBase;
 
 public abstract class WorldGenArboriculture extends WorldGenBase {
 
-	protected ITreeGenData tree;
+	protected final ITreeGenData tree;
 	protected int startX;
 	protected int startY;
 	protected int startZ;
