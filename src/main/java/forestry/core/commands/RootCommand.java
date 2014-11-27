@@ -40,26 +40,11 @@ public class RootCommand extends CommandBase implements IForestryCommand {
 		children.add(child);
 	}
 
-	@Override
-	public SortedSet<SubCommand> getChildren() {
-		return children;
-	}
+	/* CommandBase */
 
 	@Override
 	public String getCommandName() {
 		return ROOT_COMMAND_NAME;
-	}
-
-	@Override
-	public int getRequiredPermissionLevel() {
-		return 0;
-	}
-
-	@Override
-	public List<String> getCommandAliases() {
-		List<String> aliases = new ArrayList<String>();
-		aliases.add(ROOT_COMMAND_ALIAS);
-		return aliases;
 	}
 
 	@Override
@@ -73,14 +58,42 @@ public class RootCommand extends CommandBase implements IForestryCommand {
 			CommandHelpers.throwWrongUsage(sender, this);
 	}
 
+	/**
+	 * Used only for CommandBase.
+	 * It gets obfuscated, so the name needs to be different from the one in IForestryCommand.
+	 */
+	@Override
+	public int getRequiredPermissionLevel() {
+		return getPermissionLevel();
+	}
+
+	@Override
+	public List<String> getCommandAliases() {
+		List<String> aliases = new ArrayList<String>();
+		aliases.add(ROOT_COMMAND_ALIAS);
+		return aliases;
+	}
+
 	@Override
 	public List addTabCompletionOptions(ICommandSender sender, String[] incomplete) {
 		return CommandHelpers.addStandardTabCompletionOptions(this, sender, incomplete);
 	}
 
+	/* IForestryCommand */
+
 	@Override
 	public String getFullCommandString() {
 		return getCommandName();
+	}
+
+	@Override
+	public int getPermissionLevel() {
+		return 0;
+	}
+
+	@Override
+	public SortedSet<SubCommand> getChildren() {
+		return children;
 	}
 
 	@Override

@@ -101,13 +101,13 @@ public abstract class SubCommand implements IForestryCommand {
 	}
 
 	@Override
-	public final int getRequiredPermissionLevel() {
+	public final int getPermissionLevel() {
 		return permLevel.permLevel;
 	}
 
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender sender) {
-		return sender.canCommandSenderUseCommand(getRequiredPermissionLevel(), getCommandName());
+		return sender.canCommandSenderUseCommand(getPermissionLevel(), getCommandName());
 	}
 
 	@Override

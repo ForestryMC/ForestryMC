@@ -26,7 +26,7 @@ public interface IForestryCommand extends ICommand {
 	@Override
 	List<String> getCommandAliases();
 
-	int getRequiredPermissionLevel();
+	int getPermissionLevel();
 
 	SortedSet<SubCommand> getChildren();
 
