@@ -116,6 +116,12 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		tankManager = new TankManager(liquidTank);
 	}
 
+	@Override
+	public void validate() {
+		super.validate();
+		setBiomeInformation();
+	}
+
 	/* SAVING & LOADING */
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
