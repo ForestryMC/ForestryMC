@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 
+import forestry.api.core.BiomeHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -944,7 +945,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	@Override
 	public EnumTemperature getTemperature() {
-		if (EnumTemperature.isBiomeHellish(biomeId))
+		if (BiomeHelper.isBiomeHellish(biomeId))
 			return EnumTemperature.HELLISH;
 
 		return EnumTemperature.getFromValue(getExactTemperature());

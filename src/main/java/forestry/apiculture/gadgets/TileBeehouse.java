@@ -119,9 +119,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 
 	@Override
 	public EnumTemperature getTemperature() {
-		if (EnumTemperature.isBiomeHellish(biomeId))
-			return EnumTemperature.HELLISH;
-		return EnumTemperature.getFromValue(temperature);
+		return EnumTemperature.getFromBiome(biomeId);
 	}
 
 	@Override

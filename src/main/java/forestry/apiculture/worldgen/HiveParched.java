@@ -11,6 +11,7 @@
 package forestry.apiculture.worldgen;
 
 import forestry.api.apiculture.hives.HiveGround;
+import forestry.api.core.BiomeHelper;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.core.config.ForestryBlock;
@@ -21,6 +22,11 @@ public class HiveParched extends HiveGround {
 
 	public HiveParched(float genChance) {
 		super(ForestryBlock.beehives.block(), 3, genChance, Blocks.sand, Blocks.sandstone);
+	}
+
+	@Override
+	public boolean isGoodBiome(BiomeGenBase biome) {
+		return !BiomeHelper.canRainOrSnow(biome);
 	}
 
 	@Override

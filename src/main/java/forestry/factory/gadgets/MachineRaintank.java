@@ -12,6 +12,7 @@ package forestry.factory.gadgets;
 
 import buildcraft.api.statements.ITriggerExternal;
 import cpw.mods.fml.common.Optional;
+import forestry.api.core.BiomeHelper;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.EnumErrorCode;
@@ -72,7 +73,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 		// Raintanks in desert and snow biomes are useless
 		if (worldObj != null) {
 			BiomeGenBase biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
-			if (EnumHumidity.getFromValue(biome.rainfall) == EnumHumidity.ARID) {
+			if (!BiomeHelper.canRainOrSnow(biome)) {
 				setErrorState(EnumErrorCode.INVALIDBIOME);
 				isValidBiome = false;
 			}
