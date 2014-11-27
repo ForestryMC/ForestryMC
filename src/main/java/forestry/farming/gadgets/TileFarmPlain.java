@@ -772,6 +772,19 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		return inventory.contains(resources, SLOT_RESOURCES_1, SLOT_COUNT_RESERVOIRS);
 	}
 
+	public boolean hasResourcesAmount(int amount) {
+		int total = 0;
+		for (ItemStack itemStack : inventory.getStacks(SLOT_RESOURCES_1, SLOT_COUNT_RESERVOIRS)) {
+			if (itemStack == null)
+				continue;
+
+			total += itemStack.stackSize;
+			if (total >= amount)
+				return true;
+		}
+		return false;
+	}
+
 	@Override
 	public void removeResources(ItemStack[] resources) {
 		EntityPlayer player = Proxies.common.getPlayer(worldObj, owner);

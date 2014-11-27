@@ -63,14 +63,12 @@ public class TriggerLowSoil extends Trigger {
 		if (central == null || !(central instanceof TileFarmPlain))
 			return false;
 
-		ItemStack filter;
 		if (parameter == null || parameter.getItemStack() == null) {
-			filter = new ItemStack(Blocks.bedrock, threshold);
+			return !((TileFarmPlain) central).hasResourcesAmount(threshold);
 		} else {
-			filter = parameter.getItemStack().copy();
+			ItemStack filter = parameter.getItemStack().copy();
 			filter.stackSize = threshold;
+			return !((TileFarmPlain) central).hasResources(new ItemStack[] { filter });
 		}
-
-		return !((TileFarmPlain) central).hasResources(new ItemStack[] { filter });
 	}
 }
