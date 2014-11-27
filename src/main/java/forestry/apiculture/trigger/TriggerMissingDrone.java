@@ -8,12 +8,13 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.triggers;
+package forestry.apiculture.trigger;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
 import forestry.api.core.EnumErrorCode;
 import forestry.core.interfaces.IErrorSource;
+import forestry.core.triggers.Trigger;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 

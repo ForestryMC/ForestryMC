@@ -200,6 +200,36 @@ public class InventoryAdapter implements IInventory, INBTTagable {
 		return StackUtils.containsSets(query, stock) > 0;
 	}
 
+	public boolean containsPercent(float percent, int slot1, int length) {
+		int amount = 0;
+		int stackMax = 0;
+		for (ItemStack itemStack : getStacks(slot1, length)) {
+			if (itemStack == null) {
+				stackMax += 64;
+				continue;
+			}
+
+			amount += itemStack.stackSize;
+			stackMax += itemStack.getMaxStackSize();
+		}
+		if (stackMax == 0)
+			return false;
+		return ((float)amount / (float)stackMax) >= percent;
+	}
+
+	public boolean containsAmount(int amount, int slot1, int length) {
+		int total = 0;
+		for (ItemStack itemStack : getStacks(slot1, length)) {
+			if (itemStack == null)
+				continue;
+
+			total += itemStack.stackSize;
+			if (total >= amount)
+				return true;
+		}
+		return false;
+	}
+
 	/* REMOVAL */
 	/**
 	 * Removes a set of items from an inventory.

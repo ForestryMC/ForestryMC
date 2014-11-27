@@ -13,10 +13,10 @@ package forestry.energy.gadgets;
 import buildcraft.api.statements.ITriggerExternal;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameData;
+import forestry.api.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.fuels.FuelManager;
-import forestry.api.core.EnumErrorCode;
 import forestry.core.TemperatureState;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
@@ -24,10 +24,10 @@ import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.Engine;
 import forestry.core.gadgets.TileBase;
 import forestry.core.network.GuiId;
-import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.TileInventoryAdapter;
+import forestry.factory.triggers.FactoryTriggers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -504,7 +504,8 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
-		res.add(ForestryTrigger.lowFuel25);
+		res.add(FactoryTriggers.lowFuel25);
+		res.add(FactoryTriggers.lowFuel10);
 		return res;
 	}
 

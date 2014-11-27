@@ -13,12 +13,11 @@ package forestry.farming.gadgets;
 import buildcraft.api.statements.ITriggerExternal;
 import cpw.mods.fml.common.Optional;
 import forestry.api.core.ITileStructure;
-import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
-import forestry.plugins.PluginFarming;
+import forestry.farming.triggers.FarmingTriggers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -336,13 +335,15 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 			return null;
 
 		LinkedList<ITriggerExternal> list = new LinkedList<ITriggerExternal>();
-		list.add(PluginFarming.lowResourceLiquid50);
-		list.add(PluginFarming.lowResourceLiquid25);
-		list.add(PluginFarming.lowSoil128);
-		list.add(PluginFarming.lowSoil64);
-		list.add(PluginFarming.lowSoil32);
-		list.add(PluginFarming.lowFertilizer50);
-		list.add(PluginFarming.lowFertilizer25);
+		list.add(FarmingTriggers.lowResourceLiquid50);
+		list.add(FarmingTriggers.lowResourceLiquid25);
+		list.add(FarmingTriggers.lowSoil128);
+		list.add(FarmingTriggers.lowSoil64);
+		list.add(FarmingTriggers.lowSoil32);
+		list.add(FarmingTriggers.lowFertilizer50);
+		list.add(FarmingTriggers.lowFertilizer25);
+		list.add(FarmingTriggers.lowGermlings25);
+		list.add(FarmingTriggers.lowGermlings10);
 		return list;
 	}
 

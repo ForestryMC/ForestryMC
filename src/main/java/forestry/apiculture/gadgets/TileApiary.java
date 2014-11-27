@@ -15,9 +15,9 @@ import cpw.mods.fml.common.Optional;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IHiveFrame;
 import forestry.api.core.ForestryAPI;
+import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.core.gadgets.TileBase;
 import forestry.core.network.GuiId;
-import forestry.core.triggers.ForestryTrigger;
 import forestry.plugins.PluginApiculture;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -350,9 +350,9 @@ public class TileApiary extends TileBeehouse implements ISidedInventory {
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
-		res.add(ForestryTrigger.missingQueen);
-		res.add(ForestryTrigger.missingDrone);
-		res.add(PluginApiculture.triggerNoFrames);
+		res.add(ApicultureTriggers.missingQueen);
+		res.add(ApicultureTriggers.missingDrone);
+		res.add(ApicultureTriggers.noFrames);
 		return res;
 	}
 }

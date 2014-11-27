@@ -16,14 +16,13 @@ import forestry.api.core.ITileStructure;
 import forestry.core.triggers.Trigger;
 import forestry.farming.gadgets.TileFarmPlain;
 import forestry.farming.gadgets.TileHatch;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class TriggerLowSoil extends Trigger {
 
-	private int threshold = 64;
+	private final int threshold;
 
 	public TriggerLowSoil(int threshold) {
 		super("lowSoil." + threshold, "lowSoil");

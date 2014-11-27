@@ -773,16 +773,15 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	}
 
 	public boolean hasResourcesAmount(int amount) {
-		int total = 0;
-		for (ItemStack itemStack : inventory.getStacks(SLOT_RESOURCES_1, SLOT_COUNT_RESERVOIRS)) {
-			if (itemStack == null)
-				continue;
+		return inventory.containsAmount(amount, SLOT_RESOURCES_1, SLOT_COUNT_RESERVOIRS);
+	}
 
-			total += itemStack.stackSize;
-			if (total >= amount)
-				return true;
-		}
-		return false;
+	public boolean hasGermlingsPercent(float percent) {
+		return inventory.containsPercent(percent, SLOT_GERMLINGS_1, SLOT_COUNT_RESERVOIRS);
+	}
+
+	public boolean hasFertilizerPercent(float percent) {
+		return inventory.containsPercent(percent, SLOT_FERTILIZER, 1);
 	}
 
 	@Override

@@ -10,15 +10,7 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import java.util.ArrayList;
-
-import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-
 import cpw.mods.fml.common.network.IGuiHandler;
-
 import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.GameMode;
@@ -49,6 +41,13 @@ import forestry.factory.gadgets.MachineStill;
 import forestry.factory.gadgets.MillRainmaker;
 import forestry.factory.gadgets.TileWorktable;
 import forestry.factory.recipes.CraftGuideIntegration;
+import forestry.factory.triggers.FactoryTriggers;
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+
+import java.util.ArrayList;
 
 @Plugin(pluginID = "Factory", name = "Factory", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.factory.description")
 public class PluginFactory extends ForestryPlugin {
@@ -204,6 +203,11 @@ public class PluginFactory extends ForestryPlugin {
 						'W', Blocks.crafting_table,
 						'C', Blocks.chest))
 				.setFaces(0, 1, 2, 3, 4, 4));
+
+		// Triggers
+		if (PluginManager.Module.BUILDCRAFT.isEnabled()) {
+			FactoryTriggers.initialize();
+		}
 	}
 
 	@Override

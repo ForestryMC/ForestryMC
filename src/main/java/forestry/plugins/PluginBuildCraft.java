@@ -23,7 +23,6 @@ import forestry.core.config.Configuration;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.Property;
-import forestry.core.gadgets.TileForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.LiquidHelper;
 import net.minecraft.item.Item;

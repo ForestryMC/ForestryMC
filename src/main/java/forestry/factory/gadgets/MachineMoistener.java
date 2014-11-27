@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
-import buildcraft.api.statements.ITriggerExternal;
-import cpw.mods.fml.common.Optional;
+import forestry.api.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
 import forestry.api.recipes.IMoistenerManager;
-import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.TankManager;
@@ -27,7 +25,6 @@ import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
-import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
@@ -39,7 +36,6 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
@@ -48,9 +44,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 public class MachineMoistener extends TileBase implements ISpecialInventory, ISidedInventory, ILiquidTankContainer, IRenderableMachine {
@@ -734,18 +728,6 @@ public class MachineMoistener extends TileBase implements ISpecialInventory, ISi
 		iCrafting.sendProgressBarUpdate(container, i + 1, totalTime);
 		iCrafting.sendProgressBarUpdate(container, i + 2, productionTime);
 		iCrafting.sendProgressBarUpdate(container, i + 3, timePerItem);
-	}
-
-	/* ITRIGGERPROVIDER */
-	@Optional.Method(modid = "BuildCraftAPI|statements")
-	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
-		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
-		res.add(ForestryTrigger.lowFuel25);
-		res.add(ForestryTrigger.lowFuel10);
-		res.add(ForestryTrigger.lowResource25);
-		res.add(ForestryTrigger.lowResource10);
-		return res;
 	}
 
 }

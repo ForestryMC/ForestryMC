@@ -43,9 +43,6 @@ public class TriggerLowFertilizer extends Trigger {
 		if (central == null || !(central instanceof TileFarmPlain))
 			return false;
 
-		ItemStack fertilizer = central.getInventory().getStackInSlot(TileFarmPlain.SLOT_FERTILIZER);
-		if (fertilizer == null)
-			return true;
-		return ((float) fertilizer.stackSize / fertilizer.getMaxStackSize()) <= threshold;
+		return !((TileFarmPlain) central).hasFertilizerPercent(threshold);
 	}
 }

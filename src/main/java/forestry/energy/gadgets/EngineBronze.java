@@ -10,29 +10,16 @@
  ******************************************************************************/
 package forestry.energy.gadgets;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-
+import forestry.api.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.FuelManager;
-import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.fluids.tanks.FilteredTank;
+import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gadgets.Engine;
 import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ILiquidTankContainer;
@@ -40,6 +27,17 @@ import forestry.core.network.GuiId;
 import forestry.core.network.PacketPayload;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.TileInventoryAdapter;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
 
 public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTankContainer {
 
