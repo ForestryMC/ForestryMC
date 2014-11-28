@@ -8,19 +8,27 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.triggers;
+package forestry.factory.triggers;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
-import forestry.api.core.EnumErrorCode;
-import forestry.core.interfaces.IErrorSource;
+import forestry.core.gadgets.TilePowered;
+import forestry.core.triggers.Trigger;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TriggerMissingQueen extends Trigger {
+public class TriggerLowResource extends Trigger {
 
-	public TriggerMissingQueen() {
-		super("missingQueen");
+	private float threshold = 0.25F;
+
+	public TriggerLowResource(String tag, float threshold) {
+		super(tag, "lowResources");
+		this.threshold = threshold;
+	}
+
+	@Override
+	public String getDescription() {
+		return super.getDescription() + " < " + threshold * 100 + "%";
 	}
 
 	/**
@@ -28,10 +36,10 @@ public class TriggerMissingQueen extends Trigger {
 	 */
 	@Override
 	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
-
-		if (!(tile instanceof IErrorSource))
+		if (!(tile instanceof TilePowered))
 			return false;
 
-		return ((IErrorSource) tile).getErrorState() == EnumErrorCode.NOQUEEN;
+		return !((TilePowered) tile).hasResourcesMin(threshold);
 	}
+
 }

@@ -23,7 +23,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 
 public class TriggerLowLiquid extends Trigger {
 
-	private float threshold = 0.25F;
+	private final float threshold;
 
 	public TriggerLowLiquid(String tag, float threshold) {
 		super(tag, "lowLiquid");

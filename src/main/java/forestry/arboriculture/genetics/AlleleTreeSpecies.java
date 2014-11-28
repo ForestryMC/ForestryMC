@@ -83,16 +83,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	private EnumPlantType nativeType = EnumPlantType.Plains;
 	private final ArrayList<IFruitFamily> fruits = new ArrayList<IFruitFamily>();
 
-	private ItemStack wood;
-
-	public AlleleTreeSpecies(String uid, boolean isDominant, String name, IClassification branch, String binomial, int primaryColor, int secondaryColor) {
-		super(uid, isDominant, name, branch, binomial);
-
-		this.root = (ITreeRoot)AlleleManager.alleleRegistry.getSpeciesRoot(TreeHelper.UID);
-		this.primaryColour = primaryColor;
-		//this.secondaryColour = secondaryColor;
-		leafType = leafTypes.get("deciduous");
-	}
+	private final ItemStack wood;
 
 	public AlleleTreeSpecies(String uid, boolean isDominant, String name, IClassification branch, String binomial, int primaryColor,
 			Class<? extends WorldGenArboriculture> generator, ItemStack wood) {

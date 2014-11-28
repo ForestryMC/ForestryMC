@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.config;
 
+import forestry.core.proxy.Proxies;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -20,9 +22,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Properties;
-
-import forestry.core.proxy.Proxies;
-import forestry.core.triggers.ForestryTrigger;
 
 public class Config {
 
@@ -238,8 +237,6 @@ public class Config {
 		disabledStructures.addAll(Arrays.asList(parseStructureKeys(property.Value)));
 		for (String str : disabledStructures)
 			Proxies.log.finer("Disabled structure '%s'.", str);
-
-		ForestryTrigger.initialize();
 
 		config.save();
 

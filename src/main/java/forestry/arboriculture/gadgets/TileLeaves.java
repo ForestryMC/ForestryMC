@@ -69,17 +69,14 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	private int maturationTime;
 	private int encumbrance;
 
-	private int biomeId = -1;
+	private BiomeGenBase biome;
 
 	private IEffectData effectData[] = new IEffectData[2];
 
 	private void updateBiome() {
 		if(worldObj == null)
 			return;
-		BiomeGenBase biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
-		if (biome != null) {
-			this.biomeId = biome.biomeID;
-		}
+		biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
 	}
 
 	/* SAVING & LOADING */
@@ -119,7 +116,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public void onBlockTick() {
-		if(biomeId < 0)
+		if(biome == null)
 			updateBiome();
 
 		if (isDecorative || getTree() == null)
@@ -127,7 +124,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 		boolean isDestroyed = isDestroyed();
 		for(ILeafTickHandler tickHandler : getTree().getGenome().getPrimary().getRoot().getLeafTickHandlers())
-			if(tickHandler.onRandomLeafTick(getTree(), worldObj, biomeId, xCoord, yCoord, zCoord, isDestroyed))
+			if(tickHandler.onRandomLeafTick(getTree(), worldObj, biome.biomeID, xCoord, yCoord, zCoord, isDestroyed))
 				return;
 
 		if(isDestroyed)
@@ -149,7 +146,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if(caterpillar != null)
 			matureCaterpillar();
 
-		effectData = getTree().doEffect(effectData, worldObj, biomeId, xCoord, yCoord, zCoord);
+		effectData = getTree().doEffect(effectData, worldObj, biome.biomeID, xCoord, yCoord, zCoord);
 	}
 
 	@Override
@@ -424,7 +421,12 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public int getBiomeId() {
-		return 0;
+		return biome.biomeID;
+	}
+
+	@Override
+	public BiomeGenBase getBiome() {
+		return biome;
 	}
 
 	@Override

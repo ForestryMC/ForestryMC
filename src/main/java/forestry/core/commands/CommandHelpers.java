@@ -88,7 +88,7 @@ public class CommandHelpers {
 	}
 
 	public static void processChildCommand(ICommandSender sender, SubCommand child, String[] args) {
-		if (!sender.canCommandSenderUseCommand(child.getRequiredPermissionLevel(), child.getFullCommandString()))
+		if (!sender.canCommandSenderUseCommand(child.getPermissionLevel(), child.getFullCommandString()))
 			throw new WrongUsageException(StringUtil.localize("chat.command.noperms"));
 		String[] newargs = new String[args.length - 1];
 		System.arraycopy(args, 1, newargs, 0, newargs.length);
@@ -110,7 +110,7 @@ public class CommandHelpers {
 		if (commandAliases.size() > 0)
 			sendLocalizedChatMessage(sender, body, "for.chat.command.aliases", commandAliases.toString().replace("[", "").replace("]", ""));
 
-		int permLevel = command.getRequiredPermissionLevel();
+		int permLevel = command.getPermissionLevel();
 		if (permLevel > 0)
 			sendLocalizedChatMessage(sender, body, "for.chat.command.permlevel", permLevel);
 

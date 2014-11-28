@@ -103,6 +103,7 @@ import forestry.apiculture.items.ItemHoneycomb;
 import forestry.apiculture.items.ItemImprinter;
 import forestry.apiculture.items.ItemWaxCast;
 import forestry.apiculture.proxy.ProxyApiculture;
+import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.apiculture.trigger.TriggerNoFrames;
 import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveEnd;
@@ -170,7 +171,6 @@ public class PluginApiculture extends ForestryPlugin {
 	public static int ticksPerBeeWorkCycle = 550;
 	public static boolean apiarySideSensitive = false;
 	public static boolean fancyRenderedBees = false;
-	public static Trigger triggerNoFrames;
 	private ArrayList<IHiveDrop> forestDrops;
 	private ArrayList<IHiveDrop> meadowsDrops;
 	private ArrayList<IHiveDrop> desertDrops;
@@ -259,7 +259,9 @@ public class PluginApiculture extends ForestryPlugin {
 		ForestryBlock.alveary.block().setHarvestLevel("axe", 0);
 
 		// Add triggers
-		triggerNoFrames = new TriggerNoFrames();
+		if (PluginManager.Module.BUILDCRAFT.isEnabled()) {
+			ApicultureTriggers.initialize();
+		}
 
 		// Register village components with the Structure registry.
 		VillageHandlerApiculture.registerVillageComponents();

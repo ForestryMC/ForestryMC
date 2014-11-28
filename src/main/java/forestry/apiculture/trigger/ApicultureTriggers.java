@@ -4,31 +4,23 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.commands;
+package forestry.apiculture.trigger;
 
-import java.util.List;
-import java.util.SortedSet;
-import net.minecraft.command.ICommand;
-import net.minecraft.command.ICommandSender;
+import forestry.core.triggers.Trigger;
 
-/**
- *
- * @author CovertJaguar <http://www.railcraft.info/>
- */
-public interface IForestryCommand extends ICommand {
+public class ApicultureTriggers {
+	public static Trigger noFrames;
+	public static Trigger missingQueen;
+	public static Trigger missingDrone;
 
-	String getFullCommandString();
+	public static void initialize() {
+		noFrames = new TriggerNoFrames();
 
-	@Override
-	List<String> getCommandAliases();
-
-	int getPermissionLevel();
-
-	SortedSet<SubCommand> getChildren();
-
-	void printHelp(ICommandSender sender);
+		missingQueen = new TriggerMissingQueen();
+		missingDrone = new TriggerMissingDrone();
+	}
 }

@@ -19,6 +19,8 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeMutation;
 import forestry.api.apiculture.IBeekeepingMode;
+import forestry.api.core.BiomeHelper;
+import forestry.api.core.EnumErrorCode;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
@@ -30,7 +32,6 @@ import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
-import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Defaults;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.GenericRatings;
@@ -210,8 +211,9 @@ public class Bee extends IndividualLiving implements IBee {
 
 		World world = housing.getWorld();
 		// / Rain needs tolerant flyers
-		if (world.isRaining() && !genome.getTolerantFlyer() && housing.getHumidity() != EnumHumidity.ARID && !housing.isSealed())
+		if (world.isRaining() && !genome.getTolerantFlyer() && BiomeHelper.canRainOrSnow(housing.getBiomeId()) && !housing.isSealed()) {
 			return EnumErrorCode.ISRAINING;
+		}
 
 		// / Night or darkness requires nocturnal species
 		if(world.isDaytime()) {
@@ -230,7 +232,7 @@ public class Bee extends IndividualLiving implements IBee {
 		BiomeGenBase biome = BiomeGenBase.getBiome(housing.getBiomeId());
 		if(biome == null)
 			return EnumErrorCode.NOSKY;
-		if (!EnumTemperature.isBiomeHellish(biome) && !world.canBlockSeeTheSky(housing.getXCoord(), housing.getYCoord() + 3, housing.getZCoord())
+		if (!BiomeHelper.isBiomeHellish(biome) && !world.canBlockSeeTheSky(housing.getXCoord(), housing.getYCoord() + 3, housing.getZCoord())
 				&& !genome.getCaveDwelling() && !housing.isSunlightSimulated())
 			return EnumErrorCode.NOSKY;
 
@@ -329,6 +331,16 @@ public class Bee extends IndividualLiving implements IBee {
 		for (BiomeGenBase biome : BiomeGenBase.getBiomeGenArray())
 			if (checkBiomeHazard(biome))
 				suitableBiomes.add(biome.biomeID);
+
+		return suitableBiomes;
+	}
+
+	@Override
+	public ArrayList<BiomeGenBase> getSuitableBiomes() {
+		ArrayList<BiomeGenBase> suitableBiomes = new ArrayList<BiomeGenBase>();
+		for (BiomeGenBase biome : BiomeGenBase.getBiomeGenArray())
+			if (checkBiomeHazard(biome))
+				suitableBiomes.add(biome);
 
 		return suitableBiomes;
 	}

@@ -10,30 +10,22 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import com.mojang.authlib.GameProfile;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.util.ForgeDirection;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingLogic;
-import forestry.api.core.*;
+import forestry.api.core.BiomeHelper;
+import forestry.api.core.EnumErrorCode;
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.ISpecialInventory;
+import forestry.api.core.ITileStructure;
 import forestry.api.genetics.IIndividual;
 import forestry.apiculture.gui.ContainerAlveary;
-import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.IClimatised;
@@ -45,7 +37,21 @@ import forestry.core.network.PacketInventoryStack;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.TileInventoryAdapter;
+import forestry.core.utils.Utils;
 import forestry.plugins.PluginApiculture;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, ISpecialInventory, IBeeHousing, IClimatised, IHintSource {
 
@@ -58,9 +64,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 
 	// / MEMBERS
 	protected IBeekeepingLogic beekeepingLogic;
-	protected int biomeId;
-	protected float temperature;
-	protected float humidity;
+	protected BiomeGenBase biome;
 	protected float tempChange = 0.0f;
 	protected float humidChange = 0.0f;
 	private int displayHealthMax = 0;
@@ -111,10 +115,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 	@Override
 	public void initialize() {
 		super.initialize();
-		BiomeGenBase biome = worldObj.getBiomeGenForCoordsBody(xCoord, zCoord);
-		this.biomeId = biome.biomeID;
-		this.temperature = biome.temperature;
-		this.humidity = biome.rainfall;
+		this.biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
 		setErrorState(EnumErrorCode.OK);
 	}
 
@@ -167,13 +168,12 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 			return;
 
 		// / Multiplayer FX
-		if (PluginApiculture.beeInterface.isMated(inventory.getStackInSlot(SLOT_QUEEN)))
+		if (PluginApiculture.beeInterface.isMated(inventory.getStackInSlot(SLOT_QUEEN))) {
 			if (getErrorState() == EnumErrorCode.OK && worldObj.getTotalWorldTime() % 2 == 0) {
 				IBee displayQueen = PluginApiculture.beeInterface.getMember(inventory.getStackInSlot(SLOT_QUEEN));
 				displayQueen.doFX(beekeepingLogic.getEffectData(), this);
 			}
-		return;
-
+		}
 	}
 
 	private void equalizeTemperature() {
@@ -280,11 +280,13 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 
 	@Override
 	public void addTemperatureChange(float change, float boundaryDown, float boundaryUp) {
+		float temperature = biome.temperature;
 		tempChange = Math.min(boundaryUp - temperature, Math.max(boundaryDown - temperature, tempChange + change));
 	}
 
 	@Override
 	public void addHumidityChange(float change, float boundaryDown, float boundaryUp) {
+		float humidity = biome.rainfall;
 		humidChange = Math.min(boundaryUp - humidity, Math.max(boundaryDown - humidity, humidChange + change));
 	}
 
@@ -326,12 +328,17 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 
 	@Override
 	public int getBiomeId() {
-		return this.biomeId;
+		return biome.biomeID;
+	}
+
+	@Override
+	public BiomeGenBase getBiome() {
+		return biome;
 	}
 
 	@Override
 	public EnumTemperature getTemperature() {
-		if (EnumTemperature.isBiomeHellish(biomeId) && tempChange >= 0)
+		if (BiomeHelper.isBiomeHellish(biome) && tempChange >= 0)
 			return EnumTemperature.HELLISH;
 
 		return EnumTemperature.getFromValue(getExactTemperature());
@@ -754,27 +761,22 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 	/* SMP GUI */
 	public void getGUINetworkData(int i, int j) {
 		switch (i) {
-		case 0:
-			displayHealth = j;
-			break;
-		case 1:
-			displayHealthMax = j;
-			break;
-		case 2:
-			this.temperature = (float) j / 100;
-			break;
-		case 3:
-			this.humidity = (float) j / 100;
-			break;
-		case 4:
-			this.tempChange = (float) j / 100;
-			break;
-		case 5:
-			this.humidChange = (float) j / 100;
-			break;
-		case 6:
-			this.biomeId = j;
-			break;
+			case 0:
+				displayHealth = j;
+				break;
+			case 1:
+				displayHealthMax = j;
+				break;
+			case 4:
+				this.tempChange = (float) j / 100;
+				break;
+			case 5:
+				this.humidChange = (float) j / 100;
+				break;
+			case 6: {
+				this.biome = BiomeGenBase.getBiome(j);
+				break;
+			}
 		}
 
 	}
@@ -785,11 +787,9 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 
 		iCrafting.sendProgressBarUpdate(container, 0, beekeepingLogic.getBreedingTime());
 		iCrafting.sendProgressBarUpdate(container, 1, beekeepingLogic.getTotalBreedingTime());
-		iCrafting.sendProgressBarUpdate(container, 2, Math.round(temperature * 100));
-		iCrafting.sendProgressBarUpdate(container, 3, Math.round(humidity * 100));
 		iCrafting.sendProgressBarUpdate(container, 4, Math.round(tempChange * 100));
 		iCrafting.sendProgressBarUpdate(container, 5, Math.round(humidChange * 100));
-		iCrafting.sendProgressBarUpdate(container, 6, biomeId);
+		iCrafting.sendProgressBarUpdate(container, 6, biome.biomeID);
 	}
 
 	/* IERRORSOURCE */
@@ -812,12 +812,12 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 
 	@Override
 	public float getExactTemperature() {
-		return this.temperature + this.tempChange;
+		return biome.temperature + this.tempChange;
 	}
 
 	@Override
 	public float getExactHumidity() {
-		return this.humidity + this.humidChange;
+		return biome.rainfall + this.humidChange;
 	}
 
 	/* IHINTSOURCE */

@@ -17,12 +17,12 @@ import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.core.IStructureLogic;
 import forestry.api.core.ITileStructure;
+import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
-import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.TileInventoryAdapter;
 import forestry.core.utils.Utils;
 import net.minecraft.entity.player.EntityPlayer;
@@ -253,8 +253,8 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
-		res.add(ForestryTrigger.missingQueen);
-		res.add(ForestryTrigger.missingDrone);
+		res.add(ApicultureTriggers.missingQueen);
+		res.add(ApicultureTriggers.missingDrone);
 		return res;
 	}
 

@@ -8,20 +8,23 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.triggers;
+package forestry.farming.triggers;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
-import forestry.core.gadgets.TilePowered;
+import forestry.api.core.ITileStructure;
+import forestry.core.triggers.Trigger;
+import forestry.farming.gadgets.TileFarmPlain;
+import forestry.farming.gadgets.TileHatch;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TriggerLowResource extends Trigger {
+public class TriggerLowGermlings extends Trigger {
 
-	private float threshold = 0.25F;
+	private final float threshold;
 
-	public TriggerLowResource(String tag, float threshold) {
-		super(tag, "lowResources");
+	public TriggerLowGermlings(String tag, float threshold) {
+		super(tag, "lowGermlings");
 		this.threshold = threshold;
 	}
 
@@ -35,10 +38,13 @@ public class TriggerLowResource extends Trigger {
 	 */
 	@Override
 	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
-		if (!(tile instanceof TilePowered))
+		if (!(tile instanceof TileHatch))
 			return false;
 
-		return !((TilePowered) tile).hasResourcesMin(threshold);
-	}
+		ITileStructure central = ((TileHatch) tile).getCentralTE();
+		if (central == null || !(central instanceof TileFarmPlain))
+			return false;
 
+		return !((TileFarmPlain) central).hasGermlingsPercent(threshold);
+	}
 }
