@@ -22,20 +22,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
+import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodType;
+import forestry.core.proxy.Proxies;
 
 public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyped {
 
 	public static enum SlabCat {
-		CAT0, CAT1, CAT2
+		CAT0, CAT1, CAT2, CAT3
 	}
 
 	private final SlabCat cat;
@@ -64,8 +62,11 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 
 	@Override
 	public IIcon getIcon(int side, int meta) {
-		WoodType type = WoodType.VALUES[(8 * cat.ordinal()) + (meta & 7)];
-		return type.getPlankIcon();
+		if(meta + cat.ordinal() * 8 < WoodType.VALUES.length) {
+			WoodType type = WoodType.VALUES[(8 * cat.ordinal()) + (meta & 7)];
+			return type.getPlankIcon();
+		}
+		return WoodType.LARCH.getPlankIcon();
 	}
 
 	@Override

@@ -18,6 +18,7 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.ILegacyHandler;
+import forestry.arboriculture.genetics.AlleleTreeSpecies;
 import forestry.core.config.Defaults;
 import forestry.core.utils.StringUtil;
 
@@ -170,6 +171,10 @@ public class Allele implements IAllele {
 
 	public static AlleleSpecies treeMaple;
 
+	public static AlleleSpecies treeIpe;
+	public static AlleleSpecies treePadauk;
+	public static AlleleSpecies treeCocobolo;
+	
 	/// BUTTERFLIES // SPECIES
 	// Moths
 	public static AlleleSpecies mothBrimstone;

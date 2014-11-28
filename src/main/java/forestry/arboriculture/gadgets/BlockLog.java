@@ -35,7 +35,7 @@ import forestry.arboriculture.WoodType;
 public class BlockLog extends Block implements IWoodTyped {
 
 	public enum LogCat {
-		CAT0, CAT1, CAT2, CAT3, CAT4, CAT5, CAT6, CAT7
+		CAT0, CAT1, CAT2, CAT3, CAT4, CAT5, CAT6, CAT7, CAT8
 	}
 
 	protected final LogCat cat;
