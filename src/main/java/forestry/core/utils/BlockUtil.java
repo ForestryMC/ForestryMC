@@ -50,6 +50,9 @@ public class BlockUtil {
 	/**
 	 * Searches for inventories adjacent to block, excludes IPowerReceptor
 	 * 
+	 * @param world
+	 * @param blockPos
+	 * @param from
 	 * @return
 	 */
 	public static IInventory[] getAdjacentInventories(World world, Vect blockPos, ForgeDirection from) {
@@ -75,6 +78,7 @@ public class BlockUtil {
 	 * 
 	 * @param world
 	 * @param blockPos
+	 * @param from
 	 * @return
 	 */
 	public static ForgeDirection[] getPipeDirections(World world, Vect blockPos, ForgeDirection from) {
@@ -108,9 +112,10 @@ public class BlockUtil {
 		ArrayList<ForgeDirection> filtered = new ArrayList<ForgeDirection>();
 		ArrayList<ForgeDirection> excludeList = new ArrayList<ForgeDirection>(Arrays.asList(exclude));
 
-		for (int i = 0; i < all.length; i++)
-			if (!excludeList.contains(all[i]))
-				filtered.add(all[i]);
+		for (ForgeDirection dir : all) {
+			if (!excludeList.contains(dir))
+				filtered.add(dir);
+		}
 
 		return filtered;
 

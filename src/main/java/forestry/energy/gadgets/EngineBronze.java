@@ -12,7 +12,6 @@ package forestry.energy.gadgets;
 
 import forestry.api.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.ISpecialInventory;
 import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.FuelManager;
 import forestry.core.config.Config;
@@ -27,9 +26,11 @@ import forestry.core.network.GuiId;
 import forestry.core.network.PacketPayload;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.TileInventoryAdapter;
+import static forestry.factory.gadgets.MachineBottler.SLOT_PRODUCT;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -39,7 +40,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
-public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTankContainer {
+public class EngineBronze extends Engine implements ISidedInventory, ILiquidTankContainer {
 
 	/* CONSTANTS */
 	public static final short SLOT_CAN = 0;
@@ -50,9 +51,9 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 		PacketPayload payload = super.getPacketPayload();
 
 		if (shutdown)
-			payload.append(new int[] { 1 });
+			payload.append(new int[]{1});
 		else
-			payload.append(new int[] { 0 });
+			payload.append(new int[]{0});
 
 		return payload;
 	}
@@ -91,6 +92,7 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 		this.tankManager = new TankManager(fuelTank, heatingTank);
 	}
 
+	@Override
 	public TankManager getTankManager() {
 		return tankManager;
 	}
@@ -160,7 +162,7 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 				}
 
 			// We need a minimum temperature to generate energy
-			if (heatStage > 0.2) {
+			if (heatStage > 0.2)
 
 				if (burnTime > 0) {
 					burnTime--;
@@ -171,12 +173,11 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 					currentFluidId = fuelTank.getFluid().getFluid().getID();
 					fuelTank.drain(Defaults.BUCKET_VOLUME, true);
 				}
-
-			} else
+			else
 				shutdown(true);
 		}
 
-		if(burnTime <= 0)
+		if (burnTime <= 0)
 			currentFluidId = -1;
 	}
 
@@ -299,6 +300,7 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 
 	/**
 	 * Reads saved data
+	 * @param nbt
 	 */
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
@@ -321,6 +323,7 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 
 	/**
 	 * Writes data to save
+	 * @param nbt
 	 */
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
@@ -417,6 +420,8 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 
 	/**
 	 * TODO: just a specialsource workaround
+	 * @param player
+	 * @return 
 	 */
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
@@ -430,6 +435,7 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 
 	/**
 	 * TODO: just a specialsource workaround
+	 * @return 
 	 */
 	@Override
 	public boolean hasCustomInventoryName() {
@@ -438,6 +444,9 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 
 	/**
 	 * TODO: just a specialsource workaround
+	 * @param slotIndex
+	 * @param itemstack
+	 * @return 
 	 */
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
@@ -451,23 +460,63 @@ public class EngineBronze extends Engine implements ISpecialInventory, ILiquidTa
 		return super.isItemValidForSlot(slotIndex, itemstack);
 	}
 
-	/* ISPECIALINVENTORY */
+	/* ISIDEDINVENTORY */
 	@Override
-	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
+	protected boolean canTakeStackFromSide(int slotIndex, ItemStack stack, int side) {
+		return false;
+	}
+
+	@Override
+	protected boolean canPutStackFromSide(int slotIndex, ItemStack stack, int side) {
+		if (!super.canTakeStackFromSide(slotIndex, stack, side))
+			return false;
+
 		FluidContainerData container = LiquidHelper.getLiquidContainer(stack);
-		if (container == null)
-			return 0;
-
-		return inventory.addStack(stack, false, doAdd);
+		return container != null;
 	}
 
+	/**
+	 * TODO: just a specialsource workaround
+	 * @return 
+	 */
 	@Override
-	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
-		return null;
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return super.canExtractItem(i, itemstack, j);
 	}
 
-	// IFluidHandler
+	/**
+	 * TODO: just a specialsource workaround
+	 * @return 
+	 */
+	@Override
+	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
+		return super.canInsertItem(i, itemstack, j);
+	}
 
+	/**
+	 * TODO: just a specialsource workaround
+	 * @return 
+	 */
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) {
+		return super.getAccessibleSlotsFromSide(side); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	/* ISPECIALINVENTORY */
+//	@Override
+//	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
+//		FluidContainerData container = LiquidHelper.getLiquidContainer(stack);
+//		if (container == null)
+//			return 0;
+//
+//		return inventory.addStack(stack, false, doAdd);
+//	}
+//
+//	@Override
+//	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
+//		return null;
+//	}
+	// IFluidHandler
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
 		return tankManager.fill(from, resource, doFill);
