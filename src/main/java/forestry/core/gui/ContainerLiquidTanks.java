@@ -54,7 +54,7 @@ public class ContainerLiquidTanks extends ContainerForestry {
 
 		IToolPipette pipette = (IToolPipette) held;
 		StandardTank tank = tile.getTankManager().get(slot);
-		int liquidAmount = tank.getFluid().amount;
+		int liquidAmount = tank.getFluidAmount();
 
 		if (pipette.canPipette(itemstack) && liquidAmount > 0) {
 			if (liquidAmount > 0) {
