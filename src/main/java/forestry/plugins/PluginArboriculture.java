@@ -879,14 +879,14 @@ public class PluginArboriculture extends ForestryPlugin {
 
 		// Lauraceae
 		Allele.treeSipiri = new AlleleTreeSpecies("treeSipiri", true, "sipiri", chlorocardium,
-				"rodiei", 0x678911, 0x79a175, WorldGenGreenheart.class, ForestryBlock.log3.getItemStack(1, 2)).addFruitFamily(jungle);
+				"rodiei", 0x678911, 0x79a175, WorldGenGreenheart.class, ForestryBlock.log4.getItemStack(1, 2)).addFruitFamily(jungle);
 
 		// Unclassified
 		Allele.treePapaya = new AlleleTreeSpecies("treePapaya", true, "papaya", carica, "papaya",
 				0x6d9f58, 0x9ee67f, WorldGenPapaya.class, ForestryBlock.log5.getItemStack(1, 3)).addFruitFamily(jungle)
 				.addFruitFamily(nux).setLeafIndices("palm");
 		Allele.treeDate = new AlleleTreeSpecies("treeDate", true, "datePalm", null, "dactylifera",
-				0xcbcd79, 0xf0f38f, WorldGenDate.class, ForestryBlock.log4.getItemStack(1, 2)).addFruitFamily(jungle).addFruitFamily(nux)
+				0xcbcd79, 0xf0f38f, WorldGenDate.class, ForestryBlock.log5.getItemStack(1, 2)).addFruitFamily(jungle).addFruitFamily(nux)
 				.setLeafIndices("palm");
 
 		Allele.treePoplar = new AlleleTreeSpecies("treePoplar", true, "whitePoplar", populus,
