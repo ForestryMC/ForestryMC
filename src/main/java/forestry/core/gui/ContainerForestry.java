@@ -10,17 +10,17 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import forestry.core.gadgets.TileForestry;
+import forestry.core.gui.slots.SlotForestry;
+import forestry.core.utils.EnumAccess;
+import forestry.core.utils.PlayerUtil;
+import forestry.core.utils.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-
-import forestry.core.gadgets.TileForestry;
-import forestry.core.gui.slots.SlotForestry;
-import forestry.core.utils.EnumAccess;
-import forestry.core.utils.StackUtils;
 
 public class ContainerForestry extends Container {
 
@@ -44,8 +44,12 @@ public class ContainerForestry extends Container {
 
 	@Override
 	public ItemStack slotClick(int slotIndex, int button, int modifier, EntityPlayer player) {
-		if (inventoryForestry != null && (inventoryForestry.getAccess() != EnumAccess.SHARED) && !inventoryForestry.owner.equals(player.getGameProfile()))
+		if (player == null)
 			return null;
+
+		if ((inventoryForestry != null) && (inventoryForestry.getAccess() != EnumAccess.SHARED))
+			if ((inventoryForestry.owner != null) && !PlayerUtil.isSameGameProfile(inventoryForestry.owner, player.getGameProfile()))
+				return null;
 
 		Slot slot = slotIndex < 0 ? null : (Slot) this.inventorySlots.get(slotIndex);
 		if (slot instanceof SlotForestry) {
