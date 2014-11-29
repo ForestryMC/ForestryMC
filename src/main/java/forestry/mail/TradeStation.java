@@ -10,8 +10,20 @@
  ******************************************************************************/
 package forestry.mail;
 
-import java.util.ArrayList;
-
+import com.mojang.authlib.GameProfile;
+import forestry.api.mail.EnumPostage;
+import forestry.api.mail.ILetter;
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.IPostalState;
+import forestry.api.mail.IStamps;
+import forestry.api.mail.ITradeStation;
+import forestry.api.mail.PostManager;
+import forestry.api.mail.TradeStationInfo;
+import forestry.core.config.ForestryItem;
+import forestry.core.utils.InventoryAdapter;
+import forestry.core.utils.PlayerUtil;
+import forestry.core.utils.StackUtils;
+import forestry.mail.items.ItemLetter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
@@ -21,20 +33,7 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.mail.EnumPostage;
-import forestry.api.mail.ILetter;
-import forestry.api.mail.IPostalState;
-import forestry.api.mail.IStamps;
-import forestry.api.mail.ITradeStation;
-import forestry.api.mail.PostManager;
-import forestry.api.mail.TradeStationInfo;
-import forestry.api.mail.IMailAddress;
-import forestry.core.config.ForestryItem;
-import forestry.core.utils.InventoryAdapter;
-import forestry.core.utils.StackUtils;
-import forestry.mail.items.ItemLetter;
+import java.util.ArrayList;
 
 public class TradeStation extends WorldSavedData implements ITradeStation, ISidedInventory {
 
@@ -529,8 +528,8 @@ public class TradeStation extends WorldSavedData implements ITradeStation, ISide
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer var1) {
-		return var1.getGameProfile().equals(owner);
+	public boolean isUseableByPlayer(EntityPlayer player) {
+		return PlayerUtil.isSameGameProfile(owner, player.getGameProfile());
 	}
 
 	@Override
