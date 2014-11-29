@@ -414,12 +414,13 @@ public class Bee extends IndividualLiving implements IBee {
 
 		}
 
-		return products.toArray(new ItemStack[0]);
+		return products.toArray(new ItemStack[products.size()]);
 	}
 
 	@Override
 	public ItemStack[] getSpecialtyList() {
-		return genome.getPrimary().getSpecialty().keySet().toArray(new ItemStack[0]);
+		Set<ItemStack> specialties = genome.getPrimary().getSpecialty().keySet();
+		return specialties.toArray(new ItemStack[specialties.size()]);
 	}
 
 	@Override
@@ -460,7 +461,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 		// We are done if the we are not jubilant.
 		if (!primary.isJubilant(genome, housing) || !secondary.isJubilant(genome, housing))
-			return products.toArray(StackUtils.EMPTY_STACK_ARRAY);
+			return products.toArray(new ItemStack[products.size()]);
 
 		// / Specialty products
 		for (Map.Entry<ItemStack, Integer> entry : primary.getSpecialty().entrySet())
@@ -468,7 +469,7 @@ public class Bee extends IndividualLiving implements IBee {
 				products.add(entry.getKey().copy());
 
 		return genome.getFlowerProvider().affectProducts(housing.getWorld(), this, housing.getXCoord(), housing.getYCoord(), housing.getZCoord(),
-				products.toArray(StackUtils.EMPTY_STACK_ARRAY));
+				products.toArray(new ItemStack[products.size()]));
 	}
 
 	/* REPRODUCTION */
@@ -512,7 +513,7 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		if (bees.size() > 0)
-			return bees.toArray(new IBee[0]);
+			return bees.toArray(new IBee[bees.size()]);
 		else
 			return null;
 	}

@@ -39,6 +39,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 public class MachineCentrifuge extends TilePowered implements ISidedInventory, ISpecialInventory {
@@ -124,8 +125,10 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 		public Map<Object[], Object[]> getRecipes() {
 			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
 
-			for (Recipe recipe : recipes)
-				recipeList.put(new Object[] { recipe.resource }, recipe.products.keySet().toArray(StackUtils.EMPTY_STACK_ARRAY));
+			for (Recipe recipe : recipes) {
+				Set<ItemStack> productsKeys = recipe.products.keySet();
+				recipeList.put(new Object[]{recipe.resource}, productsKeys.toArray(new ItemStack[productsKeys.size()]));
+			}
 
 			return recipeList;
 		}

@@ -199,7 +199,7 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 			}
 
 			circuits = getCircuits(type, true);
-			inventoryStacks[finishedSlot] = ItemCircuitBoard.createCircuitboard(type, layout, circuits.toArray(new ICircuit[0]));
+			inventoryStacks[finishedSlot] = ItemCircuitBoard.createCircuitboard(type, layout, circuits.toArray(new ICircuit[circuits.size()]));
 			inventoryStacks[blankSlot] = null;
 		}
 

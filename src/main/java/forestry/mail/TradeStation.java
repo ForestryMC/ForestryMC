@@ -481,7 +481,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, ISide
 				surplus.add(stack);
 		}
 
-		return surplus.toArray(new ItemStack[0]);
+		return surplus.toArray(new ItemStack[surplus.size()]);
 	}
 
 	/* IINVENTORY */

@@ -209,7 +209,6 @@ public class CommandTreekeepingMode extends CommandMC {
 			help += mode.getName();
 		}
 		sendChatMessage(sender, "Available modes: " + help);
-		return;
 	}
 
 	private void listModeInfo(ICommandSender sender, String[] arguments) {

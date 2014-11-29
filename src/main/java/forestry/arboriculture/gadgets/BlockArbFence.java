@@ -10,8 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
-import java.util.List;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.core.Tabs;
+import forestry.arboriculture.IWoodTyped;
+import forestry.arboriculture.WoodType;
+import forestry.plugins.PluginArboriculture;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
@@ -22,16 +26,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.api.core.Tabs;
-import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.WoodType;
-import forestry.plugins.PluginArboriculture;
+import java.util.List;
 
 public class BlockArbFence extends BlockFence implements IWoodTyped {
 
@@ -72,7 +69,7 @@ public class BlockArbFence extends BlockFence implements IWoodTyped {
 	public boolean canConnectFenceTo(IBlockAccess world, int x, int y, int z) {
 		if (!isFence(world, x, y, z)) {
 			Block block = world.getBlock(x, y, z);
-			return block != null && block.getMaterial().isOpaque() && block.renderAsNormalBlock() ? block.getMaterial() != Material.gourd : false;
+			return block != null && block.getMaterial().isOpaque() && block.renderAsNormalBlock() && block.getMaterial() != Material.gourd;
 		} else
 			return true;
 	}

@@ -39,7 +39,8 @@ public class RenderEngine extends TileEntitySpecialRenderer implements IBlockRen
 	private static enum Textures {
 
 		BASE, PISTON, EXTENSION, TRUNK_HIGHEST, TRUNK_HIGHER, TRUNK_HIGH, TRUNK_MEDIUM, TRUNK_LOW
-	};
+	}
+
 	private ResourceLocation[] textures;
 	private static final float[] angleMap = new float[6];
 

@@ -59,7 +59,7 @@ public class PluginManager {
 
 	public enum Stage {
 
-		SETUP, PRE_INIT, INIT, POST_INIT, INIT_DISABLED, FINISHED;
+		SETUP, PRE_INIT, INIT, POST_INIT, INIT_DISABLED, FINISHED
 	}
 
 	public enum Module {

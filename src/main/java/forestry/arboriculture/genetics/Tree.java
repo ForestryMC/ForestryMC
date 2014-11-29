@@ -311,7 +311,7 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 			else
 				prod.add(createOffspring(world, x, y, z));
 
-		return prod.toArray(new ITree[0]);
+		return prod.toArray(new ITree[prod.size()]);
 	}
 
 	private ITree createOffspring(World world, int x, int y, int z) {

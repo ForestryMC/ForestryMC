@@ -10,16 +10,16 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import java.util.ArrayList;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IHiveDrop;
 import forestry.api.genetics.IAllele;
 import forestry.plugins.PluginApiculture;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class HiveDrop implements IHiveDrop {
 
@@ -32,8 +32,7 @@ public class HiveDrop implements IHiveDrop {
 		this.template = template;
 		this.chance = chance;
 
-		for (ItemStack stack : bonus)
-			this.additional.add(stack);
+		Collections.addAll(this.additional, bonus);
 	}
 
 	public HiveDrop setIgnobleShare(float share) {

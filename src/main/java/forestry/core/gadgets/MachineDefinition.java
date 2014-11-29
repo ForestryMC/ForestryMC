@@ -10,10 +10,12 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.core.interfaces.IBlockRenderer;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -26,16 +28,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.core.interfaces.IBlockRenderer;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * This will replace the whole {@link Gadget}-nonsense at some point, using the proper Forge hook. Will hopefully sort out any issues with interfaces.
@@ -148,11 +145,9 @@ public class MachineDefinition {
 	public MachineDefinition setFaces(int... faces) {
 
 		if (faces.length > 6)
-			for (int i = 0; i < faces.length; i++)
-				faceMap[i] = faces[i];
+			System.arraycopy(faces, 0, faceMap, 0, faces.length);
 		else {
-			for (int i = 0; i < 6; i++)
-				faceMap[i] = faces[i];
+			System.arraycopy(faces, 0, faceMap, 0, 6);
 			faceMap[6] = faces[0];
 			faceMap[7] = faces[1];
 		}

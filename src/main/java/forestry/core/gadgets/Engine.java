@@ -120,7 +120,6 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 			}
 		} else if (this.isActive)
 			stagePiston = 1;
-		return;
 	}
 
 	@Override

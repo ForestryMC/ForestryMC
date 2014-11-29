@@ -199,7 +199,7 @@ public class Version {
 				changelog.add(line);
 			}
 
-			return changelog.toArray(new String[0]);
+			return changelog.toArray(new String[changelog.size()]);
 
 		} catch (Exception ex) {
 //			ex.printStackTrace();

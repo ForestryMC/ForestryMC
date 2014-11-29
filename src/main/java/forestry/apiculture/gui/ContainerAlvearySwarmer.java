@@ -10,13 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.apiculture.gadgets.TileAlvearySwarmer;
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.slots.SlotCustom;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+
+import java.util.Set;
 
 public class ContainerAlvearySwarmer extends ContainerForestry {
 
@@ -39,6 +41,7 @@ public class ContainerAlvearySwarmer extends ContainerForestry {
 	}
 
 	private Object[] getInducerItems() {
-		return BeeManager.inducers.keySet().toArray(new Object[0]);
+		Set<ItemStack> inducers = BeeManager.inducers.keySet();
+		return inducers.toArray(new Object[inducers.size()]);
 	}
 }

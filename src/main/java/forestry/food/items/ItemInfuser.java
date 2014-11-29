@@ -149,7 +149,7 @@ public class ItemInfuser extends ItemForestry {
 					matches.add(mixture);
 			}
 
-			return matches.toArray(new Mixture[0]);
+			return matches.toArray(new Mixture[matches.size()]);
 		}
 
 		@Override
@@ -166,7 +166,7 @@ public class ItemInfuser extends ItemForestry {
 				required.addAll(Arrays.asList(mixture.getIngredients()));
 			}
 
-			return required.toArray(new ItemStack[0]);
+			return required.toArray(new ItemStack[required.size()]);
 		}
 
 		@Override
@@ -187,7 +187,7 @@ public class ItemInfuser extends ItemForestry {
 
 			ItemStack seasoned = base.copy();
 			seasoned.setItemDamage(meta);
-			((ItemBeverage) base.getItem()).beverages[meta].saveEffects(seasoned, effects.toArray(new IBeverageEffect[0]));
+			((ItemBeverage) base.getItem()).beverages[meta].saveEffects(seasoned, effects.toArray(new IBeverageEffect[effects.size()]));
 			return seasoned;
 		}
 	}

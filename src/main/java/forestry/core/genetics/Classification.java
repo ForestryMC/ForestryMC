@@ -73,7 +73,7 @@ public class Classification implements IClassification {
 
 	@Override
 	public IClassification[] getMemberGroups() {
-		return groups.toArray(new IClassification[0]);
+		return groups.toArray(new IClassification[groups.size()]);
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class Classification implements IClassification {
 
 	@Override
 	public IAlleleSpecies[] getMemberSpecies() {
-		return members.toArray(new IAlleleSpecies[0]);
+		return members.toArray(new IAlleleSpecies[members.size()]);
 	}
 
 	@Override
