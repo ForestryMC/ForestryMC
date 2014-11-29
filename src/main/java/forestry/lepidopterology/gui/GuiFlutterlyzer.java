@@ -23,7 +23,6 @@ import forestry.core.config.ForestryItem;
 import forestry.core.genetics.AlleleBoolean;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.gui.GuiAlyzer;
-import forestry.core.utils.StackUtils;
 import forestry.core.utils.StringUtil;
 import forestry.lepidopterology.genetics.ButterflyGenome;
 import forestry.lepidopterology.items.ItemButterflyGE;
@@ -38,8 +37,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GuiFlutterlyzer extends GuiAlyzer {
-
-	private ItemStack[] tempProductList;
 
 	public GuiFlutterlyzer(EntityPlayer player, FlutterlyzerInventory inventory) {
 		super(AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies"), player,
@@ -219,15 +216,13 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 	}
 	private void drawAnalyticsPage3(IButterfly butterfly) {
 
-		tempProductList = butterfly.getGenome().getPrimary().getButterflyLoot().keySet().toArray(StackUtils.EMPTY_STACK_ARRAY);
-
 		startPage(COLUMN_0, COLUMN_1, COLUMN_2);
 
 		drawLine(StringUtil.localize("gui.loot.butterfly") + ":", COLUMN_0);
 		newLine();
 
 		int x = COLUMN_0;
-		for (ItemStack stack : tempProductList) {
+		for (ItemStack stack : butterfly.getGenome().getPrimary().getButterflyLoot().keySet()) {
 			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, stack, (int) ((guiLeft + x) * (1 / factor)),
 					(int) ((guiTop + getLineY()) * (1 / factor)));
 			x += 18;
@@ -244,7 +239,7 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 		newLine();
 
 		x = COLUMN_0;
-		for (ItemStack stack : butterfly.getGenome().getPrimary().getCaterpillarLoot().keySet().toArray(StackUtils.EMPTY_STACK_ARRAY)) {
+		for (ItemStack stack : butterfly.getGenome().getPrimary().getCaterpillarLoot().keySet()) {
 			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, stack, (int) ((guiLeft + x) * (1 / factor)),
 					(int) ((guiTop + getLineY()) * (1 / factor)));
 			x += 18;
