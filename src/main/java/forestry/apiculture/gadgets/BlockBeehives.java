@@ -10,10 +10,16 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.IHiveDrop;
+import forestry.api.apiculture.hives.HiveManager;
+import forestry.api.core.Tabs;
+import forestry.apiculture.MaterialBeehive;
+import forestry.core.config.Config;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StackUtils;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -26,16 +32,9 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IHiveDrop;
-import forestry.api.core.Tabs;
-import forestry.apiculture.MaterialBeehive;
-import forestry.core.config.Config;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StackUtils;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class BlockBeehives extends BlockContainer {
 
@@ -84,7 +83,7 @@ public class BlockBeehives extends BlockContainer {
 			return ret;
 		}
 
-		ArrayList<IHiveDrop> dropList = BeeManager.hiveDrops[metadata - 1];
+		List<IHiveDrop> dropList = getDropsForHive(metadata);
 
 		Collections.shuffle(dropList);
 		// Grab a princess
@@ -121,6 +120,29 @@ public class BlockBeehives extends BlockContainer {
 	@Override
 	public int damageDropped(int meta) {
 		return meta;
+	}
+
+	private List<IHiveDrop> getDropsForHive(int meta) {
+		if (meta == 8) //TODO: make a real hive for swarm
+			return BeeManager.hiveDrops[meta];
+
+		String hiveName = getHiveNameForMeta(meta);
+		if (hiveName == null)
+			return Collections.emptyList();
+		return HiveManager.get(hiveName).getDrops();
+	}
+
+	private String getHiveNameForMeta(int meta) {
+		switch (meta) {
+			case 1: return HiveManager.forest;
+			case 2: return HiveManager.meadows;
+			case 3: return HiveManager.desert;
+			case 4: return HiveManager.jungle;
+			case 5: return HiveManager.end;
+			case 6: return HiveManager.snow;
+			case 7: return HiveManager.swamp;
+		}
+		return null;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

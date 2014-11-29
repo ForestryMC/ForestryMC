@@ -36,6 +36,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.EnumPlantType;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 public class GuiTreealyzer extends GuiAlyzer {
@@ -226,37 +228,39 @@ public class GuiTreealyzer extends GuiAlyzer {
 
 		drawLine(StringUtil.localize("gui.tolerated"), COLUMN_0);
 
-		EnumPlantType[] tolerated0 = tree.getGenome().getPlantTypes().toArray(new EnumPlantType[0]);
-		EnumPlantType[] tolerated1 = new EnumPlantType[0];
-		IAllele allele1 = tree.getGenome().getInactiveAllele(EnumTreeChromosome.PLANT.ordinal());
-		if (allele1 instanceof AllelePlantType)
-			tolerated1 = ((AllelePlantType) allele1).getPlantTypes().toArray(new EnumPlantType[0]);
+		List<EnumPlantType> tolerated0 = new ArrayList<EnumPlantType>(tree.getGenome().getPlantTypes());
+		List<EnumPlantType> tolerated1 = Collections.emptyList();
 
-		int max = tolerated0.length > tolerated1.length ? tolerated0.length : tolerated1.length;
+		IAllele allele1 = tree.getGenome().getInactiveAllele(EnumTreeChromosome.PLANT.ordinal());
+		if (allele1 instanceof AllelePlantType) {
+			tolerated1 = new ArrayList<EnumPlantType>(((AllelePlantType) allele1).getPlantTypes());
+		}
+
+		int max = Math.max(tolerated0.size(), tolerated1.size());
 		for (int i = 0; i < max; i++) {
 			if (i > 0)
 				newLine();
-			if(tolerated0.length > i)
-				drawLine(StringUtil.localize("gui." + tolerated0[i].toString().toLowerCase(Locale.ENGLISH)), COLUMN_1, tree, EnumTreeChromosome.PLANT, false);
-			if(tolerated1.length > i)
-				drawLine(StringUtil.localize("gui." + tolerated1[i].toString().toLowerCase(Locale.ENGLISH)), COLUMN_2, tree, EnumTreeChromosome.PLANT, true);
+			if(tolerated0.size() > i)
+				drawLine(StringUtil.localize("gui." + tolerated0.get(i).toString().toLowerCase(Locale.ENGLISH)), COLUMN_1, tree, EnumTreeChromosome.PLANT, false);
+			if(tolerated1.size() > i)
+				drawLine(StringUtil.localize("gui." + tolerated1.get(i).toString().toLowerCase(Locale.ENGLISH)), COLUMN_2, tree, EnumTreeChromosome.PLANT, true);
 		}
 		newLine();
 
 		// FRUITS
 		drawLine(StringUtil.localize("gui.supports"), COLUMN_0);
-		IFruitFamily[] families0 = tree.getGenome().getPrimary().getSuitableFruit().toArray(new IFruitFamily[0]);
-		IFruitFamily[] families1 = tree.getGenome().getPrimary().getSuitableFruit().toArray(new IFruitFamily[0]);
+		List<IFruitFamily> families0 = new ArrayList<IFruitFamily>(tree.getGenome().getPrimary().getSuitableFruit());
+		List<IFruitFamily> families1 = new ArrayList<IFruitFamily>(tree.getGenome().getSecondary().getSuitableFruit());
 
-		max = families0.length > families1.length ? families0.length : families1.length;
+		max = Math.max(families0.size(), families1.size());
 		for (int i = 0; i < max; i++) {
 			if (i > 0)
 				newLine();
 
-			if (families0.length > i)
-				drawLine(families0[i].getName(), COLUMN_1, speciesDominance0);
-			if (families1.length > i)
-				drawLine(families1[i].getName(), COLUMN_2, speciesDominance1);
+			if (families0.size() > i)
+				drawLine(families0.get(i).getName(), COLUMN_1, speciesDominance0);
+			if (families1.size() > i)
+				drawLine(families1.get(i).getName(), COLUMN_2, speciesDominance1);
 
 		}
 

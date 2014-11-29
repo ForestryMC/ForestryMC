@@ -62,7 +62,7 @@ public class AIAvoidPlayers extends EntityAIBase {
 			return false;
 
 		pathing = pathNavigator.getPathToXYZ(randomTarget.xCoord, randomTarget.yCoord, randomTarget.zCoord);
-		return pathing == null ? false : pathing.isDestinationSame(randomTarget);
+		return pathing != null && pathing.isDestinationSame(randomTarget);
 	}
 
 	@Override

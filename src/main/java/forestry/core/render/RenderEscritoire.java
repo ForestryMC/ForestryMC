@@ -46,7 +46,7 @@ public class RenderEscritoire extends TileEntitySpecialRenderer implements IBloc
 			@Override
 			public boolean shouldSpreadItems() {
 				return false;
-			};
+			}
 		};
 		customRenderItem.setRenderManager(RenderManager.instance);
 

@@ -43,7 +43,7 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer implements IBlockR
 			@Override
 			public boolean shouldSpreadItems() {
 				return false;
-			};
+			}
 		};
 		customRenderItem.setRenderManager(RenderManager.instance);
 	}

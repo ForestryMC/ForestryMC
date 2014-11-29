@@ -11,18 +11,18 @@
 package forestry.mail.proxy;
 
 import com.mojang.authlib.GameProfile;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.PostManager;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.PacketIds;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.PlayerUtil;
 import forestry.mail.POBox;
 import forestry.mail.POBoxInfo;
 import forestry.mail.PostRegistry;
 import forestry.mail.gui.GuiMailboxInfo;
-import forestry.api.mail.IMailAddress;
-import forestry.api.mail.PostManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 
 public class ClientProxyMail extends ProxyMail {
 
@@ -52,7 +52,7 @@ public class ClientProxyMail extends ProxyMail {
 	@Override
 	public void setPOBoxInfo(World world, IMailAddress address, POBoxInfo info) {
 		EntityPlayer clientPlayer = Proxies.common.getPlayer();
-		if (clientPlayer != null && clientPlayer.getGameProfile().equals(address.getPlayerProfile()))
+		if (PlayerUtil.isSameGameProfile(clientPlayer.getGameProfile(), address.getPlayerProfile()))
 			GuiMailboxInfo.instance.setPOBoxInfo(info);
 	}
 }

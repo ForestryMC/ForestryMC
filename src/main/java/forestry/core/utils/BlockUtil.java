@@ -100,7 +100,7 @@ public class BlockUtil {
 			}
 		}
 
-		return possiblePipes.toArray(new ForgeDirection[0]);
+		return possiblePipes.toArray(new ForgeDirection[possiblePipes.size()]);
 
 	}
 

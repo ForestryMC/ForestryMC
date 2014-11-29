@@ -24,7 +24,7 @@ public class PacketFXSignal extends ForestryPacket {
 
 	public static enum VisualFXType {
 		NONE, BLOCK_DESTROY, SAPLING_PLACE
-	};
+	}
 
 	public static enum SoundFXType {
 		NONE(""), BLOCK_DESTROY(""), BLOCK_PLACE(""), LEAF("step.grass"), LOG("dig.wood"), DIRT("dig.gravel");
@@ -36,7 +36,7 @@ public class PacketFXSignal extends ForestryPacket {
 		private SoundFXType(String soundFile) {
 			this.soundFile = soundFile;
 		}
-	};
+	}
 
 	private VisualFXType visualFX;
 	private SoundFXType soundFX;

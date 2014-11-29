@@ -28,6 +28,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 
 public class TileHatch extends TileFarm implements ISidedInventory {
@@ -59,9 +60,7 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 
 		ArrayList<ForgeDirection> pipes = new ArrayList<ForgeDirection>();
 		ForgeDirection[] tmp = BlockUtil.getPipeDirections(worldObj, Coords(), ForgeDirection.UP);
-		for (int i = 0; i < tmp.length; ++i) {
-			pipes.add(tmp[i]);
-		}
+		Collections.addAll(pipes, tmp);
 
 		if (pipes.size() > 0)
 			dumpToPipe(pipes);

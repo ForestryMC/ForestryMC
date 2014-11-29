@@ -10,14 +10,20 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import java.security.MessageDigest;
-import java.security.cert.Certificate;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
-
+import buildcraft.api.tools.IToolWrench;
+import com.mojang.authlib.GameProfile;
+import cpw.mods.fml.common.registry.EntityRegistry;
+import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.ITree;
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.IArmorNaturalist;
+import forestry.api.core.ITileStructure;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.IPollinatable;
+import forestry.core.gadgets.TileForestry;
+import forestry.core.proxy.Proxies;
+import forestry.plugins.PluginArboriculture;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -29,34 +35,19 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
-import cpw.mods.fml.common.registry.EntityRegistry;
-
-import buildcraft.api.tools.IToolWrench;
-import com.google.common.base.Charsets;
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.ITree;
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.IArmorNaturalist;
-import forestry.api.core.ITileStructure;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IPollinatable;
-import forestry.core.config.Config;
-import forestry.core.gadgets.TileForestry;
-import forestry.core.proxy.Proxies;
-import forestry.plugins.PluginArboriculture;
+import java.security.MessageDigest;
+import java.security.cert.Certificate;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
 
 public class Utils {
 
