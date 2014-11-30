@@ -125,7 +125,7 @@ public class PluginFarming extends ForestryPlugin {
 		proxy.initializeRendering();
 
 		// Triggers
-		if (PluginManager.Module.BUILDCRAFT.isEnabled()) {
+		if (PluginManager.Module.BUILDCRAFT_STATEMENTS.isEnabled()) {
 			FarmingTriggers.initialize();
 		}
 
