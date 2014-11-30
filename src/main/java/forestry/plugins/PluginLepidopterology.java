@@ -149,8 +149,8 @@ public class PluginLepidopterology extends ForestryPlugin {
 		CraftingManager.getInstance().getRecipeList().add(new MatingRecipe());
 
 		RecipeManagers.carpenterManager.addRecipe(100, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 2000), null, ForestryItem.flutterlyzer.getItemStack(),
-				new Object[]{"X#X", "X#X", "RDR", Character.valueOf('#'), Blocks.glass_pane, Character.valueOf('X'), "ingotBronze", Character.valueOf('R'),
-					Items.redstone, Character.valueOf('D'), Items.diamond});
+				"X#X", "X#X", "RDR", Character.valueOf('#'), Blocks.glass_pane, Character.valueOf('X'), "ingotBronze", Character.valueOf('R'),
+				Items.redstone, Character.valueOf('D'), Items.diamond);
 	}
 
 	private void createAlleles() {

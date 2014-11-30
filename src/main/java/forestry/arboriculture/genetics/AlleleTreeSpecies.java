@@ -60,7 +60,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 		}
 	}
 
-	private static HashMap<String, LeafType> leafTypes = new HashMap<String, LeafType>();
+	private static final HashMap<String, LeafType> leafTypes = new HashMap<String, LeafType>();
 	static {
 		leafTypes.put("deciduous", new LeafType("deciduous", (short) 10, (short) 11, (short) 12));
 		leafTypes.put("conifers", new LeafType("conifers", (short) 15, (short) 16, (short) 17));
@@ -175,7 +175,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@SuppressWarnings("rawtypes")
 	public WorldGenerator getGenerator(ITree tree, World world, int x, int y, int z) {
 		try {
-			return generatorClass.getConstructor(new Class[] { ITreeGenData.class }).newInstance(new Object[] { tree });
+			return generatorClass.getConstructor(new Class[] { ITreeGenData.class }).newInstance(tree);
 		} catch (Exception ex) {
 			throw new RuntimeException("Failed to instantiate generator of class " + generatorClass.getName());
 		}
@@ -226,7 +226,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	}
 
 	@SideOnly(Side.CLIENT)
-	IIcon icon;
+	private IIcon icon;
 
 	@Override
 	@SideOnly(Side.CLIENT)

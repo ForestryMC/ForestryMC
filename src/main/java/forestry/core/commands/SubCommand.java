@@ -27,7 +27,7 @@ public abstract class SubCommand implements IForestryCommand {
 	public enum PermLevel {
 
 		EVERYONE(0), ADMIN(2);
-		int permLevel;
+		public final int permLevel;
 
 		private PermLevel(int permLevel) {
 			this.permLevel = permLevel;

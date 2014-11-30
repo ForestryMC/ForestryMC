@@ -52,10 +52,8 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 		// Render overlay for fruit leaves.
 		IIcon fruitIcon = null;
 		int fruitColor = 0xffffff;
-		if (tile != null) {
-			fruitIcon = tile.getFruitTexture();
-			fruitColor = tile.getFruitColour();
-		}
+		fruitIcon = tile.getFruitTexture();
+		fruitColor = tile.getFruitColour();
 
 		if (fruitIcon != null)
 			renderFruitOverlay(world, block, x, y, z, renderer, fruitIcon, fruitColor);

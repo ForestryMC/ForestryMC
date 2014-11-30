@@ -69,12 +69,6 @@ public class Bee extends IndividualLiving implements IBee {
 		this.isIrregularMating = mate.isNatural() != this.isNatural;
 	}
 
-	public Bee(IBeeGenome genome, IBee mate) {
-		this(genome);
-		this.mate = mate.getGenome();
-		this.isIrregularMating = mate.isNatural() != this.isNatural;
-	}
-
 	public Bee(World world, IBeeGenome genome) {
 		this(world, genome, true, 0);
 	}

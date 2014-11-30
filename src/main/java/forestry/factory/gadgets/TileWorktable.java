@@ -265,10 +265,10 @@ public class TileWorktable extends TileBase implements ICrafter {
 		@Override
 		public void writeToNBT(NBTTagCompound nbttagcompound) {
 			NBTTagList nbttaglist = new NBTTagList();
-			for (int i = 0; i < recipes.size(); i++) {
-				if (recipes.get(i) != null) {
+			for (Recipe recipe : recipes) {
+				if (recipe != null) {
 					NBTTagCompound nbttagcompound2 = new NBTTagCompound();
-					recipes.get(i).writeToNBT(nbttagcompound2);
+					recipe.writeToNBT(nbttagcompound2);
 					nbttaglist.appendTag(nbttagcompound2);
 				}
 			}

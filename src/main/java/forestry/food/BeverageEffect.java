@@ -20,7 +20,7 @@ public abstract class BeverageEffect implements IBeverageEffect {
 	public static final IBeverageEffect weakAntidote = new BeverageEffectAntidote(20, 0.5f);
 	public static final IBeverageEffect strongAntidote = new BeverageEffectAntidote(21, 1.0f);
 
-	private int id;
+	private final int id;
 	protected String description;
 
 	public BeverageEffect(int id) {

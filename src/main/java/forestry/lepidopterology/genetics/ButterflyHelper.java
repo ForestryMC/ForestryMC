@@ -177,7 +177,7 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	/* TEMPLATES */
-	public static ArrayList<IButterfly> butterflyTemplates = new ArrayList<IButterfly>();
+	public static final ArrayList<IButterfly> butterflyTemplates = new ArrayList<IButterfly>();
 
 	@Override
 	public ArrayList<IButterfly> getIndividualTemplates() {

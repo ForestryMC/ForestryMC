@@ -17,16 +17,16 @@ import net.minecraft.entity.Entity;
 public class ModelEscritoire extends ModelBase {
 
 	//fields
-	ModelRenderer desk;
-	ModelRenderer standRB;
-	ModelRenderer standRF;
-	ModelRenderer standLB;
-	ModelRenderer standLF;
-	ModelRenderer drawers;
-	ModelRenderer standLowLF;
-	ModelRenderer standLowRB;
-	ModelRenderer standLowRF;
-	ModelRenderer standLowLB;
+	private final ModelRenderer desk;
+	private final ModelRenderer standRB;
+	private final ModelRenderer standRF;
+	private final ModelRenderer standLB;
+	private final ModelRenderer standLF;
+	private final ModelRenderer drawers;
+	private final ModelRenderer standLowLF;
+	private final ModelRenderer standLowRB;
+	private final ModelRenderer standLowRF;
+	private final ModelRenderer standLowLB;
 
 	public ModelEscritoire() {
 		textureWidth = 64;

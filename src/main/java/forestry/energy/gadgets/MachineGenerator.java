@@ -52,11 +52,11 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 	public static final int maxEnergy = 30000;
 
 	@EntityNetData
-	public FilteredTank resourceTank;
+	public final FilteredTank resourceTank;
 	private final TankManager tankManager;
 	private int tickCount = 0;
 
-	InventoryAdapter inventory = new InventoryAdapter(1, "Items");
+	private final InventoryAdapter inventory = new InventoryAdapter(1, "Items");
 	protected BasicSource ic2EnergySource;
 
 	public MachineGenerator() {

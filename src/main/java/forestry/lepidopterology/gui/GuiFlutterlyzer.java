@@ -131,7 +131,7 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 						.getDescription(), butterfly, EnumButterflyChromosome.FLOWER_PROVIDER);
 
 		drawRow(StringUtil.localize("gui.effect"), butterfly.getGenome().getEffect().getName(),
-				((IAlleleEffect) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.EFFECT.ordinal())).getName(), butterfly,
+				butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.EFFECT.ordinal()).getName(), butterfly,
 				EnumButterflyChromosome.EFFECT);
 
 		newLine();

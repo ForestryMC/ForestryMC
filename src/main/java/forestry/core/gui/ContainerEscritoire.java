@@ -46,7 +46,7 @@ public class ContainerEscritoire extends ContainerForestry implements IGuiSelect
 		addSlot(new SlotCustom(tile, TileEscritoire.SLOT_ANALYZE, 97, 67, filters.toArray()).setCrafter(tile));
 
 		for (int i = 0; i < TileEscritoire.SLOTS_INPUT_COUNT; i++) {
-			addSlot(new SlotCustom(tile, TileEscritoire.SLOT_INPUT_1 + i, 17, 49 + i * 18, true).setBlockedTexture("slots/blocked_2"));
+			addSlot(new SlotCustom(tile, TileEscritoire.SLOT_INPUT_1 + i, 17, 49 + i * 18).setExclusion(true).setBlockedTexture("slots/blocked_2"));
 		}
 
 		for(int i = 0; i < 3; i++)

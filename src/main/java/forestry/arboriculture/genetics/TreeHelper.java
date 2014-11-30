@@ -60,14 +60,18 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 
 	public static final String UID = "rootTrees";
 	public static int treeSpeciesCount = -1;
+	public static ITreekeepingMode activeTreekeepingMode;
+	public static final ArrayList<ITree> treeTemplates = new ArrayList<ITree>();
+
+	private final ArrayList<ITreekeepingMode> treekeepingModes = new ArrayList<ITreekeepingMode>();
+
+	public TreeHelper() {
+		setResearchSuitability(new ItemStack(Blocks.sapling, 1, Defaults.WILDCARD), 1.0f);
+	}
 
 	@Override
 	public String getUID() {
 		return UID;
-	}
-
-	public TreeHelper() {
-		setResearchSuitability(new ItemStack(Blocks.sapling, 1, Defaults.WILDCARD), 1.0f);
 	}
 
 	@Override
@@ -290,8 +294,6 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	}
 
 	/* BREEDING MODES */
-	ArrayList<ITreekeepingMode> treekeepingModes = new ArrayList<ITreekeepingMode>();
-	public static ITreekeepingMode activeTreekeepingMode;
 
 	@Override
 	public ArrayList<ITreekeepingMode> getTreekeepingModes() {
@@ -337,7 +339,6 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	}
 
 	/* TEMPLATES */
-	public static ArrayList<ITree> treeTemplates = new ArrayList<ITree>();
 
 	@Override
 	public ArrayList<ITree> getIndividualTemplates() {
@@ -356,7 +357,7 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	}
 
 	/* MUTATIONS */
-	private static ArrayList<ITreeMutation> treeMutations = new ArrayList<ITreeMutation>();
+	private static final ArrayList<ITreeMutation> treeMutations = new ArrayList<ITreeMutation>();
 
 	@Override
 	public ArrayList<ITreeMutation> getMutations(boolean shuffle) {

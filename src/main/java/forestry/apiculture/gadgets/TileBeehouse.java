@@ -39,7 +39,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.BiomeDictionary;
 
 public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 
@@ -47,15 +46,16 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	public static final int SLOT_QUEEN = 0;
 	public static final int SLOT_DRONE = 1;
 	public static final int SLOT_INVENTORY_1 = 2;
-	protected static int SLOT_PRODUCT_1 = 2;
-	protected static int SLOT_PRODUCT_COUNT = 7;
+	public static final int SLOT_PRODUCT_1 = 2;
+	public static final int SLOT_PRODUCT_COUNT = 7;
 	public static final int SLOT_FRAMES_1 = 9;
 	public static final int SLOT_FRAMES_2 = 10;
 	public static final int SLOT_FRAMES_3 = 11;
 	public static final int SLOT_INVENTORY_COUNT = 7;
 	public static final int SLOT_FRAMES_COUNT = 3;
+
 	// Inventory
-	protected InventoryAdapter inventory = new InventoryAdapter(12, "Items");
+	protected final InventoryAdapter inventory = new InventoryAdapter(12, "Items");
 	private final IBeekeepingLogic logic;
 	private BiomeGenBase biome;
 	private int displayHealthMax = 0;

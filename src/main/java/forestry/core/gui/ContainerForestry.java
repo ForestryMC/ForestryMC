@@ -24,13 +24,15 @@ import net.minecraft.item.ItemStack;
 
 public class ContainerForestry extends Container {
 
-	protected IInventory inventory;
-	protected TileForestry inventoryForestry;
+	protected final IInventory inventory;
+	protected final TileForestry inventoryForestry;
 
 	public ContainerForestry(IInventory inventory) {
 		this.inventory = inventory;
 		if (inventory instanceof TileForestry)
 			this.inventoryForestry = (TileForestry)inventory;
+		else
+			this.inventoryForestry  = null;
 	}
 
 	/**
@@ -108,7 +110,7 @@ public class ContainerForestry extends Container {
 		stackSlot.stackSize = stackSize;
 
 		if (stackSlot.stackSize <= 0)
-			slot.putStack((ItemStack) null);
+			slot.putStack(null);
 	}
 
 	protected void fillPhantomSlot(Slot slot, ItemStack stackHeld, int mouseButton, int modifier) {

@@ -38,8 +38,8 @@ public class PacketSocketUpdate extends PacketCoordinates {
 		super.writeData(data);
 
 		data.writeShort(itemstacks.length);
-		for (int i = 0; i < itemstacks.length; i++)
-			writeItemStack(itemstacks[i], data);
+		for (ItemStack itemstack : itemstacks)
+			writeItemStack(itemstack, data);
 	}
 
 	@Override

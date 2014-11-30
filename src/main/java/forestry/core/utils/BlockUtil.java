@@ -99,13 +99,13 @@ public class BlockUtil {
 
 	}
 
-	public static ArrayList<ForgeDirection> filterPipeDirections(ForgeDirection[] all, ForgeDirection[] exclude) {
+	public static ArrayList<ForgeDirection> filterPipeDirections(ForgeDirection[] allDirections, ForgeDirection[] exclude) {
 		ArrayList<ForgeDirection> filtered = new ArrayList<ForgeDirection>();
 		ArrayList<ForgeDirection> excludeList = new ArrayList<ForgeDirection>(Arrays.asList(exclude));
 
-		for (int i = 0; i < all.length; i++)
-			if (!excludeList.contains(all[i]))
-				filtered.add(all[i]);
+		for (ForgeDirection direction : allDirections)
+			if (!excludeList.contains(direction))
+				filtered.add(direction);
 
 		return filtered;
 

@@ -22,18 +22,18 @@ import forestry.api.apiculture.EnumBeeType;
 public class ModelBee extends ModelBase {
 
 	//fields
-	ModelRenderer snout;
-	ModelRenderer torsoWing;
-	ModelRenderer rump;
-	ModelRenderer tail;
-	ModelRenderer tailEnd;
-	ModelRenderer bridge;
-	ModelRenderer eyeRight;
-	ModelRenderer eyeLeft;
-	ModelRenderer wingLeft;
-	ModelRenderer wingRight;
-	ModelRenderer crownQueen;
-	ModelRenderer crownPrincess;
+	private final ModelRenderer snout;
+	private final ModelRenderer torsoWing;
+	private final ModelRenderer rump;
+	private final ModelRenderer tail;
+	private final ModelRenderer tailEnd;
+	private final ModelRenderer bridge;
+	private final ModelRenderer eyeRight;
+	private final ModelRenderer eyeLeft;
+	private final ModelRenderer wingLeft;
+	private final ModelRenderer wingRight;
+	private final ModelRenderer crownQueen;
+	private final ModelRenderer crownPrincess;
 
 	EnumBeeType type = EnumBeeType.DRONE;
 

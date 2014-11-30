@@ -19,7 +19,7 @@ import net.minecraft.entity.EntityLivingBase;
 
 public class RenderButterfly extends RenderLiving {
 
-	ModelButterfly butterflyModel;
+	private final ModelButterfly butterflyModel;
 
 	public RenderButterfly() {
 		super(new ModelButterfly(), 0.25f);

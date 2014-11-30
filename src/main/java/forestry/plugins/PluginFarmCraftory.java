@@ -36,16 +36,16 @@ public class PluginFarmCraftory extends ForestryPlugin {
 	public static Method methodGrowthSingle;
 	public static Method methodGrowthMulti;
 
-	public static HashMap<String, ItemStack> vegetableSeeds = new HashMap<String, ItemStack>();
+	public static final HashMap<String, ItemStack> vegetableSeeds = new HashMap<String, ItemStack>();
 	public static final String[] seedIdentifiers = new String[]{"turnipSeedBag", "cabbageSeedBag", "onionSeedBag", "spinachSeedBag", "leekSeedBag",
 		"cucumberSeedBag", "tomatoSeedBag", "eggplantSeedBag", "greenPepperSeedBag", "yamSeedBag", "strawberrySeedBag", "pineappleSeedBag"};
-	public static HashMap<String, ItemStack> vegetableItems = new HashMap<String, ItemStack>();
+	public static final HashMap<String, ItemStack> vegetableItems = new HashMap<String, ItemStack>();
 	public static final String[] vegetableIdentifiers = new String[]{"turnipItem", "cabbageItem", "onionItem", "spinachItem", "leekItem", "cucumberItem",
 		"tomatoItem", "eggplantItem", "greenPepperItem", "yamItem", "strawberryItem", "pineappleItem"};
 
-	public static HashMap<String, ItemStack> cerealSeeds = new HashMap<String, ItemStack>();
+	public static final HashMap<String, ItemStack> cerealSeeds = new HashMap<String, ItemStack>();
 	public static final String[] cseedIdentifiers = new String[]{"cornSeedBag"};
-	public static HashMap<String, ItemStack> cerealItems = new HashMap<String, ItemStack>();
+	public static final HashMap<String, ItemStack> cerealItems = new HashMap<String, ItemStack>();
 	public static final String[] cerealIdentifiers = new String[]{"cornItem"};
 
 	@Override

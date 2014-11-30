@@ -29,7 +29,7 @@ public abstract class Ledger {
 	private static final int OPEN_SPEED = 8;
 	private static final ResourceLocation ledgerTexture = new ForestryResource(Defaults.TEXTURE_PATH_GUI + "/ledger.png");
 	
-	protected LedgerManager manager;
+	protected final LedgerManager manager;
 
 	private boolean open;
 

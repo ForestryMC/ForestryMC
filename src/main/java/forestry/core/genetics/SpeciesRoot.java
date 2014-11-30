@@ -28,7 +28,7 @@ import forestry.api.genetics.ISpeciesRoot;
 public abstract class SpeciesRoot implements ISpeciesRoot {
 	
 	/* RESEARCH */
-	LinkedHashMap<ItemStack, Float> researchCatalysts = new LinkedHashMap<ItemStack, Float>();
+	private final LinkedHashMap<ItemStack, Float> researchCatalysts = new LinkedHashMap<ItemStack, Float>();
 	
 	@Override
 	public Map<ItemStack, Float> getResearchCatalysts() {
@@ -41,7 +41,7 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 	}
 
 	/* TEMPLATES */
-	public HashMap<String, IAllele[]> speciesTemplates = new HashMap<String, IAllele[]>();
+	public final HashMap<String, IAllele[]> speciesTemplates = new HashMap<String, IAllele[]>();
 
 	@Override
 	public Map<String, IAllele[]> getGenomeTemplates() {

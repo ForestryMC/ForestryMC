@@ -76,7 +76,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 	}
 
 	public static class RecipeManager implements ICentrifugeManager {
-		public static ArrayList<MachineCentrifuge.Recipe> recipes = new ArrayList<MachineCentrifuge.Recipe>();
+		public static final ArrayList<MachineCentrifuge.Recipe> recipes = new ArrayList<MachineCentrifuge.Recipe>();
 
 		@Override
 		public void addRecipe(int timePerItem, ItemStack resource, HashMap<ItemStack, Integer> products) {
@@ -113,8 +113,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 		}
 
 		public static Recipe findMatchingRecipe(ItemStack item) {
-			for (int i = 0; i < recipes.size(); i++) {
-				Recipe recipe = recipes.get(i);
+			for (Recipe recipe : recipes) {
 				if (recipe.matches(item))
 					return recipe;
 			}

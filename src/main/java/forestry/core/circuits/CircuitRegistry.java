@@ -26,9 +26,9 @@ import forestry.core.config.ForestryItem;
 
 public class CircuitRegistry implements ICircuitRegistry {
 
-	private LinkedHashMap<String, ICircuitLayout> layoutMap = new LinkedHashMap<String, ICircuitLayout>();
-	private LinkedHashMap<String, ICircuit> circuitMap = new LinkedHashMap<String, ICircuit>();
-	private HashMap<Integer, String> legacyMap = new HashMap<Integer, String>();
+	private final LinkedHashMap<String, ICircuitLayout> layoutMap = new LinkedHashMap<String, ICircuitLayout>();
+	private final LinkedHashMap<String, ICircuit> circuitMap = new LinkedHashMap<String, ICircuit>();
+	private final HashMap<Integer, String> legacyMap = new HashMap<Integer, String>();
 
 	@Override
 	public ICircuitLibrary getCircuitLibrary(World world, String playername) {

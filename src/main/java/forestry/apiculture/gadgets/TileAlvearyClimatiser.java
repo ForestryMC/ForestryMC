@@ -32,8 +32,8 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 			this.boundaryUp = boundaryUp;
 		}
 	}
-	protected EnergyManager energyManager;
-	ClimateControl climateControl;
+	protected final EnergyManager energyManager;
+	private final ClimateControl climateControl;
 	private int transferTime = 0;
 	private int animationDelay = 0;
 	private final int textureOff;

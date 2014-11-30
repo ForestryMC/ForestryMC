@@ -235,7 +235,7 @@ public class ItemInfuser extends ItemForestry {
 		private final short inputSlot = 0;
 		private final short outputSlot = 1;
 		private final short ingredientSlot1 = 2;
-		EntityPlayer player;
+		private final EntityPlayer player;
 
 		public InfuserInventory(EntityPlayer player) {
 			this.player = player;

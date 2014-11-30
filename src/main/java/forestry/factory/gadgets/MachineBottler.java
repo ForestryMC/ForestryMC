@@ -86,7 +86,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	}
 
 	public static class RecipeManager implements ICraftingProvider {
-		public static ArrayList<MachineBottler.Recipe> recipes = new ArrayList<MachineBottler.Recipe>();
+		public static final ArrayList<MachineBottler.Recipe> recipes = new ArrayList<MachineBottler.Recipe>();
 
 		/**
 		 * 
@@ -99,8 +99,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 			if (res == null || empty == null)
 				return null;
 
-			for (int i = 0; i < recipes.size(); i++) {
-				Recipe recipe = recipes.get(i);
+			for (Recipe recipe : recipes) {
 				if (recipe.matches(res, empty))
 					return recipe;
 			}
@@ -142,7 +141,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	}
 
 	@EntityNetData
-	public StandardTank resourceTank;
+	public final StandardTank resourceTank;
 	private final TankManager tankManager;
 
 	private final InventoryAdapter inventory = new InventoryAdapter(3, "Items");

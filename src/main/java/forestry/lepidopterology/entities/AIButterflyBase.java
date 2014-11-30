@@ -18,7 +18,7 @@ import net.minecraft.util.Vec3;
 
 public abstract class AIButterflyBase extends EntityAIBase {
 
-	protected EntityButterfly entity;
+	protected final EntityButterfly entity;
 
 	public AIButterflyBase(EntityButterfly entity) {
 		this.entity = entity;

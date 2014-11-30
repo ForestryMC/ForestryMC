@@ -22,7 +22,7 @@ import forestry.core.proxy.Proxies;
  */
 public abstract class Widget implements IToolTipProvider {
 
-	protected WidgetManager manager;
+	protected final WidgetManager manager;
 	protected int xPos;
 	protected int yPos;
 	protected int width = 16;

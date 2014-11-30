@@ -15,7 +15,7 @@ import forestry.core.utils.StringUtil;
 
 public class AlleleFloat extends Allele implements IAlleleFloat {
 
-	float value;
+	private final float value;
 
 	public AlleleFloat(String uid, float value) {
 		this(uid, value, false);

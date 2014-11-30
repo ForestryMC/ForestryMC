@@ -24,7 +24,7 @@ import forestry.food.items.ItemInfuser.InfuserInventory;
 
 public class ContainerInfuser extends ContainerForestry {
 
-	InfuserInventory inventory;
+	private final InfuserInventory inventory;
 
 	public ContainerInfuser(InventoryPlayer inventoryplayer, InfuserInventory inventory) {
 		super(inventory);

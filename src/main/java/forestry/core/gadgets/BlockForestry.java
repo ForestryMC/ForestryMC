@@ -28,13 +28,9 @@ import forestry.core.utils.Utils;
 
 public abstract class BlockForestry extends BlockContainer {
 
-	protected static boolean keepInventory = false;
-	protected Random furnaceRand;
-
 	public BlockForestry(Material material) {
 		super(material);
 		setHardness(1.5f);
-		furnaceRand = new Random();
 		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
 

@@ -149,16 +149,15 @@ public abstract class Genome implements IGenome {
 
 		for (int i = 0; i < chromosomes.length; i++) {
 			IChromosome chromosome = chromosomes[i];
-			if (chromosome == null && genetics[i] != null)
-				return false;
-			if (chromosome != null && genetics[i] == null)
-				return false;
-			if (chromosome == null && genetics[i] == null)
+			IChromosome otherChromosome = genetics[i];
+			if (chromosome == null && otherChromosome == null)
 				continue;
-
-			if (!chromosome.getPrimaryAllele().getUID().equals(genetics[i].getPrimaryAllele().getUID()))
+			if (chromosome == null || otherChromosome == null)
 				return false;
-			if (!chromosome.getSecondaryAllele().getUID().equals(genetics[i].getSecondaryAllele().getUID()))
+
+			if (!chromosome.getPrimaryAllele().getUID().equals(otherChromosome.getPrimaryAllele().getUID()))
+				return false;
+			if (!chromosome.getSecondaryAllele().getUID().equals(otherChromosome.getSecondaryAllele().getUID()))
 				return false;
 		}
 

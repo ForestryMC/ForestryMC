@@ -153,7 +153,7 @@ public class PluginArboriculture extends ForestryPlugin {
 	public static int modelIdPods;
 	public static ITreeRoot treeInterface;
 	public static MachineDefinition definitionChest;
-	public static List<Block> validFences = new ArrayList<Block>();
+	public static final List<Block> validFences = new ArrayList<Block>();
 	private static final EnumSet<ForestryBlock> logs = EnumSet.of(
 			ForestryBlock.log1,
 			ForestryBlock.log2,
@@ -474,12 +474,11 @@ public class PluginArboriculture extends ForestryPlugin {
 			Proxies.common.addRecipe(ForestryBlock.fences2.getItemStack(4, i), "###", "# #", '#', ForestryBlock.planks2.getItemStack(1, i));
 
 		// Treealyzer
-		RecipeManagers.carpenterManager.addRecipe(100, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 2000), null, ForestryItem.treealyzer.getItemStack(), new Object[]{
-			"X#X", "X#X", "RDR",
-			'#', Blocks.glass_pane,
-			'X', "ingotCopper",
-			'R', Items.redstone,
-			'D', Items.diamond});
+		RecipeManagers.carpenterManager.addRecipe(100, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 2000), null, ForestryItem.treealyzer.getItemStack(), "X#X", "X#X", "RDR",
+				'#', Blocks.glass_pane,
+				'X', "ingotCopper",
+				'R', Items.redstone,
+				'D', Items.diamond);
 
 		// SQUEEZER RECIPES
 		RecipeManagers.squeezerManager.addRecipe(20, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.CHERRY.ordinal())}, LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, 5 * GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed")), ForestryItem.mulch.getItemStack(), 5);

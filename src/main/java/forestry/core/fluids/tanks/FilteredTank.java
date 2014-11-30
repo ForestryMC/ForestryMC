@@ -78,8 +78,7 @@ public class FilteredTank extends StandardTank {
 			if (rarity == null)
 				rarity = EnumRarity.common;
 			FluidStack filterFluidStack = FluidRegistry.getFluidStack(filter.getName(), 0);
-			ToolTipLine name = new ToolTipLine(filter.getLocalizedName(filterFluidStack), rarity.rarityColor);
-			name.setSpacing(2);
+			ToolTipLine name = new ToolTipLine(filter.getLocalizedName(filterFluidStack), rarity.rarityColor, 2);
 			toolTip.add(name);
 			if (getFluid() != null)
 				amount = getFluid().amount;

@@ -16,7 +16,7 @@ import forestry.core.utils.Vect;
 
 public class AlleleArea extends Allele implements IAlleleArea {
 
-	private int[] area;
+	private final int[] area;
 
 	public AlleleArea(String uid, int[] value) {
 		this(uid, value, false);

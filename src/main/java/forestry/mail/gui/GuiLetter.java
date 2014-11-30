@@ -76,7 +76,7 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 	boolean addressFocus;
 	boolean textFocus;
 
-	protected ArrayList<Widget> tradeInfoWidgets;
+	protected final ArrayList<Widget> tradeInfoWidgets;
 
 	private final ContainerLetter container;
 

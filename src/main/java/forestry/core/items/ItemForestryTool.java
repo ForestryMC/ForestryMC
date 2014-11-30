@@ -10,28 +10,28 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import forestry.core.proxy.Proxies;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 
-import forestry.core.proxy.Proxies;
+import java.util.Arrays;
+import java.util.List;
 
 public class ItemForestryTool extends ItemForestry {
 
 	private final ItemStack remnants;
 	protected float efficiencyOnProperMaterial;
-	private final Block[] blocksEffectiveAgainst;
+	private final List<Block> blocksEffectiveAgainst;
 
 	public ItemForestryTool(Block[] blocksEffectiveAgainst, ItemStack remnants) {
 		super();
-		this.blocksEffectiveAgainst = blocksEffectiveAgainst;
+		this.blocksEffectiveAgainst = Arrays.asList(blocksEffectiveAgainst);
 		this.maxStackSize = 1;
 		efficiencyOnProperMaterial = 6F;
 		setMaxDamage(200);
@@ -40,9 +40,8 @@ public class ItemForestryTool extends ItemForestry {
 
 	@Override
 	public float func_150893_a(ItemStack itemstack, Block block) {
-		for (int i = 0; i < blocksEffectiveAgainst.length; i++)
-			if (blocksEffectiveAgainst[i] == block)
-				return efficiencyOnProperMaterial;
+		if (blocksEffectiveAgainst.contains(block))
+			return efficiencyOnProperMaterial;
 		return 1.0F;
 	}
 
@@ -70,11 +69,6 @@ public class ItemForestryTool extends ItemForestry {
 		itemstack.damageItem(1, entityliving);
 		return true;
 	}
-
-	/*@Override
-	public float getDamageVsEntity(Entity entity, ItemStack itemstack) {
-		return 1;
-	}*/
 
 	@Override
 	public boolean isFull3D() {

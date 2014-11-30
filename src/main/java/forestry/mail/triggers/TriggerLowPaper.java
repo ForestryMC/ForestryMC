@@ -19,7 +19,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class TriggerLowPaper extends Trigger {
 
-	int threshold;
+	private final int threshold;
 
 	public TriggerLowPaper(String tag, int threshold) {
 		super(tag, "lowPaper");

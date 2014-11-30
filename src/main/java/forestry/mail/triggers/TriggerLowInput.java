@@ -19,7 +19,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class TriggerLowInput extends Trigger {
 
-	float threshold;
+	private final float threshold;
 
 	public TriggerLowInput(String tag, float threshold) {
 		super(tag, "lowInput");
