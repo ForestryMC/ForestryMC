@@ -10,13 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.BiomeGenBase;
 import forestry.api.apiculture.hives.HiveGround;
 import forestry.api.core.BiomeHelper;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.core.config.ForestryBlock;
-import net.minecraft.init.Blocks;
-import net.minecraft.world.biome.BiomeGenBase;
 
 public class HiveParched extends HiveGround {
 

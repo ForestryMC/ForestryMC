@@ -21,12 +21,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
+import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodType;
@@ -48,13 +45,13 @@ public class BlockPlanks extends Block implements IWoodTyped {
 		this.cat = cat;
 		setResistance(5.0F);
 		setStepSound(soundTypeWood);
-		setCreativeTab(Tabs.tabArboriculture);
+		setCreativeTab(Tabs.tabArboriculture); 
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		int count = (cat == PlankCat.CAT0 ? 16 : 8);
+		int count = (cat == PlankCat.CAT0 ? 16 : 12);
 		for (int i = 0; i < count; i++)
 			itemList.add(new ItemStack(this, 1, i));
 	}

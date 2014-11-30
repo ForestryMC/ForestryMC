@@ -11,8 +11,6 @@
 package forestry.arboriculture.worldgen;
 
 import forestry.api.world.ITreeGenData;
-import forestry.core.config.ForestryBlock;
-import forestry.core.worldgen.BlockType;
 
 public class WorldGenCocobolo extends WorldGenTree {
 
@@ -47,7 +45,6 @@ public class WorldGenCocobolo extends WorldGenTree {
 
 	@Override
 	public void preGenerate() {
-		height = determineHeight(4, 6);
 		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
 	}
 }
