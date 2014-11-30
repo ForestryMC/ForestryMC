@@ -205,7 +205,7 @@ public class PluginFactory extends ForestryPlugin {
 				.setFaces(0, 1, 2, 3, 4, 4));
 
 		// Triggers
-		if (PluginManager.Module.BUILDCRAFT.isEnabled()) {
+		if (PluginManager.Module.BUILDCRAFT_STATEMENTS.isEnabled()) {
 			FactoryTriggers.initialize();
 		}
 	}

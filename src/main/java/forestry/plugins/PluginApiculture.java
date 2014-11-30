@@ -259,7 +259,7 @@ public class PluginApiculture extends ForestryPlugin {
 		ForestryBlock.alveary.block().setHarvestLevel("axe", 0);
 
 		// Add triggers
-		if (PluginManager.Module.BUILDCRAFT.isEnabled()) {
+		if (PluginManager.Module.BUILDCRAFT_STATEMENTS.isEnabled()) {
 			ApicultureTriggers.initialize();
 		}
 
