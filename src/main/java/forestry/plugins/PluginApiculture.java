@@ -37,8 +37,7 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.recipes.RecipeManagers;
-import forestry.apiculture.CommandBeekeepingMode;
-import forestry.apiculture.CommandGiveBee;
+import forestry.apiculture.commands.CommandBeekeeping;
 import forestry.apiculture.FlowerProviderCacti;
 import forestry.apiculture.FlowerProviderEnd;
 import forestry.apiculture.FlowerProviderGourd;
@@ -104,6 +103,7 @@ import forestry.apiculture.items.ItemHoneycomb;
 import forestry.apiculture.items.ItemImprinter;
 import forestry.apiculture.items.ItemWaxCast;
 import forestry.apiculture.proxy.ProxyApiculture;
+import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.apiculture.trigger.TriggerNoFrames;
 import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveEnd;
@@ -168,10 +168,9 @@ public class PluginApiculture extends ForestryPlugin {
 	private static final String CONFIG_CATEGORY = "apiculture";
 	private Configuration apicultureConfig;
 	public static String beekeepingMode = "NORMAL";
-	public static int beeCycleTicks = 550;
+	public static int ticksPerBeeWorkCycle = 550;
 	public static boolean apiarySideSensitive = false;
 	public static boolean fancyRenderedBees = false;
-	public static Trigger triggerNoFrames;
 	private ArrayList<IHiveDrop> forestDrops;
 	private ArrayList<IHiveDrop> meadowsDrops;
 	private ArrayList<IHiveDrop> desertDrops;
@@ -260,10 +259,15 @@ public class PluginApiculture extends ForestryPlugin {
 		ForestryBlock.alveary.block().setHarvestLevel("axe", 0);
 
 		// Add triggers
-		triggerNoFrames = new TriggerNoFrames();
+		if (PluginManager.Module.BUILDCRAFT_STATEMENTS.isEnabled()) {
+			ApicultureTriggers.initialize();
+		}
 
 		// Register village components with the Structure registry.
 		VillageHandlerApiculture.registerVillageComponents();
+
+		// Commands
+		PluginCore.rootCommand.addChildCommand(new CommandBeekeeping());
 	}
 
 	@Override
@@ -414,7 +418,7 @@ public class PluginApiculture extends ForestryPlugin {
 
 		// / BEE COMBS
 		ForestryItem.beeComb.registerItem(new ItemHoneycomb(), "beeCombs");
-		OreDictionary.registerOre("beeComb", ForestryItem.beeComb.getItemStack(1, Defaults.WILDCARD));
+		OreDictionary.registerOre("beeComb", ForestryItem.beeComb.getWildcard());
 
 		// / APIARIST'S CLOTHES
 		ForestryItem.apiaristHat.registerItem(new ItemArmorApiarist(0), "apiaristHelmet");
@@ -1273,12 +1277,6 @@ public class PluginApiculture extends ForestryPlugin {
 	@Override
 	public IOreDictionaryHandler getDictionaryHandler() {
 		return null;
-	}
-
-	@Override
-	public ICommand[] getConsoleCommands() {
-		return new ICommand[]{new CommandBeekeepingMode(), new CommandGiveBee(EnumBeeType.DRONE), new CommandGiveBee(EnumBeeType.PRINCESS),
-			new CommandGiveBee(EnumBeeType.QUEEN),};
 	}
 
 	@Override

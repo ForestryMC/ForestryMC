@@ -10,28 +10,27 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import forestry.api.mail.IMailAddress;
 import forestry.api.mail.PostManager;
+import forestry.core.gui.ContainerForestry;
+import forestry.core.gui.slots.SlotClosed;
+import forestry.core.proxy.Proxies;
+import forestry.mail.POBox;
+import forestry.mail.gadgets.MachineMailbox;
+import forestry.plugins.PluginMail;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.gui.ContainerForestry;
-import forestry.core.gui.slots.SlotClosed;
-import forestry.core.proxy.Proxies;
-import forestry.mail.POBox;
-import forestry.mail.gadgets.MachineMailbox;
-import forestry.api.mail.IMailAddress;
-import forestry.plugins.PluginMail;
-
 public class ContainerMailbox extends ContainerForestry {
 
 	public static final short SLOT_LETTERS = 0;
 	public static final short SLOT_LETTERS_COUNT = 7 * 12;
 
-	MachineMailbox mailbox;
-	POBox mailinventory;
+	private final MachineMailbox mailbox;
+	private final POBox mailInventory;
 
 	public ContainerMailbox(InventoryPlayer player, MachineMailbox tile) {
 		super(tile);
@@ -41,7 +40,9 @@ public class ContainerMailbox extends ContainerForestry {
 
 		IInventory inv = mailbox.getOrCreateMailInventory(player.player.worldObj, player.player.getGameProfile());
 		if (inv instanceof POBox)
-			mailinventory = (POBox) inv;
+			this.mailInventory = (POBox) inv;
+		else
+			this.mailInventory = null;
 
 		for (int i = 0; i < 7; i++)
 			for (int j = 0; j < 12; j++)
@@ -62,9 +63,9 @@ public class ContainerMailbox extends ContainerForestry {
 		ItemStack stack = super.slotClick(slotIndex, button, par3, player);
 
 		if (slotIndex >= SLOT_LETTERS && slotIndex < SLOT_LETTERS + SLOT_LETTERS_COUNT) {
-			if (Proxies.common.isSimulating(player.worldObj) && mailinventory != null) {
+			if (Proxies.common.isSimulating(player.worldObj) && mailInventory != null) {
 				IMailAddress address = PostManager.postRegistry.getMailAddress(player.getGameProfile());
-				PluginMail.proxy.setPOBoxInfo(mailbox.getWorldObj(), address, mailinventory.getPOBoxInfo());
+				PluginMail.proxy.setPOBoxInfo(mailbox.getWorldObj(), address, mailInventory.getPOBoxInfo());
 			}
 		}
 

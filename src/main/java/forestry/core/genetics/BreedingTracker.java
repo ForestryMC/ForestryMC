@@ -36,7 +36,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	private ArrayList<String> discoveredMutations = new ArrayList<String>();
 	private String modeName;
 
-	GameProfile username;
+	private final GameProfile username;
 
 	public BreedingTracker(String s, GameProfile username) {
 		super(s);

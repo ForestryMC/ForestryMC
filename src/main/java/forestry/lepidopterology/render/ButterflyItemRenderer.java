@@ -28,7 +28,7 @@ import forestry.plugins.PluginLepidopterology;
 
 public class ButterflyItemRenderer implements IItemRenderer {
 
-	ModelButterfly model;
+	private final ModelButterfly model;
 	EntityButterfly entity;
 	
 	public ButterflyItemRenderer() {
@@ -41,7 +41,7 @@ public class ButterflyItemRenderer implements IItemRenderer {
 		if(butterfly.isAlive()) {
 			long systemTime = System.currentTimeMillis();
 			long flapping = systemTime + butterfly.getIdent().hashCode();
-			float flap = (float) (flapping % 1000) / 1000;   // 0 to 1
+			float flap = (float) (flapping % 1024) / 1024;   // 0 to 1
 
 			wingYaw = getIrregularWingYaw(flapping, flap);
 
@@ -51,8 +51,8 @@ public class ButterflyItemRenderer implements IItemRenderer {
 	}
 	
 	public static float getIrregularWingYaw(long flapping, float flap) {
-		long irregular = (long)(flapping / 1000);
-		float wingYaw = 1f;
+		long irregular = flapping / 1024;
+		float wingYaw;
 		
 		if(irregular % 11 == 0) {
 			wingYaw = 0.75f;

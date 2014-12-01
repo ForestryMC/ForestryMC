@@ -23,7 +23,7 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IIndividual;
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.proxy.Proxies;
@@ -32,11 +32,11 @@ import forestry.plugins.PluginApiculture;
 public class BeekeepingLogic implements IBeekeepingLogic {
 
 	private static final int MAX_POLLINATION_ATTEMPTS = 20;
-	IBeeHousing housing;
+	private final IBeeHousing housing;
 	// Breeding
 	private int breedingTime;
 	private final int totalBreedingTime = Defaults.APIARY_BREEDING_TIME;
-	private int throttle;
+	private int queenWorkCycleThrottle;
 	private IEffectData effectData[] = new IEffectData[2];
 	private IBee queen;
 	private IIndividual pollen;
@@ -51,7 +51,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		breedingTime = nbttagcompound.getInteger("BreedingTime");
-		throttle = nbttagcompound.getInteger("Throttle");
+		queenWorkCycleThrottle = nbttagcompound.getInteger("Throttle");
 
 		NBTTagList nbttaglist = nbttagcompound.getTagList("Offspring", 10);
 		for (int i = 0; i < nbttaglist.tagCount(); i++) {
@@ -63,7 +63,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound.setInteger("BreedingTime", breedingTime);
-		nbttagcompound.setInteger("Throttle", throttle);
+		nbttagcompound.setInteger("Throttle", queenWorkCycleThrottle);
 
 		Stack<ItemStack> spawnCopy = new Stack<ItemStack>();
 		spawnCopy.addAll(spawn);
@@ -107,116 +107,185 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	@Override
 	public void update() {
 
-		resetQueen(null);
+		this.queen = null;
 
-		// Still something to spawn, try it
-		while (!spawn.isEmpty()) {
-			ItemStack next = spawn.peek();
-			if (housing.addProduct(next, true)) {
-				spawn.pop();
-				housing.setErrorState(EnumErrorCode.OK.ordinal());
-			} else
-				housing.setErrorState(EnumErrorCode.NOSPACE.ordinal());
+		if (!addPendingProducts()) {
+			return;
+		}
+		
+		if (tryBreedingPrincess() || !hasHealthyQueen()) {
+			return;
+		}
+		
+		if (!queenCanWork()) {
 			return;
 		}
 
-		// No queen? And no princess?
-		if (housing.getQueen() == null) {
-			housing.setErrorState(EnumErrorCode.NOQUEEN.ordinal());
-			return;
-		}
+		queenWorkTick();
+	}
 
-		// Princess available? Try to breed!
-		if (ForestryItem.beePrincessGE.isItemEqual(housing.getQueen())) {
-			if (ForestryItem.beeDroneGE.isItemEqual(housing.getDrone()))
-				housing.setErrorState(EnumErrorCode.OK.ordinal());
-			else
-				housing.setErrorState(EnumErrorCode.NODRONE.ordinal());
-			tickBreed();
-			return;
-		}
-
-		// Can't continue if an item of the wrong type is in the queen slot.
-		if (!ForestryItem.beeQueenGE.isItemEqual(housing.getQueen())) {
-			housing.setErrorState(EnumErrorCode.NOQUEEN.ordinal());
-			return;
-		}
-
-		IBee queen = PluginApiculture.beeInterface.getMember(housing.getQueen());
-		// Kill dying queens
-		if (!queen.isAlive()) {
-			killQueen(queen);
-			housing.setErrorState(EnumErrorCode.OK.ordinal());
-			return;
-		}
-
-		resetQueen(queen);
-
-		// Not while raining, at night or without light
-		EnumErrorCode state = EnumErrorCode.values()[queen.isWorking(housing)];
-		if (state != EnumErrorCode.OK) {
-			housing.setErrorState(state.ordinal());
-			return;
-		} else if (housing.getErrorOrdinal() != EnumErrorCode.NOFLOWER.ordinal())
-			housing.setErrorState(EnumErrorCode.OK.ordinal());
-
+	private void queenWorkTick() {
 		// Effects only fire when queen can work.
 		effectData = queen.doEffect(effectData, housing);
 
-		// We have a queen, work!
-		throttle++;
+		// Work cycles are throttled, rather than occurring every game tick.
+		queenWorkCycleThrottle++;
+		if (queenWorkCycleThrottle >= PluginApiculture.ticksPerBeeWorkCycle) {
+			queenWorkCycleThrottle = 0;
+			
+			// Need a flower
+			if (queen.hasFlower(housing)) {
+				housing.setErrorState(EnumErrorCode.OK.ordinal());
+				doQueenWorkCycle();
+			} else {
+				housing.setErrorState(EnumErrorCode.NOFLOWER.ordinal());
+			}
+		}
+	}
+	
+	private void doQueenWorkCycle() {
+		doProduction();
+		queen.plantFlowerRandom(housing);
+		doPollination();
+		// Age the queen
+		queen.age(housing.getWorld(), housing.getLifespanModifier(queen.getGenome(), queen.getMate(), 0f));
+		updateQueenItemNBT();
+	}
 
-		if (throttle >= PluginApiculture.beeCycleTicks)
-			throttle = 0;
-		else
-			return;
-
-		// Need a flower
-		if (!queen.hasFlower(housing)) {
-			housing.setErrorState(EnumErrorCode.NOFLOWER.ordinal());
-			return;
-		} else
-			housing.setErrorState(EnumErrorCode.OK.ordinal());
-
+	private void doProduction() {
 		// Produce and add stacks
 		ItemStack[] products = queen.produceStacks(housing);
 		housing.wearOutEquipment(1);
 		for (ItemStack stack : products) {
 			housing.addProduct(stack, false);
 		}
+	}
 
-		// Plant a flower
-		queen.plantFlowerRandom(housing);
+	private void doPollination() {
 		// Get pollen if none available yet
 		if (pollen == null) {
 			pollen = queen.retrievePollen(housing);
 			attemptedPollinations = 0;
 			if (pollen != null) {
-				if (housing.onPollenRetrieved(queen, pollen, false))
+				if (housing.onPollenRetrieved(queen, pollen, false)) {
 					pollen = null;
+				}
 			}
 		}
 		if (pollen != null) {
 			attemptedPollinations++;
-			if (queen.pollinateRandom(housing, pollen)
-					|| attemptedPollinations >= MAX_POLLINATION_ATTEMPTS) {
+			if (queen.pollinateRandom(housing, pollen) || attemptedPollinations >= MAX_POLLINATION_ATTEMPTS) {
 				pollen = null;
 			}
 		}
+	}
 
-		// Age the queen
-		queen.age(housing.getWorld(), housing.getLifespanModifier(queen.getGenome(), queen.getMate(), 0f));
-
+	private void updateQueenItemNBT() {
 		// Write the changed queen back into the item stack.
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		queen.writeToNBT(nbttagcompound);
 		housing.getQueen().setTagCompound(nbttagcompound);
-
-		return;
 	}
 
-	private void resetQueen(IBee bee) {
-		this.queen = bee;
+	private boolean addPendingProducts() {
+		EnumErrorCode housingErrorState = null;
+
+		while (!spawn.isEmpty()) {
+			ItemStack next = spawn.peek();
+			if (housing.addProduct(next, true)) {
+				spawn.pop();
+				housingErrorState = EnumErrorCode.OK;
+			} else {
+				housingErrorState = EnumErrorCode.NOSPACE;
+				break;
+			}
+		}
+
+		if (housingErrorState != null) {
+			try {
+				housing.setErrorState(housingErrorState);
+			} catch (Error e) {
+				housing.setErrorState(housingErrorState.ordinal());
+			}
+		}
+
+		return housingErrorState != EnumErrorCode.NOSPACE;
+	}
+	
+	private boolean hasHealthyQueen() {
+		boolean hasQueen = true;
+		EnumErrorCode housingErrorState = null;
+
+		if (housing.getQueen() == null || !ForestryItem.beeQueenGE.isItemEqual(housing.getQueen())) {
+			housingErrorState = EnumErrorCode.NOQUEEN;
+			hasQueen = false;
+		} else {
+			IBee queen = PluginApiculture.beeInterface.getMember(housing.getQueen());
+			// Kill dying queens
+			if (!queen.isAlive()) {
+				killQueen(queen);
+				housingErrorState = EnumErrorCode.OK;
+				hasQueen = false;
+			} else {
+				this.queen = queen;
+			}
+		}
+		if (housingErrorState != null) {
+			try {
+				housing.setErrorState(housingErrorState);
+			} catch (Error e) {
+				housing.setErrorState(housingErrorState.ordinal());
+			}
+		}
+		return hasQueen;
+	}
+	
+	private boolean tryBreedingPrincess() {
+		boolean isBreedingPrincess = false;
+
+		// Princess available? Try to breed!
+		if (ForestryItem.beePrincessGE.isItemEqual(housing.getQueen())) {
+			if (ForestryItem.beeDroneGE.isItemEqual(housing.getDrone())) {
+				housing.setErrorState(EnumErrorCode.OK.ordinal());
+			} else {
+				housing.setErrorState(EnumErrorCode.NODRONE.ordinal());
+			}
+			tickBreed();
+			isBreedingPrincess = true;
+		}
+		
+		return isBreedingPrincess;
+	}
+
+	private boolean queenCanWork() {
+		try {
+			boolean canWork = true;
+			// Not while raining, at night or without light
+			EnumErrorCode state = queen.canWork(housing);
+			if (state != EnumErrorCode.OK) {
+				housing.setErrorState(state);
+				canWork = false;
+			} else if (housing.getErrorState() != EnumErrorCode.NOFLOWER) {
+				housing.setErrorState(EnumErrorCode.OK);
+			}
+			return canWork;
+		} catch (Error e) {
+			return queenCanWorkDeprecated();
+		}
+	}
+
+	// fallback for outdated APIs
+	private boolean queenCanWorkDeprecated() {
+		boolean canWork = true;
+		// Not while raining, at night or without light
+		EnumErrorCode state = EnumErrorCode.values()[queen.isWorking(housing)];
+		if (state != EnumErrorCode.OK) {
+			housing.setErrorState(state.ordinal());
+			canWork = false;
+		} else if (housing.getErrorOrdinal() != EnumErrorCode.NOFLOWER.ordinal()) {
+			housing.setErrorState(EnumErrorCode.OK.ordinal());
+		}
+		return canWork;
 	}
 
 	// / BREEDING

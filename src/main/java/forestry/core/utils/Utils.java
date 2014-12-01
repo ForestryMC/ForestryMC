@@ -10,14 +10,20 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import java.security.MessageDigest;
-import java.security.cert.Certificate;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
-
+import buildcraft.api.tools.IToolWrench;
+import com.mojang.authlib.GameProfile;
+import cpw.mods.fml.common.registry.EntityRegistry;
+import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.ITree;
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.IArmorNaturalist;
+import forestry.api.core.ITileStructure;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.IPollinatable;
+import forestry.core.gadgets.TileForestry;
+import forestry.core.proxy.Proxies;
+import forestry.plugins.PluginArboriculture;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -29,34 +35,19 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
-import cpw.mods.fml.common.registry.EntityRegistry;
-
-import buildcraft.api.tools.IToolWrench;
-import com.google.common.base.Charsets;
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.ITree;
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.IArmorNaturalist;
-import forestry.api.core.ITileStructure;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IPollinatable;
-import forestry.core.config.Config;
-import forestry.core.gadgets.TileForestry;
-import forestry.core.proxy.Proxies;
-import forestry.plugins.PluginArboriculture;
+import java.security.MessageDigest;
+import java.security.cert.Certificate;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
 
 public class Utils {
 
@@ -133,14 +124,6 @@ public class Utils {
 		ItemStack armorItem = player.inventory.armorInventory[3];
 		return armorItem != null && armorItem.getItem() instanceof IArmorNaturalist
 				&& ((IArmorNaturalist) armorItem.getItem()).canSeePollination(player, armorItem, true);
-	}
-
-	@SuppressWarnings("rawtypes")
-	public static void broadcastMessage(World world, String message) {
-		for (Iterator iterator = world.playerEntities.iterator(); iterator.hasNext();) {
-			EntityPlayer entityplayer = (EntityPlayer) iterator.next();
-			entityplayer.addChatMessage(new ChatComponentText(message));
-		}
 	}
 
 	public static IInventory getChest(IInventory inventory) {
@@ -230,8 +213,12 @@ public class Utils {
 	public static boolean isReplaceableBlock(World world, int x, int y, int z) {
 		Block block = world.getBlock(x, y, z);
 
+		return isReplaceableBlock(block);
+	}
+
+	public static boolean isReplaceableBlock(Block block) {
 		return block == Blocks.vine || block == Blocks.tallgrass || block == Blocks.deadbush || block == Blocks.snow_layer
-				|| block.isReplaceable(world, x, y, z);
+				|| block.getMaterial().isReplaceable();
 	}
 
 	public static boolean isLiquidBlock(World world, int x, int y, int z) {
@@ -269,7 +256,7 @@ public class Utils {
 			spawn.setLocationAndAngles(x, y, z, MathHelper.wrapAngleTo180_float(world.rand.nextFloat() * 360.0f), 0.0f);
 			living.rotationYawHead = living.rotationYaw;
 			living.renderYawOffset = living.rotationYaw;
-			living.onSpawnWithEgg((IEntityLivingData) null);
+			living.onSpawnWithEgg(null);
 			world.spawnEntityInWorld(spawn);
 			living.playLivingSound();
 		}
@@ -352,7 +339,7 @@ public class Utils {
 		return ersatz;
 	}
 
-	public static IPollinatable getOrCreatePollinatable(GameProfile owner, World world, int x, int y, int z) {
+	public static IPollinatable getOrCreatePollinatable(GameProfile owner, World world, final int x, final int y, final int z) {
 		TileEntity tile = world.getTileEntity(x, y, z);
 
 		IPollinatable receiver = null;
@@ -360,21 +347,26 @@ public class Utils {
 			receiver = (IPollinatable) tile;
 		else if (!world.isAirBlock(x, y, z)) {
 
+			Block block = world.getBlock(x, y, z);
+			int meta = world.getBlockMetadata(x, y, z);
+
+			if (Blocks.leaves == block || Blocks.leaves2 == block) {
+				if ((meta & 4) != 0) {
+					// no-decay vanilla leaves. http://minecraft.gamepedia.com/Data_values#Leaves
+					// Treat them as decorative and don't pollinate.
+					return null;
+				}
+				meta = meta % 3;
+			}
+
 			// Test for ersatz genomes
 			for (Map.Entry<ItemStack, IIndividual> entry : AlleleManager.ersatzSpecimen.entrySet()) {
-				if (!StackUtils.equals(world.getBlock(x, y, z), entry.getKey()))
-					continue;
-
-				int meta = world.getBlockMetadata(x, y, z);
-				if (StackUtils.equals(Blocks.leaves, entry.getKey()))
-					meta = meta & 3;
-				if (entry.getKey().getItemDamage() != meta)
-					continue;
-
-				// We matched, replace the leaf block with ours and set the ersatz genome
-				PluginArboriculture.treeInterface.setLeaves(world, entry.getValue(), owner, x, y, z);
-				// Now let's pollinate
-				receiver = (IPollinatable) world.getTileEntity(x, y, z);
+				if (block == StackUtils.getBlock(entry.getKey()) && entry.getKey().getItemDamage() == meta) {
+					// We matched, replace the leaf block with ours and set the ersatz genome
+					PluginArboriculture.treeInterface.setLeaves(world, entry.getValue(), owner, x, y, z);
+					// Now let's pollinate
+					receiver = (IPollinatable) world.getTileEntity(x, y, z);
+				}
 			}
 
 		}

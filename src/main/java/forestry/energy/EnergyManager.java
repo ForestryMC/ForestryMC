@@ -10,10 +10,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class EnergyManager implements IEnergyHandler {
 	private enum EnergyTransferMode {
-		EXTRACT, RECEIVE, BOTH;
+		EXTRACT, RECEIVE, BOTH
 	}
 
-	private int energyPerWork;
+	private final int energyPerWork;
 	protected EnergyStorage energyStorage;
 	private EnergyTransferMode mode = EnergyTransferMode.BOTH;
 

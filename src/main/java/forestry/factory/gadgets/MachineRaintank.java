@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
-import buildcraft.api.statements.ITriggerExternal;
-import forestry.api.core.EnumHumidity;
+import forestry.api.core.BiomeHelper;
+import forestry.api.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
-import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.TankManager;
@@ -21,7 +20,6 @@ import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.GuiId;
-import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.Fluids;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
@@ -39,8 +37,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
-
-import java.util.LinkedList;
 
 public class MachineRaintank extends TileBase implements ISidedInventory, ILiquidTankContainer {
 
@@ -69,7 +65,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 		// Raintanks in desert and snow biomes are useless
 		if (worldObj != null) {
 			BiomeGenBase biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
-			if (EnumHumidity.getFromValue(biome.rainfall) == EnumHumidity.ARID) {
+			if (!BiomeHelper.canRainOrSnow(biome)) {
 				setErrorState(EnumErrorCode.INVALIDBIOME);
 				isValidBiome = false;
 			}
@@ -319,12 +315,4 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 		return tankManager.getTankInfo(from);
 	}
 
-	/* ITRIGGERPROVIDER */
-	@Override
-	public LinkedList<ITriggerExternal> getCustomTriggers() {
-		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
-		res.add(ForestryTrigger.lowResource25);
-		res.add(ForestryTrigger.lowResource10);
-		return res;
-	}
 }

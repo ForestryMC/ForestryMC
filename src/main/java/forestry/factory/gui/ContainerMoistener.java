@@ -12,7 +12,6 @@ package forestry.factory.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 
@@ -24,7 +23,7 @@ import forestry.factory.gadgets.MachineMoistener;
 
 public class ContainerMoistener extends ContainerLiquidTanks implements IContainerCrafting {
 
-	protected MachineMoistener tile;
+	protected final MachineMoistener tile;
 
 	public ContainerMoistener(InventoryPlayer player, MachineMoistener tile) {
 		super(tile, tile);

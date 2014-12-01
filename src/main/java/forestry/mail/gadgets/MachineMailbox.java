@@ -12,6 +12,7 @@ package forestry.mail.gadgets;
 
 import buildcraft.api.statements.ITriggerExternal;
 import com.mojang.authlib.GameProfile;
+import cpw.mods.fml.common.Optional;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.mail.ILetter;
@@ -32,10 +33,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.Collection;
 import java.util.LinkedList;
 
 public class MachineMailbox extends TileBase implements IMailContainer, ISpecialInventory, ISidedInventory {
@@ -115,8 +118,9 @@ public class MachineMailbox extends TileBase implements IMailContainer, ISpecial
 	}
 
 	/* ITRIGGERPROVIDER */
+	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public LinkedList<ITriggerExternal> getCustomTriggers() {
+	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(PluginMail.triggerHasMail);
 		return res;

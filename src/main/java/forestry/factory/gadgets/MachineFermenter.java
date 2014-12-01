@@ -11,11 +11,12 @@
 package forestry.factory.gadgets;
 
 import buildcraft.api.statements.ITriggerExternal;
+import cpw.mods.fml.common.Optional;
+import forestry.api.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
 import forestry.api.recipes.IFermenterManager;
 import forestry.api.recipes.IVariableFermentable;
-import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.TankManager;
@@ -26,18 +27,19 @@ import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
-import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
+import forestry.factory.triggers.FactoryTriggers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
@@ -45,6 +47,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -100,7 +103,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 				return true;
 
 			// Liquid required but none given
-			if (liquid != null && liqu == null)
+			if (liqu == null)
 				return false;
 
 			// Wrong liquid
@@ -117,9 +120,9 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 
 	public static class RecipeManager implements IFermenterManager {
 
-		public static ArrayList<MachineFermenter.Recipe> recipes = new ArrayList<MachineFermenter.Recipe>();
-		public static HashSet<Fluid> recipeFluidInputs = new HashSet<Fluid>();
-		public static HashSet<Fluid> recipeFluidOutputs = new HashSet<Fluid>();
+		public static final ArrayList<MachineFermenter.Recipe> recipes = new ArrayList<MachineFermenter.Recipe>();
+		public static final HashSet<Fluid> recipeFluidInputs = new HashSet<Fluid>();
+		public static final HashSet<Fluid> recipeFluidOutputs = new HashSet<Fluid>();
 
 		@Override
 		public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
@@ -177,9 +180,9 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		}
 	}
 	@EntityNetData
-	public FilteredTank resourceTank;
+	public final FilteredTank resourceTank;
 	@EntityNetData
-	public FilteredTank productTank;
+	public final FilteredTank productTank;
 
 	private final TankManager tankManager;
 
@@ -681,14 +684,13 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		return tankManager.getTankInfo(from);
 	}
 
-	// ITRIGGERPROVIDER
+	/* ITRIGGERPROVIDER */
+	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public LinkedList<ITriggerExternal> getCustomTriggers() {
+	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
-		res.add(ForestryTrigger.lowFuel25);
-		res.add(ForestryTrigger.lowFuel10);
-		res.add(ForestryTrigger.lowResource25);
-		res.add(ForestryTrigger.lowResource10);
+		res.add(FactoryTriggers.lowResource25);
+		res.add(FactoryTriggers.lowResource10);
 		return res;
 	}
 }

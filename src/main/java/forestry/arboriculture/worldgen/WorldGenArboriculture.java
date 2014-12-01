@@ -24,10 +24,16 @@ import forestry.core.worldgen.WorldGenBase;
 
 public abstract class WorldGenArboriculture extends WorldGenBase {
 
-	protected ITreeGenData tree;
+	private static final BlockType vine = new BlockType(Blocks.vine, 0);
+	private static final BlockType air = new BlockTypeVoid();
+
+	protected final ITreeGenData tree;
 	protected int startX;
 	protected int startY;
 	protected int startZ;
+
+	protected BlockType leaf;
+	protected BlockType wood;
 
 	protected boolean spawnPods = false;
 	protected int minPodHeight = 3;
@@ -73,11 +79,6 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	public abstract BlockType getLeaf(GameProfile owner);
 
 	public abstract BlockType getWood();
-
-	BlockType leaf;
-	BlockType wood;
-	BlockType vine = new BlockType(Blocks.vine, 0);
-	BlockType air = new BlockTypeVoid();
 
 	public final Vect getStartVector() {
 		return new Vect(startX, startY, startZ);

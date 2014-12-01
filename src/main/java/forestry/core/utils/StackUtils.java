@@ -35,7 +35,6 @@ import forestry.core.gadgets.TileForestry;
 public class StackUtils {
 
 	public static final ItemStack[] EMPTY_STACK_ARRAY = new ItemStack[0];
-	public static final ArrayList<ItemStack> EMPTY_STACK_LIST = new ArrayList<ItemStack>();
 
 	/**
 	 * Compares item id, damage and NBT. Accepts wildcard damage.
@@ -176,7 +175,6 @@ public class StackUtils {
 		ItemStack temp = giver.splitStack(receptor.getMaxStackSize() - receptor.stackSize);
 		receptor.stackSize += temp.stackSize;
 		temp.stackSize = 0;
-		return;
 	}
 
 	public static boolean freeSpaceInStack(ItemStack stack, int maxSize) {
@@ -244,7 +242,7 @@ public class StackUtils {
 
 		}
 
-		return condensed.toArray(EMPTY_STACK_ARRAY);
+		return condensed.toArray(new ItemStack[condensed.size()]);
 	}
 
 	/**

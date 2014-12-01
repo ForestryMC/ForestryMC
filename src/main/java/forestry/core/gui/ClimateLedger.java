@@ -20,7 +20,7 @@ import forestry.core.utils.StringUtil;
  */
 public class ClimateLedger extends Ledger {
 
-	IClimatised tile;
+	private final IClimatised tile;
 
 	public ClimateLedger(LedgerManager manager, IClimatised tile) {
 		super(manager);

@@ -23,7 +23,7 @@ import forestry.core.gadgets.TileForestry;
 public class ClassMap {
 
 	@SuppressWarnings("rawtypes")
-	public static HashMap<Class, ClassMap> classMappers = new HashMap<Class, ClassMap>();
+	public static final HashMap<Class, ClassMap> classMappers = new HashMap<Class, ClassMap>();
 
 	private final LinkedList<Field> intMember = new LinkedList<Field>();
 	private final LinkedList<Field> floatMember = new LinkedList<Field>();
@@ -79,9 +79,9 @@ public class ClassMap {
 			UUID profileID = profile.getId();
 			if (profileID == null)
 				profileID = new UUID(0,0);
-			intPayload[index.intIndex] = (int) profileID.getMostSignificantBits() >>> 32;
+			intPayload[index.intIndex] = (int) (profileID.getMostSignificantBits() >>> 32);
 			intPayload[index.intIndex + 1] = (int) profileID.getMostSignificantBits();
-			intPayload[index.intIndex + 2] = (int) profileID.getLeastSignificantBits() >>> 32;
+			intPayload[index.intIndex + 2] = (int) (profileID.getLeastSignificantBits() >>> 32);
 			intPayload[index.intIndex + 3] = (int) profileID.getLeastSignificantBits();
 			index.intIndex += 4;
 			stringPayload[index.stringIndex] = profile.getName();

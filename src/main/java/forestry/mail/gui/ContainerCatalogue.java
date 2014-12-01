@@ -10,27 +10,27 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Set;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ICrafting;
-
+import forestry.api.mail.EnumAddressee;
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.IPostalState;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
 import forestry.api.mail.TradeStationInfo;
-import forestry.api.mail.IMailAddress;
-import forestry.api.mail.EnumAddressee;
-import forestry.mail.network.PacketLetterInfo;
-import forestry.mail.EnumStationState;
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
+import forestry.mail.EnumStationState;
+import forestry.mail.network.PacketLetterInfo;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ICrafting;
+
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Set;
 
 public class ContainerCatalogue extends ContainerForestry implements IGuiSelectable {
 
@@ -47,7 +47,7 @@ public class ContainerCatalogue extends ContainerForestry implements IGuiSelecta
 
 	private static final String[] FILTER_NAMES = new String[] { "all", "online", "offline" };
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	private static final Set<EnumStationState>[] FILTERS = new EnumSet[] {
+	private static final Set<IPostalState>[] FILTERS = new EnumSet[] {
 		EnumSet.noneOf(EnumStationState.class),
 		EnumSet.of(EnumStationState.OK),
 		EnumSet.of(EnumStationState.INSUFFICIENT_OFFER, EnumStationState.INSUFFICIENT_TRADE_GOOD, EnumStationState.INSUFFICIENT_BUFFER, EnumStationState.INSUFFICIENT_PAPER, EnumStationState.INSUFFICIENT_STAMPS)
@@ -201,8 +201,8 @@ public class ContainerCatalogue extends ContainerForestry implements IGuiSelecta
 		super.detectAndSendChanges();
 
 		if(needsSynch) {
-			for (int i = 0; i < crafters.size(); i++) {
-				ICrafting crafter = (ICrafting)crafters.get(i);
+			for (Object crafter1 : crafters) {
+				ICrafting crafter = (ICrafting) crafter1;
 				crafter.sendProgressBarUpdate(this, 0, currentItPos);
 				crafter.sendProgressBarUpdate(this, 1, maxItPos);
 				crafter.sendProgressBarUpdate(this, 2, currentFilter);

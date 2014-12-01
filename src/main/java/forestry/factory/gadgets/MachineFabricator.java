@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -51,10 +51,10 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 
 	/* RECIPE MANAGMENT */
 	public static class Recipe {
-		ItemStack plan;
+		private final ItemStack plan;
 
-		FluidStack molten;
-		ShapedRecipeCustom internal;
+		private final FluidStack molten;
+		private final ShapedRecipeCustom internal;
 
 		public Recipe(ItemStack plan, FluidStack molten, ShapedRecipeCustom internal) {
 			this.plan = plan;
@@ -65,10 +65,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 		public boolean matches(ItemStack plan) {
 			if (this.plan == null)
 				return true;
-
-			if (plan == null && this.plan == null)
-				return true;
-			else if (plan == null && this.plan != null)
+			else if (plan == null)
 				return false;
 
 			if (this.plan.getItemDamage() == Defaults.WILDCARD)
@@ -146,8 +143,8 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 	}
 
 	public static class RecipeManager implements IFabricatorManager {
-		public static ArrayList<Recipe> recipes = new ArrayList<Recipe>();
-		public static ArrayList<Smelting> smeltings = new ArrayList<Smelting>();
+		public static final ArrayList<Recipe> recipes = new ArrayList<Recipe>();
+		public static final ArrayList<Smelting> smeltings = new ArrayList<Smelting>();
 
 		@Override
 		public void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern) {

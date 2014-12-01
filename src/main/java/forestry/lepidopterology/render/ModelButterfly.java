@@ -18,12 +18,12 @@ import net.minecraft.util.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 public class ModelButterfly extends ModelBase {
-	
-    ModelRenderer wingRight;
-    ModelRenderer eyeRight;
-    ModelRenderer eyeLeft;
-    ModelRenderer wingLeft;
-    ModelRenderer body;
+
+	private final ModelRenderer wingRight;
+	private final ModelRenderer eyeRight;
+	private final ModelRenderer eyeLeft;
+	private final ModelRenderer wingLeft;
+	private final ModelRenderer body;
   
     private float scale;
     
@@ -95,8 +95,8 @@ public class ModelButterfly extends ModelBase {
     }
 
     @Override
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
-    	super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+    public void setRotationAngles(float f, float f1, float swing, float f3, float f4, float f5, Entity entity) {
+    	super.setRotationAngles(f, f1, swing, f3, f4, f5, entity);
     }
 
 }

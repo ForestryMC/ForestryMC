@@ -10,6 +10,11 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import forestry.core.gadgets.TileForestry;
+import forestry.core.gui.slots.SlotForestry;
+import forestry.core.utils.EnumAccess;
+import forestry.core.utils.PlayerUtil;
+import forestry.core.utils.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -17,20 +22,17 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.gadgets.TileForestry;
-import forestry.core.gui.slots.SlotForestry;
-import forestry.core.utils.EnumAccess;
-import forestry.core.utils.StackUtils;
-
 public class ContainerForestry extends Container {
 
-	protected IInventory inventory;
-	protected TileForestry inventoryForestry;
+	protected final IInventory inventory;
+	protected final TileForestry inventoryForestry;
 
 	public ContainerForestry(IInventory inventory) {
 		this.inventory = inventory;
 		if (inventory instanceof TileForestry)
 			this.inventoryForestry = (TileForestry)inventory;
+		else
+			this.inventoryForestry  = null;
 	}
 
 	/**
@@ -44,8 +46,12 @@ public class ContainerForestry extends Container {
 
 	@Override
 	public ItemStack slotClick(int slotIndex, int button, int modifier, EntityPlayer player) {
-		if (inventoryForestry != null && (inventoryForestry.getAccess() != EnumAccess.SHARED) && !inventoryForestry.owner.equals(player.getGameProfile()))
+		if (player == null)
 			return null;
+
+		if ((inventoryForestry != null) && (inventoryForestry.getAccess() != EnumAccess.SHARED))
+			if ((inventoryForestry.owner != null) && !PlayerUtil.isSameGameProfile(inventoryForestry.owner, player.getGameProfile()))
+				return null;
 
 		Slot slot = slotIndex < 0 ? null : (Slot) this.inventorySlots.get(slotIndex);
 		if (slot instanceof SlotForestry) {
@@ -104,7 +110,7 @@ public class ContainerForestry extends Container {
 		stackSlot.stackSize = stackSize;
 
 		if (stackSlot.stackSize <= 0)
-			slot.putStack((ItemStack) null);
+			slot.putStack(null);
 	}
 
 	protected void fillPhantomSlot(Slot slot, ItemStack stackHeld, int mouseButton, int modifier) {

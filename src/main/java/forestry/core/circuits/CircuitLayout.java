@@ -15,7 +15,7 @@ import forestry.core.utils.StringUtil;
 
 public class CircuitLayout implements ICircuitLayout {
 
-	String uid;
+	private final String uid;
 
 	public CircuitLayout(String uid) {
 		this.uid = uid;

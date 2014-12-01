@@ -167,7 +167,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 			fluidAmount = fluidStack.amount;
 		}
 
-		player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA + 0, fluidId);
+		player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidId);
 		PacketGuiInteger packet = new PacketGuiInteger(container.windowId, tankIndex * NETWORK_DATA + 1, fluidAmount);
 		Proxies.net.sendToPlayer(packet, (EntityPlayerMP)player);
 	}
@@ -192,12 +192,12 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 					fluidId = fluidStack.fluidID;
 					fluidAmount = fluidStack.amount;
 				}
-				player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA + 0, fluidId);
+				player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidId);
 				PacketGuiInteger packet = new PacketGuiInteger(container.windowId, tankIndex * NETWORK_DATA + 1, fluidAmount);
 				Proxies.net.sendToPlayer(packet, player);
 			} else if (fluidStack != null && prev != null) {
 				if (fluidStack.getFluid() != prev.getFluid())
-					player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA + 0, fluidStack.fluidID);
+					player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidStack.fluidID);
 				if (fluidStack.amount != prev.amount) {
 					PacketGuiInteger packet = new PacketGuiInteger(container.windowId, tankIndex * NETWORK_DATA + 1, fluidStack.amount);
 					Proxies.net.sendToPlayer(packet, player);

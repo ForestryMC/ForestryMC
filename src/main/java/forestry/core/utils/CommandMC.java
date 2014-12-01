@@ -18,6 +18,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 
+@Deprecated
 public abstract class CommandMC extends CommandBase {
 
 	protected World getWorld(ICommandSender sender, String[] arguments) {

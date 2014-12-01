@@ -13,7 +13,7 @@ package forestry.factory.gadgets;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.recipes.IStillManager;
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.TankManager;
@@ -71,9 +71,7 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 		public boolean matches(FluidStack res) {
 			if (res == null && input == null)
 				return true;
-			else if (res == null && input != null)
-				return false;
-			else if (res != null && input == null)
+			else if (res == null || input == null)
 				return false;
 			else
 				return input.isFluidEqual(res);
@@ -81,9 +79,9 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 	}
 
 	public static class RecipeManager implements IStillManager {
-		public static ArrayList<MachineStill.Recipe> recipes = new ArrayList<MachineStill.Recipe>();
-		public static HashSet<Fluid> recipeFluidInputs = new HashSet<Fluid>();
-		public static HashSet<Fluid> recipeFluidOutputs = new HashSet<Fluid>();
+		public static final ArrayList<MachineStill.Recipe> recipes = new ArrayList<MachineStill.Recipe>();
+		public static final HashSet<Fluid> recipeFluidInputs = new HashSet<Fluid>();
+		public static final HashSet<Fluid> recipeFluidOutputs = new HashSet<Fluid>();
 
 		@Override
 		public void addRecipe(int timePerUnit, FluidStack input, FluidStack output) {
@@ -120,9 +118,9 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 
 	/* MEMBER */
 	@EntityNetData
-	public FilteredTank resourceTank;
+	public final FilteredTank resourceTank;
 	@EntityNetData
-	public FilteredTank productTank;
+	public final FilteredTank productTank;
 	private final TankManager tankManager;
 
 	private final InventoryAdapter inventory = new InventoryAdapter(3, "Items");

@@ -19,6 +19,8 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 
+import forestry.api.core.BiomeHelper;
+import forestry.core.utils.Utils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -45,7 +47,7 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmListener;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmable;
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.GameMode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
@@ -92,7 +94,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
 
-	private FilteredTank liquidTank;
+	private final FilteredTank liquidTank;
 	private final TankManager tankManager;
 
 	private IFarmLogic harvestProvider; // The farm logic which supplied the pending crops.
@@ -103,9 +105,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	private boolean stage = false;
 
-	private int biomeId;
-	private float temperature;
-	private float humidity;
+	private BiomeGenBase biome;
 
 	private int hydrationDelay = 0;
 	private int ticksSinceRainfall = 0;
@@ -114,6 +114,12 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		fertilizerValue = GameMode.getGameMode().getIntegerSetting("farms.fertilizer.value");
 		liquidTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
 		tankManager = new TankManager(liquidTank);
+	}
+
+	@Override
+	public void validate() {
+		super.validate();
+		setBiomeInformation();
 	}
 
 	/* SAVING & LOADING */
@@ -184,10 +190,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	}
 
 	private void setBiomeInformation() {
-		BiomeGenBase biome = worldObj.getBiomeGenForCoords(xCoord, zCoord);
-		this.biomeId = biome.biomeID;
-		this.temperature = biome.temperature;
-		this.humidity = biome.rainfall;
+		this.biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
 		setErrorState(EnumErrorCode.OK);
 	}
 
@@ -276,7 +279,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			int size = potential.size() * 3;
 			if (size > allowedExtent)
 				allowedExtent = size;
-			targets.put(direction, potential.toArray(new FarmTarget[0]));
+			targets.put(direction, potential.toArray(new FarmTarget[potential.size()]));
 		}
 
 		// Fill out the corners
@@ -324,7 +327,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 				targ.add(corner);
 			}
 
-			cache.put(entry.getKey(), targ.toArray(new FarmTarget[0]));
+			cache.put(entry.getKey(), targ.toArray(new FarmTarget[targ.size()]));
 		}
 
 		targets = cache;
@@ -769,6 +772,18 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		return inventory.contains(resources, SLOT_RESOURCES_1, SLOT_COUNT_RESERVOIRS);
 	}
 
+	public boolean hasResourcesAmount(int amount) {
+		return inventory.containsAmount(amount, SLOT_RESOURCES_1, SLOT_COUNT_RESERVOIRS);
+	}
+
+	public boolean hasGermlingsPercent(float percent) {
+		return inventory.containsPercent(percent, SLOT_GERMLINGS_1, SLOT_COUNT_RESERVOIRS);
+	}
+
+	public boolean hasFertilizerPercent(float percent) {
+		return inventory.containsPercent(percent, SLOT_FERTILIZER, 1);
+	}
+
 	@Override
 	public void removeResources(ItemStack[] resources) {
 		EntityPlayer player = Proxies.common.getPlayer(worldObj, owner);
@@ -894,12 +909,6 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		case 0:
 			storedFertilizer = j;
 			break;
-		case 3:
-			this.temperature = (float) j / 100;
-			break;
-		case 4:
-			this.humidity = (float) j / 100;
-			break;
 		case 5:
 			ticksSinceRainfall = j;
 			break;
@@ -909,8 +918,6 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
 		int i = tankManager.maxMessageId() + 1;
 		iCrafting.sendProgressBarUpdate(container, i, storedFertilizer);
-		iCrafting.sendProgressBarUpdate(container, i + 3, Math.round(temperature * 100));
-		iCrafting.sendProgressBarUpdate(container, i + 4, Math.round(humidity * 100));
 		iCrafting.sendProgressBarUpdate(container, i + 5, ticksSinceRainfall);
 	}
 
@@ -920,11 +927,12 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	}
 
 	public float getHydrationTempModifier() {
+		float temperature = getExactTemperature();
 		return temperature > 0.8f ? temperature : 0.8f;
 	}
 
 	public float getHydrationHumidModifier() {
-		float mod = 1 / humidity;
+		float mod = 1 / getExactHumidity();
 		return mod < 2.0f ? mod : 2.0f;
 	}
 
@@ -944,7 +952,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	@Override
 	public EnumTemperature getTemperature() {
-		if (EnumTemperature.isBiomeHellish(biomeId))
+		if (BiomeHelper.isBiomeHellish(biome))
 			return EnumTemperature.HELLISH;
 
 		return EnumTemperature.getFromValue(getExactTemperature());
@@ -957,12 +965,12 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	@Override
 	public float getExactTemperature() {
-		return temperature;
+		return biome.temperature;
 	}
 
 	@Override
 	public float getExactHumidity() {
-		return humidity;
+		return biome.rainfall;
 	}
 
 	/* IHINTSOURCE */

@@ -39,7 +39,7 @@ import java.util.List;
 
 public class ItemBeeGE extends ItemGE {
 
-	EnumBeeType type;
+	private final EnumBeeType type;
 
 	public ItemBeeGE(EnumBeeType type) {
 		super();
@@ -141,7 +141,7 @@ public class ItemBeeGE extends ItemGE {
 	public int getColourFromSpecies(IAlleleSpecies species, int renderPass) {
 
 		if (species != null && species instanceof IAlleleBeeSpecies)
-			return ((IAlleleBeeSpecies) species).getIconColour(renderPass);
+			return species.getIconColour(renderPass);
 		else
 			return 0xffffff;
 

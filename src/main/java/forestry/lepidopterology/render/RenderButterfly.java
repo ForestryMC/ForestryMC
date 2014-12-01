@@ -15,32 +15,38 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 import forestry.lepidopterology.entities.EntityButterfly;
+import net.minecraft.entity.EntityLivingBase;
 
 public class RenderButterfly extends RenderLiving {
 
-	ModelButterfly butterflyModel;
+	private final ModelButterfly butterflyModel;
 
 	public RenderButterfly() {
 		super(new ModelButterfly(), 0.25f);
-		butterflyModel = (ModelButterfly)mainModel;
+		butterflyModel = (ModelButterfly) mainModel;
 	}
 
-	public void renderButterfly(EntityButterfly entity, double x, double y, double z, float par8, float par9) {
-		if(!entity.isRenderable())
+	public void renderButterfly(EntityButterfly entity, double x, double y, double z, float light, float partialTickTime) {
+		if (!entity.isRenderable())
 			return;
 
 		butterflyModel.setScale(entity.getScale());
-		super.doRender(entity, x, y, z, par8, entity.getWingFlap(par9));
+		super.doRender(entity, x, y, z, light, partialTickTime);
 	}
 
 	@Override
-	public void doRender(Entity entity, double x, double y, double z, float par8, float par9) {
-		this.renderButterfly((EntityButterfly)entity, x, y, z, par8, par9);
+	public void doRender(Entity entity, double x, double y, double z, float light, float partialTickTime) {
+		this.renderButterfly((EntityButterfly) entity, x, y, z, light, partialTickTime);
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		return ((EntityButterfly)entity).getTexture();
+		return ((EntityButterfly) entity).getTexture();
+	}
+
+	@Override
+	protected float handleRotationFloat(EntityLivingBase entity, float partialTickTime) {
+		return ((EntityButterfly) entity).getWingFlap(partialTickTime);
 	}
 
 }

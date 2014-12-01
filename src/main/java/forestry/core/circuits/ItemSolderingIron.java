@@ -25,7 +25,7 @@ import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ISolderManager;
 import forestry.api.core.ForestryAPI;
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.items.ItemForestry;
 import forestry.core.network.GuiId;
@@ -35,9 +35,9 @@ import forestry.core.utils.ItemInventory;
 public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 
 	public static class CircuitRecipe {
-		ICircuitLayout layout;
-		ItemStack resource;
-		ICircuit circuit;
+		private final ICircuitLayout layout;
+		private final ItemStack resource;
+		public final ICircuit circuit;
 
 		public CircuitRecipe(ICircuitLayout layout, ItemStack resource, ICircuit circuit) {
 			this.resource = resource;
@@ -54,7 +54,7 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 	}
 
 	public static class SolderManager implements ISolderManager {
-		public static ArrayList<CircuitRecipe> recipes = new ArrayList<CircuitRecipe>();
+		public static final ArrayList<CircuitRecipe> recipes = new ArrayList<CircuitRecipe>();
 
 		@Override
 		public void addRecipe(ICircuitLayout layout, ItemStack resource, ICircuit circuit) {
@@ -82,12 +82,12 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 	// / INVENTORY MANAGMENT
 	public static class SolderingInventory extends ItemInventory implements IErrorSource {
 
-		ICircuitLayout layout;
-		EnumErrorCode errorState;
+		private ICircuitLayout layout;
+		private EnumErrorCode errorState;
 
-		short blankSlot = 0;
-		short finishedSlot = 1;
-		short ingredientSlot1 = 2;
+		private final short blankSlot = 0;
+		private final short finishedSlot = 1;
+		private final short ingredientSlot1 = 2;
 
 		public SolderingInventory() {
 			super(ItemSolderingIron.class, 6);
@@ -199,7 +199,7 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 			}
 
 			circuits = getCircuits(type, true);
-			inventoryStacks[finishedSlot] = ItemCircuitBoard.createCircuitboard(type, layout, circuits.toArray(new ICircuit[0]));
+			inventoryStacks[finishedSlot] = ItemCircuitBoard.createCircuitboard(type, layout, circuits.toArray(new ICircuit[circuits.size()]));
 			inventoryStacks[blankSlot] = null;
 		}
 

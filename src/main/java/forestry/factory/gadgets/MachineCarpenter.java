@@ -12,7 +12,7 @@ package forestry.factory.gadgets;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.ICarpenterManager;
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
@@ -138,8 +138,8 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 	public static class RecipeManager implements ICarpenterManager {
 
-		public static ArrayList<MachineCarpenter.Recipe> recipes = new ArrayList<MachineCarpenter.Recipe>();
-		public static HashSet<Fluid> recipeFluids = new HashSet<Fluid>();
+		public static final ArrayList<MachineCarpenter.Recipe> recipes = new ArrayList<MachineCarpenter.Recipe>();
+		public static final HashSet<Fluid> recipeFluids = new HashSet<Fluid>();
 
 		@Override
 		public void addCrating(ItemStack itemStack) {
@@ -174,8 +174,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		}
 
 		public static Recipe findMatchingRecipe(FluidStack liquid, ItemStack item, InventoryCrafting inventorycrafting, World world) {
-			for (int i = 0; i < recipes.size(); i++) {
-				Recipe recipe = recipes.get(i);
+			for (Recipe recipe : recipes) {
 				if (recipe.matches(liquid, item, inventorycrafting, world))
 					return recipe;
 			}
@@ -210,7 +209,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 	/* MEMBER */
 	@EntityNetData
-	public FilteredTank resourceTank;
+	public final FilteredTank resourceTank;
 	private final TankManager tankManager;
 	private final TileInventoryAdapter craftingInventory;
 	private final TileInventoryAdapter accessibleInventory;

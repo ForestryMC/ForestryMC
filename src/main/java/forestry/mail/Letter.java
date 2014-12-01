@@ -27,8 +27,8 @@ import org.apache.commons.lang3.StringUtils;
 public class Letter implements ILetter, INBTTagable {
 
 	// CONSTANTS
-	public static short SLOT_ATTACHMENT_1 = 0;
-	public static short SLOT_POSTAGE_1 = 18;
+	public static final short SLOT_ATTACHMENT_1 = 0;
+	public static final short SLOT_POSTAGE_1 = 18;
 
 	private boolean isProcessed = false;
 
@@ -36,7 +36,7 @@ public class Letter implements ILetter, INBTTagable {
 	private IMailAddress[] recipient;
 
 	private String text;
-	private InventoryAdapter inventory = new InventoryAdapter(22, "INV");
+	private final InventoryAdapter inventory = new InventoryAdapter(22, "INV");
 
 	public Letter(IMailAddress sender, IMailAddress recipient) {
 		this.sender = sender;
@@ -123,10 +123,6 @@ public class Letter implements ILetter, INBTTagable {
 	public void invalidatePostage() {
 		for (int i = SLOT_POSTAGE_1; i < SLOT_POSTAGE_1 + 4; i++)
 			inventory.setInventorySlotContents(i, null);
-	}
-
-	public void setInventory(InventoryAdapter inventory) {
-		this.inventory = inventory;
 	}
 
 	@Override

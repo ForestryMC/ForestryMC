@@ -38,7 +38,7 @@ import forestry.core.genetics.ItemResearchNote.EnumNoteType;
 
 public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
 
-	public static final int ALLELE_ARRAY_SIZE = 2048;
+	private static final int ALLELE_ARRAY_SIZE = 2048;
 
 	/* SPECIES ROOT */
 	private final LinkedHashMap<String, ISpeciesRoot> rootMap = new LinkedHashMap<String, ISpeciesRoot>(16);

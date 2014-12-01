@@ -10,10 +10,20 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.IToolGrafter;
+import forestry.api.arboriculture.ITree;
+import forestry.api.core.IToolScoop;
+import forestry.api.core.Tabs;
+import forestry.api.lepidopterology.EnumFlutterType;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StackUtils;
+import forestry.plugins.PluginArboriculture;
+import forestry.plugins.PluginLepidopterology;
 import net.minecraft.block.BlockNewLeaf;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -28,24 +38,12 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.IToolGrafter;
-import forestry.api.arboriculture.ITree;
-import forestry.api.core.IToolScoop;
-import forestry.api.core.Tabs;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IButterfly;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StackUtils;
-import forestry.plugins.PluginArboriculture;
-import forestry.plugins.PluginLepidopterology;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProvider {
 
@@ -149,8 +147,7 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 
 		// Add fruits
 		if (tile.hasFruit())
-			for (ItemStack stack : tile.getTree().produceStacks(world, x, y, z, tile.getRipeningTime()))
-				prod.add(stack);
+			Collections.addAll(prod, tile.getTree().produceStacks(world, x, y, z, tile.getRipeningTime()));
 
 		return prod;
 	}

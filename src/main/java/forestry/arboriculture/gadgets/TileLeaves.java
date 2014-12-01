@@ -10,28 +10,14 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.EnumSet;
-
 import com.mojang.authlib.GameProfile;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraftforge.common.EnumPlantType;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafTickHandler;
 import forestry.api.arboriculture.ITree;
+import forestry.api.core.EnumErrorCode;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
@@ -50,6 +36,20 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginArboriculture;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.Packet;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.EnumPlantType;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.EnumSet;
 
 public class TileLeaves extends TileTreeContainer implements IPollinatable, IFruitBearer, IButterflyNursery {
 
@@ -69,17 +69,14 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	private int maturationTime;
 	private int encumbrance;
 
-	private int biomeId = -1;
+	private BiomeGenBase biome;
 
 	private IEffectData effectData[] = new IEffectData[2];
 
 	private void updateBiome() {
 		if(worldObj == null)
 			return;
-		BiomeGenBase biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
-		if (biome != null) {
-			this.biomeId = biome.biomeID;
-		}
+		biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
 	}
 
 	/* SAVING & LOADING */
@@ -119,7 +116,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public void onBlockTick() {
-		if(biomeId < 0)
+		if(biome == null)
 			updateBiome();
 
 		if (isDecorative || getTree() == null)
@@ -127,7 +124,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 		boolean isDestroyed = isDestroyed();
 		for(ILeafTickHandler tickHandler : getTree().getGenome().getPrimary().getRoot().getLeafTickHandlers())
-			if(tickHandler.onRandomLeafTick(getTree(), worldObj, biomeId, xCoord, yCoord, zCoord, isDestroyed))
+			if(tickHandler.onRandomLeafTick(getTree(), worldObj, biome.biomeID, xCoord, yCoord, zCoord, isDestroyed))
 				return;
 
 		if(isDestroyed)
@@ -149,7 +146,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if(caterpillar != null)
 			matureCaterpillar();
 
-		effectData = getTree().doEffect(effectData, worldObj, biomeId, xCoord, yCoord, zCoord);
+		effectData = getTree().doEffect(effectData, worldObj, biome.biomeID, xCoord, yCoord, zCoord);
 	}
 
 	@Override
@@ -393,7 +390,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 		boolean wasDestroyed = isDestroyed();
 		encumbrance += caterpillar.getGenome().getMetabolism();
-		wasDestroyed = !wasDestroyed && isDestroyed() ? true : false;
+		wasDestroyed = !wasDestroyed && isDestroyed();
 
 		if(maturationTime >= (float)caterpillar.getGenome().getLifespan() / (caterpillar.getGenome().getFertility()*2)
 				&& caterpillar.canTakeFlight(worldObj, xCoord, yCoord, zCoord)) {
@@ -424,7 +421,12 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public int getBiomeId() {
-		return 0;
+		return biome.biomeID;
+	}
+
+	@Override
+	public BiomeGenBase getBiome() {
+		return biome;
 	}
 
 	@Override
@@ -438,7 +440,18 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override public void setErrorState(int state) {}
+
+	@Override
+	public void setErrorState(EnumErrorCode state) {
+	}
+
 	@Override public int getErrorOrdinal() { return 0; }
+
+	@Override
+	public EnumErrorCode getErrorState() {
+		return null;
+	}
+
 	@Override
 	public boolean addProduct(ItemStack product, boolean all) {
 		return false;

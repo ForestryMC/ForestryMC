@@ -40,7 +40,8 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 		BASE,
 		TANK_R_EMPTY, TANK_R_LOW, TANK_R_MEDIUM, TANK_R_HIGH, TANK_R_MAXIMUM,
 		TANK_P_EMPTY, TANK_P_LOW, TANK_P_MEDIUM, TANK_P_HIGH, TANK_P_MAXIMUM
-	};
+	}
+
 	private ResourceLocation[] textures;
 
 	public RenderMachine() {

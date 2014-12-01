@@ -10,10 +10,27 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import java.io.File;
-
 import com.mojang.authlib.GameProfile;
-
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.API;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.versioning.ArtifactVersion;
+import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
+import cpw.mods.fml.common.versioning.VersionParser;
+import cpw.mods.fml.common.versioning.VersionRange;
+import forestry.Forestry;
+import forestry.core.TickHandlerCoreServer;
+import forestry.core.config.Defaults;
+import forestry.core.config.ForestryBlock;
+import forestry.core.config.ForestryItem;
+import forestry.core.network.PacketCoordinates;
+import forestry.core.network.PacketFXSignal;
+import forestry.core.network.PacketIds;
+import forestry.core.render.SpriteSheet;
+import forestry.core.utils.StringUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;
@@ -28,32 +45,12 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.versioning.ArtifactVersion;
-import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
-import cpw.mods.fml.common.versioning.VersionParser;
-import cpw.mods.fml.common.versioning.VersionRange;
-
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import forestry.Forestry;
-import forestry.core.TickHandlerCoreServer;
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
-import forestry.core.network.PacketCoordinates;
-import forestry.core.network.PacketFXSignal;
-import forestry.core.network.PacketIds;
-import forestry.core.render.SpriteSheet;
-import forestry.core.utils.StringUtil;
+import java.io.File;
 
 public class ProxyCommon {
 
@@ -246,7 +243,7 @@ public class ProxyCommon {
 	}
 
 	public void closeGUI(EntityPlayer player) {
-		((EntityPlayerMP) player).closeScreen();
+		player.closeScreen();
 	}
 
 	/* DEPENDENCY HANDLING */
@@ -266,6 +263,36 @@ public class ProxyCommon {
 			DefaultArtifactVersion requiredVersion = new DefaultArtifactVersion(modname, versionRange);
 
 			if (!requiredVersion.containsVersion(modVersion))
+				return false;
+		}
+
+		return true;
+	}
+
+	public boolean isAPILoaded(String apiName) {
+		return isAPILoaded(apiName, null);
+	}
+
+	public boolean isAPILoaded(String apiName, String versionRangeString) {
+		Package apiPackage = Package.getPackage(apiName);
+		if (apiPackage == null)
+			return false;
+
+		API apiAnnotation = apiPackage.getAnnotation(API.class);
+		if (apiAnnotation == null)
+			return false;
+
+		if (versionRangeString != null) {
+			String apiVersionString = apiAnnotation.apiVersion();
+			if (apiVersionString == null)
+				return false;
+
+			VersionRange versionRange = VersionParser.parseRange(versionRangeString);
+
+			DefaultArtifactVersion givenVersion = new DefaultArtifactVersion(apiName, apiVersionString);
+			DefaultArtifactVersion requiredVersion = new DefaultArtifactVersion(apiName, versionRange);
+
+			if (!requiredVersion.containsVersion(givenVersion))
 				return false;
 		}
 

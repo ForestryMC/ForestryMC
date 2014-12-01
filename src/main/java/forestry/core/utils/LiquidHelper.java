@@ -77,8 +77,7 @@ public class LiquidHelper {
 	}
 
 	public static Fluid getFluid(String ident) {
-		Fluid fluid = FluidRegistry.getFluid(ident);
-		return fluid;
+		return FluidRegistry.getFluid(ident);
 	}
 
 	public static Fluid getOrCreateLiquid(String ident) {

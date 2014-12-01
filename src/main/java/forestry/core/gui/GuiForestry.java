@@ -10,32 +10,10 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import java.awt.Color;
-import java.util.Collection;
-import java.util.List;
-
 import codechicken.nei.VisiblityData;
 import codechicken.nei.api.INEIGuiHandler;
 import codechicken.nei.api.TaggedInventoryArea;
-
 import cpw.mods.fml.common.Optional;
-
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import forestry.core.config.Config;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.slots.SlotForestry;
@@ -50,17 +28,33 @@ import forestry.core.interfaces.IOwnable;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.FontColour;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import java.awt.Color;
+import java.util.Collection;
+import java.util.List;
 
 @Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = "NotEnoughItems")
 public abstract class GuiForestry<T extends TileForestry> extends GuiContainer implements INEIGuiHandler {
 
 	/* WIDGETS */
-	protected WidgetManager widgetManager;
+	protected final WidgetManager widgetManager;
 	/* LEDGERS */
-	protected LedgerManager ledgerManager = new LedgerManager(this);
-	protected T tile;
-	public ResourceLocation textureFile;
-	protected FontColour fontColor;
+	protected final LedgerManager ledgerManager;
+	protected final T tile;
+	protected final FontColour fontColor;
+	public final ResourceLocation textureFile;
 
 	public GuiForestry(String texture, ContainerForestry container) {
 		this(new ResourceLocation("forestry", texture), container, null);
@@ -85,6 +79,8 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 
 		if (inventory instanceof TileForestry)
 			this.tile = (T) inventory;
+		else
+			this.tile = null;
 
 		fontColor = new FontColour(Proxies.common.getSelectedTexturePack(Proxies.common.getClientInstance()));
 		initLedgers(inventory);
@@ -188,27 +184,6 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		fontRendererObj.drawSplitString(text, (int) ((guiLeft + x) * (1 / factor)), (int) ((guiTop + line) * (1 / factor)), (int) (maxWidth * (1 / factor)), color);
 	}
 
-	public void spinTextureIcon(int par1, int par2, IIcon par3Icon, int par4, int par5, int rotation) {
-		par1 += width / 2 - xSize / 2;
-		par2 += height / 2 - ySize / 2;
-
-		float x = par1 + par4 / 2;
-		float y = par2 + par5 / 2;
-		GL11.glPushMatrix();
-		GL11.glTranslatef(x, y, 0);
-		GL11.glRotatef(rotation, 0, 0, 1);
-		GL11.glTranslatef(-x, -y, 0);
-
-		Tessellator tessellator = Tessellator.instance;
-		tessellator.startDrawingQuads();
-		tessellator.addVertexWithUV(par1 + 0, par2 + par5, this.zLevel, par3Icon.getMinU(), par3Icon.getMaxV());
-		tessellator.addVertexWithUV(par1 + par4, par2 + par5, this.zLevel, par3Icon.getMaxU(), par3Icon.getMaxV());
-		tessellator.addVertexWithUV(par1 + par4, par2 + 0, this.zLevel, par3Icon.getMaxU(), par3Icon.getMinV());
-		tessellator.addVertexWithUV(par1 + 0, par2 + 0, this.zLevel, par3Icon.getMinU(), par3Icon.getMinV());
-		tessellator.draw();
-		GL11.glPopMatrix();
-	}
-
 	/* CORE GUI HANDLING */
 	protected int getCenteredOffset(String string) {
 		return getCenteredOffset(string, xSize);
@@ -261,65 +236,6 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		return this.func_146978_c(par1Slot.xDisplayPosition, par1Slot.yDisplayPosition, 16, 16, par2, par3);
 	}
 
-	@SuppressWarnings("rawtypes")
-	protected void drawTooltip(int mouseX, int mouseY, float zLevel, List information, EnumRarity rarity) {
-
-		if (information.size() > 0) {
-			this.zLevel = 0f;
-			itemRender.zLevel = 0f;
-
-			int tooltipWidth = 0;
-
-			for (int i = 0; i < information.size(); ++i) {
-				int textWidth = this.fontRendererObj.getStringWidth((String) information.get(i));
-
-				if (textWidth > tooltipWidth)
-					tooltipWidth = textWidth;
-			}
-
-			int xPos = mouseX - this.guiLeft + 12;
-			int yPos = mouseY - this.guiTop - 12;
-			int var14 = 8;
-
-			if (information.size() > 1)
-				var14 += 2 + (information.size() - 1) * 10;
-
-			this.zLevel = zLevel;
-			itemRender.zLevel = zLevel;
-			int var15 = -267386864;
-			this.drawGradientRect(xPos - 3, yPos - 4, xPos + tooltipWidth + 3, yPos - 3, var15, var15);
-			this.drawGradientRect(xPos - 3, yPos + var14 + 3, xPos + tooltipWidth + 3, yPos + var14 + 4, var15, var15);
-			this.drawGradientRect(xPos - 3, yPos - 3, xPos + tooltipWidth + 3, yPos + var14 + 3, var15, var15);
-			this.drawGradientRect(xPos - 4, yPos - 3, xPos - 3, yPos + var14 + 3, var15, var15);
-			this.drawGradientRect(xPos + tooltipWidth + 3, yPos - 3, xPos + tooltipWidth + 4, yPos + var14 + 3, var15, var15);
-			int var16 = 1347420415;
-			int var17 = (var16 & 16711422) >> 1 | var16 & -16777216;
-			this.drawGradientRect(xPos - 3, yPos - 3 + 1, xPos - 3 + 1, yPos + var14 + 3 - 1, var16, var17);
-			this.drawGradientRect(xPos + tooltipWidth + 2, yPos - 3 + 1, xPos + tooltipWidth + 3, yPos + var14 + 3 - 1, var16, var17);
-			this.drawGradientRect(xPos - 3, yPos - 3, xPos + tooltipWidth + 3, yPos - 3 + 1, var16, var16);
-			this.drawGradientRect(xPos - 3, yPos + var14 + 2, xPos + tooltipWidth + 3, yPos + var14 + 3, var17, var17);
-
-			for (int i = 0; i < information.size(); ++i) {
-				String line = (String) information.get(i);
-
-				if (i == 0)
-					line = "\u00a7" + rarity.rarityColor.getFormattingCode() + line;
-				else
-					line = "\u00a77" + line;
-
-				this.fontRendererObj.drawStringWithShadow(line, xPos, yPos, -1);
-
-				if (i == 0)
-					yPos += 2;
-
-				yPos += 10;
-			}
-
-			this.zLevel = 0.0F;
-			itemRender.zLevel = 0.0F;
-		}
-	}
-
 	public void drawToolTips(ToolTip toolTips, int mouseX, int mouseY) {
 		if (toolTips == null)
 			return;
@@ -334,7 +250,7 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		int y;
 
 		for (ToolTipLine tip : toolTips) {
-			y = this.fontRendererObj.getStringWidth(tip.text);
+			y = this.fontRendererObj.getStringWidth(tip.getText());
 
 			height += 10 + tip.getSpacing();
 			if (y > length)
@@ -364,12 +280,12 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		this.drawGradientRect(x - 3, y + height, x + length + 2, y + height + 1, borderColorBottomInt, borderColorBottomInt);
 
 		for (ToolTipLine tip : toolTips) {
-			String line = tip.text;
+			String line = tip.getText();
 
-			if (tip.color == null)
+			if (tip.getColor() == null)
 				line = "\u00a77" + line;
 			else
-				line = "\u00a7" + tip.color.getFormattingCode() + line;
+				line = "\u00a7" + tip.getColor().getFormattingCode() + line;
 
 			this.fontRendererObj.drawStringWithShadow(line, x, y, -1);
 
@@ -449,13 +365,17 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240 / 1.0F, 240 / 1.0F);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		ledgerManager.drawLedgers();
-		widgetManager.drawWidgets();
+		drawWidgets();
 
 		GL11.glPopMatrix();
 		GL11.glPopAttrib();
 
 		bindTexture(textureFile);
+	}
+
+	protected void drawWidgets() {
+		ledgerManager.drawLedgers();
+		widgetManager.drawWidgets();
 	}
 
 	protected void bindTexture(ResourceLocation texturePath) {

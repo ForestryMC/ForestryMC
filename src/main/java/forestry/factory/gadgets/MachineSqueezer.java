@@ -13,7 +13,7 @@ package forestry.factory.gadgets;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.recipes.ISqueezerManager;
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.TankManager;
@@ -81,9 +81,9 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 	}
 
 	public static class RecipeManager implements ISqueezerManager {
-		public static ArrayList<MachineSqueezer.Recipe> recipes = new ArrayList<MachineSqueezer.Recipe>();
-		public static HashSet<Fluid> recipeFluids = new HashSet<Fluid>();
-		public static HashSet<ItemStack> recipeInputs = new HashSet<ItemStack>();
+		public static final ArrayList<MachineSqueezer.Recipe> recipes = new ArrayList<MachineSqueezer.Recipe>();
+		public static final HashSet<Fluid> recipeFluids = new HashSet<Fluid>();
+		public static final HashSet<ItemStack> recipeInputs = new HashSet<ItemStack>();
 
 		@Override
 		public void addRecipe(int timePerItem, ItemStack[] resources, FluidStack liquid, ItemStack remnants, int chance) {
@@ -100,8 +100,7 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 		}
 
 		public static Recipe findMatchingRecipe(ItemStack[] items) {
-			for (int i = 0; i < recipes.size(); i++) {
-				Recipe recipe = recipes.get(i);
+			for (Recipe recipe : recipes) {
 				if (recipe.matches(items))
 					return recipe;
 			}
@@ -132,7 +131,7 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 	/* MEMBER */
 	private final TankManager tankManager;
 	@EntityNetData
-	public FilteredTank productTank;
+	public final FilteredTank productTank;
 
 	private final InventoryAdapter inventory = new InventoryAdapter(12, "Items");
 	private Recipe currentRecipe;

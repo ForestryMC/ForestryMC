@@ -26,7 +26,7 @@ public class ItemStackMap<T> extends StackMap<ItemStack, T> {
 			return a.isItemEqual(b2) && ItemStack.areItemStackTagsEqual(a, b2);
 		}
 		if(b instanceof Item) {
-			return a.getItem() == (Item) b;
+			return a.getItem() == b;
 		}
 		if(b instanceof String) {
 			for(ItemStack stack : OreDictionary.getOres((String) b)) {

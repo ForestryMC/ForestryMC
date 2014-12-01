@@ -12,7 +12,7 @@ package forestry.farming.gadgets;
 
 import forestry.api.core.ITileStructure;
 import forestry.api.farming.IFarmHousing;
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.energy.EnergyManager;
@@ -21,7 +21,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileGearbox extends TileFarm implements IPowerHandler {
 
-	public static int WORK_CYCLES = 4;
+	public static final int WORK_CYCLES = 4;
 	private int activationDelay = 0;
 	private int previousDelays = 0;
 	private int workCounter;

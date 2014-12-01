@@ -7,10 +7,8 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import net.minecraft.item.Item;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
-import forestry.core.config.Configuration;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.IPacketHandler;
@@ -18,18 +16,14 @@ import forestry.core.proxy.Proxies;
 import forestry.pipes.GuiHandlerPipes;
 import forestry.pipes.network.PacketHandlerPipes;
 import forestry.pipes.proxy.ProxyPipes;
+import net.minecraft.item.Item;
+
 import java.util.EnumSet;
 
 @Plugin(pluginID = "Pipes", name = "Pipes", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.pipes.description")
 public class PluginPropolisPipe extends ForestryPlugin {
 
 	public static ProxyPipes proxy;
-
-	static String CONFIG_CATEGORY = "pipes";
-	public static Configuration config;
-	public static int propolisPipeItemId;
-
-	public static String textureBees = Defaults.TEXTURE_PATH_GUI + "/analyzer_icons.png";
 	/**
 	 * Pipe used to sort bees from Forestry.
 	 */
@@ -37,34 +31,19 @@ public class PluginPropolisPipe extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isModLoaded("BuildCraft|Transport", PluginBuildCraft.validVersionRange);
+		return Proxies.common.isModLoaded("BuildCraft|Transport");
 	}
 
 	@Override
 	public String getFailMessage() {
-		return "Buildcraft|Transport not found";
+		return "BuildCraft|Transport not found";
 	}
 
 	@Override
 	public EnumSet<PluginManager.Module> getDependancies() {
 		EnumSet<PluginManager.Module> deps = super.getDependancies();
-		deps.add(PluginManager.Module.BUILDCRAFT);
 		deps.add(PluginManager.Module.APICULTURE);
 		return deps;
-	}
-
-	@Override
-	public void preInit() {
-
-		/*config = new Configuration();
-
-		 propolisPipeItemId = Integer.parseInt(PluginPropolisPipe.config.get("propolisPipe", CONFIG_CATEGORY, 14000).Value);
-
-		 config.save();*/
-	}
-
-	@Override
-	public void doInit() {
 	}
 
 	@Override
@@ -73,7 +52,7 @@ public class PluginPropolisPipe extends ForestryPlugin {
 		if (FMLCommonHandler.instance().getSide().isClient())
 			proxyClass = "forestry.pipes.proxy.ClientProxyPipes";
 
-		proxy = (ProxyPipes) Proxies.common.instantiateIfModLoaded("BuildCraft|Transport", PluginBuildCraft.validVersionRange, proxyClass);
+		proxy = (ProxyPipes) Proxies.common.instantiateIfModLoaded("BuildCraft|Transport", proxyClass);
 
 		if (proxy == null)
 			return;
@@ -90,22 +69,6 @@ public class PluginPropolisPipe extends ForestryPlugin {
 	@Override
 	public IPacketHandler getPacketHandler() {
 		return new PacketHandlerPipes();
-	}
-
-	@Override
-	protected void registerItems() {
-	}
-
-	@Override
-	protected void registerBackpackItems() {
-	}
-
-	@Override
-	protected void registerCrates() {
-	}
-
-	@Override
-	protected void registerRecipes() {
 	}
 
 }

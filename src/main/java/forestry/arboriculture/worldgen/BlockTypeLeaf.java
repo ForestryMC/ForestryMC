@@ -20,7 +20,7 @@ import forestry.core.worldgen.BlockType;
 
 public class BlockTypeLeaf extends BlockType {
 
-	private GameProfile owner;
+	private final GameProfile owner;
 
 	public BlockTypeLeaf(GameProfile owner) {
 		super(ForestryBlock.leaves, 0);

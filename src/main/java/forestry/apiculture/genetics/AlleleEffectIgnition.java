@@ -25,8 +25,8 @@ import forestry.plugins.PluginApiculture;
 
 public class AlleleEffectIgnition extends AlleleEffectThrottled {
 
-	int ignitionChance = 50;
-	int fireDuration = 500;
+	private final int ignitionChance = 50;
+	private final int fireDuration = 500;
 
 	public AlleleEffectIgnition(String uid) {
 		super(uid, "ignition", false, 20, false, true);

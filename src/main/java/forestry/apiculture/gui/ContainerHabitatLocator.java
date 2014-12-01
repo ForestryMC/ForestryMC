@@ -24,7 +24,7 @@ import forestry.core.proxy.Proxies;
 
 public class ContainerHabitatLocator extends ContainerItemInventory {
 
-	public BiomefinderInventory inventory;
+	public final BiomefinderInventory inventory;
 
 	public ContainerHabitatLocator(InventoryPlayer inventoryplayer, BiomefinderInventory inventory) {
 		super(inventory, inventoryplayer.player);
@@ -32,12 +32,12 @@ public class ContainerHabitatLocator extends ContainerItemInventory {
 		this.inventory = inventory;
 
 		// Energy
-		this.addSlot(new SlotCustom(inventory, 2, 152, 8, new Object[] { ForestryItem.honeydew, ForestryItem.honeyDrop }));
+		this.addSlot(new SlotCustom(inventory, 2, 152, 8, ForestryItem.honeydew, ForestryItem.honeyDrop));
 
 		// Bee to analyze
-		this.addSlot(new SlotCustom(inventory, 0, 152, 32, new Object[] { ItemBeeGE.class }));
+		this.addSlot(new SlotCustom(inventory, 0, 152, 32, ItemBeeGE.class));
 		// Analyzed bee
-		this.addSlot(new SlotCustom(inventory, 1, 152, 75, new Object[] { ItemBeeGE.class }));
+		this.addSlot(new SlotCustom(inventory, 1, 152, 75, ItemBeeGE.class));
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++)

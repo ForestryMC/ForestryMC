@@ -17,6 +17,7 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.render.SpriteSheet;
 import forestry.core.utils.Vect;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -71,12 +72,13 @@ public abstract class FarmLogic implements IFarmLogic {
 		return getWorld().isAirBlock(position.x, position.y, position.z);
 	}
 
-	protected final boolean isWaterBlock(Vect position) {
-		return getWorld().getBlock(position.x, position.y, position.z) == Blocks.water;
+	protected final boolean isAirBlock(Block block) {
+		return block.getMaterial() == Material.air;
 	}
 
-	protected final boolean isWaterBlock(Block block) {
-		return block == Blocks.water;
+	protected final boolean isWaterSourceBlock(World world, Vect position) {
+		return world.getBlock(position.x, position.y, position.z) == Blocks.water &&
+				world.getBlockMetadata(position.x, position.y, position.z) == 0;
 	}
 
 	protected final boolean isWoodBlock(Vect position) {

@@ -21,7 +21,7 @@ import forestry.plugins.PluginLepidopterology;
 
 public class MatingRecipe implements IRecipe {
 
-	ItemStack unknown;
+	private final ItemStack unknown;
 	ItemStack cached;
 	
 	public MatingRecipe() {

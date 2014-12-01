@@ -21,6 +21,7 @@ import forestry.core.config.Defaults;
 import forestry.core.gadgets.Engine;
 import forestry.core.gadgets.TileBase;
 import forestry.core.utils.DamageSourceForestry;
+import net.minecraftforge.common.util.FakePlayer;
 
 public class EngineClockwork extends Engine {
 
@@ -44,7 +45,10 @@ public class EngineClockwork extends Engine {
 	@Override
 	public void openGui(EntityPlayer player, TileBase tile) {
 		
-		if(!(player instanceof EntityPlayerMP))
+		if (!(player instanceof EntityPlayerMP))
+			return;
+
+		if (player instanceof FakePlayer)
 			return;
 		
 		if(tension <= 0)

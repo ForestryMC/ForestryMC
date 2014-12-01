@@ -204,7 +204,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	}
 
 	/* TEMPLATES */
-	public static ArrayList<IBee> beeTemplates = new ArrayList<IBee>();
+	public static final ArrayList<IBee> beeTemplates = new ArrayList<IBee>();
 
 	@Override
 	public ArrayList<IBee> getIndividualTemplates() {
@@ -248,7 +248,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	}
 
 	/* BREEDING MODES */
-	ArrayList<IBeekeepingMode> beekeepingModes = new ArrayList<IBeekeepingMode>();
+	final ArrayList<IBeekeepingMode> beekeepingModes = new ArrayList<IBeekeepingMode>();
 	public static IBeekeepingMode activeBeekeepingMode;
 
 	@Override

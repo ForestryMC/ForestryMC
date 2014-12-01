@@ -248,7 +248,7 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	}
 
 	/* ITILESTRUCTURE */
-	IStructureLogic structureLogic;
+	private final IStructureLogic structureLogic;
 	private boolean isMaster;
 	private int masterX, masterZ;
 	private int masterY = -99;

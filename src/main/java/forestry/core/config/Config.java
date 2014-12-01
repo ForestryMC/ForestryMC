@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.config;
 
+import forestry.core.proxy.Proxies;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -21,9 +23,6 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Properties;
 
-import forestry.core.proxy.Proxies;
-import forestry.core.triggers.ForestryTrigger;
-
 public class Config {
 
 	public static final String CATEGORY_COMMON = "common";
@@ -33,7 +32,7 @@ public class Config {
 
 	public static String gameMode;
 
-	public static HashSet<String> disabledStructures = new HashSet<String>();
+	public static final HashSet<String> disabledStructures = new HashSet<String>();
 
 	public static boolean isDebug = false;
 
@@ -81,7 +80,7 @@ public class Config {
 	}
 
 	public static boolean craftingStampsEnabled = true;
-	public static ArrayList<String> collectorStamps = new ArrayList<String>();
+	public static final ArrayList<String> collectorStamps = new ArrayList<String>();
 
 	public static boolean applePickup = true;
 	public static boolean squareFarms = false;
@@ -91,7 +90,7 @@ public class Config {
 
 	// Hints
 	public static boolean disableHints = false;
-	public static HashMap<String, String[]> hints = new HashMap<String, String[]>();
+	public static final HashMap<String, String[]> hints = new HashMap<String, String[]>();
 	public static boolean disableEnergyStat = false;
 
 	public static void load() {
@@ -238,8 +237,6 @@ public class Config {
 		disabledStructures.addAll(Arrays.asList(parseStructureKeys(property.Value)));
 		for (String str : disabledStructures)
 			Proxies.log.finer("Disabled structure '%s'.", str);
-
-		ForestryTrigger.initialize();
 
 		config.save();
 

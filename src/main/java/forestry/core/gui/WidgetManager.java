@@ -22,9 +22,9 @@ import forestry.core.proxy.Proxies;
 
 public class WidgetManager {
 
-	public GuiForestry<? extends TileForestry> gui;
-	public Minecraft minecraft;
-	protected ArrayList<Widget> widgets = new ArrayList<Widget>();
+	public final GuiForestry<? extends TileForestry> gui;
+	public final Minecraft minecraft;
+	protected final ArrayList<Widget> widgets = new ArrayList<Widget>();
 
 	public WidgetManager(GuiForestry<? extends TileForestry> gui) {
 		this.gui = gui;

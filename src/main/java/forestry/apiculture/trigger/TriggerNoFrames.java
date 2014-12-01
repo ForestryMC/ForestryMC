@@ -32,11 +32,11 @@ public class TriggerNoFrames extends Trigger {
 		if (!(tile instanceof TileApiary))
 			return false;
 
-		for (int i = TileApiary.SLOT_FRAMES_1; i < TileApiary.SLOT_FRAMES_1 + TileApiary.SLOT_FRAMES_COUNT; i++)
-			if (((TileApiary) tile).getStackInSlot(i) == null)
-				continue;
-			else
+		for (int i = TileApiary.SLOT_FRAMES_1; i < TileApiary.SLOT_FRAMES_1 + TileApiary.SLOT_FRAMES_COUNT; i++) {
+			if (((TileApiary) tile).getStackInSlot(i) != null) {
 				return false;
+			}
+		}
 
 		return true;
 

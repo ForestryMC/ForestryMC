@@ -11,20 +11,24 @@
 package forestry.farming.gadgets;
 
 import buildcraft.api.statements.ITriggerExternal;
+import cpw.mods.fml.common.Optional;
 import forestry.api.core.ITileStructure;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
-import forestry.plugins.PluginFarming;
+import forestry.farming.triggers.FarmingTriggers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 
 public class TileHatch extends TileFarm implements ISidedInventory {
@@ -56,9 +60,7 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 
 		ArrayList<ForgeDirection> pipes = new ArrayList<ForgeDirection>();
 		ForgeDirection[] tmp = BlockUtil.getPipeDirections(worldObj, Coords(), ForgeDirection.UP);
-		for (int i = 0; i < tmp.length; ++i) {
-			pipes.add(tmp[i]);
-		}
+		Collections.addAll(pipes, tmp);
 
 		if (pipes.size() > 0)
 			dumpToPipe(pipes);
@@ -71,9 +73,9 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 	private void dumpToPipe(ArrayList<ForgeDirection> pipes) {
 
 		ItemStack[] products = extractItem(true, ForgeDirection.DOWN, 1);
-		for (int i = 0; i < products.length; i++)
-			while (products[i].stackSize > 0)
-				BlockUtil.putFromStackIntoPipe(this, pipes, products[i]);
+		for (ItemStack product : products)
+			while (product.stackSize > 0)
+				BlockUtil.putFromStackIntoPipe(this, pipes, product);
 
 	}
 
@@ -93,23 +95,22 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 			if (stack.stackSize <= 0)
 				continue;
 
-			for (int j = 0; j < inventories.length; j++) {
+			for (IInventory inventory : inventories) {
 
 				// Don't dump in arboretums!
-				if (inventories[j].getSizeInventory() < 4)
+				if (inventory.getSizeInventory() < 4)
 					continue;
 
 				// Get complete inventory (for double chests)
-				IInventory inventory = Utils.getChest(inventories[j]);
-				if (inventory instanceof ISidedInventory) {
-					ISidedInventory sidedInventory = (ISidedInventory)inventory;
+				IInventory completeInventory = Utils.getChest(inventory);
+				if (completeInventory instanceof ISidedInventory) {
+					ISidedInventory sidedInventory = (ISidedInventory) completeInventory;
 					int[] slots = sidedInventory.getAccessibleSlotsFromSide(ForgeDirection.UP.ordinal());
 					for (int sl = 0; sl < slots.length; ++sl) {
 						StackUtils.stowInInventory(stack, sidedInventory, true, sl, 1);
 					}
-				}
-				else {
-					StackUtils.stowInInventory(stack, inventory, true);
+				} else {
+					StackUtils.stowInInventory(stack, completeInventory, true);
 					if (stack.stackSize <= 0) {
 						inv.setInventorySlotContents(i, null);
 						break;
@@ -325,19 +326,22 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 	}
 
 	/* ITRIGGERPROVIDER */
+	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public LinkedList<ITriggerExternal> getCustomTriggers() {
+	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
 		if (!hasMaster())
 			return null;
 
 		LinkedList<ITriggerExternal> list = new LinkedList<ITriggerExternal>();
-		list.add(PluginFarming.lowResourceLiquid50);
-		list.add(PluginFarming.lowResourceLiquid25);
-		list.add(PluginFarming.lowSoil128);
-		list.add(PluginFarming.lowSoil64);
-		list.add(PluginFarming.lowSoil32);
-		list.add(PluginFarming.lowFertilizer50);
-		list.add(PluginFarming.lowFertilizer25);
+		list.add(FarmingTriggers.lowResourceLiquid50);
+		list.add(FarmingTriggers.lowResourceLiquid25);
+		list.add(FarmingTriggers.lowSoil128);
+		list.add(FarmingTriggers.lowSoil64);
+		list.add(FarmingTriggers.lowSoil32);
+		list.add(FarmingTriggers.lowFertilizer50);
+		list.add(FarmingTriggers.lowFertilizer25);
+		list.add(FarmingTriggers.lowGermlings25);
+		list.add(FarmingTriggers.lowGermlings10);
 		return list;
 	}
 

@@ -11,27 +11,35 @@
 package forestry.apiculture.gadgets;
 
 import buildcraft.api.statements.ITriggerExternal;
+import cpw.mods.fml.common.Optional;
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.core.IStructureLogic;
 import forestry.api.core.ITileStructure;
+import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
-import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.TileInventoryAdapter;
 import forestry.core.utils.Utils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.Collection;
 import java.util.LinkedList;
 
 public abstract class TileAlveary extends TileForestry implements IAlvearyComponent {
+
+	private final IStructureLogic structureLogic;
+	private boolean isMaster;
+	protected int masterX, masterZ;
+	protected int masterY = -99;
 
 	protected TileInventoryAdapter inventory;
 	protected final int componentBlockMeta;
@@ -123,11 +131,6 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	}
 
 	/* ITILESTRUCTURE */
-	IStructureLogic structureLogic;
-
-	private boolean isMaster;
-	protected int masterX, masterZ;
-	protected int masterY = -99;
 
 	@Override
 	public String getTypeUID() {
@@ -245,12 +248,13 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	public void removeBeeListener(IBeeListener event) {
 	}
 
-	// / ITRIGGERPROVIDER
+	/* ITRIGGERPROVIDER */
+	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public LinkedList<ITriggerExternal> getCustomTriggers() {
+	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
-		res.add(ForestryTrigger.missingQueen);
-		res.add(ForestryTrigger.missingDrone);
+		res.add(ApicultureTriggers.missingQueen);
+		res.add(ApicultureTriggers.missingDrone);
 		return res;
 	}
 

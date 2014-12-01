@@ -104,7 +104,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		Vect min = coords.add(offset);
 		Vect max = coords.add(offset).add(area);
 
-		AxisAlignedBB harvestBox = AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
+		AxisAlignedBB harvestBox = AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, getWorld().getHeight(), max.z);
 		List<Entity> list = getWorld().getEntitiesWithinAABB(Entity.class, harvestBox);
 
 		for (Entity entity : list) {

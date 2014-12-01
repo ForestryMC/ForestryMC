@@ -198,8 +198,7 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 		int rows = 0;
 		if (materials[index] instanceof String[]) {
 			String as[] = (String[]) materials[index++];
-			for (int l = 0; l < as.length; l++) {
-				String pattern = as[l];
+			for (String pattern : as) {
 				rows++;
 				columns = pattern.length();
 				s = (new StringBuilder()).append(s).append(pattern).toString();

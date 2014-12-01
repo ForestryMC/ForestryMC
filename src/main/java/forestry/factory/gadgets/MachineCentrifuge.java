@@ -11,18 +11,19 @@
 package forestry.factory.gadgets;
 
 import buildcraft.api.statements.ITriggerExternal;
+import cpw.mods.fml.common.Optional;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.recipes.ICentrifugeManager;
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.network.GuiId;
-import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.StackUtils;
+import forestry.factory.triggers.FactoryTriggers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -30,12 +31,15 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 public class MachineCentrifuge extends TilePowered implements ISidedInventory, ISpecialInventory {
@@ -72,7 +76,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 	}
 
 	public static class RecipeManager implements ICentrifugeManager {
-		public static ArrayList<MachineCentrifuge.Recipe> recipes = new ArrayList<MachineCentrifuge.Recipe>();
+		public static final ArrayList<MachineCentrifuge.Recipe> recipes = new ArrayList<MachineCentrifuge.Recipe>();
 
 		@Override
 		public void addRecipe(int timePerItem, ItemStack resource, HashMap<ItemStack, Integer> products) {
@@ -109,8 +113,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 		}
 
 		public static Recipe findMatchingRecipe(ItemStack item) {
-			for (int i = 0; i < recipes.size(); i++) {
-				Recipe recipe = recipes.get(i);
+			for (Recipe recipe : recipes) {
 				if (recipe.matches(item))
 					return recipe;
 			}
@@ -121,8 +124,10 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 		public Map<Object[], Object[]> getRecipes() {
 			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
 
-			for (Recipe recipe : recipes)
-				recipeList.put(new Object[] { recipe.resource }, recipe.products.keySet().toArray(StackUtils.EMPTY_STACK_ARRAY));
+			for (Recipe recipe : recipes) {
+				Set<ItemStack> productsKeys = recipe.products.keySet();
+				recipeList.put(new Object[]{recipe.resource}, productsKeys.toArray(new ItemStack[productsKeys.size()]));
+			}
 
 			return recipeList;
 		}
@@ -469,11 +474,12 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 	}
 
 	/* ITRIGGERPROVIDER */
+	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public LinkedList<ITriggerExternal> getCustomTriggers() {
+	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
-		res.add(ForestryTrigger.lowResource25);
-		res.add(ForestryTrigger.lowResource10);
+		res.add(FactoryTriggers.lowResource25);
+		res.add(FactoryTriggers.lowResource10);
 		return res;
 	}
 }

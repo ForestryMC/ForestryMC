@@ -35,10 +35,10 @@ public class ContainerSolderingIron extends ContainerItemInventory implements IG
 		this.inventory = inventory;
 
 		// Input
-		this.addSlot(new SlotCustom(inventory, 0, 152, 12, new Object[] { ItemCircuitBoard.class }));
+		this.addSlot(new SlotCustom(inventory, 0, 152, 12, ItemCircuitBoard.class));
 
 		// Output
-		this.addSlot(new SlotCustom(inventory, 1, 152, 92, new Object[] { ItemCircuitBoard.class }));
+		this.addSlot(new SlotCustom(inventory, 1, 152, 92, ItemCircuitBoard.class));
 
 		// Ingredients
 		this.addSlot(new Slot(inventory, 2, 12, 32));

@@ -19,7 +19,7 @@ import forestry.core.interfaces.ICrafter;
 
 public class SlotCrafter extends Slot {
 
-	ICrafter crafter;
+	private final ICrafter crafter;
 
 	public SlotCrafter(IInventory inventory, ICrafter crafter, int slot, int xPos, int yPos) {
 		super(inventory, slot, xPos, yPos);

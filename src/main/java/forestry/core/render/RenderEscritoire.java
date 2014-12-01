@@ -29,8 +29,8 @@ import forestry.core.utils.ForestryResource;
 
 public class RenderEscritoire extends TileEntitySpecialRenderer implements IBlockRenderer {
 
-	ModelEscritoire modelEscritoire;
-	ResourceLocation texture = new ForestryResource(Defaults.TEXTURE_PATH_BLOCKS + "/escritoire.png");
+	private final ModelEscritoire modelEscritoire;
+	private final ResourceLocation texture = new ForestryResource(Defaults.TEXTURE_PATH_BLOCKS + "/escritoire.png");
 	//private final EntityItem dummyEntityItem = new EntityItem(null);
 	private final RenderItem customRenderItem;
 
@@ -46,7 +46,7 @@ public class RenderEscritoire extends TileEntitySpecialRenderer implements IBloc
 			@Override
 			public boolean shouldSpreadItems() {
 				return false;
-			};
+			}
 		};
 		customRenderItem.setRenderManager(RenderManager.instance);
 

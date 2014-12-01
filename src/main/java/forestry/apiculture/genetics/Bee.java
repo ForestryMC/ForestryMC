@@ -19,6 +19,8 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeMutation;
 import forestry.api.apiculture.IBeekeepingMode;
+import forestry.api.core.BiomeHelper;
+import forestry.api.core.EnumErrorCode;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
@@ -30,7 +32,6 @@ import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
-import forestry.core.EnumErrorCode;
 import forestry.core.config.Defaults;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.GenericRatings;
@@ -46,7 +47,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.BiomeDictionary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,12 +65,6 @@ public class Bee extends IndividualLiving implements IBee {
 
 	public Bee(World world, IBeeGenome genome, IBee mate) {
 		this(world, genome);
-		this.mate = mate.getGenome();
-		this.isIrregularMating = mate.isNatural() != this.isNatural;
-	}
-
-	public Bee(IBeeGenome genome, IBee mate) {
-		this(genome);
 		this.mate = mate.getGenome();
 		this.isIrregularMating = mate.isNatural() != this.isNatural;
 	}
@@ -203,38 +197,44 @@ public class Bee extends IndividualLiving implements IBee {
 
 	@Override
 	public int isWorking(IBeeHousing housing) {
+		return canWork(housing).ordinal();
+	}
+
+	@Override
+	public EnumErrorCode canWork(IBeeHousing housing) {
 
 		World world = housing.getWorld();
 		// / Rain needs tolerant flyers
-		if (world.isRaining() && !genome.getTolerantFlyer() && housing.getHumidity() != EnumHumidity.ARID && !housing.isSealed())
-			return EnumErrorCode.ISRAINING.ordinal();
+		if (world.isRaining() && !genome.getTolerantFlyer() && BiomeHelper.canRainOrSnow(housing.getBiomeId()) && !housing.isSealed()) {
+			return EnumErrorCode.ISRAINING;
+		}
 
 		// / Night or darkness requires nocturnal species
 		if(world.isDaytime()) {
 			if(!canWorkDuringDay())
-				return EnumErrorCode.NOTNIGHT.ordinal();
+				return EnumErrorCode.NOTNIGHT;
 		} else if (!canWorkAtNight() && !housing.isSelfLighted())
-			return EnumErrorCode.NOTDAY.ordinal();
+			return EnumErrorCode.NOTDAY;
 
 		if (world.getBlockLightValue(housing.getXCoord(), housing.getYCoord() + 2, housing.getZCoord()) > Defaults.APIARY_MIN_LEVEL_LIGHT) {
 			if(!canWorkDuringDay())
-				return EnumErrorCode.NOTGLOOMY.ordinal();
+				return EnumErrorCode.NOTGLOOMY;
 		} else if(!canWorkAtNight() && !housing.isSelfLighted())
-			return EnumErrorCode.NOTLUCID.ordinal();
+			return EnumErrorCode.NOTLUCID;
 
 		// / No sky, except if in hell
 		BiomeGenBase biome = BiomeGenBase.getBiome(housing.getBiomeId());
 		if(biome == null)
-			return EnumErrorCode.NOSKY.ordinal();
-		if (!BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.NETHER) && !world.canBlockSeeTheSky(housing.getXCoord(), housing.getYCoord() + 3, housing.getZCoord())
+			return EnumErrorCode.NOSKY;
+		if (!BiomeHelper.isBiomeHellish(biome) && !world.canBlockSeeTheSky(housing.getXCoord(), housing.getYCoord() + 3, housing.getZCoord())
 				&& !genome.getCaveDwelling() && !housing.isSunlightSimulated())
-			return EnumErrorCode.NOSKY.ordinal();
+			return EnumErrorCode.NOSKY;
 
 		// / And finally climate check
 		if (!checkSuitableClimate(housing.getTemperature(), housing.getHumidity()))
-			return EnumErrorCode.INVALIDBIOME.ordinal();
+			return EnumErrorCode.INVALIDBIOME;
 
-		return EnumErrorCode.OK.ordinal();
+		return EnumErrorCode.OK;
 	}
 
 	private boolean canWorkAtNight() {
@@ -330,6 +330,16 @@ public class Bee extends IndividualLiving implements IBee {
 	}
 
 	@Override
+	public ArrayList<BiomeGenBase> getSuitableBiomes() {
+		ArrayList<BiomeGenBase> suitableBiomes = new ArrayList<BiomeGenBase>();
+		for (BiomeGenBase biome : BiomeGenBase.getBiomeGenArray())
+			if (checkBiomeHazard(biome))
+				suitableBiomes.add(biome);
+
+		return suitableBiomes;
+	}
+
+	@Override
 	public void addTooltip(List<String> list) {
 
 		// No info 4 u!
@@ -398,12 +408,13 @@ public class Bee extends IndividualLiving implements IBee {
 
 		}
 
-		return products.toArray(new ItemStack[0]);
+		return products.toArray(new ItemStack[products.size()]);
 	}
 
 	@Override
 	public ItemStack[] getSpecialtyList() {
-		return genome.getPrimary().getSpecialty().keySet().toArray(new ItemStack[0]);
+		Set<ItemStack> specialties = genome.getPrimary().getSpecialty().keySet();
+		return specialties.toArray(new ItemStack[specialties.size()]);
 	}
 
 	@Override
@@ -444,7 +455,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 		// We are done if the we are not jubilant.
 		if (!primary.isJubilant(genome, housing) || !secondary.isJubilant(genome, housing))
-			return products.toArray(StackUtils.EMPTY_STACK_ARRAY);
+			return products.toArray(new ItemStack[products.size()]);
 
 		// / Specialty products
 		for (Map.Entry<ItemStack, Integer> entry : primary.getSpecialty().entrySet())
@@ -452,7 +463,7 @@ public class Bee extends IndividualLiving implements IBee {
 				products.add(entry.getKey().copy());
 
 		return genome.getFlowerProvider().affectProducts(housing.getWorld(), this, housing.getXCoord(), housing.getYCoord(), housing.getZCoord(),
-				products.toArray(StackUtils.EMPTY_STACK_ARRAY));
+				products.toArray(new ItemStack[products.size()]));
 	}
 
 	/* REPRODUCTION */
@@ -496,7 +507,7 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		if (bees.size() > 0)
-			return bees.toArray(new IBee[0]);
+			return bees.toArray(new IBee[bees.size()]);
 		else
 			return null;
 	}

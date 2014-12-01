@@ -37,7 +37,7 @@ public class ContainerAnalyzer extends ContainerLiquidTanks {
 				addSlot(new SlotCustom(tile, TileAnalyzer.SLOT_INPUT_1 + i * 2 + k, 8 + k * 18, 28 + i * 18, ItemGE.class));
 
 		// Analyze slot
-		addSlot(new SlotCustom(tile, TileAnalyzer.SLOT_ANALYZE, 73, 59, new Object[]{}));
+		addSlot(new SlotCustom(tile, TileAnalyzer.SLOT_ANALYZE, 73, 59));
 
 		// Can slot
 		addSlot(new SlotLiquidContainer(tile, TileAnalyzer.SLOT_CAN, 143, 24, false, Fluids.HONEY.get()) {

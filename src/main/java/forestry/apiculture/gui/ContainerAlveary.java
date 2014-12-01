@@ -22,7 +22,7 @@ import forestry.core.gui.slots.SlotCustom;
 
 public class ContainerAlveary extends ContainerForestry {
 
-	private TileAlvearyPlain tile;
+	private final TileAlvearyPlain tile;
 
 	public ContainerAlveary(InventoryPlayer player, TileAlvearyPlain tile) {
 		super(tile);
@@ -31,10 +31,10 @@ public class ContainerAlveary extends ContainerForestry {
 		tile.sendNetworkUpdate();
 
 		// Queen/Princess
-		this.addSlot(new SlotCustom(tile, TileAlvearyPlain.SLOT_QUEEN, 29, 39, new Object[] { ForestryItem.beePrincessGE, ForestryItem.beeQueenGE }));
+		this.addSlot(new SlotCustom(tile, TileAlvearyPlain.SLOT_QUEEN, 29, 39, ForestryItem.beePrincessGE, ForestryItem.beeQueenGE));
 
 		// Drone
-		this.addSlot(new SlotCustom(tile, TileAlvearyPlain.SLOT_DRONE, 29, 65, new Object[] { ForestryItem.beeDroneGE }));
+		this.addSlot(new SlotCustom(tile, TileAlvearyPlain.SLOT_DRONE, 29, 65, ForestryItem.beeDroneGE));
 
 		// Product Inventory
 		this.addSlot(new SlotClosed(tile, 2, 116, 52));
@@ -62,8 +62,8 @@ public class ContainerAlveary extends ContainerForestry {
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		for (int i = 0; i < crafters.size(); i++)
-			tile.sendGUINetworkData(this, (ICrafting) crafters.get(i));
+		for (Object crafter : crafters)
+			tile.sendGUINetworkData(this, (ICrafting) crafter);
 	}
 
 }

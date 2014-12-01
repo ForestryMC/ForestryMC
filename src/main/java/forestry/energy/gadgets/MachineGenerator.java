@@ -27,10 +27,9 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
-import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.TankManager;
 import forestry.core.gadgets.TileBase;
@@ -45,7 +44,6 @@ import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginIC2;
 import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 
 public class MachineGenerator extends TileBase implements ISpecialInventory, ILiquidTankContainer, IRenderableMachine {
 
@@ -54,11 +52,11 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 	public static final int maxEnergy = 30000;
 
 	@EntityNetData
-	public FilteredTank resourceTank;
+	public final FilteredTank resourceTank;
 	private final TankManager tankManager;
 	private int tickCount = 0;
 
-	InventoryAdapter inventory = new InventoryAdapter(1, "Items");
+	private final InventoryAdapter inventory = new InventoryAdapter(1, "Items");
 	protected BasicSource ic2EnergySource;
 
 	public MachineGenerator() {
@@ -140,7 +138,7 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 		ic2EnergySource.updateEntity();
 
 		if (resourceTank.getFluidAmount() > 0) {
-			GeneratorFuel fuel = FuelManager.generatorFuel.get(resourceTank.getFluid());
+			GeneratorFuel fuel = FuelManager.generatorFuel.get(resourceTank.getFluid().getFluid());
 
 			if (resourceTank.getFluidAmount() >= fuel.fuelConsumed.amount &&
 					ic2EnergySource.getFreeCapacity() >= fuel.eu) {
@@ -242,7 +240,7 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 		if (container == null)
 			return 0;
 
-		if (!FuelManager.generatorFuel.containsKey(container.fluid))
+		if (container.fluid == null || !FuelManager.generatorFuel.containsKey(container.fluid.getFluid()))
 			return 0;
 
 		if (inventory.getStackInSlot(SLOT_CAN) == null) {

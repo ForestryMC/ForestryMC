@@ -19,7 +19,7 @@ import forestry.core.utils.AlyzerInventory;
 import forestry.api.arboriculture.ITree;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.IErrorSource;

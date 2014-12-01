@@ -29,7 +29,7 @@ public class SidedInventoryIterator implements Iterable<IInvSlot> {
 	@Override
 	public Iterator<IInvSlot> iterator() {
 		return new Iterator<IInvSlot>() {
-			int[] slots = inv.getAccessibleSlotsFromSide(0);
+			final int[] slots = inv.getAccessibleSlotsFromSide(0);
 			int index = 0;
 
 			@Override
@@ -52,7 +52,7 @@ public class SidedInventoryIterator implements Iterable<IInvSlot> {
 
 	private class InvSlot implements IInvSlot {
 
-		private int slot;
+		private final int slot;
 
 		public InvSlot(int slot) {
 			this.slot = slot;

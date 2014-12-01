@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.core.config;
 
+import forestry.core.proxy.Proxies;
+import net.minecraftforge.common.config.Configuration.UnicodeInputStreamReader;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -22,15 +25,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import net.minecraftforge.common.config.Configuration.UnicodeInputStreamReader;
-
-import forestry.core.proxy.Proxies;
-
 public class Configuration {
 
-	private String newLine;
-	private ArrayList<String> purge = new ArrayList<String>();
-	private TreeMap<String, ArrayList<Property>> categorized = new TreeMap<String, ArrayList<Property>>();
+	private final String newLine;
+	private final ArrayList<String> purge = new ArrayList<String>();
+	private final TreeMap<String, ArrayList<Property>> categorized = new TreeMap<String, ArrayList<Property>>();
 
 	public Configuration() {
 		newLine = System.getProperty("line.separator");
@@ -47,7 +46,7 @@ public class Configuration {
 			return existing;
 
 		// Create new property since none exists yet.
-		Property property = new Property(key, new Boolean(defaultVal).toString());
+		Property property = new Property(key, Boolean.toString(defaultVal));
 		categorized.get(category).add(property);
 		return property;
 	}
@@ -59,7 +58,7 @@ public class Configuration {
 			return existing;
 
 		// Create new property since none exists yet.
-		Property property = new Property(key, new Integer(defaultVal).toString());
+		Property property = new Property(key, Integer.toString(defaultVal));
 		categorized.get(category).add(property);
 		return property;
 	}
@@ -71,7 +70,7 @@ public class Configuration {
 			return existing;
 
 		// Create new property since none exists yet.
-		Property property = new Property(key, new Float(defaultVal).toString());
+		Property property = new Property(key, Float.toString(defaultVal));
 		categorized.get(category).add(property);
 		return property;
 	}
@@ -91,12 +90,12 @@ public class Configuration {
 	public void set(String key, String category, boolean val) {
 		Property existing = getExisting(key, category);
 		if (existing != null) {
-			existing.Value = new Boolean(val).toString();
+			existing.Value = Boolean.toString(val);
 			return;
 		}
 
 		// Create new property since none exists yet.
-		Property property = new Property(key, new Boolean(val).toString());
+		Property property = new Property(key, Boolean.toString(val));
 		categorized.get(category).add(property);
 
 	}
@@ -117,12 +116,12 @@ public class Configuration {
 	public void set(String key, String category, int val) {
 		Property existing = getExisting(key, category);
 		if (existing != null) {
-			existing.Value = new Integer(val).toString();
+			existing.Value = Integer.toString(val);
 			return;
 		}
 
 		// Create new property since none exists yet.
-		Property property = new Property(key, new Integer(val).toString());
+		Property property = new Property(key, Integer.toString(val));
 		categorized.get(category).add(property);
 
 	}
@@ -130,12 +129,12 @@ public class Configuration {
 	public void set(String key, String category, float val) {
 		Property existing = getExisting(key, category);
 		if (existing != null) {
-			existing.Value = new Float(val).toString();
+			existing.Value = Float.toString(val);
 			return;
 		}
 
 		// Create new property since none exists yet.
-		Property property = new Property(key, new Float(val).toString());
+		Property property = new Property(key, Float.toString(val));
 		categorized.get(category).add(property);
 
 	}

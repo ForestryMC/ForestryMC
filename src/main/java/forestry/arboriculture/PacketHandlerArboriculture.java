@@ -43,7 +43,7 @@ public class PacketHandlerArboriculture implements IPacketHandler {
 
 	private void onLeafUpdate(PacketLeafUpdate packet) {
 
-		TileEntity tile = ((ILocatedPacket) packet).getTarget(Proxies.common.getRenderWorld());
+		TileEntity tile = packet.getTarget(Proxies.common.getRenderWorld());
 		if (tile instanceof TileLeaves)
 			((TileLeaves) tile).fromPacket(packet);
 

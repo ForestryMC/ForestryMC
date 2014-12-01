@@ -8,27 +8,20 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.triggers;
+package forestry.apiculture.trigger;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
-import forestry.core.gadgets.Engine;
-import forestry.core.gadgets.TilePowered;
+import forestry.api.core.EnumErrorCode;
+import forestry.core.interfaces.IErrorSource;
+import forestry.core.triggers.Trigger;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TriggerLowFuel extends Trigger {
+public class TriggerMissingDrone extends Trigger {
 
-	private float threshold = 0.25F;
-
-	public TriggerLowFuel(String tag, float threshold) {
-		super(tag, "lowFuel");
-		this.threshold = threshold;
-	}
-
-	@Override
-	public String getDescription() {
-		return super.getDescription() + " < " + threshold * 100 + "%";
+	public TriggerMissingDrone() {
+		super("missingDrone");
 	}
 
 	/**
@@ -37,15 +30,11 @@ public class TriggerLowFuel extends Trigger {
 	@Override
 	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
 
-		if (tile instanceof TilePowered)
-			return !((TilePowered) tile).hasFuelMin(threshold);
+		if (!(tile instanceof IErrorSource))
+			return false;
 
-		if (tile instanceof Engine) {
-			Engine engine = (Engine) tile;
-			return !engine.hasFuelMin(threshold);
-		}
+		return ((IErrorSource) tile).getErrorState() == EnumErrorCode.NODRONE;
 
-		return false;
 	}
 
 }

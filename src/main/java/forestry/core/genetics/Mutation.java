@@ -21,20 +21,20 @@ import forestry.api.genetics.IMutation;
 
 public abstract class Mutation implements IMutation {
 
-	protected int chance;
+	protected final int chance;
 	boolean isSecret = false;
 
-	protected IAllele allele0;
-	protected IAllele allele1;
+	protected final IAllele allele0;
+	protected final IAllele allele1;
 
-	IAllele[] template;
+	private final IAllele[] template;
 
 	protected float minTemperature = 0.0f;
 	protected float maxTemperature = 2.0f;
 	protected float minRainfall = 0.0f;
 	protected float maxRainfall = 2.0f;
 
-	protected ArrayList<String> specialConditions = new ArrayList<String>();
+	protected final ArrayList<String> specialConditions = new ArrayList<String>();
 
 	public Mutation(IAllele allele0, IAllele allele1, IAllele[] template, int chance) {
 		this.allele0 = allele0;

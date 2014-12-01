@@ -45,7 +45,7 @@ import forestry.plugins.PluginArboriculture;
 
 public class CommandTreekeepingMode extends CommandMC {
 
-	String[] modeStrings;
+	private final String[] modeStrings;
 
 	public CommandTreekeepingMode() {
 		modeStrings = new String[PluginArboriculture.treeInterface.getTreekeepingModes().size()];
@@ -209,7 +209,6 @@ public class CommandTreekeepingMode extends CommandMC {
 			help += mode.getName();
 		}
 		sendChatMessage(sender, "Available modes: " + help);
-		return;
 	}
 
 	private void listModeInfo(ICommandSender sender, String[] arguments) {

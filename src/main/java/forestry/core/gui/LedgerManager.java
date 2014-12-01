@@ -22,10 +22,10 @@ import forestry.core.proxy.Proxies;
 
 public class LedgerManager {
 
-	public GuiForestry<? extends TileForestry> gui;
-	public Minecraft minecraft;
+	public final GuiForestry<? extends TileForestry> gui;
+	public final Minecraft minecraft;
 
-	protected ArrayList<Ledger> ledgers = new ArrayList<Ledger>();
+	protected final ArrayList<Ledger> ledgers = new ArrayList<Ledger>();
 
 	public LedgerManager(GuiForestry<? extends TileForestry> gui) {
 		this.gui = gui;
@@ -52,8 +52,7 @@ public class LedgerManager {
 		int xShift = ((gui.width -  gui.getSizeX()) / 2) +  gui.getSizeX();
 		int yShift = ((gui.height -  gui.getSizeY()) / 2) + 8;
 
-		for (int i = 0; i < ledgers.size(); i++) {
-			Ledger ledger = ledgers.get(i);
+		for (Ledger ledger : ledgers) {
 			if (!ledger.isVisible())
 				continue;
 
@@ -70,7 +69,7 @@ public class LedgerManager {
 
 	protected void drawLedgers() {
 
-		int xPos = 8;
+		int yPos = 8;
 		for (Ledger ledger : ledgers) {
 
 			ledger.update();
@@ -78,8 +77,8 @@ public class LedgerManager {
 				continue;
 
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			ledger.draw(gui.getSizeX(), xPos);
-			xPos += ledger.getHeight();
+			ledger.draw(gui.getSizeX(), yPos);
+			yPos += ledger.getHeight();
 		}
 	}
 

@@ -59,9 +59,9 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	private final HygroregulatorRecipe[] recipes;
 
 	/* MEMBERS */
-	InventoryAdapter canInventory = new InventoryAdapter(1, "CanInv");
+	private final InventoryAdapter canInventory = new InventoryAdapter(1, "CanInv");
 	private final TankManager tankManager;
-	private FilteredTank liquidTank;
+	private final FilteredTank liquidTank;
 
 	private HygroregulatorRecipe currentRecipe;
 	private int transferTime;

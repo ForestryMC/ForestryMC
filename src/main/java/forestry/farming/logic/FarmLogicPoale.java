@@ -37,7 +37,8 @@ public class FarmLogicPoale extends FarmLogic {
 
 	public FarmLogicPoale(IFarmHousing housing) {
 		super(housing);
-		germlings = Farmables.farmables.get("farmPoales").toArray(new IFarmable[0]);
+		Collection<IFarmable> farmables = Farmables.farmables.get("farmPoales");
+		germlings = farmables.toArray(new IFarmable[farmables.size()]);
 	}
 
 	@Override

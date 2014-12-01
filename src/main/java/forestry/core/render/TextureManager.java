@@ -37,39 +37,31 @@ public class TextureManager implements ITextureManager {
 		return instance;
 	}
 
-	String[] defaultIconNames = new String[] { "habitats/desert", "habitats/end", "habitats/forest", "habitats/hills", "habitats/jungle", "habitats/mushroom",
-			"habitats/nether", "habitats/ocean", "habitats/plains", "habitats/snow", "habitats/swamp", "habitats/taiga", "misc/access.private",
-			"misc/access.viewable", "misc/access.shared", "misc/energy", "misc/hint",
-			"analyzer/anything", "analyzer/bee", "analyzer/cave", "analyzer/closed", "analyzer/drone", "analyzer/flyer",
-			"analyzer/item", "analyzer/nocturnal", "analyzer/princess", "analyzer/pure_breed", "analyzer/pure_cave",
-			"analyzer/pure_flyer", "analyzer/pure_nocturnal", "analyzer/queen",
-			"particles/ember", "particles/flame", "particles/poison", "particles/swarm_bee", "errors/errored",
-			"slots/blocked", "slots/blocked_2", "slots/liquid", "slots/container", "slots/locked",
-			"mail/carrier.player", "mail/carrier.trader" };
-	HashMap<String, IIcon> defaultIcons = new HashMap<String, IIcon>();
+	private final HashMap<String, IIcon> defaultIcons = new HashMap<String, IIcon>();
+
+	private final IIcon[] textures = new IIcon[2048];
+
+	private final ArrayList<IIconProvider> iconProvider = new ArrayList<IIconProvider>();
+
+	private TextureManager() {
+	}
 
 	public void initDefaultIcons(IIconRegister register) {
+		String[] defaultIconNames = new String[] { "habitats/desert", "habitats/end", "habitats/forest", "habitats/hills", "habitats/jungle", "habitats/mushroom",
+				"habitats/nether", "habitats/ocean", "habitats/plains", "habitats/snow", "habitats/swamp", "habitats/taiga", "misc/access.private",
+				"misc/access.viewable", "misc/access.shared", "misc/energy", "misc/hint",
+				"analyzer/anything", "analyzer/bee", "analyzer/cave", "analyzer/closed", "analyzer/drone", "analyzer/flyer",
+				"analyzer/item", "analyzer/nocturnal", "analyzer/princess", "analyzer/pure_breed", "analyzer/pure_cave",
+				"analyzer/pure_flyer", "analyzer/pure_nocturnal", "analyzer/queen",
+				"particles/ember", "particles/flame", "particles/poison", "particles/swarm_bee", "errors/errored",
+				"slots/blocked", "slots/blocked_2", "slots/liquid", "slots/container", "slots/locked",
+				"mail/carrier.player", "mail/carrier.trader" };
 		for (String str : defaultIconNames)
-			defaultIcons.put(str, TextureManager.getInstance().registerTex(register, str));
+			defaultIcons.put(str, registerTex(register, str));
 	}
 
 	public IIcon getDefault(String ident) {
-		if (defaultIcons.containsKey(ident))
-			return defaultIcons.get(ident);
-		else
-			return null;
-	}
-
-	//public TextureMap terrainMap;
-	//public TextureMap itemMap;
-
-	IIcon[] textures = new IIcon[2048];
-
-	ArrayList<IIconProvider> iconProvider = new ArrayList<IIconProvider>();
-
-	public TextureManager() {
-		//this.terrainMap = textureMap;
-		//this.itemMap = itemMap;
+		return defaultIcons.get(ident);
 	}
 
 	public IIcon registerTex(IIconRegister register, String identifier) {

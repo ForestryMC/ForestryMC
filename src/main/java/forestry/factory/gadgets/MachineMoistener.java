@@ -10,24 +10,21 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
-import buildcraft.api.statements.ITriggerExternal;
+import forestry.api.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
 import forestry.api.recipes.IMoistenerManager;
-import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.gadgets.TileBase;
-import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
-import forestry.core.triggers.ForestryTrigger;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
@@ -48,7 +45,6 @@ import net.minecraftforge.fluids.FluidTankInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 public class MachineMoistener extends TileBase implements ISpecialInventory, ISidedInventory, ILiquidTankContainer, IRenderableMachine {
@@ -62,13 +58,11 @@ public class MachineMoistener extends TileBase implements ISpecialInventory, ISi
 	private static final short SLOTS_COUNT_RESERVOIR = 3;
 	private static final short SLOTS_COUNT_STASH = 6;
 
-	private static final FluidStack STACK_WATER = LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1);
-
 	/* RECIPE MANAGMENT */
 	public static class Recipe {
-		public int timePerItem;
-		public ItemStack resource;
-		public ItemStack product;
+		public final int timePerItem;
+		public final ItemStack resource;
+		public final ItemStack product;
 
 		public Recipe(ItemStack resource, ItemStack product, int timePerItem) {
 			this.timePerItem = timePerItem;
@@ -79,9 +73,7 @@ public class MachineMoistener extends TileBase implements ISpecialInventory, ISi
 		public boolean matches(ItemStack res) {
 			if (res == null && resource == null)
 				return true;
-			else if (res == null && resource != null)
-				return false;
-			else if (res != null && resource == null)
+			else if (res == null || resource == null)
 				return false;
 			else
 				return resource.isItemEqual(res);
@@ -89,7 +81,7 @@ public class MachineMoistener extends TileBase implements ISpecialInventory, ISi
 	}
 
 	public static class RecipeManager implements IMoistenerManager {
-		public static ArrayList<MachineMoistener.Recipe> recipes = new ArrayList<MachineMoistener.Recipe>();
+		public static final ArrayList<MachineMoistener.Recipe> recipes = new ArrayList<MachineMoistener.Recipe>();
 
 		@Override
 		public void addRecipe(ItemStack resource, ItemStack product, int timePerItem) {
@@ -129,7 +121,7 @@ public class MachineMoistener extends TileBase implements ISpecialInventory, ISi
 	}
 
 	@EntityNetData
-	public FilteredTank resourceTank;
+	public final FilteredTank resourceTank;
 	private final TankManager tankManager;
 	private final InventoryAdapter inventory = new InventoryAdapter(12, "Items");
 	//private ItemStack[] inventoryStacks = new ItemStack[12];
@@ -732,17 +724,6 @@ public class MachineMoistener extends TileBase implements ISpecialInventory, ISi
 		iCrafting.sendProgressBarUpdate(container, i + 1, totalTime);
 		iCrafting.sendProgressBarUpdate(container, i + 2, productionTime);
 		iCrafting.sendProgressBarUpdate(container, i + 3, timePerItem);
-	}
-
-	// ITRIGGERPROVIDER
-	@Override
-	public LinkedList<ITriggerExternal> getCustomTriggers() {
-		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
-		res.add(ForestryTrigger.lowFuel25);
-		res.add(ForestryTrigger.lowFuel10);
-		res.add(ForestryTrigger.lowResource25);
-		res.add(ForestryTrigger.lowResource10);
-		return res;
 	}
 
 }

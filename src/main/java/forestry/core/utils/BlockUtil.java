@@ -10,10 +10,13 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-
+import buildcraft.api.core.Position;
+import buildcraft.api.transport.IPipeConnection;
+import buildcraft.api.transport.IPipeConnection.ConnectOverride;
+import buildcraft.api.transport.IPipeTile;
+import buildcraft.api.transport.IPipeTile.PipeType;
+import cofh.api.energy.IEnergyHandler;
+import forestry.core.config.Defaults;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCocoa;
 import net.minecraft.block.BlockLog;
@@ -24,18 +27,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.util.Direction;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.util.ForgeDirection;
 
-import buildcraft.api.core.Position;
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.transport.IPipeConnection;
-import buildcraft.api.transport.IPipeConnection.ConnectOverride;
-import buildcraft.api.transport.IPipeTile;
-import buildcraft.api.transport.IPipeTile.PipeType;
-
-import cofh.api.energy.IEnergyHandler;
-import forestry.core.config.Defaults;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 
 public class BlockUtil {
 
@@ -50,6 +46,9 @@ public class BlockUtil {
 	/**
 	 * Searches for inventories adjacent to block, excludes IPowerReceptor
 	 * 
+	 * @param world
+	 * @param blockPos
+	 * @param from
 	 * @return
 	 */
 	public static IInventory[] getAdjacentInventories(World world, Vect blockPos, ForgeDirection from) {
@@ -63,8 +62,7 @@ public class BlockUtil {
 			if (entity != null)
 				if (entity instanceof IInventory)
 					if (!(entity instanceof TileEntityHopper))
-						if (!(entity instanceof IPowerReceptor))
-							inventories.add((IInventory) entity);
+						inventories.add((IInventory) entity);
 		}
 
 		return inventories.toArray(new IInventory[inventories.size()]);
@@ -75,6 +73,7 @@ public class BlockUtil {
 	 * 
 	 * @param world
 	 * @param blockPos
+	 * @param from
 	 * @return
 	 */
 	public static ForgeDirection[] getPipeDirections(World world, Vect blockPos, ForgeDirection from) {
@@ -100,17 +99,17 @@ public class BlockUtil {
 			}
 		}
 
-		return possiblePipes.toArray(new ForgeDirection[0]);
+		return possiblePipes.toArray(new ForgeDirection[possiblePipes.size()]);
 
 	}
 
-	public static ArrayList<ForgeDirection> filterPipeDirections(ForgeDirection[] all, ForgeDirection[] exclude) {
+	public static ArrayList<ForgeDirection> filterPipeDirections(ForgeDirection[] allDirections, ForgeDirection[] exclude) {
 		ArrayList<ForgeDirection> filtered = new ArrayList<ForgeDirection>();
 		ArrayList<ForgeDirection> excludeList = new ArrayList<ForgeDirection>(Arrays.asList(exclude));
 
-		for (int i = 0; i < all.length; i++)
-			if (!excludeList.contains(all[i]))
-				filtered.add(all[i]);
+		for (ForgeDirection direction : allDirections)
+			if (!excludeList.contains(direction))
+				filtered.add(direction);
 
 		return filtered;
 

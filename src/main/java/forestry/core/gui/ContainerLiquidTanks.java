@@ -28,7 +28,7 @@ import forestry.core.proxy.Proxies;
 
 public class ContainerLiquidTanks extends ContainerForestry {
 
-	private ILiquidTankContainer tile;
+	private final ILiquidTankContainer tile;
 
 	public ContainerLiquidTanks(IInventory inventory, ILiquidTankContainer tile) {
 		super(inventory);
@@ -54,7 +54,7 @@ public class ContainerLiquidTanks extends ContainerForestry {
 
 		IToolPipette pipette = (IToolPipette) held;
 		StandardTank tank = tile.getTankManager().get(slot);
-		int liquidAmount = tank.getFluid().amount;
+		int liquidAmount = tank.getFluidAmount();
 
 		if (pipette.canPipette(itemstack) && liquidAmount > 0) {
 			if (liquidAmount > 0) {
@@ -82,8 +82,8 @@ public class ContainerLiquidTanks extends ContainerForestry {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		tile.getTankManager().updateGuiData(this, crafters);
-		for (int i = 0; i < crafters.size(); i++)
-			tile.sendGUINetworkData(this, (ICrafting) crafters.get(i));
+		for (Object crafter : crafters)
+			tile.sendGUINetworkData(this, (ICrafting) crafter);
 	}
 
 	@Override

@@ -22,7 +22,7 @@ import ic2.api.energy.prefab.BasicSink;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.core.ForestryAPI;
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.TemperatureState;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
@@ -357,12 +357,10 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 					chipset.onRemoval(this);
 			}
 
+		sockets.setInventorySlotContents(slot, stack);
 		if (stack == null) {
-			sockets.setInventorySlotContents(slot, stack);
 			return;
 		}
-
-		sockets.setInventorySlotContents(slot, stack);
 
 		ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitboard(stack);
 		if (chipset != null)

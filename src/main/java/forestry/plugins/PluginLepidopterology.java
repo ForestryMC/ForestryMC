@@ -48,6 +48,7 @@ import forestry.core.utils.Utils;
 import forestry.lepidopterology.ButterflySpawner;
 import forestry.lepidopterology.GuiHandlerLepidopterology;
 import forestry.lepidopterology.MatingRecipe;
+import forestry.lepidopterology.commands.CommandButterfly;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.gadgets.TileLepidopteristChest;
 import forestry.lepidopterology.genetics.AlleleButterflySpecies;
@@ -110,6 +111,8 @@ public class PluginLepidopterology extends ForestryPlugin {
 
 		config.save();
 
+		PluginCore.rootCommand.addChildCommand(new CommandButterfly());
+
 		Utils.registerEntity(EntityButterfly.class, "butterflyGE", 0, 0x000000, 0xffffff, 50, 1, true);
 		proxy.initializeRendering();
 		registerTemplates();
@@ -146,8 +149,8 @@ public class PluginLepidopterology extends ForestryPlugin {
 		CraftingManager.getInstance().getRecipeList().add(new MatingRecipe());
 
 		RecipeManagers.carpenterManager.addRecipe(100, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 2000), null, ForestryItem.flutterlyzer.getItemStack(),
-				new Object[]{"X#X", "X#X", "RDR", Character.valueOf('#'), Blocks.glass_pane, Character.valueOf('X'), "ingotBronze", Character.valueOf('R'),
-					Items.redstone, Character.valueOf('D'), Items.diamond});
+				"X#X", "X#X", "RDR", Character.valueOf('#'), Blocks.glass_pane, Character.valueOf('X'), "ingotBronze", Character.valueOf('R'),
+				Items.redstone, Character.valueOf('D'), Items.diamond);
 	}
 
 	private void createAlleles() {

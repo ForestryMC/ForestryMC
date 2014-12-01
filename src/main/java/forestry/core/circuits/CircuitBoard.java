@@ -10,17 +10,16 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CircuitBoard implements ICircuitBoard {
 
@@ -80,7 +79,7 @@ public class CircuitBoard implements ICircuitBoard {
 				readcircuits.add(ChipsetManager.circuitRegistry.getFromLegacyMap(nbttagcompound1.getInteger("I")));
 			}
 
-			circuits = readcircuits.toArray(new ICircuit[0]);
+			circuits = readcircuits.toArray(new ICircuit[readcircuits.size()]);
 			return;
 
 		}
@@ -93,7 +92,7 @@ public class CircuitBoard implements ICircuitBoard {
 				readcircuits.add(ChipsetManager.circuitRegistry.getCircuit(nbttagcompound1.getString("I")));
 			}
 
-			circuits = readcircuits.toArray(new ICircuit[0]);
+			circuits = readcircuits.toArray(new ICircuit[readcircuits.size()]);
 			return;
 		}
 

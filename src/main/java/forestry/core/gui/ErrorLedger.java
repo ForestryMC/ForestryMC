@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import forestry.core.EnumErrorCode;
+import forestry.api.core.EnumErrorCode;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.utils.StringUtil;
 

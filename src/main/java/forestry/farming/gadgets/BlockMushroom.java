@@ -36,7 +36,7 @@ import forestry.farming.worldgen.WorldGenBigMushroom;
 public class BlockMushroom extends BlockSapling implements IItemTyped {
 
 	public enum MushroomType {
-		BROWN, RED;
+		BROWN, RED
 	}
 
 	private final WorldGenerator[] generators;

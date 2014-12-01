@@ -20,14 +20,14 @@ import forestry.core.utils.StringUtil;
 
 public class Classification implements IClassification {
 
-	private EnumClassLevel level;
-	private String uid;
-	private String scientific;
+	private final EnumClassLevel level;
+	private final String uid;
+	private final String scientific;
 
 	private IClassification parent;
 
-	private ArrayList<IAlleleSpecies> members = new ArrayList<IAlleleSpecies>();
-	private ArrayList<IClassification> groups = new ArrayList<IClassification>();
+	private final ArrayList<IAlleleSpecies> members = new ArrayList<IAlleleSpecies>();
+	private final ArrayList<IClassification> groups = new ArrayList<IClassification>();
 
 	public Classification(EnumClassLevel level, String uid, String scientific) {
 		this.level = level;
@@ -73,7 +73,7 @@ public class Classification implements IClassification {
 
 	@Override
 	public IClassification[] getMemberGroups() {
-		return groups.toArray(new IClassification[0]);
+		return groups.toArray(new IClassification[groups.size()]);
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class Classification implements IClassification {
 
 	@Override
 	public IAlleleSpecies[] getMemberSpecies() {
-		return members.toArray(new IAlleleSpecies[0]);
+		return members.toArray(new IAlleleSpecies[members.size()]);
 	}
 
 	@Override

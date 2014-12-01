@@ -4,36 +4,31 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- *
+ * 
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.inventory;
+package forestry.core.commands;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+import java.util.SortedSet;
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
 
-import net.minecraft.item.ItemStack;
+/**
+ *
+ * @author CovertJaguar <http://www.railcraft.info/>
+ */
+public interface IForestryCommand extends ICommand {
 
-public class ItemStackSizeSorter implements Comparator<ItemStack> {
-
-	private static ItemStackSizeSorter instance;
-
-	private static ItemStackSizeSorter getInstance() {
-		if (instance == null) {
-			instance = new ItemStackSizeSorter();
-		}
-		return instance;
-	}
-
-	public static void sort(List<ItemStack> list) {
-		Collections.sort(list, getInstance());
-	}
+	String getFullCommandString();
 
 	@Override
-	public int compare(ItemStack o1, ItemStack o2) {
-		return o1.stackSize - o2.stackSize;
-	}
+	List<String> getCommandAliases();
 
+	int getPermissionLevel();
+
+	SortedSet<SubCommand> getChildren();
+
+	void printHelp(ICommandSender sender);
 }

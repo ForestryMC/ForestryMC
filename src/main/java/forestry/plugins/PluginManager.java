@@ -46,12 +46,12 @@ public class PluginManager {
 	public static final String MODULE_CONFIG_FILE_NAME = "modules.cfg";
 	public static final String CATEGORY_MODULES = "modules";
 
-	public static ArrayList<IGuiHandler> guiHandlers = Lists.newArrayList();
-	public static ArrayList<IPacketHandler> packetHandlers = Lists.newArrayList();
-	public static ArrayList<IPickupHandler> pickupHandlers = Lists.newArrayList();
-	public static ArrayList<ISaveEventHandler> saveEventHandlers = Lists.newArrayList();
-	public static ArrayList<IResupplyHandler> resupplyHandlers = Lists.newArrayList();
-	public static ArrayList<IOreDictionaryHandler> dictionaryHandlers = Lists.newArrayList();
+	public static final ArrayList<IGuiHandler> guiHandlers = Lists.newArrayList();
+	public static final ArrayList<IPacketHandler> packetHandlers = Lists.newArrayList();
+	public static final ArrayList<IPickupHandler> pickupHandlers = Lists.newArrayList();
+	public static final ArrayList<ISaveEventHandler> saveEventHandlers = Lists.newArrayList();
+	public static final ArrayList<IResupplyHandler> resupplyHandlers = Lists.newArrayList();
+	public static final ArrayList<IOreDictionaryHandler> dictionaryHandlers = Lists.newArrayList();
 
 	private static final Set<Module> loadedModules = EnumSet.noneOf(Module.class);
 	private static final Set<Module> unloadedModules = EnumSet.allOf(Module.class);
@@ -59,7 +59,7 @@ public class PluginManager {
 
 	public enum Stage {
 
-		SETUP, PRE_INIT, INIT, POST_INIT, INIT_DISABLED, FINISHED;
+		SETUP, PRE_INIT, INIT, POST_INIT, INIT_DISABLED, FINISHED
 	}
 
 	public enum Module {
@@ -74,7 +74,10 @@ public class PluginManager {
 		LEPIDOPTEROLOGY(new PluginLepidopterology()),
 		MAIL(new PluginMail()),
 		STORAGE(new PluginStorage()),
-		BUILDCRAFT(new PluginBuildCraft()),
+		BUILDCRAFT_FUELS(new PluginBuildCraftFuels()),
+		BUILDCRAFT_RECIPES(new PluginBuildCraftRecipes()),
+		BUILDCRAFT_STATEMENTS(new PluginBuildCraftStatements()),
+		BUILDCRAFT_TRANSPORT(new PluginBuildCraftTransport()),
 		PROPOLIS_PIPE(new PluginPropolisPipe()),
 		EQUIVELENT_EXCHANGE(new PluginEE()),
 		FARM_CRAFTORY(new PluginFarmCraftory()),
@@ -281,8 +284,7 @@ public class PluginManager {
 	private static boolean isEnabled(Configuration config, Module m) {
 		Plugin info = m.instance().getClass().getAnnotation(Plugin.class);
 
-		boolean defaultValue = true;
-		Property prop = config.get(CATEGORY_MODULES, m.toString().toLowerCase(Locale.ENGLISH).replace('_', '.'), defaultValue);
+		Property prop = config.get(CATEGORY_MODULES, m.toString().toLowerCase(Locale.ENGLISH).replace('_', '.'), true);
 		prop.comment = StatCollector.translateToLocal(info.unlocalizedDescription());
 		return prop.getBoolean(true);
 	}

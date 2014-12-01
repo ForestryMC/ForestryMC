@@ -10,30 +10,29 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import java.util.ArrayList;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IHiveDrop;
 import forestry.api.genetics.IAllele;
 import forestry.plugins.PluginApiculture;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class HiveDrop implements IHiveDrop {
 
-	private IAllele[] template;
-	private ArrayList<ItemStack> additional = new ArrayList<ItemStack>();
-	private int chance;
+	private final IAllele[] template;
+	private final ArrayList<ItemStack> additional = new ArrayList<ItemStack>();
+	private final int chance;
 	private float ignobleShare = 0.0f;
 
 	public HiveDrop(IAllele[] template, ItemStack[] bonus, int chance) {
 		this.template = template;
 		this.chance = chance;
 
-		for (ItemStack stack : bonus)
-			this.additional.add(stack);
+		Collections.addAll(this.additional, bonus);
 	}
 
 	public HiveDrop setIgnobleShare(float share) {
@@ -42,22 +41,22 @@ public class HiveDrop implements IHiveDrop {
 	}
 	
 	private IBee createBee(World world) {
-		IBee bee = PluginApiculture.beeInterface.getBee(world, PluginApiculture.beeInterface.templateAsGenome(template));
-		if(world.rand.nextFloat() < ignobleShare)
-			bee.setIsNatural(false);
-		return bee;
+		return PluginApiculture.beeInterface.getBee(world, PluginApiculture.beeInterface.templateAsGenome(template));
 	}
 	
 	@Override
 	public ItemStack getPrincess(World world, int x, int y, int z, int fortune) {
-		return PluginApiculture.beeInterface.getMemberStack(createBee(world), EnumBeeType.PRINCESS.ordinal());
+		IBee bee = createBee(world);
+		if(world.rand.nextFloat() < ignobleShare)
+			bee.setIsNatural(false);
+
+		return PluginApiculture.beeInterface.getMemberStack(bee, EnumBeeType.PRINCESS.ordinal());
 	}
 
 	@Override
 	public ArrayList<ItemStack> getDrones(World world, int x, int y, int z, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		ret.add(PluginApiculture.beeInterface.getMemberStack(createBee(world),
-				EnumBeeType.DRONE.ordinal()));
+		ret.add(PluginApiculture.beeInterface.getMemberStack(createBee(world), EnumBeeType.DRONE.ordinal()));
 		return ret;
 	}
 

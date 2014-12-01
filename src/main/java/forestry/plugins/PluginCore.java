@@ -23,7 +23,6 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
-import forestry.core.CommandForestry;
 import forestry.core.CreativeTabForestry;
 import forestry.core.GameMode;
 import forestry.core.PickupHandlerCore;
@@ -31,6 +30,9 @@ import forestry.core.SaveEventHandlerCore;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.circuits.ItemSolderingIron;
+import forestry.core.commands.CommandPlugins;
+import forestry.core.commands.CommandVersion;
+import forestry.core.commands.RootCommand;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
@@ -68,16 +70,22 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.ShapedRecipeCustom;
 
+import java.util.ArrayList;
+
 @Plugin(pluginID = "Core", name = "Core", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.core.description")
 public class PluginCore extends ForestryPlugin {
 
 	public static MachineDefinition definitionEscritoire;
 	// ICrashCallable for highlighting certain mods during crashes.
 	public static ForestryModEnvWarningCallable crashCallable;
+	public static final RootCommand rootCommand = new RootCommand();
 
 	@Override
 	public void preInit() {
 		super.preInit();
+
+		rootCommand.addChildCommand(new CommandVersion());
+		rootCommand.addChildCommand(new CommandPlugins());
 
 		ChipsetManager.solderManager = new ItemSolderingIron.SolderManager();
 
@@ -109,7 +117,7 @@ public class PluginCore extends ForestryPlugin {
 		OreDictionary.registerOre("oreApatite", ForestryBlock.resources.getItemStack(1, 0));
 		OreDictionary.registerOre("oreCopper", ForestryBlock.resources.getItemStack(1, 1));
 		OreDictionary.registerOre("oreTin", ForestryBlock.resources.getItemStack(1, 2));
-		
+
 		ForestryBlock.resourceStorage.registerBlock(new BlockResourceStorageBlock(), ItemForestryBlock.class, "resourceStorage");
 		ForestryBlock.resourceStorage.block().setHarvestLevel("pickaxe", 0, 0);
 		ForestryBlock.resourceStorage.block().setHarvestLevel("pickaxe", 0, 1);
@@ -375,18 +383,16 @@ public class PluginCore extends ForestryPlugin {
 		Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.can"), " # ", "# #", '#', "ingotTin");
 
 		// / GEARS
-		if (PluginBuildCraft.stoneGear != null) {
-
-			Proxies.common.addRecipe(ForestryItem.gearBronze.getItemStack(), " # ", "#Y#", " # ", '#', "ingotBronze", 'Y', PluginBuildCraft.stoneGear);
-			Proxies.common.addRecipe(ForestryItem.gearCopper.getItemStack(), " # ", "#Y#", " # ", '#', "ingotCopper", 'Y', PluginBuildCraft.stoneGear);
-			Proxies.common.addRecipe(ForestryItem.gearTin.getItemStack(), " # ", "#Y#", " # ", '#', "ingotTin", 'Y', PluginBuildCraft.stoneGear);
-
+		ArrayList<ItemStack> stoneGear = OreDictionary.getOres("gearStone");
+		Object gearCenter;
+		if (!stoneGear.isEmpty()) {
+			gearCenter = "gearStone";
 		} else {
-
-			Proxies.common.addRecipe(ForestryItem.gearBronze.getItemStack(), " # ", "#X#", " # ", '#', "ingotBronze", 'X', "ingotCopper");
-			Proxies.common.addRecipe(ForestryItem.gearCopper.getItemStack(), " # ", "#X#", " # ", '#', "ingotCopper", 'X', "ingotCopper");
-			Proxies.common.addRecipe(ForestryItem.gearTin.getItemStack(), " # ", "#X#", " # ", '#', "ingotTin", 'X', "ingotCopper");
+			gearCenter = "ingotCopper";
 		}
+		Proxies.common.addRecipe(ForestryItem.gearBronze.getItemStack(), " # ", "#X#", " # ", '#', "ingotBronze", 'X', gearCenter);
+		Proxies.common.addRecipe(ForestryItem.gearCopper.getItemStack(), " # ", "#X#", " # ", '#', "ingotCopper", 'X', gearCenter);
+		Proxies.common.addRecipe(ForestryItem.gearTin.getItemStack(), " # ", "#X#", " # ", '#', "ingotTin", 'X', gearCenter);
 
 		// / SURVIVALIST TOOLS
 		Proxies.common.addRecipe(ForestryItem.bronzePickaxe.getItemStack(), " X ", " X ", "###", '#', "ingotBronze", 'X', "stickWood");
@@ -435,17 +441,17 @@ public class PluginCore extends ForestryPlugin {
 
 		// / Pipette
 		Proxies.common.addRecipe(ForestryItem.pipette.getItemStack(), "  #", " X ", "X  ", 'X', Blocks.glass_pane, '#', new ItemStack(Blocks.wool, 1, Defaults.WILDCARD));
-		
+
 		// Storage Blocks
 		Proxies.common.addRecipe(ForestryBlock.resourceStorage.getItemStack(1, 0), "###", "###", "###", '#', "gemApatite");
 		Proxies.common.addShapelessRecipe(ForestryItem.apatite.getItemStack(9), "blockApatite");
 
 		Proxies.common.addRecipe(ForestryBlock.resourceStorage.getItemStack(1, 1), "###", "###", "###", '#', "ingotCopper");
 		Proxies.common.addShapelessRecipe(ForestryItem.ingotCopper.getItemStack(9), "blockCopper");
-		
+
 		Proxies.common.addRecipe(ForestryBlock.resourceStorage.getItemStack(1, 2), "###", "###", "###", '#', "ingotTin");
 		Proxies.common.addShapelessRecipe(ForestryItem.ingotTin.getItemStack(9), "blockTin");
-		
+
 		Proxies.common.addRecipe(ForestryBlock.resourceStorage.getItemStack(1, 3), "###", "###", "###", '#', "ingotBronze");
 		Proxies.common.addShapelessRecipe(ForestryItem.ingotBronze.getItemStack(9), "blockBronze");
 	}
@@ -457,7 +463,7 @@ public class PluginCore extends ForestryPlugin {
 
 	@Override
 	public ICommand[] getConsoleCommands() {
-		return new ICommand[]{new CommandForestry()};
+		return new ICommand[]{rootCommand};
 	}
 
 	@Override

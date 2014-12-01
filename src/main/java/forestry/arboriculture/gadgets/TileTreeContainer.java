@@ -10,14 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.Packet;
-import net.minecraft.tileentity.TileEntity;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.arboriculture.ITree;
 import forestry.arboriculture.genetics.Tree;
 import forestry.core.interfaces.IOwnable;
@@ -27,6 +20,12 @@ import forestry.core.network.PacketIds;
 import forestry.core.network.PacketTileNBT;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumAccess;
+import forestry.core.utils.PlayerUtil;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.Packet;
+import net.minecraft.tileentity.TileEntity;
 
 /**
  * This is the base TE class for any block that needs to contain tree genome information.
@@ -156,10 +155,7 @@ public abstract class TileTreeContainer extends TileEntity implements INetworked
 
 	@Override
 	public boolean isOwner(EntityPlayer player) {
-		if (owner != null)
-			return owner.equals(player.getGameProfile());
-		else
-			return false;
+		return PlayerUtil.isSameGameProfile(owner, player.getGameProfile());
 	}
 
 	@Override

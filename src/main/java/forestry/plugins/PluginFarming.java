@@ -10,30 +10,17 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import java.util.ArrayList;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
-
-import net.minecraftforge.common.MinecraftForge;
-
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmable;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
-import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
@@ -41,7 +28,6 @@ import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemTypedBlock;
 import forestry.core.proxy.Proxies;
-import forestry.core.triggers.Trigger;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.farming.EventHandlerFarming;
 import forestry.farming.FarmHelper;
@@ -64,7 +50,6 @@ import forestry.farming.logic.FarmLogicInfernal;
 import forestry.farming.logic.FarmLogicOrchard;
 import forestry.farming.logic.FarmLogicPeat;
 import forestry.farming.logic.FarmLogicPoale;
-import forestry.farming.logic.FarmLogicRubber;
 import forestry.farming.logic.FarmLogicShroom;
 import forestry.farming.logic.FarmLogicSucculent;
 import forestry.farming.logic.FarmLogicVegetable;
@@ -76,9 +61,16 @@ import forestry.farming.logic.FarmableStacked;
 import forestry.farming.logic.FarmableVanillaSapling;
 import forestry.farming.logic.FarmableVanillaShroom;
 import forestry.farming.proxy.ProxyFarming;
-import forestry.farming.triggers.TriggerLowFertilizer;
-import forestry.farming.triggers.TriggerLowLiquid;
-import forestry.farming.triggers.TriggerLowSoil;
+import forestry.farming.triggers.FarmingTriggers;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
+
+import java.util.ArrayList;
 
 @Plugin(pluginID = "Farming", name = "Farming", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.farming.description")
 public class PluginFarming extends ForestryPlugin {
@@ -87,13 +79,6 @@ public class PluginFarming extends ForestryPlugin {
 	public static ProxyFarming proxy;
 	public static int modelIdFarmBlock;
 	public static ItemStack farmFertilizer;
-	public static Trigger lowResourceLiquid50;
-	public static Trigger lowResourceLiquid25;
-	public static Trigger lowSoil128;
-	public static Trigger lowSoil64;
-	public static Trigger lowSoil32;
-	public static Trigger lowFertilizer50;
-	public static Trigger lowFertilizer25;
 
 	@Override
 	public void preInit() {
@@ -140,13 +125,9 @@ public class PluginFarming extends ForestryPlugin {
 		proxy.initializeRendering();
 
 		// Triggers
-		lowResourceLiquid50 = new TriggerLowLiquid("lowLiquid.50", 0.5f);
-		lowResourceLiquid25 = new TriggerLowLiquid("lowLiquid.25", 0.25f);
-		lowSoil128 = new TriggerLowSoil(128);
-		lowSoil64 = new TriggerLowSoil(64);
-		lowSoil32 = new TriggerLowSoil(32);
-		lowFertilizer50 = new TriggerLowFertilizer("lowFertilizer.50", 0.5f);
-		lowFertilizer25 = new TriggerLowFertilizer("lowFertilizer.25", 0.25f);
+		if (PluginManager.Module.BUILDCRAFT_STATEMENTS.isEnabled()) {
+			FarmingTriggers.initialize();
+		}
 
 		// Layouts
 		ICircuitLayout layoutManaged = new CircuitLayout("farms.managed");
