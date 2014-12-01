@@ -10,16 +10,9 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-<<<<<<< Updated upstream
-=======
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-
->>>>>>> Stashed changes
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotLiquidContainer;
 import forestry.energy.gadgets.MachineGenerator;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 

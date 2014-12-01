@@ -29,18 +29,19 @@ import forestry.core.network.PacketIds;
 import forestry.core.network.PacketInventoryStack;
 import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
-import forestry.core.inventory.InventoryAdapter;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginApiculture;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
-public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
+public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised, ISidedInventory {
 
 	// CONSTANTS
 	public static final int SLOT_QUEEN = 0;
@@ -53,9 +54,6 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	public static final int SLOT_FRAMES_3 = 11;
 	public static final int SLOT_INVENTORY_COUNT = 7;
 	public static final int SLOT_FRAMES_COUNT = 3;
-
-	// Inventory
-	protected final InventoryAdapter inventory = new InventoryAdapter(12, "Items");
 	private final IBeekeepingLogic logic;
 	private BiomeGenBase biome;
 	private int displayHealthMax = 0;
@@ -64,6 +62,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	public TileBeehouse() {
 		setHints(Config.hints.get("apiary"));
 		logic = PluginApiculture.beeInterface.createBeekeepingLogic(this);
+		setInternalInventory(new TileInventoryAdapter(this, 12, "Items"));
 	}
 
 	@Override
@@ -77,8 +76,6 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 		super.writeToNBT(nbttagcompound);
 
 		nbttagcompound.setInteger("BiomeId", biome.biomeID);
-
-		inventory.writeToNBT(nbttagcompound);
 		if (logic != null)
 			logic.writeToNBT(nbttagcompound);
 	}
@@ -89,8 +86,6 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 
 		int biomeId = nbttagcompound.getInteger("BiomeId");
 		biome = BiomeGenBase.getBiome(biomeId);
-
-		inventory.readFromNBT(nbttagcompound);
 		logic.readFromNBT(nbttagcompound);
 
 	}
@@ -137,12 +132,11 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	public void updateClientSide() {
 
 		// / Multiplayer FX
-		if (PluginApiculture.beeInterface.isMated(inventory.getStackInSlot(SLOT_QUEEN))) {
+		if (PluginApiculture.beeInterface.isMated(getInternalInventory().getStackInSlot(SLOT_QUEEN)))
 			if (getErrorState() == EnumErrorCode.OK && worldObj.getTotalWorldTime() % 2 % 2 == 0) {
-				IBee displayQueen = PluginApiculture.beeInterface.getMember(inventory.getStackInSlot(SLOT_QUEEN));
+				IBee displayQueen = PluginApiculture.beeInterface.getMember(getInternalInventory().getStackInSlot(SLOT_QUEEN));
 				displayQueen.doFX(logic.getEffectData(), this);
 			}
-		}
 
 	}
 
@@ -157,7 +151,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 
 		// Add swarm effects
 		if (worldObj.getTotalWorldTime() % 200 * 10 == 0)
-			onQueenChange(inventory.getStackInSlot(SLOT_QUEEN));
+			onQueenChange(getInternalInventory().getStackInSlot(SLOT_QUEEN));
 		/* These should get already done on the client / doesn't work server-side anyway
 		 if (getErrorState() == EnumErrorCode.OK && worldObj.getTotalWorldTime() % 2 % 2 == 0)
 		 queen.doFX(logic.getEffectData(), this);
@@ -184,7 +178,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 
 	@Override
 	public boolean addProduct(ItemStack product, boolean all) {
-		return inventory.tryAddStack(product, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT, all, true);
+		return getInternalInventory().tryAddStack(product, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT, all, true);
 	}
 
 	/* NETWORK SYNCH */
@@ -200,6 +194,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 
 	/* STATE INFORMATION */
 	private int getHealthDisplay() {
+		TileInventoryAdapter inventory = getInternalInventory();
 		if (inventory.getStackInSlot(SLOT_QUEEN) == null)
 			return 0;
 
@@ -212,6 +207,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	}
 
 	private int getMaxHealthDisplay() {
+		TileInventoryAdapter inventory = getInternalInventory();
 		if (inventory.getStackInSlot(SLOT_QUEEN) == null)
 			return 0;
 
@@ -281,16 +277,95 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 
 	/* INVENTORY MANAGMENT */
 	@Override
-	public InventoryAdapter getInternalInventory() {
-		return inventory;
-	}
-
 	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
+		return getInternalInventory().getStackInSlot(i);
 	}
 
-	public void setSlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) {
+		return getInternalInventory().getAccessibleSlotsFromSide(side);
+	}
+
+	@Override
+	public int getSizeInventory() {
+		return getInternalInventory().getSizeInventory();
+	}
+
+	@Override
+	public ItemStack decrStackSize(int slotIndex, int amount) {
+		return getInternalInventory().decrStackSize(slotIndex, amount);
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int slotIndex) {
+		return getInternalInventory().getStackInSlotOnClosing(slotIndex);
+	}
+
+	@Override
+	public void setInventorySlotContents(int slotIndex, ItemStack stack) {
+		getInternalInventory().setInventorySlotContents(slotIndex, stack);
+	}
+
+	@Override
+	public String getInventoryName() {
+		return getUnlocalizedName();
+	}
+
+	@Override
+	public boolean hasCustomInventoryName() {
+		return false;
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		return getInternalInventory().getInventoryStackLimit();
+	}
+
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer player) {
+		return getInternalInventory().isUseableByPlayer(player);
+	}
+
+	@Override
+	public void openInventory() {
+	}
+
+	@Override
+	public void closeInventory() {
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
+		if (!getInternalInventory().isItemValidForSlot(slotIndex, itemstack))
+			return false;
+
+		if (slotIndex == SLOT_QUEEN && PluginApiculture.beeInterface.isMember(itemstack)
+				&& !PluginApiculture.beeInterface.isDrone(itemstack))
+			return true;
+
+		return slotIndex == SLOT_DRONE && PluginApiculture.beeInterface.isDrone(itemstack);
+	}
+
+	@Override
+	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+		if (!getInternalInventory().canExtractItem(side, itemstack, side))
+			return false;
+
+		switch (slotIndex) {
+		case SLOT_QUEEN:
+		case SLOT_DRONE:
+		case SLOT_FRAMES_1:
+		case SLOT_FRAMES_2:
+		case SLOT_FRAMES_3:
+			return false;
+		default:
+			return true;
+		}
+	}
+
+	@Override
+	public boolean canInsertItem(int slotIndex, ItemStack stack, int side) {
+		return isItemValidForSlot(slotIndex, stack);
 	}
 
 	// / IBEEHOUSING
@@ -331,12 +406,12 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 
 	@Override
 	public void setQueen(ItemStack itemstack) {
-		setSlotContents(SLOT_QUEEN, itemstack);
+		setInventorySlotContents(SLOT_QUEEN, itemstack);
 	}
 
 	@Override
 	public void setDrone(ItemStack itemstack) {
-		setSlotContents(SLOT_DRONE, itemstack);
+		setInventorySlotContents(SLOT_DRONE, itemstack);
 	}
 
 	@Override
@@ -430,10 +505,11 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	public boolean onEggLaid(IBee queen) {
 		return false;
 	}
-	
+
 	/* IHousing */
 	@Override
 	public GameProfile getOwnerName() {
 		return this.getOwnerProfile();
 	}
+
 }

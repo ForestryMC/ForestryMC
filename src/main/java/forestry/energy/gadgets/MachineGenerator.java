@@ -24,7 +24,6 @@ import net.minecraftforge.fluids.FluidStack;
 import ic2.api.energy.prefab.BasicSource;
 
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.ISpecialInventory;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
 import forestry.api.core.EnumErrorCode;
@@ -38,14 +37,15 @@ import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.inventory.InventoryAdapter;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginIC2;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraftforge.fluids.FluidTankInfo;
 
-public class MachineGenerator extends TileBase implements ISpecialInventory, ILiquidTankContainer, IRenderableMachine {
+public class MachineGenerator extends TileBase implements ISidedInventory, ILiquidTankContainer, IRenderableMachine {
 
 	// / CONSTANTS
 	public static final short SLOT_CAN = 0;
@@ -56,18 +56,18 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 	private final TankManager tankManager;
 	private int tickCount = 0;
 
-	private final InventoryAdapter inventory = new InventoryAdapter(1, "Items");
 	protected BasicSource ic2EnergySource;
 
 	public MachineGenerator() {
 		setHints(Config.hints.get("generator"));
 
+		setInternalInventory(new TileInventoryAdapter(this, 1, "Items"));
+
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, FuelManager.generatorFuel.keySet());
 		tankManager = new TankManager(resourceTank);
 
-		if (PluginIC2.instance.isAvailable()) {
+		if (PluginIC2.instance.isAvailable())
 			ic2EnergySource = new BasicSource(this, maxEnergy, 1);
-		}
 	}
 
 	@Override
@@ -84,40 +84,44 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 
-		if (ic2EnergySource != null) ic2EnergySource.writeToNBT(nbttagcompound);
+		if (ic2EnergySource != null)
+			ic2EnergySource.writeToNBT(nbttagcompound);
 
 		tankManager.writeTanksToNBT(nbttagcompound);
-		inventory.writeToNBT(nbttagcompound);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 
-		if (ic2EnergySource != null) ic2EnergySource.readFromNBT(nbttagcompound);
+		if (ic2EnergySource != null)
+			ic2EnergySource.readFromNBT(nbttagcompound);
 
 		tankManager.readTanksFromNBT(nbttagcompound);
-		inventory.readFromNBT(nbttagcompound);
 	}
 
 	@Override
 	public void onChunkUnload() {
-		if (ic2EnergySource != null) ic2EnergySource.onChunkUnload();
+		if (ic2EnergySource != null)
+			ic2EnergySource.onChunkUnload();
 
 		super.onChunkUnload();
 	}
 
 	@Override
 	public void invalidate() {
-		if (ic2EnergySource != null) ic2EnergySource.invalidate();
+		if (ic2EnergySource != null)
+			ic2EnergySource.invalidate();
 
 		super.invalidate();
 	}
+
 	@Override
 	public void updateServerSide() {
 
 		// Check inventory slots for fuel
 		// Check if we have suitable items waiting in the item slot
+		TileInventoryAdapter inventory = getInternalInventory();
 		if (inventory.getStackInSlot(SLOT_CAN) != null) {
 			FluidContainerData container = LiquidHelper.getLiquidContainer(inventory.getStackInSlot(SLOT_CAN));
 			if (container != null)
@@ -140,8 +144,8 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 		if (resourceTank.getFluidAmount() > 0) {
 			GeneratorFuel fuel = FuelManager.generatorFuel.get(resourceTank.getFluid().getFluid());
 
-			if (resourceTank.getFluidAmount() >= fuel.fuelConsumed.amount &&
-					ic2EnergySource.getFreeCapacity() >= fuel.eu) {
+			if (resourceTank.getFluidAmount() >= fuel.fuelConsumed.amount
+					&& ic2EnergySource.getFreeCapacity() >= fuel.eu) {
 				ic2EnergySource.addEnergy(fuel.eu);
 				this.tickCount++;
 
@@ -168,7 +172,8 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 	}
 
 	public int getStoredScaled(int i) {
-		if (ic2EnergySource == null) return 0;
+		if (ic2EnergySource == null)
+			return 0;
 
 		return (int) (ic2EnergySource.getEnergyStored() * i) / maxEnergy;
 	}
@@ -186,87 +191,95 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 	/* SMP GUI */
 	public void getGUINetworkData(int i, int j) {
 		int firstMessageId = tankManager.maxMessageId() + 1;
-		if (i == firstMessageId) {
-			if (ic2EnergySource != null) ic2EnergySource.setEnergyStored(j);
-		}
+		if (i == firstMessageId)
+			if (ic2EnergySource != null)
+				ic2EnergySource.setEnergyStored(j);
 	}
 
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
 		int firstMessageId = tankManager.maxMessageId() + 1;
-		if (ic2EnergySource != null) {
+		if (ic2EnergySource != null)
 			iCrafting.sendProgressBarUpdate(container, firstMessageId, (short) ic2EnergySource.getEnergyStored());
-		}
 	}
 
 	/* IINVENTORY */
-	@Override public ItemStack getStackInSlot(int i) { return inventory.getStackInSlot(i); }
-	@Override public void setInventorySlotContents(int i, ItemStack itemstack) { inventory.setInventorySlotContents(i, itemstack); }
-	@Override public int getSizeInventory() { return inventory.getSizeInventory(); }
-	@Override public ItemStack decrStackSize(int i, int j) { return inventory.decrStackSize(i, j); }
-	@Override public ItemStack getStackInSlotOnClosing(int slot) { return inventory.getStackInSlotOnClosing(slot); }
-	@Override public int getInventoryStackLimit() { return inventory.getInventoryStackLimit(); }
-	@Override public void openInventory() {}
-	@Override public void closeInventory() {}
+	@Override
+	public ItemStack getStackInSlot(int i) {
+		return getInternalInventory().getStackInSlot(i);
+	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
+	@Override
+	public void setInventorySlotContents(int i, ItemStack itemstack) {
+		getInternalInventory().setInventorySlotContents(i, itemstack);
+	}
+
+	@Override
+	public int getSizeInventory() {
+		return getInternalInventory().getSizeInventory();
+	}
+
+	@Override
+	public ItemStack decrStackSize(int i, int j) {
+		return getInternalInventory().decrStackSize(i, j);
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int slot) {
+		return getInternalInventory().getStackInSlotOnClosing(slot);
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		return getInternalInventory().getInventoryStackLimit();
+	}
+
+	@Override
+	public void openInventory() {
+	}
+
+	@Override
+	public void closeInventory() {
+	}
+
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return super.isUseableByPlayer(player);
+		return getInternalInventory().isUseableByPlayer(player);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean hasCustomInventoryName() {
-		return super.hasCustomInventoryName();
+		return false;
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return super.isItemValidForSlot(slotIndex, itemstack);
-	}
+	public boolean isItemValidForSlot(int slotIndex, ItemStack stack) {
+		if (!getInternalInventory().isItemValidForSlot(slotIndex, stack))
+			return false;
 
-	/* ISPECIALINVENTORY */
-	@Override
-	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
+		if (slotIndex == SLOT_CAN) {
+			FluidContainerData container = LiquidHelper.getLiquidContainer(stack);
+			if (container == null)
+				return false;
 
-		FluidContainerData container = LiquidHelper.getLiquidContainer(stack);
-		if (container == null)
-			return 0;
-
-		if (container.fluid == null || !FuelManager.generatorFuel.containsKey(container.fluid.getFluid()))
-			return 0;
-
-		if (inventory.getStackInSlot(SLOT_CAN) == null) {
-			if (doAdd)
-				inventory.setInventorySlotContents(SLOT_CAN, stack.copy());
-
-			return stack.stackSize;
+			return container.fluid != null && FuelManager.generatorFuel.containsKey(container.fluid.getFluid());
 		}
+		return false;
+	}
 
-		if (!inventory.getStackInSlot(SLOT_CAN).isItemEqual(stack))
-			return 0;
-
-		int space = inventory.getStackInSlot(SLOT_CAN).getMaxStackSize() - inventory.getStackInSlot(SLOT_CAN).stackSize;
-		if (space <= 0)
-			return 0;
-
-		if (doAdd)
-			inventory.getStackInSlot(SLOT_CAN).stackSize += stack.stackSize;
-
-		return Math.min(space, stack.stackSize);
-
+	/* ISIDEDINVENTORY */
+	@Override
+	public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
+		return false;
 	}
 
 	@Override
-	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
-		return null;
+	public boolean canInsertItem(int slotIndex, ItemStack stack, int side) {
+		return isItemValidForSlot(slotIndex, stack);
+	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) {
+		return getInternalInventory().getAccessibleSlotsFromSide(side);
 	}
 
 	/* ILiquidTankContainer */
@@ -280,6 +293,7 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 		return tankManager;
 	}
 
+	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
 		return tankManager.drain(from, resource, doDrain);
 	}

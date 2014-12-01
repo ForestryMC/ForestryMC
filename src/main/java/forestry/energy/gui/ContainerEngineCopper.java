@@ -17,14 +17,11 @@ import net.minecraft.inventory.Slot;
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.slots.SlotClosed;
 import forestry.energy.gadgets.EngineCopper;
+import scala.collection.parallel.ParSeqLike.Updated;
 
 public class ContainerEngineCopper extends ContainerForestry {
-<<<<<<< Updated upstream
-	protected final EngineCopper engine;
-=======
 
-	protected EngineCopper engine;
->>>>>>> Stashed changes
+	protected final EngineCopper engine;
 
 	public ContainerEngineCopper(InventoryPlayer player, EngineCopper tile) {
 		super(tile);
@@ -59,14 +56,9 @@ public class ContainerEngineCopper extends ContainerForestry {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
-<<<<<<< Updated upstream
-		for (Object crafter : crafters)
-			engine.sendGUINetworkData(this, (ICrafting) crafter);
-=======
 		for (Object crafter : crafters) {
 			engine.sendGUINetworkData(this, (ICrafting) crafter);
 		}
->>>>>>> Stashed changes
 	}
 
 }

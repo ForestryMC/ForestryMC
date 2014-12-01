@@ -35,13 +35,8 @@ import forestry.plugins.PluginMail;
 public class PostRegistry implements IPostRegistry {
 
 	public static PostOffice cachedPostOffice;
-<<<<<<< Updated upstream
-	public static final HashMap<IMailAddress, POBox> cachedPOBoxes = new HashMap<IMailAddress, POBox>();
-	public static final HashMap<IMailAddress, ITradeStation> cachedTradeStations = new HashMap<IMailAddress, ITradeStation>();
-=======
-	public static Map<IMailAddress, POBox> cachedPOBoxes = new HashMap<IMailAddress, POBox>();
-	public static Map<IMailAddress, ITradeStation> cachedTradeStations = new HashMap<IMailAddress, ITradeStation>();
->>>>>>> Stashed changes
+	public static final Map<IMailAddress, POBox> cachedPOBoxes = new HashMap<IMailAddress, POBox>();
+	public static final Map<IMailAddress, ITradeStation> cachedTradeStations = new HashMap<IMailAddress, ITradeStation>();
 
 	/**
 	 * @param world the Minecraft world the PO box will be in
@@ -101,7 +96,7 @@ public class PostRegistry implements IPostRegistry {
 	@Override
 	public TradeStation getTradeStation(World world, IMailAddress address) {
 		if (cachedTradeStations.containsKey(address))
-			return (TradeStation)cachedTradeStations.get(address);
+			return (TradeStation) cachedTradeStations.get(address);
 
 		TradeStation trade = (TradeStation) world.loadItemData(TradeStation.class, TradeStation.SAVE_NAME + address);
 
@@ -226,6 +221,5 @@ public class PostRegistry implements IPostRegistry {
 	public boolean isLetter(ItemStack itemstack) {
 		return ForestryItem.letters.isItemEqual(itemstack);
 	}
-
 
 }

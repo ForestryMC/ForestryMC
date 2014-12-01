@@ -33,11 +33,13 @@ import forestry.core.network.GuiId;
 import forestry.core.utils.DelayTimer;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.inventory.InventoryAdapter;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.plugins.PluginIC2;
 
 public class EngineTin extends Engine implements ISocketable, IInventory {
 
 	protected static class EuConfig {
+
 		public int euForCycle;
 		public int rfPerCycle;
 		public int euStorage;
@@ -51,7 +53,6 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	}
 
 	private final short batterySlot = 0;
-	private final InventoryAdapter inventory = new InventoryAdapter(1, "electrical");
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
 	private final EuConfig euConfig = new EuConfig(Defaults.ENGINE_TIN_EU_FOR_CYCLE, Defaults.ENGINE_TIN_ENERGY_PER_CYCLE, Defaults.ENGINE_TIN_MAX_EU_STORED);
 
@@ -63,7 +64,10 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		super(Defaults.ENGINE_TIN_HEAT_MAX, 100000, 4000);
 		setHints(Config.hints.get("engine.tin"));
 
-		if (PluginIC2.instance.isAvailable()) ic2EnergySink = new BasicSink(this, euConfig.euStorage, 3);
+		setInternalInventory(new TileInventoryAdapter(this, 1, "electrical"));
+
+		if (PluginIC2.instance.isAvailable())
+			ic2EnergySink = new BasicSink(this, euConfig.euStorage, 3);
 	}
 
 	@Override
@@ -76,8 +80,8 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 
-		if (ic2EnergySink != null) ic2EnergySink.readFromNBT(nbttagcompound);
-		inventory.readFromNBT(nbttagcompound);
+		if (ic2EnergySink != null)
+			ic2EnergySink.readFromNBT(nbttagcompound);
 		sockets.readFromNBT(nbttagcompound);
 
 		ItemStack chip = sockets.getStackInSlot(0);
@@ -92,21 +96,23 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 
-		if (ic2EnergySink != null) ic2EnergySink.writeToNBT(nbttagcompound);
-		inventory.writeToNBT(nbttagcompound);
+		if (ic2EnergySink != null)
+			ic2EnergySink.writeToNBT(nbttagcompound);
 		sockets.writeToNBT(nbttagcompound);
 	}
 
 	@Override
 	public void onChunkUnload() {
-		if (ic2EnergySink != null) ic2EnergySink.onChunkUnload();
+		if (ic2EnergySink != null)
+			ic2EnergySink.onChunkUnload();
 
 		super.onChunkUnload();
 	}
 
 	@Override
 	public void invalidate() {
-		if (ic2EnergySink != null) ic2EnergySink.invalidate();
+		if (ic2EnergySink != null)
+			ic2EnergySink.invalidate();
 
 		super.invalidate();
 	}
@@ -162,7 +168,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 			return;
 		}
 
-		if (inventory.getStackInSlot(batterySlot) != null)
+		if (getInternalInventory().getStackInSlot(batterySlot) != null)
 			replenishFromBattery(batterySlot);
 
 		// Updating of gui delayed to prevent it from going crazy
@@ -194,7 +200,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		if (!isActivated())
 			return;
 
-		ic2EnergySink.discharge(inventory.getStackInSlot(slot), euConfig.euForCycle * 3);
+		ic2EnergySink.discharge(getInternalInventory().getStackInSlot(slot), euConfig.euForCycle * 3);
 	}
 
 	// / STATE INFORMATION
@@ -204,7 +210,8 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	}
 
 	public int getStorageScaled(int i) {
-		if (ic2EnergySink == null) return 0;
+		if (ic2EnergySink == null)
+			return 0;
 
 		return Math.min(i, (int) (ic2EnergySink.getEnergyStored() * i) / ic2EnergySink.getCapacity());
 	}
@@ -239,7 +246,8 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 			heat = j;
 			break;
 		case 3:
-			if (ic2EnergySink != null) ic2EnergySink.setEnergyStored(j);
+			if (ic2EnergySink != null)
+				ic2EnergySink.setEnergyStored(j);
 			break;
 		}
 
@@ -250,9 +258,8 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		iCrafting.sendProgressBarUpdate(containerEngine, 0, currentOutput);
 		iCrafting.sendProgressBarUpdate(containerEngine, 1, energyManager.toPacketInt());
 		iCrafting.sendProgressBarUpdate(containerEngine, 2, heat);
-		if (ic2EnergySink != null) {
+		if (ic2EnergySink != null)
 			iCrafting.sendProgressBarUpdate(containerEngine, 3, (short) ic2EnergySink.getEnergyStored());
-		}
 	}
 
 	// / ENERGY CONFIG CHANGE
@@ -261,38 +268,39 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		euConfig.rfPerCycle += rfChange;
 		euConfig.euStorage += storageChange;
 
-		if (ic2EnergySink != null) ic2EnergySink.setCapacity(euConfig.euStorage);
+		if (ic2EnergySink != null)
+			ic2EnergySink.setCapacity(euConfig.euStorage);
 	}
 
 	/* IINVENTORY */
 	@Override
 	public int getSizeInventory() {
-		return inventory.getSizeInventory();
+		return getInternalInventory().getSizeInventory();
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
+		return getInternalInventory().getStackInSlot(i);
 	}
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
-		return inventory.decrStackSize(i, j);
+		return getInternalInventory().decrStackSize(i, j);
 	}
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
+		getInternalInventory().setInventorySlotContents(i, itemstack);
 	}
 
 	@Override
 	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
+		return getInternalInventory().getInventoryStackLimit();
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slot) {
-		return inventory.getStackInSlotOnClosing(slot);
+		return getInternalInventory().getStackInSlotOnClosing(slot);
 	}
 
 	@Override
@@ -303,12 +311,9 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	public void closeInventory() {
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return super.isUseableByPlayer(player);
+		return getInternalInventory().isUseableByPlayer(player);
 	}
 
 	@Override
@@ -316,21 +321,17 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		return getUnlocalizedName();
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean hasCustomInventoryName() {
-		return super.hasCustomInventoryName();
+		return false;
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return super.isItemValidForSlot(slotIndex, itemstack);
+		return getInternalInventory().isItemValidForSlot(slotIndex, itemstack);
 	}
+	
+	//TODO: Add ISideInventory and clarify allowed items
 
 	/* ISOCKETABLE */
 	@Override
@@ -358,9 +359,8 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 			}
 
 		sockets.setInventorySlotContents(slot, stack);
-		if (stack == null) {
+		if (stack == null)
 			return;
-		}
 
 		ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitboard(stack);
 		if (chipset != null)

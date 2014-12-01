@@ -30,9 +30,9 @@ public class ContainerForestry extends Container {
 	public ContainerForestry(IInventory inventory) {
 		this.inventory = inventory;
 		if (inventory instanceof TileForestry)
-			this.inventoryForestry = (TileForestry)inventory;
+			this.inventoryForestry = (TileForestry) inventory;
 		else
-			this.inventoryForestry  = null;
+			this.inventoryForestry = null;
 	}
 
 	/**
@@ -50,16 +50,15 @@ public class ContainerForestry extends Container {
 			return null;
 
 		if ((inventoryForestry != null) && (inventoryForestry.getAccess() != EnumAccess.SHARED))
-			if ((inventoryForestry.owner != null) && !PlayerUtil.isSameGameProfile(inventoryForestry.owner, player.getGameProfile()))
+			if (!inventoryForestry.isOwner(player))
 				return null;
 
 		Slot slot = slotIndex < 0 ? null : (Slot) this.inventorySlots.get(slotIndex);
 		if (slot instanceof SlotForestry) {
 			((SlotForestry) slot).onSlotClick(slotIndex, button, modifier, player);
 
-			if (((SlotForestry) slot).isPhantom()) {
+			if (((SlotForestry) slot).isPhantom())
 				return slotClickPhantom(slot, button, modifier, player);
-			}
 		}
 		return super.slotClick(slotIndex, button, modifier, player);
 	}

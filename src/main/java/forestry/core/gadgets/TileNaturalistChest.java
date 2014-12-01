@@ -21,7 +21,6 @@ import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.GuiHandler;
 import forestry.core.config.Config;
 import forestry.core.gui.IPagedInventory;
-import forestry.core.utils.StringUtil;
 
 public abstract class TileNaturalistChest extends TileBase implements IInventory, IPagedInventory {
 
@@ -157,19 +156,13 @@ public abstract class TileNaturalistChest extends TileBase implements IInventory
 	public void closeInventory() {
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return super.isUseableByPlayer(player);
+		return getInternalInventory().isUseableByPlayer(player);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean hasCustomInventoryName() {
-		return super.hasCustomInventoryName();
+		return false;
 	}
 }

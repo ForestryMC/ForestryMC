@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -65,6 +64,6 @@ public abstract class BlockForestry extends BlockContainer {
 
 		TileForestry tile = (TileForestry) world.getTileEntity(i, j, k);
 		if (entityliving instanceof EntityPlayer)
-			tile.owner = ((EntityPlayer) entityliving).getGameProfile();
+			tile.setOwner(((EntityPlayer) entityliving));
 	}
 }

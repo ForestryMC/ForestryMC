@@ -10,17 +10,10 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-<<<<<<< Updated upstream
-=======
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-
->>>>>>> Stashed changes
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotClosed;
 import forestry.core.gui.slots.SlotLiquidContainer;
 import forestry.factory.gadgets.MachineBottler;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 

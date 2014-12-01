@@ -47,7 +47,7 @@ public class PacketTileUpdate extends PacketUpdate {
 
 		isOwnable = tile.isOwnable();
 		access = tile.getAccess();
-		owner = tile.owner;
+		owner = tile.getOwnerProfile();
 	}
 
 	@Override

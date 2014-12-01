@@ -108,19 +108,8 @@ public class MailAddress implements INBTTagable, IMailAddress {
 		if (!(o instanceof MailAddress))
 			return false;
 
-<<<<<<< Updated upstream
 		MailAddress address = (MailAddress) o;
 		return PlayerUtil.isSameGameProfile(address.gameProfile, gameProfile);
-=======
-		MailAddress other = (MailAddress) o;
-		return isSamePlayer(gameProfile, other.gameProfile);
-	}
-
-	private static boolean isSamePlayer(GameProfile a, GameProfile b) {
-		if (a.getId() != null && b.getId() != null)
-			return a.getId().equals(b.getId());
-		return a.getName() != null && a.getName().equals(b.getName());
->>>>>>> Stashed changes
 	}
 
 	@Override

@@ -47,12 +47,12 @@ public class TileInventoryAdapter extends InventoryAdapter {
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
 		return tile.getAccess() == EnumAccess.SHARED;
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack stack, int side) {
+	public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
 		return tile.getAccess() == EnumAccess.SHARED;
 	}
 }

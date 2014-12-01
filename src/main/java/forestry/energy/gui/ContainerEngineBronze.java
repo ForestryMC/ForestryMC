@@ -10,26 +10,15 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-<<<<<<< Updated upstream
-=======
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-
->>>>>>> Stashed changes
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotLiquidContainer;
 import forestry.energy.gadgets.EngineBronze;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 
 public class ContainerEngineBronze extends ContainerLiquidTanks {
-<<<<<<< Updated upstream
-	protected final EngineBronze engine;
-=======
 
-	protected EngineBronze engine;
->>>>>>> Stashed changes
+	protected final EngineBronze engine;
 
 	public ContainerEngineBronze(InventoryPlayer player, EngineBronze engine) {
 		super(engine, engine);

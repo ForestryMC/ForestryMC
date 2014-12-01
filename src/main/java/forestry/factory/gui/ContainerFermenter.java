@@ -10,28 +10,17 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-<<<<<<< Updated upstream
-=======
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-
->>>>>>> Stashed changes
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotCustom;
 import forestry.core.gui.slots.SlotLiquidContainer;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.factory.gadgets.MachineFermenter;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 
 public class ContainerFermenter extends ContainerLiquidTanks {
-<<<<<<< Updated upstream
-	protected final MachineFermenter fermenter;
-=======
 
-	protected MachineFermenter fermenter;
->>>>>>> Stashed changes
+	protected final MachineFermenter fermenter;
 
 	public ContainerFermenter(InventoryPlayer player, MachineFermenter fermenter) {
 		super(fermenter, fermenter);

@@ -276,19 +276,19 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 			if (tile instanceof TileBeehouse) {
 				TileBeehouse apiary = ((TileBeehouse) tile);
 				apiary.initialize();
-				apiary.setSlotContents(TileBeehouse.SLOT_QUEEN,
+				apiary.setInventorySlotContents(TileBeehouse.SLOT_QUEEN,
 						PluginApiculture.beeInterface.getMemberStack(getVillageBee(world, xCoord, yCoord, zCoord), EnumBeeType.PRINCESS.ordinal()));
-				apiary.setSlotContents(TileBeehouse.SLOT_DRONE,
+				apiary.setInventorySlotContents(TileBeehouse.SLOT_DRONE,
 						PluginApiculture.beeInterface.getMemberStack(getVillageBee(world, xCoord, yCoord, zCoord), EnumBeeType.DRONE.ordinal()));
 
 				for (int i = TileBeehouse.SLOT_FRAMES_1; i < TileBeehouse.SLOT_FRAMES_1 + TileBeehouse.SLOT_FRAMES_COUNT; i++) {
 					float roll = world.rand.nextFloat();
 					if (roll < 0.2f)
-						apiary.setSlotContents(i, ForestryItem.frameUntreated.getItemStack());
+						apiary.setInventorySlotContents(i, ForestryItem.frameUntreated.getItemStack());
 					else if (roll < 0.4f)
-						apiary.setSlotContents(i, ForestryItem.frameImpregnated.getItemStack());
+						apiary.setInventorySlotContents(i, ForestryItem.frameImpregnated.getItemStack());
 					else if (roll < 0.6)
-						apiary.setSlotContents(i, ForestryItem.frameProven.getItemStack());
+						apiary.setInventorySlotContents(i, ForestryItem.frameProven.getItemStack());
 				}
 
 			}

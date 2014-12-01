@@ -27,6 +27,7 @@ import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumAccess;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Vect;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -87,8 +88,9 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	@Override
 	public void readFromNBT(NBTTagCompound data) {
 		super.readFromNBT(data);
-		
-		if(inventory != null) inventory.readFromNBT(data);
+
+		if (inventory != null)
+			inventory.readFromNBT(data);
 
 		if (data.hasKey("Access"))
 			access = EnumAccess.values()[data.getInteger("Access")];
@@ -107,7 +109,8 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	@Override
 	public void writeToNBT(NBTTagCompound data) {
 		super.writeToNBT(data);
-		if(inventory != null) inventory.writeToNBT(data);
+		if (inventory != null)
+			inventory.writeToNBT(data);
 		data.setInteger("Access", access.ordinal());
 		if (this.owner != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
@@ -264,10 +267,9 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 
 	@Override
 	public boolean isOwner(EntityPlayer player) {
-		if (owner != null)
-			return owner.getId().compareTo(player.getPersistentID()) == 0;
-		else
-			return false;
+		if (owner != null && player != null)
+			return PlayerUtil.isSameGameProfile(owner, player.getGameProfile());
+		return false;
 	}
 
 	@Override
