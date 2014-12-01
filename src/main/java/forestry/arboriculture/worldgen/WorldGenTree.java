@@ -109,7 +109,7 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 
 		// if we have a fireproof tree, return the fireproof log
 		if (block instanceof BlockLog) {
-			IAlleleBoolean fireproof = (IAlleleBoolean) tree.getGenome().getActiveAllele(EnumTreeChromosome.FIREPROOF.ordinal());
+			IAlleleBoolean fireproof = (IAlleleBoolean) tree.getGenome().getActiveAllele(EnumTreeChromosome.FIREPROOF);
 			if (fireproof.getValue()) {
 				BlockLog blockLog = (BlockLog) block;
 				ForestryBlock fireproofLogBlock = BlockFireproofLog.getFireproofLog(blockLog);

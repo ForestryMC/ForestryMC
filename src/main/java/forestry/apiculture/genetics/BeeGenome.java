@@ -82,73 +82,73 @@ public class BeeGenome extends Genome implements IBeeGenome {
 	// / INFORMATION RETRIEVAL
 	@Override
 	public IAlleleBeeSpecies getPrimary() {
-		return (IAlleleBeeSpecies) getActiveAllele(EnumBeeChromosome.SPECIES.ordinal());
+		return (IAlleleBeeSpecies) getActiveAllele(EnumBeeChromosome.SPECIES);
 	}
 
 	@Override
 	public IAlleleBeeSpecies getSecondary() {
-		return (IAlleleBeeSpecies) getInactiveAllele(EnumBeeChromosome.SPECIES.ordinal());
+		return (IAlleleBeeSpecies) getInactiveAllele(EnumBeeChromosome.SPECIES);
 	}
 
 	@Override
 	public float getSpeed() {
-		return ((IAlleleFloat) getActiveAllele(EnumBeeChromosome.SPEED.ordinal())).getValue();
+		return ((IAlleleFloat) getActiveAllele(EnumBeeChromosome.SPEED)).getValue();
 	}
 
 	@Override
 	public int getLifespan() {
-		return ((IAlleleInteger) getActiveAllele(EnumBeeChromosome.LIFESPAN.ordinal())).getValue();
+		return ((IAlleleInteger) getActiveAllele(EnumBeeChromosome.LIFESPAN)).getValue();
 	}
 
 	@Override
 	public int getFertility() {
-		return ((IAlleleInteger) getActiveAllele(EnumBeeChromosome.FERTILITY.ordinal())).getValue();
+		return ((IAlleleInteger) getActiveAllele(EnumBeeChromosome.FERTILITY)).getValue();
 	}
 
 	@Override
 	public EnumTolerance getToleranceTemp() {
-		return ((AlleleTolerance) getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal())).getValue();
+		return ((AlleleTolerance) getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE)).getValue();
 	}
 
 	@Override
 	public boolean getNocturnal() {
-		return ((AlleleBoolean) getActiveAllele(EnumBeeChromosome.NOCTURNAL.ordinal())).getValue();
+		return ((AlleleBoolean) getActiveAllele(EnumBeeChromosome.NOCTURNAL)).getValue();
 	}
 
 	@Override
 	public EnumTolerance getToleranceHumid() {
-		return ((AlleleTolerance) getActiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal())).getValue();
+		return ((AlleleTolerance) getActiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE)).getValue();
 	}
 
 	@Override
 	public boolean getTolerantFlyer() {
-		return ((AlleleBoolean) getActiveAllele(EnumBeeChromosome.TOLERANT_FLYER.ordinal())).getValue();
+		return ((AlleleBoolean) getActiveAllele(EnumBeeChromosome.TOLERANT_FLYER)).getValue();
 	}
 
 	@Override
 	public boolean getCaveDwelling() {
-		return ((AlleleBoolean) getActiveAllele(EnumBeeChromosome.CAVE_DWELLING.ordinal())).getValue();
+		return ((AlleleBoolean) getActiveAllele(EnumBeeChromosome.CAVE_DWELLING)).getValue();
 	}
 
 	@Override
 	public IFlowerProvider getFlowerProvider() {
-		return ((IAlleleFlowers) getActiveAllele(EnumBeeChromosome.FLOWER_PROVIDER.ordinal())).getProvider();
+		return ((IAlleleFlowers) getActiveAllele(EnumBeeChromosome.FLOWER_PROVIDER)).getProvider();
 	}
 
 	@Override
 	public int getFlowering() {
-		return ((IAlleleInteger) getActiveAllele(EnumBeeChromosome.FLOWERING.ordinal())).getValue();
+		return ((IAlleleInteger) getActiveAllele(EnumBeeChromosome.FLOWERING)).getValue();
 	}
 
 	@Override
 	public int[] getTerritory() {
-		Vect area = ((AlleleArea) getActiveAllele(EnumBeeChromosome.TERRITORY.ordinal())).getArea();
+		Vect area = ((AlleleArea) getActiveAllele(EnumBeeChromosome.TERRITORY)).getArea();
 		return new int[] { area.x, area.y, area.z };
 	}
 
 	@Override
 	public IAlleleBeeEffect getEffect() {
-		return (IAlleleBeeEffect) getActiveAllele(EnumBeeChromosome.EFFECT.ordinal());
+		return (IAlleleBeeEffect) getActiveAllele(EnumBeeChromosome.EFFECT);
 	}
 
 	@Override

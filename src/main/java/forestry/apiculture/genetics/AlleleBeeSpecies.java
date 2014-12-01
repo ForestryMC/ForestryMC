@@ -112,7 +112,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 		int highest = 0;
 		exclude.add(species);
 
-		for(IMutation mutation : getRoot().getPaths(species, EnumBeeChromosome.SPECIES.ordinal())) {
+		for(IMutation mutation : getRoot().getPaths(species, EnumBeeChromosome.SPECIES)) {
 			if(!exclude.contains(mutation.getAllele0())) {
 				int otherAdvance = getGeneticAdvancement(mutation.getAllele0(), exclude);
 				if(otherAdvance > highest)

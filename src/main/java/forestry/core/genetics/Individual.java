@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
+import forestry.api.genetics.IChromosomeType;
 import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.genetics.IIndividual;
@@ -74,8 +75,13 @@ public abstract class Individual implements IIndividual {
 	}
 
 	@Override
+	@SuppressWarnings("deprecated")
 	public boolean isPureBred(int chromosomeOrdinal) {
 		return getGenome().getActiveAllele(chromosomeOrdinal).getUID().equals(getGenome().getInactiveAllele(chromosomeOrdinal).getUID());
 	}
 
+	@Override
+	public boolean isPureBred(IChromosomeType chromosomeType) {
+		return getGenome().getActiveAllele(chromosomeType).getUID().equals(getGenome().getInactiveAllele(chromosomeType).getUID());
+	}
 }

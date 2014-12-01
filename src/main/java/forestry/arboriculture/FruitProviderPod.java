@@ -82,7 +82,7 @@ public class FruitProviderPod extends FruitProviderNone {
 		if (type == EnumPodType.COCOA)
 			return BlockUtil.tryPlantPot(world, x, y, z, Blocks.cocoa);
 		else {
-			return PluginArboriculture.treeInterface.setFruitBlock(world, (IAlleleFruit) genome.getActiveAllele(EnumTreeChromosome.FRUITS.ordinal()),
+			return PluginArboriculture.treeInterface.setFruitBlock(world, (IAlleleFruit) genome.getActiveAllele(EnumTreeChromosome.FRUITS),
 					genome.getSappiness(), type.uids, x, y, z);
 		}
 	}

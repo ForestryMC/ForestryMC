@@ -108,7 +108,7 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 	/* EFFECTS */
 	@Override
 	public IEffectData[] doEffect(IEffectData[] storedData, World world, int biomeid, int x, int y, int z) {
-		IAlleleLeafEffect effect = (IAlleleLeafEffect) getGenome().getActiveAllele(EnumTreeChromosome.EFFECT.ordinal());
+		IAlleleLeafEffect effect = (IAlleleLeafEffect) getGenome().getActiveAllele(EnumTreeChromosome.EFFECT);
 
 		if (effect == null)
 			return null;
@@ -119,7 +119,7 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 		if (!effect.isCombinable())
 			return storedData;
 
-		IAlleleLeafEffect secondary = (IAlleleLeafEffect) getGenome().getInactiveAllele(EnumTreeChromosome.EFFECT.ordinal());
+		IAlleleLeafEffect secondary = (IAlleleLeafEffect) getGenome().getInactiveAllele(EnumTreeChromosome.EFFECT);
 		if (!secondary.isCombinable())
 			return storedData;
 
@@ -255,7 +255,7 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 
 	@Override
 	public boolean isPureBred(EnumTreeChromosome chromosome) {
-		return genome.getActiveAllele(chromosome.ordinal()).getUID().equals(genome.getInactiveAllele(chromosome.ordinal()).getUID());
+		return genome.getActiveAllele(chromosome).getUID().equals(genome.getInactiveAllele(chromosome).getUID());
 	}
 
 	@Override
@@ -279,16 +279,16 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 		IAlleleTreeSpecies secondary = genome.getSecondary();
 		if (!isPureBred(EnumTreeChromosome.SPECIES))
 			list.add("\u00A79" + StringUtil.localize("trees.hybrid").replaceAll("%PRIMARY",primary.getName()).replaceAll("%SECONDARY",secondary.getName()));
-		list.add(String.format("\u00A76S: %s, \u00A7cM: %s", genome.getActiveAllele(EnumTreeChromosome.SAPPINESS.ordinal()).getName(), genome.getActiveAllele(EnumTreeChromosome.MATURATION.ordinal()).getName()));
-		list.add(String.format("\u00A7dH: %s, \u00A7bG: %sx%s", genome.getActiveAllele(EnumTreeChromosome.HEIGHT.ordinal()).getName(), genome.getGirth(), genome.getGirth()));
+		list.add(String.format("\u00A76S: %s, \u00A7cM: %s", genome.getActiveAllele(EnumTreeChromosome.SAPPINESS).getName(), genome.getActiveAllele(EnumTreeChromosome.MATURATION).getName()));
+		list.add(String.format("\u00A7dH: %s, \u00A7bG: %sx%s", genome.getActiveAllele(EnumTreeChromosome.HEIGHT).getName(), genome.getGirth(), genome.getGirth()));
 
-		list.add(String.format("\u00A7eS: %s, \u00A7fY: %s", genome.getActiveAllele(EnumTreeChromosome.FERTILITY.ordinal()).getName(), genome.getActiveAllele(EnumTreeChromosome.YIELD.ordinal()).getName()));
+		list.add(String.format("\u00A7eS: %s, \u00A7fY: %s", genome.getActiveAllele(EnumTreeChromosome.FERTILITY).getName(), genome.getActiveAllele(EnumTreeChromosome.YIELD).getName()));
 
-		IAlleleBoolean primaryFireproof = (IAlleleBoolean)genome.getActiveAllele(EnumTreeChromosome.FIREPROOF.ordinal());
+		IAlleleBoolean primaryFireproof = (IAlleleBoolean)genome.getActiveAllele(EnumTreeChromosome.FIREPROOF);
 		if (primaryFireproof.getValue())
 			list.add(String.format("\u00A7c%s", StatCollector.translateToLocal("for.gui.fireresist")));
 
-		IAllele fruit = getGenome().getActiveAllele(EnumTreeChromosome.FRUITS.ordinal());
+		IAllele fruit = getGenome().getActiveAllele(EnumTreeChromosome.FRUITS);
 		if(fruit != Allele.fruitNone) {
 			String strike = "";
 			if (!canBearFruit())
