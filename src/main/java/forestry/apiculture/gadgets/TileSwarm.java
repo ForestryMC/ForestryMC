@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-import forestry.core.utils.InventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
 
 public class TileSwarm extends TileEntity {
 

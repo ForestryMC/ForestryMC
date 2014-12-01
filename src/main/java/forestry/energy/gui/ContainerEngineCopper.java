@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
@@ -20,7 +19,12 @@ import forestry.core.gui.slots.SlotClosed;
 import forestry.energy.gadgets.EngineCopper;
 
 public class ContainerEngineCopper extends ContainerForestry {
+<<<<<<< Updated upstream
 	protected final EngineCopper engine;
+=======
+
+	protected EngineCopper engine;
+>>>>>>> Stashed changes
 
 	public ContainerEngineCopper(InventoryPlayer player, EngineCopper tile) {
 		super(tile);
@@ -33,12 +37,15 @@ public class ContainerEngineCopper extends ContainerForestry {
 		this.addSlot(new SlotClosed(tile, 3, 116, 35));
 		this.addSlot(new SlotClosed(tile, 4, 116, 53));
 
-		for (int i = 0; i < 3; ++i)
-			for (int j = 0; j < 9; ++j)
+		for (int i = 0; i < 3; ++i) {
+			for (int j = 0; j < 9; ++j) {
 				this.addSlot(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+			}
+		}
 
-		for (int i = 0; i < 9; ++i)
+		for (int i = 0; i < 9; ++i) {
 			this.addSlot(new Slot(player, i, 8 + i * 18, 142));
+		}
 
 	}
 
@@ -52,12 +59,14 @@ public class ContainerEngineCopper extends ContainerForestry {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
+<<<<<<< Updated upstream
 		for (Object crafter : crafters)
 			engine.sendGUINetworkData(this, (ICrafting) crafter);
+=======
+		for (Object crafter : crafters) {
+			engine.sendGUINetworkData(this, (ICrafting) crafter);
+		}
+>>>>>>> Stashed changes
 	}
 
-	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return engine.isUseableByPlayer(entityplayer);
-	}
 }

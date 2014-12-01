@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import forestry.core.utils.AlyzerInventory;
+import forestry.core.inventory.AlyzerInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

@@ -23,7 +23,7 @@ import forestry.core.config.Config;
 import forestry.core.gadgets.TileBase;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.InventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.mail.EnumDeliveryState;
 import forestry.mail.IMailContainer;
 import forestry.mail.POBox;

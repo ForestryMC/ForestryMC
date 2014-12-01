@@ -32,7 +32,7 @@ import forestry.core.interfaces.ISocketable;
 import forestry.core.network.GuiId;
 import forestry.core.utils.DelayTimer;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.InventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.plugins.PluginIC2;
 
 public class EngineTin extends Engine implements ISocketable, IInventory {

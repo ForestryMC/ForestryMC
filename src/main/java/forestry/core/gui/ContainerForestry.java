@@ -213,7 +213,7 @@ public class ContainerForestry extends Container {
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer) {
+	public final boolean canInteractWith(EntityPlayer entityplayer) {
 		return inventory.isUseableByPlayer(entityplayer);
 	}
 }

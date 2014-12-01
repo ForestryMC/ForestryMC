@@ -22,7 +22,7 @@ import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumAccess;
-import forestry.core.utils.InventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.StackUtils;
 import forestry.mail.MailAddress;
 import forestry.mail.TradeStation;

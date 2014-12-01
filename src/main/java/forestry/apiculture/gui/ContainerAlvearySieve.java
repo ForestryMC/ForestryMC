@@ -50,8 +50,4 @@ public class ContainerAlvearySieve extends ContainerForestry {
 
 	}
 
-	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return tile.isUseableByPlayer(entityplayer);
-	}
 }

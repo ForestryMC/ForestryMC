@@ -35,8 +35,13 @@ import forestry.plugins.PluginMail;
 public class PostRegistry implements IPostRegistry {
 
 	public static PostOffice cachedPostOffice;
+<<<<<<< Updated upstream
 	public static final HashMap<IMailAddress, POBox> cachedPOBoxes = new HashMap<IMailAddress, POBox>();
 	public static final HashMap<IMailAddress, ITradeStation> cachedTradeStations = new HashMap<IMailAddress, ITradeStation>();
+=======
+	public static Map<IMailAddress, POBox> cachedPOBoxes = new HashMap<IMailAddress, POBox>();
+	public static Map<IMailAddress, ITradeStation> cachedTradeStations = new HashMap<IMailAddress, ITradeStation>();
+>>>>>>> Stashed changes
 
 	/**
 	 * @param world the Minecraft world the PO box will be in

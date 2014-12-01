@@ -89,16 +89,6 @@ public abstract class TileBase extends TileForestry implements IHintSource {
 	public void openGui(EntityPlayer player, TileBase tile) {
 	}
 
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		if (!Utils.isUseableByPlayer(player, this, worldObj, xCoord, yCoord, zCoord))
-			return false;
-		if (getAccess() == EnumAccess.PRIVATE)
-			return PlayerUtil.isSameGameProfile(owner, player.getGameProfile());
-
-		return true;
-	}
-
 	public boolean canDrainWithBucket() {
 		return false;
 	}

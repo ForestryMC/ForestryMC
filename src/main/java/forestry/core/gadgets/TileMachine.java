@@ -12,32 +12,26 @@ package forestry.core.gadgets;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.core.ISpecialInventory;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.interfaces.IClimatised;
 import forestry.core.interfaces.IHintSource;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.EnumAccess;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.Utils;
 import forestry.plugins.PluginApiculture;
 import forestry.plugins.PluginEnergy;
 import forestry.plugins.PluginFactory;
 import forestry.plugins.PluginIC2;
 import forestry.plugins.PluginMail;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.HashMap;
 
-public abstract class TileMachine extends TileForestry implements ISpecialInventory, IClimatised, IHintSource {
+public abstract class TileMachine extends TileForestry implements IClimatised, IHintSource {
 
 	public TileMachine() {
 	}
@@ -275,86 +269,6 @@ public abstract class TileMachine extends TileForestry implements ISpecialInvent
 		return false;
 	}
 
-	// IINVENTORY IMPLEMENTATION
-	@Override
-	public int getSizeInventory() {
-		return 0;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return null;
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return null;
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-	}
-
-	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return 64;
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		return null;
-	}
-
-	@Override
-	public void openInventory() {
-	}
-
-	@Override
-	public void closeInventory() {
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return Utils.isUseableByPlayer(player, this, worldObj, xCoord, yCoord, zCoord);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean hasCustomInventoryName() {
-		return super.hasCustomInventoryName();
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return super.isItemValidForSlot(slotIndex, itemstack);
-	}
-
-	// IPARTICULARINVENTORY IMPLEMENTATION
-	@Override
-	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
-		if (getAccess() == EnumAccess.PRIVATE)
-			return 0;
-
-		return 0;
-	}
-
-	@Override
-	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
-		if (getAccess() == EnumAccess.PRIVATE)
-			return new ItemStack[0];
-
-		return new ItemStack[0];
-	}
 
 	// INETWORKEDTILE IMPLEMENTATION
 	@Override

@@ -2,7 +2,7 @@ package forestry.core.gui;
 
 import forestry.core.gui.slots.SlotCustom;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.AlyzerInventory;
+import forestry.core.inventory.AlyzerInventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;

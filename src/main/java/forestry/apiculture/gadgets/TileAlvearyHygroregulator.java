@@ -32,9 +32,10 @@ import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
+import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.utils.Utils;
 
 public class TileAlvearyHygroregulator extends TileAlveary implements IInventory, ILiquidTankContainer {
 
@@ -43,6 +44,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 
 	/* RECIPE MANAGMENT */
 	private static class HygroregulatorRecipe {
+
 		public final FluidStack liquid;
 		public final int transferTime;
 		public final float humidChange;
@@ -59,7 +61,6 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	private final HygroregulatorRecipe[] recipes;
 
 	/* MEMBERS */
-	private final InventoryAdapter canInventory = new InventoryAdapter(1, "CanInv");
 	private final TankManager tankManager;
 	private final FilteredTank liquidTank;
 
@@ -69,6 +70,8 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	public TileAlvearyHygroregulator() {
 		super(BLOCK_META);
 
+		setInternalInventory(new TileInventoryAdapter(this, 1, "CanInv"));
+
 		Fluid water = LiquidHelper.getFluid(Defaults.LIQUID_WATER);
 		Fluid lava = LiquidHelper.getFluid(Defaults.LIQUID_LAVA);
 		Fluid liquidIce = LiquidHelper.getFluid(Defaults.LIQUID_ICE);
@@ -76,9 +79,9 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 		liquidTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, water, lava, liquidIce);
 		tankManager = new TankManager(liquidTank);
 
-		recipes = new HygroregulatorRecipe[] { new HygroregulatorRecipe(new FluidStack(water, 1), 1, 0.01f, -0.005f),
-				new HygroregulatorRecipe(new FluidStack(lava, 1), 10, -0.01f, +0.005f),
-				new HygroregulatorRecipe(new FluidStack(liquidIce, 1), 10, 0.02f, -0.01f) };
+		recipes = new HygroregulatorRecipe[]{new HygroregulatorRecipe(new FluidStack(water, 1), 1, 0.01f, -0.005f),
+			new HygroregulatorRecipe(new FluidStack(lava, 1), 10, -0.01f, +0.005f),
+			new HygroregulatorRecipe(new FluidStack(liquidIce, 1), 10, 0.02f, -0.01f)};
 	}
 
 	@Override
@@ -94,11 +97,12 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	/* UPDATING */
 	private HygroregulatorRecipe getRecipe(FluidStack liquid) {
 		HygroregulatorRecipe recipe = null;
-		for (HygroregulatorRecipe rec : recipes)
+		for (HygroregulatorRecipe rec : recipes) {
 			if (rec.liquid.isFluidEqual(liquid)) {
 				recipe = rec;
 				break;
 			}
+		}
 		return recipe;
 	}
 
@@ -131,11 +135,13 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
 			return;
 
+		TileInventoryAdapter canInventory = getInternalInventory();
+
 		// Check if we have suitable items waiting in the item slot
 		if (canInventory.getStackInSlot(0) != null) {
 			FluidContainerData container = LiquidHelper.getLiquidContainer(canInventory.getStackInSlot(0));
-			if (container != null &&
-					(container.fluid.getFluid() == FluidRegistry.WATER || container.fluid.getFluid() == FluidRegistry.LAVA)) {
+			if (container != null
+					&& (container.fluid.getFluid() == FluidRegistry.WATER || container.fluid.getFluid() == FluidRegistry.LAVA)) {
 
 				canInventory.setInventorySlotContents(0, StackUtils.replenishByContainer(this, canInventory.getStackInSlot(0), container, liquidTank));
 				if (canInventory.getStackInSlot(0).stackSize <= 0)
@@ -154,9 +160,6 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
-
-		canInventory.readFromNBT(nbttagcompound);
-
 		tankManager.readTanksFromNBT(nbttagcompound);
 
 		transferTime = nbttagcompound.getInteger("TransferTime");
@@ -170,9 +173,6 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
-
-		canInventory.writeToNBT(nbttagcompound);
-
 		tankManager.writeTanksToNBT(nbttagcompound);
 
 		nbttagcompound.setInteger("TransferTime", transferTime);
@@ -192,38 +192,38 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 
 	@Override
 	public IInventory getInventory() {
-		return canInventory;
+		return getInternalInventory();
 	}
 
 	/* IINVENTORY */
 	@Override
 	public int getSizeInventory() {
-		if (canInventory != null)
-			return canInventory.getSizeInventory();
+		if (getInternalInventory() != null)
+			return getInternalInventory().getSizeInventory();
 		else
 			return 0;
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int slotIndex) {
-		if (canInventory != null)
-			return canInventory.getStackInSlot(slotIndex);
+		if (getInternalInventory() != null)
+			return getInternalInventory().getStackInSlot(slotIndex);
 		else
 			return null;
 	}
 
 	@Override
 	public ItemStack decrStackSize(int slotIndex, int amount) {
-		if (canInventory != null)
-			return canInventory.decrStackSize(slotIndex, amount);
+		if (getInternalInventory() != null)
+			return getInternalInventory().decrStackSize(slotIndex, amount);
 		else
 			return null;
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slotIndex) {
-		if (canInventory != null)
-			return canInventory.getStackInSlotOnClosing(slotIndex);
+		if (getInternalInventory() != null)
+			return getInternalInventory().getStackInSlotOnClosing(slotIndex);
 		else
 			return null;
 	}
@@ -231,19 +231,24 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	@Override
 	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
 		// Client side handling for container synch
-		if (canInventory == null && !Proxies.common.isSimulating(worldObj))
+		if (getInternalInventory() == null && !Proxies.common.isSimulating(worldObj))
 			createInventory();
 
-		if (canInventory != null)
-			canInventory.setInventorySlotContents(slotIndex, itemstack);
+		if (getInternalInventory() != null)
+			getInternalInventory().setInventorySlotContents(slotIndex, itemstack);
 	}
 
 	@Override
 	public int getInventoryStackLimit() {
-		if (canInventory != null)
-			return canInventory.getInventoryStackLimit();
+		if (getInternalInventory() != null)
+			return getInternalInventory().getInventoryStackLimit();
 		else
 			return 0;
+	}
+
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer player) {
+		return Utils.isUseableByPlayer(player, this);
 	}
 
 	@Override
@@ -254,27 +259,16 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	public void closeInventory() {
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return super.isUseableByPlayer(player);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean hasCustomInventoryName() {
-		return super.hasCustomInventoryName();
+		return false;
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
+		if (!getInternalInventory().isItemValidForSlot(slotIndex, itemstack))
+			return false;
+
 		if (slotIndex == 0) {
 			FluidStack fluid = LiquidHelper.getFluidStackInContainer(itemstack);
 			if (fluid == null || fluid.amount <= 0)
@@ -282,7 +276,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 			return liquidTank.accepts(fluid.getFluid());
 		}
 
-		return super.isItemValidForSlot(slotIndex, itemstack);
+		return false;
 	}
 
 	/* ILIQUIDTANKCONTAINER */
@@ -296,6 +290,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 		return tankManager.fill(from, resource, doFill);
 	}
 
+	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
 		return tankManager.drain(from, resource, doDrain);
 	}
@@ -321,8 +316,10 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	}
 
 	@Override
-	public void getGUINetworkData(int messageId, int data) {}
+	public void getGUINetworkData(int messageId, int data) {
+	}
 
 	@Override
-	public void sendGUINetworkData(Container container, ICrafting iCrafting) {}
+	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
+	}
 }

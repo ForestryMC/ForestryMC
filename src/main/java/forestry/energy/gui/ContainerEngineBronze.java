@@ -10,6 +10,12 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
+<<<<<<< Updated upstream
+=======
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
+
+>>>>>>> Stashed changes
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotLiquidContainer;
 import forestry.energy.gadgets.EngineBronze;
@@ -18,7 +24,12 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 
 public class ContainerEngineBronze extends ContainerLiquidTanks {
+<<<<<<< Updated upstream
 	protected final EngineBronze engine;
+=======
+
+	protected EngineBronze engine;
+>>>>>>> Stashed changes
 
 	public ContainerEngineBronze(InventoryPlayer player, EngineBronze engine) {
 		super(engine, engine);
@@ -27,18 +38,16 @@ public class ContainerEngineBronze extends ContainerLiquidTanks {
 		this.addSlot(new SlotLiquidContainer(engine, EngineBronze.SLOT_CAN, 143, 40));
 
 		int i;
-		for (i = 0; i < 3; ++i)
-			for (int var4 = 0; var4 < 9; ++var4)
+		for (i = 0; i < 3; ++i) {
+			for (int var4 = 0; var4 < 9; ++var4) {
 				this.addSlot(new Slot(player, var4 + i * 9 + 9, 8 + var4 * 18, 84 + i * 18));
+			}
+		}
 
-		for (i = 0; i < 9; ++i)
+		for (i = 0; i < 9; ++i) {
 			this.addSlot(new Slot(player, i, 8 + i * 18, 142));
+		}
 
-	}
-
-	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return engine.isUseableByPlayer(entityplayer);
 	}
 
 }

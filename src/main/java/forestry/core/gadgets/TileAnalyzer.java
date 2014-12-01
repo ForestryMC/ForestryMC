@@ -42,7 +42,7 @@ import forestry.core.inventory.InvTools;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.inventory.wrappers.InventoryMapper;
-import forestry.core.utils.InventoryAdapter;
+import forestry.core.inventory.TileInventoryAdapter;
 import net.minecraft.inventory.IInventory;
 
 public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankContainer {
@@ -57,8 +57,6 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	public static final short SLOT_OUTPUT_1 = 8;
 
 	/* MEMBER */
-	private final InventoryAdapter inventory = new InventoryAdapter(12, "Items");
-
 	private int analyzeTime;
 
 	@EntityNetData
@@ -68,13 +66,15 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 	private final Stack<ItemStack> pendingProducts = new Stack<ItemStack>();
 
-	private final IInventory invInput = new InventoryMapper(inventory, SLOT_INPUT_1, 6);
+	private final IInventory invInput;
 
 	/* CONSTRUCTOR */
 	public TileAnalyzer() {
 		super(800, 40, Defaults.MACHINE_MAX_ENERGY);
+		setInternalInventory(new TileInventoryAdapter(this, 12, "Items"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, Fluids.HONEY.get());
 		tankManager = new TankManager(resourceTank);
+		invInput = new InventoryMapper(getInternalInventory(), SLOT_INPUT_1, 6);
 	}
 
 	@Override
@@ -100,17 +100,15 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		// / Pending Products
 		NBTTagList nbttaglist = new NBTTagList();
 		ItemStack[] pending = pendingProducts.toArray(new ItemStack[pendingProducts.size()]);
-		for (int i = 0; i < pending.length; i++)
+		for (int i = 0; i < pending.length; i++) {
 			if (pending[i] != null) {
 				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 				nbttagcompound1.setByte("Slot", (byte) i);
 				pending[i].writeToNBT(nbttagcompound1);
 				nbttaglist.appendTag(nbttagcompound1);
 			}
+		}
 		nbttagcompound.setTag("PendingProducts", nbttaglist);
-
-		// / Inventory
-		inventory.writeToNBT(nbttagcompound);
 	}
 
 	@Override
@@ -127,9 +125,6 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 			pendingProducts.add(ItemStack.loadItemStackFromNBT(nbttagcompound1));
 		}
-
-		// / Inventory
-		inventory.readFromNBT(nbttagcompound);
 	}
 
 	@Override
@@ -249,7 +244,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			return false;
 
 		ItemStack next = pendingProducts.peek();
-		if (inventory.tryAddStack(next, SLOT_OUTPUT_1, inventory.getSizeInventory() - SLOT_OUTPUT_1, true)) {
+		if (getInternalInventory().tryAddStack(next, SLOT_OUTPUT_1, getInternalInventory().getSizeInventory() - SLOT_OUTPUT_1, true)) {
 			pendingProducts.pop();
 			return true;
 		}
@@ -270,7 +265,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		if (analyzeTime > 0)
 			return true;
 
-		return getErrorState() == EnumErrorCode.OK ||getErrorState() == EnumErrorCode.NOPOWER;
+		return getErrorState() == EnumErrorCode.OK || getErrorState() == EnumErrorCode.NOPOWER;
 	}
 
 	public int getProgressScaled(int i) {
@@ -305,61 +300,33 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 	/* ISIDEDINVENTORY */
 	@Override
-	public InventoryAdapter getInternalInventory() {
-		return inventory;
-	}
-
-	@Override
-	protected boolean canTakeStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-		if (!super.canTakeStackFromSide(slotIndex, itemstack, side))
-			return false;
-
-		return slotIndex >= SLOT_OUTPUT_1 && slotIndex < SLOT_OUTPUT_1 + 4;
-	}
-
-	@Override
-	protected boolean canPutStackFromSide(int slotIndex, ItemStack stack, int side) {
-
-		if (!super.canPutStackFromSide(slotIndex, stack, side))
-			return false;
-
-		if (slotIndex >= SLOT_INPUT_1 && slotIndex < SLOT_INPUT_1 + 6)
-			return AlleleManager.alleleRegistry.isIndividual(stack);
-
-		if (slotIndex == SLOT_CAN)
-			return Fluids.HONEY.isContained(stack);
-
-		return false;
-	}
-
-	@Override
 	public int getSizeInventory() {
-		return inventory.getSizeInventory();
+		return getInternalInventory().getSizeInventory();
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
+		return getInternalInventory().getStackInSlot(i);
 	}
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
-		return inventory.decrStackSize(i, j);
+		return getInternalInventory().decrStackSize(i, j);
 	}
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
+		getInternalInventory().setInventorySlotContents(i, itemstack);
 	}
 
 	@Override
 	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
+		return getInternalInventory().getInventoryStackLimit();
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slot) {
-		return inventory.getStackInSlotOnClosing(slot);
+		return getInternalInventory().getStackInSlotOnClosing(slot);
 	}
 
 	@Override
@@ -370,52 +337,46 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	public void closeInventory() {
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return super.isUseableByPlayer(player);
+		return getInternalInventory().isUseableByPlayer(player);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean hasCustomInventoryName() {
-		return super.hasCustomInventoryName();
+		return false;
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return super.isItemValidForSlot(slotIndex, itemstack);
+	public boolean isItemValidForSlot(int slot, ItemStack stack) {
+		if (!getInternalInventory().isItemValidForSlot(slot, stack))
+			return false;
+
+		if (slot >= SLOT_INPUT_1 && slot < SLOT_INPUT_1 + 6)
+			return AlleleManager.alleleRegistry.isIndividual(stack);
+
+		if (slot == SLOT_CAN)
+			return Fluids.HONEY.isContained(stack);
+
+		return false;
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return super.canInsertItem(i, itemstack, j);
+	public boolean canInsertItem(int slot, ItemStack stack, int side) {
+		return isItemValidForSlot(side, stack);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return super.canExtractItem(i, itemstack, j);
+	public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
+		if (!getInternalInventory().canExtractItem(slotIndex, stack, side))
+			return false;
+
+		return slotIndex >= SLOT_OUTPUT_1 && slotIndex < SLOT_OUTPUT_1 + 4;
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
-		return super.getAccessibleSlotsFromSide(side);
+		return getInternalInventory().getAccessibleSlotsFromSide(side);
 	}
 
 	/* ILIQUIDCONTAINER */

@@ -14,7 +14,7 @@ import buildcraft.api.statements.ITriggerExternal;
 import cpw.mods.fml.common.Optional;
 import forestry.api.core.ITileStructure;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.InventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.farming.triggers.FarmingTriggers;

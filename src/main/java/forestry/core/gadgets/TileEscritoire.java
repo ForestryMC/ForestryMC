@@ -29,9 +29,9 @@ import forestry.core.network.PacketTileNBT;
 import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.InventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.TileInventoryAdapter;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.utils.Utils;
 
 public class TileEscritoire extends TileBase implements ISidedInventory, IRenderableMachine, ICrafter {

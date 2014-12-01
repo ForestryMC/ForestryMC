@@ -25,7 +25,7 @@ import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.InventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
@@ -64,6 +64,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 
 	/* RECIPE MANAGMENT */
 	public static class Recipe {
+
 		public final int cyclesPerUnit;
 		public final FluidStack input;
 		public final ItemStack can;
@@ -86,7 +87,12 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	}
 
 	public static class RecipeManager implements ICraftingProvider {
+<<<<<<< Updated upstream
 		public static final ArrayList<MachineBottler.Recipe> recipes = new ArrayList<MachineBottler.Recipe>();
+=======
+
+		public static ArrayList<MachineBottler.Recipe> recipes = new ArrayList<MachineBottler.Recipe>();
+>>>>>>> Stashed changes
 
 		/**
 		 * 
@@ -105,9 +111,9 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 			}
 
 			// No recipe matched. See if the liquid dictionary has anything.
-			if(FluidContainerRegistry.isEmptyContainer(empty)) {
+			if (FluidContainerRegistry.isEmptyContainer(empty)) {
 				ItemStack filled = FluidContainerRegistry.fillFluidContainer(res, empty);
-				if(filled != null) {
+				if (filled != null) {
 					FluidStack fluidStack = FluidContainerRegistry.getFluidForFilledItem(filled);
 					Recipe recipe = new Recipe(CYCLES_FILLING_DEFAULT, fluidStack, empty, filled);
 					recipes.add(recipe);
@@ -133,8 +139,9 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		public Map<Object[], Object[]> getRecipes() {
 			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
 
-			for (Recipe recipe : recipes)
-				recipeList.put(new Object[] { recipe.input, recipe.can }, new Object[] { recipe.bottled });
+			for (Recipe recipe : recipes) {
+				recipeList.put(new Object[]{recipe.input, recipe.can}, new Object[]{recipe.bottled});
+			}
 
 			return recipeList;
 		}
@@ -184,13 +191,14 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 
 		NBTTagList nbttaglist = new NBTTagList();
 		ItemStack[] offspring = pendingProducts.toArray(new ItemStack[pendingProducts.size()]);
-		for (int i = 0; i < offspring.length; i++)
+		for (int i = 0; i < offspring.length; i++) {
 			if (offspring[i] != null) {
 				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 				nbttagcompound1.setByte("Slot", (byte) i);
 				offspring[i].writeToNBT(nbttagcompound1);
 				nbttaglist.appendTag(nbttagcompound1);
 			}
+		}
 		nbttagcompound.setTag("PendingProducts", nbttaglist);
 	}
 
@@ -379,14 +387,43 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	}
 
 	/* IINVENTORY */
-	@Override public int getSizeInventory() { return inventory.getSizeInventory(); }
-	@Override public ItemStack getStackInSlot(int i) { return inventory.getStackInSlot(i); }
-	@Override public ItemStack decrStackSize(int i, int j) { return inventory.decrStackSize(i, j); }
-	@Override public void setInventorySlotContents(int i, ItemStack itemstack) { inventory.setInventorySlotContents(i, itemstack); }
-	@Override public ItemStack getStackInSlotOnClosing(int slot) { return inventory.getStackInSlotOnClosing(slot); }
-	@Override public int getInventoryStackLimit() { return inventory.getInventoryStackLimit(); }
-	@Override public void openInventory() {}
-	@Override public void closeInventory() {}
+	@Override
+	public int getSizeInventory() {
+		return inventory.getSizeInventory();
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int i) {
+		return inventory.getStackInSlot(i);
+	}
+
+	@Override
+	public ItemStack decrStackSize(int i, int j) {
+		return inventory.decrStackSize(i, j);
+	}
+
+	@Override
+	public void setInventorySlotContents(int i, ItemStack itemstack) {
+		inventory.setInventorySlotContents(i, itemstack);
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int slot) {
+		return inventory.getStackInSlotOnClosing(slot);
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		return inventory.getInventoryStackLimit();
+	}
+
+	@Override
+	public void openInventory() {
+	}
+
+	@Override
+	public void closeInventory() {
+	}
 
 	/**
 	 * TODO: just a specialsource workaround
@@ -404,36 +441,38 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		return super.hasCustomInventoryName();
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return super.isItemValidForSlot(slotIndex, itemstack);
+		if (!getInternalInventory().isItemValidForSlot(slotIndex, itemstack))
+			return false;
+
+		if (slotIndex == SLOT_RESOURCE)
+			return FluidContainerRegistry.isEmptyContainer(itemstack);
+
+		if (slotIndex == SLOT_CAN) {
+			FluidContainerData container = LiquidHelper.getLiquidContainer(itemstack);
+			return container != null && RecipeManager.isInput(container.fluid);
+		}
+
+		return false;
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
+
 	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return super.canInsertItem(i, itemstack, j);
+	public boolean canInsertItem(int slotIndex, ItemStack itemstack, int side) {
+		return isItemValidForSlot(slotIndex, itemstack);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
+
 	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return super.canExtractItem(i, itemstack, j);
+	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+		return getInternalInventory().canExtractItem(side, itemstack, side) && slotIndex == SLOT_PRODUCT;
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
+
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
-		return super.getAccessibleSlotsFromSide(side);
+		return getInternalInventory().getAccessibleSlotsFromSide(side);
 	}
 
 	/* ISIDEDINVENTORY */
@@ -445,7 +484,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	@Override
 	protected boolean canTakeStackFromSide(int slotIndex, ItemStack itemstack, int side) {
 
-		if(!super.canTakeStackFromSide(slotIndex, itemstack, side))
+		if (!super.canTakeStackFromSide(slotIndex, itemstack, side))
 			return false;
 
 		return slotIndex == SLOT_PRODUCT;
@@ -454,18 +493,6 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	@Override
 	protected boolean canPutStackFromSide(int slotIndex, ItemStack itemstack, int side) {
 
-		if(!super.canPutStackFromSide(slotIndex, itemstack, side))
-			return false;
-
-		if(slotIndex == SLOT_RESOURCE)
-			return FluidContainerRegistry.isEmptyContainer(itemstack);
-
-		if(slotIndex == SLOT_CAN) {
-			FluidContainerData container = LiquidHelper.getLiquidContainer(itemstack);
-			return container != null && RecipeManager.isInput(container.fluid);
-		}
-
-		return false;
 	}
 
 	/* ILIQUIDCONTAINER */

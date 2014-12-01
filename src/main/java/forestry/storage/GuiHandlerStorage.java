@@ -23,7 +23,7 @@ import forestry.core.config.Defaults;
 import forestry.core.gui.GuiNaturalistInventory;
 import forestry.core.gui.IPagedInventory;
 import forestry.core.network.GuiId;
-import forestry.core.utils.ItemInventory;
+import forestry.core.inventory.ItemInventory;
 import forestry.storage.gui.ContainerBackpack;
 import forestry.storage.gui.ContainerNaturalistBackpack;
 import forestry.storage.gui.GuiBackpack;

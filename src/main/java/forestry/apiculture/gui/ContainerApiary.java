@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
@@ -22,7 +21,6 @@ import forestry.core.config.ForestryItem;
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.slots.SlotClosed;
 import forestry.core.gui.slots.SlotCustom;
-import forestry.core.utils.Utils;
 
 public class ContainerApiary extends ContainerForestry {
 
@@ -33,29 +31,29 @@ public class ContainerApiary extends ContainerForestry {
 
 		this.tile = tile;
 		tile.sendNetworkUpdate();
-		IInventory inventory = tile.getInternalInventory();
+		IInventory inv = tile.getInternalInventory();
 
 		// Queen/Princess
-		this.addSlot(new SlotCustom(inventory, TileBeehouse.SLOT_QUEEN, 29, 39, ForestryItem.beePrincessGE, ForestryItem.beeQueenGE));
+		this.addSlot(new SlotCustom(inv, TileBeehouse.SLOT_QUEEN, 29, 39, ForestryItem.beePrincessGE, ForestryItem.beeQueenGE));
 
 		// Drone
-		this.addSlot(new SlotCustom(inventory, TileBeehouse.SLOT_DRONE, 29, 65, ForestryItem.beeDroneGE));
+		this.addSlot(new SlotCustom(inv, TileBeehouse.SLOT_DRONE, 29, 65, ForestryItem.beeDroneGE));
 
 		// Frames
 		if (hasFrames) {
-			this.addSlot(new SlotCustom(inventory, TileBeehouse.SLOT_FRAMES_1, 66, 23, IHiveFrame.class));
-			this.addSlot(new SlotCustom(inventory, TileBeehouse.SLOT_FRAMES_1 + 1, 66, 52, IHiveFrame.class));
-			this.addSlot(new SlotCustom(inventory, TileBeehouse.SLOT_FRAMES_1 + 2, 66, 81, IHiveFrame.class));
+			this.addSlot(new SlotCustom(inv, TileBeehouse.SLOT_FRAMES_1, 66, 23, IHiveFrame.class));
+			this.addSlot(new SlotCustom(inv, TileBeehouse.SLOT_FRAMES_1 + 1, 66, 52, IHiveFrame.class));
+			this.addSlot(new SlotCustom(inv, TileBeehouse.SLOT_FRAMES_1 + 2, 66, 81, IHiveFrame.class));
 		}
 
 		// Product Inventory
-		this.addSlot(new SlotClosed(inventory, 2, 116, 52));
-		this.addSlot(new SlotClosed(inventory, 3, 137, 39));
-		this.addSlot(new SlotClosed(inventory, 4, 137, 65));
-		this.addSlot(new SlotClosed(inventory, 5, 116, 78));
-		this.addSlot(new SlotClosed(inventory, 6, 95, 65));
-		this.addSlot(new SlotClosed(inventory, 7, 95, 39));
-		this.addSlot(new SlotClosed(inventory, 8, 116, 26));
+		this.addSlot(new SlotClosed(inv, 2, 116, 52));
+		this.addSlot(new SlotClosed(inv, 3, 137, 39));
+		this.addSlot(new SlotClosed(inv, 4, 137, 65));
+		this.addSlot(new SlotClosed(inv, 5, 116, 78));
+		this.addSlot(new SlotClosed(inv, 6, 95, 65));
+		this.addSlot(new SlotClosed(inv, 7, 95, 39));
+		this.addSlot(new SlotClosed(inv, 8, 116, 26));
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++) {
@@ -82,8 +80,4 @@ public class ContainerApiary extends ContainerForestry {
 		}
 	}
 
-	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return Utils.isUseableByPlayer(entityplayer, tile, tile.getWorld(), tile.xCoord, tile.yCoord, tile.zCoord);
-	}
 }

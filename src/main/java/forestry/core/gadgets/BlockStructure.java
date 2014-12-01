@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import forestry.api.core.ITileStructure;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
+import forestry.core.utils.Utils;
 
 public abstract class BlockStructure extends BlockForestry {
 
@@ -60,7 +61,7 @@ public abstract class BlockStructure extends BlockForestry {
 			return false;
 
 		TileForestry tile = (TileForestry) world.getTileEntity(x, y, z);
-		if (!tile.isUseableByPlayer(player))
+		if (!Utils.isUseableByPlayer(player, tile))
 			return false;
 
 		if (!Proxies.common.isSimulating(world))

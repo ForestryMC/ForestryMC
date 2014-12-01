@@ -28,7 +28,7 @@ import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.InventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;

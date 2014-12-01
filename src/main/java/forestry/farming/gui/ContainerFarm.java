@@ -24,7 +24,7 @@ import forestry.core.gui.slots.SlotCustom;
 import forestry.core.gui.slots.SlotForestry;
 import forestry.core.gui.slots.SlotLiquidContainer;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.core.utils.TileInventoryAdapter;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.farming.gadgets.TileFarmPlain;
 import forestry.plugins.PluginFarming;
 

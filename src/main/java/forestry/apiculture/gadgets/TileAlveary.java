@@ -23,9 +23,6 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.TileInventoryAdapter;
-import forestry.core.utils.Utils;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -40,8 +37,6 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	private boolean isMaster;
 	protected int masterX, masterZ;
 	protected int masterY = -99;
-
-	protected TileInventoryAdapter inventory;
 	protected final int componentBlockMeta;
 
 	public TileAlveary(int componentBlockMeta) {
@@ -147,7 +142,7 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 		setCentralTE(null);
 		isMaster = true;
 
-		if (inventory == null)
+		if (getInternalInventory() == null)
 			createInventory();
 	}
 
@@ -215,7 +210,7 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 
 	@Override
 	public IInventory getInventory() {
-		return inventory;
+		return getInternalInventory();
 	}
 
 	/* IALVEARY COMPONENT */
@@ -256,11 +251,6 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 		res.add(ApicultureTriggers.missingQueen);
 		res.add(ApicultureTriggers.missingDrone);
 		return res;
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return Utils.isUseableByPlayer(player, this, worldObj, xCoord, yCoord, zCoord);
 	}
 
 }

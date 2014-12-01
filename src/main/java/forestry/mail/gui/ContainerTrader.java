@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -37,11 +36,14 @@ public class ContainerTrader extends ContainerForestry {
 		this.addSlot(new Slot(inventory, TradeStation.SLOT_TRADEGOOD, 78, 109));
 
 		// Exchange
-		for (int i = 0; i < 2; i++)
-			for (int j = 0; j < 2; j++)
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
 				addSlot(new Slot(inventory, TradeStation.SLOT_EXCHANGE_1 + j + i * 2, 69 + j * 18, 55 + i * 18));
+			}
+		}
 
 		// Stamps
+<<<<<<< Updated upstream
 		for (int i = 0; i < 2; i++)
 			for (int j = 0; j < 2; j++)
 				addSlot(new SlotCustom(inventory, TradeStation.SLOT_STAMPS_1 + j + i * 2, 15 + j * 18, 37 + i * 18, ItemStamps.class));
@@ -50,24 +52,45 @@ public class ContainerTrader extends ContainerForestry {
 		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < 2; j++)
 				addSlot(new SlotCustom(inventory, TradeStation.SLOT_LETTERS_1 + j + i * 2, 15 + j * 18, 73 + i * 18, Items.paper));
+=======
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				addSlot(new SlotCustom(inventory, TradeStation.SLOT_STAMPS_1 + j + i * 2, 15 + j * 18, 37 + i * 18, new Object[]{ItemStamps.class}));
+			}
+		}
+
+		// Letters
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 2; j++) {
+				addSlot(new SlotCustom(inventory, TradeStation.SLOT_LETTERS_1 + j + i * 2, 15 + j * 18, 73 + i * 18, new Object[]{Items.paper}));
+			}
+		}
+>>>>>>> Stashed changes
 
 		// Buffers
 		final int bufCols = 5;
-		for (int i = 0; i < 3; i++)
-			for (int j = 0; j < bufCols; j++)
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < bufCols; j++) {
 				addSlot(new Slot(inventory, TradeStation.SLOT_RECEIVE_BUFFER + j + i * bufCols, 123 + j * 18, 19 + i * 18));
+			}
+		}
 
-		for (int i = 0; i < 2; i++)
-			for (int j = 0; j < bufCols; j++)
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < bufCols; j++) {
 				addSlot(new Slot(inventory, TradeStation.SLOT_SEND_BUFFER + j + i * bufCols, 123 + j * 18, (19 + (18 * 4)) + i * 18));
+			}
+		}
 
 		// Player inventory
-		for (int i = 0; i < 3; i++)
-			for (int j = 0; j < 9; j++)
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 9; j++) {
 				addSlot(new Slot(player, j + i * 9 + 9, 33 + j * 18, 138 + i * 18));
+			}
+		}
 		// Player hotbar
-		for (int i = 0; i < 9; i++)
+		for (int i = 0; i < 9; i++) {
 			addSlot(new Slot(player, i, 33 + i * 18, 196));
+		}
 
 	}
 
@@ -79,8 +102,4 @@ public class ContainerTrader extends ContainerForestry {
 		return machine.getAddress();
 	}
 
-	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return true;
-	}
 }

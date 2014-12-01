@@ -20,7 +20,7 @@ import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
 import forestry.api.mail.TradeStationInfo;
 import forestry.core.config.ForestryItem;
-import forestry.core.utils.InventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.StackUtils;
 import forestry.mail.items.ItemLetter;

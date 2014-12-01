@@ -19,7 +19,7 @@ import net.minecraft.world.WorldSavedData;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.PostManager;
 import forestry.api.mail.IMailAddress;
-import forestry.core.utils.InventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
 
 public class POBox extends WorldSavedData implements IInventory {
 

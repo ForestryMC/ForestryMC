@@ -19,7 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
@@ -27,20 +26,25 @@ import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.ISpecialInventory;
 import forestry.apiculture.worldgen.WorldGenHive;
 import forestry.apiculture.worldgen.WorldGenHiveSwamer;
+import forestry.core.config.Defaults;
+import forestry.core.config.ForestryItem;
+import forestry.core.inventory.wrappers.IInvSlot;
+import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.TileInventoryAdapter;
+import forestry.core.utils.StackUtils;
+import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.utils.Utils;
 import forestry.plugins.PluginApiculture;
+import net.minecraft.inventory.ISidedInventory;
 
-public class TileAlvearySwarmer extends TileAlveary implements ISpecialInventory {
+public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 
 	/* CONSTANTS */
 	public static final int BLOCK_META = 2;
 
-	TileInventoryAdapter swarmerInventory;
 	private final Stack<ItemStack> pendingSpawns = new Stack<ItemStack>();
 
 	public TileAlvearySwarmer() {
@@ -50,7 +54,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISpecialInventory
 	@Override
 	public void initialize() {
 		super.initialize();
-		if (swarmerInventory == null)
+		if (getInternalInventory() == null)
 			createInventory();
 	}
 
@@ -89,10 +93,10 @@ public class TileAlvearySwarmer extends TileAlveary implements ISpecialInventory
 		int slot = getInducerSlot();
 		if (slot < 0)
 			return;
-		int chance = getChanceFor(swarmerInventory.getStackInSlot(slot));
+		int chance = getChanceFor(getInternalInventory().getStackInSlot(slot));
 
 		// Remove resource
-		swarmerInventory.decrStackSize(slot, 1);
+		getInternalInventory().decrStackSize(slot, 1);
 
 		// Try to spawn princess
 		if (worldObj.rand.nextInt(1000) >= chance)
@@ -115,12 +119,13 @@ public class TileAlvearySwarmer extends TileAlveary implements ISpecialInventory
 	}
 
 	private int getInducerSlot() {
-		for (int i = 0; i < swarmerInventory.getSizeInventory(); i++) {
-			if (swarmerInventory.getStackInSlot(i) == null)
+		for (IInvSlot slot : InventoryIterator.getIterable(getInternalInventory())) {
+			ItemStack stack = slot.getStackInSlot();
+			if (stack == null)
 				continue;
 			for (Entry<ItemStack, Integer> entry : BeeManager.inducers.entrySet()) {
-				if (entry.getKey().isItemEqual(swarmerInventory.getStackInSlot(i)))
-					return i;
+				if (entry.getKey().isItemEqual(stack))
+					return slot.getIndex();
 			}
 		}
 
@@ -130,7 +135,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISpecialInventory
 	private void trySpawnSwarm() {
 
 		ItemStack toSpawn = pendingSpawns.peek();
-		WorldGenHive generator = new WorldGenHiveSwamer(new ItemStack[] { toSpawn });
+		WorldGenHive generator = new WorldGenHiveSwamer(new ItemStack[]{toSpawn});
 
 		int i = 0;
 		while (i < 10) {
@@ -154,7 +159,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISpecialInventory
 	/* TEXTURES */
 	@Override
 	public int getIcon(int side, int metadata) {
-		if(side == 0 || side == 1)
+		if (side == 0 || side == 1)
 			return BlockAlveary.BOTTOM;
 
 		if (pendingSpawns.size() > 0)
@@ -166,10 +171,9 @@ public class TileAlvearySwarmer extends TileAlveary implements ISpecialInventory
 	/* SAVING & LOADING */
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		if (swarmerInventory == null)
+		if (getInternalInventory() == null)
 			createInventory();
-		swarmerInventory.readFromNBT(nbttagcompound);
+		super.readFromNBT(nbttagcompound);
 
 		NBTTagList nbttaglist = nbttagcompound.getTagList("PendingSpawns", 10);
 		for (int i = 0; i < nbttaglist.tagCount(); i++) {
@@ -182,75 +186,60 @@ public class TileAlvearySwarmer extends TileAlveary implements ISpecialInventory
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
-		if (swarmerInventory != null)
-			swarmerInventory.writeToNBT(nbttagcompound);
 
 		NBTTagList nbttaglist = new NBTTagList();
 		ItemStack[] offspring = pendingSpawns.toArray(new ItemStack[pendingSpawns.size()]);
-		for (int i = 0; i < offspring.length; i++)
+		for (int i = 0; i < offspring.length; i++) {
 			if (offspring[i] != null) {
 				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 				nbttagcompound1.setByte("Slot", (byte) i);
 				offspring[i].writeToNBT(nbttagcompound1);
 				nbttaglist.appendTag(nbttagcompound1);
 			}
+		}
 		nbttagcompound.setTag("PendingSpawns", nbttaglist);
 
 	}
 
 	@Override
 	protected void createInventory() {
-		swarmerInventory = new TileInventoryAdapter(this, 4, "SwarmInv");
+		setInternalInventory(new TileInventoryAdapter(this, 4, "SwarmInv"));
 	}
 
 	@Override
 	public IInventory getInventory() {
-		return swarmerInventory;
-	}
-
-	/* ISPECIALINVENTORY */
-	@Override
-	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
-		if (swarmerInventory != null)
-			return swarmerInventory.addStack(stack, false, doAdd);
-		else
-			return 0;
-	}
-
-	@Override
-	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
-		return null;
+		return getInternalInventory();
 	}
 
 	/* IINVENTORY */
 	@Override
 	public int getSizeInventory() {
-		if (swarmerInventory != null)
-			return swarmerInventory.getSizeInventory();
+		if (getInternalInventory() != null)
+			return getInternalInventory().getSizeInventory();
 		else
 			return 0;
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int slotIndex) {
-		if (swarmerInventory != null)
-			return swarmerInventory.getStackInSlot(slotIndex);
+		if (getInternalInventory() != null)
+			return getInternalInventory().getStackInSlot(slotIndex);
 		else
 			return null;
 	}
 
 	@Override
 	public ItemStack decrStackSize(int slotIndex, int amount) {
-		if (swarmerInventory != null)
-			return swarmerInventory.decrStackSize(slotIndex, amount);
+		if (getInternalInventory() != null)
+			return getInternalInventory().decrStackSize(slotIndex, amount);
 		else
 			return null;
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slotIndex) {
-		if (swarmerInventory != null)
-			return swarmerInventory.getStackInSlotOnClosing(slotIndex);
+		if (getInternalInventory() != null)
+			return getInternalInventory().getStackInSlotOnClosing(slotIndex);
 		else
 			return null;
 	}
@@ -258,11 +247,11 @@ public class TileAlvearySwarmer extends TileAlveary implements ISpecialInventory
 	@Override
 	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
 		// Client side handling for container synch
-		if (swarmerInventory == null && !Proxies.common.isSimulating(worldObj))
+		if (getInternalInventory() == null && !Proxies.common.isSimulating(worldObj))
 			createInventory();
 
-		if (swarmerInventory != null)
-			swarmerInventory.setInventorySlotContents(slotIndex, itemstack);
+		if (getInternalInventory() != null)
+			getInternalInventory().setInventorySlotContents(slotIndex, itemstack);
 	}
 
 	@Override
@@ -272,36 +261,56 @@ public class TileAlvearySwarmer extends TileAlveary implements ISpecialInventory
 
 	@Override
 	public int getInventoryStackLimit() {
-		if (swarmerInventory != null)
-			return swarmerInventory.getInventoryStackLimit();
+		if (getInternalInventory() != null)
+			return getInternalInventory().getInventoryStackLimit();
 		else
 			return 0;
 	}
 
-	@Override public void openInventory() {}
-	@Override public void closeInventory() {}
+	@Override
+	public void openInventory() {
+	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
+	@Override
+	public void closeInventory() {
+	}
+
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return super.isUseableByPlayer(player);
+		return Utils.isUseableByPlayer(player, this);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean hasCustomInventoryName() {
-		return super.hasCustomInventoryName();
+		return false;
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return super.isItemValidForSlot(slotIndex, itemstack);
+	public boolean isItemValidForSlot(int slotIndex, ItemStack stack) {
+		if (getInternalInventory() != null) {
+			if (!getInternalInventory().isItemValidForSlot(slotIndex, stack))
+				return false;
+			return StackUtils.isIdenticalItem(stack, ForestryItem.royalJelly.getItemStack());
+		}
+		return false;
+	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) {
+		if (getInternalInventory() != null)
+			return getInternalInventory().getAccessibleSlotsFromSide(side);
+		return Defaults.FACINGS_NONE;
+	}
+
+	@Override
+	public boolean canInsertItem(int slot, ItemStack stack, int side) {
+		if (getInternalInventory() != null)
+			return getInternalInventory().isItemValidForSlot(slot, stack);
+		return false;
+	}
+
+	@Override
+	public boolean canExtractItem(int slot, ItemStack stack, int side) {
+		return false;
 	}
 }

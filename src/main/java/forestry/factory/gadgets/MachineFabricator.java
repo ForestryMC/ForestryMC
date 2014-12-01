@@ -42,7 +42,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.utils.InventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.core.utils.StackUtils;
 import net.minecraftforge.fluids.FluidTankInfo;

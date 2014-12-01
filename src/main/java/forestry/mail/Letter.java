@@ -20,7 +20,7 @@ import forestry.api.core.INBTTagable;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.IMailAddress;
-import forestry.core.utils.InventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 

@@ -10,6 +10,12 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
+<<<<<<< Updated upstream
+=======
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
+
+>>>>>>> Stashed changes
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotCustom;
 import forestry.core.gui.slots.SlotLiquidContainer;
@@ -20,7 +26,12 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 
 public class ContainerFermenter extends ContainerLiquidTanks {
+<<<<<<< Updated upstream
 	protected final MachineFermenter fermenter;
+=======
+
+	protected MachineFermenter fermenter;
+>>>>>>> Stashed changes
 
 	public ContainerFermenter(InventoryPlayer player, MachineFermenter fermenter) {
 		super(fermenter, fermenter);
@@ -32,17 +43,16 @@ public class ContainerFermenter extends ContainerLiquidTanks {
 		this.addSlot(new SlotLiquidContainer(fermenter, MachineFermenter.SLOT_CAN_INPUT, 150, 22, true));
 		this.addSlot(new SlotLiquidContainer(fermenter, MachineFermenter.SLOT_INPUT, 10, 40));
 
-		for (int i = 0; i < 3; ++i)
-			for (int var4 = 0; var4 < 9; ++var4)
+		for (int i = 0; i < 3; ++i) {
+			for (int var4 = 0; var4 < 9; ++var4) {
 				this.addSlot(new Slot(player, var4 + i * 9 + 9, 8 + var4 * 18, 84 + i * 18));
+			}
+		}
 
-		for (int i = 0; i < 9; ++i)
+		for (int i = 0; i < 9; ++i) {
 			this.addSlot(new Slot(player, i, 8 + i * 18, 142));
+		}
 
 	}
 
-	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return fermenter.isUseableByPlayer(entityplayer);
-	}
 }

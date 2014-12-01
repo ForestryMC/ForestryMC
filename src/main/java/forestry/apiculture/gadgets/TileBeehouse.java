@@ -29,7 +29,7 @@ import forestry.core.network.PacketIds;
 import forestry.core.network.PacketInventoryStack;
 import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.InventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginApiculture;
 import net.minecraft.entity.player.EntityPlayer;

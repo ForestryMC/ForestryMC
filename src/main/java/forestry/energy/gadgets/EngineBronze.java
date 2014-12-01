@@ -25,8 +25,7 @@ import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.GuiId;
 import forestry.core.network.PacketPayload;
 import forestry.core.utils.LiquidHelper;
-import forestry.core.utils.TileInventoryAdapter;
-import static forestry.factory.gadgets.MachineBottler.SLOT_PRODUCT;
+import forestry.core.inventory.TileInventoryAdapter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -70,7 +69,6 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	public FilteredTank fuelTank;
 	public FilteredTank heatingTank;
 	private final TankManager tankManager;
-	private final TileInventoryAdapter inventory;
 	public int burnTime;
 	public int totalTime;
 	public int currentFluidId = -1;
@@ -83,7 +81,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		super(Defaults.ENGINE_BRONZE_HEAT_MAX, 300000, 5000);
 		setHints(Config.hints.get("engine.bronze"));
 
-		inventory = new TileInventoryAdapter(this, 1, "Items");
+		setInternalInventory(new TileInventoryAdapter(this, 1, "Items"));
 
 		fuelTank = new FilteredTank(Defaults.ENGINE_TANK_CAPACITY, FuelManager.bronzeEngineFuel.keySet());
 		fuelTank.tankMode = StandardTank.TankMode.INPUT;
@@ -106,6 +104,8 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	public void updateServerSide() {
 
 		super.updateServerSide();
+
+		TileInventoryAdapter inventory = getInternalInventory();
 
 		// Check if we have suitable items waiting in the item slot
 		if (inventory.getStackInSlot(SLOT_CAN) != null) {
@@ -304,7 +304,6 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	 */
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
-
 		super.readFromNBT(nbt);
 
 		burnTime = nbt.getInteger("EngineBurnTime");
@@ -317,7 +316,6 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		}
 
 		tankManager.readTanksFromNBT(nbt);
-		inventory.readFromNBT(nbt);
 
 	}
 
@@ -327,7 +325,6 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	 */
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
-
 		super.writeToNBT(nbt);
 
 		nbt.setInteger("EngineBurnTime", burnTime);
@@ -338,7 +335,6 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 			nbt.setString("currentFluid", fluid.getName());
 
 		tankManager.writeTanksToNBT(nbt);
-		inventory.writeToNBT(nbt);
 	}
 
 	/* GUI */
@@ -382,32 +378,32 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	/* IINVENTORY */
 	@Override
 	public int getSizeInventory() {
-		return inventory.getSizeInventory();
+		return getInternalInventory().getSizeInventory();
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
+		return getInternalInventory().getStackInSlot(i);
 	}
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
+		getInternalInventory().setInventorySlotContents(i, itemstack);
 	}
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
-		return inventory.decrStackSize(i, j);
+		return getInternalInventory().decrStackSize(i, j);
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slot) {
-		return inventory.getStackInSlotOnClosing(slot);
+		return getInternalInventory().getStackInSlotOnClosing(slot);
 	}
 
 	@Override
 	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
+		return getInternalInventory().getInventoryStackLimit();
 	}
 
 	@Override
@@ -418,14 +414,9 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	public void closeInventory() {
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 * @param player
-	 * @return 
-	 */
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return super.isUseableByPlayer(player);
+		return getInternalInventory().isUseableByPlayer(player);
 	}
 
 	@Override
@@ -433,21 +424,11 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		return getUnlocalizedName();
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 * @return 
-	 */
 	@Override
 	public boolean hasCustomInventoryName() {
-		return super.hasCustomInventoryName();
+		return false;
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 * @param slotIndex
-	 * @param itemstack
-	 * @return 
-	 */
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
 		if (slotIndex == SLOT_CAN) {
@@ -457,65 +438,25 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 			return fuelTank.accepts(fluid.getFluid()) || heatingTank.accepts(fluid.getFluid());
 		}
 
-		return super.isItemValidForSlot(slotIndex, itemstack);
+		return getInternalInventory().isItemValidForSlot(slotIndex, itemstack);
 	}
 
 	/* ISIDEDINVENTORY */
 	@Override
-	protected boolean canTakeStackFromSide(int slotIndex, ItemStack stack, int side) {
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return false;
 	}
 
 	@Override
-	protected boolean canPutStackFromSide(int slotIndex, ItemStack stack, int side) {
-		if (!super.canTakeStackFromSide(slotIndex, stack, side))
-			return false;
-
-		FluidContainerData container = LiquidHelper.getLiquidContainer(stack);
-		return container != null;
+	public boolean canInsertItem(int slotIndex, ItemStack stack, int side) {
+		return isItemValidForSlot(slotIndex, stack);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 * @return 
-	 */
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return super.canExtractItem(i, itemstack, j);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 * @return 
-	 */
-	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return super.canInsertItem(i, itemstack, j);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 * @return 
-	 */
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
-		return super.getAccessibleSlotsFromSide(side); //To change body of generated methods, choose Tools | Templates.
+		return getInternalInventory().getAccessibleSlotsFromSide(side);
 	}
 
-	/* ISPECIALINVENTORY */
-//	@Override
-//	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
-//		FluidContainerData container = LiquidHelper.getLiquidContainer(stack);
-//		if (container == null)
-//			return 0;
-//
-//		return inventory.addStack(stack, false, doAdd);
-//	}
-//
-//	@Override
-//	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
-//		return null;
-//	}
 	// IFluidHandler
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {

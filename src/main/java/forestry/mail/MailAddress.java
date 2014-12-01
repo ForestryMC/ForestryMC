@@ -23,6 +23,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class MailAddress implements INBTTagable, IMailAddress {
+
 	private static final GameProfile invalidGameProfile = new GameProfile(new UUID(0, 0), "");
 	@EntityNetData
 	private EnumAddressee type;
@@ -47,17 +48,16 @@ public class MailAddress implements INBTTagable, IMailAddress {
 			throw new IllegalArgumentException("name must not be null");
 
 		this.type = EnumAddressee.TRADER;
-		this.gameProfile = new GameProfile(new UUID(0, 0), name);
+		this.gameProfile = new GameProfile(null, name);
 	}
 
 	public MailAddress(IMailAddress address) {
 		this.type = address.getType();
 		if (type == EnumAddressee.TRADER) {
 			String name = address.getName();
-			this.gameProfile = new GameProfile(new UUID(0, 0), name);
-		} else if (type == EnumAddressee.PLAYER) {
+			this.gameProfile = new GameProfile(null, name);
+		} else if (type == EnumAddressee.PLAYER)
 			this.gameProfile = address.getPlayerProfile();
-		}
 	}
 
 	public static MailAddress loadFromNBT(NBTTagCompound nbttagcompound) {
@@ -100,7 +100,7 @@ public class MailAddress implements INBTTagable, IMailAddress {
 
 	@Override
 	public int hashCode() {
-		return gameProfile.hashCode();
+		return gameProfile.getName().hashCode();
 	}
 
 	@Override
@@ -108,18 +108,28 @@ public class MailAddress implements INBTTagable, IMailAddress {
 		if (!(o instanceof MailAddress))
 			return false;
 
+<<<<<<< Updated upstream
 		MailAddress address = (MailAddress) o;
 		return PlayerUtil.isSameGameProfile(address.gameProfile, gameProfile);
+=======
+		MailAddress other = (MailAddress) o;
+		return isSamePlayer(gameProfile, other.gameProfile);
+	}
+
+	private static boolean isSamePlayer(GameProfile a, GameProfile b) {
+		if (a.getId() != null && b.getId() != null)
+			return a.getId().equals(b.getId());
+		return a.getName() != null && a.getName().equals(b.getName());
+>>>>>>> Stashed changes
 	}
 
 	@Override
 	public String toString() {
 		String name = getName().toLowerCase(Locale.ENGLISH);
-		if (isPlayer()) {
+		if (isPlayer())
 			return type + "-" + name + "-" + gameProfile.getId();
-		} else {
+		else
 			return type + "-" + name;
-		}
 	}
 
 	@Override

@@ -34,10 +34,10 @@ import forestry.core.network.PacketIds;
 import forestry.core.network.PacketTileNBT;
 import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.InventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.PlainInventory;
 import forestry.core.utils.StackUtils;
-import forestry.core.utils.TileInventoryAdapter;
+import forestry.core.inventory.TileInventoryAdapter;
 
 public class TileWorktable extends TileBase implements ICrafter {
 

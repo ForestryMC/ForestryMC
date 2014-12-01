@@ -33,7 +33,7 @@ import forestry.core.network.GuiId;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
-import forestry.core.utils.TileInventoryAdapter;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.utils.Utils;
 
 public abstract class TileFarm extends TileForestry implements IFarmComponent {

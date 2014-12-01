@@ -8,19 +8,22 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.utils;
+package forestry.core.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 
 import forestry.core.gadgets.TileForestry;
+import forestry.core.utils.EnumAccess;
+import forestry.core.utils.PlayerUtil;
+import forestry.core.utils.Utils;
+import net.minecraft.item.ItemStack;
 
 public class TileInventoryAdapter extends InventoryAdapter {
 
 	private final TileForestry tile;
 
 	public TileInventoryAdapter(TileForestry tile, int size, String name) {
-		super(size, name);
-		this.tile = tile;
+		this(tile, size, name, 64);
 	}
 
 	public TileInventoryAdapter(TileForestry tile, int size, String name, int stackLimit) {
@@ -29,13 +32,27 @@ public class TileInventoryAdapter extends InventoryAdapter {
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return tile.isUseableByPlayer(entityplayer);
+	public boolean isUseableByPlayer(EntityPlayer player) {
+		if (!Utils.isUseableByPlayer(player, tile))
+			return false;
+		if (tile.getAccess() == EnumAccess.PRIVATE)
+			return PlayerUtil.isSameGameProfile(tile.getOwnerProfile(), player.getGameProfile());
+		return true;
 	}
 
 	@Override
 	public void markDirty() {
 		super.markDirty();
 		tile.markDirty();
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+		return tile.getAccess() == EnumAccess.SHARED;
+	}
+
+	@Override
+	public boolean canExtractItem(int slot, ItemStack stack, int side) {
+		return tile.getAccess() == EnumAccess.SHARED;
 	}
 }

@@ -229,7 +229,15 @@ public class Utils {
 		return block == Blocks.water || block == Blocks.flowing_water || block == Blocks.lava || block == Blocks.flowing_lava;
 	}
 
-	public static boolean isUseableByPlayer(EntityPlayer player, TileEntity tile, World world, int x, int y, int z) {
+	public static boolean isUseableByPlayer(EntityPlayer player, TileEntity tile) {
+		int x = tile.xCoord;
+		int y = tile.yCoord;
+		int z = tile.zCoord;
+		World world = tile.getWorldObj();
+		
+		if(tile.isInvalid())
+			return false;
+		
 		if (world.getTileEntity(x, y, z) != tile)
 			return false;
 

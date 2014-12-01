@@ -18,7 +18,6 @@ import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.Optional;
 import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Config;
-import forestry.core.config.Defaults;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IOwnable;
 import forestry.core.network.ForestryPacket;
@@ -27,7 +26,7 @@ import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumAccess;
-import forestry.core.utils.InventoryAdapter;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.utils.Vect;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -46,6 +45,7 @@ import java.util.Collection;
 public abstract class TileForestry extends TileEntity implements INetworkedEntity, IOwnable, IErrorSource, ITriggerProvider {
 
 	protected boolean isInited = false;
+	private TileInventoryAdapter inventory;
 
 	public Vect Coords() {
 		return new Vect(xCoord, yCoord, zCoord);
@@ -79,44 +79,43 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 			initialize();
 			isInited = true;
 		}
-
-		if (!Proxies.common.isSimulating(worldObj))
-			return;
 	}
 
 	public abstract void initialize();
 
 	// / SAVING & LOADING
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
+	public void readFromNBT(NBTTagCompound data) {
+		super.readFromNBT(data);
+		
+		if(inventory != null) inventory.readFromNBT(data);
 
-		if (nbttagcompound.hasKey("Access"))
-			access = EnumAccess.values()[nbttagcompound.getInteger("Access")];
+		if (data.hasKey("Access"))
+			access = EnumAccess.values()[data.getInteger("Access")];
 		else
 			access = EnumAccess.SHARED;
-		if (nbttagcompound.hasKey("owner")) {
-			owner = NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("owner"));
-		}
+		if (data.hasKey("owner"))
+			owner = NBTUtil.func_152459_a(data.getCompoundTag("owner"));
 
-		if (nbttagcompound.hasKey("Orientation"))
-			orientation = ForgeDirection.values()[nbttagcompound.getInteger("Orientation")];
+		if (data.hasKey("Orientation"))
+			orientation = ForgeDirection.values()[data.getInteger("Orientation")];
 		else
 			orientation = ForgeDirection.WEST;
 
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
-		nbttagcompound.setInteger("Access", access.ordinal());
+	public void writeToNBT(NBTTagCompound data) {
+		super.writeToNBT(data);
+		if(inventory != null) inventory.writeToNBT(data);
+		data.setInteger("Access", access.ordinal());
 		if (this.owner != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
 			NBTUtil.func_152460_a(nbt, owner);
-			nbttagcompound.setTag("owner", nbt);
+			data.setTag("owner", nbt);
 		}
 		if (orientation != null)
-			nbttagcompound.setInteger("Orientation", orientation.ordinal());
+			data.setInteger("Orientation", orientation.ordinal());
 	}
 
 	// / SMP
@@ -205,7 +204,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		return errorState;
 	}
 	// / OWNERSHIP
-	public GameProfile owner = null;
+	private GameProfile owner = null;
 	private EnumAccess access = EnumAccess.SHARED;
 
 	@Override
@@ -285,52 +284,21 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	/* NAME */
-
 	/**
 	 * Gets the tile's unlocalized name, based on the block at the location of this entity (client-only).
+	 * @return 
 	 */
 	public String getUnlocalizedName() {
-		String blockUnlocalizedName = getBlockType().getUnlocalizedName().replace("tile.for.","");
+		String blockUnlocalizedName = getBlockType().getUnlocalizedName().replace("tile.for.", "");
 		return blockUnlocalizedName + "." + getBlockMetadata() + ".name";
 	}
 
-	public boolean hasCustomInventoryName() {
-		return true;
-	}
-
-	/* ACCESS */
-	public abstract boolean isUseableByPlayer(EntityPlayer player);
-
 	/* INVENTORY BASICS */
-	public InventoryAdapter getInternalInventory() {
-		return null;
+	public final TileInventoryAdapter getInternalInventory() {
+		return inventory;
 	}
 
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return true;
-	}
-
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return canPutStackFromSide(i, itemstack, j);
-	}
-
-	protected boolean canTakeStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-		return getAccess() == EnumAccess.SHARED;
-	}
-
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return canTakeStackFromSide(i, itemstack, j);
-	}
-
-	protected boolean canPutStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-		return getAccess() == EnumAccess.SHARED;
-	}
-
-	public int[] getAccessibleSlotsFromSide(int side) {
-		if (getInternalInventory() == null)
-			return Defaults.FACINGS_NONE;
-		else
-			return getInternalInventory().getSizeInventorySide(side);
-
+	public final void setInternalInventory(TileInventoryAdapter inv) {
+		this.inventory = inv;
 	}
 }

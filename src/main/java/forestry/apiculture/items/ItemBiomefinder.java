@@ -38,7 +38,7 @@ import forestry.core.interfaces.IHintSource;
 import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.ItemInventory;
+import forestry.core.inventory.ItemInventory;
 import forestry.core.utils.Vect;
 import forestry.plugins.PluginApiculture;
 

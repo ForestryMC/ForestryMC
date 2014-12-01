@@ -1,4 +1,4 @@
-package forestry.core.utils;
+package forestry.core.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;

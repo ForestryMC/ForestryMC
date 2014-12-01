@@ -37,6 +37,7 @@ import forestry.core.items.ItemNBTTile;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StringUtil;
+import forestry.core.utils.Utils;
 
 public class BlockBase extends BlockForestry {
 
@@ -161,7 +162,7 @@ public class BlockBase extends BlockForestry {
 			return false;
 
 		TileBase tile = (TileBase) world.getTileEntity(x, y, z);
-		if (!tile.isUseableByPlayer(player))
+		if (!Utils.isUseableByPlayer(player, tile))
 			return false;
 
 		ItemStack current = player.getCurrentEquippedItem();

@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.utils;
+package forestry.core.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -18,13 +18,16 @@ import net.minecraft.nbt.NBTTagList;
 
 import forestry.api.core.INBTTagable;
 import forestry.core.config.Defaults;
+import forestry.core.utils.PlainInventory;
+import forestry.core.utils.StackUtils;
+import net.minecraft.inventory.ISidedInventory;
 
 /**
  * With permission from Krapht.
  */
-public class InventoryAdapter implements IInventory, INBTTagable {
+public class InventoryAdapter implements IInventory, ISidedInventory, INBTTagable {
 
-	private IInventory inventory = null;
+	private final IInventory inventory;
 	//private boolean debug = false;
 
 	public InventoryAdapter(int size, String name) {
@@ -44,7 +47,6 @@ public class InventoryAdapter implements IInventory, INBTTagable {
 //		this.debug = true;
 //		return this;
 //	}
-
 	/**
 	 * @return Copy of this inventory. Stacks are copies.
 	 */
@@ -333,7 +335,7 @@ public class InventoryAdapter implements IInventory, INBTTagable {
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -357,7 +359,8 @@ public class InventoryAdapter implements IInventory, INBTTagable {
 	/* ISIDEDINVENTORY */
 	private int[][] slotMap;
 
-	public int[] getSizeInventorySide(int side) {
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) {
 		return slotMap[side];
 	}
 
@@ -405,6 +408,16 @@ public class InventoryAdapter implements IInventory, INBTTagable {
 		}
 
 		return this;
+	}
+
+	@Override
+	public boolean canInsertItem(int slot, ItemStack stack, int side) {
+		return isItemValidForSlot(slot, stack);
+	}
+
+	@Override
+	public boolean canExtractItem(int slot, ItemStack stack, int side) {
+		return true;
 	}
 
 	/* SAVING & LOADING */

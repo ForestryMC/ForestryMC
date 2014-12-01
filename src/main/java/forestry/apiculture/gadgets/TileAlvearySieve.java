@@ -23,7 +23,7 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.core.interfaces.ICrafter;
 import forestry.core.network.GuiId;
-import forestry.core.utils.InventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
 
 public class TileAlvearySieve extends TileAlveary implements ICrafter, IBeeListener {
 
@@ -124,11 +124,6 @@ public class TileAlvearySieve extends TileAlveary implements ICrafter, IBeeListe
 				return;
 			}
 		}
-	}
-	
-	/* INVENTORY */
-	public InventoryAdapter getInternalInventory() {
-		return inventory;
 	}
 
 	/* ICRAFTER */

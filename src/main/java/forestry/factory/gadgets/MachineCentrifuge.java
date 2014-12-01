@@ -21,7 +21,7 @@ import forestry.core.config.Defaults;
 import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.network.GuiId;
-import forestry.core.utils.InventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.StackUtils;
 import forestry.factory.triggers.FactoryTriggers;
 import net.minecraft.entity.player.EntityPlayer;

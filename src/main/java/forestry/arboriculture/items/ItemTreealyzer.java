@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-import forestry.core.utils.AlyzerInventory;
+import forestry.core.inventory.AlyzerInventory;
 import forestry.api.arboriculture.ITree;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;

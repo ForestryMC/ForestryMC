@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import forestry.core.inventory.InventoryAdapter;
 import java.util.ArrayList;
 import java.util.Random;
 

@@ -30,7 +30,7 @@ import forestry.core.interfaces.IErrorSource;
 import forestry.core.items.ItemForestry;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.ItemInventory;
+import forestry.core.inventory.ItemInventory;
 
 public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 

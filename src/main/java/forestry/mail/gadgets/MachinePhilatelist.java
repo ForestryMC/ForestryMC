@@ -20,7 +20,7 @@ import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
 import forestry.core.gadgets.TileBase;
 import forestry.core.network.GuiId;
-import forestry.core.utils.InventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.StackUtils;
 
 public class MachinePhilatelist extends TileBase implements IInventory {

@@ -22,7 +22,7 @@ import forestry.api.storage.BackpackManager;
 import forestry.api.storage.BackpackResupplyEvent;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.core.interfaces.IResupplyHandler;
-import forestry.core.utils.ItemInventory;
+import forestry.core.inventory.ItemInventory;
 import forestry.storage.items.ItemBackpack;
 
 public class ResupplyHandler implements IResupplyHandler {

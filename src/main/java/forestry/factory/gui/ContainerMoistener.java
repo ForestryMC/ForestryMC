@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -30,12 +29,15 @@ public class ContainerMoistener extends ContainerLiquidTanks implements IContain
 
 		this.tile = tile;
 		// Stash
-		for (int l = 0; l < 2; l++)
-			for (int k1 = 0; k1 < 3; k1++)
+		for (int l = 0; l < 2; l++) {
+			for (int k1 = 0; k1 < 3; k1++) {
 				addSlot(new Slot(tile, k1 + l * 3, 39 + k1 * 18, 16 + l * 18));
+			}
+		}
 		// Reservoir
-		for (int k1 = 0; k1 < 3; k1++)
+		for (int k1 = 0; k1 < 3; k1++) {
 			addSlot(new Slot(tile, k1 + 6, 39 + k1 * 18, 22 + 36));
+		}
 
 		// Working slot
 		this.addSlot(new SlotWorking(tile, 9, 105, 37));
@@ -47,12 +49,15 @@ public class ContainerMoistener extends ContainerLiquidTanks implements IContain
 
 		// Player inventory
 		int var3;
-		for (var3 = 0; var3 < 3; ++var3)
-			for (int var4 = 0; var4 < 9; ++var4)
+		for (var3 = 0; var3 < 3; ++var3) {
+			for (int var4 = 0; var4 < 9; ++var4) {
 				this.addSlot(new Slot(player, var4 + var3 * 9 + 9, 8 + var4 * 18, 84 + var3 * 18));
+			}
+		}
 
-		for (var3 = 0; var3 < 9; ++var3)
+		for (var3 = 0; var3 < 9; ++var3) {
 			this.addSlot(new Slot(player, var3, 8 + var3 * 18, 142));
+		}
 
 	}
 
@@ -60,11 +65,6 @@ public class ContainerMoistener extends ContainerLiquidTanks implements IContain
 	public void onCraftMatrixChanged(IInventory iinventory, int slot) {
 		inventory.setInventorySlotContents(slot, iinventory.getStackInSlot(slot));
 		tile.checkRecipe();
-	}
-
-	@Override
-	public boolean canInteractWith(EntityPlayer player) {
-		return this.tile.isUseableByPlayer(player);
 	}
 
 }

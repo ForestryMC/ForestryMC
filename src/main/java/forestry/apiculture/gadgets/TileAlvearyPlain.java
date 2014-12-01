@@ -27,6 +27,7 @@ import forestry.api.core.ITileStructure;
 import forestry.api.genetics.IIndividual;
 import forestry.apiculture.gui.ContainerAlveary;
 import forestry.core.config.Config;
+import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.IClimatised;
 import forestry.core.interfaces.IErrorSource;
@@ -35,8 +36,8 @@ import forestry.core.network.GuiId;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketInventoryStack;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.InventoryAdapter;
-import forestry.core.utils.TileInventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginApiculture;
 import net.minecraft.entity.player.EntityPlayer;
@@ -47,11 +48,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import scala.collection.SortedMap;
 
 public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, ISpecialInventory, IBeeHousing, IClimatised, IHintSource {
 
@@ -90,8 +91,6 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 		this.tempChange = nbttagcompound.getFloat("TempChange");
 		this.humidChange = nbttagcompound.getFloat("HumidChange");
 
-		if (inventory != null)
-			inventory.readFromNBT(nbttagcompound);
 		if (beekeepingLogic != null)
 			beekeepingLogic.readFromNBT(nbttagcompound);
 
@@ -104,8 +103,6 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 		nbttagcompound.setFloat("TempChange", tempChange);
 		nbttagcompound.setFloat("HumidChange", humidChange);
 
-		if (inventory != null)
-			inventory.writeToNBT(nbttagcompound);
 		if (beekeepingLogic != null)
 			beekeepingLogic.writeToNBT(nbttagcompound);
 
@@ -139,7 +136,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 
 		// Add swarm effects
 		if (worldObj.getTotalWorldTime() % 200 * 10 == 0)
-			onQueenChange(inventory.getStackInSlot(SLOT_QUEEN));
+			onQueenChange(getInternalInventory().getStackInSlot(SLOT_QUEEN));
 		if (getErrorState() == EnumErrorCode.OK)
 			queen.doFX(beekeepingLogic.getEffectData(), this);
 
@@ -164,16 +161,15 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 		if (!isMaster())
 			return;
 
-		if (inventory == null)
+		if (getInternalInventory() == null)
 			return;
 
 		// / Multiplayer FX
-		if (PluginApiculture.beeInterface.isMated(inventory.getStackInSlot(SLOT_QUEEN))) {
+		if (PluginApiculture.beeInterface.isMated(getInternalInventory().getStackInSlot(SLOT_QUEEN)))
 			if (getErrorState() == EnumErrorCode.OK && worldObj.getTotalWorldTime() % 2 == 0) {
-				IBee displayQueen = PluginApiculture.beeInterface.getMember(inventory.getStackInSlot(SLOT_QUEEN));
+				IBee displayQueen = PluginApiculture.beeInterface.getMember(getInternalInventory().getStackInSlot(SLOT_QUEEN));
 				displayQueen.doFX(beekeepingLogic.getEffectData(), this);
 			}
-		}
 	}
 
 	private void equalizeTemperature() {
@@ -196,6 +192,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 
 	/* STATE INFORMATION */
 	private int getHealthDisplay() {
+		IInventory inventory = getInternalInventory();
 		if (inventory == null || inventory.getStackInSlot(SLOT_QUEEN) == null)
 			return 0;
 
@@ -208,6 +205,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 	}
 
 	private int getMaxHealthDisplay() {
+		IInventory inventory = getInternalInventory();
 		if (inventory == null || inventory.getStackInSlot(SLOT_QUEEN) == null)
 			return 0;
 
@@ -237,7 +235,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 	/* STRUCTURE MANAGMENT */
 	@Override
 	protected void createInventory() {
-		this.inventory = new TileInventoryAdapter(this, 9, "Items");
+		setInternalInventory(new TileInventoryAdapter(this, 9, "Items"));
 	}
 
 	@Override
@@ -425,6 +423,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 
 	@Override
 	public boolean addProduct(ItemStack product, boolean all) {
+		TileInventoryAdapter inventory = getInternalInventory();
 		if (inventory == null)
 			return false;
 
@@ -523,13 +522,8 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 	}
 
 	/* IINVENTORY */
-	@Override
-	public InventoryAdapter getInternalInventory() {
-		return (InventoryAdapter) getStructureInventory();
-	}
-
 	private IInventory getStructureInventory() {
-
+		TileInventoryAdapter inventory = getInternalInventory();
 		if (inventory != null) {
 			if (isMaster() || !Proxies.common.isSimulating(worldObj))
 				return inventory;
@@ -580,6 +574,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 
 	@Override
 	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
+		TileInventoryAdapter inventory = getInternalInventory();
 		// Client side handling for container synch
 		if (inventory == null && !Proxies.common.isSimulating(worldObj))
 			createInventory();
@@ -604,33 +599,6 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 	}
 
 	@Override
-	protected boolean canTakeStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-
-		if (!super.canTakeStackFromSide(slotIndex, itemstack, side))
-			return false;
-
-		if (slotIndex != SLOT_QUEEN && slotIndex != SLOT_DRONE)
-			return true;
-
-		return false;
-	}
-
-	@Override
-	protected boolean canPutStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-
-		if (!super.canPutStackFromSide(slotIndex, itemstack, side))
-			return false;
-
-		if (slotIndex == SLOT_QUEEN && PluginApiculture.beeInterface.isMember(itemstack)
-				&& !PluginApiculture.beeInterface.isDrone(itemstack))
-			return true;
-		if (slotIndex == SLOT_DRONE && PluginApiculture.beeInterface.isDrone(itemstack))
-			return true;
-
-		return false;
-	}
-
-	@Override
 	public void openInventory() {
 	}
 
@@ -638,52 +606,53 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 	public void closeInventory() {
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return super.isUseableByPlayer(player);
+		return Utils.isUseableByPlayer(player, this);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean hasCustomInventoryName() {
-		return super.hasCustomInventoryName();
+		return false;
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return super.isItemValidForSlot(slotIndex, itemstack);
+		TileInventoryAdapter inventory = getInternalInventory();
+		if (inventory == null)
+			return false;
+
+		if (!inventory.isItemValidForSlot(slotIndex, itemstack))
+			return false;
+
+		if (slotIndex == SLOT_QUEEN && PluginApiculture.beeInterface.isMember(itemstack)
+				&& !PluginApiculture.beeInterface.isDrone(itemstack))
+			return true;
+		return slotIndex == SLOT_DRONE && PluginApiculture.beeInterface.isDrone(itemstack);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return super.canInsertItem(i, itemstack, j);
+	public boolean canInsertItem(int slotIndex, ItemStack itemstack, int side) {
+		return isItemValidForSlot(slotIndex, itemstack);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return super.canExtractItem(i, itemstack, j);
+	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+		TileInventoryAdapter inventory = getInternalInventory();
+		if (inventory == null)
+			return false;
+		if (!inventory.canExtractItem(slotIndex, itemstack, side))
+			return false;
+
+		return slotIndex != SLOT_QUEEN && slotIndex != SLOT_DRONE;
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
-		return super.getAccessibleSlotsFromSide(side);
+		TileInventoryAdapter inventory = getInternalInventory();
+		if (inventory == null)
+			return Defaults.FACINGS_NONE;
+		return inventory.getAccessibleSlotsFromSide(side);
 	}
 
 	/* ISPECIALINVENTORY */
@@ -755,28 +724,28 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 			break;
 		}
 
-		return new ItemStack[] { product };
+		return new ItemStack[]{product};
 	}
 
 	/* SMP GUI */
 	public void getGUINetworkData(int i, int j) {
 		switch (i) {
-			case 0:
-				displayHealth = j;
-				break;
-			case 1:
-				displayHealthMax = j;
-				break;
-			case 4:
-				this.tempChange = (float) j / 100;
-				break;
-			case 5:
-				this.humidChange = (float) j / 100;
-				break;
-			case 6: {
-				this.biome = BiomeGenBase.getBiome(j);
-				break;
-			}
+		case 0:
+			displayHealth = j;
+			break;
+		case 1:
+			displayHealthMax = j;
+			break;
+		case 4:
+			this.tempChange = (float) j / 100;
+			break;
+		case 5:
+			this.humidChange = (float) j / 100;
+			break;
+		case 6: {
+			this.biome = BiomeGenBase.getBiome(j);
+			break;
+		}
 		}
 
 	}
@@ -836,7 +805,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 	public boolean isOwnable() {
 		return true;
 	}
-	
+
 	/* IHousing */
 	@Override
 	public GameProfile getOwnerName() {
