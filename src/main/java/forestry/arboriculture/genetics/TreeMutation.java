@@ -24,7 +24,7 @@ import forestry.plugins.PluginArboriculture;
 
 public class TreeMutation extends Mutation implements ITreeMutation {
 
-	private ITreeRoot root;
+	private final ITreeRoot root;
 
 	public TreeMutation(IAllele allele0, IAllele allele1, IAllele[] template, int chance) {
 		super(allele0, allele1, template, chance);

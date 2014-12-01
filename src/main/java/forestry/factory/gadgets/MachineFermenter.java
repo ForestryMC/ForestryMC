@@ -103,7 +103,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 				return true;
 
 			// Liquid required but none given
-			if (liquid != null && liqu == null)
+			if (liqu == null)
 				return false;
 
 			// Wrong liquid
@@ -120,9 +120,9 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 
 	public static class RecipeManager implements IFermenterManager {
 
-		public static ArrayList<MachineFermenter.Recipe> recipes = new ArrayList<MachineFermenter.Recipe>();
-		public static HashSet<Fluid> recipeFluidInputs = new HashSet<Fluid>();
-		public static HashSet<Fluid> recipeFluidOutputs = new HashSet<Fluid>();
+		public static final ArrayList<MachineFermenter.Recipe> recipes = new ArrayList<MachineFermenter.Recipe>();
+		public static final HashSet<Fluid> recipeFluidInputs = new HashSet<Fluid>();
+		public static final HashSet<Fluid> recipeFluidOutputs = new HashSet<Fluid>();
 
 		@Override
 		public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
@@ -180,9 +180,9 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		}
 	}
 	@EntityNetData
-	public FilteredTank resourceTank;
+	public final FilteredTank resourceTank;
 	@EntityNetData
-	public FilteredTank productTank;
+	public final FilteredTank productTank;
 
 	private final TankManager tankManager;
 

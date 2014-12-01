@@ -27,9 +27,9 @@ public class ItemHoneycomb extends ItemForestryMultiPass {
 
 	private static class CombInfo {
 
-		public String name;
-		public int primaryColor;
-		public int secondaryColor;
+		public final String name;
+		public final int primaryColor;
+		public final int secondaryColor;
 		public boolean isSecret = false;
 
 		public CombInfo(String name, int primaryColor, int secondaryColor) {
@@ -43,7 +43,8 @@ public class ItemHoneycomb extends ItemForestryMultiPass {
 			return this;
 		}
 	}
-	public CombInfo[] combs = new CombInfo[]{new CombInfo("honey", 0xe8d56a, 0xffa12b), // 0
+	public final CombInfo[] combs = new CombInfo[]{
+		new CombInfo("honey", 0xe8d56a, 0xffa12b), // 0
 		new CombInfo("cocoa", 0x674016, 0xffb62b).setIsSecret(), // 1
 		new CombInfo("simmering", 0x981919, 0xffb62b), // 2
 		new CombInfo("stringy", 0xc8be67, 0xbda93e), // 3

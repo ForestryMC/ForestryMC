@@ -18,7 +18,7 @@ import forestry.api.genetics.IAllelePlantType;
 
 public class AllelePlantType extends Allele implements IAllelePlantType {
 
-	private EnumSet<EnumPlantType> types;
+	private final EnumSet<EnumPlantType> types;
 
 	protected AllelePlantType(String uid, EnumPlantType type) {
 		this(uid, type, false);

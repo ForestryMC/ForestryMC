@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Defaults;
 import forestry.core.interfaces.IDescriptiveRecipe;
 import forestry.core.proxy.Proxies;
+import net.minecraft.item.ItemStack;
 
 public class RecipeUtil {
 
@@ -62,9 +61,7 @@ public class RecipeUtil {
 		Object[] result = new Object[10];
 
 		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				result[y * 3 + x] = ingredients[y * width + x];
-			}
+			System.arraycopy(ingredients, y * width, result, y * 3, width);
 		}
 
 		result[9] = output;

@@ -15,6 +15,7 @@ import forestry.api.core.INBTTagable;
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
 import forestry.core.network.EntityNetData;
+import forestry.core.utils.PlayerUtil;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 
@@ -77,7 +78,7 @@ public class MailAddress implements INBTTagable, IMailAddress {
 
 	@Override
 	public boolean isValid() {
-		return !gameProfile.equals(invalidGameProfile);
+		return !PlayerUtil.isSameGameProfile(gameProfile, invalidGameProfile);
 	}
 
 	@Override
@@ -108,7 +109,7 @@ public class MailAddress implements INBTTagable, IMailAddress {
 			return false;
 
 		MailAddress address = (MailAddress) o;
-		return address.gameProfile.equals(gameProfile);
+		return PlayerUtil.isSameGameProfile(address.gameProfile, gameProfile);
 	}
 
 	@Override

@@ -708,7 +708,7 @@ public abstract class InvTools {
 			if (stack != null)
 				list.add(stack);
 		}
-		return list.toArray(new ItemStack[0]);
+		return list.toArray(new ItemStack[list.size()]);
 	}
 
 	/**

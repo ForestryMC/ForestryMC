@@ -106,7 +106,7 @@ public class FlowerProviderVanilla implements IFlowerProvider {
 
 	@Override
 	public ItemStack[] getItemStacks() {
-		return FlowerManager.plainFlowers.toArray(new ItemStack[0]);
+		return FlowerManager.plainFlowers.toArray(new ItemStack[FlowerManager.plainFlowers.size()]);
 	}
 
 }

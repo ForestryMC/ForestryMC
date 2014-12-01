@@ -19,7 +19,7 @@ import forestry.energy.gadgets.EngineTin;
 
 public class ContainerEngineTin extends ContainerSocketed {
 
-	protected EngineTin tile;
+	protected final EngineTin tile;
 
 	public ContainerEngineTin(InventoryPlayer player, EngineTin tile) {
 		super(tile, tile);
@@ -49,8 +49,8 @@ public class ContainerEngineTin extends ContainerSocketed {
 		if (tile == null)
 			return;
 
-		for (int i = 0; i < crafters.size(); i++)
-			tile.sendGUINetworkData(this, (ICrafting) crafters.get(i));
+		for (Object crafter : crafters)
+			tile.sendGUINetworkData(this, (ICrafting) crafter);
 	}
 
 }

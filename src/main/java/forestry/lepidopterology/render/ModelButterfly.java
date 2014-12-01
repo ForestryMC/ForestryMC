@@ -18,12 +18,12 @@ import net.minecraft.util.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 public class ModelButterfly extends ModelBase {
-	
-    ModelRenderer wingRight;
-    ModelRenderer eyeRight;
-    ModelRenderer eyeLeft;
-    ModelRenderer wingLeft;
-    ModelRenderer body;
+
+	private final ModelRenderer wingRight;
+	private final ModelRenderer eyeRight;
+	private final ModelRenderer eyeLeft;
+	private final ModelRenderer wingLeft;
+	private final ModelRenderer body;
   
     private float scale;
     

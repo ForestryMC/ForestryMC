@@ -216,7 +216,6 @@ public enum ForestryItem {
 	cratedMulch,
 	cratedSilver,
 	cratedBrass,
-	cratedNikolite,
 	cratedCookies,
 	cratedHoneycombs,
 	cratedBeeswax,

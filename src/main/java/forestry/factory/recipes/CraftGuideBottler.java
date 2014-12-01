@@ -38,7 +38,7 @@ public class CraftGuideBottler implements RecipeProvider {
 	@Override
 	public void generateRecipes(RecipeGenerator generator) {
 
-		if (ForestryBlock.factoryTESR == null)
+		if (ForestryBlock.factoryTESR.block() == null)
 			return;
 
 		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_BOTTLER_META);

@@ -10,20 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Locale;
-
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-
+import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-import com.mojang.authlib.GameProfile;
-
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -40,6 +29,15 @@ import forestry.core.config.Defaults;
 import forestry.core.genetics.AlleleSpecies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Locale;
 
 public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies, IIconProvider {
 
@@ -148,8 +146,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	@Override
 	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
 		ArrayList<ItemStack> bounty = new ArrayList<ItemStack>();
-		for(ItemStack stack : super.getResearchBounty(world, researcher, individual, bountyLevel))
-			bounty.add(stack);
+		Collections.addAll(bounty, super.getResearchBounty(world, researcher, individual, bountyLevel));
 
 		if(bountyLevel > 10) {
 			for(ItemStack stack : specialty.keySet()) {
@@ -159,7 +156,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 		for(ItemStack stack : products.keySet()) {
 			bounty.add(StackUtils.copyWithRandomSize(stack, (int)((float)bountyLevel / 2), world.rand));
 		}
-		return bounty.toArray(StackUtils.EMPTY_STACK_ARRAY);
+		return bounty.toArray(new ItemStack[bounty.size()]);
 	}
 
 	/* OTHER */
@@ -211,7 +208,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 			if(EnumBeeType.values()[i] == EnumBeeType.NONE)
 				continue;
 
-			icons[i][0] = TextureManager.getInstance().registerTex(register, "bees/" + iconType + "/" + EnumBeeType.values()[i].toString().toLowerCase(Locale.ENGLISH) + ".outline");;
+			icons[i][0] = TextureManager.getInstance().registerTex(register, "bees/" + iconType + "/" + EnumBeeType.values()[i].toString().toLowerCase(Locale.ENGLISH) + ".outline");
 			icons[i][1] = (EnumBeeType.values()[i] != EnumBeeType.LARVAE) ? body1
 					: TextureManager.getInstance().registerTex(register, "bees/" + iconType + "/" + EnumBeeType.values()[i].toString().toLowerCase(Locale.ENGLISH) + ".body");
 			icons[i][2] = TextureManager.getInstance().registerTex(register, "bees/" + iconType + "/" + EnumBeeType.values()[i].toString().toLowerCase(Locale.ENGLISH) + ".body2");

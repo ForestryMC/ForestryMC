@@ -42,14 +42,11 @@ import forestry.core.render.TextureManager;
 
 /**
  * Humus, bog earth, peat
- * 
- * @author
- * 
  */
 public class BlockSoil extends Block implements IItemTyped {
 
 	public enum SoilType {
-		HUMUS, BOG_EARTH, PEAT;
+		HUMUS, BOG_EARTH, PEAT
 	}
 
 	private static final int degradeDelimiter = 3;
@@ -164,7 +161,7 @@ public class BlockSoil extends Block implements IItemTyped {
 		// Repackage in format TTGG
 		meta = (grade << 2 | type);
 
-		if (grade >= this.degradeDelimiter)
+		if (grade >= degradeDelimiter)
 			world.setBlock(i, j, k, Blocks.sand, 0, Defaults.FLAG_BLOCK_SYNCH);
 		else
 			world.setBlockMetadataWithNotify(i, j, k, meta, Defaults.FLAG_BLOCK_SYNCH);

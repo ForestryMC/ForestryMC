@@ -20,8 +20,8 @@ import forestry.core.interfaces.IContainerCrafting;
  */
 public class SlotCraftMatrix extends SlotForestry {
 
-	private IContainerCrafting eventHandler;
-	private int slot;
+	private final IContainerCrafting eventHandler;
+	private final int slot;
 
 	public SlotCraftMatrix(IContainerCrafting container, IInventory iinventory, int i, int j, int k) {
 		super(iinventory, i, j, k);

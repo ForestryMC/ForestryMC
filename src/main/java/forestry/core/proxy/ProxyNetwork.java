@@ -28,9 +28,9 @@ public class ProxyNetwork {
 			return;
 
 		World[] worlds = DimensionManager.getWorlds();
-		for (int i = 0; i < worlds.length; i++)
-			for (int j = 0; j < worlds[i].playerEntities.size(); j++) {
-				EntityPlayerMP player = (EntityPlayerMP) worlds[i].playerEntities.get(j);
+		for (World world : worlds)
+			for (int j = 0; j < world.playerEntities.size(); j++) {
+				EntityPlayerMP player = (EntityPlayerMP) world.playerEntities.get(j);
 
 				if (Math.abs(player.posX - x) <= Defaults.NET_MAX_UPDATE_DISTANCE && Math.abs(player.posY - y) <= Defaults.NET_MAX_UPDATE_DISTANCE
 						&& Math.abs(player.posZ - z) <= Defaults.NET_MAX_UPDATE_DISTANCE)

@@ -10,17 +10,17 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
+import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.genetics.IFruitFamily;
+import forestry.plugins.PluginArboriculture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.genetics.IFruitFamily;
-import forestry.plugins.PluginArboriculture;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class FruitProviderRipening extends FruitProviderNone {
 
@@ -73,12 +73,13 @@ public class FruitProviderRipening extends FruitProviderNone {
 			if (world.rand.nextFloat() <= genome.getYield() * entry.getValue() * modeYieldMod * 5.0f * stage)
 				product.add(entry.getKey().copy());
 
-		return product.toArray(new ItemStack[0]);
+		return product.toArray(new ItemStack[product.size()]);
 	}
 
 	@Override
 	public ItemStack[] getProducts() {
-		return products.keySet().toArray(new ItemStack[0]);
+		Set<ItemStack> products = this.products.keySet();
+		return products.toArray(new ItemStack[products.size()]);
 	}
 
 	@Override

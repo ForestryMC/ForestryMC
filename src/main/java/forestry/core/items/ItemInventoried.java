@@ -28,7 +28,7 @@ public abstract class ItemInventoried extends ItemForestry implements IInventori
 		if (itemstack != null &&
 				player instanceof EntityPlayerMP &&
 				player.openContainer instanceof ContainerItemInventory)
-			((EntityPlayerMP) player).closeScreen();
+			player.closeScreen();
 
 		return super.onDroppedByPlayer(itemstack, player);
 	}

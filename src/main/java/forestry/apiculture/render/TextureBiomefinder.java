@@ -42,7 +42,7 @@ public class TextureBiomefinder extends TextureAtlasSprite {
 		if (minecraft.theWorld != null && minecraft.thePlayer != null)
 			updateCompass(minecraft.theWorld, minecraft.thePlayer.posX, minecraft.thePlayer.posZ, minecraft.thePlayer.rotationYaw, false, true);
 		else
-			updateCompass((World)null, 0.0d, 0.0d, 0.0d, true, true);
+			updateCompass(null, 0.0d, 0.0d, 0.0d, true, true);
 	}
 
 	public void updateCompass(World world, double playerX, double playerZ, double playerYaw, boolean par8, boolean hasSpin) {

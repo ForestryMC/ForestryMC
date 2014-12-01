@@ -37,7 +37,7 @@ public class ItemImprinter extends ItemForestry {
 		private int primaryIndex = 0;
 		private int secondaryIndex = 0;
 
-		EntityPlayer player;
+		private final EntityPlayer player;
 
 		public ImprinterInventory(EntityPlayer player) {
 			this.player = player;

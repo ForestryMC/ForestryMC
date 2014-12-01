@@ -17,14 +17,14 @@ import net.minecraft.world.World;
 
 public class BeverageEffectDrunk extends BeverageEffect {
 
-	private PotionEffect drunkEffect;
-	private float chance = 0.2f;
+	private final PotionEffect drunkEffect;
+	private final float chance;
 
 	public BeverageEffectDrunk(int id, float chance) {
 		super(id);
 		this.chance = chance;
 		this.description = "beverage.effect.alcoholic";
-		drunkEffect = new PotionEffect(Potion.confusion.id, 25 * 20, 0);
+		this.drunkEffect = new PotionEffect(Potion.confusion.id, 25 * 20, 0);
 	}
 
 	@Override

@@ -18,7 +18,7 @@ import forestry.apiculture.entities.EntityBee;
 
 public class RenderBee extends RenderLiving {
 
-	ModelBee beeModel;
+	private final ModelBee beeModel;
 
 	public RenderBee() {
 		super(new ModelBee(), 0.15f);

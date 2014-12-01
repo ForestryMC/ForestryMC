@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.Slot;
-
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotCrafter;
 import forestry.factory.gadgets.MachineFabricator;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
 
 public class ContainerFabricator extends ContainerLiquidTanks {
 
-	private MachineFabricator tile;
+	private final MachineFabricator tile;
 
 	public ContainerFabricator(InventoryPlayer player, MachineFabricator tile) {
 		super(tile, tile);

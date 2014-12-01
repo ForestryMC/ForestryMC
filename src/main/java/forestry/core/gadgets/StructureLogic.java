@@ -25,10 +25,10 @@ import forestry.core.utils.Vect;
 
 public abstract class StructureLogic implements IStructureLogic {
 
-	protected ITileStructure structure;
-	protected TileEntity structureTile;
+	protected final ITileStructure structure;
+	protected final TileEntity structureTile;
 
-	protected String uid;
+	protected final String uid;
 	protected Schemata[] schematas;
 	protected short activeSchemata = -1;
 	protected boolean isRotated = false;

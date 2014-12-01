@@ -10,15 +10,15 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import forestry.core.interfaces.IHintSource;
 import forestry.core.network.ClassMap;
 import forestry.core.network.IndexInPayload;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.Utils;
 import forestry.core.utils.EnumAccess;
+import forestry.core.utils.PlayerUtil;
+import forestry.core.utils.Utils;
+import net.minecraft.entity.player.EntityPlayer;
 
 public abstract class TileBase extends TileForestry implements IHintSource {
 
@@ -94,7 +94,7 @@ public abstract class TileBase extends TileForestry implements IHintSource {
 		if (!Utils.isUseableByPlayer(player, this, worldObj, xCoord, yCoord, zCoord))
 			return false;
 		if (getAccess() == EnumAccess.PRIVATE)
-			return owner.equals(player.getGameProfile());
+			return PlayerUtil.isSameGameProfile(owner, player.getGameProfile());
 
 		return true;
 	}

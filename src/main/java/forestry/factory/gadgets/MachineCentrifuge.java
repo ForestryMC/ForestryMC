@@ -39,6 +39,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 public class MachineCentrifuge extends TilePowered implements ISidedInventory, ISpecialInventory {
@@ -75,7 +76,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 	}
 
 	public static class RecipeManager implements ICentrifugeManager {
-		public static ArrayList<MachineCentrifuge.Recipe> recipes = new ArrayList<MachineCentrifuge.Recipe>();
+		public static final ArrayList<MachineCentrifuge.Recipe> recipes = new ArrayList<MachineCentrifuge.Recipe>();
 
 		@Override
 		public void addRecipe(int timePerItem, ItemStack resource, HashMap<ItemStack, Integer> products) {
@@ -112,8 +113,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 		}
 
 		public static Recipe findMatchingRecipe(ItemStack item) {
-			for (int i = 0; i < recipes.size(); i++) {
-				Recipe recipe = recipes.get(i);
+			for (Recipe recipe : recipes) {
 				if (recipe.matches(item))
 					return recipe;
 			}
@@ -124,8 +124,10 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 		public Map<Object[], Object[]> getRecipes() {
 			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
 
-			for (Recipe recipe : recipes)
-				recipeList.put(new Object[] { recipe.resource }, recipe.products.keySet().toArray(StackUtils.EMPTY_STACK_ARRAY));
+			for (Recipe recipe : recipes) {
+				Set<ItemStack> productsKeys = recipe.products.keySet();
+				recipeList.put(new Object[]{recipe.resource}, productsKeys.toArray(new ItemStack[productsKeys.size()]));
+			}
 
 			return recipeList;
 		}

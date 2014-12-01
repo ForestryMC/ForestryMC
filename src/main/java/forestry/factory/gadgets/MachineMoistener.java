@@ -58,13 +58,11 @@ public class MachineMoistener extends TileBase implements ISpecialInventory, ISi
 	private static final short SLOTS_COUNT_RESERVOIR = 3;
 	private static final short SLOTS_COUNT_STASH = 6;
 
-	private static final FluidStack STACK_WATER = LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1);
-
 	/* RECIPE MANAGMENT */
 	public static class Recipe {
-		public int timePerItem;
-		public ItemStack resource;
-		public ItemStack product;
+		public final int timePerItem;
+		public final ItemStack resource;
+		public final ItemStack product;
 
 		public Recipe(ItemStack resource, ItemStack product, int timePerItem) {
 			this.timePerItem = timePerItem;
@@ -75,9 +73,7 @@ public class MachineMoistener extends TileBase implements ISpecialInventory, ISi
 		public boolean matches(ItemStack res) {
 			if (res == null && resource == null)
 				return true;
-			else if (res == null && resource != null)
-				return false;
-			else if (res != null && resource == null)
+			else if (res == null || resource == null)
 				return false;
 			else
 				return resource.isItemEqual(res);
@@ -85,7 +81,7 @@ public class MachineMoistener extends TileBase implements ISpecialInventory, ISi
 	}
 
 	public static class RecipeManager implements IMoistenerManager {
-		public static ArrayList<MachineMoistener.Recipe> recipes = new ArrayList<MachineMoistener.Recipe>();
+		public static final ArrayList<MachineMoistener.Recipe> recipes = new ArrayList<MachineMoistener.Recipe>();
 
 		@Override
 		public void addRecipe(ItemStack resource, ItemStack product, int timePerItem) {
@@ -125,7 +121,7 @@ public class MachineMoistener extends TileBase implements ISpecialInventory, ISi
 	}
 
 	@EntityNetData
-	public FilteredTank resourceTank;
+	public final FilteredTank resourceTank;
 	private final TankManager tankManager;
 	private final InventoryAdapter inventory = new InventoryAdapter(12, "Items");
 	//private ItemStack[] inventoryStacks = new ItemStack[12];

@@ -20,7 +20,7 @@ import forestry.factory.gadgets.MachineCentrifuge;
 
 public class ContainerCentrifuge extends ContainerForestry {
 
-	protected MachineCentrifuge tile;
+	protected final MachineCentrifuge tile;
 
 	public ContainerCentrifuge(InventoryPlayer player, MachineCentrifuge tile) {
 		super(tile);
@@ -53,8 +53,8 @@ public class ContainerCentrifuge extends ContainerForestry {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
-		for (int i = 0; i < crafters.size(); i++)
-			tile.sendGUINetworkData(this, (ICrafting) crafters.get(i));
+		for (Object crafter : crafters)
+			tile.sendGUINetworkData(this, (ICrafting) crafter);
 	}
 
 }

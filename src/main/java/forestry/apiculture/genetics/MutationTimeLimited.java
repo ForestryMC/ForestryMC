@@ -19,12 +19,12 @@ import forestry.api.genetics.IGenome;
 public class MutationTimeLimited extends BeeMutation {
 
 	/**
-	 * Fed up with Date and Calendar and their shinenigans
+	 * Fed up with Date and Calendar and their shenanigans
 	 */
 	public static class DayMonth {
 
-		public int day;
-		public int month;
+		public final int day;
+		public final int month;
 
 		public DayMonth() {
 			this.day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
@@ -93,8 +93,9 @@ public class MutationTimeLimited extends BeeMutation {
 			return day + "." + month;
 		}
 	}
-	DayMonth start;
-	DayMonth end;
+
+	private final DayMonth start;
+	private final DayMonth end;
 
 	public MutationTimeLimited(IAllele allele0, IAllele allele1, IAllele[] template, int chance, DayMonth start) {
 		this(allele0, allele1, template, chance, start, null);
@@ -113,7 +114,7 @@ public class MutationTimeLimited extends BeeMutation {
 		if (chance == 0)
 			return 0;
 
-		if (start == null && end == null)
+		if (start == null)
 			return chance;
 
 		DayMonth now = new DayMonth();

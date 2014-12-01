@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommandBeekeepingModeSet extends SubCommand {
-	private String[] modeStringArr;
+	private final String[] modeStringArr;
 
 	public CommandBeekeepingModeSet() {
 		super("set");

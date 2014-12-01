@@ -10,17 +10,9 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import java.util.Collection;
-import java.util.Map;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
+import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-import com.mojang.authlib.GameProfile;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IIconProvider;
@@ -32,6 +24,11 @@ import forestry.api.genetics.IMutation;
 import forestry.core.config.ForestryItem;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.StringUtil;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
+import java.util.Collection;
+import java.util.Map;
 
 public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
 
@@ -95,7 +92,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
 		if (world.rand.nextFloat() < ((float) 10 / bountyLevel)) {
 			Collection<? extends IMutation> combinations = getRoot().getCombinations(this);
 			if (combinations.size() > 0) {
-				IMutation[] candidates = combinations.toArray(new IMutation[0]);
+				IMutation[] candidates = combinations.toArray(new IMutation[combinations.size()]);
 				research = AlleleManager.alleleRegistry.getMutationNoteStack(researcher, candidates[world.rand.nextInt(candidates.length)]);
 			}
 		}

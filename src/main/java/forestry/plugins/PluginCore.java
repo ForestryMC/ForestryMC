@@ -70,13 +70,15 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.ShapedRecipeCustom;
 
+import java.util.ArrayList;
+
 @Plugin(pluginID = "Core", name = "Core", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.core.description")
 public class PluginCore extends ForestryPlugin {
 
 	public static MachineDefinition definitionEscritoire;
 	// ICrashCallable for highlighting certain mods during crashes.
 	public static ForestryModEnvWarningCallable crashCallable;
-	public static RootCommand rootCommand = new RootCommand();
+	public static final RootCommand rootCommand = new RootCommand();
 
 	@Override
 	public void preInit() {
@@ -381,18 +383,16 @@ public class PluginCore extends ForestryPlugin {
 		Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.can"), " # ", "# #", '#', "ingotTin");
 
 		// / GEARS
-		if (PluginBuildCraft.stoneGear != null) {
-
-			Proxies.common.addRecipe(ForestryItem.gearBronze.getItemStack(), " # ", "#Y#", " # ", '#', "ingotBronze", 'Y', PluginBuildCraft.stoneGear);
-			Proxies.common.addRecipe(ForestryItem.gearCopper.getItemStack(), " # ", "#Y#", " # ", '#', "ingotCopper", 'Y', PluginBuildCraft.stoneGear);
-			Proxies.common.addRecipe(ForestryItem.gearTin.getItemStack(), " # ", "#Y#", " # ", '#', "ingotTin", 'Y', PluginBuildCraft.stoneGear);
-
+		ArrayList<ItemStack> stoneGear = OreDictionary.getOres("gearStone");
+		Object gearCenter;
+		if (!stoneGear.isEmpty()) {
+			gearCenter = "gearStone";
 		} else {
-
-			Proxies.common.addRecipe(ForestryItem.gearBronze.getItemStack(), " # ", "#X#", " # ", '#', "ingotBronze", 'X', "ingotCopper");
-			Proxies.common.addRecipe(ForestryItem.gearCopper.getItemStack(), " # ", "#X#", " # ", '#', "ingotCopper", 'X', "ingotCopper");
-			Proxies.common.addRecipe(ForestryItem.gearTin.getItemStack(), " # ", "#X#", " # ", '#', "ingotTin", 'X', "ingotCopper");
+			gearCenter = "ingotCopper";
 		}
+		Proxies.common.addRecipe(ForestryItem.gearBronze.getItemStack(), " # ", "#X#", " # ", '#', "ingotBronze", 'X', gearCenter);
+		Proxies.common.addRecipe(ForestryItem.gearCopper.getItemStack(), " # ", "#X#", " # ", '#', "ingotCopper", 'X', gearCenter);
+		Proxies.common.addRecipe(ForestryItem.gearTin.getItemStack(), " # ", "#X#", " # ", '#', "ingotTin", 'X', gearCenter);
 
 		// / SURVIVALIST TOOLS
 		Proxies.common.addRecipe(ForestryItem.bronzePickaxe.getItemStack(), " X ", " X ", "###", '#', "ingotBronze", 'X', "stickWood");

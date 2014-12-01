@@ -26,7 +26,7 @@ public class ContainerPropolisPipe extends ContainerForestry {
 	public ContainerPropolisPipe(IInventory playerInventory, PipeItemsPropolis pipe) {
 		super(new InventoryAdapter(0, "Empty"));
 		this.playerIInventory = playerInventory;
-		this.pipeLogic = (PipeLogicPropolis) pipe.pipeLogic;
+		this.pipeLogic = pipe.pipeLogic;
 
 		for (int l = 0; l < 3; l++)
 			for (int k1 = 0; k1 < 9; k1++)

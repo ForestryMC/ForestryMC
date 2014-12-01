@@ -25,7 +25,7 @@ public class ContainerPhilatelist extends ContainerForestry {
 		super(tile);
 
 		// Filter
-		addSlot(new SlotCustom(tile, MachinePhilatelist.SLOT_FILTER, 80, 19, new Object[] { ItemStamps.class }));
+		addSlot(new SlotCustom(tile, MachinePhilatelist.SLOT_FILTER, 80, 19, ItemStamps.class));
 
 		// Collected Stamps
 		for (int i = 0; i < 3; i++)

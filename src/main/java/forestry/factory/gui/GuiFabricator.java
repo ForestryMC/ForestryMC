@@ -32,7 +32,7 @@ public class GuiFabricator extends GuiForestryTitled<MachineFabricator> {
 		MachineFabricator fabricator = tile;
 		int heatScaled = fabricator.getHeatScaled(52);
 		if (heatScaled > 0)
-			drawTexturedModalRect(guiLeft + 55, guiTop + 17 + 52 - heatScaled, 192, 0 + 52 - heatScaled, 4, heatScaled);
+			drawTexturedModalRect(guiLeft + 55, guiTop + 17 + 52 - heatScaled, 192, 52 - heatScaled, 4, heatScaled);
 
 		int meltingPointScaled = fabricator.getMeltingPointScaled(52);
 		if (meltingPointScaled > 0)

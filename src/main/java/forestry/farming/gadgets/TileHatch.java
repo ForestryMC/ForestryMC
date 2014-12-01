@@ -28,6 +28,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 
 public class TileHatch extends TileFarm implements ISidedInventory {
@@ -59,9 +60,7 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 
 		ArrayList<ForgeDirection> pipes = new ArrayList<ForgeDirection>();
 		ForgeDirection[] tmp = BlockUtil.getPipeDirections(worldObj, Coords(), ForgeDirection.UP);
-		for (int i = 0; i < tmp.length; ++i) {
-			pipes.add(tmp[i]);
-		}
+		Collections.addAll(pipes, tmp);
 
 		if (pipes.size() > 0)
 			dumpToPipe(pipes);
@@ -74,9 +73,9 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 	private void dumpToPipe(ArrayList<ForgeDirection> pipes) {
 
 		ItemStack[] products = extractItem(true, ForgeDirection.DOWN, 1);
-		for (int i = 0; i < products.length; i++)
-			while (products[i].stackSize > 0)
-				BlockUtil.putFromStackIntoPipe(this, pipes, products[i]);
+		for (ItemStack product : products)
+			while (product.stackSize > 0)
+				BlockUtil.putFromStackIntoPipe(this, pipes, product);
 
 	}
 
@@ -96,23 +95,22 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 			if (stack.stackSize <= 0)
 				continue;
 
-			for (int j = 0; j < inventories.length; j++) {
+			for (IInventory inventory : inventories) {
 
 				// Don't dump in arboretums!
-				if (inventories[j].getSizeInventory() < 4)
+				if (inventory.getSizeInventory() < 4)
 					continue;
 
 				// Get complete inventory (for double chests)
-				IInventory inventory = Utils.getChest(inventories[j]);
-				if (inventory instanceof ISidedInventory) {
-					ISidedInventory sidedInventory = (ISidedInventory)inventory;
+				IInventory completeInventory = Utils.getChest(inventory);
+				if (completeInventory instanceof ISidedInventory) {
+					ISidedInventory sidedInventory = (ISidedInventory) completeInventory;
 					int[] slots = sidedInventory.getAccessibleSlotsFromSide(ForgeDirection.UP.ordinal());
 					for (int sl = 0; sl < slots.length; ++sl) {
 						StackUtils.stowInInventory(stack, sidedInventory, true, sl, 1);
 					}
-				}
-				else {
-					StackUtils.stowInInventory(stack, inventory, true);
+				} else {
+					StackUtils.stowInInventory(stack, completeInventory, true);
 					if (stack.stackSize <= 0) {
 						inv.setInventorySlotContents(i, null);
 						break;

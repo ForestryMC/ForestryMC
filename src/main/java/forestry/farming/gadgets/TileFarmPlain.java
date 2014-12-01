@@ -94,7 +94,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
 
-	private FilteredTank liquidTank;
+	private final FilteredTank liquidTank;
 	private final TankManager tankManager;
 
 	private IFarmLogic harvestProvider; // The farm logic which supplied the pending crops.
@@ -279,7 +279,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			int size = potential.size() * 3;
 			if (size > allowedExtent)
 				allowedExtent = size;
-			targets.put(direction, potential.toArray(new FarmTarget[0]));
+			targets.put(direction, potential.toArray(new FarmTarget[potential.size()]));
 		}
 
 		// Fill out the corners
@@ -327,7 +327,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 				targ.add(corner);
 			}
 
-			cache.put(entry.getKey(), targ.toArray(new FarmTarget[0]));
+			cache.put(entry.getKey(), targ.toArray(new FarmTarget[targ.size()]));
 		}
 
 		targets = cache;

@@ -126,8 +126,7 @@ public abstract class TileMachine extends TileForestry implements ISpecialInvent
 
 		super.readFromNBT(nbttagcompound);
 
-		int kind = nbttagcompound.getInteger("Kind");
-		oldkind = kind;
+		oldkind = nbttagcompound.getInteger("Kind");
 		olddata = nbttagcompound;
 
 	}
@@ -360,10 +359,7 @@ public abstract class TileMachine extends TileForestry implements ISpecialInvent
 	// INETWORKEDTILE IMPLEMENTATION
 	@Override
 	public PacketPayload getPacketPayload() {
-
-		PacketPayload payload = null;
-
-		return payload;
+		return null;
 	}
 
 	@Override
