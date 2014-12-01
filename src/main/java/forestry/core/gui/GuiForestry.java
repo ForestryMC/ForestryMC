@@ -365,13 +365,17 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240 / 1.0F, 240 / 1.0F);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		ledgerManager.drawLedgers();
-		widgetManager.drawWidgets();
+		drawWidgets();
 
 		GL11.glPopMatrix();
 		GL11.glPopAttrib();
 
 		bindTexture(textureFile);
+	}
+
+	protected void drawWidgets() {
+		ledgerManager.drawLedgers();
+		widgetManager.drawWidgets();
 	}
 
 	protected void bindTexture(ResourceLocation texturePath) {

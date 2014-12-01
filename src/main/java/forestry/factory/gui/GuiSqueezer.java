@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.factory.gadgets.MachineSqueezer;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiSqueezer extends GuiForestryTitled<MachineSqueezer> {
 
@@ -25,12 +24,11 @@ public class GuiSqueezer extends GuiForestryTitled<MachineSqueezer> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		MachineSqueezer machine = tile;
+	protected void drawWidgets() {
+		int progress = tile.getProgressScaled(43);
+		drawTexturedModalRect(75, 20, 176, 60, 43 - progress, 18);
 
-		int progress = machine.getProgressScaled(43);
-		drawTexturedModalRect(guiLeft + 75, guiTop + 20, 176, 60, 43 - progress, 18);
+		super.drawWidgets();
 	}
 
 }
