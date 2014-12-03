@@ -28,7 +28,6 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -37,7 +36,6 @@ import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -45,7 +43,6 @@ import net.minecraft.world.biome.BiomeGenBase;
 import java.security.MessageDigest;
 import java.security.cert.Certificate;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
@@ -57,8 +54,7 @@ public class Utils {
 		if (rand == null)
 			rand = new Random();
 
-		int uid = rand.nextInt();
-		return uid;
+		return rand.nextInt();
 	}
 
 	public static void dropInventory(TileForestry tile, World world, int x, int y, int z) {

@@ -85,10 +85,7 @@ public class ItemBackpack extends ItemInventoried {
 
 	@Override
 	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-		if (getInventoryHit(world, x, y, z, side) != null)
-			return true;
-		else
-			return false;
+		return getInventoryHit(world, x, y, z, side) != null;
 	}
 
 	@Override
