@@ -47,6 +47,25 @@ public class ItemInventory implements IInventory, INBTTagable {
 		readFromNBT(itemstack.getTagCompound());
 	}
 
+	public static int getOccupiedSlotCount(ItemStack itemStack) {
+		NBTTagCompound nbt = itemStack.getTagCompound();
+		if (nbt == null)
+			return 0;
+
+		int count = 0;
+		if (nbt.hasKey("Items")) {
+			NBTTagList nbttaglist = nbt.getTagList("Items", 10);
+			for (int i = 0; i < nbttaglist.tagCount(); i++) {
+				NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
+				ItemStack itemStack1 = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+				if (itemStack1 != null && itemStack1.stackSize > 0) {
+					count++;
+				}
+			}
+		}
+		return count;
+	}
+
 	protected void setUID(boolean override) {
 		if (parent.getTagCompound() == null)
 			parent.setTagCompound(new NBTTagCompound());
