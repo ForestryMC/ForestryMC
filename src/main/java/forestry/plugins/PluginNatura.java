@@ -84,8 +84,8 @@ public class PluginNatura extends ForestryPlugin {
 			seedList.add(seedCotton);
 
 		int amount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");
-		for (int i = 0; i < seedList.size(); ++i)
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{seedList.get(i)},
+		for (ItemStack aSeedList : seedList)
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{aSeedList},
 					LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, amount));
 
 		ItemStack berryBlight = GameRegistry.findItemStack(NATURA, "berryBlight", 1);
@@ -117,8 +117,8 @@ public class PluginNatura extends ForestryPlugin {
 
 		amount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple") / 25;
 		amount = (amount > 1) ? amount : 1; // Produce at least 1 mb of juice.
-		for (int i = 0; i < berries.size(); ++i)
-			RecipeManagers.squeezerManager.addRecipe(3, new ItemStack[]{berries.get(i)},
+		for (ItemStack berry : berries)
+			RecipeManagers.squeezerManager.addRecipe(3, new ItemStack[]{berry},
 					LiquidHelper.getLiquid(Defaults.LIQUID_JUICE, amount));
 	}
 

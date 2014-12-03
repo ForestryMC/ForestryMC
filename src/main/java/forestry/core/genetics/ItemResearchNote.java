@@ -47,7 +47,7 @@ public class ItemResearchNote extends ItemForestry {
 	public static enum EnumNoteType {
 		NONE, MUTATION, SPECIES;
 
-		public static EnumNoteType[] VALUES = values();
+		public static final EnumNoteType[] VALUES = values();
 
 		private IMutation getEncodedMutation(ISpeciesRoot root, NBTTagCompound compound) {
 			IAllele allele0 = AlleleManager.alleleRegistry.getAllele(compound.getString("AL0"));
@@ -180,9 +180,9 @@ public class ItemResearchNote extends ItemForestry {
 
 	public static class ResearchNote {
 
-		private GameProfile researcher;
-		private EnumNoteType type = EnumNoteType.NONE;
-		private NBTTagCompound inner;
+		private final GameProfile researcher;
+		private final EnumNoteType type;
+		private final NBTTagCompound inner;
 
 		public ResearchNote(GameProfile researcher, EnumNoteType type, NBTTagCompound inner) {
 			this.researcher = researcher;
@@ -193,12 +193,17 @@ public class ItemResearchNote extends ItemForestry {
 		public ResearchNote(NBTTagCompound compound) {
 			if(compound != null) {
 				if (compound.hasKey("res")) {
-					researcher = NBTUtil.func_152459_a(compound.getCompoundTag("res"));
+					this.researcher = NBTUtil.func_152459_a(compound.getCompoundTag("res"));
+				} else {
+					this.researcher = null;
 				}
 				this.type = EnumNoteType.VALUES[compound.getByte("TYP")];
 				this.inner = compound.getCompoundTag("INN");
-			} else
+			} else {
+				this.type = EnumNoteType.NONE;
+				this.researcher = null;
 				this.inner = new NBTTagCompound();
+			}
 		}
 
 		public void writeToNBT(NBTTagCompound compound) {

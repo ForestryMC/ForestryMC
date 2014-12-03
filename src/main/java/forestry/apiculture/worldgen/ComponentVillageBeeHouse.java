@@ -45,7 +45,7 @@ import forestry.plugins.PluginApiculture;
 
 public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
-	protected ItemStack[] buildingBlocks = new ItemStack[]{ForestryBlock.planks1.getItemStack(1, 15), new ItemStack(Blocks.log, 1, 0),};
+	protected final ItemStack[] buildingBlocks = new ItemStack[]{ForestryBlock.planks1.getItemStack(1, 15), new ItemStack(Blocks.log, 1, 0),};
 	protected int averageGroundLevel = -1;
 	protected boolean isInDesert = false;
 	protected boolean hasChest = false;

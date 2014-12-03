@@ -357,12 +357,10 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 					chipset.onRemoval(this);
 			}
 
+		sockets.setInventorySlotContents(slot, stack);
 		if (stack == null) {
-			sockets.setInventorySlotContents(slot, stack);
 			return;
 		}
-
-		sockets.setInventorySlotContents(slot, stack);
 
 		ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitboard(stack);
 		if (chipset != null)

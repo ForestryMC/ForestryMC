@@ -23,7 +23,7 @@ import forestry.core.gadgets.TileForestry;
 public class ClassMap {
 
 	@SuppressWarnings("rawtypes")
-	public static HashMap<Class, ClassMap> classMappers = new HashMap<Class, ClassMap>();
+	public static final HashMap<Class, ClassMap> classMappers = new HashMap<Class, ClassMap>();
 
 	private final LinkedList<Field> intMember = new LinkedList<Field>();
 	private final LinkedList<Field> floatMember = new LinkedList<Field>();

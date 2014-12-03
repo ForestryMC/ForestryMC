@@ -45,7 +45,7 @@ import forestry.plugins.PluginArboriculture;
 
 public class CommandTreekeepingMode extends CommandMC {
 
-	String[] modeStrings;
+	private final String[] modeStrings;
 
 	public CommandTreekeepingMode() {
 		modeStrings = new String[PluginArboriculture.treeInterface.getTreekeepingModes().size()];

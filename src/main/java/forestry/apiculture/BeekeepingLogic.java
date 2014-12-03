@@ -32,7 +32,7 @@ import forestry.plugins.PluginApiculture;
 public class BeekeepingLogic implements IBeekeepingLogic {
 
 	private static final int MAX_POLLINATION_ATTEMPTS = 20;
-	IBeeHousing housing;
+	private final IBeeHousing housing;
 	// Breeding
 	private int breedingTime;
 	private final int totalBreedingTime = Defaults.APIARY_BREEDING_TIME;

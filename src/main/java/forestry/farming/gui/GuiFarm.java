@@ -135,7 +135,6 @@ public class GuiFarm extends GuiForestry<TileFarmPlain> {
 
 		this.xSize = 216;
 		this.ySize = 220;
-		this.tile = tile;
 		this.farm = tile;
 	}
 

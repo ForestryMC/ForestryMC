@@ -121,7 +121,7 @@ public class GuiCatalogue extends GuiForestry<TileForestry> {
 	protected void actionPerformed(GuiButton button) {
 		switch(button.id) {
 		case 0:
-			mc.displayGuiScreen((GuiScreen)null);
+			mc.displayGuiScreen(null);
 			break;
 		case 2:
 			container.advanceIteration();
@@ -138,7 +138,7 @@ public class GuiCatalogue extends GuiForestry<TileForestry> {
 				SessionVars.setStringVar("mail.letter.recipient", info.address.getName());
 				SessionVars.setStringVar("mail.letter.addressee", EnumAddressee.TRADER.toString());
 			}
-			mc.displayGuiScreen((GuiScreen)null);
+			mc.displayGuiScreen(null);
 			break;
 		}
 	}

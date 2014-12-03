@@ -42,7 +42,7 @@ public class PickupHandlerStorage implements IPickupHandler {
 			if (pack == null || pack.stackSize <= 0)
 				continue;
 
-			if (itemstack == null || itemstack.stackSize <= 0)
+			if (itemstack.stackSize <= 0)
 				break;
 
 			if (!(pack.getItem() instanceof ItemBackpack))
@@ -53,7 +53,7 @@ public class PickupHandlerStorage implements IPickupHandler {
 				backpack.tryStowing(player, pack, itemstack);
 		}
 
-		if (itemstack == null || itemstack.stackSize <= 0)
+		if (itemstack.stackSize <= 0)
 			return false;
 		else
 			return true;

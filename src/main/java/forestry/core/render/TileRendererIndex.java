@@ -13,8 +13,8 @@ package forestry.core.render;
 import net.minecraft.block.Block;
 
 public class TileRendererIndex {
-	private Block block;
-	private int meta;
+	private final Block block;
+	private final int meta;
 
 	public TileRendererIndex(Block block, int meta) {
 		this.block = block;

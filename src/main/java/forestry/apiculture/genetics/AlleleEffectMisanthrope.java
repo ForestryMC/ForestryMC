@@ -24,7 +24,7 @@ import forestry.core.utils.DamageSourceForestry;
 
 public class AlleleEffectMisanthrope extends AlleleEffectThrottled {
 
-	public static DamageSource damageSourceBeeEnd = new DamageSourceForestry("bee.end");
+	public static final DamageSource damageSourceBeeEnd = new DamageSourceForestry("bee.end");
 
 	public AlleleEffectMisanthrope(String uid) {
 		super(uid, "misanthrope", true, 20, false, false);

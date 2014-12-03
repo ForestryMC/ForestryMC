@@ -25,9 +25,6 @@ import forestry.plugins.PluginArboriculture;
 
 public class FarmableVanillaSapling extends FarmableGenericSapling {
 
-	int saplingId;
-	int saplingMeta;
-
 	public FarmableVanillaSapling() {
 		super(Blocks.sapling, -1, new ItemStack(Items.apple), new ItemStack(FarmableCocoa.COCOA_SEED, 1, FarmableCocoa.COCOA_META));
 	}

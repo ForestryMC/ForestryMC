@@ -26,17 +26,18 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.Utils;
 
 public class TickHandlerCoreClient {
+
+	private static final ConcurrentLinkedQueue<String> messages = new ConcurrentLinkedQueue<String>();
+	private boolean naggedVersion, naggedVerify;
+	private boolean hasNaturalistView;
+
 	public TickHandlerCoreClient() {
 		FMLCommonHandler.instance().bus().register(this);
 	}
 
-	private static ConcurrentLinkedQueue<String> messages = new ConcurrentLinkedQueue<String>();
-
 	public void queueChatMessage(String message) {
 		messages.add(message);
 	}
-	private boolean naggedVersion, naggedVerify;
-	private boolean hasNaturalistView;
 
 	@SubscribeEvent
 	public void onPlayerTick(PlayerTickEvent event) {

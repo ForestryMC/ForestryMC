@@ -18,8 +18,8 @@ import forestry.core.utils.StringUtil;
 
 public class HintLedger extends Ledger {
 
-	int position;
-	String[] hints;
+	private final int position;
+	private final String[] hints;
 
 	public HintLedger(LedgerManager manager, IHintSource tile) {
 		super(manager);

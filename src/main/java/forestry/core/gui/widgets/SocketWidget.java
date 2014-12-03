@@ -27,8 +27,8 @@ import forestry.core.utils.StringUtil;
 
 public class SocketWidget extends Widget {
 
-	ISocketable tile;
-	int slot = 0;
+	private final ISocketable tile;
+	private final int slot;
 
 	public SocketWidget(WidgetManager manager, int xPos, int yPos, ISocketable tile, int slot) {
 		super(manager, xPos, yPos);

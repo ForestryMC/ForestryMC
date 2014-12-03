@@ -17,8 +17,8 @@ import net.minecraft.util.IIcon;
  */
 public class PlainLedger extends Ledger {
 
-	private IIcon icon;
-	private String text;
+	private final IIcon icon;
+	private final String text;
 
 	public PlainLedger(LedgerManager manager, IIcon icon, String text) {
 		super(manager);

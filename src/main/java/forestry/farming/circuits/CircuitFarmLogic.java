@@ -18,7 +18,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class CircuitFarmLogic extends Circuit {
 
-	private Class<? extends IFarmLogic> logicClass;
+	private final Class<? extends IFarmLogic> logicClass;
 	private boolean isManual = false;
 
 	public CircuitFarmLogic(String uid, Class<? extends IFarmLogic> logicClass) {

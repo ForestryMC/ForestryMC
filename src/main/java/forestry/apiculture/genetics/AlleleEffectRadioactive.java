@@ -32,7 +32,7 @@ import forestry.core.utils.Vect;
 
 public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 
-	public static DamageSource damageSourceBeeRadioactive = new DamageSourceForestry("bee.radioactive");
+	public static final DamageSource damageSourceBeeRadioactive = new DamageSourceForestry("bee.radioactive");
 
 	public AlleleEffectRadioactive(String uid) {
 		super(uid, "radioactive", true, 40, false, true);

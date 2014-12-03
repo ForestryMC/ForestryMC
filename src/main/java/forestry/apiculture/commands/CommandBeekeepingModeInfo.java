@@ -25,8 +25,8 @@ import java.util.List;
 
 public class CommandBeekeepingModeInfo extends SubCommand {
 
-	private String[] modeStringArr;
-	private String helpString;
+	private final String[] modeStringArr;
+	private final String helpString;
 
 	public CommandBeekeepingModeInfo() {
 		super("info");

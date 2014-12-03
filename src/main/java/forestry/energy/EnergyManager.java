@@ -13,7 +13,7 @@ public class EnergyManager implements IEnergyHandler {
 		EXTRACT, RECEIVE, BOTH
 	}
 
-	private int energyPerWork;
+	private final int energyPerWork;
 	protected EnergyStorage energyStorage;
 	private EnergyTransferMode mode = EnergyTransferMode.BOTH;
 

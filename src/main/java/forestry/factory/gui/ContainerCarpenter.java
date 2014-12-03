@@ -42,8 +42,8 @@ public class ContainerCarpenter extends ContainerLiquidTanks implements IContain
 	private MachineCarpenter machine;
 	private final IInventory craftingInventory;
 	private IInventory internalInventory;
-	public InventoryCraftingAuto craftMatrix;
-	public InventoryCraftResult craftResult;
+	public final InventoryCraftingAuto craftMatrix;
+	public final InventoryCraftResult craftResult;
 
 	public ContainerCarpenter(InventoryPlayer inventoryplayer, MachineCarpenter tile) {
 		super(tile.getInternalInventory(), tile);

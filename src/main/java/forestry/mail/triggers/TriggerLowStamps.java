@@ -19,7 +19,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class TriggerLowStamps extends Trigger {
 
-	int threshold;
+	private final int threshold;
 
 	public TriggerLowStamps(String tag, int threshold) {
 		super(tag, "lowStamps");

@@ -20,7 +20,7 @@ import forestry.core.gui.ContainerItemInventory;
 public class SlotItemInventory extends Slot {
 
 	private final EntityPlayer player;
-	private ContainerItemInventory container;
+	private final ContainerItemInventory container;
 
 	public SlotItemInventory(ContainerItemInventory container, IInventory inventory, EntityPlayer player, int par2, int par3, int par4) {
 		super(inventory, par2, par3, par4);

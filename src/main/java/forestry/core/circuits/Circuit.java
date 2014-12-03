@@ -18,9 +18,9 @@ import forestry.core.utils.StringUtil;
 
 public abstract class Circuit implements ICircuit {
 
-	String uid;
-	int limit = 1;
-	boolean requiresDiscovery;
+	private final String uid;
+	private final boolean requiresDiscovery;
+	private int limit = 1;
 
 	public Circuit(String uid, boolean requiresDiscovery) {
 		this.uid = uid;

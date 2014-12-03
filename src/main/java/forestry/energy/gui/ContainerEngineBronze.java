@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.Slot;
-
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotLiquidContainer;
 import forestry.energy.gadgets.EngineBronze;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
 
 public class ContainerEngineBronze extends ContainerLiquidTanks {
-	protected EngineBronze engine;
+	protected final EngineBronze engine;
 
 	public ContainerEngineBronze(InventoryPlayer player, EngineBronze engine) {
 		super(engine, engine);

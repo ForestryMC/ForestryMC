@@ -47,8 +47,8 @@ public class GuiPropolisPipe<T extends TileForestry> extends GuiForestry<T> {
 
 	class TypeFilterSlot extends Widget {
 
-		ForgeDirection orientation;
-		PipeLogicPropolis logic;
+		private final ForgeDirection orientation;
+		private final PipeLogicPropolis logic;
 
 		public TypeFilterSlot(int x, int y, ForgeDirection orientation, PipeLogicPropolis logic) {
 			super(widgetManager, x, y);
@@ -98,11 +98,11 @@ public class GuiPropolisPipe<T extends TileForestry> extends GuiForestry<T> {
 
 	class SpeciesFilterSlot extends Widget {
 
-		IApiaristTracker tracker;
-		ForgeDirection orientation;
-		PipeLogicPropolis logic;
-		int pattern;
-		int allele;
+		private final IApiaristTracker tracker;
+		private final ForgeDirection orientation;
+		private final PipeLogicPropolis logic;
+		private final int pattern;
+		private final int allele;
 
 		public SpeciesFilterSlot(IApiaristTracker tracker, int x, int y, ForgeDirection orientation, int pattern, int allele, PipeLogicPropolis logic) {
 			super(widgetManager, x, y);
@@ -204,7 +204,7 @@ public class GuiPropolisPipe<T extends TileForestry> extends GuiForestry<T> {
 		}
 	}
 
-	PipeLogicPropolis pipeLogic;
+	private final PipeLogicPropolis pipeLogic;
 
 	public GuiPropolisPipe(EntityPlayer player, PipeItemsPropolis pipe) {
 		super(Defaults.TEXTURE_PATH_GUI + "/analyzer.png", new ContainerPropolisPipe(player.inventory, pipe));

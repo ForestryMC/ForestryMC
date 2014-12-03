@@ -24,9 +24,9 @@ import forestry.core.utils.Vect;
 
 public class MutationEMC extends MutationReqRes {
 
-	int emcRequired = 0;
-	Class<?> condenserClass;
-	Field emcField;
+	private final int emcRequired;
+	private final Class<?> condenserClass;
+	private final Field emcField;
 
 	public MutationEMC(IAllele allele0, IAllele allele1, IAllele[] template, int chance, ItemStack blockRequired, Class<?> condenserClass, Field emcField,
 			int emcRequired) {

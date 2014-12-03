@@ -30,44 +30,7 @@ import forestry.plugins.PluginFarming;
 
 public class ContainerFarm extends ContainerSocketed {
 
-	private class SlotResources extends SlotForestry {
-
-		private final IFarmLogic[] logics;
-
-		public SlotResources(IInventory inventory, IFarmLogic[] logics, int slotIndex, int xPos, int yPos) {
-			super(inventory, slotIndex, xPos, yPos);
-			this.logics = logics;
-		}
-
-		@Override
-		public boolean isItemValid(ItemStack stack) {
-			for (IFarmLogic logic : logics) {
-				if (logic != null && logic.isAcceptedResource(stack))
-					return true;
-			}
-			return false;
-		}
-	}
-
-	private class SlotGermlings extends SlotForestry {
-
-		private final IFarmLogic[] logics;
-
-		public SlotGermlings(IInventory inventory, IFarmLogic[] logics, int slotIndex, int xPos, int yPos) {
-			super(inventory, slotIndex, xPos, yPos);
-			this.logics = logics;
-		}
-
-		@Override
-		public boolean isItemValid(ItemStack stack) {
-			for (IFarmLogic logic : logics) {
-				if (logic != null && logic.isAcceptedGermling(stack))
-					return true;
-			}
-			return false;
-		}
-	}
-	TileFarmPlain tile;
+	private final TileFarmPlain tile;
 
 	public ContainerFarm(InventoryPlayer playerinventory, TileFarmPlain tile) {
 		super(playerinventory, tile);
@@ -140,8 +103,8 @@ public class ContainerFarm extends ContainerSocketed {
 		if (tankManager != null)
 			tankManager.updateGuiData(this, crafters);
 
-		for (int i = 0; i < crafters.size(); i++) {
-			tile.sendGUINetworkData(this, (ICrafting) crafters.get(i));
+		for (Object crafter : crafters) {
+			tile.sendGUINetworkData(this, (ICrafting) crafter);
 		}
 	}
 
@@ -155,5 +118,43 @@ public class ContainerFarm extends ContainerSocketed {
 
 	public StandardTank getTank(int slot) {
 		return tile.getTankManager().get(slot);
+	}
+
+	private class SlotResources extends SlotForestry {
+
+		private final IFarmLogic[] logics;
+
+		public SlotResources(IInventory inventory, IFarmLogic[] logics, int slotIndex, int xPos, int yPos) {
+			super(inventory, slotIndex, xPos, yPos);
+			this.logics = logics;
+		}
+
+		@Override
+		public boolean isItemValid(ItemStack stack) {
+			for (IFarmLogic logic : logics) {
+				if (logic != null && logic.isAcceptedResource(stack))
+					return true;
+			}
+			return false;
+		}
+	}
+
+	private class SlotGermlings extends SlotForestry {
+
+		private final IFarmLogic[] logics;
+
+		public SlotGermlings(IInventory inventory, IFarmLogic[] logics, int slotIndex, int xPos, int yPos) {
+			super(inventory, slotIndex, xPos, yPos);
+			this.logics = logics;
+		}
+
+		@Override
+		public boolean isItemValid(ItemStack stack) {
+			for (IFarmLogic logic : logics) {
+				if (logic != null && logic.isAcceptedGermling(stack))
+					return true;
+			}
+			return false;
+		}
 	}
 }

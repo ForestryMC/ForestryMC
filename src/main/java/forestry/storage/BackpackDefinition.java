@@ -24,12 +24,12 @@ import net.minecraft.util.StatCollector;
 
 public class BackpackDefinition implements IBackpackDefinition {
 
-	final String name;
+	private final String name;
 
-	final int primaryColor; // - c03384
-	final int secondaryColor;
+	private final int primaryColor; // - c03384
+	private final int secondaryColor;
 
-	ArrayList<ItemStack> validItems = new ArrayList<ItemStack>();
+	private final ArrayList<ItemStack> validItems = new ArrayList<ItemStack>();
 
 	public BackpackDefinition(String name, int primaryColor) {
 		this(name, primaryColor, 0xffffff);

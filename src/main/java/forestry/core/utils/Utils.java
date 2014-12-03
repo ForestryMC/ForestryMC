@@ -126,14 +126,6 @@ public class Utils {
 				&& ((IArmorNaturalist) armorItem.getItem()).canSeePollination(player, armorItem, true);
 	}
 
-	@SuppressWarnings("rawtypes")
-	public static void broadcastMessage(World world, String message) {
-		for (Iterator iterator = world.playerEntities.iterator(); iterator.hasNext();) {
-			EntityPlayer entityplayer = (EntityPlayer) iterator.next();
-			entityplayer.addChatMessage(new ChatComponentText(message));
-		}
-	}
-
 	public static IInventory getChest(IInventory inventory) {
 		if (!(inventory instanceof TileEntityChest))
 			return inventory;
@@ -264,7 +256,7 @@ public class Utils {
 			spawn.setLocationAndAngles(x, y, z, MathHelper.wrapAngleTo180_float(world.rand.nextFloat() * 360.0f), 0.0f);
 			living.rotationYawHead = living.rotationYaw;
 			living.renderYawOffset = living.rotationYaw;
-			living.onSpawnWithEgg((IEntityLivingData) null);
+			living.onSpawnWithEgg(null);
 			world.spawnEntityInWorld(spawn);
 			living.playLivingSound();
 		}

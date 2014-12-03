@@ -15,7 +15,6 @@ import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameData;
 import forestry.api.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.ISpecialInventory;
 import forestry.api.fuels.FuelManager;
 import forestry.core.TemperatureState;
 import forestry.core.config.Config;
@@ -42,7 +41,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
-public class EngineCopper extends Engine implements ISpecialInventory, ISidedInventory {
+public class EngineCopper extends Engine implements ISidedInventory {
 
 	/* CONSTANTS */
 	public static final short SLOT_FUEL = 0;
@@ -169,16 +168,16 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 	@Override
 	public int generateHeat() {
 
-		int heat = 0;
+		int heatToAdd = 0;
 
 		if (isBurning()) {
-			heat++;
+			heatToAdd++;
 			if (((double) energyManager.getTotalEnergyStored() / (double) maxEnergy) > 0.5)
-				heat++;
+				heatToAdd++;
 		}
 
-		addHeat(heat);
-		return heat;
+		addHeat(heatToAdd);
+		return heatToAdd;
 	}
 
 	private void addAsh(int amount) {
@@ -242,10 +241,11 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 				continue;
 
 			ArrayList<ForgeDirection> filtered;
-			filtered = BlockUtil.filterPipeDirections(pipes, new ForgeDirection[] { getOrientation() });
+			filtered = BlockUtil.filterPipeDirections(pipes, new ForgeDirection[]{getOrientation()});
 
-			while (inventory.getStackInSlot(i).stackSize > 0 && filtered.size() > 0)
+			while (inventory.getStackInSlot(i).stackSize > 0 && filtered.size() > 0) {
 				BlockUtil.putFromStackIntoPipe(this, filtered, inventory.getStackInSlot(i));
+			}
 
 			if (inventory.getStackInSlot(i).stackSize <= 0)
 				inventory.setInventorySlotContents(i, null);
@@ -253,7 +253,6 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 	}
 
 	// / STATE INFORMATION
-
 	@Override
 	public boolean isBurning() {
 		return mayBurn() && burnTime > 0;
@@ -279,6 +278,7 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 	// / LOADING AND SAVING
 	/**
 	 * Reads saved data
+	 * @param nbttagcompound
 	 */
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
@@ -286,7 +286,8 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 
 		String fuelItemName = nbttagcompound.getString("EngineFuelItem");
 
-		if (!fuelItemName.isEmpty()) fuelItem = GameData.getItemRegistry().getRaw(fuelItemName);
+		if (!fuelItemName.isEmpty())
+			fuelItem = GameData.getItemRegistry().getRaw(fuelItemName);
 
 		fuelItemMeta = nbttagcompound.getInteger("EngineFuelMeta");
 		burnTime = nbttagcompound.getInteger("EngineBurnTime");
@@ -300,14 +301,14 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 
 	/**
 	 * Writes data to save
+	 * @param nbttagcompound
 	 */
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 
-		if (fuelItem != null) {
+		if (fuelItem != null)
 			nbttagcompound.setString("EngineFuelItem", GameData.getItemRegistry().getNameForObject(fuelItem));
-		}
 
 		nbttagcompound.setInteger("EngineFuelMeta", fuelItemMeta);
 		nbttagcompound.setInteger("EngineBurnTime", burnTime);
@@ -449,55 +450,20 @@ public class EngineCopper extends Engine implements ISpecialInventory, ISidedInv
 
 	@Override
 	protected boolean canTakeStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-		if(!super.canTakeStackFromSide(slotIndex, itemstack, side))
+		if (!super.canTakeStackFromSide(slotIndex, itemstack, side))
 			return false;
 
-		if(slotIndex >= SLOT_WASTE_1 && slotIndex < SLOT_WASTE_1 + SLOT_WASTE_COUNT)
-			return true;
-
-		return false;
+		return slotIndex >= SLOT_WASTE_1 && slotIndex < SLOT_WASTE_1 + SLOT_WASTE_COUNT;
 	}
 
 	@Override
 	protected boolean canPutStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-		if(!super.canPutStackFromSide(slotIndex, itemstack, side))
+		if (!super.canPutStackFromSide(slotIndex, itemstack, side))
 			return false;
 
-		if(slotIndex == SLOT_FUEL && FuelManager.copperEngineFuel.containsKey(itemstack))
-			return true;
-
-		return false;
-
+		return slotIndex == SLOT_FUEL && FuelManager.copperEngineFuel.containsKey(itemstack);
 	}
 
-	/* ISPECIALINVENTORY */
-	@Override
-	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
-		// Peat
-		if (FuelManager.copperEngineFuel.containsKey(stack))
-			return inventory.addStack(stack, SLOT_FUEL, 1, false, doAdd);
-
-		return 0;
-	}
-
-	@Override
-	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
-		for (int i = SLOT_WASTE_1; i < SLOT_WASTE_1 + SLOT_WASTE_COUNT; i++) {
-			if (inventory.getStackInSlot(i) == null)
-				continue;
-
-			// Only ash can be extracted
-			if (!ForestryItem.ash.isItemEqual(inventory.getStackInSlot(i)))
-				continue;
-
-			ItemStack product = ForestryItem.ash.getItemStack();
-			if (doRemove)
-				decrStackSize(i, 1);
-			return new ItemStack[] { product };
-		}
-
-		return new ItemStack[0];
-	}
 
 	/* ITRIGGERPROVIDER */
 	@Optional.Method(modid = "BuildCraftAPI|statements")

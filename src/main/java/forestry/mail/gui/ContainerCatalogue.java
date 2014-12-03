@@ -201,8 +201,8 @@ public class ContainerCatalogue extends ContainerForestry implements IGuiSelecta
 		super.detectAndSendChanges();
 
 		if(needsSynch) {
-			for (int i = 0; i < crafters.size(); i++) {
-				ICrafting crafter = (ICrafting)crafters.get(i);
+			for (Object crafter1 : crafters) {
+				ICrafting crafter = (ICrafting) crafter1;
 				crafter.sendProgressBarUpdate(this, 0, currentItPos);
 				crafter.sendProgressBarUpdate(this, 1, maxItPos);
 				crafter.sendProgressBarUpdate(this, 2, currentFilter);

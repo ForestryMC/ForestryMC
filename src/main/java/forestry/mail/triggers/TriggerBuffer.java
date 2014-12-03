@@ -19,7 +19,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class TriggerBuffer extends Trigger {
 
-	float threshold;
+	private final float threshold;
 
 	public TriggerBuffer(String tag, float threshold) {
 		super(tag, "mailBuffer");

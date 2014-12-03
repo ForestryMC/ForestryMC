@@ -67,7 +67,7 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
 	public List<String> convertToStrings() {
 		List<String> tips = new ArrayList<String>(size());
 		for (ToolTipLine line : this) {
-			tips.add(line.text);
+			tips.add(line.getText());
 		}
 		return tips;
 	}

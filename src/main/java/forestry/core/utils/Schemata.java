@@ -16,7 +16,7 @@ public class Schemata {
 	public enum EnumStructureBlock {
 		ANY('X'), FOREIGN('F'), AIR('O'), MASTER('M'), GLASS('G'), BLOCK_A('A'), BLOCK_B('B'), BLOCK_C('C'), BLOCK_D('D'), BLOCK_E('E');
 
-		private char key;
+		private final char key;
 
 		private EnumStructureBlock(char key) {
 			this.key = key;
@@ -28,8 +28,10 @@ public class Schemata {
 	}
 
 	private final String uid;
-	private EnumStructureBlock[][][] structure;
-	private int width, height, depth;
+	private final EnumStructureBlock[][][] structure;
+	private final int width;
+	private final int height;
+	private final int depth;
 	private int xOffset, yOffset, zOffset = -1;
 
 	public Schemata(String uid, int width, int height, int depth, String... patterns) {

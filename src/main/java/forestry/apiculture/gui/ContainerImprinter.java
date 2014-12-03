@@ -28,17 +28,17 @@ import forestry.core.proxy.Proxies;
 
 public class ContainerImprinter extends ContainerForestry implements IGuiSelectable {
 
-	public ImprinterInventory inventory;
-	private boolean isNetSynched = false;
+	public final ImprinterInventory inventory;
+	private boolean isNetSynced = false;
 
 	public ContainerImprinter(InventoryPlayer inventoryplayer, ImprinterInventory inventory) {
 		super(inventory);
 
 		this.inventory = inventory;
 		// Input
-		this.addSlot(new SlotCustom(inventory, 0, 152, 12, new Object[] { ItemBeeGE.class }));
+		this.addSlot(new SlotCustom(inventory, 0, 152, 12, ItemBeeGE.class));
 		// Output
-		this.addSlot(new SlotCustom(inventory, 1, 152, 72, new Object[] { ItemBeeGE.class }));
+		this.addSlot(new SlotCustom(inventory, 1, 152, 72, ItemBeeGE.class));
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++)
@@ -84,7 +84,7 @@ public class ContainerImprinter extends ContainerForestry implements IGuiSelecta
 	private void sendSelectionChange(PacketPayload payload) {
 		PacketUpdate packet = new PacketUpdate(PacketIds.GUI_SELECTION_CHANGE, payload);
 		Proxies.net.sendToServer(packet);
-		isNetSynched = false;
+		isNetSynced = false;
 	}
 
 	@Override
@@ -94,8 +94,8 @@ public class ContainerImprinter extends ContainerForestry implements IGuiSelecta
 	}
 
 	public void updateContainer(World world) {
-		if (!isNetSynched && !Proxies.common.isSimulating(world)) {
-			isNetSynched = true;
+		if (!isNetSynced && !Proxies.common.isSimulating(world)) {
+			isNetSynced = true;
 			Proxies.net.sendToServer(new PacketUpdate(PacketIds.IMPRINT_SELECTION_GET));
 		}
 	}

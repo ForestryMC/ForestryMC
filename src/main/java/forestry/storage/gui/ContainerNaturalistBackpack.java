@@ -36,7 +36,7 @@ public class ContainerNaturalistBackpack extends ContainerItemInventory implemen
 		// Inventory
 		for (int x = 0; x < 5; x++) {
 			for (int y = 0; y < 5; y++) {
-				addSlot(new SlotCustom(inventory, y + page * pageSize + x * 5, 100 + y * 18, 21 + x * 18, new Object[] { speciesRoot }));
+				addSlot(new SlotCustom(inventory, y + page * pageSize + x * 5, 100 + y * 18, 21 + x * 18, speciesRoot));
 			}
 		}
 

@@ -32,10 +32,10 @@ import forestry.core.proxy.Proxies;
 public class PipeLogicPropolis {
 
 	@SuppressWarnings("rawtypes")
-	private Pipe pipe;
+	private final Pipe pipe;
 	
-	private EnumFilterType[] typeFilter = new EnumFilterType[6];
-	private IAllele[][][] genomeFilter = new IAllele[6][3][2];
+	private final EnumFilterType[] typeFilter = new EnumFilterType[6];
+	private final IAllele[][][] genomeFilter = new IAllele[6][3][2];
 
 	@SuppressWarnings("rawtypes")
 	public PipeLogicPropolis(Pipe pipe) {

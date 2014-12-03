@@ -10,19 +10,17 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.Slot;
-
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotClosed;
 import forestry.core.gui.slots.SlotLiquidContainer;
 import forestry.factory.gadgets.MachineBottler;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
 
 public class ContainerBottler extends ContainerLiquidTanks {
 
-	protected MachineBottler tile;
+	protected final MachineBottler tile;
 
 	public ContainerBottler(InventoryPlayer player, MachineBottler tile) {
 		super(tile, tile);

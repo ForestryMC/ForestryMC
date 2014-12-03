@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-
 import forestry.apiculture.gadgets.TileAlvearyHygroregulator;
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotLiquidContainer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 
 public class ContainerAlvearyHygroregulator extends ContainerLiquidTanks {
 
-	TileAlvearyHygroregulator tile;
+	private final TileAlvearyHygroregulator tile;
 
 	public ContainerAlvearyHygroregulator(IInventory inventory, TileAlvearyHygroregulator tile) {
 		super(inventory, tile);

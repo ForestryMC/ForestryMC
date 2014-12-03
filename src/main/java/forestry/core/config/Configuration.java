@@ -27,9 +27,9 @@ import java.util.TreeMap;
 
 public class Configuration {
 
-	private String newLine;
-	private ArrayList<String> purge = new ArrayList<String>();
-	private TreeMap<String, ArrayList<Property>> categorized = new TreeMap<String, ArrayList<Property>>();
+	private final String newLine;
+	private final ArrayList<String> purge = new ArrayList<String>();
+	private final TreeMap<String, ArrayList<Property>> categorized = new TreeMap<String, ArrayList<Property>>();
 
 	public Configuration() {
 		newLine = System.getProperty("line.separator");

@@ -34,7 +34,7 @@ public class GuiEngineCopper extends GuiEngine {
 		int progress;
 		if (engine.isBurning()) {
 			progress = engine.getBurnTimeRemainingScaled(12);
-			this.drawTexturedModalRect(guiLeft + 45, guiTop + 27 + 12 - progress, 176, 0 + 12 - progress, 14, progress + 2);
+			this.drawTexturedModalRect(guiLeft + 45, guiTop + 27 + 12 - progress, 176, 12 - progress, 14, progress + 2);
 		}
 	}
 }
