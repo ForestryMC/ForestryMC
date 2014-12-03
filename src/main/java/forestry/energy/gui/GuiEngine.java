@@ -49,7 +49,7 @@ public abstract class GuiEngine extends GuiForestryTitled<Engine> {
 			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.currentOutput") + ":", x + 22, y + 20, fontColor.get("ledger.power.subheader"));
 			fontRendererObj.drawString(engine.getCurrentOutput() + " RF/t", x + 22, y + 32, fontColor.get("ledger.power.text"));
 			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.stored") + ":", x + 22, y + 44, fontColor.get("ledger.power.subheader"));
-			fontRendererObj.drawString(engine.getEnergyStored(engine.getOrientation()) + " RF", x + 22, y + 56, fontColor.get("ledger.power.text"));
+			fontRendererObj.drawString(engine.getEnergyManager().getEnergyStored(engine.getOrientation()) + " RF", x + 22, y + 56, fontColor.get("ledger.power.text"));
 			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.heat") + ":", x + 22, y + 68, fontColor.get("ledger.power.subheader"));
 			fontRendererObj.drawString((((double) engine.getHeat() / (double) 10) + 20.0) + " C", x + 22, y + 80, fontColor.get("ledger.power.text"));
 

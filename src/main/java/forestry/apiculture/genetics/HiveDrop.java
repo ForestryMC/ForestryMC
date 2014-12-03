@@ -23,9 +23,9 @@ import java.util.Collections;
 
 public class HiveDrop implements IHiveDrop {
 
-	private IAllele[] template;
-	private ArrayList<ItemStack> additional = new ArrayList<ItemStack>();
-	private int chance;
+	private final IAllele[] template;
+	private final ArrayList<ItemStack> additional = new ArrayList<ItemStack>();
+	private final int chance;
 	private float ignobleShare = 0.0f;
 
 	public HiveDrop(IAllele[] template, ItemStack[] bonus, int chance) {

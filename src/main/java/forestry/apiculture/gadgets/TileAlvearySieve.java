@@ -34,7 +34,7 @@ public class TileAlvearySieve extends TileAlveary implements ICrafter, IBeeListe
 	public static final int SLOTS_POLLEN_COUNT = 4;
 	public static final int SLOT_SIEVE = 4;
 	
-	InventoryAdapter inventory = new InventoryAdapter(5, "Items", 1);
+	private final InventoryAdapter inventory = new InventoryAdapter(5, "Items", 1);
 
 	public TileAlvearySieve() {
 		super(BLOCK_META);

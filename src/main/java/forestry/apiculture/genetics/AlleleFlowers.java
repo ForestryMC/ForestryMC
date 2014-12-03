@@ -16,7 +16,7 @@ import forestry.core.genetics.Allele;
 
 public class AlleleFlowers extends Allele implements IAlleleFlowers {
 
-	IFlowerProvider provider;
+	private final IFlowerProvider provider;
 
 	public AlleleFlowers(String uid, IFlowerProvider provider) {
 		this(uid, provider, false);

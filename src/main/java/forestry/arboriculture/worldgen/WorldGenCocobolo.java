@@ -34,10 +34,16 @@ public class WorldGenCocobolo extends WorldGenTree {
 		leafSpawn--;
 		
 		while (leafSpawn > 4) {
-			if (leafSpawn % 2 == 0) 
-				generateAdjustedCylinder(leafSpawn, 2, 1, leaf);
-			else 
-				generateAdjustedCylinder(leafSpawn, 0, 1, leaf);
+			int offset = 1;
+			if (leafSpawn % 2 == 0) {
+				if (rand.nextBoolean())
+					offset = -1; 
+				generateAdjustedCylinder(leafSpawn, offset, 2, 1, leaf, EnumReplaceMode.NONE);
+			} else {
+				if (rand.nextBoolean())
+					offset = -1;
+				generateAdjustedCylinder(leafSpawn, offset, 0, 1, leaf, EnumReplaceMode.NONE );
+			}
 			leafSpawn--;
 		}
 
@@ -45,6 +51,7 @@ public class WorldGenCocobolo extends WorldGenTree {
 
 	@Override
 	public void preGenerate() {
+		height = determineHeight(8, 8);
 		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
 	}
 }

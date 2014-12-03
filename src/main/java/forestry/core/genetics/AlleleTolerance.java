@@ -16,7 +16,7 @@ import forestry.core.utils.StringUtil;
 
 public class AlleleTolerance extends Allele implements IAlleleTolerance {
 
-	EnumTolerance value;
+	private final EnumTolerance value;
 
 	public AlleleTolerance(String uid, EnumTolerance value) {
 		this(uid, value, false);

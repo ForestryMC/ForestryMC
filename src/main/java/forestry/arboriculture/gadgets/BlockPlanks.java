@@ -51,7 +51,7 @@ public class BlockPlanks extends Block implements IWoodTyped {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		int count = (cat == PlankCat.CAT0 ? 16 : 12);
+		int count = (cat == PlankCat.CAT0 ? 16 : 13);
 		for (int i = 0; i < count; i++)
 			itemList.add(new ItemStack(this, 1, i));
 	}

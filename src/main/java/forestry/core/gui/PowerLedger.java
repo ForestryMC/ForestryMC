@@ -17,7 +17,7 @@ import forestry.energy.EnergyManager;
 
 public class PowerLedger extends Ledger {
 
-	IPowerHandler tile;
+	private final IPowerHandler tile;
 
 	public PowerLedger(LedgerManager manager, IPowerHandler tile) {
 		super(manager);

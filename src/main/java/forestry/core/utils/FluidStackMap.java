@@ -24,7 +24,7 @@ public class FluidStackMap<T> extends StackMap<FluidStack, T> {
 		if(b instanceof Fluid) {
 			return ((Fluid)b).getID() == a.getFluid().getID();
 		} if(b instanceof String)
-			return ((String)b).equals(a.getFluid().getName());
+			return b.equals(a.getFluid().getName());
 		return false;
 	}
 

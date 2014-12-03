@@ -15,7 +15,7 @@ import forestry.core.utils.StringUtil;
 
 public class AlleleInteger extends Allele implements IAlleleInteger {
 
-	int value;
+	private final int value;
 
 	public AlleleInteger(String uid, int value) {
 		this(uid, value, false);

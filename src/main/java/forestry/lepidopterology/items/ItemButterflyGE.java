@@ -42,7 +42,7 @@ import java.util.List;
 
 public class ItemButterflyGE extends ItemGE {
 
-	EnumFlutterType type;
+	private final EnumFlutterType type;
 
 	public ItemButterflyGE(EnumFlutterType type) {
 		super();

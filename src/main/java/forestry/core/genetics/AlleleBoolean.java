@@ -14,8 +14,7 @@ import forestry.api.genetics.IAlleleBoolean;
 
 public class AlleleBoolean extends Allele implements IAlleleBoolean {
 
-	boolean value;
-	boolean isDominant;
+	final boolean value;
 
 	public AlleleBoolean(String uid, boolean value) {
 		this(uid, value, false);

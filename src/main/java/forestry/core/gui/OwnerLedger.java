@@ -27,7 +27,7 @@ import forestry.core.utils.StringUtil;
  */
 public class OwnerLedger extends Ledger {
 
-	IOwnable tile;
+	private final IOwnable tile;
 
 	public OwnerLedger(LedgerManager manager, IOwnable tile) {
 		super(manager);

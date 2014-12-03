@@ -32,7 +32,7 @@ public class Config {
 
 	public static String gameMode;
 
-	public static HashSet<String> disabledStructures = new HashSet<String>();
+	public static final HashSet<String> disabledStructures = new HashSet<String>();
 
 	public static boolean isDebug = false;
 
@@ -80,7 +80,7 @@ public class Config {
 	}
 
 	public static boolean craftingStampsEnabled = true;
-	public static ArrayList<String> collectorStamps = new ArrayList<String>();
+	public static final ArrayList<String> collectorStamps = new ArrayList<String>();
 
 	public static boolean applePickup = true;
 	public static boolean squareFarms = false;
@@ -90,7 +90,7 @@ public class Config {
 
 	// Hints
 	public static boolean disableHints = false;
-	public static HashMap<String, String[]> hints = new HashMap<String, String[]>();
+	public static final HashMap<String, String[]> hints = new HashMap<String, String[]>();
 	public static boolean disableEnergyStat = false;
 
 	public static void load() {

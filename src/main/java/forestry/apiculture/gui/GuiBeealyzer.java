@@ -140,7 +140,7 @@ public class GuiBeealyzer extends GuiAlyzer {
 				.getArea().toString(), bee, EnumBeeChromosome.TERRITORY);
 
 		drawRow(StringUtil.localize("gui.effect"), bee.getGenome().getEffect().getName(),
-				((IAlleleBeeEffect) bee.getGenome().getInactiveAllele(EnumBeeChromosome.EFFECT.ordinal())).getName(), bee,
+				bee.getGenome().getInactiveAllele(EnumBeeChromosome.EFFECT.ordinal()).getName(), bee,
 				EnumBeeChromosome.EFFECT);
 
 		newLine();

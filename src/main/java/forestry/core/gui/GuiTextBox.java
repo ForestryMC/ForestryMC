@@ -69,21 +69,19 @@ public class GuiTextBox extends GuiTextField {
 
 	@SuppressWarnings("unchecked")
 	private void drawScrolledSplitString(String text, int startX, int startY, int width, int textColour) {
-		List<String> list = fontRendererObj.listFormattedStringToWidth(text, width);
-		maxLines = list.size();
+		List<String> lines = fontRendererObj.listFormattedStringToWidth(text, width);
+		maxLines = lines.size();
 
 		int count = 0;
 		int lineY = startY;
 
-		for (Iterator<String> iterator = list.iterator(); iterator.hasNext();) {
-			if(count < lineScroll) {
+		for (String line : lines) {
+			if (count < lineScroll) {
 				count++;
 				continue;
-			}
-			else if(lineY + fontRendererObj.FONT_HEIGHT - startY > height)
+			} else if (lineY + fontRendererObj.FONT_HEIGHT - startY > height)
 				break;
 
-			String line = iterator.next();
 			fontRendererObj.drawString(line, startX, lineY, textColour);
 			lineY += fontRendererObj.FONT_HEIGHT;
 

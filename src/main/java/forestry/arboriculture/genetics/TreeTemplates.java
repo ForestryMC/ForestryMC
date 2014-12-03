@@ -67,6 +67,7 @@ public class TreeTemplates {
 	public static IMutation ipeA;
 	public static TreeMutation padaukA;
 	public static TreeMutation cocoboloA;
+	public static TreeMutation zebrawoodA;
 	
 	/* TEMPLATES */
 	public static IAllele[] getDefaultTemplate() {
@@ -401,6 +402,14 @@ public class TreeTemplates {
 		IAllele[] alleles = getDefaultTemplate();
 		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeCocobolo;
 		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightLargest;
+		return alleles;
+	}
+	
+	public static IAllele[] getZebrawoodTemplate() {
+		IAllele[] alleles = getDefaultTemplate();
+		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeZebrawood;
+		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightLargest;
+		alleles[EnumTreeChromosome.GIRTH.ordinal()] = Allele.int2;
 		return alleles;
 	}
 	

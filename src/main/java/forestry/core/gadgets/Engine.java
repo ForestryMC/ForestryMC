@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import cofh.api.energy.IEnergyConnection;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -17,17 +18,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.util.ForgeDirection;
-
-import cofh.api.energy.IEnergyHandler;
 import forestry.core.TemperatureState;
 import forestry.core.config.Defaults;
 import forestry.core.network.PacketPayload;
 import forestry.core.utils.BlockUtil;
 import forestry.energy.EnergyManager;
 
-public abstract class Engine extends TileBase implements IEnergyHandler {
+public abstract class Engine extends TileBase implements IEnergyConnection {
 
 	@Override
 	public PacketPayload getPacketPayload() {
@@ -153,13 +151,13 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 				stagePiston = 0;
 			}
 
-		} else if (canPowerTo(tile)) { // If we are not already running, check if
-			if (getEnergyStored(getOrientation()) > 0) {
+		} else if (canPowerTo(tile)) // If we are not already running, check if
+			if (energyManager.getEnergyStored(getOrientation()) > 0) {
 				stagePiston = 1; // If we can transfer energy, start running
 				setActive(true);
 			} else
 				setActive(false);
-		} else
+		else
 			setActive(false);
 
 		dissipateHeat();
@@ -302,31 +300,11 @@ public abstract class Engine extends TileBase implements IEnergyHandler {
 	public abstract void sendGUINetworkData(Container containerEngine, ICrafting iCrafting);
 
 	@Override
-	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
-		if (from == getOrientation())
-			return 0;
-		return energyManager.receiveEnergy(from, maxReceive, simulate);
-	}
-
-	@Override
-	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
-		if (from != getOrientation())
-			return 0;
-		return energyManager.extractEnergy(from, maxExtract, simulate);
-	}
-
-	@Override
-	public int getEnergyStored(ForgeDirection from) {
-		return energyManager.getEnergyStored(from);
-	}
-
-	@Override
-	public int getMaxEnergyStored(ForgeDirection from) {
-		return energyManager.getMaxEnergyStored(from);
-	}
-
-	@Override
 	public boolean canConnectEnergy(ForgeDirection from) {
 		return energyManager.canConnectEnergy(from);
+	}
+
+	public EnergyManager getEnergyManager() {
+		return energyManager;
 	}
 }

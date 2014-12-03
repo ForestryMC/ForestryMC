@@ -21,7 +21,7 @@ import forestry.core.utils.Vect;
 
 public class AlleleLeafEffectNone extends Allele implements IAlleleLeafEffect {
 
-	int[] DEFAULT_EFFECT_AREA = new int[] { 12, 12, 12 };
+	private static final int[] DEFAULT_EFFECT_AREA = new int[] { 12, 12, 12 };
 
 	public AlleleLeafEffectNone(String uid) {
 		super(uid, true);

@@ -315,10 +315,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	protected boolean canTakeStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-		if (getAccess() != EnumAccess.SHARED)
-			return false;
-
-		return true;
+		return getAccess() == EnumAccess.SHARED;
 	}
 
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
@@ -326,10 +323,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	protected boolean canPutStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-		if (getAccess() != EnumAccess.SHARED)
-			return false;
-
-		return true;
+		return getAccess() == EnumAccess.SHARED;
 	}
 
 	public int[] getAccessibleSlotsFromSide(int side) {

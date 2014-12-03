@@ -44,12 +44,12 @@ public class ContainerTrader extends ContainerForestry {
 		// Stamps
 		for (int i = 0; i < 2; i++)
 			for (int j = 0; j < 2; j++)
-				addSlot(new SlotCustom(inventory, TradeStation.SLOT_STAMPS_1 + j + i * 2, 15 + j * 18, 37 + i * 18, new Object[] { ItemStamps.class }));
+				addSlot(new SlotCustom(inventory, TradeStation.SLOT_STAMPS_1 + j + i * 2, 15 + j * 18, 37 + i * 18, ItemStamps.class));
 
 		// Letters
 		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < 2; j++)
-				addSlot(new SlotCustom(inventory, TradeStation.SLOT_LETTERS_1 + j + i * 2, 15 + j * 18, 73 + i * 18, new Object[] { Items.paper }));
+				addSlot(new SlotCustom(inventory, TradeStation.SLOT_LETTERS_1 + j + i * 2, 15 + j * 18, 73 + i * 18, Items.paper));
 
 		// Buffers
 		final int bufCols = 5;

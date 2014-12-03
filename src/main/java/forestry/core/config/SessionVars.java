@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 public class SessionVars {
 	
-	private static HashMap<String, String> stringVars = new HashMap<String, String>();
+	private static final HashMap<String, String> stringVars = new HashMap<String, String>();
 	
 	private static Class<?> openedLedger;
 

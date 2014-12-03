@@ -41,7 +41,7 @@ public class CraftGuideFabricator implements RecipeProvider {
 	@Override
 	public void generateRecipes(RecipeGenerator generator) {
 
-		if (ForestryBlock.factoryTESR == null)
+		if (ForestryBlock.factoryTESR.block() == null)
 			return;
 
 		ItemStack machine = ForestryBlock.factoryPlain.getItemStack(1, Defaults.DEFINITION_FABRICATOR_META);

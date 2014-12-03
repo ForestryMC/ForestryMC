@@ -78,7 +78,7 @@ public class PluginCore extends ForestryPlugin {
 	public static MachineDefinition definitionEscritoire;
 	// ICrashCallable for highlighting certain mods during crashes.
 	public static ForestryModEnvWarningCallable crashCallable;
-	public static RootCommand rootCommand = new RootCommand();
+	public static final RootCommand rootCommand = new RootCommand();
 
 	@Override
 	public void preInit() {

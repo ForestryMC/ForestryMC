@@ -94,7 +94,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
 
-	private FilteredTank liquidTank;
+	private final FilteredTank liquidTank;
 	private final TankManager tankManager;
 
 	private IFarmLogic harvestProvider; // The farm logic which supplied the pending crops.

@@ -18,7 +18,7 @@ import forestry.core.utils.InventoryAdapter;
 
 public class TileSwarm extends TileEntity {
 
-	public InventoryAdapter contained = new InventoryAdapter(2, "Contained");
+	public final InventoryAdapter contained = new InventoryAdapter(2, "Contained");
 
 	@Override
 	public boolean canUpdate() {

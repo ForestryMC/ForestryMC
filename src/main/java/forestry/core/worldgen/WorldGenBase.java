@@ -29,9 +29,9 @@ public abstract class WorldGenBase extends WorldGenerator {
 			this.y = h;
 			this.z = g;
 		}
-		float x;
-		float y;
-		float z;
+		public final float x;
+		public final float y;
+		public final float z;
 
 		public static double distance(Vector a, Vector b) {
 			return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2) + Math.pow(a.z - b.z, 2));

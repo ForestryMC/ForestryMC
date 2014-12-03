@@ -20,7 +20,7 @@ import forestry.core.gui.slots.SlotClosed;
 import forestry.energy.gadgets.EngineCopper;
 
 public class ContainerEngineCopper extends ContainerForestry {
-	protected EngineCopper engine;
+	protected final EngineCopper engine;
 
 	public ContainerEngineCopper(InventoryPlayer player, EngineCopper tile) {
 		super(tile);
@@ -52,8 +52,8 @@ public class ContainerEngineCopper extends ContainerForestry {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
-		for (int i = 0; i < crafters.size(); i++)
-			engine.sendGUINetworkData(this, (ICrafting) crafters.get(i));
+		for (Object crafter : crafters)
+			engine.sendGUINetworkData(this, (ICrafting) crafter);
 	}
 
 	@Override

@@ -11,7 +11,6 @@
 package forestry.core.utils;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -41,12 +40,10 @@ public class InventoryAdapter implements IInventory, INBTTagable {
 		configureSided();
 	}
 
-	/*
-	public InventoryAdapter enableDebug() {
-		this.debug = true;
-		return this;
-	}
-	 */
+//	public InventoryAdapter enableDebug() {
+//		this.debug = true;
+//		return this;
+//	}
 
 	/**
 	 * @return Copy of this inventory. Stacks are copies.
@@ -54,24 +51,27 @@ public class InventoryAdapter implements IInventory, INBTTagable {
 	public InventoryAdapter copy() {
 		InventoryAdapter copy = new InventoryAdapter(inventory.getSizeInventory(), inventory.getInventoryName(), inventory.getInventoryStackLimit());
 
-		for (int i = 0; i < inventory.getSizeInventory(); i++)
+		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			if (inventory.getStackInSlot(i) != null)
 				copy.setInventorySlotContents(i, inventory.getStackInSlot(i).copy());
+		}
 
 		return copy;
 	}
 
 	public ItemStack[] getStacks() {
 		ItemStack[] stacks = new ItemStack[inventory.getSizeInventory()];
-		for(int i = 0; i < inventory.getSizeInventory(); i++)
+		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			stacks[i] = inventory.getStackInSlot(i);
+		}
 		return stacks;
 	}
 
 	public ItemStack[] getStacks(int slot1, int length) {
 		ItemStack[] result = new ItemStack[length];
-		for(int i = slot1; i < slot1 + length; i++)
+		for (int i = slot1; i < slot1 + length; i++) {
 			result[i - slot1] = inventory.getStackInSlot(i);
+		}
 		return result;
 	}
 
@@ -191,7 +191,7 @@ public class InventoryAdapter implements IInventory, INBTTagable {
 
 	/* CONTAINS */
 	public boolean contains(ItemStack query, int startSlot, int slots) {
-		ItemStack[] queryArray = new ItemStack[] {query};
+		ItemStack[] queryArray = new ItemStack[]{query};
 		return contains(queryArray, startSlot, slots);
 	}
 
@@ -214,7 +214,7 @@ public class InventoryAdapter implements IInventory, INBTTagable {
 		}
 		if (stackMax == 0)
 			return false;
-		return ((float)amount / (float)stackMax) >= percent;
+		return ((float) amount / (float) stackMax) >= percent;
 	}
 
 	public boolean containsAmount(int amount, int slot1, int length) {
@@ -236,6 +236,15 @@ public class InventoryAdapter implements IInventory, INBTTagable {
 	 * Removes the exact items first if they exist, and then removes crafting equivalents.
 	 * If the inventory doesn't have all the required items, returns false without removing anything.
 	 * If stowContainer is true, items with containers will have their container stowed.
+	 * @param count
+	 * @param set
+	 * @param firstSlotIndex
+	 * @param slotCount
+	 * @param player
+	 * @param stowContainer
+	 * @param oreDictionary
+	 * @param craftingTools
+	 * @return 
 	 */
 	public boolean removeSets(int count, ItemStack[] set, int firstSlotIndex, int slotCount, EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
 
@@ -269,7 +278,6 @@ public class InventoryAdapter implements IInventory, INBTTagable {
 
 			if (!StackUtils.isCraftingEquivalent(stackToRemove, stackInSlot, oreDictionary, craftingTools))
 				continue;
-
 
 			ItemStack removed = decrStackSize(j, stackToRemove.stackSize);
 			stackToRemove.stackSize -= removed.stackSize;
@@ -379,20 +387,22 @@ public class InventoryAdapter implements IInventory, INBTTagable {
 	}
 
 	public InventoryAdapter configureSided(int side, int startSlot, int count) {
-		return configureSided(new int[] { side }, startSlot, count);
+		return configureSided(new int[]{side}, startSlot, count);
 	}
 
 	public InventoryAdapter configureSided(int[] sides, int startSlot, int count) {
 		int[] slots = new int[count];
-		for(int i = 0; i < count; i++)
+		for (int i = 0; i < count; i++) {
 			slots[i] = startSlot + i;
+		}
 
 		return configureSided(sides, slots);
 	}
 
 	public InventoryAdapter configureSided(int[] sides, int[] slots) {
-		for(int side : sides)
+		for (int side : sides) {
 			slotMap[side] = slots;
+		}
 
 		return this;
 	}
@@ -415,13 +425,14 @@ public class InventoryAdapter implements IInventory, INBTTagable {
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		NBTTagList nbttaglist = new NBTTagList();
-		for (int i = 0; i < inventory.getSizeInventory(); i++)
+		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			if (inventory.getStackInSlot(i) != null) {
 				NBTTagCompound nbttagcompound2 = new NBTTagCompound();
 				nbttagcompound2.setByte("Slot", (byte) i);
 				inventory.getStackInSlot(i).writeToNBT(nbttagcompound2);
 				nbttaglist.appendTag(nbttagcompound2);
 			}
+		}
 		nbttagcompound.setTag(inventory.getInventoryName(), nbttaglist);
 	}
 

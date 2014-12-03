@@ -31,8 +31,8 @@ import java.util.List;
 
 public class CommandBeekeepingGiveBee extends SubCommand {
 
-	private String beeTypeHelpString;
-	private String[] beeTypeArr;
+	private final String beeTypeHelpString;
+	private final String[] beeTypeArr;
 
 	public CommandBeekeepingGiveBee() {
 		super("give");

@@ -16,9 +16,9 @@ import net.minecraft.item.ItemStack;
 
 public class InventoryCraftingAuto extends InventoryCrafting {
 
-	private ContainerCarpenter eventHandler;
-	public ItemStack stackList[];
-	private int inventoryWidth;
+	private final ContainerCarpenter eventHandler;
+	public final ItemStack stackList[];
+	private final int inventoryWidth;
 
 	public InventoryCraftingAuto(ContainerCarpenter container, int i, int j) {
 		super(container, i, j);

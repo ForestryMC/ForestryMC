@@ -85,7 +85,7 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 	private final ArrayList<ItemStack> hunterItems = new ArrayList<ItemStack>();
 	private final ArrayList<ItemStack> adventurerItems = new ArrayList<ItemStack>();
 	private final ArrayList<ItemStack> builderItems = new ArrayList<ItemStack>();
-	static String CONFIG_CATEGORY = "backpacks";
+	private final static String CONFIG_CATEGORY = "backpacks";
 	Configuration config;
 
 	@Override
@@ -482,46 +482,46 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 
 		// Miner's Backpack
 		Proxies.common.addRecipe(ForestryItem.minerBackpack.getItemStack(),
-				new Object[]{"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
-					Items.iron_ingot, 'Y', Blocks.chest});
+				"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
+				Items.iron_ingot, 'Y', Blocks.chest);
 		// Digger's Backpack
 		Proxies.common.addRecipe(ForestryItem.diggerBackpack.getItemStack(),
-				new Object[]{"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
-					Blocks.stone, 'Y', Blocks.chest});
+				"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
+				Blocks.stone, 'Y', Blocks.chest);
 		// Forester's Backpack
-		Proxies.common.addRecipe(ForestryItem.foresterBackpack.getItemStack(), new Object[]{"X#X", "VYV", "X#X", '#', Blocks.wool,
-			'X', Items.string, 'V', "logWood", 'Y', Blocks.chest});
+		Proxies.common.addRecipe(ForestryItem.foresterBackpack.getItemStack(), "X#X", "VYV", "X#X", '#', Blocks.wool,
+				'X', Items.string, 'V', "logWood", 'Y', Blocks.chest);
 		// Hunter's Backpack
 		Proxies.common.addRecipe(ForestryItem.hunterBackpack.getItemStack(),
-				new Object[]{"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
-					Items.feather, 'Y', Blocks.chest});
+				"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
+				Items.feather, 'Y', Blocks.chest);
 		// Adventurer's Backpack
-		Proxies.common.addRecipe(ForestryItem.adventurerBackpack.getItemStack(), new Object[]{"X#X", "VYV", "X#X", '#', Blocks.wool,
-			'X', Items.string, 'V', Items.bone, 'Y', Blocks.chest});
+		Proxies.common.addRecipe(ForestryItem.adventurerBackpack.getItemStack(), "X#X", "VYV", "X#X", '#', Blocks.wool,
+				'X', Items.string, 'V', Items.bone, 'Y', Blocks.chest);
 		// Builder's Backpack
-		Proxies.common.addRecipe(ForestryItem.builderBackpack.getItemStack(), new Object[]{"X#X", "VYV", "X#X", '#', Blocks.wool,
-			'X', Items.string, 'V', Items.clay_ball, 'Y', Blocks.chest});
+		Proxies.common.addRecipe(ForestryItem.builderBackpack.getItemStack(), "X#X", "VYV", "X#X", '#', Blocks.wool,
+				'X', Items.string, 'V', Items.clay_ball, 'Y', Blocks.chest);
 
 		// / CARPENTER
 		// / BACKPACKS T2
 		RecipeManagers.carpenterManager.addRecipe(200, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.minerBackpackT2.getItemStack(),
-				new Object[]{"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
-					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.minerBackpack});
+				"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
+				ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.minerBackpack);
 		RecipeManagers.carpenterManager.addRecipe(200, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.diggerBackpackT2.getItemStack(),
-				new Object[]{"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
-					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.diggerBackpack});
+				"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
+				ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.diggerBackpack);
 		RecipeManagers.carpenterManager.addRecipe(200, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.foresterBackpackT2.getItemStack(),
-				new Object[]{"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
-					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.foresterBackpack});
+				"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
+				ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.foresterBackpack);
 		RecipeManagers.carpenterManager.addRecipe(200, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.hunterBackpackT2.getItemStack(),
-				new Object[]{"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
-					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.hunterBackpack});
+				"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
+				ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.hunterBackpack);
 		RecipeManagers.carpenterManager.addRecipe(200, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.adventurerBackpackT2.getItemStack(),
-				new Object[]{"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
-					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.adventurerBackpack});
+				"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
+				ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.adventurerBackpack);
 		RecipeManagers.carpenterManager.addRecipe(200, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.builderBackpackT2.getItemStack(),
-				new Object[]{"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
-					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.builderBackpack});
+				"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
+				ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.builderBackpack);
 
 	}
 

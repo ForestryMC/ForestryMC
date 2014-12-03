@@ -374,15 +374,15 @@ public class PluginFactory extends ForestryPlugin {
 
 		// / CHIPSETS
 		RecipeManagers.carpenterManager.addRecipe(20, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.circuitboards.getItemStack(1, 0),
-				new Object[]{"R R", "R#R", "R R", '#', "ingotTin", 'R', Items.redstone});
+				"R R", "R#R", "R R", '#', "ingotTin", 'R', Items.redstone);
 		RecipeManagers.carpenterManager.addRecipe(40, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.circuitboards.getItemStack(1, 1),
-				new Object[]{"R#R", "R#R", "R#R", '#', "ingotBronze", 'R', Items.redstone});
+				"R#R", "R#R", "R#R", '#', "ingotBronze", 'R', Items.redstone);
 		RecipeManagers.carpenterManager.addRecipe(80, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.circuitboards.getItemStack(1, 2),
-				new Object[]{"R#R", "R#R", "R#R", '#', Items.iron_ingot, 'R', Items.redstone});
+				"R#R", "R#R", "R#R", '#', Items.iron_ingot, 'R', Items.redstone);
 		RecipeManagers.carpenterManager.addRecipe(80, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.circuitboards.getItemStack(1, 3),
-				new Object[]{"R#R", "R#R", "R#R", '#', Items.gold_ingot, 'R', Items.redstone});
+				"R#R", "R#R", "R#R", '#', Items.gold_ingot, 'R', Items.redstone);
 		RecipeManagers.carpenterManager.addRecipe(40, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.solderingIron.getItemStack(),
-				new Object[]{" # ", "# #", "  B", '#', Items.iron_ingot, 'B', "ingotBronze"});
+				" # ", "# #", "  B", '#', Items.iron_ingot, 'B', "ingotBronze");
 		// ForestryCore.oreHandler.registerCarpenterRecipe(solderingIron);
 
 		// RAIN SUBSTRATES
@@ -408,17 +408,17 @@ public class PluginFactory extends ForestryPlugin {
 		}
 
 		// Ender pearl
-		RecipeManagers.carpenterManager.addRecipe(100, null, new ItemStack(Items.ender_pearl, 1), new Object[]{" # ", "###", " # ", '#',
-			ForestryItem.craftingMaterial.getItemStack(1, 1)});
+		RecipeManagers.carpenterManager.addRecipe(100, null, new ItemStack(Items.ender_pearl, 1), " # ", "###", " # ", '#',
+				ForestryItem.craftingMaterial.getItemStack(1, 1));
 		// Woven Silk
 		RecipeManagers.carpenterManager.addRecipe(10, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 500), null, ForestryItem.craftingMaterial.getItemStack(1, 3),
-				new Object[]{"###", "###", "###", '#', ForestryItem.craftingMaterial.getItemStack(1, 2)});
+				"###", "###", "###", '#', ForestryItem.craftingMaterial.getItemStack(1, 2));
 
 		// Boxes
 		RecipeManagers.carpenterManager.addRecipe(5, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.carton.getItemStack(2),
-				new Object[]{" # ", "# #", " # ", '#', "pulpWood"});
+				" # ", "# #", " # ", '#', "pulpWood");
 		RecipeManagers.carpenterManager.addRecipe(20, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000), null, ForestryItem.crate.getItemStack(24),
-				new Object[]{" # ", "# #", " # ", '#', "logWood"});
+				" # ", "# #", " # ", '#', "logWood");
 
 		// Assembly Kits
 		RecipeManagers.carpenterManager.addRecipe(20, null, ForestryItem.carton.getItemStack(), ForestryItem.kitPickaxe.getItemStack(), new Object[]{
@@ -433,8 +433,8 @@ public class PluginFactory extends ForestryPlugin {
 
 		// Reclamation
 		RecipeManagers.carpenterManager.addRecipe(null, ForestryItem.ingotBronze.getItemStack(2, ForestryItem.ingotBronze.item().getMaxDamage()),
-				new Object[]{"#", '#', ForestryItem.brokenBronzePickaxe});
-		RecipeManagers.carpenterManager.addRecipe(null, ForestryItem.ingotBronze.getItemStack(), new Object[]{"#", '#', ForestryItem.brokenBronzeShovel});
+				"#", '#', ForestryItem.brokenBronzePickaxe);
+		RecipeManagers.carpenterManager.addRecipe(null, ForestryItem.ingotBronze.getItemStack(), "#", '#', ForestryItem.brokenBronzeShovel);
 
 		// Crating and uncrating condensed
 		if (PluginManager.Module.STORAGE.isEnabled()) {

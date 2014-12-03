@@ -19,7 +19,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockFireproofPlanks extends BlockPlanks implements IWoodFireproof {
 
-	public static Material fireproofWood = new Material(MapColor.woodColor);
+	private static final Material fireproofWood = new Material(MapColor.woodColor);
 
 	public BlockFireproofPlanks(PlankCat cat) {
 		super(cat, fireproofWood);

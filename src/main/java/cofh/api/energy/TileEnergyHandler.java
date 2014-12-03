@@ -12,7 +12,7 @@ import net.minecraftforge.common.util.ForgeDirection;
  */
 public class TileEnergyHandler extends TileEntity implements IEnergyHandler {
 
-	protected EnergyStorage storage = new EnergyStorage(32000);
+	protected final EnergyStorage storage = new EnergyStorage(32000);
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {

@@ -89,19 +89,19 @@ public class Version {
 	public static String retrieveRemoteString(String location, String defaultValue) {
 		try {
 
-			HttpURLConnection conn = null;
-			while (location != null && !location.isEmpty()) {
+			HttpURLConnection conn;
+			 do {
 				URL url = new URL(location);
 				conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestProperty("User-Agent",
 						"Mozilla/5.0 (Windows; U; Windows NT 6.0; ru; rv:1.9.0.11) Gecko/2009060215 Firefox/3.0.11 (.NET CLR 3.5.30729)");
 				conn.connect();
 				location = conn.getHeaderField("Location");
-			}
+			} while (location != null && !location.isEmpty());
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
-			String line = null;
+			String line;
 			if ((line = reader.readLine()) != null)
 				return line;
 
@@ -174,17 +174,16 @@ public class Version {
 	public static String[] grabChangelog(String version) {
 
 		try {
-
 			String location = REMOTE_CHANGELOG_ROOT + version;
 			HttpURLConnection conn = null;
-			while (location != null && !location.isEmpty()) {
+			 do {
 				URL url = new URL(location);
 				conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestProperty("User-Agent",
 						"Mozilla/5.0 (Windows; U; Windows NT 6.0; ru; rv:1.9.0.11) Gecko/2009060215 Firefox/3.0.11 (.NET CLR 3.5.30729)");
 				conn.connect();
 				location = conn.getHeaderField("Location");
-			}
+			} while (location != null && !location.isEmpty());
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 

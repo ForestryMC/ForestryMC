@@ -25,9 +25,9 @@ import forestry.core.genetics.EffectData;
 public class AlleleEffectCreeper extends AlleleEffectThrottled {
 
 	private final int explosionChance = 50;
-	byte defaultForce = 12;
-	byte indexExplosionTimer = 1;
-	byte indexExplosionForce = 2;
+	private final byte defaultForce = 12;
+	private final byte indexExplosionTimer = 1;
+	private final byte indexExplosionForce = 2;
 
 	public AlleleEffectCreeper(String uid) {
 		super(uid, "creeper", true, 20, false, true);

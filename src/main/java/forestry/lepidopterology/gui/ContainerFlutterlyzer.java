@@ -22,7 +22,7 @@ public class ContainerFlutterlyzer extends ContainerAlyzer {
 	FlutterlyzerInventory inventory;
 
 	public ContainerFlutterlyzer(InventoryPlayer inventoryplayer, FlutterlyzerInventory inventory) {
-		super(inventoryplayer, inventory, new Object[] { ForestryItem.honeydew, ForestryItem.honeyDrop }, new Object[] { ItemButterflyGE.class });
+		super(inventoryplayer, inventory, new Object[] { ForestryItem.honeydew, ForestryItem.honeyDrop }, ItemButterflyGE.class);
 	}
 
 }

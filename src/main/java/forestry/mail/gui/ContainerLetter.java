@@ -70,7 +70,7 @@ public class ContainerLetter extends ContainerItemInventory {
 		if (!letterInventory.getLetter().isProcessed())
 			for (int i = 0; i < 2; i++)
 				for (int j = 0; j < 9; j++)
-					addSlot(new SlotCustom(inventory, Letter.SLOT_ATTACHMENT_1 + j + i * 9, 17 + j * 18, 98 + i * 18, true, new Object[] { ItemLetter.class }));
+					addSlot(new SlotCustom(inventory, Letter.SLOT_ATTACHMENT_1 + j + i * 9, 17 + j * 18, 98 + i * 18, ItemLetter.class).setExclusion(true));
 		else
 			for (int i = 0; i < 2; i++)
 				for (int j = 0; j < 9; j++)

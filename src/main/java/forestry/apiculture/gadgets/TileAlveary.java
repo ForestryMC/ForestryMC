@@ -36,6 +36,11 @@ import java.util.LinkedList;
 
 public abstract class TileAlveary extends TileForestry implements IAlvearyComponent {
 
+	private final IStructureLogic structureLogic;
+	private boolean isMaster;
+	protected int masterX, masterZ;
+	protected int masterY = -99;
+
 	protected TileInventoryAdapter inventory;
 	protected final int componentBlockMeta;
 
@@ -126,11 +131,6 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	}
 
 	/* ITILESTRUCTURE */
-	IStructureLogic structureLogic;
-
-	private boolean isMaster;
-	protected int masterX, masterZ;
-	protected int masterY = -99;
 
 	@Override
 	public String getTypeUID() {

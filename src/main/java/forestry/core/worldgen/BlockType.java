@@ -19,8 +19,8 @@ import forestry.core.config.ForestryBlock;
 
 public class BlockType {
 
-	Block block;
-	int meta;
+	private final Block block;
+	private final int meta;
 
 	public BlockType(Block block, int meta) {
 		this.block = block;

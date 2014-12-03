@@ -17,7 +17,6 @@ import forestry.api.arboriculture.IAlleleGrowth;
 import forestry.api.arboriculture.ITree;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleEffect;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IFruitFamily;
@@ -41,8 +40,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class GuiTreealyzer extends GuiAlyzer {
-
-	private ItemStack[] tempProductList;
 
 	public GuiTreealyzer(EntityPlayer player, TreealyzerInventory inventory) {
 		super(AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees"), player,
@@ -189,7 +186,7 @@ public class GuiTreealyzer extends GuiAlyzer {
 		newLine();
 
 		drawRow(StringUtil.localize("gui.effect"), tree.getGenome().getEffect().getName(),
-				((IAlleleEffect) tree.getGenome().getInactiveAllele(EnumTreeChromosome.EFFECT.ordinal())).getName(), tree,
+				tree.getGenome().getInactiveAllele(EnumTreeChromosome.EFFECT.ordinal()).getName(), tree,
 				EnumTreeChromosome.EFFECT);
 
 		newLine();
@@ -299,15 +296,13 @@ public class GuiTreealyzer extends GuiAlyzer {
 
 	private void drawAnalyticsPage3(ITree tree) {
 
-		tempProductList = tree.getProduceList();
-
 		startPage(COLUMN_0, COLUMN_1, COLUMN_2);
 
 		drawLine(StringUtil.localize("gui.beealyzer.produce") + ":", COLUMN_0);
 		newLine();
 
 		int x = COLUMN_0;
-		for (ItemStack stack : tempProductList) {
+		for (ItemStack stack : tree.getProduceList()) {
 			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, stack, (int) ((guiLeft + x) * (1 / factor)),
 					(int) ((guiTop + getLineY()) * (1 / factor)));
 			x += 18;

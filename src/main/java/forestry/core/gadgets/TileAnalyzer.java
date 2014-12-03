@@ -62,7 +62,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	private int analyzeTime;
 
 	@EntityNetData
-	public FilteredTank resourceTank;
+	public final FilteredTank resourceTank;
 
 	private final TankManager tankManager;
 

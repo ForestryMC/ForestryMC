@@ -10,18 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import java.util.Collection;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
@@ -29,6 +19,12 @@ import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.ICrafter;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 
 /**
  * Slot which only specific items. (With permission by RichardG.)
@@ -37,29 +33,10 @@ import forestry.core.utils.StackUtils;
  */
 public class SlotCustom extends SlotForestry {
 
-	protected Object[] items;
+	protected final Object[] items;
 	private boolean exclusion;
 	private ICrafter crafter;
 	private String blockedTexture = "slots/blocked";
-
-	public SlotCustom(IInventory iinventory, int slotIndex, int xPos, int yPos, boolean exclusion) {
-		super(iinventory, slotIndex, xPos, yPos);
-		items = new Object[0];
-		this.exclusion = exclusion;
-	}
-
-	/*public SlotCustom(IInventory iinventory, ArrayList items, int i, int j, int k) {
-		this(iinventory, i, j, k, items.toArray());
-	}*/
-
-	public SlotCustom(IInventory iinventory, Collection<?> items, int slotIndex, int xPos, int yPos) {
-		this(iinventory, slotIndex, xPos, yPos, items.toArray());
-	}
-
-	public SlotCustom(IInventory iinventory, int slotIndex, int xPos, int yPos, boolean exclusion, Object... items) {
-		this(iinventory, slotIndex, xPos, yPos, items);
-		this.exclusion = exclusion;
-	}
 
 	public SlotCustom(IInventory iinventory, int slotIndex, int xPos, int yPos, Object... items) {
 		super(iinventory, slotIndex, xPos, yPos);
@@ -68,6 +45,11 @@ public class SlotCustom extends SlotForestry {
 
 	public SlotCustom setCrafter(ICrafter crafter) {
 		this.crafter = crafter;
+		return this;
+	}
+
+	public SlotCustom setExclusion(boolean exclusion) {
+		this.exclusion = exclusion;
 		return this;
 	}
 
@@ -124,7 +106,7 @@ public class SlotCustom extends SlotForestry {
 			} else if (filter instanceof Block) {
 				if (StackUtils.equals((Block) filter, itemstack)) return true;
 			} else if (filter instanceof Item) {
-				if (itemstack.getItem() == (Item) filter) return true;
+				if (itemstack.getItem() == filter) return true;
 			} else if (filter instanceof ForestryItem) {
 				if (((ForestryItem) filter).isItemEqual(itemstack)) return true;
 			} else if (filter instanceof ForestryBlock) {

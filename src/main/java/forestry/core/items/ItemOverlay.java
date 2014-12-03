@@ -29,9 +29,9 @@ public class ItemOverlay extends ItemForestry {
 
 	public static class OverlayInfo {
 
-		public String name;
-		public int primaryColor = 0;
-		public int secondaryColor = 0;
+		public final String name;
+		public final int primaryColor;
+		public final int secondaryColor;
 		public boolean isSecret = false;
 
 		public OverlayInfo(String name, int primaryColor, int secondaryColor) {

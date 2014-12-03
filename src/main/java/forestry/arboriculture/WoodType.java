@@ -23,7 +23,7 @@ import forestry.core.render.TextureManager;
 
 public enum WoodType {
 	LARCH, TEAK, ACACIA, LIME, CHESTNUT, WENGE, BAOBAB, SEQUOIA(4.0f), KAPOK, EBONY, MAHOGANY, BALSA(1.0f), WILLOW, WALNUT, GREENHEART(7.5f), CHERRY, MAHOE, POPLAR, PALM, PAPAYA, PINE(
-			3.0f), PLUM, MAPLE, CITRUS, GIGANTEUM(2.0f), IPE, PADAUK, COCOBOLO;
+			3.0f), PLUM, MAPLE, CITRUS, GIGANTEUM(2.0f), IPE, PADAUK, COCOBOLO, ZEBRAWOOD;
 
 	public static final WoodType[] VALUES = values();
 	private final float hardness;

@@ -10,14 +10,6 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-
-import org.lwjgl.opengl.GL11;
-
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.WidgetManager;
@@ -25,14 +17,18 @@ import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
 import forestry.factory.gadgets.TileWorktable;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import org.lwjgl.opengl.GL11;
 
 public class GuiWorktable extends GuiForestryTitled<TileWorktable> {
 
 	private class MemorizedSlot extends Widget {
 
-		int slotNumber;
+		private final int slotNumber;
 
 		public MemorizedSlot(WidgetManager manager, int xPos, int yPos, int slot) {
 			super(manager, xPos, yPos);
@@ -100,14 +96,13 @@ public class GuiWorktable extends GuiForestryTitled<TileWorktable> {
 		}
 	}
 	private final TileWorktable worktable;
-	protected ContainerWorktable container;
+	protected final ContainerWorktable container;
 
 	public GuiWorktable(EntityPlayer player, TileWorktable tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/worktable2.png", new ContainerWorktable(player, tile), tile);
 
 		ySize = 218;
 		worktable = tile;
-		this.tile = tile;
 		container = (ContainerWorktable) inventorySlots;
 
 		final int spacing = 18;

@@ -16,7 +16,7 @@ import forestry.core.genetics.Allele;
 
 public class AlleleGrowth extends Allele implements IAlleleGrowth {
 
-	IGrowthProvider provider;
+	private final IGrowthProvider provider;
 
 	public AlleleGrowth(String uid, IGrowthProvider provider) {
 		this(uid, provider, false);

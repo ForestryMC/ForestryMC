@@ -104,10 +104,10 @@ public class BlockLog extends Block implements IWoodTyped {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		/*if(cat == LogCat.CAT6) {
+		if(cat == LogCat.CAT7) {
 			itemList.add(new ItemStack(this, 1, 0));
 			return;
-		}*/
+		}
 
 		for (int i = 0; i < 4; i++)
 			itemList.add(new ItemStack(this, 1, i));

@@ -243,7 +243,7 @@ public class ProxyCommon {
 	}
 
 	public void closeGUI(EntityPlayer player) {
-		((EntityPlayerMP) player).closeScreen();
+		player.closeScreen();
 	}
 
 	/* DEPENDENCY HANDLING */

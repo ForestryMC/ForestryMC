@@ -24,8 +24,8 @@ import forestry.core.utils.StringUtil;
 
 public class Allele implements IAllele {
 
-	protected String uid;
-	boolean isDominant;
+	protected final String uid;
+	protected final boolean isDominant;
 	protected String name;
 
 	public Allele(String uid, boolean isDominant) {
@@ -174,6 +174,7 @@ public class Allele implements IAllele {
 	public static AlleleSpecies treeIpe;
 	public static AlleleSpecies treePadauk;
 	public static AlleleSpecies treeCocobolo;
+	public static AlleleSpecies treeZebrawood;
 	
 	/// BUTTERFLIES // SPECIES
 	// Moths

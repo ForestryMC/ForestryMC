@@ -22,7 +22,7 @@ import forestry.core.gui.slots.SlotCustom;
 
 public class ContainerAlvearySieve extends ContainerForestry {
 
-	TileAlvearySieve tile;
+	private final TileAlvearySieve tile;
 
 	public ContainerAlvearySieve(InventoryPlayer player, TileAlvearySieve tile) {
 		super(tile.getInternalInventory());
@@ -30,10 +30,10 @@ public class ContainerAlvearySieve extends ContainerForestry {
 		this.tile = tile;
 		IInventory inventory = tile.getInternalInventory();
 
-		addSlot(new SlotCustom(inventory, 0, 94, 52, new Object[0]).setCrafter(tile));
-		addSlot(new SlotCustom(inventory, 1, 115, 39, new Object[0]).setCrafter(tile));
-		addSlot(new SlotCustom(inventory, 2, 73, 39, new Object[0]).setCrafter(tile));
-		addSlot(new SlotCustom(inventory, 3, 94, 26, new Object[0]).setCrafter(tile));
+		addSlot(new SlotCustom(inventory, 0, 94, 52).setCrafter(tile));
+		addSlot(new SlotCustom(inventory, 1, 115, 39).setCrafter(tile));
+		addSlot(new SlotCustom(inventory, 2, 73, 39).setCrafter(tile));
+		addSlot(new SlotCustom(inventory, 3, 94, 26).setCrafter(tile));
 
 		addSlot(new SlotCustom(inventory, TileAlvearySieve.SLOT_SIEVE, 43, 39, ForestryItem.craftingMaterial.getItemStack(1, 3)).setCrafter(tile));
 

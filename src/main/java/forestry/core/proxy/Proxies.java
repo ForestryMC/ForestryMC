@@ -20,5 +20,5 @@ public class Proxies {
 	@SidedProxy(clientSide = "forestry.core.proxy.ClientProxyRender", serverSide = "forestry.core.proxy.ProxyRender")
 	public static ProxyRender render;
 
-	public static ProxyLog log = new ProxyLog();
+	public static final ProxyLog log = new ProxyLog();
 }

@@ -16,7 +16,7 @@ import forestry.core.gadgets.TileForestry;
 
 public class TileInventoryAdapter extends InventoryAdapter {
 
-	TileForestry tile;
+	private final TileForestry tile;
 
 	public TileInventoryAdapter(TileForestry tile, int size, String name) {
 		super(size, name);
