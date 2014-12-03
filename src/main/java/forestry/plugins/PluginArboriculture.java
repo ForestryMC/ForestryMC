@@ -469,7 +469,7 @@ public class PluginArboriculture extends ForestryPlugin {
 			Proxies.common.addShapelessRecipe(ForestryBlock.fireproofPlanks2.getItemStack(4, 8 + i), ForestryBlock.fireproofLog7.getItemStack(1, i));
 
 		// Slab recipes
-		for (int i = 0; i < 8; i++)
+		for (int i = 0; i < 16; i++)
 			Proxies.common.addPriorityRecipe(ForestryBlock.slabs1.getItemStack(6, i), "###", '#', ForestryBlock.planks1.getItemStack(1, i));
 		for (int i = 0; i < 8; i++)
 			Proxies.common.addPriorityRecipe(ForestryBlock.slabs2.getItemStack(6, i), "###", '#', ForestryBlock.planks1.getItemStack(1, 8 + i));

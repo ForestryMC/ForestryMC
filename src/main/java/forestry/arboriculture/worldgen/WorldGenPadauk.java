@@ -25,32 +25,26 @@ public class WorldGenPadauk extends WorldGenTree {
 	@Override
 	public void generate() {
 		generateTreeTrunk(height, girth);
-		
 
 		int leafSpawn = height + 1;
 
 		generateAdjustedCylinder(leafSpawn--, 0, 1, leaf);
 		generateAdjustedCylinder(leafSpawn--, 1.5f, 1, leaf);
 		generateAdjustedCylinder(leafSpawn--, 3f, 1, leaf);
+		int randomHeight = rand.nextInt(3-(1+1)) + 1;
+		generateAdjustedCylinder(leafSpawn, 4.5f, randomHeight, leaf);
 		
-		int count = 0;
-		int max = 3;
-		int min = 1;
-		int canopyHeight = rand.nextInt(max - min + 1) + min;
-		
-		while (leafSpawn > 3 && count < canopyHeight) {
-			generateAdjustedCylinder(leafSpawn--, 4.5f, 1, leaf);
-			count++;
-			//Random Trunk Branches
-			for (int i = 0; i < 3; i++) {
-				if (rand.nextBoolean()){
-					int[] offset = {-1, 0, 1};
-					int offsetx = new Random().nextInt(offset.length);
-					int offsetz = new Random().nextInt(offset.length);
-					addWood(offset[offsetx], leafSpawn+1, offset[offsetz], EnumReplaceMode.ALL);
-				}
+		//Random Trunk Branches
+		for (int i = 0; i < 3; i++) {
+			if (rand.nextBoolean()){
+				int[] offset = {-1, 0, 1};
+				int offsetx = new Random().nextInt(offset.length);
+				int offsetz = new Random().nextInt(offset.length);
+				addWood(offset[offsetx], leafSpawn+1, offset[offsetz], EnumReplaceMode.ALL);
 			}
 		}
+		
+		
 		//if (rand.nextBoolean())
 			//generateAdjustedCylinder(leafSpawn--, 2f, 1, leaf);
 
