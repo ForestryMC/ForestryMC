@@ -118,8 +118,8 @@ public class Allele implements IAllele {
 
 	// Agrarian branch
 	public static AlleleSpecies speciesRural;
-	// 41 Farmerly
-	// 42 Agrarian
+	public static AlleleSpecies speciesFarmerly;
+	public static AlleleSpecies speciesArgrarian;
 
 	// Boggy branch
 	public static AlleleSpecies speciesMarshy;
@@ -391,6 +391,7 @@ public class Allele implements IAllele {
 	public static Allele effectReanimation;
 	public static Allele effectResurrection;
 	public static Allele effectRepulsion;
+	public static Allele effectFertile;
 
 	// / TREES // EFFECTS
 	public static Allele leavesNone;
