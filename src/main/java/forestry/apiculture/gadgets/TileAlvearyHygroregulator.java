@@ -187,7 +187,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	/* TEXTURES */
 	@Override
 	public int getIcon(int side, int metadata) {
-		return BlockAlveary.TX_73_VLVE;
+		return BlockAlveary.ALVEARY_HYGRO;
 	}
 
 	@Override
