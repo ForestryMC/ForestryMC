@@ -1166,7 +1166,7 @@ public class PluginApiculture extends ForestryPlugin {
 				.restrictBiomeType(BiomeDictionary.Type.PLAINS).enableStrictBiomeCheck();
 		new BeeMutation(Allele.speciesRural, Allele.speciesUnweary, BeeTemplates.getFarmerlyTemplate(), 10)
 				.restrictBiomeType(BiomeDictionary.Type.PLAINS).enableStrictBiomeCheck();
-		new BeeMutation(Allele.speciesFarmerly, Allele.speciesIndustrious, BeeTemplates.getAgrarianBranchTemplate(), 6)
+		new BeeMutation(Allele.speciesFarmerly, Allele.speciesIndustrious, BeeTemplates.getAgrarianTemplate(), 6)
 				.restrictBiomeType(BiomeDictionary.Type.PLAINS).enableStrictBiomeCheck();
 
 		// Monastic branch
