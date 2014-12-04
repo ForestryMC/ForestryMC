@@ -47,7 +47,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.LinkedHashSet;
@@ -80,6 +79,17 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 			player.openGui(ForestryAPI.instance, GuiId.AlvearyGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
 		else if (this.hasMaster())
 			player.openGui(ForestryAPI.instance, GuiId.AlvearyGUI.ordinal(), worldObj, masterX, masterY, masterZ);
+	}
+
+	@Override
+	public void validate() {
+		super.validate();
+		setBiomeInformation();
+	}
+
+	private void setBiomeInformation() {
+		this.biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
+		setErrorState(EnumErrorCode.OK);
 	}
 
 	/* LOADING & SAVING */
@@ -115,8 +125,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 	@Override
 	public void initialize() {
 		super.initialize();
-		this.biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
-		setErrorState(EnumErrorCode.OK);
+		setBiomeInformation();
 	}
 
 	@Override
