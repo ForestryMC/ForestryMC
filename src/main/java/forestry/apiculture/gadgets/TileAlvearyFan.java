@@ -16,7 +16,7 @@ public class TileAlvearyFan extends TileAlvearyClimatiser {
 	public static final int BLOCK_META = 3;
 
 	public TileAlvearyFan() {
-		super(new ClimateControl(-0.01f, 0.05f, 2.5f), BlockAlveary.TX_71_FNOF, BlockAlveary.TX_72_FNON, BLOCK_META);
+		super(new ClimateControl(-0.01f, 0.05f, 2.5f), BlockAlveary.ALVEARY_FAN_OFF, BlockAlveary.ALVEARY_FAN_ON, BLOCK_META);
 	}
 
 }
