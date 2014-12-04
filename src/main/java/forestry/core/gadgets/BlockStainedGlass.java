@@ -101,4 +101,9 @@ public class BlockStainedGlass extends BlockBreakable {
 		return false;
 	}
 
+	@Override
+	protected boolean canSilkHarvest() {
+		return true;
+	}
+
 }
