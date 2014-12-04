@@ -105,13 +105,13 @@ public class BlockAlveary extends BlockStructure {
 	public static final int BOTTOM = 2;
 	public static final int LEFT = 3;
 	public static final int RIGHT = 4;
-	public static final int TX_55_SWOF = 5;
-	public static final int TX_56_SWON = 6;
-	public static final int TX_57_HTOF = 7;
-	public static final int TX_58_HTON = 8;
-	public static final int TX_71_FNOF = 9;
-	public static final int TX_72_FNON = 10;
-	public static final int TX_73_VLVE = 11;
+	public static final int ALVEARY_SWARMER_OFF = 5;
+	public static final int ALVEARY_SWARMER_ON = 6;
+	public static final int ALVEARY_HEATER_OFF = 7;
+	public static final int ALVEARY_HEATER_ON = 8;
+	public static final int ALVEARY_FAN_OFF = 9;
+	public static final int ALVEARY_FAN_ON = 10;
+	public static final int ALVEARY_HYGRO = 11;
 	public static final int STABILISER = 12;
 	public static final int SIEVE = 13;
 
@@ -152,13 +152,13 @@ public class BlockAlveary extends BlockStructure {
 		case 1:
 			return icons[ENTRANCE];
 		case TileAlvearySwarmer.BLOCK_META:
-			return icons[TX_55_SWOF];
+			return icons[ALVEARY_SWARMER_OFF];
 		case TileAlvearyFan.BLOCK_META:
-			return icons[TX_71_FNOF];
+			return icons[ALVEARY_FAN_OFF];
 		case TileAlvearyHeater.BLOCK_META:
-			return icons[TX_57_HTOF];
+			return icons[ALVEARY_HEATER_OFF];
 		case TileAlvearyHygroregulator.BLOCK_META:
-			return icons[TX_73_VLVE];
+			return icons[ALVEARY_HYGRO];
 		case TileAlvearyStabiliser.BLOCK_META:
 			return icons[STABILISER];
 		case TileAlvearySieve.BLOCK_META:
