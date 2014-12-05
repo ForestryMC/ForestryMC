@@ -145,15 +145,15 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		public void addCrating(ItemStack itemStack) {
 			ItemStack uncrated = ((forestry.core.items.ItemCrated) itemStack.getItem()).getContained(itemStack);
 			addRecipe(Defaults.CARPENTER_CRATING_CYCLES, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, Defaults.CARPENTER_CRATING_LIQUID_QUANTITY),
-					ForestryItem.crate.getItemStack(), itemStack, new Object[] { "###", "###", "###", '#', uncrated });
-			addRecipe(null, new ItemStack(uncrated.getItem(), 9, uncrated.getItemDamage()), new Object[] { "#", Character.valueOf('#'), itemStack });
+					ForestryItem.crate.getItemStack(), itemStack, new Object[]{"###", "###", "###", '#', uncrated});
+			addRecipe(null, new ItemStack(uncrated.getItem(), 9, uncrated.getItemDamage()), new Object[]{"#", Character.valueOf('#'), itemStack});
 		}
 
 		@Override
 		public void addCrating(String toCrate, ItemStack unpack, ItemStack crated) {
 			addRecipe(Defaults.CARPENTER_CRATING_CYCLES, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, Defaults.CARPENTER_CRATING_LIQUID_QUANTITY),
-					ForestryItem.crate.getItemStack(), crated, new Object[] { "###", "###", "###", '#', toCrate });
-			addRecipe(null, new ItemStack(unpack.getItem(), 9, unpack.getItemDamage()), new Object[] { "#", '#', crated });
+					ForestryItem.crate.getItemStack(), crated, new Object[]{"###", "###", "###", '#', toCrate});
+			addRecipe(null, new ItemStack(unpack.getItem(), 9, unpack.getItemDamage()), new Object[]{"#", '#', crated});
 		}
 
 		@Override
@@ -200,7 +200,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
 
 			for (Recipe recipe : recipes) {
-				recipeList.put(recipe.internal.getIngredients(), new Object[] { recipe.getCraftingResult() });
+				recipeList.put(recipe.internal.getIngredients(), new Object[]{recipe.getCraftingResult()});
 			}
 
 			return recipeList;
@@ -212,7 +212,6 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	public final FilteredTank resourceTank;
 	private final TankManager tankManager;
 	private final TileInventoryAdapter craftingInventory;
-	private final TileInventoryAdapter accessibleInventory;
 	public MachineCarpenter.Recipe currentRecipe;
 	public MachineCarpenter.Recipe lastRecipe;
 	public ContainerCarpenter activeContainer;
@@ -222,7 +221,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	private ItemStack pendingProduct;
 
 	public ItemStack getBoxStack() {
-		return accessibleInventory.getStackInSlot(SLOT_BOX);
+		return getInternalInventory().getStackInSlot(SLOT_BOX);
 	}
 
 	public MachineCarpenter() {
@@ -230,7 +229,8 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		setHints(Config.hints.get("carpenter"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluids);
 		craftingInventory = new TileInventoryAdapter(this, 10, "CraftItems");
-		accessibleInventory = (TileInventoryAdapter) new TileInventoryAdapter(this, 30, "Items").configureSided(Defaults.FACINGS, SLOT_BOX, 20);
+		setInternalInventory(new TileInventoryAdapter(this, 30, "Items"));
+		getInternalInventory().configureSided(Defaults.FACINGS, SLOT_BOX, 20);
 
 		tankManager = new TankManager(resourceTank);
 	}
@@ -256,7 +256,6 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		tankManager.writeTanksToNBT(nbttagcompound);
 
 		craftingInventory.writeToNBT(nbttagcompound);
-		accessibleInventory.writeToNBT(nbttagcompound);
 
 		// Write pending product
 		if (pendingProduct != null) {
@@ -295,7 +294,6 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			}
 
 		}
-		accessibleInventory.readFromNBT(nbttagcompound);
 
 		// Load pending product
 		if (nbttagcompound.hasKey("PendingProduct")) {
@@ -315,7 +313,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 	public void setCurrentRecipe(MachineCarpenter.Recipe currentRecipe) {
 		this.currentRecipe = currentRecipe;
-		if(currentRecipe != null)
+		if (currentRecipe != null)
 			lastRecipe = currentRecipe;
 	}
 
@@ -324,7 +322,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
 			return;
-
+		TileInventoryAdapter accessibleInventory = getInternalInventory();
 		// Check if we have suitable items waiting in the item slot
 		if (accessibleInventory.getStackInSlot(SLOT_CAN_INPUT) != null) {
 			FluidContainerData container = LiquidHelper.getLiquidContainer(accessibleInventory.getStackInSlot(SLOT_CAN_INPUT));
@@ -416,6 +414,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			if (resourceTank.getFluidAmount() < currentRecipe.liquid.amount)
 				return false;
 
+		TileInventoryAdapter accessibleInventory = getInternalInventory();
 		// Check whether boxes are available
 		if (currentRecipe.box != null)
 			if (accessibleInventory.getStackInSlot(SLOT_BOX) == null)
@@ -439,7 +438,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		}
 		// Remove boxes
 		if (recipe.box != null) {
-			ItemStack removed = accessibleInventory.decrStackSize(SLOT_BOX, 1);
+			ItemStack removed = getInternalInventory().decrStackSize(SLOT_BOX, 1);
 			if (removed == null || removed.stackSize == 0)
 				return false;
 		}
@@ -448,11 +447,12 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	}
 
 	private boolean removeSets(int count, ItemStack[] set) {
-		EntityPlayer player = Proxies.common.getPlayer(worldObj, owner);
-		return accessibleInventory.removeSets(count, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
+		EntityPlayer player = Proxies.common.getPlayer(worldObj, getOwnerProfile());
+		return getInternalInventory().removeSets(count, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
 	}
 
 	private boolean tryAddPending() {
+		TileInventoryAdapter accessibleInventory = getInternalInventory();
 		if (accessibleInventory.getStackInSlot(SLOT_PRODUCT) == null) {
 			accessibleInventory.setInventorySlotContents(SLOT_PRODUCT, pendingProduct.copy());
 			pendingProduct = null;
@@ -481,6 +481,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		if (currentRecipe == null)
 			return false;
 
+		TileInventoryAdapter accessibleInventory = getInternalInventory();
 		// Stop working if the output slot cannot take more
 		if (accessibleInventory.getStackInSlot(SLOT_PRODUCT) != null
 				&& accessibleInventory.getStackInSlot(SLOT_PRODUCT).getMaxStackSize() - accessibleInventory.getStackInSlot(SLOT_PRODUCT).stackSize < currentRecipe
@@ -510,32 +511,32 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	/* IINVENTORY */
 	@Override
 	public int getSizeInventory() {
-		return accessibleInventory.getSizeInventory();
+		return getInternalInventory().getSizeInventory();
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		return accessibleInventory.getStackInSlot(i);
+		return getInternalInventory().getStackInSlot(i);
 	}
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		accessibleInventory.setInventorySlotContents(i, itemstack);
+		getInternalInventory().setInventorySlotContents(i, itemstack);
 	}
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
-		return accessibleInventory.decrStackSize(i, j);
+		return getInternalInventory().decrStackSize(i, j);
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slot) {
-		return accessibleInventory.getStackInSlotOnClosing(slot);
+		return getInternalInventory().getStackInSlotOnClosing(slot);
 	}
 
 	@Override
 	public int getInventoryStackLimit() {
-		return accessibleInventory.getInventoryStackLimit();
+		return getInternalInventory().getInventoryStackLimit();
 	}
 
 	@Override
@@ -546,102 +547,19 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	public void closeInventory() {
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return super.isUseableByPlayer(player);
+		return getInternalInventory().isUseableByPlayer(player);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean hasCustomInventoryName() {
-		return super.hasCustomInventoryName();
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return super.isItemValidForSlot(slotIndex, itemstack);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return super.canInsertItem(i, itemstack, j);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return super.canExtractItem(i, itemstack, j);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return super.getAccessibleSlotsFromSide(side);
-	}
-
-	/* SMP GUI */
-	public void getGUINetworkData(int i, int j) {
-		i -= tankManager.maxMessageId() + 1;
-		switch (i) {
-		case 0:
-			packageTime = j;
-			break;
-		case 1:
-			totalTime = j;
-			break;
-		}
-	}
-
-	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		int i = tankManager.maxMessageId() + 1;
-		iCrafting.sendProgressBarUpdate(container, i, packageTime);
-		iCrafting.sendProgressBarUpdate(container, i + 1, totalTime);
-	}
-
-	/* ISIDEDINVENTORY */
-	@Override
-	public InventoryAdapter getInternalInventory() {
-		return accessibleInventory;
-	}
-
-	/**
-	 * @return Inaccessible crafting inventory for the craft grid.
-	 */
-	public InventoryAdapter getCraftingInventory() {
-		return craftingInventory;
-	}
-
-	@Override
-	protected boolean canTakeStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-
-		if (!super.canTakeStackFromSide(slotIndex, itemstack, side))
-			return false;
-
-		if (slotIndex == SLOT_PRODUCT)
-			return true;
-
 		return false;
 	}
 
 	@Override
-	protected boolean canPutStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-
-		if (!super.canPutStackFromSide(slotIndex, itemstack, side))
+	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
+		if (!getInternalInventory().isItemValidForSlot(slotIndex, itemstack))
 			return false;
 
 		if (slotIndex == SLOT_PRODUCT)
@@ -662,7 +580,54 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		return false;
 	}
 
-	// ILIQUIDCONTAINER IMPLEMENTATION
+	/* ISIDEDINVENTORY */
+	@Override
+	public boolean canInsertItem(int slotIndex, ItemStack itemstack, int side) {
+		return isItemValidForSlot(slotIndex, itemstack);
+	}
+
+	@Override
+	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+		if (!getInternalInventory().canExtractItem(slotIndex, itemstack, side))
+			return false;
+
+		return slotIndex == SLOT_PRODUCT;
+	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) {
+		return getInternalInventory().getAccessibleSlotsFromSide(side);
+	}
+
+	/* SMP GUI */
+	@Override
+	public void getGUINetworkData(int i, int j) {
+		i -= tankManager.maxMessageId() + 1;
+		switch (i) {
+		case 0:
+			packageTime = j;
+			break;
+		case 1:
+			totalTime = j;
+			break;
+		}
+	}
+
+	@Override
+	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
+		int i = tankManager.maxMessageId() + 1;
+		iCrafting.sendProgressBarUpdate(container, i, packageTime);
+		iCrafting.sendProgressBarUpdate(container, i + 1, totalTime);
+	}
+
+	/**
+	 * @return Inaccessible crafting inventory for the craft grid.
+	 */
+	public InventoryAdapter getCraftingInventory() {
+		return craftingInventory;
+	}
+
+	// IFLUIDCONTAINER IMPLEMENTATION
 	@Override
 	public int fill(ForgeDirection direction, FluidStack resource, boolean doFill) {
 		return tankManager.fill(direction, resource, doFill);
@@ -673,6 +638,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		return tankManager;
 	}
 
+	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
 		return tankManager.drain(from, resource, doDrain);
 	}

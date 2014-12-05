@@ -25,7 +25,7 @@ import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.inventory.InventoryAdapter;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
@@ -87,12 +87,8 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	}
 
 	public static class RecipeManager implements ICraftingProvider {
-<<<<<<< Updated upstream
-		public static final ArrayList<MachineBottler.Recipe> recipes = new ArrayList<MachineBottler.Recipe>();
-=======
 
-		public static ArrayList<MachineBottler.Recipe> recipes = new ArrayList<MachineBottler.Recipe>();
->>>>>>> Stashed changes
+		public static final ArrayList<MachineBottler.Recipe> recipes = new ArrayList<MachineBottler.Recipe>();
 
 		/**
 		 * 
@@ -151,8 +147,6 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	public final StandardTank resourceTank;
 	private final TankManager tankManager;
 
-	private final InventoryAdapter inventory = new InventoryAdapter(3, "Items");
-
 	private boolean productPending = false;
 
 	private Recipe currentRecipe;
@@ -162,6 +156,9 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 
 	public MachineBottler() {
 		super(1100, 50, 4000);
+		
+		setInternalInventory(new TileInventoryAdapter(this, 3, "Items"));
+		
 		setHints(Config.hints.get("bottler"));
 		resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 		tankManager = new TankManager(resourceTank);
@@ -187,7 +184,6 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		nbttagcompound.setBoolean("ProductPending", productPending);
 
 		tankManager.writeTanksToNBT(nbttagcompound);
-		inventory.writeToNBT(nbttagcompound);
 
 		NBTTagList nbttaglist = new NBTTagList();
 		ItemStack[] offspring = pendingProducts.toArray(new ItemStack[pendingProducts.size()]);
@@ -212,8 +208,6 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 
 		tankManager.readTanksFromNBT(nbttagcompound);
 
-		inventory.readFromNBT(nbttagcompound);
-
 		NBTTagList nbttaglist = nbttagcompound.getTagList("PendingProducts", 10);
 		for (int i = 0; i < nbttaglist.tagCount(); i++) {
 			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
@@ -227,7 +221,9 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	public void updateServerSide() {
 		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
 			return;
-
+		
+		TileInventoryAdapter inventory = getInternalInventory();
+		
 		// Check if we have suitable items waiting in the item slot
 		if (inventory.getStackInSlot(SLOT_CAN) != null) {
 			FluidContainerData container = LiquidHelper.getLiquidContainer(inventory.getStackInSlot(SLOT_CAN));
@@ -280,6 +276,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		// We are done, add products to queue and remove resources
 		pendingProducts.push(currentRecipe.bottled.copy());
 
+		TileInventoryAdapter inventory = getInternalInventory();
 		inventory.decrStackSize(SLOT_RESOURCE, 1);
 		resourceTank.drain(currentRecipe.input.amount, true);
 		checkRecipe();
@@ -291,6 +288,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	}
 
 	public void checkRecipe() {
+		TileInventoryAdapter inventory = getInternalInventory();
 		Recipe sameRec = RecipeManager.findMatchingRecipe(resourceTank.getFluid(), inventory.getStackInSlot(SLOT_RESOURCE));
 
 		if (sameRec == null)
@@ -328,7 +326,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	}
 
 	private boolean addProduct(ItemStack product, boolean all) {
-		return inventory.tryAddStack(product, SLOT_PRODUCT, 1, all);
+		return getInternalInventory().tryAddStack(product, SLOT_PRODUCT, 1, all);
 	}
 
 	// / STATE INFORMATION
@@ -339,6 +337,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 
 	@Override
 	public boolean hasResourcesMin(float percentage) {
+		TileInventoryAdapter inventory = getInternalInventory();
 		if (inventory.getStackInSlot(SLOT_RESOURCE) == null)
 			return false;
 
@@ -368,6 +367,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	}
 
 	/* SMP GUI */
+	@Override
 	public void getGUINetworkData(int i, int j) {
 		i -= tankManager.maxMessageId() + 1;
 		switch (i) {
@@ -380,6 +380,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		}
 	}
 
+	@Override
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
 		int i = tankManager.maxMessageId() + 1;
 		iCrafting.sendProgressBarUpdate(container, i, fillingTime);
@@ -389,32 +390,32 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	/* IINVENTORY */
 	@Override
 	public int getSizeInventory() {
-		return inventory.getSizeInventory();
+		return getInternalInventory().getSizeInventory();
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
+		return getInternalInventory().getStackInSlot(i);
 	}
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
-		return inventory.decrStackSize(i, j);
+		return getInternalInventory().decrStackSize(i, j);
 	}
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
+		getInternalInventory().setInventorySlotContents(i, itemstack);
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slot) {
-		return inventory.getStackInSlotOnClosing(slot);
+		return getInternalInventory().getStackInSlotOnClosing(slot);
 	}
 
 	@Override
 	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
+		return getInternalInventory().getInventoryStackLimit();
 	}
 
 	@Override
@@ -425,20 +426,14 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	public void closeInventory() {
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return super.isUseableByPlayer(player);
+		return getInternalInventory().isUseableByPlayer(player);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean hasCustomInventoryName() {
-		return super.hasCustomInventoryName();
+		return false;
 	}
 
 	@Override
@@ -458,41 +453,20 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	}
 
 
+	/* ISIDEDINVENTORY */
 	@Override
 	public boolean canInsertItem(int slotIndex, ItemStack itemstack, int side) {
 		return isItemValidForSlot(slotIndex, itemstack);
 	}
-
 
 	@Override
 	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
 		return getInternalInventory().canExtractItem(side, itemstack, side) && slotIndex == SLOT_PRODUCT;
 	}
 
-
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
 		return getInternalInventory().getAccessibleSlotsFromSide(side);
-	}
-
-	/* ISIDEDINVENTORY */
-	@Override
-	public InventoryAdapter getInternalInventory() {
-		return inventory;
-	}
-
-	@Override
-	protected boolean canTakeStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-
-		if (!super.canTakeStackFromSide(slotIndex, itemstack, side))
-			return false;
-
-		return slotIndex == SLOT_PRODUCT;
-	}
-
-	@Override
-	protected boolean canPutStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-
 	}
 
 	/* ILIQUIDCONTAINER */
@@ -506,6 +480,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		return tankManager.fill(from, resource, doFill);
 	}
 
+	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
 		return tankManager.drain(from, resource, doDrain);
 	}
