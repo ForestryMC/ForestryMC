@@ -548,6 +548,24 @@ public class BeeTemplates {
 		alleles[EnumBeeChromosome.SPECIES.ordinal()] = Allele.speciesRural;
 		return alleles;
 	}
+	
+	public static IAllele[] getFarmerlyTemplate() {
+		IAllele[] alleles = getAgrarianBranchTemplate();
+		alleles[EnumBeeChromosome.SPECIES.ordinal()] = Allele.speciesFarmerly;
+		alleles[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlow;
+		alleles[EnumBeeChromosome.TERRITORY.ordinal()] = Allele.territoryLarge;
+		return alleles;
+	}
+	
+	public static IAllele[] getAgrarianTemplate() {
+		IAllele[] alleles = getAgrarianBranchTemplate();
+		alleles[EnumBeeChromosome.SPECIES.ordinal()] = Allele.speciesArgrarian;
+		alleles[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlow;
+		alleles[EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceBoth2;
+		alleles[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectFertile;
+		alleles[EnumBeeChromosome.TERRITORY.ordinal()] = Allele.territoryLarge;
+		return alleles;
+	}
 
 	// / BOGGY BRANCH
 	public static IAllele[] getBoggyBranchTemplate() {

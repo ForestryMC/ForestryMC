@@ -42,10 +42,7 @@ import java.util.Locale;
 public class GuiTreealyzer extends GuiAlyzer {
 
 	public GuiTreealyzer(EntityPlayer player, TreealyzerInventory inventory) {
-		super(AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees"), player,
-				new ContainerTreealyzer(player.inventory, inventory), inventory, 1, inventory.getSizeInventory());
-
-		guiName = "gui.treealyzer";
+		super("rootTrees", player, new ContainerTreealyzer(player.inventory, inventory), inventory, "gui.treealyzer");
 
 		ArrayList<ItemStack> treeList = new ArrayList<ItemStack>();
 		((ItemGermlingGE) ForestryItem.sapling.item()).addCreativeItems(treeList, false);
@@ -127,42 +124,42 @@ public class GuiTreealyzer extends GuiAlyzer {
 		newLine();
 
 		drawLine(StringUtil.localize("gui.saplings"), COLUMN_0);
-		drawLine(tree.getGenome().getActiveAllele(EnumTreeChromosome.FERTILITY.ordinal()).getName(), COLUMN_1, tree, EnumTreeChromosome.FERTILITY, false);
-		drawLine(tree.getGenome().getInactiveAllele(EnumTreeChromosome.FERTILITY.ordinal()).getName(), COLUMN_2, tree,
+		drawLine(tree.getGenome().getActiveAllele(EnumTreeChromosome.FERTILITY).getName(), COLUMN_1, tree, EnumTreeChromosome.FERTILITY, false);
+		drawLine(tree.getGenome().getInactiveAllele(EnumTreeChromosome.FERTILITY).getName(), COLUMN_2, tree,
 				EnumTreeChromosome.FERTILITY, true);
 
 		newLine();
 
-		drawRow(StringUtil.localize("gui.maturity"), tree.getGenome().getActiveAllele(EnumTreeChromosome.MATURATION.ordinal()).getName(),
-				tree.getGenome().getInactiveAllele(EnumTreeChromosome.MATURATION.ordinal()).getName(), tree,
+		drawRow(StringUtil.localize("gui.maturity"), tree.getGenome().getActiveAllele(EnumTreeChromosome.MATURATION).getName(),
+				tree.getGenome().getInactiveAllele(EnumTreeChromosome.MATURATION).getName(), tree,
 				EnumTreeChromosome.MATURATION);
 
 		drawLine(StringUtil.localize("gui.height"), COLUMN_0);
-		drawLine(tree.getGenome().getActiveAllele(EnumTreeChromosome.HEIGHT.ordinal()).getName(), COLUMN_1, tree, EnumTreeChromosome.HEIGHT, false);
-		drawLine(tree.getGenome().getInactiveAllele(EnumTreeChromosome.HEIGHT.ordinal()).getName(), COLUMN_2, tree,
+		drawLine(tree.getGenome().getActiveAllele(EnumTreeChromosome.HEIGHT).getName(), COLUMN_1, tree, EnumTreeChromosome.HEIGHT, false);
+		drawLine(tree.getGenome().getInactiveAllele(EnumTreeChromosome.HEIGHT).getName(), COLUMN_2, tree,
 				EnumTreeChromosome.HEIGHT, true);
 
 		newLine();
 
 		drawLine(StringUtil.localize("gui.girth"), COLUMN_0);
 		drawLine(String.format("%sx%s", tree.getGenome().getGirth(), tree.getGenome().getGirth()), COLUMN_1, tree, EnumTreeChromosome.FERTILITY, false);
-		int secondGirth = ((IAlleleInteger) tree.getGenome().getInactiveAllele(EnumTreeChromosome.GIRTH.ordinal())).getValue();
+		int secondGirth = ((IAlleleInteger) tree.getGenome().getInactiveAllele(EnumTreeChromosome.GIRTH)).getValue();
 		drawLine(String.format("%sx%s", secondGirth, secondGirth), COLUMN_2, tree, EnumTreeChromosome.FERTILITY, true);
 
 		newLine();
 
 		drawLine(StringUtil.localize("gui.yield"), COLUMN_0);
-		drawLine(tree.getGenome().getActiveAllele(EnumTreeChromosome.YIELD.ordinal()).getName(), COLUMN_1, tree, EnumTreeChromosome.YIELD, false);
-		drawLine(tree.getGenome().getInactiveAllele(EnumTreeChromosome.YIELD.ordinal()).getName(), COLUMN_2, tree,
+		drawLine(tree.getGenome().getActiveAllele(EnumTreeChromosome.YIELD).getName(), COLUMN_1, tree, EnumTreeChromosome.YIELD, false);
+		drawLine(tree.getGenome().getInactiveAllele(EnumTreeChromosome.YIELD).getName(), COLUMN_2, tree,
 				EnumTreeChromosome.YIELD, true);
 
 		newLine();
 
 		drawLine(StringUtil.localize("gui.sappiness"), COLUMN_0);
-		drawLine(tree.getGenome().getActiveAllele(EnumTreeChromosome.SAPPINESS.ordinal()).getName(), COLUMN_1, tree, EnumTreeChromosome.SAPPINESS, false);
+		drawLine(tree.getGenome().getActiveAllele(EnumTreeChromosome.SAPPINESS).getName(), COLUMN_1, tree, EnumTreeChromosome.SAPPINESS, false);
 
 		// FIXME: Legacy handling
-		IAllele sappiness = tree.getGenome().getInactiveAllele(EnumTreeChromosome.SAPPINESS.ordinal());
+		IAllele sappiness = tree.getGenome().getInactiveAllele(EnumTreeChromosome.SAPPINESS);
 		String sap;
 		if (sappiness instanceof IAlleleFloat)
 			sap = sappiness.getName();
@@ -176,8 +173,8 @@ public class GuiTreealyzer extends GuiAlyzer {
 		String yes = StringUtil.localize("yes");
 		String no = StringUtil.localize("no");
 
-		AlleleBoolean primaryFireproof = (AlleleBoolean)tree.getGenome().getActiveAllele(EnumTreeChromosome.FIREPROOF.ordinal());
-		AlleleBoolean secondaryFireproof = (AlleleBoolean)tree.getGenome().getInactiveAllele(EnumTreeChromosome.FIREPROOF.ordinal());
+		AlleleBoolean primaryFireproof = (AlleleBoolean)tree.getGenome().getActiveAllele(EnumTreeChromosome.FIREPROOF);
+		AlleleBoolean secondaryFireproof = (AlleleBoolean)tree.getGenome().getInactiveAllele(EnumTreeChromosome.FIREPROOF);
 
 		drawLine(StringUtil.localize("gui.fireproof"), COLUMN_0);
 		drawLine(StringUtil.readableBoolean(primaryFireproof.getValue(), yes, no), COLUMN_1, tree, EnumTreeChromosome.FIREPROOF, false);
@@ -186,7 +183,7 @@ public class GuiTreealyzer extends GuiAlyzer {
 		newLine();
 
 		drawRow(StringUtil.localize("gui.effect"), tree.getGenome().getEffect().getName(),
-				tree.getGenome().getInactiveAllele(EnumTreeChromosome.EFFECT.ordinal()).getName(), tree,
+				tree.getGenome().getInactiveAllele(EnumTreeChromosome.EFFECT).getName(), tree,
 				EnumTreeChromosome.EFFECT);
 
 		newLine();
@@ -210,7 +207,7 @@ public class GuiTreealyzer extends GuiAlyzer {
 
 		drawLine(StringUtil.localize("gui.growth"), COLUMN_0);
 		drawLine(tree.getGenome().getGrowthProvider().getDescription(), COLUMN_1, tree, EnumTreeChromosome.GROWTH, false);
-		drawLine(((IAlleleGrowth) tree.getGenome().getInactiveAllele(EnumTreeChromosome.GROWTH.ordinal())).getProvider().getDescription(), COLUMN_2, tree,
+		drawLine(((IAlleleGrowth) tree.getGenome().getInactiveAllele(EnumTreeChromosome.GROWTH)).getProvider().getDescription(), COLUMN_2, tree,
 				EnumTreeChromosome.GROWTH, true);
 
 		newLine();
@@ -228,7 +225,7 @@ public class GuiTreealyzer extends GuiAlyzer {
 		List<EnumPlantType> tolerated0 = new ArrayList<EnumPlantType>(tree.getGenome().getPlantTypes());
 		List<EnumPlantType> tolerated1 = Collections.emptyList();
 
-		IAllele allele1 = tree.getGenome().getInactiveAllele(EnumTreeChromosome.PLANT.ordinal());
+		IAllele allele1 = tree.getGenome().getInactiveAllele(EnumTreeChromosome.PLANT);
 		if (allele1 instanceof AllelePlantType) {
 			tolerated1 = new ArrayList<EnumPlantType>(((AllelePlantType) allele1).getPlantTypes());
 		}
@@ -264,18 +261,18 @@ public class GuiTreealyzer extends GuiAlyzer {
 		newLine();
 		newLine();
 
-		int fruitDominance0 = getColorCoding(tree.getGenome().getActiveAllele(EnumTreeChromosome.FRUITS.ordinal()).isDominant());
-		int fruitDominance1 = getColorCoding(tree.getGenome().getInactiveAllele(EnumTreeChromosome.FRUITS.ordinal()).isDominant());
+		int fruitDominance0 = getColorCoding(tree.getGenome().getActiveAllele(EnumTreeChromosome.FRUITS).isDominant());
+		int fruitDominance1 = getColorCoding(tree.getGenome().getInactiveAllele(EnumTreeChromosome.FRUITS).isDominant());
 
 		drawLine(StringUtil.localize("gui.fruits"), COLUMN_0);
 		String strike = "";
-		IAllele fruit0 = tree.getGenome().getActiveAllele(EnumTreeChromosome.FRUITS.ordinal());
+		IAllele fruit0 = tree.getGenome().getActiveAllele(EnumTreeChromosome.FRUITS);
 		if (!tree.canBearFruit() && fruit0 != Allele.fruitNone)
 			strike = "\u00A7m";
 		drawLine(strike + StringUtil.localize(tree.getGenome().getFruitProvider().getDescription()), COLUMN_1, fruitDominance0);
 
 		strike = "";
-		IAllele fruit1 = tree.getGenome().getInactiveAllele(EnumTreeChromosome.FRUITS.ordinal());
+		IAllele fruit1 = tree.getGenome().getInactiveAllele(EnumTreeChromosome.FRUITS);
 		if (!tree.getGenome().getSecondary().getSuitableFruit().contains(((IAlleleFruit) fruit1).getProvider().getFamily()) && fruit1 != Allele.fruitNone)
 			strike = "\u00A7m";
 		drawLine(strike + StringUtil.localize(((IAlleleFruit) fruit1).getProvider().getDescription()), COLUMN_2, fruitDominance1);
@@ -284,7 +281,7 @@ public class GuiTreealyzer extends GuiAlyzer {
 
 		drawLine(StringUtil.localize("gui.family"), COLUMN_0);
 		IFruitFamily primary = tree.getGenome().getFruitProvider().getFamily();
-		IFruitFamily secondary = ((IAlleleFruit) tree.getGenome().getInactiveAllele(EnumTreeChromosome.FRUITS.ordinal())).getProvider().getFamily();
+		IFruitFamily secondary = ((IAlleleFruit) tree.getGenome().getInactiveAllele(EnumTreeChromosome.FRUITS)).getProvider().getFamily();
 
 		if (primary != null)
 			drawLine(primary.getName(), COLUMN_1, fruitDominance0);

@@ -131,7 +131,7 @@ public class Bee extends IndividualLiving implements IBee {
 		if (!effect.isCombinable())
 			return storedData;
 
-		IAlleleBeeEffect secondary = (IAlleleBeeEffect) genome.getInactiveAllele(EnumBeeChromosome.EFFECT.ordinal());
+		IAlleleBeeEffect secondary = (IAlleleBeeEffect) genome.getInactiveAllele(EnumBeeChromosome.EFFECT);
 		if (!secondary.isCombinable())
 			return storedData;
 
@@ -158,7 +158,7 @@ public class Bee extends IndividualLiving implements IBee {
 		if (!effect.isCombinable())
 			return storedData;
 
-		IAlleleBeeEffect secondary = (IAlleleBeeEffect) genome.getInactiveAllele(EnumBeeChromosome.EFFECT.ordinal());
+		IAlleleBeeEffect secondary = (IAlleleBeeEffect) genome.getInactiveAllele(EnumBeeChromosome.EFFECT);
 		if (!secondary.isCombinable())
 			return storedData;
 
@@ -351,22 +351,22 @@ public class Bee extends IndividualLiving implements IBee {
 		// You analyzed it? Juicy tooltip coming up!
 		IAlleleBeeSpecies primary = genome.getPrimary();
 		IAlleleBeeSpecies secondary = genome.getSecondary();
-		if (!isPureBred(EnumBeeChromosome.SPECIES.ordinal()))
+		if (!isPureBred(EnumBeeChromosome.SPECIES))
 			list.add("\u00A79" + StringUtil.localize("bees.hybrid").replaceAll("%PRIMARY",primary.getName()).replaceAll("%SECONDARY",secondary.getName()));
 
-		IAllele speed = genome.getActiveAllele(EnumBeeChromosome.SPEED.ordinal());
+		IAllele speed = genome.getActiveAllele(EnumBeeChromosome.SPEED);
 		String customWorker = "tooltip.worker." + speed.getUnlocalizedName().replaceFirst("gui.", "");
 		if (StringUtil.canTranslate(customWorker))
 			list.add(StringUtil.localize(customWorker));
 		else
 			list.add(speed.getName() + " " + StringUtil.localize("gui.worker"));
 
-		list.add(genome.getActiveAllele(EnumBeeChromosome.LIFESPAN.ordinal()).getName() + " " + StringUtil.localize("gui.life"));
+		list.add(genome.getActiveAllele(EnumBeeChromosome.LIFESPAN).getName() + " " + StringUtil.localize("gui.life"));
 
-		IAlleleTolerance tempTolerance = (IAlleleTolerance)getGenome().getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal());
+		IAlleleTolerance tempTolerance = (IAlleleTolerance)getGenome().getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
 		list.add("\u00A7aT: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / " + tempTolerance.getName());
 
-		IAlleleTolerance humidTolerance = (IAlleleTolerance)getGenome().getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal());
+		IAlleleTolerance humidTolerance = (IAlleleTolerance)getGenome().getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
 		list.add("\u00A7aH: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / " + humidTolerance.getName());
 
 		list.add(genome.getFlowerProvider().getDescription());

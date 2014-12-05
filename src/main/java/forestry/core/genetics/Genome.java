@@ -16,7 +16,6 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IGenome;
-import forestry.apiculture.items.ItemBeeGE;
 import forestry.core.config.Config;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -137,8 +136,18 @@ public abstract class Genome implements IGenome {
 	}
 
 	@Override
+	public IAllele getActiveAllele(IChromosomeType chromosomeType) {
+		return chromosomes[chromosomeType.ordinal()].getActiveAllele();
+	}
+
+	@Override
 	public IAllele getInactiveAllele(int chromosome) {
 		return chromosomes[chromosome].getInactiveAllele();
+	}
+
+	@Override
+	public IAllele getInactiveAllele(IChromosomeType chromosomeType) {
+		return chromosomes[chromosomeType.ordinal()].getInactiveAllele();
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IAlleleTolerance;
 import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.genetics.IIndividual;
@@ -49,19 +50,21 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 	protected ISpeciesRoot speciesRoot;
 	protected IBreedingTracker breedingTracker;
 
-	protected String guiName;
+	protected final String guiName;
 
 	protected HashMap<String, ItemStack> iconStacks = new HashMap<String, ItemStack>();
 
-	public GuiAlyzer(ISpeciesRoot speciesRoot, EntityPlayer player, ContainerForestry container, IInventory inventory, int pageMax, int pageSize) {
+	public GuiAlyzer(String speciesRoot, EntityPlayer player, ContainerForestry container, IInventory inventory, String guiName) {
 		super(Defaults.TEXTURE_PATH_GUI + "/beealyzer2.png", container);
 
-		xSize = 246;
-		ySize = 238;
+		this.xSize = 246;
+		this.ySize = 238;
+
+		this.guiName = guiName;
 
 		this.inventory = inventory;
-		this.speciesRoot = speciesRoot;
-		this.breedingTracker = speciesRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
+		this.speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(speciesRoot);
+		this.breedingTracker = this.speciesRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
 	}
 
 	protected final int getColorCoding(boolean dominant) {
@@ -71,26 +74,26 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 			return fontColor.get("gui.beealyzer.recessive");
 	}
 
-	protected final void drawLine(String text, int x, IIndividual individual, Enum<?> chromosome, boolean inactive) {
+	protected final void drawLine(String text, int x, IIndividual individual, IChromosomeType chromosome, boolean inactive) {
 		if (!inactive)
-			drawLine(text, x, getColorCoding(individual.getGenome().getActiveAllele(chromosome.ordinal()).isDominant()));
+			drawLine(text, x, getColorCoding(individual.getGenome().getActiveAllele(chromosome).isDominant()));
 		else
-			drawLine(text, x, getColorCoding(individual.getGenome().getInactiveAllele(chromosome.ordinal()).isDominant()));
+			drawLine(text, x, getColorCoding(individual.getGenome().getInactiveAllele(chromosome).isDominant()));
 	}
 
-	protected final void drawSplitLine(String text, int x, int maxWidth, IIndividual individual, Enum<?> chromosome, boolean inactive) {
+	protected final void drawSplitLine(String text, int x, int maxWidth, IIndividual individual, IChromosomeType chromosome, boolean inactive) {
 		if (!inactive)
-			drawSplitLine(text, x, maxWidth, getColorCoding(individual.getGenome().getActiveAllele(chromosome.ordinal()).isDominant()));
+			drawSplitLine(text, x, maxWidth, getColorCoding(individual.getGenome().getActiveAllele(chromosome).isDominant()));
 		else
-			drawSplitLine(text, x, maxWidth, getColorCoding(individual.getGenome().getInactiveAllele(chromosome.ordinal()).isDominant()));
+			drawSplitLine(text, x, maxWidth, getColorCoding(individual.getGenome().getInactiveAllele(chromosome).isDominant()));
 	}
 
-	protected final void drawRow(String text0, String text1, String text2, IIndividual individual, Enum<?> chromosome) {
-		drawRow(text0, text1, text2, fontColor.get("gui.screen"), getColorCoding(individual.getGenome().getActiveAllele(chromosome.ordinal()).isDominant()),
-				getColorCoding(individual.getGenome().getInactiveAllele(chromosome.ordinal()).isDominant()));
+	protected final void drawRow(String text0, String text1, String text2, IIndividual individual, IChromosomeType chromosome) {
+		drawRow(text0, text1, text2, fontColor.get("gui.screen"), getColorCoding(individual.getGenome().getActiveAllele(chromosome).isDominant()),
+				getColorCoding(individual.getGenome().getInactiveAllele(chromosome).isDominant()));
 	}
 
-	protected final void drawSpeciesRow(String text0, IIndividual individual, Enum<?> chromosome, String customPrimaryName, String customSecondaryName) {
+	protected final void drawSpeciesRow(String text0, IIndividual individual, IChromosomeType chromosome, String customPrimaryName, String customSecondaryName) {
 		IAlleleSpecies primary = individual.getGenome().getPrimary();
 		IAlleleSpecies secondary = individual.getGenome().getSecondary();
 
@@ -116,7 +119,7 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 
 	}
 
-	protected final void drawSpeciesRow(String text0, IIndividual individual, Enum<?> chromosome){
+	protected final void drawSpeciesRow(String text0, IIndividual individual, IChromosomeType chromosome){
 		drawSpeciesRow(text0, individual, chromosome, null, null);
 	}
 

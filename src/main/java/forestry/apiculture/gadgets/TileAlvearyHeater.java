@@ -12,14 +12,11 @@ package forestry.apiculture.gadgets;
 
 public class TileAlvearyHeater extends TileAlvearyClimatiser {
 
-	public static final int TEXTURE_OFF = 57;
-	public static final int TEXTURE_ON = 58;
-
 	/* CONSTANTS */
 	public static final int BLOCK_META = 4;
 
 	public TileAlvearyHeater() {
-		super(new ClimateControl(0.01f, 0.0f, 2.5f), BlockAlveary.TX_57_HTOF, BlockAlveary.TX_58_HTON, BLOCK_META);
+		super(new ClimateControl(0.01f, 0.0f, 2.5f), BlockAlveary.ALVEARY_HEATER_OFF, BlockAlveary.ALVEARY_HEATER_ON, BLOCK_META);
 	}
 
 }

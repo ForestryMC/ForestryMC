@@ -52,72 +52,72 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 	/* SPECIES */
 	@Override
 	public IAlleleButterflySpecies getPrimary() {
-		return (IAlleleButterflySpecies) getActiveAllele(EnumButterflyChromosome.SPECIES.ordinal());
+		return (IAlleleButterflySpecies) getActiveAllele(EnumButterflyChromosome.SPECIES);
 	}
 
 	@Override
 	public IAlleleButterflySpecies getSecondary() {
-		return (IAlleleButterflySpecies) getInactiveAllele(EnumButterflyChromosome.SPECIES.ordinal());
+		return (IAlleleButterflySpecies) getInactiveAllele(EnumButterflyChromosome.SPECIES);
 	}
 
 	@Override
 	public float getSize() {
-		return ((IAlleleFloat) getActiveAllele(EnumButterflyChromosome.SIZE.ordinal())).getValue();
+		return ((IAlleleFloat) getActiveAllele(EnumButterflyChromosome.SIZE)).getValue();
 	}
 	
 	@Override
 	public int getLifespan() {
-		return ((IAlleleInteger) getActiveAllele(EnumButterflyChromosome.LIFESPAN.ordinal())).getValue();
+		return ((IAlleleInteger) getActiveAllele(EnumButterflyChromosome.LIFESPAN)).getValue();
 	}
 	
 	@Override
 	public float getSpeed() {
-		return ((IAlleleFloat) getActiveAllele(EnumButterflyChromosome.SPEED.ordinal())).getValue();
+		return ((IAlleleFloat) getActiveAllele(EnumButterflyChromosome.SPEED)).getValue();
 	}
 
 	@Override
 	public int getMetabolism() {
-		return ((IAlleleInteger) getActiveAllele(EnumButterflyChromosome.METABOLISM.ordinal())).getValue();
+		return ((IAlleleInteger) getActiveAllele(EnumButterflyChromosome.METABOLISM)).getValue();
 	}
 
 	@Override
 	public int getFertility() {
-		return ((IAlleleInteger) getActiveAllele(EnumButterflyChromosome.FERTILITY.ordinal())).getValue();
+		return ((IAlleleInteger) getActiveAllele(EnumButterflyChromosome.FERTILITY)).getValue();
 	}
 
 	@Override
 	public EnumTolerance getToleranceTemp() {
-		return ((AlleleTolerance) getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE.ordinal())).getValue();
+		return ((AlleleTolerance) getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE)).getValue();
 	}
 
 	@Override
 	public EnumTolerance getToleranceHumid() {
-		return ((AlleleTolerance) getActiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE.ordinal())).getValue();
+		return ((AlleleTolerance) getActiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE)).getValue();
 	}
 
 	@Override
 	public boolean getNocturnal() {
-		return ((AlleleBoolean) getActiveAllele(EnumButterflyChromosome.NOCTURNAL.ordinal())).getValue();
+		return ((AlleleBoolean) getActiveAllele(EnumButterflyChromosome.NOCTURNAL)).getValue();
 	}
 
 	@Override
 	public boolean getTolerantFlyer() {
-		return ((AlleleBoolean) getActiveAllele(EnumButterflyChromosome.TOLERANT_FLYER.ordinal())).getValue();
+		return ((AlleleBoolean) getActiveAllele(EnumButterflyChromosome.TOLERANT_FLYER)).getValue();
 	}
 
 	@Override
 	public boolean getFireResist() {
-		return ((AlleleBoolean) getActiveAllele(EnumButterflyChromosome.FIRE_RESIST.ordinal())).getValue();
+		return ((AlleleBoolean) getActiveAllele(EnumButterflyChromosome.FIRE_RESIST)).getValue();
 	}
 
 	@Override
 	public IFlowerProvider getFlowerProvider() {
-		return ((IAlleleFlowers) getActiveAllele(EnumButterflyChromosome.FLOWER_PROVIDER.ordinal())).getProvider();
+		return ((IAlleleFlowers) getActiveAllele(EnumButterflyChromosome.FLOWER_PROVIDER)).getProvider();
 	}
 
 	@Override
 	public IAlleleButterflyEffect getEffect() {
-		return (IAlleleButterflyEffect) getActiveAllele(EnumButterflyChromosome.EFFECT.ordinal());
+		return (IAlleleButterflyEffect) getActiveAllele(EnumButterflyChromosome.EFFECT);
 	}
 
 	@Override

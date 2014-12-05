@@ -85,10 +85,7 @@ public class ItemBackpack extends ItemInventoried {
 
 	@Override
 	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-		if (getInventoryHit(world, x, y, z, side) != null)
-			return true;
-		else
-			return false;
+		return getInventoryHit(world, x, y, z, side) != null;
 	}
 
 	@Override
@@ -222,21 +219,7 @@ public class ItemBackpack extends ItemInventoried {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
-		ItemInventory inventory = new ItemInventory(ItemBackpack.class, getBackpackSize(), itemstack);
-
-		// HashMap<ItemStack, Integer> contents = new HashMap<ItemStack,
-		// Integer>();
-		int occupied = 0;
-
-		for (int i = 0; i < inventory.getSizeInventory(); i++) {
-			if (inventory.getStackInSlot(i) == null)
-				continue;
-			if (inventory.getStackInSlot(i).stackSize <= 0)
-				continue;
-
-			// Count the slot as occupied
-			occupied++;
-		}
+		int occupied = ItemInventory.getOccupiedSlotCount(itemstack);
 
 		BackpackMode mode = getMode(itemstack);
 		if (mode == BackpackMode.LOCKED)

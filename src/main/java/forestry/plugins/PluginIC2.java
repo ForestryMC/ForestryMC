@@ -173,12 +173,6 @@ public class PluginIC2 extends ForestryPlugin {
 		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_EFFICIENCY_I, "forestry.energyEfficiency1");
 		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_BOOST_I, "forestry.energyBoost1");
 		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_BOOST_II, "forestry.energyBoost2");
-
-		// Remove some items from the recycler
-		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			Recipes.recyclerBlacklist.add(new RecipeInputItemStack(ForestryItem.beeQueenGE.getItemStack()));
-			Recipes.recyclerBlacklist.add(new RecipeInputItemStack(ForestryItem.beePrincessGE.getItemStack()));
-		}
 	}
 
 	@Override
@@ -187,6 +181,16 @@ public class PluginIC2 extends ForestryPlugin {
 		super.doInit();
 
 		config = Config.config;
+
+		// Remove some items from the recycler
+		if (Recipes.recyclerBlacklist != null) {
+			if (PluginManager.Module.APICULTURE.isEnabled()) {
+				Recipes.recyclerBlacklist.add(new RecipeInputItemStack(ForestryItem.beeQueenGE.getItemStack()));
+				Recipes.recyclerBlacklist.add(new RecipeInputItemStack(ForestryItem.beePrincessGE.getItemStack()));
+			}
+		} else {
+			Proxies.log.severe("IC2 Recipes.recyclerBlacklist not found.");
+		}
 
 		definitionEngineTin.register();
 		definitionGenerator.register();

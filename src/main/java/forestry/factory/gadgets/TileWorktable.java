@@ -43,6 +43,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 
 	/* CONSTANTS */
 	public final static int SLOT_CRAFTING_1 = 0;
+	public final static int SLOT_CRAFTING_COUNT = 9;
 	public final static int SLOT_CRAFTING_RESULT = 9;
 	public final static short SLOT_INVENTORY_1 = 0;
 	public final static short SLOT_INVENTORY_COUNT = 18;
@@ -135,7 +136,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 				return false;
 
 			ItemStack recipeOutput = RECIPE_BRIDGE.findMatchingRecipe(crafting, world);
-			return recipeOutput != null && cachedRecipeOutput.isItemEqual(recipeOutput);
+			return ItemStack.areItemStacksEqual(cachedRecipeOutput, recipeOutput);
 		}
 
 		@Override
@@ -447,7 +448,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 			return false;
 
 		// Need at least one matched set
-		ItemStack[] set = craftingInventory.getStacks(SLOT_CRAFTING_1, 9);
+		ItemStack[] set = craftingInventory.getStacks(SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
 		ItemStack[] stock = accessibleInventory.getStacks(SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
 		if (StackUtils.containsSets(set, stock, true, true) == 0)
 			return false;
@@ -495,7 +496,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 		if (recipeOutput == null)
 			return false;
 
-		return recipeOutput.isItemEqual(currentRecipe.getRecipeOutput());
+		return ItemStack.areItemStacksEqual(recipeOutput, currentRecipe.getRecipeOutput());
 	}
 
 	private boolean removeResources(EntityPlayer player) {

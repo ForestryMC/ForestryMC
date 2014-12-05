@@ -12,6 +12,7 @@ package forestry.core.gui;
 
 import java.util.HashMap;
 
+import forestry.api.arboriculture.EnumTreeChromosome;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -74,9 +75,8 @@ public class GuiNaturalistInventory extends GuiForestry<TileForestry> {
 			startPage();
 
 			displaySpeciesInformation(true, individual.getGenome().getPrimary(), iconStacks.get(individual.getIdent()), 10);
-			if (!individual.isPureBred(0))
-				displaySpeciesInformation(individual.isAnalyzed(), individual.getGenome().getSecondary(), iconStacks.get(individual.getGenome().getSecondary().getUID()),
-						10);
+			if (!individual.isPureBred(EnumTreeChromosome.SPECIES))
+				displaySpeciesInformation(individual.isAnalyzed(), individual.getGenome().getSecondary(), iconStacks.get(individual.getGenome().getSecondary().getUID()), 10);
 
 			endPage();
 		}

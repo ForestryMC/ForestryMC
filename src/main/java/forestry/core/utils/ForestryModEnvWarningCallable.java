@@ -41,7 +41,7 @@ public class ForestryModEnvWarningCallable implements ICrashCallable {
 			Class<?> c = Class.forName("org.bukkit.Bukkit");
 			modIDs.add("Bukkit, Cauldron, or other Bukkit replacement");
 		}
-		catch (Throwable t) {} // No need to do anything.
+		catch (Throwable ignored) {} // No need to do anything.
 
 		// Add other bad mods here.
 

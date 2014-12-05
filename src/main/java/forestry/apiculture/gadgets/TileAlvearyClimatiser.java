@@ -34,15 +34,14 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 	}
 	protected final EnergyManager energyManager;
 	private final ClimateControl climateControl;
-	private int transferTime = 0;
-	private int animationDelay = 0;
+	private int workingTime = 0;
 	private final int textureOff;
 	private final int textureOn;
 
 	public TileAlvearyClimatiser(ClimateControl control, int textureOff, int textureOn, int componentBlockMeta) {
 		super(componentBlockMeta);
 		this.climateControl = control;
-		energyManager = new EnergyManager(1000, 250, 2000);
+		energyManager = new EnergyManager(1000, 50, 2000);
 		energyManager.setReceiveOnly();
 		this.textureOff = textureOff;
 		this.textureOn = textureOn;
@@ -60,28 +59,22 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 		if (!this.hasMaster())
 			return;
 
-		if (energyManager.consumeEnergyToDoWork()) {
+		boolean wasInactive = (workingTime == 0);
 
-			transferTime = energyManager.getEnergyPerWork();
-
-			if (animationDelay <= 0) {
-				animationDelay = 100;
-				sendNetworkUpdate();
-			} else
-				animationDelay = 100;
+		if (workingTime < 20 && energyManager.consumeEnergyToDoWork()) {
+			// consume 10 RF per tick of work
+			workingTime += energyManager.getEnergyPerWork() / 10;
 		}
 
-		if (transferTime > 0) {
-			transferTime--;
+		if (workingTime > 0) {
+			workingTime--;
 			IAlvearyComponent component = (IAlvearyComponent) this.getCentralTE();
 			if (component != null)
 				component.addTemperatureChange(climateControl.changePerTransfer, climateControl.boundaryDown, climateControl.boundaryUp);
 		}
 
-		if (animationDelay > 0) {
-			animationDelay--;
-			if (animationDelay <= 0)
-				sendNetworkUpdate();
+		if ((wasInactive && workingTime > 0) || (!wasInactive && workingTime == 0)) {
+			sendNetworkUpdate();
 		}
 	}
 
@@ -93,7 +86,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 	/* TEXTURES */
 	@Override
 	public int getIcon(int side, int metadata) {
-		if (animationDelay > 0)
+		if (workingTime > 0)
 			return textureOn;
 		else
 			return textureOff;
@@ -104,23 +97,23 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 		energyManager.readFromNBT(nbttagcompound);
-		transferTime = nbttagcompound.getInteger("Heating");
+		workingTime = nbttagcompound.getInteger("Heating");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 		energyManager.writeToNBT(nbttagcompound);
-		nbttagcompound.setInteger("Heating", transferTime);
+		nbttagcompound.setInteger("Heating", workingTime);
 	}
 
 
 	/* NETWORK */
 	@Override
 	public void fromPacketPayload(PacketPayload payload) {
-		short delay = payload.shortPayload[0];
-		if (animationDelay != delay) {
-			animationDelay = delay;
+		short workingTime = payload.shortPayload[0];
+		if (this.workingTime != workingTime) {
+			this.workingTime = workingTime;
 			worldObj.func_147479_m(xCoord, yCoord, zCoord);
 		}
 	}
@@ -128,7 +121,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 	@Override
 	public PacketPayload getPacketPayload() {
 		PacketPayload payload = new PacketPayload(0, 1);
-		payload.shortPayload[0] = (short) animationDelay;
+		payload.shortPayload[0] = (short) workingTime;
 		return payload;
 	}
 

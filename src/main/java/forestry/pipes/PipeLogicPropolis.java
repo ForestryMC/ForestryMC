@@ -86,19 +86,19 @@ public class PipeLogicPropolis {
 		// Special bee filtering
 		if (bee != null) {
 			if (filter == EnumFilterType.PURE_BREED)
-				return bee.isPureBred(EnumBeeChromosome.SPECIES.ordinal());
+				return bee.isPureBred(EnumBeeChromosome.SPECIES);
 			if (filter == EnumFilterType.NOCTURNAL)
 				return bee.getGenome().getNocturnal();
 			if (filter == EnumFilterType.PURE_NOCTURNAL)
-				return bee.getGenome().getNocturnal() && bee.isPureBred(EnumBeeChromosome.NOCTURNAL.ordinal());
+				return bee.getGenome().getNocturnal() && bee.isPureBred(EnumBeeChromosome.NOCTURNAL);
 			if (filter == EnumFilterType.FLYER)
 				return bee.getGenome().getTolerantFlyer();
 			if (filter == EnumFilterType.PURE_FLYER)
-				return bee.getGenome().getTolerantFlyer() && bee.isPureBred(EnumBeeChromosome.TOLERANT_FLYER.ordinal());
+				return bee.getGenome().getTolerantFlyer() && bee.isPureBred(EnumBeeChromosome.TOLERANT_FLYER);
 			if (filter == EnumFilterType.CAVE)
 				return bee.getGenome().getCaveDwelling();
 			if (filter == EnumFilterType.PURE_CAVE)
-				return bee.getGenome().getCaveDwelling() && bee.isPureBred(EnumBeeChromosome.CAVE_DWELLING.ordinal());
+				return bee.getGenome().getCaveDwelling() && bee.isPureBred(EnumBeeChromosome.CAVE_DWELLING);
 			if (filter == EnumFilterType.NATURAL)
 				return bee.isNatural();
 		}

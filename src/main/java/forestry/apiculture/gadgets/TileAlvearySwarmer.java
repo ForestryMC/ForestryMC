@@ -163,9 +163,9 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 			return BlockAlveary.BOTTOM;
 
 		if (pendingSpawns.size() > 0)
-			return BlockAlveary.TX_56_SWON;
+			return BlockAlveary.ALVEARY_SWARMER_ON;
 		else
-			return BlockAlveary.TX_55_SWOF;
+			return BlockAlveary.ALVEARY_SWARMER_OFF;
 	}
 
 	/* SAVING & LOADING */

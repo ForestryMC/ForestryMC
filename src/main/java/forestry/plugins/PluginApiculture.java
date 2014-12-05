@@ -82,6 +82,7 @@ import forestry.apiculture.genetics.AlleleEffectRadioactive;
 import forestry.apiculture.genetics.AlleleEffectRepulsion;
 import forestry.apiculture.genetics.AlleleEffectResurrection;
 import forestry.apiculture.genetics.AlleleEffectSnowing;
+import forestry.apiculture.genetics.AlleleEffectFertile;
 import forestry.apiculture.genetics.AlleleFlowers;
 import forestry.apiculture.genetics.Bee;
 import forestry.apiculture.genetics.BeeHelper;
@@ -1028,8 +1029,10 @@ public class PluginApiculture extends ForestryPlugin {
 		// Agrarian branch
 		Allele.speciesRural = new AlleleBeeSpecies("speciesRural", false, "bees.species.rural", agrarian, "rustico", 0xfeff8f, 0xffdc16).addProduct(
 				ForestryItem.beeComb.getItemStack(1, 14), 20).setIsSecret();
-		// 41 Farmerly
-		// 42 Agrarian
+		Allele.speciesFarmerly = new AlleleBeeSpecies("speciesFarmerly", true, "bees.species.farmerly", agrarian, "arator", 0xD39728, 0xffdc16).addProduct(
+				ForestryItem.beeComb.getItemStack(1, 14), 27).setIsSecret();
+		Allele.speciesArgrarian = new AlleleBeeSpecies("speciesArgrarian", true, "bees.species.agrarian", agrarian, "arator", 0xFFCA75, 0xFFE047).addProduct(
+				ForestryItem.beeComb.getItemStack(1, 14), 35).setIsSecret().setHasEffect();
 
 		// Boggy branch
 		Allele.speciesMarshy = new AlleleBeeSpecies("speciesMarshy", true, "bees.species.marshy", boggy, "adorasti", 0x546626, 0xffdc16).addProduct(
@@ -1075,6 +1078,7 @@ public class PluginApiculture extends ForestryPlugin {
 		Allele.effectReanimation = new AlleleEffectResurrection("effectReanimation", "reanimation", AlleleEffectResurrection.getReanimationList());
 		Allele.effectResurrection = new AlleleEffectResurrection("effectResurrection", "resurrection", AlleleEffectResurrection.getResurrectionList());
 		Allele.effectRepulsion = new AlleleEffectRepulsion("effectRepulsion");
+		Allele.effectFertile = new AlleleEffectFertile("effectFertile");
 
 	}
 
@@ -1160,6 +1164,10 @@ public class PluginApiculture extends ForestryPlugin {
 		// Agrarian branch
 		BeeTemplates.ruralA = new BeeMutation(Allele.speciesMeadows, Allele.speciesDiligent, BeeTemplates.getRuralTemplate(), 12)
 				.restrictBiomeType(BiomeDictionary.Type.PLAINS).enableStrictBiomeCheck();
+		new BeeMutation(Allele.speciesRural, Allele.speciesUnweary, BeeTemplates.getFarmerlyTemplate(), 10)
+				.restrictBiomeType(BiomeDictionary.Type.PLAINS).enableStrictBiomeCheck();
+		new BeeMutation(Allele.speciesFarmerly, Allele.speciesIndustrious, BeeTemplates.getAgrarianTemplate(), 6)
+				.restrictBiomeType(BiomeDictionary.Type.PLAINS).enableStrictBiomeCheck();
 
 		// Monastic branch
 		BeeTemplates.secludedA = new BeeMutation(Allele.speciesMonastic, Allele.speciesAustere, BeeTemplates.getSecludedTemplate(), 12);
@@ -1210,6 +1218,8 @@ public class PluginApiculture extends ForestryPlugin {
 		beeInterface.registerTemplate(BeeTemplates.getReddenedTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getOmegaTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getRuralTemplate());
+		beeInterface.registerTemplate(BeeTemplates.getFarmerlyTemplate());
+		beeInterface.registerTemplate(BeeTemplates.getAgrarianTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getLeporineTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getMerryTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getTipsyTemplate());

@@ -83,6 +83,17 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 			player.openGui(ForestryAPI.instance, GuiId.AlvearyGUI.ordinal(), worldObj, masterX, masterY, masterZ);
 	}
 
+	@Override
+	public void validate() {
+		super.validate();
+		setBiomeInformation();
+	}
+
+	private void setBiomeInformation() {
+		this.biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
+		setErrorState(EnumErrorCode.OK);
+	}
+
 	/* LOADING & SAVING */
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
@@ -112,8 +123,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 	@Override
 	public void initialize() {
 		super.initialize();
-		this.biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
-		setErrorState(EnumErrorCode.OK);
+		setBiomeInformation();
 	}
 
 	@Override
