@@ -55,7 +55,7 @@ public abstract class AlleleEffectThrottled extends Allele implements IAlleleBee
 
 	public boolean isHalted(IEffectData storedData, IBeeHousing housing) {
 
-		if (requiresWorkingQueen && housing.getErrorState() != EnumErrorCode.OK)
+		if (requiresWorkingQueen && housing.getErrorOrdinal() != EnumErrorCode.OK.ordinal())
 			return true;
 
 		int throttle = storedData.getInteger(0);
