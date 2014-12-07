@@ -314,11 +314,6 @@ public class PluginApiculture extends ForestryPlugin {
 
 		registerTemplates();
 
-		definitionAnalyzer.register();
-		definitionApiary.register();
-		definitionBeehouse.register();
-		definitionChest.register();
-
 		GameRegistry.registerTileEntity(TileAlvearyPlain.class, "forestry.Alveary");
 		GameRegistry.registerTileEntity(TileSwarm.class, "forestry.Swarm");
 		GameRegistry.registerTileEntity(TileAlvearySwarmer.class, "forestry.AlvearySwarmer");
@@ -715,6 +710,11 @@ public class PluginApiculture extends ForestryPlugin {
 
 		// ANALYZER
 		definitionAnalyzer.recipes = createAlyzerRecipes(ForestryBlock.core.block(), Defaults.DEFINITION_ANALYZER_META);
+
+		definitionAnalyzer.register();
+		definitionApiary.register();
+		definitionBeehouse.register();
+		definitionChest.register();
 	}
 
 	public IRecipe[] createAlyzerRecipes(Block block, int meta) {
