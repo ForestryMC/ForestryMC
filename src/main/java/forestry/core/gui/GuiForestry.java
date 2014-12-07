@@ -214,9 +214,6 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 
 		widgetManager.handleMouseMove(mouseX, mouseY, mouseButton, time);
 
-		Slot slot = getSlotAtPosition(mouseX, mouseY);
-		if (mouseButton == 1 && slot instanceof SlotForestry && ((SlotForestry) slot).isPhantom())
-			return;
 		super.mouseClickMove(mouseX, mouseY, mouseButton, time);
 	}
 

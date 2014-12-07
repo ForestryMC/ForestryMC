@@ -51,6 +51,12 @@ public class SlotForestry extends Slot implements IToolTipProvider{
 		return this;
 	}
 
+	@Override
+	public void putStack(ItemStack itemStack) {
+		if (!isPhantom() || canAdjustPhantom())
+			super.putStack(itemStack);
+	}
+
 	public SlotForestry setCanAdjustPhantom(boolean canAdjust) {
 		this.canAdjustPhantom = canAdjust;
 		return this;
@@ -103,9 +109,6 @@ public class SlotForestry extends Slot implements IToolTipProvider{
 		ItemStack result = stack.copy();
 		result.stackSize = i;
 		return result;
-	}
-
-	public void onSlotClick(int slotIndex, int button, int modifier, EntityPlayer player) {
 	}
 
 	/**
