@@ -10,20 +10,22 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import forestry.core.interfaces.ICrafter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.interfaces.ICrafter;
-
-public class SlotCrafter extends Slot {
+public class SlotCrafter extends SlotCrafting {
 
 	private final ICrafter crafter;
+	private final IInventory craftMatrix;
 
-	public SlotCrafter(IInventory inventory, ICrafter crafter, int slot, int xPos, int yPos) {
-		super(inventory, slot, xPos, yPos);
+	public SlotCrafter(EntityPlayer player, IInventory craftMatrix, ICrafter crafter, int slot, int xPos, int yPos) {
+		super(player, craftMatrix, craftMatrix, slot, xPos, yPos);
 		this.crafter = crafter;
+		this.craftMatrix = craftMatrix;
 	}
 
 	@Override
@@ -56,6 +58,8 @@ public class SlotCrafter extends Slot {
 
 	@Override
 	public void onPickupFromSlot(EntityPlayer player, ItemStack itemStack) {
+		FMLCommonHandler.instance().firePlayerCraftingEvent(player, itemStack, craftMatrix);
+		this.onCrafting(itemStack, itemStack.stackSize); // handles crafting achievements, maps, and statistics
 		crafter.takenFromSlot(getSlotIndex(), true, player);
 	}
 }
