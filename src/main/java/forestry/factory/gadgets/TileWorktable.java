@@ -128,7 +128,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 			currentRecipe = null;
 			currentCrafting = null;
 		} else {
-			currentRecipe = new RecipeMemory.Recipe(crafting, worldObj);
+			currentRecipe = new RecipeMemory.Recipe(crafting);
 			currentCrafting = crafting;
 		}
 		updateCraftResult();
