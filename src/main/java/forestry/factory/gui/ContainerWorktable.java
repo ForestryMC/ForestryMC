@@ -60,7 +60,7 @@ public class ContainerWorktable extends ContainerForestry implements IContainerC
 		}
 
 		// CraftResult display
-		addSlot(new SlotCrafter(craftingInventory, tile, TileWorktable.SLOT_CRAFTING_RESULT, 77, 38));
+		addSlot(new SlotCrafter(player, craftingInventory, tile, TileWorktable.SLOT_CRAFTING_RESULT, 77, 38));
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++) {

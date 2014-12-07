@@ -20,7 +20,7 @@ public class ContainerFabricator extends ContainerLiquidTanks {
 
 	private final MachineFabricator tile;
 
-	public ContainerFabricator(InventoryPlayer player, MachineFabricator tile) {
+	public ContainerFabricator(InventoryPlayer playerInventory, MachineFabricator tile) {
 		super(tile, tile);
 		this.tile = tile;
 
@@ -36,7 +36,7 @@ public class ContainerFabricator extends ContainerLiquidTanks {
 		this.addSlot(new Slot(tile, MachineFabricator.SLOT_PLAN, 139, 17));
 
 		// Result
-		this.addSlot(new SlotCrafter(tile, tile, MachineFabricator.SLOT_RESULT, 139, 53));
+		this.addSlot(new SlotCrafter(playerInventory.player, tile, tile, MachineFabricator.SLOT_RESULT, 139, 53));
 
 		// Crafting matrix
 		for (int l = 0; l < 3; l++)
@@ -46,10 +46,10 @@ public class ContainerFabricator extends ContainerLiquidTanks {
 		// Player inventory
 		for (int i = 0; i < 3; i++)
 			for (int k = 0; k < 9; k++)
-				addSlot(new Slot(player, k + i * 9 + 9, 8 + k * 18, 129 + i * 18));
+				addSlot(new Slot(playerInventory, k + i * 9 + 9, 8 + k * 18, 129 + i * 18));
 		// Player hotbar
 		for (int j = 0; j < 9; j++)
-			addSlot(new Slot(player, j, 8 + j * 18, 187));
+			addSlot(new Slot(playerInventory, j, 8 + j * 18, 187));
 
 	}
 
