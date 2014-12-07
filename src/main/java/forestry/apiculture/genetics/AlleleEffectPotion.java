@@ -10,10 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.items.ItemArmorApiarist;
+import forestry.core.proxy.Proxies;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -24,11 +26,13 @@ import java.util.List;
 public class AlleleEffectPotion extends AlleleEffectThrottled {
 
 	private final Potion potion;
+	private final boolean isBadEffect;
 	private final int duration;
 
 	public AlleleEffectPotion(String uid, String name, boolean isDominant, Potion potion, int duration, boolean requiresWorking) {
 		super(uid, name, isDominant, 200, requiresWorking, false);
 		this.potion = potion;
+		this.isBadEffect = isBadEffect(potion);
 		this.duration = duration;
 	}
 
@@ -48,7 +52,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 			EntityPlayer player = (EntityPlayer) entity;
 
 			int duration = this.duration;
-			if (potion.isBadEffect()) {
+			if (isBadEffect) {
 				// Players are not attacked if they wear a full set of apiarist's armor.
 				int count = ItemArmorApiarist.wearsItems((EntityPlayer) entity, getUID(), true);
 				if (count >= 4)
@@ -65,6 +69,16 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 		}
 
 		return storedData;
+	}
+
+	//FIXME: remove when Potion.isBadEffect() is available server-side
+	private static boolean isBadEffect(Potion potion) {
+		try {
+			return ReflectionHelper.getPrivateValue(Potion.class, potion, "field_76418_K", "isBadEffect");
+		} catch (ReflectionHelper.UnableToFindFieldException e) {
+			Proxies.log.severe("Could not access potion field isBadEffect.");
+			return false;
+		}
 	}
 
 }
