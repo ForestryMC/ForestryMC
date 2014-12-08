@@ -17,17 +17,19 @@ import forestry.core.utils.PlainInventory;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class RecipeMemory implements INBTTagable {
-
-	private final static Container DUMMY_CONTAINER = new ContainerDummy();
 
 	public static final class Recipe implements INBTTagable {
 
@@ -117,15 +119,38 @@ public class RecipeMemory implements INBTTagable {
 		}
 	}
 
+	private static final Container DUMMY_CONTAINER = new ContainerDummy();
+	private static final List<Class<? extends Item>> memoryBlacklist = new ArrayList<Class<? extends Item>>();
+	static {
+		memoryBlacklist.add(ItemMap.class); // almost every ItemMap is unique
+	}
+
 	private LinkedList<Recipe> recipes = new LinkedList<Recipe>();
 	private long lastUpdate;
 	public final int capacity = 9;
+
+	private static boolean isValid(World world, Recipe recipe) {
+		Item item = recipe.getRecipeOutput(world).getItem();
+		return item != null && !memoryBlacklist.contains(item.getClass());
+	}
+
+	public void validate(World world) {
+		LinkedList<Recipe> validRecipes = new LinkedList<Recipe>();
+		for (Recipe recipe : recipes) {
+			if (isValid(world, recipe))
+				validRecipes.add(recipe);
+		}
+		this.recipes = validRecipes;
+	}
 
 	public long getLastUpdate() {
 		return lastUpdate;
 	}
 
 	public void memorizeRecipe(World world, Recipe recipe, InventoryCrafting crafting) {
+
+		if (!isValid(world, recipe))
+			return;
 
 		lastUpdate = world.getTotalWorldTime();
 		recipe.updateLastUse(lastUpdate);

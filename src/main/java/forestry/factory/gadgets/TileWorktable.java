@@ -98,6 +98,12 @@ public class TileWorktable extends TileBase implements ICrafter {
 		Proxies.net.sendToPlayer(new PacketTileNBT(PacketIds.TILE_NBT, this), player);
 	}
 
+	@Override
+	public void validate() {
+		super.validate();
+		memorized.validate(worldObj);
+	}
+
 	/* RECIPE SELECTION */
 	public RecipeMemory getMemory() {
 		return memorized;
