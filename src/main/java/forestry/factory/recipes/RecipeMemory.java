@@ -130,7 +130,12 @@ public class RecipeMemory implements INBTTagable {
 	public final int capacity = 9;
 
 	private static boolean isValid(World world, Recipe recipe) {
-		Item item = recipe.getRecipeOutput(world).getItem();
+		if (recipe == null)
+			return false;
+		ItemStack recipeOutput = recipe.getRecipeOutput(world);
+		if (recipeOutput == null)
+			return false;
+		Item item = recipeOutput.getItem();
 		return item != null && !memoryBlacklist.contains(item.getClass());
 	}
 
