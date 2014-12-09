@@ -33,12 +33,12 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 	private final int width;
 	private final int height;
 
-	private final Object ingredients[];
+	private final Object[] ingredients;
 	private final ItemStack product;
 
 	private boolean preserveNBT = false;
 
-	public ShapedRecipeCustom(int width, int height, Object ingredients[], ItemStack product) {
+	public ShapedRecipeCustom(int width, int height, Object[] ingredients, ItemStack product) {
 		this.width = width;
 		this.height = height;
 		this.ingredients = ingredients;
