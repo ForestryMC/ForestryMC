@@ -12,7 +12,6 @@ package forestry.apiculture.gadgets;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IHiveDrop;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.core.Tabs;
@@ -123,9 +122,6 @@ public class BlockBeehives extends BlockContainer {
 	}
 
 	private List<IHiveDrop> getDropsForHive(int meta) {
-		if (meta == 8) //TODO: make a real hive for swarm
-			return BeeManager.hiveDrops[meta];
-
 		String hiveName = getHiveNameForMeta(meta);
 		if (hiveName == null)
 			return Collections.emptyList();
@@ -177,7 +173,7 @@ public class BlockBeehives extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int i, int j) {
-		if (j == 0 || j >= 8)
+		if (j == 0 || j > 8)
 			return null;
 
 		if (i == 0 || i == 1) {

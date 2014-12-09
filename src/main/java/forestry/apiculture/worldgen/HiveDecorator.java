@@ -52,34 +52,39 @@ public class HiveDecorator {
 		if (!TerrainGen.populate(event.chunkProvider, event.world, event.rand, event.chunkX, event.chunkZ, event.hasVillageGenerated, EVENT_TYPE)) {
 			return;
 		}
-		decorateHives(event.world, event.rand, event.chunkX * 16, event.chunkZ * 16);
+		decorateHives(event.world, event.rand, event.chunkX, event.chunkZ);
 	}
 
-	private void decorateHives(World world, Random rand, int worldX, int worldZ) {
+	private void decorateHives(World world, Random rand, int chunkX, int chunkZ) {
 		for (IHive hive : HiveManager.getHives())
 			if (Config.generateBeehivesDebug)
-				genHiveDebug(world, worldX, worldZ, hive);
+				genHiveDebug(world, chunkX, chunkZ, hive);
 			else
-				genHive(world, rand, worldX, worldZ, hive);
+				genHive(world, rand, chunkX, chunkZ, hive);
 	}
 
-	private void genHive(World world, Random rand, int worldX, int worldZ, IHive hive) {
+	public boolean genHive(World world, Random rand, int chunkX, int chunkZ, IHive hive) {
 		if (hive.genChance() < rand.nextFloat() * 128.0f)
-			return;
+			return false;
+
+		int worldX = chunkX * 16;
+		int worldZ = chunkZ * 16;
 
 		BiomeGenBase biome = world.getBiomeGenForCoords(worldX, worldZ);
 		EnumHumidity humidity = EnumHumidity.getFromValue(biome.rainfall);
 
 		if (!hive.isGoodBiome(biome) || !hive.isGoodHumidity(humidity))
-			return;
+			return false;
 
 		for (int tries = 0; tries < 4; tries ++) {
 			int x = worldX + rand.nextInt(16);
 			int z = worldZ + rand.nextInt(16);
 
 			if (tryGenHive(world, x, z, hive))
-				return;
+				return true;
 		}
+
+		return false;
 	}
 
 	private void genHiveDebug(World world, int worldX, int worldZ, IHive hive) {
