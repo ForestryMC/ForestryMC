@@ -23,7 +23,7 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 		}
 		
 		World world = housing.getWorld();
-		int territorySize[] = genome.getTerritory();
+		int territorySize[] = getModifiedArea(genome, housing);
 		
 		int blockX = getRandomOffset(world.rand, housing.getXCoord(), territorySize[0]);
 		int blockZ = getRandomOffset(world.rand, housing.getZCoord(), territorySize[2]);
