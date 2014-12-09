@@ -123,8 +123,8 @@ public class Allele implements IAllele {
 
 	// Boggy branch
 	public static AlleleSpecies speciesMarshy;
-	// 44 speciesMiry
-	// 45 speciesBoggy
+	public static AlleleSpecies speciesMiry;
+	public static AlleleSpecies speciesBoggy;
 
 	// Monastic branch
 	public static AlleleSpecies speciesMonastic;
@@ -392,6 +392,7 @@ public class Allele implements IAllele {
 	public static Allele effectResurrection;
 	public static Allele effectRepulsion;
 	public static Allele effectFertile;
+	public static Allele effectMycophilic;
 
 	// / TREES // EFFECTS
 	public static Allele leavesNone;
