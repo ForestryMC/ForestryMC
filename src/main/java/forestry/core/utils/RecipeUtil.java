@@ -12,11 +12,18 @@ package forestry.core.utils;
 
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Defaults;
+import forestry.core.gui.ContainerDummy;
 import forestry.core.interfaces.IDescriptiveRecipe;
 import forestry.core.proxy.Proxies;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.world.World;
 
 public class RecipeUtil {
+
+	private static final Container DUMMY_CONTAINER = new ContainerDummy();
 
 	public static void injectLeveledRecipe(ItemStack resource, int fermentationValue, String output) {
 		if (RecipeManagers.fermenterManager == null)
@@ -66,5 +73,54 @@ public class RecipeUtil {
 
 		result[9] = output;
 		return result;
+	}
+
+	public static boolean canCraftRecipe(World world, ItemStack[] recipeItems, ItemStack recipeOutput, ItemStack[] availableItems) {
+		// Need at least one matched set
+		if (StackUtils.containsSets(recipeItems, availableItems, true, true) == 0)
+			return false;
+
+		// Check that it doesn't make a different recipe.
+		// For example:
+		// Wood Logs are all ore dictionary equivalent with each other,
+		// but an Oak Log shouldn't be able to make Ebony Wood Planks
+		// because it makes Oak Wood Planks using the same recipe.
+		// Strategy:
+		// Create a fake crafting inventory using items we have in availableItems
+		// in place of the ones in the saved crafting inventory.
+		// Check that the recipe it makes is the same as the currentRecipe.
+		InventoryCrafting crafting = new InventoryCrafting(DUMMY_CONTAINER, 3, 3);
+		ItemStack[] stockCopy = StackUtils.condenseStacks(availableItems);
+
+		for (int slot = 0; slot < recipeItems.length; slot++) {
+			ItemStack recipeStack = recipeItems[slot];
+			if (recipeStack == null)
+				continue;
+
+			// Use crafting equivalent (not oredict) items first
+			for (ItemStack stockStack : stockCopy) {
+				if (stockStack.stackSize > 0 && StackUtils.isCraftingEquivalent(recipeStack, stockStack, false, false)) {
+					ItemStack stack = new ItemStack(stockStack.getItem(), 1, stockStack.getItemDamage());
+					stockStack.stackSize--;
+					crafting.setInventorySlotContents(slot, stack);
+					break;
+				}
+			}
+
+			// Use oredict items if crafting equivalent items aren't available
+			if (crafting.getStackInSlot(slot) == null) {
+				for (ItemStack stockStack : stockCopy) {
+					if (stockStack.stackSize > 0 && StackUtils.isCraftingEquivalent(recipeStack, stockStack, true, true)) {
+						ItemStack stack = new ItemStack(stockStack.getItem(), 1, stockStack.getItemDamage());
+						stockStack.stackSize--;
+						crafting.setInventorySlotContents(slot, stack);
+						break;
+					}
+				}
+			}
+		}
+		ItemStack output = CraftingManager.getInstance().findMatchingRecipe(crafting, world);
+
+		return ItemStack.areItemStacksEqual(output, recipeOutput);
 	}
 }

@@ -12,7 +12,6 @@ package forestry.factory.gadgets;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.gadgets.TileBase;
-import forestry.core.gui.ContainerDummy;
 import forestry.core.interfaces.ICrafter;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.GuiId;
@@ -21,11 +20,10 @@ import forestry.core.network.PacketTileNBT;
 import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.InventoryAdapter;
-import forestry.core.utils.StackUtils;
+import forestry.core.utils.RecipeUtil;
 import forestry.core.utils.TileInventoryAdapter;
 import forestry.factory.recipes.RecipeMemory;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -40,7 +38,6 @@ public class TileWorktable extends TileBase implements ICrafter {
 	public final static int SLOT_CRAFTING_RESULT = 9;
 	public final static short SLOT_INVENTORY_1 = 0;
 	public final static short SLOT_INVENTORY_COUNT = 18;
-	private final static Container DUMMY_CONTAINER = new ContainerDummy();
 
 	/* MEMBERS */
 	private RecipeMemory.Recipe currentRecipe;
@@ -156,56 +153,11 @@ public class TileWorktable extends TileBase implements ICrafter {
 		if (currentRecipe == null)
 			return false;
 
-		// Need at least one matched set
-		ItemStack[] set = craftingInventory.getStacks(SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
-		ItemStack[] stock = accessibleInventory.getStacks(SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
-		if (StackUtils.containsSets(set, stock, true, true) == 0)
-			return false;
+		ItemStack[] recipeItems = craftingInventory.getStacks(SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
+		ItemStack[] inventory = accessibleInventory.getStacks(SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+		ItemStack recipeOutput = currentRecipe.getRecipeOutput(worldObj);
 
-		// Check that it doesn't make a different recipe.
-		// For example:
-		// Wood Logs are all ore dictionary equivalent with each other,
-		// but an Oak Log shouldn't be able to make Ebony Wood Planks
-		// because it makes Oak Wood Planks using the same recipe.
-		// Strategy:
-		// Create a fake crafting inventory using items we have in stock
-		// in place of the ones in the saved crafting inventory.
-		// Check that the recipe it makes is the same as the currentRecipe.
-		InventoryCrafting crafting = new InventoryCrafting(DUMMY_CONTAINER, 3, 3);
-		ItemStack[] stockCopy = StackUtils.condenseStacks(stock);
-
-		for (int slot = 0; slot < currentCrafting.getSizeInventory(); slot++) {
-			ItemStack recipeStack = currentCrafting.getStackInSlot(slot);
-			if (recipeStack == null)
-				continue;
-
-			// Use crafting equivalent (not oredict) items first
-			for (ItemStack stockStack : stockCopy) {
-				if (stockStack.stackSize > 0 && StackUtils.isCraftingEquivalent(recipeStack, stockStack, false, false)) {
-					ItemStack stack = new ItemStack(stockStack.getItem(), 1, stockStack.getItemDamage());
-					stockStack.stackSize--;
-					crafting.setInventorySlotContents(slot, stack);
-					break;
-				}
-			}
-
-			// Use oredict items if crafting equivalent items aren't available
-			if (crafting.getStackInSlot(slot) == null) {
-				for (ItemStack stockStack : stockCopy) {
-					if (stockStack.stackSize > 0 && StackUtils.isCraftingEquivalent(recipeStack, stockStack, true, true)) {
-						ItemStack stack = new ItemStack(stockStack.getItem(), 1, stockStack.getItemDamage());
-						stockStack.stackSize--;
-						crafting.setInventorySlotContents(slot, stack);
-						break;
-					}
-				}
-			}
-		}
-		ItemStack recipeOutput = CraftingManager.getInstance().findMatchingRecipe(crafting, worldObj);
-		if (recipeOutput == null)
-			return false;
-
-		return ItemStack.areItemStacksEqual(recipeOutput, currentRecipe.getRecipeOutput(worldObj));
+		return RecipeUtil.canCraftRecipe(worldObj, recipeItems, recipeOutput, inventory);
 	}
 
 	private boolean removeResources(EntityPlayer player) {
