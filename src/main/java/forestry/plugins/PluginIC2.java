@@ -263,9 +263,12 @@ public class PluginIC2 extends ForestryPlugin {
 	@Optional.Method(modid = "IC2")
 	protected void registerRecipes() {
 
-		if (rubber != null)
-			RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 8),
-					new Object[]{" X ", "#X#", "XXX", '#', Items.redstone, 'X', PluginIC2.rubber});
+		if (rubber != null) {
+			for (Object rubberOreDict : RecipeUtil.getOreDictRecipeEquivalents(rubber)) {
+				RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 8),
+						new Object[]{" X ", "#X#", "XXX", '#', Items.redstone, 'X', rubberOreDict});
+			}
+		}
 
 		if (plantBall != null && compressedPlantBall != null) {
 			RecipeUtil.injectLeveledRecipe(plantBall, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat") * 4, Defaults.LIQUID_BIOMASS);

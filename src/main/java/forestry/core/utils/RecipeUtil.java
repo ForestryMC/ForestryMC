@@ -20,6 +20,11 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class RecipeUtil {
 
@@ -36,6 +41,23 @@ public class RecipeUtil {
 
 		if (LiquidHelper.exists(Defaults.LIQUID_HONEY))
 			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, LiquidHelper.getLiquid(output, 1), LiquidHelper.getLiquid(Defaults.LIQUID_HONEY, 1));
+	}
+
+	/**
+	 * Returns a list of the ore dictionary names if they exist.
+	 * Returns a list containing itemStack if there are no ore dictionary names.
+	 * Used for creating recipes that should accept equivalent itemStacks, based on the ore dictionary.
+	 */
+	public static List getOreDictRecipeEquivalents(ItemStack itemStack) {
+		int[] oreDictIds = OreDictionary.getOreIDs(itemStack);
+		List<String> oreDictNames = new ArrayList<String>(oreDictIds.length);
+		for (int oreId : oreDictIds) {
+			String oreDictName = OreDictionary.getOreName(oreId);
+			oreDictNames.add(oreDictName);
+		}
+		if (oreDictNames.isEmpty())
+			return Collections.singletonList(itemStack);
+		return oreDictNames;
 	}
 
 	public static Object[] getCraftingRecipeAsArray(Object rec) {
