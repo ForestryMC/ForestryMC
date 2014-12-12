@@ -62,10 +62,6 @@ public class TileControl extends TileFarm implements IFarmListener {
 		return true;
 	}
 
-	@Override
-	protected void createInventory() {
-	}
-
 	/* IFARMLISTENER */
 	@Override
 	public boolean cancelTask(IFarmLogic logic, ForgeDirection direction) {

@@ -34,10 +34,6 @@ public class TileGearbox extends TileFarm implements IPowerHandler {
 	}
 
 	@Override
-	protected void createInventory() {
-	}
-
-	@Override
 	public boolean hasFunction() {
 		return true;
 	}

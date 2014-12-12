@@ -11,13 +11,7 @@
 package forestry.core.fluids;
 
 import com.google.common.collect.ForwardingList;
-import forestry.core.fluids.tanks.FakeTank;
-import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.inventory.ITileFilter;
-import forestry.core.network.PacketGuiInteger;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.NBTUtil;
-import forestry.core.utils.NBTUtil.NBTList;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -26,19 +20,26 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-import net.minecraftforge.fluids.IFluidTank;
+
+import forestry.core.fluids.tanks.FakeTank;
+import forestry.core.fluids.tanks.StandardTank;
+import forestry.core.inventory.ITileFilter;
+import forestry.core.network.PacketGuiInteger;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.NBTUtil;
+import forestry.core.utils.NBTUtil.NBTList;
 
 /**
  *
@@ -287,12 +288,16 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 		return tank.drain(maxDrain, doDrain);
 	}
 
-	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+	public FluidStack drain(FluidStack resource, boolean doDrain) {
 		for (StandardTank tank : tanks)
 			if (tankCanDrainFluid(tank, resource))
 				return tank.drain(resource.amount, doDrain);
 		return null;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return drain(resource, doDrain);
 	}
 
 	@Override
@@ -343,6 +348,14 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 		if (tile instanceof IFluidHandler)
 			tank = (IFluidHandler) tile;
 		return tank;
+	}
+
+	public boolean accepts(Fluid fluid) {
+		for (StandardTank tank : tanks)
+			if (tank.accepts(fluid))
+				return true;
+
+		return false;
 	}
 
 	private boolean tankAcceptsFluid(StandardTank tank, FluidStack fluidStack) {

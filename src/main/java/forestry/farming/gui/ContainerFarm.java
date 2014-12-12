@@ -24,7 +24,6 @@ import forestry.core.gui.slots.SlotCustom;
 import forestry.core.gui.slots.SlotForestry;
 import forestry.core.gui.slots.SlotLiquidContainer;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.core.utils.TileInventoryAdapter;
 import forestry.farming.gadgets.TileFarmPlain;
 import forestry.plugins.PluginFarming;
 
@@ -38,9 +37,6 @@ public class ContainerFarm extends ContainerSocketed {
 		this.tile = tile;
 
 		IInventory inventory = tile.getInventory();
-		// Tile will not have an inventory client side.
-		if (inventory == null)
-			inventory = new TileInventoryAdapter(tile, TileFarmPlain.SLOT_COUNT, "Items");
 
 		// Resources
 		for (int i = 0; i < 3; i++) {
