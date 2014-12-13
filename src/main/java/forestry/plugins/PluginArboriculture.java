@@ -10,6 +10,24 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.command.ICommand;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.WeightedRandomChestContent;
+
+import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.oredict.OreDictionary;
+
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
@@ -17,6 +35,7 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
+
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeRoot;
@@ -122,24 +141,8 @@ import forestry.core.interfaces.IPacketHandler;
 import forestry.core.items.ItemForestryBlock;
 import forestry.core.items.ItemFruit.EnumFruit;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.RecipeUtil;
 import forestry.core.utils.ShapedRecipeCustom;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.command.ICommand;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.WeightedRandomChestContent;
-import net.minecraftforge.common.ChestGenHooks;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.OreDictionary;
-
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
 
 @Plugin(pluginID = "Arboriculture", name = "Arboriculture", author = "Binnie & SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.arboriculture.description")
 public class PluginArboriculture extends ForestryPlugin {
@@ -409,7 +412,7 @@ public class PluginArboriculture extends ForestryPlugin {
 
 					ItemStack logStack = forestryBlock.getItemStack(1, i);
 					ItemStack fireproofLogStack = fireproofLog.getItemStack(1, i);
-					RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), fireproofLogStack, new Object[]{
+					RecipeManagers.fabricatorManager.addRecipe(null, FluidRegistry.getFluidStack(Defaults.LIQUID_GLASS, 500), fireproofLogStack, new Object[]{
 							" # ",
 							"#X#",
 							" # ",
@@ -424,7 +427,7 @@ public class PluginArboriculture extends ForestryPlugin {
 				ForestryBlock fireproofPlank = BlockFireproofPlanks.getFireproofPlanks((BlockPlanks)plank.block());
 				ItemStack plankStack = plank.getItemStack(1, i);
 				ItemStack fireproofPlankStack = fireproofPlank.getItemStack(5, i);
-				RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), fireproofPlankStack, new Object[]{
+				RecipeManagers.fabricatorManager.addRecipe(null, FluidRegistry.getFluidStack(Defaults.LIQUID_GLASS, 500), fireproofPlankStack, new Object[]{
 						"X#X",
 						"#X#",
 						"X#X",
@@ -436,7 +439,7 @@ public class PluginArboriculture extends ForestryPlugin {
 				ForestryBlock fireproofPlank = BlockFireproofPlanks.getFireproofPlanks((BlockPlanks)plank.block());
 				ItemStack plankStack = plank.getItemStack(1, i);
 				ItemStack fireproofPlankStack = fireproofPlank.getItemStack(5, i);
-				RecipeManagers.fabricatorManager.addRecipe(null, LiquidHelper.getLiquid(Defaults.LIQUID_GLASS, 500), fireproofPlankStack, new Object[]{
+				RecipeManagers.fabricatorManager.addRecipe(null, FluidRegistry.getFluidStack(Defaults.LIQUID_GLASS, 500), fireproofPlankStack, new Object[]{
 						"X#X",
 						"#X#",
 						"X#X",
@@ -474,20 +477,20 @@ public class PluginArboriculture extends ForestryPlugin {
 			Proxies.common.addRecipe(ForestryBlock.fences2.getItemStack(4, i), "###", "# #", '#', ForestryBlock.planks2.getItemStack(1, i));
 
 		// Treealyzer
-		RecipeManagers.carpenterManager.addRecipe(100, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 2000), null, ForestryItem.treealyzer.getItemStack(), "X#X", "X#X", "RDR",
+		RecipeManagers.carpenterManager.addRecipe(100, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 2000), null, ForestryItem.treealyzer.getItemStack(), "X#X", "X#X", "RDR",
 				'#', Blocks.glass_pane,
 				'X', "ingotCopper",
 				'R', Items.redstone,
 				'D', Items.diamond);
 
 		// SQUEEZER RECIPES
-		RecipeManagers.squeezerManager.addRecipe(20, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.CHERRY.ordinal())}, LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, 5 * GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed")), ForestryItem.mulch.getItemStack(), 5);
-		RecipeManagers.squeezerManager.addRecipe(60, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.WALNUT.ordinal())}, LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, 18 * GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed")), ForestryItem.mulch.getItemStack(), 5);
-		RecipeManagers.squeezerManager.addRecipe(70, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.CHESTNUT.ordinal())}, LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, 22 * GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed")), ForestryItem.mulch.getItemStack(), 2);
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.LEMON.ordinal())}, LiquidHelper.getLiquid(Defaults.LIQUID_JUICE, GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple") * 2), ForestryItem.mulch.getItemStack(), (int) Math.floor(GameMode.getGameMode().getIntegerSetting("squeezer.mulch.apple") * 0.5f));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.PLUM.ordinal())}, LiquidHelper.getLiquid(Defaults.LIQUID_JUICE, (int) Math.floor(GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple") * 0.5f)), ForestryItem.mulch.getItemStack(), GameMode.getGameMode().getIntegerSetting("squeezer.mulch.apple") * 3);
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.PAPAYA.ordinal())}, LiquidHelper.getLiquid(Defaults.LIQUID_JUICE, GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple") * 3), ForestryItem.mulch.getItemStack(), (int) Math.floor(GameMode.getGameMode().getIntegerSetting("squeezer.mulch.apple") * 0.5f));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.DATES.ordinal())}, LiquidHelper.getLiquid(Defaults.LIQUID_JUICE, (int) Math.floor(GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple") * 0.25)), ForestryItem.mulch.getItemStack(), (int) Math.floor(GameMode.getGameMode().getIntegerSetting("squeezer.mulch.apple")));
+		RecipeManagers.squeezerManager.addRecipe(20, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.CHERRY.ordinal())}, FluidRegistry.getFluidStack(Defaults.LIQUID_SEEDOIL, 5 * GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed")), ForestryItem.mulch.getItemStack(), 5);
+		RecipeManagers.squeezerManager.addRecipe(60, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.WALNUT.ordinal())}, FluidRegistry.getFluidStack(Defaults.LIQUID_SEEDOIL, 18 * GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed")), ForestryItem.mulch.getItemStack(), 5);
+		RecipeManagers.squeezerManager.addRecipe(70, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.CHESTNUT.ordinal())}, FluidRegistry.getFluidStack(Defaults.LIQUID_SEEDOIL, 22 * GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed")), ForestryItem.mulch.getItemStack(), 2);
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.LEMON.ordinal())}, FluidRegistry.getFluidStack(Defaults.LIQUID_JUICE, GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple") * 2), ForestryItem.mulch.getItemStack(), (int) Math.floor(GameMode.getGameMode().getIntegerSetting("squeezer.mulch.apple") * 0.5f));
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.PLUM.ordinal())}, FluidRegistry.getFluidStack(Defaults.LIQUID_JUICE, (int) Math.floor(GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple") * 0.5f)), ForestryItem.mulch.getItemStack(), GameMode.getGameMode().getIntegerSetting("squeezer.mulch.apple") * 3);
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.PAPAYA.ordinal())}, FluidRegistry.getFluidStack(Defaults.LIQUID_JUICE, GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple") * 3), ForestryItem.mulch.getItemStack(), (int) Math.floor(GameMode.getGameMode().getIntegerSetting("squeezer.mulch.apple") * 0.5f));
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.DATES.ordinal())}, FluidRegistry.getFluidStack(Defaults.LIQUID_JUICE, (int) Math.floor(GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple") * 0.25)), ForestryItem.mulch.getItemStack(), (int) Math.floor(GameMode.getGameMode().getIntegerSetting("squeezer.mulch.apple")));
 
 		RecipeUtil.injectLeveledRecipe(ForestryItem.sapling.getItemStack(), GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Defaults.LIQUID_BIOMASS);
 

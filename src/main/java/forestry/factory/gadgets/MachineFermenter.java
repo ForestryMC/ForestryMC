@@ -10,8 +10,29 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
-import buildcraft.api.statements.ITriggerExternal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Map;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+
 import cpw.mods.fml.common.Optional;
+
 import forestry.api.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
@@ -19,6 +40,7 @@ import forestry.api.recipes.IFermenterManager;
 import forestry.api.recipes.IVariableFermentable;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
@@ -29,29 +51,10 @@ import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.InventoryAdapter;
-import forestry.core.utils.LiquidHelper;
-import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.factory.triggers.FactoryTriggers;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Map;
+import buildcraft.api.statements.ITriggerExternal;
 
 public class MachineFermenter extends TilePowered implements ISidedInventory, ILiquidTankContainer {
 
@@ -135,7 +138,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 
 		@Override
 		public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output) {
-			addRecipe(resource, fermentationValue, modifier, output, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1000));
+			addRecipe(resource, fermentationValue, modifier, output, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 1000));
 		}
 
 		public static Recipe findMatchingRecipe(ItemStack res, FluidStack liqu) {
@@ -161,6 +164,8 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		}
 
 		public static boolean isLiquidResource(FluidStack liquid) {
+			if (liquid == null)
+				return false;
 			return recipeFluidInputs.contains(liquid.getFluid());
 		}
 
@@ -247,33 +252,20 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 	@Override
 	public void updateServerSide() {
 
-		// Check if we have suitable items waiting in the item slot
-		if (inventory.getStackInSlot(SLOT_INPUT) != null) {
-
-			FluidContainerData container = LiquidHelper.getLiquidContainer(inventory.getStackInSlot(SLOT_INPUT));
-			if (container != null && RecipeManager.isLiquidResource(container.fluid)) {
-
-				inventory.setInventorySlotContents(SLOT_INPUT, StackUtils.replenishByContainer(this, inventory.getStackInSlot(SLOT_INPUT), container, resourceTank));
-				if (inventory.getStackInSlot(SLOT_INPUT).stackSize <= 0)
-					inventory.setInventorySlotContents(SLOT_INPUT, null);
-
-			}
-		}
-		// Can/capsule input/output needs to be handled here.
-		if (inventory.getStackInSlot(SLOT_CAN_INPUT) != null) {
-			FluidContainerData container = LiquidHelper.getEmptyContainer(inventory.getStackInSlot(SLOT_CAN_INPUT), productTank.getFluid());
-
-			if (container != null) {
-				inventory.setInventorySlotContents(SLOT_CAN_OUTPUT, bottleIntoContainer(inventory.getStackInSlot(SLOT_CAN_INPUT), inventory.getStackInSlot(SLOT_CAN_OUTPUT), container,
-						productTank));
-				if (inventory.getStackInSlot(SLOT_CAN_INPUT).stackSize <= 0)
-					inventory.setInventorySlotContents(SLOT_CAN_INPUT, null);
-			}
-		}
-
-		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
+		if (worldObj.getTotalWorldTime() % 20 != 0)
 			return;
 
+		// Check if we have suitable items waiting in the item slot
+		if (inventory.getStackInSlot(SLOT_INPUT) != null) {
+			FluidHelper.drainContainers(tankManager, inventory, SLOT_INPUT);
+		}
+
+		// Can/capsule input/output needs to be handled here.
+		if (inventory.getStackInSlot(SLOT_CAN_INPUT) != null) {
+			FluidStack fluidStack = productTank.getFluid();
+			if (fluidStack != null)
+				FluidHelper.fillContainers(tankManager, inventory, SLOT_CAN_INPUT, SLOT_CAN_OUTPUT, fluidStack.getFluid());
+		}
 
 		if (RecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid()) != null) {
 			if (resourceTank.getFluidAmount() < fuelCurrentFerment)
@@ -550,11 +542,11 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 
 
 		if (slotIndex == SLOT_INPUT) {
-			FluidContainerData container = LiquidHelper.getLiquidContainer(itemstack);
-			return container != null && RecipeManager.isLiquidResource(container.fluid);
+			FluidStack fluidStack = FluidHelper.getFluidStackInContainer(itemstack);
+			return RecipeManager.isLiquidResource(fluidStack);
 		}
 
-		if (slotIndex == SLOT_CAN_INPUT && LiquidHelper.isEmptyContainer(itemstack)) {
+		if (slotIndex == SLOT_CAN_INPUT && FluidHelper.isEmptyContainer(itemstack)) {
 			return true;
 		}
 		if (slotIndex == SLOT_FUEL && FuelManager.fermenterFuel.containsKey(itemstack))

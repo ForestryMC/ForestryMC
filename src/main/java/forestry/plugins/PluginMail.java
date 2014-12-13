@@ -16,9 +16,12 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.fluids.FluidRegistry;
+
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.network.IGuiHandler;
 
+import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.EnumPostage;
 import forestry.api.mail.PostManager;
 import forestry.api.recipes.RecipeManagers;
@@ -34,9 +37,7 @@ import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemForestryBlock;
 import forestry.core.proxy.Proxies;
 import forestry.core.triggers.Trigger;
-import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.ShapedRecipeCustom;
-import forestry.api.mail.EnumAddressee;
 import forestry.mail.GuiHandlerMail;
 import forestry.mail.PacketHandlerMail;
 import forestry.mail.PostRegistry;
@@ -201,7 +202,7 @@ public class PluginMail extends ForestryPlugin {
 						'X', stampDefinitions[i].getCraftingIngredient(),
 						'#', Items.paper,
 						'Z', stampGlue);
-				RecipeManagers.carpenterManager.addRecipe(10, LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, 300), null, ForestryItem.stamps.getItemStack(9, i),
+				RecipeManagers.carpenterManager.addRecipe(10, FluidRegistry.getFluidStack(Defaults.LIQUID_SEEDOIL, 300), null, ForestryItem.stamps.getItemStack(9, i),
 						"XXX", "###",
 						'X', stampDefinitions[i].getCraftingIngredient(),
 						'#', Items.paper);
@@ -211,7 +212,7 @@ public class PluginMail extends ForestryPlugin {
 		Proxies.common.addRecipe(new ItemStack(Items.paper), "###", '#', ForestryItem.letters.getItemStack(1, Defaults.WILDCARD));
 
 		// Carpenter
-		RecipeManagers.carpenterManager.addRecipe(10, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 250), null, ForestryItem.letters.getItemStack(), "###", "###", '#', ForestryItem.woodPulp);
+		RecipeManagers.carpenterManager.addRecipe(10, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 250), null, ForestryItem.letters.getItemStack(), "###", "###", '#', ForestryItem.woodPulp);
 
 		Proxies.common.addShapelessRecipe(ForestryItem.catalogue.getItemStack(), ForestryItem.stamps.getItemStack(1, Defaults.WILDCARD), new ItemStack(Items.book));
 	}

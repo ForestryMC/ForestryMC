@@ -16,6 +16,7 @@ import forestry.api.recipes.ISqueezerManager;
 import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
@@ -230,20 +231,15 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 	@Override
 	public void updateServerSide() {
 
+		if (worldObj.getTotalWorldTime() % 20 != 0)
+			return;
+
 		// Can/capsule input/output needs to be handled here.
 		if (inventory.getStackInSlot(SLOT_CAN_INPUT) != null) {
-
-			FluidContainerData container = LiquidHelper.getEmptyContainer(inventory.getStackInSlot(SLOT_CAN_INPUT), productTank.getFluid());
-			if (container != null) {
-				inventory.setInventorySlotContents(SLOT_CAN_OUTPUT, bottleIntoContainer(inventory.getStackInSlot(SLOT_CAN_INPUT), inventory.getStackInSlot(SLOT_CAN_OUTPUT), container, productTank));
-				if (inventory.getStackInSlot(SLOT_CAN_INPUT).stackSize <= 0)
-					inventory.setInventorySlotContents(SLOT_CAN_INPUT, null);
-			}
-
+			FluidStack fluidStack = productTank.getFluid();
+			if (fluidStack != null)
+				FluidHelper.fillContainers(tankManager, inventory, SLOT_CAN_INPUT, SLOT_CAN_OUTPUT, fluidStack.getFluid());
 		}
-
-		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
-			return;
 
 		checkRecipe();
 		if (getErrorState() == EnumErrorCode.NORECIPE && currentRecipe != null)
@@ -436,11 +432,11 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
 
 		if(slotIndex == SLOT_CAN_INPUT) {
-			return LiquidHelper.isEmptyContainer(itemstack);
+			return FluidHelper.isEmptyContainer(itemstack);
 		}
 
 		if(slotIndex >= SLOT_RESOURCE_1 && slotIndex < SLOT_RESOURCE_1 + SLOTS_RESOURCE_COUNT) {
-			if (LiquidHelper.isEmptyContainer(itemstack))
+			if (FluidHelper.isEmptyContainer(itemstack))
 				return false;
 
 			if (RecipeManager.canUse(itemstack))
@@ -504,7 +500,7 @@ public class MachineSqueezer extends TilePowered implements ISpecialInventory, I
 	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
 
 		// Try to add to can slot if input is from top or bottom.
-		if (LiquidHelper.isEmptyContainer(stack)) {
+		if (FluidHelper.isEmptyContainer(stack)) {
 			return inventory.addStack(stack, SLOT_CAN_INPUT, 1, false, doAdd);
 		} else {
 			return inventory.addStack(stack, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT, false, doAdd);

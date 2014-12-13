@@ -25,11 +25,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.WeightedRandomChestContent;
+
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
@@ -40,6 +43,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;
@@ -156,7 +160,6 @@ import forestry.core.items.ItemOverlay.OverlayInfo;
 import forestry.core.items.ItemScoop;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.EntitySnowFX;
-import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.ShapedRecipeCustom;
 
 @Plugin(pluginID = "Apiculture", name = "Apiculture", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.apiculture.description")
@@ -560,13 +563,13 @@ public class PluginApiculture extends ForestryPlugin {
 				'#', ForestryItem.propolis.getItemStack(1, 2));
 
 		// / CANDLES
-		RecipeManagers.carpenterManager.addRecipe(30, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 600), null, ForestryBlock.candle.getItemStack(24),
+		RecipeManagers.carpenterManager.addRecipe(30, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 600), null, ForestryBlock.candle.getItemStack(24),
 				" X ",
 				"###",
 				"###",
 				'#', ForestryItem.beeswax,
 				'X', Items.string);
-		RecipeManagers.carpenterManager.addRecipe(10, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 200), null, ForestryBlock.candle.getItemStack(6),
+		RecipeManagers.carpenterManager.addRecipe(10, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 200), null, ForestryBlock.candle.getItemStack(6),
 				"#X#",
 				'#', ForestryItem.beeswax,
 				'X', ForestryItem.craftingMaterial.getItemStack(1, 2));
@@ -636,20 +639,20 @@ public class PluginApiculture extends ForestryPlugin {
 				'W', ForestryItem.craftingMaterial.getItemStack(1, 3));
 
 		// / SQUEEZER
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.honeyDrop.getItemStack()}, LiquidHelper.getLiquid(Defaults.LIQUID_HONEY, Defaults.FLUID_PER_HONEY_DROP),
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.honeyDrop.getItemStack()}, FluidRegistry.getFluidStack(Defaults.LIQUID_HONEY, Defaults.FLUID_PER_HONEY_DROP),
 				ForestryItem.propolis.getItemStack(), 5);
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.honeydew.getItemStack()}, LiquidHelper.getLiquid(Defaults.LIQUID_HONEY, Defaults.FLUID_PER_HONEY_DROP));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.sand)}, LiquidHelper.getLiquid(Defaults.LIQUID_LAVA, 2000));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.dirt)}, LiquidHelper.getLiquid(Defaults.LIQUID_LAVA, 1600));
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.honeydew.getItemStack()}, FluidRegistry.getFluidStack(Defaults.LIQUID_HONEY, Defaults.FLUID_PER_HONEY_DROP));
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.sand)}, FluidRegistry.getFluidStack(Defaults.LIQUID_LAVA, 2000));
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.dirt)}, FluidRegistry.getFluidStack(Defaults.LIQUID_LAVA, 1600));
 
 		// / CARPENTER
-		RecipeManagers.carpenterManager.addRecipe(100, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 2000), null, ForestryItem.beealyzer.getItemStack(),
+		RecipeManagers.carpenterManager.addRecipe(100, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 2000), null, ForestryItem.beealyzer.getItemStack(),
 				"X#X", "X#X", "RDR",
 				'#', Blocks.glass_pane,
 				'X', "ingotTin",
 				'R', Items.redstone,
 				'D', Items.diamond);
-		RecipeManagers.carpenterManager.addRecipe(50, LiquidHelper.getLiquid(Defaults.LIQUID_HONEY, 500), null, ForestryItem.craftingMaterial.getItemStack(1, 6),
+		RecipeManagers.carpenterManager.addRecipe(50, FluidRegistry.getFluidStack(Defaults.LIQUID_HONEY, 500), null, ForestryItem.craftingMaterial.getItemStack(1, 6),
 				" J ", "###", "WPW",
 				'#', "plankWood",
 				'J', ForestryItem.royalJelly,
@@ -704,8 +707,8 @@ public class PluginApiculture extends ForestryPlugin {
 			ForestryItem.craftingMaterial.getItemStack(1, 2), ForestryItem.propolis.getItemStack()}, new int[]{60, 10});
 
 		// / FERMENTER
-		RecipeManagers.fermenterManager.addRecipe(ForestryItem.honeydew.getItemStack(), 500, 1.0f, LiquidHelper.getLiquid(Defaults.LIQUID_MEAD, 1),
-				LiquidHelper.getLiquid(Defaults.LIQUID_HONEY, 1));
+		RecipeManagers.fermenterManager.addRecipe(ForestryItem.honeydew.getItemStack(), 500, 1.0f, FluidRegistry.getFluidStack(Defaults.LIQUID_MEAD, 1),
+				FluidRegistry.getFluidStack(Defaults.LIQUID_HONEY, 1));
 
 		// ANALYZER
 		definitionAnalyzer.recipes = createAlyzerRecipes(ForestryBlock.core.block(), Defaults.DEFINITION_ANALYZER_META);

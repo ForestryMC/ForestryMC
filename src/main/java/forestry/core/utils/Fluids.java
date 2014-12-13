@@ -18,6 +18,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.core.fluids.FluidHelper;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -46,7 +48,7 @@ public enum Fluids {
 	}
 
 	public boolean isContained(ItemStack containerStack) {
-		return containerStack != null && LiquidHelper.containsFluid(containerStack, Fluids.WATER.get());
+		return containerStack != null && FluidHelper.containsFluid(containerStack, Fluids.WATER.get());
 	}
 
 	public static boolean areEqual(Fluid fluid, FluidStack fluidStack) {

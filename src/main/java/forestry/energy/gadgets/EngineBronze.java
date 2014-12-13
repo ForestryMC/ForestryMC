@@ -16,6 +16,7 @@ import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.FuelManager;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
@@ -26,6 +27,8 @@ import forestry.core.network.GuiId;
 import forestry.core.network.PacketPayload;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.TileInventoryAdapter;
+
+import static forestry.factory.gadgets.MachineBottler.SLOT_CAN;
 import static forestry.factory.gadgets.MachineBottler.SLOT_PRODUCT;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -107,29 +110,13 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 
 		super.updateServerSide();
 
-		// Check if we have suitable items waiting in the item slot
-		if (inventory.getStackInSlot(SLOT_CAN) != null) {
-
-			FluidContainerData container = LiquidHelper.getLiquidContainer(inventory.getStackInSlot(SLOT_CAN));
-			if (container != null) {
-
-				StandardTank tank = null;
-
-				if (heatingTank.accepts(container.fluid.getFluid()))
-					tank = heatingTank;
-				else if (fuelTank.accepts(container.fluid.getFluid()))
-					tank = fuelTank;
-
-				if (tank != null) {
-					inventory.setInventorySlotContents(SLOT_CAN, replenishByContainer(inventory.getStackInSlot(SLOT_CAN), container, tank));
-					if (inventory.getStackInSlot(SLOT_CAN).stackSize <= 0)
-						inventory.setInventorySlotContents(0, null);
-				}
-			}
-		}
-
 		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
 			return;
+
+		// Check if we have suitable items waiting in the item slot
+		if (inventory.getStackInSlot(SLOT_CAN) != null) {
+			FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
+		}
 
 		if (getHeatLevel() <= 0.2 && heatingTank.getFluidAmount() <= 0)
 			setErrorState(EnumErrorCode.NOHEAT);
@@ -451,7 +438,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
 		if (slotIndex == SLOT_CAN) {
-			FluidStack fluid = LiquidHelper.getFluidStackInContainer(itemstack);
+			FluidStack fluid = FluidHelper.getFluidStackInContainer(itemstack);
 			if (fluid == null || fluid.amount <= 0)
 				return false;
 			return fuelTank.accepts(fluid.getFluid()) || heatingTank.accepts(fluid.getFluid());
@@ -471,8 +458,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		if (!super.canTakeStackFromSide(slotIndex, stack, side))
 			return false;
 
-		FluidContainerData container = LiquidHelper.getLiquidContainer(stack);
-		return container != null;
+		return FluidHelper.isContainer(stack);
 	}
 
 	/**

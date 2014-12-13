@@ -10,14 +10,18 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import buildcraft.api.fuels.BuildcraftFuelRegistry;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+
 import cpw.mods.fml.common.Optional;
+
 import forestry.core.GameMode;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.LiquidHelper;
-import net.minecraftforge.fluids.Fluid;
+
+import buildcraft.api.fuels.BuildcraftFuelRegistry;
 
 @Plugin(pluginID = "BC6|Fuels", name = "BuildCraft 6 Fuels", author = "mezz", url = Defaults.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
 public class PluginBuildCraftFuels extends ForestryPlugin {
@@ -35,9 +39,9 @@ public class PluginBuildCraftFuels extends ForestryPlugin {
 	@Optional.Method(modid = "BuildCraftAPI|fuels")
 	@Override
 	public void doInit() {
-		BuildcraftFuelRegistry.coolant.addCoolant(LiquidHelper.getFluid(Defaults.LIQUID_ICE), 10.0f);
+		BuildcraftFuelRegistry.coolant.addCoolant(FluidRegistry.getFluid(Defaults.LIQUID_ICE), 10.0f);
 
-		Fluid ethanol = LiquidHelper.getLiquid(Defaults.LIQUID_ETHANOL, 1).getFluid();
+		Fluid ethanol = FluidRegistry.getFluidStack(Defaults.LIQUID_ETHANOL, 1).getFluid();
 		int ethanolPower = 40;
 		int ethanolBurnTime = Math.round(Defaults.ENGINE_CYCLE_DURATION_ETHANOL * GameMode.getGameMode().getFloatSetting("fuel.ethanol.combustion"));
 		BuildcraftFuelRegistry.fuel.addFuel(ethanol, ethanolPower, ethanolBurnTime);

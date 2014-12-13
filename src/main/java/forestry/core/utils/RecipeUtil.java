@@ -10,21 +10,24 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import forestry.api.recipes.RecipeManagers;
-import forestry.core.config.Defaults;
-import forestry.core.gui.ContainerDummy;
-import forestry.core.interfaces.IDescriptiveRecipe;
-import forestry.core.proxy.Proxies;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
+
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.config.Defaults;
+import forestry.core.gui.ContainerDummy;
+import forestry.core.interfaces.IDescriptiveRecipe;
+import forestry.core.proxy.Proxies;
 
 public class RecipeUtil {
 
@@ -34,13 +37,13 @@ public class RecipeUtil {
 		if (RecipeManagers.fermenterManager == null)
 			return;
 
-		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, LiquidHelper.getLiquid(output, 1), LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1));
+		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, FluidRegistry.getFluidStack(output, 1), FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 1));
 
-		if (LiquidHelper.exists(Defaults.LIQUID_JUICE))
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, LiquidHelper.getLiquid(output, 1), LiquidHelper.getLiquid(Defaults.LIQUID_JUICE, 1));
+		if (FluidRegistry.isFluidRegistered(Defaults.LIQUID_JUICE))
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, FluidRegistry.getFluidStack(output, 1), FluidRegistry.getFluidStack(Defaults.LIQUID_JUICE, 1));
 
-		if (LiquidHelper.exists(Defaults.LIQUID_HONEY))
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, LiquidHelper.getLiquid(output, 1), LiquidHelper.getLiquid(Defaults.LIQUID_HONEY, 1));
+		if (FluidRegistry.isFluidRegistered(Defaults.LIQUID_HONEY))
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, FluidRegistry.getFluidStack(output, 1), FluidRegistry.getFluidStack(Defaults.LIQUID_HONEY, 1));
 	}
 
 	/**

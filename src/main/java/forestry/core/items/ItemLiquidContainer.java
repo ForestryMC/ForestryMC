@@ -33,6 +33,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 
 import forestry.core.CreativeTabForestry;
+import forestry.core.fluids.FluidHelper;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.LiquidHelper;
@@ -149,19 +150,18 @@ public class ItemLiquidContainer extends Item {
 			if (fluid == null || fluid.amount <= 0)
 				return itemstack;
 
-			// Check whether there is valid container for the liquid.
-			FluidContainerData container = LiquidHelper.getEmptyContainer(itemstack, fluid);
-			if (container == null)
+			ItemStack filledContainer = FluidHelper.getFilledContainer(fluid.getFluid(), itemstack);
+			if (filledContainer == null)
 				return itemstack;
 
 			// Search for a slot to stow a filled container in player's
 			// inventory
-			int slot = getMatchingSlot(entityplayer, container.filledContainer);
+			int slot = getMatchingSlot(entityplayer, filledContainer);
 			if (slot < 0)
 				return itemstack;
 
 			if (entityplayer.inventory.getStackInSlot(slot) == null)
-				entityplayer.inventory.setInventorySlotContents(slot, container.filledContainer.copy());
+				entityplayer.inventory.setInventorySlotContents(slot, filledContainer.copy());
 			else
 				entityplayer.inventory.getStackInSlot(slot).stackSize++;
 

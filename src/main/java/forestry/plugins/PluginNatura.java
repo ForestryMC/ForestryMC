@@ -12,19 +12,20 @@ package forestry.plugins;
 
 import java.util.ArrayList;
 
-import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.fluids.FluidRegistry;
+
 import cpw.mods.fml.common.event.FMLInterModComms;
+import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.GameMode;
 import forestry.core.config.Defaults;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.LiquidHelper;
 
 @Plugin(pluginID = "Natura", name = "Natura", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.natura.description")
 public class PluginNatura extends ForestryPlugin {
@@ -86,7 +87,7 @@ public class PluginNatura extends ForestryPlugin {
 		int amount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");
 		for (ItemStack aSeedList : seedList)
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{aSeedList},
-					LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, amount));
+					FluidRegistry.getFluidStack(Defaults.LIQUID_SEEDOIL, amount));
 
 		ItemStack berryBlight = GameRegistry.findItemStack(NATURA, "berryBlight", 1);
 		ItemStack berryDusk = GameRegistry.findItemStack(NATURA, "berryDusk", 1);
@@ -119,7 +120,7 @@ public class PluginNatura extends ForestryPlugin {
 		amount = (amount > 1) ? amount : 1; // Produce at least 1 mb of juice.
 		for (ItemStack berry : berries)
 			RecipeManagers.squeezerManager.addRecipe(3, new ItemStack[]{berry},
-					LiquidHelper.getLiquid(Defaults.LIQUID_JUICE, amount));
+					FluidRegistry.getFluidStack(Defaults.LIQUID_JUICE, amount));
 	}
 
 }

@@ -27,6 +27,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.core.ForestryAPI;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.interfaces.ILiquidTankContainer;
@@ -69,9 +70,9 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	public TileAlvearyHygroregulator() {
 		super(BLOCK_META);
 
-		Fluid water = LiquidHelper.getFluid(Defaults.LIQUID_WATER);
-		Fluid lava = LiquidHelper.getFluid(Defaults.LIQUID_LAVA);
-		Fluid liquidIce = LiquidHelper.getFluid(Defaults.LIQUID_ICE);
+		Fluid water = FluidRegistry.getFluid(Defaults.LIQUID_WATER);
+		Fluid lava = FluidRegistry.getFluid(Defaults.LIQUID_LAVA);
+		Fluid liquidIce = FluidRegistry.getFluid(Defaults.LIQUID_ICE);
 
 		liquidTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, water, lava, liquidIce);
 		tankManager = new TankManager(liquidTank);
@@ -133,14 +134,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 
 		// Check if we have suitable items waiting in the item slot
 		if (canInventory.getStackInSlot(0) != null) {
-			FluidContainerData container = LiquidHelper.getLiquidContainer(canInventory.getStackInSlot(0));
-			if (container != null &&
-					(container.fluid.getFluid() == FluidRegistry.WATER || container.fluid.getFluid() == FluidRegistry.LAVA)) {
-
-				canInventory.setInventorySlotContents(0, StackUtils.replenishByContainer(this, canInventory.getStackInSlot(0), container, liquidTank));
-				if (canInventory.getStackInSlot(0).stackSize <= 0)
-					canInventory.setInventorySlotContents(0, null);
-			}
+			FluidHelper.drainContainers(tankManager, canInventory, 0);
 		}
 
 	}
@@ -276,7 +270,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
 		if (slotIndex == 0) {
-			FluidStack fluid = LiquidHelper.getFluidStackInContainer(itemstack);
+			FluidStack fluid = FluidHelper.getFluidStackInContainer(itemstack);
 			if (fluid == null || fluid.amount <= 0)
 				return false;
 			return liquidTank.accepts(fluid.getFluid());

@@ -23,6 +23,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 	protected ItemStack ground;
 	private final ItemStack[] resource;
 
-	private static final FluidStack STACK_WATER = new FluidStack(LiquidHelper.getFluid(Defaults.LIQUID_WATER), 1000);
+	private static final FluidStack STACK_WATER = new FluidStack(FluidRegistry.getFluid(Defaults.LIQUID_WATER), 1000);
 
 	ArrayList<ItemStack> produce = new ArrayList<ItemStack>();
 

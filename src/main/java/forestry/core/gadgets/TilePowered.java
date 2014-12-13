@@ -118,32 +118,6 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 		energyManager.readFromNBT(nbt);
 	}
 
-	/* LIQUID CONTAINER HANDLING */
-	/**
-	@deprecated Use FluidHelper
-	*/
-	@Deprecated
-	protected ItemStack bottleIntoContainer(ItemStack canStack, ItemStack outputStack, FluidContainerData container, StandardTank tank) {
-		if (tank.getFluidAmount() < container.fluid.amount)
-			return outputStack;
-		if (canStack.stackSize <= 0)
-			return outputStack;
-		if (outputStack != null && !outputStack.isItemEqual(container.filledContainer))
-			return outputStack;
-		if (outputStack != null && outputStack.stackSize >= outputStack.getMaxStackSize())
-			return outputStack;
-
-		tank.drain(container.fluid.amount, true);
-		canStack.stackSize--;
-
-		if (outputStack == null)
-			outputStack = container.filledContainer.copy();
-		else
-			outputStack.stackSize++;
-
-		return outputStack;
-	}
-
 	// / ADDITIONAL LIQUID HANDLING
 	@Override
 	public EnumTankLevel getPrimaryLevel() {

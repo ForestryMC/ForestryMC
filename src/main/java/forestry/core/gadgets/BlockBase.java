@@ -22,20 +22,22 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.IFluidHandler;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.core.fluids.FluidHelper;
 import forestry.core.interfaces.IOwnable;
 import forestry.core.items.ItemNBTTile;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StringUtil;
 
 public class BlockBase extends BlockForestry {
@@ -167,7 +169,7 @@ public class BlockBase extends BlockForestry {
 		ItemStack current = player.getCurrentEquippedItem();
 		if (current != null && current.getItem() != Items.bucket && tile instanceof IFluidHandler) {
 			if (Proxies.common.isSimulating(world)) {
-				if (LiquidHelper.handleRightClick((IFluidHandler) tile, ForgeDirection.getOrientation(side), player, true, tile.canDrainWithBucket())) {
+				if (FluidHelper.handleRightClick((IFluidHandler) tile, ForgeDirection.getOrientation(side), player, true, tile.canDrainWithBucket())) {
 					return true;
 				}
 			} else {

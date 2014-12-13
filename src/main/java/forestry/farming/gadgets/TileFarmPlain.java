@@ -29,7 +29,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -48,16 +47,15 @@ import forestry.api.farming.IFarmable;
 import forestry.core.GameMode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.interfaces.IClimatised;
 import forestry.core.interfaces.IHintSource;
 import forestry.core.interfaces.ISocketable;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.DelayTimer;
 import forestry.core.utils.InventoryAdapter;
-import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.TileInventoryAdapter;
 import forestry.core.utils.Utils;
@@ -169,13 +167,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 		// Check if we have suitable items waiting in the item slot
 		if (inventory.getStackInSlot(SLOT_CAN) != null) {
-			FluidContainerData container = LiquidHelper.getLiquidContainer(inventory.getStackInSlot(SLOT_CAN));
-			if (container != null && tankManager.accepts(container.fluid.getFluid())) {
-				StandardTank liquidTank = tankManager.get(0);
-				inventory.setInventorySlotContents(SLOT_CAN, StackUtils.replenishByContainer(this, inventory.getStackInSlot(SLOT_CAN), container, liquidTank));
-				if (inventory.getStackInSlot(SLOT_CAN).stackSize <= 0)
-					inventory.setInventorySlotContents(SLOT_CAN, null);
-			}
+			FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
 		}
 
 	}
@@ -442,7 +434,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 						else
 							hasFertilizer = true;
 
-						FluidStack liquid = LiquidHelper.getLiquid(Defaults.LIQUID_WATER, logic.getWaterConsumption(getHydrationModifier()));
+						FluidStack liquid = FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, logic.getWaterConsumption(getHydrationModifier()));
 						if (liquid.amount > 0 && !hasLiquid(liquid))
 							continue;
 						else
@@ -565,7 +557,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		}
 
 		// Check water
-		FluidStack liquid = LiquidHelper.getLiquid(Defaults.LIQUID_WATER, provider.getWaterConsumption(getHydrationModifier()));
+		FluidStack liquid = FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, provider.getWaterConsumption(getHydrationModifier()));
 		if (liquid.amount > 0 && !hasLiquid(liquid)) {
 			setErrorState(EnumErrorCode.NOLIQUID);
 			return false;

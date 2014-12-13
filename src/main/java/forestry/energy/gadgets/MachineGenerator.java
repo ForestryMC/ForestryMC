@@ -18,7 +18,6 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidStack;
 
 import ic2.api.energy.prefab.BasicSource;
@@ -30,6 +29,7 @@ import forestry.api.fuels.GeneratorFuel;
 import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.TankManager;
 import forestry.core.gadgets.TileBase;
@@ -39,8 +39,6 @@ import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.InventoryAdapter;
-import forestry.core.utils.LiquidHelper;
-import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginIC2;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -119,14 +117,7 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 		// Check inventory slots for fuel
 		// Check if we have suitable items waiting in the item slot
 		if (inventory.getStackInSlot(SLOT_CAN) != null) {
-			FluidContainerData container = LiquidHelper.getLiquidContainer(inventory.getStackInSlot(SLOT_CAN));
-			if (container != null)
-
-				if (resourceTank.accepts(container.fluid.getFluid())) {
-					inventory.setInventorySlotContents(SLOT_CAN, StackUtils.replenishByContainer(this, inventory.getStackInSlot(SLOT_CAN), container, resourceTank));
-					if (inventory.getStackInSlot(SLOT_CAN).stackSize <= 0)
-						inventory.setInventorySlotContents(SLOT_CAN, null);
-				}
+			FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
 		}
 
 		// No work to be done if IC2 is unavailable.
@@ -236,11 +227,9 @@ public class MachineGenerator extends TileBase implements ISpecialInventory, ILi
 	@Override
 	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
 
-		FluidContainerData container = LiquidHelper.getLiquidContainer(stack);
-		if (container == null)
-			return 0;
+		Fluid fluid = FluidHelper.getFluidInContainer(stack);
 
-		if (container.fluid == null || !FuelManager.generatorFuel.containsKey(container.fluid.getFluid()))
+		if (fluid == null || !FuelManager.generatorFuel.containsKey(fluid))
 			return 0;
 
 		if (inventory.getStackInSlot(SLOT_CAN) == null) {
