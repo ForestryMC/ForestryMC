@@ -51,7 +51,7 @@ public class TreeModeHelper implements ICommandModeHelper {
 	}
 
 	@Override
-	public ArrayList<String> getDescription(String modeName) {
+	public Iterable<String> getDescription(String modeName) {
 		ITreekeepingMode mode = PluginArboriculture.treeInterface.getTreekeepingMode(modeName);
 		return mode.getDescription();
 	}

@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.commands;
 
-import java.util.ArrayList;
-
 import net.minecraft.world.World;
 
 public interface ICommandModeHelper {
@@ -22,5 +20,5 @@ public interface ICommandModeHelper {
 	String getModeName(World world);
 	void setMode(World world, String modeName);
 
-	ArrayList<String> getDescription(String modeName);
+	Iterable<String> getDescription(String modeName);
 }

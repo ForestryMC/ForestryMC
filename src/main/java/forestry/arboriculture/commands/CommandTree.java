@@ -27,7 +27,7 @@ public class CommandTree extends SubCommand {
 		addChildCommand(new CommandTreeSpawn("spawnTree", new TreeSpawner()));
 		addChildCommand(new CommandTreeSpawn("spawnForest", new ForestSpawner()));
 		addChildCommand(new CommandMode(modeHelper));
-		addChildCommand(new CommandSaveStats(saveHelper));
+		addChildCommand(new CommandSaveStats(saveHelper, modeHelper));
 	}
 
 }

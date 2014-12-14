@@ -26,7 +26,7 @@ public class CommandBee extends SubCommand {
 		ICommandModeHelper modeHelper = new BeeModeHelper();
 
 		addChildCommand(new CommandMode(modeHelper));
-		addChildCommand(new CommandSaveStats(saveHelper));
+		addChildCommand(new CommandSaveStats(saveHelper, modeHelper));
 		addChildCommand(new CommandBeeGive());
 	}
 }

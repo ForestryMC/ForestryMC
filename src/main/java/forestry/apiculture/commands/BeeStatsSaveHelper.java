@@ -52,11 +52,6 @@ public class BeeStatsSaveHelper implements IStatsSaveHelper {
 	}
 
 	@Override
-	public String getModeName(World world) {
-		return PluginApiculture.beeInterface.getBeekeepingMode(world).getName();
-	}
-
-	@Override
 	public Collection<IAlleleSpecies> getSpecies() {
 		Collection<IAlleleSpecies> species = new ArrayList<IAlleleSpecies>();
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values())

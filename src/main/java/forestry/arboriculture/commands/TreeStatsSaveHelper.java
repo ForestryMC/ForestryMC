@@ -37,11 +37,6 @@ public class TreeStatsSaveHelper implements IStatsSaveHelper {
 	}
 
 	@Override
-	public String getModeName(World world) {
-		return PluginArboriculture.treeInterface.getTreekeepingMode(world).getName();
-	}
-
-	@Override
 	public Collection<IAlleleSpecies> getSpecies() {
 		Collection<IAlleleSpecies> species = new ArrayList<IAlleleSpecies>();
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values())

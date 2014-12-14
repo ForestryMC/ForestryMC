@@ -25,8 +25,6 @@ public interface IStatsSaveHelper {
 
 	void addExtraInfo(Collection<String> statistics, IBreedingTracker breedingTracker);
 
-	String getModeName(World world);
-
 	Collection<IAlleleSpecies> getSpecies();
 
 	String getFileSuffix();

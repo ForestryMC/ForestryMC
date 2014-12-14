@@ -51,7 +51,7 @@ public class BeeModeHelper implements ICommandModeHelper {
 	}
 
 	@Override
-	public ArrayList<String> getDescription(String modeName) {
+	public Iterable<String> getDescription(String modeName) {
 		IBeekeepingMode mode = PluginApiculture.beeInterface.getBeekeepingMode(modeName);
 		return mode.getDescription();
 	}

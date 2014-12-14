@@ -37,17 +37,22 @@ import forestry.core.utils.StringUtil;
 
 public final class CommandSaveStats extends SubCommand {
 
-	private final String discoveredSymbol;
-	private final String blacklistedSymbol;
-	private final String notCountedSymbol;
-	private final IStatsSaveHelper saveHelper;
-
-	public CommandSaveStats(IStatsSaveHelper saveHelper) {
-		super("save");
+	private static final String discoveredSymbol;
+	private static final String blacklistedSymbol;
+	private static final String notCountedSymbol;
+	static {
 		discoveredSymbol = StatCollector.translateToLocal("for.chat.command.forestry.stats.save.key.discovered.symbol");
 		blacklistedSymbol = StatCollector.translateToLocal("for.chat.command.forestry.stats.save.key.blacklisted.symbol");
 		notCountedSymbol = StatCollector.translateToLocal("for.chat.command.forestry.stats.save.key.notCounted.symbol");
+	}
+
+	private final IStatsSaveHelper saveHelper;
+	private final ICommandModeHelper modeHelper;
+
+	public CommandSaveStats(IStatsSaveHelper saveHelper, ICommandModeHelper modeHelper) {
+		super("save");
 		this.saveHelper = saveHelper;
+		this.modeHelper = modeHelper;
 	}
 
 	@Override
@@ -76,7 +81,7 @@ public final class CommandSaveStats extends SubCommand {
 		String date = DateFormat.getInstance().format(new Date());
 		statistics.add(StatCollector.translateToLocalFormatted(saveHelper.getUnlocalizedSaveStatsString(), player.getDisplayName(), date));
 		statistics.add("");
-		statistics.add(StatCollector.translateToLocalFormatted("for.chat.command.forestry.stats.save.mode", saveHelper.getModeName(world)));
+		statistics.add(StatCollector.translateToLocalFormatted("for.chat.command.forestry.stats.save.mode", modeHelper.getModeName(world)));
 		statistics.add("");
 
 		IBreedingTracker tracker = saveHelper.getBreedingTracker(world, player.getGameProfile());
