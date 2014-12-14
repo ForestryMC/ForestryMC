@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.apiculture;
+package forestry.core.commands;
 
 import net.minecraft.command.CommandException;
 
@@ -17,7 +17,7 @@ public class SpeciesNotFoundException extends CommandException {
 	private static final long serialVersionUID = 1L;
 
 	public SpeciesNotFoundException(String title) {
-		super("Could not find bee species with Name or UID %s", title);
+		super("Could not find species with Name or UID %s", title);
 	}
 
 }

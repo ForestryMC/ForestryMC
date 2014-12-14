@@ -8,17 +8,16 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.apiculture.commands;
+package forestry.arboriculture.commands;
 
 import forestry.core.commands.SubCommand;
 
-public class CommandBeekeeping extends SubCommand {
+public class CommandTrees extends SubCommand {
 
-	public CommandBeekeeping() {
-		super("bee");
-		addAlias("beekeeping");
-		addChildCommand(new CommandBeekeepingMode());
-		addChildCommand(new CommandBeekeepingSave());
-		addChildCommand(new CommandBeekeepingGiveBee());
+	public CommandTrees() {
+		super("tree");
+		addChildCommand(new CommandTreesSpawnTree());
+		addChildCommand(new CommandTreesSpawnForest());
 	}
+
 }

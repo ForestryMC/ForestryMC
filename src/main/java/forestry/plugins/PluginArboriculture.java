@@ -25,7 +25,6 @@ import net.minecraft.util.WeightedRandomChestContent;
 
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.IFuelHandler;
@@ -47,8 +46,6 @@ import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
-import forestry.arboriculture.CommandSpawnForest;
-import forestry.arboriculture.CommandSpawnTree;
 import forestry.arboriculture.CommandTreekeepingMode;
 import forestry.arboriculture.EventHandlerArboriculture;
 import forestry.arboriculture.FruitProviderNone;
@@ -60,6 +57,7 @@ import forestry.arboriculture.GuiHandlerArboriculture;
 import forestry.arboriculture.PacketHandlerArboriculture;
 import forestry.arboriculture.VillageHandlerArboriculture;
 import forestry.arboriculture.WoodType;
+import forestry.arboriculture.commands.CommandTrees;
 import forestry.arboriculture.gadgets.BlockArbFence;
 import forestry.arboriculture.gadgets.BlockArbFence.FenceCat;
 import forestry.arboriculture.gadgets.BlockArbStairs;
@@ -297,6 +295,8 @@ public class PluginArboriculture extends ForestryPlugin {
 		validFences.add(Blocks.fence_gate);
 		validFences.add(Blocks.nether_brick_fence);
 
+		// Commands
+		PluginCore.rootCommand.addChildCommand(new CommandTrees());
 	}
 
 	@Override
@@ -1104,8 +1104,7 @@ public class PluginArboriculture extends ForestryPlugin {
 
 	@Override
 	public ICommand[] getConsoleCommands() {
-		return new ICommand[]{new CommandSpawnTree(), new CommandSpawnForest(),
-			new CommandTreekeepingMode()};
+		return new ICommand[]{new CommandTreekeepingMode()};
 	}
 
 	@Override
