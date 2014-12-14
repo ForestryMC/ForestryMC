@@ -10,25 +10,57 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.world.World;
+
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.oredict.OreDictionary;
+
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Defaults;
+import forestry.core.gui.ContainerDummy;
 import forestry.core.interfaces.IDescriptiveRecipe;
 import forestry.core.proxy.Proxies;
-import net.minecraft.item.ItemStack;
 
 public class RecipeUtil {
+
+	private static final Container DUMMY_CONTAINER = new ContainerDummy();
 
 	public static void injectLeveledRecipe(ItemStack resource, int fermentationValue, String output) {
 		if (RecipeManagers.fermenterManager == null)
 			return;
 
-		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, LiquidHelper.getLiquid(output, 1), LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1));
+		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, FluidRegistry.getFluidStack(output, 1), FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 1));
 
-		if (LiquidHelper.exists(Defaults.LIQUID_JUICE))
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, LiquidHelper.getLiquid(output, 1), LiquidHelper.getLiquid(Defaults.LIQUID_JUICE, 1));
+		if (FluidRegistry.isFluidRegistered(Defaults.LIQUID_JUICE))
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, FluidRegistry.getFluidStack(output, 1), FluidRegistry.getFluidStack(Defaults.LIQUID_JUICE, 1));
 
-		if (LiquidHelper.exists(Defaults.LIQUID_HONEY))
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, LiquidHelper.getLiquid(output, 1), LiquidHelper.getLiquid(Defaults.LIQUID_HONEY, 1));
+		if (FluidRegistry.isFluidRegistered(Defaults.LIQUID_HONEY))
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, FluidRegistry.getFluidStack(output, 1), FluidRegistry.getFluidStack(Defaults.LIQUID_HONEY, 1));
+	}
+
+	/**
+	 * Returns a list of the ore dictionary names if they exist.
+	 * Returns a list containing itemStack if there are no ore dictionary names.
+	 * Used for creating recipes that should accept equivalent itemStacks, based on the ore dictionary.
+	 */
+	public static List getOreDictRecipeEquivalents(ItemStack itemStack) {
+		int[] oreDictIds = OreDictionary.getOreIDs(itemStack);
+		List<String> oreDictNames = new ArrayList<String>(oreDictIds.length);
+		for (int oreId : oreDictIds) {
+			String oreDictName = OreDictionary.getOreName(oreId);
+			oreDictNames.add(oreDictName);
+		}
+		if (oreDictNames.isEmpty())
+			return Collections.singletonList(itemStack);
+		return oreDictNames;
 	}
 
 	public static Object[] getCraftingRecipeAsArray(Object rec) {
@@ -66,5 +98,54 @@ public class RecipeUtil {
 
 		result[9] = output;
 		return result;
+	}
+
+	public static boolean canCraftRecipe(World world, ItemStack[] recipeItems, ItemStack recipeOutput, ItemStack[] availableItems) {
+		// Need at least one matched set
+		if (StackUtils.containsSets(recipeItems, availableItems, true, true) == 0)
+			return false;
+
+		// Check that it doesn't make a different recipe.
+		// For example:
+		// Wood Logs are all ore dictionary equivalent with each other,
+		// but an Oak Log shouldn't be able to make Ebony Wood Planks
+		// because it makes Oak Wood Planks using the same recipe.
+		// Strategy:
+		// Create a fake crafting inventory using items we have in availableItems
+		// in place of the ones in the saved crafting inventory.
+		// Check that the recipe it makes is the same as the currentRecipe.
+		InventoryCrafting crafting = new InventoryCrafting(DUMMY_CONTAINER, 3, 3);
+		ItemStack[] stockCopy = StackUtils.condenseStacks(availableItems);
+
+		for (int slot = 0; slot < recipeItems.length; slot++) {
+			ItemStack recipeStack = recipeItems[slot];
+			if (recipeStack == null)
+				continue;
+
+			// Use crafting equivalent (not oredict) items first
+			for (ItemStack stockStack : stockCopy) {
+				if (stockStack.stackSize > 0 && StackUtils.isCraftingEquivalent(recipeStack, stockStack, false, false)) {
+					ItemStack stack = new ItemStack(stockStack.getItem(), 1, stockStack.getItemDamage());
+					stockStack.stackSize--;
+					crafting.setInventorySlotContents(slot, stack);
+					break;
+				}
+			}
+
+			// Use oredict items if crafting equivalent items aren't available
+			if (crafting.getStackInSlot(slot) == null) {
+				for (ItemStack stockStack : stockCopy) {
+					if (stockStack.stackSize > 0 && StackUtils.isCraftingEquivalent(recipeStack, stockStack, true, true)) {
+						ItemStack stack = new ItemStack(stockStack.getItem(), 1, stockStack.getItemDamage());
+						stockStack.stackSize--;
+						crafting.setInventorySlotContents(slot, stack);
+						break;
+					}
+				}
+			}
+		}
+		ItemStack output = CraftingManager.getInstance().findMatchingRecipe(crafting, world);
+
+		return ItemStack.areItemStacksEqual(output, recipeOutput);
 	}
 }

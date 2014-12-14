@@ -43,10 +43,6 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 	}
 
 	@Override
-	protected void createInventory() {
-	}
-
-	@Override
 	protected void updateServerSide() {
 		if (worldObj.getTotalWorldTime() % 40 == 0)
 			dumpStash();

@@ -10,12 +10,15 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import buildcraft.api.recipes.BuildcraftRecipeRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
 import cpw.mods.fml.common.Optional;
+
 import forestry.core.config.Defaults;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.LiquidHelper;
-import net.minecraftforge.fluids.FluidStack;
+
+import buildcraft.api.recipes.BuildcraftRecipeRegistry;
 
 @Plugin(pluginID = "BC6|Recipes", name = "BuildCraft 6 Recipes", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
 public class PluginBuildCraftRecipes extends ForestryPlugin {
@@ -34,8 +37,8 @@ public class PluginBuildCraftRecipes extends ForestryPlugin {
 	@Override
 	protected void registerRecipes() {
 		// Add recipe for ethanol
-		FluidStack input = LiquidHelper.getLiquid(Defaults.LIQUID_BIOMASS, 4);
-		FluidStack output = LiquidHelper.getLiquid(Defaults.LIQUID_ETHANOL, 1);
+		FluidStack input = FluidRegistry.getFluidStack(Defaults.LIQUID_BIOMASS, 4);
+		FluidStack output = FluidRegistry.getFluidStack(Defaults.LIQUID_ETHANOL, 1);
 		BuildcraftRecipeRegistry.refinery.addRecipe("forestry:BiomassToEthanol", input, output, 100, 1);
 	}
 }

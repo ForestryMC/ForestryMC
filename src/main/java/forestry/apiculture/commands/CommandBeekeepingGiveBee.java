@@ -61,26 +61,46 @@ public class CommandBeekeepingGiveBee extends SubCommand {
 
 	@Override
 	public void processSubCommand(ICommandSender sender, String[] arguments) {
-		if (arguments.length < 3) {
+		if (arguments.length < 2) {
 			printHelp(sender);
 			return;
 		}
 
-		EnumBeeType beeType = getBeeType(arguments[0]);
+		IBeeGenome beeGenome = getBeeGenome(arguments[0]);
+		EnumBeeType beeType = getBeeType(arguments[1]);
 		if (beeType == EnumBeeType.NONE) {
 			printHelp(sender);
 			return;
 		}
 
-		EntityPlayer player = CommandHelpers.getPlayer(sender, arguments[1]);
+		EntityPlayer player;
+		if (arguments.length == 3) {
+			player = CommandHelpers.getPlayer(sender, arguments[2]);
+		} else {
+			player = CommandHelpers.getPlayer(sender, sender.getCommandSenderName());
+		}
+		if (player == null) {
+			printHelp(sender);
+			return;
+		}
 
-		String parameter = arguments[2];
+		IBee bee = PluginApiculture.beeInterface.getBee(player.worldObj, beeGenome);
 
+		if(beeType == EnumBeeType.QUEEN)
+			bee.mate(bee);
+
+		ItemStack beeStack = PluginApiculture.beeInterface.getMemberStack(bee, beeType.ordinal());
+		player.dropPlayerItemWithRandomChoice(beeStack, true);
+
+		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.beekeeping.give.given", player.getCommandSenderName(), bee.getGenome().getPrimary().getName(), beeType.getName());
+	}
+
+	private static IBeeGenome getBeeGenome(String speciesName) {
 		IAlleleBeeSpecies species = null;
 
 		for (String uid : AlleleManager.alleleRegistry.getRegisteredAlleles().keySet()) {
 
-			if (!uid.equals(parameter))
+			if (!uid.equals(speciesName))
 				continue;
 
 			if (AlleleManager.alleleRegistry.getAllele(uid) instanceof IAlleleBeeSpecies) {
@@ -91,7 +111,7 @@ public class CommandBeekeepingGiveBee extends SubCommand {
 
 		if (species == null) {
 			for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
-				if (allele instanceof IAlleleBeeSpecies && allele.getName().equals(parameter)) {
+				if (allele instanceof IAlleleBeeSpecies && allele.getName().equals(speciesName)) {
 					species = (IAlleleBeeSpecies) allele;
 					break;
 				}
@@ -99,36 +119,26 @@ public class CommandBeekeepingGiveBee extends SubCommand {
 		}
 
 		if (species == null)
-			throw new SpeciesNotFoundException(parameter);
+			throw new SpeciesNotFoundException(speciesName);
 
 		IAllele[] template = PluginApiculture.beeInterface.getTemplate(species.getUID());
 
 		if (template == null)
 			throw new TemplateNotFoundException(species);
 
-		IBeeGenome genome = PluginApiculture.beeInterface.templateAsGenome(template);
-
-		IBee bee = PluginApiculture.beeInterface.getBee(player.worldObj, genome);
-
-		if(beeType == EnumBeeType.QUEEN)
-			bee.mate(bee);
-
-		ItemStack beeStack = PluginApiculture.beeInterface.getMemberStack(bee, beeType.ordinal());
-		player.dropPlayerItemWithRandomChoice(beeStack, true);
-
-		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.beekeeping.give.given", player.getCommandSenderName(), template[0].getName(), beeType.getName());
+		return PluginApiculture.beeInterface.templateAsGenome(template);
 	}
 
 	@Override
 	public List<String> addTabCompletionOptions(ICommandSender sender, String[] parameters) {
 		if (parameters.length == 1) {
-			List<String> tabCompletion = CommandHelpers.getListOfStringsMatchingLastWord(parameters, beeTypeArr);
+			List<String> tabCompletion = CommandHelpers.getListOfStringsMatchingLastWord(parameters, getSpecies());
 			tabCompletion.add("help");
 			return tabCompletion;
 		} else if (parameters.length == 2) {
-			return CommandHelpers.getListOfStringsMatchingLastWord(parameters, CommandHelpers.getPlayers());
+			return CommandHelpers.getListOfStringsMatchingLastWord(parameters, beeTypeArr);
 		} else if (parameters.length == 3) {
-			return CommandHelpers.getListOfStringsMatchingLastWord(parameters, getSpecies());
+			return CommandHelpers.getListOfStringsMatchingLastWord(parameters, CommandHelpers.getPlayers());
 		}
 		return null;
 	}

@@ -33,10 +33,6 @@ public class TileValve extends TileFarm implements ILiquidTankContainer {
 		return true;
 	}
 
-	@Override
-	protected void createInventory() {
-	}
-
 	/* ILIQUIDTANKCONTAINER */
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {

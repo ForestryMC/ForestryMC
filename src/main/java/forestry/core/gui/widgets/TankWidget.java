@@ -61,10 +61,11 @@ public class TankWidget extends Widget {
 
 	@Override
 	public void draw(int startX, int startY) {
-		if (getTank() == null)
+		StandardTank tank = getTank();
+		if (tank == null)
 			return;
 
-		FluidStack contents = getTank().getFluid();
+		FluidStack contents = tank.getFluid();
 		if (contents == null || contents.amount <= 0 || contents.getFluid() == null)
 			return;
 		IIcon liquidIcon = contents.getFluid().getIcon(contents);

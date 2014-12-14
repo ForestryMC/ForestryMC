@@ -13,7 +13,6 @@ package forestry.core.gui;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.slots.SlotForestry;
 import forestry.core.utils.EnumAccess;
-import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -39,6 +38,7 @@ public class ContainerForestry extends Container {
 	 * Adds a slot to the container, shortcut for addSlotToContainer(slot).
 	 *
 	 * @param slot
+	 * @return 
 	 */
 	protected Slot addSlot(Slot slot) {
 		return addSlotToContainer(slot);
@@ -54,41 +54,41 @@ public class ContainerForestry extends Container {
 				return null;
 
 		Slot slot = slotIndex < 0 ? null : (Slot) this.inventorySlots.get(slotIndex);
-		if (slot instanceof SlotForestry) {
-			((SlotForestry) slot).onSlotClick(slotIndex, button, modifier, player);
-
+		if (slot instanceof SlotForestry)
 			if (((SlotForestry) slot).isPhantom())
 				return slotClickPhantom(slot, button, modifier, player);
-		}
 		return super.slotClick(slotIndex, button, modifier, player);
 	}
 
 	private ItemStack slotClickPhantom(Slot slot, int mouseButton, int modifier, EntityPlayer player) {
 		ItemStack stack = null;
 
-		if (mouseButton == 2) {
-			if (((SlotForestry) slot).canAdjustPhantom())
-				slot.putStack(null);
-		} else if (mouseButton == 0 || mouseButton == 1) {
-			InventoryPlayer playerInv = player.inventory;
-			slot.onSlotChanged();
-			ItemStack stackSlot = slot.getStack();
-			ItemStack stackHeld = playerInv.getItemStack();
+		ItemStack stackSlot = slot.getStack();
+		if (stackSlot != null)
+			stack = stackSlot.copy();
 
-			if (stackSlot != null)
-				stack = stackSlot.copy();
+		if (mouseButton == 2)
+			fillPhantomSlot(slot, null, mouseButton, modifier);
+		else if (mouseButton == 0 || mouseButton == 1) {
+			InventoryPlayer playerInv = player.inventory;
+
+			ItemStack stackHeld = playerInv.getItemStack();
 
 			if (stackSlot == null) {
 				if (stackHeld != null && slot.isItemValid(stackHeld))
 					fillPhantomSlot(slot, stackHeld, mouseButton, modifier);
-			} else if (stackHeld == null) {
+			} else if (stackHeld == null)
 				adjustPhantomSlot(slot, mouseButton, modifier);
-				slot.onPickupFromSlot(player, playerInv.getItemStack());
-			} else if (slot.isItemValid(stackHeld))
+			else if (slot.isItemValid(stackHeld))
 				if (StackUtils.isIdenticalItem(stackSlot, stackHeld))
 					adjustPhantomSlot(slot, mouseButton, modifier);
 				else
 					fillPhantomSlot(slot, stackHeld, mouseButton, modifier);
+		} else if (mouseButton == 5) {
+			InventoryPlayer playerInv = player.inventory;
+			ItemStack stackHeld = playerInv.getItemStack();
+			if (!slot.getHasStack())
+				fillPhantomSlot(slot, stackHeld, mouseButton, modifier);
 		}
 		return stack;
 	}
@@ -109,12 +109,20 @@ public class ContainerForestry extends Container {
 		stackSlot.stackSize = stackSize;
 
 		if (stackSlot.stackSize <= 0)
-			slot.putStack(null);
+			stackSlot = null;
+
+		slot.putStack(stackSlot);
 	}
 
 	protected void fillPhantomSlot(Slot slot, ItemStack stackHeld, int mouseButton, int modifier) {
 		if (!((SlotForestry) slot).canAdjustPhantom())
 			return;
+
+		if (stackHeld == null) {
+			slot.putStack(null);
+			return;
+		}
+
 		int stackSize = mouseButton == 0 ? stackHeld.stackSize : 1;
 		if (stackSize > slot.getSlotStackLimit())
 			stackSize = slot.getSlotStackLimit();

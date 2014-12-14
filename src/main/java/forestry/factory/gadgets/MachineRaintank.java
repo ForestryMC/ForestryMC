@@ -10,21 +10,6 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
-import forestry.api.core.BiomeHelper;
-import forestry.api.core.EnumErrorCode;
-import forestry.api.core.ForestryAPI;
-import forestry.core.config.Config;
-import forestry.core.config.Defaults;
-import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.gadgets.TileBase;
-import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.network.GuiId;
-import forestry.core.utils.Fluids;
-import forestry.core.inventory.InventoryAdapter;
-import forestry.core.utils.LiquidHelper;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -32,18 +17,40 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.biome.BiomeGenBase;
+
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
+import forestry.api.core.BiomeHelper;
+import forestry.api.core.EnumErrorCode;
+import forestry.api.core.ForestryAPI;
+import forestry.core.config.Config;
+import forestry.core.config.Defaults;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.TankManager;
+import forestry.core.fluids.tanks.FilteredTank;
+import forestry.core.gadgets.TileBase;
+import forestry.core.interfaces.ILiquidTankContainer;
+import forestry.core.network.GuiId;
+import forestry.core.utils.Fluids;
+<<<<<<< HEAD
+import forestry.core.inventory.InventoryAdapter;
+import forestry.core.utils.LiquidHelper;
+=======
+import forestry.core.utils.InventoryAdapter;
+>>>>>>> 5ea4770a2d5fef57cf52fb7c81f33671f8086740
+import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
+
 public class MachineRaintank extends TileBase implements ISidedInventory, ILiquidTankContainer {
 
 	/* CONSTANTS */
 	public static final short SLOT_RESOURCE = 0;
 	public static final short SLOT_PRODUCT = 1;
-	private static final FluidStack STACK_WATER = LiquidHelper.getLiquid(Defaults.LIQUID_WATER, Defaults.RAINTANK_AMOUNT_PER_UPDATE);
+	private static final FluidStack STACK_WATER = FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, Defaults.RAINTANK_AMOUNT_PER_UPDATE);
 
 	/* MEMBER */
 	public FilteredTank resourceTank;
@@ -132,7 +139,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 			tryToStartFillling();
 		else {
 			fillingTime--;
-			if (fillingTime <= 0 && LiquidHelper.fillContainers(this, inventory, SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.get()))
+			if (fillingTime <= 0 && FluidHelper.fillContainers(tankManager, inventory, SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.get()))
 				fillingTime = 0;
 		}
 	}
@@ -143,7 +150,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 
 	private void tryToStartFillling() {
 		// Nothing to do if no empty cans are available
-		if (!LiquidHelper.fillContainers(this, inventory, SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.get(), false))
+		if (!FluidHelper.fillContainers(tankManager, inventory, SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.get(), false))
 			return;
 
 		fillingTime = Defaults.RAINTANK_FILLING_TIME;
@@ -262,7 +269,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 		if (slotIndex != SLOT_RESOURCE)
 			return false;
 
-		return LiquidHelper.getEmptyContainer(itemstack, STACK_WATER) != null;
+		return FluidHelper.isFillableContainer(itemstack, STACK_WATER);
 	}
 
 	/* SMP GUI */

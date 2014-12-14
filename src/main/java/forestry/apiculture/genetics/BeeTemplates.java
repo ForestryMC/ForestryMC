@@ -582,6 +582,25 @@ public class BeeTemplates {
 		alleles[EnumBeeChromosome.SPECIES.ordinal()] = Allele.speciesMarshy;
 		return alleles;
 	}
+	
+	public static IAllele[] getMiryTemplate() {
+		IAllele[] alleles = getBoggyBranchTemplate();
+		alleles[EnumBeeChromosome.SPECIES.ordinal()] = Allele.speciesMiry;
+		alleles[EnumBeeChromosome.FERTILITY.ordinal()] = Allele.fertilityMaximum;
+		alleles[EnumBeeChromosome.TOLERANT_FLYER.ordinal()] = Allele.boolTrue;
+		alleles[EnumBeeChromosome.NOCTURNAL.ordinal()] = Allele.boolTrue;
+		return alleles;
+	}
+	
+	public static IAllele[] getBoggyTemplate() {
+		IAllele[] alleles = getBoggyBranchTemplate();
+		alleles[EnumBeeChromosome.SPECIES.ordinal()] = Allele.speciesBoggy;
+		alleles[EnumBeeChromosome.TOLERANT_FLYER.ordinal()] = Allele.boolTrue;
+		alleles[EnumBeeChromosome.NOCTURNAL.ordinal()] = Allele.boolTrue;
+		alleles[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectMycophilic;
+		alleles[EnumBeeChromosome.TERRITORY.ordinal()] = Allele.territoryLarger;
+		return alleles;		
+	}
 
 	/* MONASTIC BRANCH */
 	public static IAllele[] getMonasticBranchTemplate() {

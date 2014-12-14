@@ -18,6 +18,7 @@ import forestry.api.fuels.MoistenerFuel;
 import forestry.api.recipes.IMoistenerManager;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.gadgets.TileBase;
@@ -26,8 +27,12 @@ import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
+<<<<<<< HEAD
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
+=======
+import forestry.core.utils.InventoryAdapter;
+>>>>>>> 5ea4770a2d5fef57cf52fb7c81f33671f8086740
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,7 +43,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -204,13 +208,7 @@ public class MachineMoistener extends TileBase implements ISpecialInventory, ISi
 
 		// Check if we have suitable water container waiting in the item slot
 		if (inventory.getStackInSlot(SLOT_PRODUCT) != null) {
-			FluidContainerData container = LiquidHelper.getLiquidContainer(inventory.getStackInSlot(SLOT_PRODUCT));
-			if (container != null && resourceTank.accepts(container.fluid.getFluid())) {
-
-				inventory.setInventorySlotContents(SLOT_PRODUCT, StackUtils.replenishByContainer(this, inventory.getStackInSlot(SLOT_PRODUCT), container, resourceTank));
-				if (inventory.getStackInSlot(SLOT_PRODUCT).stackSize <= 0)
-					inventory.setInventorySlotContents(SLOT_PRODUCT, null);
-			}
+			FluidHelper.drainContainers(tankManager, inventory, SLOT_PRODUCT);
 		}
 
 		// Let's get to work
@@ -620,8 +618,8 @@ public class MachineMoistener extends TileBase implements ISpecialInventory, ISi
 	@Override
 	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
 
-		FluidContainerData container = LiquidHelper.getLiquidContainer(stack);
-		if (container != null && resourceTank.accepts(container.fluid.getFluid())) {
+		Fluid fluid = FluidHelper.getFluidInContainer(stack);
+		if (fluid != null && resourceTank.accepts(fluid)) {
 			return inventory.addStack(stack, SLOT_PRODUCT, 1, false, doAdd);
 		}
 

@@ -11,6 +11,7 @@
 package forestry.core.utils;
 
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 public class FluidStackMap<T> extends StackMap<FluidStack, T> {
@@ -38,9 +39,9 @@ public class FluidStackMap<T> extends StackMap<FluidStack, T> {
 		if (key instanceof FluidStack)
 			return (FluidStack) key;
 		if (key instanceof Fluid)
-			return LiquidHelper.getLiquid(((Fluid) key).getName(), 1);
+			return FluidRegistry.getFluidStack(((Fluid) key).getName(), 1);
 		if (key instanceof String)
-			return LiquidHelper.getLiquid((String) key, 1);
+			return FluidRegistry.getFluidStack((String) key, 1);
 		return null;
 	}
 

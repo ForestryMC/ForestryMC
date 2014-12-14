@@ -10,12 +10,30 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+
+import forestry.api.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.recipes.IStillManager;
-import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
@@ -25,26 +43,14 @@ import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
+<<<<<<< HEAD
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.LiquidHelper;
+=======
+import forestry.core.utils.InventoryAdapter;
+>>>>>>> 5ea4770a2d5fef57cf52fb7c81f33671f8086740
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 
 public class MachineStill extends TilePowered implements ISpecialInventory, ISidedInventory, ILiquidTankContainer {
 
@@ -177,31 +183,21 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 	@Override
 	public void updateServerSide() {
 
+		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
+			return;
+
 		// Check if we have suitable items waiting in the item slot
 		if (inventory.getStackInSlot(SLOT_CAN) != null) {
-			FluidContainerData container = LiquidHelper.getLiquidContainer(inventory.getStackInSlot(SLOT_CAN));
-
-			if (container != null && resourceTank.accepts(container.fluid.getFluid())) {
-
-				inventory.setInventorySlotContents(SLOT_CAN, StackUtils.replenishByContainer(this, inventory.getStackInSlot(SLOT_CAN), container, resourceTank));
-				if (inventory.getStackInSlot(SLOT_CAN).stackSize <= 0)
-					inventory.setInventorySlotContents(SLOT_CAN, null);
-
-			}
+			FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
 		}
 
 		// Can product liquid if possible
 		if (inventory.getStackInSlot(SLOT_RESOURCE) != null) {
-			FluidContainerData container = LiquidHelper.getEmptyContainer(inventory.getStackInSlot(SLOT_RESOURCE), productTank.getFluid());
-			if (container != null) {
-				inventory.setInventorySlotContents(SLOT_PRODUCT, bottleIntoContainer(inventory.getStackInSlot(SLOT_RESOURCE), inventory.getStackInSlot(SLOT_PRODUCT), container, productTank));
-				if (inventory.getStackInSlot(SLOT_RESOURCE).stackSize <= 0)
-					inventory.setInventorySlotContents(SLOT_RESOURCE, null);
+			FluidStack fluidStack = productTank.getFluid();
+			if (fluidStack != null) {
+				FluidHelper.fillContainers(tankManager, inventory, SLOT_RESOURCE, SLOT_PRODUCT, fluidStack.getFluid());
 			}
 		}
-
-		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
-			return;
 
 		checkRecipe();
 		if (getErrorState() == EnumErrorCode.NORECIPE && currentRecipe != null)
@@ -335,10 +331,10 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
 		int inventorySlot;
 
-		FluidContainerData container = LiquidHelper.getLiquidContainer(stack);
-		if (container != null && resourceTank.accepts(container.fluid.getFluid()))
+		Fluid fluid = FluidHelper.getFluidInContainer(stack);
+		if (fluid != null && resourceTank.accepts(fluid))
 			inventorySlot = SLOT_CAN;
-		else if (LiquidHelper.isEmptyContainer(stack))
+		else if (FluidHelper.isEmptyContainer(stack))
 			inventorySlot = SLOT_RESOURCE;
 		else
 			return 0;
@@ -447,11 +443,11 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 			return false;
 
 		if(slotIndex == SLOT_RESOURCE)
-			return LiquidHelper.isEmptyContainer(itemstack);
+			return FluidHelper.isEmptyContainer(itemstack);
 
 		if(slotIndex == SLOT_CAN) {
-			FluidContainerData container = LiquidHelper.getLiquidContainer(itemstack);
-			return container != null && resourceTank.accepts(container.fluid.getFluid());
+			Fluid fluid = FluidHelper.getFluidInContainer(itemstack);
+			return fluid != null && resourceTank.accepts(fluid);
 		}
 
 		return false;

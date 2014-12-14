@@ -70,7 +70,7 @@ public abstract class StructureLogic implements IStructureLogic {
 
 		EnumStructureState state = EnumStructureState.INDETERMINATE;
 
-		boolean rotate = false;
+		boolean rotate;
 		for (int i = 0; i < schematas.length; i++) {
 			if (!schematas[i].isEnabled())
 				continue;
@@ -87,7 +87,6 @@ public abstract class StructureLogic implements IStructureLogic {
 				isRotated = rotate;
 				break;
 			}
-
 		}
 
 		// Structure state is indeterminate, possibly caused by chunkloading. Remain calm, do nothing.

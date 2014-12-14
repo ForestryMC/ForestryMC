@@ -10,6 +10,29 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.WeightedRandomChestContent;
+
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.oredict.OreDictionary;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
@@ -20,6 +43,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;
@@ -37,7 +61,6 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.recipes.RecipeManagers;
-import forestry.apiculture.commands.CommandBeekeeping;
 import forestry.apiculture.FlowerProviderCacti;
 import forestry.apiculture.FlowerProviderEnd;
 import forestry.apiculture.FlowerProviderGourd;
@@ -50,6 +73,7 @@ import forestry.apiculture.GuiHandlerApiculture;
 import forestry.apiculture.PacketHandlerApiculture;
 import forestry.apiculture.SaveEventHandlerApiculture;
 import forestry.apiculture.VillageHandlerApiculture;
+import forestry.apiculture.commands.CommandBeekeeping;
 import forestry.apiculture.gadgets.BlockAlveary;
 import forestry.apiculture.gadgets.BlockBeehives;
 import forestry.apiculture.gadgets.BlockCandle;
@@ -71,6 +95,8 @@ import forestry.apiculture.genetics.AlleleBeeSpecies;
 import forestry.apiculture.genetics.AlleleEffectAggressive;
 import forestry.apiculture.genetics.AlleleEffectCreeper;
 import forestry.apiculture.genetics.AlleleEffectExploration;
+import forestry.apiculture.genetics.AlleleEffectFertile;
+import forestry.apiculture.genetics.AlleleEffectFungification;
 import forestry.apiculture.genetics.AlleleEffectGlacial;
 import forestry.apiculture.genetics.AlleleEffectHeroic;
 import forestry.apiculture.genetics.AlleleEffectIgnition;
@@ -82,7 +108,6 @@ import forestry.apiculture.genetics.AlleleEffectRadioactive;
 import forestry.apiculture.genetics.AlleleEffectRepulsion;
 import forestry.apiculture.genetics.AlleleEffectResurrection;
 import forestry.apiculture.genetics.AlleleEffectSnowing;
-import forestry.apiculture.genetics.AlleleEffectFertile;
 import forestry.apiculture.genetics.AlleleFlowers;
 import forestry.apiculture.genetics.Bee;
 import forestry.apiculture.genetics.BeeHelper;
@@ -105,7 +130,6 @@ import forestry.apiculture.items.ItemImprinter;
 import forestry.apiculture.items.ItemWaxCast;
 import forestry.apiculture.proxy.ProxyApiculture;
 import forestry.apiculture.trigger.ApicultureTriggers;
-import forestry.apiculture.trigger.TriggerNoFrames;
 import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveEnd;
 import forestry.apiculture.worldgen.HiveForest;
@@ -136,30 +160,7 @@ import forestry.core.items.ItemOverlay.OverlayInfo;
 import forestry.core.items.ItemScoop;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.EntitySnowFX;
-import forestry.core.triggers.Trigger;
-import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.ShapedRecipeCustom;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.command.ICommand;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.WeightedRandomChestContent;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.ChestGenHooks;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.OreDictionary;
-
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Plugin(pluginID = "Apiculture", name = "Apiculture", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.apiculture.description")
 public class PluginApiculture extends ForestryPlugin {
@@ -314,11 +315,6 @@ public class PluginApiculture extends ForestryPlugin {
 		BeeManager.inducers.put(ForestryItem.royalJelly.getItemStack(), 10);
 
 		registerTemplates();
-
-		definitionAnalyzer.register();
-		definitionApiary.register();
-		definitionBeehouse.register();
-		definitionChest.register();
 
 		GameRegistry.registerTileEntity(TileAlvearyPlain.class, "forestry.Alveary");
 		GameRegistry.registerTileEntity(TileSwarm.class, "forestry.Swarm");
@@ -567,13 +563,13 @@ public class PluginApiculture extends ForestryPlugin {
 				'#', ForestryItem.propolis.getItemStack(1, 2));
 
 		// / CANDLES
-		RecipeManagers.carpenterManager.addRecipe(30, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 600), null, ForestryBlock.candle.getItemStack(24),
+		RecipeManagers.carpenterManager.addRecipe(30, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 600), null, ForestryBlock.candle.getItemStack(24),
 				" X ",
 				"###",
 				"###",
 				'#', ForestryItem.beeswax,
 				'X', Items.string);
-		RecipeManagers.carpenterManager.addRecipe(10, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 200), null, ForestryBlock.candle.getItemStack(6),
+		RecipeManagers.carpenterManager.addRecipe(10, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 200), null, ForestryBlock.candle.getItemStack(6),
 				"#X#",
 				'#', ForestryItem.beeswax,
 				'X', ForestryItem.craftingMaterial.getItemStack(1, 2));
@@ -643,20 +639,20 @@ public class PluginApiculture extends ForestryPlugin {
 				'W', ForestryItem.craftingMaterial.getItemStack(1, 3));
 
 		// / SQUEEZER
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.honeyDrop.getItemStack()}, LiquidHelper.getLiquid(Defaults.LIQUID_HONEY, Defaults.FLUID_PER_HONEY_DROP),
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.honeyDrop.getItemStack()}, FluidRegistry.getFluidStack(Defaults.LIQUID_HONEY, Defaults.FLUID_PER_HONEY_DROP),
 				ForestryItem.propolis.getItemStack(), 5);
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.honeydew.getItemStack()}, LiquidHelper.getLiquid(Defaults.LIQUID_HONEY, Defaults.FLUID_PER_HONEY_DROP));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.sand)}, LiquidHelper.getLiquid(Defaults.LIQUID_LAVA, 2000));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.dirt)}, LiquidHelper.getLiquid(Defaults.LIQUID_LAVA, 1600));
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.honeydew.getItemStack()}, FluidRegistry.getFluidStack(Defaults.LIQUID_HONEY, Defaults.FLUID_PER_HONEY_DROP));
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.sand)}, FluidRegistry.getFluidStack(Defaults.LIQUID_LAVA, 2000));
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.dirt)}, FluidRegistry.getFluidStack(Defaults.LIQUID_LAVA, 1600));
 
 		// / CARPENTER
-		RecipeManagers.carpenterManager.addRecipe(100, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 2000), null, ForestryItem.beealyzer.getItemStack(),
+		RecipeManagers.carpenterManager.addRecipe(100, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 2000), null, ForestryItem.beealyzer.getItemStack(),
 				"X#X", "X#X", "RDR",
 				'#', Blocks.glass_pane,
 				'X', "ingotTin",
 				'R', Items.redstone,
 				'D', Items.diamond);
-		RecipeManagers.carpenterManager.addRecipe(50, LiquidHelper.getLiquid(Defaults.LIQUID_HONEY, 500), null, ForestryItem.craftingMaterial.getItemStack(1, 6),
+		RecipeManagers.carpenterManager.addRecipe(50, FluidRegistry.getFluidStack(Defaults.LIQUID_HONEY, 500), null, ForestryItem.craftingMaterial.getItemStack(1, 6),
 				" J ", "###", "WPW",
 				'#', "plankWood",
 				'J', ForestryItem.royalJelly,
@@ -711,11 +707,16 @@ public class PluginApiculture extends ForestryPlugin {
 			ForestryItem.craftingMaterial.getItemStack(1, 2), ForestryItem.propolis.getItemStack()}, new int[]{60, 10});
 
 		// / FERMENTER
-		RecipeManagers.fermenterManager.addRecipe(ForestryItem.honeydew.getItemStack(), 500, 1.0f, LiquidHelper.getLiquid(Defaults.LIQUID_MEAD, 1),
-				LiquidHelper.getLiquid(Defaults.LIQUID_HONEY, 1));
+		RecipeManagers.fermenterManager.addRecipe(ForestryItem.honeydew.getItemStack(), 500, 1.0f, FluidRegistry.getFluidStack(Defaults.LIQUID_MEAD, 1),
+				FluidRegistry.getFluidStack(Defaults.LIQUID_HONEY, 1));
 
 		// ANALYZER
 		definitionAnalyzer.recipes = createAlyzerRecipes(ForestryBlock.core.block(), Defaults.DEFINITION_ANALYZER_META);
+
+		definitionAnalyzer.register();
+		definitionApiary.register();
+		definitionBeehouse.register();
+		definitionChest.register();
 	}
 
 	public IRecipe[] createAlyzerRecipes(Block block, int meta) {
@@ -1037,8 +1038,10 @@ public class PluginApiculture extends ForestryPlugin {
 		// Boggy branch
 		Allele.speciesMarshy = new AlleleBeeSpecies("speciesMarshy", true, "bees.species.marshy", boggy, "adorasti", 0x546626, 0xffdc16).addProduct(
 				ForestryItem.beeComb.getItemStack(1, 15), 30).setHumidity(EnumHumidity.DAMP);
-		// 44 speciesMiry
-		// 45 speciesBoggy
+		Allele.speciesMiry = new AlleleBeeSpecies("speciesMiry", true, "bees.species.miry", boggy, "humidium", 0x92AF42, 0xffdc16).addProduct(
+				ForestryItem.beeComb.getItemStack(1, 15), 36).setHumidity(EnumHumidity.DAMP).setIsSecret();
+		Allele.speciesBoggy = new AlleleBeeSpecies("speciesBoggy", true, "bees.species.boggy", boggy, "paluster", 0x698948, 0xffdc16).addProduct(
+				ForestryItem.beeComb.getItemStack(1, 15), 39).addSpecialty(ForestryItem.peat.getItemStack(1), 8).setHumidity(EnumHumidity.DAMP).setIsSecret();		
 
 		// Monastic branch
 		Allele.speciesMonastic = new AlleleBeeSpecies("speciesMonastic", false, "bees.species.monastic", monastic, "monachus", 0x42371c, 0xfff7b6)
@@ -1079,6 +1082,7 @@ public class PluginApiculture extends ForestryPlugin {
 		Allele.effectResurrection = new AlleleEffectResurrection("effectResurrection", "resurrection", AlleleEffectResurrection.getResurrectionList());
 		Allele.effectRepulsion = new AlleleEffectRepulsion("effectRepulsion");
 		Allele.effectFertile = new AlleleEffectFertile("effectFertile");
+		Allele.effectMycophilic = new AlleleEffectFungification("effectMycophilic");
 
 	}
 
@@ -1168,6 +1172,12 @@ public class PluginApiculture extends ForestryPlugin {
 				.restrictBiomeType(BiomeDictionary.Type.PLAINS).enableStrictBiomeCheck();
 		new BeeMutation(Allele.speciesFarmerly, Allele.speciesIndustrious, BeeTemplates.getAgrarianTemplate(), 6)
 				.restrictBiomeType(BiomeDictionary.Type.PLAINS).enableStrictBiomeCheck();
+		
+		// Boggy branch
+		new BeeMutation(Allele.speciesMarshy, Allele.speciesNoble, BeeTemplates.getMiryTemplate(), 15)
+				.setTemperatureRainfall(0.75f, 0.94f, 0.75f, 2.0f);
+		new BeeMutation(Allele.speciesMarshy, Allele.speciesMiry, BeeTemplates.getBoggyTemplate(), 9)
+				.setTemperatureRainfall(0.75f, 0.94f, 0.75f, 2.0f);
 
 		// Monastic branch
 		BeeTemplates.secludedA = new BeeMutation(Allele.speciesMonastic, Allele.speciesAustere, BeeTemplates.getSecludedTemplate(), 12);
@@ -1225,6 +1235,8 @@ public class PluginApiculture extends ForestryPlugin {
 		beeInterface.registerTemplate(BeeTemplates.getTipsyTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getTrickyTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getMarshyTemplate());
+		beeInterface.registerTemplate(BeeTemplates.getMiryTemplate());
+		beeInterface.registerTemplate(BeeTemplates.getBoggyTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getMonasticTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getSecludedTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getHermiticTemplate());

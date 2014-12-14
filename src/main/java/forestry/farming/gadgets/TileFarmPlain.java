@@ -19,8 +19,6 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 
-import forestry.api.core.BiomeHelper;
-import forestry.core.utils.Utils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -31,14 +29,13 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitBoard;
+import forestry.api.core.BiomeHelper;
+import forestry.api.core.EnumErrorCode;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.farming.ICrop;
@@ -47,29 +44,27 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmListener;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmable;
-import forestry.api.core.EnumErrorCode;
 import forestry.core.GameMode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.TankManager;
+import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.interfaces.IClimatised;
 import forestry.core.interfaces.IHintSource;
 import forestry.core.interfaces.ISocketable;
-import forestry.core.interfaces.ILiquidTankContainer;
+import forestry.core.inventory.InventoryAdapter;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.DelayTimer;
-import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.fluids.TankManager;
-import forestry.core.inventory.InventoryAdapter;
-import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
-import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.utils.Utils;
 import forestry.core.utils.Vect;
 import forestry.farming.FarmTarget;
 import forestry.farming.logic.FarmLogicArboreal;
 import forestry.plugins.PluginFarming;
 
-public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable, IClimatised, IHintSource, ILiquidTankContainer {
+public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable, IClimatised, IHintSource {
 
 	public static final int SLOT_RESOURCES_1 = 0;
 	public static final int SLOT_GERMLINGS_1 = 6;
@@ -82,9 +77,9 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	public static final int SLOT_COUNT = 22;
 
-	public static final int DELAY_HYDRATION = 100;
-	public static final float RAINFALL_MODIFIER_CAP = 15f;
-	public static final int BUFFER_FERTILIZER = 200;
+	private static final int DELAY_HYDRATION = 100;
+	private static final float RAINFALL_MODIFIER_CAP = 15f;
+	private static final int BUFFER_FERTILIZER = 200;
 
 	private IFarmLogic[] farmLogics = new IFarmLogic[4];
 
@@ -94,8 +89,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
 
-	private final FilteredTank liquidTank;
-	private final TankManager tankManager;
+	private TankManager tankManager;
 
 	private IFarmLogic harvestProvider; // The farm logic which supplied the pending crops.
 	private final Stack<ICrop> pendingCrops = new Stack<ICrop>();
@@ -112,8 +106,6 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	public TileFarmPlain() {
 		fertilizerValue = GameMode.getGameMode().getIntegerSetting("farms.fertilizer.value");
-		liquidTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
-		tankManager = new TankManager(liquidTank);
 	}
 
 	@Override
@@ -134,7 +126,8 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 		refreshFarmLogics();
 
-		tankManager.readTanksFromNBT(nbttagcompound);
+		if (tankManager != null)
+			tankManager.readTanksFromNBT(nbttagcompound);
 	}
 
 	@Override
@@ -146,15 +139,11 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		nbttagcompound.setInteger("HydrationDelay", hydrationDelay);
 		nbttagcompound.setInteger("TicksSinceRainfall", ticksSinceRainfall);
 
-		tankManager.writeTanksToNBT(nbttagcompound);
+		if (tankManager != null)
+			tankManager.writeTanksToNBT(nbttagcompound);
 	}
 
 	/* UPDATING */
-	@Override
-	public void initialize() {
-		setBiomeInformation();
-	}
-
 	@Override
 	protected void updateServerSide() {
 		super.updateServerSide();
@@ -178,13 +167,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 		// Check if we have suitable items waiting in the item slot
 		if (inventory.getStackInSlot(SLOT_CAN) != null) {
-			FluidContainerData container = LiquidHelper.getLiquidContainer(inventory.getStackInSlot(SLOT_CAN));
-			if (container != null && liquidTank.accepts(container.fluid.getFluid())) {
-
-				inventory.setInventorySlotContents(SLOT_CAN, StackUtils.replenishByContainer(this, inventory.getStackInSlot(SLOT_CAN), container, liquidTank));
-				if (inventory.getStackInSlot(SLOT_CAN).stackSize <= 0)
-					inventory.setInventorySlotContents(SLOT_CAN, null);
-			}
+			FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
 		}
 
 	}
@@ -366,16 +349,14 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		}
 	}
 
-	@Override
 	protected void createInventory() {
 		inventory = new TileInventoryAdapter(this, SLOT_COUNT, "Items");
+		FilteredTank liquidTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
+		tankManager = new TankManager(liquidTank);
 	}
 
 	@Override
 	public boolean doWork() {
-
-		setBiomeInformation();
-
 		// System.out.println("Starting doWork()");
 		if (targets == null) {
 			createTargets();
@@ -453,7 +434,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 						else
 							hasFertilizer = true;
 
-						FluidStack liquid = LiquidHelper.getLiquid(Defaults.LIQUID_WATER, logic.getWaterConsumption(getHydrationModifier()));
+						FluidStack liquid = FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, logic.getWaterConsumption(getHydrationModifier()));
 						if (liquid.amount > 0 && !hasLiquid(liquid))
 							continue;
 						else
@@ -576,7 +557,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		}
 
 		// Check water
-		FluidStack liquid = LiquidHelper.getLiquid(Defaults.LIQUID_WATER, provider.getWaterConsumption(getHydrationModifier()));
+		FluidStack liquid = FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, provider.getWaterConsumption(getHydrationModifier()));
 		if (liquid.amount > 0 && !hasLiquid(liquid)) {
 			setErrorState(EnumErrorCode.NOLIQUID);
 			return false;
@@ -681,18 +662,9 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	public void makeMaster() {
 		super.makeMaster();
 		refreshFarmLogics();
+		createInventory();
 	}
 
-	@Override
-	public void onStructureReset() {
-		super.onStructureReset();
-	}
-
-	public StandardTank[] getTanks() {
-		return new StandardTank[] {liquidTank};
-	}
-
-	@Override
 	public TankManager getTankManager() {
 		return tankManager;
 	}
@@ -786,18 +758,18 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	@Override
 	public void removeResources(ItemStack[] resources) {
-		EntityPlayer player = Proxies.common.getPlayer(worldObj, owner);
+		EntityPlayer player = Proxies.common.getPlayer(worldObj, getOwnerProfile());
 		inventory.removeSets(1, resources, SLOT_RESOURCES_1, SLOT_COUNT_RESERVOIRS, player, false, true, true);
 	}
 
 	@Override
 	public boolean hasLiquid(FluidStack liquid) {
-		return liquidTank.getFluidAmount() >= liquid.amount;
+		return tankManager.get(0).getFluidAmount() >= liquid.amount;
 	}
 
 	@Override
 	public void removeLiquid(FluidStack liquid) {
-		liquidTank.drain(liquid.amount, true);
+		tankManager.drain(liquid, true);
 	}
 
 	public boolean hasGermlings(ItemStack[] germlings) {
@@ -813,7 +785,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			if (!germling.isGermling(inventory.getStackInSlot(i)))
 				continue;
 
-			EntityPlayer player = Proxies.common.getPlayer(world, owner);
+			EntityPlayer player = Proxies.common.getPlayer(world, getOwnerProfile());
 			if (!germling.plantSaplingAt(player, inventory.getStackInSlot(i), world, x, y, z))
 				continue;
 
@@ -877,9 +849,9 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		return StackUtils.isIdenticalItem(PluginFarming.farmFertilizer, itemstack);
 	}
 
-	int[] coords;
-	int[] offset;
-	int[] area;
+	private int[] coords;
+	private int[] offset;
+	private int[] area;
 
 	@Override
 	public int[] getCoords() {
@@ -988,36 +960,5 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	@Override
 	public boolean isOwnable() {
 		return true;
-	}
-
-	/* ILiquidTankContainer */
-	@Override
-	public int fill(ForgeDirection direction, FluidStack resource, boolean doFill) {
-		return tankManager.fill(direction, resource, doFill);
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return tankManager.drain(from, resource, doDrain);
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return tankManager.drain(from, maxDrain, doDrain);
-	}
-
-	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return tankManager.canFill(from, fluid);
-	}
-
-	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return tankManager.canDrain(from, fluid);
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return tankManager.getTankInfo(from);
 	}
 }

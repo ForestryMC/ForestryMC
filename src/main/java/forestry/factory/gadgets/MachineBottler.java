@@ -17,6 +17,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.ICraftingProvider;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gadgets.TileBase;
@@ -226,13 +227,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		
 		// Check if we have suitable items waiting in the item slot
 		if (inventory.getStackInSlot(SLOT_CAN) != null) {
-			FluidContainerData container = LiquidHelper.getLiquidContainer(inventory.getStackInSlot(SLOT_CAN));
-			if (container != null && RecipeManager.isInput(container.fluid)) {
-
-				inventory.setInventorySlotContents(SLOT_CAN, StackUtils.replenishByContainer(this, inventory.getStackInSlot(SLOT_CAN), container, resourceTank));
-				if (inventory.getStackInSlot(SLOT_CAN).stackSize <= 0)
-					inventory.setInventorySlotContents(SLOT_CAN, null);
-			}
+			FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
 		}
 
 		checkRecipe();
@@ -444,9 +439,15 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		if (slotIndex == SLOT_RESOURCE)
 			return FluidContainerRegistry.isEmptyContainer(itemstack);
 
+<<<<<<< HEAD
 		if (slotIndex == SLOT_CAN) {
 			FluidContainerData container = LiquidHelper.getLiquidContainer(itemstack);
 			return container != null && RecipeManager.isInput(container.fluid);
+=======
+		if(slotIndex == SLOT_CAN) {
+			FluidStack fluidStack = FluidHelper.getFluidStackInContainer(itemstack);
+			return RecipeManager.isInput(fluidStack);
+>>>>>>> 5ea4770a2d5fef57cf52fb7c81f33671f8086740
 		}
 
 		return false;

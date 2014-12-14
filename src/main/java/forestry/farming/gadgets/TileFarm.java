@@ -228,19 +228,21 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	/* INVENTORY MANAGMENT */
 	protected TileInventoryAdapter inventory;
 
-	protected abstract void createInventory();
-
 	/* TILEFORESTRY */
 	@Override
 	public PacketPayload getPacketPayload() {
-		PacketPayload payload = new PacketPayload(0, 1);
+		PacketPayload payload = new PacketPayload(0, 2);
 		payload.shortPayload[0] = (short) farmBlock.ordinal();
+		payload.shortPayload[1] = (short) (isMaster() ? 1 : 0);
 		return payload;
 	}
 
 	@Override
 	public void fromPacketPayload(PacketPayload payload) {
 		EnumFarmBlock farmType = EnumFarmBlock.values()[payload.shortPayload[0]];
+		if (payload.shortPayload[1] > 0)
+			makeMaster();
+
 		if (this.farmBlock != farmType) {
 			this.farmBlock = farmType;
 			worldObj.func_147479_m(xCoord, yCoord, zCoord);
@@ -267,9 +269,6 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	public void makeMaster() {
 		setCentralTE(null);
 		this.isMaster = true;
-
-		if (inventory == null)
-			createInventory();
 	}
 
 	@Override
@@ -284,22 +283,19 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	@Override
 	public ITileStructure getCentralTE() {
 
-		if (!isIntegratedIntoStructure() || !hasMaster())
+		if (!isIntegratedIntoStructure())
 			return null;
 
-		if (!isMaster) {
-			TileEntity tile = worldObj.getTileEntity(masterX, masterY, masterZ);
-			if (tile instanceof ITileStructure) {
-				ITileStructure master = (ITileStructure) worldObj.getTileEntity(masterX, masterY, masterZ);
-				if (master.isMaster())
-					return master;
-				else
-					return null;
-			} else
-				return null;
-		} else
+		if (isMaster)
 			return this;
 
+		TileEntity tile = worldObj.getTileEntity(masterX, masterY, masterZ);
+		if (tile instanceof ITileStructure) {
+			ITileStructure master = (ITileStructure)tile;
+			if (master.isMaster())
+				return master;
+		}
+		return null;
 	}
 
 	private boolean isSameTile(TileEntity tile) {
@@ -347,11 +343,5 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 
 	@Override
 	public void removeListener(IFarmListener listener) {
-	}
-
-	/* INTERACTION */
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return Utils.isUseableByPlayer(player, this, worldObj, xCoord, yCoord, zCoord);
 	}
 }

@@ -11,8 +11,6 @@
 package forestry.apiculture.worldgen;
 
 import forestry.api.apiculture.hives.HiveGround;
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
 import forestry.core.config.ForestryBlock;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.BiomeGenBase;

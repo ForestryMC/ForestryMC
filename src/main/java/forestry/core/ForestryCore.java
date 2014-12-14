@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core;
 
+import com.google.common.collect.ImmutableList;
+
 import java.io.File;
 
 import net.minecraft.init.Blocks;
@@ -17,14 +19,13 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.FluidRegistry;
+
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-
-import net.minecraftforge.common.MinecraftForge;
-
-import com.google.common.collect.ImmutableList;
 
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.core.ForestryAPI;
@@ -89,17 +90,17 @@ public class ForestryCore {
 				Defaults.ENGINE_COPPER_FUEL_VALUE_PEAT, Defaults.ENGINE_COPPER_CYCLE_DURATION_PEAT));
 		FuelManager.copperEngineFuel.put(ForestryItem.bituminousPeat.getItemStack(), new EngineCopperFuel(ForestryItem.bituminousPeat.getItemStack(),
 				Defaults.ENGINE_COPPER_FUEL_VALUE_BITUMINOUS_PEAT, Defaults.ENGINE_COPPER_CYCLE_DURATION_BITUMINOUS_PEAT));
-		FuelManager.bronzeEngineFuel.put(LiquidHelper.getFluid(Defaults.LIQUID_BIOMASS), new EngineBronzeFuel(LiquidHelper.getFluid(Defaults.LIQUID_BIOMASS),
+		FuelManager.bronzeEngineFuel.put(FluidRegistry.getFluid(Defaults.LIQUID_BIOMASS), new EngineBronzeFuel(FluidRegistry.getFluid(Defaults.LIQUID_BIOMASS),
 				Defaults.ENGINE_FUEL_VALUE_BIOMASS, (int) (Defaults.ENGINE_CYCLE_DURATION_BIOMASS * GameMode.getGameMode().getFloatSetting("fuel.biomass.biogas")), 1));
-		FuelManager.bronzeEngineFuel.put(LiquidHelper.getFluid(Defaults.LIQUID_WATER), new EngineBronzeFuel(LiquidHelper.getFluid(Defaults.LIQUID_WATER),
+		FuelManager.bronzeEngineFuel.put(FluidRegistry.getFluid(Defaults.LIQUID_WATER), new EngineBronzeFuel(FluidRegistry.getFluid(Defaults.LIQUID_WATER),
 				Defaults.ENGINE_FUEL_VALUE_WATER, Defaults.ENGINE_CYCLE_DURATION_WATER, 3));
-		FuelManager.bronzeEngineFuel.put(LiquidHelper.getFluid(Defaults.LIQUID_MILK), new EngineBronzeFuel(LiquidHelper.getFluid(Defaults.LIQUID_MILK),
+		FuelManager.bronzeEngineFuel.put(FluidRegistry.getFluid(Defaults.LIQUID_MILK), new EngineBronzeFuel(FluidRegistry.getFluid(Defaults.LIQUID_MILK),
 				Defaults.ENGINE_FUEL_VALUE_MILK, Defaults.ENGINE_CYCLE_DURATION_MILK, 3));
-		FuelManager.bronzeEngineFuel.put(LiquidHelper.getFluid(Defaults.LIQUID_SEEDOIL), new EngineBronzeFuel(LiquidHelper.getFluid(Defaults.LIQUID_SEEDOIL),
+		FuelManager.bronzeEngineFuel.put(FluidRegistry.getFluid(Defaults.LIQUID_SEEDOIL), new EngineBronzeFuel(FluidRegistry.getFluid(Defaults.LIQUID_SEEDOIL),
 				Defaults.ENGINE_FUEL_VALUE_SEED_OIL, Defaults.ENGINE_CYCLE_DURATION_SEED_OIL, 1));
-		FuelManager.bronzeEngineFuel.put(LiquidHelper.getFluid(Defaults.LIQUID_HONEY), new EngineBronzeFuel(LiquidHelper.getFluid(Defaults.LIQUID_HONEY),
+		FuelManager.bronzeEngineFuel.put(FluidRegistry.getFluid(Defaults.LIQUID_HONEY), new EngineBronzeFuel(FluidRegistry.getFluid(Defaults.LIQUID_HONEY),
 				Defaults.ENGINE_FUEL_VALUE_HONEY, Defaults.ENGINE_CYCLE_DURATION_HONEY, 1));
-		FuelManager.bronzeEngineFuel.put(LiquidHelper.getFluid(Defaults.LIQUID_JUICE), new EngineBronzeFuel(LiquidHelper.getFluid(Defaults.LIQUID_JUICE),
+		FuelManager.bronzeEngineFuel.put(FluidRegistry.getFluid(Defaults.LIQUID_JUICE), new EngineBronzeFuel(FluidRegistry.getFluid(Defaults.LIQUID_JUICE),
 				Defaults.ENGINE_FUEL_VALUE_JUICE, Defaults.ENGINE_CYCLE_DURATION_JUICE, 1));
 
 		// Set rain substrates

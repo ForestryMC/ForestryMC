@@ -22,6 +22,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 public class GuiWorktable extends GuiForestryTitled<TileWorktable> {
@@ -29,14 +30,16 @@ public class GuiWorktable extends GuiForestryTitled<TileWorktable> {
 	private class MemorizedSlot extends Widget {
 
 		private final int slotNumber;
+		private final World world;
 
-		public MemorizedSlot(WidgetManager manager, int xPos, int yPos, int slot) {
+		public MemorizedSlot(World world, WidgetManager manager, int xPos, int yPos, int slot) {
 			super(manager, xPos, yPos);
 			this.slotNumber = slot;
+			this.world = world;
 		}
 
 		private ItemStack getOutputStack() {
-			return worktable.getMemory().getRecipeOutput(slotNumber);
+			return worktable.getMemory().getRecipeOutput(world, slotNumber);
 		}
 
 		@Override
@@ -111,7 +114,7 @@ public class GuiWorktable extends GuiForestryTitled<TileWorktable> {
 			int yPos = 20 + (y * spacing);
 			for (int x = 0; x < 3; x++) {
 				int xPos = 110 + (x * spacing);
-				widgetManager.add(new MemorizedSlot(widgetManager, xPos, yPos, slot));
+				widgetManager.add(new MemorizedSlot(player.getEntityWorld(), widgetManager, xPos, yPos, slot));
 				slot += 1;
 			}
 		}
