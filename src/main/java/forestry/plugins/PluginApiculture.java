@@ -472,36 +472,6 @@ public class PluginApiculture extends ForestryPlugin {
 		// / HABITAT LOCATOR
 		//Proxies.common.addRecipe(ForestryItem.biomeFinder.getItemStack(),
 		//		new Object[] { " X ", "X#X", " X ", '#', Items.redstone, 'X', "ingotBronze" });
-		Proxies.common.addRecipe(ForestryItem.vialCatalyst.getItemStack(3),
-				"###", "YXY",
-				'#', ForestryItem.waxCapsule,
-				'X', Items.bone,
-				'Y', ForestryItem.pollenCluster);
-		Proxies.common.addRecipe(ForestryItem.vialCatalyst.getItemStack(3),
-				"###", "YXY",
-				'#', ForestryItem.canEmpty,
-				'X', Items.bone,
-				'Y', ForestryItem.pollenCluster);
-		Proxies.common.addRecipe(ForestryItem.vialCatalyst.getItemStack(),
-				"###", "YXY", "###",
-				'#', ForestryItem.honeyDrop,
-				'Y', ForestryItem.fertilizerCompound,
-				'X', ForestryItem.waxCapsule);
-		Proxies.common.addRecipe(ForestryItem.vialCatalyst.getItemStack(),
-				"###", "YXY", "###",
-				'#', ForestryItem.honeyDrop,
-				'Y', ForestryItem.fertilizerCompound,
-				'X', ForestryItem.canEmpty);
-		Proxies.common.addRecipe(ForestryItem.vialCatalyst.getItemStack(),
-				"###", "YXY", "###",
-				'#', ForestryItem.honeyDrop,
-				'Y', ForestryItem.pollenCluster,
-				'X', ForestryItem.waxCapsule);
-		Proxies.common.addRecipe(ForestryItem.vialCatalyst.getItemStack(),
-				"###", "YXY", "###",
-				'#', ForestryItem.honeyDrop,
-				'Y', ForestryItem.pollenCluster,
-				'X', ForestryItem.canEmpty);
 
 		// Bees
 		Proxies.common.addRecipe(ForestryItem.scoop.getItemStack(1),

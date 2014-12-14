@@ -193,13 +193,6 @@ public class PluginCore extends ForestryPlugin {
 		/* ARMOR */
 		ForestryItem.naturalistHat.registerItem(new ItemArmorNaturalist(0), "naturalistHelmet");
 
-		// / DISCONTINUED
-		// ForestryItem.vialEmpty = (new
-		// ItemForestry(Config.getOrCreateIntProperty("vialEmpty",
-		// Config.CATEGORY_ITEM, Defaults.ID_ITEM_VIAL_EMPTY)))
-		// .setItemName("vialEmpty").setIconIndex(10);
-		ForestryItem.vialCatalyst.registerItem((new ItemForestry()), "vialCatalyst");
-
 		// / PEAT PRODUCTION
 		ForestryItem.peat.registerItem((new ItemForestry()), "peat");
 		OreDictionary.registerOre("brickPeat", ForestryItem.peat.getItemStack());
@@ -431,10 +424,6 @@ public class PluginCore extends ForestryPlugin {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.waxCapsuleWater, 'Y', Blocks.sand);
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.refractoryWater, 'Y', Blocks.sand);
 		}
-
-		// Vials and catalyst
-		Proxies.common.addRecipe(ForestryItem.vialCatalyst.getItemStack(3), "###", "YXY", '#', ForestryItem.waxCapsule.item(), 'X', Items.bone, 'Y', ForestryItem.fertilizerCompound);
-		Proxies.common.addRecipe(ForestryItem.vialCatalyst.getItemStack(3), "###", "YXY", '#', ForestryItem.canEmpty.item(), 'X', Items.bone, 'Y', ForestryItem.fertilizerCompound);
 
 		// Crafting Material
 		Proxies.common.addRecipe(new ItemStack(Items.string), "#", "#", "#", '#', ForestryItem.craftingMaterial.getItemStack(1, 2));
