@@ -412,14 +412,13 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 	public boolean hasWork() {
 		ItemStack itemToMelt = inventory.getStackInSlot(SLOT_METAL);
 		Smelting smelting = RecipeManager.findMatchingSmelting(itemToMelt);
-		FluidStack liquid = smelting.getProduct();
-		if (moltenTank.fill(liquid, false) > 0)
+		if (smelting != null && moltenTank.fill(smelting.getProduct(), false) > 0)
 			return true;
 
 		ItemStack plan = inventory.getStackInSlot(SLOT_PLAN);
 		ItemStack[] resources = inventory.getStacks(SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
 
-		return RecipeManager.findMatchingRecipe(plan, liquid, resources) != null;
+		return RecipeManager.findMatchingRecipe(plan, moltenTank.getFluid(), resources) != null;
 	}
 
 	public int getHeatScaled(int i) {
