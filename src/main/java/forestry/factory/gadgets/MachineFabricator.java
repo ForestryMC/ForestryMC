@@ -15,6 +15,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.recipes.IFabricatorManager;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
@@ -214,8 +215,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ISpecial
 
 	public MachineFabricator() {
 		super(1100, 50, 3300);
-		Fluid liquidGlass = FluidRegistry.getFluid(Defaults.LIQUID_GLASS);
-		moltenTank = new FilteredTank(2 * Defaults.BUCKET_VOLUME, liquidGlass);
+		moltenTank = new FilteredTank(2 * Defaults.BUCKET_VOLUME, Fluids.GLASS.get());
 		moltenTank.tankMode = StandardTank.TankMode.INTERNAL;
 		tankManager = new TankManager(moltenTank);
 	}

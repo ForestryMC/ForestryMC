@@ -10,6 +10,20 @@
  ******************************************************************************/
 package forestry.energy.gadgets;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+
 import forestry.api.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.EngineBronzeFuel;
@@ -17,6 +31,7 @@ import forestry.api.fuels.FuelManager;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
@@ -25,23 +40,7 @@ import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.GuiId;
 import forestry.core.network.PacketPayload;
-import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.TileInventoryAdapter;
-
-import static forestry.factory.gadgets.MachineBottler.SLOT_CAN;
-import static forestry.factory.gadgets.MachineBottler.SLOT_PRODUCT;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
 
 public class EngineBronze extends Engine implements ISidedInventory, ILiquidTankContainer {
 
@@ -143,7 +142,8 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 			if (heatStage > 0.25 && shutdown)
 				shutdown(false);
 			else if (shutdown)
-				if (heatingTank.getFluidAmount() > 0 && heatingTank.getFluid().getFluid().getName().equals(Defaults.LIQUID_LAVA)) {
+
+				if (heatingTank.getFluidAmount() > 0 && Fluids.LAVA.is(heatingTank.getFluid())) {
 					addHeat(Defaults.ENGINE_HEAT_VALUE_LAVA);
 					heatingTank.drain(1, true);
 				}

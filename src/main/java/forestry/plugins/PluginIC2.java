@@ -38,6 +38,7 @@ import forestry.core.config.Configuration;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
+import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.items.ItemCrated;
@@ -200,11 +201,11 @@ public class PluginIC2 extends ForestryPlugin {
 		definitionEngineTin.register();
 		definitionGenerator.register();
 
-		FluidStack ethanol = FluidRegistry.getFluidStack(Defaults.LIQUID_ETHANOL, 1);
+		FluidStack ethanol = Fluids.BIOETHANOL.get(1);
 		GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * GameMode.getGameMode().getFloatSetting("fuel.ethanol.generator")), 4);
 		FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
 
-		FluidStack biomass = FluidRegistry.getFluidStack(Defaults.LIQUID_BIOMASS, 1);
+		FluidStack biomass = Fluids.BIOMASS.get(1);
 		GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * GameMode.getGameMode().getFloatSetting("fuel.biomass.generator")), 1);
 		FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
 
@@ -270,14 +271,14 @@ public class PluginIC2 extends ForestryPlugin {
 
 		if (rubber != null) {
 			for (Object rubberOreDict : RecipeUtil.getOreDictRecipeEquivalents(rubber)) {
-				RecipeManagers.fabricatorManager.addRecipe(null, FluidRegistry.getFluidStack(Defaults.LIQUID_GLASS, 500), ForestryItem.tubes.getItemStack(4, 8),
+				RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.get(500), ForestryItem.tubes.getItemStack(4, 8),
 						new Object[]{" X ", "#X#", "XXX", '#', Items.redstone, 'X', rubberOreDict});
 			}
 		}
 
 		if (plantBall != null && compressedPlantBall != null) {
-			RecipeUtil.injectLeveledRecipe(plantBall, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat") * 4, Defaults.LIQUID_BIOMASS);
-			RecipeUtil.injectLeveledRecipe(compressedPlantBall, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat") * 5, Defaults.LIQUID_BIOMASS);
+			RecipeUtil.injectLeveledRecipe(plantBall, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat") * 4, Fluids.BIOMASS);
+			RecipeUtil.injectLeveledRecipe(compressedPlantBall, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat") * 5, Fluids.BIOMASS);
 		} else {
 			Proxies.log.fine("No IC2 plantballs found.");
 		}
@@ -288,7 +289,7 @@ public class PluginIC2 extends ForestryPlugin {
 			Proxies.log.fine("Missing IC2 resin, skipping centrifuge recipe for propolis to resin.");
 
 		if (rubbersapling != null) {
-			RecipeUtil.injectLeveledRecipe(rubbersapling, GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Defaults.LIQUID_BIOMASS);
+			RecipeUtil.injectLeveledRecipe(rubbersapling, GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 		} else
 			Proxies.log.fine("Missing IC2 rubber sapling, skipping fermenter recipe for converting rubber sapling to biomass.");
 
@@ -303,10 +304,10 @@ public class PluginIC2 extends ForestryPlugin {
 		}
 
 		if (lavaCell != null)
-			LiquidHelper.injectTinContainer(Defaults.LIQUID_LAVA, Defaults.BUCKET_VOLUME, lavaCell, emptyCell);
+			LiquidHelper.injectTinContainer(Fluids.LAVA, Defaults.BUCKET_VOLUME, lavaCell, emptyCell);
 
 		if (waterCell != null) {
-			LiquidHelper.injectTinContainer(Defaults.LIQUID_WATER, Defaults.BUCKET_VOLUME, waterCell, emptyCell);
+			LiquidHelper.injectTinContainer(Fluids.WATER, Defaults.BUCKET_VOLUME, waterCell, emptyCell);
 
 			ItemStack bogEarthCan = GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can");
 			if (bogEarthCan.stackSize > 0)

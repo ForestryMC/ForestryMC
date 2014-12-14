@@ -18,7 +18,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.crafting.CraftingManager;
 
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.RecipeSorter;
 
 import cpw.mods.fml.common.SidedProxy;
@@ -39,6 +38,7 @@ import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.Property;
+import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.genetics.Allele;
@@ -149,7 +149,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 	protected void registerRecipes() {
 		CraftingManager.getInstance().getRecipeList().add(new MatingRecipe());
 
-		RecipeManagers.carpenterManager.addRecipe(100, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 2000), null, ForestryItem.flutterlyzer.getItemStack(),
+		RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.get(2000), null, ForestryItem.flutterlyzer.getItemStack(),
 				"X#X", "X#X", "RDR", '#', Blocks.glass_pane, 'X', "ingotBronze", 'R',
 				Items.redstone, 'D', Items.diamond);
 	}

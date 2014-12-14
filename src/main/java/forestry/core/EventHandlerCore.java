@@ -10,22 +10,25 @@
  ******************************************************************************/
 package forestry.core;
 
-import cpw.mods.fml.common.eventhandler.Event.Result;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.core.EnumErrorCode;
-import forestry.core.interfaces.IOreDictionaryHandler;
-import forestry.core.interfaces.IPickupHandler;
-import forestry.core.interfaces.ISaveEventHandler;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.LiquidHelper;
-import forestry.plugins.PluginManager;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.oredict.OreDictionary;
+
+import cpw.mods.fml.common.eventhandler.Event.Result;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.core.EnumErrorCode;
+import forestry.core.fluids.Fluids;
+import forestry.core.interfaces.IOreDictionaryHandler;
+import forestry.core.interfaces.IPickupHandler;
+import forestry.core.interfaces.ISaveEventHandler;
+import forestry.core.render.TextureManager;
+import forestry.plugins.PluginManager;
 
 public class EventHandlerCore {
 
@@ -87,7 +90,7 @@ public class EventHandlerCore {
 			EnumErrorCode.initIcons(event.map);
 			TextureManager.getInstance().initDefaultIcons(event.map);
 		} else if(event.map.getTextureType() == 0)
-			LiquidHelper.resetLiquidIcons(event.map);
+			Fluids.resetFluidIcons(event.map);
 	}
 
 	@SubscribeEvent

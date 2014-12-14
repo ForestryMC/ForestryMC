@@ -20,6 +20,7 @@ import forestry.api.food.IBeverageEffect;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
+import forestry.core.fluids.Fluids;
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemForestryFood;
@@ -69,8 +70,8 @@ public class PluginFood extends ForestryPlugin {
 		ItemStack meadBottle = ForestryItem.beverage.getItemStack();
 		((ItemBeverage) ForestryItem.beverage.item()).beverages[0].saveEffects(meadBottle, new IBeverageEffect[] { BeverageEffect.weakAlcoholic });
 
-		LiquidHelper.getOrCreateLiquid(Defaults.LIQUID_MEAD);
-		LiquidHelper.injectLiquidContainer(Defaults.LIQUID_MEAD, Defaults.BUCKET_VOLUME, meadBottle, new ItemStack(Items.glass_bottle));
+		Fluids.SHORT_MEAD.register();
+		LiquidHelper.injectLiquidContainer(Fluids.SHORT_MEAD, Defaults.BUCKET_VOLUME, meadBottle, new ItemStack(Items.glass_bottle));
 	}
 
 	@Override

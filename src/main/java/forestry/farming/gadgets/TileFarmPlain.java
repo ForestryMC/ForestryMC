@@ -48,6 +48,7 @@ import forestry.core.GameMode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.interfaces.IClimatised;
@@ -434,7 +435,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 						else
 							hasFertilizer = true;
 
-						FluidStack liquid = FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, logic.getWaterConsumption(getHydrationModifier()));
+						FluidStack liquid = Fluids.WATER.get(logic.getWaterConsumption(getHydrationModifier()));
 						if (liquid.amount > 0 && !hasLiquid(liquid))
 							continue;
 						else
@@ -557,7 +558,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		}
 
 		// Check water
-		FluidStack liquid = FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, provider.getWaterConsumption(getHydrationModifier()));
+		FluidStack liquid = Fluids.WATER.get(provider.getWaterConsumption(getHydrationModifier()));
 		if (liquid.amount > 0 && !hasLiquid(liquid)) {
 			setErrorState(EnumErrorCode.NOLIQUID);
 			return false;

@@ -11,13 +11,13 @@
 package forestry.plugins;
 
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 
 import cpw.mods.fml.common.Optional;
 
 import forestry.core.GameMode;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
+import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.LiquidHelper;
 
@@ -39,19 +39,19 @@ public class PluginBuildCraftFuels extends ForestryPlugin {
 	@Optional.Method(modid = "BuildCraftAPI|fuels")
 	@Override
 	public void doInit() {
-		BuildcraftFuelRegistry.coolant.addCoolant(FluidRegistry.getFluid(Defaults.LIQUID_ICE), 10.0f);
+		BuildcraftFuelRegistry.coolant.addCoolant(Fluids.ICE.get(), 10.0f);
 
-		Fluid ethanol = FluidRegistry.getFluidStack(Defaults.LIQUID_ETHANOL, 1).getFluid();
+		Fluid ethanol = Fluids.BIOETHANOL.get();
 		int ethanolPower = 40;
 		int ethanolBurnTime = Math.round(Defaults.ENGINE_CYCLE_DURATION_ETHANOL * GameMode.getGameMode().getFloatSetting("fuel.ethanol.combustion"));
 		BuildcraftFuelRegistry.fuel.addFuel(ethanol, ethanolPower, ethanolBurnTime);
 
-		LiquidHelper.injectWaxContainer(Defaults.LIQUID_OIL, Defaults.BUCKET_VOLUME, ForestryItem.waxCapsuleOil.getItemStack(), ForestryItem.waxCapsule.getItemStack());
-		LiquidHelper.injectWaxContainer(Defaults.LIQUID_FUEL, Defaults.BUCKET_VOLUME, ForestryItem.waxCapsuleFuel.getItemStack(), ForestryItem.waxCapsule.getItemStack());
-		LiquidHelper.injectRefractoryContainer(Defaults.LIQUID_OIL, Defaults.BUCKET_VOLUME, ForestryItem.refractoryOil.getItemStack(), ForestryItem.refractoryEmpty.getItemStack());
-		LiquidHelper.injectRefractoryContainer(Defaults.LIQUID_FUEL, Defaults.BUCKET_VOLUME, ForestryItem.refractoryFuel.getItemStack(), ForestryItem.refractoryEmpty.getItemStack());
-		LiquidHelper.injectTinContainer(Defaults.LIQUID_OIL, Defaults.BUCKET_VOLUME, ForestryItem.canOil.getItemStack(), ForestryItem.canEmpty.getItemStack());
-		LiquidHelper.injectTinContainer(Defaults.LIQUID_FUEL, Defaults.BUCKET_VOLUME, ForestryItem.canFuel.getItemStack(), ForestryItem.canEmpty.getItemStack());
+		LiquidHelper.injectWaxContainer(Fluids.OIL, Defaults.BUCKET_VOLUME, ForestryItem.waxCapsuleOil.getItemStack(), ForestryItem.waxCapsule.getItemStack());
+		LiquidHelper.injectWaxContainer(Fluids.FUEL, Defaults.BUCKET_VOLUME, ForestryItem.waxCapsuleFuel.getItemStack(), ForestryItem.waxCapsule.getItemStack());
+		LiquidHelper.injectRefractoryContainer(Fluids.OIL, Defaults.BUCKET_VOLUME, ForestryItem.refractoryOil.getItemStack(), ForestryItem.refractoryEmpty.getItemStack());
+		LiquidHelper.injectRefractoryContainer(Fluids.FUEL, Defaults.BUCKET_VOLUME, ForestryItem.refractoryFuel.getItemStack(), ForestryItem.refractoryEmpty.getItemStack());
+		LiquidHelper.injectTinContainer(Fluids.OIL, Defaults.BUCKET_VOLUME, ForestryItem.canOil.getItemStack(), ForestryItem.canEmpty.getItemStack());
+		LiquidHelper.injectTinContainer(Fluids.FUEL, Defaults.BUCKET_VOLUME, ForestryItem.canFuel.getItemStack(), ForestryItem.canEmpty.getItemStack());
 	}
 
 }

@@ -43,7 +43,6 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
@@ -60,6 +59,7 @@ import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.Property;
+import forestry.core.fluids.Fluids;
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.IResupplyHandler;
@@ -504,22 +504,22 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 
 		// / CARPENTER
 		// / BACKPACKS T2
-		RecipeManagers.carpenterManager.addRecipe(200, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 1000), null, ForestryItem.minerBackpackT2.getItemStack(),
+		RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, ForestryItem.minerBackpackT2.getItemStack(),
 				"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
 				ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.minerBackpack);
-		RecipeManagers.carpenterManager.addRecipe(200, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 1000), null, ForestryItem.diggerBackpackT2.getItemStack(),
+		RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, ForestryItem.diggerBackpackT2.getItemStack(),
 				"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
 				ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.diggerBackpack);
-		RecipeManagers.carpenterManager.addRecipe(200, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 1000), null, ForestryItem.foresterBackpackT2.getItemStack(),
+		RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, ForestryItem.foresterBackpackT2.getItemStack(),
 				"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
 				ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.foresterBackpack);
-		RecipeManagers.carpenterManager.addRecipe(200, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 1000), null, ForestryItem.hunterBackpackT2.getItemStack(),
+		RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, ForestryItem.hunterBackpackT2.getItemStack(),
 				"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
 				ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.hunterBackpack);
-		RecipeManagers.carpenterManager.addRecipe(200, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 1000), null, ForestryItem.adventurerBackpackT2.getItemStack(),
+		RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, ForestryItem.adventurerBackpackT2.getItemStack(),
 				"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
 				ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.adventurerBackpack);
-		RecipeManagers.carpenterManager.addRecipe(200, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 1000), null, ForestryItem.builderBackpackT2.getItemStack(),
+		RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.get(1000), null, ForestryItem.builderBackpackT2.getItemStack(),
 				"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
 				ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.builderBackpack);
 

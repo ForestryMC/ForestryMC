@@ -41,6 +41,7 @@ import forestry.api.recipes.IVariableFermentable;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
@@ -138,7 +139,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 
 		@Override
 		public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output) {
-			addRecipe(resource, fermentationValue, modifier, output, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 1000));
+			addRecipe(resource, fermentationValue, modifier, output, Fluids.WATER.get(1000));
 		}
 
 		public static Recipe findMatchingRecipe(ItemStack res, FluidStack liqu) {

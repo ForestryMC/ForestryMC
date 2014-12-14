@@ -21,10 +21,12 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.Fluids;
 import forestry.core.gui.ContainerDummy;
 import forestry.core.interfaces.IDescriptiveRecipe;
 import forestry.core.proxy.Proxies;
@@ -33,17 +35,17 @@ public class RecipeUtil {
 
 	private static final Container DUMMY_CONTAINER = new ContainerDummy();
 
-	public static void injectLeveledRecipe(ItemStack resource, int fermentationValue, String output) {
+	public static void injectLeveledRecipe(ItemStack resource, int fermentationValue, Fluids output) {
 		if (RecipeManagers.fermenterManager == null)
 			return;
 
-		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, FluidRegistry.getFluidStack(output, 1), FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 1));
+		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, output.get(1), Fluids.WATER.get(1));
 
-		if (FluidRegistry.isFluidRegistered(Defaults.LIQUID_JUICE))
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, FluidRegistry.getFluidStack(output, 1), FluidRegistry.getFluidStack(Defaults.LIQUID_JUICE, 1));
+		if (FluidRegistry.isFluidRegistered(Fluids.JUICE.get()))
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.get(1), Fluids.JUICE.get(1));
 
-		if (FluidRegistry.isFluidRegistered(Defaults.LIQUID_HONEY))
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, FluidRegistry.getFluidStack(output, 1), FluidRegistry.getFluidStack(Defaults.LIQUID_HONEY, 1));
+		if (FluidRegistry.isFluidRegistered(Fluids.HONEY.get()))
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.get(1), Fluids.HONEY.get(1));
 	}
 
 	/**

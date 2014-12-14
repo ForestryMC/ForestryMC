@@ -30,12 +30,12 @@ import forestry.api.core.ForestryAPI;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.GuiId;
-import forestry.core.utils.Fluids;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
@@ -45,7 +45,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 	/* CONSTANTS */
 	public static final short SLOT_RESOURCE = 0;
 	public static final short SLOT_PRODUCT = 1;
-	private static final FluidStack STACK_WATER = FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, Defaults.RAINTANK_AMOUNT_PER_UPDATE);
+	private static final FluidStack STACK_WATER = Fluids.WATER.get(Defaults.RAINTANK_AMOUNT_PER_UPDATE);
 
 	/* MEMBER */
 	public FilteredTank resourceTank;

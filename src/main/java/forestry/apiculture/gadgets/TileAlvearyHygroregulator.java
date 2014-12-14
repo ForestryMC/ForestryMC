@@ -19,8 +19,6 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
@@ -28,14 +26,13 @@ import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.core.ForestryAPI;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.InventoryAdapter;
-import forestry.core.utils.LiquidHelper;
-import forestry.core.utils.StackUtils;
 
 public class TileAlvearyHygroregulator extends TileAlveary implements IInventory, ILiquidTankContainer {
 
@@ -70,9 +67,9 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	public TileAlvearyHygroregulator() {
 		super(BLOCK_META);
 
-		Fluid water = FluidRegistry.getFluid(Defaults.LIQUID_WATER);
-		Fluid lava = FluidRegistry.getFluid(Defaults.LIQUID_LAVA);
-		Fluid liquidIce = FluidRegistry.getFluid(Defaults.LIQUID_ICE);
+		Fluid water = Fluids.WATER.get();
+		Fluid lava = Fluids.LAVA.get();
+		Fluid liquidIce = Fluids.ICE.get();
 
 		liquidTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, water, lava, liquidIce);
 		tankManager = new TankManager(liquidTank);

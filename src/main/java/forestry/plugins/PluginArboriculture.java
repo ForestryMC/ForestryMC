@@ -133,6 +133,7 @@ import forestry.core.GameMode;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
+import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.genetics.Allele;
@@ -412,7 +413,7 @@ public class PluginArboriculture extends ForestryPlugin {
 
 					ItemStack logStack = forestryBlock.getItemStack(1, i);
 					ItemStack fireproofLogStack = fireproofLog.getItemStack(1, i);
-					RecipeManagers.fabricatorManager.addRecipe(null, FluidRegistry.getFluidStack(Defaults.LIQUID_GLASS, 500), fireproofLogStack, new Object[]{
+					RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.get(500), fireproofLogStack, new Object[]{
 							" # ",
 							"#X#",
 							" # ",
@@ -427,7 +428,7 @@ public class PluginArboriculture extends ForestryPlugin {
 				ForestryBlock fireproofPlank = BlockFireproofPlanks.getFireproofPlanks((BlockPlanks)plank.block());
 				ItemStack plankStack = plank.getItemStack(1, i);
 				ItemStack fireproofPlankStack = fireproofPlank.getItemStack(5, i);
-				RecipeManagers.fabricatorManager.addRecipe(null, FluidRegistry.getFluidStack(Defaults.LIQUID_GLASS, 500), fireproofPlankStack, new Object[]{
+				RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.get(500), fireproofPlankStack, new Object[]{
 						"X#X",
 						"#X#",
 						"X#X",
@@ -439,7 +440,7 @@ public class PluginArboriculture extends ForestryPlugin {
 				ForestryBlock fireproofPlank = BlockFireproofPlanks.getFireproofPlanks((BlockPlanks)plank.block());
 				ItemStack plankStack = plank.getItemStack(1, i);
 				ItemStack fireproofPlankStack = fireproofPlank.getItemStack(5, i);
-				RecipeManagers.fabricatorManager.addRecipe(null, FluidRegistry.getFluidStack(Defaults.LIQUID_GLASS, 500), fireproofPlankStack, new Object[]{
+				RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.get(500), fireproofPlankStack, new Object[]{
 						"X#X",
 						"#X#",
 						"X#X",
@@ -477,22 +478,25 @@ public class PluginArboriculture extends ForestryPlugin {
 			Proxies.common.addRecipe(ForestryBlock.fences2.getItemStack(4, i), "###", "# #", '#', ForestryBlock.planks2.getItemStack(1, i));
 
 		// Treealyzer
-		RecipeManagers.carpenterManager.addRecipe(100, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 2000), null, ForestryItem.treealyzer.getItemStack(), "X#X", "X#X", "RDR",
+		RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.get(2000), null, ForestryItem.treealyzer.getItemStack(), "X#X", "X#X", "RDR",
 				'#', Blocks.glass_pane,
 				'X', "ingotCopper",
 				'R', Items.redstone,
 				'D', Items.diamond);
 
 		// SQUEEZER RECIPES
-		RecipeManagers.squeezerManager.addRecipe(20, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.CHERRY.ordinal())}, FluidRegistry.getFluidStack(Defaults.LIQUID_SEEDOIL, 5 * GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed")), ForestryItem.mulch.getItemStack(), 5);
-		RecipeManagers.squeezerManager.addRecipe(60, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.WALNUT.ordinal())}, FluidRegistry.getFluidStack(Defaults.LIQUID_SEEDOIL, 18 * GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed")), ForestryItem.mulch.getItemStack(), 5);
-		RecipeManagers.squeezerManager.addRecipe(70, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.CHESTNUT.ordinal())}, FluidRegistry.getFluidStack(Defaults.LIQUID_SEEDOIL, 22 * GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed")), ForestryItem.mulch.getItemStack(), 2);
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.LEMON.ordinal())}, FluidRegistry.getFluidStack(Defaults.LIQUID_JUICE, GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple") * 2), ForestryItem.mulch.getItemStack(), (int) Math.floor(GameMode.getGameMode().getIntegerSetting("squeezer.mulch.apple") * 0.5f));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.PLUM.ordinal())}, FluidRegistry.getFluidStack(Defaults.LIQUID_JUICE, (int) Math.floor(GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple") * 0.5f)), ForestryItem.mulch.getItemStack(), GameMode.getGameMode().getIntegerSetting("squeezer.mulch.apple") * 3);
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.PAPAYA.ordinal())}, FluidRegistry.getFluidStack(Defaults.LIQUID_JUICE, GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple") * 3), ForestryItem.mulch.getItemStack(), (int) Math.floor(GameMode.getGameMode().getIntegerSetting("squeezer.mulch.apple") * 0.5f));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.fruits.getItemStack(1, EnumFruit.DATES.ordinal())}, FluidRegistry.getFluidStack(Defaults.LIQUID_JUICE, (int) Math.floor(GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple") * 0.25)), ForestryItem.mulch.getItemStack(), (int) Math.floor(GameMode.getGameMode().getIntegerSetting("squeezer.mulch.apple")));
+		int seedOilMultiplier = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");
+		int juiceMultiplier = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple");
+		int mulchMultiplier = GameMode.getGameMode().getIntegerSetting("squeezer.mulch.apple");
+		RecipeManagers.squeezerManager.addRecipe(20, new ItemStack[]{EnumFruit.CHERRY.getStack()}, Fluids.SEEDOIL.get(5 * seedOilMultiplier), ForestryItem.mulch.getItemStack(), 5);
+		RecipeManagers.squeezerManager.addRecipe(60, new ItemStack[]{EnumFruit.WALNUT.getStack()}, Fluids.SEEDOIL.get(18 * seedOilMultiplier), ForestryItem.mulch.getItemStack(), 5);
+		RecipeManagers.squeezerManager.addRecipe(70, new ItemStack[]{EnumFruit.CHESTNUT.getStack()}, Fluids.SEEDOIL.get(22 * seedOilMultiplier), ForestryItem.mulch.getItemStack(), 2);
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.LEMON.getStack()}, Fluids.JUICE.get(juiceMultiplier * 2), ForestryItem.mulch.getItemStack(), (int) Math.floor(mulchMultiplier * 0.5f));
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.PLUM.getStack()}, Fluids.JUICE.get((int) Math.floor(juiceMultiplier * 0.5f)), ForestryItem.mulch.getItemStack(), mulchMultiplier * 3);
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.PAPAYA.getStack()}, Fluids.JUICE.get(juiceMultiplier * 3), ForestryItem.mulch.getItemStack(), (int) Math.floor(mulchMultiplier * 0.5f));
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.DATES.getStack()}, Fluids.JUICE.get((int) Math.floor(juiceMultiplier * 0.25)), ForestryItem.mulch.getItemStack(), mulchMultiplier);
 
-		RecipeUtil.injectLeveledRecipe(ForestryItem.sapling.getItemStack(), GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Defaults.LIQUID_BIOMASS);
+		RecipeUtil.injectLeveledRecipe(ForestryItem.sapling.getItemStack(), GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 
 		// Stairs
 		for (int i = 0; i < 16; i++) {
@@ -918,17 +922,17 @@ public class PluginArboriculture extends ForestryPlugin {
 		Allele.fruitApple = new AlleleFruit("fruitApple", new FruitProviderRandom("apple", pomes, new ItemStack(Items.apple), 1.0f).setColour(0xff2e2e).setOverlay("pomes"));
 		Allele.fruitCocoa = new AlleleFruit("fruitCocoa", new FruitProviderPod("cocoa", jungle, EnumPodType.COCOA));
 		// .setColours(0xecdca5, 0xc4d24a), true);
-		Allele.fruitChestnut = new AlleleFruit("fruitChestnut", new FruitProviderRipening("chestnut", nux, ForestryItem.fruits.getItemStack(1, EnumFruit.CHESTNUT.ordinal()), 1.0f).setRipeningPeriod(6).setColours(0x7f333d, 0xc4d24a).setOverlay("nuts"), true);
-		Allele.fruitWalnut = new AlleleFruit("fruitWalnut", new FruitProviderRipening("walnut", nux, ForestryItem.fruits.getItemStack(1, EnumFruit.WALNUT.ordinal()), 1.0f).setRipeningPeriod(8).setColours(0xfba248, 0xc4d24a).setOverlay("nuts"), true);
-		Allele.fruitCherry = new AlleleFruit("fruitCherry", new FruitProviderRipening("cherry", prunes, ForestryItem.fruits.getItemStack(1, EnumFruit.CHERRY.ordinal()), 1.0f).setColours(0xff2e2e, 0xc4d24a).setOverlay("berries"), true);
-		Allele.fruitDates = new AlleleFruit("fruitDates", new FruitProviderPod("dates", jungle, EnumPodType.DATES, ForestryItem.fruits.getItemStack(4, EnumFruit.DATES.ordinal())));
-		Allele.fruitPapaya = new AlleleFruit("fruitPapaya", new FruitProviderPod("papaya", jungle, EnumPodType.PAPAYA, ForestryItem.fruits.getItemStack(1, EnumFruit.PAPAYA.ordinal())));
+		Allele.fruitChestnut = new AlleleFruit("fruitChestnut", new FruitProviderRipening("chestnut", nux, EnumFruit.CHESTNUT.getStack(), 1.0f).setRipeningPeriod(6).setColours(0x7f333d, 0xc4d24a).setOverlay("nuts"), true);
+		Allele.fruitWalnut = new AlleleFruit("fruitWalnut", new FruitProviderRipening("walnut", nux, EnumFruit.WALNUT.getStack(), 1.0f).setRipeningPeriod(8).setColours(0xfba248, 0xc4d24a).setOverlay("nuts"), true);
+		Allele.fruitCherry = new AlleleFruit("fruitCherry", new FruitProviderRipening("cherry", prunes, EnumFruit.CHERRY.getStack(), 1.0f).setColours(0xff2e2e, 0xc4d24a).setOverlay("berries"), true);
+		Allele.fruitDates = new AlleleFruit("fruitDates", new FruitProviderPod("dates", jungle, EnumPodType.DATES, EnumFruit.DATES.getStack(4)));
+		Allele.fruitPapaya = new AlleleFruit("fruitPapaya", new FruitProviderPod("papaya", jungle, EnumPodType.PAPAYA, EnumFruit.PAPAYA.getStack()));
 		// Allele.fruitCoconut = new AlleleFruit("fruitCoconut", new
 		// FruitProviderPod("coconut", jungle, EnumPodType.COCONUT, new
 		// ItemStack[] { new ItemStack(
 		// ForestryItem.fruits, 1, EnumFruit.COCONUT.ordinal()) }));
-		Allele.fruitLemon = new AlleleFruit("fruitLemon", new FruitProviderRipening("lemon", prunes, ForestryItem.fruits.getItemStack(1, EnumFruit.LEMON.ordinal()), 1.0f).setColours(0xeeee00, 0x99ff00).setOverlay("citrus"), true);
-		Allele.fruitPlum = new AlleleFruit("fruitPlum", new FruitProviderRipening("plum", prunes, ForestryItem.fruits.getItemStack(1, EnumFruit.PLUM.ordinal()), 1.0f).setColours(0x663446, 0xeeff1a).setOverlay("plums"), true);
+		Allele.fruitLemon = new AlleleFruit("fruitLemon", new FruitProviderRipening("lemon", prunes, EnumFruit.LEMON.getStack(), 1.0f).setColours(0xeeee00, 0x99ff00).setOverlay("citrus"), true);
+		Allele.fruitPlum = new AlleleFruit("fruitPlum", new FruitProviderRipening("plum", prunes, EnumFruit.PLUM.getStack(), 1.0f).setColours(0x663446, 0xeeff1a).setOverlay("plums"), true);
 
 		// / TREES // GROWTH PROVIDER 1350 - 1399
 		Allele.growthLightlevel = new AlleleGrowth("growthLightlevel", new GrowthProvider());

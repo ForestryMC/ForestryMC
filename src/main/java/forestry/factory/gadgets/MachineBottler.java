@@ -106,11 +106,10 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 			}
 
 			// No recipe matched. See if the liquid dictionary has anything.
-			if(FluidContainerRegistry.isEmptyContainer(empty)) {
-				ItemStack filled = FluidContainerRegistry.fillFluidContainer(res, empty);
+			if(FluidHelper.isEmptyContainer(empty)) {
+				ItemStack filled = FluidHelper.getFilledContainer(res, empty);
 				if(filled != null) {
-					FluidStack fluidStack = FluidContainerRegistry.getFluidForFilledItem(filled);
-					Recipe recipe = new Recipe(CYCLES_FILLING_DEFAULT, fluidStack, empty, filled);
+					Recipe recipe = new Recipe(CYCLES_FILLING_DEFAULT, res, empty, filled);
 					recipes.add(recipe);
 					return recipe;
 				}

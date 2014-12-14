@@ -10,13 +10,19 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
-import forestry.core.config.Defaults;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+
+import forestry.core.render.TextureManager;
 
 /**
  *
@@ -25,7 +31,10 @@ import net.minecraftforge.fluids.FluidStack;
 public enum Fluids {
 
 	WATER, LAVA, FUEL, BIOMASS, BIOFUEL, CREOSOTE, STEAM, BIOETHANOL,
-	COAL, PYROTHEUM, HONEY, MILK, JUICE, ICE, GLASS, OIL, SEEDOIL, SHORT_MEAD(Defaults.LIQUID_MEAD);
+	COAL, PYROTHEUM, HONEY, MILK, JUICE, ICE, GLASS, OIL, SEEDOIL, SHORT_MEAD("short.mead");
+
+	private static final List<String> myLiquids = new ArrayList<String>(values().length);
+
 	private final String tag;
 
 	private Fluids() {
@@ -44,24 +53,20 @@ public enum Fluids {
 		return FluidRegistry.getFluid(tag);
 	}
 
-	/**
-	 * Gets a FluidStack filled with qty milliBuckets worth of Fluid.
-	 *
-	 * @param qty
-	 * @return
-	 */
-	public FluidStack get(int qty) {
-		return FluidRegistry.getFluidStack(tag, qty);
+	public void register() {
+		Fluid fluid = get();
+		if (fluid == null) {
+			fluid = new Fluid(tag);
+			FluidRegistry.registerFluid(fluid);
+			myLiquids.add(tag);
+		}
 	}
 
 	/**
-	 * Gets a FluidStack filled with n buckets worth of Fluid.
-	 *
-	 * @param n
-	 * @return
+	 * Gets a FluidStack filled with mb milliBuckets worth of Fluid.
 	 */
-	public FluidStack getB(int n) {
-		return FluidRegistry.getFluidStack(tag, n * FluidContainerRegistry.BUCKET_VOLUME);
+	public FluidStack get(int mb) {
+		return FluidRegistry.getFluidStack(tag, mb);
 	}
 
 	public boolean is(Fluid fluid) {
@@ -80,6 +85,14 @@ public enum Fluids {
 		if (fluidStack != null && fluid == fluidStack.getFluid())
 			return true;
 		return fluid == null && fluidStack == null;
+	}
+
+	public static void resetFluidIcons(IIconRegister register) {
+		for (String fluidString : myLiquids) {
+			Fluid fluid = FluidRegistry.getFluid(fluidString);
+			IIcon icon = TextureManager.getInstance().registerTex(register, "liquid/" + fluid.getName());
+			fluid.setIcons(icon);
+		}
 	}
 
 }

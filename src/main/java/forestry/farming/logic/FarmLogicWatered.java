@@ -10,31 +10,30 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import forestry.api.farming.IFarmHousing;
-import forestry.core.config.Defaults;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.BlockUtil;
-import forestry.core.utils.LiquidHelper;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
-import forestry.core.utils.Vect;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import forestry.api.farming.IFarmHousing;
+import forestry.core.fluids.Fluids;
+import forestry.core.utils.BlockUtil;
+import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
+import forestry.core.utils.Vect;
 
 public abstract class FarmLogicWatered extends FarmLogic {
 
 	protected ItemStack ground;
 	private final ItemStack[] resource;
 
-	private static final FluidStack STACK_WATER = new FluidStack(FluidRegistry.getFluid(Defaults.LIQUID_WATER), 1000);
+	private static final FluidStack STACK_WATER = Fluids.WATER.get(1000);
 
 	ArrayList<ItemStack> produce = new ArrayList<ItemStack>();
 

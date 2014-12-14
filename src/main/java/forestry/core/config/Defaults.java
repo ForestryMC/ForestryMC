@@ -45,20 +45,6 @@ public class Defaults {
 	public static final int[] FACING_WESTEAST = { FACING_WEST, FACING_EAST };
 	public static final int[] FACINGS_NONE = new int[0];
 
-	public static final String LIQUID_WATER = "water";
-	public static final String LIQUID_LAVA = "lava";
-	public static final String LIQUID_MILK = "milk";
-	public static final String LIQUID_BIOMASS = "biomass";
-	public static final String LIQUID_ETHANOL = "bioethanol";
-	public static final String LIQUID_SEEDOIL = "seedoil";
-	public static final String LIQUID_HONEY = "honey";
-	public static final String LIQUID_JUICE = "juice";
-	public static final String LIQUID_ICE = "ice";
-	public static final String LIQUID_MEAD = "short.mead";
-	public static final String LIQUID_GLASS = "glass";
-	public static final String LIQUID_OIL = "oil";
-	public static final String LIQUID_FUEL = "fuel";
-
 	// Textures
 	public static final String TEXTURE_PATH_GUI = "textures/gui";
 	public static final String TEXTURE_PATH_BLOCKS = "textures/blocks";
