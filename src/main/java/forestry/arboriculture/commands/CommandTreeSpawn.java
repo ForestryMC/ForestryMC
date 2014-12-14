@@ -16,27 +16,23 @@ import java.util.List;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.gen.feature.WorldGenerator;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.core.commands.CommandHelpers;
-import forestry.core.commands.SpeciesNotFoundException;
 import forestry.core.commands.SubCommand;
-import forestry.core.commands.TemplateNotFoundException;
-import forestry.core.worldgen.WorldGenBase;
-import forestry.plugins.PluginArboriculture;
 
 import org.apache.commons.lang3.StringUtils;
 
-public abstract class CommandTreesSpawn extends SubCommand {
+public final class CommandTreeSpawn extends SubCommand {
 
-	public CommandTreesSpawn(String name) {
+	private final ITreeSpawner treeSpawner;
+
+	public CommandTreeSpawn(String name, ITreeSpawner treeSpawner) {
 		super(name);
 		setPermLevel(PermLevel.ADMIN);
+		this.treeSpawner = treeSpawner;
 	}
 
 	@Override
@@ -58,27 +54,9 @@ public abstract class CommandTreesSpawn extends SubCommand {
 			treeName = StringUtils.join(arguments, " ");
 		}
 
-		processSubCommand(sender, treeName, player);
-	}
-
-	protected abstract void processSubCommand(ICommandSender sender, String treeName, EntityPlayer player);
-
-	protected final WorldGenerator getWorldGen(String treeName, EntityPlayer player, int x, int y, int z) {
-		ITreeGenome treeGenome = getTreeGenome(treeName);
-		if (treeGenome == null) {
-			return null;
-		}
-
-		ITree tree = PluginArboriculture.treeInterface.getTree(player.worldObj, treeGenome);
-		return tree.getTreeGenerator(player.worldObj, x, y, z, true);
-	}
-
-	protected final void generateTree(WorldGenerator gen, EntityPlayer player, int x, int y, int z) {
-		if (gen instanceof WorldGenBase) {
-			((WorldGenBase) gen).generate(player.worldObj, player.worldObj.rand, x, y, z, true);
-		} else {
-			gen.generate(player.worldObj, player.worldObj.rand, x, y, z);
-		}
+		boolean success = treeSpawner.spawn(sender, treeName, player);
+		if (!success)
+			printHelp(sender);
 	}
 
 	@Override
@@ -101,41 +79,6 @@ public abstract class CommandTreesSpawn extends SubCommand {
 				species.add(allele.getName().replaceAll("\\s", ""));
 
 		return species.toArray(new String[species.size()]);
-	}
-
-	private static ITreeGenome getTreeGenome(String speciesName) {
-		IAlleleTreeSpecies species = null;
-
-		for (String uid : AlleleManager.alleleRegistry.getRegisteredAlleles().keySet()) {
-
-			if (!uid.equals(speciesName))
-				continue;
-
-			IAllele allele = AlleleManager.alleleRegistry.getAllele(uid);
-			if (allele instanceof IAlleleTreeSpecies) {
-				species = (IAlleleTreeSpecies) allele;
-				break;
-			}
-		}
-
-		if (species == null) {
-			for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
-				if (allele instanceof IAlleleTreeSpecies && allele.getName().replaceAll("\\s", "").equals(speciesName)) {
-					species = (IAlleleTreeSpecies) allele;
-					break;
-				}
-			}
-		}
-
-		if (species == null)
-			throw new SpeciesNotFoundException(speciesName);
-
-		IAllele[] template = PluginArboriculture.treeInterface.getTemplate(species.getUID());
-
-		if (template == null)
-			throw new TemplateNotFoundException(species);
-
-		return PluginArboriculture.treeInterface.templateAsGenome(template);
 	}
 
 }

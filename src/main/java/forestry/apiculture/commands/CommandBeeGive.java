@@ -30,12 +30,12 @@ import forestry.core.commands.SubCommand;
 import forestry.core.commands.TemplateNotFoundException;
 import forestry.plugins.PluginApiculture;
 
-public class CommandBeekeepingGiveBee extends SubCommand {
+public class CommandBeeGive extends SubCommand {
 
 	private final String beeTypeHelpString;
 	private final String[] beeTypeArr;
 
-	public CommandBeekeepingGiveBee() {
+	public CommandBeeGive() {
 		super("give");
 		setPermLevel(PermLevel.ADMIN);
 
@@ -93,7 +93,7 @@ public class CommandBeekeepingGiveBee extends SubCommand {
 		ItemStack beeStack = PluginApiculture.beeInterface.getMemberStack(bee, beeType.ordinal());
 		player.dropPlayerItemWithRandomChoice(beeStack, true);
 
-		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.beekeeping.give.given", player.getCommandSenderName(), bee.getGenome().getPrimary().getName(), beeType.getName());
+		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.bee.give.given", player.getCommandSenderName(), bee.getGenome().getPrimary().getName(), beeType.getName());
 	}
 
 	private static IBeeGenome getBeeGenome(String speciesName) {

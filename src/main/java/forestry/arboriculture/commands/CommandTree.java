@@ -10,14 +10,24 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
+import forestry.core.commands.CommandMode;
+import forestry.core.commands.CommandSaveStats;
+import forestry.core.commands.ICommandModeHelper;
+import forestry.core.commands.IStatsSaveHelper;
 import forestry.core.commands.SubCommand;
 
-public class CommandTrees extends SubCommand {
+public class CommandTree extends SubCommand {
 
-	public CommandTrees() {
+	public CommandTree() {
 		super("tree");
-		addChildCommand(new CommandTreesSpawnTree());
-		addChildCommand(new CommandTreesSpawnForest());
+
+		IStatsSaveHelper saveHelper = new TreeStatsSaveHelper();
+		ICommandModeHelper modeHelper = new TreeModeHelper();
+
+		addChildCommand(new CommandTreeSpawn("spawnTree", new TreeSpawner()));
+		addChildCommand(new CommandTreeSpawn("spawnForest", new ForestSpawner()));
+		addChildCommand(new CommandMode(modeHelper));
+		addChildCommand(new CommandSaveStats(saveHelper));
 	}
 
 }

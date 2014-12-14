@@ -16,7 +16,6 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -46,7 +45,6 @@ import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
-import forestry.arboriculture.CommandTreekeepingMode;
 import forestry.arboriculture.EventHandlerArboriculture;
 import forestry.arboriculture.FruitProviderNone;
 import forestry.arboriculture.FruitProviderPod;
@@ -57,7 +55,7 @@ import forestry.arboriculture.GuiHandlerArboriculture;
 import forestry.arboriculture.PacketHandlerArboriculture;
 import forestry.arboriculture.VillageHandlerArboriculture;
 import forestry.arboriculture.WoodType;
-import forestry.arboriculture.commands.CommandTrees;
+import forestry.arboriculture.commands.CommandTree;
 import forestry.arboriculture.gadgets.BlockArbFence;
 import forestry.arboriculture.gadgets.BlockArbFence.FenceCat;
 import forestry.arboriculture.gadgets.BlockArbStairs;
@@ -295,8 +293,15 @@ public class PluginArboriculture extends ForestryPlugin {
 		validFences.add(Blocks.fence_gate);
 		validFences.add(Blocks.nether_brick_fence);
 
+		// Modes
+		PluginArboriculture.treeInterface.registerTreekeepingMode(TreekeepingMode.easy);
+		PluginArboriculture.treeInterface.registerTreekeepingMode(TreekeepingMode.normal);
+		PluginArboriculture.treeInterface.registerTreekeepingMode(TreekeepingMode.hard);
+		PluginArboriculture.treeInterface.registerTreekeepingMode(TreekeepingMode.hardcore);
+		PluginArboriculture.treeInterface.registerTreekeepingMode(TreekeepingMode.insane);
+
 		// Commands
-		PluginCore.rootCommand.addChildCommand(new CommandTrees());
+		PluginCore.rootCommand.addChildCommand(new CommandTree());
 	}
 
 	@Override
@@ -312,12 +317,6 @@ public class PluginArboriculture extends ForestryPlugin {
 		createMutations();
 		registerTemplates();
 		registerErsatzGenomes();
-
-		PluginArboriculture.treeInterface.registerTreekeepingMode(TreekeepingMode.easy);
-		PluginArboriculture.treeInterface.registerTreekeepingMode(TreekeepingMode.normal);
-		PluginArboriculture.treeInterface.registerTreekeepingMode(TreekeepingMode.hard);
-		PluginArboriculture.treeInterface.registerTreekeepingMode(TreekeepingMode.hardcore);
-		PluginArboriculture.treeInterface.registerTreekeepingMode(TreekeepingMode.insane);
 
 		MinecraftForge.EVENT_BUS.register(new EventHandlerArboriculture());
 
@@ -1100,11 +1099,6 @@ public class PluginArboriculture extends ForestryPlugin {
 	@Override
 	public IGuiHandler getGuiHandler() {
 		return new GuiHandlerArboriculture();
-	}
-
-	@Override
-	public ICommand[] getConsoleCommands() {
-		return new ICommand[]{new CommandTreekeepingMode()};
 	}
 
 	@Override

@@ -30,7 +30,6 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -73,7 +72,7 @@ import forestry.apiculture.GuiHandlerApiculture;
 import forestry.apiculture.PacketHandlerApiculture;
 import forestry.apiculture.SaveEventHandlerApiculture;
 import forestry.apiculture.VillageHandlerApiculture;
-import forestry.apiculture.commands.CommandBeekeeping;
+import forestry.apiculture.commands.CommandBee;
 import forestry.apiculture.gadgets.BlockAlveary;
 import forestry.apiculture.gadgets.BlockBeehives;
 import forestry.apiculture.gadgets.BlockCandle;
@@ -269,8 +268,15 @@ public class PluginApiculture extends ForestryPlugin {
 		// Register village components with the Structure registry.
 		VillageHandlerApiculture.registerVillageComponents();
 
+		// Modes
+		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.easy);
+		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.normal);
+		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.hard);
+		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.hardcore);
+		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.insane);
+
 		// Commands
-		PluginCore.rootCommand.addChildCommand(new CommandBeekeeping());
+		PluginCore.rootCommand.addChildCommand(new CommandBee());
 	}
 
 	@Override
@@ -305,12 +311,6 @@ public class PluginApiculture extends ForestryPlugin {
 		createAlleles();
 		createMutations();
 		registerBeehiveDrops();
-
-		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.easy);
-		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.normal);
-		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.hard);
-		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.hardcore);
-		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.insane);
 
 		// Inducers for swarmer
 		BeeManager.inducers.put(ForestryItem.royalJelly.getItemStack(), 10);

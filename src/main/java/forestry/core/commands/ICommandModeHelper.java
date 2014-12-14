@@ -8,17 +8,19 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.apiculture.commands;
+package forestry.core.commands;
 
-import forestry.core.commands.SubCommand;
+import java.util.ArrayList;
 
-public class CommandBeekeeping extends SubCommand {
+import net.minecraft.world.World;
 
-	public CommandBeekeeping() {
-		super("bee");
-		addAlias("beekeeping");
-		addChildCommand(new CommandBeekeepingMode());
-		addChildCommand(new CommandBeekeepingSave());
-		addChildCommand(new CommandBeekeepingGiveBee());
-	}
+public interface ICommandModeHelper {
+	String[] getModeNames();
+
+	String getModeNameMatching(String desired);
+
+	String getModeName(World world);
+	void setMode(World world, String modeName);
+
+	ArrayList<String> getDescription(String modeName);
 }

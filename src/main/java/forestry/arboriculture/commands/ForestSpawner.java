@@ -15,13 +15,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
-public class CommandTreesSpawnForest extends CommandTreesSpawn {
+public class ForestSpawner implements ITreeSpawner {
 
-	public CommandTreesSpawnForest() {
-		super("spawnForest");
-	}
-
-	protected void processSubCommand(ICommandSender sender, String treeName, EntityPlayer player) {
+	public boolean spawn(ICommandSender sender, String treeName, EntityPlayer player) {
 		Vec3 look = player.getLookVec();
 
 		int x = (int)Math.round(player.posX + (16 * look.xCoord));
@@ -32,13 +28,13 @@ public class CommandTreesSpawnForest extends CommandTreesSpawn {
 			int spawnX = x + player.worldObj.rand.nextInt(32) - 16;
 			int spawnZ = z + player.worldObj.rand.nextInt(32) - 16;
 
-			WorldGenerator gen = getWorldGen(treeName, player, spawnX, y, spawnZ);
+			WorldGenerator gen = TreeGenHelper.getWorldGen(treeName, player, spawnX, y, spawnZ);
 			if (gen == null) {
-				printHelp(sender);
-				return;
+				return false;
 			}
-			generateTree(gen, player, spawnX, y, spawnZ);
+			TreeGenHelper.generateTree(gen, player, spawnX, y, spawnZ);
 		}
+		return true;
 	}
 
 }
