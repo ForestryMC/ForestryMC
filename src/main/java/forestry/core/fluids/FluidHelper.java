@@ -166,23 +166,32 @@ public final class FluidHelper {
 		if (used < fluidInContainer.amount)
 			return false;
 
-		fluidHandler.fill(ForgeDirection.UNKNOWN, fluidInContainer, true);
-
 		ItemStack emptyItem = getEmptyContainer(input);
 
-		// unstackable containers like buckets are not consumed
-		if (outputSlot == inputSlot && input.getMaxStackSize() == 1) {
-			inv.setInventorySlotContents(outputSlot, emptyItem);
-			return true;
+		if (output != null && emptyItem != null) {
+			if (outputSlot == inputSlot) {
+				if (input.stackSize > 1)
+					return false;
+			} else if (!StackUtils.isIdenticalItem(output, emptyItem)) {
+				return false;
+			} else if (output.stackSize + emptyItem.stackSize > output.getMaxStackSize()) {
+				return false;
+			}
 		}
 
+		fluidHandler.fill(ForgeDirection.UNKNOWN, fluidInContainer, true);
+
 		if (emptyItem != null) {
+			if (outputSlot == inputSlot) {
+				inv.setInventorySlotContents(outputSlot, emptyItem);
+				return true;
+			}
+
 			if (output == null) {
 				inv.setInventorySlotContents(outputSlot, emptyItem);
-			} else if (StackUtils.isIdenticalItem(output, emptyItem) && (output.stackSize < output.getMaxStackSize())) {
+			} else {
 				output.stackSize++;
 			}
-			// else output item is consumed
 		}
 		inv.decrStackSize(inputSlot, 1);
 		return true;
@@ -239,17 +248,11 @@ public final class FluidHelper {
 	}
 
 	public static ItemStack getEmptyContainer(ItemStack container) {
-
 		Item item = container.getItem();
-		if (item instanceof IFluidContainerItem) {
-			ItemStack empty = container.copy();
-			empty.stackSize = 1;
-			IFluidContainerItem containerItem = (IFluidContainerItem) item;
-			containerItem.drain(empty, Integer.MAX_VALUE, true);
-			return empty;
-		}
+		if (item == null)
+			return null;
 
-		return FluidContainerRegistry.drainFluidContainer(container);
+		return item.getContainerItem(container);
 	}
 
 	public static ItemStack getFilledContainer(Fluid fluid, ItemStack empty) {
