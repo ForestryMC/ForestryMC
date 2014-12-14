@@ -26,12 +26,9 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.core.config.Defaults;
-import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.gadgets.TileForestry;
 
 public class StackUtils {
 

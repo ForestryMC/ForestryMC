@@ -144,9 +144,6 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 		if (isMaster)
 			makeMaster();
 
-		if (inventory != null)
-			inventory.readFromNBT(nbttagcompound);
-
 		structureLogic.readFromNBT(nbttagcompound);
 	}
 
@@ -160,9 +157,6 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 		nbttagcompound.setInteger("MasterZ", masterZ);
 
 		farmBlock.saveToCompound(nbttagcompound);
-
-		if (inventory != null)
-			inventory.writeToNBT(nbttagcompound);
 
 		structureLogic.writeToNBT(nbttagcompound);
 	}
@@ -224,9 +218,6 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 		 */
 		return null;
 	}
-
-	/* INVENTORY MANAGMENT */
-	protected TileInventoryAdapter inventory;
 
 	/* TILEFORESTRY */
 	@Override
@@ -329,7 +320,7 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 
 	@Override
 	public IInventory getInventory() {
-		return inventory;
+		return getInternalInventory();
 	}
 
 	@Override

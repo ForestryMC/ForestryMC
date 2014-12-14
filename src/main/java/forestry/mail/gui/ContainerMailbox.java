@@ -20,7 +20,6 @@ import forestry.mail.gadgets.MachineMailbox;
 import forestry.plugins.PluginMail;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
@@ -33,20 +32,19 @@ public class ContainerMailbox extends ContainerForestry {
 	private final POBox mailInventory;
 
 	public ContainerMailbox(InventoryPlayer player, MachineMailbox tile) {
-		super(tile);
+		super(tile.getOrCreateMailInventory(player.player.worldObj, player.player.getGameProfile()));
 
 		// Mailbox contents
 		this.mailbox = tile;
 
-		IInventory inv = mailbox.getOrCreateMailInventory(player.player.worldObj, player.player.getGameProfile());
-		if (inv instanceof POBox)
-			this.mailInventory = (POBox) inv;
+		if (inventory instanceof POBox)
+			this.mailInventory = (POBox) inventory;
 		else
 			this.mailInventory = null;
 
 		for (int i = 0; i < 7; i++)
 			for (int j = 0; j < 12; j++)
-				addSlot(new SlotClosed(inv, j + i * 9, 8 + j * 18, 8 + i * 18));
+				addSlot(new SlotClosed(inventory, j + i * 9, 8 + j * 18, 8 + i * 18));
 
 		// Player inventory
 		for (int i = 0; i < 3; i++)

@@ -13,21 +13,15 @@ package forestry.factory.gadgets;
 import forestry.api.core.ForestryAPI;
 import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ICrafter;
+import forestry.core.inventory.InventoryAdapter;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.GuiId;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketTileNBT;
 import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
-<<<<<<< HEAD
-import forestry.core.inventory.InventoryAdapter;
-import forestry.core.utils.PlainInventory;
-import forestry.core.utils.StackUtils;
-import forestry.core.inventory.TileInventoryAdapter;
-=======
-import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.RecipeUtil;
-import forestry.core.utils.TileInventoryAdapter;
 import forestry.factory.recipes.RecipeMemory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -35,7 +29,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
->>>>>>> 5ea4770a2d5fef57cf52fb7c81f33671f8086740
+
 
 public class TileWorktable extends TileBase implements ICrafter {
 
@@ -51,11 +45,10 @@ public class TileWorktable extends TileBase implements ICrafter {
 	private InventoryCrafting currentCrafting;
 	private final RecipeMemory memorized;
 	private final TileInventoryAdapter craftingInventory;
-	private final TileInventoryAdapter accessibleInventory;
 
 	public TileWorktable() {
 		craftingInventory = new TileInventoryAdapter(this, 10, "CraftItems");
-		accessibleInventory = new TileInventoryAdapter(this, 18, "Items");
+		setInternalInventory(new TileInventoryAdapter(this, 18, "Items"));
 
 		memorized = new RecipeMemory();
 	}
@@ -71,7 +64,6 @@ public class TileWorktable extends TileBase implements ICrafter {
 		super.writeToNBT(nbttagcompound);
 
 		craftingInventory.writeToNBT(nbttagcompound);
-		accessibleInventory.writeToNBT(nbttagcompound);
 
 		memorized.writeToNBT(nbttagcompound);
 	}
@@ -81,7 +73,6 @@ public class TileWorktable extends TileBase implements ICrafter {
 		super.readFromNBT(nbttagcompound);
 
 		craftingInventory.readFromNBT(nbttagcompound);
-		accessibleInventory.readFromNBT(nbttagcompound);
 
 		memorized.readFromNBT(nbttagcompound);
 	}
@@ -161,7 +152,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 			return false;
 
 		ItemStack[] recipeItems = craftingInventory.getStacks(SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
-		ItemStack[] inventory = accessibleInventory.getStacks(SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+		ItemStack[] inventory = getInternalInventory().getStacks(SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
 		ItemStack recipeOutput = currentRecipe.getRecipeOutput(worldObj);
 
 		return RecipeUtil.canCraftRecipe(worldObj, recipeItems, recipeOutput, inventory);
@@ -169,7 +160,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 
 	private boolean removeResources(EntityPlayer player) {
 		ItemStack[] set = craftingInventory.getStacks(SLOT_CRAFTING_1, 9);
-		return accessibleInventory.removeSets(1, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
+		return getInternalInventory().removeSets(1, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
 	}
 
 	@Override
@@ -199,12 +190,6 @@ public class TileWorktable extends TileBase implements ICrafter {
 		if (currentRecipe.getRecipeOutput(worldObj) != null)
 			return currentRecipe.getRecipeOutput(worldObj).copy();
 		return null;
-	}
-
-	/* INVENTORY */
-	@Override
-	public InventoryAdapter getInternalInventory() {
-		return accessibleInventory;
 	}
 
 	/**

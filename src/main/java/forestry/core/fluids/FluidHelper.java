@@ -251,6 +251,10 @@ public final class FluidHelper {
 
 		return FluidContainerRegistry.drainFluidContainer(container);
 	}
+	
+	public static ItemStack getFullyDrainedContainer(ItemStack container) {
+		return container.getItem().getContainerItem(container);
+	}
 
 	public static ItemStack getFilledContainer(Fluid fluid, ItemStack empty) {
 		if (fluid == null)

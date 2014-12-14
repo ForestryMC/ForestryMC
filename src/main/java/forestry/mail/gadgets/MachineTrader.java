@@ -17,6 +17,7 @@ import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
 import forestry.api.core.EnumErrorCode;
+import forestry.core.config.Defaults;
 import forestry.core.gadgets.TileBase;
 import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
@@ -24,6 +25,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumAccess;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
 import forestry.mail.MailAddress;
 import forestry.mail.TradeStation;
 import forestry.plugins.PluginMail;
@@ -63,9 +65,8 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 
 	@Override
 	public void onRemoval() {
-		if (isLinked()) {
+		if (isLinked())
 			PostManager.postRegistry.deleteTradeStation(worldObj, address);
-		}
 	}
 
 	/* SAVING & LOADING */
@@ -84,13 +85,11 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 
-		if (nbttagcompound.hasKey("address")) {
+		if (nbttagcompound.hasKey("address"))
 			address = MailAddress.loadFromNBT(nbttagcompound.getCompoundTag("address"));
-		}
 	}
 
 	/* UPDATING */
-
 	/**
 	 * The trade station should show errors for missing stamps and paper first.
 	 * Once it is able to send letters, it should display other error states.
@@ -106,12 +105,11 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 		if (!hasPostageMin(3))
 			errorCode = EnumErrorCode.NOSTAMPS;
 
-		if (!hasPaperMin(2)) {
+		if (!hasPaperMin(2))
 			if (errorCode == EnumErrorCode.NOSTAMPS)
 				errorCode = EnumErrorCode.NOSTAMPSNOPAPER;
 			else
 				errorCode = EnumErrorCode.NOPAPER;
-		}
 
 		if (errorCode != EnumErrorCode.OK) {
 			setErrorState(errorCode);
@@ -133,23 +131,21 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 		}
 
 		boolean hasSupplies = hasItemCount(TradeStation.SLOT_SEND_BUFFER, TradeStation.SLOT_SEND_BUFFER_COUNT, tradeGood, tradeGood.stackSize);
-		if(!hasSupplies) {
+		if (!hasSupplies) {
 			setErrorState(EnumErrorCode.NOSUPPLIES);
 			return;
 		}
 
-		if (inventory instanceof TradeStation) {
-			if (!((TradeStation)inventory).canReceivePayment()) {
+		if (inventory instanceof TradeStation)
+			if (!((TradeStation) inventory).canReceivePayment()) {
 				setErrorState(EnumErrorCode.NOSPACE);
 				return;
 			}
-		}
 
 		setErrorState(EnumErrorCode.OK);
 	}
 
 	/* STATE INFORMATION */
-
 	public boolean isLinked() {
 		return address.isValid();
 	}
@@ -186,16 +182,16 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 		IInventory tradeInventory = this.getOrCreateTradeInventory();
 		for (int i = startSlot; i < startSlot + countSlots; i++) {
 			ItemStack itemInSlot = tradeInventory.getStackInSlot(i);
-			if (itemInSlot == null) {
+			if (itemInSlot == null)
 				total += 64;
-			} else {
+			else {
 				total += itemInSlot.getMaxStackSize();
 				if (item == null || StackUtils.isIdenticalItem(itemInSlot, item))
 					count += itemInSlot.stackSize;
 			}
 		}
 
-		return ((float)count / (float)total);
+		return ((float) count / (float) total);
 	}
 
 	public boolean hasPaperMin(int count) {
@@ -277,23 +273,6 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 		return PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerProfile(), address);
 	}
 
-	/* ISIDEDINVENTORY */
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	protected boolean canTakeStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-		return super.canTakeStackFromSide(slotIndex, itemstack, side);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	protected boolean canPutStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-		return super.canPutStackFromSide(slotIndex, itemstack, side);
-	}
 
 	/* ISIDEDINVENTORY */
 	@Override
@@ -350,11 +329,17 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 	}
 
 	@Override
+	public boolean isUseableByPlayer(EntityPlayer player) {
+		return Utils.isUseableByPlayer(player, this);
+	}
+
+	/* ISIDEDINVENTORY */
+	@Override
 	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
 		IInventory inventory = getOrCreateTradeInventory();
 		if (inventory instanceof TradeStation)
-			return ((TradeStation)getOrCreateTradeInventory()).canInsertItem(i, itemstack, j);
-		return super.canInsertItem(i, itemstack, j);
+			return ((TradeStation) inventory).canInsertItem(i, itemstack, j);
+		return false;
 	}
 
 	@Override
@@ -362,9 +347,9 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 		IInventory inventory = getOrCreateTradeInventory();
 		if (inventory instanceof TradeStation) {
 			boolean permission = (getAccess() == EnumAccess.SHARED);
-			return ((TradeStation) getOrCreateTradeInventory()).canExtractItem(i, itemstack, j, permission);
+			return ((TradeStation) inventory).canExtractItem(i, itemstack, j, permission);
 		}
-		return super.canExtractItem(i, itemstack, j);
+		return false;
 	}
 
 	@Override
@@ -372,9 +357,9 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 		IInventory inventory = getOrCreateTradeInventory();
 		if (inventory instanceof TradeStation) {
 			boolean permission = (getAccess() == EnumAccess.SHARED);
-			return ((TradeStation) getOrCreateTradeInventory()).getAccessibleSlotsFromSide(side, permission);
+			return ((TradeStation) inventory).getAccessibleSlotsFromSide(side, permission);
 		}
-		return super.getAccessibleSlotsFromSide(side);
+		return Defaults.FACINGS_NONE;
 	}
 
 	/* ITRIGGERPROVIDER */

@@ -27,8 +27,6 @@ import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.inventory.TileInventoryAdapter;
-import forestry.core.utils.LiquidHelper;
-import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.factory.triggers.FactoryTriggers;
 import net.minecraft.entity.player.EntityPlayer;
@@ -42,7 +40,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -439,15 +436,9 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		if (slotIndex == SLOT_RESOURCE)
 			return FluidContainerRegistry.isEmptyContainer(itemstack);
 
-<<<<<<< HEAD
-		if (slotIndex == SLOT_CAN) {
-			FluidContainerData container = LiquidHelper.getLiquidContainer(itemstack);
-			return container != null && RecipeManager.isInput(container.fluid);
-=======
 		if(slotIndex == SLOT_CAN) {
 			FluidStack fluidStack = FluidHelper.getFluidStackInContainer(itemstack);
 			return RecipeManager.isInput(fluidStack);
->>>>>>> 5ea4770a2d5fef57cf52fb7c81f33671f8086740
 		}
 
 		return false;

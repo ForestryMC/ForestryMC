@@ -13,15 +13,15 @@ package forestry.mail.gadgets;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
 import forestry.core.gadgets.TileBase;
 import forestry.core.network.GuiId;
-import forestry.core.inventory.InventoryAdapter;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
 
 public class MachinePhilatelist extends TileBase implements IInventory {
 
@@ -30,9 +30,8 @@ public class MachinePhilatelist extends TileBase implements IInventory {
 	public static final short SLOT_BUFFER_1 = 1;
 	public static final short SLOT_BUFFER_COUNT = 27;
 
-	private final InventoryAdapter inventory = new InventoryAdapter(28, "INV");
-
 	public MachinePhilatelist() {
+		setInternalInventory(new TileInventoryAdapter(this, 28, "INV"));
 	}
 
 	@Override
@@ -45,21 +44,6 @@ public class MachinePhilatelist extends TileBase implements IInventory {
 		player.openGui(ForestryAPI.instance, GuiId.PhilatelistGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
 	}
 
-	/* SAVING & LOADING */
-	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
-
-		inventory.writeToNBT(nbttagcompound);
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-
-		inventory.readFromNBT(nbttagcompound);
-	}
-
 	// / UPDATING
 	@Override
 	public void updateServerSide() {
@@ -68,6 +52,7 @@ public class MachinePhilatelist extends TileBase implements IInventory {
 
 		ItemStack stamp = null;
 
+		TileInventoryAdapter inventory = getInternalInventory();
 		if (inventory.getStackInSlot(SLOT_FILTER) == null)
 			stamp = PostManager.postRegistry.getPostOffice(worldObj).getAnyStamp(1);
 		else {
@@ -86,37 +71,32 @@ public class MachinePhilatelist extends TileBase implements IInventory {
 	/* IINVENTORY */
 	@Override
 	public int getSizeInventory() {
-		return inventory.getSizeInventory();
+		return getInternalInventory().getSizeInventory();
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
+		return getInternalInventory().getStackInSlot(i);
 	}
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
-		return inventory.decrStackSize(i, j);
+		return getInternalInventory().decrStackSize(i, j);
 	}
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
+		getInternalInventory().setInventorySlotContents(i, itemstack);
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slot) {
-		return inventory.getStackInSlotOnClosing(slot);
-	}
-
-	@Override
-	public void markDirty() {
-		inventory.markDirty();
+		return getInternalInventory().getStackInSlotOnClosing(slot);
 	}
 
 	@Override
 	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
+		return getInternalInventory().getInventoryStackLimit();
 	}
 
 	@Override
@@ -127,28 +107,19 @@ public class MachinePhilatelist extends TileBase implements IInventory {
 	public void closeInventory() {
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return super.isUseableByPlayer(player);
+		return Utils.isUseableByPlayer(player, this);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean hasCustomInventoryName() {
-		return super.hasCustomInventoryName();
+		return false;
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return super.isItemValidForSlot(slotIndex, itemstack);
+		return getInternalInventory().isItemValidForSlot(slotIndex, itemstack);
 	}
 
 }

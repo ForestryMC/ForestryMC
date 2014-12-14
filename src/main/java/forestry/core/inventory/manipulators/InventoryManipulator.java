@@ -30,9 +30,6 @@ public class InventoryManipulator {
 	private final IInventory inv;
 
 	public static InventoryManipulator get(IInventory inv) {
-		if (inv instanceof ISpecialInventory) {
-			return new SpecialManipulator((ISpecialInventory) inv);
-		}
 		return new InventoryManipulator(inv);
 	}
 

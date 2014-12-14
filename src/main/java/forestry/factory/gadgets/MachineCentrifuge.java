@@ -339,11 +339,6 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 
 	/* IINVENTORY */
 	@Override
-	public InventoryAdapter getInternalInventory() {
-		return inventory;
-	}
-
-	@Override
 	protected boolean canTakeStackFromSide(int slotIndex, ItemStack itemstack, int side) {
 
 		if(!super.canTakeStackFromSide(slotIndex, itemstack, side))

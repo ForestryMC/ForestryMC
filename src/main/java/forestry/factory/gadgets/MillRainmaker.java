@@ -11,30 +11,21 @@
 package forestry.factory.gadgets;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
-import forestry.api.core.ISpecialInventory;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.RainSubstrate;
 import forestry.core.gadgets.Mill;
 import forestry.core.gadgets.TileBase;
 import forestry.core.proxy.Proxies;
 
-public class MillRainmaker extends Mill implements ISpecialInventory {
+public class MillRainmaker extends Mill {
 
 	private int duration;
 	private boolean reverse;
 
 	public MillRainmaker() {
 		speed = 0.01f;
-	}
-
-	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
 	}
 
 	@Override
@@ -117,86 +108,78 @@ public class MillRainmaker extends Mill implements ISpecialInventory {
 		}
 	}
 
-	@Override
-	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
-		if (charge != 0)
-			return 0;
-
-		if (!FuelManager.rainSubstrate.containsKey(stack))
-			return 0;
-
-		RainSubstrate substrate = FuelManager.rainSubstrate.get(stack);
-		if (!substrate.item.isItemEqual(stack))
-			return 0;
-
-		if (doAdd)
-			addCharge(substrate);
-		return 1;
-	}
-
-	@Override
-	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
-		return null;
-	}
-
-	@Override
-	public int getSizeInventory() {
-		return 0;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int var1) {
-		return null;
-	}
-
-	@Override
-	public ItemStack decrStackSize(int var1, int var2) {
-		return null;
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int var1) {
-		return null;
-	}
-
-	@Override
-	public void setInventorySlotContents(int var1, ItemStack var2) {
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return 0;
-	}
-
-	@Override
-	public void openInventory() {
-	}
-
-	@Override
-	public void closeInventory() {
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return super.isUseableByPlayer(player);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean hasCustomInventoryName() {
-		return super.hasCustomInventoryName();
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return super.isItemValidForSlot(slotIndex, itemstack);
-	}
+	// TODO: Give Rainmaker a real inventory and a GUI with slots
+//	@Override
+//	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
+//		if (charge != 0)
+//			return 0;
+//
+//		if (!FuelManager.rainSubstrate.containsKey(stack))
+//			return 0;
+//
+//		RainSubstrate substrate = FuelManager.rainSubstrate.get(stack);
+//		if (!substrate.item.isItemEqual(stack))
+//			return 0;
+//
+//		if (doAdd)
+//			addCharge(substrate);
+//		return 1;
+//	}
+//
+//	@Override
+//	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
+//		return null;
+//	}
+//
+//	@Override
+//	public int getSizeInventory() {
+//		return 0;
+//	}
+//
+//	@Override
+//	public ItemStack getStackInSlot(int var1) {
+//		return null;
+//	}
+//
+//	@Override
+//	public ItemStack decrStackSize(int var1, int var2) {
+//		return null;
+//	}
+//
+//	@Override
+//	public ItemStack getStackInSlotOnClosing(int var1) {
+//		return null;
+//	}
+//
+//	@Override
+//	public void setInventorySlotContents(int var1, ItemStack var2) {
+//	}
+//
+//	@Override
+//	public int getInventoryStackLimit() {
+//		return 0;
+//	}
+//
+//	@Override
+//	public void openInventory() {
+//	}
+//
+//	@Override
+//	public void closeInventory() {
+//	}
+//
+//	@Override
+//	public boolean isUseableByPlayer(EntityPlayer player) {
+//		return Utils.isUseableByPlayer(player, this);
+//	}
+//
+//	@Override
+//	public boolean hasCustomInventoryName() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
+//		return false;
+//	}
 }

@@ -14,7 +14,6 @@ import buildcraft.api.statements.ITriggerExternal;
 import cpw.mods.fml.common.Optional;
 import forestry.api.core.ITileStructure;
 import forestry.core.utils.BlockUtil;
-import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.farming.triggers.FarmingTriggers;
@@ -69,9 +68,11 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 	private void dumpToPipe(ArrayList<ForgeDirection> pipes) {
 
 		ItemStack[] products = extractItem(true, ForgeDirection.DOWN, 1);
-		for (ItemStack product : products)
-			while (product.stackSize > 0)
+		for (ItemStack product : products) {
+			while (product.stackSize > 0) {
 				BlockUtil.putFromStackIntoPipe(this, pipes, product);
+			}
+		}
 
 	}
 
@@ -118,17 +119,11 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 	}
 
 	/* IINVENTORY */
-	@Override
-	public InventoryAdapter getInternalInventory() {
-		return (InventoryAdapter)getStructureInventory();
-	}
-
-	private IInventory getStructureInventory() {
-
+	private ISidedInventory getStructureInventory() {
 		if (hasMaster()) {
 			ITileStructure central = getCentralTE();
 			if (central != null)
-				return central.getInventory();
+				return (ISidedInventory) central.getInventory();
 		}
 
 		return null;
@@ -187,46 +182,6 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 	}
 
 	@Override
-	protected boolean canTakeStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-
-		if(!super.canTakeStackFromSide(slotIndex, itemstack, side))
-			return false;
-
-		if(slotIndex >= TileFarmPlain.SLOT_PRODUCTION_1 && slotIndex < TileFarmPlain.SLOT_PRODUCTION_1 + TileFarmPlain.SLOT_COUNT_PRODUCTION)
-			return true;
-
-		return false;
-	}
-
-	@Override
-	protected boolean canPutStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-
-		if (!hasMaster())
-			return false;
-
-		ITileStructure struct = getCentralTE();
-		if (!(struct instanceof TileFarmPlain))
-			return false;
-
-		if(!super.canPutStackFromSide(slotIndex, itemstack, side))
-			return false;
-
-		TileFarmPlain housing = (TileFarmPlain) struct;
-		if (slotIndex == TileFarmPlain.SLOT_FERTILIZER && housing.acceptsAsFertilizer(itemstack))
-			return true;
-		if (slotIndex >= TileFarmPlain.SLOT_RESOURCES_1 && slotIndex < TileFarmPlain.SLOT_RESOURCES_1 + TileFarmPlain.SLOT_COUNT_RESERVOIRS
-				&& housing.acceptsAsResource(itemstack))
-			return true;
-		if (slotIndex >= TileFarmPlain.SLOT_GERMLINGS_1 && slotIndex < TileFarmPlain.SLOT_GERMLINGS_1 + TileFarmPlain.SLOT_COUNT_RESERVOIRS
-				&& housing.acceptsAsGermling(itemstack))
-			return true;
-		if(slotIndex == TileFarmPlain.SLOT_CAN)
-			return FluidContainerRegistry.isFilledContainer(itemstack);
-
-		return false;
-	}
-
-	@Override
 	public void openInventory() {
 	}
 
@@ -239,52 +194,59 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 		return getUnlocalizedName();
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return super.isUseableByPlayer(player);
+		return Utils.isUseableByPlayer(player, this);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean hasCustomInventoryName() {
-		return super.hasCustomInventoryName();
+		return false;
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return super.isItemValidForSlot(slotIndex, itemstack);
+		if (!hasMaster())
+			return false;
+
+		ITileStructure struct = getCentralTE();
+		if (!(struct instanceof TileFarmPlain))
+			return false;
+
+		if (!getStructureInventory().isItemValidForSlot(slotIndex, itemstack))
+			return false;
+
+		TileFarmPlain housing = (TileFarmPlain) struct;
+		if (slotIndex == TileFarmPlain.SLOT_FERTILIZER && housing.acceptsAsFertilizer(itemstack))
+			return true;
+		if (slotIndex >= TileFarmPlain.SLOT_RESOURCES_1 && slotIndex < TileFarmPlain.SLOT_RESOURCES_1 + TileFarmPlain.SLOT_COUNT_RESERVOIRS
+				&& housing.acceptsAsResource(itemstack))
+			return true;
+		if (slotIndex >= TileFarmPlain.SLOT_GERMLINGS_1 && slotIndex < TileFarmPlain.SLOT_GERMLINGS_1 + TileFarmPlain.SLOT_COUNT_RESERVOIRS
+				&& housing.acceptsAsGermling(itemstack))
+			return true;
+		if (slotIndex == TileFarmPlain.SLOT_CAN)
+			return FluidContainerRegistry.isFilledContainer(itemstack);
+
+		return false;
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return super.canInsertItem(i, itemstack, j);
+	public boolean canInsertItem(int slotIndex, ItemStack itemstack, int side) {
+		return isItemValidForSlot(xCoord, itemstack);
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return super.canExtractItem(i, itemstack, j);
+	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+		if (!getStructureInventory().canExtractItem(slotIndex, itemstack, side))
+			return false;
+
+		return slotIndex >= TileFarmPlain.SLOT_PRODUCTION_1 && slotIndex < TileFarmPlain.SLOT_PRODUCTION_1 + TileFarmPlain.SLOT_COUNT_PRODUCTION;
 	}
 
-	/**
-	 * TODO: just a specialsource workaround
-	 */
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
-		return super.getAccessibleSlotsFromSide(side);
+		return getStructureInventory().getAccessibleSlotsFromSide(side);
 	}
 
 	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
@@ -316,7 +278,7 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 		}
 
 		if (product != null)
-			return new ItemStack[] { product };
+			return new ItemStack[]{product};
 		else
 			return StackUtils.EMPTY_STACK_ARRAY;
 	}

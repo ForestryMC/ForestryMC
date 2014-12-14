@@ -33,7 +33,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 
 import buildcraft.api.transport.PipeManager;
-
 import forestry.api.core.ISpecialInventory;
 import forestry.core.inventory.filters.ArrayStackFilter;
 import forestry.core.inventory.filters.IStackFilter;
@@ -45,7 +44,6 @@ import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.inventory.wrappers.SidedInventoryMapper;
-import forestry.core.inventory.wrappers.SpecialInventoryMapper;
 import forestry.core.utils.PlainInventory;
 
 public abstract class InvTools {
@@ -130,9 +128,7 @@ public abstract class InvTools {
 			public boolean matches(TileEntity tile) {
 				if (type != null && !type.isAssignableFrom(tile.getClass()))
 					return false;
-				if (exclude != null && exclude.isAssignableFrom(tile.getClass()))
-					return false;
-				return true;
+				return !(exclude != null && exclude.isAssignableFrom(tile.getClass()));
 			}
 		});
 	}
@@ -161,10 +157,7 @@ public abstract class InvTools {
 	public static IInventory getInventory(IInventory inv, ForgeDirection side) {
 		if (inv == null)
 			return null;
-
-		if (inv instanceof ISpecialInventory)
-			inv = new SpecialInventoryMapper((ISpecialInventory) inv, side);
-		else if (inv instanceof ISidedInventory)
+		if (inv instanceof ISidedInventory)
 			inv = new SidedInventoryMapper((ISidedInventory) inv, side);
 		return inv;
 	}
@@ -318,9 +311,8 @@ public abstract class InvTools {
 			return countItems(inv);
 
 		int count = 0;
-		ItemStack stack = null;
-		for (int slot = 0; slot < inv.getSizeInventory(); slot++) {
-			stack = inv.getStackInSlot(slot);
+		for (IInvSlot slot : InventoryIterator.getIterable(inv)) {
+			ItemStack stack = slot.getStackInSlot();
 			if (stack != null)
 				for (ItemStack filter : filters) {
 					if (filter != null && isItemEqual(stack, filter)) {
@@ -392,7 +384,7 @@ public abstract class InvTools {
 	 *
 	 * @param source
 	 * @param dest
-	 * @param filer an ItemStack[] to match against
+	 * @param filters an ItemStack[] to match against
 	 * @return null if nothing was moved, the stack moved otherwise
 	 */
 	public static ItemStack moveOneItem(IInventory source, IInventory dest, ItemStack... filters) {
@@ -404,7 +396,7 @@ public abstract class InvTools {
 	 *
 	 * @param source
 	 * @param dest
-	 * @param filer an IItemType to match against
+	 * @param filter an IItemType to match against
 	 * @return null if nothing was moved, the stack moved otherwise
 	 */
 	public static ItemStack moveOneItem(IInventory source, IInventory dest, IStackFilter filter) {
@@ -434,7 +426,7 @@ public abstract class InvTools {
 	 *
 	 * @param sources
 	 * @param dest
-	 * @param filters
+	 * @param filter
 	 * @return
 	 */
 	public static ItemStack moveOneItem(Collection<IInventory> sources, IInventory dest, IStackFilter filter) {
@@ -449,8 +441,8 @@ public abstract class InvTools {
 	/**
 	 * Attempts to move one item to a collection of inventories.
 	 *
-	 * @param sources
-	 * @param dest
+	 * @param source
+	 * @param destinations
 	 * @param filters
 	 * @return
 	 */
@@ -470,7 +462,7 @@ public abstract class InvTools {
 	 *
 	 * @param source
 	 * @param dest
-	 * @param filer an ItemStack[] to exclude
+	 * @param filters an ItemStack[] to exclude
 	 * @return null if nothing was moved, the stack moved otherwise
 	 */
 	public static ItemStack moveOneItemExcept(IInventory source, IInventory dest, ItemStack... filters) {
@@ -497,8 +489,8 @@ public abstract class InvTools {
 	/**
 	 * Attempts to move one item to a collection of inventories.
 	 *
-	 * @param sources
-	 * @param dest
+	 * @param source
+	 * @param destinations
 	 * @param filters
 	 * @return
 	 */
@@ -750,7 +742,7 @@ public abstract class InvTools {
 	 * Removes and returns a single item from the inventory that matches the
 	 * filter.
 	 *
-	 * @param inv The inventory
+	 * @param invs The inventory
 	 * @param filter EnumItemType to match against
 	 * @return An ItemStack
 	 */
