@@ -154,6 +154,9 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 		if(!isProcessedLetter && !checkedSessionVars) {
 			checkedSessionVars = true;
 			setFromSessionVars();
+			String recipient = this.address.getText();
+			EnumAddressee recipientType = container.getCarrierType();
+			setRecipient(recipient, recipientType);
 		}
 
 		// Check for focus changes
@@ -247,7 +250,7 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 			address.setText(recipient);
 
 			EnumAddressee type = EnumAddressee.fromString(typeName);
-			setRecipient(recipient, type);
+			container.setCarrierType(type);
 		}
 
 		SessionVars.clearStringVar("mail.letter.recipient");

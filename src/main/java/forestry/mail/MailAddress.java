@@ -10,23 +10,24 @@
  ******************************************************************************/
 package forestry.mail;
 
-import com.mojang.authlib.GameProfile;
-import forestry.api.core.INBTTagable;
-import forestry.api.mail.EnumAddressee;
-import forestry.api.mail.IMailAddress;
-import forestry.core.network.EntityNetData;
-import forestry.core.utils.PlayerUtil;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
-
 import java.util.Locale;
 import java.util.UUID;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
+
+import com.mojang.authlib.GameProfile;
+
+import forestry.api.core.INBTTagable;
+import forestry.api.mail.EnumAddressee;
+import forestry.api.mail.IMailAddress;
+import forestry.core.network.PacketPayload;
+import forestry.core.utils.PlayerUtil;
+
 public class MailAddress implements INBTTagable, IMailAddress {
 	private static final GameProfile invalidGameProfile = new GameProfile(new UUID(0, 0), "");
-	@EntityNetData
+
 	private EnumAddressee type;
-	@EntityNetData
 	private GameProfile gameProfile; // gameProfile is a fake GameProfile for traders, and real for players
 
 	public MailAddress() {

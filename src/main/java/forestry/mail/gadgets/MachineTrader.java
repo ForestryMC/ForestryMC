@@ -41,7 +41,6 @@ import java.util.LinkedList;
 
 public class MachineTrader extends TileBase implements ISidedInventory {
 
-	@EntityNetData
 	private MailAddress address;
 
 	public MachineTrader() {
