@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
-import forestry.core.EnumErrorCode;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.IFabricatorManager;
+import forestry.core.EnumErrorCode;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
@@ -28,13 +29,16 @@ import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.GuiId;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -44,11 +48,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import net.minecraft.inventory.ISidedInventory;
 
 public class MachineFabricator extends TilePowered implements ICrafter, ILiquidTankContainer, ISidedInventory {
 
@@ -229,14 +228,9 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 
 	public MachineFabricator() {
 		super(1100, 50, 3300);
-<<<<<<< HEAD
 		setInternalInventory(new TileInventoryAdapter(this, 30, "Items"));
 		invCrafting = new InventoryMapper(getInternalInventory(), SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
-		Fluid liquidGlass = FluidRegistry.getFluid(Defaults.LIQUID_GLASS);
-		moltenTank = new FilteredTank(2 * Defaults.BUCKET_VOLUME, liquidGlass);
-=======
 		moltenTank = new FilteredTank(2 * Defaults.BUCKET_VOLUME, Fluids.GLASS.get());
->>>>>>> dev
 		moltenTank.tankMode = StandardTank.TankMode.INTERNAL;
 		tankManager = new TankManager(moltenTank);
 	}
@@ -471,6 +465,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 	}
 
 	/* SMP */
+	@Override
 	public void getGUINetworkData(int i, int j) {
 		int messageId = tankManager.maxMessageId() + 1;
 
@@ -480,6 +475,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 			guiMeltingPoint = j;
 	}
 
+	@Override
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
 		int messageId = tankManager.maxMessageId() + 1;
 		iCrafting.sendProgressBarUpdate(container, messageId, heat);

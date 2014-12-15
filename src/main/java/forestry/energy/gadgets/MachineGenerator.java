@@ -10,21 +10,10 @@
  ******************************************************************************/
 package forestry.energy.gadgets;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-
-import forestry.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
+import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.FluidHelper;
@@ -33,24 +22,22 @@ import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.interfaces.IRenderableMachine;
-<<<<<<< HEAD
 import forestry.core.inventory.TileInventoryAdapter;
-import forestry.core.network.EntityNetData;
-=======
->>>>>>> dev
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginIC2;
-<<<<<<< HEAD
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraftforge.fluids.FluidTankInfo;
-=======
-
 import ic2.api.energy.prefab.BasicSource;
->>>>>>> dev
-
-
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
 
 public class MachineGenerator extends TileBase implements ISidedInventory, ILiquidTankContainer, IRenderableMachine {
 
@@ -187,6 +174,7 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 	}
 
 	/* SMP GUI */
+	@Override
 	public void getGUINetworkData(int i, int j) {
 		int firstMessageId = tankManager.maxMessageId() + 1;
 		if (i == firstMessageId)
@@ -194,6 +182,7 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 				ic2EnergySource.setEnergyStored(j);
 	}
 
+	@Override
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
 		int firstMessageId = tankManager.maxMessageId() + 1;
 		if (ic2EnergySource != null)

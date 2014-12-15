@@ -294,6 +294,7 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	/* SMP GUI */
+	@Override
 	public void getGUINetworkData(int i, int j) {
 		i -= tankManager.maxMessageId() + 1;
 		switch (i) {
@@ -306,6 +307,7 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 		}
 	}
 
+	@Override
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
 		int i = tankManager.maxMessageId() + 1;
 		iCrafting.sendProgressBarUpdate(container, i, distillationTime);
