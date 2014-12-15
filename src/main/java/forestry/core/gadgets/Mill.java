@@ -10,15 +10,12 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import forestry.core.network.EntityNetData;
+import forestry.core.network.PacketPayload;
 
 public abstract class Mill extends TileBase {
 
-	@EntityNetData
 	public int charge = 0;
-	@EntityNetData
 	public float speed;
-	@EntityNetData
 	public int stage = 0;
 	public float progress;
 
@@ -34,6 +31,24 @@ public abstract class Mill extends TileBase {
 	@Override
 	public void updateServerSide() {
 		update(true);
+	}
+
+	@Override
+	public PacketPayload getPacketPayload() {
+		PacketPayload payload = new PacketPayload(2, 1, 0);
+		payload.intPayload[0] = charge;
+		payload.intPayload[1] = stage;
+
+		payload.floatPayload[0] = speed;
+		return payload;
+	}
+
+	@Override
+	public void fromPacketPayload(PacketPayload payload) {
+		charge = payload.intPayload[0];
+		stage = payload.intPayload[1];
+
+		speed = payload.floatPayload[0];
 	}
 
 	private void update(boolean isSimulating) {

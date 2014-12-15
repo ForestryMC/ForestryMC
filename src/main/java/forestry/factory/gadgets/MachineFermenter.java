@@ -27,7 +27,6 @@ import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
@@ -48,7 +47,6 @@ import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.InventoryAdapter;
@@ -185,9 +183,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 			return recipeList;
 		}
 	}
-	@EntityNetData
 	public final FilteredTank resourceTank;
-	@EntityNetData
 	public final FilteredTank productTank;
 
 	private final TankManager tankManager;

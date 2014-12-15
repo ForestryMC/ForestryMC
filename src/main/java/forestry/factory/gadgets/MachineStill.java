@@ -40,7 +40,6 @@ import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.InventoryAdapter;
@@ -118,9 +117,7 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 	}
 
 	/* MEMBER */
-	@EntityNetData
 	public final FilteredTank resourceTank;
-	@EntityNetData
 	public final FilteredTank productTank;
 	private final TankManager tankManager;
 

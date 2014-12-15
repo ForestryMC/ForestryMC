@@ -10,15 +10,27 @@
  ******************************************************************************/
 package forestry.mail.gadgets;
 
-import buildcraft.api.statements.ITriggerExternal;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
 import cpw.mods.fml.common.Optional;
+
+import forestry.api.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
-import forestry.api.core.EnumErrorCode;
 import forestry.core.gadgets.TileBase;
-import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumAccess;
@@ -27,17 +39,8 @@ import forestry.core.utils.StackUtils;
 import forestry.mail.MailAddress;
 import forestry.mail.TradeStation;
 import forestry.plugins.PluginMail;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.Collection;
-import java.util.LinkedList;
+import buildcraft.api.statements.ITriggerExternal;
 
 public class MachineTrader extends TileBase implements ISidedInventory {
 

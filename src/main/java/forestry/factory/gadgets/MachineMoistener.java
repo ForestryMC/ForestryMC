@@ -10,6 +10,23 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+
 import forestry.api.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
@@ -24,27 +41,11 @@ import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.interfaces.IRenderableMachine;
-import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MachineMoistener extends TileBase implements ISpecialInventory, ISidedInventory, ILiquidTankContainer, IRenderableMachine {
 
@@ -119,7 +120,6 @@ public class MachineMoistener extends TileBase implements ISpecialInventory, ISi
 		}
 	}
 
-	@EntityNetData
 	public final FilteredTank resourceTank;
 	private final TankManager tankManager;
 	private final InventoryAdapter inventory = new InventoryAdapter(12, "Items");

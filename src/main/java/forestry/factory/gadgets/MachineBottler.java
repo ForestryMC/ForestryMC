@@ -10,8 +10,31 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
-import buildcraft.api.statements.ITriggerExternal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Stack;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+
 import cpw.mods.fml.common.Optional;
+
 import forestry.api.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.ICraftingProvider;
@@ -23,36 +46,13 @@ import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.InventoryAdapter;
-import forestry.core.utils.LiquidHelper;
-import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.factory.triggers.FactoryTriggers;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Stack;
+import buildcraft.api.statements.ITriggerExternal;
 
 public class MachineBottler extends TilePowered implements ISidedInventory, ILiquidTankContainer {
 
@@ -140,7 +140,6 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		}
 	}
 
-	@EntityNetData
 	public final StandardTank resourceTank;
 	private final TankManager tankManager;
 

@@ -29,7 +29,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
@@ -46,7 +45,6 @@ import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
@@ -211,7 +209,6 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	}
 
 	/* MEMBER */
-	@EntityNetData
 	public final FilteredTank resourceTank;
 	private final TankManager tankManager;
 	private final TileInventoryAdapter craftingInventory;
