@@ -16,8 +16,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fluids.FluidRegistry;
-
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.network.IGuiHandler;
 
@@ -29,6 +27,7 @@ import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
+import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.interfaces.IOreDictionaryHandler;
@@ -202,7 +201,7 @@ public class PluginMail extends ForestryPlugin {
 						'X', stampDefinitions[i].getCraftingIngredient(),
 						'#', Items.paper,
 						'Z', stampGlue);
-				RecipeManagers.carpenterManager.addRecipe(10, FluidRegistry.getFluidStack(Defaults.LIQUID_SEEDOIL, 300), null, ForestryItem.stamps.getItemStack(9, i),
+				RecipeManagers.carpenterManager.addRecipe(10, Fluids.SEEDOIL.get(300), null, ForestryItem.stamps.getItemStack(9, i),
 						"XXX", "###",
 						'X', stampDefinitions[i].getCraftingIngredient(),
 						'#', Items.paper);
@@ -212,7 +211,7 @@ public class PluginMail extends ForestryPlugin {
 		Proxies.common.addRecipe(new ItemStack(Items.paper), "###", '#', ForestryItem.letters.getItemStack(1, Defaults.WILDCARD));
 
 		// Carpenter
-		RecipeManagers.carpenterManager.addRecipe(10, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 250), null, ForestryItem.letters.getItemStack(), "###", "###", '#', ForestryItem.woodPulp);
+		RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.get(250), null, ForestryItem.letters.getItemStack(), "###", "###", '#', ForestryItem.woodPulp);
 
 		Proxies.common.addShapelessRecipe(ForestryItem.catalogue.getItemStack(), ForestryItem.stamps.getItemStack(1, Defaults.WILDCARD), new ItemStack(Items.book));
 	}

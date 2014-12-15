@@ -43,8 +43,6 @@ public enum ForestryItem {
 	wrench,
 	pipette,
 	bucketBiomass,
-	vialEmpty,
-	vialCatalyst,
 	bucketBiofuel,
 	// Crafting
 	impregnatedCasing,

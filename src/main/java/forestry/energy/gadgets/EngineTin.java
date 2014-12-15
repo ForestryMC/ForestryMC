@@ -22,7 +22,7 @@ import ic2.api.energy.prefab.BasicSink;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.core.TemperatureState;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;

@@ -19,29 +19,36 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
 
-import ic2.api.energy.prefab.BasicSource;
-
+import forestry.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
-import forestry.api.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.FluidHelper;
-import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.TankManager;
+import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.interfaces.IRenderableMachine;
+<<<<<<< HEAD
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.EntityNetData;
+=======
+>>>>>>> dev
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginIC2;
+<<<<<<< HEAD
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraftforge.fluids.FluidTankInfo;
+=======
+
+import ic2.api.energy.prefab.BasicSource;
+>>>>>>> dev
 
 
 
@@ -51,7 +58,6 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 	public static final short SLOT_CAN = 0;
 	public static final int maxEnergy = 30000;
 
-	@EntityNetData
 	public final FilteredTank resourceTank;
 	private final TankManager tankManager;
 	private int tickCount = 0;

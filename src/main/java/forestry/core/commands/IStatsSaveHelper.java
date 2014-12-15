@@ -4,22 +4,30 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.apiculture;
+package forestry.core.commands;
 
-import net.minecraft.command.CommandException;
+import java.util.Collection;
+
+import net.minecraft.world.World;
 
 import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IBreedingTracker;
 
-public class TemplateNotFoundException extends CommandException {
+import com.mojang.authlib.GameProfile;
 
-	private static final long serialVersionUID = 1L;
+public interface IStatsSaveHelper {
 
-	public TemplateNotFoundException(IAlleleSpecies species) {
-		super("Could not find template for species %s with UID %s", species.getName(), species.getUID());
-	}
+	String getUnlocalizedSaveStatsString();
 
+	void addExtraInfo(Collection<String> statistics, IBreedingTracker breedingTracker);
+
+	Collection<IAlleleSpecies> getSpecies();
+
+	String getFileSuffix();
+
+	IBreedingTracker getBreedingTracker(World world, GameProfile gameProfile);
 }

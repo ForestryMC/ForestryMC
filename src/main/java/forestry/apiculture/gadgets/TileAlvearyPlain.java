@@ -18,10 +18,11 @@ import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.core.BiomeHelper;
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorState;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.core.ITileStructure;
 import forestry.api.genetics.IIndividual;
@@ -423,7 +424,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 
 	@Override
 	public int getErrorOrdinal() {
-		return getErrorState().ordinal();
+		return getErrorState().getID();
 	}
 
 	@Override
@@ -773,7 +774,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IS
 
 	/* IERRORSOURCE */
 	@Override
-	public EnumErrorCode getErrorState() {
+	public IErrorState getErrorState() {
 		if (hasMaster()) {
 			ITileStructure tile = this.getCentralTE();
 			if (tile != null)

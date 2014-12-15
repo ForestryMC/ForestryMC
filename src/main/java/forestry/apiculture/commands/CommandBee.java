@@ -10,15 +10,23 @@
  ******************************************************************************/
 package forestry.apiculture.commands;
 
+import forestry.core.commands.CommandMode;
+import forestry.core.commands.CommandSaveStats;
+import forestry.core.commands.ICommandModeHelper;
+import forestry.core.commands.IStatsSaveHelper;
 import forestry.core.commands.SubCommand;
 
-public class CommandBeekeeping extends SubCommand {
+public class CommandBee extends SubCommand {
 
-	public CommandBeekeeping() {
-		super("beekeeping");
-		addAlias("bee");
-		addChildCommand(new CommandBeekeepingMode());
-		addChildCommand(new CommandBeekeepingSave());
-		addChildCommand(new CommandBeekeepingGiveBee());
+	public CommandBee() {
+		super("bee");
+		addAlias("beekeeping");
+
+		IStatsSaveHelper saveHelper = new BeeStatsSaveHelper();
+		ICommandModeHelper modeHelper = new BeeModeHelper();
+
+		addChildCommand(new CommandMode(modeHelper));
+		addChildCommand(new CommandSaveStats(saveHelper, modeHelper));
+		addChildCommand(new CommandBeeGive());
 	}
 }

@@ -25,7 +25,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.mail.ILetter;
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IHintSource;

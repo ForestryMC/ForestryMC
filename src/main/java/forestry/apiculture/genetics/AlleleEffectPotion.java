@@ -51,21 +51,21 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 
 			EntityPlayer player = (EntityPlayer) entity;
 
-			int duration = this.duration;
+			int dur = this.duration;
 			if (isBadEffect) {
 				// Players are not attacked if they wear a full set of apiarist's armor.
 				int count = ItemArmorApiarist.wearsItems((EntityPlayer) entity, getUID(), true);
 				if (count >= 4)
 					continue; // Full set, no damage/effect
 				else if (count == 3)
-					duration = this.duration / 4;
+					dur = this.duration / 4;
 				else if (count == 2)
-					duration = this.duration / 2;
+					dur = this.duration / 2;
 				else if (count == 1)
-					duration = this.duration * 3 / 4;
+					dur = this.duration * 3 / 4;
 			}
 
-			player.addPotionEffect(new PotionEffect(potion.getId(), duration, 0));
+			player.addPotionEffect(new PotionEffect(potion.getId(), dur, 0));
 		}
 
 		return storedData;
@@ -74,7 +74,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 	//FIXME: remove when Potion.isBadEffect() is available server-side
 	private static boolean isBadEffect(Potion potion) {
 		try {
-			return ReflectionHelper.getPrivateValue(Potion.class, potion, "field_76418_K", "isBadEffect");
+			return (Boolean) ReflectionHelper.getPrivateValue(Potion.class, potion, "field_76418_K", "isBadEffect");
 		} catch (ReflectionHelper.UnableToFindFieldException e) {
 			Proxies.log.severe("Could not access potion field isBadEffect.");
 			return false;

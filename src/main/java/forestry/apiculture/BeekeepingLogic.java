@@ -23,10 +23,12 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IIndividual;
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
+import forestry.api.core.IErrorState;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.proxy.Proxies;
+import forestry.core.proxy.ProxyLog;
 import forestry.plugins.PluginApiculture;
 
 public class BeekeepingLogic implements IBeekeepingLogic {
@@ -261,7 +263,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		try {
 			boolean canWork = true;
 			// Not while raining, at night or without light
-			EnumErrorCode state = queen.canWork(housing);
+			IErrorState state = queen.canWork(housing);
 			if (state != EnumErrorCode.OK) {
 				housing.setErrorState(state);
 				canWork = false;
@@ -270,6 +272,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 			}
 			return canWork;
 		} catch (Error e) {
+			Proxies.log.logErrorAPI("Forestry", e, IBee.class);
 			return queenCanWorkDeprecated();
 		}
 	}

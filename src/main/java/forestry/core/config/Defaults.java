@@ -29,7 +29,6 @@ public class Defaults {
 
 	public static final int NET_MAX_UPDATE_DISTANCE = 50;
 
-	public static final String DEFAULT_POWER_FRAMEWORK = "forestry.energy.BioPowerFramework";
 	public static final int BUCKET_VOLUME = 1000;
 	public static final int FLUID_PER_HONEY_DROP = 100;
 
@@ -45,39 +44,17 @@ public class Defaults {
 	public static final int[] FACING_WESTEAST = { FACING_WEST, FACING_EAST };
 	public static final int[] FACINGS_NONE = new int[0];
 
-	public static final String LIQUID_WATER = "water";
-	public static final String LIQUID_LAVA = "lava";
-	public static final String LIQUID_MILK = "milk";
-	public static final String LIQUID_BIOMASS = "biomass";
-	public static final String LIQUID_ETHANOL = "bioethanol";
-	public static final String LIQUID_SEEDOIL = "seedoil";
-	public static final String LIQUID_HONEY = "honey";
-	public static final String LIQUID_JUICE = "juice";
-	public static final String LIQUID_ICE = "ice";
-	public static final String LIQUID_MEAD = "short.mead";
-	public static final String LIQUID_GLASS = "glass";
-	public static final String LIQUID_OIL = "oil";
-	public static final String LIQUID_FUEL = "fuel";
-
 	// Textures
 	public static final String TEXTURE_PATH_GUI = "textures/gui";
 	public static final String TEXTURE_PATH_BLOCKS = "textures/blocks";
 	public static final String TEXTURE_PATH_ITEMS = "textures/items";
 	public static final String TEXTURE_PATH_ENTITIES = "textures/entity";
 
-	public static final String TEXTURE_BLOCKS = TEXTURE_PATH_BLOCKS + "/blocks.png";
-	public static final String TEXTURE_ARBORICULTURE = TEXTURE_PATH_BLOCKS + "/arboriculture.png";
-	public static final String TEXTURE_PODS = TEXTURE_PATH_BLOCKS + "/pods.png";
-	public static final String TEXTURE_FARM = TEXTURE_PATH_BLOCKS + "/farm.png";
-
 	public static final String TEXTURE_APIARIST_ARMOR_PRIMARY = TEXTURE_PATH_ITEMS + "/apiarist_armor_1.png";
 	public static final String TEXTURE_APIARIST_ARMOR_SECONDARY = TEXTURE_PATH_ITEMS + "/apiarist_armor_2.png";
 	public static final String TEXTURE_NATURALIST_ARMOR_PRIMARY = TEXTURE_PATH_ITEMS + "/naturalist_armor_1.png";
 	public static final String TEXTURE_SKIN_BEEKPEEPER = TEXTURE_PATH_ENTITIES + "/beekeeper.png";
 	public static final String TEXTURE_SKIN_LUMBERJACK = TEXTURE_PATH_ENTITIES + "/lumberjack.png";
-
-	public static final String TEXTURE_ICONS_MINECRAFT = "/gui/items.png";
-	public static final String TEXTURE_BLOCKS_MINECRAFT = "/terrain.png";
 
 	// Villagers
 	public static final int ID_VILLAGER_BEEKEEPER = 80;
@@ -160,13 +137,6 @@ public class Defaults {
 	public static final int FOOD_HONEY_HEAL = 2;
 	public static final float FOOD_HONEY_SATURATION = 0.2f;
 
-	// IndustrialCraft 2
-	public static final int ID_IC2_FUELCAN_DAMAGE = 6480;
-
-	// BuildCraft
-	public static final int BUILDCRAFT_BLOCKID_ENGINE = 161;
-	public static final int BUILDCRAFT_BLOCKID_PIPE = 166;
-
 	public static final int APIARY_MIN_LEVEL_LIGHT = 11;
 	public static final int APIARY_BREEDING_TIME = 100;
 
@@ -233,32 +203,4 @@ public class Defaults {
 	public static final int CARPENTER_CRATING_CYCLES = 5;
 	public static final int CARPENTER_UNCRATING_CYCLES = 5;
 	public static final int CARPENTER_CRATING_LIQUID_QUANTITY = 100;
-
-	// SMP gui ids
-	public static final int ID_GUI_ARBORETUM = 90;
-	public static final int ID_GUI_BOTTLER = 91;
-	public static final int ID_GUI_ENGINE_BRONZE = 92;
-	public static final int ID_GUI_FARM = 93;
-	public static final int ID_GUI_FERMENTER = 94;
-	public static final int ID_GUI_FORESTER = 95;
-	public static final int ID_GUI_PLANTATION = 96;
-	public static final int ID_GUI_PUMPKIN_FARM = 97;
-	public static final int ID_GUI_PEAT_BOG = 98;
-	public static final int ID_GUI_STILL = 99;
-	public static final int ID_GUI_ENGINE_COPPER = 89;
-	public static final int ID_GUI_RAINTANK = 88;
-	public static final int ID_GUI_GENERATOR = 87;
-	public static final int ID_GUI_CARPENTER = 86;
-	public static final int ID_GUI_MOISTENER = 85;
-	public static final int ID_GUI_MUSHROOM_FARM = 84;
-	public static final int ID_GUI_APIARY = 83;
-	public static final int ID_GUI_CENTRIFUGE = 82;
-	public static final int ID_GUI_APIARIST_INVENTORY = 81;
-	public static final int ID_GUI_BACKPACK = 80;
-	public static final int ID_GUI_SQUEEZER = 79;
-	public static final int ID_GUI_NETHER_FARM = 78;
-	public static final int ID_GUI_BEEALYZER = 100;
-	public static final int ID_GUI_BACKPACK_T2 = 101;
-	public static final int ID_GUI_BIOME_FINDER = 102;
-	// ID 100 used by bucket filler.
 }

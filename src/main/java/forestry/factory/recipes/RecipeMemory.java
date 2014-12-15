@@ -12,7 +12,7 @@ package forestry.factory.recipes;
 
 import forestry.api.core.INBTTagable;
 import forestry.core.gui.ContainerDummy;
-import forestry.core.utils.InventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.PlainInventory;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;

@@ -10,6 +10,21 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
+import forestry.api.core.BiomeHelper;
+import forestry.api.core.ForestryAPI;
+import forestry.core.EnumErrorCode;
+import forestry.core.config.Config;
+import forestry.core.config.Defaults;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.Fluids;
+import forestry.core.fluids.TankManager;
+import forestry.core.fluids.tanks.FilteredTank;
+import forestry.core.gadgets.TileBase;
+import forestry.core.interfaces.ILiquidTankContainer;
+import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.GuiId;
+import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -17,36 +32,18 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.biome.BiomeGenBase;
-
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
-import forestry.api.core.BiomeHelper;
-import forestry.api.core.EnumErrorCode;
-import forestry.api.core.ForestryAPI;
-import forestry.core.config.Config;
-import forestry.core.config.Defaults;
-import forestry.core.fluids.FluidHelper;
-import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.gadgets.TileBase;
-import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.inventory.InventoryAdapter;
-import forestry.core.inventory.TileInventoryAdapter;
-import forestry.core.network.GuiId;
-import forestry.core.utils.Fluids;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
-
 public class MachineRaintank extends TileBase implements ISidedInventory, ILiquidTankContainer {
 
 	/* CONSTANTS */
 	public static final short SLOT_RESOURCE = 0;
 	public static final short SLOT_PRODUCT = 1;
-	private static final FluidStack STACK_WATER = FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, Defaults.RAINTANK_AMOUNT_PER_UPDATE);
+	private static final FluidStack STACK_WATER = Fluids.WATER.get(Defaults.RAINTANK_AMOUNT_PER_UPDATE);
 
 	/* MEMBER */
 	public FilteredTank resourceTank;

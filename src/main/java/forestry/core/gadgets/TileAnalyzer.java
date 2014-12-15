@@ -15,6 +15,7 @@ import java.util.Stack;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,25 +26,23 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
+import forestry.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
-import forestry.api.core.EnumErrorCode;
-import forestry.core.fluids.TankManager;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.Fluids;
-import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.network.EntityNetData;
-import forestry.core.network.GuiId;
+import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
+import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.InvTools;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.inventory.wrappers.InventoryMapper;
-import forestry.core.inventory.TileInventoryAdapter;
-import net.minecraft.inventory.IInventory;
+import forestry.core.network.GuiId;
 
 public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankContainer {
 
@@ -59,7 +58,6 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	/* MEMBER */
 	private int analyzeTime;
 
-	@EntityNetData
 	public final FilteredTank resourceTank;
 
 	private final TankManager tankManager;

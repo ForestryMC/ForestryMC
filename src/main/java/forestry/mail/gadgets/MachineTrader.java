@@ -16,19 +16,20 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.core.config.Defaults;
 import forestry.core.gadgets.TileBase;
-import forestry.core.network.EntityNetData;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumAccess;
-import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.mail.MailAddress;
 import forestry.mail.TradeStation;
 import forestry.plugins.PluginMail;
+import java.util.Collection;
+import java.util.LinkedList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -38,12 +39,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.Collection;
-import java.util.LinkedList;
-
 public class MachineTrader extends TileBase implements ISidedInventory {
 
-	@EntityNetData
 	private MailAddress address;
 
 	public MachineTrader() {

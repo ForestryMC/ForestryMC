@@ -12,8 +12,6 @@ package forestry.core.circuits;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map.Entry;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -25,16 +23,19 @@ import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ISolderManager;
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.EnumErrorCode;
+import forestry.api.core.IErrorState;
+import forestry.core.EnumErrorCode;
 import forestry.core.interfaces.IErrorSource;
+import forestry.core.inventory.ItemInventory;
 import forestry.core.items.ItemForestry;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.inventory.ItemInventory;
+import forestry.core.utils.RevolvingList;
 
 public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 
 	public static class CircuitRecipe {
+
 		private final ICircuitLayout layout;
 		private final ItemStack resource;
 		public final ICircuit circuit;
@@ -54,6 +55,7 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 	}
 
 	public static class SolderManager implements ISolderManager {
+
 		public static final ArrayList<CircuitRecipe> recipes = new ArrayList<CircuitRecipe>();
 
 		@Override
@@ -71,9 +73,10 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 			if (layout == null || resource == null)
 				return null;
 
-			for (CircuitRecipe recipe : recipes)
+			for (CircuitRecipe recipe : recipes) {
 				if (recipe.matches(layout, resource))
 					return recipe;
+			}
 
 			return null;
 		}
@@ -82,7 +85,7 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 	// / INVENTORY MANAGMENT
 	public static class SolderingInventory extends ItemInventory implements IErrorSource {
 
-		private ICircuitLayout layout;
+		private final RevolvingList<ICircuitLayout> layouts = new RevolvingList<ICircuitLayout>(ChipsetManager.circuitRegistry.getRegisteredLayouts().values());
 		private EnumErrorCode errorState;
 
 		private final short blankSlot = 0;
@@ -91,57 +94,32 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 
 		public SolderingInventory() {
 			super(ItemSolderingIron.class, 6);
-			layout = ChipsetManager.circuitRegistry.getDefaultLayout();
+			init();
 		}
 
 		public SolderingInventory(ItemStack itemstack) {
 			super(ItemSolderingIron.class, 6, itemstack);
-			layout = ChipsetManager.circuitRegistry.getDefaultLayout();
+			init();
+		}
+
+		private void init() {
+			layouts.setCurrent(ChipsetManager.circuitRegistry.getDefaultLayout());
 		}
 
 		public ICircuitLayout getLayout() {
-			return this.layout;
+			return layouts.getCurrent();
 		}
 
 		public void setLayout(String uid) {
-			this.layout = ChipsetManager.circuitRegistry.getLayout(uid);
+			layouts.setCurrent(ChipsetManager.circuitRegistry.getLayout(uid));
 		}
 
 		public void advanceLayout() {
-			Iterator<Entry<String, ICircuitLayout>> it = ChipsetManager.circuitRegistry.getRegisteredLayouts().entrySet().iterator();
-			while (it.hasNext()) {
-				Entry<String, ICircuitLayout> entry = it.next();
-				if (entry.getKey().equals(layout.getUID())) {
-
-					if (it.hasNext())
-						layout = it.next().getValue();
-					else
-						layout = ChipsetManager.circuitRegistry.getRegisteredLayouts().entrySet().iterator().next().getValue();
-
-					break;
-				}
-			}
+			layouts.rotateRight();
 		}
 
 		public void regressLayout() {
-			Iterator<Entry<String, ICircuitLayout>> it = ChipsetManager.circuitRegistry.getRegisteredLayouts().entrySet().iterator();
-
-			ICircuitLayout previous = null;
-			while (it.hasNext()) {
-				Entry<String, ICircuitLayout> entry = it.next();
-				if (entry.getKey().equals(layout.getUID())) {
-
-					if (previous != null)
-						layout = previous;
-					else
-						while (it.hasNext())
-							layout = it.next().getValue();
-
-					break;
-				}
-
-				previous = entry.getValue();
-			}
+			layouts.rotateLeft();
 		}
 
 		private Collection<ICircuit> getCircuits(EnumCircuitBoardType type, boolean doConsume) {
@@ -153,7 +131,7 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 				if (ingredient == null)
 					continue;
 
-				CircuitRecipe recipe = SolderManager.getMatchingRecipe(layout, ingredient);
+				CircuitRecipe recipe = SolderManager.getMatchingRecipe(layouts.getCurrent(), ingredient);
 				if (recipe == null)
 					continue;
 
@@ -170,16 +148,18 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 		}
 
 		public void trySolder() {
-
-			// Requires blank slot
-			if (inventoryStacks[blankSlot] == null)
+			if (layouts.getCurrent() == CircuitRegistry.DUMMY_LAYOUT)
 				return;
-			if (inventoryStacks[blankSlot].stackSize > 1)
+
+			ItemStack blank = inventoryStacks[blankSlot];
+			// Requires blank slot
+			if (blank == null)
+				return;
+			if (blank.stackSize > 1)
 				return;
 			if (inventoryStacks[finishedSlot] != null)
 				return;
 
-			ItemStack blank = inventoryStacks[blankSlot];
 			// Need a chipset item
 			if (!ChipsetManager.circuitRegistry.isChipset(blank))
 				return;
@@ -199,15 +179,16 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 			}
 
 			circuits = getCircuits(type, true);
-			inventoryStacks[finishedSlot] = ItemCircuitBoard.createCircuitboard(type, layout, circuits.toArray(new ICircuit[circuits.size()]));
+			inventoryStacks[finishedSlot] = ItemCircuitBoard.createCircuitboard(type, layouts.getCurrent(), circuits.toArray(new ICircuit[circuits.size()]));
 			inventoryStacks[blankSlot] = null;
 		}
 
 		public int getCount(ICircuit circuit, ArrayList<ICircuit> circuits) {
 			int count = 0;
-			for (ICircuit other : circuits)
+			for (ICircuit other : circuits) {
 				if (other.getUID().equals(circuit.getUID()))
 					count++;
+			}
 			return count;
 		}
 
@@ -231,7 +212,9 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 		}
 
 		@Override
-		public EnumErrorCode getErrorState() {
+		public IErrorState getErrorState() {
+			if (layouts.getCurrent() == CircuitRegistry.DUMMY_LAYOUT)
+				return EnumErrorCode.NOCIRCUITLAYOUT;
 			if (inventoryStacks[blankSlot] == null)
 				return EnumErrorCode.NOCIRCUITBOARD;
 			if (inventoryStacks[blankSlot].stackSize > 1)

@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.core.interfaces;
 
-import forestry.api.core.EnumErrorCode;
+import forestry.api.core.IErrorState;
 
 public interface IErrorSource {
 
 	boolean throwsErrors();
 
-	EnumErrorCode getErrorState();
+	IErrorState getErrorState();
 
 }

@@ -10,25 +10,9 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import forestry.api.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.IStillManager;
+import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.FluidHelper;
@@ -39,10 +23,23 @@ import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.TileInventoryAdapter;
-import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.Utils;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
 
 public class MachineStill extends TilePowered implements ISidedInventory, ILiquidTankContainer {
 
@@ -118,9 +115,7 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	/* MEMBER */
-	@EntityNetData
 	public final FilteredTank resourceTank;
-	@EntityNetData
 	public final FilteredTank productTank;
 	private final TankManager tankManager;
 
@@ -131,7 +126,7 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 
 	public MachineStill() {
 		super(1100, 50, 8000);
-		setInternalInventory(new TileInventoryAdapter(this,3, "Items"));
+		setInternalInventory(new TileInventoryAdapter(this, 3, "Items"));
 		setHints(Config.hints.get("still"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluidInputs);
 		resourceTank.tankMode = StandardTank.TankMode.INPUT;
@@ -381,7 +376,7 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 
 		return false;
 	}
-	
+
 	/* ISIDEDINVENTORY */
 	@Override
 	public boolean canInsertItem(int slotIndex, ItemStack itemstack, int side) {

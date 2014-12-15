@@ -17,9 +17,10 @@ import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafTickHandler;
 import forestry.api.arboriculture.ITree;
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.core.IErrorState;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFruitBearer;
@@ -442,7 +443,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	@Override public void setErrorState(int state) {}
 
 	@Override
-	public void setErrorState(EnumErrorCode state) {
+	public void setErrorState(IErrorState state) {
 	}
 
 	@Override public int getErrorOrdinal() { return 0; }

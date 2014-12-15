@@ -156,14 +156,14 @@ public class ContainerLetter extends ContainerItemInventory {
 		String typeName = packet.payload.stringPayload[1];
 
 		EnumAddressee type = EnumAddressee.fromString(typeName);
-		IMailAddress recipient;
+		IMailAddress recipient = null;
 		if (type == EnumAddressee.PLAYER) {
 			GameProfile gameProfile = MinecraftServer.getServer().func_152358_ax().func_152655_a(recipientName);
 			if (gameProfile == null)
 				gameProfile = new GameProfile(new UUID(0, 0), recipientName);
-			recipient = PostManager.postRegistry.getMailAddress(gameProfile);
+			recipient = PostManager.postRegistry.getValidMailAddress(player.worldObj, gameProfile);
 		} else if (type == EnumAddressee.TRADER) {
-			recipient = PostManager.postRegistry.getMailAddress(recipientName);
+			recipient = PostManager.postRegistry.getValidMailAddress(player.worldObj, recipientName);
 		} else {
 			return;
 		}
@@ -171,7 +171,8 @@ public class ContainerLetter extends ContainerItemInventory {
 		getLetter().setRecipient(recipient);
 		
 		// Update the trading info
-		updateTradeInfo(player.worldObj, recipient);
+		if (recipient == null || recipient.isTrader())
+			updateTradeInfo(player.worldObj, recipient);
 		
 		// Update info on client
 		Proxies.net.sendToPlayer(new PacketLetterInfo(PacketIds.LETTER_INFO, type, tradeInfo, recipient), player);
@@ -210,12 +211,16 @@ public class ContainerLetter extends ContainerItemInventory {
 		if (!Proxies.common.isSimulating(world))
 			return;
 
-		if (address.isPlayer())
+		if (address == null) {
+			setTradeInfo(null);
 			return;
+		}
 
 		ITradeStation station = PostManager.postRegistry.getTradeStation(world, address);
-		if (station == null)
+		if (station == null) {
+			setTradeInfo(null);
 			return;
+		}
 
 		setTradeInfo(station.getTradeInfo());
 	}
@@ -235,5 +240,9 @@ public class ContainerLetter extends ContainerItemInventory {
 
 	private void setTradeInfo(TradeStationInfo info) {
 		this.tradeInfo = info;
+		if (tradeInfo == null)
+			getLetter().setRecipient(null);
+		else
+			getLetter().setRecipient(tradeInfo.address);
 	}
 }

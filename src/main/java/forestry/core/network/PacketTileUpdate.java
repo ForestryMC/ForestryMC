@@ -18,15 +18,17 @@ import java.util.UUID;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.mojang.authlib.GameProfile;
+import forestry.api.core.ErrorStateRegistry;
+import forestry.api.core.IErrorState;
 
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.utils.EnumAccess;
 
 public class PacketTileUpdate extends PacketUpdate {
 
 	private ForgeDirection orientation = ForgeDirection.WEST;
-	private EnumErrorCode errorState = EnumErrorCode.OK;
+	private IErrorState errorState = EnumErrorCode.OK;
 
 	private boolean isOwnable = false;
 	private EnumAccess access = EnumAccess.SHARED;
@@ -57,11 +59,14 @@ public class PacketTileUpdate extends PacketUpdate {
 		data.writeInt(posY);
 		data.writeInt(posZ);
 
-		data.writeInt(this.orientation.ordinal());
-		data.writeInt(this.errorState.ordinal());
+		data.writeByte(this.orientation.ordinal());
+		data.writeShort(this.errorState.getID());
 
+		// TODO: Should this really be sent to the client? Huge network cost.
+		// As far as I know, only GUIs need it, and there are better ways to get the information to a GUI.
+		// -CovertJaguar
 		if (isOwnable) {
-			data.writeInt(access.ordinal());
+			data.writeByte(access.ordinal());
 			if (owner == null) {
 				data.writeBoolean(false);
 			} else {
@@ -83,10 +88,10 @@ public class PacketTileUpdate extends PacketUpdate {
 		posY = data.readInt();
 		posZ = data.readInt();
 
-		orientation = ForgeDirection.values()[data.readInt()];
-		errorState = EnumErrorCode.values()[data.readInt()];
+		orientation = ForgeDirection.getOrientation(data.readByte());
+		errorState = ErrorStateRegistry.getErrorStateFromCode(data.readShort());
 
-		int ordinal = data.readInt();
+		int ordinal = data.readByte();
 		isOwnable = ordinal >= 0;
 		if (isOwnable) {
 			access = EnumAccess.values()[ordinal];
@@ -105,7 +110,7 @@ public class PacketTileUpdate extends PacketUpdate {
 		return this.orientation;
 	}
 
-	public EnumErrorCode getErrorState() {
+	public IErrorState getErrorState() {
 		return this.errorState;
 	}
 

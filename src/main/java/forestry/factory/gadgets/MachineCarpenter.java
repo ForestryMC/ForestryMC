@@ -29,37 +29,33 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.ICarpenterManager;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.network.EntityNetData;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
-<<<<<<< HEAD
-import forestry.core.inventory.InventoryAdapter;
-import forestry.core.utils.LiquidHelper;
-=======
-import forestry.core.utils.InventoryAdapter;
->>>>>>> 5ea4770a2d5fef57cf52fb7c81f33671f8086740
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.core.utils.StackUtils;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.Utils;
 import forestry.factory.gui.ContainerCarpenter;
+import net.minecraftforge.fluids.FluidRegistry;
 
 public class MachineCarpenter extends TilePowered implements ISidedInventory, ILiquidTankContainer {
 
@@ -151,28 +147,16 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		@Override
 		public void addCrating(ItemStack itemStack) {
 			ItemStack uncrated = ((forestry.core.items.ItemCrated) itemStack.getItem()).getContained(itemStack);
-<<<<<<< HEAD
-			addRecipe(Defaults.CARPENTER_CRATING_CYCLES, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, Defaults.CARPENTER_CRATING_LIQUID_QUANTITY),
-					ForestryItem.crate.getItemStack(), itemStack, new Object[]{"###", "###", "###", '#', uncrated});
-			addRecipe(null, new ItemStack(uncrated.getItem(), 9, uncrated.getItemDamage()), new Object[]{"#", Character.valueOf('#'), itemStack});
-=======
-			addRecipe(Defaults.CARPENTER_CRATING_CYCLES, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, Defaults.CARPENTER_CRATING_LIQUID_QUANTITY),
+			addRecipe(Defaults.CARPENTER_CRATING_CYCLES, Fluids.WATER.get(Defaults.CARPENTER_CRATING_LIQUID_QUANTITY),
 					ForestryItem.crate.getItemStack(), itemStack, new Object[] { "###", "###", "###", '#', uncrated });
 			addRecipe(null, new ItemStack(uncrated.getItem(), 9, uncrated.getItemDamage()), new Object[] { "#", '#', itemStack });
->>>>>>> 5ea4770a2d5fef57cf52fb7c81f33671f8086740
 		}
 
 		@Override
 		public void addCrating(String toCrate, ItemStack unpack, ItemStack crated) {
-<<<<<<< HEAD
-			addRecipe(Defaults.CARPENTER_CRATING_CYCLES, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, Defaults.CARPENTER_CRATING_LIQUID_QUANTITY),
-					ForestryItem.crate.getItemStack(), crated, new Object[]{"###", "###", "###", '#', toCrate});
-			addRecipe(null, new ItemStack(unpack.getItem(), 9, unpack.getItemDamage()), new Object[]{"#", '#', crated});
-=======
-			addRecipe(Defaults.CARPENTER_CRATING_CYCLES, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, Defaults.CARPENTER_CRATING_LIQUID_QUANTITY),
+			addRecipe(Defaults.CARPENTER_CRATING_CYCLES, Fluids.WATER.get(Defaults.CARPENTER_CRATING_LIQUID_QUANTITY),
 					ForestryItem.crate.getItemStack(), crated, new Object[] { "###", "###", "###", '#', toCrate });
 			addRecipe(null, new ItemStack(unpack.getItem(), 9, unpack.getItemDamage()), new Object[] { "#", '#', crated });
->>>>>>> 5ea4770a2d5fef57cf52fb7c81f33671f8086740
 		}
 
 		@Override
@@ -227,7 +211,6 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	}
 
 	/* MEMBER */
-	@EntityNetData
 	public final FilteredTank resourceTank;
 	private final TankManager tankManager;
 	private final TileInventoryAdapter craftingInventory;

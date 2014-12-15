@@ -43,7 +43,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	}
 
 	@Override
-	public boolean subGenerate(int x, int y, int z) {
+	public boolean subGenerate(int x, int y, int z, boolean forced) {
 		this.startX = x;
 		this.startY = y;
 		this.startZ = z;
@@ -53,9 +53,9 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 		this.wood = getWood();
 
 		preGenerate();
-		if (!canGrow())
+		if (!forced && !canGrow()) {
 			return false;
-		else {
+		} else {
 			generate();
 			return true;
 		}

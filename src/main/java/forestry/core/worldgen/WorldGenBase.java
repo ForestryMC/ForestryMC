@@ -42,15 +42,19 @@ public abstract class WorldGenBase extends WorldGenerator {
 
 	@Override
 	public final boolean generate(World world, Random random, int x, int y, int z) {
+		return generate(world, random, x, y, z, false);
+	}
+
+	public final boolean generate(World world, Random random, int x, int y, int z, boolean forced) {
 		this.world = world;
 		this.rand = random;
-		boolean result = subGenerate(x, y, z);
+		boolean result = subGenerate(x, y, z, forced);
 		this.world = null;
 		this.rand = null;
 		return result;
 	}
 
-	public boolean subGenerate(int x, int y, int z) {
+	public boolean subGenerate(int x, int y, int z, boolean forced) {
 		return false;
 	}
 

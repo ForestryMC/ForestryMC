@@ -27,13 +27,12 @@ import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import cpw.mods.fml.common.Optional;
 
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
 import forestry.api.recipes.IFermenterManager;
@@ -41,13 +40,13 @@ import forestry.api.recipes.IVariableFermentable;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.network.EntityNetData;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.Utils;
@@ -138,7 +137,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 
 		@Override
 		public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output) {
-			addRecipe(resource, fermentationValue, modifier, output, FluidRegistry.getFluidStack(Defaults.LIQUID_WATER, 1000));
+			addRecipe(resource, fermentationValue, modifier, output, Fluids.WATER.get(1000));
 		}
 
 		public static Recipe findMatchingRecipe(ItemStack res, FluidStack liqu) {
@@ -183,9 +182,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 			return recipeList;
 		}
 	}
-	@EntityNetData
 	public final FilteredTank resourceTank;
-	@EntityNetData
 	public final FilteredTank productTank;
 
 	private final TankManager tankManager;

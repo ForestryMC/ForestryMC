@@ -19,11 +19,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
+import net.minecraftforge.oredict.OreDictionary;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import net.minecraftforge.oredict.OreDictionary;
-
+import forestry.core.config.ForestryItem;
 import forestry.core.render.TextureManager;
 
 public class ItemFruit extends ItemForestryFood {
@@ -48,6 +49,14 @@ public class ItemFruit extends ItemForestryFood {
 
 		public IIcon getIcon() {
 			return icons[ordinal()];
+		}
+
+		public ItemStack getStack() {
+			return getStack(1);
+		}
+
+		public ItemStack getStack(int qty) {
+			return ForestryItem.fruits.getItemStack(qty, ordinal());
 		}
 	}
 

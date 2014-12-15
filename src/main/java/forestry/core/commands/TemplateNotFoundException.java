@@ -8,15 +8,18 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.apiculture.commands;
+package forestry.core.commands;
 
-import forestry.core.commands.SubCommand;
+import net.minecraft.command.CommandException;
 
-public class CommandBeekeepingMode extends SubCommand {
+import forestry.api.genetics.IAlleleSpecies;
 
-	public CommandBeekeepingMode() {
-		super("mode");
-		addChildCommand(new CommandBeekeepingModeInfo());
-		addChildCommand(new CommandBeekeepingModeSet());
+public class TemplateNotFoundException extends CommandException {
+
+	private static final long serialVersionUID = 1L;
+
+	public TemplateNotFoundException(IAlleleSpecies species) {
+		super("Could not find template for species %s with UID %s", species.getName(), species.getUID());
 	}
+
 }

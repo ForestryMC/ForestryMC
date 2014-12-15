@@ -10,63 +10,42 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import java.util.LinkedList;
-
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.ForestryItem;
-import forestry.core.render.TextureManager;
+import forestry.core.fluids.Fluids;
 
 public class LiquidHelper {
-
-	private static final LinkedList<String> myLiquids = new LinkedList<String>();
 
 	public static boolean isEmptyLiquidData() {
 		return FluidContainerRegistry.getRegisteredFluidContainerData().length <= 0;
 	}
 
-	public static Fluid getOrCreateLiquid(String ident) {
-		if (!FluidRegistry.isFluidRegistered(ident)) {
-			Fluid fluid = new Fluid(ident);
-			FluidRegistry.registerFluid(fluid);
-			myLiquids.add(ident);
-		}
-		return FluidRegistry.getFluid(ident);
+	public static void injectLiquidContainer(Fluids fluid, int volume, ItemStack filled, ItemStack empty) {
+		injectLiquidContainer(fluid, volume, filled, empty, null, 0);
 	}
 
-	public static FluidStack getLiquid(String name, int amount) {
-		return FluidRegistry.getFluidStack(name, amount);
+	public static void injectWaxContainer(Fluids fluid, int volume, ItemStack filled, ItemStack empty) {
+		injectLiquidContainer(fluid, volume, filled, empty, ForestryItem.beeswax.getItemStack(), 10);
 	}
 
-	public static void injectLiquidContainer(String name, int volume, ItemStack filled, ItemStack empty) {
-		injectLiquidContainer(name, volume, filled, empty, null, 0);
+	public static void injectRefractoryContainer(Fluids fluid, int volume, ItemStack filled, ItemStack empty) {
+		injectLiquidContainer(fluid, volume, filled, empty, ForestryItem.refractoryWax.getItemStack(), 10);
 	}
 
-	public static void injectWaxContainer(String name, int volume, ItemStack filled, ItemStack empty) {
-		injectLiquidContainer(name, volume, filled, empty, ForestryItem.beeswax.getItemStack(), 10);
+	public static void injectTinContainer(Fluids fluid, int volume, ItemStack filled, ItemStack empty) {
+		injectLiquidContainer(fluid, volume, filled, empty, ForestryItem.ingotTin.getItemStack(), 5);
 	}
 
-	public static void injectRefractoryContainer(String name, int volume, ItemStack filled, ItemStack empty) {
-		injectLiquidContainer(name, volume, filled, empty, ForestryItem.refractoryWax.getItemStack(), 10);
-	}
-
-	public static void injectTinContainer(String name, int volume, ItemStack filled, ItemStack empty) {
-		injectLiquidContainer(name, volume, filled, empty, ForestryItem.ingotTin.getItemStack(), 5);
-	}
-
-	public static void injectLiquidContainer(String name, int volume, ItemStack filled, ItemStack empty, ItemStack remnant, int chance) {
-		FluidStack contained = FluidRegistry.getFluidStack(name, volume);
+	public static void injectLiquidContainer(Fluids fluid, int volume, ItemStack filled, ItemStack empty, ItemStack remnant, int chance) {
+		FluidStack contained = fluid.get(volume);
 		if (contained == null)
-			throw new IllegalArgumentException(String.format("Attempted to inject a liquid container for the non-existent liquid '%s'.", name));
+			throw new IllegalArgumentException(String.format("Attempted to inject a liquid container for the non-existent liquid '%s'.", fluid));
 
 		FluidContainerData container = new FluidContainerData(contained, filled, empty);
 		FluidContainerRegistry.registerFluidContainer(container);
@@ -79,11 +58,4 @@ public class LiquidHelper {
 					RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[] { container.filledContainer }, container.fluid);
 	}
 
-	public static void resetLiquidIcons(IIconRegister register) {
-		for (String fluidString : myLiquids) {
-			Fluid fluid = FluidRegistry.getFluid(fluidString);
-			IIcon icon = TextureManager.getInstance().registerTex(register, "liquid/" + fluid.getName());
-			fluid.setIcons(icon);
-		}
-	}
 }

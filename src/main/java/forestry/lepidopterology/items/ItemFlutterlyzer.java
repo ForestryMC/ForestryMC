@@ -19,7 +19,7 @@ import forestry.core.inventory.AlyzerInventory;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
 import forestry.api.lepidopterology.IButterfly;
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.IErrorSource;

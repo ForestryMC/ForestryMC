@@ -8,30 +8,24 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.apiculture.commands;
+package forestry.core.commands;
 
-import forestry.api.apiculture.IBeekeepingMode;
-import forestry.core.commands.CommandHelpers;
-import forestry.core.commands.SubCommand;
-import forestry.plugins.PluginApiculture;
+import java.util.List;
+
 import net.minecraft.command.ICommandSender;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class CommandBeekeepingModeSet extends SubCommand {
+public final class CommandModeSet extends SubCommand {
 	private final String[] modeStringArr;
+	private final ICommandModeHelper modeSetter;
 
-	public CommandBeekeepingModeSet() {
+	public CommandModeSet(ICommandModeHelper modeSetter) {
 		super("set");
 		setPermLevel(PermLevel.ADMIN);
-		int modeStringCount = PluginApiculture.beeInterface.getBeekeepingModes().size();
-		List<String> modeStrings = new ArrayList<String>(modeStringCount);
-		for (IBeekeepingMode mode : PluginApiculture.beeInterface.getBeekeepingModes())
-			modeStrings.add(mode.getName());
 
-		modeStringArr = modeStrings.toArray(new String[modeStringCount]);
+		this.modeSetter = modeSetter;
+		modeStringArr = modeSetter.getModeNames();
+
 	}
 
 	@Override
@@ -49,15 +43,15 @@ public class CommandBeekeepingModeSet extends SubCommand {
 
 		String desired = args[args.length - 1];
 
-		IBeekeepingMode mode = PluginApiculture.beeInterface.getBeekeepingMode(desired);
-		if (mode == null) {
-			CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.beekeeping.mode.set.error", desired);
+		String modeName = modeSetter.getModeNameMatching(desired);
+		if (modeName == null) {
+			CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.mode.set.error", desired);
 			printHelp(sender);
 			return;
 		}
 
-		PluginApiculture.beeInterface.setBeekeepingMode(world, mode.getName());
-		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.beekeeping.mode.set.success", mode.getName());
+		modeSetter.setMode(world, modeName);
+		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.mode.set.success", modeName);
 	}
 
 	@Override

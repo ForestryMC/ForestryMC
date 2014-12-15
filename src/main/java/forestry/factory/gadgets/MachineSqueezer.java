@@ -11,9 +11,8 @@
 package forestry.factory.gadgets;
 
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.ISpecialInventory;
 import forestry.api.recipes.ISqueezerManager;
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.FluidHelper;
@@ -23,14 +22,18 @@ import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.network.EntityNetData;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.inventory.InventoryAdapter;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Stack;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -42,13 +45,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Stack;
 
 public class MachineSqueezer extends TilePowered implements ISidedInventory, ILiquidTankContainer {
 
@@ -134,7 +130,6 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 
 	/* MEMBER */
 	private final TankManager tankManager;
-	@EntityNetData
 	public final FilteredTank productTank;
 
 	private Recipe currentRecipe;
@@ -455,7 +450,7 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		if(!getInternalInventory().isItemValidForSlot(slotIndex, itemstack))
+		if (!getInternalInventory().isItemValidForSlot(slotIndex, itemstack))
 			return false;
 
 		if (slotIndex == SLOT_CAN_INPUT)

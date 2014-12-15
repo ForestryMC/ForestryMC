@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.IFabricatorManager;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
@@ -228,10 +229,14 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 
 	public MachineFabricator() {
 		super(1100, 50, 3300);
+<<<<<<< HEAD
 		setInternalInventory(new TileInventoryAdapter(this, 30, "Items"));
 		invCrafting = new InventoryMapper(getInternalInventory(), SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
 		Fluid liquidGlass = FluidRegistry.getFluid(Defaults.LIQUID_GLASS);
 		moltenTank = new FilteredTank(2 * Defaults.BUCKET_VOLUME, liquidGlass);
+=======
+		moltenTank = new FilteredTank(2 * Defaults.BUCKET_VOLUME, Fluids.GLASS.get());
+>>>>>>> dev
 		moltenTank.tankMode = StandardTank.TankMode.INTERNAL;
 		tankManager = new TankManager(moltenTank);
 	}
@@ -425,14 +430,13 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		TileInventoryAdapter inventory = getInternalInventory();
 		ItemStack itemToMelt = inventory.getStackInSlot(SLOT_METAL);
 		Smelting smelting = RecipeManager.findMatchingSmelting(itemToMelt);
-		FluidStack liquid = smelting.getProduct();
-		if (moltenTank.fill(liquid, false) > 0)
+		if (smelting != null && moltenTank.fill(smelting.getProduct(), false) > 0)
 			return true;
 
 		ItemStack plan = inventory.getStackInSlot(SLOT_PLAN);
 		ItemStack[] resources = inventory.getStacks(SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
 
-		return RecipeManager.findMatchingRecipe(plan, liquid, resources) != null;
+		return RecipeManager.findMatchingRecipe(plan, moltenTank.getFluid(), resources) != null;
 	}
 
 	public int getHeatScaled(int i) {

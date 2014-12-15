@@ -4,20 +4,17 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.apiculture;
+package forestry.core.commands;
 
-import net.minecraft.command.CommandException;
+public class CommandMode extends SubCommand {
 
-public class SpeciesNotFoundException extends CommandException {
-
-	private static final long serialVersionUID = 1L;
-
-	public SpeciesNotFoundException(String title) {
-		super("Could not find bee species with Name or UID %s", title);
+	public CommandMode(ICommandModeHelper modeHelper) {
+		super("mode");
+		addChildCommand(new CommandModeInfo(modeHelper));
+		addChildCommand(new CommandModeSet(modeHelper));
 	}
-
 }

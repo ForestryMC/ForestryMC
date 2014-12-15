@@ -8,16 +8,16 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.network;
+package forestry.core.commands;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import net.minecraft.command.CommandException;
 
-/**
- * Simple annotation to mark a field for synchronization in SMP.
- */
-@Retention(RetentionPolicy.RUNTIME)
-public @interface EntityNetData {
-	// Needs to be set for arrays
-	int staticSize() default -1;
+public class SpeciesNotFoundException extends CommandException {
+
+	private static final long serialVersionUID = 1L;
+
+	public SpeciesNotFoundException(String title) {
+		super("Could not find species with Name or UID %s", title);
+	}
+
 }

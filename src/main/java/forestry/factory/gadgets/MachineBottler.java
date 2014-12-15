@@ -12,9 +12,9 @@ package forestry.factory.gadgets;
 
 import buildcraft.api.statements.ITriggerExternal;
 import cpw.mods.fml.common.Optional;
-import forestry.api.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.ICraftingProvider;
+import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.FluidHelper;
@@ -23,12 +23,17 @@ import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.network.EntityNetData;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.utils.Utils;
 import forestry.factory.triggers.FactoryTriggers;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Stack;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -43,13 +48,6 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Stack;
 
 public class MachineBottler extends TilePowered implements ISidedInventory, ILiquidTankContainer {
 
@@ -103,13 +101,12 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 				if (recipe.matches(res, empty))
 					return recipe;
 			}
-
+			
 			// No recipe matched. See if the liquid dictionary has anything.
-			if (FluidContainerRegistry.isEmptyContainer(empty)) {
-				ItemStack filled = FluidContainerRegistry.fillFluidContainer(res, empty);
+			if (FluidHelper.isEmptyContainer(empty)) {
+				ItemStack filled = FluidHelper.getFilledContainer(res, empty);
 				if (filled != null) {
-					FluidStack fluidStack = FluidContainerRegistry.getFluidForFilledItem(filled);
-					Recipe recipe = new Recipe(CYCLES_FILLING_DEFAULT, fluidStack, empty, filled);
+					Recipe recipe = new Recipe(CYCLES_FILLING_DEFAULT, res, empty, filled);
 					recipes.add(recipe);
 					return recipe;
 				}
@@ -141,7 +138,6 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		}
 	}
 
-	@EntityNetData
 	public final StandardTank resourceTank;
 	private final TankManager tankManager;
 
@@ -154,9 +150,9 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 
 	public MachineBottler() {
 		super(1100, 50, 4000);
-		
+
 		setInternalInventory(new TileInventoryAdapter(this, 3, "Items"));
-		
+
 		setHints(Config.hints.get("bottler"));
 		resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 		tankManager = new TankManager(resourceTank);
@@ -219,13 +215,12 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	public void updateServerSide() {
 		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
 			return;
-		
+
 		TileInventoryAdapter inventory = getInternalInventory();
-		
+
 		// Check if we have suitable items waiting in the item slot
-		if (inventory.getStackInSlot(SLOT_CAN) != null) {
+		if (inventory.getStackInSlot(SLOT_CAN) != null)
 			FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
-		}
 
 		checkRecipe();
 		if (getErrorState() == EnumErrorCode.NORECIPE && currentRecipe != null)
@@ -436,7 +431,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		if (slotIndex == SLOT_RESOURCE)
 			return FluidContainerRegistry.isEmptyContainer(itemstack);
 
-		if(slotIndex == SLOT_CAN) {
+		if (slotIndex == SLOT_CAN) {
 			FluidStack fluidStack = FluidHelper.getFluidStackInContainer(itemstack);
 			return RecipeManager.isInput(fluidStack);
 		}

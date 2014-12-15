@@ -16,6 +16,7 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -163,9 +164,24 @@ public class PostRegistry implements IPostRegistry {
 		return new MailAddress(gameProfile);
 	}
 
+	public IMailAddress getValidMailAddress(World world, GameProfile gameProfile) {
+		IMailAddress address = new MailAddress(gameProfile);;
+		if (getPOBox(world, address) != null)
+			return address;
+		return null;
+	}
+
 	@Override
 	public IMailAddress getMailAddress(String traderName) {
 		return new MailAddress(traderName);
+	}
+
+	@Override
+	public IMailAddress getValidMailAddress(World world, String traderName) {
+		IMailAddress address = new MailAddress(traderName);
+		if (getTradeStation(world, address) != null)
+			return address;
+		return null;
 	}
 
 	/* CARRIER */
