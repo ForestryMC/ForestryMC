@@ -11,7 +11,6 @@
 package forestry.core.config;
 
 import java.util.Locale;
-
 import net.minecraftforge.oredict.OreDictionary;
 
 public class Defaults {

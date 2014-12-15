@@ -16,12 +16,11 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.items.ItemArmorApiarist;
 import forestry.core.proxy.Proxies;
+import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
-
-import java.util.List;
 
 public class AlleleEffectPotion extends AlleleEffectThrottled {
 

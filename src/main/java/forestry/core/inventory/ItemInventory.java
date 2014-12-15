@@ -10,15 +10,14 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
+import forestry.api.core.INBTTagable;
+import forestry.core.utils.Utils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-
-import forestry.api.core.INBTTagable;
-import forestry.core.utils.Utils;
 
 public class ItemInventory implements IInventory, INBTTagable {
 

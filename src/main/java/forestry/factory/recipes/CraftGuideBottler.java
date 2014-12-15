@@ -10,8 +10,10 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import forestry.core.config.Defaults;
+import forestry.core.config.ForestryBlock;
+import forestry.factory.gadgets.MachineBottler;
 import net.minecraft.item.ItemStack;
-
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.LiquidSlot;
 import uristqwerty.CraftGuide.api.RecipeGenerator;
@@ -19,10 +21,6 @@ import uristqwerty.CraftGuide.api.RecipeProvider;
 import uristqwerty.CraftGuide.api.RecipeTemplate;
 import uristqwerty.CraftGuide.api.Slot;
 import uristqwerty.CraftGuide.api.SlotType;
-
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryBlock;
-import forestry.factory.gadgets.MachineBottler;
 
 public class CraftGuideBottler implements RecipeProvider {
 

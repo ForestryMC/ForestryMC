@@ -11,7 +11,6 @@
 package forestry.core.render;
 
 import java.util.Random;
-
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;

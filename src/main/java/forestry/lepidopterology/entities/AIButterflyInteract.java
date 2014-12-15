@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import net.minecraft.util.ChunkCoordinates;
-
 import forestry.lepidopterology.entities.EntityButterfly.EnumButterflyState;
+import net.minecraft.util.ChunkCoordinates;
 
 public abstract class AIButterflyInteract extends AIButterflyBase {
 

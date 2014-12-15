@@ -21,15 +21,16 @@ import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IOwnable;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.INetworkedEntity;
 import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumAccess;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Vect;
+import java.util.Collection;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -40,8 +41,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.Collection;
 
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
 public abstract class TileForestry extends TileEntity implements INetworkedEntity, IOwnable, IErrorSource, ITriggerProvider {

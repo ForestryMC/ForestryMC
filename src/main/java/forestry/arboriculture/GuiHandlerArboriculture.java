@@ -10,16 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import forestry.arboriculture.genetics.TreeHelper;
 import forestry.arboriculture.gui.ContainerTreealyzer;
 import forestry.arboriculture.gui.GuiTreealyzer;
 import forestry.arboriculture.items.ItemTreealyzer.TreealyzerInventory;
 import forestry.core.GuiHandlerBase;
 import forestry.core.network.GuiId;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class GuiHandlerArboriculture extends GuiHandlerBase {
 

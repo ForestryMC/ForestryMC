@@ -10,19 +10,8 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import java.util.EnumSet;
-import java.util.Locale;
-
-import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.crafting.CraftingManager;
-
-import net.minecraftforge.oredict.RecipeSorter;
-
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.network.IGuiHandler;
-
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -59,6 +48,13 @@ import forestry.lepidopterology.genetics.ButterflyTemplates;
 import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.items.ItemFlutterlyzer;
 import forestry.lepidopterology.proxy.ProxyLepidopterology;
+import java.util.EnumSet;
+import java.util.Locale;
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraftforge.oredict.RecipeSorter;
 
 @Plugin(pluginID = "Lepidopterology", name = "Lepidopterology", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.lepidopterology.description")
 public class PluginLepidopterology extends ForestryPlugin {

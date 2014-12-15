@@ -10,24 +10,14 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import java.util.Iterator;
-import java.util.UUID;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.mojang.authlib.GameProfile;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
-
+import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.ILetter;
+import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.ITradeStation;
-import forestry.api.mail.IMailAddress;
 import forestry.api.mail.PostManager;
 import forestry.api.mail.TradeStationInfo;
-import forestry.api.mail.EnumAddressee;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotClosed;
 import forestry.core.gui.slots.SlotCustom;
@@ -40,6 +30,13 @@ import forestry.mail.items.ItemLetter;
 import forestry.mail.items.ItemLetter.LetterInventory;
 import forestry.mail.items.ItemStamps;
 import forestry.mail.network.PacketLetterInfo;
+import java.util.Iterator;
+import java.util.UUID;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
+import org.apache.commons.lang3.StringUtils;
 
 public class ContainerLetter extends ContainerItemInventory {
 

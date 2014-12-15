@@ -10,11 +10,7 @@
  ******************************************************************************/
 package forestry.core;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-
 import cpw.mods.fml.common.network.IGuiHandler;
-
 import forestry.core.circuits.ContainerSolderingIron;
 import forestry.core.circuits.GuiSolderingIron;
 import forestry.core.circuits.ItemSolderingIron.SolderingInventory;
@@ -26,6 +22,8 @@ import forestry.core.gui.GuiAnalyzer;
 import forestry.core.gui.GuiEscritoire;
 import forestry.core.network.GuiId;
 import forestry.plugins.PluginManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 
 public class GuiHandler extends GuiHandlerBase {
 

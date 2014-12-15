@@ -15,10 +15,9 @@ import forestry.api.farming.IFarmable;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Vect;
+import java.util.ArrayList;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.ArrayList;
 
 public abstract class FarmLogicHomogeneous extends FarmLogic {
 

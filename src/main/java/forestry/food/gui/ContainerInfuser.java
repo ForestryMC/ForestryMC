@@ -10,17 +10,16 @@
  ******************************************************************************/
 package forestry.food.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-
 import forestry.core.config.ForestryItem;
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.slots.SlotCustom;
 import forestry.core.proxy.Proxies;
 import forestry.food.items.ItemBeverage;
 import forestry.food.items.ItemInfuser.InfuserInventory;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 public class ContainerInfuser extends ContainerForestry {
 

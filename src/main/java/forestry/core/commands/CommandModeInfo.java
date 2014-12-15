@@ -11,12 +11,10 @@
 package forestry.core.commands;
 
 import java.util.List;
-
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
-
 import org.apache.commons.lang3.StringUtils;
 
 public class CommandModeInfo extends SubCommand {

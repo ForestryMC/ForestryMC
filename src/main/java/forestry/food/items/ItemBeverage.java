@@ -10,9 +10,15 @@
  ******************************************************************************/
 package forestry.food.items;
 
-import java.util.List;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.food.BeverageManager;
+import forestry.api.food.IBeverageEffect;
+import forestry.core.config.Config;
 import forestry.core.items.ItemForestryFood;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
+import java.util.List;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,15 +29,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import forestry.api.food.BeverageManager;
-import forestry.api.food.IBeverageEffect;
-import forestry.core.config.Config;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 
 public class ItemBeverage extends ItemForestryFood {
 

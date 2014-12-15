@@ -11,21 +11,10 @@
 package forestry.core;
 
 import com.google.common.collect.ImmutableList;
-
-import java.io.File;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
-
-import net.minecraftforge.common.MinecraftForge;
-
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.EngineBronzeFuel;
@@ -45,6 +34,12 @@ import forestry.core.gadgets.TileMill;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.LiquidHelper;
 import forestry.plugins.PluginManager;
+import java.io.File;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.common.MinecraftForge;
 
 public class ForestryCore {
 

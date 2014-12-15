@@ -31,6 +31,7 @@ import forestry.core.network.PacketFXSignal;
 import forestry.core.network.PacketIds;
 import forestry.core.render.SpriteSheet;
 import forestry.core.utils.StringUtil;
+import java.io.File;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;
@@ -49,8 +50,6 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-
-import java.io.File;
 
 public class ProxyCommon {
 

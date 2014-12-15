@@ -10,26 +10,21 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.fluids.Fluids;
+import forestry.core.gui.ContainerDummy;
+import forestry.core.interfaces.IDescriptiveRecipe;
+import forestry.core.proxy.Proxies;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
-
-import forestry.api.recipes.RecipeManagers;
-import forestry.core.config.Defaults;
-import forestry.core.fluids.Fluids;
-import forestry.core.gui.ContainerDummy;
-import forestry.core.interfaces.IDescriptiveRecipe;
-import forestry.core.proxy.Proxies;
 
 public class RecipeUtil {
 

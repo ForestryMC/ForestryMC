@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import forestry.core.CreativeTabForestry;
+import forestry.core.interfaces.IOwnable;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.Utils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -18,11 +22,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-
-import forestry.core.CreativeTabForestry;
-import forestry.core.interfaces.IOwnable;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.Utils;
 
 public abstract class BlockForestry extends BlockContainer {
 

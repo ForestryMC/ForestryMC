@@ -9,7 +9,6 @@ import forestry.plugins.PluginArboriculture;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 public class ItemLeavesBlock extends ItemForestryBlock {

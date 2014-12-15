@@ -10,12 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import java.util.HashSet;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.core.ITileStructure;
 import forestry.core.config.ForestryBlock;
@@ -24,6 +18,10 @@ import forestry.core.gadgets.StructureLogic;
 import forestry.core.utils.Schemata;
 import forestry.core.utils.Schemata.EnumStructureBlock;
 import forestry.core.utils.Vect;
+import java.util.HashSet;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
 
 public class StructureLogicAlveary extends StructureLogic {
 

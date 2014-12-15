@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.RainSubstrate;
 import forestry.core.gadgets.Mill;
 import forestry.core.gadgets.TileBase;
 import forestry.core.proxy.Proxies;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class MillRainmaker extends Mill {
 

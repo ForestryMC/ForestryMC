@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestry;
 import forestry.mail.gadgets.MachineMailbox;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiMailbox extends GuiForestry<MachineMailbox> {
 

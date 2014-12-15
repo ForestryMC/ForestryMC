@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
 import forestry.arboriculture.gadgets.TileLeaves;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketTileNBT;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class PacketLeafUpdate extends PacketTileNBT {
 

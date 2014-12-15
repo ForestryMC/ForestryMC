@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.gadgets.TileSapling;
 import forestry.core.utils.Utils;
 import forestry.core.utils.Vect;
 import forestry.core.worldgen.BlockType;
 import forestry.core.worldgen.WorldGenBase;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
 
 public abstract class WorldGenArboriculture extends WorldGenBase {
 

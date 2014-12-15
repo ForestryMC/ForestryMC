@@ -10,15 +10,14 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.gui.slots.SlotCustom;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 public class ContainerNaturalistInventory extends ContainerForestry implements IGuiSelectable {
 

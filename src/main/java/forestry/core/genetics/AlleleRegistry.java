@@ -10,18 +10,7 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import net.minecraft.item.ItemStack;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleHandler;
 import forestry.api.genetics.IAlleleRegistry;
@@ -35,6 +24,14 @@ import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.ForestryItem;
 import forestry.core.genetics.ItemResearchNote.EnumNoteType;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import net.minecraft.item.ItemStack;
 
 public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
 

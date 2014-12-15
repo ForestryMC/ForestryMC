@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.core.utils.StackUtils;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 
 public class JubilanceReqRes implements IJubilanceProvider {
 

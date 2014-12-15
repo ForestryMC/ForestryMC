@@ -10,22 +10,9 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
+import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-import net.minecraftforge.common.BiomeDictionary;
-
-import com.mojang.authlib.GameProfile;
-
 import forestry.api.core.IIconProvider;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
@@ -35,6 +22,14 @@ import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.core.config.Defaults;
 import forestry.core.genetics.AlleleSpecies;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.common.BiomeDictionary;
 
 public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButterflySpecies {
 

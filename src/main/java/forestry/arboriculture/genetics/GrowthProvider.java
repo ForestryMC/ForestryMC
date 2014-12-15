@@ -10,18 +10,17 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import forestry.core.utils.StringUtil;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-
 import forestry.api.arboriculture.EnumGrowthConditions;
 import forestry.api.arboriculture.IGrowthProvider;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.arboriculture.gadgets.TileSapling;
+import forestry.core.utils.StringUtil;
 import forestry.core.utils.Utils;
 import forestry.core.utils.Vect;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 
 public class GrowthProvider implements IGrowthProvider {
 

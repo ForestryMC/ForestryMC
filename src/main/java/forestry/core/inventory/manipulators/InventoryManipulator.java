@@ -10,17 +10,14 @@
  ******************************************************************************/
 package forestry.core.inventory.manipulators;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-
-import forestry.api.core.ISpecialInventory;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.filters.IStackFilter;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
+import java.util.ArrayList;
+import java.util.List;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

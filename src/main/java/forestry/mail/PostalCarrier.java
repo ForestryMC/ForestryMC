@@ -10,19 +10,21 @@
  ******************************************************************************/
 package forestry.mail;
 
-import java.util.Locale;
-
-import forestry.api.mail.*;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
+import forestry.api.mail.EnumAddressee;
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.IPostOffice;
+import forestry.api.mail.IPostalCarrier;
+import forestry.api.mail.IPostalState;
+import forestry.api.mail.ITradeStation;
+import forestry.api.mail.PostManager;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginMail;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 
 public class PostalCarrier implements IPostalCarrier {
 

@@ -14,6 +14,9 @@ import forestry.api.core.INBTTagable;
 import forestry.core.gui.ContainerDummy;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.PlainInventory;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
@@ -24,10 +27,6 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 public class RecipeMemory implements INBTTagable {
 

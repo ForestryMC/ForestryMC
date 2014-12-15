@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import java.util.HashMap;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.api.core.IStructureLogic;
 import forestry.api.core.ITileStructure;
 import forestry.core.config.Defaults;
@@ -22,6 +17,9 @@ import forestry.core.gadgets.BlockStructure.EnumStructureState;
 import forestry.core.utils.Schemata;
 import forestry.core.utils.Schemata.EnumStructureBlock;
 import forestry.core.utils.Vect;
+import java.util.HashMap;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 
 public abstract class StructureLogic implements IStructureLogic {
 

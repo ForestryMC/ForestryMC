@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
+import forestry.api.circuits.ICircuitLibrary;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.WorldSavedData;
-
-import forestry.api.circuits.ICircuitLibrary;
 
 public class CircuitLibrary extends WorldSavedData implements ICircuitLibrary {
 

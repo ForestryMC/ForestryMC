@@ -10,10 +10,13 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import java.io.File;
-
 import com.mojang.authlib.GameProfile;
-
+import forestry.apiculture.render.TextureBiomefinder;
+import forestry.core.ForestryClient;
+import forestry.core.TickHandlerCoreClient;
+import forestry.core.config.Config;
+import forestry.core.render.SpriteSheet;
+import java.io.File;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -25,17 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-
-import net.minecraftforge.common.util.FakePlayerFactory;
-
 import org.lwjgl.input.Keyboard;
-
-import forestry.apiculture.render.TextureBiomefinder;
-import forestry.core.ForestryClient;
-import forestry.core.TickHandlerCoreClient;
-import forestry.core.config.Config;
-import forestry.core.render.SpriteSheet;
 
 public class ClientProxyCommon extends ProxyCommon {
 

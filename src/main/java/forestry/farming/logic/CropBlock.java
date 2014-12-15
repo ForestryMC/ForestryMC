@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.Vect;
 import java.util.Collection;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.Vect;
 
 public class CropBlock extends Crop {
 

@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.core.commands;
 
-import net.minecraft.command.ICommandSender;
 import forestry.core.config.Version;
 import forestry.core.proxy.Proxies;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 

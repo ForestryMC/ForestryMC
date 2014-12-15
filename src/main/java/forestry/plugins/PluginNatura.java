@@ -10,21 +10,18 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import java.util.ArrayList;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
-
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.GameMode;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
+import java.util.ArrayList;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 @Plugin(pluginID = "Natura", name = "Natura", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.natura.description")
 public class PluginNatura extends ForestryPlugin {

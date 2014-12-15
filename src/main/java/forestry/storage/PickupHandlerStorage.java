@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.storage;
 
+import forestry.core.interfaces.IPickupHandler;
+import forestry.storage.gui.ContainerBackpack;
+import forestry.storage.gui.ContainerNaturalistBackpack;
+import forestry.storage.items.ItemBackpack;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-
-import forestry.storage.gui.ContainerNaturalistBackpack;
-import forestry.core.interfaces.IPickupHandler;
-import forestry.storage.gui.ContainerBackpack;
-import forestry.storage.items.ItemBackpack;
 
 public class PickupHandlerStorage implements IPickupHandler {
 

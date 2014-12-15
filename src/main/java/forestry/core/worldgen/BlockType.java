@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.core.worldgen;
 
-import net.minecraft.block.Block;
-import net.minecraft.world.World;
-
 import forestry.api.world.ITreeGenData;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
+import net.minecraft.block.Block;
+import net.minecraft.world.World;
 
 public class BlockType {
 

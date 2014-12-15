@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import java.lang.reflect.Method;
-
 import forestry.core.proxy.Proxies;
+import java.lang.reflect.Method;
 
 public class CraftGuideIntegration {
 

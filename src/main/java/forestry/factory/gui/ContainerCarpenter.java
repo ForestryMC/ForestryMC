@@ -10,13 +10,6 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCraftResult;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotCraftAuto;
 import forestry.core.gui.slots.SlotLiquidContainer;
@@ -25,6 +18,12 @@ import forestry.core.gui.slots.SlotOutput;
 import forestry.core.interfaces.IContainerCrafting;
 import forestry.core.proxy.Proxies;
 import forestry.factory.gadgets.MachineCarpenter;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryCraftResult;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 public class ContainerCarpenter extends ContainerLiquidTanks implements IContainerCrafting {
 

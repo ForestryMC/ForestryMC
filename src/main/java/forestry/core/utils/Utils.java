@@ -24,6 +24,11 @@ import forestry.api.genetics.IPollinatable;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginArboriculture;
+import java.security.MessageDigest;
+import java.security.cert.Certificate;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -39,12 +44,6 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-
-import java.security.MessageDigest;
-import java.security.cert.Certificate;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Random;
 
 public class Utils {
 

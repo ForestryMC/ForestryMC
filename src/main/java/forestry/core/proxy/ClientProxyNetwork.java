@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import net.minecraft.client.network.NetHandlerPlayClient;
-
 import forestry.core.network.ForestryPacket;
+import net.minecraft.client.network.NetHandlerPlayClient;
 
 public class ClientProxyNetwork extends ProxyNetwork {
 

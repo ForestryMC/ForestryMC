@@ -10,17 +10,14 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
-import java.io.DataInputStream;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.arboriculture.gadgets.TileLeaves;
 import forestry.arboriculture.network.PacketLeafUpdate;
 import forestry.core.interfaces.IPacketHandler;
-import forestry.core.network.ILocatedPacket;
 import forestry.core.network.PacketIds;
 import forestry.core.proxy.Proxies;
+import java.io.DataInputStream;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 
 public class PacketHandlerArboriculture implements IPacketHandler {
 

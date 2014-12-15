@@ -10,17 +10,16 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.GuiHandler;
 import forestry.core.config.Config;
 import forestry.core.gui.IPagedInventory;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 public abstract class TileNaturalistChest extends TileBase implements IInventory, IPagedInventory {
 

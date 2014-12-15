@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.world.World;
-
 import forestry.api.world.ITreeGenData;
 import forestry.core.worldgen.BlockType;
+import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
 
 public class BlockTypeVoid extends BlockType {
 

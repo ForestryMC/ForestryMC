@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.Slot;
-
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotClosed;
 import forestry.core.gui.slots.SlotLiquidContainer;
 import forestry.factory.gadgets.MachineSqueezer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
 
 public class ContainerSqueezer extends ContainerLiquidTanks {
 

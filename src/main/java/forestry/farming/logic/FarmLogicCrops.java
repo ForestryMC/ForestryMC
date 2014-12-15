@@ -17,6 +17,10 @@ import forestry.core.config.Defaults;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.core.utils.Vect;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Stack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
@@ -24,11 +28,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Stack;
 
 public abstract class FarmLogicCrops extends FarmLogicWatered {
 

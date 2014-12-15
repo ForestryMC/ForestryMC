@@ -10,17 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
-import java.util.Locale;
-
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.ITreeGenome;
@@ -28,6 +19,12 @@ import forestry.api.genetics.IFruitFamily;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.BlockUtil;
 import forestry.plugins.PluginArboriculture;
+import java.util.Locale;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 public class FruitProviderPod extends FruitProviderNone {
 

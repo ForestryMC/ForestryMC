@@ -10,14 +10,6 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
@@ -31,6 +23,12 @@ import forestry.core.items.ItemForestry;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.RevolvingList;
+import java.util.ArrayList;
+import java.util.Collection;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 

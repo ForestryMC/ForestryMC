@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.ReservoirWidget;
 import forestry.factory.gadgets.MachineFabricator;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiFabricator extends GuiForestryTitled<MachineFabricator> {
 

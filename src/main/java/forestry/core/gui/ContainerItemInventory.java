@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import forestry.core.gui.slots.SlotItemInventory;
+import forestry.core.gui.slots.SlotLocked;
+import forestry.core.inventory.ItemInventory;
+import forestry.core.proxy.Proxies;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-
-import forestry.core.gui.slots.SlotItemInventory;
-import forestry.core.gui.slots.SlotLocked;
-import forestry.core.proxy.Proxies;
-import forestry.core.inventory.ItemInventory;
 
 public abstract class ContainerItemInventory extends ContainerForestry {
 

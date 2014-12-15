@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-
 import forestry.api.arboriculture.IAlleleLeafEffect;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.Allele;
 import forestry.core.utils.Vect;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 
 public class AlleleLeafEffectNone extends Allele implements IAlleleLeafEffect {
 

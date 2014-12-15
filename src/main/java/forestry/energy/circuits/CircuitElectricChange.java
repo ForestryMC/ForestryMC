@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.energy.circuits;
 
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.core.circuits.Circuit;
 import forestry.energy.gadgets.EngineTin;
+import net.minecraft.tileentity.TileEntity;
 
 public abstract class CircuitElectricChange extends Circuit {
 

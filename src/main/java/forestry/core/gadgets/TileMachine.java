@@ -24,12 +24,11 @@ import forestry.plugins.PluginEnergy;
 import forestry.plugins.PluginFactory;
 import forestry.plugins.PluginIC2;
 import forestry.plugins.PluginMail;
+import java.util.HashMap;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
-
-import java.util.HashMap;
 
 public abstract class TileMachine extends TileForestry implements IClimatised, IHintSource {
 

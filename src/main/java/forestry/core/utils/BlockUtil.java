@@ -17,6 +17,9 @@ import buildcraft.api.transport.IPipeTile;
 import buildcraft.api.transport.IPipeTile.PipeType;
 import cofh.api.energy.IEnergyHandler;
 import forestry.core.config.Defaults;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCocoa;
 import net.minecraft.block.BlockLog;
@@ -28,10 +31,6 @@ import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 
 public class BlockUtil {
 

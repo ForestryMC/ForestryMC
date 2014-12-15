@@ -11,7 +11,6 @@
 package forestry.core.interfaces;
 
 import java.io.DataInputStream;
-
 import net.minecraft.entity.player.EntityPlayer;
 
 public interface IPacketHandler {

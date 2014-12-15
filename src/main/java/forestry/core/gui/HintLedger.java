@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import java.util.Random;
-
 import forestry.core.interfaces.IHintSource;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
+import java.util.Random;
 
 public class HintLedger extends Ledger {
 

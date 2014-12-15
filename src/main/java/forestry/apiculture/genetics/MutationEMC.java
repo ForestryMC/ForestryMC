@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import java.lang.reflect.Field;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Vect;
+import java.lang.reflect.Field;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 public class MutationEMC extends MutationReqRes {
 

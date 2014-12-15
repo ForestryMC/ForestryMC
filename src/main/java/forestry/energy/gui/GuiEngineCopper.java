@@ -10,11 +10,9 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Defaults;
-import forestry.core.utils.StringUtil;
 import forestry.energy.gadgets.EngineCopper;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiEngineCopper extends GuiEngine {
 

@@ -7,11 +7,6 @@
  ******************************************************************************/
 package forestry.pipes.proxy;
 
-import java.lang.reflect.Constructor;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.IItemRenderer;
 import buildcraft.BuildCraftTransport;
 import buildcraft.core.CreativeTabBuildCraft;
 import buildcraft.transport.BlockGenericPipe;
@@ -21,6 +16,10 @@ import buildcraft.transport.TransportProxy;
 import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.pipes.PipeItemsPropolis;
 import forestry.plugins.PluginPropolisPipe;
+import java.lang.reflect.Constructor;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.IItemRenderer;
 
 public class ProxyPipes {
 

@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import forestry.core.config.ForestryBlock;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-
-import forestry.core.config.ForestryBlock;
 
 public class ItemForestryPickaxe extends ItemForestryTool {
 

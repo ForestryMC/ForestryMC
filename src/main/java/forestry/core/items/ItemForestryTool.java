@@ -12,6 +12,8 @@ package forestry.core.items;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import forestry.core.proxy.Proxies;
+import java.util.Arrays;
+import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -19,9 +21,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class ItemForestryTool extends ItemForestry {
 

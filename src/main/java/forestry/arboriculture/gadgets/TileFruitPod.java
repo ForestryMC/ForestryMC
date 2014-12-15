@@ -10,19 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -35,6 +24,14 @@ import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.Packet;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 
 public class TileFruitPod extends TileEntity implements INetworkedEntity, IFruitBearer {
 

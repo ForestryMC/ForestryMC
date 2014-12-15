@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
-import net.minecraftforge.fluids.FluidStack;
-
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
+import net.minecraftforge.fluids.FluidStack;
 
 public class LiquidHelper {
 

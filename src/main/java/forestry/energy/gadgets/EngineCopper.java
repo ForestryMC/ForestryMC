@@ -13,19 +13,22 @@ package forestry.energy.gadgets;
 import buildcraft.api.statements.ITriggerExternal;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameData;
-import forestry.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
+import forestry.core.EnumErrorCode;
 import forestry.core.TemperatureState;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.Engine;
 import forestry.core.gadgets.TileBase;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.utils.BlockUtil;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.factory.triggers.FactoryTriggers;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -35,10 +38,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
 
 public class EngineCopper extends Engine implements ISidedInventory {
 

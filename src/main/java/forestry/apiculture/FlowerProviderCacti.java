@@ -10,18 +10,16 @@
  ******************************************************************************/
 package forestry.apiculture;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
-import net.minecraftforge.common.EnumPlantType;
-
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
 import forestry.core.config.Defaults;
 import forestry.core.utils.StringUtil;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.common.EnumPlantType;
 
 public class FlowerProviderCacti implements IFlowerProvider {
 

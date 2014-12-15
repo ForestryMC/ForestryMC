@@ -10,13 +10,11 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import buildcraft.api.recipes.BuildcraftRecipeRegistry;
 import cpw.mods.fml.common.Optional;
-
 import forestry.core.config.Defaults;
 import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
-
-import buildcraft.api.recipes.BuildcraftRecipeRegistry;
 
 @Plugin(pluginID = "BC6|Recipes", name = "BuildCraft 6 Recipes", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
 public class PluginBuildCraftRecipes extends ForestryPlugin {

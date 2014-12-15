@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import java.util.Calendar;
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
+import java.util.Calendar;
 
 public class MutationTimeLimited extends BeeMutation {
 

@@ -16,6 +16,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 import forestry.core.interfaces.IBlockRenderer;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -29,10 +32,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * This will replace the whole {@link Gadget}-nonsense at some point, using the proper Forge hook. Will hopefully sort out any issues with interfaces.

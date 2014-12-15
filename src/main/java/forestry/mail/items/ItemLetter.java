@@ -10,8 +10,22 @@
  ******************************************************************************/
 package forestry.mail.items;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.core.ForestryAPI;
+import forestry.api.mail.ILetter;
+import forestry.core.EnumErrorCode;
+import forestry.core.config.Config;
+import forestry.core.interfaces.IErrorSource;
+import forestry.core.interfaces.IHintSource;
+import forestry.core.inventory.ItemInventory;
+import forestry.core.items.ItemInventoried;
+import forestry.core.network.GuiId;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StringUtil;
+import forestry.mail.Letter;
 import java.util.List;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -19,23 +33,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import forestry.api.core.ForestryAPI;
-import forestry.api.mail.ILetter;
-import forestry.core.EnumErrorCode;
-import forestry.core.config.Config;
-import forestry.core.interfaces.IErrorSource;
-import forestry.core.interfaces.IHintSource;
-import forestry.core.items.ItemInventoried;
-import forestry.core.network.GuiId;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
-import forestry.core.inventory.ItemInventory;
-import forestry.core.utils.StringUtil;
-import forestry.mail.Letter;
 
 public class ItemLetter extends ItemInventoried {
 

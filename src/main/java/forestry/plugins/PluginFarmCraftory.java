@@ -10,19 +10,16 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-
-
 import forestry.api.farming.Farmables;
 import forestry.core.config.Defaults;
 import forestry.core.proxy.Proxies;
 import forestry.farming.logic.FarmableFarmCraftory;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 
 @Plugin(pluginID = "FarmCraftory", name = "FarmCraftory", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.farmcraftory.description")
 public class PluginFarmCraftory extends ForestryPlugin {

@@ -10,16 +10,14 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ICrashCallable;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
-
 import forestry.core.config.Defaults;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ForestryModEnvWarningCallable implements ICrashCallable {
 

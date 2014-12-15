@@ -10,11 +10,9 @@
  ******************************************************************************/
 package forestry.core.interfaces;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.core.utils.EnumAccess;
+import net.minecraft.entity.player.EntityPlayer;
 
 public interface IOwnable {
 

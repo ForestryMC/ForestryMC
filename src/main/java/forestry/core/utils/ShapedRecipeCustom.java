@@ -10,9 +10,12 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import forestry.core.config.Defaults;
+import forestry.core.config.ForestryBlock;
+import forestry.core.config.ForestryItem;
+import forestry.core.interfaces.IDescriptiveRecipe;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -20,13 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-
 import net.minecraftforge.oredict.OreDictionary;
-
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
-import forestry.core.interfaces.IDescriptiveRecipe;
 
 public class ShapedRecipeCustom implements IDescriptiveRecipe {
 

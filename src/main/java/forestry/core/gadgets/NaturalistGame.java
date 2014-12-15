@@ -10,21 +10,19 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Random;
-
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-
 import forestry.api.core.INBTTagable;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Utils;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Random;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 public class NaturalistGame implements INBTTagable {
 

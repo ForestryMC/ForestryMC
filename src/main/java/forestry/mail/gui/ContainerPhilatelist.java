@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.slots.SlotClosed;
 import forestry.core.gui.slots.SlotCustom;
 import forestry.mail.gadgets.MachinePhilatelist;
 import forestry.mail.items.ItemStamps;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
 
 public class ContainerPhilatelist extends ContainerForestry {
 

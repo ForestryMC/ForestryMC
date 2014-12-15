@@ -14,7 +14,6 @@ import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IMutation;
 import forestry.core.genetics.Allele;
-
 import java.util.Arrays;
 
 public class BeeTemplates {

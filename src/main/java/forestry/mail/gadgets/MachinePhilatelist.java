@@ -10,18 +10,17 @@
  ******************************************************************************/
 package forestry.mail.gadgets;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
 import forestry.core.gadgets.TileBase;
-import forestry.core.network.GuiId;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.GuiId;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 
 public class MachinePhilatelist extends TileBase implements IInventory {
 

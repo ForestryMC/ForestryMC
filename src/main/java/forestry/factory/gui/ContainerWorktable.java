@@ -10,13 +10,6 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import forestry.core.utils.StackUtils;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCraftResult;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.inventory.Slot;
-
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotCrafter;
@@ -25,7 +18,13 @@ import forestry.core.network.PacketIds;
 import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.StackUtils;
 import forestry.factory.gadgets.TileWorktable;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryCraftResult;
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerWorktable extends ContainerForestry implements IContainerCrafting, IGuiSelectable {

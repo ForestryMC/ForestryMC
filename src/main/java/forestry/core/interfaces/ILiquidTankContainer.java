@@ -11,7 +11,6 @@
 package forestry.core.interfaces;
 
 import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.StandardTank;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraftforge.fluids.IFluidHandler;

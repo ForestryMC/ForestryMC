@@ -23,13 +23,12 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
+import java.util.Collection;
+import java.util.LinkedList;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.Collection;
-import java.util.LinkedList;
 
 public abstract class TileAlveary extends TileForestry implements IAlvearyComponent {
 

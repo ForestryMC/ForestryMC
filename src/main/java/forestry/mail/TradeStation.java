@@ -24,6 +24,7 @@ import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.StackUtils;
 import forestry.mail.items.ItemLetter;
+import java.util.ArrayList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
@@ -32,8 +33,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
-
-import java.util.ArrayList;
 
 public class TradeStation extends WorldSavedData implements ITradeStation, ISidedInventory {
 

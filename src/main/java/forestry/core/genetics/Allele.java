@@ -10,16 +10,14 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import java.util.EnumSet;
-
-import net.minecraftforge.common.EnumPlantType;
-
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.ILegacyHandler;
 import forestry.core.config.Defaults;
 import forestry.core.utils.StringUtil;
+import java.util.EnumSet;
+import net.minecraftforge.common.EnumPlantType;
 
 public class Allele implements IAllele {
 

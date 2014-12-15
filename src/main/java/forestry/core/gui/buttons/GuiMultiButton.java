@@ -10,16 +10,13 @@
  ******************************************************************************/
 package forestry.core.gui.buttons;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
+import forestry.core.gui.tooltips.ToolTip;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-
-import forestry.core.gui.tooltips.ToolTip;
 
 /**
  *

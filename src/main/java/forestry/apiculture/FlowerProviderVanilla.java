@@ -10,16 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture;
 
-import java.util.Collections;
-import java.util.EnumSet;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
-import net.minecraftforge.common.EnumPlantType;
-
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IIndividual;
@@ -27,6 +17,13 @@ import forestry.api.genetics.IPollinatable;
 import forestry.core.config.Defaults;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.StringUtil;
+import java.util.Collections;
+import java.util.EnumSet;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.common.EnumPlantType;
 
 public class FlowerProviderVanilla implements IFlowerProvider {
 

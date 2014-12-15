@@ -10,22 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map.Entry;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-
 import com.mojang.authlib.GameProfile;
-
+import cpw.mods.fml.common.FMLCommonHandler;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -49,6 +35,16 @@ import forestry.apiculture.gadgets.StructureLogicAlveary;
 import forestry.core.config.ForestryItem;
 import forestry.core.genetics.SpeciesRoot;
 import forestry.plugins.PluginApiculture;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map.Entry;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 

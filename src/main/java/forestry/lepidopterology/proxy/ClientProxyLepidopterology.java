@@ -11,13 +11,11 @@
 package forestry.lepidopterology.proxy;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
-
-import net.minecraftforge.client.MinecraftForgeClient;
-
 import forestry.core.config.ForestryItem;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.render.ButterflyItemRenderer;
 import forestry.lepidopterology.render.RenderButterfly;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 public class ClientProxyLepidopterology extends ProxyLepidopterology {
 

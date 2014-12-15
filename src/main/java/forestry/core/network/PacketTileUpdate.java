@@ -10,20 +10,17 @@
  ******************************************************************************/
 package forestry.core.network;
 
+import com.mojang.authlib.GameProfile;
+import forestry.api.core.ErrorStateRegistry;
+import forestry.api.core.IErrorState;
+import forestry.core.EnumErrorCode;
+import forestry.core.gadgets.TileForestry;
+import forestry.core.utils.EnumAccess;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.UUID;
-
 import net.minecraftforge.common.util.ForgeDirection;
-
-import com.mojang.authlib.GameProfile;
-import forestry.api.core.ErrorStateRegistry;
-import forestry.api.core.IErrorState;
-
-import forestry.core.EnumErrorCode;
-import forestry.core.gadgets.TileForestry;
-import forestry.core.utils.EnumAccess;
 
 public class PacketTileUpdate extends PacketUpdate {
 

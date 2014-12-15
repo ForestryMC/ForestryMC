@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-
 import forestry.apiculture.gadgets.TileAlvearySieve;
 import forestry.core.config.ForestryItem;
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.slots.SlotCustom;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 
 public class ContainerAlvearySieve extends ContainerForestry {
 

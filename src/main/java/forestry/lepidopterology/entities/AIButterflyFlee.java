@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import net.minecraft.entity.player.EntityPlayer;
 import forestry.lepidopterology.entities.EntityButterfly.EnumButterflyState;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class AIButterflyFlee extends AIButterflyMovement {
 

@@ -10,18 +10,16 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.core.Tabs;
 import forestry.core.config.Config;
 import forestry.core.config.ForestryItem;
 import forestry.core.items.ItemForestryMultiPass;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class ItemHoneycomb extends ItemForestryMultiPass {
 

@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.food;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-
 import forestry.core.GuiHandlerBase;
 import forestry.core.network.GuiId;
 import forestry.food.gui.ContainerInfuser;
 import forestry.food.gui.GuiInfuser;
 import forestry.food.items.ItemInfuser.InfuserInventory;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 
 public class GuiHandlerFood extends GuiHandlerBase {
 	@Override

@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
+import forestry.core.inventory.InventoryAdapter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-
-import forestry.core.inventory.InventoryAdapter;
 
 public class TileSwarm extends TileEntity {
 

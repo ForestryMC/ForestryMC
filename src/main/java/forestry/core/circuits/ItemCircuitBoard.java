@@ -10,21 +10,19 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
-import java.util.List;
-import java.util.Locale;
-
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.core.config.ForestryItem;
 import forestry.core.items.ItemForestryMultiPass;
+import java.util.List;
+import java.util.Locale;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class ItemCircuitBoard extends ItemForestryMultiPass {
 

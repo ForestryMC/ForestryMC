@@ -10,18 +10,16 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
 import forestry.api.genetics.IFruitBearer;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.network.PacketFXSignal;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Vect;
+import java.util.ArrayList;
+import java.util.Collection;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 public class CropFruit extends Crop {
 

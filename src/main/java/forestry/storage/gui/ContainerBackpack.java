@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.storage.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
 import forestry.core.config.Defaults;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotForestry;
 import forestry.core.inventory.ItemInventory;
 import forestry.storage.items.ItemBackpack;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 public class ContainerBackpack extends ContainerItemInventory {
 

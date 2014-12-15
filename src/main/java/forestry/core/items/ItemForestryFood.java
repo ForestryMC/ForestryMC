@@ -12,15 +12,13 @@ package forestry.core.items;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import forestry.core.CreativeTabForestry;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-
-
-import forestry.core.CreativeTabForestry;
 
 public class ItemForestryFood extends ItemFood {
 

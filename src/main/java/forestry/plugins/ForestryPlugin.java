@@ -11,20 +11,17 @@
 package forestry.plugins;
 
 import cpw.mods.fml.common.IFuelHandler;
-import java.util.Random;
-
-import net.minecraft.command.ICommand;
-import net.minecraft.world.World;
-
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.network.IGuiHandler;
-
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPacketHandler;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.IResupplyHandler;
 import forestry.core.interfaces.ISaveEventHandler;
 import java.util.EnumSet;
+import java.util.Random;
+import net.minecraft.command.ICommand;
+import net.minecraft.world.World;
 
 public abstract class ForestryPlugin {
 

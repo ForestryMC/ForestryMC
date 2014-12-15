@@ -11,6 +11,11 @@
 package forestry.core.gadgets;
 
 import cofh.api.energy.IEnergyConnection;
+import forestry.core.TemperatureState;
+import forestry.core.config.Defaults;
+import forestry.core.network.PacketPayload;
+import forestry.core.utils.BlockUtil;
+import forestry.energy.EnergyManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -19,11 +24,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import forestry.core.TemperatureState;
-import forestry.core.config.Defaults;
-import forestry.core.network.PacketPayload;
-import forestry.core.utils.BlockUtil;
-import forestry.energy.EnergyManager;
 
 public abstract class Engine extends TileBase implements IEnergyConnection {
 

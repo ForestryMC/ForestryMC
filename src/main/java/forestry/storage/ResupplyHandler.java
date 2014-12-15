@@ -10,20 +10,17 @@
  ******************************************************************************/
 package forestry.storage;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ContainerPlayer;
-import net.minecraft.item.ItemStack;
-
 import cpw.mods.fml.common.eventhandler.Event;
-
-import net.minecraftforge.common.MinecraftForge;
-
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.BackpackResupplyEvent;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.core.interfaces.IResupplyHandler;
 import forestry.core.inventory.ItemInventory;
 import forestry.storage.items.ItemBackpack;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ContainerPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 
 public class ResupplyHandler implements IResupplyHandler {
 

@@ -11,11 +11,10 @@
 package forestry.arboriculture.gui;
 
 import forestry.api.genetics.AlleleManager;
-import forestry.core.gui.ContainerAlyzer;
-import forestry.core.config.ForestryItem;
 import forestry.arboriculture.items.ItemGermlingGE;
 import forestry.arboriculture.items.ItemTreealyzer.TreealyzerInventory;
-
+import forestry.core.config.ForestryItem;
+import forestry.core.gui.ContainerAlyzer;
 import net.minecraft.entity.player.InventoryPlayer;
 import org.apache.commons.lang3.ArrayUtils;
 

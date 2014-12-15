@@ -10,19 +10,15 @@
  ******************************************************************************/
 package forestry.core;
 
-import java.util.Random;
-
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
-
 import cpw.mods.fml.common.IWorldGenerator;
-
 import forestry.core.config.Config;
 import forestry.core.config.ForestryBlock;
 import forestry.core.proxy.Proxies;
 import forestry.core.worldgen.WorldGenMinableMeta;
-import forestry.plugins.ForestryPlugin;
 import forestry.plugins.PluginManager;
+import java.util.Random;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkProvider;
 
 public class WorldGenerator implements IWorldGenerator {
 

@@ -28,17 +28,16 @@ import forestry.core.gadgets.TileForestry;
 import forestry.core.genetics.EnumMutateChance;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Stack;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.opengl.GL11;
-
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Stack;
 
 public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 

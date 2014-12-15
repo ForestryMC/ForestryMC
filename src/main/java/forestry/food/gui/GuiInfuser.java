@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.food.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
-
 import forestry.api.food.BeverageManager;
 import forestry.core.config.Defaults;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.GuiForestry;
 import forestry.food.items.ItemInfuser.InfuserInventory;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IInventory;
 
 public class GuiInfuser extends GuiForestry<TileForestry> {
 

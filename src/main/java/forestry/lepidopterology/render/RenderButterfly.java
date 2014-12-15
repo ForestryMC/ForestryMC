@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.lepidopterology.render;
 
+import forestry.lepidopterology.entities.EntityButterfly;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-
-import forestry.lepidopterology.entities.EntityButterfly;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
 
 public class RenderButterfly extends RenderLiving {
 

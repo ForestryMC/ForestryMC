@@ -19,6 +19,9 @@ import forestry.apiculture.MaterialBeehive;
 import forestry.core.config.Config;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -30,10 +33,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class BlockBeehives extends BlockContainer {
 

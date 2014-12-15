@@ -10,12 +10,7 @@
  ******************************************************************************/
 package forestry.core;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import cpw.mods.fml.common.network.IGuiHandler;
-
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.gadgets.TileForestry;
@@ -23,6 +18,9 @@ import forestry.core.gadgets.TileNaturalistChest;
 import forestry.core.gui.ContainerNaturalistInventory;
 import forestry.core.gui.GuiNaturalistInventory;
 import forestry.core.proxy.Proxies;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public abstract class GuiHandlerBase implements IGuiHandler {
 

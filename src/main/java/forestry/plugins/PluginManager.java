@@ -11,16 +11,12 @@
 package forestry.plugins;
 
 import com.google.common.collect.ImmutableList;
-import java.util.ArrayList;
-
 import com.google.common.collect.Lists;
-
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.Forestry;
-
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPacketHandler;
 import forestry.core.interfaces.IPickupHandler;
@@ -28,6 +24,7 @@ import forestry.core.interfaces.IResupplyHandler;
 import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.proxy.Proxies;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Locale;

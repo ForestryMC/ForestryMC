@@ -10,19 +10,15 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
+import buildcraft.api.tiles.IHasWork;
 import cpw.mods.fml.common.Optional;
-
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
 import forestry.energy.EnergyManager;
-
-import buildcraft.api.tiles.IHasWork;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
 
 @Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = "BuildCraftAPI|tiles")
 public abstract class TilePowered extends TileBase implements IRenderableMachine, IPowerHandler, IHasWork {

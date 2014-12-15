@@ -10,25 +10,21 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import java.util.List;
-
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-import net.minecraftforge.fluids.FluidStack;
-
 import forestry.api.core.INBTTagable;
 import forestry.api.core.IToolPipette;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
+import java.util.List;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.fluids.FluidStack;
 
 public class ItemPipette extends ItemForestry implements IToolPipette {
 

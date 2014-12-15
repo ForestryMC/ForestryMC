@@ -10,14 +10,10 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import forestry.core.interfaces.IHintSource;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.EnumAccess;
-import forestry.core.utils.PlayerUtil;
-import forestry.core.utils.Utils;
+import net.minecraft.entity.player.EntityPlayer;
 
 public abstract class TileBase extends TileForestry implements IHintSource {
 

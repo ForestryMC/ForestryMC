@@ -10,18 +10,16 @@
  ******************************************************************************/
 package forestry.mail;
 
+import forestry.api.core.INBTTagable;
+import forestry.api.mail.ILetter;
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.IStamps;
+import forestry.core.inventory.InventoryAdapter;
+import forestry.core.utils.StringUtil;
 import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
-import forestry.api.core.INBTTagable;
-import forestry.api.mail.ILetter;
-import forestry.api.mail.IStamps;
-import forestry.api.mail.IMailAddress;
-import forestry.core.inventory.InventoryAdapter;
-import forestry.core.utils.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 
 public class Letter implements ILetter, INBTTagable {

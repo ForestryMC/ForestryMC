@@ -20,14 +20,16 @@ import forestry.api.mail.IPostalState;
 import forestry.api.mail.PostManager;
 import forestry.core.config.Config;
 import forestry.core.gadgets.TileBase;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.inventory.InventoryAdapter;
 import forestry.mail.EnumDeliveryState;
 import forestry.mail.IMailContainer;
 import forestry.mail.POBox;
 import forestry.mail.PostRegistry;
 import forestry.plugins.PluginMail;
+import java.util.Collection;
+import java.util.LinkedList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -35,9 +37,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.Collection;
-import java.util.LinkedList;
 
 public class MachineMailbox extends TileBase implements IMailContainer {
 

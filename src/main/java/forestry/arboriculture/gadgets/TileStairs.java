@@ -10,16 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.arboriculture.WoodType;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.INetworkedEntity;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketTileNBT;
 import forestry.core.proxy.Proxies;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.Packet;
+import net.minecraft.tileentity.TileEntity;
 
 public class TileStairs extends TileEntity implements INetworkedEntity {
 

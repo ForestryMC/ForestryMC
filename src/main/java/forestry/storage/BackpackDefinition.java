@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.storage;
 
+import forestry.api.storage.IBackpackDefinition;
+import forestry.core.utils.StackUtils;
 import java.util.ArrayList;
 import java.util.List;
-
-import forestry.core.utils.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
-import forestry.api.storage.IBackpackDefinition;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 

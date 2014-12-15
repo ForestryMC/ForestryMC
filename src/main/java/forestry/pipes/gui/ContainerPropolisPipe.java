@@ -8,12 +8,12 @@
  */
 package forestry.pipes.gui;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
 import forestry.core.gui.ContainerForestry;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.pipes.PipeItemsPropolis;
 import forestry.pipes.PipeLogicPropolis;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 
 public class ContainerPropolisPipe extends ContainerForestry {
 

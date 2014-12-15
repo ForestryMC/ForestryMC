@@ -1,7 +1,6 @@
 package forestry.core.utils;
 
 import com.mojang.authlib.GameProfile;
-
 import java.util.UUID;
 
 public class PlayerUtil {

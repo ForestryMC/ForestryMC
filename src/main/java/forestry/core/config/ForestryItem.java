@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.core.config;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginManager;
 import forestry.plugins.PluginManager.Stage;
 import java.util.EnumSet;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 /**

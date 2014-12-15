@@ -7,16 +7,6 @@
  ******************************************************************************/
 package forestry.pipes.gui;
 
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map.Entry;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
-
-import org.lwjgl.opengl.GL11;
-
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.genetics.AlleleManager;
@@ -28,8 +18,8 @@ import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.genetics.ItemGE;
-import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.GuiForestry;
+import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.utils.StringUtil;
@@ -37,6 +27,13 @@ import forestry.pipes.EnumFilterType;
 import forestry.pipes.PipeItemsPropolis;
 import forestry.pipes.PipeLogicPropolis;
 import forestry.plugins.PluginApiculture;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map.Entry;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.common.util.ForgeDirection;
+import org.lwjgl.opengl.GL11;
 
 /**
  * GuiScreen for propolis pipes.

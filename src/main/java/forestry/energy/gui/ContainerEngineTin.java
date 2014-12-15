@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
+import forestry.core.gui.ContainerSocketed;
+import forestry.energy.gadgets.EngineTin;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
-
-import forestry.core.gui.ContainerSocketed;
-import forestry.energy.gadgets.EngineTin;
 
 public class ContainerEngineTin extends ContainerSocketed {
 

@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import forestry.apiculture.gadgets.TileAlvearyHygroregulator;
 import forestry.apiculture.gadgets.TileAlvearyPlain;
 import forestry.apiculture.gadgets.TileAlvearySieve;
@@ -43,6 +39,9 @@ import forestry.apiculture.items.ItemImprinter.ImprinterInventory;
 import forestry.core.GuiHandlerBase;
 import forestry.core.network.GuiId;
 import forestry.plugins.PluginApiculture;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class GuiHandlerApiculture extends GuiHandlerBase {
 

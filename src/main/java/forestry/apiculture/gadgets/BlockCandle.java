@@ -10,10 +10,17 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.core.Tabs;
+import forestry.core.ForestryClient;
+import forestry.core.config.Defaults;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StackUtils;
+import forestry.core.utils.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -29,19 +36,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
-
-import forestry.api.core.Tabs;
-import forestry.core.ForestryClient;
-import forestry.core.config.Defaults;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.StringUtil;
 
 public class BlockCandle extends BlockTorch {
 

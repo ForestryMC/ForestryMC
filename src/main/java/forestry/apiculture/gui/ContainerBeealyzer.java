@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import forestry.core.gui.ContainerAlyzer;
-import forestry.core.config.ForestryItem;
 import forestry.apiculture.items.ItemBeeGE;
 import forestry.apiculture.items.ItemBeealyzer.BeealyzerInventory;
-
+import forestry.core.config.ForestryItem;
+import forestry.core.gui.ContainerAlyzer;
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerBeealyzer extends ContainerAlyzer {

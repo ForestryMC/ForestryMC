@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import java.util.Map;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.core.utils.StackUtils;
+import java.util.Map;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 
 public class AIButterflyMate extends AIButterflyInteract {
 

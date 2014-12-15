@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import java.util.List;
-
-import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.util.AxisAlignedBB;
-
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
+import java.util.List;
+import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.util.AxisAlignedBB;
 
 public class AlleleEffectRepulsion extends AlleleEffectThrottled {
 

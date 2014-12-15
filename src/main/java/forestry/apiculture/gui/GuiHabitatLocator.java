@@ -10,17 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Locale;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.biome.BiomeGenBase;
-
-import org.lwjgl.opengl.GL11;
-
 import forestry.apiculture.items.ItemBiomefinder.BiomefinderInventory;
 import forestry.core.config.Defaults;
 import forestry.core.gadgets.TileForestry;
@@ -30,6 +19,14 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Locale;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.biome.BiomeGenBase;
+import org.lwjgl.opengl.GL11;
 
 public class GuiHabitatLocator extends GuiForestry<TileForestry> {
 

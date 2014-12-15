@@ -10,15 +10,12 @@
  ******************************************************************************/
 package forestry.core.network;
 
+import cpw.mods.fml.common.registry.GameData;
+import forestry.core.proxy.Proxies;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-
 import net.minecraft.block.Block;
-
-import cpw.mods.fml.common.registry.GameData;
-
-import forestry.core.proxy.Proxies;
 
 public class PacketFXSignal extends ForestryPacket {
 

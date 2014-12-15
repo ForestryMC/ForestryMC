@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestry;
 import forestry.mail.gadgets.MachinePhilatelist;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiPhilatelist extends GuiForestry<MachinePhilatelist> {
 

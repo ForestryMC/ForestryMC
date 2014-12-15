@@ -10,18 +10,16 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IEffectData;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Vect;
+import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class AlleleEffectSnowing extends AlleleEffectThrottled {
 

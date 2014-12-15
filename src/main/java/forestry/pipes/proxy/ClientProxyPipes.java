@@ -7,11 +7,11 @@
  ******************************************************************************/
 package forestry.pipes.proxy;
 
+import buildcraft.transport.TransportProxyClient;
+import forestry.plugins.PluginPropolisPipe;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
-import buildcraft.transport.TransportProxyClient;
-import forestry.plugins.PluginPropolisPipe;
 
 public class ClientProxyPipes extends ProxyPipes {
 

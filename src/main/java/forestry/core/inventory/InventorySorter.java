@@ -11,7 +11,6 @@
 package forestry.core.inventory;
 
 import java.util.Comparator;
-
 import net.minecraft.inventory.IInventory;
 
 /**

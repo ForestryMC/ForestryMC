@@ -10,28 +10,24 @@
  ******************************************************************************/
 package forestry.mail;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
+import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.ILetter;
+import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IPostOffice;
 import forestry.api.mail.IPostRegistry;
 import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
-import forestry.api.mail.IMailAddress;
-import forestry.api.mail.EnumAddressee;
 import forestry.core.config.ForestryItem;
 import forestry.mail.items.ItemLetter;
 import forestry.plugins.PluginMail;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 public class PostRegistry implements IPostRegistry {
 

@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import forestry.core.network.PacketUpdate;
+import net.minecraft.entity.player.EntityPlayer;
 
 public interface IGuiSelectable {
 	void handleSelectionChange(EntityPlayer player, PacketUpdate packet);

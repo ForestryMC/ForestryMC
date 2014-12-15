@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeListener;
@@ -22,8 +18,11 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.core.interfaces.ICrafter;
-import forestry.core.network.GuiId;
 import forestry.core.inventory.InventoryAdapter;
+import forestry.core.network.GuiId;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class TileAlvearySieve extends TileAlveary implements ICrafter, IBeeListener {
 

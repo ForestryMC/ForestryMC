@@ -10,16 +10,10 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.world.World;
-
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
-
 import forestry.core.config.Config;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.interfaces.IBlockRenderer;
@@ -31,6 +25,10 @@ import forestry.core.render.RenderMill;
 import forestry.core.render.TextureManager;
 import forestry.core.render.TileRendererIndex;
 import forestry.core.utils.ForestryResource;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.world.World;
 
 public class ClientProxyRender extends ProxyRender {
 

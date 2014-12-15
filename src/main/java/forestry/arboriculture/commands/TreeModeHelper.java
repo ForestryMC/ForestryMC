@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.world.World;
-
 import forestry.api.arboriculture.ITreekeepingMode;
 import forestry.core.commands.ICommandModeHelper;
 import forestry.plugins.PluginArboriculture;
+import java.util.ArrayList;
+import java.util.List;
+import net.minecraft.world.World;
 
 public class TreeModeHelper implements ICommandModeHelper {
 

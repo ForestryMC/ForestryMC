@@ -11,7 +11,6 @@
 package forestry.core.worldgen;
 
 import java.util.Random;
-
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 

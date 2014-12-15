@@ -7,12 +7,6 @@
  ******************************************************************************/
 package forestry.pipes.network;
 
-import java.io.DataInputStream;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import buildcraft.transport.Pipe;
 import buildcraft.transport.TileGenericPipe;
 import forestry.core.interfaces.IPacketHandler;
@@ -24,6 +18,11 @@ import forestry.core.proxy.Proxies;
 import forestry.pipes.PipeItemsPropolis;
 import forestry.pipes.PipeLogicPropolis;
 import forestry.pipes.gui.ContainerPropolisPipe;
+import java.io.DataInputStream;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 public class PacketHandlerPipes implements IPacketHandler {
 

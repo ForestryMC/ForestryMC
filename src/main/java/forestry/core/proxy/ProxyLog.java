@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
+import forestry.core.config.Defaults;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
-
-import forestry.core.config.Defaults;
 import org.apache.logging.log4j.message.MessageFormatMessage;
 
 public class ProxyLog {

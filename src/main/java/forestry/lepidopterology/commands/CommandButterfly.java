@@ -10,7 +10,8 @@
  ******************************************************************************/
 package forestry.lepidopterology.commands;
 
-import forestry.core.commands.*;
+import forestry.core.commands.CommandHelpers;
+import forestry.core.commands.SubCommand;
 import forestry.lepidopterology.entities.EntityButterfly;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.world.World;

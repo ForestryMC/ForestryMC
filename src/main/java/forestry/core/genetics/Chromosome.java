@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import java.util.Random;
-
-import net.minecraft.nbt.NBTTagCompound;
-
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.ILegacyHandler;
+import java.util.Random;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class Chromosome implements IChromosome {
 

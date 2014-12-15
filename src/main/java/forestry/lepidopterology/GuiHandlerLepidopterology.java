@@ -10,16 +10,15 @@
  ******************************************************************************/
 package forestry.lepidopterology;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import forestry.core.GuiHandlerBase;
 import forestry.core.network.GuiId;
 import forestry.lepidopterology.genetics.ButterflyHelper;
 import forestry.lepidopterology.gui.ContainerFlutterlyzer;
 import forestry.lepidopterology.gui.GuiFlutterlyzer;
 import forestry.lepidopterology.items.ItemFlutterlyzer.FlutterlyzerInventory;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class GuiHandlerLepidopterology extends GuiHandlerBase {
 

@@ -14,14 +14,12 @@
 
 package forestry.farming.worldgen;
 
+import forestry.core.config.Defaults;
 import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
-
-import forestry.core.config.Defaults;
 
 // Referenced classes of package net.minecraft.src:
 //            WorldGenerator, World, Block, BlockLeaves,

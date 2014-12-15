@@ -10,17 +10,16 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-
+import forestry.api.mail.IMailAddress;
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.slots.SlotCustom;
 import forestry.mail.TradeStation;
 import forestry.mail.gadgets.MachineTrader;
 import forestry.mail.items.ItemStamps;
-import forestry.api.mail.IMailAddress;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 
 public class ContainerTrader extends ContainerForestry {
 

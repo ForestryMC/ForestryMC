@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividualLiving;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 public abstract class IndividualLiving extends Individual implements IIndividualLiving {
 

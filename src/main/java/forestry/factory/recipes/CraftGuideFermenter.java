@@ -10,13 +10,14 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import forestry.api.fuels.FuelManager;
+import forestry.core.config.Defaults;
+import forestry.core.config.ForestryBlock;
+import forestry.factory.gadgets.MachineFermenter;
 import java.util.ArrayList;
 import java.util.List;
-
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fluids.FluidStack;
-
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.LiquidSlot;
 import uristqwerty.CraftGuide.api.RecipeGenerator;
@@ -24,11 +25,6 @@ import uristqwerty.CraftGuide.api.RecipeProvider;
 import uristqwerty.CraftGuide.api.RecipeTemplate;
 import uristqwerty.CraftGuide.api.Slot;
 import uristqwerty.CraftGuide.api.SlotType;
-
-import forestry.api.fuels.FuelManager;
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryBlock;
-import forestry.factory.gadgets.MachineFermenter;
 
 public class CraftGuideFermenter implements RecipeProvider {
 

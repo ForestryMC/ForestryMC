@@ -10,15 +10,14 @@
  ******************************************************************************/
 package forestry.farming.gadgets;
 
+import forestry.core.fluids.TankManager;
+import forestry.core.fluids.tanks.FakeTank;
+import forestry.core.interfaces.ILiquidTankContainer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-
-import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.FakeTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 public class TileValve extends TileFarm implements ILiquidTankContainer {

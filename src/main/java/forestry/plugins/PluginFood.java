@@ -10,14 +10,9 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-
 import cpw.mods.fml.common.network.IGuiHandler;
-
 import forestry.api.food.BeverageManager;
 import forestry.api.food.IBeverageEffect;
-import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
@@ -32,6 +27,8 @@ import forestry.food.items.ItemAmbrosia;
 import forestry.food.items.ItemBeverage;
 import forestry.food.items.ItemBeverage.BeverageInfo;
 import forestry.food.items.ItemInfuser;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
 @Plugin(pluginID = "Food", name = "Food", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.food.description")
 public class PluginFood extends ForestryPlugin {

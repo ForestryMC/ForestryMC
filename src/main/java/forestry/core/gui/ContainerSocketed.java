@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.core.interfaces.ISocketable;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketPayload;
@@ -22,6 +17,10 @@ import forestry.core.network.PacketSocketUpdate;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 
 public class ContainerSocketed extends ContainerForestry {
 

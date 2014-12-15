@@ -10,18 +10,13 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.core.interfaces.ICrafter;
 import forestry.core.interfaces.IRenderableMachine;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.GuiId;
 import forestry.core.network.PacketIds;
@@ -29,8 +24,11 @@ import forestry.core.network.PacketTileNBT;
 import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.utils.Utils;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEscritoire extends TileBase implements ISidedInventory, IRenderableMachine, ICrafter {
 

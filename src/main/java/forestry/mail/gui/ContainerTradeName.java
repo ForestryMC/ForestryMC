@@ -10,18 +10,16 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.PostManager;
 import forestry.core.gui.ContainerForestry;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
-import forestry.core.inventory.InventoryAdapter;
 import forestry.mail.gadgets.MachineTrader;
-import forestry.api.mail.PostManager;
-import forestry.api.mail.IMailAddress;
-
+import net.minecraft.entity.player.InventoryPlayer;
 import org.apache.commons.lang3.StringUtils;
 
 public class ContainerTradeName extends ContainerForestry {

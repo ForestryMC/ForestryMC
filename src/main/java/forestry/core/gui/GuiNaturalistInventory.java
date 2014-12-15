@@ -10,16 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import java.util.HashMap;
-
-import forestry.api.arboriculture.EnumTreeChromosome;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.apiculture.IApiaristTracker;
+import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
@@ -35,6 +27,12 @@ import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
+import java.util.HashMap;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 public class GuiNaturalistInventory extends GuiForestry<TileForestry> {
 	private final ISpeciesRoot speciesRoot;

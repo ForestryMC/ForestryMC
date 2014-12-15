@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.render;
 
+import forestry.apiculture.entities.EntityBee;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-
-import forestry.apiculture.entities.EntityBee;
 
 public class RenderBee extends RenderLiving {
 

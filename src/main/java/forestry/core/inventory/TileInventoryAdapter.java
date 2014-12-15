@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import forestry.core.gadgets.TileForestry;
 import forestry.core.utils.EnumAccess;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Utils;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 public class TileInventoryAdapter extends InventoryAdapter {

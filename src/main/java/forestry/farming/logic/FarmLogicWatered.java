@@ -10,23 +10,20 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
-
 import forestry.api.farming.IFarmHousing;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.core.utils.Vect;
+import java.util.ArrayList;
+import java.util.Collection;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
 
 public abstract class FarmLogicWatered extends FarmLogic {
 

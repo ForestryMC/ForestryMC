@@ -11,7 +11,6 @@
 package forestry.core.config;
 
 import forestry.core.proxy.Proxies;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;

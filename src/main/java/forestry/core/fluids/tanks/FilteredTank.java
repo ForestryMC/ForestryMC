@@ -11,14 +11,14 @@
 package forestry.core.fluids.tanks;
 
 import forestry.core.gui.tooltips.ToolTipLine;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
 
 /**
  *

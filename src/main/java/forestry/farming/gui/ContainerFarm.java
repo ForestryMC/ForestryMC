@@ -10,12 +10,6 @@
  ******************************************************************************/
 package forestry.farming.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.farming.IFarmLogic;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.StandardTank;
@@ -26,6 +20,11 @@ import forestry.core.gui.slots.SlotLiquidContainer;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.farming.gadgets.TileFarmPlain;
 import forestry.plugins.PluginFarming;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 public class ContainerFarm extends ContainerSocketed {
 

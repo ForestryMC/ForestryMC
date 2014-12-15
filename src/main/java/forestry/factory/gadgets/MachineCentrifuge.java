@@ -19,12 +19,17 @@ import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
-import forestry.core.network.GuiId;
-import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
-import forestry.core.utils.StackUtils;
+import forestry.core.network.GuiId;
 import forestry.core.utils.Utils;
 import forestry.factory.triggers.FactoryTriggers;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -34,14 +39,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
 
 public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 

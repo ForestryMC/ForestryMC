@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.Slot;
-
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.slots.SlotClosed;
 import forestry.energy.gadgets.EngineCopper;
-import scala.collection.parallel.ParSeqLike.Updated;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.Slot;
 
 public class ContainerEngineCopper extends ContainerForestry {
 

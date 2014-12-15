@@ -10,14 +10,6 @@
  ******************************************************************************/
 package forestry.food.items;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.food.BeverageManager;
 import forestry.api.food.IBeverageEffect;
@@ -30,6 +22,12 @@ import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.food.BeverageEffect;
 import forestry.plugins.PluginManager;
+import java.util.ArrayList;
+import java.util.Arrays;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class ItemInfuser extends ItemForestry {
 

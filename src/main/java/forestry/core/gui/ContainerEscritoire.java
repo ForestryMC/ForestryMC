@@ -10,13 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.inventory.Slot;
-
 import forestry.api.genetics.AlleleManager;
 import forestry.core.gadgets.TileEscritoire;
 import forestry.core.gui.slots.SlotClosed;
@@ -25,6 +18,11 @@ import forestry.core.network.PacketIds;
 import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
+import java.util.ArrayList;
+import java.util.Collection;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.inventory.Slot;
 
 public class ContainerEscritoire extends ContainerForestry implements IGuiSelectable {
 

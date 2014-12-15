@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.util.AxisAlignedBB;
-
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
@@ -21,6 +19,7 @@ import forestry.core.genetics.Allele;
 import forestry.core.genetics.EffectData;
 import forestry.core.utils.Vect;
 import forestry.plugins.PluginApiculture;
+import net.minecraft.util.AxisAlignedBB;
 
 public abstract class AlleleEffectThrottled extends Allele implements IAlleleBeeEffect {
 

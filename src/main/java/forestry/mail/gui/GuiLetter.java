@@ -10,17 +10,9 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import java.util.ArrayList;
-
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.EntityPlayer;
-
-import org.apache.commons.lang3.StringUtils;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
-import forestry.api.mail.IPostalCarrier;
+import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
+import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.PostManager;
 import forestry.core.config.Defaults;
 import forestry.core.config.SessionVars;
@@ -30,8 +22,13 @@ import forestry.core.gui.GuiTextBox;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
-import forestry.api.mail.EnumAddressee;
 import forestry.mail.items.ItemLetter.LetterInventory;
+import java.util.ArrayList;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.entity.player.EntityPlayer;
+import org.apache.commons.lang3.StringUtils;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 public class GuiLetter extends GuiForestry<TileForestry> {
 

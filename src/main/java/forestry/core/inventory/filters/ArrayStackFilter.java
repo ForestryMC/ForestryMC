@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.core.inventory.filters;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.core.inventory.InvTools;
+import net.minecraft.item.ItemStack;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

@@ -10,9 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import java.util.Iterator;
 import java.util.List;
-
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
 

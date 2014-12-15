@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.storage.items;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.storage.EnumBackpackType;
 import forestry.plugins.PluginApiculture;
 import forestry.plugins.PluginLepidopterology;
 import forestry.storage.BackpackDefinition;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 public class ItemNaturalistBackpack extends ItemBackpack {
 

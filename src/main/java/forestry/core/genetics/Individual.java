@@ -11,9 +11,8 @@
 package forestry.core.genetics;
 
 import forestry.api.genetics.IChromosomeType;
-import net.minecraft.nbt.NBTTagCompound;
-
 import forestry.api.genetics.IIndividual;
+import net.minecraft.nbt.NBTTagCompound;
 
 public abstract class Individual implements IIndividual {
 

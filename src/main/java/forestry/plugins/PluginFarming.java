@@ -62,6 +62,7 @@ import forestry.farming.logic.FarmableVanillaSapling;
 import forestry.farming.logic.FarmableVanillaShroom;
 import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.triggers.FarmingTriggers;
+import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -69,8 +70,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
-
-import java.util.ArrayList;
 
 @Plugin(pluginID = "Farming", name = "Farming", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.farming.description")
 public class PluginFarming extends ForestryPlugin {

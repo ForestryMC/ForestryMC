@@ -11,13 +11,12 @@
 package forestry.arboriculture.items;
 
 import forestry.arboriculture.IWoodFireproof;
-import forestry.core.utils.StringUtil;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodType;
 import forestry.core.items.ItemForestryBlock;
+import forestry.core.utils.StringUtil;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 
 public class ItemWoodBlock extends ItemForestryBlock {
 

@@ -10,12 +10,10 @@
  ******************************************************************************/
 package forestry.core.gui.tooltips;
 
+import com.google.common.collect.ForwardingList;
+import forestry.core.utils.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.collect.ForwardingList;
-
-import forestry.core.utils.StringUtil;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>

@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
-
 import forestry.apiculture.items.ItemBeeGE;
 import forestry.apiculture.items.ItemBiomefinder;
 import forestry.apiculture.items.ItemBiomefinder.BiomefinderInventory;
@@ -21,6 +17,9 @@ import forestry.core.config.ForestryItem;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotCustom;
 import forestry.core.proxy.Proxies;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
 
 public class ContainerHabitatLocator extends ContainerItemInventory {
 

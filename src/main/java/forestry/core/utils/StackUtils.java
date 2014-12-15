@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import forestry.core.config.Defaults;
 import forestry.core.inventory.InventoryAdapter;
 import java.util.ArrayList;
 import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,12 +23,9 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.oredict.OreDictionary;
-
-import forestry.core.config.Defaults;
 
 public class StackUtils {
 

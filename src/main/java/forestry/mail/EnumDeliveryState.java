@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.mail;
 
-import java.util.Locale;
-
 import forestry.api.mail.IPostalState;
+import java.util.Locale;
 
 public enum EnumDeliveryState implements IPostalState {
 	OK, NO_MAILBOX, NOT_MAILABLE, ALREADY_MAILED, NOT_POSTPAID, MAILBOX_FULL, RESPONSE_NOT_MAILABLE;

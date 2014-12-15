@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.arboriculture.IArboristTracker;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.core.genetics.BreedingTracker;
 import forestry.plugins.PluginArboriculture;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class ArboristTracker extends BreedingTracker implements IArboristTracker {
 

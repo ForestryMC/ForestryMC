@@ -10,11 +10,15 @@
  ******************************************************************************/
 package forestry.farming.gadgets;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.core.IItemTyped;
+import forestry.core.config.Defaults;
+import forestry.core.proxy.Proxies;
+import forestry.farming.worldgen.WorldGenBigMushroom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import forestry.core.IItemTyped;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -25,13 +29,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import forestry.core.config.Defaults;
-import forestry.core.proxy.Proxies;
-import forestry.farming.worldgen.WorldGenBigMushroom;
 
 public class BlockMushroom extends BlockSapling implements IItemTyped {
 

@@ -10,22 +10,19 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import forestry.core.config.Defaults;
+import forestry.core.gadgets.TileEscritoire;
+import forestry.core.interfaces.IBlockRenderer;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.ForestryResource;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.common.util.ForgeDirection;
-
 import org.lwjgl.opengl.GL11;
-
-import forestry.core.config.Defaults;
-import forestry.core.gadgets.TileEscritoire;
-import forestry.core.interfaces.IBlockRenderer;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.ForestryResource;
 
 public class RenderEscritoire extends TileEntitySpecialRenderer implements IBlockRenderer {
 

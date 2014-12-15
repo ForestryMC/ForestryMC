@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.core.config;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
+import forestry.Forestry;
+import forestry.core.proxy.Proxies;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
-
-import forestry.Forestry;
-import forestry.core.proxy.Proxies;
 
 /**
  * With permission from pahimar.

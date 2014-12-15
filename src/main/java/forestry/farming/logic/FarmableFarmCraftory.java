@@ -10,19 +10,17 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.Collection;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Vect;
 import forestry.plugins.PluginFarmCraftory;
+import java.util.Collection;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 public class FarmableFarmCraftory implements IFarmable {
 

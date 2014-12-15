@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.apiculture.gadgets.TileAlvearySwarmer;
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestry;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiAlvearySwarmer extends GuiForestry<TileAlvearySwarmer> {
 

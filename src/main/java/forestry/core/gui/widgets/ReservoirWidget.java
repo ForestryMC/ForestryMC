@@ -10,15 +10,12 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import net.minecraft.util.IIcon;
-
-import net.minecraftforge.fluids.FluidStack;
-
-import org.lwjgl.opengl.GL11;
-
 import forestry.core.gui.WidgetManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.fluids.FluidStack;
+import org.lwjgl.opengl.GL11;
 
 public class ReservoirWidget extends TankWidget {
 

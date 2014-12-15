@@ -28,21 +28,19 @@ import forestry.api.lepidopterology.IEntityButterfly;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
-import forestry.core.utils.StackUtils;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginLepidopterology;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 public class Butterfly extends IndividualLiving implements IButterfly {
 

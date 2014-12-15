@@ -14,11 +14,10 @@ import forestry.api.apiculture.BeeManager;
 import forestry.apiculture.gadgets.TileAlvearySwarmer;
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.slots.SlotCustom;
+import java.util.Set;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-
-import java.util.Set;
 
 public class ContainerAlvearySwarmer extends ContainerForestry {
 

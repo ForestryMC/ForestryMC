@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestry;
 import forestry.core.utils.StringUtil;
 import forestry.mail.gadgets.MachineTrader;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiTrader extends GuiForestry<MachineTrader> {
 

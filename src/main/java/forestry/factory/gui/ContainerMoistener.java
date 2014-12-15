@@ -10,15 +10,14 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotCraftAuto;
 import forestry.core.gui.slots.SlotWorking;
 import forestry.core.interfaces.IContainerCrafting;
 import forestry.factory.gadgets.MachineMoistener;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 
 public class ContainerMoistener extends ContainerLiquidTanks implements IContainerCrafting {
 

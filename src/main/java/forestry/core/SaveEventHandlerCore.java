@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.core;
 
-import net.minecraft.world.World;
-
 import forestry.core.interfaces.ISaveEventHandler;
+import net.minecraft.world.World;
 
 public class SaveEventHandlerCore implements ISaveEventHandler {
 

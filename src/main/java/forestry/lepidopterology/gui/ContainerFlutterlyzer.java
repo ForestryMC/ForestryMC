@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.lepidopterology.gui;
 
-import forestry.core.gui.ContainerAlyzer;
 import forestry.core.config.ForestryItem;
+import forestry.core.gui.ContainerAlyzer;
 import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.items.ItemFlutterlyzer.FlutterlyzerInventory;
-
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerFlutterlyzer extends ContainerAlyzer {

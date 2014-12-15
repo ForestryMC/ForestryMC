@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import java.util.ArrayList;
-import java.util.Locale;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IClimateHelper;
 import forestry.core.utils.StringUtil;
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class ClimateHelper implements IClimateHelper {
 

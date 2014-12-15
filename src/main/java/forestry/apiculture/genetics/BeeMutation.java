@@ -10,13 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import java.util.ArrayList;
-
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-
-import net.minecraftforge.common.BiomeDictionary;
-
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeMutation;
@@ -26,6 +19,10 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.core.genetics.Mutation;
 import forestry.plugins.PluginApiculture;
+import java.util.ArrayList;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.BiomeDictionary;
 
 public class BeeMutation extends Mutation implements IBeeMutation {
 

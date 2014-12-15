@@ -10,19 +10,16 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
+import forestry.core.render.TextureManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-
-import forestry.core.render.TextureManager;
 
 /**
  *

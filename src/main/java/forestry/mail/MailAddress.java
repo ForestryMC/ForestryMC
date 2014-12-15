@@ -10,19 +10,15 @@
  ******************************************************************************/
 package forestry.mail;
 
-import java.util.Locale;
-import java.util.UUID;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.core.INBTTagable;
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
-import forestry.core.network.PacketPayload;
 import forestry.core.utils.PlayerUtil;
+import java.util.Locale;
+import java.util.UUID;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 
 public class MailAddress implements INBTTagable, IMailAddress {
 

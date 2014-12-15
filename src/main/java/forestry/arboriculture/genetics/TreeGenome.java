@@ -10,13 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import java.util.EnumSet;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.common.EnumPlantType;
-
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IAlleleGrowth;
@@ -35,6 +28,10 @@ import forestry.core.genetics.AllelePlantType;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.Genome;
 import forestry.plugins.PluginArboriculture;
+import java.util.EnumSet;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.EnumPlantType;
 
 public class TreeGenome extends Genome implements ITreeGenome {
 

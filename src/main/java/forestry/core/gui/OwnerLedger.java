@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import java.util.Locale;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import forestry.core.interfaces.IOwnable;
 import forestry.core.network.PacketCoordinates;
 import forestry.core.network.PacketIds;
@@ -21,6 +17,9 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.EnumAccess;
 import forestry.core.utils.StringUtil;
+import java.util.Locale;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 
 /**
  * Ledger displaying ownership information

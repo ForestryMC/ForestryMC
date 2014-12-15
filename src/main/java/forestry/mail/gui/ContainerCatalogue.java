@@ -24,13 +24,12 @@ import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.mail.EnumStationState;
 import forestry.mail.network.PacketLetterInfo;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ICrafting;
-
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Set;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ICrafting;
 
 public class ContainerCatalogue extends ContainerForestry implements IGuiSelectable {
 

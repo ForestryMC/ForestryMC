@@ -11,8 +11,6 @@
 package forestry.core.config;
 
 import forestry.core.proxy.Proxies;
-import net.minecraftforge.common.config.Configuration.UnicodeInputStreamReader;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,6 +22,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
+import net.minecraftforge.common.config.Configuration.UnicodeInputStreamReader;
 
 public class Configuration {
 

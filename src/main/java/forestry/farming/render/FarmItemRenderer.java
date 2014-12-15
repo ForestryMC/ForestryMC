@@ -10,17 +10,14 @@
  ******************************************************************************/
 package forestry.farming.render;
 
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.client.IItemRenderer;
-
-import org.lwjgl.opengl.GL11;
-
 import forestry.core.utils.StackUtils;
 import forestry.farming.gadgets.BlockFarm;
 import forestry.farming.gadgets.TileFarm.EnumFarmBlock;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.IItemRenderer;
+import org.lwjgl.opengl.GL11;
 
 public class FarmItemRenderer implements IItemRenderer {
 

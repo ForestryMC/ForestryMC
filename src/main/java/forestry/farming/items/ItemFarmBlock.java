@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.farming.items;
 
+import forestry.core.gadgets.IStructureBlockItem;
+import forestry.farming.gadgets.TileFarm.EnumFarmBlock;
 import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-
-import forestry.core.gadgets.IStructureBlockItem;
-import forestry.farming.gadgets.TileFarm.EnumFarmBlock;
 
 public class ItemFarmBlock extends ItemBlock implements IStructureBlockItem {
 

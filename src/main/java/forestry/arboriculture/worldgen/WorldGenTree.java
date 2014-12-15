@@ -11,7 +11,6 @@
 package forestry.arboriculture.worldgen;
 
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.genetics.IAlleleBoolean;
 import forestry.api.world.ITreeGenData;

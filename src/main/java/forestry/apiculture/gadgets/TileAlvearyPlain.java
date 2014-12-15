@@ -18,7 +18,6 @@ import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.core.BiomeHelper;
-import forestry.core.EnumErrorCode;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
@@ -27,20 +26,22 @@ import forestry.api.core.ISpecialInventory;
 import forestry.api.core.ITileStructure;
 import forestry.api.genetics.IIndividual;
 import forestry.apiculture.gui.ContainerAlveary;
+import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.IClimatised;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IHintSource;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketInventoryStack;
 import forestry.core.proxy.Proxies;
-import forestry.core.inventory.InventoryAdapter;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginApiculture;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
@@ -50,10 +51,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
-import scala.collection.SortedMap;
 
 public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, ISpecialInventory, IBeeHousing, IClimatised, IHintSource {
 

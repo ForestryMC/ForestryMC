@@ -20,12 +20,11 @@ import forestry.core.gadgets.TileBase;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.plugins.PluginApiculture;
+import java.util.Collection;
+import java.util.LinkedList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.Collection;
-import java.util.LinkedList;
 
 public class TileApiary extends TileBeehouse {
 

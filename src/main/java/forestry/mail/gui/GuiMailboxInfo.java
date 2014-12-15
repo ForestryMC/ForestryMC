@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ForestryResource;
 import forestry.mail.POBoxInfo;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class GuiMailboxInfo extends Gui {
 

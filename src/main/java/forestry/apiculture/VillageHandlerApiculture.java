@@ -21,6 +21,8 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginApiculture;
+import java.util.List;
+import java.util.Random;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -30,9 +32,6 @@ import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
-
-import java.util.List;
-import java.util.Random;
 
 public class VillageHandlerApiculture implements IVillageCreationHandler, IVillageTradeHandler {
 

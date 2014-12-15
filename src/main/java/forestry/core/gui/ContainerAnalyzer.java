@@ -12,14 +12,13 @@ package forestry.core.gui;
 
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-
 import forestry.core.gadgets.TileAnalyzer;
 import forestry.core.genetics.ItemGE;
 import forestry.core.gui.slots.SlotCustom;
 import forestry.core.gui.slots.SlotLiquidContainer;
 import forestry.core.gui.slots.SlotOutput;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerAnalyzer extends ContainerLiquidTanks {

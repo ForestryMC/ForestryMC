@@ -10,15 +10,12 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import java.util.ArrayList;
-
-import net.minecraft.client.Minecraft;
-
-import org.lwjgl.opengl.GL11;
-
 import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
+import java.util.ArrayList;
+import net.minecraft.client.Minecraft;
+import org.lwjgl.opengl.GL11;
 
 public class WidgetManager {
 

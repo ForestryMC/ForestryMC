@@ -10,20 +10,18 @@
  ******************************************************************************/
 package forestry.apiculture.entities;
 
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
 import forestry.core.config.Defaults;
 import forestry.core.utils.ForestryResource;
 import forestry.plugins.PluginApiculture;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.passive.IAnimals;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 public class EntityBee extends EntityCreature implements IAnimals {
 

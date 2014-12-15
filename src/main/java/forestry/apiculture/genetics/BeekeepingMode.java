@@ -10,16 +10,14 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Random;
-
-import net.minecraft.world.World;
-
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingMode;
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Random;
+import net.minecraft.world.World;
 
 public class BeekeepingMode implements IBeekeepingMode {
 

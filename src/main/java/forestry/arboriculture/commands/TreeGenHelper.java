@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.gen.feature.WorldGenerator;
-
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
@@ -22,6 +19,8 @@ import forestry.core.commands.SpeciesNotFoundException;
 import forestry.core.commands.TemplateNotFoundException;
 import forestry.core.worldgen.WorldGenBase;
 import forestry.plugins.PluginArboriculture;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.gen.feature.WorldGenerator;
 
 public final class TreeGenHelper {
 

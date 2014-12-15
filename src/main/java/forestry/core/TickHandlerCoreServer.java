@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.core;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
-
 import forestry.core.interfaces.IResupplyHandler;
 import forestry.plugins.PluginManager;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class TickHandlerCoreServer {
 	public TickHandlerCoreServer() {

@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture;
 
-import java.io.DataInputStream;
-
-import net.minecraft.entity.player.EntityPlayer;
-
 import forestry.apiculture.gui.ContainerImprinter;
 import forestry.core.interfaces.IPacketHandler;
 import forestry.core.network.PacketCoordinates;
 import forestry.core.network.PacketIds;
 import forestry.core.proxy.Proxies;
+import java.io.DataInputStream;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class PacketHandlerApiculture implements IPacketHandler {
 

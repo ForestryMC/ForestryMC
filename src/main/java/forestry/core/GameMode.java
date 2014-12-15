@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.core;
 
-import java.util.HashMap;
-
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IGameMode;
 import forestry.core.config.Config;
@@ -23,6 +18,9 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.Property;
 import forestry.core.proxy.Proxies;
+import java.util.HashMap;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
 public class GameMode implements IGameMode {
 

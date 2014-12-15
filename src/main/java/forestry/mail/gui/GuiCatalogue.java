@@ -10,20 +10,17 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
+import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.TradeStationInfo;
 import forestry.core.config.SessionVars;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.GuiForestry;
 import forestry.core.utils.StringUtil;
-import forestry.api.mail.EnumAddressee;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 public class GuiCatalogue extends GuiForestry<TileForestry> {
 
