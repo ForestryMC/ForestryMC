@@ -24,7 +24,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.FuelManager;

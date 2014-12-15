@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISpecialInventory;
 import forestry.api.recipes.IFabricatorManager;

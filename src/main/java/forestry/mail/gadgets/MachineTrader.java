@@ -25,7 +25,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.common.Optional;
 
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;

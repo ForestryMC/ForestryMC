@@ -13,7 +13,7 @@ package forestry.energy.gadgets;
 import buildcraft.api.statements.ITriggerExternal;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameData;
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
 import forestry.core.TemperatureState;

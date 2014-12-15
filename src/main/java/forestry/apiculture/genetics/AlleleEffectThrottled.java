@@ -16,7 +16,7 @@ import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.core.genetics.Allele;
 import forestry.core.genetics.EffectData;
 import forestry.core.utils.Vect;
@@ -55,14 +55,14 @@ public abstract class AlleleEffectThrottled extends Allele implements IAlleleBee
 
 	public boolean isHalted(IEffectData storedData, IBeeHousing housing) {
 
-		if (requiresWorkingQueen && housing.getErrorOrdinal() != EnumErrorCode.OK.ordinal())
+		if (requiresWorkingQueen && housing.getErrorState() != EnumErrorCode.OK)
 			return true;
 
-		int throttle = storedData.getInteger(0);
-		throttle++;
-		storedData.setInteger(0, throttle);
+		int throt = storedData.getInteger(0);
+		throt++;
+		storedData.setInteger(0, throt);
 
-		if (throttle < getThrottle())
+		if (throt < getThrottle())
 			return true;
 
 		// Reset since we are done throttling.

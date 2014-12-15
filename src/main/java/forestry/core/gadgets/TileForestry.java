@@ -16,7 +16,8 @@ import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.statements.ITriggerProvider;
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.Optional;
-import forestry.api.core.EnumErrorCode;
+import forestry.api.core.IErrorState;
+import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.interfaces.IErrorSource;
@@ -186,9 +187,9 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		this.sendNetworkUpdate();
 	}
 	// / ERROR HANDLING
-	public EnumErrorCode errorState = EnumErrorCode.OK;
+	public IErrorState errorState = EnumErrorCode.OK;
 
-	public void setErrorState(EnumErrorCode state) {
+	public void setErrorState(IErrorState state) {
 		if (this.errorState == state)
 			return;
 		this.errorState = state;
@@ -201,7 +202,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	@Override
-	public EnumErrorCode getErrorState() {
+	public IErrorState getErrorState() {
 		return errorState;
 	}
 	// / OWNERSHIP
@@ -288,6 +289,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 
 	/**
 	 * Gets the tile's unlocalized name, based on the block at the location of this entity (client-only).
+	 * @return 
 	 */
 	public String getUnlocalizedName() {
 		String blockUnlocalizedName = getBlockType().getUnlocalizedName().replace("tile.for.","");

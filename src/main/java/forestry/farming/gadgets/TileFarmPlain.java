@@ -35,7 +35,7 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.core.BiomeHelper;
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.farming.ICrop;

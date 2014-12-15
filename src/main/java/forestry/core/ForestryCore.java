@@ -58,6 +58,8 @@ public class ForestryCore {
 		Config.load();
 		if (!Config.disableVersionCheck)
 			Version.versionCheck();
+		
+		EnumErrorCode.init();
 
 		PluginManager.runPreInit();
 	}

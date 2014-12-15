@@ -21,8 +21,8 @@ import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.core.ErrorStateRegistry;
 
-import forestry.api.core.EnumErrorCode;
 import forestry.core.fluids.Fluids;
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPickupHandler;
@@ -87,7 +87,7 @@ public class EventHandlerCore {
 	@SideOnly(Side.CLIENT)
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {
 		if(event.map.getTextureType() == 1) {
-			EnumErrorCode.initIcons(event.map);
+			ErrorStateRegistry.initIcons(event.map);
 			TextureManager.getInstance().initDefaultIcons(event.map);
 		} else if(event.map.getTextureType() == 0)
 			Fluids.resetFluidIcons(event.map);
