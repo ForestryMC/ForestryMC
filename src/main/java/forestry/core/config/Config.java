@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.config;
 
-import forestry.core.proxy.Proxies;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -21,6 +20,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Properties;
+
+import forestry.core.proxy.Proxies;
 
 public class Config {
 
@@ -36,7 +37,6 @@ public class Config {
 	public static boolean isDebug = false;
 
 	public static boolean disablePermissions = false;
-	public static boolean disableNags = false;
 	public static boolean disableVersionCheck = false;
 
 	public static boolean invalidFingerprint = false;
@@ -55,23 +55,14 @@ public class Config {
 	public static boolean generateCopperOre = true;
 	public static boolean generateTinOre = true;
 	public static boolean generateBeehives = true;
-	public static boolean generateBogEarth = false;
 	public static boolean generateBeehivesDebug = false;
 
 	// Performance
 	public static boolean enableBackpackResupply = true;
-	public static int planterThrottle;
-	public static int harvesterThrottle;
 
 	// Customization
 	public static boolean tooltipLiquidAmount = true;
-	public static boolean planterSideSensitive = true;
-	/**
-	 * True if the harvester should decide output to pipes according to side.
-	 */
-	public static boolean harvesterSideSensitive = true;
 
-	/* GO AWAY GRED */
 	private static boolean craftingBronzeEnabled = true;
 
 	public static boolean getCraftingBronzeEnabled() {
@@ -81,7 +72,6 @@ public class Config {
 	public static boolean craftingStampsEnabled = true;
 	public static final ArrayList<String> collectorStamps = new ArrayList<String>();
 
-	public static boolean applePickup = true;
 	public static boolean squareFarms = false;
 
 	// Mail
@@ -160,13 +150,6 @@ public class Config {
 		genTinOre.Comment = "set to false to force forestry to skip generating own tin ore blocks in the world";
 		generateTinOre = Boolean.parseBoolean(genTinOre.Value);
 
-		Property planterSideSense = config.get("planters.sidesensitive", CATEGORY_COMMON, true);
-		planterSideSense.Comment = "set to false if farms should output all harvested products regardless of side a pipe is attached to";
-		planterSideSensitive = Boolean.parseBoolean(planterSideSense.Value);
-		Property harvesterSideSense = config.get("harvesters.sidesensitive", CATEGORY_COMMON, true);
-		harvesterSideSense.Comment = "set to false if harvesters should output all harvested products regardless of side a pipe is attached to";
-		harvesterSideSensitive = Boolean.parseBoolean(harvesterSideSense.Value);
-
 		Property bronzeRecipe = config.get("crafting.bronze.enabled", CATEGORY_COMMON, true);
 		bronzeRecipe.Comment = "set to false to disable crafting recipe for bronze";
 		craftingBronzeEnabled = Boolean.parseBoolean(bronzeRecipe.Value);
@@ -188,10 +171,6 @@ public class Config {
 		Property indicatorEnable = config.get("tweaks.mailalert.enabled", CATEGORY_COMMON, true);
 		indicatorEnable.Comment = "set to false to disable the mail alert box";
 		mailAlertEnabled = Boolean.parseBoolean(indicatorEnable.Value);
-
-		Property appleHarvest = config.get("tweaks.apple.pickup.enabled", CATEGORY_COMMON, true);
-		appleHarvest.Comment = "set to false to disable apple pickup by appropriate harvesters";
-		applePickup = Boolean.parseBoolean(appleHarvest.Value);
 
 		Property clearGenome = config.get("genetics.clear.invalid.chromosomes", CATEGORY_COMMON, clearInvalidChromosomes);
 		clearGenome.Comment = "set to true to clear chromosomes which contain invalid alleles. might rescue your save if it is crashing after the removal of a bee addon.";
@@ -218,10 +197,6 @@ public class Config {
 		property = config.get("tweaks.permissions.disabled", CATEGORY_COMMON, false);
 		property.Comment = "set to true to disable access restrictions on forestry machines.";
 		Config.disablePermissions = Boolean.parseBoolean(property.Value);
-
-		property = config.get("tweaks.nags.disabled", CATEGORY_COMMON, false);
-		property.Comment = "set to true to disable some nagging and warnings (e.g. GregTech).";
-		Config.disableNags = Boolean.parseBoolean(property.Value);
 
 		property = config.get("tweaks.upgradenotice.disabled", CATEGORY_COMMON, false);
 		property.Comment = "set to true to disable update and version check notice.";

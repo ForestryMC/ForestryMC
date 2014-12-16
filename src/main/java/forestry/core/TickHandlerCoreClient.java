@@ -10,17 +10,20 @@
  ******************************************************************************/
 package forestry.core;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatComponentText;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
+
 import forestry.core.config.Config;
 import forestry.core.config.Version;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Utils;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
 
 public class TickHandlerCoreClient {
 
@@ -55,12 +58,6 @@ public class TickHandlerCoreClient {
 				player.addChatMessage(new ChatComponentText(message));
 			}
 		}
-
-		/*
-		 if (!Config.disableNags)
-		 if (Proxies.common.isModLoaded("GregTech_Addon"))
-		 queueChatMessage("\u00A76Forestry may have been modified by GregTech. It may behave unexpectedly and some config options may not work. Do not report issues with this install! You can disable this nag in the config.");
-		 */
 
 		if (!naggedVersion && !Config.disableVersionCheck && Version.needsUpdateNoticeAndMarkAsSeen()) {
 			queueChatMessage(String.format("\u00A7cNew version of Forestry available: %s for Minecraft %s", Version.getRecommendedVersion(),

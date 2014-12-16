@@ -10,13 +10,16 @@
  ******************************************************************************/
 package forestry.core;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
+
+import forestry.core.config.Config;
 import forestry.core.interfaces.IResupplyHandler;
 import forestry.plugins.PluginManager;
-import net.minecraft.entity.player.EntityPlayer;
 
 public class TickHandlerCoreServer {
 	public TickHandlerCoreServer() {
@@ -27,11 +30,12 @@ public class TickHandlerCoreServer {
 	public void onWorldTick(WorldTickEvent event) {
 		if (event.phase != Phase.END) return;
 
-		for (Object obj : event.world.playerEntities) {
-			EntityPlayer player = (EntityPlayer) obj;
-			for (IResupplyHandler handler : PluginManager.resupplyHandlers)
-				handler.resupply(player);
+		if (Config.enableBackpackResupply) {
+			for (Object obj : event.world.playerEntities) {
+				EntityPlayer player = (EntityPlayer) obj;
+				for (IResupplyHandler handler : PluginManager.resupplyHandlers)
+					handler.resupply(player);
+			}
 		}
-
 	}
 }

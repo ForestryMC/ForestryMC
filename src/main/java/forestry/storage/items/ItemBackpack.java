@@ -17,6 +17,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.storage.BackpackStowEvent;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
+import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.ItemInventory;
@@ -120,14 +121,12 @@ public class ItemBackpack extends ItemInventoried {
 
 	private void switchMode(ItemStack itemstack) {
 		BackpackMode mode = getMode(itemstack);
-		if (mode == BackpackMode.RESUPPLY)
-			itemstack.setItemDamage(0);
-		else if (mode == BackpackMode.RECEIVE)
-			itemstack.setItemDamage(3);
-		else if (mode == BackpackMode.LOCKED)
-			itemstack.setItemDamage(2);
-		else
-			itemstack.setItemDamage(1);
+		int nextMode = mode.ordinal() + 1;
+		if (!Config.enableBackpackResupply && nextMode == BackpackMode.RESUPPLY.ordinal()) {
+			nextMode++;
+		}
+		nextMode %= BackpackMode.values().length;
+		itemstack.setItemDamage(nextMode);
 	}
 
 	private IInventory getInventoryHit(World world, int x, int y, int z, int side) {
