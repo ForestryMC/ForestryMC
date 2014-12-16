@@ -87,7 +87,7 @@ public abstract class BlockStructure extends BlockForestry {
 
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbor) {
-
+		super.onNeighborBlockChange(world, x, y, z, neighbor);
 		if (!Proxies.common.isSimulating(world))
 			return;
 

@@ -32,7 +32,6 @@ import forestry.plugins.PluginApiculture;
 import java.util.Map.Entry;
 import java.util.Stack;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -217,11 +216,6 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 	@Override
 	protected void createInventory() {
 		setInternalInventory(new TileInventoryAdapter(this, 4, "SwarmInv"));
-	}
-
-	@Override
-	public IInventory getInventory() {
-		return getInternalInventory();
 	}
 
 	/* IINVENTORY */

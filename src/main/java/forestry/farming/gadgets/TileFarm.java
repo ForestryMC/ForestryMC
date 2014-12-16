@@ -27,6 +27,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -315,7 +316,12 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	}
 
 	@Override
-	public IInventory getInventory() {
+	public final IInventory getInventory() {
+		return getStructureInventory();
+	}
+
+	@Override
+	public ISidedInventory getStructureInventory() {
 		return getInternalInventory();
 	}
 

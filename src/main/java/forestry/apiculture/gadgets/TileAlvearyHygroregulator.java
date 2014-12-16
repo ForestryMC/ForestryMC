@@ -134,9 +134,8 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 		TileInventoryAdapter canInventory = getInternalInventory();
 
 		// Check if we have suitable items waiting in the item slot
-		if (canInventory.getStackInSlot(0) != null) {
+		if (canInventory.getStackInSlot(0) != null)
 			FluidHelper.drainContainers(tankManager, canInventory, 0);
-		}
 
 	}
 
@@ -177,11 +176,6 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	@Override
 	public int getIcon(int side, int metadata) {
 		return BlockAlveary.ALVEARY_HYGRO;
-	}
-
-	@Override
-	public IInventory getInventory() {
-		return getInternalInventory();
 	}
 
 	/* IINVENTORY */

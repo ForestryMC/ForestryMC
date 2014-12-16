@@ -49,10 +49,13 @@ public class BlockUtil {
 	 * @param blockPos
 	 * @param from
 	 * @return
+	 * @deprecated Use AdjacentInventoryCache instead
 	 */
+	@Deprecated
 	public static IInventory[] getAdjacentInventories(World world, Vect blockPos, ForgeDirection from) {
 		ArrayList<IInventory> inventories = new ArrayList<IInventory>();
 
+		// WTF is this? A loop that only picks the opposite direction? -CovertJaguar
 		for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
 			if (from != ForgeDirection.UNKNOWN && from != dir.getOpposite())
 				continue;
@@ -88,12 +91,12 @@ public class BlockUtil {
 			TileEntity pipeEntry = world.getTileEntity((int) posPipe.x, (int) posPipe.y, (int) posPipe.z);
 
 			if (pipeEntry instanceof IPipeTile) {
-				IPipeTile pipe = (IPipeTile)pipeEntry;
+				IPipeTile pipe = (IPipeTile) pipeEntry;
 
 				if (from != ForgeDirection.UNKNOWN && pipeEntry instanceof IPipeConnection) {
 					if (((IPipeConnection) pipeEntry).overridePipeConnection(PipeType.ITEM, from) != ConnectOverride.DISCONNECT)
 						possiblePipes.add(dir);
-				} else if(pipe.getPipeType() == PipeType.ITEM && pipe.isPipeConnected(dir.getOpposite()))
+				} else if (pipe.getPipeType() == PipeType.ITEM && pipe.isPipeConnected(dir.getOpposite()))
 					possiblePipes.add(dir);
 			}
 		}
@@ -106,9 +109,10 @@ public class BlockUtil {
 		ArrayList<ForgeDirection> filtered = new ArrayList<ForgeDirection>();
 		ArrayList<ForgeDirection> excludeList = new ArrayList<ForgeDirection>(Arrays.asList(exclude));
 
-		for (ForgeDirection direction : allDirections)
+		for (ForgeDirection direction : allDirections) {
 			if (!excludeList.contains(direction))
 				filtered.add(direction);
+		}
 
 		return filtered;
 
@@ -137,7 +141,7 @@ public class BlockUtil {
 		IPipeTile pipe = (IPipeTile) tile.getWorldObj().getTileEntity((int) pipePos.x, (int) pipePos.y, (int) pipePos.z);
 
 		ItemStack payload = stack.splitStack(1);
-		if(pipe.injectItem(payload, true, itemPos.orientation.getOpposite()) > 0)
+		if (pipe.injectItem(payload, true, itemPos.orientation.getOpposite()) > 0)
 			return true;
 		else
 			pipes.remove(choice);

@@ -26,6 +26,7 @@ import forestry.core.proxy.Proxies;
 import java.util.Collection;
 import java.util.LinkedList;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -125,7 +126,6 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	}
 
 	/* ITILESTRUCTURE */
-
 	@Override
 	public String getTypeUID() {
 		return structureLogic.getTypeUID();
@@ -208,7 +208,12 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	}
 
 	@Override
-	public IInventory getInventory() {
+	public final IInventory getInventory() {
+		return getStructureInventory();
+	}
+
+	@Override
+	public ISidedInventory getStructureInventory() {
 		return getInternalInventory();
 	}
 

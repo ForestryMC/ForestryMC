@@ -22,6 +22,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.Level;
 
 public abstract class BlockForestry extends BlockContainer {
 
@@ -65,4 +66,17 @@ public abstract class BlockForestry extends BlockContainer {
 		if (entityliving instanceof EntityPlayer)
 			tile.setOwner(((EntityPlayer) entityliving));
 	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+		try {
+			TileEntity tile = world.getTileEntity(x, y, z);
+			if (tile instanceof TileForestry)
+				((TileForestry) tile).onNeighborBlockChange(block);
+		} catch (StackOverflowError error) {
+			Proxies.log.logThrowable(Level.ERROR, "Stack Overflow Error in BlockMachine.onNeighborBlockChange()", 10, error);
+			throw error;
+		}
+	}
+
 }

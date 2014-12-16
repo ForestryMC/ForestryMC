@@ -27,10 +27,12 @@ import forestry.core.network.INetworkedEntity;
 import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.AdjacentTileCache;
 import forestry.core.utils.EnumAccess;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Vect;
 import java.util.Collection;
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -45,8 +47,29 @@ import net.minecraftforge.common.util.ForgeDirection;
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
 public abstract class TileForestry extends TileEntity implements INetworkedEntity, IOwnable, IErrorSource, ITriggerProvider {
 
+	protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 	protected boolean isInited = false;
 	private TileInventoryAdapter inventory;
+
+	public AdjacentTileCache getTileCache() {
+		return tileCache;
+	}
+
+	public void onNeighborBlockChange(Block id) {
+		tileCache.onNeighborChange();
+	}
+
+	@Override
+	public void invalidate() {
+		tileCache.purge();
+		super.invalidate();
+	}
+
+	@Override
+	public void validate() {
+		tileCache.purge();
+		super.validate();
+	}
 
 	public Vect Coords() {
 		return new Vect(xCoord, yCoord, zCoord);

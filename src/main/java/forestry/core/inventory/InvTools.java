@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
+import buildcraft.api.transport.IPipeTile;
 import buildcraft.api.transport.PipeManager;
-import forestry.api.core.ISpecialInventory;
 import forestry.core.inventory.filters.ArrayStackFilter;
 import forestry.core.inventory.filters.IStackFilter;
 import forestry.core.inventory.filters.InvertedStackFilter;
@@ -19,9 +19,11 @@ import forestry.core.inventory.filters.StackFilter;
 import forestry.core.inventory.manipulators.InventoryManipulator;
 import forestry.core.inventory.wrappers.ChestWrapper;
 import forestry.core.inventory.wrappers.IInvSlot;
+import forestry.core.inventory.wrappers.InventoryCopy;
 import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.inventory.wrappers.SidedInventoryMapper;
+import forestry.core.utils.AdjacentTileCache;
 import forestry.core.utils.PlainInventory;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,9 +48,9 @@ import net.minecraftforge.oredict.OreDictionary;
 public abstract class InvTools {
 
 	/*private static final String TAG_ID = "id";
-	private static final String TAG_SIZE = "stackSize";
-	private static final String TAG_DAMAGE = "Damage";
-	private static final String TAG_COUNT = "Count";*/
+	 private static final String TAG_SIZE = "stackSize";
+	 private static final String TAG_DAMAGE = "Damage";
+	 private static final String TAG_COUNT = "Count";*/
 	private static final String TAG_SLOT = "Slot";
 
 	public static int getXOnSide(int x, ForgeDirection side) {
@@ -168,15 +170,14 @@ public abstract class InvTools {
 	}
 
 	/*public static void addItemToolTip(ItemStack stack, String tag, String msg) {
-		NBTTagCompound nbt = getItemData(stack);
-		NBTTagCompound display = nbt.getCompoundTag("display");
-		nbt.setTag("display", display);
-		NBTTagList lore = display.getTagList("Lore", 8); // 8 = String
-		display.setTag("Lore", lore);
-		//lore.appendTag(new NBTTagString(tag, msg));
-		lore.appendTag(new NBTTagString(msg));
-	}*/
-
+	 NBTTagCompound nbt = getItemData(stack);
+	 NBTTagCompound display = nbt.getCompoundTag("display");
+	 nbt.setTag("display", display);
+	 NBTTagList lore = display.getTagList("Lore", 8); // 8 = String
+	 display.setTag("Lore", lore);
+	 //lore.appendTag(new NBTTagString(tag, msg));
+	 lore.appendTag(new NBTTagString(msg));
+	 }*/
 	public static NBTTagCompound getItemData(ItemStack stack) {
 		NBTTagCompound nbt = stack.getTagCompound();
 		if (nbt == null) {
@@ -321,7 +322,7 @@ public abstract class InvTools {
 		return count;
 	}
 
-	public static int countItems(Collection<IInventory> inventories, ItemStack... filter) {
+	public static int countItems(Iterable<IInventory> inventories, ItemStack... filter) {
 		int count = 0;
 		for (IInventory inv : inventories) {
 			count += InvTools.countItems(inv, filter);
@@ -409,7 +410,7 @@ public abstract class InvTools {
 	 * @param filters
 	 * @return
 	 */
-	public static ItemStack moveOneItem(Collection<IInventory> sources, IInventory dest, ItemStack... filters) {
+	public static ItemStack moveOneItem(Iterable<IInventory> sources, IInventory dest, ItemStack... filters) {
 		for (IInventory inv : sources) {
 			ItemStack moved = InvTools.moveOneItem(inv, dest, filters);
 			if (moved != null)
@@ -426,7 +427,7 @@ public abstract class InvTools {
 	 * @param filter
 	 * @return
 	 */
-	public static ItemStack moveOneItem(Collection<IInventory> sources, IInventory dest, IStackFilter filter) {
+	public static ItemStack moveOneItem(Iterable<IInventory> sources, IInventory dest, IStackFilter filter) {
 		for (IInventory inv : sources) {
 			ItemStack moved = InvTools.moveOneItem(inv, dest, filter);
 			if (moved != null)
@@ -443,7 +444,7 @@ public abstract class InvTools {
 	 * @param filters
 	 * @return
 	 */
-	public static ItemStack moveOneItem(IInventory source, Collection<IInventory> destinations, ItemStack... filters) {
+	public static ItemStack moveOneItem(IInventory source, Iterable<IInventory> destinations, ItemStack... filters) {
 		for (IInventory dest : destinations) {
 			ItemStack moved = InvTools.moveOneItem(source, dest, filters);
 			if (moved != null)
@@ -474,7 +475,7 @@ public abstract class InvTools {
 	 * @param filters
 	 * @return
 	 */
-	public static ItemStack moveOneItemExcept(Collection<IInventory> sources, IInventory dest, ItemStack... filters) {
+	public static ItemStack moveOneItemExcept(Iterable<IInventory> sources, IInventory dest, ItemStack... filters) {
 		for (IInventory inv : sources) {
 			ItemStack moved = InvTools.moveOneItemExcept(inv, dest, filters);
 			if (moved != null)
@@ -491,7 +492,7 @@ public abstract class InvTools {
 	 * @param filters
 	 * @return
 	 */
-	public static ItemStack moveOneItemExcept(IInventory source, Collection<IInventory> destinations, ItemStack... filters) {
+	public static ItemStack moveOneItemExcept(IInventory source, Iterable<IInventory> destinations, ItemStack... filters) {
 		for (IInventory dest : destinations) {
 			ItemStack moved = InvTools.moveOneItemExcept(source, dest, filters);
 			if (moved != null)
@@ -651,6 +652,41 @@ public abstract class InvTools {
 	}
 
 	/**
+	 * Attempts to move an ItemStack from one inventory to another.
+	 *
+	 * @param source The source IInventory.
+	 * @param dest The destination IInventory.
+	 * @return true if any items were moved
+	 */
+	public static boolean moveItemStack(IInventory source, IInventory dest) {
+		InventoryManipulator im = InventoryManipulator.get(dest);
+		for (IInvSlot slot : InventoryIterator.getIterable(source)) {
+			ItemStack stack = slot.getStackInSlot();
+			if (stack != null) {
+				ItemStack remainder = im.addStack(stack);
+				slot.setStackInSlot(remainder);
+				return !isItemEqualStrict(stack, remainder);
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Attempts to move an ItemStack from one inventory to another.
+	 *
+	 * @param source The source IInventory.
+	 * @param destinations The destination IInventory.
+	 * @return true if any items were moved
+	 */
+	public static boolean moveItemStack(IInventory source, Iterable<IInventory> destinations) {
+		for (IInventory dest : destinations) {
+			if (moveItemStack(source, dest))
+				return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Checks if there is room for the ItemStack in the inventory.
 	 *
 	 * @param stack The ItemStack
@@ -673,8 +709,6 @@ public abstract class InvTools {
 	 * @return
 	 */
 	public static ItemStack[] removeItems(IInventory inv, int numItems) {
-		if (inv instanceof ISpecialInventory)
-			return ((ISpecialInventory) inv).extractItem(true, ForgeDirection.UNKNOWN, numItems);
 		PlainInventory output = new PlainInventory(27, "temp");
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			if (numItems <= 0)
@@ -743,13 +777,58 @@ public abstract class InvTools {
 	 * @param filter EnumItemType to match against
 	 * @return An ItemStack
 	 */
-	public static ItemStack removeOneItem(Collection<IInventory> invs, IStackFilter filter) {
+	public static ItemStack removeOneItem(Iterable<IInventory> invs, IStackFilter filter) {
 		for (IInventory inv : invs) {
 			ItemStack stack = removeOneItem(inv, filter);
 			if (stack != null)
 				return stack;
 		}
 		return null;
+	}
+
+	/**
+	 * Attempts to move a single item from the source inventory into a adjacent Buildcraft pipe.
+	 * If the attempt fails, the source Inventory will not be modified.
+	 *
+	 * @param source The source inventory
+	 * @param tileCache The tile cache of the source block.
+	 * @return true if an item was inserted, otherwise false.
+	 */
+	public static boolean moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache) {
+		IInventory invClone = new InventoryCopy(source);
+		ItemStack stackToMove = removeOneItem(invClone);
+		if (stackToMove == null)
+			return false;
+		if (stackToMove.stackSize <= 0)
+			return false;
+
+		IPipeTile[] pipes = new IPipeTile[6];
+		boolean foundPipe = false;
+		for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
+			TileEntity tile = tileCache.getTileOnSide(side);
+			if (tile instanceof IPipeTile) {
+				IPipeTile pipe = (IPipeTile) tile;
+				if (pipe.getPipeType() == IPipeTile.PipeType.ITEM && pipe.isPipeConnected(side.getOpposite())) {
+					pipes[side.ordinal()] = pipe;
+					foundPipe = true;
+				}
+			}
+		}
+
+		if (!foundPipe)
+			return false;
+
+		int choice = tileCache.getSource().getWorldObj().rand.nextInt(6);
+
+		ForgeDirection side = ForgeDirection.getOrientation(choice);
+
+		IPipeTile pipe = pipes[choice];
+		if (pipe.injectItem(stackToMove, false, side.getOpposite()) > 0)
+			if (removeOneItem(source, stackToMove) != null) {
+				pipe.injectItem(stackToMove, true, side.getOpposite());
+				return true;
+			}
+		return false;
 	}
 
 	public static void writeInvToNBT(IInventory inv, String tag, NBTTagCompound data) {

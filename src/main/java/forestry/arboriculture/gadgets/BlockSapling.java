@@ -130,6 +130,7 @@ public class BlockSapling extends BlockTreeContainer {
 
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbour) {
+		super.onNeighborBlockChange(world, x, y, z, neighbour);
 		if (Proxies.common.isSimulating(world) && !this.canBlockStay(world, x, y, z)) {
 			dropAsSapling(world, x, y, z);
 			world.setBlockToAir(x, y, z);

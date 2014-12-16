@@ -13,13 +13,14 @@ package forestry.farming.gadgets;
 import buildcraft.api.statements.ITriggerExternal;
 import cpw.mods.fml.common.Optional;
 import forestry.api.core.ITileStructure;
-import forestry.core.utils.BlockUtil;
-import forestry.core.utils.StackUtils;
+import forestry.core.inventory.AdjacentInventoryCache;
+import forestry.core.inventory.ITileFilter;
+import forestry.core.inventory.InvTools;
+import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.utils.Utils;
 import forestry.farming.triggers.FarmingTriggers;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -30,6 +31,14 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 
 public class TileHatch extends TileFarm implements ISidedInventory {
+
+	private final AdjacentInventoryCache inventoryCache = new AdjacentInventoryCache(this, getTileCache(), new ITileFilter() {
+
+		@Override
+		public boolean matches(TileEntity tile) {
+			return !(tile instanceof TileFarm);
+		}
+	}, null);
 
 	public TileHatch() {
 		fixedType = TYPE_HATCH;
@@ -47,82 +56,30 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 	}
 
 	/* AUTO-EJECTING */
+	private IInventory getProductInventory() {
+		return new InventoryMapper(getStructureInventory(), TileFarmPlain.SLOT_PRODUCTION_1, TileFarmPlain.SLOT_COUNT_PRODUCTION);
+	}
+
 	protected void dumpStash() {
 
 		if (!hasMaster())
 			return;
 
-		ArrayList<ForgeDirection> pipes = new ArrayList<ForgeDirection>();
-		ForgeDirection[] tmp = BlockUtil.getPipeDirections(worldObj, Coords(), ForgeDirection.UP);
-		Collections.addAll(pipes, tmp);
-
-		if (pipes.size() > 0)
-			dumpToPipe(pipes);
-		else {
-			IInventory[] inventories = BlockUtil.getAdjacentInventories(worldObj, Coords(), ForgeDirection.UP);
-			dumpToInventory(inventories);
+		if (!InvTools.moveOneItemToPipe(getProductInventory(), tileCache)) {
+			IInventory struct = getStructureInventory();
+			if (struct != null)
+				InvTools.moveItemStack(getProductInventory(), inventoryCache.getAdjecentInventories());
 		}
-	}
-
-	private void dumpToPipe(ArrayList<ForgeDirection> pipes) {
-
-		ItemStack[] products = extractItem(true, ForgeDirection.DOWN, 1);
-		for (ItemStack product : products) {
-			while (product.stackSize > 0) {
-				BlockUtil.putFromStackIntoPipe(this, pipes, product);
-			}
-		}
-
-	}
-
-	private void dumpToInventory(IInventory[] inventories) {
-
-		ITileStructure central = getCentralTE();
-		if (central == null)
-			return;
-		IInventory inv = central.getInventory();
-
-		for (int i = TileFarmPlain.SLOT_PRODUCTION_1; i < TileFarmPlain.SLOT_PRODUCTION_1 + TileFarmPlain.SLOT_COUNT_PRODUCTION; i++) {
-			if (inv.getStackInSlot(i) == null)
-				continue;
-
-			ItemStack stack = inv.getStackInSlot(i);
-
-			if (stack.stackSize <= 0)
-				continue;
-
-			for (IInventory inventory : inventories) {
-
-				// Don't dump in arboretums!
-				if (inventory.getSizeInventory() < 4)
-					continue;
-
-				// Get complete inventory (for double chests)
-				IInventory completeInventory = Utils.getChest(inventory);
-				if (completeInventory instanceof ISidedInventory) {
-					ISidedInventory sidedInventory = (ISidedInventory) completeInventory;
-					int[] slots = sidedInventory.getAccessibleSlotsFromSide(ForgeDirection.UP.ordinal());
-					for (int sl = 0; sl < slots.length; ++sl) {
-						StackUtils.stowInInventory(stack, sidedInventory, true, sl, 1);
-					}
-				} else {
-					StackUtils.stowInInventory(stack, completeInventory, true);
-					if (stack.stackSize <= 0) {
-						inv.setInventorySlotContents(i, null);
-						break;
-					}
-				}
-			}
-		}
-
 	}
 
 	/* IINVENTORY */
-	private ISidedInventory getStructureInventory() {
+	@Override
+	public TileInventoryAdapter getStructureInventory() {
 		if (hasMaster()) {
 			ITileStructure central = getCentralTE();
-			if (central != null)
-				return (ISidedInventory) central.getInventory();
+			if (central != null){
+				return (TileInventoryAdapter) central.getInventory();
+			}
 		}
 
 		return null;
@@ -246,40 +203,6 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
 		return getStructureInventory().getAccessibleSlotsFromSide(side);
-	}
-
-	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
-
-		IInventory inv;
-		if (hasMaster()) {
-			ITileStructure central = getCentralTE();
-			if (central == null)
-				return new ItemStack[0];
-			inv = getCentralTE().getInventory();
-		} else
-			return StackUtils.EMPTY_STACK_ARRAY;
-
-		ItemStack product = null;
-
-		for (int i = TileFarmPlain.SLOT_PRODUCTION_1; i < TileFarmPlain.SLOT_PRODUCTION_1 + TileFarmPlain.SLOT_COUNT_PRODUCTION; i++) {
-			if (inv.getStackInSlot(i) == null)
-				continue;
-
-			ItemStack stack = inv.getStackInSlot(i);
-
-			if (doRemove)
-				product = inv.decrStackSize(i, 1);
-			else {
-				product = stack.copy();
-				product.stackSize = 1;
-			}
-			break;
-		}
-
-		if (product != null)
-			return new ItemStack[]{product};
-		else
-			return StackUtils.EMPTY_STACK_ARRAY;
 	}
 
 	/* ITRIGGERPROVIDER */
