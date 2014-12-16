@@ -369,8 +369,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 	}
 
 	private boolean isAirBlockAtCurrentPosition(World world, int x, int y, int z, StructureBoundingBox box) {
-		// TODO: replace with isAir
-		return getBlockAtCurrentPosition(world, x, y, z, box) == Blocks.air;
+		return getBlockAtCurrentPosition(world, x, y, z, box).isAir(world, x, y, z);
 	}
 
 }

@@ -10,8 +10,17 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import java.util.Arrays;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.fluids.FluidStack;
+
 import cpw.mods.fml.common.network.IGuiHandler;
-import forestry.api.recipes.ICraftingProvider;
+
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.GameMode;
 import forestry.core.config.Defaults;
@@ -21,8 +30,6 @@ import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.gadgets.MachineNBTDefinition;
-import forestry.core.interfaces.IOreDictionaryHandler;
-import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemForestryBlock;
 import forestry.core.items.ItemNBTTile;
 import forestry.core.proxy.Proxies;
@@ -42,12 +49,7 @@ import forestry.factory.gadgets.MillRainmaker;
 import forestry.factory.gadgets.TileWorktable;
 import forestry.factory.recipes.CraftGuideIntegration;
 import forestry.factory.triggers.FactoryTriggers;
-import java.util.ArrayList;
-import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
+
 
 @Plugin(pluginID = "Factory", name = "Factory", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.factory.description")
 public class PluginFactory extends ForestryPlugin {
@@ -68,21 +70,15 @@ public class PluginFactory extends ForestryPlugin {
 	public void preInit() {
 		super.preInit();
 
-		RecipeManagers.craftingProviders = new ArrayList<ICraftingProvider>();
-		// Init carpenter manager
-		RecipeManagers.craftingProviders.add(RecipeManagers.carpenterManager = new MachineCarpenter.RecipeManager());
-		// Init centrifuge manager
-		RecipeManagers.craftingProviders.add(RecipeManagers.centrifugeManager = new MachineCentrifuge.RecipeManager());
-		// Init fabricator manager
-		RecipeManagers.craftingProviders.add(RecipeManagers.fabricatorManager = new MachineFabricator.RecipeManager());
-		// Init fermenter manager
-		RecipeManagers.craftingProviders.add(RecipeManagers.fermenterManager = new MachineFermenter.RecipeManager());
-		// Init moistener manager
-		RecipeManagers.craftingProviders.add(RecipeManagers.moistenerManager = new MachineMoistener.RecipeManager());
-		// Init squeezer manager
-		RecipeManagers.craftingProviders.add(RecipeManagers.squeezerManager = new MachineSqueezer.RecipeManager());
-		// Init still manager
-		RecipeManagers.craftingProviders.add(RecipeManagers.stillManager = new MachineStill.RecipeManager());
+		RecipeManagers.craftingProviders = Arrays.asList(
+			RecipeManagers.carpenterManager = new MachineCarpenter.RecipeManager(),
+			RecipeManagers.centrifugeManager = new MachineCentrifuge.RecipeManager(),
+			RecipeManagers.fabricatorManager = new MachineFabricator.RecipeManager(),
+			RecipeManagers.fermenterManager = new MachineFermenter.RecipeManager(),
+			RecipeManagers.moistenerManager = new MachineMoistener.RecipeManager(),
+			RecipeManagers.squeezerManager = new MachineSqueezer.RecipeManager(),
+			RecipeManagers.stillManager = new MachineStill.RecipeManager()
+		);
 
 		ForestryBlock.factoryTESR.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "factory");
 
@@ -498,22 +494,8 @@ public class PluginFactory extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerCrates() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	public IGuiHandler getGuiHandler() {
 		return new GuiHandlerFactory();
 	}
 
-	@Override
-	public ISaveEventHandler getSaveEventHandler() {
-		return null;
-	}
-
-	@Override
-	public IOreDictionaryHandler getDictionaryHandler() {
-		return null;
-	}
 }

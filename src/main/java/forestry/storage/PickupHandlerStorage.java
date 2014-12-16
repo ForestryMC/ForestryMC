@@ -10,13 +10,14 @@
  ******************************************************************************/
 package forestry.storage;
 
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+
 import forestry.core.interfaces.IPickupHandler;
 import forestry.storage.gui.ContainerBackpack;
 import forestry.storage.gui.ContainerNaturalistBackpack;
 import forestry.storage.items.ItemBackpack;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 
 public class PickupHandlerStorage implements IPickupHandler {
 
@@ -27,13 +28,11 @@ public class PickupHandlerStorage implements IPickupHandler {
 		if (itemstack == null || itemstack.stackSize <= 0)
 			return false;
 
-		// Do not pick up if a backpack is open // FIXME: Must not contain
-		// anything from apiculture
+		// Do not pick up if a backpack is open
 		if (player.openContainer instanceof ContainerBackpack || player.openContainer instanceof ContainerNaturalistBackpack)
 			return true;
 
-		// Make sure to top off manually placed itemstacks in player
-		// inventory first
+		// Make sure to top off manually placed itemstacks in player inventory first
 		topOffPlayerInventory(player, itemstack);
 
 		for (ItemStack pack : player.inventory.mainInventory) {
