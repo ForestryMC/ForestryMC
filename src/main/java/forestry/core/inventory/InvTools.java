@@ -25,6 +25,7 @@ import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.inventory.wrappers.SidedInventoryMapper;
 import forestry.core.utils.AdjacentTileCache;
 import forestry.core.utils.PlainInventory;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -802,14 +803,14 @@ public abstract class InvTools {
 		if (stackToMove.stackSize <= 0)
 			return false;
 
-		IPipeTile[] pipes = new IPipeTile[6];
+		List<Map.Entry<ForgeDirection, IPipeTile>> pipes = new ArrayList<Map.Entry<ForgeDirection, IPipeTile>>();
 		boolean foundPipe = false;
 		for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
 			TileEntity tile = tileCache.getTileOnSide(side);
 			if (tile instanceof IPipeTile) {
 				IPipeTile pipe = (IPipeTile) tile;
 				if (pipe.getPipeType() == IPipeTile.PipeType.ITEM && pipe.isPipeConnected(side.getOpposite())) {
-					pipes[side.ordinal()] = pipe;
+					pipes.add(new AbstractMap.SimpleEntry(side, pipe));					
 					foundPipe = true;
 				}
 			}
@@ -818,14 +819,11 @@ public abstract class InvTools {
 		if (!foundPipe)
 			return false;
 
-		int choice = tileCache.getSource().getWorldObj().rand.nextInt(6);
-
-		ForgeDirection side = ForgeDirection.getOrientation(choice);
-
-		IPipeTile pipe = pipes[choice];
-		if (pipe.injectItem(stackToMove, false, side.getOpposite()) > 0)
+		int choice = tileCache.getSource().getWorldObj().rand.nextInt(pipes.size());
+		Map.Entry<ForgeDirection, IPipeTile> pipe = pipes.get(choice);
+		if (pipe.getValue().injectItem(stackToMove, false, pipe.getKey().getOpposite()) > 0)
 			if (removeOneItem(source, stackToMove) != null) {
-				pipe.injectItem(stackToMove, true, side.getOpposite());
+				pipe.getValue().injectItem(stackToMove, true, pipe.getKey().getOpposite());
 				return true;
 			}
 		return false;
