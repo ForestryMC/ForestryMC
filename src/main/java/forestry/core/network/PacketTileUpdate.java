@@ -86,7 +86,7 @@ public class PacketTileUpdate extends PacketUpdate {
 		posZ = data.readInt();
 
 		orientation = ForgeDirection.getOrientation(data.readByte());
-		errorState = ErrorStateRegistry.getErrorStateFromCode(data.readShort());
+		errorState = ErrorStateRegistry.getErrorState(data.readShort());
 
 		int ordinal = data.readByte();
 		isOwnable = ordinal >= 0;
