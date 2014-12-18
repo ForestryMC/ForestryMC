@@ -87,8 +87,6 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	/* LOADING & SAVING */
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-
 		this.isMaster = nbttagcompound.getBoolean("IsMaster");
 		this.masterX = nbttagcompound.getInteger("MasterX");
 		this.masterY = nbttagcompound.getInteger("MasterY");
@@ -96,7 +94,9 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 
 		// Init for master state
 		if (isMaster)
-			makeMaster();
+			makeMaster();		
+		
+		super.readFromNBT(nbttagcompound);
 
 		structureLogic.readFromNBT(nbttagcompound);
 	}
