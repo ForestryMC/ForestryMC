@@ -10,8 +10,21 @@
  ******************************************************************************/
 package forestry.mail.gadgets;
 
-import buildcraft.api.statements.ITriggerExternal;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
 import cpw.mods.fml.common.Optional;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
@@ -27,17 +40,9 @@ import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.mail.MailAddress;
 import forestry.mail.TradeStation;
-import forestry.plugins.PluginMail;
-import java.util.Collection;
-import java.util.LinkedList;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import forestry.mail.triggers.MailTriggers;
+
+import buildcraft.api.statements.ITriggerExternal;
 
 public class MachineTrader extends TileBase implements ISidedInventory {
 
@@ -364,14 +369,14 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
-		res.add(PluginMail.lowPaper64);
-		res.add(PluginMail.lowPaper32);
-		res.add(PluginMail.lowInput25);
-		res.add(PluginMail.lowInput10);
-		res.add(PluginMail.lowPostage40);
-		res.add(PluginMail.lowPostage20);
-		res.add(PluginMail.highBuffer90);
-		res.add(PluginMail.highBuffer75);
+		res.add(MailTriggers.lowPaper64);
+		res.add(MailTriggers.lowPaper32);
+		res.add(MailTriggers.lowInput25);
+		res.add(MailTriggers.lowInput10);
+		res.add(MailTriggers.lowPostage40);
+		res.add(MailTriggers.lowPostage20);
+		res.add(MailTriggers.highBuffer90);
+		res.add(MailTriggers.highBuffer75);
 		return res;
 	}
 

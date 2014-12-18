@@ -192,6 +192,7 @@ task mainJarSigned ( type: Jar, dependsOn: 'reobf' ) {
 		exclude '**/api/**'
 		exclude '**/codechicken/**'
 		exclude '**/old/lang/**'
+		exclude '**/buildcraft/api/**'
 	}
 
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -219,6 +220,7 @@ task mainJar ( type: Zip, dependsOn: mainJarSigned ) {
 		include '**'
 		exclude '**/codechicken/**'
 		exclude '**/old/lang/**'
+		exclude '**/buildcraft/api/**'
 	}
 
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -232,6 +234,7 @@ task devJarSigned ( type: Jar, dependsOn: 'classes' ) {
 		exclude '**/api/**'
 		exclude '**/codechicken/**'
 		exclude '**/old/lang/**'
+		exclude '**/buildcraft/api/**'
 	}
 
 	destinationDir = file("build/tmp")
@@ -258,12 +261,14 @@ task devJar ( type: Zip, dependsOn: devJarSigned ) {
 		include '**'
 		exclude '**/codechicken/**'
 		exclude '**/old/lang/**'
+		exclude '**/buildcraft/api/**'
 	}
 
 	from(sourceSets.main.output) {
 		include '**'
 		exclude '**/codechicken/**'
 		exclude '**/old/lang/**'
+		exclude '**/buildcraft/api/**'
 	}
 
 	from {

@@ -10,8 +10,15 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.network.IGuiHandler;
+
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.EnumPostage;
 import forestry.api.mail.PostManager;
@@ -28,7 +35,6 @@ import forestry.core.interfaces.IPacketHandler;
 import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemForestryBlock;
 import forestry.core.proxy.Proxies;
-import forestry.core.triggers.Trigger;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.mail.GuiHandlerMail;
 import forestry.mail.PacketHandlerMail;
@@ -45,31 +51,13 @@ import forestry.mail.items.ItemLetter;
 import forestry.mail.items.ItemStamps;
 import forestry.mail.items.ItemStamps.StampInfo;
 import forestry.mail.proxy.ProxyMail;
-import forestry.mail.triggers.TriggerBuffer;
-import forestry.mail.triggers.TriggerHasMail;
-import forestry.mail.triggers.TriggerLowInput;
-import forestry.mail.triggers.TriggerLowPaper;
-import forestry.mail.triggers.TriggerLowStamps;
-import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import forestry.mail.triggers.MailTriggers;
 
 @Plugin(pluginID = "Mail", name = "Mail", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.mail.description")
 public class PluginMail extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.mail.proxy.ClientProxyMail", serverSide = "forestry.mail.proxy.ProxyMail")
 	public static ProxyMail proxy;
-	public static Trigger triggerHasMail;
-	public static Trigger lowPaper64;
-	public static Trigger lowPaper32;
-	public static Trigger lowPostage40;
-	public static Trigger lowPostage20;
-	public static Trigger lowInput25;
-	public static Trigger lowInput10;
-	public static Trigger highBuffer75;
-	public static Trigger highBuffer90;
 	public static MachineDefinition definitionMailbox;  
 	public static MachineDefinition definitionTradestation;
 	public static MachineDefinition definitionPhilatelist;
@@ -83,15 +71,10 @@ public class PluginMail extends ForestryPlugin {
 
 		new TickHandlerMailClient();
 
-		triggerHasMail = new TriggerHasMail();
-		lowPaper64 = new TriggerLowPaper("mail.lowPaper.64", 64);
-		lowPaper32 = new TriggerLowPaper("mail.lowPaper.32", 32);
-		lowPostage40 = new TriggerLowStamps("mail.lowStamps.40", 40);
-		lowPostage20 = new TriggerLowStamps("mail.lowStamps.20", 20);
-		lowInput25 = new TriggerLowInput("mail.lowInput.25", 0.25f);
-		lowInput10 = new TriggerLowInput("mail.lowInput.10", 0.1f);
-		highBuffer75 = new TriggerBuffer("mail.lowBuffer.75", 0.75f);
-		highBuffer90 = new TriggerBuffer("mail.lowBuffer.90", 0.90f);
+		// Triggers
+		if (PluginManager.Module.BUILDCRAFT_STATEMENTS.isEnabled()) {
+			MailTriggers.initialize();
+		}
 
 		ForestryBlock.mail.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "mail");
 

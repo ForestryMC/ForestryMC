@@ -23,7 +23,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 @Plugin(pluginID = "BC6|Statements", name = "BuildCraft 6 Statements", author = "mezz", url = Defaults.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
-@Optional.Interface(iface = "ITriggerProvider", modid = "BuildCraftAPI|statements")
+@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
 public class PluginBuildCraftStatements extends ForestryPlugin implements ITriggerProvider {
 
 	@Override

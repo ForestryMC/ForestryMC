@@ -40,7 +40,7 @@ import forestry.mail.EnumDeliveryState;
 import forestry.mail.IMailContainer;
 import forestry.mail.POBox;
 import forestry.mail.PostRegistry;
-import forestry.plugins.PluginMail;
+import forestry.mail.triggers.MailTriggers;
 
 import buildcraft.api.statements.ITriggerExternal;
 
@@ -120,7 +120,7 @@ public class MachineMailbox extends TileBase implements IMailContainer {
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
-		res.add(PluginMail.triggerHasMail);
+		res.add(MailTriggers.triggerHasMail);
 		return res;
 	}
 }
