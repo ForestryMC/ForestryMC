@@ -71,16 +71,15 @@ public abstract class BlockStructure extends BlockForestry {
 			if (!((ITileStructure) tile).isIntegratedIntoStructure())
 				return false;
 
-		if (tile.allowsInteraction(player)) {
+		if (tile.allowsInteraction(player))
 			tile.openGui(player);
-		}
 		else {
 			String ownerName = StringUtil.localize("gui.derelict");
-			
+
 			if (tile.getOwnerProfile() != null)
 				ownerName = tile.getOwnerProfile().getName();
 
-			player.addChatMessage(new ChatComponentTranslation("for.chat.accesslocked",ownerName));
+			player.addChatMessage(new ChatComponentTranslation("for.chat.accesslocked", ownerName));
 		}
 		return true;
 	}

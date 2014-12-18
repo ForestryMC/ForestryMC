@@ -378,7 +378,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return Utils.isUseableByPlayer(player, this);
+		return getInternalInventory().isUseableByPlayer(player);
 	}
 
 	@Override

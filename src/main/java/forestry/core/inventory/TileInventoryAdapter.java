@@ -12,7 +12,6 @@ package forestry.core.inventory;
 
 import forestry.core.gadgets.TileForestry;
 import forestry.core.utils.EnumAccess;
-import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Utils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -34,9 +33,7 @@ public class TileInventoryAdapter extends InventoryAdapter {
 	public boolean isUseableByPlayer(EntityPlayer player) {
 		if (!Utils.isUseableByPlayer(player, tile))
 			return false;
-		if (tile.getAccess() == EnumAccess.PRIVATE)
-			return PlayerUtil.isSameGameProfile(tile.getOwnerProfile(), player.getGameProfile());
-		return true;
+		return tile.allowsInteraction(player);
 	}
 
 	@Override

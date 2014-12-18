@@ -614,6 +614,9 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
+		IInventory inv = getStructureInventory();
+		if (inv != null)
+			return inv.isUseableByPlayer(player);
 		return Utils.isUseableByPlayer(player, this);
 	}
 

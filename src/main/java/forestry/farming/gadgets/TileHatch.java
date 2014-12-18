@@ -77,9 +77,8 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 	public TileInventoryAdapter getStructureInventory() {
 		if (hasMaster()) {
 			ITileStructure central = getCentralTE();
-			if (central != null){
+			if (central != null)
 				return (TileInventoryAdapter) central.getInventory();
-			}
 		}
 
 		return null;
@@ -152,6 +151,9 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
+		IInventory inv = getStructureInventory();
+		if (inv != null)
+			return inv.isUseableByPlayer(player);
 		return Utils.isUseableByPlayer(player, this);
 	}
 

@@ -522,7 +522,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return Utils.isUseableByPlayer(player, this);
+		return getInternalInventory().isUseableByPlayer(player);
 	}
 
 	@Override

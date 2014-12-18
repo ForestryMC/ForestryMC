@@ -332,7 +332,9 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return Utils.isUseableByPlayer(player, this);
+		if (!Utils.isUseableByPlayer(player, this))
+			return false;
+		return getOrCreateTradeInventory().isUseableByPlayer(player);
 	}
 
 	/* ISIDEDINVENTORY */

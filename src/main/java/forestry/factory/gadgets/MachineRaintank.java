@@ -193,7 +193,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return Utils.isUseableByPlayer(player, this);
+		return getInternalInventory().isUseableByPlayer(player);
 	}
 
 	@Override

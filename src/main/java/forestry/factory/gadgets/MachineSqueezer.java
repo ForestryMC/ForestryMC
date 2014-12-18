@@ -440,7 +440,7 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return Utils.isUseableByPlayer(player, this);
+		return getInternalInventory().isUseableByPlayer(player);
 	}
 
 	@Override

@@ -231,6 +231,9 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
+		IInventory inv = getInternalInventory();
+		if (inv != null)
+			return inv.isUseableByPlayer(player);
 		return Utils.isUseableByPlayer(player, this);
 	}
 

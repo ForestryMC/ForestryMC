@@ -355,7 +355,7 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return Utils.isUseableByPlayer(player, this);
+		return getInternalInventory().isUseableByPlayer(player);
 	}
 
 	@Override

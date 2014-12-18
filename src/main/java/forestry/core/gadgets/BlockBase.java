@@ -16,6 +16,8 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.interfaces.IOwnable;
 import forestry.core.items.ItemNBTTile;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.EnumAccess;
+import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Utils;
 import java.util.ArrayList;
@@ -164,7 +166,7 @@ public class BlockBase extends BlockForestry {
 			return false;
 
 		ItemStack current = player.getCurrentEquippedItem();
-		if (current != null && current.getItem() != Items.bucket && tile instanceof IFluidHandler) {
+		if (current != null && current.getItem() != Items.bucket && tile instanceof IFluidHandler && tile.allowsInteraction(player)) {
 			if (Proxies.common.isSimulating(world)) {
 				if (FluidHelper.handleRightClick((IFluidHandler) tile, ForgeDirection.getOrientation(side), player, true, tile.canDrainWithBucket())) {
 					return true;

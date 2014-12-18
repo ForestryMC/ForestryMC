@@ -17,7 +17,6 @@ import forestry.core.gadgets.TileBase;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -108,7 +107,7 @@ public class MachinePhilatelist extends TileBase implements IInventory {
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return Utils.isUseableByPlayer(player, this);
+		return getInternalInventory().isUseableByPlayer(player);
 	}
 
 	@Override
