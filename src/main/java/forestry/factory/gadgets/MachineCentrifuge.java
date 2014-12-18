@@ -396,7 +396,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 	/* ISIDEDINVENTORY */
 	@Override
 	public boolean canInsertItem(int slotIndex, ItemStack itemstack, int side) {
-		return isItemValidForSlot(xCoord, itemstack);
+		return isItemValidForSlot(slotIndex, itemstack);
 	}
 
 	@Override

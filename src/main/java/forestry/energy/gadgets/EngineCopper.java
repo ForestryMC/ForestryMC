@@ -409,8 +409,8 @@ public class EngineCopper extends Engine implements ISidedInventory {
 
 	/* ISIDEDINVENTORY */
 	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return isItemValidForSlot(xCoord, itemstack);
+	public boolean canInsertItem(int slotIndex, ItemStack itemstack, int side) {
+		return isItemValidForSlot(slotIndex, itemstack);
 	}
 
 	@Override

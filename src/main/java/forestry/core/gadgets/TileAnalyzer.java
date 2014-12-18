@@ -358,7 +358,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 	@Override
 	public boolean canInsertItem(int slot, ItemStack stack, int side) {
-		return isItemValidForSlot(side, stack);
+		return isItemValidForSlot(slot, stack);
 	}
 
 	@Override
