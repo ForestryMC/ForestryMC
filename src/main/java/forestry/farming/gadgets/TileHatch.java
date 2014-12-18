@@ -189,7 +189,7 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 
 	@Override
 	public boolean canInsertItem(int slotIndex, ItemStack itemstack, int side) {
-		return isItemValidForSlot(xCoord, itemstack);
+		return isItemValidForSlot(slotIndex, itemstack);
 	}
 
 	@Override
