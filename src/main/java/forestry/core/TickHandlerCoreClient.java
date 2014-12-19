@@ -20,10 +20,10 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
+import forestry.core.utils.GeneticsUtil;
 import forestry.core.config.Config;
 import forestry.core.config.Version;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.Utils;
 
 public class TickHandlerCoreClient {
 
@@ -44,7 +44,7 @@ public class TickHandlerCoreClient {
 		if (event.phase != Phase.END) return;
 
 		EntityPlayer player = Proxies.common.getClientInstance().thePlayer;
-		boolean hasNaturalistEye = Utils.hasNaturalistEye(player);
+		boolean hasNaturalistEye = GeneticsUtil.hasNaturalistEye(player);
 		if (hasNaturalistEye != hasNaturalistView) {
 			hasNaturalistView = !hasNaturalistView;
 			Proxies.common.getClientInstance().renderGlobal.markBlockRangeForRenderUpdate(

@@ -10,9 +10,27 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.EnumSet;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.Packet;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+
 import com.mojang.authlib.GameProfile;
+
+import net.minecraftforge.common.EnumPlantType;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafTickHandler;
@@ -30,6 +48,7 @@ import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.arboriculture.network.PacketLeafUpdate;
+import forestry.core.utils.GeneticsUtil;
 import forestry.core.EnumErrorCode;
 import forestry.core.genetics.Allele;
 import forestry.core.network.ForestryPacket;
@@ -37,19 +56,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginArboriculture;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.EnumSet;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.EnumPlantType;
 
 public class TileLeaves extends TileTreeContainer implements IPollinatable, IFruitBearer, IButterflyNursery {
 
@@ -175,7 +181,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	public int getFoliageColour(EntityPlayer player) {
-		return isPollinatedState & Utils.hasNaturalistEye(player) ? 0xffffff : colourLeaves;
+		return isPollinatedState & GeneticsUtil.hasNaturalistEye(player) ? 0xffffff : colourLeaves;
 	}
 
 	public int getFruitColour() {

@@ -1,0 +1,123 @@
+/*******************************************************************************
+ * Copyright (c) 2011-2014 SirSengir.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser Public License v3
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ *
+ * Various Contributors including, but not limited to:
+ * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ ******************************************************************************/
+package forestry.core.utils;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
+
+import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.ITree;
+import forestry.api.core.IArmorNaturalist;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.IPollinatable;
+import forestry.plugins.PluginArboriculture;
+
+public class GeneticsUtil {
+
+	private static Set<Material> ersatzSpecimenMaterials;
+
+	private static Set<Material> getErsatzSpecimenMaterials() {
+		if (ersatzSpecimenMaterials == null) {
+			ersatzSpecimenMaterials = new HashSet<Material>();
+			for (ItemStack ersatzSpecimen : AlleleManager.ersatzSpecimen.keySet()) {
+				Block ersatzBlock = StackUtils.getBlock(ersatzSpecimen);
+				if (ersatzBlock != null)
+					ersatzSpecimenMaterials.add(ersatzBlock.getMaterial());
+			}
+		}
+		return ersatzSpecimenMaterials;
+	}
+
+	private static boolean isErsatzMaterial(Block block) {
+		return block != null && getErsatzSpecimenMaterials().contains(block.getMaterial());
+	}
+
+	public static boolean hasNaturalistEye(EntityPlayer player) {
+		ItemStack armorItem = player.inventory.armorInventory[3];
+		return armorItem != null && armorItem.getItem() instanceof IArmorNaturalist
+				&& ((IArmorNaturalist) armorItem.getItem()).canSeePollination(player, armorItem, true);
+	}
+
+	public static IPollinatable getOrCreatePollinatable(GameProfile owner, World world, final int x, final int y, final int z) {
+		TileEntity tile = world.getTileEntity(x, y, z);
+
+		if (tile instanceof IPollinatable) {
+			return (IPollinatable) tile;
+		}
+
+		IIndividual pollen = getErsatzPollen(world, x, y, z);
+		if (pollen != null) {
+			PluginArboriculture.treeInterface.setLeaves(world, pollen, owner, x, y, z);
+			return (IPollinatable) world.getTileEntity(x, y, z);
+		}
+
+		return null;
+	}
+
+	public static IIndividual getErsatzPollen(World world, final int x, final int y, final int z) {
+		Block block = world.getBlock(x, y, z);
+		if (!isErsatzMaterial(block))
+			return null;
+
+		int meta = world.getBlockMetadata(x, y, z);
+
+		if (Blocks.leaves == block || Blocks.leaves2 == block) {
+			if ((meta & 4) != 0) {
+				// no-decay vanilla leaves. http://minecraft.gamepedia.com/Data_values#Leaves
+				// Treat them as decorative and don't pollinate.
+				return null;
+			}
+			meta %= 3;
+		}
+
+		// Find the matching ersatz genome
+		for (ItemStack ersatzSpecimen : AlleleManager.ersatzSpecimen.keySet()) {
+			if (StackUtils.equals(block, meta, ersatzSpecimen)) {
+				return AlleleManager.ersatzSpecimen.get(ersatzSpecimen).copy();
+			}
+		}
+
+		return null;
+	}
+
+	public static ItemStack convertSaplingToGeneticEquivalent(ItemStack foreign) {
+
+		ItemStack ersatz = null;
+		ITree tree = null;
+
+		for (Map.Entry<ItemStack, IIndividual> entry : AlleleManager.ersatzSaplings.entrySet()) {
+			if (entry.getKey().getItem() != foreign.getItem())
+				continue;
+			if (entry.getKey().getItemDamage() != foreign.getItemDamage())
+				continue;
+
+			if (entry.getValue() instanceof ITree)
+				tree = (ITree) entry.getValue();
+
+			ersatz = PluginArboriculture.treeInterface.getMemberStack(tree, EnumGermlingType.SAPLING.ordinal());
+			ersatz.stackSize = foreign.stackSize;
+		}
+
+		return ersatz;
+	}
+}

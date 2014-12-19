@@ -10,10 +10,17 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
+import forestry.core.utils.GeneticsUtil;
 import forestry.core.interfaces.ICrafter;
 import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.inventory.TileInventoryAdapter;
@@ -24,11 +31,6 @@ import forestry.core.network.PacketTileNBT;
 import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.Utils;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEscritoire extends TileBase implements ISidedInventory, IRenderableMachine, ICrafter {
 
@@ -151,7 +153,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 		if (slotIndex == SLOT_ANALYZE && Proxies.common.isSimulating(worldObj)) {
 			if (!AlleleManager.alleleRegistry.isIndividual(inventory.getStackInSlot(SLOT_ANALYZE))
 					&& inventory.getStackInSlot(SLOT_ANALYZE) != null) {
-				ItemStack ersatz = Utils.convertSaplingToGeneticEquivalent(inventory.getStackInSlot(SLOT_ANALYZE));
+				ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(inventory.getStackInSlot(SLOT_ANALYZE));
 				if (ersatz != null)
 					inventory.setInventorySlotContents(SLOT_ANALYZE, ersatz);
 			}

@@ -991,6 +991,10 @@ public class PluginArboriculture extends ForestryPlugin {
 				TreeTemplates.templateAsGenome(TreeTemplates.getBirchTemplate())));
 		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves, 1, 3), new Tree(
 				TreeTemplates.templateAsGenome(TreeTemplates.getJungleTemplate())));
+		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves2, 1, 0), new Tree(
+				TreeTemplates.templateAsGenome(TreeTemplates.getAcaciaTemplate())));
+		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves2, 1, 1), new Tree(
+				TreeTemplates.templateAsGenome(TreeTemplates.getDarkOakTemplate())));
 
 		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 0), new Tree(
 				TreeTemplates.templateAsGenome(TreeTemplates.getOakTemplate())));

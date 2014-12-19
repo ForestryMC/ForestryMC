@@ -31,21 +31,22 @@ import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
+import forestry.core.utils.GeneticsUtil;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Defaults;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StackUtils;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Utils;
 import forestry.core.utils.Vect;
 import forestry.plugins.PluginApiculture;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -604,38 +605,25 @@ public class Bee extends IndividualLiving implements IBee {
 		if (area.z < 1)
 			area.z = 1;
 
-		// We have up to ten attempts
+		World world = housing.getWorld();
+		Random random = world.rand;
+
+		Vect housingPos = new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord());
+
+		IIndividual pollen = null;
+
 		for (int i = 0; i < 20; i++) {
+			Vect randomPos = new Vect(random.nextInt(area.x), random.nextInt(area.y), random.nextInt(area.z));
+			Vect blockPos = housingPos.add(randomPos).add(offset);
+			TileEntity tile = world.getTileEntity(blockPos.x, blockPos.y, blockPos.z);
 
-			Vect randomPos = new Vect(housing.getWorld().rand.nextInt(area.x), housing.getWorld().rand.nextInt(area.y), housing.getWorld().rand.nextInt(area.z));
-
-			Vect posBlock = randomPos.add(new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord()));
-			posBlock = posBlock.add(offset);
-
-			TileEntity tile = housing.getWorld().getTileEntity(posBlock.x, posBlock.y, posBlock.z);
-			if (!(tile instanceof IPollinatable)) {
-				if (housing.getWorld().isAirBlock(posBlock.x, posBlock.y, posBlock.z))
-					continue;
-
-				// Test for ersatz genomes
-				for (Map.Entry<ItemStack, IIndividual> entry : AlleleManager.ersatzSpecimen.entrySet()) {
-					if (!StackUtils.equals(housing.getWorld().getBlock(posBlock.x, posBlock.y, posBlock.z), entry.getKey()))
-						continue;
-					if (entry.getKey().getItemDamage() != housing.getWorld().getBlockMetadata(posBlock.x, posBlock.y, posBlock.z))
-						continue;
-
-					// We matched, return ersatz genome
-					return entry.getValue().copy();
-				}
-
-				continue;
+			if (tile instanceof IPollinatable) {
+				IPollinatable pitcher = (IPollinatable) tile;
+				if (genome.getFlowerProvider().isAcceptedPollinatable(world, pitcher))
+					pollen = pitcher.getPollen();
+			} else {
+				pollen = GeneticsUtil.getErsatzPollen(world, blockPos.x, blockPos.y, blockPos.z);
 			}
-
-			IPollinatable pitcher = (IPollinatable) tile;
-			if (!genome.getFlowerProvider().isAcceptedPollinatable(housing.getWorld(), pitcher))
-				continue;
-
-			IIndividual pollen = pitcher.getPollen();
 
 			if (pollen != null)
 				return pollen;
@@ -664,7 +652,6 @@ public class Bee extends IndividualLiving implements IBee {
 		if (area.z < 1)
 			area.z = 1;
 
-		// We have up to ten attempts
 		for (int i = 0; i < 30; i++) {
 
 			Vect randomPos = new Vect(housing.getWorld().rand.nextInt(area.x), housing.getWorld().rand.nextInt(area.y), housing.getWorld().rand.nextInt(area.z));
@@ -672,7 +659,7 @@ public class Bee extends IndividualLiving implements IBee {
 			Vect posBlock = randomPos.add(new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord()));
 			posBlock = posBlock.add(offset);
 
-			IPollinatable receiver = Utils.getOrCreatePollinatable(housing.getOwnerName(), housing.getWorld(), posBlock.x, posBlock.y, posBlock.z);
+			IPollinatable receiver = GeneticsUtil.getOrCreatePollinatable(housing.getOwnerName(), housing.getWorld(), posBlock.x, posBlock.y, posBlock.z);
 			if(receiver == null)
 				continue;
 

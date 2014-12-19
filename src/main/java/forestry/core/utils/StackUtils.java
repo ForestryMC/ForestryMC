@@ -425,4 +425,8 @@ public class StackUtils {
 	public static boolean equals(Block block, ItemStack stack) {
 		return block == getBlock(stack);
 	}
+
+	public static boolean equals(Block block, int meta, ItemStack stack) {
+		return block == getBlock(stack) && meta == stack.getItemDamage();
+	}
 }

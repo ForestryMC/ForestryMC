@@ -10,9 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+
 import forestry.api.arboriculture.ITree;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
+import forestry.core.utils.GeneticsUtil;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.ForestryItem;
@@ -22,12 +28,7 @@ import forestry.core.inventory.AlyzerInventory;
 import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.Utils;
 import forestry.plugins.PluginArboriculture;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 
 public class ItemTreealyzer extends ItemInventoried {
 
@@ -62,7 +63,7 @@ public class ItemTreealyzer extends ItemInventoried {
 				return;
 
 			if (!PluginArboriculture.treeInterface.isMember(getStackInSlot(SLOT_SPECIMEN))) {
-				ItemStack ersatz = Utils.convertSaplingToGeneticEquivalent(getStackInSlot(SLOT_SPECIMEN));
+				ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(getStackInSlot(SLOT_SPECIMEN));
 				if (ersatz != null)
 					setInventorySlotContents(SLOT_SPECIMEN, ersatz);
 			}
