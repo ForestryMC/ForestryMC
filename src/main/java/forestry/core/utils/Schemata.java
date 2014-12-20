@@ -11,6 +11,7 @@
 package forestry.core.utils;
 
 import forestry.core.config.Config;
+import forestry.core.vect.Vect;
 
 public class Schemata {
 	public enum EnumStructureBlock {

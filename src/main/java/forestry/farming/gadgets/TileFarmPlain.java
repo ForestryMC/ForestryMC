@@ -38,7 +38,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.DelayTimer;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 import forestry.farming.FarmTarget;
 import forestry.farming.logic.FarmLogicArboreal;
 import forestry.plugins.PluginFarming;

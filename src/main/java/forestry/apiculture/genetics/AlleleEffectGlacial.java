@@ -15,7 +15,7 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IEffectData;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;

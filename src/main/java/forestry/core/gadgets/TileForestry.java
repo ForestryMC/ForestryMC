@@ -30,7 +30,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.AdjacentTileCache;
 import forestry.core.utils.EnumAccess;
 import forestry.core.utils.PlayerUtil;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 import java.util.Collection;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;

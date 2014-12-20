@@ -17,7 +17,7 @@ import forestry.apiculture.gadgets.BlockAlveary;
 import forestry.apiculture.gadgets.TileAlveary;
 import forestry.apiculture.items.ItemArmorApiarist;
 import forestry.core.utils.DamageSourceForestry;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 import java.util.List;
 import java.util.Random;
 import net.minecraft.block.Block;

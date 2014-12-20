@@ -14,7 +14,7 @@ import forestry.api.genetics.IFruitBearer;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.network.PacketFXSignal;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 import java.util.ArrayList;
 import java.util.Collection;
 import net.minecraft.item.ItemStack;

@@ -17,7 +17,7 @@ import forestry.api.genetics.IEffectData;
 import forestry.core.EnumErrorCode;
 import forestry.core.genetics.Allele;
 import forestry.core.genetics.EffectData;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 import forestry.plugins.PluginApiculture;
 import net.minecraft.util.AxisAlignedBB;
 

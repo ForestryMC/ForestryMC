@@ -16,7 +16,7 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.genetics.IFruitBearer;
 import forestry.core.config.ForestryItem;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;

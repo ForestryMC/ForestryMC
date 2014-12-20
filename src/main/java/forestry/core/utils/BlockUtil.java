@@ -17,6 +17,8 @@ import buildcraft.api.transport.IPipeTile;
 import buildcraft.api.transport.IPipeTile.PipeType;
 import cofh.api.energy.IEnergyHandler;
 import forestry.core.config.Defaults;
+import forestry.core.vect.Vect;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;

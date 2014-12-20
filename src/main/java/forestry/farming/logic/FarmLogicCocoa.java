@@ -15,7 +15,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
-import forestry.core.utils.Vect;
+import forestry.core.vect.MutableVect;
+import forestry.core.vect.Vect;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -123,7 +124,7 @@ public class FarmLogicCocoa extends FarmLogic {
 
 		World world = getWorld();
 
-		Vect current = position;
+		MutableVect current = new MutableVect(position);
 		while (isWoodBlock(current) && BlockLog.func_150165_c(getBlockMeta(current)) == 3) {
 
 			for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
@@ -135,7 +136,7 @@ public class FarmLogicCocoa extends FarmLogic {
 					return housing.plantGermling(cocoa, world, candidate.x, candidate.y, candidate.z);
 			}
 
-			current = current.add(new Vect(0, 1, 0));
+			current.y++;
 			if (current.y - position.y > 1)
 				break;
 		}

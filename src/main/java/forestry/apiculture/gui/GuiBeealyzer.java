@@ -25,7 +25,7 @@ import forestry.core.genetics.AlleleArea;
 import forestry.core.genetics.AlleleBoolean;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 import forestry.plugins.PluginApiculture;
 import java.util.ArrayList;
 import net.minecraft.entity.player.EntityPlayer;

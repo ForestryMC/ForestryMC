@@ -17,7 +17,7 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.StackUtils;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 import java.util.Collection;
 import java.util.Stack;
 import net.minecraft.init.Blocks;

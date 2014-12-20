@@ -11,7 +11,7 @@
 package forestry.farming.logic;
 
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 import java.util.Collection;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;

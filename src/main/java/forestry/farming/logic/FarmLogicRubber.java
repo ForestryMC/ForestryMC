@@ -16,7 +16,7 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 import forestry.plugins.PluginIC2;
 import java.util.ArrayList;
 import java.util.Collection;

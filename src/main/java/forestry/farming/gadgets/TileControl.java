@@ -15,7 +15,7 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmComponent;
 import forestry.api.farming.IFarmListener;
 import forestry.api.farming.IFarmLogic;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 import java.util.Collection;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;

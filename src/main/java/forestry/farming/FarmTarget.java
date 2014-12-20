@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.farming;
 
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 
 public class FarmTarget {
 

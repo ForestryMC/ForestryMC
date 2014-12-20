@@ -17,7 +17,7 @@ import forestry.api.arboriculture.ITreeGenome;
 import forestry.arboriculture.gadgets.TileSapling;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Utils;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;

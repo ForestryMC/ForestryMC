@@ -12,7 +12,7 @@ package forestry.farming.logic;
 
 import forestry.api.farming.ICrop;
 import forestry.core.config.Defaults;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 import java.util.Collection;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;

@@ -26,7 +26,7 @@ import forestry.core.genetics.AlleleArea;
 import forestry.core.genetics.AlleleBoolean;
 import forestry.core.genetics.AlleleTolerance;
 import forestry.core.genetics.Genome;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 import forestry.plugins.PluginApiculture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

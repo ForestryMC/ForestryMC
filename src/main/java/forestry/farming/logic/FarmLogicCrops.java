@@ -16,7 +16,8 @@ import forestry.api.farming.IFarmable;
 import forestry.core.config.Defaults;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
-import forestry.core.utils.Vect;
+import forestry.core.vect.IVect;
+import forestry.core.vect.Vect;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -74,7 +75,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 		Vect offset = new Vect(housing.getOffset());
 
 		Vect min = coords.add(offset);
-		Vect max = coords.add(offset).add(area);
+		Vect max = min.add(area);
 
 		AxisAlignedBB harvestBox = AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
 		List<Entity> list = housing.getWorld().getEntitiesWithinAABB(Entity.class, harvestBox);
@@ -106,7 +107,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 			if (!isAirBlock(position) && !Utils.isReplaceableBlock(getWorld(), position.x, position.y, position.z))
 				continue;
 
-			ItemStack below = getAsItemStack(position.add(new Vect(0, -1, 0)));
+			ItemStack below = getAsItemStack(position.add(0, -1, 0));
 			if (ground.getItem() != below.getItem())
 				continue;
 			if (below.getItemDamage() <= 0)
@@ -118,11 +119,11 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 		return false;
 	}
 
-	private boolean trySetCrop(Vect position) {
+	private boolean trySetCrop(IVect position) {
 		World world = getWorld();
 
 		for (IFarmable candidate : seeds)
-			if (housing.plantGermling(candidate, world, position.x, position.y, position.z))
+			if (housing.plantGermling(candidate, world, position.getX(), position.getY(), position.getZ()))
 				return true;
 
 		return false;

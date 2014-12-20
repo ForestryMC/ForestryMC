@@ -16,7 +16,7 @@ import forestry.core.gadgets.BlockStructure.EnumStructureState;
 import forestry.core.gadgets.StructureLogic;
 import forestry.core.utils.Schemata;
 import forestry.core.utils.Schemata.EnumStructureBlock;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 import java.util.HashSet;
 import java.util.Set;
 import net.minecraft.block.Block;

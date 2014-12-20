@@ -10,20 +10,24 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmLogic;
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryBlock;
-import forestry.core.render.SpriteSheet;
-import forestry.core.utils.Vect;
 import java.util.HashSet;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.util.ForgeDirection;
+
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmLogic;
+import forestry.core.config.Defaults;
+import forestry.core.config.ForestryBlock;
+import forestry.core.render.SpriteSheet;
+import forestry.core.vect.IVect;
+import forestry.core.vect.Vect;
 
 public abstract class FarmLogic implements IFarmLogic {
 
@@ -67,8 +71,8 @@ public abstract class FarmLogic implements IFarmLogic {
 		return SpriteSheet.ITEMS.getLocation();
 	}
 
-	protected final boolean isAirBlock(Vect position) {
-		return getWorld().isAirBlock(position.x, position.y, position.z);
+	protected final boolean isAirBlock(IVect position) {
+		return getWorld().isAirBlock(position.getX(), position.getY(), position.getZ());
 	}
 
 	protected final boolean isAirBlock(Block block) {
@@ -80,20 +84,20 @@ public abstract class FarmLogic implements IFarmLogic {
 				world.getBlockMetadata(position.x, position.y, position.z) == 0;
 	}
 
-	protected final boolean isWoodBlock(Vect position) {
+	protected final boolean isWoodBlock(IVect position) {
 		Block block = getBlock(position);
-		return block.isWood(getWorld(), position.x, position.y, position.z);
+		return block.isWood(getWorld(), position.getX(), position.getY(), position.getZ());
 	}
 
-	protected final Block getBlock(Vect position) {
-		return getWorld().getBlock(position.x, position.y, position.z);
+	protected final Block getBlock(IVect position) {
+		return getWorld().getBlock(position.getX(), position.getY(), position.getZ());
 	}
 
-	protected final int getBlockMeta(Vect position) {
-		return getWorld().getBlockMetadata(position.x, position.y, position.z);
+	protected final int getBlockMeta(IVect position) {
+		return getWorld().getBlockMetadata(position.getX(), position.getY(), position.getZ());
 	}
 
-	protected final ItemStack getAsItemStack(Vect position) {
+	protected final ItemStack getAsItemStack(IVect position) {
 		return new ItemStack(getBlock(position), 1, getBlockMeta(position));
 	}
 

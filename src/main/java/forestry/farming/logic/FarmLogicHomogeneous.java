@@ -14,7 +14,7 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.StackUtils;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 import java.util.ArrayList;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;

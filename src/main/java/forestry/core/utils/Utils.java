@@ -37,6 +37,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.ITileStructure;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.proxy.Proxies;
+import forestry.core.vect.Vect;
 
 import buildcraft.api.tools.IToolWrench;
 

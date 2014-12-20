@@ -14,7 +14,7 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 import java.lang.reflect.Field;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;

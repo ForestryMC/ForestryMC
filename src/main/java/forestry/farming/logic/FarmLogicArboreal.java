@@ -19,7 +19,7 @@ import forestry.api.farming.IFarmable;
 import forestry.core.config.ForestryBlock;
 import forestry.core.gadgets.BlockSoil;
 import forestry.core.render.SpriteSheet;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -101,7 +101,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		Vect offset = new Vect(housing.getOffset());
 
 		Vect min = coords.add(offset);
-		Vect max = coords.add(offset).add(area);
+		Vect max = min.add(area);
 
 		AxisAlignedBB harvestBox = AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, getWorld().getHeight(), max.z);
 		List<Entity> list = getWorld().getEntitiesWithinAABB(Entity.class, harvestBox);
