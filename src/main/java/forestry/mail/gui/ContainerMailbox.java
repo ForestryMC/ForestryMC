@@ -44,15 +44,15 @@ public class ContainerMailbox extends ContainerForestry {
 
 		for (int i = 0; i < 7; i++)
 			for (int j = 0; j < 12; j++)
-				addSlot(new SlotClosed(inventory, j + i * 9, 8 + j * 18, 8 + i * 18));
+				addSlotToContainer(new SlotClosed(inventory, j + i * 9, 8 + j * 18, 8 + i * 18));
 
 		// Player inventory
 		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < 9; j++)
-				addSlot(new Slot(player, j + i * 9 + 9, 35 + j * 18, 145 + i * 18));
+				addSlotToContainer(new Slot(player, j + i * 9 + 9, 35 + j * 18, 145 + i * 18));
 		// Player hotbar
 		for (int i = 0; i < 9; i++)
-			addSlot(new Slot(player, i, 35 + i * 18, 203));
+			addSlotToContainer(new Slot(player, i, 35 + i * 18, 203));
 
 	}
 

@@ -218,10 +218,7 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 			return false;
 
 		Collection<IFruitFamily> suitable = genome.getPrimary().getSuitableFruit();
-		if (!suitable.contains(provider.getFamily()))
-			return false;
-
-		return true;
+		return suitable.contains(provider.getFamily());
 	}
 
 	@Override
@@ -360,18 +357,17 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 		}
 
 		for (ITreeMutation mutation : PluginArboriculture.treeInterface.getMutations(true)) {
-			float chance = 0;
 
 			// Stop blacklisted species.
 			// if (BeeManager.breedingManager.isBlacklisted(mutation.getTemplate()[0].getUID())) {
 			// continue;
 			// }
-
-			if ((chance = mutation.getChance(world, x, y, z, allele0, allele1, genome0, genome1)) > 0)
-				if (world.rand.nextFloat()*100 < chance)
-					// IApiaristTracker breedingTracker = BeeManager.breedingManager.getApiaristTracker(world);
-					// breedingTracker.registerMutation(mutation);
-					return PluginArboriculture.treeInterface.templateAsChromosomes(mutation.getTemplate());
+			float chance = mutation.getChance(world, x, y, z, allele0, allele1, genome0, genome1);
+			if (chance > world.rand.nextFloat() * 100) {
+				// IApiaristTracker breedingTracker = BeeManager.breedingManager.getApiaristTracker(world);
+				// breedingTracker.registerMutation(mutation);
+				return PluginArboriculture.treeInterface.templateAsChromosomes(mutation.getTemplate());
+			}
 		}
 
 		return null;

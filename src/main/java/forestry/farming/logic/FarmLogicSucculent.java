@@ -29,7 +29,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class FarmLogicSucculent extends FarmLogic {
 
-	IFarmable[] germlings;
+	private final IFarmable[] germlings;
 
 	public FarmLogicSucculent(IFarmHousing housing) {
 		super(housing);

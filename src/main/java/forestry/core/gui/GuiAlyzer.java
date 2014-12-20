@@ -45,9 +45,9 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 	protected static final int COLUMN_1 = 85;
 	protected static final int COLUMN_2 = 150;
 
-	protected IInventory inventory;
-	protected ISpeciesRoot speciesRoot;
-	protected IBreedingTracker breedingTracker;
+	protected final IInventory inventory;
+	protected final ISpeciesRoot speciesRoot;
+	protected final IBreedingTracker breedingTracker;
 
 	protected final String guiName;
 

@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.TileAnalyzer;
@@ -17,29 +21,22 @@ import forestry.core.genetics.ItemGE;
 import forestry.core.gui.slots.SlotCustom;
 import forestry.core.gui.slots.SlotLiquidContainer;
 import forestry.core.gui.slots.SlotOutput;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 
 public class ContainerAnalyzer extends ContainerLiquidTanks {
-
-	private final TileAnalyzer tile;
 
 	public ContainerAnalyzer(InventoryPlayer player, TileAnalyzer tile) {
 		super(tile, tile);
 
-		this.tile = tile;
-
 		// Input buffer
 		for (int i = 0; i < 3; i++)
 			for (int k = 0; k < 2; k++)
-				addSlot(new SlotCustom(tile, TileAnalyzer.SLOT_INPUT_1 + i * 2 + k, 8 + k * 18, 28 + i * 18, ItemGE.class));
+				addSlotToContainer(new SlotCustom(tile, TileAnalyzer.SLOT_INPUT_1 + i * 2 + k, 8 + k * 18, 28 + i * 18, ItemGE.class));
 
 		// Analyze slot
-		addSlot(new SlotCustom(tile, TileAnalyzer.SLOT_ANALYZE, 73, 59));
+		addSlotToContainer(new SlotCustom(tile, TileAnalyzer.SLOT_ANALYZE, 73, 59));
 
 		// Can slot
-		addSlot(new SlotLiquidContainer(tile, TileAnalyzer.SLOT_CAN, 143, 24, false, Fluids.HONEY.get()) {
+		addSlotToContainer(new SlotLiquidContainer(tile, TileAnalyzer.SLOT_CAN, 143, 24, false, Fluids.HONEY.get()) {
 
 			@Override
 			public boolean isItemValid(ItemStack stack) {
@@ -53,15 +50,15 @@ public class ContainerAnalyzer extends ContainerLiquidTanks {
 		// Output buffer
 		for (int i = 0; i < 2; i++)
 			for (int k = 0; k < 2; k++)
-				addSlot(new SlotOutput(tile, TileAnalyzer.SLOT_OUTPUT_1 + i * 2 + k, 134 + k * 18, 48 + i * 18));
+				addSlotToContainer(new SlotOutput(tile, TileAnalyzer.SLOT_OUTPUT_1 + i * 2 + k, 134 + k * 18, 48 + i * 18));
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++)
 			for (int l1 = 0; l1 < 9; l1++)
-				addSlot(new Slot(player, l1 + i1 * 9 + 9, 8 + l1 * 18, 94 + i1 * 18));
+				addSlotToContainer(new Slot(player, l1 + i1 * 9 + 9, 8 + l1 * 18, 94 + i1 * 18));
 		// Player hotbar
 		for (int j1 = 0; j1 < 9; j1++)
-			addSlot(new Slot(player, j1, 8 + j1 * 18, 152));
+			addSlotToContainer(new Slot(player, j1, 8 + j1 * 18, 152));
 
 	}
 

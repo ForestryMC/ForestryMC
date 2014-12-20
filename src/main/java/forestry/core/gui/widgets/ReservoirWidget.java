@@ -43,7 +43,7 @@ public class ReservoirWidget extends TankWidget {
 
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
 		while (true) {
-			int x = 0;
+			int x;
 
 			if (squaled > 16) {
 				x = 16;

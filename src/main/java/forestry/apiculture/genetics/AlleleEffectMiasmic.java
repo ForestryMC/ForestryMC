@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 
 public class AlleleEffectMiasmic extends AlleleEffectThrottled {
 
-	private final int infectionChance = 50;
+	private static final int infectionChance = 50;
 
 	public AlleleEffectMiasmic(String uid) {
 		super(uid, "misasmic", false, 50, false, false);

@@ -22,8 +22,8 @@ import net.minecraft.world.World;
 
 public class FarmableStacked implements IFarmable {
 
-	Block block;
-	int matureHeight;
+	private final Block block;
+	private final int matureHeight;
 
 	public FarmableStacked(Block block, int matureHeight) {
 		this.block = block;

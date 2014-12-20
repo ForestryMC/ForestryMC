@@ -27,23 +27,23 @@ import net.minecraft.world.World;
 
 public class ContainerSolderingIron extends ContainerItemInventory implements IGuiSelectable {
 
-	SolderingInventory inventory;
+	private final SolderingInventory inventory;
 
 	public ContainerSolderingIron(InventoryPlayer inventoryplayer, SolderingInventory inventory) {
 		super(inventory, inventoryplayer.player);
 		this.inventory = inventory;
 
 		// Input
-		this.addSlot(new SlotCustom(inventory, 0, 152, 12, ItemCircuitBoard.class));
+		this.addSlotToContainer(new SlotCustom(inventory, 0, 152, 12, ItemCircuitBoard.class));
 
 		// Output
-		this.addSlot(new SlotCustom(inventory, 1, 152, 92, ItemCircuitBoard.class));
+		this.addSlotToContainer(new SlotCustom(inventory, 1, 152, 92, ItemCircuitBoard.class));
 
 		// Ingredients
-		this.addSlot(new Slot(inventory, 2, 12, 32));
-		this.addSlot(new Slot(inventory, 3, 12, 52));
-		this.addSlot(new Slot(inventory, 4, 12, 72));
-		this.addSlot(new Slot(inventory, 5, 12, 92));
+		this.addSlotToContainer(new Slot(inventory, 2, 12, 32));
+		this.addSlotToContainer(new Slot(inventory, 3, 12, 52));
+		this.addSlotToContainer(new Slot(inventory, 4, 12, 72));
+		this.addSlotToContainer(new Slot(inventory, 5, 12, 92));
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++)

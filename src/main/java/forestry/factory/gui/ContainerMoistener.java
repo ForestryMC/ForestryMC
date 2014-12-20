@@ -30,32 +30,32 @@ public class ContainerMoistener extends ContainerLiquidTanks implements IContain
 		// Stash
 		for (int l = 0; l < 2; l++) {
 			for (int k1 = 0; k1 < 3; k1++) {
-				addSlot(new Slot(tile, k1 + l * 3, 39 + k1 * 18, 16 + l * 18));
+				addSlotToContainer(new Slot(tile, k1 + l * 3, 39 + k1 * 18, 16 + l * 18));
 			}
 		}
 		// Reservoir
 		for (int k1 = 0; k1 < 3; k1++) {
-			addSlot(new Slot(tile, k1 + 6, 39 + k1 * 18, 22 + 36));
+			addSlotToContainer(new Slot(tile, k1 + 6, 39 + k1 * 18, 22 + 36));
 		}
 
 		// Working slot
-		this.addSlot(new SlotWorking(tile, 9, 105, 37));
+		this.addSlotToContainer(new SlotWorking(tile, 9, 105, 37));
 
 		// Product slot
-		this.addSlot(new Slot(tile, 10, 143, 55));
+		this.addSlotToContainer(new Slot(tile, 10, 143, 55));
 		// Boxes
-		this.addSlot(new SlotCraftAuto(this, tile, 11, 143, 19));
+		this.addSlotToContainer(new SlotCraftAuto(this, tile, 11, 143, 19));
 
 		// Player inventory
 		int var3;
 		for (var3 = 0; var3 < 3; ++var3) {
 			for (int var4 = 0; var4 < 9; ++var4) {
-				this.addSlot(new Slot(player, var4 + var3 * 9 + 9, 8 + var4 * 18, 84 + var3 * 18));
+				this.addSlotToContainer(new Slot(player, var4 + var3 * 9 + 9, 8 + var4 * 18, 84 + var3 * 18));
 			}
 		}
 
 		for (var3 = 0; var3 < 9; ++var3) {
-			this.addSlot(new Slot(player, var3, 8 + var3 * 18, 142));
+			this.addSlotToContainer(new Slot(player, var3, 8 + var3 * 18, 142));
 		}
 
 	}

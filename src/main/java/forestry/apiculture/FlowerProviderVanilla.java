@@ -53,10 +53,7 @@ public class FlowerProviderVanilla implements IFlowerProvider {
 	}
 
 	private boolean checkFlowerPot(int meta) {
-		if (meta == 1 || meta == 2)
-			return true;
-		else
-			return false;
+		return meta == 1 || meta == 2;
 	}
 
 	@Override

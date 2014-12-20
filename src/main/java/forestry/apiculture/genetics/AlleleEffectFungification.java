@@ -114,7 +114,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 	}
 
 	private void doMushroomGrowth(Block block, World world, int blockX, int blockY, int blockZ) {
-        WorldGenBigMushroom giantMushroomGenerator = null;
+        WorldGenBigMushroom giantMushroomGenerator;
         
         if (block == Blocks.brown_mushroom) {
             giantMushroomGenerator = new WorldGenBigMushroom(0);

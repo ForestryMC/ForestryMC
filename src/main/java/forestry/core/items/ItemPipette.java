@@ -92,7 +92,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 		PipetteContents contained = new PipetteContents(itemstack.getTagCompound());
 
 		int limit = getCapacity(itemstack);
-		int filled = 0;
+		int filled;
 
 		if (contained.contents == null) {
 

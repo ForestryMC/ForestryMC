@@ -65,12 +65,10 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		public boolean matches(FluidStack res) {
-			if (res == null && input == null)
-				return true;
-			else if (res == null || input == null)
+			if (res == null)
 				return false;
-			else
-				return input.isFluidEqual(res);
+
+			return input.isFluidEqual(res);
 		}
 	}
 
@@ -90,8 +88,7 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		public static Recipe findMatchingRecipe(FluidStack item) {
-			for (int i = 0; i < recipes.size(); i++) {
-				Recipe recipe = recipes.get(i);
+			for (Recipe recipe : recipes) {
 				if (recipe.matches(item))
 					return recipe;
 			}

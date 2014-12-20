@@ -10,29 +10,30 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockCocoa;
+import net.minecraft.block.BlockLog;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
+import net.minecraft.world.World;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
+import forestry.core.config.Defaults;
+import forestry.core.vect.Vect;
+
 import buildcraft.api.core.Position;
 import buildcraft.api.transport.IPipeConnection;
 import buildcraft.api.transport.IPipeConnection.ConnectOverride;
 import buildcraft.api.transport.IPipeTile;
 import buildcraft.api.transport.IPipeTile.PipeType;
 import cofh.api.energy.IEnergyHandler;
-import forestry.core.config.Defaults;
-import forestry.core.vect.Vect;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockCocoa;
-import net.minecraft.block.BlockLog;
-import net.minecraft.init.Blocks;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityHopper;
-import net.minecraft.util.Direction;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockUtil {
 
@@ -45,40 +46,7 @@ public class BlockUtil {
 	}
 
 	/**
-	 * Searches for inventories adjacent to block, excludes IPowerReceptor
-	 * 
-	 * @param world
-	 * @param blockPos
-	 * @param from
-	 * @return
-	 * @deprecated Use AdjacentInventoryCache instead
-	 */
-	@Deprecated
-	public static IInventory[] getAdjacentInventories(World world, Vect blockPos, ForgeDirection from) {
-		ArrayList<IInventory> inventories = new ArrayList<IInventory>();
-
-		// WTF is this? A loop that only picks the opposite direction? -CovertJaguar
-		for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-			if (from != ForgeDirection.UNKNOWN && from != dir.getOpposite())
-				continue;
-
-			TileEntity entity = world.getTileEntity(blockPos.x + dir.offsetX, blockPos.y + dir.offsetY, blockPos.z + dir.offsetZ);
-			if (entity != null)
-				if (entity instanceof IInventory)
-					if (!(entity instanceof TileEntityHopper))
-						inventories.add((IInventory) entity);
-		}
-
-		return inventories.toArray(new IInventory[inventories.size()]);
-	}
-
-	/**
 	 * Returns a list of adjacent pipes.
-	 * 
-	 * @param world
-	 * @param blockPos
-	 * @param from
-	 * @return
 	 */
 	public static ForgeDirection[] getPipeDirections(World world, Vect blockPos, ForgeDirection from) {
 		LinkedList<ForgeDirection> possiblePipes = new LinkedList<ForgeDirection>();

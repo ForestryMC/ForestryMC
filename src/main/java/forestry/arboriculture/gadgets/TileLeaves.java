@@ -341,9 +341,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	 **/
 	@Override
 	public boolean shouldRefresh(Block oldBlock, Block newBlock, int oldMeta, int newMeta, World world, int x, int y, int z) {
-		if (!Block.isEqualTo(oldBlock, newBlock))
-			return true;
-		return false;
+		return !Block.isEqualTo(oldBlock, newBlock);
 	}
 
 	/* IFRUITBEARER */

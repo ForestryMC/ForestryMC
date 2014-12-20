@@ -135,16 +135,9 @@ public class Letter implements ILetter, INBTTagable {
 
 	@Override
 	public boolean isMailable() {
-
 		// Can't resend an already sent letter
-		if (this.isProcessed)
-			return false;
-
 		// Requires at least one recipient
-		if (this.recipient != null && this.recipient.length > 0)
-			return true;
-
-		return false;
+		return !isProcessed && recipient != null && recipient.length > 0;
 	}
 
 	@Override

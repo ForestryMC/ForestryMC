@@ -39,10 +39,7 @@ public class FarmableFarmCraftory implements IFarmable {
 			return false;
 
 		Block block = world.getBlock(x, y, z);
-		if (block != PluginFarmCraftory.blockSingle && block != PluginFarmCraftory.blockMulti)
-			return false;
-		else
-			return true;
+		return block == PluginFarmCraftory.blockSingle || block == PluginFarmCraftory.blockMulti;
 	}
 
 	@Override

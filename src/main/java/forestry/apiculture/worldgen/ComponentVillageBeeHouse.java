@@ -322,11 +322,8 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		EnumTolerance temperatureTolerance = genome.getToleranceTemp();
 
 		Collection<EnumTemperature> toleratedTemperatures = AlleleManager.climateHelper.getToleratedTemperature(beeTemperature, temperatureTolerance);
-		boolean validTemp = false;
 
-		validTemp = toleratedTemperatures.contains(EnumTemperature.getFromValue(temperature));
-
-		if (!validTemp)
+		if (!toleratedTemperatures.contains(EnumTemperature.getFromValue(temperature)))
 			return false;
 
 		EnumHumidity beeHumidity = genome.getPrimary().getHumidity();
@@ -334,11 +331,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
 		Collection<EnumHumidity> toleratedHumidity = AlleleManager.climateHelper.getToleratedHumidity(beeHumidity, humidityTolerance);
 
-		boolean validHumidity = false;
-
-		validHumidity = toleratedHumidity.contains(EnumHumidity.getFromValue(humidity));
-
-		return validHumidity;
+		return toleratedHumidity.contains(EnumHumidity.getFromValue(humidity));
 	}
 
 	protected void fillBoxWith(World world, StructureBoundingBox box, int par3, int par4, int par5, int par6, int par7, int par8, ItemStack buildingBlock,

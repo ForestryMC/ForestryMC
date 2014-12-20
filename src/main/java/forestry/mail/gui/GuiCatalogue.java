@@ -24,13 +24,13 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiCatalogue extends GuiForestry<TileForestry> {
 
-	GuiButton buttonTrade;
-	GuiButton buttonClose;
+//	GuiButton buttonTrade;
+//	GuiButton buttonClose;
 
-	GuiButton buttonFilter;
-	GuiButton buttonCopy;
+	private GuiButton buttonFilter;
+	private GuiButton buttonCopy;
 
-	ContainerCatalogue container;
+	private final ContainerCatalogue container;
 
 	public GuiCatalogue(EntityPlayer player) {
 		super(new ResourceLocation("textures/gui/book.png"), new ContainerCatalogue(player));
@@ -76,10 +76,7 @@ public class GuiCatalogue extends GuiForestry<TileForestry> {
 			drawNoTrade(guiLeft + 38, guiTop + 30);
 
 		buttonFilter.displayString = StringUtil.localize("gui.mail.filter." + container.getFilterIdent());
-		if(container.getTradeInfo() == null || !container.getTradeInfo().state.isOk())
-			buttonCopy.enabled = false;
-		else
-			buttonCopy.enabled = true;
+		buttonCopy.enabled = container.getTradeInfo() != null && container.getTradeInfo().state.isOk();
 	}
 
 	private void drawNoTrade(int x, int y) {

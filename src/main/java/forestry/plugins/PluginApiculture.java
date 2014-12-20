@@ -282,25 +282,25 @@ public class PluginApiculture extends ForestryPlugin {
 		apicultureConfig = new Configuration();
 
 		Property property = apicultureConfig.get("apiary.sidesensitive", CONFIG_CATEGORY, apiarySideSensitive);
-		property.Comment = "set to false if apiaries should output all items regardless of side a pipe is attached to";
-		apiarySideSensitive = Boolean.parseBoolean(property.Value);
+		property.comment = "set to false if apiaries should output all items regardless of side a pipe is attached to";
+		apiarySideSensitive = Boolean.parseBoolean(property.value);
 
 		property = apicultureConfig.get("render.bees.fancy", CONFIG_CATEGORY, fancyRenderedBees);
-		property.Comment = "set to true to enable a fancy butterfly-like renderer for bees. (experimental!)";
-		fancyRenderedBees = Boolean.parseBoolean(property.Value);
+		property.comment = "set to true to enable a fancy butterfly-like renderer for bees. (experimental!)";
+		fancyRenderedBees = Boolean.parseBoolean(property.value);
 
 		property = apicultureConfig.get("beekeeping.mode", CONFIG_CATEGORY, "NORMAL");
-		property.Comment = "change beekeeping modes here. possible values EASY, NORMAL, HARD, HARDCORE, INSANE. mods may add additional modes.";
-		beekeepingMode = property.Value.trim();
+		property.comment = "change beekeeping modes here. possible values EASY, NORMAL, HARD, HARDCORE, INSANE. mods may add additional modes.";
+		beekeepingMode = property.value.trim();
 		Proxies.log.finer("Beekeeping mode read from config: " + beekeepingMode);
 
 		property = apicultureConfig.get("beekeeping.flowers.custom", CONFIG_CATEGORY, "");
-		property.Comment = "add additional flower blocks for apiaries here in the format id:meta. separate blocks using ';'. will be treated like vanilla flowers. not recommended for flowers implemented as tile entities.";
-		parseAdditionalFlowers(property.Value, FlowerManager.plainFlowers);
+		property.comment = "add additional flower blocks for apiaries here in the format id:meta. separate blocks using ';'. will be treated like vanilla flowers. not recommended for flowers implemented as tile entities.";
+		parseAdditionalFlowers(property.value, FlowerManager.plainFlowers);
 
 		property = apicultureConfig.get("species.blacklist", CONFIG_CATEGORY, "");
-		property.Comment = "add species to blacklist identified by their uid and seperated with ';'.";
-		parseBeeBlacklist(property.Value);
+		property.comment = "add species to blacklist identified by their uid and seperated with ';'.";
+		parseBeeBlacklist(property.value);
 
 		apicultureConfig.save();
 

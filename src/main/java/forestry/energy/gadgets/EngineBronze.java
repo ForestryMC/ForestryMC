@@ -62,13 +62,10 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	public void fromPacketPayload(PacketPayload payload) {
 		super.fromPacketPayload(payload);
 
-		if (payload.intPayload[3] > 0)
-			shutdown = true;
-		else
-			shutdown = false;
+		shutdown = payload.intPayload[3] > 0;
 	}
-	public FilteredTank fuelTank;
-	public FilteredTank heatingTank;
+	private final FilteredTank fuelTank;
+	private final FilteredTank heatingTank;
 	private final TankManager tankManager;
 	public int burnTime;
 	public int totalTime;
@@ -214,11 +211,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	}
 
 	/**
-	 * Returns the fuel value (power per cycle) an item of the passed ItemStack
-	 * provides
-	 *
-	 * @param fluid
-	 * @return
+	 * Returns the fuel value (power per cycle) an item of the passed fluid
 	 */
 	private int determineFuelValue(Fluid fluid) {
 		if (FuelManager.bronzeEngineFuel.containsKey(fluid))
@@ -228,8 +221,6 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	}
 
 	/**
-	 *
-	 * @param fluid
 	 * @return Duration of burn cycle of one bucket
 	 */
 	private int determineBurnTime(Fluid fluid) {
@@ -280,10 +271,6 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		return (heatingTank.getFluidAmount() * i) / Defaults.ENGINE_TANK_CAPACITY;
 	}
 
-	/**
-	 * Reads saved data
-	 * @param nbt
-	 */
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
@@ -301,10 +288,6 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 
 	}
 
-	/**
-	 * Writes data to save
-	 * @param nbt
-	 */
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);

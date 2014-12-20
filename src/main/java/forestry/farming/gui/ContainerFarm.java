@@ -40,45 +40,45 @@ public class ContainerFarm extends ContainerSocketed {
 		// Resources
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 2; j++) {
-				addSlot(new SlotResources(inv, tile.getFarmLogics(), TileFarmPlain.SLOT_RESOURCES_1 + j + i * 2, 123 + j * 18, 22 + i * 18));
+				addSlotToContainer(new SlotResources(inv, tile.getFarmLogics(), TileFarmPlain.SLOT_RESOURCES_1 + j + i * 2, 123 + j * 18, 22 + i * 18));
 			}
 		}
 
 		// Germlings
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 2; j++) {
-				addSlot(new SlotGermlings(inv, tile.getFarmLogics(), TileFarmPlain.SLOT_GERMLINGS_1 + j + i * 2, 164 + j * 18, 22 + i * 18));
+				addSlotToContainer(new SlotGermlings(inv, tile.getFarmLogics(), TileFarmPlain.SLOT_GERMLINGS_1 + j + i * 2, 164 + j * 18, 22 + i * 18));
 			}
 		}
 
 		// Production 1
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
-				addSlot(new SlotOutput(inv, TileFarmPlain.SLOT_PRODUCTION_1 + j + i * 2, 123 + j * 18, 86 + i * 18));
+				addSlotToContainer(new SlotOutput(inv, TileFarmPlain.SLOT_PRODUCTION_1 + j + i * 2, 123 + j * 18, 86 + i * 18));
 			}
 		}
 
 		// Production 2
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
-				addSlot(new SlotOutput(inv, TileFarmPlain.SLOT_PRODUCTION_1 + 4 + j + i * 2, 164 + j * 18, 86 + i * 18));
+				addSlotToContainer(new SlotOutput(inv, TileFarmPlain.SLOT_PRODUCTION_1 + 4 + j + i * 2, 164 + j * 18, 86 + i * 18));
 			}
 		}
 
 		// Fertilizer
-		addSlot(new SlotCustom(inv, TileFarmPlain.SLOT_FERTILIZER, 63, 95, PluginFarming.farmFertilizer));
+		addSlotToContainer(new SlotCustom(inv, TileFarmPlain.SLOT_FERTILIZER, 63, 95, PluginFarming.farmFertilizer));
 		// Can Slot
-		addSlot(new SlotLiquidContainer(inv, TileFarmPlain.SLOT_CAN, 15, 95));
+		addSlotToContainer(new SlotLiquidContainer(inv, TileFarmPlain.SLOT_CAN, 15, 95));
 
 		// Player inventory
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
-				addSlot(new Slot(playerinventory, j + i * 9 + 9, 28 + j * 18, 138 + i * 18));
+				addSlotToContainer(new Slot(playerinventory, j + i * 9 + 9, 28 + j * 18, 138 + i * 18));
 			}
 		}
 		// Player hotbar
 		for (int i = 0; i < 9; i++) {
-			addSlot(new Slot(playerinventory, i, 28 + i * 18, 196));
+			addSlotToContainer(new Slot(playerinventory, i, 28 + i * 18, 196));
 		}
 	}
 

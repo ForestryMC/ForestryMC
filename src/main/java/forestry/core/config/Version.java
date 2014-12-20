@@ -62,13 +62,13 @@ public class Version {
 			return false;
 
 		Property property = Config.config.get("vars.version.seen", Config.CATEGORY_COMMON, VERSION);
-		property.Comment = "indicates the last version the user has been informed about and will suppress further notices on it.";
-		String seenVersion = property.Value;
+		property.comment = "indicates the last version the user has been informed about and will suppress further notices on it.";
+		String seenVersion = property.value;
 
 		if (recommendedVersion == null || recommendedVersion.equals(seenVersion))
 			return false;
 
-		property.Value = recommendedVersion;
+		property.value = recommendedVersion;
 		Config.config.save();
 		return true;
 	}

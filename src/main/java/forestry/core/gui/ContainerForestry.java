@@ -34,16 +34,6 @@ public class ContainerForestry extends Container {
 			this.inventoryForestry = null;
 	}
 
-	/**
-	 * Adds a slot to the container, shortcut for addSlotToContainer(slot).
-	 *
-	 * @param slot
-	 * @return 
-	 */
-	protected Slot addSlot(Slot slot) {
-		return addSlotToContainer(slot);
-	}
-
 	@Override
 	public ItemStack slotClick(int slotIndex, int button, int modifier, EntityPlayer player) {
 		if (player == null)

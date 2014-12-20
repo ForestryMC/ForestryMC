@@ -38,9 +38,7 @@ public class OwnerLedger extends Ledger {
 		int shiftX = currentShiftX;
 		int shiftY = currentShiftY + 44;
 
-		if (mouseX >= shiftX && mouseX <= currentShiftX + currentWidth && mouseY >= shiftY && mouseY <= shiftY + 12)
-			return true;
-		return false;
+		return mouseX >= shiftX && mouseX <= currentShiftX + currentWidth && mouseY >= shiftY && mouseY <= shiftY + 12;
 	}
 
 	public boolean isOwnerChangeButton(int mouseX, int mouseY) {

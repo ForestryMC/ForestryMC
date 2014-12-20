@@ -94,7 +94,6 @@ public class FarmLogicRubber extends FarmLogic {
 		if (inActive)
 			return null;
 
-		Collection<ICrop> crops = null;
 		Vect start = new Vect(x, y, z);
 		if (!lastExtents.containsKey(start))
 			lastExtents.put(start, 0);
@@ -104,7 +103,7 @@ public class FarmLogicRubber extends FarmLogic {
 			lastExtent = 0;
 
 		Vect position = translateWithOffset(x, y + 1, z, direction, lastExtent);
-		crops = getHarvestBlocks(position);
+		Collection<ICrop> crops = getHarvestBlocks(position);
 		lastExtent++;
 		lastExtents.put(start, lastExtent);
 

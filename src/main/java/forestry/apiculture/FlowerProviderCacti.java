@@ -40,10 +40,7 @@ public class FlowerProviderCacti implements IFlowerProvider {
 	}
 
 	private boolean checkFlowerPot(int meta) {
-		if (meta == 9)
-			return true;
-		else
-			return false;
+		return meta == 9;
 	}
 
 	@Override

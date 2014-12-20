@@ -810,7 +810,7 @@ public abstract class InvTools {
 			if (tile instanceof IPipeTile) {
 				IPipeTile pipe = (IPipeTile) tile;
 				if (pipe.getPipeType() == IPipeTile.PipeType.ITEM && pipe.isPipeConnected(side.getOpposite())) {
-					pipes.add(new AbstractMap.SimpleEntry(side, pipe));					
+					pipes.add(new AbstractMap.SimpleEntry<ForgeDirection, IPipeTile>(side, pipe));
 					foundPipe = true;
 				}
 			}

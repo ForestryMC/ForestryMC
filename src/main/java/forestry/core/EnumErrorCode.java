@@ -56,8 +56,8 @@ public enum EnumErrorCode implements IErrorState {
 	NOTRADE("noTrade", "noResource"),
 	NOPOWER("noPower");
 
-	private String name;
-	private String iconName;
+	private final String name;
+	private final String iconName;
 	@SideOnly(Side.CLIENT)
 	private IIcon icon;
 

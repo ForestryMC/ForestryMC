@@ -46,7 +46,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 	private static final FluidStack STACK_WATER = Fluids.WATER.get(Defaults.RAINTANK_AMOUNT_PER_UPDATE);
 
 	/* MEMBER */
-	public FilteredTank resourceTank;
+	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
 	private boolean isValidBiome = true;
 	private int fillingTime;

@@ -52,7 +52,7 @@ public class BlockResourceStorageBlock extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int i, int meta) {
-		IIcon icon = null;
+		IIcon icon;
 		if (meta == 0) {
 			icon = iconApatite;
 		} else if (meta == 1) {

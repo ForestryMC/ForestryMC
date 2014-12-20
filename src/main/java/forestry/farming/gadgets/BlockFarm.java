@@ -182,10 +182,7 @@ public class BlockFarm extends BlockStructure {
 
 	@Override
 	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
-		if (world.getBlockMetadata(x, y, z) == 5)
-			return true;
-		else
-			return false;
+		return world.getBlockMetadata(x, y, z) == 5;
 	}
 
 	@Override

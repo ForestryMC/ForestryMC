@@ -192,7 +192,7 @@ public class GuiNaturalistInventory extends GuiForestry<TileForestry> {
 		RenderHelper.disableStandardItemLighting();
 
 		int line = 48;
-		int column = 0;
+		int column;
 		EnumMutateChance chance = EnumMutateChance.rateChance(combination.getBaseChance());
 		if (chance == EnumMutateChance.HIGHEST) {
 			line += 16;
@@ -223,8 +223,8 @@ public class GuiNaturalistInventory extends GuiForestry<TileForestry> {
 
 		float chance = mutation.getBaseChance();
 
-		int line = 0;
-		int column = 0;
+		int line;
+		int column;
 		if (chance >= 20) {
 			line = 16;
 			column = 228;

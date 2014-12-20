@@ -25,21 +25,21 @@ public class ContainerEngineCopper extends ContainerForestry {
 		super(tile);
 
 		this.engine = tile;
-		this.addSlot(new Slot(tile, 0, 44, 46));
+		this.addSlotToContainer(new Slot(tile, 0, 44, 46));
 
-		this.addSlot(new SlotClosed(tile, 1, 98, 35));
-		this.addSlot(new SlotClosed(tile, 2, 98, 53));
-		this.addSlot(new SlotClosed(tile, 3, 116, 35));
-		this.addSlot(new SlotClosed(tile, 4, 116, 53));
+		this.addSlotToContainer(new SlotClosed(tile, 1, 98, 35));
+		this.addSlotToContainer(new SlotClosed(tile, 2, 98, 53));
+		this.addSlotToContainer(new SlotClosed(tile, 3, 116, 35));
+		this.addSlotToContainer(new SlotClosed(tile, 4, 116, 53));
 
 		for (int i = 0; i < 3; ++i) {
 			for (int j = 0; j < 9; ++j) {
-				this.addSlot(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+				this.addSlotToContainer(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
 			}
 		}
 
 		for (int i = 0; i < 9; ++i) {
-			this.addSlot(new Slot(player, i, 8 + i * 18, 142));
+			this.addSlotToContainer(new Slot(player, i, 8 + i * 18, 142));
 		}
 
 	}

@@ -35,9 +35,9 @@ public abstract class ContainerItemInventory extends ContainerForestry {
 
 	protected void addSecuredSlot(IInventory other, int slot, int x, int y) {
 		if (other.getStackInSlot(slot) != null && inventory.itemClass.isAssignableFrom(other.getStackInSlot(slot).getItem().getClass()))
-			addSlot(new SlotLocked(other, slot, x, y));
+			addSlotToContainer(new SlotLocked(other, slot, x, y));
 		else
-			addSlot(new SlotItemInventory(this, other, player, slot, x, y));
+			addSlotToContainer(new SlotItemInventory(this, other, player, slot, x, y));
 	}
 
 	protected abstract boolean isAcceptedItem(EntityPlayer player, ItemStack stack);

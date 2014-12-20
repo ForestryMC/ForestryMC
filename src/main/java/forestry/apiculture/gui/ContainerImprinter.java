@@ -35,17 +35,17 @@ public class ContainerImprinter extends ContainerForestry implements IGuiSelecta
 
 		this.inventory = inventory;
 		// Input
-		this.addSlot(new SlotCustom(inventory, 0, 152, 12, ItemBeeGE.class));
+		this.addSlotToContainer(new SlotCustom(inventory, 0, 152, 12, ItemBeeGE.class));
 		// Output
-		this.addSlot(new SlotCustom(inventory, 1, 152, 72, ItemBeeGE.class));
+		this.addSlotToContainer(new SlotCustom(inventory, 1, 152, 72, ItemBeeGE.class));
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++)
 			for (int l1 = 0; l1 < 9; l1++)
-				addSlot(new Slot(inventoryplayer, l1 + i1 * 9 + 9, 8 + l1 * 18, 103 + i1 * 18));
+				addSlotToContainer(new Slot(inventoryplayer, l1 + i1 * 9 + 9, 8 + l1 * 18, 103 + i1 * 18));
 		// Player hotbar
 		for (int j1 = 0; j1 < 9; j1++)
-			addSlot(new Slot(inventoryplayer, j1, 8 + j1 * 18, 161));
+			addSlotToContainer(new Slot(inventoryplayer, j1, 8 + j1 * 18, 161));
 	}
 
 	@Override

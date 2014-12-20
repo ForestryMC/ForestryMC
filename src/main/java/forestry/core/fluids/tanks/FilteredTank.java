@@ -10,15 +10,18 @@
  ******************************************************************************/
 package forestry.core.fluids.tanks;
 
-import forestry.core.gui.tooltips.ToolTipLine;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+
 import net.minecraft.item.EnumRarity;
 import net.minecraft.tileentity.TileEntity;
+
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+
+import forestry.core.gui.tooltips.ToolTipLine;
 
 /**
  *
@@ -26,7 +29,7 @@ import net.minecraftforge.fluids.FluidStack;
  */
 public class FilteredTank extends StandardTank {
 
-	private HashSet<Fluid> filters;
+	private final HashSet<Fluid> filters;
 
 	public FilteredTank(int capacity, Fluid... filters) {
 		this(capacity, Arrays.asList(filters), null);

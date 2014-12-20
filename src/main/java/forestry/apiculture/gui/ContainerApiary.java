@@ -33,36 +33,36 @@ public class ContainerApiary extends ContainerForestry {
 		IInventory inv = tile.getInternalInventory();
 
 		// Queen/Princess
-		this.addSlot(new SlotCustom(inv, TileBeehouse.SLOT_QUEEN, 29, 39, ForestryItem.beePrincessGE, ForestryItem.beeQueenGE));
+		this.addSlotToContainer(new SlotCustom(inv, TileBeehouse.SLOT_QUEEN, 29, 39, ForestryItem.beePrincessGE, ForestryItem.beeQueenGE));
 
 		// Drone
-		this.addSlot(new SlotCustom(inv, TileBeehouse.SLOT_DRONE, 29, 65, ForestryItem.beeDroneGE));
+		this.addSlotToContainer(new SlotCustom(inv, TileBeehouse.SLOT_DRONE, 29, 65, ForestryItem.beeDroneGE));
 
 		// Frames
 		if (hasFrames) {
-			this.addSlot(new SlotCustom(inv, TileBeehouse.SLOT_FRAMES_1, 66, 23, IHiveFrame.class));
-			this.addSlot(new SlotCustom(inv, TileBeehouse.SLOT_FRAMES_1 + 1, 66, 52, IHiveFrame.class));
-			this.addSlot(new SlotCustom(inv, TileBeehouse.SLOT_FRAMES_1 + 2, 66, 81, IHiveFrame.class));
+			this.addSlotToContainer(new SlotCustom(inv, TileBeehouse.SLOT_FRAMES_1, 66, 23, IHiveFrame.class));
+			this.addSlotToContainer(new SlotCustom(inv, TileBeehouse.SLOT_FRAMES_1 + 1, 66, 52, IHiveFrame.class));
+			this.addSlotToContainer(new SlotCustom(inv, TileBeehouse.SLOT_FRAMES_1 + 2, 66, 81, IHiveFrame.class));
 		}
 
 		// Product Inventory
-		this.addSlot(new SlotClosed(inv, 2, 116, 52));
-		this.addSlot(new SlotClosed(inv, 3, 137, 39));
-		this.addSlot(new SlotClosed(inv, 4, 137, 65));
-		this.addSlot(new SlotClosed(inv, 5, 116, 78));
-		this.addSlot(new SlotClosed(inv, 6, 95, 65));
-		this.addSlot(new SlotClosed(inv, 7, 95, 39));
-		this.addSlot(new SlotClosed(inv, 8, 116, 26));
+		this.addSlotToContainer(new SlotClosed(inv, 2, 116, 52));
+		this.addSlotToContainer(new SlotClosed(inv, 3, 137, 39));
+		this.addSlotToContainer(new SlotClosed(inv, 4, 137, 65));
+		this.addSlotToContainer(new SlotClosed(inv, 5, 116, 78));
+		this.addSlotToContainer(new SlotClosed(inv, 6, 95, 65));
+		this.addSlotToContainer(new SlotClosed(inv, 7, 95, 39));
+		this.addSlotToContainer(new SlotClosed(inv, 8, 116, 26));
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++) {
 			for (int l1 = 0; l1 < 9; l1++) {
-				addSlot(new Slot(player, l1 + i1 * 9 + 9, 8 + l1 * 18, 108 + i1 * 18));
+				addSlotToContainer(new Slot(player, l1 + i1 * 9 + 9, 8 + l1 * 18, 108 + i1 * 18));
 			}
 		}
 		// Player hotbar
 		for (int j1 = 0; j1 < 9; j1++) {
-			addSlot(new Slot(player, j1, 8 + j1 * 18, 166));
+			addSlotToContainer(new Slot(player, j1, 8 + j1 * 18, 166));
 		}
 	}
 

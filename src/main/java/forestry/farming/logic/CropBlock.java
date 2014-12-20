@@ -19,8 +19,8 @@ import net.minecraft.world.World;
 
 public class CropBlock extends Crop {
 
-	Block block;
-	int meta;
+	protected final Block block;
+	protected final int meta;
 
 	public CropBlock(World world, Block block, int meta, Vect position) {
 		super(world, position);

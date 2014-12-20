@@ -20,7 +20,7 @@ import forestry.core.utils.StringUtil;
  */
 public class ErrorLedger extends Ledger {
 
-	IErrorSource tile;
+	private final IErrorSource tile;
 
 	public ErrorLedger(LedgerManager manager, IErrorSource tile) {
 		super(manager);

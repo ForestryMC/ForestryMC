@@ -122,7 +122,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 
 		for (EnumPostage postage : postages) {
 
-			int collected = 0;
+			int collected;
 			if (collectedPostage[postage.ordinal()] <= 0)
 				continue;
 

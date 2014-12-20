@@ -42,10 +42,7 @@ public class FlowerProviderMushroom implements IFlowerProvider {
 	}
 
 	private boolean checkFlowerPot(int meta) {
-		if (meta == 7 || meta == 8)
-			return true;
-		else
-			return false;
+		return meta == 7 || meta == 8;
 	}
 
 	@Override

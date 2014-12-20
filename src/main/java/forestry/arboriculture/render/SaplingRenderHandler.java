@@ -39,10 +39,10 @@ public class SaplingRenderHandler implements ISimpleBlockRenderingHandler {
 
 		TileSapling tile = BlockSapling.getSaplingTile(world, x, y, z);
 
-		IAlleleTreeSpecies species = (IAlleleTreeSpecies) PluginArboriculture.treeInterface.getDefaultTemplate()[0];
 		if (tile == null || tile.getTree() == null)
 			return true;
-		species = tile.getTree().getGenome().getPrimary();
+
+		IAlleleTreeSpecies species = tile.getTree().getGenome().getPrimary();
 
 		renderCrossedSquares(species, world, block, x, y, z);
 		renderLayer = 1;

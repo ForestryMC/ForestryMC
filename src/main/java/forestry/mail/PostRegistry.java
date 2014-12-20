@@ -161,7 +161,7 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	public IMailAddress getValidMailAddress(World world, GameProfile gameProfile) {
-		IMailAddress address = new MailAddress(gameProfile);;
+		IMailAddress address = new MailAddress(gameProfile);
 		if (getPOBox(world, address) != null)
 			return address;
 		return null;

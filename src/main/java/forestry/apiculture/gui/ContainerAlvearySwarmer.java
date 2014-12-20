@@ -24,18 +24,18 @@ public class ContainerAlvearySwarmer extends ContainerForestry {
 	public ContainerAlvearySwarmer(InventoryPlayer player, TileAlvearySwarmer tile) {
 		super(tile);
 
-		this.addSlot(new SlotCustom(tile, 0, 79, 52, getInducerItems()));
-		this.addSlot(new SlotCustom(tile, 1, 100, 39, getInducerItems()));
-		this.addSlot(new SlotCustom(tile, 2, 58, 39, getInducerItems()));
-		this.addSlot(new SlotCustom(tile, 3, 79, 26, getInducerItems()));
+		this.addSlotToContainer(new SlotCustom(tile, 0, 79, 52, getInducerItems()));
+		this.addSlotToContainer(new SlotCustom(tile, 1, 100, 39, getInducerItems()));
+		this.addSlotToContainer(new SlotCustom(tile, 2, 58, 39, getInducerItems()));
+		this.addSlotToContainer(new SlotCustom(tile, 3, 79, 26, getInducerItems()));
 
 		// Player inventory
 		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < 9; j++)
-				addSlot(new Slot(player, j + i * 9 + 9, 8 + j * 18, 87 + i * 18));
+				addSlotToContainer(new Slot(player, j + i * 9 + 9, 8 + j * 18, 87 + i * 18));
 		// Player hotbar
 		for (int i = 0; i < 9; i++)
-			addSlot(new Slot(player, i, 8 + i * 18, 145));
+			addSlotToContainer(new Slot(player, i, 8 + i * 18, 145));
 
 	}
 

@@ -23,8 +23,8 @@ import net.minecraft.world.World;
 
 public class AlleleEffectIgnition extends AlleleEffectThrottled {
 
-	private final int ignitionChance = 50;
-	private final int fireDuration = 500;
+	private static final int ignitionChance = 50;
+	private static final int fireDuration = 500;
 
 	public AlleleEffectIgnition(String uid) {
 		super(uid, "ignition", false, 20, false, true);

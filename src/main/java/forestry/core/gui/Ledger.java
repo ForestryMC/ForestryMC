@@ -79,11 +79,7 @@ public abstract class Ledger {
 	}
 
 	public boolean intersectsWith(int mouseX, int mouseY, int shiftX, int shiftY) {
-
-		if (mouseX >= shiftX && mouseX <= shiftX + currentWidth && mouseY >= shiftY && mouseY <= shiftY + getHeight())
-			return true;
-
-		return false;
+		return mouseX >= shiftX && mouseX <= shiftX + currentWidth && mouseY >= shiftY && mouseY <= shiftY + getHeight();
 	}
 
 	public void setFullyOpen() {

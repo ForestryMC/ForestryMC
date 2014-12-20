@@ -157,14 +157,6 @@ public class ClientProxyCommon extends ProxyCommon {
 
 	/**
 	 * Renders a EntityBiodustFX on client.
-	 * 
-	 * @param world
-	 * @param d1
-	 * @param d2
-	 * @param d3
-	 * @param f1
-	 * @param f2
-	 * @param f3
 	 */
 	// FIXME: This is causing crashes.
 	@Override

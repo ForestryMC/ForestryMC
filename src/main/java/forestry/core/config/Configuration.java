@@ -18,7 +18,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
@@ -89,7 +88,7 @@ public class Configuration {
 	public void set(String key, String category, boolean val) {
 		Property existing = getExisting(key, category);
 		if (existing != null) {
-			existing.Value = Boolean.toString(val);
+			existing.value = Boolean.toString(val);
 			return;
 		}
 
@@ -102,7 +101,7 @@ public class Configuration {
 	public void set(String key, String category, String val) {
 		Property existing = getExisting(key, category);
 		if (existing != null) {
-			existing.Value = val;
+			existing.value = val;
 			return;
 		}
 
@@ -115,7 +114,7 @@ public class Configuration {
 	public void set(String key, String category, int val) {
 		Property existing = getExisting(key, category);
 		if (existing != null) {
-			existing.Value = Integer.toString(val);
+			existing.value = Integer.toString(val);
 			return;
 		}
 
@@ -128,7 +127,7 @@ public class Configuration {
 	public void set(String key, String category, float val) {
 		Property existing = getExisting(key, category);
 		if (existing != null) {
-			existing.Value = Float.toString(val);
+			existing.value = Float.toString(val);
 			return;
 		}
 
@@ -143,7 +142,7 @@ public class Configuration {
 			loadCategory(category);
 
 		for (Property property : categorized.get(category))
-			if (property.Key.equals(key))
+			if (property.key.equals(key))
 				return property;
 
 		return null;
@@ -200,7 +199,7 @@ public class Configuration {
 					property = new Property(tokens[0], "");
 
 				if (lastComment != null) {
-					property.Comment = lastComment;
+					property.comment = lastComment;
 					lastComment = null;
 				}
 				categorized.get(category).add(property);
@@ -214,9 +213,7 @@ public class Configuration {
 	}
 
 	public void save() {
-		Iterator<Map.Entry<String, ArrayList<Property>>> it = categorized.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry<String, ArrayList<Property>> entry = it.next();
+		for (Map.Entry<String, ArrayList<Property>> entry : categorized.entrySet()) {
 			saveFile(getCategoryFile(entry.getKey()), entry.getValue());
 		}
 	}
@@ -248,18 +245,16 @@ public class Configuration {
 			writer.write("# gamemodes/\t\t-\t Configures available gamemodes");
 			TreeMap<String, ArrayList<Property>> subsectioned = getSubsectioned(properties);
 
-			Iterator<Map.Entry<String, ArrayList<Property>>> it = subsectioned.entrySet().iterator();
-			while (it.hasNext()) {
-				Map.Entry<String, ArrayList<Property>> entry = it.next();
+			for (Map.Entry<String, ArrayList<Property>> entry : subsectioned.entrySet()) {
 				writer.write(newLine + newLine + "#####################" + newLine + "# " + entry.getKey().toUpperCase() + newLine + "#####################"
 						+ newLine);
 
 				for (Property property : entry.getValue()) {
-					if(purge.contains(property.Key))
+					if (purge.contains(property.key))
 						continue;
-					if (property.Comment != null)
-						writer.write("# " + property.Comment + newLine);
-					writer.write(property.Key + "=" + property.Value + newLine);
+					if (property.comment != null)
+						writer.write("# " + property.comment + newLine);
+					writer.write(property.key + "=" + property.value + newLine);
 				}
 			}
 
@@ -275,7 +270,7 @@ public class Configuration {
 		TreeMap<String, ArrayList<Property>> subsectioned = new TreeMap<String, ArrayList<Property>>();
 
 		for (Property property : properties) {
-			String subsection = property.Key.split("\\.")[0];
+			String subsection = property.key.split("\\.")[0];
 			if (!subsectioned.containsKey(subsection))
 				subsectioned.put(subsection, new ArrayList<Property>());
 			subsectioned.get(subsection).add(property);

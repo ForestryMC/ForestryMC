@@ -21,7 +21,6 @@ public class AIButterflyPollinate extends AIButterflyInteract {
 
 	/**
 	 * Should pollinate?
-	 * @return
 	 */
 	@Override
 	protected boolean canInteract() {

@@ -185,10 +185,6 @@ public class StackUtils {
 	/**
 	 * Creates a split stack of the specified amount, preserving NBT data,
 	 * without decreasing the source stack.
-	 *
-	 * @param stack
-	 * @param amount
-	 * @return
 	 */
 	public static ItemStack createSplitStack(ItemStack stack, int amount) {
 		ItemStack split = new ItemStack(stack.getItem(), amount, stack.getItemDamage());

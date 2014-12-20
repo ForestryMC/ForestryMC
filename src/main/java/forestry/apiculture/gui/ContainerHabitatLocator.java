@@ -31,12 +31,12 @@ public class ContainerHabitatLocator extends ContainerItemInventory {
 		this.inventory = inventory;
 
 		// Energy
-		this.addSlot(new SlotCustom(inventory, 2, 152, 8, ForestryItem.honeydew, ForestryItem.honeyDrop));
+		this.addSlotToContainer(new SlotCustom(inventory, 2, 152, 8, ForestryItem.honeydew, ForestryItem.honeyDrop));
 
 		// Bee to analyze
-		this.addSlot(new SlotCustom(inventory, 0, 152, 32, ItemBeeGE.class));
+		this.addSlotToContainer(new SlotCustom(inventory, 0, 152, 32, ItemBeeGE.class));
 		// Analyzed bee
-		this.addSlot(new SlotCustom(inventory, 1, 152, 75, ItemBeeGE.class));
+		this.addSlotToContainer(new SlotCustom(inventory, 1, 152, 75, ItemBeeGE.class));
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++)

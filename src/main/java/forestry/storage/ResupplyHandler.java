@@ -93,9 +93,6 @@ public class ResupplyHandler implements IResupplyHandler {
 
 	/**
 	 * This tops off existing stacks in the player's inventory.
-	 * 
-	 * @param player
-	 * @param itemstack
 	 */
 	private boolean topOffPlayerInventory(EntityPlayer player, ItemStack itemstack) {
 
@@ -112,11 +109,8 @@ public class ResupplyHandler implements IResupplyHandler {
 				continue;
 
 			if (inventoryStack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(inventoryStack, itemstack)) {
-
 				inventoryStack.stackSize++;
 				itemstack.stackSize--;
-				if (itemstack.stackSize <= 0)
-					itemstack = null;
 				return true;
 			}
 		}

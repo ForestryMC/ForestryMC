@@ -97,12 +97,12 @@ public class Config {
 		config.addPurge("power.framework");
 
 		Property property = config.get("difficulty.gamemode", CATEGORY_COMMON, "EASY");
-		property.Comment = "set to your preferred game mode. available modes are OP, EASY, NORMAL, HARD. mismatch with the server may cause visual glitches with recipes. setting an unavailable mode will create a new mode definition file.";
-		gameMode = property.Value;
+		property.comment = "set to your preferred game mode. available modes are OP, EASY, NORMAL, HARD. mismatch with the server may cause visual glitches with recipes. setting an unavailable mode will create a new mode definition file.";
+		gameMode = property.value;
 
 		property = config.get("difficulty.recreate.definitions", CATEGORY_COMMON, true);
-		property.Comment = "set to true to force recreation of the game mode definitions in config/forestry/gamemodes";
-		boolean recreate = Boolean.parseBoolean(property.Value);
+		property.comment = "set to true to force recreation of the game mode definitions in config/forestry/gamemodes";
+		boolean recreate = Boolean.parseBoolean(property.value);
 
 		if (recreate)
 			Proxies.log.info("Recreating all gamemode definitions from the defaults. This may be caused by an upgrade");
@@ -127,88 +127,88 @@ public class Config {
 		config.set("difficulty.recreate.definitions", CATEGORY_COMMON, false);
 
 		Property particleFX = config.get("performance.particleFX.enabled", CATEGORY_COMMON, true);
-		particleFX.Comment = "set to false to disable particle fx on slower machines";
-		enableParticleFX = Boolean.parseBoolean(particleFX.Value);
+		particleFX.comment = "set to false to disable particle fx on slower machines";
+		enableParticleFX = Boolean.parseBoolean(particleFX.value);
 
 		Property genApatiteOre = config.get("world.generate.apatite", CATEGORY_COMMON, true);
-		genApatiteOre.Comment = "set to false to force forestry to skip generating own apatite ore blocks in the world";
-		generateApatiteOre = Boolean.parseBoolean(genApatiteOre.Value);
+		genApatiteOre.comment = "set to false to force forestry to skip generating own apatite ore blocks in the world";
+		generateApatiteOre = Boolean.parseBoolean(genApatiteOre.value);
 
 		Property genBeehives = config.get("world.generate.beehives", CATEGORY_COMMON, true);
-		genBeehives.Comment = "set to false to force forestry to skip generating beehives in the world";
-		generateBeehives = Boolean.parseBoolean(genBeehives.Value);
+		genBeehives.comment = "set to false to force forestry to skip generating beehives in the world";
+		generateBeehives = Boolean.parseBoolean(genBeehives.value);
 
 		Property genDebugBeehives = config.get("world.generate.beehives.debug", CATEGORY_DEBUG, false);
-		genDebugBeehives.Comment = "Set to true to force Forestry to try to generate a beehive at every possible location.";
-		generateBeehivesDebug = Boolean.parseBoolean(genDebugBeehives.Value);
+		genDebugBeehives.comment = "Set to true to force Forestry to try to generate a beehive at every possible location.";
+		generateBeehivesDebug = Boolean.parseBoolean(genDebugBeehives.value);
 
 		Property genCopperOre = config.get("world.generate.copper", CATEGORY_COMMON, true);
-		genCopperOre.Comment = "set to false to force forestry to skip generating own copper ore blocks in the world";
-		generateCopperOre = Boolean.parseBoolean(genCopperOre.Value);
+		genCopperOre.comment = "set to false to force forestry to skip generating own copper ore blocks in the world";
+		generateCopperOre = Boolean.parseBoolean(genCopperOre.value);
 
 		Property genTinOre = config.get("world.generate.tin", CATEGORY_COMMON, true);
-		genTinOre.Comment = "set to false to force forestry to skip generating own tin ore blocks in the world";
-		generateTinOre = Boolean.parseBoolean(genTinOre.Value);
+		genTinOre.comment = "set to false to force forestry to skip generating own tin ore blocks in the world";
+		generateTinOre = Boolean.parseBoolean(genTinOre.value);
 
 		Property bronzeRecipe = config.get("crafting.bronze.enabled", CATEGORY_COMMON, true);
-		bronzeRecipe.Comment = "set to false to disable crafting recipe for bronze";
-		craftingBronzeEnabled = Boolean.parseBoolean(bronzeRecipe.Value);
+		bronzeRecipe.comment = "set to false to disable crafting recipe for bronze";
+		craftingBronzeEnabled = Boolean.parseBoolean(bronzeRecipe.value);
 
 		property = config.get("crafting.stamps.enabled", CATEGORY_COMMON, true);
-		property.Comment = "set to false to disable crafting recipes for all types of stamps.";
-		craftingStampsEnabled = Boolean.parseBoolean(property.Value);
+		property.comment = "set to false to disable crafting recipes for all types of stamps.";
+		craftingStampsEnabled = Boolean.parseBoolean(property.value);
 
 		String defaultCollectors = "20n;50n;100n;200n";
 		property = config.get("crafting.stamps.collector", CATEGORY_COMMON, defaultCollectors);
-		property.Comment = "if crafting of stamps is generally allowed, these stamps are still excluded from crafting.";
+		property.comment = "if crafting of stamps is generally allowed, these stamps are still excluded from crafting.";
 		try {
-			collectorStamps.addAll(Arrays.asList(parseStamps(property.Value)));
+			collectorStamps.addAll(Arrays.asList(parseStamps(property.value)));
 		} catch(Exception ex) {
 			config.set("crafting.stamps.collector", CATEGORY_COMMON, defaultCollectors);
 			collectorStamps.addAll(Arrays.asList(parseStamps(defaultCollectors)));
 		}
 
 		Property indicatorEnable = config.get("tweaks.mailalert.enabled", CATEGORY_COMMON, true);
-		indicatorEnable.Comment = "set to false to disable the mail alert box";
-		mailAlertEnabled = Boolean.parseBoolean(indicatorEnable.Value);
+		indicatorEnable.comment = "set to false to disable the mail alert box";
+		mailAlertEnabled = Boolean.parseBoolean(indicatorEnable.value);
 
 		Property clearGenome = config.get("genetics.clear.invalid.chromosomes", CATEGORY_COMMON, clearInvalidChromosomes);
-		clearGenome.Comment = "set to true to clear chromosomes which contain invalid alleles. might rescue your save if it is crashing after the removal of a bee addon.";
-		clearInvalidChromosomes = Boolean.parseBoolean(clearGenome.Value);
+		clearGenome.comment = "set to true to clear chromosomes which contain invalid alleles. might rescue your save if it is crashing after the removal of a bee addon.";
+		clearInvalidChromosomes = Boolean.parseBoolean(clearGenome.value);
 
 		Property dungeonLootRarity = config.get("difficulty.dungeonloot.rare", CATEGORY_COMMON, false);
-		dungeonLootRarity.Comment = "set to true to make dungeon loot generated by forestry rarer";
-		dungeonLootRare = Boolean.parseBoolean(dungeonLootRarity.Value);
+		dungeonLootRarity.comment = "set to true to make dungeon loot generated by forestry rarer";
+		dungeonLootRare = Boolean.parseBoolean(dungeonLootRarity.value);
 
 		Property resupplyEnable = config.get("performance.backpacks.resupply", CATEGORY_COMMON, true);
-		resupplyEnable.Comment = "leaving this enabled will cycle the list of active players PER INGAME TICK to check for resupply via backpack. you want to set this to false on busy servers.";
-		Config.enableBackpackResupply = Boolean.parseBoolean(resupplyEnable.Value);
+		resupplyEnable.comment = "leaving this enabled will cycle the list of active players PER INGAME TICK to check for resupply via backpack. you want to set this to false on busy servers.";
+		Config.enableBackpackResupply = Boolean.parseBoolean(resupplyEnable.value);
 
 		property = config.get("tweaks.hints.disabled", CATEGORY_COMMON, false);
-		property.Comment = "set to true to disable hints on machine and engine guis.";
-		Config.disableHints = Boolean.parseBoolean(property.Value);
+		property.comment = "set to true to disable hints on machine and engine guis.";
+		Config.disableHints = Boolean.parseBoolean(property.value);
 		property = config.get("tweaks.energystat.disabled", CATEGORY_COMMON, true);
-		property.Comment = "set to true to disable energy statistics on energy consumers.";
-		Config.disableEnergyStat = !isDebug && Boolean.parseBoolean(property.Value);
+		property.comment = "set to true to disable energy statistics on energy consumers.";
+		Config.disableEnergyStat = !isDebug && Boolean.parseBoolean(property.value);
 		property = config.get("tweaks.tooltip.liquidamount.disabled", CATEGORY_COMMON, false);
-		property.Comment = "set to true to disable displaying liquid amounts in tank tooltips.";
-		Config.tooltipLiquidAmount = isDebug || !Boolean.parseBoolean(property.Value);
+		property.comment = "set to true to disable displaying liquid amounts in tank tooltips.";
+		Config.tooltipLiquidAmount = isDebug || !Boolean.parseBoolean(property.value);
 
 		property = config.get("tweaks.permissions.disabled", CATEGORY_COMMON, false);
-		property.Comment = "set to true to disable access restrictions on forestry machines.";
-		Config.disablePermissions = Boolean.parseBoolean(property.Value);
+		property.comment = "set to true to disable access restrictions on forestry machines.";
+		Config.disablePermissions = Boolean.parseBoolean(property.value);
 
 		property = config.get("tweaks.upgradenotice.disabled", CATEGORY_COMMON, false);
-		property.Comment = "set to true to disable update and version check notice.";
-		Config.disableVersionCheck = isDebug || Boolean.parseBoolean(property.Value);
+		property.comment = "set to true to disable update and version check notice.";
+		Config.disableVersionCheck = isDebug || Boolean.parseBoolean(property.value);
 
 		property = config.get("tweaks.farms.squared", CATEGORY_COMMON, false);
-		property.Comment = "set to true to have farms use a square layout instead of a diamond one.";
-		Config.squareFarms = Boolean.parseBoolean(property.Value);
+		property.comment = "set to true to have farms use a square layout instead of a diamond one.";
+		Config.squareFarms = Boolean.parseBoolean(property.value);
 
 		property = config.get("structures.schemata.disabled", CATEGORY_COMMON, "");
-		property.Comment = "add schemata keys to disable them. current keys: alveary3x3;farm3x3;farm3x4;farm3x5;farm4x4;farm5x5";
-		disabledStructures.addAll(Arrays.asList(parseStructureKeys(property.Value)));
+		property.comment = "add schemata keys to disable them. current keys: alveary3x3;farm3x3;farm3x4;farm3x5;farm4x4;farm5x5";
+		disabledStructures.addAll(Arrays.asList(parseStructureKeys(property.value)));
 		for (String str : disabledStructures)
 			Proxies.log.finer("Disabled structure '%s'.", str);
 
@@ -281,7 +281,7 @@ public class Config {
 	}
 
 	public static boolean getOrCreateBooleanProperty(String key, String kind, boolean defaults) {
-		return Boolean.parseBoolean(config.get(key, kind, defaults).Value);
+		return Boolean.parseBoolean(config.get(key, kind, defaults).value);
 	}
 
 }

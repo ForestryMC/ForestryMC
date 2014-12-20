@@ -33,9 +33,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-/**
- * This will replace the whole {@link Gadget}-nonsense at some point, using the proper Forge hook. Will hopefully sort out any issues with interfaces.
- */
 public class MachineDefinition {
 
 	public final Class<? extends TileEntity> teClass;

@@ -127,8 +127,6 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	@Override
 	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
 
-		Collection<ICrop> crops = null;
-
 		Vect start = new Vect(x, y, z);
 		if (!lastExtentsHarvest.containsKey(start))
 			lastExtentsHarvest.put(start, 0);
@@ -138,7 +136,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 			lastExtent = 0;
 
 		Vect position = translateWithOffset(x, y + 1, z, direction, lastExtent);
-		crops = getHarvestBlocks(position);
+		Collection<ICrop> crops = getHarvestBlocks(position);
 		lastExtent++;
 		lastExtentsHarvest.put(start, lastExtent);
 

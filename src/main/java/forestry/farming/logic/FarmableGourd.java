@@ -10,20 +10,21 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
 import forestry.core.config.Defaults;
 import forestry.core.utils.StackUtils;
 import forestry.core.vect.Vect;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 public class FarmableGourd implements IFarmable {
 
-	public ItemStack seed;
-	public ItemStack stem;
-	public ItemStack fruit;
+	private final ItemStack seed;
+	private final ItemStack stem;
+	private final ItemStack fruit;
 
 	public FarmableGourd(ItemStack seed, ItemStack stem, ItemStack fruit) {
 		this.seed = seed;
@@ -36,10 +37,7 @@ public class FarmableGourd implements IFarmable {
 		if (world.isAirBlock(x, y, z))
 			return false;
 
-		if (!StackUtils.equals(world.getBlock(x, y, z), stem))
-			return false;
-
-		return true;
+		return StackUtils.equals(world.getBlock(x, y, z), stem);
 	}
 
 	@Override

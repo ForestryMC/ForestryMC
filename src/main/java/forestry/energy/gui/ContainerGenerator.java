@@ -24,16 +24,16 @@ public class ContainerGenerator extends ContainerLiquidTanks {
 		super(tile, tile);
 
 		this.tile = tile;
-		this.addSlot(new SlotLiquidContainer(tile, MachineGenerator.SLOT_CAN, 22, 38));
+		this.addSlotToContainer(new SlotLiquidContainer(tile, MachineGenerator.SLOT_CAN, 22, 38));
 
 		for (int i = 0; i < 3; ++i) {
 			for (int var4 = 0; var4 < 9; ++var4) {
-				this.addSlot(new Slot(player, var4 + i * 9 + 9, 8 + var4 * 18, 84 + i * 18));
+				this.addSlotToContainer(new Slot(player, var4 + i * 9 + 9, 8 + var4 * 18, 84 + i * 18));
 			}
 		}
 
 		for (int i = 0; i < 9; ++i) {
-			this.addSlot(new Slot(player, i, 8 + i * 18, 142));
+			this.addSlotToContainer(new Slot(player, i, 8 + i * 18, 142));
 		}
 	}
 

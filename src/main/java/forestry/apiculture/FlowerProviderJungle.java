@@ -43,10 +43,7 @@ public class FlowerProviderJungle implements IFlowerProvider {
 	}
 
 	private boolean checkFlowerPot(int meta) {
-		if (meta == 11)
-			return true;
-		else
-			return false;
+		return meta == 11;
 	}
 
 	@Override

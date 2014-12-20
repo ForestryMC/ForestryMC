@@ -30,24 +30,24 @@ public class ContainerInfuser extends ContainerForestry {
 		this.inventory = inventory;
 
 		// Input
-		this.addSlot(new SlotCustom(inventory, 0, 152, 12, ForestryItem.beverage.getItemStack()));
+		this.addSlotToContainer(new SlotCustom(inventory, 0, 152, 12, ForestryItem.beverage.getItemStack()));
 
 		// Output
-		this.addSlot(new SlotCustom(inventory, 1, 152, 72, ItemBeverage.class));
+		this.addSlotToContainer(new SlotCustom(inventory, 1, 152, 72, ItemBeverage.class));
 
 		// Ingredients
-		this.addSlot(new Slot(inventory, 2, 12, 12));
-		this.addSlot(new Slot(inventory, 3, 12, 32));
-		this.addSlot(new Slot(inventory, 4, 12, 52));
-		this.addSlot(new Slot(inventory, 5, 12, 72));
+		this.addSlotToContainer(new Slot(inventory, 2, 12, 12));
+		this.addSlotToContainer(new Slot(inventory, 3, 12, 32));
+		this.addSlotToContainer(new Slot(inventory, 4, 12, 52));
+		this.addSlotToContainer(new Slot(inventory, 5, 12, 72));
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++)
 			for (int l1 = 0; l1 < 9; l1++)
-				addSlot(new Slot(inventoryplayer, l1 + i1 * 9 + 9, 8 + l1 * 18, 103 + i1 * 18));
+				addSlotToContainer(new Slot(inventoryplayer, l1 + i1 * 9 + 9, 8 + l1 * 18, 103 + i1 * 18));
 		// Player hotbar
 		for (int j1 = 0; j1 < 9; j1++)
-			addSlot(new Slot(inventoryplayer, j1, 8 + j1 * 18, 161));
+			addSlotToContainer(new Slot(inventoryplayer, j1, 8 + j1 * 18, 161));
 	}
 
 	@Override

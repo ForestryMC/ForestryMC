@@ -107,14 +107,6 @@ public class BlockSoil extends Block implements IItemTyped {
 			matureBog(world, i, j, k);
 	}
 
-	/**
-	 * 
-	 * @param world
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @return
-	 */
 	private boolean isEnrooted(World world, int x, int y, int z) {
 
 		for (int i = -1; i < 2; i++)
@@ -123,10 +115,7 @@ public class BlockSoil extends Block implements IItemTyped {
 				if (block == Blocks.log || block == Blocks.sapling || block == ForestryBlock.saplingGE.block())
 					// We are not returning true if we are the base of a
 					// sapling.
-					if (i == 0 && j == 0)
-						return false;
-					else
-						return true;
+					return !(i == 0 && j == 0);
 			}
 
 		return false;
@@ -134,18 +123,13 @@ public class BlockSoil extends Block implements IItemTyped {
 
 	/**
 	 * If a tree or sapling is in the vicinity, there is a chance, that the soil will degrade.
-	 * 
-	 * @param world
-	 * @param i
-	 * @param j
-	 * @param k
 	 */
-	private void degradeSoil(World world, int i, int j, int k) {
+	private void degradeSoil(World world, int x, int y, int z) {
 
 		if (world.rand.nextInt(140) != 0)
 			return;
 
-		int meta = world.getBlockMetadata(i, j, k);
+		int meta = world.getBlockMetadata(x, y, z);
 
 		// Unpack first
 		int type = meta & 0x03;
@@ -158,10 +142,10 @@ public class BlockSoil extends Block implements IItemTyped {
 		meta = (grade << 2 | type);
 
 		if (grade >= degradeDelimiter)
-			world.setBlock(i, j, k, Blocks.sand, 0, Defaults.FLAG_BLOCK_SYNCH);
+			world.setBlock(x, y, z, Blocks.sand, 0, Defaults.FLAG_BLOCK_SYNCH);
 		else
-			world.setBlockMetadataWithNotify(i, j, k, meta, Defaults.FLAG_BLOCK_SYNCH);
-		world.markBlockForUpdate(i, j, k);
+			world.setBlockMetadataWithNotify(x, y, z, meta, Defaults.FLAG_BLOCK_SYNCH);
+		world.markBlockForUpdate(x, y, z);
 	}
 
 	public static boolean isMoistened(World world, int x, int y, int z) {
@@ -188,7 +172,7 @@ public class BlockSoil extends Block implements IItemTyped {
 		int type = meta & 0x03;
 		int maturity = meta >> 2;
 
-		if (maturity >= this.degradeDelimiter)
+		if (maturity >= degradeDelimiter)
 			return;
 
 		// Increment (de)gradation

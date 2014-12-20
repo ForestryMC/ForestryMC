@@ -106,23 +106,23 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 		config = new Configuration();
 
 		Property backpackConf = config.get("backpacks.miner.items", CONFIG_CATEGORY, "");
-		backpackConf.Comment = "add additional blocks and items for the miner's backpack here in the format id:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		parseBackpackItems("Miner's Backpack", backpackConf.Value, BackpackManager.definitions.get("miner"));
+		backpackConf.comment = "add additional blocks and items for the miner's backpack here in the format id:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
+		parseBackpackItems("Miner's Backpack", backpackConf.value, BackpackManager.definitions.get("miner"));
 		backpackConf = config.get("backpacks.digger.items", CONFIG_CATEGORY, "");
-		backpackConf.Comment = "add additional blocks and items for the digger's backpack here in the format id:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		parseBackpackItems("Digger's Backpack", backpackConf.Value, BackpackManager.definitions.get("digger"));
+		backpackConf.comment = "add additional blocks and items for the digger's backpack here in the format id:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
+		parseBackpackItems("Digger's Backpack", backpackConf.value, BackpackManager.definitions.get("digger"));
 		backpackConf = config.get("backpacks.forester.items", CONFIG_CATEGORY, "");
-		backpackConf.Comment = "add additional blocks and items for the forester's backpack here in the format id:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		parseBackpackItems("Forester's Backpack", backpackConf.Value, BackpackManager.definitions.get("forester"));
+		backpackConf.comment = "add additional blocks and items for the forester's backpack here in the format id:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
+		parseBackpackItems("Forester's Backpack", backpackConf.value, BackpackManager.definitions.get("forester"));
 		backpackConf = config.get("backpacks.hunter.items", CONFIG_CATEGORY, "");
-		backpackConf.Comment = "add additional blocks and items for the hunter's backpack here in the format id:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		parseBackpackItems("Hunter's Backpack", backpackConf.Value, BackpackManager.definitions.get("hunter"));
+		backpackConf.comment = "add additional blocks and items for the hunter's backpack here in the format id:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
+		parseBackpackItems("Hunter's Backpack", backpackConf.value, BackpackManager.definitions.get("hunter"));
 		backpackConf = config.get("backpacks.adventurer.items", CONFIG_CATEGORY, "");
-		backpackConf.Comment = "add blocks and items for the adventurer's backpack here in the format id:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		parseBackpackItems("Adventurer's Backpack", backpackConf.Value, BackpackManager.definitions.get("adventurer"));
+		backpackConf.comment = "add blocks and items for the adventurer's backpack here in the format id:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
+		parseBackpackItems("Adventurer's Backpack", backpackConf.value, BackpackManager.definitions.get("adventurer"));
 		backpackConf = config.get("backpacks.builder.items", CONFIG_CATEGORY, "");
-		backpackConf.Comment = "add blocks and items for the builder's backpack here in the format id:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		parseBackpackItems("Builder's Backpack", backpackConf.Value, BackpackManager.definitions.get("builder"));
+		backpackConf.comment = "add blocks and items for the builder's backpack here in the format id:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
+		parseBackpackItems("Builder's Backpack", backpackConf.value, BackpackManager.definitions.get("builder"));
 
 		config.save();
 

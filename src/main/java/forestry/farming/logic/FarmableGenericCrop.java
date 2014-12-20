@@ -32,14 +32,7 @@ public class FarmableGenericCrop implements IFarmable {
 
 	@Override
 	public boolean isSaplingAt(World world, int x, int y, int z) {
-
-		if (world.isAirBlock(x, y, z))
-			return false;
-
-		if (world.getBlock(x, y, z) != block)
-			return false;
-		else
-			return true;
+		return world.getBlock(x, y, z) == block;
 	}
 
 	@Override

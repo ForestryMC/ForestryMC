@@ -61,17 +61,17 @@ public class ContainerLetter extends ContainerItemInventory {
 
 		// Stamps
 		for (int i = 0; i < 4; i++)
-			addSlot(new SlotCustom(inventory, Letter.SLOT_POSTAGE_1 + i, 150, 14 + i * 19, validStamps).setStackLimit(1));
+			addSlotToContainer(new SlotCustom(inventory, Letter.SLOT_POSTAGE_1 + i, 150, 14 + i * 19, validStamps).setStackLimit(1));
 
 		// Attachments
 		if (!letterInventory.getLetter().isProcessed())
 			for (int i = 0; i < 2; i++)
 				for (int j = 0; j < 9; j++)
-					addSlot(new SlotCustom(inventory, Letter.SLOT_ATTACHMENT_1 + j + i * 9, 17 + j * 18, 98 + i * 18, ItemLetter.class).setExclusion(true));
+					addSlotToContainer(new SlotCustom(inventory, Letter.SLOT_ATTACHMENT_1 + j + i * 9, 17 + j * 18, 98 + i * 18, ItemLetter.class).setExclusion(true));
 		else
 			for (int i = 0; i < 2; i++)
 				for (int j = 0; j < 9; j++)
-					addSlot(new SlotClosed(inventory, Letter.SLOT_ATTACHMENT_1 + j + i * 9, 17 + j * 18, 98 + i * 18));
+					addSlotToContainer(new SlotClosed(inventory, Letter.SLOT_ATTACHMENT_1 + j + i * 9, 17 + j * 18, 98 + i * 18));
 
 		// Player inventory
 		for (int i = 0; i < 3; i++)
@@ -126,7 +126,7 @@ public class ContainerLetter extends ContainerItemInventory {
 				break;
 		}
 
-		IPostalCarrier postal = null;
+		IPostalCarrier postal;
 		if(it.hasNext())
 			postal = it.next();
 		else
@@ -153,7 +153,7 @@ public class ContainerLetter extends ContainerItemInventory {
 		String typeName = packet.payload.stringPayload[1];
 
 		EnumAddressee type = EnumAddressee.fromString(typeName);
-		IMailAddress recipient = null;
+		IMailAddress recipient;
 		if (type == EnumAddressee.PLAYER) {
 			GameProfile gameProfile = MinecraftServer.getServer().func_152358_ax().func_152655_a(recipientName);
 			if (gameProfile == null)

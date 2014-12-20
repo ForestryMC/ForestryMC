@@ -230,12 +230,10 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		}
 
 		for (IButterflyMutation mutation : PluginLepidopterology.butterflyInterface.getMutations(true)) {
-			float chance = 0;
-
-			if ((chance = mutation.getChance(nursery, allele0, allele1, genome0, genome1)) > 0)
-				if (world.rand.nextFloat()*100 < chance) {
-					return PluginLepidopterology.butterflyInterface.templateAsChromosomes(mutation.getTemplate());
-				}
+			float chance = mutation.getChance(nursery, allele0, allele1, genome0, genome1);
+			if (chance > world.rand.nextFloat() * 100) {
+				return PluginLepidopterology.butterflyInterface.templateAsChromosomes(mutation.getTemplate());
+			}
 		}
 
 		return null;

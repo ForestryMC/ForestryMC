@@ -21,10 +21,9 @@ import net.minecraft.world.World;
 
 public class FarmableGenericSapling implements IFarmable {
 
-	final Block sapling;
-	final int saplingMeta;
-
-	ItemStack[] windfall;
+	private final Block sapling;
+	private final int saplingMeta;
+	private final ItemStack[] windfall;
 
 	public FarmableGenericSapling(Block sapling, int saplingMeta, ItemStack... windfall) {
 		this.sapling = sapling;

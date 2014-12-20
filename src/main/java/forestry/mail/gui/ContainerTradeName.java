@@ -24,13 +24,11 @@ import org.apache.commons.lang3.StringUtils;
 
 public class ContainerTradeName extends ContainerForestry {
 
-	boolean isLinked;
-	MachineTrader machine;
+	protected final MachineTrader machine;
 
 	public ContainerTradeName(InventoryPlayer player, MachineTrader tile) {
 		super(new InventoryAdapter(0, "Empty"));
 		machine = tile;
-		isLinked = machine.isLinked();
 	}
 
 	public IMailAddress getAddress() {

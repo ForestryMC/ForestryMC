@@ -24,7 +24,6 @@ public class AIButterflyMate extends AIButterflyInteract {
 
 	/**
 	 * Should lay egg?
-	 * @return
 	 */
 	@Override
 	protected boolean canInteract() {

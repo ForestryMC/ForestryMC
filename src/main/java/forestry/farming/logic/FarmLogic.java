@@ -31,11 +31,11 @@ import forestry.core.vect.Vect;
 
 public abstract class FarmLogic implements IFarmLogic {
 
-	IFarmHousing housing;
+	protected final IFarmHousing housing;
 
-	boolean isManual;
+	protected boolean isManual;
 
-	static HashSet<Block> breakable = new HashSet<Block>();
+	private static final HashSet<Block> breakable = new HashSet<Block>();
 
 	public FarmLogic(IFarmHousing housing) {
 		this.housing = housing;

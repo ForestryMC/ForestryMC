@@ -51,10 +51,7 @@ public class PickupHandlerStorage implements IPickupHandler {
 				backpack.tryStowing(player, pack, itemstack);
 		}
 
-		if (itemstack.stackSize <= 0)
-			return false;
-		else
-			return true;
+		return itemstack.stackSize > 0;
 	}
 
 	/**
@@ -85,7 +82,6 @@ public class PickupHandlerStorage implements IPickupHandler {
 				if (space > itemstack.stackSize) {
 					inventoryStack.stackSize += itemstack.stackSize;
 					itemstack.stackSize = 0;
-					itemstack = null;
 					break;
 					// Only part can be added
 				} else {

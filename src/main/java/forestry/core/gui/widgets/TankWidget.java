@@ -76,7 +76,7 @@ public class TankWidget extends Widget {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
 		while (true) {
-			int x = 0;
+			int x;
 
 			if (squaled > 16) {
 				x = 16;

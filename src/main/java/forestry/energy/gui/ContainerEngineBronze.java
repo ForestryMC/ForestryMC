@@ -24,17 +24,17 @@ public class ContainerEngineBronze extends ContainerLiquidTanks {
 		super(engine, engine);
 
 		this.engine = engine;
-		this.addSlot(new SlotLiquidContainer(engine, EngineBronze.SLOT_CAN, 143, 40));
+		this.addSlotToContainer(new SlotLiquidContainer(engine, EngineBronze.SLOT_CAN, 143, 40));
 
 		int i;
 		for (i = 0; i < 3; ++i) {
 			for (int var4 = 0; var4 < 9; ++var4) {
-				this.addSlot(new Slot(player, var4 + i * 9 + 9, 8 + var4 * 18, 84 + i * 18));
+				this.addSlotToContainer(new Slot(player, var4 + i * 9 + 9, 8 + var4 * 18, 84 + i * 18));
 			}
 		}
 
 		for (i = 0; i < 9; ++i) {
-			this.addSlot(new Slot(player, i, 8 + i * 18, 142));
+			this.addSlotToContainer(new Slot(player, i, 8 + i * 18, 142));
 		}
 
 	}

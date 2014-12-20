@@ -107,7 +107,7 @@ public class ItemBeverage extends ItemForestryFood {
 
 	}
 
-	public BeverageInfo[] beverages;
+	public final BeverageInfo[] beverages;
 
 	public ItemBeverage(BeverageInfo... beverages) {
 		super(1, 0.2f);

@@ -50,7 +50,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		}
 	}
 
-	private final short batterySlot = 0;
+	private static final short batterySlot = 0;
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
 	private final EuConfig euConfig = new EuConfig(Defaults.ENGINE_TIN_EU_FOR_CYCLE, Defaults.ENGINE_TIN_ENERGY_PER_CYCLE, Defaults.ENGINE_TIN_MAX_EU_STORED);
 

@@ -18,20 +18,17 @@ import net.minecraft.inventory.Slot;
 
 public class ContainerAlvearyHygroregulator extends ContainerLiquidTanks {
 
-	private final TileAlvearyHygroregulator tile;
-
 	public ContainerAlvearyHygroregulator(IInventory inventory, TileAlvearyHygroregulator tile) {
 		super(inventory, tile);
 
-		this.tile = tile;
-		this.addSlot(new SlotLiquidContainer(tile, 0, 56, 38));
+		this.addSlotToContainer(new SlotLiquidContainer(tile, 0, 56, 38));
 
 		for (int i = 0; i < 3; ++i)
 			for (int var4 = 0; var4 < 9; ++var4)
-				this.addSlot(new Slot(inventory, var4 + i * 9 + 9, 8 + var4 * 18, 84 + i * 18));
+				this.addSlotToContainer(new Slot(inventory, var4 + i * 9 + 9, 8 + var4 * 18, 84 + i * 18));
 
 		for (int i = 0; i < 9; ++i)
-			this.addSlot(new Slot(inventory, i, 8 + i * 18, 142));
+			this.addSlotToContainer(new Slot(inventory, i, 8 + i * 18, 142));
 
 	}
 

@@ -15,12 +15,11 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
 
 public class GuiTextBox extends GuiTextField {
+	private static final int enabledColor = 14737632;
+	private static final int disabledColor = 7368816;
 
 	private final FontRenderer fontRendererObj;
-
 	private final int startX, startY, width, height;
-	private final int enabledColor = 14737632;
-	private final int disabledColor = 7368816;
 
 	private int lineScroll = 0;
 	private int maxLines = 0;

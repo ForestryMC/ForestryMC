@@ -43,8 +43,8 @@ public class FruitProviderNone implements IFruitProvider {
 		overlayTypes.put("plums", new OverlayType("plums", (short) 1004));
 	}
 
-	String key;
-	IFruitFamily family = null;
+	private final String key;
+	private final IFruitFamily family;
 
 	int ripeningPeriod = 10;
 

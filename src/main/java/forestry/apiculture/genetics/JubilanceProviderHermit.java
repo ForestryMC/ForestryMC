@@ -28,10 +28,7 @@ public class JubilanceProviderHermit extends JubilanceDefault {
 
 		@SuppressWarnings("rawtypes")
 		List list = housing.getWorld().getEntitiesWithinAABB(EntityLiving.class, bounding);
-		if (list.size() > 0)
-			return false;
-
-		return true;
+		return list.size() <= 0;
 	}
 
 }

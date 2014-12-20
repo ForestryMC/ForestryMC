@@ -32,26 +32,26 @@ public class ContainerTrader extends ContainerForestry {
 		IInventory inventory = machine.getOrCreateTradeInventory();
 
 		// Trade good
-		this.addSlot(new Slot(inventory, TradeStation.SLOT_TRADEGOOD, 78, 109));
+		this.addSlotToContainer(new Slot(inventory, TradeStation.SLOT_TRADEGOOD, 78, 109));
 
 		// Exchange
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
-				addSlot(new Slot(inventory, TradeStation.SLOT_EXCHANGE_1 + j + i * 2, 69 + j * 18, 55 + i * 18));
+				addSlotToContainer(new Slot(inventory, TradeStation.SLOT_EXCHANGE_1 + j + i * 2, 69 + j * 18, 55 + i * 18));
 			}
 		}
 
 		// Stamps
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
-				addSlot(new SlotCustom(inventory, TradeStation.SLOT_STAMPS_1 + j + i * 2, 15 + j * 18, 37 + i * 18, ItemStamps.class));
+				addSlotToContainer(new SlotCustom(inventory, TradeStation.SLOT_STAMPS_1 + j + i * 2, 15 + j * 18, 37 + i * 18, ItemStamps.class));
 			}
 		}
 
 		// Letters
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 2; j++) {
-				addSlot(new SlotCustom(inventory, TradeStation.SLOT_LETTERS_1 + j + i * 2, 15 + j * 18, 73 + i * 18, Items.paper));
+				addSlotToContainer(new SlotCustom(inventory, TradeStation.SLOT_LETTERS_1 + j + i * 2, 15 + j * 18, 73 + i * 18, Items.paper));
 			}
 		}
 
@@ -59,25 +59,25 @@ public class ContainerTrader extends ContainerForestry {
 		final int bufCols = 5;
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < bufCols; j++) {
-				addSlot(new Slot(inventory, TradeStation.SLOT_RECEIVE_BUFFER + j + i * bufCols, 123 + j * 18, 19 + i * 18));
+				addSlotToContainer(new Slot(inventory, TradeStation.SLOT_RECEIVE_BUFFER + j + i * bufCols, 123 + j * 18, 19 + i * 18));
 			}
 		}
 
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < bufCols; j++) {
-				addSlot(new Slot(inventory, TradeStation.SLOT_SEND_BUFFER + j + i * bufCols, 123 + j * 18, (19 + (18 * 4)) + i * 18));
+				addSlotToContainer(new Slot(inventory, TradeStation.SLOT_SEND_BUFFER + j + i * bufCols, 123 + j * 18, (19 + (18 * 4)) + i * 18));
 			}
 		}
 
 		// Player inventory
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
-				addSlot(new Slot(player, j + i * 9 + 9, 33 + j * 18, 138 + i * 18));
+				addSlotToContainer(new Slot(player, j + i * 9 + 9, 33 + j * 18, 138 + i * 18));
 			}
 		}
 		// Player hotbar
 		for (int i = 0; i < 9; i++) {
-			addSlot(new Slot(player, i, 33 + i * 18, 196));
+			addSlotToContainer(new Slot(player, i, 33 + i * 18, 196));
 		}
 
 	}

@@ -99,8 +99,7 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 		}
 
 		public static Recipe findMatchingRecipe(ItemStack item) {
-			for (int i = 0; i < recipes.size(); i++) {
-				Recipe recipe = recipes.get(i);
+			for (Recipe recipe : recipes) {
 				if (recipe.matches(item))
 					return recipe;
 			}

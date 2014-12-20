@@ -61,15 +61,11 @@ public class PostalCarrier implements IPostalCarrier {
 	}
 
 	private IPostalState handleTradeLetter(World world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
-		IPostalState state = EnumDeliveryState.NOT_MAILABLE;
-
 		ITradeStation trade = PostManager.postRegistry.getTradeStation(world, recipient);
 		if (trade == null)
 			return EnumDeliveryState.NO_MAILBOX;
 
-		state = trade.handleLetter(world, recipient, letterstack, doLodge);
-
-		return state;
+		return trade.handleLetter(world, recipient, letterstack, doLodge);
 	}
 
 	private EnumDeliveryState storeInPOBox(World world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {

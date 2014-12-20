@@ -99,12 +99,12 @@ public class PluginLepidopterology extends ForestryPlugin {
 		config = new Configuration();
 
 		Property property = config.get("entities.spawn.limit", CONFIG_CATEGORY, spawnConstraint);
-		property.Comment = "determines the global butterfly entity count above which natural spawning of butterflies ceases.";
-		spawnConstraint = Integer.parseInt(property.Value);
+		property.comment = "determines the global butterfly entity count above which natural spawning of butterflies ceases.";
+		spawnConstraint = Integer.parseInt(property.value);
 
 		property = config.get("entities.maximum.allowed", CONFIG_CATEGORY, entityConstraint);
-		property.Comment = "determines the global butterfly entity count above which butterflies will stay in item form and will not take flight anymore.";
-		entityConstraint = Integer.parseInt(property.Value);
+		property.comment = "determines the global butterfly entity count above which butterflies will stay in item form and will not take flight anymore.";
+		entityConstraint = Integer.parseInt(property.value);
 
 		config.save();
 

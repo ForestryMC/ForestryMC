@@ -26,8 +26,8 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class ForestryPacket {
 
+	protected static final String channel = "FOR";
 	protected int id;
-	protected static String channel = "FOR";
 
 	public ForestryPacket() {
 	}

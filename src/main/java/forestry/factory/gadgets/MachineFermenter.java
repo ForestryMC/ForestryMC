@@ -137,8 +137,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		}
 
 		public static Recipe findMatchingRecipe(ItemStack res, FluidStack liqu) {
-			for (int i = 0; i < recipes.size(); i++) {
-				Recipe recipe = recipes.get(i);
+			for (Recipe recipe : recipes) {
 				if (recipe.matches(res, liqu))
 					return recipe;
 			}

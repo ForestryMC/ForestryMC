@@ -24,7 +24,7 @@ import net.minecraft.tileentity.TileEntity;
 
 public class ContainerSocketed extends ContainerForestry {
 
-	ISocketable tile;
+	private final ISocketable tile;
 
 	public ContainerSocketed(IInventory inventory, ISocketable tile) {
 		super(inventory);

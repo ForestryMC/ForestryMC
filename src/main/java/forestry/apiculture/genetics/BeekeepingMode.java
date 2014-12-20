@@ -141,10 +141,7 @@ public class BeekeepingMode implements IBeekeepingMode {
 	
 	@Override
 	public boolean isNaturalOffspring(IBee queen) {
-		if (!queen.isNatural())
-			return false;
-
-		return true;
+		return queen.isNatural();
 	}
 
 	@Override

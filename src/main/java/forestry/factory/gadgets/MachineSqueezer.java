@@ -337,10 +337,7 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 	private boolean addProduct(FluidStack stack) {
 		stack.amount -= productTank.fill(stack, true);
 
-		if (stack.amount <= 0)
-			return true;
-		else
-			return false;
+		return stack.amount <= 0;
 	}
 
 	private boolean addRemnant(ItemStack stack) {

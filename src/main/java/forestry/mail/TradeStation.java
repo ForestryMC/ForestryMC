@@ -585,7 +585,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, ISide
 
 		int[] slotsInt = new int[slots.size()];
 		for (int i = 0; i < slots.size(); i++)
-			slotsInt[i] = slots.get(i).intValue();
+			slotsInt[i] = slots.get(i);
 
 		return slotsInt;
 	}

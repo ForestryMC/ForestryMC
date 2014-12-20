@@ -27,7 +27,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 public abstract class FarmLogicWatered extends FarmLogic {
 
-	protected ItemStack ground;
+	protected final ItemStack ground;
 	private final ItemStack[] resource;
 
 	private static final FluidStack STACK_WATER = Fluids.WATER.get(1000);

@@ -39,7 +39,7 @@ public class FruitProviderPod extends FruitProviderNone {
 		}
 	}
 
-	private static ItemStack[] DUMMY = new ItemStack[0];
+	private static final ItemStack[] DUMMY = new ItemStack[0];
 
 	private final EnumPodType type;
 	private final ItemStack[] drop;

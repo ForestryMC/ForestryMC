@@ -228,10 +228,6 @@ public class ItemLetter extends ItemInventoried {
 	public static int encodeMeta(int state, int size) {
 		int meta = size << 4;
 		meta |= state;
-
-		size = getSize(meta);
-		state = getState(meta);
-
 		return meta;
 	}
 

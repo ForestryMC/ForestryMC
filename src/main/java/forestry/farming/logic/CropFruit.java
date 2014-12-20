@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 
 public class CropFruit extends Crop {
 
-	IFruitFamily family;
+	private final IFruitFamily family;
 
 	public CropFruit(World world, Vect position, IFruitFamily family) {
 		super(world, position);

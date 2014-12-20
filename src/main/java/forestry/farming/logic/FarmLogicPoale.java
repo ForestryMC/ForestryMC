@@ -29,7 +29,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class FarmLogicPoale extends FarmLogic {
 
-	IFarmable[] germlings;
+	private final IFarmable[] germlings;
 
 	public FarmLogicPoale(IFarmHousing housing) {
 		super(housing);

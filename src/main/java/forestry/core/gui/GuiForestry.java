@@ -406,53 +406,7 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 	public void drawGradientRect(int par1, int par2, int par3, int par4, int par5, int par6) {
 		super.drawGradientRect(par1, par2, par3, par4, par5, par6);
 	}
-	//
-	//	protected void drawGuiContainerForegroundLayer() {
-	//	}
 
-	/**
-	 * Draws the basic background texture centered on the screen.
-	 */
-	//	protected void drawBackground() {
-	//		drawBackground((this.width - this.xSize) / 2, (this.height - this.ySize) / 2, this.xSize, this.ySize);
-	//	}
-	//	protected void drawBackground(int x, int y, int w, int h) {
-	//		bindTexture();
-	//		this.drawTexturedModalRect(x, y, 0, 0, w, h);
-	//	}
-	//	protected void bindTexture() {
-	//		bindTexture(textureFile);
-	//	}
-	//
-	//	protected void drawSlotInventory(Slot slot) {
-	//
-	//		int xPos = slot.xDisplayPosition;
-	//		int yPos = slot.yDisplayPosition;
-	//		ItemStack slotStack = slot.getStack();
-	//		boolean backgroundDrawn = false;
-	//
-	//		this.zLevel = 100.0F;
-	//		itemRenderer.zLevel = 100.0F;
-	//
-	//		if (slotStack == null) {
-	//			IIcon icon = slot.getBackgroundIconIndex();
-	//
-	//			if (icon != null) {
-	//				GL11.glDisable(GL11.GL_LIGHTING);
-	//				GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
-	//				Proxies.common.bindTexture(SpriteSheet.ITEMS);
-	//				this.drawTexturedModelRectFromIcon(xPos, yPos, icon, 16, 16);
-	//				GL11.glEnable(GL11.GL_LIGHTING);
-	//				backgroundDrawn = true;
-	//			}
-	//		}
-	//
-	//		if (!backgroundDrawn && slotStack != null)
-	//			drawItemStack(slotStack, xPos, yPos);
-	//
-	//		this.zLevel = 0.0F;
-	//		itemRenderer.zLevel = 0.0F;
-	//	}
 	public void drawItemStack(ItemStack stack, int xPos, int yPos) {
 		GL11.glTranslatef(0.0F, 0.0F, 32.0F);
 		this.zLevel = 100.0F;
@@ -469,7 +423,7 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 	}
 
 	protected class ItemStackWidget extends Widget {
-		ItemStack itemStack;
+		private final ItemStack itemStack;
 
 		public ItemStackWidget(int xPos, int yPos, ItemStack itemStack) {
 			super(widgetManager, xPos, yPos);

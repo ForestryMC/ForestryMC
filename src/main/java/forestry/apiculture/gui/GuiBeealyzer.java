@@ -40,8 +40,6 @@ public class GuiBeealyzer extends GuiAlyzer {
 		((ItemBeeGE) ForestryItem.beeDroneGE.item()).addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList)
 			iconStacks.put(BeeGenome.getSpecies(beeStack).getUID(), beeStack);
-
-		breedingTracker = PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, player.getGameProfile());
 	}
 
 	@Override

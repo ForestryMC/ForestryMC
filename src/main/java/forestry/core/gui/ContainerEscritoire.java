@@ -41,24 +41,24 @@ public class ContainerEscritoire extends ContainerForestry implements IGuiSelect
 		filters.add(Blocks.sapling);
 		filters.addAll(AlleleManager.alleleRegistry.getSpeciesRoot().values());
 		// Analyze slot
-		addSlot(new SlotCustom(tile, TileEscritoire.SLOT_ANALYZE, 97, 67, filters.toArray()).setCrafter(tile));
+		addSlotToContainer(new SlotCustom(tile, TileEscritoire.SLOT_ANALYZE, 97, 67, filters.toArray()).setCrafter(tile));
 
 		for (int i = 0; i < TileEscritoire.SLOTS_INPUT_COUNT; i++) {
-			addSlot(new SlotCustom(tile, TileEscritoire.SLOT_INPUT_1 + i, 17, 49 + i * 18).setExclusion(true).setBlockedTexture("slots/blocked_2"));
+			addSlotToContainer(new SlotCustom(tile, TileEscritoire.SLOT_INPUT_1 + i, 17, 49 + i * 18).setExclusion(true).setBlockedTexture("slots/blocked_2"));
 		}
 
 		for(int i = 0; i < 3; i++)
 			for(int j = 0; j < 2; j++) {
-				addSlot(new SlotClosed(tile, TileEscritoire.SLOT_RESULTS_1 + (i*2) + j, 177 + j*18, 85 + i*18));
+				addSlotToContainer(new SlotClosed(tile, TileEscritoire.SLOT_RESULTS_1 + (i * 2) + j, 177 + j * 18, 85 + i * 18));
 			}
 
 		// Player inventory
 		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < 9; j++)
-				addSlot(new Slot(player.inventory, j + i * 9 + 9, 34 + j * 18, 153 + i * 18));
+				addSlotToContainer(new Slot(player.inventory, j + i * 9 + 9, 34 + j * 18, 153 + i * 18));
 		// Player hotbar
 		for (int k = 0; k < 9; k++)
-			addSlot(new Slot(player.inventory, k, 34 + k * 18, 211));
+			addSlotToContainer(new Slot(player.inventory, k, 34 + k * 18, 211));
 	}
 
 	@Override

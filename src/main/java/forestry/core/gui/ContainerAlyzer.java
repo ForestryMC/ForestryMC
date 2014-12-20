@@ -19,17 +19,17 @@ public class ContainerAlyzer extends ContainerItemInventory {
 		final int xPosLeftSlots = 223;
 
 		// Energy
-		this.addSlot(new SlotCustom(inventory, AlyzerInventory.SLOT_ENERGY, xPosLeftSlots, 8, acceptedEnergy));
+		this.addSlotToContainer(new SlotCustom(inventory, AlyzerInventory.SLOT_ENERGY, xPosLeftSlots, 8, acceptedEnergy));
 
 		// Bee to analyze
-		this.addSlot(new SlotCustom(inventory, AlyzerInventory.SLOT_SPECIMEN, xPosLeftSlots, 26, acceptedSpecimens));
+		this.addSlotToContainer(new SlotCustom(inventory, AlyzerInventory.SLOT_SPECIMEN, xPosLeftSlots, 26, acceptedSpecimens));
 
 		// Analyzed bee
-		this.addSlot(new SlotCustom(inventory, AlyzerInventory.SLOT_ANALYZE_1, xPosLeftSlots, 57, acceptedSpecimens));
-		this.addSlot(new SlotCustom(inventory, AlyzerInventory.SLOT_ANALYZE_2, xPosLeftSlots, 75, acceptedSpecimens));
-		this.addSlot(new SlotCustom(inventory, AlyzerInventory.SLOT_ANALYZE_3, xPosLeftSlots, 93, acceptedSpecimens));
-		this.addSlot(new SlotCustom(inventory, AlyzerInventory.SLOT_ANALYZE_4, xPosLeftSlots, 111, acceptedSpecimens));
-		this.addSlot(new SlotCustom(inventory, AlyzerInventory.SLOT_ANALYZE_5, xPosLeftSlots, 129, acceptedSpecimens));
+		this.addSlotToContainer(new SlotCustom(inventory, AlyzerInventory.SLOT_ANALYZE_1, xPosLeftSlots, 57, acceptedSpecimens));
+		this.addSlotToContainer(new SlotCustom(inventory, AlyzerInventory.SLOT_ANALYZE_2, xPosLeftSlots, 75, acceptedSpecimens));
+		this.addSlotToContainer(new SlotCustom(inventory, AlyzerInventory.SLOT_ANALYZE_3, xPosLeftSlots, 93, acceptedSpecimens));
+		this.addSlotToContainer(new SlotCustom(inventory, AlyzerInventory.SLOT_ANALYZE_4, xPosLeftSlots, 111, acceptedSpecimens));
+		this.addSlotToContainer(new SlotCustom(inventory, AlyzerInventory.SLOT_ANALYZE_5, xPosLeftSlots, 129, acceptedSpecimens));
 
 		final int xPosPlayerInv = 43;
 		final int xSpacePlayerInv = 18;

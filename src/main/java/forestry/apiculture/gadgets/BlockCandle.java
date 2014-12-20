@@ -107,7 +107,7 @@ public class BlockCandle extends BlockTorch {
 
 	@SideOnly(Side.CLIENT)
 	public IIcon getTextureFromPassAndMeta(int meta, int pass) {
-		IIcon i = this.unlitStump;
+		IIcon i;
 		if (pass == 0) {
 			if (isLit(meta)) {
 				i = this.litTip;

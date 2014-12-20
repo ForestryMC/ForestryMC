@@ -221,9 +221,6 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised, 
 
 	/**
 	 * Returns scaled queen health or breeding progress
-	 *
-	 * @param i
-	 * @return
 	 */
 	public int getHealthScaled(int i) {
 		if (getMaxHealthDisplay() == 0)

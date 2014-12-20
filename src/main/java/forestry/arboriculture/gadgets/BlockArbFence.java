@@ -93,10 +93,7 @@ public class BlockArbFence extends BlockFence implements IWoodTyped {
 
 	public boolean isFence(IBlockAccess world, int x, int y, int z) {
 		Block block = world.getBlock(x, y, z);
-		if (PluginArboriculture.validFences.contains(block))
-			return true;
-
-		return false;
+		return PluginArboriculture.validFences.contains(block);
 	}
 
 	/* PROPERTIES */

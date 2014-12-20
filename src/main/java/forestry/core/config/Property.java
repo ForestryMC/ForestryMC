@@ -11,12 +11,12 @@
 package forestry.core.config;
 
 public class Property {
-	public String Key;
-	public String Value;
-	public String Comment;
+	public final String key;
+	public String value;
+	public String comment;
 
 	public Property(String key, String value) {
-		Key = key;
-		Value = value;
+		this.key = key;
+		this.value = value;
 	}
 }

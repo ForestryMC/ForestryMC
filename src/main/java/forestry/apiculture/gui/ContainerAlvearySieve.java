@@ -10,40 +10,38 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import forestry.apiculture.gadgets.TileAlvearySieve;
-import forestry.core.config.ForestryItem;
-import forestry.core.gui.ContainerForestry;
-import forestry.core.gui.slots.SlotCustom;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 
-public class ContainerAlvearySieve extends ContainerForestry {
+import forestry.apiculture.gadgets.TileAlvearySieve;
+import forestry.core.config.ForestryItem;
+import forestry.core.gui.ContainerForestry;
+import forestry.core.gui.slots.SlotCustom;
 
-	private final TileAlvearySieve tile;
+public class ContainerAlvearySieve extends ContainerForestry {
 
 	public ContainerAlvearySieve(InventoryPlayer player, TileAlvearySieve tile) {
 		super(tile.getInternalInventory());
 
-		this.tile = tile;
 		IInventory inventory = tile.getInternalInventory();
 
-		addSlot(new SlotCustom(inventory, 0, 94, 52).setCrafter(tile));
-		addSlot(new SlotCustom(inventory, 1, 115, 39).setCrafter(tile));
-		addSlot(new SlotCustom(inventory, 2, 73, 39).setCrafter(tile));
-		addSlot(new SlotCustom(inventory, 3, 94, 26).setCrafter(tile));
+		addSlotToContainer(new SlotCustom(inventory, 0, 94, 52).setCrafter(tile));
+		addSlotToContainer(new SlotCustom(inventory, 1, 115, 39).setCrafter(tile));
+		addSlotToContainer(new SlotCustom(inventory, 2, 73, 39).setCrafter(tile));
+		addSlotToContainer(new SlotCustom(inventory, 3, 94, 26).setCrafter(tile));
 
-		addSlot(new SlotCustom(inventory, TileAlvearySieve.SLOT_SIEVE, 43, 39, ForestryItem.craftingMaterial.getItemStack(1, 3)).setCrafter(tile));
+		addSlotToContainer(new SlotCustom(inventory, TileAlvearySieve.SLOT_SIEVE, 43, 39, ForestryItem.craftingMaterial.getItemStack(1, 3)).setCrafter(tile));
 
 		// Player inventory
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
-				addSlot(new Slot(player, j + i * 9 + 9, 8 + j * 18, 87 + i * 18));
+				addSlotToContainer(new Slot(player, j + i * 9 + 9, 8 + j * 18, 87 + i * 18));
 			}
 		}
 		// Player hotbar
 		for (int i = 0; i < 9; i++) {
-			addSlot(new Slot(player, i, 8 + i * 18, 145));
+			addSlotToContainer(new Slot(player, i, 8 + i * 18, 145));
 		}
 
 	}

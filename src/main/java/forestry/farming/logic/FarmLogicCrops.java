@@ -33,7 +33,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 public abstract class FarmLogicCrops extends FarmLogicWatered {
 
 	private final IFarmable[] seeds;
-	private static ItemStack farmland = new ItemStack(Blocks.farmland, 1, Defaults.WILDCARD);
+	private static final ItemStack farmland = new ItemStack(Blocks.farmland, 1, Defaults.WILDCARD);
 
 	public FarmLogicCrops(IFarmHousing housing, IFarmable[] seeds) {
 		super(housing,

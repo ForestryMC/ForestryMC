@@ -199,9 +199,6 @@ public class EngineCopper extends Engine implements ISidedInventory {
 
 	/**
 	 * Returns the fuel value (power per cycle) an item of the passed ItemStack provides
-	 * 
-	 * @param fuel
-	 * @return
 	 */
 	private int determineFuelValue(ItemStack fuel) {
 		if (FuelManager.copperEngineFuel.containsKey(fuel))
@@ -212,9 +209,6 @@ public class EngineCopper extends Engine implements ISidedInventory {
 
 	/**
 	 * Returns the fuel value (power per cycle) an item of the passed ItemStack provides
-	 * 
-	 * @param fuel
-	 * @return
 	 */
 	private int determineBurnDuration(ItemStack fuel) {
 		if (FuelManager.copperEngineFuel.containsKey(fuel))
@@ -275,10 +269,6 @@ public class EngineCopper extends Engine implements ISidedInventory {
 	}
 
 	// / LOADING AND SAVING
-	/**
-	 * Reads saved data
-	 * @param nbttagcompound
-	 */
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
@@ -295,10 +285,6 @@ public class EngineCopper extends Engine implements ISidedInventory {
 			ashProduction = nbttagcompound.getInteger("AshProduction");
 	}
 
-	/**
-	 * Writes data to save
-	 * @param nbttagcompound
-	 */
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);

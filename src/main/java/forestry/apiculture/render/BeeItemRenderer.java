@@ -44,7 +44,7 @@ public class BeeItemRenderer implements IItemRenderer {
 
 	public static float getIrregularWingYaw(long flapping, float flap) {
 		long irregular = flapping / 1000;
-		float wingYaw = 1f;
+		float wingYaw;
 
 		if(irregular % 11 == 0) {
 			wingYaw = 0.75f;

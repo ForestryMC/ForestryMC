@@ -51,7 +51,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	private final int primaryColour;
 	private final int secondaryColour;
 
-	private final String iconType = "default";
+	private static final String iconType = "default";
 
 	public AlleleBeeSpecies(String uid, boolean dominant, String name, IClassification branch, int primaryColor, int secondaryColor) {
 		this(uid, dominant, name, branch, null, primaryColor, secondaryColor);

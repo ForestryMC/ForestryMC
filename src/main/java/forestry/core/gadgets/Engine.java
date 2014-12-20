@@ -68,7 +68,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 	protected final int maxHeat;
 	protected boolean forceCooldown = false;
 	public float progress;
-	protected EnergyManager energyManager;
+	protected final EnergyManager energyManager;
 
 	public Engine(int maxHeat, int maxEnergy, int maxEnergyExtracted) {
 		this.maxHeat = maxHeat;
@@ -85,11 +85,6 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 		rotateEngine();
 	}
 
-	/**
-	 * Adds heat
-	 *
-	 * @param i
-	 */
 	protected void addHeat(int i) {
 		heat += i;
 
@@ -227,8 +222,6 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 
 	/**
 	 * Returns the current energy state of the engine
-	 *
-	 * @return
 	 */
 	public TemperatureState getTemperatureState() {
 		// double scaledStorage = (double)storedEnergy / (double)maxEnergy;
@@ -248,11 +241,6 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 			return TemperatureState.MELTING;
 	}
 
-	/**
-	 * Piston speed
-	 *
-	 * @return
-	 */
 	public float getPistonSpeed() {
 		switch (getTemperatureState()) {
 		case COOL:

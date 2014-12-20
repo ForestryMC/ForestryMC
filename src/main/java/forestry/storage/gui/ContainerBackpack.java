@@ -43,7 +43,7 @@ public class ContainerBackpack extends ContainerItemInventory {
 		for (int j = 0; j < lines; j++)
 			for (int k = 0; k < columns; k++) {
 				int slot = k + j * columns;
-				addSlot(new SlotForestry(inventory, slot, startX + k * 18, startY + j * 18) {
+				addSlotToContainer(new SlotForestry(inventory, slot, startX + k * 18, startY + j * 18) {
 
 					@Override
 					public boolean isItemValid(ItemStack stack) {

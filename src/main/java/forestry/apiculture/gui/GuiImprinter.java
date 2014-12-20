@@ -102,8 +102,8 @@ public class GuiImprinter extends GuiForestry<TileForestry> {
 		int cornerX = (width - xSize) / 2;
 		int cornerY = (height - ySize) / 2;
 
-		int slot = 0;
-		if ((slot = getHabitatSlotAtPosition(i - cornerX, j - cornerY)) < 0)
+		int slot = getHabitatSlotAtPosition(i - cornerX, j - cornerY);
+		if (slot < 0)
 			return;
 
 		if (k == 0)

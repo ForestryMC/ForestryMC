@@ -25,19 +25,19 @@ public class ContainerBottler extends ContainerLiquidTanks {
 		super(tile, tile);
 
 		this.tile = tile;
-		this.addSlot(new SlotLiquidContainer(tile, MachineBottler.SLOT_RESOURCE, 116, 19, true));
-		this.addSlot(new SlotClosed(tile, MachineBottler.SLOT_PRODUCT, 116, 55));
-		this.addSlot(new SlotLiquidContainer(tile, MachineBottler.SLOT_CAN, 26, 38));
+		this.addSlotToContainer(new SlotLiquidContainer(tile, MachineBottler.SLOT_RESOURCE, 116, 19, true));
+		this.addSlotToContainer(new SlotClosed(tile, MachineBottler.SLOT_PRODUCT, 116, 55));
+		this.addSlotToContainer(new SlotLiquidContainer(tile, MachineBottler.SLOT_CAN, 26, 38));
 
 		int var3;
 		for (var3 = 0; var3 < 3; ++var3) {
 			for (int var4 = 0; var4 < 9; ++var4) {
-				this.addSlot(new Slot(player, var4 + var3 * 9 + 9, 8 + var4 * 18, 84 + var3 * 18));
+				this.addSlotToContainer(new Slot(player, var4 + var3 * 9 + 9, 8 + var4 * 18, 84 + var3 * 18));
 			}
 		}
 
 		for (var3 = 0; var3 < 9; ++var3) {
-			this.addSlot(new Slot(player, var3, 8 + var3 * 18, 142));
+			this.addSlotToContainer(new Slot(player, var3, 8 + var3 * 18, 142));
 		}
 
 	}

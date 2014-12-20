@@ -24,20 +24,20 @@ public class ContainerPhilatelist extends ContainerForestry {
 		super(tile);
 
 		// Filter
-		addSlot(new SlotCustom(tile, MachinePhilatelist.SLOT_FILTER, 80, 19, ItemStamps.class));
+		addSlotToContainer(new SlotCustom(tile, MachinePhilatelist.SLOT_FILTER, 80, 19, ItemStamps.class));
 
 		// Collected Stamps
 		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < 9; j++)
-				addSlot(new SlotClosed(tile, j + i * 9 + MachinePhilatelist.SLOT_BUFFER_1, 8 + j * 18, 46 + i * 18));
+				addSlotToContainer(new SlotClosed(tile, j + i * 9 + MachinePhilatelist.SLOT_BUFFER_1, 8 + j * 18, 46 + i * 18));
 
 		// Player inventory
 		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < 9; j++)
-				addSlot(new Slot(player, j + i * 9 + 9, 8 + j * 18, 111 + i * 18));
+				addSlotToContainer(new Slot(player, j + i * 9 + 9, 8 + j * 18, 111 + i * 18));
 		// Player hotbar
 		for (int i = 0; i < 9; i++)
-			addSlot(new Slot(player, i, 8 + i * 18, 169));
+			addSlotToContainer(new Slot(player, i, 8 + i * 18, 169));
 
 	}
 

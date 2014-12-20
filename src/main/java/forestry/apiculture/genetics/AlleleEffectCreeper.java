@@ -22,8 +22,8 @@ import net.minecraft.world.World;
 
 public class AlleleEffectCreeper extends AlleleEffectThrottled {
 
-	private final int explosionChance = 50;
-	private final byte defaultForce = 12;
+	private static final int explosionChance = 50;
+	private static final byte defaultForce = 12;
 	private final byte indexExplosionTimer = 1;
 	private final byte indexExplosionForce = 2;
 
