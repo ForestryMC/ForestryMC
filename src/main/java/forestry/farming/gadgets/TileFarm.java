@@ -10,8 +10,16 @@
  ******************************************************************************/
 package forestry.farming.gadgets;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IStructureLogic;
 import forestry.api.core.ITileStructure;
@@ -22,16 +30,6 @@ import forestry.core.gadgets.TileForestry;
 import forestry.core.network.GuiId;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 
 public abstract class TileFarm extends TileForestry implements IFarmComponent {
 
@@ -43,74 +41,6 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	public static final int TYPE_HATCH = 5;
 	public static final int TYPE_VALVE = 6;
 	public static final int TYPE_CONTROL = 7;
-
-	public enum EnumFarmBlock {
-
-		BRICK_STONE(new ItemStack(Blocks.stonebrick, 1, 0)),
-		BRICK_MOSSY(new ItemStack(Blocks.stonebrick, 1, 1)),
-		BRICK_CRACKED(new ItemStack(Blocks.stonebrick, 1, 2)),
-		BRICK(new ItemStack(Blocks.brick_block)),
-		SANDSTONE_SMOOTH(new ItemStack(Blocks.sandstone, 1, 2)),
-		SANDSTONE_CHISELED(new ItemStack(Blocks.sandstone, 1, 1)),
-		BRICK_NETHER(new ItemStack(Blocks.nether_brick)),
-		BRICK_CHISELED(new ItemStack(Blocks.stonebrick, 1, 3)),
-		QUARTZ(new ItemStack(Blocks.quartz_block, 1, 0)),
-		QUARTZ_CHISELED(new ItemStack(Blocks.quartz_block, 1, 1)),
-		QUARTZ_LINES(new ItemStack(Blocks.quartz_block, 1, 2));
-		public final ItemStack base;
-
-		private EnumFarmBlock(ItemStack base) {
-			this.base = base;
-		}
-		@SideOnly(Side.CLIENT)
-		private static IIcon[] icons;
-
-		@SideOnly(Side.CLIENT)
-		public static void registerIcons(IIconRegister register) {
-
-			icons = new IIcon[8];
-			// for(int i = 0; i < values().length; i++) {
-			// generateTexturesIfNeeded(values()[i]);
-
-			icons[0] = TextureManager.getInstance().registerTex(register, "farm/plain");
-			icons[1] = TextureManager.getInstance().registerTex(register, "farm/reverse");
-			icons[2] = TextureManager.getInstance().registerTex(register, "farm/top");
-			icons[3] = TextureManager.getInstance().registerTex(register, "farm/band");
-			icons[4] = TextureManager.getInstance().registerTex(register, "farm/gears");
-			icons[5] = TextureManager.getInstance().registerTex(register, "farm/hatch");
-			icons[6] = TextureManager.getInstance().registerTex(register, "farm/valve");
-			icons[7] = TextureManager.getInstance().registerTex(register, "farm/control");
-			// }
-		}
-
-		@SideOnly(Side.CLIENT)
-		public IIcon getIcon(int type) {
-			return icons[type];
-		}
-
-		public void saveToCompound(NBTTagCompound compound) {
-			compound.setInteger("FarmBlock", this.ordinal());
-		}
-
-		public String getName() {
-			return base.getItem().getItemStackDisplayName(base);
-		}
-
-		public ItemStack getCraftingIngredient() {
-			return base;
-		}
-
-		public static EnumFarmBlock getFromCompound(NBTTagCompound compound) {
-
-			if (compound != null) {
-				int farmBlockOrdinal = compound.getInteger("FarmBlock");
-				if (farmBlockOrdinal < EnumFarmBlock.values().length)
-					return EnumFarmBlock.values()[farmBlockOrdinal];
-			}
-
-			return EnumFarmBlock.BRICK_STONE;
-		}
-	}
 
 	public TileFarm() {
 		this.structureLogic = Farmables.farmInterface.createFarmStructureLogic(this);
