@@ -58,8 +58,6 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	/* SAVING & LOADING */
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-
 		this.isMaster = nbttagcompound.getBoolean("IsMaster");
 		this.masterX = nbttagcompound.getInteger("MasterX");
 		this.masterY = nbttagcompound.getInteger("MasterY");
@@ -72,6 +70,8 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 			makeMaster();
 
 		structureLogic.readFromNBT(nbttagcompound);
+
+		super.readFromNBT(nbttagcompound);
 	}
 
 	@Override
