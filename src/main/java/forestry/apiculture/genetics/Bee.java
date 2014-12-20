@@ -336,7 +336,7 @@ public class Bee extends IndividualLiving implements IBee {
 		IAlleleTolerance tempTolerance = (IAlleleTolerance)getGenome().getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
 		list.add("\u00A7aT: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / " + tempTolerance.getName());
 
-		IAlleleTolerance humidTolerance = (IAlleleTolerance)getGenome().getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
+		IAlleleTolerance humidTolerance = (IAlleleTolerance)getGenome().getActiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE);
 		list.add("\u00A7aH: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / " + humidTolerance.getName());
 
 		list.add(genome.getFlowerProvider().getDescription());
