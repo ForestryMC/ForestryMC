@@ -10,18 +10,9 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.core.fluids.FluidHelper;
-import forestry.core.interfaces.IOwnable;
-import forestry.core.items.ItemNBTTile;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.EnumAccess;
-import forestry.core.utils.PlayerUtil;
-import forestry.core.utils.StringUtil;
-import forestry.core.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -35,9 +26,20 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.IFluidHandler;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.core.fluids.FluidHelper;
+import forestry.core.interfaces.IOwnable;
+import forestry.core.items.ItemNBTTile;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.StringUtil;
+import forestry.core.utils.Utils;
 
 public class BlockBase extends BlockForestry {
 

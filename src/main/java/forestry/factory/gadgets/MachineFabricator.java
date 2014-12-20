@@ -10,6 +10,23 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTTagCompound;
+
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.IFabricatorManager;
@@ -31,22 +48,6 @@ import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.GuiId;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
 
 public class MachineFabricator extends TilePowered implements ICrafter, ILiquidTankContainer, ISidedInventory {
 
