@@ -10,6 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
+
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.apiculture.genetics.BeeGenome;
 import forestry.apiculture.items.ItemBeeGE;
@@ -20,10 +29,6 @@ import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.GuiForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
-import java.util.ArrayList;
-import java.util.HashMap;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
 
 public class GuiImprinter extends GuiForestry<TileForestry> {
 
@@ -33,7 +38,7 @@ public class GuiImprinter extends GuiForestry<TileForestry> {
 	private int startX;
 	private int startY;
 
-	private final HashMap<String, ItemStack> iconStacks = new HashMap<String, ItemStack>();
+	private final Map<String, ItemStack> iconStacks = new HashMap<String, ItemStack>();
 
 	public GuiImprinter(InventoryPlayer inventoryplayer, ImprinterInventory inventory) {
 		super(Defaults.TEXTURE_PATH_GUI + "/imprinter.png", new ContainerImprinter(inventoryplayer, inventory), inventory);
@@ -44,7 +49,7 @@ public class GuiImprinter extends GuiForestry<TileForestry> {
 		xSize = 176;
 		ySize = 185;
 
-		ArrayList<ItemStack> beeList = new ArrayList<ItemStack>();
+		List<ItemStack> beeList = new ArrayList<ItemStack>();
 		((ItemBeeGE) ForestryItem.beeDroneGE.item()).addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList)
 			iconStacks.put(BeeGenome.getSpecies(beeStack).getUID(), beeStack);
@@ -74,21 +79,9 @@ public class GuiImprinter extends GuiForestry<TileForestry> {
 	}
 
 	private void drawBeeSpeciesIcon(IAlleleBeeSpecies bee, int x, int y) {
-
-		/*
-		 * GL11.glDisable(GL11.GL_LIGHTING); mc.renderEngine.func_98187_b(Defaults.TEXTURE_BEES);
-		 * 
-		 * for (int i = 0; i < ForestryItem.beeDroneGE.getRenderPasses(0); ++i) {
-		 * 
-		 * int iconIndex = ForestryItem.beeDroneGE.getIconIndex(iconStacks.get(bee.getUID()), i); int color = ((ItemGE)
-		 * ForestryItem.beeDroneGE).getColorFromItemStack(iconStacks.get(bee.getUID()), i); float colorR = (color >> 16 & 255) / 255.0F; float colorG = (color
-		 * >> 8 & 255) / 255.0F; float colorB = (color & 255) / 255.0F;
-		 * 
-		 * GL11.glColor4f(colorR, colorG, colorB, 1.0F); drawTexturedModalRect(x, y, iconIndex % 16 * 16, iconIndex / 16 * 16, 16, 16);
-		 * 
-		 * } GL11.glEnable(GL11.GL_LIGHTING);
-		 */
-
+		RenderHelper.enableStandardItemLighting();
+		drawItemStack(iconStacks.get(bee.getUID()), x, y);
+		RenderHelper.disableStandardItemLighting();
 	}
 
 	private int getHabitatSlotAtPosition(int i, int j) {
