@@ -30,6 +30,7 @@ import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
+import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.factory.triggers.FactoryTriggers;
 import java.util.ArrayList;
@@ -145,12 +146,11 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		}
 
 		public static boolean isResource(ItemStack resource) {
-			for (int i = 0; i < recipes.size(); i++) {
-				Recipe recipe = recipes.get(i);
-				if (recipe.resource.getItemDamage() == Defaults.WILDCARD
-						&& recipe.resource.getItem() == resource.getItem())
-					return true;
-				else if (recipe.resource.isItemEqual(resource))
+			if (resource == null)
+				return false;
+
+			for (Recipe recipe : recipes) {
+				if (StackUtils.isCraftingEquivalent(recipe.resource, resource))
 					return true;
 			}
 			return false;
