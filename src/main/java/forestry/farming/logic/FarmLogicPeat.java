@@ -73,7 +73,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 			Vect position = translateWithOffset(x, y, z, direction, i);
 			ItemStack occupant = getAsItemStack(position);
 
-			if (occupant == null)
+			if (occupant.getItem() == null)
 				continue;
 
 			Block block = BlockSoil.getBlockFromItem(occupant.getItem());

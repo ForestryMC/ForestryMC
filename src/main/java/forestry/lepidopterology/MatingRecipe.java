@@ -64,6 +64,8 @@ public class MatingRecipe implements IRecipe {
 			} else if(PluginLepidopterology.butterflyInterface.isMember(crafting.getStackInSlot(i), EnumFlutterType.SERUM.ordinal()))
 				serum = PluginLepidopterology.butterflyInterface.getMember(crafting.getStackInSlot(i));	
 		}
+		if (butterfly == null || serum == null)
+			return null;
 		
 		IButterfly mated = butterfly.copy();
 		mated.mate(serum);

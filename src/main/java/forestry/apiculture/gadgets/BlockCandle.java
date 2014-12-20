@@ -176,6 +176,7 @@ public class BlockCandle extends BlockTorch {
 			TileCandle te = (TileCandle)world.getTileEntity(x, y, z);
 			if (te == null) {
 				world.setTileEntity(x, y, z, this.createTileEntity(world, meta));
+				te = (TileCandle)world.getTileEntity(x, y, z);
 			}
 
 			if (StackUtils.equals(this, held)) {

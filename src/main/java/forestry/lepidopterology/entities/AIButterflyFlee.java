@@ -15,8 +15,6 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class AIButterflyFlee extends AIButterflyMovement {
 
-	private EntityPlayer player;
-
 	public AIButterflyFlee(EntityButterfly entity) {
 		super(entity);
 		setMutexBits(3);
@@ -25,7 +23,7 @@ public class AIButterflyFlee extends AIButterflyMovement {
 	@Override
 	public boolean shouldExecute() {
 
-		player = entity.worldObj.getClosestPlayerToEntity(entity, entity.getButterfly().getGenome().getPrimary().getFlightDistance());
+		EntityPlayer player = entity.worldObj.getClosestPlayerToEntity(entity, entity.getButterfly().getGenome().getPrimary().getFlightDistance());
 
 		if (player == null || player.isSneaking())
 			return false;
