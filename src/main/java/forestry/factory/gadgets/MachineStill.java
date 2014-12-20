@@ -188,7 +188,6 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 
 		if (energyManager.getTotalEnergyStored() == 0) {
 			setErrorState(EnumErrorCode.NOPOWER);
-			return;
 		}
 	}
 

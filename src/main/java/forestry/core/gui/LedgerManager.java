@@ -37,8 +37,6 @@ public class LedgerManager {
 
 	/**
 	 * Inserts a ledger into the next-to-last position.
-	 * 
-	 * @param ledger
 	 */
 	public void insert(Ledger ledger) {
 		this.ledgers.add(ledgers.size() - 1, ledger);

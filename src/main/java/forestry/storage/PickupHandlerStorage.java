@@ -57,9 +57,6 @@ public class PickupHandlerStorage implements IPickupHandler {
 	/**
 	 * This tops off existing stacks in the player's inventory. That way you can keep f.e. a stack of dirt or cobblestone in your inventory which gets refreshed
 	 * constantly by picked up items.
-	 * 
-	 * @param player
-	 * @param itemstack
 	 */
 	private void topOffPlayerInventory(EntityPlayer player, ItemStack itemstack) {
 

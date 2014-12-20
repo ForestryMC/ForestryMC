@@ -113,12 +113,6 @@ public class InventoryAdapter implements IInventory, ISidedInventory, INBTTagabl
 
 	/**
 	 * Tries to add a stack to the specified slot range.
-	 * 
-	 * @param stack
-	 * @param startSlot
-	 * @param slots
-	 * @param all
-	 * @return
 	 */
 	public boolean tryAddStack(ItemStack stack, int startSlot, int slots, boolean all) {
 		return tryAddStack(stack, startSlot, slots, all, true);
@@ -237,15 +231,6 @@ public class InventoryAdapter implements IInventory, ISidedInventory, INBTTagabl
 	 * Removes the exact items first if they exist, and then removes crafting equivalents.
 	 * If the inventory doesn't have all the required items, returns false without removing anything.
 	 * If stowContainer is true, items with containers will have their container stowed.
-	 * @param count
-	 * @param set
-	 * @param firstSlotIndex
-	 * @param slotCount
-	 * @param player
-	 * @param stowContainer
-	 * @param oreDictionary
-	 * @param craftingTools
-	 * @return 
 	 */
 	public boolean removeSets(int count, ItemStack[] set, int firstSlotIndex, int slotCount, EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
 

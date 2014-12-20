@@ -210,7 +210,6 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 
 		if (energyManager.getTotalEnergyStored() == 0) {
 			setErrorState(EnumErrorCode.NOPOWER);
-			return;
 		}
 	}
 

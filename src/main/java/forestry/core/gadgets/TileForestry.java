@@ -311,7 +311,6 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	/* NAME */
 	/**
 	 * Gets the tile's unlocalized name, based on the block at the location of this entity (client-only).
-	 * @return 
 	 */
 	public String getUnlocalizedName() {
 		String blockUnlocalizedName = getBlockType().getUnlocalizedName().replace("tile.for.", "");

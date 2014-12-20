@@ -167,7 +167,6 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 	}
 
 	/**
-	 * @param resource
 	 * @return true if resource is a valid ingredient in this recipe.
 	 */
 	@SuppressWarnings("unchecked")

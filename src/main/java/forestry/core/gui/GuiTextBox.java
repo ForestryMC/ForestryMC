@@ -97,7 +97,7 @@ public class GuiTextBox extends GuiTextField {
 			drawRect(startX, startY, startX + this.width, startY + this.height, -16777216);
 		}
 
-		int textColour = isFocused() ? this.enabledColor : this.disabledColor;
+		int textColour = isFocused() ? enabledColor : disabledColor;
 
 		drawScrolledSplitString(getCursoredText(), startX + 2, startY + 2, width - 4, textColour);
 	}

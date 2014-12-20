@@ -48,8 +48,6 @@ public class InventoryManipulator {
 
 	/**
 	 * Attempt to add the stack to the inventory.
-	 *
-	 * @param stack
 	 * @return The remainder
 	 */
 	public ItemStack addStack(ItemStack stack) {
@@ -103,10 +101,7 @@ public class InventoryManipulator {
 	}
 
 	/**
-	 * @param slot
-	 * @param stack
 	 * @param available Amount we can move
-	 * @param doAdd
 	 * @return Return the number of items moved.
 	 */
 	private int addToSlot(IInvSlot slot, ItemStack stack, int available, boolean doAdd) {

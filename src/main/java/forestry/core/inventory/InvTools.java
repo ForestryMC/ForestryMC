@@ -250,9 +250,6 @@ public abstract class InvTools {
 
 	/**
 	 * Counts the number of items.
-	 *
-	 * @param inv
-	 * @return
 	 */
 	public static int countItems(IInventory inv) {
 		int count = 0;
@@ -290,10 +287,6 @@ public abstract class InvTools {
 	 * Counts the number of items that match the filter. Ignores
 	 * ISpecialInventory and ISidedInventory, and bypasses InventoryMapper to
 	 * count from the base IInventory.
-	 *
-	 * @param inv
-	 * @param filters
-	 * @return
 	 */
 	public static int countItems(IInventory inv, ItemStack... filters) {
 		if (inv instanceof InventoryMapper)
@@ -369,9 +362,6 @@ public abstract class InvTools {
 
 	/**
 	 * Attempts to move a single item from one inventory to another.
-	 *
-	 * @param source
-	 * @param dest
 	 * @return null if nothing was moved, the stack moved otherwise
 	 */
 	public static ItemStack moveOneItem(IInventory source, IInventory dest) {
@@ -380,9 +370,6 @@ public abstract class InvTools {
 
 	/**
 	 * Attempts to move a single item from one inventory to another.
-	 *
-	 * @param source
-	 * @param dest
 	 * @param filters an ItemStack[] to match against
 	 * @return null if nothing was moved, the stack moved otherwise
 	 */
@@ -392,9 +379,6 @@ public abstract class InvTools {
 
 	/**
 	 * Attempts to move a single item from one inventory to another.
-	 *
-	 * @param source
-	 * @param dest
 	 * @param filter an IItemType to match against
 	 * @return null if nothing was moved, the stack moved otherwise
 	 */
@@ -405,11 +389,6 @@ public abstract class InvTools {
 
 	/**
 	 * Attempts to move one item from a collection of inventories.
-	 *
-	 * @param sources
-	 * @param dest
-	 * @param filters
-	 * @return
 	 */
 	public static ItemStack moveOneItem(Iterable<IInventory> sources, IInventory dest, ItemStack... filters) {
 		for (IInventory inv : sources) {
@@ -422,11 +401,6 @@ public abstract class InvTools {
 
 	/**
 	 * Attempts to move one item from a collection of inventories.
-	 *
-	 * @param sources
-	 * @param dest
-	 * @param filter
-	 * @return
 	 */
 	public static ItemStack moveOneItem(Iterable<IInventory> sources, IInventory dest, IStackFilter filter) {
 		for (IInventory inv : sources) {
@@ -439,11 +413,6 @@ public abstract class InvTools {
 
 	/**
 	 * Attempts to move one item to a collection of inventories.
-	 *
-	 * @param source
-	 * @param destinations
-	 * @param filters
-	 * @return
 	 */
 	public static ItemStack moveOneItem(IInventory source, Iterable<IInventory> destinations, ItemStack... filters) {
 		for (IInventory dest : destinations) {
@@ -459,8 +428,6 @@ public abstract class InvTools {
 	 *
 	 * Will not move any items in the filter.
 	 *
-	 * @param source
-	 * @param dest
 	 * @param filters an ItemStack[] to exclude
 	 * @return null if nothing was moved, the stack moved otherwise
 	 */
@@ -470,11 +437,6 @@ public abstract class InvTools {
 
 	/**
 	 * Attempts to move one item from a collection of inventories.
-	 *
-	 * @param sources
-	 * @param dest
-	 * @param filters
-	 * @return
 	 */
 	public static ItemStack moveOneItemExcept(Iterable<IInventory> sources, IInventory dest, ItemStack... filters) {
 		for (IInventory inv : sources) {
@@ -487,11 +449,6 @@ public abstract class InvTools {
 
 	/**
 	 * Attempts to move one item to a collection of inventories.
-	 *
-	 * @param source
-	 * @param destinations
-	 * @param filters
-	 * @return
 	 */
 	public static ItemStack moveOneItemExcept(IInventory source, Iterable<IInventory> destinations, ItemStack... filters) {
 		for (IInventory dest : destinations) {
@@ -610,10 +567,6 @@ public abstract class InvTools {
 
 	/**
 	 * Returns true if the item is equal to any one of several possible matches.
-	 *
-	 * @param stack
-	 * @param matches
-	 * @return
 	 */
 	public static boolean isItemEqual(ItemStack stack, ItemStack... matches) {
 		for (ItemStack match : matches) {
@@ -625,10 +578,6 @@ public abstract class InvTools {
 
 	/**
 	 * Returns true if the item is equal to any one of several possible matches.
-	 *
-	 * @param stack
-	 * @param matches
-	 * @return
 	 */
 	public static boolean isItemEqual(ItemStack stack, Collection<ItemStack> matches) {
 		for (ItemStack match : matches) {
@@ -704,10 +653,6 @@ public abstract class InvTools {
 	/**
 	 * Removes a up to numItems worth of items from the inventory, not caring
 	 * about what the items are.
-	 *
-	 * @param inv
-	 * @param numItems
-	 * @return
 	 */
 	public static ItemStack[] removeItems(IInventory inv, int numItems) {
 		PlainInventory output = new PlainInventory(27, "temp");

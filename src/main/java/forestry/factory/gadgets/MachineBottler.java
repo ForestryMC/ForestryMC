@@ -87,9 +87,6 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		public static final ArrayList<MachineBottler.Recipe> recipes = new ArrayList<MachineBottler.Recipe>();
 
 		/**
-		 * 
-		 * @param res
-		 * @param empty
 		 * @return Recipe matching both res and empty, null if none
 		 */
 		public static Recipe findMatchingRecipe(FluidStack res, ItemStack empty) {
@@ -116,8 +113,6 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		}
 
 		/**
-		 * 
-		 * @param res
 		 * @return true if any recipe has a matching input
 		 */
 		public static boolean isInput(FluidStack res) {
@@ -228,7 +223,6 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 
 		if (energyManager.getTotalEnergyStored() == 0) {
 			setErrorState(EnumErrorCode.NOPOWER);
-			return;
 		}
 	}
 

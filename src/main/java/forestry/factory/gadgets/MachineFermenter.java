@@ -357,9 +357,6 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 
 	/**
 	 * Returns the burnTime an item of the passed ItemStack provides
-	 *
-	 * @param item
-	 * @return
 	 */
 	private int determineFuelValue(ItemStack item) {
 		if (item == null)

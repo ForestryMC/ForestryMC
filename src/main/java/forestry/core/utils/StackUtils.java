@@ -33,10 +33,6 @@ public class StackUtils {
 
 	/**
 	 * Compares item id, damage and NBT. Accepts wildcard damage.
-	 *
-	 * @param lhs
-	 * @param rhs
-	 * @return
 	 */
 	public static boolean isIdenticalItem(ItemStack lhs, ItemStack rhs) {
 		if (lhs == null || rhs == null)
@@ -150,9 +146,6 @@ public class StackUtils {
 
 	/**
 	 * Merges the giving stack into the receiving stack as far as possible
-	 *
-	 * @param giver
-	 * @param receptor
 	 */
 	public static void mergeStacks(ItemStack giver, ItemStack receptor) {
 		if (receptor.stackSize >= 64)
@@ -200,11 +193,7 @@ public class StackUtils {
 	}
 
 	/**
-	 *
-	 * @param stacks
-	 * @param maxCountedPerStack The maximum stacksize counted in a single
-	 * stack. -1 for unlimited.
-	 * @return
+	 * @param maxCountedPerStack The maximum stacksize counted in a single stack. -1 for unlimited.
 	 */
 	public static ItemStack[] condenseStacks(ItemStack[] stacks, int maxCountedPerStack, boolean craftingEquivalency) {
 		ArrayList<ItemStack> condensed = new ArrayList<ItemStack>();
@@ -238,10 +227,6 @@ public class StackUtils {
 
 	/**
 	 * Counts how many full sets are contained in the passed stock
-	 *
-	 * @param set
-	 * @param stock
-	 * @return
 	 */
 	public static int containsSets(ItemStack[] set, ItemStack[] stock) {
 		return containsSets(set, stock, false, false);
@@ -249,10 +234,6 @@ public class StackUtils {
 
 	/**
 	 * Counts how many full sets are contained in the passed stock
-	 *
-	 * @param set
-	 * @param stock
-	 * @return
 	 */
 	public static int containsSets(ItemStack[] set, ItemStack[] stock, boolean oreDictionary, boolean craftingTools) {
 		int count = 0;
@@ -307,11 +288,6 @@ public class StackUtils {
 
 	/**
 	 * Compare two item stacks for crafting equivalency.
-	 *
-	 * @param base
-	 * @param comparison
-	 * @param oreDictionary
-	 * @return
 	 */
 	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, boolean oreDictionary, boolean craftingTools) {
 		if (isCraftingEquivalent(base, comparison))
