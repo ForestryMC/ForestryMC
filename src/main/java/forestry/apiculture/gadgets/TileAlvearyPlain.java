@@ -140,8 +140,12 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 			return;
 
 		// Add swarm effects
-		if (worldObj.getTotalWorldTime() % 200 * 10 == 0)
-			onQueenChange(getStructureInventory().getStackInSlot(SLOT_QUEEN));
+		if (worldObj.getTotalWorldTime() % 200 == 0) {
+			ISidedInventory inventory = getStructureInventory();
+			if (inventory != null)
+				onQueenChange(inventory.getStackInSlot(SLOT_QUEEN));
+		}
+
 		if (getErrorState() == EnumErrorCode.OK)
 			queen.doFX(beekeepingLogic.getEffectData(), this);
 
@@ -166,15 +170,18 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 		if (!isMaster())
 			return;
 
-		if (getStructureInventory() == null)
+		ISidedInventory inventory = getStructureInventory();
+		if (inventory == null)
 			return;
 
 		// / Multiplayer FX
-		if (PluginApiculture.beeInterface.isMated(getStructureInventory().getStackInSlot(SLOT_QUEEN)))
+		ItemStack queenStack = inventory.getStackInSlot(SLOT_QUEEN);
+		if (PluginApiculture.beeInterface.isMated(queenStack)) {
 			if (getErrorState() == EnumErrorCode.OK && worldObj.getTotalWorldTime() % 2 == 0) {
-				IBee displayQueen = PluginApiculture.beeInterface.getMember(getStructureInventory().getStackInSlot(SLOT_QUEEN));
+				IBee displayQueen = PluginApiculture.beeInterface.getMember(queenStack);
 				displayQueen.doFX(beekeepingLogic.getEffectData(), this);
 			}
+		}
 	}
 
 	private void equalizeTemperature() {
@@ -544,37 +551,37 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 	@Override
 	public int getSizeInventory() {
 		IInventory inv = getStructureInventory();
-		if (inv != null)
-			return inv.getSizeInventory();
-		else
+		if (inv == null)
 			return 0;
+
+		return inv.getSizeInventory();
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int slotIndex) {
 		IInventory inv = getStructureInventory();
-		if (inv != null)
-			return inv.getStackInSlot(slotIndex);
-		else
+		if (inv == null)
 			return null;
+
+		return inv.getStackInSlot(slotIndex);
 	}
 
 	@Override
 	public ItemStack decrStackSize(int slotIndex, int amount) {
 		IInventory inv = getStructureInventory();
-		if (inv != null)
-			return inv.decrStackSize(slotIndex, amount);
-		else
+		if (inv == null)
 			return null;
+
+		return inv.decrStackSize(slotIndex, amount);
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slotIndex) {
 		IInventory inv = getStructureInventory();
-		if (inv != null)
-			return inv.getStackInSlotOnClosing(slotIndex);
-		else
+		if (inv == null)
 			return null;
+
+		return inv.getStackInSlotOnClosing(slotIndex);
 	}
 
 	@Override
@@ -598,10 +605,10 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 	@Override
 	public int getInventoryStackLimit() {
 		IInventory inv = getStructureInventory();
-		if (inv != null)
-			return inv.getInventoryStackLimit();
-		else
+		if (inv == null)
 			return 0;
+
+		return inv.getInventoryStackLimit();
 	}
 
 	@Override

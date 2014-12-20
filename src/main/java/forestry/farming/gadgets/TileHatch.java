@@ -13,6 +13,7 @@ package forestry.farming.gadgets;
 import buildcraft.api.statements.ITriggerExternal;
 import cpw.mods.fml.common.Optional;
 import forestry.api.core.ITileStructure;
+import forestry.core.config.Defaults;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.inventory.ITileFilter;
 import forestry.core.inventory.InvTools;
@@ -57,7 +58,11 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 
 	/* AUTO-EJECTING */
 	private IInventory getProductInventory() {
-		return new InventoryMapper(getStructureInventory(), TileFarmPlain.SLOT_PRODUCTION_1, TileFarmPlain.SLOT_COUNT_PRODUCTION);
+		TileInventoryAdapter inventory = getStructureInventory();
+		if (inventory == null)
+			return null;
+
+		return new InventoryMapper(inventory, TileFarmPlain.SLOT_PRODUCTION_1, TileFarmPlain.SLOT_COUNT_PRODUCTION);
 	}
 
 	protected void dumpStash() {
@@ -87,37 +92,37 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 	@Override
 	public int getSizeInventory() {
 		IInventory inv = getStructureInventory();
-		if (inv != null)
-			return inv.getSizeInventory();
-		else
+		if (inv == null)
 			return 0;
+
+		return inv.getSizeInventory();
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int slotIndex) {
 		IInventory inv = getStructureInventory();
-		if (inv != null)
-			return inv.getStackInSlot(slotIndex);
-		else
+		if (inv == null)
 			return null;
+
+		return inv.getStackInSlot(slotIndex);
 	}
 
 	@Override
 	public ItemStack decrStackSize(int slotIndex, int amount) {
 		IInventory inv = getStructureInventory();
-		if (inv != null)
-			return inv.decrStackSize(slotIndex, amount);
-		else
+		if (inv == null)
 			return null;
+
+		return inv.decrStackSize(slotIndex, amount);
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slotIndex) {
 		IInventory inv = getStructureInventory();
-		if (inv != null)
-			return inv.getStackInSlotOnClosing(slotIndex);
-		else
+		if (inv == null)
 			return null;
+
+		return inv.getStackInSlotOnClosing(slotIndex);
 	}
 
 	@Override
@@ -130,10 +135,10 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 	@Override
 	public int getInventoryStackLimit() {
 		IInventory inv = getStructureInventory();
-		if (inv != null)
-			return inv.getInventoryStackLimit();
-		else
+		if (inv == null)
 			return 0;
+
+		return inv.getInventoryStackLimit();
 	}
 
 	@Override
@@ -171,7 +176,8 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 		if (!(struct instanceof TileFarmPlain))
 			return false;
 
-		if (!getStructureInventory().isItemValidForSlot(slotIndex, itemstack))
+		TileInventoryAdapter inventory = getStructureInventory();
+		if (inventory == null || !inventory.isItemValidForSlot(slotIndex, itemstack))
 			return false;
 
 		TileFarmPlain housing = (TileFarmPlain) struct;
@@ -196,7 +202,8 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 
 	@Override
 	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-		if (!getStructureInventory().canExtractItem(slotIndex, itemstack, side))
+		TileInventoryAdapter inventory = getStructureInventory();
+		if (inventory == null || !inventory.canExtractItem(slotIndex, itemstack, side))
 			return false;
 
 		return slotIndex >= TileFarmPlain.SLOT_PRODUCTION_1 && slotIndex < TileFarmPlain.SLOT_PRODUCTION_1 + TileFarmPlain.SLOT_COUNT_PRODUCTION;
@@ -204,7 +211,10 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
-		return getStructureInventory().getAccessibleSlotsFromSide(side);
+		TileInventoryAdapter inventory = getStructureInventory();
+		if (inventory == null)
+			return Defaults.FACINGS_NONE;
+		return inventory.getAccessibleSlotsFromSide(side);
 	}
 
 	/* ITRIGGERPROVIDER */

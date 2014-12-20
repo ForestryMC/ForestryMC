@@ -60,7 +60,7 @@ public class Utils {
 		if (tile instanceof ITileStructure) {
 
 			IInventory inventory = ((ITileStructure) tile).getInventory();
-			if (inventory != null)
+			if (inventory != null) {
 				for (int i = 0; i < inventory.getSizeInventory(); i++) {
 					if (inventory.getStackInSlot(i) == null)
 						continue;
@@ -68,7 +68,7 @@ public class Utils {
 					StackUtils.dropItemStackAsEntity(inventory.getStackInSlot(i), world, x, y, z);
 					inventory.setInventorySlotContents(i, null);
 				}
-
+			}
 		} else {
 
 			IInventory inventory;
