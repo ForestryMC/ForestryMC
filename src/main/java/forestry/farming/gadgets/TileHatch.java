@@ -66,14 +66,12 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 	}
 
 	protected void dumpStash() {
-
-		if (!hasMaster())
+		IInventory productInventory = getProductInventory();
+		if (productInventory == null)
 			return;
 
-		if (!InvTools.moveOneItemToPipe(getProductInventory(), tileCache)) {
-			IInventory struct = getStructureInventory();
-			if (struct != null)
-				InvTools.moveItemStack(getProductInventory(), inventoryCache.getAdjecentInventories());
+		if (!InvTools.moveOneItemToPipe(productInventory, tileCache)) {
+			InvTools.moveItemStack(productInventory, inventoryCache.getAdjacentInventories());
 		}
 	}
 

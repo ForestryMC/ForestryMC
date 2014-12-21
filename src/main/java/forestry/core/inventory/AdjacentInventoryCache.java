@@ -10,11 +10,19 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import forestry.core.utils.AdjacentTileCache;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
+
 import net.minecraftforge.common.util.ForgeDirection;
+
+import forestry.core.utils.AdjacentTileCache;
 
 /**
  *
@@ -40,12 +48,12 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
 		cache.addListener(this);
 	}
 
-	public IInventory getAdjecentInventory(ForgeDirection side) {
+	public IInventory getAdjacentInventory(ForgeDirection side) {
 		checkChanged();
 		return sides[side.ordinal()];
 	}
 
-	public Collection<IInventory> getAdjecentInventories() {
+	public Collection<IInventory> getAdjacentInventories() {
 		checkChanged();
 		return invs;
 	}

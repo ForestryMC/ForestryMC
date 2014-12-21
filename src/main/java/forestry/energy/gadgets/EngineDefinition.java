@@ -42,7 +42,7 @@ public class EngineDefinition extends MachineDefinition {
 			return false;
 
 		Engine tile = (Engine) world.getTileEntity(x, y, z);
-		if (player.getCurrentEquippedItem() != null && Utils.canWrench(player, x, y, z)) {
+		if (Utils.canWrench(player, x, y, z)) {
 			tile.rotateEngine();
 			Utils.useWrench(player, x, y, z);
 			return true;

@@ -10,8 +10,31 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import buildcraft.api.transport.IPipeTile;
-import buildcraft.api.transport.PipeManager;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.oredict.OreDictionary;
+
+import cpw.mods.fml.common.Optional;
+
 import forestry.core.inventory.filters.ArrayStackFilter;
 import forestry.core.inventory.filters.IStackFilter;
 import forestry.core.inventory.filters.InvertedStackFilter;
@@ -25,26 +48,10 @@ import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.inventory.wrappers.SidedInventoryMapper;
 import forestry.core.utils.AdjacentTileCache;
 import forestry.core.utils.PlainInventory;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import net.minecraft.block.Block;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.oredict.OreDictionary;
+import forestry.plugins.PluginManager;
+
+import buildcraft.api.transport.IPipeTile;
+import buildcraft.api.transport.PipeManager;
 
 public abstract class InvTools {
 
@@ -144,14 +151,21 @@ public abstract class InvTools {
 		if (tile == null || !(tile instanceof IInventory))
 			return null;
 
-		if (!PipeManager.canExtractItems(null, tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord))
-			return null;
+		if (PluginManager.Module.BUILDCRAFT_TRANSPORT.isEnabled()) {
+			if(!internal_canExtractFromBuildCraftPipe(tile))
+				return null;
+		}
 
 		if (tile instanceof TileEntityChest) {
 			TileEntityChest chest = (TileEntityChest) tile;
 			return new ChestWrapper(chest);
 		}
 		return getInventory((IInventory) tile, side);
+	}
+
+	@Optional.Method(modid = "BuildCraftAPI|transport")
+	private static boolean internal_canExtractFromBuildCraftPipe(TileEntity tile) {
+		return PipeManager.canExtractItems(null, tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord);
 	}
 
 	public static IInventory getInventory(IInventory inv, ForgeDirection side) {
@@ -741,6 +755,15 @@ public abstract class InvTools {
 	 * @return true if an item was inserted, otherwise false.
 	 */
 	public static boolean moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache) {
+		if (PluginManager.Module.BUILDCRAFT_TRANSPORT.isEnabled()) {
+			return internal_moveOneItemToPipe(source, tileCache);
+		}
+
+		return false;
+	}
+
+	@Optional.Method(modid = "BuildCraftAPI|transport")
+	private static boolean internal_moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache) {
 		IInventory invClone = new InventoryCopy(source);
 		ItemStack stackToMove = removeOneItem(invClone);
 		if (stackToMove == null)

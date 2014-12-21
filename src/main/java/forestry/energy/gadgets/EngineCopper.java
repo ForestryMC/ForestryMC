@@ -10,9 +10,24 @@
  ******************************************************************************/
 package forestry.energy.gadgets;
 
-import buildcraft.api.statements.ITriggerExternal;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameData;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
 import forestry.core.EnumErrorCode;
@@ -22,22 +37,14 @@ import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.Engine;
 import forestry.core.gadgets.TileBase;
+import forestry.core.inventory.AdjacentInventoryCache;
+import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.GuiId;
-import forestry.core.utils.BlockUtil;
 import forestry.factory.triggers.FactoryTriggers;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+
+import buildcraft.api.statements.ITriggerExternal;
 
 public class EngineCopper extends Engine implements ISidedInventory {
 
@@ -53,6 +60,7 @@ public class EngineCopper extends Engine implements ISidedInventory {
 	private int totalBurnTime;
 	private int ashProduction;
 	private final int ashForItem;
+	private final AdjacentInventoryCache inventoryCache = new AdjacentInventoryCache(this, getTileCache());
 
 	public EngineCopper() {
 		super(Defaults.ENGINE_COPPER_HEAT_MAX, 200000, 4000);
@@ -97,8 +105,10 @@ public class EngineCopper extends Engine implements ISidedInventory {
 	public void updateServerSide() {
 		super.updateServerSide();
 
-		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
+		if (worldObj.getTotalWorldTime() % 40 != 0)
 			return;
+
+		dumpStash();
 
 		if (mayBurn() && burnTime > 0) {
 			setErrorState(EnumErrorCode.OK);
@@ -217,31 +227,22 @@ public class EngineCopper extends Engine implements ISidedInventory {
 			return 0;
 	}
 
-	private void dumpStash() {
-		ForgeDirection[] pipes = BlockUtil.getPipeDirections(worldObj, Coords(), ForgeDirection.UNKNOWN);
+	/* AUTO-EJECTING */
+	private IInventory getWasteInventory() {
+		TileInventoryAdapter inventory = getInternalInventory();
+		if (inventory == null)
+			return null;
 
-		if (pipes.length > 0)
-			dumpToPipe(pipes);
+		return new InventoryMapper(inventory, SLOT_WASTE_1, SLOT_WASTE_COUNT);
 	}
 
-	private void dumpToPipe(ForgeDirection[] pipes) {
-		TileInventoryAdapter inventory = getInternalInventory();
-		for (int i = SLOT_WASTE_1; i < SLOT_WASTE_1 + SLOT_WASTE_COUNT; i++) {
-			if (inventory.getStackInSlot(i) == null)
-				continue;
-			if (inventory.getStackInSlot(i).stackSize <= 0)
-				continue;
+	private void dumpStash() {
+		IInventory wasteInventory = getWasteInventory();
+		if (wasteInventory == null)
+			return;
 
-			ArrayList<ForgeDirection> filtered;
-			filtered = BlockUtil.filterPipeDirections(pipes, new ForgeDirection[]{getOrientation()});
-
-			while (inventory.getStackInSlot(i).stackSize > 0 && filtered.size() > 0) {
-				BlockUtil.putFromStackIntoPipe(this, filtered, inventory.getStackInSlot(i));
-			}
-
-			if (inventory.getStackInSlot(i).stackSize <= 0)
-				inventory.setInventorySlotContents(i, null);
-		}
+		if (!InvTools.moveOneItemToPipe(wasteInventory, tileCache))
+			InvTools.moveItemStack(wasteInventory, inventoryCache.getAdjacentInventories());
 	}
 
 	// / STATE INFORMATION
