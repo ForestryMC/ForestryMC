@@ -129,7 +129,8 @@ public class SlotCustom extends SlotForestry {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getBackgroundIconIndex() {
-		if (!inventory.isItemValidForSlot(getSlotIndex(), null))
+		ItemStack stack = getStack();
+		if (stack != null && !inventory.isItemValidForSlot(getSlotIndex(), stack))
 			return TextureManager.getInstance().getDefault(blockedTexture);
 		else
 			return null;
