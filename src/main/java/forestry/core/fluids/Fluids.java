@@ -10,13 +10,10 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
-import forestry.core.render.TextureManager;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
-import net.minecraft.client.renderer.texture.IIconRegister;
+
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -28,9 +25,7 @@ import net.minecraftforge.fluids.FluidStack;
 public enum Fluids {
 
 	WATER, LAVA, FUEL, BIOMASS, BIOFUEL, CREOSOTE, STEAM, BIOETHANOL,
-	COAL, PYROTHEUM, HONEY, MILK, JUICE, ICE, GLASS, OIL, SEEDOIL, SHORT_MEAD("short.mead");
-
-	private static final List<String> myLiquids = new ArrayList<String>(values().length);
+	COAL, PYROTHEUM, HONEY("for.honey"), MILK, JUICE, ICE, GLASS, OIL, SEEDOIL, SHORT_MEAD("short.mead");
 
 	private final String tag;
 
@@ -48,15 +43,6 @@ public enum Fluids {
 
 	public Fluid get() {
 		return FluidRegistry.getFluid(tag);
-	}
-
-	public void register() {
-		Fluid fluid = get();
-		if (fluid == null) {
-			fluid = new Fluid(tag);
-			FluidRegistry.registerFluid(fluid);
-			myLiquids.add(tag);
-		}
 	}
 
 	/**
@@ -84,12 +70,5 @@ public enum Fluids {
 		return fluid == null && fluidStack == null;
 	}
 
-	public static void resetFluidIcons(IIconRegister register) {
-		for (String fluidString : myLiquids) {
-			Fluid fluid = FluidRegistry.getFluid(fluidString);
-			IIcon icon = TextureManager.getInstance().registerTex(register, "liquid/" + fluid.getName());
-			fluid.setIcons(icon);
-		}
-	}
 
 }

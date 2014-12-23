@@ -237,8 +237,8 @@ public class Configuration {
 			writer.write("# " + Defaults.MOD + newLine + "# " + Version.getVersion() + newLine);
 
 			writer.write("#" + newLine + "# Config files:" + newLine);
-			writer.write("# base.conf\t\t-\t Contains Forge configuration for block and item ids" + newLine);
 			writer.write("# common.conf\t\t-\t Contains all options common to Forestry" + newLine);
+			writer.write("# fluids.conf\t\t-\t Contains all options for fluids" + newLine);
 			writer.write("# apiculture.conf\t-\t Contains all options for bee breeding" + newLine);
 			writer.write("# backpacks.conf\t-\t Contains custom configurations for backpacks" + newLine);
 			writer.write("# pipes.conf\t\t-\t Configures item id for the apiarist's pipe" + newLine);

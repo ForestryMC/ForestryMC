@@ -67,7 +67,6 @@ public class PluginFood extends ForestryPlugin {
 		ItemStack meadBottle = ForestryItem.beverage.getItemStack();
 		((ItemBeverage) ForestryItem.beverage.item()).beverages[0].saveEffects(meadBottle, new IBeverageEffect[] { BeverageEffect.weakAlcoholic });
 
-		Fluids.SHORT_MEAD.register();
 		LiquidHelper.injectLiquidContainer(Fluids.SHORT_MEAD, Defaults.BUCKET_VOLUME, meadBottle, new ItemStack(Items.glass_bottle));
 	}
 

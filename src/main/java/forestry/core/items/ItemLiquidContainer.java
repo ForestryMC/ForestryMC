@@ -10,17 +10,18 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.core.CreativeTabForestry;
-import forestry.core.fluids.FluidHelper;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
+import java.awt.Color;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,16 +29,28 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
+
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.core.CreativeTabForestry;
+import forestry.core.fluids.BlockForestryFluid;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
+
 public class ItemLiquidContainer extends Item {
 
 	public static enum EnumContainerType {
-
-		GLASS, JAR, CAN, CAPSULE, REFRACTORY
+		GLASS, JAR, CAN, CAPSULE, REFRACTORY, BUCKET
 	}
+
+	private static final Map<Block, ItemLiquidContainer> buckets = new HashMap<Block, ItemLiquidContainer>();
 
 	private boolean isDrink = false;
 	private boolean isAlwaysEdible = false;
@@ -46,14 +59,25 @@ public class ItemLiquidContainer extends Item {
 	private float saturationModifier = 0.0f;
 
 	private final EnumContainerType type;
-	private final int colour;
+	private final Block contents;
+	private final Color color;
 
-	public ItemLiquidContainer(EnumContainerType type, int colour) {
+	public ItemLiquidContainer(EnumContainerType type, Block contents, Color color) {
 		super();
 		this.type = type;
-		this.colour = colour;
+		this.contents = contents;
+		this.color = color;
 		setCreativeTab(CreativeTabForestry.tabForestry);
 		setMaxStackSize(16);
+		if (type == EnumContainerType.BUCKET) {
+			setContainerItem(Items.bucket);
+			this.maxStackSize = 1;
+			buckets.put(contents, this);
+		}
+	}
+
+	public static ItemLiquidContainer getExistingBucket(Block contents) {
+		return buckets.get(contents);
 	}
 
 	private int getMatchingSlot(EntityPlayer player, ItemStack stack) {
@@ -141,8 +165,8 @@ public class ItemLiquidContainer extends Item {
 				}
 			}
 
-			if (fluid == null || fluid.amount <= 0)
-				return itemstack;
+			if (fluid == null || fluid.amount <= 0 && this.type == EnumContainerType.BUCKET)
+				return tryPlaceLiquid(itemstack, world, entityplayer, movingobjectposition);
 
 			ItemStack filledContainer = FluidHelper.getFilledContainer(fluid.getFluid(), itemstack);
 			if (filledContainer == null)
@@ -178,6 +202,81 @@ public class ItemLiquidContainer extends Item {
 		return itemstack;
 
 	}
+
+	private ItemStack tryPlaceLiquid(ItemStack itemstack, World world, EntityPlayer player, MovingObjectPosition movingobjectposition) {
+
+		if (this.type != EnumContainerType.BUCKET) {
+			return itemstack;
+		}
+
+		if (this.contents == Blocks.air) {
+			return new ItemStack(Items.bucket);
+		}
+
+		int x = movingobjectposition.blockX;
+		int y = movingobjectposition.blockY;
+		int z = movingobjectposition.blockZ;
+
+		switch (movingobjectposition.sideHit) {
+			case 0: --y; break;
+			case 1: ++y; break;
+			case 2: --z; break;
+			case 3: ++z; break;
+			case 4: --x; break;
+			case 5: ++x; break;
+		}
+
+		if (!player.canPlayerEdit(x, y, z, movingobjectposition.sideHit, itemstack)) {
+			return itemstack;
+		}
+
+		if (this.tryPlaceLiquidAtPosition(world, x, y, z) && !player.capabilities.isCreativeMode) {
+			return new ItemStack(Items.bucket);
+		}
+
+		return itemstack;
+	}
+
+	private boolean tryPlaceLiquidAtPosition(World world, int x, int y, int z) {
+		if (this.contents == Blocks.air) {
+			return false;
+		} else {
+			Material material = world.getBlock(x, y, z).getMaterial();
+			boolean isLiquid = !material.isSolid();
+
+			if (!world.isAirBlock(x, y, z) && !isLiquid) {
+				return false;
+			} else {
+				// Can't put down liquids in the nether.
+				// Explode if it's flammable, evaporate otherwise.
+				if (world.provider.isHellWorld && this.contents != Blocks.flowing_lava) {
+					int flammability = contents.getFlammability(world, x, y, z, ForgeDirection.UNKNOWN);
+					if (contents instanceof BlockForestryFluid && flammability > 0) {
+						// Explosion size is determined by flammability, up to size 4.
+						float explosionSize = 4F * flammability / 300F;
+						world.newExplosion(null, x, y, z, explosionSize, true, true);
+						return true;
+					} else {
+						Random random = world.rand;
+						world.playSoundEffect(x + 0.5, y + 0.5F, z + 0.5F, "random.fizz", 0.5F, 2.6F + (random.nextFloat() - random.nextFloat()) * 0.8F);
+
+						for (int l = 0; l < 8; ++l) {
+							world.spawnParticle("largesmoke", x + random.nextDouble(), y + random.nextDouble(), z + random.nextDouble(), 0.0, 0.0, 0.0);
+						}
+					}
+				} else {
+					if (!world.isRemote && isLiquid && !material.isLiquid()) {
+						world.func_147480_a(x, y, z, true);
+					}
+
+					world.setBlock(x, y, z, this.contents, 0, 3);
+				}
+
+				return true;
+			}
+		}
+	}
+
 
 	public int getHealAmount() {
 		return healAmount;
@@ -218,7 +317,7 @@ public class ItemLiquidContainer extends Item {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIconFromDamageForRenderPass(int i, int j) {
-		if (j > 0 && colour >= 0)
+		if (j > 0 && color != null)
 			return icons[1];
 		else
 			return icons[0];
@@ -232,9 +331,13 @@ public class ItemLiquidContainer extends Item {
 
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int j) {
-		if (j > 0 && colour >= 0)
-			return colour;
+		if (j > 0 && color != null)
+			return color.getRGB() & 0xffffff; // remove alpha
 		else
 			return 0xffffff;
+	}
+
+	public EnumContainerType getType() {
+		return type;
 	}
 }

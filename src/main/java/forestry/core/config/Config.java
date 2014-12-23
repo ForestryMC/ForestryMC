@@ -19,20 +19,26 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.proxy.Proxies;
 
 public class Config {
 
 	public static final String CATEGORY_COMMON = "common";
+	public static final String CATEGORY_FLUIDS = "fluids";
 	public static final String CATEGORY_DEBUG = "debug";
 
 	public static Configuration config;
 
 	public static String gameMode;
 
-	public static final HashSet<String> disabledStructures = new HashSet<String>();
+	private static final Set<String> disabledStructures = new HashSet<String>();
+	private static final Set<String> disabledFluids = new HashSet<String>();
+	private static final Set<String> disabledBlocks = new HashSet<String>();
 
 	public static boolean isDebug = false;
 
@@ -65,10 +71,6 @@ public class Config {
 
 	private static boolean craftingBronzeEnabled = true;
 
-	public static boolean getCraftingBronzeEnabled() {
-		return craftingBronzeEnabled;
-	}
-
 	public static boolean craftingStampsEnabled = true;
 	public static final ArrayList<String> collectorStamps = new ArrayList<String>();
 
@@ -81,6 +83,22 @@ public class Config {
 	public static boolean disableHints = false;
 	public static final HashMap<String, String[]> hints = new HashMap<String, String[]>();
 	public static boolean disableEnergyStat = false;
+
+	public static boolean isStructureEnabled(String uid) {
+		return !Config.disabledStructures.contains(uid);
+	}
+
+	public static boolean isFluidEnabled(ForestryFluids fluids) {
+		return !Config.disabledFluids.contains(fluids.tag);
+	}
+
+	public static boolean isBlockEnabled(String tag) {
+		return !Config.disabledBlocks.contains(tag);
+	}
+
+	public static boolean isCraftingBronzeEnabled() {
+		return craftingBronzeEnabled;
+	}
 
 	public static void load() {
 
@@ -96,35 +114,10 @@ public class Config {
 		config.addPurge("buildcraft.ignore");
 		config.addPurge("power.framework");
 
-		Property property = config.get("difficulty.gamemode", CATEGORY_COMMON, "EASY");
-		property.comment = "set to your preferred game mode. available modes are OP, EASY, NORMAL, HARD. mismatch with the server may cause visual glitches with recipes. setting an unavailable mode will create a new mode definition file.";
-		gameMode = property.value;
+		loadModes();
+		loadFluids();
 
-		property = config.get("difficulty.recreate.definitions", CATEGORY_COMMON, true);
-		property.comment = "set to true to force recreation of the game mode definitions in config/forestry/gamemodes";
-		boolean recreate = Boolean.parseBoolean(property.value);
-
-		if (recreate)
-			Proxies.log.info("Recreating all gamemode definitions from the defaults. This may be caused by an upgrade");
-
-		// Make sure the default mode files are there.
-		File easyMode = config.getCategoryFile("gamemodes/EASY");
-		if (recreate)
-			CopyFileToFS(easyMode, "/config/forestry/gamemodes/EASY.conf");
-
-		File opMode = config.getCategoryFile("gamemodes/OP");
-		if (!opMode.exists() || recreate)
-			CopyFileToFS(opMode, "/config/forestry/gamemodes/OP.conf");
-
-		File normalMode = config.getCategoryFile("gamemodes/NORMAL");
-		if (!normalMode.exists() || recreate)
-			CopyFileToFS(normalMode, "/config/forestry/gamemodes/NORMAL.conf");
-
-		File hardMode = config.getCategoryFile("gamemodes/HARD");
-		if (!hardMode.exists() || recreate)
-			CopyFileToFS(hardMode, "/config/forestry/gamemodes/HARD.conf");
-
-		config.set("difficulty.recreate.definitions", CATEGORY_COMMON, false);
+		Property property;
 
 		Property particleFX = config.get("performance.particleFX.enabled", CATEGORY_COMMON, true);
 		particleFX.comment = "set to false to disable particle fx on slower machines";
@@ -217,6 +210,53 @@ public class Config {
 		loadHints();
 	}
 
+	private static void loadModes() {
+		Property property = config.get("difficulty.gamemode", CATEGORY_COMMON, "EASY");
+		property.comment = "set to your preferred game mode. available modes are OP, EASY, NORMAL, HARD. mismatch with the server may cause visual glitches with recipes. setting an unavailable mode will create a new mode definition file.";
+		gameMode = property.value;
+
+		property = config.get("difficulty.recreate.definitions", CATEGORY_COMMON, true);
+		property.comment = "set to true to force recreation of the game mode definitions in config/forestry/gamemodes";
+		boolean recreate = Boolean.parseBoolean(property.value);
+
+		if (recreate)
+			Proxies.log.info("Recreating all gamemode definitions from the defaults. This may be caused by an upgrade");
+
+		// Make sure the default mode files are there.
+		File easyMode = config.getCategoryFile("gamemodes/EASY");
+		if (recreate)
+			CopyFileToFS(easyMode, "/config/forestry/gamemodes/EASY.conf");
+
+		File opMode = config.getCategoryFile("gamemodes/OP");
+		if (!opMode.exists() || recreate)
+			CopyFileToFS(opMode, "/config/forestry/gamemodes/OP.conf");
+
+		File normalMode = config.getCategoryFile("gamemodes/NORMAL");
+		if (!normalMode.exists() || recreate)
+			CopyFileToFS(normalMode, "/config/forestry/gamemodes/NORMAL.conf");
+
+		File hardMode = config.getCategoryFile("gamemodes/HARD");
+		if (!hardMode.exists() || recreate)
+			CopyFileToFS(hardMode, "/config/forestry/gamemodes/HARD.conf");
+
+		config.set("difficulty.recreate.definitions", CATEGORY_COMMON, false);
+	}
+
+	private static void loadFluids() {
+		Property property;
+		for (ForestryFluids fluid : ForestryFluids.values()) {
+			property = config.get("disable.fluid." + fluid.tag, CATEGORY_FLUIDS, false);
+			property.comment = "set to true to disable the fluid for " + fluid.tag;
+			if (Boolean.parseBoolean(property.value))
+				Config.disabledFluids.add(fluid.tag);
+
+			property = config.get("disable.fluidBlock." + fluid.tag, CATEGORY_FLUIDS, false);
+			property.comment = "set to true to disable the in-world FluidBlock for " + fluid.tag;
+			if (Boolean.parseBoolean(property.value))
+				Config.disabledBlocks.add(fluid.tag);
+		}
+	}
+
 	private static void setDebugMode() {
 		File debug = new File(Proxies.common.getForestryRoot(), "config/" + Defaults.MOD.toLowerCase(Locale.ENGLISH) + "/DEBUG.ON");
 		isDebug = debug.exists();
@@ -279,9 +319,4 @@ public class Config {
 		else
 			return list.split("[;]+");
 	}
-
-	public static boolean getOrCreateBooleanProperty(String key, String kind, boolean defaults) {
-		return Boolean.parseBoolean(config.get(key, kind, defaults).value);
-	}
-
 }

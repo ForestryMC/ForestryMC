@@ -97,7 +97,7 @@ public class Schemata {
 	}
 
 	public boolean isEnabled() {
-		return !Config.disabledStructures.contains(uid);
+		return Config.isStructureEnabled(uid);
 	}
 
 	/**

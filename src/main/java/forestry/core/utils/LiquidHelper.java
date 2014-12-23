@@ -10,18 +10,44 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import forestry.api.recipes.RecipeManagers;
-import forestry.core.config.ForestryItem;
-import forestry.core.fluids.Fluids;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.config.Defaults;
+import forestry.core.config.ForestryItem;
+import forestry.core.fluids.Fluids;
+import forestry.core.items.ItemLiquidContainer;
+import forestry.core.proxy.Proxies;
+
 public class LiquidHelper {
 
-	public static boolean isEmptyLiquidData() {
-		return FluidContainerRegistry.getRegisteredFluidContainerData().length <= 0;
+	public static void injectLiquidContainer(Fluids fluid, ItemStack filled) {
+		Item item = filled.getItem();
+		if (item.getContainerItem() instanceof ItemBucket) {
+			LiquidHelper.injectLiquidContainer(fluid, Defaults.BUCKET_VOLUME, filled, new ItemStack(Items.bucket));
+			return;
+		} else if (item instanceof ItemLiquidContainer) {
+			ItemLiquidContainer liquidContainer = (ItemLiquidContainer)item;
+			switch (liquidContainer.getType()) {
+				case CAN:
+					LiquidHelper.injectTinContainer(fluid, Defaults.BUCKET_VOLUME, filled, ForestryItem.canEmpty.getItemStack());
+					return;
+				case CAPSULE:
+					LiquidHelper.injectWaxContainer(fluid, Defaults.BUCKET_VOLUME, filled, ForestryItem.waxCapsule.getItemStack());
+					return;
+				case REFRACTORY:
+					LiquidHelper.injectRefractoryContainer(fluid, Defaults.BUCKET_VOLUME, filled, ForestryItem.refractoryEmpty.getItemStack());
+					return;
+			}
+		}
+		Proxies.log.warning("Unable to inject liquid container: " + filled);
 	}
 
 	public static void injectLiquidContainer(Fluids fluid, int volume, ItemStack filled, ItemStack empty) {

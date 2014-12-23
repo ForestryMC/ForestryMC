@@ -11,10 +11,21 @@
 package forestry.core;
 
 import com.google.common.collect.ImmutableList;
+
+import java.io.File;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
+
+import net.minecraftforge.common.MinecraftForge;
+
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.EngineBronzeFuel;
@@ -34,12 +45,6 @@ import forestry.core.gadgets.TileMill;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.LiquidHelper;
 import forestry.plugins.PluginManager;
-import java.io.File;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.common.MinecraftForge;
 
 public class ForestryCore {
 
@@ -61,7 +66,6 @@ public class ForestryCore {
 
 	public void init(Object basemod) {
 
-		// Register Liquids & Containers
 		registerLiquidContainers();
 
 		// Register world generator
@@ -123,7 +127,6 @@ public class ForestryCore {
 	}
 
 	public void postInit() {
-
 		PluginManager.runPostInit();
 
 		Proxies.common.registerTickHandlers();
@@ -144,61 +147,14 @@ public class ForestryCore {
 		return "after:mod_IC2;after:mod_BuildCraftCore;after:mod_BuildCraftEnergy;after:mod_BuildCraftFactory;after:mod_BuildCraftSilicon;after:mod_BuildCraftTransport;after:mod_RedPowerWorld";
 	}
 
+	/** Set containers for vanilla liquids */
 	private void registerLiquidContainers() {
-		// Add lava and water buckets to the API in case this has not been done yet.
-		if (LiquidHelper.isEmptyLiquidData()) {
-			LiquidHelper.injectLiquidContainer(Fluids.LAVA, Defaults.BUCKET_VOLUME, new ItemStack(Items.lava_bucket), new ItemStack(Items.bucket));
-			LiquidHelper.injectLiquidContainer(Fluids.WATER, Defaults.BUCKET_VOLUME, new ItemStack(Items.water_bucket), new ItemStack(Items.bucket));
-		}
+		LiquidHelper.injectLiquidContainer(Fluids.LAVA, ForestryItem.canLava.getItemStack());
+		LiquidHelper.injectLiquidContainer(Fluids.LAVA, ForestryItem.refractoryLava.getItemStack());
 
-		// Glass
-		Fluids.GLASS.register();
-
-		// Set default lava, water and biofuel buckets
-		Fluids.MILK.register();
-		LiquidHelper.injectLiquidContainer(Fluids.MILK, Defaults.BUCKET_VOLUME, new ItemStack(Items.milk_bucket), new ItemStack(Items.bucket));
-
-		// Lava
-		LiquidHelper.injectTinContainer(Fluids.LAVA, Defaults.BUCKET_VOLUME, ForestryItem.canLava.getItemStack(), ForestryItem.canEmpty.getItemStack());
-		LiquidHelper.injectRefractoryContainer(Fluids.LAVA, Defaults.BUCKET_VOLUME, ForestryItem.refractoryLava.getItemStack(), ForestryItem.refractoryEmpty.getItemStack());
-
-		// Water
-		LiquidHelper.injectLiquidContainer(Fluids.WATER, Defaults.BUCKET_VOLUME, new ItemStack(Items.potionitem, 1, 0), new ItemStack(Items.glass_bottle));
-		LiquidHelper.injectTinContainer(Fluids.WATER, Defaults.BUCKET_VOLUME, ForestryItem.canWater.getItemStack(), ForestryItem.canEmpty.getItemStack());
-		LiquidHelper.injectWaxContainer(Fluids.WATER, Defaults.BUCKET_VOLUME, ForestryItem.waxCapsuleWater.getItemStack(), ForestryItem.waxCapsule.getItemStack());
-		LiquidHelper.injectRefractoryContainer(Fluids.WATER, Defaults.BUCKET_VOLUME, ForestryItem.refractoryWater.getItemStack(), ForestryItem.refractoryEmpty.getItemStack());
-
-		Fluids.BIOMASS.register();
-		LiquidHelper.injectLiquidContainer(Fluids.BIOMASS, Defaults.BUCKET_VOLUME, ForestryItem.bucketBiomass.getItemStack(), new ItemStack(Items.bucket));
-		LiquidHelper.injectTinContainer(Fluids.BIOMASS, Defaults.BUCKET_VOLUME, ForestryItem.canBiomass.getItemStack(), ForestryItem.canEmpty.getItemStack());
-		LiquidHelper.injectWaxContainer(Fluids.BIOMASS, Defaults.BUCKET_VOLUME, ForestryItem.waxCapsuleBiomass.getItemStack(), ForestryItem.waxCapsule.getItemStack());
-		LiquidHelper.injectRefractoryContainer(Fluids.BIOMASS, Defaults.BUCKET_VOLUME, ForestryItem.refractoryBiomass.getItemStack(), ForestryItem.refractoryEmpty.getItemStack());
-
-		Fluids.BIOETHANOL.register();
-		LiquidHelper.injectLiquidContainer(Fluids.BIOETHANOL, Defaults.BUCKET_VOLUME, ForestryItem.bucketBiofuel.getItemStack(), new ItemStack(Items.bucket));
-		LiquidHelper.injectTinContainer(Fluids.BIOETHANOL, Defaults.BUCKET_VOLUME, ForestryItem.canBiofuel.getItemStack(), ForestryItem.canEmpty.getItemStack());
-		LiquidHelper.injectWaxContainer(Fluids.BIOETHANOL, Defaults.BUCKET_VOLUME, ForestryItem.waxCapsuleBiofuel.getItemStack(), ForestryItem.waxCapsule.getItemStack());
-		LiquidHelper.injectRefractoryContainer(Fluids.BIOETHANOL, Defaults.BUCKET_VOLUME, ForestryItem.refractoryBiofuel.getItemStack(), ForestryItem.refractoryEmpty.getItemStack());
-
-		Fluids.SEEDOIL.register();
-		LiquidHelper.injectTinContainer(Fluids.SEEDOIL, Defaults.BUCKET_VOLUME, ForestryItem.canSeedOil.getItemStack(), ForestryItem.canEmpty.getItemStack());
-		LiquidHelper.injectWaxContainer(Fluids.SEEDOIL, Defaults.BUCKET_VOLUME, ForestryItem.waxCapsuleSeedOil.getItemStack(), ForestryItem.waxCapsule.getItemStack());
-		LiquidHelper.injectRefractoryContainer(Fluids.SEEDOIL, Defaults.BUCKET_VOLUME, ForestryItem.refractorySeedOil.getItemStack(), ForestryItem.refractoryEmpty.getItemStack());
-
-		Fluids.HONEY.register();
-		LiquidHelper.injectTinContainer(Fluids.HONEY, Defaults.BUCKET_VOLUME, ForestryItem.canHoney.getItemStack(), ForestryItem.canEmpty.getItemStack());
-		LiquidHelper.injectWaxContainer(Fluids.HONEY, Defaults.BUCKET_VOLUME, ForestryItem.waxCapsuleHoney.getItemStack(), ForestryItem.waxCapsule.getItemStack());
-		LiquidHelper.injectRefractoryContainer(Fluids.HONEY, Defaults.BUCKET_VOLUME, ForestryItem.refractoryHoney.getItemStack(), ForestryItem.refractoryEmpty.getItemStack());
-
-		Fluids.JUICE.register();
-		LiquidHelper.injectTinContainer(Fluids.JUICE, Defaults.BUCKET_VOLUME, ForestryItem.canJuice.getItemStack(), ForestryItem.canEmpty.getItemStack());
-		LiquidHelper.injectWaxContainer(Fluids.JUICE, Defaults.BUCKET_VOLUME, ForestryItem.waxCapsuleJuice.getItemStack(), ForestryItem.waxCapsule.getItemStack());
-		LiquidHelper.injectRefractoryContainer(Fluids.JUICE, Defaults.BUCKET_VOLUME, ForestryItem.refractoryJuice.getItemStack(), ForestryItem.refractoryEmpty.getItemStack());
-
-		Fluids.ICE.register();
-		LiquidHelper.injectTinContainer(Fluids.ICE, Defaults.BUCKET_VOLUME, ForestryItem.canIce.getItemStack(), ForestryItem.canEmpty.getItemStack());
-		LiquidHelper.injectWaxContainer(Fluids.ICE, Defaults.BUCKET_VOLUME, ForestryItem.waxCapsuleIce.getItemStack(), ForestryItem.waxCapsule.getItemStack());
-		LiquidHelper.injectRefractoryContainer(Fluids.ICE, Defaults.BUCKET_VOLUME, ForestryItem.refractoryIce.getItemStack(), ForestryItem.refractoryEmpty.getItemStack());
-
+		LiquidHelper.injectLiquidContainer(Fluids.WATER, Defaults.BUCKET_VOLUME, new ItemStack(Items.potionitem), new ItemStack(Items.glass_bottle));
+		LiquidHelper.injectLiquidContainer(Fluids.WATER, ForestryItem.canWater.getItemStack());
+		LiquidHelper.injectLiquidContainer(Fluids.WATER, ForestryItem.waxCapsuleWater.getItemStack());
+		LiquidHelper.injectLiquidContainer(Fluids.WATER, ForestryItem.refractoryWater.getItemStack());
 	}
 }
