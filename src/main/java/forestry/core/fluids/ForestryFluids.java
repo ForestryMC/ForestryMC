@@ -99,6 +99,7 @@ public enum ForestryFluids {
 			);
 		}
 	},
+	LEGACY_HONEY(Fluids.LEGACY_HONEY, new Color(224, 194, 57), 1420, 73600),
 	ICE(Fluids.ICE, new Color(175, 242, 255), 920, 1000, 265) {
 		@Override
 		public Block makeBlock() {
@@ -177,6 +178,10 @@ public enum ForestryFluids {
 	protected Fluid fluid;
 	protected Block fluidBlock;
 
+	private ForestryFluids(Fluids standardFluid, Color color) {
+		this(standardFluid, color, 1000, 1000, 295);
+	}
+
 	private ForestryFluids(Fluids standardFluid, Color color, int density, int viscosity) {
 		this(standardFluid, color, density, viscosity, 295);
 	}
@@ -192,9 +197,12 @@ public enum ForestryFluids {
 
 	private void initFluid() {
 		if (fluid == null && Config.isFluidEnabled(this)) {
-			fluid = new Fluid(standardFluid.getTag()).setDensity(density).setViscosity(viscosity).setTemperature(temperature);
-			FluidRegistry.registerFluid(fluid);
-			initBlock();
+			String fluidName = standardFluid.getTag();
+			if (!FluidRegistry.isFluidRegistered(fluidName)) {
+				fluid = new Fluid(fluidName).setDensity(density).setViscosity(viscosity).setTemperature(temperature);
+				FluidRegistry.registerFluid(fluid);
+				initBlock();
+			}
 		}
 	}
 
@@ -202,7 +210,9 @@ public enum ForestryFluids {
 		return Collections.emptyList();
 	}
 
-	abstract Block makeBlock();
+	Block makeBlock() {
+		return null;
+	}
 
 	private void initBlock() {
 		if (fluidBlock != null)
@@ -217,20 +227,16 @@ public enum ForestryFluids {
 		if (Config.isBlockEnabled(tag))
 			if (fluidBlock == null) {
 				fluidBlock = makeBlock();
-				fluidBlock.setBlockName("forestry." + tag);
-				Proxies.common.registerBlock(fluidBlock, ItemBlock.class);
+				if (fluidBlock != null) {
+					fluidBlock.setBlockName("forestry." + tag);
+					Proxies.common.registerBlock(fluidBlock, ItemBlock.class);
+				}
 			} else {
 				GameRegistry.UniqueIdentifier blockID = GameRegistry.findUniqueIdentifierFor(fluidBlock);
 				Proxies.log.severe("Pre-existing {0} fluid block detected, deferring to {1}:{2}, "
 						+ "this may cause issues if the server/client have different mod load orders, "
 						+ "recommended that you disable all but one instance of {0} fluid blocks via your configs.", fluid.getName(), blockID.modId, blockID.name);
 			}
-	}
-
-	public static void resetFluidIcons(IIconRegister register) {
-		for (ForestryFluids fluid : VALUES) {
-			fluid.getBlock().registerBlockIcons(register);
-		}
 	}
 
 	public Block getBlock() {

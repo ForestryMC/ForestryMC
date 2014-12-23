@@ -24,8 +24,11 @@ import net.minecraftforge.fluids.FluidStack;
  */
 public enum Fluids {
 
-	WATER, LAVA, FUEL, BIOMASS, BIOFUEL, CREOSOTE, STEAM, BIOETHANOL,
-	COAL, PYROTHEUM, HONEY("for.honey"), MILK, JUICE, ICE, GLASS, OIL, SEEDOIL, SHORT_MEAD("short.mead");
+	WATER, LAVA,
+	FUEL, OIL, BIOFUEL,
+	CREOSOTE, STEAM,
+	COAL, PYROTHEUM,
+	BIOMASS, BIOETHANOL, LEGACY_HONEY("honey"), HONEY("for.honey"), MILK, JUICE, ICE, GLASS, SEEDOIL, SHORT_MEAD("short.mead");
 
 	private final String tag;
 
@@ -69,6 +72,4 @@ public enum Fluids {
 			return true;
 		return fluid == null && fluidStack == null;
 	}
-
-
 }

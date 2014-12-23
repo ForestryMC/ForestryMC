@@ -299,6 +299,9 @@ public class PluginFactory extends ForestryPlugin {
 		RecipeManagers.stillManager.addRecipe(Defaults.STILL_DESTILLATION_DURATION, Fluids.BIOMASS.get(Defaults.STILL_DESTILLATION_INPUT),
 				Fluids.BIOETHANOL.get(Defaults.STILL_DESTILLATION_OUTPUT));
 
+		// convert old honey to new honey
+		RecipeManagers.stillManager.addRecipe(1, Fluids.LEGACY_HONEY.get(1000), Fluids.HONEY.get(1000));
+
 		// MOISTENER
 		RecipeManagers.moistenerManager.addRecipe(new ItemStack(Items.wheat_seeds), new ItemStack(Blocks.mycelium), 5000);
 		RecipeManagers.moistenerManager.addRecipe(new ItemStack(Blocks.cobblestone), new ItemStack(Blocks.mossy_cobblestone), 20000);

@@ -89,8 +89,6 @@ public class EventHandlerCore {
 		if(event.map.getTextureType() == 1) {
 			ErrorStateRegistry.initIcons(event.map);
 			TextureManager.getInstance().initDefaultIcons(event.map);
-		} else if(event.map.getTextureType() == 0) {
-			ForestryFluids.resetFluidIcons(event.map);
 		}
 	}
 
