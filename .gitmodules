@@ -4,6 +4,3 @@
 [submodule "api/redstoneflux"]
 	path = api/redstoneflux
 	url = git@github.com:CoFH/RedstoneFlux-API.git
-[submodule "api/forestry"]
-	path = api/forestry
-	url = git@github.com:ForestryMC/ForestryAPI.git
