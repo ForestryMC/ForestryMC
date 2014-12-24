@@ -182,7 +182,7 @@ public class PluginMail extends ForestryPlugin {
 						'X', stampDefinitions[i].getCraftingIngredient(),
 						'#', Items.paper,
 						'Z', stampGlue);
-				RecipeManagers.carpenterManager.addRecipe(10, Fluids.SEEDOIL.get(300), null, ForestryItem.stamps.getItemStack(9, i),
+				RecipeManagers.carpenterManager.addRecipe(10, Fluids.SEEDOIL.getFluid(300), null, ForestryItem.stamps.getItemStack(9, i),
 						"XXX", "###",
 						'X', stampDefinitions[i].getCraftingIngredient(),
 						'#', Items.paper);
@@ -192,7 +192,7 @@ public class PluginMail extends ForestryPlugin {
 		Proxies.common.addRecipe(new ItemStack(Items.paper), "###", '#', ForestryItem.letters.getItemStack(1, Defaults.WILDCARD));
 
 		// Carpenter
-		RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.get(250), null, ForestryItem.letters.getItemStack(), "###", "###", '#', ForestryItem.woodPulp);
+		RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(250), null, ForestryItem.letters.getItemStack(), "###", "###", '#', ForestryItem.woodPulp);
 
 		Proxies.common.addShapelessRecipe(ForestryItem.catalogue.getItemStack(), ForestryItem.stamps.getItemStack(1, Defaults.WILDCARD), new ItemStack(Items.book));
 	}

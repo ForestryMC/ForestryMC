@@ -67,7 +67,7 @@ public class LiquidHelper {
 	}
 
 	public static void injectLiquidContainer(Fluids fluid, int volume, ItemStack filled, ItemStack empty, ItemStack remnant, int chance) {
-		FluidStack contained = fluid.get(volume);
+		FluidStack contained = fluid.getFluid(volume);
 		if (contained == null)
 			throw new IllegalArgumentException(String.format("Attempted to inject a liquid container for the non-existent liquid '%s'.", fluid));
 

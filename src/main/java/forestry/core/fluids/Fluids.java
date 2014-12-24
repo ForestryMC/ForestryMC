@@ -44,27 +44,27 @@ public enum Fluids {
 		return tag;
 	}
 
-	public Fluid get() {
+	public Fluid getFluid() {
 		return FluidRegistry.getFluid(tag);
 	}
 
 	/**
 	 * Gets a FluidStack filled with mb milliBuckets worth of Fluid.
 	 */
-	public FluidStack get(int mb) {
+	public FluidStack getFluid(int mb) {
 		return FluidRegistry.getFluidStack(tag, mb);
 	}
 
 	public boolean is(Fluid fluid) {
-		return get() == fluid;
+		return getFluid() == fluid;
 	}
 
 	public boolean is(FluidStack fluidStack) {
-		return fluidStack != null && get() == fluidStack.getFluid();
+		return fluidStack != null && getFluid() == fluidStack.getFluid();
 	}
 
 	public boolean isContained(ItemStack containerStack) {
-		return containerStack != null && FluidHelper.containsFluid(containerStack, get());
+		return containerStack != null && FluidHelper.containsFluid(containerStack, getFluid());
 	}
 
 	public static boolean areEqual(Fluid fluid, FluidStack fluidStack) {

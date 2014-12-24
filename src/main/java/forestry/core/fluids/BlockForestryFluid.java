@@ -57,7 +57,7 @@ public class BlockForestryFluid extends BlockFluidClassic {
 	}
 
 	public BlockForestryFluid(ForestryFluids forestryFluid, int flammability, boolean flammable) {
-		this(forestryFluid.standardFluid.get(), flammability, flammable, forestryFluid.getColor());
+		this(forestryFluid.standardFluid.getFluid(), flammability, flammable, forestryFluid.getColor());
 	}
 
 	private BlockForestryFluid(Fluid fluid, int flammability, boolean flammable, Color color) {

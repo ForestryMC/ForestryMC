@@ -195,11 +195,11 @@ public class PluginIC2 extends ForestryPlugin {
 		definitionEngineTin.register();
 		definitionGenerator.register();
 
-		FluidStack ethanol = Fluids.BIOETHANOL.get(1);
+		FluidStack ethanol = Fluids.BIOETHANOL.getFluid(1);
 		GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * GameMode.getGameMode().getFloatSetting("fuel.ethanol.generator")), 4);
 		FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
 
-		FluidStack biomass = Fluids.BIOMASS.get(1);
+		FluidStack biomass = Fluids.BIOMASS.getFluid(1);
 		GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * GameMode.getGameMode().getFloatSetting("fuel.biomass.generator")), 1);
 		FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
 
@@ -265,7 +265,7 @@ public class PluginIC2 extends ForestryPlugin {
 
 		if (rubber != null) {
 			for (Object rubberOreDict : RecipeUtil.getOreDictRecipeEquivalents(rubber)) {
-				RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.get(500), ForestryItem.tubes.getItemStack(4, 8),
+				RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 8),
 						new Object[]{" X ", "#X#", "XXX", '#', Items.redstone, 'X', rubberOreDict});
 			}
 		}

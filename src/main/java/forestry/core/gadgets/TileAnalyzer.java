@@ -67,7 +67,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	public TileAnalyzer() {
 		super(800, 40, Defaults.MACHINE_MAX_ENERGY);
 		setInternalInventory(new TileInventoryAdapter(this, 12, "Items"));
-		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, Fluids.HONEY.get());
+		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, Fluids.HONEY.getFluid());
 		tankManager = new TankManager(resourceTank);
 		invInput = new InventoryMapper(getInternalInventory(), SLOT_INPUT_1, 6);
 	}
@@ -127,9 +127,9 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		// Check if we have suitable items waiting in the can slot
 		FluidHelper.drainContainers(tankManager, this, SLOT_CAN);
 		ItemStack can = getStackInSlot(SLOT_CAN);
-		if (ForestryItem.honeyDrop.isItemEqual(can) && resourceTank.fill(Fluids.HONEY.get(Defaults.FLUID_PER_HONEY_DROP), false) == Defaults.FLUID_PER_HONEY_DROP) {
+		if (ForestryItem.honeyDrop.isItemEqual(can) && resourceTank.fill(Fluids.HONEY.getFluid(Defaults.FLUID_PER_HONEY_DROP), false) == Defaults.FLUID_PER_HONEY_DROP) {
 			setInventorySlotContents(SLOT_CAN, InvTools.depleteItem(can));
-			resourceTank.fill(Fluids.HONEY.get(Defaults.FLUID_PER_HONEY_DROP), true);
+			resourceTank.fill(Fluids.HONEY.getFluid(Defaults.FLUID_PER_HONEY_DROP), true);
 		}
 
 		for (int i = 0; i < invInput.getSizeInventory(); i++) {

@@ -218,7 +218,7 @@ public enum ForestryFluids {
 		if (fluidBlock != null)
 			return;
 
-		Fluid fluid = standardFluid.get();
+		Fluid fluid = standardFluid.getFluid();
 		if (fluid == null)
 			return;
 
@@ -263,7 +263,7 @@ public enum ForestryFluids {
 
 	public static void init() {
 		for (ForestryFluids fluidType : VALUES) {
-			if (fluidType.standardFluid.get() == null)
+			if (fluidType.standardFluid.getFluid() == null)
 				continue;
 
 			for (ItemStack filledContainer : fluidType.getFilledContainers()) {
@@ -275,7 +275,7 @@ public enum ForestryFluids {
 	public static void postInit() {
 		for (ForestryFluids fluidType : VALUES) {
 			fluidType.initBlock();
-			if (fluidType.standardFluid.get() == null)
+			if (fluidType.standardFluid.getFluid() == null)
 				throw new MissingFluidException(fluidType.standardFluid.getTag());
 		}
 	}

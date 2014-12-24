@@ -92,17 +92,17 @@ public class ForestryCore {
 		FuelManager.copperEngineFuel.put(ForestryItem.bituminousPeat.getItemStack(), new EngineCopperFuel(ForestryItem.bituminousPeat.getItemStack(),
 				Defaults.ENGINE_COPPER_FUEL_VALUE_BITUMINOUS_PEAT, Defaults.ENGINE_COPPER_CYCLE_DURATION_BITUMINOUS_PEAT));
 
-		FuelManager.bronzeEngineFuel.put(Fluids.BIOMASS.get(), new EngineBronzeFuel(Fluids.BIOMASS.get(),
+		FuelManager.bronzeEngineFuel.put(Fluids.BIOMASS.getFluid(), new EngineBronzeFuel(Fluids.BIOMASS.getFluid(),
 				Defaults.ENGINE_FUEL_VALUE_BIOMASS, (int) (Defaults.ENGINE_CYCLE_DURATION_BIOMASS * GameMode.getGameMode().getFloatSetting("fuel.biomass.biogas")), 1));
-		FuelManager.bronzeEngineFuel.put(Fluids.WATER.get(), new EngineBronzeFuel(Fluids.WATER.get(),
+		FuelManager.bronzeEngineFuel.put(Fluids.WATER.getFluid(), new EngineBronzeFuel(Fluids.WATER.getFluid(),
 				Defaults.ENGINE_FUEL_VALUE_WATER, Defaults.ENGINE_CYCLE_DURATION_WATER, 3));
-		FuelManager.bronzeEngineFuel.put(Fluids.MILK.get(), new EngineBronzeFuel(Fluids.MILK.get(),
+		FuelManager.bronzeEngineFuel.put(Fluids.MILK.getFluid(), new EngineBronzeFuel(Fluids.MILK.getFluid(),
 				Defaults.ENGINE_FUEL_VALUE_MILK, Defaults.ENGINE_CYCLE_DURATION_MILK, 3));
-		FuelManager.bronzeEngineFuel.put(Fluids.SEEDOIL.get(), new EngineBronzeFuel(Fluids.SEEDOIL.get(),
+		FuelManager.bronzeEngineFuel.put(Fluids.SEEDOIL.getFluid(), new EngineBronzeFuel(Fluids.SEEDOIL.getFluid(),
 				Defaults.ENGINE_FUEL_VALUE_SEED_OIL, Defaults.ENGINE_CYCLE_DURATION_SEED_OIL, 1));
-		FuelManager.bronzeEngineFuel.put(Fluids.HONEY.get(), new EngineBronzeFuel(Fluids.HONEY.get(),
+		FuelManager.bronzeEngineFuel.put(Fluids.HONEY.getFluid(), new EngineBronzeFuel(Fluids.HONEY.getFluid(),
 				Defaults.ENGINE_FUEL_VALUE_HONEY, Defaults.ENGINE_CYCLE_DURATION_HONEY, 1));
-		FuelManager.bronzeEngineFuel.put(Fluids.JUICE.get(), new EngineBronzeFuel(Fluids.JUICE.get(),
+		FuelManager.bronzeEngineFuel.put(Fluids.JUICE.getFluid(), new EngineBronzeFuel(Fluids.JUICE.getFluid(),
 				Defaults.ENGINE_FUEL_VALUE_JUICE, Defaults.ENGINE_CYCLE_DURATION_JUICE, 1));
 
 		// Set rain substrates

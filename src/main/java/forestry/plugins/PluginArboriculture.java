@@ -408,7 +408,7 @@ public class PluginArboriculture extends ForestryPlugin {
 
 					ItemStack logStack = forestryBlock.getItemStack(1, i);
 					ItemStack fireproofLogStack = fireproofLog.getItemStack(1, i);
-					RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.get(500), fireproofLogStack, new Object[]{
+					RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), fireproofLogStack, new Object[]{
 							" # ",
 							"#X#",
 							" # ",
@@ -423,7 +423,7 @@ public class PluginArboriculture extends ForestryPlugin {
 				ForestryBlock fireproofPlank = BlockFireproofPlanks.getFireproofPlanks((BlockPlanks)plank.block());
 				ItemStack plankStack = plank.getItemStack(1, i);
 				ItemStack fireproofPlankStack = fireproofPlank.getItemStack(5, i);
-				RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.get(500), fireproofPlankStack, new Object[]{
+				RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), fireproofPlankStack, new Object[]{
 						"X#X",
 						"#X#",
 						"X#X",
@@ -435,7 +435,7 @@ public class PluginArboriculture extends ForestryPlugin {
 				ForestryBlock fireproofPlank = BlockFireproofPlanks.getFireproofPlanks((BlockPlanks)plank.block());
 				ItemStack plankStack = plank.getItemStack(1, i);
 				ItemStack fireproofPlankStack = fireproofPlank.getItemStack(5, i);
-				RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.get(500), fireproofPlankStack, new Object[]{
+				RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), fireproofPlankStack, new Object[]{
 						"X#X",
 						"#X#",
 						"X#X",
@@ -473,7 +473,7 @@ public class PluginArboriculture extends ForestryPlugin {
 			Proxies.common.addRecipe(ForestryBlock.fences2.getItemStack(4, i), "###", "# #", '#', ForestryBlock.planks2.getItemStack(1, i));
 
 		// Treealyzer
-		RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.get(2000), null, ForestryItem.treealyzer.getItemStack(), "X#X", "X#X", "RDR",
+		RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, ForestryItem.treealyzer.getItemStack(), "X#X", "X#X", "RDR",
 				'#', Blocks.glass_pane,
 				'X', "ingotCopper",
 				'R', Items.redstone,
@@ -483,13 +483,13 @@ public class PluginArboriculture extends ForestryPlugin {
 		int seedOilMultiplier = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");
 		int juiceMultiplier = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple");
 		int mulchMultiplier = GameMode.getGameMode().getIntegerSetting("squeezer.mulch.apple");
-		RecipeManagers.squeezerManager.addRecipe(20, new ItemStack[]{EnumFruit.CHERRY.getStack()}, Fluids.SEEDOIL.get(5 * seedOilMultiplier), ForestryItem.mulch.getItemStack(), 5);
-		RecipeManagers.squeezerManager.addRecipe(60, new ItemStack[]{EnumFruit.WALNUT.getStack()}, Fluids.SEEDOIL.get(18 * seedOilMultiplier), ForestryItem.mulch.getItemStack(), 5);
-		RecipeManagers.squeezerManager.addRecipe(70, new ItemStack[]{EnumFruit.CHESTNUT.getStack()}, Fluids.SEEDOIL.get(22 * seedOilMultiplier), ForestryItem.mulch.getItemStack(), 2);
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.LEMON.getStack()}, Fluids.JUICE.get(juiceMultiplier * 2), ForestryItem.mulch.getItemStack(), (int) Math.floor(mulchMultiplier * 0.5f));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.PLUM.getStack()}, Fluids.JUICE.get((int) Math.floor(juiceMultiplier * 0.5f)), ForestryItem.mulch.getItemStack(), mulchMultiplier * 3);
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.PAPAYA.getStack()}, Fluids.JUICE.get(juiceMultiplier * 3), ForestryItem.mulch.getItemStack(), (int) Math.floor(mulchMultiplier * 0.5f));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.DATES.getStack()}, Fluids.JUICE.get((int) Math.floor(juiceMultiplier * 0.25)), ForestryItem.mulch.getItemStack(), mulchMultiplier);
+		RecipeManagers.squeezerManager.addRecipe(20, new ItemStack[]{EnumFruit.CHERRY.getStack()}, Fluids.SEEDOIL.getFluid(5 * seedOilMultiplier), ForestryItem.mulch.getItemStack(), 5);
+		RecipeManagers.squeezerManager.addRecipe(60, new ItemStack[]{EnumFruit.WALNUT.getStack()}, Fluids.SEEDOIL.getFluid(18 * seedOilMultiplier), ForestryItem.mulch.getItemStack(), 5);
+		RecipeManagers.squeezerManager.addRecipe(70, new ItemStack[]{EnumFruit.CHESTNUT.getStack()}, Fluids.SEEDOIL.getFluid(22 * seedOilMultiplier), ForestryItem.mulch.getItemStack(), 2);
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.LEMON.getStack()}, Fluids.JUICE.getFluid(juiceMultiplier * 2), ForestryItem.mulch.getItemStack(), (int) Math.floor(mulchMultiplier * 0.5f));
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.PLUM.getStack()}, Fluids.JUICE.getFluid((int) Math.floor(juiceMultiplier * 0.5f)), ForestryItem.mulch.getItemStack(), mulchMultiplier * 3);
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.PAPAYA.getStack()}, Fluids.JUICE.getFluid(juiceMultiplier * 3), ForestryItem.mulch.getItemStack(), (int) Math.floor(mulchMultiplier * 0.5f));
+		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.DATES.getStack()}, Fluids.JUICE.getFluid((int) Math.floor(juiceMultiplier * 0.25)), ForestryItem.mulch.getItemStack(), mulchMultiplier);
 
 		RecipeUtil.injectLeveledRecipe(ForestryItem.sapling.getItemStack(), GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 

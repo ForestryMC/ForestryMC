@@ -142,14 +142,14 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		@Override
 		public void addCrating(ItemStack itemStack) {
 			ItemStack uncrated = ((forestry.core.items.ItemCrated) itemStack.getItem()).getContained(itemStack);
-			addRecipe(Defaults.CARPENTER_CRATING_CYCLES, Fluids.WATER.get(Defaults.CARPENTER_CRATING_LIQUID_QUANTITY),
+			addRecipe(Defaults.CARPENTER_CRATING_CYCLES, Fluids.WATER.getFluid(Defaults.CARPENTER_CRATING_LIQUID_QUANTITY),
 					ForestryItem.crate.getItemStack(), itemStack, new Object[] { "###", "###", "###", '#', uncrated });
 			addRecipe(null, new ItemStack(uncrated.getItem(), 9, uncrated.getItemDamage()), new Object[] { "#", '#', itemStack });
 		}
 
 		@Override
 		public void addCrating(String toCrate, ItemStack unpack, ItemStack crated) {
-			addRecipe(Defaults.CARPENTER_CRATING_CYCLES, Fluids.WATER.get(Defaults.CARPENTER_CRATING_LIQUID_QUANTITY),
+			addRecipe(Defaults.CARPENTER_CRATING_CYCLES, Fluids.WATER.getFluid(Defaults.CARPENTER_CRATING_LIQUID_QUANTITY),
 					ForestryItem.crate.getItemStack(), crated, new Object[] { "###", "###", "###", '#', toCrate });
 			addRecipe(null, new ItemStack(unpack.getItem(), 9, unpack.getItemDamage()), new Object[] { "#", '#', crated });
 		}

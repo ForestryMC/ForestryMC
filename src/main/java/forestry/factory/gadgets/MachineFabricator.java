@@ -230,7 +230,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		super(1100, 50, 3300);
 		setInternalInventory(new TileInventoryAdapter(this, 30, "Items"));
 		invCrafting = new InventoryMapper(getInternalInventory(), SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
-		moltenTank = new FilteredTank(2 * Defaults.BUCKET_VOLUME, Fluids.GLASS.get());
+		moltenTank = new FilteredTank(2 * Defaults.BUCKET_VOLUME, Fluids.GLASS.getFluid());
 		moltenTank.tankMode = StandardTank.TankMode.INTERNAL;
 		tankManager = new TankManager(moltenTank);
 	}

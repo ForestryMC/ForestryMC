@@ -133,7 +133,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 
 		@Override
 		public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output) {
-			addRecipe(resource, fermentationValue, modifier, output, Fluids.WATER.get(1000));
+			addRecipe(resource, fermentationValue, modifier, output, Fluids.WATER.getFluid(1000));
 		}
 
 		public static Recipe findMatchingRecipe(ItemStack res, FluidStack liqu) {

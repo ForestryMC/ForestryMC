@@ -30,7 +30,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 	protected final ItemStack ground;
 	private final ItemStack[] resource;
 
-	private static final FluidStack STACK_WATER = Fluids.WATER.get(1000);
+	private static final FluidStack STACK_WATER = Fluids.WATER.getFluid(1000);
 
 	ArrayList<ItemStack> produce = new ArrayList<ItemStack>();
 

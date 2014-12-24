@@ -145,7 +145,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 	protected void registerRecipes() {
 		CraftingManager.getInstance().getRecipeList().add(new MatingRecipe());
 
-		RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.get(2000), null, ForestryItem.flutterlyzer.getItemStack(),
+		RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, ForestryItem.flutterlyzer.getItemStack(),
 				"X#X", "X#X", "RDR", '#', Blocks.glass_pane, 'X', "ingotBronze", 'R',
 				Items.redstone, 'D', Items.diamond);
 	}

@@ -44,16 +44,16 @@ public class PluginBuildCraftFuels extends ForestryPlugin {
 	@Optional.Method(modid = "BuildCraftAPI|fuels")
 	@Override
 	public void doInit() {
-		BuildcraftFuelRegistry.coolant.addCoolant(Fluids.ICE.get(), 10.0f);
+		BuildcraftFuelRegistry.coolant.addCoolant(Fluids.ICE.getFluid(), 10.0f);
 
-		Fluid ethanol = Fluids.BIOETHANOL.get();
+		Fluid ethanol = Fluids.BIOETHANOL.getFluid();
 		if (ethanol != null) {
 			int ethanolPower = 40;
 			int ethanolBurnTime = Math.round(Defaults.ENGINE_CYCLE_DURATION_ETHANOL * GameMode.getGameMode().getFloatSetting("fuel.ethanol.combustion"));
 			BuildcraftFuelRegistry.fuel.addFuel(ethanol, ethanolPower, ethanolBurnTime);
 		}
 
-		Fluid oil = Fluids.OIL.get();
+		Fluid oil = Fluids.OIL.getFluid();
 		if (oil != null) {
 			Block oilBlock = oil.getBlock();
 			if (oilBlock != null) {
@@ -68,7 +68,7 @@ public class PluginBuildCraftFuels extends ForestryPlugin {
 			}
 		}
 
-		Fluid fuel = Fluids.FUEL.get();
+		Fluid fuel = Fluids.FUEL.getFluid();
 		if (fuel != null) {
 			Block fuelBlock = fuel.getBlock();
 			if (fuelBlock != null) {

@@ -36,7 +36,7 @@ public class ContainerAnalyzer extends ContainerLiquidTanks {
 		addSlotToContainer(new SlotCustom(tile, TileAnalyzer.SLOT_ANALYZE, 73, 59));
 
 		// Can slot
-		addSlotToContainer(new SlotLiquidContainer(tile, TileAnalyzer.SLOT_CAN, 143, 24, false, Fluids.HONEY.get()) {
+		addSlotToContainer(new SlotLiquidContainer(tile, TileAnalyzer.SLOT_CAN, 143, 24, false, Fluids.HONEY.getFluid()) {
 
 			@Override
 			public boolean isItemValid(ItemStack stack) {

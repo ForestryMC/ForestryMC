@@ -43,7 +43,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 	/* CONSTANTS */
 	public static final short SLOT_RESOURCE = 0;
 	public static final short SLOT_PRODUCT = 1;
-	private static final FluidStack STACK_WATER = Fluids.WATER.get(Defaults.RAINTANK_AMOUNT_PER_UPDATE);
+	private static final FluidStack STACK_WATER = Fluids.WATER.getFluid(Defaults.RAINTANK_AMOUNT_PER_UPDATE);
 
 	/* MEMBER */
 	private final FilteredTank resourceTank;
@@ -131,7 +131,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 			tryToStartFillling();
 		else {
 			fillingTime--;
-			if (fillingTime <= 0 && FluidHelper.fillContainers(tankManager, inventory, SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.get()))
+			if (fillingTime <= 0 && FluidHelper.fillContainers(tankManager, inventory, SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.getFluid()))
 				fillingTime = 0;
 		}
 	}
@@ -142,7 +142,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 
 	private void tryToStartFillling() {
 		// Nothing to do if no empty cans are available
-		if (!FluidHelper.fillContainers(tankManager, getInternalInventory(), SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.get(), false))
+		if (!FluidHelper.fillContainers(tankManager, getInternalInventory(), SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.getFluid(), false))
 			return;
 
 		fillingTime = Defaults.RAINTANK_FILLING_TIME;
