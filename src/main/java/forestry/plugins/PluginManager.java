@@ -61,7 +61,8 @@ public class PluginManager {
 
 	public enum Module {
 
-		CORE(new PluginCore()),
+		CORE(new PluginCore(), false),
+		FLUIDS(new PluginFluids(), false),
 		APICULTURE(new PluginApiculture()),
 		ARBORICULTURE(new PluginArboriculture()),
 		ENERGY(new PluginEnergy()),
@@ -82,9 +83,15 @@ public class PluginManager {
 		NATURA(new PluginNatura()),;
 
 		private final ForestryPlugin instance;
+		private final boolean canBeDisabled;
 
 		private Module(ForestryPlugin plugin) {
+			this(plugin, true);
+		}
+
+		private Module(ForestryPlugin plugin, boolean canBeDisabled) {
 			this.instance = plugin;
+			this.canBeDisabled = canBeDisabled;
 		}
 
 		public ForestryPlugin instance() {
@@ -93,6 +100,10 @@ public class PluginManager {
 
 		public boolean isEnabled() {
 			return isModuleLoaded(this);
+		}
+
+		public boolean canBeDisabled() {
+			return canBeDisabled;
 		}
 
 	}
@@ -128,7 +139,7 @@ public class PluginManager {
 		Iterator<Module> it = toLoad.iterator();
 		while (it.hasNext()) {
 			Module m = it.next();
-			if (m == Module.CORE)
+			if (!m.canBeDisabled())
 				continue;
 			if (!isEnabled(config, m)) {
 				it.remove();

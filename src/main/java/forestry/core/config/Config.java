@@ -19,11 +19,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import forestry.core.fluids.ForestryFluids;
+import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
 
 public class Config {
@@ -88,8 +87,8 @@ public class Config {
 		return !Config.disabledStructures.contains(uid);
 	}
 
-	public static boolean isFluidEnabled(ForestryFluids fluids) {
-		return !Config.disabledFluids.contains(fluids.tag);
+	public static boolean isFluidEnabled(Fluids fluids) {
+		return !Config.disabledFluids.contains(fluids.getTag());
 	}
 
 	public static boolean isBlockEnabled(String tag) {
@@ -244,16 +243,16 @@ public class Config {
 
 	private static void loadFluids() {
 		Property property;
-		for (ForestryFluids fluid : ForestryFluids.values()) {
-			property = config.get("disable.fluid." + fluid.tag, CATEGORY_FLUIDS, false);
-			property.comment = "set to true to disable the fluid for " + fluid.tag;
+		for (Fluids fluid : Fluids.values()) {
+			property = config.get("disable.fluid." + fluid.getTag(), CATEGORY_FLUIDS, false);
+			property.comment = "set to true to disable the fluid for " + fluid.getTag();
 			if (Boolean.parseBoolean(property.value))
-				Config.disabledFluids.add(fluid.tag);
+				Config.disabledFluids.add(fluid.getTag());
 
-			property = config.get("disable.fluidBlock." + fluid.tag, CATEGORY_FLUIDS, false);
-			property.comment = "set to true to disable the in-world FluidBlock for " + fluid.tag;
+			property = config.get("disable.fluidBlock." + fluid.getTag(), CATEGORY_FLUIDS, false);
+			property.comment = "set to true to disable the in-world FluidBlock for " + fluid.getTag();
 			if (Boolean.parseBoolean(property.value))
-				Config.disabledBlocks.add(fluid.tag);
+				Config.disabledBlocks.add(fluid.getTag());
 		}
 	}
 

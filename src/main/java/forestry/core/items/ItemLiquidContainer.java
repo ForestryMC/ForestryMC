@@ -63,12 +63,10 @@ public class ItemLiquidContainer extends Item {
 	private final Color color;
 
 	public ItemLiquidContainer(EnumContainerType type, Block contents, Color color) {
-		super();
 		this.type = type;
 		this.contents = contents;
 		this.color = color;
 		setCreativeTab(CreativeTabForestry.tabForestry);
-		setMaxStackSize(16);
 		if (type == EnumContainerType.BUCKET) {
 			setContainerItem(Items.bucket);
 			this.maxStackSize = 1;

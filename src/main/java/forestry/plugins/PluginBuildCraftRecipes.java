@@ -33,6 +33,6 @@ public class PluginBuildCraftRecipes extends ForestryPlugin {
 	@Override
 	protected void registerRecipes() {
 		// Add recipe for ethanol
-		BuildcraftRecipeRegistry.refinery.addRecipe("forestry:BiomassToEthanol", Fluids.BIOMASS.getFluid(4), Fluids.BIOETHANOL.getFluid(1), 100, 1);
+		BuildcraftRecipeRegistry.refinery.addRecipe("forestry:BiomassToEthanol", Fluids.BIOMASS.getFluid(4), Fluids.ETHANOL.getFluid(1), 100, 1);
 	}
 }

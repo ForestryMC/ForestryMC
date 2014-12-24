@@ -10,23 +10,16 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import java.awt.Color;
-
-import net.minecraft.block.Block;
-
 import net.minecraftforge.fluids.Fluid;
 
 import cpw.mods.fml.common.Optional;
 
 import forestry.core.GameMode;
 import forestry.core.config.Defaults;
-import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.LiquidHelper;
 
 import buildcraft.api.fuels.BuildcraftFuelRegistry;
-import forestry.core.items.ItemLiquidContainer.EnumContainerType;
 
 @Plugin(pluginID = "BC6|Fuels", name = "BuildCraft 6 Fuels", author = "mezz", url = Defaults.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
 public class PluginBuildCraftFuels extends ForestryPlugin {
@@ -46,41 +39,11 @@ public class PluginBuildCraftFuels extends ForestryPlugin {
 	public void doInit() {
 		BuildcraftFuelRegistry.coolant.addCoolant(Fluids.ICE.getFluid(), 10.0f);
 
-		Fluid ethanol = Fluids.BIOETHANOL.getFluid();
+		Fluid ethanol = Fluids.ETHANOL.getFluid();
 		if (ethanol != null) {
 			int ethanolPower = 40;
 			int ethanolBurnTime = Math.round(Defaults.ENGINE_CYCLE_DURATION_ETHANOL * GameMode.getGameMode().getFloatSetting("fuel.ethanol.combustion"));
 			BuildcraftFuelRegistry.fuel.addFuel(ethanol, ethanolPower, ethanolBurnTime);
-		}
-
-		Fluid oil = Fluids.OIL.getFluid();
-		if (oil != null) {
-			Block oilBlock = oil.getBlock();
-			if (oilBlock != null) {
-				Color oilColor = new Color(0x404040);
-				ForestryItem.waxCapsuleOil.registerContainer(EnumContainerType.CAPSULE, oilBlock, oilColor);
-				ForestryItem.canOil.registerContainer(EnumContainerType.CAN, oilBlock, oilColor);
-				ForestryItem.refractoryOil.registerContainer(EnumContainerType.REFRACTORY, oilBlock, oilColor);
-
-				LiquidHelper.injectLiquidContainer(Fluids.OIL, ForestryItem.waxCapsuleOil.getItemStack());
-				LiquidHelper.injectLiquidContainer(Fluids.OIL, ForestryItem.refractoryOil.getItemStack());
-				LiquidHelper.injectLiquidContainer(Fluids.OIL, ForestryItem.canOil.getItemStack());
-			}
-		}
-
-		Fluid fuel = Fluids.FUEL.getFluid();
-		if (fuel != null) {
-			Block fuelBlock = fuel.getBlock();
-			if (fuelBlock != null) {
-				Color fuelColor = new Color(0xffff00);
-				ForestryItem.waxCapsuleFuel.registerContainer(EnumContainerType.CAPSULE, fuelBlock, fuelColor);
-				ForestryItem.canFuel.registerContainer(EnumContainerType.CAN, fuelBlock, fuelColor);
-				ForestryItem.refractoryFuel.registerContainer(EnumContainerType.REFRACTORY, fuelBlock, fuelColor);
-
-				LiquidHelper.injectLiquidContainer(Fluids.FUEL, ForestryItem.waxCapsuleFuel.getItemStack());
-				LiquidHelper.injectLiquidContainer(Fluids.FUEL, ForestryItem.refractoryFuel.getItemStack());
-				LiquidHelper.injectLiquidContainer(Fluids.FUEL, ForestryItem.canFuel.getItemStack());
-			}
 		}
 	}
 

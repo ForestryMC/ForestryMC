@@ -195,7 +195,7 @@ public class PluginIC2 extends ForestryPlugin {
 		definitionEngineTin.register();
 		definitionGenerator.register();
 
-		FluidStack ethanol = Fluids.BIOETHANOL.getFluid(1);
+		FluidStack ethanol = Fluids.ETHANOL.getFluid(1);
 		GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * GameMode.getGameMode().getFloatSetting("fuel.ethanol.generator")), 4);
 		FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
 

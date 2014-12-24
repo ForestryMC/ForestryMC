@@ -43,7 +43,6 @@ import forestry.core.gadgets.TileEngine;
 import forestry.core.gadgets.TileMachine;
 import forestry.core.gadgets.TileMill;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.LiquidHelper;
 import forestry.plugins.PluginManager;
 
 public class ForestryCore {
@@ -65,8 +64,6 @@ public class ForestryCore {
 	}
 
 	public void init(Object basemod) {
-
-		registerLiquidContainers();
 
 		// Register world generator
 		GameRegistry.registerWorldGenerator(new WorldGenerator(), 0);
@@ -145,16 +142,5 @@ public class ForestryCore {
 
 	public String getPriorities() {
 		return "after:mod_IC2;after:mod_BuildCraftCore;after:mod_BuildCraftEnergy;after:mod_BuildCraftFactory;after:mod_BuildCraftSilicon;after:mod_BuildCraftTransport;after:mod_RedPowerWorld";
-	}
-
-	/** Set containers for vanilla liquids */
-	private void registerLiquidContainers() {
-		LiquidHelper.injectLiquidContainer(Fluids.LAVA, ForestryItem.canLava.getItemStack());
-		LiquidHelper.injectLiquidContainer(Fluids.LAVA, ForestryItem.refractoryLava.getItemStack());
-
-		LiquidHelper.injectLiquidContainer(Fluids.WATER, Defaults.BUCKET_VOLUME, new ItemStack(Items.potionitem), new ItemStack(Items.glass_bottle));
-		LiquidHelper.injectLiquidContainer(Fluids.WATER, ForestryItem.canWater.getItemStack());
-		LiquidHelper.injectLiquidContainer(Fluids.WATER, ForestryItem.waxCapsuleWater.getItemStack());
-		LiquidHelper.injectLiquidContainer(Fluids.WATER, ForestryItem.refractoryWater.getItemStack());
 	}
 }

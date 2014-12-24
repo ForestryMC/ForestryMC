@@ -365,4 +365,9 @@ public final class FluidHelper {
 		return null;
 	}
 
+	public static boolean areEqual(Fluid fluid, FluidStack fluidStack) {
+		if (fluidStack != null && fluid == fluidStack.getFluid())
+			return true;
+		return fluid == null && fluidStack == null;
+	}
 }

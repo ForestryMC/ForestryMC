@@ -11,9 +11,7 @@
 package forestry.core.fluids;
 
 import java.awt.Color;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -52,12 +50,12 @@ public class BlockForestryFluid extends BlockFluidClassic {
 	@SideOnly(Side.CLIENT)
 	private List<IIcon> icons;
 
-	public BlockForestryFluid(ForestryFluids forestryFluid) {
+	public BlockForestryFluid(Fluids forestryFluid) {
 		this(forestryFluid, 0, false);
 	}
 
-	public BlockForestryFluid(ForestryFluids forestryFluid, int flammability, boolean flammable) {
-		this(forestryFluid.standardFluid.getFluid(), flammability, flammable, forestryFluid.getColor());
+	public BlockForestryFluid(Fluids forestryFluid, int flammability, boolean flammable) {
+		this(forestryFluid.getFluid(), flammability, flammable, forestryFluid.getColor());
 	}
 
 	private BlockForestryFluid(Fluid fluid, int flammability, boolean flammable, Color color) {

@@ -10,16 +10,12 @@
  ******************************************************************************/
 package forestry.core.config;
 
-import forestry.core.fluids.ForestryFluids;
-import forestry.core.items.ItemLiquidContainer;
 import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginManager;
 import forestry.plugins.PluginManager.Stage;
 
-import java.awt.Color;
 import java.util.EnumSet;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -294,19 +290,5 @@ public enum ForestryItem {
 		if (item == null)
 			return null;
 		return new ItemStack(item, qty, meta);
-	}
-
-	public void registerContainer(ItemLiquidContainer.EnumContainerType type, ForestryFluids fluid, int healAmount, float saturationModifier) {
-		ItemLiquidContainer liquidContainer = new ItemLiquidContainer(type, fluid.getBlock(), fluid.getColor());
-		liquidContainer.setDrink(healAmount, saturationModifier);
-		registerItem(liquidContainer, toString());
-	}
-
-	public void registerContainer(ItemLiquidContainer.EnumContainerType type, ForestryFluids fluid) {
-		registerItem(new ItemLiquidContainer(type, fluid.getBlock(), fluid.getColor()), toString());
-	}
-
-	public void registerContainer(ItemLiquidContainer.EnumContainerType type, Block block, Color color) {
-		registerItem(new ItemLiquidContainer(type, block, color), toString());
 	}
 }

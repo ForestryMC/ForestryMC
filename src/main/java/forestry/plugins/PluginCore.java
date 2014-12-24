@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import java.awt.Color;
 import java.util.ArrayList;
 
 import net.minecraft.block.material.Material;
@@ -43,7 +42,6 @@ import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
-import forestry.core.fluids.ForestryFluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.BlockResource;
 import forestry.core.gadgets.BlockResourceStorageBlock;
@@ -65,7 +63,6 @@ import forestry.core.items.ItemForestryBlock;
 import forestry.core.items.ItemForestryPickaxe;
 import forestry.core.items.ItemForestryShovel;
 import forestry.core.items.ItemFruit;
-import forestry.core.items.ItemLiquidContainer;
 import forestry.core.items.ItemMisc;
 import forestry.core.items.ItemOverlay;
 import forestry.core.items.ItemOverlay.OverlayInfo;
@@ -75,11 +72,6 @@ import forestry.core.items.ItemWrench;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.ShapedRecipeCustom;
-
-import static forestry.core.items.ItemLiquidContainer.EnumContainerType.BUCKET;
-import static forestry.core.items.ItemLiquidContainer.EnumContainerType.CAN;
-import static forestry.core.items.ItemLiquidContainer.EnumContainerType.CAPSULE;
-import static forestry.core.items.ItemLiquidContainer.EnumContainerType.REFRACTORY;
 
 @Plugin(pluginID = "Core", name = "Core", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.core.description")
 public class PluginCore extends ForestryPlugin {
@@ -95,10 +87,6 @@ public class PluginCore extends ForestryPlugin {
 
 		rootCommand.addChildCommand(new CommandVersion());
 		rootCommand.addChildCommand(new CommandPlugins());
-
-		ForestryFluids.preInit();
-		MinecraftForge.EVENT_BUS.register(ForestryFluids.getTextureHook());
-		MinecraftForge.EVENT_BUS.register(ForestryFluids.getFillBucketHook());
 
 		ChipsetManager.solderManager = new ItemSolderingIron.SolderManager();
 
@@ -149,8 +137,6 @@ public class PluginCore extends ForestryPlugin {
 	public void doInit() {
 		super.doInit();
 
-		ForestryFluids.init();
-
 		definitionEscritoire.register();
 		crashCallable = new ForestryModEnvWarningCallable();
 
@@ -174,7 +160,6 @@ public class PluginCore extends ForestryPlugin {
 
 	@Override
 	protected void registerItems() {
-
 		// / FERTILIZERS
 		ForestryItem.fertilizerBio.registerItem((new ItemForestry()), "fertilizerBio");
 		ForestryItem.fertilizerCompound.registerItem((new ItemForestry()).setBonemeal(true), "fertilizerCompound");
@@ -278,58 +263,10 @@ public class PluginCore extends ForestryPlugin {
 
 		// FRUITS
 		ForestryItem.fruits.registerItem(new ItemFruit(), "fruits");
-
-		// / EMPTY LIQUID CONTAINERS
-		ForestryItem.waxCapsule.registerItem(new ItemLiquidContainer(CAPSULE, Blocks.air, null).setMaxStackSize(64), "waxCapsule");
-		ForestryItem.canEmpty.registerItem(new ItemLiquidContainer(CAN, Blocks.air, null).setMaxStackSize(64), "canEmpty");
-		ForestryItem.refractoryEmpty.registerItem(new ItemLiquidContainer(REFRACTORY, Blocks.air, null).setMaxStackSize(64), "refractoryEmpty");
-
-		// / BUCKETS
-		ForestryItem.bucketBiomass.registerContainer(BUCKET, ForestryFluids.BIOMASS);
-		ForestryItem.bucketEthanol.registerContainer(BUCKET, ForestryFluids.ETHANOL);
-		ForestryItem.bucketGlass.registerContainer(BUCKET, ForestryFluids.LIQUID_GLASS);
-		ForestryItem.bucketHoney.registerContainer(BUCKET, ForestryFluids.HONEY);
-		ForestryItem.bucketIce.registerContainer(BUCKET, ForestryFluids.ICE);
-		ForestryItem.bucketJuice.registerContainer(BUCKET, ForestryFluids.JUICE);
-		ForestryItem.bucketSeedoil.registerContainer(BUCKET, ForestryFluids.SEEDOIL);
-		ForestryItem.bucketShortMead.registerContainer(BUCKET, ForestryFluids.SHORT_MEAD);
-
-		Color colorWater = new Color(0x2432ec);
-		Color colorLava = new Color(0xfd461f);
-
-		// / WAX CAPSULES
-		ForestryItem.waxCapsuleBiomass.registerContainer(CAPSULE, ForestryFluids.BIOMASS);
-		ForestryItem.waxCapsuleEthanol.registerContainer(CAPSULE, ForestryFluids.ETHANOL);
-		ForestryItem.waxCapsuleHoney.registerContainer(CAPSULE, ForestryFluids.HONEY, Defaults.FOOD_HONEY_HEAL, Defaults.FOOD_HONEY_SATURATION);
-		ForestryItem.waxCapsuleIce.registerContainer(CAPSULE, ForestryFluids.ICE);
-		ForestryItem.waxCapsuleJuice.registerContainer(CAPSULE, ForestryFluids.JUICE, Defaults.FOOD_JUICE_HEAL, Defaults.FOOD_JUICE_SATURATION);
-		ForestryItem.waxCapsuleSeedOil.registerContainer(CAPSULE, ForestryFluids.SEEDOIL);
-		ForestryItem.waxCapsuleWater.registerContainer(CAPSULE, Blocks.flowing_water, colorWater);
-
-		// / CANS
-		ForestryItem.canBiomass.registerContainer(CAN, ForestryFluids.BIOMASS);
-		ForestryItem.canEthanol.registerContainer(CAN, ForestryFluids.ETHANOL);
-		ForestryItem.canLava.registerContainer(CAN, Blocks.flowing_lava, colorLava);
-		ForestryItem.canHoney.registerContainer(CAN, ForestryFluids.HONEY, Defaults.FOOD_HONEY_HEAL, Defaults.FOOD_HONEY_SATURATION);
-		ForestryItem.canIce.registerContainer(CAN, ForestryFluids.ICE);
-		ForestryItem.canJuice.registerContainer(CAN, ForestryFluids.JUICE, Defaults.FOOD_JUICE_HEAL, Defaults.FOOD_JUICE_SATURATION);
-		ForestryItem.canSeedOil.registerContainer(CAN, ForestryFluids.SEEDOIL);
-		ForestryItem.canWater.registerContainer(CAN, Blocks.flowing_water, colorWater);
-
-		// / REFRACTORY CAPSULES
-		ForestryItem.refractoryBiomass.registerContainer(REFRACTORY, ForestryFluids.BIOMASS);
-		ForestryItem.refractoryEthanol.registerContainer(REFRACTORY, ForestryFluids.ETHANOL);
-		ForestryItem.refractoryLava.registerContainer(REFRACTORY, Blocks.flowing_lava, colorLava);
-		ForestryItem.refractoryHoney.registerContainer(REFRACTORY, ForestryFluids.HONEY, Defaults.FOOD_HONEY_HEAL, Defaults.FOOD_HONEY_SATURATION);
-		ForestryItem.refractoryIce.registerContainer(REFRACTORY, ForestryFluids.ICE);
-		ForestryItem.refractoryJuice.registerContainer(REFRACTORY, ForestryFluids.JUICE, Defaults.FOOD_JUICE_HEAL, Defaults.FOOD_JUICE_SATURATION);
-		ForestryItem.refractorySeedOil.registerContainer(REFRACTORY, ForestryFluids.SEEDOIL);
-		ForestryItem.refractoryWater.registerContainer(REFRACTORY, Blocks.flowing_water, colorWater);
 	}
 
 	@Override
 	public void postInit() {
-		ForestryFluids.postInit();
 	}
 
 	@Override
