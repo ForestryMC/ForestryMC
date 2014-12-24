@@ -166,16 +166,14 @@ public final class FluidHelper {
 
 		ItemStack emptyItem = getEmptyContainer(input);
 
-		if (output != null && emptyItem != null) {
+		if (output != null && emptyItem != null)
 			if (outputSlot == inputSlot) {
 				if (input.stackSize > 1)
 					return false;
-			} else if (!StackUtils.isIdenticalItem(output, emptyItem)) {
+			} else if (!StackUtils.isIdenticalItem(output, emptyItem))
 				return false;
-			} else if (output.stackSize + emptyItem.stackSize > output.getMaxStackSize()) {
+			else if (output.stackSize + emptyItem.stackSize > output.getMaxStackSize())
 				return false;
-			}
-		}
 
 		fluidHandler.fill(ForgeDirection.UNKNOWN, fluidInContainer, true);
 
@@ -185,11 +183,10 @@ public final class FluidHelper {
 				return true;
 			}
 
-			if (output == null) {
+			if (output == null)
 				inv.setInventorySlotContents(outputSlot, emptyItem);
-			} else {
+			else
 				output.stackSize++;
-			}
 		}
 		inv.decrStackSize(inputSlot, 1);
 		return true;
@@ -207,7 +204,7 @@ public final class FluidHelper {
 
 		Item item = stack.getItem();
 		if (item instanceof IFluidContainerItem) {
-			IFluidContainerItem containerItem = (IFluidContainerItem)item;
+			IFluidContainerItem containerItem = (IFluidContainerItem) item;
 			FluidStack fluidStack = containerItem.getFluid(stack);
 			return fluidStack != null && fluidStack.amount > 0;
 		}
@@ -218,7 +215,7 @@ public final class FluidHelper {
 	public static boolean isFillableContainer(ItemStack empty, FluidStack liquid) {
 		Item item = empty.getItem();
 		if (item instanceof IFluidContainerItem) {
-			IFluidContainerItem containerItem = (IFluidContainerItem)item;
+			IFluidContainerItem containerItem = (IFluidContainerItem) item;
 			return containerItem.fill(empty, liquid, false) > 0;
 		}
 
@@ -237,7 +234,7 @@ public final class FluidHelper {
 
 		Item item = empty.getItem();
 		if (item instanceof IFluidContainerItem) {
-			IFluidContainerItem containerItem = (IFluidContainerItem)item;
+			IFluidContainerItem containerItem = (IFluidContainerItem) item;
 			FluidStack fluid = containerItem.getFluid(empty);
 			return fluid == null || fluid.amount == 0;
 		}
@@ -252,7 +249,7 @@ public final class FluidHelper {
 
 		return item.getContainerItem(container);
 	}
-	
+
 	public static ItemStack getFullyDrainedContainer(ItemStack container) {
 		return container.getItem().getContainerItem(container);
 	}
@@ -312,12 +309,6 @@ public final class FluidHelper {
 		return containsFluidStack(stack, new FluidStack(fluid, 1));
 	}
 
-	public static boolean isFluidEqual(FluidStack L1, FluidStack L2) {
-		if (L1 == null || L2 == null)
-			return false;
-		return L1.isFluidEqual(L2);
-	}
-
 	public static FluidStack drainBlock(World world, int x, int y, int z, boolean doDrain) {
 		return drainBlock(world.getBlock(x, y, z), world, x, y, z, doDrain);
 	}
@@ -363,11 +354,5 @@ public final class FluidHelper {
 		else if (block == Blocks.lava || block == Blocks.flowing_lava)
 			return FluidRegistry.LAVA;
 		return null;
-	}
-
-	public static boolean areEqual(Fluid fluid, FluidStack fluidStack) {
-		if (fluidStack != null && fluid == fluidStack.getFluid())
-			return true;
-		return fluid == null && fluidStack == null;
 	}
 }
