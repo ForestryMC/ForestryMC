@@ -31,7 +31,9 @@ archivesBaseName = "forestry_" + mcversion
 
 ext.dirDest = './build/dist'
 ext.dirLang = "./lang"
-ext.dirApi = "./api"
+
+ext.apiForestry = "./api/forestry"
+ext.apiRedstoneFlux = "./api/redstoneflux"
 
 ext.CraftGuideRepo = "https://github.com/Uristqwerty/CraftGuide.git"
 ext.CraftGuideTmp = "build/tmp/CraftGuide"
@@ -54,7 +56,8 @@ sourceSets {
 	
 	main {
 		java {
-			srcDir project.dirApi
+			srcDir project.apiForestry
+			srcDir project.apiRedstoneFlux + "/src/main/java"
 		}
 		resources {
 			srcDir project.dirLang
@@ -70,13 +73,13 @@ repositories {
 }
 
 configurations {
-	apis
-	compile.extendsFrom apis
+	api
+	compile.extendsFrom api
 }
 
 dependencies {
-	compile 'net.industrial-craft:industrialcraft-2:2.2.575-experimental:api'
-	apis 'com.mod-buildcraft:buildcraft:6.2.1:dev'
+	api 'net.industrial-craft:industrialcraft-2:2.2.575-experimental:api'
+	api 'com.mod-buildcraft:buildcraft:6.2.1:dev'
 }
 
 processResources {
@@ -178,12 +181,11 @@ jar {
 	destinationDir = file("build/tmp")
 	archiveName = "main.jar"
 
-	from {
-		configurations.apis.collect {
-			it.isDirectory() ? it : zipTree(it).matching {
-				include '**/api/**'
-			}
-		}
+	into ('forestry/api') {
+		from project.apiForestry + "/LICENSE.txt"
+	}
+	into ('cofh/api') {
+		from project.apiRedstoneFlux + "/LICENSE - LGPLv3.txt"
 	}
 }
 
@@ -191,8 +193,6 @@ task mainJarSigned ( type: Jar, dependsOn: 'reobf' ) {
 	from (zipTree(jar.getArchivePath())) {
 		exclude '**/api/**'
 		exclude '**/codechicken/**'
-		exclude '**/old/lang/**'
-		exclude '**/buildcraft/api/**'
 	}
 
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -219,8 +219,6 @@ task mainJar ( type: Zip, dependsOn: mainJarSigned ) {
 	from (zipTree(jar.getArchivePath())) {
 		include '**'
 		exclude '**/codechicken/**'
-		exclude '**/old/lang/**'
-		exclude '**/buildcraft/api/**'
 	}
 
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -233,8 +231,6 @@ task devJarSigned ( type: Jar, dependsOn: 'classes' ) {
 	from(sourceSets.main.output) {
 		exclude '**/api/**'
 		exclude '**/codechicken/**'
-		exclude '**/old/lang/**'
-		exclude '**/buildcraft/api/**'
 	}
 
 	destinationDir = file("build/tmp")
@@ -260,23 +256,11 @@ task devJar ( type: Zip, dependsOn: devJarSigned ) {
 	from(sourceSets.main.allSource) {
 		include '**'
 		exclude '**/codechicken/**'
-		exclude '**/old/lang/**'
-		exclude '**/buildcraft/api/**'
 	}
 
 	from(sourceSets.main.output) {
 		include '**'
 		exclude '**/codechicken/**'
-		exclude '**/old/lang/**'
-		exclude '**/buildcraft/api/**'
-	}
-
-	from {
-		configurations.apis.collect {
-			it.isDirectory() ? it : zipTree(it).matching {
-				include '**/api/**'
-			}
-		}
 	}
 
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -287,9 +271,7 @@ task devJar ( type: Zip, dependsOn: devJarSigned ) {
 }
 
 task apiJar(type: Jar, dependsOn: 'classes') {
-	from (dirApi) {
-		include '**'
-	}
+	from project.apiForestry
 	
 	from (sourceSets.main.output) {
 		include 'forestry/api/**'
@@ -300,13 +282,18 @@ task apiJar(type: Jar, dependsOn: 'classes') {
 	classifier = 'api'
 }
 
-task release(dependsOn: [apiJar, devJar, mainJar]) {
-	doLast {
-		println '*************************************************************'
-		println 'This build will be version: ' +  project.version
-		println '*************************************************************'
-	}
+task releaseInit << {
+	println '*************************************************************'
+	println 'This build will be version: ' +  rootProject.version
+	println '*************************************************************'
 }
+
+task release (dependsOn: [releaseInit, apiJar, devJar, mainJar]) {
+}
+
+mainJar.shouldRunAfter releaseInit
+devJar.shouldRunAfter releaseInit
+apiJar.shouldRunAfter releaseInit
 
 afterEvaluate {
 	compileApiJava.dependsOn initCraftGuide
