@@ -130,7 +130,7 @@ public enum Fluids {
 		}
 
 		@Override
-		public void setDrink(ItemLiquidContainer liquidContainer) {
+		public void setProperties(ItemLiquidContainer liquidContainer) {
 			if (liquidContainer.getType() != EnumContainerType.BUCKET)
 				liquidContainer.setDrink(Defaults.FOOD_HONEY_HEAL, Defaults.FOOD_HONEY_SATURATION);
 		}
@@ -191,7 +191,7 @@ public enum Fluids {
 		}
 
 		@Override
-		public void setDrink(ItemLiquidContainer liquidContainer) {
+		public void setProperties(ItemLiquidContainer liquidContainer) {
 			if (liquidContainer.getType() != EnumContainerType.BUCKET)
 				liquidContainer.setDrink(Defaults.FOOD_JUICE_HEAL, Defaults.FOOD_JUICE_SATURATION);
 		}
@@ -386,30 +386,31 @@ public enum Fluids {
 	/** FluidBlock and Container registration */
 
 	/**
-	 * Add the filled containers for the fluid, to have them get created and registered.
+	 * Add the filled containers for this fluid.
+	 * They will be automatically created and registered.
 	 */
 	public ForestryItem getContainerForType(EnumContainerType type) {
 		return null;
 	}
 
 	/**
-	 * Add non-forestry containers for the fluid.
+	 * Add non-forestry containers for this fluid.
 	 */
 	public List<ItemStack> getOtherContainers() {
 		return Collections.emptyList();
 	}
 
 	/**
-	 * Override for Forestry fluids to create FluidBlocks.
+	 * Create a FluidBlock for this fluid.
 	 */
 	public Block makeBlock() {
 		return null;
 	}
 
 	/**
-	 * Set the drink properties for a ItemLiquidContainer before it gets registered.
+	 * Set the properties for an ItemLiquidContainer before it gets registered.
 	 */
-	public void setDrink(ItemLiquidContainer liquidContainer) {
+	public void setProperties(ItemLiquidContainer liquidContainer) {
 
 	}
 }

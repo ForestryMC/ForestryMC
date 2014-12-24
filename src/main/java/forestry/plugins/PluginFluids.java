@@ -111,7 +111,7 @@ public class PluginFluids extends ForestryPlugin {
 					continue;
 
 				ItemLiquidContainer liquidContainer = new ItemLiquidContainer(type, fluidType.getBlock(), fluidType.getColor());
-				fluidType.setDrink(liquidContainer);
+				fluidType.setProperties(liquidContainer);
 				container.registerItem(liquidContainer, container.toString());
 			}
 		}
