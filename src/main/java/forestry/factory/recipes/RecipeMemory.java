@@ -161,6 +161,8 @@ public class RecipeMemory implements INBTTagable {
 
 		Recipe memory = getMemorized(crafting, world);
 		if (memory != null) {
+			if (memory.isLocked() != recipe.isLocked())
+				recipe.toggleLock();
 			int index = recipes.indexOf(memory);
 			recipes.set(index, recipe);
 			return;
