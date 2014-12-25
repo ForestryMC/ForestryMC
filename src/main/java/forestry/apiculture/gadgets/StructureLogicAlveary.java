@@ -33,7 +33,6 @@ public class StructureLogicAlveary extends StructureLogic {
 
 	public static final HashSet<Block> slabBlocks = new HashSet<Block>();
 	static {
-		slabBlocks.add(Blocks.stone_slab);
 		slabBlocks.add(Blocks.wooden_slab);
 		slabBlocks.add(ForestryBlock.slabs1.block());
 		slabBlocks.add(ForestryBlock.slabs2.block());
