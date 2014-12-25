@@ -17,12 +17,11 @@ public class WorldGenZebrawood extends WorldGenTree {
 	public WorldGenZebrawood(ITreeGenData tree) {
 		super(tree);
 	}
-
+	
 	@Override
 	public void generate() {
 
 		generateTreeTrunk(height, girth);
-		generateSupportStems(height, girth, 0.2f, 0.2f);
 
 		int leafSpawn = height + 1;
 
@@ -49,7 +48,7 @@ public class WorldGenZebrawood extends WorldGenTree {
 
 	@Override
 	public void preGenerate() {
-		height = determineHeight(10, 8);
+		height = determineHeight(8, 8);
 		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
 	}
 }

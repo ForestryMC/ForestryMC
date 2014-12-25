@@ -26,19 +26,28 @@ public class WorldGenIpe extends WorldGenTree {
 
 		generateAdjustedCylinder(leafSpawn--, 0, 1, leaf);
 		generateAdjustedCylinder(leafSpawn--, 0.5f, 1, leaf);
-
-		generateAdjustedCylinder(leafSpawn--, 1.9f, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 1.9f, 1, leaf);
-		if (rand.nextBoolean())
-			generateAdjustedCylinder(leafSpawn--, 1.9f, 1, leaf);
-
 		generateAdjustedCylinder(leafSpawn--, 0.5f, 1, leaf);
+		generateAdjustedCylinder(leafSpawn--, 1.9f, 1, leaf);
+		
+		while (leafSpawn > 7) {
+			generateAdjustedCylinder(leafSpawn, 2.5f, 1, leaf);
+			leafSpawn--;
+		}
+		
+		generateAdjustedCylinder(leafSpawn--, 3.2f, 1, leaf);
+		generateAdjustedCylinder(leafSpawn--, 3.2f, 1, leaf);
+		generateAdjustedCylinder(leafSpawn--, 3.2f, 1, leaf);
+		
+		if (rand.nextBoolean())
+			generateAdjustedCylinder(leafSpawn--, 2.5f, 1, leaf);
+
+		generateAdjustedCylinder(leafSpawn--, 1.9f, 1, leaf);
 
 	}
 
 	@Override
 	public void preGenerate() {
-		height = determineHeight(6, 3);
+		height = determineHeight(8, 6);
 		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
 	}
 }

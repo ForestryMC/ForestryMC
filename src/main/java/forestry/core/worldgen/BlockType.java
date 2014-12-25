@@ -37,4 +37,12 @@ public class BlockType {
 		if (world.getTileEntity(x, y, z) != null)
 			world.removeTileEntity(x, y, z);
 	}
+	
+	public int getMeta() {
+		return this.meta;
+	}
+	
+	public Block getBlock() {
+		return this.block;
+	}
 }

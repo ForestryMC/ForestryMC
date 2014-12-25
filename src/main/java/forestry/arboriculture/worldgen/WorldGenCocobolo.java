@@ -17,7 +17,7 @@ public class WorldGenCocobolo extends WorldGenTree {
 	public WorldGenCocobolo(ITreeGenData tree) {
 		super(tree);
 	}
-
+	
 	@Override
 	public void generate() {
 		generateTreeTrunk(height, girth);

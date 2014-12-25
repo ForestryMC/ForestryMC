@@ -42,12 +42,23 @@ public class WorldGenPadauk extends WorldGenTree {
 			generateAdjustedCylinder(leafSpawn--, 4.5f, 1, leaf);
 			count++;
 			//Random Trunk Branches
-			for (int i = 0; i < 3; i++) {
+			for (int i = 0; i < girth*4; i++) {
 				if (rand.nextBoolean()){
-					int[] offset = {-1, 0, 1};
-					int offsetx = new Random().nextInt(offset.length);
-					int offsetz = new Random().nextInt(offset.length);
-					addWood(offset[offsetx], leafSpawn+1, offset[offsetz], EnumReplaceMode.ALL);
+					
+					int[] offset = {-1, 1};
+					int length = 3;
+						
+					if (rand.nextBoolean()) {
+						for (int j = 1; j < length ; j++) {
+							int offsetz = new Random().nextInt(offset.length);
+							addZWood(0, leafSpawn, j*offset[offsetz], EnumReplaceMode.ALL);
+						}
+					} else {
+						for (int j = 1; j < length+1; j++) {
+							int offsetx = new Random().nextInt(offset.length);
+							addXWood(j*offset[offsetx], leafSpawn, 0, EnumReplaceMode.ALL);
+						}
+					}
 				}
 			}
 		}
