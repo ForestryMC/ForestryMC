@@ -10,13 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.core.Tabs;
-import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.WoodType;
 import java.util.List;
 import java.util.Random;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -26,7 +22,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.core.Tabs;
+import forestry.arboriculture.IWoodTyped;
+import forestry.arboriculture.WoodType;
 
 public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyped {
 
@@ -67,21 +71,6 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 	@Override
 	public Item getItemDropped(int meta, Random random, int par3) {
 		return Item.getItemFromBlock(this);
-	}
-
-	/**
-	 * only called by clickMiddleMouseButton , and passed to inventory.setCurrentItem (along with isCreative)
-	 */
-	/*public int idPicked(World world, int x, int y, int z) {
-		return blockID;
-	}*/
-
-	/**
-	 * Get the block's damage value (for use with pick block).
-	 */
-	@Override
-	public int getDamageValue(World world, int x, int y, int z) {
-		return super.getDamageValue(world, x, y, z) & 7;
 	}
 
 	@Override
@@ -133,5 +122,12 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 	@Override
 	public boolean getUseNeighborBrightness() {
 		return true;
+	}
+
+	// Minecraft's BlockSlab overrides this for their slabs, so we change it back to normal here
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Item getItem(World world, int x, int y, int z) {
+		return Item.getItemFromBlock(this);
 	}
 }
