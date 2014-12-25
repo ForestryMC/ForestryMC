@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -71,23 +71,23 @@ public class GuiTreealyzer extends GuiAlyzer {
 		}
 
 		switch (page) {
-		case 1:
-			drawAnalyticsPage1(tree, treeType);
-			break;
-		case 2:
-			drawAnalyticsPage2(tree);
-			break;
-		case 3:
-			drawAnalyticsPage3(tree);
-			break;
-		case 4:
-			drawAnalyticsPage4(tree);
-			break;
-		case 6:
-			drawAnalyticsPageClassification(tree);
-			break;
-		default:
-			drawAnalyticsOverview();
+			case 1:
+				drawAnalyticsPage1(tree, treeType);
+				break;
+			case 2:
+				drawAnalyticsPage2(tree);
+				break;
+			case 3:
+				drawAnalyticsPage3(tree);
+				break;
+			case 4:
+				drawAnalyticsPage4(tree);
+				break;
+			case 6:
+				drawAnalyticsPageClassification(tree);
+				break;
+			default:
+				drawAnalyticsOverview();
 		}
 
 	}
@@ -121,52 +121,20 @@ public class GuiTreealyzer extends GuiAlyzer {
 		}
 		newLine();
 
-		drawLine(StringUtil.localize("gui.saplings"), COLUMN_0);
-		drawLine(tree.getGenome().getActiveAllele(EnumTreeChromosome.FERTILITY).getName(), COLUMN_1, tree, EnumTreeChromosome.FERTILITY, false);
-		drawLine(tree.getGenome().getInactiveAllele(EnumTreeChromosome.FERTILITY).getName(), COLUMN_2, tree,
-				EnumTreeChromosome.FERTILITY, true);
+		drawChromosomeRow(StringUtil.localize("gui.saplings"), tree, EnumTreeChromosome.FERTILITY);
+		drawChromosomeRow(StringUtil.localize("gui.maturity"), tree, EnumTreeChromosome.MATURATION);
+		drawChromosomeRow(StringUtil.localize("gui.height"), tree, EnumTreeChromosome.HEIGHT);
 
-		newLine();
-
-		drawRow(StringUtil.localize("gui.maturity"), tree.getGenome().getActiveAllele(EnumTreeChromosome.MATURATION).getName(),
-				tree.getGenome().getInactiveAllele(EnumTreeChromosome.MATURATION).getName(), tree,
-				EnumTreeChromosome.MATURATION);
-
-		drawLine(StringUtil.localize("gui.height"), COLUMN_0);
-		drawLine(tree.getGenome().getActiveAllele(EnumTreeChromosome.HEIGHT).getName(), COLUMN_1, tree, EnumTreeChromosome.HEIGHT, false);
-		drawLine(tree.getGenome().getInactiveAllele(EnumTreeChromosome.HEIGHT).getName(), COLUMN_2, tree,
-				EnumTreeChromosome.HEIGHT, true);
-
-		newLine();
-
+		IAlleleInteger activeGirth = (IAlleleInteger) tree.getGenome().getActiveAllele(EnumTreeChromosome.GIRTH);
+		IAlleleInteger inactiveGirth = (IAlleleInteger) tree.getGenome().getInactiveAllele(EnumTreeChromosome.GIRTH);
 		drawLine(StringUtil.localize("gui.girth"), COLUMN_0);
-		drawLine(String.format("%sx%s", tree.getGenome().getGirth(), tree.getGenome().getGirth()), COLUMN_1, tree, EnumTreeChromosome.FERTILITY, false);
-		int secondGirth = ((IAlleleInteger) tree.getGenome().getInactiveAllele(EnumTreeChromosome.GIRTH)).getValue();
-		drawLine(String.format("%sx%s", secondGirth, secondGirth), COLUMN_2, tree, EnumTreeChromosome.FERTILITY, true);
+		drawLine(String.format("%sx%s", activeGirth.getValue(), activeGirth.getValue()), COLUMN_1, tree, EnumTreeChromosome.GIRTH, false);
+		drawLine(String.format("%sx%s", inactiveGirth.getValue(), inactiveGirth.getValue()), COLUMN_2, tree, EnumTreeChromosome.GIRTH, true);
 
 		newLine();
 
-		drawLine(StringUtil.localize("gui.yield"), COLUMN_0);
-		drawLine(tree.getGenome().getActiveAllele(EnumTreeChromosome.YIELD).getName(), COLUMN_1, tree, EnumTreeChromosome.YIELD, false);
-		drawLine(tree.getGenome().getInactiveAllele(EnumTreeChromosome.YIELD).getName(), COLUMN_2, tree,
-				EnumTreeChromosome.YIELD, true);
-
-		newLine();
-
-		drawLine(StringUtil.localize("gui.sappiness"), COLUMN_0);
-		drawLine(tree.getGenome().getActiveAllele(EnumTreeChromosome.SAPPINESS).getName(), COLUMN_1, tree, EnumTreeChromosome.SAPPINESS, false);
-
-		// FIXME: Legacy handling
-		IAllele sappiness = tree.getGenome().getInactiveAllele(EnumTreeChromosome.SAPPINESS);
-		String sap;
-		if (sappiness instanceof IAlleleFloat)
-			sap = sappiness.getName();
-		else
-			sap = Allele.saplingsLowest.getName();
-
-		drawLine(sap, COLUMN_2, tree, EnumTreeChromosome.SAPPINESS, true);
-
-		newLine();
+		drawChromosomeRow(StringUtil.localize("gui.yield"), tree, EnumTreeChromosome.YIELD);
+		drawChromosomeRow(StringUtil.localize("gui.sappiness"), tree, EnumTreeChromosome.SAPPINESS);
 
 		String yes = StringUtil.localize("yes");
 		String no = StringUtil.localize("no");
@@ -180,12 +148,7 @@ public class GuiTreealyzer extends GuiAlyzer {
 
 		newLine();
 
-		drawRow(StringUtil.localize("gui.effect"), tree.getGenome().getEffect().getName(),
-				tree.getGenome().getInactiveAllele(EnumTreeChromosome.EFFECT).getName(), tree,
-				EnumTreeChromosome.EFFECT);
-
-		newLine();
-		newLine();
+		drawChromosomeRow(StringUtil.localize("gui.effect"), tree, EnumTreeChromosome.EFFECT);
 
 		endPage();
 	}
@@ -220,22 +183,22 @@ public class GuiTreealyzer extends GuiAlyzer {
 
 		drawLine(StringUtil.localize("gui.tolerated"), COLUMN_0);
 
-		List<EnumPlantType> tolerated0 = new ArrayList<EnumPlantType>(tree.getGenome().getPlantTypes());
-		List<EnumPlantType> tolerated1 = Collections.emptyList();
+		List<EnumPlantType> activeTolerated = new ArrayList<EnumPlantType>(tree.getGenome().getPlantTypes());
+		List<EnumPlantType> inactiveTolerated = Collections.emptyList();
 
-		IAllele allele1 = tree.getGenome().getInactiveAllele(EnumTreeChromosome.PLANT);
-		if (allele1 instanceof AllelePlantType) {
-			tolerated1 = new ArrayList<EnumPlantType>(((AllelePlantType) allele1).getPlantTypes());
+		IAllele inactiveAllelePlant = tree.getGenome().getInactiveAllele(EnumTreeChromosome.PLANT);
+		if (inactiveAllelePlant instanceof AllelePlantType) {
+			inactiveTolerated = new ArrayList<EnumPlantType>(((AllelePlantType) inactiveAllelePlant).getPlantTypes());
 		}
 
-		int max = Math.max(tolerated0.size(), tolerated1.size());
+		int max = Math.max(activeTolerated.size(), inactiveTolerated.size());
 		for (int i = 0; i < max; i++) {
 			if (i > 0)
 				newLine();
-			if(tolerated0.size() > i)
-				drawLine(StringUtil.localize("gui." + tolerated0.get(i).toString().toLowerCase(Locale.ENGLISH)), COLUMN_1, tree, EnumTreeChromosome.PLANT, false);
-			if(tolerated1.size() > i)
-				drawLine(StringUtil.localize("gui." + tolerated1.get(i).toString().toLowerCase(Locale.ENGLISH)), COLUMN_2, tree, EnumTreeChromosome.PLANT, true);
+			if(activeTolerated.size() > i)
+				drawLine(StringUtil.localize("gui." + activeTolerated.get(i).toString().toLowerCase(Locale.ENGLISH)), COLUMN_1, tree, EnumTreeChromosome.PLANT, false);
+			if(inactiveTolerated.size() > i)
+				drawLine(StringUtil.localize("gui." + inactiveTolerated.get(i).toString().toLowerCase(Locale.ENGLISH)), COLUMN_2, tree, EnumTreeChromosome.PLANT, true);
 		}
 		newLine();
 

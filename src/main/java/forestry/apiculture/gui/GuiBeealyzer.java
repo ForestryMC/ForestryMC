@@ -14,15 +14,20 @@ import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleArea;
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleTolerance;
+import forestry.api.genetics.IChromosome;
 import forestry.apiculture.genetics.BeeGenome;
 import forestry.apiculture.items.ItemBeeGE;
 import forestry.apiculture.items.ItemBeealyzer.BeealyzerInventory;
 import forestry.core.config.ForestryItem;
 import forestry.core.genetics.AlleleArea;
 import forestry.core.genetics.AlleleBoolean;
+import forestry.core.genetics.Chromosome;
+import forestry.core.genetics.Genome;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StringUtil;
 import forestry.core.vect.Vect;
@@ -102,37 +107,30 @@ public class GuiBeealyzer extends GuiAlyzer {
 
 			drawSpeciesRow(StringUtil.localize("gui.species"), bee, EnumBeeChromosome.SPECIES, checkCustomName(customPrimaryBeeKey), checkCustomName(customSecondaryBeeKey));
 		}
-		drawRow(StringUtil.localize("gui.lifespan"), bee.getGenome().getActiveAllele(EnumBeeChromosome.LIFESPAN).getName(),
-				bee.getGenome().getInactiveAllele(EnumBeeChromosome.LIFESPAN).getName(), bee,
-				EnumBeeChromosome.LIFESPAN);
+		drawChromosomeRow(StringUtil.localize("gui.lifespan"), bee, EnumBeeChromosome.LIFESPAN);
 
-		drawRow(StringUtil.localize("gui.speed"), bee.getGenome().getActiveAllele(EnumBeeChromosome.SPEED).getName(),
-				bee.getGenome().getInactiveAllele(EnumBeeChromosome.SPEED).getName(), bee, EnumBeeChromosome.SPEED);
+		drawChromosomeRow(StringUtil.localize("gui.speed"), bee, EnumBeeChromosome.SPEED);
 
-		drawRow(StringUtil.localize("gui.pollination"), bee.getGenome().getActiveAllele(EnumBeeChromosome.FLOWERING).getName(),
-				bee.getGenome().getInactiveAllele(EnumBeeChromosome.FLOWERING).getName(), bee,
-				EnumBeeChromosome.FLOWERING);
+		drawChromosomeRow(StringUtil.localize("gui.pollination"), bee, EnumBeeChromosome.FLOWERING);
 
-		drawRow(StringUtil.localize("gui.flowers"), bee.getGenome().getFlowerProvider().getDescription(),
-				((IAlleleFlowers) bee.getGenome().getInactiveAllele(EnumBeeChromosome.FLOWER_PROVIDER)).getProvider()
-						.getDescription(), bee, EnumBeeChromosome.FLOWER_PROVIDER);
+		drawChromosomeRow(StringUtil.localize("gui.flowers"), bee, EnumBeeChromosome.FLOWER_PROVIDER);
 
 		drawLine(StringUtil.localize("gui.fertility"), COLUMN_0);
-		drawFertilityInfo(bee.getGenome().getFertility(), COLUMN_1, getColorCoding(bee.getGenome().getActiveAllele(EnumBeeChromosome.FERTILITY)
-				.isDominant()), 0);
-		drawFertilityInfo(((IAlleleInteger) bee.getGenome().getInactiveAllele(EnumBeeChromosome.FERTILITY)).getValue(), COLUMN_2, getColorCoding(bee
-				.getGenome().getInactiveAllele(EnumBeeChromosome.FERTILITY).isDominant()), 0);
+		IAlleleInteger primaryFertility = (IAlleleInteger)bee.getGenome().getActiveAllele(EnumBeeChromosome.FERTILITY);
+		IAlleleInteger secondaryFertility = (IAlleleInteger)bee.getGenome().getInactiveAllele(EnumBeeChromosome.FERTILITY);
+		drawFertilityInfo(primaryFertility.getValue(), COLUMN_1, getColorCoding(primaryFertility.isDominant()), 0);
+		drawFertilityInfo(secondaryFertility.getValue(), COLUMN_2, getColorCoding(secondaryFertility.isDominant()), 0);
 
 		newLine();
 
-		int[] areaAr = bee.getGenome().getTerritory();
-		Vect area = new Vect(areaAr[0], areaAr[1], areaAr[2]);
-		drawRow(StringUtil.localize("gui.area"), area.toString(), ((AlleleArea) bee.getGenome().getInactiveAllele(EnumBeeChromosome.TERRITORY))
-				.getArea().toString(), bee, EnumBeeChromosome.TERRITORY);
+		IAlleleArea activeTerritory = (IAlleleArea)bee.getGenome().getActiveAllele(EnumBeeChromosome.TERRITORY);
+		IAlleleArea inactiveTerritory = (IAlleleArea)bee.getGenome().getInactiveAllele(EnumBeeChromosome.TERRITORY);
+		drawRow(StringUtil.localize("gui.area"),
+				new Vect(activeTerritory.getValue()).toString(),
+				new Vect(inactiveTerritory.getValue()).toString(),
+				bee, EnumBeeChromosome.TERRITORY);
 
-		drawRow(StringUtil.localize("gui.effect"), bee.getGenome().getEffect().getName(),
-				bee.getGenome().getInactiveAllele(EnumBeeChromosome.EFFECT).getName(), bee,
-				EnumBeeChromosome.EFFECT);
+		drawChromosomeRow(StringUtil.localize("gui.effect"), bee, EnumBeeChromosome.EFFECT);
 
 		newLine();
 

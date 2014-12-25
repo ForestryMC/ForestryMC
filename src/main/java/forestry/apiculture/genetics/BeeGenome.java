@@ -72,7 +72,7 @@ public class BeeGenome extends Genome implements IBeeGenome {
 
 	// NBT RETRIEVAL
 	public static IAlleleBeeSpecies getSpecies(ItemStack itemStack) {
-		IAllele speciesAllele = Genome.getPrimaryAllele(itemStack, EnumBeeChromosome.SPECIES);
+		IAllele speciesAllele = Genome.getActiveAllele(itemStack, EnumBeeChromosome.SPECIES);
 		if (speciesAllele instanceof IAlleleBeeSpecies)
 			return (IAlleleBeeSpecies)speciesAllele;
 		else

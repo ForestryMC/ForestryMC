@@ -72,11 +72,11 @@ public abstract class Genome implements IGenome {
 		return null;
 	}
 
-	public static IAllele getPrimaryAllele(ItemStack itemStack, IChromosomeType chromosomeType) {
+	public static IAllele getActiveAllele(ItemStack itemStack, IChromosomeType chromosomeType) {
 		Chromosome chromosome = getChromosome(itemStack, chromosomeType);
 		if (chromosome == null)
 			return null;
-		return chromosome.getPrimaryAllele();
+		return chromosome.getActiveAllele();
 	}
 
 	// / SAVING & LOADING

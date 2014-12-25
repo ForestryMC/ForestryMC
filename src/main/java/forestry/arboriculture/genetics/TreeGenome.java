@@ -45,7 +45,7 @@ public class TreeGenome extends Genome implements ITreeGenome {
 
 	// NBT RETRIEVAL
 	public static IAlleleTreeSpecies getSpecies(ItemStack itemStack) {
-		IAllele speciesAllele = Genome.getPrimaryAllele(itemStack, EnumTreeChromosome.SPECIES);
+		IAllele speciesAllele = Genome.getActiveAllele(itemStack, EnumTreeChromosome.SPECIES);
 		if (speciesAllele instanceof IAlleleTreeSpecies)
 			return (IAlleleTreeSpecies)speciesAllele;
 		else

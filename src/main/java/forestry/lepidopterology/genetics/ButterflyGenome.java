@@ -42,7 +42,7 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 
 	// NBT RETRIEVAL
 	public static IAlleleButterflySpecies getSpecies(ItemStack itemStack) {
-		IAllele speciesAllele = Genome.getPrimaryAllele(itemStack, EnumButterflyChromosome.SPECIES);
+		IAllele speciesAllele = Genome.getActiveAllele(itemStack, EnumButterflyChromosome.SPECIES);
 		if (speciesAllele instanceof IAlleleButterflySpecies)
 			return (IAlleleButterflySpecies)speciesAllele;
 		else

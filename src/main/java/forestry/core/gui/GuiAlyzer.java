@@ -26,6 +26,7 @@ import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.Defaults;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.genetics.EnumMutateChance;
+import forestry.core.genetics.Genome;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 import java.util.HashMap;
@@ -90,6 +91,14 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 	protected final void drawRow(String text0, String text1, String text2, IIndividual individual, IChromosomeType chromosome) {
 		drawRow(text0, text1, text2, fontColor.get("gui.screen"), getColorCoding(individual.getGenome().getActiveAllele(chromosome).isDominant()),
 				getColorCoding(individual.getGenome().getInactiveAllele(chromosome).isDominant()));
+	}
+
+	protected final void drawChromosomeRow(String chromosomeName, IIndividual individual, IChromosomeType chromosome) {
+		IAllele active = individual.getGenome().getActiveAllele(chromosome);
+		IAllele inactive = individual.getGenome().getInactiveAllele(chromosome);
+		drawRow(chromosomeName, active.getName(), inactive.getName(),
+				fontColor.get("gui.screen"), getColorCoding(active.isDominant()),
+				getColorCoding(inactive.isDominant()));
 	}
 
 	protected final void drawSpeciesRow(String text0, IIndividual individual, IChromosomeType chromosome, String customPrimaryName, String customSecondaryName) {
