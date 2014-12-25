@@ -230,33 +230,27 @@ public class PluginIC2 extends ForestryPlugin {
 	@Optional.Method(modid = "IC2")
 	protected void registerCrates() {
 		if (resin != null) {
-			ForestryItem.cratedResin.registerItem(new ItemCrated(), "cratedResin");
-			((ItemCrated) ForestryItem.cratedResin.item()).setContained(ForestryItem.cratedResin.getItemStack(), resin);
+			ForestryItem.cratedResin.registerItem(new ItemCrated(resin), "cratedResin");
 		}
 
 		if (rubber != null) {
-			ForestryItem.cratedRubber.registerItem(new ItemCrated(), "cratedRubber");
-			((ItemCrated) ForestryItem.cratedRubber.item()).setContained(ForestryItem.cratedRubber.getItemStack(), rubber);
+			ForestryItem.cratedRubber.registerItem(new ItemCrated(rubber), "cratedRubber");
 		}
 
 		if (scrap != null) {
-			ForestryItem.cratedScrap.registerItem(new ItemCrated(), "cratedScrap");
-			((ItemCrated) ForestryItem.cratedScrap.item()).setContained(ForestryItem.cratedScrap.getItemStack(), scrap);
+			ForestryItem.cratedScrap.registerItem(new ItemCrated(scrap), "cratedScrap");
 		}
 
 		if (uuMatter != null) {
-			ForestryItem.cratedUUM.registerItem(new ItemCrated(), "cratedUUM");
-			((ItemCrated) ForestryItem.cratedUUM.item()).setContained(ForestryItem.cratedUUM.getItemStack(), uuMatter);
+			ForestryItem.cratedUUM.registerItem(new ItemCrated(uuMatter), "cratedUUM");
 		}
 
 		if (silver != null) {
-			ForestryItem.cratedSilver.registerItem(new ItemCrated(), "cratedSilver");
-			((ItemCrated) ForestryItem.cratedSilver.item()).setContained(ForestryItem.cratedSilver.getItemStack(), silver);
+			ForestryItem.cratedSilver.registerItem(new ItemCrated(silver), "cratedSilver");
 		}
 
 		if (brass != null) {
-			ForestryItem.cratedBrass.registerItem(new ItemCrated(), "cratedBrass");
-			((ItemCrated) ForestryItem.cratedBrass.item()).setContained(ForestryItem.cratedBrass.getItemStack(), brass);
+			ForestryItem.cratedBrass.registerItem(new ItemCrated(brass), "cratedBrass");
 		}
 	}
 

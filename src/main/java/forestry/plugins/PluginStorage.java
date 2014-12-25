@@ -10,40 +10,12 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.registry.GameData;
-import forestry.api.core.Tabs;
-import forestry.api.recipes.RecipeManagers;
-import forestry.api.storage.BackpackManager;
-import forestry.api.storage.EnumBackpackType;
-import forestry.api.storage.IBackpackDefinition;
-import forestry.core.config.Configuration;
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
-import forestry.core.config.Property;
-import forestry.core.fluids.Fluids;
-import forestry.core.interfaces.IOreDictionaryHandler;
-import forestry.core.interfaces.IPickupHandler;
-import forestry.core.interfaces.IResupplyHandler;
-import forestry.core.interfaces.ISaveEventHandler;
-import forestry.core.items.ItemForestry;
-import forestry.core.network.GuiId;
-import forestry.core.proxy.Proxies;
-import forestry.storage.BackpackDefinition;
-import forestry.storage.BackpackHelper;
-import forestry.storage.GuiHandlerStorage;
-import forestry.storage.PickupHandlerStorage;
-import forestry.storage.ResupplyHandler;
-import forestry.storage.items.ItemNaturalistBackpack;
-import forestry.storage.items.ItemNaturalistBackpack.BackpackDefinitionApiarist;
-import forestry.storage.items.ItemNaturalistBackpack.BackpackDefinitionLepidopterist;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBasePressurePlate;
 import net.minecraft.block.BlockButton;
@@ -68,13 +40,49 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemDoor;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.oredict.OreDictionary;
 
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
+import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.registry.GameData;
+
+import forestry.api.core.Tabs;
+import forestry.api.recipes.RecipeManagers;
+import forestry.api.storage.BackpackManager;
+import forestry.api.storage.EnumBackpackType;
+import forestry.api.storage.IBackpackDefinition;
+import forestry.core.config.Configuration;
+import forestry.core.config.Defaults;
+import forestry.core.config.ForestryBlock;
+import forestry.core.config.ForestryItem;
+import forestry.core.config.Property;
+import forestry.core.fluids.Fluids;
+import forestry.core.interfaces.IOreDictionaryHandler;
+import forestry.core.interfaces.IPickupHandler;
+import forestry.core.interfaces.IResupplyHandler;
+import forestry.core.interfaces.ISaveEventHandler;
+import forestry.core.items.ItemCrated;
+import forestry.core.network.GuiId;
+import forestry.core.proxy.Proxies;
+import forestry.storage.BackpackDefinition;
+import forestry.storage.BackpackHelper;
+import forestry.storage.GuiHandlerStorage;
+import forestry.storage.PickupHandlerStorage;
+import forestry.storage.ResupplyHandler;
+import forestry.storage.items.ItemNaturalistBackpack;
+import forestry.storage.items.ItemNaturalistBackpack.BackpackDefinitionApiarist;
+import forestry.storage.items.ItemNaturalistBackpack.BackpackDefinitionLepidopterist;
+import forestry.storage.proxy.ProxyStorage;
+
 @Plugin(pluginID = "Storage", name = "Storage", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.storage.description")
 public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandler {
 
+	@SidedProxy(clientSide = "forestry.storage.proxy.ClientProxyStorage", serverSide = "forestry.storage.proxy.ProxyStorage")
+	public static ProxyStorage proxy;
 	private final ArrayList<ItemStack> minerItems = new ArrayList<ItemStack>();
 	private final ArrayList<ItemStack> diggerItems = new ArrayList<ItemStack>();
 	private final ArrayList<ItemStack> foresterItems = new ArrayList<ItemStack>();
@@ -237,7 +245,7 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 	@Override
 	protected void registerItems() {
 		// CRATE
-		ForestryItem.crate.registerItem((new ItemForestry()), "crate");
+		ForestryItem.crate.registerItem((new ItemCrated(null)), "crate");
 
 		// BACKPACKS
 		BackpackDefinition definition;

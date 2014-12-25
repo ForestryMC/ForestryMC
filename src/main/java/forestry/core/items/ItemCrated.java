@@ -10,32 +10,31 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.recipes.IGenericCrate;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
-import java.util.Locale;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.recipes.IGenericCrate;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StringUtil;
+import forestry.plugins.PluginStorage;
 
 public class ItemCrated extends Item implements IGenericCrate {
 
 	private ItemStack contained;
 
-	public ItemCrated() {
-		this(null);
-	}
-
 	public ItemCrated(ItemStack contained) {
-		super();
 		this.contained = contained;
+		PluginStorage.proxy.registerCrate(this);
 	}
 
 	@Override
@@ -80,16 +79,18 @@ public class ItemCrated extends Item implements IGenericCrate {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
-		if (contained != null)
+		if (contained == null) {
+			return StatCollector.translateToLocal("item.for.crate.name");
+		} else {
 			return StringUtil.localize("item.crated.adj") + " " + Proxies.common.getDisplayName(contained);
-		else
-			return StringUtil.localize("item.crated.unknown");
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerIcons(IIconRegister register) {
-		itemIcon = TextureManager.getInstance().registerTex(register, "crates/" + getUnlocalizedName().replace("item.for.crated", "").toLowerCase(Locale.ENGLISH));
+		String textureName = (contained == null) ? "crate" : "crate-filled";
+		itemIcon = TextureManager.getInstance().registerTex(register, textureName);
 	}
 
 }
