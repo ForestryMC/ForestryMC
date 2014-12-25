@@ -10,10 +10,14 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
+import com.google.common.base.Objects;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.ILegacyHandler;
+import forestry.core.proxy.Proxies;
+
 import java.util.Random;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -101,20 +105,59 @@ public class Chromosome implements IChromosome {
 			return secondary;
 	}
 
-	public void overrideInvalidAlleles(IAllele template, Class<? extends IAllele> chromosomeClass) {
-		if (primary == null || !chromosomeClass.isInstance(primary))
+	public boolean overrideInvalidAlleles(IAllele template, Class<? extends IAllele> chromosomeClass) {
+		boolean foundInvalidAlleles = false;
+
+		// use the other chromosome instead of the template if it's valid
+		if (primary != null && chromosomeClass.isInstance(primary)) {
+			template = primary;
+		} else if (secondary != null && chromosomeClass.isInstance(secondary)) {
+			template = secondary;
+		}
+
+		if (primary == null) {
+			Proxies.log.warning("Missing primary allele: {0}. Setting to: {1}", this, template);
 			primary = template;
+			foundInvalidAlleles = true;
+		} else if (!chromosomeClass.isInstance(primary)) {
+			Proxies.log.warning("Wrong primary allele: {0}. Setting to: {1}", this, template);
+			primary = template;
+			foundInvalidAlleles = true;
+		}
 		
-		if (secondary == null || !chromosomeClass.isInstance(secondary))
+		if (secondary == null) {
+			Proxies.log.warning("Missing secondary allele: {0}. Setting to: {1}", this, template);
 			secondary = template;
+			foundInvalidAlleles = true;
+		} else if (!chromosomeClass.isInstance(secondary)) {
+			Proxies.log.warning("Wrong secondary allele: {0}. Setting to: {1}", this, template);
+			secondary = template;
+			foundInvalidAlleles = true;
+		}
+
+		return foundInvalidAlleles;
 	}
 	
 	public boolean hasInvalidAlleles(Class<? extends IAllele> chromosomeClass) {
-		if (primary == null || !chromosomeClass.isInstance(primary))
+		if (primary == null) {
+			Proxies.log.severe("Missing primary allele: {0}", this);
 			return true;
+		}
+
+		if (!chromosomeClass.isInstance(primary)) {
+			Proxies.log.severe("Wrong primary allele for: {0}. Should be: {1}", this, chromosomeClass.getSimpleName());
+			return true;
+		}
 		
-		if (secondary == null || !chromosomeClass.isInstance(secondary))
+		if (secondary == null) {
+			Proxies.log.severe("Missing secondary allele: {0}", this);
 			return true;
+		}
+
+		if (!chromosomeClass.isInstance(secondary)) {
+			Proxies.log.severe("Wrong secondary allele for: {0}. Should be: {1}", this, chromosomeClass.getSimpleName());
+			return true;
+		}
 		
 		return false;
 	}
@@ -144,6 +187,11 @@ public class Chromosome implements IChromosome {
 			return new Chromosome(choice1, choice2);
 		else
 			return new Chromosome(choice2, choice1);
+	}
+
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this).add("Primary", primary).add("Secondary", secondary).toString();
 	}
 
 }

@@ -707,4 +707,9 @@ public class Allele implements IAllele {
 		name = string;
 		return this;
 	}
+
+	@Override
+	public String toString() {
+		return uid;
+	}
 }

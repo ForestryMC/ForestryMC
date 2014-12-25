@@ -10,6 +10,12 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
+import com.google.common.base.Objects;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
@@ -17,9 +23,7 @@ import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IGenome;
 import forestry.core.config.Config;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import forestry.core.proxy.Proxies;
 
 public abstract class Genome implements IGenome {
 
@@ -81,6 +85,9 @@ public abstract class Genome implements IGenome {
 
 		NBTTagList nbttaglist = nbttagcompound.getTagList("Chromosomes", 10);
 		chromosomes = new Chromosome[chromosomes.length];
+
+		Boolean invalidGenome = false;
+
 		for (int i = 0; i < nbttaglist.tagCount(); i++) {
 			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 			byte byte0 = nbttagcompound1.getByte(SLOT_TAG);
@@ -88,13 +95,20 @@ public abstract class Genome implements IGenome {
 			if (byte0 >= 0 && byte0 < chromosomes.length) {
 				Chromosome chromosome = Chromosome.loadChromosomeFromNBT(nbttagcompound1);
 				chromosomes[byte0] = chromosome;
-				
-				if (Config.clearInvalidChromosomes)
-					chromosome.overrideInvalidAlleles(getDefaultTemplate()[byte0], getSpeciesRoot().getKaryotype()[byte0].getAlleleClass());
+
+				if (Config.clearInvalidChromosomes) {
+					if (chromosome.overrideInvalidAlleles(getDefaultTemplate()[byte0], getSpeciesRoot().getKaryotype()[byte0].getAlleleClass())) {
+						invalidGenome = true;
+					}
+				}
 				
 				if (chromosome.hasInvalidAlleles(getSpeciesRoot().getKaryotype()[byte0].getAlleleClass()))
-					throw new RuntimeException("Found Chromosome with invalid Alleles. See config option \"genetics.clear.invalid.chromosomes\".");
+					throw new RuntimeException("Found Chromosome with invalid Alleles.\nNBTTagCompound: " + nbttaglist + "\nSee config option \"genetics.clear.invalid.chromosomes\".");
 			}
+		}
+
+		if (invalidGenome) {
+			Proxies.log.warning("Overrode alleles for genome:\n{0}\nOriginal NBTTagCompound: {1}", this, nbttaglist);
 		}
 
 		// handle old saves that have missing chromosomes
@@ -171,5 +185,15 @@ public abstract class Genome implements IGenome {
 		}
 
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		Objects.ToStringHelper toStringHelper = Objects.toStringHelper(this);
+		int i = 0;
+		for (IChromosome chromosome : chromosomes) {
+			toStringHelper.add(String.valueOf(i++), chromosome);
+		}
+		return toStringHelper.toString();
 	}
 }
