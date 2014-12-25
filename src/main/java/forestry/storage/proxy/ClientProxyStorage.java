@@ -17,8 +17,10 @@ import forestry.core.render.CrateRenderingHandler;
 
 public class ClientProxyStorage extends ProxyStorage{
 
+	private static final CrateRenderingHandler crateRenderer = new CrateRenderingHandler();
+
 	@Override
 	public void registerCrate(ItemCrated crate) {
-		MinecraftForgeClient.registerItemRenderer(crate, new CrateRenderingHandler());
+		MinecraftForgeClient.registerItemRenderer(crate, crateRenderer);
 	}
 }
