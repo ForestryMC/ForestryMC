@@ -10,6 +10,28 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.WeightedRandomChestContent;
+
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.OreDictionary;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
@@ -20,6 +42,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;
@@ -37,6 +60,8 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.recipes.RecipeManagers;
+import forestry.api.storage.ICrateRegistry;
+import forestry.api.storage.StorageManager;
 import forestry.apiculture.FlowerProviderCacti;
 import forestry.apiculture.FlowerProviderEnd;
 import forestry.apiculture.FlowerProviderGourd;
@@ -119,7 +144,6 @@ import forestry.core.config.Config;
 import forestry.core.config.Configuration;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryCrate;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.Property;
 import forestry.core.fluids.Fluids;
@@ -130,7 +154,6 @@ import forestry.core.genetics.Allele;
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPacketHandler;
 import forestry.core.interfaces.ISaveEventHandler;
-import forestry.core.items.ItemCrated;
 import forestry.core.items.ItemForestry;
 import forestry.core.items.ItemForestryBlock;
 import forestry.core.items.ItemOverlay;
@@ -139,25 +162,6 @@ import forestry.core.items.ItemScoop;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.EntitySnowFX;
 import forestry.core.utils.ShapedRecipeCustom;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.WeightedRandomChestContent;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.ChestGenHooks;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.OreDictionary;
 
 @Plugin(pluginID = "Apiculture", name = "Apiculture", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.apiculture.description")
 public class PluginApiculture extends ForestryPlugin {
@@ -432,21 +436,21 @@ public class PluginApiculture extends ForestryPlugin {
 
 	@Override
 	protected void registerCrates() {
-		ForestryCrate.registerCrate(ForestryItem.beeswax.getItemStack(), "cratedBeeswax");
-		ForestryCrate.registerCrate(ForestryItem.pollenCluster.getItemStack(), "cratedPollen");
-		ForestryCrate.registerCrate(ForestryItem.propolis.getItemStack(), "cratedPropolis");
-		ForestryCrate.registerCrate(ForestryItem.honeydew.getItemStack(), "cratedHoneydew");
-		ForestryCrate.registerCrate(ForestryItem.royalJelly.getItemStack(), "cratedRoyalJelly");
+		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
+		crateRegistry.registerCrate(ForestryItem.beeswax.getItemStack(), "cratedBeeswax");
+		crateRegistry.registerCrate(ForestryItem.pollenCluster.getItemStack(), "cratedPollen");
+		crateRegistry.registerCrate(ForestryItem.propolis.getItemStack(), "cratedPropolis");
+		crateRegistry.registerCrate(ForestryItem.honeydew.getItemStack(), "cratedHoneydew");
+		crateRegistry.registerCrate(ForestryItem.royalJelly.getItemStack(), "cratedRoyalJelly");
 
-		ForestryCrate.registerCrate(ForestryItem.beeComb.getItemStack(1, 0), "cratedHoneycombs");
-		ForestryCrate.registerCrate(ForestryItem.beeComb.getItemStack(1, 1), "cratedCocoaComb");
-		ForestryCrate.registerCrate(ForestryItem.beeComb.getItemStack(1, 2), "cratedSimmeringCombs");
-		ForestryCrate.registerCrate(ForestryItem.beeComb.getItemStack(1, 3), "cratedStringyCombs");
-		ForestryCrate.registerCrate(ForestryItem.beeComb.getItemStack(1, 4), "cratedFrozenCombs");
-		ForestryCrate.registerCrate(ForestryItem.beeComb.getItemStack(1, 5), "cratedDrippingCombs");
+		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 0), "cratedHoneycombs");
+		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 1), "cratedCocoaComb");
+		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 2), "cratedSimmeringCombs");
+		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 3), "cratedStringyCombs");
+		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 4), "cratedFrozenCombs");
+		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 5), "cratedDrippingCombs");
 
-		ForestryCrate.registerCrate(ForestryItem.refractoryWax.getItemStack(), "cratedRefractoryWax");
-
+		crateRegistry.registerCrate(ForestryItem.refractoryWax.getItemStack(), "cratedRefractoryWax");
 	}
 
 	@Override

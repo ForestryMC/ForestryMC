@@ -56,6 +56,7 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
+import forestry.api.storage.StorageManager;
 import forestry.core.config.Configuration;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
@@ -71,6 +72,7 @@ import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.storage.BackpackDefinition;
 import forestry.storage.BackpackHelper;
+import forestry.storage.CrateRegistry;
 import forestry.storage.GuiHandlerStorage;
 import forestry.storage.PickupHandlerStorage;
 import forestry.storage.ResupplyHandler;
@@ -108,6 +110,8 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 		BackpackManager.backpackItems[3] = hunterItems;
 		BackpackManager.backpackItems[4] = adventurerItems;
 		BackpackManager.backpackItems[5] = builderItems;
+
+		StorageManager.crateRegistry = new CrateRegistry();
 	}
 
 	@Override
@@ -264,7 +268,7 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 	@Override
 	protected void registerItems() {
 		// CRATE
-		ForestryItem.crate.registerItem((new ItemCrated(null)), "crate");
+		ForestryItem.crate.registerItem((new ItemCrated(null, false)), "crate");
 
 		// BACKPACKS
 		BackpackDefinition definition;

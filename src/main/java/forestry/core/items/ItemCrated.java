@@ -29,14 +29,11 @@ import forestry.core.utils.StringUtil;
 
 public class ItemCrated extends Item implements IGenericCrate {
 
-	private ItemStack contained;
-	private boolean usesOreDict = false;
+	private final ItemStack contained;
+	private final boolean usesOreDict;
 
-	public ItemCrated(ItemStack contained) {
+	public ItemCrated(ItemStack contained, boolean usesOreDict) {
 		this.contained = contained;
-	}
-
-	public void setUsesOreDict(boolean usesOreDict) {
 		this.usesOreDict = usesOreDict;
 	}
 
@@ -46,7 +43,6 @@ public class ItemCrated extends Item implements IGenericCrate {
 
 	@Override
 	public void setContained(ItemStack crated, ItemStack contained) {
-		this.contained = contained;
 	}
 
 	@Override

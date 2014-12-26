@@ -10,15 +10,26 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import java.util.EnumSet;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.fluids.FluidStack;
+
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameData;
+
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
+import forestry.api.storage.ICrateRegistry;
+import forestry.api.storage.StorageManager;
 import forestry.core.GameMode;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitId;
@@ -27,12 +38,10 @@ import forestry.core.config.Config;
 import forestry.core.config.Configuration;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryCrate;
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
-import forestry.core.items.ItemCrated;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.RecipeUtil;
@@ -47,14 +56,10 @@ import forestry.energy.gadgets.EngineTin;
 import forestry.energy.gadgets.MachineGenerator;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicRubber;
+
 import ic2.api.item.IC2Items;
 import ic2.api.recipe.RecipeInputItemStack;
 import ic2.api.recipe.Recipes;
-import java.util.EnumSet;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 @Plugin(pluginID = "IC2", name = "IndustrialCraft2", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.ic2.description")
 public class PluginIC2 extends ForestryPlugin {
@@ -230,28 +235,29 @@ public class PluginIC2 extends ForestryPlugin {
 	@Override
 	@Optional.Method(modid = "IC2")
 	protected void registerCrates() {
+		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
 		if (resin != null) {
-			ForestryCrate.registerCrate(resin, "cratedResin");
+			crateRegistry.registerCrate(resin, "cratedResin");
 		}
 
 		if (rubber != null) {
-			ForestryCrate.registerCrate(rubber, "cratedRubber");
+			crateRegistry.registerCrate(rubber, "cratedRubber");
 		}
 
 		if (scrap != null) {
-			ForestryCrate.registerCrate(scrap, "cratedScrap");
+			crateRegistry.registerCrate(scrap, "cratedScrap");
 		}
 
 		if (uuMatter != null) {
-			ForestryCrate.registerCrate(uuMatter, "cratedUUM");
+			crateRegistry.registerCrate(uuMatter, "cratedUUM");
 		}
 
 		if (silver != null) {
-			ForestryCrate.registerCrate(silver, "cratedSilver").setUsesOreDict(true);
+			crateRegistry.registerCrateUsingOreDict(silver, "cratedSilver");
 		}
 
 		if (brass != null) {
-			ForestryCrate.registerCrate(brass, "cratedBrass").setUsesOreDict(true);
+			crateRegistry.registerCrateUsingOreDict(brass, "cratedBrass");
 		}
 	}
 
