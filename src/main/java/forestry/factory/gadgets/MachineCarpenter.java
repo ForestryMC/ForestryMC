@@ -10,9 +10,30 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.oredict.OreDictionary;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.ICarpenterManager;
-import forestry.api.recipes.IGenericCrate;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
@@ -26,7 +47,6 @@ import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
-import forestry.core.items.ItemCrated;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
@@ -34,26 +54,6 @@ import forestry.core.utils.ShapedRecipeCustom;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.factory.gui.ContainerCarpenter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class MachineCarpenter extends TilePowered implements ISidedInventory, ILiquidTankContainer {
 
@@ -99,25 +99,6 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 				return false;
 
 			return internal.matches(inventorycrafting, world);
-		}
-
-		public boolean hasLiquid(FluidStack resource) {
-			if (liquid != null && resource != null)
-				return liquid.isFluidEqual(resource);
-			else
-				return false;
-		}
-
-		public boolean hasBox(ItemStack resource) {
-			if (box == null && resource == null)
-				return true;
-			else if (box == null)
-				return true;
-
-			if (box.getItemDamage() > 0)
-				return box.isItemEqual(resource);
-			else
-				return box.getItem() == resource.getItem();
 		}
 
 		public boolean isIngredient(ItemStack resource) {
@@ -190,10 +171,6 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 					return recipe;
 			}
 			return null;
-		}
-
-		public static boolean isResourceLiquid(FluidStack liquid) {
-			return recipeFluids.contains(liquid.getFluid());
 		}
 
 		public static boolean isBox(ItemStack resource) {
@@ -290,20 +267,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 		tankManager.readTanksFromNBT(nbttagcompound);
 
-		if (nbttagcompound.hasKey("CraftItems"))
-			craftingInventory.readFromNBT(nbttagcompound);
-		else {
-			// FIXME: Legacy conversion for carpenters <= 2.2.2.2
-			NBTTagList nbttaglist = nbttagcompound.getTagList("Items", 10);
-
-			for (int j = 0; j < nbttaglist.tagCount(); ++j) {
-				NBTTagCompound nbttagcompound2 = nbttaglist.getCompoundTagAt(j);
-				int index = nbttagcompound2.getByte("Slot");
-				if (index < 9)
-					craftingInventory.setInventorySlotContents(index, ItemStack.loadItemStackFromNBT(nbttagcompound2));
-			}
-
-		}
+		craftingInventory.readFromNBT(nbttagcompound);
 
 		// Load pending product
 		if (nbttagcompound.hasKey("PendingProduct")) {
