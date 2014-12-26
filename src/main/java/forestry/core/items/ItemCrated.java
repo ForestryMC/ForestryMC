@@ -26,15 +26,22 @@ import forestry.api.recipes.IGenericCrate;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
-import forestry.plugins.PluginStorage;
 
 public class ItemCrated extends Item implements IGenericCrate {
 
 	private ItemStack contained;
+	private boolean usesOreDict = false;
 
 	public ItemCrated(ItemStack contained) {
 		this.contained = contained;
-		PluginStorage.proxy.registerCrate(this);
+	}
+
+	public void setUsesOreDict(boolean usesOreDict) {
+		this.usesOreDict = usesOreDict;
+	}
+
+	public boolean usesOreDict() {
+		return usesOreDict;
 	}
 
 	@Override

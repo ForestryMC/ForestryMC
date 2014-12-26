@@ -12,6 +12,7 @@ package forestry.factory.gadgets;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.ICarpenterManager;
+import forestry.api.recipes.IGenericCrate;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
@@ -25,6 +26,7 @@ import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.items.ItemCrated;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
@@ -51,6 +53,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class MachineCarpenter extends TilePowered implements ISidedInventory, ILiquidTankContainer {
 
@@ -145,6 +148,16 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			addRecipe(Defaults.CARPENTER_CRATING_CYCLES, Fluids.WATER.getFluid(Defaults.CARPENTER_CRATING_LIQUID_QUANTITY),
 					ForestryItem.crate.getItemStack(), itemStack, new Object[] { "###", "###", "###", '#', uncrated });
 			addRecipe(null, new ItemStack(uncrated.getItem(), 9, uncrated.getItemDamage()), new Object[] { "#", '#', itemStack });
+		}
+
+		@Override
+		public void addCratingWithOreDict(ItemStack itemStack) {
+			ItemStack uncrated = ((forestry.core.items.ItemCrated) itemStack.getItem()).getContained(itemStack);
+			int[] oreIds = OreDictionary.getOreIDs(uncrated);
+			for (int oreId : oreIds) {
+				String oreName = OreDictionary.getOreName(oreId);
+				addCrating(oreName, uncrated, itemStack);
+			}
 		}
 
 		@Override

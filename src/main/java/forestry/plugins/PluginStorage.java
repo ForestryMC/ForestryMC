@@ -13,6 +13,7 @@ package forestry.plugins;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -81,6 +82,9 @@ import forestry.storage.proxy.ProxyStorage;
 @Plugin(pluginID = "Storage", name = "Storage", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.storage.description")
 public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandler {
 
+	private static final List<ItemCrated> crates = new ArrayList<ItemCrated>();
+	private static final String CONFIG_CATEGORY = "backpacks";
+
 	@SidedProxy(clientSide = "forestry.storage.proxy.ClientProxyStorage", serverSide = "forestry.storage.proxy.ProxyStorage")
 	public static ProxyStorage proxy;
 	private final ArrayList<ItemStack> minerItems = new ArrayList<ItemStack>();
@@ -89,8 +93,7 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 	private final ArrayList<ItemStack> hunterItems = new ArrayList<ItemStack>();
 	private final ArrayList<ItemStack> adventurerItems = new ArrayList<ItemStack>();
 	private final ArrayList<ItemStack> builderItems = new ArrayList<ItemStack>();
-	private final static String CONFIG_CATEGORY = "backpacks";
-	Configuration config;
+	private Configuration config;
 
 	@Override
 	@SuppressWarnings({"unchecked","rawtypes"})
@@ -140,6 +143,22 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 		BackpackManager.definitions.get("hunter").addValidItems(hunterItems);
 		BackpackManager.definitions.get("adventurer").addValidItems(adventurerItems);
 		BackpackManager.definitions.get("builder").addValidItems(builderItems);
+	}
+
+	public static void registerCrate(ItemCrated crate) {
+		proxy.registerCrate(crate);
+		crates.add(crate);
+	}
+
+	public static void createCrateRecipes() {
+		for (ItemCrated crate : crates) {
+			ItemStack itemStack = new ItemStack(crate);
+			if (crate.usesOreDict()) {
+				RecipeManagers.carpenterManager.addCratingWithOreDict(itemStack);
+			} else {
+				RecipeManagers.carpenterManager.addCrating(itemStack);
+			}
+		}
 	}
 
 	public static void addBackpackItem(String pack, ItemStack stack) {

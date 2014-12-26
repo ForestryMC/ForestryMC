@@ -27,6 +27,7 @@ import forestry.core.config.Config;
 import forestry.core.config.Configuration;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
+import forestry.core.config.ForestryCrate;
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
@@ -230,27 +231,27 @@ public class PluginIC2 extends ForestryPlugin {
 	@Optional.Method(modid = "IC2")
 	protected void registerCrates() {
 		if (resin != null) {
-			ForestryItem.cratedResin.registerItem(new ItemCrated(resin), "cratedResin");
+			ForestryCrate.registerCrate(resin, "cratedResin");
 		}
 
 		if (rubber != null) {
-			ForestryItem.cratedRubber.registerItem(new ItemCrated(rubber), "cratedRubber");
+			ForestryCrate.registerCrate(rubber, "cratedRubber");
 		}
 
 		if (scrap != null) {
-			ForestryItem.cratedScrap.registerItem(new ItemCrated(scrap), "cratedScrap");
+			ForestryCrate.registerCrate(scrap, "cratedScrap");
 		}
 
 		if (uuMatter != null) {
-			ForestryItem.cratedUUM.registerItem(new ItemCrated(uuMatter), "cratedUUM");
+			ForestryCrate.registerCrate(uuMatter, "cratedUUM");
 		}
 
 		if (silver != null) {
-			ForestryItem.cratedSilver.registerItem(new ItemCrated(silver), "cratedSilver");
+			ForestryCrate.registerCrate(silver, "cratedSilver").setUsesOreDict(true);
 		}
 
 		if (brass != null) {
-			ForestryItem.cratedBrass.registerItem(new ItemCrated(brass), "cratedBrass");
+			ForestryCrate.registerCrate(brass, "cratedBrass").setUsesOreDict(true);
 		}
 	}
 

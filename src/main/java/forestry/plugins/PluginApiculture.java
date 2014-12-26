@@ -119,6 +119,7 @@ import forestry.core.config.Config;
 import forestry.core.config.Configuration;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
+import forestry.core.config.ForestryCrate;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.Property;
 import forestry.core.fluids.Fluids;
@@ -431,20 +432,20 @@ public class PluginApiculture extends ForestryPlugin {
 
 	@Override
 	protected void registerCrates() {
-		ForestryItem.cratedBeeswax.registerItem(new ItemCrated(ForestryItem.beeswax.getItemStack()), "cratedBeeswax");
-		ForestryItem.cratedPollen.registerItem(new ItemCrated(ForestryItem.pollenCluster.getItemStack()), "cratedPollen");
-		ForestryItem.cratedPropolis.registerItem(new ItemCrated(ForestryItem.propolis.getItemStack()), "cratedPropolis");
-		ForestryItem.cratedHoneydew.registerItem(new ItemCrated(ForestryItem.honeydew.getItemStack()), "cratedHoneydew");
-		ForestryItem.cratedRoyalJelly.registerItem(new ItemCrated(ForestryItem.royalJelly.getItemStack()), "cratedRoyalJelly");
+		ForestryCrate.registerCrate(ForestryItem.beeswax.getItemStack(), "cratedBeeswax");
+		ForestryCrate.registerCrate(ForestryItem.pollenCluster.getItemStack(), "cratedPollen");
+		ForestryCrate.registerCrate(ForestryItem.propolis.getItemStack(), "cratedPropolis");
+		ForestryCrate.registerCrate(ForestryItem.honeydew.getItemStack(), "cratedHoneydew");
+		ForestryCrate.registerCrate(ForestryItem.royalJelly.getItemStack(), "cratedRoyalJelly");
 
-		ForestryItem.cratedHoneycombs.registerItem(new ItemCrated(ForestryItem.beeComb.getItemStack(1, 0)), "cratedHoneycombs");
-		ForestryItem.cratedCocoaComb.registerItem(new ItemCrated(ForestryItem.beeComb.getItemStack(1, 1)), "cratedCocoaComb");
-		ForestryItem.cratedSimmeringCombs.registerItem(new ItemCrated(ForestryItem.beeComb.getItemStack(1, 2)), "cratedSimmeringCombs");
-		ForestryItem.cratedStringyCombs.registerItem(new ItemCrated(ForestryItem.beeComb.getItemStack(1, 3)), "cratedStringyCombs");
-		ForestryItem.cratedFrozenCombs.registerItem(new ItemCrated(ForestryItem.beeComb.getItemStack(1, 4)), "cratedFrozenCombs");
-		ForestryItem.cratedDrippingCombs.registerItem(new ItemCrated(ForestryItem.beeComb.getItemStack(1, 5)), "cratedDrippingCombs");
+		ForestryCrate.registerCrate(ForestryItem.beeComb.getItemStack(1, 0), "cratedHoneycombs");
+		ForestryCrate.registerCrate(ForestryItem.beeComb.getItemStack(1, 1), "cratedCocoaComb");
+		ForestryCrate.registerCrate(ForestryItem.beeComb.getItemStack(1, 2), "cratedSimmeringCombs");
+		ForestryCrate.registerCrate(ForestryItem.beeComb.getItemStack(1, 3), "cratedStringyCombs");
+		ForestryCrate.registerCrate(ForestryItem.beeComb.getItemStack(1, 4), "cratedFrozenCombs");
+		ForestryCrate.registerCrate(ForestryItem.beeComb.getItemStack(1, 5), "cratedDrippingCombs");
 
-		ForestryItem.cratedRefractoryWax.registerItem(new ItemCrated(ForestryItem.refractoryWax.getItemStack()), "cratedRefractoryWax");
+		ForestryCrate.registerCrate(ForestryItem.refractoryWax.getItemStack(), "cratedRefractoryWax");
 
 	}
 
