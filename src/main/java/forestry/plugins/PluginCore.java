@@ -314,6 +314,8 @@ public class PluginCore extends ForestryPlugin {
 		ForestryCrate.registerCrate(Blocks.gravel, "cratedGravel");
 		ForestryCrate.registerCrate(Items.wheat_seeds, "cratedSeeds");
 		ForestryCrate.registerCrate(Blocks.sapling, "cratedSaplings");
+		ForestryCrate.registerCrate(Items.potato, "cratedPotatoes");
+		ForestryCrate.registerCrate(Items.carrot, "cratedCarrots");
 	}
 
 	@Override
