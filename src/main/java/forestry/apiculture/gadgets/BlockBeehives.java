@@ -41,6 +41,7 @@ public class BlockBeehives extends BlockContainer {
 		setLightLevel(0.8f);
 		setHardness(1.0f);
 		setCreativeTab(Tabs.tabApiculture);
+		setHarvestLevel("scoop", 0);
 	}
 
 	@Override

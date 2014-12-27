@@ -237,15 +237,6 @@ public class PluginApiculture extends ForestryPlugin {
 				PluginApiculture.proxy.getRendererAnalyzer(Defaults.TEXTURE_PATH_BLOCKS + "/analyzer_")));
 
 		ForestryBlock.beehives.registerBlock(new BlockBeehives(), ItemForestryBlock.class, "beehives");
-		ForestryBlock.beehives.block().setHarvestLevel("pickaxe", 1, 0);
-		ForestryBlock.beehives.block().setHarvestLevel("scoop", 0, 1);
-		ForestryBlock.beehives.block().setHarvestLevel("scoop", 0, 2);
-		ForestryBlock.beehives.block().setHarvestLevel("scoop", 0, 3);
-		ForestryBlock.beehives.block().setHarvestLevel("scoop", 0, 4);
-		ForestryBlock.beehives.block().setHarvestLevel("scoop", 0, 5);
-		ForestryBlock.beehives.block().setHarvestLevel("scoop", 0, 6);
-		ForestryBlock.beehives.block().setHarvestLevel("scoop", 0, 7);
-		ForestryBlock.beehives.block().setHarvestLevel("scoop", 0, 8);
 
 		createHives();
 

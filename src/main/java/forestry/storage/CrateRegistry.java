@@ -14,7 +14,7 @@ import forestry.plugins.PluginStorage;
 
 public class CrateRegistry implements ICrateRegistry {
 
-	public void registerCrate(ItemStack stack, String uid, boolean useOreDict) {
+	private void registerCrate(ItemStack stack, String uid, boolean useOreDict) {
 		if (!EnumSet.of(PluginManager.Stage.INIT).contains(PluginManager.getStage()))
 			throw new RuntimeException("Tried to make a crate outside of Init");
 
