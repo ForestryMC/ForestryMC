@@ -10,21 +10,24 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import forestry.api.recipes.RecipeManagers;
-import forestry.core.fluids.Fluids;
-import forestry.core.gui.ContainerDummy;
-import forestry.core.interfaces.IDescriptiveRecipe;
-import forestry.core.proxy.Proxies;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.fluids.Fluids;
+import forestry.core.gui.ContainerDummy;
+import forestry.core.interfaces.IDescriptiveRecipe;
+import forestry.core.proxy.Proxies;
 
 public class RecipeUtil {
 
@@ -122,7 +125,7 @@ public class RecipeUtil {
 			// Use crafting equivalent (not oredict) items first
 			for (ItemStack stockStack : stockCopy) {
 				if (stockStack.stackSize > 0 && StackUtils.isCraftingEquivalent(recipeStack, stockStack, false, false)) {
-					ItemStack stack = new ItemStack(stockStack.getItem(), 1, stockStack.getItemDamage());
+					ItemStack stack = StackUtils.createSplitStack(stockStack, 1);
 					stockStack.stackSize--;
 					crafting.setInventorySlotContents(slot, stack);
 					break;
@@ -133,7 +136,7 @@ public class RecipeUtil {
 			if (crafting.getStackInSlot(slot) == null) {
 				for (ItemStack stockStack : stockCopy) {
 					if (stockStack.stackSize > 0 && StackUtils.isCraftingEquivalent(recipeStack, stockStack, true, true)) {
-						ItemStack stack = new ItemStack(stockStack.getItem(), 1, stockStack.getItemDamage());
+						ItemStack stack = StackUtils.createSplitStack(stockStack, 1);
 						stockStack.stackSize--;
 						crafting.setInventorySlotContents(slot, stack);
 						break;
