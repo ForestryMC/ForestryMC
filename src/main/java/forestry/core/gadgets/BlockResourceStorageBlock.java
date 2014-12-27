@@ -39,6 +39,11 @@ public class BlockResourceStorageBlock extends Block {
 		itemList.add(new ItemStack(this, 1, 2));
 		itemList.add(new ItemStack(this, 1, 3));
 	}
+
+	@Override
+	public int damageDropped(int damage) {
+		return damage;
+	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
