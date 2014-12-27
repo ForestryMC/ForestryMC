@@ -112,19 +112,14 @@ public class PluginCore extends ForestryPlugin {
 		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, 1);
 
 		ForestryBlock.resources.registerBlock(new BlockResource(), ItemForestryBlock.class, "resources");
-		ForestryBlock.resources.block().setHarvestLevel("pickaxe", 1, 0);
-		ForestryBlock.resources.block().setHarvestLevel("pickaxe", 1, 1);
-		ForestryBlock.resources.block().setHarvestLevel("pickaxe", 1, 2);
+		ForestryBlock.resources.block().setHarvestLevel("pickaxe", 1);
 
 		OreDictionary.registerOre("oreApatite", ForestryBlock.resources.getItemStack(1, 0));
 		OreDictionary.registerOre("oreCopper", ForestryBlock.resources.getItemStack(1, 1));
 		OreDictionary.registerOre("oreTin", ForestryBlock.resources.getItemStack(1, 2));
 
 		ForestryBlock.resourceStorage.registerBlock(new BlockResourceStorageBlock(), ItemForestryBlock.class, "resourceStorage");
-		ForestryBlock.resourceStorage.block().setHarvestLevel("pickaxe", 0, 0);
-		ForestryBlock.resourceStorage.block().setHarvestLevel("pickaxe", 0, 1);
-		ForestryBlock.resourceStorage.block().setHarvestLevel("pickaxe", 0, 2);
-		ForestryBlock.resourceStorage.block().setHarvestLevel("pickaxe", 0, 3);
+		ForestryBlock.resourceStorage.block().setHarvestLevel("pickaxe", 0);
 
 		OreDictionary.registerOre("blockApatite", ForestryBlock.resourceStorage.getItemStack(1, 0));
 		OreDictionary.registerOre("blockCopper", ForestryBlock.resourceStorage.getItemStack(1, 1));

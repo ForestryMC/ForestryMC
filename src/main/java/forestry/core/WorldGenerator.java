@@ -10,15 +10,18 @@
  ******************************************************************************/
 package forestry.core;
 
+import java.util.Random;
+
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkProvider;
+
 import cpw.mods.fml.common.IWorldGenerator;
+
 import forestry.core.config.Config;
 import forestry.core.config.ForestryBlock;
 import forestry.core.proxy.Proxies;
 import forestry.core.worldgen.WorldGenMinableMeta;
 import forestry.plugins.PluginManager;
-import java.util.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
 
 public class WorldGenerator implements IWorldGenerator {
 
@@ -30,7 +33,7 @@ public class WorldGenerator implements IWorldGenerator {
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 
 		if (apatiteGenerator == null) {
-			apatiteGenerator = new WorldGenMinableMeta(ForestryBlock.resources.block(), 0, 36);
+			apatiteGenerator = new WorldGenMinableMeta(ForestryBlock.resources, 0, 36);
 			copperGenerator = new WorldGenMinableMeta(ForestryBlock.resources, 1, 6);
 			tinGenerator = new WorldGenMinableMeta(ForestryBlock.resources, 2, 6);
 		}
