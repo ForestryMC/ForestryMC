@@ -46,13 +46,13 @@ public class ContainerTradeName extends ContainerForestry {
 		PacketUpdate packet = new PacketUpdate(PacketIds.TRADING_ADDRESS_SET, payload);
 		Proxies.net.sendToServer(packet);
 
-		IMailAddress address = PostManager.postRegistry.getValidMailAddress(machine.getWorld(), addressName);
+		IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
 		machine.setAddress(address);
 	}
 
 	public void handleSetAddress(PacketUpdate packet) {
 		String addressName = packet.payload.stringPayload[0];
-		IMailAddress address = PostManager.postRegistry.getValidMailAddress(machine.getWorld(), addressName);
+		IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
 		machine.setAddress(address);
 	}
 
