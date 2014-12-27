@@ -1,6 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2011-2014 SirSengir.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser Public License v3
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ *
+ * Various Contributors including, but not limited to:
+ * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ ******************************************************************************/
 package forestry.storage;
-
-import java.util.EnumSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -15,7 +23,7 @@ import forestry.plugins.PluginStorage;
 public class CrateRegistry implements ICrateRegistry {
 
 	private void registerCrate(ItemStack stack, String uid, boolean useOreDict) {
-		if (!EnumSet.of(PluginManager.Stage.INIT).contains(PluginManager.getStage()))
+		if (PluginManager.getStage() != PluginManager.Stage.INIT)
 			throw new RuntimeException("Tried to make a crate outside of Init");
 
 		if (stack == null || stack.getItem() == null)
