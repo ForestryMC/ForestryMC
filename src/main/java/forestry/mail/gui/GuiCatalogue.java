@@ -79,6 +79,7 @@ public class GuiCatalogue extends GuiForestry<TileForestry> {
 
 		fontRendererObj.drawString(String.format("%s / %s", container.getCurrentPos(), container.getMaxCount()), guiLeft + xSize - 72, guiTop + 12, fontColor.get("gui.book"));
 
+		clearTradeInfoWidgets();
 		if(container.getTradeInfo() != null)
 			drawTradePreview(guiLeft + 38, guiTop + 30);
 		else
@@ -98,8 +99,6 @@ public class GuiCatalogue extends GuiForestry<TileForestry> {
 
 		TradeStationInfo info = container.getTradeInfo();
 		fontRendererObj.drawString(String.format(StringUtil.localize("gui.mail.willtrade"), info.owner.getName()), x, y + 18, fontColor.get("gui.book"));
-
-		clearTradeInfoWidgets();
 
 		addTradeInfoWidget(new ItemStackWidget(x - guiLeft, y - guiTop + 28, info.tradegood));
 
