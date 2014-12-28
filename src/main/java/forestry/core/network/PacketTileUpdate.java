@@ -51,10 +51,7 @@ public class PacketTileUpdate extends PacketUpdate {
 
 	@Override
 	public void writeData(DataOutputStream data) throws IOException {
-
-		data.writeInt(posX);
-		data.writeInt(posY);
-		data.writeInt(posZ);
+		super.writeData(data);
 
 		data.writeByte(this.orientation.ordinal());
 		data.writeShort(this.errorState.getID());
@@ -74,16 +71,11 @@ public class PacketTileUpdate extends PacketUpdate {
 			}
 		} else
 			data.writeInt(-1);
-
-		super.writeData(data);
 	}
 
 	@Override
 	public void readData(DataInputStream data) throws IOException {
-
-		posX = data.readInt();
-		posY = data.readInt();
-		posZ = data.readInt();
+		super.readData(data);
 
 		orientation = ForgeDirection.getOrientation(data.readByte());
 		errorState = ErrorStateRegistry.getErrorState(data.readShort());
@@ -99,8 +91,6 @@ public class PacketTileUpdate extends PacketUpdate {
 				owner = null;
 			}
 		}
-
-		super.readData(data);
 	}
 
 	public ForgeDirection getOrientation() {
