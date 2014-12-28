@@ -41,6 +41,15 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
 		return add(new ToolTipLine(line));
 	}
 
+	public boolean add(List lines) {
+		boolean changed = false;
+		for (Object line : lines) {
+			if (line instanceof String)
+				changed |= add((String) line);
+		}
+		return changed;
+	}
+
 	public void onTick(boolean mouseOver) {
 		if (delay == 0)
 			return;

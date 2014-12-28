@@ -30,11 +30,14 @@ import forestry.core.utils.FontColour;
 import java.awt.Color;
 import java.util.Collection;
 import java.util.List;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -408,6 +411,12 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 	}
 
 	public void drawItemStack(ItemStack stack, int xPos, int yPos) {
+		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		RenderHelper.enableGUIStandardItemLighting();
+
 		GL11.glTranslatef(0.0F, 0.0F, 32.0F);
 		this.zLevel = 100.0F;
 		itemRender.zLevel = 100.0F;
@@ -420,6 +429,9 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		itemRender.renderItemOverlayIntoGUI(font, this.mc.getTextureManager(), stack, xPos, yPos);
 		this.zLevel = 0.0F;
 		itemRender.zLevel = 0.0F;
+
+		RenderHelper.disableStandardItemLighting();
+		GL11.glPopAttrib();
 	}
 
 	protected class ItemStackWidget extends Widget {
@@ -427,24 +439,19 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 
 		public ItemStackWidget(int xPos, int yPos, ItemStack itemStack) {
 			super(widgetManager, xPos, yPos);
-
-			IIcon icon = itemStack.getItem().getIcon(itemStack, 0);
-
-			this.width = icon.getIconWidth();
-			this.height = icon.getIconHeight();
 			this.itemStack = itemStack;
 		}
 
 		@Override
 		public void draw(int startX, int startY) {
-			itemRender.renderItemAndEffectIntoGUI(fontRendererObj, mc.renderEngine, itemStack, xPos + startX, yPos + startY);
-			itemRender.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, itemStack, xPos + startX, yPos + startY);
+			drawItemStack(itemStack, xPos + startX, yPos + startY);
 		}
 
 		@Override
 		public ToolTip getToolTip() {
+			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			ToolTip tip = new ToolTip();
-			tip.add(itemStack.getDisplayName());
+			tip.add(itemStack.getTooltip(player, false));
 			return tip;
 		}
 	}
