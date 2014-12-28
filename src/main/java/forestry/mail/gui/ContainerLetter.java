@@ -158,9 +158,9 @@ public class ContainerLetter extends ContainerItemInventory {
 			GameProfile gameProfile = MinecraftServer.getServer().func_152358_ax().func_152655_a(recipientName);
 			if (gameProfile == null)
 				gameProfile = new GameProfile(new UUID(0, 0), recipientName);
-			recipient = PostManager.postRegistry.getValidMailAddress(player.worldObj, gameProfile);
+			recipient = PostManager.postRegistry.getMailAddress(gameProfile);
 		} else if (type == EnumAddressee.TRADER) {
-			recipient = PostManager.postRegistry.getValidMailAddress(player.worldObj, recipientName);
+			recipient = PostManager.postRegistry.getMailAddress(recipientName);
 		} else {
 			return;
 		}

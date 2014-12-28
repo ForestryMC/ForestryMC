@@ -160,24 +160,9 @@ public class PostRegistry implements IPostRegistry {
 		return new MailAddress(gameProfile);
 	}
 
-	public IMailAddress getValidMailAddress(World world, GameProfile gameProfile) {
-		IMailAddress address = new MailAddress(gameProfile);
-		if (getPOBox(world, address) != null)
-			return address;
-		return null;
-	}
-
 	@Override
 	public IMailAddress getMailAddress(String traderName) {
 		return new MailAddress(traderName);
-	}
-
-	@Override
-	public IMailAddress getValidMailAddress(World world, String traderName) {
-		IMailAddress address = new MailAddress(traderName);
-		if (getTradeStation(world, address) != null)
-			return address;
-		return null;
 	}
 
 	/* CARRIER */

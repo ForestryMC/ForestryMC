@@ -34,6 +34,7 @@ import forestry.core.config.Defaults;
 import forestry.core.gadgets.TileBase;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.network.GuiId;
+import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumAccess;
 import forestry.core.utils.StackUtils;
@@ -46,7 +47,7 @@ import buildcraft.api.statements.ITriggerExternal;
 
 public class MachineTrader extends TileBase implements ISidedInventory {
 
-	private MailAddress address;
+	private IMailAddress address;
 
 	public MachineTrader() {
 		address = new MailAddress();
@@ -89,6 +90,27 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 
 		if (nbttagcompound.hasKey("address"))
 			address = MailAddress.loadFromNBT(nbttagcompound.getCompoundTag("address"));
+	}
+
+	@Override
+	public PacketPayload getPacketPayload() {
+		if (address == null)
+			return null;
+
+		PacketPayload payload = new PacketPayload(0, 0, 1);
+		payload.stringPayload[0] = address.getName();
+		return payload;
+	}
+
+	@Override
+	public void fromPacketPayload(PacketPayload payload) {
+		if (payload.isEmpty()) {
+			address = null;
+			return;
+		}
+
+		String addressName = payload.stringPayload[0];
+		address = PostManager.postRegistry.getMailAddress(addressName);
 	}
 
 	/* UPDATING */
@@ -149,7 +171,7 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 
 	/* STATE INFORMATION */
 	public boolean isLinked() {
-		return address.isValid();
+		return address.isValid() && getErrorState() != EnumErrorCode.NOTALPHANUMERIC && getErrorState() != EnumErrorCode.NOTUNIQUE;
 	}
 
 	/**
@@ -255,11 +277,10 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 				return;
 			}
 
-			this.address = new MailAddress(address);
+			this.address = address;
 			PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerProfile(), address);
 			setErrorState(EnumErrorCode.OK);
-		} else
-			this.address = new MailAddress(address);
+		}
 	}
 
 	/* TRADING */
@@ -274,7 +295,6 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 
 		return PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerProfile(), address);
 	}
-
 
 	/* ISIDEDINVENTORY */
 	@Override
@@ -334,7 +354,7 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 	public boolean isUseableByPlayer(EntityPlayer player) {
 		if (!Utils.isUseableByPlayer(player, this))
 			return false;
-		return getOrCreateTradeInventory().isUseableByPlayer(player);
+		return allowsInteraction(player);
 	}
 
 	/* ISIDEDINVENTORY */

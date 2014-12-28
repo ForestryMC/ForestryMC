@@ -75,7 +75,7 @@ public class MailAddress implements INBTTagable, IMailAddress {
 
 	@Override
 	public boolean isValid() {
-		return !PlayerUtil.isSameGameProfile(gameProfile, invalidGameProfile);
+		return gameProfile.getName() != null && !PlayerUtil.isSameGameProfile(gameProfile, invalidGameProfile);
 	}
 
 	@Override
