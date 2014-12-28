@@ -57,9 +57,7 @@ public class CommandMail extends SubCommand {
 		}
 
 		private String makeTradeListEntry(TradeStationInfo info) {
-			String entry = "\u00A7c";
-			if (info.state == EnumStationState.OK)
-				entry = "\u00A7a";
+			EnumChatFormatting formatting = info.state.isOk() ? EnumChatFormatting.GREEN : EnumChatFormatting.RED;
 
 			String tradegood = "[ ? ]";
 			if (info.tradegood != null)
@@ -72,7 +70,7 @@ public class CommandMail extends SubCommand {
 				}
 			}
 
-			return String.format("%s%-12s | %-20s | %s", entry, info.address.getName(), tradegood, demand);
+			return String.format("%s%-12s | %-20s | %s", formatting, info.address.getName(), tradegood, demand);
 		}
 	}
 

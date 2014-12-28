@@ -23,6 +23,8 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+
 import org.lwjgl.opengl.GL11;
 
 public class GuiEscritoire extends GuiForestry<TileEscritoire> {
@@ -214,7 +216,8 @@ public class GuiEscritoire extends GuiForestry<TileEscritoire> {
 
 		newLine();
 		newLine();
-		drawLine("\u00A7n\u00A7oAttempt No. " + (NaturalistGame.BOUNTY_MAX - tile.getGame().getBountyLevel()), 171, fontColor.get("gui.mail.lettertext"));
+		String format = EnumChatFormatting.UNDERLINE + EnumChatFormatting.ITALIC.toString();
+		drawLine(format + "Attempt No. " + (NaturalistGame.BOUNTY_MAX - tile.getGame().getBountyLevel()), 171, fontColor.get("gui.mail.lettertext"));
 		newLine();
 		drawSplitLine(getResearchNote(), 171, 46, fontColor.get("gui.mail.lettertext"));
 

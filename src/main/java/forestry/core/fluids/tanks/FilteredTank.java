@@ -16,6 +16,7 @@ import java.util.HashSet;
 
 import net.minecraft.item.EnumRarity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumChatFormatting;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -87,7 +88,7 @@ public class FilteredTank extends StandardTank {
 				toolTip.add(name);
 			}
 		} else {
-			toolTip.add("\u00A7o<" + StringUtil.localize("gui.tooltip.tmi") + ">");
+			toolTip.add(EnumChatFormatting.ITALIC + "<" + StringUtil.localize("gui.tooltip.tmi") + ">");
 		}
 
 		toolTip.add(String.format("%,d", getFluidAmount()) + " / " + String.format("%,d", getCapacity()));

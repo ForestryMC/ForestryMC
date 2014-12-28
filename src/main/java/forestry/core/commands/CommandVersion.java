@@ -37,7 +37,7 @@ public class CommandVersion extends SubCommand {
 		CommandHelpers.sendLocalizedChatMessage(sender, style, "for.chat.version", Version.getVersion(), Proxies.common.getMinecraftVersion(), Version.getRecommendedVersion());
 		if (Version.isOutdated())
 			for (String updateLine : Version.getChangelog()) {
-				CommandHelpers.sendChatMessage(sender, "\u00A79" + updateLine);
+				CommandHelpers.sendChatMessage(sender, EnumChatFormatting.BLUE + updateLine);
 			}
 	}
 

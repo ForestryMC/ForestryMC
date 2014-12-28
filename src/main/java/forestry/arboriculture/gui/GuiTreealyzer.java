@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.Locale;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+
 import net.minecraftforge.common.EnumPlantType;
 
 public class GuiTreealyzer extends GuiAlyzer {
@@ -229,13 +231,13 @@ public class GuiTreealyzer extends GuiAlyzer {
 		String strike = "";
 		IAllele fruit0 = tree.getGenome().getActiveAllele(EnumTreeChromosome.FRUITS);
 		if (!tree.canBearFruit() && fruit0 != Allele.fruitNone)
-			strike = "\u00A7m";
+			strike = EnumChatFormatting.STRIKETHROUGH.toString();
 		drawLine(strike + StringUtil.localize(tree.getGenome().getFruitProvider().getDescription()), COLUMN_1, fruitDominance0);
 
 		strike = "";
 		IAllele fruit1 = tree.getGenome().getInactiveAllele(EnumTreeChromosome.FRUITS);
 		if (!tree.getGenome().getSecondary().getSuitableFruit().contains(((IAlleleFruit) fruit1).getProvider().getFamily()) && fruit1 != Allele.fruitNone)
-			strike = "\u00A7m";
+			strike = EnumChatFormatting.STRIKETHROUGH.toString();
 		drawLine(strike + StringUtil.localize(((IAlleleFruit) fruit1).getProvider().getDescription()), COLUMN_2, fruitDominance1);
 
 		newLine();

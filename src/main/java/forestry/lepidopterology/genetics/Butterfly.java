@@ -38,6 +38,7 @@ import java.util.Map;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
@@ -66,21 +67,21 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		IAlleleButterflySpecies primary = genome.getPrimary();
 		IAlleleButterflySpecies secondary = genome.getSecondary();
 		if (!isPureBred(EnumButterflyChromosome.SPECIES))
-			list.add("\u00A79" + StringUtil.localize("butterflies.hybrid").replaceAll("%PRIMARY",primary.getName()).replaceAll("%SECONDARY",secondary.getName()));
+			list.add(EnumChatFormatting.BLUE + StringUtil.localize("butterflies.hybrid").replaceAll("%PRIMARY",primary.getName()).replaceAll("%SECONDARY",secondary.getName()));
 
 		if(getMate() != null)
-			list.add("\u00A7c" + StringUtil.localize("gui.fecundated").toUpperCase(Locale.ENGLISH));
-		list.add("\u00A7e" + genome.getActiveAllele(EnumButterflyChromosome.SIZE).getName());
-		list.add("\u00A7f" + genome.getActiveAllele(EnumButterflyChromosome.SPEED).getName() + " " + StringUtil.localize("gui.flyer"));
+			list.add(EnumChatFormatting.RED + StringUtil.localize("gui.fecundated").toUpperCase(Locale.ENGLISH));
+		list.add(EnumChatFormatting.YELLOW + genome.getActiveAllele(EnumButterflyChromosome.SIZE).getName());
+		list.add(EnumChatFormatting.WHITE + genome.getActiveAllele(EnumButterflyChromosome.SPEED).getName() + " " + StringUtil.localize("gui.flyer"));
 		list.add(genome.getActiveAllele(EnumButterflyChromosome.LIFESPAN).getName() + " " + StringUtil.localize("gui.life"));
 
 		IAlleleTolerance tempTolerance = (IAlleleTolerance)getGenome().getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE);
-		list.add("\u00A7aT: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / " + tempTolerance.getName());
+		list.add(EnumChatFormatting.GREEN + "T: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / " + tempTolerance.getName());
 
 		IAlleleTolerance humidTolerance = (IAlleleTolerance)getGenome().getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE);
-		list.add("\u00A7aH: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / " + humidTolerance.getName());
+		list.add(EnumChatFormatting.GREEN + "H: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / " + humidTolerance.getName());
 
-		list.add("\u00A7c" + GenericRatings.rateActivityTime(genome.getNocturnal(), genome.getPrimary().isNocturnal()));
+		list.add(EnumChatFormatting.RED + GenericRatings.rateActivityTime(genome.getNocturnal(), genome.getPrimary().isNocturnal()));
 	}
 
 	/* SAVING & LOADING */

@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -60,14 +61,14 @@ public class TickHandlerCoreClient {
 		}
 
 		if (!naggedVersion && !Config.disableVersionCheck && Version.needsUpdateNoticeAndMarkAsSeen()) {
-			queueChatMessage(String.format("\u00A7cNew version of Forestry available: %s for Minecraft %s", Version.getRecommendedVersion(),
+			queueChatMessage(EnumChatFormatting.RED + String.format("New version of Forestry available: %s for Minecraft %s", Version.getRecommendedVersion(),
 					Proxies.common.getMinecraftVersion()));
-			queueChatMessage("\u00A7cThis message only displays once. Type '/forestry version' to see the changelog.");
+			queueChatMessage(EnumChatFormatting.RED + "This message only displays once. Type '/forestry version' to see the changelog.");
 			naggedVersion = true;
 		}
 
 		if (!naggedVerify && Config.invalidFingerprint) {
-			queueChatMessage("\u00A76Forestry's jar file was tampered with. Some machines have shut down and beekeeping has grown dangerous. Get a new jar from the official download page to fix that!");
+			queueChatMessage(EnumChatFormatting.GOLD + "Forestry's jar file was tampered with. Some machines have shut down and beekeeping has grown dangerous. Get a new jar from the official download page to fix that!");
 			naggedVerify = true;
 		}
 	}

@@ -38,6 +38,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -274,22 +275,28 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 		IAlleleTreeSpecies primary = genome.getPrimary();
 		IAlleleTreeSpecies secondary = genome.getSecondary();
 		if (!isPureBred(EnumTreeChromosome.SPECIES))
-			list.add("\u00A79" + StringUtil.localize("trees.hybrid").replaceAll("%PRIMARY",primary.getName()).replaceAll("%SECONDARY",secondary.getName()));
-		list.add(String.format("\u00A76S: %s, \u00A7cM: %s", genome.getActiveAllele(EnumTreeChromosome.SAPPINESS).getName(), genome.getActiveAllele(EnumTreeChromosome.MATURATION).getName()));
-		list.add(String.format("\u00A7dH: %s, \u00A7bG: %sx%s", genome.getActiveAllele(EnumTreeChromosome.HEIGHT).getName(), genome.getGirth(), genome.getGirth()));
+			list.add(EnumChatFormatting.BLUE + StringUtil.localize("trees.hybrid").replaceAll("%PRIMARY",primary.getName()).replaceAll("%SECONDARY",secondary.getName()));
 
-		list.add(String.format("\u00A7eS: %s, \u00A7fY: %s", genome.getActiveAllele(EnumTreeChromosome.FERTILITY).getName(), genome.getActiveAllele(EnumTreeChromosome.YIELD).getName()));
+		String sappiness = EnumChatFormatting.GOLD + "S: " + genome.getActiveAllele(EnumTreeChromosome.SAPPINESS).getName();
+		String maturation = EnumChatFormatting.RED + "M: " + genome.getActiveAllele(EnumTreeChromosome.MATURATION).getName();
+		String height = EnumChatFormatting.LIGHT_PURPLE + "H: " + genome.getActiveAllele(EnumTreeChromosome.HEIGHT).getName();
+		String girth = EnumChatFormatting.AQUA + "G: " + String.format("%sx%s", genome.getGirth(), genome.getGirth());
+		String fertility = EnumChatFormatting.YELLOW + "S: " + genome.getActiveAllele(EnumTreeChromosome.FERTILITY).getName();
+		String yield = EnumChatFormatting.WHITE + "Y: " + genome.getActiveAllele(EnumTreeChromosome.YIELD).getName();
+		list.add(String.format("%s, %s", sappiness, maturation));
+		list.add(String.format("%s, %s", height, girth));
+		list.add(String.format("%s, %s", fertility, yield));
 
 		IAlleleBoolean primaryFireproof = (IAlleleBoolean)genome.getActiveAllele(EnumTreeChromosome.FIREPROOF);
 		if (primaryFireproof.getValue())
-			list.add(String.format("\u00A7c%s", StatCollector.translateToLocal("for.gui.fireresist")));
+			list.add(EnumChatFormatting.RED + StatCollector.translateToLocal("for.gui.fireresist"));
 
 		IAllele fruit = getGenome().getActiveAllele(EnumTreeChromosome.FRUITS);
 		if(fruit != Allele.fruitNone) {
 			String strike = "";
 			if (!canBearFruit())
-				strike = "\u00A7m";
-			list.add(strike + "\u00A7aF: " + StringUtil.localize(genome.getFruitProvider().getDescription()));
+				strike = EnumChatFormatting.STRIKETHROUGH.toString();
+			list.add(strike + EnumChatFormatting.GREEN + "F: " + StringUtil.localize(genome.getFruitProvider().getDescription()));
 		}
 
 	}

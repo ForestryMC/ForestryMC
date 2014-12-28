@@ -33,6 +33,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
@@ -88,7 +89,7 @@ public class ItemResearchNote extends ItemForestry {
 
 				if(encoded.getSpecialConditions() != null && encoded.getSpecialConditions().size() > 0) {
 					for(String line : encoded.getSpecialConditions())
-						tooltips.add("\u00A76" + line);
+						tooltips.add(EnumChatFormatting.GOLD + line);
 				}
 			} else if(this == SPECIES) {
 				IAlleleSpecies allele0 = (IAlleleSpecies)AlleleManager.alleleRegistry.getAllele(compound.getString("AL0"));
@@ -213,7 +214,7 @@ public class ItemResearchNote extends ItemForestry {
 		public void addTooltip(List<String> list) {
 			ArrayList<String> tooltips = type.getTooltip(inner);
 			if(tooltips.size() <= 0) {
-				list.add("\u00A7o\u00A7c" + StringUtil.localize("researchNote.error.0"));
+				list.add(EnumChatFormatting.ITALIC + EnumChatFormatting.RED.toString() + StringUtil.localize("researchNote.error.0"));
 				list.add(StringUtil.localize("researchNote.error.1"));
 				return;
 			}
