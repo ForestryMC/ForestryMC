@@ -41,6 +41,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -248,7 +249,7 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		int y;
 
 		for (ToolTipLine tip : toolTips) {
-			y = this.fontRendererObj.getStringWidth(tip.getText());
+			y = this.fontRendererObj.getStringWidth(tip.toString());
 
 			height += 10 + tip.getSpacing();
 			if (y > length)
@@ -277,17 +278,19 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		this.drawGradientRect(x - 3, y - 3, x + length + 2, y - 3 + 1, borderColorTopInt, borderColorTopInt);
 		this.drawGradientRect(x - 3, y + height, x + length + 2, y + height + 1, borderColorBottomInt, borderColorBottomInt);
 
+		boolean firstLine = true;
 		for (ToolTipLine tip : toolTips) {
-			String line = tip.getText();
+			String line = tip.toString();
 
-			if (tip.getColor() == null)
-				line = "\u00a77" + line;
-			else
-				line = "\u00a7" + tip.getColor().getFormattingCode() + line;
+			if (!firstLine) {
+				line = EnumChatFormatting.GRAY + line;
+			}
 
 			this.fontRendererObj.drawStringWithShadow(line, x, y, -1);
 
 			y += 10 + tip.getSpacing();
+
+			firstLine = false;
 		}
 
 		this.zLevel = 0.0F;

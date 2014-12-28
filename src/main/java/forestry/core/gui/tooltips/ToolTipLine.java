@@ -40,12 +40,10 @@ public class ToolTipLine {
 		return spacing;
 	}
 
-	public String getText() {
-		return text;
-	}
-
-	public EnumChatFormatting getColor() {
-		return color;
+	public String toString() {
+		if (color == null)
+			return text;
+		return color + text;
 	}
 
 }

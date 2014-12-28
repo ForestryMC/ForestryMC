@@ -10,19 +10,27 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.TradeStationInfo;
 import forestry.core.config.SessionVars;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.GuiForestry;
+import forestry.core.gui.widgets.Widget;
 import forestry.core.utils.StringUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 public class GuiCatalogue extends GuiForestry<TileForestry> {
+
+	private static final String boldUnderline = EnumChatFormatting.BOLD.toString() + EnumChatFormatting.UNDERLINE;
 
 //	GuiButton buttonTrade;
 //	GuiButton buttonClose;
@@ -30,6 +38,7 @@ public class GuiCatalogue extends GuiForestry<TileForestry> {
 	private GuiButton buttonFilter;
 	private GuiButton buttonCopy;
 
+	private final List<ItemStackWidget> tradeInfoWidgets = new ArrayList<ItemStackWidget>();
 	private final ContainerCatalogue container;
 
 	public GuiCatalogue(EntityPlayer player) {
@@ -85,30 +94,36 @@ public class GuiCatalogue extends GuiForestry<TileForestry> {
 
 	private void drawTradePreview(int x, int y) {
 
-		fontRendererObj.drawString("\u00A7l\u00A7n" + container.getTradeInfo().address.getName(), x, y, fontColor.get("gui.book"));
+		fontRendererObj.drawString(boldUnderline + container.getTradeInfo().address.getName(), x, y, fontColor.get("gui.book"));
 
 		TradeStationInfo info = container.getTradeInfo();
 		fontRendererObj.drawString(String.format(StringUtil.localize("gui.mail.willtrade"), info.owner.getName()), x, y + 18, fontColor.get("gui.book"));
 
-		itemRender.renderItemAndEffectIntoGUI(fontRendererObj, mc.renderEngine, info.tradegood, x, y + 28);
-		itemRender.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, info.tradegood, x, y + 28);
+		clearTradeInfoWidgets();
 
-		GL11.glDisable(GL11.GL_LIGHTING);
+		addTradeInfoWidget(new ItemStackWidget(x - guiLeft, y - guiTop + 28, info.tradegood));
+
 		fontRendererObj.drawString(StringUtil.localize("gui.mail.tradefor"), x, y + 46, fontColor.get("gui.book"));
-		GL11.glEnable(GL11.GL_LIGHTING);
 		for (int i = 0; i < container.getTradeInfo().required.length; i++) {
-			GL11.glDisable(GL11.GL_LIGHTING);
-			itemRender.renderItemAndEffectIntoGUI(fontRendererObj, mc.renderEngine, info.required[i], x + i * 18, y + 56);
-			itemRender.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, info.required[i], x + i * 18, y + 56);
-			GL11.glEnable(GL11.GL_LIGHTING);
+			addTradeInfoWidget(new ItemStackWidget(x - guiLeft + i * 18, y - guiTop + 56, info.required[i]));
 		}
 
-		GL11.glDisable(GL11.GL_LIGHTING);
 		if(info.state.isOk())
-			fontRendererObj.drawSplitString("\u00A72" + StringUtil.localize("chat.mail." + info.state.getIdentifier()), x, y + 82, 119, fontColor.get("gui.book"));
+			fontRendererObj.drawSplitString(EnumChatFormatting.DARK_GREEN + StringUtil.localize("chat.mail." + info.state.getIdentifier()), x, y + 82, 119, fontColor.get("gui.book"));
 		else
-			fontRendererObj.drawSplitString("\u00A74" + StringUtil.localize("chat.mail." + info.state.getIdentifier()), x, y + 82, 119, fontColor.get("gui.book"));
-		GL11.glEnable(GL11.GL_LIGHTING);
+			fontRendererObj.drawSplitString(EnumChatFormatting.DARK_RED + StringUtil.localize("chat.mail." + info.state.getIdentifier()), x, y + 82, 119, fontColor.get("gui.book"));
+	}
+
+	private void addTradeInfoWidget(ItemStackWidget widget) {
+		tradeInfoWidgets.add(widget);
+		widgetManager.add(widget);
+	}
+
+	private void clearTradeInfoWidgets() {
+		for (Widget widget : tradeInfoWidgets) {
+			widgetManager.remove(widget);
+		}
+		tradeInfoWidgets.clear();
 	}
 
 	@Override

@@ -70,11 +70,10 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 	private GuiTextField address;
 	private GuiTextBox text;
 
-	boolean addressFocus;
-	boolean textFocus;
+	private boolean addressFocus;
+	private boolean textFocus;
 
-	protected final ArrayList<Widget> tradeInfoWidgets;
-
+	private final ArrayList<Widget> tradeInfoWidgets;
 	private final ContainerLetter container;
 
 	public GuiLetter(EntityPlayer player, LetterInventory inventory) {
@@ -217,8 +216,10 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 	}
 
 	private void clearTradeInfoWidgets() {
-		for (Widget widget : tradeInfoWidgets)
+		for (Widget widget : tradeInfoWidgets) {
 			widgetManager.remove(widget);
+		}
+		tradeInfoWidgets.clear();
 	}
 
 	@Override
