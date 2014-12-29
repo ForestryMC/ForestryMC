@@ -17,6 +17,7 @@ import forestry.api.food.IInfuserManager;
 import forestry.api.food.IIngredientManager;
 import forestry.core.CreativeTabForestry;
 import forestry.core.config.ForestryItem;
+import forestry.core.inventory.ItemInventory;
 import forestry.core.items.ItemForestry;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
@@ -227,7 +228,7 @@ public class ItemInfuser extends ItemForestry {
 	}
 
 	// / INVENTORY MANAGMENT
-	public static class InfuserInventory implements IInventory {
+	public static class InfuserInventory extends ItemInventory {
 
 		private final ItemStack[] inventoryStacks = new ItemStack[6];
 		private final short inputSlot = 0;
@@ -236,6 +237,7 @@ public class ItemInfuser extends ItemForestry {
 		private final EntityPlayer player;
 
 		public InfuserInventory(EntityPlayer player) {
+			super(ItemInfuser.class);
 			this.player = player;
 		}
 

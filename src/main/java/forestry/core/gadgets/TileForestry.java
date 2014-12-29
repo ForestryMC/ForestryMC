@@ -10,28 +10,8 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.ITriggerExternal;
-import buildcraft.api.statements.ITriggerInternal;
-import buildcraft.api.statements.ITriggerProvider;
-import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.common.Optional;
-import forestry.api.core.IErrorState;
-import forestry.core.EnumErrorCode;
-import forestry.core.config.Config;
-import forestry.core.interfaces.IErrorSource;
-import forestry.core.interfaces.IOwnable;
-import forestry.core.inventory.TileInventoryAdapter;
-import forestry.core.network.ForestryPacket;
-import forestry.core.network.INetworkedEntity;
-import forestry.core.network.PacketPayload;
-import forestry.core.network.PacketTileUpdate;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.AdjacentTileCache;
-import forestry.core.utils.EnumAccess;
-import forestry.core.utils.PlayerUtil;
-import forestry.core.vect.Vect;
 import java.util.Collection;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -42,10 +22,36 @@ import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.common.util.ForgeDirection;
 
+import cpw.mods.fml.common.Optional;
+
+import forestry.api.core.IErrorState;
+import forestry.core.EnumErrorCode;
+import forestry.core.config.Config;
+import forestry.core.interfaces.IErrorSource;
+import forestry.core.interfaces.IRestrictedAccess;
+import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.INetworkedEntity;
+import forestry.core.network.PacketPayload;
+import forestry.core.network.PacketTileUpdate;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.AdjacentTileCache;
+import forestry.core.utils.EnumAccess;
+import forestry.core.utils.PlayerUtil;
+import forestry.core.vect.Vect;
+
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.ITriggerExternal;
+import buildcraft.api.statements.ITriggerInternal;
+import buildcraft.api.statements.ITriggerProvider;
+
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
-public abstract class TileForestry extends TileEntity implements INetworkedEntity, IOwnable, IErrorSource, ITriggerProvider {
+public abstract class TileForestry extends TileEntity implements INetworkedEntity, IRestrictedAccess, IErrorSource, ITriggerProvider {
 
 	protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 	protected boolean isInited = false;
@@ -234,33 +240,18 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	private EnumAccess access = EnumAccess.SHARED;
 
 	@Override
-	public boolean allowsRemoval(EntityPlayer player) {
-		if (!isOwnable())
-			return true;
-		if (!isOwned())
-			return true;
-		if (isOwner(player))
-			return true;
-		if (Proxies.common.isOp(player))
-			return true;
-
-		return getAccess() == EnumAccess.SHARED;
+	public final boolean allowsRemoval(EntityPlayer player) {
+		return Config.disablePermissions || !isOwnable() || !isOwned() || isOwner(player) || Proxies.common.isOp(player);
 	}
 
 	@Override
-	public boolean allowsInteraction(EntityPlayer player) {
-		if (Config.disablePermissions)
-			return true;
-		if (!isOwnable())
-			return true;
-		if (!isOwned())
-			return true;
-		if (isOwner(player))
-			return true;
-		if (Proxies.common.isOp(player))
-			return true;
+	public final boolean allowsAlteration(EntityPlayer player) {
+		return allowsRemoval(player) || getAccess() == EnumAccess.SHARED;
+	}
 
-		return getAccess() == EnumAccess.SHARED || getAccess() == EnumAccess.VIEWABLE;
+	@Override
+	public final boolean allowsViewing(EntityPlayer player) {
+		return allowsAlteration(player) || getAccess() == EnumAccess.VIEWABLE;
 	}
 
 	@Override
@@ -300,10 +291,10 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		if (!isOwner(player))
 			return false;
 
-		if (access.ordinal() < EnumAccess.values().length - 1)
-			access = EnumAccess.values()[access.ordinal() + 1];
-		else
-			access = EnumAccess.values()[0];
+		int ordinal = (access.ordinal() + 1) % EnumAccess.values().length;
+		access = EnumAccess.values()[ordinal];
+		if (!this.worldObj.isRemote)
+			sendNetworkUpdate();
 
 		return true;
 	}

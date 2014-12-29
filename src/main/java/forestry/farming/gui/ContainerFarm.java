@@ -31,7 +31,7 @@ public class ContainerFarm extends ContainerSocketed {
 	private final TileFarmPlain tile;
 
 	public ContainerFarm(InventoryPlayer playerinventory, TileFarmPlain tile) {
-		super(playerinventory, tile);
+		super(tile, tile);
 
 		this.tile = tile;
 

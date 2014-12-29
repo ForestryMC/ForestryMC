@@ -10,24 +10,25 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
+
+import org.apache.commons.lang3.StringUtils;
+
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.PostManager;
-import forestry.core.gui.ContainerForestry;
-import forestry.core.inventory.InventoryAdapter;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.mail.gadgets.MachineTrader;
-import net.minecraft.entity.player.InventoryPlayer;
-import org.apache.commons.lang3.StringUtils;
 
-public class ContainerTradeName extends ContainerForestry {
+public class ContainerTradeName extends Container {
 
 	protected final MachineTrader machine;
 
 	public ContainerTradeName(InventoryPlayer player, MachineTrader tile) {
-		super(new InventoryAdapter(0, "Empty"));
 		machine = tile;
 	}
 
@@ -56,4 +57,8 @@ public class ContainerTradeName extends ContainerForestry {
 		machine.setAddress(address);
 	}
 
+	@Override
+	public boolean canInteractWith(EntityPlayer entityPlayer) {
+		return machine.isOwner(entityPlayer);
+	}
 }

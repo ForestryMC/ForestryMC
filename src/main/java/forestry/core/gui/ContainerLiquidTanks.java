@@ -12,6 +12,7 @@ package forestry.core.gui;
 
 import forestry.api.core.IToolPipette;
 import forestry.core.fluids.tanks.StandardTank;
+import forestry.core.gadgets.TileForestry;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketPayload;
@@ -28,8 +29,8 @@ public class ContainerLiquidTanks extends ContainerForestry {
 
 	private final ILiquidTankContainer tile;
 
-	public ContainerLiquidTanks(IInventory inventory, ILiquidTankContainer tile) {
-		super(inventory);
+	public <T extends TileForestry & ILiquidTankContainer> ContainerLiquidTanks(IInventory playerInventory, T tile) {
+		super(tile);
 		this.tile = tile;
 	}
 

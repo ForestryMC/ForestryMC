@@ -22,7 +22,7 @@ import forestry.core.gui.slots.SlotCustom;
 public class ContainerAlvearySieve extends ContainerForestry {
 
 	public ContainerAlvearySieve(InventoryPlayer player, TileAlvearySieve tile) {
-		super(tile.getInternalInventory());
+		super(tile);
 
 		IInventory inventory = tile.getInternalInventory();
 

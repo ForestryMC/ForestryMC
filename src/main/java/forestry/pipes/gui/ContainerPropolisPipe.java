@@ -8,19 +8,19 @@
  */
 package forestry.pipes.gui;
 
-import forestry.core.gui.ContainerForestry;
-import forestry.core.inventory.InventoryAdapter;
-import forestry.pipes.PipeItemsPropolis;
-import forestry.pipes.PipeLogicPropolis;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 
-public class ContainerPropolisPipe extends ContainerForestry {
+import forestry.pipes.PipeItemsPropolis;
+import forestry.pipes.PipeLogicPropolis;
+
+public class ContainerPropolisPipe extends Container {
 
 	public final PipeLogicPropolis pipeLogic;
 
 	public ContainerPropolisPipe(IInventory playerInventory, PipeItemsPropolis pipe) {
-		super(new InventoryAdapter(0, "Empty"));
 		this.pipeLogic = pipe.pipeLogic;
 
 		for (int l = 0; l < 3; l++) {
@@ -34,4 +34,8 @@ public class ContainerPropolisPipe extends ContainerForestry {
 		}
 	}
 
+	@Override
+	public boolean canInteractWith(EntityPlayer p_75145_1_) {
+		return true;
+	}
 }

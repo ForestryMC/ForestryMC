@@ -26,7 +26,7 @@ public class ContainerApiary extends ContainerForestry {
 	private final TileBeehouse tile;
 
 	public ContainerApiary(InventoryPlayer player, TileBeehouse tile, boolean hasFrames) {
-		super(tile.getInternalInventory());
+		super(tile);
 
 		this.tile = tile;
 		tile.sendNetworkUpdate();

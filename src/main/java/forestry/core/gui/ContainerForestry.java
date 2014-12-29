@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import forestry.core.gadgets.TileForestry;
-import forestry.core.gui.slots.SlotForestry;
-import forestry.core.utils.EnumAccess;
-import forestry.core.utils.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -21,17 +17,29 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
+import forestry.core.gadgets.TileForestry;
+import forestry.core.gui.slots.SlotForestry;
+import forestry.core.interfaces.IRestrictedAccess;
+import forestry.core.inventory.ItemInventory;
+import forestry.core.utils.StackUtils;
+
 public class ContainerForestry extends Container {
 
-	protected final IInventory inventory;
-	protected final TileForestry inventoryForestry;
+	protected final IInventory inventoryAccess;
+	protected final IRestrictedAccess restrictedAccess;
 
-	public ContainerForestry(IInventory inventory) {
-		this.inventory = inventory;
-		if (inventory instanceof TileForestry)
-			this.inventoryForestry = (TileForestry) inventory;
+	public ContainerForestry(TileForestry tileForestry) {
+		if (tileForestry instanceof IInventory)
+			this.inventoryAccess = (IInventory) tileForestry;
 		else
-			this.inventoryForestry = null;
+			this.inventoryAccess = tileForestry.getInternalInventory();
+
+		this.restrictedAccess = tileForestry;
+	}
+
+	public ContainerForestry(ItemInventory itemInventory) {
+		this.inventoryAccess = itemInventory;
+		this.restrictedAccess = null;
 	}
 
 	@Override
@@ -39,9 +47,8 @@ public class ContainerForestry extends Container {
 		if (player == null)
 			return null;
 
-		if ((inventoryForestry != null) && (inventoryForestry.getAccess() != EnumAccess.SHARED))
-			if (!inventoryForestry.isOwner(player))
-				return null;
+		if (restrictedAccess != null && !restrictedAccess.allowsAlteration(player))
+			return null;
 
 		Slot slot = slotIndex < 0 ? null : (Slot) this.inventorySlots.get(slotIndex);
 		if (slot instanceof SlotForestry)
@@ -181,6 +188,12 @@ public class ContainerForestry extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
+		if (player == null)
+			return null;
+
+		if (restrictedAccess != null && !restrictedAccess.allowsAlteration(player))
+			return null;
+
 		ItemStack originalStack = null;
 		Slot slot = (Slot) inventorySlots.get(slotIndex);
 		int numSlots = inventorySlots.size();
@@ -211,6 +224,8 @@ public class ContainerForestry extends Container {
 
 	@Override
 	public final boolean canInteractWith(EntityPlayer entityplayer) {
-		return inventory.isUseableByPlayer(entityplayer);
+		if (inventoryAccess == null)
+			return true;
+		return inventoryAccess.isUseableByPlayer(entityplayer);
 	}
 }

@@ -38,7 +38,7 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.interfaces.IOwnable;
 import forestry.core.items.ItemNBTTile;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Utils;
 
 public class BlockBase extends BlockForestry {
@@ -168,7 +168,7 @@ public class BlockBase extends BlockForestry {
 			return false;
 
 		ItemStack current = player.getCurrentEquippedItem();
-		if (current != null && current.getItem() != Items.bucket && tile instanceof IFluidHandler && tile.allowsInteraction(player)) {
+		if (current != null && current.getItem() != Items.bucket && tile instanceof IFluidHandler && tile.allowsAlteration(player)) {
 			if (Proxies.common.isSimulating(world)) {
 				if (FluidHelper.handleRightClick((IFluidHandler) tile, ForgeDirection.getOrientation(side), player, true, tile.canDrainWithBucket())) {
 					return true;
@@ -183,17 +183,10 @@ public class BlockBase extends BlockForestry {
 		if (!Proxies.common.isSimulating(world))
 			return true;
 
-		if (tile.allowsInteraction(player)) {
+		if (tile.allowsViewing(player)) {
 			tile.openGui(player, tile);
-		}
-		else {
-			String ownerName = StringUtil.localize("gui.derelict");
-			
-			if (tile.getOwnerProfile() != null)
-				ownerName = tile.getOwnerProfile().getName();
-
-
-			player.addChatMessage(new ChatComponentTranslation("for.chat.accesslocked",ownerName));
+		} else {
+			player.addChatMessage(new ChatComponentTranslation("for.chat.accesslocked", PlayerUtil.getOwnerName(tile)));
 		}
 		return true;
 	}

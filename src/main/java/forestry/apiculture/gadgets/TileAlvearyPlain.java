@@ -236,14 +236,6 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 		return (getHealthDisplay() * i) / getMaxHealthDisplay();
 	}
 
-	@Override
-	public boolean allowsInteraction(EntityPlayer player) {
-		if (!super.allowsInteraction(player))
-			return false;
-
-		return this.isIntegratedIntoStructure();
-	}
-
 	/* STRUCTURE MANAGMENT */
 	@Override
 	protected void createInventory() {

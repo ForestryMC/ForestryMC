@@ -35,7 +35,7 @@ public class ContainerWorktable extends ContainerForestry implements IContainerC
 	private long lastUpdate;
 
 	public ContainerWorktable(EntityPlayer player, TileWorktable tile) {
-		super(tile.getInternalInventory());
+		super(tile);
 		this.tile = tile;
 
 		IInventory craftingInventory = tile.getCraftingInventory();

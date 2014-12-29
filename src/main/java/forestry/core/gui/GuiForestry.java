@@ -10,10 +10,29 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import codechicken.nei.VisiblityData;
-import codechicken.nei.api.INEIGuiHandler;
-import codechicken.nei.api.TaggedInventoryArea;
+import java.awt.Color;
+import java.util.Collection;
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ResourceLocation;
+
 import cpw.mods.fml.common.Optional;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
 import forestry.core.config.Config;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.tooltips.IToolTipProvider;
@@ -27,25 +46,10 @@ import forestry.core.interfaces.IOwnable;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.FontColour;
-import java.awt.Color;
-import java.util.Collection;
-import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
+import codechicken.nei.VisiblityData;
+import codechicken.nei.api.INEIGuiHandler;
+import codechicken.nei.api.TaggedInventoryArea;
 
 @Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = "NotEnoughItems")
 public abstract class GuiForestry<T extends TileForestry> extends GuiContainer implements INEIGuiHandler {
@@ -58,20 +62,20 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 	protected final FontColour fontColor;
 	public final ResourceLocation textureFile;
 
-	public GuiForestry(String texture, ContainerForestry container) {
+	public GuiForestry(String texture, Container container) {
 		this(new ResourceLocation("forestry", texture), container, null);
 	}
 
-	public GuiForestry(String texture, ContainerForestry container, Object inventory) {
+	public GuiForestry(String texture, Container container, Object inventory) {
 		this(new ResourceLocation("forestry", texture), container, inventory);
 	}
 
-	public GuiForestry(ResourceLocation texture, ContainerForestry container) {
+	public GuiForestry(ResourceLocation texture, Container container) {
 		this(texture, container, null);
 	}
 
 	@SuppressWarnings("unchecked")
-	public GuiForestry(ResourceLocation texture, ContainerForestry container, Object inventory) {
+	public GuiForestry(ResourceLocation texture, Container container, Object inventory) {
 		super(container);
 		this.widgetManager = new WidgetManager(this);
 		this.ledgerManager = new LedgerManager(this);

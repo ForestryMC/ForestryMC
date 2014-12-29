@@ -33,7 +33,7 @@ public class TileInventoryAdapter extends InventoryAdapter {
 	public boolean isUseableByPlayer(EntityPlayer player) {
 		if (!Utils.isUseableByPlayer(player, tile))
 			return false;
-		return tile.allowsInteraction(player);
+		return tile.allowsViewing(player);
 	}
 
 	@Override
@@ -44,11 +44,11 @@ public class TileInventoryAdapter extends InventoryAdapter {
 
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return tile.getAccess() == EnumAccess.SHARED;
+		return true;
 	}
 
 	@Override
 	public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
-		return tile.getAccess() == EnumAccess.SHARED;
+		return true;
 	}
 }

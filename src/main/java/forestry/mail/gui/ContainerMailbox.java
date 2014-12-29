@@ -10,6 +10,13 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.PostManager;
 import forestry.core.gui.ContainerForestry;
@@ -18,10 +25,6 @@ import forestry.core.proxy.Proxies;
 import forestry.mail.POBox;
 import forestry.mail.gadgets.MachineMailbox;
 import forestry.plugins.PluginMail;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 
 public class ContainerMailbox extends ContainerForestry {
 
@@ -32,7 +35,8 @@ public class ContainerMailbox extends ContainerForestry {
 	private final POBox mailInventory;
 
 	public ContainerMailbox(InventoryPlayer player, MachineMailbox tile) {
-		super(tile.getOrCreateMailInventory(player.player.worldObj, player.player.getGameProfile()));
+		super(tile);
+		IInventory inventory = tile.getOrCreateMailInventory(player.player.worldObj, player.player.getGameProfile());
 
 		// Mailbox contents
 		this.mailbox = tile;

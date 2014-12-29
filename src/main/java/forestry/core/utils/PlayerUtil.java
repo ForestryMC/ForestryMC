@@ -3,6 +3,8 @@ package forestry.core.utils;
 import com.mojang.authlib.GameProfile;
 import java.util.UUID;
 
+import forestry.core.interfaces.IOwnable;
+
 public class PlayerUtil {
 
 	//TODO: use null everywhere instead of an emptyUUID
@@ -18,6 +20,14 @@ public class PlayerUtil {
 			return id1.equals(id2);
 
 		return player1.getName() != null && player1.getName().equals(player2.getName());
+	}
+
+	public static String getOwnerName(IOwnable ownable) {
+		GameProfile profile = ownable.getOwnerProfile();
+		if (profile == null)
+			return StringUtil.localize("gui.derelict");
+		else
+			return profile.getName();
 	}
 
 }

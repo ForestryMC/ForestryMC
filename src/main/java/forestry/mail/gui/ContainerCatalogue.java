@@ -10,13 +10,21 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Set;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IPostalState;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
 import forestry.api.mail.TradeStationInfo;
-import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketPayload;
@@ -24,14 +32,8 @@ import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.mail.EnumStationState;
 import forestry.mail.network.PacketLetterInfo;
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Set;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ICrafting;
 
-public class ContainerCatalogue extends ContainerForestry implements IGuiSelectable {
+public class ContainerCatalogue extends Container implements IGuiSelectable {
 
 	private final EntityPlayer player;
 	private final LinkedHashMap<IMailAddress, ITradeStation> stations;
@@ -53,7 +55,6 @@ public class ContainerCatalogue extends ContainerForestry implements IGuiSelecta
 	};
 
 	public ContainerCatalogue(EntityPlayer player) {
-		super(player.inventory);
 		this.player = player;
 
 		// Filter out any trade stations which do not actually offer anything.
@@ -225,6 +226,11 @@ public class ContainerCatalogue extends ContainerForestry implements IGuiSelecta
 			currentFilter = j;
 			break;
 		}
+	}
+
+	@Override
+	public boolean canInteractWith(EntityPlayer p_75145_1_) {
+		return true;
 	}
 
 	@Override

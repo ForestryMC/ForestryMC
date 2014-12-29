@@ -10,21 +10,23 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.gui.slots.SlotCustom;
-import forestry.core.network.PacketUpdate;
-import forestry.core.proxy.Proxies;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import forestry.api.genetics.ISpeciesRoot;
+import forestry.core.gadgets.TileNaturalistChest;
+import forestry.core.gui.slots.SlotCustom;
+import forestry.core.network.PacketUpdate;
+import forestry.core.proxy.Proxies;
 
 public class ContainerNaturalistInventory extends ContainerForestry implements IGuiSelectable {
 
 	private final IPagedInventory inv;
 	private final ISpeciesRoot speciesRoot;
 
-	public ContainerNaturalistInventory(ISpeciesRoot speciesRoot, InventoryPlayer player, IPagedInventory inventory, int page, int pageSize) {
+	public ContainerNaturalistInventory(ISpeciesRoot speciesRoot, InventoryPlayer player, TileNaturalistChest inventory, int page, int pageSize) {
 		super(inventory);
 		this.inv = inventory;
 		this.speciesRoot = speciesRoot;
@@ -49,8 +51,9 @@ public class ContainerNaturalistInventory extends ContainerForestry implements I
 	}
 
 	public void purgeBag(EntityPlayer player) {
-		for (int i = 0; i < inventory.getSizeInventory(); i++) {
-			ItemStack stack = inventory.getStackInSlot(i);
+
+		for (int i = 0; i < inv.getSizeInventory(); i++) {
+			ItemStack stack = inv.getStackInSlot(i);
 			if (stack == null)
 				continue;
 
@@ -58,7 +61,7 @@ public class ContainerNaturalistInventory extends ContainerForestry implements I
 				continue;
 
 			Proxies.common.dropItemPlayer(player, stack);
-			inventory.setInventorySlotContents(i, null);
+			inv.setInventorySlotContents(i, null);
 		}
 	}
 

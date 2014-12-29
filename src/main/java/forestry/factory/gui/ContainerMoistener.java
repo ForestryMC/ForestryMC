@@ -62,7 +62,7 @@ public class ContainerMoistener extends ContainerLiquidTanks implements IContain
 
 	@Override
 	public void onCraftMatrixChanged(IInventory iinventory, int slot) {
-		inventory.setInventorySlotContents(slot, iinventory.getStackInSlot(slot));
+		tile.setInventorySlotContents(slot, iinventory.getStackInSlot(slot));
 		tile.checkRecipe();
 	}
 
