@@ -20,6 +20,7 @@ import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
 import forestry.api.mail.TradeStationInfo;
 import forestry.core.config.ForestryItem;
+import forestry.core.interfaces.ICrafter;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.StackUtils;
@@ -553,10 +554,10 @@ public class TradeStation extends WorldSavedData implements ITradeStation, ISide
 			return itemStack.getItem() == Items.paper;
 
 		if (slot >= SLOT_STAMPS_1 && slot < SLOT_STAMPS_1 + SLOT_STAMPS_COUNT)
-			return IStamps.class.isAssignableFrom(itemStack.getItem().getClass());
+			return itemStack.getItem() instanceof IStamps;
 
 		if (slot >= SLOT_SEND_BUFFER && slot < SLOT_SEND_BUFFER + SLOT_SEND_BUFFER_COUNT) {
-			ItemStack item = new ItemStack(itemStack.getItem(), 1, itemStack.getItemDamage());
+			ItemStack item = StackUtils.createSplitStack(itemStack, 1);
 			return inventory.contains(item, SLOT_TRADEGOOD, SLOT_TRADEGOOD_COUNT);
 		}
 
@@ -603,5 +604,4 @@ public class TradeStation extends WorldSavedData implements ITradeStation, ISide
 	public boolean canExtractItem(int slot, ItemStack itemStack, int side, boolean permission) {
 		return permission && slot >= SLOT_RECEIVE_BUFFER && slot < SLOT_RECEIVE_BUFFER + SLOT_RECEIVE_BUFFER_COUNT;
 	}
-
 }
