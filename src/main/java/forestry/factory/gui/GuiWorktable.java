@@ -44,13 +44,6 @@ public class GuiWorktable extends GuiForestryTitled<TileWorktable> {
 
 		@Override
 		public void draw(int startX, int startY) {
-			GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-			GL11.glDisable(GL11.GL_LIGHTING);
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
-			RenderHelper.enableGUIStandardItemLighting();
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
 			ItemStack output = getOutputStack();
 			if (output != null)
 				manager.gui.drawItemStack(output, startX + xPos, startY + yPos);
