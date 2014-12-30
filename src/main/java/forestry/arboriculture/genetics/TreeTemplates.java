@@ -385,7 +385,7 @@ public class TreeTemplates {
 		IAllele[] alleles = getDefaultTemplate();
 		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeIpe;
 		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLower;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightAverage;
+		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightLarge;
 		alleles[EnumTreeChromosome.GIRTH.ordinal()] = Allele.int2;
 		return alleles;
 	}

@@ -23,31 +23,31 @@ public class WorldGenIpe extends WorldGenTree {
 		generateTreeTrunk(height, girth);
 
 		int leafSpawn = height + 1;
+		float adjustedGirth = girth*.65f;
 
 		generateAdjustedCylinder(leafSpawn--, 0, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 0.5f, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 0.5f, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 1.9f, 1, leaf);
+		generateAdjustedCylinder(leafSpawn--, 0.2f*adjustedGirth, 1, leaf);
+		generateAdjustedCylinder(leafSpawn--, 0.2f*adjustedGirth, 1, leaf); 
 		
 		while (leafSpawn > 7) {
-			generateAdjustedCylinder(leafSpawn, 2.5f, 1, leaf);
+			generateAdjustedCylinder(leafSpawn, (float) (1.25f*(adjustedGirth * .65)), 1, leaf);
 			leafSpawn--;
 		}
 		
-		generateAdjustedCylinder(leafSpawn--, 3.2f, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 3.2f, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 3.2f, 1, leaf);
+		generateAdjustedCylinder(leafSpawn--, 1.6f*adjustedGirth, 1, leaf);
+		generateAdjustedCylinder(leafSpawn--, 1.6f*adjustedGirth, 1, leaf);
+		generateAdjustedCylinder(leafSpawn--, 1.6f*adjustedGirth, 1, leaf);
 		
 		if (rand.nextBoolean())
-			generateAdjustedCylinder(leafSpawn--, 2.5f, 1, leaf);
+			generateAdjustedCylinder(leafSpawn--, 1.25f*adjustedGirth, 1, leaf);
 
-		generateAdjustedCylinder(leafSpawn--, 1.9f, 1, leaf);
+		generateAdjustedCylinder(leafSpawn--, 1f*adjustedGirth, 1, leaf);
 
 	}
 
 	@Override
 	public void preGenerate() {
-		height = determineHeight(8, 6);
+		height = determineHeight(8, 8);
 		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
 	}
 }

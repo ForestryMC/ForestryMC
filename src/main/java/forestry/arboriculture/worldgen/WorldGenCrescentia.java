@@ -45,15 +45,34 @@ public class WorldGenCrescentia extends WorldGenTree {
 		//Trunk generation
 		for (int x = 0; x < girth; x++) //offsets trunk in x direction
 			for (int z = 0; z < girth; z++) //offsets trunk in z direction
-				for (int i = 0; i < height; i++) { //grows trunk in y direction to the correct height
-					addWood(x - offset, i, z - offset, EnumReplaceMode.ALL);
+				if (x==0 || x==girth-1) { //checks for edges in x direction
+					if (z==0 || z==girth-1) {//checks for corners
+						if (x==0 && z==0) {}//xz corner
+						if (x==girth-1 && z==0) {}//x-1z corner
+						if (x==0 && z==girth-1) {}//xz-1 corner
+						if (x==girth-1 && z==0) {} //x-1z-1 corner
+					} else { //these are the z only edges
+						if (x==0) {
+							
+						} else if (x==girth-1) { 
+							
+						}
+					}
+				} else if (z==0 || z==girth-1) { //these are the x only edges
+					if (z==0) {
+						
+					} else if (z==girth-1) {
+						
+					}
+				} else { //these are center pieces
+					for (int i = 0; i < height; i++) { //grows trunk straight up in y direction to the correct height
+						addWood(x - offset, i, z - offset, EnumReplaceMode.ALL);
+					}
 				}
+				
 		//End trunk generation
 		
-		
-		if (!spawnPods)
-			return;
-
+		//Spawn pods
 		for (int y = minPodHeight; y < height; y++)
 			for (int x = 0; x < girth; x++)
 				for (int z = 0; z < girth; z++) {

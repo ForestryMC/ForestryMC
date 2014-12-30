@@ -641,6 +641,9 @@ public class PluginArboriculture extends ForestryPlugin {
 		IClassification lamiaceae = AlleleManager.alleleRegistry.createAndRegisterClassification(
 				EnumClassLevel.FAMILY, "lamiaceae", "Lamiaceae");
 		lamiales.addMemberGroup(lamiaceae);
+		IClassification bignoniaceae = AlleleManager.alleleRegistry.createAndRegisterClassification(
+				EnumClassLevel.FAMILY, "bignoniaceae", "Bignoniaceae");
+		lamiales.addMemberGroup(bignoniaceae);
 
 		IClassification ebenaceae = AlleleManager.alleleRegistry.createAndRegisterClassification(
 				EnumClassLevel.FAMILY, "ebenaceae", "Ebenaceae");
@@ -668,7 +671,11 @@ public class PluginArboriculture extends ForestryPlugin {
 		IClassification sapindaceae = AlleleManager.alleleRegistry.createAndRegisterClassification(
 				EnumClassLevel.FAMILY, "sapindaceae", "Sapindaceae");
 		sapindales.addMemberGroup(sapindaceae);
-
+		IClassification anacardiaceae = AlleleManager.alleleRegistry.createAndRegisterClassification(
+				EnumClassLevel.FAMILY, "anacardiaceae", "Anacardiaceae");
+		sapindales.addMemberGroup(anacardiaceae);
+		
+		
 		IClassification caricaceae = AlleleManager.alleleRegistry.createAndRegisterClassification(
 				EnumClassLevel.FAMILY, "caricaceae", "Caricaceae");
 		brassicales.addMemberGroup(caricaceae);
@@ -718,14 +725,19 @@ public class PluginArboriculture extends ForestryPlugin {
 		fabaceae.addMemberGroup(acacia);
 		IClassification millettia = new BranchTrees("millettia", "Millettia");
 		fabaceae.addMemberGroup(millettia);
-
-		IClassification ochroma = new BranchTrees("ochroma", "Ochroma");
-		malvaceae.addMemberGroup(ochroma);
+		IClassification dalbergia = new BranchTrees("dalbergia", "Dalbergia");
+		fabaceae.addMemberGroup(dalbergia);
+		IClassification pterocarpus = new BranchTrees("pterocarpus", "Pterocarpus");
+		fabaceae.addMemberGroup(pterocarpus);
 		
 		IClassification tabebuia = new BranchTrees("tabebuia", "Tabebuia");
-		IClassification pterocarpus = new BranchTrees("pterocarpus", "Pterocarpus");
-		IClassification dalbergia = new BranchTrees("dalbergia", "Dalbergia");
+		bignoniaceae.addMemberGroup(tabebuia);
+		
 		IClassification astronium = new BranchTrees("astronium", "Astronium");
+		anacardiaceae.addMemberGroup(astronium);
+		
+		IClassification ochroma = new BranchTrees("ochroma", "Ochroma");
+		malvaceae.addMemberGroup(ochroma);
 		
 		IClassification prunus = new BranchTrees("prunus", "Prunus");
 		rosaceae.addMemberGroup(prunus);
@@ -1051,7 +1063,7 @@ public class PluginArboriculture extends ForestryPlugin {
 		// Decidious
 		TreeTemplates.limeA = new TreeMutation(Allele.treeBirch, Allele.treeOak,
 				TreeTemplates.getLimeTemplate(), 15);
-		TreeTemplates.mapleA = new TreeMutation(Allele.treeLime, Allele.treeLarch,
+		TreeTemplates.mapleA = new TreeMutation(Allele.treeSpruce, Allele.treeLarch,
 				TreeTemplates.getMapleTemplate(), 5);
 
 		// Fructifera
@@ -1083,13 +1095,13 @@ public class PluginArboriculture extends ForestryPlugin {
 				TreeTemplates.getSequoiaTemplate(), 5);
 
 		// Tropical
-		TreeTemplates.teakA = new TreeMutation(Allele.treeLime, Allele.treeJungle,
+		TreeTemplates.teakA = new TreeMutation(Allele.treeDarkOak, Allele.treeJungle,
 				TreeTemplates.getTeakTemplate(), 10);
-		TreeTemplates.ipeA = new TreeMutation(Allele.treeTeak, Allele.treeAcacia,
+		TreeTemplates.ipeA = new TreeMutation(Allele.treeTeak, Allele.treeDarkOak,
 				TreeTemplates.getIpeTemplate(), 10);
 		TreeTemplates.kapokA = new TreeMutation(Allele.treeJungle, Allele.treeTeak,
 				TreeTemplates.getKapokTemplate(), 10);
-		TreeTemplates.ebonyA = new TreeMutation(Allele.treeKapok, Allele.treeTeak,
+		TreeTemplates.ebonyA = new TreeMutation(Allele.treeDarkOak, Allele.treeKapok,
 				TreeTemplates.getEbonyTemplate(), 10);
 		TreeTemplates.zebrawoodA = new TreeMutation(Allele.treeEbony, Allele.treePoplar,
 				TreeTemplates.getZebrawoodTemplate(), 5);
@@ -1102,19 +1114,19 @@ public class PluginArboriculture extends ForestryPlugin {
 				TreeTemplates.getDateTemplate(), 5);
 
 		// Malva
-		TreeTemplates.balsaA = new TreeMutation(Allele.treeTeak, Allele.treeLime,
+		TreeTemplates.balsaA = new TreeMutation(Allele.treeTeak, Allele.treeAcacia,
 				TreeTemplates.getBalsaTemplate(), 10);
 		TreeTemplates.acaciaA = new TreeMutation(Allele.treeTeak, Allele.treeBalsa,
 				TreeTemplates.getDesertAcaciaTemplate(), 10);
 		TreeTemplates.padaukA = new TreeMutation(Allele.treeAcacia, Allele.treeJungle,
 				TreeTemplates.getPadaukTemplate(), 10);
-		TreeTemplates.cocoboloA = new TreeMutation(Allele.treeBalsa, Allele.treeDarkOak,
+		TreeTemplates.cocoboloA = new TreeMutation(Allele.treeDesertAcacia, Allele.treeDarkOak,
 				TreeTemplates.getCocoboloTemplate(), 10);
-		TreeTemplates.wengeA = new TreeMutation(Allele.treeDesertAcacia, Allele.treeBalsa,
+		TreeTemplates.wengeA = new TreeMutation(Allele.treeCocobolo, Allele.treeBalsa,
 				TreeTemplates.getWengeTemplate(), 10);
 		TreeTemplates.baobabA = new TreeMutation(Allele.treeBalsa, Allele.treeWenge,
 				TreeTemplates.getBaobabTemplate(), 10);
-		TreeTemplates.mahoeA = new TreeMutation(Allele.treeBirch, Allele.treeDesertAcacia,
+		TreeTemplates.mahoeA = new TreeMutation(Allele.treeBalsa, Allele.treeDesertAcacia,
 				TreeTemplates.getMahoeTemplate(), 5);
 
 		TreeTemplates.willowA = new TreeMutation(Allele.treeOak, Allele.treeBirch,

@@ -46,19 +46,24 @@ public class WorldGenPadauk extends WorldGenTree {
 				if (rand.nextBoolean()){
 					
 					int[] offset = {-1, 1};
-					int length = 3;
-						
-					if (rand.nextBoolean()) {
-						for (int j = 1; j < length ; j++) {
-							int offsetz = new Random().nextInt(offset.length);
-							addZWood(0, leafSpawn, j*offset[offsetz], EnumReplaceMode.ALL);
+					int offsetValue = (offset[new Random().nextInt(offset.length)]);
+					int maxBranchLength = 3;
+					int branchLength = new Random().nextInt(maxBranchLength+1);
+					char[] direction = {'z', 'x'};
+					char directionValue = (direction[new Random().nextInt(direction.length)]);
+					int branchSpawn = leafSpawn;
+									
+					for (int j = 1; j < branchLength+1; j++) {
+						if (j == branchLength && rand.nextBoolean()) { //Just adding a bit of variation to the ends for character
+							branchSpawn += 1;
 						}
-					} else {
-						for (int j = 1; j < length+1; j++) {
-							int offsetx = new Random().nextInt(offset.length);
-							addXWood(j*offset[offsetx], leafSpawn, 0, EnumReplaceMode.ALL);
+						if (directionValue == 'z') {
+							addZWood(0, branchSpawn, j*offsetValue, EnumReplaceMode.ALL);
+						} else if (directionValue == 'x'){
+							addXWood(j*offsetValue, branchSpawn, 0, EnumReplaceMode.ALL);
 						}
 					}
+					
 				}
 			}
 		}
