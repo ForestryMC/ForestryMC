@@ -82,7 +82,7 @@ public class PluginFluids extends ForestryPlugin {
 
 	@Override
 	public void preInit() {
-		for (Fluids fluidType : Fluids.values()) {
+		for (Fluids fluidType : Fluids.forestryFluids) {
 			createFluid(fluidType);
 		}
 		MinecraftForge.EVENT_BUS.register(getTextureHook());
@@ -145,7 +145,7 @@ public class PluginFluids extends ForestryPlugin {
 
 	@Override
 	public void postInit() {
-		for (Fluids fluidType : Fluids.values()) {
+		for (Fluids fluidType : Fluids.forestryFluids) {
 			if (fluidType.getFluid() == null)
 				throw new MissingFluidException(fluidType.getTag());
 		}

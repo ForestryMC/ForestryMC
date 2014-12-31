@@ -317,6 +317,8 @@ public enum Fluids {
 	// Thermal Expansion
 	COAL, PYROTHEUM;
 
+	public static final Fluids[] forestryFluids = {ETHANOL, BIOMASS, GLASS, HONEY, LEGACY_HONEY, ICE, JUICE, MILK, SEEDOIL, SHORT_MEAD};
+
 	private final String tag;
 	private final int density, viscosity;
 	private final Color color;
