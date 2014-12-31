@@ -101,21 +101,16 @@ public class BlockMushroom extends BlockSapling implements IItemTyped {
 
 	@Override
 	public void func_149878_d(World world, int i, int j, int k, Random random) {
-		int type = world.getBlockMetadata(i, j, k) & 0x03;
-
-		if(type >= generators.length)
-			return;
+		MushroomType type = getTypeFromMeta(world.getBlockMetadata(i, j, k));
 
 		world.setBlockToAir(i, j, k);
-		if (!generators[type].generate(world, random, i, j, k))
-			world.setBlock(i, j, k, this, type, 0);
+		if (!generators[type.ordinal()].generate(world, random, i, j, k))
+			world.setBlock(i, j, k, this, type.ordinal(), 0);
 	}
 
 	@Override
 	public MushroomType getTypeFromMeta(int meta) {
-		meta %= 3;
-		if (meta >= MushroomType.values().length)
-			return null;
+		meta %= MushroomType.values().length;
 		return MushroomType.values()[meta];
 	}
 
@@ -138,12 +133,11 @@ public class BlockMushroom extends BlockSapling implements IItemTyped {
 	public IIcon getIcon(int side, int meta) {
 		MushroomType type = getTypeFromMeta(meta);
 
-		if (type == MushroomType.BROWN)
-			return Blocks.brown_mushroom.getIcon(side, meta);
-		else if (type == MushroomType.RED)
-			return Blocks.red_mushroom.getIcon(side, meta);
-		else
-			return null;
+		switch (type) {
+			case BROWN: return Blocks.brown_mushroom.getIcon(side, meta);
+			case RED: return Blocks.red_mushroom.getIcon(side, meta);
+			default: return null;
+		}
 	}
 
 }
