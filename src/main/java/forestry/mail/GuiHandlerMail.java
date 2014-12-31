@@ -44,7 +44,7 @@ public class GuiHandlerMail extends GuiHandlerBase {
 
 		switch (GuiId.values()[id]) {
 		case CatalogueGUI:
-			ItemStack cata = getEquippedItem(player);
+			ItemStack cata = player.getCurrentEquippedItem();
 			if (cata == null)
 				return null;
 
@@ -54,7 +54,7 @@ public class GuiHandlerMail extends GuiHandlerBase {
 				return null;
 			
 		case LetterGUI:
-			ItemStack equipped = getEquippedItem(player);
+			ItemStack equipped = player.getCurrentEquippedItem();
 			if (equipped == null)
 				return null;
 
@@ -85,7 +85,7 @@ public class GuiHandlerMail extends GuiHandlerBase {
 
 		switch (GuiId.values()[id]) {
 		case CatalogueGUI:
-			ItemStack cata = getEquippedItem(player);
+			ItemStack cata = player.getCurrentEquippedItem();
 			if (cata == null)
 				return null;
 
@@ -95,12 +95,12 @@ public class GuiHandlerMail extends GuiHandlerBase {
 				return null;
 			
 		case LetterGUI:
-			ItemStack equipped = getEquippedItem(player);
+			ItemStack equipped = player.getCurrentEquippedItem();
 			if (equipped == null)
 				return null;
 
 			if (equipped.getItem() instanceof ItemLetter)
-				return new ContainerLetter(player, new LetterInventory(getEquippedItem(player)));
+				return new ContainerLetter(player, new LetterInventory(equipped));
 			else
 				return null;
 

@@ -23,9 +23,12 @@ import forestry.core.items.ItemForestry;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.RevolvingList;
+import forestry.plugins.PluginApiculture;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -89,15 +92,16 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 		private final short blankSlot = 0;
 		private final short finishedSlot = 1;
 		private final short ingredientSlot1 = 2;
+		private final short ingredientSlotCount = 4;
 
-		public SolderingInventory() {
-			super(ItemSolderingIron.class, 6);
+		public SolderingInventory(ItemStack itemStack) {
+			super(ItemSolderingIron.class, 6, itemStack);
 			init();
 		}
 
-		public SolderingInventory(ItemStack itemstack) {
-			super(ItemSolderingIron.class, 6, itemstack);
-			init();
+		@Override
+		public int getInventoryStackLimit() {
+			return 1;
 		}
 
 		private void init() {
@@ -191,14 +195,6 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 		}
 
 		@Override
-		public void readFromNBT(NBTTagCompound nbttagcompound) {
-		}
-
-		@Override
-		public void writeToNBT(NBTTagCompound nbttagcompound) {
-		}
-
-		@Override
 		public void markDirty() {
 			errorState = EnumErrorCode.OK;
 			trySolder();
@@ -221,6 +217,21 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 				return errorState;
 
 			return EnumErrorCode.OK;
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (itemStack == null)
+				return false;
+
+			Item item = itemStack.getItem();
+			if (slotIndex == blankSlot) {
+				return item instanceof ItemCircuitBoard;
+			} else if (slotIndex >= ingredientSlot1 && slotIndex < ingredientSlot1 + ingredientSlotCount) {
+				CircuitRecipe recipe = SolderManager.getMatchingRecipe(layouts.getCurrent(), itemStack);
+				return recipe != null;
+			}
+			return false;
 		}
 	}
 

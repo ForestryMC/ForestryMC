@@ -37,18 +37,13 @@ public abstract class GuiHandlerBase implements IGuiHandler {
 	public GuiNaturalistInventory getNaturalistChestGui(String rootUID, EntityPlayer player, World world, int x, int y, int z, int page) {
 		TileNaturalistChest tile = (TileNaturalistChest) getTileForestry(world, x, y, z);
 		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(rootUID);
-		return new GuiNaturalistInventory(speciesRoot, player, new ContainerNaturalistInventory(speciesRoot, player.inventory, tile, page, 25), tile, page, 5);
+		return new GuiNaturalistInventory(speciesRoot, player, new ContainerNaturalistInventory(player.inventory, tile, page, 25), tile, page, 5);
 	}
 
 	public ContainerNaturalistInventory getNaturalistChestContainer(String rootUID, EntityPlayer player, World world, int x, int y, int z, int page) {
 		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(rootUID);
 		speciesRoot.getBreedingTracker(world, player.getGameProfile()).synchToPlayer(player);
-		return new ContainerNaturalistInventory(speciesRoot,
-				player.inventory, (TileNaturalistChest) getTileForestry(world, x, y, z), page, 25);
-	}
-
-	public ItemStack getEquippedItem(EntityPlayer player) {
-		return player.getCurrentEquippedItem();
+		return new ContainerNaturalistInventory(player.inventory, (TileNaturalistChest) getTileForestry(world, x, y, z), page, 25);
 	}
 
 	public static int encodeGuiData(int guiId, int data) {

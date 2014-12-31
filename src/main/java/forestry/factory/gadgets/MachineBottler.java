@@ -10,8 +10,31 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
-import buildcraft.api.statements.ITriggerExternal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Stack;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+
 import cpw.mods.fml.common.Optional;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.ICraftingProvider;
 import forestry.core.EnumErrorCode;
@@ -23,31 +46,15 @@ import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.Utils;
 import forestry.factory.triggers.FactoryTriggers;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Stack;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
+
+import buildcraft.api.statements.ITriggerExternal;
 
 public class MachineBottler extends TilePowered implements ISidedInventory, ILiquidTankContainer {
 
@@ -146,16 +153,27 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	public MachineBottler() {
 		super(1100, 50, 4000);
 
-		setInternalInventory(new TileInventoryAdapter(this, 3, "Items"));
+		setInternalInventory(new TileInventoryAdapter(this, 3, "Items") {
+			@Override
+			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+				if (slotIndex == SLOT_RESOURCE) {
+					return FluidContainerRegistry.isEmptyContainer(itemStack);
+				} else if (slotIndex == SLOT_CAN) {
+					FluidStack fluidStack = FluidHelper.getFluidStackInContainer(itemStack);
+					return RecipeManager.isInput(fluidStack);
+				}
+				return false;
+			}
+
+			@Override
+			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+				return slotIndex == SLOT_PRODUCT;
+			}
+		});
 
 		setHints(Config.hints.get("bottler"));
 		resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 		tankManager = new TankManager(resourceTank);
-	}
-
-	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
 	}
 
 	@Override
@@ -211,7 +229,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
 			return;
 
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 
 		// Check if we have suitable items waiting in the item slot
 		if (inventory.getStackInSlot(SLOT_CAN) != null)
@@ -257,7 +275,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		// We are done, add products to queue and remove resources
 		pendingProducts.push(currentRecipe.bottled.copy());
 
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 		inventory.decrStackSize(SLOT_RESOURCE, 1);
 		resourceTank.drain(currentRecipe.input.amount, true);
 		checkRecipe();
@@ -269,7 +287,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	}
 
 	public void checkRecipe() {
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 		Recipe sameRec = RecipeManager.findMatchingRecipe(resourceTank.getFluid(), inventory.getStackInSlot(SLOT_RESOURCE));
 
 		if (sameRec == null)
@@ -307,7 +325,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	}
 
 	private boolean addProduct(ItemStack product, boolean all) {
-		return getInternalInventory().tryAddStack(product, SLOT_PRODUCT, 1, all);
+		return InvTools.tryAddStack(getInternalInventory(), product, SLOT_PRODUCT, 1, all);
 	}
 
 	// / STATE INFORMATION
@@ -318,7 +336,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 
 	@Override
 	public boolean hasResourcesMin(float percentage) {
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 		if (inventory.getStackInSlot(SLOT_RESOURCE) == null)
 			return false;
 
@@ -366,88 +384,6 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		int i = tankManager.maxMessageId() + 1;
 		iCrafting.sendProgressBarUpdate(container, i, fillingTime);
 		iCrafting.sendProgressBarUpdate(container, i + 1, fillingTotalTime);
-	}
-
-	/* IINVENTORY */
-	@Override
-	public int getSizeInventory() {
-		return getInternalInventory().getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return getInternalInventory().getStackInSlot(i);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return getInternalInventory().decrStackSize(i, j);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		getInternalInventory().setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		return getInternalInventory().getStackInSlotOnClosing(slot);
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return getInternalInventory().getInventoryStackLimit();
-	}
-
-	@Override
-	public void openInventory() {
-	}
-
-	@Override
-	public void closeInventory() {
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return getInternalInventory().isUseableByPlayer(player);
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
-		return false;
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		if (!getInternalInventory().isItemValidForSlot(slotIndex, itemstack))
-			return false;
-
-		if (slotIndex == SLOT_RESOURCE)
-			return FluidContainerRegistry.isEmptyContainer(itemstack);
-
-		if (slotIndex == SLOT_CAN) {
-			FluidStack fluidStack = FluidHelper.getFluidStackInContainer(itemstack);
-			return RecipeManager.isInput(fluidStack);
-		}
-
-		return false;
-	}
-
-
-	/* ISIDEDINVENTORY */
-	@Override
-	public boolean canInsertItem(int slotIndex, ItemStack itemstack, int side) {
-		return isItemValidForSlot(slotIndex, itemstack);
-	}
-
-	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-		return getInternalInventory().canExtractItem(side, itemstack, side) && slotIndex == SLOT_PRODUCT;
-	}
-
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return getInternalInventory().getAccessibleSlotsFromSide(side);
 	}
 
 	/* ILIQUIDCONTAINER */

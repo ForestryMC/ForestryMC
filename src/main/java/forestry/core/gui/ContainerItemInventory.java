@@ -10,13 +10,15 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import forestry.core.gui.slots.SlotItemInventory;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.inventory.ItemInventory;
 import forestry.core.proxy.Proxies;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import forestry.core.utils.StackUtils;
 
 public abstract class ContainerItemInventory extends ContainerForestry {
 
@@ -29,26 +31,20 @@ public abstract class ContainerItemInventory extends ContainerForestry {
 		this.player = player;
 	}
 
-	public ItemInventory getItemInventory() {
-		return inventory;
-	}
-
 	protected void addSecuredSlot(IInventory other, int slot, int x, int y) {
-		if (other.getStackInSlot(slot) != null && inventory.itemClass.isAssignableFrom(other.getStackInSlot(slot).getItem().getClass()))
+		ItemStack stackInSlot = other.getStackInSlot(slot);
+		if (StackUtils.isIdenticalItem(inventory.parent, stackInSlot))
 			addSlotToContainer(new SlotLocked(other, slot, x, y));
 		else
-			addSlotToContainer(new SlotItemInventory(this, other, player, slot, x, y));
+			addSlotToContainer(new Slot(other, slot, x, y));
 	}
 
-	protected abstract boolean isAcceptedItem(EntityPlayer player, ItemStack stack);
-
 	public void purgeBag(EntityPlayer player) {
-		for (int i = 0; i < inventory.getSizeInventory(); i++) {
-			ItemStack stack = inventory.getStackInSlot(i);
-			if (stack == null)
-				continue;
+		for (int i = 0; i < inventorySlots.size() - 9 * 4; i++) {
+			Slot slot = (Slot) inventorySlots.get(i);
+			ItemStack stack = slot.getStack();
 
-			if (isAcceptedItem(player, stack))
+			if (stack == null || slot.isItemValid(stack))
 				continue;
 
 			Proxies.common.dropItemPlayer(player, stack);

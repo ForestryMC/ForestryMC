@@ -12,40 +12,26 @@ package forestry.core.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 
-import forestry.core.config.ForestryItem;
-import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.TileAnalyzer;
-import forestry.core.genetics.ItemGE;
-import forestry.core.gui.slots.SlotCustom;
-import forestry.core.gui.slots.SlotLiquidContainer;
+import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 
 public class ContainerAnalyzer extends ContainerLiquidTanks {
 
 	public ContainerAnalyzer(InventoryPlayer player, TileAnalyzer tile) {
-		super(tile, tile);
+		super(tile);
 
 		// Input buffer
 		for (int i = 0; i < 3; i++)
 			for (int k = 0; k < 2; k++)
-				addSlotToContainer(new SlotCustom(tile, TileAnalyzer.SLOT_INPUT_1 + i * 2 + k, 8 + k * 18, 28 + i * 18, ItemGE.class));
+				addSlotToContainer(new SlotFiltered(tile, TileAnalyzer.SLOT_INPUT_1 + i * 2 + k, 8 + k * 18, 28 + i * 18));
 
 		// Analyze slot
-		addSlotToContainer(new SlotCustom(tile, TileAnalyzer.SLOT_ANALYZE, 73, 59));
+		addSlotToContainer(new SlotFiltered(tile, TileAnalyzer.SLOT_ANALYZE, 73, 59));
 
 		// Can slot
-		addSlotToContainer(new SlotLiquidContainer(tile, TileAnalyzer.SLOT_CAN, 143, 24, false, Fluids.HONEY.getFluid()) {
-
-			@Override
-			public boolean isItemValid(ItemStack stack) {
-				if (ForestryItem.honeyDrop.isItemEqual(stack))
-					return true;
-				return super.isItemValid(stack);
-			}
-
-		});
+		addSlotToContainer(new SlotFiltered(tile, TileAnalyzer.SLOT_CAN, 143, 24));
 
 		// Output buffer
 		for (int i = 0; i < 2; i++)

@@ -10,24 +10,22 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import forestry.api.apiculture.BeeManager;
-import forestry.apiculture.gadgets.TileAlvearySwarmer;
-import forestry.core.gui.ContainerForestry;
-import forestry.core.gui.slots.SlotCustom;
-import java.util.Set;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
+
+import forestry.apiculture.gadgets.TileAlvearySwarmer;
+import forestry.core.gui.ContainerForestry;
+import forestry.core.gui.slots.SlotFiltered;
 
 public class ContainerAlvearySwarmer extends ContainerForestry {
 
 	public ContainerAlvearySwarmer(InventoryPlayer player, TileAlvearySwarmer tile) {
 		super(tile);
 
-		this.addSlotToContainer(new SlotCustom(tile, 0, 79, 52, getInducerItems()));
-		this.addSlotToContainer(new SlotCustom(tile, 1, 100, 39, getInducerItems()));
-		this.addSlotToContainer(new SlotCustom(tile, 2, 58, 39, getInducerItems()));
-		this.addSlotToContainer(new SlotCustom(tile, 3, 79, 26, getInducerItems()));
+		this.addSlotToContainer(new SlotFiltered(tile, 0, 79, 52));
+		this.addSlotToContainer(new SlotFiltered(tile, 1, 100, 39));
+		this.addSlotToContainer(new SlotFiltered(tile, 2, 58, 39));
+		this.addSlotToContainer(new SlotFiltered(tile, 3, 79, 26));
 
 		// Player inventory
 		for (int i = 0; i < 3; i++)
@@ -37,10 +35,5 @@ public class ContainerAlvearySwarmer extends ContainerForestry {
 		for (int i = 0; i < 9; i++)
 			addSlotToContainer(new Slot(player, i, 8 + i * 18, 145));
 
-	}
-
-	private Object[] getInducerItems() {
-		Set<ItemStack> inducers = BeeManager.inducers.keySet();
-		return inducers.toArray(new Object[inducers.size()]);
 	}
 }

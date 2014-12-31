@@ -10,6 +10,18 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.core.ForestryAPI;
 import forestry.core.config.Defaults;
@@ -18,20 +30,9 @@ import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.interfaces.ILiquidTankContainer;
+import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.Utils;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
 
 public class TileAlvearyHygroregulator extends TileAlveary implements IInventory, ILiquidTankContainer {
 
@@ -54,6 +55,8 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 		}
 	}
 
+	public static final short SLOT_INPUT = 0;
+
 	private final HygroregulatorRecipe[] recipes;
 
 	/* MEMBERS */
@@ -66,7 +69,16 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	public TileAlvearyHygroregulator() {
 		super(BLOCK_META);
 
-		setInternalInventory(new TileInventoryAdapter(this, 1, "CanInv"));
+		setInternalInventory(new TileInventoryAdapter(this, 1, "CanInv") {
+			@Override
+			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+				if (slotIndex == SLOT_INPUT) {
+					Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+					return liquidTank.accepts(fluid);
+				}
+				return false;
+			}
+		});
 
 		Fluid water = Fluids.WATER.getFluid();
 		Fluid lava = Fluids.LAVA.getFluid();
@@ -83,11 +95,6 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	@Override
 	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.HygroregulatorGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
-	}
-
-	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
 	}
 
 	/* UPDATING */
@@ -131,7 +138,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
 			return;
 
-		TileInventoryAdapter canInventory = getInternalInventory();
+		IInventoryAdapter canInventory = getInternalInventory();
 
 		// Check if we have suitable items waiting in the item slot
 		if (canInventory.getStackInSlot(0) != null)
@@ -176,93 +183,6 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	@Override
 	public int getIcon(int side, int metadata) {
 		return BlockAlveary.ALVEARY_HYGRO;
-	}
-
-	/* IINVENTORY */
-	@Override
-	public int getSizeInventory() {
-		if (getInternalInventory() != null)
-			return getInternalInventory().getSizeInventory();
-		else
-			return 0;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int slotIndex) {
-		if (getInternalInventory() != null)
-			return getInternalInventory().getStackInSlot(slotIndex);
-		else
-			return null;
-	}
-
-	@Override
-	public ItemStack decrStackSize(int slotIndex, int amount) {
-		if (getInternalInventory() != null)
-			return getInternalInventory().decrStackSize(slotIndex, amount);
-		else
-			return null;
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slotIndex) {
-		if (getInternalInventory() != null)
-			return getInternalInventory().getStackInSlotOnClosing(slotIndex);
-		else
-			return null;
-	}
-
-	@Override
-	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
-		// Client side handling for container synch
-		if (getInternalInventory() == null && !Proxies.common.isSimulating(worldObj))
-			createInventory();
-
-		if (getInternalInventory() != null)
-			getInternalInventory().setInventorySlotContents(slotIndex, itemstack);
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		if (getInternalInventory() != null)
-			return getInternalInventory().getInventoryStackLimit();
-		else
-			return 0;
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		IInventory inv = getInternalInventory();
-		if (inv != null)
-			return inv.isUseableByPlayer(player);
-		return Utils.isUseableByPlayer(player, this);
-	}
-
-	@Override
-	public void openInventory() {
-	}
-
-	@Override
-	public void closeInventory() {
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
-		return false;
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		if (!getInternalInventory().isItemValidForSlot(slotIndex, itemstack))
-			return false;
-
-		if (slotIndex == 0) {
-			FluidStack fluid = FluidHelper.getFluidStackInContainer(itemstack);
-			if (fluid == null || fluid.amount <= 0)
-				return false;
-			return liquidTank.accepts(fluid.getFluid());
-		}
-
-		return false;
 	}
 
 	/* ILIQUIDTANKCONTAINER */

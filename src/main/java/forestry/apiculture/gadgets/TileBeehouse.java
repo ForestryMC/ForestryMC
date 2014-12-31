@@ -10,11 +10,21 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.api.apiculture.IHiveFrame;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
@@ -23,36 +33,53 @@ import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.TileBase;
+import forestry.core.gadgets.TileForestry;
 import forestry.core.interfaces.IClimatised;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketInventoryStack;
 import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.GuiUtil;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginApiculture;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 
-public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised, ISidedInventory {
+public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
+
+	protected static class BeehouseInventoryAdapter extends TileInventoryAdapter {
+		public BeehouseInventoryAdapter(TileForestry tile, int size, String name) {
+			super(tile, size, name);
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_QUEEN) {
+				return PluginApiculture.beeInterface.isMember(itemStack) && !PluginApiculture.beeInterface.isDrone(itemStack);
+			} else if (GuiUtil.isIndexInRange(slotIndex, SLOT_FRAMES_1, SLOT_FRAMES_COUNT)) {
+				return itemStack.getItem() instanceof IHiveFrame;
+			} else if (slotIndex == SLOT_DRONE) {
+				return PluginApiculture.beeInterface.isDrone(itemStack);
+			}
+			return false;
+		}
+
+		@Override
+		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+			return GuiUtil.isIndexInRange(slotIndex, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT);
+		}
+	}
 
 	// CONSTANTS
 	public static final int SLOT_QUEEN = 0;
 	public static final int SLOT_DRONE = 1;
-	public static final int SLOT_INVENTORY_1 = 2;
 	public static final int SLOT_PRODUCT_1 = 2;
 	public static final int SLOT_PRODUCT_COUNT = 7;
 	public static final int SLOT_FRAMES_1 = 9;
 	public static final int SLOT_FRAMES_2 = 10;
 	public static final int SLOT_FRAMES_3 = 11;
-	public static final int SLOT_INVENTORY_COUNT = 7;
 	public static final int SLOT_FRAMES_COUNT = 3;
 	private final IBeekeepingLogic logic;
 	private BiomeGenBase biome;
@@ -62,7 +89,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised, 
 	public TileBeehouse() {
 		setHints(Config.hints.get("apiary"));
 		logic = PluginApiculture.beeInterface.createBeekeepingLogic(this);
-		setInternalInventory(new TileInventoryAdapter(this, 12, "Items"));
+		setInternalInventory(new BeehouseInventoryAdapter(this, 12, "Items").disableAutomation());
 	}
 
 	@Override
@@ -178,7 +205,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised, 
 
 	@Override
 	public boolean addProduct(ItemStack product, boolean all) {
-		return getInternalInventory().tryAddStack(product, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT, all, true);
+		return InvTools.tryAddStack(getInternalInventory(), product, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT, all, true);
 	}
 
 	/* NETWORK SYNCH */
@@ -194,7 +221,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised, 
 
 	/* STATE INFORMATION */
 	private int getHealthDisplay() {
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 		if (inventory.getStackInSlot(SLOT_QUEEN) == null)
 			return 0;
 
@@ -207,7 +234,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised, 
 	}
 
 	private int getMaxHealthDisplay() {
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 		if (inventory.getStackInSlot(SLOT_QUEEN) == null)
 			return 0;
 
@@ -270,99 +297,6 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised, 
 
 		iCrafting.sendProgressBarUpdate(container, 0, logic.getBreedingTime());
 		iCrafting.sendProgressBarUpdate(container, 1, logic.getTotalBreedingTime());
-	}
-
-	/* INVENTORY MANAGMENT */
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return getInternalInventory().getStackInSlot(i);
-	}
-
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return getInternalInventory().getAccessibleSlotsFromSide(side);
-	}
-
-	@Override
-	public int getSizeInventory() {
-		return getInternalInventory().getSizeInventory();
-	}
-
-	@Override
-	public ItemStack decrStackSize(int slotIndex, int amount) {
-		return getInternalInventory().decrStackSize(slotIndex, amount);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slotIndex) {
-		return getInternalInventory().getStackInSlotOnClosing(slotIndex);
-	}
-
-	@Override
-	public void setInventorySlotContents(int slotIndex, ItemStack stack) {
-		getInternalInventory().setInventorySlotContents(slotIndex, stack);
-	}
-
-	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
-		return false;
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return getInternalInventory().getInventoryStackLimit();
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return getInternalInventory().isUseableByPlayer(player);
-	}
-
-	@Override
-	public void openInventory() {
-	}
-
-	@Override
-	public void closeInventory() {
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		if (!getInternalInventory().isItemValidForSlot(slotIndex, itemstack))
-			return false;
-
-		if (slotIndex == SLOT_QUEEN && PluginApiculture.beeInterface.isMember(itemstack)
-				&& !PluginApiculture.beeInterface.isDrone(itemstack))
-			return true;
-
-		return slotIndex == SLOT_DRONE && PluginApiculture.beeInterface.isDrone(itemstack);
-	}
-
-	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-		if (!getInternalInventory().canExtractItem(side, itemstack, side))
-			return false;
-
-		switch (slotIndex) {
-		case SLOT_QUEEN:
-		case SLOT_DRONE:
-		case SLOT_FRAMES_1:
-		case SLOT_FRAMES_2:
-		case SLOT_FRAMES_3:
-			return false;
-		default:
-			return true;
-		}
-	}
-
-	@Override
-	public boolean canInsertItem(int slotIndex, ItemStack stack, int side) {
-		return isItemValidForSlot(slotIndex, stack);
 	}
 
 	// / IBEEHOUSING
@@ -508,5 +442,4 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised, 
 	public GameProfile getOwnerName() {
 		return this.getOwnerProfile();
 	}
-
 }

@@ -10,11 +10,13 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import forestry.core.gui.ContainerSocketed;
-import forestry.energy.gadgets.EngineTin;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
+
+import forestry.core.gui.ContainerSocketed;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.energy.gadgets.EngineTin;
 
 public class ContainerEngineTin extends ContainerSocketed {
 
@@ -24,7 +26,8 @@ public class ContainerEngineTin extends ContainerSocketed {
 		super(tile, tile);
 
 		this.tile = tile;
-		this.addSlotToContainer(new Slot(tile, 0, 84, 53));
+
+		this.addSlotToContainer(new SlotFiltered(tile, EngineTin.SLOT_BATTERY, 84, 53));
 
 		int i;
 		for (i = 0; i < 3; ++i)

@@ -21,6 +21,7 @@ import forestry.api.lepidopterology.IButterfly;
 import forestry.core.config.ForestryItem;
 import forestry.core.genetics.AlleleBoolean;
 import forestry.core.genetics.GenericRatings;
+import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StringUtil;
 import forestry.lepidopterology.genetics.ButterflyGenome;
@@ -37,7 +38,7 @@ import net.minecraft.item.ItemStack;
 public class GuiFlutterlyzer extends GuiAlyzer {
 
 	public GuiFlutterlyzer(EntityPlayer player, FlutterlyzerInventory inventory) {
-		super("rootButterflies", player, new ContainerFlutterlyzer(player.inventory, inventory), inventory, "gui.flutterlyzer");
+		super("rootButterflies", player, new ContainerAlyzer(inventory, player), inventory, "gui.flutterlyzer");
 
 		ArrayList<ItemStack> butterflyList = new ArrayList<ItemStack>();
 		((ItemButterflyGE) ForestryItem.butterflyGE.item()).addCreativeItems(butterflyList, false);

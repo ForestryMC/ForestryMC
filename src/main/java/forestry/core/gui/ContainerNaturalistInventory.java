@@ -13,28 +13,23 @@ package forestry.core.gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 
-import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.gadgets.TileNaturalistChest;
-import forestry.core.gui.slots.SlotCustom;
+import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.network.PacketUpdate;
-import forestry.core.proxy.Proxies;
 
 public class ContainerNaturalistInventory extends ContainerForestry implements IGuiSelectable {
 
 	private final IPagedInventory inv;
-	private final ISpeciesRoot speciesRoot;
 
-	public ContainerNaturalistInventory(ISpeciesRoot speciesRoot, InventoryPlayer player, TileNaturalistChest inventory, int page, int pageSize) {
-		super(inventory);
-		this.inv = inventory;
-		this.speciesRoot = speciesRoot;
+	public ContainerNaturalistInventory(InventoryPlayer player, TileNaturalistChest tile, int page, int pageSize) {
+		super(tile);
+		this.inv = tile;
 
 		// Inventory
 		for (int x = 0; x < 5; x++) {
 			for (int y = 0; y < 5; y++) {
-				addSlotToContainer(new SlotCustom(inventory, y + page * pageSize + x * 5, 100 + y * 18, 21 + x * 18, speciesRoot));
+				addSlotToContainer(new SlotFiltered(tile, y + page * pageSize + x * 5, 100 + y * 18, 21 + x * 18));
 			}
 		}
 
@@ -47,21 +42,6 @@ public class ContainerNaturalistInventory extends ContainerForestry implements I
 		// Player hotbar
 		for (int j1 = 0; j1 < 9; j1++) {
 			addSlotToContainer(new Slot(player, j1, 18 + j1 * 18, 178));
-		}
-	}
-
-	public void purgeBag(EntityPlayer player) {
-
-		for (int i = 0; i < inv.getSizeInventory(); i++) {
-			ItemStack stack = inv.getStackInSlot(i);
-			if (stack == null)
-				continue;
-
-			if (speciesRoot.isMember(stack))
-				continue;
-
-			Proxies.common.dropItemPlayer(player, stack);
-			inv.setInventorySlotContents(i, null);
 		}
 	}
 

@@ -227,10 +227,6 @@ public class PacketHandler {
 
 		if (tile instanceof IInventory) {
 			((IInventory) tile).setInventorySlotContents(packet.slotIndex, packet.itemstack);
-		} else if (tile instanceof TileForestry) {
-			IInventory inventory = ((TileForestry) tile).getInternalInventory();
-
-			if (inventory != null) inventory.setInventorySlotContents(packet.slotIndex, packet.itemstack);
 		}
 	}
 

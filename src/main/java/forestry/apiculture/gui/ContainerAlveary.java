@@ -10,14 +10,14 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import forestry.apiculture.gadgets.TileAlvearyPlain;
-import forestry.core.config.ForestryItem;
-import forestry.core.gui.ContainerForestry;
-import forestry.core.gui.slots.SlotClosed;
-import forestry.core.gui.slots.SlotCustom;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
+
+import forestry.apiculture.gadgets.TileAlvearyPlain;
+import forestry.core.gui.ContainerForestry;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotOutput;
 
 public class ContainerAlveary extends ContainerForestry {
 
@@ -30,19 +30,19 @@ public class ContainerAlveary extends ContainerForestry {
 		tile.sendNetworkUpdate();
 
 		// Queen/Princess
-		this.addSlotToContainer(new SlotCustom(tile, TileAlvearyPlain.SLOT_QUEEN, 29, 39, ForestryItem.beePrincessGE, ForestryItem.beeQueenGE));
+		this.addSlotToContainer(new SlotFiltered(tile, TileAlvearyPlain.SLOT_QUEEN, 29, 39));
 
 		// Drone
-		this.addSlotToContainer(new SlotCustom(tile, TileAlvearyPlain.SLOT_DRONE, 29, 65, ForestryItem.beeDroneGE));
+		this.addSlotToContainer(new SlotFiltered(tile, TileAlvearyPlain.SLOT_DRONE, 29, 65));
 
 		// Product Inventory
-		this.addSlotToContainer(new SlotClosed(tile, 2, 116, 52));
-		this.addSlotToContainer(new SlotClosed(tile, 3, 137, 39));
-		this.addSlotToContainer(new SlotClosed(tile, 4, 137, 65));
-		this.addSlotToContainer(new SlotClosed(tile, 5, 116, 78));
-		this.addSlotToContainer(new SlotClosed(tile, 6, 95, 65));
-		this.addSlotToContainer(new SlotClosed(tile, 7, 95, 39));
-		this.addSlotToContainer(new SlotClosed(tile, 8, 116, 26));
+		this.addSlotToContainer(new SlotOutput(tile, 2, 116, 52));
+		this.addSlotToContainer(new SlotOutput(tile, 3, 137, 39));
+		this.addSlotToContainer(new SlotOutput(tile, 4, 137, 65));
+		this.addSlotToContainer(new SlotOutput(tile, 5, 116, 78));
+		this.addSlotToContainer(new SlotOutput(tile, 6, 95, 65));
+		this.addSlotToContainer(new SlotOutput(tile, 7, 95, 39));
+		this.addSlotToContainer(new SlotOutput(tile, 8, 116, 26));
 
 		// Player inventory
 		for (int i = 0; i < 3; i++)

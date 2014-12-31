@@ -10,16 +10,14 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import forestry.api.apiculture.IHiveFrame;
-import forestry.apiculture.gadgets.TileBeehouse;
-import forestry.core.config.ForestryItem;
-import forestry.core.gui.ContainerForestry;
-import forestry.core.gui.slots.SlotClosed;
-import forestry.core.gui.slots.SlotCustom;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+
+import forestry.apiculture.gadgets.TileBeehouse;
+import forestry.core.gui.ContainerForestry;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotOutput;
 
 public class ContainerApiary extends ContainerForestry {
 
@@ -30,29 +28,28 @@ public class ContainerApiary extends ContainerForestry {
 
 		this.tile = tile;
 		tile.sendNetworkUpdate();
-		IInventory inv = tile.getInternalInventory();
 
 		// Queen/Princess
-		this.addSlotToContainer(new SlotCustom(inv, TileBeehouse.SLOT_QUEEN, 29, 39, ForestryItem.beePrincessGE, ForestryItem.beeQueenGE));
+		this.addSlotToContainer(new SlotFiltered(tile, TileBeehouse.SLOT_QUEEN, 29, 39));
 
 		// Drone
-		this.addSlotToContainer(new SlotCustom(inv, TileBeehouse.SLOT_DRONE, 29, 65, ForestryItem.beeDroneGE));
+		this.addSlotToContainer(new SlotFiltered(tile, TileBeehouse.SLOT_DRONE, 29, 65));
 
 		// Frames
 		if (hasFrames) {
-			this.addSlotToContainer(new SlotCustom(inv, TileBeehouse.SLOT_FRAMES_1, 66, 23, IHiveFrame.class));
-			this.addSlotToContainer(new SlotCustom(inv, TileBeehouse.SLOT_FRAMES_1 + 1, 66, 52, IHiveFrame.class));
-			this.addSlotToContainer(new SlotCustom(inv, TileBeehouse.SLOT_FRAMES_1 + 2, 66, 81, IHiveFrame.class));
+			this.addSlotToContainer(new SlotFiltered(tile, TileBeehouse.SLOT_FRAMES_1, 66, 23));
+			this.addSlotToContainer(new SlotFiltered(tile, TileBeehouse.SLOT_FRAMES_1 + 1, 66, 52));
+			this.addSlotToContainer(new SlotFiltered(tile, TileBeehouse.SLOT_FRAMES_1 + 2, 66, 81));
 		}
 
 		// Product Inventory
-		this.addSlotToContainer(new SlotClosed(inv, 2, 116, 52));
-		this.addSlotToContainer(new SlotClosed(inv, 3, 137, 39));
-		this.addSlotToContainer(new SlotClosed(inv, 4, 137, 65));
-		this.addSlotToContainer(new SlotClosed(inv, 5, 116, 78));
-		this.addSlotToContainer(new SlotClosed(inv, 6, 95, 65));
-		this.addSlotToContainer(new SlotClosed(inv, 7, 95, 39));
-		this.addSlotToContainer(new SlotClosed(inv, 8, 116, 26));
+		this.addSlotToContainer(new SlotOutput(tile, 2, 116, 52));
+		this.addSlotToContainer(new SlotOutput(tile, 3, 137, 39));
+		this.addSlotToContainer(new SlotOutput(tile, 4, 137, 65));
+		this.addSlotToContainer(new SlotOutput(tile, 5, 116, 78));
+		this.addSlotToContainer(new SlotOutput(tile, 6, 95, 65));
+		this.addSlotToContainer(new SlotOutput(tile, 7, 95, 39));
+		this.addSlotToContainer(new SlotOutput(tile, 8, 116, 26));
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++) {

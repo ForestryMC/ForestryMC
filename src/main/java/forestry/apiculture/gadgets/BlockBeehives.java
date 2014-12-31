@@ -17,6 +17,7 @@ import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.core.Tabs;
 import forestry.apiculture.MaterialBeehive;
 import forestry.core.config.Config;
+import forestry.core.inventory.InvTools;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class BlockBeehives extends BlockContainer {
 			if (tile instanceof TileSwarm) {
 				TileSwarm swarm = (TileSwarm) tile;
 				if (swarm.containsBees())
-					for (ItemStack beeStack : swarm.contained.getStacks())
+					for (ItemStack beeStack : InvTools.getStacks(swarm.contained))
 						if (beeStack != null)
 							StackUtils.dropItemStackAsEntity(beeStack, world, x, y, z);
 			}

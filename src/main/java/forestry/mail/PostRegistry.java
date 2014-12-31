@@ -92,6 +92,9 @@ public class PostRegistry implements IPostRegistry {
 
 	@Override
 	public TradeStation getTradeStation(World world, IMailAddress address) {
+		if (address.getName() == null)
+			return null;
+
 		if (cachedTradeStations.containsKey(address))
 			return (TradeStation) cachedTradeStations.get(address);
 

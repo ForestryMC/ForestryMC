@@ -10,21 +10,16 @@
  ******************************************************************************/
 package forestry.farming.gui;
 
-import forestry.api.farming.IFarmLogic;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.Slot;
+
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gui.ContainerSocketed;
-import forestry.core.gui.slots.SlotCustom;
-import forestry.core.gui.slots.SlotForestry;
-import forestry.core.gui.slots.SlotLiquidContainer;
+import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.farming.gadgets.TileFarmPlain;
-import forestry.plugins.PluginFarming;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 
 public class ContainerFarm extends ContainerSocketed {
 
@@ -35,40 +30,38 @@ public class ContainerFarm extends ContainerSocketed {
 
 		this.tile = tile;
 
-		IInventory inv = tile.getInventory();
-
 		// Resources
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 2; j++) {
-				addSlotToContainer(new SlotResources(inv, tile.getFarmLogics(), TileFarmPlain.SLOT_RESOURCES_1 + j + i * 2, 123 + j * 18, 22 + i * 18));
+				addSlotToContainer(new SlotFiltered(tile, TileFarmPlain.SLOT_RESOURCES_1 + j + i * 2, 123 + j * 18, 22 + i * 18));
 			}
 		}
 
 		// Germlings
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 2; j++) {
-				addSlotToContainer(new SlotGermlings(inv, tile.getFarmLogics(), TileFarmPlain.SLOT_GERMLINGS_1 + j + i * 2, 164 + j * 18, 22 + i * 18));
+				addSlotToContainer(new SlotFiltered(tile, TileFarmPlain.SLOT_GERMLINGS_1 + j + i * 2, 164 + j * 18, 22 + i * 18));
 			}
 		}
 
 		// Production 1
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
-				addSlotToContainer(new SlotOutput(inv, TileFarmPlain.SLOT_PRODUCTION_1 + j + i * 2, 123 + j * 18, 86 + i * 18));
+				addSlotToContainer(new SlotOutput(tile, TileFarmPlain.SLOT_PRODUCTION_1 + j + i * 2, 123 + j * 18, 86 + i * 18));
 			}
 		}
 
 		// Production 2
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
-				addSlotToContainer(new SlotOutput(inv, TileFarmPlain.SLOT_PRODUCTION_1 + 4 + j + i * 2, 164 + j * 18, 86 + i * 18));
+				addSlotToContainer(new SlotOutput(tile, TileFarmPlain.SLOT_PRODUCTION_1 + 4 + j + i * 2, 164 + j * 18, 86 + i * 18));
 			}
 		}
 
 		// Fertilizer
-		addSlotToContainer(new SlotCustom(inv, TileFarmPlain.SLOT_FERTILIZER, 63, 95, PluginFarming.farmFertilizer));
+		addSlotToContainer(new SlotFiltered(tile, TileFarmPlain.SLOT_FERTILIZER, 63, 95));
 		// Can Slot
-		addSlotToContainer(new SlotLiquidContainer(inv, TileFarmPlain.SLOT_CAN, 15, 95));
+		addSlotToContainer(new SlotFiltered(tile, TileFarmPlain.SLOT_CAN, 15, 95));
 
 		// Player inventory
 		for (int i = 0; i < 3; i++) {
@@ -115,41 +108,4 @@ public class ContainerFarm extends ContainerSocketed {
 		return tile.getTankManager().get(slot);
 	}
 
-	private class SlotResources extends SlotForestry {
-
-		private final IFarmLogic[] logics;
-
-		public SlotResources(IInventory inventory, IFarmLogic[] logics, int slotIndex, int xPos, int yPos) {
-			super(inventory, slotIndex, xPos, yPos);
-			this.logics = logics;
-		}
-
-		@Override
-		public boolean isItemValid(ItemStack stack) {
-			for (IFarmLogic logic : logics) {
-				if (logic != null && logic.isAcceptedResource(stack))
-					return true;
-			}
-			return false;
-		}
-	}
-
-	private class SlotGermlings extends SlotForestry {
-
-		private final IFarmLogic[] logics;
-
-		public SlotGermlings(IInventory inventory, IFarmLogic[] logics, int slotIndex, int xPos, int yPos) {
-			super(inventory, slotIndex, xPos, yPos);
-			this.logics = logics;
-		}
-
-		@Override
-		public boolean isItemValid(ItemStack stack) {
-			for (IFarmLogic logic : logics) {
-				if (logic != null && logic.isAcceptedGermling(stack))
-					return true;
-			}
-			return false;
-		}
-	}
 }

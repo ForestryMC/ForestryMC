@@ -29,11 +29,7 @@ public class ContainerForestry extends Container {
 	protected final IRestrictedAccess restrictedAccess;
 
 	public ContainerForestry(TileForestry tileForestry) {
-		if (tileForestry instanceof IInventory)
-			this.inventoryAccess = (IInventory) tileForestry;
-		else
-			this.inventoryAccess = tileForestry.getInternalInventory();
-
+		this.inventoryAccess = tileForestry;
 		this.restrictedAccess = tileForestry;
 	}
 

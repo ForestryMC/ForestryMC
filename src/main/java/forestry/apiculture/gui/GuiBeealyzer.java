@@ -10,36 +10,33 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
+import java.util.ArrayList;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleArea;
-import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleTolerance;
-import forestry.api.genetics.IChromosome;
 import forestry.apiculture.genetics.BeeGenome;
 import forestry.apiculture.items.ItemBeeGE;
 import forestry.apiculture.items.ItemBeealyzer.BeealyzerInventory;
 import forestry.core.config.ForestryItem;
-import forestry.core.genetics.AlleleArea;
 import forestry.core.genetics.AlleleBoolean;
-import forestry.core.genetics.Chromosome;
-import forestry.core.genetics.Genome;
+import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StringUtil;
 import forestry.core.vect.Vect;
 import forestry.plugins.PluginApiculture;
-import java.util.ArrayList;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 
 public class GuiBeealyzer extends GuiAlyzer {
 
 	public GuiBeealyzer(EntityPlayer player, BeealyzerInventory inventory) {
-		super("rootBees", player, new ContainerBeealyzer(player.inventory, inventory), inventory, "gui.beealyzer");
+		super("rootBees", player, new ContainerAlyzer(inventory, player), inventory, "gui.beealyzer");
 
 		ArrayList<ItemStack> beeList = new ArrayList<ItemStack>();
 		((ItemBeeGE) ForestryItem.beeDroneGE.item()).addCreativeItems(beeList, false);
@@ -54,7 +51,8 @@ public class GuiBeealyzer extends GuiAlyzer {
 		int page = 0;
 		IBee bee = null;
 		EnumBeeType beeType = EnumBeeType.DRONE;
-		for (int k = 1; k < BeealyzerInventory.SLOT_ANALYZE_5 + 1; k++) {
+
+		for (int k = BeealyzerInventory.SLOT_SPECIMEN; k <= BeealyzerInventory.SLOT_ANALYZE_5; k++) {
 			if (k == BeealyzerInventory.SLOT_ENERGY)
 				continue;
 

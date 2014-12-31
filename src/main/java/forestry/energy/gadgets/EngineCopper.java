@@ -38,10 +38,12 @@ import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.Engine;
 import forestry.core.gadgets.TileBase;
 import forestry.core.inventory.AdjacentInventoryCache;
+import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.GuiId;
+import forestry.core.utils.GuiUtil;
 import forestry.factory.triggers.FactoryTriggers;
 
 import buildcraft.api.statements.ITriggerExternal;
@@ -67,7 +69,17 @@ public class EngineCopper extends Engine implements ISidedInventory {
 		setHints(Config.hints.get("engine.copper"));
 
 		ashForItem = Defaults.ENGINE_COPPER_ASH_FOR_ITEM;
-		setInternalInventory(new TileInventoryAdapter(this, 5, "Items"));
+		setInternalInventory(new TileInventoryAdapter(this, 5, "Items") {
+			@Override
+			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+				return slotIndex == SLOT_FUEL && FuelManager.copperEngineFuel.containsKey(itemStack);
+			}
+
+			@Override
+			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+				return GuiUtil.isIndexInRange(slotIndex, SLOT_WASTE_1, SLOT_WASTE_COUNT);
+			}
+		});
 	}
 
 	@Override
@@ -76,7 +88,7 @@ public class EngineCopper extends Engine implements ISidedInventory {
 	}
 
 	private int getFuelSlot() {
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 		if (inventory.getStackInSlot(SLOT_FUEL) == null)
 			return -1;
 
@@ -87,7 +99,7 @@ public class EngineCopper extends Engine implements ISidedInventory {
 	}
 
 	private int getFreeWasteSlot() {
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 		for (int i = SLOT_WASTE_1; i <= SLOT_WASTE_COUNT; i++) {
 			if (inventory.getStackInSlot(i) == null)
 				return i;
@@ -143,7 +155,7 @@ public class EngineCopper extends Engine implements ISidedInventory {
 			int wasteslot = getFreeWasteSlot();
 
 			if (fuelslot >= 0 && wasteslot >= 0) {
-				TileInventoryAdapter inventory = getInternalInventory();
+				IInventoryAdapter inventory = getInternalInventory();
 				burnTime = totalBurnTime = determineBurnDuration(inventory.getStackInSlot(fuelslot));
 				if (burnTime > 0) {
 					fuelItem = inventory.getStackInSlot(fuelslot).getItem();
@@ -195,7 +207,7 @@ public class EngineCopper extends Engine implements ISidedInventory {
 		// If we have reached the necessary amount, we need to add ash
 		int wasteslot = getFreeWasteSlot();
 		if (wasteslot >= 0) {
-			TileInventoryAdapter inventory = getInternalInventory();
+			IInventoryAdapter inventory = getInternalInventory();
 			if (inventory.getStackInSlot(wasteslot) == null)
 				inventory.setInventorySlotContents(wasteslot, ForestryItem.ash.getItemStack());
 			else
@@ -229,7 +241,7 @@ public class EngineCopper extends Engine implements ISidedInventory {
 
 	/* AUTO-EJECTING */
 	private IInventory getWasteInventory() {
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 		if (inventory == null)
 			return null;
 
@@ -265,7 +277,7 @@ public class EngineCopper extends Engine implements ISidedInventory {
 		if (fuelSlot < 0)
 			return false;
 
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 		return ((float) inventory.getStackInSlot(fuelSlot).stackSize / (float) inventory.getStackInSlot(fuelSlot).getMaxStackSize()) > percentage;
 	}
 
@@ -329,88 +341,6 @@ public class EngineCopper extends Engine implements ISidedInventory {
 		iCrafting.sendProgressBarUpdate(containerEngine, 2, currentOutput);
 		iCrafting.sendProgressBarUpdate(containerEngine, 3, energyManager.toPacketInt());
 		iCrafting.sendProgressBarUpdate(containerEngine, 4, heat);
-	}
-
-	// / IINVENTORY
-	@Override
-	public int getSizeInventory() {
-		return getInternalInventory().getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return getInternalInventory().getStackInSlot(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		getInternalInventory().setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return getInternalInventory().decrStackSize(i, j);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		return getInternalInventory().getStackInSlotOnClosing(slot);
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return getInternalInventory().getInventoryStackLimit();
-	}
-
-	@Override
-	public void openInventory() {
-	}
-
-	@Override
-	public void closeInventory() {
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return getInternalInventory().isUseableByPlayer(player);
-	}
-
-	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
-		return false;
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		if (!getInternalInventory().isItemValidForSlot(slotIndex, itemstack))
-			return false;
-
-		return slotIndex == SLOT_FUEL && FuelManager.copperEngineFuel.containsKey(itemstack);
-	}
-
-
-	/* ISIDEDINVENTORY */
-	@Override
-	public boolean canInsertItem(int slotIndex, ItemStack itemstack, int side) {
-		return isItemValidForSlot(slotIndex, itemstack);
-	}
-
-	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-		if (!getInternalInventory().canExtractItem(slotIndex, itemstack, side))
-			return false;
-
-		return slotIndex >= SLOT_WASTE_1 && slotIndex < SLOT_WASTE_1 + SLOT_WASTE_COUNT;
-	}
-
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return getInternalInventory().getAccessibleSlotsFromSide(side);
 	}
 
 	/* ITRIGGERPROVIDER */

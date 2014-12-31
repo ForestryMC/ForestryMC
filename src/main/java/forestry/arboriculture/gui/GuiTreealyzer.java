@@ -10,13 +10,23 @@
  ******************************************************************************/
 package forestry.arboriculture.gui;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+
+import net.minecraftforge.common.EnumPlantType;
+
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IAlleleGrowth;
 import forestry.api.arboriculture.ITree;
 import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IFruitFamily;
 import forestry.arboriculture.genetics.TreeGenome;
@@ -26,23 +36,15 @@ import forestry.core.config.ForestryItem;
 import forestry.core.genetics.Allele;
 import forestry.core.genetics.AlleleBoolean;
 import forestry.core.genetics.AllelePlantType;
+import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginArboriculture;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-
-import net.minecraftforge.common.EnumPlantType;
 
 public class GuiTreealyzer extends GuiAlyzer {
 
 	public GuiTreealyzer(EntityPlayer player, TreealyzerInventory inventory) {
-		super("rootTrees", player, new ContainerTreealyzer(player.inventory, inventory), inventory, "gui.treealyzer");
+		super("rootTrees", player, new ContainerAlyzer(inventory, player), inventory, "gui.treealyzer");
 
 		ArrayList<ItemStack> treeList = new ArrayList<ItemStack>();
 		((ItemGermlingGE) ForestryItem.sapling.item()).addCreativeItems(treeList, false);

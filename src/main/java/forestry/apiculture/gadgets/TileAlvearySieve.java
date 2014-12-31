@@ -20,9 +20,12 @@ import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
+import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.ICrafter;
+import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
+import forestry.core.utils.StackUtils;
 
 public class TileAlvearySieve extends TileAlveary implements ICrafter, IBeeListener {
 
@@ -35,7 +38,12 @@ public class TileAlvearySieve extends TileAlveary implements ICrafter, IBeeListe
 
 	public TileAlvearySieve() {
 		super(BLOCK_META);
-		setInternalInventory(new TileInventoryAdapter(this, 5, "Items", 1));
+		setInternalInventory(new TileInventoryAdapter(this, 5, "Items", 1) {
+			@Override
+			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+				return StackUtils.isIdenticalItem(ForestryItem.craftingMaterial.getItemStack(1, 3), itemStack);
+			}
+		});
 	}
 
 	@Override
@@ -80,19 +88,19 @@ public class TileAlvearySieve extends TileAlveary implements ICrafter, IBeeListe
 	}
 
 	private void destroySieve() {
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 		inventory.setInventorySlotContents(SLOT_SIEVE, null);
 	}
 
 	private void destroyPollen() {
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 		for(int i = SLOT_POLLEN_1; i < SLOT_POLLEN_1 + SLOTS_POLLEN_COUNT; i++) {
 			inventory.setInventorySlotContents(i, null);
 		}
 	}
 	
 	private boolean canStorePollen() {
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 		if(inventory.getStackInSlot(SLOT_SIEVE) == null)
 			return false;
 		
@@ -105,7 +113,7 @@ public class TileAlvearySieve extends TileAlveary implements ICrafter, IBeeListe
 	}
 	
 	private void storePollenStack(ItemStack itemstack) {
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 		for(int i = SLOT_POLLEN_1; i < SLOT_POLLEN_1 + SLOTS_POLLEN_COUNT; i++) {
 			if(inventory.getStackInSlot(i) == null) {
 				inventory.setInventorySlotContents(i, itemstack);
@@ -122,7 +130,7 @@ public class TileAlvearySieve extends TileAlveary implements ICrafter, IBeeListe
 
 	@Override
 	public ItemStack takenFromSlot(int slotIndex, boolean consumeRecipe, EntityPlayer player) {
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 		if(slotIndex == SLOT_SIEVE) {
 			destroyPollen();
 			return inventory.getStackInSlot(SLOT_SIEVE);

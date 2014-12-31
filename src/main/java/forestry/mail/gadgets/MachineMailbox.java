@@ -50,6 +50,7 @@ public class MachineMailbox extends TileBase implements IMailContainer {
 
 	public MachineMailbox() {
 		setHints(Config.hints.get("mailbox"));
+		setInternalInventory(new InventoryAdapter(POBox.SLOT_SIZE, "Letters").disableAutomation());
 	}
 
 	/* GUI */
@@ -83,8 +84,9 @@ public class MachineMailbox extends TileBase implements IMailContainer {
 
 	/* MAIL HANDLING */
 	public IInventory getOrCreateMailInventory(World world, GameProfile playerProfile) {
-		if (!Proxies.common.isSimulating(world))
-			return new InventoryAdapter(POBox.SLOT_SIZE, "Letters");
+		if (!Proxies.common.isSimulating(world)) {
+			return getInternalInventory();
+		}
 
 		IMailAddress address = PostManager.postRegistry.getMailAddress(playerProfile);
 		return PostRegistry.getOrCreatePOBox(worldObj, address);

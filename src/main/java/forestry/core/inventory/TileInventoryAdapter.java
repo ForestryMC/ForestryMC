@@ -10,11 +10,9 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import forestry.core.gadgets.TileForestry;
-import forestry.core.utils.EnumAccess;
-import forestry.core.utils.Utils;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+
+import forestry.core.gadgets.TileForestry;
 
 public class TileInventoryAdapter extends InventoryAdapter {
 
@@ -30,25 +28,13 @@ public class TileInventoryAdapter extends InventoryAdapter {
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		if (!Utils.isUseableByPlayer(player, tile))
-			return false;
-		return tile.allowsViewing(player);
-	}
-
-	@Override
 	public void markDirty() {
 		super.markDirty();
 		tile.markDirty();
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return true;
-	}
-
-	@Override
 	public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
-		return true;
+		return false;
 	}
 }

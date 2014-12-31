@@ -10,6 +10,20 @@
  ******************************************************************************/
 package forestry.energy.gadgets;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.FuelManager;
@@ -24,21 +38,10 @@ import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gadgets.Engine;
 import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ILiquidTankContainer;
+import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.network.PacketPayload;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
 
 public class EngineBronze extends Engine implements ISidedInventory, ILiquidTankContainer {
 
@@ -79,7 +82,17 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		super(Defaults.ENGINE_BRONZE_HEAT_MAX, 300000, 5000);
 		setHints(Config.hints.get("engine.bronze"));
 
-		setInternalInventory(new TileInventoryAdapter(this, 1, "Items"));
+		setInternalInventory(new TileInventoryAdapter(this, 1, "Items") {
+			@Override
+			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+				if (slotIndex == SLOT_CAN) {
+					Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+					return tankManager.accepts(fluid);
+				}
+
+				return false;
+			}
+		});
 
 		fuelTank = new FilteredTank(Defaults.ENGINE_TANK_CAPACITY, FuelManager.bronzeEngineFuel.keySet());
 		fuelTank.tankMode = StandardTank.TankMode.INPUT;
@@ -104,7 +117,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
 			return;
 
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 		// Check if we have suitable items waiting in the item slot
 		if (inventory.getStackInSlot(SLOT_CAN) != null)
 			FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
@@ -338,88 +351,6 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		iCrafting.sendProgressBarUpdate(containerEngine, i + 3, energyManager.toPacketInt());
 		iCrafting.sendProgressBarUpdate(containerEngine, i + 4, heat);
 		iCrafting.sendProgressBarUpdate(containerEngine, i + 5, currentFluidId);
-	}
-
-	/* IINVENTORY */
-	@Override
-	public int getSizeInventory() {
-		return getInternalInventory().getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return getInternalInventory().getStackInSlot(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		getInternalInventory().setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return getInternalInventory().decrStackSize(i, j);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		return getInternalInventory().getStackInSlotOnClosing(slot);
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return getInternalInventory().getInventoryStackLimit();
-	}
-
-	@Override
-	public void openInventory() {
-	}
-
-	@Override
-	public void closeInventory() {
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return getInternalInventory().isUseableByPlayer(player);
-	}
-
-	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
-		return false;
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		if (slotIndex == SLOT_CAN) {
-			FluidStack fluid = FluidHelper.getFluidStackInContainer(itemstack);
-			if (fluid == null || fluid.amount <= 0)
-				return false;
-			return fuelTank.accepts(fluid.getFluid()) || heatingTank.accepts(fluid.getFluid());
-		}
-
-		return getInternalInventory().isItemValidForSlot(slotIndex, itemstack);
-	}
-
-	/* ISIDEDINVENTORY */
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return false;
-	}
-
-	@Override
-	public boolean canInsertItem(int slotIndex, ItemStack stack, int side) {
-		return isItemValidForSlot(slotIndex, stack);
-	}
-
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return getInternalInventory().getAccessibleSlotsFromSide(side);
 	}
 
 	// IFluidHandler

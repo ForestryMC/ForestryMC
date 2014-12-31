@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
 import forestry.apiculture.gadgets.TileAlvearyHygroregulator;
 import forestry.apiculture.gadgets.TileAlvearyPlain;
 import forestry.apiculture.gadgets.TileAlvearySieve;
@@ -22,7 +26,6 @@ import forestry.apiculture.gui.ContainerAlvearyHygroregulator;
 import forestry.apiculture.gui.ContainerAlvearySieve;
 import forestry.apiculture.gui.ContainerAlvearySwarmer;
 import forestry.apiculture.gui.ContainerApiary;
-import forestry.apiculture.gui.ContainerBeealyzer;
 import forestry.apiculture.gui.ContainerHabitatLocator;
 import forestry.apiculture.gui.ContainerImprinter;
 import forestry.apiculture.gui.GuiAlveary;
@@ -37,11 +40,9 @@ import forestry.apiculture.items.ItemBeealyzer.BeealyzerInventory;
 import forestry.apiculture.items.ItemBiomefinder.BiomefinderInventory;
 import forestry.apiculture.items.ItemImprinter.ImprinterInventory;
 import forestry.core.GuiHandlerBase;
+import forestry.core.gui.ContainerAlyzer;
 import forestry.core.network.GuiId;
 import forestry.plugins.PluginApiculture;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 public class GuiHandlerApiculture extends GuiHandlerBase {
 
@@ -72,7 +73,7 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 			return new GuiApiary(player.inventory, (TileApiary) getTileForestry(world, x, y, z));
 
 		case BeealyzerGUI:
-			equipped = getEquippedItem(player);
+			equipped = player.getCurrentEquippedItem();
 			if (equipped == null)
 				return null;
 
@@ -82,7 +83,7 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 			return new GuiApiary(player.inventory, (TileBeehouse) getTileForestry(world, x, y, z));
 
 		case HabitatLocatorGUI:
-			equipped = getEquippedItem(player);
+			equipped = player.getCurrentEquippedItem();
 			if (equipped == null)
 				return null;
 
@@ -92,7 +93,10 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 			return new GuiAlvearyHygroregulator(player.inventory, (TileAlvearyHygroregulator) getTileForestry(world, x, y, z));
 
 		case ImprinterGUI:
-			return new GuiImprinter(player.inventory, new ImprinterInventory(player));
+			equipped = player.getCurrentEquippedItem();
+			if (equipped == null)
+				return null;
+			return new GuiImprinter(player.inventory, new ImprinterInventory(player, equipped));
 
 		default:
 			return null;
@@ -129,19 +133,19 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 			return new ContainerApiary(player.inventory, (TileApiary) getTileForestry(world, x, y, z), true);
 
 		case BeealyzerGUI:
-			equipped = getEquippedItem(player);
+			equipped = player.getCurrentEquippedItem();
 			if (equipped == null)
 				return null;
 
 			synchApiaristTracker(world, player);
-			return new ContainerBeealyzer(player.inventory, new BeealyzerInventory(player, equipped));
+			return new ContainerAlyzer(new BeealyzerInventory(player, equipped), player);
 
 		case BeehouseGUI:
 			synchApiaristTracker(world, player);
 			return new ContainerApiary(player.inventory, (TileBeehouse) getTileForestry(world, x, y, z), false);
 
 		case HabitatLocatorGUI:
-			equipped = getEquippedItem(player);
+			equipped = player.getCurrentEquippedItem();
 			if (equipped == null)
 				return null;
 
@@ -152,7 +156,10 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 
 		case ImprinterGUI:
 			synchApiaristTracker(world, player);
-			return new ContainerImprinter(player.inventory, new ImprinterInventory(player));
+			equipped = player.getCurrentEquippedItem();
+			if (equipped == null)
+				return null;
+			return new ContainerImprinter(player.inventory, new ImprinterInventory(player, equipped));
 
 		default:
 			return null;

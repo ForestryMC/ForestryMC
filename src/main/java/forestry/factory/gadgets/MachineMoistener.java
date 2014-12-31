@@ -10,6 +10,23 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
@@ -23,36 +40,25 @@ import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.interfaces.IRenderableMachine;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
+import forestry.core.utils.GuiUtil;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
 
 public class MachineMoistener extends TileBase implements ISidedInventory, ILiquidTankContainer, IRenderableMachine {
 
 	/* CONSTANTS */
 	private static final short SLOT_STASH_1 = 0;
+	private static final short SLOT_STASH_COUNT = 6;
 	private static final short SLOT_RESERVOIR_1 = 6;
+	private static final short SLOT_RESERVOIR_COUNT = 3;
 	private static final short SLOT_WORKING = 9;
 	private static final short SLOT_PRODUCT = 10;
 	private static final short SLOT_RESOURCE = 11;
-	private static final short SLOTS_COUNT_RESERVOIR = 3;
-	private static final short SLOTS_COUNT_STASH = 6;
 
 	/* RECIPE MANAGMENT */
 	public static class Recipe {
@@ -120,7 +126,6 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 
 	public final FilteredTank resourceTank;
 	private final TankManager tankManager;
-	//private ItemStack[] inventoryStacks = new ItemStack[12];
 	public MachineMoistener.Recipe currentRecipe;
 
 	public int burnTime = 0;
@@ -131,15 +136,37 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 	private ItemStack pendingProduct;
 
 	public MachineMoistener() {
-		setInternalInventory(new TileInventoryAdapter(this, 12, "Items"));
+		setInternalInventory(new TileInventoryAdapter(this, 12, "Items") {
+			@Override
+			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+				if (slotIndex == SLOT_RESOURCE)
+					return RecipeManager.isResource(itemStack);
+
+				if (GuiUtil.isIndexInRange(slotIndex, SLOT_STASH_1, SLOT_STASH_COUNT))
+					return FuelManager.moistenerResource.containsKey(itemStack);
+
+				if (slotIndex == SLOT_PRODUCT) {
+					Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+					return resourceTank.accepts(fluid);
+				}
+
+				return false;
+			}
+
+			@Override
+			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+				if (slotIndex == SLOT_PRODUCT)
+					return true;
+
+				if (GuiUtil.isIndexInRange(slotIndex, SLOT_STASH_1, SLOT_STASH_COUNT))
+					return !FuelManager.moistenerResource.containsKey(itemstack);
+
+				return false;
+			}
+		});
 		setHints(Config.hints.get("moistener"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
 		tankManager = new TankManager(resourceTank);
-	}
-
-	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
 	}
 
 	@Override
@@ -197,7 +224,7 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 	@Override
 	public void updateServerSide() {
 
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 		// Check if we have suitable water container waiting in the item slot
 		if (inventory.getStackInSlot(SLOT_PRODUCT) != null)
 			FluidHelper.drainContainers(tankManager, inventory, SLOT_PRODUCT);
@@ -272,8 +299,8 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 		if (pendingProduct == null)
 			return false;
 
-		TileInventoryAdapter inventory = getInternalInventory();
-		if (inventory.tryAddStack(pendingProduct, SLOT_PRODUCT, 1, true)) {
+		IInventoryAdapter inventory = getInternalInventory();
+		if (InvTools.tryAddStack(inventory, pendingProduct, SLOT_PRODUCT, 1, true)) {
 			pendingProduct = null;
 			return true;
 		}
@@ -306,7 +333,7 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 	private int getFreeSlot(ItemStack deposit, int startSlot, int endSlot, boolean emptyOnly) {
 		int slot = -1;
 
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 		for (int i = startSlot; i < endSlot; i++) {
 			ItemStack slotStack = inventory.getStackInSlot(i);
 			// Empty slots are okay.
@@ -334,7 +361,7 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 	}
 
 	private int getFreeReservoirSlot(ItemStack deposit) {
-		return getFreeSlot(deposit, SLOT_RESERVOIR_1, SLOT_RESERVOIR_1 + SLOTS_COUNT_RESERVOIR, false);
+		return getFreeSlot(deposit, SLOT_RESERVOIR_1, SLOT_RESERVOIR_1 + SLOT_RESERVOIR_COUNT, false);
 
 	}
 
@@ -343,7 +370,7 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 		int stage = -1;
 		int resourceSlot = -1;
 
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 		for (int i = startSlot; i < endSlot; i++) {
 			ItemStack slotStack = inventory.getStackInSlot(i);
 			if (slotStack == null)
@@ -363,7 +390,7 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 	}
 
 	private boolean rotateWorkingSlot() {
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 		// Put working slot contents into inventory if space is available
 		if (inventory.getStackInSlot(SLOT_WORKING) != null) {
 			// Get the result of the consumed item in the working slot
@@ -391,7 +418,7 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 			return true;
 
 		// Let's look for a new resource to put into the working slot.
-		int resourceSlot = getNextResourceSlot(SLOT_RESERVOIR_1, SLOT_RESERVOIR_1 + SLOTS_COUNT_RESERVOIR);
+		int resourceSlot = getNextResourceSlot(SLOT_RESERVOIR_1, SLOT_RESERVOIR_1 + SLOT_RESERVOIR_COUNT);
 		// Nothing found, stop.
 		if (resourceSlot < 0)
 			return false;
@@ -403,9 +430,9 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 	private void rotateReservoir() {
 		ArrayList<Integer> slotsToShift = new ArrayList<Integer>();
 
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 
-		for (int i = SLOT_RESERVOIR_1; i < SLOT_RESERVOIR_1 + SLOTS_COUNT_RESERVOIR; i++) {
+		for (int i = SLOT_RESERVOIR_1; i < SLOT_RESERVOIR_1 + SLOT_RESERVOIR_COUNT; i++) {
 			if (inventory.getStackInSlot(i) == null)
 				continue;
 
@@ -455,7 +482,7 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 	public boolean hasFuelMin(float percentage) {
 		int max = 0;
 		int avail = 0;
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 
 		for (int i = SLOT_STASH_1; i < SLOT_RESERVOIR_1; i++) {
 			if (inventory.getStackInSlot(i) == null) {
@@ -475,7 +502,7 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 	}
 
 	public boolean hasResourcesMin(float percentage) {
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 		if (inventory.getStackInSlot(SLOT_RESOURCE) == null)
 			return false;
 
@@ -515,96 +542,6 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 	@Override
 	public EnumTankLevel getSecondaryLevel() {
 		return EnumTankLevel.EMPTY;
-	}
-
-	/* IINVENTORY */
-	@Override
-	public int getSizeInventory() {
-		return getInternalInventory().getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return getInternalInventory().getStackInSlot(i);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return getInternalInventory().decrStackSize(i, j);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		getInternalInventory().setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		return getInternalInventory().getStackInSlotOnClosing(slot);
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return getInternalInventory().getInventoryStackLimit();
-	}
-
-	@Override
-	public void openInventory() {
-	}
-
-	@Override
-	public void closeInventory() {
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return getInternalInventory().isUseableByPlayer(player);
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
-		return false;
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-
-		if (!getInternalInventory().isItemValidForSlot(slotIndex, itemstack))
-			return false;
-
-		if (slotIndex == SLOT_RESOURCE)
-			return RecipeManager.isResource(itemstack);
-
-		if (slotIndex >= SLOT_STASH_1 && slotIndex < SLOT_STASH_1 + SLOTS_COUNT_STASH - 2)
-			return FuelManager.moistenerResource.containsKey(itemstack);
-
-		return false;
-	}
-
-
-	/* ISIDEDINVENTORY */
-	@Override
-	public boolean canInsertItem(int slotIndex, ItemStack itemstack, int side) {
-		return isItemValidForSlot(slotIndex, itemstack);
-	}
-
-	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-		if (!getInternalInventory().canExtractItem(slotIndex, itemstack, side))
-			return false;
-
-		if (slotIndex == SLOT_PRODUCT)
-			return true;
-
-		if (slotIndex >= SLOT_STASH_1 && slotIndex < SLOT_STASH_1 + SLOTS_COUNT_STASH)
-			return !FuelManager.moistenerResource.containsKey(itemstack);
-
-		return false;
-	}
-
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return getInternalInventory().getAccessibleSlotsFromSide(side);
 	}
 
 	/* ILiquidTankContainer */

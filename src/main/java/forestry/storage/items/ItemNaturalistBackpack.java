@@ -27,7 +27,7 @@ public class ItemNaturalistBackpack extends ItemBackpack {
 		}
 
 		@Override
-		public boolean isValidItem(EntityPlayer player, ItemStack stack) {
+		public boolean isValidItem(ItemStack stack) {
 			return PluginApiculture.beeInterface.isMember(stack);
 		}
 	}
@@ -39,7 +39,7 @@ public class ItemNaturalistBackpack extends ItemBackpack {
 		}
 
 		@Override
-		public boolean isValidItem(EntityPlayer player, ItemStack stack) {
+		public boolean isValidItem(ItemStack stack) {
 			return PluginLepidopterology.butterflyInterface.isMember(stack);
 		}
 	}

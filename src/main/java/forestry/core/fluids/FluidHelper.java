@@ -212,7 +212,8 @@ public final class FluidHelper {
 		return false;
 	}
 
-	public static boolean isFillableContainer(ItemStack empty, FluidStack liquid) {
+	public static boolean isFillableContainer(ItemStack stack, FluidStack liquid) {
+		ItemStack empty = StackUtils.createSplitStack(stack, 1);
 		Item item = empty.getItem();
 		if (item instanceof IFluidContainerItem) {
 			IFluidContainerItem containerItem = (IFluidContainerItem) item;

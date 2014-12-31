@@ -20,9 +20,9 @@ import com.mojang.authlib.GameProfile;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
-import forestry.core.utils.GeneticsUtil;
 import forestry.core.interfaces.ICrafter;
 import forestry.core.interfaces.IRenderableMachine;
+import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.GuiId;
@@ -31,6 +31,8 @@ import forestry.core.network.PacketTileNBT;
 import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
+import forestry.core.utils.GeneticsUtil;
+import forestry.core.utils.GuiUtil;
 
 public class TileEscritoire extends TileBase implements ISidedInventory, IRenderableMachine, ICrafter {
 
@@ -43,13 +45,43 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 	/* MEMBER */
 	private final NaturalistGame game = new NaturalistGame();
 
-	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
-	}
-
 	public TileEscritoire() {
-		setInternalInventory(new TileInventoryAdapter(this, 12, "Items"));
+		setInternalInventory(new TileInventoryAdapter(this, 12, "Items") {
+			@Override
+			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+				if (slotIndex >= SLOT_INPUT_1 && slotIndex < SLOT_INPUT_1 + Math.min(game.getSampleSize(), SLOTS_INPUT_COUNT)) {
+					ItemStack specimen = getStackInSlot(SLOT_ANALYZE);
+					if (specimen == null)
+						return false;
+					IIndividual individual = AlleleManager.alleleRegistry.getIndividual(specimen);
+					return individual != null && individual.getGenome().getPrimary().getResearchSuitability(itemStack) > 0;
+				}
+
+				if (slotIndex == SLOT_ANALYZE) {
+					return AlleleManager.alleleRegistry.isIndividual(itemStack);
+				}
+
+				return false;
+			}
+
+			@Override
+			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+				return GuiUtil.isIndexInRange(slotIndex, SLOT_RESULTS_1, SLOTS_RESULTS_COUNT);
+			}
+
+			@Override
+			public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
+				super.setInventorySlotContents(slotIndex, itemstack);
+				if (slotIndex == SLOT_ANALYZE && Proxies.common.isSimulating(worldObj)) {
+					if (!AlleleManager.alleleRegistry.isIndividual(getStackInSlot(SLOT_ANALYZE)) && getStackInSlot(SLOT_ANALYZE) != null) {
+						ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(getStackInSlot(SLOT_ANALYZE));
+						if (ersatz != null)
+							setInventorySlotContents(SLOT_ANALYZE, ersatz);
+					}
+					game.initialize(getStackInSlot(SLOT_ANALYZE));
+				}
+			}
+		});
 	}
 
 	/* GUI */
@@ -87,7 +119,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 			return;
 
 		for (ItemStack itemstack : individual.getGenome().getPrimary().getResearchBounty(worldObj, gameProfile, individual, game.getBountyLevel())) {
-			getInternalInventory().addStack(itemstack, SLOT_RESULTS_1, SLOTS_RESULTS_COUNT, false, true);
+			InvTools.addStack(getInternalInventory(), itemstack, SLOT_RESULTS_1, SLOTS_RESULTS_COUNT, false, true);
 		}
 	}
 
@@ -123,92 +155,6 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 		Proxies.net.sendToPlayer(new PacketTileNBT(PacketIds.TILE_NBT, this), player);
 	}
 
-	/* ISIDEDINVENTORY */
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		if (!getInternalInventory().isItemValidForSlot(slotIndex, itemstack))
-			if (slotIndex >= SLOT_INPUT_1 && slotIndex < SLOT_INPUT_1 + SLOTS_INPUT_COUNT)
-				return slotIndex < SLOT_INPUT_1 + Math.min(game.getSampleSize(), SLOTS_INPUT_COUNT);
-
-		return true;
-	}
-
-	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-		if (!getInternalInventory().canExtractItem(slotIndex, itemstack, side))
-			return false;
-
-		return slotIndex >= SLOT_RESULTS_1 && slotIndex < SLOT_RESULTS_1 + SLOTS_RESULTS_COUNT;
-	}
-
-	@Override
-	public boolean canInsertItem(int slotIndex, ItemStack itemstack, int side) {
-		return isItemValidForSlot(slotIndex, itemstack);
-	}
-
-	@Override
-	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
-		TileInventoryAdapter inventory = getInternalInventory();
-		inventory.setInventorySlotContents(slotIndex, itemstack);
-		if (slotIndex == SLOT_ANALYZE && Proxies.common.isSimulating(worldObj)) {
-			if (!AlleleManager.alleleRegistry.isIndividual(inventory.getStackInSlot(SLOT_ANALYZE))
-					&& inventory.getStackInSlot(SLOT_ANALYZE) != null) {
-				ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(inventory.getStackInSlot(SLOT_ANALYZE));
-				if (ersatz != null)
-					inventory.setInventorySlotContents(SLOT_ANALYZE, ersatz);
-			}
-			game.initialize(inventory.getStackInSlot(SLOT_ANALYZE));
-		}
-	}
-
-	@Override
-	public int getSizeInventory() {
-		return getInternalInventory().getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return getInternalInventory().getStackInSlot(i);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return getInternalInventory().decrStackSize(i, j);
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return getInternalInventory().getInventoryStackLimit();
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		return getInternalInventory().getStackInSlotOnClosing(slot);
-	}
-
-	@Override
-	public void openInventory() {
-	}
-
-	@Override
-	public void closeInventory() {
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return getInternalInventory().isUseableByPlayer(player);
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
-		return false;
-	}
-
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return getInternalInventory().getAccessibleSlotsFromSide(side);
-	}
-
 	@Override
 	public EnumTankLevel getPrimaryLevel() {
 		return EnumTankLevel.EMPTY;
@@ -235,5 +181,4 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 	public boolean canTakeStack(int slotIndex) {
 		return true;
 	}
-
 }

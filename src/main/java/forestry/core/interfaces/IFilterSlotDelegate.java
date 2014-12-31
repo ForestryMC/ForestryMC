@@ -4,27 +4,22 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.gui.slots;
+package forestry.core.interfaces;
 
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-/**
- *
- * @author CovertJaguar <http://www.railcraft.info/>
- */
-public class SlotOutput extends SlotWatched {
+public interface IFilterSlotDelegate {
 
-	public SlotOutput(IInventory iinventory, int slotIndex, int posX, int posY) {
-		super(iinventory, slotIndex, posX, posY);
-	}
+	/**
+	 * Non-automation version of IInventory's isItemValidForSlot.
+	 * Used to determine if a player can place a stack in a slot.
+	 *
+	 * Combine this with Forestry's access permissions to implement isItemValidForSlot.
+	 */
+	boolean canSlotAccept(int slotIndex, ItemStack itemStack);
 
-	@Override
-	public boolean isItemValid(ItemStack itemstack) {
-		return false;
-	}
 }

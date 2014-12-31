@@ -71,41 +71,34 @@ public class Utils {
 			}
 		} else {
 
-			IInventory inventory;
-			if (tile instanceof IInventory)
-				inventory = (IInventory) tile;
-			else
-				inventory = tile.getInternalInventory();
+			for (int slot = 0; slot < tile.getSizeInventory(); slot++) {
 
-			if (inventory != null) {
-				for (int slot = 0; slot < inventory.getSizeInventory(); slot++) {
+				ItemStack itemstack = tile.getStackInSlot(slot);
 
-					ItemStack itemstack = inventory.getStackInSlot(slot);
+				if (itemstack == null)
+					continue;
 
-					if (itemstack == null)
-						continue;
+				float f = world.rand.nextFloat() * 0.8F + 0.1F;
+				float f1 = world.rand.nextFloat() * 0.8F + 0.1F;
+				float f2 = world.rand.nextFloat() * 0.8F + 0.1F;
 
-					float f = world.rand.nextFloat() * 0.8F + 0.1F;
-					float f1 = world.rand.nextFloat() * 0.8F + 0.1F;
-					float f2 = world.rand.nextFloat() * 0.8F + 0.1F;
+				while (itemstack.stackSize > 0) {
 
-					while (itemstack.stackSize > 0) {
+					int stackPartial = world.rand.nextInt(21) + 10;
+					if (stackPartial > itemstack.stackSize)
+						stackPartial = itemstack.stackSize;
+					ItemStack drop = itemstack.splitStack(stackPartial);
+					EntityItem entityitem = new EntityItem(world, x + f, y + f1, z + f2, drop);
+					float accel = 0.05F;
+					entityitem.motionX = (float) world.rand.nextGaussian() * accel;
+					entityitem.motionY = (float) world.rand.nextGaussian() * accel + 0.2F;
+					entityitem.motionZ = (float) world.rand.nextGaussian() * accel;
+					world.spawnEntityInWorld(entityitem);
 
-						int stackPartial = world.rand.nextInt(21) + 10;
-						if (stackPartial > itemstack.stackSize)
-							stackPartial = itemstack.stackSize;
-						ItemStack drop = itemstack.splitStack(stackPartial);
-						EntityItem entityitem = new EntityItem(world, x + f, y + f1, z + f2, drop);
-						float accel = 0.05F;
-						entityitem.motionX = (float) world.rand.nextGaussian() * accel;
-						entityitem.motionY = (float) world.rand.nextGaussian() * accel + 0.2F;
-						entityitem.motionZ = (float) world.rand.nextGaussian() * accel;
-						world.spawnEntityInWorld(entityitem);
-
-					}
-
-					inventory.setInventorySlotContents(slot, null);
 				}
+
+				tile.setInventorySlotContents(slot, null);
+
 			}
 		}
 

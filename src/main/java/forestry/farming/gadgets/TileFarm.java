@@ -27,6 +27,8 @@ import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmComponent;
 import forestry.api.farming.IFarmListener;
 import forestry.core.gadgets.TileForestry;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
@@ -187,6 +189,9 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	public void makeMaster() {
 		setCentralTE(null);
 		this.isMaster = true;
+
+		if (worldObj != null && !worldObj.isRemote)
+			sendNetworkUpdate();
 	}
 
 	@Override
@@ -251,7 +256,7 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	}
 
 	@Override
-	public ISidedInventory getStructureInventory() {
+	public IInventoryAdapter getStructureInventory() {
 		return getInternalInventory();
 	}
 

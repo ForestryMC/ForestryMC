@@ -10,6 +10,13 @@
  ******************************************************************************/
 package forestry.energy.gadgets;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.core.ForestryAPI;
@@ -26,13 +33,9 @@ import forestry.core.network.GuiId;
 import forestry.core.utils.DelayTimer;
 import forestry.core.utils.EnumTankLevel;
 import forestry.plugins.PluginIC2;
+
 import ic2.api.energy.prefab.BasicSink;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import ic2.api.item.ElectricItem;
 
 public class EngineTin extends Engine implements ISocketable, IInventory {
 
@@ -50,7 +53,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		}
 	}
 
-	private static final short batterySlot = 0;
+	public static final short SLOT_BATTERY = 0;
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
 	private final EuConfig euConfig = new EuConfig(Defaults.ENGINE_TIN_EU_FOR_CYCLE, Defaults.ENGINE_TIN_ENERGY_PER_CYCLE, Defaults.ENGINE_TIN_MAX_EU_STORED);
 
@@ -62,7 +65,15 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		super(Defaults.ENGINE_TIN_HEAT_MAX, 100000, 4000);
 		setHints(Config.hints.get("engine.tin"));
 
-		setInternalInventory(new TileInventoryAdapter(this, 1, "electrical"));
+		setInternalInventory(new TileInventoryAdapter(this, 1, "electrical") {
+			@Override
+			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+				if (slotIndex == SLOT_BATTERY) {
+					return ElectricItem.manager.getCharge(itemStack) > 0;
+				}
+				return false;
+			}
+		});
 
 		if (PluginIC2.instance.isAvailable())
 			ic2EnergySink = new BasicSink(this, euConfig.euStorage, 3);
@@ -166,8 +177,8 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 			return;
 		}
 
-		if (getInternalInventory().getStackInSlot(batterySlot) != null)
-			replenishFromBattery(batterySlot);
+		if (getInternalInventory().getStackInSlot(SLOT_BATTERY) != null)
+			replenishFromBattery(SLOT_BATTERY);
 
 		// Updating of gui delayed to prevent it from going crazy
 		if (!delayUpdateTimer.delayPassed(worldObj, 80))
@@ -269,67 +280,6 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		if (ic2EnergySink != null)
 			ic2EnergySink.setCapacity(euConfig.euStorage);
 	}
-
-	/* IINVENTORY */
-	@Override
-	public int getSizeInventory() {
-		return getInternalInventory().getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return getInternalInventory().getStackInSlot(i);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return getInternalInventory().decrStackSize(i, j);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		getInternalInventory().setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return getInternalInventory().getInventoryStackLimit();
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		return getInternalInventory().getStackInSlotOnClosing(slot);
-	}
-
-	@Override
-	public void openInventory() {
-	}
-
-	@Override
-	public void closeInventory() {
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return getInternalInventory().isUseableByPlayer(player);
-	}
-
-	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
-		return false;
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return getInternalInventory().isItemValidForSlot(slotIndex, itemstack);
-	}
-	
-	//TODO: Add ISideInventory and clarify allowed items
 
 	/* ISOCKETABLE */
 	@Override

@@ -27,7 +27,6 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.oredict.OreDictionary;
@@ -45,11 +44,14 @@ import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.inventory.InvTools;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
+import forestry.core.utils.GuiUtil;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
@@ -59,6 +61,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 	/* CONSTANTS */
 	public final static int SLOT_CRAFTING_1 = 0;
+	public final static int SLOT_CRAFTING_COUNT = 9;
 	public final static int SLOT_BOX = 9;
 	public final static int SLOT_PRODUCT = 10;
 	public final static int SLOT_CAN_INPUT = 11;
@@ -216,15 +219,36 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		setHints(Config.hints.get("carpenter"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluids);
 		craftingInventory = new TileInventoryAdapter(this, 10, "CraftItems");
-		setInternalInventory(new TileInventoryAdapter(this, 30, "Items"));
-		getInternalInventory().configureSided(Defaults.FACINGS, SLOT_BOX, 20);
+		setInternalInventory(new TileInventoryAdapter(this, 30, "Items") {
+			@Override
+			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+				if (slotIndex == SLOT_CAN_INPUT) {
+					Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+					return tankManager.accepts(fluid);
+				} else if (slotIndex == SLOT_BOX) {
+					return MachineCarpenter.RecipeManager.isBox(itemStack);
+				}
+
+				return true;
+			}
+
+			@Override
+			public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
+				if (GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT)) {
+					if (lastRecipe != null)
+						return lastRecipe.isIngredient(itemStack);
+				}
+				return true;
+			}
+
+			@Override
+			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+				return slotIndex == SLOT_PRODUCT;
+			}
+		});
+		InvTools.configureSided(getInternalInventory(), Defaults.FACINGS, SLOT_BOX, 20);
 
 		tankManager = new TankManager(resourceTank);
-	}
-
-	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
 	}
 
 	@Override
@@ -296,7 +320,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 		if (worldObj.getTotalWorldTime() % 20 != 0)
 			return;
-		TileInventoryAdapter accessibleInventory = getInternalInventory();
+		IInventoryAdapter accessibleInventory = getInternalInventory();
 		// Check if we have suitable items waiting in the item slot
 		if (accessibleInventory.getStackInSlot(SLOT_CAN_INPUT) != null) {
 			FluidHelper.drainContainers(tankManager, accessibleInventory, SLOT_CAN_INPUT);
@@ -381,15 +405,15 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			if (resourceTank.getFluidAmount() < currentRecipe.liquid.amount)
 				return false;
 
-		TileInventoryAdapter accessibleInventory = getInternalInventory();
+		IInventoryAdapter accessibleInventory = getInternalInventory();
 		// Check whether boxes are available
 		if (currentRecipe.box != null)
 			if (accessibleInventory.getStackInSlot(SLOT_BOX) == null)
 				return false;
 
 		// Need at least one matched set
-		ItemStack[] set = craftingInventory.getStacks(SLOT_CRAFTING_1, 9);
-		ItemStack[] stock = accessibleInventory.getStacks(SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+		ItemStack[] set = InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
+		ItemStack[] stock = InvTools.getStacks(accessibleInventory, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);;
 		return StackUtils.containsSets(set, stock, true, false) > 0;
 	}
 
@@ -409,17 +433,16 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			if (removed == null || removed.stackSize == 0)
 				return false;
 		}
-
-		return removeSets(1, craftingInventory.getStacks(SLOT_CRAFTING_1, 9));
+		return removeSets(1, InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT));
 	}
 
 	private boolean removeSets(int count, ItemStack[] set) {
 		EntityPlayer player = Proxies.common.getPlayer(worldObj, getOwnerProfile());
-		return getInternalInventory().removeSets(count, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
+		return InvTools.removeSets(getInternalInventory(), count, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
 	}
 
 	private boolean tryAddPending() {
-		TileInventoryAdapter accessibleInventory = getInternalInventory();
+		IInventoryAdapter accessibleInventory = getInternalInventory();
 		if (accessibleInventory.getStackInSlot(SLOT_PRODUCT) == null) {
 			accessibleInventory.setInventorySlotContents(SLOT_PRODUCT, pendingProduct.copy());
 			pendingProduct = null;
@@ -448,7 +471,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		if (currentRecipe == null)
 			return false;
 
-		TileInventoryAdapter accessibleInventory = getInternalInventory();
+		IInventoryAdapter accessibleInventory = getInternalInventory();
 		// Stop working if the output slot cannot take more
 		if (accessibleInventory.getStackInSlot(SLOT_PRODUCT) != null
 				&& accessibleInventory.getStackInSlot(SLOT_PRODUCT).getMaxStackSize() - accessibleInventory.getStackInSlot(SLOT_PRODUCT).stackSize < currentRecipe
@@ -473,97 +496,6 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	@Override
 	public EnumTankLevel getPrimaryLevel() {
 		return Utils.rateTankLevel(getResourceScaled(100));
-	}
-
-	/* IINVENTORY */
-	@Override
-	public int getSizeInventory() {
-		return getInternalInventory().getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return getInternalInventory().getStackInSlot(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		getInternalInventory().setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return getInternalInventory().decrStackSize(i, j);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		return getInternalInventory().getStackInSlotOnClosing(slot);
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return getInternalInventory().getInventoryStackLimit();
-	}
-
-	@Override
-	public void openInventory() {
-	}
-
-	@Override
-	public void closeInventory() {
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return getInternalInventory().isUseableByPlayer(player);
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
-		return false;
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		if (!getInternalInventory().isItemValidForSlot(slotIndex, itemstack))
-			return false;
-
-		if (slotIndex == SLOT_PRODUCT)
-			return false;
-
-		if (slotIndex == SLOT_BOX)
-			return RecipeManager.isBox(itemstack);
-
-		if (slotIndex == SLOT_CAN_INPUT)
-			return FluidContainerRegistry.isContainer(itemstack);
-
-		if (slotIndex >= SLOT_INVENTORY_1 && slotIndex < SLOT_INVENTORY_1 + SLOT_INVENTORY_COUNT) {
-			if (lastRecipe == null)
-				return true;
-			return lastRecipe.isIngredient(itemstack);
-		}
-
-		return false;
-	}
-
-	/* ISIDEDINVENTORY */
-	@Override
-	public boolean canInsertItem(int slotIndex, ItemStack itemstack, int side) {
-		return isItemValidForSlot(slotIndex, itemstack);
-	}
-
-	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-		if (!getInternalInventory().canExtractItem(slotIndex, itemstack, side))
-			return false;
-
-		return slotIndex == SLOT_PRODUCT;
-	}
-
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return getInternalInventory().getAccessibleSlotsFromSide(side);
 	}
 
 	/* SMP GUI */

@@ -20,6 +20,7 @@ import java.util.TreeMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -35,6 +36,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.Optional;
 
+import forestry.core.config.Defaults;
 import forestry.core.inventory.filters.ArrayStackFilter;
 import forestry.core.inventory.filters.IStackFilter;
 import forestry.core.inventory.filters.InvertedStackFilter;
@@ -48,6 +50,7 @@ import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.inventory.wrappers.SidedInventoryMapper;
 import forestry.core.utils.AdjacentTileCache;
 import forestry.core.utils.PlainInventory;
+import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginManager;
 
 import buildcraft.api.transport.IPipeTile;
@@ -829,5 +832,253 @@ public abstract class InvTools {
 		if (stack.stackSize > 127)
 			stack.stackSize = 127;
 		stack.writeToNBT(data);
+	}
+
+	public static IInventoryAdapter configureSidedUp(IInventoryAdapter inventory, int startSlot, int count) {
+		return configureSided(inventory, Defaults.FACING_UP, startSlot, count);
+	}
+
+	public static IInventoryAdapter configureSidedDown(IInventoryAdapter inventory, int startSlot, int count) {
+		return configureSided(inventory, Defaults.FACING_DOWN, startSlot, count);
+	}
+
+	public static IInventoryAdapter configureSidedNorthSouth(IInventoryAdapter inventory, int startSlot, int count) {
+		return configureSided(inventory, Defaults.FACING_NORTHSOUTH, startSlot, count);
+	}
+
+	public static IInventoryAdapter configureSidedWestEast(IInventoryAdapter inventory, int startSlot, int count) {
+		return configureSided(inventory, Defaults.FACING_WESTEAST, startSlot, count);
+	}
+
+	public static IInventoryAdapter configureSidedSides(IInventoryAdapter inventory, int startSlot, int count) {
+		return configureSided(inventory, Defaults.FACING_SIDES, startSlot, count);
+	}
+
+	public static IInventoryAdapter configureSided(IInventoryAdapter inventory, int side, int startSlot, int count) {
+		return configureSided(inventory, new int[]{side}, startSlot, count);
+	}
+
+	public static IInventoryAdapter configureSided(IInventoryAdapter inventory, int[] sides, int startSlot, int count) {
+		int[] slots = new int[count];
+		for (int i = 0; i < count; i++) {
+			slots[i] = startSlot + i;
+		}
+
+		return inventory.configureSided(sides, slots);
+	}
+
+		/* REMOVAL */
+	/**
+	 * Removes a set of items from an inventory.
+	 * Removes the exact items first if they exist, and then removes crafting equivalents.
+	 * If the inventory doesn't have all the required items, returns false without removing anything.
+	 * If stowContainer is true, items with containers will have their container stowed.
+	 */
+	public static boolean removeSets(IInventory inventory, int count, ItemStack[] set, int firstSlotIndex, int slotCount, EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
+
+		ItemStack[] condensedSet = StackUtils.condenseStacks(set, -1, false);
+
+		ItemStack[] stock = getStacks(inventory, firstSlotIndex, slotCount);
+		if (StackUtils.containsSets(condensedSet, stock, oreDictionary, craftingTools) < count)
+			return false;
+
+		for (ItemStack stackToRemove : condensedSet) {
+			stackToRemove.stackSize *= count;
+
+			// try to remove the exact stack first
+			removeStack(inventory, stackToRemove, firstSlotIndex, slotCount, player, stowContainer, false, false);
+
+			// remove crafting equivalents next
+			if (stackToRemove.stackSize > 0)
+				removeStack(inventory, stackToRemove, firstSlotIndex, slotCount, player, stowContainer, oreDictionary, craftingTools);
+		}
+		return true;
+	}
+
+	/**
+	 * Private Helper for removeSetsFromInventory. Assumes removal is possible.
+	 */
+	private static void removeStack(IInventory inventory, ItemStack stackToRemove, int firstSlotIndex, int slotCount, EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
+		for (int j = firstSlotIndex; j < firstSlotIndex + slotCount; j++) {
+			ItemStack stackInSlot = inventory.getStackInSlot(j);
+			if (stackInSlot == null)
+				continue;
+
+			if (!StackUtils.isCraftingEquivalent(stackToRemove, stackInSlot, oreDictionary, craftingTools))
+				continue;
+
+			ItemStack removed = inventory.decrStackSize(j, stackToRemove.stackSize);
+			stackToRemove.stackSize -= removed.stackSize;
+
+			if (stowContainer && stackToRemove.getItem().hasContainerItem(stackToRemove))
+				StackUtils.stowContainerItem(removed, inventory, j, player);
+
+			if (stackToRemove.stackSize == 0)
+				return;
+		}
+	}
+
+	/* CONTAINS */
+	public static boolean contains(IInventory inventory, ItemStack query, int startSlot, int slots) {
+		ItemStack[] queryArray = new ItemStack[]{query};
+		return contains(inventory, queryArray, startSlot, slots);
+	}
+
+	public static boolean contains(IInventory inventory, ItemStack[] query, int startSlot, int slots) {
+		ItemStack[] stock = getStacks(inventory, startSlot, slots);
+		return StackUtils.containsSets(query, stock) > 0;
+	}
+
+	public static boolean containsPercent(IInventory inventory, float percent, int slot1, int length) {
+		int amount = 0;
+		int stackMax = 0;
+		for (ItemStack itemStack : getStacks(inventory, slot1, length)) {
+			if (itemStack == null) {
+				stackMax += 64;
+				continue;
+			}
+
+			amount += itemStack.stackSize;
+			stackMax += itemStack.getMaxStackSize();
+		}
+		if (stackMax == 0)
+			return false;
+		return ((float) amount / (float) stackMax) >= percent;
+	}
+
+	public static boolean containsAmount(IInventory inventory, int amount, int slot1, int length) {
+		int total = 0;
+		for (ItemStack itemStack : getStacks(inventory, slot1, length)) {
+			if (itemStack == null)
+				continue;
+
+			total += itemStack.stackSize;
+			if (total >= amount)
+				return true;
+		}
+		return false;
+	}
+
+	public static ItemStack[] getStacks(IInventory inventory) {
+		ItemStack[] stacks = new ItemStack[inventory.getSizeInventory()];
+		for (int i = 0; i < inventory.getSizeInventory(); i++) {
+			stacks[i] = inventory.getStackInSlot(i);
+		}
+		return stacks;
+	}
+
+	public static ItemStack[] getStacks(IInventory inventory, int slot1, int length) {
+		ItemStack[] result = new ItemStack[length];
+		for (int i = slot1; i < slot1 + length; i++) {
+			result[i - slot1] = inventory.getStackInSlot(i);
+		}
+		return result;
+	}
+
+	public static boolean tryAddStacksCopy(IInventory inventory, ItemStack[] stacks, boolean all) {
+		return tryAddStacksCopy(inventory, stacks, 0, inventory.getSizeInventory(), all);
+	}
+
+	public static boolean tryAddStacksCopy(IInventory inventory, ItemStack[] stacks, int startSlot, int slots, boolean all) {
+
+		for (ItemStack stack : stacks) {
+			if (stack == null)
+				continue;
+
+			if (!tryAddStack(inventory, stack.copy(), startSlot, slots, all))
+				return false;
+		}
+
+		return true;
+	}
+
+	public static boolean tryAddStacks(IInventory inventory, ItemStack[] stacks, boolean all) {
+
+		boolean addedAll = true;
+		for (ItemStack stack : stacks) {
+			if (stack == null)
+				continue;
+
+			if (!tryAddStack(inventory, stack, all))
+				addedAll = false;
+		}
+
+		return addedAll;
+	}
+
+	public static boolean tryAddStack(IInventory inventory, ItemStack stack, boolean all) {
+		return tryAddStack(inventory, stack, 0, inventory.getSizeInventory(), all);
+	}
+
+	/**
+	 * Tries to add a stack to the specified slot range.
+	 */
+	public static boolean tryAddStack(IInventory inventory, ItemStack stack, int startSlot, int slots, boolean all) {
+		return tryAddStack(inventory, stack, startSlot, slots, all, true);
+	}
+
+	public static boolean tryAddStack(IInventory inventory, ItemStack stack, int startSlot, int slots, boolean all, boolean doAdd) {
+		int added = addStack(inventory, stack, startSlot, slots, all, doAdd);
+		if (all)
+			return added == stack.stackSize;
+		else
+			return added > 0;
+	}
+
+	public static int addStack(IInventory inventory, ItemStack stack, boolean all, boolean doAdd) {
+		return addStack(inventory, stack, 0, inventory.getSizeInventory(), all, doAdd);
+	}
+
+	public static int addStack(IInventory inventory, ItemStack stack, int startSlot, int slots, boolean all, boolean doAdd) {
+
+		int added = 0;
+		// Add to existing stacks first
+		for (int i = startSlot; i < startSlot + slots; i++) {
+
+			// Empty slot. Add
+			if (inventory.getStackInSlot(i) == null)
+				continue;
+
+			// Already occupied by different item, skip this slot.
+			if (!inventory.getStackInSlot(i).isItemEqual(stack))
+				continue;
+			if (!ItemStack.areItemStackTagsEqual(inventory.getStackInSlot(i), stack))
+				continue;
+
+			int remain = stack.stackSize - added;
+			int space = inventory.getStackInSlot(i).getMaxStackSize() - inventory.getStackInSlot(i).stackSize;
+			// No space left, skip this slot.
+			if (space <= 0)
+				continue;
+			// Enough space
+			if (space >= remain) {
+				if (doAdd)
+					inventory.getStackInSlot(i).stackSize += remain;
+				return stack.stackSize;
+			}
+
+			// Not enough space
+			if (doAdd)
+				inventory.getStackInSlot(i).stackSize = inventory.getStackInSlot(i).getMaxStackSize();
+
+			added += space;
+		}
+
+		if (added >= stack.stackSize)
+			return added;
+
+		for (int i = startSlot; i < startSlot + slots; i++) {
+			if (inventory.getStackInSlot(i) != null)
+				continue;
+
+			if (doAdd) {
+				inventory.setInventorySlotContents(i, stack.copy());
+				inventory.getStackInSlot(i).stackSize = stack.stackSize - added;
+			}
+			return stack.stackSize;
+
+		}
+
+		return added;
 	}
 }

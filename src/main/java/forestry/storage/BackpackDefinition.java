@@ -85,17 +85,21 @@ public class BackpackDefinition implements IBackpackDefinition {
 			addValidItem(validItem);
 	}
 
-	public ArrayList<ItemStack> getValidItems(EntityPlayer player) {
+	public ArrayList<ItemStack> getValidItems() {
 		return validItems;
 	}
 
 	@Override
 	public boolean isValidItem(EntityPlayer player, ItemStack itemstack) {
-		for (ItemStack stack : getValidItems(player))
+		return isValidItem(itemstack);
+	}
+
+	@Override
+	public boolean isValidItem(ItemStack itemstack) {
+		for (ItemStack stack : getValidItems())
 			if (StackUtils.isCraftingEquivalent(stack, itemstack, true, false))
 				return true;
 
 		return false;
 	}
-
 }

@@ -4,27 +4,16 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.gui.slots;
+package forestry.core.utils;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+public class GuiUtil {
 
-/**
- *
- * @author CovertJaguar <http://www.railcraft.info/>
- */
-public class SlotOutput extends SlotWatched {
-
-	public SlotOutput(IInventory iinventory, int slotIndex, int posX, int posY) {
-		super(iinventory, slotIndex, posX, posY);
+	public static boolean isIndexInRange(int index, int start, int count) {
+		return (index >= start) && (index < start + count);
 	}
 
-	@Override
-	public boolean isItemValid(ItemStack itemstack) {
-		return false;
-	}
 }

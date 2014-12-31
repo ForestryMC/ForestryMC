@@ -32,6 +32,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -48,10 +49,6 @@ public class ItemBiomefinder extends ItemInventoried {
 		private final short energySlot = 2;
 		private final short specimenSlot = 0;
 		private final short analyzeSlot = 1;
-
-		public BiomefinderInventory() {
-			super(ItemBiomefinder.class, 3);
-		}
 
 		public BiomefinderInventory(ItemStack itemstack) {
 			super(ItemBiomefinder.class, 3, itemstack);
@@ -135,6 +132,17 @@ public class ItemBiomefinder extends ItemInventoried {
 				return EnumErrorCode.NOHONEY;
 
 			return EnumErrorCode.OK;
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == energySlot) {
+				Item item = itemStack.getItem();
+				return item == ForestryItem.honeydew.item() || item == ForestryItem.honeyDrop.item();
+			} else if (slotIndex == specimenSlot || slotIndex == analyzeSlot) {
+				return PluginApiculture.beeInterface.isMember(itemStack);
+			}
+			return false;
 		}
 
 	}

@@ -10,20 +10,21 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import forestry.core.gui.ContainerLiquidTanks;
-import forestry.core.gui.slots.SlotClosed;
-import forestry.core.gui.slots.SlotLiquidContainer;
-import forestry.factory.gadgets.MachineRaintank;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
+
+import forestry.core.gui.ContainerLiquidTanks;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotOutput;
+import forestry.factory.gadgets.MachineRaintank;
 
 public class ContainerRaintank extends ContainerLiquidTanks {
 
 	public ContainerRaintank(InventoryPlayer player, MachineRaintank tile) {
-		super(tile, tile);
+		super(tile);
 
-		this.addSlotToContainer(new SlotLiquidContainer(tile, MachineRaintank.SLOT_RESOURCE, 116, 19, true));
-		this.addSlotToContainer(new SlotClosed(tile, MachineRaintank.SLOT_PRODUCT, 116, 55));
+		this.addSlotToContainer(new SlotFiltered(tile, MachineRaintank.SLOT_RESOURCE, 116, 19));
+		this.addSlotToContainer(new SlotOutput(tile, MachineRaintank.SLOT_PRODUCT, 116, 55));
 
 		for (int i = 0; i < 3; ++i) {
 			for (int j = 0; j < 9; ++j) {

@@ -11,27 +11,24 @@
 package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 
 import forestry.apiculture.gadgets.TileAlvearySieve;
-import forestry.core.config.ForestryItem;
 import forestry.core.gui.ContainerForestry;
-import forestry.core.gui.slots.SlotCustom;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotOutput;
 
 public class ContainerAlvearySieve extends ContainerForestry {
 
 	public ContainerAlvearySieve(InventoryPlayer player, TileAlvearySieve tile) {
 		super(tile);
 
-		IInventory inventory = tile.getInternalInventory();
+		addSlotToContainer(new SlotOutput(tile, 0, 94, 52).setCrafter(tile));
+		addSlotToContainer(new SlotOutput(tile, 1, 115, 39).setCrafter(tile));
+		addSlotToContainer(new SlotOutput(tile, 2, 73, 39).setCrafter(tile));
+		addSlotToContainer(new SlotOutput(tile, 3, 94, 26).setCrafter(tile));
 
-		addSlotToContainer(new SlotCustom(inventory, 0, 94, 52).setCrafter(tile));
-		addSlotToContainer(new SlotCustom(inventory, 1, 115, 39).setCrafter(tile));
-		addSlotToContainer(new SlotCustom(inventory, 2, 73, 39).setCrafter(tile));
-		addSlotToContainer(new SlotCustom(inventory, 3, 94, 26).setCrafter(tile));
-
-		addSlotToContainer(new SlotCustom(inventory, TileAlvearySieve.SLOT_SIEVE, 43, 39, ForestryItem.craftingMaterial.getItemStack(1, 3)).setCrafter(tile));
+		addSlotToContainer(new SlotFiltered(tile, TileAlvearySieve.SLOT_SIEVE, 43, 39).setCrafter(tile));
 
 		// Player inventory
 		for (int i = 0; i < 3; i++) {

@@ -13,6 +13,7 @@ package forestry.factory.gadgets;
 import forestry.api.core.ForestryAPI;
 import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ICrafter;
+import forestry.core.inventory.InvTools;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.ForestryPacket;
@@ -48,7 +49,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 
 	public TileWorktable() {
 		craftingInventory = new TileInventoryAdapter(this, 10, "CraftItems");
-		setInternalInventory(new TileInventoryAdapter(this, 18, "Items"));
+		setInternalInventory(new TileInventoryAdapter(this, 18, "Items").disableAutomation());
 
 		memorized = new RecipeMemory();
 	}
@@ -151,16 +152,16 @@ public class TileWorktable extends TileBase implements ICrafter {
 		if (currentRecipe == null)
 			return false;
 
-		ItemStack[] recipeItems = craftingInventory.getStacks(SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
-		ItemStack[] inventory = getInternalInventory().getStacks(SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+		ItemStack[] recipeItems = InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
+		ItemStack[] inventory = InvTools.getStacks(getInternalInventory(), SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
 		ItemStack recipeOutput = currentRecipe.getRecipeOutput(worldObj);
 
 		return RecipeUtil.canCraftRecipe(worldObj, recipeItems, recipeOutput, inventory);
 	}
 
 	private boolean removeResources(EntityPlayer player) {
-		ItemStack[] set = craftingInventory.getStacks(SLOT_CRAFTING_1, 9);
-		return getInternalInventory().removeSets(1, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
+		ItemStack[] set = InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
+		return InvTools.removeSets(getInternalInventory(), 1, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
 	}
 
 	@Override

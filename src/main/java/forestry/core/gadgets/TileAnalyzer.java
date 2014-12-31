@@ -10,6 +10,22 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import java.util.Stack;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
@@ -27,19 +43,7 @@ import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.GuiId;
-import java.util.Stack;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
+import forestry.core.utils.GuiUtil;
 
 public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankContainer {
 
@@ -50,7 +54,9 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	public static final short SLOT_ANALYZE = 0;
 	public static final short SLOT_CAN = 1;
 	public static final short SLOT_INPUT_1 = 2;
+	public static final short SLOT_INPUT_COUNT = 6;
 	public static final short SLOT_OUTPUT_1 = 8;
+	public static final short SLOT_OUTPUT_COUNT = 4;
 
 	/* MEMBER */
 	private int analyzeTime;
@@ -66,15 +72,27 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	/* CONSTRUCTOR */
 	public TileAnalyzer() {
 		super(800, 40, Defaults.MACHINE_MAX_ENERGY);
-		setInternalInventory(new TileInventoryAdapter(this, 12, "Items"));
+		setInternalInventory(new TileInventoryAdapter(this, 12, "Items") {
+			@Override
+			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+				if (GuiUtil.isIndexInRange(slotIndex, SLOT_INPUT_1, SLOT_INPUT_COUNT)) {
+					return AlleleManager.alleleRegistry.isIndividual(itemStack);
+				} else if (slotIndex == SLOT_CAN) {
+					Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+					return resourceTank.accepts(fluid);
+				}
+
+				return false;
+			}
+
+			@Override
+			public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
+				return GuiUtil.isIndexInRange(slotIndex, SLOT_OUTPUT_1, SLOT_OUTPUT_COUNT);
+			}
+		});
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, Fluids.HONEY.getFluid());
 		tankManager = new TankManager(resourceTank);
 		invInput = new InventoryMapper(getInternalInventory(), SLOT_INPUT_1, 6);
-	}
-
-	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
 	}
 
 	/* GUI */
@@ -239,7 +257,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			return false;
 
 		ItemStack next = pendingProducts.peek();
-		if (getInternalInventory().tryAddStack(next, SLOT_OUTPUT_1, getInternalInventory().getSizeInventory() - SLOT_OUTPUT_1, true)) {
+		if (InvTools.tryAddStack(getInternalInventory(), next, SLOT_OUTPUT_1, getInternalInventory().getSizeInventory() - SLOT_OUTPUT_1, true)) {
 			pendingProducts.pop();
 			return true;
 		}
@@ -293,87 +311,6 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 	}
 
-	/* ISIDEDINVENTORY */
-	@Override
-	public int getSizeInventory() {
-		return getInternalInventory().getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return getInternalInventory().getStackInSlot(i);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return getInternalInventory().decrStackSize(i, j);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		getInternalInventory().setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return getInternalInventory().getInventoryStackLimit();
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		return getInternalInventory().getStackInSlotOnClosing(slot);
-	}
-
-	@Override
-	public void openInventory() {
-	}
-
-	@Override
-	public void closeInventory() {
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return getInternalInventory().isUseableByPlayer(player);
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
-		return false;
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		if (!getInternalInventory().isItemValidForSlot(slot, stack))
-			return false;
-
-		if (slot >= SLOT_INPUT_1 && slot < SLOT_INPUT_1 + 6)
-			return AlleleManager.alleleRegistry.isIndividual(stack);
-
-		if (slot == SLOT_CAN)
-			return Fluids.HONEY.isContained(stack);
-
-		return false;
-	}
-
-	@Override
-	public boolean canInsertItem(int slot, ItemStack stack, int side) {
-		return isItemValidForSlot(slot, stack);
-	}
-
-	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
-		if (!getInternalInventory().canExtractItem(slotIndex, stack, side))
-			return false;
-
-		return slotIndex >= SLOT_OUTPUT_1 && slotIndex < SLOT_OUTPUT_1 + 4;
-	}
-
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return getInternalInventory().getAccessibleSlotsFromSide(side);
-	}
-
 	/* ILIQUIDCONTAINER */
 	@Override
 	public TankManager getTankManager() {
@@ -409,5 +346,4 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return tankManager.getTankInfo(from);
 	}
-
 }

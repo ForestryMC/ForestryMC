@@ -21,6 +21,7 @@ import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.ItemInventory;
+import forestry.core.inventory.ItemInventoryBackpack;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.items.ItemInventoried;
@@ -101,7 +102,7 @@ public class ItemBackpack extends ItemInventoried {
 	public ItemStack tryStowing(EntityPlayer player, ItemStack backpackStack, ItemStack stack) {
 
 		ItemBackpack backpack = ((ItemBackpack) backpackStack.getItem());
-		ItemInventory inventory = new ItemInventory(ItemBackpack.class, backpack.getBackpackSize(), backpackStack);
+		ItemInventory inventory = new ItemInventoryBackpack(ItemBackpack.class, backpack.getBackpackSize(), backpackStack);
 		if (backpackStack.getItemDamage() == 1)
 			return stack;
 
@@ -147,7 +148,7 @@ public class ItemBackpack extends ItemInventoried {
 				return true;
 
 			// Create our own backpack inventory
-			ItemInventory backpackInventory = new ItemInventory(ItemBackpack.class, getBackpackSize(), stack);
+			ItemInventoryBackpack backpackInventory = new ItemInventoryBackpack(ItemBackpack.class, getBackpackSize(), stack);
 
 			BackpackMode mode = getMode(stack);
 			if (mode == BackpackMode.RECEIVE)
@@ -163,7 +164,7 @@ public class ItemBackpack extends ItemInventoried {
 		return false;
 	}
 
-	private void tryChestTransfer(ItemInventory backpackInventory, IInventory target) {
+	private void tryChestTransfer(ItemInventoryBackpack backpackInventory, IInventory target) {
 
 		for (IInvSlot slot : InventoryIterator.getIterable(backpackInventory)) {
 			ItemStack packStack = slot.getStackInSlot();
@@ -175,7 +176,7 @@ public class ItemBackpack extends ItemInventoried {
 		}
 	}
 
-	private void tryChestReceive(EntityPlayer player, ItemInventory backpackInventory, IInventory target) {
+	private void tryChestReceive(EntityPlayer player, ItemInventoryBackpack backpackInventory, IInventory target) {
 
 		for (IInvSlot slot : InventoryIterator.getIterable(target)) {
 			ItemStack targetStack = slot.getStackInSlot();

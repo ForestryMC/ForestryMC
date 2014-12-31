@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
+import forestry.core.inventory.InvTools;
 import forestry.core.inventory.InventoryAdapter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,7 +27,7 @@ public class TileSwarm extends TileEntity {
 
 	public TileSwarm setContained(ItemStack[] bees) {
 		for (ItemStack itemstack : bees)
-			contained.addStack(itemstack, false, true);
+			InvTools.addStack(contained, itemstack, false, true);
 
 		return this;
 	}

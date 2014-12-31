@@ -10,20 +10,20 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.world.World;
+
 import forestry.api.circuits.ICircuitLayout;
 import forestry.core.circuits.ItemSolderingIron.SolderingInventory;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.IGuiSelectable;
-import forestry.core.gui.slots.SlotCustom;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotOutput;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 public class ContainerSolderingIron extends ContainerItemInventory implements IGuiSelectable {
 
@@ -34,16 +34,16 @@ public class ContainerSolderingIron extends ContainerItemInventory implements IG
 		this.inventory = inventory;
 
 		// Input
-		this.addSlotToContainer(new SlotCustom(inventory, 0, 152, 12, ItemCircuitBoard.class));
+		this.addSlotToContainer(new SlotFiltered(inventory, 0, 152, 12));
 
 		// Output
-		this.addSlotToContainer(new SlotCustom(inventory, 1, 152, 92, ItemCircuitBoard.class));
+		this.addSlotToContainer(new SlotOutput(inventory, 1, 152, 92));
 
 		// Ingredients
-		this.addSlotToContainer(new Slot(inventory, 2, 12, 32));
-		this.addSlotToContainer(new Slot(inventory, 3, 12, 52));
-		this.addSlotToContainer(new Slot(inventory, 4, 12, 72));
-		this.addSlotToContainer(new Slot(inventory, 5, 12, 92));
+		this.addSlotToContainer(new SlotFiltered(inventory, 2, 12, 32));
+		this.addSlotToContainer(new SlotFiltered(inventory, 3, 12, 52));
+		this.addSlotToContainer(new SlotFiltered(inventory, 4, 12, 72));
+		this.addSlotToContainer(new SlotFiltered(inventory, 5, 12, 92));
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++)
@@ -54,24 +54,6 @@ public class ContainerSolderingIron extends ContainerItemInventory implements IG
 			addSecuredSlot(inventoryplayer, j1, 8 + j1 * 18, 181);
 
 	}
-
-	@Override
-	protected boolean isAcceptedItem(EntityPlayer player, ItemStack stack) {
-		return false;
-	}
-
-	/*
-	 * @Override public void onCraftGuiClosed(EntityPlayer entityplayer) {
-	 * 
-	 * if (!Proxies.common.isSimulating(entityplayer.worldObj)) return;
-	 * 
-	 * // Drop everything still in there. for (int i = 0; i < inventory.getSizeInventory(); i++) { ItemStack stack = inventory.getStackInSlot(i); if (stack ==
-	 * null) { continue; }
-	 * 
-	 * Proxies.common.dropItemPlayer(entityplayer, stack); inventory.setInventorySlotContents(i, null); }
-	 * 
-	 * }
-	 */
 
 	public ICircuitLayout getLayout() {
 		return inventory.getLayout();

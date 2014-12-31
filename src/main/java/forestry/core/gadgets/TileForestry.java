@@ -15,6 +15,7 @@ import java.util.Collection;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
@@ -32,9 +33,12 @@ import cpw.mods.fml.common.Optional;
 import forestry.api.core.IErrorState;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
+import forestry.core.config.Defaults;
 import forestry.core.interfaces.IErrorSource;
+import forestry.core.interfaces.IFilterSlotDelegate;
 import forestry.core.interfaces.IRestrictedAccess;
-import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.inventory.FakeInventoryAdapter;
+import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.INetworkedEntity;
 import forestry.core.network.PacketPayload;
@@ -43,6 +47,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.AdjacentTileCache;
 import forestry.core.utils.EnumAccess;
 import forestry.core.utils.PlayerUtil;
+import forestry.core.utils.Utils;
 import forestry.core.vect.Vect;
 
 import buildcraft.api.statements.IStatementContainer;
@@ -51,11 +56,11 @@ import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.statements.ITriggerProvider;
 
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
-public abstract class TileForestry extends TileEntity implements INetworkedEntity, IRestrictedAccess, IErrorSource, ITriggerProvider {
+public abstract class TileForestry extends TileEntity implements INetworkedEntity, IRestrictedAccess, IErrorSource, ITriggerProvider, ISidedInventory, IFilterSlotDelegate {
 
 	protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 	protected boolean isInited = false;
-	private TileInventoryAdapter inventory;
+	private IInventoryAdapter inventory = FakeInventoryAdapter.instance();
 
 	public AdjacentTileCache getTileCache() {
 		return tileCache;
@@ -79,10 +84,6 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 
 	public Vect Coords() {
 		return new Vect(xCoord, yCoord, zCoord);
-	}
-
-	public World getWorld() {
-		return this.getWorldObj();
 	}
 
 	public void openGui(EntityPlayer player) {
@@ -118,8 +119,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	public void readFromNBT(NBTTagCompound data) {
 		super.readFromNBT(data);
 
-		if (inventory != null)
-			inventory.readFromNBT(data);
+		inventory.readFromNBT(data);
 
 		if (data.hasKey("Access"))
 			access = EnumAccess.values()[data.getInteger("Access")];
@@ -138,8 +138,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	@Override
 	public void writeToNBT(NBTTagCompound data) {
 		super.writeToNBT(data);
-		if (inventory != null)
-			inventory.writeToNBT(data);
+		inventory.writeToNBT(data);
 		data.setInteger("Access", access.ordinal());
 		if (this.owner != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
@@ -254,6 +253,10 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		return allowsAlteration(player) || getAccess() == EnumAccess.VIEWABLE;
 	}
 
+	private boolean allowsPipeConnections() {
+		return access == EnumAccess.SHARED;
+	}
+
 	@Override
 	public EnumAccess getAccess() {
 		return access;
@@ -291,10 +294,19 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		if (!isOwner(player))
 			return false;
 
+		boolean couldPipesConnect = allowsPipeConnections();
+
 		int ordinal = (access.ordinal() + 1) % EnumAccess.values().length;
 		access = EnumAccess.values()[ordinal];
 		if (!this.worldObj.isRemote)
 			sendNetworkUpdate();
+
+		boolean canPipesConnect = allowsPipeConnections();
+		if (couldPipesConnect != canPipesConnect) {
+			// pipes connected to this need to update
+			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, blockType);
+			markDirty();
+		}
 
 		return true;
 	}
@@ -309,11 +321,109 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	/* INVENTORY BASICS */
-	public final TileInventoryAdapter getInternalInventory() {
+	public IInventoryAdapter getInternalInventory() {
 		return inventory;
 	}
 
-	public final void setInternalInventory(TileInventoryAdapter inv) {
+	public final void setInternalInventory(IInventoryAdapter inv) {
+		if (inv == null) {
+			throw new NullPointerException("Inventory cannot be null");
+		}
 		this.inventory = inv;
+	}
+
+	/* ISidedInventory */
+	@Override
+	public final int getSizeInventory() {
+		return getInternalInventory().getSizeInventory();
+	}
+
+	@Override
+	public final ItemStack getStackInSlot(int slotIndex) {
+		return getInternalInventory().getStackInSlot(slotIndex);
+	}
+
+	@Override
+	public final ItemStack decrStackSize(int slotIndex, int amount) {
+		return getInternalInventory().decrStackSize(slotIndex, amount);
+	}
+
+	@Override
+	public final ItemStack getStackInSlotOnClosing(int slotIndex) {
+		return getInternalInventory().getStackInSlotOnClosing(slotIndex);
+	}
+
+	@Override
+	public final void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
+		getInternalInventory().setInventorySlotContents(slotIndex, itemstack);
+	}
+
+	@Override
+	public final int getInventoryStackLimit() {
+		return getInternalInventory().getInventoryStackLimit();
+	}
+
+	@Override
+	public final void openInventory() {
+		getInternalInventory().openInventory();
+	}
+
+	@Override
+	public final void closeInventory() {
+		getInternalInventory().closeInventory();
+	}
+
+	@Override
+	public final String getInventoryName() {
+		return getUnlocalizedName();
+	}
+
+	@Override
+	public final boolean isUseableByPlayer(EntityPlayer player) {
+		if (!Utils.isUseableByPlayer(player, this) || !allowsViewing(player))
+			return false;
+		return getInternalInventory().isUseableByPlayer(player);
+	}
+
+	@Override
+	public final boolean hasCustomInventoryName() {
+		return getInternalInventory().hasCustomInventoryName();
+	}
+
+	@Override
+	public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
+		if (itemStack == null || !allowsPipeConnections())
+			return false;
+
+		if (!canSlotAccept(slotIndex, itemStack))
+			return false;
+
+		return getInternalInventory().isItemValidForSlot(slotIndex, itemStack);
+	}
+
+	@Override
+	public final boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+		return getInternalInventory().canSlotAccept(slotIndex, itemStack);
+	}
+
+	@Override
+	public final int[] getAccessibleSlotsFromSide(int side) {
+		if (!allowsPipeConnections())
+			return Defaults.SLOTS_NONE;
+		return getInternalInventory().getAccessibleSlotsFromSide(side);
+	}
+
+	@Override
+	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, int side) {
+		if (itemStack == null || !allowsPipeConnections())
+			return false;
+		return isItemValidForSlot(slotIndex, itemStack);
+	}
+
+	@Override
+	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, int side) {
+		if (itemStack == null || !allowsPipeConnections())
+			return false;
+		return getInternalInventory().canExtractItem(slotIndex, itemStack, side);
 	}
 }

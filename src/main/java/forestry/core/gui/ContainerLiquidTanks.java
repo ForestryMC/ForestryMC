@@ -29,7 +29,7 @@ public class ContainerLiquidTanks extends ContainerForestry {
 
 	private final ILiquidTankContainer tile;
 
-	public <T extends TileForestry & ILiquidTankContainer> ContainerLiquidTanks(IInventory playerInventory, T tile) {
+	public <T extends TileForestry & ILiquidTankContainer> ContainerLiquidTanks(T tile) {
 		super(tile);
 		this.tile = tile;
 	}

@@ -351,6 +351,9 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 	}
 
 	public boolean accepts(Fluid fluid) {
+		if (fluid == null)
+			return false;
+		
 		for (StandardTank tank : tanks) {
 			if (tank.accepts(fluid))
 				return true;

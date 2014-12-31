@@ -10,16 +10,16 @@
  ******************************************************************************/
 package forestry.food.gui;
 
-import forestry.core.config.ForestryItem;
-import forestry.core.gui.ContainerForestry;
-import forestry.core.gui.slots.SlotCustom;
-import forestry.core.proxy.Proxies;
-import forestry.food.items.ItemBeverage;
-import forestry.food.items.ItemInfuser.InfuserInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import forestry.core.gui.ContainerForestry;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotOutput;
+import forestry.core.proxy.Proxies;
+import forestry.food.items.ItemInfuser.InfuserInventory;
 
 public class ContainerInfuser extends ContainerForestry {
 
@@ -30,16 +30,16 @@ public class ContainerInfuser extends ContainerForestry {
 		this.inventory = inventory;
 
 		// Input
-		this.addSlotToContainer(new SlotCustom(inventory, 0, 152, 12, ForestryItem.beverage.getItemStack()));
+		this.addSlotToContainer(new SlotFiltered(inventory, 0, 152, 12));
 
 		// Output
-		this.addSlotToContainer(new SlotCustom(inventory, 1, 152, 72, ItemBeverage.class));
+		this.addSlotToContainer(new SlotOutput(inventory, 1, 152, 72));
 
 		// Ingredients
-		this.addSlotToContainer(new Slot(inventory, 2, 12, 12));
-		this.addSlotToContainer(new Slot(inventory, 3, 12, 32));
-		this.addSlotToContainer(new Slot(inventory, 4, 12, 52));
-		this.addSlotToContainer(new Slot(inventory, 5, 12, 72));
+		this.addSlotToContainer(new SlotFiltered(inventory, 2, 12, 12));
+		this.addSlotToContainer(new SlotFiltered(inventory, 3, 12, 32));
+		this.addSlotToContainer(new SlotFiltered(inventory, 4, 12, 52));
+		this.addSlotToContainer(new SlotFiltered(inventory, 5, 12, 72));
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++)

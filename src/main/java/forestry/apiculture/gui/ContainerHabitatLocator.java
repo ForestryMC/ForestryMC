@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import forestry.apiculture.items.ItemBeeGE;
 import forestry.apiculture.items.ItemBiomefinder;
 import forestry.apiculture.items.ItemBiomefinder.BiomefinderInventory;
 import forestry.core.config.ForestryItem;
 import forestry.core.gui.ContainerItemInventory;
-import forestry.core.gui.slots.SlotCustom;
+import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.proxy.Proxies;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -31,12 +30,12 @@ public class ContainerHabitatLocator extends ContainerItemInventory {
 		this.inventory = inventory;
 
 		// Energy
-		this.addSlotToContainer(new SlotCustom(inventory, 2, 152, 8, ForestryItem.honeydew, ForestryItem.honeyDrop));
+		this.addSlotToContainer(new SlotFiltered(inventory, 2, 152, 8));
 
 		// Bee to analyze
-		this.addSlotToContainer(new SlotCustom(inventory, 0, 152, 32, ItemBeeGE.class));
+		this.addSlotToContainer(new SlotFiltered(inventory, 0, 152, 32));
 		// Analyzed bee
-		this.addSlotToContainer(new SlotCustom(inventory, 1, 152, 75, ItemBeeGE.class));
+		this.addSlotToContainer(new SlotFiltered(inventory, 1, 152, 75));
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++)
@@ -66,11 +65,6 @@ public class ContainerHabitatLocator extends ContainerItemInventory {
 
 		inventory.onGuiSaved(entityplayer);
 
-	}
-
-	@Override
-	protected boolean isAcceptedItem(EntityPlayer player, ItemStack stack) {
-		return false;
 	}
 
 }

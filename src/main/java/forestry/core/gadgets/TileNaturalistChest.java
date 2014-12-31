@@ -10,31 +10,37 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.GuiHandler;
 import forestry.core.config.Config;
 import forestry.core.gui.IPagedInventory;
 import forestry.core.inventory.TileInventoryAdapter;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 
-public abstract class TileNaturalistChest extends TileBase implements IInventory, IPagedInventory {
+public abstract class TileNaturalistChest extends TileBase implements IPagedInventory {
 
-	private final ISpeciesRoot speciesRoot;
+	private static class NaturalistInventoryAdapter extends TileInventoryAdapter {
+		private final ISpeciesRoot speciesRoot;
+		public NaturalistInventoryAdapter(TileNaturalistChest tile, int size, String name, ISpeciesRoot speciesRoot) {
+			super(tile, size, name);
+			this.speciesRoot = speciesRoot;
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemstack) {
+			return speciesRoot.isMember(itemstack);
+		}
+	}
+
 	private final int guiID;
 
 	public TileNaturalistChest(ISpeciesRoot speciesRoot, int guiId) {
-		setInternalInventory(new TileInventoryAdapter(this, 125, "Items"));
+		setInternalInventory(new NaturalistInventoryAdapter(this, 125, "Items", speciesRoot));
 		setHints(Config.hints.get("apiarist.chest"));
-		this.speciesRoot = speciesRoot;
 		this.guiID = guiId;
-	}
-
-	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
 	}
 
 	@Override
@@ -55,60 +61,6 @@ public abstract class TileNaturalistChest extends TileBase implements IInventory
 	/* ERROR HANDLING */
 	@Override
 	public boolean throwsErrors() {
-		return false;
-	}
-
-	/* IINVENTORY */
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return itemstack == null || speciesRoot.isMember(itemstack);
-	}
-
-	@Override
-	public int getSizeInventory() {
-		return getInternalInventory().getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int slotIndex) {
-		return getInternalInventory().getStackInSlot(slotIndex);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int slotIndex, int count) {
-		return getInternalInventory().decrStackSize(slotIndex, count);
-	}
-
-	@Override
-	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
-		getInternalInventory().setInventorySlotContents(slotIndex, itemstack);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		return getInternalInventory().getStackInSlotOnClosing(slot);
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return 64;
-	}
-
-	@Override
-	public void openInventory() {
-	}
-
-	@Override
-	public void closeInventory() {
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return getInternalInventory().isUseableByPlayer(player);
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
 		return false;
 	}
 }

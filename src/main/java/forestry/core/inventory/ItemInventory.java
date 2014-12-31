@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import forestry.api.core.INBTTagable;
-import forestry.core.utils.Utils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -19,24 +17,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-public class ItemInventory implements IInventory, INBTTagable {
+import forestry.api.core.INBTTagable;
+import forestry.core.interfaces.IFilterSlotDelegate;
+import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
+
+public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagable {
 
 	public final Class<? extends Item> itemClass;
-	public boolean isItemInventory = false;
+	public final boolean isItemInventory;
 	public ItemStack parent;
 	protected ItemStack[] inventoryStacks;
 
-	protected ItemInventory(Class<? extends Item> itemClass) {
-		this.itemClass = itemClass;
-	}
-
-	public ItemInventory(Class<? extends Item> itemClass, int slots) {
-		this(itemClass);
-		inventoryStacks = new ItemStack[slots];
-	}
-
 	public ItemInventory(Class<? extends Item> itemClass, int size, ItemStack itemstack) {
-		this(itemClass, size);
+		this.itemClass = itemClass;
+
+		inventoryStacks = new ItemStack[size];
 
 		parent = itemstack;
 		isItemInventory = true;
@@ -77,46 +73,18 @@ public class ItemInventory implements IInventory, INBTTagable {
 	}
 
 	public void onGuiSaved(EntityPlayer player) {
-		parent = findParent(player);
+		parent = findParentInInventory(player);
 		if (parent != null)
 			save();
 	}
 
-	public ItemStack findParent(EntityPlayer player) {
-		if (parent == null)
-			return null;
-
-		NBTTagCompound parentNBT = parent.getTagCompound();
-		if (parentNBT == null)
-			return null;
-
-		int uid = parentNBT.getInteger("UID");
-
+	public ItemStack findParentInInventory(EntityPlayer player) {
 		for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
 			ItemStack stack = player.inventory.getStackInSlot(i);
-			if (stack == null)
-				continue;
-			if(stack.getItem() != parent.getItem())
-				continue;
-			NBTTagCompound slotNBT = stack.getTagCompound();
-			if (slotNBT == null)
-				continue;
-			if (uid == slotNBT.getInteger("UID"))
-				return player.inventory.getStackInSlot(i);
+			if (StackUtils.isIdenticalItem(stack, parent))
+				return stack;
 		}
-		return null;
-	}
-
-	public boolean matchesUID(int otherId) {
-		if (parent == null)
-			return false;
-
-		NBTTagCompound nbt = parent.getTagCompound();
-		if (nbt == null)
-			return false;
-
-		int uid = nbt.getInteger("UID");
-		return uid == otherId;
+		return parent;
 	}
 
 	public void save() {
@@ -220,7 +188,12 @@ public class ItemInventory implements IInventory, INBTTagable {
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+	public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
+		return canSlotAccept(slotIndex, itemStack);
+	}
+
+	@Override
+	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		return true;
 	}
 

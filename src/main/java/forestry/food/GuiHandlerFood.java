@@ -16,6 +16,7 @@ import forestry.food.gui.ContainerInfuser;
 import forestry.food.gui.GuiInfuser;
 import forestry.food.items.ItemInfuser.InfuserInventory;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class GuiHandlerFood extends GuiHandlerBase {
@@ -28,7 +29,10 @@ public class GuiHandlerFood extends GuiHandlerBase {
 		switch (GuiId.values()[id]) {
 
 		case InfuserGUI:
-			return new GuiInfuser(player.inventory, new InfuserInventory(player));
+			ItemStack infuser = player.getCurrentEquippedItem();
+			if (infuser == null)
+				return null;
+			return new GuiInfuser(player.inventory, new InfuserInventory(player, infuser));
 
 		default:
 			return null;
@@ -44,7 +48,10 @@ public class GuiHandlerFood extends GuiHandlerBase {
 		switch (GuiId.values()[id]) {
 
 		case InfuserGUI:
-			return new ContainerInfuser(player.inventory, new InfuserInventory(player));
+			ItemStack infuser = player.getCurrentEquippedItem();
+			if (infuser == null)
+				return null;
+			return new ContainerInfuser(player.inventory, new InfuserInventory(player, infuser));
 
 		default:
 			return null;

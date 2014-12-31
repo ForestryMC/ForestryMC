@@ -10,8 +10,16 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import buildcraft.api.statements.ITriggerExternal;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
 import cpw.mods.fml.common.Optional;
+
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
@@ -21,15 +29,13 @@ import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.gadgets.TileForestry;
+import forestry.core.inventory.FakeInventoryAdapter;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
-import java.util.Collection;
-import java.util.LinkedList;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+
+import buildcraft.api.statements.ITriggerExternal;
 
 public abstract class TileAlveary extends TileForestry implements IAlvearyComponent {
 
@@ -117,12 +123,16 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	}
 
 	@Override
-	public void fromPacketPayload(PacketPayload payload) {
+	public PacketPayload getPacketPayload() {
+		PacketPayload payload = new PacketPayload(0, 1);
+		payload.shortPayload[0] = (short) (isMaster() ? 1 : 0);
+		return payload;
 	}
 
 	@Override
-	public PacketPayload getPacketPayload() {
-		return null;
+	public void fromPacketPayload(PacketPayload payload) {
+		if (payload.shortPayload[0] > 0)
+			makeMaster();
 	}
 
 	/* ITILESTRUCTURE */
@@ -141,7 +151,7 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 		setCentralTE(null);
 		isMaster = true;
 
-		if (getInternalInventory() == null)
+		if (getInternalInventory() instanceof FakeInventoryAdapter)
 			createInventory();
 	}
 
@@ -208,12 +218,12 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	}
 
 	@Override
-	public final IInventory getInventory() {
+	public final IInventoryAdapter getInventory() {
 		return getStructureInventory();
 	}
 
 	@Override
-	public ISidedInventory getStructureInventory() {
+	public IInventoryAdapter getStructureInventory() {
 		return getInternalInventory();
 	}
 

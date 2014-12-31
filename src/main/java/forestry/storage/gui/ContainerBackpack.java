@@ -10,17 +10,16 @@
  ******************************************************************************/
 package forestry.storage.gui;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import forestry.core.config.Defaults;
 import forestry.core.gui.ContainerItemInventory;
-import forestry.core.gui.slots.SlotForestry;
-import forestry.core.inventory.ItemInventory;
-import forestry.storage.items.ItemBackpack;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.inventory.ItemInventoryBackpack;
 
 public class ContainerBackpack extends ContainerItemInventory {
 
-	public ContainerBackpack(final EntityPlayer player, ItemInventory inventory) {
+	public ContainerBackpack(final EntityPlayer player, ItemInventoryBackpack inventory) {
 		super(inventory, player);
 
 		int lines = 0;
@@ -40,18 +39,12 @@ public class ContainerBackpack extends ContainerItemInventory {
 		}
 
 		// Inventory
-		for (int j = 0; j < lines; j++)
+		for (int j = 0; j < lines; j++) {
 			for (int k = 0; k < columns; k++) {
 				int slot = k + j * columns;
-				addSlotToContainer(new SlotForestry(inventory, slot, startX + k * 18, startY + j * 18) {
-
-					@Override
-					public boolean isItemValid(ItemStack stack) {
-						return isAcceptedItem(player, stack);
-					}
-
-				});
+				addSlotToContainer(new SlotFiltered(inventory, slot, startX + k * 18, startY + j * 18));
 			}
+		}
 
 		// Player inventory
 		for (int i = 0; i < 3; i++)
@@ -60,23 +53,6 @@ public class ContainerBackpack extends ContainerItemInventory {
 		// Player hotbar
 		for (int i = 0; i < 9; i++)
 			addSecuredSlot(player.inventory, i, 8 + i * 18, 11 + startY + lines * 18 + 58);
-	}
-
-	@Override
-	protected boolean isAcceptedItem(EntityPlayer player, ItemStack stack) {
-		// FIXME: This is incorrect.
-		// However, if we return false here, even valid items will be dropped
-		// while being kept inside the backpack, leading to duping.
-		// inventory.parent will turn null with the current implementation if
-		// something is put inside a backpack and the backpack is then
-		// moved from the action bar into the player's inventory.
-		if (inventory.parent == null)
-			return true;
-
-		if (!(inventory.parent.getItem() instanceof ItemBackpack))
-			return false;
-
-		return ((ItemBackpack) inventory.parent.getItem()).getDefinition().isValidItem(player, stack);
 	}
 
 }

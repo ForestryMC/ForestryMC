@@ -10,20 +10,21 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import forestry.apiculture.items.ItemBeeGE;
-import forestry.apiculture.items.ItemImprinter.ImprinterInventory;
-import forestry.core.gui.ContainerForestry;
-import forestry.core.gui.IGuiSelectable;
-import forestry.core.gui.slots.SlotCustom;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketPayload;
-import forestry.core.network.PacketUpdate;
-import forestry.core.proxy.Proxies;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import forestry.apiculture.items.ItemImprinter.ImprinterInventory;
+import forestry.core.gui.ContainerForestry;
+import forestry.core.gui.IGuiSelectable;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotOutput;
+import forestry.core.network.PacketIds;
+import forestry.core.network.PacketPayload;
+import forestry.core.network.PacketUpdate;
+import forestry.core.proxy.Proxies;
 
 public class ContainerImprinter extends ContainerForestry implements IGuiSelectable {
 
@@ -35,9 +36,9 @@ public class ContainerImprinter extends ContainerForestry implements IGuiSelecta
 
 		this.inventory = inventory;
 		// Input
-		this.addSlotToContainer(new SlotCustom(inventory, 0, 152, 12, ItemBeeGE.class));
+		this.addSlotToContainer(new SlotFiltered(inventory, 0, 152, 12));
 		// Output
-		this.addSlotToContainer(new SlotCustom(inventory, 1, 152, 72, ItemBeeGE.class));
+		this.addSlotToContainer(new SlotOutput(inventory, 1, 152, 72));
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++)

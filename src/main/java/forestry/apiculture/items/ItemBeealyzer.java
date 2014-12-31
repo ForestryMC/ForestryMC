@@ -10,12 +10,16 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+
 import forestry.api.apiculture.IBee;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
-import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IHintSource;
 import forestry.core.inventory.AlyzerInventory;
@@ -23,39 +27,22 @@ import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginApiculture;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 
 public class ItemBeealyzer extends ItemInventoried {
 
 	public static class BeealyzerInventory extends AlyzerInventory implements IErrorSource, IHintSource {
-
-		public BeealyzerInventory(EntityPlayer player) {
-			super(ItemBeealyzer.class, 7);
-			this.player = player;
-		}
 
 		public BeealyzerInventory(EntityPlayer player, ItemStack itemStack) {
 			super(ItemBeealyzer.class, 7, itemStack);
 			this.player = player;
 		}
 
-		private boolean isEnergy(ItemStack itemstack) {
-			if (itemstack == null || itemstack.stackSize <= 0)
-				return false;
-
-			return ForestryItem.honeyDrop.isItemEqual(itemstack) || ForestryItem.honeydew.isItemEqual(itemstack);
+		@Override
+		protected boolean isSpecimen(ItemStack itemStack) {
+			return PluginApiculture.beeInterface.isMember(itemStack);
 		}
 
 		private void tryAnalyze() {
-
-			// Analyzed slot occupied, abort
-			if (inventoryStacks[SLOT_ANALYZE_1] != null || inventoryStacks[SLOT_ANALYZE_2] != null || inventoryStacks[SLOT_ANALYZE_3] != null
-					|| inventoryStacks[SLOT_ANALYZE_4] != null || inventoryStacks[SLOT_ANALYZE_5] != null)
-				return;
-
 			// Source slot to analyze empty
 			if (getStackInSlot(SLOT_SPECIMEN) == null)
 				return;
@@ -132,8 +119,7 @@ public class ItemBeealyzer extends ItemInventoried {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 		if (Proxies.common.isSimulating(world))
-			entityplayer.openGui(ForestryAPI.instance, GuiId.BeealyzerGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY,
-					(int) entityplayer.posZ);
+			entityplayer.openGui(ForestryAPI.instance, GuiId.BeealyzerGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY, (int) entityplayer.posZ);
 
 		return itemstack;
 	}

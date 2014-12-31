@@ -10,12 +10,14 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import forestry.core.gui.ContainerForestry;
-import forestry.core.gui.slots.SlotClosed;
-import forestry.factory.gadgets.MachineCentrifuge;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
+
+import forestry.core.gui.ContainerForestry;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotOutput;
+import forestry.factory.gadgets.MachineCentrifuge;
 
 public class ContainerCentrifuge extends ContainerForestry {
 
@@ -27,12 +29,12 @@ public class ContainerCentrifuge extends ContainerForestry {
 		this.tile = tile;
 
 		// Resource
-		this.addSlotToContainer(new Slot(tile, 0, 34, 37));
+		this.addSlotToContainer(new SlotFiltered(tile, 0, 34, 37));
 
 		// Product Inventory
 		for (int l = 0; l < 3; l++)
 			for (int k = 0; k < 3; k++)
-				addSlotToContainer(new SlotClosed(tile, 1 + k + l * 3, 98 + k * 18, 19 + l * 18));
+				addSlotToContainer(new SlotOutput(tile, 1 + k + l * 3, 98 + k * 18, 19 + l * 18));
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++)

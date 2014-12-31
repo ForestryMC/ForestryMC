@@ -38,8 +38,11 @@ import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
+import forestry.core.utils.GuiUtil;
 import forestry.factory.triggers.FactoryTriggers;
 
 import buildcraft.api.statements.ITriggerExternal;
@@ -49,6 +52,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 	/* CONSTANTS */
 	public static final int SLOT_RESOURCE = 0;
 	public static final int SLOT_PRODUCT_1 = 1;
+	public static final int SLOT_PRODUCT_COUNT = 9;
 
 	/* RECIPE MANAGMENT */
 	public static class Recipe {
@@ -146,13 +150,18 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 
 	public MachineCentrifuge() {
 		super(800, 40, Defaults.MACHINE_MAX_ENERGY);
-		setInternalInventory(new TileInventoryAdapter(this, 10, "Items"));
-		setHints(Config.hints.get("centrifuge"));
-	}
+		setInternalInventory(new TileInventoryAdapter(this, 10, "Items") {
+			@Override
+			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+				return slotIndex == SLOT_RESOURCE && RecipeManager.findMatchingRecipe(itemStack) != null;
+			}
 
-	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
+			@Override
+			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+				return GuiUtil.isIndexInRange(slotIndex, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT);
+			}
+		});
+		setHints(Config.hints.get("centrifuge"));
 	}
 
 	@Override
@@ -293,7 +302,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 	}
 
 	private boolean addProduct(ItemStack product, boolean all) {
-		return getInternalInventory().tryAddStack(product, 1, getSizeInventory() - 1, all);
+		return InvTools.tryAddStack(getInternalInventory(), product, 1, getSizeInventory() - 1, all);
 	}
 
 	@Override
@@ -303,7 +312,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 
 	@Override
 	public boolean hasResourcesMin(float percentage) {
-		TileInventoryAdapter inventory = getInternalInventory();
+		IInventoryAdapter inventory = getInternalInventory();
 		if (inventory.getStackInSlot(SLOT_RESOURCE) == null)
 			return false;
 
@@ -337,81 +346,6 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
 		iCrafting.sendProgressBarUpdate(container, 0, productionTime);
 		iCrafting.sendProgressBarUpdate(container, 1, timePerItem);
-	}
-
-	/* IINVENTORY */
-
-	@Override
-	public int getSizeInventory() {
-		return getInternalInventory().getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return getInternalInventory().getStackInSlot(i);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return getInternalInventory().decrStackSize(i, j);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		getInternalInventory().setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		return getInternalInventory().getStackInSlotOnClosing(slot);
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return getInternalInventory().getInventoryStackLimit();
-	}
-
-	@Override
-	public void openInventory() {
-	}
-
-	@Override
-	public void closeInventory() {
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return getInternalInventory().isUseableByPlayer(player);
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
-		return false;
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		if (!getInternalInventory().isItemValidForSlot(slotIndex, itemstack))
-			return false;
-		return slotIndex == SLOT_RESOURCE && RecipeManager.findMatchingRecipe(itemstack) != null;
-	}
-
-	/* ISIDEDINVENTORY */
-	@Override
-	public boolean canInsertItem(int slotIndex, ItemStack itemstack, int side) {
-		return isItemValidForSlot(slotIndex, itemstack);
-	}
-
-	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-		if (!getInternalInventory().canExtractItem(slotIndex, itemstack, side))
-			return false;
-		return slotIndex >= SLOT_PRODUCT_1 && slotIndex < SLOT_PRODUCT_1 + 9;
-	}
-
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return getInternalInventory().getAccessibleSlotsFromSide(side);
 	}
 
 	/* ITRIGGERPROVIDER */

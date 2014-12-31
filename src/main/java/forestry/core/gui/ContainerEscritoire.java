@@ -10,19 +10,16 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import forestry.api.genetics.AlleleManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Slot;
+
 import forestry.core.gadgets.TileEscritoire;
-import forestry.core.gui.slots.SlotClosed;
-import forestry.core.gui.slots.SlotCustom;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotOutput;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
-import java.util.ArrayList;
-import java.util.Collection;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.inventory.Slot;
 
 public class ContainerEscritoire extends ContainerForestry implements IGuiSelectable {
 
@@ -37,20 +34,18 @@ public class ContainerEscritoire extends ContainerForestry implements IGuiSelect
 		this.player = player;
 		this.tile = t;
 
-		Collection<Object> filters = new ArrayList<Object>();
-		filters.add(Blocks.sapling);
-		filters.addAll(AlleleManager.alleleRegistry.getSpeciesRoot().values());
 		// Analyze slot
-		addSlotToContainer(new SlotCustom(tile, TileEscritoire.SLOT_ANALYZE, 97, 67, filters.toArray()).setCrafter(tile));
+		addSlotToContainer(new SlotFiltered(tile, TileEscritoire.SLOT_ANALYZE, 97, 67).setCrafter(tile));
 
 		for (int i = 0; i < TileEscritoire.SLOTS_INPUT_COUNT; i++) {
-			addSlotToContainer(new SlotCustom(tile, TileEscritoire.SLOT_INPUT_1 + i, 17, 49 + i * 18).setExclusion(true).setBlockedTexture("slots/blocked_2"));
+			addSlotToContainer(new SlotFiltered(tile, TileEscritoire.SLOT_INPUT_1 + i, 17, 49 + i * 18).setBlockedTexture("slots/blocked_2"));
 		}
 
-		for(int i = 0; i < 3; i++)
-			for(int j = 0; j < 2; j++) {
-				addSlotToContainer(new SlotClosed(tile, TileEscritoire.SLOT_RESULTS_1 + (i * 2) + j, 177 + j * 18, 85 + i * 18));
+		for(int i = 0; i < 3; i++) {
+			for (int j = 0; j < 2; j++) {
+				addSlotToContainer(new SlotOutput(tile, TileEscritoire.SLOT_RESULTS_1 + (i * 2) + j, 177 + j * 18, 85 + i * 18));
 			}
+		}
 
 		// Player inventory
 		for (int i = 0; i < 3; i++)

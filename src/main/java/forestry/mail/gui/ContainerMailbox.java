@@ -12,7 +12,6 @@ package forestry.mail.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -20,7 +19,7 @@ import net.minecraft.item.ItemStack;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.PostManager;
 import forestry.core.gui.ContainerForestry;
-import forestry.core.gui.slots.SlotClosed;
+import forestry.core.gui.slots.SlotOutput;
 import forestry.core.proxy.Proxies;
 import forestry.mail.POBox;
 import forestry.mail.gadgets.MachineMailbox;
@@ -48,7 +47,7 @@ public class ContainerMailbox extends ContainerForestry {
 
 		for (int i = 0; i < 7; i++)
 			for (int j = 0; j < 12; j++)
-				addSlotToContainer(new SlotClosed(inventory, j + i * 9, 8 + j * 18, 8 + i * 18));
+				addSlotToContainer(new SlotOutput(inventory, j + i * 9, 8 + j * 18, 8 + i * 18));
 
 		// Player inventory
 		for (int i = 0; i < 3; i++)

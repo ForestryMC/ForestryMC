@@ -15,12 +15,13 @@ import net.minecraft.inventory.Slot;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotCrafter;
+import forestry.core.gui.slots.SlotFiltered;
 import forestry.factory.gadgets.MachineFabricator;
 
 public class ContainerFabricator extends ContainerLiquidTanks {
 
 	public ContainerFabricator(InventoryPlayer playerInventory, MachineFabricator tile) {
-		super(tile, tile);
+		super(tile);
 
 		// Internal inventory
 		for (int i = 0; i < 2; i++)
@@ -28,10 +29,10 @@ public class ContainerFabricator extends ContainerLiquidTanks {
 				addSlotToContainer(new Slot(tile, MachineFabricator.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 84 + i * 18));
 
 		// Molten resource
-		this.addSlotToContainer(new Slot(tile, MachineFabricator.SLOT_METAL, 26, 21));
+		this.addSlotToContainer(new SlotFiltered(tile, MachineFabricator.SLOT_METAL, 26, 21));
 
 		// Plan
-		this.addSlotToContainer(new Slot(tile, MachineFabricator.SLOT_PLAN, 139, 17));
+		this.addSlotToContainer(new SlotFiltered(tile, MachineFabricator.SLOT_PLAN, 139, 17));
 
 		// Result
 		this.addSlotToContainer(new SlotCrafter(playerInventory.player, tile, tile, MachineFabricator.SLOT_RESULT, 139, 53));

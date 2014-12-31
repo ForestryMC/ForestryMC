@@ -10,15 +10,17 @@
  ******************************************************************************/
 package forestry.mail;
 
-import forestry.api.mail.ILetter;
-import forestry.api.mail.IMailAddress;
-import forestry.api.mail.PostManager;
-import forestry.core.inventory.InventoryAdapter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.WorldSavedData;
+
+import forestry.api.mail.ILetter;
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.PostManager;
+import forestry.core.inventory.InvTools;
+import forestry.core.inventory.InventoryAdapter;
 
 public class POBox extends WorldSavedData implements IInventory {
 
@@ -26,7 +28,7 @@ public class POBox extends WorldSavedData implements IInventory {
 	public static final short SLOT_SIZE = 84;
 
 	private IMailAddress address;
-	private final InventoryAdapter letters = new InventoryAdapter(SLOT_SIZE, "Letters");
+	private final InventoryAdapter letters = new InventoryAdapter(SLOT_SIZE, "Letters").disableAutomation();
 
 	public POBox(IMailAddress address) {
 		super(SAVE_NAME + address);
@@ -69,7 +71,8 @@ public class POBox extends WorldSavedData implements IInventory {
 		letterstack.setTagCompound(nbttagcompound);
 
 		this.markDirty();
-		return this.letters.tryAddStack(letterstack, true);
+
+		return InvTools.tryAddStack(letters, letterstack, true);
 	}
 
 	public POBoxInfo getPOBoxInfo() {
@@ -151,7 +154,7 @@ public class POBox extends WorldSavedData implements IInventory {
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return true;
+		return letters.isItemValidForSlot(i, itemstack);
 	}
 
 }

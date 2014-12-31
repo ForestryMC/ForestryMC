@@ -16,6 +16,7 @@ import forestry.api.storage.BackpackResupplyEvent;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.core.interfaces.IResupplyHandler;
 import forestry.core.inventory.ItemInventory;
+import forestry.core.inventory.ItemInventoryBackpack;
 import forestry.storage.items.ItemBackpack;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ContainerPlayer;
@@ -59,7 +60,7 @@ public class ResupplyHandler implements IResupplyHandler {
 
 			// Load their inventory
 			ItemBackpack packItem = ((ItemBackpack) backpack.getItem());
-			ItemInventory backpackinventory = new ItemInventory(ItemBackpack.class, packItem.getBackpackSize(), backpack);
+			ItemInventory backpackinventory = new ItemInventoryBackpack(ItemBackpack.class, packItem.getBackpackSize(), backpack);
 			Event event = new BackpackResupplyEvent(player, packItem.getDefinition(), backpackinventory);
 			MinecraftForge.EVENT_BUS.post(event);
 			if (event.isCanceled())

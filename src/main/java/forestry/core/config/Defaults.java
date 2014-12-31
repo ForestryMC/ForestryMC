@@ -43,6 +43,8 @@ public class Defaults {
 	public static final int[] FACING_WESTEAST = { FACING_WEST, FACING_EAST };
 	public static final int[] FACINGS_NONE = new int[0];
 
+	public static final int[] SLOTS_NONE = new int[0];
+
 	// Textures
 	public static final String TEXTURE_PATH_GUI = "textures/gui";
 	public static final String TEXTURE_PATH_BLOCKS = "textures/blocks";

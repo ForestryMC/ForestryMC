@@ -10,26 +10,28 @@
  ******************************************************************************/
 package forestry.farming.gadgets;
 
-import buildcraft.api.statements.ITriggerExternal;
-import cpw.mods.fml.common.Optional;
-import forestry.api.core.ITileStructure;
-import forestry.core.config.Defaults;
-import forestry.core.inventory.AdjacentInventoryCache;
-import forestry.core.inventory.ITileFilter;
-import forestry.core.inventory.InvTools;
-import forestry.core.inventory.TileInventoryAdapter;
-import forestry.core.inventory.wrappers.InventoryMapper;
-import forestry.core.utils.Utils;
-import forestry.farming.triggers.FarmingTriggers;
 import java.util.Collection;
 import java.util.LinkedList;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidContainerRegistry;
+
+import cpw.mods.fml.common.Optional;
+
+import forestry.api.core.ITileStructure;
+import forestry.core.inventory.AdjacentInventoryCache;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.inventory.ITileFilter;
+import forestry.core.inventory.InvTools;
+import forestry.core.inventory.wrappers.InventoryMapper;
+import forestry.farming.triggers.FarmingTriggers;
+
+import buildcraft.api.statements.ITriggerExternal;
 
 public class TileHatch extends TileFarm implements ISidedInventory {
 
@@ -58,11 +60,8 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 
 	/* AUTO-EJECTING */
 	private IInventory getProductInventory() {
-		TileInventoryAdapter inventory = getStructureInventory();
-		if (inventory == null)
-			return null;
-
-		return new InventoryMapper(inventory, TileFarmPlain.SLOT_PRODUCTION_1, TileFarmPlain.SLOT_COUNT_PRODUCTION);
+		IInventoryAdapter inventory = getStructureInventory();
+		return new InventoryMapper(inventory, TileFarmPlain.SLOT_PRODUCTION_1, TileFarmPlain.SLOT_PRODUCTION_COUNT);
 	}
 
 	protected void dumpStash() {
@@ -77,142 +76,12 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 
 	/* IINVENTORY */
 	@Override
-	public TileInventoryAdapter getStructureInventory() {
-		if (hasMaster()) {
-			ITileStructure central = getCentralTE();
-			if (central != null)
-				return (TileInventoryAdapter) central.getInventory();
-		}
+	public IInventoryAdapter getInternalInventory() {
+		ITileStructure central = getCentralTE();
+		if (central instanceof TileFarmPlain)
+			return ((TileFarmPlain) central).getInternalInventory();
 
-		return null;
-	}
-
-	@Override
-	public int getSizeInventory() {
-		IInventory inv = getStructureInventory();
-		if (inv == null)
-			return 0;
-
-		return inv.getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int slotIndex) {
-		IInventory inv = getStructureInventory();
-		if (inv == null)
-			return null;
-
-		return inv.getStackInSlot(slotIndex);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int slotIndex, int amount) {
-		IInventory inv = getStructureInventory();
-		if (inv == null)
-			return null;
-
-		return inv.decrStackSize(slotIndex, amount);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slotIndex) {
-		IInventory inv = getStructureInventory();
-		if (inv == null)
-			return null;
-
-		return inv.getStackInSlotOnClosing(slotIndex);
-	}
-
-	@Override
-	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
-		IInventory inv = getStructureInventory();
-		if (inv != null)
-			inv.setInventorySlotContents(slotIndex, itemstack);
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		IInventory inv = getStructureInventory();
-		if (inv == null)
-			return 0;
-
-		return inv.getInventoryStackLimit();
-	}
-
-	@Override
-	public void openInventory() {
-	}
-
-	@Override
-	public void closeInventory() {
-	}
-
-	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		IInventory inv = getStructureInventory();
-		if (inv != null)
-			return inv.isUseableByPlayer(player);
-		return Utils.isUseableByPlayer(player, this);
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
-		return false;
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		if (!hasMaster())
-			return false;
-
-		ITileStructure struct = getCentralTE();
-		if (!(struct instanceof TileFarmPlain))
-			return false;
-
-		TileInventoryAdapter inventory = getStructureInventory();
-		if (inventory == null || !inventory.isItemValidForSlot(slotIndex, itemstack))
-			return false;
-
-		TileFarmPlain housing = (TileFarmPlain) struct;
-		if (slotIndex == TileFarmPlain.SLOT_FERTILIZER && housing.acceptsAsFertilizer(itemstack))
-			return true;
-		if (slotIndex >= TileFarmPlain.SLOT_RESOURCES_1 && slotIndex < TileFarmPlain.SLOT_RESOURCES_1 + TileFarmPlain.SLOT_COUNT_RESERVOIRS
-				&& housing.acceptsAsResource(itemstack))
-			return true;
-		if (slotIndex >= TileFarmPlain.SLOT_GERMLINGS_1 && slotIndex < TileFarmPlain.SLOT_GERMLINGS_1 + TileFarmPlain.SLOT_COUNT_RESERVOIRS
-				&& housing.acceptsAsGermling(itemstack))
-			return true;
-		if (slotIndex == TileFarmPlain.SLOT_CAN)
-			return FluidContainerRegistry.isFilledContainer(itemstack);
-
-		return false;
-	}
-
-	@Override
-	public boolean canInsertItem(int slotIndex, ItemStack itemstack, int side) {
-		return isItemValidForSlot(slotIndex, itemstack);
-	}
-
-	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-		TileInventoryAdapter inventory = getStructureInventory();
-		if (inventory == null || !inventory.canExtractItem(slotIndex, itemstack, side))
-			return false;
-
-		return slotIndex >= TileFarmPlain.SLOT_PRODUCTION_1 && slotIndex < TileFarmPlain.SLOT_PRODUCTION_1 + TileFarmPlain.SLOT_COUNT_PRODUCTION;
-	}
-
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		TileInventoryAdapter inventory = getStructureInventory();
-		if (inventory == null)
-			return Defaults.FACINGS_NONE;
-		return inventory.getAccessibleSlotsFromSide(side);
+		return super.getInternalInventory();
 	}
 
 	/* ITRIGGERPROVIDER */

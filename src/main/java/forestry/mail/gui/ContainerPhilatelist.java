@@ -10,13 +10,13 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import forestry.core.gui.ContainerForestry;
-import forestry.core.gui.slots.SlotClosed;
-import forestry.core.gui.slots.SlotCustom;
-import forestry.mail.gadgets.MachinePhilatelist;
-import forestry.mail.items.ItemStamps;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
+
+import forestry.core.gui.ContainerForestry;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotOutput;
+import forestry.mail.gadgets.MachinePhilatelist;
 
 public class ContainerPhilatelist extends ContainerForestry {
 
@@ -24,12 +24,12 @@ public class ContainerPhilatelist extends ContainerForestry {
 		super(tile);
 
 		// Filter
-		addSlotToContainer(new SlotCustom(tile, MachinePhilatelist.SLOT_FILTER, 80, 19, ItemStamps.class));
+		addSlotToContainer(new SlotFiltered(tile, MachinePhilatelist.SLOT_FILTER, 80, 19));
 
 		// Collected Stamps
 		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < 9; j++)
-				addSlotToContainer(new SlotClosed(tile, j + i * 9 + MachinePhilatelist.SLOT_BUFFER_1, 8 + j * 18, 46 + i * 18));
+				addSlotToContainer(new SlotOutput(tile, j + i * 9 + MachinePhilatelist.SLOT_BUFFER_1, 8 + j * 18, 46 + i * 18));
 
 		// Player inventory
 		for (int i = 0; i < 3; i++)

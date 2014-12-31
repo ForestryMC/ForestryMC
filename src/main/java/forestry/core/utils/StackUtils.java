@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import forestry.core.config.Defaults;
-import forestry.core.inventory.InventoryAdapter;
 import java.util.ArrayList;
 import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,9 +22,13 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.oredict.OreDictionary;
+
+import forestry.core.config.Defaults;
+import forestry.core.inventory.InvTools;
 
 public class StackUtils {
 
@@ -225,6 +228,14 @@ public class StackUtils {
 		return condensed.toArray(new ItemStack[condensed.size()]);
 	}
 
+	public static boolean containsItemStack(Iterable<ItemStack> list, ItemStack itemStack) {
+		for (ItemStack listStack : list) {
+			if (isIdenticalItem(listStack, itemStack))
+				return true;
+		}
+		return false;
+	}
+
 	/**
 	 * Counts how many full sets are contained in the passed stock
 	 */
@@ -323,7 +334,7 @@ public class StackUtils {
 		return isCraftingTool(phantom) && phantom.getItem() == actual.getItem();
 	}
 
-	public static void stowContainerItem(ItemStack itemstack, InventoryAdapter stowing, int slotIndex, EntityPlayer player) {
+	public static void stowContainerItem(ItemStack itemstack, IInventory stowing, int slotIndex, EntityPlayer player) {
 		if (!itemstack.getItem().hasContainerItem(itemstack))
 			return;
 
@@ -337,12 +348,12 @@ public class StackUtils {
 		if (container != null) {
 
 			if (itemstack.getItem().doesContainerItemLeaveCraftingGrid(itemstack)) {
-				if (!stowing.tryAddStack(container, true))
+				if (!InvTools.tryAddStack(stowing, container, true))
 					if (!player.inventory.addItemStackToInventory(container))
 						player.dropPlayerItemWithRandomChoice(container, true);
 			} else {
-				if (!stowing.tryAddStack(container, slotIndex, 1, true))
-					if (!stowing.tryAddStack(container, true))
+				if (!InvTools.tryAddStack(stowing, container, slotIndex, 1, true))
+					if (!InvTools.tryAddStack(stowing, container, true))
 						player.dropPlayerItemWithRandomChoice(container, true);
 			}
 		}

@@ -30,7 +30,6 @@ public class ItemImprinter extends ItemForestry {
 
 	public static class ImprinterInventory extends ItemInventory {
 
-		private final ItemStack[] inventoryStacks = new ItemStack[2];
 		private final short specimenSlot = 0;
 		private final short imprintedSlot = 1;
 
@@ -39,8 +38,8 @@ public class ItemImprinter extends ItemForestry {
 
 		private final EntityPlayer player;
 
-		public ImprinterInventory(EntityPlayer player) {
-			super(ItemImprinter.class);
+		public ImprinterInventory(EntityPlayer player, ItemStack itemStack) {
+			super(ItemImprinter.class, 2, itemStack);
 			this.player = player;
 		}
 
@@ -128,44 +127,10 @@ public class ItemImprinter extends ItemForestry {
 		}
 
 		@Override
-		public ItemStack decrStackSize(int i, int j) {
-			if (inventoryStacks[i] == null)
-				return null;
-
-			ItemStack product;
-			if (inventoryStacks[i].stackSize <= j) {
-				product = inventoryStacks[i];
-				inventoryStacks[i] = null;
-				return product;
-			} else {
-				product = inventoryStacks[i].splitStack(j);
-				if (inventoryStacks[i].stackSize == 0)
-					inventoryStacks[i] = null;
-
-				return product;
-			}
-		}
-
-		@Override
 		public void markDirty() {
 			if (!Proxies.common.isSimulating(player.worldObj))
 				return;
 			tryImprint();
-		}
-
-		@Override
-		public void setInventorySlotContents(int i, ItemStack itemstack) {
-			inventoryStacks[i] = itemstack;
-		}
-
-		@Override
-		public ItemStack getStackInSlot(int i) {
-			return inventoryStacks[i];
-		}
-
-		@Override
-		public int getSizeInventory() {
-			return inventoryStacks.length;
 		}
 
 		@Override
@@ -174,40 +139,8 @@ public class ItemImprinter extends ItemForestry {
 		}
 
 		@Override
-		public int getInventoryStackLimit() {
-			return 64;
-		}
-
-		@Override
-		public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-			return true;
-		}
-
-		@Override
-		public void openInventory() {
-		}
-
-		@Override
-		public void closeInventory() {
-		}
-
-		@Override
-		public ItemStack getStackInSlotOnClosing(int slot) {
-			if (inventoryStacks[slot] == null)
-				return null;
-			ItemStack toReturn = inventoryStacks[slot];
-			inventoryStacks[slot] = null;
-			return toReturn;
-		}
-
-		@Override
-		public boolean hasCustomInventoryName() {
-			return true;
-		}
-
-		@Override
-		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-			return true;
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			return PluginApiculture.beeInterface.isMember(itemStack);
 		}
 
 	}
