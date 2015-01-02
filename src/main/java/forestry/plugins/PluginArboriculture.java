@@ -496,9 +496,9 @@ public class PluginArboriculture extends ForestryPlugin {
 		for (WoodType woodType : WoodType.values()) {
 			int i = woodType.ordinal();
 			if (i < 16)
-				Proxies.common.addRecipe(ForestryBlock.fences1.getItemStack(4, i), "###", "# #", '#', ForestryBlock.planks1.getItemStack(1, i));
+				Proxies.common.addRecipe(ForestryBlock.fences1.getItemStack(4, i % 16), "###", "# #", '#', ForestryBlock.planks1.getItemStack(1, i % 16));
 			else if (i < 32)
-				Proxies.common.addRecipe(ForestryBlock.fences2.getItemStack(4, i), "###", "# #", '#', ForestryBlock.planks2.getItemStack(1, i % 16));
+				Proxies.common.addRecipe(ForestryBlock.fences2.getItemStack(4, i % 16), "###", "# #", '#', ForestryBlock.planks2.getItemStack(1, i % 16));
 			else
 				throw new RuntimeException("Wood type has no fences defined");
 		}
