@@ -184,7 +184,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		if (!delayUpdateTimer.delayPassed(worldObj, 80))
 			return;
 
-		if (currentOutput <= 0)
+		if (!ic2EnergySink.canUseEnergy(euConfig.euForCycle))
 			setErrorState(EnumErrorCode.NOFUEL);
 		else
 			setErrorState(EnumErrorCode.OK);
