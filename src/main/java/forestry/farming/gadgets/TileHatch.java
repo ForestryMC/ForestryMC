@@ -13,10 +13,8 @@ package forestry.farming.gadgets;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.util.ForgeDirection;
@@ -35,11 +33,13 @@ import buildcraft.api.statements.ITriggerExternal;
 
 public class TileHatch extends TileFarm implements ISidedInventory {
 
+	private static final ForgeDirection[] dumpDirections = new ForgeDirection[] { ForgeDirection.DOWN };
+	
 	private final AdjacentInventoryCache inventoryCache = new AdjacentInventoryCache(this, getTileCache(), new ITileFilter() {
 
 		@Override
 		public boolean matches(TileEntity tile) {
-			return !(tile instanceof TileFarm);
+			return !(tile instanceof TileFarm) && tile.yCoord < yCoord;
 		}
 	}, null);
 
@@ -69,7 +69,7 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 		if (productInventory == null)
 			return;
 
-		if (!InvTools.moveOneItemToPipe(productInventory, tileCache)) {
+		if (!InvTools.moveOneItemToPipe(productInventory, tileCache, dumpDirections)) {
 			InvTools.moveItemStack(productInventory, inventoryCache.getAdjacentInventories());
 		}
 	}

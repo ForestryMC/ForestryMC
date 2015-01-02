@@ -13,6 +13,7 @@ package forestry.core.inventory;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -758,15 +759,19 @@ public abstract class InvTools {
 	 * @return true if an item was inserted, otherwise false.
 	 */
 	public static boolean moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache) {
+		return moveOneItemToPipe(source, tileCache, ForgeDirection.VALID_DIRECTIONS);
+	}
+
+	public static boolean moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache, ForgeDirection[] directions) {
 		if (PluginManager.Module.BUILDCRAFT_TRANSPORT.isEnabled()) {
-			return internal_moveOneItemToPipe(source, tileCache);
+			return internal_moveOneItemToPipe(source, tileCache, directions);
 		}
 
 		return false;
 	}
 
 	@Optional.Method(modid = "BuildCraftAPI|transport")
-	private static boolean internal_moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache) {
+	private static boolean internal_moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache, ForgeDirection[] directions) {
 		IInventory invClone = new InventoryCopy(source);
 		ItemStack stackToMove = removeOneItem(invClone);
 		if (stackToMove == null)
@@ -776,7 +781,7 @@ public abstract class InvTools {
 
 		List<Map.Entry<ForgeDirection, IPipeTile>> pipes = new ArrayList<Map.Entry<ForgeDirection, IPipeTile>>();
 		boolean foundPipe = false;
-		for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
+		for (ForgeDirection side : directions) {
 			TileEntity tile = tileCache.getTileOnSide(side);
 			if (tile instanceof IPipeTile) {
 				IPipeTile pipe = (IPipeTile) tile;
