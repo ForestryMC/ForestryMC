@@ -106,7 +106,13 @@ public class PluginManager {
 			return canBeDisabled;
 		}
 
+		public String configName() {
+			return toString().toLowerCase(Locale.ENGLISH).replace('_', '.');
+		}
+
 	}
+
+	public static final EnumSet<Module> configDisabledModules = EnumSet.noneOf(Module.class);
 
 	public static Stage getStage() {
 		return stage;
@@ -292,8 +298,13 @@ public class PluginManager {
 	private static boolean isEnabled(Configuration config, Module m) {
 		Plugin info = m.instance().getClass().getAnnotation(Plugin.class);
 
-		Property prop = config.get(CATEGORY_MODULES, m.toString().toLowerCase(Locale.ENGLISH).replace('_', '.'), true);
-		prop.comment = StatCollector.translateToLocal(info.unlocalizedDescription());
-		return prop.getBoolean(true);
+		String comment = StatCollector.translateToLocal(info.unlocalizedDescription());
+		Property prop = config.get(CATEGORY_MODULES, m.configName(), true, comment);
+		boolean enabled = prop.getBoolean();
+
+		if (!enabled)
+			configDisabledModules.add(m);
+
+		return enabled;
 	}
 }
