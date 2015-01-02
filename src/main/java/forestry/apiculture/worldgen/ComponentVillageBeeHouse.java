@@ -10,6 +10,23 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
+import net.minecraft.world.gen.structure.StructureComponent;
+import net.minecraft.world.gen.structure.StructureVillagePieces;
+
+import net.minecraftforge.common.ChestGenHooks;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;
@@ -20,63 +37,61 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.apiculture.gadgets.TileBeehouse;
+import forestry.arboriculture.gadgets.BlockFireproofLog;
+import forestry.arboriculture.gadgets.BlockFireproofPlanks;
+import forestry.arboriculture.gadgets.BlockLog;
+import forestry.arboriculture.gadgets.BlockPlanks;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginApiculture;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraft.world.gen.structure.StructureVillagePieces;
-import net.minecraftforge.common.ChestGenHooks;
+import forestry.plugins.PluginManager;
 
 public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
-	protected final ItemStack[] buildingBlocks = new ItemStack[]{ForestryBlock.planks1.getItemStack(1, 15), new ItemStack(Blocks.log, 1, 0),};
+	protected final ItemStack[] buildingBlocks;
 	protected int averageGroundLevel = -1;
 	protected boolean isInDesert = false;
 	protected boolean hasChest = false;
-
-	public ComponentVillageBeeHouse() {
-		// Populate buildingblocks with some defaults so it doesn't explode.
-		buildingBlocks[0] = ForestryBlock.planks1.getItemStack();
-		buildingBlocks[1] = ForestryBlock.log1.getItemStack();
-	}
 
 	public ComponentVillageBeeHouse(StructureVillagePieces.Start startPiece, int componentType, Random random, StructureBoundingBox boundingBox, int coordBaseMode) {
 		super(startPiece, componentType, random, boundingBox, coordBaseMode);
 
 		isInDesert = startPiece.inDesert;
 
-		buildingBlocks[0] = ForestryBlock.planks1.getItemStack(1, random.nextInt(16));
+		int plankMeta = random.nextInt(16);
+		int blockMeta = random.nextInt(4);
+		Block plankBlock = Blocks.planks;
+		Block woodBlock = Blocks.log;
 
-		Block woodBlock;
-		switch (random.nextInt(4)) {
-		case 1:
-			woodBlock = ForestryBlock.log2.block();
-			break;
-		case 2:
-			woodBlock = ForestryBlock.log3.block();
-			break;
-		case 3:
-			woodBlock = ForestryBlock.log4.block();
-			break;
-		default:
-			woodBlock = ForestryBlock.log1.block();
-			break;
+		if (PluginManager.Module.ARBORICULTURE.isEnabled()) {
+			switch (random.nextInt(4)) {
+				case 1:
+					woodBlock = ForestryBlock.log2.block();
+					break;
+				case 2:
+					woodBlock = ForestryBlock.log3.block();
+					break;
+				case 3:
+					woodBlock = ForestryBlock.log4.block();
+					break;
+				default:
+					woodBlock = ForestryBlock.log1.block();
+					break;
+			}
+
+			plankBlock = ForestryBlock.planks1.block();
+
+			// chance for the house to have fireproof components
+			if (random.nextInt(4) == 0) {
+				woodBlock = BlockFireproofLog.getFireproofLog((BlockLog) woodBlock).block();
+				plankBlock = BlockFireproofPlanks.getFireproofPlanks((BlockPlanks) plankBlock).block();
+			}
 		}
 
-		buildingBlocks[1] = new ItemStack(woodBlock, 1, random.nextInt(4));
+		buildingBlocks = new ItemStack[]{new ItemStack(plankBlock, 1, plankMeta), new ItemStack(woodBlock, 1, blockMeta)};
+
 	}
 
 	/*@Override
