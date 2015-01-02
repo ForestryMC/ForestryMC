@@ -33,8 +33,16 @@ public class ItemWoodBlock extends ItemForestryBlock {
 			if (woodType == null)
 				return null;
 
-			String unlocalizedName = block.getBlockKind() + "." + woodType.ordinal() + ".name";
-			String displayName = StringUtil.localizeTile(unlocalizedName);
+			String displayName;
+			String customUnlocalizedName = block.getBlockKind() + "." + woodType.ordinal() + ".name";
+			if (StringUtil.canTranslateTile(customUnlocalizedName)) {
+				displayName = StringUtil.localizeTile(customUnlocalizedName);
+			} else {
+				String woodGrammar = StringUtil.localize(block.getBlockKind() + ".grammar");
+				String woodTypeName = StringUtil.localize("trees.woodType." + woodType);
+
+				displayName = woodGrammar.replaceAll("%TYPE", woodTypeName);
+			}
 
 			if (this.getBlock() instanceof IWoodFireproof)
 				displayName = StringUtil.localizeAndFormatRaw("tile.for.fireproof", displayName);

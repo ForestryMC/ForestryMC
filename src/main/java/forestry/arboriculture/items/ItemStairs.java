@@ -11,10 +11,13 @@
 package forestry.arboriculture.items;
 
 import forestry.arboriculture.WoodType;
+import forestry.arboriculture.gadgets.BlockArbStairs;
 import forestry.arboriculture.gadgets.TileStairs;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.items.ItemForestryBlock;
+import forestry.core.utils.StringUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -61,9 +64,24 @@ public class ItemStairs extends ItemForestryBlock {
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack) {
-		WoodType type = WoodType.getFromCompound(stack.getTagCompound());
-		return getBlock().getUnlocalizedName() + "." + type.ordinal(); //To change body of generated methods, choose Tools | Templates.
+	public String getItemStackDisplayName(ItemStack itemStack) {
+		BlockArbStairs block = (BlockArbStairs) getBlock();
+		WoodType woodType = WoodType.getFromCompound(itemStack.getTagCompound());
+		if (woodType == null)
+			return null;
+
+		String displayName;
+		String customUnlocalizedName = "stairs." + woodType.ordinal() + ".name";
+		if (StringUtil.canTranslateTile(customUnlocalizedName)) {
+			displayName = StringUtil.localizeTile(customUnlocalizedName);
+		} else {
+			String woodGrammar = StringUtil.localize("stairs.grammar");
+			String woodTypeName = StringUtil.localize("trees.woodType." + woodType);
+
+			displayName = woodGrammar.replaceAll("%TYPE", woodTypeName);
+		}
+
+		return displayName;
 	}
 
 }

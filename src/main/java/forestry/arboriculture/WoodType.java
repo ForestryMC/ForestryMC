@@ -92,4 +92,9 @@ public enum WoodType {
 		return WoodType.LARCH;
 	}
 
+	@Override
+	public String toString() {
+		return super.toString().toLowerCase(Locale.ENGLISH);
+	}
+
 }

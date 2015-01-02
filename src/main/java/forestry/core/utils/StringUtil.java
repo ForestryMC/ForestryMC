@@ -22,6 +22,10 @@ public class StringUtil {
 		return StatCollector.canTranslate("for." + key);
 	}
 
+	public static boolean canTranslateTile(String key) {
+		return StatCollector.canTranslate("tile.for." + key);
+	}
+
 	public static String localize(String key) {
 		return StatCollector.translateToLocal("for." + key).replace("\\n", "\n").replace("@", "%").replace("\\%", "@");
 	}

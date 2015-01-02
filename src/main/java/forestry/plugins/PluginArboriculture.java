@@ -10,6 +10,22 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.WeightedRandomChestContent;
+
+import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.OreDictionary;
+
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
@@ -17,6 +33,7 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
+
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeRoot;
@@ -123,19 +140,6 @@ import forestry.core.items.ItemFruit.EnumFruit;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.RecipeUtil;
 import forestry.core.utils.ShapedRecipeCustom;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.WeightedRandomChestContent;
-import net.minecraftforge.common.ChestGenHooks;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.OreDictionary;
 
 @Plugin(pluginID = "Arboriculture", name = "Arboriculture", author = "Binnie & SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.arboriculture.description")
 public class PluginArboriculture extends ForestryPlugin {
@@ -178,7 +182,7 @@ public class PluginArboriculture extends ForestryPlugin {
 			ForestryBlock.slabs3);
 	private static final EnumSet<ForestryBlock> fences = EnumSet.of(
 			ForestryBlock.fences1,
-			ForestryBlock.fences1);
+			ForestryBlock.fences2);
 
 	@Override
 	public void preInit() {
@@ -467,10 +471,15 @@ public class PluginArboriculture extends ForestryPlugin {
 			Proxies.common.addPriorityRecipe(ForestryBlock.slabs3.getItemStack(6, i), "###", '#', ForestryBlock.planks2.getItemStack(1, i));
 
 		// Fence recipes
-		for (int i = 0; i < 16; i++)
-			Proxies.common.addRecipe(ForestryBlock.fences1.getItemStack(4, i), "###", "# #", '#', ForestryBlock.planks1.getItemStack(1, i));
-		for (int i = 0; i < 8; i++)
-			Proxies.common.addRecipe(ForestryBlock.fences2.getItemStack(4, i), "###", "# #", '#', ForestryBlock.planks2.getItemStack(1, i));
+		for (WoodType woodType : WoodType.values()) {
+			int i = woodType.ordinal();
+			if (i < 16)
+				Proxies.common.addRecipe(ForestryBlock.fences1.getItemStack(4, i), "###", "# #", '#', ForestryBlock.planks1.getItemStack(1, i));
+			else if (i < 32)
+				Proxies.common.addRecipe(ForestryBlock.fences2.getItemStack(4, i), "###", "# #", '#', ForestryBlock.planks2.getItemStack(1, i % 16));
+			else
+				throw new RuntimeException("Wood type has no fences defined");
+		}
 
 		// Treealyzer
 		RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, ForestryItem.treealyzer.getItemStack(), "X#X", "X#X", "RDR",
@@ -494,30 +503,25 @@ public class PluginArboriculture extends ForestryPlugin {
 		RecipeUtil.injectLeveledRecipe(ForestryItem.sapling.getItemStack(), GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 
 		// Stairs
-		for (int i = 0; i < 16; i++) {
-			WoodType type = WoodType.VALUES[i];
-			NBTTagCompound compound = new NBTTagCompound();
-			type.saveToCompound(compound);
+		for (WoodType woodType : WoodType.values()) {
+			ForestryBlock planks;
+			int i = woodType.ordinal();
+			if (i < 16)
+				planks = ForestryBlock.planks1;
+			else if (i < 32)
+				planks = ForestryBlock.planks2;
+			else
+				throw new RuntimeException("Wood type has no planks defined");
 
-			ItemStack stairs = ForestryBlock.stairs.getItemStack(4, 0);
+			NBTTagCompound compound = new NBTTagCompound();
+			woodType.saveToCompound(compound);
+
+			ItemStack stairs = ForestryBlock.stairs.getItemStack(4);
 			stairs.setTagCompound(compound);
 			Proxies.common.addPriorityRecipe(stairs,
 					"#  ",
 					"## ",
-					"###", '#', ForestryBlock.planks1.getItemStack(1, i));
-		}
-		for (int i = 0; i < 8; i++) {
-			WoodType type = WoodType.VALUES[16 + i];
-			NBTTagCompound compound = new NBTTagCompound();
-			type.saveToCompound(compound);
-
-			ItemStack stairs = ForestryBlock.stairs.getItemStack(4, 0);
-			stairs.setTagCompound(compound);
-			Proxies.common.addPriorityRecipe(stairs,
-					"#  ",
-					"## ",
-					"###",
-					'#', ForestryBlock.planks2.getItemStack(1, i));
+					"###", '#', planks.getItemStack(1, i % 16));
 		}
 
 		// Grafter

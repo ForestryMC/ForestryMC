@@ -35,6 +35,7 @@ public class BlockArbFence extends BlockFence implements IWoodTyped {
 		CAT0, CAT1
 	}
 
+	public static final int fencesPerCat = 16;
 	private final FenceCat cat;
 
 	public BlockArbFence(FenceCat cat) {
@@ -49,7 +50,8 @@ public class BlockArbFence extends BlockFence implements IWoodTyped {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		int count = (cat == FenceCat.CAT0 ? 16 : 8);
+		int totalWoods = WoodType.values().length;
+		int count = Math.min(totalWoods - (cat.ordinal() * fencesPerCat), fencesPerCat);
 		for (int i = 0; i < count; i++)
 			itemList.add(new ItemStack(this, 1, i));
 	}
@@ -88,7 +90,10 @@ public class BlockArbFence extends BlockFence implements IWoodTyped {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIcon(int side, int meta) {
-		return getWoodType(meta).getPlankIcon();
+		WoodType woodType = getWoodType(meta);
+		if (woodType == null)
+			return null;
+		return woodType.getPlankIcon();
 	}
 
 	public boolean isFence(IBlockAccess world, int x, int y, int z) {
@@ -119,10 +124,11 @@ public class BlockArbFence extends BlockFence implements IWoodTyped {
 
 	@Override
 	public WoodType getWoodType(int meta) {
-		if(cat.ordinal() * 16 + meta < WoodType.VALUES.length)
-			return WoodType.VALUES[cat.ordinal() * 16 + meta];
+		int woodOrdinal = cat.ordinal() * fencesPerCat + meta;
+		if(woodOrdinal < WoodType.VALUES.length)
+			return WoodType.VALUES[woodOrdinal];
 		else
-			return WoodType.LARCH;
+			return null;
 	}
 
 	@Override

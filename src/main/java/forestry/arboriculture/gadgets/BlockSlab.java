@@ -38,6 +38,7 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 		CAT0, CAT1, CAT2
 	}
 
+	public static final int slabsPerCat = 8;
 	private final SlabCat cat;
 
 	public BlockSlab(SlabCat cat) {
@@ -64,7 +65,9 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 
 	@Override
 	public IIcon getIcon(int side, int meta) {
-		WoodType type = WoodType.VALUES[(8 * cat.ordinal()) + (meta & 7)];
+		WoodType type = getWoodType(meta);
+		if (type == null)
+			return null;
 		return type.getPlankIcon();
 	}
 
@@ -86,8 +89,10 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		for (int i = 0; i < 8; ++i)
-			itemList.add(new ItemStack(item, 1, i));
+		int totalWoods = WoodType.values().length;
+		int count = Math.min(totalWoods - (cat.ordinal() * slabsPerCat), slabsPerCat);
+		for (int i = 0; i < count; i++)
+			itemList.add(new ItemStack(this, 1, i));
 	}
 
 	/* PROPERTIES */
@@ -108,10 +113,11 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 
 	@Override
 	public WoodType getWoodType(int meta) {
-		if(meta + cat.ordinal() * 8 < WoodType.VALUES.length)
-			return WoodType.VALUES[meta + cat.ordinal() * 8];
+		int woodOrdinal = meta + cat.ordinal() * slabsPerCat;
+		if(woodOrdinal < WoodType.VALUES.length)
+			return WoodType.VALUES[woodOrdinal];
 		else
-			return WoodType.LARCH;
+			return null;
 	}
 
 	@Override
