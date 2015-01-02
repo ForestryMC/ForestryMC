@@ -120,12 +120,13 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 
 	@Override
 	public void updateServerSide() {
-
-		// Check inventory slots for fuel
-		// Check if we have suitable items waiting in the item slot
-		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(SLOT_CAN) != null)
-			FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
+		if (worldObj.getTotalWorldTime() % 20 == 0) {
+			// Check inventory slots for fuel
+			// Check if we have suitable items waiting in the item slot
+			IInventoryAdapter inventory = getInternalInventory();
+			if (inventory.getStackInSlot(SLOT_CAN) != null)
+				FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
+		}
 
 		// No work to be done if IC2 is unavailable.
 		if (ic2EnergySource == null) {
