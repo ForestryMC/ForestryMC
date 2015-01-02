@@ -80,7 +80,7 @@ public class ItemLiquidContainer extends Item {
 
 	private int getMatchingSlot(EntityPlayer player, ItemStack stack) {
 
-		for (int slot = 0; slot < player.inventory.getSizeInventory(); slot++) {
+		for (int slot = 0; slot < player.inventory.mainInventory.length; slot++) {
 			ItemStack slotStack = player.inventory.getStackInSlot(slot);
 
 			if (slotStack == null)
