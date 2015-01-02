@@ -168,6 +168,11 @@ public class Allele implements IAllele {
 
 	public static AlleleSpecies treeMaple;
 
+	public static AlleleSpecies treeIpe;
+	public static AlleleSpecies treePadauk;
+	public static AlleleSpecies treeCocobolo;
+	public static AlleleSpecies treeZebrawood;
+	
 	/// BUTTERFLIES // SPECIES
 	// Moths
 	public static AlleleSpecies mothBrimstone;

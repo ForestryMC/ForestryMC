@@ -38,10 +38,7 @@ public class VillageHandlerArboriculture implements IVillageTradeHandler {
 		WoodType sells = WoodType.VALUES[random.nextInt(WoodType.VALUES.length)];
 		Block plankBlock;
 		int meta;
-		if(!sells.hasPlank) {
-			plankBlock = ForestryBlock.planks1.block();
-			meta = 0;
-		} else if(sells.ordinal() > 15) {
+		if(sells.ordinal() > 15) {
 			plankBlock = ForestryBlock.planks2.block();
 			meta = sells.ordinal() - 16;
 		} else {

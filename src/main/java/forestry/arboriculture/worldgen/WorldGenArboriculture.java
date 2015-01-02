@@ -160,7 +160,17 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	protected final void addWood(int x, int y, int z, EnumReplaceMode replace) {
 		addBlock(x, y, z, wood, replace);
 	}
+	
+	protected final void addXWood(int x, int y, int z, EnumReplaceMode replace) {
+		BlockType woodX = new BlockType(wood.getBlock(), wood.getMeta() + 4);
+		addBlock(x, y, z, woodX, replace);
+	}
 
+	protected final void addZWood(int x, int y, int z, EnumReplaceMode replace) {
+		BlockType woodZ = new BlockType(wood.getBlock(), wood.getMeta() + 8);
+		addBlock(x, y, z, woodZ, replace);
+	}
+	
 	protected final void addLeaf(int x, int y, int z, EnumReplaceMode replace) {
 		addBlock(x, y, z, leaf, replace);
 	}

@@ -37,8 +37,7 @@ public class StructureLogicAlveary extends StructureLogic {
 		slabBlocks.add(ForestryBlock.slabs1.block());
 		slabBlocks.add(ForestryBlock.slabs2.block());
 		slabBlocks.add(ForestryBlock.slabs3.block());
-		if (ForestryBlock.slabs4.block() != null)
-			slabBlocks.add(ForestryBlock.slabs4.block());
+		slabBlocks.add(ForestryBlock.slabs4.block());
 	}
 
 	public StructureLogicAlveary(ITileStructure structure) {

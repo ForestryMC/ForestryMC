@@ -64,6 +64,11 @@ public class TreeTemplates {
 	public static IMutation papayaA;
 	public static IMutation dateA;
 	
+	public static IMutation ipeA;
+	public static TreeMutation padaukA;
+	public static TreeMutation cocoboloA;
+	public static TreeMutation zebrawoodA;
+	
 	/* TEMPLATES */
 	public static IAllele[] getDefaultTemplate() {
 		IAllele[] alleles = new IAllele[EnumTreeChromosome.values().length];
@@ -376,6 +381,38 @@ public class TreeTemplates {
 		return alleles;
 	}
 
+	public static IAllele[] getIpeTemplate() {
+		IAllele[] alleles = getDefaultTemplate();
+		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeIpe;
+		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLower;
+		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightLarge;
+		alleles[EnumTreeChromosome.GIRTH.ordinal()] = Allele.int2;
+		return alleles;
+	}
+	
+	public static IAllele[] getPadaukTemplate() {
+		IAllele[] alleles = getDefaultTemplate();
+		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treePadauk;
+		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLower;
+		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightLarge;
+		return alleles;
+	}
+	
+	public static IAllele[] getCocoboloTemplate() {
+		IAllele[] alleles = getDefaultTemplate();
+		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeCocobolo;
+		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightLargest;
+		return alleles;
+	}
+	
+	public static IAllele[] getZebrawoodTemplate() {
+		IAllele[] alleles = getDefaultTemplate();
+		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeZebrawood;
+		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightLarge;
+		alleles[EnumTreeChromosome.GIRTH.ordinal()] = Allele.int2;
+		return alleles;
+	}
+	
 	// / HELPER FUNCTIONS
 
 	public static Chromosome[] templateAsChromosomes(IAllele[] template) {

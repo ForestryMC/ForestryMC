@@ -19,24 +19,24 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 
 public enum WoodType {
-	LARCH, TEAK, ACACIA, LIME, CHESTNUT, WENGE, BAOBAB, SEQUOIA(4.0f), KAPOK, EBONY, MAHOGANY, BALSA(1.0f), WILLOW, WALNUT, GREENHEART(7.5f), CHERRY, MAHOE, POPLAR, PALM, PAPAYA, PINE(
-			3.0f), PLUM, MAPLE, CITRUS, GIGANTEUM(2.0f, false);
+	LARCH, TEAK, ACACIA, LIME,
+	CHESTNUT, WENGE, BAOBAB, SEQUOIA(4.0f),
+	KAPOK, EBONY, MAHOGANY, BALSA(1.0f),
+	WILLOW, WALNUT, GREENHEART(7.5f), CHERRY,
+	MAHOE, POPLAR, PALM, PAPAYA,
+	PINE(3.0f), PLUM, MAPLE, CITRUS,
+	GIGANTEUM(2.0f), IPE, PADAUK, COCOBOLO,
+	ZEBRAWOOD;
 
 	public static final WoodType[] VALUES = values();
 	private final float hardness;
-	public final boolean hasPlank;
 
 	private WoodType() {
-		this(2.0f, true);
+		this(2.0f);
 	}
 
 	private WoodType(float hardness) {
-		this(hardness, true);
-	}
-	
-	private WoodType(float hardness, boolean hasPlank) {
 		this.hardness = hardness;
-		this.hasPlank = hasPlank;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -49,10 +49,7 @@ public enum WoodType {
 			WoodType woodType = VALUES[i];
 			String woodName = woodType.toString().toLowerCase(Locale.ENGLISH);
 
-			if (woodType.hasPlank)
-				icons[0][i] = TextureManager.getInstance().registerTex(register, "wood/planks." + woodName);
-			else
-				icons[0][i] = null;
+			icons[0][i] = TextureManager.getInstance().registerTex(register, "wood/planks." + woodName);
 			icons[1][i] = TextureManager.getInstance().registerTex(register, "wood/bark." + woodName);
 			icons[2][i] = TextureManager.getInstance().registerTex(register, "wood/heart." + woodName);
 		}

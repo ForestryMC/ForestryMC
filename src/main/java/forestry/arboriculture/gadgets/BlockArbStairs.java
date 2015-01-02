@@ -53,8 +53,6 @@ public class BlockArbStairs extends BlockStairs {
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
 		for (WoodType type : WoodType.VALUES) {
-			if(!type.hasPlank)
-				continue;
 			ItemStack stack = new ItemStack(item, 1, 0);
 			NBTTagCompound compound = new NBTTagCompound();
 			type.saveToCompound(compound);

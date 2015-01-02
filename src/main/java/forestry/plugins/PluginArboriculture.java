@@ -101,11 +101,13 @@ import forestry.arboriculture.worldgen.WorldGenBaobab;
 import forestry.arboriculture.worldgen.WorldGenBirch;
 import forestry.arboriculture.worldgen.WorldGenCherry;
 import forestry.arboriculture.worldgen.WorldGenChestnut;
+import forestry.arboriculture.worldgen.WorldGenCocobolo;
 import forestry.arboriculture.worldgen.WorldGenDarkOak;
 import forestry.arboriculture.worldgen.WorldGenDate;
 import forestry.arboriculture.worldgen.WorldGenEbony;
 import forestry.arboriculture.worldgen.WorldGenGiganteum;
 import forestry.arboriculture.worldgen.WorldGenGreenheart;
+import forestry.arboriculture.worldgen.WorldGenIpe;
 import forestry.arboriculture.worldgen.WorldGenJungle;
 import forestry.arboriculture.worldgen.WorldGenKapok;
 import forestry.arboriculture.worldgen.WorldGenLarch;
@@ -115,6 +117,7 @@ import forestry.arboriculture.worldgen.WorldGenMahoe;
 import forestry.arboriculture.worldgen.WorldGenMahogany;
 import forestry.arboriculture.worldgen.WorldGenMaple;
 import forestry.arboriculture.worldgen.WorldGenOak;
+import forestry.arboriculture.worldgen.WorldGenPadauk;
 import forestry.arboriculture.worldgen.WorldGenPapaya;
 import forestry.arboriculture.worldgen.WorldGenPine;
 import forestry.arboriculture.worldgen.WorldGenPlum;
@@ -125,6 +128,7 @@ import forestry.arboriculture.worldgen.WorldGenTeak;
 import forestry.arboriculture.worldgen.WorldGenWalnut;
 import forestry.arboriculture.worldgen.WorldGenWenge;
 import forestry.arboriculture.worldgen.WorldGenWillow;
+import forestry.arboriculture.worldgen.WorldGenZebrawood;
 import forestry.core.GameMode;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
@@ -161,7 +165,8 @@ public class PluginArboriculture extends ForestryPlugin {
 			ForestryBlock.log4,
 			ForestryBlock.log5,
 			ForestryBlock.log6,
-			ForestryBlock.log7);
+			ForestryBlock.log7,
+			ForestryBlock.log8);
 	public static final EnumSet<ForestryBlock> fireproofLogs = EnumSet.of(
 			ForestryBlock.fireproofLog1,
 			ForestryBlock.fireproofLog2,
@@ -169,7 +174,8 @@ public class PluginArboriculture extends ForestryPlugin {
 			ForestryBlock.fireproofLog4,
 			ForestryBlock.fireproofLog5,
 			ForestryBlock.fireproofLog6,
-			ForestryBlock.fireproofLog7);
+			ForestryBlock.fireproofLog7,
+			ForestryBlock.fireproofLog8);
 	private static final EnumSet<ForestryBlock> planks = EnumSet.of(
 			ForestryBlock.planks1,
 			ForestryBlock.planks2);
@@ -179,7 +185,8 @@ public class PluginArboriculture extends ForestryPlugin {
 	private static final EnumSet<ForestryBlock> slabs = EnumSet.of(
 			ForestryBlock.slabs1,
 			ForestryBlock.slabs2,
-			ForestryBlock.slabs3);
+			ForestryBlock.slabs3,
+			ForestryBlock.slabs4);
 	private static final EnumSet<ForestryBlock> fences = EnumSet.of(
 			ForestryBlock.fences1,
 			ForestryBlock.fences2);
@@ -195,6 +202,7 @@ public class PluginArboriculture extends ForestryPlugin {
 		ForestryBlock.log5.registerBlock(new BlockLog(LogCat.CAT4), ItemWoodBlock.class, "log5");
 		ForestryBlock.log6.registerBlock(new BlockLog(LogCat.CAT5), ItemWoodBlock.class, "log6");
 		ForestryBlock.log7.registerBlock(new BlockLog(LogCat.CAT6), ItemWoodBlock.class, "log7");
+		ForestryBlock.log8.registerBlock(new BlockLog(LogCat.CAT7), ItemWoodBlock.class, "log8");
 
 		for (ForestryBlock log : logs) {
 			log.block().setHarvestLevel("axe", 0);
@@ -208,6 +216,7 @@ public class PluginArboriculture extends ForestryPlugin {
 		ForestryBlock.fireproofLog5.registerBlock(new BlockFireproofLog(LogCat.CAT4), ItemWoodBlock.class, "fireproofLog5");
 		ForestryBlock.fireproofLog6.registerBlock(new BlockFireproofLog(LogCat.CAT5), ItemWoodBlock.class, "fireproofLog6");
 		ForestryBlock.fireproofLog7.registerBlock(new BlockFireproofLog(LogCat.CAT6), ItemWoodBlock.class, "fireproofLog7");
+		ForestryBlock.fireproofLog8.registerBlock(new BlockFireproofLog(LogCat.CAT7), ItemWoodBlock.class, "fireproofLog8");
 
 		for (ForestryBlock fireproofLog : fireproofLogs) {
 			fireproofLog.block().setHarvestLevel("axe", 0);
@@ -233,6 +242,7 @@ public class PluginArboriculture extends ForestryPlugin {
 		ForestryBlock.slabs1.registerBlock(new BlockSlab(SlabCat.CAT0), ItemWoodBlock.class, "slabs1");
 		ForestryBlock.slabs2.registerBlock(new BlockSlab(SlabCat.CAT1), ItemWoodBlock.class, "slabs2");
 		ForestryBlock.slabs3.registerBlock(new BlockSlab(SlabCat.CAT2), ItemWoodBlock.class, "slabs3");
+		ForestryBlock.slabs4.registerBlock(new BlockSlab(SlabCat.CAT3), ItemWoodBlock.class, "slabs4");
 
 		for (ForestryBlock plank : slabs) {
 			plank.block().setHarvestLevel("axe", 0);
@@ -394,6 +404,10 @@ public class PluginArboriculture extends ForestryPlugin {
 			Proxies.common.addShapelessRecipe(ForestryBlock.planks2.getItemStack(4, i), ForestryBlock.log5.getItemStack(1, i));
 		for (int i = 0; i < 4; i++)
 			Proxies.common.addShapelessRecipe(ForestryBlock.planks2.getItemStack(4, 4 + i), ForestryBlock.log6.getItemStack(1, i));
+		for (int i = 0; i < 4; i++)
+			Proxies.common.addShapelessRecipe(ForestryBlock.planks2.getItemStack(4, 8 + i), ForestryBlock.log7.getItemStack(1, i));
+		for (int i = 0; i < 1; i++)
+			Proxies.common.addShapelessRecipe(ForestryBlock.planks2.getItemStack(4, 12 + i), ForestryBlock.log8.getItemStack(1, i));
 
 		// Fabricator recipes
 		if (PluginManager.Module.FACTORY.isEnabled() && PluginManager.Module.APICULTURE.isEnabled()) {
@@ -403,11 +417,8 @@ public class PluginArboriculture extends ForestryPlugin {
 				BlockLog blockLog = (BlockLog) forestryBlock.block();
 				ForestryBlock fireproofLog = BlockFireproofLog.getFireproofLog(blockLog);
 
-				if (forestryBlock == ForestryBlock.log8)
-					continue;
-
 				for (int i = 0; i < 4; i++) {
-					if (forestryBlock == ForestryBlock.log7 && i > 0)
+					if (forestryBlock == ForestryBlock.log8 && i > 0)
 						break;
 
 					ItemStack logStack = forestryBlock.getItemStack(1, i);
@@ -435,7 +446,7 @@ public class PluginArboriculture extends ForestryPlugin {
 						'X', plankStack});
 			}
 			plank = ForestryBlock.planks2;
-			for (int i = 0; i < 8; i++) {
+			for (int i = 0; i < 12; i++) {
 				ForestryBlock fireproofPlank = BlockFireproofPlanks.getFireproofPlanks((BlockPlanks)plank.block());
 				ItemStack plankStack = plank.getItemStack(1, i);
 				ItemStack fireproofPlankStack = fireproofPlank.getItemStack(5, i);
@@ -461,14 +472,25 @@ public class PluginArboriculture extends ForestryPlugin {
 			Proxies.common.addShapelessRecipe(ForestryBlock.fireproofPlanks2.getItemStack(4, i), ForestryBlock.fireproofLog5.getItemStack(1, i));
 		for (int i = 0; i < 4; i++)
 			Proxies.common.addShapelessRecipe(ForestryBlock.fireproofPlanks2.getItemStack(4, 4 + i), ForestryBlock.fireproofLog6.getItemStack(1, i));
+		for (int i = 0; i < 4; i++)
+			Proxies.common.addShapelessRecipe(ForestryBlock.fireproofPlanks2.getItemStack(4, 8 + i), ForestryBlock.fireproofLog7.getItemStack(1, i));
+		for (int i = 0; i < 1; i++)
+			Proxies.common.addShapelessRecipe(ForestryBlock.fireproofPlanks2.getItemStack(4, 12 + i), ForestryBlock.fireproofLog8.getItemStack(1, i));
 
 		// Slab recipes
-		for (int i = 0; i < 8; i++)
-			Proxies.common.addPriorityRecipe(ForestryBlock.slabs1.getItemStack(6, i), "###", '#', ForestryBlock.planks1.getItemStack(1, i));
-		for (int i = 0; i < 8; i++)
-			Proxies.common.addPriorityRecipe(ForestryBlock.slabs2.getItemStack(6, i), "###", '#', ForestryBlock.planks1.getItemStack(1, 8 + i));
-		for (int i = 0; i < 8; i++)
-			Proxies.common.addPriorityRecipe(ForestryBlock.slabs3.getItemStack(6, i), "###", '#', ForestryBlock.planks2.getItemStack(1, i));
+		for (WoodType woodType : WoodType.values()) {
+			int i = woodType.ordinal();
+			if (i < 8)
+				Proxies.common.addPriorityRecipe(ForestryBlock.slabs1.getItemStack(6, i % 8), "###", '#', ForestryBlock.planks1.getItemStack(1, i % 16));
+			else if (i < 16)
+				Proxies.common.addPriorityRecipe(ForestryBlock.slabs2.getItemStack(6, i % 8), "###", '#', ForestryBlock.planks1.getItemStack(1, i % 16));
+			else if (i < 24)
+				Proxies.common.addPriorityRecipe(ForestryBlock.slabs3.getItemStack(6, i % 8), "###", '#', ForestryBlock.planks2.getItemStack(1, i % 16));
+			else if (i < 32)
+				Proxies.common.addPriorityRecipe(ForestryBlock.slabs4.getItemStack(6, i % 8), "###", '#', ForestryBlock.planks2.getItemStack(1, i % 16));
+			else
+				throw new RuntimeException("Wood type has no slabs defined");
+		}
 
 		// Fence recipes
 		for (WoodType woodType : WoodType.values()) {
@@ -629,6 +651,9 @@ public class PluginArboriculture extends ForestryPlugin {
 		IClassification lamiaceae = AlleleManager.alleleRegistry.createAndRegisterClassification(
 				EnumClassLevel.FAMILY, "lamiaceae", "Lamiaceae");
 		lamiales.addMemberGroup(lamiaceae);
+		IClassification bignoniaceae = AlleleManager.alleleRegistry.createAndRegisterClassification(
+				EnumClassLevel.FAMILY, "bignoniaceae", "Bignoniaceae");
+		lamiales.addMemberGroup(bignoniaceae);
 
 		IClassification ebenaceae = AlleleManager.alleleRegistry.createAndRegisterClassification(
 				EnumClassLevel.FAMILY, "ebenaceae", "Ebenaceae");
@@ -656,7 +681,11 @@ public class PluginArboriculture extends ForestryPlugin {
 		IClassification sapindaceae = AlleleManager.alleleRegistry.createAndRegisterClassification(
 				EnumClassLevel.FAMILY, "sapindaceae", "Sapindaceae");
 		sapindales.addMemberGroup(sapindaceae);
-
+		IClassification anacardiaceae = AlleleManager.alleleRegistry.createAndRegisterClassification(
+				EnumClassLevel.FAMILY, "anacardiaceae", "Anacardiaceae");
+		sapindales.addMemberGroup(anacardiaceae);
+		
+		
 		IClassification caricaceae = AlleleManager.alleleRegistry.createAndRegisterClassification(
 				EnumClassLevel.FAMILY, "caricaceae", "Caricaceae");
 		brassicales.addMemberGroup(caricaceae);
@@ -705,7 +734,17 @@ public class PluginArboriculture extends ForestryPlugin {
 		fabaceae.addMemberGroup(acacia);
 		IClassification millettia = new BranchTrees("millettia", "Millettia");
 		fabaceae.addMemberGroup(millettia);
-
+		IClassification dalbergia = new BranchTrees("dalbergia", "Dalbergia");
+		fabaceae.addMemberGroup(dalbergia);
+		IClassification pterocarpus = new BranchTrees("pterocarpus", "Pterocarpus");
+		fabaceae.addMemberGroup(pterocarpus);
+		
+		IClassification tabebuia = new BranchTrees("tabebuia", "Tabebuia");
+		bignoniaceae.addMemberGroup(tabebuia);
+		
+		IClassification astronium = new BranchTrees("astronium", "Astronium");
+		anacardiaceae.addMemberGroup(astronium);
+		
 		IClassification ochroma = new BranchTrees("ochroma", "Ochroma");
 		malvaceae.addMemberGroup(ochroma);
 
@@ -778,6 +817,11 @@ public class PluginArboriculture extends ForestryPlugin {
 		final ItemStack lemonLog = ForestryBlock.log6.getItemStack(1, 3);
 
 		final ItemStack giganteumLog = ForestryBlock.log7.getItemStack(1, 0);
+		final ItemStack ipeLog 		 = ForestryBlock.log7.getItemStack(1, 1);
+		final ItemStack padaukLog    = ForestryBlock.log7.getItemStack(1, 2);
+		final ItemStack cocoboloLog  = ForestryBlock.log7.getItemStack(1, 3);
+		
+		final ItemStack zebrawoodLog  = ForestryBlock.log8.getItemStack(1, 0);
 
 		// Deciduous
 		Allele.treeOak = new AlleleTreeSpecies("treeOak", false, "appleOak", quercus, "robur",
@@ -843,8 +887,11 @@ public class PluginArboriculture extends ForestryPlugin {
 				"tectona", proxy.getFoliageColorBasic(), 0x539d12, WorldGenJungle.class, jungleLog)
 				.addFruitFamily(jungle).setLeafIndices("jungle").setVanillaMap(3);
 		Allele.treeTeak = new AlleleTreeSpecies("treeTeak", true, "teak", tectona, "grandis",
-				0xfeff8f, 0xffd98f, WorldGenTeak.class, teakLog).addFruitFamily(jungle).setLeafIndices(
-						"jungle");
+				0xfeff8f, 0xffd98f, WorldGenTeak.class, teakLog)
+				.addFruitFamily(jungle).setLeafIndices("jungle");
+		Allele.treeIpe = new AlleleTreeSpecies("treeIpe", true, "ipe", tabebuia, "serratifolia", 
+				0xfdd207, 0xad8f04,	WorldGenIpe.class, ipeLog)
+				.addFruitFamily(jungle).setLeafIndices("jungle").setGirth(2);
 		Allele.treeKapok = new AlleleTreeSpecies("treeKapok", true, "kapok", ceiba, "pentandra",
 				0x89987b, 0x89aa9e, WorldGenKapok.class, kapokLog).addFruitFamily(jungle)
 				.addFruitFamily(prunes).setLeafIndices("jungle");
@@ -853,6 +900,9 @@ public class PluginArboriculture extends ForestryPlugin {
 		Allele.treeEbony = new AlleleTreeSpecies("treeEbony", true, "myrtleEbony", diospyros,
 				"pentamera", 0xa2d24a, 0xc4d24a, WorldGenEbony.class, ebonyLog).addFruitFamily(jungle)
 				.addFruitFamily(prunes).setGirth(3).setLeafIndices("jungle");
+		Allele.treeZebrawood = new AlleleTreeSpecies("treeZebrawood", false, "zebrawood", astronium,
+				"graveolens", 0xa2d24a, 0xc4d24a, WorldGenZebrawood.class, zebrawoodLog)
+				.addFruitFamily(nux).setGirth(2).setLeafIndices("jungle");
 
 		// Diospyros mespiliformis, the Jackalberry (also known as African Ebony
 		// The Gaub Tree, Malabar ebony, Black-and-white Ebony or Pale Moon
@@ -883,8 +933,12 @@ public class PluginArboriculture extends ForestryPlugin {
 		Allele.treeDesertAcacia = new AlleleTreeSpecies("treeAcacia", true, "desertAcacia", acacia,
 				"erioloba", 0x748C1C, 0xb3b302, WorldGenAcacia.class, desertAcaciaLog).addFruitFamily(jungle)
 				.addFruitFamily(nux);
+		Allele.treePadauk = new AlleleTreeSpecies("treePadauk", true, "padauk", pterocarpus,
+				"soyauxii", 0xd0df8c, 0x435c32, WorldGenPadauk.class, padaukLog).addFruitFamily(jungle);
 		Allele.treeBalsa = new AlleleTreeSpecies("treeBalsa", true, "balsa", ochroma, "pyramidale",
 				0x59ac00, 0xfeff8f, WorldGenBalsa.class, balsaLog).addFruitFamily(jungle).addFruitFamily(nux);
+		Allele.treeCocobolo = new AlleleTreeSpecies("treeCocobolo", false, "cocobolo", dalbergia, "retusa",
+				0x6aa17a, 0x487d4c, WorldGenCocobolo.class, cocoboloLog).addFruitFamily(jungle);
 		Allele.treeWenge = new AlleleTreeSpecies("treeWenge", true, "wenge", millettia,
 				"laurentii", 0xada157, 0xad8a57, WorldGenWenge.class, wengeLog).addFruitFamily(jungle)
 				.addFruitFamily(nux).setGirth(2);
@@ -965,10 +1019,14 @@ public class PluginArboriculture extends ForestryPlugin {
 		treeInterface.registerTemplate(TreeTemplates.getDesertAcaciaTemplate());
 		treeInterface.registerTemplate(TreeTemplates.getWengeTemplate());
 		treeInterface.registerTemplate(TreeTemplates.getBaobabTemplate());
-
+		treeInterface.registerTemplate(TreeTemplates.getPadaukTemplate());
+		treeInterface.registerTemplate(TreeTemplates.getCocoboloTemplate());
+		
 		treeInterface.registerTemplate(TreeTemplates.getTeakTemplate());
+		treeInterface.registerTemplate(TreeTemplates.getIpeTemplate());
 		treeInterface.registerTemplate(TreeTemplates.getKapokTemplate());
 		treeInterface.registerTemplate(TreeTemplates.getEbonyTemplate());
+		treeInterface.registerTemplate(TreeTemplates.getZebrawoodTemplate());
 		treeInterface.registerTemplate(TreeTemplates.getMahoganyTemplate());
 
 		treeInterface.registerTemplate(TreeTemplates.getWillowTemplate());
@@ -1019,7 +1077,7 @@ public class PluginArboriculture extends ForestryPlugin {
 		// Decidious
 		TreeTemplates.limeA = new TreeMutation(Allele.treeBirch, Allele.treeOak,
 				TreeTemplates.getLimeTemplate(), 15);
-		TreeTemplates.mapleA = new TreeMutation(Allele.treeLime, Allele.treeLarch,
+		TreeTemplates.mapleA = new TreeMutation(Allele.treeSpruce, Allele.treeLarch,
 				TreeTemplates.getMapleTemplate(), 5);
 
 		// Fructifera
@@ -1051,12 +1109,16 @@ public class PluginArboriculture extends ForestryPlugin {
 				TreeTemplates.getSequoiaTemplate(), 5);
 
 		// Tropical
-		TreeTemplates.teakA = new TreeMutation(Allele.treeLime, Allele.treeJungle,
+		TreeTemplates.teakA = new TreeMutation(Allele.treeDarkOak, Allele.treeJungle,
 				TreeTemplates.getTeakTemplate(), 10);
+		TreeTemplates.ipeA = new TreeMutation(Allele.treeTeak, Allele.treeDarkOak,
+				TreeTemplates.getIpeTemplate(), 10);
 		TreeTemplates.kapokA = new TreeMutation(Allele.treeJungle, Allele.treeTeak,
 				TreeTemplates.getKapokTemplate(), 10);
-		TreeTemplates.ebonyA = new TreeMutation(Allele.treeKapok, Allele.treeTeak,
+		TreeTemplates.ebonyA = new TreeMutation(Allele.treeDarkOak, Allele.treeKapok,
 				TreeTemplates.getEbonyTemplate(), 10);
+		TreeTemplates.zebrawoodA = new TreeMutation(Allele.treeEbony, Allele.treePoplar,
+				TreeTemplates.getZebrawoodTemplate(), 5);
 		TreeTemplates.mahoganyA = new TreeMutation(Allele.treeKapok, Allele.treeEbony,
 				TreeTemplates.getMahoganyTemplate(), 10);
 
@@ -1066,15 +1128,19 @@ public class PluginArboriculture extends ForestryPlugin {
 				TreeTemplates.getDateTemplate(), 5);
 
 		// Malva
-		TreeTemplates.balsaA = new TreeMutation(Allele.treeTeak, Allele.treeLime,
+		TreeTemplates.balsaA = new TreeMutation(Allele.treeTeak, Allele.treeAcacia,
 				TreeTemplates.getBalsaTemplate(), 10);
 		TreeTemplates.acaciaA = new TreeMutation(Allele.treeTeak, Allele.treeBalsa,
 				TreeTemplates.getDesertAcaciaTemplate(), 10);
-		TreeTemplates.wengeA = new TreeMutation(Allele.treeDesertAcacia, Allele.treeBalsa,
+		TreeTemplates.padaukA = new TreeMutation(Allele.treeAcacia, Allele.treeJungle,
+				TreeTemplates.getPadaukTemplate(), 10);
+		TreeTemplates.cocoboloA = new TreeMutation(Allele.treeDesertAcacia, Allele.treeDarkOak,
+				TreeTemplates.getCocoboloTemplate(), 10);
+		TreeTemplates.wengeA = new TreeMutation(Allele.treeCocobolo, Allele.treeBalsa,
 				TreeTemplates.getWengeTemplate(), 10);
 		TreeTemplates.baobabA = new TreeMutation(Allele.treeBalsa, Allele.treeWenge,
 				TreeTemplates.getBaobabTemplate(), 10);
-		TreeTemplates.mahoeA = new TreeMutation(Allele.treeBirch, Allele.treeDesertAcacia,
+		TreeTemplates.mahoeA = new TreeMutation(Allele.treeBalsa, Allele.treeDesertAcacia,
 				TreeTemplates.getMahoeTemplate(), 5);
 
 		TreeTemplates.willowA = new TreeMutation(Allele.treeOak, Allele.treeBirch,

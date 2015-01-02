@@ -35,7 +35,7 @@ import forestry.arboriculture.WoodType;
 public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyped {
 
 	public static enum SlabCat {
-		CAT0, CAT1, CAT2
+		CAT0, CAT1, CAT2, CAT3
 	}
 
 	public static final int slabsPerCat = 8;
