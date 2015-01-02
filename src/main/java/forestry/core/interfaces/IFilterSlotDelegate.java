@@ -22,4 +22,10 @@ public interface IFilterSlotDelegate {
 	 */
 	boolean canSlotAccept(int slotIndex, ItemStack itemStack);
 
+	/**
+	 * Used to lock slots under special conditions.
+	 * Locked slots will have an X over them.
+	 */
+	boolean isLocked(int slotIndex);
+
 }

@@ -65,6 +65,22 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 			}
 
 			@Override
+			public boolean isLocked(int slotIndex) {
+				if (slotIndex == SLOT_ANALYZE)
+					return false;
+
+				if (getStackInSlot(SLOT_ANALYZE) == null)
+					return true;
+
+				if (GuiUtil.isIndexInRange(slotIndex, SLOT_INPUT_1, SLOTS_INPUT_COUNT)) {
+					if (slotIndex >= SLOT_INPUT_1 + game.getSampleSize())
+						return true;
+				}
+
+				return false;
+			}
+
+			@Override
 			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
 				return GuiUtil.isIndexInRange(slotIndex, SLOT_RESULTS_1, SLOTS_RESULTS_COUNT);
 			}

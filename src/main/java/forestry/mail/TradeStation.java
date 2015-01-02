@@ -36,7 +36,6 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.GuiUtil;
-import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.StackUtils;
 import forestry.mail.items.ItemLetter;
 
@@ -627,6 +626,11 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		return inventory.canSlotAccept(slotIndex, itemStack);
+	}
+
+	@Override
+	public boolean isLocked(int slotIndex) {
+		return inventory.isLocked(slotIndex);
 	}
 
 	@Override

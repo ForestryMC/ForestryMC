@@ -58,7 +58,7 @@ public abstract class SlotWatched extends SlotForestry {
 	@Override
 	public IIcon getBackgroundIconIndex() {
 		ItemStack stack = getStack();
-		if (stack != null && !inventory.isItemValidForSlot(getSlotIndex(), stack))
+		if (!isItemValid(stack))
 			return TextureManager.getInstance().getDefault(blockedTexture);
 		else
 			return null;

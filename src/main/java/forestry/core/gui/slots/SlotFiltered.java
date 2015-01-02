@@ -33,6 +33,11 @@ public class SlotFiltered extends SlotWatched {
 
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
-		return itemstack != null && filterSlotDelegate.canSlotAccept(getSlotIndex(), itemstack);
+		int slotIndex = getSlotIndex();
+		if (filterSlotDelegate.isLocked(slotIndex))
+			return false;
+		if (itemstack != null)
+			return filterSlotDelegate.canSlotAccept(slotIndex, itemstack);
+		return true;
 	}
 }

@@ -73,7 +73,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
 			return 0.7f;
 		else if (ForestryItem.beeComb.isItemEqual(itemstack))
 			return 0.4f;
-		else if (AlleleManager.alleleRegistry.isIndividual(itemstack))
+		else if (getRoot().isMember(itemstack))
 			return 1.0f;
 
 		for (Map.Entry<ItemStack, Float> entry : getRoot().getResearchCatalysts().entrySet()) {

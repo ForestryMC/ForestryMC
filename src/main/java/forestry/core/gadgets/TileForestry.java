@@ -407,6 +407,11 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	@Override
+	public boolean isLocked(int slotIndex) {
+		return getInternalInventory().isLocked(slotIndex);
+	}
+
+	@Override
 	public final int[] getAccessibleSlotsFromSide(int side) {
 		if (!allowsPipeConnections())
 			return Defaults.SLOTS_NONE;

@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.core.config.Defaults;
-import forestry.core.utils.StackUtils;
 
 public class FakeInventoryAdapter implements IInventoryAdapter {
 
@@ -34,6 +33,11 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+		return false;
+	}
+
+	@Override
+	public boolean isLocked(int slotIndex) {
 		return false;
 	}
 

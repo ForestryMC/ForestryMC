@@ -18,7 +18,6 @@ import net.minecraft.nbt.NBTTagList;
 
 import forestry.core.config.Defaults;
 import forestry.core.utils.PlainInventory;
-import forestry.core.utils.StackUtils;
 
 /**
  * With permission from Krapht.
@@ -127,6 +126,11 @@ public class InventoryAdapter implements IInventoryAdapter {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		return true;
+	}
+
+	@Override
+	public boolean isLocked(int slotIndex) {
+		return false;
 	}
 
 	@Override

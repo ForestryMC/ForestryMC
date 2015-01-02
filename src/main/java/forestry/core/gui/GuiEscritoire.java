@@ -10,6 +10,19 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
+
+import java.util.List;
+
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+
+import org.lwjgl.opengl.GL11;
+
 import forestry.core.config.Defaults;
 import forestry.core.gadgets.NaturalistGame;
 import forestry.core.gadgets.NaturalistGame.GameToken;
@@ -19,24 +32,23 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-
-import org.lwjgl.opengl.GL11;
 
 public class GuiEscritoire extends GuiForestry<TileEscritoire> {
 
-	private static String[][] researchNotes = new String[][] {
-		new String[] { "I have found a curious specimen on my travels.", "This strange fellow needs further investigation.", "Elated, I wanted to start at once with my research." },
-		new String[] { "I was amazed at the wondrous nature of it.", "The specimen twitched, while I inspected it more closely.", "Strange markings on the underside made me curious.", "This will be the talk of the society when I am done investigating." },
-		new String[] { "After some prodding I discovered an interesting new lead.", "I scratched my head at this discovery and questioned everything.", "I thought my eyes deceived me, but there it was.", "A previously unseen dot led me to question the specimen's classification." },
-		new String[] { "My screams of frustration had the housekeeper look into my study in worry.", "In a frenzy and on the verge of despair, I ripped up all the notes!", "This... just doesn't make any sense!", "It just cannot be. It didn't do that before!", "The sledgehammer barely made a dent, so I sent for the chainsaw.", "I swear it was looking at me, with its beady, cruel, little eyes.", "Is that laughter? Do I hear laughter? Who is laughing here?" },
-		new String[] { "EUREKA!", "Wondrous! My name will go down in history!", "My colleagues will be impressed!", "I will be the envy of everyone at the society!", "Woot!" },
-		new String[] { "All is lost.", "I consign my notes to the fire.", "Why? I had made such great strides at first...", "Failed. Again.", "Oh my..." }
-	};
+	private static enum Notes {
+		level1, level2, level3, level4, success, failure
+	}
+	private static final ListMultimap<Notes, String> researchNotes;
+	static {
+		researchNotes = ArrayListMultimap.create();
+		for (Notes notesLevel : Notes.values()) {
+			int levelCount = Integer.valueOf(StringUtil.localize("gui.escritoire.notes." + notesLevel + ".count"));
+			for (int i = 1; i <= levelCount; i++) {
+				String note = StringUtil.localize("gui.escritoire.notes." + notesLevel + "." + i);
+				researchNotes.put(notesLevel, note);
+			}
+		}
+	}
 
 	private class TokenSlot extends Widget {
 
@@ -229,22 +241,22 @@ public class GuiEscritoire extends GuiForestry<TileEscritoire> {
 			return researchNote;
 
 		if (!tile.getGame().isInited())
-			researchNote = "";
+			researchNote = StringUtil.localize("gui.escritoire.instructions");
 		else {
 			if (tile.getGame().isWon()) {
-				researchNote = getRandomNote(researchNotes[4]);
+				researchNote = getRandomNote(researchNotes.get(Notes.success));
 			} else if (tile.getGame().isEnded()) {
-				researchNote = getRandomNote(researchNotes[5]);
+				researchNote = getRandomNote(researchNotes.get(Notes.failure));
 			} else {
 				int bounty = tile.getGame().getBountyLevel();
 				if (bounty >= NaturalistGame.BOUNTY_MAX) {
-					researchNote = getRandomNote(researchNotes[0]);
+					researchNote = getRandomNote(researchNotes.get(Notes.level1));
 				} else if (bounty > NaturalistGame.BOUNTY_MAX / 2) {
-					researchNote = getRandomNote(researchNotes[1]);
+					researchNote = getRandomNote(researchNotes.get(Notes.level2));
 				} else if (bounty > NaturalistGame.BOUNTY_MAX / 4) {
-					researchNote = getRandomNote(researchNotes[2]);
+					researchNote = getRandomNote(researchNotes.get(Notes.level3));
 				} else
-					researchNote = getRandomNote(researchNotes[3]);
+					researchNote = getRandomNote(researchNotes.get(Notes.level4));
 			}
 		}
 
@@ -252,7 +264,8 @@ public class GuiEscritoire extends GuiForestry<TileEscritoire> {
 		return researchNote;
 	}
 
-	private String getRandomNote(String[] candidates) {
-		return candidates[mc.theWorld.rand.nextInt(candidates.length)];
+	private String getRandomNote(List<String> candidates) {
+		int index = mc.theWorld.rand.nextInt(candidates.size());
+		return candidates.get(index);
 	}
 }

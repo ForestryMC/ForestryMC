@@ -198,6 +198,11 @@ public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagab
 	}
 
 	@Override
+	public boolean isLocked(int slotIndex) {
+		return false;
+	}
+
+	@Override
 	public void openInventory() {
 	}
 
