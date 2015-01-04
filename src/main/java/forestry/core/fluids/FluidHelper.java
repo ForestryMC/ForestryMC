@@ -57,7 +57,15 @@ public final class FluidHelper {
 
 				if (used > 0) {
 					if (!player.capabilities.isCreativeMode) {
-						player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(current));
+						ItemStack drainedContainer = getDrainedContainer(current, used);
+						if (current.stackSize > 1) {
+							player.inventory.decrStackSize(player.inventory.currentItem, 1);
+							if (drainedContainer != null && !player.inventory.addItemStackToInventory(drainedContainer)) {
+								player.dropPlayerItemWithRandomChoice(drainedContainer, false);
+							}
+						} else {
+							player.inventory.setInventorySlotContents(player.inventory.currentItem, drainedContainer);
+						}
 						player.inventory.markDirty();
 					}
 					return true;
@@ -251,8 +259,23 @@ public final class FluidHelper {
 		return item.getContainerItem(container);
 	}
 
-	public static ItemStack getFullyDrainedContainer(ItemStack container) {
-		return container.getItem().getContainerItem(container);
+	public static ItemStack getDrainedContainer(ItemStack container, int drainAmount) {
+		if (container == null)
+			return null;
+
+		if (drainAmount == 0)
+			return container;
+
+		Item item = container.getItem();
+		if (item instanceof IFluidContainerItem) {
+			ItemStack drained = container.copy();
+			drained.stackSize = 1;
+			IFluidContainerItem containerItem = (IFluidContainerItem) item;
+			containerItem.drain(drained, drainAmount, true);
+			return drained;
+		}
+
+		return getEmptyContainer(container);
 	}
 
 	public static ItemStack getFilledContainer(Fluid fluid, ItemStack empty) {

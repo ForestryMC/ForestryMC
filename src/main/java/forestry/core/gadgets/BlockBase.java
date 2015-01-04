@@ -169,14 +169,8 @@ public class BlockBase extends BlockForestry {
 
 		ItemStack current = player.getCurrentEquippedItem();
 		if (current != null && current.getItem() != Items.bucket && tile instanceof IFluidHandler && tile.allowsAlteration(player)) {
-			if (Proxies.common.isSimulating(world)) {
-				if (FluidHelper.handleRightClick((IFluidHandler) tile, ForgeDirection.getOrientation(side), player, true, tile.canDrainWithBucket())) {
-					return true;
-				}
-			} else {
-				if (FluidContainerRegistry.isContainer(current)) {
-					return true;
-				}
+			if (FluidHelper.handleRightClick((IFluidHandler) tile, ForgeDirection.getOrientation(side), player, true, tile.canDrainWithBucket())) {
+				return true;
 			}
 		}
 
