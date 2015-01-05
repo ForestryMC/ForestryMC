@@ -60,7 +60,7 @@ public class ItemButterflyGE extends ItemGE {
 	}
 
 	@Override
-	protected IIndividual getIndividual(ItemStack itemstack) {
+	public IButterfly getIndividual(ItemStack itemstack) {
 		return PluginLepidopterology.butterflyInterface.getMember(itemstack);
 	}
 

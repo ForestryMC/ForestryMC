@@ -88,20 +88,14 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 
 	protected void generateTreeTrunk(int height, int girth, float vines) {
 		int offset = (girth - 1) / 2;
-		for (int x = 0; x < girth; x++)
-			for (int y = 0; y < girth; y++)
-				for (int i = 0; i < height; i++) {
-					addWood(x - offset, i, y - offset, EnumReplaceMode.ALL);
-
-					if (rand.nextFloat() < vines)
-						addVine(x - offset - 1, i, y - offset);
-					if (rand.nextFloat() < vines)
-						addVine(x - offset + 1, i, y - offset);
-					if (rand.nextFloat() < vines)
-						addVine(x - offset, i, y - offset - 1);
-					if (rand.nextFloat() < vines)
-						addVine(x - offset, i, y - offset + 1);
+		for (int x = 0; x < girth; x++) {
+			for (int z = 0; z < girth; z++) {
+				for (int y = 0; y < height; y++) {
+					addWood(x - offset, y, z - offset, EnumReplaceMode.ALL);
+					addVines(x - offset, y, z - offset, vines);
 				}
+			}
+		}
 
 		if (!spawnPods)
 			return;
@@ -148,7 +142,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	@Override
 	protected void addBlock(int x, int y, int z, BlockType type, EnumReplaceMode replace) {
 		if (replace == EnumReplaceMode.ALL
-				|| replace == EnumReplaceMode.SOFT && Utils.isReplaceableBlock(world, startX + x, startY + y, startZ + z)
+				|| (replace == EnumReplaceMode.SOFT && Utils.isReplaceableBlock(world, startX + x, startY + y, startZ + z))
 				|| world.isAirBlock(startX + x, startY + y, startZ + z))
 			type.setBlock(world, tree, startX + x, startY + y, startZ + z);
 	}
@@ -177,6 +171,20 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 
 	protected final void addVine(int x, int y, int z) {
 		addBlock(x, y, z, vine, EnumReplaceMode.NONE);
+	}
+
+	protected final void addVines(int x, int y, int z, float chance) {
+		if (chance <= 0)
+			return;
+
+		if (rand.nextFloat() < chance)
+			addVine(x - 1, y, z);
+		if (rand.nextFloat() < chance)
+			addVine(x + 1, y, z);
+		if (rand.nextFloat() < chance)
+			addVine(x, y, z - 1);
+		if (rand.nextFloat() < chance)
+			addVine(x, y, z + 1);
 	}
 
 }

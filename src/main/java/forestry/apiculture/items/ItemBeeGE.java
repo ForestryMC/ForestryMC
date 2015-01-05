@@ -50,7 +50,7 @@ public class ItemBeeGE extends ItemGE {
 	}
 
 	@Override
-	protected IIndividual getIndividual(ItemStack itemstack) {
+	public IBee getIndividual(ItemStack itemstack) {
 		return new Bee(itemstack.getTagCompound());
 	}
 

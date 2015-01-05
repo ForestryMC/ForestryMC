@@ -48,6 +48,7 @@ import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.arboriculture.network.PacketLeafUpdate;
+import forestry.arboriculture.network.PacketRipeningUpdate;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.EnumErrorCode;
 import forestry.core.genetics.Allele;
@@ -312,27 +313,26 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	private void sendNetworkUpdateRipening() {
-		Proxies.net.sendNetworkPacket(new PacketLeafUpdate(this, determineFruitColour()), xCoord, yCoord, zCoord);
+		Proxies.net.sendNetworkPacket(new PacketRipeningUpdate(this, determineFruitColour()), xCoord, yCoord, zCoord);
 	}
 
 	@Override
 	public void fromPacket(ForestryPacket packetRaw) {
+		super.fromPacket(packetRaw);
 
 		PacketLeafUpdate packet = (PacketLeafUpdate)packetRaw;
-		if(packet.isRipeningUpdate()) {
-			colourFruits = packet.colourFruits;
-		} else {
-			readFromNBT(packet.getTagCompound());
-			isFruitLeaf = packet.isFruitLeaf();
-			isPollinatedState = packet.isPollinated();
-			textureIndexFancy = packet.textureIndexFancy;
-			textureIndexPlain = packet.textureIndexPlain;
-			textureIndexFruits = packet.textureIndexFruit;
-			colourLeaves = packet.colourLeaves;
-			colourFruits = packet.colourFruits;
-		}
 
-		worldObj.func_147479_m(xCoord, yCoord, zCoord);
+		isFruitLeaf = packet.isFruitLeaf();
+		isPollinatedState = packet.isPollinated();
+		textureIndexFancy = packet.textureIndexFancy;
+		textureIndexPlain = packet.textureIndexPlain;
+		textureIndexFruits = packet.textureIndexFruit;
+		colourLeaves = packet.colourLeaves;
+		colourFruits = packet.colourFruits;
+	}
+
+	public void fromRipeningPacket(PacketRipeningUpdate packet) {
+		colourFruits = packet.colourFruits;
 	}
 
 	/**

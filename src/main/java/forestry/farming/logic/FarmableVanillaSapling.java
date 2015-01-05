@@ -10,16 +10,16 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import forestry.api.arboriculture.ITree;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IIndividual;
-import forestry.plugins.PluginArboriculture;
-import java.util.Map;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import forestry.api.arboriculture.ITree;
+import forestry.api.genetics.IIndividual;
+import forestry.core.utils.GeneticsUtil;
+import forestry.plugins.PluginArboriculture;
 
 public class FarmableVanillaSapling extends FarmableGenericSapling {
 
@@ -29,17 +29,11 @@ public class FarmableVanillaSapling extends FarmableGenericSapling {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
-		ITree tree = null;
-		for (Map.Entry<ItemStack, IIndividual> entry : AlleleManager.ersatzSaplings.entrySet())
-			if (entry.getKey().isItemEqual(germling) && entry.getValue() instanceof ITree) {
-				tree = (ITree) entry.getValue();
-				break;
-			}
-
-		if (tree == null)
+		IIndividual tree = GeneticsUtil.getGeneticEquivalent(germling);
+		if (!(tree instanceof ITree))
 			return false;
 
-		return PluginArboriculture.treeInterface.plantSapling(world, tree, player.getGameProfile(), x, y, z);
+		return PluginArboriculture.treeInterface.plantSapling(world, (ITree)tree, player.getGameProfile(), x, y, z);
 	}
 
 }

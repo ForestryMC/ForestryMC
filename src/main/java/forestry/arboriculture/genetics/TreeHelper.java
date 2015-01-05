@@ -45,6 +45,7 @@ import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.arboriculture.gadgets.BlockFruitPod;
+import forestry.arboriculture.gadgets.ForestryBlockLeaves;
 import forestry.arboriculture.gadgets.TileFruitPod;
 import forestry.arboriculture.gadgets.TileLeaves;
 import forestry.arboriculture.gadgets.TileSapling;
@@ -214,19 +215,18 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 		if (!ForestryBlock.leaves.isBlockEqual(world, x, y, z))
 			return false;
 
-		TileLeaves tileLeaves = new TileLeaves();
-		tileLeaves.setTree((ITree) tree.copy());
-		tileLeaves.setOwner(owner);
-		if (decorative)
-			tileLeaves.setDecorative();
-
-		world.setTileEntity(x, y, z, tileLeaves);
-
-		TileEntity tile = world.getTileEntity(x, y, z);
-		if (!(tile instanceof TileLeaves)) {
+		TileEntity tile = ForestryBlockLeaves.getLeafTile(world, x, y, z);
+		if (tile == null) {
 			world.setBlockToAir(x, y, z);
 			return false;
 		}
+
+		TileLeaves tileLeaves = (TileLeaves) tile;
+		tileLeaves.setOwner(owner);
+		tileLeaves.setTree((ITree) tree.copy());
+		if (decorative)
+			tileLeaves.setDecorative();
+		world.markBlockForUpdate(x, y, z);
 
 		return true;
 	}

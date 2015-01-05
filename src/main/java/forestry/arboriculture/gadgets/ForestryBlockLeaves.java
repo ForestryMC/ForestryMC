@@ -181,6 +181,7 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 		if (getLeafTile(world, x, y, z).isDecorative())
 			return;
 		super.beginLeavesDecay(world, x, y, z);
+		world.markBlockForUpdate(x, y, z);
 	}
 
 	@Override
@@ -190,6 +191,11 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 			return;
 
 		super.updateTick(world, x, y, z, random);
+
+		// check leaves tile again because they can decay in super.updateTick
+		tileLeaves = getLeafTile(world, x, y, z);
+		if (tileLeaves == null)
+			return;
 
 		if (world.rand.nextFloat() > 0.1)
 			return;

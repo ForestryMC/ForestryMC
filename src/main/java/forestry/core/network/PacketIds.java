@@ -47,6 +47,7 @@ public class PacketIds {
 	public static final int POBOX_INFO_REQUEST = 86;
 
 	public static final int LEAF_UPDATE = 90;
+	public static final int RIPENING_UPDATE = 91;
 	
 	public static final int GUI_INTEGER = 92;
 	

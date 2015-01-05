@@ -35,7 +35,7 @@ public abstract class ItemGE extends Item {
 
 	protected abstract int getDefaultSecondaryColour();
 
-	protected abstract IIndividual getIndividual(ItemStack itemstack);
+	public abstract IIndividual getIndividual(ItemStack itemstack);
 
 	protected abstract IAlleleSpecies getSpecies(ItemStack itemStack);
 

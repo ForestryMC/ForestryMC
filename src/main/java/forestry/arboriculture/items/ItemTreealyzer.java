@@ -18,7 +18,6 @@ import net.minecraft.world.World;
 import forestry.api.arboriculture.ITree;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
-import forestry.api.genetics.AlleleManager;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.interfaces.IErrorSource;
@@ -28,7 +27,6 @@ import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.GeneticsUtil;
-import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginArboriculture;
 
 public class ItemTreealyzer extends ItemInventoried {
@@ -42,7 +40,7 @@ public class ItemTreealyzer extends ItemInventoried {
 
 		@Override
 		protected boolean isSpecimen(ItemStack itemStack) {
-			return StackUtils.containsItemStack(AlleleManager.ersatzSaplings.keySet(), itemStack) || PluginArboriculture.treeInterface.isMember(itemStack);
+			return GeneticsUtil.getGeneticEquivalent(itemStack) instanceof ITree;
 		}
 
 		private void tryAnalyze() {

@@ -18,6 +18,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -30,6 +31,7 @@ import forestry.api.core.IArmorNaturalist;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
+import forestry.core.genetics.ItemGE;
 import forestry.plugins.PluginArboriculture;
 
 public class GeneticsUtil {
@@ -65,7 +67,7 @@ public class GeneticsUtil {
 			return (IPollinatable) tile;
 		}
 
-		IIndividual pollen = getErsatzPollen(world, x, y, z);
+		ITree pollen = getErsatzPollen(world, x, y, z);
 		if (pollen != null) {
 			PluginArboriculture.treeInterface.setLeaves(world, pollen, owner, x, y, z);
 			return (IPollinatable) world.getTileEntity(x, y, z);
@@ -74,7 +76,7 @@ public class GeneticsUtil {
 		return null;
 	}
 
-	public static IIndividual getErsatzPollen(World world, final int x, final int y, final int z) {
+	public static ITree getErsatzPollen(World world, final int x, final int y, final int z) {
 		Block block = world.getBlock(x, y, z);
 		if (!isErsatzMaterial(block))
 			return null;
@@ -89,35 +91,33 @@ public class GeneticsUtil {
 			}
 			meta %= 3;
 		}
-
-		// Find the matching ersatz genome
-		for (ItemStack ersatzSpecimen : AlleleManager.ersatzSpecimen.keySet()) {
-			if (StackUtils.equals(block, meta, ersatzSpecimen)) {
-				return AlleleManager.ersatzSpecimen.get(ersatzSpecimen).copy();
-			}
-		}
+		ItemStack itemStack = new ItemStack(block, meta);
+		IIndividual tree = getGeneticEquivalent(itemStack);
+		if (tree instanceof ITree)
+			return (ITree) tree;
 
 		return null;
 	}
 
-	public static ItemStack convertSaplingToGeneticEquivalent(ItemStack foreign) {
-
-		ItemStack ersatz = null;
-		ITree tree = null;
+	public static IIndividual getGeneticEquivalent(ItemStack itemStack) {
+		Item item = itemStack.getItem();
+		if (item instanceof ItemGE)
+			return ((ItemGE) item).getIndividual(itemStack);
 
 		for (Map.Entry<ItemStack, IIndividual> entry : AlleleManager.ersatzSaplings.entrySet()) {
-			if (entry.getKey().getItem() != foreign.getItem())
-				continue;
-			if (entry.getKey().getItemDamage() != foreign.getItemDamage())
-				continue;
-
-			if (entry.getValue() instanceof ITree)
-				tree = (ITree) entry.getValue();
-
-			ersatz = PluginArboriculture.treeInterface.getMemberStack(tree, EnumGermlingType.SAPLING.ordinal());
-			ersatz.stackSize = foreign.stackSize;
+			if (StackUtils.isIdenticalItem(itemStack, entry.getKey()))
+				return entry.getValue().copy();
 		}
+		return null;
+	}
 
+	public static ItemStack convertSaplingToGeneticEquivalent(ItemStack foreign) {
+		IIndividual tree = getGeneticEquivalent(foreign);
+		if (!(tree instanceof ITree))
+			return null;
+
+		ItemStack ersatz = PluginArboriculture.treeInterface.getMemberStack(tree, EnumGermlingType.SAPLING.ordinal());
+		ersatz.stackSize = foreign.stackSize;
 		return ersatz;
 	}
 }

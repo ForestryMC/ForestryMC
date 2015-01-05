@@ -36,7 +36,7 @@ public class FarmableGE implements IFarmable {
 	public ICrop getCropAt(World world, int x, int y, int z) {
 		Block block = world.getBlock(x, y, z);
 
-		if (block.isAir(world, x, y, z) || !block.isWood(world, x, y, z))
+		if (!block.isWood(world, x, y, z))
 			return null;
 
 		return new CropBlock(world, block, world.getBlockMetadata(x, y, z), new Vect(x, y, z));

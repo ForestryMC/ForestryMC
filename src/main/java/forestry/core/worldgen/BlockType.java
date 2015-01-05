@@ -33,8 +33,6 @@ public class BlockType {
 
 	public void setBlock(World world, ITreeGenData tree, int x, int y, int z) {
 		world.setBlock(x, y, z, block, meta, Defaults.FLAG_BLOCK_SYNCH);
-		if (world.getTileEntity(x, y, z) != null)
-			world.removeTileEntity(x, y, z);
 	}
 	
 	public int getMeta() {

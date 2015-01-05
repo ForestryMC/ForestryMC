@@ -51,7 +51,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 	}
 
 	@Override
-	protected IIndividual getIndividual(ItemStack itemstack) {
+	public ITree getIndividual(ItemStack itemstack) {
 		return new Tree(itemstack.getTagCompound());
 	}
 

@@ -24,8 +24,6 @@ public class BlockTypeVoid extends BlockType {
 	@Override
 	public void setBlock(World world, ITreeGenData tree, int x, int y, int z) {
 		world.setBlockToAir(x, y, z);
-		if (world.getTileEntity(x, y, z) != null)
-			world.removeTileEntity(x, y, z);
 	}
 
 }
