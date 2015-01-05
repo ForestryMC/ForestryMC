@@ -50,16 +50,25 @@ import forestry.plugins.PluginManager;
 
 public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
+	private static final Random random = new Random();
 	protected final ItemStack[] buildingBlocks;
 	protected int averageGroundLevel = -1;
 	protected boolean isInDesert = false;
 	protected boolean hasChest = false;
+
+	public ComponentVillageBeeHouse() {
+		buildingBlocks = createBuildingBlocks(random);
+	}
 
 	public ComponentVillageBeeHouse(StructureVillagePieces.Start startPiece, int componentType, Random random, StructureBoundingBox boundingBox, int coordBaseMode) {
 		super(startPiece, componentType, random, boundingBox, coordBaseMode);
 
 		isInDesert = startPiece.inDesert;
 
+		buildingBlocks = createBuildingBlocks(random);
+	}
+
+	private static ItemStack[] createBuildingBlocks(Random random) {
 		int plankMeta = random.nextInt(16);
 		int blockMeta = random.nextInt(4);
 		Block plankBlock = Blocks.planks;
@@ -90,8 +99,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 			}
 		}
 
-		buildingBlocks = new ItemStack[]{new ItemStack(plankBlock, 1, plankMeta), new ItemStack(woodBlock, 1, blockMeta)};
-
+		return new ItemStack[]{new ItemStack(plankBlock, 1, plankMeta), new ItemStack(woodBlock, 1, blockMeta)};
 	}
 
 	/*@Override
@@ -108,7 +116,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 	@SuppressWarnings("rawtypes")
 	public static ComponentVillageBeeHouse buildComponent(StructureVillagePieces.Start startPiece, List par1List, Random random, int par3, int par4, int par5,
 			int par6, int par7) {
-		StructureBoundingBox bbox = StructureBoundingBox.getComponentToAddBoundingBox(par3, par4, par5, 0, 0, 0, 9, 9, 6, par6);
+		StructureBoundingBox bbox = StructureBoundingBox.getComponentToAddBoundingBox(par3, par4, par5, 0, 0, 0, 9, 9, 10, par6);
 		return canVillageGoDeeper(bbox) && StructureComponent.findIntersecting(par1List, bbox) == null ? new ComponentVillageBeeHouse(startPiece, par7, random,
 				bbox, par6) : null;
 	}
