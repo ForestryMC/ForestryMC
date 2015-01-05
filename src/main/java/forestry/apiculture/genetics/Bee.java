@@ -58,6 +58,9 @@ import forestry.plugins.PluginApiculture;
 
 public class Bee extends IndividualLiving implements IBee {
 
+	protected int generation;
+	protected boolean isNatural = true;
+
 	public IBeeGenome genome;
 	public IBeeGenome mate;
 
@@ -66,28 +69,20 @@ public class Bee extends IndividualLiving implements IBee {
 		readFromNBT(nbttagcompound);
 	}
 
-	public Bee(World world, IBeeGenome genome, IBee mate) {
-		this(world, genome);
+	public Bee(IBeeGenome genome, IBee mate) {
+		this(genome);
 		this.mate = mate.getGenome();
-		this.isIrregularMating = mate.isNatural() != this.isNatural;
-	}
-
-	public Bee(World world, IBeeGenome genome) {
-		this(world, genome, true, 0);
 	}
 
 	public Bee(IBeeGenome genome) {
 		this(genome, true, 0);
 	}
 
-	public Bee(World world, IBeeGenome genome, boolean isNatural, int generation) {
-		super(genome.getLifespan(), isNatural, generation);
-		this.genome = genome;
-	}
-
 	public Bee(IBeeGenome genome, boolean isNatural, int generation) {
-		super(genome.getLifespan(), isNatural, generation);
+		super(genome.getLifespan());
 		this.genome = genome;
+		this.isNatural = isNatural;
+		this.generation = generation;
 	}
 
 	/* SAVING & LOADING */
@@ -101,13 +96,49 @@ public class Bee extends IndividualLiving implements IBee {
 
 		super.readFromNBT(nbttagcompound);
 
+		if (nbttagcompound.hasKey("NA"))
+			isNatural = nbttagcompound.getBoolean("NA");
+
+		if (nbttagcompound.hasKey("GEN"))
+			generation = nbttagcompound.getInteger("GEN");
+
 		if (nbttagcompound.hasKey("Genome"))
 			genome = new BeeGenome(nbttagcompound.getCompoundTag("Genome"));
 		else
 			genome = PluginApiculture.beeInterface.templateAsGenome(BeeTemplates.getForestTemplate());
+
 		if (nbttagcompound.hasKey("Mate"))
 			mate = new BeeGenome(nbttagcompound.getCompoundTag("Mate"));
 
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
+
+		super.writeToNBT(nbttagcompound);
+
+		if (!isNatural)
+			nbttagcompound.setBoolean("NA", false);
+
+		if (generation > 0)
+			nbttagcompound.setInteger("GEN", generation);
+	}
+
+	public void setIsNatural(boolean flag) {
+		this.isNatural = flag;
+	}
+
+	@Override
+	public boolean isIrregularMating() {
+		return false;
+	}
+
+	public boolean isNatural() {
+		return this.isNatural;
+	}
+
+	public int getGeneration() {
+		return generation;
 	}
 
 	@Override
@@ -117,7 +148,6 @@ public class Bee extends IndividualLiving implements IBee {
 
 		IBee drone = (IBee)individual;
 		mate = drone.getGenome();
-		this.isIrregularMating = drone.isNatural() != this.isNatural;
 	}
 
 	/* EFFECTS */
@@ -470,7 +500,7 @@ public class Bee extends IndividualLiving implements IBee {
 			toCreate = 1;
 
 		for (int i = 0; i < toCreate; i++) {
-			IBee offspring = createOffspring(housing, -1);
+			IBee offspring = createOffspring(housing, 0);
 			if (offspring != null) {
 				offspring.setIsNatural(true);
 				bees.add(offspring);
@@ -505,7 +535,7 @@ public class Bee extends IndividualLiving implements IBee {
 				chromosomes[i] = Chromosome.inheritChromosome(world.rand, parent1[i], parent2[i]);
 
 		IBeekeepingMode mode = PluginApiculture.beeInterface.getBeekeepingMode(world);
-		IBee offspring = new Bee(world, new BeeGenome(chromosomes), mode.isNaturalOffspring(this), generation);
+		IBee offspring = new Bee(new BeeGenome(chromosomes), mode.isNaturalOffspring(this), generation);
 
 		/* Disabling the mutation rate nerf
 		// All mutation and no play makes queen a dull girl.

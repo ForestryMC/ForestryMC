@@ -17,19 +17,13 @@ import net.minecraft.world.World;
 
 public abstract class IndividualLiving extends Individual implements IIndividualLiving {
 
-	protected int generation;
-	protected boolean isNatural;
-	protected boolean isIrregularMating;
-
 	protected int health;
 	protected int maxHealth;
 
 	public IndividualLiving() {}
 	
-	public IndividualLiving(int newHealth, boolean isNatural, int generation) {
+	public IndividualLiving(int newHealth) {
 		health = maxHealth = newHealth;
-		this.isNatural = isNatural;
-		this.generation = generation;
 	}
 	
 	/* SAVING & LOADING */
@@ -37,13 +31,6 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 
 		super.readFromNBT(nbttagcompound);
-
-		if (nbttagcompound.hasKey("NA"))
-			isNatural = nbttagcompound.getBoolean("NA");
-		else
-			isNatural = true;
-		isIrregularMating = nbttagcompound.getBoolean("IM");
-		generation = nbttagcompound.getInteger("GEN");
 
 		health = nbttagcompound.getInteger("Health");
 		maxHealth = nbttagcompound.getInteger("MaxH");
@@ -54,10 +41,6 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 
 		super.writeToNBT(nbttagcompound);
-
-		nbttagcompound.setBoolean("NA", isNatural);
-		nbttagcompound.setBoolean("IM", isIrregularMating);
-		nbttagcompound.setInteger("GEN", generation);
 
 		nbttagcompound.setInteger("Health", health);
 		nbttagcompound.setInteger("MaxH", maxHealth);
@@ -77,22 +60,6 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 
 	/* GENERATION */
 	public abstract IGenome getMate();
-	
-	public void setIsNatural(boolean flag) {
-		this.isNatural = flag;
-	}
-
-	public boolean isIrregularMating() {
-		return this.isIrregularMating;
-	}
-
-	public boolean isNatural() {
-		return this.isNatural;
-	}
-
-	public int getGeneration() {
-		return generation;
-	}
 
 	@Override
 	public boolean isAlive() {

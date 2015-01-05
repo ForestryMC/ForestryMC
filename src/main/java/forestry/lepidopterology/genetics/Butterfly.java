@@ -54,11 +54,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	}
 
 	public Butterfly(IButterflyGenome genome) {
-		this(genome, true, 0);
-	}
-
-	public Butterfly(IButterflyGenome genome, boolean isNatural, int generation) {
-		super(genome.getLifespan(), isNatural, generation);
+		super(genome.getLifespan());
 		this.genome = genome;
 	}
 
@@ -201,7 +197,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 			if (parent1[i] != null && parent2[i] != null)
 				chromosomes[i] = Chromosome.inheritChromosome(world.rand, parent1[i], parent2[i]);
 
-		return new Butterfly(new ButterflyGenome(chromosomes), true, generation);
+		return new Butterfly(new ButterflyGenome(chromosomes));
 	}
 
 	private IChromosome[] mutateSpecies(IButterflyNursery nursery, IGenome genomeOne, IGenome genomeTwo) {

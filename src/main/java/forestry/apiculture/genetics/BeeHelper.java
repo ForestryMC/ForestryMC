@@ -156,8 +156,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 
 	@Override
 	public IBee getMember(ItemStack stack) {
-		if (!ForestryItem.beeQueenGE.isItemEqual(stack) && !ForestryItem.beePrincessGE.isItemEqual(stack)
-				&& !ForestryItem.beeDroneGE.isItemEqual(stack) && !ForestryItem.beeLarvaeGE.isItemEqual(stack))
+		if (!isMember(stack))
 			return null;
 
 		return new Bee(stack.getTagCompound());
@@ -170,12 +169,12 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 
 	@Override
 	public IBee getBee(World world, IBeeGenome genome) {
-		return new Bee(world, genome);
+		return new Bee(genome);
 	}
 
 	@Override
 	public IBee getBee(World world, IBeeGenome genome, IBee mate) {
-		return new Bee(world, genome, mate);
+		return new Bee(genome, mate);
 	}
 
 	/* GENOME CONVERSIONS */
