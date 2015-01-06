@@ -12,6 +12,7 @@ package forestry.arboriculture.gadgets;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.core.Tabs;
 import forestry.arboriculture.WoodType;
 import forestry.core.proxy.Proxies;
@@ -28,6 +29,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -102,6 +104,25 @@ public class BlockArbStairs extends BlockStairs {
 	@Override
 	public TileEntity createTileEntity(World world, int meta) {
 		return new TileStairs();
+	}
+
+	@Override
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+		ItemStack itemStack = super.getPickBlock(target, world, x, y, z);
+		NBTTagCompound stairsNBT = getTagCompoundForStairs(world, x, y, z);
+		itemStack.setTagCompound(stairsNBT);
+		return itemStack;
+	}
+
+	private static NBTTagCompound getTagCompoundForStairs(IBlockAccess world, int x, int y, int z) {
+		TileStairs stairs = getStairTile(world, x, y, z);
+
+		NBTTagCompound nbttagcompound = new NBTTagCompound();
+		if (stairs == null || stairs.getType() == null)
+			return nbttagcompound;
+
+		stairs.getType().saveToCompound(nbttagcompound);
+		return nbttagcompound;
 	}
 
 	/* ICONS */
