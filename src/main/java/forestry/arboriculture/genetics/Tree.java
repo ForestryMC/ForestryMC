@@ -281,11 +281,11 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 		String maturation = EnumChatFormatting.RED + "M: " + genome.getActiveAllele(EnumTreeChromosome.MATURATION).getName();
 		String height = EnumChatFormatting.LIGHT_PURPLE + "H: " + genome.getActiveAllele(EnumTreeChromosome.HEIGHT).getName();
 		String girth = EnumChatFormatting.AQUA + "G: " + String.format("%sx%s", genome.getGirth(), genome.getGirth());
-		String fertility = EnumChatFormatting.YELLOW + "S: " + genome.getActiveAllele(EnumTreeChromosome.FERTILITY).getName();
+		String saplings = EnumChatFormatting.YELLOW + "S: " + genome.getActiveAllele(EnumTreeChromosome.FERTILITY).getName();
 		String yield = EnumChatFormatting.WHITE + "Y: " + genome.getActiveAllele(EnumTreeChromosome.YIELD).getName();
-		list.add(String.format("%s, %s", sappiness, maturation));
+		list.add(String.format("%s, %s", saplings, maturation));
 		list.add(String.format("%s, %s", height, girth));
-		list.add(String.format("%s, %s", fertility, yield));
+		list.add(String.format("%s, %s", yield, sappiness));
 
 		IAlleleBoolean primaryFireproof = (IAlleleBoolean)genome.getActiveAllele(EnumTreeChromosome.FIREPROOF);
 		if (primaryFireproof.getValue())
