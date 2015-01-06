@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -355,22 +356,43 @@ public class Bee extends IndividualLiving implements IBee {
 		if (!isPureBred(EnumBeeChromosome.SPECIES))
 			list.add(EnumChatFormatting.BLUE + StringUtil.localize("bees.hybrid").replaceAll("%PRIMARY",primary.getName()).replaceAll("%SECONDARY",secondary.getName()));
 
-		IAllele speed = genome.getActiveAllele(EnumBeeChromosome.SPEED);
-		String customWorker = "tooltip.worker." + speed.getUnlocalizedName().replaceFirst("gui.", "");
-		if (StringUtil.canTranslate(customWorker))
-			list.add(StringUtil.localize(customWorker));
+		if (generation > 0) {
+			EnumRarity rarity;
+			if (generation >= 1000)
+				rarity = EnumRarity.epic;
+			else if (generation >= 100)
+				rarity = EnumRarity.rare;
+			else if (generation >= 10)
+				rarity = EnumRarity.uncommon;
+			else
+				rarity = EnumRarity.common;
+
+			String generationString = rarity.rarityColor + StringUtil.localizeAndFormat("gui.beealyzer.generations", generation);
+			list.add(generationString);
+		}
+
+		IAllele speedAllele = genome.getActiveAllele(EnumBeeChromosome.SPEED);
+		IAlleleTolerance tempToleranceAllele = (IAlleleTolerance)getGenome().getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
+		IAlleleTolerance humidToleranceAllele = (IAlleleTolerance)getGenome().getActiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE);
+
+		String unlocalizedCustomSpeed = "tooltip.worker." + speedAllele.getUnlocalizedName().replaceFirst("gui.", "");
+		String speed;
+		if (StringUtil.canTranslate(unlocalizedCustomSpeed))
+			speed = StringUtil.localize(unlocalizedCustomSpeed);
 		else
-			list.add(speed.getName() + " " + StringUtil.localize("gui.worker"));
+			speed = speedAllele.getName() + " " + StringUtil.localize("gui.worker");
 
-		list.add(genome.getActiveAllele(EnumBeeChromosome.LIFESPAN).getName() + " " + StringUtil.localize("gui.life"));
+		String lifespan = genome.getActiveAllele(EnumBeeChromosome.LIFESPAN).getName() + " " + StringUtil.localize("gui.life");
+		String tempTolerance = EnumChatFormatting.GREEN + "T: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / " + tempToleranceAllele.getName();
+		String humidTolerance = EnumChatFormatting.GREEN + "H: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / " + humidToleranceAllele.getName();
+		String flowers = genome.getFlowerProvider().getDescription();
 
-		IAlleleTolerance tempTolerance = (IAlleleTolerance)getGenome().getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
-		list.add(EnumChatFormatting.GREEN + "T: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / " + tempTolerance.getName());
+		list.add(lifespan);
+		list.add(speed);
+		list.add(tempTolerance);
+		list.add(humidTolerance);
+		list.add(flowers);
 
-		IAlleleTolerance humidTolerance = (IAlleleTolerance)getGenome().getActiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE);
-		list.add(EnumChatFormatting.GREEN + "H: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / " + humidTolerance.getName());
-
-		list.add(genome.getFlowerProvider().getDescription());
 		if (genome.getNocturnal())
 			list.add(EnumChatFormatting.RED + GenericRatings.rateActivityTime(genome.getNocturnal(), false));
 	}
