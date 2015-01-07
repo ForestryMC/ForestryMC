@@ -57,6 +57,7 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 	public static final short SLOT_RESOURCE_1 = 0;
 	public static final short SLOTS_RESOURCE_COUNT = 9;
 	public static final short SLOT_REMNANT = 9;
+	public static final short SLOT_REMNANT_COUNT = 1;
 	public static final short SLOT_CAN_INPUT = 10;
 	public static final short SLOT_CAN_OUTPUT = 11;
 
@@ -139,8 +140,6 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 
 	private Recipe currentRecipe;
 
-	private final Stack<FluidStack> pendingLiquids = new Stack<FluidStack>();
-	private final Stack<ItemStack> pendingRemnants = new Stack<ItemStack>();
 	private int productionTime;
 	private int timePerItem;
 
@@ -187,32 +186,6 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 		nbttagcompound.setInteger("ProductionTime", productionTime);
 		nbttagcompound.setInteger("TimePerItem", timePerItem);
 
-		// Pending remnants
-		NBTTagList nbttaglist = new NBTTagList();
-		ItemStack[] remnants = pendingRemnants.toArray(new ItemStack[pendingRemnants.size()]);
-		for (int i = 0; i < remnants.length; i++) {
-			if (remnants[i] != null) {
-				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setByte("Slot", (byte) i);
-				remnants[i].writeToNBT(nbttagcompound1);
-				nbttaglist.appendTag(nbttagcompound1);
-			}
-		}
-		nbttagcompound.setTag("PendingRemnants", nbttaglist);
-
-		// Pending liquids
-		nbttaglist = new NBTTagList();
-		FluidStack[] liquids = pendingLiquids.toArray(new FluidStack[pendingLiquids.size()]);
-		for (int i = 0; i < liquids.length; i++) {
-			if (liquids[i] != null) {
-				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setByte("Slot", (byte) i);
-				liquids[i].writeToNBT(nbttagcompound1);
-				nbttaglist.appendTag(nbttagcompound1);
-			}
-		}
-		nbttagcompound.setTag("PendingLiquids", nbttaglist);
-
 		tankManager.writeTanksToNBT(nbttagcompound);
 	}
 
@@ -222,21 +195,6 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 
 		productionTime = nbttagcompound.getInteger("ProductionTime");
 		timePerItem = nbttagcompound.getInteger("TimePerItem");
-
-		// Pending remnants
-		NBTTagList nbttaglist = nbttagcompound.getTagList("PendingRemnants", 10);
-		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-			pendingRemnants.add(ItemStack.loadItemStackFromNBT(nbttagcompound1));
-		}
-
-		// Pending liquids
-		nbttaglist = nbttagcompound.getTagList("PendingLiquids", 10);
-		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-			pendingLiquids.add(FluidStack.loadFluidStackFromNBT(nbttagcompound1));
-		}
-
 		tankManager.readTanksFromNBT(nbttagcompound);
 
 		checkRecipe();
@@ -271,13 +229,24 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 
 		checkRecipe();
 
-		// If we add pending products, we skip to the next work cycle.
-		tryAddPending();
-
-		if (!pendingLiquids.isEmpty() || !pendingRemnants.isEmpty())
+		if (getErrorState() == EnumErrorCode.NORECIPE)
 			return false;
 
-		// Continue work if nothing needs to be added
+		FluidStack resultFluid = currentRecipe.liquid.copy();
+		if (productTank.fill(resultFluid, false) < resultFluid.amount) {
+			setErrorState(EnumErrorCode.NOSPACETANK);
+			return false;
+		}
+
+		ItemStack remnant = null;
+		if (currentRecipe.remnants != null) {
+			remnant = currentRecipe.remnants.copy();
+			if (!InvTools.tryAddStack(getInternalInventory(), remnant, SLOT_REMNANT, SLOT_REMNANT_COUNT, true, false)) {
+				setErrorState(EnumErrorCode.NOSPACE);
+				return false;
+			}
+		}
+
 		if (productionTime <= 0)
 			return false;
 
@@ -294,16 +263,14 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 		if (!removeResources(currentRecipe.resources))
 			return false;
 
-		// We are done, add products to queue
-		pendingLiquids.push(currentRecipe.liquid.copy());
-		if (currentRecipe.remnants != null && worldObj.rand.nextInt(100) < currentRecipe.chance)
-			pendingRemnants.push(currentRecipe.remnants.copy());
+		productTank.fill(resultFluid, true);
+		if (remnant != null && worldObj.rand.nextInt(100) < currentRecipe.chance)
+			InvTools.tryAddStack(getInternalInventory(), remnant, SLOT_REMNANT, SLOT_REMNANT_COUNT, true);
+
+		setErrorState(EnumErrorCode.OK);
 
 		checkRecipe();
 		resetRecipe();
-
-		tryAddPending();
-		setErrorState(EnumErrorCode.OK);
 
 		return true;
 	}
@@ -330,39 +297,6 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 
 		productionTime = currentRecipe.timePerItem;
 		timePerItem = currentRecipe.timePerItem;
-	}
-
-	private boolean tryAddPending() {
-
-		if (!pendingLiquids.isEmpty()) {
-			FluidStack next = pendingLiquids.peek();
-			if (addProduct(next)) {
-				pendingLiquids.pop();
-				return true;
-			}
-		}
-
-		if (!pendingRemnants.isEmpty()) {
-			ItemStack next = pendingRemnants.peek();
-			if (addRemnant(next)) {
-				pendingRemnants.pop();
-				return true;
-			}
-		}
-
-		if (!pendingLiquids.isEmpty() || !pendingRemnants.isEmpty())
-			setErrorState(EnumErrorCode.NOSPACE);
-		return false;
-	}
-
-	private boolean addProduct(FluidStack stack) {
-		stack.amount -= productTank.fill(stack, true);
-
-		return stack.amount <= 0;
-	}
-
-	private boolean addRemnant(ItemStack stack) {
-		return InvTools.tryAddStack(getInternalInventory(), stack, SLOT_REMNANT, 1, true);
 	}
 
 	private boolean removeResources(ItemStack[] stacks) {

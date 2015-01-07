@@ -33,6 +33,7 @@ public enum EnumErrorCode implements IErrorState {
 	NODRONE("noDrone"),
 	NOSKY("noSky"),
 	NOSPACE("noSpace"),
+	NOSPACETANK("noSpaceTank", "noLiquid"),
 	NORECIPE("noRecipe"),
 	NOENERGYNET("noEnergyNet"),
 	NOTHINGANALYZE("noSpecimen"),
