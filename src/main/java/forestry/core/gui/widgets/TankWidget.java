@@ -114,7 +114,7 @@ public class TankWidget extends Widget {
 
 		Item held = itemstack.getItem();
 		if (held instanceof IToolPipette && manager.gui.inventorySlots instanceof ContainerLiquidTanks)
-			((ContainerLiquidTanks) manager.gui.inventorySlots).handlePipetteClick(slot, manager.minecraft.thePlayer);
+			((ContainerLiquidTanks) manager.gui.inventorySlots).handlePipetteClickClient(slot, manager.minecraft.thePlayer);
 
 	}
 }

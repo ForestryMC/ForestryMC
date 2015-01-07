@@ -10,6 +10,17 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.fluids.FluidStack;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.core.IToolPipette;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gadgets.TileForestry;
@@ -18,12 +29,6 @@ import forestry.core.network.PacketIds;
 import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 public class ContainerLiquidTanks extends ContainerForestry {
 
@@ -34,7 +39,18 @@ public class ContainerLiquidTanks extends ContainerForestry {
 		this.tile = tile;
 	}
 
-	public void handlePipetteClick(int slot, EntityPlayer player) {
+	@SideOnly(Side.CLIENT)
+	public void handlePipetteClickClient(int slot, EntityPlayer player) {
+		ItemStack itemstack = player.inventory.getItemStack();
+		if (itemstack == null || !(itemstack.getItem() instanceof IToolPipette))
+			return;
+
+		PacketPayload payload = new PacketPayload(1, 0, 0);
+		payload.intPayload[0] = slot;
+		Proxies.net.sendToServer(new PacketUpdate(PacketIds.PIPETTE_CLICK, payload));
+	}
+
+	public void handlePipetteClick(int slot, EntityPlayerMP player) {
 
 		ItemStack itemstack = player.inventory.getItemStack();
 		if (itemstack == null)
@@ -43,13 +59,6 @@ public class ContainerLiquidTanks extends ContainerForestry {
 		Item held = itemstack.getItem();
 		if (!(held instanceof IToolPipette))
 			return;
-
-		if (!Proxies.common.isSimulating(player.worldObj)) {
-			PacketPayload payload = new PacketPayload(1, 0, 0);
-			payload.intPayload[0] = slot;
-			Proxies.net.sendToServer(new PacketUpdate(PacketIds.PIPETTE_CLICK, payload));
-			return;
-		}
 
 		IToolPipette pipette = (IToolPipette) held;
 		StandardTank tank = tile.getTankManager().get(slot);
@@ -60,11 +69,14 @@ public class ContainerLiquidTanks extends ContainerForestry {
 				FluidStack fillAmount = tank.drain(1000, false);
 				int filled = pipette.fill(itemstack, fillAmount, true);
 				tank.drain(filled, true);
+				player.updateHeldItem();
 			}
 		} else {
 			FluidStack potential = pipette.drain(itemstack, pipette.getCapacity(itemstack), false);
-			if (potential != null)
+			if (potential != null) {
 				pipette.drain(itemstack, tank.fill(potential, true), true);
+				player.updateHeldItem();
+			}
 		}
 	}
 

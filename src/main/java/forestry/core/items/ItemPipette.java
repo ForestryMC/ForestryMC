@@ -60,8 +60,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 				return;
 
 			String descr = contents.getFluid().getLocalizedName(contents);
-			if (Config.isDebug)
-				descr += " (" + contents.amount + ")";
+			descr += " (" + contents.amount + " mb)";
 
 			list.add(descr);
 		}

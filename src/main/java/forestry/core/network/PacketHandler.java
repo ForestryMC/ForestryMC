@@ -59,7 +59,7 @@ public class PacketHandler {
 				null);
 	}
 
-	public void onPacketData(InputStream is, EntityPlayer player) {
+	public void onPacketData(InputStream is, EntityPlayerMP player) {
 		DataInputStream data = new DataInputStream(is);
 		PacketUpdate packetU;
 
@@ -263,7 +263,7 @@ public class PacketHandler {
 		tile.switchAccessRule(playerEntity);
 	}
 
-	private void onPipetteClick(PacketUpdate packet, EntityPlayer player) {
+	private void onPipetteClick(PacketUpdate packet, EntityPlayerMP player) {
 		assert FMLCommonHandler.instance().getEffectiveSide().isServer();
 
 		if (!(player.openContainer instanceof ContainerLiquidTanks))
