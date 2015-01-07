@@ -193,9 +193,11 @@ public class RenderEngine extends TileEntitySpecialRenderer implements IBlockRen
 		Proxies.common.bindTexture(textures[Textures.EXTENSION.ordinal()]);
 		float chamberf = 2F / 16F;
 
-		for (int i = 0; i <= step + 2; i += 2) {
-			extension.render(factor);
-			GL11.glTranslatef(translate[0] * chamberf, translate[1] * chamberf, translate[2] * chamberf);
+		if (step > 0) {
+			for (int i = 0; i <= step + 2; i += 2) {
+				extension.render(factor);
+				GL11.glTranslatef(translate[0] * chamberf, translate[1] * chamberf, translate[2] * chamberf);
+			}
 		}
 
 		GL11.glPopAttrib();
