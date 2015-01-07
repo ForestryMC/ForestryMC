@@ -169,7 +169,7 @@ public class PluginManager {
 				if (!toLoad.containsAll(deps)) {
 					it.remove();
 					changed = true;
-					Proxies.log.warning("Module {0} is missing dependancies: {1}", m, deps);
+					Proxies.log.warning("Module {0} is missing dependencies: {1}", m, deps);
 					continue;
 				}
 			}
