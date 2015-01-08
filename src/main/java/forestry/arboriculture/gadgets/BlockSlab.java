@@ -113,7 +113,7 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 
 	@Override
 	public WoodType getWoodType(int meta) {
-		int woodOrdinal = meta + cat.ordinal() * slabsPerCat;
+		int woodOrdinal = (meta % slabsPerCat) + cat.ordinal() * slabsPerCat;
 		if(woodOrdinal < WoodType.VALUES.length)
 			return WoodType.VALUES[woodOrdinal];
 		else
