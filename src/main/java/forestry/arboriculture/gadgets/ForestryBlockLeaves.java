@@ -178,12 +178,16 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 	@Override
 	public void beginLeavesDecay(World world, int x, int y, int z) {
 		TileLeaves tile = getLeafTile(world, x, y, z);
-		if (tile != null && tile.isDecorative())
+		if (tile == null || tile.isDecorative())
 			return;
-		world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z) | 8, 4);
-		if (world.isRemote)
-			world.markBlockForUpdate(x, y, z);
+		super.beginLeavesDecay(world, x, y, z);
+		
+		// TODO: Remove the following line when/if the following Forge PR is accepted
+		// This work around is very costly in terms of both bandwidth and rendering
+		// https://github.com/MinecraftForge/MinecraftForge/pull/1627
+		world.markBlockForUpdate(x, y, z);
 	}
+	
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random random) {
