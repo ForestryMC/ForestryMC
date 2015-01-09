@@ -181,11 +181,6 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 		if (tile == null || tile.isDecorative())
 			return;
 		super.beginLeavesDecay(world, x, y, z);
-		
-		// TODO: Remove the following line when/if the following Forge PR is accepted
-		// This work around is very costly in terms of both bandwidth and rendering
-		// https://github.com/MinecraftForge/MinecraftForge/pull/1627
-		world.markBlockForUpdate(x, y, z);
 	}
 	
 
