@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -58,7 +60,10 @@ public class HiveDecorator {
 	}
 
 	private void decorateHives(World world, Random rand, int chunkX, int chunkZ) {
-		for (Hive hive : PluginApiculture.hiveRegistry.getHives()) {
+		List<Hive> hives = PluginApiculture.hiveRegistry.getHives();
+		Collections.shuffle(hives, rand);
+
+		for (Hive hive : hives) {
 			if (Config.generateBeehivesDebug)
 				genHiveDebug(world, chunkX, chunkZ, hive);
 			else
