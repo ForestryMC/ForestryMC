@@ -51,7 +51,6 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeRoot;
 import forestry.api.apiculture.IHiveDrop;
 import forestry.api.apiculture.hives.HiveManager;
-import forestry.api.apiculture.hives.IHive;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.Tabs;
@@ -132,13 +131,9 @@ import forestry.apiculture.items.ItemWaxCast;
 import forestry.apiculture.proxy.ProxyApiculture;
 import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.apiculture.worldgen.HiveDecorator;
-import forestry.apiculture.worldgen.HiveEnd;
-import forestry.apiculture.worldgen.HiveForest;
-import forestry.apiculture.worldgen.HiveJungle;
-import forestry.apiculture.worldgen.HiveMeadows;
-import forestry.apiculture.worldgen.HiveParched;
-import forestry.apiculture.worldgen.HiveSnow;
-import forestry.apiculture.worldgen.HiveSwamp;
+import forestry.apiculture.worldgen.HiveDescription;
+import forestry.apiculture.worldgen.HiveGenHelper;
+import forestry.apiculture.worldgen.HiveRegistry;
 import forestry.core.GameMode;
 import forestry.core.config.Config;
 import forestry.core.config.Configuration;
@@ -186,6 +181,8 @@ public class PluginApiculture extends ForestryPlugin {
 	 * See {@link IBeeRoot} for details
 	 */
 	public static IBeeRoot beeInterface;
+	public static HiveRegistry hiveRegistry;
+
 	public static MachineDefinition definitionApiary;
 	public static MachineDefinition definitionChest;
 	public static MachineDefinition definitionBeehouse;
@@ -198,6 +195,8 @@ public class PluginApiculture extends ForestryPlugin {
 
 		MinecraftForge.EVENT_BUS.register(this);
 
+		HiveManager.hiveRegistry = hiveRegistry = new HiveRegistry();
+		HiveManager.genHelper = new HiveGenHelper();
 		createHiveDropArrays();
 
 		ForestryBlock.apiculture.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "apiculture");
@@ -790,44 +789,23 @@ public class PluginApiculture extends ForestryPlugin {
 	}
 
 	private void createHives() {
-		HiveManager.put(HiveManager.forest, new HiveForest(3));
-		HiveManager.put(HiveManager.meadows, new HiveMeadows(1));
-		HiveManager.put(HiveManager.desert, new HiveParched(1));
-		HiveManager.put(HiveManager.jungle, new HiveJungle(4));
-		HiveManager.put(HiveManager.end, new HiveEnd(4));
-		HiveManager.put(HiveManager.snow, new HiveSnow(2));
-		HiveManager.put(HiveManager.swamp, new HiveSwamp(2));
+		hiveRegistry.registerHive(HiveRegistry.forest, HiveDescription.FOREST);
+		hiveRegistry.registerHive(HiveRegistry.meadows, HiveDescription.MEADOWS);
+		hiveRegistry.registerHive(HiveRegistry.desert, HiveDescription.DESERT);
+		hiveRegistry.registerHive(HiveRegistry.jungle, HiveDescription.JUNGLE);
+		hiveRegistry.registerHive(HiveRegistry.end, HiveDescription.END);
+		hiveRegistry.registerHive(HiveRegistry.snow, HiveDescription.SNOW);
+		hiveRegistry.registerHive(HiveRegistry.swamp, HiveDescription.SWAMP);
 	}
 
-	@Deprecated // deprecated since 3.1. remove when BeeManager.hiveDrops is removed
 	private void updateHiveDrops() {
-		IHive hive = HiveManager.getForestHive();
-		for (IHiveDrop drop : forestDrops)
-			hive.addDrop(drop);
-
-		hive = HiveManager.getMeadowsHive();
-		for (IHiveDrop drop : meadowsDrops)
-			hive.addDrop(drop);
-
-		hive = HiveManager.getDesertHive();
-		for (IHiveDrop drop : desertDrops)
-			hive.addDrop(drop);
-
-		hive = HiveManager.getJungleHive();
-		for (IHiveDrop drop : jungleDrops)
-			hive.addDrop(drop);
-
-		hive = HiveManager.getEndHive();
-		for (IHiveDrop drop : endDrops)
-			hive.addDrop(drop);
-
-		hive = HiveManager.getSnowHive();
-		for (IHiveDrop drop : snowDrops)
-			hive.addDrop(drop);
-
-		hive = HiveManager.getSwampHive();
-		for (IHiveDrop drop : swampDrops)
-			hive.addDrop(drop);
+		hiveRegistry.addDrops(HiveRegistry.forest, forestDrops);
+		hiveRegistry.addDrops(HiveRegistry.meadows, meadowsDrops);
+		hiveRegistry.addDrops(HiveRegistry.desert, desertDrops);
+		hiveRegistry.addDrops(HiveRegistry.jungle, jungleDrops);
+		hiveRegistry.addDrops(HiveRegistry.end, endDrops);
+		hiveRegistry.addDrops(HiveRegistry.snow, snowDrops);
+		hiveRegistry.addDrops(HiveRegistry.swamp, swampDrops);
 	}
 
 	private void createAlleles() {

@@ -25,8 +25,9 @@ import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.ForestryAPI;
+import forestry.apiculture.worldgen.Hive;
 import forestry.apiculture.worldgen.HiveDecorator;
-import forestry.apiculture.worldgen.HiveSwarmer;
+import forestry.apiculture.worldgen.HiveDescriptionSwarmer;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
@@ -127,7 +128,8 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 	private void trySpawnSwarm() {
 
 		ItemStack toSpawn = pendingSpawns.peek();
-		HiveSwarmer hive = new HiveSwarmer(128, toSpawn);
+		HiveDescriptionSwarmer hiveDescription = new HiveDescriptionSwarmer(toSpawn);
+		Hive hive = new Hive(hiveDescription);
 
 		int chunkX = (xCoord + worldObj.rand.nextInt(40 * 2) - 40) / 16;
 		int chunkZ = (zCoord + worldObj.rand.nextInt(40 * 2) - 40) / 16;
