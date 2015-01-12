@@ -150,7 +150,9 @@ public class HiveDecorator {
 		hiveBlock.onBlockAdded(world, x, y, z);
 		world.markBlockForUpdate(x, y, z);
 
-		hive.postGen(world, x, y, z);
+		if (!Config.generateBeehivesDebug) {
+			hive.postGen(world, x, y, z);
+		}
 		return true;
 	}
 }
