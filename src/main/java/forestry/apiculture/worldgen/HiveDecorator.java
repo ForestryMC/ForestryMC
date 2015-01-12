@@ -59,13 +59,17 @@ public class HiveDecorator {
 
 	public void decorateHives(World world, Random rand, int chunkX, int chunkZ) {
 		List<Hive> hives = PluginApiculture.hiveRegistry.getHives();
-		Collections.shuffle(hives, rand);
 
+		if (Config.generateBeehivesDebug) {
+			decorateHivesDebug(world, chunkX, chunkZ, hives);
+			return;
+		}
+
+		Collections.shuffle(hives, rand);
 		for (Hive hive : hives) {
-			if (Config.generateBeehivesDebug)
-				genHiveDebug(world, chunkX, chunkZ, hive);
-			else
-				genHive(world, rand, chunkX, chunkZ, hive);
+			if (genHive(world, rand, chunkX, chunkZ, hive)) {
+				return;
+			}
 		}
 	}
 
@@ -93,18 +97,23 @@ public class HiveDecorator {
 		return false;
 	}
 
-	private void genHiveDebug(World world, int chunkX, int chunkZ, Hive hive) {
+	private void decorateHivesDebug(World world, int chunkX, int chunkZ, List<Hive> hives) {
 		int worldX = chunkX * 16;
 		int worldZ = chunkZ * 16;
 		BiomeGenBase biome = world.getBiomeGenForCoords(worldX, worldZ);
 		EnumHumidity humidity = EnumHumidity.getFromValue(biome.rainfall);
 
-		if (!hive.isGoodBiome(biome) || !hive.isGoodHumidity(humidity))
-			return;
+		for (int x = 0; x < 16; x++) {
+			for (int z = 0; z < 16; z++) {
+				Collections.shuffle(hives, world.rand);
+				for (Hive hive : hives) {
+					if (!hive.isGoodBiome(biome) || !hive.isGoodHumidity(humidity))
+						continue;
 
-		for (int x = 0; x < 16; x++)
-			for (int z = 0; z < 16; z++)
-				tryGenHive(world, worldX + x, worldZ + z, hive);
+					tryGenHive(world, worldX + x, worldZ + z, hive);
+				}
+			}
+		}
 	}
 
 	private boolean tryGenHive(World world, int x, int z, Hive hive) {
