@@ -64,10 +64,6 @@ public class ForestryCore {
 	}
 
 	public void init(Object basemod) {
-
-		// Register world generator
-		GameRegistry.registerWorldGenerator(new WorldGenerator(), 0);
-
 		// Set fuels and resources for the fermenter
 		FuelManager.fermenterFuel.put(ForestryItem.fertilizerCompound.getItemStack(), new FermenterFuel(ForestryItem.fertilizerCompound.getItemStack(),
 				GameMode.getGameMode().getIntegerSetting("fermenter.value.fertilizer"), GameMode.getGameMode().getIntegerSetting("fermenter.cycles.fertilizer")));
@@ -126,7 +122,12 @@ public class ForestryCore {
 	public void postInit() {
 		PluginManager.runPostInit();
 
-		Proxies.common.registerTickHandlers();
+		// Register world generator
+		WorldGenerator worldGenerator = new WorldGenerator();
+		GameRegistry.registerWorldGenerator(worldGenerator, 0);
+
+		// Register tick handlers
+		Proxies.common.registerTickHandlers(worldGenerator);
 
 		// Handle IMC messages.
 		processIMCMessages(FMLInterModComms.fetchRuntimeMessages(ForestryAPI.instance));

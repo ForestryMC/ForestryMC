@@ -17,13 +17,11 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.chunk.IChunkProvider;
 
 import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
 import net.minecraftforge.event.terraingen.TerrainGen;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -51,15 +49,15 @@ public class HiveDecorator {
 	private HiveDecorator() {
 	}
 
-	@SubscribeEvent
-	public void generate(PopulateChunkEvent.Post event) {
-		if (!TerrainGen.populate(event.chunkProvider, event.world, event.rand, event.chunkX, event.chunkZ, event.hasVillageGenerated, EVENT_TYPE)) {
+	public void decorateHives(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
+		if (!TerrainGen.populate(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated, EVENT_TYPE)) {
 			return;
 		}
-		decorateHives(event.world, event.rand, event.chunkX, event.chunkZ);
+
+		decorateHives(world, rand, chunkX, chunkZ);
 	}
 
-	private void decorateHives(World world, Random rand, int chunkX, int chunkZ) {
+	public void decorateHives(World world, Random rand, int chunkX, int chunkZ) {
 		List<Hive> hives = PluginApiculture.hiveRegistry.getHives();
 		Collections.shuffle(hives, rand);
 

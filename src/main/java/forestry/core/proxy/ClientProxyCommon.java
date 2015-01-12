@@ -14,6 +14,7 @@ import com.mojang.authlib.GameProfile;
 import forestry.apiculture.render.TextureBiomefinder;
 import forestry.core.ForestryClient;
 import forestry.core.TickHandlerCoreClient;
+import forestry.core.WorldGenerator;
 import forestry.core.config.Config;
 import forestry.core.render.SpriteSheet;
 import java.io.File;
@@ -43,8 +44,8 @@ public class ClientProxyCommon extends ProxyCommon {
 	}
 
 	@Override
-	public void registerTickHandlers() {
-		super.registerTickHandlers();
+	public void registerTickHandlers(WorldGenerator worldGenerator) {
+		super.registerTickHandlers(worldGenerator);
 
 		new TickHandlerCoreClient();
 	}

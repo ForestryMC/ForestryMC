@@ -23,6 +23,7 @@ import cpw.mods.fml.common.versioning.VersionParser;
 import cpw.mods.fml.common.versioning.VersionRange;
 import forestry.Forestry;
 import forestry.core.TickHandlerCoreServer;
+import forestry.core.WorldGenerator;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
@@ -61,8 +62,8 @@ public class ProxyCommon {
 		return Loader.instance().getMinecraftModContainer().getVersion();
 	}
 
-	public void registerTickHandlers() {
-		new TickHandlerCoreServer();
+	public void registerTickHandlers(WorldGenerator worldGenerator) {
+		new TickHandlerCoreServer(worldGenerator);
 	}
 
 	public void registerBlock(Block block, Class<? extends ItemBlock> itemClass) {

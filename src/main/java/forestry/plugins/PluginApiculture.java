@@ -11,6 +11,7 @@
 package forestry.plugins;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,6 +26,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkProvider;
 
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.BiomeDictionary;
@@ -335,10 +338,6 @@ public class PluginApiculture extends ForestryPlugin {
 		VillagerRegistry.instance().registerVillagerId(Defaults.ID_VILLAGER_BEEKEEPER);
 		Proxies.render.registerVillagerSkin(Defaults.ID_VILLAGER_BEEKEEPER, Defaults.TEXTURE_SKIN_BEEKPEEPER);
 		VillagerRegistry.instance().registerVillageTradeHandler(Defaults.ID_VILLAGER_BEEKEEPER, villageHandler);
-
-		// Register world gen
-		if (Config.generateBeehives)
-			MinecraftForge.EVENT_BUS.register(HiveDecorator.instance());
 
 		proxy.initializeRendering();
 	}
@@ -1241,6 +1240,18 @@ public class PluginApiculture extends ForestryPlugin {
 	@Override
 	public IOreDictionaryHandler getDictionaryHandler() {
 		return null;
+	}
+
+	@Override
+	public void populateChunk(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
+		if (Config.generateBeehives)
+			HiveDecorator.instance().decorateHives(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
+	}
+
+	@Override
+	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
+		if (Config.generateBeehives)
+			HiveDecorator.instance().decorateHives(world, rand, chunkX, chunkZ);
 	}
 
 	@Override

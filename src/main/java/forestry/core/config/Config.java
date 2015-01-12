@@ -62,6 +62,10 @@ public class Config {
 	public static boolean generateBeehives = true;
 	public static boolean generateBeehivesDebug = false;
 
+	// Retrogen
+	public static boolean doRetrogen = false;
+	public static boolean forceRetrogen = false;
+
 	// Performance
 	public static boolean enableBackpackResupply = true;
 
@@ -121,6 +125,26 @@ public class Config {
 		Property particleFX = config.get("performance.particleFX.enabled", CATEGORY_COMMON, true);
 		particleFX.comment = "set to false to disable particle fx on slower machines";
 		enableParticleFX = Boolean.parseBoolean(particleFX.value);
+
+		// RetroGen
+
+		String retroGenMessage = "Forestry will attempt worldGen in chunks that were created before the mod was added.";
+		Property retroGen = config.get("world.retrogen.normal", CATEGORY_COMMON, false);
+		retroGen.comment = "Set to true, " + retroGenMessage;
+		doRetrogen = Boolean.parseBoolean(retroGen.value);
+
+		String forcedRetroGenMessage = "Forestry will attempt worldGen in all chunks for this game instance. Config option will be set to false after this run.";
+		Property forceRetroGen = config.get("world.retrogen.forced", CATEGORY_COMMON, false);
+		forceRetroGen.comment = "Set to true, " + forcedRetroGenMessage;
+		forceRetrogen = Boolean.parseBoolean(forceRetroGen.value);
+
+		if (forceRetrogen) {
+			Proxies.log.info(forcedRetroGenMessage);
+			config.set("world.generate.retrogen.forced", CATEGORY_COMMON, false);
+			doRetrogen = true;
+		} else if (doRetrogen) {
+			Proxies.log.info(retroGenMessage);
+		}
 
 		Property genApatiteOre = config.get("world.generate.apatite", CATEGORY_COMMON, true);
 		genApatiteOre.comment = "set to false to force forestry to skip generating own apatite ore blocks in the world";

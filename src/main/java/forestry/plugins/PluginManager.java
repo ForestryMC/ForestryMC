@@ -35,6 +35,8 @@ import net.minecraft.command.ICommand;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkProvider;
+
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
@@ -288,10 +290,17 @@ public class PluginManager {
 			}
 	}
 
-	public static void generateSurface(World world, Random rand, int chunkX, int chunkZ) {
+	public static void populateChunk(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
 		for (Module m : loadedModules) {
 			ForestryPlugin plugin = m.instance;
-			plugin.generateSurface(world, rand, chunkX, chunkZ);
+			plugin.populateChunk(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
+		}
+	}
+
+	public static void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
+		for (Module m : loadedModules) {
+			ForestryPlugin plugin = m.instance;
+			plugin.populateChunkRetroGen(world, rand, chunkX, chunkZ);
 		}
 	}
 
