@@ -134,13 +134,14 @@ public class Config {
 		doRetrogen = Boolean.parseBoolean(retroGen.value);
 
 		String forcedRetroGenMessage = "Forestry will attempt worldGen in all chunks for this game instance. Config option will be set to false after this run.";
-		Property forceRetroGen = config.get("world.retrogen.forced", CATEGORY_COMMON, false);
+		String forcedRetroGenKey = "world.retrogen.forced";
+		Property forceRetroGen = config.get(forcedRetroGenKey, CATEGORY_COMMON, false);
 		forceRetroGen.comment = "Set to true, " + forcedRetroGenMessage;
 		forceRetrogen = Boolean.parseBoolean(forceRetroGen.value);
 
 		if (forceRetrogen) {
 			Proxies.log.info(forcedRetroGenMessage);
-			config.set("world.generate.retrogen.forced", CATEGORY_COMMON, false);
+			config.set(forcedRetroGenKey, CATEGORY_COMMON, false);
 			doRetrogen = true;
 		} else if (doRetrogen) {
 			Proxies.log.info(retroGenMessage);
