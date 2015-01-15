@@ -64,18 +64,17 @@ public abstract class BlockStructure extends BlockForestry {
 		if (!Utils.isUseableByPlayer(player, tile))
 			return false;
 
-		if (!Proxies.common.isSimulating(world))
-			return player.getCurrentEquippedItem() == null || !(player.getCurrentEquippedItem().getItem() instanceof IStructureBlockItem);
-
 		// GUIs can only be opened on integrated structure blocks.
 		if (tile instanceof ITileStructure)
 			if (!((ITileStructure) tile).isIntegratedIntoStructure())
 				return false;
 
-		if (tile.allowsViewing(player)) {
-			tile.openGui(player);
-		} else {
-			player.addChatMessage(new ChatComponentTranslation("for.chat.accesslocked", PlayerUtil.getOwnerName(tile)));
+		if (Proxies.common.isSimulating(world)) {
+			if (tile.allowsViewing(player)) {
+				tile.openGui(player);
+			} else {
+				player.addChatMessage(new ChatComponentTranslation("for.chat.accesslocked", PlayerUtil.getOwnerName(tile)));
+			}
 		}
 		return true;
 	}

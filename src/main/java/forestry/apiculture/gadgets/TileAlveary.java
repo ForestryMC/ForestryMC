@@ -124,8 +124,12 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 
 	@Override
 	public PacketPayload getPacketPayload() {
-		PacketPayload payload = new PacketPayload(0, 1);
+		PacketPayload payload = new PacketPayload(0, 2);
 		payload.shortPayload[0] = (short) (isMaster() ? 1 : 0);
+
+		// so the client can know if it is part of an integrated structure
+		payload.shortPayload[1] = (short) this.masterY;
+
 		return payload;
 	}
 
@@ -133,6 +137,9 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	public void fromPacketPayload(PacketPayload payload) {
 		if (payload.shortPayload[0] > 0)
 			makeMaster();
+
+		// so the client can know if it is part of an integrated structure
+		this.masterY = payload.shortPayload[1];
 	}
 
 	/* ITILESTRUCTURE */

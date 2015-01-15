@@ -12,7 +12,6 @@ package forestry.farming.gadgets;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -28,7 +27,6 @@ import forestry.api.farming.IFarmComponent;
 import forestry.api.farming.IFarmListener;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
@@ -151,9 +149,14 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	/* TILEFORESTRY */
 	@Override
 	public PacketPayload getPacketPayload() {
-		PacketPayload payload = new PacketPayload(0, 2);
+		PacketPayload payload = new PacketPayload(0, 3);
 		payload.shortPayload[0] = (short) farmBlock.ordinal();
+
 		payload.shortPayload[1] = (short) (isMaster() ? 1 : 0);
+
+		// so the client can know if it is part of an integrated structure
+		payload.shortPayload[2] = (short) masterY;
+
 		return payload;
 	}
 
@@ -162,6 +165,9 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 		EnumFarmBlock farmType = EnumFarmBlock.values()[payload.shortPayload[0]];
 		if (payload.shortPayload[1] > 0)
 			makeMaster();
+
+		// so the client can know if it is part of an integrated structure
+		this.masterY = payload.shortPayload[2];
 
 		if (this.farmBlock != farmType) {
 			this.farmBlock = farmType;
