@@ -255,6 +255,7 @@ public class GuiBeealyzer extends GuiAlyzer {
 		newLine();
 
 		drawLine(StringUtil.localize("gui.beealyzer.specialty") + ":", COLUMN_0);
+		newLine();
 
 		x = COLUMN_0;
 		for (ItemStack stack : bee.getSpecialtyList()) {
