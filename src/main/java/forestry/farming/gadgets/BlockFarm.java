@@ -61,10 +61,10 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
 		ArrayList<ItemStack> drops = getDrops(world, x, y, z, 0, 0);
 		if (drops.isEmpty())
-			return super.getPickBlock(target, world, x, y, z);
+			return super.getPickBlock(target, world, x, y, z, player);
 		return drops.get(0);
 	}
 

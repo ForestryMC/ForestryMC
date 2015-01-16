@@ -107,8 +107,8 @@ public class BlockArbStairs extends BlockStairs {
 	}
 
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-		ItemStack itemStack = super.getPickBlock(target, world, x, y, z);
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
+		ItemStack itemStack = super.getPickBlock(target, world, x, y, z, player);
 		NBTTagCompound stairsNBT = getTagCompoundForStairs(world, x, y, z);
 		itemStack.setTagCompound(stairsNBT);
 		return itemStack;
