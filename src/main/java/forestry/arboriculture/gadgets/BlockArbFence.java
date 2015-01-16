@@ -19,9 +19,11 @@ import forestry.plugins.PluginArboriculture;
 import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
+import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -70,7 +72,10 @@ public class BlockArbFence extends BlockFence implements IWoodTyped {
 	public boolean canConnectFenceTo(IBlockAccess world, int x, int y, int z) {
 		if (!isFence(world, x, y, z)) {
 			Block block = world.getBlock(x, y, z);
-			return block != null && block.getMaterial().isOpaque() && block.renderAsNormalBlock() && block.getMaterial() != Material.gourd;
+			if (block == this || block instanceof BlockFenceGate)
+				return true;
+
+			return block.getMaterial().isOpaque() && block.renderAsNormalBlock() && block.getMaterial() != Material.gourd;
 		} else
 			return true;
 	}
