@@ -39,19 +39,6 @@ public abstract class ContainerItemInventory extends ContainerForestry {
 			addSlotToContainer(new Slot(other, slot, x, y));
 	}
 
-	public void purgeBag(EntityPlayer player) {
-		for (int i = 0; i < inventorySlots.size() - 9 * 4; i++) {
-			Slot slot = (Slot) inventorySlots.get(i);
-			ItemStack stack = slot.getStack();
-
-			if (stack == null || slot.isItemValid(stack))
-				continue;
-
-			Proxies.common.dropItemPlayer(player, stack);
-			inventory.setInventorySlotContents(i, null);
-		}
-	}
-
 	public void saveInventory(EntityPlayer entityplayer) {
 		if (inventory.isItemInventory)
 			inventory.onGuiSaved(entityplayer);
@@ -63,7 +50,6 @@ public abstract class ContainerItemInventory extends ContainerForestry {
 		if (!Proxies.common.isSimulating(player.worldObj))
 			return;
 
-		purgeBag(player);
 		saveInventory(player);
 	}
 }
