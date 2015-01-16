@@ -13,7 +13,6 @@ package forestry.core.inventory;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +54,6 @@ import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginManager;
 
 import buildcraft.api.transport.IPipeTile;
-import buildcraft.api.transport.PipeManager;
 
 public abstract class InvTools {
 
@@ -155,21 +153,11 @@ public abstract class InvTools {
 		if (tile == null || !(tile instanceof IInventory))
 			return null;
 
-		if (PluginManager.Module.BUILDCRAFT_TRANSPORT.isEnabled()) {
-			if(!internal_canExtractFromBuildCraftPipe(tile))
-				return null;
-		}
-
 		if (tile instanceof TileEntityChest) {
 			TileEntityChest chest = (TileEntityChest) tile;
 			return new ChestWrapper(chest);
 		}
 		return getInventory((IInventory) tile, side);
-	}
-
-	@Optional.Method(modid = "BuildCraftAPI|transport")
-	private static boolean internal_canExtractFromBuildCraftPipe(TileEntity tile) {
-		return PipeManager.canExtractItems(null, tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord);
 	}
 
 	public static IInventory getInventory(IInventory inv, ForgeDirection side) {
@@ -797,9 +785,9 @@ public abstract class InvTools {
 
 		int choice = tileCache.getSource().getWorldObj().rand.nextInt(pipes.size());
 		Map.Entry<ForgeDirection, IPipeTile> pipe = pipes.get(choice);
-		if (pipe.getValue().injectItem(stackToMove, false, pipe.getKey().getOpposite()) > 0)
+		if (pipe.getValue().injectItem(stackToMove, false, pipe.getKey().getOpposite(), null) > 0)
 			if (removeOneItem(source, stackToMove) != null) {
-				pipe.getValue().injectItem(stackToMove, true, pipe.getKey().getOpposite());
+				pipe.getValue().injectItem(stackToMove, true, pipe.getKey().getOpposite(), null);
 				return true;
 			}
 		return false;

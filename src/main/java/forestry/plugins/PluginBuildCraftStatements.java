@@ -28,7 +28,7 @@ public class PluginBuildCraftStatements extends ForestryPlugin implements ITrigg
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isAPILoaded("buildcraft.api.statements", "[1.0, 1.1)");
+		return Proxies.common.isAPILoaded("buildcraft.api.statements", "[1.0, 2.0)");
 	}
 
 	@Override

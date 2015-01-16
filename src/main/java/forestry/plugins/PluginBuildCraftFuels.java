@@ -26,7 +26,7 @@ public class PluginBuildCraftFuels extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isAPILoaded("buildcraft.api.fuels", "[2.0, 2.1)");
+		return Proxies.common.isAPILoaded("buildcraft.api.fuels", "[2.0, 3.0)");
 	}
 
 	@Override

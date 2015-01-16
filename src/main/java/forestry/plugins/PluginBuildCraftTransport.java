@@ -22,7 +22,7 @@ public class PluginBuildCraftTransport extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isModLoaded("BuildCraft|Transport");
+		return Proxies.common.isAPILoaded("buildcraft.api.transport", "[2.0, 4.0)");
 	}
 
 	@Override
