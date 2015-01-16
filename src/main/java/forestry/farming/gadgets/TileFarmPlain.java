@@ -373,6 +373,11 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 				}
 				return false;
 			}
+
+			@Override
+			public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
+				return GuiUtil.isIndexInRange(slotIndex, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT);
+			}
 		});
 		FilteredTank liquidTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
 		tankManager = new TankManager(liquidTank);
