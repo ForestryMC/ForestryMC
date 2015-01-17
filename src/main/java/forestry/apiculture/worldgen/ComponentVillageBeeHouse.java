@@ -270,7 +270,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 						if (!Blocks.red_flower.canBlockStay(world, xCoord, yCoord, zCoord))
 							continue;
 
-						ItemStack flower = FlowerManager.plainFlowers.get(world.rand.nextInt(FlowerManager.plainFlowers.size()));
+						ItemStack flower = FlowerManager.flowerRegistry.getRandomPlantableFlower(FlowerManager.FlowerTypeVanilla, world.rand);
 						this.placeBlockAtCurrentPosition(world, flower, j, i, k, box);
 					}
 	}

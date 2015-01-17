@@ -28,13 +28,11 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
@@ -45,7 +43,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;
@@ -64,19 +61,13 @@ import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
-import forestry.apiculture.FlowerProviderCacti;
-import forestry.apiculture.FlowerProviderEnd;
-import forestry.apiculture.FlowerProviderGourd;
-import forestry.apiculture.FlowerProviderJungle;
-import forestry.apiculture.FlowerProviderMushroom;
-import forestry.apiculture.FlowerProviderNetherwart;
-import forestry.apiculture.FlowerProviderVanilla;
-import forestry.apiculture.FlowerProviderWheat;
+import forestry.apiculture.flowers.FlowerProvider;
 import forestry.apiculture.GuiHandlerApiculture;
 import forestry.apiculture.PacketHandlerApiculture;
 import forestry.apiculture.SaveEventHandlerApiculture;
 import forestry.apiculture.VillageHandlerApiculture;
 import forestry.apiculture.commands.CommandBee;
+import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.gadgets.BlockAlveary;
 import forestry.apiculture.gadgets.BlockBeehives;
 import forestry.apiculture.gadgets.BlockCandle;
@@ -201,6 +192,8 @@ public class PluginApiculture extends ForestryPlugin {
 		HiveManager.hiveRegistry = hiveRegistry = new HiveRegistry();
 		HiveManager.genHelper = new HiveGenHelper();
 		createHiveDropArrays();
+
+		FlowerManager.flowerRegistry = new FlowerRegistry();
 
 		ForestryBlock.apiculture.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "apiculture");
 		ForestryBlock.apiculture.block().setCreativeTab(Tabs.tabApiculture);
@@ -994,16 +987,18 @@ public class PluginApiculture extends ForestryPlugin {
 				.addSpecialty(ForestryItem.beeComb.getItemStack(1, 16), 20).setJubilanceProvider(new JubilanceProviderHermit()).setHasEffect().setIsSecret();
 
 		// / BEES // FLOWER PROVIDERS 1500 - 1599
-		Allele.flowersVanilla = new AlleleFlowers("flowersVanilla", new FlowerProviderVanilla(), true);
-		Allele.flowersNether = new AlleleFlowers("flowersNether", new FlowerProviderNetherwart());
-		Allele.flowersCacti = new AlleleFlowers("flowersCacti", new FlowerProviderCacti());
-		Allele.flowersMushrooms = new AlleleFlowers("flowersMushrooms", new FlowerProviderMushroom());
-		Allele.flowersEnd = new AlleleFlowers("flowersEnd", new FlowerProviderEnd());
-		Allele.flowersJungle = new AlleleFlowers("flowersJungle", new FlowerProviderJungle());
-		Allele.flowersSnow = new AlleleFlowers("flowersSnow", new FlowerProviderVanilla(), true);
-		Allele.flowersWheat = new AlleleFlowers("flowersWheat", new FlowerProviderWheat(), true);
-		Allele.flowersGourd = new AlleleFlowers("flowersGourd", new FlowerProviderGourd(), true);
+		Allele.flowersVanilla = new AlleleFlowers("flowersVanilla", new FlowerProvider(FlowerManager.FlowerTypeVanilla, "flowers.vanilla"), true);
+		Allele.flowersNether = new AlleleFlowers("flowersNether", new FlowerProvider(FlowerManager.FlowerTypeNether, "flowers.nether"));
+		Allele.flowersCacti = new AlleleFlowers("flowersCacti", new FlowerProvider(FlowerManager.FlowerTypeCacti, "flowers.cacti"));
+		Allele.flowersMushrooms = new AlleleFlowers("flowersMushrooms", new FlowerProvider(FlowerManager.FlowerTypeMushrooms, "flowers.mushroom"));
+		Allele.flowersEnd = new AlleleFlowers("flowersEnd", new FlowerProvider(FlowerManager.FlowerTypeEnd, "flowers.end"));
+		Allele.flowersJungle = new AlleleFlowers("flowersJungle", new FlowerProvider(FlowerManager.FlowerTypeJungle, "flowers.jungle"));
+		Allele.flowersSnow = new AlleleFlowers("flowersSnow", new FlowerProvider(FlowerManager.FlowerTypeSnow, "flowers.vanilla"), true);
+		Allele.flowersWheat = new AlleleFlowers("flowersWheat", new FlowerProvider(FlowerManager.FlowerTypeWheat, "flowers.wheat"), true);
+		Allele.flowersGourd = new AlleleFlowers("flowersGourd", new FlowerProvider(FlowerManager.FlowerTypeGourd, "flowers.gourd"), true);
 
+		// REgiste
+		
 		// / BEES // EFFECTS 1800 - 1899
 		Allele.effectNone = new AlleleEffectNone("effectNone");
 		Allele.effectAggressive = new AlleleEffectAggressive("effectAggressive");

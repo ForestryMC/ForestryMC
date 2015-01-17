@@ -14,7 +14,6 @@ import com.google.common.collect.ImmutableList;
 
 import java.io.File;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
@@ -26,7 +25,6 @@ import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-import forestry.api.apiculture.FlowerManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.EngineCopperFuel;
@@ -102,11 +100,6 @@ public class ForestryCore {
 		FuelManager.rainSubstrate.put(ForestryItem.iodineCharge.getItemStack(), new RainSubstrate(ForestryItem.iodineCharge.getItemStack(),
 				Defaults.RAINMAKER_RAIN_DURATION_IODINE, 0.01f));
 		FuelManager.rainSubstrate.put(ForestryItem.craftingMaterial.getItemStack(1, 4), new RainSubstrate(ForestryItem.craftingMaterial.getItemStack(1, 4), 0.075f));
-
-		// Set additional apiary flowers
-		for (int i = 0; i < 9; i++)
-			FlowerManager.plainFlowers.add(new ItemStack(Blocks.red_flower, 1, i));
-		FlowerManager.plainFlowers.add(new ItemStack(Blocks.yellow_flower));
 
 		// Register gui handler
 		NetworkRegistry.INSTANCE.registerGuiHandler(basemod, new GuiHandler());
