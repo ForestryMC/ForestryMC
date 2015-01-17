@@ -15,8 +15,12 @@ import forestry.api.farming.IFarmable;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.StackUtils;
 import forestry.core.vect.Vect;
+import forestry.core.vect.VectUtil;
+
 import java.util.ArrayList;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
 import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class FarmLogicHomogeneous extends FarmLogic {
@@ -74,14 +78,16 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 		if (!housing.hasResources(resource))
 			return false;
 
+		World world = getWorld();
+
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(x, yGround, z, direction, i);
 
-			ItemStack stack = getAsItemStack(position);
-			if (isAcceptedGround(stack) || !canBreakGround(getBlock(position)))
+			ItemStack stack = VectUtil.getAsItemStack(world, position);
+			if (isAcceptedGround(stack) || !canBreakGround(VectUtil.getBlock(world, position)))
 				continue;
 
-			produce.addAll(BlockUtil.getBlockItemStack(getWorld(), position));
+			produce.addAll(BlockUtil.getBlockDrops(world, position));
 
 			setBlock(position, StackUtils.getBlock(groundBlock), groundBlock.getItemDamage());
 			housing.removeResources(resource);

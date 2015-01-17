@@ -18,6 +18,8 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.Utils;
 import forestry.core.vect.Vect;
+import forestry.core.vect.VectUtil;
+
 import java.util.Collection;
 import java.util.Stack;
 import net.minecraft.init.Blocks;
@@ -86,10 +88,10 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(x, y, z, direction, i);
-			if (!isAirBlock(position) && !Utils.isReplaceableBlock(world, position.x, position.y, position.z))
+			if (!VectUtil.isAirBlock(world, position) && !Utils.isReplaceableBlock(world, position.x, position.y, position.z))
 				continue;
 
-			ItemStack below = getAsItemStack(position.add(0, -1, 0));
+			ItemStack below = VectUtil.getAsItemStack(world, position.add(0, -1, 0));
 			if (!isAcceptedGround(below))
 				continue;
 

@@ -18,6 +18,8 @@ import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.core.vect.IVect;
 import forestry.core.vect.Vect;
+import forestry.core.vect.VectUtil;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -102,12 +104,14 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 	@Override
 	protected boolean maintainCrops(int x, int y, int z, ForgeDirection direction, int extent) {
 
+		World world = getWorld();
+
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(x, y, z, direction, i);
-			if (!isAirBlock(position) && !Utils.isReplaceableBlock(getWorld(), position.x, position.y, position.z))
+			if (!VectUtil.isAirBlock(world, position) && !Utils.isReplaceableBlock(getWorld(), position.x, position.y, position.z))
 				continue;
 
-			ItemStack below = getAsItemStack(position.add(0, -1, 0));
+			ItemStack below = VectUtil.getAsItemStack(world, position.add(0, -1, 0));
 			if (ground.getItem() != below.getItem())
 				continue;
 			if (below.getItemDamage() <= 0)

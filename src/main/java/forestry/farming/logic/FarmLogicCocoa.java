@@ -17,6 +17,8 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.vect.MutableVect;
 import forestry.core.vect.Vect;
+import forestry.core.vect.VectUtil;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -123,14 +125,14 @@ public class FarmLogicCocoa extends FarmLogic {
 		World world = getWorld();
 
 		MutableVect current = new MutableVect(position);
-		while (isWoodBlock(current) && BlockLog.func_150165_c(getBlockMeta(current)) == 3) {
+		while (VectUtil.isWoodBlock(world, current) && BlockLog.func_150165_c(VectUtil.getBlockMeta(world, current)) == 3) {
 
 			for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
 				if (direction == ForgeDirection.UP || direction == ForgeDirection.DOWN)
 					continue;
 
 				Vect candidate = new Vect(current.x + direction.offsetX, current.y, current.z + direction.offsetZ);
-				if (isAirBlock(candidate))
+				if (VectUtil.isAirBlock(world, candidate))
 					return housing.plantGermling(cocoa, world, candidate.x, candidate.y, candidate.z);
 			}
 
@@ -148,7 +150,7 @@ public class FarmLogicCocoa extends FarmLogic {
 		Stack<ICrop> crops = new Stack<ICrop>();
 
 		// Determine what type we want to harvest.
-		Block block = getBlock(position);
+		Block block = VectUtil.getBlock(getWorld(), position);
 
 		ICrop crop = null;
 		if (!block.isWood(getWorld(), position.x, position.y, position.z)) {
@@ -201,7 +203,7 @@ public class FarmLogicCocoa extends FarmLogic {
 						crops.push(crop);
 						candidates.add(candidate);
 						seen.add(candidate);
-					} else if (isWoodBlock(candidate)) {
+					} else if (VectUtil.isWoodBlock(world, candidate)) {
 						candidates.add(candidate);
 						seen.add(candidate);
 					}

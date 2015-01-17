@@ -12,6 +12,8 @@ package forestry.core.vect;
 
 import java.util.Random;
 
+import net.minecraftforge.common.util.ForgeDirection;
+
 /**
  * Represents an unchangeable position or dimensions.
  */
@@ -27,6 +29,10 @@ public class Vect implements IVect {
 		this.x = dim[0];
 		this.y = dim[1];
 		this.z = dim[2];
+	}
+
+	public Vect(IVect vect) {
+		this(vect.getX(), vect.getY(), vect.getZ());
 	}
 
 	public Vect(int x, int y, int z) {
@@ -62,6 +68,11 @@ public class Vect implements IVect {
 	@Override
 	public Vect add(int x, int y, int z) {
 		return new Vect(this.x + x, this.y + y, this.z + z);
+	}
+
+	@Override
+	public Vect add(ForgeDirection direction) {
+		return add(direction.offsetX, direction.offsetY, direction.offsetZ);
 	}
 
 	public Vect multiply(float factor) {

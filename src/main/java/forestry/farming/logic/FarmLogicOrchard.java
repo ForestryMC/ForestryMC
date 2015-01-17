@@ -17,6 +17,8 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.genetics.IFruitBearer;
 import forestry.core.config.ForestryItem;
 import forestry.core.vect.Vect;
+import forestry.core.vect.VectUtil;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -105,9 +107,11 @@ public class FarmLogicOrchard extends FarmLogic {
 		Set<Vect> seen = new HashSet<Vect>();
 		Stack<ICrop> crops = new Stack<ICrop>();
 
+		World world = getWorld();
+
 		// Determine what type we want to harvest.
 		IFruitBearer bearer = getFruitBlock(position);
-		Block block = getBlock(position);
+		Block block = VectUtil.getBlock(world, position);
 		if ((!block.isWood(getWorld(), position.x, position.y, position.z)) && bearer == null)
 			return crops;
 
@@ -152,7 +156,7 @@ public class FarmLogicOrchard extends FarmLogic {
 							crops.push(new CropFruit(world, candidate, bearer.getFruitFamily()));
 						candidates.add(candidate);
 						seen.add(candidate);
-					} else if (this.isWoodBlock(candidate)) {
+					} else if (VectUtil.isWoodBlock(world, candidate)) {
 						candidates.add(candidate);
 						seen.add(candidate);
 					}

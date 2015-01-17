@@ -18,6 +18,8 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.BlockSoil;
 import forestry.core.vect.Vect;
+import forestry.core.vect.VectUtil;
+
 import java.util.Collection;
 import java.util.Stack;
 import net.minecraft.block.Block;
@@ -71,7 +73,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 		Stack<ICrop> crops = new Stack<ICrop>();
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(x, y, z, direction, i);
-			ItemStack occupant = getAsItemStack(position);
+			ItemStack occupant = VectUtil.getAsItemStack(world, position);
 
 			if (occupant.getItem() == null)
 				continue;

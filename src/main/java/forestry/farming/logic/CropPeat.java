@@ -40,7 +40,7 @@ public class CropPeat extends Crop {
 
 	@Override
 	protected Collection<ItemStack> harvestBlock(Vect pos) {
-		ArrayList<ItemStack> drops = BlockUtil.getBlockItemStack(world, pos);
+		ArrayList<ItemStack> drops = BlockUtil.getBlockDrops(world, pos);
 
 		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, world.getBlock(pos.x, pos.y, pos.z), 0);
 		setBlock(pos, Blocks.air, 0);

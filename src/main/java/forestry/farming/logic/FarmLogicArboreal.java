@@ -20,6 +20,8 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.gadgets.BlockSoil;
 import forestry.core.render.SpriteSheet;
 import forestry.core.vect.Vect;
+import forestry.core.vect.VectUtil;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -217,12 +219,14 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	@Override
 	protected boolean maintainGermlings(int x, int ySaplings, int z, ForgeDirection direction, int extent) {
 
+		World world = getWorld();
+
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(x, ySaplings, z, direction, i);
 
-			if (isAirBlock(position)) {
+			if (VectUtil.isAirBlock(world, position)) {
 				Vect soilBelowPosition = new Vect(position.x, position.y - 1, position.z);
-				ItemStack soilBelow = getAsItemStack(soilBelowPosition);
+				ItemStack soilBelow = VectUtil.getAsItemStack(world, soilBelowPosition);
 				if (isAcceptedGround(soilBelow))
 					return plantSapling(position);
 			}

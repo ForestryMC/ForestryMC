@@ -71,10 +71,6 @@ public abstract class FarmLogic implements IFarmLogic {
 		return SpriteSheet.ITEMS.getLocation();
 	}
 
-	protected final boolean isAirBlock(IVect position) {
-		return getWorld().isAirBlock(position.getX(), position.getY(), position.getZ());
-	}
-
 	protected final boolean isAirBlock(Block block) {
 		return block.getMaterial() == Material.air;
 	}
@@ -82,23 +78,6 @@ public abstract class FarmLogic implements IFarmLogic {
 	protected final boolean isWaterSourceBlock(World world, Vect position) {
 		return world.getBlock(position.x, position.y, position.z) == Blocks.water &&
 				world.getBlockMetadata(position.x, position.y, position.z) == 0;
-	}
-
-	protected final boolean isWoodBlock(IVect position) {
-		Block block = getBlock(position);
-		return block.isWood(getWorld(), position.getX(), position.getY(), position.getZ());
-	}
-
-	protected final Block getBlock(IVect position) {
-		return getWorld().getBlock(position.getX(), position.getY(), position.getZ());
-	}
-
-	protected final int getBlockMeta(IVect position) {
-		return getWorld().getBlockMetadata(position.getX(), position.getY(), position.getZ());
-	}
-
-	protected final ItemStack getAsItemStack(IVect position) {
-		return new ItemStack(getBlock(position), 1, getBlockMeta(position));
 	}
 
 	protected final Vect translateWithOffset(int x, int y, int z, ForgeDirection direction, int step) {

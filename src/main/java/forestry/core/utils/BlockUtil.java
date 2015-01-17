@@ -30,7 +30,7 @@ import cofh.api.energy.IEnergyHandler;
 
 public class BlockUtil {
 
-	public static ArrayList<ItemStack> getBlockItemStack(World world, Vect posBlock) {
+	public static ArrayList<ItemStack> getBlockDrops(World world, Vect posBlock) {
 		Block block = world.getBlock(posBlock.x, posBlock.y, posBlock.z);
 		int meta = world.getBlockMetadata(posBlock.x, posBlock.y, posBlock.z);
 

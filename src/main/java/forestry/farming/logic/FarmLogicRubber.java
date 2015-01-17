@@ -17,6 +17,7 @@ import forestry.api.farming.IFarmHousing;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
 import forestry.core.vect.Vect;
+import forestry.core.vect.VectUtil;
 import forestry.plugins.PluginIC2;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -115,12 +116,14 @@ public class FarmLogicRubber extends FarmLogic {
 		Set<Vect> seen = new HashSet<Vect>();
 		Stack<ICrop> crops = new Stack<ICrop>();
 
+		World world = getWorld();
+
 		// Determine what type we want to harvest.
-		Block block = getBlock(position);
+		Block block = VectUtil.getBlock(world, position);
 		if (!StackUtils.equals(block, PluginIC2.rubberwood))
 			return crops;
 
-		int meta = this.getBlockMeta(position);
+		int meta = VectUtil.getBlockMeta(world, position);
 		if (meta >= 2 && meta <= 5)
 			crops.push(new CropRubber(getWorld(), block, meta, position));
 
@@ -152,9 +155,9 @@ public class FarmLogicRubber extends FarmLogic {
 			if (seen.contains(candidate))
 				continue;
 
-			Block block = getBlock(candidate);
+			Block block = VectUtil.getBlock(world, candidate);
 			if (StackUtils.equals(block, PluginIC2.rubberwood)) {
-				int meta = this.getBlockMeta(candidate);
+				int meta = VectUtil.getBlockMeta(world, candidate);
 				if (meta >= 2 && meta <= 5)
 					crops.push(new CropRubber(world, block, meta, candidate));
 				candidates.add(candidate);

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.vect;
 
+import net.minecraftforge.common.util.ForgeDirection;
+
 /**
  * Represents changeable positions or dimensions.
  */
@@ -41,6 +43,14 @@ public class MutableVect implements IVect {
 		this.x += x;
 		this.y += y;
 		this.z += z;
+		return this;
+	}
+
+	@Override
+	public MutableVect add(ForgeDirection direction) {
+		this.x += direction.offsetX;
+		this.y += direction.offsetY;
+		this.z += direction.offsetZ;
 		return this;
 	}
 
