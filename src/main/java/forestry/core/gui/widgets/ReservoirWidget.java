@@ -28,7 +28,7 @@ public class ReservoirWidget extends TankWidget {
 	public void draw(int startX, int startY) {
 
 		FluidStack contents = getTank().getFluid();
-		if(contents == null || contents.amount <= 0)
+		if(contents == null || contents.amount <= 0 || contents.getFluid() == null)
 			return;
 		IIcon liquidIcon = contents.getFluid().getIcon(contents);
 		if(liquidIcon == null)
