@@ -10,29 +10,31 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import buildcraft.api.statements.ITriggerExternal;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
 import cpw.mods.fml.common.Optional;
+
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IHiveFrame;
 import forestry.api.core.ForestryAPI;
 import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.core.gadgets.TileBase;
+import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.plugins.PluginApiculture;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.Collection;
-import java.util.LinkedList;
+import buildcraft.api.statements.ITriggerExternal;
 
-public class TileApiary extends TileBeehouse implements ISidedInventory {
+public class TileApiary extends TileBeehouse {
 
-	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
+	public TileApiary() {
+		setInternalInventory(new BeehouseInventoryAdapter(this, 12, "Items"));
 	}
 
 	@Override
@@ -43,6 +45,7 @@ public class TileApiary extends TileBeehouse implements ISidedInventory {
 	/* IBEEHOUSING */
 	@Override
 	public float getTerritoryModifier(IBeeGenome genome, float currentModifier) {
+		IInventoryAdapter inventory = getInternalInventory();
 		float mod = 1.0f;
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
 			if (inventory.getStackInSlot(i) == null)
@@ -55,6 +58,7 @@ public class TileApiary extends TileBeehouse implements ISidedInventory {
 
 	@Override
 	public float getProductionModifier(IBeeGenome genome, float currentModifier) {
+		IInventoryAdapter inventory = getInternalInventory();
 		float mod = 0.1f;
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
 			if (inventory.getStackInSlot(i) == null)
@@ -67,6 +71,7 @@ public class TileApiary extends TileBeehouse implements ISidedInventory {
 
 	@Override
 	public float getMutationModifier(IBeeGenome genome, IBeeGenome mate, float currentModifier) {
+		IInventoryAdapter inventory = getInternalInventory();
 		float mod = 1.0f;
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
 			if (inventory.getStackInSlot(i) == null)
@@ -79,6 +84,7 @@ public class TileApiary extends TileBeehouse implements ISidedInventory {
 
 	@Override
 	public float getLifespanModifier(IBeeGenome genome, IBeeGenome mate, float currentModifier) {
+		IInventoryAdapter inventory = getInternalInventory();
 		float mod = 1.0f;
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
 			if (inventory.getStackInSlot(i) == null)
@@ -91,6 +97,7 @@ public class TileApiary extends TileBeehouse implements ISidedInventory {
 
 	@Override
 	public float getFloweringModifier(IBeeGenome genome, float currentModifier) {
+		IInventoryAdapter inventory = getInternalInventory();
 		float mod = 1f;
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
 			if (inventory.getStackInSlot(i) == null)
@@ -103,6 +110,7 @@ public class TileApiary extends TileBeehouse implements ISidedInventory {
 
 	@Override
 	public float getGeneticDecay(IBeeGenome genome, float currentModifier) {
+		IInventoryAdapter inventory = getInternalInventory();
 		float mod = 1f;
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
 			if (inventory.getStackInSlot(i) == null)
@@ -115,6 +123,7 @@ public class TileApiary extends TileBeehouse implements ISidedInventory {
 
 	@Override
 	public void wearOutEquipment(int amount) {
+		IInventoryAdapter inventory = getInternalInventory();
 		int wear = Math.round(amount * PluginApiculture.beeInterface.getBeekeepingMode(worldObj).getWearModifier());
 
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
@@ -128,128 +137,6 @@ public class TileApiary extends TileBeehouse implements ISidedInventory {
 					((IHiveFrame) inventory.getStackInSlot(i).getItem()).frameUsed(this, inventory.getStackInSlot(i),
 							PluginApiculture.beeInterface.getMember(inventory.getStackInSlot(SLOT_QUEEN)), wear));
 		}
-	}
-
-	/* IINVENTORY */
-	@Override
-	protected boolean canTakeStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-		if (!super.canTakeStackFromSide(slotIndex, itemstack, side))
-			return false;
-
-		switch (slotIndex) {
-		case SLOT_QUEEN:
-		case SLOT_DRONE:
-		case SLOT_FRAMES_1:
-		case SLOT_FRAMES_2:
-		case SLOT_FRAMES_3:
-			return false;
-		default:
-			return true;
-		}
-	}
-
-	@Override
-	protected boolean canPutStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-		if (!super.canPutStackFromSide(slotIndex, itemstack, side))
-			return false;
-
-		if (slotIndex == SLOT_QUEEN && PluginApiculture.beeInterface.isMember(itemstack)
-				&& !PluginApiculture.beeInterface.isDrone(itemstack))
-			return true;
-
-		if (slotIndex == SLOT_DRONE && PluginApiculture.beeInterface.isDrone(itemstack))
-			return true;
-
-		return false;
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return super.getStackInSlot(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		super.setSlotContents(i, itemstack);
-	}
-
-	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return inventory.decrStackSize(i, j);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		return inventory.getStackInSlotOnClosing(slot);
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
-	}
-
-	@Override
-	public void openInventory() {
-	}
-
-	@Override
-	public void closeInventory() {
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return super.isUseableByPlayer(player);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean hasCustomInventoryName() {
-		return super.hasCustomInventoryName();
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return super.isItemValidForSlot(slotIndex, itemstack);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return super.canInsertItem(i, itemstack, j);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return super.canExtractItem(i, itemstack, j);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return super.getAccessibleSlotsFromSide(side);
 	}
 
 	/* ISPECIALINVENTORY */

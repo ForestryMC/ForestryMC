@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.core.utils.StackUtils;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class MutationReqRes extends BeeMutation {
 

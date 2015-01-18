@@ -10,8 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.core.Tabs;
+import forestry.arboriculture.IWoodTyped;
+import forestry.arboriculture.WoodType;
 import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -22,21 +26,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraftforge.common.util.ForgeDirection;
-
-import forestry.api.core.Tabs;
-import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.WoodType;
 
 public class BlockLog extends Block implements IWoodTyped {
 
 	public enum LogCat {
 		CAT0, CAT1, CAT2, CAT3, CAT4, CAT5, CAT6, CAT7
 	}
+	public static final short logsPerCat = 4;
 
 	protected final LogCat cat;
 
@@ -104,12 +101,9 @@ public class BlockLog extends Block implements IWoodTyped {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		if(cat == LogCat.CAT6) {
-			itemList.add(new ItemStack(this, 1, 0));
-			return;
-		}
-
-		for (int i = 0; i < 4; i++)
+		int totalWoods = WoodType.values().length;
+		int count = Math.min(totalWoods - (cat.ordinal() * logsPerCat), logsPerCat);
+		for (int i = 0; i < count; i++)
 			itemList.add(new ItemStack(this, 1, i));
 	}
 
@@ -199,8 +193,9 @@ public class BlockLog extends Block implements IWoodTyped {
 	@Override
 	public WoodType getWoodType(int meta) {
 		meta = getTypeFromMeta(meta);
-		if(meta + cat.ordinal() * 4 < WoodType.VALUES.length)
-			return WoodType.VALUES[meta + cat.ordinal() * 4];
+		int woodOrdinal = meta + cat.ordinal() * logsPerCat;
+		if(woodOrdinal < WoodType.VALUES.length)
+			return WoodType.VALUES[woodOrdinal];
 		else
 			return null;
 	}

@@ -10,13 +10,11 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Defaults;
 import forestry.core.gui.widgets.SocketWidget;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.StringUtil;
 import forestry.energy.gadgets.EngineTin;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiEngineTin extends GuiEngine {
 

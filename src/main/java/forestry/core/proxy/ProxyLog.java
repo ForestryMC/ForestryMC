@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
+import forestry.core.config.Defaults;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
-
-import forestry.core.config.Defaults;
 import org.apache.logging.log4j.message.MessageFormatMessage;
 
 public class ProxyLog {
@@ -99,6 +98,37 @@ public class ProxyLog {
 	/* GENERIC */
 	public void log(Level logLevel, String message, Object... params) {
 		LogManager.getLogger(Defaults.MOD).log(logLevel, new MessageFormatMessage(String.format(message, params), params));
+	}
+
+	/* EXCEPTIONS */
+	public void logThrowable(String msg, Throwable error, Object... args) {
+		logThrowable(Level.ERROR, msg, 3, error, args);
+	}
+
+	public void logThrowable(String msg, int lines, Throwable error, Object... args) {
+		logThrowable(Level.ERROR, msg, lines, error, args);
+	}
+
+	public void logThrowable(Level level, String msg, int lines, Throwable error, Object... args) {
+		StackTraceElement[] oldtrace = error.getStackTrace();
+		if (lines < oldtrace.length) {
+			StackTraceElement[] newtrace = new StackTraceElement[lines];
+			System.arraycopy(oldtrace, 0, newtrace, 0, newtrace.length);
+			error.setStackTrace(newtrace);
+		}
+		LogManager.getLogger(Defaults.MOD).log(level, new MessageFormatMessage(msg, args), error);
+	}
+
+	public void logErrorAPI(String mod, Throwable error, Class classFile) {
+		StringBuilder msg = new StringBuilder(mod);
+		msg.append(" API error, please update your mods. Error: ").append(error);
+		logThrowable(Level.ERROR, msg.toString(), 2, error);
+
+		if (classFile != null) {
+			msg = new StringBuilder(mod);
+			msg.append(" API error: ").append(classFile.getSimpleName()).append(" is loaded from ").append(classFile.getProtectionDomain().getCodeSource().getLocation());
+			log(Level.ERROR, msg.toString());
+		}
 	}
 
 }

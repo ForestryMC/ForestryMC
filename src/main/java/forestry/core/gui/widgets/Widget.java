@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import forestry.core.gui.WidgetManager;
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.proxy.Proxies;
+import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * Basic non-ItemStack slot

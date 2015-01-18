@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import forestry.apiculture.render.ModelAnalyzer;
+import forestry.core.gadgets.TileAnalyzer;
+import forestry.core.interfaces.IBlockRenderer;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -17,14 +20,8 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.util.ForgeDirection;
-
 import org.lwjgl.opengl.GL11;
-
-import forestry.apiculture.render.ModelAnalyzer;
-import forestry.core.gadgets.TileAnalyzer;
-import forestry.core.interfaces.IBlockRenderer;
 
 public class RenderAnalyzer extends TileEntitySpecialRenderer implements IBlockRenderer {
 

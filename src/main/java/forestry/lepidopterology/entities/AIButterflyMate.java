@@ -10,17 +10,11 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import java.util.Map;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-
-import forestry.api.arboriculture.ITreeRoot;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.IPollinatable;
 import forestry.api.lepidopterology.IButterflyNursery;
-import forestry.core.utils.StackUtils;
+import forestry.core.utils.GeneticsUtil;
+
+import net.minecraft.tileentity.TileEntity;
 
 public class AIButterflyMate extends AIButterflyInteract {
 
@@ -30,7 +24,6 @@ public class AIButterflyMate extends AIButterflyInteract {
 
 	/**
 	 * Should lay egg?
-	 * @return
 	 */
 	@Override
 	protected boolean canInteract() {
@@ -45,23 +38,13 @@ public class AIButterflyMate extends AIButterflyInteract {
 
 		if (tile instanceof IButterflyNursery)
 			nursery = (IButterflyNursery) tile;
-		else
-			for (Map.Entry<ItemStack, IIndividual> entry : AlleleManager.ersatzSpecimen.entrySet()) {
-
-				if (!StackUtils.equals(entity.worldObj.getBlock(rest.posX, rest.posY, rest.posZ), entry.getKey()))
-					continue;
-
-				int meta = entity.worldObj.getBlockMetadata(rest.posX, rest.posY, rest.posZ);
-				if (StackUtils.equals(Blocks.leaves, entry.getKey()))
-					meta = meta & 3;
-				if (entry.getKey().getItemDamage() != meta)
-					continue;
-
-				// We matched, replace the leaf block with ours and set the ersatz genome
-				((ITreeRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees")).setLeaves(entity.worldObj, entry.getValue(), null, rest.posX, rest.posY, rest.posZ);
-				// Now let's pollinate
-				nursery = (IButterflyNursery) entity.worldObj.getTileEntity(rest.posX, rest.posY, rest.posZ);
+		else {
+			IPollinatable pollinatable = GeneticsUtil.getOrCreatePollinatable(null, entity.worldObj, rest.posX, rest.posY, rest.posZ);
+			if (pollinatable instanceof IButterflyNursery) {
+				nursery = (IButterflyNursery) pollinatable;
 			}
+		}
+
 		if (nursery == null)
 			return false;
 

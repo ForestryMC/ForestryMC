@@ -10,13 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import java.util.EnumSet;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.common.EnumPlantType;
-
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IAlleleGrowth;
@@ -35,6 +28,10 @@ import forestry.core.genetics.AllelePlantType;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.Genome;
 import forestry.plugins.PluginArboriculture;
+import java.util.EnumSet;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.EnumPlantType;
 
 public class TreeGenome extends Genome implements ITreeGenome {
 
@@ -48,7 +45,7 @@ public class TreeGenome extends Genome implements ITreeGenome {
 
 	// NBT RETRIEVAL
 	public static IAlleleTreeSpecies getSpecies(ItemStack itemStack) {
-		IAllele speciesAllele = Genome.getPrimaryAllele(itemStack, EnumTreeChromosome.SPECIES);
+		IAllele speciesAllele = Genome.getActiveAllele(itemStack, EnumTreeChromosome.SPECIES);
 		if (speciesAllele instanceof IAlleleTreeSpecies)
 			return (IAlleleTreeSpecies)speciesAllele;
 		else
@@ -57,37 +54,37 @@ public class TreeGenome extends Genome implements ITreeGenome {
 
 	@Override
 	public IAlleleTreeSpecies getPrimary() {
-		return (IAlleleTreeSpecies) getActiveAllele(EnumTreeChromosome.SPECIES.ordinal());
+		return (IAlleleTreeSpecies) getActiveAllele(EnumTreeChromosome.SPECIES);
 	}
 
 	@Override
 	public IAlleleTreeSpecies getSecondary() {
-		return (IAlleleTreeSpecies) getInactiveAllele(EnumTreeChromosome.SPECIES.ordinal());
+		return (IAlleleTreeSpecies) getInactiveAllele(EnumTreeChromosome.SPECIES);
 	}
 
 	@Override
 	public IFruitProvider getFruitProvider() {
-		return ((IAlleleFruit) getActiveAllele(EnumTreeChromosome.FRUITS.ordinal())).getProvider();
+		return ((IAlleleFruit) getActiveAllele(EnumTreeChromosome.FRUITS)).getProvider();
 	}
 
 	@Override
 	public IGrowthProvider getGrowthProvider() {
-		return ((IAlleleGrowth) getActiveAllele(EnumTreeChromosome.GROWTH.ordinal())).getProvider();
+		return ((IAlleleGrowth) getActiveAllele(EnumTreeChromosome.GROWTH)).getProvider();
 	}
 
 	@Override
 	public float getHeight() {
-		return ((IAlleleFloat) getActiveAllele(EnumTreeChromosome.HEIGHT.ordinal())).getValue();
+		return ((IAlleleFloat) getActiveAllele(EnumTreeChromosome.HEIGHT)).getValue();
 	}
 
 	@Override
 	public float getFertility() {
-		return ((IAlleleFloat) getActiveAllele(EnumTreeChromosome.FERTILITY.ordinal())).getValue();
+		return ((IAlleleFloat) getActiveAllele(EnumTreeChromosome.FERTILITY)).getValue();
 	}
 
 	@Override
 	public float getYield() {
-		return ((IAlleleFloat) getActiveAllele(EnumTreeChromosome.YIELD.ordinal())).getValue();
+		return ((IAlleleFloat) getActiveAllele(EnumTreeChromosome.YIELD)).getValue();
 	}
 
 	@Override
@@ -96,7 +93,7 @@ public class TreeGenome extends Genome implements ITreeGenome {
 		if (getChromosomes()[EnumTreeChromosome.SAPPINESS.ordinal()] == null)
 			getChromosomes()[EnumTreeChromosome.SAPPINESS.ordinal()] = new Chromosome(Allele.sappinessLowest);
 
-		IAllele allele = getActiveAllele(EnumTreeChromosome.SAPPINESS.ordinal());
+		IAllele allele = getActiveAllele(EnumTreeChromosome.SAPPINESS);
 		// FIXME: More legacy handling
 		if (allele instanceof IAlleleFloat)
 			return ((IAlleleFloat) allele).getValue();
@@ -109,10 +106,10 @@ public class TreeGenome extends Genome implements ITreeGenome {
 	@Override
 	public EnumSet<EnumPlantType> getPlantTypes() {
 		// / FIXME: Needs some legacy handling.
-		if (!(getActiveAllele(EnumTreeChromosome.PLANT.ordinal()) instanceof AllelePlantType))
+		if (!(getActiveAllele(EnumTreeChromosome.PLANT) instanceof AllelePlantType))
 			getChromosomes()[EnumTreeChromosome.PLANT.ordinal()] = new Chromosome(Allele.plantTypeNone);
 
-		return ((AllelePlantType) getActiveAllele(EnumTreeChromosome.PLANT.ordinal())).getPlantTypes();
+		return ((AllelePlantType) getActiveAllele(EnumTreeChromosome.PLANT)).getPlantTypes();
 	}
 
 	@Override
@@ -120,7 +117,7 @@ public class TreeGenome extends Genome implements ITreeGenome {
 		if (getChromosomes()[EnumTreeChromosome.MATURATION.ordinal()] == null)
 			getChromosomes()[EnumTreeChromosome.MATURATION.ordinal()] = new Chromosome(Allele.maturationSlowest);
 
-		return ((IAlleleInteger) getActiveAllele(EnumTreeChromosome.MATURATION.ordinal())).getValue();
+		return ((IAlleleInteger) getActiveAllele(EnumTreeChromosome.MATURATION)).getValue();
 	}
 
 	private IAllele translateGirth(int girth) {
@@ -136,12 +133,12 @@ public class TreeGenome extends Genome implements ITreeGenome {
 
 	@Override
 	public int getGirth() {
-		return ((IAlleleInteger) getActiveAllele(EnumTreeChromosome.GIRTH.ordinal())).getValue();
+		return ((IAlleleInteger) getActiveAllele(EnumTreeChromosome.GIRTH)).getValue();
 	}
 	
 	@Override
 	public IAlleleLeafEffect getEffect() {
-		return (IAlleleLeafEffect) getActiveAllele(EnumTreeChromosome.EFFECT.ordinal());
+		return (IAlleleLeafEffect) getActiveAllele(EnumTreeChromosome.EFFECT);
 	}
 
 	@Override

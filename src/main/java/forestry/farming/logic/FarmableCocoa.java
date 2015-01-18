@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmable;
+import forestry.core.utils.BlockUtil;
+import forestry.core.vect.Vect;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -17,11 +21,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.core.utils.BlockUtil;
-import forestry.core.utils.Vect;
 
 public class FarmableCocoa implements IFarmable {
 

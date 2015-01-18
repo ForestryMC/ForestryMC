@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.core.interfaces.ICraftingPlan;
 import forestry.core.items.ItemForestry;
+import net.minecraft.item.ItemStack;
 
 public class ItemWaxCast extends ItemForestry implements ICraftingPlan {
 

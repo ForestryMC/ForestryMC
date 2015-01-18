@@ -10,11 +10,8 @@
  ******************************************************************************/
 package forestry.farming.gadgets;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -29,12 +26,10 @@ import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmComponent;
 import forestry.api.farming.IFarmListener;
 import forestry.core.gadgets.TileForestry;
+import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.TileInventoryAdapter;
-import forestry.core.utils.Utils;
 
 public abstract class TileFarm extends TileForestry implements IFarmComponent {
 
@@ -46,74 +41,6 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	public static final int TYPE_HATCH = 5;
 	public static final int TYPE_VALVE = 6;
 	public static final int TYPE_CONTROL = 7;
-
-	public enum EnumFarmBlock {
-
-		BRICK_STONE(new ItemStack(Blocks.stonebrick, 1, 0)),
-		BRICK_MOSSY(new ItemStack(Blocks.stonebrick, 1, 1)),
-		BRICK_CRACKED(new ItemStack(Blocks.stonebrick, 1, 2)),
-		BRICK(new ItemStack(Blocks.brick_block)),
-		SANDSTONE_SMOOTH(new ItemStack(Blocks.sandstone, 1, 2)),
-		SANDSTONE_CHISELED(new ItemStack(Blocks.sandstone, 1, 1)),
-		BRICK_NETHER(new ItemStack(Blocks.nether_brick)),
-		BRICK_CHISELED(new ItemStack(Blocks.stonebrick, 1, 3)),
-		QUARTZ(new ItemStack(Blocks.quartz_block, 1, 0)),
-		QUARTZ_CHISELED(new ItemStack(Blocks.quartz_block, 1, 1)),
-		QUARTZ_LINES(new ItemStack(Blocks.quartz_block, 1, 2));
-		public final ItemStack base;
-
-		private EnumFarmBlock(ItemStack base) {
-			this.base = base;
-		}
-		@SideOnly(Side.CLIENT)
-		private static IIcon[] icons;
-
-		@SideOnly(Side.CLIENT)
-		public static void registerIcons(IIconRegister register) {
-
-			icons = new IIcon[8];
-			// for(int i = 0; i < values().length; i++) {
-			// generateTexturesIfNeeded(values()[i]);
-
-			icons[0] = TextureManager.getInstance().registerTex(register, "farm/plain");
-			icons[1] = TextureManager.getInstance().registerTex(register, "farm/reverse");
-			icons[2] = TextureManager.getInstance().registerTex(register, "farm/top");
-			icons[3] = TextureManager.getInstance().registerTex(register, "farm/band");
-			icons[4] = TextureManager.getInstance().registerTex(register, "farm/gears");
-			icons[5] = TextureManager.getInstance().registerTex(register, "farm/hatch");
-			icons[6] = TextureManager.getInstance().registerTex(register, "farm/valve");
-			icons[7] = TextureManager.getInstance().registerTex(register, "farm/control");
-			// }
-		}
-
-		@SideOnly(Side.CLIENT)
-		public IIcon getIcon(int type) {
-			return icons[type];
-		}
-
-		public void saveToCompound(NBTTagCompound compound) {
-			compound.setInteger("FarmBlock", this.ordinal());
-		}
-
-		public String getName() {
-			return base.getItem().getItemStackDisplayName(base);
-		}
-
-		public ItemStack getCraftingIngredient() {
-			return base;
-		}
-
-		public static EnumFarmBlock getFromCompound(NBTTagCompound compound) {
-
-			if (compound != null) {
-				int farmBlockOrdinal = compound.getInteger("FarmBlock");
-				if (farmBlockOrdinal < EnumFarmBlock.values().length)
-					return EnumFarmBlock.values()[farmBlockOrdinal];
-			}
-
-			return EnumFarmBlock.BRICK_STONE;
-		}
-	}
 
 	public TileFarm() {
 		this.structureLogic = Farmables.farmInterface.createFarmStructureLogic(this);
@@ -131,8 +58,6 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	/* SAVING & LOADING */
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-
 		this.isMaster = nbttagcompound.getBoolean("IsMaster");
 		this.masterX = nbttagcompound.getInteger("MasterX");
 		this.masterY = nbttagcompound.getInteger("MasterY");
@@ -144,10 +69,9 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 		if (isMaster)
 			makeMaster();
 
-		if (inventory != null)
-			inventory.readFromNBT(nbttagcompound);
-
 		structureLogic.readFromNBT(nbttagcompound);
+
+		super.readFromNBT(nbttagcompound);
 	}
 
 	@Override
@@ -160,9 +84,6 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 		nbttagcompound.setInteger("MasterZ", masterZ);
 
 		farmBlock.saveToCompound(nbttagcompound);
-
-		if (inventory != null)
-			inventory.writeToNBT(nbttagcompound);
 
 		structureLogic.writeToNBT(nbttagcompound);
 	}
@@ -225,22 +146,29 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 		return null;
 	}
 
-	/* INVENTORY MANAGMENT */
-	protected TileInventoryAdapter inventory;
-
-	protected abstract void createInventory();
-
 	/* TILEFORESTRY */
 	@Override
 	public PacketPayload getPacketPayload() {
-		PacketPayload payload = new PacketPayload(0, 1);
+		PacketPayload payload = new PacketPayload(0, 3);
 		payload.shortPayload[0] = (short) farmBlock.ordinal();
+
+		payload.shortPayload[1] = (short) (isMaster() ? 1 : 0);
+
+		// so the client can know if it is part of an integrated structure
+		payload.shortPayload[2] = (short) masterY;
+
 		return payload;
 	}
 
 	@Override
 	public void fromPacketPayload(PacketPayload payload) {
 		EnumFarmBlock farmType = EnumFarmBlock.values()[payload.shortPayload[0]];
+		if (payload.shortPayload[1] > 0)
+			makeMaster();
+
+		// so the client can know if it is part of an integrated structure
+		this.masterY = payload.shortPayload[2];
+
 		if (this.farmBlock != farmType) {
 			this.farmBlock = farmType;
 			worldObj.func_147479_m(xCoord, yCoord, zCoord);
@@ -268,8 +196,8 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 		setCentralTE(null);
 		this.isMaster = true;
 
-		if (inventory == null)
-			createInventory();
+		if (worldObj != null && !worldObj.isRemote)
+			sendNetworkUpdate();
 	}
 
 	@Override
@@ -284,22 +212,19 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	@Override
 	public ITileStructure getCentralTE() {
 
-		if (!isIntegratedIntoStructure() || !hasMaster())
+		if (!isIntegratedIntoStructure())
 			return null;
 
-		if (!isMaster) {
-			TileEntity tile = worldObj.getTileEntity(masterX, masterY, masterZ);
-			if (tile instanceof ITileStructure) {
-				ITileStructure master = (ITileStructure) worldObj.getTileEntity(masterX, masterY, masterZ);
-				if (master.isMaster())
-					return master;
-				else
-					return null;
-			} else
-				return null;
-		} else
+		if (isMaster)
 			return this;
 
+		TileEntity tile = worldObj.getTileEntity(masterX, masterY, masterZ);
+		if (tile instanceof ITileStructure) {
+			ITileStructure master = (ITileStructure)tile;
+			if (master.isMaster())
+				return master;
+		}
+		return null;
 	}
 
 	private boolean isSameTile(TileEntity tile) {
@@ -332,8 +257,13 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	}
 
 	@Override
-	public IInventory getInventory() {
-		return inventory;
+	public final IInventory getInventory() {
+		return getStructureInventory();
+	}
+
+	@Override
+	public IInventoryAdapter getStructureInventory() {
+		return getInternalInventory();
 	}
 
 	@Override
@@ -347,11 +277,5 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 
 	@Override
 	public void removeListener(IFarmListener listener) {
-	}
-
-	/* INTERACTION */
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return Utils.isUseableByPlayer(player, this, worldObj, xCoord, yCoord, zCoord);
 	}
 }

@@ -16,6 +16,7 @@ import forestry.plugins.Plugin;
 import forestry.plugins.PluginManager;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 
 /**
@@ -49,9 +50,7 @@ public class CommandPlugins extends SubCommand {
 	}
 
 	private String makeListEntry(ForestryPlugin plugin) {
-		String entry = "\u00A7c";
-		if (plugin.isAvailable())
-			entry = "\u00A7a";
+		String entry = plugin.isAvailable() ? EnumChatFormatting.GREEN.toString() : EnumChatFormatting.RED.toString();
 
 		Plugin info = plugin.getClass().getAnnotation(Plugin.class);
 		if (info != null) {
@@ -95,18 +94,17 @@ public class CommandPlugins extends SubCommand {
 			if (found == null)
 				throw new CommandException(StringUtil.localizeAndFormat("chat.plugins.error", plugin));
 
-			String entry = "\u00A7c";
-			if (found.isAvailable())
-				entry = "\u00A7a";
+			EnumChatFormatting formatting = found.isAvailable() ? EnumChatFormatting.GREEN : EnumChatFormatting.RED;
+
 			Plugin info = found.getClass().getAnnotation(Plugin.class);
 			if (info != null) {
-				CommandHelpers.sendChatMessage(sender, entry + "Plugin: " + info.name());
+				CommandHelpers.sendChatMessage(sender, formatting + "Plugin: " + info.name());
 				if (!info.version().isEmpty())
-					CommandHelpers.sendChatMessage(sender, "\u00A79Version: " + info.version());
+					CommandHelpers.sendChatMessage(sender, EnumChatFormatting.BLUE + "Version: " + info.version());
 				if (!info.author().isEmpty())
-					CommandHelpers.sendChatMessage(sender, "\u00A79Author(s): " + info.author());
+					CommandHelpers.sendChatMessage(sender, EnumChatFormatting.BLUE + "Author(s): " + info.author());
 				if (!info.url().isEmpty())
-					CommandHelpers.sendChatMessage(sender, "\u00A79URL: " + info.url());
+					CommandHelpers.sendChatMessage(sender, EnumChatFormatting.BLUE + "URL: " + info.url());
 				if (!info.unlocalizedDescription().isEmpty())
 					CommandHelpers.sendChatMessage(sender, StatCollector.translateToLocal(info.unlocalizedDescription()));
 			}

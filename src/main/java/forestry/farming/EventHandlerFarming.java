@@ -10,16 +10,13 @@
  ******************************************************************************/
 package forestry.farming;
 
-import net.minecraft.block.Block;
-
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-
-import net.minecraftforge.event.entity.player.BonemealEvent;
-
 import forestry.core.config.ForestryBlock;
 import forestry.core.proxy.Proxies;
 import forestry.farming.gadgets.BlockMushroom;
+import net.minecraft.block.Block;
+import net.minecraftforge.event.entity.player.BonemealEvent;
 
 public class EventHandlerFarming {
 

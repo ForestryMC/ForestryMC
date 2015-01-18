@@ -10,14 +10,16 @@
  ******************************************************************************/
 package forestry.core.config;
 
+import java.util.EnumSet;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginManager;
 import forestry.plugins.PluginManager.Stage;
-import java.util.EnumSet;
-import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * Allows direct access to Forestry's items. Will be populated during
@@ -43,9 +45,13 @@ public enum ForestryItem {
 	wrench,
 	pipette,
 	bucketBiomass,
-	vialEmpty,
-	vialCatalyst,
-	bucketBiofuel,
+	bucketEthanol,
+	bucketGlass,
+	bucketHoney,
+	bucketIce,
+	bucketJuice,
+	bucketSeedoil,
+	bucketShortMead,
 	// Crafting
 	impregnatedCasing,
 	sturdyCasing,
@@ -159,7 +165,7 @@ public enum ForestryItem {
 	waxCapsule,
 	waxCapsuleWater,
 	waxCapsuleBiomass,
-	waxCapsuleBiofuel,
+	waxCapsuleEthanol,
 	waxCapsuleOil,
 	waxCapsuleFuel,
 	waxCapsuleSeedOil,
@@ -170,7 +176,7 @@ public enum ForestryItem {
 	refractoryEmpty,
 	refractoryWater,
 	refractoryBiomass,
-	refractoryBiofuel,
+	refractoryEthanol,
 	refractoryOil,
 	refractoryFuel,
 	refractoryLava,
@@ -182,71 +188,14 @@ public enum ForestryItem {
 	canWater,
 	canEmpty,
 	canBiomass,
-	canBiofuel,
+	canEthanol,
 	canOil,
 	canFuel,
 	canLava,
 	canSeedOil,
 	canHoney,
 	canJuice,
-	canIce,
-	// Crating
-	cratedWood,
-	cratedCobblestone,
-	cratedDirt,
-	cratedStone,
-	cratedBrick,
-	cratedCacti,
-	cratedSand,
-	cratedObsidian,
-	cratedNetherrack,
-	cratedSoulsand,
-	cratedSandstone,
-	cratedBogearth,
-	cratedHumus,
-	cratedNetherbrick,
-	cratedPeat,
-	cratedApatite,
-	cratedFertilizer,
-	cratedTin,
-	cratedCopper,
-	cratedBronze,
-	cratedWheat,
-	cratedMycelium,
-	cratedMulch,
-	cratedSilver,
-	cratedBrass,
-	cratedCookies,
-	cratedHoneycombs,
-	cratedBeeswax,
-	cratedPollen,
-	cratedPropolis,
-	cratedHoneydew,
-	cratedRoyalJelly,
-	cratedCocoaComb,
-	cratedRedstone,
-	cratedLapis,
-	cratedReeds,
-	cratedClay,
-	cratedGlowstone,
-	cratedApples,
-	cratedNetherwart,
-	cratedResin,
-	cratedRubber,
-	cratedScrap,
-	cratedUUM,
-	cratedSimmeringCombs,
-	cratedStringyCombs,
-	cratedFrozenCombs,
-	cratedDrippingCombs,
-	cratedRefractoryWax,
-	cratedPhosphor,
-	cratedAsh,
-	cratedCharcoal,
-	cratedGravel,
-	cratedCoal,
-	cratedSeeds,
-	cratedSaplings;
+	canIce;
 	private Item item;
 
 	public void registerItem(Item item, String name) {

@@ -19,7 +19,14 @@ import forestry.api.farming.IFarmable;
 import forestry.core.config.ForestryBlock;
 import forestry.core.gadgets.BlockSoil;
 import forestry.core.render.SpriteSheet;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.Stack;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -30,14 +37,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.Stack;
 
 public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
@@ -102,7 +101,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		Vect offset = new Vect(housing.getOffset());
 
 		Vect min = coords.add(offset);
-		Vect max = coords.add(offset).add(area);
+		Vect max = min.add(area);
 
 		AxisAlignedBB harvestBox = AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, getWorld().getHeight(), max.z);
 		List<Entity> list = getWorld().getEntitiesWithinAABB(Entity.class, harvestBox);
@@ -128,8 +127,6 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	@Override
 	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
 
-		Collection<ICrop> crops = null;
-
 		Vect start = new Vect(x, y, z);
 		if (!lastExtentsHarvest.containsKey(start))
 			lastExtentsHarvest.put(start, 0);
@@ -139,7 +136,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 			lastExtent = 0;
 
 		Vect position = translateWithOffset(x, y + 1, z, direction, lastExtent);
-		crops = getHarvestBlocks(position);
+		Collection<ICrop> crops = getHarvestBlocks(position);
 		lastExtent++;
 		lastExtentsHarvest.put(start, lastExtent);
 

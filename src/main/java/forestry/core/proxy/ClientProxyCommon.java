@@ -10,10 +10,14 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import java.io.File;
-
 import com.mojang.authlib.GameProfile;
-
+import forestry.apiculture.render.TextureBiomefinder;
+import forestry.core.ForestryClient;
+import forestry.core.TickHandlerCoreClient;
+import forestry.core.WorldGenerator;
+import forestry.core.config.Config;
+import forestry.core.render.SpriteSheet;
+import java.io.File;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -25,17 +29,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-
-import net.minecraftforge.common.util.FakePlayerFactory;
-
 import org.lwjgl.input.Keyboard;
-
-import forestry.apiculture.render.TextureBiomefinder;
-import forestry.core.ForestryClient;
-import forestry.core.TickHandlerCoreClient;
-import forestry.core.config.Config;
-import forestry.core.render.SpriteSheet;
 
 public class ClientProxyCommon extends ProxyCommon {
 
@@ -50,8 +44,8 @@ public class ClientProxyCommon extends ProxyCommon {
 	}
 
 	@Override
-	public void registerTickHandlers() {
-		super.registerTickHandlers();
+	public void registerTickHandlers(WorldGenerator worldGenerator) {
+		super.registerTickHandlers(worldGenerator);
 
 		new TickHandlerCoreClient();
 	}
@@ -164,14 +158,6 @@ public class ClientProxyCommon extends ProxyCommon {
 
 	/**
 	 * Renders a EntityBiodustFX on client.
-	 * 
-	 * @param world
-	 * @param d1
-	 * @param d2
-	 * @param d3
-	 * @param f1
-	 * @param f2
-	 * @param f3
 	 */
 	// FIXME: This is causing crashes.
 	@Override

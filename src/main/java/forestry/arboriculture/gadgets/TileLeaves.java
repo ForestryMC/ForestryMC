@@ -10,16 +10,34 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.EnumSet;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.Packet;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+
 import com.mojang.authlib.GameProfile;
+
+import net.minecraftforge.common.EnumPlantType;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafTickHandler;
 import forestry.api.arboriculture.ITree;
-import forestry.api.core.EnumErrorCode;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.core.IErrorState;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFruitBearer;
@@ -30,26 +48,15 @@ import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.arboriculture.network.PacketLeafUpdate;
+import forestry.arboriculture.network.PacketRipeningUpdate;
+import forestry.core.utils.GeneticsUtil;
+import forestry.core.EnumErrorCode;
 import forestry.core.genetics.Allele;
 import forestry.core.network.ForestryPacket;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginArboriculture;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.EnumPlantType;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.EnumSet;
 
 public class TileLeaves extends TileTreeContainer implements IPollinatable, IFruitBearer, IButterflyNursery {
 
@@ -175,7 +182,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	public int getFoliageColour(EntityPlayer player) {
-		return isPollinatedState & Utils.hasNaturalistEye(player) ? 0xffffff : colourLeaves;
+		return isPollinatedState & GeneticsUtil.hasNaturalistEye(player) ? 0xffffff : colourLeaves;
 	}
 
 	public int getFruitColour() {
@@ -306,27 +313,26 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	private void sendNetworkUpdateRipening() {
-		Proxies.net.sendNetworkPacket(new PacketLeafUpdate(this, determineFruitColour()), xCoord, yCoord, zCoord);
+		Proxies.net.sendNetworkPacket(new PacketRipeningUpdate(this, determineFruitColour()), xCoord, yCoord, zCoord);
 	}
 
 	@Override
 	public void fromPacket(ForestryPacket packetRaw) {
+		super.fromPacket(packetRaw);
 
 		PacketLeafUpdate packet = (PacketLeafUpdate)packetRaw;
-		if(packet.isRipeningUpdate()) {
-			colourFruits = packet.colourFruits;
-		} else {
-			readFromNBT(packet.getTagCompound());
-			isFruitLeaf = packet.isFruitLeaf();
-			isPollinatedState = packet.isPollinated();
-			textureIndexFancy = packet.textureIndexFancy;
-			textureIndexPlain = packet.textureIndexPlain;
-			textureIndexFruits = packet.textureIndexFruit;
-			colourLeaves = packet.colourLeaves;
-			colourFruits = packet.colourFruits;
-		}
 
-		worldObj.func_147479_m(xCoord, yCoord, zCoord);
+		isFruitLeaf = packet.isFruitLeaf();
+		isPollinatedState = packet.isPollinated();
+		textureIndexFancy = packet.textureIndexFancy;
+		textureIndexPlain = packet.textureIndexPlain;
+		textureIndexFruits = packet.textureIndexFruit;
+		colourLeaves = packet.colourLeaves;
+		colourFruits = packet.colourFruits;
+	}
+
+	public void fromRipeningPacket(PacketRipeningUpdate packet) {
+		colourFruits = packet.colourFruits;
 	}
 
 	/**
@@ -335,9 +341,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	 **/
 	@Override
 	public boolean shouldRefresh(Block oldBlock, Block newBlock, int oldMeta, int newMeta, World world, int x, int y, int z) {
-		if (!Block.isEqualTo(oldBlock, newBlock))
-			return true;
-		return false;
+		return !Block.isEqualTo(oldBlock, newBlock);
 	}
 
 	/* IFRUITBEARER */
@@ -442,7 +446,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	@Override public void setErrorState(int state) {}
 
 	@Override
-	public void setErrorState(EnumErrorCode state) {
+	public void setErrorState(IErrorState state) {
 	}
 
 	@Override public int getErrorOrdinal() { return 0; }

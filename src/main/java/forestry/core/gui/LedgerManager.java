@@ -10,15 +10,12 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import java.util.ArrayList;
-
-import net.minecraft.client.Minecraft;
-
-import org.lwjgl.opengl.GL11;
-
 import forestry.core.config.SessionVars;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.proxy.Proxies;
+import java.util.ArrayList;
+import net.minecraft.client.Minecraft;
+import org.lwjgl.opengl.GL11;
 
 public class LedgerManager {
 
@@ -40,8 +37,6 @@ public class LedgerManager {
 
 	/**
 	 * Inserts a ledger into the next-to-last position.
-	 * 
-	 * @param ledger
 	 */
 	public void insert(Ledger ledger) {
 		this.ledgers.add(ledgers.size() - 1, ledger);

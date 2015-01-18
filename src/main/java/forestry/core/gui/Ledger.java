@@ -10,16 +10,14 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.util.IIcon;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
 import forestry.core.config.Defaults;
 import forestry.core.config.SessionVars;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.utils.ForestryResource;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 /**
  * Side ledger for guis
@@ -81,11 +79,7 @@ public abstract class Ledger {
 	}
 
 	public boolean intersectsWith(int mouseX, int mouseY, int shiftX, int shiftY) {
-
-		if (mouseX >= shiftX && mouseX <= shiftX + currentWidth && mouseY >= shiftY && mouseY <= shiftY + getHeight())
-			return true;
-
-		return false;
+		return mouseX >= shiftX && mouseX <= shiftX + currentWidth && mouseY >= shiftY && mouseY <= shiftY + getHeight();
 	}
 
 	public void setFullyOpen() {

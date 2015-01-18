@@ -12,7 +12,6 @@ package forestry.core.genetics;
 
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlleleTolerance;
-import forestry.core.utils.StringUtil;
 
 public class AlleleTolerance extends Allele implements IAlleleTolerance {
 

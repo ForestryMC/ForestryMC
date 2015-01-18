@@ -14,8 +14,6 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.core.utils.EnumAccess;
-
 public interface IOwnable {
 
 	boolean isOwnable();
@@ -28,11 +26,6 @@ public interface IOwnable {
 
 	boolean isOwner(EntityPlayer player);
 
-	boolean switchAccessRule(EntityPlayer player);
-
-	EnumAccess getAccess();
-
 	boolean allowsRemoval(EntityPlayer player);
 
-	boolean allowsInteraction(EntityPlayer player);
 }

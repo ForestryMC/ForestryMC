@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import net.minecraft.init.Blocks;
 import forestry.api.world.ITreeGenData;
 import forestry.core.worldgen.BlockType;
+import net.minecraft.init.Blocks;
 
 public class WorldGenDarkOak extends WorldGenTree {
 

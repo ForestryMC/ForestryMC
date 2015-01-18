@@ -104,7 +104,7 @@ public class StandardTank extends FluidTank {
 	}
 
 	public boolean accepts(Fluid fluid) {
-		return true;
+		return fluid != null;
 	}
 
 	public boolean canBeFilledExternally() {

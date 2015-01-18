@@ -10,14 +10,6 @@
  ******************************************************************************/
 package forestry.food.items;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.food.BeverageManager;
 import forestry.api.food.IBeverageEffect;
@@ -25,11 +17,18 @@ import forestry.api.food.IInfuserManager;
 import forestry.api.food.IIngredientManager;
 import forestry.core.CreativeTabForestry;
 import forestry.core.config.ForestryItem;
+import forestry.core.inventory.ItemInventory;
 import forestry.core.items.ItemForestry;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.food.BeverageEffect;
 import forestry.plugins.PluginManager;
+import java.util.ArrayList;
+import java.util.Arrays;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class ItemInfuser extends ItemForestry {
 
@@ -229,15 +228,16 @@ public class ItemInfuser extends ItemForestry {
 	}
 
 	// / INVENTORY MANAGMENT
-	public static class InfuserInventory implements IInventory {
+	public static class InfuserInventory extends ItemInventory {
 
-		private final ItemStack[] inventoryStacks = new ItemStack[6];
 		private final short inputSlot = 0;
 		private final short outputSlot = 1;
 		private final short ingredientSlot1 = 2;
+		private final short ingredientSlotCount = 4;
 		private final EntityPlayer player;
 
-		public InfuserInventory(EntityPlayer player) {
+		public InfuserInventory(EntityPlayer player, ItemStack itemStack) {
+			super(ItemInfuser.class, 6, itemStack);
 			this.player = player;
 		}
 
@@ -291,44 +291,10 @@ public class ItemInfuser extends ItemForestry {
 		}
 
 		@Override
-		public ItemStack decrStackSize(int i, int j) {
-			if (inventoryStacks[i] == null)
-				return null;
-
-			ItemStack product;
-			if (inventoryStacks[i].stackSize <= j) {
-				product = inventoryStacks[i];
-				inventoryStacks[i] = null;
-				return product;
-			} else {
-				product = inventoryStacks[i].splitStack(j);
-				if (inventoryStacks[i].stackSize == 0)
-					inventoryStacks[i] = null;
-
-				return product;
-			}
-		}
-
-		@Override
 		public void markDirty() {
 			if (!Proxies.common.isSimulating(player.worldObj))
 				return;
 			trySeasoning();
-		}
-
-		@Override
-		public void setInventorySlotContents(int i, ItemStack itemstack) {
-			inventoryStacks[i] = itemstack;
-		}
-
-		@Override
-		public ItemStack getStackInSlot(int i) {
-			return inventoryStacks[i];
-		}
-
-		@Override
-		public int getSizeInventory() {
-			return inventoryStacks.length;
 		}
 
 		@Override
@@ -337,40 +303,13 @@ public class ItemInfuser extends ItemForestry {
 		}
 
 		@Override
-		public int getInventoryStackLimit() {
-			return 64;
-		}
-
-		@Override
-		public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-			return true;
-		}
-
-		@Override
-		public void openInventory() {
-		}
-
-		@Override
-		public void closeInventory() {
-		}
-
-		@Override
-		public ItemStack getStackInSlotOnClosing(int slot) {
-			if (inventoryStacks[slot] == null)
-				return null;
-			ItemStack toReturn = inventoryStacks[slot];
-			inventoryStacks[slot] = null;
-			return toReturn;
-		}
-
-		@Override
-		public boolean hasCustomInventoryName() {
-			return true;
-		}
-
-		@Override
-		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-			return true;
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == inputSlot) {
+				ForestryItem.beverage.isItemEqual(itemStack);
+			} else if (slotIndex >= ingredientSlot1 && slotIndex < ingredientSlot1 + ingredientSlotCount) {
+				BeverageManager.infuserManager.isIngredient(itemStack);
+			}
+			return false;
 		}
 	}
 

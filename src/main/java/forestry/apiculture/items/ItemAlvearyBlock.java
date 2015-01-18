@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import net.minecraft.block.Block;
-
 import forestry.core.gadgets.IStructureBlockItem;
 import forestry.core.items.ItemForestryBlock;
+import net.minecraft.block.Block;
 
 /**
  *

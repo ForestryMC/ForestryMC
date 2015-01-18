@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmable;
+import forestry.core.vect.Vect;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.core.utils.Vect;
 
 public class FarmableGenericCrop implements IFarmable {
 
@@ -33,14 +32,7 @@ public class FarmableGenericCrop implements IFarmable {
 
 	@Override
 	public boolean isSaplingAt(World world, int x, int y, int z) {
-
-		if (world.isAirBlock(x, y, z))
-			return false;
-
-		if (world.getBlock(x, y, z) != block)
-			return false;
-		else
-			return true;
+		return world.getBlock(x, y, z) == block;
 	}
 
 	@Override

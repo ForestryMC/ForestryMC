@@ -10,21 +10,6 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
-import forestry.api.core.BiomeHelper;
-import forestry.api.core.EnumErrorCode;
-import forestry.api.core.ForestryAPI;
-import forestry.core.config.Config;
-import forestry.core.config.Defaults;
-import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.gadgets.TileBase;
-import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.network.GuiId;
-import forestry.core.utils.Fluids;
-import forestry.core.utils.InventoryAdapter;
-import forestry.core.utils.LiquidHelper;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -32,28 +17,58 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.biome.BiomeGenBase;
+
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
+import forestry.api.core.BiomeHelper;
+import forestry.api.core.ForestryAPI;
+import forestry.core.EnumErrorCode;
+import forestry.core.config.Config;
+import forestry.core.config.Defaults;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.Fluids;
+import forestry.core.fluids.TankManager;
+import forestry.core.fluids.tanks.FilteredTank;
+import forestry.core.gadgets.TileBase;
+import forestry.core.interfaces.ILiquidTankContainer;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.GuiId;
+import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
+
 public class MachineRaintank extends TileBase implements ISidedInventory, ILiquidTankContainer {
 
 	/* CONSTANTS */
 	public static final short SLOT_RESOURCE = 0;
 	public static final short SLOT_PRODUCT = 1;
-	private static final FluidStack STACK_WATER = LiquidHelper.getLiquid(Defaults.LIQUID_WATER, Defaults.RAINTANK_AMOUNT_PER_UPDATE);
+	private static final FluidStack STACK_WATER = Fluids.WATER.getFluid(Defaults.RAINTANK_AMOUNT_PER_UPDATE);
 
 	/* MEMBER */
-	public FilteredTank resourceTank;
+	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
-	private final InventoryAdapter inventory = new InventoryAdapter(3, "Items");
 	private boolean isValidBiome = true;
 	private int fillingTime;
 	private ItemStack usedEmpty;
 
 	public MachineRaintank() {
+		setInternalInventory(new TileInventoryAdapter(this, 3, "Items") {
+			@Override
+			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+				if (slotIndex == SLOT_RESOURCE) {
+					return FluidHelper.isFillableContainer(itemStack, Fluids.WATER.getFluid(1000));
+				}
+				return false;
+			}
+			@Override
+			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+				return slotIndex == SLOT_PRODUCT;
+			}
+		});
 		setHints(Config.hints.get("raintank"));
 
 		resourceTank = new FilteredTank(Defaults.RAINTANK_TANK_CAPACITY, FluidRegistry.WATER);
@@ -75,11 +90,6 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 	}
 
 	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
-	}
-
-	@Override
 	public void openGui(EntityPlayer player, TileBase tile) {
 		player.openGui(ForestryAPI.instance, GuiId.RaintankGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
@@ -91,7 +101,6 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 		nbttagcompound.setBoolean("IsValidBiome", isValidBiome);
 
 		tankManager.writeTanksToNBT(nbttagcompound);
-		inventory.writeToNBT(nbttagcompound);
 	}
 
 	@Override
@@ -101,7 +110,6 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 		isValidBiome = nbttagcompound.getBoolean("IsValidBiome");
 
 		tankManager.readTanksFromNBT(nbttagcompound);
-		inventory.readFromNBT(nbttagcompound);
 	}
 
 	@Override
@@ -120,6 +128,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 		if (worldObj.getTotalWorldTime() % 16 != 0)
 			return;
 
+		IInventoryAdapter inventory = getInternalInventory();
 		if (!StackUtils.isIdenticalItem(usedEmpty, inventory.getStackInSlot(SLOT_RESOURCE))) {
 			fillingTime = 0;
 			usedEmpty = null;
@@ -132,7 +141,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 			tryToStartFillling();
 		else {
 			fillingTime--;
-			if (fillingTime <= 0 && LiquidHelper.fillContainers(this, inventory, SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.get()))
+			if (fillingTime <= 0 && FluidHelper.fillContainers(tankManager, inventory, SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.getFluid()))
 				fillingTime = 0;
 		}
 	}
@@ -143,7 +152,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 
 	private void tryToStartFillling() {
 		// Nothing to do if no empty cans are available
-		if (!LiquidHelper.fillContainers(this, inventory, SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.get(), false))
+		if (!FluidHelper.fillContainers(tankManager, getInternalInventory(), SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.getFluid(), false))
 			return;
 
 		fillingTime = Defaults.RAINTANK_FILLING_TIME;
@@ -153,119 +162,8 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 		return (fillingTime * i) / Defaults.RAINTANK_FILLING_TIME;
 	}
 
-	/* IINVENTORY */
-	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return inventory.decrStackSize(i, j);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		return inventory.getStackInSlotOnClosing(slot);
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
-	}
-
-	@Override
-	public void openInventory() {
-	}
-
-	@Override
-	public void closeInventory() {
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return super.isUseableByPlayer(player);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean hasCustomInventoryName() {
-		return super.hasCustomInventoryName();
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return super.isItemValidForSlot(slotIndex, itemstack);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return super.canInsertItem(i, itemstack, j);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return super.canExtractItem(i, itemstack, j);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return super.getAccessibleSlotsFromSide(side);
-	}
-
-	/* ISIDEDINVENTORY */
-	@Override
-	public InventoryAdapter getInternalInventory() {
-		return inventory;
-	}
-
-	@Override
-	protected boolean canTakeStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-		if (!super.canTakeStackFromSide(slotIndex, itemstack, side))
-			return false;
-
-		return slotIndex == SLOT_PRODUCT;
-	}
-
-	@Override
-	protected boolean canPutStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-		if (!super.canPutStackFromSide(slotIndex, itemstack, side))
-			return false;
-
-		if (slotIndex != SLOT_RESOURCE)
-			return false;
-
-		return LiquidHelper.getEmptyContainer(itemstack, STACK_WATER) != null;
-	}
-
 	/* SMP GUI */
+	@Override
 	public void getGUINetworkData(int i, int j) {
 		i -= tankManager.maxMessageId() + 1;
 		switch (i) {
@@ -275,6 +173,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 		}
 	}
 
+	@Override
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
 		int i = tankManager.maxMessageId() + 1;
 		iCrafting.sendProgressBarUpdate(container, i, fillingTime);
@@ -311,6 +210,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 		return tankManager;
 	}
 
+	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return tankManager.getTankInfo(from);
 	}

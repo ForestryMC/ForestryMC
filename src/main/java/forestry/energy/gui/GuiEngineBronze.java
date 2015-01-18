@@ -10,16 +10,6 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.IIcon;
-
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-
-import org.lwjgl.opengl.GL11;
-
 import forestry.core.config.Defaults;
 import forestry.core.gui.WidgetManager;
 import forestry.core.gui.widgets.TankWidget;
@@ -28,12 +18,19 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.utils.StringUtil;
 import forestry.energy.gadgets.EngineBronze;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import org.lwjgl.opengl.GL11;
 
 public class GuiEngineBronze extends GuiEngine {
 
 	protected class BiogasSlot extends Widget {
 
-		EngineBronze engine;
+		private final EngineBronze engine;
 
 		public BiogasSlot(WidgetManager manager, int xPos, int yPos, EngineBronze engine) {
 			super(manager, xPos, yPos);
@@ -63,7 +60,7 @@ public class GuiEngineBronze extends GuiEngine {
 
 			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
 			while (true) {
-				int x = 0;
+				int x;
 
 				if (squaled > 16) {
 					x = 16;
@@ -90,8 +87,7 @@ public class GuiEngineBronze extends GuiEngine {
 			if (fluid == null)
 				return StringUtil.localize("gui.empty");
 
-			String tooltip = fluid.getLocalizedName(new FluidStack(fluid, 1));
-			return tooltip;
+			return fluid.getLocalizedName(new FluidStack(fluid, 1));
 		}
 	}
 

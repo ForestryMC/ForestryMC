@@ -10,6 +10,31 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkProvider;
+
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.OreDictionary;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
@@ -20,6 +45,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;
@@ -28,7 +54,6 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeRoot;
 import forestry.api.apiculture.IHiveDrop;
 import forestry.api.apiculture.hives.HiveManager;
-import forestry.api.apiculture.hives.IHive;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.Tabs;
@@ -37,7 +62,8 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.recipes.RecipeManagers;
-import forestry.apiculture.commands.CommandBeekeeping;
+import forestry.api.storage.ICrateRegistry;
+import forestry.api.storage.StorageManager;
 import forestry.apiculture.FlowerProviderCacti;
 import forestry.apiculture.FlowerProviderEnd;
 import forestry.apiculture.FlowerProviderGourd;
@@ -50,6 +76,7 @@ import forestry.apiculture.GuiHandlerApiculture;
 import forestry.apiculture.PacketHandlerApiculture;
 import forestry.apiculture.SaveEventHandlerApiculture;
 import forestry.apiculture.VillageHandlerApiculture;
+import forestry.apiculture.commands.CommandBee;
 import forestry.apiculture.gadgets.BlockAlveary;
 import forestry.apiculture.gadgets.BlockBeehives;
 import forestry.apiculture.gadgets.BlockCandle;
@@ -71,6 +98,8 @@ import forestry.apiculture.genetics.AlleleBeeSpecies;
 import forestry.apiculture.genetics.AlleleEffectAggressive;
 import forestry.apiculture.genetics.AlleleEffectCreeper;
 import forestry.apiculture.genetics.AlleleEffectExploration;
+import forestry.apiculture.genetics.AlleleEffectFertile;
+import forestry.apiculture.genetics.AlleleEffectFungification;
 import forestry.apiculture.genetics.AlleleEffectGlacial;
 import forestry.apiculture.genetics.AlleleEffectHeroic;
 import forestry.apiculture.genetics.AlleleEffectIgnition;
@@ -104,15 +133,10 @@ import forestry.apiculture.items.ItemImprinter;
 import forestry.apiculture.items.ItemWaxCast;
 import forestry.apiculture.proxy.ProxyApiculture;
 import forestry.apiculture.trigger.ApicultureTriggers;
-import forestry.apiculture.trigger.TriggerNoFrames;
 import forestry.apiculture.worldgen.HiveDecorator;
-import forestry.apiculture.worldgen.HiveEnd;
-import forestry.apiculture.worldgen.HiveForest;
-import forestry.apiculture.worldgen.HiveJungle;
-import forestry.apiculture.worldgen.HiveMeadows;
-import forestry.apiculture.worldgen.HiveParched;
-import forestry.apiculture.worldgen.HiveSnow;
-import forestry.apiculture.worldgen.HiveSwamp;
+import forestry.apiculture.worldgen.HiveDescription;
+import forestry.apiculture.worldgen.HiveGenHelper;
+import forestry.apiculture.worldgen.HiveRegistry;
 import forestry.core.GameMode;
 import forestry.core.config.Config;
 import forestry.core.config.Configuration;
@@ -120,6 +144,7 @@ import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.Property;
+import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.gadgets.TileAnalyzer;
@@ -127,7 +152,6 @@ import forestry.core.genetics.Allele;
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPacketHandler;
 import forestry.core.interfaces.ISaveEventHandler;
-import forestry.core.items.ItemCrated;
 import forestry.core.items.ItemForestry;
 import forestry.core.items.ItemForestryBlock;
 import forestry.core.items.ItemOverlay;
@@ -135,30 +159,7 @@ import forestry.core.items.ItemOverlay.OverlayInfo;
 import forestry.core.items.ItemScoop;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.EntitySnowFX;
-import forestry.core.triggers.Trigger;
-import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.ShapedRecipeCustom;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.command.ICommand;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.WeightedRandomChestContent;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.ChestGenHooks;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.OreDictionary;
-
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Plugin(pluginID = "Apiculture", name = "Apiculture", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.apiculture.description")
 public class PluginApiculture extends ForestryPlugin {
@@ -183,6 +184,8 @@ public class PluginApiculture extends ForestryPlugin {
 	 * See {@link IBeeRoot} for details
 	 */
 	public static IBeeRoot beeInterface;
+	public static HiveRegistry hiveRegistry;
+
 	public static MachineDefinition definitionApiary;
 	public static MachineDefinition definitionChest;
 	public static MachineDefinition definitionBeehouse;
@@ -195,6 +198,8 @@ public class PluginApiculture extends ForestryPlugin {
 
 		MinecraftForge.EVENT_BUS.register(this);
 
+		HiveManager.hiveRegistry = hiveRegistry = new HiveRegistry();
+		HiveManager.genHelper = new HiveGenHelper();
 		createHiveDropArrays();
 
 		ForestryBlock.apiculture.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "apiculture");
@@ -234,15 +239,6 @@ public class PluginApiculture extends ForestryPlugin {
 				PluginApiculture.proxy.getRendererAnalyzer(Defaults.TEXTURE_PATH_BLOCKS + "/analyzer_")));
 
 		ForestryBlock.beehives.registerBlock(new BlockBeehives(), ItemForestryBlock.class, "beehives");
-		ForestryBlock.beehives.block().setHarvestLevel("pickaxe", 1, 0);
-		ForestryBlock.beehives.block().setHarvestLevel("scoop", 0, 1);
-		ForestryBlock.beehives.block().setHarvestLevel("scoop", 0, 2);
-		ForestryBlock.beehives.block().setHarvestLevel("scoop", 0, 3);
-		ForestryBlock.beehives.block().setHarvestLevel("scoop", 0, 4);
-		ForestryBlock.beehives.block().setHarvestLevel("scoop", 0, 5);
-		ForestryBlock.beehives.block().setHarvestLevel("scoop", 0, 6);
-		ForestryBlock.beehives.block().setHarvestLevel("scoop", 0, 7);
-		ForestryBlock.beehives.block().setHarvestLevel("scoop", 0, 8);
 
 		createHives();
 
@@ -266,8 +262,15 @@ public class PluginApiculture extends ForestryPlugin {
 		// Register village components with the Structure registry.
 		VillageHandlerApiculture.registerVillageComponents();
 
+		// Modes
+		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.easy);
+		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.normal);
+		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.hard);
+		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.hardcore);
+		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.insane);
+
 		// Commands
-		PluginCore.rootCommand.addChildCommand(new CommandBeekeeping());
+		PluginCore.rootCommand.addChildCommand(new CommandBee());
 	}
 
 	@Override
@@ -277,37 +280,31 @@ public class PluginApiculture extends ForestryPlugin {
 		apicultureConfig = new Configuration();
 
 		Property property = apicultureConfig.get("apiary.sidesensitive", CONFIG_CATEGORY, apiarySideSensitive);
-		property.Comment = "set to false if apiaries should output all items regardless of side a pipe is attached to";
-		apiarySideSensitive = Boolean.parseBoolean(property.Value);
+		property.comment = "set to false if apiaries should output all items regardless of side a pipe is attached to";
+		apiarySideSensitive = Boolean.parseBoolean(property.value);
 
 		property = apicultureConfig.get("render.bees.fancy", CONFIG_CATEGORY, fancyRenderedBees);
-		property.Comment = "set to true to enable a fancy butterfly-like renderer for bees. (experimental!)";
-		fancyRenderedBees = Boolean.parseBoolean(property.Value);
+		property.comment = "set to true to enable a fancy butterfly-like renderer for bees. (experimental!)";
+		fancyRenderedBees = Boolean.parseBoolean(property.value);
 
 		property = apicultureConfig.get("beekeeping.mode", CONFIG_CATEGORY, "NORMAL");
-		property.Comment = "change beekeeping modes here. possible values EASY, NORMAL, HARD, HARDCORE, INSANE. mods may add additional modes.";
-		beekeepingMode = property.Value.trim();
+		property.comment = "change beekeeping modes here. possible values EASY, NORMAL, HARD, HARDCORE, INSANE. mods may add additional modes.";
+		beekeepingMode = property.value.trim();
 		Proxies.log.finer("Beekeeping mode read from config: " + beekeepingMode);
 
 		property = apicultureConfig.get("beekeeping.flowers.custom", CONFIG_CATEGORY, "");
-		property.Comment = "add additional flower blocks for apiaries here in the format id:meta. separate blocks using ';'. will be treated like vanilla flowers. not recommended for flowers implemented as tile entities.";
-		parseAdditionalFlowers(property.Value, FlowerManager.plainFlowers);
+		property.comment = "add additional flower blocks for apiaries here in the format id:meta. separate blocks using ';'. will be treated like vanilla flowers. not recommended for flowers implemented as tile entities.";
+		parseAdditionalFlowers(property.value, FlowerManager.plainFlowers);
 
 		property = apicultureConfig.get("species.blacklist", CONFIG_CATEGORY, "");
-		property.Comment = "add species to blacklist identified by their uid and seperated with ';'.";
-		parseBeeBlacklist(property.Value);
+		property.comment = "add species to blacklist identified by their uid and seperated with ';'.";
+		parseBeeBlacklist(property.value);
 
 		apicultureConfig.save();
 
 		createAlleles();
 		createMutations();
 		registerBeehiveDrops();
-
-		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.easy);
-		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.normal);
-		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.hard);
-		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.hardcore);
-		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.insane);
 
 		// Inducers for swarmer
 		BeeManager.inducers.put(ForestryItem.royalJelly.getItemStack(), 10);
@@ -341,10 +338,6 @@ public class PluginApiculture extends ForestryPlugin {
 		VillagerRegistry.instance().registerVillagerId(Defaults.ID_VILLAGER_BEEKEEPER);
 		Proxies.render.registerVillagerSkin(Defaults.ID_VILLAGER_BEEKEEPER, Defaults.TEXTURE_SKIN_BEEKPEEPER);
 		VillagerRegistry.instance().registerVillageTradeHandler(Defaults.ID_VILLAGER_BEEKEEPER, villageHandler);
-
-		// Register world gen
-		if (Config.generateBeehives)
-			MinecraftForge.EVENT_BUS.register(HiveDecorator.instance());
 
 		proxy.initializeRendering();
 	}
@@ -432,21 +425,21 @@ public class PluginApiculture extends ForestryPlugin {
 
 	@Override
 	protected void registerCrates() {
-		ForestryItem.cratedBeeswax.registerItem(new ItemCrated(ForestryItem.beeswax.getItemStack()), "cratedBeeswax");
-		ForestryItem.cratedPollen.registerItem(new ItemCrated(ForestryItem.pollenCluster.getItemStack()), "cratedPollen");
-		ForestryItem.cratedPropolis.registerItem(new ItemCrated(ForestryItem.propolis.getItemStack()), "cratedPropolis");
-		ForestryItem.cratedHoneydew.registerItem(new ItemCrated(ForestryItem.honeydew.getItemStack()), "cratedHoneydew");
-		ForestryItem.cratedRoyalJelly.registerItem(new ItemCrated(ForestryItem.royalJelly.getItemStack()), "cratedRoyalJelly");
+		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
+		crateRegistry.registerCrate(ForestryItem.beeswax.getItemStack(), "cratedBeeswax");
+		crateRegistry.registerCrate(ForestryItem.pollenCluster.getItemStack(), "cratedPollen");
+		crateRegistry.registerCrate(ForestryItem.propolis.getItemStack(), "cratedPropolis");
+		crateRegistry.registerCrate(ForestryItem.honeydew.getItemStack(), "cratedHoneydew");
+		crateRegistry.registerCrate(ForestryItem.royalJelly.getItemStack(), "cratedRoyalJelly");
 
-		ForestryItem.cratedHoneycombs.registerItem(new ItemCrated(ForestryItem.beeComb.getItemStack(1, 0)), "cratedHoneycombs");
-		ForestryItem.cratedCocoaComb.registerItem(new ItemCrated(ForestryItem.beeComb.getItemStack(1, 1)), "cratedCocoaComb");
-		ForestryItem.cratedSimmeringCombs.registerItem(new ItemCrated(ForestryItem.beeComb.getItemStack(1, 2)), "cratedSimmeringCombs");
-		ForestryItem.cratedStringyCombs.registerItem(new ItemCrated(ForestryItem.beeComb.getItemStack(1, 3)), "cratedStringyCombs");
-		ForestryItem.cratedFrozenCombs.registerItem(new ItemCrated(ForestryItem.beeComb.getItemStack(1, 4)), "cratedFrozenCombs");
-		ForestryItem.cratedDrippingCombs.registerItem(new ItemCrated(ForestryItem.beeComb.getItemStack(1, 5)), "cratedDrippingCombs");
+		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 0), "cratedHoneycombs");
+		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 1), "cratedCocoaComb");
+		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 2), "cratedSimmeringCombs");
+		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 3), "cratedStringyCombs");
+		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 4), "cratedFrozenCombs");
+		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 5), "cratedDrippingCombs");
 
-		ForestryItem.cratedRefractoryWax.registerItem(new ItemCrated(ForestryItem.refractoryWax.getItemStack()), "cratedRefractoryWax");
-
+		crateRegistry.registerCrate(ForestryItem.refractoryWax.getItemStack(), "cratedRefractoryWax");
 	}
 
 	@Override
@@ -469,36 +462,6 @@ public class PluginApiculture extends ForestryPlugin {
 		// / HABITAT LOCATOR
 		//Proxies.common.addRecipe(ForestryItem.biomeFinder.getItemStack(),
 		//		new Object[] { " X ", "X#X", " X ", '#', Items.redstone, 'X', "ingotBronze" });
-		Proxies.common.addRecipe(ForestryItem.vialCatalyst.getItemStack(3),
-				"###", "YXY",
-				'#', ForestryItem.waxCapsule,
-				'X', Items.bone,
-				'Y', ForestryItem.pollenCluster);
-		Proxies.common.addRecipe(ForestryItem.vialCatalyst.getItemStack(3),
-				"###", "YXY",
-				'#', ForestryItem.canEmpty,
-				'X', Items.bone,
-				'Y', ForestryItem.pollenCluster);
-		Proxies.common.addRecipe(ForestryItem.vialCatalyst.getItemStack(),
-				"###", "YXY", "###",
-				'#', ForestryItem.honeyDrop,
-				'Y', ForestryItem.fertilizerCompound,
-				'X', ForestryItem.waxCapsule);
-		Proxies.common.addRecipe(ForestryItem.vialCatalyst.getItemStack(),
-				"###", "YXY", "###",
-				'#', ForestryItem.honeyDrop,
-				'Y', ForestryItem.fertilizerCompound,
-				'X', ForestryItem.canEmpty);
-		Proxies.common.addRecipe(ForestryItem.vialCatalyst.getItemStack(),
-				"###", "YXY", "###",
-				'#', ForestryItem.honeyDrop,
-				'Y', ForestryItem.pollenCluster,
-				'X', ForestryItem.waxCapsule);
-		Proxies.common.addRecipe(ForestryItem.vialCatalyst.getItemStack(),
-				"###", "YXY", "###",
-				'#', ForestryItem.honeyDrop,
-				'Y', ForestryItem.pollenCluster,
-				'X', ForestryItem.canEmpty);
 
 		// Bees
 		Proxies.common.addRecipe(ForestryItem.scoop.getItemStack(1),
@@ -551,6 +514,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'#', "dustAsh",
 				'X', ForestryItem.peat,
 				'Y', ForestryItem.propolis);
+
 		// / TORCHES
 		Proxies.common.addRecipe(new ItemStack(Blocks.torch, 3),
 				" # ", " # ", " Y ",
@@ -559,20 +523,6 @@ public class PluginApiculture extends ForestryPlugin {
 		Proxies.common.addRecipe(ForestryItem.craftingMaterial.getItemStack(1, 1),
 				"# #", " # ", "# #",
 				'#', ForestryItem.propolis.getItemStack(1, 2));
-
-		// / CANDLES
-		RecipeManagers.carpenterManager.addRecipe(30, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 600), null, ForestryBlock.candle.getItemStack(24),
-				" X ",
-				"###",
-				"###",
-				'#', ForestryItem.beeswax,
-				'X', Items.string);
-		RecipeManagers.carpenterManager.addRecipe(10, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 200), null, ForestryBlock.candle.getItemStack(6),
-				"#X#",
-				'#', ForestryItem.beeswax,
-				'X', ForestryItem.craftingMaterial.getItemStack(1, 2));
-		Proxies.common.addShapelessRecipe(ForestryBlock.candle.getItemStack(), ForestryBlock.candle.getItemStack());
-		Proxies.common.addShapelessRecipe(ForestryBlock.candle.getItemStack(1, 1), ForestryBlock.candle.getItemStack(1, 1));
 
 		// / WAX CAST
 		Proxies.common.addRecipe(ForestryItem.waxCast.getItemStack(),
@@ -636,77 +586,91 @@ public class PluginApiculture extends ForestryPlugin {
 				'I', Items.iron_ingot,
 				'W', ForestryItem.craftingMaterial.getItemStack(1, 3));
 
-		// / SQUEEZER
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.honeyDrop.getItemStack()}, LiquidHelper.getLiquid(Defaults.LIQUID_HONEY, Defaults.FLUID_PER_HONEY_DROP),
-				ForestryItem.propolis.getItemStack(), 5);
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.honeydew.getItemStack()}, LiquidHelper.getLiquid(Defaults.LIQUID_HONEY, Defaults.FLUID_PER_HONEY_DROP));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.sand)}, LiquidHelper.getLiquid(Defaults.LIQUID_LAVA, 2000));
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.dirt)}, LiquidHelper.getLiquid(Defaults.LIQUID_LAVA, 1600));
+		if (PluginManager.Module.FACTORY.isEnabled()) {
+			// / SQUEEZER
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.honeyDrop.getItemStack()}, Fluids.HONEY.getFluid(Defaults.FLUID_PER_HONEY_DROP),
+					ForestryItem.propolis.getItemStack(), 5);
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.honeydew.getItemStack()}, Fluids.HONEY.getFluid(Defaults.FLUID_PER_HONEY_DROP));
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.sand)}, Fluids.LAVA.getFluid(2000));
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.dirt)}, Fluids.LAVA.getFluid(1600));
 
-		// / CARPENTER
-		RecipeManagers.carpenterManager.addRecipe(100, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 2000), null, ForestryItem.beealyzer.getItemStack(),
-				"X#X", "X#X", "RDR",
-				'#', Blocks.glass_pane,
-				'X', "ingotTin",
-				'R', Items.redstone,
-				'D', Items.diamond);
-		RecipeManagers.carpenterManager.addRecipe(50, LiquidHelper.getLiquid(Defaults.LIQUID_HONEY, 500), null, ForestryItem.craftingMaterial.getItemStack(1, 6),
-				" J ", "###", "WPW",
-				'#', "plankWood",
-				'J', ForestryItem.royalJelly,
-				'W', ForestryItem.beeswax,
-				'P', ForestryItem.pollenCluster);
+			// / CARPENTER
+			RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, ForestryItem.beealyzer.getItemStack(),
+					"X#X", "X#X", "RDR",
+					'#', Blocks.glass_pane,
+					'X', "ingotTin",
+					'R', Items.redstone,
+					'D', Items.diamond);
+			RecipeManagers.carpenterManager.addRecipe(50, Fluids.HONEY.getFluid(500), null, ForestryItem.craftingMaterial.getItemStack(1, 6),
+					" J ", "###", "WPW",
+					'#', "plankWood",
+					'J', ForestryItem.royalJelly,
+					'W', ForestryItem.beeswax,
+					'P', ForestryItem.pollenCluster);
 
-		// / CENTRIFUGE
-		// Honey combs
-		RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 0), ForestryItem.beeswax.getItemStack(), ForestryItem.honeyDrop.getItemStack(), 90);
-		// Cocoa combs
-		RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 1), ForestryItem.beeswax.getItemStack(), new ItemStack(Items.dye, 1, 3), 50);
-		// Simmering combs
-		RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 2), ForestryItem.refractoryWax.getItemStack(), ForestryItem.phosphor.getItemStack(2), 70);
-		// Stringy combs
-		RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 3), ForestryItem.propolis.getItemStack(), ForestryItem.honeyDrop.getItemStack(), 40);
-		// Drippig combs
-		RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 5), ForestryItem.honeydew.getItemStack(), ForestryItem.honeyDrop.getItemStack(), 40);
-		// Frozen combs
-		RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 4), new ItemStack[]{ForestryItem.beeswax.getItemStack(),
-			ForestryItem.honeyDrop.getItemStack(), new ItemStack(Items.snowball), ForestryItem.pollenCluster.getItemStack(1, 1)}, new int[]{80, 70, 40, 20});
-		// Silky combs
-		RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 6), ForestryItem.honeyDrop.getItemStack(), ForestryItem.propolis.getItemStack(1, 3), 80);
-		// Parched combs
-		RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 7), ForestryItem.beeswax.getItemStack(), ForestryItem.honeyDrop.getItemStack(), 90);
-		// Mysterious combs
-		RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 8), new ItemStack[]{ForestryItem.honeyDrop.getItemStack(),
-			ForestryItem.propolis.getItemStack(1, 2)}, new int[]{40, 100});
-		// Irradiated combs
-		RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 9), new ItemStack[]{}, new int[]{});
-		// Powdery combs
-		RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 10), new ItemStack[]{ForestryItem.honeyDrop.getItemStack(),
-			ForestryItem.beeswax.getItemStack(), new ItemStack(Items.gunpowder)}, new int[]{20, 20, 90});
-		// Reddened Combs
-		RecipeManagers.centrifugeManager.addRecipe(80, ForestryItem.beeComb.getItemStack(1, 11),
-				new ItemStack[]{ForestryItem.honeyDrop.getItemStack(2, 1)}, new int[]{100});
-		// Darkened Combs
-		RecipeManagers.centrifugeManager.addRecipe(80, ForestryItem.beeComb.getItemStack(1, 12),
-				new ItemStack[]{ForestryItem.honeyDrop.getItemStack(1, 1)}, new int[]{100});
-		// Omega Combs
-		RecipeManagers.centrifugeManager.addRecipe(400, ForestryItem.beeComb.getItemStack(1, 13), new ItemStack[]{ForestryItem.honeyDrop.getItemStack(1, 2)}, new int[]{100});
-		// Wheaten Combs
-		RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 14), new ItemStack[]{ForestryItem.honeyDrop.getItemStack(),
-			ForestryItem.beeswax.getItemStack(), new ItemStack(Items.wheat)}, new int[]{20, 20, 80});
-		// Mossy Combs
-		RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 15), ForestryItem.beeswax.getItemStack(), ForestryItem.honeyDrop.getItemStack(), 90);
-		// Mellow Combs
-		RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 16), new ItemStack[]{ForestryItem.honeydew.getItemStack(),
-			ForestryItem.beeswax.getItemStack(), new ItemStack(Items.quartz)}, new int[]{60, 20, 30});
+			RecipeManagers.carpenterManager.addRecipe(30, Fluids.WATER.getFluid(600), null, ForestryBlock.candle.getItemStack(24),
+					" X ",
+					"###",
+					"###",
+					'#', ForestryItem.beeswax,
+					'X', Items.string);
+			RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(200), null, ForestryBlock.candle.getItemStack(6),
+					"#X#",
+					'#', ForestryItem.beeswax,
+					'X', ForestryItem.craftingMaterial.getItemStack(1, 2));
+			Proxies.common.addShapelessRecipe(ForestryBlock.candle.getItemStack(), ForestryBlock.candle.getItemStack());
+			Proxies.common.addShapelessRecipe(ForestryBlock.candle.getItemStack(1, 1), ForestryBlock.candle.getItemStack(1, 1));
 
-		// Silk
-		RecipeManagers.centrifugeManager.addRecipe(5, ForestryItem.propolis.getItemStack(1, 3), new ItemStack[]{
-			ForestryItem.craftingMaterial.getItemStack(1, 2), ForestryItem.propolis.getItemStack()}, new int[]{60, 10});
+			// / CENTRIFUGE
+			// Honey combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 0), ForestryItem.beeswax.getItemStack(), ForestryItem.honeyDrop.getItemStack(), 90);
+			// Cocoa combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 1), ForestryItem.beeswax.getItemStack(), new ItemStack(Items.dye, 1, 3), 50);
+			// Simmering combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 2), ForestryItem.refractoryWax.getItemStack(), ForestryItem.phosphor.getItemStack(2), 70);
+			// Stringy combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 3), ForestryItem.propolis.getItemStack(), ForestryItem.honeyDrop.getItemStack(), 40);
+			// Drippig combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 5), ForestryItem.honeydew.getItemStack(), ForestryItem.honeyDrop.getItemStack(), 40);
+			// Frozen combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 4), new ItemStack[]{ForestryItem.beeswax.getItemStack(),
+					ForestryItem.honeyDrop.getItemStack(), new ItemStack(Items.snowball), ForestryItem.pollenCluster.getItemStack(1, 1)}, new int[]{80, 70, 40, 20});
+			// Silky combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 6), ForestryItem.honeyDrop.getItemStack(), ForestryItem.propolis.getItemStack(1, 3), 80);
+			// Parched combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 7), ForestryItem.beeswax.getItemStack(), ForestryItem.honeyDrop.getItemStack(), 90);
+			// Mysterious combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 8), new ItemStack[]{ForestryItem.honeyDrop.getItemStack(),
+					ForestryItem.propolis.getItemStack(1, 2)}, new int[]{40, 100});
+			// Irradiated combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 9), new ItemStack[]{}, new int[]{});
+			// Powdery combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 10), new ItemStack[]{ForestryItem.honeyDrop.getItemStack(),
+					ForestryItem.beeswax.getItemStack(), new ItemStack(Items.gunpowder)}, new int[]{20, 20, 90});
+			// Reddened Combs
+			RecipeManagers.centrifugeManager.addRecipe(80, ForestryItem.beeComb.getItemStack(1, 11),
+					new ItemStack[]{ForestryItem.honeyDrop.getItemStack(2, 1)}, new int[]{100});
+			// Darkened Combs
+			RecipeManagers.centrifugeManager.addRecipe(80, ForestryItem.beeComb.getItemStack(1, 12),
+					new ItemStack[]{ForestryItem.honeyDrop.getItemStack(1, 1)}, new int[]{100});
+			// Omega Combs
+			RecipeManagers.centrifugeManager.addRecipe(400, ForestryItem.beeComb.getItemStack(1, 13), new ItemStack[]{ForestryItem.honeyDrop.getItemStack(1, 2)}, new int[]{100});
+			// Wheaten Combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 14), new ItemStack[]{ForestryItem.honeyDrop.getItemStack(),
+					ForestryItem.beeswax.getItemStack(), new ItemStack(Items.wheat)}, new int[]{20, 20, 80});
+			// Mossy Combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 15), ForestryItem.beeswax.getItemStack(), ForestryItem.honeyDrop.getItemStack(), 90);
+			// Mellow Combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 16), new ItemStack[]{ForestryItem.honeydew.getItemStack(),
+					ForestryItem.beeswax.getItemStack(), new ItemStack(Items.quartz)}, new int[]{60, 20, 30});
 
-		// / FERMENTER
-		RecipeManagers.fermenterManager.addRecipe(ForestryItem.honeydew.getItemStack(), 500, 1.0f, LiquidHelper.getLiquid(Defaults.LIQUID_MEAD, 1),
-				LiquidHelper.getLiquid(Defaults.LIQUID_HONEY, 1));
+			// Silk
+			RecipeManagers.centrifugeManager.addRecipe(5, ForestryItem.propolis.getItemStack(1, 3), new ItemStack[]{
+					ForestryItem.craftingMaterial.getItemStack(1, 2), ForestryItem.propolis.getItemStack()}, new int[]{60, 10});
+
+			// / FERMENTER
+			RecipeManagers.fermenterManager.addRecipe(ForestryItem.honeydew.getItemStack(), 500, 1.0f, Fluids.SHORT_MEAD.getFluid(1), Fluids.HONEY.getFluid(1));
+		}
 
 		// ANALYZER
 		definitionAnalyzer.recipes = createAlyzerRecipes(ForestryBlock.core.block(), Defaults.DEFINITION_ANALYZER_META);
@@ -824,44 +788,23 @@ public class PluginApiculture extends ForestryPlugin {
 	}
 
 	private void createHives() {
-		HiveManager.put(HiveManager.forest, new HiveForest(3));
-		HiveManager.put(HiveManager.meadows, new HiveMeadows(1));
-		HiveManager.put(HiveManager.desert, new HiveParched(1));
-		HiveManager.put(HiveManager.jungle, new HiveJungle(4));
-		HiveManager.put(HiveManager.end, new HiveEnd(4));
-		HiveManager.put(HiveManager.snow, new HiveSnow(2));
-		HiveManager.put(HiveManager.swamp, new HiveSwamp(2));
+		hiveRegistry.registerHive(HiveRegistry.forest, HiveDescription.FOREST);
+		hiveRegistry.registerHive(HiveRegistry.meadows, HiveDescription.MEADOWS);
+		hiveRegistry.registerHive(HiveRegistry.desert, HiveDescription.DESERT);
+		hiveRegistry.registerHive(HiveRegistry.jungle, HiveDescription.JUNGLE);
+		hiveRegistry.registerHive(HiveRegistry.end, HiveDescription.END);
+		hiveRegistry.registerHive(HiveRegistry.snow, HiveDescription.SNOW);
+		hiveRegistry.registerHive(HiveRegistry.swamp, HiveDescription.SWAMP);
 	}
 
-	@Deprecated // deprecated since 3.1. remove when BeeManager.hiveDrops is removed
 	private void updateHiveDrops() {
-		IHive hive = HiveManager.getForestHive();
-		for (IHiveDrop drop : forestDrops)
-			hive.addDrop(drop);
-
-		hive = HiveManager.getMeadowsHive();
-		for (IHiveDrop drop : meadowsDrops)
-			hive.addDrop(drop);
-
-		hive = HiveManager.getDesertHive();
-		for (IHiveDrop drop : desertDrops)
-			hive.addDrop(drop);
-
-		hive = HiveManager.getJungleHive();
-		for (IHiveDrop drop : jungleDrops)
-			hive.addDrop(drop);
-
-		hive = HiveManager.getEndHive();
-		for (IHiveDrop drop : endDrops)
-			hive.addDrop(drop);
-
-		hive = HiveManager.getSnowHive();
-		for (IHiveDrop drop : snowDrops)
-			hive.addDrop(drop);
-
-		hive = HiveManager.getSwampHive();
-		for (IHiveDrop drop : swampDrops)
-			hive.addDrop(drop);
+		hiveRegistry.addDrops(HiveRegistry.forest, forestDrops);
+		hiveRegistry.addDrops(HiveRegistry.meadows, meadowsDrops);
+		hiveRegistry.addDrops(HiveRegistry.desert, desertDrops);
+		hiveRegistry.addDrops(HiveRegistry.jungle, jungleDrops);
+		hiveRegistry.addDrops(HiveRegistry.end, endDrops);
+		hiveRegistry.addDrops(HiveRegistry.snow, snowDrops);
+		hiveRegistry.addDrops(HiveRegistry.swamp, swampDrops);
 	}
 
 	private void createAlleles() {
@@ -1028,14 +971,18 @@ public class PluginApiculture extends ForestryPlugin {
 		// Agrarian branch
 		Allele.speciesRural = new AlleleBeeSpecies("speciesRural", false, "bees.species.rural", agrarian, "rustico", 0xfeff8f, 0xffdc16).addProduct(
 				ForestryItem.beeComb.getItemStack(1, 14), 20).setIsSecret();
-		// 41 Farmerly
-		// 42 Agrarian
+		Allele.speciesFarmerly = new AlleleBeeSpecies("speciesFarmerly", true, "bees.species.farmerly", agrarian, "arator", 0xD39728, 0xffdc16).addProduct(
+				ForestryItem.beeComb.getItemStack(1, 14), 27).setIsSecret();
+		Allele.speciesArgrarian = new AlleleBeeSpecies("speciesArgrarian", true, "bees.species.agrarian", agrarian, "arator", 0xFFCA75, 0xFFE047).addProduct(
+				ForestryItem.beeComb.getItemStack(1, 14), 35).setIsSecret().setHasEffect();
 
 		// Boggy branch
 		Allele.speciesMarshy = new AlleleBeeSpecies("speciesMarshy", true, "bees.species.marshy", boggy, "adorasti", 0x546626, 0xffdc16).addProduct(
 				ForestryItem.beeComb.getItemStack(1, 15), 30).setHumidity(EnumHumidity.DAMP);
-		// 44 speciesMiry
-		// 45 speciesBoggy
+		Allele.speciesMiry = new AlleleBeeSpecies("speciesMiry", true, "bees.species.miry", boggy, "humidium", 0x92AF42, 0xffdc16).addProduct(
+				ForestryItem.beeComb.getItemStack(1, 15), 36).setHumidity(EnumHumidity.DAMP).setIsSecret();
+		Allele.speciesBoggy = new AlleleBeeSpecies("speciesBoggy", true, "bees.species.boggy", boggy, "paluster", 0x698948, 0xffdc16).addProduct(
+				ForestryItem.beeComb.getItemStack(1, 15), 39).addSpecialty(ForestryItem.peat.getItemStack(1), 8).setHumidity(EnumHumidity.DAMP).setIsSecret();		
 
 		// Monastic branch
 		Allele.speciesMonastic = new AlleleBeeSpecies("speciesMonastic", false, "bees.species.monastic", monastic, "monachus", 0x42371c, 0xfff7b6)
@@ -1075,6 +1022,8 @@ public class PluginApiculture extends ForestryPlugin {
 		Allele.effectReanimation = new AlleleEffectResurrection("effectReanimation", "reanimation", AlleleEffectResurrection.getReanimationList());
 		Allele.effectResurrection = new AlleleEffectResurrection("effectResurrection", "resurrection", AlleleEffectResurrection.getResurrectionList());
 		Allele.effectRepulsion = new AlleleEffectRepulsion("effectRepulsion");
+		Allele.effectFertile = new AlleleEffectFertile("effectFertile");
+		Allele.effectMycophilic = new AlleleEffectFungification("effectMycophilic");
 
 	}
 
@@ -1160,6 +1109,16 @@ public class PluginApiculture extends ForestryPlugin {
 		// Agrarian branch
 		BeeTemplates.ruralA = new BeeMutation(Allele.speciesMeadows, Allele.speciesDiligent, BeeTemplates.getRuralTemplate(), 12)
 				.restrictBiomeType(BiomeDictionary.Type.PLAINS).enableStrictBiomeCheck();
+		new BeeMutation(Allele.speciesRural, Allele.speciesUnweary, BeeTemplates.getFarmerlyTemplate(), 10)
+				.restrictBiomeType(BiomeDictionary.Type.PLAINS).enableStrictBiomeCheck();
+		new BeeMutation(Allele.speciesFarmerly, Allele.speciesIndustrious, BeeTemplates.getAgrarianTemplate(), 6)
+				.restrictBiomeType(BiomeDictionary.Type.PLAINS).enableStrictBiomeCheck();
+		
+		// Boggy branch
+		new BeeMutation(Allele.speciesMarshy, Allele.speciesNoble, BeeTemplates.getMiryTemplate(), 15)
+				.setTemperatureRainfall(0.75f, 0.94f, 0.75f, 2.0f);
+		new BeeMutation(Allele.speciesMarshy, Allele.speciesMiry, BeeTemplates.getBoggyTemplate(), 9)
+				.setTemperatureRainfall(0.75f, 0.94f, 0.75f, 2.0f);
 
 		// Monastic branch
 		BeeTemplates.secludedA = new BeeMutation(Allele.speciesMonastic, Allele.speciesAustere, BeeTemplates.getSecludedTemplate(), 12);
@@ -1210,11 +1169,15 @@ public class PluginApiculture extends ForestryPlugin {
 		beeInterface.registerTemplate(BeeTemplates.getReddenedTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getOmegaTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getRuralTemplate());
+		beeInterface.registerTemplate(BeeTemplates.getFarmerlyTemplate());
+		beeInterface.registerTemplate(BeeTemplates.getAgrarianTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getLeporineTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getMerryTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getTipsyTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getTrickyTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getMarshyTemplate());
+		beeInterface.registerTemplate(BeeTemplates.getMiryTemplate());
+		beeInterface.registerTemplate(BeeTemplates.getBoggyTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getMonasticTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getSecludedTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getHermiticTemplate());
@@ -1277,6 +1240,18 @@ public class PluginApiculture extends ForestryPlugin {
 	@Override
 	public IOreDictionaryHandler getDictionaryHandler() {
 		return null;
+	}
+
+	@Override
+	public void populateChunk(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
+		if (Config.generateBeehives)
+			HiveDecorator.instance().decorateHives(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
+	}
+
+	@Override
+	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
+		if (Config.generateBeehives)
+			HiveDecorator.instance().decorateHives(world, rand, chunkX, chunkZ);
 	}
 
 	@Override

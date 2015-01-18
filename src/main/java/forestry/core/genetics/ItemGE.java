@@ -10,20 +10,18 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import java.util.List;
-
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
+import java.util.List;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 
 public abstract class ItemGE extends Item {
 
@@ -37,7 +35,7 @@ public abstract class ItemGE extends Item {
 
 	protected abstract int getDefaultSecondaryColour();
 
-	protected abstract IIndividual getIndividual(ItemStack itemstack);
+	public abstract IIndividual getIndividual(ItemStack itemstack);
 
 	protected abstract IAlleleSpecies getSpecies(ItemStack itemStack);
 
@@ -74,7 +72,7 @@ public abstract class ItemGE extends Item {
 			if(Proxies.common.isShiftDown())
 				individual.addTooltip(list);
 			else
-				list.add("\u00A7o<" + StringUtil.localize("gui.tooltip.tmi") + ">");
+				list.add(EnumChatFormatting.ITALIC + "<" + StringUtil.localize("gui.tooltip.tmi") + ">");
 		} else
 			list.add("<" + StringUtil.localize("gui.unknown") + ">");
 	}

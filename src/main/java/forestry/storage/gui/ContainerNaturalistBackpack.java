@@ -12,31 +12,26 @@ package forestry.storage.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
 
-import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.IGuiSelectable;
-import forestry.core.gui.slots.SlotCustom;
+import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.network.PacketUpdate;
-import forestry.core.proxy.Proxies;
-import forestry.storage.GuiHandlerStorage.PagedInventory;
+import forestry.storage.GuiHandlerStorage.PagedBackpackInventory;
 
 public class ContainerNaturalistBackpack extends ContainerItemInventory implements IGuiSelectable {
 
-	private final PagedInventory inv;
-	private ISpeciesRoot speciesRoot;
+	private final PagedBackpackInventory inv;
 
-	public ContainerNaturalistBackpack(ISpeciesRoot speciesRoot, InventoryPlayer player, PagedInventory inventory, int page, int pageSize) {
+	public ContainerNaturalistBackpack(InventoryPlayer player, PagedBackpackInventory inventory, int page, int pageSize) {
 		super(inventory, player.player);
 
 		this.inv = inventory;
-		this.speciesRoot = speciesRoot;
 
 		// Inventory
 		for (int x = 0; x < 5; x++) {
 			for (int y = 0; y < 5; y++) {
-				addSlot(new SlotCustom(inventory, y + page * pageSize + x * 5, 100 + y * 18, 21 + x * 18, speciesRoot));
+				addSlotToContainer(new SlotFiltered(inventory, y + page * pageSize + x * 5, 100 + y * 18, 21 + x * 18));
 			}
 		}
 
@@ -50,27 +45,6 @@ public class ContainerNaturalistBackpack extends ContainerItemInventory implemen
 		for (int j1 = 0; j1 < 9; j1++) {
 			addSecuredSlot(player, j1, 18 + j1 * 18, 178);
 		}
-	}
-
-	@Override
-	public void purgeBag(EntityPlayer player) {
-		for (int i = 0; i < inventory.getSizeInventory(); i++) {
-			ItemStack stack = inventory.getStackInSlot(i);
-			if (stack == null)
-				continue;
-
-			if (speciesRoot.isMember(stack))
-				continue;
-
-			Proxies.common.dropItemPlayer(player, stack);
-			inventory.setInventorySlotContents(i, null);
-		}
-	}
-
-	@Override
-	protected boolean isAcceptedItem(EntityPlayer player, ItemStack stack) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override

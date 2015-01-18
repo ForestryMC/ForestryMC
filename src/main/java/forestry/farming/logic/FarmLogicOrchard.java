@@ -10,29 +10,25 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Stack;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.genetics.IFruitBearer;
 import forestry.core.config.ForestryItem;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Stack;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class FarmLogicOrchard extends FarmLogic {
 
@@ -86,8 +82,6 @@ public class FarmLogicOrchard extends FarmLogic {
 	@Override
 	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
 
-		Collection<ICrop> crops = null;
-
 		Vect start = new Vect(x, y, z);
 		if (!lastExtents.containsKey(start))
 			lastExtents.put(start, 0);
@@ -99,7 +93,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		// Proxies.log.finest("Logic %s is searching in direction %s at %s/%s/%s with extension %s.", getClass(), direction, x, y, z, lastExtent);
 
 		Vect position = translateWithOffset(x, y + 1, z, direction, lastExtent);
-		crops = getHarvestBlocks(position);
+		Collection<ICrop> crops = getHarvestBlocks(position);
 		lastExtent++;
 		lastExtents.put(start, lastExtent);
 

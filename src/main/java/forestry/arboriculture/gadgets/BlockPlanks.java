@@ -10,8 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.core.Tabs;
+import forestry.arboriculture.IWoodTyped;
+import forestry.arboriculture.WoodType;
 import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -21,15 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraftforge.common.util.ForgeDirection;
-
-import forestry.api.core.Tabs;
-import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.WoodType;
 
 public class BlockPlanks extends Block implements IWoodTyped {
 
@@ -37,6 +33,7 @@ public class BlockPlanks extends Block implements IWoodTyped {
 		CAT0, CAT1
 	}
 
+	public static final int planksPerCat = 16;
 	protected final PlankCat cat;
 
 	public BlockPlanks(PlankCat cat) {
@@ -54,7 +51,8 @@ public class BlockPlanks extends Block implements IWoodTyped {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		int count = (cat == PlankCat.CAT0 ? 16 : 8);
+		int totalWoods = WoodType.values().length;
+		int count = Math.min(totalWoods - (cat.ordinal() * planksPerCat), planksPerCat);
 		for (int i = 0; i < count; i++)
 			itemList.add(new ItemStack(this, 1, i));
 	}
@@ -69,7 +67,10 @@ public class BlockPlanks extends Block implements IWoodTyped {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIcon(int side, int meta) {
-		return getWoodType(meta).getPlankIcon();
+		WoodType woodType = getWoodType(meta);
+		if (woodType == null)
+			return null;
+		return woodType.getPlankIcon();
 	}
 
 	@Override
@@ -105,10 +106,11 @@ public class BlockPlanks extends Block implements IWoodTyped {
 
 	@Override
 	public WoodType getWoodType(int meta) {
-		if(cat.ordinal() * 16 + meta < WoodType.VALUES.length)
-			return WoodType.VALUES[cat.ordinal() * 16 + meta];
+		int woodOrdinal = cat.ordinal() * planksPerCat + meta;
+		if(woodOrdinal < WoodType.VALUES.length)
+			return WoodType.VALUES[woodOrdinal];
 		else
-			return WoodType.LARCH;
+			return null;
 	}
 
 	@Override

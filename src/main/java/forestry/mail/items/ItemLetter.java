@@ -14,6 +14,7 @@ import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentTranslation;
@@ -25,15 +26,17 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.mail.ILetter;
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
+import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IHintSource;
+import forestry.core.inventory.ItemInventory;
 import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
-import forestry.core.utils.ItemInventory;
+import forestry.core.utils.GuiUtil;
 import forestry.core.utils.StringUtil;
 import forestry.mail.Letter;
 
@@ -44,9 +47,7 @@ public class ItemLetter extends ItemInventoried {
 		ILetter letter;
 
 		public LetterInventory(ItemStack itemstack) {
-			super(ItemLetter.class);
-			this.parent = itemstack;
-			this.isItemInventory = true;
+			super(ItemLetter.class, 0, itemstack);
 
 			// Set an uid to identify the itemstack on SMP
 			setUID(true);
@@ -136,16 +137,21 @@ public class ItemLetter extends ItemInventoried {
 		}
 
 		@Override
-		public void openInventory() {
-		}
-
-		@Override
-		public void closeInventory() {
-		}
-
-		@Override
 		public ItemStack getStackInSlotOnClosing(int slot) {
 			return letter.getStackInSlotOnClosing(slot);
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (letter.isProcessed()) {
+				return false;
+			} else if (GuiUtil.isIndexInRange(slotIndex, Letter.SLOT_POSTAGE_1, Letter.SLOT_POSTAGE_COUNT)) {
+				Item item = itemStack.getItem();
+				return item instanceof ItemStamps;
+			} else if (GuiUtil.isIndexInRange(slotIndex, Letter.SLOT_ATTACHMENT_1, Letter.SLOT_ATTACHMENT_COUNT)) {
+				return !ForestryItem.letters.isItemEqual(itemStack);
+			}
+			return false;
 		}
 
 		// / IERRORSOURCE
@@ -231,10 +237,6 @@ public class ItemLetter extends ItemInventoried {
 	public static int encodeMeta(int state, int size) {
 		int meta = size << 4;
 		meta |= state;
-
-		size = getSize(meta);
-		state = getState(meta);
-
 		return meta;
 	}
 

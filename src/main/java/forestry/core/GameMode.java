@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.core;
 
-import java.util.HashMap;
-
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IGameMode;
 import forestry.core.config.Config;
@@ -23,6 +18,9 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.Property;
 import forestry.core.proxy.Proxies;
+import java.util.HashMap;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
 public class GameMode implements IGameMode {
 
@@ -129,20 +127,20 @@ public class GameMode implements IGameMode {
 
 	private void initSetting(String ident, ItemStack def, String comment) {
 		Property property = Config.config.get(ident, category, def.stackSize);
-		property.Comment = comment;
+		property.comment = comment;
 		ItemStack changed = def.copy();
-		changed.stackSize = Integer.parseInt(property.Value);
+		changed.stackSize = Integer.parseInt(property.value);
 		stackSettings.put(ident, changed);
 	}
 
 	private void initSetting(String ident, int def, int max, String comment) {
 		Property property = Config.config.get(ident, category, def);
 		if (max < 0) {
-			property.Comment = comment;
-			integerSettings.put(ident, Integer.parseInt(property.Value));
+			property.comment = comment;
+			integerSettings.put(ident, Integer.parseInt(property.value));
 		} else {
-			property.Comment = comment + " (max: " + max + ")";
-			integerSettings.put(ident, Math.min(Integer.parseInt(property.Value), max));
+			property.comment = comment + " (max: " + max + ")";
+			integerSettings.put(ident, Math.min(Integer.parseInt(property.value), max));
 		}
 		Config.config.set(ident, category, integerSettings.get(ident));
 
@@ -151,19 +149,19 @@ public class GameMode implements IGameMode {
 	private void initSetting(String ident, float def, float max, String comment) {
 		Property property = Config.config.get(ident, category, def);
 		if (max < 0) {
-			property.Comment = comment;
-			floatSettings.put(ident, Float.parseFloat(property.Value));
+			property.comment = comment;
+			floatSettings.put(ident, Float.parseFloat(property.value));
 		} else {
-			property.Comment = comment + " (max: " + max + ")";
-			floatSettings.put(ident, Math.min(Float.parseFloat(property.Value), max));
+			property.comment = comment + " (max: " + max + ")";
+			floatSettings.put(ident, Math.min(Float.parseFloat(property.value), max));
 		}
 		Config.config.set(ident, category, floatSettings.get(ident));
 	}
 
 	private void initSetting(String ident, boolean def, String comment) {
 		Property property = Config.config.get(ident, category, def);
-		property.Comment = comment;
-		booleanSettings.put(ident, Boolean.parseBoolean(property.Value));
+		property.comment = comment;
+		booleanSettings.put(ident, Boolean.parseBoolean(property.value));
 		Config.config.set(ident, category, booleanSettings.get(ident));
 	}
 

@@ -5,6 +5,7 @@
 !/forestry_techne
 !/gradle/wrapper
 !/src
+!/api
 
 # files
 !/.gitignore

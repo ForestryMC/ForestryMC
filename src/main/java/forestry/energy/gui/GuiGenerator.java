@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.energy.gadgets.MachineGenerator;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiGenerator extends GuiForestryTitled<MachineGenerator> {
 

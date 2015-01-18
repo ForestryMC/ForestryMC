@@ -53,6 +53,7 @@ public class TileAlvearyStabiliser extends TileAlveary implements IBeeModifier {
 	}
 
 	/* TEXTURES */
+	@Override
 	public int getIcon(int side, int metadata) {
 		if(side == 0 || side == 1)
 			return BlockAlveary.BOTTOM;

@@ -10,19 +10,20 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import forestry.api.mail.IMailAddress;
-import forestry.api.mail.PostManager;
-import forestry.core.gui.ContainerForestry;
-import forestry.core.gui.slots.SlotClosed;
-import forestry.core.proxy.Proxies;
-import forestry.mail.POBox;
-import forestry.mail.gadgets.MachineMailbox;
-import forestry.plugins.PluginMail;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.PostManager;
+import forestry.core.gui.ContainerForestry;
+import forestry.core.gui.slots.SlotOutput;
+import forestry.core.proxy.Proxies;
+import forestry.mail.POBox;
+import forestry.mail.gadgets.MachineMailbox;
+import forestry.plugins.PluginMail;
 
 public class ContainerMailbox extends ContainerForestry {
 
@@ -34,27 +35,27 @@ public class ContainerMailbox extends ContainerForestry {
 
 	public ContainerMailbox(InventoryPlayer player, MachineMailbox tile) {
 		super(tile);
+		IInventory inventory = tile.getOrCreateMailInventory(player.player.worldObj, player.player.getGameProfile());
 
 		// Mailbox contents
 		this.mailbox = tile;
 
-		IInventory inv = mailbox.getOrCreateMailInventory(player.player.worldObj, player.player.getGameProfile());
-		if (inv instanceof POBox)
-			this.mailInventory = (POBox) inv;
+		if (inventory instanceof POBox)
+			this.mailInventory = (POBox) inventory;
 		else
 			this.mailInventory = null;
 
 		for (int i = 0; i < 7; i++)
 			for (int j = 0; j < 12; j++)
-				addSlot(new SlotClosed(inv, j + i * 9, 8 + j * 18, 8 + i * 18));
+				addSlotToContainer(new SlotOutput(inventory, j + i * 9, 8 + j * 18, 8 + i * 18));
 
 		// Player inventory
 		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < 9; j++)
-				addSlot(new Slot(player, j + i * 9 + 9, 35 + j * 18, 145 + i * 18));
+				addSlotToContainer(new Slot(player, j + i * 9 + 9, 35 + j * 18, 145 + i * 18));
 		// Player hotbar
 		for (int i = 0; i < 9; i++)
-			addSlot(new Slot(player, i, 35 + i * 18, 203));
+			addSlotToContainer(new Slot(player, i, 35 + i * 18, 203));
 
 	}
 

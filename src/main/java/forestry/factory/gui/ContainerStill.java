@@ -10,37 +10,33 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 
 import forestry.core.gui.ContainerLiquidTanks;
-import forestry.core.gui.slots.SlotLiquidContainer;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotOutput;
 import forestry.factory.gadgets.MachineStill;
 
 public class ContainerStill extends ContainerLiquidTanks {
-	protected MachineStill processor;
 
 	public ContainerStill(InventoryPlayer player, MachineStill tile) {
-		super(tile, tile);
+		super(tile);
 
-		this.processor = tile;
-		this.addSlot(new Slot(tile, MachineStill.SLOT_PRODUCT, 150, 54));
-		this.addSlot(new SlotLiquidContainer(tile, MachineStill.SLOT_RESOURCE, 150, 18, true));
-		this.addSlot(new SlotLiquidContainer(tile, MachineStill.SLOT_CAN, 10, 36));
+		this.addSlotToContainer(new SlotOutput(tile, MachineStill.SLOT_PRODUCT, 150, 54));
+		this.addSlotToContainer(new SlotFiltered(tile, MachineStill.SLOT_RESOURCE, 150, 18));
+		this.addSlotToContainer(new SlotFiltered(tile, MachineStill.SLOT_CAN, 10, 36));
 
-		for (int i = 0; i < 3; ++i)
-			for (int j = 0; j < 9; ++j)
-				this.addSlot(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+		for (int i = 0; i < 3; ++i) {
+			for (int j = 0; j < 9; ++j) {
+				this.addSlotToContainer(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+			}
+		}
 
-		for (int i = 0; i < 9; ++i)
-			this.addSlot(new Slot(player, i, 8 + i * 18, 142));
+		for (int i = 0; i < 9; ++i) {
+			this.addSlotToContainer(new Slot(player, i, 8 + i * 18, 142));
+		}
 
 	}
 
-	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return processor.isUseableByPlayer(entityplayer);
-	}
 }

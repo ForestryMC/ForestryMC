@@ -10,6 +10,11 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IChromosome;
+import forestry.api.genetics.IChromosomeType;
+import forestry.api.genetics.IMutation;
+import forestry.api.genetics.ISpeciesRoot;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,13 +22,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
-
 import net.minecraft.item.ItemStack;
-
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IChromosome;
-import forestry.api.genetics.IMutation;
-import forestry.api.genetics.ISpeciesRoot;
 
 public abstract class SpeciesRoot implements ISpeciesRoot {
 	
@@ -74,6 +73,7 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 		return combinations;
 	}
 
+	@Deprecated
 	@Override
 	public Collection<? extends IMutation> getPaths(IAllele result, int chromosomeOrdinal) {
 		ArrayList<IMutation> paths = new ArrayList<IMutation>();
@@ -81,6 +81,16 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 			if(mutation.getTemplate()[chromosomeOrdinal] == result)
 				paths.add(mutation);
 		
+		return paths;
+	}
+
+	@Override
+	public Collection<? extends IMutation> getPaths(IAllele result, IChromosomeType chromosomeType) {
+		ArrayList<IMutation> paths = new ArrayList<IMutation>();
+		for (IMutation mutation : getMutations(false))
+			if(mutation.getTemplate()[chromosomeType.ordinal()] == result)
+				paths.add(mutation);
+
 		return paths;
 	}
 

@@ -10,7 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import forestry.api.core.EnumErrorCode;
+import forestry.api.core.IErrorState;
+import forestry.core.EnumErrorCode;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.utils.StringUtil;
 
@@ -19,7 +20,7 @@ import forestry.core.utils.StringUtil;
  */
 public class ErrorLedger extends Ledger {
 
-	IErrorSource tile;
+	private final IErrorSource tile;
 
 	public ErrorLedger(LedgerManager manager, IErrorSource tile) {
 		super(manager);
@@ -30,7 +31,7 @@ public class ErrorLedger extends Ledger {
 
 	@Override
 	public void draw(int x, int y) {
-		EnumErrorCode state = tile.getErrorState();
+		IErrorState state = tile.getErrorState();
 		if (state == EnumErrorCode.OK)
 			return;
 
@@ -52,11 +53,8 @@ public class ErrorLedger extends Ledger {
 
 	@Override
 	public boolean isVisible() {
-		EnumErrorCode state = tile.getErrorState();
-		if (state == EnumErrorCode.OK)
-			return false;
-		else
-			return true;
+		IErrorState state = tile.getErrorState();
+		return state != EnumErrorCode.OK;
 	}
 
 	@Override

@@ -11,6 +11,11 @@
 package forestry.core.gadgets;
 
 import cofh.api.energy.IEnergyConnection;
+import forestry.core.TemperatureState;
+import forestry.core.config.Defaults;
+import forestry.core.network.PacketPayload;
+import forestry.core.utils.BlockUtil;
+import forestry.energy.EnergyManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -19,11 +24,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import forestry.core.TemperatureState;
-import forestry.core.config.Defaults;
-import forestry.core.network.PacketPayload;
-import forestry.core.utils.BlockUtil;
-import forestry.energy.EnergyManager;
 
 public abstract class Engine extends TileBase implements IEnergyConnection {
 
@@ -68,7 +68,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 	protected final int maxHeat;
 	protected boolean forceCooldown = false;
 	public float progress;
-	protected EnergyManager energyManager;
+	protected final EnergyManager energyManager;
 
 	public Engine(int maxHeat, int maxEnergy, int maxEnergyExtracted) {
 		this.maxHeat = maxHeat;
@@ -85,11 +85,6 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 		rotateEngine();
 	}
 
-	/**
-	 * Adds heat
-	 *
-	 * @param i
-	 */
 	protected void addHeat(int i) {
 		heat += i;
 
@@ -227,8 +222,6 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 
 	/**
 	 * Returns the current energy state of the engine
-	 *
-	 * @return
 	 */
 	public TemperatureState getTemperatureState() {
 		// double scaledStorage = (double)storedEnergy / (double)maxEnergy;
@@ -248,11 +241,6 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 			return TemperatureState.MELTING;
 	}
 
-	/**
-	 * Piston speed
-	 *
-	 * @return
-	 */
 	public float getPistonSpeed() {
 		switch (getTemperatureState()) {
 		case COOL:

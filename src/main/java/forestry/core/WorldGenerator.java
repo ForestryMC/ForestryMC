@@ -15,13 +15,16 @@ import java.util.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent;
+
 import cpw.mods.fml.common.IWorldGenerator;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 import forestry.core.config.Config;
 import forestry.core.config.ForestryBlock;
 import forestry.core.proxy.Proxies;
 import forestry.core.worldgen.WorldGenMinableMeta;
-import forestry.plugins.ForestryPlugin;
 import forestry.plugins.PluginManager;
 
 public class WorldGenerator implements IWorldGenerator {
@@ -30,11 +33,31 @@ public class WorldGenerator implements IWorldGenerator {
 	private WorldGenMinableMeta copperGenerator;
 	private WorldGenMinableMeta tinGenerator;
 
+	public WorldGenerator() {
+		MinecraftForge.EVENT_BUS.register(this);
+	}
+
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
+		generateWorld(random, chunkX, chunkZ, world);
+	}
+
+	@SubscribeEvent
+	public void populateChunk(PopulateChunkEvent.Post event) {
+		// / PLUGIN WORLD GENERATION
+		PluginManager.populateChunk(event.chunkProvider, event.world, event.rand, event.chunkX, event.chunkZ, event.hasVillageGenerated);
+	}
+
+	public void retroGen(Random random, int chunkX, int chunkZ, World world) {
+		generateWorld(random, chunkX, chunkZ, world);
+		PluginManager.populateChunkRetroGen(world, random, chunkX, chunkZ);
+		world.getChunkFromChunkCoords(chunkX, chunkZ).setChunkModified();
+	}
+
+	private void generateWorld(Random random, int chunkX, int chunkZ, World world) {
 
 		if (apatiteGenerator == null) {
-			apatiteGenerator = new WorldGenMinableMeta(ForestryBlock.resources.block(), 0, 36);
+			apatiteGenerator = new WorldGenMinableMeta(ForestryBlock.resources, 0, 36);
 			copperGenerator = new WorldGenMinableMeta(ForestryBlock.resources, 1, 6);
 			tinGenerator = new WorldGenMinableMeta(ForestryBlock.resources, 2, 6);
 		}
@@ -70,9 +93,6 @@ public class WorldGenerator implements IWorldGenerator {
 				int randPosZ = chunkZ + random.nextInt(16);
 				tinGenerator.generate(world, random, randPosX, randPosY, randPosZ);
 			}
-
-		// / PLUGIN WORLD GENERATION
-		PluginManager.generateSurface(world, random, chunkX, chunkZ);
 	}
 
 }

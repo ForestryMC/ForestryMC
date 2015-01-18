@@ -11,20 +11,18 @@
 package forestry.plugins;
 
 import cpw.mods.fml.common.IFuelHandler;
-import java.util.Random;
-
-import net.minecraft.command.ICommand;
-import net.minecraft.world.World;
-
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.network.IGuiHandler;
-
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPacketHandler;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.IResupplyHandler;
 import forestry.core.interfaces.ISaveEventHandler;
 import java.util.EnumSet;
+import java.util.Random;
+import net.minecraft.command.ICommand;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkProvider;
 
 public abstract class ForestryPlugin {
 
@@ -68,7 +66,10 @@ public abstract class ForestryPlugin {
 		return null;
 	}
 
-	public void generateSurface(World world, Random rand, int chunkX, int chunkZ) {
+	public void populateChunk(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGeneratedZ) {
+	}
+
+	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
 	}
 
 	public IPacketHandler getPacketHandler() {

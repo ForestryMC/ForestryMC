@@ -12,59 +12,18 @@ package forestry.core.gadgets;
 
 import buildcraft.api.tiles.IHasWork;
 import cpw.mods.fml.common.Optional;
-import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.interfaces.IRenderableMachine;
-import forestry.core.network.ClassMap;
-import forestry.core.network.IndexInPayload;
-import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
 import forestry.energy.EnergyManager;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 
 @Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = "BuildCraftAPI|tiles")
 public abstract class TilePowered extends TileBase implements IRenderableMachine, IPowerHandler, IHasWork {
 
 	public static final int WORK_CYCLES = 4;
-
-	@Override
-	public PacketPayload getPacketPayload() {
-		if (!ClassMap.classMappers.containsKey(this.getClass()))
-			ClassMap.classMappers.put(this.getClass(), new ClassMap(this.getClass()));
-
-		ClassMap classmap = ClassMap.classMappers.get(this.getClass());
-		PacketPayload payload = new PacketPayload(classmap.intSize, classmap.floatSize, classmap.stringSize);
-
-		try {
-			classmap.setData(this, payload.intPayload, payload.floatPayload, payload.stringPayload, new IndexInPayload(0, 0, 0));
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-		return payload;
-	}
-
-	@Override
-	public void fromPacketPayload(PacketPayload payload) {
-
-		if (payload.isEmpty())
-			return;
-
-		if (!ClassMap.classMappers.containsKey(this.getClass()))
-			ClassMap.classMappers.put(this.getClass(), new ClassMap(this.getClass()));
-
-		ClassMap classmap = ClassMap.classMappers.get(this.getClass());
-
-		try {
-			classmap.fromData(this, payload.intPayload, payload.floatPayload, payload.stringPayload, new IndexInPayload(0, 0, 0));
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
 
 	protected final EnergyManager energyManager;
 
@@ -116,32 +75,6 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		energyManager.readFromNBT(nbt);
-	}
-
-	/* LIQUID CONTAINER HANDLING */
-	/**
-	@deprecated Use FluidHelper
-	*/
-	@Deprecated
-	protected ItemStack bottleIntoContainer(ItemStack canStack, ItemStack outputStack, FluidContainerData container, StandardTank tank) {
-		if (tank.getFluidAmount() < container.fluid.amount)
-			return outputStack;
-		if (canStack.stackSize <= 0)
-			return outputStack;
-		if (outputStack != null && !outputStack.isItemEqual(container.filledContainer))
-			return outputStack;
-		if (outputStack != null && outputStack.stackSize >= outputStack.getMaxStackSize())
-			return outputStack;
-
-		tank.drain(container.fluid.amount, true);
-		canStack.stackSize--;
-
-		if (outputStack == null)
-			outputStack = container.filledContainer.copy();
-		else
-			outputStack.stackSize++;
-
-		return outputStack;
 	}
 
 	// / ADDITIONAL LIQUID HANDLING

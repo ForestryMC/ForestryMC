@@ -16,9 +16,8 @@ import forestry.core.proxy.Proxies;
 import forestry.pipes.GuiHandlerPipes;
 import forestry.pipes.network.PacketHandlerPipes;
 import forestry.pipes.proxy.ProxyPipes;
-import net.minecraft.item.Item;
-
 import java.util.EnumSet;
+import net.minecraft.item.Item;
 
 @Plugin(pluginID = "Pipes", name = "Pipes", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.pipes.description")
 public class PluginPropolisPipe extends ForestryPlugin {

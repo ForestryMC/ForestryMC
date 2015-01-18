@@ -11,6 +11,7 @@
 package forestry.core;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -43,7 +44,10 @@ public class GuiHandler extends GuiHandlerBase {
 					return new GuiEscritoire(player, (TileEscritoire) getTileForestry(world, x, y, z));
 
 				case SolderingIronGUI:
-					return new GuiSolderingIron(player.inventory, new SolderingInventory());
+					ItemStack equipped = player.getCurrentEquippedItem();
+					if (equipped == null)
+						return null;
+					return new GuiSolderingIron(player.inventory, new SolderingInventory(equipped));
 
 				default:
 					for (IGuiHandler handler : PluginManager.guiHandlers) {
@@ -72,7 +76,10 @@ public class GuiHandler extends GuiHandlerBase {
 					return new ContainerEscritoire(player, (TileEscritoire) getTileForestry(world, x, y, z));
 
 				case SolderingIronGUI:
-					return new ContainerSolderingIron(player.inventory, new SolderingInventory());
+					ItemStack equipped = player.getCurrentEquippedItem();
+					if (equipped == null)
+						return null;
+					return new ContainerSolderingIron(player.inventory, new SolderingInventory(equipped));
 
 				default:
 					for (IGuiHandler handler : PluginManager.guiHandlers) {

@@ -7,27 +7,22 @@
  ******************************************************************************/
 package forestry.pipes;
 
-import java.util.ArrayList;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-import buildcraft.transport.BlockGenericPipe;
 import buildcraft.transport.Pipe;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IBee;
-import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
-import forestry.core.network.GuiId;
 import forestry.core.network.PacketCoordinates;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketNBT;
 import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
+import java.util.ArrayList;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class PipeLogicPropolis {
 
@@ -86,19 +81,19 @@ public class PipeLogicPropolis {
 		// Special bee filtering
 		if (bee != null) {
 			if (filter == EnumFilterType.PURE_BREED)
-				return bee.isPureBred(EnumBeeChromosome.SPECIES.ordinal());
+				return bee.isPureBred(EnumBeeChromosome.SPECIES);
 			if (filter == EnumFilterType.NOCTURNAL)
 				return bee.getGenome().getNocturnal();
 			if (filter == EnumFilterType.PURE_NOCTURNAL)
-				return bee.getGenome().getNocturnal() && bee.isPureBred(EnumBeeChromosome.NOCTURNAL.ordinal());
+				return bee.getGenome().getNocturnal() && bee.isPureBred(EnumBeeChromosome.NOCTURNAL);
 			if (filter == EnumFilterType.FLYER)
 				return bee.getGenome().getTolerantFlyer();
 			if (filter == EnumFilterType.PURE_FLYER)
-				return bee.getGenome().getTolerantFlyer() && bee.isPureBred(EnumBeeChromosome.TOLERANT_FLYER.ordinal());
+				return bee.getGenome().getTolerantFlyer() && bee.isPureBred(EnumBeeChromosome.TOLERANT_FLYER);
 			if (filter == EnumFilterType.CAVE)
 				return bee.getGenome().getCaveDwelling();
 			if (filter == EnumFilterType.PURE_CAVE)
-				return bee.getGenome().getCaveDwelling() && bee.isPureBred(EnumBeeChromosome.CAVE_DWELLING.ordinal());
+				return bee.getGenome().getCaveDwelling() && bee.isPureBred(EnumBeeChromosome.CAVE_DWELLING);
 			if (filter == EnumFilterType.NATURAL)
 				return bee.isNatural();
 		}

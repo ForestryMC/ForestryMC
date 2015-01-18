@@ -10,20 +10,18 @@
  ******************************************************************************/
 package forestry.mail.network;
 
+import com.mojang.authlib.GameProfile;
+import forestry.api.mail.EnumAddressee;
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.PostManager;
+import forestry.api.mail.TradeStationInfo;
+import forestry.core.network.ForestryPacket;
+import forestry.mail.EnumStationState;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.UUID;
-
 import net.minecraft.item.ItemStack;
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.mail.TradeStationInfo;
-import forestry.api.mail.IMailAddress;
-import forestry.api.mail.EnumAddressee;
-import forestry.api.mail.PostManager;
-import forestry.core.network.ForestryPacket;
-import forestry.mail.EnumStationState;
 
 public class PacketLetterInfo extends ForestryPacket {
 

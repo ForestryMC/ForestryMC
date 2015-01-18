@@ -11,13 +11,13 @@
 package forestry.farming.logic;
 
 import forestry.api.farming.IFarmHousing;
-import forestry.core.config.Defaults;
-import forestry.core.proxy.Proxies;
+import forestry.core.fluids.Fluids;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
+import java.util.ArrayList;
+import java.util.Collection;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -25,15 +25,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 public abstract class FarmLogicWatered extends FarmLogic {
 
-	protected ItemStack ground;
+	protected final ItemStack ground;
 	private final ItemStack[] resource;
 
-	private static final FluidStack STACK_WATER = new FluidStack(LiquidHelper.getFluid(Defaults.LIQUID_WATER), 1000);
+	private static final FluidStack STACK_WATER = Fluids.WATER.getFluid(1000);
 
 	ArrayList<ItemStack> produce = new ArrayList<ItemStack>();
 
@@ -157,7 +154,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		// don't place water close to other water
 		for (int x = -2; x <= 2; x++) {
 			for (int z = -2; z <= 2; z++) {
-				Vect offsetPosition = position.add(new Vect(x, 0, z));
+				Vect offsetPosition = position.add(x, 0, z);
 				if (isWaterSourceBlock(world, offsetPosition))
 					return false;
 			}
@@ -165,12 +162,12 @@ public abstract class FarmLogicWatered extends FarmLogic {
 
 		// don't place water if it can flow into blocks next to it
 		for (int x = -1; x <= 1; x++) {
-			Vect offsetPosition = position.add(new Vect(x, 0, 0));
+			Vect offsetPosition = position.add(x, 0, 0);
 			if (isAirBlock(offsetPosition))
 				return false;
 		}
 		for (int z = -1; z <= 1; z++) {
-			Vect offsetPosition = position.add(new Vect(0, 0, z));
+			Vect offsetPosition = position.add(0, 0, z);
 			if (isAirBlock(offsetPosition))
 				return false;
 		}

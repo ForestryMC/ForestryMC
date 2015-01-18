@@ -23,6 +23,7 @@ import cpw.mods.fml.common.versioning.VersionParser;
 import cpw.mods.fml.common.versioning.VersionRange;
 import forestry.Forestry;
 import forestry.core.TickHandlerCoreServer;
+import forestry.core.WorldGenerator;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
@@ -31,6 +32,11 @@ import forestry.core.network.PacketFXSignal;
 import forestry.core.network.PacketIds;
 import forestry.core.render.SpriteSheet;
 import forestry.core.utils.StringUtil;
+import forestry.plugins.PluginManager;
+
+import java.io.File;
+import java.util.EnumSet;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;
@@ -50,19 +56,19 @@ import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import java.io.File;
-
 public class ProxyCommon {
 
 	public String getMinecraftVersion() {
 		return Loader.instance().getMinecraftModContainer().getVersion();
 	}
 
-	public void registerTickHandlers() {
-		new TickHandlerCoreServer();
+	public void registerTickHandlers(WorldGenerator worldGenerator) {
+		new TickHandlerCoreServer(worldGenerator);
 	}
 
 	public void registerBlock(Block block, Class<? extends ItemBlock> itemClass) {
+		if (!EnumSet.of(PluginManager.Stage.PRE_INIT).contains(PluginManager.getStage()))
+			throw new RuntimeException("Tried to register Block outside of Pre-Init");
 		GameRegistry.registerBlock(block, itemClass, StringUtil.cleanBlockName(block));
 	}
 

@@ -10,8 +10,16 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import buildcraft.api.statements.ITriggerExternal;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
 import cpw.mods.fml.common.Optional;
+
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
@@ -21,18 +29,13 @@ import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.gadgets.TileForestry;
+import forestry.core.inventory.FakeInventoryAdapter;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.TileInventoryAdapter;
-import forestry.core.utils.Utils;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.Collection;
-import java.util.LinkedList;
+import buildcraft.api.statements.ITriggerExternal;
 
 public abstract class TileAlveary extends TileForestry implements IAlvearyComponent {
 
@@ -40,8 +43,6 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	private boolean isMaster;
 	protected int masterX, masterZ;
 	protected int masterY = -99;
-
-	protected TileInventoryAdapter inventory;
 	protected final int componentBlockMeta;
 
 	public TileAlveary(int componentBlockMeta) {
@@ -92,8 +93,6 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	/* LOADING & SAVING */
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-
 		this.isMaster = nbttagcompound.getBoolean("IsMaster");
 		this.masterX = nbttagcompound.getInteger("MasterX");
 		this.masterY = nbttagcompound.getInteger("MasterY");
@@ -101,7 +100,9 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 
 		// Init for master state
 		if (isMaster)
-			makeMaster();
+			makeMaster();		
+		
+		super.readFromNBT(nbttagcompound);
 
 		structureLogic.readFromNBT(nbttagcompound);
 	}
@@ -122,16 +123,26 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	}
 
 	@Override
-	public void fromPacketPayload(PacketPayload payload) {
+	public PacketPayload getPacketPayload() {
+		PacketPayload payload = new PacketPayload(0, 2);
+		payload.shortPayload[0] = (short) (isMaster() ? 1 : 0);
+
+		// so the client can know if it is part of an integrated structure
+		payload.shortPayload[1] = (short) this.masterY;
+
+		return payload;
 	}
 
 	@Override
-	public PacketPayload getPacketPayload() {
-		return null;
+	public void fromPacketPayload(PacketPayload payload) {
+		if (payload.shortPayload[0] > 0)
+			makeMaster();
+
+		// so the client can know if it is part of an integrated structure
+		this.masterY = payload.shortPayload[1];
 	}
 
 	/* ITILESTRUCTURE */
-
 	@Override
 	public String getTypeUID() {
 		return structureLogic.getTypeUID();
@@ -147,7 +158,7 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 		setCentralTE(null);
 		isMaster = true;
 
-		if (inventory == null)
+		if (getInternalInventory() instanceof FakeInventoryAdapter)
 			createInventory();
 	}
 
@@ -214,8 +225,13 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	}
 
 	@Override
-	public IInventory getInventory() {
-		return inventory;
+	public final IInventoryAdapter getInventory() {
+		return getStructureInventory();
+	}
+
+	@Override
+	public IInventoryAdapter getStructureInventory() {
+		return getInternalInventory();
 	}
 
 	/* IALVEARY COMPONENT */
@@ -256,11 +272,6 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 		res.add(ApicultureTriggers.missingQueen);
 		res.add(ApicultureTriggers.missingDrone);
 		return res;
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return Utils.isUseableByPlayer(player, this, worldObj, xCoord, yCoord, zCoord);
 	}
 
 }

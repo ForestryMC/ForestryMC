@@ -10,12 +10,10 @@
  ******************************************************************************/
 package forestry.core.gui.tooltips;
 
+import com.google.common.collect.ForwardingList;
+import forestry.core.utils.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.collect.ForwardingList;
-
-import forestry.core.utils.StringUtil;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -43,6 +41,15 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
 		return add(new ToolTipLine(line));
 	}
 
+	public boolean add(List lines) {
+		boolean changed = false;
+		for (Object line : lines) {
+			if (line instanceof String)
+				changed |= add((String) line);
+		}
+		return changed;
+	}
+
 	public void onTick(boolean mouseOver) {
 		if (delay == 0)
 			return;
@@ -67,7 +74,7 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
 	public List<String> convertToStrings() {
 		List<String> tips = new ArrayList<String>(size());
 		for (ToolTipLine line : this) {
-			tips.add(line.getText());
+			tips.add(line.toString());
 		}
 		return tips;
 	}

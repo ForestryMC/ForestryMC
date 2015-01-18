@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import forestry.core.gadgets.TileForestry;
-import forestry.core.gui.slots.SlotForestry;
-import forestry.core.utils.EnumAccess;
-import forestry.core.utils.PlayerUtil;
-import forestry.core.utils.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -22,26 +17,25 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
+import forestry.core.gadgets.TileForestry;
+import forestry.core.gui.slots.SlotForestry;
+import forestry.core.interfaces.IRestrictedAccess;
+import forestry.core.inventory.ItemInventory;
+import forestry.core.utils.StackUtils;
+
 public class ContainerForestry extends Container {
 
-	protected final IInventory inventory;
-	protected final TileForestry inventoryForestry;
+	protected final IInventory inventoryAccess;
+	protected final IRestrictedAccess restrictedAccess;
 
-	public ContainerForestry(IInventory inventory) {
-		this.inventory = inventory;
-		if (inventory instanceof TileForestry)
-			this.inventoryForestry = (TileForestry)inventory;
-		else
-			this.inventoryForestry  = null;
+	public ContainerForestry(TileForestry tileForestry) {
+		this.inventoryAccess = tileForestry;
+		this.restrictedAccess = tileForestry;
 	}
 
-	/**
-	 * Adds a slot to the container, shortcut for addSlotToContainer(slot).
-	 *
-	 * @param slot
-	 */
-	protected Slot addSlot(Slot slot) {
-		return addSlotToContainer(slot);
+	public ContainerForestry(ItemInventory itemInventory) {
+		this.inventoryAccess = itemInventory;
+		this.restrictedAccess = null;
 	}
 
 	@Override
@@ -49,16 +43,13 @@ public class ContainerForestry extends Container {
 		if (player == null)
 			return null;
 
-		if ((inventoryForestry != null) && (inventoryForestry.getAccess() != EnumAccess.SHARED))
-			if ((inventoryForestry.owner != null) && !PlayerUtil.isSameGameProfile(inventoryForestry.owner, player.getGameProfile()))
-				return null;
+		if (restrictedAccess != null && !restrictedAccess.allowsAlteration(player))
+			return null;
 
 		Slot slot = slotIndex < 0 ? null : (Slot) this.inventorySlots.get(slotIndex);
-		if (slot instanceof SlotForestry) {
-			if (((SlotForestry) slot).isPhantom()) {
+		if (slot instanceof SlotForestry)
+			if (((SlotForestry) slot).isPhantom())
 				return slotClickPhantom(slot, button, modifier, player);
-			}
-		}
 		return super.slotClick(slotIndex, button, modifier, player);
 	}
 
@@ -69,9 +60,9 @@ public class ContainerForestry extends Container {
 		if (stackSlot != null)
 			stack = stackSlot.copy();
 
-		if (mouseButton == 2) {
+		if (mouseButton == 2)
 			fillPhantomSlot(slot, null, mouseButton, modifier);
-		} else if (mouseButton == 0 || mouseButton == 1) {
+		else if (mouseButton == 0 || mouseButton == 1) {
 			InventoryPlayer playerInv = player.inventory;
 
 			ItemStack stackHeld = playerInv.getItemStack();
@@ -79,9 +70,9 @@ public class ContainerForestry extends Container {
 			if (stackSlot == null) {
 				if (stackHeld != null && slot.isItemValid(stackHeld))
 					fillPhantomSlot(slot, stackHeld, mouseButton, modifier);
-			} else if (stackHeld == null) {
-				fillPhantomSlot(slot, null, mouseButton, modifier);
-			} else if (slot.isItemValid(stackHeld))
+			} else if (stackHeld == null)
+				adjustPhantomSlot(slot, mouseButton, modifier);
+			else if (slot.isItemValid(stackHeld))
 				if (StackUtils.isIdenticalItem(stackSlot, stackHeld))
 					adjustPhantomSlot(slot, mouseButton, modifier);
 				else
@@ -111,7 +102,9 @@ public class ContainerForestry extends Container {
 		stackSlot.stackSize = stackSize;
 
 		if (stackSlot.stackSize <= 0)
-			slot.putStack(null);
+			stackSlot = null;
+
+		slot.putStack(stackSlot);
 	}
 
 	protected void fillPhantomSlot(Slot slot, ItemStack stackHeld, int mouseButton, int modifier) {
@@ -191,6 +184,12 @@ public class ContainerForestry extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
+		if (player == null)
+			return null;
+
+		if (restrictedAccess != null && !restrictedAccess.allowsAlteration(player))
+			return null;
+
 		ItemStack originalStack = null;
 		Slot slot = (Slot) inventorySlots.get(slotIndex);
 		int numSlots = inventorySlots.size();
@@ -220,7 +219,9 @@ public class ContainerForestry extends Container {
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return inventory.isUseableByPlayer(entityplayer);
+	public final boolean canInteractWith(EntityPlayer entityplayer) {
+		if (inventoryAccess == null)
+			return true;
+		return inventoryAccess.isUseableByPlayer(entityplayer);
 	}
 }

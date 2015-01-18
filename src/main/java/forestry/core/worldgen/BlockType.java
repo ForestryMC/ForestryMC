@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.core.worldgen;
 
-import net.minecraft.block.Block;
-import net.minecraft.world.World;
-
 import forestry.api.world.ITreeGenData;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
+import net.minecraft.block.Block;
+import net.minecraft.world.World;
 
 public class BlockType {
 
@@ -34,7 +33,13 @@ public class BlockType {
 
 	public void setBlock(World world, ITreeGenData tree, int x, int y, int z) {
 		world.setBlock(x, y, z, block, meta, Defaults.FLAG_BLOCK_SYNCH);
-		if (world.getTileEntity(x, y, z) != null)
-			world.removeTileEntity(x, y, z);
+	}
+	
+	public int getMeta() {
+		return this.meta;
+	}
+	
+	public Block getBlock() {
+		return this.block;
 	}
 }

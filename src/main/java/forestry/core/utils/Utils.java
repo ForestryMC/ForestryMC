@@ -10,25 +10,15 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import buildcraft.api.tools.IToolWrench;
-import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.ITree;
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.IArmorNaturalist;
-import forestry.api.core.ITileStructure;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IPollinatable;
-import forestry.core.gadgets.TileForestry;
-import forestry.core.proxy.Proxies;
-import forestry.plugins.PluginArboriculture;
+import java.security.MessageDigest;
+import java.security.cert.Certificate;
+import java.util.Arrays;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -37,17 +27,19 @@ import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
-import java.security.MessageDigest;
-import java.security.cert.Certificate;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Random;
+import cpw.mods.fml.common.registry.EntityRegistry;
+
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.ITileStructure;
+import forestry.core.gadgets.TileForestry;
+import forestry.core.proxy.Proxies;
+import forestry.core.vect.Vect;
+
+import buildcraft.api.tools.IToolWrench;
 
 public class Utils {
 
@@ -57,8 +49,7 @@ public class Utils {
 		if (rand == null)
 			rand = new Random();
 
-		int uid = rand.nextInt();
-		return uid;
+		return rand.nextInt();
 	}
 
 	public static void dropInventory(TileForestry tile, World world, int x, int y, int z) {
@@ -69,7 +60,7 @@ public class Utils {
 		if (tile instanceof ITileStructure) {
 
 			IInventory inventory = ((ITileStructure) tile).getInventory();
-			if (inventory != null)
+			if (inventory != null) {
 				for (int i = 0; i < inventory.getSizeInventory(); i++) {
 					if (inventory.getStackInSlot(i) == null)
 						continue;
@@ -77,53 +68,40 @@ public class Utils {
 					StackUtils.dropItemStackAsEntity(inventory.getStackInSlot(i), world, x, y, z);
 					inventory.setInventorySlotContents(i, null);
 				}
-
+			}
 		} else {
 
-			IInventory inventory;
-			if (tile instanceof IInventory)
-				inventory = (IInventory) tile;
-			else
-				inventory = tile.getInternalInventory();
+			for (int slot = 0; slot < tile.getSizeInventory(); slot++) {
 
-			if (inventory != null) {
-				for (int slot = 0; slot < inventory.getSizeInventory(); slot++) {
+				ItemStack itemstack = tile.getStackInSlot(slot);
 
-					ItemStack itemstack = inventory.getStackInSlot(slot);
+				if (itemstack == null)
+					continue;
 
-					if (itemstack == null)
-						continue;
+				float f = world.rand.nextFloat() * 0.8F + 0.1F;
+				float f1 = world.rand.nextFloat() * 0.8F + 0.1F;
+				float f2 = world.rand.nextFloat() * 0.8F + 0.1F;
 
-					float f = world.rand.nextFloat() * 0.8F + 0.1F;
-					float f1 = world.rand.nextFloat() * 0.8F + 0.1F;
-					float f2 = world.rand.nextFloat() * 0.8F + 0.1F;
+				while (itemstack.stackSize > 0) {
 
-					while (itemstack.stackSize > 0) {
+					int stackPartial = world.rand.nextInt(21) + 10;
+					if (stackPartial > itemstack.stackSize)
+						stackPartial = itemstack.stackSize;
+					ItemStack drop = itemstack.splitStack(stackPartial);
+					EntityItem entityitem = new EntityItem(world, x + f, y + f1, z + f2, drop);
+					float accel = 0.05F;
+					entityitem.motionX = (float) world.rand.nextGaussian() * accel;
+					entityitem.motionY = (float) world.rand.nextGaussian() * accel + 0.2F;
+					entityitem.motionZ = (float) world.rand.nextGaussian() * accel;
+					world.spawnEntityInWorld(entityitem);
 
-						int stackPartial = world.rand.nextInt(21) + 10;
-						if (stackPartial > itemstack.stackSize)
-							stackPartial = itemstack.stackSize;
-						ItemStack drop = itemstack.splitStack(stackPartial);
-						EntityItem entityitem = new EntityItem(world, x + f, y + f1, z + f2, drop);
-						float accel = 0.05F;
-						entityitem.motionX = (float) world.rand.nextGaussian() * accel;
-						entityitem.motionY = (float) world.rand.nextGaussian() * accel + 0.2F;
-						entityitem.motionZ = (float) world.rand.nextGaussian() * accel;
-						world.spawnEntityInWorld(entityitem);
-
-					}
-
-					inventory.setInventorySlotContents(slot, null);
 				}
+
+				tile.setInventorySlotContents(slot, null);
+
 			}
 		}
 
-	}
-
-	public static boolean hasNaturalistEye(EntityPlayer player) {
-		ItemStack armorItem = player.inventory.armorInventory[3];
-		return armorItem != null && armorItem.getItem() instanceof IArmorNaturalist
-				&& ((IArmorNaturalist) armorItem.getItem()).canSeePollination(player, armorItem, true);
 	}
 
 	public static IInventory getChest(IInventory inventory) {
@@ -229,7 +207,15 @@ public class Utils {
 		return block == Blocks.water || block == Blocks.flowing_water || block == Blocks.lava || block == Blocks.flowing_lava;
 	}
 
-	public static boolean isUseableByPlayer(EntityPlayer player, TileEntity tile, World world, int x, int y, int z) {
+	public static boolean isUseableByPlayer(EntityPlayer player, TileEntity tile) {
+		int x = tile.xCoord;
+		int y = tile.yCoord;
+		int z = tile.zCoord;
+		World world = tile.getWorldObj();
+		
+		if(tile.isInvalid())
+			return false;
+		
 		if (world.getTileEntity(x, y, z) != tile)
 			return false;
 
@@ -316,61 +302,5 @@ public class Utils {
 			hex.append(HEX.charAt((bty & 0xf0) >> 4)).append(HEX.charAt((bty & 0x0f)));
 		}
 		return hex.toString();
-	}
-
-	public static ItemStack convertSaplingToGeneticEquivalent(ItemStack foreign) {
-
-		ItemStack ersatz = null;
-		ITree tree = null;
-
-		for (Map.Entry<ItemStack, IIndividual> entry : AlleleManager.ersatzSaplings.entrySet()) {
-			if (entry.getKey().getItem() != foreign.getItem())
-				continue;
-			if (entry.getKey().getItemDamage() != foreign.getItemDamage())
-				continue;
-
-			if (entry.getValue() instanceof ITree)
-				tree = (ITree) entry.getValue();
-
-			ersatz = PluginArboriculture.treeInterface.getMemberStack(tree, EnumGermlingType.SAPLING.ordinal());
-			ersatz.stackSize = foreign.stackSize;
-		}
-
-		return ersatz;
-	}
-
-	public static IPollinatable getOrCreatePollinatable(GameProfile owner, World world, final int x, final int y, final int z) {
-		TileEntity tile = world.getTileEntity(x, y, z);
-
-		IPollinatable receiver = null;
-		if (tile instanceof IPollinatable)
-			receiver = (IPollinatable) tile;
-		else if (!world.isAirBlock(x, y, z)) {
-
-			Block block = world.getBlock(x, y, z);
-			int meta = world.getBlockMetadata(x, y, z);
-
-			if (Blocks.leaves == block || Blocks.leaves2 == block) {
-				if ((meta & 4) != 0) {
-					// no-decay vanilla leaves. http://minecraft.gamepedia.com/Data_values#Leaves
-					// Treat them as decorative and don't pollinate.
-					return null;
-				}
-				meta = meta % 3;
-			}
-
-			// Test for ersatz genomes
-			for (Map.Entry<ItemStack, IIndividual> entry : AlleleManager.ersatzSpecimen.entrySet()) {
-				if (block == StackUtils.getBlock(entry.getKey()) && entry.getKey().getItemDamage() == meta) {
-					// We matched, replace the leaf block with ours and set the ersatz genome
-					PluginArboriculture.treeInterface.setLeaves(world, entry.getValue(), owner, x, y, z);
-					// Now let's pollinate
-					receiver = (IPollinatable) world.getTileEntity(x, y, z);
-				}
-			}
-
-		}
-
-		return receiver;
 	}
 }

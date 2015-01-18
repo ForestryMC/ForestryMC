@@ -10,20 +10,17 @@
  ******************************************************************************/
 package forestry.apiculture.render;
 
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.client.IItemRenderer;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import forestry.api.apiculture.IBee;
 import forestry.apiculture.entities.EntityBee;
 import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginApiculture;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.IItemRenderer;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class BeeItemRenderer implements IItemRenderer {
 
@@ -47,7 +44,7 @@ public class BeeItemRenderer implements IItemRenderer {
 
 	public static float getIrregularWingYaw(long flapping, float flap) {
 		long irregular = flapping / 1000;
-		float wingYaw = 1f;
+		float wingYaw;
 
 		if(irregular % 11 == 0) {
 			wingYaw = 0.75f;

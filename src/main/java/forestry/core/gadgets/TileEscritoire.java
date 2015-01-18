@@ -22,6 +22,8 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.core.interfaces.ICrafter;
 import forestry.core.interfaces.IRenderableMachine;
+import forestry.core.inventory.InvTools;
+import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.GuiId;
 import forestry.core.network.PacketIds;
@@ -29,10 +31,8 @@ import forestry.core.network.PacketTileNBT;
 import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.InventoryAdapter;
-import forestry.core.utils.StringUtil;
-import forestry.core.utils.TileInventoryAdapter;
-import forestry.core.utils.Utils;
+import forestry.core.utils.GeneticsUtil;
+import forestry.core.utils.GuiUtil;
 
 public class TileEscritoire extends TileBase implements ISidedInventory, IRenderableMachine, ICrafter {
 
@@ -44,14 +44,60 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 
 	/* MEMBER */
 	private final NaturalistGame game = new NaturalistGame();
-	private final InventoryAdapter inventory;
-	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
-	}
 
 	public TileEscritoire() {
-		inventory = new TileInventoryAdapter(this, 12, "Items");
+		setInternalInventory(new TileInventoryAdapter(this, 12, "Items") {
+			@Override
+			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+				if (slotIndex >= SLOT_INPUT_1 && slotIndex < SLOT_INPUT_1 + Math.min(game.getSampleSize(), SLOTS_INPUT_COUNT)) {
+					ItemStack specimen = getStackInSlot(SLOT_ANALYZE);
+					if (specimen == null)
+						return false;
+					IIndividual individual = AlleleManager.alleleRegistry.getIndividual(specimen);
+					return individual != null && individual.getGenome().getPrimary().getResearchSuitability(itemStack) > 0;
+				}
+
+				if (slotIndex == SLOT_ANALYZE) {
+					return AlleleManager.alleleRegistry.isIndividual(itemStack);
+				}
+
+				return false;
+			}
+
+			@Override
+			public boolean isLocked(int slotIndex) {
+				if (slotIndex == SLOT_ANALYZE)
+					return false;
+
+				if (getStackInSlot(SLOT_ANALYZE) == null)
+					return true;
+
+				if (GuiUtil.isIndexInRange(slotIndex, SLOT_INPUT_1, SLOTS_INPUT_COUNT)) {
+					if (slotIndex >= SLOT_INPUT_1 + game.getSampleSize())
+						return true;
+				}
+
+				return false;
+			}
+
+			@Override
+			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+				return GuiUtil.isIndexInRange(slotIndex, SLOT_RESULTS_1, SLOTS_RESULTS_COUNT);
+			}
+
+			@Override
+			public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
+				super.setInventorySlotContents(slotIndex, itemstack);
+				if (slotIndex == SLOT_ANALYZE && Proxies.common.isSimulating(worldObj)) {
+					if (!AlleleManager.alleleRegistry.isIndividual(getStackInSlot(SLOT_ANALYZE)) && getStackInSlot(SLOT_ANALYZE) != null) {
+						ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(getStackInSlot(SLOT_ANALYZE));
+						if (ersatz != null)
+							setInventorySlotContents(SLOT_ANALYZE, ersatz);
+					}
+					game.initialize(getStackInSlot(SLOT_ANALYZE));
+				}
+			}
+		});
 	}
 
 	/* GUI */
@@ -66,7 +112,6 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 		super.writeToNBT(nbttagcompound);
 
 		game.writeToNBT(nbttagcompound);
-		inventory.writeToNBT(nbttagcompound);
 	}
 
 	@Override
@@ -74,7 +119,6 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 		super.readFromNBT(nbttagcompound);
 
 		game.readFromNBT(nbttagcompound);
-		inventory.readFromNBT(nbttagcompound);
 	}
 
 	/* GAME */
@@ -83,141 +127,48 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 	}
 
 	public void processTurnResult(GameProfile gameProfile) {
-		if(!game.isWon())
+		if (!game.isWon())
 			return;
 
-		IIndividual individual = AlleleManager.alleleRegistry.getIndividual(inventory.getStackInSlot(SLOT_ANALYZE));
-		if(individual == null)
+		IIndividual individual = AlleleManager.alleleRegistry.getIndividual(getInternalInventory().getStackInSlot(SLOT_ANALYZE));
+		if (individual == null)
 			return;
 
-		for(ItemStack itemstack : individual.getGenome().getPrimary().getResearchBounty(worldObj, gameProfile, individual, game.getBountyLevel()))
-			inventory.addStack(itemstack, SLOT_RESULTS_1, SLOTS_RESULTS_COUNT, false, true);
+		for (ItemStack itemstack : individual.getGenome().getPrimary().getResearchBounty(worldObj, gameProfile, individual, game.getBountyLevel())) {
+			InvTools.addStack(getInternalInventory(), itemstack, SLOT_RESULTS_1, SLOTS_RESULTS_COUNT, false, true);
+		}
 	}
 
 	private boolean areProbeSlotsFilled() {
 		int filledSlots = 0;
 		int required = game.getSampleSize() < SLOTS_INPUT_COUNT ? game.getSampleSize() : SLOTS_INPUT_COUNT;
-		for(int i = SLOT_INPUT_1; i < SLOT_INPUT_1 + required; i++)
-			if(inventory.getStackInSlot(i) != null)
+		for (int i = SLOT_INPUT_1; i < SLOT_INPUT_1 + required; i++) {
+			if (getInternalInventory().getStackInSlot(i) != null)
 				filledSlots++;
+		}
 
 		return filledSlots >= required;
 	}
 
 	public void probe() {
-		if (!worldObj.isRemote && inventory.getStackInSlot(SLOT_ANALYZE) != null && areProbeSlotsFilled()) {
-			game.probe(inventory.getStackInSlot(SLOT_ANALYZE), this, SLOT_INPUT_1, SLOTS_INPUT_COUNT);
-		}
+		if (!worldObj.isRemote && getInternalInventory().getStackInSlot(SLOT_ANALYZE) != null && areProbeSlotsFilled())
+			game.probe(getInternalInventory().getStackInSlot(SLOT_ANALYZE), this, SLOT_INPUT_1, SLOTS_INPUT_COUNT);
 	}
 
 	/* NETWORK */
 	@Override
 	public void fromPacket(ForestryPacket packetRaw) {
-		if(packetRaw instanceof PacketTileUpdate) {
+		if (packetRaw instanceof PacketTileUpdate) {
 			super.fromPacket(packetRaw);
 			return;
 		}
 
-		PacketTileNBT packet = (PacketTileNBT)packetRaw;
+		PacketTileNBT packet = (PacketTileNBT) packetRaw;
 		readFromNBT(packet.getTagCompound());
 	}
 
 	public void sendBoard(EntityPlayer player) {
 		Proxies.net.sendToPlayer(new PacketTileNBT(PacketIds.TILE_NBT, this), player);
-	}
-
-	/* ISIDEDINVENTORY */
-	@Override
-	public InventoryAdapter getInternalInventory() {
-		return inventory;
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		if(slotIndex >= SLOT_INPUT_1 && slotIndex < SLOT_INPUT_1 + SLOTS_INPUT_COUNT)
-			return slotIndex < SLOT_INPUT_1 + game.getSampleSize();
-
-		return true;
-	}
-
-	@Override
-	protected boolean canTakeStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-		if(!super.canTakeStackFromSide(slotIndex, itemstack, side))
-			return false;
-
-		return slotIndex >= SLOT_RESULTS_1 && slotIndex < SLOT_RESULTS_1 + SLOTS_RESULTS_COUNT;
-	}
-
-	@Override
-	protected boolean canPutStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-
-		if(!super.canPutStackFromSide(slotIndex, itemstack, side))
-			return false;
-
-		int samples = game.getSampleSize();
-		return slotIndex >= SLOT_INPUT_1 && slotIndex < SLOT_INPUT_1 + (samples < SLOTS_INPUT_COUNT ? samples : SLOTS_INPUT_COUNT);
-	}
-
-	@Override
-	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
-		inventory.setInventorySlotContents(slotIndex, itemstack);
-		if(slotIndex == SLOT_ANALYZE && Proxies.common.isSimulating(worldObj)) {
-			if(!AlleleManager.alleleRegistry.isIndividual(inventory.getStackInSlot(SLOT_ANALYZE))
-					&& inventory.getStackInSlot(SLOT_ANALYZE) != null) {
-				ItemStack ersatz = Utils.convertSaplingToGeneticEquivalent(inventory.getStackInSlot(SLOT_ANALYZE));
-				if(ersatz != null)
-					inventory.setInventorySlotContents(SLOT_ANALYZE, ersatz);
-			}
-			game.initialize(inventory.getStackInSlot(SLOT_ANALYZE));
-		}
-	}
-
-	@Override public int getSizeInventory() { return inventory.getSizeInventory(); }
-	@Override public ItemStack getStackInSlot(int i) { return inventory.getStackInSlot(i); }
-	@Override public ItemStack decrStackSize(int i, int j) { return inventory.decrStackSize(i, j); }
-	@Override public int getInventoryStackLimit() { return inventory.getInventoryStackLimit(); }
-	@Override public ItemStack getStackInSlotOnClosing(int slot) { return inventory.getStackInSlotOnClosing(slot); }
-	@Override public void openInventory() {}
-	@Override public void closeInventory() {}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return super.isUseableByPlayer(player);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean hasCustomInventoryName() {
-		return super.hasCustomInventoryName();
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return super.canInsertItem(i, itemstack, j);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return super.canExtractItem(i, itemstack, j);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return super.getAccessibleSlotsFromSide(side);
 	}
 
 	@Override
@@ -232,7 +183,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 
 	@Override
 	public ItemStack takenFromSlot(int slotIndex, boolean consumeRecipe, EntityPlayer player) {
-		if(slotIndex == SLOT_ANALYZE)
+		if (slotIndex == SLOT_ANALYZE)
 			game.reset();
 		return null;
 	}
@@ -246,6 +197,4 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 	public boolean canTakeStack(int slotIndex) {
 		return true;
 	}
-
-
 }

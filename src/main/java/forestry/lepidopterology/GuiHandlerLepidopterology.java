@@ -15,9 +15,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import forestry.core.GuiHandlerBase;
+import forestry.core.gui.ContainerAlyzer;
 import forestry.core.network.GuiId;
 import forestry.lepidopterology.genetics.ButterflyHelper;
-import forestry.lepidopterology.gui.ContainerFlutterlyzer;
 import forestry.lepidopterology.gui.GuiFlutterlyzer;
 import forestry.lepidopterology.items.ItemFlutterlyzer.FlutterlyzerInventory;
 
@@ -33,11 +33,11 @@ public class GuiHandlerLepidopterology extends GuiHandlerBase {
 
 		switch (GuiId.values()[cleanId]) {
 			case FlutterlyzerGUI:
-				ItemStack equipped = getEquippedItem(player);
+				ItemStack equipped = player.getCurrentEquippedItem();
 				if (equipped == null)
 					return null;
 
-				return new ContainerFlutterlyzer(player.inventory, new FlutterlyzerInventory(player, equipped));
+				return new ContainerAlyzer(new FlutterlyzerInventory(player, equipped), player);
 
 			case LepidopteristChestGUI:
 				return getNaturalistChestContainer(ButterflyHelper.UID, player, world, x, y, z, guiData);
@@ -58,7 +58,7 @@ public class GuiHandlerLepidopterology extends GuiHandlerBase {
 
 		switch (GuiId.values()[cleanId]) {
 			case FlutterlyzerGUI:
-				ItemStack equipped = getEquippedItem(player);
+				ItemStack equipped = player.getCurrentEquippedItem();
 				if (equipped == null)
 					return null;
 

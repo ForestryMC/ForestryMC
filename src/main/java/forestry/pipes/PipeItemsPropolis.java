@@ -7,14 +7,6 @@
  ******************************************************************************/
 package forestry.pipes;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
 import buildcraft.api.core.IIconProvider;
 import buildcraft.transport.BlockGenericPipe;
 import buildcraft.transport.Pipe;
@@ -29,6 +21,13 @@ import forestry.api.genetics.IAllele;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginApiculture;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class PipeItemsPropolis extends Pipe<PipeTransportItems> {
 
@@ -147,7 +146,7 @@ public class PipeItemsPropolis extends Pipe<PipeTransportItems> {
 		// A bit of speed to perhaps prevent bees from popping out of the pipe.
 		try {
 			event.item.setSpeed(TransportConstants.PIPE_NORMAL_SPEED * 20F);
-		} catch (Throwable error) {
+		} catch (Throwable ignored) {
 		}
 	}
 

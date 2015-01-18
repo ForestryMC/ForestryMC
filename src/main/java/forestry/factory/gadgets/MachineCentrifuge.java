@@ -10,30 +10,6 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
-import buildcraft.api.statements.ITriggerExternal;
-import cpw.mods.fml.common.Optional;
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.ISpecialInventory;
-import forestry.api.recipes.ICentrifugeManager;
-import forestry.api.core.EnumErrorCode;
-import forestry.core.config.Config;
-import forestry.core.config.Defaults;
-import forestry.core.gadgets.TileBase;
-import forestry.core.gadgets.TilePowered;
-import forestry.core.network.GuiId;
-import forestry.core.utils.InventoryAdapter;
-import forestry.core.utils.StackUtils;
-import forestry.factory.triggers.FactoryTriggers;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -42,14 +18,45 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-public class MachineCentrifuge extends TilePowered implements ISidedInventory, ISpecialInventory {
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.common.Optional;
+
+import forestry.api.core.ForestryAPI;
+import forestry.api.recipes.ICentrifugeManager;
+import forestry.core.EnumErrorCode;
+import forestry.core.config.Config;
+import forestry.core.config.Defaults;
+import forestry.core.gadgets.TileBase;
+import forestry.core.gadgets.TilePowered;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.inventory.InvTools;
+import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.GuiId;
+import forestry.core.utils.GuiUtil;
+import forestry.factory.triggers.FactoryTriggers;
+
+import buildcraft.api.statements.ITriggerExternal;
+
+public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 
 	/* CONSTANTS */
 	public static final int SLOT_RESOURCE = 0;
 	public static final int SLOT_PRODUCT_1 = 1;
+	public static final int SLOT_PRODUCT_COUNT = 9;
 
 	/* RECIPE MANAGMENT */
 	public static class Recipe {
+
 		public final int timePerItem;
 		public final ItemStack resource;
 		public final HashMap<ItemStack, Integer> products;
@@ -76,6 +83,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 	}
 
 	public static class RecipeManager implements ICentrifugeManager {
+
 		public static final ArrayList<MachineCentrifuge.Recipe> recipes = new ArrayList<MachineCentrifuge.Recipe>();
 
 		@Override
@@ -134,7 +142,6 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 	}
 
 	/* MEMBER */
-	private final InventoryAdapter inventory = new InventoryAdapter(10, "Items");
 	public MachineCentrifuge.Recipe currentRecipe;
 
 	private final Stack<ItemStack> pendingProducts = new Stack<ItemStack>();
@@ -143,12 +150,18 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 
 	public MachineCentrifuge() {
 		super(800, 40, Defaults.MACHINE_MAX_ENERGY);
-		setHints(Config.hints.get("centrifuge"));
-	}
+		setInternalInventory(new TileInventoryAdapter(this, 10, "Items") {
+			@Override
+			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+				return slotIndex == SLOT_RESOURCE && RecipeManager.findMatchingRecipe(itemStack) != null;
+			}
 
-	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
+			@Override
+			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+				return GuiUtil.isIndexInRange(slotIndex, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT);
+			}
+		});
+		setHints(Config.hints.get("centrifuge"));
 	}
 
 	@Override
@@ -164,17 +177,16 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 		nbttagcompound.setInteger("ProductionTime", productionTime);
 		nbttagcompound.setInteger("TimePerItem", timePerItem);
 
-		inventory.writeToNBT(nbttagcompound);
-
 		NBTTagList nbttaglist = new NBTTagList();
 		ItemStack[] offspring = pendingProducts.toArray(new ItemStack[pendingProducts.size()]);
-		for (int i = 0; i < offspring.length; i++)
+		for (int i = 0; i < offspring.length; i++) {
 			if (offspring[i] != null) {
 				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 				nbttagcompound1.setByte("Slot", (byte) i);
 				offspring[i].writeToNBT(nbttagcompound1);
 				nbttaglist.appendTag(nbttagcompound1);
 			}
+		}
 		nbttagcompound.setTag("PendingProducts", nbttaglist);
 	}
 
@@ -184,8 +196,6 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 
 		productionTime = nbttagcompound.getInteger("ProductionTime");
 		timePerItem = nbttagcompound.getInteger("TimePerItem");
-
-		inventory.readFromNBT(nbttagcompound);
 
 		NBTTagList nbttaglist = nbttagcompound.getTagList("PendingProducts", 10);
 		for (int i = 0; i < nbttaglist.tagCount(); i++) {
@@ -209,7 +219,6 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 
 		if (energyManager.getTotalEnergyStored() == 0) {
 			setErrorState(EnumErrorCode.NOPOWER);
-			return;
 		}
 	}
 
@@ -240,13 +249,14 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 		}
 
 		// We are done, add products to queue
-		for (Map.Entry<ItemStack, Integer> entry : currentRecipe.products.entrySet())
+		for (Map.Entry<ItemStack, Integer> entry : currentRecipe.products.entrySet()) {
 			if (entry.getValue() >= 100)
 				pendingProducts.push(entry.getKey().copy());
 			else if (worldObj.rand.nextInt(100) < entry.getValue())
 				pendingProducts.push(entry.getKey().copy());
+		}
 
-		inventory.decrStackSize(SLOT_RESOURCE, 1);
+		getInternalInventory().decrStackSize(SLOT_RESOURCE, 1);
 		checkRecipe();
 		resetRecipe();
 
@@ -255,7 +265,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 	}
 
 	public void checkRecipe() {
-		Recipe sameRec = RecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_RESOURCE));
+		Recipe sameRec = RecipeManager.findMatchingRecipe(getInternalInventory().getStackInSlot(SLOT_RESOURCE));
 
 		if (sameRec == null)
 			setErrorState(EnumErrorCode.NORECIPE);
@@ -292,7 +302,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 	}
 
 	private boolean addProduct(ItemStack product, boolean all) {
-		return inventory.tryAddStack(product, 1, getSizeInventory() - 1, all);
+		return InvTools.tryAddStack(getInternalInventory(), product, 1, getSizeInventory() - 1, all);
 	}
 
 	@Override
@@ -302,6 +312,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 
 	@Override
 	public boolean hasResourcesMin(float percentage) {
+		IInventoryAdapter inventory = getInternalInventory();
 		if (inventory.getStackInSlot(SLOT_RESOURCE) == null)
 			return false;
 
@@ -335,142 +346,6 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory, I
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
 		iCrafting.sendProgressBarUpdate(container, 0, productionTime);
 		iCrafting.sendProgressBarUpdate(container, 1, timePerItem);
-	}
-
-	/* IINVENTORY */
-	@Override
-	public InventoryAdapter getInternalInventory() {
-		return inventory;
-	}
-
-	@Override
-	protected boolean canTakeStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-
-		if(!super.canTakeStackFromSide(slotIndex, itemstack, side))
-			return false;
-
-		if(slotIndex >= SLOT_PRODUCT_1 && slotIndex < SLOT_PRODUCT_1 + 9)
-			return true;
-
-		return false;
-	}
-
-	@Override
-	protected boolean canPutStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-
-		if(!super.canPutStackFromSide(slotIndex, itemstack, side))
-			return false;
-
-		if (slotIndex == SLOT_RESOURCE && RecipeManager.findMatchingRecipe(itemstack) != null)
-			return true;
-
-		return false;
-	}
-
-	@Override public int getSizeInventory() { return inventory.getSizeInventory(); }
-	@Override public ItemStack getStackInSlot(int i) { return inventory.getStackInSlot(i); }
-	@Override public ItemStack decrStackSize(int i, int j) { return inventory.decrStackSize(i, j); }
-	@Override public void setInventorySlotContents(int i, ItemStack itemstack) { inventory.setInventorySlotContents(i, itemstack); }
-	@Override public ItemStack getStackInSlotOnClosing(int slot) { return inventory.getStackInSlotOnClosing(slot); }
-	@Override public int getInventoryStackLimit() { return inventory.getInventoryStackLimit(); }
-	@Override public void openInventory() {}
-	@Override public void closeInventory() {}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return super.isUseableByPlayer(player);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean hasCustomInventoryName() {
-		return super.hasCustomInventoryName();
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return super.isItemValidForSlot(slotIndex, itemstack);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return super.canInsertItem(i, itemstack, j);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return super.canExtractItem(i, itemstack, j);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return super.getAccessibleSlotsFromSide(side);
-	}
-
-	/* ISPECIALINVENTORY */
-	@Override
-	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
-
-		ItemStack product = null;
-
-		for (int i = SLOT_PRODUCT_1; i < inventory.getSizeInventory(); i++) {
-			ItemStack stack = inventory.getStackInSlot(i);
-			if (stack == null)
-				continue;
-
-			product = StackUtils.createSplitStack(stack, 1);
-			if (doRemove)
-				decrStackSize(i, 1);
-
-			break;
-		}
-
-		if (product != null)
-			return new ItemStack[] { product };
-		else
-			return new ItemStack[0];
-	}
-
-	@Override
-	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
-		ItemStack resource = inventory.getStackInSlot(SLOT_RESOURCE);
-		if (resource == null) {
-			if (doAdd)
-				inventory.setInventorySlotContents(SLOT_RESOURCE, stack.copy());
-			return stack.stackSize;
-		}
-
-		if (!StackUtils.isIdenticalItem(resource, stack))
-			return 0;
-
-		int space = resource.getMaxStackSize() - resource.stackSize;
-		if (space <= 0)
-			return 0;
-
-		if (doAdd)
-			if (stack.stackSize <= space)
-				resource.stackSize += stack.stackSize;
-			else
-				resource.stackSize += space;
-
-		return Math.min(stack.stackSize, space);
 	}
 
 	/* ITRIGGERPROVIDER */

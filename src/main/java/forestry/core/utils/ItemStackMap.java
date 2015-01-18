@@ -13,7 +13,6 @@ package forestry.core.utils;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemStackMap<T> extends StackMap<ItemStack, T> {

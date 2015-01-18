@@ -10,8 +10,18 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.IAlleleFruit;
+import forestry.api.arboriculture.IAlleleTreeSpecies;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StackUtils;
+import forestry.plugins.PluginArboriculture;
 import java.util.ArrayList;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -23,19 +33,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.IAlleleFruit;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StackUtils;
-import forestry.plugins.PluginArboriculture;
 
 public class BlockSapling extends BlockTreeContainer {
 
@@ -133,6 +130,7 @@ public class BlockSapling extends BlockTreeContainer {
 
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbour) {
+		super.onNeighborBlockChange(world, x, y, z, neighbour);
 		if (Proxies.common.isSimulating(world) && !this.canBlockStay(world, x, y, z)) {
 			dropAsSapling(world, x, y, z);
 			world.setBlockToAir(x, y, z);
@@ -147,7 +145,7 @@ public class BlockSapling extends BlockTreeContainer {
 	}
 
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
 		TileSapling sapling = getSaplingTile(world, x, y, z);
 		if (sapling == null || sapling.getTree() == null)
 			return null;

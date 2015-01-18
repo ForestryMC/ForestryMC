@@ -10,17 +10,14 @@
  ******************************************************************************/
 package forestry.core.inventory.manipulators;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-
-import forestry.api.core.ISpecialInventory;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.filters.IStackFilter;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
+import java.util.ArrayList;
+import java.util.List;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -30,9 +27,6 @@ public class InventoryManipulator {
 	private final IInventory inv;
 
 	public static InventoryManipulator get(IInventory inv) {
-		if (inv instanceof ISpecialInventory) {
-			return new SpecialManipulator((ISpecialInventory) inv);
-		}
 		return new InventoryManipulator(inv);
 	}
 
@@ -54,8 +48,6 @@ public class InventoryManipulator {
 
 	/**
 	 * Attempt to add the stack to the inventory.
-	 *
-	 * @param stack
 	 * @return The remainder
 	 */
 	public ItemStack addStack(ItemStack stack) {
@@ -109,10 +101,7 @@ public class InventoryManipulator {
 	}
 
 	/**
-	 * @param slot
-	 * @param stack
 	 * @param available Amount we can move
-	 * @param doAdd
 	 * @return Return the number of items moved.
 	 */
 	private int addToSlot(IInvSlot slot, ItemStack stack, int available, boolean doAdd) {

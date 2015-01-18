@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Defaults;
 import forestry.core.gadgets.TileAnalyzer;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.Utils;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiAnalyzer extends GuiForestryTitled<TileAnalyzer> {
 

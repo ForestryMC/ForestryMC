@@ -10,15 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import java.util.HashMap;
-
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.apiculture.IApiaristTracker;
+import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
@@ -34,6 +27,12 @@ import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
+import java.util.HashMap;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 public class GuiNaturalistInventory extends GuiForestry<TileForestry> {
 	private final ISpeciesRoot speciesRoot;
@@ -74,9 +73,8 @@ public class GuiNaturalistInventory extends GuiForestry<TileForestry> {
 			startPage();
 
 			displaySpeciesInformation(true, individual.getGenome().getPrimary(), iconStacks.get(individual.getIdent()), 10);
-			if (!individual.isPureBred(0))
-				displaySpeciesInformation(individual.isAnalyzed(), individual.getGenome().getSecondary(), iconStacks.get(individual.getGenome().getSecondary().getUID()),
-						10);
+			if (!individual.isPureBred(EnumTreeChromosome.SPECIES))
+				displaySpeciesInformation(individual.isAnalyzed(), individual.getGenome().getSecondary(), iconStacks.get(individual.getGenome().getSecondary().getUID()), 10);
 
 			endPage();
 		}
@@ -194,7 +192,7 @@ public class GuiNaturalistInventory extends GuiForestry<TileForestry> {
 		RenderHelper.disableStandardItemLighting();
 
 		int line = 48;
-		int column = 0;
+		int column;
 		EnumMutateChance chance = EnumMutateChance.rateChance(combination.getBaseChance());
 		if (chance == EnumMutateChance.HIGHEST) {
 			line += 16;
@@ -225,8 +223,8 @@ public class GuiNaturalistInventory extends GuiForestry<TileForestry> {
 
 		float chance = mutation.getBaseChance();
 
-		int line = 0;
-		int column = 0;
+		int line;
+		int column;
 		if (chance >= 20) {
 			line = 16;
 			column = 228;

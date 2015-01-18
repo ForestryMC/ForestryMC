@@ -37,23 +37,27 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.apiculture.gadgets.TileBeehouse;
+import forestry.arboriculture.gadgets.BlockFireproofLog;
+import forestry.arboriculture.gadgets.BlockFireproofPlanks;
+import forestry.arboriculture.gadgets.BlockLog;
+import forestry.arboriculture.gadgets.BlockPlanks;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginApiculture;
+import forestry.plugins.PluginManager;
 
 public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
-	protected final ItemStack[] buildingBlocks = new ItemStack[]{ForestryBlock.planks1.getItemStack(1, 15), new ItemStack(Blocks.log, 1, 0),};
+	private static final Random random = new Random();
+	protected final ItemStack[] buildingBlocks;
 	protected int averageGroundLevel = -1;
 	protected boolean isInDesert = false;
 	protected boolean hasChest = false;
 
 	public ComponentVillageBeeHouse() {
-		// Populate buildingblocks with some defaults so it doesn't explode.
-		buildingBlocks[0] = ForestryBlock.planks1.getItemStack();
-		buildingBlocks[1] = ForestryBlock.log1.getItemStack();
+		buildingBlocks = createBuildingBlocks(random);
 	}
 
 	public ComponentVillageBeeHouse(StructureVillagePieces.Start startPiece, int componentType, Random random, StructureBoundingBox boundingBox, int coordBaseMode) {
@@ -61,25 +65,41 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
 		isInDesert = startPiece.inDesert;
 
-		buildingBlocks[0] = ForestryBlock.planks1.getItemStack(1, random.nextInt(16));
+		buildingBlocks = createBuildingBlocks(random);
+	}
 
-		Block woodBlock;
-		switch (random.nextInt(4)) {
-		case 1:
-			woodBlock = ForestryBlock.log2.block();
-			break;
-		case 2:
-			woodBlock = ForestryBlock.log3.block();
-			break;
-		case 3:
-			woodBlock = ForestryBlock.log4.block();
-			break;
-		default:
-			woodBlock = ForestryBlock.log1.block();
-			break;
+	private static ItemStack[] createBuildingBlocks(Random random) {
+		int plankMeta = random.nextInt(16);
+		int blockMeta = random.nextInt(4);
+		Block plankBlock = Blocks.planks;
+		Block woodBlock = Blocks.log;
+
+		if (PluginManager.Module.ARBORICULTURE.isEnabled()) {
+			switch (random.nextInt(4)) {
+				case 1:
+					woodBlock = ForestryBlock.log2.block();
+					break;
+				case 2:
+					woodBlock = ForestryBlock.log3.block();
+					break;
+				case 3:
+					woodBlock = ForestryBlock.log4.block();
+					break;
+				default:
+					woodBlock = ForestryBlock.log1.block();
+					break;
+			}
+
+			plankBlock = ForestryBlock.planks1.block();
+
+			// chance for the house to have fireproof components
+			if (random.nextInt(4) == 0) {
+				woodBlock = BlockFireproofLog.getFireproofLog((BlockLog) woodBlock).block();
+				plankBlock = BlockFireproofPlanks.getFireproofPlanks((BlockPlanks) plankBlock).block();
+			}
 		}
 
-		buildingBlocks[1] = new ItemStack(woodBlock, 1, random.nextInt(4));
+		return new ItemStack[]{new ItemStack(plankBlock, 1, plankMeta), new ItemStack(woodBlock, 1, blockMeta)};
 	}
 
 	/*@Override
@@ -96,7 +116,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 	@SuppressWarnings("rawtypes")
 	public static ComponentVillageBeeHouse buildComponent(StructureVillagePieces.Start startPiece, List par1List, Random random, int par3, int par4, int par5,
 			int par6, int par7) {
-		StructureBoundingBox bbox = StructureBoundingBox.getComponentToAddBoundingBox(par3, par4, par5, 0, 0, 0, 9, 9, 6, par6);
+		StructureBoundingBox bbox = StructureBoundingBox.getComponentToAddBoundingBox(par3, par4, par5, 0, 0, 0, 9, 9, 10, par6);
 		return canVillageGoDeeper(bbox) && StructureComponent.findIntersecting(par1List, bbox) == null ? new ComponentVillageBeeHouse(startPiece, par7, random,
 				bbox, par6) : null;
 	}
@@ -276,19 +296,19 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 			if (tile instanceof TileBeehouse) {
 				TileBeehouse apiary = ((TileBeehouse) tile);
 				apiary.initialize();
-				apiary.setSlotContents(TileBeehouse.SLOT_QUEEN,
+				apiary.setInventorySlotContents(TileBeehouse.SLOT_QUEEN,
 						PluginApiculture.beeInterface.getMemberStack(getVillageBee(world, xCoord, yCoord, zCoord), EnumBeeType.PRINCESS.ordinal()));
-				apiary.setSlotContents(TileBeehouse.SLOT_DRONE,
+				apiary.setInventorySlotContents(TileBeehouse.SLOT_DRONE,
 						PluginApiculture.beeInterface.getMemberStack(getVillageBee(world, xCoord, yCoord, zCoord), EnumBeeType.DRONE.ordinal()));
 
 				for (int i = TileBeehouse.SLOT_FRAMES_1; i < TileBeehouse.SLOT_FRAMES_1 + TileBeehouse.SLOT_FRAMES_COUNT; i++) {
 					float roll = world.rand.nextFloat();
 					if (roll < 0.2f)
-						apiary.setSlotContents(i, ForestryItem.frameUntreated.getItemStack());
+						apiary.setInventorySlotContents(i, ForestryItem.frameUntreated.getItemStack());
 					else if (roll < 0.4f)
-						apiary.setSlotContents(i, ForestryItem.frameImpregnated.getItemStack());
+						apiary.setInventorySlotContents(i, ForestryItem.frameImpregnated.getItemStack());
 					else if (roll < 0.6)
-						apiary.setSlotContents(i, ForestryItem.frameProven.getItemStack());
+						apiary.setInventorySlotContents(i, ForestryItem.frameProven.getItemStack());
 				}
 
 			}
@@ -325,11 +345,8 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		EnumTolerance temperatureTolerance = genome.getToleranceTemp();
 
 		Collection<EnumTemperature> toleratedTemperatures = AlleleManager.climateHelper.getToleratedTemperature(beeTemperature, temperatureTolerance);
-		boolean validTemp = false;
 
-		validTemp = toleratedTemperatures.contains(EnumTemperature.getFromValue(temperature));
-
-		if (!validTemp)
+		if (!toleratedTemperatures.contains(EnumTemperature.getFromValue(temperature)))
 			return false;
 
 		EnumHumidity beeHumidity = genome.getPrimary().getHumidity();
@@ -337,11 +354,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
 		Collection<EnumHumidity> toleratedHumidity = AlleleManager.climateHelper.getToleratedHumidity(beeHumidity, humidityTolerance);
 
-		boolean validHumidity = false;
-
-		validHumidity = toleratedHumidity.contains(EnumHumidity.getFromValue(humidity));
-
-		return validHumidity;
+		return toleratedHumidity.contains(EnumHumidity.getFromValue(humidity));
 	}
 
 	protected void fillBoxWith(World world, StructureBoundingBox box, int par3, int par4, int par5, int par6, int par7, int par8, ItemStack buildingBlock,
@@ -372,8 +385,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 	}
 
 	private boolean isAirBlockAtCurrentPosition(World world, int x, int y, int z, StructureBoundingBox box) {
-		// TODO: replace with isAir
-		return getBlockAtCurrentPosition(world, x, y, z, box) == Blocks.air;
+		return getBlockAtCurrentPosition(world, x, y, z, box).isAir(world, x, y, z);
 	}
 
 }

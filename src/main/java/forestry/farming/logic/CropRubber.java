@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import forestry.core.config.Defaults;
+import forestry.core.proxy.Proxies;
+import forestry.core.vect.Vect;
+import forestry.plugins.PluginIC2;
 import java.util.ArrayList;
 import java.util.Collection;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import forestry.core.config.Defaults;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.Vect;
-import forestry.plugins.PluginIC2;
 
 public class CropRubber extends CropBlock {
 

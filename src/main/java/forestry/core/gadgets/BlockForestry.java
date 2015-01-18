@@ -10,8 +10,10 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import java.util.Random;
-
+import forestry.core.CreativeTabForestry;
+import forestry.core.interfaces.IOwnable;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.Utils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -20,11 +22,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-
-import forestry.core.CreativeTabForestry;
-import forestry.core.interfaces.IOwnable;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.Utils;
+import org.apache.logging.log4j.Level;
 
 public abstract class BlockForestry extends BlockContainer {
 
@@ -66,6 +64,19 @@ public abstract class BlockForestry extends BlockContainer {
 
 		TileForestry tile = (TileForestry) world.getTileEntity(i, j, k);
 		if (entityliving instanceof EntityPlayer)
-			tile.owner = ((EntityPlayer) entityliving).getGameProfile();
+			tile.setOwner(((EntityPlayer) entityliving));
 	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+		try {
+			TileEntity tile = world.getTileEntity(x, y, z);
+			if (tile instanceof TileForestry)
+				((TileForestry) tile).onNeighborBlockChange(block);
+		} catch (StackOverflowError error) {
+			Proxies.log.logThrowable(Level.ERROR, "Stack Overflow Error in BlockMachine.onNeighborBlockChange()", 10, error);
+			throw error;
+		}
+	}
+
 }

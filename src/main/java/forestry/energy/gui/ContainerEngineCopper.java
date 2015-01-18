@@ -10,35 +10,40 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 
 import forestry.core.gui.ContainerForestry;
-import forestry.core.gui.slots.SlotClosed;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotOutput;
 import forestry.energy.gadgets.EngineCopper;
 
 public class ContainerEngineCopper extends ContainerForestry {
+
 	protected final EngineCopper engine;
 
 	public ContainerEngineCopper(InventoryPlayer player, EngineCopper tile) {
 		super(tile);
 
 		this.engine = tile;
-		this.addSlot(new Slot(tile, 0, 44, 46));
 
-		this.addSlot(new SlotClosed(tile, 1, 98, 35));
-		this.addSlot(new SlotClosed(tile, 2, 98, 53));
-		this.addSlot(new SlotClosed(tile, 3, 116, 35));
-		this.addSlot(new SlotClosed(tile, 4, 116, 53));
+		this.addSlotToContainer(new SlotFiltered(tile, 0, 44, 46));
 
-		for (int i = 0; i < 3; ++i)
-			for (int j = 0; j < 9; ++j)
-				this.addSlot(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+		this.addSlotToContainer(new SlotOutput(tile, 1, 98, 35));
+		this.addSlotToContainer(new SlotOutput(tile, 2, 98, 53));
+		this.addSlotToContainer(new SlotOutput(tile, 3, 116, 35));
+		this.addSlotToContainer(new SlotOutput(tile, 4, 116, 53));
 
-		for (int i = 0; i < 9; ++i)
-			this.addSlot(new Slot(player, i, 8 + i * 18, 142));
+		for (int i = 0; i < 3; ++i) {
+			for (int j = 0; j < 9; ++j) {
+				this.addSlotToContainer(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+			}
+		}
+
+		for (int i = 0; i < 9; ++i) {
+			this.addSlotToContainer(new Slot(player, i, 8 + i * 18, 142));
+		}
 
 	}
 
@@ -52,12 +57,9 @@ public class ContainerEngineCopper extends ContainerForestry {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
-		for (Object crafter : crafters)
+		for (Object crafter : crafters) {
 			engine.sendGUINetworkData(this, (ICrafting) crafter);
+		}
 	}
 
-	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return engine.isUseableByPlayer(entityplayer);
-	}
 }

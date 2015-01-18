@@ -11,13 +11,12 @@
 package forestry.core.genetics;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IMutation;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public abstract class Mutation implements IMutation {
 

@@ -10,28 +10,24 @@
  ******************************************************************************/
 package forestry.core.network;
 
+import cpw.mods.fml.common.network.internal.FMLProxyPacket;
+import cpw.mods.fml.common.registry.GameData;
+import forestry.core.proxy.Proxies;
+import io.netty.buffer.Unpooled;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
-import cpw.mods.fml.common.registry.GameData;
-
-import io.netty.buffer.Unpooled;
-
-import forestry.core.proxy.Proxies;
-
 public class ForestryPacket {
 
+	protected static final String channel = "FOR";
 	protected int id;
-	protected static String channel = "FOR";
 
 	public ForestryPacket() {
 	}

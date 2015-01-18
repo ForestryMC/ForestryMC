@@ -10,20 +10,21 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ICrashCallable;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
-
 import forestry.core.config.Defaults;
+import forestry.plugins.PluginManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ForestryModEnvWarningCallable implements ICrashCallable {
 
 	private final List<String> modIDs;
+	private final List<String> disabledModules;
 
 	public ForestryModEnvWarningCallable() {
 		this.modIDs = new ArrayList<String>();
@@ -41,24 +42,42 @@ public class ForestryModEnvWarningCallable implements ICrashCallable {
 			Class<?> c = Class.forName("org.bukkit.Bukkit");
 			modIDs.add("Bukkit, Cauldron, or other Bukkit replacement");
 		}
-		catch (Throwable t) {} // No need to do anything.
+		catch (Throwable ignored) {} // No need to do anything.
 
-		// Add other bad mods here.
 
-		if (modIDs.size() > 0) {
+		this.disabledModules = new ArrayList<String>();
+		for (PluginManager.Module module : PluginManager.configDisabledModules) {
+			disabledModules.add(module.configName());
+		}
+
+		if (modIDs.size() > 0 || disabledModules.size() > 0) {
 			FMLCommonHandler.instance().registerCrashCallable(this);
 		}
 	}
 
 	@Override
 	public String call() throws Exception {
-		String message = "[" + Defaults.MOD + "] Warning: You have mods that change the behavior of Minecraft, ForgeModLoader, and/or Minecraft Forge to your client: \r\n";
-		message = message + modIDs.get(0);
-		for (int i = 1; i < modIDs.size(); ++i) {
-			message = message + ", " + modIDs.get(i);
+		StringBuilder message = new StringBuilder();
+		if (modIDs.size() > 0) {
+			message.append("Warning: You have mods that change the behavior of Minecraft, ForgeModLoader, and/or Minecraft Forge to your client: \r\n");
+			message.append(modIDs.get(0));
+			for (int i = 1; i < modIDs.size(); ++i) {
+				message.append(", ").append(modIDs.get(i));
+			}
+			message.append("\r\nThese may have caused this error, and may not be supported. Try reproducing the crash WITHOUT these mods, and report it then.");
 		}
-		message = message + "\r\nThese may have caused this error, and may not be supported. Try reproducing the crash WITHOUT these mods, and report it then.";
-		return message;
+
+		if (disabledModules.size() > 0) {
+			if (message.length() > 0)
+				message.append("\r\n");
+			message.append("Info: The following plugins have been disabled in the config: ");
+			message.append(disabledModules.get(0));
+			for (int i = 1; i < disabledModules.size(); ++i) {
+				message.append(", ").append(disabledModules.get(i));
+			}
+		}
+
+		return message.toString();
 	}
 
 	@Override

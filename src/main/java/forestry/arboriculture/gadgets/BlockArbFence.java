@@ -16,11 +16,14 @@ import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodType;
 import forestry.plugins.PluginArboriculture;
+import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
+import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -28,14 +31,13 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.List;
-
 public class BlockArbFence extends BlockFence implements IWoodTyped {
 
 	public static enum FenceCat {
 		CAT0, CAT1
 	}
 
+	public static final int fencesPerCat = 16;
 	private final FenceCat cat;
 
 	public BlockArbFence(FenceCat cat) {
@@ -50,7 +52,8 @@ public class BlockArbFence extends BlockFence implements IWoodTyped {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		int count = (cat == FenceCat.CAT0 ? 16 : 8);
+		int totalWoods = WoodType.values().length;
+		int count = Math.min(totalWoods - (cat.ordinal() * fencesPerCat), fencesPerCat);
 		for (int i = 0; i < count; i++)
 			itemList.add(new ItemStack(this, 1, i));
 	}
@@ -69,7 +72,10 @@ public class BlockArbFence extends BlockFence implements IWoodTyped {
 	public boolean canConnectFenceTo(IBlockAccess world, int x, int y, int z) {
 		if (!isFence(world, x, y, z)) {
 			Block block = world.getBlock(x, y, z);
-			return block != null && block.getMaterial().isOpaque() && block.renderAsNormalBlock() && block.getMaterial() != Material.gourd;
+			if (block == this || block instanceof BlockFenceGate)
+				return true;
+
+			return block.getMaterial().isOpaque() && block.renderAsNormalBlock() && block.getMaterial() != Material.gourd;
 		} else
 			return true;
 	}
@@ -89,15 +95,15 @@ public class BlockArbFence extends BlockFence implements IWoodTyped {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIcon(int side, int meta) {
-		return getWoodType(meta).getPlankIcon();
+		WoodType woodType = getWoodType(meta);
+		if (woodType == null)
+			return null;
+		return woodType.getPlankIcon();
 	}
 
 	public boolean isFence(IBlockAccess world, int x, int y, int z) {
 		Block block = world.getBlock(x, y, z);
-		if (PluginArboriculture.validFences.contains(block))
-			return true;
-
-		return false;
+		return PluginArboriculture.validFences.contains(block);
 	}
 
 	/* PROPERTIES */
@@ -123,10 +129,11 @@ public class BlockArbFence extends BlockFence implements IWoodTyped {
 
 	@Override
 	public WoodType getWoodType(int meta) {
-		if(cat.ordinal() * 16 + meta < WoodType.VALUES.length)
-			return WoodType.VALUES[cat.ordinal() * 16 + meta];
+		int woodOrdinal = cat.ordinal() * fencesPerCat + meta;
+		if(woodOrdinal < WoodType.VALUES.length)
+			return WoodType.VALUES[woodOrdinal];
 		else
-			return WoodType.LARCH;
+			return null;
 	}
 
 	@Override

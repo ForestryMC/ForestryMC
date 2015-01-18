@@ -31,9 +31,14 @@ import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.Individual;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginArboriculture;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -41,11 +46,6 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.List;
 
 public class Tree extends Individual implements ITree, ITreeGenData, IPlantable {
 
@@ -108,7 +108,7 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 	/* EFFECTS */
 	@Override
 	public IEffectData[] doEffect(IEffectData[] storedData, World world, int biomeid, int x, int y, int z) {
-		IAlleleLeafEffect effect = (IAlleleLeafEffect) getGenome().getActiveAllele(EnumTreeChromosome.EFFECT.ordinal());
+		IAlleleLeafEffect effect = (IAlleleLeafEffect) getGenome().getActiveAllele(EnumTreeChromosome.EFFECT);
 
 		if (effect == null)
 			return null;
@@ -119,7 +119,7 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 		if (!effect.isCombinable())
 			return storedData;
 
-		IAlleleLeafEffect secondary = (IAlleleLeafEffect) getGenome().getInactiveAllele(EnumTreeChromosome.EFFECT.ordinal());
+		IAlleleLeafEffect secondary = (IAlleleLeafEffect) getGenome().getInactiveAllele(EnumTreeChromosome.EFFECT);
 		if (!secondary.isCombinable())
 			return storedData;
 
@@ -219,10 +219,7 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 			return false;
 
 		Collection<IFruitFamily> suitable = genome.getPrimary().getSuitableFruit();
-		if (!suitable.contains(provider.getFamily()))
-			return false;
-
-		return true;
+		return suitable.contains(provider.getFamily());
 	}
 
 	@Override
@@ -255,7 +252,7 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 
 	@Override
 	public boolean isPureBred(EnumTreeChromosome chromosome) {
-		return genome.getActiveAllele(chromosome.ordinal()).getUID().equals(genome.getInactiveAllele(chromosome.ordinal()).getUID());
+		return genome.getActiveAllele(chromosome).getUID().equals(genome.getInactiveAllele(chromosome).getUID());
 	}
 
 	@Override
@@ -278,22 +275,28 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 		IAlleleTreeSpecies primary = genome.getPrimary();
 		IAlleleTreeSpecies secondary = genome.getSecondary();
 		if (!isPureBred(EnumTreeChromosome.SPECIES))
-			list.add("\u00A79" + StringUtil.localize("trees.hybrid").replaceAll("%PRIMARY",primary.getName()).replaceAll("%SECONDARY",secondary.getName()));
-		list.add(String.format("\u00A76S: %s, \u00A7cM: %s", genome.getActiveAllele(EnumTreeChromosome.SAPPINESS.ordinal()).getName(), genome.getActiveAllele(EnumTreeChromosome.MATURATION.ordinal()).getName()));
-		list.add(String.format("\u00A7dH: %s, \u00A7bG: %sx%s", genome.getActiveAllele(EnumTreeChromosome.HEIGHT.ordinal()).getName(), genome.getGirth(), genome.getGirth()));
+			list.add(EnumChatFormatting.BLUE + StringUtil.localize("trees.hybrid").replaceAll("%PRIMARY",primary.getName()).replaceAll("%SECONDARY",secondary.getName()));
 
-		list.add(String.format("\u00A7eS: %s, \u00A7fY: %s", genome.getActiveAllele(EnumTreeChromosome.FERTILITY.ordinal()).getName(), genome.getActiveAllele(EnumTreeChromosome.YIELD.ordinal()).getName()));
+		String sappiness = EnumChatFormatting.GOLD + "S: " + genome.getActiveAllele(EnumTreeChromosome.SAPPINESS).getName();
+		String maturation = EnumChatFormatting.RED + "M: " + genome.getActiveAllele(EnumTreeChromosome.MATURATION).getName();
+		String height = EnumChatFormatting.LIGHT_PURPLE + "H: " + genome.getActiveAllele(EnumTreeChromosome.HEIGHT).getName();
+		String girth = EnumChatFormatting.AQUA + "G: " + String.format("%sx%s", genome.getGirth(), genome.getGirth());
+		String saplings = EnumChatFormatting.YELLOW + "S: " + genome.getActiveAllele(EnumTreeChromosome.FERTILITY).getName();
+		String yield = EnumChatFormatting.WHITE + "Y: " + genome.getActiveAllele(EnumTreeChromosome.YIELD).getName();
+		list.add(String.format("%s, %s", saplings, maturation));
+		list.add(String.format("%s, %s", height, girth));
+		list.add(String.format("%s, %s", yield, sappiness));
 
-		IAlleleBoolean primaryFireproof = (IAlleleBoolean)genome.getActiveAllele(EnumTreeChromosome.FIREPROOF.ordinal());
+		IAlleleBoolean primaryFireproof = (IAlleleBoolean)genome.getActiveAllele(EnumTreeChromosome.FIREPROOF);
 		if (primaryFireproof.getValue())
-			list.add(String.format("\u00A7c%s", StatCollector.translateToLocal("for.gui.fireresist")));
+			list.add(EnumChatFormatting.RED + StatCollector.translateToLocal("for.gui.fireresist"));
 
-		IAllele fruit = getGenome().getActiveAllele(EnumTreeChromosome.FRUITS.ordinal());
+		IAllele fruit = getGenome().getActiveAllele(EnumTreeChromosome.FRUITS);
 		if(fruit != Allele.fruitNone) {
 			String strike = "";
 			if (!canBearFruit())
-				strike = "\u00A7m";
-			list.add(strike + "\u00A7aF: " + StringUtil.localize(genome.getFruitProvider().getDescription()));
+				strike = EnumChatFormatting.STRIKETHROUGH.toString();
+			list.add(strike + EnumChatFormatting.GREEN + "F: " + StringUtil.localize(genome.getFruitProvider().getDescription()));
 		}
 
 	}
@@ -361,18 +364,17 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 		}
 
 		for (ITreeMutation mutation : PluginArboriculture.treeInterface.getMutations(true)) {
-			float chance = 0;
 
 			// Stop blacklisted species.
 			// if (BeeManager.breedingManager.isBlacklisted(mutation.getTemplate()[0].getUID())) {
 			// continue;
 			// }
-
-			if ((chance = mutation.getChance(world, x, y, z, allele0, allele1, genome0, genome1)) > 0)
-				if (world.rand.nextFloat()*100 < chance)
-					// IApiaristTracker breedingTracker = BeeManager.breedingManager.getApiaristTracker(world);
-					// breedingTracker.registerMutation(mutation);
-					return PluginArboriculture.treeInterface.templateAsChromosomes(mutation.getTemplate());
+			float chance = mutation.getChance(world, x, y, z, allele0, allele1, genome0, genome1);
+			if (chance > world.rand.nextFloat() * 100) {
+				// IApiaristTracker breedingTracker = BeeManager.breedingManager.getApiaristTracker(world);
+				// breedingTracker.registerMutation(mutation);
+				return PluginArboriculture.treeInterface.templateAsChromosomes(mutation.getTemplate());
+			}
 		}
 
 		return null;

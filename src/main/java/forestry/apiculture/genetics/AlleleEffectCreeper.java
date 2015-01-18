@@ -10,22 +10,20 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import java.util.List;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.items.ItemArmorApiarist;
 import forestry.core.genetics.EffectData;
+import java.util.List;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 
 public class AlleleEffectCreeper extends AlleleEffectThrottled {
 
-	private final int explosionChance = 50;
-	private final byte defaultForce = 12;
+	private static final int explosionChance = 50;
+	private static final byte defaultForce = 12;
 	private final byte indexExplosionTimer = 1;
 	private final byte indexExplosionForce = 2;
 

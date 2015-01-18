@@ -20,11 +20,15 @@ import org.lwjgl.opengl.GL11;
 
 import forestry.core.utils.StackUtils;
 import forestry.farming.gadgets.BlockFarm;
-import forestry.farming.gadgets.TileFarm.EnumFarmBlock;
+import forestry.farming.gadgets.EnumFarmBlock;
 
 public class FarmItemRenderer implements IItemRenderer {
 
 	private void renderFarmBlock(RenderBlocks render, ItemStack item, float translateX, float translateY, float translateZ) {
+		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		Tessellator tessellator = Tessellator.instance;
 		BlockFarm block = (BlockFarm) StackUtils.getBlock(item);
@@ -76,6 +80,7 @@ public class FarmItemRenderer implements IItemRenderer {
 
 		block.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 
+		GL11.glPopAttrib();
 	}
 
 	@Override

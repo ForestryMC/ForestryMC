@@ -10,16 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.apiculture.IArmorApiarist;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.core.Tabs;
@@ -27,6 +19,12 @@ import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 
 public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArmorNaturalist {
 

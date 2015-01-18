@@ -10,22 +10,26 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumChatFormatting;
+
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-
-import java.util.ArrayList;
-import java.util.List;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.StringUtil;
 
 public class CircuitBoard implements ICircuitBoard {
 
-	EnumCircuitBoardType type;
-	ICircuitLayout layout;
-	ICircuit[] circuits;
+	private EnumCircuitBoardType type;
+	private ICircuitLayout layout;
+	private ICircuit[] circuits;
 
 	public CircuitBoard(EnumCircuitBoardType type, ICircuitLayout layout, ICircuit[] circuits) {
 		this.type = type;
@@ -50,11 +54,18 @@ public class CircuitBoard implements ICircuitBoard {
 	@Override
 	public void addTooltip(List<String> list) {
 		if (layout != null)
-			list.add("\u00A76" + layout.getUsage() + ":");
+			list.add(EnumChatFormatting.GOLD + layout.getUsage() + ":");
 
+		List<String> extendedTooltip = new ArrayList<String>();
 		for (ICircuit circuit : circuits)
 			if (circuit != null)
-				circuit.addTooltip(list);
+				circuit.addTooltip(extendedTooltip);
+
+		if(Proxies.common.isShiftDown() || extendedTooltip.size() <= 4) {
+			list.addAll(extendedTooltip);
+		} else {
+			list.add(EnumChatFormatting.ITALIC + "<" + StringUtil.localize("gui.tooltip.tmi") + ">");
+		}
 	}
 
 	@Override

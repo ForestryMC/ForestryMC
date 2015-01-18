@@ -120,16 +120,6 @@ public abstract class TileTreeContainer extends TileEntity implements INetworked
 	}
 
 	@Override
-	public boolean allowsInteraction(EntityPlayer player) {
-		return true;
-	}
-
-	@Override
-	public EnumAccess getAccess() {
-		return EnumAccess.SHARED;
-	}
-
-	@Override
 	public boolean isOwnable() {
 		return false;
 	}
@@ -156,11 +146,6 @@ public abstract class TileTreeContainer extends TileEntity implements INetworked
 	@Override
 	public boolean isOwner(EntityPlayer player) {
 		return PlayerUtil.isSameGameProfile(owner, player.getGameProfile());
-	}
-
-	@Override
-	public boolean switchAccessRule(EntityPlayer player) {
-		return false;
 	}
 
 }

@@ -10,19 +10,16 @@
  ******************************************************************************/
 package forestry.farming.gadgets;
 
-import java.util.Collection;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.api.core.ITileStructure;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmComponent;
 import forestry.api.farming.IFarmListener;
 import forestry.api.farming.IFarmLogic;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
+import java.util.Collection;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileControl extends TileFarm implements IFarmListener {
 
@@ -60,10 +57,6 @@ public class TileControl extends TileFarm implements IFarmListener {
 	@Override
 	public boolean hasFunction() {
 		return true;
-	}
-
-	@Override
-	protected void createInventory() {
 	}
 
 	/* IFARMLISTENER */

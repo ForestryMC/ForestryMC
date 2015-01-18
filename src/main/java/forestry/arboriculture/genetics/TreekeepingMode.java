@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import java.util.ArrayList;
-import java.util.Locale;
-
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreekeepingMode;
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class TreekeepingMode implements ITreekeepingMode {
 

@@ -10,16 +10,14 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.world.World;
-
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.util.FakePlayer;
-
 import forestry.Forestry;
 import forestry.core.config.Defaults;
 import forestry.core.network.ForestryPacket;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.util.FakePlayer;
 
 public class ProxyNetwork {
 

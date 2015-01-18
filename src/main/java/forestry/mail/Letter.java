@@ -10,25 +10,26 @@
  ******************************************************************************/
 package forestry.mail;
 
+import forestry.api.core.INBTTagable;
+import forestry.api.mail.ILetter;
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.IStamps;
+import forestry.core.inventory.InvTools;
+import forestry.core.inventory.InventoryAdapter;
+import forestry.core.utils.StringUtil;
 import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
-import forestry.api.core.INBTTagable;
-import forestry.api.mail.ILetter;
-import forestry.api.mail.IStamps;
-import forestry.api.mail.IMailAddress;
-import forestry.core.utils.InventoryAdapter;
-import forestry.core.utils.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 
 public class Letter implements ILetter, INBTTagable {
 
 	// CONSTANTS
 	public static final short SLOT_ATTACHMENT_1 = 0;
+	public static final short SLOT_ATTACHMENT_COUNT = 18;
 	public static final short SLOT_POSTAGE_1 = 18;
+	public static final short SLOT_POSTAGE_COUNT = 4;
 
 	private boolean isProcessed = false;
 
@@ -88,12 +89,12 @@ public class Letter implements ILetter, INBTTagable {
 
 	@Override
 	public ItemStack[] getPostage() {
-		return inventory.getStacks(SLOT_POSTAGE_1, 4);
+		return InvTools.getStacks(inventory, SLOT_POSTAGE_1, SLOT_POSTAGE_COUNT);
 	}
 
 	@Override
 	public ItemStack[] getAttachments() {
-		return inventory.getStacks(SLOT_ATTACHMENT_1, 18);
+		return InvTools.getStacks(inventory, SLOT_ATTACHMENT_1, SLOT_ATTACHMENT_COUNT);
 	}
 
 	@Override
@@ -110,7 +111,7 @@ public class Letter implements ILetter, INBTTagable {
 
 	@Override
 	public void addAttachment(ItemStack itemstack) {
-		inventory.tryAddStack(itemstack, false);
+		InvTools.tryAddStack(inventory, itemstack, false);
 	}
 
 	@Override
@@ -137,16 +138,9 @@ public class Letter implements ILetter, INBTTagable {
 
 	@Override
 	public boolean isMailable() {
-
 		// Can't resend an already sent letter
-		if (this.isProcessed)
-			return false;
-
 		// Requires at least one recipient
-		if (this.recipient != null && this.recipient.length > 0)
-			return true;
-
-		return false;
+		return !isProcessed && recipient != null && recipient.length > 0;
 	}
 
 	@Override
@@ -179,7 +173,7 @@ public class Letter implements ILetter, INBTTagable {
 
 	@Override
 	public void addStamps(ItemStack stamps) {
-		this.inventory.tryAddStack(stamps, SLOT_POSTAGE_1, 4, false);
+		InvTools.tryAddStack(inventory, stamps, SLOT_POSTAGE_1, 4, false);
 	}
 
 	@Override

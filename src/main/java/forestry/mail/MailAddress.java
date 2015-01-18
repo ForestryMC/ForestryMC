@@ -14,19 +14,17 @@ import com.mojang.authlib.GameProfile;
 import forestry.api.core.INBTTagable;
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
-import forestry.core.network.EntityNetData;
 import forestry.core.utils.PlayerUtil;
+import java.util.Locale;
+import java.util.UUID;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 
-import java.util.Locale;
-import java.util.UUID;
-
 public class MailAddress implements INBTTagable, IMailAddress {
+
 	private static final GameProfile invalidGameProfile = new GameProfile(new UUID(0, 0), "");
-	@EntityNetData
+
 	private EnumAddressee type;
-	@EntityNetData
 	private GameProfile gameProfile; // gameProfile is a fake GameProfile for traders, and real for players
 
 	public MailAddress() {
@@ -47,17 +45,16 @@ public class MailAddress implements INBTTagable, IMailAddress {
 			throw new IllegalArgumentException("name must not be null");
 
 		this.type = EnumAddressee.TRADER;
-		this.gameProfile = new GameProfile(new UUID(0, 0), name);
+		this.gameProfile = new GameProfile(null, name);
 	}
 
 	public MailAddress(IMailAddress address) {
 		this.type = address.getType();
 		if (type == EnumAddressee.TRADER) {
 			String name = address.getName();
-			this.gameProfile = new GameProfile(new UUID(0, 0), name);
-		} else if (type == EnumAddressee.PLAYER) {
+			this.gameProfile = new GameProfile(null, name);
+		} else if (type == EnumAddressee.PLAYER)
 			this.gameProfile = address.getPlayerProfile();
-		}
 	}
 
 	public static MailAddress loadFromNBT(NBTTagCompound nbttagcompound) {
@@ -78,7 +75,7 @@ public class MailAddress implements INBTTagable, IMailAddress {
 
 	@Override
 	public boolean isValid() {
-		return !PlayerUtil.isSameGameProfile(gameProfile, invalidGameProfile);
+		return gameProfile.getName() != null && !PlayerUtil.isSameGameProfile(gameProfile, invalidGameProfile);
 	}
 
 	@Override
@@ -100,7 +97,7 @@ public class MailAddress implements INBTTagable, IMailAddress {
 
 	@Override
 	public int hashCode() {
-		return gameProfile.hashCode();
+		return gameProfile.getName().hashCode();
 	}
 
 	@Override
@@ -115,11 +112,10 @@ public class MailAddress implements INBTTagable, IMailAddress {
 	@Override
 	public String toString() {
 		String name = getName().toLowerCase(Locale.ENGLISH);
-		if (isPlayer()) {
+		if (isPlayer())
 			return type + "-" + name + "-" + gameProfile.getId();
-		} else {
+		else
 			return type + "-" + name;
-		}
 	}
 
 	@Override

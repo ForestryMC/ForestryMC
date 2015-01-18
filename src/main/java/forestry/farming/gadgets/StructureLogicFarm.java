@@ -10,20 +10,18 @@
  ******************************************************************************/
 package forestry.farming.gadgets;
 
-import java.util.HashSet;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.api.core.ITileStructure;
 import forestry.api.farming.IFarmComponent;
 import forestry.core.gadgets.BlockStructure.EnumStructureState;
 import forestry.core.gadgets.StructureLogic;
 import forestry.core.utils.Schemata;
 import forestry.core.utils.Schemata.EnumStructureBlock;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
+import java.util.HashSet;
 import java.util.Set;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
 
 public class StructureLogicFarm extends StructureLogic {
 

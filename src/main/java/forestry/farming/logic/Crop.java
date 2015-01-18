@@ -18,12 +18,12 @@ import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
 import forestry.core.config.Defaults;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 
 public abstract class Crop implements ICrop {
 
-	protected World world;
-	protected Vect position;
+	protected final World world;
+	protected final Vect position;
 
 	public Crop(World world, Vect position) {
 		this.world = world;

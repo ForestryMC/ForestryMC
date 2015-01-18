@@ -10,19 +10,17 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import forestry.core.proxy.Proxies;
+import forestry.core.vect.Vect;
 import java.util.Collection;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.Vect;
-
 public class CropBlock extends Crop {
 
-	Block block;
-	int meta;
+	protected final Block block;
+	protected final int meta;
 
 	public CropBlock(World world, Block block, int meta, Vect position) {
 		super(world, position);

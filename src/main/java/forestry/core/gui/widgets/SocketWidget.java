@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import java.util.List;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 import forestry.core.circuits.ISolderingIron;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.gui.ContainerSocketed;
@@ -24,6 +19,9 @@ import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.interfaces.ISocketable;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
+import java.util.List;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class SocketWidget extends Widget {
 

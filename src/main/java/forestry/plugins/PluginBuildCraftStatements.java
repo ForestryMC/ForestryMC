@@ -18,18 +18,17 @@ import buildcraft.api.statements.StatementManager;
 import cpw.mods.fml.common.Optional;
 import forestry.core.config.Defaults;
 import forestry.core.proxy.Proxies;
+import java.util.Collection;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.Collection;
-
 @Plugin(pluginID = "BC6|Statements", name = "BuildCraft 6 Statements", author = "mezz", url = Defaults.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
-@Optional.Interface(iface = "ITriggerProvider", modid = "BuildCraftAPI|statements")
+@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
 public class PluginBuildCraftStatements extends ForestryPlugin implements ITriggerProvider {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isAPILoaded("buildcraft.api.statements", "[1.0, 1.1)");
+		return Proxies.common.isAPILoaded("buildcraft.api.statements", "[1.0, 2.0)");
 	}
 
 	@Override

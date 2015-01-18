@@ -10,19 +10,7 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map.Entry;
-
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosomeType;
@@ -41,6 +29,15 @@ import forestry.core.genetics.SpeciesRoot;
 import forestry.core.utils.Utils;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.plugins.PluginLepidopterology;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map.Entry;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 

@@ -10,16 +10,14 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import java.util.EnumSet;
-
-import net.minecraftforge.common.EnumPlantType;
-
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.ILegacyHandler;
 import forestry.core.config.Defaults;
 import forestry.core.utils.StringUtil;
+import java.util.EnumSet;
+import net.minecraftforge.common.EnumPlantType;
 
 public class Allele implements IAllele {
 
@@ -118,13 +116,13 @@ public class Allele implements IAllele {
 
 	// Agrarian branch
 	public static AlleleSpecies speciesRural;
-	// 41 Farmerly
-	// 42 Agrarian
+	public static AlleleSpecies speciesFarmerly;
+	public static AlleleSpecies speciesArgrarian;
 
 	// Boggy branch
 	public static AlleleSpecies speciesMarshy;
-	// 44 speciesMiry
-	// 45 speciesBoggy
+	public static AlleleSpecies speciesMiry;
+	public static AlleleSpecies speciesBoggy;
 
 	// Monastic branch
 	public static AlleleSpecies speciesMonastic;
@@ -170,6 +168,11 @@ public class Allele implements IAllele {
 
 	public static AlleleSpecies treeMaple;
 
+	public static AlleleSpecies treeIpe;
+	public static AlleleSpecies treePadauk;
+	public static AlleleSpecies treeCocobolo;
+	public static AlleleSpecies treeZebrawood;
+	
 	/// BUTTERFLIES // SPECIES
 	// Moths
 	public static AlleleSpecies mothBrimstone;
@@ -391,6 +394,8 @@ public class Allele implements IAllele {
 	public static Allele effectReanimation;
 	public static Allele effectResurrection;
 	public static Allele effectRepulsion;
+	public static Allele effectFertile;
+	public static Allele effectMycophilic;
 
 	// / TREES // EFFECTS
 	public static Allele leavesNone;
@@ -706,5 +711,10 @@ public class Allele implements IAllele {
 	public Allele setName(String string) {
 		name = string;
 		return this;
+	}
+
+	@Override
+	public String toString() {
+		return uid;
 	}
 }

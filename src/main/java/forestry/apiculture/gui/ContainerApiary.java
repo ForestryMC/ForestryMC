@@ -10,62 +10,56 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 
-import forestry.api.apiculture.IHiveFrame;
 import forestry.apiculture.gadgets.TileBeehouse;
-import forestry.core.config.ForestryItem;
 import forestry.core.gui.ContainerForestry;
-import forestry.core.gui.slots.SlotClosed;
-import forestry.core.gui.slots.SlotCustom;
-import forestry.core.utils.Utils;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotOutput;
 
 public class ContainerApiary extends ContainerForestry {
 
 	private final TileBeehouse tile;
 
 	public ContainerApiary(InventoryPlayer player, TileBeehouse tile, boolean hasFrames) {
-		super(tile.getInternalInventory());
+		super(tile);
 
 		this.tile = tile;
 		tile.sendNetworkUpdate();
-		IInventory inventory = tile.getInternalInventory();
 
 		// Queen/Princess
-		this.addSlot(new SlotCustom(inventory, TileBeehouse.SLOT_QUEEN, 29, 39, ForestryItem.beePrincessGE, ForestryItem.beeQueenGE));
+		this.addSlotToContainer(new SlotFiltered(tile, TileBeehouse.SLOT_QUEEN, 29, 39));
 
 		// Drone
-		this.addSlot(new SlotCustom(inventory, TileBeehouse.SLOT_DRONE, 29, 65, ForestryItem.beeDroneGE));
+		this.addSlotToContainer(new SlotFiltered(tile, TileBeehouse.SLOT_DRONE, 29, 65));
 
 		// Frames
 		if (hasFrames) {
-			this.addSlot(new SlotCustom(inventory, TileBeehouse.SLOT_FRAMES_1, 66, 23, IHiveFrame.class));
-			this.addSlot(new SlotCustom(inventory, TileBeehouse.SLOT_FRAMES_1 + 1, 66, 52, IHiveFrame.class));
-			this.addSlot(new SlotCustom(inventory, TileBeehouse.SLOT_FRAMES_1 + 2, 66, 81, IHiveFrame.class));
+			this.addSlotToContainer(new SlotFiltered(tile, TileBeehouse.SLOT_FRAMES_1, 66, 23));
+			this.addSlotToContainer(new SlotFiltered(tile, TileBeehouse.SLOT_FRAMES_1 + 1, 66, 52));
+			this.addSlotToContainer(new SlotFiltered(tile, TileBeehouse.SLOT_FRAMES_1 + 2, 66, 81));
 		}
 
 		// Product Inventory
-		this.addSlot(new SlotClosed(inventory, 2, 116, 52));
-		this.addSlot(new SlotClosed(inventory, 3, 137, 39));
-		this.addSlot(new SlotClosed(inventory, 4, 137, 65));
-		this.addSlot(new SlotClosed(inventory, 5, 116, 78));
-		this.addSlot(new SlotClosed(inventory, 6, 95, 65));
-		this.addSlot(new SlotClosed(inventory, 7, 95, 39));
-		this.addSlot(new SlotClosed(inventory, 8, 116, 26));
+		this.addSlotToContainer(new SlotOutput(tile, 2, 116, 52));
+		this.addSlotToContainer(new SlotOutput(tile, 3, 137, 39));
+		this.addSlotToContainer(new SlotOutput(tile, 4, 137, 65));
+		this.addSlotToContainer(new SlotOutput(tile, 5, 116, 78));
+		this.addSlotToContainer(new SlotOutput(tile, 6, 95, 65));
+		this.addSlotToContainer(new SlotOutput(tile, 7, 95, 39));
+		this.addSlotToContainer(new SlotOutput(tile, 8, 116, 26));
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++) {
 			for (int l1 = 0; l1 < 9; l1++) {
-				addSlot(new Slot(player, l1 + i1 * 9 + 9, 8 + l1 * 18, 108 + i1 * 18));
+				addSlotToContainer(new Slot(player, l1 + i1 * 9 + 9, 8 + l1 * 18, 108 + i1 * 18));
 			}
 		}
 		// Player hotbar
 		for (int j1 = 0; j1 < 9; j1++) {
-			addSlot(new Slot(player, j1, 8 + j1 * 18, 166));
+			addSlotToContainer(new Slot(player, j1, 8 + j1 * 18, 166));
 		}
 	}
 
@@ -82,8 +76,4 @@ public class ContainerApiary extends ContainerForestry {
 		}
 	}
 
-	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return Utils.isUseableByPlayer(entityplayer, tile, tile.getWorld(), tile.xCoord, tile.yCoord, tile.zCoord);
-	}
 }

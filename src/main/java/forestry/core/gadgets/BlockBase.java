@@ -22,21 +22,24 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.IFluidHandler;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.core.fluids.FluidHelper;
 import forestry.core.interfaces.IOwnable;
 import forestry.core.items.ItemNBTTile;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.LiquidHelper;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.PlayerUtil;
+import forestry.core.utils.Utils;
 
 public class BlockBase extends BlockForestry {
 
@@ -161,36 +164,23 @@ public class BlockBase extends BlockForestry {
 			return false;
 
 		TileBase tile = (TileBase) world.getTileEntity(x, y, z);
-		if (!tile.isUseableByPlayer(player))
+		if (!Utils.isUseableByPlayer(player, tile))
 			return false;
 
 		ItemStack current = player.getCurrentEquippedItem();
-		if (current != null && current.getItem() != Items.bucket && tile instanceof IFluidHandler) {
-			if (Proxies.common.isSimulating(world)) {
-				if (LiquidHelper.handleRightClick((IFluidHandler) tile, ForgeDirection.getOrientation(side), player, true, tile.canDrainWithBucket())) {
-					return true;
-				}
-			} else {
-				if (FluidContainerRegistry.isContainer(current)) {
-					return true;
-				}
+		if (current != null && current.getItem() != Items.bucket && tile instanceof IFluidHandler && tile.allowsAlteration(player)) {
+			if (FluidHelper.handleRightClick((IFluidHandler) tile, ForgeDirection.getOrientation(side), player, true, tile.canDrainWithBucket())) {
+				return true;
 			}
 		}
 
 		if (!Proxies.common.isSimulating(world))
 			return true;
 
-		if (tile.allowsInteraction(player)) {
+		if (tile.allowsViewing(player)) {
 			tile.openGui(player, tile);
-		}
-		else {
-			String ownerName = StringUtil.localize("gui.derelict");
-			
-			if (tile.getOwnerProfile() != null)
-				ownerName = tile.getOwnerProfile().getName();
-
-
-			player.addChatMessage(new ChatComponentTranslation("for.chat.accesslocked",ownerName));
+		} else {
+			player.addChatMessage(new ChatComponentTranslation("for.chat.accesslocked", PlayerUtil.getOwnerName(tile)));
 		}
 		return true;
 	}

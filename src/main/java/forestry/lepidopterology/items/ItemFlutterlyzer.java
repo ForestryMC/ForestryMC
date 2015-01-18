@@ -15,15 +15,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-import forestry.core.utils.AlyzerInventory;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
 import forestry.api.lepidopterology.IButterfly;
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
-import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IHintSource;
+import forestry.core.inventory.AlyzerInventory;
 import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
@@ -33,21 +32,14 @@ public class ItemFlutterlyzer extends ItemInventoried {
 
 	public static class FlutterlyzerInventory extends AlyzerInventory implements IErrorSource, IHintSource {
 
-		public FlutterlyzerInventory(EntityPlayer player) {
-			super(ItemFlutterlyzer.class, 7);
-			this.player = player;
-		}
-
 		public FlutterlyzerInventory(EntityPlayer player, ItemStack itemStack) {
 			super(ItemFlutterlyzer.class, 7, itemStack);
 			this.player = player;
 		}
 
-		private boolean isEnergy(ItemStack itemstack) {
-			if (itemstack == null || itemstack.stackSize <= 0)
-				return false;
-
-			return ForestryItem.honeyDrop.isItemEqual(itemstack) || ForestryItem.honeydew.isItemEqual(itemstack);
+		@Override
+		protected boolean isSpecimen(ItemStack itemStack) {
+			return PluginLepidopterology.butterflyInterface.isMember(itemStack);
 		}
 
 		private void tryAnalyze() {

@@ -10,18 +10,16 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import java.util.List;
-
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.items.ItemArmorApiarist;
 import forestry.core.utils.DamageSourceForestry;
+import java.util.List;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
 
 public class AlleleEffectAggressive extends AlleleEffectThrottled {
 

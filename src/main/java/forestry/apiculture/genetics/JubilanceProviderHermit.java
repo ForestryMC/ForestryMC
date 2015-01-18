@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import java.util.List;
-
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.util.AxisAlignedBB;
-
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
+import java.util.List;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.AxisAlignedBB;
 
 /**
  * Hermits will not produce if there are any other living creatures nearby.
@@ -30,10 +28,7 @@ public class JubilanceProviderHermit extends JubilanceDefault {
 
 		@SuppressWarnings("rawtypes")
 		List list = housing.getWorld().getEntitiesWithinAABB(EntityLiving.class, bounding);
-		if (list.size() > 0)
-			return false;
-
-		return true;
+		return list.size() <= 0;
 	}
 
 }

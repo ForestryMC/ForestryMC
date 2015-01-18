@@ -10,15 +10,14 @@
  ******************************************************************************/
 package forestry.farming.render;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.world.IBlockAccess;
-
 import forestry.core.config.ForestryBlock;
 import forestry.core.render.OverlayRenderingHandler;
 import forestry.farming.gadgets.BlockFarm;
 import forestry.plugins.PluginFarming;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.world.IBlockAccess;
 
 public class FarmRenderingHandler extends OverlayRenderingHandler {
 

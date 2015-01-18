@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.mail;
 
-import java.io.DataInputStream;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-
 import forestry.core.interfaces.IPacketHandler;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketUpdate;
@@ -22,9 +17,12 @@ import forestry.core.proxy.Proxies;
 import forestry.mail.gui.ContainerCatalogue;
 import forestry.mail.gui.ContainerLetter;
 import forestry.mail.gui.ContainerTradeName;
-import forestry.mail.network.PacketPOBoxInfo;
 import forestry.mail.network.PacketLetterInfo;
+import forestry.mail.network.PacketPOBoxInfo;
 import forestry.plugins.PluginMail;
+import java.io.DataInputStream;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 
 public class PacketHandlerMail implements IPacketHandler {
 

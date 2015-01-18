@@ -27,15 +27,15 @@ import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginApiculture;
+import java.util.List;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
-
-import java.util.List;
 
 public class ItemBeeGE extends ItemGE {
 
@@ -50,7 +50,7 @@ public class ItemBeeGE extends ItemGE {
 	}
 
 	@Override
-	protected IIndividual getIndividual(ItemStack itemstack) {
+	public IBee getIndividual(ItemStack itemstack) {
 		return new Bee(itemstack.getTagCompound());
 	}
 
@@ -95,9 +95,9 @@ public class ItemBeeGE extends ItemGE {
 		if(type != EnumBeeType.DRONE) {
 			IBee individual = new Bee(itemstack.getTagCompound());
 			if (individual.isNatural())
-				list.add("\u00A7e\u00A7o" + StringUtil.localize("bees.stock.pristine"));
+				list.add(EnumChatFormatting.YELLOW + EnumChatFormatting.ITALIC.toString() + StringUtil.localize("bees.stock.pristine"));
 			else
-				list.add("\u00A7e" + StringUtil.localize("bees.stock.ignoble"));
+				list.add(EnumChatFormatting.YELLOW + StringUtil.localize("bees.stock.ignoble"));
 		}
 
 		super.addInformation(itemstack, player, list, flag);

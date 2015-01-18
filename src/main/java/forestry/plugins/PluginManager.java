@@ -11,16 +11,12 @@
 package forestry.plugins;
 
 import com.google.common.collect.ImmutableList;
-import java.util.ArrayList;
-
 import com.google.common.collect.Lists;
-
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.Forestry;
-
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPacketHandler;
 import forestry.core.interfaces.IPickupHandler;
@@ -28,6 +24,7 @@ import forestry.core.interfaces.IResupplyHandler;
 import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.proxy.Proxies;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Locale;
@@ -38,6 +35,8 @@ import net.minecraft.command.ICommand;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkProvider;
+
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
@@ -64,7 +63,8 @@ public class PluginManager {
 
 	public enum Module {
 
-		CORE(new PluginCore()),
+		CORE(new PluginCore(), false),
+		FLUIDS(new PluginFluids(), false),
 		APICULTURE(new PluginApiculture()),
 		ARBORICULTURE(new PluginArboriculture()),
 		ENERGY(new PluginEnergy()),
@@ -85,9 +85,15 @@ public class PluginManager {
 		NATURA(new PluginNatura()),;
 
 		private final ForestryPlugin instance;
+		private final boolean canBeDisabled;
 
 		private Module(ForestryPlugin plugin) {
+			this(plugin, true);
+		}
+
+		private Module(ForestryPlugin plugin, boolean canBeDisabled) {
 			this.instance = plugin;
+			this.canBeDisabled = canBeDisabled;
 		}
 
 		public ForestryPlugin instance() {
@@ -98,7 +104,17 @@ public class PluginManager {
 			return isModuleLoaded(this);
 		}
 
+		public boolean canBeDisabled() {
+			return canBeDisabled;
+		}
+
+		public String configName() {
+			return toString().toLowerCase(Locale.ENGLISH).replace('_', '.');
+		}
+
 	}
+
+	public static final EnumSet<Module> configDisabledModules = EnumSet.noneOf(Module.class);
 
 	public static Stage getStage() {
 		return stage;
@@ -131,7 +147,7 @@ public class PluginManager {
 		Iterator<Module> it = toLoad.iterator();
 		while (it.hasNext()) {
 			Module m = it.next();
-			if (m == Module.CORE)
+			if (!m.canBeDisabled())
 				continue;
 			if (!isEnabled(config, m)) {
 				it.remove();
@@ -155,7 +171,7 @@ public class PluginManager {
 				if (!toLoad.containsAll(deps)) {
 					it.remove();
 					changed = true;
-					Proxies.log.warning("Module {0} is missing dependancies: {1}", m, deps);
+					Proxies.log.warning("Module {0} is missing dependencies: {1}", m, deps);
 					continue;
 				}
 			}
@@ -274,18 +290,30 @@ public class PluginManager {
 			}
 	}
 
-	public static void generateSurface(World world, Random rand, int chunkX, int chunkZ) {
+	public static void populateChunk(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
 		for (Module m : loadedModules) {
 			ForestryPlugin plugin = m.instance;
-			plugin.generateSurface(world, rand, chunkX, chunkZ);
+			plugin.populateChunk(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
+		}
+	}
+
+	public static void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
+		for (Module m : loadedModules) {
+			ForestryPlugin plugin = m.instance;
+			plugin.populateChunkRetroGen(world, rand, chunkX, chunkZ);
 		}
 	}
 
 	private static boolean isEnabled(Configuration config, Module m) {
 		Plugin info = m.instance().getClass().getAnnotation(Plugin.class);
 
-		Property prop = config.get(CATEGORY_MODULES, m.toString().toLowerCase(Locale.ENGLISH).replace('_', '.'), true);
-		prop.comment = StatCollector.translateToLocal(info.unlocalizedDescription());
-		return prop.getBoolean(true);
+		String comment = StatCollector.translateToLocal(info.unlocalizedDescription());
+		Property prop = config.get(CATEGORY_MODULES, m.configName(), true, comment);
+		boolean enabled = prop.getBoolean();
+
+		if (!enabled)
+			configDisabledModules.add(m);
+
+		return enabled;
 	}
 }

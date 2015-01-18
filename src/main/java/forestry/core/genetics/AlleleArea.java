@@ -12,7 +12,7 @@ package forestry.core.genetics;
 
 import forestry.api.genetics.IAlleleArea;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 
 public class AlleleArea extends Allele implements IAlleleArea {
 

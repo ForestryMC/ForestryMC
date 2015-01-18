@@ -10,17 +10,9 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import java.util.ArrayList;
-
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.EntityPlayer;
-
-import org.apache.commons.lang3.StringUtils;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
-import forestry.api.mail.IPostalCarrier;
+import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
+import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.PostManager;
 import forestry.core.config.Defaults;
 import forestry.core.config.SessionVars;
@@ -30,8 +22,13 @@ import forestry.core.gui.GuiTextBox;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
-import forestry.api.mail.EnumAddressee;
 import forestry.mail.items.ItemLetter.LetterInventory;
+import java.util.ArrayList;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.entity.player.EntityPlayer;
+import org.apache.commons.lang3.StringUtils;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 public class GuiLetter extends GuiForestry<TileForestry> {
 
@@ -73,11 +70,10 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 	private GuiTextField address;
 	private GuiTextBox text;
 
-	boolean addressFocus;
-	boolean textFocus;
+	private boolean addressFocus;
+	private boolean textFocus;
 
-	protected final ArrayList<Widget> tradeInfoWidgets;
-
+	private final ArrayList<Widget> tradeInfoWidgets;
 	private final ContainerLetter container;
 
 	public GuiLetter(EntityPlayer player, LetterInventory inventory) {
@@ -154,6 +150,9 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 		if(!isProcessedLetter && !checkedSessionVars) {
 			checkedSessionVars = true;
 			setFromSessionVars();
+			String recipient = this.address.getText();
+			EnumAddressee recipientType = container.getCarrierType();
+			setRecipient(recipient, recipientType);
 		}
 
 		// Check for focus changes
@@ -217,8 +216,10 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 	}
 
 	private void clearTradeInfoWidgets() {
-		for (Widget widget : tradeInfoWidgets)
+		for (Widget widget : tradeInfoWidgets) {
 			widgetManager.remove(widget);
+		}
+		tradeInfoWidgets.clear();
 	}
 
 	@Override
@@ -247,7 +248,7 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 			address.setText(recipient);
 
 			EnumAddressee type = EnumAddressee.fromString(typeName);
-			setRecipient(recipient, type);
+			container.setCarrierType(type);
 		}
 
 		SessionVars.clearStringVar("mail.letter.recipient");

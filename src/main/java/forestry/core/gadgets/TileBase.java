@@ -11,13 +11,8 @@
 package forestry.core.gadgets;
 
 import forestry.core.interfaces.IHintSource;
-import forestry.core.network.ClassMap;
-import forestry.core.network.IndexInPayload;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.EnumAccess;
-import forestry.core.utils.PlayerUtil;
-import forestry.core.utils.Utils;
 import net.minecraft.entity.player.EntityPlayer;
 
 public abstract class TileBase extends TileForestry implements IHintSource {
@@ -52,51 +47,15 @@ public abstract class TileBase extends TileForestry implements IHintSource {
 	/* NETWORK */
 	@Override
 	public PacketPayload getPacketPayload() {
-		if (!ClassMap.classMappers.containsKey(this.getClass()))
-			ClassMap.classMappers.put(this.getClass(), new ClassMap(this.getClass()));
-
-		ClassMap classmap = ClassMap.classMappers.get(this.getClass());
-		PacketPayload payload = new PacketPayload(classmap.intSize, classmap.floatSize, classmap.stringSize);
-
-		try {
-			classmap.setData(this, payload.intPayload, payload.floatPayload, payload.stringPayload, new IndexInPayload(0, 0, 0));
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-
-		return payload;
+		return null;
 	}
 
 	@Override
 	public void fromPacketPayload(PacketPayload payload) {
-
-		if (payload.isEmpty())
-			return;
-
-		if (!ClassMap.classMappers.containsKey(this.getClass()))
-			ClassMap.classMappers.put(this.getClass(), new ClassMap(this.getClass()));
-
-		ClassMap classmap = ClassMap.classMappers.get(this.getClass());
-
-		try {
-			classmap.fromData(this, payload.intPayload, payload.floatPayload, payload.stringPayload, new IndexInPayload(0, 0, 0));
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
 	}
 
 	/* INTERACTION */
 	public void openGui(EntityPlayer player, TileBase tile) {
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		if (!Utils.isUseableByPlayer(player, this, worldObj, xCoord, yCoord, zCoord))
-			return false;
-		if (getAccess() == EnumAccess.PRIVATE)
-			return PlayerUtil.isSameGameProfile(owner, player.getGameProfile());
-
-		return true;
 	}
 
 	public boolean canDrainWithBucket() {

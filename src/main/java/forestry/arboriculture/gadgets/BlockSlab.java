@@ -23,10 +23,10 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import net.minecraftforge.common.util.ForgeDirection;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
@@ -35,9 +35,10 @@ import forestry.arboriculture.WoodType;
 public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyped {
 
 	public static enum SlabCat {
-		CAT0, CAT1, CAT2
+		CAT0, CAT1, CAT2, CAT3
 	}
 
+	public static final int slabsPerCat = 8;
 	private final SlabCat cat;
 
 	public BlockSlab(SlabCat cat) {
@@ -64,28 +65,15 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 
 	@Override
 	public IIcon getIcon(int side, int meta) {
-		WoodType type = WoodType.VALUES[(8 * cat.ordinal()) + (meta & 7)];
+		WoodType type = getWoodType(meta);
+		if (type == null)
+			return null;
 		return type.getPlankIcon();
 	}
 
 	@Override
 	public Item getItemDropped(int meta, Random random, int par3) {
 		return Item.getItemFromBlock(this);
-	}
-
-	/**
-	 * only called by clickMiddleMouseButton , and passed to inventory.setCurrentItem (along with isCreative)
-	 */
-	/*public int idPicked(World world, int x, int y, int z) {
-		return blockID;
-	}*/
-
-	/**
-	 * Get the block's damage value (for use with pick block).
-	 */
-	@Override
-	public int getDamageValue(World world, int x, int y, int z) {
-		return super.getDamageValue(world, x, y, z) & 7;
 	}
 
 	@Override
@@ -101,8 +89,10 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		for (int i = 0; i < 8; ++i)
-			itemList.add(new ItemStack(item, 1, i));
+		int totalWoods = WoodType.values().length;
+		int count = Math.min(totalWoods - (cat.ordinal() * slabsPerCat), slabsPerCat);
+		for (int i = 0; i < count; i++)
+			itemList.add(new ItemStack(this, 1, i));
 	}
 
 	/* PROPERTIES */
@@ -123,10 +113,11 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 
 	@Override
 	public WoodType getWoodType(int meta) {
-		if(meta + cat.ordinal() * 8 < WoodType.VALUES.length)
-			return WoodType.VALUES[meta + cat.ordinal() * 8];
+		int woodOrdinal = (meta % slabsPerCat) + cat.ordinal() * slabsPerCat;
+		if(woodOrdinal < WoodType.VALUES.length)
+			return WoodType.VALUES[woodOrdinal];
 		else
-			return WoodType.LARCH;
+			return null;
 	}
 
 	@Override
@@ -137,5 +128,12 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 	@Override
 	public boolean getUseNeighborBrightness() {
 		return true;
+	}
+
+	// Minecraft's BlockSlab overrides this for their slabs, so we change it back to normal here
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Item getItem(World world, int x, int y, int z) {
+		return Item.getItemFromBlock(this);
 	}
 }

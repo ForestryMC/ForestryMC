@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.energy.circuits;
 
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.core.circuits.Circuit;
 import forestry.energy.gadgets.EngineCopper;
+import net.minecraft.tileentity.TileEntity;
 
 public class CircuitFireDampener extends Circuit {
 

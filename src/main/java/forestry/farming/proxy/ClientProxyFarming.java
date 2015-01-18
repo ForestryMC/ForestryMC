@@ -12,13 +12,11 @@ package forestry.farming.proxy;
 
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
-
-import net.minecraftforge.client.MinecraftForgeClient;
-
 import forestry.core.config.ForestryBlock;
 import forestry.farming.render.FarmItemRenderer;
 import forestry.farming.render.FarmRenderingHandler;
 import forestry.plugins.PluginFarming;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 public class ClientProxyFarming extends ProxyFarming {
 

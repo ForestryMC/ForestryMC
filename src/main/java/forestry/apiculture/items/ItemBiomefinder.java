@@ -10,37 +10,35 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.apiculture.IBee;
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.Tabs;
+import forestry.apiculture.render.TextureBiomefinder;
+import forestry.core.EnumErrorCode;
+import forestry.core.config.Config;
+import forestry.core.config.ForestryItem;
+import forestry.core.interfaces.IErrorSource;
+import forestry.core.interfaces.IHintSource;
+import forestry.core.inventory.ItemInventory;
+import forestry.core.items.ItemInventoried;
+import forestry.core.network.GuiId;
+import forestry.core.proxy.Proxies;
+import forestry.core.vect.Vect;
+import forestry.plugins.PluginApiculture;
 import java.util.ArrayList;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import forestry.api.apiculture.IBee;
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.Tabs;
-import forestry.apiculture.render.TextureBiomefinder;
-import forestry.api.core.EnumErrorCode;
-import forestry.core.config.Config;
-import forestry.core.config.ForestryItem;
-import forestry.core.interfaces.IErrorSource;
-import forestry.core.interfaces.IHintSource;
-import forestry.core.items.ItemInventoried;
-import forestry.core.network.GuiId;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.ItemInventory;
-import forestry.core.utils.Vect;
-import forestry.plugins.PluginApiculture;
 
 public class ItemBiomefinder extends ItemInventoried {
 
@@ -51,10 +49,6 @@ public class ItemBiomefinder extends ItemInventoried {
 		private final short energySlot = 2;
 		private final short specimenSlot = 0;
 		private final short analyzeSlot = 1;
-
-		public BiomefinderInventory() {
-			super(ItemBiomefinder.class, 3);
-		}
 
 		public BiomefinderInventory(ItemStack itemstack) {
 			super(ItemBiomefinder.class, 3, itemstack);
@@ -138,6 +132,17 @@ public class ItemBiomefinder extends ItemInventoried {
 				return EnumErrorCode.NOHONEY;
 
 			return EnumErrorCode.OK;
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == energySlot) {
+				Item item = itemStack.getItem();
+				return item == ForestryItem.honeydew.item() || item == ForestryItem.honeyDrop.item();
+			} else if (slotIndex == specimenSlot || slotIndex == analyzeSlot) {
+				return PluginApiculture.beeInterface.isMember(itemStack);
+			}
+			return false;
 		}
 
 	}

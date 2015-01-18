@@ -10,15 +10,12 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import net.minecraft.util.IIcon;
-
-import net.minecraftforge.fluids.FluidStack;
-
-import org.lwjgl.opengl.GL11;
-
 import forestry.core.gui.WidgetManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.fluids.FluidStack;
+import org.lwjgl.opengl.GL11;
 
 public class ReservoirWidget extends TankWidget {
 
@@ -46,7 +43,7 @@ public class ReservoirWidget extends TankWidget {
 
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
 		while (true) {
-			int x = 0;
+			int x;
 
 			if (squaled > 16) {
 				x = 16;

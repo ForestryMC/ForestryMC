@@ -10,19 +10,21 @@
  ******************************************************************************/
 package forestry.mail;
 
-import java.util.Locale;
-
-import forestry.api.mail.*;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
+import forestry.api.mail.EnumAddressee;
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.IPostOffice;
+import forestry.api.mail.IPostalCarrier;
+import forestry.api.mail.IPostalState;
+import forestry.api.mail.ITradeStation;
+import forestry.api.mail.PostManager;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginMail;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 
 public class PostalCarrier implements IPostalCarrier {
 
@@ -59,15 +61,11 @@ public class PostalCarrier implements IPostalCarrier {
 	}
 
 	private IPostalState handleTradeLetter(World world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
-		IPostalState state = EnumDeliveryState.NOT_MAILABLE;
-
 		ITradeStation trade = PostManager.postRegistry.getTradeStation(world, recipient);
 		if (trade == null)
 			return EnumDeliveryState.NO_MAILBOX;
 
-		state = trade.handleLetter(world, recipient, letterstack, doLodge);
-
-		return state;
+		return trade.handleLetter(world, recipient, letterstack, doLodge);
 	}
 
 	private EnumDeliveryState storeInPOBox(World world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {

@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.mail.proxy;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-
+import forestry.api.mail.IMailAddress;
 import forestry.core.network.PacketIds;
 import forestry.core.proxy.Proxies;
 import forestry.mail.POBoxInfo;
 import forestry.mail.network.PacketPOBoxInfo;
-import forestry.api.mail.IMailAddress;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 
 public class ProxyMail {
 

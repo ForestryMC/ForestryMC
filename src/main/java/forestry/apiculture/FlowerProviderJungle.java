@@ -10,20 +10,17 @@
  ******************************************************************************/
 package forestry.apiculture;
 
-import java.util.EnumSet;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
-import net.minecraftforge.common.EnumPlantType;
-
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
 import forestry.core.config.Defaults;
 import forestry.core.utils.StringUtil;
+import java.util.EnumSet;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.common.EnumPlantType;
 
 public class FlowerProviderJungle implements IFlowerProvider {
 
@@ -46,10 +43,7 @@ public class FlowerProviderJungle implements IFlowerProvider {
 	}
 
 	private boolean checkFlowerPot(int meta) {
-		if (meta == 11)
-			return true;
-		else
-			return false;
+		return meta == 11;
 	}
 
 	@Override

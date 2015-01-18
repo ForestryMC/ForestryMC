@@ -22,6 +22,10 @@ public class StringUtil {
 		return StatCollector.canTranslate("for." + key);
 	}
 
+	public static boolean canTranslateTile(String key) {
+		return StatCollector.canTranslate("tile.for." + key);
+	}
+
 	public static String localize(String key) {
 		return StatCollector.translateToLocal("for." + key).replace("\\n", "\n").replace("@", "%").replace("\\%", "@");
 	}
@@ -88,5 +92,13 @@ public class StringUtil {
 
 	public static String floatAsPercent(float val) {
 		return (int) (val * 100) + " %";
+	}
+
+	public static String line(int length) {
+		StringBuilder line = new StringBuilder();
+		for (int i = 0; i < length; i++)
+			line.append("-");
+
+		return line.toString();
 	}
 }

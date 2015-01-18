@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
-
 import forestry.api.circuits.ICircuitLayout;
 import forestry.core.circuits.ItemSolderingIron.CircuitRecipe;
 import forestry.core.circuits.ItemSolderingIron.SolderingInventory;
@@ -22,6 +18,9 @@ import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.GuiForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IInventory;
 
 public class GuiSolderingIron extends GuiForestry<TileForestry> {
 

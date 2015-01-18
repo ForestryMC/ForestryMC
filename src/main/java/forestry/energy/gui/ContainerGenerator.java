@@ -10,34 +10,33 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import forestry.core.gui.ContainerLiquidTanks;
-import forestry.core.gui.slots.SlotLiquidContainer;
-import forestry.energy.gadgets.MachineGenerator;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
+
+import forestry.core.gui.ContainerLiquidTanks;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.energy.gadgets.MachineGenerator;
 
 public class ContainerGenerator extends ContainerLiquidTanks {
 
 	protected final MachineGenerator tile;
 
 	public ContainerGenerator(InventoryPlayer player, MachineGenerator tile) {
-		super(tile, tile);
+		super(tile);
 
 		this.tile = tile;
-		this.addSlot(new SlotLiquidContainer(tile, MachineGenerator.SLOT_CAN, 22, 38));
 
-		for (int i = 0; i < 3; ++i)
-			for (int var4 = 0; var4 < 9; ++var4)
-				this.addSlot(new Slot(player, var4 + i * 9 + 9, 8 + var4 * 18, 84 + i * 18));
+		this.addSlotToContainer(new SlotFiltered(tile, MachineGenerator.SLOT_CAN, 22, 38));
 
-		for (int i = 0; i < 9; ++i)
-			this.addSlot(new Slot(player, i, 8 + i * 18, 142));
-	}
+		for (int i = 0; i < 3; ++i) {
+			for (int var4 = 0; var4 < 9; ++var4) {
+				this.addSlotToContainer(new Slot(player, var4 + i * 9 + 9, 8 + var4 * 18, 84 + i * 18));
+			}
+		}
 
-	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return tile.isUseableByPlayer(entityplayer);
+		for (int i = 0; i < 9; ++i) {
+			this.addSlotToContainer(new Slot(player, i, 8 + i * 18, 142));
+		}
 	}
 
 }

@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture.render;
 
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import forestry.apiculture.gadgets.BlockCandle;
+import forestry.apiculture.gadgets.TileCandle;
+import forestry.core.ForestryClient;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-
-import forestry.apiculture.gadgets.BlockCandle;
-import forestry.apiculture.gadgets.TileCandle;
-import forestry.core.ForestryClient;
 
 public class BlockCandleRenderer implements ISimpleBlockRenderingHandler {
 

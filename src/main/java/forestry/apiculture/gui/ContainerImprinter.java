@@ -16,11 +16,11 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import forestry.apiculture.items.ItemBeeGE;
 import forestry.apiculture.items.ItemImprinter.ImprinterInventory;
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.IGuiSelectable;
-import forestry.core.gui.slots.SlotCustom;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotOutput;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
@@ -36,17 +36,17 @@ public class ContainerImprinter extends ContainerForestry implements IGuiSelecta
 
 		this.inventory = inventory;
 		// Input
-		this.addSlot(new SlotCustom(inventory, 0, 152, 12, ItemBeeGE.class));
+		this.addSlotToContainer(new SlotFiltered(inventory, 0, 152, 12));
 		// Output
-		this.addSlot(new SlotCustom(inventory, 1, 152, 72, ItemBeeGE.class));
+		this.addSlotToContainer(new SlotOutput(inventory, 1, 152, 72));
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++)
 			for (int l1 = 0; l1 < 9; l1++)
-				addSlot(new Slot(inventoryplayer, l1 + i1 * 9 + 9, 8 + l1 * 18, 103 + i1 * 18));
+				addSlotToContainer(new Slot(inventoryplayer, l1 + i1 * 9 + 9, 8 + l1 * 18, 103 + i1 * 18));
 		// Player hotbar
 		for (int j1 = 0; j1 < 9; j1++)
-			addSlot(new Slot(inventoryplayer, j1, 8 + j1 * 18, 161));
+			addSlotToContainer(new Slot(inventoryplayer, j1, 8 + j1 * 18, 161));
 	}
 
 	@Override

@@ -10,43 +10,42 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.ISpecialInventory;
-import forestry.api.recipes.IStillManager;
-import forestry.api.core.EnumErrorCode;
-import forestry.core.config.Config;
-import forestry.core.config.Defaults;
-import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.gadgets.TileBase;
-import forestry.core.gadgets.TilePowered;
-import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.network.EntityNetData;
-import forestry.core.network.GuiId;
-import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.InventoryAdapter;
-import forestry.core.utils.LiquidHelper;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import forestry.api.core.ForestryAPI;
+import forestry.api.recipes.IStillManager;
+import forestry.core.EnumErrorCode;
+import forestry.core.config.Config;
+import forestry.core.config.Defaults;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.TankManager;
+import forestry.core.fluids.tanks.FilteredTank;
+import forestry.core.fluids.tanks.StandardTank;
+import forestry.core.gadgets.TileBase;
+import forestry.core.gadgets.TilePowered;
+import forestry.core.interfaces.ILiquidTankContainer;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.GuiId;
+import forestry.core.utils.EnumTankLevel;
+import forestry.core.utils.Utils;
 
-public class MachineStill extends TilePowered implements ISpecialInventory, ISidedInventory, ILiquidTankContainer {
+public class MachineStill extends TilePowered implements ISidedInventory, ILiquidTankContainer {
 
 	/* CONSTANTS */
 	public static final short SLOT_PRODUCT = 0;
@@ -54,31 +53,31 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 	public static final short SLOT_CAN = 2;
 
 	public static class Recipe {
+
 		public final int timePerUnit;
 		public final FluidStack input;
 		public final FluidStack output;
 
 		public Recipe(int timePerUnit, FluidStack input, FluidStack output) {
 			this.timePerUnit = timePerUnit;
-			if(input == null)
+			if (input == null)
 				throw new IllegalArgumentException("Still recipes need an input. Input was null.");
-			if(output == null)
+			if (output == null)
 				throw new IllegalArgumentException("Still recipes need an output. Output was null.");
 			this.input = input;
 			this.output = output;
 		}
 
 		public boolean matches(FluidStack res) {
-			if (res == null && input == null)
-				return true;
-			else if (res == null || input == null)
+			if (res == null)
 				return false;
-			else
-				return input.isFluidEqual(res);
+
+			return input.isFluidEqual(res);
 		}
 	}
 
 	public static class RecipeManager implements IStillManager {
+
 		public static final ArrayList<MachineStill.Recipe> recipes = new ArrayList<MachineStill.Recipe>();
 		public static final HashSet<Fluid> recipeFluidInputs = new HashSet<Fluid>();
 		public static final HashSet<Fluid> recipeFluidOutputs = new HashSet<Fluid>();
@@ -93,8 +92,7 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 		}
 
 		public static Recipe findMatchingRecipe(FluidStack item) {
-			for (int i = 0; i < recipes.size(); i++) {
-				Recipe recipe = recipes.get(i);
+			for (Recipe recipe : recipes) {
 				if (recipe.matches(item))
 					return recipe;
 			}
@@ -109,21 +107,18 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 		public Map<Object[], Object[]> getRecipes() {
 			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
 
-			for (Recipe recipe : recipes)
-				recipeList.put(new Object[] { recipe.input }, new Object[] { recipe.output });
+			for (Recipe recipe : recipes) {
+				recipeList.put(new Object[]{recipe.input}, new Object[]{recipe.output});
+			}
 
 			return recipeList;
 		}
 	}
 
 	/* MEMBER */
-	@EntityNetData
 	public final FilteredTank resourceTank;
-	@EntityNetData
 	public final FilteredTank productTank;
 	private final TankManager tankManager;
-
-	private final InventoryAdapter inventory = new InventoryAdapter(3, "Items");
 
 	private Recipe currentRecipe;
 	private FluidStack bufferedLiquid;
@@ -132,17 +127,29 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 
 	public MachineStill() {
 		super(1100, 50, 8000);
+		setInternalInventory(new TileInventoryAdapter(this, 3, "Items") {
+			@Override
+			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+				if (slotIndex == SLOT_RESOURCE) {
+					return FluidHelper.isEmptyContainer(itemStack);
+				} else if (slotIndex == SLOT_CAN) {
+					Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+					return resourceTank.accepts(fluid);
+				}
+				return false;
+			}
+
+			@Override
+			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+				return slotIndex == SLOT_PRODUCT;
+			}
+		});
 		setHints(Config.hints.get("still"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluidInputs);
 		resourceTank.tankMode = StandardTank.TankMode.INPUT;
 		productTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluidOutputs);
 		productTank.tankMode = StandardTank.TankMode.OUTPUT;
 		tankManager = new TankManager(resourceTank, productTank);
-	}
-
-	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
 	}
 
 	@Override
@@ -158,7 +165,6 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 		nbttagcompound.setInteger("DistillationTotalTime", distillationTotalTime);
 
 		tankManager.writeTanksToNBT(nbttagcompound);
-		inventory.writeToNBT(nbttagcompound);
 	}
 
 	@Override
@@ -169,7 +175,6 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 		distillationTotalTime = nbttagcompound.getInteger("DistillationTotalTime");
 
 		tankManager.readTanksFromNBT(nbttagcompound);
-		inventory.readFromNBT(nbttagcompound);
 
 		checkRecipe();
 	}
@@ -177,31 +182,20 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 	@Override
 	public void updateServerSide() {
 
+		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
+			return;
+
+		IInventoryAdapter inventory = getInternalInventory();
 		// Check if we have suitable items waiting in the item slot
-		if (inventory.getStackInSlot(SLOT_CAN) != null) {
-			FluidContainerData container = LiquidHelper.getLiquidContainer(inventory.getStackInSlot(SLOT_CAN));
-
-			if (container != null && resourceTank.accepts(container.fluid.getFluid())) {
-
-				inventory.setInventorySlotContents(SLOT_CAN, StackUtils.replenishByContainer(this, inventory.getStackInSlot(SLOT_CAN), container, resourceTank));
-				if (inventory.getStackInSlot(SLOT_CAN).stackSize <= 0)
-					inventory.setInventorySlotContents(SLOT_CAN, null);
-
-			}
-		}
+		if (inventory.getStackInSlot(SLOT_CAN) != null)
+			FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
 
 		// Can product liquid if possible
 		if (inventory.getStackInSlot(SLOT_RESOURCE) != null) {
-			FluidContainerData container = LiquidHelper.getEmptyContainer(inventory.getStackInSlot(SLOT_RESOURCE), productTank.getFluid());
-			if (container != null) {
-				inventory.setInventorySlotContents(SLOT_PRODUCT, bottleIntoContainer(inventory.getStackInSlot(SLOT_RESOURCE), inventory.getStackInSlot(SLOT_PRODUCT), container, productTank));
-				if (inventory.getStackInSlot(SLOT_RESOURCE).stackSize <= 0)
-					inventory.setInventorySlotContents(SLOT_RESOURCE, null);
-			}
+			FluidStack fluidStack = productTank.getFluid();
+			if (fluidStack != null)
+				FluidHelper.fillContainers(tankManager, inventory, SLOT_RESOURCE, SLOT_PRODUCT, fluidStack.getFluid());
 		}
-
-		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
-			return;
 
 		checkRecipe();
 		if (getErrorState() == EnumErrorCode.NORECIPE && currentRecipe != null)
@@ -209,7 +203,6 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 
 		if (energyManager.getTotalEnergyStored() == 0) {
 			setErrorState(EnumErrorCode.NOPOWER);
-			return;
 		}
 	}
 
@@ -312,6 +305,7 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 	}
 
 	/* SMP GUI */
+	@Override
 	public void getGUINetworkData(int i, int j) {
 		i -= tankManager.maxMessageId() + 1;
 		switch (i) {
@@ -324,140 +318,14 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 		}
 	}
 
+	@Override
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
 		int i = tankManager.maxMessageId() + 1;
 		iCrafting.sendProgressBarUpdate(container, i, distillationTime);
 		iCrafting.sendProgressBarUpdate(container, i + 1, distillationTotalTime);
 	}
 
-	/* ISPECIALINVENTORY */
-	@Override
-	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
-		int inventorySlot;
-
-		FluidContainerData container = LiquidHelper.getLiquidContainer(stack);
-		if (container != null && resourceTank.accepts(container.fluid.getFluid()))
-			inventorySlot = SLOT_CAN;
-		else if (LiquidHelper.isEmptyContainer(stack))
-			inventorySlot = SLOT_RESOURCE;
-		else
-			return 0;
-
-		return inventory.addStack(stack, inventorySlot, 1, false, doAdd);
-	}
-
-	/**
-	 * Transport pipes cannot extract items from the still.
-	 */
-	@Override
-	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
-		ItemStack product = null;
-
-		if (inventory.getStackInSlot(SLOT_PRODUCT) != null) {
-
-			product = new ItemStack(inventory.getStackInSlot(SLOT_PRODUCT).getItem(), 1, inventory.getStackInSlot(SLOT_PRODUCT).getItemDamage());
-			if (doRemove) {
-				inventory.decrStackSize(SLOT_PRODUCT, 1);
-			}
-		}
-
-		if (product != null)
-			return new ItemStack[] { product };
-		else
-			return StackUtils.EMPTY_STACK_ARRAY;
-	}
-
-	/* IINVENTORY */
-	@Override public int getSizeInventory() { return inventory.getSizeInventory(); }
-	@Override public ItemStack getStackInSlot(int i) { return inventory.getStackInSlot(i); }
-	@Override public ItemStack decrStackSize(int i, int j) { return inventory.decrStackSize(i, j); }
-	@Override public void setInventorySlotContents(int i, ItemStack itemstack) { inventory.setInventorySlotContents(i, itemstack); }
-	@Override public ItemStack getStackInSlotOnClosing(int slot) { return inventory.getStackInSlotOnClosing(slot); }
-	@Override public int getInventoryStackLimit() { return inventory.getInventoryStackLimit(); }
-	@Override public void openInventory() {}
-	@Override public void closeInventory() {}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return super.isUseableByPlayer(player);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean hasCustomInventoryName() {
-		return super.hasCustomInventoryName();
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return super.isItemValidForSlot(slotIndex, itemstack);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return super.canInsertItem(i, itemstack, j);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return super.canExtractItem(i, itemstack, j);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return super.getAccessibleSlotsFromSide(side);
-	}
-
-	/* ISIDEDINVENTORY */
-	@Override
-	public InventoryAdapter getInternalInventory() {
-		return inventory;
-	}
-
-	@Override
-	protected boolean canTakeStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-
-		if(!super.canTakeStackFromSide(slotIndex, itemstack, side))
-			return false;
-
-		return slotIndex == SLOT_PRODUCT;
-	}
-
-	@Override
-	protected boolean canPutStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-
-		if(!super.canPutStackFromSide(slotIndex, itemstack, side))
-			return false;
-
-		if(slotIndex == SLOT_RESOURCE)
-			return LiquidHelper.isEmptyContainer(itemstack);
-
-		if(slotIndex == SLOT_CAN) {
-			FluidContainerData container = LiquidHelper.getLiquidContainer(itemstack);
-			return container != null && resourceTank.accepts(container.fluid.getFluid());
-		}
-
-		return false;
-	}
-
-	/* ILiquidTankContainer */
+	/* IFluidHandler */
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
 		return tankManager.fill(from, resource, doFill);
@@ -488,6 +356,7 @@ public class MachineStill extends TilePowered implements ISpecialInventory, ISid
 		return tankManager;
 	}
 
+	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return tankManager.getTankInfo(from);
 	}

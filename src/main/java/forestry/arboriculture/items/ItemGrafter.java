@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
+import forestry.api.arboriculture.IToolGrafter;
+import forestry.api.core.Tabs;
+import forestry.core.items.ItemForestry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.ForgeHooks;
-
-import forestry.api.arboriculture.IToolGrafter;
-import forestry.api.core.Tabs;
-import forestry.core.items.ItemForestry;
 
 public class ItemGrafter extends ItemForestry implements IToolGrafter {
 

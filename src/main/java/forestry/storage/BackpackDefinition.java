@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.storage;
 
+import forestry.api.storage.IBackpackDefinition;
+import forestry.core.utils.StackUtils;
 import java.util.ArrayList;
 import java.util.List;
-
-import forestry.core.utils.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
-import forestry.api.storage.IBackpackDefinition;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 
@@ -87,17 +85,21 @@ public class BackpackDefinition implements IBackpackDefinition {
 			addValidItem(validItem);
 	}
 
-	public ArrayList<ItemStack> getValidItems(EntityPlayer player) {
+	public ArrayList<ItemStack> getValidItems() {
 		return validItems;
 	}
 
 	@Override
 	public boolean isValidItem(EntityPlayer player, ItemStack itemstack) {
-		for (ItemStack stack : getValidItems(player))
+		return isValidItem(itemstack);
+	}
+
+	@Override
+	public boolean isValidItem(ItemStack itemstack) {
+		for (ItemStack stack : getValidItems())
 			if (StackUtils.isCraftingEquivalent(stack, itemstack, true, false))
 				return true;
 
 		return false;
 	}
-
 }

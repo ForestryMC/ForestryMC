@@ -10,35 +10,38 @@
  ******************************************************************************/
 package forestry.energy.gadgets;
 
-import forestry.api.core.EnumErrorCode;
-import forestry.api.core.ForestryAPI;
-import forestry.api.fuels.EngineBronzeFuel;
-import forestry.api.fuels.FuelManager;
-import forestry.core.config.Config;
-import forestry.core.config.Defaults;
-import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.gadgets.Engine;
-import forestry.core.gadgets.TileBase;
-import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.network.GuiId;
-import forestry.core.network.PacketPayload;
-import forestry.core.utils.LiquidHelper;
-import forestry.core.utils.TileInventoryAdapter;
-import static forestry.factory.gadgets.MachineBottler.SLOT_PRODUCT;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
+
+import forestry.api.core.ForestryAPI;
+import forestry.api.fuels.EngineBronzeFuel;
+import forestry.api.fuels.FuelManager;
+import forestry.core.EnumErrorCode;
+import forestry.core.config.Config;
+import forestry.core.config.Defaults;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.Fluids;
+import forestry.core.fluids.TankManager;
+import forestry.core.fluids.tanks.FilteredTank;
+import forestry.core.fluids.tanks.StandardTank;
+import forestry.core.gadgets.Engine;
+import forestry.core.gadgets.TileBase;
+import forestry.core.interfaces.ILiquidTankContainer;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.GuiId;
+import forestry.core.network.PacketPayload;
 
 public class EngineBronze extends Engine implements ISidedInventory, ILiquidTankContainer {
 
@@ -62,15 +65,11 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	public void fromPacketPayload(PacketPayload payload) {
 		super.fromPacketPayload(payload);
 
-		if (payload.intPayload[3] > 0)
-			shutdown = true;
-		else
-			shutdown = false;
+		shutdown = payload.intPayload[3] > 0;
 	}
-	public FilteredTank fuelTank;
-	public FilteredTank heatingTank;
+	private final FilteredTank fuelTank;
+	private final FilteredTank heatingTank;
 	private final TankManager tankManager;
-	private final TileInventoryAdapter inventory;
 	public int burnTime;
 	public int totalTime;
 	public int currentFluidId = -1;
@@ -83,7 +82,17 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		super(Defaults.ENGINE_BRONZE_HEAT_MAX, 300000, 5000);
 		setHints(Config.hints.get("engine.bronze"));
 
-		inventory = new TileInventoryAdapter(this, 1, "Items");
+		setInternalInventory(new TileInventoryAdapter(this, 1, "Items") {
+			@Override
+			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+				if (slotIndex == SLOT_CAN) {
+					Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+					return tankManager.accepts(fluid);
+				}
+
+				return false;
+			}
+		});
 
 		fuelTank = new FilteredTank(Defaults.ENGINE_TANK_CAPACITY, FuelManager.bronzeEngineFuel.keySet());
 		fuelTank.tankMode = StandardTank.TankMode.INPUT;
@@ -104,32 +113,14 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 
 	@Override
 	public void updateServerSide() {
-
 		super.updateServerSide();
-
-		// Check if we have suitable items waiting in the item slot
-		if (inventory.getStackInSlot(SLOT_CAN) != null) {
-
-			FluidContainerData container = LiquidHelper.getLiquidContainer(inventory.getStackInSlot(SLOT_CAN));
-			if (container != null) {
-
-				StandardTank tank = null;
-
-				if (heatingTank.accepts(container.fluid.getFluid()))
-					tank = heatingTank;
-				else if (fuelTank.accepts(container.fluid.getFluid()))
-					tank = fuelTank;
-
-				if (tank != null) {
-					inventory.setInventorySlotContents(SLOT_CAN, replenishByContainer(inventory.getStackInSlot(SLOT_CAN), container, tank));
-					if (inventory.getStackInSlot(SLOT_CAN).stackSize <= 0)
-						inventory.setInventorySlotContents(0, null);
-				}
-			}
-		}
-
 		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
 			return;
+
+		IInventoryAdapter inventory = getInternalInventory();
+		// Check if we have suitable items waiting in the item slot
+		if (inventory.getStackInSlot(SLOT_CAN) != null)
+			FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
 
 		if (getHeatLevel() <= 0.2 && heatingTank.getFluidAmount() <= 0)
 			setErrorState(EnumErrorCode.NOHEAT);
@@ -156,7 +147,8 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 			if (heatStage > 0.25 && shutdown)
 				shutdown(false);
 			else if (shutdown)
-				if (heatingTank.getFluidAmount() > 0 && heatingTank.getFluid().getFluid().getName().equals(Defaults.LIQUID_LAVA)) {
+
+				if (heatingTank.getFluidAmount() > 0 && Fluids.LAVA.is(heatingTank.getFluid())) {
 					addHeat(Defaults.ENGINE_HEAT_VALUE_LAVA);
 					heatingTank.drain(1, true);
 				}
@@ -232,11 +224,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	}
 
 	/**
-	 * Returns the fuel value (power per cycle) an item of the passed ItemStack
-	 * provides
-	 *
-	 * @param fluid
-	 * @return
+	 * Returns the fuel value (power per cycle) an item of the passed fluid
 	 */
 	private int determineFuelValue(Fluid fluid) {
 		if (FuelManager.bronzeEngineFuel.containsKey(fluid))
@@ -246,8 +234,6 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	}
 
 	/**
-	 *
-	 * @param fluid
 	 * @return Duration of burn cycle of one bucket
 	 */
 	private int determineBurnTime(Fluid fluid) {
@@ -298,13 +284,8 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		return (heatingTank.getFluidAmount() * i) / Defaults.ENGINE_TANK_CAPACITY;
 	}
 
-	/**
-	 * Reads saved data
-	 * @param nbt
-	 */
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
-
 		super.readFromNBT(nbt);
 
 		burnTime = nbt.getInteger("EngineBurnTime");
@@ -317,17 +298,11 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		}
 
 		tankManager.readTanksFromNBT(nbt);
-		inventory.readFromNBT(nbt);
 
 	}
 
-	/**
-	 * Writes data to save
-	 * @param nbt
-	 */
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
-
 		super.writeToNBT(nbt);
 
 		nbt.setInteger("EngineBurnTime", burnTime);
@@ -338,7 +313,6 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 			nbt.setString("currentFluid", fluid.getName());
 
 		tankManager.writeTanksToNBT(nbt);
-		inventory.writeToNBT(nbt);
 	}
 
 	/* GUI */
@@ -379,143 +353,6 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		iCrafting.sendProgressBarUpdate(containerEngine, i + 5, currentFluidId);
 	}
 
-	/* IINVENTORY */
-	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return inventory.decrStackSize(i, j);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		return inventory.getStackInSlotOnClosing(slot);
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
-	}
-
-	@Override
-	public void openInventory() {
-	}
-
-	@Override
-	public void closeInventory() {
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 * @param player
-	 * @return 
-	 */
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return super.isUseableByPlayer(player);
-	}
-
-	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 * @return 
-	 */
-	@Override
-	public boolean hasCustomInventoryName() {
-		return super.hasCustomInventoryName();
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 * @param slotIndex
-	 * @param itemstack
-	 * @return 
-	 */
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		if (slotIndex == SLOT_CAN) {
-			FluidStack fluid = LiquidHelper.getFluidStackInContainer(itemstack);
-			if (fluid == null || fluid.amount <= 0)
-				return false;
-			return fuelTank.accepts(fluid.getFluid()) || heatingTank.accepts(fluid.getFluid());
-		}
-
-		return super.isItemValidForSlot(slotIndex, itemstack);
-	}
-
-	/* ISIDEDINVENTORY */
-	@Override
-	protected boolean canTakeStackFromSide(int slotIndex, ItemStack stack, int side) {
-		return false;
-	}
-
-	@Override
-	protected boolean canPutStackFromSide(int slotIndex, ItemStack stack, int side) {
-		if (!super.canTakeStackFromSide(slotIndex, stack, side))
-			return false;
-
-		FluidContainerData container = LiquidHelper.getLiquidContainer(stack);
-		return container != null;
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 * @return 
-	 */
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return super.canExtractItem(i, itemstack, j);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 * @return 
-	 */
-	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return super.canInsertItem(i, itemstack, j);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 * @return 
-	 */
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return super.getAccessibleSlotsFromSide(side); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	/* ISPECIALINVENTORY */
-//	@Override
-//	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
-//		FluidContainerData container = LiquidHelper.getLiquidContainer(stack);
-//		if (container == null)
-//			return 0;
-//
-//		return inventory.addStack(stack, false, doAdd);
-//	}
-//
-//	@Override
-//	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
-//		return null;
-//	}
 	// IFluidHandler
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {

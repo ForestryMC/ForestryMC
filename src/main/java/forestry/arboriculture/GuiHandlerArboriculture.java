@@ -15,10 +15,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import forestry.arboriculture.genetics.TreeHelper;
-import forestry.arboriculture.gui.ContainerTreealyzer;
 import forestry.arboriculture.gui.GuiTreealyzer;
 import forestry.arboriculture.items.ItemTreealyzer.TreealyzerInventory;
 import forestry.core.GuiHandlerBase;
+import forestry.core.gui.ContainerAlyzer;
 import forestry.core.network.GuiId;
 
 public class GuiHandlerArboriculture extends GuiHandlerBase {
@@ -36,11 +36,11 @@ public class GuiHandlerArboriculture extends GuiHandlerBase {
 				return this.getNaturalistChestContainer(TreeHelper.UID, player, world, x, y, z, decodeGuiData(id));
 
 			case TreealyzerGUI:
-				ItemStack equipped = getEquippedItem(player);
+				ItemStack equipped = player.getCurrentEquippedItem();
 				if (equipped == null)
 					return null;
 
-				return new ContainerTreealyzer(player.inventory, new TreealyzerInventory(player, equipped));
+				return new ContainerAlyzer(new TreealyzerInventory(player, equipped), player);
 
 			default:
 				return null;
@@ -62,7 +62,7 @@ public class GuiHandlerArboriculture extends GuiHandlerBase {
 				return this.getNaturalistChestGui(TreeHelper.UID, player, world, x, y, z, decodeGuiData(id));
 
 			case TreealyzerGUI:
-				ItemStack equipped = getEquippedItem(player);
+				ItemStack equipped = player.getCurrentEquippedItem();
 				if (equipped == null)
 					return null;
 

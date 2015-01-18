@@ -10,9 +10,12 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import forestry.core.config.Defaults;
+import forestry.core.config.ForestryBlock;
+import forestry.core.config.ForestryItem;
+import forestry.core.interfaces.IDescriptiveRecipe;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -20,25 +23,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-
 import net.minecraftforge.oredict.OreDictionary;
-
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
-import forestry.core.interfaces.IDescriptiveRecipe;
 
 public class ShapedRecipeCustom implements IDescriptiveRecipe {
 
 	private final int width;
 	private final int height;
 
-	private final Object ingredients[];
+	private final Object[] ingredients;
 	private final ItemStack product;
 
 	private boolean preserveNBT = false;
 
-	public ShapedRecipeCustom(int width, int height, Object ingredients[], ItemStack product) {
+	public ShapedRecipeCustom(int width, int height, Object[] ingredients, ItemStack product) {
 		this.width = width;
 		this.height = height;
 		this.ingredients = ingredients;
@@ -170,7 +167,6 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 	}
 
 	/**
-	 * @param resource
 	 * @return true if resource is a valid ingredient in this recipe.
 	 */
 	@SuppressWarnings("unchecked")

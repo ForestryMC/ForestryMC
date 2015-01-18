@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
+import forestry.plugins.PluginArboriculture;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.gen.feature.WorldGenerator;
-
-import forestry.plugins.PluginArboriculture;
 
 public class TileSapling extends TileTreeContainer {
 

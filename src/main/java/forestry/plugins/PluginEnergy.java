@@ -10,23 +10,9 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-
-import net.minecraftforge.fluids.FluidStack;
-
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.network.IGuiHandler;
-
-import forestry.api.circuits.ChipsetManager;
-import forestry.api.circuits.ICircuitLayout;
-import forestry.api.fuels.FuelManager;
-import forestry.api.fuels.GeneratorFuel;
 import forestry.core.GameMode;
-import forestry.core.circuits.Circuit;
-import forestry.core.circuits.CircuitId;
-import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
@@ -35,21 +21,16 @@ import forestry.core.gadgets.MachineDefinition;
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemForestryBlock;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.energy.GuiHandlerEnergy;
-import forestry.energy.circuits.CircuitElectricBoost;
-import forestry.energy.circuits.CircuitElectricChoke;
-import forestry.energy.circuits.CircuitElectricEfficiency;
-import forestry.energy.circuits.CircuitFireDampener;
 import forestry.energy.gadgets.EngineBronze;
 import forestry.energy.gadgets.EngineClockwork;
 import forestry.energy.gadgets.EngineCopper;
 import forestry.energy.gadgets.EngineDefinition;
-import forestry.energy.gadgets.EngineTin;
-import forestry.energy.gadgets.MachineGenerator;
 import forestry.energy.proxy.ProxyEnergy;
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 
 @Plugin(pluginID = "Energy", name = "Energy", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.energy.description")
 public class PluginEnergy extends ForestryPlugin {

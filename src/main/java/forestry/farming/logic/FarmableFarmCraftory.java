@@ -10,19 +10,17 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmable;
+import forestry.core.utils.StackUtils;
+import forestry.core.vect.Vect;
+import forestry.plugins.PluginFarmCraftory;
 import java.util.Collection;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.Vect;
-import forestry.plugins.PluginFarmCraftory;
 
 public class FarmableFarmCraftory implements IFarmable {
 
@@ -41,10 +39,7 @@ public class FarmableFarmCraftory implements IFarmable {
 			return false;
 
 		Block block = world.getBlock(x, y, z);
-		if (block != PluginFarmCraftory.blockSingle && block != PluginFarmCraftory.blockMulti)
-			return false;
-		else
-			return true;
+		return block == PluginFarmCraftory.blockSingle || block == PluginFarmCraftory.blockMulti;
 	}
 
 	@Override

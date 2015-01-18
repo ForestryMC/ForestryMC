@@ -15,11 +15,10 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.config.ForestryItem;
 import forestry.core.gui.ContainerForestry;
-import forestry.core.gui.slots.SlotCustom;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotOutput;
 import forestry.core.proxy.Proxies;
-import forestry.food.items.ItemBeverage;
 import forestry.food.items.ItemInfuser.InfuserInventory;
 
 public class ContainerInfuser extends ContainerForestry {
@@ -31,24 +30,24 @@ public class ContainerInfuser extends ContainerForestry {
 		this.inventory = inventory;
 
 		// Input
-		this.addSlot(new SlotCustom(inventory, 0, 152, 12, ForestryItem.beverage.getItemStack()));
+		this.addSlotToContainer(new SlotFiltered(inventory, 0, 152, 12));
 
 		// Output
-		this.addSlot(new SlotCustom(inventory, 1, 152, 72, ItemBeverage.class));
+		this.addSlotToContainer(new SlotOutput(inventory, 1, 152, 72));
 
 		// Ingredients
-		this.addSlot(new Slot(inventory, 2, 12, 12));
-		this.addSlot(new Slot(inventory, 3, 12, 32));
-		this.addSlot(new Slot(inventory, 4, 12, 52));
-		this.addSlot(new Slot(inventory, 5, 12, 72));
+		this.addSlotToContainer(new SlotFiltered(inventory, 2, 12, 12));
+		this.addSlotToContainer(new SlotFiltered(inventory, 3, 12, 32));
+		this.addSlotToContainer(new SlotFiltered(inventory, 4, 12, 52));
+		this.addSlotToContainer(new SlotFiltered(inventory, 5, 12, 72));
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++)
 			for (int l1 = 0; l1 < 9; l1++)
-				addSlot(new Slot(inventoryplayer, l1 + i1 * 9 + 9, 8 + l1 * 18, 103 + i1 * 18));
+				addSlotToContainer(new Slot(inventoryplayer, l1 + i1 * 9 + 9, 8 + l1 * 18, 103 + i1 * 18));
 		// Player hotbar
 		for (int j1 = 0; j1 < 9; j1++)
-			addSlot(new Slot(inventoryplayer, j1, 8 + j1 * 18, 161));
+			addSlotToContainer(new Slot(inventoryplayer, j1, 8 + j1 * 18, 161));
 	}
 
 	@Override

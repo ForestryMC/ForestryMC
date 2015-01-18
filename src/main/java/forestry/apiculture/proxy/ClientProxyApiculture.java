@@ -10,13 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.proxy;
 
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.world.World;
-
 import cpw.mods.fml.client.registry.RenderingRegistry;
-
-import net.minecraftforge.client.MinecraftForgeClient;
-
 import forestry.apiculture.entities.EntityBee;
 import forestry.apiculture.render.BeeItemRenderer;
 import forestry.apiculture.render.EntityBeeFX;
@@ -28,6 +22,9 @@ import forestry.core.interfaces.IBlockRenderer;
 import forestry.core.render.RenderAnalyzer;
 import forestry.core.render.TextureManager;
 import forestry.plugins.PluginApiculture;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 public class ClientProxyApiculture extends ProxyApiculture {
 

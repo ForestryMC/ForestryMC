@@ -10,17 +10,16 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import forestry.core.interfaces.IBlockRenderer;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-
-import forestry.core.interfaces.IBlockRenderer;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
 
 public class MachineNBTDefinition extends MachineDefinition {
 

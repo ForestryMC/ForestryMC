@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.lepidopterology;
 
-import net.minecraft.world.World;
-
 import forestry.api.arboriculture.ILeafTickHandler;
 import forestry.api.arboriculture.ITree;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.core.proxy.Proxies;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.plugins.PluginLepidopterology;
+import net.minecraft.world.World;
 
 public class ButterflySpawner implements ILeafTickHandler {
 

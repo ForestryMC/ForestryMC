@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.network.IGuiHandler;
 
+import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.EnumPostage;
 import forestry.api.mail.PostManager;
 import forestry.api.recipes.RecipeManagers;
@@ -26,6 +27,7 @@ import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
+import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.interfaces.IOreDictionaryHandler;
@@ -33,10 +35,7 @@ import forestry.core.interfaces.IPacketHandler;
 import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemForestryBlock;
 import forestry.core.proxy.Proxies;
-import forestry.core.triggers.Trigger;
-import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.ShapedRecipeCustom;
-import forestry.api.mail.EnumAddressee;
 import forestry.mail.GuiHandlerMail;
 import forestry.mail.PacketHandlerMail;
 import forestry.mail.PostRegistry;
@@ -52,26 +51,13 @@ import forestry.mail.items.ItemLetter;
 import forestry.mail.items.ItemStamps;
 import forestry.mail.items.ItemStamps.StampInfo;
 import forestry.mail.proxy.ProxyMail;
-import forestry.mail.triggers.TriggerBuffer;
-import forestry.mail.triggers.TriggerHasMail;
-import forestry.mail.triggers.TriggerLowInput;
-import forestry.mail.triggers.TriggerLowPaper;
-import forestry.mail.triggers.TriggerLowStamps;
+import forestry.mail.triggers.MailTriggers;
 
 @Plugin(pluginID = "Mail", name = "Mail", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.mail.description")
 public class PluginMail extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.mail.proxy.ClientProxyMail", serverSide = "forestry.mail.proxy.ProxyMail")
 	public static ProxyMail proxy;
-	public static Trigger triggerHasMail;
-	public static Trigger lowPaper64;
-	public static Trigger lowPaper32;
-	public static Trigger lowPostage40;
-	public static Trigger lowPostage20;
-	public static Trigger lowInput25;
-	public static Trigger lowInput10;
-	public static Trigger highBuffer75;
-	public static Trigger highBuffer90;
 	public static MachineDefinition definitionMailbox;  
 	public static MachineDefinition definitionTradestation;
 	public static MachineDefinition definitionPhilatelist;
@@ -85,15 +71,10 @@ public class PluginMail extends ForestryPlugin {
 
 		new TickHandlerMailClient();
 
-		triggerHasMail = new TriggerHasMail();
-		lowPaper64 = new TriggerLowPaper("mail.lowPaper.64", 64);
-		lowPaper32 = new TriggerLowPaper("mail.lowPaper.32", 32);
-		lowPostage40 = new TriggerLowStamps("mail.lowStamps.40", 40);
-		lowPostage20 = new TriggerLowStamps("mail.lowStamps.20", 20);
-		lowInput25 = new TriggerLowInput("mail.lowInput.25", 0.25f);
-		lowInput10 = new TriggerLowInput("mail.lowInput.10", 0.1f);
-		highBuffer75 = new TriggerBuffer("mail.lowBuffer.75", 0.75f);
-		highBuffer90 = new TriggerBuffer("mail.lowBuffer.90", 0.90f);
+		// Triggers
+		if (PluginManager.Module.BUILDCRAFT_STATEMENTS.isEnabled()) {
+			MailTriggers.initialize();
+		}
 
 		ForestryBlock.mail.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "mail");
 
@@ -201,7 +182,7 @@ public class PluginMail extends ForestryPlugin {
 						'X', stampDefinitions[i].getCraftingIngredient(),
 						'#', Items.paper,
 						'Z', stampGlue);
-				RecipeManagers.carpenterManager.addRecipe(10, LiquidHelper.getLiquid(Defaults.LIQUID_SEEDOIL, 300), null, ForestryItem.stamps.getItemStack(9, i),
+				RecipeManagers.carpenterManager.addRecipe(10, Fluids.SEEDOIL.getFluid(300), null, ForestryItem.stamps.getItemStack(9, i),
 						"XXX", "###",
 						'X', stampDefinitions[i].getCraftingIngredient(),
 						'#', Items.paper);
@@ -211,7 +192,7 @@ public class PluginMail extends ForestryPlugin {
 		Proxies.common.addRecipe(new ItemStack(Items.paper), "###", '#', ForestryItem.letters.getItemStack(1, Defaults.WILDCARD));
 
 		// Carpenter
-		RecipeManagers.carpenterManager.addRecipe(10, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 250), null, ForestryItem.letters.getItemStack(), "###", "###", '#', ForestryItem.woodPulp);
+		RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(250), null, ForestryItem.letters.getItemStack(), "###", "###", '#', ForestryItem.woodPulp);
 
 		Proxies.common.addShapelessRecipe(ForestryItem.catalogue.getItemStack(), ForestryItem.stamps.getItemStack(1, Defaults.WILDCARD), new ItemStack(Items.book));
 	}

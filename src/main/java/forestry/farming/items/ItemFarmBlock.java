@@ -18,7 +18,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.gadgets.IStructureBlockItem;
-import forestry.farming.gadgets.TileFarm.EnumFarmBlock;
+import forestry.farming.gadgets.EnumFarmBlock;
 
 public class ItemFarmBlock extends ItemBlock implements IStructureBlockItem {
 

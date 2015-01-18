@@ -10,21 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-import net.minecraftforge.common.EnumPlantType;
-
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
@@ -43,6 +30,15 @@ import forestry.core.config.ForestryItem;
 import forestry.core.genetics.AlleleSpecies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.Utils;
+import java.util.ArrayList;
+import java.util.HashMap;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.common.EnumPlantType;
 
 public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpecies, IIconProvider {
 
@@ -144,7 +140,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 		int highest = 0;
 		exclude.add(species);
 
-		for(IMutation mutation : getRoot().getPaths(species, EnumBeeChromosome.SPECIES.ordinal())) {
+		for(IMutation mutation : getRoot().getPaths(species, EnumBeeChromosome.SPECIES)) {
 			if(!exclude.contains(mutation.getAllele0())) {
 				int otherAdvance = getGeneticAdvancement(mutation.getAllele0(), exclude);
 				if(otherAdvance > highest)

@@ -10,9 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.core.Tabs;
+import forestry.arboriculture.WoodType;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.StackUtils;
 import java.util.ArrayList;
 import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -23,16 +29,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import forestry.api.core.Tabs;
-import forestry.arboriculture.WoodType;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.StackUtils;
 
 public class BlockArbStairs extends BlockStairs {
 
@@ -56,8 +55,6 @@ public class BlockArbStairs extends BlockStairs {
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
 		for (WoodType type : WoodType.VALUES) {
-			if(!type.hasPlank)
-				continue;
 			ItemStack stack = new ItemStack(item, 1, 0);
 			NBTTagCompound compound = new NBTTagCompound();
 			type.saveToCompound(compound);
@@ -107,6 +104,25 @@ public class BlockArbStairs extends BlockStairs {
 	@Override
 	public TileEntity createTileEntity(World world, int meta) {
 		return new TileStairs();
+	}
+
+	@Override
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
+		ItemStack itemStack = super.getPickBlock(target, world, x, y, z, player);
+		NBTTagCompound stairsNBT = getTagCompoundForStairs(world, x, y, z);
+		itemStack.setTagCompound(stairsNBT);
+		return itemStack;
+	}
+
+	private static NBTTagCompound getTagCompoundForStairs(IBlockAccess world, int x, int y, int z) {
+		TileStairs stairs = getStairTile(world, x, y, z);
+
+		NBTTagCompound nbttagcompound = new NBTTagCompound();
+		if (stairs == null || stairs.getType() == null)
+			return nbttagcompound;
+
+		stairs.getType().saveToCompound(nbttagcompound);
+		return nbttagcompound;
 	}
 
 	/* ICONS */

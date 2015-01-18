@@ -10,11 +10,9 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import java.util.EnumSet;
-
-import net.minecraftforge.common.EnumPlantType;
-
 import forestry.api.genetics.IAllelePlantType;
+import java.util.EnumSet;
+import net.minecraftforge.common.EnumPlantType;
 
 public class AllelePlantType extends Allele implements IAllelePlantType {
 

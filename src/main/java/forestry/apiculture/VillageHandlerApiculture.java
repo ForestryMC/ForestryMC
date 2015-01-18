@@ -10,9 +10,19 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import cpw.mods.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
+import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
+import forestry.api.apiculture.EnumBeeType;
+import forestry.apiculture.genetics.BeeTemplates;
+import forestry.apiculture.items.ItemHoneycomb;
+import forestry.apiculture.worldgen.ComponentVillageBeeHouse;
+import forestry.core.config.Defaults;
+import forestry.core.config.ForestryBlock;
+import forestry.core.config.ForestryItem;
+import forestry.core.proxy.Proxies;
+import forestry.plugins.PluginApiculture;
 import java.util.List;
 import java.util.Random;
-
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -23,24 +33,13 @@ import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 
-import cpw.mods.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
-import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
-
-import forestry.api.apiculture.EnumBeeType;
-import forestry.apiculture.genetics.BeeTemplates;
-import forestry.apiculture.items.ItemHoneycomb;
-import forestry.apiculture.worldgen.ComponentVillageBeeHouse;
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
-import forestry.plugins.PluginApiculture;
-
 public class VillageHandlerApiculture implements IVillageCreationHandler, IVillageTradeHandler {
 
 	public static void registerVillageComponents() {
 		try {
 			MapGenStructureIO.func_143031_a(ComponentVillageBeeHouse.class, "Forestry:BeeHouse");
 		} catch (Throwable e) {
+			Proxies.log.severe("Failed to register village beehouse.");
 		}
 	}
 

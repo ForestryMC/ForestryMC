@@ -10,12 +10,10 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import net.minecraft.entity.player.EntityPlayer;
 import forestry.lepidopterology.entities.EntityButterfly.EnumButterflyState;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class AIButterflyFlee extends AIButterflyMovement {
-
-	private EntityPlayer player;
 
 	public AIButterflyFlee(EntityButterfly entity) {
 		super(entity);
@@ -25,7 +23,7 @@ public class AIButterflyFlee extends AIButterflyMovement {
 	@Override
 	public boolean shouldExecute() {
 
-		player = entity.worldObj.getClosestPlayerToEntity(entity, entity.getButterfly().getGenome().getPrimary().getFlightDistance());
+		EntityPlayer player = entity.worldObj.getClosestPlayerToEntity(entity, entity.getButterfly().getGenome().getPrimary().getFlightDistance());
 
 		if (player == null || player.isSneaking())
 			return false;

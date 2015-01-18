@@ -11,7 +11,6 @@
 package forestry.core.inventory.wrappers;
 
 import java.util.Iterator;
-
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -32,7 +31,7 @@ public class InventoryIterator implements Iterable<IInvSlot> {
 
 	private InventoryIterator(IInventory inv) {
 		this.inv = inv;
-		this.invSize = inv.getSizeInventory();
+		this.invSize = inv != null ? inv.getSizeInventory() : 0;
 	}
 
 	@Override

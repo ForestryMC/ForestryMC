@@ -10,19 +10,26 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
+
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
+
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.storage.ICrateRegistry;
+import forestry.api.storage.StorageManager;
 import forestry.core.CreativeTabForestry;
 import forestry.core.GameMode;
 import forestry.core.PickupHandlerCore;
@@ -52,14 +59,11 @@ import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemArmorNaturalist;
 import forestry.core.items.ItemAssemblyKit;
-import forestry.core.items.ItemCrated;
 import forestry.core.items.ItemForestry;
 import forestry.core.items.ItemForestryBlock;
 import forestry.core.items.ItemForestryPickaxe;
 import forestry.core.items.ItemForestryShovel;
 import forestry.core.items.ItemFruit;
-import forestry.core.items.ItemLiquidContainer;
-import forestry.core.items.ItemLiquidContainer.EnumContainerType;
 import forestry.core.items.ItemMisc;
 import forestry.core.items.ItemOverlay;
 import forestry.core.items.ItemOverlay.OverlayInfo;
@@ -69,8 +73,6 @@ import forestry.core.items.ItemWrench;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ForestryModEnvWarningCallable;
 import forestry.core.utils.ShapedRecipeCustom;
-
-import java.util.ArrayList;
 
 @Plugin(pluginID = "Core", name = "Core", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.core.description")
 public class PluginCore extends ForestryPlugin {
@@ -110,19 +112,14 @@ public class PluginCore extends ForestryPlugin {
 		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, 1);
 
 		ForestryBlock.resources.registerBlock(new BlockResource(), ItemForestryBlock.class, "resources");
-		ForestryBlock.resources.block().setHarvestLevel("pickaxe", 1, 0);
-		ForestryBlock.resources.block().setHarvestLevel("pickaxe", 1, 1);
-		ForestryBlock.resources.block().setHarvestLevel("pickaxe", 1, 2);
+		ForestryBlock.resources.block().setHarvestLevel("pickaxe", 1);
 
 		OreDictionary.registerOre("oreApatite", ForestryBlock.resources.getItemStack(1, 0));
 		OreDictionary.registerOre("oreCopper", ForestryBlock.resources.getItemStack(1, 1));
 		OreDictionary.registerOre("oreTin", ForestryBlock.resources.getItemStack(1, 2));
 
 		ForestryBlock.resourceStorage.registerBlock(new BlockResourceStorageBlock(), ItemForestryBlock.class, "resourceStorage");
-		ForestryBlock.resourceStorage.block().setHarvestLevel("pickaxe", 0, 0);
-		ForestryBlock.resourceStorage.block().setHarvestLevel("pickaxe", 0, 1);
-		ForestryBlock.resourceStorage.block().setHarvestLevel("pickaxe", 0, 2);
-		ForestryBlock.resourceStorage.block().setHarvestLevel("pickaxe", 0, 3);
+		ForestryBlock.resourceStorage.block().setHarvestLevel("pickaxe", 0);
 
 		OreDictionary.registerOre("blockApatite", ForestryBlock.resourceStorage.getItemStack(1, 0));
 		OreDictionary.registerOre("blockCopper", ForestryBlock.resourceStorage.getItemStack(1, 1));
@@ -159,7 +156,6 @@ public class PluginCore extends ForestryPlugin {
 
 	@Override
 	protected void registerItems() {
-
 		// / FERTILIZERS
 		ForestryItem.fertilizerBio.registerItem((new ItemForestry()), "fertilizerBio");
 		ForestryItem.fertilizerCompound.registerItem((new ItemForestry()).setBonemeal(true), "fertilizerCompound");
@@ -192,13 +188,6 @@ public class PluginCore extends ForestryPlugin {
 
 		/* ARMOR */
 		ForestryItem.naturalistHat.registerItem(new ItemArmorNaturalist(0), "naturalistHelmet");
-
-		// / DISCONTINUED
-		// ForestryItem.vialEmpty = (new
-		// ItemForestry(Config.getOrCreateIntProperty("vialEmpty",
-		// Config.CATEGORY_ITEM, Defaults.ID_ITEM_VIAL_EMPTY)))
-		// .setItemName("vialEmpty").setIconIndex(10);
-		ForestryItem.vialCatalyst.registerItem((new ItemForestry()), "vialCatalyst");
 
 		// / PEAT PRODUCTION
 		ForestryItem.peat.registerItem((new ItemForestry()), "peat");
@@ -270,51 +259,10 @@ public class PluginCore extends ForestryPlugin {
 
 		// FRUITS
 		ForestryItem.fruits.registerItem(new ItemFruit(), "fruits");
+	}
 
-		// / EMPTY LIQUID CONTAINERS
-		ForestryItem.waxCapsule.registerItem(new ItemLiquidContainer(EnumContainerType.CAPSULE, -1).setMaxStackSize(64), "waxCapsule");
-		ForestryItem.canEmpty.registerItem(new ItemLiquidContainer(EnumContainerType.CAN, -1).setMaxStackSize(64), "canEmpty");
-		ForestryItem.refractoryEmpty.registerItem(new ItemLiquidContainer(EnumContainerType.REFRACTORY, -1).setMaxStackSize(64), "refractoryEmpty");
-
-		// / BUCKETS
-		ForestryItem.bucketBiomass.registerItem(new ItemForestry().setContainerItem(Items.bucket).setMaxStackSize(1), "bucketBiomass");
-		ForestryItem.bucketBiofuel.registerItem(new ItemForestry().setContainerItem(Items.bucket).setMaxStackSize(1), "bucketBiofuel");
-
-		// / WAX CAPSULES
-		ForestryItem.waxCapsuleWater.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0x2432ec)), "waxCapsuleWater");
-		ForestryItem.waxCapsuleBiomass.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0x83d41c)), "waxCapsuleBiomass");
-		ForestryItem.waxCapsuleBiofuel.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0xff7909)), "waxCapsuleBiofuel");
-		ForestryItem.waxCapsuleOil.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0x404040)), "waxCapsuleOil");
-		ForestryItem.waxCapsuleFuel.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0xffff00)), "waxCapsuleFuel");
-		ForestryItem.waxCapsuleSeedOil.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0xffffa9)), "waxCapsuleSeedOil");
-		ForestryItem.waxCapsuleHoney.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0xffda47)).setDrink(Defaults.FOOD_HONEY_HEAL, Defaults.FOOD_HONEY_SATURATION), "waxCapsuleHoney");
-		ForestryItem.waxCapsuleJuice.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0x99d04e)).setDrink(Defaults.FOOD_JUICE_HEAL, Defaults.FOOD_JUICE_SATURATION), "waxCapsuleJuice");
-		ForestryItem.waxCapsuleIce.registerItem((new ItemLiquidContainer(EnumContainerType.CAPSULE, 0xdcffff)), "waxCapsuleIce");
-
-		// / CANS
-		ForestryItem.canWater.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0x2432ec)), "waterCan");
-		ForestryItem.canBiomass.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0x83d41c)), "biomassCan");
-		ForestryItem.canBiofuel.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0xff7909)), "biofuelCan");
-		ForestryItem.canOil.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0x404040)), "canOil");
-		ForestryItem.canFuel.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0xffff00)), "canFuel");
-		ForestryItem.canLava.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0xfd461f)), "canLava");
-		ForestryItem.canSeedOil.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0xffffa9)), "canSeedOil");
-		ForestryItem.canHoney.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0xffda47)).setDrink(Defaults.FOOD_HONEY_HEAL, Defaults.FOOD_HONEY_SATURATION), "canHoney");
-		ForestryItem.canJuice.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0x99d04e)).setDrink(Defaults.FOOD_JUICE_HEAL, Defaults.FOOD_JUICE_SATURATION), "canJuice");
-		ForestryItem.canIce.registerItem((new ItemLiquidContainer(EnumContainerType.CAN, 0xdcffff)), "canIce");
-
-		// / REFRACTORY CAPSULES
-		ForestryItem.refractoryWater.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0x2432ec)), "refractoryWater");
-		ForestryItem.refractoryBiomass.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0x83d41c)), "refractoryBiomass");
-		ForestryItem.refractoryBiofuel.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0xff7909)), "refractoryBiofuel");
-		ForestryItem.refractoryOil.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0x404040)), "refractoryOil");
-		ForestryItem.refractoryFuel.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0xffff00)), "refractoryFuel");
-		ForestryItem.refractoryLava.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0xfd461f)), "refractoryLava");
-		ForestryItem.refractorySeedOil.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0xffffa9)), "refractorySeedOil");
-		ForestryItem.refractoryHoney.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0xffda47)).setDrink(Defaults.FOOD_HONEY_HEAL, Defaults.FOOD_HONEY_SATURATION), "refractoryHoney");
-		ForestryItem.refractoryJuice.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0x99d04e)).setDrink(Defaults.FOOD_JUICE_HEAL, Defaults.FOOD_JUICE_SATURATION), "refractoryJuice");
-		ForestryItem.refractoryIce.registerItem((new ItemLiquidContainer(EnumContainerType.REFRACTORY, 0xdcffff)), "refractoryIce");
-
+	@Override
+	public void postInit() {
 	}
 
 	@Override
@@ -323,45 +271,48 @@ public class PluginCore extends ForestryPlugin {
 
 	@Override
 	protected void registerCrates() {
-		// / CRATES
-		ForestryItem.cratedWood.registerItem(new ItemCrated(new ItemStack(Blocks.log)), "cratedWood");
-		ForestryItem.cratedCobblestone.registerItem(new ItemCrated(new ItemStack(Blocks.cobblestone)), "cratedCobblestone");
-		ForestryItem.cratedDirt.registerItem(new ItemCrated(new ItemStack(Blocks.dirt)), "cratedDirt");
-		ForestryItem.cratedStone.registerItem(new ItemCrated(new ItemStack(Blocks.stone)), "cratedStone");
-		ForestryItem.cratedBrick.registerItem(new ItemCrated(new ItemStack(Blocks.brick_block)), "cratedBrick");
-		ForestryItem.cratedCacti.registerItem(new ItemCrated(new ItemStack(Blocks.cactus)), "cratedCacti");
-		ForestryItem.cratedSand.registerItem(new ItemCrated(new ItemStack(Blocks.sand)), "cratedSand");
-		ForestryItem.cratedObsidian.registerItem(new ItemCrated(new ItemStack(Blocks.obsidian)), "cratedObsidian");
-		ForestryItem.cratedNetherrack.registerItem(new ItemCrated(new ItemStack(Blocks.netherrack)), "cratedNetherrack");
-		ForestryItem.cratedSoulsand.registerItem(new ItemCrated(new ItemStack(Blocks.soul_sand)), "cratedSoulsand");
-		ForestryItem.cratedSandstone.registerItem(new ItemCrated(new ItemStack(Blocks.sandstone)), "cratedSandstone");
-		ForestryItem.cratedBogearth.registerItem(new ItemCrated(ForestryBlock.soil.getItemStack(1, 1)), "cratedBogearth");
-		ForestryItem.cratedHumus.registerItem(new ItemCrated(ForestryBlock.soil.getItemStack(1, 0)), "cratedHumus");
-		ForestryItem.cratedNetherbrick.registerItem(new ItemCrated(new ItemStack(Blocks.nether_brick)), "cratedNetherbrick");
-		ForestryItem.cratedPeat.registerItem(new ItemCrated(ForestryItem.peat.getItemStack()), "cratedPeat");
-		ForestryItem.cratedApatite.registerItem(new ItemCrated(ForestryItem.apatite.getItemStack()), "cratedApatite");
-		ForestryItem.cratedFertilizer.registerItem(new ItemCrated(ForestryItem.fertilizerCompound.getItemStack()), "cratedFertilizer");
-		ForestryItem.cratedTin.registerItem(new ItemCrated(ForestryItem.ingotTin.getItemStack()), "cratedTin");
-		ForestryItem.cratedCopper.registerItem(new ItemCrated(ForestryItem.ingotCopper.getItemStack()), "cratedCopper");
-		ForestryItem.cratedBronze.registerItem(new ItemCrated(ForestryItem.ingotBronze.getItemStack()), "cratedBronze");
-		ForestryItem.cratedWheat.registerItem(new ItemCrated(new ItemStack(Items.wheat)), "cratedWheat");
-		ForestryItem.cratedMycelium.registerItem(new ItemCrated(new ItemStack(Blocks.mycelium)), "cratedMycelium");
-		ForestryItem.cratedMulch.registerItem(new ItemCrated(ForestryItem.mulch.getItemStack()), "cratedMulch");
-		ForestryItem.cratedCookies.registerItem(new ItemCrated(new ItemStack(Items.cookie)), "cratedCookies");
-		ForestryItem.cratedRedstone.registerItem(new ItemCrated(new ItemStack(Items.redstone)), "cratedRedstone");
-		ForestryItem.cratedLapis.registerItem(new ItemCrated(new ItemStack(Items.dye, 1, 4)), "cratedLapis");
-		ForestryItem.cratedReeds.registerItem(new ItemCrated(new ItemStack(Items.reeds)), "cratedReeds");
-		ForestryItem.cratedClay.registerItem(new ItemCrated(new ItemStack(Items.clay_ball)), "cratedClay");
-		ForestryItem.cratedGlowstone.registerItem(new ItemCrated(new ItemStack(Items.glowstone_dust)), "cratedGlowstone");
-		ForestryItem.cratedApples.registerItem(new ItemCrated(new ItemStack(Items.apple)), "cratedApples");
-		ForestryItem.cratedNetherwart.registerItem(new ItemCrated(new ItemStack(Items.nether_wart)), "cratedNetherwart");
-		ForestryItem.cratedPhosphor.registerItem(new ItemCrated(ForestryItem.phosphor.getItemStack()), "cratedPhosphor");
-		ForestryItem.cratedAsh.registerItem(new ItemCrated(ForestryItem.ash.getItemStack()), "cratedAsh");
-		ForestryItem.cratedCharcoal.registerItem(new ItemCrated(new ItemStack(Items.coal, 1, 1)), "cratedCharcoal");
-		ForestryItem.cratedGravel.registerItem(new ItemCrated(new ItemStack(Blocks.gravel)), "cratedGravel");
-		ForestryItem.cratedCoal.registerItem(new ItemCrated(new ItemStack(Items.coal, 1, 0)), "cratedCoal");
-		ForestryItem.cratedSeeds.registerItem(new ItemCrated(new ItemStack(Items.wheat_seeds)), "cratedSeeds");
-		ForestryItem.cratedSaplings.registerItem(new ItemCrated(new ItemStack(Blocks.sapling)), "cratedSaplings");
+		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
+		crateRegistry.registerCrate(Blocks.log, "cratedWood");
+		crateRegistry.registerCrate(Blocks.cobblestone, "cratedCobblestone");
+		crateRegistry.registerCrate(Blocks.dirt, "cratedDirt");
+		crateRegistry.registerCrate(Blocks.stone, "cratedStone");
+		crateRegistry.registerCrate(Blocks.brick_block, "cratedBrick");
+		crateRegistry.registerCrate(Blocks.cactus, "cratedCacti");
+		crateRegistry.registerCrate(Blocks.sand, "cratedSand");
+		crateRegistry.registerCrate(Blocks.obsidian, "cratedObsidian");
+		crateRegistry.registerCrate(Blocks.netherrack, "cratedNetherrack");
+		crateRegistry.registerCrate(Blocks.soul_sand, "cratedSoulsand");
+		crateRegistry.registerCrate(Blocks.sandstone, "cratedSandstone");
+		crateRegistry.registerCrate(ForestryBlock.soil.getItemStack(1, 0), "cratedHumus");
+		crateRegistry.registerCrate(ForestryBlock.soil.getItemStack(1, 1), "cratedBogearth");
+		crateRegistry.registerCrate(Blocks.nether_brick, "cratedNetherbrick");
+		crateRegistry.registerCrate(ForestryItem.peat.item(), "cratedPeat");
+		crateRegistry.registerCrate(ForestryItem.apatite.item(), "cratedApatite");
+		crateRegistry.registerCrate(ForestryItem.fertilizerCompound.item(), "cratedFertilizer");
+		crateRegistry.registerCrate(Items.wheat, "cratedWheat");
+		crateRegistry.registerCrate(Blocks.mycelium, "cratedMycelium");
+		crateRegistry.registerCrate(ForestryItem.mulch.item(), "cratedMulch");
+		crateRegistry.registerCrate(Items.cookie, "cratedCookies");
+		crateRegistry.registerCrate(Items.redstone, "cratedRedstone");
+		crateRegistry.registerCrate(new ItemStack(Items.dye, 1, 4), "cratedLapis");
+		crateRegistry.registerCrate(Items.reeds, "cratedReeds");
+		crateRegistry.registerCrate(Items.clay_ball, "cratedClay");
+		crateRegistry.registerCrate(Items.glowstone_dust, "cratedGlowstone");
+		crateRegistry.registerCrate(Items.apple, "cratedApples");
+		crateRegistry.registerCrate(new ItemStack(Items.nether_wart), "cratedNetherwart");
+		crateRegistry.registerCrate(ForestryItem.phosphor.item(), "cratedPhosphor");
+		crateRegistry.registerCrate(ForestryItem.ash.item(), "cratedAsh");
+		crateRegistry.registerCrate(new ItemStack(Items.coal, 1, 1), "cratedCharcoal");
+		crateRegistry.registerCrate(new ItemStack(Items.coal, 1, 0), "cratedCoal");
+		crateRegistry.registerCrate(Blocks.gravel, "cratedGravel");
+		crateRegistry.registerCrate(Items.wheat_seeds, "cratedSeeds");
+		crateRegistry.registerCrate(Blocks.sapling, "cratedSaplings");
+		crateRegistry.registerCrate(Items.potato, "cratedPotatoes");
+		crateRegistry.registerCrate(Items.carrot, "cratedCarrots");
+
+		crateRegistry.registerCrateUsingOreDict(ForestryItem.ingotTin.item(), "cratedTin");
+		crateRegistry.registerCrateUsingOreDict(ForestryItem.ingotCopper.item(), "cratedCopper");
+		crateRegistry.registerCrateUsingOreDict(ForestryItem.ingotBronze.item(), "cratedBronze");
 	}
 
 	@Override
@@ -373,7 +324,7 @@ public class PluginCore extends ForestryPlugin {
 		Proxies.common.addSmelting(ForestryBlock.resources.getItemStack(1, 2), ForestryItem.ingotTin.getItemStack(), 0.5f);
 
 		/* BRONZE INGOTS */
-		if (Config.getCraftingBronzeEnabled())
+		if (Config.isCraftingBronzeEnabled())
 			Proxies.common.addShapelessRecipe(ForestryItem.ingotBronze.getItemStack(4), "ingotTin", "ingotCopper", "ingotCopper", "ingotCopper");
 
 		/* STURDY MACHINE */
@@ -431,10 +382,6 @@ public class PluginCore extends ForestryPlugin {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.waxCapsuleWater, 'Y', Blocks.sand);
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.refractoryWater, 'Y', Blocks.sand);
 		}
-
-		// Vials and catalyst
-		Proxies.common.addRecipe(ForestryItem.vialCatalyst.getItemStack(3), "###", "YXY", '#', ForestryItem.waxCapsule.item(), 'X', Items.bone, 'Y', ForestryItem.fertilizerCompound);
-		Proxies.common.addRecipe(ForestryItem.vialCatalyst.getItemStack(3), "###", "YXY", '#', ForestryItem.canEmpty.item(), 'X', Items.bone, 'Y', ForestryItem.fertilizerCompound);
 
 		// Crafting Material
 		Proxies.common.addRecipe(new ItemStack(Items.string), "#", "#", "#", '#', ForestryItem.craftingMaterial.getItemStack(1, 2));

@@ -10,16 +10,7 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import java.util.ArrayList;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.WorldSavedData;
-
-import net.minecraftforge.common.MinecraftForge;
-
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.core.ForestryEvent;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
@@ -29,6 +20,11 @@ import forestry.api.genetics.IMutation;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketNBT;
 import forestry.core.proxy.Proxies;
+import java.util.ArrayList;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.WorldSavedData;
+import net.minecraftforge.common.MinecraftForge;
 
 public abstract class BreedingTracker extends WorldSavedData implements IBreedingTracker {
 

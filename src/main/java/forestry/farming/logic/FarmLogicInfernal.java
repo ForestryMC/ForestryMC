@@ -10,26 +10,22 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.Collection;
-import java.util.Stack;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.Utils;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
+import java.util.Collection;
+import java.util.Stack;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class FarmLogicInfernal extends FarmLogicHomogeneous {
 
@@ -93,7 +89,7 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 			if (!isAirBlock(position) && !Utils.isReplaceableBlock(world, position.x, position.y, position.z))
 				continue;
 
-			ItemStack below = getAsItemStack(position.add(new Vect(0, -1, 0)));
+			ItemStack below = getAsItemStack(position.add(0, -1, 0));
 			if (!isAcceptedGround(below))
 				continue;
 

@@ -1,9 +1,8 @@
 package forestry.core.gui;
 
-import forestry.core.gui.slots.SlotCustom;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.inventory.AlyzerInventory;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.AlyzerInventory;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -12,25 +11,26 @@ public class ContainerAlyzer extends ContainerItemInventory {
 
 	private final AlyzerInventory inventory;
 
-	protected ContainerAlyzer(InventoryPlayer inventoryplayer, AlyzerInventory inventory, Object[] acceptedEnergy, Object... acceptedSpecimens) {
-		super(inventory, inventoryplayer.player);
+	public ContainerAlyzer(AlyzerInventory inventory, EntityPlayer player) {
+		super(inventory, player);
 
+		InventoryPlayer inventoryplayer = player.inventory;
 		this.inventory = inventory;
 
 		final int xPosLeftSlots = 223;
 
 		// Energy
-		this.addSlot(new SlotCustom(inventory, AlyzerInventory.SLOT_ENERGY, xPosLeftSlots, 8, acceptedEnergy));
+		this.addSlotToContainer(new SlotFiltered(inventory, AlyzerInventory.SLOT_ENERGY, xPosLeftSlots, 8));
 
 		// Bee to analyze
-		this.addSlot(new SlotCustom(inventory, AlyzerInventory.SLOT_SPECIMEN, xPosLeftSlots, 26, acceptedSpecimens));
+		this.addSlotToContainer(new SlotFiltered(inventory, AlyzerInventory.SLOT_SPECIMEN, xPosLeftSlots, 26));
 
 		// Analyzed bee
-		this.addSlot(new SlotCustom(inventory, AlyzerInventory.SLOT_ANALYZE_1, xPosLeftSlots, 57, acceptedSpecimens));
-		this.addSlot(new SlotCustom(inventory, AlyzerInventory.SLOT_ANALYZE_2, xPosLeftSlots, 75, acceptedSpecimens));
-		this.addSlot(new SlotCustom(inventory, AlyzerInventory.SLOT_ANALYZE_3, xPosLeftSlots, 93, acceptedSpecimens));
-		this.addSlot(new SlotCustom(inventory, AlyzerInventory.SLOT_ANALYZE_4, xPosLeftSlots, 111, acceptedSpecimens));
-		this.addSlot(new SlotCustom(inventory, AlyzerInventory.SLOT_ANALYZE_5, xPosLeftSlots, 129, acceptedSpecimens));
+		this.addSlotToContainer(new SlotFiltered(inventory, AlyzerInventory.SLOT_ANALYZE_1, xPosLeftSlots, 57));
+		this.addSlotToContainer(new SlotFiltered(inventory, AlyzerInventory.SLOT_ANALYZE_2, xPosLeftSlots, 75));
+		this.addSlotToContainer(new SlotFiltered(inventory, AlyzerInventory.SLOT_ANALYZE_3, xPosLeftSlots, 93));
+		this.addSlotToContainer(new SlotFiltered(inventory, AlyzerInventory.SLOT_ANALYZE_4, xPosLeftSlots, 111));
+		this.addSlotToContainer(new SlotFiltered(inventory, AlyzerInventory.SLOT_ANALYZE_5, xPosLeftSlots, 129));
 
 		final int xPosPlayerInv = 43;
 		final int xSpacePlayerInv = 18;
@@ -73,11 +73,6 @@ public class ContainerAlyzer extends ContainerItemInventory {
 		}
 
 		inventory.onGuiSaved(entityplayer);
-	}
-
-	@Override
-	protected boolean isAcceptedItem(EntityPlayer player, ItemStack stack) {
-		return true;
 	}
 
 }

@@ -10,17 +10,17 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
-import java.io.DataInputStream;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.arboriculture.gadgets.TileLeaves;
 import forestry.arboriculture.network.PacketLeafUpdate;
+import forestry.arboriculture.network.PacketRipeningUpdate;
 import forestry.core.interfaces.IPacketHandler;
-import forestry.core.network.ILocatedPacket;
 import forestry.core.network.PacketIds;
 import forestry.core.proxy.Proxies;
+import forestry.storage.proxy.ProxyStorage;
+
+import java.io.DataInputStream;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 
 public class PacketHandlerArboriculture implements IPacketHandler {
 
@@ -29,11 +29,18 @@ public class PacketHandlerArboriculture implements IPacketHandler {
 		try {
 
 			switch (packetID) {
-			case PacketIds.LEAF_UPDATE:
-				PacketLeafUpdate packet = new PacketLeafUpdate();
-				packet.readData(data);
-				onLeafUpdate(packet);
-				break;
+				case PacketIds.LEAF_UPDATE: {
+					PacketLeafUpdate packet = new PacketLeafUpdate();
+					packet.readData(data);
+					onLeafUpdate(packet);
+					break;
+				}
+				case PacketIds.RIPENING_UPDATE: {
+					PacketRipeningUpdate packet = new PacketRipeningUpdate();
+					packet.readData(data);
+					onRipeningUpdate(packet);
+					break;
+				}
 			}
 
 		} catch(Exception ex) {
@@ -49,5 +56,12 @@ public class PacketHandlerArboriculture implements IPacketHandler {
 
 	}
 
+	private void onRipeningUpdate(PacketRipeningUpdate packet) {
+
+		TileEntity tile = packet.getTarget(Proxies.common.getRenderWorld());
+		if (tile instanceof TileLeaves)
+			((TileLeaves) tile).fromRipeningPacket(packet);
+
+	}
 
 }

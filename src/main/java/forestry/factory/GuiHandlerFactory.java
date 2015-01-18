@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.factory;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-
 import forestry.core.GuiHandlerBase;
 import forestry.core.network.GuiId;
 import forestry.factory.gadgets.MachineBottler;
@@ -45,6 +42,8 @@ import forestry.factory.gui.GuiRaintank;
 import forestry.factory.gui.GuiSqueezer;
 import forestry.factory.gui.GuiStill;
 import forestry.factory.gui.GuiWorktable;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 
 public class GuiHandlerFactory extends GuiHandlerBase {
 

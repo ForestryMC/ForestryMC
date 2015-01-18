@@ -12,12 +12,13 @@ package forestry.core.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.gui.slots.SlotItemInventory;
 import forestry.core.gui.slots.SlotLocked;
+import forestry.core.inventory.ItemInventory;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.ItemInventory;
+import forestry.core.utils.StackUtils;
 
 public abstract class ContainerItemInventory extends ContainerForestry {
 
@@ -30,31 +31,12 @@ public abstract class ContainerItemInventory extends ContainerForestry {
 		this.player = player;
 	}
 
-	public ItemInventory getItemInventory() {
-		return inventory;
-	}
-
 	protected void addSecuredSlot(IInventory other, int slot, int x, int y) {
-		if (other.getStackInSlot(slot) != null && inventory.itemClass.isAssignableFrom(other.getStackInSlot(slot).getItem().getClass()))
-			addSlot(new SlotLocked(other, slot, x, y));
+		ItemStack stackInSlot = other.getStackInSlot(slot);
+		if (StackUtils.isIdenticalItem(inventory.parent, stackInSlot))
+			addSlotToContainer(new SlotLocked(other, slot, x, y));
 		else
-			addSlot(new SlotItemInventory(this, other, player, slot, x, y));
-	}
-
-	protected abstract boolean isAcceptedItem(EntityPlayer player, ItemStack stack);
-
-	public void purgeBag(EntityPlayer player) {
-		for (int i = 0; i < inventory.getSizeInventory(); i++) {
-			ItemStack stack = inventory.getStackInSlot(i);
-			if (stack == null)
-				continue;
-
-			if (isAcceptedItem(player, stack))
-				continue;
-
-			Proxies.common.dropItemPlayer(player, stack);
-			inventory.setInventorySlotContents(i, null);
-		}
+			addSlotToContainer(new Slot(other, slot, x, y));
 	}
 
 	public void saveInventory(EntityPlayer entityplayer) {
@@ -68,7 +50,6 @@ public abstract class ContainerItemInventory extends ContainerForestry {
 		if (!Proxies.common.isSimulating(player.worldObj))
 			return;
 
-		purgeBag(player);
 		saveInventory(player);
 	}
 }

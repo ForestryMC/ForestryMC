@@ -12,7 +12,6 @@ package forestry.core.utils;
 
 import java.io.InputStream;
 import java.util.Properties;
-
 import net.minecraft.client.resources.IResourceManager;
 
 public class FontColour {

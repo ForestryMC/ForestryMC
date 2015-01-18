@@ -10,13 +10,11 @@
  ******************************************************************************/
 package forestry.core.network;
 
+import forestry.core.interfaces.ISocketable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-
 import net.minecraft.item.ItemStack;
-
-import forestry.core.interfaces.ISocketable;
 
 public class PacketSocketUpdate extends PacketCoordinates {
 

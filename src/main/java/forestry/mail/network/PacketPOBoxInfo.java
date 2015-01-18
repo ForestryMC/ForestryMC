@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.mail.network;
 
+import forestry.core.network.ForestryPacket;
+import forestry.mail.POBoxInfo;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-
-import forestry.core.network.ForestryPacket;
-import forestry.mail.POBoxInfo;
 
 public class PacketPOBoxInfo extends ForestryPacket {
 

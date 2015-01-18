@@ -31,6 +31,7 @@ import forestry.core.render.SpriteSheet;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Utils;
 import forestry.plugins.PluginArboriculture;
+import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -38,8 +39,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 
@@ -52,7 +51,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 	}
 
 	@Override
-	protected IIndividual getIndividual(ItemStack itemstack) {
+	public ITree getIndividual(ItemStack itemstack) {
 		return new Tree(itemstack.getTagCompound());
 	}
 

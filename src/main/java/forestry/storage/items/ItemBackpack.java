@@ -10,9 +10,28 @@
  ******************************************************************************/
 package forestry.storage.items;
 
+import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.core.ForestryAPI;
+import forestry.api.storage.BackpackStowEvent;
+import forestry.api.storage.EnumBackpackType;
+import forestry.api.storage.IBackpackDefinition;
+import forestry.core.config.Config;
+import forestry.core.config.Defaults;
+import forestry.core.inventory.InvTools;
+import forestry.core.inventory.ItemInventory;
+import forestry.core.inventory.ItemInventoryBackpack;
+import forestry.core.inventory.wrappers.IInvSlot;
+import forestry.core.inventory.wrappers.InventoryIterator;
+import forestry.core.items.ItemInventoried;
+import forestry.core.network.GuiId;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StringUtil;
+import forestry.storage.BackpackMode;
 import java.util.List;
 import java.util.Locale;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -20,29 +39,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import forestry.api.core.ForestryAPI;
-import forestry.api.storage.BackpackStowEvent;
-import forestry.api.storage.EnumBackpackType;
-import forestry.api.storage.IBackpackDefinition;
-import forestry.core.config.Defaults;
-import forestry.core.inventory.InvTools;
-import forestry.core.inventory.wrappers.IInvSlot;
-import forestry.core.inventory.wrappers.InventoryIterator;
-import forestry.core.items.ItemInventoried;
-import forestry.core.network.GuiId;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.ItemInventory;
-import forestry.core.utils.StringUtil;
-import forestry.storage.BackpackMode;
 
 public class ItemBackpack extends ItemInventoried {
 
@@ -85,10 +83,7 @@ public class ItemBackpack extends ItemInventoried {
 
 	@Override
 	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-		if (getInventoryHit(world, x, y, z, side) != null)
-			return true;
-		else
-			return false;
+		return getInventoryHit(world, x, y, z, side) != null;
 	}
 
 	@Override
@@ -107,7 +102,7 @@ public class ItemBackpack extends ItemInventoried {
 	public ItemStack tryStowing(EntityPlayer player, ItemStack backpackStack, ItemStack stack) {
 
 		ItemBackpack backpack = ((ItemBackpack) backpackStack.getItem());
-		ItemInventory inventory = new ItemInventory(ItemBackpack.class, backpack.getBackpackSize(), backpackStack);
+		ItemInventory inventory = new ItemInventoryBackpack(ItemBackpack.class, backpack.getBackpackSize(), backpackStack);
 		if (backpackStack.getItemDamage() == 1)
 			return stack;
 
@@ -127,14 +122,12 @@ public class ItemBackpack extends ItemInventoried {
 
 	private void switchMode(ItemStack itemstack) {
 		BackpackMode mode = getMode(itemstack);
-		if (mode == BackpackMode.RESUPPLY)
-			itemstack.setItemDamage(0);
-		else if (mode == BackpackMode.RECEIVE)
-			itemstack.setItemDamage(3);
-		else if (mode == BackpackMode.LOCKED)
-			itemstack.setItemDamage(2);
-		else
-			itemstack.setItemDamage(1);
+		int nextMode = mode.ordinal() + 1;
+		if (!Config.enableBackpackResupply && nextMode == BackpackMode.RESUPPLY.ordinal()) {
+			nextMode++;
+		}
+		nextMode %= BackpackMode.values().length;
+		itemstack.setItemDamage(nextMode);
 	}
 
 	private IInventory getInventoryHit(World world, int x, int y, int z, int side) {
@@ -155,7 +148,7 @@ public class ItemBackpack extends ItemInventoried {
 				return true;
 
 			// Create our own backpack inventory
-			ItemInventory backpackInventory = new ItemInventory(ItemBackpack.class, getBackpackSize(), stack);
+			ItemInventoryBackpack backpackInventory = new ItemInventoryBackpack(ItemBackpack.class, getBackpackSize(), stack);
 
 			BackpackMode mode = getMode(stack);
 			if (mode == BackpackMode.RECEIVE)
@@ -171,7 +164,7 @@ public class ItemBackpack extends ItemInventoried {
 		return false;
 	}
 
-	private void tryChestTransfer(ItemInventory backpackInventory, IInventory target) {
+	private void tryChestTransfer(ItemInventoryBackpack backpackInventory, IInventory target) {
 
 		for (IInvSlot slot : InventoryIterator.getIterable(backpackInventory)) {
 			ItemStack packStack = slot.getStackInSlot();
@@ -183,7 +176,7 @@ public class ItemBackpack extends ItemInventoried {
 		}
 	}
 
-	private void tryChestReceive(EntityPlayer player, ItemInventory backpackInventory, IInventory target) {
+	private void tryChestReceive(EntityPlayer player, ItemInventoryBackpack backpackInventory, IInventory target) {
 
 		for (IInvSlot slot : InventoryIterator.getIterable(target)) {
 			ItemStack targetStack = slot.getStackInSlot();

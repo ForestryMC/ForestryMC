@@ -29,15 +29,14 @@ import forestry.core.config.Defaults;
 import forestry.core.genetics.AlleleSpecies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 
 public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies, IIconProvider {
 
@@ -52,7 +51,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	private final int primaryColour;
 	private final int secondaryColour;
 
-	private final String iconType = "default";
+	private static final String iconType = "default";
 
 	public AlleleBeeSpecies(String uid, boolean dominant, String name, IClassification branch, int primaryColor, int secondaryColor) {
 		this(uid, dominant, name, branch, null, primaryColor, secondaryColor);
@@ -112,7 +111,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 		int highest = 0;
 		exclude.add(species);
 
-		for(IMutation mutation : getRoot().getPaths(species, EnumBeeChromosome.SPECIES.ordinal())) {
+		for(IMutation mutation : getRoot().getPaths(species, EnumBeeChromosome.SPECIES)) {
 			if(!exclude.contains(mutation.getAllele0())) {
 				int otherAdvance = getGeneticAdvancement(mutation.getAllele0(), exclude);
 				if(otherAdvance > highest)

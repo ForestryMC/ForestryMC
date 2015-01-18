@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import forestry.core.utils.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.IGuiSelectable;
@@ -25,52 +24,49 @@ import forestry.core.network.PacketIds;
 import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.StackUtils;
 import forestry.factory.gadgets.TileWorktable;
-import net.minecraft.item.ItemStack;
 
 public class ContainerWorktable extends ContainerForestry implements IContainerCrafting, IGuiSelectable {
 
-	EntityPlayer player;
-	TileWorktable tile;
-	IInventory craftingInventory;
-	IInventory internalInventory;
-	InventoryCrafting craftMatrix = new InventoryCrafting(this, 3, 3);
-	InventoryCraftResult craftResult = new InventoryCraftResult();
-	long lastUpdate;
+	private final EntityPlayer player;
+	private final TileWorktable tile;
+	private final InventoryCrafting craftMatrix = new InventoryCrafting(this, 3, 3);
+	private long lastUpdate;
 
 	public ContainerWorktable(EntityPlayer player, TileWorktable tile) {
-		super(tile.getInternalInventory());
+		super(tile);
 		this.tile = tile;
 
-		craftingInventory = tile.getCraftingInventory();
-		internalInventory = tile.getInternalInventory();
+		IInventory craftingInventory = tile.getCraftingInventory();
+		IInventory internalInventory = tile.getInternalInventory();
 
 		// Internal inventory
 		for (int i = 0; i < 2; i++) {
 			for (int k = 0; k < 9; k++) {
-				addSlot(new Slot(internalInventory, TileWorktable.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 90 + i * 18));
+				addSlotToContainer(new Slot(internalInventory, TileWorktable.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 90 + i * 18));
 			}
 		}
 
 		// Crafting matrix
 		for (int l = 0; l < 3; l++) {
 			for (int k1 = 0; k1 < 3; k1++) {
-				addSlot(new SlotCraftMatrix(this, craftingInventory, k1 + l * 3, 11 + k1 * 18, 20 + l * 18));
+				addSlotToContainer(new SlotCraftMatrix(this, craftingInventory, k1 + l * 3, 11 + k1 * 18, 20 + l * 18));
 			}
 		}
 
 		// CraftResult display
-		addSlot(new SlotCrafter(player, craftingInventory, tile, TileWorktable.SLOT_CRAFTING_RESULT, 77, 38));
+		addSlotToContainer(new SlotCrafter(player, craftingInventory, tile, TileWorktable.SLOT_CRAFTING_RESULT, 77, 38));
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++) {
 			for (int l1 = 0; l1 < 9; l1++) {
-				addSlot(new Slot(player.inventory, l1 + i1 * 9 + 9, 8 + l1 * 18, 136 + i1 * 18));
+				addSlotToContainer(new Slot(player.inventory, l1 + i1 * 9 + 9, 8 + l1 * 18, 136 + i1 * 18));
 			}
 		}
 		// Player hotbar
 		for (int j1 = 0; j1 < 9; j1++) {
-			addSlot(new Slot(player.inventory, j1, 8 + j1 * 18, 194));
+			addSlotToContainer(new Slot(player.inventory, j1, 8 + j1 * 18, 194));
 		}
 
 		// Update crafting matrix with current contents of tileentity.
@@ -107,7 +103,7 @@ public class ContainerWorktable extends ContainerForestry implements IContainerC
 
 	private void updateMatrix() {
 		for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
-			craftMatrix.setInventorySlotContents(i, craftingInventory.getStackInSlot(i));
+			craftMatrix.setInventorySlotContents(i, tile.getCraftingInventory().getStackInSlot(i));
 		}
 	}
 

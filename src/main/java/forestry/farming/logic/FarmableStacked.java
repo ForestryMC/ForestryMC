@@ -10,21 +10,20 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmable;
+import forestry.core.config.Defaults;
+import forestry.core.utils.StackUtils;
+import forestry.core.vect.Vect;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.core.config.Defaults;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.Vect;
-
 public class FarmableStacked implements IFarmable {
 
-	Block block;
-	int matureHeight;
+	private final Block block;
+	private final int matureHeight;
 
 	public FarmableStacked(Block block, int matureHeight) {
 		this.block = block;

@@ -15,11 +15,9 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 
 import forestry.core.gui.ContainerLiquidTanks;
-import forestry.core.gui.slots.SlotCraftAuto;
-import forestry.core.gui.slots.SlotLiquidContainer;
+import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.interfaces.IContainerCrafting;
@@ -28,30 +26,17 @@ import forestry.factory.gadgets.MachineCarpenter;
 
 public class ContainerCarpenter extends ContainerLiquidTanks implements IContainerCrafting {
 
-	private class SlotCrate extends SlotCraftAuto {
-
-		public SlotCrate(IContainerCrafting container, IInventory iinventory, int slotNumber, int x, int y) {
-			super(container, iinventory, slotNumber, x, y);
-		}
-
-		@Override
-		public boolean isItemValid(ItemStack stack) {
-			return MachineCarpenter.RecipeManager.isBox(stack);
-		}
-	}
 	private MachineCarpenter machine;
 	private final IInventory craftingInventory;
-	private IInventory internalInventory;
 	public final InventoryCraftingAuto craftMatrix;
 	public final InventoryCraftResult craftResult;
 
 	public ContainerCarpenter(InventoryPlayer inventoryplayer, MachineCarpenter tile) {
-		super(tile.getInternalInventory(), tile);
+		super(tile);
 
 		machine = tile;
 		machine.activeContainer = this;
 		craftingInventory = machine.getCraftingInventory();
-		internalInventory = machine.getInternalInventory();
 
 		craftMatrix = new InventoryCraftingAuto(this, 3, 3);
 		craftResult = new InventoryCraftResult();
@@ -59,36 +44,36 @@ public class ContainerCarpenter extends ContainerLiquidTanks implements IContain
 		// Internal inventory
 		for (int i = 0; i < 2; i++) {
 			for (int k = 0; k < 9; k++) {
-				addSlot(new Slot(internalInventory, MachineCarpenter.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 90 + i * 18));
+				addSlotToContainer(new Slot(machine, MachineCarpenter.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 90 + i * 18));
 			}
 		}
 
 		// Liquid Input
-		this.addSlot(new SlotLiquidContainer(internalInventory, MachineCarpenter.SLOT_CAN_INPUT, 120, 20));
+		this.addSlotToContainer(new SlotFiltered(machine, MachineCarpenter.SLOT_CAN_INPUT, 120, 20));
 		// Boxes
-		this.addSlot(new SlotCrate(this, internalInventory, MachineCarpenter.SLOT_BOX, 83, 20));
+		this.addSlotToContainer(new SlotFiltered(machine, MachineCarpenter.SLOT_BOX, 83, 20));
 		// Product
-		this.addSlot(new SlotOutput(internalInventory, MachineCarpenter.SLOT_PRODUCT, 120, 56));
+		this.addSlotToContainer(new SlotOutput(machine, MachineCarpenter.SLOT_PRODUCT, 120, 56));
 
 		// CraftResult display
-		addSlot(new SlotLocked(craftResult, 0, 80, 51));
+		addSlotToContainer(new SlotLocked(craftResult, 0, 80, 51));
 
 		// Crafting matrix
 		for (int l = 0; l < 3; l++) {
 			for (int k1 = 0; k1 < 3; k1++) {
-				addSlot(new SlotCraftMatrix(this, craftingInventory, k1 + l * 3, 10 + k1 * 18, 20 + l * 18));
+				addSlotToContainer(new SlotCraftMatrix(this, craftingInventory, k1 + l * 3, 10 + k1 * 18, 20 + l * 18));
 			}
 		}
 
 		// Player inventory
 		for (int i1 = 0; i1 < 3; i1++) {
 			for (int l1 = 0; l1 < 9; l1++) {
-				addSlot(new Slot(inventoryplayer, l1 + i1 * 9 + 9, 8 + l1 * 18, 136 + i1 * 18));
+				addSlotToContainer(new Slot(inventoryplayer, l1 + i1 * 9 + 9, 8 + l1 * 18, 136 + i1 * 18));
 			}
 		}
 		// Player hotbar
 		for (int j1 = 0; j1 < 9; j1++) {
-			addSlot(new Slot(inventoryplayer, j1, 8 + j1 * 18, 194));
+			addSlotToContainer(new Slot(inventoryplayer, j1, 8 + j1 * 18, 194));
 		}
 
 		// Update crafting matrix with current contents of tileentity.
@@ -98,7 +83,7 @@ public class ContainerCarpenter extends ContainerLiquidTanks implements IContain
 	}
 
 	public ContainerCarpenter(MachineCarpenter tile) {
-		super(tile.getInternalInventory(), tile);
+		super(tile);
 		craftMatrix = new InventoryCraftingAuto(this, 3, 3);
 		craftResult = new InventoryCraftResult();
 		craftingInventory = tile.getCraftingInventory();
@@ -115,12 +100,6 @@ public class ContainerCarpenter extends ContainerLiquidTanks implements IContain
 		updateProductSlot();
 	}
 
-	/**
-	 * Replaces the original onCraftMatrixChanged
-	 *
-	 * @param iinventory
-	 * @param slot
-	 */
 	@Override
 	public void onCraftMatrixChanged(IInventory iinventory, int slot) {
 		craftingInventory.setInventorySlotContents(slot, iinventory.getStackInSlot(slot));

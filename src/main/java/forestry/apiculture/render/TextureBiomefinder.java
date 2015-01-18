@@ -47,7 +47,7 @@ public class TextureBiomefinder extends TextureAtlasSprite {
 
 	public void updateCompass(World world, double playerX, double playerZ, double playerYaw, boolean par8, boolean hasSpin) {
 
-		double targetAngle = 0.0d;
+		double targetAngle;
 
 		if(world == null || targetBiome == null) {
 			// No target has the locator spinning wildly.

@@ -10,18 +10,16 @@
  ******************************************************************************/
 package forestry.arboriculture.render;
 
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import forestry.arboriculture.gadgets.BlockFruitPod;
+import forestry.arboriculture.gadgets.TileFruitPod;
+import forestry.plugins.PluginArboriculture;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-
-import forestry.arboriculture.gadgets.BlockFruitPod;
-import forestry.arboriculture.gadgets.TileFruitPod;
-import forestry.plugins.PluginArboriculture;
 
 public class FruitPodRenderingHandler implements ISimpleBlockRenderingHandler {
 

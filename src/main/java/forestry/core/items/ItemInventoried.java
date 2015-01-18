@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import forestry.core.gui.ContainerItemInventory;
+import forestry.core.interfaces.IInventoriedItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-
-import forestry.core.gui.ContainerItemInventory;
-import forestry.core.interfaces.IInventoriedItem;
 
 public abstract class ItemInventoried extends ItemForestry implements IInventoriedItem {
 

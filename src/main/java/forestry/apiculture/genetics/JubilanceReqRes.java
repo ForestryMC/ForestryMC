@@ -10,13 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.core.utils.StackUtils;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class JubilanceReqRes implements IJubilanceProvider {
 
@@ -32,12 +32,11 @@ public class JubilanceReqRes implements IJubilanceProvider {
 		if (blockRequired == null)
 			return true;
 
-		Block block = housing.getWorld().getBlock(housing.getXCoord(), housing.getYCoord() - 1, housing.getZCoord());
-		int meta = housing.getWorld().getBlockMetadata(housing.getXCoord(), housing.getYCoord() - 1, housing.getZCoord());
-		if (StackUtils.equals(block, blockRequired) && meta == blockRequired.getItemDamage())
-			return true;
-		else
-			return false;
+		World world = housing.getWorld();
+
+		Block block = world.getBlock(housing.getXCoord(), housing.getYCoord() - 1, housing.getZCoord());
+		int meta = world.getBlockMetadata(housing.getXCoord(), housing.getYCoord() - 1, housing.getZCoord());
+		return StackUtils.equals(block, meta, blockRequired);
 	}
 
 }

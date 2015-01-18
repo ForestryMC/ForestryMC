@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.farming;
 
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
 
 public class FarmTarget {
 
-	private Vect start;
+	private final Vect start;
 	private int yOffset;
 	private int extent;
 	private int limit;

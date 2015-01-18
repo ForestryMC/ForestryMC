@@ -10,22 +10,19 @@
  ******************************************************************************/
 package forestry.energy.render;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import org.lwjgl.opengl.GL11;
-
 import forestry.core.TemperatureState;
 import forestry.core.config.Defaults;
 import forestry.core.gadgets.Engine;
 import forestry.core.interfaces.IBlockRenderer;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ForestryResource;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.ForgeDirection;
+import org.lwjgl.opengl.GL11;
 
 public class RenderEngine extends TileEntitySpecialRenderer implements IBlockRenderer {
 
@@ -196,9 +193,11 @@ public class RenderEngine extends TileEntitySpecialRenderer implements IBlockRen
 		Proxies.common.bindTexture(textures[Textures.EXTENSION.ordinal()]);
 		float chamberf = 2F / 16F;
 
-		for (int i = 0; i <= step + 2; i += 2) {
-			extension.render(factor);
-			GL11.glTranslatef(translate[0] * chamberf, translate[1] * chamberf, translate[2] * chamberf);
+		if (step > 0) {
+			for (int i = 0; i <= step + 2; i += 2) {
+				extension.render(factor);
+				GL11.glTranslatef(translate[0] * chamberf, translate[1] * chamberf, translate[2] * chamberf);
+			}
 		}
 
 		GL11.glPopAttrib();

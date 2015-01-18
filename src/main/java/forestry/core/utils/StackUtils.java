@@ -25,12 +25,10 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.core.config.Defaults;
-import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.gadgets.TileForestry;
+import forestry.core.inventory.InvTools;
 
 public class StackUtils {
 
@@ -38,10 +36,6 @@ public class StackUtils {
 
 	/**
 	 * Compares item id, damage and NBT. Accepts wildcard damage.
-	 *
-	 * @param lhs
-	 * @param rhs
-	 * @return
 	 */
 	public static boolean isIdenticalItem(ItemStack lhs, ItemStack rhs) {
 		if (lhs == null || rhs == null)
@@ -155,9 +149,6 @@ public class StackUtils {
 
 	/**
 	 * Merges the giving stack into the receiving stack as far as possible
-	 *
-	 * @param giver
-	 * @param receptor
 	 */
 	public static void mergeStacks(ItemStack giver, ItemStack receptor) {
 		if (receptor.stackSize >= 64)
@@ -190,10 +181,6 @@ public class StackUtils {
 	/**
 	 * Creates a split stack of the specified amount, preserving NBT data,
 	 * without decreasing the source stack.
-	 *
-	 * @param stack
-	 * @param amount
-	 * @return
 	 */
 	public static ItemStack createSplitStack(ItemStack stack, int amount) {
 		ItemStack split = new ItemStack(stack.getItem(), amount, stack.getItemDamage());
@@ -209,11 +196,7 @@ public class StackUtils {
 	}
 
 	/**
-	 *
-	 * @param stacks
-	 * @param maxCountedPerStack The maximum stacksize counted in a single
-	 * stack. -1 for unlimited.
-	 * @return
+	 * @param maxCountedPerStack The maximum stacksize counted in a single stack. -1 for unlimited.
 	 */
 	public static ItemStack[] condenseStacks(ItemStack[] stacks, int maxCountedPerStack, boolean craftingEquivalency) {
 		ArrayList<ItemStack> condensed = new ArrayList<ItemStack>();
@@ -245,12 +228,16 @@ public class StackUtils {
 		return condensed.toArray(new ItemStack[condensed.size()]);
 	}
 
+	public static boolean containsItemStack(Iterable<ItemStack> list, ItemStack itemStack) {
+		for (ItemStack listStack : list) {
+			if (isIdenticalItem(listStack, itemStack))
+				return true;
+		}
+		return false;
+	}
+
 	/**
 	 * Counts how many full sets are contained in the passed stock
-	 *
-	 * @param set
-	 * @param stock
-	 * @return
 	 */
 	public static int containsSets(ItemStack[] set, ItemStack[] stock) {
 		return containsSets(set, stock, false, false);
@@ -258,10 +245,6 @@ public class StackUtils {
 
 	/**
 	 * Counts how many full sets are contained in the passed stock
-	 *
-	 * @param set
-	 * @param stock
-	 * @return
 	 */
 	public static int containsSets(ItemStack[] set, ItemStack[] stock, boolean oreDictionary, boolean craftingTools) {
 		int count = 0;
@@ -316,11 +299,6 @@ public class StackUtils {
 
 	/**
 	 * Compare two item stacks for crafting equivalency.
-	 *
-	 * @param base
-	 * @param comparison
-	 * @param oreDictionary
-	 * @return
 	 */
 	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, boolean oreDictionary, boolean craftingTools) {
 		if (isCraftingEquivalent(base, comparison))
@@ -356,7 +334,7 @@ public class StackUtils {
 		return isCraftingTool(phantom) && phantom.getItem() == actual.getItem();
 	}
 
-	public static void stowContainerItem(ItemStack itemstack, InventoryAdapter stowing, int slotIndex, EntityPlayer player) {
+	public static void stowContainerItem(ItemStack itemstack, IInventory stowing, int slotIndex, EntityPlayer player) {
 		if (!itemstack.getItem().hasContainerItem(itemstack))
 			return;
 
@@ -370,12 +348,12 @@ public class StackUtils {
 		if (container != null) {
 
 			if (itemstack.getItem().doesContainerItemLeaveCraftingGrid(itemstack)) {
-				if (!stowing.tryAddStack(container, true))
+				if (!InvTools.tryAddStack(stowing, container, true))
 					if (!player.inventory.addItemStackToInventory(container))
 						player.dropPlayerItemWithRandomChoice(container, true);
 			} else {
-				if (!stowing.tryAddStack(container, slotIndex, 1, true))
-					if (!stowing.tryAddStack(container, true))
+				if (!InvTools.tryAddStack(stowing, container, slotIndex, 1, true))
+					if (!InvTools.tryAddStack(stowing, container, true))
 						player.dropPlayerItemWithRandomChoice(container, true);
 			}
 		}
@@ -394,27 +372,6 @@ public class StackUtils {
 
 		world.spawnEntityInWorld(entityitem);
 
-	}
-
-	public static void replenishByContainer(TileForestry tile, ItemStack inventoryStack, StandardTank tank) {
-		FluidContainerData container = LiquidHelper.getLiquidContainer(inventoryStack);
-		replenishByContainer(tile, inventoryStack, container, tank);
-	}
-
-	public static ItemStack replenishByContainer(TileForestry tile, ItemStack inventoryStack, FluidContainerData container, StandardTank tank) {
-		if (container == null)
-			return inventoryStack;
-
-		if (tank.fill(container.fluid, false) >= container.fluid.amount) {
-			tank.fill(container.fluid, true);
-			if (container.filledContainer != null && container.filledContainer.getItem().hasContainerItem(container.filledContainer))
-				inventoryStack = container.emptyContainer.copy();
-			else
-				inventoryStack.stackSize--;
-			tile.sendNetworkUpdate();
-		}
-
-		return inventoryStack;
 	}
 
 	public static ItemStack copyWithRandomSize(ItemStack template, int max, Random rand) {
@@ -450,5 +407,9 @@ public class StackUtils {
 
 	public static boolean equals(Block block, ItemStack stack) {
 		return block == getBlock(stack);
+	}
+
+	public static boolean equals(Block block, int meta, ItemStack stack) {
+		return block == getBlock(stack) && meta == stack.getItemDamage();
 	}
 }

@@ -14,12 +14,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
+
 import forestry.api.core.ITileStructure;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
+import forestry.core.utils.PlayerUtil;
+import forestry.core.utils.Utils;
 
 public abstract class BlockStructure extends BlockForestry {
 
@@ -60,34 +61,27 @@ public abstract class BlockStructure extends BlockForestry {
 			return false;
 
 		TileForestry tile = (TileForestry) world.getTileEntity(x, y, z);
-		if (!tile.isUseableByPlayer(player))
+		if (!Utils.isUseableByPlayer(player, tile))
 			return false;
-
-		if (!Proxies.common.isSimulating(world))
-			return player.getCurrentEquippedItem() == null || !(player.getCurrentEquippedItem().getItem() instanceof IStructureBlockItem);
 
 		// GUIs can only be opened on integrated structure blocks.
 		if (tile instanceof ITileStructure)
 			if (!((ITileStructure) tile).isIntegratedIntoStructure())
 				return false;
 
-		if (tile.allowsInteraction(player)) {
-			tile.openGui(player);
-		}
-		else {
-			String ownerName = StringUtil.localize("gui.derelict");
-			
-			if (tile.getOwnerProfile() != null)
-				ownerName = tile.getOwnerProfile().getName();
-
-			player.addChatMessage(new ChatComponentTranslation("for.chat.accesslocked",ownerName));
+		if (Proxies.common.isSimulating(world)) {
+			if (tile.allowsViewing(player)) {
+				tile.openGui(player);
+			} else {
+				player.addChatMessage(new ChatComponentTranslation("for.chat.accesslocked", PlayerUtil.getOwnerName(tile)));
+			}
 		}
 		return true;
 	}
 
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbor) {
-
+		super.onNeighborBlockChange(world, x, y, z, neighbor);
 		if (!Proxies.common.isSimulating(world))
 			return;
 

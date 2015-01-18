@@ -14,14 +14,17 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import net.minecraft.world.World;
+
 import forestry.arboriculture.gadgets.TileLeaves;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketTileNBT;
 
 public class PacketLeafUpdate extends PacketTileNBT {
 
-	public byte isRipeningUpdate = 0;
-	
+	private static short hasFruitFlag = 1;
+	private static short isPollinatedFlag = 1 << 1;
+
 	private byte leafState = 0;
 	public short textureIndexFancy;
 	public short textureIndexPlain;
@@ -38,9 +41,9 @@ public class PacketLeafUpdate extends PacketTileNBT {
 
 		leafState = 0;
 		if(leaves.hasFruit())
-			leafState |= 1 << 0;
+			leafState |= hasFruitFlag;
 		if(leaves.isPollinated())
-			leafState |= 1 << 1;
+			leafState |= isPollinatedFlag;
 		textureIndexFancy = leaves.determineTextureIndex(true);
 		textureIndexPlain = leaves.determineTextureIndex(false);
 		textureIndexFruit = leaves.determineOverlayIndex();
@@ -48,56 +51,35 @@ public class PacketLeafUpdate extends PacketTileNBT {
 		colourFruits = leaves.determineFruitColour();
 	}
 
-	public PacketLeafUpdate(TileLeaves leaves, int fruitColour) {
-		super(PacketIds.LEAF_UPDATE, leaves);
-
-		isRipeningUpdate = 1;
-		colourFruits = fruitColour;
-	}
-
 	@Override
 	public void writeData(DataOutputStream data) throws IOException {
 		super.writeData(data);
 
-		data.writeByte(isRipeningUpdate);
-
-		if(isRipeningUpdate()) {
-			data.writeInt(colourFruits);
-		} else {
-			data.writeByte(leafState);
-			data.writeShort(textureIndexFancy);
-			data.writeShort(textureIndexPlain);
-			data.writeShort(textureIndexFruit);
-			data.writeInt(colourLeaves);
-			data.writeInt(colourFruits);
-		}
+		data.writeByte(leafState);
+		data.writeShort(textureIndexFancy);
+		data.writeShort(textureIndexPlain);
+		data.writeShort(textureIndexFruit);
+		data.writeInt(colourLeaves);
+		data.writeInt(colourFruits);
 	}
 	
 	@Override
 	public void readData(DataInputStream data) throws IOException {
 		super.readData(data);
-		
-		isRipeningUpdate = data.readByte();
-		if(isRipeningUpdate()) {
-			colourFruits = data.readInt();
-		} else {
-			leafState = data.readByte();
-			textureIndexFancy = data.readShort();
-			textureIndexPlain = data.readShort();
-			textureIndexFruit = data.readShort();
-			colourLeaves = data.readInt();
-			colourFruits = data.readInt();
-		}
+
+		leafState = data.readByte();
+		textureIndexFancy = data.readShort();
+		textureIndexPlain = data.readShort();
+		textureIndexFruit = data.readShort();
+		colourLeaves = data.readInt();
+		colourFruits = data.readInt();
 	}
-	
-	public boolean isRipeningUpdate() {
-		return isRipeningUpdate != 0;
-	}
-	
+
 	public boolean isFruitLeaf() {
-		return (leafState & (1 << 0)) > 0;
+		return (leafState & hasFruitFlag) > 0;
 	}
+
 	public boolean isPollinated() {
-		return (leafState & (1 << 1)) > 0;
+		return (leafState & isPollinatedFlag) > 0;
 	}
 }

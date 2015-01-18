@@ -24,11 +24,10 @@ import forestry.api.genetics.IMutation;
 import forestry.core.config.ForestryItem;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.StringUtil;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import java.util.Collection;
 import java.util.Map;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
 
@@ -74,7 +73,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
 			return 0.7f;
 		else if (ForestryItem.beeComb.isItemEqual(itemstack))
 			return 0.4f;
-		else if (AlleleManager.alleleRegistry.isIndividual(itemstack))
+		else if (getRoot().isMember(itemstack))
 			return 1.0f;
 
 		for (Map.Entry<ItemStack, Float> entry : getRoot().getResearchCatalysts().entrySet()) {

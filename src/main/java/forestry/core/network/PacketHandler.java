@@ -10,17 +10,6 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.DataInputStream;
-import java.io.InputStream;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.NetHandlerPlayServer;
-import net.minecraft.tileentity.TileEntity;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.FMLEventChannel;
@@ -28,24 +17,29 @@ import cpw.mods.fml.common.network.FMLNetworkEvent.ClientCustomPacketEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
-
-import net.minecraftforge.common.MinecraftForge;
-
-import io.netty.buffer.ByteBufInputStream;
-
 import forestry.api.core.ForestryEvent;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.gadgets.TileForestry;
-import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.interfaces.ISocketable;
 import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginManager;
+import io.netty.buffer.ByteBufInputStream;
+import java.io.DataInputStream;
+import java.io.InputStream;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.MinecraftForge;
 
 public class PacketHandler {
 	public PacketHandler() {
@@ -65,7 +59,7 @@ public class PacketHandler {
 				null);
 	}
 
-	public void onPacketData(InputStream is, EntityPlayer player) {
+	public void onPacketData(InputStream is, EntityPlayerMP player) {
 		DataInputStream data = new DataInputStream(is);
 		PacketUpdate packetU;
 
@@ -233,10 +227,6 @@ public class PacketHandler {
 
 		if (tile instanceof IInventory) {
 			((IInventory) tile).setInventorySlotContents(packet.slotIndex, packet.itemstack);
-		} else if (tile instanceof TileForestry) {
-			IInventory inventory = ((TileForestry) tile).getInternalInventory();
-
-			if (inventory != null) inventory.setInventorySlotContents(packet.slotIndex, packet.itemstack);
 		}
 	}
 
@@ -273,7 +263,7 @@ public class PacketHandler {
 		tile.switchAccessRule(playerEntity);
 	}
 
-	private void onPipetteClick(PacketUpdate packet, EntityPlayer player) {
+	private void onPipetteClick(PacketUpdate packet, EntityPlayerMP player) {
 		assert FMLCommonHandler.instance().getEffectiveSide().isServer();
 
 		if (!(player.openContainer instanceof ContainerLiquidTanks))

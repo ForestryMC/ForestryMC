@@ -10,23 +10,22 @@
  ******************************************************************************/
 package forestry.core.network;
 
+import com.mojang.authlib.GameProfile;
+import forestry.api.core.ErrorStateRegistry;
+import forestry.api.core.IErrorState;
+import forestry.core.EnumErrorCode;
+import forestry.core.gadgets.TileForestry;
+import forestry.core.utils.EnumAccess;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.UUID;
-
 import net.minecraftforge.common.util.ForgeDirection;
-
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.core.EnumErrorCode;
-import forestry.core.gadgets.TileForestry;
-import forestry.core.utils.EnumAccess;
 
 public class PacketTileUpdate extends PacketUpdate {
 
 	private ForgeDirection orientation = ForgeDirection.WEST;
-	private EnumErrorCode errorState = EnumErrorCode.OK;
+	private IErrorState errorState = EnumErrorCode.OK;
 
 	private boolean isOwnable = false;
 	private EnumAccess access = EnumAccess.SHARED;
@@ -47,21 +46,21 @@ public class PacketTileUpdate extends PacketUpdate {
 
 		isOwnable = tile.isOwnable();
 		access = tile.getAccess();
-		owner = tile.owner;
+		owner = tile.getOwnerProfile();
 	}
 
 	@Override
 	public void writeData(DataOutputStream data) throws IOException {
+		super.writeData(data);
 
-		data.writeInt(posX);
-		data.writeInt(posY);
-		data.writeInt(posZ);
+		data.writeByte(this.orientation.ordinal());
+		data.writeShort(this.errorState.getID());
 
-		data.writeInt(this.orientation.ordinal());
-		data.writeInt(this.errorState.ordinal());
-
+		// TODO: Should this really be sent to the client? Huge network cost.
+		// As far as I know, only GUIs need it, and there are better ways to get the information to a GUI.
+		// -CovertJaguar
 		if (isOwnable) {
-			data.writeInt(access.ordinal());
+			data.writeByte(access.ordinal());
 			if (owner == null) {
 				data.writeBoolean(false);
 			} else {
@@ -72,21 +71,16 @@ public class PacketTileUpdate extends PacketUpdate {
 			}
 		} else
 			data.writeInt(-1);
-
-		super.writeData(data);
 	}
 
 	@Override
 	public void readData(DataInputStream data) throws IOException {
+		super.readData(data);
 
-		posX = data.readInt();
-		posY = data.readInt();
-		posZ = data.readInt();
+		orientation = ForgeDirection.getOrientation(data.readByte());
+		errorState = ErrorStateRegistry.getErrorState(data.readShort());
 
-		orientation = ForgeDirection.values()[data.readInt()];
-		errorState = EnumErrorCode.values()[data.readInt()];
-
-		int ordinal = data.readInt();
+		int ordinal = data.readByte();
 		isOwnable = ordinal >= 0;
 		if (isOwnable) {
 			access = EnumAccess.values()[ordinal];
@@ -97,15 +91,13 @@ public class PacketTileUpdate extends PacketUpdate {
 				owner = null;
 			}
 		}
-
-		super.readData(data);
 	}
 
 	public ForgeDirection getOrientation() {
 		return this.orientation;
 	}
 
-	public EnumErrorCode getErrorState() {
+	public IErrorState getErrorState() {
 		return this.errorState;
 	}
 

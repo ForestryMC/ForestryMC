@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.food;
 
+import forestry.core.proxy.Proxies;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.world.World;
-
-import forestry.core.proxy.Proxies;
 
 public class BeverageEffectAntidote extends BeverageEffect {
 

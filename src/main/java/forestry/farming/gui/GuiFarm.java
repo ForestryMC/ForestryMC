@@ -10,12 +10,6 @@
  ******************************************************************************/
 package forestry.farming.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.util.IIcon;
-
-import org.lwjgl.opengl.GL11;
-
 import forestry.api.farming.IFarmLogic;
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestry;
@@ -28,6 +22,10 @@ import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 import forestry.farming.gadgets.TileFarmPlain;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.util.IIcon;
+import org.lwjgl.opengl.GL11;
 
 public class GuiFarm extends GuiForestry<TileFarmPlain> {
 

@@ -10,19 +10,16 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
+import java.util.ArrayList;
+import java.util.Collection;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 
 public class FarmLogicShroom extends FarmLogicArboreal {
 

@@ -10,21 +10,18 @@
  ******************************************************************************/
 package forestry.lepidopterology.render;
 
+import forestry.api.lepidopterology.IButterfly;
+import forestry.core.proxy.Proxies;
+import forestry.lepidopterology.entities.EntityButterfly;
+import forestry.plugins.PluginLepidopterology;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.client.IItemRenderer;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-
-import forestry.api.lepidopterology.IButterfly;
-import forestry.core.proxy.Proxies;
-import forestry.lepidopterology.entities.EntityButterfly;
-import forestry.plugins.PluginLepidopterology;
 
 public class ButterflyItemRenderer implements IItemRenderer {
 

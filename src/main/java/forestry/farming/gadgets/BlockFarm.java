@@ -33,7 +33,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import forestry.core.gadgets.BlockStructure;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
-import forestry.farming.gadgets.TileFarm.EnumFarmBlock;
 import forestry.plugins.PluginFarming;
 
 public class BlockFarm extends BlockStructure {
@@ -62,10 +61,10 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
 		ArrayList<ItemStack> drops = getDrops(world, x, y, z, 0, 0);
 		if (drops.isEmpty())
-			return super.getPickBlock(target, world, x, y, z);
+			return super.getPickBlock(target, world, x, y, z, player);
 		return drops.get(0);
 	}
 
@@ -155,7 +154,7 @@ public class BlockFarm extends BlockStructure {
 
 	@SideOnly(Side.CLIENT)
 	public IIcon getBlockTextureFromSideAndMetadata(EnumFarmBlock type, int side, int metadata) {
-		return StackUtils.getBlock(type.base).getIcon(side, type.base.getItemDamage());
+		return StackUtils.getBlock(type.getBase()).getIcon(side, type.getBase().getItemDamage());
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -185,20 +184,17 @@ public class BlockFarm extends BlockStructure {
 
 	@Override
 	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
-		if (world.getBlockMetadata(x, y, z) == 5)
-			return true;
-		else
-			return false;
+		return world.getBlockMetadata(x, y, z) == 5;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 		TileEntity tile = world.getTileEntity(x, y, z);
-		ItemStack base = EnumFarmBlock.BRICK_STONE.base;
+		ItemStack base = EnumFarmBlock.BRICK_STONE.getBase();
 
 		if (tile instanceof TileFarm)
-			base = ((TileFarm) tile).farmBlock.base;
+			base = ((TileFarm) tile).farmBlock.getBase();
 
 		return StackUtils.getBlock(base).getIcon(side, base.getItemDamage());
 	}

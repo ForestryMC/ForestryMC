@@ -13,7 +13,6 @@ package forestry.core.network;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-
 import net.minecraft.item.ItemStack;
 
 public class PacketInventoryStack extends PacketCoordinates {

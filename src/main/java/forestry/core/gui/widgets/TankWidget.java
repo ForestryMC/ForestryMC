@@ -10,24 +10,20 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import forestry.farming.gui.ContainerFarm;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
-import net.minecraftforge.fluids.FluidStack;
-
-import org.lwjgl.opengl.GL11;
-
 import forestry.api.core.IToolPipette;
 import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.WidgetManager;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
+import forestry.farming.gui.ContainerFarm;
+import net.minecraft.inventory.Container;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.fluids.FluidStack;
+import org.lwjgl.opengl.GL11;
 
 /**
  * Slot for liquid tanks
@@ -61,10 +57,11 @@ public class TankWidget extends Widget {
 
 	@Override
 	public void draw(int startX, int startY) {
-		if (getTank() == null)
+		StandardTank tank = getTank();
+		if (tank == null)
 			return;
 
-		FluidStack contents = getTank().getFluid();
+		FluidStack contents = tank.getFluid();
 		if (contents == null || contents.amount <= 0 || contents.getFluid() == null)
 			return;
 		IIcon liquidIcon = contents.getFluid().getIcon(contents);
@@ -79,7 +76,7 @@ public class TankWidget extends Widget {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
 		while (true) {
-			int x = 0;
+			int x;
 
 			if (squaled > 16) {
 				x = 16;
@@ -117,7 +114,7 @@ public class TankWidget extends Widget {
 
 		Item held = itemstack.getItem();
 		if (held instanceof IToolPipette && manager.gui.inventorySlots instanceof ContainerLiquidTanks)
-			((ContainerLiquidTanks) manager.gui.inventorySlots).handlePipetteClick(slot, manager.minecraft.thePlayer);
+			((ContainerLiquidTanks) manager.gui.inventorySlots).handlePipetteClickClient(slot, manager.minecraft.thePlayer);
 
 	}
 }

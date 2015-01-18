@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.factory.gadgets.MachineBottler;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiBottler extends GuiForestryTitled<MachineBottler> {
 

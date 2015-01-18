@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.world.World;
-
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.interfaces.IBlockRenderer;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.world.World;
 
 public class ProxyRender {
 

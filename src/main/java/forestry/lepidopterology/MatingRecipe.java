@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.lepidopterology;
 
+import forestry.api.lepidopterology.EnumFlutterType;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.plugins.PluginLepidopterology;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
-
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IButterfly;
-import forestry.plugins.PluginLepidopterology;
 
 public class MatingRecipe implements IRecipe {
 
@@ -65,6 +64,8 @@ public class MatingRecipe implements IRecipe {
 			} else if(PluginLepidopterology.butterflyInterface.isMember(crafting.getStackInSlot(i), EnumFlutterType.SERUM.ordinal()))
 				serum = PluginLepidopterology.butterflyInterface.getMember(crafting.getStackInSlot(i));	
 		}
+		if (butterfly == null || serum == null)
+			return null;
 		
 		IButterfly mated = butterfly.copy();
 		mated.mate(serum);

@@ -10,9 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.BlockUtil;
+import forestry.core.utils.StackUtils;
+import forestry.plugins.PluginArboriculture;
 import java.util.ArrayList;
 import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCocoa;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -22,15 +28,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.BlockUtil;
-import forestry.core.utils.StackUtils;
-import forestry.plugins.PluginArboriculture;
 
 public class BlockFruitPod extends BlockCocoa {
 

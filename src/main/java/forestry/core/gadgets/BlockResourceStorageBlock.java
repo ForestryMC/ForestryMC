@@ -1,7 +1,10 @@
 package forestry.core.gadgets;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.core.CreativeTabForestry;
+import forestry.core.render.TextureManager;
 import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -9,10 +12,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.core.CreativeTabForestry;
-import forestry.core.render.TextureManager;
 
 public class BlockResourceStorageBlock extends Block {
 	
@@ -40,6 +39,11 @@ public class BlockResourceStorageBlock extends Block {
 		itemList.add(new ItemStack(this, 1, 2));
 		itemList.add(new ItemStack(this, 1, 3));
 	}
+
+	@Override
+	public int damageDropped(int damage) {
+		return damage;
+	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -53,7 +57,7 @@ public class BlockResourceStorageBlock extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int i, int meta) {
-		IIcon icon = null;
+		IIcon icon;
 		if (meta == 0) {
 			icon = iconApatite;
 		} else if (meta == 1) {

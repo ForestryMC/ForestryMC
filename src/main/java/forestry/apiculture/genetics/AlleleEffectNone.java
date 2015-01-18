@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.world.World;
-
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.Allele;
 import forestry.plugins.PluginApiculture;
+import net.minecraft.world.World;
 
 public class AlleleEffectNone extends Allele implements IAlleleBeeEffect {
 

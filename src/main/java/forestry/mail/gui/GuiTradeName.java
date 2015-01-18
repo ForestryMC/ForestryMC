@@ -10,17 +10,14 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.InventoryPlayer;
-
-import org.apache.commons.lang3.StringUtils;
-import org.lwjgl.input.Keyboard;
-
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestry;
 import forestry.core.utils.StringUtil;
 import forestry.mail.gadgets.MachineTrader;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.entity.player.InventoryPlayer;
+import org.apache.commons.lang3.StringUtils;
+import org.lwjgl.input.Keyboard;
 
 public class GuiTradeName extends GuiForestry<MachineTrader> {
 

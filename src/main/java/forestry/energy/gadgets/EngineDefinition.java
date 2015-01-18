@@ -10,18 +10,16 @@
  ******************************************************************************/
 package forestry.energy.gadgets;
 
+import forestry.core.gadgets.Engine;
+import forestry.core.gadgets.MachineDefinition;
+import forestry.core.interfaces.IBlockRenderer;
+import forestry.core.utils.Utils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.util.ForgeDirection;
-
-import forestry.core.gadgets.Engine;
-import forestry.core.gadgets.MachineDefinition;
-import forestry.core.interfaces.IBlockRenderer;
-import forestry.core.utils.Utils;
 
 public class EngineDefinition extends MachineDefinition {
 
@@ -44,7 +42,7 @@ public class EngineDefinition extends MachineDefinition {
 			return false;
 
 		Engine tile = (Engine) world.getTileEntity(x, y, z);
-		if (player.getCurrentEquippedItem() != null && Utils.canWrench(player, x, y, z)) {
+		if (Utils.canWrench(player, x, y, z)) {
 			tile.rotateEngine();
 			Utils.useWrench(player, x, y, z);
 			return true;

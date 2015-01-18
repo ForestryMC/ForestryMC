@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.farming;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-
 import forestry.core.GuiHandlerBase;
 import forestry.core.network.GuiId;
 import forestry.core.network.PacketIds;
@@ -21,6 +18,8 @@ import forestry.core.proxy.Proxies;
 import forestry.farming.gadgets.TileFarmPlain;
 import forestry.farming.gui.ContainerFarm;
 import forestry.farming.gui.GuiFarm;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 
 public class GuiHandlerFarming extends GuiHandlerBase {
 

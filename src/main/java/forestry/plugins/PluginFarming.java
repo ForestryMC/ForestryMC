@@ -10,11 +10,23 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import java.util.ArrayList;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
+import net.minecraftforge.common.MinecraftForge;
+
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
+
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.farming.Farmables;
@@ -35,8 +47,8 @@ import forestry.farming.GuiHandlerFarming;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.gadgets.BlockFarm;
 import forestry.farming.gadgets.BlockMushroom;
+import forestry.farming.gadgets.EnumFarmBlock;
 import forestry.farming.gadgets.TileControl;
-import forestry.farming.gadgets.TileFarm.EnumFarmBlock;
 import forestry.farming.gadgets.TileFarmPlain;
 import forestry.farming.gadgets.TileGearbox;
 import forestry.farming.gadgets.TileHatch;
@@ -62,15 +74,6 @@ import forestry.farming.logic.FarmableVanillaSapling;
 import forestry.farming.logic.FarmableVanillaShroom;
 import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.triggers.FarmingTriggers;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.MinecraftForge;
-
-import java.util.ArrayList;
 
 @Plugin(pluginID = "Farming", name = "Farming", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.farming.description")
 public class PluginFarming extends ForestryPlugin {
@@ -295,8 +298,7 @@ public class PluginFarming extends ForestryPlugin {
 			block.saveToCompound(compound);
 
 			basic.setTagCompound((NBTTagCompound) compound.copy());
-			ShapedRecipeCustom.buildRecipe(basic.copy(), "I#I", "WCW", '#', block.getCraftingIngredient(), 'W', "slabWood", 'C', ForestryItem.tubes.getItemStack(1, 1), 'I', "ingotCopper");
-
+			ShapedRecipeCustom.buildRecipe(basic.copy(), "I#I", "WCW", '#', block.getBase(), 'W', "slabWood", 'C', ForestryItem.tubes.getItemStack(1, 1), 'I', "ingotCopper");
 		}
 
 		ItemStack gearbox = ForestryBlock.farm.getItemStack(1, 2);

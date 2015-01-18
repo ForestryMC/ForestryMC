@@ -11,6 +11,9 @@
 package forestry.core.commands;
 
 import forestry.core.utils.StringUtil;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -21,10 +24,6 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  *
@@ -70,14 +69,11 @@ public class CommandHelpers {
 	}
 
 	/**
-	 Avoid using this function if at all possible. Commands are processed on the server,
-	 which has no localization information.
-	
-	 StringUtil.localize() is NOT a valid alternative for sendLocalizedChatMessage().
-	 Messages will not be localized properly if you use StringUtil.localize().
-	
-	 @param sender
-	 @param message 
+	 * Avoid using this function if at all possible. Commands are processed on the server,
+	 * which has no localization information.
+	 *
+	 * StringUtil.localize() is NOT a valid alternative for sendLocalizedChatMessage().
+	 * Messages will not be localized properly if you use StringUtil.localize().
 	 */
 	public static void sendChatMessage(ICommandSender sender, String message) {
 		sender.addChatMessage(new ChatComponentText(message));

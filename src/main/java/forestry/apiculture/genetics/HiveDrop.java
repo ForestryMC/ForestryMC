@@ -15,11 +15,10 @@ import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IHiveDrop;
 import forestry.api.genetics.IAllele;
 import forestry.plugins.PluginApiculture;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import java.util.ArrayList;
 import java.util.Collections;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class HiveDrop implements IHiveDrop {
 

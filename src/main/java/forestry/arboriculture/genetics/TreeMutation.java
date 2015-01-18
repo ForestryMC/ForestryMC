@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreeMutation;
 import forestry.api.arboriculture.ITreeRoot;
@@ -21,6 +18,8 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.core.genetics.Mutation;
 import forestry.plugins.PluginArboriculture;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 
 public class TreeMutation extends Mutation implements ITreeMutation {
 

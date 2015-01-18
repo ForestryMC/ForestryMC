@@ -15,40 +15,32 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-import forestry.core.utils.AlyzerInventory;
 import forestry.api.arboriculture.ITree;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
-import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IHintSource;
+import forestry.core.inventory.AlyzerInventory;
 import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.Utils;
+import forestry.core.utils.GeneticsUtil;
 import forestry.plugins.PluginArboriculture;
 
 public class ItemTreealyzer extends ItemInventoried {
 
 	public static class TreealyzerInventory extends AlyzerInventory implements IErrorSource, IHintSource {
 
-		public TreealyzerInventory(EntityPlayer player) {
-			super(ItemTreealyzer.class, 7);
-			this.player = player;
-		}
-
 		public TreealyzerInventory(EntityPlayer player, ItemStack itemStack) {
 			super(ItemTreealyzer.class, 7, itemStack);
 			this.player = player;
 		}
 
-		private boolean isEnergy(ItemStack itemstack) {
-			if (itemstack == null || itemstack.stackSize <= 0)
-				return false;
-
-			return ForestryItem.honeyDrop.isItemEqual(itemstack) || ForestryItem.honeydew.isItemEqual(itemstack);
+		@Override
+		protected boolean isSpecimen(ItemStack itemStack) {
+			return GeneticsUtil.getGeneticEquivalent(itemStack) instanceof ITree;
 		}
 
 		private void tryAnalyze() {
@@ -63,7 +55,7 @@ public class ItemTreealyzer extends ItemInventoried {
 				return;
 
 			if (!PluginArboriculture.treeInterface.isMember(getStackInSlot(SLOT_SPECIMEN))) {
-				ItemStack ersatz = Utils.convertSaplingToGeneticEquivalent(getStackInSlot(SLOT_SPECIMEN));
+				ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(getStackInSlot(SLOT_SPECIMEN));
 				if (ersatz != null)
 					setInventorySlotContents(SLOT_SPECIMEN, ersatz);
 			}

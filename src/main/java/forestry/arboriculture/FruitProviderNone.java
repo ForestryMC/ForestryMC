@@ -10,20 +10,17 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
-import java.util.HashMap;
-
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.render.TextureManager;
+import java.util.HashMap;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 public class FruitProviderNone implements IFruitProvider {
 
@@ -46,8 +43,8 @@ public class FruitProviderNone implements IFruitProvider {
 		overlayTypes.put("plums", new OverlayType("plums", (short) 1004));
 	}
 
-	String key;
-	IFruitFamily family = null;
+	private final String key;
+	private final IFruitFamily family;
 
 	int ripeningPeriod = 10;
 

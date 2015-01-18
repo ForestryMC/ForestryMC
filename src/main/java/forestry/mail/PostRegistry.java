@@ -10,33 +10,30 @@
  ******************************************************************************/
 package forestry.mail;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
+import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.ILetter;
+import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IPostOffice;
 import forestry.api.mail.IPostRegistry;
 import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
-import forestry.api.mail.IMailAddress;
-import forestry.api.mail.EnumAddressee;
 import forestry.core.config.ForestryItem;
 import forestry.mail.items.ItemLetter;
 import forestry.plugins.PluginMail;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 public class PostRegistry implements IPostRegistry {
 
 	public static PostOffice cachedPostOffice;
-	public static final HashMap<IMailAddress, POBox> cachedPOBoxes = new HashMap<IMailAddress, POBox>();
-	public static final HashMap<IMailAddress, ITradeStation> cachedTradeStations = new HashMap<IMailAddress, ITradeStation>();
+	public static final Map<IMailAddress, POBox> cachedPOBoxes = new HashMap<IMailAddress, POBox>();
+	public static final Map<IMailAddress, ITradeStation> cachedTradeStations = new HashMap<IMailAddress, ITradeStation>();
 
 	/**
 	 * @param world the Minecraft world the PO box will be in
@@ -95,8 +92,11 @@ public class PostRegistry implements IPostRegistry {
 
 	@Override
 	public TradeStation getTradeStation(World world, IMailAddress address) {
+		if (address.getName() == null)
+			return null;
+
 		if (cachedTradeStations.containsKey(address))
-			return (TradeStation)cachedTradeStations.get(address);
+			return (TradeStation) cachedTradeStations.get(address);
 
 		TradeStation trade = (TradeStation) world.loadItemData(TradeStation.class, TradeStation.SAVE_NAME + address);
 
@@ -221,6 +221,5 @@ public class PostRegistry implements IPostRegistry {
 	public boolean isLetter(ItemStack itemstack) {
 		return ForestryItem.letters.isItemEqual(itemstack);
 	}
-
 
 }

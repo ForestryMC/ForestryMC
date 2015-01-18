@@ -13,7 +13,6 @@ package forestry.apiculture.genetics;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map.Entry;
 
@@ -22,9 +21,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-
 import com.mojang.authlib.GameProfile;
+
+import cpw.mods.fml.common.FMLCommonHandler;
 
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
@@ -69,9 +68,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	public int getSpeciesCount() {
 		if (beeSpeciesCount < 0) {
 			beeSpeciesCount = 0;
-			Iterator<Entry<String, IAllele> > it = AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet().iterator();
-			while (it.hasNext()) {
-				Entry<String, IAllele> entry = it.next();
+			for (Entry<String, IAllele> entry : AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet()) {
 				if (entry.getValue() instanceof IAlleleBeeSpecies)
 					if (((IAlleleBeeSpecies) entry.getValue()).isCounted())
 						beeSpeciesCount++;
@@ -101,7 +98,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 		if (!isMember(bee))
 			return null;
 
-		Item beeItem = null;
+		Item beeItem;
 		switch (EnumBeeType.VALUES[type]) {
 		case QUEEN:
 			beeItem = ForestryItem.beeQueenGE.item();
@@ -117,7 +114,6 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 			break;
 		default:
 			throw new RuntimeException("Cannot instantiate a bee of type " + type);
-
 		}
 
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
@@ -160,8 +156,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 
 	@Override
 	public IBee getMember(ItemStack stack) {
-		if (!ForestryItem.beeQueenGE.isItemEqual(stack) && !ForestryItem.beePrincessGE.isItemEqual(stack)
-				&& !ForestryItem.beeDroneGE.isItemEqual(stack) && !ForestryItem.beeLarvaeGE.isItemEqual(stack))
+		if (!isMember(stack))
 			return null;
 
 		return new Bee(stack.getTagCompound());
@@ -174,12 +169,12 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 
 	@Override
 	public IBee getBee(World world, IBeeGenome genome) {
-		return new Bee(world, genome);
+		return new Bee(genome);
 	}
 
 	@Override
 	public IBee getBee(World world, IBeeGenome genome, IBee mate) {
-		return new Bee(world, genome, mate);
+		return new Bee(genome, mate);
 	}
 
 	/* GENOME CONVERSIONS */

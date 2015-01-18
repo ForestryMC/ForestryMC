@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.core;
 
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.interfaces.IPickupHandler;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 public class PickupHandlerCore implements IPickupHandler {
 

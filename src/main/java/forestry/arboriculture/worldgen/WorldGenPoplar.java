@@ -11,8 +11,6 @@
 package forestry.arboriculture.worldgen;
 
 import forestry.api.world.ITreeGenData;
-import forestry.core.config.ForestryBlock;
-import forestry.core.worldgen.BlockType;
 
 public class WorldGenPoplar extends WorldGenTree {
 

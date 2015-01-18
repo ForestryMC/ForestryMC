@@ -13,7 +13,6 @@ package forestry.arboriculture.genetics;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map.Entry;
@@ -25,9 +24,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-
 import com.mojang.authlib.GameProfile;
+
+import cpw.mods.fml.common.FMLCommonHandler;
 
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumTreeChromosome;
@@ -46,6 +45,7 @@ import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.arboriculture.gadgets.BlockFruitPod;
+import forestry.arboriculture.gadgets.ForestryBlockLeaves;
 import forestry.arboriculture.gadgets.TileFruitPod;
 import forestry.arboriculture.gadgets.TileLeaves;
 import forestry.arboriculture.gadgets.TileSapling;
@@ -83,9 +83,7 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	public int getSpeciesCount() {
 		if (treeSpeciesCount < 0) {
 			treeSpeciesCount = 0;
-			Iterator<Entry<String, IAllele>> it = AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet().iterator();
-			while (it.hasNext()) {
-				Entry<String, IAllele> entry = it.next();
+			for (Entry<String, IAllele> entry : AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet()) {
 				if (entry.getValue() instanceof IAlleleTreeSpecies)
 					if (((IAlleleTreeSpecies) entry.getValue()).isCounted())
 						treeSpeciesCount++;
@@ -217,19 +215,18 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 		if (!ForestryBlock.leaves.isBlockEqual(world, x, y, z))
 			return false;
 
-		TileLeaves tileLeaves = new TileLeaves();
-		tileLeaves.setTree((ITree) tree.copy());
-		tileLeaves.setOwner(owner);
-		if (decorative)
-			tileLeaves.setDecorative();
-
-		world.setTileEntity(x, y, z, tileLeaves);
-
-		TileEntity tile = world.getTileEntity(x, y, z);
-		if (!(tile instanceof TileLeaves)) {
+		TileEntity tile = ForestryBlockLeaves.getLeafTile(world, x, y, z);
+		if (tile == null) {
 			world.setBlockToAir(x, y, z);
 			return false;
 		}
+
+		TileLeaves tileLeaves = (TileLeaves) tile;
+		tileLeaves.setOwner(owner);
+		tileLeaves.setTree((ITree) tree.copy());
+		if (decorative)
+			tileLeaves.setDecorative();
+		world.markBlockForUpdate(x, y, z);
 
 		return true;
 	}

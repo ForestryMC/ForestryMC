@@ -10,29 +10,26 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmable;
+import forestry.core.vect.MutableVect;
+import forestry.core.vect.Vect;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLog;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
-import forestry.core.utils.Vect;
-import java.util.HashSet;
-import java.util.Set;
 
 public class FarmLogicCocoa extends FarmLogic {
 
@@ -105,8 +102,6 @@ public class FarmLogicCocoa extends FarmLogic {
 	@Override
 	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
 
-		Collection<ICrop> crops = null;
-
 		Vect start = new Vect(x, y, z);
 		if (!lastExtentsHarvest.containsKey(start))
 			lastExtentsHarvest.put(start, 0);
@@ -116,7 +111,7 @@ public class FarmLogicCocoa extends FarmLogic {
 			lastExtent = 0;
 
 		Vect position = translateWithOffset(x, y + 1, z, direction, lastExtent);
-		crops = getHarvestBlocks(position);
+		Collection<ICrop> crops = getHarvestBlocks(position);
 		lastExtent++;
 		lastExtentsHarvest.put(start, lastExtent);
 
@@ -127,7 +122,7 @@ public class FarmLogicCocoa extends FarmLogic {
 
 		World world = getWorld();
 
-		Vect current = position;
+		MutableVect current = new MutableVect(position);
 		while (isWoodBlock(current) && BlockLog.func_150165_c(getBlockMeta(current)) == 3) {
 
 			for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
@@ -139,7 +134,7 @@ public class FarmLogicCocoa extends FarmLogic {
 					return housing.plantGermling(cocoa, world, candidate.x, candidate.y, candidate.z);
 			}
 
-			current = current.add(new Vect(0, 1, 0));
+			current.y++;
 			if (current.y - position.y > 1)
 				break;
 		}

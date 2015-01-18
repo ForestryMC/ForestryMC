@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.energy;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-
 import forestry.core.GuiHandlerBase;
 import forestry.core.network.GuiId;
 import forestry.core.network.PacketIds;
@@ -30,6 +27,8 @@ import forestry.energy.gui.GuiEngineBronze;
 import forestry.energy.gui.GuiEngineCopper;
 import forestry.energy.gui.GuiEngineTin;
 import forestry.energy.gui.GuiGenerator;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 
 public class GuiHandlerEnergy extends GuiHandlerBase {
 

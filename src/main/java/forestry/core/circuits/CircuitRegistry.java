@@ -10,25 +10,30 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitLibrary;
 import forestry.api.circuits.ICircuitRegistry;
 import forestry.core.config.ForestryItem;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 public class CircuitRegistry implements ICircuitRegistry {
 
-	private final LinkedHashMap<String, ICircuitLayout> layoutMap = new LinkedHashMap<String, ICircuitLayout>();
-	private final LinkedHashMap<String, ICircuit> circuitMap = new LinkedHashMap<String, ICircuit>();
-	private final HashMap<Integer, String> legacyMap = new HashMap<Integer, String>();
+	public static final ICircuitLayout DUMMY_LAYOUT = new CircuitLayout("dummy");
+	public static final Map<String, ICircuitLayout> DUMMY_MAP = new LinkedHashMap<String, ICircuitLayout>();
+	private final Map<String, ICircuitLayout> layoutMap = new LinkedHashMap<String, ICircuitLayout>();
+	private final Map<String, ICircuit> circuitMap = new LinkedHashMap<String, ICircuit>();
+	private final Map<Integer, String> legacyMap = new HashMap<Integer, String>();
+
+	static {
+		DUMMY_MAP.put("dummy", DUMMY_LAYOUT);
+	}
 
 	@Override
 	public ICircuitLibrary getCircuitLibrary(World world, String playername) {
@@ -47,12 +52,16 @@ public class CircuitRegistry implements ICircuitRegistry {
 	public ICircuitLayout getDefaultLayout() {
 		if (layoutMap.containsKey("forestry.engine.tin"))
 			return layoutMap.get("forestry.engine.tin");
-		else
+		else if (!layoutMap.isEmpty())
 			return layoutMap.values().iterator().next();
+		else
+			return DUMMY_LAYOUT;
 	}
 
 	@Override
-	public LinkedHashMap<String, ICircuitLayout> getRegisteredLayouts() {
+	public Map<String, ICircuitLayout> getRegisteredLayouts() {
+		if (layoutMap.isEmpty())
+			return DUMMY_MAP;
 		return layoutMap;
 	}
 
@@ -71,7 +80,7 @@ public class CircuitRegistry implements ICircuitRegistry {
 
 	/* CIRCUITS */
 	@Override
-	public HashMap<String, ICircuit> getRegisteredCircuits() {
+	public Map<String, ICircuit> getRegisteredCircuits() {
 		return circuitMap;
 	}
 
@@ -100,14 +109,12 @@ public class CircuitRegistry implements ICircuitRegistry {
 
 	public void initialize() {
 	}
-	
-	
-	
+
 	@Override
 	public boolean isChipset(ItemStack itemstack) {
 		return ForestryItem.circuitboards.isItemEqual(itemstack);
 	}
-	
+
 	@Override
 	public ICircuitBoard getCircuitboard(ItemStack itemstack) {
 		NBTTagCompound nbttagcompound = itemstack.getTagCompound();

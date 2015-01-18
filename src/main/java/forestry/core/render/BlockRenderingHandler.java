@@ -10,16 +10,13 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import forestry.core.ForestryClient;
+import forestry.core.interfaces.IBlockRenderer;
 import java.util.HashMap;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
-
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-
-import forestry.core.ForestryClient;
-import forestry.core.interfaces.IBlockRenderer;
 
 public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 

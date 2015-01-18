@@ -13,14 +13,13 @@ package forestry.farming.logic;
 import forestry.core.gadgets.BlockSoil;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
+import java.util.ArrayList;
+import java.util.Collection;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class CropPeat extends Crop {
 

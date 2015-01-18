@@ -10,13 +10,11 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 
 public class ItemForestryMultiPass extends ItemForestry {

@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
+import forestry.core.gui.tooltips.IToolTipProvider;
+import forestry.core.gui.tooltips.ToolTip;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-
-import forestry.core.gui.tooltips.IToolTipProvider;
-import forestry.core.gui.tooltips.ToolTip;
 
 public class SlotForestry extends Slot implements IToolTipProvider{
 
@@ -28,12 +27,10 @@ public class SlotForestry extends Slot implements IToolTipProvider{
 	private ToolTip toolTips;
 
 	public SlotForestry(IInventory inventory, int slotIndex, int xPos, int yPos) {
-		this(inventory, slotIndex, xPos, yPos, -1);
-	}
-
-	public SlotForestry(IInventory inventory, int slotIndex, int xPos, int yPos, int stackLimit) {
 		super(inventory, slotIndex, xPos, yPos);
-		this.stackLimit = stackLimit;
+		if (inventory == null)
+			throw new IllegalArgumentException("Inventory must not be null");
+		this.stackLimit = -1;
 	}
 
 	public SlotForestry setInfinite() {

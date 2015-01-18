@@ -14,21 +14,17 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
-import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.BlockSoil;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
+import java.util.Collection;
+import java.util.Stack;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.Collection;
-import java.util.Stack;
 
 public class FarmLogicPeat extends FarmLogicWatered {
 
@@ -77,7 +73,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 			Vect position = translateWithOffset(x, y, z, direction, i);
 			ItemStack occupant = getAsItemStack(position);
 
-			if (occupant == null)
+			if (occupant.getItem() == null)
 				continue;
 
 			Block block = BlockSoil.getBlockFromItem(occupant.getItem());

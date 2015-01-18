@@ -10,13 +10,31 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import codechicken.nei.VisiblityData;
-import codechicken.nei.api.INEIGuiHandler;
-import codechicken.nei.api.TaggedInventoryArea;
+import java.awt.Color;
+import java.util.Collection;
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ResourceLocation;
+
 import cpw.mods.fml.common.Optional;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
 import forestry.core.config.Config;
 import forestry.core.gadgets.TileForestry;
-import forestry.core.gui.slots.SlotForestry;
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.tooltips.ToolTipLine;
@@ -28,22 +46,10 @@ import forestry.core.interfaces.IOwnable;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.FontColour;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
-import java.awt.Color;
-import java.util.Collection;
-import java.util.List;
+import codechicken.nei.VisiblityData;
+import codechicken.nei.api.INEIGuiHandler;
+import codechicken.nei.api.TaggedInventoryArea;
 
 @Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = "NotEnoughItems")
 public abstract class GuiForestry<T extends TileForestry> extends GuiContainer implements INEIGuiHandler {
@@ -56,20 +62,20 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 	protected final FontColour fontColor;
 	public final ResourceLocation textureFile;
 
-	public GuiForestry(String texture, ContainerForestry container) {
+	public GuiForestry(String texture, Container container) {
 		this(new ResourceLocation("forestry", texture), container, null);
 	}
 
-	public GuiForestry(String texture, ContainerForestry container, Object inventory) {
+	public GuiForestry(String texture, Container container, Object inventory) {
 		this(new ResourceLocation("forestry", texture), container, inventory);
 	}
 
-	public GuiForestry(ResourceLocation texture, ContainerForestry container) {
+	public GuiForestry(ResourceLocation texture, Container container) {
 		this(texture, container, null);
 	}
 
 	@SuppressWarnings("unchecked")
-	public GuiForestry(ResourceLocation texture, ContainerForestry container, Object inventory) {
+	public GuiForestry(ResourceLocation texture, Container container, Object inventory) {
 		super(container);
 		this.widgetManager = new WidgetManager(this);
 		this.ledgerManager = new LedgerManager(this);
@@ -247,7 +253,7 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		int y;
 
 		for (ToolTipLine tip : toolTips) {
-			y = this.fontRendererObj.getStringWidth(tip.getText());
+			y = this.fontRendererObj.getStringWidth(tip.toString());
 
 			height += 10 + tip.getSpacing();
 			if (y > length)
@@ -276,17 +282,19 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		this.drawGradientRect(x - 3, y - 3, x + length + 2, y - 3 + 1, borderColorTopInt, borderColorTopInt);
 		this.drawGradientRect(x - 3, y + height, x + length + 2, y + height + 1, borderColorBottomInt, borderColorBottomInt);
 
+		boolean firstLine = true;
 		for (ToolTipLine tip : toolTips) {
-			String line = tip.getText();
+			String line = tip.toString();
 
-			if (tip.getColor() == null)
-				line = "\u00a77" + line;
-			else
-				line = "\u00a7" + tip.getColor().getFormattingCode() + line;
+			if (!firstLine) {
+				line = EnumChatFormatting.GRAY + line;
+			}
 
 			this.fontRendererObj.drawStringWithShadow(line, x, y, -1);
 
 			y += 10 + tip.getSpacing();
+
+			firstLine = false;
 		}
 
 		this.zLevel = 0.0F;
@@ -408,54 +416,14 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 	public void drawGradientRect(int par1, int par2, int par3, int par4, int par5, int par6) {
 		super.drawGradientRect(par1, par2, par3, par4, par5, par6);
 	}
-	//
-	//	protected void drawGuiContainerForegroundLayer() {
-	//	}
 
-	/**
-	 * Draws the basic background texture centered on the screen.
-	 */
-	//	protected void drawBackground() {
-	//		drawBackground((this.width - this.xSize) / 2, (this.height - this.ySize) / 2, this.xSize, this.ySize);
-	//	}
-	//	protected void drawBackground(int x, int y, int w, int h) {
-	//		bindTexture();
-	//		this.drawTexturedModalRect(x, y, 0, 0, w, h);
-	//	}
-	//	protected void bindTexture() {
-	//		bindTexture(textureFile);
-	//	}
-	//
-	//	protected void drawSlotInventory(Slot slot) {
-	//
-	//		int xPos = slot.xDisplayPosition;
-	//		int yPos = slot.yDisplayPosition;
-	//		ItemStack slotStack = slot.getStack();
-	//		boolean backgroundDrawn = false;
-	//
-	//		this.zLevel = 100.0F;
-	//		itemRenderer.zLevel = 100.0F;
-	//
-	//		if (slotStack == null) {
-	//			IIcon icon = slot.getBackgroundIconIndex();
-	//
-	//			if (icon != null) {
-	//				GL11.glDisable(GL11.GL_LIGHTING);
-	//				GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
-	//				Proxies.common.bindTexture(SpriteSheet.ITEMS);
-	//				this.drawTexturedModelRectFromIcon(xPos, yPos, icon, 16, 16);
-	//				GL11.glEnable(GL11.GL_LIGHTING);
-	//				backgroundDrawn = true;
-	//			}
-	//		}
-	//
-	//		if (!backgroundDrawn && slotStack != null)
-	//			drawItemStack(slotStack, xPos, yPos);
-	//
-	//		this.zLevel = 0.0F;
-	//		itemRenderer.zLevel = 0.0F;
-	//	}
 	public void drawItemStack(ItemStack stack, int xPos, int yPos) {
+		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		RenderHelper.enableGUIStandardItemLighting();
+
 		GL11.glTranslatef(0.0F, 0.0F, 32.0F);
 		this.zLevel = 100.0F;
 		itemRender.zLevel = 100.0F;
@@ -468,31 +436,29 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		itemRender.renderItemOverlayIntoGUI(font, this.mc.getTextureManager(), stack, xPos, yPos);
 		this.zLevel = 0.0F;
 		itemRender.zLevel = 0.0F;
+
+		RenderHelper.disableStandardItemLighting();
+		GL11.glPopAttrib();
 	}
 
 	protected class ItemStackWidget extends Widget {
-		ItemStack itemStack;
+		private final ItemStack itemStack;
 
 		public ItemStackWidget(int xPos, int yPos, ItemStack itemStack) {
 			super(widgetManager, xPos, yPos);
-
-			IIcon icon = itemStack.getItem().getIcon(itemStack, 0);
-
-			this.width = icon.getIconWidth();
-			this.height = icon.getIconHeight();
 			this.itemStack = itemStack;
 		}
 
 		@Override
 		public void draw(int startX, int startY) {
-			itemRender.renderItemAndEffectIntoGUI(fontRendererObj, mc.renderEngine, itemStack, xPos + startX, yPos + startY);
-			itemRender.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, itemStack, xPos + startX, yPos + startY);
+			drawItemStack(itemStack, xPos + startX, yPos + startY);
 		}
 
 		@Override
 		public ToolTip getToolTip() {
+			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			ToolTip tip = new ToolTip();
-			tip.add(itemStack.getDisplayName());
+			tip.add(itemStack.getTooltip(player, false));
 			return tip;
 		}
 	}

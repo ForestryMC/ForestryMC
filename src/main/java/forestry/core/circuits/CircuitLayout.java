@@ -28,11 +28,11 @@ public class CircuitLayout implements ICircuitLayout {
 
 	@Override
 	public String getName() {
-		return StringUtil.localize("layout." + this.uid);
+		return StringUtil.localize("circuit.layout." + this.uid + ".name");
 	}
 
 	@Override
 	public String getUsage() {
-		return StringUtil.localize("usage." + this.uid);
+		return StringUtil.localize("circuit.layout." + this.uid + ".usage");
 	}
 }

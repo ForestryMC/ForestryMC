@@ -10,16 +10,12 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-
 import cpw.mods.fml.common.network.IGuiHandler;
-
 import forestry.api.food.BeverageManager;
 import forestry.api.food.IBeverageEffect;
-import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
+import forestry.core.fluids.Fluids;
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemForestryFood;
@@ -31,6 +27,8 @@ import forestry.food.items.ItemAmbrosia;
 import forestry.food.items.ItemBeverage;
 import forestry.food.items.ItemBeverage.BeverageInfo;
 import forestry.food.items.ItemInfuser;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
 @Plugin(pluginID = "Food", name = "Food", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.food.description")
 public class PluginFood extends ForestryPlugin {
@@ -69,8 +67,7 @@ public class PluginFood extends ForestryPlugin {
 		ItemStack meadBottle = ForestryItem.beverage.getItemStack();
 		((ItemBeverage) ForestryItem.beverage.item()).beverages[0].saveEffects(meadBottle, new IBeverageEffect[] { BeverageEffect.weakAlcoholic });
 
-		LiquidHelper.getOrCreateLiquid(Defaults.LIQUID_MEAD);
-		LiquidHelper.injectLiquidContainer(Defaults.LIQUID_MEAD, Defaults.BUCKET_VOLUME, meadBottle, new ItemStack(Items.glass_bottle));
+		LiquidHelper.injectLiquidContainer(Fluids.SHORT_MEAD, Defaults.BUCKET_VOLUME, meadBottle, new ItemStack(Items.glass_bottle));
 	}
 
 	@Override

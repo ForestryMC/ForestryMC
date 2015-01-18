@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import java.util.EnumSet;
-
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.World;
-
 import forestry.api.arboriculture.EnumGrowthConditions;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.core.utils.StringUtil;
+import java.util.EnumSet;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 
 public class GrowthProviderTropical extends GrowthProvider {
 

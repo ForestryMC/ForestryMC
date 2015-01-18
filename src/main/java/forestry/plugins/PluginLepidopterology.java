@@ -10,18 +10,8 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import java.util.EnumSet;
-import java.util.Locale;
-
-import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraftforge.oredict.RecipeSorter;
-
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.network.IGuiHandler;
-
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -37,12 +27,12 @@ import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.Property;
+import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.genetics.Allele;
 import forestry.core.genetics.Branch;
 import forestry.core.items.ItemForestryBlock;
-import forestry.core.utils.LiquidHelper;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.core.utils.Utils;
 import forestry.lepidopterology.ButterflySpawner;
@@ -58,6 +48,13 @@ import forestry.lepidopterology.genetics.ButterflyTemplates;
 import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.items.ItemFlutterlyzer;
 import forestry.lepidopterology.proxy.ProxyLepidopterology;
+import java.util.EnumSet;
+import java.util.Locale;
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraftforge.oredict.RecipeSorter;
 
 @Plugin(pluginID = "Lepidopterology", name = "Lepidopterology", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.lepidopterology.description")
 public class PluginLepidopterology extends ForestryPlugin {
@@ -102,12 +99,12 @@ public class PluginLepidopterology extends ForestryPlugin {
 		config = new Configuration();
 
 		Property property = config.get("entities.spawn.limit", CONFIG_CATEGORY, spawnConstraint);
-		property.Comment = "determines the global butterfly entity count above which natural spawning of butterflies ceases.";
-		spawnConstraint = Integer.parseInt(property.Value);
+		property.comment = "determines the global butterfly entity count above which natural spawning of butterflies ceases.";
+		spawnConstraint = Integer.parseInt(property.value);
 
 		property = config.get("entities.maximum.allowed", CONFIG_CATEGORY, entityConstraint);
-		property.Comment = "determines the global butterfly entity count above which butterflies will stay in item form and will not take flight anymore.";
-		entityConstraint = Integer.parseInt(property.Value);
+		property.comment = "determines the global butterfly entity count above which butterflies will stay in item form and will not take flight anymore.";
+		entityConstraint = Integer.parseInt(property.value);
 
 		config.save();
 
@@ -148,9 +145,9 @@ public class PluginLepidopterology extends ForestryPlugin {
 	protected void registerRecipes() {
 		CraftingManager.getInstance().getRecipeList().add(new MatingRecipe());
 
-		RecipeManagers.carpenterManager.addRecipe(100, LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 2000), null, ForestryItem.flutterlyzer.getItemStack(),
-				"X#X", "X#X", "RDR", Character.valueOf('#'), Blocks.glass_pane, Character.valueOf('X'), "ingotBronze", Character.valueOf('R'),
-				Items.redstone, Character.valueOf('D'), Items.diamond);
+		RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, ForestryItem.flutterlyzer.getItemStack(),
+				"X#X", "X#X", "RDR", '#', Blocks.glass_pane, 'X', "ingotBronze", 'R',
+				Items.redstone, 'D', Items.diamond);
 	}
 
 	private void createAlleles() {

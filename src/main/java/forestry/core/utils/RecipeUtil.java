@@ -10,32 +10,57 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import forestry.api.recipes.RecipeManagers;
-import forestry.core.config.Defaults;
-import forestry.core.gui.ContainerDummy;
-import forestry.core.interfaces.IDescriptiveRecipe;
-import forestry.core.proxy.Proxies;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
 
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.oredict.OreDictionary;
+
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.fluids.Fluids;
+import forestry.core.gui.ContainerDummy;
+import forestry.core.interfaces.IDescriptiveRecipe;
+import forestry.core.proxy.Proxies;
+
 public class RecipeUtil {
 
 	private static final Container DUMMY_CONTAINER = new ContainerDummy();
 
-	public static void injectLeveledRecipe(ItemStack resource, int fermentationValue, String output) {
+	public static void injectLeveledRecipe(ItemStack resource, int fermentationValue, Fluids output) {
 		if (RecipeManagers.fermenterManager == null)
 			return;
 
-		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, LiquidHelper.getLiquid(output, 1), LiquidHelper.getLiquid(Defaults.LIQUID_WATER, 1));
+		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, output.getFluid(1), Fluids.WATER.getFluid(1));
 
-		if (LiquidHelper.exists(Defaults.LIQUID_JUICE))
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, LiquidHelper.getLiquid(output, 1), LiquidHelper.getLiquid(Defaults.LIQUID_JUICE, 1));
+		if (FluidRegistry.isFluidRegistered(Fluids.JUICE.getFluid()))
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.JUICE.getFluid(1));
 
-		if (LiquidHelper.exists(Defaults.LIQUID_HONEY))
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, LiquidHelper.getLiquid(output, 1), LiquidHelper.getLiquid(Defaults.LIQUID_HONEY, 1));
+		if (FluidRegistry.isFluidRegistered(Fluids.HONEY.getFluid()))
+			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.HONEY.getFluid(1));
+	}
+
+	/**
+	 * Returns a list of the ore dictionary names if they exist.
+	 * Returns a list containing itemStack if there are no ore dictionary names.
+	 * Used for creating recipes that should accept equivalent itemStacks, based on the ore dictionary.
+	 */
+	public static List getOreDictRecipeEquivalents(ItemStack itemStack) {
+		int[] oreDictIds = OreDictionary.getOreIDs(itemStack);
+		List<String> oreDictNames = new ArrayList<String>(oreDictIds.length);
+		for (int oreId : oreDictIds) {
+			String oreDictName = OreDictionary.getOreName(oreId);
+			oreDictNames.add(oreDictName);
+		}
+		if (oreDictNames.isEmpty())
+			return Collections.singletonList(itemStack);
+		return oreDictNames;
 	}
 
 	public static Object[] getCraftingRecipeAsArray(Object rec) {
@@ -100,7 +125,7 @@ public class RecipeUtil {
 			// Use crafting equivalent (not oredict) items first
 			for (ItemStack stockStack : stockCopy) {
 				if (stockStack.stackSize > 0 && StackUtils.isCraftingEquivalent(recipeStack, stockStack, false, false)) {
-					ItemStack stack = new ItemStack(stockStack.getItem(), 1, stockStack.getItemDamage());
+					ItemStack stack = StackUtils.createSplitStack(stockStack, 1);
 					stockStack.stackSize--;
 					crafting.setInventorySlotContents(slot, stack);
 					break;
@@ -111,7 +136,7 @@ public class RecipeUtil {
 			if (crafting.getStackInSlot(slot) == null) {
 				for (ItemStack stockStack : stockCopy) {
 					if (stockStack.stackSize > 0 && StackUtils.isCraftingEquivalent(recipeStack, stockStack, true, true)) {
-						ItemStack stack = new ItemStack(stockStack.getItem(), 1, stockStack.getItemDamage());
+						ItemStack stack = StackUtils.createSplitStack(stockStack, 1);
 						stockStack.stackSize--;
 						crafting.setInventorySlotContents(slot, stack);
 						break;

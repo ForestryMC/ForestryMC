@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.core.interfaces;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.core.utils.EnumTankLevel;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public interface IRenderableMachine {
 

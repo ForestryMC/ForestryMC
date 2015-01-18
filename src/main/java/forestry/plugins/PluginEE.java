@@ -10,13 +10,6 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import java.lang.reflect.Field;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.common.BiomeDictionary;
-
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IMutation;
 import forestry.apiculture.genetics.AlleleBeeSpecies;
@@ -27,6 +20,10 @@ import forestry.apiculture.genetics.MutationEMC;
 import forestry.core.config.Defaults;
 import forestry.core.genetics.Allele;
 import forestry.core.proxy.Proxies;
+import java.lang.reflect.Field;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.BiomeDictionary;
 
 @Plugin(pluginID = "EqEx2", name = "Equivalent Exchange 2", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.ee2.description")
 public class PluginEE extends ForestryPlugin {

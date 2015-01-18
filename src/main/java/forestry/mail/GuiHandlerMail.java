@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.mail;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import forestry.core.GuiHandlerBase;
 import forestry.core.network.GuiId;
 import forestry.mail.gadgets.MachineMailbox;
@@ -34,6 +30,9 @@ import forestry.mail.gui.GuiTrader;
 import forestry.mail.items.ItemCatalogue;
 import forestry.mail.items.ItemLetter;
 import forestry.mail.items.ItemLetter.LetterInventory;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class GuiHandlerMail extends GuiHandlerBase {
 
@@ -45,7 +44,7 @@ public class GuiHandlerMail extends GuiHandlerBase {
 
 		switch (GuiId.values()[id]) {
 		case CatalogueGUI:
-			ItemStack cata = getEquippedItem(player);
+			ItemStack cata = player.getCurrentEquippedItem();
 			if (cata == null)
 				return null;
 
@@ -55,7 +54,7 @@ public class GuiHandlerMail extends GuiHandlerBase {
 				return null;
 			
 		case LetterGUI:
-			ItemStack equipped = getEquippedItem(player);
+			ItemStack equipped = player.getCurrentEquippedItem();
 			if (equipped == null)
 				return null;
 
@@ -86,7 +85,7 @@ public class GuiHandlerMail extends GuiHandlerBase {
 
 		switch (GuiId.values()[id]) {
 		case CatalogueGUI:
-			ItemStack cata = getEquippedItem(player);
+			ItemStack cata = player.getCurrentEquippedItem();
 			if (cata == null)
 				return null;
 
@@ -96,12 +95,12 @@ public class GuiHandlerMail extends GuiHandlerBase {
 				return null;
 			
 		case LetterGUI:
-			ItemStack equipped = getEquippedItem(player);
+			ItemStack equipped = player.getCurrentEquippedItem();
 			if (equipped == null)
 				return null;
 
 			if (equipped.getItem() instanceof ItemLetter)
-				return new ContainerLetter(player, new LetterInventory(getEquippedItem(player)));
+				return new ContainerLetter(player, new LetterInventory(equipped));
 			else
 				return null;
 

@@ -10,20 +10,18 @@
  ******************************************************************************/
 package forestry.storage;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ContainerPlayer;
-import net.minecraft.item.ItemStack;
-
 import cpw.mods.fml.common.eventhandler.Event;
-
-import net.minecraftforge.common.MinecraftForge;
-
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.BackpackResupplyEvent;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.core.interfaces.IResupplyHandler;
-import forestry.core.utils.ItemInventory;
+import forestry.core.inventory.ItemInventory;
+import forestry.core.inventory.ItemInventoryBackpack;
 import forestry.storage.items.ItemBackpack;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ContainerPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 
 public class ResupplyHandler implements IResupplyHandler {
 
@@ -62,7 +60,7 @@ public class ResupplyHandler implements IResupplyHandler {
 
 			// Load their inventory
 			ItemBackpack packItem = ((ItemBackpack) backpack.getItem());
-			ItemInventory backpackinventory = new ItemInventory(ItemBackpack.class, packItem.getBackpackSize(), backpack);
+			ItemInventory backpackinventory = new ItemInventoryBackpack(ItemBackpack.class, packItem.getBackpackSize(), backpack);
 			Event event = new BackpackResupplyEvent(player, packItem.getDefinition(), backpackinventory);
 			MinecraftForge.EVENT_BUS.post(event);
 			if (event.isCanceled())
@@ -96,9 +94,6 @@ public class ResupplyHandler implements IResupplyHandler {
 
 	/**
 	 * This tops off existing stacks in the player's inventory.
-	 * 
-	 * @param player
-	 * @param itemstack
 	 */
 	private boolean topOffPlayerInventory(EntityPlayer player, ItemStack itemstack) {
 
@@ -115,11 +110,8 @@ public class ResupplyHandler implements IResupplyHandler {
 				continue;
 
 			if (inventoryStack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(inventoryStack, itemstack)) {
-
 				inventoryStack.stackSize++;
 				itemstack.stackSize--;
-				if (itemstack.stackSize <= 0)
-					itemstack = null;
 				return true;
 			}
 		}

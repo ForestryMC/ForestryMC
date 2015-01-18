@@ -10,17 +10,15 @@
  ******************************************************************************/
 package forestry.core.config;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
+import forestry.Forestry;
+import forestry.core.proxy.Proxies;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
-
-import forestry.Forestry;
-import forestry.core.proxy.Proxies;
 
 /**
  * With permission from pahimar.
@@ -64,13 +62,13 @@ public class Version {
 			return false;
 
 		Property property = Config.config.get("vars.version.seen", Config.CATEGORY_COMMON, VERSION);
-		property.Comment = "indicates the last version the user has been informed about and will suppress further notices on it.";
-		String seenVersion = property.Value;
+		property.comment = "indicates the last version the user has been informed about and will suppress further notices on it.";
+		String seenVersion = property.value;
 
 		if (recommendedVersion == null || recommendedVersion.equals(seenVersion))
 			return false;
 
-		property.Value = recommendedVersion;
+		property.value = recommendedVersion;
 		Config.config.save();
 		return true;
 	}

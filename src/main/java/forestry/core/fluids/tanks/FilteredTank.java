@@ -10,15 +10,21 @@
  ******************************************************************************/
 package forestry.core.fluids.tanks;
 
-import forestry.core.gui.tooltips.ToolTipLine;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+
+import net.minecraft.item.EnumRarity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumChatFormatting;
+
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
+import forestry.core.gui.tooltips.ToolTipLine;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.StringUtil;
 
 /**
  *
@@ -26,7 +32,7 @@ import java.util.HashSet;
  */
 public class FilteredTank extends StandardTank {
 
-	private HashSet<Fluid> filters;
+	private final HashSet<Fluid> filters;
 
 	public FilteredTank(int capacity, Fluid... filters) {
 		this(capacity, Arrays.asList(filters), null);
@@ -72,19 +78,20 @@ public class FilteredTank extends StandardTank {
 		}
 
 		toolTip.clear();
-		int amount = 0;
-		for (Fluid filter : filters) {
-			EnumRarity rarity = filter.getRarity();
-			if (rarity == null)
-				rarity = EnumRarity.common;
-			FluidStack filterFluidStack = FluidRegistry.getFluidStack(filter.getName(), 0);
-			ToolTipLine name = new ToolTipLine(filter.getLocalizedName(filterFluidStack), rarity.rarityColor, 2);
-			toolTip.add(name);
-			if (getFluid() != null)
-				amount = getFluid().amount;
+		if(Proxies.common.isShiftDown() || filters.size() < 5) {
+			for (Fluid filter : filters) {
+				EnumRarity rarity = filter.getRarity();
+				if (rarity == null)
+					rarity = EnumRarity.common;
+				FluidStack filterFluidStack = FluidRegistry.getFluidStack(filter.getName(), 0);
+				ToolTipLine name = new ToolTipLine(filter.getLocalizedName(filterFluidStack), rarity.rarityColor, 2);
+				toolTip.add(name);
+			}
+		} else {
+			toolTip.add(EnumChatFormatting.ITALIC + "<" + StringUtil.localize("gui.tooltip.tmi") + ">");
 		}
 
-		toolTip.add(new ToolTipLine(String.format("%,d", amount) + " / " + String.format("%,d", getCapacity())));
+		toolTip.add(String.format("%,d", getFluidAmount()) + " / " + String.format("%,d", getCapacity()));
 	}
 
 }

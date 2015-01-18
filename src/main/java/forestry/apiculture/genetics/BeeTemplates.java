@@ -14,7 +14,6 @@ import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IMutation;
 import forestry.core.genetics.Allele;
-
 import java.util.Arrays;
 
 public class BeeTemplates {
@@ -548,6 +547,24 @@ public class BeeTemplates {
 		alleles[EnumBeeChromosome.SPECIES.ordinal()] = Allele.speciesRural;
 		return alleles;
 	}
+	
+	public static IAllele[] getFarmerlyTemplate() {
+		IAllele[] alleles = getAgrarianBranchTemplate();
+		alleles[EnumBeeChromosome.SPECIES.ordinal()] = Allele.speciesFarmerly;
+		alleles[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlow;
+		alleles[EnumBeeChromosome.TERRITORY.ordinal()] = Allele.territoryLarge;
+		return alleles;
+	}
+	
+	public static IAllele[] getAgrarianTemplate() {
+		IAllele[] alleles = getAgrarianBranchTemplate();
+		alleles[EnumBeeChromosome.SPECIES.ordinal()] = Allele.speciesArgrarian;
+		alleles[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlow;
+		alleles[EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceBoth2;
+		alleles[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectFertile;
+		alleles[EnumBeeChromosome.TERRITORY.ordinal()] = Allele.territoryLarge;
+		return alleles;
+	}
 
 	// / BOGGY BRANCH
 	public static IAllele[] getBoggyBranchTemplate() {
@@ -563,6 +580,25 @@ public class BeeTemplates {
 		IAllele[] alleles = getBoggyBranchTemplate();
 		alleles[EnumBeeChromosome.SPECIES.ordinal()] = Allele.speciesMarshy;
 		return alleles;
+	}
+	
+	public static IAllele[] getMiryTemplate() {
+		IAllele[] alleles = getBoggyBranchTemplate();
+		alleles[EnumBeeChromosome.SPECIES.ordinal()] = Allele.speciesMiry;
+		alleles[EnumBeeChromosome.FERTILITY.ordinal()] = Allele.fertilityMaximum;
+		alleles[EnumBeeChromosome.TOLERANT_FLYER.ordinal()] = Allele.boolTrue;
+		alleles[EnumBeeChromosome.NOCTURNAL.ordinal()] = Allele.boolTrue;
+		return alleles;
+	}
+	
+	public static IAllele[] getBoggyTemplate() {
+		IAllele[] alleles = getBoggyBranchTemplate();
+		alleles[EnumBeeChromosome.SPECIES.ordinal()] = Allele.speciesBoggy;
+		alleles[EnumBeeChromosome.TOLERANT_FLYER.ordinal()] = Allele.boolTrue;
+		alleles[EnumBeeChromosome.NOCTURNAL.ordinal()] = Allele.boolTrue;
+		alleles[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectMycophilic;
+		alleles[EnumBeeChromosome.TERRITORY.ordinal()] = Allele.territoryLarger;
+		return alleles;		
 	}
 
 	/* MONASTIC BRANCH */

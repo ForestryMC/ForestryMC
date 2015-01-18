@@ -10,17 +10,14 @@
  ******************************************************************************/
 package forestry.arboriculture.render;
 
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import forestry.plugins.PluginArboriculture;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.IBlockAccess;
-
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-
 import org.lwjgl.opengl.GL11;
-
-import forestry.plugins.PluginArboriculture;
 
 public class FenceRenderingHandler implements ISimpleBlockRenderingHandler {
 

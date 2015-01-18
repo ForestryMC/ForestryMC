@@ -10,47 +10,44 @@
  ******************************************************************************/
 package forestry.mail.gadgets;
 
-import buildcraft.api.statements.ITriggerExternal;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
 import cpw.mods.fml.common.Optional;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.core.gadgets.TileBase;
-import forestry.core.network.EntityNetData;
+import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.GuiId;
+import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.EnumAccess;
-import forestry.core.utils.InventoryAdapter;
 import forestry.core.utils.StackUtils;
 import forestry.mail.MailAddress;
 import forestry.mail.TradeStation;
-import forestry.plugins.PluginMail;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import forestry.mail.triggers.MailTriggers;
 
-import java.util.Collection;
-import java.util.LinkedList;
+import buildcraft.api.statements.ITriggerExternal;
 
-public class MachineTrader extends TileBase implements ISidedInventory {
+public class MachineTrader extends TileBase {
 
-	@EntityNetData
-	private MailAddress address;
+	private IMailAddress address;
 
 	public MachineTrader() {
 		address = new MailAddress();
-	}
-
-	@Override
-	public String getInventoryName() {
-		return getUnlocalizedName();
+		setInternalInventory(new TradeStation.TradeStationInventory(TradeStation.SLOT_SIZE, "INV"));
 	}
 
 	@Override
@@ -63,9 +60,8 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 
 	@Override
 	public void onRemoval() {
-		if (isLinked()) {
+		if (isLinked())
 			PostManager.postRegistry.deleteTradeStation(worldObj, address);
-		}
 	}
 
 	/* SAVING & LOADING */
@@ -84,13 +80,32 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 
-		if (nbttagcompound.hasKey("address")) {
+		if (nbttagcompound.hasKey("address"))
 			address = MailAddress.loadFromNBT(nbttagcompound.getCompoundTag("address"));
+	}
+
+	@Override
+	public PacketPayload getPacketPayload() {
+		if (address == null || address.getName() == null)
+			return null;
+
+		PacketPayload payload = new PacketPayload(0, 0, 1);
+		payload.stringPayload[0] = address.getName();
+		return payload;
+	}
+
+	@Override
+	public void fromPacketPayload(PacketPayload payload) {
+		if (payload.isEmpty()) {
+			address = null;
+			return;
 		}
+
+		String addressName = payload.stringPayload[0];
+		address = PostManager.postRegistry.getMailAddress(addressName);
 	}
 
 	/* UPDATING */
-
 	/**
 	 * The trade station should show errors for missing stamps and paper first.
 	 * Once it is able to send letters, it should display other error states.
@@ -106,19 +121,18 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 		if (!hasPostageMin(3))
 			errorCode = EnumErrorCode.NOSTAMPS;
 
-		if (!hasPaperMin(2)) {
+		if (!hasPaperMin(2))
 			if (errorCode == EnumErrorCode.NOSTAMPS)
 				errorCode = EnumErrorCode.NOSTAMPSNOPAPER;
 			else
 				errorCode = EnumErrorCode.NOPAPER;
-		}
 
 		if (errorCode != EnumErrorCode.OK) {
 			setErrorState(errorCode);
 			return;
 		}
 
-		IInventory inventory = getOrCreateTradeInventory();
+		IInventory inventory = getInternalInventory();
 		ItemStack tradeGood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
 
 		if (tradeGood == null) {
@@ -133,25 +147,23 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 		}
 
 		boolean hasSupplies = hasItemCount(TradeStation.SLOT_SEND_BUFFER, TradeStation.SLOT_SEND_BUFFER_COUNT, tradeGood, tradeGood.stackSize);
-		if(!hasSupplies) {
+		if (!hasSupplies) {
 			setErrorState(EnumErrorCode.NOSUPPLIES);
 			return;
 		}
 
-		if (inventory instanceof TradeStation) {
-			if (!((TradeStation)inventory).canReceivePayment()) {
+		if (inventory instanceof TradeStation)
+			if (!((TradeStation) inventory).canReceivePayment()) {
 				setErrorState(EnumErrorCode.NOSPACE);
 				return;
 			}
-		}
 
 		setErrorState(EnumErrorCode.OK);
 	}
 
 	/* STATE INFORMATION */
-
 	public boolean isLinked() {
-		return address.isValid();
+		return address.isValid() && getErrorState() != EnumErrorCode.NOTALPHANUMERIC && getErrorState() != EnumErrorCode.NOTUNIQUE;
 	}
 
 	/**
@@ -161,7 +173,7 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 	private boolean hasItemCount(int startSlot, int countSlots, ItemStack item, int itemCount) {
 		int count = 0;
 
-		IInventory tradeInventory = this.getOrCreateTradeInventory();
+		IInventory tradeInventory = this.getInternalInventory();
 		for (int i = startSlot; i < startSlot + countSlots; i++) {
 			ItemStack itemInSlot = tradeInventory.getStackInSlot(i);
 			if (itemInSlot == null)
@@ -183,19 +195,19 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 		int count = 0;
 		int total = 0;
 
-		IInventory tradeInventory = this.getOrCreateTradeInventory();
+		IInventory tradeInventory = this.getInternalInventory();
 		for (int i = startSlot; i < startSlot + countSlots; i++) {
 			ItemStack itemInSlot = tradeInventory.getStackInSlot(i);
-			if (itemInSlot == null) {
+			if (itemInSlot == null)
 				total += 64;
-			} else {
+			else {
 				total += itemInSlot.getMaxStackSize();
 				if (item == null || StackUtils.isIdenticalItem(itemInSlot, item))
 					count += itemInSlot.stackSize;
 			}
 		}
 
-		return ((float)count / (float)total);
+		return ((float) count / (float) total);
 	}
 
 	public boolean hasPaperMin(int count) {
@@ -203,7 +215,7 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 	}
 
 	public boolean hasInputBufMin(float percentage) {
-		IInventory inventory = getOrCreateTradeInventory();
+		IInventory inventory = getInternalInventory();
 		ItemStack tradeGood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
 		if (tradeGood == null)
 			return true;
@@ -218,7 +230,7 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 
 		int posted = 0;
 
-		IInventory tradeInventory = this.getOrCreateTradeInventory();
+		IInventory tradeInventory = this.getInternalInventory();
 		for (int i = TradeStation.SLOT_STAMPS_1; i < TradeStation.SLOT_STAMPS_1 + TradeStation.SLOT_STAMPS_COUNT; i++) {
 			ItemStack stamp = tradeInventory.getStackInSlot(i);
 			if (stamp == null)
@@ -257,124 +269,20 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 				return;
 			}
 
-			this.address = new MailAddress(address);
+			this.address = address;
 			PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerProfile(), address);
 			setErrorState(EnumErrorCode.OK);
-		} else
-			this.address = new MailAddress(address);
+		}
 	}
 
-	/* TRADING */
-	public IInventory getOrCreateTradeInventory() {
-
+	@Override
+	public IInventoryAdapter getInternalInventory() {
 		// Handle client side
-		if (!Proxies.common.isSimulating(worldObj))
-			return new InventoryAdapter(TradeStation.SLOT_SIZE, "INV");
-
-		if (!address.isValid())
-			return new InventoryAdapter(TradeStation.SLOT_SIZE, "INV");
-
-		return PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerProfile(), address);
-	}
-
-	/* ISIDEDINVENTORY */
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	protected boolean canTakeStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-		return super.canTakeStackFromSide(slotIndex, itemstack, side);
-	}
-
-	/**
-	 * TODO: just a specialsource workaround
-	 */
-	@Override
-	protected boolean canPutStackFromSide(int slotIndex, ItemStack itemstack, int side) {
-		return super.canPutStackFromSide(slotIndex, itemstack, side);
-	}
-
-	/* ISIDEDINVENTORY */
-	@Override
-	public int getSizeInventory() {
-		return getOrCreateTradeInventory().getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return getOrCreateTradeInventory().getStackInSlot(i);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return getOrCreateTradeInventory().decrStackSize(i, j);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		getOrCreateTradeInventory().setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		return getOrCreateTradeInventory().getStackInSlotOnClosing(slot);
-	}
-
-	@Override
-	public void markDirty() {
-		getOrCreateTradeInventory().markDirty();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return getOrCreateTradeInventory().getInventoryStackLimit();
-	}
-
-	@Override
-	public void openInventory() {
-	}
-
-	@Override
-	public void closeInventory() {
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
-		return getOrCreateTradeInventory().hasCustomInventoryName();
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-		return getOrCreateTradeInventory().isItemValidForSlot(slotIndex, itemstack);
-	}
-
-	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		IInventory inventory = getOrCreateTradeInventory();
-		if (inventory instanceof TradeStation)
-			return ((TradeStation)getOrCreateTradeInventory()).canInsertItem(i, itemstack, j);
-		return super.canInsertItem(i, itemstack, j);
-	}
-
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		IInventory inventory = getOrCreateTradeInventory();
-		if (inventory instanceof TradeStation) {
-			boolean permission = (getAccess() == EnumAccess.SHARED);
-			return ((TradeStation) getOrCreateTradeInventory()).canExtractItem(i, itemstack, j, permission);
+		if (!Proxies.common.isSimulating(worldObj) || !address.isValid()) {
+			return super.getInternalInventory();
 		}
-		return super.canExtractItem(i, itemstack, j);
-	}
 
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		IInventory inventory = getOrCreateTradeInventory();
-		if (inventory instanceof TradeStation) {
-			boolean permission = (getAccess() == EnumAccess.SHARED);
-			return ((TradeStation) getOrCreateTradeInventory()).getAccessibleSlotsFromSide(side, permission);
-		}
-		return super.getAccessibleSlotsFromSide(side);
+		return (TradeStation)PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerProfile(), address);
 	}
 
 	/* ITRIGGERPROVIDER */
@@ -382,15 +290,14 @@ public class MachineTrader extends TileBase implements ISidedInventory {
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
-		res.add(PluginMail.lowPaper64);
-		res.add(PluginMail.lowPaper32);
-		res.add(PluginMail.lowInput25);
-		res.add(PluginMail.lowInput10);
-		res.add(PluginMail.lowPostage40);
-		res.add(PluginMail.lowPostage20);
-		res.add(PluginMail.highBuffer90);
-		res.add(PluginMail.highBuffer75);
+		res.add(MailTriggers.lowPaper64);
+		res.add(MailTriggers.lowPaper32);
+		res.add(MailTriggers.lowInput25);
+		res.add(MailTriggers.lowInput10);
+		res.add(MailTriggers.lowPostage40);
+		res.add(MailTriggers.lowPostage20);
+		res.add(MailTriggers.highBuffer90);
+		res.add(MailTriggers.highBuffer75);
 		return res;
 	}
-
 }

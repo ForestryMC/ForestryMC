@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.apiculture.gadgets.TileAlvearyPlain;
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.Utils;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiAlveary extends GuiForestryTitled<TileAlvearyPlain> {
 

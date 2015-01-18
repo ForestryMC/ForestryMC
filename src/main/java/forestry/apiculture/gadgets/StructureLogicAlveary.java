@@ -10,12 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import java.util.HashSet;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.core.ITileStructure;
 import forestry.core.config.ForestryBlock;
@@ -23,7 +17,11 @@ import forestry.core.gadgets.BlockStructure.EnumStructureState;
 import forestry.core.gadgets.StructureLogic;
 import forestry.core.utils.Schemata;
 import forestry.core.utils.Schemata.EnumStructureBlock;
-import forestry.core.utils.Vect;
+import forestry.core.vect.Vect;
+import java.util.HashSet;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
 
 public class StructureLogicAlveary extends StructureLogic {
 
@@ -35,13 +33,11 @@ public class StructureLogicAlveary extends StructureLogic {
 
 	public static final HashSet<Block> slabBlocks = new HashSet<Block>();
 	static {
-		slabBlocks.add(Blocks.stone_slab);
 		slabBlocks.add(Blocks.wooden_slab);
 		slabBlocks.add(ForestryBlock.slabs1.block());
 		slabBlocks.add(ForestryBlock.slabs2.block());
 		slabBlocks.add(ForestryBlock.slabs3.block());
-		if (ForestryBlock.slabs4.block() != null)
-			slabBlocks.add(ForestryBlock.slabs4.block());
+		slabBlocks.add(ForestryBlock.slabs4.block());
 	}
 
 	public StructureLogicAlveary(ITileStructure structure) {

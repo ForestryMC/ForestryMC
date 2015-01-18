@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.mail;
 
-import java.util.Locale;
-
 import forestry.api.mail.IPostalState;
+import java.util.Locale;
 
 public enum EnumStationState implements IPostalState {
 	OK, INSUFFICIENT_OFFER, INSUFFICIENT_TRADE_GOOD, INSUFFICIENT_BUFFER, INSUFFICIENT_PAPER, INSUFFICIENT_STAMPS;

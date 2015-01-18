@@ -11,10 +11,10 @@
 package forestry.core.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
+import forestry.core.gadgets.TileForestry;
 import forestry.core.interfaces.ISocketable;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketPayload;
@@ -25,9 +25,9 @@ import forestry.core.utils.StackUtils;
 
 public class ContainerSocketed extends ContainerForestry {
 
-	ISocketable tile;
+	private final ISocketable tile;
 
-	public ContainerSocketed(IInventory inventory, ISocketable tile) {
+	public ContainerSocketed(TileForestry inventory, ISocketable tile) {
 		super(inventory);
 		this.tile = tile;
 	}

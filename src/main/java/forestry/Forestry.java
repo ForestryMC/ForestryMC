@@ -39,6 +39,9 @@ import forestry.core.utils.FluidMap;
 import forestry.core.utils.ItemStackMap;
 import forestry.core.utils.StringUtil;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 
@@ -62,6 +65,22 @@ public class Forestry {
 	@Mod.Instance(Defaults.MOD)
 	public static Forestry instance;
 	private File configFolder;
+
+	private static final Map<String, ForestryItem> mappedItems = new HashMap<String, ForestryItem>();
+
+	static {
+		mappedItems.put("Forestry:builderBackpack", ForestryItem.builderBackpack);
+		mappedItems.put("Forestry:builderBackpackT2", ForestryItem.builderBackpackT2);
+		mappedItems.put("Forestry:adventurerBackpack", ForestryItem.adventurerBackpack);
+		mappedItems.put("Forestry:adventurerBackpackT2", ForestryItem.adventurerBackpackT2);
+		mappedItems.put("Forestry:shortMead", ForestryItem.beverage);
+		mappedItems.put("Forestry:waterCan", ForestryItem.canWater);
+		mappedItems.put("Forestry:biofuelCan", ForestryItem.canEthanol);
+		mappedItems.put("Forestry:biomassCan", ForestryItem.canBiomass);
+		mappedItems.put("Forestry:bucketBiofuel", ForestryItem.bucketEthanol);
+		mappedItems.put("Forestry:refractoryBiofuel", ForestryItem.refractoryEthanol);
+		mappedItems.put("Forestry:waxCapsuleBiofuel", ForestryItem.waxCapsuleEthanol);
+	}
 
 	public Forestry() {
 		FuelManager.fermenterFuel = new ItemStackMap<FermenterFuel>();
@@ -129,21 +148,12 @@ public class Forestry {
 				if (block != null) {
 					mapping.remap(Item.getItemFromBlock(block));
 					Proxies.log.warning("Remapping item " + mapping.name + " to " + StringUtil.cleanBlockName(block));
-				} else if (mapping.name.equals("Forestry:builderBackpack")) {
-					mapping.remap(ForestryItem.builderBackpack.item());
-					Proxies.log.warning("Remapping item " + mapping.name + " to " + ForestryItem.builderBackpack.name());
-				} else if (mapping.name.equals("Forestry:builderBackpackT2")) {
-					mapping.remap(ForestryItem.builderBackpackT2.item());
-					Proxies.log.warning("Remapping item " + mapping.name + " to " + ForestryItem.builderBackpackT2.name());
-				} else if (mapping.name.equals("Forestry:adventurerBackpack")) {
-					mapping.remap(ForestryItem.adventurerBackpack.item());
-					Proxies.log.warning("Remapping item " + mapping.name + " to " + ForestryItem.adventurerBackpack.name());
-				} else if (mapping.name.equals("Forestry:adventurerBackpackT2")) {
-					mapping.remap(ForestryItem.adventurerBackpackT2.item());
-					Proxies.log.warning("Remapping item " + mapping.name + " to " + ForestryItem.adventurerBackpackT2.name());
-				} else if (mapping.name.equals("Forestry:shortMead")) {
-					mapping.remap(ForestryItem.beverage.item());
-					Proxies.log.warning("Remapping item " + mapping.name + " to " + ForestryItem.beverage.name());
+				} else {
+					ForestryItem mappedItem = mappedItems.get(mapping.name);
+					if (mappedItem != null) {
+						mapping.remap(mappedItem.item());
+						Proxies.log.warning("Remapping item " + mapping.name + " to " + mappedItem.name());
+					}
 				}
 			}
 	}

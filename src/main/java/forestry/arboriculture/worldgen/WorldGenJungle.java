@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import net.minecraft.init.Blocks;
-
 import forestry.api.world.ITreeGenData;
 import forestry.core.worldgen.BlockType;
+import net.minecraft.init.Blocks;
 
 /**
  * This is a dummy and needs to be replaced with something proper.

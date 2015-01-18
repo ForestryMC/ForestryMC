@@ -10,38 +10,32 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 
 import forestry.core.gui.ContainerLiquidTanks;
-import forestry.core.gui.slots.SlotClosed;
-import forestry.core.gui.slots.SlotLiquidContainer;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotOutput;
 import forestry.factory.gadgets.MachineRaintank;
 
 public class ContainerRaintank extends ContainerLiquidTanks {
 
-	protected MachineRaintank tile;
-
 	public ContainerRaintank(InventoryPlayer player, MachineRaintank tile) {
-		super(tile, tile);
+		super(tile);
 
-		this.tile = tile;
-		this.addSlot(new SlotLiquidContainer(tile, MachineRaintank.SLOT_RESOURCE, 116, 19, true));
-		this.addSlot(new SlotClosed(tile, MachineRaintank.SLOT_PRODUCT, 116, 55));
+		this.addSlotToContainer(new SlotFiltered(tile, MachineRaintank.SLOT_RESOURCE, 116, 19));
+		this.addSlotToContainer(new SlotOutput(tile, MachineRaintank.SLOT_PRODUCT, 116, 55));
 
-		for (int i = 0; i < 3; ++i)
-			for (int j = 0; j < 9; ++j)
-				this.addSlot(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+		for (int i = 0; i < 3; ++i) {
+			for (int j = 0; j < 9; ++j) {
+				this.addSlotToContainer(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+			}
+		}
 
-		for (int i = 0; i < 9; ++i)
-			this.addSlot(new Slot(player, i, 8 + i * 18, 142));
+		for (int i = 0; i < 9; ++i) {
+			this.addSlotToContainer(new Slot(player, i, 8 + i * 18, 142));
+		}
 
 	}
 
-	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return tile.isUseableByPlayer(entityplayer);
-	}
 }

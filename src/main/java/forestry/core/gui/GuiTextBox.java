@@ -10,19 +10,16 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import java.util.Iterator;
 import java.util.List;
-
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
 
 public class GuiTextBox extends GuiTextField {
+	private static final int enabledColor = 14737632;
+	private static final int disabledColor = 7368816;
 
 	private final FontRenderer fontRendererObj;
-
 	private final int startX, startY, width, height;
-	private final int enabledColor = 14737632;
-	private final int disabledColor = 7368816;
 
 	private int lineScroll = 0;
 	private int maxLines = 0;
@@ -100,7 +97,7 @@ public class GuiTextBox extends GuiTextField {
 			drawRect(startX, startY, startX + this.width, startY + this.height, -16777216);
 		}
 
-		int textColour = isFocused() ? this.enabledColor : this.disabledColor;
+		int textColour = isFocused() ? enabledColor : disabledColor;
 
 		drawScrolledSplitString(getCursoredText(), startX + 2, startY + 2, width - 4, textColour);
 	}

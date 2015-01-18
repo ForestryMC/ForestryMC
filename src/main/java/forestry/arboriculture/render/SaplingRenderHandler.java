@@ -10,20 +10,18 @@
  ******************************************************************************/
 package forestry.arboriculture.render;
 
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.IAlleleTreeSpecies;
+import forestry.arboriculture.gadgets.BlockSapling;
+import forestry.arboriculture.gadgets.TileSapling;
+import forestry.plugins.PluginArboriculture;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.arboriculture.gadgets.BlockSapling;
-import forestry.arboriculture.gadgets.TileSapling;
-import forestry.plugins.PluginArboriculture;
 
 public class SaplingRenderHandler implements ISimpleBlockRenderingHandler {
 
@@ -41,10 +39,10 @@ public class SaplingRenderHandler implements ISimpleBlockRenderingHandler {
 
 		TileSapling tile = BlockSapling.getSaplingTile(world, x, y, z);
 
-		IAlleleTreeSpecies species = (IAlleleTreeSpecies) PluginArboriculture.treeInterface.getDefaultTemplate()[0];
 		if (tile == null || tile.getTree() == null)
 			return true;
-		species = tile.getTree().getGenome().getPrimary();
+
+		IAlleleTreeSpecies species = tile.getTree().getGenome().getPrimary();
 
 		renderCrossedSquares(species, world, block, x, y, z);
 		renderLayer = 1;

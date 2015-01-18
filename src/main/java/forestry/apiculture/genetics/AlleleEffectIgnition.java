@@ -10,23 +10,21 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import java.util.List;
-
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.items.ItemArmorApiarist;
 import forestry.plugins.PluginApiculture;
+import java.util.List;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 
 public class AlleleEffectIgnition extends AlleleEffectThrottled {
 
-	private final int ignitionChance = 50;
-	private final int fireDuration = 500;
+	private static final int ignitionChance = 50;
+	private static final int fireDuration = 500;
 
 	public AlleleEffectIgnition(String uid) {
 		super(uid, "ignition", false, 20, false, true);

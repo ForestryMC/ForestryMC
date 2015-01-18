@@ -13,12 +13,18 @@ package forestry.apiculture.gadgets;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.apiculture.IHiveDrop;
-import forestry.api.apiculture.hives.HiveManager;
+import forestry.apiculture.worldgen.HiveRegistry;
 import forestry.api.core.Tabs;
 import forestry.apiculture.MaterialBeehive;
 import forestry.core.config.Config;
+import forestry.core.inventory.InvTools;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
+import forestry.plugins.PluginApiculture;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -31,10 +37,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class BlockBeehives extends BlockContainer {
 
 	public BlockBeehives() {
@@ -42,6 +44,7 @@ public class BlockBeehives extends BlockContainer {
 		setLightLevel(0.8f);
 		setHardness(1.0f);
 		setCreativeTab(Tabs.tabApiculture);
+		setHarvestLevel("scoop", 0);
 	}
 
 	@Override
@@ -63,7 +66,7 @@ public class BlockBeehives extends BlockContainer {
 			if (tile instanceof TileSwarm) {
 				TileSwarm swarm = (TileSwarm) tile;
 				if (swarm.containsBees())
-					for (ItemStack beeStack : swarm.contained.getStacks())
+					for (ItemStack beeStack : InvTools.getStacks(swarm.contained))
 						if (beeStack != null)
 							StackUtils.dropItemStackAsEntity(beeStack, world, x, y, z);
 			}
@@ -125,18 +128,18 @@ public class BlockBeehives extends BlockContainer {
 		String hiveName = getHiveNameForMeta(meta);
 		if (hiveName == null)
 			return Collections.emptyList();
-		return HiveManager.get(hiveName).getDrops();
+		return PluginApiculture.hiveRegistry.getDrops(hiveName);
 	}
 
 	private String getHiveNameForMeta(int meta) {
 		switch (meta) {
-			case 1: return HiveManager.forest;
-			case 2: return HiveManager.meadows;
-			case 3: return HiveManager.desert;
-			case 4: return HiveManager.jungle;
-			case 5: return HiveManager.end;
-			case 6: return HiveManager.snow;
-			case 7: return HiveManager.swamp;
+			case 1: return HiveRegistry.forest;
+			case 2: return HiveRegistry.meadows;
+			case 3: return HiveRegistry.desert;
+			case 4: return HiveRegistry.jungle;
+			case 5: return HiveRegistry.end;
+			case 6: return HiveRegistry.snow;
+			case 7: return HiveRegistry.swamp;
 		}
 		return null;
 	}

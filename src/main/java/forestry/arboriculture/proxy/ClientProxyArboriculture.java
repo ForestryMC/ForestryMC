@@ -10,13 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.proxy;
 
-import net.minecraft.item.Item;
-import net.minecraft.world.ColorizerFoliage;
-
 import cpw.mods.fml.client.registry.RenderingRegistry;
-
-import net.minecraftforge.client.MinecraftForgeClient;
-
 import forestry.arboriculture.render.FenceRenderingHandler;
 import forestry.arboriculture.render.FruitPodRenderingHandler;
 import forestry.arboriculture.render.LeavesRenderingHandler;
@@ -24,6 +18,8 @@ import forestry.arboriculture.render.SaplingRenderHandler;
 import forestry.arboriculture.render.StairItemRenderer;
 import forestry.core.config.ForestryBlock;
 import forestry.plugins.PluginArboriculture;
+import net.minecraft.world.ColorizerFoliage;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 public class ClientProxyArboriculture extends ProxyArboriculture {
 	@Override

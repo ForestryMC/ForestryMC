@@ -24,6 +24,10 @@ import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginArboriculture;
 import forestry.plugins.PluginLepidopterology;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 import net.minecraft.block.BlockNewLeaf;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -40,11 +44,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-
 public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProvider {
 
 	public ForestryBlockLeaves() {
@@ -59,10 +58,9 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 
 	public static TileLeaves getLeafTile(IBlockAccess world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(x, y, z);
-		if (!(tile instanceof TileLeaves))
-			return null;
-
-		return (TileLeaves) tile;
+		if (tile instanceof TileLeaves)
+			return (TileLeaves) tile;
+		return null;
 	}
 
 	private static NBTTagCompound getTagCompoundForTree(IBlockAccess world, int x, int y, int z) {
@@ -153,9 +151,9 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 	}
 
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
 
-		ItemStack itemStack = super.getPickBlock(target, world, x, y, z);
+		ItemStack itemStack = super.getPickBlock(target, world, x, y, z, player);
 		NBTTagCompound treeNBT = getTagCompoundForTree(world, x, y, z);
 		itemStack.setTagCompound(treeNBT);
 		return itemStack;
@@ -179,10 +177,12 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 
 	@Override
 	public void beginLeavesDecay(World world, int x, int y, int z) {
-		if (getLeafTile(world, x, y, z).isDecorative())
+		TileLeaves tile = getLeafTile(world, x, y, z);
+		if (tile == null || tile.isDecorative())
 			return;
 		super.beginLeavesDecay(world, x, y, z);
 	}
+	
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random random) {
@@ -191,6 +191,10 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 			return;
 
 		super.updateTick(world, x, y, z, random);
+
+		// check leaves tile again because they can decay in super.updateTick
+		if (tileLeaves.isInvalid())
+			return;
 
 		if (world.rand.nextFloat() > 0.1)
 			return;
@@ -287,7 +291,7 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 		ItemStack heldItem = player.getHeldItem();
 		TileEntity tile = world.getTileEntity(x, y, z);
 		IButterfly caterpillar = tile instanceof TileLeaves ? ((TileLeaves) tile).getCaterpillar() : null;
-		if(heldItem != null && (heldItem.getItem() instanceof IToolScoop) && caterpillar != null) {
+		if (heldItem != null && (heldItem.getItem() instanceof IToolScoop) && caterpillar != null) {
 			ItemStack butterfly = PluginLepidopterology.butterflyInterface.getMemberStack(caterpillar, EnumFlutterType.CATERPILLAR.ordinal());
 			StackUtils.dropItemStackAsEntity(butterfly, world, x, y, z);
 			((TileLeaves) tile).setCaterpillar(null);

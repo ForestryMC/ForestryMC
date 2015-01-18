@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import forestry.core.proxy.Proxies;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-
-import forestry.core.proxy.Proxies;
 
 public class ItemAssemblyKit extends ItemForestry {
 	private final ItemStack assembled;

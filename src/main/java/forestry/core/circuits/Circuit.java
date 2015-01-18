@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
-import java.util.List;
-
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.core.utils.StringUtil;
+import java.util.List;
 
 public abstract class Circuit implements ICircuit {
 

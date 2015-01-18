@@ -12,7 +12,7 @@ package forestry.farming.gadgets;
 
 import forestry.api.core.ITileStructure;
 import forestry.api.farming.IFarmHousing;
-import forestry.api.core.EnumErrorCode;
+import forestry.core.EnumErrorCode;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.energy.EnergyManager;
@@ -31,10 +31,6 @@ public class TileGearbox extends TileFarm implements IPowerHandler {
 		energyManager = new EnergyManager(200, 50, 10000);
 
 		fixedType = TYPE_GEARS;
-	}
-
-	@Override
-	protected void createInventory() {
 	}
 
 	@Override

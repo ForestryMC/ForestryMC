@@ -10,22 +10,20 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmable;
+import forestry.core.utils.StackUtils;
+import forestry.core.vect.Vect;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.Vect;
-
 public class FarmableGenericSapling implements IFarmable {
 
-	final Block sapling;
-	final int saplingMeta;
-
-	ItemStack[] windfall;
+	private final Block sapling;
+	private final int saplingMeta;
+	private final ItemStack[] windfall;
 
 	public FarmableGenericSapling(Block sapling, int saplingMeta, ItemStack... windfall) {
 		this.sapling = sapling;

@@ -15,6 +15,7 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 
 import forestry.core.gui.ContainerSocketed;
+import forestry.core.gui.slots.SlotFiltered;
 import forestry.energy.gadgets.EngineTin;
 
 public class ContainerEngineTin extends ContainerSocketed {
@@ -25,15 +26,16 @@ public class ContainerEngineTin extends ContainerSocketed {
 		super(tile, tile);
 
 		this.tile = tile;
-		this.addSlot(new Slot(tile, 0, 84, 53));
+
+		this.addSlotToContainer(new SlotFiltered(tile, EngineTin.SLOT_BATTERY, 84, 53));
 
 		int i;
 		for (i = 0; i < 3; ++i)
 			for (int j = 0; j < 9; ++j)
-				this.addSlot(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+				this.addSlotToContainer(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
 
 		for (i = 0; i < 9; ++i)
-			this.addSlot(new Slot(player, i, 8 + i * 18, 142));
+			this.addSlotToContainer(new Slot(player, i, 8 + i * 18, 142));
 	}
 
 	@Override

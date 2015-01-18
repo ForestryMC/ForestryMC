@@ -11,7 +11,7 @@
 package forestry.lepidopterology.entities;
 
 import forestry.api.genetics.IPollinatable;
-import forestry.core.utils.Utils;
+import forestry.core.utils.GeneticsUtil;
 
 public class AIButterflyPollinate extends AIButterflyInteract {
 
@@ -21,14 +21,13 @@ public class AIButterflyPollinate extends AIButterflyInteract {
 
 	/**
 	 * Should pollinate?
-	 * @return
 	 */
 	@Override
 	protected boolean canInteract() {
 		if (entity.cooldownPollination > 0)
 			return false;
 
-		IPollinatable pollinatable = Utils.getOrCreatePollinatable(null, entity.worldObj, rest.posX, rest.posY, rest.posZ);
+		IPollinatable pollinatable = GeneticsUtil.getOrCreatePollinatable(null, entity.worldObj, rest.posX, rest.posY, rest.posZ);
 		if (pollinatable == null)
 			return false;
 

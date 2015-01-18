@@ -13,24 +13,24 @@ package forestry.mail.gui;
 import java.util.Iterator;
 import java.util.UUID;
 
-import org.apache.commons.lang3.StringUtils;
-
-import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 
+import com.mojang.authlib.GameProfile;
+
+import org.apache.commons.lang3.StringUtils;
+
+import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.ILetter;
+import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.ITradeStation;
-import forestry.api.mail.IMailAddress;
 import forestry.api.mail.PostManager;
 import forestry.api.mail.TradeStationInfo;
-import forestry.api.mail.EnumAddressee;
 import forestry.core.gui.ContainerItemInventory;
-import forestry.core.gui.slots.SlotClosed;
-import forestry.core.gui.slots.SlotCustom;
+import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
@@ -38,7 +38,6 @@ import forestry.core.proxy.Proxies;
 import forestry.mail.Letter;
 import forestry.mail.items.ItemLetter;
 import forestry.mail.items.ItemLetter.LetterInventory;
-import forestry.mail.items.ItemStamps;
 import forestry.mail.network.PacketLetterInfo;
 
 public class ContainerLetter extends ContainerItemInventory {
@@ -58,23 +57,15 @@ public class ContainerLetter extends ContainerItemInventory {
 			inventory.parent.setItemDamage(ItemLetter.encodeMeta(2, ItemLetter.getSize(inventory.parent.getItemDamage())));
 
 		// Init slots
-		Object[] validStamps = new Object[] { ItemStamps.class };
-		if (letterInventory.getLetter().isProcessed())
-			validStamps = new Object[] {};
 
 		// Stamps
 		for (int i = 0; i < 4; i++)
-			addSlot(new SlotCustom(inventory, Letter.SLOT_POSTAGE_1 + i, 150, 14 + i * 19, validStamps).setStackLimit(1));
+			addSlotToContainer(new SlotFiltered(inventory, Letter.SLOT_POSTAGE_1 + i, 150, 14 + i * 19).setStackLimit(1));
 
 		// Attachments
-		if (!letterInventory.getLetter().isProcessed())
-			for (int i = 0; i < 2; i++)
-				for (int j = 0; j < 9; j++)
-					addSlot(new SlotCustom(inventory, Letter.SLOT_ATTACHMENT_1 + j + i * 9, 17 + j * 18, 98 + i * 18, ItemLetter.class).setExclusion(true));
-		else
-			for (int i = 0; i < 2; i++)
-				for (int j = 0; j < 9; j++)
-					addSlot(new SlotClosed(inventory, Letter.SLOT_ATTACHMENT_1 + j + i * 9, 17 + j * 18, 98 + i * 18));
+		for (int i = 0; i < 2; i++)
+			for (int j = 0; j < 9; j++)
+				addSlotToContainer(new SlotFiltered(inventory, Letter.SLOT_ATTACHMENT_1 + j + i * 9, 17 + j * 18, 98 + i * 18));
 
 		// Player inventory
 		for (int i = 0; i < 3; i++)
@@ -105,11 +96,6 @@ public class ContainerLetter extends ContainerItemInventory {
 		super.onContainerClosed(entityplayer);
 	}
 
-	@Override
-	protected boolean isAcceptedItem(EntityPlayer player, ItemStack stack) {
-		return true;
-	}
-
 	public ILetter getLetter() {
 		return letterInventory.getLetter();
 	}
@@ -129,7 +115,7 @@ public class ContainerLetter extends ContainerItemInventory {
 				break;
 		}
 
-		IPostalCarrier postal = null;
+		IPostalCarrier postal;
 		if(it.hasNext())
 			postal = it.next();
 		else
@@ -171,7 +157,8 @@ public class ContainerLetter extends ContainerItemInventory {
 		getLetter().setRecipient(recipient);
 		
 		// Update the trading info
-		updateTradeInfo(player.worldObj, recipient);
+		if (recipient == null || recipient.isTrader())
+			updateTradeInfo(player.worldObj, recipient);
 		
 		// Update info on client
 		Proxies.net.sendToPlayer(new PacketLetterInfo(PacketIds.LETTER_INFO, type, tradeInfo, recipient), player);
@@ -210,12 +197,16 @@ public class ContainerLetter extends ContainerItemInventory {
 		if (!Proxies.common.isSimulating(world))
 			return;
 
-		if (address.isPlayer())
+		if (address == null) {
+			setTradeInfo(null);
 			return;
+		}
 
 		ITradeStation station = PostManager.postRegistry.getTradeStation(world, address);
-		if (station == null)
+		if (station == null) {
+			setTradeInfo(null);
 			return;
+		}
 
 		setTradeInfo(station.getTradeInfo());
 	}
@@ -235,5 +226,9 @@ public class ContainerLetter extends ContainerItemInventory {
 
 	private void setTradeInfo(TradeStationInfo info) {
 		this.tradeInfo = info;
+		if (tradeInfo == null)
+			getLetter().setRecipient(null);
+		else
+			getLetter().setRecipient(tradeInfo.address);
 	}
 }

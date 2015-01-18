@@ -10,10 +10,14 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.genetics.IEffectData;
+import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityItem;
@@ -29,12 +33,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-
-import forestry.api.apiculture.IBeeGenome;
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.genetics.IEffectData;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
 
 public class AlleleEffectResurrection extends AlleleEffectThrottled {
 
