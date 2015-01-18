@@ -28,6 +28,7 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.render.SpriteSheet;
 import forestry.core.vect.IVect;
 import forestry.core.vect.Vect;
+import forestry.core.vect.VectUtil;
 
 public abstract class FarmLogic implements IFarmLogic {
 
@@ -46,7 +47,8 @@ public abstract class FarmLogic implements IFarmLogic {
 		return this;
 	}
 
-	public boolean canBreakGround(Block block) {
+	public boolean canBreakGround(World world, Vect position) {
+		Block block = VectUtil.getBlock(world, position);
 		if (breakable.isEmpty()) {
 			breakable.add(Blocks.air);
 			breakable.add(Blocks.dirt);
@@ -59,7 +61,7 @@ public abstract class FarmLogic implements IFarmLogic {
 			breakable.add(Blocks.flowing_water);
 			breakable.add(ForestryBlock.soil.block());
 		}
-		return breakable.contains(block);
+		return breakable.contains(block) || block.isReplaceable(world, position.getX(), position.getY(), position.getZ());
 	}
 
 	protected World getWorld() {

@@ -84,7 +84,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 			Vect position = translateWithOffset(x, yGround, z, direction, i);
 
 			ItemStack stack = VectUtil.getAsItemStack(world, position);
-			if (isAcceptedGround(stack) || !canBreakGround(VectUtil.getBlock(world, position)))
+			if (isAcceptedGround(stack) || !canBreakGround(world, position))
 				continue;
 
 			produce.addAll(BlockUtil.getBlockDrops(world, position));
