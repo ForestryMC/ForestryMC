@@ -90,7 +90,7 @@ public final class FlowerRegistry implements IFlowerRegistry {
 		ItemStack is = new ItemStack(b, 1, meta);
 
 		for (Flower f : this.registeredFlowers.get(flowerType))
-			if (StackUtils.isIdenticalItem(f.Item, is))
+			if (StackUtils.isIdenticalItem(f.item, is))
 				return true;
 
 		return false;
@@ -135,11 +135,11 @@ public final class FlowerRegistry implements IFlowerRegistry {
 		for (Flower f : this.registeredFlowers.get(flowerType)) {
 			if (f.isPlantable) {
 				tm.put(count, f);
-				count += f.Weight;
+				count += f.weight;
 			}
 		}
 
-		return tm.get(tm.lowerKey(rand.nextDouble() * count)).Item;
+		return tm.get(tm.lowerKey(rand.nextDouble() * count)).item;
 	}
 
 	/*
