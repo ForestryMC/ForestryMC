@@ -72,7 +72,7 @@ public class GuiTradeName extends GuiForestry<MachineTrader> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
 		// Close gui screen if we linked up.
 		if (container.machine.isLinked()) {
-			this.mc.displayGuiScreen(null);
+			this.mc.thePlayer.closeScreen();
 			this.mc.setIngameFocus();
 		}
 
