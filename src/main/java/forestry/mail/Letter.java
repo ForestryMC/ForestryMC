@@ -122,7 +122,7 @@ public class Letter implements ILetter, INBTTagable {
 
 	@Override
 	public void invalidatePostage() {
-		for (int i = SLOT_POSTAGE_1; i < SLOT_POSTAGE_1 + 4; i++)
+		for (int i = SLOT_POSTAGE_1; i < SLOT_POSTAGE_1 + SLOT_POSTAGE_COUNT; i++)
 			inventory.setInventorySlotContents(i, null);
 	}
 

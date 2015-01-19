@@ -193,8 +193,7 @@ public class ItemLetter extends ItemInventoried {
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 		if (Proxies.common.isSimulating(world))
 			if (itemstack.stackSize == 1) {
-				entityplayer.openGui(ForestryAPI.instance, GuiId.LetterGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY,
-						(int) entityplayer.posZ);
+				entityplayer.openGui(ForestryAPI.instance, GuiId.LetterGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY, (int) entityplayer.posZ);
 			} else {
 				entityplayer.addChatMessage(new ChatComponentTranslation("for.chat.mail.wrongstacksize"));
 			}
