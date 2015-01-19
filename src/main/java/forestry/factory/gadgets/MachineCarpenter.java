@@ -13,7 +13,9 @@ package forestry.factory.gadgets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -124,7 +126,8 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	public static class RecipeManager implements ICarpenterManager {
 
 		public static final ArrayList<MachineCarpenter.Recipe> recipes = new ArrayList<MachineCarpenter.Recipe>();
-		public static final HashSet<Fluid> recipeFluids = new HashSet<Fluid>();
+		private static final Set<Fluid> recipeFluids = new HashSet<Fluid>();
+		private static final List<ItemStack> boxes = new ArrayList<ItemStack>();
 
 		@Override
 		public void addCrating(ItemStack itemStack) {
@@ -166,6 +169,9 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			recipes.add(new Recipe(packagingTime, liquid, box, ShapedRecipeCustom.createShapedRecipe(product, materials)));
 			if (liquid != null)
 				recipeFluids.add(liquid.getFluid());
+			if (box != null && !isBox(box)) {
+				boxes.add(box);
+			}
 		}
 
 		public static Recipe findMatchingRecipe(FluidStack liquid, ItemStack item, InventoryCrafting inventorycrafting, World world) {
@@ -177,8 +183,11 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		}
 
 		public static boolean isBox(ItemStack resource) {
-			for (Recipe recipe : recipes) {
-				if (StackUtils.isIdenticalItem(recipe.getBox(), resource))
+			if (resource == null)
+				return false;
+
+			for (ItemStack box : boxes) {
+				if (StackUtils.isIdenticalItem(box, resource))
 					return true;
 			}
 
@@ -227,9 +236,11 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 					return tankManager.accepts(fluid);
 				} else if (slotIndex == SLOT_BOX) {
 					return MachineCarpenter.RecipeManager.isBox(itemStack);
+				} else if (canSlotAccept(SLOT_CAN_INPUT, itemStack) || canSlotAccept(SLOT_BOX, itemStack)) {
+					return false;
 				}
 
-				return true;
+				return GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
 			}
 
 			@Override
