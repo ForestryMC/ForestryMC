@@ -220,7 +220,7 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 			setErrorState(EnumErrorCode.OK);
 			return true;
 
-		} else if (currentRecipe != null && productTank.getFluidAmount() + currentRecipe.output.amount <= Defaults.PROCESSOR_TANK_CAPACITY) {
+		} else if (currentRecipe != null && productTank.getFluidAmount() + (currentRecipe.output.amount * currentRecipe.timePerUnit) <= Defaults.PROCESSOR_TANK_CAPACITY) {
 
 			int resReq = currentRecipe.timePerUnit * currentRecipe.input.amount;
 			// Start next cycle if enough bio mass is available
