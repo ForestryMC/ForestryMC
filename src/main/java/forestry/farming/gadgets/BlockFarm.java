@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -32,14 +34,19 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.core.gadgets.BlockStructure;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.ParticleHelper;
+import forestry.core.render.ParticleHelperCallback;
 import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginFarming;
 
 public class BlockFarm extends BlockStructure {
 
+	private static BlockFarm instance;
+
 	public BlockFarm() {
 		super(Material.rock);
 		setHardness(1.0f);
+		instance = this;
 	}
 
 	@Override
@@ -144,6 +151,41 @@ public class BlockFarm extends BlockStructure {
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
 		EnumFarmBlock.registerIcons(register);
+	}
+
+
+	private static class ParticleCallback implements ParticleHelperCallback {
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public void addHitEffects(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
+			setTexture(fx, world, x, y, z, meta);
+		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public void addDestroyEffects(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
+			setTexture(fx, world, x, y, z, meta);
+		}
+
+		@SideOnly(Side.CLIENT)
+		private void setTexture(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
+			fx.setParticleIcon(instance.getIcon(world, x, y, z, 0));
+		}
+
+	}
+	private static final ParticleHelperCallback callback = new ParticleCallback();
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
+		return ParticleHelper.addHitEffects(worldObj, instance, target, effectRenderer, callback);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean addDestroyEffects(World worldObj, int x, int y, int z, int meta, EffectRenderer effectRenderer) {
+		return ParticleHelper.addDestroyEffects(worldObj, instance, x, y, z, meta, effectRenderer, callback);
 	}
 
 	@SideOnly(Side.CLIENT)
