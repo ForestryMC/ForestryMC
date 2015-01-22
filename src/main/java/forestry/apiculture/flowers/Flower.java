@@ -16,20 +16,22 @@ import net.minecraft.item.ItemStack;
 final class Flower implements Comparable<Flower> {
 
 	public final ItemStack item;
-	public final Double weight;
-	public final boolean isPlantable;
+	public Double weight;
 
-	public Flower(ItemStack item, double weight, boolean isPlantable) {
+	public Flower(ItemStack item, double weight) {
 		this.item = item;
 		this.weight = weight;
-		this.isPlantable = isPlantable;
 	}
 
+	public boolean isPlantable() {
+		return this.weight != 0.0;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null || !(obj instanceof Flower))
 			return false;
-		return StackUtils.isIdenticalItem(this.item, ((Flower) obj).item) && this.isPlantable == ((Flower) obj).isPlantable;
+		return StackUtils.isIdenticalItem(this.item, ((Flower) obj).item);
 	}
 
 	@Override
