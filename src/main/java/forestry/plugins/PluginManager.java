@@ -82,7 +82,8 @@ public class PluginManager {
 		EQUIVELENT_EXCHANGE(new PluginEE()),
 		FARM_CRAFTORY(new PluginFarmCraftory()),
 		INDUSTRIALCRAFT(new PluginIC2()),
-		NATURA(new PluginNatura()),;
+		NATURA(new PluginNatura()),
+		UNDERGROUND_BIOMES(new PluginUndergroundBiomes());
 
 		private final ForestryPlugin instance;
 		private final boolean canBeDisabled;
