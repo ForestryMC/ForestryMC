@@ -1181,6 +1181,12 @@ public class PluginArboriculture extends ForestryPlugin {
 				if (ForestryItem.sapling.isItemEqual(fuel))
 					return 100;
 
+				for (ForestryBlock slab : slabs) {
+					if (slab.isItemEqual(fuel)) {
+						return 150;
+					}
+				}
+
 				return 0;
 			}
 		};
