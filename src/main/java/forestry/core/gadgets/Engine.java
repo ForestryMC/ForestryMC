@@ -166,7 +166,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 	}
 
 	private boolean canPowerTo(TileEntity tile) {
-		return isActivated() && BlockUtil.isRFTile(getOrientation().getOpposite(), tile);
+		return isActivated() && BlockUtil.isEnergyReceiver(getOrientation().getOpposite(), tile);
 	}
 
 	private void setActive(boolean isActive) {
@@ -185,7 +185,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 
 			TileEntity tile = worldObj.getTileEntity(xCoord + orient.offsetX, yCoord + orient.offsetY, zCoord + orient.offsetZ);
 
-			if (BlockUtil.isRFTile(getOrientation().getOpposite(), tile)) {
+			if (BlockUtil.isEnergyReceiver(getOrientation().getOpposite(), tile)) {
 				setOrientation(orient);
 				worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, worldObj.getBlock(xCoord, yCoord, zCoord));
 				worldObj.func_147479_m(xCoord, yCoord, zCoord);

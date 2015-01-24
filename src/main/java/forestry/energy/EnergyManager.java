@@ -2,6 +2,8 @@ package forestry.energy;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyReceiver;
+
 import forestry.core.GameMode;
 import forestry.core.utils.BlockUtil;
 import net.minecraft.nbt.NBTTagCompound;
@@ -156,8 +158,8 @@ public class EnergyManager implements IEnergyHandler {
 	 */
 	public int sendEnergy(ForgeDirection orientation, TileEntity tile, int amount) {
 		int sent = 0;
-		if (BlockUtil.isRFTile(orientation.getOpposite(), tile)) {
-			IEnergyHandler receptor = (IEnergyHandler) tile;
+		if (BlockUtil.isEnergyReceiver(orientation.getOpposite(), tile)) {
+			IEnergyReceiver receptor = (IEnergyReceiver) tile;
 
 			int extractable = energyStorage.extractEnergy(amount, true);
 			if (extractable > 0) {
