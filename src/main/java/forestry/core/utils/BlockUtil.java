@@ -26,7 +26,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import forestry.core.config.Defaults;
 import forestry.core.vect.Vect;
 
-import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyReceiver;
 
 public class BlockUtil {
 
@@ -38,14 +38,11 @@ public class BlockUtil {
 
 	}
 
-	public static boolean isRFTile(ForgeDirection side, TileEntity tile) {
-		if (tile == null)
+	public static boolean isEnergyReceiver(ForgeDirection side, TileEntity tile) {
+		if (!(tile instanceof IEnergyReceiver))
 			return false;
 
-		if (!(tile instanceof IEnergyHandler))
-			return false;
-
-		IEnergyHandler receptor = (IEnergyHandler) tile;
+		IEnergyReceiver receptor = (IEnergyReceiver) tile;
 		return receptor.canConnectEnergy(side);
 	}
 
