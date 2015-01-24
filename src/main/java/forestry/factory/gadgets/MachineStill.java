@@ -215,36 +215,32 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 		if (distillationTime > 0 && currentRecipe != null) {
 
 			distillationTime -= currentRecipe.input.amount;
-			addProduct(currentRecipe.output.fluidID, currentRecipe.output.amount);
+			productTank.fill(currentRecipe.output, true);
 
 			setErrorState(EnumErrorCode.OK);
 			return true;
 
-		} else if (currentRecipe != null && productTank.getFluidAmount() + currentRecipe.output.amount <= Defaults.PROCESSOR_TANK_CAPACITY) {
+		} else if (currentRecipe != null) {
 
-			int resReq = currentRecipe.timePerUnit * currentRecipe.input.amount;
-			// Start next cycle if enough bio mass is available
-			if (resourceTank.getFluidAmount() >= resReq) {
+			int resourceRequired = currentRecipe.timePerUnit * currentRecipe.input.amount;
 
-				distillationTime = distillationTotalTime = resReq;
-				resourceTank.drain(resReq, true);
-				bufferedLiquid = new FluidStack(currentRecipe.input.fluidID, resReq);
+			if (productTank.fill(currentRecipe.output, false) < currentRecipe.output.amount) {
+				setErrorState(EnumErrorCode.NOSPACETANK);
+			} else if (resourceTank.getFluidAmount() < resourceRequired) {
+				setErrorState(EnumErrorCode.NORESOURCE);
+			} else {
+				// Start next cycle if enough bio mass is available
+				distillationTime = distillationTotalTime = resourceRequired;
+				resourceTank.drain(resourceRequired, true);
+				bufferedLiquid = new FluidStack(currentRecipe.input.fluidID, resourceRequired);
 
 				setErrorState(EnumErrorCode.OK);
 				return true;
-
-			} else
-				setErrorState(EnumErrorCode.NORESOURCE);
-
+			}
 		}
 
 		bufferedLiquid = null;
 		return false;
-	}
-
-	private void addProduct(int id, int amount) {
-
-		productTank.fill(new FluidStack(id, amount), true);
 	}
 
 	public void checkRecipe() {
