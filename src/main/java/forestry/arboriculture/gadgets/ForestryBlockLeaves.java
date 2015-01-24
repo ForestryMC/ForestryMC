@@ -98,7 +98,8 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 
 	@Override
 	public void onBlockHarvested(World world, int x, int y, int z, int metadata, EntityPlayer player) {
-		if (getLeafTile(world, x, y, z).isDecorative())
+		TileLeaves leafTile = getLeafTile(world, x, y, z);
+		if (leafTile == null || leafTile.isDecorative())
 			return;
 
 		int fortune = EnchantmentHelper.getFortuneModifier(player);
