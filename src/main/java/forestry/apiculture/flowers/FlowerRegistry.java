@@ -32,12 +32,14 @@ public final class FlowerRegistry implements IFlowerRegistry {
 
 	private final Map<String, List<Flower>> registeredFlowers;
 	private final Map<String, List<IFlowerGrowthRule>> growthRules;
+	private final Map<String, TreeMap<Double, Flower>> chances;
 
 	private boolean hasDepricatedFlowersImported;
 
 	public FlowerRegistry() {
 		this.registeredFlowers = new HashMap<String, List<Flower>>();
 		this.growthRules = new HashMap<String, List<IFlowerGrowthRule>>();
+		this.chances =  new HashMap<String, TreeMap<Double,Flower>>();
 
 		this.hasDepricatedFlowersImported = false;
 
@@ -47,15 +49,15 @@ public final class FlowerRegistry implements IFlowerRegistry {
 
 	@Override
 	public void registerAcceptableFlower(ItemStack is, String... flowerTypes) {
-		registerFlower(is, null, false, flowerTypes);
+		registerFlower(is, null, flowerTypes);
 	}
 
 	@Override
 	public void registerPlantableFlower(ItemStack is, double weight, String... flowerTypes) {
-		registerFlower(is, weight, true, flowerTypes);
+		registerFlower(is, weight, flowerTypes);
 	}
 
-	private void registerFlower(ItemStack is, Double weight, boolean isPlantable, String... flowerTypes) {
+	private void registerFlower(ItemStack is, Double weight, String... flowerTypes) {
 		if (is == null || is.getItem() == null)
 			return;
 		if (is.getItemDamage() == Short.MAX_VALUE || is.getItemDamage() == -1)
@@ -65,17 +67,27 @@ public final class FlowerRegistry implements IFlowerRegistry {
 		if (weight >= 1.0)
 			weight = 1.0;
 
-		Flower newFlower = new Flower(is, weight, isPlantable);
+		Flower newFlower = new Flower(is, weight);
+		Integer index;
+		
 		for (String flowerType : flowerTypes) {
 			if (!this.registeredFlowers.containsKey(flowerType)) {
 				this.registeredFlowers.put(flowerType, new ArrayList<Flower>());
 			}
-
-			if (!this.registeredFlowers.get(flowerType).contains(newFlower)) {
+			
+			index = this.registeredFlowers.get(flowerType).indexOf(flowerType);
+			if (index == -1) {
 				this.registeredFlowers.get(flowerType).add(newFlower);
-
-				Collections.sort(this.registeredFlowers.get(flowerType));
 			}
+			else if (this.registeredFlowers.get(flowerType).get(index).weight > newFlower.weight) {
+				this.registeredFlowers.get(flowerType).get(index).weight = newFlower.weight;
+			}
+			
+			if (this.chances.containsKey(flowerType)) {
+				this.chances.remove(flowerType);
+			}
+			
+			Collections.sort(this.registeredFlowers.get(flowerType));
 		}
 	}
 
@@ -136,16 +148,24 @@ public final class FlowerRegistry implements IFlowerRegistry {
 
 	@Override
 	public ItemStack getRandomPlantableFlower(String flowerType, Random rand) {
-		TreeMap<Double, Flower> tm = new TreeMap<Double, Flower>();
-		double count = 0.0;
-		for (Flower f : this.registeredFlowers.get(flowerType)) {
-			if (f.isPlantable) {
-				tm.put(count, f);
-				count += f.weight;
-			}
-		}
+		TreeMap<Double, Flower> tm = getChancesMap(flowerType);
+		double maxKey = tm.lastKey() + 1.0;
+		return tm.get(tm.lowerKey(rand.nextDouble() * maxKey)).item;
+	}
 
-		return tm.get(tm.lowerKey(rand.nextDouble() * count)).item;
+	private TreeMap<Double, Flower> getChancesMap(String flowerType) {
+		if (!this.chances.containsKey(flowerType)) {
+			TreeMap<Double, Flower> tm = new TreeMap<Double, Flower>();
+			double count = 0.0;
+			for (Flower f : this.registeredFlowers.get(flowerType)) {
+				if (f.isPlantable()) {
+					tm.put(count, f);
+					count += f.weight;
+				}
+			}
+			this.chances.put(flowerType, tm);
+		}
+		return this.chances.get(flowerType);
 	}
 
 	/*
