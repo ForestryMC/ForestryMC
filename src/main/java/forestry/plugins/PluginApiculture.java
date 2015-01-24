@@ -259,8 +259,10 @@ public class PluginApiculture extends ForestryPlugin {
 			ApicultureTriggers.initialize();
 		}
 
-		// Register village components with the Structure registry.
-		VillageHandlerApiculture.registerVillageComponents();
+		if (Config.enableVillager) {
+			// Register village components with the Structure registry.
+			VillageHandlerApiculture.registerVillageComponents();
+		}
 
 		// Modes
 		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.easy);
@@ -332,12 +334,14 @@ public class PluginApiculture extends ForestryPlugin {
 		BeeManager.villageBees[1].add(beeInterface.templateAsGenome(BeeTemplates.getCommonTemplate()));
 		BeeManager.villageBees[1].add(beeInterface.templateAsGenome(BeeTemplates.getValiantTemplate()));
 
-		// Register villager stuff
-		VillageHandlerApiculture villageHandler = new VillageHandlerApiculture();
-		VillagerRegistry.instance().registerVillageCreationHandler(villageHandler);
-		VillagerRegistry.instance().registerVillagerId(Defaults.ID_VILLAGER_BEEKEEPER);
-		Proxies.render.registerVillagerSkin(Defaults.ID_VILLAGER_BEEKEEPER, Defaults.TEXTURE_SKIN_BEEKPEEPER);
-		VillagerRegistry.instance().registerVillageTradeHandler(Defaults.ID_VILLAGER_BEEKEEPER, villageHandler);
+		if (Config.enableVillager) {
+			// Register villager stuff
+			VillageHandlerApiculture villageHandler = new VillageHandlerApiculture();
+			VillagerRegistry.instance().registerVillageCreationHandler(villageHandler);
+			VillagerRegistry.instance().registerVillagerId(Defaults.ID_VILLAGER_BEEKEEPER);
+			Proxies.render.registerVillagerSkin(Defaults.ID_VILLAGER_BEEKEEPER, Defaults.TEXTURE_SKIN_BEEKPEEPER);
+			VillagerRegistry.instance().registerVillageTradeHandler(Defaults.ID_VILLAGER_BEEKEEPER, villageHandler);
+		}
 
 		proxy.initializeRendering();
 	}

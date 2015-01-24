@@ -61,6 +61,7 @@ public class Config {
 	public static boolean generateTinOre = true;
 	public static boolean generateBeehives = true;
 	public static boolean generateBeehivesDebug = false;
+	public static boolean enableVillager = true;
 
 	// Retrogen
 	public static boolean doRetrogen = false;
@@ -166,6 +167,10 @@ public class Config {
 		Property genTinOre = config.get("world.generate.tin", CATEGORY_COMMON, true);
 		genTinOre.comment = "set to false to force forestry to skip generating own tin ore blocks in the world";
 		generateTinOre = Boolean.parseBoolean(genTinOre.value);
+
+		Property enableVillagerProp = config.get("world.generate.villager", CATEGORY_COMMON, true);
+		enableVillagerProp.comment = "set to false to disable the creation of forestry villagers and their houses";
+		enableVillager = Boolean.parseBoolean(enableVillagerProp.value);
 
 		Property bronzeRecipe = config.get("crafting.bronze.enabled", CATEGORY_COMMON, true);
 		bronzeRecipe.comment = "set to false to disable crafting recipe for bronze";
