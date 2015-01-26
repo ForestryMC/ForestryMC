@@ -18,7 +18,6 @@ buildscript {
 }
 
 apply plugin: 'forge'
-apply plugin: 'maven'
 
 loadProperties()
 
@@ -35,24 +34,25 @@ ext.dirLang = "./lang"
 ext.apiForestry = "./api/forestry"
 ext.apiRedstoneFlux = "./api/redstoneflux"
 
-ext.CraftGuideRepo = "https://github.com/Uristqwerty/CraftGuide.git"
-ext.CraftGuideTmp = "build/tmp/CraftGuide"
+//ext.CraftGuideRepo = "https://github.com/Uristqwerty/CraftGuide.git" //Until CG has a 1.8 build, this is out.
+//ext.CraftGuideTmp = "build/tmp/CraftGuide"
 
 minecraft {
 	version = mcversion + "-" + forgeversion
 	runDir = "run"
+	mappings = mcp_mappings
 
 	replace '@VERSION@', project.version
 	replace '@BUILD_NUMBER@', getBuildNumber()
 }
 
 sourceSets {
-	api {
-		java {
-			srcDir CraftGuideTmp + "/src"
-			include '**/CraftGuide/api/**'
-		}
-	}
+	//api {
+	//	java {
+	//		srcDir CraftGuideTmp + "/src"
+	//		include '**/CraftGuide/api/**'
+	//	}
+	//}
 	
 	main {
 		java {
@@ -72,14 +72,9 @@ repositories {
 	}
 }
 
-configurations {
-	api
-	compile.extendsFrom api
-}
-
 dependencies {
-	api 'net.industrial-craft:industrialcraft-2:2.2.575-experimental:api'
-	api 'com.mod-buildcraft:buildcraft:6.3.1:dev'
+	//compile 'net.industrial-craft:industrialcraft-2:2.2.575-experimental:api'
+	//compile 'com.mod-buildcraft:buildcraft:6.3.1:dev'
 }
 
 processResources {
@@ -160,9 +155,9 @@ task bumpPatch << {
 	saveVersion()
 }
 
-import org.ajoberstar.grgit.Grgit
+//import org.ajoberstar.grgit.Grgit
 
-task initCraftGuide << {
+/*task initCraftGuide << {
 	def localRepo = file(CraftGuideTmp)
 
 	if (localRepo.exists()) {
@@ -175,7 +170,7 @@ task initCraftGuide << {
 		def grgit = Grgit.clone(dir: localRepo, uri: CraftGuideRepo)
 		grgit.close()
 	}
-}
+}*/
 
 jar {
 	destinationDir = file("build/tmp")
@@ -304,9 +299,9 @@ mainJar.shouldRunAfter releaseInit
 devJar.shouldRunAfter releaseInit
 apiJar.shouldRunAfter releaseInit
 
-afterEvaluate {
+/*afterEvaluate {
 	compileApiJava.dependsOn initCraftGuide
-}
+}*/
 
 artifacts {
 	archives apiJar
