@@ -136,7 +136,8 @@ public class BlockBase extends BlockForestry {
 	/* INTERACTION */
 	@Override
 	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
-		return getDefinition(world, x, y, z).isSolidOnSide(world, x, y, z, side.ordinal());
+		MachineDefinition definition = getDefinition(world, x, y, z);
+		return definition != null && definition.isSolidOnSide(world, x, y, z, side.ordinal());
 	}
 
 	@Override
