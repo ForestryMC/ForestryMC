@@ -41,14 +41,14 @@ public class FlowerProvider implements IFlowerProvider {
 	@Override
 	public boolean isAcceptedPollinatable(World world, IPollinatable pollinatable) {
 		EnumSet<EnumPlantType> types = pollinatable.getPlantType();
-		if (!types.isEmpty()) {
-			if (flowerType.equals(FlowerManager.FlowerTypeNether) && types.contains(EnumPlantType.Nether)) {
-				return true;
-			} else if (!flowerType.equals(FlowerManager.FlowerTypeNether) && !types.contains(EnumPlantType.Nether)) {
-				return true;
-			}
+
+		if (flowerType.equals(FlowerManager.FlowerTypeNether)) {
+			return types.contains(EnumPlantType.Nether);
+		} else if (flowerType.equals(FlowerManager.FlowerTypeCacti)) {
+			return types.contains(EnumPlantType.Desert);
+		} else {
+			return types.size() > 1 || !types.contains(EnumPlantType.Nether);
 		}
-		return false;
 	}
 
 	@Override
