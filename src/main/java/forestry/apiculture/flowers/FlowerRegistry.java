@@ -10,7 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.flowers;
 
-import java.util.ArrayList;
+import com.google.common.collect.ArrayListMultimap;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -22,71 +23,70 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import forestry.api.apiculture.FlowerManager;
+import forestry.api.genetics.IFlower;
 import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
-import forestry.core.utils.StackUtils;
 
 public final class FlowerRegistry implements IFlowerRegistry {
 
-	private final Map<String, List<Flower>> registeredFlowers;
-	private final Map<String, List<IFlowerGrowthRule>> growthRules;
-	private final Map<String, TreeMap<Double, Flower>> chances;
+	private final ArrayListMultimap<String, IFlower> registeredFlowers;
+	private final ArrayListMultimap<String, IFlowerGrowthRule> growthRules;
+	private final Map<String, TreeMap<Double, IFlower>> chances;
 
-	private boolean hasDepricatedFlowersImported;
+	private boolean hasDeprecatedFlowersImported;
 
 	public FlowerRegistry() {
-		this.registeredFlowers = new HashMap<String, List<Flower>>();
-		this.growthRules = new HashMap<String, List<IFlowerGrowthRule>>();
-		this.chances =  new HashMap<String, TreeMap<Double,Flower>>();
+		this.registeredFlowers = ArrayListMultimap.create();
+		this.growthRules = ArrayListMultimap.create();
+		this.chances =  new HashMap<String, TreeMap<Double, IFlower>>();
 
-		this.hasDepricatedFlowersImported = false;
+		this.hasDeprecatedFlowersImported = false;
 
 		registerVanillaFlowers();
 		registerVanillaGrowthRules();
 	}
 
 	@Override
-	public void registerAcceptableFlower(ItemStack is, String... flowerTypes) {
-		registerFlower(is, null, flowerTypes);
+	public void registerAcceptableFlower(Block block, int meta, String... flowerTypes) {
+		registerFlower(block, meta, null, flowerTypes);
 	}
 
 	@Override
-	public void registerPlantableFlower(ItemStack is, double weight, String... flowerTypes) {
-		registerFlower(is, weight, flowerTypes);
+	public void registerPlantableFlower(Block block, int meta, double weight, String... flowerTypes) {
+		registerFlower(block, meta, weight, flowerTypes);
 	}
 
-	private void registerFlower(ItemStack is, Double weight, String... flowerTypes) {
-		if (is == null || is.getItem() == null)
+	private void registerFlower(Block block, int meta, Double weight, String... flowerTypes) {
+		if (block == null)
 			return;
-		if (is.getItemDamage() == Short.MAX_VALUE || is.getItemDamage() == -1)
+		if (meta == Short.MAX_VALUE || meta == -1)
 			return;
 		if (weight == null || weight <= 0.0)
 			weight = 0.0;
 		if (weight >= 1.0)
 			weight = 1.0;
 
-		Flower newFlower = new Flower(is, weight);
+		Flower newFlower = new Flower(block, meta, weight);
 		Integer index;
 		
 		for (String flowerType : flowerTypes) {
-			if (!this.registeredFlowers.containsKey(flowerType)) {
-				this.registeredFlowers.put(flowerType, new ArrayList<Flower>());
-			}
-			
-			index = this.registeredFlowers.get(flowerType).indexOf(flowerType);
+			List<IFlower> flowers = this.registeredFlowers.get(flowerType);
+
+			index = flowers.indexOf(newFlower);
 			if (index == -1) {
-				this.registeredFlowers.get(flowerType).add(newFlower);
+				flowers.add(newFlower);
 			}
-			else if (this.registeredFlowers.get(flowerType).get(index).weight > newFlower.weight) {
-				this.registeredFlowers.get(flowerType).get(index).weight = newFlower.weight;
+			else if (flowers.get(index).getWeight() > newFlower.getWeight()) {
+				flowers.get(index).setWeight(newFlower.getWeight());
 			}
-			
+
 			if (this.chances.containsKey(flowerType)) {
 				this.chances.remove(flowerType);
 			}
-			
+
 			Collections.sort(this.registeredFlowers.get(flowerType));
 		}
 	}
@@ -97,12 +97,14 @@ public final class FlowerRegistry implements IFlowerRegistry {
 		if (!this.registeredFlowers.containsKey(flowerType))
 			return false;
 
-		Block b = world.getBlock(x, y, z);
+		Block block = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
-		ItemStack is = new ItemStack(b, 1, meta);
 
-		for (Flower f : this.registeredFlowers.get(flowerType))
-			if (StackUtils.isIdenticalItem(f.item, is))
+		if (world.isAirBlock(x, y, z) || block.equals(Blocks.bedrock) || block.equals(Blocks.dirt) || block.equals(Blocks.grass))
+			return false;
+
+		for (IFlower flower : this.registeredFlowers.get(flowerType))
+			if (Block.isEqualTo(flower.getBlock(), block) && flower.getMeta() == meta)
 				return true;
 
 		return false;
@@ -114,23 +116,18 @@ public final class FlowerRegistry implements IFlowerRegistry {
 		if (!this.growthRules.containsKey(flowerType))
 			return false;
 
-		for (IFlowerGrowthRule r : this.growthRules.get(flowerType))
-			if (r.growFlower(this, flowerType, world, individual, x, y, z))
+		for (IFlowerGrowthRule rule : this.growthRules.get(flowerType))
+			if (rule.growFlower(this, flowerType, world, individual, x, y, z))
 				return true;
 
 		return false;
 	}
 
 	@Override
-	public ItemStack[] getAcceptableFlowers(String flowerType) {
+	public List<IFlower> getAcceptableFlowers(String flowerType) {
 		internalInitialize();
-		List<Flower> flowers = this.registeredFlowers.get(flowerType);
 
-		ItemStack[] acceptableFlowers = new ItemStack[flowers.size()];
-		for (int i = 0; i < acceptableFlowers.length; i++)
-			acceptableFlowers[i] = flowers.get(i).item;
-
-		return acceptableFlowers;
+		return this.registeredFlowers.get(flowerType);
 	}
 
 	@Override
@@ -139,31 +136,28 @@ public final class FlowerRegistry implements IFlowerRegistry {
 			return;
 
 		for (String flowerType : flowerTypes) {
-			if (!this.growthRules.containsKey(flowerType))
-				this.growthRules.put(flowerType, new ArrayList<IFlowerGrowthRule>());
-
 			this.growthRules.get(flowerType).add(rule);
 		}
 	}
 
 	@Override
-	public ItemStack getRandomPlantableFlower(String flowerType, Random rand) {
-		TreeMap<Double, Flower> tm = getChancesMap(flowerType);
-		double maxKey = tm.lastKey() + 1.0;
-		return tm.get(tm.lowerKey(rand.nextDouble() * maxKey)).item;
+	public IFlower getRandomPlantableFlower(String flowerType, Random rand) {
+		TreeMap<Double, IFlower> chancesMap = getChancesMap(flowerType);
+		double maxKey = chancesMap.lastKey() + 1.0;
+		return chancesMap.get(chancesMap.lowerKey(rand.nextDouble() * maxKey));
 	}
 
-	private TreeMap<Double, Flower> getChancesMap(String flowerType) {
+	private TreeMap<Double, IFlower> getChancesMap(String flowerType) {
 		if (!this.chances.containsKey(flowerType)) {
-			TreeMap<Double, Flower> tm = new TreeMap<Double, Flower>();
+			TreeMap<Double, IFlower> flowerChances = new TreeMap<Double, IFlower>();
 			double count = 0.0;
-			for (Flower f : this.registeredFlowers.get(flowerType)) {
-				if (f.isPlantable()) {
-					tm.put(count, f);
-					count += f.weight;
+			for (IFlower flower : this.registeredFlowers.get(flowerType)) {
+				if (flower.isPlantable()) {
+					flowerChances.put(count, flower);
+					count += flower.getWeight();
 				}
 			}
-			this.chances.put(flowerType, tm);
+			this.chances.put(flowerType, flowerChances);
 		}
 		return this.chances.get(flowerType);
 	}
@@ -173,44 +167,48 @@ public final class FlowerRegistry implements IFlowerRegistry {
 	 */
 	@SuppressWarnings("deprecation")
 	private void internalInitialize() {
-		if (!hasDepricatedFlowersImported) {
-			for (ItemStack f : FlowerManager.plainFlowers)
-				registerPlantableFlower(f, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		if (!hasDeprecatedFlowersImported) {
+			for (ItemStack plainFlower : FlowerManager.plainFlowers) {
+				Block flowerBlock = Block.getBlockFromItem(plainFlower.getItem());
+				int meta = plainFlower.getItemDamage();
+				registerPlantableFlower(flowerBlock, meta, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+			}
 
-			hasDepricatedFlowersImported = true;
+			hasDeprecatedFlowersImported = true;
 		}
 	}
 
 	private void registerVanillaFlowers() {
 		// Register plantable plants
-		for (int sc = 0; sc <= 8; sc++)
-			registerPlantableFlower(new ItemStack(Blocks.red_flower, 1, sc), 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		for (int meta = 0; meta <= 8; meta++) {
+			registerPlantableFlower(Blocks.red_flower, meta, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		}
 
-		registerPlantableFlower(new ItemStack(Blocks.yellow_flower), 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerPlantableFlower(new ItemStack(Blocks.brown_mushroom), 1.0, FlowerManager.FlowerTypeMushrooms);
-		registerPlantableFlower(new ItemStack(Blocks.red_mushroom), 1.0, FlowerManager.FlowerTypeMushrooms);
-		registerPlantableFlower(new ItemStack(Blocks.cactus), 1.0, FlowerManager.FlowerTypeCacti);
+		registerPlantableFlower(Blocks.yellow_flower, 0, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		registerPlantableFlower(Blocks.brown_mushroom, 0, 1.0, FlowerManager.FlowerTypeMushrooms);
+		registerPlantableFlower(Blocks.red_mushroom, 0, 1.0, FlowerManager.FlowerTypeMushrooms);
+		registerPlantableFlower(Blocks.cactus, 0, 1.0, FlowerManager.FlowerTypeCacti);
 
 		// Register acceptable plants
-		registerAcceptableFlower(new ItemStack(Blocks.flower_pot, 1, 1), FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerAcceptableFlower(new ItemStack(Blocks.flower_pot, 1, 2), FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerAcceptableFlower(new ItemStack(Blocks.flower_pot, 1, 7), FlowerManager.FlowerTypeMushrooms);
-		registerAcceptableFlower(new ItemStack(Blocks.flower_pot, 1, 8), FlowerManager.FlowerTypeMushrooms);
-		registerAcceptableFlower(new ItemStack(Blocks.flower_pot, 1, 9), FlowerManager.FlowerTypeCacti);
-		registerAcceptableFlower(new ItemStack(Blocks.flower_pot, 1, 11), FlowerManager.FlowerTypeJungle);
+		registerAcceptableFlower(Blocks.flower_pot, 1, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		registerAcceptableFlower(Blocks.flower_pot, 2, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		registerAcceptableFlower(Blocks.flower_pot, 7, FlowerManager.FlowerTypeMushrooms);
+		registerAcceptableFlower(Blocks.flower_pot, 8, FlowerManager.FlowerTypeMushrooms);
+		registerAcceptableFlower(Blocks.flower_pot, 9, FlowerManager.FlowerTypeCacti);
+		registerAcceptableFlower(Blocks.flower_pot, 11, FlowerManager.FlowerTypeJungle);
 
-		registerAcceptableFlower(new ItemStack(Blocks.dragon_egg), FlowerManager.FlowerTypeEnd);
-		registerAcceptableFlower(new ItemStack(Blocks.vine), FlowerManager.FlowerTypeJungle);
-		registerAcceptableFlower(new ItemStack(Blocks.tallgrass, 1, 2), FlowerManager.FlowerTypeJungle);
-		registerAcceptableFlower(new ItemStack(Blocks.wheat, 1, 8), FlowerManager.FlowerTypeWheat);
-		registerAcceptableFlower(new ItemStack(Blocks.pumpkin_stem), FlowerManager.FlowerTypeGourd);
-		registerAcceptableFlower(new ItemStack(Blocks.melon_stem), FlowerManager.FlowerTypeGourd);
-		registerAcceptableFlower(new ItemStack(Blocks.nether_wart), FlowerManager.FlowerTypeNether);
+		registerAcceptableFlower(Blocks.dragon_egg, 0, FlowerManager.FlowerTypeEnd);
+		registerAcceptableFlower(Blocks.vine, 0, FlowerManager.FlowerTypeJungle);
+		registerAcceptableFlower(Blocks.tallgrass, 2, FlowerManager.FlowerTypeJungle);
+		registerAcceptableFlower(Blocks.wheat, 7, FlowerManager.FlowerTypeWheat);
+		registerAcceptableFlower(Blocks.pumpkin_stem, 0, FlowerManager.FlowerTypeGourd);
+		registerAcceptableFlower(Blocks.melon_stem, 0, FlowerManager.FlowerTypeGourd);
+		registerAcceptableFlower(Blocks.nether_wart, 0, FlowerManager.FlowerTypeNether);
 
-		registerAcceptableFlower(new ItemStack(Blocks.double_plant, 1, 0), FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerAcceptableFlower(new ItemStack(Blocks.double_plant, 1, 1), FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerAcceptableFlower(new ItemStack(Blocks.double_plant, 1, 4), FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerAcceptableFlower(new ItemStack(Blocks.double_plant, 1, 5), FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		registerAcceptableFlower(Blocks.double_plant, 0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		registerAcceptableFlower(Blocks.double_plant, 1, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		registerAcceptableFlower(Blocks.double_plant, 4, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		registerAcceptableFlower(Blocks.double_plant, 5, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
 	}
 
 	private void registerVanillaGrowthRules() {

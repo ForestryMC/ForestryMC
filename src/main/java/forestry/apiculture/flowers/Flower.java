@@ -10,16 +10,19 @@
  ******************************************************************************/
 package forestry.apiculture.flowers;
 
-import forestry.core.utils.StackUtils;
-import net.minecraft.item.ItemStack;
+import net.minecraft.block.Block;
 
-final class Flower implements Comparable<Flower> {
+import forestry.api.genetics.IFlower;
 
-	public final ItemStack item;
-	public Double weight;
+final class Flower implements IFlower {
 
-	public Flower(ItemStack item, double weight) {
-		this.item = item;
+	private final Block block;
+	private final int meta;
+	private Double weight;
+
+	public Flower(Block block, int meta, double weight) {
+		this.block = block;
+		this.meta = meta;
 		this.weight = weight;
 	}
 
@@ -29,13 +32,36 @@ final class Flower implements Comparable<Flower> {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null || !(obj instanceof Flower))
+		if (!(obj instanceof Flower))
 			return false;
-		return StackUtils.isIdenticalItem(this.item, ((Flower) obj).item);
+
+		Flower flower = (Flower) obj;
+
+		return Block.isEqualTo(this.block, flower.block) && this.meta == flower.meta;
 	}
 
 	@Override
-	public int compareTo(Flower other) {
-		return this.weight.compareTo(other.weight);
+	public int compareTo(IFlower other) {
+		return this.weight.compareTo(other.getWeight());
+	}
+
+	@Override
+	public Block getBlock() {
+		return block;
+	}
+
+	@Override
+	public int getMeta() {
+		return meta;
+	}
+
+	@Override
+	public double getWeight() {
+		return weight;
+	}
+
+	@Override
+	public void setWeight(double weight) {
+		this.weight = weight;
 	}
 }

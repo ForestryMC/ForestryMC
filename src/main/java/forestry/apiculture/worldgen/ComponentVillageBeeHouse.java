@@ -36,6 +36,7 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
+import forestry.api.genetics.IFlower;
 import forestry.apiculture.gadgets.TileBeehouse;
 import forestry.arboriculture.gadgets.BlockFireproofLog;
 import forestry.arboriculture.gadgets.BlockFireproofPlanks;
@@ -270,8 +271,8 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 						if (!Blocks.red_flower.canBlockStay(world, xCoord, yCoord, zCoord))
 							continue;
 
-						ItemStack flower = FlowerManager.flowerRegistry.getRandomPlantableFlower(FlowerManager.FlowerTypeVanilla, world.rand);
-						this.placeBlockAtCurrentPosition(world, flower, j, i, k, box);
+						IFlower flower = FlowerManager.flowerRegistry.getRandomPlantableFlower(FlowerManager.FlowerTypeVanilla, world.rand);
+						this.placeBlockAtCurrentPosition(world, flower.getBlock(), flower.getMeta(), j, i, k, box);
 					}
 	}
 
@@ -367,13 +368,17 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 						this.placeBlockAtCurrentPosition(world, buildingBlock, var15, var14, var16, box);
 	}
 
-	protected void placeBlockAtCurrentPosition(World world, ItemStack buildingBlock, int par4, int par5, int par6, StructureBoundingBox par7StructureBoundingBox) {
+	protected void placeBlockAtCurrentPosition(World world, ItemStack itemStack, int par4, int par5, int par6, StructureBoundingBox par7StructureBoundingBox) {
+		placeBlockAtCurrentPosition(world, StackUtils.getBlock(itemStack), itemStack.getItemDamage(), par4, par5, par6, par7StructureBoundingBox);
+	}
+
+	protected void placeBlockAtCurrentPosition(World world, Block block, int blockMeta, int par4, int par5, int par6, StructureBoundingBox par7StructureBoundingBox) {
 		int var8 = this.getXWithOffset(par4, par6);
 		int var9 = this.getYWithOffset(par5);
 		int var10 = this.getZWithOffset(par4, par6);
 
 		if (par7StructureBoundingBox.isVecInside(var8, var9, var10))
-			world.setBlock(var8, var9, var10, StackUtils.getBlock(buildingBlock), buildingBlock.getItemDamage(), Defaults.FLAG_BLOCK_SYNCH);
+			world.setBlock(var8, var9, var10, block, blockMeta, Defaults.FLAG_BLOCK_SYNCH);
 	}
 
 	@Override
