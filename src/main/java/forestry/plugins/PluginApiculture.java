@@ -118,6 +118,7 @@ import forestry.apiculture.items.ItemArmorApiarist;
 import forestry.apiculture.items.ItemBeeGE;
 import forestry.apiculture.items.ItemBeealyzer;
 import forestry.apiculture.items.ItemCandleBlock;
+import forestry.apiculture.items.ItemHabitatLocator;
 import forestry.apiculture.items.ItemHiveFrame;
 import forestry.apiculture.items.ItemHoneycomb;
 import forestry.apiculture.items.ItemImprinter;
@@ -366,9 +367,7 @@ public class PluginApiculture extends ForestryPlugin {
 		ForestryItem.beeLarvaeGE.registerItem((new ItemBeeGE(EnumBeeType.LARVAE)), "beeLarvaeGE");
 
 		ForestryItem.beealyzer.registerItem((new ItemBeealyzer()), "beealyzer");
-		// Disabling Habitat Locator, because it's b0rked and seems to flubber up other icons.
-		/*ForestryItem.biomeFinder = new ItemBiomefinder(Config.getOrCreateItemIdProperty("biomeFinder", Defaults.ID_ITEM_BIOME_FINDER))
-		 .setUnlocalizedName("biomeFinder");*/
+		ForestryItem.habitatLocator.registerItem(new ItemHabitatLocator(), "habitatLocator");
 		ForestryItem.imprinter.registerItem((new ItemImprinter()), "imprinter");
 
 		// / COMB FRAMES
@@ -457,8 +456,11 @@ public class PluginApiculture extends ForestryPlugin {
 				'#', ForestryItem.craftingMaterial.getItemStack(1, 3));
 
 		// / HABITAT LOCATOR
-		//Proxies.common.addRecipe(ForestryItem.biomeFinder.getItemStack(),
-		//		new Object[] { " X ", "X#X", " X ", '#', Items.redstone, 'X', "ingotBronze" });
+		Proxies.common.addRecipe(ForestryItem.habitatLocator.getItemStack(),
+				" X ",
+				"X#X",
+				" X ",
+				'#', Items.redstone, 'X', "ingotBronze");
 
 		// Bees
 		Proxies.common.addRecipe(ForestryItem.scoop.getItemStack(1),

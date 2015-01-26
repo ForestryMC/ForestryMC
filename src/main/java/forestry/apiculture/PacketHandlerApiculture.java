@@ -29,7 +29,7 @@ public class PacketHandlerApiculture implements IPacketHandler {
 			case PacketIds.HABITAT_BIOME_POINTER:
 				PacketCoordinates packetC = new PacketCoordinates();
 				packetC.readData(data);
-				Proxies.common.setBiomefinderCoordinates(player, packetC.getCoordinates());
+				Proxies.common.setHabitatLocatorCoordinates(player, packetC.getCoordinates());
 				break;
 			case PacketIds.IMPRINT_SELECTION_GET:
 				onImprintSelectionGet(player);

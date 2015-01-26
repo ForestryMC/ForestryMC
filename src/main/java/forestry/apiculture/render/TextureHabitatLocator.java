@@ -16,23 +16,25 @@ import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
-public class TextureBiomefinder extends TextureAtlasSprite {
+public class TextureHabitatLocator extends TextureAtlasSprite {
 
-	private static TextureBiomefinder instance;
-	public static TextureBiomefinder getInstance() { return instance; }
+	private static TextureHabitatLocator instance;
+	public static TextureHabitatLocator getInstance() { return instance; }
 
 	private ChunkCoordinates targetBiome;
+	private boolean targetBiomeFound;
 
 	public double currentAngle;
 	public double angleDelta;
 
-	public TextureBiomefinder() {
+	public TextureHabitatLocator() {
 		super("biomefinder");
 		instance = this;
 	}
 
 	public void setTargetCoordinates(ChunkCoordinates coordinates) {
 		this.targetBiome = coordinates;
+		this.targetBiomeFound = false;
 	}
 
 	@Override
@@ -54,8 +56,16 @@ public class TextureBiomefinder extends TextureAtlasSprite {
 			targetAngle = Math.random() * Math.PI * 2.0d;
 		} else {
 			double xPart = targetBiome.posX - playerX;
-			double yPart = targetBiome.posZ - playerZ;
-			targetAngle = (playerYaw - 90.0f) * Math.PI / 180.0d - Math.atan2(yPart, xPart);
+			double zPart = targetBiome.posZ - playerZ;
+
+			if (Math.abs(xPart) + Math.abs(zPart) < 10 || targetBiomeFound) {
+				// spin steadily when the biome is found
+				targetAngle = currentAngle + 1;
+				targetBiomeFound = true;
+			} else {
+				playerYaw %= 360.0D;
+				targetAngle = -((playerYaw - 90.0f) * Math.PI / 180.0d - Math.atan2(zPart, xPart));
+			}
 		}
 
 		if(!hasSpin) {

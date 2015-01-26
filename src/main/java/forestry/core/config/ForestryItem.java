@@ -87,7 +87,7 @@ public enum ForestryItem {
 	kitShovel,
 	// Do not touch - contagious!
 	tent,
-	biomeFinder,
+	habitatLocator,
 	// Moistener
 	mouldyWheat,
 	decayingWheat,

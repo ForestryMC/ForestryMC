@@ -11,7 +11,7 @@
 package forestry.core.proxy;
 
 import com.mojang.authlib.GameProfile;
-import forestry.apiculture.render.TextureBiomefinder;
+import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.ForestryClient;
 import forestry.core.TickHandlerCoreClient;
 import forestry.core.WorldGenerator;
@@ -23,6 +23,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.particle.EntityExplodeFX;
 import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -56,12 +57,8 @@ public class ClientProxyCommon extends ProxyCommon {
 	}
 
 	@Override
-	public void setBiomefinderCoordinates(EntityPlayer player, ChunkCoordinates coordinates) {
-		if (isSimulating(player.worldObj))
-			super.setBiomefinderCoordinates(player, coordinates);
-		else
-			TextureBiomefinder.getInstance().setTargetCoordinates(coordinates);
-		// TextureHabitatLocatorFX.instance.setTargetCoordinates(coordinates);
+	public void setHabitatLocatorCoordinates(Entity player, ChunkCoordinates coordinates) {
+		TextureHabitatLocator.getInstance().setTargetCoordinates(coordinates);
 	}
 
 	@Override

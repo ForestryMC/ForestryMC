@@ -37,7 +37,7 @@ import forestry.apiculture.gui.GuiBeealyzer;
 import forestry.apiculture.gui.GuiHabitatLocator;
 import forestry.apiculture.gui.GuiImprinter;
 import forestry.apiculture.items.ItemBeealyzer.BeealyzerInventory;
-import forestry.apiculture.items.ItemBiomefinder.BiomefinderInventory;
+import forestry.apiculture.items.ItemHabitatLocator.HabitatLocatorInventory;
 import forestry.apiculture.items.ItemImprinter.ImprinterInventory;
 import forestry.core.GuiHandlerBase;
 import forestry.core.gui.ContainerAlyzer;
@@ -87,7 +87,7 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 			if (equipped == null)
 				return null;
 
-			return new GuiHabitatLocator(player.inventory, new BiomefinderInventory(equipped));
+			return new GuiHabitatLocator(player.inventory, new HabitatLocatorInventory(equipped));
 
 		case HygroregulatorGUI:
 			return new GuiAlvearyHygroregulator(player.inventory, (TileAlvearyHygroregulator) getTileForestry(world, x, y, z));
@@ -149,7 +149,7 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 			if (equipped == null)
 				return null;
 
-			return new ContainerHabitatLocator(player.inventory, new BiomefinderInventory(equipped));
+			return new ContainerHabitatLocator(player.inventory, new HabitatLocatorInventory(equipped));
 
 		case HygroregulatorGUI:
 			return new ContainerAlvearyHygroregulator(player.inventory, (TileAlvearyHygroregulator) getTileForestry(world, x, y, z));

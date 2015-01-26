@@ -40,6 +40,7 @@ import java.util.EnumSet;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -134,7 +135,7 @@ public class ProxyCommon {
 		player.dropPlayerItemWithRandomChoice(stack, true);
 	}
 
-	public void setBiomefinderCoordinates(EntityPlayer player, ChunkCoordinates coordinates) {
+	public void setHabitatLocatorCoordinates(Entity player, ChunkCoordinates coordinates) {
 		if (coordinates != null)
 			Forestry.packetHandler.sendPacket(new PacketCoordinates(PacketIds.HABITAT_BIOME_POINTER, coordinates).getPacket(), (EntityPlayerMP) player);
 	}
