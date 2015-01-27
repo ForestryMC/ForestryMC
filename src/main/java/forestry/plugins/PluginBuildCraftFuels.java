@@ -11,8 +11,7 @@
 package forestry.plugins;
 
 import net.minecraftforge.fluids.Fluid;
-
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 import forestry.core.GameMode;
 import forestry.core.config.Defaults;

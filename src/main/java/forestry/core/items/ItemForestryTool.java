@@ -21,8 +21,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import forestry.core.proxy.Proxies;
 

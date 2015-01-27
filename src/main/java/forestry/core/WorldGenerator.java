@@ -17,9 +17,8 @@ import net.minecraft.world.chunk.IChunkProvider;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
-
-import cpw.mods.fml.common.IWorldGenerator;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.IWorldGenerator;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import forestry.core.config.Config;
 import forestry.core.config.ForestryBlock;

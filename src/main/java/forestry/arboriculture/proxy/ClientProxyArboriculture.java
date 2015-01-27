@@ -13,8 +13,7 @@ package forestry.arboriculture.proxy;
 import net.minecraft.world.ColorizerFoliage;
 
 import net.minecraftforge.client.MinecraftForgeClient;
-
-import cpw.mods.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 import forestry.arboriculture.render.FenceRenderingHandler;
 import forestry.arboriculture.render.FruitPodRenderingHandler;

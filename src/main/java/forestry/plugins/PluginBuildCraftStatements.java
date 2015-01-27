@@ -15,8 +15,7 @@ import java.util.Collection;
 import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.util.ForgeDirection;
-
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 import forestry.core.config.Defaults;
 import forestry.core.proxy.Proxies;

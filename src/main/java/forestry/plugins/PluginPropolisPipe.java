@@ -11,8 +11,8 @@ import java.util.EnumSet;
 
 import net.minecraft.item.Item;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;

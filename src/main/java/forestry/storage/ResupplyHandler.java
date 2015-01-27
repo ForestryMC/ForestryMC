@@ -15,8 +15,7 @@ import net.minecraft.inventory.ContainerPlayer;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.MinecraftForge;
-
-import cpw.mods.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.Event;
 
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.BackpackResupplyEvent;

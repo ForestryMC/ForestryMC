@@ -13,7 +13,7 @@ package forestry.plugins;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-import cpw.mods.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 
 import forestry.api.food.BeverageManager;
 import forestry.api.food.IBeverageEffect;

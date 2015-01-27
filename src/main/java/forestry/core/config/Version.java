@@ -16,8 +16,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion;
 
 import forestry.Forestry;
 import forestry.core.proxy.Proxies;

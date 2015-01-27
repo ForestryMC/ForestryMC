@@ -16,7 +16,7 @@ import java.io.IOException;
 
 import net.minecraft.block.Block;
 
-import cpw.mods.fml.common.registry.GameData;
+import net.minecraftforge.fml.common.registry.GameData;
 
 import forestry.core.proxy.Proxies;
 

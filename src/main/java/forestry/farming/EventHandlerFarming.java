@@ -13,9 +13,8 @@ package forestry.farming;
 import net.minecraft.block.Block;
 
 import net.minecraftforge.event.entity.player.BonemealEvent;
-
-import cpw.mods.fml.common.eventhandler.Event.Result;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import forestry.core.config.ForestryBlock;
 import forestry.core.proxy.Proxies;

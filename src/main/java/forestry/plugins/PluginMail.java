@@ -16,8 +16,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.EnumPostage;

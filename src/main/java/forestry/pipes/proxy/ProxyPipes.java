@@ -13,8 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.client.IItemRenderer;
-
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.pipes.PipeItemsPropolis;
 import forestry.plugins.PluginPropolisPipe;

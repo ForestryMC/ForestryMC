@@ -32,9 +32,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.oredict.OreDictionary;
-
-import cpw.mods.fml.common.Optional;
 
 import forestry.core.config.Defaults;
 import forestry.core.inventory.filters.ArrayStackFilter;

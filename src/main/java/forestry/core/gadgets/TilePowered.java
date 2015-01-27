@@ -13,8 +13,7 @@ package forestry.core.gadgets;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;
-
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.interfaces.IRenderableMachine;

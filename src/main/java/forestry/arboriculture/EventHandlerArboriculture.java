@@ -13,9 +13,8 @@ package forestry.arboriculture;
 import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.event.entity.player.BonemealEvent;
-
-import cpw.mods.fml.common.eventhandler.Event.Result;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import forestry.api.genetics.IFruitBearer;
 import forestry.arboriculture.gadgets.TileFruitPod;

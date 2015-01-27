@@ -13,7 +13,7 @@ package forestry.plugins;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;

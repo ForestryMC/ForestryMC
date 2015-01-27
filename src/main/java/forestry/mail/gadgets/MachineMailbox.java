@@ -23,8 +23,7 @@ import net.minecraft.world.World;
 import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.common.util.ForgeDirection;
-
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.mail.ILetter;

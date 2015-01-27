@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import cpw.mods.fml.common.Optional;
+import net.minecraftforge.fml.common.Optional;
 
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;

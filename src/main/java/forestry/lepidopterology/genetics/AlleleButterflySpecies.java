@@ -22,9 +22,8 @@ import net.minecraft.world.World;
 import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.common.BiomeDictionary;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IIconProvider;
 import forestry.api.genetics.AlleleManager;

@@ -12,8 +12,7 @@ package forestry.farming.proxy;
 
 
 import net.minecraftforge.client.MinecraftForgeClient;
-
-import cpw.mods.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 import forestry.core.config.ForestryBlock;
 import forestry.farming.render.FarmItemRenderer;

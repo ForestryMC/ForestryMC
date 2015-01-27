@@ -14,8 +14,7 @@ import net.minecraft.client.particle.EntityFX;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.MinecraftForgeClient;
-
-import cpw.mods.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 import forestry.apiculture.entities.EntityBee;
 import forestry.apiculture.render.BeeItemRenderer;

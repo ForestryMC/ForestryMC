@@ -19,11 +19,10 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
-
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.network.IGuiHandler;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.core.Tabs;

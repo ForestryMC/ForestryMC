@@ -19,11 +19,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 
 import net.minecraftforge.common.MinecraftForge;
-
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.EngineBronzeFuel;

@@ -17,9 +17,9 @@ import net.minecraft.command.ICommand;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
-import cpw.mods.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPacketHandler;

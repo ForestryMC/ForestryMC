@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core;
 
-import cpw.mods.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 import forestry.apiculture.render.BlockCandleRenderer;
 import forestry.core.proxy.Proxies;

@@ -16,7 +16,7 @@ import java.io.IOException;
 
 import net.minecraft.client.entity.EntityClientPlayerMP;
 
-import cpw.mods.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.FMLClientHandler;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

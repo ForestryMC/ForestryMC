@@ -30,11 +30,10 @@ import net.minecraft.world.chunk.IChunkProvider;
 
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import forestry.Forestry;
 import forestry.core.interfaces.IOreDictionaryHandler;

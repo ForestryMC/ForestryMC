@@ -18,8 +18,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.FluidStack;
-
-import cpw.mods.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.GameMode;
