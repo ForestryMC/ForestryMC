@@ -4,23 +4,25 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.genetics;
 
-import forestry.api.genetics.IGenome;
-import forestry.api.genetics.IIndividualLiving;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
+import forestry.api.genetics.IGenome;
+import forestry.api.genetics.IIndividualLiving;
 
 public abstract class IndividualLiving extends Individual implements IIndividualLiving {
 
 	protected int health;
 	protected int maxHealth;
 
-	public IndividualLiving() {}
+	public IndividualLiving() {
+	}
 	
 	public IndividualLiving(int newHealth) {
 		health = maxHealth = newHealth;
@@ -90,14 +92,16 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 			decreaseHealth();
 			ageModifier--;
 		}
-		if (world.rand.nextFloat() < ageModifier)
+		if (world.rand.nextFloat() < ageModifier) {
 			decreaseHealth();
+		}
 
 	}
 
 	public void decreaseHealth() {
-		if (health > 0)
+		if (health > 0) {
 			health--;
+		}
 	}
 
 

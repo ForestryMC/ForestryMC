@@ -56,20 +56,21 @@ public class MutableVect implements IVect {
 
 	public boolean advancePositionInArea(Vect area) {
 		// Increment z first until end reached
-		if (z < area.z - 1)
+		if (z < area.z - 1) {
 			z++;
-		else {
+		} else {
 			z = 0;
 
-			if (x < area.x - 1)
+			if (x < area.x - 1) {
 				x++;
-			else {
+			} else {
 				x = 0;
 
-				if (y < area.y - 1)
+				if (y < area.y - 1) {
 					y++;
-				else
+				} else {
 					return false;
+				}
 			}
 		}
 

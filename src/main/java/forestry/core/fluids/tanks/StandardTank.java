@@ -4,23 +4,25 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.fluids.tanks;
 
-import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.gui.tooltips.ToolTipLine;
 import java.util.Locale;
+
 import net.minecraft.item.EnumRarity;
 import net.minecraft.tileentity.TileEntity;
+
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
+import forestry.core.gui.tooltips.ToolTip;
+import forestry.core.gui.tooltips.ToolTipLine;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class StandardTank extends FluidTank {
@@ -71,8 +73,9 @@ public class StandardTank extends FluidTank {
 
 	public int getColor() {
 		Fluid f = getFluidType();
-		if (f == null)
+		if (f == null) {
 			return DEFAULT_COLOR;
+		}
 		return f.getColor(getFluid());
 	}
 
@@ -94,12 +97,15 @@ public class StandardTank extends FluidTank {
 
 	@Override
 	public int fill(final FluidStack resource, final boolean doFill) {
-		if (resource == null)
+		if (resource == null) {
 			return 0;
-		if (resource.amount <= 0)
+		}
+		if (resource.amount <= 0) {
 			return 0;
-		if (!accepts(resource.getFluid()))
+		}
+		if (!accepts(resource.getFluid())) {
 			return 0;
+		}
 		return super.fill(resource, doFill);
 	}
 
@@ -127,8 +133,9 @@ public class StandardTank extends FluidTank {
 
 	@Override
 	public FluidStack drain(int maxDrain, boolean doDrain) {
-		if (maxDrain <= 0)
+		if (maxDrain <= 0) {
 			return null;
+		}
 		return super.drain(maxDrain, doDrain);
 	}
 
@@ -152,8 +159,9 @@ public class StandardTank extends FluidTank {
 		if (hasFluid()) {
 			Fluid fluidType = getFluidType();
 			EnumRarity rarity = fluidType.getRarity();
-			if (rarity == null)
+			if (rarity == null) {
 				rarity = EnumRarity.common;
+			}
 			ToolTipLine fluidName = new ToolTipLine(fluidType.getLocalizedName(getFluid()), rarity.rarityColor, 2);
 			toolTip.add(fluidName);
 			amount = getFluid().amount;

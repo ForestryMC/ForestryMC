@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -80,8 +80,9 @@ public class ContainerWorktable extends ContainerForestry implements IContainerC
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		if (lastUpdate == tile.getMemory().getLastUpdate())
+		if (lastUpdate == tile.getMemory().getLastUpdate()) {
 			return;
+		}
 
 		lastUpdate = tile.getMemory().getLastUpdate();
 		tile.sendAll(player);
@@ -89,8 +90,9 @@ public class ContainerWorktable extends ContainerForestry implements IContainerC
 
 	@Override
 	public void onCraftMatrixChanged(IInventory iinventory, int slot) {
-		if (slot >= craftMatrix.getSizeInventory())
+		if (slot >= craftMatrix.getSizeInventory()) {
 			return;
+		}
 
 		ItemStack stack = iinventory.getStackInSlot(slot);
 		ItemStack currentStack = craftMatrix.getStackInSlot(slot);

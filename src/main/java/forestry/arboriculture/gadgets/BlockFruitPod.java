@@ -4,21 +4,15 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.BlockUtil;
-import forestry.core.utils.StackUtils;
-import forestry.plugins.PluginArboriculture;
 import java.util.ArrayList;
 import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCocoa;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -29,6 +23,15 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.BlockUtil;
+import forestry.core.utils.StackUtils;
+import forestry.plugins.PluginArboriculture;
+
 public class BlockFruitPod extends BlockCocoa {
 
 	public BlockFruitPod() {
@@ -37,8 +40,9 @@ public class BlockFruitPod extends BlockCocoa {
 
 	public static TileFruitPod getPodTile(IBlockAccess world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(x, y, z);
-		if (!(tile instanceof TileFruitPod))
+		if (!(tile instanceof TileFruitPod)) {
 			return null;
+		}
 
 		return (TileFruitPod) tile;
 	}
@@ -53,18 +57,19 @@ public class BlockFruitPod extends BlockCocoa {
 		}
 
 		TileFruitPod tile = getPodTile(world, x, y, z);
-		if (tile == null)
+		if (tile == null) {
 			return;
+		}
 
 		tile.onBlockTick();
 	}
 
 	@Override
 	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
-		if(Proxies.common.isSimulating(world)) {
+		if (Proxies.common.isSimulating(world)) {
 			TileFruitPod tile = getPodTile(world, x, y, z);
 			if (tile != null) {
-				for(ItemStack drop : tile.getDrop()) {
+				for (ItemStack drop : tile.getDrop()) {
 					StackUtils.dropItemStackAsEntity(drop, world, x, y, z);
 				}
 			}
@@ -121,8 +126,9 @@ public class BlockFruitPod extends BlockCocoa {
 		TileFruitPod pod = getPodTile(world, x, y, z);
 		if (pod != null) {
 			IIcon podIcon = pod.getIcon(world.getBlockMetadata(x, y, z), side);
-			if (podIcon != null)
+			if (podIcon != null) {
 				return podIcon;
+			}
 		}
 
 		return defaultIcon;

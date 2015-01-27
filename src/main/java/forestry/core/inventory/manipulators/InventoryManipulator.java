@@ -10,14 +10,16 @@
  ******************************************************************************/
 package forestry.core.inventory.manipulators;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.filters.IStackFilter;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -48,6 +50,7 @@ public class InventoryManipulator {
 
 	/**
 	 * Attempt to add the stack to the inventory.
+	 *
 	 * @return The remainder
 	 */
 	public ItemStack addStack(ItemStack stack) {

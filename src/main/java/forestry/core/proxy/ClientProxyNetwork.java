@@ -4,21 +4,23 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.proxy;
 
-import forestry.core.network.ForestryPacket;
 import net.minecraft.client.network.NetHandlerPlayClient;
+
+import forestry.core.network.ForestryPacket;
 
 public class ClientProxyNetwork extends ProxyNetwork {
 
 	@Override
 	public void sendToServer(ForestryPacket packet) {
 		NetHandlerPlayClient netHandler = Proxies.common.getClientInstance().getNetHandler();
-		if (netHandler != null)
+		if (netHandler != null) {
 			netHandler.addToSendQueue(packet.getPacket());
+		}
 	}
 }

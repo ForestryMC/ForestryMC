@@ -32,8 +32,9 @@ final class Flower implements IFlower {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Flower))
+		if (!(obj instanceof Flower)) {
 			return false;
+		}
 
 		Flower flower = (Flower) obj;
 

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -57,20 +57,23 @@ public class MachineMailbox extends TileBase implements IMailContainer {
 	@Override
 	public void openGui(EntityPlayer player, TileBase tile) {
 
-		if (!Proxies.common.isSimulating(worldObj))
+		if (!Proxies.common.isSimulating(worldObj)) {
 			return;
+		}
 
 		ItemStack held = player.getCurrentEquippedItem();
 
 		// Handle letter sending
 		if (PostManager.postRegistry.isLetter(held)) {
 			IPostalState result = this.tryDispatchLetter(held, true);
-			if (!result.isOk())
+			if (!result.isOk()) {
 				player.addChatMessage(new ChatComponentTranslation("for.chat.mail." + result.getIdentifier()));
-			else
+			} else {
 				held.stackSize--;
-		} else
+			}
+		} else {
 			player.openGui(ForestryAPI.instance, GuiId.MailboxGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
+		}
 	}
 
 	/* UPDATING */
@@ -96,10 +99,11 @@ public class MachineMailbox extends TileBase implements IMailContainer {
 		ILetter letter = PostManager.postRegistry.getLetter(letterstack);
 		IPostalState result;
 
-		if (letter != null)
+		if (letter != null) {
 			result = PostManager.postRegistry.getPostOffice(worldObj).lodgeLetter(worldObj, letterstack, dispatchLetter);
-		else
+		} else {
 			result = EnumDeliveryState.NOT_MAILABLE;
+		}
 
 		return result;
 	}
@@ -110,8 +114,9 @@ public class MachineMailbox extends TileBase implements IMailContainer {
 
 		IInventory mailInventory = getOrCreateMailInventory(worldObj, getOwnerProfile());
 		for (int i = 0; i < mailInventory.getSizeInventory(); i++) {
-			if (mailInventory.getStackInSlot(i) != null)
+			if (mailInventory.getStackInSlot(i) != null) {
 				return true;
+			}
 		}
 
 		return false;

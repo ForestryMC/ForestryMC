@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -33,22 +33,25 @@ public abstract class ContainerItemInventory extends ContainerForestry {
 
 	protected void addSecuredSlot(IInventory other, int slot, int x, int y) {
 		ItemStack stackInSlot = other.getStackInSlot(slot);
-		if (StackUtils.isIdenticalItem(inventory.parent, stackInSlot))
+		if (StackUtils.isIdenticalItem(inventory.parent, stackInSlot)) {
 			addSlotToContainer(new SlotLocked(other, slot, x, y));
-		else
+		} else {
 			addSlotToContainer(new Slot(other, slot, x, y));
+		}
 	}
 
 	public void saveInventory(EntityPlayer entityplayer) {
-		if (inventory.isItemInventory)
+		if (inventory.isItemInventory) {
 			inventory.onGuiSaved(entityplayer);
+		}
 	}
 
 	@Override
 	public void onContainerClosed(EntityPlayer player) {
 		super.onContainerClosed(player);
-		if (!Proxies.common.isSimulating(player.worldObj))
+		if (!Proxies.common.isSimulating(player.worldObj)) {
 			return;
+		}
 
 		saveInventory(player);
 	}

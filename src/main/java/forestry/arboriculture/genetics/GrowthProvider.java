@@ -4,11 +4,15 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.genetics;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 
 import forestry.api.arboriculture.EnumGrowthConditions;
 import forestry.api.arboriculture.IGrowthProvider;
@@ -18,9 +22,6 @@ import forestry.arboriculture.gadgets.TileSapling;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Utils;
 import forestry.core.vect.Vect;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 
 public class GrowthProvider implements IGrowthProvider {
 
@@ -49,8 +50,9 @@ public class GrowthProvider implements IGrowthProvider {
 	protected EnumGrowthConditions getConditionsFromRainfall(World world, int xPos, int yPos, int zPos, float min, float max) {
 
 		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenAt(xPos, zPos);
-		if (biome.rainfall < min || biome.rainfall > max)
+		if (biome.rainfall < min || biome.rainfall > max) {
 			return EnumGrowthConditions.HOSTILE;
+		}
 
 		return EnumGrowthConditions.EXCELLENT;
 	}
@@ -58,8 +60,9 @@ public class GrowthProvider implements IGrowthProvider {
 	protected EnumGrowthConditions getConditionsFromTemperature(World world, int xPos, int yPos, int zPos, float min, float max) {
 
 		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenAt(xPos, zPos);
-		if (biome.temperature < min || biome.temperature > max)
+		if (biome.temperature < min || biome.temperature > max) {
 			return EnumGrowthConditions.HOSTILE;
+		}
 
 		return EnumGrowthConditions.EXCELLENT;
 	}
@@ -67,16 +70,17 @@ public class GrowthProvider implements IGrowthProvider {
 	protected EnumGrowthConditions getConditionFromLight(World world, int xPos, int yPos, int zPos) {
 		int lightvalue = world.getBlockLightValue(xPos, yPos + 1, zPos);
 
-		if (lightvalue > 13)
+		if (lightvalue > 13) {
 			return EnumGrowthConditions.EXCELLENT;
-		else if (lightvalue > 11)
+		} else if (lightvalue > 11) {
 			return EnumGrowthConditions.GOOD;
-		else if (lightvalue > 8)
+		} else if (lightvalue > 8) {
 			return EnumGrowthConditions.NORMAL;
-		else if (lightvalue > 6)
+		} else if (lightvalue > 6) {
 			return EnumGrowthConditions.PALTRY;
-		else
+		} else {
 			return EnumGrowthConditions.HOSTILE;
+		}
 	}
 
 	/*
@@ -100,35 +104,44 @@ public class GrowthProvider implements IGrowthProvider {
 	}
 
 	protected final boolean checkArea(World world, Vect start, Vect area) {
-		for (int x = start.x; x < start.x + area.x; x++)
-			for (int y = start.y; y < start.y + area.y; y++)
-				for (int z = start.z; z < start.z + area.z; z++)
-					if (!world.isAirBlock(x, y, z) && !Utils.isReplaceableBlock(world, x, y, z))
+		for (int x = start.x; x < start.x + area.x; x++) {
+			for (int y = start.y; y < start.y + area.y; y++) {
+				for (int z = start.z; z < start.z + area.z; z++) {
+					if (!world.isAirBlock(x, y, z) && !Utils.isReplaceableBlock(world, x, y, z)) {
 						return false;
+					}
+				}
+			}
+		}
 		return true;
 	}
 
 	protected boolean hasSufficientSaplings(ITreeGenome genome, World world, int xPos, int yPos, int zPos, int expectedGirth) {
 
-		if (expectedGirth == 1)
+		if (expectedGirth == 1) {
 			return true;
+		}
 
 		int offset = (expectedGirth - 1) / 2;
 
-		for (int x = xPos - offset; x < xPos - offset + expectedGirth; x++)
+		for (int x = xPos - offset; x < xPos - offset + expectedGirth; x++) {
 			for (int z = zPos - offset; z < zPos - offset + expectedGirth; z++) {
 
-				if (world.isAirBlock(x, yPos, z))
+				if (world.isAirBlock(x, yPos, z)) {
 					return false;
+				}
 
 				TileEntity tile = world.getTileEntity(x, yPos, z);
-				if (!(tile instanceof TileSapling))
+				if (!(tile instanceof TileSapling)) {
 					return false;
+				}
 
 				ITree tree = ((TileSapling) tile).getTree();
-				if (tree == null || !tree.getGenome().getPrimary().getUID().equals(genome.getPrimary().getUID()))
+				if (tree == null || !tree.getGenome().getPrimary().getUID().equals(genome.getPrimary().getUID())) {
 					return false;
+				}
 			}
+		}
 
 		return true;
 	}

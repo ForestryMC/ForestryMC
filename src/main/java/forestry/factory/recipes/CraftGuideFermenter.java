@@ -4,20 +4,24 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.fluids.FluidStack;
+
 import forestry.api.fuels.FuelManager;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.factory.gadgets.MachineFermenter;
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
+
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.LiquidSlot;
 import uristqwerty.CraftGuide.api.RecipeGenerator;
@@ -41,8 +45,9 @@ public class CraftGuideFermenter implements RecipeProvider {
 	@Override
 	public void generateRecipes(RecipeGenerator generator) {
 
-		if (ForestryBlock.factoryTESR.block() == null)
+		if (ForestryBlock.factoryTESR.block() == null) {
 			return;
+		}
 
 		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_FERMENTER_META);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);

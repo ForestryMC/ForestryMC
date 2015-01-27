@@ -4,19 +4,22 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import cofh.api.energy.IEnergyHandler;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.core.network.PacketPayload;
 import forestry.energy.EnergyManager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+
+import cofh.api.energy.IEnergyHandler;
 
 public abstract class TileAlvearyClimatiser extends TileAlveary implements IEnergyHandler {
 
@@ -32,6 +35,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 			this.boundaryUp = boundaryUp;
 		}
 	}
+
 	protected final EnergyManager energyManager;
 	private final ClimateControl climateControl;
 	private int workingTime = 0;
@@ -56,8 +60,9 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 	protected void updateServerSide() {
 		super.updateServerSide();
 
-		if (!this.hasMaster())
+		if (!this.hasMaster()) {
 			return;
+		}
 
 		boolean wasInactive = (workingTime == 0);
 
@@ -69,8 +74,9 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 		if (workingTime > 0) {
 			workingTime--;
 			IAlvearyComponent component = (IAlvearyComponent) this.getCentralTE();
-			if (component != null)
+			if (component != null) {
 				component.addTemperatureChange(climateControl.changePerTransfer, climateControl.boundaryDown, climateControl.boundaryUp);
+			}
 		}
 
 		if ((wasInactive && workingTime > 0) || (!wasInactive && workingTime == 0)) {
@@ -86,10 +92,11 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 	/* TEXTURES */
 	@Override
 	public int getIcon(int side, int metadata) {
-		if (workingTime > 0)
+		if (workingTime > 0) {
 			return textureOn;
-		else
+		} else {
 			return textureOff;
+		}
 	}
 
 	/* LOADING & SAVING */

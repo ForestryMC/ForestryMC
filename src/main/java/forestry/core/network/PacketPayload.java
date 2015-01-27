@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -33,23 +33,29 @@ public class PacketPayload {
 	}
 
 	public void append(PacketPayload other) {
-		if (other == null)
+		if (other == null) {
 			return;
+		}
 
-		if (other.intPayload.length > 0)
+		if (other.intPayload.length > 0) {
 			this.intPayload = Utils.concat(this.intPayload, other.intPayload);
-		if (other.shortPayload.length > 0)
+		}
+		if (other.shortPayload.length > 0) {
 			this.shortPayload = Utils.concat(this.shortPayload, other.shortPayload);
-		if (other.floatPayload.length > 0)
+		}
+		if (other.floatPayload.length > 0) {
 			this.floatPayload = Utils.concat(this.floatPayload, other.floatPayload);
-		if (other.stringPayload.length > 0)
+		}
+		if (other.stringPayload.length > 0) {
 			this.stringPayload = Utils.concat(this.stringPayload, other.stringPayload);
+		}
 
 	}
 
 	public void append(int[] other) {
-		if (other == null || other.length < 0)
+		if (other == null || other.length < 0) {
 			return;
+		}
 
 		this.intPayload = Utils.concat(this.intPayload, other);
 	}

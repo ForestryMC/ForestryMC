@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -29,8 +29,9 @@ public class BeverageEffectDrunk extends BeverageEffect {
 
 	@Override
 	public void doEffect(World world, EntityPlayer player) {
-		if (world.rand.nextFloat() < chance)
+		if (world.rand.nextFloat() < chance) {
 			player.addPotionEffect(drunkEffect);
+		}
 	}
 
 }

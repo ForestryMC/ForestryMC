@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -33,10 +33,11 @@ public class PlainInventory implements IInventory {
 	public PlainInventory(IInventory tocopy) {
 		this(tocopy.getSizeInventory(), tocopy.getInventoryName(), tocopy.getInventoryStackLimit());
 		for (int i = 0; i < tocopy.getSizeInventory(); i++) {
-			if (tocopy.getStackInSlot(i) != null)
+			if (tocopy.getStackInSlot(i) != null) {
 				this.setInventorySlotContents(i, tocopy.getStackInSlot(i).copy());
-			else
+			} else {
 				this.setInventorySlotContents(i, null);
+			}
 		}
 	}
 
@@ -56,10 +57,12 @@ public class PlainInventory implements IInventory {
 
 	@Override
 	public ItemStack decrStackSize(int slotId, int count) {
-		if (contents[slotId] == null)
+		if (contents[slotId] == null) {
 			return null;
-		if (contents[slotId].stackSize > count)
+		}
+		if (contents[slotId].stackSize > count) {
 			return contents[slotId].splitStack(count);
+		}
 		ItemStack stack = contents[slotId];
 		contents[slotId] = null;
 		return stack;

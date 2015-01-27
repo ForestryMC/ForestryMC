@@ -24,12 +24,14 @@ public class VanillaMyceliumGrowthRule implements IFlowerGrowthRule {
 
 	@Override
 	public boolean growFlower(IFlowerRegistry fr, String flowerType, World world, IIndividual individual, int x, int y, int z) {
-		if (!world.isAirBlock(x, y, z))
+		if (!world.isAirBlock(x, y, z)) {
 			return false;
+		}
 
 		Block ground = world.getBlock(x, y - 1, z);
-		if (ground != Blocks.mycelium)
+		if (ground != Blocks.mycelium) {
 			return false;
+		}
 
 		IFlower flower = fr.getRandomPlantableFlower(flowerType, world.rand);
 		return world.setBlock(x, y, z, flower.getBlock(), flower.getMeta(), Defaults.FLAG_BLOCK_SYNCH);

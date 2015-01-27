@@ -1,19 +1,20 @@
 package forestry.apiculture.genetics;
 
-import forestry.api.apiculture.IBeeGenome;
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.genetics.IEffectData;
-import forestry.core.genetics.EffectData;
 import java.util.List;
 import java.util.Random;
+
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenBigMushroom;
+
+import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.genetics.IEffectData;
+import forestry.core.genetics.EffectData;
 
 public class AlleleEffectFungification extends AlleleEffectThrottled {
 
@@ -48,7 +49,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		} else {
 			++entityThrottle;
 		}
-		storedData.setInteger(1, entityThrottle);		
+		storedData.setInteger(1, entityThrottle);
 		
 		return storedData;
 	}
@@ -74,7 +75,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 			blockY = getRandomOffset(world.rand, housing.getYCoord(), territorySize[1]);
 			blockZ = getRandomOffset(world.rand, housing.getZCoord(), territorySize[2]);
 		}
-			
+
 	}
 
 	private void doEntityEffect(IBeeGenome genome, IBeeHousing housing) {
@@ -84,8 +85,8 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		List entities = world.getEntitiesWithinAABB(EntityCow.class, aabb);
 		for (Object entity : entities) {
 			if (entity instanceof EntityCow && !(entity instanceof EntityMooshroom)) {
-		        convertCowToMooshroom((EntityCow)entity);
-		        break;
+				convertCowToMooshroom((EntityCow) entity);
+				break;
 			}
 		}
 	}
@@ -104,25 +105,25 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 	
 	private static void convertCowToMooshroom(EntityCow cow) {
 		World worldObj = cow.worldObj;
-        cow.setDead();
-        EntityMooshroom mooshroom = new EntityMooshroom(worldObj);
-        mooshroom.setLocationAndAngles(cow.posX, cow.posY, cow.posZ, cow.rotationYaw, cow.rotationPitch);
-        mooshroom.setHealth(cow.getHealth());
-        mooshroom.renderYawOffset = cow.renderYawOffset;
-        worldObj.spawnEntityInWorld(mooshroom);
-        worldObj.spawnParticle("largeexplode", cow.posX, cow.posY + (double)(cow.height / 2.0F), cow.posZ, 0.0D, 0.0D, 0.0D);
+		cow.setDead();
+		EntityMooshroom mooshroom = new EntityMooshroom(worldObj);
+		mooshroom.setLocationAndAngles(cow.posX, cow.posY, cow.posZ, cow.rotationYaw, cow.rotationPitch);
+		mooshroom.setHealth(cow.getHealth());
+		mooshroom.renderYawOffset = cow.renderYawOffset;
+		worldObj.spawnEntityInWorld(mooshroom);
+		worldObj.spawnParticle("largeexplode", cow.posX, cow.posY + (double) (cow.height / 2.0F), cow.posZ, 0.0D, 0.0D, 0.0D);
 	}
 
 	private void doMushroomGrowth(Block block, World world, int blockX, int blockY, int blockZ) {
-        WorldGenBigMushroom giantMushroomGenerator;
-        
-        if (block == Blocks.brown_mushroom) {
-            giantMushroomGenerator = new WorldGenBigMushroom(0);
-        } else {
-            giantMushroomGenerator = new WorldGenBigMushroom(1);
-        }
-        
-        world.setBlockToAir(blockX, blockY, blockZ);
-        giantMushroomGenerator.generate(world, world.rand, blockX, blockY, blockZ);
+		WorldGenBigMushroom giantMushroomGenerator;
+
+		if (block == Blocks.brown_mushroom) {
+			giantMushroomGenerator = new WorldGenBigMushroom(0);
+		} else {
+			giantMushroomGenerator = new WorldGenBigMushroom(1);
+		}
+
+		world.setBlockToAir(blockX, blockY, blockZ);
+		giantMushroomGenerator.generate(world, world.rand, blockX, blockY, blockZ);
 	}
 }

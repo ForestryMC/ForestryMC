@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -13,8 +13,6 @@ package forestry.arboriculture.network;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-
-import net.minecraft.world.World;
 
 import forestry.arboriculture.gadgets.TileLeaves;
 import forestry.core.network.PacketIds;
@@ -40,10 +38,12 @@ public class PacketLeafUpdate extends PacketTileNBT {
 		super(PacketIds.LEAF_UPDATE, leaves);
 
 		leafState = 0;
-		if(leaves.hasFruit())
+		if (leaves.hasFruit()) {
 			leafState |= hasFruitFlag;
-		if(leaves.isPollinated())
+		}
+		if (leaves.isPollinated()) {
 			leafState |= isPollinatedFlag;
+		}
 		textureIndexFancy = leaves.determineTextureIndex(true);
 		textureIndexPlain = leaves.determineTextureIndex(false);
 		textureIndexFruit = leaves.determineOverlayIndex();

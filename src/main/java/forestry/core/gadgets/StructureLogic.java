@@ -4,11 +4,16 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.gadgets;
+
+import java.util.HashMap;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 
 import forestry.api.core.IStructureLogic;
 import forestry.api.core.ITileStructure;
@@ -17,9 +22,6 @@ import forestry.core.gadgets.BlockStructure.EnumStructureState;
 import forestry.core.utils.Schemata;
 import forestry.core.utils.Schemata.EnumStructureBlock;
 import forestry.core.vect.Vect;
-import java.util.HashMap;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 
 public abstract class StructureLogic implements IStructureLogic {
 
@@ -45,15 +47,17 @@ public abstract class StructureLogic implements IStructureLogic {
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		if (nbttagcompound.hasKey("SchemataOrdinal"))
+		if (nbttagcompound.hasKey("SchemataOrdinal")) {
 			activeSchemata = nbttagcompound.getShort("SchemataOrdinal");
+		}
 		isRotated = nbttagcompound.getBoolean("Rotated");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		if (activeSchemata >= 0)
+		if (activeSchemata >= 0) {
 			nbttagcompound.setShort("SchemataOrdinal", activeSchemata);
+		}
 		nbttagcompound.setBoolean("Rotated", isRotated);
 	}
 
@@ -70,8 +74,9 @@ public abstract class StructureLogic implements IStructureLogic {
 
 		boolean rotate;
 		for (int i = 0; i < schematas.length; i++) {
-			if (!schematas[i].isEnabled())
+			if (!schematas[i].isEnabled()) {
 				continue;
+			}
 
 			state = determineMasterState(schematas[i], false);
 			rotate = false;
@@ -88,8 +93,9 @@ public abstract class StructureLogic implements IStructureLogic {
 		}
 
 		// Structure state is indeterminate, possibly caused by chunkloading. Remain calm, do nothing.
-		if (state == EnumStructureState.INDETERMINATE)
+		if (state == EnumStructureState.INDETERMINATE) {
 			return;
+		}
 
 		if (state == EnumStructureState.VALID) {
 			// Structure is valid and this block is master, set all other blocks
@@ -109,8 +115,10 @@ public abstract class StructureLogic implements IStructureLogic {
 			// System.out.println(String.format("Offsets: %s and %s.", offsetX, offsetZ));
 
 		} else if (structure.isMaster())
-			// Structure is invalid, break it up.
+		// Structure is invalid, break it up.
+		{
 			resetStructureBlocks(schematas[activeSchemata]);
+		}
 	}
 
 	protected void resetStructureBlocks(Schemata schemata) {
@@ -123,23 +131,27 @@ public abstract class StructureLogic implements IStructureLogic {
 			offsetZ = schemata.getxOffset();
 		}
 
-		for (int i = 0; i < dimensions.x; i++)
-			for (int j = 0; j < schemata.getHeight(); j++)
+		for (int i = 0; i < dimensions.x; i++) {
+			for (int j = 0; j < schemata.getHeight(); j++) {
 				for (int k = 0; k < dimensions.z; k++) {
 					int x = structureTile.xCoord + i + offsetX;
 					int y = structureTile.yCoord + j + schemata.getyOffset();
 					int z = structureTile.zCoord + k + offsetZ;
 
 					TileEntity tile = structureTile.getWorldObj().getTileEntity(x, y, z);
-					if (!(tile instanceof ITileStructure))
+					if (!(tile instanceof ITileStructure)) {
 						continue;
+					}
 
 					ITileStructure part = (ITileStructure) tile;
-					if (!part.getTypeUID().equals(getTypeUID()))
+					if (!part.getTypeUID().equals(getTypeUID())) {
 						continue;
+					}
 
 					part.onStructureReset();
 				}
+			}
+		}
 	}
 
 	protected void markStructureBlocks(Schemata schemata) {
@@ -152,20 +164,22 @@ public abstract class StructureLogic implements IStructureLogic {
 			offsetZ = schemata.getxOffset();
 		}
 
-		for (int i = 0; i < dimensions.x; i++)
-			for (int j = 0; j < schemata.getHeight(); j++)
+		for (int i = 0; i < dimensions.x; i++) {
+			for (int j = 0; j < schemata.getHeight(); j++) {
 				for (int k = 0; k < dimensions.z; k++) {
 					int x = structureTile.xCoord + i + offsetX;
 					int y = structureTile.yCoord + j + schemata.getyOffset();
 					int z = structureTile.zCoord + k + offsetZ;
 
 					TileEntity tile = structureTile.getWorldObj().getTileEntity(x, y, z);
-					if (!(tile instanceof ITileStructure))
+					if (!(tile instanceof ITileStructure)) {
 						continue;
+					}
 
 					ITileStructure part = (ITileStructure) tile;
-					if (!part.getTypeUID().equals(getTypeUID()))
+					if (!part.getTypeUID().equals(getTypeUID())) {
 						continue;
+					}
 
 					part.setCentralTE((TileEntity) structure);
 					EnumStructureBlock type = schemata.getAt(i, j, k, isRotated);
@@ -174,6 +188,8 @@ public abstract class StructureLogic implements IStructureLogic {
 						structureTile.getWorldObj().markBlockForUpdate(x, y, z);
 					}
 				}
+			}
+		}
 	}
 
 	protected abstract EnumStructureState determineMasterState(Schemata schemata, boolean rotate);

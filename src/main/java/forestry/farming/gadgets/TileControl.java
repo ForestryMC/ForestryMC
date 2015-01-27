@@ -4,11 +4,18 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.farming.gadgets;
+
+import java.util.Collection;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.core.ITileStructure;
 import forestry.api.farming.ICrop;
@@ -16,10 +23,6 @@ import forestry.api.farming.IFarmComponent;
 import forestry.api.farming.IFarmListener;
 import forestry.api.farming.IFarmLogic;
 import forestry.core.vect.Vect;
-import java.util.Collection;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileControl extends TileFarm implements IFarmListener {
 
@@ -29,8 +32,9 @@ public class TileControl extends TileFarm implements IFarmListener {
 
 	@Override
 	protected void updateServerSide() {
-		if (!isInited)
+		if (!isInited) {
 			registerWithMaster();
+		}
 	}
 
 	@Override
@@ -44,12 +48,14 @@ public class TileControl extends TileFarm implements IFarmListener {
 	private void registerWithMaster() {
 
 		isInited = true;
-		if (!hasMaster())
+		if (!hasMaster()) {
 			return;
+		}
 
 		ITileStructure central = getCentralTE();
-		if (!(central instanceof IFarmComponent))
+		if (!(central instanceof IFarmComponent)) {
 			return;
+		}
 
 		((IFarmComponent) central).registerListener(this);
 	}

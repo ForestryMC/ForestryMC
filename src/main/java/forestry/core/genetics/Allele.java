@@ -4,11 +4,15 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.genetics;
+
+import java.util.EnumSet;
+
+import net.minecraftforge.common.EnumPlantType;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
@@ -16,8 +20,6 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.ILegacyHandler;
 import forestry.core.config.Defaults;
 import forestry.core.utils.StringUtil;
-import java.util.EnumSet;
-import net.minecraftforge.common.EnumPlantType;
 
 public class Allele implements IAllele {
 
@@ -32,10 +34,11 @@ public class Allele implements IAllele {
 	protected Allele(String uid, boolean isDominant, boolean skipRegister) {
 		this.uid = uid;
 		this.isDominant = isDominant;
-		this.name = "allele."+uid;
+		this.name = "allele." + uid;
 		
-		if (!skipRegister)
+		if (!skipRegister) {
 			AlleleManager.alleleRegistry.registerAllele(this);
+		}
 	}
 
 	@Override
@@ -543,10 +546,10 @@ public class Allele implements IAllele {
 		floweringMaximum = new AlleleInteger("floweringMaximum", 99, true).setName("flowering", "maximum");
 
 		// BOTH // TERRITORY
-		territoryDefault = new AlleleArea("territoryDefault", new int[] {9, 6, 9}).setName("territory", "average");
-		territoryLarge = new AlleleArea("territoryLarge", new int[] {11, 8, 11}).setName("territory", "large");
-		territoryLarger = new AlleleArea("territoryLarger", new int[] {13, 12, 13}).setName("territory", "larger");
-		territoryLargest = new AlleleArea("territoryLargest", new int[] {15, 13, 15}).setName("territory", "largest");
+		territoryDefault = new AlleleArea("territoryDefault", new int[]{9, 6, 9}).setName("territory", "average");
+		territoryLarge = new AlleleArea("territoryLarge", new int[]{11, 8, 11}).setName("territory", "large");
+		territoryLarger = new AlleleArea("territoryLarger", new int[]{13, 12, 13}).setName("territory", "larger");
+		territoryLargest = new AlleleArea("territoryLargest", new int[]{15, 13, 15}).setName("territory", "largest");
 
 		// TREES // PLANTS
 		plantTypeNone = new AllelePlantType("plantTypeNone", EnumSet.noneOf(EnumPlantType.class), true);

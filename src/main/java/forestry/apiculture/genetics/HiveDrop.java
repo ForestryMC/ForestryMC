@@ -4,21 +4,23 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.genetics;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IHiveDrop;
 import forestry.api.genetics.IAllele;
 import forestry.plugins.PluginApiculture;
-import java.util.ArrayList;
-import java.util.Collections;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 public class HiveDrop implements IHiveDrop {
 
@@ -46,8 +48,9 @@ public class HiveDrop implements IHiveDrop {
 	@Override
 	public ItemStack getPrincess(World world, int x, int y, int z, int fortune) {
 		IBee bee = createBee(world);
-		if(world.rand.nextFloat() < ignobleShare)
+		if (world.rand.nextFloat() < ignobleShare) {
 			bee.setIsNatural(false);
+		}
 
 		return PluginApiculture.beeInterface.getMemberStack(bee, EnumBeeType.PRINCESS.ordinal());
 	}
@@ -62,8 +65,9 @@ public class HiveDrop implements IHiveDrop {
 	@Override
 	public ArrayList<ItemStack> getAdditional(World world, int x, int y, int z, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		for (ItemStack stack : additional)
+		for (ItemStack stack : additional) {
 			ret.add(stack.copy());
+		}
 
 		return ret;
 	}

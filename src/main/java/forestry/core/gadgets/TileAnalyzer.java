@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -152,8 +152,9 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 		for (int i = 0; i < invInput.getSizeInventory(); i++) {
 			ItemStack inputStack = invInput.getStackInSlot(i);
-			if (inputStack == null || !AlleleManager.alleleRegistry.isIndividual(inputStack))
+			if (inputStack == null || !AlleleManager.alleleRegistry.isIndividual(inputStack)) {
 				continue;
+			}
 			// Analyzed bees in the input buffer are added to the output queue.
 			IIndividual individual = AlleleManager.alleleRegistry.getIndividual(inputStack);
 			if (individual.isAnalyzed()) {
@@ -209,8 +210,9 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			// Analyzation is done.
 			IIndividual individual = AlleleManager.alleleRegistry.getIndividual(stackToAnalyze);
 			// No bee, abort
-			if (individual == null)
+			if (individual == null) {
 				return false;
+			}
 
 			individual.analyze();
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
@@ -226,11 +228,13 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		analyzeTime = 0;
 
 		// Don't start if analyze slot already occupied
-		if (stackToAnalyze != null)
+		if (stackToAnalyze != null) {
 			return false;
+		}
 
-		if (getErrorState() != EnumErrorCode.OK)
+		if (getErrorState() != EnumErrorCode.OK) {
 			return false;
+		}
 
 		// Look for bees in input slots.
 		IInvSlot slot = getInputSlot();
@@ -246,15 +250,17 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	private IInvSlot getInputSlot() {
 		for (IInvSlot slot : InventoryIterator.getIterable(invInput)) {
 			ItemStack inputStack = slot.getStackInSlot();
-			if (inputStack != null && AlleleManager.alleleRegistry.isIndividual(inputStack))
+			if (inputStack != null && AlleleManager.alleleRegistry.isIndividual(inputStack)) {
 				return slot;
+			}
 		}
 		return null;
 	}
 
 	private boolean tryAddPending() {
-		if (pendingProducts.isEmpty())
+		if (pendingProducts.isEmpty()) {
 			return false;
+		}
 
 		ItemStack next = pendingProducts.peek();
 		if (InvTools.tryAddStack(getInternalInventory(), next, SLOT_OUTPUT_1, getInternalInventory().getSizeInventory() - SLOT_OUTPUT_1, true)) {
@@ -273,10 +279,12 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 	@Override
 	public boolean hasWork() {
-		if (!pendingProducts.isEmpty())
+		if (!pendingProducts.isEmpty()) {
 			return true;
-		if (analyzeTime > 0)
+		}
+		if (analyzeTime > 0) {
 			return true;
+		}
 
 		return getErrorState() == EnumErrorCode.OK || getErrorState() == EnumErrorCode.NOPOWER;
 	}
@@ -298,9 +306,9 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	public void getGUINetworkData(int i, int j) {
 		i -= tankManager.maxMessageId() + 1;
 		switch (i) {
-		case 0:
-			analyzeTime = j;
-			break;
+			case 0:
+				analyzeTime = j;
+				break;
 		}
 	}
 

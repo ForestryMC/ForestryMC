@@ -4,15 +4,16 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.factory.gui;
 
+import net.minecraft.inventory.IInventory;
+
 import forestry.core.gui.slots.SlotForestry;
 import forestry.core.interfaces.IContainerCrafting;
-import net.minecraft.inventory.IInventory;
 
 /**
  * Informs the passed container of slot changes. Contains a dummy itemstack.

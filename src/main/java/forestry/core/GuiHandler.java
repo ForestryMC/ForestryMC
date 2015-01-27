@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -34,7 +34,7 @@ public class GuiHandler extends GuiHandlerBase {
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		int cleanId = decodeGuiID(id);
 
-		if (cleanId < GuiId.values().length)
+		if (cleanId < GuiId.values().length) {
 			switch (GuiId.values()[cleanId]) {
 
 				case AnalyzerGUI:
@@ -45,19 +45,22 @@ public class GuiHandler extends GuiHandlerBase {
 
 				case SolderingIronGUI:
 					ItemStack equipped = player.getCurrentEquippedItem();
-					if (equipped == null)
+					if (equipped == null) {
 						return null;
+					}
 					return new GuiSolderingIron(player.inventory, new SolderingInventory(equipped));
 
 				default:
 					for (IGuiHandler handler : PluginManager.guiHandlers) {
 						Object element = handler.getClientGuiElement(id, player, world, x, y, z);
-						if (element != null)
+						if (element != null) {
 							return element;
+						}
 					}
 
 					return null;
 			}
+		}
 
 		return null;
 	}
@@ -66,7 +69,7 @@ public class GuiHandler extends GuiHandlerBase {
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		int cleanId = decodeGuiID(id);
 
-		if (cleanId < GuiId.values().length)
+		if (cleanId < GuiId.values().length) {
 			switch (GuiId.values()[cleanId]) {
 
 				case AnalyzerGUI:
@@ -77,20 +80,23 @@ public class GuiHandler extends GuiHandlerBase {
 
 				case SolderingIronGUI:
 					ItemStack equipped = player.getCurrentEquippedItem();
-					if (equipped == null)
+					if (equipped == null) {
 						return null;
+					}
 					return new ContainerSolderingIron(player.inventory, new SolderingInventory(equipped));
 
 				default:
 					for (IGuiHandler handler : PluginManager.guiHandlers) {
 						Object element = handler.getServerGuiElement(id, player, world, x, y, z);
-						if (element != null)
+						if (element != null) {
 							return element;
+						}
 					}
 
 					return null;
 
 			}
+		}
 
 		return null;
 	}

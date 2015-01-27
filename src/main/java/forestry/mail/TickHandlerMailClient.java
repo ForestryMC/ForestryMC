@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -14,6 +14,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.RenderTickEvent;
+
 import forestry.mail.gui.GuiMailboxInfo;
 import forestry.plugins.PluginMail;
 
@@ -24,11 +25,14 @@ public class TickHandlerMailClient {
 
 	@SubscribeEvent
 	public void onRenderTick(RenderTickEvent event) {
-		if (event.phase != Phase.END) return;
+		if (event.phase != Phase.END) {
+			return;
+		}
 
-		if (GuiMailboxInfo.instance != null)
+		if (GuiMailboxInfo.instance != null) {
 			GuiMailboxInfo.instance.render(0, 0);
-		else
+		} else {
 			PluginMail.proxy.resetMailboxInfo();
+		}
 	}
 }

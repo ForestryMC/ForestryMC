@@ -4,18 +4,19 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.render;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public abstract class OverlayRenderingHandler implements ISimpleBlockRenderingHandler {
 
@@ -28,8 +29,9 @@ public abstract class OverlayRenderingHandler implements ISimpleBlockRenderingHa
 	protected void renderBottomFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness,
 			float r, float g, float b) {
 
-		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x, y - 1, z, 0))
+		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x, y - 1, z, 0)) {
 			return;
+		}
 
 		Tessellator tesselator = Tessellator.instance;
 
@@ -42,8 +44,9 @@ public abstract class OverlayRenderingHandler implements ISimpleBlockRenderingHa
 	protected void renderTopFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness, float r,
 			float g, float b) {
 
-		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x, y + 1, z, 1))
+		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x, y + 1, z, 1)) {
 			return;
+		}
 
 		Tessellator tesselator = Tessellator.instance;
 
@@ -56,8 +59,9 @@ public abstract class OverlayRenderingHandler implements ISimpleBlockRenderingHa
 	protected void renderEastFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness, float r,
 			float g, float b) {
 
-		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x, y, z - 1, 2))
+		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x, y, z - 1, 2)) {
 			return;
+		}
 
 		Tessellator tesselator = Tessellator.instance;
 
@@ -70,8 +74,9 @@ public abstract class OverlayRenderingHandler implements ISimpleBlockRenderingHa
 	protected void renderWestFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness, float r,
 			float g, float b) {
 
-		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x, y, z + 1, 3))
+		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x, y, z + 1, 3)) {
 			return;
+		}
 
 		Tessellator tesselator = Tessellator.instance;
 
@@ -84,8 +89,9 @@ public abstract class OverlayRenderingHandler implements ISimpleBlockRenderingHa
 	protected void renderNorthFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness,
 			float r, float g, float b) {
 
-		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x - 1, y, z, 4))
+		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x - 1, y, z, 4)) {
 			return;
+		}
 
 		Tessellator tesselator = Tessellator.instance;
 
@@ -98,8 +104,9 @@ public abstract class OverlayRenderingHandler implements ISimpleBlockRenderingHa
 	protected void renderSouthFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness,
 			float r, float g, float b) {
 
-		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x + 1, y, z, 5))
+		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x + 1, y, z, 5)) {
 			return;
+		}
 
 		Tessellator tesselator = Tessellator.instance;
 

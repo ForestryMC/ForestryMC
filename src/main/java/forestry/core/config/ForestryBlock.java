@@ -4,32 +4,34 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.config;
 
-import forestry.core.proxy.Proxies;
-import forestry.plugins.PluginManager;
-import forestry.plugins.PluginManager.Stage;
 import java.util.EnumSet;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
 import net.minecraftforge.oredict.OreDictionary;
+
+import forestry.core.proxy.Proxies;
+import forestry.plugins.PluginManager;
+import forestry.plugins.PluginManager.Stage;
 
 /**
  * Allows direct access to Forestry's blocks. Will be populated during BaseMod.load().
- * 
+ *
  * All of this stuff is metadata sensitive which is not reflected here!
- * 
+ *
  * Make sure to only reference it in modsLoaded() or later.
- * 
+ *
  * @author SirSengir
- * 
  */
 public enum ForestryBlock {
 
@@ -93,8 +95,9 @@ public enum ForestryBlock {
 	private Block block;
 
 	public void registerBlock(Block block, Class<? extends ItemBlock> itemClass, String name) {
-		if (!EnumSet.of(Stage.PRE_INIT).contains(PluginManager.getStage()))
+		if (!EnumSet.of(Stage.PRE_INIT).contains(PluginManager.getStage())) {
 			throw new RuntimeException("Tried to register Block outside of Pre-Init");
+		}
 		this.block = block;
 		block.setBlockName("for." + name);
 		Proxies.common.registerBlock(block, itemClass);
@@ -133,8 +136,9 @@ public enum ForestryBlock {
 	}
 
 	public ItemStack getItemStack(int qty, int meta) {
-		if (block == null)
+		if (block == null) {
 			return null;
+		}
 		return new ItemStack(block, qty, meta);
 	}
 

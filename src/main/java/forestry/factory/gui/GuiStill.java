@@ -4,17 +4,18 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.factory.gui;
 
+import net.minecraft.entity.player.InventoryPlayer;
+
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.factory.gadgets.MachineStill;
-import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiStill extends GuiForestryTitled<MachineStill> {
 
@@ -29,12 +30,14 @@ public class GuiStill extends GuiForestryTitled<MachineStill> {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 		MachineStill boiler = tile;
 
-		if (boiler.isWorking())
+		if (boiler.isWorking()) {
 			drawTexturedModalRect(guiLeft + 81, guiTop + 57, 176, 60, 14, 14);
+		}
 
 		int massRemaining = boiler.getDistillationProgressScaled(16);
-		if (massRemaining > 0)
+		if (massRemaining > 0) {
 			drawTexturedModalRect(guiLeft + 84, guiTop + 17 + 17 - massRemaining, 176, 74 + 17 - massRemaining, 4, massRemaining);
+		}
 
 	}
 

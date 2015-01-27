@@ -18,6 +18,7 @@ public interface ICommandModeHelper {
 	String getModeNameMatching(String desired);
 
 	String getModeName(World world);
+
 	void setMode(World world, String modeName);
 
 	Iterable<String> getDescription(String modeName);

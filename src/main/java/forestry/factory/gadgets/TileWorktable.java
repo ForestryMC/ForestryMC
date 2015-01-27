@@ -4,11 +4,18 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.factory.gadgets;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.gadgets.TileBase;
@@ -24,12 +31,6 @@ import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.RecipeUtil;
 import forestry.factory.recipes.RecipeMemory;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.nbt.NBTTagCompound;
 
 
 public class TileWorktable extends TileBase implements ICrafter {
@@ -114,8 +115,9 @@ public class TileWorktable extends TileBase implements ICrafter {
 		}
 
 		IInventory matrix = memorized.getRecipeMatrix(recipeIndex);
-		if (matrix == null)
+		if (matrix == null) {
 			return;
+		}
 
 		for (int slot = 0; slot < matrix.getSizeInventory(); slot++) {
 			craftingInventory.setInventorySlotContents(slot, matrix.getStackInSlot(slot));
@@ -149,8 +151,9 @@ public class TileWorktable extends TileBase implements ICrafter {
 	}
 
 	private boolean canCraftCurrentRecipe() {
-		if (currentRecipe == null)
+		if (currentRecipe == null) {
 			return false;
+		}
 
 		ItemStack[] recipeItems = InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
 		ItemStack[] inventory = InvTools.getStacks(getInternalInventory(), SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
@@ -166,18 +169,21 @@ public class TileWorktable extends TileBase implements ICrafter {
 
 	@Override
 	public boolean canTakeStack(int slotIndex) {
-		if (slotIndex == SLOT_CRAFTING_RESULT)
+		if (slotIndex == SLOT_CRAFTING_RESULT) {
 			return canCraftCurrentRecipe();
+		}
 		return true;
 	}
 
 	@Override
 	public ItemStack takenFromSlot(int slotIndex, boolean consumeRecipe, EntityPlayer player) {
-		if (!removeResources(player))
+		if (!removeResources(player)) {
 			return null;
+		}
 
-		if (Proxies.common.isSimulating(worldObj))
+		if (Proxies.common.isSimulating(worldObj)) {
 			memorized.memorizeRecipe(worldObj, currentRecipe, currentCrafting);
+		}
 
 		updateCraftResult();
 		return currentRecipe.getRecipeOutput(worldObj).copy();
@@ -185,11 +191,13 @@ public class TileWorktable extends TileBase implements ICrafter {
 
 	@Override
 	public ItemStack getResult() {
-		if (currentRecipe == null)
+		if (currentRecipe == null) {
 			return null;
+		}
 
-		if (currentRecipe.getRecipeOutput(worldObj) != null)
+		if (currentRecipe.getRecipeOutput(worldObj) != null) {
 			return currentRecipe.getRecipeOutput(worldObj).copy();
+		}
 		return null;
 	}
 

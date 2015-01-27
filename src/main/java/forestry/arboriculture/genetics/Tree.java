@@ -4,13 +4,32 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenerator;
+
 import com.mojang.authlib.GameProfile;
+
+import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import forestry.api.arboriculture.EnumGrowthConditions;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleLeafEffect;
@@ -31,21 +50,6 @@ import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.Individual;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginArboriculture;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.List;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
-import net.minecraftforge.common.EnumPlantType;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class Tree extends Individual implements ITree, ITreeGenData, IPlantable {
 
@@ -72,12 +76,14 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 
 		super.readFromNBT(nbttagcompound);
 
-		if (nbttagcompound.hasKey("Genome"))
+		if (nbttagcompound.hasKey("Genome")) {
 			genome = new TreeGenome(nbttagcompound.getCompoundTag("Genome"));
-		else
+		} else {
 			genome = PluginArboriculture.treeInterface.templateAsGenome(TreeTemplates.getOakTemplate());
-		if (nbttagcompound.hasKey("Mate"))
+		}
+		if (nbttagcompound.hasKey("Mate")) {
 			mate = new TreeGenome(nbttagcompound.getCompoundTag("Mate"));
+		}
 
 	}
 
@@ -110,18 +116,21 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 	public IEffectData[] doEffect(IEffectData[] storedData, World world, int biomeid, int x, int y, int z) {
 		IAlleleLeafEffect effect = (IAlleleLeafEffect) getGenome().getActiveAllele(EnumTreeChromosome.EFFECT);
 
-		if (effect == null)
+		if (effect == null) {
 			return null;
+		}
 
 		storedData[0] = doEffect(effect, storedData[0], world, biomeid, x, y, z);
 
 		// Return here if the primary can already not be combined
-		if (!effect.isCombinable())
+		if (!effect.isCombinable()) {
 			return storedData;
+		}
 
 		IAlleleLeafEffect secondary = (IAlleleLeafEffect) getGenome().getInactiveAllele(EnumTreeChromosome.EFFECT);
-		if (!secondary.isCombinable())
+		if (!secondary.isCombinable()) {
 			return storedData;
+		}
 
 		storedData[1] = doEffect(secondary, storedData[1], world, biomeid, x, y, z);
 
@@ -147,13 +156,15 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 	@Override
 	public boolean canStay(World world, int x, int y, int z) {
 		Block block = world.getBlock(x, y - 1, z);
-		if (block == null)
+		if (block == null) {
 			return false;
+		}
 
 		for (EnumPlantType type : getPlantTypes()) {
 			this.plantType = type;
-			if (block.canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, this))
+			if (block.canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, this)) {
 				return true;
+			}
 		}
 
 		return false;
@@ -198,7 +209,7 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 
 	@Override
 	public int getResilience() {
-		int base = (int)(getGenome().getFertility() * getGenome().getSappiness() * 100);
+		int base = (int) (getGenome().getFertility() * getGenome().getSappiness() * 100);
 		return (base > 1 ? base : 1) * 10;
 	}
 
@@ -215,8 +226,9 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 	@Override
 	public boolean allowsFruitBlocks() {
 		IFruitProvider provider = getGenome().getFruitProvider();
-		if (!provider.requiresFruitBlocks())
+		if (!provider.requiresFruitBlocks()) {
 			return false;
+		}
 
 		Collection<IFruitFamily> suitable = genome.getPrimary().getSuitableFruit();
 		return suitable.contains(provider.getFamily());
@@ -226,8 +238,9 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 	public boolean trySpawnFruitBlock(World world, int x, int y, int z) {
 		IFruitProvider provider = getGenome().getFruitProvider();
 		Collection<IFruitFamily> suitable = genome.getPrimary().getSuitableFruit();
-		if (!suitable.contains(provider.getFamily()))
+		if (!suitable.contains(provider.getFamily())) {
 			return false;
+		}
 
 		return provider.trySpawnFruitBlock(getGenome(), world, x, y, z);
 	}
@@ -274,8 +287,9 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 		// You analyzed it? Juicy tooltip coming up!
 		IAlleleTreeSpecies primary = genome.getPrimary();
 		IAlleleTreeSpecies secondary = genome.getSecondary();
-		if (!isPureBred(EnumTreeChromosome.SPECIES))
-			list.add(EnumChatFormatting.BLUE + StringUtil.localize("trees.hybrid").replaceAll("%PRIMARY",primary.getName()).replaceAll("%SECONDARY",secondary.getName()));
+		if (!isPureBred(EnumTreeChromosome.SPECIES)) {
+			list.add(EnumChatFormatting.BLUE + StringUtil.localize("trees.hybrid").replaceAll("%PRIMARY", primary.getName()).replaceAll("%SECONDARY", secondary.getName()));
+		}
 
 		String sappiness = EnumChatFormatting.GOLD + "S: " + genome.getActiveAllele(EnumTreeChromosome.SAPPINESS).getName();
 		String maturation = EnumChatFormatting.RED + "M: " + genome.getActiveAllele(EnumTreeChromosome.MATURATION).getName();
@@ -287,15 +301,17 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 		list.add(String.format("%s, %s", height, girth));
 		list.add(String.format("%s, %s", yield, sappiness));
 
-		IAlleleBoolean primaryFireproof = (IAlleleBoolean)genome.getActiveAllele(EnumTreeChromosome.FIREPROOF);
-		if (primaryFireproof.getValue())
+		IAlleleBoolean primaryFireproof = (IAlleleBoolean) genome.getActiveAllele(EnumTreeChromosome.FIREPROOF);
+		if (primaryFireproof.getValue()) {
 			list.add(EnumChatFormatting.RED + StatCollector.translateToLocal("for.gui.fireresist"));
+		}
 
 		IAllele fruit = getGenome().getActiveAllele(EnumTreeChromosome.FRUITS);
-		if(fruit != Allele.fruitNone) {
+		if (fruit != Allele.fruitNone) {
 			String strike = "";
-			if (!canBearFruit())
+			if (!canBearFruit()) {
 				strike = EnumChatFormatting.STRIKETHROUGH.toString();
+			}
 			list.add(strike + EnumChatFormatting.GREEN + "F: " + StringUtil.localize(genome.getFruitProvider().getDescription()));
 		}
 
@@ -308,11 +324,13 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 
 		float chance = genome.getFertility() * modifier;
 
-		if (world.rand.nextFloat() <= chance)
-			if (this.getMate() == null)
+		if (world.rand.nextFloat() <= chance) {
+			if (this.getMate() == null) {
 				prod.add(PluginArboriculture.treeInterface.getTree(world, new TreeGenome(genome.getChromosomes())));
-			else
+			} else {
 				prod.add(createOffspring(world, x, y, z));
+			}
+		}
 
 		return prod.toArray(new ITree[prod.size()]);
 	}
@@ -326,15 +344,19 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 		// Check for mutation. Replace one of the parents with the mutation
 		// template if mutation occured.
 		IChromosome[] mutated = mutateSpecies(world, x, y, z, genome, mate);
-		if (mutated == null)
+		if (mutated == null) {
 			mutated = mutateSpecies(world, x, y, z, mate, genome);
+		}
 
-		if (mutated != null)
+		if (mutated != null) {
 			return new Tree(world, new TreeGenome(mutated));
+		}
 
-		for (int i = 0; i < parent1.length; i++)
-			if (parent1[i] != null && parent2[i] != null)
+		for (int i = 0; i < parent1.length; i++) {
+			if (parent1[i] != null && parent2[i] != null) {
 				chromosomes[i] = Chromosome.inheritChromosome(world.rand, parent1[i], parent2[i]);
+			}
+		}
 
 		return new Tree(world, new TreeGenome(chromosomes));
 	}

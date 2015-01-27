@@ -4,14 +4,27 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenerator;
+
+import net.minecraftforge.common.EnumPlantType;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
@@ -30,15 +43,6 @@ import forestry.core.config.ForestryItem;
 import forestry.core.genetics.AlleleSpecies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.Utils;
-import java.util.ArrayList;
-import java.util.HashMap;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
-import net.minecraftforge.common.EnumPlantType;
 
 public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpecies, IIconProvider {
 
@@ -57,6 +61,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	}
 
 	private static final HashMap<String, LeafType> leafTypes = new HashMap<String, LeafType>();
+
 	static {
 		leafTypes.put("deciduous", new LeafType("deciduous", (short) 10, (short) 11, (short) 12));
 		leafTypes.put("conifers", new LeafType("conifers", (short) 15, (short) 16, (short) 17));
@@ -90,7 +95,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 			Class<? extends WorldGenArboriculture> generator, ItemStack wood) {
 		super(uid, isDominant, "trees.species." + name, branch, binomial);
 
-		this.root = (ITreeRoot)AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees");
+		this.root = (ITreeRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees");
 		this.generatorClass = generator;
 		this.primaryColour = primaryColor;
 		//this.secondaryColour = secondaryColor;
@@ -140,16 +145,18 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 		int highest = 0;
 		exclude.add(species);
 
-		for(IMutation mutation : getRoot().getPaths(species, EnumBeeChromosome.SPECIES)) {
-			if(!exclude.contains(mutation.getAllele0())) {
+		for (IMutation mutation : getRoot().getPaths(species, EnumBeeChromosome.SPECIES)) {
+			if (!exclude.contains(mutation.getAllele0())) {
 				int otherAdvance = getGeneticAdvancement(mutation.getAllele0(), exclude);
-				if(otherAdvance > highest)
+				if (otherAdvance > highest) {
 					highest = otherAdvance;
+				}
 			}
-			if(!exclude.contains(mutation.getAllele1())) {
+			if (!exclude.contains(mutation.getAllele1())) {
 				int otherAdvance = getGeneticAdvancement(mutation.getAllele1(), exclude);
-				if(otherAdvance > highest)
+				if (otherAdvance > highest) {
 					highest = otherAdvance;
+				}
 			}
 		}
 
@@ -171,7 +178,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@SuppressWarnings("rawtypes")
 	public WorldGenerator getGenerator(ITree tree, World world, int x, int y, int z) {
 		try {
-			return generatorClass.getConstructor(new Class[] { ITreeGenData.class }).newInstance(tree);
+			return generatorClass.getConstructor(new Class[]{ITreeGenData.class}).newInstance(tree);
 		} catch (Exception ex) {
 			throw new RuntimeException("Failed to instantiate generator of class " + generatorClass.getName());
 		}
@@ -180,17 +187,19 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	public Class<? extends WorldGenerator>[] getGeneratorClasses() {
-		return new Class[] { generatorClass };
+		return new Class[]{generatorClass};
 	}
 
 	@Override
 	public short getLeafIconIndex(ITree tree, boolean fancy) {
 
-		if (!fancy)
+		if (!fancy) {
 			return leafType.plainUID;
+		}
 
-		if (tree.getMate() != null)
+		if (tree.getMate() != null) {
 			return leafType.changedUID;
+		}
 
 		return leafType.fancyUID;
 	}
@@ -216,8 +225,9 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 
 	@Override
 	public int getIconColour(int renderPass) {
-		if(renderPass == 0)
+		if (renderPass == 0) {
 			return primaryColour;
+		}
 		return 0xffffff;
 	}
 
@@ -227,10 +237,11 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister register) {
-		if (vanillaMap < 0)
+		if (vanillaMap < 0) {
 			icon = TextureManager.getInstance().registerTex(register, "germlings/sapling." + uid);
-		else
+		} else {
 			icon = Blocks.sapling.getIcon(0, vanillaMap);
+		}
 		TextureManager.getInstance().registerTexUID(register, leafType.plainUID, "leaves/" + leafType.ident + ".plain");
 		TextureManager.getInstance().registerTexUID(register, leafType.changedUID, "leaves/" + leafType.ident + ".changed");
 		TextureManager.getInstance().registerTexUID(register, leafType.fancyUID, "leaves/" + leafType.ident + ".fancy");
@@ -239,8 +250,9 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getGermlingIcon(EnumGermlingType type, int renderPass) {
-		if(type == EnumGermlingType.POLLEN)
+		if (type == EnumGermlingType.POLLEN) {
 			return ForestryItem.pollenCluster.item().getIconFromDamageForRenderPass(0, renderPass);
+		}
 
 		return icon;
 	}
@@ -249,8 +261,9 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getGermlingColour(EnumGermlingType type, int renderPass) {
-		if(type == EnumGermlingType.SAPLING)
+		if (type == EnumGermlingType.SAPLING) {
 			return 0xFFFFFF;
+		}
 		return getLeafColour(null);
 	}
 
@@ -269,7 +282,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 
 	@Override
 	public ItemStack[] getLogStacks() {
-		return new ItemStack[] {wood};
+		return new ItemStack[]{wood};
 	}
 
 }

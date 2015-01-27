@@ -10,12 +10,14 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
-import forestry.arboriculture.IWoodFireproof;
-import forestry.core.config.ForestryBlock;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
+
 import net.minecraftforge.common.util.ForgeDirection;
+
+import forestry.arboriculture.IWoodFireproof;
+import forestry.core.config.ForestryBlock;
 
 public class BlockFireproofLog extends BlockLog implements IWoodFireproof {
 
@@ -31,14 +33,22 @@ public class BlockFireproofLog extends BlockLog implements IWoodFireproof {
 
 	private static ForestryBlock getFireproofLog(BlockLog.LogCat logCat) {
 		switch (logCat) {
-			case CAT0: return ForestryBlock.fireproofLog1;
-			case CAT1: return ForestryBlock.fireproofLog2;
-			case CAT2: return ForestryBlock.fireproofLog3;
-			case CAT3: return ForestryBlock.fireproofLog4;
-			case CAT4: return ForestryBlock.fireproofLog5;
-			case CAT5: return ForestryBlock.fireproofLog6;
-			case CAT6: return ForestryBlock.fireproofLog7;
-			case CAT7: return ForestryBlock.fireproofLog8;
+			case CAT0:
+				return ForestryBlock.fireproofLog1;
+			case CAT1:
+				return ForestryBlock.fireproofLog2;
+			case CAT2:
+				return ForestryBlock.fireproofLog3;
+			case CAT3:
+				return ForestryBlock.fireproofLog4;
+			case CAT4:
+				return ForestryBlock.fireproofLog5;
+			case CAT5:
+				return ForestryBlock.fireproofLog6;
+			case CAT6:
+				return ForestryBlock.fireproofLog7;
+			case CAT7:
+				return ForestryBlock.fireproofLog8;
 		}
 		throw new IllegalArgumentException("No fireproof log for this category: " + logCat);
 	}

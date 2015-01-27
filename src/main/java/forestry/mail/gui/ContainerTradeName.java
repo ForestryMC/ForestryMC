@@ -4,17 +4,17 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.mail.gui;
 
+import org.apache.commons.lang3.StringUtils;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-
-import org.apache.commons.lang3.StringUtils;
 
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.PostManager;
@@ -38,8 +38,9 @@ public class ContainerTradeName extends Container {
 
 	public void setAddress(String addressName) {
 
-		if (StringUtils.isBlank(addressName))
+		if (StringUtils.isBlank(addressName)) {
 			return;
+		}
 
 		PacketPayload payload = new PacketPayload(0, 0, 1);
 		payload.stringPayload[0] = addressName;

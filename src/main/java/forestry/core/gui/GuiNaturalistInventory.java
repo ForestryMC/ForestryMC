@@ -4,11 +4,19 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.gui;
+
+import java.util.HashMap;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.arboriculture.EnumTreeChromosome;
@@ -27,12 +35,6 @@ import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
-import java.util.HashMap;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 
 public class GuiNaturalistInventory extends GuiForestry<TileForestry> {
 	private final ISpeciesRoot speciesRoot;
@@ -65,16 +67,18 @@ public class GuiNaturalistInventory extends GuiForestry<TileForestry> {
 		fontRendererObj.drawString(header, guiLeft + 95 + getCenteredOffset(header, 98), guiTop + 10, fontColor.get("gui.title"));
 
 		IIndividual individual = getIndividualAtPosition(i, j);
-		if (individual == null)
+		if (individual == null) {
 			displayBreedingStatistics(10);
+		}
 
 		if (individual != null) {
 			RenderHelper.enableGUIStandardItemLighting();
 			startPage();
 
 			displaySpeciesInformation(true, individual.getGenome().getPrimary(), iconStacks.get(individual.getIdent()), 10);
-			if (!individual.isPureBred(EnumTreeChromosome.SPECIES))
+			if (!individual.isPureBred(EnumTreeChromosome.SPECIES)) {
 				displaySpeciesInformation(individual.isAnalyzed(), individual.getGenome().getSecondary(), iconStacks.get(individual.getGenome().getSecondary().getUID()), 10);
+			}
 
 			endPage();
 		}
@@ -100,25 +104,30 @@ public class GuiNaturalistInventory extends GuiForestry<TileForestry> {
 	protected void actionPerformed(GuiButton guibutton) {
 		super.actionPerformed(guibutton);
 
-		if (guibutton.id == 1 && pageCurrent > 0)
+		if (guibutton.id == 1 && pageCurrent > 0) {
 			flipPage(pageCurrent - 1);
-		else if (guibutton.id == 2 && pageCurrent < pageMax - 1)
+		} else if (guibutton.id == 2 && pageCurrent < pageMax - 1) {
 			flipPage(pageCurrent + 1);
+		}
 	}
 
 	private IIndividual getIndividualAtPosition(int x, int y) {
 		Slot slot = getSlotAtPosition(x, y);
-		if (slot == null)
+		if (slot == null) {
 			return null;
+		}
 
-		if (!slot.getHasStack())
+		if (!slot.getHasStack()) {
 			return null;
+		}
 
-		if (!slot.getStack().hasTagCompound())
+		if (!slot.getStack().hasTagCompound()) {
 			return null;
+		}
 
-		if (!speciesRoot.isMember(slot.getStack()))
+		if (!speciesRoot.isMember(slot.getStack())) {
 			return null;
+		}
 
 		return speciesRoot.getMember(slot.getStack());
 	}
@@ -165,13 +174,15 @@ public class GuiNaturalistInventory extends GuiForestry<TileForestry> {
 		int column = 10;
 
 		for (IMutation combination : speciesRoot.getCombinations(species)) {
-			if (combination.isSecret())
+			if (combination.isSecret()) {
 				continue;
+			}
 
-			if (breedingTracker.isDiscovered(combination))
+			if (breedingTracker.isDiscovered(combination)) {
 				drawMutationIcon(combination, species, column);
-			else
+			} else {
 				drawUnknownIcon(combination, column);
+			}
 
 			column += columnWidth;
 			if (column > 75) {

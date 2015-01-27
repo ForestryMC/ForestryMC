@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -21,18 +21,19 @@ public enum EnumMutateChance {
 	
 	public static EnumMutateChance rateChance(float percent) {
 
-		if (percent >= 20)
+		if (percent >= 20) {
 			return HIGHEST;
-		else if (percent >= 15)
+		} else if (percent >= 15) {
 			return HIGHER;
-		else if (percent >= 12)
+		} else if (percent >= 12) {
 			return HIGH;
-		else if (percent >= 10)
+		} else if (percent >= 10) {
 			return NORMAL;
-		else if (percent >= 5)
+		} else if (percent >= 5) {
 			return LOW;
-		else
+		} else {
 			return LOWEST;
+		}
 
 	}
 }

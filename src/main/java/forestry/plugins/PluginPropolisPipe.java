@@ -1,14 +1,19 @@
 /*******************************************************************************
  * Copyright 2011-2014 by SirSengir
- * 
+ *
  * This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
- * 
+ *
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/.
  ******************************************************************************/
 package forestry.plugins;
 
+import java.util.EnumSet;
+
+import net.minecraft.item.Item;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
+
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.IPacketHandler;
@@ -16,8 +21,6 @@ import forestry.core.proxy.Proxies;
 import forestry.pipes.GuiHandlerPipes;
 import forestry.pipes.network.PacketHandlerPipes;
 import forestry.pipes.proxy.ProxyPipes;
-import java.util.EnumSet;
-import net.minecraft.item.Item;
 
 @Plugin(pluginID = "Pipes", name = "Pipes", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.pipes.description")
 public class PluginPropolisPipe extends ForestryPlugin {
@@ -48,13 +51,15 @@ public class PluginPropolisPipe extends ForestryPlugin {
 	@Override
 	public void postInit() {
 		String proxyClass = "forestry.pipes.proxy.ProxyPipes";
-		if (FMLCommonHandler.instance().getSide().isClient())
+		if (FMLCommonHandler.instance().getSide().isClient()) {
 			proxyClass = "forestry.pipes.proxy.ClientProxyPipes";
+		}
 
 		proxy = (ProxyPipes) Proxies.common.instantiateIfModLoaded("BuildCraft|Transport", proxyClass);
 
-		if (proxy == null)
+		if (proxy == null) {
 			return;
+		}
 
 		proxy.initPropolisPipe();
 		proxy.registerCraftingPropolis(ForestryItem.propolis.getItemStack());

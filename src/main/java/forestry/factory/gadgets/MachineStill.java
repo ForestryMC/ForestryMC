@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -60,17 +60,20 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 
 		public Recipe(int timePerUnit, FluidStack input, FluidStack output) {
 			this.timePerUnit = timePerUnit;
-			if (input == null)
+			if (input == null) {
 				throw new IllegalArgumentException("Still recipes need an input. Input was null.");
-			if (output == null)
+			}
+			if (output == null) {
 				throw new IllegalArgumentException("Still recipes need an output. Output was null.");
+			}
 			this.input = input;
 			this.output = output;
 		}
 
 		public boolean matches(FluidStack res) {
-			if (res == null)
+			if (res == null) {
 				return false;
+			}
 
 			return input.isFluidEqual(res);
 		}
@@ -85,16 +88,19 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 		@Override
 		public void addRecipe(int timePerUnit, FluidStack input, FluidStack output) {
 			recipes.add(new MachineStill.Recipe(timePerUnit, input, output));
-			if (input != null)
+			if (input != null) {
 				recipeFluidInputs.add(input.getFluid());
-			if (output != null)
+			}
+			if (output != null) {
 				recipeFluidOutputs.add(output.getFluid());
+			}
 		}
 
 		public static Recipe findMatchingRecipe(FluidStack item) {
 			for (Recipe recipe : recipes) {
-				if (recipe.matches(item))
+				if (recipe.matches(item)) {
 					return recipe;
+				}
 			}
 			return null;
 		}
@@ -182,24 +188,28 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 	@Override
 	public void updateServerSide() {
 
-		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
+		if (worldObj.getTotalWorldTime() % 20 * 10 != 0) {
 			return;
+		}
 
 		IInventoryAdapter inventory = getInternalInventory();
 		// Check if we have suitable items waiting in the item slot
-		if (inventory.getStackInSlot(SLOT_CAN) != null)
+		if (inventory.getStackInSlot(SLOT_CAN) != null) {
 			FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
+		}
 
 		// Can product liquid if possible
 		if (inventory.getStackInSlot(SLOT_RESOURCE) != null) {
 			FluidStack fluidStack = productTank.getFluid();
-			if (fluidStack != null)
+			if (fluidStack != null) {
 				FluidHelper.fillContainers(tankManager, inventory, SLOT_RESOURCE, SLOT_PRODUCT, fluidStack.getFluid());
+			}
 		}
 
 		checkRecipe();
-		if (getErrorState() == EnumErrorCode.NORECIPE && currentRecipe != null)
+		if (getErrorState() == EnumErrorCode.NORECIPE && currentRecipe != null) {
 			setErrorState(EnumErrorCode.OK);
+		}
 
 		if (energyManager.getTotalEnergyStored() == 0) {
 			setErrorState(EnumErrorCode.NOPOWER);
@@ -246,11 +256,13 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 	public void checkRecipe() {
 		Recipe sameRec = RecipeManager.findMatchingRecipe(resourceTank.getFluid());
 
-		if (sameRec == null && bufferedLiquid != null && distillationTime > 0)
+		if (sameRec == null && bufferedLiquid != null && distillationTime > 0) {
 			sameRec = RecipeManager.findMatchingRecipe(new FluidStack(bufferedLiquid.fluidID, distillationTime));
+		}
 
-		if (sameRec == null)
+		if (sameRec == null) {
 			setErrorState(EnumErrorCode.NORECIPE);
+		}
 
 		if (currentRecipe != sameRec) {
 			currentRecipe = sameRec;
@@ -268,16 +280,18 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 
 	@Override
 	public boolean hasWork() {
-		if (currentRecipe == null)
+		if (currentRecipe == null) {
 			return false;
+		}
 
 		return (distillationTime > 0 || resourceTank.getFluidAmount() >= currentRecipe.timePerUnit * currentRecipe.input.amount)
 				&& productTank.getFluidAmount() <= productTank.getCapacity() - currentRecipe.output.amount;
 	}
 
 	public int getDistillationProgressScaled(int i) {
-		if (distillationTotalTime == 0)
+		if (distillationTotalTime == 0) {
 			return i;
+		}
 
 		return (distillationTime * i) / distillationTotalTime;
 	}
@@ -305,12 +319,12 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 	public void getGUINetworkData(int i, int j) {
 		i -= tankManager.maxMessageId() + 1;
 		switch (i) {
-		case 0:
-			distillationTime = j;
-			break;
-		case 1:
-			distillationTotalTime = j;
-			break;
+			case 0:
+				distillationTime = j;
+				break;
+			case 1:
+				distillationTotalTime = j;
+				break;
 		}
 	}
 

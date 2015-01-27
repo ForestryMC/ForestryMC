@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -30,17 +30,18 @@ public class InventoryCraftingAuto extends InventoryCrafting {
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		if (i >= getSizeInventory())
+		if (i >= getSizeInventory()) {
 			return null;
-		else
+		} else {
 			return stackList[i];
+		}
 	}
 
 	@Override
 	public ItemStack getStackInRowAndColumn(int i, int j) {
-		if (i < 0 || i >= inventoryWidth)
+		if (i < 0 || i >= inventoryWidth) {
 			return null;
-		else {
+		} else {
 			int k = i + j * inventoryWidth;
 			return getStackInSlot(k);
 		}
@@ -56,12 +57,14 @@ public class InventoryCraftingAuto extends InventoryCrafting {
 				return itemstack;
 			}
 			ItemStack itemstack1 = stackList[i].splitStack(j);
-			if (stackList[i].stackSize == 0)
+			if (stackList[i].stackSize == 0) {
 				stackList[i] = null;
+			}
 			eventHandler.onCraftMatrixChanged(this, i);
 			return itemstack1;
-		} else
+		} else {
 			return null;
+		}
 	}
 
 	@Override

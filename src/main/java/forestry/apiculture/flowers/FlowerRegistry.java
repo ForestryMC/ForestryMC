@@ -41,7 +41,7 @@ public final class FlowerRegistry implements IFlowerRegistry {
 	public FlowerRegistry() {
 		this.registeredFlowers = ArrayListMultimap.create();
 		this.growthRules = ArrayListMultimap.create();
-		this.chances =  new HashMap<String, TreeMap<Double, IFlower>>();
+		this.chances = new HashMap<String, TreeMap<Double, IFlower>>();
 
 		this.hasDeprecatedFlowersImported = false;
 
@@ -60,14 +60,18 @@ public final class FlowerRegistry implements IFlowerRegistry {
 	}
 
 	private void registerFlower(Block block, int meta, Double weight, String... flowerTypes) {
-		if (block == null)
+		if (block == null) {
 			return;
-		if (meta == Short.MAX_VALUE || meta == -1)
+		}
+		if (meta == Short.MAX_VALUE || meta == -1) {
 			return;
-		if (weight == null || weight <= 0.0)
+		}
+		if (weight == null || weight <= 0.0) {
 			weight = 0.0;
-		if (weight >= 1.0)
+		}
+		if (weight >= 1.0) {
 			weight = 1.0;
+		}
 
 		Flower newFlower = new Flower(block, meta, weight);
 		Integer index;
@@ -78,8 +82,7 @@ public final class FlowerRegistry implements IFlowerRegistry {
 			index = flowers.indexOf(newFlower);
 			if (index == -1) {
 				flowers.add(newFlower);
-			}
-			else if (flowers.get(index).getWeight() > newFlower.getWeight()) {
+			} else if (flowers.get(index).getWeight() > newFlower.getWeight()) {
 				flowers.get(index).setWeight(newFlower.getWeight());
 			}
 
@@ -94,18 +97,22 @@ public final class FlowerRegistry implements IFlowerRegistry {
 	@Override
 	public boolean isAcceptedFlower(String flowerType, World world, IIndividual individual, int x, int y, int z) {
 		internalInitialize();
-		if (!this.registeredFlowers.containsKey(flowerType))
+		if (!this.registeredFlowers.containsKey(flowerType)) {
 			return false;
+		}
 
 		Block block = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 
-		if (world.isAirBlock(x, y, z) || block.equals(Blocks.bedrock) || block.equals(Blocks.dirt) || block.equals(Blocks.grass))
+		if (world.isAirBlock(x, y, z) || block.equals(Blocks.bedrock) || block.equals(Blocks.dirt) || block.equals(Blocks.grass)) {
 			return false;
+		}
 
-		for (IFlower flower : this.registeredFlowers.get(flowerType))
-			if (Block.isEqualTo(flower.getBlock(), block) && flower.getMeta() == meta)
+		for (IFlower flower : this.registeredFlowers.get(flowerType)) {
+			if (Block.isEqualTo(flower.getBlock(), block) && flower.getMeta() == meta) {
 				return true;
+			}
+		}
 
 		return false;
 	}
@@ -113,12 +120,15 @@ public final class FlowerRegistry implements IFlowerRegistry {
 	@Override
 	public boolean growFlower(String flowerType, World world, IIndividual individual, int x, int y, int z) {
 		internalInitialize();
-		if (!this.growthRules.containsKey(flowerType))
+		if (!this.growthRules.containsKey(flowerType)) {
 			return false;
+		}
 
-		for (IFlowerGrowthRule rule : this.growthRules.get(flowerType))
-			if (rule.growFlower(this, flowerType, world, individual, x, y, z))
+		for (IFlowerGrowthRule rule : this.growthRules.get(flowerType)) {
+			if (rule.growFlower(this, flowerType, world, individual, x, y, z)) {
 				return true;
+			}
+		}
 
 		return false;
 	}
@@ -132,8 +142,9 @@ public final class FlowerRegistry implements IFlowerRegistry {
 
 	@Override
 	public void registerGrowthRule(IFlowerGrowthRule rule, String... flowerTypes) {
-		if (rule == null)
+		if (rule == null) {
 			return;
+		}
 
 		for (String flowerType : flowerTypes) {
 			this.growthRules.get(flowerType).add(rule);

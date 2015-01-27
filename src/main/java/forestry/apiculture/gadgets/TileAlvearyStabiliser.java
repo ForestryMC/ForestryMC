@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -27,23 +27,26 @@ public class TileAlvearyStabiliser extends TileAlveary implements IBeeModifier {
 	public void initialize() {
 		super.initialize();
 		
-		if(!hasMaster() || !isIntegratedIntoStructure())
+		if (!hasMaster() || !isIntegratedIntoStructure()) {
 			return;
+		}
 		
-		((IAlvearyComponent)getCentralTE()).registerBeeModifier(this);
+		((IAlvearyComponent) getCentralTE()).registerBeeModifier(this);
 
 	}
 	
 	@Override
 	protected void updateServerSide() {
 		super.updateServerSide();
-		if(worldObj.getTotalWorldTime() % 200 != 0)
+		if (worldObj.getTotalWorldTime() % 200 != 0) {
 			return;
+		}
 		
-		if(!hasMaster() || !isIntegratedIntoStructure())
+		if (!hasMaster() || !isIntegratedIntoStructure()) {
 			return;
+		}
 		
-		((IAlvearyComponent)getCentralTE()).registerBeeModifier(this);
+		((IAlvearyComponent) getCentralTE()).registerBeeModifier(this);
 	}
 	
 
@@ -55,8 +58,9 @@ public class TileAlvearyStabiliser extends TileAlveary implements IBeeModifier {
 	/* TEXTURES */
 	@Override
 	public int getIcon(int side, int metadata) {
-		if(side == 0 || side == 1)
+		if (side == 0 || side == 1) {
 			return BlockAlveary.BOTTOM;
+		}
 
 		return BlockAlveary.STABILISER;
 	}

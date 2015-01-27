@@ -4,16 +4,17 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import java.util.Calendar;
+
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
-import java.util.Calendar;
 
 public class MutationTimeLimited extends BeeMutation {
 
@@ -36,31 +37,37 @@ public class MutationTimeLimited extends BeeMutation {
 		}
 
 		public boolean between(DayMonth start, DayMonth end) {
-			if (equals(start) || equals(end))
+			if (equals(start) || equals(end)) {
 				return true;
-			if (start.month > end.month)
+			}
+			if (start.month > end.month) {
 				return after(start) || before(end);
+			}
 			return after(start) && before(end);
 		}
 
 		public boolean before(DayMonth other) {
 
-			if (other.month > this.month)
+			if (other.month > this.month) {
 				return true;
+			}
 
-			if (other.month < this.month)
+			if (other.month < this.month) {
 				return false;
+			}
 
 			return this.day < other.day;
 		}
 
 		public boolean after(DayMonth other) {
 
-			if (other.month < this.month)
+			if (other.month < this.month) {
 				return true;
+			}
 
-			if (other.month > this.month)
+			if (other.month > this.month) {
 				return false;
+			}
 
 			return this.day > other.day;
 		}
@@ -75,15 +82,19 @@ public class MutationTimeLimited extends BeeMutation {
 
 		@Override
 		public boolean equals(Object obj) {
-			if (obj == null)
+			if (obj == null) {
 				return false;
-			if (getClass() != obj.getClass())
+			}
+			if (getClass() != obj.getClass()) {
 				return false;
+			}
 			final DayMonth other = (DayMonth) obj;
-			if (this.day != other.day)
+			if (this.day != other.day) {
 				return false;
-			if (this.month != other.month)
+			}
+			if (this.month != other.month) {
 				return false;
+			}
 			return true;
 		}
 
@@ -110,29 +121,35 @@ public class MutationTimeLimited extends BeeMutation {
 	public float getChance(IBeeHousing housing, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
 		float chance = super.getChance(housing, allele0, allele1, genome0, genome1);
 
-		if (chance == 0)
+		if (chance == 0) {
 			return 0;
+		}
 
-		if (start == null)
+		if (start == null) {
 			return chance;
+		}
 
 		DayMonth now = new DayMonth();
 
 		// If we are equal to start day, return chance.
-		if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == start.day && Calendar.getInstance().get(Calendar.MONTH) + 1 == start.month)
+		if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == start.day && Calendar.getInstance().get(Calendar.MONTH) + 1 == start.month) {
 			return chance;
+		}
 
 		// Still here but not time span? No mutation!
-		if (end == null)
+		if (end == null) {
 			return 0;
+		}
 
 		// Equal to end date, return chance.
-		if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == end.day && Calendar.getInstance().get(Calendar.MONTH) + 1 == end.month)
+		if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == end.day && Calendar.getInstance().get(Calendar.MONTH) + 1 == end.month) {
 			return chance;
+		}
 
 		// Still a chance we are in between
-		if (now.between(start, end))
+		if (now.between(start, end)) {
 			return chance;
+		}
 
 		// Now we finally failed.
 		return 0;

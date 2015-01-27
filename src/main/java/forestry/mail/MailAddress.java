@@ -10,15 +10,18 @@
  ******************************************************************************/
 package forestry.mail;
 
+import java.util.Locale;
+import java.util.UUID;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.core.INBTTagable;
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
 import forestry.core.utils.PlayerUtil;
-import java.util.Locale;
-import java.util.UUID;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
 
 public class MailAddress implements INBTTagable, IMailAddress {
 
@@ -33,16 +36,18 @@ public class MailAddress implements INBTTagable, IMailAddress {
 	}
 
 	public MailAddress(GameProfile gameProfile) {
-		if (gameProfile == null)
+		if (gameProfile == null) {
 			throw new IllegalArgumentException("gameProfile must not be null");
+		}
 
 		this.type = EnumAddressee.PLAYER;
 		this.gameProfile = gameProfile;
 	}
 
 	public MailAddress(String name) {
-		if (name == null)
+		if (name == null) {
 			throw new IllegalArgumentException("name must not be null");
+		}
 
 		this.type = EnumAddressee.TRADER;
 		this.gameProfile = new GameProfile(null, name);
@@ -53,8 +58,9 @@ public class MailAddress implements INBTTagable, IMailAddress {
 		if (type == EnumAddressee.TRADER) {
 			String name = address.getName();
 			this.gameProfile = new GameProfile(null, name);
-		} else if (type == EnumAddressee.PLAYER)
+		} else if (type == EnumAddressee.PLAYER) {
 			this.gameProfile = address.getPlayerProfile();
+		}
 	}
 
 	public static MailAddress loadFromNBT(NBTTagCompound nbttagcompound) {
@@ -90,8 +96,9 @@ public class MailAddress implements INBTTagable, IMailAddress {
 
 	@Override
 	public GameProfile getPlayerProfile() {
-		if (!this.isPlayer())
+		if (!this.isPlayer()) {
 			return null;
+		}
 		return gameProfile;
 	}
 
@@ -102,8 +109,9 @@ public class MailAddress implements INBTTagable, IMailAddress {
 
 	@Override
 	public boolean equals(Object o) {
-		if (!(o instanceof MailAddress))
+		if (!(o instanceof MailAddress)) {
 			return false;
+		}
 
 		MailAddress address = (MailAddress) o;
 		return PlayerUtil.isSameGameProfile(address.gameProfile, gameProfile);
@@ -112,10 +120,11 @@ public class MailAddress implements INBTTagable, IMailAddress {
 	@Override
 	public String toString() {
 		String name = getName().toLowerCase(Locale.ENGLISH);
-		if (isPlayer())
+		if (isPlayer()) {
 			return type + "-" + name + "-" + gameProfile.getId();
-		else
+		} else {
 			return type + "-" + name;
+		}
 	}
 
 	@Override

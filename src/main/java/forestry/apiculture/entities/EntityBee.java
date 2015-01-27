@@ -10,18 +10,20 @@
  ******************************************************************************/
 package forestry.apiculture.entities;
 
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.passive.IAnimals;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
 import forestry.core.config.Defaults;
 import forestry.core.utils.ForestryResource;
 import forestry.plugins.PluginApiculture;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 
 public class EntityBee extends EntityCreature implements IAnimals {
 
@@ -43,10 +45,11 @@ public class EntityBee extends EntityCreature implements IAnimals {
 	}
 
 	public EntityBee setIndividual(IBee bee) {
-		if (bee != null)
+		if (bee != null) {
 			contained = bee;
-		else
+		} else {
 			contained = PluginApiculture.beeInterface.templateAsIndividual(PluginApiculture.beeInterface.getDefaultTemplate());
+		}
 
 		//isImmuneToFire = contained.getGenome().getFireResist();
 		setSpecies(contained.getGenome().getPrimary());
@@ -81,8 +84,9 @@ public class EntityBee extends EntityCreature implements IAnimals {
 
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getTexture() {
-		if (textureResource == null || lastTextureUpdate != lastUpdate)
+		if (textureResource == null || lastTextureUpdate != lastUpdate) {
 			textureResource = new ForestryResource(beeTexture);
+		}
 
 		return textureResource;
 	}

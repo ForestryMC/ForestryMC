@@ -4,20 +4,11 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.farming.logic;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
-import forestry.core.vect.MutableVect;
-import forestry.core.vect.Vect;
-import forestry.core.vect.VectUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,13 +16,25 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLog;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmable;
+import forestry.core.vect.MutableVect;
+import forestry.core.vect.Vect;
+import forestry.core.vect.VectUtil;
 
 public class FarmLogicCocoa extends FarmLogic {
 
@@ -83,12 +86,14 @@ public class FarmLogicCocoa extends FarmLogic {
 	public boolean cultivate(int x, int y, int z, ForgeDirection direction, int extent) {
 
 		Vect start = new Vect(x, y, z);
-		if (!lastExtentsCultivation.containsKey(start))
+		if (!lastExtentsCultivation.containsKey(start)) {
 			lastExtentsCultivation.put(start, 0);
+		}
 
 		int lastExtent = lastExtentsCultivation.get(start);
-		if (lastExtent > extent)
+		if (lastExtent > extent) {
 			lastExtent = 0;
+		}
 
 		Vect position = translateWithOffset(x, y + 1, z, direction, lastExtent);
 		boolean result = tryPlantingCocoa(position);
@@ -105,12 +110,14 @@ public class FarmLogicCocoa extends FarmLogic {
 	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
 
 		Vect start = new Vect(x, y, z);
-		if (!lastExtentsHarvest.containsKey(start))
+		if (!lastExtentsHarvest.containsKey(start)) {
 			lastExtentsHarvest.put(start, 0);
+		}
 
 		int lastExtent = lastExtentsHarvest.get(start);
-		if (lastExtent > extent)
+		if (lastExtent > extent) {
 			lastExtent = 0;
+		}
 
 		Vect position = translateWithOffset(x, y + 1, z, direction, lastExtent);
 		Collection<ICrop> crops = getHarvestBlocks(position);
@@ -128,17 +135,20 @@ public class FarmLogicCocoa extends FarmLogic {
 		while (VectUtil.isWoodBlock(world, current) && BlockLog.func_150165_c(VectUtil.getBlockMeta(world, current)) == 3) {
 
 			for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
-				if (direction == ForgeDirection.UP || direction == ForgeDirection.DOWN)
+				if (direction == ForgeDirection.UP || direction == ForgeDirection.DOWN) {
 					continue;
+				}
 
 				Vect candidate = new Vect(current.x + direction.offsetX, current.y, current.z + direction.offsetZ);
-				if (VectUtil.isAirBlock(world, candidate))
+				if (VectUtil.isAirBlock(world, candidate)) {
 					return housing.plantGermling(cocoa, world, candidate.x, candidate.y, candidate.z);
+				}
 			}
 
 			current.y++;
-			if (current.y - position.y > 1)
+			if (current.y - position.y > 1) {
 				break;
+			}
 		}
 
 		return false;
@@ -155,18 +165,21 @@ public class FarmLogicCocoa extends FarmLogic {
 		ICrop crop = null;
 		if (!block.isWood(getWorld(), position.x, position.y, position.z)) {
 			crop = cocoa.getCropAt(getWorld(), position.x, position.y, position.z);
-			if (crop == null)
+			if (crop == null) {
 				return crops;
+			}
 		}
 
-		if (crop != null)
+		if (crop != null) {
 			crops.add(crop);
+		}
 
 		ArrayList<Vect> candidates = processHarvestBlock(crops, seen, position, position);
 		ArrayList<Vect> temp = new ArrayList<Vect>();
 		while (!candidates.isEmpty() && crops.size() < 20) {
-			for (Vect candidate : candidates)
+			for (Vect candidate : candidates) {
 				temp.addAll(processHarvestBlock(crops, seen, position, candidate));
+			}
 			candidates.clear();
 			candidates.addAll(temp);
 			temp.clear();
@@ -183,20 +196,24 @@ public class FarmLogicCocoa extends FarmLogic {
 		ArrayList<Vect> candidates = new ArrayList<Vect>();
 
 		// Get additional candidates to return
-		for (int i = -1; i < 2; i++)
-			for (int j = 0; j < 2; j++)
+		for (int i = -1; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
 				for (int k = -1; k < 2; k++) {
 					Vect candidate = new Vect(position.x + i, position.y + j, position.z + k);
-					if (candidate.equals(position))
+					if (candidate.equals(position)) {
 						continue;
-					if (Math.abs(candidate.x - start.x) > 5)
+					}
+					if (Math.abs(candidate.x - start.x) > 5) {
 						continue;
-					if (Math.abs(candidate.z - start.z) > 5)
+					}
+					if (Math.abs(candidate.z - start.z) > 5) {
 						continue;
+					}
 
 					// See whether the given position has already been processed
-					if (seen.contains(candidate))
+					if (seen.contains(candidate)) {
 						continue;
+					}
 
 					ICrop crop = cocoa.getCropAt(world, candidate.x, candidate.y, candidate.z);
 					if (crop != null) {
@@ -208,6 +225,8 @@ public class FarmLogicCocoa extends FarmLogic {
 						seen.add(candidate);
 					}
 				}
+			}
+		}
 
 		return candidates;
 	}

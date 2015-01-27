@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -13,14 +13,13 @@ package forestry.mail.gui;
 import java.util.Iterator;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
+
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
-
-import org.apache.commons.lang3.StringUtils;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.ILetter;
@@ -53,33 +52,43 @@ public class ContainerLetter extends ContainerItemInventory {
 
 		// Rip open delivered mails
 		if (Proxies.common.isSimulating(player.worldObj) && letterInventory.getLetter().isProcessed() && inventory.parent != null
-				&& ItemLetter.getState(inventory.parent.getItemDamage()) < 2)
+				&& ItemLetter.getState(inventory.parent.getItemDamage()) < 2) {
 			inventory.parent.setItemDamage(ItemLetter.encodeMeta(2, ItemLetter.getSize(inventory.parent.getItemDamage())));
+		}
 
 		// Init slots
 
 		// Stamps
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 4; i++) {
 			addSlotToContainer(new SlotFiltered(inventory, Letter.SLOT_POSTAGE_1 + i, 150, 14 + i * 19).setStackLimit(1));
+		}
 
 		// Attachments
-		for (int i = 0; i < 2; i++)
-			for (int j = 0; j < 9; j++)
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 9; j++) {
 				addSlotToContainer(new SlotFiltered(inventory, Letter.SLOT_ATTACHMENT_1 + j + i * 9, 17 + j * 18, 98 + i * 18));
+			}
+		}
 
 		// Player inventory
-		for (int i = 0; i < 3; i++)
-			for (int j = 0; j < 9; j++)
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 9; j++) {
 				addSecuredSlot(player.inventory, j + i * 9 + 9, 17 + j * 18, 145 + i * 18);
+			}
+		}
 		// Player hotbar
-		for (int i = 0; i < 9; i++)
+		for (int i = 0; i < 9; i++) {
 			addSecuredSlot(player.inventory, i, 17 + i * 18, 203);
+		}
 
 		// Set recipient type
-		if (letterInventory.getLetter() != null)
-			if (letterInventory.getLetter().getRecipients() != null)
-				if (letterInventory.getLetter().getRecipients().length > 0)
+		if (letterInventory.getLetter() != null) {
+			if (letterInventory.getLetter().getRecipients() != null) {
+				if (letterInventory.getLetter().getRecipients().length > 0) {
 					this.carrierType = letterInventory.getLetter().getRecipients()[0].getType();
+				}
+			}
+		}
 	}
 
 	@Override
@@ -110,26 +119,29 @@ public class ContainerLetter extends ContainerItemInventory {
 
 	public void advanceCarrierType() {
 		Iterator<IPostalCarrier> it = PostManager.postRegistry.getRegisteredCarriers().values().iterator();
-		while(it.hasNext()) {
-			if(it.next().getType().equals(carrierType))
+		while (it.hasNext()) {
+			if (it.next().getType().equals(carrierType)) {
 				break;
+			}
 		}
 
 		IPostalCarrier postal;
-		if(it.hasNext())
+		if (it.hasNext()) {
 			postal = it.next();
-		else
+		} else {
 			postal = PostManager.postRegistry.getRegisteredCarriers().values().iterator().next();
+		}
 
 		setCarrierType(postal.getType());
 	}
 
 	public void setRecipient(String recipientName, EnumAddressee type) {
-		if (StringUtils.isBlank(recipientName) || type == null)
+		if (StringUtils.isBlank(recipientName) || type == null) {
 			return;
+		}
 
 		// / Send to server
-		PacketPayload payload = new PacketPayload(0,0,2);
+		PacketPayload payload = new PacketPayload(0, 0, 2);
 		payload.stringPayload[0] = recipientName;
 		payload.stringPayload[1] = type.toString();
 
@@ -145,8 +157,9 @@ public class ContainerLetter extends ContainerItemInventory {
 		IMailAddress recipient;
 		if (type == EnumAddressee.PLAYER) {
 			GameProfile gameProfile = MinecraftServer.getServer().func_152358_ax().func_152655_a(recipientName);
-			if (gameProfile == null)
+			if (gameProfile == null) {
 				gameProfile = new GameProfile(new UUID(0, 0), recipientName);
+			}
 			recipient = PostManager.postRegistry.getMailAddress(gameProfile);
 		} else if (type == EnumAddressee.TRADER) {
 			recipient = PostManager.postRegistry.getMailAddress(recipientName);
@@ -157,18 +170,20 @@ public class ContainerLetter extends ContainerItemInventory {
 		getLetter().setRecipient(recipient);
 		
 		// Update the trading info
-		if (recipient == null || recipient.isTrader())
+		if (recipient == null || recipient.isTrader()) {
 			updateTradeInfo(player.worldObj, recipient);
+		}
 		
 		// Update info on client
 		Proxies.net.sendToPlayer(new PacketLetterInfo(PacketIds.LETTER_INFO, type, tradeInfo, recipient), player);
 	}
 
 	public IMailAddress getRecipient() {
-		if (getLetter().getRecipients().length > 0)
+		if (getLetter().getRecipients().length > 0) {
 			return getLetter().getRecipients()[0];
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public String getText() {
@@ -194,8 +209,9 @@ public class ContainerLetter extends ContainerItemInventory {
 	/* Managing Trade info */
 	public void updateTradeInfo(World world, IMailAddress address) {
 		// Updating is done by the server.
-		if (!Proxies.common.isSimulating(world))
+		if (!Proxies.common.isSimulating(world)) {
 			return;
+		}
 
 		if (address == null) {
 			setTradeInfo(null);
@@ -226,9 +242,10 @@ public class ContainerLetter extends ContainerItemInventory {
 
 	private void setTradeInfo(TradeStationInfo info) {
 		this.tradeInfo = info;
-		if (tradeInfo == null)
+		if (tradeInfo == null) {
 			getLetter().setRecipient(null);
-		else
+		} else {
 			getLetter().setRecipient(tradeInfo.address);
+		}
 	}
 }

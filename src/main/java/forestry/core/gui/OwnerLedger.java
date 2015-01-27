@@ -4,11 +4,16 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.gui;
+
+import java.util.Locale;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 
 import forestry.core.interfaces.IOwnable;
 import forestry.core.interfaces.IRestrictedAccess;
@@ -19,9 +24,6 @@ import forestry.core.render.TextureManager;
 import forestry.core.utils.EnumAccess;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.StringUtil;
-import java.util.Locale;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 
 /**
  * Ledger displaying ownership information
@@ -53,10 +55,11 @@ public class OwnerLedger extends Ledger {
 		// Update state
 		boolean playerIsOwner = tile.isOwner(manager.minecraft.thePlayer);
 
-		if (playerIsOwner)
+		if (playerIsOwner) {
 			maxHeight = 60;
-		else
+		} else {
 			maxHeight = 36;
+		}
 
 		// Draw background
 		drawBackground(x, y);
@@ -64,7 +67,7 @@ public class OwnerLedger extends Ledger {
 		// Draw icon
 		EnumAccess access;
 		if (tile instanceof IRestrictedAccess) {
-			access = ((IRestrictedAccess)tile).getAccess();
+			access = ((IRestrictedAccess) tile).getAccess();
 		} else {
 			access = EnumAccess.SHARED;
 		}
@@ -72,8 +75,9 @@ public class OwnerLedger extends Ledger {
 		drawIcon(accessIcon, x + 3, y + 4);
 
 		// Draw description
-		if (!isFullyOpened())
+		if (!isFullyOpened()) {
 			return;
+		}
 
 		manager.minecraft.fontRenderer.drawStringWithShadow(StringUtil.localize("gui.owner"), x + 22, y + 8, manager.gui.fontColor.get("ledger.owner.header"));
 

@@ -1,11 +1,12 @@
 package forestry.core.gui;
 
-import forestry.core.gui.slots.SlotFiltered;
-import forestry.core.inventory.AlyzerInventory;
-import forestry.core.proxy.Proxies;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.inventory.AlyzerInventory;
+import forestry.core.proxy.Proxies;
 
 public class ContainerAlyzer extends ContainerItemInventory {
 
@@ -34,7 +35,7 @@ public class ContainerAlyzer extends ContainerItemInventory {
 
 		final int xPosPlayerInv = 43;
 		final int xSpacePlayerInv = 18;
-		final int yPosPlayerInv= 156;
+		final int yPosPlayerInv = 156;
 		final int ySpacePlayerInv = 18;
 
 		// Player inventory
@@ -57,16 +58,19 @@ public class ContainerAlyzer extends ContainerItemInventory {
 	@Override
 	public void onContainerClosed(EntityPlayer entityplayer) {
 
-		if (!Proxies.common.isSimulating(entityplayer.worldObj))
+		if (!Proxies.common.isSimulating(entityplayer.worldObj)) {
 			return;
+		}
 
 		// Last slot is the energy slot, so we don't save that one.
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
-			if (i == AlyzerInventory.SLOT_ENERGY)
+			if (i == AlyzerInventory.SLOT_ENERGY) {
 				continue;
+			}
 			ItemStack stack = inventory.getStackInSlot(i);
-			if (stack == null)
+			if (stack == null) {
 				continue;
+			}
 
 			Proxies.common.dropItemPlayer(entityplayer, stack);
 			inventory.setInventorySlotContents(i, null);

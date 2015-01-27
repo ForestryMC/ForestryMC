@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -40,8 +40,9 @@ public class GuiBeealyzer extends GuiAlyzer {
 
 		ArrayList<ItemStack> beeList = new ArrayList<ItemStack>();
 		((ItemBeeGE) ForestryItem.beeDroneGE.item()).addCreativeItems(beeList, false);
-		for (ItemStack beeStack : beeList)
+		for (ItemStack beeStack : beeList) {
 			iconStacks.put(BeeGenome.getSpecies(beeStack).getUID(), beeStack);
+		}
 	}
 
 	@Override
@@ -53,38 +54,41 @@ public class GuiBeealyzer extends GuiAlyzer {
 		EnumBeeType beeType = EnumBeeType.DRONE;
 
 		for (int k = BeealyzerInventory.SLOT_SPECIMEN; k <= BeealyzerInventory.SLOT_ANALYZE_5; k++) {
-			if (k == BeealyzerInventory.SLOT_ENERGY)
+			if (k == BeealyzerInventory.SLOT_ENERGY) {
 				continue;
+			}
 
-			if (inventory.getStackInSlot(k) == null)
+			if (inventory.getStackInSlot(k) == null) {
 				continue;
+			}
 			bee = PluginApiculture.beeInterface.getMember(inventory.getStackInSlot(k));
 			beeType = PluginApiculture.beeInterface.getType(inventory.getStackInSlot(k));
-			if (bee == null || !bee.isAnalyzed())
+			if (bee == null || !bee.isAnalyzed()) {
 				continue;
+			}
 
 			page = k;
 			break;
 		}
 
 		switch (page) {
-		case 1:
-			drawAnalyticsPage1(bee, beeType);
-			break;
-		case 2:
-			drawAnalyticsPage2(bee, beeType);
-			break;
-		case 3:
-			drawAnalyticsPage3(bee, beeType);
-			break;
-		case 4:
-			drawAnalyticsPage4(bee);
-			break;
-		case 6:
-			drawAnalyticsPageClassification(bee);
-			break;
-		default:
-			drawAnalyticsOverview();
+			case 1:
+				drawAnalyticsPage1(bee, beeType);
+				break;
+			case 2:
+				drawAnalyticsPage2(bee, beeType);
+				break;
+			case 3:
+				drawAnalyticsPage3(bee, beeType);
+				break;
+			case 4:
+				drawAnalyticsPage4(bee);
+				break;
+			case 6:
+				drawAnalyticsPageClassification(bee);
+				break;
+			default:
+				drawAnalyticsOverview();
 		}
 
 	}
@@ -114,15 +118,15 @@ public class GuiBeealyzer extends GuiAlyzer {
 		drawChromosomeRow(StringUtil.localize("gui.flowers"), bee, EnumBeeChromosome.FLOWER_PROVIDER);
 
 		drawLine(StringUtil.localize("gui.fertility"), COLUMN_0);
-		IAlleleInteger primaryFertility = (IAlleleInteger)bee.getGenome().getActiveAllele(EnumBeeChromosome.FERTILITY);
-		IAlleleInteger secondaryFertility = (IAlleleInteger)bee.getGenome().getInactiveAllele(EnumBeeChromosome.FERTILITY);
+		IAlleleInteger primaryFertility = (IAlleleInteger) bee.getGenome().getActiveAllele(EnumBeeChromosome.FERTILITY);
+		IAlleleInteger secondaryFertility = (IAlleleInteger) bee.getGenome().getInactiveAllele(EnumBeeChromosome.FERTILITY);
 		drawFertilityInfo(primaryFertility.getValue(), COLUMN_1, getColorCoding(primaryFertility.isDominant()), 0);
 		drawFertilityInfo(secondaryFertility.getValue(), COLUMN_2, getColorCoding(secondaryFertility.isDominant()), 0);
 
 		newLine();
 
-		IAlleleArea activeTerritory = (IAlleleArea)bee.getGenome().getActiveAllele(EnumBeeChromosome.TERRITORY);
-		IAlleleArea inactiveTerritory = (IAlleleArea)bee.getGenome().getInactiveAllele(EnumBeeChromosome.TERRITORY);
+		IAlleleArea activeTerritory = (IAlleleArea) bee.getGenome().getActiveAllele(EnumBeeChromosome.TERRITORY);
+		IAlleleArea inactiveTerritory = (IAlleleArea) bee.getGenome().getInactiveAllele(EnumBeeChromosome.TERRITORY);
 		drawRow(StringUtil.localize("gui.area"),
 				new Vect(activeTerritory.getValue()).toString(),
 				new Vect(inactiveTerritory.getValue()).toString(),
@@ -148,8 +152,8 @@ public class GuiBeealyzer extends GuiAlyzer {
 		drawRow(StringUtil.localize("gui.climate"), AlleleManager.climateHelper.toDisplay(bee.getGenome().getPrimary().getTemperature()),
 				AlleleManager.climateHelper.toDisplay(bee.getGenome().getSecondary().getTemperature()), bee, EnumBeeChromosome.SPECIES);
 
-		IAlleleTolerance tempToleranceActive = (IAlleleTolerance)bee.getGenome().getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
-		IAlleleTolerance tempToleranceInactive = (IAlleleTolerance)bee.getGenome().getInactiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
+		IAlleleTolerance tempToleranceActive = (IAlleleTolerance) bee.getGenome().getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
+		IAlleleTolerance tempToleranceInactive = (IAlleleTolerance) bee.getGenome().getInactiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
 		drawLine(StringUtil.localize("gui.temptol"), COLUMN_0);
 		drawToleranceInfo(tempToleranceActive, COLUMN_1);
 		drawToleranceInfo(tempToleranceInactive, COLUMN_2);
@@ -159,8 +163,8 @@ public class GuiBeealyzer extends GuiAlyzer {
 		drawRow(StringUtil.localize("gui.humidity"), AlleleManager.climateHelper.toDisplay(bee.getGenome().getPrimary().getHumidity()),
 				AlleleManager.climateHelper.toDisplay(bee.getGenome().getSecondary().getHumidity()), bee, EnumBeeChromosome.SPECIES);
 
-		IAlleleTolerance humidToleranceActive = (IAlleleTolerance)bee.getGenome().getActiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE);
-		IAlleleTolerance humidToleranceInactive = (IAlleleTolerance)bee.getGenome().getInactiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE);
+		IAlleleTolerance humidToleranceActive = (IAlleleTolerance) bee.getGenome().getActiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE);
+		IAlleleTolerance humidToleranceInactive = (IAlleleTolerance) bee.getGenome().getInactiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE);
 		drawLine(StringUtil.localize("gui.humidtol"), COLUMN_0);
 		drawToleranceInfo(humidToleranceActive, COLUMN_1);
 		drawToleranceInfo(humidToleranceInactive, COLUMN_2);
@@ -172,13 +176,13 @@ public class GuiBeealyzer extends GuiAlyzer {
 		String no = StringUtil.localize("no");
 
 		String diurnal0, diurnal1, nocturnal0, nocturnal1;
-		if(bee.getGenome().getNocturnal()) {
+		if (bee.getGenome().getNocturnal()) {
 			nocturnal0 = diurnal0 = yes;
 		} else {
 			nocturnal0 = bee.getGenome().getPrimary().isNocturnal() ? yes : no;
 			diurnal0 = !bee.getGenome().getPrimary().isNocturnal() ? yes : no;
 		}
-		if(((AlleleBoolean) bee.getGenome().getInactiveAllele(EnumBeeChromosome.NOCTURNAL)).getValue()) {
+		if (((AlleleBoolean) bee.getGenome().getInactiveAllele(EnumBeeChromosome.NOCTURNAL)).getValue()) {
 			nocturnal1 = diurnal1 = yes;
 		} else {
 			nocturnal1 = bee.getGenome().getSecondary().isNocturnal() ? yes : no;
@@ -212,8 +216,9 @@ public class GuiBeealyzer extends GuiAlyzer {
 		String displayText;
 		if (type == EnumBeeType.PRINCESS || type == EnumBeeType.QUEEN) {
 			displayText = "bees.stock.pristine";
-			if (!bee.isNatural())
+			if (!bee.isNatural()) {
 				displayText = "bees.stock.ignoble";
+			}
 			displayText = StringUtil.localize(displayText);
 			drawCenteredLine(displayText, 8, 208, fontColor.get("gui.beealyzer.binomial"));
 		}

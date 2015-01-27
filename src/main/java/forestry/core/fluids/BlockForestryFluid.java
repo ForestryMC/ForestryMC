@@ -97,7 +97,7 @@ public class BlockForestryFluid extends BlockFluidClassic {
 		String still = "liquid/" + fluidName + "_still";
 		this.icons.add(TextureManager.getInstance().registerTex(iconRegister, still));
 
-		if(flowTextureExists()) {
+		if (flowTextureExists()) {
 			String flow = "liquid/" + fluidName + "_flow";
 			this.icons.add(TextureManager.getInstance().registerTex(iconRegister, flow));
 		}
@@ -175,10 +175,11 @@ public class BlockForestryFluid extends BlockFluidClassic {
 	public Material getMaterial() {
 		// Fahrenheit 451 = 505.928 Kelvin
 		// The temperature at which book-paper catches fire, and burns.
-		if (temperature > 505)
+		if (temperature > 505) {
 			return Material.lava;
-		else
+		} else {
 			return super.getMaterial();
+		}
 	}
 
 	@Override

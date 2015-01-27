@@ -25,8 +25,9 @@ public class HiveRegistry implements IHiveRegistry {
 
 	@Override
 	public void registerHive(String hiveName, IHiveDescription hiveDescription) {
-		if (hives.containsKey(hiveName))
+		if (hives.containsKey(hiveName)) {
 			throw new IllegalArgumentException("Hive already exists with name: " + hiveName);
+		}
 
 		Hive hive = new Hive(hiveDescription);
 		hives.put(hiveName, hive);
@@ -35,8 +36,9 @@ public class HiveRegistry implements IHiveRegistry {
 	@Override
 	public void addDrops(String hiveName, List<IHiveDrop> drops) {
 		Hive hive = hives.get(hiveName);
-		if (hive == null)
+		if (hive == null) {
 			throw new IllegalArgumentException("No hive registered with name: " + hiveName);
+		}
 
 		hive.addDrops(drops);
 	}
@@ -47,8 +49,9 @@ public class HiveRegistry implements IHiveRegistry {
 
 	public List<IHiveDrop> getDrops(String hiveName) {
 		Hive hive = hives.get(hiveName);
-		if (hive == null)
+		if (hive == null) {
 			throw new IllegalArgumentException("No hive registered with name: " + hiveName);
+		}
 
 		return hive.getDrops();
 	}

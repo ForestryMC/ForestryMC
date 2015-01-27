@@ -10,14 +10,15 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
 import net.minecraft.client.entity.EntityClientPlayerMP;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 
@@ -50,8 +51,9 @@ public class PacketGuiInteger extends ForestryPacket {
 
 		EntityClientPlayerMP player = FMLClientHandler.instance().getClient().thePlayer;
 
-		if (player.openContainer != null && player.openContainer.windowId == windowId)
+		if (player.openContainer != null && player.openContainer.windowId == windowId) {
 			player.openContainer.updateProgressBar(dataId, value);
+		}
 	}
 
 	@Override

@@ -4,21 +4,23 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.core.genetics.BreedingTracker;
 import forestry.plugins.PluginApiculture;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class ApiaristTracker extends BreedingTracker implements IApiaristTracker {
 
@@ -58,12 +60,15 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 
 	@Override
 	public void registerPickup(IIndividual individual) {
-		if(!individual.getGenome().getPrimary().getRoot().getUID().equals(BeeHelper.UID))
+		if (!individual.getGenome().getPrimary().getRoot().getUID().equals(BeeHelper.UID)) {
 			return;
-		if(!individual.isPureBred(EnumBeeChromosome.SPECIES))
+		}
+		if (!individual.isPureBred(EnumBeeChromosome.SPECIES)) {
 			return;
-		if(PluginApiculture.beeInterface.getCombinations(individual.getGenome().getPrimary()).size() > 0)
+		}
+		if (PluginApiculture.beeInterface.getCombinations(individual.getGenome().getPrimary()).size() > 0) {
 			return;
+		}
 
 		registerSpecies(individual.getGenome().getPrimary());
 	}

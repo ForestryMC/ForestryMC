@@ -10,17 +10,22 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import java.util.Collection;
+
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.common.Optional;
+
+import forestry.core.config.Defaults;
+import forestry.core.proxy.Proxies;
+
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.ITriggerExternal;
 import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.statements.ITriggerProvider;
 import buildcraft.api.statements.StatementManager;
-import cpw.mods.fml.common.Optional;
-import forestry.core.config.Defaults;
-import forestry.core.proxy.Proxies;
-import java.util.Collection;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 
 @Plugin(pluginID = "BC6|Statements", name = "BuildCraft 6 Statements", author = "mezz", url = Defaults.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
@@ -49,8 +54,9 @@ public class PluginBuildCraftStatements extends ForestryPlugin implements ITrigg
 	@Override
 	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
 		TileEntity tile = container.getTile();
-		if (tile instanceof ITriggerProvider)
+		if (tile instanceof ITriggerProvider) {
 			return ((ITriggerProvider) tile).getInternalTriggers(container);
+		}
 
 		return null;
 	}
@@ -58,8 +64,9 @@ public class PluginBuildCraftStatements extends ForestryPlugin implements ITrigg
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
-		if (tile instanceof ITriggerProvider)
+		if (tile instanceof ITriggerProvider) {
 			return ((ITriggerProvider) tile).getExternalTriggers(side, tile);
+		}
 
 		return null;
 	}

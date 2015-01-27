@@ -4,11 +4,18 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.gadgets;
+
+import java.util.HashMap;
+
+import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -24,11 +31,6 @@ import forestry.plugins.PluginEnergy;
 import forestry.plugins.PluginFactory;
 import forestry.plugins.PluginIC2;
 import forestry.plugins.PluginMail;
-import java.util.HashMap;
-import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
 
 public abstract class TileMachine extends TileForestry implements IClimatised, IHintSource {
 
@@ -93,11 +95,13 @@ public abstract class TileMachine extends TileForestry implements IClimatised, I
 	@Override
 	public void initialize() {
 
-		if (!Proxies.common.isSimulating(worldObj))
+		if (!Proxies.common.isSimulating(worldObj)) {
 			return;
+		}
 
-		if (olddata != null)
+		if (olddata != null) {
 			legacyConversion(oldkind, olddata);
+		}
 
 	}
 
@@ -140,8 +144,9 @@ public abstract class TileMachine extends TileForestry implements IClimatised, I
 		machineMap.put(Defaults.ID_PACKAGE_MACHINE_SQUEEZER, PluginFactory.definitionSqueezer);
 		machineMap.put(Defaults.ID_PACKAGE_MACHINE_STILL, PluginFactory.definitionStill);
 		machineMap.put(Defaults.ID_PACKAGE_MACHINE_APIARY, PluginApiculture.definitionApiary);
-		if (PluginIC2.instance.isAvailable())
+		if (PluginIC2.instance.isAvailable()) {
 			machineMap.put(Defaults.ID_PACKAGE_MACHINE_GENERATOR, PluginIC2.definitionGenerator);
+		}
 		definitionMap.put(ForestryBlock.factoryTESR.block(), machineMap);
 
 		HashMap<Integer, MachineDefinition> millMap = new HashMap<Integer, MachineDefinition>();
@@ -156,15 +161,17 @@ public abstract class TileMachine extends TileForestry implements IClimatised, I
 		HashMap<Integer, MachineDefinition> engineMap = new HashMap<Integer, MachineDefinition>();
 		engineMap.put(0, PluginEnergy.definitionEngineBronze);
 		engineMap.put(1, PluginEnergy.definitionEngineCopper);
-		if (PluginIC2.instance.isAvailable())
+		if (PluginIC2.instance.isAvailable()) {
 			engineMap.put(2, PluginIC2.definitionEngineTin);
+		}
 		definitionMap.put(ForestryBlock.engine.block(), engineMap);
 
 	}
 
 	private void legacyConversion(int kind, NBTTagCompound nbttagcompound) {
-		if (definitionMap == null)
+		if (definitionMap == null) {
 			createDefinitionMap();
+		}
 
 		Block block = worldObj.getBlock(xCoord, yCoord, zCoord);
 		if (!definitionMap.containsKey(block) || !definitionMap.get(block).containsKey(kind)) {
@@ -181,15 +188,17 @@ public abstract class TileMachine extends TileForestry implements IClimatised, I
 		Proxies.log.info("Setting to new block id...");
 		worldObj.setBlock(xCoord, yCoord, zCoord, definition.block, definition.meta, Defaults.FLAG_BLOCK_SYNCH);
 		TileEntity tile = worldObj.getTileEntity(xCoord, yCoord, zCoord);
-		if (tile == null)
+		if (tile == null) {
 			throw new RuntimeException("Failed to set new block tile entity!");
-		else if (tile.getClass() != definition.teClass)
+		} else if (tile.getClass() != definition.teClass) {
 			throw new RuntimeException(String.format("Converted tile entity was '%s' instead of expected '%s'", tile.getClass(), definition.teClass));
+		}
 		Proxies.log.info("Refreshing converted tile entity %s with nbt data...", tile.getClass());
-		if (nbttagcompound.hasKey("Machine"))
+		if (nbttagcompound.hasKey("Machine")) {
 			tile.readFromNBT(complementNBT(nbttagcompound, nbttagcompound.getCompoundTag("Machine"), definition));
-		else
+		} else {
 			tile.readFromNBT(nbttagcompound);
+		}
 	}
 
 	private NBTTagCompound complementNBT(NBTTagCompound parent, NBTTagCompound inner, MachineDefinition definition) {
@@ -200,10 +209,12 @@ public abstract class TileMachine extends TileForestry implements IClimatised, I
 		inner.setInteger("z", this.zCoord);
 
 		inner.setInteger("Access", parent.getInteger("Access"));
-		if (parent.hasKey("Owner"))
+		if (parent.hasKey("Owner")) {
 			inner.setString("Owner", parent.getString("Owner"));
-		if (parent.hasKey("Orientation"))
+		}
+		if (parent.hasKey("Orientation")) {
 			inner.setInteger("Orientation", parent.getInteger("Orientation"));
+		}
 
 		return inner;
 	}
@@ -247,16 +258,17 @@ public abstract class TileMachine extends TileForestry implements IClimatised, I
 
 	public static EnumTankLevel rateTankLevel(int scaled) {
 
-		if (scaled < 5)
+		if (scaled < 5) {
 			return EnumTankLevel.EMPTY;
-		else if (scaled < 30)
+		} else if (scaled < 30) {
 			return EnumTankLevel.LOW;
-		else if (scaled < 60)
+		} else if (scaled < 60) {
 			return EnumTankLevel.MEDIUM;
-		else if (scaled < 90)
+		} else if (scaled < 90) {
 			return EnumTankLevel.HIGH;
-		else
+		} else {
 			return EnumTankLevel.MAXIMUM;
+		}
 	}
 
 	// / REDSTONE SIGNALS

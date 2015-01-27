@@ -5,13 +5,15 @@
  ******************************************************************************/
 package forestry.core;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.IIcon;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.core.ErrorStateRegistry;
 import forestry.api.core.IErrorState;
 import forestry.core.config.Defaults;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
 
 public enum EnumErrorCode implements IErrorState {
 

@@ -4,24 +4,14 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.IAlleleFruit;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StackUtils;
-import forestry.plugins.PluginArboriculture;
 import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -34,12 +24,26 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.IAlleleFruit;
+import forestry.api.arboriculture.IAlleleTreeSpecies;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StackUtils;
+import forestry.plugins.PluginArboriculture;
+
 public class BlockSapling extends BlockTreeContainer {
 
 	public static TileSapling getSaplingTile(IBlockAccess world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(x, y, z);
-		if (!(tile instanceof TileSapling))
+		if (!(tile instanceof TileSapling)) {
 			return null;
+		}
 
 		return (TileSapling) tile;
 	}
@@ -89,10 +93,12 @@ public class BlockSapling extends BlockTreeContainer {
 		defaultIcon = TextureManager.getInstance().registerTex(register, "germlings/sapling.treeBalsa");
 
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
-			if (allele instanceof IAlleleTreeSpecies)
+			if (allele instanceof IAlleleTreeSpecies) {
 				((IAlleleTreeSpecies) allele).getIconProvider().registerIcons(register);
-			if (allele instanceof IAlleleFruit)
+			}
+			if (allele instanceof IAlleleFruit) {
 				((IAlleleFruit) allele).getProvider().registerIcons(register);
+			}
 		}
 
 	}
@@ -107,11 +113,13 @@ public class BlockSapling extends BlockTreeContainer {
 	@Override
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 		TileSapling sapling = getSaplingTile(world, x, y, z);
-		if (sapling == null)
+		if (sapling == null) {
 			return defaultIcon;
+		}
 
-		if (sapling.getTree() == null)
+		if (sapling.getTree() == null) {
 			return defaultIcon;
+		}
 
 		return sapling.getTree().getGenome().getPrimary().getGermlingIcon(EnumGermlingType.SAPLING, 0);
 	}
@@ -120,10 +128,12 @@ public class BlockSapling extends BlockTreeContainer {
 	@Override
 	public boolean canBlockStay(World world, int x, int y, int z) {
 		TileSapling tile = getSaplingTile(world, x, y, z);
-		if (tile == null)
+		if (tile == null) {
 			return false;
-		if (tile.getTree() == null)
+		}
+		if (tile.getTree() == null) {
 			return false;
+		}
 
 		return tile.getTree().canStay(world, x, y, z);
 	}
@@ -147,23 +157,27 @@ public class BlockSapling extends BlockTreeContainer {
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
 		TileSapling sapling = getSaplingTile(world, x, y, z);
-		if (sapling == null || sapling.getTree() == null)
+		if (sapling == null || sapling.getTree() == null) {
 			return null;
+		}
 		return PluginArboriculture.treeInterface.getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING.ordinal());
 	}
 
 	@Override
 	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
-		if (Proxies.common.isSimulating(world) && canHarvestBlock(player, world.getBlockMetadata(x, y, z)))
-			if (!player.capabilities.isCreativeMode)
+		if (Proxies.common.isSimulating(world) && canHarvestBlock(player, world.getBlockMetadata(x, y, z))) {
+			if (!player.capabilities.isCreativeMode) {
 				dropAsSapling(world, x, y, z);
+			}
+		}
 
 		return world.setBlockToAir(x, y, z);
 	}
 
 	private void dropAsSapling(World world, int x, int y, int z) {
-		if (!Proxies.common.isSimulating(world))
+		if (!Proxies.common.isSimulating(world)) {
 			return;
+		}
 
 		TileSapling sapling = getSaplingTile(world, x, y, z);
 		if (sapling != null && sapling.getTree() != null) {

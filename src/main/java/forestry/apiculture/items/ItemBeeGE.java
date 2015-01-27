@@ -10,8 +10,20 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import java.util.List;
+
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IIcon;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -27,15 +39,6 @@ import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginApiculture;
-import java.util.List;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IIcon;
 
 public class ItemBeeGE extends ItemGE {
 
@@ -45,8 +48,9 @@ public class ItemBeeGE extends ItemGE {
 		super();
 		this.type = type;
 		setCreativeTab(Tabs.tabApiculture);
-		if (type != EnumBeeType.DRONE)
+		if (type != EnumBeeType.DRONE) {
 			setMaxStackSize(1);
+		}
 	}
 
 	@Override
@@ -72,12 +76,13 @@ public class ItemBeeGE extends ItemGE {
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
 
-		if (itemstack.getTagCompound() == null)
+		if (itemstack.getTagCompound() == null) {
 			return super.getItemStackDisplayName(itemstack);
+		}
 
 		IBee individual = new Bee(itemstack.getTagCompound());
-		String customBeeKey = "bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.","");
-		if(StringUtil.canTranslate(customBeeKey)){
+		String customBeeKey = "bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.", "");
+		if (StringUtil.canTranslate(customBeeKey)) {
 			return StringUtil.localize(customBeeKey);
 		}
 		String beeGrammar = StringUtil.localize("bees.grammar." + type.getName());
@@ -86,18 +91,20 @@ public class ItemBeeGE extends ItemGE {
 		return beeGrammar.replaceAll("%SPECIES", beeSpecies).replaceAll("%TYPE", beeType);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
-		if(!itemstack.hasTagCompound())
+		if (!itemstack.hasTagCompound()) {
 			return;
+		}
 
-		if(type != EnumBeeType.DRONE) {
+		if (type != EnumBeeType.DRONE) {
 			IBee individual = new Bee(itemstack.getTagCompound());
-			if (individual.isNatural())
+			if (individual.isNatural()) {
 				list.add(EnumChatFormatting.YELLOW + EnumChatFormatting.ITALIC.toString() + StringUtil.localize("bees.stock.pristine"));
-			else
+			} else {
 				list.add(EnumChatFormatting.YELLOW + StringUtil.localize("bees.stock.ignoble"));
+			}
 		}
 
 		super.addInformation(itemstack, player, list, flag);
@@ -106,19 +113,21 @@ public class ItemBeeGE extends ItemGE {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		if (type == EnumBeeType.QUEEN)
+		if (type == EnumBeeType.QUEEN) {
 			return;
+		}
 
 		addCreativeItems(itemList, true);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void addCreativeItems(List itemList, boolean hideSecrets) {
 
 		for (IIndividual individual : PluginApiculture.beeInterface.getIndividualTemplates()) {
 			// Don't show secret bees unless ordered to.
-			if (hideSecrets && individual.isSecret() && !Config.isDebug)
+			if (hideSecrets && individual.isSecret() && !Config.isDebug) {
 				continue;
+			}
 
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
 			ItemStack someStack = new ItemStack(this);
@@ -131,8 +140,9 @@ public class ItemBeeGE extends ItemGE {
 	/* RENDERING */
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
-		if (!itemstack.hasTagCompound())
+		if (!itemstack.hasTagCompound()) {
 			return super.getColorFromItemStack(itemstack, renderPass);
+		}
 
 		return getColourFromSpecies(BeeGenome.getSpecies(itemstack), renderPass);
 	}
@@ -140,10 +150,11 @@ public class ItemBeeGE extends ItemGE {
 	@Override
 	public int getColourFromSpecies(IAlleleSpecies species, int renderPass) {
 
-		if (species != null && species instanceof IAlleleBeeSpecies)
+		if (species != null && species instanceof IAlleleBeeSpecies) {
 			return species.getIconColour(renderPass);
-		else
+		} else {
 			return 0xffffff;
+		}
 
 	}
 
@@ -161,9 +172,11 @@ public class ItemBeeGE extends ItemGE {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister register) {
-		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values())
-			if (allele instanceof IAlleleBeeSpecies)
+		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+			if (allele instanceof IAlleleBeeSpecies) {
 				((IAlleleBeeSpecies) allele).getIconProvider().registerIcons(register);
+			}
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -174,8 +187,9 @@ public class ItemBeeGE extends ItemGE {
 
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconFromSpecies(IAlleleBeeSpecies species, int renderPass) {
-		if (species == null)
+		if (species == null) {
 			species = (IAlleleBeeSpecies) PluginApiculture.beeInterface.getDefaultTemplate()[EnumBeeChromosome.SPECIES.ordinal()];
+		}
 
 		return species.getIcon(type, renderPass);
 	}

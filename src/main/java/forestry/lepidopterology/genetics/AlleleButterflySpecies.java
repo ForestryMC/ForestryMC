@@ -4,15 +4,28 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
+import net.minecraftforge.common.BiomeDictionary;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.core.IIconProvider;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
@@ -22,14 +35,6 @@ import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.core.config.Defaults;
 import forestry.core.genetics.AlleleSpecies;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.common.BiomeDictionary;
 
 public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButterflySpecies {
 
@@ -47,8 +52,8 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	private final Map<ItemStack, Float> caterpillarLoot = new HashMap<ItemStack, Float>();
 
 	public AlleleButterflySpecies(String uid, boolean isDominant, String name, IClassification branch, String binomial, int serumColour) {
-		super(uid, isDominant, "butterflies.species." + branch.getParent().getUID().substring((branch.getParent().getLevel().name().toLowerCase(Locale.ENGLISH)).length()+1) + "." + name, branch, binomial);
-		this.root = (IButterflyRoot)AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies");
+		super(uid, isDominant, "butterflies.species." + branch.getParent().getUID().substring((branch.getParent().getLevel().name().toLowerCase(Locale.ENGLISH)).length() + 1) + "." + name, branch, binomial);
+		this.root = (IButterflyRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies");
 		this.serumColour = serumColour;
 		texture = "forestry:" + Defaults.TEXTURE_PATH_ENTITIES + "/butterflies/" + uid + ".png";
 	}
@@ -107,30 +112,36 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	/* RESEARCH */
 	@Override
 	public int getComplexity() {
-		return (int)((1.35f/rarity)*1.5);
+		return (int) ((1.35f / rarity) * 1.5);
 	}
 
 	@Override
 	public float getResearchSuitability(ItemStack itemstack) {
-		if(itemstack == null)
+		if (itemstack == null) {
 			return 0f;
+		}
 
-		if(itemstack.getItem() == Items.glass_bottle)
+		if (itemstack.getItem() == Items.glass_bottle) {
 			return 0.9f;
+		}
 
-		for(ItemStack stack : butterflyLoot.keySet())
-			if(stack.isItemEqual(itemstack))
+		for (ItemStack stack : butterflyLoot.keySet()) {
+			if (stack.isItemEqual(itemstack)) {
 				return 1.0f;
-		for(ItemStack stack : caterpillarLoot.keySet())
-			if(stack.isItemEqual(itemstack))
+			}
+		}
+		for (ItemStack stack : caterpillarLoot.keySet()) {
+			if (stack.isItemEqual(itemstack)) {
 				return 1.0f;
+			}
+		}
 
 		return super.getResearchSuitability(itemstack);
 	}
 
 	@Override
 	public ItemStack[] getResearchBounty(World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
-		return new ItemStack[] { getRoot().getMemberStack(individual.copy(), EnumFlutterType.SERUM.ordinal()) };
+		return new ItemStack[]{getRoot().getMemberStack(individual.copy(), EnumFlutterType.SERUM.ordinal())};
 	}
 
 	/* OTHER */
@@ -166,8 +177,9 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 
 	@Override
 	public int getIconColour(int renderPass) {
-		if(renderPass > 0)
+		if (renderPass > 0) {
 			return 0xffffff;
+		}
 		return serumColour;
 	}
 }

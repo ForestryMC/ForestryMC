@@ -4,21 +4,16 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.farming.gadgets;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.core.IItemTyped;
-import forestry.core.config.Defaults;
-import forestry.core.proxy.Proxies;
-import forestry.farming.worldgen.WorldGenBigMushroom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -29,6 +24,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.core.IItemTyped;
+import forestry.core.config.Defaults;
+import forestry.core.proxy.Proxies;
+import forestry.farming.worldgen.WorldGenBigMushroom;
 
 public class BlockMushroom extends BlockSapling implements IItemTyped {
 
@@ -42,8 +45,8 @@ public class BlockMushroom extends BlockSapling implements IItemTyped {
 	public BlockMushroom() {
 		super();
 		setHardness(0.0f);
-		this.generators = new WorldGenerator[] { new WorldGenBigMushroom(Blocks.brown_mushroom_block), new WorldGenBigMushroom(Blocks.red_mushroom_block) };
-		this.drops = new ItemStack[] { new ItemStack(Blocks.brown_mushroom), new ItemStack(Blocks.red_mushroom) };
+		this.generators = new WorldGenerator[]{new WorldGenBigMushroom(Blocks.brown_mushroom_block), new WorldGenBigMushroom(Blocks.red_mushroom_block)};
+		this.drops = new ItemStack[]{new ItemStack(Blocks.brown_mushroom), new ItemStack(Blocks.red_mushroom)};
 		setCreativeTab(null);
 		setTickRandomly(true);
 	}
@@ -73,8 +76,9 @@ public class BlockMushroom extends BlockSapling implements IItemTyped {
 	@Override
 	public void updateTick(World world, int i, int j, int k, Random random) {
 
-		if (!Proxies.common.isSimulating(world))
+		if (!Proxies.common.isSimulating(world)) {
 			return;
+		}
 
 		int meta = world.getBlockMetadata(i, j, k);
 		MushroomType type = getTypeFromMeta(meta);
@@ -87,16 +91,18 @@ public class BlockMushroom extends BlockSapling implements IItemTyped {
 
 		int lightvalue = world.getBlockLightValue(i, j + 1, k);
 
-		if (random.nextInt(2) != 0)
+		if (random.nextInt(2) != 0) {
 			return;
+		}
 
 		if (maturity != 3) {
 			maturity = 3;
 			int matX = maturity << 2;
 			int meta = (matX | type.ordinal());
 			world.setBlockMetadataWithNotify(i, j, k, meta, Defaults.FLAG_BLOCK_SYNCH);
-		} else if (lightvalue <= 7)
+		} else if (lightvalue <= 7) {
 			func_149878_d(world, i, j, k, random);
+		}
 	}
 
 	@Override
@@ -104,8 +110,9 @@ public class BlockMushroom extends BlockSapling implements IItemTyped {
 		MushroomType type = getTypeFromMeta(world.getBlockMetadata(i, j, k));
 
 		world.setBlockToAir(i, j, k);
-		if (!generators[type.ordinal()].generate(world, random, i, j, k))
+		if (!generators[type.ordinal()].generate(world, random, i, j, k)) {
 			world.setBlock(i, j, k, this, type.ordinal(), 0);
+		}
 	}
 
 	@Override
@@ -134,9 +141,12 @@ public class BlockMushroom extends BlockSapling implements IItemTyped {
 		MushroomType type = getTypeFromMeta(meta);
 
 		switch (type) {
-			case BROWN: return Blocks.brown_mushroom.getIcon(side, meta);
-			case RED: return Blocks.red_mushroom.getIcon(side, meta);
-			default: return null;
+			case BROWN:
+				return Blocks.brown_mushroom.getIcon(side, meta);
+			case RED:
+				return Blocks.red_mushroom.getIcon(side, meta);
+			default:
+				return null;
 		}
 	}
 

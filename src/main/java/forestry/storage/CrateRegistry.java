@@ -23,14 +23,17 @@ import forestry.plugins.PluginStorage;
 public class CrateRegistry implements ICrateRegistry {
 
 	private void registerCrate(ItemStack stack, String uid, boolean useOreDict) {
-		if (PluginManager.getStage() != PluginManager.Stage.INIT)
+		if (PluginManager.getStage() != PluginManager.Stage.INIT) {
 			throw new RuntimeException("Tried to make a crate outside of Init");
+		}
 
-		if (stack == null || stack.getItem() == null)
+		if (stack == null || stack.getItem() == null) {
 			throw new RuntimeException("Tried to make a crate without an item");
+		}
 
-		if (uid == null)
+		if (uid == null) {
 			throw new RuntimeException("Tried to make a crate without a uid");
+		}
 
 		ItemCrated crate = new ItemCrated(stack, useOreDict);
 		crate.setUnlocalizedName(uid);

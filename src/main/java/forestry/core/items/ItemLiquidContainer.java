@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -83,15 +83,18 @@ public class ItemLiquidContainer extends Item {
 		for (int slot = 0; slot < player.inventory.mainInventory.length; slot++) {
 			ItemStack slotStack = player.inventory.getStackInSlot(slot);
 
-			if (slotStack == null)
+			if (slotStack == null) {
 				return slot;
+			}
 
-			if (!slotStack.isItemEqual(stack))
+			if (!slotStack.isItemEqual(stack)) {
 				continue;
+			}
 
 			int space = slotStack.getMaxStackSize() - slotStack.stackSize;
-			if (space >= stack.stackSize)
+			if (space >= stack.stackSize) {
 				return slot;
+			}
 		}
 
 		return -1;
@@ -99,8 +102,9 @@ public class ItemLiquidContainer extends Item {
 
 	@Override
 	public ItemStack onEaten(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (!isDrink)
+		if (!isDrink) {
 			return itemstack;
+		}
 
 		itemstack.stackSize--;
 		entityplayer.getFoodStats().addStats(this.getHealAmount(), this.getSaturationModifier());
@@ -115,30 +119,34 @@ public class ItemLiquidContainer extends Item {
 
 	@Override
 	public int getMaxItemUseDuration(ItemStack itemstack) {
-		if (isDrink)
+		if (isDrink) {
 			return 32;
-		else
+		} else {
 			return super.getMaxItemUseDuration(itemstack);
+		}
 	}
 
 	@Override
 	public EnumAction getItemUseAction(ItemStack itemstack) {
-		if (isDrink)
+		if (isDrink) {
 			return EnumAction.drink;
-		else
+		} else {
 			return EnumAction.none;
+		}
 	}
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 
-		if (!Proxies.common.isSimulating(world))
+		if (!Proxies.common.isSimulating(world)) {
 			return itemstack;
+		}
 
 		// / DRINKS can be drunk
 		if (isDrink) {
-			if (entityplayer.canEat(isAlwaysEdible))
+			if (entityplayer.canEat(isAlwaysEdible)) {
 				entityplayer.setItemInUse(itemstack, getMaxItemUseDuration(itemstack));
+			}
 			return itemstack;
 		}
 
@@ -154,7 +162,7 @@ public class ItemLiquidContainer extends Item {
 			FluidStack fluid = null;
 
 			if (targetedBlock instanceof IFluidBlock) {
-				fluid = ((IFluidBlock)targetedBlock).drain(world, x, y, z, false);
+				fluid = ((IFluidBlock) targetedBlock).drain(world, x, y, z, false);
 			} else {
 				if (targetedBlock == Blocks.water || targetedBlock == Blocks.flowing_water) {
 					fluid = new FluidStack(FluidRegistry.WATER, 1000);
@@ -163,27 +171,31 @@ public class ItemLiquidContainer extends Item {
 				}
 			}
 
-			if (fluid == null || fluid.amount <= 0 && this.type == EnumContainerType.BUCKET)
+			if (fluid == null || fluid.amount <= 0 && this.type == EnumContainerType.BUCKET) {
 				return tryPlaceLiquid(itemstack, world, entityplayer, movingobjectposition);
+			}
 
 			ItemStack filledContainer = FluidHelper.getFilledContainer(fluid.getFluid(), itemstack);
-			if (filledContainer == null)
+			if (filledContainer == null) {
 				return itemstack;
+			}
 
 			// Search for a slot to stow a filled container in player's
 			// inventory
 			int slot = getMatchingSlot(entityplayer, filledContainer);
-			if (slot < 0)
+			if (slot < 0) {
 				return itemstack;
+			}
 
-			if (entityplayer.inventory.getStackInSlot(slot) == null)
+			if (entityplayer.inventory.getStackInSlot(slot) == null) {
 				entityplayer.inventory.setInventorySlotContents(slot, filledContainer.copy());
-			else
+			} else {
 				entityplayer.inventory.getStackInSlot(slot).stackSize++;
+			}
 
 			// Remove consumed liquid block in world
 			if (targetedBlock instanceof IFluidBlock) {
-				((IFluidBlock)targetedBlock).drain(world, x, y, z, true);
+				((IFluidBlock) targetedBlock).drain(world, x, y, z, true);
 			} else {
 				world.setBlockToAir(x, y, z);
 			}
@@ -216,12 +228,24 @@ public class ItemLiquidContainer extends Item {
 		int z = movingobjectposition.blockZ;
 
 		switch (movingobjectposition.sideHit) {
-			case 0: --y; break;
-			case 1: ++y; break;
-			case 2: --z; break;
-			case 3: ++z; break;
-			case 4: --x; break;
-			case 5: ++x; break;
+			case 0:
+				--y;
+				break;
+			case 1:
+				++y;
+				break;
+			case 2:
+				--z;
+				break;
+			case 3:
+				++z;
+				break;
+			case 4:
+				--x;
+				break;
+			case 5:
+				++x;
+				break;
 		}
 
 		if (!player.canPlayerEdit(x, y, z, movingobjectposition.sideHit, itemstack)) {
@@ -315,10 +339,11 @@ public class ItemLiquidContainer extends Item {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIconFromDamageForRenderPass(int i, int j) {
-		if (j > 0 && color != null)
+		if (j > 0 && color != null) {
 			return icons[1];
-		else
+		} else {
 			return icons[0];
+		}
 	}
 
 	// Return true to enable color overlay
@@ -329,10 +354,11 @@ public class ItemLiquidContainer extends Item {
 
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int j) {
-		if (j > 0 && color != null)
+		if (j > 0 && color != null) {
 			return color.getRGB() & 0xffffff; // remove alpha
-		else
+		} else {
 			return 0xffffff;
+		}
 	}
 
 	public EnumContainerType getType() {

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -46,13 +46,16 @@ public class TickHandlerCoreServer {
 
 	@SubscribeEvent
 	public void onWorldTick(WorldTickEvent event) {
-		if (event.phase != Phase.END) return;
+		if (event.phase != Phase.END) {
+			return;
+		}
 
 		if (Config.enableBackpackResupply) {
 			for (Object obj : event.world.playerEntities) {
 				EntityPlayer player = (EntityPlayer) obj;
-				for (IResupplyHandler handler : PluginManager.resupplyHandlers)
+				for (IResupplyHandler handler : PluginManager.resupplyHandlers) {
 					handler.resupply(player);
+				}
 			}
 		}
 
@@ -90,7 +93,7 @@ public class TickHandlerCoreServer {
 	@SubscribeEvent
 	public void chunkLoadEventHandler(ChunkDataEvent.Load event) {
 		if (Config.doRetrogen) {
-			NBTTagCompound tag = (NBTTagCompound)event.getData().getTag(Defaults.MOD);
+			NBTTagCompound tag = (NBTTagCompound) event.getData().getTag(Defaults.MOD);
 			if (tag == null || !tag.hasKey("retrogen") || Config.forceRetrogen) {
 				ChunkCoords coords = new ChunkCoords(event.getChunk());
 				chunkRegenList.put(coords.dimension, coords);

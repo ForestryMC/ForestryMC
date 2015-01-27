@@ -4,16 +4,18 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import net.minecraft.item.ItemStack;
+
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.factory.gadgets.MachineStill;
-import net.minecraft.item.ItemStack;
+
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.LiquidSlot;
 import uristqwerty.CraftGuide.api.RecipeGenerator;
@@ -35,8 +37,9 @@ public class CraftGuideStill implements RecipeProvider {
 	@Override
 	public void generateRecipes(RecipeGenerator generator) {
 
-		if (ForestryBlock.factoryTESR.block() == null)
+		if (ForestryBlock.factoryTESR.block() == null) {
 			return;
+		}
 
 		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_STILL_META);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);

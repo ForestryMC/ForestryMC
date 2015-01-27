@@ -10,12 +10,14 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
 import cpw.mods.fml.common.Optional;
+
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.proxy.Proxies;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 
 @Plugin(pluginID = "BC6|Transport", name = "BuildCraft 6 Transport", author = "mezz", url = Defaults.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
 public class PluginBuildCraftTransport extends ForestryPlugin {

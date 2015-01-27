@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -66,25 +66,31 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 
 		if (pendingSpawns.size() > 0) {
 			setIsActive(true);
-			if (worldObj.getTotalWorldTime() % 1000 == 0)
+			if (worldObj.getTotalWorldTime() % 1000 == 0) {
 				trySpawnSwarm();
-		} else
+			}
+		} else {
 			setIsActive(false);
+		}
 
-		if (worldObj.getTotalWorldTime() % 500 != 0)
+		if (worldObj.getTotalWorldTime() % 500 != 0) {
 			return;
+		}
 
 		ItemStack princessStack = getPrincessStack();
-		if (princessStack == null)
+		if (princessStack == null) {
 			return;
+		}
 
 		int chance = consumeInducerAndGetChance();
-		if (chance == 0)
+		if (chance == 0) {
 			return;
+		}
 
 		// Try to spawn princess
-		if (worldObj.rand.nextInt(1000) >= chance)
+		if (worldObj.rand.nextInt(1000) >= chance) {
 			return;
+		}
 
 		// Queue swarm spawn
 		IBee princess = PluginApiculture.beeInterface.getMember(princessStack);
@@ -93,24 +99,28 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 	}
 
 	private ItemStack getPrincessStack() {
-		if (!this.hasMaster())
+		if (!this.hasMaster()) {
 			return null;
+		}
 
 		IAlvearyComponent master = (IAlvearyComponent) this.getCentralTE();
-		if (!(master instanceof IBeeHousing))
+		if (!(master instanceof IBeeHousing)) {
 			return null;
+		}
 
 		IBeeHousing housing = (IBeeHousing) master;
 		ItemStack princessStack = housing.getQueen();
-		if (princessStack == null || !PluginApiculture.beeInterface.isMated(princessStack))
+		if (princessStack == null || !PluginApiculture.beeInterface.isMated(princessStack)) {
 			return null;
+		}
 
 		return princessStack;
 	}
 
 	private int consumeInducerAndGetChance() {
-		if (getInternalInventory() == null)
+		if (getInternalInventory() == null) {
 			return 0;
+		}
 
 		for (IInvSlot slot : InventoryIterator.getIterable(getInternalInventory())) {
 			ItemStack stack = slot.getStackInSlot();
@@ -134,8 +144,9 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 		int chunkX = (xCoord + worldObj.rand.nextInt(40 * 2) - 40) / 16;
 		int chunkZ = (zCoord + worldObj.rand.nextInt(40 * 2) - 40) / 16;
 
-		if (HiveDecorator.instance().genHive(worldObj, worldObj.rand, chunkX, chunkZ, hive))
+		if (HiveDecorator.instance().genHive(worldObj, worldObj.rand, chunkX, chunkZ, hive)) {
 			pendingSpawns.pop();
+		}
 	}
 
 	private void setIsActive(boolean isActive) {
@@ -170,13 +181,15 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 	/* TEXTURES */
 	@Override
 	public int getIcon(int side, int metadata) {
-		if (side == 0 || side == 1)
+		if (side == 0 || side == 1) {
 			return BlockAlveary.BOTTOM;
+		}
 
-		if (isActive)
+		if (isActive) {
 			return BlockAlveary.ALVEARY_SWARMER_ON;
-		else
+		} else {
 			return BlockAlveary.ALVEARY_SWARMER_OFF;
+		}
 	}
 
 	/* SAVING & LOADING */

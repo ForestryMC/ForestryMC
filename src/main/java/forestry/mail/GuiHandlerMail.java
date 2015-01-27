@@ -4,11 +4,15 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.mail;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 import forestry.core.GuiHandlerBase;
 import forestry.core.network.GuiId;
@@ -30,49 +34,51 @@ import forestry.mail.gui.GuiTrader;
 import forestry.mail.items.ItemCatalogue;
 import forestry.mail.items.ItemLetter;
 import forestry.mail.items.ItemLetter.LetterInventory;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 public class GuiHandlerMail extends GuiHandlerBase {
 
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 
-		if (id >= GuiId.values().length)
+		if (id >= GuiId.values().length) {
 			return null;
+		}
 
 		switch (GuiId.values()[id]) {
-		case CatalogueGUI:
-			ItemStack cata = player.getCurrentEquippedItem();
-			if (cata == null)
-				return null;
+			case CatalogueGUI:
+				ItemStack cata = player.getCurrentEquippedItem();
+				if (cata == null) {
+					return null;
+				}
 
-			if (cata.getItem() instanceof ItemCatalogue)
-				return new GuiCatalogue(player);
-			else
-				return null;
+				if (cata.getItem() instanceof ItemCatalogue) {
+					return new GuiCatalogue(player);
+				} else {
+					return null;
+				}
 			
-		case LetterGUI:
-			ItemStack equipped = player.getCurrentEquippedItem();
-			if (equipped == null)
-				return null;
+			case LetterGUI:
+				ItemStack equipped = player.getCurrentEquippedItem();
+				if (equipped == null) {
+					return null;
+				}
 
-			if (equipped.getItem() instanceof ItemLetter)
-				return new GuiLetter(player, new LetterInventory(equipped));
-			else
-				return null;
+				if (equipped.getItem() instanceof ItemLetter) {
+					return new GuiLetter(player, new LetterInventory(equipped));
+				} else {
+					return null;
+				}
 
-		case MailboxGUI:
-			return new GuiMailbox(player.inventory, (MachineMailbox) getTileForestry(world, x, y, z));
-		case PhilatelistGUI:
-			return new GuiPhilatelist(player.inventory, (MachinePhilatelist) getTileForestry(world, x, y, z));
-		case TraderGUI:
-			return new GuiTrader(player.inventory, (MachineTrader) getTileForestry(world, x, y, z));
-		case TraderNameGUI:
-			return new GuiTradeName(player.inventory, (MachineTrader) getTileForestry(world, x, y, z));
-		default:
-			return null;
+			case MailboxGUI:
+				return new GuiMailbox(player.inventory, (MachineMailbox) getTileForestry(world, x, y, z));
+			case PhilatelistGUI:
+				return new GuiPhilatelist(player.inventory, (MachinePhilatelist) getTileForestry(world, x, y, z));
+			case TraderGUI:
+				return new GuiTrader(player.inventory, (MachineTrader) getTileForestry(world, x, y, z));
+			case TraderNameGUI:
+				return new GuiTradeName(player.inventory, (MachineTrader) getTileForestry(world, x, y, z));
+			default:
+				return null;
 
 		}
 	}
@@ -80,40 +86,45 @@ public class GuiHandlerMail extends GuiHandlerBase {
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 
-		if (id >= GuiId.values().length)
+		if (id >= GuiId.values().length) {
 			return null;
+		}
 
 		switch (GuiId.values()[id]) {
-		case CatalogueGUI:
-			ItemStack cata = player.getCurrentEquippedItem();
-			if (cata == null)
-				return null;
+			case CatalogueGUI:
+				ItemStack cata = player.getCurrentEquippedItem();
+				if (cata == null) {
+					return null;
+				}
 
-			if (cata.getItem() instanceof ItemCatalogue)
-				return new ContainerCatalogue(player);
-			else
-				return null;
+				if (cata.getItem() instanceof ItemCatalogue) {
+					return new ContainerCatalogue(player);
+				} else {
+					return null;
+				}
 			
-		case LetterGUI:
-			ItemStack equipped = player.getCurrentEquippedItem();
-			if (equipped == null)
-				return null;
+			case LetterGUI:
+				ItemStack equipped = player.getCurrentEquippedItem();
+				if (equipped == null) {
+					return null;
+				}
 
-			if (equipped.getItem() instanceof ItemLetter)
-				return new ContainerLetter(player, new LetterInventory(equipped));
-			else
-				return null;
+				if (equipped.getItem() instanceof ItemLetter) {
+					return new ContainerLetter(player, new LetterInventory(equipped));
+				} else {
+					return null;
+				}
 
-		case MailboxGUI:
-			return new ContainerMailbox(player.inventory, (MachineMailbox) getTileForestry(world, x, y, z));
-		case PhilatelistGUI:
-			return new ContainerPhilatelist(player.inventory, (MachinePhilatelist) getTileForestry(world, x, y, z));
-		case TraderGUI:
-			return new ContainerTrader(player.inventory, (MachineTrader) getTileForestry(world, x, y, z));
-		case TraderNameGUI:
-			return new ContainerTradeName(player.inventory, (MachineTrader) getTileForestry(world, x, y, z));
-		default:
-			return null;
+			case MailboxGUI:
+				return new ContainerMailbox(player.inventory, (MachineMailbox) getTileForestry(world, x, y, z));
+			case PhilatelistGUI:
+				return new ContainerPhilatelist(player.inventory, (MachinePhilatelist) getTileForestry(world, x, y, z));
+			case TraderGUI:
+				return new ContainerTrader(player.inventory, (MachineTrader) getTileForestry(world, x, y, z));
+			case TraderNameGUI:
+				return new ContainerTradeName(player.inventory, (MachineTrader) getTileForestry(world, x, y, z));
+			default:
+				return null;
 
 		}
 	}

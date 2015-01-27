@@ -4,21 +4,14 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.food.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.food.BeverageManager;
-import forestry.api.food.IBeverageEffect;
-import forestry.core.config.Config;
-import forestry.core.items.ItemForestryFood;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 import java.util.List;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,6 +22,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.food.BeverageManager;
+import forestry.api.food.IBeverageEffect;
+import forestry.core.config.Config;
+import forestry.core.items.ItemForestryFood;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
 
 public class ItemBeverage extends ItemForestryFood {
 
@@ -70,8 +73,9 @@ public class ItemBeverage extends ItemForestryFood {
 			IBeverageEffect[] effects = new IBeverageEffect[0];
 
 			NBTTagCompound nbttagcompound = stack.getTagCompound();
-			if (nbttagcompound == null)
+			if (nbttagcompound == null) {
 				return effects;
+			}
 
 			if (nbttagcompound.hasKey("E")) {
 				int effectLength = nbttagcompound.getInteger("L");
@@ -80,8 +84,9 @@ public class ItemBeverage extends ItemForestryFood {
 				for (int i = 0; i < nbttaglist.tagCount(); i++) {
 					NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 					byte byte0 = nbttagcompound1.getByte("S");
-					if (byte0 >= 0 && byte0 < effects.length)
+					if (byte0 >= 0 && byte0 < effects.length) {
 						effects[byte0] = BeverageManager.effectList[nbttagcompound1.getInteger("ID")];
+					}
 				}
 			}
 
@@ -93,13 +98,14 @@ public class ItemBeverage extends ItemForestryFood {
 
 			NBTTagList nbttaglist = new NBTTagList();
 			nbttagcompound.setInteger("L", effects.length);
-			for (int i = 0; i < effects.length; i++)
+			for (int i = 0; i < effects.length; i++) {
 				if (effects[i] != null) {
 					NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 					nbttagcompound1.setByte("S", (byte) i);
 					nbttagcompound1.setInteger("ID", effects[i].getId());
 					nbttaglist.appendTag(nbttagcompound1);
 				}
+			}
 			nbttagcompound.setTag("E", nbttaglist);
 
 			stack.setTagCompound(nbttagcompound);
@@ -134,11 +140,13 @@ public class ItemBeverage extends ItemForestryFood {
 		entityplayer.getFoodStats().func_151686_a(this, itemstack);
 		world.playSoundAtEntity(entityplayer, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
 
-		if (!Proxies.common.isSimulating(world))
+		if (!Proxies.common.isSimulating(world)) {
 			return itemstack;
+		}
 
-		for (IBeverageEffect effect : effects)
+		for (IBeverageEffect effect : effects) {
 			effect.doEffect(world, entityplayer);
+		}
 
 		return itemstack;
 	}
@@ -173,17 +181,20 @@ public class ItemBeverage extends ItemForestryFood {
 		int meta = itemstack.getItemDamage();
 		BeverageInfo beverage = beverages[meta];
 
-		if (entityplayer.canEat(beverage.isAlwaysEdible))
+		if (entityplayer.canEat(beverage.isAlwaysEdible)) {
 			entityplayer.setItemInUse(itemstack, getMaxItemUseDuration(itemstack));
+		}
 		return itemstack;
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		for (int i = 0; i < beverages.length; i++)
-			if (Config.isDebug || !beverages[i].isSecret)
+		for (int i = 0; i < beverages.length; i++) {
+			if (Config.isDebug || !beverages[i].isSecret) {
 				itemList.add(new ItemStack(this, 1, i));
+			}
+		}
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -193,9 +204,11 @@ public class ItemBeverage extends ItemForestryFood {
 		BeverageInfo beverage = beverages[meta];
 		IBeverageEffect[] effects = beverage.loadEffects(itemstack);
 
-		for (IBeverageEffect effect : effects)
-			if (effect.getDescription() != null)
+		for (IBeverageEffect effect : effects) {
+			if (effect.getDescription() != null) {
 				list.add(effect.getDescription());
+			}
+		}
 	}
 
 	@Override
@@ -207,17 +220,19 @@ public class ItemBeverage extends ItemForestryFood {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerIcons(IIconRegister register) {
-		for (BeverageInfo info : beverages)
+		for (BeverageInfo info : beverages) {
 			info.registerIcons(register);
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIconFromDamageForRenderPass(int i, int j) {
-		if (j > 0 && beverages[i].secondaryColor != 0)
+		if (j > 0 && beverages[i].secondaryColor != 0) {
 			return beverages[i].iconBottle;
-		else
+		} else {
 			return beverages[i].iconContents;
+		}
 	}
 
 	// Return true to enable color overlay
@@ -229,10 +244,11 @@ public class ItemBeverage extends ItemForestryFood {
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int j) {
 
-		if (j == 0 || beverages[itemstack.getItemDamage()].secondaryColor == 0)
+		if (j == 0 || beverages[itemstack.getItemDamage()].secondaryColor == 0) {
 			return beverages[itemstack.getItemDamage()].primaryColor;
-		else
+		} else {
 			return beverages[itemstack.getItemDamage()].secondaryColor;
+		}
 	}
 
 }

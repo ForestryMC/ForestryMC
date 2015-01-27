@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -52,21 +52,27 @@ public class Schemata {
 
 		String fullpattern = "";
 
-		for (String pattern : patterns)
+		for (String pattern : patterns) {
 			fullpattern = (new StringBuilder()).append(fullpattern).append(pattern).toString();
+		}
 
-		if (fullpattern.length() != getWidth() * getHeight() * getDepth())
+		if (fullpattern.length() != getWidth() * getHeight() * getDepth()) {
 			throw new RuntimeException("Incorrect pattern " + fullpattern + " (" + fullpattern.length() + ") for (" + getWidth() + "/" + getHeight() + "/"
 					+ getDepth() + ")");
+		}
 
-		for (int i = 0; i < getWidth(); i++)
-			for (int j = 0; j < getHeight(); j++)
-				for (int k = 0; k < getDepth(); k++)
-					for (EnumStructureBlock type : EnumStructureBlock.values())
+		for (int i = 0; i < getWidth(); i++) {
+			for (int j = 0; j < getHeight(); j++) {
+				for (int k = 0; k < getDepth(); k++) {
+					for (EnumStructureBlock type : EnumStructureBlock.values()) {
 						if (type.getKey() == fullpattern.charAt(i * getHeight() * getDepth() + j * getDepth() + k)) {
 							structure[i][j][k] = type;
 							break;
 						}
+					}
+				}
+			}
+		}
 
 		/*
 		 * for(int i = 0; i < getWidth(); i++) { for(int j = 0; j < getHeight(); j++) { System.out.print("["); for(int k = 0; k < getDepth(); k++) {
@@ -84,16 +90,18 @@ public class Schemata {
 	}
 
 	public EnumStructureBlock getAt(int x, int y, int z, boolean rotate) {
-		if (rotate)
+		if (rotate) {
 			return structure[z][y][x];
+		}
 		return structure[x][y][z];
 	}
 
 	public Vect getDimensions(boolean rotate) {
-		if (rotate)
+		if (rotate) {
 			return new Vect(getDepth(), getHeight(), getWidth());
-		else
+		} else {
 			return new Vect(getWidth(), getHeight(), getDepth());
+		}
 	}
 
 	public boolean isEnabled() {

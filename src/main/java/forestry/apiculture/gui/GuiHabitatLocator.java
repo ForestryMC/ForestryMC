@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -35,8 +35,6 @@ import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
-
-import static net.minecraftforge.common.BiomeDictionary.Type.MOUNTAIN;
 
 public class GuiHabitatLocator extends GuiForestry<TileForestry> {
 
@@ -74,10 +72,11 @@ public class GuiHabitatLocator extends GuiForestry<TileForestry> {
 			if (getIcon() != null) {
 				GL11.glDisable(GL11.GL_LIGHTING);
 
-				if (!isActive)
+				if (!isActive) {
 					GL11.glColor4f(0.2f, 0.2f, 0.2f, 0.2f);
-				else
+				} else {
 					GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+				}
 
 				Proxies.common.bindTexture(SpriteSheet.ITEMS);
 				manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos, getIcon(), 16, 16);
@@ -87,7 +86,7 @@ public class GuiHabitatLocator extends GuiForestry<TileForestry> {
 
 	}
 
-	private final HabitatSlot[] habitatSlots = new HabitatSlot[] {
+	private final HabitatSlot[] habitatSlots = new HabitatSlot[]{
 			new HabitatSlot(0, "Ocean"), // ocean, beach
 			new HabitatSlot(1, "Plains"),
 			new HabitatSlot(2, "Desert"), // desert, desert hills
@@ -99,7 +98,7 @@ public class GuiHabitatLocator extends GuiForestry<TileForestry> {
 			new HabitatSlot(8, "Snow"), // Ice plains, mountains, frozen rivers, frozen oceans
 			new HabitatSlot(9, "Mushroom"),
 			new HabitatSlot(10, "Nether"),
-			new HabitatSlot(11, "End") };
+			new HabitatSlot(11, "End")};
 	private final Map<BiomeDictionary.Type, HabitatSlot> biomeToHabitat = new HashMap<BiomeDictionary.Type, HabitatSlot>();
 
 	private int startX;
@@ -166,12 +165,14 @@ public class GuiHabitatLocator extends GuiForestry<TileForestry> {
 
 		for (BiomeDictionary.Type biomeType : activeBiomeTypes) {
 			HabitatSlot habitatSlot = biomeToHabitat.get(biomeType);
-			if (habitatSlot != null)
+			if (habitatSlot != null) {
 				habitatSlot.isActive = true;
+			}
 		}
 
-		for (HabitatSlot slot : habitatSlots)
+		for (HabitatSlot slot : habitatSlots) {
 			slot.draw(startX, startY);
+		}
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Reset afterwards.
 
 	}

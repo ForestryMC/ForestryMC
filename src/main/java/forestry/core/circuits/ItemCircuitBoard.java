@@ -4,11 +4,20 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.circuits;
+
+import java.util.List;
+import java.util.Locale;
+
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
@@ -16,13 +25,6 @@ import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.core.config.ForestryItem;
 import forestry.core.items.ItemForestryMultiPass;
-import java.util.List;
-import java.util.Locale;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class ItemCircuitBoard extends ItemForestryMultiPass {
 
@@ -51,10 +53,11 @@ public class ItemCircuitBoard extends ItemForestryMultiPass {
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int pass) {
 		EnumCircuitBoardType type = EnumCircuitBoardType.values()[itemstack.getItemDamage()];
-		if (pass == 0)
+		if (pass == 0) {
 			return type.primaryColor;
-		else
+		} else {
 			return type.secondaryColor;
+		}
 	}
 
 	@Override
@@ -67,8 +70,9 @@ public class ItemCircuitBoard extends ItemForestryMultiPass {
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
 		ICircuitBoard circuitboard = ChipsetManager.circuitRegistry.getCircuitboard(itemstack);
-		if (circuitboard != null)
+		if (circuitboard != null) {
 			circuitboard.addTooltip(list);
+		}
 	}
 
 	public static ItemStack createCircuitboard(EnumCircuitBoardType type, ICircuitLayout layout, ICircuit[] circuits) {

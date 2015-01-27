@@ -4,11 +4,13 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.genetics;
+
+import net.minecraft.util.AxisAlignedBB;
 
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IBeeGenome;
@@ -19,7 +21,6 @@ import forestry.core.genetics.Allele;
 import forestry.core.genetics.EffectData;
 import forestry.core.vect.Vect;
 import forestry.plugins.PluginApiculture;
-import net.minecraft.util.AxisAlignedBB;
 
 public abstract class AlleleEffectThrottled extends Allele implements IAlleleBeeEffect {
 
@@ -46,23 +47,26 @@ public abstract class AlleleEffectThrottled extends Allele implements IAlleleBee
 
 	@Override
 	public IEffectData validateStorage(IEffectData storedData) {
-		if (storedData instanceof EffectData)
+		if (storedData instanceof EffectData) {
 			return storedData;
+		}
 
 		return new EffectData(1, 0);
 	}
 
 	public boolean isHalted(IEffectData storedData, IBeeHousing housing) {
 
-		if (requiresWorkingQueen && housing.getErrorState() != EnumErrorCode.OK)
+		if (requiresWorkingQueen && housing.getErrorState() != EnumErrorCode.OK) {
 			return true;
+		}
 
 		int throt = storedData.getInteger(0);
 		throt++;
 		storedData.setInteger(0, throt);
 
-		if (throt < getThrottle())
+		if (throt < getThrottle()) {
 			return true;
+		}
 
 		// Reset since we are done throttling.
 		storedData.setInteger(0, 0);
@@ -85,12 +89,15 @@ public abstract class AlleleEffectThrottled extends Allele implements IAlleleBee
 		area[1] *= housing.getTerritoryModifier(genome, 1f) * 3;
 		area[2] *= housing.getTerritoryModifier(genome, 1f) * 3;
 
-		if (area[0] < 1)
+		if (area[0] < 1) {
 			area[0] = 1;
-		if (area[1] < 1)
+		}
+		if (area[1] < 1) {
 			area[1] = 1;
-		if (area[2] < 1)
+		}
+		if (area[2] < 1) {
 			area[2] = 1;
+		}
 
 		return area;
 	}

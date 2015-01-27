@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -47,29 +47,34 @@ public class ItemTreealyzer extends ItemInventoried {
 
 			// Analyzed slot occupied, abort
 			if (inventoryStacks[SLOT_ANALYZE_1] != null || inventoryStacks[SLOT_ANALYZE_2] != null || inventoryStacks[SLOT_ANALYZE_3] != null
-					|| inventoryStacks[SLOT_ANALYZE_4] != null || inventoryStacks[SLOT_ANALYZE_5] != null)
+					|| inventoryStacks[SLOT_ANALYZE_4] != null || inventoryStacks[SLOT_ANALYZE_5] != null) {
 				return;
+			}
 
 			// Source slot to analyze empty
-			if (getStackInSlot(SLOT_SPECIMEN) == null)
+			if (getStackInSlot(SLOT_SPECIMEN) == null) {
 				return;
+			}
 
 			if (!PluginArboriculture.treeInterface.isMember(getStackInSlot(SLOT_SPECIMEN))) {
 				ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(getStackInSlot(SLOT_SPECIMEN));
-				if (ersatz != null)
+				if (ersatz != null) {
 					setInventorySlotContents(SLOT_SPECIMEN, ersatz);
+				}
 			}
 			ITree tree = PluginArboriculture.treeInterface.getMember(getStackInSlot(SLOT_SPECIMEN));
 			// No tree, abort
-			if (tree == null)
+			if (tree == null) {
 				return;
+			}
 
 			// Analyze if necessary
 			if (!tree.isAnalyzed()) {
 
 				// Requires energy
-				if (!isEnergy(getStackInSlot(SLOT_ENERGY)))
+				if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
 					return;
+				}
 
 				tree.analyze();
 				if (player != null) {
@@ -114,8 +119,9 @@ public class ItemTreealyzer extends ItemInventoried {
 
 		@Override
 		public EnumErrorCode getErrorState() {
-			if (PluginArboriculture.treeInterface.isMember(inventoryStacks[SLOT_SPECIMEN]) && !isEnergy(getStackInSlot(SLOT_ENERGY)))
+			if (PluginArboriculture.treeInterface.isMember(inventoryStacks[SLOT_SPECIMEN]) && !isEnergy(getStackInSlot(SLOT_ENERGY))) {
 				return EnumErrorCode.NOHONEY;
+			}
 
 			return EnumErrorCode.OK;
 		}
@@ -129,9 +135,10 @@ public class ItemTreealyzer extends ItemInventoried {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (Proxies.common.isSimulating(world))
+		if (Proxies.common.isSimulating(world)) {
 			entityplayer.openGui(ForestryAPI.instance, GuiId.TreealyzerGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY,
 					(int) entityplayer.posZ);
+		}
 
 		return itemstack;
 	}

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -35,8 +35,9 @@ public class ItemFarmBlock extends ItemBlock implements IStructureBlockItem {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List info, boolean par4) {
-		if (!itemstack.hasTagCompound())
+		if (!itemstack.hasTagCompound()) {
 			return;
+		}
 
 		info.add(EnumFarmBlock.getFromCompound(itemstack.getTagCompound()).getName());
 	}

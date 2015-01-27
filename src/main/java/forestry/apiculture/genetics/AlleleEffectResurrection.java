@@ -4,20 +4,16 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import forestry.api.apiculture.IBeeGenome;
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.genetics.IEffectData;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityItem;
@@ -33,6 +29,12 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+
+import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.genetics.IEffectData;
+import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
 
 public class AlleleEffectResurrection extends AlleleEffectThrottled {
 
@@ -77,30 +79,35 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 
 	@Override
 	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		if (isHalted(storedData, housing))
+		if (isHalted(storedData, housing)) {
 			return storedData;
+		}
 
 		AxisAlignedBB bounding = getBounding(genome, housing, 1.0f);
 		@SuppressWarnings("rawtypes")
 		List list = housing.getWorld().getEntitiesWithinAABB(EntityItem.class, bounding);
 
-		if (list.size() > 0)
+		if (list.size() > 0) {
 			Collections.shuffle(resurrectables);
+		}
 
 		for (Object obj : list) {
 			EntityItem item = (EntityItem) obj;
-			if (item.isDead)
+			if (item.isDead) {
 				continue;
+			}
 
 			ItemStack contained = item.getEntityItem();
-			for (Resurrectable entry : resurrectables)
+			for (Resurrectable entry : resurrectables) {
 				if (StackUtils.isIdenticalItem(entry.res, contained)) {
 					Utils.spawnEntity(housing.getWorld(), entry.risen, item.posX, item.posY, item.posZ);
 					contained.stackSize--;
-					if (contained.stackSize <= 0)
+					if (contained.stackSize <= 0) {
 						item.setDead();
+					}
 					break;
 				}
+			}
 		}
 
 		return storedData;

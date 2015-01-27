@@ -4,24 +4,26 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.render;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.arboriculture.gadgets.BlockSapling;
-import forestry.arboriculture.gadgets.TileSapling;
-import forestry.plugins.PluginArboriculture;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+
+import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.IAlleleTreeSpecies;
+import forestry.arboriculture.gadgets.BlockSapling;
+import forestry.arboriculture.gadgets.TileSapling;
+import forestry.plugins.PluginArboriculture;
 
 public class SaplingRenderHandler implements ISimpleBlockRenderingHandler {
 
@@ -34,13 +36,15 @@ public class SaplingRenderHandler implements ISimpleBlockRenderingHandler {
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 
-		if (modelId != this.getRenderId())
+		if (modelId != this.getRenderId()) {
 			return false;
+		}
 
 		TileSapling tile = BlockSapling.getSaplingTile(world, x, y, z);
 
-		if (tile == null || tile.getTree() == null)
+		if (tile == null || tile.getTree() == null) {
 			return true;
+		}
 
 		IAlleleTreeSpecies species = tile.getTree().getGenome().getPrimary();
 

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -24,9 +24,11 @@ public class ContainerSqueezer extends ContainerLiquidTanks {
 		super(tile);
 
 		// Resource inventory
-		for (int l = 0; l < 3; l++)
-			for (int k = 0; k < 3; k++)
+		for (int l = 0; l < 3; l++) {
+			for (int k = 0; k < 3; k++) {
 				addSlotToContainer(new SlotFiltered(tile, k + l * 3, 19 + k * 18, 18 + l * 18));
+			}
+		}
 
 		// Remnants slot
 		this.addSlotToContainer(new SlotOutput(tile, MachineSqueezer.SLOT_REMNANT, 123, 19));
@@ -37,12 +39,15 @@ public class ContainerSqueezer extends ContainerLiquidTanks {
 		this.addSlotToContainer(new SlotOutput(tile, MachineSqueezer.SLOT_CAN_OUTPUT, 140, 55));
 
 		// Player inventory
-		for (int i1 = 0; i1 < 3; i1++)
-			for (int l1 = 0; l1 < 9; l1++)
+		for (int i1 = 0; i1 < 3; i1++) {
+			for (int l1 = 0; l1 < 9; l1++) {
 				addSlotToContainer(new Slot(player, l1 + i1 * 9 + 9, 8 + l1 * 18, 84 + i1 * 18));
+			}
+		}
 		// Player hotbar
-		for (int j1 = 0; j1 < 9; j1++)
+		for (int j1 = 0; j1 < 9; j1++) {
 			addSlotToContainer(new Slot(player, j1, 8 + j1 * 18, 142));
+		}
 	}
 
 }

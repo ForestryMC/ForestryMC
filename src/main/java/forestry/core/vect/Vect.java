@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -23,8 +23,9 @@ public class Vect implements IVect {
 	public final int z;
 
 	public Vect(int[] dim) {
-		if (dim.length != 3)
+		if (dim.length != 3) {
 			throw new RuntimeException("Cannot instantiate a vector with less or more than 3 points.");
+		}
 
 		this.x = dim[0];
 		this.y = dim[1];
@@ -96,10 +97,12 @@ public class Vect implements IVect {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (!(obj instanceof Vect))
+		}
+		if (!(obj instanceof Vect)) {
 			return false;
+		}
 		Vect other = (Vect) obj;
 		return (x == other.x) && (y == other.y) && (z == other.z);
 	}

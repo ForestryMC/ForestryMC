@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -47,7 +47,7 @@ public class TextureManager implements ITextureManager {
 	}
 
 	public void initDefaultIcons(IIconRegister register) {
-		String[] defaultIconNames = new String[] { "habitats/desert", "habitats/end", "habitats/forest", "habitats/hills", "habitats/jungle", "habitats/mushroom",
+		String[] defaultIconNames = new String[]{"habitats/desert", "habitats/end", "habitats/forest", "habitats/hills", "habitats/jungle", "habitats/mushroom",
 				"habitats/nether", "habitats/ocean", "habitats/plains", "habitats/snow", "habitats/swamp", "habitats/taiga", "misc/access.private",
 				"misc/access.viewable", "misc/access.shared", "misc/energy", "misc/hint",
 				"analyzer/anything", "analyzer/bee", "analyzer/cave", "analyzer/closed", "analyzer/drone", "analyzer/flyer",
@@ -55,9 +55,10 @@ public class TextureManager implements ITextureManager {
 				"analyzer/pure_flyer", "analyzer/pure_nocturnal", "analyzer/queen",
 				"particles/ember", "particles/flame", "particles/poison", "particles/swarm_bee", "errors/errored",
 				"slots/blocked", "slots/blocked_2", "slots/liquid", "slots/container", "slots/locked",
-				"mail/carrier.player", "mail/carrier.trader" };
-		for (String str : defaultIconNames)
+				"mail/carrier.player", "mail/carrier.trader"};
+		for (String str : defaultIconNames) {
 			defaultIcons.put(str, registerTex(register, str));
+		}
 	}
 
 	public IIcon getDefault(String ident) {
@@ -84,15 +85,18 @@ public class TextureManager implements ITextureManager {
 
 	@Override
 	public IIcon getIcon(short texUID) {
-		if (texUID < 0)
+		if (texUID < 0) {
 			return null;
-		if (texUID < textures.length)
+		}
+		if (texUID < textures.length) {
 			return textures[texUID];
+		}
 
 		for (IIconProvider provider : iconProvider) {
 			IIcon retr = provider.getIcon(texUID);
-			if (retr != null)
+			if (retr != null) {
 				return retr;
+			}
 		}
 
 		return null;

@@ -4,28 +4,12 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.core.IToolScoop;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IIndividual;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IAlleleButterflySpecies;
-import forestry.api.lepidopterology.IButterfly;
-import forestry.api.lepidopterology.IEntityButterfly;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.StackUtils;
-import forestry.lepidopterology.genetics.Butterfly;
-import forestry.lepidopterology.render.ButterflyItemRenderer;
-import forestry.plugins.PluginLepidopterology;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFlower;
@@ -45,7 +29,26 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+
 import net.minecraftforge.common.IPlantable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.core.IToolScoop;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IIndividual;
+import forestry.api.lepidopterology.EnumFlutterType;
+import forestry.api.lepidopterology.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.IEntityButterfly;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.StackUtils;
+import forestry.lepidopterology.genetics.Butterfly;
+import forestry.lepidopterology.render.ButterflyItemRenderer;
+import forestry.plugins.PluginLepidopterology;
 
 public class EntityButterfly extends EntityCreature implements IEntityButterfly {
 
@@ -68,8 +71,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 				float flap = (float) (flapping % 1000) / 1000;   // 0 to 1
 
 				return ButterflyItemRenderer.getIrregularWingYaw(flapping, flap);
-			} else
+			} else {
 				return entity.ticksExisted + partialTicktime;
+			}
 		}
 	}
 
@@ -153,12 +157,14 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	public void readEntityFromNBT(NBTTagCompound nbttagcompound) {
 		super.readEntityFromNBT(nbttagcompound);
 
-		if (nbttagcompound.hasKey("BTFLY"))
+		if (nbttagcompound.hasKey("BTFLY")) {
 			contained = new Butterfly((NBTTagCompound) nbttagcompound.getTag("BTFLY"));
+		}
 		setIndividual(contained);
 
-		if (nbttagcompound.hasKey("PLN"))
+		if (nbttagcompound.hasKey("PLN")) {
 			pollen = AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees").getMember((NBTTagCompound) nbttagcompound.getTag("PLN"));
+		}
 
 		state = EnumButterflyState.VALUES[nbttagcompound.getByte("STATE")];
 		exhaustion = nbttagcompound.getInteger("EXH");
@@ -194,33 +200,37 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	public float getBlockPathWeight(int x, int y, int z) {
 		float weight = 0.0f;
 
-		if (!getButterfly().isAcceptedEnvironment(worldObj, x, y, z))
+		if (!getButterfly().isAcceptedEnvironment(worldObj, x, y, z)) {
 			weight -= 15.0f;
+		}
 
-		if (!worldObj.getEntitiesWithinAABB(EntityButterfly.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1)).isEmpty())
+		if (!worldObj.getEntitiesWithinAABB(EntityButterfly.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1)).isEmpty()) {
 			weight -= 1.0f;
+		}
 
 		int depth = getFluidDepth(x, z);
-		if (depth > 0)
+		if (depth > 0) {
 			weight -= 0.1f * depth;
-		else {
+		} else {
 			Block block = worldObj.getBlock(x, y, z);
-			if (block instanceof BlockFlower)
+			if (block instanceof BlockFlower) {
 				weight += 2.0f;
-			else if (block instanceof IPlantable)
+			} else if (block instanceof IPlantable) {
 				weight += 1.5f;
-			else if (block instanceof IGrowable)
+			} else if (block instanceof IGrowable) {
 				weight += 1.0f;
-			else if (block.getMaterial() == Material.plants)
+			} else if (block.getMaterial() == Material.plants) {
 				weight += 1.0f;
+			}
 
 			block = worldObj.getBlock(x, y - 1, z);
-			if (block.isLeaves(worldObj, x, y - 1, z))
+			if (block.isLeaves(worldObj, x, y - 1, z)) {
 				weight += 2.5f;
-			else if (block instanceof BlockFence)
+			} else if (block instanceof BlockFence) {
 				weight += 1.0f;
-			else if (block instanceof BlockWall)
+			} else if (block instanceof BlockWall) {
 				weight += 1.0f;
+			}
 		}
 
 		weight += worldObj.getLightBrightness(x, y, z);
@@ -234,10 +244,11 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		int depth = 0;
 		for (int y = chunk.getTopFilledSegment() + 15; y > 0; --y) {
 			Block block = chunk.getBlock(xx, y, zz);
-			if (block.getMaterial().isLiquid())
+			if (block.getMaterial().isLiquid()) {
 				depth++;
-			else if (!block.isAir(worldObj, x, y, z))
+			} else if (!block.isAir(worldObj, x, y, z)) {
 				break;
+			}
 		}
 
 		return depth;
@@ -293,10 +304,11 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	}
 
 	public EntityButterfly setIndividual(IButterfly butterfly) {
-		if (butterfly != null)
+		if (butterfly != null) {
 			contained = butterfly;
-		else
+		} else {
 			contained = PluginLepidopterology.butterflyInterface.templateAsIndividual(PluginLepidopterology.butterflyInterface.getDefaultTemplate());
+		}
 
 		isImmuneToFire = contained.getGenome().getFireResist();
 		setSpecies(contained.getGenome().getPrimary());
@@ -319,8 +331,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 	@Override
 	public IEntityLivingData onSpawnWithEgg(IEntityLivingData data) {
-		if (Proxies.common.isSimulating(worldObj))
+		if (Proxies.common.isSimulating(worldObj)) {
 			setIndividual(contained);
+		}
 		return data;
 	}
 
@@ -333,8 +346,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	protected void entityInit() {
 		super.entityInit();
 
-		if (state == null)
+		if (state == null) {
 			state = DEFAULT_STATE;
+		}
 
 		dataWatcher.addObject(DATAWATCHER_ID_SPECIES, "");
 		dataWatcher.addObject(DATAWATCHER_ID_SCALE, 75);
@@ -352,8 +366,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getTexture() {
-		if (textureResource == null || lastTextureUpdate != lastUpdate)
+		if (textureResource == null || lastTextureUpdate != lastUpdate) {
 			textureResource = new ResourceLocation(mothTexture);
+		}
 
 		return textureResource;
 	}
@@ -380,19 +395,23 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	/* INTERACTION */
 	@Override
 	public boolean interact(EntityPlayer player) {
-		if (isDead)
+		if (isDead) {
 			return false;
-		if (player.getHeldItem() == null)
+		}
+		if (player.getHeldItem() == null) {
 			return false;
-		if (!(player.getHeldItem().getItem() instanceof IToolScoop))
+		}
+		if (!(player.getHeldItem().getItem() instanceof IToolScoop)) {
 			return false;
+		}
 
 		if (Proxies.common.isSimulating(worldObj)) {
 			contained.getGenome().getPrimary().getRoot().getBreedingTracker(worldObj, player.getGameProfile()).registerCatch(contained);
 			StackUtils.dropItemStackAsEntity(PluginLepidopterology.butterflyInterface.getMemberStack(contained.copy(), EnumFlutterType.BUTTERFLY.ordinal()), worldObj, posX, posY, posZ);
 			setDead();
-		} else
+		} else {
 			player.swingItem();
+		}
 		return true;
 	}
 
@@ -404,8 +423,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		}
 
 		// Drop pollen if any
-		if (getPollen() != null)
+		if (getPollen() != null) {
 			StackUtils.dropItemStackAsEntity(AlleleManager.alleleRegistry.getSpeciesRoot(getPollen().getClass()).getMemberStack(getPollen(), EnumGermlingType.POLLEN.ordinal()), worldObj, posX, posY, posZ);
+		}
 	}
 
 	/* UPDATING */
@@ -420,8 +440,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 				String uid = dataWatcher.getWatchableObjectString(DATAWATCHER_ID_SPECIES);
 				if (species == null || !species.getUID().equals(uid)) {
 					IAllele allele = AlleleManager.alleleRegistry.getAllele(uid);
-					if (allele instanceof IAlleleButterflySpecies)
+					if (allele instanceof IAlleleButterflySpecies) {
 						setSpecies((IAlleleButterflySpecies) allele);
+					}
 				}
 			}
 			state = EnumButterflyState.VALUES[dataWatcher.getWatchableObjectByte(DATAWATCHER_ID_STATE)];
@@ -430,14 +451,17 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		motionY *= 0.6000000238418579d;
 
 		// Make sure we die if the butterfly hasn't rested in a long, long time.
-		if (exhaustion > EXHAUSTION_CONSUMPTION && getRNG().nextInt(20) == 0)
+		if (exhaustion > EXHAUSTION_CONSUMPTION && getRNG().nextInt(20) == 0) {
 			attackEntityFrom(DamageSource.generic, 1);
+		}
 
 		// Reduce cooldowns
-		if (cooldownEgg > 0)
+		if (cooldownEgg > 0) {
 			cooldownEgg--;
-		if (cooldownPollination > 0)
+		}
+		if (cooldownPollination > 0) {
 			cooldownPollination--;
+		}
 	}
 
 	@Override
@@ -484,8 +508,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	@Override
 	public float getSwingProgress(float partialTicktime) {
 		float flap = swingProgress - prevSwingProgress;
-		if (flap < 0.0F)
+		if (flap < 0.0F) {
 			++flap;
+		}
 
 		return prevSwingProgress + flap * partialTicktime;
 

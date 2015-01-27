@@ -4,22 +4,24 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.render;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import forestry.arboriculture.gadgets.BlockFruitPod;
-import forestry.arboriculture.gadgets.TileFruitPod;
-import forestry.plugins.PluginArboriculture;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+
+import forestry.arboriculture.gadgets.BlockFruitPod;
+import forestry.arboriculture.gadgets.TileFruitPod;
+import forestry.plugins.PluginArboriculture;
 
 public class FruitPodRenderingHandler implements ISimpleBlockRenderingHandler {
 
@@ -34,8 +36,9 @@ public class FruitPodRenderingHandler implements ISimpleBlockRenderingHandler {
 
 		BlockFruitPod blockPod = (BlockFruitPod) block;
 		TileFruitPod pod = BlockFruitPod.getPodTile(world, x, y, z);
-		if (pod != null)
+		if (pod != null) {
 			maturity = pod.getMaturity();
+		}
 
 		Tessellator tessellator = Tessellator.instance;
 		tessellator.setBrightness(blockPod.getMixedBrightnessForBlock(world, x, y, z));
@@ -58,21 +61,21 @@ public class FruitPodRenderingHandler implements ISimpleBlockRenderingHandler {
 		double d9 = 0.0D;
 
 		switch (notchDirection) {
-		case 0:
-			d8 = 8.0D - k1 / 2;
-			d9 = 15.0D - k1;
-			break;
-		case 1:
-			d8 = 1.0D;
-			d9 = 8.0D - k1 / 2;
-			break;
-		case 2:
-			d8 = 8.0D - k1 / 2;
-			d9 = 1.0D;
-			break;
-		case 3:
-			d8 = 15.0D - k1;
-			d9 = 8.0D - k1 / 2;
+			case 0:
+				d8 = 8.0D - k1 / 2;
+				d9 = 15.0D - k1;
+				break;
+			case 1:
+				d8 = 1.0D;
+				d9 = 8.0D - k1 / 2;
+				break;
+			case 2:
+				d8 = 8.0D - k1 / 2;
+				d9 = 1.0D;
+				break;
+			case 3:
+				d8 = 15.0D - k1;
+				d9 = 8.0D - k1 / 2;
 		}
 
 		double d10 = x + d8 / 16.0D;
@@ -99,8 +102,9 @@ public class FruitPodRenderingHandler implements ISimpleBlockRenderingHandler {
 		tessellator.addVertexWithUV(d10, d13, d15, d4, d6);
 		int i2 = k1;
 
-		if (maturity >= 2)
+		if (maturity >= 2) {
 			i2 = k1 - 1;
+		}
 
 		d4 = (double) podIcon.getMinU();
 		d5 = (double) podIcon.getInterpolatedU((double) i2);
@@ -124,27 +128,27 @@ public class FruitPodRenderingHandler implements ISimpleBlockRenderingHandler {
 		double d16;
 
 		switch (notchDirection) {
-		case 0:
-			d8 = 8.0D;
-			d9 = 12.0D;
-			d16 = d4;
-			d4 = d5;
-			d5 = d16;
-			break;
-		case 1:
-			d8 = 0.0D;
-			d9 = 8.0D;
-			break;
-		case 2:
-			d8 = 8.0D;
-			d9 = 0.0D;
-			break;
-		case 3:
-			d8 = 12.0D;
-			d9 = 8.0D;
-			d16 = d4;
-			d4 = d5;
-			d5 = d16;
+			case 0:
+				d8 = 8.0D;
+				d9 = 12.0D;
+				d16 = d4;
+				d4 = d5;
+				d5 = d16;
+				break;
+			case 1:
+				d8 = 0.0D;
+				d9 = 8.0D;
+				break;
+			case 2:
+				d8 = 8.0D;
+				d9 = 0.0D;
+				break;
+			case 3:
+				d8 = 12.0D;
+				d9 = 8.0D;
+				d16 = d4;
+				d4 = d5;
+				d5 = d16;
 		}
 
 		d10 = x + d8 / 16.0D;

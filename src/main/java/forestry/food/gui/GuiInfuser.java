@@ -4,19 +4,20 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.food.gui;
+
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IInventory;
 
 import forestry.api.food.BeverageManager;
 import forestry.core.config.Defaults;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.GuiForestry;
 import forestry.food.items.ItemInfuser.InfuserInventory;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
 
 public class GuiInfuser extends GuiForestry<TileForestry> {
 
@@ -39,8 +40,9 @@ public class GuiInfuser extends GuiForestry<TileForestry> {
 
 		for (int l = 2; l < inventory.getSizeInventory(); l++) {
 			String description = BeverageManager.ingredientManager.getDescription(inventory.getStackInSlot(l));
-			if (description == null)
+			if (description == null) {
 				description = "(No effect)";
+			}
 
 			int row = (l - 2) * 20;
 			fontRendererObj.drawString(description, startX + 32, startY + 16 + row, fontColor.get("gui.screen"));

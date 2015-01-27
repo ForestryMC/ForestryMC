@@ -4,25 +4,28 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.plugins;
 
+import java.util.EnumSet;
+import java.util.Random;
+
+import net.minecraft.command.ICommand;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkProvider;
+
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.network.IGuiHandler;
+
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPacketHandler;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.IResupplyHandler;
 import forestry.core.interfaces.ISaveEventHandler;
-import java.util.EnumSet;
-import java.util.Random;
-import net.minecraft.command.ICommand;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
 
 public abstract class ForestryPlugin {
 
@@ -107,8 +110,9 @@ public abstract class ForestryPlugin {
 	@Override
 	public String toString() {
 		Plugin info = getClass().getAnnotation(Plugin.class);
-		if (info == null)
+		if (info == null) {
 			return getClass().getSimpleName();
+		}
 		return info.name() + " Plugin";
 	}
 

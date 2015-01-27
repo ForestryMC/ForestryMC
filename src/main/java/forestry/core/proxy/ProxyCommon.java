@@ -4,35 +4,11 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.proxy;
-
-import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.API;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.versioning.ArtifactVersion;
-import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
-import cpw.mods.fml.common.versioning.VersionParser;
-import cpw.mods.fml.common.versioning.VersionRange;
-import forestry.Forestry;
-import forestry.core.TickHandlerCoreServer;
-import forestry.core.WorldGenerator;
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
-import forestry.core.network.PacketCoordinates;
-import forestry.core.network.PacketFXSignal;
-import forestry.core.network.PacketIds;
-import forestry.core.render.SpriteSheet;
-import forestry.core.utils.StringUtil;
-import forestry.plugins.PluginManager;
 
 import java.io.File;
 import java.util.EnumSet;
@@ -53,9 +29,36 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.API;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.versioning.ArtifactVersion;
+import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
+import cpw.mods.fml.common.versioning.VersionParser;
+import cpw.mods.fml.common.versioning.VersionRange;
+
+import forestry.Forestry;
+import forestry.core.TickHandlerCoreServer;
+import forestry.core.WorldGenerator;
+import forestry.core.config.Defaults;
+import forestry.core.config.ForestryBlock;
+import forestry.core.config.ForestryItem;
+import forestry.core.network.PacketCoordinates;
+import forestry.core.network.PacketFXSignal;
+import forestry.core.network.PacketIds;
+import forestry.core.render.SpriteSheet;
+import forestry.core.utils.StringUtil;
+import forestry.plugins.PluginManager;
 
 public class ProxyCommon {
 
@@ -68,8 +71,9 @@ public class ProxyCommon {
 	}
 
 	public void registerBlock(Block block, Class<? extends ItemBlock> itemClass) {
-		if (!EnumSet.of(PluginManager.Stage.PRE_INIT).contains(PluginManager.getStage()))
+		if (!EnumSet.of(PluginManager.Stage.PRE_INIT).contains(PluginManager.getStage())) {
 			throw new RuntimeException("Tried to register Block outside of Pre-Init");
+		}
 		GameRegistry.registerBlock(block, itemClass, StringUtil.cleanBlockName(block));
 	}
 
@@ -112,11 +116,13 @@ public class ProxyCommon {
 	}
 
 	private void cleanRecipe(Object... obj) {
-		for (int i = 0; i < obj.length; i++)
-			if (obj[i] instanceof ForestryItem)
+		for (int i = 0; i < obj.length; i++) {
+			if (obj[i] instanceof ForestryItem) {
 				obj[i] = ((ForestryItem) obj[i]).item();
-			else if (obj[i] instanceof ForestryBlock)
+			} else if (obj[i] instanceof ForestryBlock) {
 				obj[i] = ((ForestryBlock) obj[i]).block();
+			}
+		}
 	}
 
 	public void addSmelting(ItemStack res, ItemStack prod) {
@@ -124,10 +130,12 @@ public class ProxyCommon {
 	}
 
 	public void addSmelting(ItemStack res, ItemStack prod, float xp) {
-		if (res == null || res.getItem() == null)
+		if (res == null || res.getItem() == null) {
 			throw new IllegalArgumentException("Tried to register smelting recipe with null input");
-		if (prod == null || prod.getItem() == null)
+		}
+		if (prod == null || prod.getItem() == null) {
 			throw new IllegalArgumentException("Tried to register smelting recipe with null output");
+		}
 		GameRegistry.addSmelting(res, prod, xp);
 	}
 
@@ -136,8 +144,9 @@ public class ProxyCommon {
 	}
 
 	public void setHabitatLocatorCoordinates(Entity player, ChunkCoordinates coordinates) {
-		if (coordinates != null)
+		if (coordinates != null) {
 			Forestry.packetHandler.sendPacket(new PacketCoordinates(PacketIds.HABITAT_BIOME_POINTER, coordinates).getPacket(), (EntityPlayerMP) player);
+		}
 	}
 
 	public void removePotionEffect(EntityPlayer player, Potion effect) {
@@ -229,8 +238,9 @@ public class ProxyCommon {
 
 	public void sendFXSignal(PacketFXSignal.VisualFXType visualFX, PacketFXSignal.SoundFXType soundFX, World world, int xCoord, int yCoord, int zCoord,
 			Block block, int i) {
-		if (Proxies.common.isSimulating(world))
+		if (Proxies.common.isSimulating(world)) {
 			Proxies.net.sendNetworkPacket(new PacketFXSignal(visualFX, soundFX, xCoord, yCoord, zCoord, block, i), xCoord, yCoord, zCoord);
+		}
 	}
 
 	public IResourceManager getSelectedTexturePack(Minecraft minecraft) {
@@ -259,8 +269,9 @@ public class ProxyCommon {
 	}
 
 	public boolean isModLoaded(String modname, String versionRangeString) {
-		if (!isModLoaded(modname))
+		if (!isModLoaded(modname)) {
 			return false;
+		}
 
 		if (versionRangeString != null) {
 			ModContainer mod = Loader.instance().getIndexedModList().get(modname);
@@ -269,8 +280,9 @@ public class ProxyCommon {
 			VersionRange versionRange = VersionParser.parseRange(versionRangeString);
 			DefaultArtifactVersion requiredVersion = new DefaultArtifactVersion(modname, versionRange);
 
-			if (!requiredVersion.containsVersion(modVersion))
+			if (!requiredVersion.containsVersion(modVersion)) {
 				return false;
+			}
 		}
 
 		return true;
@@ -282,25 +294,29 @@ public class ProxyCommon {
 
 	public boolean isAPILoaded(String apiName, String versionRangeString) {
 		Package apiPackage = Package.getPackage(apiName);
-		if (apiPackage == null)
+		if (apiPackage == null) {
 			return false;
+		}
 
 		API apiAnnotation = apiPackage.getAnnotation(API.class);
-		if (apiAnnotation == null)
+		if (apiAnnotation == null) {
 			return false;
+		}
 
 		if (versionRangeString != null) {
 			String apiVersionString = apiAnnotation.apiVersion();
-			if (apiVersionString == null)
+			if (apiVersionString == null) {
 				return false;
+			}
 
 			VersionRange versionRange = VersionParser.parseRange(versionRangeString);
 
 			DefaultArtifactVersion givenVersion = new DefaultArtifactVersion(apiName, apiVersionString);
 			DefaultArtifactVersion requiredVersion = new DefaultArtifactVersion(apiName, versionRange);
 
-			if (!requiredVersion.containsVersion(givenVersion))
+			if (!requiredVersion.containsVersion(givenVersion)) {
 				return false;
+			}
 		}
 
 		return true;
@@ -312,7 +328,7 @@ public class ProxyCommon {
 
 	public Object instantiateIfModLoaded(String modname, String versionRangeString, String className) {
 
-		if (isModLoaded(modname, versionRangeString))
+		if (isModLoaded(modname, versionRangeString)) {
 			try {
 				Class<?> clas = Class.forName(className, true, Loader.instance().getModClassLoader());
 				return clas.newInstance();
@@ -320,8 +336,9 @@ public class ProxyCommon {
 				Proxies.log.severe("Failed to load " + className + " even though mod " + modname + " was available.");
 				return null;
 			}
-		else
+		} else {
 			return null;
+		}
 
 	}
 
@@ -341,16 +358,19 @@ public class ProxyCommon {
 	 * Do not store references to the return value, to prevent worlds staying in memory.
 	 */
 	public EntityPlayer getPlayer(World world, GameProfile profile) {
-		if (world == null)
+		if (world == null) {
 			throw new IllegalArgumentException("World cannot be null");
+		}
 
-		if (profile == null || profile.getName() == null)
-			return FakePlayerFactory.getMinecraft((WorldServer)world);
+		if (profile == null || profile.getName() == null) {
+			return FakePlayerFactory.getMinecraft((WorldServer) world);
+		}
 
 		EntityPlayer player = world.getPlayerEntityByName(profile.getName());
-		if (player != null)
+		if (player != null) {
 			return player;
-		else
-			return FakePlayerFactory.get((WorldServer)world, profile);
+		} else {
+			return FakePlayerFactory.get((WorldServer) world, profile);
+		}
 	}
 }

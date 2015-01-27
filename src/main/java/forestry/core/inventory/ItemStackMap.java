@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import net.minecraft.item.ItemStack;
 
 /**
@@ -24,196 +25,171 @@ import net.minecraft.item.ItemStack;
  * The keys index on the itemID and damage of the ItemStacks,
  * ignoring any other differences (NBT Tags, stackSize, etc...).
  *
+ * @param <V>
  * @author CovertJaguar <http://www.railcraft.info>
  * @see Map
- * @param <V>
  */
-public class ItemStackMap<V> implements Map<ItemStack, V>
-{
+public class ItemStackMap<V> implements Map<ItemStack, V> {
 
-	private class EntryWrapper implements Map.Entry<ItemStack, V>
-	{
+	private class EntryWrapper implements Map.Entry<ItemStack, V> {
 
 		private final Map.Entry<KeyWrapper, V> entry;
 
-		public EntryWrapper(Map.Entry<KeyWrapper, V> e)
-		{
+		public EntryWrapper(Map.Entry<KeyWrapper, V> e) {
 			entry = e;
 		}
 
 		@Override
-		public ItemStack getKey()
-		{
+		public ItemStack getKey() {
 			return entry.getKey().getStack();
 		}
 
 		@Override
-		public V getValue()
-		{
+		public V getValue() {
 			return entry.getValue();
 		}
 
 		@Override
-		public V setValue(V value)
-		{
+		public V setValue(V value) {
 			return entry.setValue(value);
 		}
 
 		@Override
-		public String toString()
-		{
+		public String toString() {
 			return getKey().getItem().getUnlocalizedName() + "=" + getValue().toString();
 		}
 	}
 
-	private static class KeyWrapper
-	{
+	private static class KeyWrapper {
 
 		private final ItemStack stack;
 
-		public KeyWrapper(ItemStack stack)
-		{
+		public KeyWrapper(ItemStack stack) {
 			this.stack = stack.copy();
 		}
 
 		@Override
-		public boolean equals(Object obj)
-		{
-			if(obj == null) {
+		public boolean equals(Object obj) {
+			if (obj == null) {
 				return false;
 			}
-			if(getClass() != obj.getClass()) {
+			if (getClass() != obj.getClass()) {
 				return false;
 			}
-			final KeyWrapper other = (KeyWrapper)obj;
-			if(stack.getItem() != other.stack.getItem()) {
+			final KeyWrapper other = (KeyWrapper) obj;
+			if (stack.getItem() != other.stack.getItem()) {
 				return false;
 			}
-			if(stack.getItemDamage() != other.stack.getItemDamage()) {
+			if (stack.getItemDamage() != other.stack.getItemDamage()) {
 				return false;
 			}
 			return true;
 		}
 
 		@Override
-		public int hashCode()
-		{
+		public int hashCode() {
 			int hash = 5;
 			hash = 23 * hash + stack.getItem().hashCode();
 			hash = 23 * hash + stack.getItemDamage();
 			return hash;
 		}
 
-		public ItemStack getStack()
-		{
+		public ItemStack getStack() {
 			return stack.copy();
 		}
 	}
+
 	private final Map<KeyWrapper, V> map = new HashMap<KeyWrapper, V>();
 
 	@Override
-	public V put(ItemStack stack, V value)
-	{
+	public V put(ItemStack stack, V value) {
 		return map.put(new KeyWrapper(stack), value);
 	}
 
 	@Override
-	public Collection<V> values()
-	{
+	public Collection<V> values() {
 		return map.values();
 	}
 
 	@Override
-	public int size()
-	{
+	public int size() {
 		return map.size();
 	}
 
 	@Override
-	public V remove(Object key)
-	{
-		if(key instanceof ItemStack) {
-			return map.remove(new KeyWrapper((ItemStack)key));
+	public V remove(Object key) {
+		if (key instanceof ItemStack) {
+			return map.remove(new KeyWrapper((ItemStack) key));
 		}
 		return null;
 	}
 
 	@Override
-	public boolean isEmpty()
-	{
+	public boolean isEmpty() {
 		return map.isEmpty();
 	}
 
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		return map.hashCode();
 	}
 
 	@Override
-	public V get(Object key)
-	{
-		if(key instanceof ItemStack) {
-			return map.get(new KeyWrapper((ItemStack)key));
+	public V get(Object key) {
+		if (key instanceof ItemStack) {
+			return map.get(new KeyWrapper((ItemStack) key));
 		}
 		return null;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean equals(Object o)
-	{
-		if(o instanceof ItemStackMap) {
-			return map.equals(((ItemStackMap<V>)o).map);
+	public boolean equals(Object o) {
+		if (o instanceof ItemStackMap) {
+			return map.equals(((ItemStackMap<V>) o).map);
 		}
 		return false;
 	}
 
 	@Override
-	public boolean containsValue(Object value)
-	{
+	public boolean containsValue(Object value) {
 		return map.containsValue(value);
 	}
 
 	@Override
-	public boolean containsKey(Object key)
-	{
-		if(key instanceof ItemStack) {
-			return map.containsKey(new KeyWrapper((ItemStack)key));
+	public boolean containsKey(Object key) {
+		if (key instanceof ItemStack) {
+			return map.containsKey(new KeyWrapper((ItemStack) key));
 		}
 		return false;
 	}
 
 	@Override
-	public void clear()
-	{
+	public void clear() {
 		map.clear();
 	}
 
 	@Override
-	public void putAll(Map<? extends ItemStack, ? extends V> m)
-	{
-		for(Map.Entry<? extends ItemStack, ? extends V> e : m.entrySet()) {
+	public void putAll(Map<? extends ItemStack, ? extends V> m) {
+		for (Map.Entry<? extends ItemStack, ? extends V> e : m.entrySet()) {
 			put(e.getKey(), e.getValue());
 		}
 	}
 
 	@Override
-	public Set<ItemStack> keySet()
-	{
+	public Set<ItemStack> keySet() {
 		Set<ItemStack> keySet = new HashSet<ItemStack>();
-		for(KeyWrapper w : map.keySet()) {
+		for (KeyWrapper w : map.keySet()) {
 			keySet.add(w.getStack());
 		}
 		return keySet;
 	}
 
 	@Override
-	public Set<Map.Entry<ItemStack, V>> entrySet()
-	{
+	public Set<Map.Entry<ItemStack, V>> entrySet() {
 		Set<Map.Entry<ItemStack, V>> entrySet = new HashSet<Map.Entry<ItemStack, V>>();
 
-		for(Map.Entry<KeyWrapper, V> entry : map.entrySet()) {
+		for (Map.Entry<KeyWrapper, V> entry : map.entrySet()) {
 			entrySet.add(new EntryWrapper(entry));
 		}
 		return entrySet;

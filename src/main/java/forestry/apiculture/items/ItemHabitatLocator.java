@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -16,13 +16,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChunkCoordinates;
@@ -30,12 +28,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.BiomeManager;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import forestry.Forestry;
 import forestry.api.apiculture.IBee;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -51,8 +47,6 @@ import forestry.core.interfaces.IHintSource;
 import forestry.core.inventory.ItemInventory;
 import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketCoordinates;
-import forestry.core.network.PacketIds;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 import forestry.core.vect.Vect;
@@ -71,12 +65,13 @@ public class ItemHabitatLocator extends ItemInventoried {
 
 		public HabitatLocatorInventory(ItemStack itemstack) {
 			super(ItemHabitatLocator.class, 3, itemstack);
-			this.habitatLocator = (ItemHabitatLocator)itemstack.getItem();
+			this.habitatLocator = (ItemHabitatLocator) itemstack.getItem();
 		}
 
 		private boolean isEnergy(ItemStack itemstack) {
-			if (itemstack == null || itemstack.stackSize <= 0)
+			if (itemstack == null || itemstack.stackSize <= 0) {
 				return false;
+			}
 
 			return ForestryItem.honeyDrop.isItemEqual(itemstack) || ForestryItem.honeydew.isItemEqual(itemstack);
 		}
@@ -85,8 +80,9 @@ public class ItemHabitatLocator extends ItemInventoried {
 
 			if (getStackInSlot(SLOT_SPECIMEN) != null) {
 				// Requires energy
-				if (!isEnergy(getStackInSlot(SLOT_ENERGY)))
+				if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
 					return;
+				}
 
 				// Decrease energy
 				decrStackSize(SLOT_ENERGY, 1);
@@ -98,8 +94,9 @@ public class ItemHabitatLocator extends ItemInventoried {
 			IBee bee = PluginApiculture.beeInterface.getMember(getStackInSlot(SLOT_ANALYZED));
 
 			// No bee, abort
-			if (bee == null)
+			if (bee == null) {
 				return;
+			}
 
 			biomesToSearch = new HashSet<BiomeGenBase>(bee.getSuitableBiomes());
 			habitatLocator.startBiomeSearch(biomesToSearch);
@@ -129,8 +126,9 @@ public class ItemHabitatLocator extends ItemInventoried {
 
 		@Override
 		public EnumErrorCode getErrorState() {
-			if (PluginApiculture.beeInterface.isMember(inventoryStacks[SLOT_SPECIMEN]) && !isEnergy(getStackInSlot(SLOT_ENERGY)))
+			if (PluginApiculture.beeInterface.isMember(inventoryStacks[SLOT_SPECIMEN]) && !isEnergy(getStackInSlot(SLOT_ENERGY))) {
 				return EnumErrorCode.NOHONEY;
+			}
 
 			return EnumErrorCode.OK;
 		}
@@ -163,8 +161,9 @@ public class ItemHabitatLocator extends ItemInventoried {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 
-		if (Proxies.common.isSimulating(world))
+		if (Proxies.common.isSimulating(world)) {
 			entityplayer.openGui(ForestryAPI.instance, GuiId.HabitatLocatorGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY, (int) entityplayer.posZ);
+		}
 
 		return itemstack;
 	}
@@ -173,14 +172,14 @@ public class ItemHabitatLocator extends ItemInventoried {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerIcons(IIconRegister register) {
-		if(register instanceof TextureMap) {
+		if (register instanceof TextureMap) {
 			TextureAtlasSprite texture = new TextureHabitatLocator();
-			((TextureMap)register).setTextureEntry("forestry:biomefinder", texture);
+			((TextureMap) register).setTextureEntry("forestry:biomefinder", texture);
 			itemIcon = texture;
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
 		BiomeGenBase currentBiome = player.worldObj.getBiomeGenForCoords((int) player.posX, (int) player.posZ);
@@ -208,8 +207,9 @@ public class ItemHabitatLocator extends ItemInventoried {
 	@Override
 	public void onUpdate(ItemStack p_77663_1_, World world, Entity player, int p_77663_4_, boolean p_77663_5_) {
 
-		if (!Proxies.common.isSimulating(world))
+		if (!Proxies.common.isSimulating(world)) {
 			return;
+		}
 
 		if (this.searchCenter == null) {
 			this.searchCenter = new Vect((int) player.posX, (int) player.posY, (int) player.posZ);
@@ -218,8 +218,9 @@ public class ItemHabitatLocator extends ItemInventoried {
 			removeInvalidBiomes(currentBiome, biomesToSearch);
 		}
 
-		if (biomesToSearch.isEmpty())
+		if (biomesToSearch.isEmpty()) {
 			return;
+		}
 
 		// once we've found the biome, slow down to conserve cpu and network data
 		if (biomeFound && world.getTotalWorldTime() % 20 != 0) {
@@ -299,24 +300,29 @@ public class ItemHabitatLocator extends ItemInventoried {
 		BiomeGenBase biome;
 
 		biome = world.getBiomeGenForCoords(pos.x, pos.z);
-		if (!biomesToSearch.contains(biome))
+		if (!biomesToSearch.contains(biome)) {
 			return null;
+		}
 
 		biome = world.getBiomeGenForCoords(pos.x - minBiomeRadius, pos.z);
-		if (!biomesToSearch.contains(biome))
+		if (!biomesToSearch.contains(biome)) {
 			return null;
+		}
 
 		biome = world.getBiomeGenForCoords(pos.x + minBiomeRadius, pos.z);
-		if (!biomesToSearch.contains(biome))
+		if (!biomesToSearch.contains(biome)) {
 			return null;
+		}
 
 		biome = world.getBiomeGenForCoords(pos.x, pos.z - minBiomeRadius);
-		if (!biomesToSearch.contains(biome))
+		if (!biomesToSearch.contains(biome)) {
 			return null;
+		}
 
 		biome = world.getBiomeGenForCoords(pos.x, pos.z + minBiomeRadius);
-		if (!biomesToSearch.contains(biome))
+		if (!biomesToSearch.contains(biome)) {
 			return null;
+		}
 
 		return new ChunkCoordinates(pos.x, pos.y, pos.z);
 	}
@@ -324,6 +330,7 @@ public class ItemHabitatLocator extends ItemInventoried {
 	private static final Set<BiomeGenBase> waterBiomes = new HashSet<BiomeGenBase>();
 	private static final Set<BiomeGenBase> netherBiomes = new HashSet<BiomeGenBase>();
 	private static final Set<BiomeGenBase> endBiomes = new HashSet<BiomeGenBase>();
+
 	static {
 		Collections.addAll(waterBiomes, BiomeDictionary.getBiomesForType(BiomeDictionary.Type.BEACH));
 		Collections.addAll(waterBiomes, BiomeDictionary.getBiomesForType(BiomeDictionary.Type.OCEAN));

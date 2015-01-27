@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -46,20 +46,24 @@ public class AIAvoidPlayers extends EntityAIBase {
 
 		player = mob.worldObj.getClosestPlayerToEntity(mob, minDistance);
 
-		if (player == null)
+		if (player == null) {
 			return false;
+		}
 
-		if (!mob.getEntitySenses().canSee(player))
+		if (!mob.getEntitySenses().canSee(player)) {
 			return false;
+		}
 
 		Vec3 randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(mob, 16, 7,
 				Vec3.createVectorHelper(player.posX, player.posY, player.posZ));
 
-		if (randomTarget == null)
+		if (randomTarget == null) {
 			return false;
+		}
 
-		if (player.getDistanceSq(randomTarget.xCoord, randomTarget.yCoord, randomTarget.zCoord) < player.getDistanceSqToEntity(mob))
+		if (player.getDistanceSq(randomTarget.xCoord, randomTarget.yCoord, randomTarget.zCoord) < player.getDistanceSqToEntity(mob)) {
 			return false;
+		}
 
 		pathing = pathNavigator.getPathToXYZ(randomTarget.xCoord, randomTarget.yCoord, randomTarget.zCoord);
 		return pathing != null && pathing.isDestinationSame(randomTarget);
@@ -82,9 +86,10 @@ public class AIAvoidPlayers extends EntityAIBase {
 
 	@Override
 	public void updateTask() {
-		if (mob.getDistanceSqToEntity(player) < 49.0D)
+		if (mob.getDistanceSqToEntity(player) < 49.0D) {
 			mob.getNavigator().setSpeed(nearSpeed);
-		else
+		} else {
 			mob.getNavigator().setSpeed(farSpeed);
+		}
 	}
 }

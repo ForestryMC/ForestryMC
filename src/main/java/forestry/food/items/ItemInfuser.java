@@ -4,11 +4,18 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.food.items;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.food.BeverageManager;
@@ -23,16 +30,11 @@ import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.food.BeverageEffect;
 import forestry.plugins.PluginManager;
-import java.util.ArrayList;
-import java.util.Arrays;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 public class ItemInfuser extends ItemForestry {
 
 	// / RECIPE MANAGMENT
+
 	/**
 	 * Mixture describes the itemstacks required to achieve a certain effect.
 	 */
@@ -43,7 +45,7 @@ public class ItemInfuser extends ItemForestry {
 		private final IBeverageEffect effect;
 
 		public Mixture(int meta, ItemStack ingredient, IBeverageEffect effect) {
-			this(meta, new ItemStack[] { ingredient }, effect);
+			this(meta, new ItemStack[]{ingredient}, effect);
 		}
 
 		public Mixture(int meta, ItemStack ingredients[], IBeverageEffect effect) {
@@ -58,10 +60,11 @@ public class ItemInfuser extends ItemForestry {
 
 		public boolean isIngredient(ItemStack itemstack) {
 			for (ItemStack ingredient : ingredients) {
-				if (ingredient.getItemDamage() < 0 && ingredient.getItem() == itemstack.getItem())
+				if (ingredient.getItemDamage() < 0 && ingredient.getItem() == itemstack.getItem()) {
 					return true;
-				else if (ingredient.getItemDamage() >= 0 && ingredient.isItemEqual(itemstack))
+				} else if (ingredient.getItemDamage() >= 0 && ingredient.isItemEqual(itemstack)) {
 					return true;
+				}
 			}
 
 			return false;
@@ -70,16 +73,18 @@ public class ItemInfuser extends ItemForestry {
 		public boolean matches(ItemStack[] res) {
 
 			// No recipe without resource!
-			if (res == null || res.length <= 0)
+			if (res == null || res.length <= 0) {
 				return false;
+			}
 
 			boolean matchedAll = true;
 
 			for (ItemStack stack : ingredients) {
 				boolean matched = false;
 				for (ItemStack matchStack : res) {
-					if (matchStack == null)
+					if (matchStack == null) {
 						continue;
+					}
 
 					// Check item matching
 					if (stack.getItemDamage() < 0 && stack.getItem() == matchStack.getItem()) {
@@ -87,14 +92,16 @@ public class ItemInfuser extends ItemForestry {
 							matched = true;
 							break;
 						}
-					} else if (stack.getItemDamage() >= 0 && stack.isItemEqual(matchStack))
+					} else if (stack.getItemDamage() >= 0 && stack.isItemEqual(matchStack)) {
 						if (stack.stackSize <= matchStack.stackSize) {
 							matched = true;
 							break;
 						}
+					}
 				}
-				if (!matched)
+				if (!matched) {
 					matchedAll = false;
+				}
 			}
 			return matchedAll;
 
@@ -132,8 +139,9 @@ public class ItemInfuser extends ItemForestry {
 
 		public boolean isIngredient(ItemStack itemstack) {
 			for (Mixture ingredient : mixtures) {
-				if (ingredient.isIngredient(itemstack))
+				if (ingredient.isIngredient(itemstack)) {
 					return true;
+				}
 			}
 
 			return false;
@@ -144,8 +152,9 @@ public class ItemInfuser extends ItemForestry {
 			ArrayList<Mixture> matches = new ArrayList<Mixture>();
 
 			for (Mixture mixture : mixtures) {
-				if (mixture.matches(ingredients))
+				if (mixture.matches(ingredients)) {
 					matches.add(mixture);
+				}
 			}
 
 			return matches.toArray(new Mixture[matches.size()]);
@@ -213,14 +222,16 @@ public class ItemInfuser extends ItemForestry {
 
 		@Override
 		public String getDescription(ItemStack itemstack) {
-			if (itemstack == null)
+			if (itemstack == null) {
 				return null;
+			}
 
 			for (Ingredient ingredient : ingredients) {
-				if (ingredient.ingredient.getItemDamage() < 0 && ingredient.ingredient.getItem() == itemstack.getItem())
+				if (ingredient.ingredient.getItemDamage() < 0 && ingredient.ingredient.getItem() == itemstack.getItem()) {
 					return ingredient.description;
-				else if (ingredient.ingredient.getItemDamage() >= 0 && ingredient.ingredient.isItemEqual(itemstack))
+				} else if (ingredient.ingredient.getItemDamage() >= 0 && ingredient.ingredient.isItemEqual(itemstack)) {
 					return ingredient.description;
+				}
 			}
 
 			return null;
@@ -244,28 +255,33 @@ public class ItemInfuser extends ItemForestry {
 		private void trySeasoning() {
 
 			// Need input
-			if (inventoryStacks[inputSlot] == null)
+			if (inventoryStacks[inputSlot] == null) {
 				return;
+			}
 
 			// Output slot may not be occupied
-			if (inventoryStacks[outputSlot] != null)
+			if (inventoryStacks[outputSlot] != null) {
 				return;
+			}
 
 			// Need a valid base
-			if (!inventoryStacks[inputSlot].isItemEqual(ForestryItem.beverage.getItemStack()))
+			if (!inventoryStacks[inputSlot].isItemEqual(ForestryItem.beverage.getItemStack())) {
 				return;
+			}
 
 			// Create the seasoned item
 			ItemStack[] ingredients = new ItemStack[4];
 			System.arraycopy(inventoryStacks, ingredientSlot1, ingredients, 0, 4);
 
 			// Only continue if there is anything to season
-			if (!BeverageManager.infuserManager.hasMixtures(ingredients))
+			if (!BeverageManager.infuserManager.hasMixtures(ingredients)) {
 				return;
+			}
 
 			ItemStack seasoned = BeverageManager.infuserManager.getSeasoned(inventoryStacks[inputSlot], ingredients);
-			if (seasoned == null)
+			if (seasoned == null) {
 				return;
+			}
 
 			// Remove required ingredients.
 			ItemStack[] toRemove = BeverageManager.infuserManager.getRequired(ingredients);
@@ -273,10 +289,12 @@ public class ItemInfuser extends ItemForestry {
 				ItemStack ghost = templ.copy();
 
 				for (int i = ingredientSlot1; i < this.getSizeInventory(); i++) {
-					if (inventoryStacks[i] == null)
+					if (inventoryStacks[i] == null) {
 						continue;
-					if (ghost.stackSize <= 0)
+					}
+					if (ghost.stackSize <= 0) {
 						break;
+					}
 
 					if ((ghost.getItemDamage() >= 0 && inventoryStacks[i].isItemEqual(ghost))
 							|| (ghost.getItemDamage() < 0 && ghost.getItem() == inventoryStacks[i].getItem())) {
@@ -292,8 +310,9 @@ public class ItemInfuser extends ItemForestry {
 
 		@Override
 		public void markDirty() {
-			if (!Proxies.common.isSimulating(player.worldObj))
+			if (!Proxies.common.isSimulating(player.worldObj)) {
 				return;
+			}
 			trySeasoning();
 		}
 
@@ -321,9 +340,10 @@ public class ItemInfuser extends ItemForestry {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (Proxies.common.isSimulating(world))
+		if (Proxies.common.isSimulating(world)) {
 			entityplayer.openGui(ForestryAPI.instance, GuiId.InfuserGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY,
 					(int) entityplayer.posZ);
+		}
 
 		return itemstack;
 	}

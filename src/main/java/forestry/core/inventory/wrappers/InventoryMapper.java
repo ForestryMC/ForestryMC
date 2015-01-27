@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -13,6 +13,7 @@ package forestry.core.inventory.wrappers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.common.util.ForgeDirection;
 
 /**
@@ -45,10 +46,10 @@ public class InventoryMapper implements IInventory {
 	/**
 	 * Creates a new InventoryMapper
 	 *
-	 * @param inv The backing inventory
+	 * @param inv   The backing inventory
 	 * @param start The starting index
-	 * @param size The size of the new inventory, take care not to exceed the
-	 * end of the backing inventory
+	 * @param size  The size of the new inventory, take care not to exceed the
+	 *              end of the backing inventory
 	 */
 	public InventoryMapper(IInventory inv, int start, int size) {
 		this(inv, start, size, true);
@@ -139,8 +140,9 @@ public class InventoryMapper implements IInventory {
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		if (checkItems)
+		if (checkItems) {
 			return inv.isItemValidForSlot(start + slot, stack);
+		}
 		return true;
 	}
 

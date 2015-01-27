@@ -4,19 +4,20 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.items;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 
 import forestry.arboriculture.IWoodFireproof;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodType;
 import forestry.core.items.ItemForestryBlock;
 import forestry.core.utils.StringUtil;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 
 public class ItemWoodBlock extends ItemForestryBlock {
 
@@ -30,8 +31,9 @@ public class ItemWoodBlock extends ItemForestryBlock {
 			IWoodTyped block = (IWoodTyped) getBlock();
 			int meta = itemstack.getItemDamage();
 			WoodType woodType = block.getWoodType(meta);
-			if (woodType == null)
+			if (woodType == null) {
 				return null;
+			}
 
 			String displayName;
 			String customUnlocalizedName = block.getBlockKind() + "." + woodType.ordinal() + ".name";
@@ -44,8 +46,9 @@ public class ItemWoodBlock extends ItemForestryBlock {
 				displayName = woodGrammar.replaceAll("%TYPE", woodTypeName);
 			}
 
-			if (this.getBlock() instanceof IWoodFireproof)
+			if (this.getBlock() instanceof IWoodFireproof) {
 				displayName = StringUtil.localizeAndFormatRaw("tile.for.fireproof", displayName);
+			}
 
 			return displayName;
 		}

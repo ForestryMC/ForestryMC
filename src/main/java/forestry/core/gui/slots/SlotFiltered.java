@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -34,10 +34,12 @@ public class SlotFiltered extends SlotWatched {
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
 		int slotIndex = getSlotIndex();
-		if (filterSlotDelegate.isLocked(slotIndex))
+		if (filterSlotDelegate.isLocked(slotIndex)) {
 			return false;
-		if (itemstack != null)
+		}
+		if (itemstack != null) {
 			return filterSlotDelegate.canSlotAccept(slotIndex, itemstack);
+		}
 		return true;
 	}
 }

@@ -4,11 +4,17 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.factory.gui;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
+import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestryTitled;
@@ -18,12 +24,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
 import forestry.factory.gadgets.TileWorktable;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import org.lwjgl.opengl.GL11;
 
 public class GuiWorktable extends GuiForestryTitled<TileWorktable> {
 
@@ -45,8 +45,9 @@ public class GuiWorktable extends GuiForestryTitled<TileWorktable> {
 		@Override
 		public void draw(int startX, int startY) {
 			ItemStack output = getOutputStack();
-			if (output != null)
+			if (output != null) {
 				manager.gui.drawItemStack(output, startX + xPos, startY + yPos);
+			}
 
 			GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -92,6 +93,7 @@ public class GuiWorktable extends GuiForestryTitled<TileWorktable> {
 			container.clearRecipe();
 		}
 	}
+
 	private final TileWorktable worktable;
 	protected final ContainerWorktable container;
 

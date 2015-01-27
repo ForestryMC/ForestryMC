@@ -4,18 +4,21 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.mail.triggers;
 
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.IStatementParameter;
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
 import forestry.core.triggers.Trigger;
 import forestry.mail.gadgets.MachineTrader;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
 
 public class TriggerBuffer extends Trigger {
 
@@ -34,8 +37,9 @@ public class TriggerBuffer extends Trigger {
 	@Override
 	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
 
-		if (!(tile instanceof MachineTrader))
+		if (!(tile instanceof MachineTrader)) {
 			return false;
+		}
 
 		return ((MachineTrader) tile).hasOutputBufMin(threshold);
 	}

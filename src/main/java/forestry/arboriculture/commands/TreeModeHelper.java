@@ -10,12 +10,14 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.world.World;
+
 import forestry.api.arboriculture.ITreekeepingMode;
 import forestry.core.commands.ICommandModeHelper;
 import forestry.plugins.PluginArboriculture;
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.world.World;
 
 public class TreeModeHelper implements ICommandModeHelper {
 
@@ -24,8 +26,9 @@ public class TreeModeHelper implements ICommandModeHelper {
 		ArrayList<ITreekeepingMode> treekeepingModes = PluginArboriculture.treeInterface.getTreekeepingModes();
 		int modeStringCount = treekeepingModes.size();
 		List<String> modeStrings = new ArrayList<String>(modeStringCount);
-		for (ITreekeepingMode mode : treekeepingModes)
+		for (ITreekeepingMode mode : treekeepingModes) {
 			modeStrings.add(mode.getName());
+		}
 
 		return modeStrings.toArray(new String[modeStringCount]);
 	}
@@ -33,8 +36,9 @@ public class TreeModeHelper implements ICommandModeHelper {
 	@Override
 	public String getModeNameMatching(String desired) {
 		ITreekeepingMode mode = PluginArboriculture.treeInterface.getTreekeepingMode(desired);
-		if (mode == null)
+		if (mode == null) {
 			return null;
+		}
 		return mode.getName();
 	}
 

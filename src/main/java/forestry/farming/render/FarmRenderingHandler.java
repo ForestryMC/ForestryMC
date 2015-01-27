@@ -4,20 +4,21 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.farming.render;
 
-import forestry.core.config.ForestryBlock;
-import forestry.core.render.OverlayRenderingHandler;
-import forestry.farming.gadgets.BlockFarm;
-import forestry.plugins.PluginFarming;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
+
+import forestry.core.config.ForestryBlock;
+import forestry.core.render.OverlayRenderingHandler;
+import forestry.farming.gadgets.BlockFarm;
+import forestry.plugins.PluginFarming;
 
 public class FarmRenderingHandler extends OverlayRenderingHandler {
 

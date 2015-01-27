@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -28,11 +28,13 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
+
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
@@ -43,6 +45,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;
@@ -61,12 +64,12 @@ import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
-import forestry.apiculture.flowers.FlowerProvider;
 import forestry.apiculture.GuiHandlerApiculture;
 import forestry.apiculture.PacketHandlerApiculture;
 import forestry.apiculture.SaveEventHandlerApiculture;
 import forestry.apiculture.VillageHandlerApiculture;
 import forestry.apiculture.commands.CommandBee;
+import forestry.apiculture.flowers.FlowerProvider;
 import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.gadgets.BlockAlveary;
 import forestry.apiculture.gadgets.BlockBeehives;
@@ -382,14 +385,14 @@ public class PluginApiculture extends ForestryPlugin {
 		OreDictionary.registerOre("dropHoney", ForestryItem.honeyDrop.getItemStack());
 
 		ForestryItem.pollenCluster.registerItem(new ItemOverlay(Tabs.tabApiculture,
-				new OverlayInfo("normal", 0xa28a25, 0xa28a25),
-				new OverlayInfo("crystalline", 0xffffff, 0xc5feff)),
+						new OverlayInfo("normal", 0xa28a25, 0xa28a25),
+						new OverlayInfo("crystalline", 0xffffff, 0xc5feff)),
 				"pollen");
 		OreDictionary.registerOre("itemPollen", ForestryItem.pollenCluster.getItemStack());
 
 		ForestryItem.propolis.registerItem(new ItemOverlay(Tabs.tabApiculture,
-				new OverlayInfo("normal", 0xc5b24e), new OverlayInfo("sticky", 0xc68e57), new OverlayInfo("pulsating", 0x2ccdb1).setIsSecret(),
-				new OverlayInfo("silky", 0xddff00)),
+						new OverlayInfo("normal", 0xc5b24e), new OverlayInfo("sticky", 0xc68e57), new OverlayInfo("pulsating", 0x2ccdb1).setIsSecret(),
+						new OverlayInfo("silky", 0xddff00)),
 				"propolis");
 
 		ForestryItem.honeydew.registerItem(new ItemForestry().setCreativeTab(Tabs.tabApiculture), "honeydew");
@@ -486,22 +489,25 @@ public class PluginApiculture extends ForestryPlugin {
 				'S', Items.string);
 
 		// FOOD STUFF
-		if (ForestryItem.honeyedSlice.item() != null)
+		if (ForestryItem.honeyedSlice.item() != null) {
 			Proxies.common.addRecipe(ForestryItem.honeyedSlice.getItemStack(4),
 					"###", "#X#", "###",
 					'#', ForestryItem.honeyDrop,
 					'X', Items.bread);
-		if (ForestryItem.honeyPot.item() != null)
+		}
+		if (ForestryItem.honeyPot.item() != null) {
 			Proxies.common.addRecipe(ForestryItem.honeyPot.getItemStack(1),
 					"# #", " X ", "# #",
 					'#', ForestryItem.honeyDrop,
 					'X', ForestryItem.waxCapsule);
-		if (ForestryItem.ambrosia.item() != null)
+		}
+		if (ForestryItem.ambrosia.item() != null) {
 			Proxies.common.addRecipe(ForestryItem.ambrosia.getItemStack(),
 					"#Y#", "XXX", "###",
 					'#', ForestryItem.honeydew,
 					'X', ForestryItem.royalJelly,
 					'Y', ForestryItem.waxCapsule);
+		}
 
 		// / CAPSULES
 		Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.capsule"), "###", '#', ForestryItem.beeswax);
@@ -712,10 +718,11 @@ public class PluginApiculture extends ForestryPlugin {
 
 	private void registerDungeonLoot() {
 		int rarity;
-		if (Config.dungeonLootRare)
+		if (Config.dungeonLootRare) {
 			rarity = 5;
-		else
+		} else {
 			rarity = 10;
+		}
 
 		ChestGenHooks.addItem(ChestGenHooks.DUNGEON_CHEST, new WeightedRandomChestContent(getBeeItemFromTemplate(BeeTemplates.getSteadfastTemplate(), EnumBeeType.DRONE), 1, 1, rarity));
 
@@ -740,13 +747,13 @@ public class PluginApiculture extends ForestryPlugin {
 		IBee bee = new Bee(PluginApiculture.beeInterface.templateAsGenome(template));
 		ItemStack beeItem;
 		switch (beeType) {
-		default:
-		case DRONE:
-			beeItem = ForestryItem.beeDroneGE.getItemStack();
-			break;
-		case PRINCESS:
-			beeItem = ForestryItem.beePrincessGE.getItemStack();
-			break;
+			default:
+			case DRONE:
+				beeItem = ForestryItem.beeDroneGE.getItemStack();
+				break;
+			case PRINCESS:
+				beeItem = ForestryItem.beePrincessGE.getItemStack();
+				break;
 		}
 		NBTTagCompound nbtTagCompound = new NBTTagCompound();
 		bee.writeToNBT(nbtTagCompound);
@@ -981,7 +988,7 @@ public class PluginApiculture extends ForestryPlugin {
 		Allele.speciesMiry = new AlleleBeeSpecies("speciesMiry", true, "bees.species.miry", boggy, "humidium", 0x92AF42, 0xffdc16).addProduct(
 				ForestryItem.beeComb.getItemStack(1, 15), 36).setHumidity(EnumHumidity.DAMP).setIsSecret();
 		Allele.speciesBoggy = new AlleleBeeSpecies("speciesBoggy", true, "bees.species.boggy", boggy, "paluster", 0x698948, 0xffdc16).addProduct(
-				ForestryItem.beeComb.getItemStack(1, 15), 39).addSpecialty(ForestryItem.peat.getItemStack(1), 8).setHumidity(EnumHumidity.DAMP).setIsSecret();		
+				ForestryItem.beeComb.getItemStack(1, 15), 39).addSpecialty(ForestryItem.peat.getItemStack(1), 8).setHumidity(EnumHumidity.DAMP).setIsSecret();
 
 		// Monastic branch
 		Allele.speciesMonastic = new AlleleBeeSpecies("speciesMonastic", false, "bees.species.monastic", monastic, "monachus", 0x42371c, 0xfff7b6)
@@ -1191,8 +1198,9 @@ public class PluginApiculture extends ForestryPlugin {
 		String[] parts = list.split("[;]+");
 
 		for (String part : parts) {
-			if (part.isEmpty())
+			if (part.isEmpty()) {
 				continue;
+			}
 
 			String[] ident = part.split("[:]+");
 
@@ -1225,8 +1233,9 @@ public class PluginApiculture extends ForestryPlugin {
 		String[] items = list.split("[;]+");
 
 		for (String item : items) {
-			if (item.isEmpty())
+			if (item.isEmpty()) {
 				continue;
+			}
 
 			FMLCommonHandler.instance().getFMLLogger().debug("Blacklisting bee species identified by " + item);
 			AlleleManager.alleleRegistry.blacklistAllele(item);
@@ -1245,42 +1254,47 @@ public class PluginApiculture extends ForestryPlugin {
 
 	@Override
 	public void populateChunk(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
-		if (Config.generateBeehives)
+		if (Config.generateBeehives) {
 			HiveDecorator.instance().decorateHives(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
+		}
 	}
 
 	@Override
 	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
-		if (Config.generateBeehives)
+		if (Config.generateBeehives) {
 			HiveDecorator.instance().decorateHives(world, rand, chunkX, chunkZ);
+		}
 	}
 
 	@Override
 	public boolean processIMCMessage(IMCMessage message) {
 		if (message.key.equals("add-candle-lighting-id")) {
 			ItemStack value = message.getItemStackValue();
-			if (value != null)
+			if (value != null) {
 				((BlockCandle) ForestryBlock.candle.block()).addItemToLightingList(value.getItem());
-			else
+			} else {
 				Logger.getLogger("Forestry").log(Level.WARNING,
 						"Received an invalid 'add-candle-lighting-id' request from mod %s. Please contact the author and report this issue.",
 						message.getSender());
+			}
 			return true;
-		} else if (message.key.equals("add-alveary-slab") && message.isStringMessage())
+		} else if (message.key.equals("add-alveary-slab") && message.isStringMessage()) {
 			try {
 				Block block = GameData.getBlockRegistry().getRaw(message.getStringValue());
 
-				if (block == null || block == Blocks.air)
+				if (block == null || block == Blocks.air) {
 					Logger.getLogger("Forestry").log(Level.WARNING,
 							"Received an invalid 'add-alveary-slab' request from mod %s. Please contact the author and report this issue.",
 							message.getSender());
-				else
+				} else {
 					StructureLogicAlveary.slabBlocks.add(block);
+				}
 			} catch (Exception e) {
 				Logger.getLogger("Forestry").log(Level.WARNING,
 						"Received an invalid 'add-alveary-slab' request from mod %s. Please contact the author and report this issue.",
 						message.getSender());
 			}
+		}
 		return super.processIMCMessage(message);
 	}
 
@@ -1289,8 +1303,9 @@ public class PluginApiculture extends ForestryPlugin {
 	public void textureHook(TextureStitchEvent.Pre event) {
 		if (event.map.getTextureType() == 1) {
 			EntitySnowFX.icons = new IIcon[3];
-			for (int i = 0; i < EntitySnowFX.icons.length; i++)
+			for (int i = 0; i < EntitySnowFX.icons.length; i++) {
 				EntitySnowFX.icons[i] = event.map.registerIcon("forestry:particles/snow." + (i + 1));
+			}
 		}
 	}
 }

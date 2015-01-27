@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -67,18 +67,20 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 			this.products = products;
 
 			for (ItemStack item : products.keySet()) {
-				if (item == null)
+				if (item == null) {
 					throw new IllegalArgumentException("Tried to register a null product of " + resource);
+				}
 			}
 		}
 
 		public boolean matches(ItemStack res) {
-			if (res == null && resource == null)
+			if (res == null && resource == null) {
 				return true;
-			else if (res == null || resource == null)
+			} else if (res == null || resource == null) {
 				return false;
-			else
+			} else {
 				return resource.isItemEqual(res);
+			}
 		}
 	}
 
@@ -108,8 +110,9 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 		public void addRecipe(int timePerItem, ItemStack resource, ItemStack primary, ItemStack secondary, int chance) {
 			HashMap<ItemStack, Integer> products = new HashMap<ItemStack, Integer>();
 			products.put(primary, 100);
-			if (secondary != null)
+			if (secondary != null) {
 				products.put(secondary, chance);
+			}
 			addRecipe(timePerItem, resource, products);
 		}
 
@@ -122,8 +125,9 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 
 		public static Recipe findMatchingRecipe(ItemStack item) {
 			for (Recipe recipe : recipes) {
-				if (recipe.matches(item))
+				if (recipe.matches(item)) {
 					return recipe;
+				}
 			}
 			return null;
 		}
@@ -209,13 +213,15 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 	@Override
 	public void updateServerSide() {
 
-		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
+		if (worldObj.getTotalWorldTime() % 20 * 10 != 0) {
 			return;
+		}
 
 		// Check and reset recipe if necessary
 		checkRecipe();
-		if (getErrorState() == EnumErrorCode.NORECIPE && currentRecipe != null)
+		if (getErrorState() == EnumErrorCode.NORECIPE && currentRecipe != null) {
 			setErrorState(EnumErrorCode.OK);
+		}
 
 		if (energyManager.getTotalEnergyStored() == 0) {
 			setErrorState(EnumErrorCode.NOPOWER);
@@ -228,18 +234,22 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 		checkRecipe();
 
 		// If we add pending products, we skip to the next work cycle.
-		if (tryAddPending())
+		if (tryAddPending()) {
 			return false;
+		}
 
-		if (!pendingProducts.isEmpty())
+		if (!pendingProducts.isEmpty()) {
 			return false;
+		}
 
 		// Continue work if nothing needs to be added
-		if (productionTime <= 0)
+		if (productionTime <= 0) {
 			return false;
+		}
 
-		if (currentRecipe == null)
+		if (currentRecipe == null) {
 			return false;
+		}
 
 		productionTime--;
 		// Still not done, return
@@ -250,10 +260,11 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 
 		// We are done, add products to queue
 		for (Map.Entry<ItemStack, Integer> entry : currentRecipe.products.entrySet()) {
-			if (entry.getValue() >= 100)
+			if (entry.getValue() >= 100) {
 				pendingProducts.push(entry.getKey().copy());
-			else if (worldObj.rand.nextInt(100) < entry.getValue())
+			} else if (worldObj.rand.nextInt(100) < entry.getValue()) {
 				pendingProducts.push(entry.getKey().copy());
+			}
 		}
 
 		getInternalInventory().decrStackSize(SLOT_RESOURCE, 1);
@@ -267,8 +278,9 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 	public void checkRecipe() {
 		Recipe sameRec = RecipeManager.findMatchingRecipe(getInternalInventory().getStackInSlot(SLOT_RESOURCE));
 
-		if (sameRec == null)
+		if (sameRec == null) {
 			setErrorState(EnumErrorCode.NORECIPE);
+		}
 
 		if (currentRecipe != sameRec) {
 			currentRecipe = sameRec;
@@ -288,8 +300,9 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 	}
 
 	private boolean tryAddPending() {
-		if (pendingProducts.isEmpty())
+		if (pendingProducts.isEmpty()) {
 			return false;
+		}
 
 		ItemStack next = pendingProducts.peek();
 		if (addProduct(next, true)) {
@@ -313,8 +326,9 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 	@Override
 	public boolean hasResourcesMin(float percentage) {
 		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(SLOT_RESOURCE) == null)
+		if (inventory.getStackInSlot(SLOT_RESOURCE) == null) {
 			return false;
+		}
 
 		return ((float) inventory.getStackInSlot(SLOT_RESOURCE).stackSize / (float) inventory.getStackInSlot(SLOT_RESOURCE).getMaxStackSize()) > percentage;
 	}
@@ -325,8 +339,9 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 	}
 
 	public int getProgressScaled(int i) {
-		if (timePerItem == 0)
+		if (timePerItem == 0) {
 			return i;
+		}
 
 		return (productionTime * i) / timePerItem;
 	}
@@ -334,12 +349,12 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 	/* GUI */
 	public void getGUINetworkData(int i, int j) {
 		switch (i) {
-		case 0:
-			productionTime = j;
-			break;
-		case 1:
-			timePerItem = j;
-			break;
+			case 0:
+				productionTime = j;
+				break;
+			case 1:
+				timePerItem = j;
+				break;
 		}
 	}
 

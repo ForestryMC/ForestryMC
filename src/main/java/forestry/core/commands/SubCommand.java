@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -15,11 +15,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public abstract class SubCommand implements IForestryCommand {
@@ -87,8 +87,9 @@ public abstract class SubCommand implements IForestryCommand {
 
 	@Override
 	public final void processCommand(ICommandSender sender, String[] args) {
-		if (!CommandHelpers.processStandardCommands(sender, this, args))
+		if (!CommandHelpers.processStandardCommands(sender, this, args)) {
 			processSubCommand(sender, args);
+		}
 	}
 
 	public void processSubCommand(ICommandSender sender, String[] args) {

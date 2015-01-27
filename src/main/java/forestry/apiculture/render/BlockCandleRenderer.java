@@ -4,21 +4,23 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.render;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import forestry.apiculture.gadgets.BlockCandle;
-import forestry.apiculture.gadgets.TileCandle;
-import forestry.core.ForestryClient;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+
+import forestry.apiculture.gadgets.BlockCandle;
+import forestry.apiculture.gadgets.TileCandle;
+import forestry.core.ForestryClient;
 
 public class BlockCandleRenderer implements ISimpleBlockRenderingHandler {
 
@@ -36,7 +38,7 @@ public class BlockCandleRenderer implements ISimpleBlockRenderingHandler {
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 		if (block.getRenderType() == ForestryClient.candleRenderId) {
-			this.renderBlockCandle(world, x, y, z, (BlockCandle)block, modelId, renderer);
+			this.renderBlockCandle(world, x, y, z, (BlockCandle) block, modelId, renderer);
 		}
 		return true;
 	}
@@ -56,7 +58,7 @@ public class BlockCandleRenderer implements ISimpleBlockRenderingHandler {
 		IIcon iconA = block.getTextureFromPassAndMeta(meta, 0);
 		IIcon iconB = block.getTextureFromPassAndMeta(meta, 1);
 		meta = meta & 0x7;
-		TileCandle tc = (TileCandle)world.getTileEntity(x, y, z);
+		TileCandle tc = (TileCandle) world.getTileEntity(x, y, z);
 		int colour = tc.getColour();
 		Tessellator tessellator = Tessellator.instance;
 		tessellator.setBrightness(world.getLightBrightnessForSkyBlocks(x, y, z, block.getLightValue(world, x, y, z)));
@@ -65,28 +67,19 @@ public class BlockCandleRenderer implements ISimpleBlockRenderingHandler {
 		double d1 = 0.5D - d0;
 		double d2 = 0.20000000298023224D;
 
-		if (meta == 1)
-		{
+		if (meta == 1) {
 			this.renderCandleAtAngle(iconA, x - d1, y + d2, z, -d0, 0.0D, 0xffffff);
 			this.renderCandleAtAngle(iconB, x - d1, y + d2, z, -d0, 0.0D, colour);
-		}
-		else if (meta == 2)
-		{
+		} else if (meta == 2) {
 			this.renderCandleAtAngle(iconA, x + d1, y + d2, z, d0, 0.0D, 0xffffff);
 			this.renderCandleAtAngle(iconB, x + d1, y + d2, z, d0, 0.0D, colour);
-		}
-		else if (meta == 3)
-		{
+		} else if (meta == 3) {
 			this.renderCandleAtAngle(iconA, x, y + d2, z - d1, 0.0D, -d0, 0xffffff);
 			this.renderCandleAtAngle(iconB, x, y + d2, z - d1, 0.0D, -d0, colour);
-		}
-		else if (meta == 4)
-		{
+		} else if (meta == 4) {
 			this.renderCandleAtAngle(iconA, x, y + d2, z + d1, 0.0D, d0, 0xffffff);
 			this.renderCandleAtAngle(iconB, x, y + d2, z + d1, 0.0D, d0, colour);
-		}
-		else
-		{
+		} else {
 			this.renderCandleAtAngle(iconA, x, y, z, 0.0D, 0.0D, 0xffffff);
 			this.renderCandleAtAngle(iconB, x, y, z, 0.0D, 0.0D, colour);
 		}
@@ -94,8 +87,7 @@ public class BlockCandleRenderer implements ISimpleBlockRenderingHandler {
 		return true;
 	}
 
-	public void renderCandleAtAngle(IIcon icon, double x, double y, double z, double par8, double par10, int colour)
-	{
+	public void renderCandleAtAngle(IIcon icon, double x, double y, double z, double par8, double par10, int colour) {
 		Tessellator tessellator = Tessellator.instance;
 		double minU = icon.getMinU();
 		double minV = icon.getMinV();

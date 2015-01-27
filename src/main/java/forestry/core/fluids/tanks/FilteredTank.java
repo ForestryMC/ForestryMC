@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -27,7 +27,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class FilteredTank extends StandardTank {
@@ -48,14 +47,16 @@ public class FilteredTank extends StandardTank {
 	}
 
 	public void addFilter(Fluid filter) {
-		if (!accepts(filter))
+		if (!accepts(filter)) {
 			filters.add(filter);
+		}
 	}
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
-		if (liquidMatchesFilter(resource))
+		if (liquidMatchesFilter(resource)) {
 			return super.fill(resource, doFill);
+		}
 		return 0;
 	}
 
@@ -65,8 +66,9 @@ public class FilteredTank extends StandardTank {
 	}
 
 	public boolean liquidMatchesFilter(FluidStack resource) {
-		if (resource == null || filters == null)
+		if (resource == null || filters == null) {
 			return false;
+		}
 		return filters.contains(resource.getFluid());
 	}
 
@@ -78,11 +80,12 @@ public class FilteredTank extends StandardTank {
 		}
 
 		toolTip.clear();
-		if(Proxies.common.isShiftDown() || filters.size() < 5) {
+		if (Proxies.common.isShiftDown() || filters.size() < 5) {
 			for (Fluid filter : filters) {
 				EnumRarity rarity = filter.getRarity();
-				if (rarity == null)
+				if (rarity == null) {
 					rarity = EnumRarity.common;
+				}
 				FluidStack filterFluidStack = FluidRegistry.getFluidStack(filter.getName(), 0);
 				ToolTipLine name = new ToolTipLine(filter.getLocalizedName(filterFluidStack), rarity.rarityColor, 2);
 				toolTip.add(name);
