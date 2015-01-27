@@ -80,9 +80,9 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 	private void doEntityEffect(IBeeGenome genome, IBeeHousing housing) {
 		AxisAlignedBB aabb = this.getBounding(genome, housing, 1f);
 		World world = housing.getWorld();
-			@SuppressWarnings("unchecked") // Quiets warnings. Eventually returns a list of entities.
-		List<Entity> entities = (List<Entity>)world.getEntitiesWithinAABB(EntityCow.class, aabb);
-		for (Entity entity : entities) {
+
+		List entities = world.getEntitiesWithinAABB(EntityCow.class, aabb);
+		for (Object entity : entities) {
 			if (entity instanceof EntityCow && !(entity instanceof EntityMooshroom)) {
 		        convertCowToMooshroom((EntityCow)entity);
 		        break;
