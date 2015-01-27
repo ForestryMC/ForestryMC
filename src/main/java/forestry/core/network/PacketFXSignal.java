@@ -4,18 +4,21 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.network;
 
-import cpw.mods.fml.common.registry.GameData;
-import forestry.core.proxy.Proxies;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
 import net.minecraft.block.Block;
+
+import cpw.mods.fml.common.registry.GameData;
+
+import forestry.core.proxy.Proxies;
 
 public class PacketFXSignal extends ForestryPacket {
 
@@ -89,15 +92,18 @@ public class PacketFXSignal extends ForestryPacket {
 	}
 
 	public void executeFX() {
-		if (visualFX != VisualFXType.NONE)
+		if (visualFX != VisualFXType.NONE) {
 			Proxies.common.addBlockDestroyEffects(Proxies.common.getRenderWorld(), xCoord, yCoord, zCoord, block, meta);
-		if (soundFX != SoundFXType.NONE)
-			if (soundFX == SoundFXType.BLOCK_DESTROY)
+		}
+		if (soundFX != SoundFXType.NONE) {
+			if (soundFX == SoundFXType.BLOCK_DESTROY) {
 				Proxies.common.playBlockBreakSoundFX(Proxies.common.getRenderWorld(), xCoord, yCoord, zCoord, block);
-			else if (soundFX == SoundFXType.BLOCK_PLACE)
+			} else if (soundFX == SoundFXType.BLOCK_PLACE) {
 				Proxies.common.playBlockPlaceSoundFX(Proxies.common.getRenderWorld(), xCoord, yCoord, zCoord, block);
-			else
+			} else {
 				Proxies.common.playSoundFX(Proxies.common.getRenderWorld(), xCoord, yCoord, zCoord, soundFX.soundFile, soundFX.volume, soundFX.pitch);
+			}
+		}
 	}
 
 }

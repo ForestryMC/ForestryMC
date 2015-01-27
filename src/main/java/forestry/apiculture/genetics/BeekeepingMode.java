@@ -4,20 +4,22 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Random;
+
+import net.minecraft.world.World;
+
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingMode;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Random;
-import net.minecraft.world.World;
 
 public class BeekeepingMode implements IBeekeepingMode {
 
@@ -96,23 +98,27 @@ public class BeekeepingMode implements IBeekeepingMode {
 	public int getFinalFertility(IBee queen, World world, int x, int y, int z) {
 		int toCreate = queen.getGenome().getFertility();
 
-		if (reducesFertility)
+		if (reducesFertility) {
 			toCreate = new Random().nextInt(toCreate);
+		}
 
 		return toCreate;
 	}
 
 	@Override
 	public boolean isFatigued(IBee queen, IBeeHousing housing) {
-		if (!canFatigue)
+		if (!canFatigue) {
 			return false;
+		}
 
-		if (queen.isNatural())
+		if (queen.isNatural()) {
 			return false;
+		}
 
 		if (queen.getGeneration() > 96 + rand.nextInt(6) + rand.nextInt(6) &&
-				rand.nextFloat() < 0.02f * housing.getGeneticDecay(queen.getGenome(), 1f))
+				rand.nextFloat() < 0.02f * housing.getGeneticDecay(queen.getGenome(), 1f)) {
 			return true;
+		}
 
 		return false;
 	}
@@ -120,9 +126,10 @@ public class BeekeepingMode implements IBeekeepingMode {
 	@Override
 	public boolean isOverworked(IBee queen, IBeeHousing housing) {
 		float productionModifier = housing.getProductionModifier(queen.getGenome(), 1f);
-		if(productionModifier > 16) {
-			if(housing.getWorld().rand.nextFloat()*100 < 0.01 * ((productionModifier*productionModifier) - 100))
+		if (productionModifier > 16) {
+			if (housing.getWorld().rand.nextFloat() * 100 < 0.01 * ((productionModifier * productionModifier) - 100)) {
 				return true;
+			}
 		}
 		
 		return false;
@@ -131,9 +138,10 @@ public class BeekeepingMode implements IBeekeepingMode {
 	@Override
 	public boolean isDegenerating(IBee queen, IBee offspring, IBeeHousing housing) {
 		float mutationModifier = housing.getMutationModifier(queen.getGenome(), queen.getMate(), 1.0f);
-		if(mutationModifier > 10) {
-			if(housing.getWorld().rand.nextFloat()*100 < 0.4 * ((mutationModifier*mutationModifier) - 100))
+		if (mutationModifier > 10) {
+			if (housing.getWorld().rand.nextFloat() * 100 < 0.4 * ((mutationModifier * mutationModifier) - 100)) {
 				return true;
+			}
 		}
 		
 		return false;

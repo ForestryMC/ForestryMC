@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -58,7 +58,7 @@ public class PluginMail extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.mail.proxy.ClientProxyMail", serverSide = "forestry.mail.proxy.ProxyMail")
 	public static ProxyMail proxy;
-	public static MachineDefinition definitionMailbox;  
+	public static MachineDefinition definitionMailbox;
 	public static MachineDefinition definitionTradestation;
 	public static MachineDefinition definitionPhilatelist;
 	public static StampInfo[] stampDefinitions;
@@ -136,10 +136,10 @@ public class PluginMail extends ForestryPlugin {
 	protected void registerItems() {
 
 		stampDefinitions = new StampInfo[]{
-			new StampInfo("1n", EnumPostage.P_1, ForestryItem.apatite, 0x4a8ca7, 0xffffff), new StampInfo("2n", EnumPostage.P_2, "ingotCopper", 0xe8c814, 0xffffff),
-			new StampInfo("5n", EnumPostage.P_5, "ingotTin", 0x9c0707, 0xffffff), new StampInfo("10n", EnumPostage.P_10, Items.gold_ingot, 0x7bd1b8, 0xffffff),
-			new StampInfo("20n", EnumPostage.P_20, Items.diamond, 0xff9031, 0xfff7dd), new StampInfo("50n", EnumPostage.P_50, Items.emerald, 0x6431d7, 0xfff7dd),
-			new StampInfo("100n", EnumPostage.P_100, Items.nether_star, 0xd731ba, 0xfff7dd)}; //new StampInfo("200n", EnumPostage.P_200, Item.netherStar, 0xcd9831, 0xfff7dd)};
+				new StampInfo("1n", EnumPostage.P_1, ForestryItem.apatite, 0x4a8ca7, 0xffffff), new StampInfo("2n", EnumPostage.P_2, "ingotCopper", 0xe8c814, 0xffffff),
+				new StampInfo("5n", EnumPostage.P_5, "ingotTin", 0x9c0707, 0xffffff), new StampInfo("10n", EnumPostage.P_10, Items.gold_ingot, 0x7bd1b8, 0xffffff),
+				new StampInfo("20n", EnumPostage.P_20, Items.diamond, 0xff9031, 0xfff7dd), new StampInfo("50n", EnumPostage.P_50, Items.emerald, 0x6431d7, 0xfff7dd),
+				new StampInfo("100n", EnumPostage.P_100, Items.nether_star, 0xd731ba, 0xfff7dd)}; //new StampInfo("200n", EnumPostage.P_200, Item.netherStar, 0xcd9831, 0xfff7dd)};
 
 		/* STAMPS */
 		ForestryItem.stamps.registerItem(new ItemStamps(stampDefinitions), "stamps");
@@ -172,10 +172,11 @@ public class PluginMail extends ForestryPlugin {
 			stampGlue = Items.slime_ball;
 		}
 
-		if (Config.craftingStampsEnabled)
+		if (Config.craftingStampsEnabled) {
 			for (int i = 0; i < stampDefinitions.length; i++) {
-				if (Config.collectorStamps.contains(stampDefinitions[i].name))
+				if (Config.collectorStamps.contains(stampDefinitions[i].name)) {
 					continue;
+				}
 
 				Proxies.common.addRecipe(ForestryItem.stamps.getItemStack(9, i),
 						"XXX", "###", "ZZZ",
@@ -187,6 +188,7 @@ public class PluginMail extends ForestryPlugin {
 						'X', stampDefinitions[i].getCraftingIngredient(),
 						'#', Items.paper);
 			}
+		}
 
 		// Recycling
 		Proxies.common.addRecipe(new ItemStack(Items.paper), "###", '#', ForestryItem.letters.getItemStack(1, Defaults.WILDCARD));

@@ -4,22 +4,24 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.genetics;
+
+import java.util.List;
+
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.items.ItemArmorApiarist;
 import forestry.plugins.PluginApiculture;
-import java.util.List;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
 
 public class AlleleEffectIgnition extends AlleleEffectThrottled {
 
@@ -35,8 +37,9 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
 
 		World world = housing.getWorld();
 
-		if (isHalted(storedData, housing))
+		if (isHalted(storedData, housing)) {
 			return storedData;
+		}
 
 		AxisAlignedBB hurtBox = getBounding(genome, housing, 1.0f);
 		@SuppressWarnings("rawtypes")
@@ -53,9 +56,9 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
 			if (entity instanceof EntityPlayer) {
 				int count = ItemArmorApiarist.wearsItems((EntityPlayer) entity, getUID(), true);
 				// Full set, no damage/effect
-				if (count > 3)
+				if (count > 3) {
 					continue;
-				else if (count > 2) {
+				} else if (count > 2) {
 					chance = 5;
 					duration = 50;
 				} else if (count > 1) {
@@ -67,8 +70,9 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
 				}
 			}
 
-			if (world.rand.nextInt(1000) >= chance)
+			if (world.rand.nextInt(1000) >= chance) {
 				continue;
+			}
 
 			entity.setFire(duration);
 		}
@@ -81,12 +85,13 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
 
 		int[] area = getModifiedArea(genome, housing);
 
-		if (housing.getWorld().rand.nextBoolean())
+		if (housing.getWorld().rand.nextBoolean()) {
 			PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getXCoord(), housing.getYCoord(),
 					housing.getZCoord(), genome.getPrimary().getIconColour(0), area[0], area[1], area[2]);
-		else
+		} else {
 			PluginApiculture.proxy.addBeeHiveFX("particles/ember", housing.getWorld(), housing.getXCoord(), housing.getYCoord(),
 					housing.getZCoord(), 0xffffff, area[0], area[1], area[2]);
+		}
 		return storedData;
 	}
 

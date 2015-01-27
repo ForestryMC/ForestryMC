@@ -13,17 +13,20 @@ public class ItemInventoryBackpack extends ItemInventory {
 	public ItemInventoryBackpack(Class<? extends Item> itemClass, int size, ItemStack itemstack) {
 		super(itemClass, size, itemstack);
 
-		if (parent == null)
+		if (parent == null) {
 			throw new IllegalArgumentException("Parent cannot be null.");
+		}
 
 		Item item = parent.getItem();
-		if (!(item instanceof ItemBackpack))
+		if (!(item instanceof ItemBackpack)) {
 			throw new IllegalArgumentException("Parent must be a backpack.");
+		}
 
 		this.backpackDefinition = ((ItemBackpack) item).getDefinition();
 
-		if (this.backpackDefinition == null)
+		if (this.backpackDefinition == null) {
 			throw new IllegalArgumentException("Backpack must have a backpack definition.");
+		}
 	}
 
 	@Override

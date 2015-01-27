@@ -4,11 +4,13 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.gui;
+
+import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.apiculture.gadgets.TileApiary;
 import forestry.apiculture.gadgets.TileBeehouse;
@@ -16,7 +18,6 @@ import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.Utils;
-import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiApiary extends GuiForestryTitled<TileBeehouse> {
 
@@ -44,20 +45,20 @@ public class GuiApiary extends GuiForestryTitled<TileBeehouse> {
 		int i = 176;
 		int k = 0;
 		switch (rated) {
-		case EMPTY:
-			break;
-		case LOW:
-			i += 4;
-			break;
-		case MEDIUM:
-			i += 8;
-			break;
-		case HIGH:
-			i += 12;
-			break;
-		case MAXIMUM:
-			i += 16;
-			break;
+			case EMPTY:
+				break;
+			case LOW:
+				i += 4;
+				break;
+			case MEDIUM:
+				i += 8;
+				break;
+			case HIGH:
+				i += 12;
+				break;
+			case MAXIMUM:
+				i += 16;
+				break;
 		}
 
 		this.drawTexturedModalRect(x, y + 46 - height, i, k + 46 - height, 4, height);

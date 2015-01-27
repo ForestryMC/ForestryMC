@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -24,8 +24,9 @@ public class WorldGenPoplar extends WorldGenTree {
 
 		int leafSpawn = height + 1;
 
-		while (leafSpawn > girth - 1)
+		while (leafSpawn > girth - 1) {
 			generateAdjustedCylinder(leafSpawn--, 0, 1, leaf);
+		}
 
 	}
 

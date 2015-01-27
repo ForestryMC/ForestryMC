@@ -4,23 +4,26 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.network;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.UUID;
+
 import com.mojang.authlib.GameProfile;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
 import forestry.api.core.ErrorStateRegistry;
 import forestry.api.core.IErrorState;
 import forestry.core.EnumErrorCode;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.utils.EnumAccess;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.UUID;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class PacketTileUpdate extends PacketUpdate {
 
@@ -69,8 +72,9 @@ public class PacketTileUpdate extends PacketUpdate {
 				data.writeLong(owner.getId().getLeastSignificantBits());
 				data.writeUTF(owner.getName());
 			}
-		} else
+		} else {
 			data.writeInt(-1);
+		}
 	}
 
 	@Override

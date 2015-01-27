@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -45,8 +45,9 @@ public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagab
 
 	public static int getOccupiedSlotCount(ItemStack itemStack) {
 		NBTTagCompound nbt = itemStack.getTagCompound();
-		if (nbt == null)
+		if (nbt == null) {
 			return 0;
+		}
 
 		int count = 0;
 		if (nbt.hasKey("Items")) {
@@ -63,8 +64,9 @@ public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagab
 	}
 
 	protected void setUID(boolean override) {
-		if (parent.getTagCompound() == null)
+		if (parent.getTagCompound() == null) {
 			parent.setTagCompound(new NBTTagCompound());
+		}
 
 		NBTTagCompound nbt = parent.getTagCompound();
 		if (override || !nbt.hasKey("UID")) {
@@ -74,23 +76,26 @@ public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagab
 
 	public void onGuiSaved(EntityPlayer player) {
 		parent = findParentInInventory(player);
-		if (parent != null)
+		if (parent != null) {
 			save();
+		}
 	}
 
 	public ItemStack findParentInInventory(EntityPlayer player) {
 		for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
 			ItemStack stack = player.inventory.getStackInSlot(i);
-			if (StackUtils.isIdenticalItem(stack, parent))
+			if (StackUtils.isIdenticalItem(stack, parent)) {
 				return stack;
+			}
 		}
 		return parent;
 	}
 
 	public void save() {
 		NBTTagCompound nbt = parent.getTagCompound();
-		if (nbt == null)
+		if (nbt == null) {
 			nbt = new NBTTagCompound();
+		}
 		writeToNBT(nbt);
 		parent.setTagCompound(nbt);
 	}
@@ -98,8 +103,9 @@ public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagab
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 
-		if (nbt == null)
+		if (nbt == null) {
 			return;
+		}
 
 		if (nbt.hasKey("Items")) {
 			NBTTagList nbttaglist = nbt.getTagList("Items", 10);
@@ -107,8 +113,9 @@ public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagab
 			for (int i = 0; i < nbttaglist.tagCount(); i++) {
 				NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 				byte byte0 = nbttagcompound1.getByte("Slot");
-				if (byte0 >= 0 && byte0 < inventoryStacks.length)
+				if (byte0 >= 0 && byte0 < inventoryStacks.length) {
 					inventoryStacks[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+				}
 			}
 		}
 
@@ -118,21 +125,23 @@ public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagab
 	public void writeToNBT(NBTTagCompound nbt) {
 
 		NBTTagList nbttaglist = new NBTTagList();
-		for (int i = 0; i < inventoryStacks.length; i++)
+		for (int i = 0; i < inventoryStacks.length; i++) {
 			if (inventoryStacks[i] != null) {
 				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 				nbttagcompound1.setByte("Slot", (byte) i);
 				inventoryStacks[i].writeToNBT(nbttagcompound1);
 				nbttaglist.appendTag(nbttagcompound1);
 			}
+		}
 		nbt.setTag("Items", nbttaglist);
 
 	}
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
-		if (inventoryStacks[i] == null)
+		if (inventoryStacks[i] == null) {
 			return null;
+		}
 
 		ItemStack product;
 		if (inventoryStacks[i].stackSize <= j) {
@@ -141,8 +150,9 @@ public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagab
 			return product;
 		} else {
 			product = inventoryStacks[i].splitStack(j);
-			if (inventoryStacks[i].stackSize == 0)
+			if (inventoryStacks[i].stackSize == 0) {
 				inventoryStacks[i] = null;
+			}
 
 			return product;
 		}
@@ -212,8 +222,9 @@ public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagab
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slot) {
-		if (inventoryStacks[slot] == null)
+		if (inventoryStacks[slot] == null) {
 			return null;
+		}
 		ItemStack toReturn = inventoryStacks[slot];
 		inventoryStacks[slot] = null;
 		return toReturn;

@@ -4,11 +4,15 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.circuits;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IInventory;
 
 import forestry.api.circuits.ICircuitLayout;
 import forestry.core.circuits.ItemSolderingIron.CircuitRecipe;
@@ -18,9 +22,6 @@ import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.GuiForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
 
 public class GuiSolderingIron extends GuiForestry<TileForestry> {
 
@@ -46,10 +47,11 @@ public class GuiSolderingIron extends GuiForestry<TileForestry> {
 		for (int l = 2; l < inventory.getSizeInventory(); l++) {
 			String description;
 			CircuitRecipe recipe = ItemSolderingIron.SolderManager.getMatchingRecipe(layout, inventory.getStackInSlot(l));
-			if (recipe == null)
+			if (recipe == null) {
 				description = "(" + StringUtil.localize("gui.noeffect") + ")";
-			else
+			} else {
 				description = StringUtil.localize(recipe.circuit.getName()) + " (" + recipe.circuit.getLimit() + ")";
+			}
 
 			int row = (l - 2) * 20;
 			fontRendererObj.drawString(description, guiLeft + 32, guiTop + 36 + row, fontColor.get("gui.screen"));
@@ -70,10 +72,11 @@ public class GuiSolderingIron extends GuiForestry<TileForestry> {
 	protected void actionPerformed(GuiButton guibutton) {
 		super.actionPerformed(guibutton);
 
-		if (guibutton.id == 1)
+		if (guibutton.id == 1) {
 			((ContainerSolderingIron) inventorySlots).regressSelection(0, Proxies.common.getRenderWorld());
-		else if (guibutton.id == 2)
+		} else if (guibutton.id == 2) {
 			((ContainerSolderingIron) inventorySlots).advanceSelection(0, Proxies.common.getRenderWorld());
+		}
 	}
 
 }

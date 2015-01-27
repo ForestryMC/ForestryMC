@@ -40,12 +40,12 @@ public enum HiveDescription implements IHiveDescription {
 	SNOW(6, 2.0f, EnumSet.allOf(EnumHumidity.class), EnumSet.of(EnumTemperature.COLD, EnumTemperature.ICY), HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass, Blocks.snow)) {
 		@Override
 		public void postGen(World world, int x, int y, int z) {
-			if (world.isAirBlock(x, y + 1, z))
+			if (world.isAirBlock(x, y + 1, z)) {
 				world.setBlock(x, y + 1, z, Blocks.snow_layer, 0, 0);
+			}
 		}
 	},
-	SWAMP(7, 2.0f, EnumSet.of(EnumHumidity.DAMP), EnumSet.of(EnumTemperature.NORMAL), HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass)),
-	;
+	SWAMP(7, 2.0f, EnumSet.of(EnumHumidity.DAMP), EnumSet.of(EnumTemperature.NORMAL), HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass)),;
 
 	private final int meta;
 	private final float genChance;

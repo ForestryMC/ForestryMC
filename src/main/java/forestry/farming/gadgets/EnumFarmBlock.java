@@ -82,8 +82,9 @@ public enum EnumFarmBlock {
 
 		if (compound != null) {
 			int farmBlockOrdinal = compound.getInteger("FarmBlock");
-			if (farmBlockOrdinal < EnumFarmBlock.values().length)
+			if (farmBlockOrdinal < EnumFarmBlock.values().length) {
 				return EnumFarmBlock.values()[farmBlockOrdinal];
+			}
 		}
 
 		return EnumFarmBlock.BRICK_STONE;

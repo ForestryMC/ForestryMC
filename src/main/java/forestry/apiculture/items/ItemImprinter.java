@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -44,31 +44,35 @@ public class ItemImprinter extends ItemForestry {
 		}
 
 		public void advancePrimary() {
-			if (primaryIndex < PluginApiculture.beeInterface.getIndividualTemplates().size() - 1)
+			if (primaryIndex < PluginApiculture.beeInterface.getIndividualTemplates().size() - 1) {
 				primaryIndex++;
-			else
+			} else {
 				primaryIndex = 0;
+			}
 		}
 
 		public void advanceSecondary() {
-			if (secondaryIndex < PluginApiculture.beeInterface.getIndividualTemplates().size() - 1)
+			if (secondaryIndex < PluginApiculture.beeInterface.getIndividualTemplates().size() - 1) {
 				secondaryIndex++;
-			else
+			} else {
 				secondaryIndex = 0;
+			}
 		}
 
 		public void regressPrimary() {
-			if (primaryIndex > 0)
+			if (primaryIndex > 0) {
 				primaryIndex--;
-			else
+			} else {
 				primaryIndex = PluginApiculture.beeInterface.getIndividualTemplates().size() - 1;
+			}
 		}
 
 		public void regressSecondary() {
-			if (secondaryIndex > 0)
+			if (secondaryIndex > 0) {
 				secondaryIndex--;
-			else
+			} else {
 				secondaryIndex = PluginApiculture.beeInterface.getIndividualTemplates().size() - 1;
+			}
 		}
 
 		public IAlleleBeeSpecies getPrimary() {
@@ -103,20 +107,24 @@ public class ItemImprinter extends ItemForestry {
 
 		private void tryImprint() {
 
-			if (inventoryStacks[specimenSlot] == null)
+			if (inventoryStacks[specimenSlot] == null) {
 				return;
+			}
 
 			// Only imprint bees
-			if (!PluginApiculture.beeInterface.isMember(inventoryStacks[specimenSlot]))
+			if (!PluginApiculture.beeInterface.isMember(inventoryStacks[specimenSlot])) {
 				return;
+			}
 
 			// Needs space
-			if (inventoryStacks[imprintedSlot] != null)
+			if (inventoryStacks[imprintedSlot] != null) {
 				return;
+			}
 
 			IBee imprint = getSelectedBee();
-			if (imprint == null)
+			if (imprint == null) {
 				return;
+			}
 
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
 			imprint.writeToNBT(nbttagcompound);
@@ -128,8 +136,9 @@ public class ItemImprinter extends ItemForestry {
 
 		@Override
 		public void markDirty() {
-			if (!Proxies.common.isSimulating(player.worldObj))
+			if (!Proxies.common.isSimulating(player.worldObj)) {
 				return;
+			}
 			tryImprint();
 		}
 
@@ -153,9 +162,10 @@ public class ItemImprinter extends ItemForestry {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (Proxies.common.isSimulating(world))
+		if (Proxies.common.isSimulating(world)) {
 			entityplayer.openGui(ForestryAPI.instance, GuiId.ImprinterGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY,
 					(int) entityplayer.posZ);
+		}
 
 		return itemstack;
 	}

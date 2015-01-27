@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -73,8 +73,9 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, FuelManager.generatorFuel.keySet());
 		tankManager = new TankManager(resourceTank);
 
-		if (PluginIC2.instance.isAvailable())
+		if (PluginIC2.instance.isAvailable()) {
 			ic2EnergySource = new BasicSource(this, maxEnergy, 1);
+		}
 	}
 
 	@Override
@@ -86,8 +87,9 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 
-		if (ic2EnergySource != null)
+		if (ic2EnergySource != null) {
 			ic2EnergySource.writeToNBT(nbttagcompound);
+		}
 
 		tankManager.writeTanksToNBT(nbttagcompound);
 	}
@@ -96,24 +98,27 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 
-		if (ic2EnergySource != null)
+		if (ic2EnergySource != null) {
 			ic2EnergySource.readFromNBT(nbttagcompound);
+		}
 
 		tankManager.readTanksFromNBT(nbttagcompound);
 	}
 
 	@Override
 	public void onChunkUnload() {
-		if (ic2EnergySource != null)
+		if (ic2EnergySource != null) {
 			ic2EnergySource.onChunkUnload();
+		}
 
 		super.onChunkUnload();
 	}
 
 	@Override
 	public void invalidate() {
-		if (ic2EnergySource != null)
+		if (ic2EnergySource != null) {
 			ic2EnergySource.invalidate();
+		}
 
 		super.invalidate();
 	}
@@ -124,8 +129,9 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 			// Check inventory slots for fuel
 			// Check if we have suitable items waiting in the item slot
 			IInventoryAdapter inventory = getInternalInventory();
-			if (inventory.getStackInSlot(SLOT_CAN) != null)
+			if (inventory.getStackInSlot(SLOT_CAN) != null) {
 				FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
+			}
 		}
 
 		// No work to be done if IC2 is unavailable.
@@ -152,10 +158,11 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 
 		}
 
-		if (resourceTank.getFluidAmount() <= 0)
+		if (resourceTank.getFluidAmount() <= 0) {
 			setErrorState(EnumErrorCode.NOFUEL);
-		else
+		} else {
 			setErrorState(EnumErrorCode.OK);
+		}
 	}
 
 	public boolean isWorking() {
@@ -167,8 +174,9 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 	}
 
 	public int getStoredScaled(int i) {
-		if (ic2EnergySource == null)
+		if (ic2EnergySource == null) {
 			return 0;
+		}
 
 		return (int) (ic2EnergySource.getEnergyStored() * i) / maxEnergy;
 	}
@@ -187,16 +195,19 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 	@Override
 	public void getGUINetworkData(int i, int j) {
 		int firstMessageId = tankManager.maxMessageId() + 1;
-		if (i == firstMessageId)
-			if (ic2EnergySource != null)
+		if (i == firstMessageId) {
+			if (ic2EnergySource != null) {
 				ic2EnergySource.setEnergyStored(j);
+			}
+		}
 	}
 
 	@Override
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
 		int firstMessageId = tankManager.maxMessageId() + 1;
-		if (ic2EnergySource != null)
+		if (ic2EnergySource != null) {
 			iCrafting.sendProgressBarUpdate(container, firstMessageId, (short) ic2EnergySource.getEnergyStored());
+		}
 	}
 
 	/* ILiquidTankContainer */

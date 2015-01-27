@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -48,10 +48,12 @@ public class TileApiary extends TileBeehouse {
 		IInventoryAdapter inventory = getInternalInventory();
 		float mod = 1.0f;
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
-			if (inventory.getStackInSlot(i) == null)
+			if (inventory.getStackInSlot(i) == null) {
 				continue;
-			if (inventory.getStackInSlot(i).getItem() instanceof IHiveFrame)
+			}
+			if (inventory.getStackInSlot(i).getItem() instanceof IHiveFrame) {
 				mod *= ((IHiveFrame) inventory.getStackInSlot(i).getItem()).getTerritoryModifier(genome, mod);
+			}
 		}
 		return mod;
 	}
@@ -61,10 +63,12 @@ public class TileApiary extends TileBeehouse {
 		IInventoryAdapter inventory = getInternalInventory();
 		float mod = 0.1f;
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
-			if (inventory.getStackInSlot(i) == null)
+			if (inventory.getStackInSlot(i) == null) {
 				continue;
-			if (inventory.getStackInSlot(i).getItem() instanceof IHiveFrame)
+			}
+			if (inventory.getStackInSlot(i).getItem() instanceof IHiveFrame) {
 				mod *= ((IHiveFrame) inventory.getStackInSlot(i).getItem()).getProductionModifier(genome, mod);
+			}
 		}
 		return mod;
 	}
@@ -74,10 +78,12 @@ public class TileApiary extends TileBeehouse {
 		IInventoryAdapter inventory = getInternalInventory();
 		float mod = 1.0f;
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
-			if (inventory.getStackInSlot(i) == null)
+			if (inventory.getStackInSlot(i) == null) {
 				continue;
-			if (inventory.getStackInSlot(i).getItem() instanceof IHiveFrame)
+			}
+			if (inventory.getStackInSlot(i).getItem() instanceof IHiveFrame) {
 				mod *= ((IHiveFrame) inventory.getStackInSlot(i).getItem()).getMutationModifier(genome, mate, mod);
+			}
 		}
 		return mod;
 	}
@@ -87,10 +93,12 @@ public class TileApiary extends TileBeehouse {
 		IInventoryAdapter inventory = getInternalInventory();
 		float mod = 1.0f;
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
-			if (inventory.getStackInSlot(i) == null)
+			if (inventory.getStackInSlot(i) == null) {
 				continue;
-			if (inventory.getStackInSlot(i).getItem() instanceof IHiveFrame)
+			}
+			if (inventory.getStackInSlot(i).getItem() instanceof IHiveFrame) {
 				mod *= ((IHiveFrame) inventory.getStackInSlot(i).getItem()).getLifespanModifier(genome, mate, mod);
+			}
 		}
 		return mod;
 	}
@@ -100,10 +108,12 @@ public class TileApiary extends TileBeehouse {
 		IInventoryAdapter inventory = getInternalInventory();
 		float mod = 1f;
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
-			if (inventory.getStackInSlot(i) == null)
+			if (inventory.getStackInSlot(i) == null) {
 				continue;
-			if (inventory.getStackInSlot(i).getItem() instanceof IHiveFrame)
+			}
+			if (inventory.getStackInSlot(i).getItem() instanceof IHiveFrame) {
 				mod *= ((IHiveFrame) inventory.getStackInSlot(i).getItem()).getFloweringModifier(genome, mod);
+			}
 		}
 		return mod;
 	}
@@ -113,10 +123,12 @@ public class TileApiary extends TileBeehouse {
 		IInventoryAdapter inventory = getInternalInventory();
 		float mod = 1f;
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
-			if (inventory.getStackInSlot(i) == null)
+			if (inventory.getStackInSlot(i) == null) {
 				continue;
-			if (inventory.getStackInSlot(i).getItem() instanceof IHiveFrame)
+			}
+			if (inventory.getStackInSlot(i).getItem() instanceof IHiveFrame) {
 				mod *= ((IHiveFrame) inventory.getStackInSlot(i).getItem()).getGeneticDecay(genome, mod);
+			}
 		}
 		return mod;
 	}
@@ -127,10 +139,12 @@ public class TileApiary extends TileBeehouse {
 		int wear = Math.round(amount * PluginApiculture.beeInterface.getBeekeepingMode(worldObj).getWearModifier());
 
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
-			if (inventory.getStackInSlot(i) == null)
+			if (inventory.getStackInSlot(i) == null) {
 				continue;
-			if (!(inventory.getStackInSlot(i).getItem() instanceof IHiveFrame))
+			}
+			if (!(inventory.getStackInSlot(i).getItem() instanceof IHiveFrame)) {
 				continue;
+			}
 
 			inventory.setInventorySlotContents(
 					i,

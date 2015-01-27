@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -45,12 +45,15 @@ public class ContainerAlveary extends ContainerForestry {
 		this.addSlotToContainer(new SlotOutput(tile, 8, 116, 26));
 
 		// Player inventory
-		for (int i = 0; i < 3; i++)
-			for (int j = 0; j < 9; j++)
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 9; j++) {
 				addSlotToContainer(new Slot(player, j + i * 9 + 9, 8 + j * 18, 108 + i * 18));
+			}
+		}
 		// Player hotbar
-		for (int i = 0; i < 9; i++)
+		for (int i = 0; i < 9; i++) {
 			addSlotToContainer(new Slot(player, i, 8 + i * 18, 166));
+		}
 	}
 
 	@Override
@@ -61,8 +64,9 @@ public class ContainerAlveary extends ContainerForestry {
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		for (Object crafter : crafters)
+		for (Object crafter : crafters) {
 			tile.sendGUINetworkData(this, (ICrafting) crafter);
+		}
 	}
 
 }

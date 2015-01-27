@@ -10,17 +10,20 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.PlayerNotFoundException;
+import net.minecraft.entity.player.EntityPlayer;
+
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.core.commands.CommandHelpers;
 import forestry.core.commands.SubCommand;
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.PlayerNotFoundException;
-import net.minecraft.entity.player.EntityPlayer;
-import org.apache.commons.lang3.StringUtils;
 
 public final class CommandTreeSpawn extends SubCommand {
 
@@ -52,8 +55,9 @@ public final class CommandTreeSpawn extends SubCommand {
 		}
 
 		boolean success = treeSpawner.spawn(sender, treeName, player);
-		if (!success)
+		if (!success) {
 			printHelp(sender);
+		}
 	}
 
 	@Override
@@ -71,9 +75,11 @@ public final class CommandTreeSpawn extends SubCommand {
 	private static String[] getSpecies() {
 		List<String> species = new ArrayList<String>();
 
-		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values())
-			if (allele instanceof IAlleleTreeSpecies)
+		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+			if (allele instanceof IAlleleTreeSpecies) {
 				species.add(allele.getName().replaceAll("\\s", ""));
+			}
+		}
 
 		return species.toArray(new String[species.size()]);
 	}

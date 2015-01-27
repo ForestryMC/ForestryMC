@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -14,12 +14,14 @@
 
 package forestry.farming.worldgen;
 
-import forestry.core.config.Defaults;
 import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
+import forestry.core.config.Defaults;
 
 // Referenced classes of package net.minecraft.src:
 //            WorldGenerator, World, Block, BlockLeaves,
@@ -46,103 +48,130 @@ public class WorldGenBigMushroom extends WorldGenerator {
 
 		int height = random.nextInt(1) + 2;
 		boolean flag = true;
-		if (y < 1 || y + height + 1 > Defaults.WORLD_HEIGHT)
+		if (y < 1 || y + height + 1 > Defaults.WORLD_HEIGHT) {
 			return false;
+		}
 
 		for (int i = y; i <= y + 1 + height; i++) {
 			byte offset = 3;
-			if (i == y)
+			if (i == y) {
 				offset = 0;
+			}
 
-			for (int j = x - offset; j <= x + offset && flag; j++)
-				for (int k = z - offset; k <= z + offset && flag; k++)
+			for (int j = x - offset; j <= x + offset && flag; j++) {
+				for (int k = z - offset; k <= z + offset && flag; k++) {
 					if (i >= 0 && i < Defaults.WORLD_HEIGHT) {
 						Block block = world.getBlock(j, i, k);
-						if (!block.isAir(world, j, i, k) && block != Blocks.leaves)
+						if (!block.isAir(world, j, i, k) && block != Blocks.leaves) {
 							flag = false;
-					} else
+						}
+					} else {
 						flag = false;
+					}
+				}
+			}
 		}
 
-		if (!flag)
+		if (!flag) {
 			return false;
+		}
 
 		Block ground = world.getBlock(x, y - 1, z);
-		if (ground != Blocks.mycelium)
+		if (ground != Blocks.mycelium) {
 			return false;
+		}
 
-		if (!Blocks.brown_mushroom.canPlaceBlockAt(world, x, y, z))
+		if (!Blocks.brown_mushroom.canPlaceBlockAt(world, x, y, z)) {
 			return false;
+		}
 
 		func_150515_a(world, x, y - 1, z, Blocks.dirt);
 
 		int capStartY = y + height;
-		if (type == Blocks.red_mushroom_block)
+		if (type == Blocks.red_mushroom_block) {
 			capStartY = (y + height) - 1;
+		}
 
 		for (int i = capStartY; i <= y + height; i++) {
 
 			int capRad = 1;
 
-			if (type == Blocks.brown_mushroom_block)
+			if (type == Blocks.brown_mushroom_block) {
 				capRad = 1;
+			}
 
-			for (int j = x - capRad; j <= x + capRad; j++)
+			for (int j = x - capRad; j <= x + capRad; j++) {
 				for (int k = z - capRad; k <= z + capRad; k++) {
 					int remain = 5;
-					if (j == x - capRad)
+					if (j == x - capRad) {
 						remain--;
+					}
 
-					if (j == x + capRad)
+					if (j == x + capRad) {
 						remain++;
+					}
 
-					if (k == z - capRad)
+					if (k == z - capRad) {
 						remain -= 3;
+					}
 
-					if (k == z + capRad)
+					if (k == z + capRad) {
 						remain += 3;
+					}
 
 					if (type == Blocks.brown_mushroom_block || i < y + height) {
 
-						if (j == x - (capRad - 1) && k == z - capRad)
+						if (j == x - (capRad - 1) && k == z - capRad) {
 							remain = 1;
+						}
 
-						if (j == x - capRad && k == z - (capRad - 1))
+						if (j == x - capRad && k == z - (capRad - 1)) {
 							remain = 1;
+						}
 
-						if (j == x + (capRad - 1) && k == z - capRad)
+						if (j == x + (capRad - 1) && k == z - capRad) {
 							remain = 3;
+						}
 
-						if (j == x + capRad && k == z - (capRad - 1))
+						if (j == x + capRad && k == z - (capRad - 1)) {
 							remain = 3;
+						}
 
-						if (j == x - (capRad - 1) && k == z + capRad)
+						if (j == x - (capRad - 1) && k == z + capRad) {
 							remain = 7;
+						}
 
-						if (j == x - capRad && k == z + (capRad - 1))
+						if (j == x - capRad && k == z + (capRad - 1)) {
 							remain = 7;
+						}
 
-						if (j == x + (capRad - 1) && k == z + capRad)
+						if (j == x + (capRad - 1) && k == z + capRad) {
 							remain = 9;
+						}
 
-						if (j == x + capRad && k == z + (capRad - 1))
+						if (j == x + capRad && k == z + (capRad - 1)) {
 							remain = 9;
+						}
 
 					}
-					if (remain == 5 && i < y + height)
+					if (remain == 5 && i < y + height) {
 						remain = 0;
+					}
 
-					if ((remain != 0 || y >= (y + height) - 1) && !world.getBlock(j, i, k).isOpaqueCube())
+					if ((remain != 0 || y >= (y + height) - 1) && !world.getBlock(j, i, k).isOpaqueCube()) {
 						setBlockAndNotifyAdequately(world, j, i, k, type, remain);
+					}
 
 				}
+			}
 
 		}
 
 		for (int i = 0; i < height; i++) {
 			Block block = world.getBlock(x, y + i, z);
-			if (!block.isOpaqueCube())
+			if (!block.isOpaqueCube()) {
 				setBlockAndNotifyAdequately(world, x, y + i, z, type, 10);
+			}
 		}
 
 		return true;

@@ -4,24 +4,27 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.render;
+
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
+import org.lwjgl.opengl.GL11;
 
 import forestry.core.interfaces.IBlockRenderer;
 import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.ForestryResource;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.ForgeDirection;
-import org.lwjgl.opengl.GL11;
 
 public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRenderer {
 
@@ -72,7 +75,7 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 	public RenderMachine(String baseTexture) {
 		this();
 
-		textures = new ResourceLocation[] {
+		textures = new ResourceLocation[]{
 				new ForestryResource(baseTexture + "base.png"),
 
 				new ForestryResource(baseTexture + "tank_resource_empty.png"),
@@ -117,41 +120,42 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 
 		GL11.glTranslatef((float) x, (float) y, (float) z);
 
-		float[] angle = { 0, 0, 0 };
-		float[] translate = { 0, 0, 0 };
+		float[] angle = {0, 0, 0};
+		float[] translate = {0, 0, 0};
 
-		if (orientation == null)
+		if (orientation == null) {
 			orientation = ForgeDirection.WEST;
+		}
 		switch (orientation) {
-		case EAST:
-			// angle [2] = (float) Math.PI / 2;
-			angle[1] = (float) Math.PI;
-			angle[2] = (float) -Math.PI / 2;
-			translate[0] = 1;
-			break;
-		case WEST:
-			// 2, -PI/2
-			angle[2] = (float) Math.PI / 2;
-			translate[0] = -1;
-			break;
-		case UP:
-			translate[1] = 1;
-			break;
-		case DOWN:
-			angle[2] = (float) Math.PI;
-			translate[1] = -1;
-			break;
-		case SOUTH:
-			angle[0] = (float) Math.PI / 2;
-			angle[2] = (float) Math.PI / 2;
-			translate[2] = 1;
-			break;
-		case NORTH:
-		default:
-			angle[0] = (float) -Math.PI / 2;
-			angle[2] = (float) Math.PI / 2;
-			translate[2] = -1;
-			break;
+			case EAST:
+				// angle [2] = (float) Math.PI / 2;
+				angle[1] = (float) Math.PI;
+				angle[2] = (float) -Math.PI / 2;
+				translate[0] = 1;
+				break;
+			case WEST:
+				// 2, -PI/2
+				angle[2] = (float) Math.PI / 2;
+				translate[0] = -1;
+				break;
+			case UP:
+				translate[1] = 1;
+				break;
+			case DOWN:
+				angle[2] = (float) Math.PI;
+				translate[1] = -1;
+				break;
+			case SOUTH:
+				angle[0] = (float) Math.PI / 2;
+				angle[2] = (float) Math.PI / 2;
+				translate[2] = 1;
+				break;
+			case NORTH:
+			default:
+				angle[0] = (float) -Math.PI / 2;
+				angle[2] = (float) Math.PI / 2;
+				translate[2] = -1;
+				break;
 		}
 
 		basefront.rotateAngleX = angle[0];
@@ -181,43 +185,43 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 		ResourceLocation texture;
 
 		switch (waterLevel) {
-		case LOW:
-			texture = textures[Textures.TANK_R_LOW.ordinal()];
-			break;
-		case MEDIUM:
-			texture = textures[Textures.TANK_R_MEDIUM.ordinal()];
-			break;
-		case HIGH:
-			texture = textures[Textures.TANK_R_HIGH.ordinal()];
-			break;
-		case MAXIMUM:
-			texture = textures[Textures.TANK_R_MAXIMUM.ordinal()];
-			break;
-		case EMPTY:
-		default:
-			texture = textures[Textures.TANK_R_EMPTY.ordinal()];
-			break;
+			case LOW:
+				texture = textures[Textures.TANK_R_LOW.ordinal()];
+				break;
+			case MEDIUM:
+				texture = textures[Textures.TANK_R_MEDIUM.ordinal()];
+				break;
+			case HIGH:
+				texture = textures[Textures.TANK_R_HIGH.ordinal()];
+				break;
+			case MAXIMUM:
+				texture = textures[Textures.TANK_R_MAXIMUM.ordinal()];
+				break;
+			case EMPTY:
+			default:
+				texture = textures[Textures.TANK_R_EMPTY.ordinal()];
+				break;
 		}
 		Proxies.common.bindTexture(texture);
 		resourceTank.render(factor);
 
 		switch (melangeLevel) {
-		case LOW:
-			texture = textures[Textures.TANK_P_LOW.ordinal()];
-			break;
-		case MEDIUM:
-			texture = textures[Textures.TANK_P_MEDIUM.ordinal()];
-			break;
-		case HIGH:
-			texture = textures[Textures.TANK_P_HIGH.ordinal()];
-			break;
-		case MAXIMUM:
-			texture = textures[Textures.TANK_P_MAXIMUM.ordinal()];
-			break;
-		case EMPTY:
-		default:
-			texture = textures[Textures.TANK_P_EMPTY.ordinal()];
-			break;
+			case LOW:
+				texture = textures[Textures.TANK_P_LOW.ordinal()];
+				break;
+			case MEDIUM:
+				texture = textures[Textures.TANK_P_MEDIUM.ordinal()];
+				break;
+			case HIGH:
+				texture = textures[Textures.TANK_P_HIGH.ordinal()];
+				break;
+			case MAXIMUM:
+				texture = textures[Textures.TANK_P_MAXIMUM.ordinal()];
+				break;
+			case EMPTY:
+			default:
+				texture = textures[Textures.TANK_P_EMPTY.ordinal()];
+				break;
 		}
 		Proxies.common.bindTexture(texture);
 		productTank.render(factor);

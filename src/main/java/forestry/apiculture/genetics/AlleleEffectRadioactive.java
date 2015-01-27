@@ -4,11 +4,22 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.genetics;
+
+import java.util.List;
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
 
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
@@ -18,15 +29,6 @@ import forestry.apiculture.gadgets.TileAlveary;
 import forestry.apiculture.items.ItemArmorApiarist;
 import forestry.core.utils.DamageSourceForestry;
 import forestry.core.vect.Vect;
-import java.util.List;
-import java.util.Random;
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
 
 public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 
@@ -41,8 +43,9 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 
 		World world = housing.getWorld();
 
-		if (isHalted(storedData, housing))
+		if (isHalted(storedData, housing)) {
 			return storedData;
+		}
 
 		int[] areaAr = genome.getTerritory();
 		Vect area = new Vect(areaAr[0] * 2, areaAr[1] * 2, areaAr[2] * 2);
@@ -67,14 +70,15 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 			if (entity instanceof EntityPlayer) {
 				int count = ItemArmorApiarist.wearsItems((EntityPlayer) entity, getUID(), true);
 				// Full set, no damage/effect
-				if (count > 3)
+				if (count > 3) {
 					continue;
-				else if (count > 2)
+				} else if (count > 2) {
 					damage = 1;
-				else if (count > 1)
+				} else if (count > 1) {
 					damage = 2;
-				else if (count > 0)
+				} else if (count > 0) {
 					damage = 3;
+				}
 			}
 
 			entity.attackEntityFrom(damageSourceBeeRadioactive, damage);
@@ -90,29 +94,36 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 			Vect posBlock = randomPos.add(new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord()));
 			posBlock = posBlock.add(offset);
 
-			if(posBlock.y <= 1 || posBlock.y >= housing.getWorld().getActualHeight())
+			if (posBlock.y <= 1 || posBlock.y >= housing.getWorld().getActualHeight()) {
 				continue;
+			}
 
 			// Don't destroy ourself and blocks below us.
-			if (posBlock.x == housing.getXCoord() && posBlock.z == housing.getZCoord() && posBlock.y <= housing.getYCoord())
+			if (posBlock.x == housing.getXCoord() && posBlock.z == housing.getZCoord() && posBlock.y <= housing.getYCoord()) {
 				continue;
+			}
 
-			if (world.isAirBlock(posBlock.x, posBlock.y, posBlock.z))
+			if (world.isAirBlock(posBlock.x, posBlock.y, posBlock.z)) {
 				continue;
+			}
 
 			Block block = world.getBlock(posBlock.x, posBlock.y, posBlock.z);
 
-			if (block instanceof BlockAlveary)
+			if (block instanceof BlockAlveary) {
 				continue;
+			}
 
 			TileEntity tile = world.getTileEntity(posBlock.x, posBlock.y, posBlock.z);
-			if (tile instanceof IBeeHousing)
+			if (tile instanceof IBeeHousing) {
 				continue;
-			if (tile instanceof TileAlveary)
+			}
+			if (tile instanceof TileAlveary) {
 				continue;
+			}
 
-			if (block.getBlockHardness(world, posBlock.x, posBlock.y, posBlock.z) < 0)
+			if (block.getBlockHardness(world, posBlock.x, posBlock.y, posBlock.z) < 0) {
 				continue;
+			}
 
 			world.setBlockToAir(posBlock.x, posBlock.y, posBlock.z);
 			break;

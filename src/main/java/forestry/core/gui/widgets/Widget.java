@@ -4,17 +4,18 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import forestry.core.gui.WidgetManager;
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.proxy.Proxies;
-import net.minecraft.entity.player.EntityPlayer;
 
 /**
  * Basic non-ItemStack slot

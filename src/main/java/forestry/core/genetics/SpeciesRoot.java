@@ -4,17 +4,12 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.genetics;
 
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IChromosome;
-import forestry.api.genetics.IChromosomeType;
-import forestry.api.genetics.IMutation;
-import forestry.api.genetics.ISpeciesRoot;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,7 +17,14 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
+
 import net.minecraft.item.ItemStack;
+
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IChromosome;
+import forestry.api.genetics.IChromosomeType;
+import forestry.api.genetics.IMutation;
+import forestry.api.genetics.ISpeciesRoot;
 
 public abstract class SpeciesRoot implements ISpeciesRoot {
 	
@@ -66,9 +68,11 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 	@Override
 	public Collection<? extends IMutation> getCombinations(IAllele other) {
 		ArrayList<IMutation> combinations = new ArrayList<IMutation>();
-		for (IMutation mutation : getMutations(false))
-			if (mutation.isPartner(other))
+		for (IMutation mutation : getMutations(false)) {
+			if (mutation.isPartner(other)) {
 				combinations.add(mutation);
+			}
+		}
 
 		return combinations;
 	}
@@ -77,9 +81,11 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 	@Override
 	public Collection<? extends IMutation> getPaths(IAllele result, int chromosomeOrdinal) {
 		ArrayList<IMutation> paths = new ArrayList<IMutation>();
-		for (IMutation mutation : getMutations(false))
-			if(mutation.getTemplate()[chromosomeOrdinal] == result)
+		for (IMutation mutation : getMutations(false)) {
+			if (mutation.getTemplate()[chromosomeOrdinal] == result) {
 				paths.add(mutation);
+			}
+		}
 		
 		return paths;
 	}
@@ -87,9 +93,11 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 	@Override
 	public Collection<? extends IMutation> getPaths(IAllele result, IChromosomeType chromosomeType) {
 		ArrayList<IMutation> paths = new ArrayList<IMutation>();
-		for (IMutation mutation : getMutations(false))
-			if(mutation.getTemplate()[chromosomeType.ordinal()] == result)
+		for (IMutation mutation : getMutations(false)) {
+			if (mutation.getTemplate()[chromosomeType.ordinal()] == result) {
 				paths.add(mutation);
+			}
+		}
 
 		return paths;
 	}
@@ -98,9 +106,11 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 	@Override
 	public IChromosome[] templateAsChromosomes(IAllele[] template) {
 		Chromosome[] chromosomes = new Chromosome[template.length];
-		for (int i = 0; i < template.length; i++)
-			if (template[i] != null)
+		for (int i = 0; i < template.length; i++) {
+			if (template[i] != null) {
 				chromosomes[i] = new Chromosome(template[i]);
+			}
+		}
 
 		return chromosomes;
 	}
@@ -108,9 +118,11 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 	@Override
 	public IChromosome[] templateAsChromosomes(IAllele[] templateActive, IAllele[] templateInactive) {
 		Chromosome[] chromosomes = new Chromosome[templateActive.length];
-		for (int i = 0; i < templateActive.length; i++)
-			if (templateActive[i] != null)
+		for (int i = 0; i < templateActive.length; i++) {
+			if (templateActive[i] != null) {
 				chromosomes[i] = new Chromosome(templateActive[i], templateInactive[i]);
+			}
+		}
 
 		return chromosomes;
 	}

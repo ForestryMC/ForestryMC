@@ -4,11 +4,22 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.farming.logic;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.farming.IFarmHousing;
 import forestry.core.fluids.Fluids;
@@ -17,15 +28,6 @@ import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
 
 public abstract class FarmLogicWatered extends FarmLogic {
 
@@ -71,14 +73,17 @@ public abstract class FarmLogicWatered extends FarmLogic {
 	@Override
 	public boolean cultivate(int x, int y, int z, ForgeDirection direction, int extent) {
 
-		if (maintainSoil(x, y, z, direction, extent))
+		if (maintainSoil(x, y, z, direction, extent)) {
 			return true;
+		}
 
-		if (!isManual && maintainWater(x, y, z, direction, extent))
+		if (!isManual && maintainWater(x, y, z, direction, extent)) {
 			return true;
+		}
 
-		if (maintainCrops(x, y + 1, z, direction, extent))
+		if (maintainCrops(x, y + 1, z, direction, extent)) {
 			return true;
+		}
 
 		return false;
 	}
@@ -102,11 +107,13 @@ public abstract class FarmLogicWatered extends FarmLogic {
 				continue;
 			}
 
-			if (isManual || isWaterSourceBlock(world, position))
+			if (isManual || isWaterSourceBlock(world, position)) {
 				continue;
+			}
 
-			if (trySetWater(world, position))
+			if (trySetWater(world, position)) {
 				return true;
+			}
 
 			return trySetSoil(position);
 		}
@@ -120,8 +127,9 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(x, y, z, direction, i);
 
-			if (trySetWater(world, position))
+			if (trySetWater(world, position)) {
 				return true;
+			}
 		}
 
 		return false;
@@ -132,19 +140,22 @@ public abstract class FarmLogicWatered extends FarmLogic {
 	}
 
 	private boolean trySetSoil(Vect position) {
-		if (!housing.hasResources(resource))
+		if (!housing.hasResources(resource)) {
 			return false;
+		}
 		setBlock(position, StackUtils.getBlock(ground), ground.getItemDamage());
 		housing.removeResources(resource);
 		return true;
 	}
 
 	private boolean trySetWater(World world, Vect position) {
-		if (isWaterSourceBlock(world, position) || !canPlaceWater(world, position))
+		if (isWaterSourceBlock(world, position) || !canPlaceWater(world, position)) {
 			return false;
+		}
 
-		if (!housing.hasLiquid(STACK_WATER))
+		if (!housing.hasLiquid(STACK_WATER)) {
 			return false;
+		}
 
 		produce.addAll(BlockUtil.getBlockDrops(world, position));
 		setBlock(position, Blocks.water, 0);
@@ -157,21 +168,24 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		for (int x = -2; x <= 2; x++) {
 			for (int z = -2; z <= 2; z++) {
 				Vect offsetPosition = position.add(x, 0, z);
-				if (isWaterSourceBlock(world, offsetPosition))
+				if (isWaterSourceBlock(world, offsetPosition)) {
 					return false;
+				}
 			}
 		}
 
 		// don't place water if it can flow into blocks next to it
 		for (int x = -1; x <= 1; x++) {
 			Vect offsetPosition = position.add(x, 0, 0);
-			if (VectUtil.isAirBlock(world, offsetPosition))
+			if (VectUtil.isAirBlock(world, offsetPosition)) {
 				return false;
+			}
 		}
 		for (int z = -1; z <= 1; z++) {
 			Vect offsetPosition = position.add(0, 0, z);
-			if (VectUtil.isAirBlock(world, offsetPosition))
+			if (VectUtil.isAirBlock(world, offsetPosition)) {
 				return false;
+			}
 		}
 
 		return true;

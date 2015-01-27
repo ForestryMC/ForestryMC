@@ -4,17 +4,18 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import forestry.core.inventory.InvTools;
-import forestry.core.inventory.InventoryAdapter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+
+import forestry.core.inventory.InvTools;
+import forestry.core.inventory.InventoryAdapter;
 
 public class TileSwarm extends TileEntity {
 
@@ -26,16 +27,19 @@ public class TileSwarm extends TileEntity {
 	}
 
 	public TileSwarm setContained(ItemStack[] bees) {
-		for (ItemStack itemstack : bees)
+		for (ItemStack itemstack : bees) {
 			InvTools.addStack(contained, itemstack, false, true);
+		}
 
 		return this;
 	}
 
 	public boolean containsBees() {
-		for (int i = 0; i < contained.getSizeInventory(); i++)
-			if (contained.getStackInSlot(i) != null)
+		for (int i = 0; i < contained.getSizeInventory(); i++) {
+			if (contained.getStackInSlot(i) != null) {
 				return true;
+			}
+		}
 
 		return false;
 	}

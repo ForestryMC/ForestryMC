@@ -4,32 +4,35 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.core.Tabs;
-import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.WoodType;
-import forestry.plugins.PluginArboriculture;
 import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.core.Tabs;
+import forestry.arboriculture.IWoodTyped;
+import forestry.arboriculture.WoodType;
+import forestry.plugins.PluginArboriculture;
 
 public class BlockArbFence extends BlockFence implements IWoodTyped {
 
@@ -49,13 +52,14 @@ public class BlockArbFence extends BlockFence implements IWoodTyped {
 		setCreativeTab(Tabs.tabArboriculture);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
 		int totalWoods = WoodType.values().length;
 		int count = Math.min(totalWoods - (cat.ordinal() * fencesPerCat), fencesPerCat);
-		for (int i = 0; i < count; i++)
+		for (int i = 0; i < count; i++) {
 			itemList.add(new ItemStack(this, 1, i));
+		}
 	}
 
 	@Override
@@ -72,12 +76,14 @@ public class BlockArbFence extends BlockFence implements IWoodTyped {
 	public boolean canConnectFenceTo(IBlockAccess world, int x, int y, int z) {
 		if (!isFence(world, x, y, z)) {
 			Block block = world.getBlock(x, y, z);
-			if (block == this || block instanceof BlockFenceGate)
+			if (block == this || block instanceof BlockFenceGate) {
 				return true;
+			}
 
 			return block.getMaterial().isOpaque() && block.renderAsNormalBlock() && block.getMaterial() != Material.gourd;
-		} else
+		} else {
 			return true;
+		}
 	}
 
 	@Override
@@ -96,8 +102,9 @@ public class BlockArbFence extends BlockFence implements IWoodTyped {
 	@Override
 	public IIcon getIcon(int side, int meta) {
 		WoodType woodType = getWoodType(meta);
-		if (woodType == null)
+		if (woodType == null) {
 			return null;
+		}
 		return woodType.getPlankIcon();
 	}
 
@@ -130,10 +137,11 @@ public class BlockArbFence extends BlockFence implements IWoodTyped {
 	@Override
 	public WoodType getWoodType(int meta) {
 		int woodOrdinal = cat.ordinal() * fencesPerCat + meta;
-		if(woodOrdinal < WoodType.VALUES.length)
+		if (woodOrdinal < WoodType.VALUES.length) {
 			return WoodType.VALUES[woodOrdinal];
-		else
+		} else {
 			return null;
+		}
 	}
 
 	@Override

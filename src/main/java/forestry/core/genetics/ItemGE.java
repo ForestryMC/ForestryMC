@@ -4,24 +4,27 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.genetics;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IIndividual;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
 import java.util.List;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IIndividual;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.StringUtil;
 
 public abstract class ItemGE extends Item {
 
@@ -60,21 +63,24 @@ public abstract class ItemGE extends Item {
 		return species != null && species.hasEffect();
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
-		if(!itemstack.hasTagCompound())
+		if (!itemstack.hasTagCompound()) {
 			return;
+		}
 
 		IIndividual individual = getIndividual(itemstack);
 
-		if(individual.isAnalyzed()) {
-			if(Proxies.common.isShiftDown())
+		if (individual.isAnalyzed()) {
+			if (Proxies.common.isShiftDown()) {
 				individual.addTooltip(list);
-			else
+			} else {
 				list.add(EnumChatFormatting.ITALIC + "<" + StringUtil.localize("gui.tooltip.tmi") + ">");
-		} else
+			}
+		} else {
 			list.add("<" + StringUtil.localize("gui.unknown") + ">");
+		}
 	}
 
 	/* ICONS */
@@ -87,12 +93,13 @@ public abstract class ItemGE extends Item {
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
 
-		if (renderPass == 0)
+		if (renderPass == 0) {
 			return getDefaultPrimaryColour();
-		else if (renderPass == 1)
+		} else if (renderPass == 1) {
 			return getDefaultSecondaryColour();
-		else
+		} else {
 			return 0xffffff;
+		}
 
 	}
 

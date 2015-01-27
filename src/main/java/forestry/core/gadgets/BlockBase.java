@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -28,7 +28,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.IFluidHandler;
 
 import cpw.mods.fml.relauncher.Side;
@@ -59,7 +58,9 @@ public class BlockBase extends BlockForestry {
 	public MachineDefinition addDefinition(MachineDefinition definition) {
 		definition.setBlock(this);
 
-		while (definitions.size() <= definition.meta) definitions.add(null);
+		while (definitions.size() <= definition.meta) {
+			definitions.add(null);
+		}
 
 		definitions.set(definition.meta, definition);
 
@@ -78,10 +79,11 @@ public class BlockBase extends BlockForestry {
 
 	@Override
 	public int getRenderType() {
-		if (hasTESR)
+		if (hasTESR) {
 			return Proxies.common.getByBlockModelId();
-		else
+		} else {
 			return 0;
+		}
 	}
 
 	private MachineDefinition getDefinition(IBlockAccess world, int x, int y, int z) {
@@ -89,8 +91,9 @@ public class BlockBase extends BlockForestry {
 	}
 
 	private MachineDefinition getDefinition(int metadata) {
-		if (metadata >= definitions.size() || definitions.get(metadata) == null)
+		if (metadata >= definitions.size() || definitions.get(metadata) == null) {
 			return definitions.get(0);
+		}
 
 		return definitions.get(metadata);
 	}
@@ -101,8 +104,9 @@ public class BlockBase extends BlockForestry {
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
 		for (MachineDefinition definition : definitions) {
-			if (definition == null)
+			if (definition == null) {
 				continue;
+			}
 			definition.getSubBlocks(item, tab, list);
 		}
 	}
@@ -110,12 +114,14 @@ public class BlockBase extends BlockForestry {
 	/* TILE ENTITY CREATION */
 	@Override
 	public TileEntity createTileEntity(World world, int metadata) {
-		if (metadata >= definitions.size() || definitions.get(metadata) == null)
+		if (metadata >= definitions.size() || definitions.get(metadata) == null) {
 			metadata = 0;
+		}
 
 		MachineDefinition definition = definitions.get(metadata);
-		if (definition == null)
+		if (definition == null) {
 			return null;
+		}
 		return definition.createMachine();
 	}
 
@@ -127,10 +133,11 @@ public class BlockBase extends BlockForestry {
 	/* BLOCK DROPS */
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-		if (getDefinition(metadata).handlesDrops())
+		if (getDefinition(metadata).handlesDrops()) {
 			return getDefinition(metadata).getDrops(world, x, y, z, metadata, fortune);
-		else
+		} else {
 			return super.getDrops(world, x, y, z, metadata, fortune);
+		}
 	}
 
 	/* INTERACTION */
@@ -158,15 +165,18 @@ public class BlockBase extends BlockForestry {
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float par7, float par8, float par9) {
-		if (getDefinition(world, x, y, z).onBlockActivated(world, x, y, z, player, side, par7, par8, par9))
+		if (getDefinition(world, x, y, z).onBlockActivated(world, x, y, z, player, side, par7, par8, par9)) {
 			return true;
+		}
 
-		if (player.isSneaking())
+		if (player.isSneaking()) {
 			return false;
+		}
 
 		TileBase tile = (TileBase) world.getTileEntity(x, y, z);
-		if (!Utils.isUseableByPlayer(player, tile))
+		if (!Utils.isUseableByPlayer(player, tile)) {
 			return false;
+		}
 
 		ItemStack current = player.getCurrentEquippedItem();
 		if (current != null && current.getItem() != Items.bucket && tile instanceof IFluidHandler && tile.allowsAlteration(player)) {
@@ -175,8 +185,9 @@ public class BlockBase extends BlockForestry {
 			}
 		}
 
-		if (!Proxies.common.isSimulating(world))
+		if (!Proxies.common.isSimulating(world)) {
 			return true;
+		}
 
 		if (tile.allowsViewing(player)) {
 			tile.openGui(player, tile);
@@ -201,23 +212,27 @@ public class BlockBase extends BlockForestry {
 	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
 
 		IOwnable tile = (IOwnable) world.getTileEntity(x, y, z);
-		if (tile == null)
+		if (tile == null) {
 			return world.setBlockToAir(x, y, z);
+		}
 
-		if (tile.isOwnable() && !tile.allowsRemoval(player))
+		if (tile.isOwnable() && !tile.allowsRemoval(player)) {
 			return false;
+		}
 
-		if (getDefinition(world, x, y, z).removedByPlayer(world, player, x, y, z))
+		if (getDefinition(world, x, y, z).removedByPlayer(world, player, x, y, z)) {
 			return world.setBlockToAir(x, y, z);
-		else
+		} else {
 			return false;
+		}
 	}
 
 	@Override
 	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
 		int metadata = world.getBlockMetadata(x, y, z);
-		if (metadata >= definitions.size() || definitions.get(metadata) == null)
+		if (metadata >= definitions.size() || definitions.get(metadata) == null) {
 			metadata = 0;
+		}
 		return definitions.get(metadata).canConnectRedstone(world, x, y, z, side);
 	}
 
@@ -231,8 +246,9 @@ public class BlockBase extends BlockForestry {
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
 		for (MachineDefinition def : definitions) {
-			if (def == null)
+			if (def == null) {
 				continue;
+			}
 			def.registerIcons(register);
 		}
 	}
@@ -240,8 +256,9 @@ public class BlockBase extends BlockForestry {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIcon(int side, int metadata) {
-		if (metadata >= definitions.size() || definitions.get(metadata) == null)
+		if (metadata >= definitions.size() || definitions.get(metadata) == null) {
 			return null;
+		}
 		return definitions.get(metadata).getBlockTextureFromSideAndMetadata(side, metadata);
 	}
 
@@ -249,8 +266,9 @@ public class BlockBase extends BlockForestry {
 	@Override
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 		int metadata = world.getBlockMetadata(x, y, z);
-		if (metadata >= definitions.size() || definitions.get(metadata) == null)
+		if (metadata >= definitions.size() || definitions.get(metadata) == null) {
 			metadata = 0;
+		}
 		return definitions.get(metadata).getIcon(world, x, y, z, side, metadata);
 	}
 

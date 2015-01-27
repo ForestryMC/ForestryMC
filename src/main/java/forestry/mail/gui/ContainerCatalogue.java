@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -46,12 +46,12 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 	private boolean needsSynch = true;
 	private int currentFilter = 1;
 
-	private static final String[] FILTER_NAMES = new String[] { "all", "online", "offline" };
+	private static final String[] FILTER_NAMES = new String[]{"all", "online", "offline"};
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	private static final Set<IPostalState>[] FILTERS = new EnumSet[] {
-		EnumSet.noneOf(EnumStationState.class),
-		EnumSet.of(EnumStationState.OK),
-		EnumSet.of(EnumStationState.INSUFFICIENT_OFFER, EnumStationState.INSUFFICIENT_TRADE_GOOD, EnumStationState.INSUFFICIENT_BUFFER, EnumStationState.INSUFFICIENT_PAPER, EnumStationState.INSUFFICIENT_STAMPS)
+	private static final Set<IPostalState>[] FILTERS = new EnumSet[]{
+			EnumSet.noneOf(EnumStationState.class),
+			EnumSet.of(EnumStationState.OK),
+			EnumSet.of(EnumStationState.INSUFFICIENT_OFFER, EnumStationState.INSUFFICIENT_TRADE_GOOD, EnumStationState.INSUFFICIENT_BUFFER, EnumStationState.INSUFFICIENT_PAPER, EnumStationState.INSUFFICIENT_STAMPS)
 	};
 
 	public ContainerCatalogue(EntityPlayer player) {
@@ -62,21 +62,30 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 		rebuildStationsList();
 	}
 
-	public int getMaxCount() { return maxItPos; }
-	public int getCurrentPos() { return currentItPos; }
+	public int getMaxCount() {
+		return maxItPos;
+	}
 
-	public String getFilterIdent() { return FILTER_NAMES[currentFilter]; }
+	public int getCurrentPos() {
+		return currentItPos;
+	}
+
+	public String getFilterIdent() {
+		return FILTER_NAMES[currentFilter];
+	}
 
 	private void rebuildStationsList() {
 		stations.clear();
-		for(ITradeStation station : PostManager.postRegistry.getPostOffice(player.worldObj).getActiveTradeStations(player.worldObj).values()) {
+		for (ITradeStation station : PostManager.postRegistry.getPostOffice(player.worldObj).getActiveTradeStations(player.worldObj).values()) {
 			TradeStationInfo info = station.getTradeInfo();
-			if(info.tradegood == null)
+			if (info.tradegood == null) {
 				continue;
+			}
 
-			if(!FILTERS[currentFilter].isEmpty()) {
-				if(!FILTERS[currentFilter].contains(info.state))
+			if (!FILTERS[currentFilter].isEmpty()) {
+				if (!FILTERS[currentFilter].contains(info.state)) {
 					continue;
+				}
 			}
 
 			stations.put(station.getAddress(), station);
@@ -87,59 +96,64 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 	}
 
 	private void resetIteration() {
-		if(!stations.isEmpty()) {
+		if (!stations.isEmpty()) {
 			iterator = stations.values().iterator();
 			updateTradeInfo(iterator.next());
-		} else
+		} else {
 			updateTradeInfo(null);
+		}
 
 		currentItPos = 1;
 	}
 
 	public void advanceIteration() {
 
-		if(!Proxies.common.isSimulating(player.worldObj)) {
+		if (!Proxies.common.isSimulating(player.worldObj)) {
 			sendSelection(true);
 			return;
 		}
 
-		if(stations.isEmpty())
+		if (stations.isEmpty()) {
 			return;
+		}
 
-		if(iterator.hasNext()) {
+		if (iterator.hasNext()) {
 			currentItPos++;
 			updateTradeInfo(iterator.next());
-		} else
+		} else {
 			resetIteration();
+		}
 	}
 
 	public void regressIteration() {
 
-		if(!Proxies.common.isSimulating(player.worldObj)) {
+		if (!Proxies.common.isSimulating(player.worldObj)) {
 			sendSelection(false);
 			return;
 		}
 
-		if(stations.isEmpty())
+		if (stations.isEmpty()) {
 			return;
+		}
 
 		iterator = stations.values().iterator();
 		ITradeStation previous = null;
 		currentItPos = 0;
 
-		while(iterator.hasNext()) {
+		while (iterator.hasNext()) {
 			ITradeStation current = iterator.next();
-			if(!current.getAddress().equals(currentTrade.address)) {
+			if (!current.getAddress().equals(currentTrade.address)) {
 				currentItPos++;
 				previous = current;
 				continue;
 			}
 
-			if(previous == null) {
+			if (previous == null) {
 				Iterator<ITradeStation> it = stations.values().iterator();
 				currentItPos = stations.size();
-				while(it.hasNext())
+				while (it.hasNext()) {
 					previous = it.next();
+				}
 
 			}
 			updateTradeInfo(previous);
@@ -148,7 +162,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 	}
 
 	public void cycleFilter() {
-		if(!Proxies.common.isSimulating(player.worldObj)) {
+		if (!Proxies.common.isSimulating(player.worldObj)) {
 			PacketPayload payload = new PacketPayload(1, 0, 0);
 			payload.intPayload[0] = 2;
 			PacketUpdate packet = new PacketUpdate(PacketIds.GUI_SELECTION_CHANGE, payload);
@@ -156,10 +170,11 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 			return;
 		}
 
-		if(currentFilter < FILTERS.length -1)
+		if (currentFilter < FILTERS.length - 1) {
 			currentFilter++;
-		else
+		} else {
 			currentFilter = 0;
+		}
 
 		rebuildStationsList();
 	}
@@ -174,13 +189,15 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 	/* Managing Trade info */
 	public void updateTradeInfo(ITradeStation station) {
 		// Updating is done by the server.
-		if (!Proxies.common.isSimulating(player.worldObj))
+		if (!Proxies.common.isSimulating(player.worldObj)) {
 			return;
+		}
 
-		if(station != null)
+		if (station != null) {
 			setTradeInfo(station.getTradeInfo());
-		else
+		} else {
 			setTradeInfo(null);
+		}
 		needsSynch = true;
 	}
 
@@ -200,7 +217,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
-		if(needsSynch) {
+		if (needsSynch) {
 			for (Object crafter1 : crafters) {
 				ICrafting crafter = (ICrafting) crafter1;
 				crafter.sendProgressBarUpdate(this, 0, currentItPos);
@@ -215,16 +232,16 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 
 	@Override
 	public void updateProgressBar(int i, int j) {
-		switch(i) {
-		case 0:
-			currentItPos = j;
-			break;
-		case 1:
-			maxItPos = j;
-			break;
-		case 2:
-			currentFilter = j;
-			break;
+		switch (i) {
+			case 0:
+				currentItPos = j;
+				break;
+			case 1:
+				maxItPos = j;
+				break;
+			case 2:
+				currentFilter = j;
+				break;
 		}
 	}
 
@@ -238,10 +255,11 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 
 		if (packet.payload.intPayload[0] == 0) {
 			advanceIteration();
-		} else if(packet.payload.intPayload[0] == 1)
+		} else if (packet.payload.intPayload[0] == 1) {
 			regressIteration();
-		else if(packet.payload.intPayload[0] == 2)
+		} else if (packet.payload.intPayload[0] == 2) {
 			cycleFilter();
+		}
 
 		needsSynch = true;
 	}

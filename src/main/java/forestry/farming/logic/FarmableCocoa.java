@@ -4,16 +4,12 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.farming.logic;
 
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.core.utils.BlockUtil;
-import forestry.core.vect.Vect;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -21,6 +17,11 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmable;
+import forestry.core.utils.BlockUtil;
+import forestry.core.vect.Vect;
 
 public class FarmableCocoa implements IFarmable {
 
@@ -36,11 +37,13 @@ public class FarmableCocoa implements IFarmable {
 	@Override
 	public ICrop getCropAt(World world, int x, int y, int z) {
 		Block block = world.getBlock(x, y, z);
-		if (block != COCOA_PLANT)
+		if (block != COCOA_PLANT) {
 			return null;
+		}
 		int meta = world.getBlockMetadata(x, y, z);
-		if (BlockUtil.getMaturityPod(meta) < 2)
+		if (BlockUtil.getMaturityPod(meta) < 2) {
 			return null;
+		}
 
 		return new CropBlock(world, block, meta, new Vect(x, y, z));
 	}

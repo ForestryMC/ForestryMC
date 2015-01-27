@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -41,25 +41,30 @@ public class ContainerImprinter extends ContainerForestry implements IGuiSelecta
 		this.addSlotToContainer(new SlotOutput(inventory, 1, 152, 72));
 
 		// Player inventory
-		for (int i1 = 0; i1 < 3; i1++)
-			for (int l1 = 0; l1 < 9; l1++)
+		for (int i1 = 0; i1 < 3; i1++) {
+			for (int l1 = 0; l1 < 9; l1++) {
 				addSlotToContainer(new Slot(inventoryplayer, l1 + i1 * 9 + 9, 8 + l1 * 18, 103 + i1 * 18));
+			}
+		}
 		// Player hotbar
-		for (int j1 = 0; j1 < 9; j1++)
+		for (int j1 = 0; j1 < 9; j1++) {
 			addSlotToContainer(new Slot(inventoryplayer, j1, 8 + j1 * 18, 161));
+		}
 	}
 
 	@Override
 	public void onContainerClosed(EntityPlayer entityplayer) {
 
-		if (!Proxies.common.isSimulating(entityplayer.worldObj))
+		if (!Proxies.common.isSimulating(entityplayer.worldObj)) {
 			return;
+		}
 
 		// Drop everything still in there.
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
-			if (stack == null)
+			if (stack == null) {
 				continue;
+			}
 
 			Proxies.common.dropItemPlayer(entityplayer, stack);
 			inventory.setInventorySlotContents(i, null);
@@ -104,15 +109,17 @@ public class ContainerImprinter extends ContainerForestry implements IGuiSelecta
 	public void handleSelectionChange(EntityPlayer player, PacketUpdate packet) {
 
 		if (packet.payload.intPayload[1] == 0) {
-			if (packet.payload.intPayload[0] == 0)
+			if (packet.payload.intPayload[0] == 0) {
 				inventory.advancePrimary();
-			else
+			} else {
 				inventory.advanceSecondary();
+			}
 
-		} else if (packet.payload.intPayload[0] == 0)
+		} else if (packet.payload.intPayload[0] == 0) {
 			inventory.regressPrimary();
-		else
+		} else {
 			inventory.regressSecondary();
+		}
 	}
 
 	public void sendSelection(EntityPlayer player) {

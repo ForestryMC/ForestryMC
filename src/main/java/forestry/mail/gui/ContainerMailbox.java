@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -40,22 +40,28 @@ public class ContainerMailbox extends ContainerForestry {
 		// Mailbox contents
 		this.mailbox = tile;
 
-		if (inventory instanceof POBox)
+		if (inventory instanceof POBox) {
 			this.mailInventory = (POBox) inventory;
-		else
+		} else {
 			this.mailInventory = null;
+		}
 
-		for (int i = 0; i < 7; i++)
-			for (int j = 0; j < 12; j++)
+		for (int i = 0; i < 7; i++) {
+			for (int j = 0; j < 12; j++) {
 				addSlotToContainer(new SlotOutput(inventory, j + i * 9, 8 + j * 18, 8 + i * 18));
+			}
+		}
 
 		// Player inventory
-		for (int i = 0; i < 3; i++)
-			for (int j = 0; j < 9; j++)
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 9; j++) {
 				addSlotToContainer(new Slot(player, j + i * 9 + 9, 35 + j * 18, 145 + i * 18));
+			}
+		}
 		// Player hotbar
-		for (int i = 0; i < 9; i++)
+		for (int i = 0; i < 9; i++) {
 			addSlotToContainer(new Slot(player, i, 35 + i * 18, 203));
+		}
 
 	}
 

@@ -23,20 +23,23 @@ public abstract class AlyzerInventory extends ItemInventory {
 	}
 
 	protected boolean isEnergy(ItemStack itemstack) {
-		if (itemstack == null || itemstack.stackSize <= 0)
+		if (itemstack == null || itemstack.stackSize <= 0) {
 			return false;
+		}
 
 		return ForestryItem.honeyDrop.isItemEqual(itemstack) || ForestryItem.honeydew.isItemEqual(itemstack);
 	}
 
 	protected boolean hasSpecimen() {
 		for (int i = SLOT_SPECIMEN; i <= SLOT_ANALYZE_5; i++) {
-			if (i == SLOT_ENERGY)
+			if (i == SLOT_ENERGY) {
 				continue;
+			}
 
 			ItemStack itemStack = getStackInSlot(i);
-			if (itemStack != null)
+			if (itemStack != null) {
 				return true;
+			}
 		}
 		return false;
 	}

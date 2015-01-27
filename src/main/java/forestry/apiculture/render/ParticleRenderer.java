@@ -4,11 +4,26 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.render;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.entity.EntityLivingBase;
+
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.WorldEvent;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -16,18 +31,7 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.WorldEvent;
+
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
@@ -37,7 +41,9 @@ public class ParticleRenderer {
 	// singleton getter >>
 
 	public static synchronized ParticleRenderer getInstance() {
-		if (instance == null) instance = new ParticleRenderer();
+		if (instance == null) {
+			instance = new ParticleRenderer();
+		}
 
 		return instance;
 	}
@@ -87,7 +93,7 @@ public class ParticleRenderer {
 	}
 
 	private synchronized void update() {
-		Minecraft.getMinecraft().mcProfiler.startSection(name+"-update");
+		Minecraft.getMinecraft().mcProfiler.startSection(name + "-update");
 
 		lazyAdd = true;
 
@@ -109,7 +115,7 @@ public class ParticleRenderer {
 	}
 
 	private synchronized void render(float partialTicks) {
-		Minecraft.getMinecraft().mcProfiler.startSection(name+"-render");
+		Minecraft.getMinecraft().mcProfiler.startSection(name + "-render");
 
 		float rotationX = ActiveRenderInfo.rotationX;
 		float rotationZ = ActiveRenderInfo.rotationZ;

@@ -4,18 +4,15 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.core.CreativeTabForestry;
-import forestry.core.render.TextureManager;
 import java.util.List;
 import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBreakable;
 import net.minecraft.block.material.Material;
@@ -26,6 +23,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.core.CreativeTabForestry;
+import forestry.core.render.TextureManager;
+
 public class BlockStainedGlass extends BlockBreakable {
 
 	public BlockStainedGlass() {
@@ -35,11 +38,12 @@ public class BlockStainedGlass extends BlockBreakable {
 		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		for (int i = 0; i < 16; i++)
+		for (int i = 0; i < 16; i++) {
 			itemList.add(new ItemStack(this, 1, i));
+		}
 	}
 
 	/* ICONS */
@@ -50,8 +54,9 @@ public class BlockStainedGlass extends BlockBreakable {
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister register) {
 		icons = new IIcon[16];
-		for (int i = 0; i < 16; i++)
+		for (int i = 0; i < 16; i++) {
 			icons[i] = TextureManager.getInstance().registerTex(register, "stained/" + i);
+		}
 	}
 
 	@Override

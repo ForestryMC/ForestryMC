@@ -4,14 +4,19 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.mail;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IPostOffice;
@@ -22,9 +27,6 @@ import forestry.api.mail.PostManager;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginMail;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
 
 public class PostalCarrier implements IPostalCarrier {
 
@@ -54,16 +56,18 @@ public class PostalCarrier implements IPostalCarrier {
 
 	@Override
 	public IPostalState deliverLetter(World world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doDeliver) {
-		if(type == EnumAddressee.TRADER)
+		if (type == EnumAddressee.TRADER) {
 			return handleTradeLetter(world, office, recipient, letterstack, doDeliver);
-		else
+		} else {
 			return storeInPOBox(world, office, recipient, letterstack, doDeliver);
+		}
 	}
 
 	private IPostalState handleTradeLetter(World world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
 		ITradeStation trade = PostManager.postRegistry.getTradeStation(world, recipient);
-		if (trade == null)
+		if (trade == null) {
 			return EnumDeliveryState.NO_MAILBOX;
+		}
 
 		return trade.handleLetter(world, recipient, letterstack, doLodge);
 	}
@@ -71,13 +75,15 @@ public class PostalCarrier implements IPostalCarrier {
 	private EnumDeliveryState storeInPOBox(World world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
 
 		POBox pobox = PostRegistry.getPOBox(world, recipient);
-		if (pobox == null)
+		if (pobox == null) {
 			return EnumDeliveryState.NO_MAILBOX;
+		}
 
-		if (!pobox.storeLetter(letterstack.copy()))
+		if (!pobox.storeLetter(letterstack.copy())) {
 			return EnumDeliveryState.MAILBOX_FULL;
-		else
+		} else {
 			PluginMail.proxy.setPOBoxInfo(world, recipient, pobox.getPOBoxInfo());
+		}
 
 		return EnumDeliveryState.OK;
 	}

@@ -4,11 +4,18 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.farming.logic;
+
+import java.util.ArrayList;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
+import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
@@ -16,12 +23,6 @@ import forestry.core.utils.BlockUtil;
 import forestry.core.utils.StackUtils;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
-
-import java.util.ArrayList;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class FarmLogicHomogeneous extends FarmLogic {
 
@@ -49,34 +50,41 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 
 	@Override
 	public boolean isAcceptedGermling(ItemStack itemstack) {
-		for (IFarmable germling : germlings)
-			if (germling.isGermling(itemstack))
+		for (IFarmable germling : germlings) {
+			if (germling.isGermling(itemstack)) {
 				return true;
+			}
+		}
 		return false;
 	}
 
 	public boolean isWindfall(ItemStack itemstack) {
-		for (IFarmable germling : germlings)
-			if (germling.isWindfall(itemstack))
+		for (IFarmable germling : germlings) {
+			if (germling.isWindfall(itemstack)) {
 				return true;
+			}
+		}
 		return false;
 	}
 
 	@Override
 	public boolean cultivate(int x, int y, int z, ForgeDirection direction, int extent) {
 
-		if (maintainSoil(x, y, z, direction, extent))
+		if (maintainSoil(x, y, z, direction, extent)) {
 			return true;
+		}
 
-		if (maintainGermlings(x, y + 1, z, direction, extent))
+		if (maintainGermlings(x, y + 1, z, direction, extent)) {
 			return true;
+		}
 
 		return false;
 	}
 
 	private boolean maintainSoil(int x, int yGround, int z, ForgeDirection direction, int extent) {
-		if (!housing.hasResources(resource))
+		if (!housing.hasResources(resource)) {
 			return false;
+		}
 
 		World world = getWorld();
 
@@ -84,8 +92,9 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 			Vect position = translateWithOffset(x, yGround, z, direction, i);
 
 			ItemStack stack = VectUtil.getAsItemStack(world, position);
-			if (isAcceptedGround(stack) || !canBreakGround(world, position))
+			if (isAcceptedGround(stack) || !canBreakGround(world, position)) {
 				continue;
+			}
 
 			produce.addAll(BlockUtil.getBlockDrops(world, position));
 

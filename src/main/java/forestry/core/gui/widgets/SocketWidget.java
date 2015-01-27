@@ -4,11 +4,16 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.gui.widgets;
+
+import java.util.List;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 import forestry.core.circuits.ISolderingIron;
 import forestry.core.circuits.ItemCircuitBoard;
@@ -19,9 +24,6 @@ import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.interfaces.ISocketable;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
-import java.util.List;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 
 public class SocketWidget extends Widget {
 
@@ -37,9 +39,10 @@ public class SocketWidget extends Widget {
 	@Override
 	public void draw(int startX, int startY) {
 		ItemStack socketStack = tile.getSocket(slot);
-		if (socketStack != null)
+		if (socketStack != null) {
 			GuiForestry.getItemRenderer().renderItemIntoGUI(manager.minecraft.fontRenderer, manager.minecraft.renderEngine, socketStack, startX + xPos, startY
 					+ yPos);
+		}
 	}
 
 	@Override
@@ -67,15 +70,17 @@ public class SocketWidget extends Widget {
 	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
 
 		ItemStack itemstack = manager.minecraft.thePlayer.inventory.getItemStack();
-		if (itemstack == null)
+		if (itemstack == null) {
 			return;
+		}
 
 		Item held = itemstack.getItem();
 
 		// Insert chipsets
-		if (held instanceof ItemCircuitBoard)
+		if (held instanceof ItemCircuitBoard) {
 			((ContainerSocketed) manager.gui.inventorySlots).handleChipsetClick(slot, manager.minecraft.thePlayer, itemstack);
-		else if (held instanceof ISolderingIron)
+		} else if (held instanceof ISolderingIron) {
 			((ContainerSocketed) manager.gui.inventorySlots).handleSolderingIronClick(slot, manager.minecraft.thePlayer, itemstack);
+		}
 	}
 }

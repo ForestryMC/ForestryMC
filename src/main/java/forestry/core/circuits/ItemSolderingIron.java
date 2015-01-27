@@ -4,11 +4,19 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.circuits;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
@@ -23,15 +31,6 @@ import forestry.core.items.ItemForestry;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.RevolvingList;
-import forestry.plugins.PluginApiculture;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 
 public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 
@@ -48,8 +47,9 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 		}
 
 		public boolean matches(ICircuitLayout layout, ItemStack itemstack) {
-			if (!this.layout.getUID().equals(layout.getUID()))
+			if (!this.layout.getUID().equals(layout.getUID())) {
 				return false;
+			}
 
 			return itemstack.isItemEqual(resource);
 		}
@@ -61,22 +61,27 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 
 		@Override
 		public void addRecipe(ICircuitLayout layout, ItemStack resource, ICircuit circuit) {
-			if (layout == null)
+			if (layout == null) {
 				throw new IllegalArgumentException("layout may not be null");
-			if (resource == null)
+			}
+			if (resource == null) {
 				throw new IllegalArgumentException("resource may not be null");
-			if (circuit == null)
+			}
+			if (circuit == null) {
 				throw new IllegalArgumentException("circuit may not be null");
+			}
 			recipes.add(new CircuitRecipe(layout, resource, circuit));
 		}
 
 		public static CircuitRecipe getMatchingRecipe(ICircuitLayout layout, ItemStack resource) {
-			if (layout == null || resource == null)
+			if (layout == null || resource == null) {
 				return null;
+			}
 
 			for (CircuitRecipe recipe : recipes) {
-				if (recipe.matches(layout, resource))
+				if (recipe.matches(layout, resource)) {
 					return recipe;
+				}
 			}
 
 			return null;
@@ -130,19 +135,23 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 
 			for (short i = 0; i < type.sockets; i++) {
 				ItemStack ingredient = inventoryStacks[ingredientSlot1 + i];
-				if (ingredient == null)
+				if (ingredient == null) {
 					continue;
+				}
 
 				CircuitRecipe recipe = SolderManager.getMatchingRecipe(layouts.getCurrent(), ingredient);
-				if (recipe == null)
+				if (recipe == null) {
 					continue;
+				}
 
 				// / Make sure we don't exceed this circuits limit per chipset
-				if (getCount(recipe.circuit, circuits) >= recipe.circuit.getLimit())
+				if (getCount(recipe.circuit, circuits) >= recipe.circuit.getLimit()) {
 					continue;
+				}
 
-				if (doConsume)
+				if (doConsume) {
 					decrStackSize(ingredientSlot1 + i, recipe.resource.stackSize);
+				}
 				circuits.add(recipe.circuit);
 			}
 
@@ -150,32 +159,38 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 		}
 
 		public void trySolder() {
-			if (layouts.getCurrent() == CircuitRegistry.DUMMY_LAYOUT)
+			if (layouts.getCurrent() == CircuitRegistry.DUMMY_LAYOUT) {
 				return;
+			}
 
 			ItemStack blank = inventoryStacks[blankSlot];
 			// Requires blank slot
-			if (blank == null)
+			if (blank == null) {
 				return;
-			if (blank.stackSize > 1)
+			}
+			if (blank.stackSize > 1) {
 				return;
-			if (inventoryStacks[finishedSlot] != null)
+			}
+			if (inventoryStacks[finishedSlot] != null) {
 				return;
+			}
 
 			// Need a chipset item
-			if (!ChipsetManager.circuitRegistry.isChipset(blank))
+			if (!ChipsetManager.circuitRegistry.isChipset(blank)) {
 				return;
+			}
 
 			// Illegal type
-			if (blank.getItemDamage() < 0 || blank.getItemDamage() >= EnumCircuitBoardType.values().length)
+			if (blank.getItemDamage() < 0 || blank.getItemDamage() >= EnumCircuitBoardType.values().length) {
 				return;
+			}
 
 			EnumCircuitBoardType type = EnumCircuitBoardType.values()[blank.getItemDamage()];
 			Collection<ICircuit> circuits = getCircuits(type, false);
 
-			if (circuits.size() <= 0)
+			if (circuits.size() <= 0) {
 				return;
-			else if (circuits.size() != type.sockets) {
+			} else if (circuits.size() != type.sockets) {
 				errorState = EnumErrorCode.CIRCUITMISMATCH;
 				return;
 			}
@@ -188,8 +203,9 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 		public int getCount(ICircuit circuit, ArrayList<ICircuit> circuits) {
 			int count = 0;
 			for (ICircuit other : circuits) {
-				if (other.getUID().equals(circuit.getUID()))
+				if (other.getUID().equals(circuit.getUID())) {
 					count++;
+				}
 			}
 			return count;
 		}
@@ -207,22 +223,27 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 
 		@Override
 		public IErrorState getErrorState() {
-			if (layouts.getCurrent() == CircuitRegistry.DUMMY_LAYOUT)
+			if (layouts.getCurrent() == CircuitRegistry.DUMMY_LAYOUT) {
 				return EnumErrorCode.NOCIRCUITLAYOUT;
-			if (inventoryStacks[blankSlot] == null)
+			}
+			if (inventoryStacks[blankSlot] == null) {
 				return EnumErrorCode.NOCIRCUITBOARD;
-			if (inventoryStacks[blankSlot].stackSize > 1)
+			}
+			if (inventoryStacks[blankSlot].stackSize > 1) {
 				return EnumErrorCode.WRONGSTACKSIZE;
-			if (errorState != EnumErrorCode.OK)
+			}
+			if (errorState != EnumErrorCode.OK) {
 				return errorState;
+			}
 
 			return EnumErrorCode.OK;
 		}
 
 		@Override
 		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (itemStack == null)
+			if (itemStack == null) {
 				return false;
+			}
 
 			Item item = itemStack.getItem();
 			if (slotIndex == blankSlot) {
@@ -248,9 +269,10 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (Proxies.common.isSimulating(world))
+		if (Proxies.common.isSimulating(world)) {
 			entityplayer.openGui(ForestryAPI.instance, GuiId.SolderingIronGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY,
 					(int) entityplayer.posZ);
+		}
 
 		return itemstack;
 	}

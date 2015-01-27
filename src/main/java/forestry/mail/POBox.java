@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -79,13 +79,15 @@ public class POBox extends WorldSavedData implements IInventory {
 		int playerLetters = 0;
 		int tradeLetters = 0;
 		for (int i = 0; i < letters.getSizeInventory(); i++) {
-			if (letters.getStackInSlot(i) == null)
+			if (letters.getStackInSlot(i) == null) {
 				continue;
+			}
 			ILetter letter = new Letter(letters.getStackInSlot(i).getTagCompound());
-			if (letter.getSender().isPlayer())
+			if (letter.getSender().isPlayer()) {
 				playerLetters++;
-			else
+			} else {
 				tradeLetters++;
+			}
 		}
 
 		return new POBoxInfo(playerLetters, tradeLetters);

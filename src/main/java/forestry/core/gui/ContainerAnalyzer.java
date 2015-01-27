@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -23,9 +23,11 @@ public class ContainerAnalyzer extends ContainerLiquidTanks {
 		super(tile);
 
 		// Input buffer
-		for (int i = 0; i < 3; i++)
-			for (int k = 0; k < 2; k++)
+		for (int i = 0; i < 3; i++) {
+			for (int k = 0; k < 2; k++) {
 				addSlotToContainer(new SlotFiltered(tile, TileAnalyzer.SLOT_INPUT_1 + i * 2 + k, 8 + k * 18, 28 + i * 18));
+			}
+		}
 
 		// Analyze slot
 		addSlotToContainer(new SlotFiltered(tile, TileAnalyzer.SLOT_ANALYZE, 73, 59));
@@ -34,17 +36,22 @@ public class ContainerAnalyzer extends ContainerLiquidTanks {
 		addSlotToContainer(new SlotFiltered(tile, TileAnalyzer.SLOT_CAN, 143, 24));
 
 		// Output buffer
-		for (int i = 0; i < 2; i++)
-			for (int k = 0; k < 2; k++)
+		for (int i = 0; i < 2; i++) {
+			for (int k = 0; k < 2; k++) {
 				addSlotToContainer(new SlotOutput(tile, TileAnalyzer.SLOT_OUTPUT_1 + i * 2 + k, 134 + k * 18, 48 + i * 18));
+			}
+		}
 
 		// Player inventory
-		for (int i1 = 0; i1 < 3; i1++)
-			for (int l1 = 0; l1 < 9; l1++)
+		for (int i1 = 0; i1 < 3; i1++) {
+			for (int l1 = 0; l1 < 9; l1++) {
 				addSlotToContainer(new Slot(player, l1 + i1 * 9 + 9, 8 + l1 * 18, 94 + i1 * 18));
+			}
+		}
 		// Player hotbar
-		for (int j1 = 0; j1 < 9; j1++)
+		for (int j1 = 0; j1 < 9; j1++) {
 			addSlotToContainer(new Slot(player, j1, 8 + j1 * 18, 152));
+		}
 
 	}
 

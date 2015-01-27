@@ -36,8 +36,9 @@ public class ParticleHelper {
 
 		int sideHit = target.sideHit;
 
-		if (block != world.getBlock(x, y, z))
+		if (block != world.getBlock(x, y, z)) {
 			return true;
+		}
 
 		int meta = world.getBlockMetadata(x, y, z);
 
@@ -46,29 +47,36 @@ public class ParticleHelper {
 		double py = y + rand.nextDouble() * (block.getBlockBoundsMaxY() - block.getBlockBoundsMinY() - (b * 2.0F)) + b + block.getBlockBoundsMinY();
 		double pz = z + rand.nextDouble() * (block.getBlockBoundsMaxZ() - block.getBlockBoundsMinZ() - (b * 2.0F)) + b + block.getBlockBoundsMinZ();
 
-		if (sideHit == 0)
+		if (sideHit == 0) {
 			py = (double) y + block.getBlockBoundsMinY() - (double) b;
+		}
 
-		if (sideHit == 1)
+		if (sideHit == 1) {
 			py = (double) y + block.getBlockBoundsMaxY() + (double) b;
+		}
 
-		if (sideHit == 2)
+		if (sideHit == 2) {
 			pz = (double) z + block.getBlockBoundsMinZ() - (double) b;
+		}
 
-		if (sideHit == 3)
+		if (sideHit == 3) {
 			pz = (double) z + block.getBlockBoundsMaxZ() + (double) b;
+		}
 
-		if (sideHit == 4)
+		if (sideHit == 4) {
 			px = (double) x + block.getBlockBoundsMinX() - (double) b;
+		}
 
-		if (sideHit == 5)
+		if (sideHit == 5) {
 			px = (double) x + block.getBlockBoundsMaxX() + (double) b;
+		}
 
 		EntityDiggingFX fx = new EntityDiggingFX(world, px, py, pz, 0.0D, 0.0D, 0.0D, block, sideHit, meta);
 		fx.setParticleIcon(block.getIcon(world, x, y, z, 0));
 
-		if (callback != null)
+		if (callback != null) {
 			callback.addHitEffects(fx, world, x, y, z, meta);
+		}
 
 		effectRenderer.addEffect(fx.applyColourMultiplier(x, y, z).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
 
@@ -81,20 +89,21 @@ public class ParticleHelper {
 	 * your block. So be sure to do proper sanity checks before assuming that
 	 * the location is this block.
 	 *
-	 * @param world The current world
+	 * @param world          The current world
 	 * @param block
-	 * @param x X position to spawn the particle
-	 * @param y Y position to spawn the particle
-	 * @param z Z position to spawn the particle
-	 * @param meta The metadata for the block before it was destroyed.
+	 * @param x              X position to spawn the particle
+	 * @param y              Y position to spawn the particle
+	 * @param z              Z position to spawn the particle
+	 * @param meta           The metadata for the block before it was destroyed.
 	 * @param effectRenderer A reference to the current effect renderer.
 	 * @param callback
 	 * @return True to prevent vanilla break particles from spawning.
 	 */
 	@SideOnly(Side.CLIENT)
 	public static boolean addDestroyEffects(World world, Block block, int x, int y, int z, int meta, EffectRenderer effectRenderer, ParticleHelperCallback callback) {
-		if (block != world.getBlock(x, y, z))
+		if (block != world.getBlock(x, y, z)) {
 			return true;
+		}
 
 		byte iterations = 4;
 		for (int i = 0; i < iterations; ++i) {
@@ -108,8 +117,9 @@ public class ParticleHelper {
 					EntityDiggingFX fx = new EntityDiggingFX(world, px, py, pz, px - x - 0.5D, py - y - 0.5D, pz - z - 0.5D, block, random, meta);
 					fx.setParticleIcon(block.getIcon(world, x, y, z, 0));
 
-					if (callback != null)
+					if (callback != null) {
 						callback.addDestroyEffects(fx, world, x, y, z, meta);
+					}
 
 					effectRenderer.addEffect(fx.applyColourMultiplier(x, y, z));
 				}

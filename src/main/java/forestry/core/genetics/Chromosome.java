@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -12,14 +12,15 @@ package forestry.core.genetics;
 
 import com.google.common.base.Objects;
 
+import java.util.Random;
+
+import net.minecraft.nbt.NBTTagCompound;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.ILegacyHandler;
 import forestry.core.proxy.Proxies;
-
-import java.util.Random;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class Chromosome implements IChromosome {
 
@@ -51,9 +52,10 @@ public class Chromosome implements IChromosome {
 			primary = ((ILegacyHandler) AlleleManager.alleleRegistry).getFromLegacyMap(nbttagcompound.getInteger("PrimaryId"));
 			secondary = ((ILegacyHandler) AlleleManager.alleleRegistry).getFromLegacyMap(nbttagcompound.getInteger("SecondaryId"));
 
-			if (primary == null || secondary == null)
+			if (primary == null || secondary == null) {
 				throw new RuntimeException("Legacy conversion of chromosome failed. Did one of your bee addons not update? No legacy mapping for ids: "
 						+ nbttagcompound.getInteger("PrimaryId") + " - " + nbttagcompound.getInteger("SecondaryId"));
+			}
 
 			return;
 		}
@@ -80,29 +82,34 @@ public class Chromosome implements IChromosome {
 
 	@Override
 	public IAllele getActiveAllele() {
-		if (primary.isDominant())
+		if (primary.isDominant()) {
 			return primary;
-		if (secondary.isDominant())
+		}
+		if (secondary.isDominant()) {
 			return secondary;
+		}
 		// Leaves only the case of both being recessive
 		return primary;
 	}
 
 	@Override
 	public IAllele getInactiveAllele() {
-		if (!secondary.isDominant())
+		if (!secondary.isDominant()) {
 			return secondary;
-		if (!primary.isDominant())
+		}
+		if (!primary.isDominant()) {
 			return primary;
+		}
 		// Leaves only the case of both being dominant
 		return secondary;
 	}
 
 	public IAllele getRandomAllele(Random rand) {
-		if (rand.nextBoolean())
+		if (rand.nextBoolean()) {
 			return primary;
-		else
+		} else {
 			return secondary;
+		}
 	}
 
 	public boolean overrideInvalidAlleles(IAllele template, Class<? extends IAllele> chromosomeClass) {
@@ -172,21 +179,24 @@ public class Chromosome implements IChromosome {
 	public static IChromosome inheritChromosome(Random rand, IChromosome parent1, IChromosome parent2) {
 
 		IAllele choice1;
-		if (rand.nextBoolean())
+		if (rand.nextBoolean()) {
 			choice1 = parent1.getPrimaryAllele();
-		else
+		} else {
 			choice1 = parent1.getSecondaryAllele();
+		}
 
 		IAllele choice2;
-		if (rand.nextBoolean())
+		if (rand.nextBoolean()) {
 			choice2 = parent2.getPrimaryAllele();
-		else
+		} else {
 			choice2 = parent2.getSecondaryAllele();
+		}
 
-		if (rand.nextBoolean())
+		if (rand.nextBoolean()) {
 			return new Chromosome(choice1, choice2);
-		else
+		} else {
 			return new Chromosome(choice2, choice1);
+		}
 	}
 
 	@Override

@@ -4,22 +4,24 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture;
 
-import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.genetics.IFruitFamily;
-import forestry.plugins.PluginArboriculture;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.genetics.IFruitFamily;
+import forestry.plugins.PluginArboriculture;
 
 public class FruitProviderRipening extends FruitProviderNone {
 
@@ -52,8 +54,9 @@ public class FruitProviderRipening extends FruitProviderNone {
 	}
 
 	private float getRipeningStage(int ripeningTime) {
-		if (ripeningTime >= ripeningPeriod)
+		if (ripeningTime >= ripeningPeriod) {
 			return 1.0f;
+		}
 
 		return (float) ripeningTime / ripeningPeriod;
 	}
@@ -63,14 +66,17 @@ public class FruitProviderRipening extends FruitProviderNone {
 		ArrayList<ItemStack> product = new ArrayList<ItemStack>();
 
 		float stage = getRipeningStage(ripeningTime);
-		if (stage < 0.5f)
+		if (stage < 0.5f) {
 			return new ItemStack[0];
+		}
 
 		float modeYieldMod = PluginArboriculture.treeInterface.getTreekeepingMode(world).getYieldModifier(genome, 1f);
 
-		for (Map.Entry<ItemStack, Float> entry : products.entrySet())
-			if (world.rand.nextFloat() <= genome.getYield() * entry.getValue() * modeYieldMod * 5.0f * stage)
+		for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
+			if (world.rand.nextFloat() <= genome.getYield() * entry.getValue() * modeYieldMod * 5.0f * stage) {
 				product.add(entry.getKey().copy());
+			}
+		}
 
 		return product.toArray(new ItemStack[product.size()]);
 	}

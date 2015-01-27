@@ -29,24 +29,27 @@ public abstract class SlotWatched extends SlotForestry {
 
 	@Override
 	public boolean getHasStack() {
-		if (crafter != null && !crafter.canTakeStack(getSlotIndex()))
+		if (crafter != null && !crafter.canTakeStack(getSlotIndex())) {
 			return false;
-		else
+		} else {
 			return super.getHasStack();
+		}
 	}
 
 	@Override
 	public ItemStack decrStackSize(int i) {
-		if (crafter != null && !crafter.canTakeStack(getSlotIndex()))
+		if (crafter != null && !crafter.canTakeStack(getSlotIndex())) {
 			return null;
-		else
+		} else {
 			return super.decrStackSize(i);
+		}
 	}
 
 	@Override
 	public void onPickupFromSlot(EntityPlayer player, ItemStack itemStack) {
-		if (crafter != null)
+		if (crafter != null) {
 			crafter.takenFromSlot(getSlotIndex(), true, player);
+		}
 	}
 
 	public SlotWatched setBlockedTexture(String ident) {
@@ -58,9 +61,10 @@ public abstract class SlotWatched extends SlotForestry {
 	@Override
 	public IIcon getBackgroundIconIndex() {
 		ItemStack stack = getStack();
-		if (!isItemValid(stack))
+		if (!isItemValid(stack)) {
 			return TextureManager.getInstance().getDefault(blockedTexture);
-		else
+		} else {
 			return null;
+		}
 	}
 }

@@ -10,12 +10,14 @@
  ******************************************************************************/
 package forestry.apiculture.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.world.World;
+
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.core.commands.ICommandModeHelper;
 import forestry.plugins.PluginApiculture;
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.world.World;
 
 public class BeeModeHelper implements ICommandModeHelper {
 
@@ -24,8 +26,9 @@ public class BeeModeHelper implements ICommandModeHelper {
 		ArrayList<IBeekeepingMode> beekeepingModes = PluginApiculture.beeInterface.getBeekeepingModes();
 		int modeStringCount = beekeepingModes.size();
 		List<String> modeStrings = new ArrayList<String>(modeStringCount);
-		for (IBeekeepingMode mode : beekeepingModes)
+		for (IBeekeepingMode mode : beekeepingModes) {
 			modeStrings.add(mode.getName());
+		}
 
 		return modeStrings.toArray(new String[modeStringCount]);
 	}
@@ -33,8 +36,9 @@ public class BeeModeHelper implements ICommandModeHelper {
 	@Override
 	public String getModeNameMatching(String desired) {
 		IBeekeepingMode mode = PluginApiculture.beeInterface.getBeekeepingMode(desired);
-		if (mode == null)
+		if (mode == null) {
 			return null;
+		}
 		return mode.getName();
 	}
 

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -32,15 +32,17 @@ public class WorldGenSequoia extends WorldGenTree {
 		generateAdjustedCylinder(leafSpawn--, 1, 1, leaf);
 		generateAdjustedCylinder(leafSpawn--, 1, 1, leaf);
 
-		while (leafSpawn > topHeight)
+		while (leafSpawn > topHeight) {
 			generateAdjustedCylinder(leafSpawn--, 1, 1, leaf);
+		}
 
 		generateAdjustedCylinder(leafSpawn--, 0, 1, leaf);
 
 		for (int times = 0; times < height / 4; times++) {
-			int h = (height/3) + rand.nextInt(height - (height/3));
-			if (rand.nextBoolean() && h < height / 3)
+			int h = (height / 3) + rand.nextInt(height - (height / 3));
+			if (rand.nextBoolean() && h < height / 3) {
 				h = height / 2 + rand.nextInt(height / 3);
+			}
 			int x_off = -1 + rand.nextInt(3);
 			int y_off = -1 + rand.nextInt(3);
 			generateSphere(new Vector(x_off, h, y_off), 1 + rand.nextInt(2), leaf, EnumReplaceMode.NONE);

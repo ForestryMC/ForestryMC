@@ -4,21 +4,15 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import forestry.api.core.Tabs;
-import forestry.arboriculture.WoodType;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.StackUtils;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -33,6 +27,14 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.core.Tabs;
+import forestry.arboriculture.WoodType;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.StackUtils;
+
 public class BlockArbStairs extends BlockStairs {
 
 	public BlockArbStairs(Block par2Block, int par3) {
@@ -44,13 +46,14 @@ public class BlockArbStairs extends BlockStairs {
 
 	public static TileStairs getStairTile(IBlockAccess world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(x, y, z);
-		if (!(tile instanceof TileStairs))
+		if (!(tile instanceof TileStairs)) {
 			return null;
+		}
 
 		return (TileStairs) tile;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
@@ -66,7 +69,7 @@ public class BlockArbStairs extends BlockStairs {
 	@Override
 	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
 		int meta = world.getBlockMetadata(x, y, z);
-		if (Proxies.common.isSimulating(world) && canHarvestBlock(player, meta))
+		if (Proxies.common.isSimulating(world) && canHarvestBlock(player, meta)) {
 			if (!player.capabilities.isCreativeMode) {
 				// Handle TE'd beehives
 				TileEntity tile = world.getTileEntity(x, y, z);
@@ -81,6 +84,7 @@ public class BlockArbStairs extends BlockStairs {
 					StackUtils.dropItemStackAsEntity(stack, world, x, y, z);
 				}
 			}
+		}
 
 		return world.setBlockToAir(x, y, z);
 	}
@@ -118,8 +122,9 @@ public class BlockArbStairs extends BlockStairs {
 		TileStairs stairs = getStairTile(world, x, y, z);
 
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		if (stairs == null || stairs.getType() == null)
+		if (stairs == null || stairs.getType() == null) {
 			return nbttagcompound;
+		}
 
 		stairs.getType().saveToCompound(nbttagcompound);
 		return nbttagcompound;
@@ -136,10 +141,11 @@ public class BlockArbStairs extends BlockStairs {
 	@Override
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 		TileStairs stairs = getStairTile(world, x, y, z);
-		if (stairs != null && stairs.getType() != null)
+		if (stairs != null && stairs.getType() != null) {
 			return stairs.getType().getPlankIcon();
-		else
+		} else {
 			return WoodType.LARCH.getPlankIcon();
+		}
 	}
 
 	@Override

@@ -4,11 +4,17 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture;
+
+import java.util.Stack;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IApiaristTracker;
@@ -23,10 +29,6 @@ import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginApiculture;
-import java.util.Stack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 
 public class BeekeepingLogic implements IBeekeepingLogic {
 
@@ -295,14 +297,17 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 			return;
 		}
 
-		if (breedingTime < totalBreedingTime)
+		if (breedingTime < totalBreedingTime) {
 			breedingTime++;
-		if (breedingTime < totalBreedingTime)
+		}
+		if (breedingTime < totalBreedingTime) {
 			return;
+		}
 
 		// Breeding done, create new queen if slot available
-		if (!ForestryItem.beePrincessGE.isItemEqual(housing.getQueen()))
+		if (!ForestryItem.beePrincessGE.isItemEqual(housing.getQueen())) {
 			return;
+		}
 
 		// Replace
 		IBee princess = PluginApiculture.beeInterface.getMember(housing.getQueen());
@@ -322,22 +327,26 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 		// Remove drone
 		housing.getDrone().stackSize--;
-		if (housing.getDrone().stackSize <= 0)
+		if (housing.getDrone().stackSize <= 0) {
 			housing.setDrone(null);
+		}
 
 		// Reset breeding time
 		breedingTime = 0;
 	}
 
 	private boolean tryBreed() {
-		if (housing.getDrone() == null || housing.getQueen() == null)
+		if (housing.getDrone() == null || housing.getQueen() == null) {
 			return false;
+		}
 
-		if (!ForestryItem.beeDroneGE.isItemEqual(housing.getDrone()) || !ForestryItem.beePrincessGE.isItemEqual(housing.getQueen()))
+		if (!ForestryItem.beeDroneGE.isItemEqual(housing.getDrone()) || !ForestryItem.beePrincessGE.isItemEqual(housing.getQueen())) {
 			return false;
+		}
 
-		if (!housing.canBreed())
+		if (!housing.canBreed()) {
 			return false;
+		}
 
 		return true;
 	}
@@ -389,8 +398,9 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 		while (!offspring.isEmpty()) {
 			ItemStack spawned = offspring.pop();
-			if (!housing.addProduct(spawned, true))
+			if (!housing.addProduct(spawned, true)) {
 				spawn.add(spawned);
+			}
 		}
 
 		housing.onPostQueenDeath(getQueen());

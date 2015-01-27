@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -160,8 +160,9 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 		refreshFarmLogics();
 
-		if (tankManager != null)
+		if (tankManager != null) {
 			tankManager.readTanksFromNBT(nbttagcompound);
+		}
 	}
 
 	@Override
@@ -173,8 +174,9 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		nbttagcompound.setInteger("HydrationDelay", hydrationDelay);
 		nbttagcompound.setInteger("TicksSinceRainfall", ticksSinceRainfall);
 
-		if (tankManager != null)
+		if (tankManager != null) {
 			tankManager.writeTanksToNBT(nbttagcompound);
+		}
 	}
 
 	/* UPDATING */
@@ -182,22 +184,26 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	protected void updateServerSide() {
 		super.updateServerSide();
 
-		if (!isMaster())
+		if (!isMaster()) {
 			return;
-
-		if (worldObj.isRaining()) {
-			if (hydrationDelay > 0)
-				hydrationDelay--;
-			else
-				ticksSinceRainfall = 0;
-		} else {
-			hydrationDelay = DELAY_HYDRATION;
-			if (ticksSinceRainfall < Integer.MAX_VALUE)
-				ticksSinceRainfall++;
 		}
 
-		if (worldObj.getTotalWorldTime() % 20 != 0)
+		if (worldObj.isRaining()) {
+			if (hydrationDelay > 0) {
+				hydrationDelay--;
+			} else {
+				ticksSinceRainfall = 0;
+			}
+		} else {
+			hydrationDelay = DELAY_HYDRATION;
+			if (ticksSinceRainfall < Integer.MAX_VALUE) {
+				ticksSinceRainfall++;
+			}
+		}
+
+		if (worldObj.getTotalWorldTime() % 20 != 0) {
 			return;
+		}
 
 		// Check if we have suitable items waiting in the item slot
 		if (getInternalInventory().getStackInSlot(SLOT_CAN) != null) {
@@ -219,10 +225,11 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		for (ForgeDirection farmSide : CARDINAL_DIRECTIONS) {
 
 			int farmSize;
-			if (farmSide == ForgeDirection.NORTH || farmSide == ForgeDirection.SOUTH)
+			if (farmSide == ForgeDirection.NORTH || farmSide == ForgeDirection.SOUTH) {
 				farmSize = farmSizeNorthSouth;
-			else
+			} else {
 				farmSize = farmSizeEastWest;
+			}
 
 			// targets extend sideways in a pinwheel pattern around the farm, so they need to go a little extra distance
 			final int targetMaxLimit = allowedExtent + farmSize;
@@ -297,12 +304,14 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 			targets = createTargets(worldObj, targetStart, allowedExtent, sizeNorthSouth, sizeEastWest);
 			setExtents();
-		} else if (checkTimer.delayPassed(worldObj, 400))
+		} else if (checkTimer.delayPassed(worldObj, 400)) {
 			setExtents();
+		}
 
 		// System.out.println("Targets set");
-		if (tryAddPending())
+		if (tryAddPending()) {
 			return true;
+		}
 
 		// System.out.println("Nothing pending added.");
 		// Abort if we still have produce waiting.
@@ -325,8 +334,9 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			if (cullCrop(pendingCrops.peek(), harvestProvider)) {
 				pendingCrops.pop();
 				return true;
-			} else
+			} else {
 				return false;
+			}
 		}
 
 		// Cultivation and collection
@@ -336,12 +346,14 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 			ForgeDirection farmSide = entry.getKey();
 			IFarmLogic logic = getFarmLogic(farmSide);
-			if (logic == null)
+			if (logic == null) {
 				continue;
+			}
 
 			// Allow listeners to cancel this cycle.
-			if (isCycleCanceledByListeners(logic, farmSide))
+			if (isCycleCanceledByListeners(logic, farmSide)) {
 				continue;
+			}
 
 			// Always try to collect windfall first.
 			if (collectWindfall(logic)) {
@@ -356,8 +368,9 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 				}
 			}
 
-			if (didWork)
+			if (didWork) {
 				break;
+			}
 		}
 
 		// Farms alternate between cultivation and harvest.
@@ -368,17 +381,20 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	private IFarmLogic getFarmLogic(ForgeDirection direction) {
 		int logicOrdinal = direction.ordinal() - 2;
-		if (farmLogics.length <= logicOrdinal)
+		if (farmLogics.length <= logicOrdinal) {
 			return null;
+		}
 
 		return farmLogics[logicOrdinal];
 	}
 
 	private boolean isCycleCanceledByListeners(IFarmLogic logic, ForgeDirection direction) {
 
-		for (IFarmListener listener : eventHandlers)
-			if (listener.cancelTask(logic, direction))
+		for (IFarmListener listener : eventHandlers) {
+			if (listener.cancelTask(logic, direction)) {
 				return true;
+			}
+		}
 
 		return false;
 	}
@@ -392,23 +408,26 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 		for (FarmTarget target : farmTargets) {
 
-			if (target.getExtent() <= 0)
+			if (target.getExtent() <= 0) {
 				continue;
-			else
+			} else {
 				hasFarmland = true;
+			}
 
 			// Check fertilizer and water
-			if (!hasFertilizer(logic.getFertilizerConsumption()))
+			if (!hasFertilizer(logic.getFertilizerConsumption())) {
 				continue;
-			else
+			} else {
 				hasFertilizer = true;
+			}
 
 			int liquidAmount = logic.getWaterConsumption(getHydrationModifier());
 			FluidStack liquid = Fluids.WATER.getFluid(liquidAmount);
-			if (liquid.amount > 0 && !hasLiquid(liquid))
+			if (liquid.amount > 0 && !hasLiquid(liquid)) {
 				continue;
-			else
+			} else {
 				hasLiquid = true;
+			}
 
 			if (cultivateTarget(target, logic)) {
 				// Remove fertilizer and water
@@ -419,22 +438,24 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			}
 		}
 
-		if (didWork)
+		if (didWork) {
 			setErrorState(EnumErrorCode.OK);
-		else if (!hasFarmland)
+		} else if (!hasFarmland) {
 			setErrorState(EnumErrorCode.NOFARMLAND);
-		else if (!hasFertilizer)
+		} else if (!hasFertilizer) {
 			setErrorState(EnumErrorCode.NOFERTILIZER);
-		else if (!hasLiquid)
+		} else if (!hasLiquid) {
 			setErrorState(EnumErrorCode.NOLIQUID);
+		}
 
 		return didWork;
 	}
 
 	private boolean cultivateTarget(FarmTarget target, IFarmLogic logic) {
 		if (logic.cultivate(target.getStart().x, target.getStart().y + target.getYOffset(), target.getStart().z, target.getDirection(), target.getExtent())) {
-			for (IFarmListener listener : eventHandlers)
+			for (IFarmListener listener : eventHandlers) {
 				listener.hasCultivated(logic, target.getStart().x, target.getStart().y, target.getStart().z, target.getDirection(), target.getExtent());
+			}
 			return true;
 		}
 
@@ -443,8 +464,9 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	private boolean harvestTargets(List<FarmTarget> farmTargets, IFarmLogic logic) {
 		for (FarmTarget target : farmTargets) {
-			if (harvestTarget(target, logic))
+			if (harvestTarget(target, logic)) {
 				return true;
+			}
 		}
 
 		return false;
@@ -452,12 +474,14 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	private boolean harvestTarget(FarmTarget target, IFarmLogic logic) {
 		Collection<ICrop> next = logic.harvest(target.getStart().x, target.getStart().y + target.getYOffset(), target.getStart().z, target.getDirection(), target.getExtent());
-		if (next == null || next.size() <= 0)
+		if (next == null || next.size() <= 0) {
 			return false;
+		}
 
 		// Let event handlers know.
-		for (IFarmListener listener : eventHandlers)
+		for (IFarmListener listener : eventHandlers) {
 			listener.hasScheduledHarvest(next, logic, target.getStart().x, target.getStart().y + target.getYOffset(), target.getStart().z, target.getDirection(), target.getExtent());
+		}
 
 		pendingCrops.addAll(next);
 		harvestProvider = logic;
@@ -467,12 +491,14 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	private boolean collectWindfall(IFarmLogic logic) {
 
 		Collection<ItemStack> collected = logic.collect();
-		if (collected == null || collected.size() <= 0)
+		if (collected == null || collected.size() <= 0) {
 			return false;
+		}
 
 		// Let event handlers know.
-		for (IFarmListener listener : eventHandlers)
+		for (IFarmListener listener : eventHandlers) {
 			listener.hasCollected(collected, logic);
+		}
 
 		for (ItemStack produce : collected) {
 			addProduceToInventory(produce);
@@ -486,15 +512,19 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		IInventoryAdapter inventory = getInternalInventory();
 		for (IFarmLogic logic : getFarmLogics()) {
 			// Germlings try to go into germling slots first.
-			if (logic.isAcceptedGermling(produce))
+			if (logic.isAcceptedGermling(produce)) {
 				produce.stackSize -= InvTools.addStack(inventory, produce, SLOT_GERMLINGS_1, SLOT_GERMLINGS_COUNT, false, true);
-			if (produce.stackSize <= 0)
+			}
+			if (produce.stackSize <= 0) {
 				return;
+			}
 
-			if (logic.isAcceptedResource(produce))
+			if (logic.isAcceptedResource(produce)) {
 				produce.stackSize -= InvTools.addStack(inventory, produce, SLOT_RESOURCES_1, SLOT_RESOURCES_COUNT, false, true);
-			if (produce.stackSize <= 0)
+			}
+			if (produce.stackSize <= 0) {
 				return;
+			}
 		}
 
 		produce.stackSize -= InvTools.addStack(inventory, produce, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT, false, true);
@@ -503,9 +533,11 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	private boolean cullCrop(ICrop crop, IFarmLogic provider) {
 
 		// Let event handlers handle the harvest first.
-		for (IFarmListener listener : eventHandlers)
-			if (listener.beforeCropHarvest(crop))
+		for (IFarmListener listener : eventHandlers) {
+			if (listener.beforeCropHarvest(crop)) {
 				return true;
+			}
+		}
 
 		// Check fertilizer
 		if (!hasFertilizer(provider.getFertilizerConsumption())) {
@@ -531,8 +563,9 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		removeLiquid(liquid);
 
 		// Let event handlers handle the harvest first.
-		for (IFarmListener listener : eventHandlers)
+		for (IFarmListener listener : eventHandlers) {
 			listener.afterCropHarvest(harvested, crop);
+		}
 
 		IInventoryAdapter inventory = getInternalInventory();
 
@@ -540,19 +573,22 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		for (ItemStack harvest : harvested) {
 
 			// Special case germlings
-			for (IFarmLogic logic : farmLogics)
+			for (IFarmLogic logic : farmLogics) {
 				if (logic.isAcceptedGermling(harvest)) {
 					harvest.stackSize -= InvTools.addStack(inventory, harvest, SLOT_GERMLINGS_1, SLOT_GERMLINGS_COUNT, false, true);
 					break;
 				}
+			}
 
 			// Handle the rest
-			if (harvest.stackSize <= 0)
+			if (harvest.stackSize <= 0) {
 				continue;
+			}
 
 			harvest.stackSize -= InvTools.addStack(inventory, harvest, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT, false, true);
-			if (harvest.stackSize <= 0)
+			if (harvest.stackSize <= 0) {
 				continue;
+			}
 
 			pendingProduce.push(harvest);
 		}
@@ -561,8 +597,9 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	}
 
 	private boolean tryAddPending() {
-		if (pendingProduce.isEmpty())
+		if (pendingProduce.isEmpty()) {
 			return false;
+		}
 
 		ItemStack next = pendingProduce.peek();
 		if (InvTools.tryAddStack(getInternalInventory(), next, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT, true, true)) {
@@ -576,43 +613,49 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	/* FERTILIZER HANDLING */
 	private void replenishFertilizer() {
-		if(fertilizerValue < 0) {
+		if (fertilizerValue < 0) {
 			storedFertilizer += 2000;
 			return;
 		}
 
 		IInventoryAdapter inventory = getInternalInventory();
 		ItemStack fertilizer = inventory.getStackInSlot(SLOT_FERTILIZER);
-		if (fertilizer == null || fertilizer.stackSize <= 0)
+		if (fertilizer == null || fertilizer.stackSize <= 0) {
 			return;
+		}
 
-		if (!acceptsAsFertilizer(fertilizer))
+		if (!acceptsAsFertilizer(fertilizer)) {
 			return;
+		}
 
 		inventory.decrStackSize(SLOT_FERTILIZER, 1);
 		storedFertilizer += fertilizerValue;
 	}
 
 	private boolean hasFertilizer(int amount) {
-		if(fertilizerValue < 0)
+		if (fertilizerValue < 0) {
 			return true;
+		}
 
 		return storedFertilizer >= amount;
 	}
 
 	private void removeFertilizer(int amount) {
 
-		if(fertilizerValue < 0)
+		if (fertilizerValue < 0) {
 			return;
+		}
 
 		storedFertilizer -= amount;
-		if (storedFertilizer < 0)
+		if (storedFertilizer < 0) {
 			storedFertilizer = 0;
+		}
 	}
 
 	public int getStoredFertilizerScaled(int scale) {
-		if (storedFertilizer == 0)
+		if (storedFertilizer == 0) {
 			return 0;
+		}
 
 		return (storedFertilizer * scale) / (fertilizerValue + BUFFER_FERTILIZER);
 	}
@@ -645,14 +688,15 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	private void refreshFarmLogics() {
 
-		farmLogics = new IFarmLogic[] { new FarmLogicArboreal(this), new FarmLogicArboreal(this), new FarmLogicArboreal(this), new FarmLogicArboreal(this) };
+		farmLogics = new IFarmLogic[]{new FarmLogicArboreal(this), new FarmLogicArboreal(this), new FarmLogicArboreal(this), new FarmLogicArboreal(this)};
 
 		// See whether we have socketed stuff.
 		ItemStack chip = sockets.getStackInSlot(0);
 		if (chip != null) {
 			ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitboard(chip);
-			if (chipset != null)
+			if (chipset != null) {
 				chipset.onLoad(this);
+			}
 		}
 	}
 
@@ -670,16 +714,19 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	@Override
 	public void setSocket(int slot, ItemStack stack) {
 
-		if (stack != null && !ChipsetManager.circuitRegistry.isChipset(stack))
+		if (stack != null && !ChipsetManager.circuitRegistry.isChipset(stack)) {
 			return;
+		}
 
 		// Dispose correctly of old chipsets
-		if (sockets.getStackInSlot(slot) != null)
+		if (sockets.getStackInSlot(slot) != null) {
 			if (ChipsetManager.circuitRegistry.isChipset(sockets.getStackInSlot(slot))) {
 				ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitboard(sockets.getStackInSlot(slot));
-				if (chipset != null)
+				if (chipset != null) {
 					chipset.onRemoval(this);
+				}
 			}
+		}
 
 		sockets.setInventorySlotContents(slot, stack);
 		refreshFarmLogics();
@@ -689,8 +736,9 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		}
 
 		ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitboard(stack);
-		if (chipset != null)
+		if (chipset != null) {
 			chipset.onInsertion(this);
+		}
 	}
 
 	/* IFARMHOUSING */
@@ -740,14 +788,17 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	public boolean plantGermling(IFarmable germling, World world, int x, int y, int z) {
 		IInventoryAdapter inventory = getInternalInventory();
 		for (int i = SLOT_GERMLINGS_1; i < SLOT_GERMLINGS_1 + SLOT_GERMLINGS_COUNT; i++) {
-			if (inventory.getStackInSlot(i) == null)
+			if (inventory.getStackInSlot(i) == null) {
 				continue;
-			if (!germling.isGermling(inventory.getStackInSlot(i)))
+			}
+			if (!germling.isGermling(inventory.getStackInSlot(i))) {
 				continue;
+			}
 
 			EntityPlayer player = Proxies.common.getPlayer(world, getOwnerProfile());
-			if (!germling.plantSaplingAt(player, inventory.getStackInSlot(i), world, x, y, z))
+			if (!germling.plantSaplingAt(player, inventory.getStackInSlot(i), world, x, y, z)) {
 				continue;
+			}
 
 			inventory.decrStackSize(i, 1);
 			return true;
@@ -775,36 +826,45 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	@Override
 	public boolean acceptsAsGermling(ItemStack itemstack) {
-		if (itemstack == null)
+		if (itemstack == null) {
 			return false;
-		if (farmLogics == null)
+		}
+		if (farmLogics == null) {
 			return false;
+		}
 
-		for (IFarmLogic logic : farmLogics)
-			if (logic.isAcceptedGermling(itemstack))
+		for (IFarmLogic logic : farmLogics) {
+			if (logic.isAcceptedGermling(itemstack)) {
 				return true;
+			}
+		}
 
 		return false;
 	}
 
 	@Override
 	public boolean acceptsAsResource(ItemStack itemstack) {
-		if (itemstack == null)
+		if (itemstack == null) {
 			return false;
-		if (farmLogics == null)
+		}
+		if (farmLogics == null) {
 			return false;
+		}
 
-		for (IFarmLogic logic : farmLogics)
-			if (logic.isAcceptedResource(itemstack))
+		for (IFarmLogic logic : farmLogics) {
+			if (logic.isAcceptedResource(itemstack)) {
 				return true;
+			}
+		}
 
 		return false;
 	}
 
 	@Override
 	public boolean acceptsAsFertilizer(ItemStack itemstack) {
-		if (itemstack == null)
+		if (itemstack == null) {
 			return false;
+		}
 
 		return StackUtils.isIdenticalItem(PluginFarming.farmFertilizer, itemstack);
 	}
@@ -815,36 +875,40 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	@Override
 	public int[] getCoords() {
-		if (coords == null)
-			coords = new int[] { xCoord, yCoord, zCoord };
+		if (coords == null) {
+			coords = new int[]{xCoord, yCoord, zCoord};
+		}
 		return coords;
 	}
 
 	@Override
 	public int[] getOffset() {
-		if (offset == null)
+		if (offset == null) {
 			offset = new int[]{-getArea()[0] / 2, -2, -getArea()[2] / 2};
+		}
 		return offset;
 	}
 
 	@Override
 	public int[] getArea() {
-		if (area == null)
-			area = new int[] { 7 + (allowedExtent * 2), 13, 7 + (allowedExtent * 2) };
+		if (area == null) {
+			area = new int[]{7 + (allowedExtent * 2), 13, 7 + (allowedExtent * 2)};
+		}
 		return area;
 	}
 
 	/* NETWORK GUI */
 	public void getGUINetworkData(int i, int j) {
-		if (tankManager != null)
+		if (tankManager != null) {
 			i -= tankManager.maxMessageId() + 1;
+		}
 		switch (i) {
-		case 0:
-			storedFertilizer = j;
-			break;
-		case 5:
-			ticksSinceRainfall = j;
-			break;
+			case 0:
+				storedFertilizer = j;
+				break;
+			case 5:
+				ticksSinceRainfall = j;
+				break;
 		}
 	}
 
@@ -885,8 +949,9 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	@Override
 	public EnumTemperature getTemperature() {
-		if (BiomeHelper.isBiomeHellish(biome))
+		if (BiomeHelper.isBiomeHellish(biome)) {
 			return EnumTemperature.HELLISH;
+		}
 
 		return EnumTemperature.getFromValue(getExactTemperature());
 	}

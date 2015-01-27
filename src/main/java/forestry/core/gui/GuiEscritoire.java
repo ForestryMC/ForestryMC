@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -38,7 +38,9 @@ public class GuiEscritoire extends GuiForestry<TileEscritoire> {
 	private static enum Notes {
 		level1, level2, level3, level4, success, failure
 	}
+
 	private static final ListMultimap<Notes, String> researchNotes;
+
 	static {
 		researchNotes = ArrayListMultimap.create();
 		for (Notes notesLevel : Notes.values()) {
@@ -73,8 +75,9 @@ public class GuiEscritoire extends GuiForestry<TileEscritoire> {
 		@Override
 		public void draw(int startX, int startY) {
 
-			if (!hasToken())
+			if (!hasToken()) {
 				return;
+			}
 
 			int tokenColour = getToken().getTokenColour();
 
@@ -88,9 +91,9 @@ public class GuiEscritoire extends GuiForestry<TileEscritoire> {
 			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
 
 			ItemStack tokenStack = HIDDEN_TOKEN;
-			if (getToken().isVisible())
+			if (getToken().isVisible()) {
 				tokenStack = getToken().tokenStack;
-
+			}
 
 
 			GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
@@ -151,16 +154,19 @@ public class GuiEscritoire extends GuiForestry<TileEscritoire> {
 
 		@Override
 		public void handleMouseRelease(int mouseX, int mouseY, int eventType) {
-			if (pressed)
+			if (pressed) {
 				pressed = false;
+			}
 		}
 
 		@Override
 		public void handleMouseMove(int mouseX, int mouseY, int mouseButton, long time) {
-			if (widgetManager.getAtPosition(mouseX - getGuiLeft(), mouseY - getGuiTop()) != this)
+			if (widgetManager.getAtPosition(mouseX - getGuiLeft(), mouseY - getGuiTop()) != this) {
 				pressed = false;
+			}
 		}
 	}
+
 	private final ItemStack LEVEL_ITEM;
 	protected ContainerEscritoire container;
 	private final TileEscritoire tile;
@@ -237,12 +243,13 @@ public class GuiEscritoire extends GuiForestry<TileEscritoire> {
 	}
 
 	private String getResearchNote() {
-		if (lastUpdate == tile.getGame().getLastUpdate())
+		if (lastUpdate == tile.getGame().getLastUpdate()) {
 			return researchNote;
+		}
 
-		if (!tile.getGame().isInited())
+		if (!tile.getGame().isInited()) {
 			researchNote = StringUtil.localize("gui.escritoire.instructions");
-		else {
+		} else {
 			if (tile.getGame().isWon()) {
 				researchNote = getRandomNote(researchNotes.get(Notes.success));
 			} else if (tile.getGame().isEnded()) {
@@ -255,8 +262,9 @@ public class GuiEscritoire extends GuiForestry<TileEscritoire> {
 					researchNote = getRandomNote(researchNotes.get(Notes.level2));
 				} else if (bounty > NaturalistGame.BOUNTY_MAX / 4) {
 					researchNote = getRandomNote(researchNotes.get(Notes.level3));
-				} else
+				} else {
 					researchNote = getRandomNote(researchNotes.get(Notes.level4));
+				}
 			}
 		}
 

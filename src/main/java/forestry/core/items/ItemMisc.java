@@ -4,21 +4,24 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.core.render.TextureManager;
 import java.util.List;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.core.render.TextureManager;
 
 public class ItemMisc extends ItemForestry {
 
@@ -42,10 +45,11 @@ public class ItemMisc extends ItemForestry {
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
-		if (stack.getItemDamage() >= definition.length || stack.getItemDamage() < 0)
+		if (stack.getItemDamage() >= definition.length || stack.getItemDamage() < 0) {
 			return "item.forestry.unknown";
-		else
+		} else {
 			return super.getUnlocalizedName(stack) + "." + definition[stack.getItemDamage()];
+		}
 	}
 
 	/* ICONS */
@@ -57,24 +61,27 @@ public class ItemMisc extends ItemForestry {
 	public void registerIcons(IIconRegister register) {
 
 		icons = new IIcon[definition.length];
-		for (int i = 0; i < definition.length; i++)
+		for (int i = 0; i < definition.length; i++) {
 			icons[i] = TextureManager.getInstance().registerTex(register, definition[i]);
+		}
 
 	}
 
 	@Override
 	public IIcon getIconFromDamage(int damage) {
-		if (damage >= definition.length || damage < 0)
+		if (damage >= definition.length || damage < 0) {
 			return icons[0];
-		else
+		} else {
 			return icons[damage];
+		}
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		for (int i = 0; i < 7; i++)
+		for (int i = 0; i < 7; i++) {
 			itemList.add(new ItemStack(this, 1, i));
+		}
 	}
 
 }

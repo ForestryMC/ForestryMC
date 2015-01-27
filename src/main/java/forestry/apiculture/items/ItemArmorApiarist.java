@@ -4,14 +4,22 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.IArmorApiarist;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.core.Tabs;
@@ -19,12 +27,6 @@ import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 
 public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArmorNaturalist {
 
@@ -36,10 +38,11 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArm
 
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
-		if (ForestryItem.apiaristLegs.isItemEqual(stack))
+		if (ForestryItem.apiaristLegs.isItemEqual(stack)) {
 			return Defaults.ID + ":" + Defaults.TEXTURE_APIARIST_ARMOR_SECONDARY;
-		else
+		} else {
 			return Defaults.ID + ":" + Defaults.TEXTURE_APIARIST_ARMOR_PRIMARY;
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -106,14 +109,18 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArm
 	public static int wearsItems(EntityPlayer player, String cause, boolean protect) {
 		int count = 0;
 
-		if (wearsHelmet(player, cause, protect))
+		if (wearsHelmet(player, cause, protect)) {
 			count++;
-		if (wearsChest(player, cause, protect))
+		}
+		if (wearsChest(player, cause, protect)) {
 			count++;
-		if (wearsLegs(player, cause, protect))
+		}
+		if (wearsLegs(player, cause, protect)) {
 			count++;
-		if (wearsBoots(player, cause, protect))
+		}
+		if (wearsBoots(player, cause, protect)) {
 			count++;
+		}
 
 		return count;
 	}

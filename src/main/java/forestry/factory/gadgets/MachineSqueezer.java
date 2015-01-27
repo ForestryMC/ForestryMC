@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Stack;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -23,7 +22,6 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -92,10 +90,12 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 		@Override
 		public void addRecipe(int timePerItem, ItemStack[] resources, FluidStack liquid, ItemStack remnants, int chance) {
 			recipes.add(new MachineSqueezer.Recipe(timePerItem, resources, liquid, remnants, chance));
-			if (liquid != null)
+			if (liquid != null) {
 				recipeFluids.add(liquid.getFluid());
-			if (resources != null)
+			}
+			if (resources != null) {
 				recipeInputs.addAll(Arrays.asList(resources));
+			}
 		}
 
 		@Override
@@ -105,19 +105,22 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 
 		public static Recipe findMatchingRecipe(ItemStack[] items) {
 			for (Recipe recipe : recipes) {
-				if (recipe.matches(items))
+				if (recipe.matches(items)) {
 					return recipe;
+				}
 			}
 
 			return null;
 		}
 
 		public static boolean canUse(ItemStack itemStack) {
-			if (recipeInputs.contains(itemStack))
+			if (recipeInputs.contains(itemStack)) {
 				return true;
+			}
 			for (ItemStack recipeInput : recipeInputs) {
-				if (StackUtils.isCraftingEquivalent(recipeInput, itemStack))
+				if (StackUtils.isCraftingEquivalent(recipeInput, itemStack)) {
 					return true;
+				}
 			}
 			return false;
 		}
@@ -148,15 +151,18 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 		setInternalInventory(new TileInventoryAdapter(this, 12, "Items") {
 			@Override
 			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				if (slotIndex == SLOT_CAN_INPUT)
+				if (slotIndex == SLOT_CAN_INPUT) {
 					return FluidHelper.isEmptyContainer(itemStack);
+				}
 
 				if (slotIndex >= SLOT_RESOURCE_1 && slotIndex < SLOT_RESOURCE_1 + SLOTS_RESOURCE_COUNT) {
-					if (FluidHelper.isEmptyContainer(itemStack))
+					if (FluidHelper.isEmptyContainer(itemStack)) {
 						return false;
+					}
 
-					if (RecipeManager.canUse(itemStack))
+					if (RecipeManager.canUse(itemStack)) {
 						return true;
+					}
 				}
 
 				return false;
@@ -204,20 +210,23 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 	@Override
 	public void updateServerSide() {
 
-		if (worldObj.getTotalWorldTime() % 20 != 0)
+		if (worldObj.getTotalWorldTime() % 20 != 0) {
 			return;
+		}
 
 		IInventoryAdapter inventory = getInternalInventory();
 		// Can/capsule input/output needs to be handled here.
 		if (inventory.getStackInSlot(SLOT_CAN_INPUT) != null) {
 			FluidStack fluidStack = productTank.getFluid();
-			if (fluidStack != null)
+			if (fluidStack != null) {
 				FluidHelper.fillContainers(tankManager, inventory, SLOT_CAN_INPUT, SLOT_CAN_OUTPUT, fluidStack.getFluid());
+			}
 		}
 
 		checkRecipe();
-		if (getErrorState() == EnumErrorCode.NORECIPE && currentRecipe != null)
+		if (getErrorState() == EnumErrorCode.NORECIPE && currentRecipe != null) {
 			setErrorState(EnumErrorCode.OK);
+		}
 
 		if (energyManager.getTotalEnergyStored() == 0) {
 			setErrorState(EnumErrorCode.NOPOWER);
@@ -229,8 +238,9 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 
 		checkRecipe();
 
-		if (getErrorState() == EnumErrorCode.NORECIPE)
+		if (getErrorState() == EnumErrorCode.NORECIPE) {
 			return false;
+		}
 
 		FluidStack resultFluid = currentRecipe.liquid.copy();
 		if (productTank.fill(resultFluid, false) < resultFluid.amount) {
@@ -247,11 +257,13 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 			}
 		}
 
-		if (productionTime <= 0)
+		if (productionTime <= 0) {
 			return false;
+		}
 
-		if (currentRecipe == null)
+		if (currentRecipe == null) {
 			return false;
+		}
 
 		productionTime--;
 		// Still not done, return
@@ -260,12 +272,14 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 			return true;
 		}
 
-		if (!removeResources(currentRecipe.resources))
+		if (!removeResources(currentRecipe.resources)) {
 			return false;
+		}
 
 		productTank.fill(resultFluid, true);
-		if (remnant != null && worldObj.rand.nextInt(100) < currentRecipe.chance)
+		if (remnant != null && worldObj.rand.nextInt(100) < currentRecipe.chance) {
 			InvTools.tryAddStack(getInternalInventory(), remnant, SLOT_REMNANT, SLOT_REMNANT_COUNT, true);
+		}
 
 		setErrorState(EnumErrorCode.OK);
 
@@ -279,8 +293,9 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 		ItemStack[] resources = InvTools.getStacks(getInternalInventory(), SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT);
 		Recipe sameRec = RecipeManager.findMatchingRecipe(resources);
 
-		if (sameRec == null)
+		if (sameRec == null) {
 			setErrorState(EnumErrorCode.NORECIPE);
+		}
 
 		if (currentRecipe != sameRec) {
 			currentRecipe = sameRec;
@@ -315,8 +330,9 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 	}
 
 	public int getProgressScaled(int i) {
-		if (timePerItem == 0)
+		if (timePerItem == 0) {
 			return i;
+		}
 
 		return (productionTime * i) / timePerItem;
 	}
@@ -335,12 +351,12 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 	public void getGUINetworkData(int i, int j) {
 		i -= tankManager.maxMessageId() + 1;
 		switch (i) {
-		case 0:
-			productionTime = j;
-			break;
-		case 1:
-			timePerItem = j;
-			break;
+			case 0:
+				productionTime = j;
+				break;
+			case 1:
+				timePerItem = j;
+				break;
 		}
 	}
 

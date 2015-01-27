@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -64,6 +64,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 				}
 				return false;
 			}
+
 			@Override
 			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
 				return slotIndex == SLOT_PRODUCT;
@@ -114,19 +115,20 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 
 	@Override
 	public void updateServerSide() {
-		if (!isValidBiome)
+		if (!isValidBiome) {
 			setErrorState(EnumErrorCode.INVALIDBIOME);
-		else if (!worldObj.canBlockSeeTheSky(xCoord, yCoord + 1, zCoord))
+		} else if (!worldObj.canBlockSeeTheSky(xCoord, yCoord + 1, zCoord)) {
 			setErrorState(EnumErrorCode.NOSKY);
-		else if (!worldObj.isRaining())
+		} else if (!worldObj.isRaining()) {
 			setErrorState(EnumErrorCode.NOTRAINING);
-		else {
+		} else {
 			resourceTank.fill(STACK_WATER, true);
 			setErrorState(EnumErrorCode.OK);
 		}
 
-		if (worldObj.getTotalWorldTime() % 16 != 0)
+		if (worldObj.getTotalWorldTime() % 16 != 0) {
 			return;
+		}
 
 		IInventoryAdapter inventory = getInternalInventory();
 		if (!StackUtils.isIdenticalItem(usedEmpty, inventory.getStackInSlot(SLOT_RESOURCE))) {
@@ -134,15 +136,17 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 			usedEmpty = null;
 		}
 
-		if (usedEmpty == null)
+		if (usedEmpty == null) {
 			usedEmpty = inventory.getStackInSlot(SLOT_RESOURCE);
+		}
 
-		if (!isFilling())
+		if (!isFilling()) {
 			tryToStartFillling();
-		else {
+		} else {
 			fillingTime--;
-			if (fillingTime <= 0 && FluidHelper.fillContainers(tankManager, inventory, SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.getFluid()))
+			if (fillingTime <= 0 && FluidHelper.fillContainers(tankManager, inventory, SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.getFluid())) {
 				fillingTime = 0;
+			}
 		}
 	}
 
@@ -152,8 +156,9 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 
 	private void tryToStartFillling() {
 		// Nothing to do if no empty cans are available
-		if (!FluidHelper.fillContainers(tankManager, getInternalInventory(), SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.getFluid(), false))
+		if (!FluidHelper.fillContainers(tankManager, getInternalInventory(), SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.getFluid(), false)) {
 			return;
+		}
 
 		fillingTime = Defaults.RAINTANK_FILLING_TIME;
 	}
@@ -167,9 +172,9 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 	public void getGUINetworkData(int i, int j) {
 		i -= tankManager.maxMessageId() + 1;
 		switch (i) {
-		case 0:
-			fillingTime = j;
-			break;
+			case 0:
+				fillingTime = j;
+				break;
 		}
 	}
 

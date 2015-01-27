@@ -4,11 +4,19 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.lepidopterology.gui;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -28,12 +36,6 @@ import forestry.lepidopterology.genetics.ButterflyGenome;
 import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.items.ItemFlutterlyzer.FlutterlyzerInventory;
 import forestry.plugins.PluginLepidopterology;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 
 public class GuiFlutterlyzer extends GuiAlyzer {
 
@@ -42,8 +44,9 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 
 		ArrayList<ItemStack> butterflyList = new ArrayList<ItemStack>();
 		((ItemButterflyGE) ForestryItem.butterflyGE.item()).addCreativeItems(butterflyList, false);
-		for (ItemStack butterflyStack : butterflyList)
+		for (ItemStack butterflyStack : butterflyList) {
 			iconStacks.put(ButterflyGenome.getSpecies(butterflyStack).getUID(), butterflyStack);
+		}
 
 	}
 
@@ -54,37 +57,40 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 		int page = 0;
 		IButterfly butterfly = null;
 		for (int k = 1; k < FlutterlyzerInventory.SLOT_ANALYZE_5 + 1; k++) {
-			if (k == FlutterlyzerInventory.SLOT_ENERGY)
+			if (k == FlutterlyzerInventory.SLOT_ENERGY) {
 				continue;
+			}
 
-			if (inventory.getStackInSlot(k) == null)
+			if (inventory.getStackInSlot(k) == null) {
 				continue;
+			}
 			butterfly = PluginLepidopterology.butterflyInterface.getMember(inventory.getStackInSlot(k));
-			if (butterfly == null || !butterfly.isAnalyzed())
+			if (butterfly == null || !butterfly.isAnalyzed()) {
 				continue;
+			}
 
 			page = k;
 			break;
 		}
 
 		switch (page) {
-		case 1:
-			drawAnalyticsPage1(butterfly);
-			break;
-		case 2:
-			drawAnalyticsPage2(butterfly);
-			break;
-		case 3:
-			drawAnalyticsPage3(butterfly);
-			break;
-		case 4:
-			drawAnalyticsPage4(butterfly);
-			break;
-		case 6:
-			drawAnalyticsPageClassification(butterfly);
-			break;
-		default:
-			drawAnalyticsOverview();
+			case 1:
+				drawAnalyticsPage1(butterfly);
+				break;
+			case 2:
+				drawAnalyticsPage2(butterfly);
+				break;
+			case 3:
+				drawAnalyticsPage3(butterfly);
+				break;
+			case 4:
+				drawAnalyticsPage4(butterfly);
+				break;
+			case 6:
+				drawAnalyticsPageClassification(butterfly);
+				break;
+			default:
+				drawAnalyticsOverview();
 		}
 
 	}
@@ -136,6 +142,7 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 		endPage();
 
 	}
+
 	private void drawAnalyticsPage2(IButterfly butterfly) {
 		startPage(COLUMN_0, COLUMN_1, COLUMN_2);
 
@@ -148,8 +155,8 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 		drawRow(StringUtil.localize("gui.climate"), AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getTemperature()),
 				AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getTemperature()), butterfly, EnumButterflyChromosome.SPECIES);
 
-		IAlleleTolerance tempToleranceActive = (IAlleleTolerance)butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE);
-		IAlleleTolerance tempToleranceInactive = (IAlleleTolerance)butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE);
+		IAlleleTolerance tempToleranceActive = (IAlleleTolerance) butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE);
+		IAlleleTolerance tempToleranceInactive = (IAlleleTolerance) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE);
 		drawLine(StringUtil.localize("gui.temptol"), COLUMN_0);
 		drawToleranceInfo(tempToleranceActive, COLUMN_1);
 		drawToleranceInfo(tempToleranceInactive, COLUMN_2);
@@ -159,8 +166,8 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 		drawRow(StringUtil.localize("gui.humidity"), AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getHumidity()),
 				AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getHumidity()), butterfly, EnumButterflyChromosome.SPECIES);
 
-		IAlleleTolerance humidToleranceActive = (IAlleleTolerance)butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE);
-		IAlleleTolerance humidToleranceInactive = (IAlleleTolerance)butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE);
+		IAlleleTolerance humidToleranceActive = (IAlleleTolerance) butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE);
+		IAlleleTolerance humidToleranceInactive = (IAlleleTolerance) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE);
 		drawLine(StringUtil.localize("gui.humidtol"), COLUMN_0);
 		drawToleranceInfo(humidToleranceActive, COLUMN_1);
 		drawToleranceInfo(humidToleranceInactive, COLUMN_2);
@@ -172,13 +179,13 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 		String no = StringUtil.localize("no");
 
 		String diurnal0, diurnal1, nocturnal0, nocturnal1;
-		if(butterfly.getGenome().getNocturnal()) {
+		if (butterfly.getGenome().getNocturnal()) {
 			nocturnal0 = diurnal0 = yes;
 		} else {
 			nocturnal0 = butterfly.getGenome().getPrimary().isNocturnal() ? yes : no;
 			diurnal0 = !butterfly.getGenome().getPrimary().isNocturnal() ? yes : no;
 		}
-		if(((AlleleBoolean) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.NOCTURNAL)).getValue()) {
+		if (((AlleleBoolean) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.NOCTURNAL)).getValue()) {
 			nocturnal1 = diurnal1 = yes;
 		} else {
 			nocturnal1 = butterfly.getGenome().getSecondary().isNocturnal() ? yes : no;
@@ -210,6 +217,7 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 		endPage();
 
 	}
+
 	private void drawAnalyticsPage3(IButterfly butterfly) {
 
 		startPage(COLUMN_0, COLUMN_1, COLUMN_2);
@@ -247,6 +255,7 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 
 		endPage();
 	}
+
 	private void drawAnalyticsPage4(IButterfly butterfly) {
 
 		startPage(COLUMN_0, COLUMN_1, COLUMN_2);

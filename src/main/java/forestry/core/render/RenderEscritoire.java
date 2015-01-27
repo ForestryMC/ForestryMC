@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -57,7 +57,7 @@ public class RenderEscritoire extends TileEntitySpecialRenderer implements IBloc
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
-		TileEscritoire tile = (TileEscritoire)tileentity;
+		TileEscritoire tile = (TileEscritoire) tileentity;
 		render(tile.getStackInSlot(TileEscritoire.SLOT_ANALYZE), tile.getOrientation(), x, y, z);
 	}
 
@@ -68,23 +68,24 @@ public class RenderEscritoire extends TileEntitySpecialRenderer implements IBloc
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glTranslatef((float) x + 0.5f, (float) y + 0.875f, (float) z + 0.5f);
 
-		float[] angle = { (float) Math.PI, 0, 0 };
+		float[] angle = {(float) Math.PI, 0, 0};
 
-		if (orientation == null)
+		if (orientation == null) {
 			orientation = ForgeDirection.WEST;
+		}
 		switch (orientation) {
-		case EAST:
-			angle[1] = (float)Math.PI / 2;
-			break;
-		case SOUTH:
-			break;
-		case NORTH:
-			angle[1] = (float)Math.PI;
-			break;
-		case WEST:
-		default:
-			angle[1] = -(float)Math.PI / 2;
-			break;
+			case EAST:
+				angle[1] = (float) Math.PI / 2;
+				break;
+			case SOUTH:
+				break;
+			case NORTH:
+				angle[1] = (float) Math.PI;
+				break;
+			case WEST:
+			default:
+				angle[1] = -(float) Math.PI / 2;
+				break;
 		}
 
 		Proxies.common.bindTexture(texture);

@@ -4,14 +4,25 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.farming.logic;
 
+import java.util.Collection;
+import java.util.Stack;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.config.ForestryBlock;
@@ -19,14 +30,6 @@ import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.BlockSoil;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
-
-import java.util.Collection;
-import java.util.Stack;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class FarmLogicPeat extends FarmLogicWatered {
 
@@ -37,13 +40,15 @@ public class FarmLogicPeat extends FarmLogicWatered {
 
 	@Override
 	public boolean isAcceptedGround(ItemStack itemStack) {
-		if (super.isAcceptedGround(itemStack))
+		if (super.isAcceptedGround(itemStack)) {
 			return true;
+		}
 
 		Block block = BlockSoil.getBlockFromItem(itemStack.getItem());
-		if (block == null || !(block instanceof BlockSoil))
+		if (block == null || !(block instanceof BlockSoil)) {
 			return false;
-		BlockSoil blockSoil = (BlockSoil)block;
+		}
+		BlockSoil blockSoil = (BlockSoil) block;
 		BlockSoil.SoilType soilType = blockSoil.getTypeFromMeta(itemStack.getItemDamage());
 		return soilType == BlockSoil.SoilType.BOG_EARTH || soilType == BlockSoil.SoilType.PEAT;
 	}
@@ -55,10 +60,11 @@ public class FarmLogicPeat extends FarmLogicWatered {
 
 	@Override
 	public String getName() {
-		if (isManual)
+		if (isManual) {
 			return "Manual Peat Bog";
-		else
+		} else {
 			return "Managed Peat Bog";
+		}
 	}
 
 	@Override
@@ -75,18 +81,21 @@ public class FarmLogicPeat extends FarmLogicWatered {
 			Vect position = translateWithOffset(x, y, z, direction, i);
 			ItemStack occupant = VectUtil.getAsItemStack(world, position);
 
-			if (occupant.getItem() == null)
+			if (occupant.getItem() == null) {
 				continue;
+			}
 
 			Block block = BlockSoil.getBlockFromItem(occupant.getItem());
-			if (block == null || !(block instanceof BlockSoil))
+			if (block == null || !(block instanceof BlockSoil)) {
 				continue;
+			}
 
-			BlockSoil blockSoil = (BlockSoil)block;
+			BlockSoil blockSoil = (BlockSoil) block;
 			BlockSoil.SoilType soilType = blockSoil.getTypeFromMeta(occupant.getItemDamage());
 
-			if (soilType == BlockSoil.SoilType.PEAT)
+			if (soilType == BlockSoil.SoilType.PEAT) {
 				crops.push(new CropPeat(world, position));
+			}
 		}
 		return crops;
 	}

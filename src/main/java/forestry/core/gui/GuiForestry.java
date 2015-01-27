@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -83,10 +83,11 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		this.textureFile = texture;
 		this.inventorySlots = container;
 
-		if (inventory instanceof TileForestry)
+		if (inventory instanceof TileForestry) {
 			this.tile = (T) inventory;
-		else
+		} else {
 			this.tile = null;
+		}
 
 		fontColor = new FontColour(Proxies.common.getSelectedTexturePack(Proxies.common.getClientInstance()));
 		initLedgers(inventory);
@@ -95,20 +96,25 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 	/* LEDGERS */
 	protected void initLedgers(Object inventory) {
 
-		if (inventory instanceof IErrorSource && ((IErrorSource) inventory).throwsErrors())
+		if (inventory instanceof IErrorSource && ((IErrorSource) inventory).throwsErrors()) {
 			ledgerManager.add(new ErrorLedger(ledgerManager, (IErrorSource) inventory));
+		}
 
-		if (inventory instanceof IClimatised && ((IClimatised) inventory).isClimatized())
+		if (inventory instanceof IClimatised && ((IClimatised) inventory).isClimatized()) {
 			ledgerManager.add(new ClimateLedger(ledgerManager, (IClimatised) inventory));
+		}
 
-		if (!Config.disableEnergyStat && inventory instanceof IPowerHandler && ((IPowerHandler) inventory).getEnergyManager().getMaxEnergyStored() > 0)
+		if (!Config.disableEnergyStat && inventory instanceof IPowerHandler && ((IPowerHandler) inventory).getEnergyManager().getMaxEnergyStored() > 0) {
 			ledgerManager.add(new PowerLedger(ledgerManager, (IPowerHandler) inventory));
+		}
 
-		if (!Config.disableHints && inventory instanceof IHintSource && ((IHintSource) inventory).hasHints())
+		if (!Config.disableHints && inventory instanceof IHintSource && ((IHintSource) inventory).hasHints()) {
 			ledgerManager.add(new HintLedger(ledgerManager, (IHintSource) inventory));
+		}
 
-		if (inventory instanceof IOwnable && ((IOwnable) inventory).isOwnable())
+		if (inventory instanceof IOwnable && ((IOwnable) inventory).isOwnable()) {
 			ledgerManager.add(new OwnerLedger(ledgerManager, (IOwnable) inventory));
+		}
 
 	}
 
@@ -240,10 +246,12 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 	}
 
 	public void drawToolTips(ToolTip toolTips, int mouseX, int mouseY) {
-		if (toolTips == null)
+		if (toolTips == null) {
 			return;
-		if (toolTips.isEmpty())
+		}
+		if (toolTips.isEmpty()) {
 			return;
+		}
 
 		int left = this.guiLeft;
 		int top = this.guiTop;
@@ -256,8 +264,9 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 			y = this.fontRendererObj.getStringWidth(tip.toString());
 
 			height += 10 + tip.getSpacing();
-			if (y > length)
+			if (y > length) {
 				length = y;
+			}
 		}
 
 		x = mouseX - left + 12;
@@ -330,14 +339,17 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 
 	private void drawToolTips(Collection<?> objects, int mouseX, int mouseY) {
 		for (Object obj : objects) {
-			if (!(obj instanceof IToolTipProvider))
+			if (!(obj instanceof IToolTipProvider)) {
 				continue;
+			}
 			IToolTipProvider provider = (IToolTipProvider) obj;
-			if (!provider.isToolTipVisible())
+			if (!provider.isToolTipVisible()) {
 				continue;
+			}
 			ToolTip tips = provider.getToolTip();
-			if (tips == null)
+			if (tips == null) {
 				continue;
+			}
 			boolean mouseOver = provider.isMouseOver(mouseX - guiLeft, mouseY - guiTop);
 			tips.onTick(mouseOver);
 			if (mouseOver && tips.isReady()) {
@@ -428,10 +440,12 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		this.zLevel = 100.0F;
 		itemRender.zLevel = 100.0F;
 		FontRenderer font = null;
-		if (stack != null)
+		if (stack != null) {
 			font = stack.getItem().getFontRenderer(stack);
-		if (font == null)
+		}
+		if (font == null) {
 			font = fontRendererObj;
+		}
 		itemRender.renderItemAndEffectIntoGUI(font, this.mc.getTextureManager(), stack, xPos, yPos);
 		itemRender.renderItemOverlayIntoGUI(font, this.mc.getTextureManager(), stack, xPos, yPos);
 		this.zLevel = 0.0F;
@@ -466,26 +480,35 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 	/* NEI */
 	@Override
 	@Optional.Method(modid = "NotEnoughItems")
-	public VisiblityData modifyVisiblity(GuiContainer gui, VisiblityData currentVisibility) { return null; }
+	public VisiblityData modifyVisiblity(GuiContainer gui, VisiblityData currentVisibility) {
+		return null;
+	}
 
 	@Override
 	@Optional.Method(modid = "NotEnoughItems")
-	public Iterable<Integer> getItemSpawnSlots(GuiContainer gui, ItemStack item) { return null; }
+	public Iterable<Integer> getItemSpawnSlots(GuiContainer gui, ItemStack item) {
+		return null;
+	}
 
 	@Override
 	@Optional.Method(modid = "NotEnoughItems")
-	public List<TaggedInventoryArea> getInventoryAreas(GuiContainer gui) { return null; }
+	public List<TaggedInventoryArea> getInventoryAreas(GuiContainer gui) {
+		return null;
+	}
 
 	@Override
 	@Optional.Method(modid = "NotEnoughItems")
-	public boolean handleDragNDrop(GuiContainer gui, int mousex, int mousey, ItemStack draggedStack, int button) { return false; }
+	public boolean handleDragNDrop(GuiContainer gui, int mousex, int mousey, ItemStack draggedStack, int button) {
+		return false;
+	}
 
 	@Override
 	@Optional.Method(modid = "NotEnoughItems")
 	public boolean hideItemPanelSlot(GuiContainer gui, int x, int y, int w, int h) {
-		if (gui instanceof GuiForestry)
-			return ((GuiForestry)gui).ledgerManager.ledgerOverlaps(x, y, w, h);
-		else
+		if (gui instanceof GuiForestry) {
+			return ((GuiForestry) gui).ledgerManager.ledgerOverlaps(x, y, w, h);
+		} else {
 			return false;
+		}
 	}
 }

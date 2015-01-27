@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class ChestWrapper implements IInventory {
@@ -157,7 +156,9 @@ public class ChestWrapper implements IInventory {
 	@Override
 	public void markDirty() {
 		this.upperChest.markDirty();
-		if (lowerChest != null) lowerChest.markDirty();
+		if (lowerChest != null) {
+			lowerChest.markDirty();
+		}
 	}
 
 	/**
@@ -172,13 +173,17 @@ public class ChestWrapper implements IInventory {
 	@Override
 	public void openInventory() {
 		this.upperChest.openInventory();
-		if (lowerChest != null) lowerChest.openInventory();
+		if (lowerChest != null) {
+			lowerChest.openInventory();
+		}
 	}
 
 	@Override
 	public void closeInventory() {
 		this.upperChest.closeInventory();
-		if (lowerChest != null) lowerChest.closeInventory();
+		if (lowerChest != null) {
+			lowerChest.closeInventory();
+		}
 	}
 
 	/**

@@ -4,11 +4,16 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core;
+
+import java.util.HashMap;
+
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IGameMode;
@@ -18,16 +23,14 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.Property;
 import forestry.core.proxy.Proxies;
-import java.util.HashMap;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 
 public class GameMode implements IGameMode {
 
 	public static IGameMode getGameMode() {
 
-		if (ForestryAPI.activeMode == null)
+		if (ForestryAPI.activeMode == null) {
 			ForestryAPI.activeMode = new GameMode(Config.gameMode);
+		}
 
 		return ForestryAPI.activeMode;
 	}
@@ -167,32 +170,36 @@ public class GameMode implements IGameMode {
 
 	@Override
 	public int getIntegerSetting(String ident) {
-		if (integerSettings.containsKey(ident))
+		if (integerSettings.containsKey(ident)) {
 			return integerSettings.get(ident);
+		}
 		Proxies.log.warning("No such setting: " + ident);
 		return -1;
 	}
 
 	@Override
 	public float getFloatSetting(String ident) {
-		if (floatSettings.containsKey(ident))
+		if (floatSettings.containsKey(ident)) {
 			return floatSettings.get(ident);
+		}
 		Proxies.log.warning("No such setting: " + ident);
 		return 1;
 	}
 
 	@Override
 	public boolean getBooleanSetting(String ident) {
-		if (booleanSettings.containsKey(ident))
+		if (booleanSettings.containsKey(ident)) {
 			return booleanSettings.get(ident);
+		}
 		Proxies.log.warning("No such setting: " + ident);
 		return false;
 	}
 
 	@Override
 	public ItemStack getStackSetting(String ident) {
-		if (stackSettings.containsKey(ident))
+		if (stackSettings.containsKey(ident)) {
 			return stackSettings.get(ident);
+		}
 		Proxies.log.warning("No such setting: " + ident);
 		return new ItemStack(Items.apple, 1);
 	}

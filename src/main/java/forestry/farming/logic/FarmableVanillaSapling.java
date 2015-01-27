@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -30,10 +30,11 @@ public class FarmableVanillaSapling extends FarmableGenericSapling {
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
 		IIndividual tree = GeneticsUtil.getGeneticEquivalent(germling);
-		if (!(tree instanceof ITree))
+		if (!(tree instanceof ITree)) {
 			return false;
+		}
 
-		return PluginArboriculture.treeInterface.plantSapling(world, (ITree)tree, player.getGameProfile(), x, y, z);
+		return PluginArboriculture.treeInterface.plantSapling(world, (ITree) tree, player.getGameProfile(), x, y, z);
 	}
 
 }

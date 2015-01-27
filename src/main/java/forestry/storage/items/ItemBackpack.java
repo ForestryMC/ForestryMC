@@ -4,15 +4,30 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.storage.items;
 
+import java.util.List;
+import java.util.Locale;
+
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.storage.BackpackStowEvent;
 import forestry.api.storage.EnumBackpackType;
@@ -30,17 +45,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 import forestry.storage.BackpackMode;
-import java.util.List;
-import java.util.Locale;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class ItemBackpack extends ItemInventoried {
 
@@ -70,13 +74,15 @@ public class ItemBackpack extends ItemInventoried {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer player) {
 
-		if (!Proxies.common.isSimulating(world))
+		if (!Proxies.common.isSimulating(world)) {
 			return itemstack;
+		}
 
-		if (!player.isSneaking())
+		if (!player.isSneaking()) {
 			openGui(player, itemstack);
-		else
+		} else {
 			switchMode(itemstack);
+		}
 		return itemstack;
 
 	}
@@ -89,12 +95,14 @@ public class ItemBackpack extends ItemInventoried {
 	@Override
 	public boolean onItemUseFirst(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 
-		if (!Proxies.common.isSimulating(world))
+		if (!Proxies.common.isSimulating(world)) {
 			return false;
+		}
 
 		// We only do this when shift is clicked
-		if (!player.isSneaking())
+		if (!player.isSneaking()) {
 			return false;
+		}
 
 		return evaluateTileHit(itemstack, player, world, x, y, z, side, hitX, hitY, hitZ);
 	}
@@ -103,15 +111,18 @@ public class ItemBackpack extends ItemInventoried {
 
 		ItemBackpack backpack = ((ItemBackpack) backpackStack.getItem());
 		ItemInventory inventory = new ItemInventoryBackpack(ItemBackpack.class, backpack.getBackpackSize(), backpackStack);
-		if (backpackStack.getItemDamage() == 1)
+		if (backpackStack.getItemDamage() == 1) {
 			return stack;
+		}
 
 		Event event = new BackpackStowEvent(player, backpack.getDefinition(), inventory, stack);
 		MinecraftForge.EVENT_BUS.post(event);
-		if (stack.stackSize <= 0)
+		if (stack.stackSize <= 0) {
 			return null;
-		if (event.isCanceled())
+		}
+		if (event.isCanceled()) {
 			return stack;
+		}
 
 		ItemStack remainder = InvTools.moveItemStack(stack, inventory);
 		stack.stackSize = remainder == null ? 0 : remainder.stackSize;
@@ -144,17 +155,19 @@ public class ItemBackpack extends ItemInventoried {
 		if (inventory != null) {
 
 			// Must have inventory slots
-			if (inventory.getSizeInventory() <= 0)
+			if (inventory.getSizeInventory() <= 0) {
 				return true;
+			}
 
 			// Create our own backpack inventory
 			ItemInventoryBackpack backpackInventory = new ItemInventoryBackpack(ItemBackpack.class, getBackpackSize(), stack);
 
 			BackpackMode mode = getMode(stack);
-			if (mode == BackpackMode.RECEIVE)
+			if (mode == BackpackMode.RECEIVE) {
 				tryChestReceive(player, backpackInventory, inventory);
-			else
+			} else {
 				tryChestTransfer(backpackInventory, inventory);
+			}
 
 			backpackInventory.save();
 
@@ -168,8 +181,9 @@ public class ItemBackpack extends ItemInventoried {
 
 		for (IInvSlot slot : InventoryIterator.getIterable(backpackInventory)) {
 			ItemStack packStack = slot.getStackInSlot();
-			if (packStack == null)
+			if (packStack == null) {
 				continue;
+			}
 
 			ItemStack remaining = InvTools.moveItemStack(packStack, target);
 			slot.setStackInSlot(remaining);
@@ -180,11 +194,13 @@ public class ItemBackpack extends ItemInventoried {
 
 		for (IInvSlot slot : InventoryIterator.getIterable(target)) {
 			ItemStack targetStack = slot.getStackInSlot();
-			if (targetStack == null)
+			if (targetStack == null) {
 				continue;
+			}
 
-			if (!info.isValidItem(player, targetStack))
+			if (!info.isValidItem(player, targetStack)) {
 				continue;
+			}
 
 			ItemStack remaining = InvTools.moveItemStack(targetStack, backpackInventory);
 			slot.setStackInSlot(remaining);
@@ -193,17 +209,19 @@ public class ItemBackpack extends ItemInventoried {
 	}
 
 	public void openGui(EntityPlayer entityplayer, ItemStack itemstack) {
-		if (getBackpackSize() == Defaults.SLOTS_BACKPACK_DEFAULT)
+		if (getBackpackSize() == Defaults.SLOTS_BACKPACK_DEFAULT) {
 			entityplayer.openGui(ForestryAPI.instance, GuiId.BackpackGUI.ordinal(), entityplayer.worldObj, (int) entityplayer.posX, (int) entityplayer.posY,
 					(int) entityplayer.posZ);
-		else if (getBackpackSize() == Defaults.SLOTS_BACKPACK_T2)
+		} else if (getBackpackSize() == Defaults.SLOTS_BACKPACK_T2) {
 			entityplayer.openGui(ForestryAPI.instance, GuiId.BackpackT2GUI.ordinal(), entityplayer.worldObj, (int) entityplayer.posX, (int) entityplayer.posY,
 					(int) entityplayer.posZ);
+		}
 	}
 
 	public boolean isBackpack(ItemStack stack) {
-		if (stack == null)
+		if (stack == null) {
 			return false;
+		}
 
 		return stack.getItem() == this;
 	}
@@ -218,12 +236,13 @@ public class ItemBackpack extends ItemInventoried {
 		int occupied = ItemInventory.getOccupiedSlotCount(itemstack);
 
 		BackpackMode mode = getMode(itemstack);
-		if (mode == BackpackMode.LOCKED)
+		if (mode == BackpackMode.LOCKED) {
 			list.add(StringUtil.localize("storage.backpack.mode.locked"));
-		else if (mode == BackpackMode.RECEIVE)
+		} else if (mode == BackpackMode.RECEIVE) {
 			list.add(StringUtil.localize("storage.backpack.mode.receiving"));
-		else if (mode == BackpackMode.RESUPPLY)
+		} else if (mode == BackpackMode.RESUPPLY) {
 			list.add(StringUtil.localize("storage.backpack.mode.resupply"));
+		}
 		list.add(StringUtil.localize("gui.slots").replaceAll("%USED", String.valueOf(occupied)).replaceAll("%SIZE", String.valueOf(getBackpackSize())));
 
 	}
@@ -271,54 +290,59 @@ public class ItemBackpack extends ItemInventoried {
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int j) {
 
-		if (j == 0)
+		if (j == 0) {
 			return info.getPrimaryColour();
-		else if (j == 1)
+		} else if (j == 1) {
 			return info.getSecondaryColour();
-		else
+		} else {
 			return 0xffffff;
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIconFromDamageForRenderPass(int i, int j) {
-		if (j == 0)
+		if (j == 0) {
 			return icons[0];
-		if (j == 1)
+		}
+		if (j == 1) {
 			return icons[1];
+		}
 
-		if (i > 2)
+		if (i > 2) {
 			return icons[5];
-		else if (i > 1)
+		} else if (i > 1) {
 			return icons[4];
-		else if (i > 0)
+		} else if (i > 0) {
 			return icons[3];
-		else
+		} else {
 			return icons[2];
+		}
 	}
 
 	public static int getSlotsForType(EnumBackpackType type) {
 		switch (type) {
-		case APIARIST:
-			return Defaults.SLOTS_BACKPACK_APIARIST;
-		case T2:
-			return Defaults.SLOTS_BACKPACK_T2;
-		case T1:
-		default:
-			return Defaults.SLOTS_BACKPACK_DEFAULT;
+			case APIARIST:
+				return Defaults.SLOTS_BACKPACK_APIARIST;
+			case T2:
+				return Defaults.SLOTS_BACKPACK_T2;
+			case T1:
+			default:
+				return Defaults.SLOTS_BACKPACK_DEFAULT;
 		}
 	}
 
 	public static BackpackMode getMode(ItemStack backpack) {
 		int meta = backpack.getItemDamage();
 
-		if (meta >= 3)
+		if (meta >= 3) {
 			return BackpackMode.RESUPPLY;
-		else if (meta >= 2)
+		} else if (meta >= 2) {
 			return BackpackMode.RECEIVE;
-		else if (meta >= 1)
+		} else if (meta >= 1) {
 			return BackpackMode.LOCKED;
-		else
+		} else {
 			return BackpackMode.NORMAL;
+		}
 	}
 }

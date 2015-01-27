@@ -4,11 +4,14 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.genetics;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IAlleleBeeEffect;
@@ -28,37 +31,35 @@ import forestry.core.genetics.AlleleTolerance;
 import forestry.core.genetics.Genome;
 import forestry.core.vect.Vect;
 import forestry.plugins.PluginApiculture;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class BeeGenome extends Genome implements IBeeGenome {
 	/**
 	 * 0 - Species (determines product)
-	 * 
+	 *
 	 * 1 - Speed
-	 * 
+	 *
 	 * 2 - Lifespan
-	 * 
+	 *
 	 * 3 - Fertility (Maximum number of offspring)
-	 * 
+	 *
 	 * 4 - Preferred temperature Icy: Snow biomes Cold: Tundra/Steppe, Extreme Mountains/Hills? Normal: Plains, Forests, Mountains Hot: Desert Hellish: Nether
-	 * 
+	 *
 	 * 5 - Temperature tolerance (Range +/-)
-	 * 
+	 *
 	 * 6 - Nocturnal
-	 * 
+	 *
 	 * 7 - Preferred humidity (Arid - Normal - Damp)
-	 * 
+	 *
 	 * 8 - Humidity tolerance (Range +/-)
-	 * 
+	 *
 	 * 9 - Flight interference tolerance (stuff falling from the sky/other hindrances -> tolerates dampness + flight interference tolerance => rain resistance)
-	 * 
+	 *
 	 * 10 - Cave dwelling
-	 * 
+	 *
 	 * 11 - Required flowers
-	 * 
+	 *
 	 * 12 - Flower plant chance
-	 * 
+	 *
 	 * 13 - Territory
 	 */
 	/* CONSTRUCTOR */
@@ -73,10 +74,11 @@ public class BeeGenome extends Genome implements IBeeGenome {
 	// NBT RETRIEVAL
 	public static IAlleleBeeSpecies getSpecies(ItemStack itemStack) {
 		IAllele speciesAllele = Genome.getActiveAllele(itemStack, EnumBeeChromosome.SPECIES);
-		if (speciesAllele instanceof IAlleleBeeSpecies)
-			return (IAlleleBeeSpecies)speciesAllele;
-		else
+		if (speciesAllele instanceof IAlleleBeeSpecies) {
+			return (IAlleleBeeSpecies) speciesAllele;
+		} else {
 			return null;
+		}
 	}
 
 	// / INFORMATION RETRIEVAL
@@ -143,7 +145,7 @@ public class BeeGenome extends Genome implements IBeeGenome {
 	@Override
 	public int[] getTerritory() {
 		Vect area = ((AlleleArea) getActiveAllele(EnumBeeChromosome.TERRITORY)).getArea();
-		return new int[] { area.x, area.y, area.z };
+		return new int[]{area.x, area.y, area.z};
 	}
 
 	@Override

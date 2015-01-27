@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -40,8 +40,9 @@ public class ClimateLedger extends Ledger {
 		// Draw icon
 		drawIcon(temperature.getIcon(), x + 3, y + 4);
 
-		if (!isFullyOpened())
+		if (!isFullyOpened()) {
 			return;
+		}
 
 		manager.minecraft.fontRenderer.drawStringWithShadow(StringUtil.localize("gui.climate"), x + 22, y + 8,
 				manager.gui.fontColor.get("ledger.climate.header"));

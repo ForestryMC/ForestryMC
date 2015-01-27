@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -19,12 +19,15 @@ public class FluidMap<T> extends StackMap<Fluid, T> {
 
 	@Override
 	protected boolean areEqual(Fluid a, Object b) {
-		if (b instanceof FluidStack)
+		if (b instanceof FluidStack) {
 			return ((FluidStack) b).getFluid() == a;
-		if (b instanceof Fluid)
+		}
+		if (b instanceof Fluid) {
 			return b == a;
-		if (b instanceof String)
+		}
+		if (b instanceof String) {
 			return b.equals(a.getName());
+		}
 		return false;
 	}
 
@@ -35,12 +38,15 @@ public class FluidMap<T> extends StackMap<Fluid, T> {
 
 	@Override
 	protected Fluid getStack(Object key) {
-		if (key instanceof FluidStack)
+		if (key instanceof FluidStack) {
 			return ((FluidStack) key).getFluid();
-		if (key instanceof Fluid)
+		}
+		if (key instanceof Fluid) {
 			return (Fluid) key;
-		if (key instanceof String)
+		}
+		if (key instanceof String) {
 			return FluidRegistry.getFluid((String) key);
+		}
 		return null;
 	}
 }

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -22,10 +22,11 @@ public class WorldGenBaobab extends WorldGenTree {
 	public void generate() {
 		generateTreeTrunk(height - 1, girth);
 
-		if (rand.nextFloat() < 0.3f)
+		if (rand.nextFloat() < 0.3f) {
 			generateCylinder(new Vector(0, height - 1, 0), girth, 1, wood, EnumReplaceMode.NONE);
-		else if (rand.nextBoolean())
+		} else if (rand.nextBoolean()) {
 			generateCylinder(new Vector(0, height - 1, 0), girth - 1, 1, wood, EnumReplaceMode.NONE);
+		}
 
 		int leafSpawn = height + 1;
 
@@ -36,8 +37,9 @@ public class WorldGenBaobab extends WorldGenTree {
 		// Add tree top
 		for (int times = 0; times < height / 2; times++) {
 			int h = height - 1 + rand.nextInt(4);
-			if (rand.nextBoolean() && h < height / 2)
+			if (rand.nextBoolean() && h < height / 2) {
 				h = height / 2 + rand.nextInt(height / 2);
+			}
 
 			int x_off = -girth + rand.nextInt(2 * girth);
 			int y_off = -girth + rand.nextInt(2 * girth);
@@ -48,8 +50,9 @@ public class WorldGenBaobab extends WorldGenTree {
 		for (int times = 0; times < height / 4; times++) {
 			int delim = modifyByHeight(6, 0, height);
 			int h = delim + (delim < height ? rand.nextInt(height - delim) : 0);
-			if (rand.nextBoolean() && h < height / 2)
+			if (rand.nextBoolean() && h < height / 2) {
 				h = height / 2 + rand.nextInt(height / 2);
+			}
 			int x_off = -1 + rand.nextInt(3);
 			int y_off = -1 + rand.nextInt(3);
 			generateSphere(new Vector(x_off, h, y_off), 1 + rand.nextInt(2), leaf, EnumReplaceMode.NONE);

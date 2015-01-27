@@ -4,25 +4,27 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.core.IArmorNaturalist;
-import forestry.core.CreativeTabForestry;
-import forestry.core.config.Defaults;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.core.IArmorNaturalist;
+import forestry.core.CreativeTabForestry;
+import forestry.core.config.Defaults;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StringUtil;
 
 public class ItemArmorNaturalist extends ItemArmor implements IArmorNaturalist {
 

@@ -4,11 +4,14 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.genetics;
+
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.biome.BiomeGenBase;
 
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeGenome;
@@ -16,8 +19,6 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.core.vect.Vect;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.biome.BiomeGenBase;
 
 public class JubilanceDefault implements IJubilanceProvider {
 
@@ -26,8 +27,9 @@ public class JubilanceDefault implements IJubilanceProvider {
 		BiomeGenBase biome = BiomeGenBase.getBiome(housing.getBiomeId());
 
 		if (EnumTemperature.getFromValue(biome.temperature) != species.getTemperature() ||
-				EnumHumidity.getFromValue(biome.rainfall) != species.getHumidity())
+				EnumHumidity.getFromValue(biome.rainfall) != species.getHumidity()) {
 			return false;
+		}
 
 		return true;
 	}

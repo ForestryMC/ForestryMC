@@ -4,23 +4,26 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.render;
 
-import forestry.api.apiculture.IBee;
-import forestry.apiculture.entities.EntityBee;
-import forestry.core.proxy.Proxies;
-import forestry.plugins.PluginApiculture;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.client.IItemRenderer;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import forestry.api.apiculture.IBee;
+import forestry.apiculture.entities.EntityBee;
+import forestry.core.proxy.Proxies;
+import forestry.plugins.PluginApiculture;
 
 public class BeeItemRenderer implements IItemRenderer {
 
@@ -30,7 +33,7 @@ public class BeeItemRenderer implements IItemRenderer {
 	private static float getWingYaw(IBee bee) {
 		float wingYaw = 1f;
 
-		if(bee.isAlive()) {
+		if (bee.isAlive()) {
 			long systemTime = System.currentTimeMillis();
 			long flapping = systemTime + bee.getIdent().hashCode();
 			float flap = (float) (flapping % 1000) / 1000;   // 0 to 1
@@ -46,10 +49,10 @@ public class BeeItemRenderer implements IItemRenderer {
 		long irregular = flapping / 1000;
 		float wingYaw;
 
-		if(irregular % 11 == 0) {
+		if (irregular % 11 == 0) {
 			wingYaw = 0.75f;
 		} else {
-			if(irregular % 7 == 0 || irregular % 19 == 0) {
+			if (irregular % 7 == 0 || irregular % 19 == 0) {
 				flap *= 8;
 				flap = flap % 1;
 			}
@@ -65,10 +68,11 @@ public class BeeItemRenderer implements IItemRenderer {
 
 	private IBee initBee(ItemStack item, boolean scaled) {
 		IBee bee = PluginApiculture.beeInterface.getMember(item);
-		if(bee == null)
+		if (bee == null) {
 			bee = PluginApiculture.beeInterface.templateAsIndividual(PluginApiculture.beeInterface.getDefaultTemplate());
+		}
 
-		if(entity == null) {
+		if (entity == null) {
 			entity = new EntityBee(Proxies.common.getClientInstance().theWorld);
 		}
 		entity.setSpecies(bee.getGenome().getPrimary());
@@ -137,7 +141,7 @@ public class BeeItemRenderer implements IItemRenderer {
 	private void renderBeeInInventory(IBee bee) {
 
 		/*
-        GL11.glPushMatrix();
+		GL11.glPushMatrix();
         //GL11.glTranslatef(-0.3f, -2.5f, 0f);
         GL11.glScalef(-1.0f, 1.0f, 1.0f);
         //GL11.glScalef((float)Math.PI / 2, 1.0f, 1.0f);
@@ -181,25 +185,25 @@ public class BeeItemRenderer implements IItemRenderer {
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
 		switch (type) {
-		case ENTITY:
-			return true;
-		case EQUIPPED:
-			return true;
-		case INVENTORY:
-			return true;
-		default:
-			return false;
+			case ENTITY:
+				return true;
+			case EQUIPPED:
+				return true;
+			case INVENTORY:
+				return true;
+			default:
+				return false;
 		}
 	}
 
 	@Override
 	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-		switch(helper) {
-		case ENTITY_BOBBING:
-		case ENTITY_ROTATION:
-			return false;
-		default:
-			return true;
+		switch (helper) {
+			case ENTITY_BOBBING:
+			case ENTITY_ROTATION:
+				return false;
+			default:
+				return true;
 		}
 	}
 
@@ -207,16 +211,16 @@ public class BeeItemRenderer implements IItemRenderer {
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 
 		switch (type) {
-		case ENTITY:
-			renderBeeItem(initBee(item, true), 0f, 0f, 0f);
-			break;
-		case EQUIPPED:
-			renderBeeItem(initBee(item, true), 1.0f, 0f, 0.5f);
-			break;
-		case INVENTORY:
-			renderBeeInInventory(initBee(item, false));
-			break;
-		default:
+			case ENTITY:
+				renderBeeItem(initBee(item, true), 0f, 0f, 0f);
+				break;
+			case EQUIPPED:
+				renderBeeItem(initBee(item, true), 1.0f, 0f, 0.5f);
+				break;
+			case INVENTORY:
+				renderBeeInInventory(initBee(item, false));
+				break;
+			default:
 		}
 	}
 

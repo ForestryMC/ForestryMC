@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -324,8 +324,9 @@ public class PluginCore extends ForestryPlugin {
 		Proxies.common.addSmelting(ForestryBlock.resources.getItemStack(1, 2), ForestryItem.ingotTin.getItemStack(), 0.5f);
 
 		/* BRONZE INGOTS */
-		if (Config.isCraftingBronzeEnabled())
+		if (Config.isCraftingBronzeEnabled()) {
 			Proxies.common.addShapelessRecipe(ForestryItem.ingotBronze.getItemStack(4), "ingotTin", "ingotCopper", "ingotCopper", "ingotCopper");
+		}
 
 		/* STURDY MACHINE */
 		Proxies.common.addRecipe(ForestryItem.sturdyCasing.getItemStack(), "###", "# #", "###", '#', "ingotBronze");
@@ -358,24 +359,31 @@ public class PluginCore extends ForestryPlugin {
 		Proxies.common.addRecipe(ForestryItem.wrench.getItemStack(), "# #", " # ", " # ", '#', "ingotBronze");
 
 		// Manure and Fertilizer
-		if (GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat").stackSize > 0)
+		if (GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat").stackSize > 0) {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat"), " X ", "X#X", " X ", '#', Blocks.dirt, 'X', Items.wheat);
-		if (GameMode.getGameMode().getStackSetting("recipe.output.compost.ash").stackSize > 0)
+		}
+		if (GameMode.getGameMode().getStackSetting("recipe.output.compost.ash").stackSize > 0) {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.compost.ash"), " X ", "X#X", " X ", '#', Blocks.dirt, 'X', "dustAsh");
-		if (GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.apatite").stackSize > 0)
+		}
+		if (GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.apatite").stackSize > 0) {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.apatite"), " # ", " X ", " # ", '#', Blocks.sand, 'X', "gemApatite");
-		if (GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.ash").stackSize > 0)
+		}
+		if (GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.ash").stackSize > 0) {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.ash"), "###", "#X#", "###", '#', "dustAsh", 'X', "gemApatite");
+		}
 
 		// Humus
-		if (GameMode.getGameMode().getStackSetting("recipe.output.humus.compost").stackSize > 0)
+		if (GameMode.getGameMode().getStackSetting("recipe.output.humus.compost").stackSize > 0) {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.humus.compost"), "###", "#X#", "###", '#', Blocks.dirt, 'X', ForestryItem.fertilizerBio);
-		if (GameMode.getGameMode().getStackSetting("recipe.output.humus.fertilizer").stackSize > 0)
+		}
+		if (GameMode.getGameMode().getStackSetting("recipe.output.humus.fertilizer").stackSize > 0) {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.humus.fertilizer"), "###", "#X#", "###", '#', Blocks.dirt, 'X', ForestryItem.fertilizerCompound);
+		}
 
 		// Bog earth
-		if (GameMode.getGameMode().getStackSetting("recipe.output.bogearth.bucket").stackSize > 0)
+		if (GameMode.getGameMode().getStackSetting("recipe.output.bogearth.bucket").stackSize > 0) {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.bucket"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', Items.water_bucket, 'Y', Blocks.sand);
+		}
 
 		if (GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can").stackSize > 0) {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.canWater, 'Y', Blocks.sand);
@@ -419,10 +427,12 @@ public class PluginCore extends ForestryPlugin {
 
 			@Override
 			public int getBurnTime(ItemStack fuel) {
-				if (fuel != null && fuel.getItem() == ForestryItem.peat.item())
+				if (fuel != null && fuel.getItem() == ForestryItem.peat.item()) {
 					return 2000;
-				if (fuel != null && fuel.getItem() == ForestryItem.bituminousPeat.item())
+				}
+				if (fuel != null && fuel.getItem() == ForestryItem.bituminousPeat.item()) {
 					return 4200;
+				}
 
 				return 0;
 			}

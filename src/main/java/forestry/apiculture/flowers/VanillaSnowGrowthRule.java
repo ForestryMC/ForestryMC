@@ -24,12 +24,14 @@ public class VanillaSnowGrowthRule implements IFlowerGrowthRule {
 
 	@Override
 	public boolean growFlower(IFlowerRegistry fr, String flowerType, World world, IIndividual individual, int x, int y, int z) {
-		if (world.getBlock(x, y, z) != Blocks.snow)
+		if (world.getBlock(x, y, z) != Blocks.snow) {
 			return false;
+		}
 
 		Block ground = world.getBlock(x, y - 1, z);
-		if (ground != Blocks.dirt && ground != Blocks.grass)
+		if (ground != Blocks.dirt && ground != Blocks.grass) {
 			return false;
+		}
 
 		IFlower flower = fr.getRandomPlantableFlower(flowerType, world.rand);
 		return world.setBlock(x, y, z, flower.getBlock(), flower.getMeta(), Defaults.FLAG_BLOCK_SYNCH);

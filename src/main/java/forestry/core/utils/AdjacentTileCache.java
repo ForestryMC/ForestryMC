@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -13,13 +13,14 @@ package forestry.core.utils;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.util.ForgeDirection;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public final class AdjacentTileCache {
@@ -58,8 +59,9 @@ public final class AdjacentTileCache {
 		int sx = source.xCoord + side.offsetX;
 		int sy = source.yCoord + side.offsetY;
 		int sz = source.zCoord + side.offsetZ;
-		if (world.blockExists(sx, sy, sz) && world.getBlock(sx, sy, sz) != Blocks.air)
+		if (world.blockExists(sx, sy, sz) && world.getBlock(sx, sy, sz) != Blocks.air) {
 			return world.getTileEntity(sx, sy, sz);
+		}
 		return null;
 	}
 
@@ -104,18 +106,21 @@ public final class AdjacentTileCache {
 
 	public TileEntity getTileOnSide(ForgeDirection side) {
 		int s = side.ordinal();
-		if (cache[s] != null)
-			if (cache[s].isInvalid() || !areCoordinatesOnSide(side, cache[s]))
+		if (cache[s] != null) {
+			if (cache[s].isInvalid() || !areCoordinatesOnSide(side, cache[s])) {
 				setTile(s, null);
-			else
+			} else {
 				return cache[s];
+			}
+		}
 
 		if (timer[s].hasTriggered(source.getWorldObj(), delay[s])) {
 			setTile(s, searchSide(side));
-			if (cache[s] == null)
+			if (cache[s] == null) {
 				incrementDelay(s);
-			else
+			} else {
 				delay[s] = DELAY_MIN;
+			}
 		}
 
 		return cache[s];
@@ -123,8 +128,9 @@ public final class AdjacentTileCache {
 
 	private void incrementDelay(int side) {
 		delay[side] += DELAY_STEP;
-		if (delay[side] > DELAY_MAX)
+		if (delay[side] > DELAY_MAX) {
 			delay[side] = DELAY_MAX;
+		}
 	}
 
 	public TileEntity getSource() {

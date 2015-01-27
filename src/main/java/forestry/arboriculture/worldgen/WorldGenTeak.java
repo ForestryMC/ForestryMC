@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -29,8 +29,9 @@ public class WorldGenTeak extends WorldGenTree {
 
 		generateAdjustedCylinder(leafSpawn--, 1.9f, 1, leaf);
 		generateAdjustedCylinder(leafSpawn--, 1.9f, 1, leaf);
-		if (rand.nextBoolean())
+		if (rand.nextBoolean()) {
 			generateAdjustedCylinder(leafSpawn--, 1.9f, 1, leaf);
+		}
 
 		generateAdjustedCylinder(leafSpawn--, 0.5f, 1, leaf);
 

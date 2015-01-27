@@ -22,8 +22,9 @@ public class HiveGenGround extends HiveGen {
 	private final Set<Material> groundMaterials = new HashSet<Material>();
 
 	public HiveGenGround(Block... groundBlocks) {
-		for (Block block : groundBlocks)
+		for (Block block : groundBlocks) {
 			groundMaterials.add(block.getMaterial());
+		}
 	}
 
 	@Override

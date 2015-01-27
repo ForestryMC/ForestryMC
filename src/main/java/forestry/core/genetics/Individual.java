@@ -4,15 +4,16 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.genetics;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
-import net.minecraft.nbt.NBTTagCompound;
 
 public abstract class Individual implements IIndividual {
 
@@ -25,8 +26,9 @@ public abstract class Individual implements IIndividual {
 
 	@Override
 	public boolean analyze() {
-		if (isAnalyzed)
+		if (isAnalyzed) {
 			return false;
+		}
 
 		isAnalyzed = true;
 		return true;
@@ -35,8 +37,9 @@ public abstract class Individual implements IIndividual {
 	/* SAVING & LOADING */
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		if (nbttagcompound == null)
+		if (nbttagcompound == null) {
 			return;
+		}
 
 		isAnalyzed = nbttagcompound.getBoolean("IsAnalyzed");
 	}

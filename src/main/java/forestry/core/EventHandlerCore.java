@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -32,60 +32,69 @@ import forestry.plugins.PluginManager;
 public class EventHandlerCore {
 
 	public EventHandlerCore() {
-		for(String name : OreDictionary.getOreNames())
-			for(ItemStack ore : OreDictionary.getOres(name))
+		for (String name : OreDictionary.getOreNames()) {
+			for (ItemStack ore : OreDictionary.getOres(name)) {
 				handleOreRegistration(name, ore);
+			}
+		}
 	}
 
 	@SubscribeEvent
 	public void handleItemPickup(EntityItemPickupEvent event) {
 
-		if (event.isCanceled())
+		if (event.isCanceled()) {
 			return;
+		}
 
-		for (IPickupHandler handler : PluginManager.pickupHandlers)
+		for (IPickupHandler handler : PluginManager.pickupHandlers) {
 			if (!handler.onItemPickup(event.entityPlayer, event.item)) {
 				event.setResult(Result.ALLOW);
 				return;
 			}
+		}
 	}
 
 	@SubscribeEvent
 	public void handleOreRegistration(OreDictionary.OreRegisterEvent event) {
 
-		if (event.isCanceled())
+		if (event.isCanceled()) {
 			return;
+		}
 
 		handleOreRegistration(event.Name, event.Ore);
 	}
 
 	private void handleOreRegistration(String name, ItemStack ore) {
-		for (IOreDictionaryHandler handler : PluginManager.dictionaryHandlers)
+		for (IOreDictionaryHandler handler : PluginManager.dictionaryHandlers) {
 			handler.onOreRegistration(name, ore);
+		}
 	}
 
 	@SubscribeEvent
 	public void handleWorldLoad(WorldEvent.Load event) {
-		for (ISaveEventHandler handler : PluginManager.saveEventHandlers)
+		for (ISaveEventHandler handler : PluginManager.saveEventHandlers) {
 			handler.onWorldLoad(event.world);
+		}
 	}
 
 	@SubscribeEvent
 	public void handleWorldSave(WorldEvent.Save event) {
-		for (ISaveEventHandler handler : PluginManager.saveEventHandlers)
+		for (ISaveEventHandler handler : PluginManager.saveEventHandlers) {
 			handler.onWorldSave(event.world);
+		}
 	}
 
 	@SubscribeEvent
 	public void handleWorldUnload(WorldEvent.Unload event) {
-		for (ISaveEventHandler handler : PluginManager.saveEventHandlers)
+		for (ISaveEventHandler handler : PluginManager.saveEventHandlers) {
 			handler.onWorldUnload(event.world);
+		}
 	}
 
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {
-		if(event.map.getTextureType() == 1) {
+		if (event.map.getTextureType() == 1) {
 			ErrorStateRegistry.initIcons(event.map);
 			TextureManager.getInstance().initDefaultIcons(event.map);
 		}

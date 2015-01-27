@@ -4,13 +4,18 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.proxy;
 
+import net.minecraft.world.ColorizerFoliage;
+
+import net.minecraftforge.client.MinecraftForgeClient;
+
 import cpw.mods.fml.client.registry.RenderingRegistry;
+
 import forestry.arboriculture.render.FenceRenderingHandler;
 import forestry.arboriculture.render.FruitPodRenderingHandler;
 import forestry.arboriculture.render.LeavesRenderingHandler;
@@ -18,8 +23,6 @@ import forestry.arboriculture.render.SaplingRenderHandler;
 import forestry.arboriculture.render.StairItemRenderer;
 import forestry.core.config.ForestryBlock;
 import forestry.plugins.PluginArboriculture;
-import net.minecraft.world.ColorizerFoliage;
-import net.minecraftforge.client.MinecraftForgeClient;
 
 public class ClientProxyArboriculture extends ProxyArboriculture {
 	@Override

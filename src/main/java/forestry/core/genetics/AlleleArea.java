@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -37,10 +37,11 @@ public class AlleleArea extends Allele implements IAlleleArea {
 
 	public AlleleArea setName(String customPrefix, String name) {
 		String customName = "gui." + customPrefix + "." + name;
-		if (StringUtil.canTranslate(customName))
+		if (StringUtil.canTranslate(customName)) {
 			this.name = customName;
-		else
+		} else {
 			this.name = "gui." + name;
+		}
 		return this;
 	}
 

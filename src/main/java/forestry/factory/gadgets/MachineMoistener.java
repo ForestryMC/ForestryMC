@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -74,12 +74,13 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 		}
 
 		public boolean matches(ItemStack res) {
-			if (res == null && resource == null)
+			if (res == null && resource == null) {
 				return true;
-			else if (res == null || resource == null)
+			} else if (res == null || resource == null) {
 				return false;
-			else
+			} else {
 				return resource.isItemEqual(res);
+			}
 		}
 	}
 
@@ -93,12 +94,14 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 		}
 
 		public static boolean isResource(ItemStack resource) {
-			if (resource == null)
+			if (resource == null) {
 				return false;
+			}
 
 			for (Recipe rec : recipes) {
-				if (StackUtils.isIdenticalItem(resource, rec.resource))
+				if (StackUtils.isIdenticalItem(resource, rec.resource)) {
 					return true;
+				}
 			}
 
 			return false;
@@ -106,8 +109,9 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 
 		public static Recipe findMatchingRecipe(ItemStack item) {
 			for (Recipe recipe : recipes) {
-				if (recipe.matches(item))
+				if (recipe.matches(item)) {
 					return recipe;
+				}
 			}
 			return null;
 		}
@@ -139,11 +143,13 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 		setInternalInventory(new TileInventoryAdapter(this, 12, "Items") {
 			@Override
 			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				if (slotIndex == SLOT_RESOURCE)
+				if (slotIndex == SLOT_RESOURCE) {
 					return RecipeManager.isResource(itemStack);
+				}
 
-				if (GuiUtil.isIndexInRange(slotIndex, SLOT_STASH_1, SLOT_STASH_COUNT))
+				if (GuiUtil.isIndexInRange(slotIndex, SLOT_STASH_1, SLOT_STASH_COUNT)) {
 					return FuelManager.moistenerResource.containsKey(itemStack);
+				}
 
 				if (slotIndex == SLOT_PRODUCT) {
 					Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
@@ -155,11 +161,13 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 
 			@Override
 			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-				if (slotIndex == SLOT_PRODUCT)
+				if (slotIndex == SLOT_PRODUCT) {
 					return true;
+				}
 
-				if (GuiUtil.isIndexInRange(slotIndex, SLOT_STASH_1, SLOT_STASH_COUNT))
+				if (GuiUtil.isIndexInRange(slotIndex, SLOT_STASH_1, SLOT_STASH_COUNT)) {
 					return !FuelManager.moistenerResource.containsKey(itemstack);
+				}
 
 				return false;
 			}
@@ -226,8 +234,9 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 
 		IInventoryAdapter inventory = getInternalInventory();
 		// Check if we have suitable water container waiting in the item slot
-		if (inventory.getStackInSlot(SLOT_PRODUCT) != null)
+		if (inventory.getStackInSlot(SLOT_PRODUCT) != null) {
 			FluidHelper.drainContainers(tankManager, inventory, SLOT_PRODUCT);
+		}
 
 		// Let's get to work
 		int lightvalue = worldObj.getBlockLightValue(xCoord, yCoord + 1, zCoord);
@@ -240,25 +249,28 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 
 		// The darker, the better
 		int speed;
-		if (lightvalue >= 9)
+		if (lightvalue >= 9) {
 			speed = 1;
-		else if (lightvalue >= 7)
+		} else if (lightvalue >= 7) {
 			speed = 2;
-		else if (lightvalue >= 5)
+		} else if (lightvalue >= 5) {
 			speed = 3;
-		else
+		} else {
 			speed = 4;
+		}
 
 		// Already running
 		if (burnTime > 0 && pendingProduct == null) {
 			// Not working if there is no water available.
-			if (resourceTank.getFluidAmount() <= 0)
+			if (resourceTank.getFluidAmount() <= 0) {
 				return;
+			}
 
 			checkRecipe();
 
-			if (currentRecipe == null)
+			if (currentRecipe == null) {
 				return;
+			}
 
 			resourceTank.drain(1, true);
 			burnTime -= speed;
@@ -271,33 +283,38 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 				tryAddPending();
 			}
 
-		} else if (pendingProduct != null)
+		} else if (pendingProduct != null) {
 			tryAddPending();
+		}
 		// Try to start process
 		else // Make sure we have a new item in the working slot.
-		if (rotateWorkingSlot()) {
-			checkRecipe();
+			if (rotateWorkingSlot()) {
+				checkRecipe();
 
-			// Let's see if we have a valid resource in the working slot
-			if (inventory.getStackInSlot(SLOT_WORKING) == null)
-				return;
+				// Let's see if we have a valid resource in the working slot
+				if (inventory.getStackInSlot(SLOT_WORKING) == null) {
+					return;
+				}
 
-			if (FuelManager.moistenerResource.containsKey(inventory.getStackInSlot(SLOT_WORKING))) {
-				MoistenerFuel res = FuelManager.moistenerResource.get(inventory.getStackInSlot(SLOT_WORKING));
-				burnTime = totalTime = res.moistenerValue;
+				if (FuelManager.moistenerResource.containsKey(inventory.getStackInSlot(SLOT_WORKING))) {
+					MoistenerFuel res = FuelManager.moistenerResource.get(inventory.getStackInSlot(SLOT_WORKING));
+					burnTime = totalTime = res.moistenerValue;
+				}
+			} else {
+				rotateReservoir();
 			}
-		} else
-			rotateReservoir();
 
-		if (currentRecipe != null)
+		if (currentRecipe != null) {
 			setErrorState(EnumErrorCode.OK);
-		else
+		} else {
 			setErrorState(EnumErrorCode.NORECIPE);
+		}
 	}
 
 	private boolean tryAddPending() {
-		if (pendingProduct == null)
+		if (pendingProduct == null) {
 			return false;
+		}
 
 		IInventoryAdapter inventory = getInternalInventory();
 		if (InvTools.tryAddStack(inventory, pendingProduct, SLOT_PRODUCT, 1, true)) {
@@ -338,17 +355,20 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 			ItemStack slotStack = inventory.getStackInSlot(i);
 			// Empty slots are okay.
 			if (slotStack == null) {
-				if (slot < 0)
+				if (slot < 0) {
 					slot = i;
+				}
 				continue;
 			}
 
-			if (emptyOnly)
+			if (emptyOnly) {
 				continue;
+			}
 
 			// Wrong item or full
-			if (!slotStack.isItemEqual(deposit) || slotStack.stackSize >= slotStack.getMaxStackSize())
+			if (!slotStack.isItemEqual(deposit) || slotStack.stackSize >= slotStack.getMaxStackSize()) {
 				continue;
+			}
 
 			slot = i;
 		}
@@ -373,11 +393,13 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 		IInventoryAdapter inventory = getInternalInventory();
 		for (int i = startSlot; i < endSlot; i++) {
 			ItemStack slotStack = inventory.getStackInSlot(i);
-			if (slotStack == null)
+			if (slotStack == null) {
 				continue;
+			}
 
-			if (!FuelManager.moistenerResource.containsKey(slotStack))
+			if (!FuelManager.moistenerResource.containsKey(slotStack)) {
 				continue;
+			}
 
 			MoistenerFuel res = FuelManager.moistenerResource.get(slotStack);
 			if (stage < 0 || res.stage < stage) {
@@ -398,30 +420,35 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 			if (FuelManager.moistenerResource.containsKey(inventory.getStackInSlot(SLOT_WORKING))) {
 				MoistenerFuel res = FuelManager.moistenerResource.get(inventory.getStackInSlot(SLOT_WORKING));
 				deposit = res.product.copy();
-			} else
+			} else {
 				deposit = inventory.getStackInSlot(SLOT_WORKING).copy();
+			}
 
 			int targetSlot = getFreeReservoirSlot(deposit);
 			// We stop the whole thing, if we don't have any room anymore.
-			if (targetSlot < 0)
+			if (targetSlot < 0) {
 				return false;
+			}
 
-			if (inventory.getStackInSlot(targetSlot) == null)
+			if (inventory.getStackInSlot(targetSlot) == null) {
 				inventory.setInventorySlotContents(targetSlot, deposit);
-			else
+			} else {
 				inventory.getStackInSlot(targetSlot).stackSize++;
+			}
 
 			decrStackSize(SLOT_WORKING, 1);
 		}
 
-		if (inventory.getStackInSlot(SLOT_WORKING) != null)
+		if (inventory.getStackInSlot(SLOT_WORKING) != null) {
 			return true;
+		}
 
 		// Let's look for a new resource to put into the working slot.
 		int resourceSlot = getNextResourceSlot(SLOT_RESERVOIR_1, SLOT_RESERVOIR_1 + SLOT_RESERVOIR_COUNT);
 		// Nothing found, stop.
-		if (resourceSlot < 0)
+		if (resourceSlot < 0) {
 			return false;
+		}
 
 		inventory.setInventorySlotContents(SLOT_WORKING, inventory.decrStackSize(resourceSlot, 1));
 		return true;
@@ -433,11 +460,13 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 		IInventoryAdapter inventory = getInternalInventory();
 
 		for (int i = SLOT_RESERVOIR_1; i < SLOT_RESERVOIR_1 + SLOT_RESERVOIR_COUNT; i++) {
-			if (inventory.getStackInSlot(i) == null)
+			if (inventory.getStackInSlot(i) == null) {
 				continue;
+			}
 
-			if (!FuelManager.moistenerResource.containsKey(inventory.getStackInSlot(i)))
+			if (!FuelManager.moistenerResource.containsKey(inventory.getStackInSlot(i))) {
 				slotsToShift.add(i);
+			}
 		}
 
 		// Move consumed items back to stash
@@ -445,8 +474,9 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 		for (int slot : slotsToShift) {
 			ItemStack slotStack = inventory.getStackInSlot(slot);
 			int targetSlot = getFreeStashSlot(slotStack, true);
-			if (targetSlot < 0)
+			if (targetSlot < 0) {
 				continue;
+			}
 
 			inventory.setInventorySlotContents(targetSlot, slotStack);
 			inventory.setInventorySlotContents(slot, null);
@@ -457,20 +487,23 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 		for (int i = 0; i < (slotsToShift.size() > 0 ? shiftedSlots : 2); i++) {
 			int resourceSlot = getNextResourceSlot(0, SLOT_RESERVOIR_1);
 			// Stop if no resources are available
-			if (resourceSlot < 0)
+			if (resourceSlot < 0) {
 				break;
+			}
 			int targetSlot = getFreeReservoirSlot(inventory.getStackInSlot(resourceSlot));
 			// No free target slot, stop
-			if (targetSlot < 0)
+			if (targetSlot < 0) {
 				break;
+			}
 			// Else shift
 			if (inventory.getStackInSlot(targetSlot) == null) {
 				inventory.setInventorySlotContents(targetSlot, inventory.getStackInSlot(resourceSlot));
 				inventory.setInventorySlotContents(resourceSlot, null);
 			} else {
 				StackUtils.mergeStacks(inventory.getStackInSlot(resourceSlot), inventory.getStackInSlot(targetSlot));
-				if (inventory.getStackInSlot(resourceSlot) != null && inventory.getStackInSlot(resourceSlot).stackSize <= 0)
+				if (inventory.getStackInSlot(resourceSlot) != null && inventory.getStackInSlot(resourceSlot).stackSize <= 0) {
 					inventory.setInventorySlotContents(resourceSlot, null);
+				}
 			}
 		}
 	}
@@ -503,8 +536,9 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 
 	public boolean hasResourcesMin(float percentage) {
 		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(SLOT_RESOURCE) == null)
+		if (inventory.getStackInSlot(SLOT_RESOURCE) == null) {
 			return false;
+		}
 
 		return ((float) inventory.getStackInSlot(SLOT_RESOURCE).stackSize / (float) inventory.getStackInSlot(SLOT_RESOURCE).getMaxStackSize()) > percentage;
 	}
@@ -514,16 +548,18 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 	}
 
 	public int getProductionProgressScaled(int i) {
-		if (timePerItem == 0)
+		if (timePerItem == 0) {
 			return 0;
+		}
 
 		return (productionTime * i) / timePerItem;
 
 	}
 
 	public int getConsumptionProgressScaled(int i) {
-		if (totalTime == 0)
+		if (totalTime == 0) {
 			return 0;
+		}
 
 		return (burnTime * i) / totalTime;
 
@@ -586,18 +622,18 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 		i -= tankManager.maxMessageId() + 1;
 
 		switch (i) {
-		case 0:
-			burnTime = j;
-			break;
-		case 1:
-			totalTime = j;
-			break;
-		case 2:
-			productionTime = j;
-			break;
-		case 3:
-			timePerItem = j;
-			break;
+			case 0:
+				burnTime = j;
+				break;
+			case 1:
+				totalTime = j;
+				break;
+			case 2:
+				productionTime = j;
+				break;
+			case 3:
+				timePerItem = j;
+				break;
 		}
 	}
 

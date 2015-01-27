@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -46,12 +46,15 @@ public class ContainerSolderingIron extends ContainerItemInventory implements IG
 		this.addSlotToContainer(new SlotFiltered(inventory, 5, 12, 92));
 
 		// Player inventory
-		for (int i1 = 0; i1 < 3; i1++)
-			for (int l1 = 0; l1 < 9; l1++)
+		for (int i1 = 0; i1 < 3; i1++) {
+			for (int l1 = 0; l1 < 9; l1++) {
 				addSecuredSlot(inventoryplayer, l1 + i1 * 9 + 9, 8 + l1 * 18, 123 + i1 * 18);
+			}
+		}
 		// Player hotbar
-		for (int j1 = 0; j1 < 9; j1++)
+		for (int j1 = 0; j1 < 9; j1++) {
 			addSecuredSlot(inventoryplayer, j1, 8 + j1 * 18, 181);
+		}
 
 	}
 
@@ -87,11 +90,13 @@ public class ContainerSolderingIron extends ContainerItemInventory implements IG
 	public void handleSelectionChange(EntityPlayer player, PacketUpdate packet) {
 
 		if (packet.payload.intPayload[1] == 0) {
-			if (packet.payload.intPayload[0] == 0)
+			if (packet.payload.intPayload[0] == 0) {
 				inventory.advanceLayout();
+			}
 
-		} else if (packet.payload.intPayload[0] == 0)
+		} else if (packet.payload.intPayload[0] == 0) {
 			inventory.regressLayout();
+		}
 
 		sendSelection(player);
 	}

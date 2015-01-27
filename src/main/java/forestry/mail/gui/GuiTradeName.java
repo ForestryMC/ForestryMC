@@ -4,20 +4,23 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.mail.gui;
 
+import org.apache.commons.lang3.StringUtils;
+
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.entity.player.InventoryPlayer;
+
+import org.lwjgl.input.Keyboard;
+
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestry;
 import forestry.core.utils.StringUtil;
 import forestry.mail.gadgets.MachineTrader;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.InventoryPlayer;
-import org.apache.commons.lang3.StringUtils;
-import org.lwjgl.input.Keyboard;
 
 public class GuiTradeName extends GuiForestry<MachineTrader> {
 
@@ -40,8 +43,9 @@ public class GuiTradeName extends GuiForestry<MachineTrader> {
 		super.initGui();
 
 		addressNameField = new GuiTextField(this.fontRendererObj, guiLeft + 44, guiTop + 39, 90, 14);
-		if (container.getAddress() != null)
+		if (container.getAddress() != null) {
 			addressNameField.setText(container.getAddress().getName());
+		}
 		addressNameField.setFocused(true);
 	}
 
@@ -77,8 +81,9 @@ public class GuiTradeName extends GuiForestry<MachineTrader> {
 		}
 
 		// Check for focus changes
-		if (addressNameFocus && !addressNameField.isFocused())
+		if (addressNameFocus && !addressNameField.isFocused()) {
 			this.setAddress();
+		}
 		addressNameFocus = addressNameField.isFocused();
 
 		super.drawGuiContainerBackgroundLayer(var1, var2, var3);
@@ -97,8 +102,9 @@ public class GuiTradeName extends GuiForestry<MachineTrader> {
 
 	private void setAddress() {
 		String address = addressNameField.getText();
-		if (StringUtils.isNotBlank(address))
+		if (StringUtils.isNotBlank(address)) {
 			container.setAddress(address);
+		}
 	}
 
 }

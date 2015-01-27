@@ -17,10 +17,14 @@ import net.minecraftforge.common.util.ForgeDirection;
  */
 public interface IVect {
 	int getX();
+
 	int getY();
+
 	int getZ();
 
 	IVect add(IVect other);
+
 	IVect add(int x, int y, int z);
+
 	IVect add(ForgeDirection direction);
 }

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -98,12 +98,14 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		 */
 		public static Recipe findMatchingRecipe(FluidStack res, ItemStack empty) {
 			// We need both ingredients
-			if (res == null || empty == null)
+			if (res == null || empty == null) {
 				return null;
+			}
 
 			for (Recipe recipe : recipes) {
-				if (recipe.matches(res, empty))
+				if (recipe.matches(res, empty)) {
 					return recipe;
+				}
 			}
 			
 			// No recipe matched. See if the liquid dictionary has anything.
@@ -123,8 +125,9 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		 * @return true if any recipe has a matching input
 		 */
 		public static boolean isInput(FluidStack res) {
-			if (res == null)
+			if (res == null) {
 				return false;
+			}
 			return FluidRegistry.isFluidRegistered(res.getFluid());
 		}
 
@@ -226,18 +229,21 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 
 	@Override
 	public void updateServerSide() {
-		if (worldObj.getTotalWorldTime() % 20 != 0)
+		if (worldObj.getTotalWorldTime() % 20 != 0) {
 			return;
+		}
 
 		IInventoryAdapter inventory = getInternalInventory();
 
 		// Check if we have suitable items waiting in the item slot
-		if (inventory.getStackInSlot(SLOT_CAN) != null)
+		if (inventory.getStackInSlot(SLOT_CAN) != null) {
 			FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
+		}
 
 		checkRecipe();
-		if (getErrorState() == EnumErrorCode.NORECIPE && currentRecipe != null)
+		if (getErrorState() == EnumErrorCode.NORECIPE && currentRecipe != null) {
 			setErrorState(EnumErrorCode.OK);
+		}
 
 		if (energyManager.getTotalEnergyStored() == 0) {
 			setErrorState(EnumErrorCode.NOPOWER);
@@ -250,15 +256,18 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		checkRecipe();
 
 		// If we add pending products, we skip to the next work cycle.
-		if (tryAddPending())
+		if (tryAddPending()) {
 			return false;
+		}
 
-		if (!pendingProducts.isEmpty())
+		if (!pendingProducts.isEmpty()) {
 			return false;
+		}
 
 		// Continue work if nothing needs to be added
-		if (fillingTime <= 0)
+		if (fillingTime <= 0) {
 			return false;
+		}
 
 		if (currentRecipe == null) {
 			setErrorState(EnumErrorCode.NORECIPE);
@@ -281,8 +290,9 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		checkRecipe();
 		resetRecipe();
 
-		while (tryAddPending())
+		while (tryAddPending()) {
 			;
+		}
 		return true;
 	}
 
@@ -290,8 +300,9 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		IInventoryAdapter inventory = getInternalInventory();
 		Recipe sameRec = RecipeManager.findMatchingRecipe(resourceTank.getFluid(), inventory.getStackInSlot(SLOT_RESOURCE));
 
-		if (sameRec == null)
+		if (sameRec == null) {
 			setErrorState(EnumErrorCode.NORECIPE);
+		}
 
 		if (currentRecipe != sameRec) {
 			currentRecipe = sameRec;
@@ -311,8 +322,9 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	}
 
 	private boolean tryAddPending() {
-		if (pendingProducts.isEmpty())
+		if (pendingProducts.isEmpty()) {
 			return false;
+		}
 
 		ItemStack next = pendingProducts.peek();
 		if (addProduct(next, true)) {
@@ -337,8 +349,9 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	@Override
 	public boolean hasResourcesMin(float percentage) {
 		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(SLOT_RESOURCE) == null)
+		if (inventory.getStackInSlot(SLOT_RESOURCE) == null) {
 			return false;
+		}
 
 		return ((float) inventory.getStackInSlot(SLOT_RESOURCE).stackSize / (float) inventory.getStackInSlot(SLOT_RESOURCE).getMaxStackSize()) > percentage;
 	}
@@ -349,8 +362,9 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	}
 
 	public int getFillProgressScaled(int i) {
-		if (fillingTotalTime == 0)
+		if (fillingTotalTime == 0) {
 			return 0;
+		}
 
 		return (fillingTime * i) / fillingTotalTime;
 
@@ -370,12 +384,12 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	public void getGUINetworkData(int i, int j) {
 		i -= tankManager.maxMessageId() + 1;
 		switch (i) {
-		case 0:
-			fillingTime = j;
-			break;
-		case 1:
-			fillingTotalTime = j;
-			break;
+			case 0:
+				fillingTime = j;
+				break;
+			case 1:
+				fillingTotalTime = j;
+				break;
 		}
 	}
 

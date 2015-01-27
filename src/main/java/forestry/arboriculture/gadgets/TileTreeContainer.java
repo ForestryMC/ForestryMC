@@ -4,13 +4,20 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.Packet;
+import net.minecraft.tileentity.TileEntity;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.arboriculture.ITree;
 import forestry.arboriculture.genetics.Tree;
 import forestry.core.interfaces.IOwnable;
@@ -19,17 +26,11 @@ import forestry.core.network.INetworkedEntity;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketTileNBT;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.EnumAccess;
 import forestry.core.utils.PlayerUtil;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.Packet;
-import net.minecraft.tileentity.TileEntity;
 
 /**
  * This is the base TE class for any block that needs to contain tree genome information.
- * 
+ *
  * @author SirSengir
  */
 public abstract class TileTreeContainer extends TileEntity implements INetworkedEntity, IOwnable {
@@ -41,8 +42,9 @@ public abstract class TileTreeContainer extends TileEntity implements INetworked
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 
-		if (nbttagcompound.hasKey("ContainedTree"))
+		if (nbttagcompound.hasKey("ContainedTree")) {
 			containedTree = new Tree(nbttagcompound.getCompoundTag("ContainedTree"));
+		}
 		if (nbttagcompound.hasKey("owner")) {
 			owner = NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("owner"));
 		}
@@ -71,8 +73,9 @@ public abstract class TileTreeContainer extends TileEntity implements INetworked
 	/* CONTAINED TREE */
 	public void setTree(ITree tree) {
 		this.containedTree = tree;
-		if (tree != null)
+		if (tree != null) {
 			sendNetworkUpdate();
+		}
 	}
 
 	public ITree getTree() {
@@ -80,6 +83,7 @@ public abstract class TileTreeContainer extends TileEntity implements INetworked
 	}
 
 	/* UPDATING */
+
 	/**
 	 * This doesn't use normal TE updates
 	 */

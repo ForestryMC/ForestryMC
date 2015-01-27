@@ -4,18 +4,14 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.core.Tabs;
-import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.WoodType;
 import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -26,13 +22,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.core.Tabs;
+import forestry.arboriculture.IWoodTyped;
+import forestry.arboriculture.WoodType;
 
 public class BlockLog extends Block implements IWoodTyped {
 
 	public enum LogCat {
 		CAT0, CAT1, CAT2, CAT3, CAT4, CAT5, CAT6, CAT7
 	}
+
 	public static final short logsPerCat = 4;
 
 	protected final LogCat cat;
@@ -66,14 +71,17 @@ public class BlockLog extends Block implements IWoodTyped {
 		byte radius = 4;
 		int boundary = radius + 1;
 
-		if (world.checkChunksExist(x - boundary, y - boundary, z - boundary, x + boundary, y + boundary, z + boundary))
-			for (int i = -radius; i <= radius; ++i)
-				for (int j = -radius; j <= radius; ++j)
+		if (world.checkChunksExist(x - boundary, y - boundary, z - boundary, x + boundary, y + boundary, z + boundary)) {
+			for (int i = -radius; i <= radius; ++i) {
+				for (int j = -radius; j <= radius; ++j) {
 					for (int k = -radius; k <= radius; ++k) {
 						Block neighbor = world.getBlock(x + i, y + j, z + k);
 
 						neighbor.beginLeavesDecay(world, x + i, y + j, z + k);
 					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -82,29 +90,30 @@ public class BlockLog extends Block implements IWoodTyped {
 		byte b0 = 0;
 
 		switch (side) {
-		case 0:
-		case 1:
-			b0 = 0;
-			break;
-		case 2:
-		case 3:
-			b0 = 8;
-			break;
-		case 4:
-		case 5:
-			b0 = 4;
+			case 0:
+			case 1:
+				b0 = 0;
+				break;
+			case 2:
+			case 3:
+				b0 = 8;
+				break;
+			case 4:
+			case 5:
+				b0 = 4;
 		}
 
 		return type | b0;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
 		int totalWoods = WoodType.values().length;
 		int count = Math.min(totalWoods - (cat.ordinal() * logsPerCat), logsPerCat);
-		for (int i = 0; i < count; i++)
+		for (int i = 0; i < count; i++) {
 			itemList.add(new ItemStack(this, 1, i));
+		}
 	}
 
 	/* ICONS */
@@ -121,26 +130,30 @@ public class BlockLog extends Block implements IWoodTyped {
 		int oriented = meta & 12;
 
 		WoodType type = getWoodType(meta);
-		if (type == null)
+		if (type == null) {
 			return null;
+		}
 
 		switch (oriented) {
-		case 4:
-			if (side > 3)
-				return type.getHeartIcon();
-			else
-				return type.getBarkIcon();
-		case 8:
-			if (side == 2 || side == 3)
-				return type.getHeartIcon();
-			else
-				return type.getBarkIcon();
-		case 0:
-		default:
-			if (side < 2)
-				return type.getHeartIcon();
-			else
-				return type.getBarkIcon();
+			case 4:
+				if (side > 3) {
+					return type.getHeartIcon();
+				} else {
+					return type.getBarkIcon();
+				}
+			case 8:
+				if (side == 2 || side == 3) {
+					return type.getHeartIcon();
+				} else {
+					return type.getBarkIcon();
+				}
+			case 0:
+			default:
+				if (side < 2) {
+					return type.getHeartIcon();
+				} else {
+					return type.getBarkIcon();
+				}
 		}
 	}
 
@@ -172,12 +185,13 @@ public class BlockLog extends Block implements IWoodTyped {
 
 	@Override
 	public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
-		if (face == ForgeDirection.DOWN)
+		if (face == ForgeDirection.DOWN) {
 			return 20;
-		else if (face != ForgeDirection.UP)
+		} else if (face != ForgeDirection.UP) {
 			return 10;
-		else
+		} else {
 			return 5;
+		}
 	}
 
 	@Override
@@ -194,10 +208,11 @@ public class BlockLog extends Block implements IWoodTyped {
 	public WoodType getWoodType(int meta) {
 		meta = getTypeFromMeta(meta);
 		int woodOrdinal = meta + cat.ordinal() * logsPerCat;
-		if(woodOrdinal < WoodType.VALUES.length)
+		if (woodOrdinal < WoodType.VALUES.length) {
 			return WoodType.VALUES[woodOrdinal];
-		else
+		} else {
 			return null;
+		}
 	}
 
 	@Override

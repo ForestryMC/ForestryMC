@@ -10,13 +10,10 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import forestry.api.core.INBTTagable;
-import forestry.core.gui.ContainerDummy;
-import forestry.core.inventory.InventoryAdapter;
-import forestry.core.utils.PlainInventory;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
@@ -27,6 +24,11 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+
+import forestry.api.core.INBTTagable;
+import forestry.core.gui.ContainerDummy;
+import forestry.core.inventory.InventoryAdapter;
+import forestry.core.utils.PlainInventory;
 
 public class RecipeMemory implements INBTTagable {
 
@@ -79,8 +81,9 @@ public class RecipeMemory implements INBTTagable {
 
 		public boolean hasSameOutput(InventoryCrafting crafting, World world) {
 			ItemStack recipeOutput = getRecipeOutput(world);
-			if (recipeOutput == null)
+			if (recipeOutput == null) {
 				return false;
+			}
 
 			ItemStack matchingRecipeOutput = CraftingManager.getInstance().findMatchingRecipe(crafting, world);
 			return ItemStack.areItemStacksEqual(recipeOutput, matchingRecipeOutput);
@@ -112,14 +115,16 @@ public class RecipeMemory implements INBTTagable {
 		private void sanitizeMatrix() {
 			for (int slot = 0; slot < matrix.getSizeInventory(); slot++) {
 				ItemStack stack = matrix.getStackInSlot(slot);
-				if (stack != null)
+				if (stack != null) {
 					stack.stackSize = 1;
+				}
 			}
 		}
 	}
 
 	private static final Container DUMMY_CONTAINER = new ContainerDummy();
 	private static final List<Class<? extends Item>> memoryBlacklist = new ArrayList<Class<? extends Item>>();
+
 	static {
 		memoryBlacklist.add(ItemMap.class); // almost every ItemMap is unique
 	}
@@ -129,11 +134,13 @@ public class RecipeMemory implements INBTTagable {
 	public final int capacity = 9;
 
 	private static boolean isValid(World world, Recipe recipe) {
-		if (recipe == null)
+		if (recipe == null) {
 			return false;
+		}
 		ItemStack recipeOutput = recipe.getRecipeOutput(world);
-		if (recipeOutput == null)
+		if (recipeOutput == null) {
 			return false;
+		}
 		Item item = recipeOutput.getItem();
 		return item != null && !memoryBlacklist.contains(item.getClass());
 	}
@@ -141,8 +148,9 @@ public class RecipeMemory implements INBTTagable {
 	public void validate(World world) {
 		LinkedList<Recipe> validRecipes = new LinkedList<Recipe>();
 		for (Recipe recipe : recipes) {
-			if (isValid(world, recipe))
+			if (isValid(world, recipe)) {
 				validRecipes.add(recipe);
+			}
 		}
 		this.recipes = validRecipes;
 	}
@@ -153,16 +161,18 @@ public class RecipeMemory implements INBTTagable {
 
 	public void memorizeRecipe(World world, Recipe recipe, InventoryCrafting crafting) {
 
-		if (!isValid(world, recipe))
+		if (!isValid(world, recipe)) {
 			return;
+		}
 
 		lastUpdate = world.getTotalWorldTime();
 		recipe.updateLastUse(lastUpdate);
 
 		Recipe memory = getMemorized(crafting, world);
 		if (memory != null) {
-			if (memory.isLocked() != recipe.isLocked())
+			if (memory.isLocked() != recipe.isLocked()) {
 				recipe.toggleLock();
+			}
 			int index = recipes.indexOf(memory);
 			recipes.set(index, recipe);
 			return;
@@ -175,10 +185,12 @@ public class RecipeMemory implements INBTTagable {
 
 		Recipe oldest = null;
 		for (Recipe existing : recipes) {
-			if (oldest != null && oldest.getLastUsed() < existing.getLastUsed())
+			if (oldest != null && oldest.getLastUsed() < existing.getLastUsed()) {
 				continue;
-			if (existing.isLocked())
+			}
+			if (existing.isLocked()) {
 				continue;
+			}
 
 			oldest = existing;
 		}
@@ -190,8 +202,9 @@ public class RecipeMemory implements INBTTagable {
 	}
 
 	public Recipe getRecipe(int recipeIndex) {
-		if (recipes.size() > recipeIndex)
+		if (recipes.size() > recipeIndex) {
 			return recipes.get(recipeIndex);
+		}
 
 		return null;
 	}
@@ -203,29 +216,33 @@ public class RecipeMemory implements INBTTagable {
 	}
 
 	public ItemStack getRecipeOutput(World world, int recipeIndex) {
-		if (recipes.size() > recipeIndex)
+		if (recipes.size() > recipeIndex) {
 			return recipes.get(recipeIndex).getRecipeOutput(world);
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public boolean isLocked(int recipeIndex) {
-		if (recipes.size() > recipeIndex)
+		if (recipes.size() > recipeIndex) {
 			return recipes.get(recipeIndex).isLocked();
+		}
 
 		return false;
 	}
 
 	public void toggleLock(World world, int recipeIndex) {
 		lastUpdate = world.getTotalWorldTime();
-		if (recipes.size() > recipeIndex)
+		if (recipes.size() > recipeIndex) {
 			recipes.get(recipeIndex).toggleLock();
+		}
 	}
 
 	private Recipe getMemorized(InventoryCrafting crafting, World world) {
 		for (Recipe recipe : recipes) {
-			if (recipe.hasSameOutput(crafting, world))
+			if (recipe.hasSameOutput(crafting, world)) {
 				return recipe;
+			}
 		}
 
 		return null;
@@ -234,8 +251,9 @@ public class RecipeMemory implements INBTTagable {
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		recipes = new LinkedList<Recipe>();
-		if (!nbttagcompound.hasKey("RecipeMemory"))
+		if (!nbttagcompound.hasKey("RecipeMemory")) {
 			return;
+		}
 
 		NBTTagList nbttaglist = nbttagcompound.getTagList("RecipeMemory", 10);
 		for (int j = 0; j < nbttaglist.tagCount(); ++j) {

@@ -4,20 +4,11 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.farming.logic;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.genetics.IFruitBearer;
-import forestry.core.config.ForestryItem;
-import forestry.core.vect.Vect;
-import forestry.core.vect.VectUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,12 +16,24 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmHousing;
+import forestry.api.genetics.IFruitBearer;
+import forestry.core.config.ForestryItem;
+import forestry.core.vect.Vect;
+import forestry.core.vect.VectUtil;
 
 public class FarmLogicOrchard extends FarmLogic {
 
@@ -85,12 +88,14 @@ public class FarmLogicOrchard extends FarmLogic {
 	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
 
 		Vect start = new Vect(x, y, z);
-		if (!lastExtents.containsKey(start))
+		if (!lastExtents.containsKey(start)) {
 			lastExtents.put(start, 0);
+		}
 
 		int lastExtent = lastExtents.get(start);
-		if (lastExtent > extent)
+		if (lastExtent > extent) {
 			lastExtent = 0;
+		}
 
 		// Proxies.log.finest("Logic %s is searching in direction %s at %s/%s/%s with extension %s.", getClass(), direction, x, y, z, lastExtent);
 
@@ -112,14 +117,16 @@ public class FarmLogicOrchard extends FarmLogic {
 		// Determine what type we want to harvest.
 		IFruitBearer bearer = getFruitBlock(position);
 		Block block = VectUtil.getBlock(world, position);
-		if ((!block.isWood(getWorld(), position.x, position.y, position.z)) && bearer == null)
+		if ((!block.isWood(getWorld(), position.x, position.y, position.z)) && bearer == null) {
 			return crops;
+		}
 
 		ArrayList<Vect> candidates = processHarvestBlock(crops, seen, position, position);
 		ArrayList<Vect> temp = new ArrayList<Vect>();
 		while (!candidates.isEmpty() && crops.size() < 20) {
-			for (Vect candidate : candidates)
+			for (Vect candidate : candidates) {
 				temp.addAll(processHarvestBlock(crops, seen, position, candidate));
+			}
 			candidates.clear();
 			candidates.addAll(temp);
 			temp.clear();
@@ -135,25 +142,30 @@ public class FarmLogicOrchard extends FarmLogic {
 		ArrayList<Vect> candidates = new ArrayList<Vect>();
 
 		// Get additional candidates to return
-		for (int i = -1; i < 2; i++)
-			for (int j = 0; j < 2; j++)
+		for (int i = -1; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
 				for (int k = -1; k < 2; k++) {
 					Vect candidate = new Vect(position.x + i, position.y + j, position.z + k);
-					if (candidate.equals(position))
+					if (candidate.equals(position)) {
 						continue;
-					if (Math.abs(candidate.x - start.x) > 5)
+					}
+					if (Math.abs(candidate.x - start.x) > 5) {
 						continue;
-					if (Math.abs(candidate.z - start.z) > 5)
+					}
+					if (Math.abs(candidate.z - start.z) > 5) {
 						continue;
+					}
 
 					// See whether the given position has already been processed
-					if (seen.contains(candidate))
+					if (seen.contains(candidate)) {
 						continue;
+					}
 
 					IFruitBearer bearer = getFruitBlock(candidate);
 					if (bearer != null && bearer.hasFruit()) {
-						if (bearer.getRipeness() >= 0.9f)
+						if (bearer.getRipeness() >= 0.9f) {
 							crops.push(new CropFruit(world, candidate, bearer.getFruitFamily()));
+						}
 						candidates.add(candidate);
 						seen.add(candidate);
 					} else if (VectUtil.isWoodBlock(world, candidate)) {
@@ -161,14 +173,17 @@ public class FarmLogicOrchard extends FarmLogic {
 						seen.add(candidate);
 					}
 				}
+			}
+		}
 
 		return candidates;
 	}
 
 	private IFruitBearer getFruitBlock(Vect position) {
 		TileEntity tile = getWorld().getTileEntity(position.x, position.y, position.z);
-		if (!(tile instanceof IFruitBearer))
+		if (!(tile instanceof IFruitBearer)) {
 			return null;
+		}
 
 		return (IFruitBearer) tile;
 	}

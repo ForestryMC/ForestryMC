@@ -4,13 +4,12 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.config;
 
-import forestry.core.proxy.Proxies;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -21,7 +20,10 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
+
 import net.minecraftforge.common.config.Configuration.UnicodeInputStreamReader;
+
+import forestry.core.proxy.Proxies;
 
 public class Configuration {
 
@@ -40,8 +42,9 @@ public class Configuration {
 	public Property get(String key, String category, boolean defaultVal) {
 
 		Property existing = getExisting(key, category);
-		if (existing != null)
+		if (existing != null) {
 			return existing;
+		}
 
 		// Create new property since none exists yet.
 		Property property = new Property(key, Boolean.toString(defaultVal));
@@ -52,8 +55,9 @@ public class Configuration {
 	public Property get(String key, String category, int defaultVal) {
 
 		Property existing = getExisting(key, category);
-		if (existing != null)
+		if (existing != null) {
 			return existing;
+		}
 
 		// Create new property since none exists yet.
 		Property property = new Property(key, Integer.toString(defaultVal));
@@ -64,8 +68,9 @@ public class Configuration {
 	public Property get(String key, String category, float defaultVal) {
 
 		Property existing = getExisting(key, category);
-		if (existing != null)
+		if (existing != null) {
 			return existing;
+		}
 
 		// Create new property since none exists yet.
 		Property property = new Property(key, Float.toString(defaultVal));
@@ -76,8 +81,9 @@ public class Configuration {
 	public Property get(String key, String category, String defaultVal) {
 
 		Property existing = getExisting(key, category);
-		if (existing != null)
+		if (existing != null) {
 			return existing;
+		}
 
 		// Create new property since none exists yet.
 		Property property = new Property(key, defaultVal);
@@ -138,12 +144,15 @@ public class Configuration {
 	}
 
 	public Property getExisting(String key, String category) {
-		if (!categorized.containsKey(category))
+		if (!categorized.containsKey(category)) {
 			loadCategory(category);
+		}
 
-		for (Property property : categorized.get(category))
-			if (property.key.equals(key))
+		for (Property property : categorized.get(category)) {
+			if (property.key.equals(key)) {
 				return property;
+			}
+		}
 
 		return null;
 	}
@@ -161,14 +170,17 @@ public class Configuration {
 
 		try {
 
-			if (file.getParentFile() != null)
+			if (file.getParentFile() != null) {
 				file.getParentFile().mkdirs();
+			}
 
-			if (!file.exists())
+			if (!file.exists()) {
 				return;
+			}
 
-			if (!file.canRead())
+			if (!file.canRead()) {
 				return;
+			}
 
 			UnicodeInputStreamReader filein = new UnicodeInputStreamReader(new FileInputStream(file), "UTF-8");
 			BufferedReader reader = new BufferedReader(filein);
@@ -179,24 +191,28 @@ public class Configuration {
 			while (true) {
 				line = reader.readLine();
 
-				if (line == null)
+				if (line == null) {
 					break;
+				}
 
 				if (line.startsWith("#")) {
-					if (line.length() > 3)
+					if (line.length() > 3) {
 						lastComment = line.substring(2, line.length() - 1);
+					}
 					continue;
 				}
 
-				if (!line.contains("="))
+				if (!line.contains("=")) {
 					continue;
+				}
 
 				String[] tokens = line.split("=");
 				Property property;
-				if (tokens.length > 1)
+				if (tokens.length > 1) {
 					property = new Property(tokens[0], tokens[1].trim());
-				else
+				} else {
 					property = new Property(tokens[0], "");
+				}
 
 				if (lastComment != null) {
 					property.comment = lastComment;
@@ -222,14 +238,17 @@ public class Configuration {
 
 		try {
 
-			if (file.getParentFile() != null)
+			if (file.getParentFile() != null) {
 				file.getParentFile().mkdirs();
+			}
 
-			if (!file.exists() && !file.createNewFile())
+			if (!file.exists() && !file.createNewFile()) {
 				return;
+			}
 
-			if (!file.canWrite())
+			if (!file.canWrite()) {
 				return;
+			}
 
 			FileOutputStream fileout = new FileOutputStream(file);
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fileout, "UTF-8"));
@@ -250,10 +269,12 @@ public class Configuration {
 						+ newLine);
 
 				for (Property property : entry.getValue()) {
-					if (purge.contains(property.key))
+					if (purge.contains(property.key)) {
 						continue;
-					if (property.comment != null)
+					}
+					if (property.comment != null) {
 						writer.write("# " + property.comment + newLine);
+					}
 					writer.write(property.key + "=" + property.value + newLine);
 				}
 			}
@@ -271,8 +292,9 @@ public class Configuration {
 
 		for (Property property : properties) {
 			String subsection = property.key.split("\\.")[0];
-			if (!subsectioned.containsKey(subsection))
+			if (!subsectioned.containsKey(subsection)) {
 				subsectioned.put(subsection, new ArrayList<Property>());
+			}
 			subsectioned.get(subsection).add(property);
 		}
 

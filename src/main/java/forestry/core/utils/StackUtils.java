@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -38,15 +38,19 @@ public class StackUtils {
 	 * Compares item id, damage and NBT. Accepts wildcard damage.
 	 */
 	public static boolean isIdenticalItem(ItemStack lhs, ItemStack rhs) {
-		if (lhs == null || rhs == null)
+		if (lhs == null || rhs == null) {
 			return false;
+		}
 
-		if (lhs.getItem() != rhs.getItem())
+		if (lhs.getItem() != rhs.getItem()) {
 			return false;
+		}
 
-		if (lhs.getItemDamage() != Defaults.WILDCARD)
-			if (lhs.getItemDamage() != rhs.getItemDamage())
+		if (lhs.getItemDamage() != Defaults.WILDCARD) {
+			if (lhs.getItemDamage() != rhs.getItemDamage()) {
 				return false;
+			}
+		}
 
 		return ItemStack.areItemStackTagsEqual(lhs, rhs);
 	}
@@ -72,14 +76,17 @@ public class StackUtils {
 			}
 
 			// Already full
-			if (inventoryStack.stackSize >= inventoryStack.getMaxStackSize())
+			if (inventoryStack.stackSize >= inventoryStack.getMaxStackSize()) {
 				continue;
+			}
 
 			// Not same type
-			if (!inventoryStack.isItemEqual(itemstack))
+			if (!inventoryStack.isItemEqual(itemstack)) {
 				continue;
-			if (!ItemStack.areItemStackTagsEqual(inventoryStack, itemstack))
+			}
+			if (!ItemStack.areItemStackTagsEqual(inventoryStack, itemstack)) {
 				continue;
+			}
 
 			int space = inventoryStack.getMaxStackSize() - inventoryStack.stackSize;
 
@@ -114,30 +121,35 @@ public class StackUtils {
 
 			// Grab those free slots
 			if (inventoryStack == null) {
-				if (doAdd)
+				if (doAdd) {
 					inventory.setInventorySlotContents(i, itemstack.copy());
+				}
 				return itemstack.stackSize;
 			}
 
 			// Already full
-			if (inventoryStack.stackSize >= inventoryStack.getMaxStackSize())
+			if (inventoryStack.stackSize >= inventoryStack.getMaxStackSize()) {
 				continue;
+			}
 
 			// Not same type
-			if (!inventoryStack.isItemEqual(itemstack))
+			if (!inventoryStack.isItemEqual(itemstack)) {
 				continue;
+			}
 
 			int space = inventoryStack.getMaxStackSize() - inventoryStack.stackSize;
 
 			// Enough space to add all
 			if (space > itemstack.stackSize - added) {
-				if (doAdd)
+				if (doAdd) {
 					inventoryStack.stackSize += itemstack.stackSize;
+				}
 				return itemstack.stackSize;
 				// Only part can be added
 			} else {
-				if (doAdd)
+				if (doAdd) {
 					inventoryStack.stackSize = inventoryStack.getMaxStackSize();
+				}
 				added += space;
 			}
 
@@ -151,11 +163,13 @@ public class StackUtils {
 	 * Merges the giving stack into the receiving stack as far as possible
 	 */
 	public static void mergeStacks(ItemStack giver, ItemStack receptor) {
-		if (receptor.stackSize >= 64)
+		if (receptor.stackSize >= 64) {
 			return;
+		}
 
-		if (!receptor.isItemEqual(giver))
+		if (!receptor.isItemEqual(giver)) {
 			return;
+		}
 
 		if (giver.stackSize <= (receptor.getMaxStackSize() - receptor.stackSize)) {
 			receptor.stackSize += giver.stackSize;
@@ -169,11 +183,13 @@ public class StackUtils {
 	}
 
 	public static boolean freeSpaceInStack(ItemStack stack, int maxSize) {
-		if (stack == null)
+		if (stack == null) {
 			return true;
+		}
 
-		if (stack.stackSize >= maxSize)
+		if (stack.stackSize >= maxSize) {
 			return false;
+		}
 
 		return true;
 	}
@@ -202,10 +218,12 @@ public class StackUtils {
 		ArrayList<ItemStack> condensed = new ArrayList<ItemStack>();
 
 		for (ItemStack stack : stacks) {
-			if (stack == null)
+			if (stack == null) {
 				continue;
-			if (stack.stackSize <= 0)
+			}
+			if (stack.stackSize <= 0) {
 				continue;
+			}
 
 			boolean matched = false;
 			for (ItemStack cached : condensed) {
@@ -218,8 +236,9 @@ public class StackUtils {
 
 			if (!matched) {
 				ItemStack cached = stack.copy();
-				if (maxCountedPerStack > 0)
+				if (maxCountedPerStack > 0) {
 					cached.stackSize = maxCountedPerStack;
+				}
 				condensed.add(cached);
 			}
 
@@ -230,8 +249,9 @@ public class StackUtils {
 
 	public static boolean containsItemStack(Iterable<ItemStack> list, ItemStack itemStack) {
 		for (ItemStack listStack : list) {
-			if (isIdenticalItem(listStack, itemStack))
+			if (isIdenticalItem(listStack, itemStack)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -261,16 +281,18 @@ public class StackUtils {
 					matched = true;
 
 					int stackCount = (int) Math.floor(offer.stackSize / req.stackSize);
-					if (stackCount <= 0)
+					if (stackCount <= 0) {
 						return 0;
-					else if (count == 0)
+					} else if (count == 0) {
 						count = stackCount;
-					else if (count > stackCount)
+					} else if (count > stackCount) {
 						count = stackCount;
+					}
 				}
 			}
-			if (!matched)
+			if (!matched) {
 				return 0;
+			}
 		}
 
 		return count;
@@ -280,39 +302,47 @@ public class StackUtils {
 	 * Compare two item stacks for crafting equivalency without oreDictionary or craftingTools
 	 */
 	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison) {
-		if (base == null || comparison == null)
+		if (base == null || comparison == null) {
 			return false;
+		}
 
-		if (base.getItem() != comparison.getItem())
+		if (base.getItem() != comparison.getItem()) {
 			return false;
+		}
 
-		if (base.getItemDamage() != Defaults.WILDCARD)
-			if (base.getItemDamage() != comparison.getItemDamage())
+		if (base.getItemDamage() != Defaults.WILDCARD) {
+			if (base.getItemDamage() != comparison.getItemDamage()) {
 				return false;
+			}
+		}
 
 		// When the base stackTagCompound is null or empty, treat it as a wildcard for crafting
-		if (base.stackTagCompound == null || base.stackTagCompound.hasNoTags())
+		if (base.stackTagCompound == null || base.stackTagCompound.hasNoTags()) {
 			return true;
-		else
+		} else {
 			return ItemStack.areItemStackTagsEqual(base, comparison);
+		}
 	}
 
 	/**
 	 * Compare two item stacks for crafting equivalency.
 	 */
 	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, boolean oreDictionary, boolean craftingTools) {
-		if (isCraftingEquivalent(base, comparison))
+		if (isCraftingEquivalent(base, comparison)) {
 			return true;
+		}
 
-		if (base == null || comparison == null)
+		if (base == null || comparison == null) {
 			return false;
+		}
 
 		if (oreDictionary) {
 			int[] idsBase = OreDictionary.getOreIDs(base);
 			for (int idBase : idsBase) {
 				for (ItemStack itemstack : OreDictionary.getOres(OreDictionary.getOreName(idBase))) {
-					if (comparison.getItem() == itemstack.getItem() && (itemstack.getItemDamage() == OreDictionary.WILDCARD_VALUE || comparison.getItemDamage() == itemstack.getItemDamage()))
+					if (comparison.getItem() == itemstack.getItem() && (itemstack.getItemDamage() == OreDictionary.WILDCARD_VALUE || comparison.getItemDamage() == itemstack.getItemDamage())) {
 						return true;
+					}
 				}
 			}
 		}
@@ -335,8 +365,9 @@ public class StackUtils {
 	}
 
 	public static void stowContainerItem(ItemStack itemstack, IInventory stowing, int slotIndex, EntityPlayer player) {
-		if (!itemstack.getItem().hasContainerItem(itemstack))
+		if (!itemstack.getItem().hasContainerItem(itemstack)) {
 			return;
+		}
 
 		ItemStack container = itemstack.getItem().getContainerItem(itemstack);
 
@@ -348,20 +379,25 @@ public class StackUtils {
 		if (container != null) {
 
 			if (itemstack.getItem().doesContainerItemLeaveCraftingGrid(itemstack)) {
-				if (!InvTools.tryAddStack(stowing, container, true))
-					if (!player.inventory.addItemStackToInventory(container))
+				if (!InvTools.tryAddStack(stowing, container, true)) {
+					if (!player.inventory.addItemStackToInventory(container)) {
 						player.dropPlayerItemWithRandomChoice(container, true);
+					}
+				}
 			} else {
-				if (!InvTools.tryAddStack(stowing, container, slotIndex, 1, true))
-					if (!InvTools.tryAddStack(stowing, container, true))
+				if (!InvTools.tryAddStack(stowing, container, slotIndex, 1, true)) {
+					if (!InvTools.tryAddStack(stowing, container, true)) {
 						player.dropPlayerItemWithRandomChoice(container, true);
+					}
+				}
 			}
 		}
 	}
 
 	public static void dropItemStackAsEntity(ItemStack items, World world, double x, double y, double z) {
-		if (items.stackSize <= 0)
+		if (items.stackSize <= 0) {
 			return;
+		}
 
 		float f1 = 0.7F;
 		double d = (world.rand.nextFloat() * f1) + (1.0F - f1) * 0.5D;

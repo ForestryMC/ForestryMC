@@ -4,22 +4,24 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.gui.buttons;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.core.gui.tooltips.ToolTip;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import forestry.core.gui.tooltips.ToolTip;
+
 /**
- *
  * @author CovertJaguar <railcraft.wikispaces.com>
  */
 @SideOnly(Side.CLIENT)

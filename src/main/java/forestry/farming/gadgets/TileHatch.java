@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -33,7 +33,7 @@ import buildcraft.api.statements.ITriggerExternal;
 
 public class TileHatch extends TileFarm implements ISidedInventory {
 
-	private static final ForgeDirection[] dumpDirections = new ForgeDirection[] { ForgeDirection.DOWN };
+	private static final ForgeDirection[] dumpDirections = new ForgeDirection[]{ForgeDirection.DOWN};
 	
 	private final AdjacentInventoryCache inventoryCache = new AdjacentInventoryCache(this, getTileCache(), new ITileFilter() {
 
@@ -54,8 +54,9 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 
 	@Override
 	protected void updateServerSide() {
-		if (worldObj.getTotalWorldTime() % 40 == 0)
+		if (worldObj.getTotalWorldTime() % 40 == 0) {
 			dumpStash();
+		}
 	}
 
 	/* AUTO-EJECTING */
@@ -66,8 +67,9 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 
 	protected void dumpStash() {
 		IInventory productInventory = getProductInventory();
-		if (productInventory == null)
+		if (productInventory == null) {
 			return;
+		}
 
 		if (!InvTools.moveOneItemToPipe(productInventory, tileCache, dumpDirections)) {
 			InvTools.moveItemStack(productInventory, inventoryCache.getAdjacentInventories());
@@ -78,8 +80,9 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 	@Override
 	public IInventoryAdapter getInternalInventory() {
 		ITileStructure central = getCentralTE();
-		if (central instanceof TileFarmPlain)
+		if (central instanceof TileFarmPlain) {
 			return ((TileFarmPlain) central).getInternalInventory();
+		}
 
 		return super.getInternalInventory();
 	}
@@ -88,8 +91,9 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
-		if (!hasMaster())
+		if (!hasMaster()) {
 			return null;
+		}
 
 		LinkedList<ITriggerExternal> list = new LinkedList<ITriggerExternal>();
 		list.add(FarmingTriggers.lowResourceLiquid50);

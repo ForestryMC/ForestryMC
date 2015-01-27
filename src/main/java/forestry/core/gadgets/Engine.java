@@ -4,18 +4,12 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import cofh.api.energy.IEnergyConnection;
-import forestry.core.TemperatureState;
-import forestry.core.config.Defaults;
-import forestry.core.network.PacketPayload;
-import forestry.core.utils.BlockUtil;
-import forestry.energy.EnergyManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -23,7 +17,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.util.ForgeDirection;
+
+import forestry.core.TemperatureState;
+import forestry.core.config.Defaults;
+import forestry.core.network.PacketPayload;
+import forestry.core.utils.BlockUtil;
+import forestry.energy.EnergyManager;
+
+import cofh.api.energy.IEnergyConnection;
 
 public abstract class Engine extends TileBase implements IEnergyConnection {
 
@@ -31,10 +34,11 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 	public PacketPayload getPacketPayload() {
 		PacketPayload payload = new PacketPayload(3, 1, 0);
 
-		if (this.isActive)
+		if (this.isActive) {
 			payload.intPayload[0] = 1;
-		else
+		} else {
 			payload.intPayload[0] = 0;
+		}
 		payload.intPayload[1] = energyManager.toPacketInt();
 		payload.intPayload[2] = heat;
 
@@ -51,6 +55,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 
 		pistonSpeedServer = payload.floatPayload[0];
 	}
+
 	public boolean isActive = false; // Used for smp.
 	/**
 	 * Indicates whether the piston is receding from or approaching the
@@ -88,8 +93,9 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 	protected void addHeat(int i) {
 		heat += i;
 
-		if (heat > maxHeat)
+		if (heat > maxHeat) {
 			heat = maxHeat;
+		}
 	}
 
 	public abstract int dissipateHeat();
@@ -111,17 +117,19 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 				stagePiston = 0;
 				progress = 0;
 			}
-		} else if (this.isActive)
+		} else if (this.isActive) {
 			stagePiston = 1;
+		}
 	}
 
 	@Override
 	public void updateServerSide() {
 		TemperatureState energyState = getTemperatureState();
-		if (energyState == TemperatureState.MELTING && heat > 0)
+		if (energyState == TemperatureState.MELTING && heat > 0) {
 			forceCooldown = true;
-		else if (forceCooldown && heat <= 0)
+		} else if (forceCooldown && heat <= 0) {
 			forceCooldown = false;
+		}
 
 		// Determine targeted tile
 		TileEntity tile = worldObj.getTileEntity(xCoord + getOrientation().offsetX, yCoord + getOrientation().offsetY, zCoord + getOrientation().offsetZ);
@@ -147,21 +155,25 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 			}
 
 		} else if (canPowerTo(tile)) // If we are not already running, check if
+		{
 			if (energyManager.getEnergyStored(getOrientation()) > 0) {
 				stagePiston = 1; // If we can transfer energy, start running
 				setActive(true);
-			} else
+			} else {
 				setActive(false);
-		else
+			}
+		} else {
 			setActive(false);
+		}
 
 		dissipateHeat();
 		generateHeat();
 		// Now let's fire up the engine:
-		if (mayBurn())
+		if (mayBurn()) {
 			burn();
-		else
+		} else {
 			energyManager.drainEnergy(20);
+		}
 
 	}
 
@@ -170,8 +182,9 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 	}
 
 	private void setActive(boolean isActive) {
-		if (this.isActive == isActive)
+		if (this.isActive == isActive) {
 			return;
+		}
 
 		this.isActive = isActive;
 		sendNetworkUpdate();
@@ -210,10 +223,11 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 	}
 
 	public int getCurrentOutput() {
-		if (isBurning() && isActivated())
+		if (isBurning() && isActivated()) {
 			return currentOutput;
-		else
+		} else {
 			return 0;
+		}
 	}
 
 	public int getHeat() {
@@ -227,36 +241,37 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 		// double scaledStorage = (double)storedEnergy / (double)maxEnergy;
 		double scaledHeat = (double) heat / (double) maxHeat;
 
-		if (scaledHeat < 0.20)
+		if (scaledHeat < 0.20) {
 			return TemperatureState.COOL;
-		else if (scaledHeat < 0.45)
+		} else if (scaledHeat < 0.45) {
 			return TemperatureState.WARMED_UP;
-		else if (scaledHeat < 0.65)
+		} else if (scaledHeat < 0.65) {
 			return TemperatureState.OPERATING_TEMPERATURE;
-		else if (scaledHeat < 0.85)
+		} else if (scaledHeat < 0.85) {
 			return TemperatureState.RUNNING_HOT;
-		else if (scaledHeat < 1.0)
+		} else if (scaledHeat < 1.0) {
 			return TemperatureState.OVERHEATING;
-		else
+		} else {
 			return TemperatureState.MELTING;
+		}
 	}
 
 	public float getPistonSpeed() {
 		switch (getTemperatureState()) {
-		case COOL:
-			return 0.03f;
-		case WARMED_UP:
-			return 0.04f;
-		case OPERATING_TEMPERATURE:
-			return 0.05f;
-		case RUNNING_HOT:
-			return 0.06f;
-		case OVERHEATING:
-			return 0.07f;
-		case MELTING:
-			return Defaults.ENGINE_PISTON_SPEED_MAX;
-		default:
-			return 0;
+			case COOL:
+				return 0.03f;
+			case WARMED_UP:
+				return 0.04f;
+			case OPERATING_TEMPERATURE:
+				return 0.05f;
+			case RUNNING_HOT:
+				return 0.06f;
+			case OVERHEATING:
+				return 0.07f;
+			case MELTING:
+				return Defaults.ENGINE_PISTON_SPEED_MAX;
+			default:
+				return 0;
 		}
 	}
 

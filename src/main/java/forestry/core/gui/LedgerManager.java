@@ -4,18 +4,21 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.gui;
 
+import java.util.ArrayList;
+
+import net.minecraft.client.Minecraft;
+
+import org.lwjgl.opengl.GL11;
+
 import forestry.core.config.SessionVars;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.proxy.Proxies;
-import java.util.ArrayList;
-import net.minecraft.client.Minecraft;
-import org.lwjgl.opengl.GL11;
 
 public class LedgerManager {
 
@@ -31,8 +34,9 @@ public class LedgerManager {
 
 	public void add(Ledger ledger) {
 		this.ledgers.add(ledger);
-		if (SessionVars.getOpenedLedger() != null && ledger.getClass().equals(SessionVars.getOpenedLedger()))
+		if (SessionVars.getOpenedLedger() != null && ledger.getClass().equals(SessionVars.getOpenedLedger())) {
 			ledger.setFullyOpen();
+		}
 	}
 
 	/**
@@ -44,17 +48,19 @@ public class LedgerManager {
 
 	protected Ledger getAtPosition(int mX, int mY) {
 
-		int xShift = ((gui.width -  gui.getSizeX()) / 2) +  gui.getSizeX();
-		int yShift = ((gui.height -  gui.getSizeY()) / 2) + 8;
+		int xShift = ((gui.width - gui.getSizeX()) / 2) + gui.getSizeX();
+		int yShift = ((gui.height - gui.getSizeY()) / 2) + 8;
 
 		for (Ledger ledger : ledgers) {
-			if (!ledger.isVisible())
+			if (!ledger.isVisible()) {
 				continue;
+			}
 
 			ledger.currentShiftX = xShift;
 			ledger.currentShiftY = yShift;
-			if (ledger.intersectsWith(mX, mY, xShift, yShift))
+			if (ledger.intersectsWith(mX, mY, xShift, yShift)) {
 				return ledger;
+			}
 
 			yShift += ledger.getHeight();
 		}
@@ -68,8 +74,9 @@ public class LedgerManager {
 		for (Ledger ledger : ledgers) {
 
 			ledger.update();
-			if (!ledger.isVisible())
+			if (!ledger.isVisible()) {
 				continue;
+			}
 
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			ledger.draw(gui.getSizeX(), yPos);
@@ -102,9 +109,11 @@ public class LedgerManager {
 			// ledger itself.
 			if (ledger != null && !ledger.handleMouseClicked(x, y, mouseButton)) {
 
-				for (Ledger other : ledgers)
-					if (other != ledger && other.isOpen())
+				for (Ledger other : ledgers) {
+					if (other != ledger && other.isOpen()) {
 						other.toggleOpen();
+					}
+				}
 				ledger.toggleOpen();
 			}
 		}

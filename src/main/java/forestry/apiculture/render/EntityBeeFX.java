@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -45,8 +45,9 @@ public class EntityBeeFX extends EntityFX {
 		this.motionY *= 1.08D;
 		this.motionZ *= 1.08D;
 
-		if (this.particleMaxAge-- <= 0)
+		if (this.particleMaxAge-- <= 0) {
 			this.setDead();
+		}
 	}
 
 	@Override

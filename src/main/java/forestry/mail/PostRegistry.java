@@ -4,13 +4,22 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.mail;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
@@ -22,12 +31,6 @@ import forestry.api.mail.PostManager;
 import forestry.core.config.ForestryItem;
 import forestry.mail.items.ItemLetter;
 import forestry.plugins.PluginMail;
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 
 public class PostRegistry implements IPostRegistry {
 
@@ -36,7 +39,7 @@ public class PostRegistry implements IPostRegistry {
 	public static final Map<IMailAddress, ITradeStation> cachedTradeStations = new HashMap<IMailAddress, ITradeStation>();
 
 	/**
-	 * @param world the Minecraft world the PO box will be in
+	 * @param world   the Minecraft world the PO box will be in
 	 * @param address the potential address of the PO box
 	 * @return true if the passed address is valid for PO Boxes.
 	 */
@@ -47,12 +50,14 @@ public class PostRegistry implements IPostRegistry {
 
 	public static POBox getPOBox(World world, IMailAddress address) {
 
-		if (cachedPOBoxes.containsKey(address))
+		if (cachedPOBoxes.containsKey(address)) {
 			return cachedPOBoxes.get(address);
+		}
 
 		POBox pobox = (POBox) world.loadItemData(POBox.class, POBox.SAVE_NAME + address);
-		if (pobox != null)
+		if (pobox != null) {
 			cachedPOBoxes.put(address, pobox);
+		}
 		return pobox;
 	}
 
@@ -71,7 +76,7 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	/**
-	 * @param world the Minecraft world the Trader will be in
+	 * @param world   the Minecraft world the Trader will be in
 	 * @param address the potential address of the Trader
 	 * @return true if the passed address can be an address for a trade station
 	 */
@@ -81,7 +86,7 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	/**
-	 * @param world the Minecraft world the Trader will be in
+	 * @param world   the Minecraft world the Trader will be in
 	 * @param address the potential address of the Trader
 	 * @return true if the trade address has not yet been used before.
 	 */
@@ -92,11 +97,13 @@ public class PostRegistry implements IPostRegistry {
 
 	@Override
 	public TradeStation getTradeStation(World world, IMailAddress address) {
-		if (address.getName() == null)
+		if (address.getName() == null) {
 			return null;
+		}
 
-		if (cachedTradeStations.containsKey(address))
+		if (cachedTradeStations.containsKey(address)) {
 			return (TradeStation) cachedTradeStations.get(address);
+		}
 
 		TradeStation trade = (TradeStation) world.loadItemData(TradeStation.class, TradeStation.SAVE_NAME + address);
 
@@ -128,8 +135,9 @@ public class PostRegistry implements IPostRegistry {
 	@Override
 	public void deleteTradeStation(World world, IMailAddress address) {
 		TradeStation trade = getTradeStation(world, address);
-		if (trade == null)
+		if (trade == null) {
 			return;
+		}
 
 		// Need to be marked as invalid since WorldSavedData seems to do some caching of its own.
 		trade.invalidate();
@@ -141,8 +149,9 @@ public class PostRegistry implements IPostRegistry {
 
 	@Override
 	public IPostOffice getPostOffice(World world) {
-		if (cachedPostOffice != null)
+		if (cachedPostOffice != null) {
 			return cachedPostOffice;
+		}
 
 		PostOffice office = (PostOffice) world.loadItemData(PostOffice.class, PostOffice.SAVE_NAME);
 
@@ -205,14 +214,17 @@ public class PostRegistry implements IPostRegistry {
 
 	@Override
 	public ILetter getLetter(ItemStack itemstack) {
-		if (itemstack == null)
+		if (itemstack == null) {
 			return null;
+		}
 
-		if (!PostManager.postRegistry.isLetter(itemstack))
+		if (!PostManager.postRegistry.isLetter(itemstack)) {
 			return null;
+		}
 
-		if (itemstack.getTagCompound() == null)
+		if (itemstack.getTagCompound() == null) {
 			return null;
+		}
 
 		return new Letter(itemstack.getTagCompound());
 	}

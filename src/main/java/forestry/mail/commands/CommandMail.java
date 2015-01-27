@@ -12,14 +12,6 @@
  */
 package forestry.mail.commands;
 
-import forestry.api.mail.ITradeStation;
-import forestry.api.mail.PostManager;
-import forestry.api.mail.TradeStationInfo;
-import forestry.core.commands.CommandHelpers;
-import forestry.core.commands.SubCommand;
-import forestry.core.utils.StringUtil;
-import forestry.mail.EnumStationState;
-import forestry.mail.MailAddress;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -27,8 +19,15 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
+import forestry.api.mail.ITradeStation;
+import forestry.api.mail.PostManager;
+import forestry.api.mail.TradeStationInfo;
+import forestry.core.commands.CommandHelpers;
+import forestry.core.commands.SubCommand;
+import forestry.core.utils.StringUtil;
+import forestry.mail.MailAddress;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class CommandMail extends SubCommand {
@@ -49,8 +48,9 @@ public class CommandMail extends SubCommand {
 
 		@Override
 		public void processSubCommand(ICommandSender sender, String[] args) {
-			if (!(sender instanceof EntityPlayer))
+			if (!(sender instanceof EntityPlayer)) {
 				return;
+			}
 			for (ITradeStation trade : PostManager.postRegistry.getPostOffice(((EntityPlayer) sender).worldObj).getActiveTradeStations(((EntityPlayer) sender).worldObj).values()) {
 				CommandHelpers.sendChatMessage(sender, makeTradeListEntry(trade.getTradeInfo()));
 			}
@@ -60,8 +60,9 @@ public class CommandMail extends SubCommand {
 			EnumChatFormatting formatting = info.state.isOk() ? EnumChatFormatting.GREEN : EnumChatFormatting.RED;
 
 			String tradegood = "[ ? ]";
-			if (info.tradegood != null)
+			if (info.tradegood != null) {
 				tradegood = info.tradegood.stackSize + "x" + info.tradegood.getDisplayName();
+			}
 			String demand = "[ ? ]";
 			if (info.required.length > 0) {
 				demand = "";
@@ -84,8 +85,9 @@ public class CommandMail extends SubCommand {
 
 		@Override
 		public void processSubCommand(ICommandSender sender, String[] args) {
-			if (args.length != 1)
+			if (args.length != 1) {
 				CommandHelpers.throwWrongUsage(sender, this);
+			}
 
 			World world = CommandHelpers.getWorld(sender, this);
 			MailAddress address = new MailAddress(args[0]);

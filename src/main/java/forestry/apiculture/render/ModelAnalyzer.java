@@ -4,19 +4,22 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.render;
 
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.ForestryResource;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.common.util.ForgeDirection;
+
 import org.lwjgl.opengl.GL11;
+
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.ForestryResource;
 
 public class ModelAnalyzer extends ModelBase {
 
@@ -29,7 +32,7 @@ public class ModelAnalyzer extends ModelBase {
 
 	public ModelAnalyzer(String gfxBase) {
 
-		textures = new ResourceLocation[] {
+		textures = new ResourceLocation[]{
 				new ForestryResource(gfxBase + "pedestal.png"),
 				new ForestryResource(gfxBase + "tower1.png"),
 				new ForestryResource(gfxBase + "tower2.png"),
@@ -59,23 +62,24 @@ public class ModelAnalyzer extends ModelBase {
 		GL11.glDisable(GL11.GL_LIGHTING);
 
 		GL11.glTranslatef(posX, posY, posZ);
-		float[] angle = { 0, 0, 0 };
+		float[] angle = {0, 0, 0};
 
-		if (orientation == null)
+		if (orientation == null) {
 			orientation = ForgeDirection.WEST;
+		}
 		switch (orientation) {
-		case EAST:
-			angle[1] = (float) Math.PI / 2;
-			break;
-		case WEST:
-			angle[1] = -(float) Math.PI / 2;
-			break;
-		case SOUTH:
-			break;
-		case NORTH:
-		default:
-			angle[1] = (float) Math.PI;
-			break;
+			case EAST:
+				angle[1] = (float) Math.PI / 2;
+				break;
+			case WEST:
+				angle[1] = -(float) Math.PI / 2;
+				break;
+			case SOUTH:
+				break;
+			case NORTH:
+			default:
+				angle[1] = (float) Math.PI;
+				break;
 		}
 
 		float factor = (float) (1.0 / 16.0);

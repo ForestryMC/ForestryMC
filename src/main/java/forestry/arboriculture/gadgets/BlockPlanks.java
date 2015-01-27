@@ -4,18 +4,14 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.core.Tabs;
-import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.WoodType;
 import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -25,7 +21,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.core.Tabs;
+import forestry.arboriculture.IWoodTyped;
+import forestry.arboriculture.WoodType;
 
 public class BlockPlanks extends Block implements IWoodTyped {
 
@@ -48,13 +52,14 @@ public class BlockPlanks extends Block implements IWoodTyped {
 		setCreativeTab(Tabs.tabArboriculture);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
 		int totalWoods = WoodType.values().length;
 		int count = Math.min(totalWoods - (cat.ordinal() * planksPerCat), planksPerCat);
-		for (int i = 0; i < count; i++)
+		for (int i = 0; i < count; i++) {
 			itemList.add(new ItemStack(this, 1, i));
+		}
 	}
 
 	/* ICONS */
@@ -68,8 +73,9 @@ public class BlockPlanks extends Block implements IWoodTyped {
 	@Override
 	public IIcon getIcon(int side, int meta) {
 		WoodType woodType = getWoodType(meta);
-		if (woodType == null)
+		if (woodType == null) {
 			return null;
+		}
 		return woodType.getPlankIcon();
 	}
 
@@ -107,10 +113,11 @@ public class BlockPlanks extends Block implements IWoodTyped {
 	@Override
 	public WoodType getWoodType(int meta) {
 		int woodOrdinal = cat.ordinal() * planksPerCat + meta;
-		if(woodOrdinal < WoodType.VALUES.length)
+		if (woodOrdinal < WoodType.VALUES.length) {
 			return WoodType.VALUES[woodOrdinal];
-		else
+		} else {
 			return null;
+		}
 	}
 
 	@Override

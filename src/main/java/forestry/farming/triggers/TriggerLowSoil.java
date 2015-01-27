@@ -4,21 +4,24 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.farming.triggers;
 
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.IStatementParameter;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
 import forestry.api.core.ITileStructure;
 import forestry.core.triggers.Trigger;
 import forestry.farming.gadgets.TileFarmPlain;
 import forestry.farming.gadgets.TileHatch;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
 
 public class TriggerLowSoil extends Trigger {
 
@@ -55,19 +58,21 @@ public class TriggerLowSoil extends Trigger {
 			parameter = parameters[0];
 		}
 
-		if (!(tile instanceof TileHatch))
+		if (!(tile instanceof TileHatch)) {
 			return false;
+		}
 
 		ITileStructure central = ((TileHatch) tile).getCentralTE();
-		if (central == null || !(central instanceof TileFarmPlain))
+		if (central == null || !(central instanceof TileFarmPlain)) {
 			return false;
+		}
 
 		if (parameter == null || parameter.getItemStack() == null) {
 			return !((TileFarmPlain) central).hasResourcesAmount(threshold);
 		} else {
 			ItemStack filter = parameter.getItemStack().copy();
 			filter.stackSize = threshold;
-			return !((TileFarmPlain) central).hasResources(new ItemStack[] { filter });
+			return !((TileFarmPlain) central).hasResources(new ItemStack[]{filter});
 		}
 	}
 }

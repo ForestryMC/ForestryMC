@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -42,8 +42,9 @@ public class ContainerLiquidTanks extends ContainerForestry {
 	@SideOnly(Side.CLIENT)
 	public void handlePipetteClickClient(int slot, EntityPlayer player) {
 		ItemStack itemstack = player.inventory.getItemStack();
-		if (itemstack == null || !(itemstack.getItem() instanceof IToolPipette))
+		if (itemstack == null || !(itemstack.getItem() instanceof IToolPipette)) {
 			return;
+		}
 
 		PacketPayload payload = new PacketPayload(1, 0, 0);
 		payload.intPayload[0] = slot;
@@ -53,12 +54,14 @@ public class ContainerLiquidTanks extends ContainerForestry {
 	public void handlePipetteClick(int slot, EntityPlayerMP player) {
 
 		ItemStack itemstack = player.inventory.getItemStack();
-		if (itemstack == null)
+		if (itemstack == null) {
 			return;
+		}
 
 		Item held = itemstack.getItem();
-		if (!(held instanceof IToolPipette))
+		if (!(held instanceof IToolPipette)) {
 			return;
+		}
 
 		IToolPipette pipette = (IToolPipette) held;
 		StandardTank tank = tile.getTankManager().get(slot);
@@ -93,8 +96,9 @@ public class ContainerLiquidTanks extends ContainerForestry {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		tile.getTankManager().updateGuiData(this, crafters);
-		for (Object crafter : crafters)
+		for (Object crafter : crafters) {
 			tile.sendGUINetworkData(this, (ICrafting) crafter);
+		}
 	}
 
 	@Override

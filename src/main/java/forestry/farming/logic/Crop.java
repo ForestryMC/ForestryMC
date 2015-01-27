@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -36,8 +36,9 @@ public abstract class Crop implements ICrop {
 
 	protected final void clearBlock(Vect position) {
 		world.setBlockToAir(position.x, position.y, position.z);
-		if (world.getTileEntity(position.x, position.y, position.z) != null)
+		if (world.getTileEntity(position.x, position.y, position.z) != null) {
 			world.setTileEntity(position.x, position.y, position.z, null);
+		}
 	}
 
 	protected final Block getBlock(Vect position) {
@@ -58,8 +59,9 @@ public abstract class Crop implements ICrop {
 
 	@Override
 	public Collection<ItemStack> harvest() {
-		if (!isCrop(position))
+		if (!isCrop(position)) {
 			return null;
+		}
 
 		return harvestBlock(position);
 	}

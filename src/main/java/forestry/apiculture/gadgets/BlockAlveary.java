@@ -4,20 +4,15 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.core.Tabs;
-import forestry.apiculture.MaterialBeehive;
-import forestry.core.gadgets.BlockStructure;
-import forestry.core.render.TextureManager;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -28,6 +23,14 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.core.Tabs;
+import forestry.apiculture.MaterialBeehive;
+import forestry.core.gadgets.BlockStructure;
+import forestry.core.render.TextureManager;
+
 public class BlockAlveary extends BlockStructure {
 
 	public BlockAlveary() {
@@ -36,13 +39,14 @@ public class BlockAlveary extends BlockStructure {
 		setCreativeTab(Tabs.tabApiculture);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
 		for (int i = 0; i < 8; i++) {
-			if (i == 1)
+			if (i == 1) {
 				continue;
+			}
 			list.add(new ItemStack(item, 1, i));
 		}
 	}
@@ -74,20 +78,20 @@ public class BlockAlveary extends BlockStructure {
 	@Override
 	public TileEntity createTileEntity(World world, int metadata) {
 		switch (metadata) {
-		case TileAlvearySwarmer.BLOCK_META:
-			return new TileAlvearySwarmer();
-		case TileAlvearyFan.BLOCK_META:
-			return new TileAlvearyFan();
-		case TileAlvearyHeater.BLOCK_META:
-			return new TileAlvearyHeater();
-		case TileAlvearyHygroregulator.BLOCK_META:
-			return new TileAlvearyHygroregulator();
-		case TileAlvearyStabiliser.BLOCK_META:
-			return new TileAlvearyStabiliser();
-		case TileAlvearySieve.BLOCK_META:
-			return new TileAlvearySieve();
-		default:
-			return new TileAlvearyPlain();
+			case TileAlvearySwarmer.BLOCK_META:
+				return new TileAlvearySwarmer();
+			case TileAlvearyFan.BLOCK_META:
+				return new TileAlvearyFan();
+			case TileAlvearyHeater.BLOCK_META:
+				return new TileAlvearyHeater();
+			case TileAlvearyHygroregulator.BLOCK_META:
+				return new TileAlvearyHygroregulator();
+			case TileAlvearyStabiliser.BLOCK_META:
+				return new TileAlvearyStabiliser();
+			case TileAlvearySieve.BLOCK_META:
+				return new TileAlvearySieve();
+			default:
+				return new TileAlvearyPlain();
 		}
 	}
 
@@ -140,28 +144,29 @@ public class BlockAlveary extends BlockStructure {
 	public IIcon getIcon(int side, int metadata) {
 		if ((metadata <= 1
 				|| metadata == TileAlvearySieve.BLOCK_META || metadata == TileAlvearySwarmer.BLOCK_META || metadata == TileAlvearyStabiliser.BLOCK_META)
-				&& (side == 1 || side == 0))
+				&& (side == 1 || side == 0)) {
 			return icons[BOTTOM];
+		}
 
 		switch (metadata) {
-		case TileAlvearyPlain.BLOCK_META:
-			return icons[PLAIN];
-		case 1:
-			return icons[ENTRANCE];
-		case TileAlvearySwarmer.BLOCK_META:
-			return icons[ALVEARY_SWARMER_OFF];
-		case TileAlvearyFan.BLOCK_META:
-			return icons[ALVEARY_FAN_OFF];
-		case TileAlvearyHeater.BLOCK_META:
-			return icons[ALVEARY_HEATER_OFF];
-		case TileAlvearyHygroregulator.BLOCK_META:
-			return icons[ALVEARY_HYGRO];
-		case TileAlvearyStabiliser.BLOCK_META:
-			return icons[STABILISER];
-		case TileAlvearySieve.BLOCK_META:
-			return icons[SIEVE];
-		default:
-			return null;
+			case TileAlvearyPlain.BLOCK_META:
+				return icons[PLAIN];
+			case 1:
+				return icons[ENTRANCE];
+			case TileAlvearySwarmer.BLOCK_META:
+				return icons[ALVEARY_SWARMER_OFF];
+			case TileAlvearyFan.BLOCK_META:
+				return icons[ALVEARY_FAN_OFF];
+			case TileAlvearyHeater.BLOCK_META:
+				return icons[ALVEARY_HEATER_OFF];
+			case TileAlvearyHygroregulator.BLOCK_META:
+				return icons[ALVEARY_HYGRO];
+			case TileAlvearyStabiliser.BLOCK_META:
+				return icons[STABILISER];
+			case TileAlvearySieve.BLOCK_META:
+				return icons[SIEVE];
+			default:
+				return null;
 		}
 
 	}
@@ -171,10 +176,11 @@ public class BlockAlveary extends BlockStructure {
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 		int meta = world.getBlockMetadata(x, y, z);
 
-		if (meta == 1)
+		if (meta == 1) {
 			return this.getIcon(side, meta);
-		else if (meta > 1)
+		} else if (meta > 1) {
 			return getBlockTextureFromSideAndTile(world, x, y, z, side);
+		}
 
 		Block blockXP = world.getBlock(x + 1, y, z);
 		Block blockXM = world.getBlock(x - 1, y, z);
@@ -183,24 +189,29 @@ public class BlockAlveary extends BlockStructure {
 
 			if (world.getBlockMetadata(x + 1, y, z) == 1) {
 
-				if (world.getBlock(x, y, z + 1) != this)
+				if (world.getBlock(x, y, z + 1) != this) {
 					return switchForSide(42, side);
-				else
+				} else {
 					return switchForSide(41, side);
+				}
 
-			} else
+			} else {
 				return this.getIcon(side, meta);
+			}
 
-		} else if (blockXP != this && blockXM == this)
+		} else if (blockXP != this && blockXM == this) {
 			if (world.getBlockMetadata(x - 1, y, z) == 1) {
 
-				if (world.getBlock(x, y, z + 1) != this)
+				if (world.getBlock(x, y, z + 1) != this) {
 					return switchForSide(41, side);
-				else
+				} else {
 					return switchForSide(42, side);
+				}
 
-			} else
+			} else {
 				return this.getIcon(side, meta);
+			}
+		}
 
 		return this.getIcon(side, meta);
 	}
@@ -208,8 +219,9 @@ public class BlockAlveary extends BlockStructure {
 	@SideOnly(Side.CLIENT)
 	private IIcon getBlockTextureFromSideAndTile(IBlockAccess world, int x, int y, int z, int side) {
 		TileEntity tile = world.getTileEntity(x, y, z);
-		if (tile == null || !(tile instanceof TileAlveary))
+		if (tile == null || !(tile instanceof TileAlveary)) {
 			return getIcon(side, 0);
+		}
 
 		return icons[((TileAlveary) tile).getIcon(side, world.getBlockMetadata(x, y, z))];
 	}
@@ -218,14 +230,16 @@ public class BlockAlveary extends BlockStructure {
 	private IIcon switchForSide(int textureId, int side) {
 
 		if (side == 4 || side == 5) {
-			if (textureId == 41)
+			if (textureId == 41) {
 				return icons[LEFT];
-			else
+			} else {
 				return icons[RIGHT];
-		} else if (textureId == 41)
+			}
+		} else if (textureId == 41) {
 			return icons[RIGHT];
-		else
+		} else {
 			return icons[LEFT];
+		}
 
 	}
 }

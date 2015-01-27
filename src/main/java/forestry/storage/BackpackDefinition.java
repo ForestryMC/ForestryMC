@@ -4,21 +4,23 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.storage;
 
-import forestry.api.storage.IBackpackDefinition;
-import forestry.core.utils.StackUtils;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
+
+import forestry.api.storage.IBackpackDefinition;
+import forestry.core.utils.StackUtils;
 
 public class BackpackDefinition implements IBackpackDefinition {
 
@@ -57,8 +59,9 @@ public class BackpackDefinition implements IBackpackDefinition {
 		if (backpack.stackTagCompound != null && backpack.stackTagCompound.hasKey("display", 10)) {
 			NBTTagCompound nbt = backpack.stackTagCompound.getCompoundTag("display");
 
-			if (nbt.hasKey("Name", 8))
+			if (nbt.hasKey("Name", 8)) {
 				display = nbt.getString("Name");
+			}
 		}
 
 		return display;
@@ -76,13 +79,15 @@ public class BackpackDefinition implements IBackpackDefinition {
 
 	@Override
 	public void addValidItem(ItemStack validItem) {
-		if (validItem.getItem() != null)
+		if (validItem.getItem() != null) {
 			this.validItems.add(validItem);
+		}
 	}
 
 	public void addValidItems(List<ItemStack> validItems) {
-		for (ItemStack validItem : validItems)
+		for (ItemStack validItem : validItems) {
 			addValidItem(validItem);
+		}
 	}
 
 	public ArrayList<ItemStack> getValidItems() {
@@ -96,9 +101,11 @@ public class BackpackDefinition implements IBackpackDefinition {
 
 	@Override
 	public boolean isValidItem(ItemStack itemstack) {
-		for (ItemStack stack : getValidItems())
-			if (StackUtils.isCraftingEquivalent(stack, itemstack, true, false))
+		for (ItemStack stack : getValidItems()) {
+			if (StackUtils.isCraftingEquivalent(stack, itemstack, true, false)) {
 				return true;
+			}
+		}
 
 		return false;
 	}

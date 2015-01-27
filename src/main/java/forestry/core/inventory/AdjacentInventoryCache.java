@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -25,7 +25,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import forestry.core.utils.AdjacentTileCache;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheListener {
@@ -84,8 +83,9 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
 					}
 				}
 			}
-			if (sorter != null)
+			if (sorter != null) {
 				Collections.sort(invs, sorter);
+			}
 		}
 	}
 

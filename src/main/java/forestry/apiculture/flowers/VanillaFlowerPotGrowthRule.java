@@ -13,6 +13,7 @@ package forestry.apiculture.flowers;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
@@ -25,8 +26,9 @@ public class VanillaFlowerPotGrowthRule implements IFlowerGrowthRule {
 	public boolean growFlower(IFlowerRegistry fr, String flowerType, World world, IIndividual individual, int x, int y, int z) {
 		Block ground = world.getBlock(x, y, z);
 		int groundMeta = world.getBlockMetadata(x, y, z);
-		if (ground != Blocks.flower_pot && groundMeta != 0)
+		if (ground != Blocks.flower_pot && groundMeta != 0) {
 			return false;
+		}
 
 		if (flowerType.equals(FlowerManager.FlowerTypeVanilla) || flowerType.equals(FlowerManager.FlowerTypeSnow)) {
 			groundMeta = world.rand.nextInt(1) + 1;

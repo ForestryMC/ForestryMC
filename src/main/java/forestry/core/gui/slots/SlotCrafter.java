@@ -10,12 +10,14 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import forestry.core.interfaces.ICrafter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+
+import forestry.core.interfaces.ICrafter;
 
 public class SlotCrafter extends SlotCrafting {
 
@@ -35,8 +37,9 @@ public class SlotCrafter extends SlotCrafting {
 
 	@Override
 	public ItemStack decrStackSize(int amount) {
-		if (!this.getHasStack())
+		if (!this.getHasStack()) {
 			return null;
+		}
 
 		return this.getStack();
 	}

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -48,8 +48,9 @@ public abstract class BlockStructure extends BlockForestry {
 			ITileStructure structure = (ITileStructure) tile;
 			if (structure.isIntegratedIntoStructure() && !structure.isMaster()) {
 				ITileStructure central = structure.getCentralTE();
-				if (central != null)
+				if (central != null) {
 					central.validateStructure();
+				}
 			}
 		}
 	}
@@ -57,17 +58,21 @@ public abstract class BlockStructure extends BlockForestry {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
 
-		if (player.isSneaking())
+		if (player.isSneaking()) {
 			return false;
+		}
 
 		TileForestry tile = (TileForestry) world.getTileEntity(x, y, z);
-		if (!Utils.isUseableByPlayer(player, tile))
+		if (!Utils.isUseableByPlayer(player, tile)) {
 			return false;
+		}
 
 		// GUIs can only be opened on integrated structure blocks.
-		if (tile instanceof ITileStructure)
-			if (!((ITileStructure) tile).isIntegratedIntoStructure())
+		if (tile instanceof ITileStructure) {
+			if (!((ITileStructure) tile).isIntegratedIntoStructure()) {
 				return false;
+			}
+		}
 
 		if (Proxies.common.isSimulating(world)) {
 			if (tile.allowsViewing(player)) {
@@ -82,12 +87,14 @@ public abstract class BlockStructure extends BlockForestry {
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbor) {
 		super.onNeighborBlockChange(world, x, y, z, neighbor);
-		if (!Proxies.common.isSimulating(world))
+		if (!Proxies.common.isSimulating(world)) {
 			return;
+		}
 
 		TileEntity tile = world.getTileEntity(x, y, z);
-		if (!(tile instanceof ITileStructure))
+		if (!(tile instanceof ITileStructure)) {
 			return;
+		}
 
 		((ITileStructure) tile).validateStructure();
 	}

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -44,23 +44,26 @@ public class ItemBeealyzer extends ItemInventoried {
 
 		private void tryAnalyze() {
 			// Source slot to analyze empty
-			if (getStackInSlot(SLOT_SPECIMEN) == null)
+			if (getStackInSlot(SLOT_SPECIMEN) == null) {
 				return;
+			}
 
 			IBee bee = PluginApiculture.beeInterface.getMember(getStackInSlot(SLOT_SPECIMEN));
 			// No bee, abort
-			if (bee == null)
+			if (bee == null) {
 				return;
+			}
 
 			// Analyze if necessary
 			if (!bee.isAnalyzed()) {
 
 				// Requires energy
-				if (!isEnergy(getStackInSlot(SLOT_ENERGY)))
+				if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
 					return;
+				}
 
 				bee.analyze();
-				if(player != null) {
+				if (player != null) {
 					PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(bee.getGenome().getPrimary());
 					PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(bee.getGenome().getSecondary());
 				}
@@ -103,8 +106,9 @@ public class ItemBeealyzer extends ItemInventoried {
 
 		@Override
 		public EnumErrorCode getErrorState() {
-			if (PluginApiculture.beeInterface.isMember(inventoryStacks[SLOT_SPECIMEN]) && !isEnergy(getStackInSlot(SLOT_ENERGY)))
+			if (PluginApiculture.beeInterface.isMember(inventoryStacks[SLOT_SPECIMEN]) && !isEnergy(getStackInSlot(SLOT_ENERGY))) {
 				return EnumErrorCode.NOHONEY;
+			}
 
 			return EnumErrorCode.OK;
 		}
@@ -118,8 +122,9 @@ public class ItemBeealyzer extends ItemInventoried {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (Proxies.common.isSimulating(world))
+		if (Proxies.common.isSimulating(world)) {
 			entityplayer.openGui(ForestryAPI.instance, GuiId.BeealyzerGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY, (int) entityplayer.posZ);
+		}
 
 		return itemstack;
 	}

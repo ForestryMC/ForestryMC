@@ -4,19 +4,20 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.factory.gadgets;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.RainSubstrate;
 import forestry.core.gadgets.Mill;
 import forestry.core.gadgets.TileBase;
 import forestry.core.proxy.Proxies;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class MillRainmaker extends Mill {
 
@@ -29,11 +30,13 @@ public class MillRainmaker extends Mill {
 
 	@Override
 	public void openGui(EntityPlayer player, TileBase tile) {
-		if (!Proxies.common.isSimulating(player.worldObj))
+		if (!Proxies.common.isSimulating(player.worldObj)) {
 			return;
+		}
 
-		if (player.inventory.getCurrentItem() == null)
+		if (player.inventory.getCurrentItem() == null) {
 			return;
+		}
 
 		// We don't have a gui, but we can be activated
 		if (FuelManager.rainSubstrate.containsKey(player.inventory.getCurrentItem()) && charge == 0) {
@@ -94,9 +97,9 @@ public class MillRainmaker extends Mill {
 		}
 
 		if (Proxies.common.isSimulating(worldObj)) {
-			if (reverse)
+			if (reverse) {
 				worldObj.getWorldInfo().setRaining(false);
-			else {
+			} else {
 				worldObj.getWorldInfo().setRaining(true);
 				worldObj.getWorldInfo().setRainTime(duration);
 			}
@@ -108,77 +111,77 @@ public class MillRainmaker extends Mill {
 	}
 
 	// TODO: Give Rainmaker a real inventory and a GUI with slots
-//	@Override
-//	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
-//		if (charge != 0)
-//			return 0;
-//
-//		if (!FuelManager.rainSubstrate.containsKey(stack))
-//			return 0;
-//
-//		RainSubstrate substrate = FuelManager.rainSubstrate.get(stack);
-//		if (!substrate.item.isItemEqual(stack))
-//			return 0;
-//
-//		if (doAdd)
-//			addCharge(substrate);
-//		return 1;
-//	}
-//
-//	@Override
-//	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
-//		return null;
-//	}
-//
-//	@Override
-//	public int getSizeInventory() {
-//		return 0;
-//	}
-//
-//	@Override
-//	public ItemStack getStackInSlot(int var1) {
-//		return null;
-//	}
-//
-//	@Override
-//	public ItemStack decrStackSize(int var1, int var2) {
-//		return null;
-//	}
-//
-//	@Override
-//	public ItemStack getStackInSlotOnClosing(int var1) {
-//		return null;
-//	}
-//
-//	@Override
-//	public void setInventorySlotContents(int var1, ItemStack var2) {
-//	}
-//
-//	@Override
-//	public int getInventoryStackLimit() {
-//		return 0;
-//	}
-//
-//	@Override
-//	public void openInventory() {
-//	}
-//
-//	@Override
-//	public void closeInventory() {
-//	}
-//
-//	@Override
-//	public boolean isUseableByPlayer(EntityPlayer player) {
-//		return Utils.isUseableByPlayer(player, this);
-//	}
-//
-//	@Override
-//	public boolean hasCustomInventoryName() {
-//		return false;
-//	}
-//
-//	@Override
-//	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
-//		return false;
-//	}
+	//	@Override
+	//	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
+	//		if (charge != 0)
+	//			return 0;
+	//
+	//		if (!FuelManager.rainSubstrate.containsKey(stack))
+	//			return 0;
+	//
+	//		RainSubstrate substrate = FuelManager.rainSubstrate.get(stack);
+	//		if (!substrate.item.isItemEqual(stack))
+	//			return 0;
+	//
+	//		if (doAdd)
+	//			addCharge(substrate);
+	//		return 1;
+	//	}
+	//
+	//	@Override
+	//	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
+	//		return null;
+	//	}
+	//
+	//	@Override
+	//	public int getSizeInventory() {
+	//		return 0;
+	//	}
+	//
+	//	@Override
+	//	public ItemStack getStackInSlot(int var1) {
+	//		return null;
+	//	}
+	//
+	//	@Override
+	//	public ItemStack decrStackSize(int var1, int var2) {
+	//		return null;
+	//	}
+	//
+	//	@Override
+	//	public ItemStack getStackInSlotOnClosing(int var1) {
+	//		return null;
+	//	}
+	//
+	//	@Override
+	//	public void setInventorySlotContents(int var1, ItemStack var2) {
+	//	}
+	//
+	//	@Override
+	//	public int getInventoryStackLimit() {
+	//		return 0;
+	//	}
+	//
+	//	@Override
+	//	public void openInventory() {
+	//	}
+	//
+	//	@Override
+	//	public void closeInventory() {
+	//	}
+	//
+	//	@Override
+	//	public boolean isUseableByPlayer(EntityPlayer player) {
+	//		return Utils.isUseableByPlayer(player, this);
+	//	}
+	//
+	//	@Override
+	//	public boolean hasCustomInventoryName() {
+	//		return false;
+	//	}
+	//
+	//	@Override
+	//	public boolean isItemValidForSlot(int slotIndex, ItemStack itemstack) {
+	//		return false;
+	//	}
 }

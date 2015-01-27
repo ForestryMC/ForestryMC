@@ -4,11 +4,18 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -22,6 +29,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.GameRegistry.Type;
+
 import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.EngineCopperFuel;
 import forestry.api.fuels.FermenterFuel;
@@ -38,12 +46,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.FluidMap;
 import forestry.core.utils.ItemStackMap;
 import forestry.core.utils.StringUtil;
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 
 /**
  * Forestry Minecraft Mod
@@ -55,11 +57,11 @@ import net.minecraft.item.Item;
 		name = "Forestry",
 		version = Version.VERSION,
 		dependencies = "required-after:Forge@[10.13.0.1207,);"
-		+ "after:Buildcraft|Core@[6.1.7,);"
-		+ "after:ExtrabiomesXL;"
-		+ "after:BiomesOPlenty;"
-		+ "after:IC2@[2.0.140,);"
-		+ "before:UndergroundBiomes")
+				+ "after:Buildcraft|Core@[6.1.7,);"
+				+ "after:ExtrabiomesXL;"
+				+ "after:BiomesOPlenty;"
+				+ "after:IC2@[2.0.140,);"
+				+ "before:UndergroundBiomes")
 //, certificateFingerprint = Version.FINGERPRINT)
 public class Forestry {
 
@@ -91,6 +93,7 @@ public class Forestry {
 		FuelManager.copperEngineFuel = new ItemStackMap<EngineCopperFuel>();
 		FuelManager.generatorFuel = new FluidMap<GeneratorFuel>();
 	}
+
 	@SidedProxy(clientSide = "forestry.core.ForestryClient", serverSide = "forestry.core.ForestryCore")
 	public static ForestryCore core = new ForestryCore();
 	public static PacketHandler packetHandler;
@@ -137,7 +140,7 @@ public class Forestry {
 
 	@EventHandler
 	public void missingMapping(FMLMissingMappingsEvent event) {
-		for (MissingMapping mapping : event.get())
+		for (MissingMapping mapping : event.get()) {
 			if (mapping.type == Type.BLOCK) {
 				Block block = GameRegistry.findBlock(Defaults.MOD, StringUtil.cleanTags(mapping.name));
 				if (block != null) {
@@ -157,5 +160,6 @@ public class Forestry {
 					}
 				}
 			}
+		}
 	}
 }

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -93,8 +93,9 @@ public class PluginIC2 extends ForestryPlugin {
 	public static ItemStack uuMatter;
 
 	public PluginIC2() {
-		if (PluginIC2.instance == null)
+		if (PluginIC2.instance == null) {
 			PluginIC2.instance = this;
+		}
 	}
 
 	@Override
@@ -219,17 +220,22 @@ public class PluginIC2 extends ForestryPlugin {
 	@Override
 	@Optional.Method(modid = "IC2")
 	protected void registerBackpackItems() {
-		if (BackpackManager.backpackItems == null)
+		if (BackpackManager.backpackItems == null) {
 			return;
+		}
 
-		if (resin != null)
+		if (resin != null) {
 			BackpackManager.definitions.get("forester").addValidItem(resin);
-		if (rubber != null)
+		}
+		if (rubber != null) {
 			BackpackManager.definitions.get("forester").addValidItem(rubber);
-		if (rubbersapling != null)
+		}
+		if (rubbersapling != null) {
 			BackpackManager.definitions.get("forester").addValidItem(rubbersapling);
-		if (rubberleaves != null)
+		}
+		if (rubberleaves != null) {
 			BackpackManager.definitions.get("forester").addValidItem(rubberleaves);
+		}
 	}
 
 	@Override
@@ -278,15 +284,17 @@ public class PluginIC2 extends ForestryPlugin {
 			Proxies.log.fine("No IC2 plantballs found.");
 		}
 
-		if (resin != null)
+		if (resin != null) {
 			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.propolis.getItemStack(), resin);
-		else
+		} else {
 			Proxies.log.fine("Missing IC2 resin, skipping centrifuge recipe for propolis to resin.");
+		}
 
 		if (rubbersapling != null) {
 			RecipeUtil.injectLeveledRecipe(rubbersapling, GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
-		} else
+		} else {
 			Proxies.log.fine("Missing IC2 rubber sapling, skipping fermenter recipe for converting rubber sapling to biomass.");
+		}
 
 		if (rubbersapling != null && resin != null) {
 			String saplingName = GameData.getBlockRegistry().getNameForObject(StackUtils.getBlock(rubbersapling));
@@ -298,15 +306,17 @@ public class PluginIC2 extends ForestryPlugin {
 			FMLInterModComms.sendMessage(Defaults.MOD, "add-farmable-sapling", imc);
 		}
 
-		if (lavaCell != null)
+		if (lavaCell != null) {
 			LiquidHelper.injectTinContainer(Fluids.LAVA, Defaults.BUCKET_VOLUME, lavaCell, emptyCell);
+		}
 
 		if (waterCell != null) {
 			LiquidHelper.injectTinContainer(Fluids.WATER, Defaults.BUCKET_VOLUME, waterCell, emptyCell);
 
 			ItemStack bogEarthCan = GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can");
-			if (bogEarthCan.stackSize > 0)
+			if (bogEarthCan.stackSize > 0) {
 				Proxies.common.addRecipe(bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', waterCell, 'Y', Blocks.sand);
+			}
 		}
 
 		ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.engine.tin");

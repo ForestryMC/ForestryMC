@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -51,8 +51,9 @@ public class GuiImprinter extends GuiForestry<TileForestry> {
 
 		List<ItemStack> beeList = new ArrayList<ItemStack>();
 		((ItemBeeGE) ForestryItem.beeDroneGE.item()).addCreativeItems(beeList, false);
-		for (ItemStack beeStack : beeList)
+		for (ItemStack beeStack : beeList) {
 			iconStacks.put(BeeGenome.getSpecies(beeStack).getUID(), beeStack);
+		}
 
 	}
 
@@ -85,12 +86,14 @@ public class GuiImprinter extends GuiForestry<TileForestry> {
 	}
 
 	private int getHabitatSlotAtPosition(int i, int j) {
-		int[] xPos = new int[] { 12, 12 };
-		int[] yPos = new int[] { 32, 52 };
+		int[] xPos = new int[]{12, 12};
+		int[] yPos = new int[]{32, 52};
 
-		for (int l = 0; l < xPos.length; l++)
-			if (i >= xPos[l] && i <= xPos[l] + 16 && j >= yPos[l] && j <= yPos[l] + 16)
+		for (int l = 0; l < xPos.length; l++) {
+			if (i >= xPos[l] && i <= xPos[l] + 16 && j >= yPos[l] && j <= yPos[l] + 16) {
 				return l;
+			}
+		}
 
 		return -1;
 	}
@@ -103,13 +106,15 @@ public class GuiImprinter extends GuiForestry<TileForestry> {
 		int cornerY = (height - ySize) / 2;
 
 		int slot = getHabitatSlotAtPosition(i - cornerX, j - cornerY);
-		if (slot < 0)
+		if (slot < 0) {
 			return;
+		}
 
-		if (k == 0)
+		if (k == 0) {
 			container.advanceSelection(slot, Proxies.common.getRenderWorld());
-		else
+		} else {
 			container.regressSelection(slot, Proxies.common.getRenderWorld());
+		}
 	}
 
 	@Override

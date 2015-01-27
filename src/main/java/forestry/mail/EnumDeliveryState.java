@@ -4,14 +4,15 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.mail;
 
-import forestry.api.mail.IPostalState;
 import java.util.Locale;
+
+import forestry.api.mail.IPostalState;
 
 public enum EnumDeliveryState implements IPostalState {
 	OK, NO_MAILBOX, NOT_MAILABLE, ALREADY_MAILED, NOT_POSTPAID, MAILBOX_FULL, RESPONSE_NOT_MAILABLE;

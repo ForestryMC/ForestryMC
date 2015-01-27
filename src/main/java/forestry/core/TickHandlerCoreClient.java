@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -21,10 +21,10 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
-import forestry.core.utils.GeneticsUtil;
 import forestry.core.config.Config;
 import forestry.core.config.Version;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.GeneticsUtil;
 
 public class TickHandlerCoreClient {
 
@@ -42,7 +42,9 @@ public class TickHandlerCoreClient {
 
 	@SubscribeEvent
 	public void onPlayerTick(PlayerTickEvent event) {
-		if (event.phase != Phase.END) return;
+		if (event.phase != Phase.END) {
+			return;
+		}
 
 		EntityPlayer player = Proxies.common.getClientInstance().thePlayer;
 		boolean hasNaturalistEye = GeneticsUtil.hasNaturalistEye(player);

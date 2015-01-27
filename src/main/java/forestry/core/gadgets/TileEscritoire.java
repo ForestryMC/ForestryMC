@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -51,8 +51,9 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 				if (slotIndex >= SLOT_INPUT_1 && slotIndex < SLOT_INPUT_1 + Math.min(game.getSampleSize(), SLOTS_INPUT_COUNT)) {
 					ItemStack specimen = getStackInSlot(SLOT_ANALYZE);
-					if (specimen == null)
+					if (specimen == null) {
 						return false;
+					}
 					IIndividual individual = AlleleManager.alleleRegistry.getIndividual(specimen);
 					return individual != null && individual.getGenome().getPrimary().getResearchSuitability(itemStack) > 0;
 				}
@@ -66,15 +67,18 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 
 			@Override
 			public boolean isLocked(int slotIndex) {
-				if (slotIndex == SLOT_ANALYZE)
+				if (slotIndex == SLOT_ANALYZE) {
 					return false;
+				}
 
-				if (getStackInSlot(SLOT_ANALYZE) == null)
+				if (getStackInSlot(SLOT_ANALYZE) == null) {
 					return true;
+				}
 
 				if (GuiUtil.isIndexInRange(slotIndex, SLOT_INPUT_1, SLOTS_INPUT_COUNT)) {
-					if (slotIndex >= SLOT_INPUT_1 + game.getSampleSize())
+					if (slotIndex >= SLOT_INPUT_1 + game.getSampleSize()) {
 						return true;
+					}
 				}
 
 				return false;
@@ -91,8 +95,9 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 				if (slotIndex == SLOT_ANALYZE && Proxies.common.isSimulating(worldObj)) {
 					if (!AlleleManager.alleleRegistry.isIndividual(getStackInSlot(SLOT_ANALYZE)) && getStackInSlot(SLOT_ANALYZE) != null) {
 						ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(getStackInSlot(SLOT_ANALYZE));
-						if (ersatz != null)
+						if (ersatz != null) {
 							setInventorySlotContents(SLOT_ANALYZE, ersatz);
+						}
 					}
 					game.initialize(getStackInSlot(SLOT_ANALYZE));
 				}
@@ -127,12 +132,14 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 	}
 
 	public void processTurnResult(GameProfile gameProfile) {
-		if (!game.isWon())
+		if (!game.isWon()) {
 			return;
+		}
 
 		IIndividual individual = AlleleManager.alleleRegistry.getIndividual(getInternalInventory().getStackInSlot(SLOT_ANALYZE));
-		if (individual == null)
+		if (individual == null) {
 			return;
+		}
 
 		for (ItemStack itemstack : individual.getGenome().getPrimary().getResearchBounty(worldObj, gameProfile, individual, game.getBountyLevel())) {
 			InvTools.addStack(getInternalInventory(), itemstack, SLOT_RESULTS_1, SLOTS_RESULTS_COUNT, false, true);
@@ -143,16 +150,18 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 		int filledSlots = 0;
 		int required = game.getSampleSize() < SLOTS_INPUT_COUNT ? game.getSampleSize() : SLOTS_INPUT_COUNT;
 		for (int i = SLOT_INPUT_1; i < SLOT_INPUT_1 + required; i++) {
-			if (getInternalInventory().getStackInSlot(i) != null)
+			if (getInternalInventory().getStackInSlot(i) != null) {
 				filledSlots++;
+			}
 		}
 
 		return filledSlots >= required;
 	}
 
 	public void probe() {
-		if (!worldObj.isRemote && getInternalInventory().getStackInSlot(SLOT_ANALYZE) != null && areProbeSlotsFilled())
+		if (!worldObj.isRemote && getInternalInventory().getStackInSlot(SLOT_ANALYZE) != null && areProbeSlotsFilled()) {
 			game.probe(getInternalInventory().getStackInSlot(SLOT_ANALYZE), this, SLOT_INPUT_1, SLOTS_INPUT_COUNT);
+		}
 	}
 
 	/* NETWORK */
@@ -183,8 +192,9 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 
 	@Override
 	public ItemStack takenFromSlot(int slotIndex, boolean consumeRecipe, EntityPlayer player) {
-		if (slotIndex == SLOT_ANALYZE)
+		if (slotIndex == SLOT_ANALYZE) {
 			game.reset();
+		}
 		return null;
 	}
 

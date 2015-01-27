@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -40,16 +40,20 @@ public class ContainerForestry extends Container {
 
 	@Override
 	public ItemStack slotClick(int slotIndex, int button, int modifier, EntityPlayer player) {
-		if (player == null)
+		if (player == null) {
 			return null;
+		}
 
-		if (restrictedAccess != null && !restrictedAccess.allowsAlteration(player))
+		if (restrictedAccess != null && !restrictedAccess.allowsAlteration(player)) {
 			return null;
+		}
 
 		Slot slot = slotIndex < 0 ? null : (Slot) this.inventorySlots.get(slotIndex);
-		if (slot instanceof SlotForestry)
-			if (((SlotForestry) slot).isPhantom())
+		if (slot instanceof SlotForestry) {
+			if (((SlotForestry) slot).isPhantom()) {
 				return slotClickPhantom(slot, button, modifier, player);
+			}
+		}
 		return super.slotClick(slotIndex, button, modifier, player);
 	}
 
@@ -57,59 +61,69 @@ public class ContainerForestry extends Container {
 		ItemStack stack = null;
 
 		ItemStack stackSlot = slot.getStack();
-		if (stackSlot != null)
+		if (stackSlot != null) {
 			stack = stackSlot.copy();
+		}
 
-		if (mouseButton == 2)
+		if (mouseButton == 2) {
 			fillPhantomSlot(slot, null, mouseButton, modifier);
-		else if (mouseButton == 0 || mouseButton == 1) {
+		} else if (mouseButton == 0 || mouseButton == 1) {
 			InventoryPlayer playerInv = player.inventory;
 
 			ItemStack stackHeld = playerInv.getItemStack();
 
 			if (stackSlot == null) {
-				if (stackHeld != null && slot.isItemValid(stackHeld))
+				if (stackHeld != null && slot.isItemValid(stackHeld)) {
 					fillPhantomSlot(slot, stackHeld, mouseButton, modifier);
-			} else if (stackHeld == null)
+				}
+			} else if (stackHeld == null) {
 				adjustPhantomSlot(slot, mouseButton, modifier);
-			else if (slot.isItemValid(stackHeld))
-				if (StackUtils.isIdenticalItem(stackSlot, stackHeld))
+			} else if (slot.isItemValid(stackHeld)) {
+				if (StackUtils.isIdenticalItem(stackSlot, stackHeld)) {
 					adjustPhantomSlot(slot, mouseButton, modifier);
-				else
+				} else {
 					fillPhantomSlot(slot, stackHeld, mouseButton, modifier);
+				}
+			}
 		} else if (mouseButton == 5) {
 			InventoryPlayer playerInv = player.inventory;
 			ItemStack stackHeld = playerInv.getItemStack();
-			if (!slot.getHasStack())
+			if (!slot.getHasStack()) {
 				fillPhantomSlot(slot, stackHeld, mouseButton, modifier);
+			}
 		}
 		return stack;
 	}
 
 	protected void adjustPhantomSlot(Slot slot, int mouseButton, int modifier) {
-		if (!((SlotForestry) slot).canAdjustPhantom())
+		if (!((SlotForestry) slot).canAdjustPhantom()) {
 			return;
+		}
 		ItemStack stackSlot = slot.getStack();
 		int stackSize;
-		if (modifier == 1)
+		if (modifier == 1) {
 			stackSize = mouseButton == 0 ? (stackSlot.stackSize + 1) / 2 : stackSlot.stackSize * 2;
-		else
+		} else {
 			stackSize = mouseButton == 0 ? stackSlot.stackSize - 1 : stackSlot.stackSize + 1;
+		}
 
-		if (stackSize > slot.getSlotStackLimit())
+		if (stackSize > slot.getSlotStackLimit()) {
 			stackSize = slot.getSlotStackLimit();
+		}
 
 		stackSlot.stackSize = stackSize;
 
-		if (stackSlot.stackSize <= 0)
+		if (stackSlot.stackSize <= 0) {
 			stackSlot = null;
+		}
 
 		slot.putStack(stackSlot);
 	}
 
 	protected void fillPhantomSlot(Slot slot, ItemStack stackHeld, int mouseButton, int modifier) {
-		if (!((SlotForestry) slot).canAdjustPhantom())
+		if (!((SlotForestry) slot).canAdjustPhantom()) {
 			return;
+		}
 
 		if (stackHeld == null) {
 			slot.putStack(null);
@@ -117,8 +131,9 @@ public class ContainerForestry extends Container {
 		}
 
 		int stackSize = mouseButton == 0 ? stackHeld.stackSize : 1;
-		if (stackSize > slot.getSlotStackLimit())
+		if (stackSize > slot.getSlotStackLimit()) {
 			stackSize = slot.getSlotStackLimit();
+		}
 		ItemStack phantomStack = stackHeld.copy();
 		phantomStack.stackSize = stackSize;
 
@@ -127,7 +142,7 @@ public class ContainerForestry extends Container {
 
 	protected boolean shiftItemStack(ItemStack stackToShift, int start, int end) {
 		boolean changed = false;
-		if (stackToShift.isStackable())
+		if (stackToShift.isStackable()) {
 			for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < end; slotIndex++) {
 				Slot slot = (Slot) inventorySlots.get(slotIndex);
 				ItemStack stackInSlot = slot.getStack();
@@ -147,7 +162,8 @@ public class ContainerForestry extends Container {
 					}
 				}
 			}
-		if (stackToShift.stackSize > 0)
+		}
+		if (stackToShift.stackSize > 0) {
 			for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < end; slotIndex++) {
 				Slot slot = (Slot) inventorySlots.get(slotIndex);
 				ItemStack stackInSlot = slot.getStack();
@@ -161,6 +177,7 @@ public class ContainerForestry extends Container {
 					changed = true;
 				}
 			}
+		}
 		return changed;
 	}
 
@@ -169,26 +186,32 @@ public class ContainerForestry extends Container {
 			Slot slot = (Slot) inventorySlots.get(machineIndex);
 			if (slot instanceof SlotForestry) {
 				SlotForestry slotForestry = (SlotForestry) slot;
-				if (!slotForestry.canShift())
+				if (!slotForestry.canShift()) {
 					continue;
-				if (slotForestry.isPhantom())
+				}
+				if (slotForestry.isPhantom()) {
 					continue;
+				}
 			}
-			if (!slot.isItemValid(stackToShift))
+			if (!slot.isItemValid(stackToShift)) {
 				continue;
-			if (shiftItemStack(stackToShift, machineIndex, machineIndex + 1))
+			}
+			if (shiftItemStack(stackToShift, machineIndex, machineIndex + 1)) {
 				return true;
+			}
 		}
 		return false;
 	}
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
-		if (player == null)
+		if (player == null) {
 			return null;
+		}
 
-		if (restrictedAccess != null && !restrictedAccess.allowsAlteration(player))
+		if (restrictedAccess != null && !restrictedAccess.allowsAlteration(player)) {
 			return null;
+		}
 
 		ItemStack originalStack = null;
 		Slot slot = (Slot) inventorySlots.get(slotIndex);
@@ -199,20 +222,25 @@ public class ContainerForestry extends Container {
 			if (slotIndex >= numSlots - 9 * 4 && tryShiftItem(stackInSlot, numSlots)) {
 				// NOOP
 			} else if (slotIndex >= numSlots - 9 * 4 && slotIndex < numSlots - 9) {
-				if (!shiftItemStack(stackInSlot, numSlots - 9, numSlots))
+				if (!shiftItemStack(stackInSlot, numSlots - 9, numSlots)) {
 					return null;
+				}
 			} else if (slotIndex >= numSlots - 9 && slotIndex < numSlots) {
-				if (!shiftItemStack(stackInSlot, numSlots - 9 * 4, numSlots - 9))
+				if (!shiftItemStack(stackInSlot, numSlots - 9 * 4, numSlots - 9)) {
 					return null;
-			} else if (!shiftItemStack(stackInSlot, numSlots - 9 * 4, numSlots))
+				}
+			} else if (!shiftItemStack(stackInSlot, numSlots - 9 * 4, numSlots)) {
 				return null;
+			}
 			slot.onSlotChange(stackInSlot, originalStack);
-			if (stackInSlot.stackSize <= 0)
+			if (stackInSlot.stackSize <= 0) {
 				slot.putStack(null);
-			else
+			} else {
 				slot.onSlotChanged();
-			if (stackInSlot.stackSize == originalStack.stackSize)
+			}
+			if (stackInSlot.stackSize == originalStack.stackSize) {
 				return null;
+			}
 			slot.onPickupFromSlot(player, stackInSlot);
 		}
 		return originalStack;
@@ -220,8 +248,9 @@ public class ContainerForestry extends Container {
 
 	@Override
 	public final boolean canInteractWith(EntityPlayer entityplayer) {
-		if (inventoryAccess == null)
+		if (inventoryAccess == null) {
 			return true;
+		}
 		return inventoryAccess.isUseableByPlayer(entityplayer);
 	}
 }

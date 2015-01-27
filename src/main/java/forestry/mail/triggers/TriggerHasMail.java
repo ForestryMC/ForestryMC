@@ -4,18 +4,21 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.mail.triggers;
 
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.IStatementParameter;
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
 import forestry.core.triggers.Trigger;
 import forestry.mail.IMailContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
 
 public class TriggerHasMail extends Trigger {
 
@@ -26,8 +29,9 @@ public class TriggerHasMail extends Trigger {
 	@Override
 	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
 
-		if (!(tile instanceof IMailContainer))
+		if (!(tile instanceof IMailContainer)) {
 			return false;
+		}
 
 		return ((IMailContainer) tile).hasMail();
 	}

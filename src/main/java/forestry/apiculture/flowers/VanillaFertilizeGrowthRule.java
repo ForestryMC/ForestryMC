@@ -15,6 +15,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
+
 import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
@@ -34,12 +35,14 @@ public class VanillaFertilizeGrowthRule implements IFlowerGrowthRule {
 		for (Block b : this.allowedItems) {
 			if (b == ground) {
 				groundMeta = world.getBlockMetadata(x, y, z);
-				if (groundMeta > 6)
+				if (groundMeta > 6) {
 					return false;
-				if (groundMeta < 6)
+				}
+				if (groundMeta < 6) {
 					groundMeta += world.rand.nextInt(1) + 1;
-				else
+				} else {
 					groundMeta = 7;
+				}
 
 				return world.setBlockMetadataWithNotify(x, y, z, groundMeta, 2);
 			}

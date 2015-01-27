@@ -4,13 +4,14 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.gui;
 
 import java.util.List;
+
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
 
@@ -38,13 +39,15 @@ public class GuiTextBox extends GuiTextField {
 	}
 
 	public void advanceLine() {
-		if(lineScroll < maxLines - 1)
+		if (lineScroll < maxLines - 1) {
 			lineScroll++;
+		}
 	}
 
 	public void regressLine() {
-		if(lineScroll > 0)
+		if (lineScroll > 0) {
 			lineScroll--;
+		}
 	}
 
 	public boolean moreLinesAllowed() {
@@ -52,15 +55,18 @@ public class GuiTextBox extends GuiTextField {
 	}
 
 	private String getCursoredText() {
-		if(!isFocused())
+		if (!isFocused()) {
 			return getText();
+		}
 
 		int cursorPos = getCursorPosition() - getLineScrollOffset();
 		String text = getText();
-		if(cursorPos < 0)
+		if (cursorPos < 0) {
 			return text;
-		if(cursorPos >= text.length())
+		}
+		if (cursorPos >= text.length()) {
 			return text + "_";
+		}
 		return text.substring(0, cursorPos) + "_" + text.substring(cursorPos);
 	}
 
@@ -76,8 +82,9 @@ public class GuiTextBox extends GuiTextField {
 			if (count < lineScroll) {
 				count++;
 				continue;
-			} else if (lineY + fontRendererObj.FONT_HEIGHT - startY > height)
+			} else if (lineY + fontRendererObj.FONT_HEIGHT - startY > height) {
 				break;
+			}
 
 			fontRendererObj.drawString(line, startX, lineY, textColour);
 			lineY += fontRendererObj.FONT_HEIGHT;
@@ -89,10 +96,11 @@ public class GuiTextBox extends GuiTextField {
 
 	@Override
 	public void drawTextBox() {
-		if(!getVisible())
+		if (!getVisible()) {
 			return;
+		}
 
-		if(getEnableBackgroundDrawing()) {
+		if (getEnableBackgroundDrawing()) {
 			drawRect(startX - 1, startY - 1, startX + this.width + 1, startY + this.height + 1, -6250336);
 			drawRect(startX, startY, startX + this.width, startY + this.height, -16777216);
 		}

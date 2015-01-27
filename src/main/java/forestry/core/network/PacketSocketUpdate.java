@@ -4,17 +4,19 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.network;
 
-import forestry.core.interfaces.ISocketable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
 import net.minecraft.item.ItemStack;
+
+import forestry.core.interfaces.ISocketable;
 
 public class PacketSocketUpdate extends PacketCoordinates {
 
@@ -27,8 +29,9 @@ public class PacketSocketUpdate extends PacketCoordinates {
 		super(id, posX, posY, posZ);
 
 		itemstacks = new ItemStack[tile.getSocketCount()];
-		for (int i = 0; i < tile.getSocketCount(); i++)
+		for (int i = 0; i < tile.getSocketCount(); i++) {
 			itemstacks[i] = tile.getSocket(i);
+		}
 	}
 
 	@Override
@@ -36,8 +39,9 @@ public class PacketSocketUpdate extends PacketCoordinates {
 		super.writeData(data);
 
 		data.writeShort(itemstacks.length);
-		for (ItemStack itemstack : itemstacks)
+		for (ItemStack itemstack : itemstacks) {
 			writeItemStack(itemstack, data);
+		}
 	}
 
 	@Override
@@ -46,7 +50,8 @@ public class PacketSocketUpdate extends PacketCoordinates {
 
 		int sockets = data.readShort();
 		itemstacks = new ItemStack[sockets];
-		for (int i = 0; i < sockets; i++)
+		for (int i = 0; i < sockets; i++) {
 			itemstacks[i] = readItemStack(data);
+		}
 	}
 }

@@ -4,11 +4,21 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.mail.gui;
+
+import java.util.ArrayList;
+
+import org.apache.commons.lang3.StringUtils;
+
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.entity.player.EntityPlayer;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
@@ -23,12 +33,6 @@ import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 import forestry.mail.items.ItemLetter.LetterInventory;
-import java.util.ArrayList;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.EntityPlayer;
-import org.apache.commons.lang3.StringUtils;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
 public class GuiLetter extends GuiForestry<TileForestry> {
 
@@ -46,8 +50,9 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
 			//mc.renderEngine.bindTexture(Defaults.TEXTURE_PATH_GUI + "/letter.png");
 			IPostalCarrier carrier = PostManager.postRegistry.getCarrier(container.getCarrierType());
-			if(carrier != null)
+			if (carrier != null) {
 				drawTexturedModelRectFromIcon(startX + xPos, startY + yPos - 5, carrier.getIcon(), 26, 26);
+			}
 
 		}
 
@@ -58,8 +63,9 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 
 		@Override
 		public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
-			if(!isProcessedLetter)
+			if (!isProcessedLetter) {
 				container.advanceCarrierType();
+			}
 		}
 
 	}
@@ -101,8 +107,9 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 
 		text = new GuiTextBox(this.fontRendererObj, guiLeft + 17, guiTop + 31, 122, 57);
 		text.setMaxStringLength(128);
-		if (!container.getText().isEmpty())
+		if (!container.getText().isEmpty()) {
 			text.setText(container.getText());
+		}
 	}
 
 	@Override
@@ -110,25 +117,28 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 
 		// Set focus or enter text into address
 		if (this.address.isFocused()) {
-			if (eventKey == Keyboard.KEY_RETURN)
+			if (eventKey == Keyboard.KEY_RETURN) {
 				this.address.setFocused(false);
-			else
+			} else {
 				this.address.textboxKeyTyped(eventCharacter, eventKey);
+			}
 			return;
 		}
 
 		if (this.text.isFocused()) {
 			if (eventKey == Keyboard.KEY_RETURN) {
-				if(Proxies.common.isShiftDown())
+				if (Proxies.common.isShiftDown()) {
 					text.setText(text.getText() + "\n");
-				else
+				} else {
 					this.text.setFocused(false);
-			} else if(eventKey == Keyboard.KEY_DOWN) {
+				}
+			} else if (eventKey == Keyboard.KEY_DOWN) {
 				text.advanceLine();
-			} else if(eventKey == Keyboard.KEY_UP) {
+			} else if (eventKey == Keyboard.KEY_UP) {
 				text.regressLine();
-			} else if(text.moreLinesAllowed() || eventKey == Keyboard.KEY_DELETE || eventKey == Keyboard.KEY_BACK)
+			} else if (text.moreLinesAllowed() || eventKey == Keyboard.KEY_DELETE || eventKey == Keyboard.KEY_BACK) {
 				this.text.textboxKeyTyped(eventCharacter, eventKey);
+			}
 			return;
 		}
 
@@ -147,7 +157,7 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 
-		if(!isProcessedLetter && !checkedSessionVars) {
+		if (!isProcessedLetter && !checkedSessionVars) {
 			checkedSessionVars = true;
 			setFromSessionVars();
 			String recipient = this.address.getText();
@@ -164,8 +174,9 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 			}
 		}
 		addressFocus = address.isFocused();
-		if (textFocus != text.isFocused())
+		if (textFocus != text.isFocused()) {
 			setText();
+		}
 		textFocus = text.isFocused();
 
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
@@ -176,22 +187,24 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 		} else {
 			clearTradeInfoWidgets();
 			address.drawTextBox();
-			if (container.getCarrierType() == EnumAddressee.TRADER)
+			if (container.getCarrierType() == EnumAddressee.TRADER) {
 				drawTradePreview(18, 32);
-			else
+			} else {
 				text.drawTextBox();
+			}
 		}
 	}
 
 	private void drawTradePreview(int x, int y) {
 
 		String infoString = null;
-		if (container.getTradeInfo() == null)
+		if (container.getTradeInfo() == null) {
 			infoString = "gui.mail.notrader";
-		else if (container.getTradeInfo().tradegood == null)
+		} else if (container.getTradeInfo().tradegood == null) {
 			infoString = "gui.mail.nothingtotrade";
-		else if (!container.getTradeInfo().state.isOk())
+		} else if (!container.getTradeInfo().state.isOk()) {
 			infoString = "chat.mail." + container.getTradeInfo().state.getIdentifier();
+		}
 
 		if (infoString != null) {
 			fontRendererObj.drawSplitString(StringUtil.localize(infoString), guiLeft + x, guiTop + y, 119, fontColor.get("gui.mail.lettertext"));
@@ -238,8 +251,9 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 	}
 
 	private void setFromSessionVars() {
-		if(SessionVars.getStringVar("mail.letter.recipient") == null)
+		if (SessionVars.getStringVar("mail.letter.recipient") == null) {
 			return;
+		}
 
 		String recipient = SessionVars.getStringVar("mail.letter.recipient");
 		String typeName = SessionVars.getStringVar("mail.letter.addressee");
@@ -256,15 +270,17 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 	}
 
 	private void setRecipient(String recipientName, EnumAddressee type) {
-		if (this.isProcessedLetter || StringUtils.isBlank(recipientName) || type == null)
+		if (this.isProcessedLetter || StringUtils.isBlank(recipientName) || type == null) {
 			return;
+		}
 
 		container.setRecipient(recipientName, type);
 	}
 
 	private void setText() {
-		if (this.isProcessedLetter)
+		if (this.isProcessedLetter) {
 			return;
+		}
 
 		container.setText(this.text.getText());
 	}

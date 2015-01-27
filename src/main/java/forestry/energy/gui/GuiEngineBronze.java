@@ -4,11 +4,21 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.energy.gui;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.IIcon;
+
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Defaults;
 import forestry.core.gui.WidgetManager;
@@ -18,13 +28,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.utils.StringUtil;
 import forestry.energy.gadgets.EngineBronze;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.opengl.GL11;
 
 public class GuiEngineBronze extends GuiEngine {
 
@@ -41,19 +44,23 @@ public class GuiEngineBronze extends GuiEngine {
 		@Override
 		public void draw(int startX, int startY) {
 
-			if (engine == null || engine.totalTime <= 0)
+			if (engine == null || engine.totalTime <= 0) {
 				return;
+			}
 
 			Fluid fluid = FluidRegistry.getFluid(engine.currentFluidId);
-			if (fluid == null)
+			if (fluid == null) {
 				return;
+			}
 			IIcon liquidIcon = fluid.getIcon();
-			if (liquidIcon == null)
+			if (liquidIcon == null) {
 				return;
+			}
 
 			int squaled = (engine.burnTime * height) / engine.totalTime;
-			if (squaled > height)
+			if (squaled > height) {
 				squaled = height;
+			}
 
 			Proxies.common.bindTexture(SpriteSheet.BLOCKS);
 			int start = 0;
@@ -74,8 +81,9 @@ public class GuiEngineBronze extends GuiEngine {
 				manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos + height - x - start, liquidIcon, 16, 16 - (16 - x));
 				start = start + 16;
 
-				if (x == 0 || squaled == 0)
+				if (x == 0 || squaled == 0) {
 					break;
+				}
 			}
 
 			Proxies.common.bindTexture(textureFile);
@@ -84,8 +92,9 @@ public class GuiEngineBronze extends GuiEngine {
 		@Override
 		public String getLegacyTooltip(EntityPlayer player) {
 			Fluid fluid = FluidRegistry.getFluid(engine.currentFluidId);
-			if (fluid == null)
+			if (fluid == null) {
 				return StringUtil.localize("gui.empty");
+			}
 
 			return fluid.getLocalizedName(new FluidStack(fluid, 1));
 		}
@@ -100,7 +109,7 @@ public class GuiEngineBronze extends GuiEngine {
 	}
 
 	protected EngineBronze getEngine() {
-		return (EngineBronze)tile;
+		return (EngineBronze) tile;
 	}
 
 	@Override
@@ -108,10 +117,12 @@ public class GuiEngineBronze extends GuiEngine {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
 		int temp = getEngine().getOperatingTemperatureScaled(16);
-		if (temp > 16)
+		if (temp > 16) {
 			temp = 16;
-		if (temp > 0)
+		}
+		if (temp > 0) {
 			drawTexturedModalRect(guiLeft + 53, guiTop + 47 + 16 - temp, 176, 60 + 16 - temp, 4, temp);
+		}
 
 	}
 }

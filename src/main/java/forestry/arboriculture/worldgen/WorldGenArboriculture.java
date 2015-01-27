@@ -4,21 +4,23 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.gadgets.TileSapling;
 import forestry.core.utils.Utils;
 import forestry.core.vect.Vect;
 import forestry.core.worldgen.BlockType;
 import forestry.core.worldgen.WorldGenBase;
-import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
 
 public abstract class WorldGenArboriculture extends WorldGenBase {
 
@@ -62,10 +64,11 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 
 	private GameProfile getOwner() {
 		TileEntity tile = world.getTileEntity(startX, startY, startZ);
-		if (tile instanceof TileSapling)
+		if (tile instanceof TileSapling) {
 			return ((TileSapling) tile).getOwnerProfile();
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public abstract void preGenerate();
@@ -97,21 +100,25 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 			}
 		}
 
-		if (!spawnPods)
+		if (!spawnPods) {
 			return;
+		}
 
-		for (int y = minPodHeight; y < height; y++)
-			for (int x = 0; x < girth; x++)
+		for (int y = minPodHeight; y < height; y++) {
+			for (int x = 0; x < girth; x++) {
 				for (int z = 0; z < girth; z++) {
 
-					if ((x > 0 && x < girth) && (z > 0 && z < girth))
+					if ((x > 0 && x < girth) && (z > 0 && z < girth)) {
 						continue;
+					}
 
 					tree.trySpawnFruitBlock(world, startX + x + 1, startY + y, startZ + z);
 					tree.trySpawnFruitBlock(world, startX + x - 1, startY + y, startZ + z);
 					tree.trySpawnFruitBlock(world, startX + x, startY + y, startZ + z + 1);
 					tree.trySpawnFruitBlock(world, startX + x, startY + y, startZ + z - 1);
 				}
+			}
+		}
 
 	}
 
@@ -119,23 +126,30 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 
 		int offset = 1;
 
-		for (int x = -offset; x < girth + offset; x++)
+		for (int x = -offset; x < girth + offset; x++) {
 			for (int z = -offset; z < girth + offset; z++) {
 
-				if (x == -offset && z == -offset)
+				if (x == -offset && z == -offset) {
 					continue;
-				if (x == girth + offset && z == girth + offset)
+				}
+				if (x == girth + offset && z == girth + offset) {
 					continue;
-				if (x == -offset && z == girth + offset)
+				}
+				if (x == -offset && z == girth + offset) {
 					continue;
-				if (x == girth + offset && z == -offset)
+				}
+				if (x == girth + offset && z == -offset) {
 					continue;
+				}
 
 				int stemHeight = rand.nextInt(Math.round(height * maxHeight));
-				if (rand.nextFloat() < chance)
-					for (int i = 0; i < stemHeight; i++)
+				if (rand.nextFloat() < chance) {
+					for (int i = 0; i < stemHeight; i++) {
 						addWood(x, i, z, EnumReplaceMode.SOFT);
+					}
+				}
 			}
+		}
 
 	}
 
@@ -143,8 +157,9 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	protected void addBlock(int x, int y, int z, BlockType type, EnumReplaceMode replace) {
 		if (replace == EnumReplaceMode.ALL
 				|| (replace == EnumReplaceMode.SOFT && Utils.isReplaceableBlock(world, startX + x, startY + y, startZ + z))
-				|| world.isAirBlock(startX + x, startY + y, startZ + z))
+				|| world.isAirBlock(startX + x, startY + y, startZ + z)) {
 			type.setBlock(world, tree, startX + x, startY + y, startZ + z);
+		}
 	}
 
 	protected final void clearBlock(int x, int y, int z) {
@@ -174,17 +189,22 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	}
 
 	protected final void addVines(int x, int y, int z, float chance) {
-		if (chance <= 0)
+		if (chance <= 0) {
 			return;
+		}
 
-		if (rand.nextFloat() < chance)
+		if (rand.nextFloat() < chance) {
 			addVine(x - 1, y, z);
-		if (rand.nextFloat() < chance)
+		}
+		if (rand.nextFloat() < chance) {
 			addVine(x + 1, y, z);
-		if (rand.nextFloat() < chance)
+		}
+		if (rand.nextFloat() < chance) {
 			addVine(x, y, z - 1);
-		if (rand.nextFloat() < chance)
+		}
+		if (rand.nextFloat() < chance) {
 			addVine(x, y, z + 1);
+		}
 	}
 
 }
