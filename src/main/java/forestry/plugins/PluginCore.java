@@ -272,13 +272,20 @@ public class PluginCore extends ForestryPlugin {
 	@Override
 	protected void registerCrates() {
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-		crateRegistry.registerCrate(Blocks.log, "cratedWood");
+		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 0), "cratedWood");
+		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 1), "cratedSpruceWood");
+		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 2), "cratedBirchWood");
+		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 3), "cratedJungleWood");
+		crateRegistry.registerCrate(new ItemStack(Blocks.log2, 1, 0), "cratedAcaciaWood");
+		crateRegistry.registerCrate(new ItemStack(Blocks.log2, 1, 1), "cratedDarkOakWood");
 		crateRegistry.registerCrate(Blocks.cobblestone, "cratedCobblestone");
-		crateRegistry.registerCrate(Blocks.dirt, "cratedDirt");
+		crateRegistry.registerCrate(new ItemStack(Blocks.dirt, 1, 0), "cratedDirt");
+		crateRegistry.registerCrate(new ItemStack(Blocks.dirt, 1, 2), "cratedPodzol");
 		crateRegistry.registerCrate(Blocks.stone, "cratedStone");
 		crateRegistry.registerCrate(Blocks.brick_block, "cratedBrick");
 		crateRegistry.registerCrate(Blocks.cactus, "cratedCacti");
-		crateRegistry.registerCrate(Blocks.sand, "cratedSand");
+		crateRegistry.registerCrate(new ItemStack(Blocks.sand, 1, 0), "cratedSand");
+		crateRegistry.registerCrate(new ItemStack(Blocks.sand, 1, 1), "cratedRedSand");
 		crateRegistry.registerCrate(Blocks.obsidian, "cratedObsidian");
 		crateRegistry.registerCrate(Blocks.netherrack, "cratedNetherrack");
 		crateRegistry.registerCrate(Blocks.soul_sand, "cratedSoulsand");
@@ -306,7 +313,12 @@ public class PluginCore extends ForestryPlugin {
 		crateRegistry.registerCrate(new ItemStack(Items.coal, 1, 0), "cratedCoal");
 		crateRegistry.registerCrate(Blocks.gravel, "cratedGravel");
 		crateRegistry.registerCrate(Items.wheat_seeds, "cratedSeeds");
-		crateRegistry.registerCrate(Blocks.sapling, "cratedSaplings");
+		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 0), "cratedSaplings");
+		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 1), "cratedSpruceSapling");
+		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 2), "cratedBirchSapling");
+		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 3), "cratedJungleSapling");
+		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 4), "cratedAcaciaSapling");
+		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 5), "cratedDarkOakSapling");
 		crateRegistry.registerCrate(Items.potato, "cratedPotatoes");
 		crateRegistry.registerCrate(Items.carrot, "cratedCarrots");
 
