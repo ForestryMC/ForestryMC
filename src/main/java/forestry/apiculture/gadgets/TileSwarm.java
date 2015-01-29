@@ -13,6 +13,7 @@ package forestry.apiculture.gadgets;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.EnumSkyBlock;
 
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.InventoryAdapter;
@@ -23,7 +24,21 @@ public class TileSwarm extends TileEntity {
 
 	@Override
 	public boolean canUpdate() {
-		return false;
+		return true;
+	}
+
+	// Hack to make sure that hives glow.
+	// TODO: remove when Mojang fixes this bug: https://bugs.mojang.com/browse/MC-3329
+	// Hives should not need to tick normally.
+	private boolean updatedLight;
+
+	@Override
+	public void updateEntity() {
+		super.updateEntity();
+
+		if (worldObj.isRemote && !updatedLight && worldObj.getWorldTime() % 20 == 0) {
+			updatedLight = worldObj.updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
+		}
 	}
 
 	public TileSwarm setContained(ItemStack[] bees) {
