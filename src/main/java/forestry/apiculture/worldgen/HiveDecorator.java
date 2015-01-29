@@ -74,8 +74,9 @@ public class HiveDecorator {
 	}
 
 	public boolean genHive(World world, Random rand, int chunkX, int chunkZ, Hive hive) {
-		if (hive.genChance() < rand.nextFloat() * 128.0f)
+		if (hive.genChance() * Config.getBeehivesRate() < rand.nextFloat() * 100.0f) {
 			return false;
+		}
 
 		int worldX = chunkX * 16;
 		int worldZ = chunkZ * 16;
