@@ -77,7 +77,7 @@ public class GuiCatalogue extends GuiForestry<TileForestry> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		fontRendererObj.drawString(String.format("%s / %s", container.getCurrentPos(), container.getMaxCount()), guiLeft + xSize - 72, guiTop + 12, fontColor.get("gui.book"));
+		fontRendererObj.drawString(String.format("%s / %s", container.getPageNumber(), container.getPageCount()), guiLeft + xSize - 72, guiTop + 12, fontColor.get("gui.book"));
 
 		clearTradeInfoWidgets();
 		if (container.getTradeInfo() != null) {
@@ -134,10 +134,10 @@ public class GuiCatalogue extends GuiForestry<TileForestry> {
 				mc.thePlayer.closeScreen();
 				break;
 			case 2:
-				container.advanceIteration();
+				container.nextPage();
 				break;
 			case 3:
-				container.regressIteration();
+				container.previousPage();
 				break;
 			case 4:
 				container.cycleFilter();
