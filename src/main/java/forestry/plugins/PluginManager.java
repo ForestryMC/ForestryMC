@@ -84,6 +84,7 @@ public class PluginManager {
 		BUILDCRAFT_STATEMENTS(new PluginBuildCraftStatements()),
 		BUILDCRAFT_TRANSPORT(new PluginBuildCraftTransport()),
 		PROPOLIS_PIPE(new PluginPropolisPipe()),
+		EXTRAUTILITIES(new PluginExtraUtilities()),
 		EQUIVELENT_EXCHANGE(new PluginEE()),
 		FARM_CRAFTORY(new PluginFarmCraftory()),
 		INDUSTRIALCRAFT(new PluginIC2()),

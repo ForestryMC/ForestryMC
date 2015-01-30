@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import net.minecraft.block.material.Material;
@@ -210,12 +211,25 @@ public class PluginCore extends ForestryPlugin {
 		// / CIRCUIT BOARDS
 		ForestryItem.circuitboards.registerItem(new ItemCircuitBoard(), "chipsets");
 		ForestryItem.solderingIron.registerItem(new ItemSolderingIron(), "solderingIron");
+
+		Color tubeCoverNormal = Color.WHITE;
+		Color tubeCoverGold = new Color(0xFFF87E);
+		Color tubeCoverEnder = new Color(0x255661);
+
 		ForestryItem.tubes.registerItem(new ItemOverlay(CreativeTabForestry.tabForestry,
-				new OverlayInfo("ex-0", 0xffffff, 0xe3b78e), new OverlayInfo("ex-1", 0xffffff, 0xe1eef4),
-				new OverlayInfo("ex-2", 0xffffff, 0xddc276), new OverlayInfo("ex-3", 0xffffff, 0xd8d8d8), new OverlayInfo("ex-4", 0xffffff, 0xffff8b),
-				new OverlayInfo("ex-5", 0xffffff, 0x7bd1b8), new OverlayInfo("ex-6", 0xffffff, 0x866bc0), new OverlayInfo("ex-7", 0xfff87e, 0xd96600),
-				new OverlayInfo("ex-8", 0xffffff, 0x444444), new OverlayInfo("ex-9", 0xffffff, 0xbfffdd), new OverlayInfo("ex-10", 0xffffff, 0x68ccee),
-				new OverlayInfo("ex-11", 0xffffff, 0x1c57c6)), "thermionicTubes");
+				new OverlayInfo("ex-0", tubeCoverNormal, new Color(0xe3b78e)),
+				new OverlayInfo("ex-1", tubeCoverNormal, new Color(0xE6F8FF)),
+				new OverlayInfo("ex-2", tubeCoverNormal, new Color(0xddc276)),
+				new OverlayInfo("ex-3", tubeCoverNormal, new Color(0xCCCCCC)),
+				new OverlayInfo("ex-4", tubeCoverNormal, new Color(0xffff8b)),
+				new OverlayInfo("ex-5", tubeCoverNormal, new Color(0x8CF5E3)),
+				new OverlayInfo("ex-6", tubeCoverNormal, new Color(0x866bc0)),
+				new OverlayInfo("ex-7", tubeCoverGold, new Color(0xd96600)),
+				new OverlayInfo("ex-8", tubeCoverNormal, new Color(0x444444)),
+				new OverlayInfo("ex-9", tubeCoverNormal, new Color(0x00CC41)),
+				new OverlayInfo("ex-10", tubeCoverNormal, new Color(0x579CD9)),
+				new OverlayInfo("ex-11", tubeCoverNormal, new Color(0x1c57c6)),
+				new OverlayInfo("ex-12", tubeCoverEnder, new Color(0x33adad))), "thermionicTubes");
 
 		// / CARTONS
 		ForestryItem.carton.registerItem((new ItemForestry()), "carton");

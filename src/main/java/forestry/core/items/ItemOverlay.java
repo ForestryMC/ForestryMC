@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import java.awt.Color;
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -33,6 +34,10 @@ public class ItemOverlay extends ItemForestry {
 		public final int primaryColor;
 		public final int secondaryColor;
 		public boolean isSecret = false;
+
+		public OverlayInfo(String name, Color primaryColor, Color secondaryColor) {
+			this(name, primaryColor.getRGB(), secondaryColor.getRGB());
+		}
 
 		public OverlayInfo(String name, int primaryColor, int secondaryColor) {
 			this.name = name;

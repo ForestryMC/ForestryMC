@@ -270,6 +270,8 @@ public class PluginFactory extends ForestryPlugin {
 				new Object[]{" X ", "#X#", "XXX", '#', Items.redstone, 'X', "gemApatite"});
 		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 11),
 				new Object[]{" X ", "#X#", "XXX", '#', Items.redstone, 'X', new ItemStack(Items.dye, 1, 4)});
+		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 12),
+				new Object[]{" X ", "#X#", "XXX", '#', new ItemStack(Items.ender_eye, 1, 0), 'X', new ItemStack(Blocks.end_stone, 1, 0)});
 
 		String[] dyes = {"dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime",
 				"dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite"};
