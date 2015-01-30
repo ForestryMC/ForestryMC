@@ -15,6 +15,7 @@ import java.util.List;
 
 import forestry.api.farming.IFarmable;
 import forestry.core.circuits.Circuit;
+import forestry.core.config.Config;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicEnder;
 import forestry.farming.logic.FarmLogicRubber;
@@ -55,7 +56,9 @@ public class PluginExtraUtilities extends ForestryPlugin {
 
         ExUEnderLilly = GameRegistry.findBlock(ExU, "plant/ender_lilly");
         Farmables.farmables.put("farmEnder", new ArrayList<IFarmable>());
-        Circuit.farmEnderManaged = new CircuitFarmLogic("managedEnder", FarmLogicEnder.class);
-        Farmables.farmables.get("farmEnder").add(new FarmableGenericCrop(new ItemStack(ExUEnderLilly, 1, 0), ExUEnderLilly, 7));
+        if(Config.isExUtilEnderLilyEnabled()) {
+            Circuit.farmEnderManaged = new CircuitFarmLogic("managedEnder", FarmLogicEnder.class);
+            Farmables.farmables.get("farmEnder").add(new FarmableGenericCrop(new ItemStack(ExUEnderLilly, 1, 0), ExUEnderLilly, 7));
+        }
     }
 }
