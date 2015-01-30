@@ -163,7 +163,8 @@ public class PluginNatura extends ForestryPlugin {
 
 		Block cropBlock = GameRegistry.findBlock(NATURA, "N Crops");
 		Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seedBarley, cropBlock, 3));
-
+		Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seedCotton, cropBlock, 8));
+		
 		List<ItemStack> berries = new ArrayList<ItemStack>();
 		if (berryBlight != null) {
 			berries.add(berryBlight);
