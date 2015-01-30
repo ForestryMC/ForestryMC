@@ -78,6 +78,7 @@ public class PluginManager {
 		LEPIDOPTEROLOGY(new PluginLepidopterology()),
 		MAIL(new PluginMail()),
 		STORAGE(new PluginStorage()),
+		BIOMESOPLENTY(new PluginBiomesOPlenty()),
 		BUILDCRAFT_FUELS(new PluginBuildCraftFuels()),
 		BUILDCRAFT_RECIPES(new PluginBuildCraftRecipes()),
 		BUILDCRAFT_STATEMENTS(new PluginBuildCraftStatements()),
