@@ -312,15 +312,15 @@ public class PluginCore extends ForestryPlugin {
 		crateRegistry.registerCrate(new ItemStack(Blocks.log,1,1), "cratedSpruceWood");
 		crateRegistry.registerCrate(new ItemStack(Blocks.log,1,2), "cratedBirchWood");
 		crateRegistry.registerCrate(new ItemStack(Blocks.log,1,3), "cratedJungleWood");
-		crateRegistry.registerCrate(Blocks.log2, "cratedAcaciaWood");
+		crateRegistry.registerCrate(new ItemStack(Blocks.log2,1,0), "cratedAcaciaWood");
 		crateRegistry.registerCrate(new ItemStack(Blocks.log2,1,1), "cratedDarkOakWood");
-		crateRegistry.registerCrate(new ItemStack(Blocks.dirt,1,2), "cratedPodzol");
 		crateRegistry.registerCrate(new ItemStack(Blocks.sapling,1,1), "cratedSpruceSapling");
 		crateRegistry.registerCrate(new ItemStack(Blocks.sapling,1,2), "cratedBirchSapling");
 		crateRegistry.registerCrate(new ItemStack(Blocks.sapling,1,3), "cratedJungleSapling");
 		crateRegistry.registerCrate(new ItemStack(Blocks.sapling,1,4), "cratedAcaciaSapling");
 		crateRegistry.registerCrate(new ItemStack(Blocks.sapling,1,5), "cratedDarkOakSapling");
 		crateRegistry.registerCrate(new ItemStack(Blocks.sand,1,1), "cratedRedSand");
+		crateRegistry.registerCrate(new ItemStack(Blocks.dirt,1,2), "cratedPodzol");
 
 		crateRegistry.registerCrateUsingOreDict(ForestryItem.ingotTin.item(), "cratedTin");
 		crateRegistry.registerCrateUsingOreDict(ForestryItem.ingotCopper.item(), "cratedCopper");
