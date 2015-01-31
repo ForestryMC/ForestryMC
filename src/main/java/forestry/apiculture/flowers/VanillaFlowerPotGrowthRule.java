@@ -11,37 +11,60 @@
 package forestry.apiculture.flowers;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockFlowerPot;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFlowerPot;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
-import forestry.core.config.Defaults;
 
 public class VanillaFlowerPotGrowthRule implements IFlowerGrowthRule {
 
 	@Override
 	public boolean growFlower(IFlowerRegistry fr, String flowerType, World world, IIndividual individual, int x, int y, int z) {
-		Block ground = world.getBlock(x, y, z);
-		int groundMeta = world.getBlockMetadata(x, y, z);
-		if (ground != Blocks.flower_pot || groundMeta != 0) {
+
+		TileEntity tile = world.getTileEntity(x, y, z);
+		if (!(tile instanceof TileEntityFlowerPot)) {
 			return false;
 		}
 
+		TileEntityFlowerPot flowerPotTile = (TileEntityFlowerPot) tile;
+		if (flowerPotTile.getFlowerPotItem() != null) {
+			return false;
+		}
+
+		Block block = world.getBlock(x, y, z);
+		if (!(block instanceof BlockFlowerPot)) {
+			return false;
+		}
+
+		BlockFlowerPot flowerPot = (BlockFlowerPot) block;
+
+		int flower;
 		if (flowerType.equals(FlowerManager.FlowerTypeVanilla) || flowerType.equals(FlowerManager.FlowerTypeSnow)) {
-			groundMeta = world.rand.nextInt(1) + 1;
+			flower = world.rand.nextInt(2) + 1;
 		} else if (flowerType.equals(FlowerManager.FlowerTypeJungle)) {
-			groundMeta = 11;
+			flower = 6;
 		} else if (flowerType.equals(FlowerManager.FlowerTypeCacti)) {
-			groundMeta = world.rand.nextInt(1) + 9;
+			flower = world.rand.nextInt(2) + 9;
 		} else if (flowerType.equals(FlowerManager.FlowerTypeMushrooms)) {
-			groundMeta = world.rand.nextInt(1) + 7;
+			flower = world.rand.nextInt(2) + 7;
 		} else {
 			return false;
 		}
 
-		return world.setBlock(x, y, z, ground, groundMeta, Defaults.FLAG_BLOCK_SYNCH);
+		TileEntityFlowerPot newTile = (TileEntityFlowerPot) flowerPot.createNewTileEntity(world, flower);
+
+		flowerPotTile.func_145964_a(newTile.getFlowerPotItem(), newTile.getFlowerPotData());
+		flowerPotTile.markDirty();
+
+		if (!world.setBlockMetadataWithNotify(x, y, z, 1, 2)) {
+			world.markBlockForUpdate(x, y, z);
+		}
+
+		return true;
 	}
 }
