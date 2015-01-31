@@ -80,6 +80,7 @@ public class Config {
 	public static final ArrayList<String> collectorStamps = new ArrayList<String>();
 
 	public static boolean squareFarms = false;
+	public static boolean ExUtilEnderLily = true;
 
 	// Mail
 	public static boolean mailAlertEnabled = true;
@@ -107,6 +108,10 @@ public class Config {
 
 	public static float getBeehivesRate() {
 		return generateBeehivesRate;
+	}
+
+	public static boolean isExUtilEnderLilyEnabled() {
+		return ExUtilEnderLily;
 	}
 
 	public static void load() {
@@ -236,6 +241,10 @@ public class Config {
 		property = config.get("tweaks.farms.squared", CATEGORY_COMMON, false);
 		property.comment = "set to true to have farms use a square layout instead of a diamond one.";
 		Config.squareFarms = Boolean.parseBoolean(property.value);
+
+		Property supportEnderlily = config.get("tweaks.farms.exutilenderlily", CATEGORY_COMMON, true);
+		supportEnderlily.comment = "set to false to disable multifarm support for ExtraUtilities Ender-lily seeds.";
+		ExUtilEnderLily = Boolean.parseBoolean(supportEnderlily.value);
 
 		property = config.get("structures.schemata.disabled", CATEGORY_COMMON, "");
 		property.comment = "add schemata keys to disable them. current keys: alveary3x3;farm3x3;farm3x4;farm3x5;farm4x4;farm5x5";

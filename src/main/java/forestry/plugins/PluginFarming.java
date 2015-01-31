@@ -33,6 +33,7 @@ import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmable;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
+import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
@@ -340,6 +341,9 @@ public class PluginFarming extends ForestryPlugin {
 
 		if (PluginIC2.resin != null && PluginIC2.rubberwood != null) {
 			ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 8), Circuit.farmRubberManual);
+		}
+		if(PluginExtraUtilities.ExUEnderLilly != null && Config.isExUtilEnderLilyEnabled() ) {
+			ChipsetManager.solderManager.addRecipe(layoutManaged, ForestryItem.tubes.getItemStack(1, 12), Circuit.farmEnderManaged);
 		}
 	}
 }
