@@ -446,6 +446,8 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			setErrorState(EnumErrorCode.NOFERTILIZER);
 		} else if (!hasLiquid) {
 			setErrorState(EnumErrorCode.NOLIQUID);
+		} else {
+			setErrorState(EnumErrorCode.OK);
 		}
 
 		return didWork;

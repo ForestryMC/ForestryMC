@@ -96,6 +96,8 @@ public class PluginFarming extends ForestryPlugin {
 		Farmables.farmables.get("farmArboreal").add(new FarmableVanillaSapling());
 		Farmables.farmables.get("farmArboreal").add(new FarmableGE());
 
+		Farmables.farmables.put("farmOrchard", new ArrayList<IFarmable>());
+
 		Farmables.farmables.put("farmShroom", new ArrayList<IFarmable>());
 		Farmables.farmables.get("farmShroom").add(new FarmableVanillaShroom(Blocks.brown_mushroom, 0));
 		Farmables.farmables.get("farmShroom").add(new FarmableVanillaShroom(Blocks.red_mushroom, 0));
