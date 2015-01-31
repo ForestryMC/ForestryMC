@@ -198,6 +198,35 @@ public enum Fluids {
 			}
 		}
 	},
+	VEGETABLE_JUICE(new Color(168, 201, 114)) {
+		@Override
+		public Block makeBlock() {
+			return new BlockForestryFluid(this);
+		}
+
+		@Override
+		public ForestryItem getContainerForType(EnumContainerType type) {
+			switch (type) {
+				case BUCKET:
+					return ForestryItem.bucketVegetableJuice;
+				case CAN:
+					return ForestryItem.canVegetableJuice;
+				case CAPSULE:
+					return ForestryItem.waxCapsuleVegetableJuice;
+				case REFRACTORY:
+					return ForestryItem.refractoryVegetableJuice;
+				default:
+					return null;
+			}
+		}
+
+		@Override
+		public void setProperties(ItemLiquidContainer liquidContainer) {
+			if (liquidContainer.getType() != EnumContainerType.BUCKET) {
+				liquidContainer.setDrink(Defaults.FOOD_JUICE_HEAL, Defaults.FOOD_JUICE_SATURATION);
+			}
+		}
+	},
 	MILK(new Color(255, 255, 255), 1030, 3000) {
 		@Override
 		public Block makeBlock() {
@@ -319,7 +348,7 @@ public enum Fluids {
 	// Thermal Expansion
 	COAL, PYROTHEUM;
 
-	public static final Fluids[] forestryFluids = {ETHANOL, BIOMASS, GLASS, HONEY, LEGACY_HONEY, ICE, JUICE, MILK, SEEDOIL, SHORT_MEAD};
+	public static final Fluids[] forestryFluids = {ETHANOL, BIOMASS, VEGETABLE_JUICE, GLASS, HONEY, LEGACY_HONEY, ICE, JUICE, MILK, SEEDOIL, SHORT_MEAD};
 
 	private final String tag;
 	private final int density, viscosity;

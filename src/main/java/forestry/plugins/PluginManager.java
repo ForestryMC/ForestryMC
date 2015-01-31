@@ -87,6 +87,7 @@ public class PluginManager {
 		EQUIVELENT_EXCHANGE(new PluginEE()),
 		FARM_CRAFTORY(new PluginFarmCraftory()),
 		INDUSTRIALCRAFT(new PluginIC2()),
+		HARVESTCRAFT(new PluginHarvestCraft()),
 		NATURA(new PluginNatura()),
 		UNDERGROUND_BIOMES(new PluginUndergroundBiomes());
 
