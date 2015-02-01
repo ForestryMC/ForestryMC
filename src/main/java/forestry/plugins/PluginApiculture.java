@@ -436,6 +436,13 @@ public class PluginApiculture extends ForestryPlugin {
 		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 3), "cratedStringyCombs");
 		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 4), "cratedFrozenCombs");
 		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 5), "cratedDrippingCombs");
+		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 6), "cratedSilkyCombs");
+		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 7), "cratedParchedCombs");
+		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 8), "cratedMysteriousCombs");
+		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 10), "cratedPowderyCombs");
+		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 14), "cratedWheatenCombs");
+		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 15), "cratedMossyCombs");
+		crateRegistry.registerCrate(ForestryItem.beeComb.getItemStack(1, 16), "cratedMellowCombs");
 
 		crateRegistry.registerCrate(ForestryItem.refractoryWax.getItemStack(), "cratedRefractoryWax");
 	}

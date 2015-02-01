@@ -39,7 +39,7 @@ public class VanillaFertilizeGrowthRule implements IFlowerGrowthRule {
 					return false;
 				}
 				if (groundMeta < 6) {
-					groundMeta += world.rand.nextInt(1) + 1;
+					groundMeta += world.rand.nextInt(2) + 1;
 				} else {
 					groundMeta = 7;
 				}

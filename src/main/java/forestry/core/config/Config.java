@@ -60,6 +60,7 @@ public class Config {
 	public static boolean generateCopperOre = true;
 	public static boolean generateTinOre = true;
 	public static boolean generateBeehives = true;
+	private static float generateBeehivesRate = 1.0f;
 	public static boolean generateBeehivesDebug = false;
 	public static boolean enableVillager = true;
 
@@ -102,6 +103,10 @@ public class Config {
 
 	public static boolean isCraftingBronzeEnabled() {
 		return craftingBronzeEnabled;
+	}
+
+	public static float getBeehivesRate() {
+		return generateBeehivesRate;
 	}
 
 	public static void load() {
@@ -155,6 +160,10 @@ public class Config {
 		Property genBeehives = config.get("world.generate.beehives", CATEGORY_COMMON, true);
 		genBeehives.comment = "set to false to force forestry to skip generating beehives in the world";
 		generateBeehives = Boolean.parseBoolean(genBeehives.value);
+
+		Property genBeehivesRate = config.get("world.generate.beehives.rate", CATEGORY_COMMON, generateBeehivesRate);
+		genBeehivesRate.comment = "set how many beehives spawn. Default is 1.0, double is 2.0, half is 0.5 etc.";
+		generateBeehivesRate = Float.parseFloat(genBeehivesRate.value);
 
 		Property genDebugBeehives = config.get("world.generate.beehives.debug", CATEGORY_DEBUG, false);
 		genDebugBeehives.comment = "Set to true to force Forestry to try to generate a beehive at every possible location.";

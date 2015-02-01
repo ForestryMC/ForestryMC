@@ -44,6 +44,8 @@ import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
+import forestry.api.storage.ICrateRegistry;
+import forestry.api.storage.StorageManager;
 import forestry.arboriculture.EventHandlerArboriculture;
 import forestry.arboriculture.FruitProviderNone;
 import forestry.arboriculture.FruitProviderPod;
@@ -334,6 +336,16 @@ public class PluginArboriculture extends ForestryPlugin {
 			VillagerRegistry.instance().registerVillagerId(Defaults.ID_VILLAGER_LUMBERJACK);
 			Proxies.render.registerVillagerSkin(Defaults.ID_VILLAGER_LUMBERJACK, Defaults.TEXTURE_SKIN_LUMBERJACK);
 			VillagerRegistry.instance().registerVillageTradeHandler(Defaults.ID_VILLAGER_LUMBERJACK, new VillageHandlerArboriculture());
+		}
+		if (PluginManager.Module.FACTORY.isEnabled()) {
+			ICrateRegistry crateRegistry = StorageManager.crateRegistry;
+			crateRegistry.registerCrate(EnumFruit.CHERRY.getStack(), "cratedCherry");
+			crateRegistry.registerCrate(EnumFruit.WALNUT.getStack(), "cratedWalnut");
+			crateRegistry.registerCrate(EnumFruit.CHESTNUT.getStack(), "cratedChestnut");
+			crateRegistry.registerCrate(EnumFruit.LEMON.getStack(), "cratedLemon");
+			crateRegistry.registerCrate(EnumFruit.PLUM.getStack(), "cratedPlum");
+			crateRegistry.registerCrate(EnumFruit.PAPAYA.getStack(), "cratedPapaya");
+			crateRegistry.registerCrate(EnumFruit.DATES.getStack(), "cratedDates");
 		}
 	}
 
