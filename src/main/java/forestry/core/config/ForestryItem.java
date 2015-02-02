@@ -49,6 +49,7 @@ public enum ForestryItem {
 	bucketHoney,
 	bucketIce,
 	bucketJuice,
+	bucketVegetableJuice,
 	bucketSeedoil,
 	bucketShortMead,
 	// Crafting
@@ -170,6 +171,7 @@ public enum ForestryItem {
 	waxCapsuleSeedOil,
 	waxCapsuleHoney,
 	waxCapsuleJuice,
+	waxCapsuleVegetableJuice,
 	waxCapsuleIce,
 	// Refractory Capsules
 	refractoryEmpty,
@@ -182,6 +184,7 @@ public enum ForestryItem {
 	refractorySeedOil,
 	refractoryHoney,
 	refractoryJuice,
+	refractoryVegetableJuice,
 	refractoryIce,
 	// Cans
 	canWater,
@@ -194,6 +197,7 @@ public enum ForestryItem {
 	canSeedOil,
 	canHoney,
 	canJuice,
+	canVegetableJuice,
 	canIce;
 	private Item item;
 
