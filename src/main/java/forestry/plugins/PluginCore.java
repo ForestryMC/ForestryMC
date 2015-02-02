@@ -215,7 +215,7 @@ public class PluginCore extends ForestryPlugin {
 				new OverlayInfo("ex-2", 0xffffff, 0xddc276), new OverlayInfo("ex-3", 0xffffff, 0xd8d8d8), new OverlayInfo("ex-4", 0xffffff, 0xffff8b),
 				new OverlayInfo("ex-5", 0xffffff, 0x7bd1b8), new OverlayInfo("ex-6", 0xffffff, 0x866bc0), new OverlayInfo("ex-7", 0xfff87e, 0xd96600),
 				new OverlayInfo("ex-8", 0xffffff, 0x444444), new OverlayInfo("ex-9", 0xffffff, 0xbfffdd), new OverlayInfo("ex-10", 0xffffff, 0x68ccee),
-				new OverlayInfo("ex-11", 0xffffff, 0x1c57c6)), "thermionicTubes");
+				new OverlayInfo("ex-11", 0xffffff, 0x1c57c6),new OverlayInfo("ex-12", 0xffffff, 0xd96600)), "thermionicTubes");
 
 		// / CARTONS
 		ForestryItem.carton.registerItem((new ItemForestry()), "carton");

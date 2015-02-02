@@ -12,6 +12,7 @@ package forestry.plugins;
 
 import java.util.ArrayList;
 
+import forestry.farming.logic.FarmableBasicFruit;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -65,7 +66,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
         fruitList.add("chilipepper");
 
         ArrayList<String> treeFruitList = new ArrayList<String>();
-        //treeFruitList.add("apple");
+
         treeFruitList.add("banana");
         treeFruitList.add("dragonfruit");
         treeFruitList.add("lemon");
@@ -92,11 +93,12 @@ public class PluginHarvestCraft extends ForestryPlugin {
         treeList.add("olive");
         treeList.add("peppercorn");
 
-//        ArrayList<String> treeSpecialList = new ArrayList<String>();
-//        treeSpecialList.add("cinnamon");
-//        treeSpecialList.add("maple");
-//        treeSpecialList.add("paperbark");
-//        treeSpecialList.add("vanilla");
+        ArrayList<String> treeSpecialList = new ArrayList<String>();
+        treeSpecialList.add("cinnamon");
+        treeSpecialList.add("maple");
+        treeSpecialList.add("paperbark");
+        treeSpecialList.add("vanillabean");
+        treeSpecialList.add("apple"); // to prevent apples from getting double registered
 
         ArrayList<String> herbList = new ArrayList<String>();
         herbList.add("garlic");
@@ -228,12 +230,23 @@ public class PluginHarvestCraft extends ForestryPlugin {
         }
         for (String aTreeFruitList : treeFruitList) {
             ItemStack treeFruit = GameRegistry.findItemStack(HC, aTreeFruitList + "Item", 1);
+            Block treeFruitBlock =GameRegistry.findBlock(HC, "pam" + (Character.toUpperCase(aTreeFruitList.charAt(0))+aTreeFruitList.substring(1)));
+            if(treeFruitBlock != null)
+                Farmables.farmables.get("farmOrchardBasic").add(new FarmableBasicFruit(treeFruitBlock,2));
             if(treeFruit != null)
                 RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{treeFruit}, Fluids.JUICE.getFluid(amount));
             plantList.add(aTreeFruitList);
         }
         for (String aTreeList : treeList) {
+            Block fruitBlock = GameRegistry.findBlock(HC, "pam" + (Character.toUpperCase(aTreeList.charAt(0)) + aTreeList.substring(1)));
+            if(fruitBlock != null)
+            Farmables.farmables.get("farmOrchardBasic").add(new FarmableBasicFruit(fruitBlock,2));
             plantList.add(aTreeList);
+        }
+        for (String aTreeSpecialList : treeSpecialList) {
+            Block fruitBlock = GameRegistry.findBlock(HC, "pam" + (Character.toUpperCase(aTreeSpecialList.charAt(0)) + aTreeSpecialList.substring(1)));
+            if(fruitBlock != null)
+                Farmables.farmables.get("farmOrchardBasic").add(new FarmableBasicFruit(fruitBlock,2));
         }
         for (String aGenericCropList : genericCropList) {
             ItemStack genericCropSeed = GameRegistry.findItemStack(HC,aGenericCropList + "seedItem",1);
@@ -250,16 +263,21 @@ public class PluginHarvestCraft extends ForestryPlugin {
             RecipeUtil.injectLeveledRecipe(plant, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
         }
         for (String aCropnutList : cropnutList) {
+            ItemStack cropnut = GameRegistry.findItemStack(HC, aCropnutList + "Item", 1);
             ItemStack cropnutSeed = GameRegistry.findItemStack(HC,aCropnutList + "seedItem",1);
             Block cropnutBlock = GameRegistry.findBlock(HC, "pam" + aCropnutList + "Crop");
             if(cropnutSeed != null)
                 RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{cropnutSeed}, Fluids.SEEDOIL.getFluid(seedamount));
             if(cropnutSeed != null && cropnutBlock != null)
                 Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(cropnutSeed, cropnutBlock, 7));
-            nutList.add(aCropnutList);
+            if(cropnut != null)
+            RecipeManagers.squeezerManager.addRecipe(20, new ItemStack[]{cropnut}, Fluids.SEEDOIL.getFluid(3 * seedamount));
         }
         for (String aNutList : nutList) {
             ItemStack nut = GameRegistry.findItemStack(HC, aNutList + "Item", 1);
+            Block nutBlock = GameRegistry.findBlock(HC, "pam" + (Character.toUpperCase(aNutList.charAt(0)) + aNutList.substring(1)));
+            if(nutBlock != null)
+                Farmables.farmables.get("farmOrchardBasic").add(new FarmableBasicFruit(nutBlock,2));
             if(nut != null)
                 RecipeManagers.squeezerManager.addRecipe(20, new ItemStack[]{nut}, Fluids.SEEDOIL.getFluid(3 * seedamount));
         }

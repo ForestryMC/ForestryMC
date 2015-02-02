@@ -12,6 +12,7 @@ package forestry.plugins;
 
 import java.util.ArrayList;
 
+import forestry.farming.logic.*;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -54,24 +55,6 @@ import forestry.farming.gadgets.TileGearbox;
 import forestry.farming.gadgets.TileHatch;
 import forestry.farming.gadgets.TileValve;
 import forestry.farming.items.ItemFarmBlock;
-import forestry.farming.logic.FarmLogicArboreal;
-import forestry.farming.logic.FarmLogicCereal;
-import forestry.farming.logic.FarmLogicCocoa;
-import forestry.farming.logic.FarmLogicGourd;
-import forestry.farming.logic.FarmLogicInfernal;
-import forestry.farming.logic.FarmLogicOrchard;
-import forestry.farming.logic.FarmLogicPeat;
-import forestry.farming.logic.FarmLogicPoale;
-import forestry.farming.logic.FarmLogicShroom;
-import forestry.farming.logic.FarmLogicSucculent;
-import forestry.farming.logic.FarmLogicVegetable;
-import forestry.farming.logic.FarmableGE;
-import forestry.farming.logic.FarmableGenericCrop;
-import forestry.farming.logic.FarmableGenericSapling;
-import forestry.farming.logic.FarmableGourd;
-import forestry.farming.logic.FarmableStacked;
-import forestry.farming.logic.FarmableVanillaSapling;
-import forestry.farming.logic.FarmableVanillaShroom;
 import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.triggers.FarmingTriggers;
 
@@ -119,7 +102,7 @@ public class PluginFarming extends ForestryPlugin {
 		Farmables.farmables.put("farmVegetables", new ArrayList<IFarmable>());
 		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(Items.potato), Blocks.potatoes, 7));
 		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(Items.carrot), Blocks.carrots, 7));
-
+		Farmables.farmables.put("farmOrchardBasic", new ArrayList<IFarmable>());
 		ForestryBlock.farm.registerBlock(new BlockFarm(), ItemFarmBlock.class, "ffarm");
 		/*Item.itemsList[ForestryBlock.farm] = null;
 		 Item.itemsList[ForestryBlock.farm] = (new ItemFarmBlock(ForestryBlock.farm - 256, "ffarm"));*/
@@ -166,6 +149,7 @@ public class PluginFarming extends ForestryPlugin {
 		Circuit.farmCocoaManual = new CircuitFarmLogic("manualCocoa", FarmLogicCocoa.class).setManual();
 
 		Circuit.farmOrchardManual = new CircuitFarmLogic("manualOrchard", FarmLogicOrchard.class);
+		Circuit.farmOrchardBasicManual = new CircuitFarmLogic("manualOrchardBasic", FarmLogicOrchardBasic.class);
 
 		MinecraftForge.EVENT_BUS.register(new EventHandlerFarming());
 	}
@@ -341,5 +325,6 @@ public class PluginFarming extends ForestryPlugin {
 		if (PluginIC2.resin != null && PluginIC2.rubberwood != null) {
 			ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 8), Circuit.farmRubberManual);
 		}
+		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 13), Circuit.farmOrchardBasicManual);
 	}
 }
