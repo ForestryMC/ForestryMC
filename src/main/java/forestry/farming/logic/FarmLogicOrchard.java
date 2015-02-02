@@ -142,13 +142,10 @@ public class FarmLogicOrchard extends FarmLogic {
 		List<Vect> candidates = new ArrayList<Vect>();
 
 		// Get additional candidates to return
-		for (int i = -1; i < 2; i++) {
+		for (int i = -2; i < 3; i++) {
 			for (int j = 0; j < 2; j++) {
 				for (int k = -1; k < 2; k++) {
 					Vect candidate = new Vect(position.x + i, position.y + j, position.z + k);
-					if (candidate.equals(position)) {
-						continue;
-					}
 					if (Math.abs(candidate.x - start.x) > 5) {
 						continue;
 					}
