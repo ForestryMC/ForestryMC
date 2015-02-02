@@ -66,9 +66,9 @@ import forestry.core.items.ItemForestryPickaxe;
 import forestry.core.items.ItemForestryShovel;
 import forestry.core.items.ItemFruit;
 import forestry.core.items.ItemMisc;
-import forestry.core.items.ItemOverlay;
 import forestry.core.items.ItemOverlay.OverlayInfo;
 import forestry.core.items.ItemPipette;
+import forestry.core.items.ItemElectronTube;
 import forestry.core.items.ItemTypedBlock;
 import forestry.core.items.ItemWrench;
 import forestry.core.proxy.Proxies;
@@ -216,7 +216,7 @@ public class PluginCore extends ForestryPlugin {
 		Color tubeCoverGold = new Color(0xFFF87E);
 		Color tubeCoverEnder = new Color(0x255661);
 
-		ForestryItem.tubes.registerItem(new ItemOverlay(CreativeTabForestry.tabForestry,
+		ForestryItem.tubes.registerItem(new ItemElectronTube(CreativeTabForestry.tabForestry,
 				new OverlayInfo("ex-0", tubeCoverNormal, new Color(0xe3b78e)),
 				new OverlayInfo("ex-1", tubeCoverNormal, new Color(0xE6F8FF)),
 				new OverlayInfo("ex-2", tubeCoverNormal, new Color(0xddc276)),
@@ -229,7 +229,8 @@ public class PluginCore extends ForestryPlugin {
 				new OverlayInfo("ex-9", tubeCoverNormal, new Color(0x00CC41)),
 				new OverlayInfo("ex-10", tubeCoverNormal, new Color(0x579CD9)),
 				new OverlayInfo("ex-11", tubeCoverNormal, new Color(0x1c57c6)),
-				new OverlayInfo("ex-12", tubeCoverEnder, new Color(0x33adad))), "thermionicTubes");
+				new OverlayInfo("ex-12", tubeCoverEnder, new Color(0x33adad))
+		), "thermionicTubes");
 
 		// / CARTONS
 		ForestryItem.carton.registerItem((new ItemForestry()), "carton");
