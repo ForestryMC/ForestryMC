@@ -29,9 +29,9 @@ import forestry.core.network.PacketIds;
 import forestry.core.network.PacketTileNBT;
 import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.GuiUtil;
 import forestry.core.utils.RecipeUtil;
 import forestry.factory.recipes.RecipeMemory;
-
 
 public class TileWorktable extends TileBase implements ICrafter {
 
@@ -50,7 +50,12 @@ public class TileWorktable extends TileBase implements ICrafter {
 
 	public TileWorktable() {
 		craftingInventory = new TileInventoryAdapter(this, 10, "CraftItems");
-		setInternalInventory(new TileInventoryAdapter(this, 18, "Items").disableAutomation());
+		setInternalInventory(new TileInventoryAdapter(this, 18, "Items") {
+			@Override
+			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+				return GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+			}
+		});
 
 		memorized = new RecipeMemory();
 	}
