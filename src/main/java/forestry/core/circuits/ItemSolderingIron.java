@@ -73,6 +73,14 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 			recipes.add(new CircuitRecipe(layout, resource, circuit));
 		}
 
+		public static ICircuit getCircuit(ICircuitLayout layout, ItemStack resource) {
+			CircuitRecipe circuitRecipe = getMatchingRecipe(layout, resource);
+			if (circuitRecipe == null) {
+				return null;
+			}
+			return circuitRecipe.circuit;
+		}
+
 		public static CircuitRecipe getMatchingRecipe(ICircuitLayout layout, ItemStack resource) {
 			if (layout == null || resource == null) {
 				return null;

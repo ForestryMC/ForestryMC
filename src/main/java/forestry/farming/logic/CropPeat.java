@@ -12,15 +12,16 @@ package forestry.farming.logic;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.BlockSoil;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.BlockUtil;
 import forestry.core.vect.Vect;
 
 public class CropPeat extends Crop {
@@ -43,10 +44,11 @@ public class CropPeat extends Crop {
 
 	@Override
 	protected Collection<ItemStack> harvestBlock(Vect pos) {
-		ArrayList<ItemStack> drops = BlockUtil.getBlockDrops(world, pos);
+		List<ItemStack> drops = new ArrayList<ItemStack>();
+		drops.add(ForestryItem.peat.getItemStack());
 
 		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, world.getBlock(pos.x, pos.y, pos.z), 0);
-		setBlock(pos, Blocks.air, 0);
+		setBlock(pos, Blocks.dirt, 0);
 		return drops;
 	}
 

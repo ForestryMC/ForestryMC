@@ -84,7 +84,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 				continue;
 			}
 
-			Block block = BlockSoil.getBlockFromItem(occupant.getItem());
+			Block block = Block.getBlockFromItem(occupant.getItem());
 			if (block == null || !(block instanceof BlockSoil)) {
 				continue;
 			}
