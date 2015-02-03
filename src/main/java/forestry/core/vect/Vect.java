@@ -12,6 +12,8 @@ package forestry.core.vect;
 
 import java.util.Random;
 
+import net.minecraft.util.BlockPos;
+
 import net.minecraftforge.common.util.ForgeDirection;
 
 /**
@@ -40,6 +42,12 @@ public class Vect implements IVect {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+	}
+
+	public Vect(BlockPos pos) {
+		this.x = pos.getX();
+		this.y = pos.getY();
+		this.z = pos.getZ();
 	}
 
 	public static Vect getRandomPositionInArea(Random random, IVect area) {
@@ -120,5 +128,10 @@ public class Vect implements IVect {
 	@Override
 	public int getZ() {
 		return z;
+	}
+
+	@Override
+	public BlockPos toBlockPos() {
+		return new BlockPos(x, y, z);
 	}
 }

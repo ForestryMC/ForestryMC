@@ -24,6 +24,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -131,9 +132,9 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	private final HashMap<Vect, Integer> lastExtentsHarvest = new HashMap<Vect, Integer>();
 
 	@Override
-	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
+	public Collection<ICrop> harvest(BlockPos pos, ForgeDirection direction, int extent) {
 
-		Vect start = new Vect(x, y, z);
+		Vect start = new Vect(pos);
 		if (!lastExtentsHarvest.containsKey(start)) {
 			lastExtentsHarvest.put(start, 0);
 		}
@@ -143,7 +144,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 			lastExtent = 0;
 		}
 
-		Vect position = translateWithOffset(x, y + 1, z, direction, lastExtent);
+		Vect position = translateWithOffset(pos.up(), direction, lastExtent);
 		Collection<ICrop> crops = getHarvestBlocks(position);
 		lastExtent++;
 		lastExtentsHarvest.put(start, lastExtent);
@@ -232,12 +233,12 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	protected boolean maintainGermlings(int x, int ySaplings, int z, ForgeDirection direction, int extent) {
+	protected boolean maintainGermlings(BlockPos pos, ForgeDirection direction, int extent) {
 
 		World world = getWorld();
 
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(x, ySaplings, z, direction, i);
+			Vect position = translateWithOffset(pos, direction, i);
 
 			if (VectUtil.isAirBlock(world, position)) {
 				Vect soilBelowPosition = new Vect(position.x, position.y - 1, position.z);
@@ -254,7 +255,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
 		World world = getWorld();
 		for (IFarmable candidate : germlings) {
-			if (housing.plantGermling(candidate, world, position.x, position.y, position.z)) {
+			if (housing.plantGermling(candidate, world, position.toBlockPos())) {
 				return true;
 			}
 		}

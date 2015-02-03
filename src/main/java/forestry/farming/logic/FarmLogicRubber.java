@@ -20,6 +20,7 @@ import java.util.Stack;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
@@ -88,19 +89,19 @@ public class FarmLogicRubber extends FarmLogic {
 	}
 
 	@Override
-	public boolean cultivate(int x, int y, int z, ForgeDirection direction, int extent) {
+	public boolean cultivate(BlockPos pos, ForgeDirection direction, int extent) {
 		return false;
 	}
 
 	private final HashMap<Vect, Integer> lastExtents = new HashMap<Vect, Integer>();
 
 	@Override
-	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
+	public Collection<ICrop> harvest(BlockPos pos, ForgeDirection direction, int extent) {
 		if (inActive) {
 			return null;
 		}
 
-		Vect start = new Vect(x, y, z);
+		Vect start = new Vect(pos);
 		if (!lastExtents.containsKey(start)) {
 			lastExtents.put(start, 0);
 		}
@@ -110,7 +111,7 @@ public class FarmLogicRubber extends FarmLogic {
 			lastExtent = 0;
 		}
 
-		Vect position = translateWithOffset(x, y + 1, z, direction, lastExtent);
+		Vect position = translateWithOffset(pos.up(), direction, lastExtent);
 		Collection<ICrop> crops = getHarvestBlocks(position);
 		lastExtent++;
 		lastExtents.put(start, lastExtent);

@@ -16,6 +16,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.oredict.OreDictionary;
@@ -99,7 +100,7 @@ public enum ForestryBlock {
 			throw new RuntimeException("Tried to register Block outside of Pre-Init");
 		}
 		this.block = block;
-		block.setBlockName("for." + name);
+		block.setUnlocalizedName("for." + name);
 		Proxies.common.registerBlock(block, itemClass);
 	}
 
@@ -111,8 +112,8 @@ public enum ForestryBlock {
 		return i != null && Block.isEqualTo(block, i);
 	}
 
-	public boolean isBlockEqual(World world, int x, int y, int z) {
-		return isBlockEqual(world.getBlock(x, y, z));
+	public boolean isBlockEqual(World world, BlockPos pos) {
+		return isBlockEqual(world.getBlockState(pos).getBlock());
 	}
 
 	public Item item() {
@@ -142,7 +143,7 @@ public enum ForestryBlock {
 		return new ItemStack(block, qty, meta);
 	}
 
-	public boolean setBlock(World world, int x, int y, int z, int meta, int flag) {
-		return world.setBlock(x, y, z, block, meta, flag);
+	public boolean setBlock(World world, BlockPos pos, int meta, int flag) {
+		return world.setBlockState(pos, block.getStateFromMeta(meta), flag);
 	}
 }

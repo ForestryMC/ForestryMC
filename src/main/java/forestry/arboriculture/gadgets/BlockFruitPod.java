@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -38,8 +39,8 @@ public class BlockFruitPod extends BlockCocoa {
 		super();
 	}
 
-	public static TileFruitPod getPodTile(IBlockAccess world, int x, int y, int z) {
-		TileEntity tile = world.getTileEntity(x, y, z);
+	public static TileFruitPod getPodTile(IBlockAccess world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
 		if (!(tile instanceof TileFruitPod)) {
 			return null;
 		}

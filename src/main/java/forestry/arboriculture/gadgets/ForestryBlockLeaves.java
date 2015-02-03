@@ -25,6 +25,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
@@ -59,8 +60,8 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 		return new TileLeaves();
 	}
 
-	public static TileLeaves getLeafTile(IBlockAccess world, int x, int y, int z) {
-		TileEntity tile = world.getTileEntity(x, y, z);
+	public static TileLeaves getLeafTile(IBlockAccess world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof TileLeaves) {
 			return (TileLeaves) tile;
 		}

@@ -15,6 +15,7 @@ import java.util.Stack;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
@@ -75,19 +76,19 @@ public class FarmLogicGourd extends FarmLogic {
 	}
 
 	@Override
-	public boolean cultivate(int x, int y, int z, ForgeDirection direction, int extent) {
+	public boolean cultivate(BlockPos pos, ForgeDirection direction, int extent) {
 		return false;
 	}
 
 	@Override
-	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
+	public Collection<ICrop> harvest(BlockPos pos, ForgeDirection direction, int extent) {
 		World world = getWorld();
 
 		Stack<ICrop> crops = new Stack<ICrop>();
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(x, y + 1, z, direction, i);
+			Vect position = translateWithOffset(pos.up(), direction, i);
 			for (IFarmable seed : seeds) {
-				ICrop crop = seed.getCropAt(world, position.x, position.y, position.z);
+				ICrop crop = seed.getCropAt(world, position.toBlockPos());
 				if (crop != null) {
 					crops.push(crop);
 				}

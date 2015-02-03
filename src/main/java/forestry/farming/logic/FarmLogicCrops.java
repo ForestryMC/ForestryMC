@@ -20,6 +20,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
@@ -108,12 +109,12 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 	}
 
 	@Override
-	protected boolean maintainCrops(int x, int y, int z, ForgeDirection direction, int extent) {
+	protected boolean maintainCrops(BlockPos pos, ForgeDirection direction, int extent) {
 
 		World world = getWorld();
 
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(x, y, z, direction, i);
+			Vect position = translateWithOffset(pos, direction, i);
 			if (!VectUtil.isAirBlock(world, position) && !Utils.isReplaceableBlock(getWorld(), position.x, position.y, position.z)) {
 				continue;
 			}
@@ -145,14 +146,14 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
+	public Collection<ICrop> harvest(BlockPos pos, ForgeDirection direction, int extent) {
 		World world = getWorld();
 
 		Stack<ICrop> crops = new Stack<ICrop>();
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(x, y + 1, z, direction, i);
+			Vect position = translateWithOffset(pos.up(), direction, i);
 			for (IFarmable seed : seeds) {
-				ICrop crop = seed.getCropAt(world, position.x, position.y, position.z);
+				ICrop crop = seed.getCropAt(world, position.toBlockPos());
 				if (crop != null) {
 					crops.push(crop);
 				}

@@ -15,6 +15,7 @@ import java.util.Stack;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
@@ -72,12 +73,12 @@ public class FarmLogicPeat extends FarmLogicWatered {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
+	public Collection<ICrop> harvest(BlockPos pos, ForgeDirection direction, int extent) {
 		World world = getWorld();
 
 		Stack<ICrop> crops = new Stack<ICrop>();
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(x, y, z, direction, i);
+			Vect position = translateWithOffset(pos, direction, i);
 			ItemStack occupant = VectUtil.getAsItemStack(world, position);
 
 			if (occupant.getItem() == null) {

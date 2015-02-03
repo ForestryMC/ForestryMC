@@ -22,6 +22,7 @@ import java.util.TreeMap;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.FlowerManager;
@@ -118,14 +119,14 @@ public final class FlowerRegistry implements IFlowerRegistry {
 	}
 
 	@Override
-	public boolean growFlower(String flowerType, World world, IIndividual individual, int x, int y, int z) {
+	public boolean growFlower(String flowerType, World world, IIndividual individual, BlockPos pos) {
 		internalInitialize();
 		if (!this.growthRules.containsKey(flowerType)) {
 			return false;
 		}
 
 		for (IFlowerGrowthRule rule : this.growthRules.get(flowerType)) {
-			if (rule.growFlower(this, flowerType, world, individual, x, y, z)) {
+			if (rule.growFlower(this, flowerType, world, individual, pos)) {
 				return true;
 			}
 		}

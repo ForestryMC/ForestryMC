@@ -15,6 +15,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -313,18 +314,8 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 
 	// / IBEEHOUSING
 	@Override
-	public int getXCoord() {
-		return xCoord;
-	}
-
-	@Override
-	public int getYCoord() {
-		return yCoord;
-	}
-
-	@Override
-	public int getZCoord() {
-		return zCoord;
+	public BlockPos getCoords() {
+		return pos;
 	}
 
 	@Override

@@ -12,6 +12,7 @@ package forestry.apiculture.flowers;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.genetics.IFlower;
@@ -23,18 +24,18 @@ import forestry.core.config.Defaults;
 public class VanillaSnowGrowthRule implements IFlowerGrowthRule {
 
 	@Override
-	public boolean growFlower(IFlowerRegistry fr, String flowerType, World world, IIndividual individual, int x, int y, int z) {
-		if (world.getBlock(x, y, z) != Blocks.snow) {
+	public boolean growFlower(IFlowerRegistry fr, String flowerType, World world, IIndividual individual, BlockPos pos) {
+		if (world.getBlockState(pos).getBlock() != Blocks.snow) {
 			return false;
 		}
 
-		Block ground = world.getBlock(x, y - 1, z);
+		Block ground = world.getBlockState(pos.down()).getBlock();
 		if (ground != Blocks.dirt && ground != Blocks.grass) {
 			return false;
 		}
 
 		IFlower flower = fr.getRandomPlantableFlower(flowerType, world.rand);
-		return world.setBlock(x, y, z, flower.getBlock(), flower.getMeta(), Defaults.FLAG_BLOCK_SYNCH);
+		return world.setBlockState(pos, flower.getBlock(), flower.getMeta(), Defaults.FLAG_BLOCK_SYNCH);
 	}
 
 }

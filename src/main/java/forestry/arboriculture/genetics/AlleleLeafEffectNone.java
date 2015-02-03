@@ -11,6 +11,7 @@
 package forestry.arboriculture.genetics;
 
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.IAlleleLeafEffect;
@@ -43,7 +44,7 @@ public class AlleleLeafEffectNone extends Allele implements IAlleleLeafEffect {
 	}
 
 	@Override
-	public IEffectData doEffect(ITreeGenome genome, IEffectData storedData, World world, int x, int y, int z) {
+	public IEffectData doEffect(ITreeGenome genome, IEffectData storedData, World world, BlockPos pos) {
 		return storedData;
 	}
 
@@ -55,7 +56,7 @@ public class AlleleLeafEffectNone extends Allele implements IAlleleLeafEffect {
 		Vect min = new Vect(x + offset.x, y + offset.y, y + offset.z);
 		Vect max = new Vect(x + offset.x + area.x, y + offset.y + area.y, y + offset.z + area.z);
 
-		return AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
+		return AxisAlignedBB.fromBounds(min.x, min.y, min.z, max.x, max.y, max.z);
 	}
 
 }

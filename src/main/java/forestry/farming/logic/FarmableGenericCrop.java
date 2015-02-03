@@ -13,6 +13,8 @@ package forestry.farming.logic;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
@@ -32,20 +34,20 @@ public class FarmableGenericCrop implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, int x, int y, int z) {
-		return world.getBlock(x, y, z) == block;
+	public boolean isSaplingAt(World world, BlockPos pos) {
+		return world.getBlockState(pos).getBlock() == block;
 	}
 
 	@Override
-	public ICrop getCropAt(World world, int x, int y, int z) {
-		if (world.getBlock(x, y, z) != block) {
+	public ICrop getCropAt(World world, BlockPos pos) {
+		if (world.getBlockState(pos).getBlock() != block) {
 			return null;
 		}
 		if (world.getBlockMetadata(x, y, z) != mature) {
 			return null;
 		}
 
-		return new CropBlock(world, block, mature, new Vect(x, y, z));
+		return new CropBlock(world, block, mature, new Vect(pos));
 	}
 
 	@Override
@@ -62,8 +64,8 @@ public class FarmableGenericCrop implements IFarmable {
 	}
 
 	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
-		return germling.copy().tryPlaceItemIntoWorld(player, world, x, y - 1, z, 1, 0, 0, 0);
+	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
+		return germling.copy().onItemUse(player, world, pos.down(), EnumFacing.UP, 0, 0, 0);
 	}
 
 	@Override

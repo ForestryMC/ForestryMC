@@ -15,6 +15,7 @@ import java.util.HashSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -59,7 +60,7 @@ public abstract class FarmLogic implements IFarmLogic {
 			breakable.add(Blocks.flowing_water);
 			breakable.add(ForestryBlock.soil.block());
 		}
-		return breakable.contains(block) || block.isReplaceable(world, position.getX(), position.getY(), position.getZ());
+		return breakable.contains(block) || block.isReplaceable(world, position.toBlockPos());
 	}
 
 	protected World getWorld() {
@@ -80,8 +81,8 @@ public abstract class FarmLogic implements IFarmLogic {
 				world.getBlockMetadata(position.x, position.y, position.z) == 0;
 	}
 
-	protected final Vect translateWithOffset(int x, int y, int z, ForgeDirection direction, int step) {
-		return new Vect(x + direction.offsetX * step, y + direction.offsetY * step, z + direction.offsetZ * step);
+	protected final Vect translateWithOffset(BlockPos pos, ForgeDirection direction, int step) {
+		return new Vect(x + direction.offsetX * step, y + direction.offsetY * step, z + direction.offsetZ * step); //TODO Fix in next pass
 	}
 
 	protected final void setBlock(Vect position, Block block, int meta) {

@@ -24,6 +24,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -787,7 +788,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	}
 
 	@Override
-	public boolean plantGermling(IFarmable germling, World world, int x, int y, int z) {
+	public boolean plantGermling(IFarmable germling, World world, BlockPos pos) {
 		IInventoryAdapter inventory = getInternalInventory();
 		for (int i = SLOT_GERMLINGS_1; i < SLOT_GERMLINGS_1 + SLOT_GERMLINGS_COUNT; i++) {
 			if (inventory.getStackInSlot(i) == null) {
@@ -798,7 +799,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			}
 
 			EntityPlayer player = Proxies.common.getPlayer(world, getOwnerProfile());
-			if (!germling.plantSaplingAt(player, inventory.getStackInSlot(i), world, x, y, z)) {
+			if (!germling.plantSaplingAt(player, inventory.getStackInSlot(i), world, pos)) {
 				continue;
 			}
 
@@ -871,16 +872,12 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		return StackUtils.isIdenticalItem(PluginFarming.farmFertilizer, itemstack);
 	}
 
-	private int[] coords;
 	private int[] offset;
 	private int[] area;
 
 	@Override
-	public int[] getCoords() {
-		if (coords == null) {
-			coords = new int[]{xCoord, yCoord, zCoord};
-		}
-		return coords;
+	public BlockPos getCoords() {
+		return pos;
 	}
 
 	@Override

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.vect;
 
+import net.minecraft.util.BlockPos;
+
 import net.minecraftforge.common.util.ForgeDirection;
 
 /**
@@ -27,4 +29,6 @@ public interface IVect {
 	IVect add(int x, int y, int z);
 
 	IVect add(ForgeDirection direction);
+
+	BlockPos toBlockPos();
 }

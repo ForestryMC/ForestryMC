@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.vect;
 
+import net.minecraft.util.BlockPos;
+
 import net.minecraftforge.common.util.ForgeDirection;
 
 /**
@@ -90,5 +92,10 @@ public class MutableVect implements IVect {
 	@Override
 	public int getZ() {
 		return z;
+	}
+
+	@Override
+	public BlockPos toBlockPos() {
+		return new BlockPos(x, y, z);
 	}
 }

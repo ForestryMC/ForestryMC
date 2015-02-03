@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.flowers;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.genetics.IFlowerGrowthRule;
@@ -19,7 +20,7 @@ import forestry.api.genetics.IIndividual;
 public class VanillaDefaultGrowthRule implements IFlowerGrowthRule {
 
 	@Override
-	public boolean growFlower(IFlowerRegistry fr, String flowerType, World world, IIndividual individual, int x, int y, int z) {
+	public boolean growFlower(IFlowerRegistry fr, String flowerType, World world, IIndividual individual, BlockPos pos) {
 		return true;
 	}
 

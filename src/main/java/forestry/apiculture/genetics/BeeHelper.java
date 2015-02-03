@@ -19,6 +19,7 @@ import java.util.Map.Entry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -175,7 +176,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
-	public IBee getBee(World world, IBeeGenome genome) {
+	public IBee getBee(IBlockAccess world, IBeeGenome genome) {
 		return new Bee(genome);
 	}
 

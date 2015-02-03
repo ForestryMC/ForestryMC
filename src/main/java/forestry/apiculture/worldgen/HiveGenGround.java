@@ -15,6 +15,7 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class HiveGenGround extends HiveGen {
@@ -28,20 +29,20 @@ public class HiveGenGround extends HiveGen {
 	}
 
 	@Override
-	public boolean isValidLocation(World world, int x, int y, int z) {
-		Block ground = world.getBlock(x, y - 1, z);
+	public boolean isValidLocation(World world, BlockPos pos) {
+		Block ground = world.getBlockState(pos.down()).getBlock();
 		return groundMaterials.contains(ground.getMaterial());
 	}
 
 	@Override
-	public int getYForHive(World world, int x, int z) {
-		int y = world.getHeightValue(x, z);
+	public BlockPos getYForHive(World world, BlockPos pos) {
+		pos = world.getHeight(pos);
 
 		// get to the ground
-		while (y >= 0 && (world.getBlock(x, y - 1, z).isLeaves(world, x, y - 1, z) || canReplace(world, x, y - 1, z))) {
-			y--;
+		while (pos.getY() >= 0 && (world.getBlockState(pos.down()).getBlock().isLeaves(world, pos.down()) || canReplace(world, pos.down()))) {
+			pos = pos.down();
 		}
 
-		return y;
+		return pos;
 	}
 }

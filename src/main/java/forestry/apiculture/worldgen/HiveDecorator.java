@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -77,10 +78,9 @@ public class HiveDecorator {
 			return false;
 		}
 
-		int worldX = chunkX * 16;
-		int worldZ = chunkZ * 16;
+		BlockPos pos = new BlockPos(chunkX * 16, 0, chunkZ * 16);
 
-		BiomeGenBase biome = world.getBiomeGenForCoords(worldX, worldZ);
+		BiomeGenBase biome = world.getBiomeGenForCoords(pos);
 		EnumHumidity humidity = EnumHumidity.getFromValue(biome.rainfall);
 
 		if (!hive.isGoodBiome(biome) || !hive.isGoodHumidity(humidity)) {
@@ -88,10 +88,9 @@ public class HiveDecorator {
 		}
 
 		for (int tries = 0; tries < 4; tries++) {
-			int x = worldX + rand.nextInt(16);
-			int z = worldZ + rand.nextInt(16);
+			BlockPos pos1 = pos.add(rand.nextInt(16), 0, rand.nextInt(16));
 
-			if (tryGenHive(world, x, z, hive)) {
+			if (tryGenHive(world, pos1, hive)) {
 				return true;
 			}
 		}
@@ -100,9 +99,8 @@ public class HiveDecorator {
 	}
 
 	private void decorateHivesDebug(World world, int chunkX, int chunkZ, List<Hive> hives) {
-		int worldX = chunkX * 16;
-		int worldZ = chunkZ * 16;
-		BiomeGenBase biome = world.getBiomeGenForCoords(worldX, worldZ);
+		BlockPos pos = new BlockPos(chunkX * 16, 0, chunkZ * 16);
+		BiomeGenBase biome = world.getBiomeGenForCoords(pos);
 		EnumHumidity humidity = EnumHumidity.getFromValue(biome.rainfall);
 
 		for (int x = 0; x < 16; x++) {
@@ -113,54 +111,54 @@ public class HiveDecorator {
 						continue;
 					}
 
-					tryGenHive(world, worldX + x, worldZ + z, hive);
+					tryGenHive(world, pos.add(x, 0, z), hive);
 				}
 			}
 		}
 	}
 
-	private boolean tryGenHive(World world, int x, int z, Hive hive) {
+	private boolean tryGenHive(World world, BlockPos pos, Hive hive) {
 
-		int y = hive.getYForHive(world, x, z);
+		pos = hive.getYForHive(world, pos);
 
-		if (y < 0) {
+		if (pos.getY() < 0) {
 			return false;
 		}
 
-		if (!hive.canReplace(world, x, y, z)) {
+		if (!hive.canReplace(world, pos)) {
 			return false;
 		}
 
-		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
-		EnumTemperature temperature = EnumTemperature.getFromValue(biome.getFloatTemperature(x, y, z));
+		BiomeGenBase biome = world.getBiomeGenForCoords(pos);
+		EnumTemperature temperature = EnumTemperature.getFromValue(biome.getFloatTemperature(pos));
 		if (!hive.isGoodTemperature(temperature)) {
 			return false;
 		}
 
-		if (!hive.isValidLocation(world, x, y, z)) {
+		if (!hive.isValidLocation(world, pos)) {
 			return false;
 		}
 
-		return setHive(world, x, y, z, hive);
+		return setHive(world, pos, hive);
 	}
 
-	protected boolean setHive(World world, int x, int y, int z, Hive hive) {
+	protected boolean setHive(World world, BlockPos pos, Hive hive) {
 		Block hiveBlock = hive.getHiveBlock();
-		boolean placed = world.setBlock(x, y, z, hiveBlock, hive.getHiveMeta(), Defaults.FLAG_BLOCK_SYNCH);
+		boolean placed = world.setBlockState(pos, hiveBlock, hive.getHiveMeta(), Defaults.FLAG_BLOCK_SYNCH);
 		if (!placed) {
 			return false;
 		}
 
-		Block placedBlock = world.getBlock(x, y, z);
+		Block placedBlock = world.getBlockState(pos).getBlock();
 		if (!Block.isEqualTo(hiveBlock, placedBlock)) {
 			return false;
 		}
 
-		hiveBlock.onBlockAdded(world, x, y, z);
-		world.markBlockForUpdate(x, y, z);
+		hiveBlock.onBlockAdded(world, pos);
+		world.markBlockForUpdate(pos);
 
 		if (!Config.generateBeehivesDebug) {
-			hive.postGen(world, x, y, z);
+			hive.postGen(world, pos);
 		}
 		return true;
 	}

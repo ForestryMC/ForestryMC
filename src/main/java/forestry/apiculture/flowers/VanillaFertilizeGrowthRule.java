@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.genetics.IFlowerGrowthRule;
@@ -29,8 +30,8 @@ public class VanillaFertilizeGrowthRule implements IFlowerGrowthRule {
 	}
 
 	@Override
-	public boolean growFlower(IFlowerRegistry fr, String flowerType, World world, IIndividual individual, int x, int y, int z) {
-		Block ground = world.getBlock(x, y, z);
+	public boolean growFlower(IFlowerRegistry fr, String flowerType, World world, IIndividual individual, BlockPos pos) {
+		Block ground = world.getBlockState(pos).getBlock();
 		int groundMeta;
 		for (Block b : this.allowedItems) {
 			if (b == ground) {

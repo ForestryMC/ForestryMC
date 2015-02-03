@@ -134,7 +134,7 @@ public class ClientProxyCommon extends ProxyCommon {
 		if (Proxies.common.isSimulating(world)) {
 			super.playSoundFX(world, x, y, z, block);
 		} else {
-			playSoundFX(world, x, y, z, block.stepSound.getStepResourcePath(), block.stepSound.getVolume(), block.stepSound.getPitch());
+			playSoundFX(world, x, y, z, block.stepSound.getStepSound(), block.stepSound.getVolume(), block.stepSound.getFrequency());
 		}
 	}
 
@@ -143,7 +143,7 @@ public class ClientProxyCommon extends ProxyCommon {
 		if (Proxies.common.isSimulating(world)) {
 			super.playSoundFX(world, x, y, z, block);
 		} else {
-			playSoundFX(world, x, y, z, block.stepSound.getBreakSound(), block.stepSound.getVolume() / 4, block.stepSound.getPitch());
+			playSoundFX(world, x, y, z, block.stepSound.getBreakSound(), block.stepSound.getVolume() / 4, block.stepSound.getFrequency());
 		}
 	}
 
@@ -152,7 +152,7 @@ public class ClientProxyCommon extends ProxyCommon {
 		if (Proxies.common.isSimulating(world)) {
 			super.playSoundFX(world, x, y, z, block);
 		} else {
-			playSoundFX(world, x, y, z, block.stepSound.getStepResourcePath(), block.stepSound.getVolume() / 4, block.stepSound.getPitch());
+			playSoundFX(world, x, y, z, block.stepSound.getStepSound(), block.stepSound.getVolume() / 4, block.stepSound.getFrequency());
 		}
 	}
 

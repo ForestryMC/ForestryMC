@@ -18,6 +18,7 @@ import net.minecraft.block.BlockLog;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 
@@ -47,20 +48,20 @@ public class BlockUtil {
 		return receptor.canConnectEnergy(side);
 	}
 
-	public static boolean tryPlantPot(World world, int x, int y, int z, Block block) {
+	public static boolean tryPlantPot(World world, BlockPos pos, Block block) {
 
-		int direction = getDirectionalMetadata(world, x, y, z);
+		int direction = getDirectionalMetadata(world, pos);
 		if (direction < 0) {
 			return false;
 		}
 
-		world.setBlock(x, y, z, block, direction, Defaults.FLAG_BLOCK_SYNCH);
+		world.setBlockState(pos, block.getStateFromMeta(direction), Defaults.FLAG_BLOCK_SYNCH);
 		return true;
 	}
 
-	public static int getDirectionalMetadata(World world, int x, int y, int z) {
+	public static int getDirectionalMetadata(World world, BlockPos pos) {
 		for (int i = 0; i < 4; i++) {
-			if (!isValidPot(world, x, y, z, i)) {
+			if (!isValidPot(world, pos, i)) {
 				continue;
 			}
 			return i;
@@ -68,14 +69,14 @@ public class BlockUtil {
 		return -1;
 	}
 
-	public static boolean isValidPot(World world, int x, int y, int z, int notchDirection) {
+	public static boolean isValidPot(World world, BlockPos pos, int notchDirection) {
 		x += Direction.offsetX[notchDirection];
 		z += Direction.offsetZ[notchDirection];
-		Block block = world.getBlock(x, y, z);
+		Block block = world.getBlockState(pos).getBlock();
 		if (block == Blocks.log) {
 			return BlockLog.func_150165_c(world.getBlockMetadata(x, y, z)) == 3;
 		} else {
-			return block.isWood(world, x, y, z);
+			return block.isWood(world, pos);
 		}
 	}
 

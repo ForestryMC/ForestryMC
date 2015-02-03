@@ -12,6 +12,7 @@ package forestry.farming.logic;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
@@ -33,21 +34,21 @@ public class FarmableGourd implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, int x, int y, int z) {
-		if (world.isAirBlock(x, y, z)) {
+	public boolean isSaplingAt(World world, BlockPos pos) {
+		if (world.isAirBlock(pos)) {
 			return false;
 		}
 
-		return StackUtils.equals(world.getBlock(x, y, z), stem);
+		return StackUtils.equals(world.getBlockState(pos).getBlock(), stem);
 	}
 
 	@Override
-	public ICrop getCropAt(World world, int x, int y, int z) {
-		if (world.isAirBlock(x, y, z)) {
+	public ICrop getCropAt(World world, BlockPos pos) {
+		if (world.isAirBlock(pos)) {
 			return null;
 		}
 
-		if (!StackUtils.equals(world.getBlock(x, y, z), fruit)) {
+		if (!StackUtils.equals(world.getBlockState(pos).getBlock(), fruit)) {
 			return null;
 		}
 
@@ -55,7 +56,7 @@ public class FarmableGourd implements IFarmable {
 			return null;
 		}
 
-		return new CropBlock(world, StackUtils.getBlock(fruit), fruit.getItemDamage(), new Vect(x, y, z));
+		return new CropBlock(world, StackUtils.getBlock(fruit), fruit.getItemDamage(), new Vect(pos));
 	}
 
 	@Override
@@ -69,8 +70,8 @@ public class FarmableGourd implements IFarmable {
 	}
 
 	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
-		return world.setBlock(x, y, z, StackUtils.getBlock(stem), 0, Defaults.FLAG_BLOCK_SYNCH);
+	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
+		return world.setBlockState(pos, StackUtils.getBlock(stem).getDefaultState(), Defaults.FLAG_BLOCK_SYNCH);
 	}
 
 }

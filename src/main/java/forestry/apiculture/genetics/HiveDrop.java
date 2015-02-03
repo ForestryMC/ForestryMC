@@ -12,9 +12,12 @@ package forestry.apiculture.genetics;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.IBlockAccess;
 
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
@@ -41,14 +44,14 @@ public class HiveDrop implements IHiveDrop {
 		return this;
 	}
 	
-	private IBee createBee(World world) {
+	private IBee createBee(IBlockAccess world) {
 		return PluginApiculture.beeInterface.getBee(world, PluginApiculture.beeInterface.templateAsGenome(template));
 	}
 	
 	@Override
-	public ItemStack getPrincess(World world, int x, int y, int z, int fortune) {
+	public ItemStack getPrincess(IBlockAccess world, BlockPos pos, int fortune) {
 		IBee bee = createBee(world);
-		if (world.rand.nextFloat() < ignobleShare) {
+		if (new Random().nextFloat() < ignobleShare) {
 			bee.setIsNatural(false);
 		}
 
@@ -56,15 +59,15 @@ public class HiveDrop implements IHiveDrop {
 	}
 
 	@Override
-	public ArrayList<ItemStack> getDrones(World world, int x, int y, int z, int fortune) {
-		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+	public List<ItemStack> getDrones(IBlockAccess world, BlockPos pos, int fortune) {
+		List<ItemStack> ret = new ArrayList<ItemStack>();
 		ret.add(PluginApiculture.beeInterface.getMemberStack(createBee(world), EnumBeeType.DRONE.ordinal()));
 		return ret;
 	}
 
 	@Override
-	public ArrayList<ItemStack> getAdditional(World world, int x, int y, int z, int fortune) {
-		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+	public List<ItemStack> getAdditional(IBlockAccess world, BlockPos pos, int fortune) {
+		List<ItemStack> ret = new ArrayList<ItemStack>();
 		for (ItemStack stack : additional) {
 			ret.add(stack.copy());
 		}
@@ -73,7 +76,7 @@ public class HiveDrop implements IHiveDrop {
 	}
 
 	@Override
-	public int getChance(World world, int x, int y, int z) {
+	public int getChance(IBlockAccess world, BlockPos pos) {
 		return chance;
 	}
 

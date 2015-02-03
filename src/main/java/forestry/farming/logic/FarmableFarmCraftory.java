@@ -16,6 +16,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
@@ -35,23 +37,23 @@ public class FarmableFarmCraftory implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, int x, int y, int z) {
+	public boolean isSaplingAt(World world, BlockPos pos) {
 
-		if (world.isAirBlock(x, y, z)) {
+		if (world.isAirBlock(pos)) {
 			return false;
 		}
 
-		Block block = world.getBlock(x, y, z);
+		Block block = world.getBlockState(pos).getBlock();
 		return block == PluginFarmCraftory.blockSingle || block == PluginFarmCraftory.blockMulti;
 	}
 
 	@Override
-	public ICrop getCropAt(World world, int x, int y, int z) {
-		Block block = world.getBlock(x, y, z);
+	public ICrop getCropAt(World world, BlockPos pos) {
+		Block block = world.getBlockState(pos).getBlock();
 		if (block != PluginFarmCraftory.blockSingle && block != PluginFarmCraftory.blockMulti) {
 			return null;
 		}
-		TileEntity tile = world.getTileEntity(x, y, z);
+		TileEntity tile = world.getTileEntity(pos);
 		if (tile == null) {
 			return null;
 		}
@@ -59,7 +61,7 @@ public class FarmableFarmCraftory implements IFarmable {
 			return null;
 		}
 
-		return new CropBlock(world, block, world.getBlockMetadata(x, y, z), new Vect(x, y, z));
+		return new CropBlock(world, block, world.getBlockMetadata(x, y, z), new Vect(pos));
 	}
 
 	@Override
@@ -74,8 +76,8 @@ public class FarmableFarmCraftory implements IFarmable {
 	}
 
 	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
-		return germling.copy().tryPlaceItemIntoWorld(player, world, x, y - 1, z, 1, 0, 0, 0);
+	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
+		return germling.copy().onItemUse(player, world, pos.down(), EnumFacing.UP, 0, 0, 0);
 	}
 
 	@Override

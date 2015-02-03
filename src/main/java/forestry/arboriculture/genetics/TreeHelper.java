@@ -22,6 +22,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -127,8 +128,8 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public ITree getTree(World world, int x, int y, int z) {
-		TileEntity tile = world.getTileEntity(x, y, z);
+	public ITree getTree(World world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
 		if (!(tile instanceof TileSapling)) {
 			return null;
 		}
@@ -184,51 +185,51 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	}
 
 	@Override
-	public boolean plantSapling(World world, ITree tree, GameProfile owner, int x, int y, int z) {
+	public boolean plantSapling(World world, ITree tree, GameProfile owner, BlockPos pos) {
 
-		boolean placed = world.setBlock(x, y, z, ForestryBlock.saplingGE.block(), 0, Defaults.FLAG_BLOCK_SYNCH);
+		boolean placed = world.setBlockState(pos, ForestryBlock.saplingGE.block().getDefaultState(), Defaults.FLAG_BLOCK_SYNCH);
 		if (!placed) {
 			return false;
 		}
 
-		if (!ForestryBlock.saplingGE.isBlockEqual(world, x, y, z)) {
+		if (!ForestryBlock.saplingGE.isBlockEqual(world, pos)) {
 			return false;
 		}
 
-		TileEntity tile = world.getTileEntity(x, y, z);
+		TileEntity tile = world.getTileEntity(pos);
 		if (!(tile instanceof TileSapling)) {
-			world.setBlockToAir(x, y, z);
+			world.setBlockToAir(pos);
 			return false;
 		}
 
 		TileSapling sapling = (TileSapling) tile;
 		sapling.setTree(tree.copy());
 		sapling.setOwner(owner);
-		world.markBlockForUpdate(x, y, z);
+		world.markBlockForUpdate(pos);
 
 		return true;
 	}
 
 	@Override
-	public boolean setLeaves(World world, IIndividual tree, GameProfile owner, int x, int y, int z) {
-		return setLeaves(world, tree, owner, x, y, z, false);
+	public boolean setLeaves(World world, IIndividual tree, GameProfile owner, BlockPos pos) {
+		return setLeaves(world, tree, owner, pos, false);
 	}
 
 	@Override
-	public boolean setLeaves(World world, IIndividual tree, GameProfile owner, int x, int y, int z, boolean decorative) {
+	public boolean setLeaves(World world, IIndividual tree, GameProfile owner, BlockPos pos, boolean decorative) {
 
-		boolean placed = ForestryBlock.leaves.setBlock(world, x, y, z, 0, Defaults.FLAG_BLOCK_SYNCH);
+		boolean placed = ForestryBlock.leaves.setBlock(world, pos, 0, Defaults.FLAG_BLOCK_SYNCH);
 		if (!placed) {
 			return false;
 		}
 
-		if (!ForestryBlock.leaves.isBlockEqual(world, x, y, z)) {
+		if (!ForestryBlock.leaves.isBlockEqual(world, pos)) {
 			return false;
 		}
 
-		TileEntity tile = ForestryBlockLeaves.getLeafTile(world, x, y, z);
+		TileEntity tile = ForestryBlockLeaves.getLeafTile(world, pos);
 		if (tile == null) {
-			world.setBlockToAir(x, y, z);
+			world.setBlockToAir(pos);
 			return false;
 		}
 
@@ -238,34 +239,34 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 		if (decorative) {
 			tileLeaves.setDecorative();
 		}
-		world.markBlockForUpdate(x, y, z);
+		world.markBlockForUpdate(pos);
 
 		return true;
 	}
 
 	@Override
-	public boolean setFruitBlock(World world, IAlleleFruit allele, float sappiness, short[] indices, int x, int y, int z) {
+	public boolean setFruitBlock(World world, IAlleleFruit allele, float sappiness, short[] indices, BlockPos pos) {
 
-		int direction = BlockUtil.getDirectionalMetadata(world, x, y, z);
+		int direction = BlockUtil.getDirectionalMetadata(world, pos);
 		if (direction < 0) {
 			return false;
 		}
-		boolean placed = ForestryBlock.pods.setBlock(world, x, y, z, direction, Defaults.FLAG_BLOCK_SYNCH);
+		boolean placed = ForestryBlock.pods.setBlock(world, pos, direction, Defaults.FLAG_BLOCK_SYNCH);
 		if (!placed) {
 			return false;
 		}
 
-		if (!ForestryBlock.pods.isBlockEqual(world, x, y, z)) {
+		if (!ForestryBlock.pods.isBlockEqual(world, pos)) {
 			return false;
 		}
 
-		TileFruitPod pod = BlockFruitPod.getPodTile(world, x, y, z);
+		TileFruitPod pod = BlockFruitPod.getPodTile(world, pos);
 		if (pod == null) {
-			world.setBlockToAir(x, y, z);
+			world.setBlockToAir(pos);
 			return false;
 		}
 		pod.setFruit(allele, sappiness, indices);
-		world.markBlockForUpdate(x, y, z);
+		world.markBlockForUpdate(pos);
 		return true;
 	}
 

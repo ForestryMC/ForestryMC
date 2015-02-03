@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -22,6 +23,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -81,8 +83,8 @@ public class BlockBeehives extends BlockContainer {
 	}
 
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState metadata, int fortune) {
+		List<ItemStack> ret = new ArrayList<ItemStack>();
 
 		// Handle legacy block
 		if (metadata == 0) {
@@ -96,12 +98,13 @@ public class BlockBeehives extends BlockContainer {
 		// Grab a princess
 		int tries = 0;
 		boolean hasPrincess = false;
+
 		while (tries <= 10 && !hasPrincess) {
 			tries++;
 
 			for (IHiveDrop drop : dropList) {
-				if (world.rand.nextInt(100) < drop.getChance(world, x, y, z)) {
-					ret.add(drop.getPrincess(world, x, y, z, fortune));
+				if (RANDOM.nextInt(100) < drop.getChance(world, pos)) {
+					ret.add(drop.getPrincess(world, pos, fortune));
 					hasPrincess = true;
 					break;
 				}
@@ -110,15 +113,15 @@ public class BlockBeehives extends BlockContainer {
 
 		// Grab drones
 		for (IHiveDrop drop : dropList) {
-			if (world.rand.nextInt(100) < drop.getChance(world, x, y, z)) {
-				ret.addAll(drop.getDrones(world, x, y, z, fortune));
+			if (RANDOM.nextInt(100) < drop.getChance(world, pos)) {
+				ret.addAll(drop.getDrones(world, pos, fortune));
 				break;
 			}
 		}
 		// Grab anything else on offer
 		for (IHiveDrop drop : dropList) {
-			if (world.rand.nextInt(100) < drop.getChance(world, x, y, z)) {
-				ret.addAll(drop.getAdditional(world, x, y, z, fortune));
+			if (RANDOM.nextInt(100) < drop.getChance(world, pos)) {
+				ret.addAll(drop.getAdditional(world, pos, fortune));
 				break;
 			}
 		}

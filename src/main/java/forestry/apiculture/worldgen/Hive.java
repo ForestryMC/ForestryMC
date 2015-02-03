@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -54,8 +55,8 @@ public final class Hive {
 		return hiveDescription.getGenChance();
 	}
 
-	public void postGen(World world, int x, int y, int z) {
-		hiveDescription.postGen(world, x, y, z);
+	public void postGen(World world, BlockPos pos) {
+		hiveDescription.postGen(world, pos);
 	}
 
 	public boolean isGoodBiome(BiomeGenBase biome) {
@@ -70,15 +71,15 @@ public final class Hive {
 		return hiveDescription.isGoodTemperature(temperature);
 	}
 
-	public boolean isValidLocation(World world, int x, int y, int z) {
-		return hiveDescription.getHiveGen().isValidLocation(world, x, y, z);
+	public boolean isValidLocation(World world, BlockPos pos) {
+		return hiveDescription.getHiveGen().isValidLocation(world, pos);
 	}
 
-	public boolean canReplace(World world, int x, int y, int z) {
-		return hiveDescription.getHiveGen().canReplace(world, x, y, z);
+	public boolean canReplace(World world, BlockPos pos) {
+		return hiveDescription.getHiveGen().canReplace(world, pos);
 	}
 
-	public int getYForHive(World world, int x, int z) {
-		return hiveDescription.getHiveGen().getYForHive(world, x, z);
+	public BlockPos getYForHive(World world, BlockPos pos) {
+		return hiveDescription.getHiveGen().getYForHive(world, pos);
 	}
 }

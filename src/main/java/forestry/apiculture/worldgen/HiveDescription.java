@@ -14,6 +14,7 @@ import java.util.EnumSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -39,9 +40,9 @@ public enum HiveDescription implements IHiveDescription {
 	},
 	SNOW(6, 2.0f, EnumSet.allOf(EnumHumidity.class), EnumSet.of(EnumTemperature.COLD, EnumTemperature.ICY), HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass, Blocks.snow)) {
 		@Override
-		public void postGen(World world, int x, int y, int z) {
-			if (world.isAirBlock(x, y + 1, z)) {
-				world.setBlock(x, y + 1, z, Blocks.snow_layer, 0, 0);
+		public void postGen(World world, BlockPos pos) {
+			if (world.isAirBlock(pos.up())) {
+				world.setBlockState(pos.up(), Blocks.snow_layer.getDefaultState(), 0);
 			}
 		}
 	},
@@ -97,7 +98,7 @@ public enum HiveDescription implements IHiveDescription {
 	}
 
 	@Override
-	public void postGen(World world, int x, int y, int z) {
+	public void postGen(World world, BlockPos pos) {
 
 	}
 }

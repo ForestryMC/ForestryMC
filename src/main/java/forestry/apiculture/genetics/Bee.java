@@ -323,7 +323,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 		IFlowerProvider provider = genome.getFlowerProvider();
 
-		Vect housingPos = new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord());
+		Vect housingPos = new Vect(housing.getCoords());
 		Vect area = getArea(genome, housing);
 		Vect offset = new Vect(-area.x / 2, -area.y / 2, -area.z / 2);
 
@@ -334,7 +334,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 			Vect posBlock = Vect.add(housingPos, posCurrent, offset);
 
-			if (provider.isAcceptedFlower(housing.getWorld(), this, posBlock.x, posBlock.y, posBlock.z)) {
+			if (provider.isAcceptedFlower(housing.getWorld(), this, posBlock.toBlockPos())) {
 				hasFlower = true;
 				break;
 			}
@@ -527,8 +527,7 @@ public class Bee extends IndividualLiving implements IBee {
 			}
 		}
 
-		return genome.getFlowerProvider().affectProducts(housing.getWorld(), this, housing.getXCoord(), housing.getYCoord(), housing.getZCoord(),
-				products.toArray(new ItemStack[products.size()]));
+		return genome.getFlowerProvider().affectProducts(housing.getWorld(), this, housing.getCoords(), products.toArray(new ItemStack[products.size()]));
 	}
 
 	/* REPRODUCTION */
@@ -560,8 +559,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 		ArrayList<IBee> bees = new ArrayList<IBee>();
 
-		int toCreate = PluginApiculture.beeInterface.getBeekeepingMode(world).getFinalFertility(this, world, housing.getXCoord(), housing.getYCoord(),
-				housing.getZCoord());
+		int toCreate = PluginApiculture.beeInterface.getBeekeepingMode(world).getFinalFertility(this, world, housing.getCoords());
 
 		if (toCreate <= 0) {
 			toCreate = 1;
@@ -756,13 +754,13 @@ public class Bee extends IndividualLiving implements IBee {
 		IFlowerProvider provider = genome.getFlowerProvider();
 		Vect area = getArea(genome, housing);
 		Vect offset = new Vect(-area.x / 2, -area.y / 4, -area.z / 2);
-		Vect housingPos = new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord());
+		Vect housingPos = new Vect(housing.getCoords());
 
 		for (int i = 0; i < 10; i++) {
 			Vect randomPos = Vect.getRandomPositionInArea(random, area);
 			Vect posBlock = Vect.add(housingPos, randomPos, offset);
 
-			if (provider.growFlower(world, this, posBlock.x, posBlock.y, posBlock.z)) {
+			if (provider.growFlower(world, this, posBlock.toBlockPos())) {
 				break;
 			}
 		}
