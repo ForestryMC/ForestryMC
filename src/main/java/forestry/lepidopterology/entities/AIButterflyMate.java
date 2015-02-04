@@ -13,6 +13,7 @@ package forestry.lepidopterology.entities;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.core.utils.GeneticsUtil;
+import forestry.plugins.PluginLepidopterology;
 
 public class AIButterflyMate extends AIButterflyInteract {
 
@@ -30,6 +31,10 @@ public class AIButterflyMate extends AIButterflyInteract {
 		}
 
 		if (entity.getButterfly().getMate() == null) {
+			return false;
+		}
+
+		if (entity.worldObj.countEntities(EntityButterfly.class) > PluginLepidopterology.spawnConstraint) {
 			return false;
 		}
 
