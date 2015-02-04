@@ -31,6 +31,11 @@ import forestry.api.core.IArmorNaturalist;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.IButterflyNursery;
+import forestry.arboriculture.genetics.CheckPollinatable;
+import forestry.arboriculture.genetics.CheckPollinatableTree;
+import forestry.arboriculture.genetics.ICheckPollinatable;
 import forestry.core.genetics.ItemGE;
 import forestry.plugins.PluginArboriculture;
 
@@ -59,6 +64,36 @@ public class GeneticsUtil {
 		ItemStack armorItem = player.inventory.armorInventory[3];
 		return armorItem != null && armorItem.getItem() instanceof IArmorNaturalist
 				&& ((IArmorNaturalist) armorItem.getItem()).canSeePollination(player, armorItem, true);
+	}
+
+	public static boolean canNurse(IButterfly butterfly, World world, final int x, final int y, final int z) {
+		TileEntity tile = world.getTileEntity(x, y, z);
+
+		if (tile instanceof IButterflyNursery) {
+			return ((IButterflyNursery) tile).canNurse(butterfly);
+		}
+
+		// vanilla leaves can always be converted and then nurse
+		return getErsatzPollen(world, x, y, z) != null;
+	}
+
+	/**
+	 * Returns an ICheckPollinatable that can be checked but not mated.
+	 * Used to check for pollination traits without altering the world by changing vanilla leaves to forestry ones.
+	 */
+	public static ICheckPollinatable getCheckPollinatable(World world, final int x, final int y, final int z) {
+		TileEntity tile = world.getTileEntity(x, y, z);
+
+		if (tile instanceof IPollinatable) {
+			return new CheckPollinatable((IPollinatable) tile);
+		}
+
+		ITree pollen = getErsatzPollen(world, x, y, z);
+		if (pollen != null) {
+			return new CheckPollinatableTree(pollen);
+		}
+
+		return null;
 	}
 
 	public static IPollinatable getOrCreatePollinatable(GameProfile owner, World world, final int x, final int y, final int z) {

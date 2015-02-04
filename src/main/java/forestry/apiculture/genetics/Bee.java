@@ -45,6 +45,7 @@ import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
+import forestry.arboriculture.genetics.ICheckPollinatable;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Defaults;
 import forestry.core.genetics.Chromosome;
@@ -720,19 +721,21 @@ public class Bee extends IndividualLiving implements IBee {
 			Vect randomPos = Vect.getRandomPositionInArea(random, area);
 			Vect posBlock = Vect.add(housingPos, randomPos, offset);
 
-			IPollinatable receiver = GeneticsUtil.getOrCreatePollinatable(housing.getOwnerName(), world, posBlock.x, posBlock.y, posBlock.z);
-			if (receiver == null) {
+			ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(world, posBlock.x, posBlock.y, posBlock.z);
+			if (checkPollinatable == null) {
 				continue;
 			}
 
-			if (!genome.getFlowerProvider().isAcceptedPollinatable(world, receiver)) {
+			if (!genome.getFlowerProvider().isAcceptedPollinatable(world, checkPollinatable.getPlantType())) {
 				continue;
 			}
-			if (!receiver.canMateWith(pollen)) {
+			if (!checkPollinatable.canMateWith(pollen)) {
 				continue;
 			}
 
-			receiver.mateWith(pollen);
+			IPollinatable realPollinatable = GeneticsUtil.getOrCreatePollinatable(housing.getOwnerName(), world, posBlock.x, posBlock.y, posBlock.z);
+
+			realPollinatable.mateWith(pollen);
 			return true;
 		}
 
