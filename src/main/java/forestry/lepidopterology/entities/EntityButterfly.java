@@ -78,7 +78,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	}
 
 	/* CONSTANTS */
-	public static final int COOLDOWNS = 1000;
+	public static final int COOLDOWNS = 1500;
 
 	private static final int DATAWATCHER_ID_SPECIES = 16;
 	private static final int DATAWATCHER_ID_SCALE = 17;
