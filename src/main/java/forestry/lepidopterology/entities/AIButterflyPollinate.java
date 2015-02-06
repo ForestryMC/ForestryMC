@@ -11,6 +11,7 @@
 package forestry.lepidopterology.entities;
 
 import forestry.api.genetics.IPollinatable;
+import forestry.arboriculture.genetics.FakePollinatable;
 import forestry.arboriculture.genetics.ICheckPollinatable;
 import forestry.core.utils.GeneticsUtil;
 
@@ -34,7 +35,7 @@ public class AIButterflyPollinate extends AIButterflyInteract {
 			return false;
 		}
 
-		if (!entity.getButterfly().getGenome().getFlowerProvider().isAcceptedPollinatable(entity.worldObj, checkPollinatable.getPlantType())) {
+		if (!entity.getButterfly().getGenome().getFlowerProvider().isAcceptedPollinatable(entity.worldObj, new FakePollinatable(checkPollinatable))) {
 			return false;
 		}
 
