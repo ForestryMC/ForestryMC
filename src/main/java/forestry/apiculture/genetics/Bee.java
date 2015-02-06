@@ -45,6 +45,7 @@ import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
+import forestry.arboriculture.genetics.FakePollinatable;
 import forestry.arboriculture.genetics.ICheckPollinatable;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Defaults;
@@ -726,7 +727,7 @@ public class Bee extends IndividualLiving implements IBee {
 				continue;
 			}
 
-			if (!genome.getFlowerProvider().isAcceptedPollinatable(world, checkPollinatable.getPlantType())) {
+			if (!genome.getFlowerProvider().isAcceptedPollinatable(world, new FakePollinatable(checkPollinatable))) {
 				continue;
 			}
 			if (!checkPollinatable.canMateWith(pollen)) {

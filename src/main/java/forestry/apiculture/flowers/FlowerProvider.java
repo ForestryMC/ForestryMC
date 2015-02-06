@@ -42,11 +42,9 @@ public class FlowerProvider implements IFlowerProvider {
 
 	@Override
 	public boolean isAcceptedPollinatable(World world, IPollinatable pollinatable) {
-		return isAcceptedPollinatable(world, pollinatable.getPlantType());
-	}
 
-	@Override
-	public boolean isAcceptedPollinatable(World world, EnumSet<EnumPlantType> plantTypes) {
+		EnumSet<EnumPlantType> plantTypes = pollinatable.getPlantType();
+
 		if (flowerType.equals(FlowerManager.FlowerTypeNether)) {
 			return plantTypes.contains(EnumPlantType.Nether);
 		} else if (flowerType.equals(FlowerManager.FlowerTypeCacti)) {
