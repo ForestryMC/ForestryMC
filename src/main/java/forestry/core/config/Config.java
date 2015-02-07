@@ -81,6 +81,7 @@ public class Config {
 
 	public static boolean squareFarms = false;
 	public static boolean ExUtilEnderLily = true;
+	public static boolean MagicalCropsSupport = true;
 
 	// Mail
 	public static boolean mailAlertEnabled = true;
@@ -112,6 +113,10 @@ public class Config {
 
 	public static boolean isExUtilEnderLilyEnabled() {
 		return ExUtilEnderLily;
+	}
+
+	public static boolean isMagicalCropsSupportEnabled() {
+		return MagicalCropsSupport;
 	}
 
 	public static void load() {
@@ -245,6 +250,10 @@ public class Config {
 		Property supportEnderlily = config.get("tweaks.farms.exutilenderlily", CATEGORY_COMMON, true);
 		supportEnderlily.comment = "set to false to disable multifarm support for ExtraUtilities Ender-lily seeds.";
 		ExUtilEnderLily = Boolean.parseBoolean(supportEnderlily.value);
+
+		Property supportMagicalCrops = config.get("tweaks.farms.magicalcropssupport", CATEGORY_COMMON, true);
+		supportMagicalCrops.comment = "set to false to disable multifarm support for Magical Crops crops.";
+		MagicalCropsSupport = Boolean.parseBoolean(supportMagicalCrops.value);
 
 		property = config.get("structures.schemata.disabled", CATEGORY_COMMON, "");
 		property.comment = "add schemata keys to disable them. current keys: alveary3x3;farm3x3;farm3x4;farm3x5;farm4x4;farm5x5";
