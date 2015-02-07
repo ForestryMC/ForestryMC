@@ -89,6 +89,7 @@ public class PluginManager {
 		FARM_CRAFTORY(new PluginFarmCraftory()),
 		INDUSTRIALCRAFT(new PluginIC2()),
 		HARVESTCRAFT(new PluginHarvestCraft()),
+		MAGICALCROPS(new PluginMagicalCrops()),
 		NATURA(new PluginNatura()),
 		UNDERGROUND_BIOMES(new PluginUndergroundBiomes());
 
