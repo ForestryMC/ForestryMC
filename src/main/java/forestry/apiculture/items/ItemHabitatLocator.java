@@ -184,7 +184,8 @@ public class ItemHabitatLocator extends ItemInventoried {
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
 		BiomeGenBase currentBiome = player.worldObj.getBiomeGenForCoords((int) player.posX, (int) player.posZ);
 
-		EnumTemperature temperature = EnumTemperature.getFromBiome(currentBiome);
+		float temperatureValue = currentBiome.getFloatTemperature((int) player.posX, (int) player.posY, (int) player.posZ);
+		EnumTemperature temperature = EnumTemperature.getFromValue(temperatureValue);
 		EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.rainfall);
 
 		list.add(StringUtil.localize("gui.currentBiome") + ": " + currentBiome.biomeName);

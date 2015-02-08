@@ -37,6 +37,7 @@ import forestry.api.core.BiomeHelper;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleTolerance;
 import forestry.api.genetics.IChromosome;
@@ -286,7 +287,7 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		// / And finally climate check
-		if (!checkSuitableClimate(housing.getTemperature(), housing.getHumidity())) {
+		if (!isSuitableClimate(housing.getTemperature(), housing.getHumidity())) {
 			return EnumErrorCode.INVALIDBIOME;
 		}
 
@@ -301,20 +302,17 @@ public class Bee extends IndividualLiving implements IBee {
 		return !genome.getPrimary().isNocturnal() || genome.getNocturnal();
 	}
 
-	private boolean checkBiomeHazard(BiomeGenBase biome) {
+	public boolean isSuitableBiome(BiomeGenBase biome) {
 		if (biome == null) {
 			return false;
 		}
 
 		EnumTemperature temperature = EnumTemperature.getFromBiome(biome);
 		EnumHumidity humidity = EnumHumidity.getFromValue(biome.rainfall);
-		return AlleleManager.climateHelper.isWithinLimits(temperature, humidity,
-				genome.getPrimary().getTemperature(), genome.getToleranceTemp(),
-				genome.getPrimary().getHumidity(), genome.getToleranceHumid());
+		return isSuitableClimate(temperature, humidity);
 	}
 
-	private boolean checkSuitableClimate(EnumTemperature temperature, EnumHumidity humidity) {
-
+	private boolean isSuitableClimate(EnumTemperature temperature, EnumHumidity humidity) {
 		return AlleleManager.climateHelper.isWithinLimits(temperature, humidity,
 				genome.getPrimary().getTemperature(), genome.getToleranceTemp(),
 				genome.getPrimary().getHumidity(), genome.getToleranceHumid());
@@ -350,7 +348,7 @@ public class Bee extends IndividualLiving implements IBee {
 	public ArrayList<Integer> getSuitableBiomeIds() {
 		ArrayList<Integer> suitableBiomes = new ArrayList<Integer>();
 		for (BiomeGenBase biome : BiomeGenBase.getBiomeGenArray()) {
-			if (checkBiomeHazard(biome)) {
+			if (isSuitableBiome(biome)) {
 				suitableBiomes.add(biome.biomeID);
 			}
 		}
@@ -362,7 +360,7 @@ public class Bee extends IndividualLiving implements IBee {
 	public ArrayList<BiomeGenBase> getSuitableBiomes() {
 		ArrayList<BiomeGenBase> suitableBiomes = new ArrayList<BiomeGenBase>();
 		for (BiomeGenBase biome : BiomeGenBase.getBiomeGenArray()) {
-			if (checkBiomeHazard(biome)) {
+			if (isSuitableBiome(biome)) {
 				suitableBiomes.add(biome);
 			}
 		}
@@ -610,14 +608,7 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		IBeekeepingMode mode = PluginApiculture.beeInterface.getBeekeepingMode(world);
-		IBee offspring = new Bee(new BeeGenome(chromosomes), mode.isNaturalOffspring(this), generation);
-
-		/* Disabling the mutation rate nerf
-		// All mutation and no play makes queen a dull girl.
-		if(mode.isDegenerating(this, offspring, housing))
-			offspring.setIsNatural(false);*/
-
-		return offspring;
+		return new Bee(new BeeGenome(chromosomes), mode.isNaturalOffspring(this), generation);
 	}
 
 	private IChromosome[] mutateSpecies(IBeeHousing housing, IGenome genomeOne, IGenome genomeTwo) {

@@ -237,8 +237,6 @@ public class PluginApiculture extends ForestryPlugin {
 
 		ForestryBlock.beehives.registerBlock(new BlockBeehives(), ItemForestryBlock.class, "beehives");
 
-		createHives();
-
 		// Init bee interface
 		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginApiculture.beeInterface = new BeeHelper());
 		BeeManager.villageBees = new ArrayList[]{new ArrayList<IBeeGenome>(), new ArrayList<IBeeGenome>()};
@@ -276,6 +274,7 @@ public class PluginApiculture extends ForestryPlugin {
 	public void doInit() {
 		super.doInit();
 
+		// Config
 		apicultureConfig = new Configuration();
 
 		Property property = apicultureConfig.get("apiary.sidesensitive", CONFIG_CATEGORY, apiarySideSensitive);
@@ -301,9 +300,13 @@ public class PluginApiculture extends ForestryPlugin {
 
 		apicultureConfig.save();
 
+		// Genetics
 		createAlleles();
 		createMutations();
+
+		// Hives
 		registerBeehiveDrops();
+		createHives();
 
 		// Inducers for swarmer
 		BeeManager.inducers.put(ForestryItem.royalJelly.getItemStack(), 10);
