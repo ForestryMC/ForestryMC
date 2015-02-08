@@ -293,7 +293,7 @@ public class BeeTemplates {
 	public static IAllele[] getAustereBranchTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
 		alleles[EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceBoth1;
-		alleles[EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceUp1;
+		alleles[EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceDown1;
 		alleles[EnumBeeChromosome.NOCTURNAL.ordinal()] = Allele.boolTrue;
 		alleles[EnumBeeChromosome.FLOWER_PROVIDER.ordinal()] = Allele.flowersCacti;
 		return alleles;
@@ -328,8 +328,8 @@ public class BeeTemplates {
 	// / TROPICAL BRANCH
 	public static IAllele[] getTropicalBranchTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceBoth1;
-		alleles[EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceDown1;
+		alleles[EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceUp1;
+		alleles[EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceUp1;
 		alleles[EnumBeeChromosome.FLOWER_PROVIDER.ordinal()] = Allele.flowersJungle;
 		alleles[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectMiasmic;
 		return alleles;
@@ -401,6 +401,7 @@ public class BeeTemplates {
 	public static IAllele[] getFrozenBranchTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
 		alleles[EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceUp1;
+		alleles[EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceBoth1;
 		alleles[EnumBeeChromosome.FLOWER_PROVIDER.ordinal()] = Allele.flowersSnow;
 		alleles[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectGlacial;
 		return alleles;
@@ -572,7 +573,6 @@ public class BeeTemplates {
 		IAllele[] alleles = getDefaultTemplate();
 		alleles[EnumBeeChromosome.FLOWER_PROVIDER.ordinal()] = Allele.flowersMushrooms;
 		alleles[EnumBeeChromosome.FLOWERING.ordinal()] = Allele.floweringSlower;
-		alleles[EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceBoth1;
 		alleles[EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceBoth1;
 		return alleles;
 	}
