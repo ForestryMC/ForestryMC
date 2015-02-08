@@ -204,7 +204,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			}
 		}
 
-		if (worldObj.getTotalWorldTime() % 20 != 0) {
+		if (!updateOnInterval(20)) {
 			return;
 		}
 

@@ -339,7 +339,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	@Override
 	public void updateServerSide() {
 
-		if (worldObj.getTotalWorldTime() % 20 != 0) {
+		if (!updateOnInterval(20)) {
 			return;
 		}
 		IInventoryAdapter accessibleInventory = getInternalInventory();
@@ -348,7 +348,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			FluidHelper.drainContainers(tankManager, accessibleInventory, SLOT_CAN_INPUT);
 		}
 
-		if (worldObj.getTotalWorldTime() % 40 != 0) {
+		if (!updateOnInterval(40)) {
 			return;
 		}
 

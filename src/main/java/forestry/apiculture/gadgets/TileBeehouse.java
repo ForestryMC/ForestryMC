@@ -161,7 +161,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 
 		// / Multiplayer FX
 		if (PluginApiculture.beeInterface.isMated(getInternalInventory().getStackInSlot(SLOT_QUEEN))) {
-			if (getErrorState() == EnumErrorCode.OK && worldObj.getTotalWorldTime() % 2 % 2 == 0) {
+			if (getErrorState() == EnumErrorCode.OK && updateOnInterval(2)) {
 				IBee displayQueen = PluginApiculture.beeInterface.getMember(getInternalInventory().getStackInSlot(SLOT_QUEEN));
 				displayQueen.doFX(logic.getEffectData(), this);
 			}
@@ -180,26 +180,9 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 		}
 
 		// Add swarm effects
-		if (worldObj.getTotalWorldTime() % 200 * 10 == 0) {
+		if (updateOnInterval(200)) {
 			onQueenChange(getInternalInventory().getStackInSlot(SLOT_QUEEN));
 		}
-		/* These should get already done on the client / doesn't work server-side anyway
-		 if (getErrorState() == EnumErrorCode.OK && worldObj.getTotalWorldTime() % 2 % 2 == 0)
-		 queen.doFX(logic.getEffectData(), this);
-
-		 if (getErrorState() == EnumErrorCode.OK && worldObj.getTotalWorldTime() % 50 == 0) {
-		 float f = xCoord + 0.5F;
-		 float f1 = yCoord + 0.0F + (worldObj.rand.nextFloat() * 6F) / 16F;
-		 float f2 = zCoord + 0.5F;
-		 float f3 = 0.52F;
-		 float f4 = worldObj.rand.nextFloat() * 0.6F - 0.3F;
-
-		 Proxies.common.addEntitySwarmFX(worldObj, (f - f3), f1, (f2 + f4), 0F, 0F, 0F);
-		 Proxies.common.addEntitySwarmFX(worldObj, (f + f3), f1, (f2 + f4), 0F, 0F, 0F);
-		 Proxies.common.addEntitySwarmFX(worldObj, (f + f4), f1, (f2 - f3), 0F, 0F, 0F);
-		 Proxies.common.addEntitySwarmFX(worldObj, (f + f4), f1, (f2 + f3), 0F, 0F, 0F);
-		 }*/
-
 	}
 
 	// @Override

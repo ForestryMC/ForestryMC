@@ -125,7 +125,7 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 
 	@Override
 	public void updateServerSide() {
-		if (worldObj.getTotalWorldTime() % 20 == 0) {
+		if (updateOnInterval(20)) {
 			// Check inventory slots for fuel
 			// Check if we have suitable items waiting in the item slot
 			IInventoryAdapter inventory = getInternalInventory();

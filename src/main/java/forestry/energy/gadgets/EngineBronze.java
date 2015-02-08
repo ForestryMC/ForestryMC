@@ -116,7 +116,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	@Override
 	public void updateServerSide() {
 		super.updateServerSide();
-		if (worldObj.getTotalWorldTime() % 20 * 10 != 0) {
+		if (!updateOnInterval(20)) {
 			return;
 		}
 

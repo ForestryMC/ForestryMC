@@ -11,6 +11,7 @@
 package forestry.core.gadgets;
 
 import java.util.Collection;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
@@ -58,9 +59,12 @@ import buildcraft.api.statements.ITriggerProvider;
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
 public abstract class TileForestry extends TileEntity implements INetworkedEntity, IRestrictedAccess, IErrorSource, ITriggerProvider, ISidedInventory, IFilterSlotDelegate {
 
+	private static Random rand = new Random();
+
 	protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 	protected boolean isInited = false;
 	private IInventoryAdapter inventory = FakeInventoryAdapter.instance();
+	private final int tickUpdateOffset = rand.nextInt();
 
 	public AdjacentTileCache getTileCache() {
 		return tileCache;
@@ -114,6 +118,10 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 			initialize();
 			isInited = true;
 		}
+	}
+
+	public final boolean updateOnInterval(int tickInterval) {
+		return (worldObj.getTotalWorldTime() + tickUpdateOffset) % tickInterval == 0;
 	}
 
 	public abstract void initialize();

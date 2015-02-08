@@ -66,14 +66,14 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 
 		if (pendingSpawns.size() > 0) {
 			setIsActive(true);
-			if (worldObj.getTotalWorldTime() % 1000 == 0) {
+			if (updateOnInterval(1000)) {
 				trySpawnSwarm();
 			}
 		} else {
 			setIsActive(false);
 		}
 
-		if (worldObj.getTotalWorldTime() % 500 != 0) {
+		if (!updateOnInterval(500)) {
 			return;
 		}
 

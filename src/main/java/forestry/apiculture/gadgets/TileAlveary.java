@@ -71,7 +71,7 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 			}
 
 			// Periodic validation if needed
-			if (worldObj.getTotalWorldTime() % 200 == 0 && (!isIntegratedIntoStructure() || isMaster())) {
+			if (updateOnInterval(200) && (!isIntegratedIntoStructure() || isMaster())) {
 				validateStructure();
 			}
 

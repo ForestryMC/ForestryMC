@@ -122,7 +122,7 @@ public class EngineCopper extends Engine implements ISidedInventory {
 	public void updateServerSide() {
 		super.updateServerSide();
 
-		if (worldObj.getTotalWorldTime() % 40 != 0) {
+		if (!updateOnInterval(40)) {
 			return;
 		}
 

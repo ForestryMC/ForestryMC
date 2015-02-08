@@ -84,7 +84,7 @@ public class TileGearbox extends TileFarm implements IPowerHandler {
 			workCounter++;
 		}
 
-		if (workCounter >= WORK_CYCLES && worldObj.getTotalWorldTime() % 5 == 0) {
+		if (workCounter >= WORK_CYCLES && updateOnInterval(5)) {
 			ITileStructure central = getCentralTE();
 			if (!(central instanceof IFarmHousing)) {
 				return;

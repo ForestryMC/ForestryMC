@@ -188,7 +188,7 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 	@Override
 	public void updateServerSide() {
 
-		if (worldObj.getTotalWorldTime() % 20 * 10 != 0) {
+		if (!updateOnInterval(20)) {
 			return;
 		}
 

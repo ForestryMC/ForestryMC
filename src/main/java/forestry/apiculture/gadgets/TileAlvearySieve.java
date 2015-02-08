@@ -71,7 +71,7 @@ public class TileAlvearySieve extends TileAlveary implements ICrafter, IBeeListe
 	@Override
 	protected void updateServerSide() {
 		super.updateServerSide();
-		if (worldObj.getTotalWorldTime() % 200 != 0) {
+		if (!updateOnInterval(200)) {
 			return;
 		}
 		

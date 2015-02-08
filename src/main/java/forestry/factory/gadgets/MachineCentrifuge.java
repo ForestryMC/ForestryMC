@@ -213,7 +213,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 	@Override
 	public void updateServerSide() {
 
-		if (worldObj.getTotalWorldTime() % 20 * 10 != 0) {
+		if (!updateOnInterval(20)) {
 			return;
 		}
 

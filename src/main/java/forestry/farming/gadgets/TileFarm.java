@@ -108,7 +108,7 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 			}
 
 			// Periodic validation if needed
-			if (worldObj.getTotalWorldTime() % 200 == 0 && (!isIntegratedIntoStructure() || isMaster())) {
+			if (updateOnInterval(200) && (!isIntegratedIntoStructure() || isMaster())) {
 				validateStructure();
 			}
 
