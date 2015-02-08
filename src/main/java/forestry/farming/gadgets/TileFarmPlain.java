@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -63,8 +64,10 @@ import forestry.core.utils.GuiUtil;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.core.vect.Vect;
+import forestry.core.vect.VectUtil;
 import forestry.farming.FarmHelper;
 import forestry.farming.FarmTarget;
+import forestry.farming.logic.FarmLogic;
 import forestry.farming.logic.FarmLogicArboreal;
 import forestry.plugins.PluginFarming;
 
@@ -246,6 +249,12 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 					targetLimit = targetMaxLimit - i - 1;
 				}
 
+				Block platform = VectUtil.getBlock(world, targetLocation);
+				Vect soilPosition = new Vect(targetLocation.x, targetLocation.y + 1, targetLocation.z);
+				if (!StructureLogicFarm.bricks.contains(platform) || !FarmLogic.canBreakSoil(world, soilPosition)) {
+					break;
+				}
+
 				FarmTarget target = new FarmTarget(targetLocation, layoutDirection, targetLimit);
 				farmSideTargets.add(target);
 			}
@@ -257,11 +266,27 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	}
 
 	private void setExtents() {
-		for (List<FarmTarget> targetsList : targets.values()) {
-			for (FarmTarget target : targetsList) {
-				target.setExtentAndYOffset(worldObj);
+		for (ForgeDirection direction : targets.keySet()) {
+			List<FarmTarget> targetsList = targets.get(direction);
+			if (!targetsList.isEmpty()) {
+				Vect groundPosition = getGroundPosition(worldObj, targetsList.get(0));
+
+				for (FarmTarget target : targetsList) {
+					target.setExtentAndYOffset(worldObj, groundPosition);
+				}
 			}
 		}
+	}
+
+	private Vect getGroundPosition(World world, FarmTarget firstTarget) {
+		for (int yOffset = 2; yOffset > -3; yOffset--) {
+			Vect position = firstTarget.getStart().add(0, yOffset, 0);
+			Block ground = VectUtil.getBlock(world, position);
+			if (StructureLogicFarm.bricks.contains(ground)) {
+				return position;
+			}
+		}
+		return null;
 	}
 
 	protected void createInventory() {
@@ -409,7 +434,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		for (FarmTarget target : farmTargets) {
 
 			if (target.getExtent() <= 0) {
-				continue;
+				break;
 			} else {
 				hasFarmland = true;
 			}
@@ -438,9 +463,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			}
 		}
 
-		if (didWork) {
-			setErrorState(EnumErrorCode.OK);
-		} else if (!hasFarmland) {
+		if (!hasFarmland) {
 			setErrorState(EnumErrorCode.NOFARMLAND);
 		} else if (!hasFertilizer) {
 			setErrorState(EnumErrorCode.NOFERTILIZER);

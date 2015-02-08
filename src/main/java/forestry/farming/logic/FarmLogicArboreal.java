@@ -57,17 +57,17 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	public boolean isAcceptedGround(ItemStack itemStack) {
-		if (super.isAcceptedGround(itemStack)) {
+	public boolean isAcceptedSoil(ItemStack soil) {
+		if (super.isAcceptedSoil(soil)) {
 			return true;
 		}
 
-		Block block = BlockSoil.getBlockFromItem(itemStack.getItem());
+		Block block = BlockSoil.getBlockFromItem(soil.getItem());
 		if (block == null || !(block instanceof BlockSoil)) {
 			return false;
 		}
 		BlockSoil blockSoil = (BlockSoil) block;
-		return blockSoil.getTypeFromMeta(itemStack.getItemDamage()) == BlockSoil.SoilType.HUMUS;
+		return blockSoil.getTypeFromMeta(soil.getItemDamage()) == BlockSoil.SoilType.HUMUS;
 	}
 
 	@Override
@@ -243,7 +243,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 			if (VectUtil.isAirBlock(world, position)) {
 				Vect soilBelowPosition = new Vect(position.x, position.y - 1, position.z);
 				ItemStack soilBelow = VectUtil.getAsItemStack(world, soilBelowPosition);
-				if (isAcceptedGround(soilBelow)) {
+				if (isAcceptedSoil(soilBelow)) {
 					return plantSapling(position);
 				}
 			}

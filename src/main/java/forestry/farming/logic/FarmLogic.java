@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.HashSet;
+import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -34,7 +34,19 @@ public abstract class FarmLogic implements IFarmLogic {
 
 	protected boolean isManual;
 
-	private static final HashSet<Block> breakable = new HashSet<Block>();
+	private static final ImmutableSet<Block> breakableSoil = ImmutableSet.of(
+			Blocks.air,
+			Blocks.dirt,
+			Blocks.grass,
+			Blocks.sand,
+			Blocks.farmland,
+			Blocks.mycelium,
+			Blocks.soul_sand,
+			Blocks.water,
+			Blocks.flowing_water,
+			Blocks.end_stone,
+			ForestryBlock.soil.block()
+	);
 
 	public FarmLogic(IFarmHousing housing) {
 		this.housing = housing;
@@ -45,21 +57,9 @@ public abstract class FarmLogic implements IFarmLogic {
 		return this;
 	}
 
-	public boolean canBreakGround(World world, Vect position) {
+	public static boolean canBreakSoil(World world, Vect position) {
 		Block block = VectUtil.getBlock(world, position);
-		if (breakable.isEmpty()) {
-			breakable.add(Blocks.air);
-			breakable.add(Blocks.dirt);
-			breakable.add(Blocks.grass);
-			breakable.add(Blocks.sand);
-			breakable.add(Blocks.farmland);
-			breakable.add(Blocks.mycelium);
-			breakable.add(Blocks.soul_sand);
-			breakable.add(Blocks.water);
-			breakable.add(Blocks.flowing_water);
-			breakable.add(ForestryBlock.soil.block());
-		}
-		return breakable.contains(block) || block.isReplaceable(world, position.getX(), position.getY(), position.getZ());
+		return breakableSoil.contains(block) || block.isReplaceable(world, position.getX(), position.getY(), position.getZ());
 	}
 
 	protected World getWorld() {
