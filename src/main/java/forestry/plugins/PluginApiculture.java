@@ -164,6 +164,7 @@ public class PluginApiculture extends ForestryPlugin {
 	private static final String CONFIG_CATEGORY = "apiculture";
 	private Configuration apicultureConfig;
 	public static String beekeepingMode = "NORMAL";
+	public static int SecondPrincessChance = 0;
 	public static int ticksPerBeeWorkCycle = 550;
 	public static boolean apiarySideSensitive = false;
 	public static boolean fancyRenderedBees = false;
@@ -290,6 +291,10 @@ public class PluginApiculture extends ForestryPlugin {
 		property.comment = "change beekeeping modes here. possible values EASY, NORMAL, HARD, HARDCORE, INSANE. mods may add additional modes.";
 		beekeepingMode = property.value.trim();
 		Proxies.log.finer("Beekeeping mode read from config: " + beekeepingMode);
+
+		Property secondPrincess = apicultureConfig.get("beekeeping.secondprincess", CONFIG_CATEGORY, SecondPrincessChance);
+		secondPrincess.comment = "percent chance of second princess drop, for limited/skyblock maps.";
+		SecondPrincessChance = Integer.parseInt(secondPrincess.value);
 
 		property = apicultureConfig.get("beekeeping.flowers.custom", CONFIG_CATEGORY, "");
 		property.comment = "add additional flower blocks for apiaries here in the format id:meta. separate blocks using ';'. will be treated like vanilla flowers. not recommended for flowers implemented as tile entities.";
@@ -1199,6 +1204,10 @@ public class PluginApiculture extends ForestryPlugin {
 		beeInterface.registerTemplate(BeeTemplates.getEnderTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getSpectralTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getPhantasmalTemplate());
+	}
+
+	public static int getSecondPrincessChance() {
+		return SecondPrincessChance;
 	}
 
 	private void parseAdditionalFlowers(String list, ArrayList<ItemStack> target) {
