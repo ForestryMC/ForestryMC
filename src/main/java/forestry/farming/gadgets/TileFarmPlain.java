@@ -279,7 +279,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	}
 
 	private Vect getGroundPosition(World world, FarmTarget firstTarget) {
-		for (int yOffset = 2; yOffset > -3; yOffset--) {
+		for (int yOffset = 2; yOffset > -4; yOffset--) {
 			Vect position = firstTarget.getStart().add(0, yOffset, 0);
 			Block ground = VectUtil.getBlock(world, position);
 			if (StructureLogicFarm.bricks.contains(ground)) {
