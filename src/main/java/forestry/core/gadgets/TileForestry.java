@@ -64,7 +64,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 	protected boolean isInited = false;
 	private IInventoryAdapter inventory = FakeInventoryAdapter.instance();
-	private final int tickUpdateOffset = rand.nextInt();
+	private int tickCount = rand.nextInt(128);
 
 	public AdjacentTileCache getTileCache() {
 		return tileCache;
@@ -114,6 +114,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	// / UPDATING
 	@Override
 	public void updateEntity() {
+		tickCount++;
 		if (!isInited) {
 			initialize();
 			isInited = true;
@@ -121,7 +122,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	public final boolean updateOnInterval(int tickInterval) {
-		return (worldObj.getTotalWorldTime() + tickUpdateOffset) % tickInterval == 0;
+		return tickCount % tickInterval == 0;
 	}
 
 	public abstract void initialize();
