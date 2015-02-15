@@ -224,7 +224,6 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 		TreeMap<ForgeDirection, List<FarmTarget>> targets = new TreeMap<ForgeDirection, List<FarmTarget>>();
 
-
 		for (ForgeDirection farmSide : CARDINAL_DIRECTIONS) {
 
 			int farmSize;
@@ -477,9 +476,10 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	}
 
 	private boolean cultivateTarget(FarmTarget target, IFarmLogic logic) {
-		if (logic.cultivate(target.getStart().x, target.getStart().y + target.getYOffset(), target.getStart().z, target.getDirection(), target.getExtent())) {
+		Vect targetPosition = target.getStart().add(0, target.getYOffset(), 0);
+		if (logic.cultivate(targetPosition.x, targetPosition.y, targetPosition.z, target.getDirection(), target.getExtent())) {
 			for (IFarmListener listener : eventHandlers) {
-				listener.hasCultivated(logic, target.getStart().x, target.getStart().y, target.getStart().z, target.getDirection(), target.getExtent());
+				listener.hasCultivated(logic, targetPosition.x, targetPosition.y, targetPosition.z, target.getDirection(), target.getExtent());
 			}
 			return true;
 		}
