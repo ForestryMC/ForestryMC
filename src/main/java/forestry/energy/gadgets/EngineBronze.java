@@ -19,7 +19,6 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -260,23 +259,6 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		}
 	}
 
-	protected ItemStack replenishByContainer(ItemStack inventoryStack, FluidContainerData container, StandardTank tank) {
-		if (container == null) {
-			return inventoryStack;
-		}
-
-		if (tank.fill(container.fluid, false) >= container.fluid.amount) {
-			tank.fill(container.fluid, true);
-			if (container.filledContainer != null && container.filledContainer.getItem().hasContainerItem(container.filledContainer)) {
-				inventoryStack = container.emptyContainer.copy();
-			} else {
-				inventoryStack.stackSize--;
-			}
-		}
-
-		return inventoryStack;
-	}
-
 	// / STATE INFORMATION
 	@Override
 	public boolean isBurning() {
@@ -294,14 +276,6 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 
 	public int getOperatingTemperatureScaled(int i) {
 		return (int) Math.round((heat * i) / (maxHeat * 0.2));
-	}
-
-	public int getFuelScaled(int i) {
-		return (fuelTank.getFluidAmount() * i) / Defaults.ENGINE_TANK_CAPACITY;
-	}
-
-	public int getHeatingFuelScaled(int i) {
-		return (heatingTank.getFluidAmount() * i) / Defaults.ENGINE_TANK_CAPACITY;
 	}
 
 	@Override
