@@ -355,6 +355,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 
 	@Override
 	public boolean workCycle() {
+		craftResult(false, null);
 		return addHeat(25);
 	}
 
@@ -409,14 +410,28 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 			return null;
 		}
 
+		craftResult(consumeRecipe, player);
+
+		IInventoryAdapter inventory = getInternalInventory();
+
+		// Return result
+		return inventory.decrStackSize(SLOT_RESULT, 1);
+	}
+
+	private void craftResult(boolean consumeRecipe, EntityPlayer player) {
 		Recipe myRecipe = getRecipe();
 		if (myRecipe == null) {
-			return null;
+			return;
+		}
+
+		IInventoryAdapter inventory = getInternalInventory();
+
+		if (inventory.getStackInSlot(SLOT_RESULT) != null) {
+			return;
 		}
 
 		FluidStack liquid = myRecipe.molten;
 
-		IInventoryAdapter inventory = getInternalInventory();
 		// Remove resources
 		ItemStack[] crafting = InvTools.getStacks(inventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
 		if (removeFromInventory(1, crafting, player, false)) {
@@ -426,10 +441,10 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 			removeFromCraftMatrix(myRecipe);
 			moltenTank.drain(liquid.amount, true);
 		} else {
-			return null;
+			return;
 		}
 
-		ItemStack result = myRecipe.internal.getRecipeOutput().copy();
+		ItemStack result = getResult();
 		// Damage plan
 		if (inventory.getStackInSlot(SLOT_PLAN) != null) {
 			Item planItem = inventory.getStackInSlot(SLOT_PLAN).getItem();
@@ -438,8 +453,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 			}
 		}
 
-		// Return result
-		return result;
+		inventory.setInventorySlotContents(SLOT_RESULT, result);
 	}
 
 	private void removeFromCraftMatrix(Recipe recipe) {

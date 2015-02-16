@@ -17,6 +17,7 @@ import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.Slot;
 
 import forestry.core.gui.ContainerLiquidTanks;
+import forestry.core.gui.slots.SlotCraftMatrix;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.gui.slots.SlotOutput;

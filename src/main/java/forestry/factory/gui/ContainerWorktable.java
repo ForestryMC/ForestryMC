@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.IGuiSelectable;
+import forestry.core.gui.slots.SlotCraftMatrix;
 import forestry.core.gui.slots.SlotCrafter;
 import forestry.core.interfaces.IContainerCrafting;
 import forestry.core.network.PacketIds;
