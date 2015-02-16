@@ -25,6 +25,7 @@ import forestry.core.interfaces.ICrafter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
 
 public class TileAlvearySieve extends TileAlveary implements ICrafter, IBeeListener {
@@ -61,7 +62,7 @@ public class TileAlvearySieve extends TileAlveary implements ICrafter, IBeeListe
 	public void initialize() {
 		super.initialize();
 		
-		if (!hasMaster() || !isIntegratedIntoStructure()) {
+		if (!hasMaster() || !isIntegratedIntoStructure() || !Proxies.common.isSimulating(worldObj)) {
 			return;
 		}
 		
