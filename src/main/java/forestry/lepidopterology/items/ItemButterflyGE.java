@@ -11,6 +11,7 @@
 package forestry.lepidopterology.items;
 
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -43,6 +44,8 @@ import forestry.lepidopterology.genetics.ButterflyGenome;
 import forestry.plugins.PluginLepidopterology;
 
 public class ItemButterflyGE extends ItemGE {
+
+	private static Random rand = new Random();
 
 	private final EnumFlutterType type;
 
@@ -113,7 +116,7 @@ public class ItemButterflyGE extends ItemGE {
 		if (!Proxies.common.isSimulating(entityItem.worldObj) || entityItem.ticksExisted < 80) {
 			return false;
 		}
-		if (entityItem.worldObj.getTotalWorldTime() % 24 != 0) {
+		if (rand.nextInt(24) != 0) {
 			return false;
 		}
 

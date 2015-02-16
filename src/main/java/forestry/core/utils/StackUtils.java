@@ -372,7 +372,9 @@ public class StackUtils {
 		ItemStack container = itemstack.getItem().getContainerItem(itemstack);
 
 		if (container.isItemStackDamageable() && container.getItemDamage() > container.getMaxDamage()) {
-			MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(player, container));
+			if (player != null) {
+				MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(player, container));
+			}
 			container = null;
 		}
 
@@ -380,13 +382,13 @@ public class StackUtils {
 
 			if (itemstack.getItem().doesContainerItemLeaveCraftingGrid(itemstack)) {
 				if (!InvTools.tryAddStack(stowing, container, true)) {
-					if (!player.inventory.addItemStackToInventory(container)) {
+					if (player != null && !player.inventory.addItemStackToInventory(container)) {
 						player.dropPlayerItemWithRandomChoice(container, true);
 					}
 				}
 			} else {
 				if (!InvTools.tryAddStack(stowing, container, slotIndex, 1, true)) {
-					if (!InvTools.tryAddStack(stowing, container, true)) {
+					if (!InvTools.tryAddStack(stowing, container, true) && player != null) {
 						player.dropPlayerItemWithRandomChoice(container, true);
 					}
 				}

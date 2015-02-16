@@ -19,6 +19,7 @@ import forestry.core.vect.MutableVect;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
 import forestry.farming.gadgets.StructureLogicFarm;
+import forestry.farming.logic.FarmLogic;
 
 public class FarmTarget {
 
@@ -43,10 +44,6 @@ public class FarmTarget {
 		return this.yOffset;
 	}
 
-	public int getLimit() {
-		return limit;
-	}
-
 	public int getExtent() {
 		return extent;
 	}
@@ -55,33 +52,22 @@ public class FarmTarget {
 		return direction;
 	}
 
-	public void setExtentAndYOffset(World world) {
-		Vect groundPosition = getGroundPosition(world);
-		if (groundPosition == null) {
+	public void setExtentAndYOffset(World world, Vect platformPosition) {
+		if (platformPosition == null) {
 			extent = 0;
 			return;
 		}
 
-		MutableVect position = new MutableVect(groundPosition);
-		for (extent = 0; extent < getLimit(); extent++) {
-			Block ground = VectUtil.getBlock(world, position);
-			if (!StructureLogicFarm.bricks.contains(ground)) {
+		MutableVect position = new MutableVect(platformPosition);
+		for (extent = 0; extent < limit; extent++) {
+			Block platform = VectUtil.getBlock(world, position);
+			Vect soilPosition = new Vect(position.x, position.y + 1, position.z);
+			if (!StructureLogicFarm.bricks.contains(platform) || !FarmLogic.canBreakSoil(world, soilPosition)) {
 				break;
 			}
 			position.add(getDirection());
 		}
 
-		yOffset = groundPosition.getY() + 1 - getStart().getY();
-	}
-
-	private Vect getGroundPosition(World world) {
-		for (int yOffset = 2; yOffset > -3; yOffset--) {
-			Vect position = getStart().add(0, yOffset, 0);
-			Block ground = VectUtil.getBlock(world, position);
-			if (StructureLogicFarm.bricks.contains(ground)) {
-				return position;
-			}
-		}
-		return null;
+		yOffset = platformPosition.getY() + 1 - getStart().getY();
 	}
 }

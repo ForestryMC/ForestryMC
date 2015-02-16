@@ -57,11 +57,16 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 			return;
 		}
 
+		// Disable powered machines on a direct redstone signal
+		if (worldObj.getBlockPowerInput(xCoord, yCoord, zCoord) >= 15) {
+			return;
+		}
+
 		if (workCounter < WORK_CYCLES && energyManager.consumeEnergyToDoWork()) {
 			workCounter++;
 		}
 
-		if (workCounter >= WORK_CYCLES && worldObj.getTotalWorldTime() % 5 == 0) {
+		if (workCounter >= WORK_CYCLES && updateOnInterval(5)) {
 			if (workCycle()) {
 				workCounter = 0;
 			}

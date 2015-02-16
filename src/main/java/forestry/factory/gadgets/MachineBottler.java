@@ -228,7 +228,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 
 	@Override
 	public void updateServerSide() {
-		if (worldObj.getTotalWorldTime() % 20 != 0) {
+		if (!updateOnInterval(20)) {
 			return;
 		}
 

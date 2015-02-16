@@ -11,14 +11,17 @@
 package forestry.factory.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 
 import forestry.core.gui.ContainerLiquidTanks;
-import forestry.core.gui.slots.SlotCrafter;
+import forestry.core.gui.slots.SlotCraftMatrix;
 import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotOutput;
+import forestry.core.interfaces.IContainerCrafting;
 import forestry.factory.gadgets.MachineFabricator;
 
-public class ContainerFabricator extends ContainerLiquidTanks {
+public class ContainerFabricator extends ContainerLiquidTanks implements IContainerCrafting {
 
 	public ContainerFabricator(InventoryPlayer playerInventory, MachineFabricator tile) {
 		super(tile);
@@ -37,12 +40,12 @@ public class ContainerFabricator extends ContainerLiquidTanks {
 		this.addSlotToContainer(new SlotFiltered(tile, MachineFabricator.SLOT_PLAN, 139, 17));
 
 		// Result
-		this.addSlotToContainer(new SlotCrafter(playerInventory.player, tile, tile, MachineFabricator.SLOT_RESULT, 139, 53));
+		this.addSlotToContainer(new SlotOutput(tile, MachineFabricator.SLOT_RESULT, 139, 53));
 
 		// Crafting matrix
 		for (int l = 0; l < 3; l++) {
 			for (int k = 0; k < 3; k++) {
-				addSlotToContainer(new Slot(tile, MachineFabricator.SLOT_CRAFTING_1 + k + l * 3, 67 + k * 18, 17 + l * 18));
+				addSlotToContainer(new SlotCraftMatrix(this, tile, MachineFabricator.SLOT_CRAFTING_1 + k + l * 3, 67 + k * 18, 17 + l * 18));
 			}
 		}
 
@@ -59,4 +62,8 @@ public class ContainerFabricator extends ContainerLiquidTanks {
 
 	}
 
+	@Override
+	public void onCraftMatrixChanged(IInventory iinventory, int slot) {
+
+	}
 }

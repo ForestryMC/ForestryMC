@@ -277,7 +277,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 	@Override
 	public void updateServerSide() {
 
-		if (worldObj.getTotalWorldTime() % 20 != 0) {
+		if (!updateOnInterval(20)) {
 			return;
 		}
 

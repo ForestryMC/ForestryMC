@@ -115,6 +115,11 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 
 	@Override
 	public void updateServerSide() {
+
+		if (!updateOnInterval(20)) {
+			return;
+		}
+
 		if (!isValidBiome) {
 			setErrorState(EnumErrorCode.INVALIDBIOME);
 		} else if (!worldObj.canBlockSeeTheSky(xCoord, yCoord + 1, zCoord)) {
@@ -125,11 +130,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 			resourceTank.fill(STACK_WATER, true);
 			setErrorState(EnumErrorCode.OK);
 		}
-
-		if (worldObj.getTotalWorldTime() % 16 != 0) {
-			return;
-		}
-
+		
 		IInventoryAdapter inventory = getInternalInventory();
 		if (!StackUtils.isIdenticalItem(usedEmpty, inventory.getStackInSlot(SLOT_RESOURCE))) {
 			fillingTime = 0;

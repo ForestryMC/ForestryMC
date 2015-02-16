@@ -15,7 +15,6 @@ import java.util.HashMap;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -86,9 +85,6 @@ public abstract class TileMachine extends TileForestry implements IClimatised, I
 		return true;
 	}
 
-	protected void createMachine() {
-	}
-
 	int oldkind;
 	NBTTagCompound olddata;
 
@@ -103,16 +99,6 @@ public abstract class TileMachine extends TileForestry implements IClimatised, I
 			legacyConversion(oldkind, olddata);
 		}
 
-	}
-
-	@Override
-	public void updateEntity() {
-
-		super.updateEntity();
-	}
-
-	@Override
-	public void onRemoval() {
 	}
 
 	/**
@@ -252,10 +238,6 @@ public abstract class TileMachine extends TileForestry implements IClimatised, I
 		return false;
 	}
 
-	public int getChargeReceivedScaled(int i) {
-		return 0;
-	}
-
 	public static EnumTankLevel rateTankLevel(int scaled) {
 
 		if (scaled < 5) {
@@ -271,16 +253,6 @@ public abstract class TileMachine extends TileForestry implements IClimatised, I
 		}
 	}
 
-	// / REDSTONE SIGNALS
-	public boolean isIndirectlyPoweringTo(IBlockAccess world, int i, int j, int k, int l) {
-		return false;
-	}
-
-	public boolean isPoweringTo(IBlockAccess iblockaccess, int i, int j, int k, int l) {
-		return false;
-	}
-
-
 	// INETWORKEDTILE IMPLEMENTATION
 	@Override
 	public PacketPayload getPacketPayload() {
@@ -289,9 +261,5 @@ public abstract class TileMachine extends TileForestry implements IClimatised, I
 
 	@Override
 	public void fromPacketPayload(PacketPayload payload) {
-	}
-
-	// NEIGHBOUR CHANGE
-	public void onNeighborBlockChange() {
 	}
 }

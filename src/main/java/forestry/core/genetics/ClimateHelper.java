@@ -30,6 +30,14 @@ public class ClimateHelper implements IClimateHelper {
 		
 		return getToleratedHumidity(baseHumid, tolHumid).contains(humidity);
 	}
+
+	public boolean isWithinLimits(EnumTemperature temperature, EnumTemperature baseTemp, EnumTolerance tolTemp) {
+		return getToleratedTemperature(baseTemp, tolTemp).contains(temperature);
+	}
+
+	public boolean isWithinLimits(EnumHumidity humidity, EnumHumidity baseHumid, EnumTolerance tolHumid) {
+		return getToleratedHumidity(baseHumid, tolHumid).contains(humidity);
+	}
 	
 	public ArrayList<EnumHumidity> getToleratedHumidity(EnumHumidity prefered, EnumTolerance tolerance) {
 

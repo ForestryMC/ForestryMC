@@ -47,7 +47,7 @@ public class MachinePhilatelist extends TileBase implements IInventory {
 	// / UPDATING
 	@Override
 	public void updateServerSide() {
-		if (worldObj.getTotalWorldTime() % 20 * 10 != 0) {
+		if (!updateOnInterval(20)) {
 			return;
 		}
 

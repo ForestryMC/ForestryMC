@@ -163,6 +163,7 @@ public class PluginApiculture extends ForestryPlugin {
 	private static final String CONFIG_CATEGORY = "apiculture";
 	private Configuration apicultureConfig;
 	public static String beekeepingMode = "NORMAL";
+	private static int secondPrincessChance = 0;
 	public static int ticksPerBeeWorkCycle = 550;
 	public static boolean apiarySideSensitive = false;
 	public static boolean fancyRenderedBees = false;
@@ -236,8 +237,6 @@ public class PluginApiculture extends ForestryPlugin {
 
 		ForestryBlock.beehives.registerBlock(new BlockBeehives(), ItemForestryBlock.class, "beehives");
 
-		createHives();
-
 		// Init bee interface
 		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginApiculture.beeInterface = new BeeHelper());
 		BeeManager.villageBees = new ArrayList[]{new ArrayList<IBeeGenome>(), new ArrayList<IBeeGenome>()};
@@ -275,6 +274,7 @@ public class PluginApiculture extends ForestryPlugin {
 	public void doInit() {
 		super.doInit();
 
+		// Config
 		apicultureConfig = new Configuration();
 
 		Property property = apicultureConfig.get("apiary.sidesensitive", CONFIG_CATEGORY, apiarySideSensitive);
@@ -290,6 +290,10 @@ public class PluginApiculture extends ForestryPlugin {
 		beekeepingMode = property.value.trim();
 		Proxies.log.finer("Beekeeping mode read from config: " + beekeepingMode);
 
+		Property secondPrincess = apicultureConfig.get("beekeeping.secondprincess", CONFIG_CATEGORY, secondPrincessChance);
+		secondPrincess.comment = "percent chance of second princess drop, for limited/skyblock maps.";
+		secondPrincessChance = Integer.parseInt(secondPrincess.value);
+
 		property = apicultureConfig.get("beekeeping.flowers.custom", CONFIG_CATEGORY, "");
 		property.comment = "add additional flower blocks for apiaries here in the format id:meta. separate blocks using ';'. will be treated like vanilla flowers. not recommended for flowers implemented as tile entities.";
 		parseAdditionalFlowers(property.value, FlowerManager.plainFlowers);
@@ -300,9 +304,13 @@ public class PluginApiculture extends ForestryPlugin {
 
 		apicultureConfig.save();
 
+		// Genetics
 		createAlleles();
 		createMutations();
+
+		// Hives
 		registerBeehiveDrops();
+		createHives();
 
 		// Inducers for swarmer
 		BeeManager.inducers.put(ForestryItem.royalJelly.getItemStack(), 10);
@@ -1198,6 +1206,10 @@ public class PluginApiculture extends ForestryPlugin {
 		beeInterface.registerTemplate(BeeTemplates.getEnderTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getSpectralTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getPhantasmalTemplate());
+	}
+
+	public static int getSecondPrincessChance() {
+		return secondPrincessChance;
 	}
 
 	private void parseAdditionalFlowers(String list, ArrayList<ItemStack> target) {

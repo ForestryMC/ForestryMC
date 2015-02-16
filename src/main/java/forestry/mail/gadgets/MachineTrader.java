@@ -117,7 +117,7 @@ public class MachineTrader extends TileBase {
 	@Override
 	public void updateServerSide() {
 
-		if (!isLinked() || worldObj.getTotalWorldTime() % 4 != 0) {
+		if (!isLinked() || !updateOnInterval(10)) {
 			return;
 		}
 

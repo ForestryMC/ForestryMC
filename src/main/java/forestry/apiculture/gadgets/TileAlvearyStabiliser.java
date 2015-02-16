@@ -13,6 +13,7 @@ package forestry.apiculture.gadgets;
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeModifier;
+import forestry.core.proxy.Proxies;
 
 public class TileAlvearyStabiliser extends TileAlveary implements IBeeModifier {
 
@@ -27,7 +28,7 @@ public class TileAlvearyStabiliser extends TileAlveary implements IBeeModifier {
 	public void initialize() {
 		super.initialize();
 		
-		if (!hasMaster() || !isIntegratedIntoStructure()) {
+		if (!hasMaster() || !isIntegratedIntoStructure() || !Proxies.common.isSimulating(worldObj)) {
 			return;
 		}
 		
@@ -38,7 +39,7 @@ public class TileAlvearyStabiliser extends TileAlveary implements IBeeModifier {
 	@Override
 	protected void updateServerSide() {
 		super.updateServerSide();
-		if (worldObj.getTotalWorldTime() % 200 != 0) {
+		if (!updateOnInterval(200)) {
 			return;
 		}
 		

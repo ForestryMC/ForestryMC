@@ -8,11 +8,10 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.factory.gui;
+package forestry.core.gui.slots;
 
 import net.minecraft.inventory.IInventory;
 
-import forestry.core.gui.slots.SlotForestry;
 import forestry.core.interfaces.IContainerCrafting;
 
 /**

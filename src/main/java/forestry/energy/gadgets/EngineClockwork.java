@@ -155,7 +155,7 @@ public class EngineClockwork extends Engine {
 		}
 		
 		float fromClockwork = (tension / ENGINE_CLOCKWORK_WIND_MAX) * Defaults.ENGINE_PISTON_SPEED_MAX;
-		return fromClockwork >= 0.01f ? fromClockwork : energyManager.getTotalEnergyStored() > 0 ? 0.01f : 0;
+		return fromClockwork >= 0.01f ? fromClockwork : 0;
 	}
 	
 	@Override

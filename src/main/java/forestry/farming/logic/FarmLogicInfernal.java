@@ -97,7 +97,7 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 			}
 
 			ItemStack below = VectUtil.getAsItemStack(world, position.add(0, -1, 0));
-			if (!isAcceptedGround(below)) {
+			if (!isAcceptedSoil(below)) {
 				continue;
 			}
 

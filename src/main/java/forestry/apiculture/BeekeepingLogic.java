@@ -381,11 +381,16 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		housing.onQueenDeath(getQueen());
 
 		// Princess
-		IBee heiress = queen.spawnPrincess(housing);
-		if (heiress != null) {
-			ItemStack princess = PluginApiculture.beeInterface.getMemberStack(heiress, EnumBeeType.PRINCESS.ordinal());
-			breedingTracker.registerPrincess(heiress);
-			offspring.push(princess);
+		boolean secondPrincess = this.housing.getWorld().rand.nextInt(100) < PluginApiculture.getSecondPrincessChance();
+		int count = secondPrincess ? 2 : 1;
+		while (count > 0) {
+			count--;
+			IBee heiress = queen.spawnPrincess(housing);
+			if (heiress != null) {
+				ItemStack princess = PluginApiculture.beeInterface.getMemberStack(heiress, EnumBeeType.PRINCESS.ordinal());
+				breedingTracker.registerPrincess(heiress);
+				offspring.push(princess);
+			}
 		}
 
 		// Drones

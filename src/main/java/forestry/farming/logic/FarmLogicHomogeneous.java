@@ -12,6 +12,7 @@ package forestry.farming.logic;
 
 import java.util.ArrayList;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -24,24 +25,25 @@ import forestry.core.utils.BlockUtil;
 import forestry.core.utils.StackUtils;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
+import forestry.farming.gadgets.StructureLogicFarm;
 
 public abstract class FarmLogicHomogeneous extends FarmLogic {
 
 	protected final ItemStack[] resource;
-	protected final ItemStack groundBlock;
+	protected final ItemStack soilBlock;
 	protected final IFarmable[] germlings;
 
 	ArrayList<ItemStack> produce = new ArrayList<ItemStack>();
 
-	public FarmLogicHomogeneous(IFarmHousing housing, ItemStack[] resource, ItemStack groundBlock, IFarmable[] germlings) {
+	public FarmLogicHomogeneous(IFarmHousing housing, ItemStack[] resource, ItemStack soilBlock, IFarmable[] germlings) {
 		super(housing);
 		this.resource = resource;
-		this.groundBlock = groundBlock;
+		this.soilBlock = soilBlock;
 		this.germlings = germlings;
 	}
 
-	public boolean isAcceptedGround(ItemStack itemStack) {
-		return StackUtils.isIdenticalItem(groundBlock, itemStack);
+	public boolean isAcceptedSoil(ItemStack itemStack) {
+		return StackUtils.isIdenticalItem(soilBlock, itemStack);
 	}
 
 	@Override
@@ -90,16 +92,32 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 		World world = getWorld();
 
 		for (int i = 0; i < extent; i++) {
+<<<<<<< HEAD
 			Vect position = translateWithOffset(pos, direction, i);
+=======
+			Vect position = translateWithOffset(x, yGround, z, direction, i);
+			Block soil = VectUtil.getBlock(world, position);
+>>>>>>> origin/dev
 
-			ItemStack stack = VectUtil.getAsItemStack(world, position);
-			if (isAcceptedGround(stack) || !canBreakGround(world, position)) {
+			if (StructureLogicFarm.bricks.contains(soil)) {
+				break;
+			}
+
+			ItemStack soilStack = VectUtil.getAsItemStack(world, position);
+			if (isAcceptedSoil(soilStack) || !canBreakSoil(world, position)) {
 				continue;
+			}
+
+			Vect platformPosition = position.add(0, -1, 0);
+			Block platformBlock = VectUtil.getBlock(world, platformPosition);
+
+			if (!StructureLogicFarm.bricks.contains(platformBlock)) {
+				break;
 			}
 
 			produce.addAll(BlockUtil.getBlockDrops(world, position));
 
-			setBlock(position, StackUtils.getBlock(groundBlock), groundBlock.getItemDamage());
+			setBlock(position, StackUtils.getBlock(soilBlock), soilBlock.getItemDamage());
 			housing.removeResources(resource);
 			return true;
 		}

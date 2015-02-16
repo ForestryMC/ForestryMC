@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -64,8 +65,10 @@ import forestry.core.utils.GuiUtil;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.core.vect.Vect;
+import forestry.core.vect.VectUtil;
 import forestry.farming.FarmHelper;
 import forestry.farming.FarmTarget;
+import forestry.farming.logic.FarmLogic;
 import forestry.farming.logic.FarmLogicArboreal;
 import forestry.plugins.PluginFarming;
 
@@ -202,7 +205,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			}
 		}
 
-		if (worldObj.getTotalWorldTime() % 20 != 0) {
+		if (!updateOnInterval(20)) {
 			return;
 		}
 
@@ -222,7 +225,6 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 		TreeMap<ForgeDirection, List<FarmTarget>> targets = new TreeMap<ForgeDirection, List<FarmTarget>>();
 
-
 		for (ForgeDirection farmSide : CARDINAL_DIRECTIONS) {
 
 			int farmSize;
@@ -238,13 +240,27 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			ForgeDirection layoutDirection = getLayoutDirection(farmSide);
 
 			Vect targetLocation = FarmHelper.getFarmMultiblockCorner(world, targetStart, farmSide, layoutDirection.getOpposite());
+			Vect firstLocation = targetLocation.add(farmSide);
+			Vect firstGroundPosition = getGroundPosition(world, firstLocation);
+			if (firstGroundPosition == null) {
+				break;
+			}
+			int groundHeight = firstGroundPosition.getY();
+
 			List<FarmTarget> farmSideTargets = new ArrayList<FarmTarget>();
 			for (int i = 0; i < allowedExtent; i++) {
 				targetLocation = targetLocation.add(farmSide);
+				Vect groundLocation = new Vect(targetLocation.getX(), groundHeight, targetLocation.getZ());
 
 				int targetLimit = targetMaxLimit;
 				if (!Config.squareFarms) {
 					targetLimit = targetMaxLimit - i - 1;
+				}
+
+				Block platform = VectUtil.getBlock(world, groundLocation);
+				Vect soilPosition = new Vect(groundLocation.x, groundLocation.y + 1, groundLocation.z);
+				if (!StructureLogicFarm.bricks.contains(platform) || !FarmLogic.canBreakSoil(world, soilPosition)) {
+					break;
 				}
 
 				FarmTarget target = new FarmTarget(targetLocation, layoutDirection, targetLimit);
@@ -258,11 +274,27 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	}
 
 	private void setExtents() {
-		for (List<FarmTarget> targetsList : targets.values()) {
-			for (FarmTarget target : targetsList) {
-				target.setExtentAndYOffset(worldObj);
+		for (ForgeDirection direction : targets.keySet()) {
+			List<FarmTarget> targetsList = targets.get(direction);
+			if (!targetsList.isEmpty()) {
+				Vect groundPosition = getGroundPosition(worldObj, targetsList.get(0).getStart());
+
+				for (FarmTarget target : targetsList) {
+					target.setExtentAndYOffset(worldObj, groundPosition);
+				}
 			}
 		}
+	}
+
+	private static Vect getGroundPosition(World world, Vect targetPosition) {
+		for (int yOffset = 2; yOffset > -4; yOffset--) {
+			Vect position = targetPosition.add(0, yOffset, 0);
+			Block ground = VectUtil.getBlock(world, position);
+			if (StructureLogicFarm.bricks.contains(ground)) {
+				return position;
+			}
+		}
+		return null;
 	}
 
 	protected void createInventory() {
@@ -294,7 +326,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	@Override
 	public boolean doWork() {
 		// System.out.println("Starting doWork()");
-		if (targets == null) {
+		if (targets == null || checkTimer.delayPassed(worldObj, 400)) {
 			Vect targetStart = new Vect(xCoord, yCoord, zCoord);
 
 			int sizeNorthSouth = FarmHelper.getFarmSizeNorthSouth(worldObj, targetStart);
@@ -304,8 +336,6 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			allowedExtent = Math.max(sizeNorthSouth, sizeEastWest) * 3;
 
 			targets = createTargets(worldObj, targetStart, allowedExtent, sizeNorthSouth, sizeEastWest);
-			setExtents();
-		} else if (checkTimer.delayPassed(worldObj, 400)) {
 			setExtents();
 		}
 
@@ -341,7 +371,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		}
 
 		// Cultivation and collection
-		boolean didWork = false;
+		FarmWorkStatus farmWorkStatus = new FarmWorkStatus();
 
 		for (Map.Entry<ForgeDirection, List<FarmTarget>> entry : targets.entrySet()) {
 
@@ -358,26 +388,38 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 			// Always try to collect windfall first.
 			if (collectWindfall(logic)) {
-				didWork = true;
+				farmWorkStatus.didWork = true;
 			} else {
 				List<FarmTarget> farmTargets = entry.getValue();
 
 				if (stage == Stage.HARVEST) {
-					didWork = harvestTargets(farmTargets, logic);
+					farmWorkStatus.didWork = harvestTargets(farmTargets, logic);
 				} else {
-					didWork = cultivateTargets(farmTargets, logic);
+					farmWorkStatus = cultivateTargets(farmWorkStatus, farmTargets, logic);
 				}
 			}
 
-			if (didWork) {
+			if (farmWorkStatus.didWork) {
 				break;
+			}
+		}
+
+		if (farmWorkStatus.didWork) {
+			setErrorState(EnumErrorCode.OK);
+		} else if (stage == Stage.CULTIVATE) {
+			if (!farmWorkStatus.hasFarmland) {
+				setErrorState(EnumErrorCode.NOFARMLAND);
+			} else if (!farmWorkStatus.hasFertilizer) {
+				setErrorState(EnumErrorCode.NOFERTILIZER);
+			} else if (!farmWorkStatus.hasLiquid) {
+				setErrorState(EnumErrorCode.NOLIQUID);
 			}
 		}
 
 		// Farms alternate between cultivation and harvest.
 		stage = stage.next();
 
-		return didWork;
+		return farmWorkStatus.didWork;
 	}
 
 	private IFarmLogic getFarmLogic(ForgeDirection direction) {
@@ -400,26 +442,28 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		return false;
 	}
 
-	private boolean cultivateTargets(List<FarmTarget> farmTargets, IFarmLogic logic) {
+	private static class FarmWorkStatus {
+		public boolean didWork = false;
+		public boolean hasFarmland = false;
+		public boolean hasFertilizer = false;
+		public boolean hasLiquid = false;
+	}
 
-		boolean didWork = false;
-		boolean hasFarmland = false;
-		boolean hasFertilizer = false;
-		boolean hasLiquid = false;
+	private FarmWorkStatus cultivateTargets(FarmWorkStatus farmWorkStatus, List<FarmTarget> farmTargets, IFarmLogic logic) {
 
 		for (FarmTarget target : farmTargets) {
 
 			if (target.getExtent() <= 0) {
-				continue;
+				break;
 			} else {
-				hasFarmland = true;
+				farmWorkStatus.hasFarmland = true;
 			}
 
 			// Check fertilizer and water
 			if (!hasFertilizer(logic.getFertilizerConsumption())) {
 				continue;
 			} else {
-				hasFertilizer = true;
+				farmWorkStatus.hasFertilizer = true;
 			}
 
 			int liquidAmount = logic.getWaterConsumption(getHydrationModifier());
@@ -427,7 +471,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			if (liquid.amount > 0 && !hasLiquid(liquid)) {
 				continue;
 			} else {
-				hasLiquid = true;
+				farmWorkStatus.hasLiquid = true;
 			}
 
 			if (cultivateTarget(target, logic)) {
@@ -435,29 +479,18 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 				removeFertilizer(logic.getFertilizerConsumption());
 				removeLiquid(liquid);
 
-				didWork = true;
+				farmWorkStatus.didWork = true;
 			}
 		}
 
-		if (didWork) {
-			setErrorState(EnumErrorCode.OK);
-		} else if (!hasFarmland) {
-			setErrorState(EnumErrorCode.NOFARMLAND);
-		} else if (!hasFertilizer) {
-			setErrorState(EnumErrorCode.NOFERTILIZER);
-		} else if (!hasLiquid) {
-			setErrorState(EnumErrorCode.NOLIQUID);
-		} else {
-			setErrorState(EnumErrorCode.OK);
-		}
-
-		return didWork;
+		return farmWorkStatus;
 	}
 
 	private boolean cultivateTarget(FarmTarget target, IFarmLogic logic) {
-		if (logic.cultivate(target.getStart().x, target.getStart().y + target.getYOffset(), target.getStart().z, target.getDirection(), target.getExtent())) {
+		Vect targetPosition = target.getStart().add(0, target.getYOffset(), 0);
+		if (logic.cultivate(targetPosition.x, targetPosition.y, targetPosition.z, target.getDirection(), target.getExtent())) {
 			for (IFarmListener listener : eventHandlers) {
-				listener.hasCultivated(logic, target.getStart().x, target.getStart().y, target.getStart().z, target.getDirection(), target.getExtent());
+				listener.hasCultivated(logic, targetPosition.x, targetPosition.y, targetPosition.z, target.getDirection(), target.getExtent());
 			}
 			return true;
 		}

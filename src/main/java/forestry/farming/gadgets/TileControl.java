@@ -27,14 +27,17 @@ import forestry.core.vect.Vect;
 
 public class TileControl extends TileFarm implements IFarmListener {
 
+	private boolean isRegistered = false;
+
 	public TileControl() {
 		fixedType = TYPE_CONTROL;
 	}
 
 	@Override
 	protected void updateServerSide() {
-		if (!isInited) {
+		if (!isRegistered) {
 			registerWithMaster();
+			isRegistered = true;
 		}
 	}
 
@@ -44,11 +47,8 @@ public class TileControl extends TileFarm implements IFarmListener {
 		registerWithMaster();
 	}
 
-	private boolean isInited = false;
-
 	private void registerWithMaster() {
 
-		isInited = true;
 		if (!hasMaster()) {
 			return;
 		}
@@ -76,7 +76,19 @@ public class TileControl extends TileFarm implements IFarmListener {
 		Vect side = new Vect(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
 
 		ForgeDirection opp = direction.getOpposite();
-		int dir = opp.offsetZ < 0 ? 2 : opp.offsetZ > 0 ? 3 : opp.offsetX < 0 ? 4 : opp.offsetX > 0 ? 5 : 0;
+		int dir;
+		if (opp.offsetZ < 0) {
+			dir = 2;
+		} else if (opp.offsetZ > 0) {
+			dir = 3;
+		} else if (opp.offsetX < 0) {
+			dir = 4;
+		} else if (opp.offsetX > 0) {
+			dir = 5;
+		} else {
+			dir = 0;
+		}
+
 		return worldObj.getIndirectPowerLevelTo(side.x, side.y, side.z, dir) > 0 || worldObj.isBlockProvidingPowerTo(side.x, side.y, side.z, dir) > 0;
 	}
 

@@ -61,16 +61,13 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 
 	@Override
 	public void updateEntity() {
+		super.updateEntity();
+
 		if (!Proxies.common.isSimulating(worldObj)) {
 			updateClientSide();
 		} else {
-			if (!isInited) {
-				initialize();
-				isInited = true;
-			}
-
 			// Periodic validation if needed
-			if (worldObj.getTotalWorldTime() % 200 == 0 && (!isIntegratedIntoStructure() || isMaster())) {
+			if (updateOnInterval(200) && (!isIntegratedIntoStructure() || isMaster())) {
 				validateStructure();
 			}
 

@@ -151,7 +151,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 		}
 
 		// Add swarm effects
-		if (worldObj.getTotalWorldTime() % 200 == 0) {
+		if (updateOnInterval(200)) {
 			ISidedInventory inventory = getStructureInventory();
 			if (inventory != null) {
 				onQueenChange(inventory.getStackInSlot(SLOT_QUEEN));
@@ -162,7 +162,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 			queen.doFX(beekeepingLogic.getEffectData(), this);
 		}
 
-		if (getErrorState() == EnumErrorCode.OK && worldObj.getTotalWorldTime() % 50 == 0) {
+		if (getErrorState() == EnumErrorCode.OK && updateOnInterval(50)) {
 			float f = xCoord + 0.5F;
 			float f1 = yCoord + 0.0F + (worldObj.rand.nextFloat() * 6F) / 16F;
 			float f2 = zCoord + 0.5F;
@@ -192,7 +192,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 		// / Multiplayer FX
 		ItemStack queenStack = inventory.getStackInSlot(SLOT_QUEEN);
 		if (PluginApiculture.beeInterface.isMated(queenStack)) {
-			if (getErrorState() == EnumErrorCode.OK && worldObj.getTotalWorldTime() % 2 == 0) {
+			if (getErrorState() == EnumErrorCode.OK && updateOnInterval(2)) {
 				IBee displayQueen = PluginApiculture.beeInterface.getMember(queenStack);
 				displayQueen.doFX(beekeepingLogic.getEffectData(), this);
 			}

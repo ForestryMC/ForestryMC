@@ -136,7 +136,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 			}
 		}
 
-		if (worldObj.getTotalWorldTime() % 20 * 10 != 0) {
+		if (!updateOnInterval(20)) {
 			return;
 		}
 

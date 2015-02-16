@@ -97,18 +97,13 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 
 	@Override
 	public void updateEntity() {
+		super.updateEntity();
 
 		if (!Proxies.common.isSimulating(worldObj)) {
 			updateClientSide();
 		} else {
-
-			if (!isInited) {
-				initialize();
-				isInited = true;
-			}
-
 			// Periodic validation if needed
-			if (worldObj.getTotalWorldTime() % 200 == 0 && (!isIntegratedIntoStructure() || isMaster())) {
+			if (updateOnInterval(200) && (!isIntegratedIntoStructure() || isMaster())) {
 				validateStructure();
 			}
 
@@ -166,7 +161,7 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	@Override
 	public void fromPacketPayload(PacketPayload payload) {
 		EnumFarmBlock farmType = EnumFarmBlock.values()[payload.shortPayload[0]];
-		if (payload.shortPayload[1] > 0) {
+		if (payload.shortPayload[1] > 0 && !isMaster()) {
 			makeMaster();
 		}
 

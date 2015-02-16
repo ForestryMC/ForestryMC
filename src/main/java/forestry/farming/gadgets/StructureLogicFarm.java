@@ -10,8 +10,7 @@
  ******************************************************************************/
 package forestry.farming.gadgets;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -66,15 +65,13 @@ public class StructureLogicFarm extends StructureLogic {
 			"FFFFFFF", "FAAAAAF", "FAAAAAF", "FBBBBBF", "FAAAAAF", "FFFFFFF",
 			"FFFFFFF", "FFFFFFF", "FFFFFFF", "FFFFFFF", "FFFFFFF", "FFFFFFF").setOffsets(-3, -3, -3);
 
-	public static final Set<Block> bricks = new HashSet<Block>();
-
-	static {
-		bricks.add(Blocks.brick_block);
-		bricks.add(Blocks.stonebrick);
-		bricks.add(Blocks.sandstone);
-		bricks.add(Blocks.nether_brick);
-		bricks.add(Blocks.quartz_block);
-	}
+	public static final ImmutableSet<Block> bricks = ImmutableSet.of(
+			Blocks.brick_block,
+			Blocks.stonebrick,
+			Blocks.sandstone,
+			Blocks.nether_brick,
+			Blocks.quartz_block
+	);
 
 	public StructureLogicFarm(ITileStructure structure) {
 		super(UID_FARM, structure);
