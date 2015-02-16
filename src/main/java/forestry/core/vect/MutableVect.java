@@ -11,8 +11,7 @@
 package forestry.core.vect;
 
 import net.minecraft.util.BlockPos;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 /**
  * Represents changeable positions or dimensions.
@@ -49,10 +48,10 @@ public class MutableVect implements IVect {
 	}
 
 	@Override
-	public MutableVect add(ForgeDirection direction) {
-		this.x += direction.offsetX;
-		this.y += direction.offsetY;
-		this.z += direction.offsetZ;
+	public MutableVect add(EnumFacing direction) {
+		this.x += direction.getFrontOffsetX();
+		this.y += direction.getFrontOffsetY();
+		this.z += direction.getFrontOffsetZ();
 		return this;
 	}
 

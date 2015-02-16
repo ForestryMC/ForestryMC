@@ -15,6 +15,7 @@ import java.util.Collection;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -68,28 +69,19 @@ public class TileControl extends TileFarm implements IFarmListener {
 
 	/* IFARMLISTENER */
 	@Override
-	public boolean cancelTask(IFarmLogic logic, ForgeDirection direction) {
-		return hasRedstoneSignal(direction) || hasRedstoneSignal(ForgeDirection.UP) || hasRedstoneSignal(ForgeDirection.DOWN);
+	public boolean cancelTask(IFarmLogic logic, EnumFacing direction) {
+		return hasRedstoneSignal(direction) || hasRedstoneSignal(EnumFacing.UP) || hasRedstoneSignal(EnumFacing.DOWN);
 	}
 
-	private boolean hasRedstoneSignal(ForgeDirection direction) {
-		Vect side = new Vect(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
+	private boolean hasRedstoneSignal(EnumFacing direction) {
+		Vect side = new Vect(pos.offset(direction));
 
-		ForgeDirection opp = direction.getOpposite();
-		int dir;
-		if (opp.offsetZ < 0) {
-			dir = 2;
-		} else if (opp.offsetZ > 0) {
-			dir = 3;
-		} else if (opp.offsetX < 0) {
-			dir = 4;
-		} else if (opp.offsetX > 0) {
-			dir = 5;
-		} else {
-			dir = 0;
+		EnumFacing opp = direction.getOpposite();
+		if(opp.getAxis() == EnumFacing.Axis.Y) {
+			opp = EnumFacing.DOWN;
 		}
 
-		return worldObj.getIndirectPowerLevelTo(side.x, side.y, side.z, dir) > 0 || worldObj.isBlockProvidingPowerTo(side.x, side.y, side.z, dir) > 0;
+		return worldObj.getRedstonePower(side.toBlockPos(), opp) > 0 || worldObj.getStrongPower(side.toBlockPos(), opp) > 0;
 	}
 
 	@Override
@@ -106,11 +98,11 @@ public class TileControl extends TileFarm implements IFarmListener {
 	}
 
 	@Override
-	public void hasCultivated(IFarmLogic logic, BlockPos pos, ForgeDirection direction, int extent) {
+	public void hasCultivated(IFarmLogic logic, BlockPos pos, EnumFacing direction, int extent) {
 	}
 
 	@Override
-	public void hasScheduledHarvest(Collection<ICrop> harvested, IFarmLogic logic, BlockPos pos, ForgeDirection direction, int extent) {
+	public void hasScheduledHarvest(Collection<ICrop> harvested, IFarmLogic logic, BlockPos pos, EnumFacing direction, int extent) {
 	}
 
 }

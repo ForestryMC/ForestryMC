@@ -21,9 +21,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
@@ -86,7 +85,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 		Vect min = coords.add(offset);
 		Vect max = min.add(area);
 
-		AxisAlignedBB harvestBox = AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
+		AxisAlignedBB harvestBox = AxisAlignedBB.fromBounds(min.x, min.y, min.z, max.x, max.y, max.z);
 		List<Entity> list = housing.getWorld().getEntitiesWithinAABB(Entity.class, harvestBox);
 
 		int i;
@@ -109,7 +108,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 	}
 
 	@Override
-	protected boolean maintainCrops(BlockPos pos, ForgeDirection direction, int extent) {
+	protected boolean maintainCrops(BlockPos pos, EnumFacing direction, int extent) {
 
 		World world = getWorld();
 
@@ -137,7 +136,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 		World world = getWorld();
 
 		for (IFarmable candidate : seeds) {
-			if (housing.plantGermling(candidate, world, position.getX(), position.getY(), position.getZ())) {
+			if (housing.plantGermling(candidate, world, position.toBlockPos())) {
 				return true;
 			}
 		}
@@ -146,7 +145,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, ForgeDirection direction, int extent) {
+	public Collection<ICrop> harvest(BlockPos pos, EnumFacing direction, int extent) {
 		World world = getWorld();
 
 		Stack<ICrop> crops = new Stack<ICrop>();

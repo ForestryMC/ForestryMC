@@ -11,6 +11,7 @@
 package forestry.farming.circuits;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -66,7 +67,7 @@ public class CircuitFarmLogic extends Circuit {
 		} catch (Throwable e) {
 			// uses older version of the API that doesn't implement setManual
 		}
-		housing.setFarmLogic(ForgeDirection.values()[slot + 2], logic);
+		housing.setFarmLogic(EnumFacing.values()[slot + 2], logic);
 	}
 
 	@Override
@@ -80,7 +81,7 @@ public class CircuitFarmLogic extends Circuit {
 			return;
 		}
 
-		((IFarmHousing) tile).resetFarmLogic(ForgeDirection.values()[slot + 2]);
+		((IFarmHousing) tile).resetFarmLogic(EnumFacing.values()[slot + 2]);
 	}
 
 	@Override

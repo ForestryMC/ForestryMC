@@ -21,10 +21,10 @@ import java.util.Stack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -83,14 +83,14 @@ public class FarmLogicOrchard extends FarmLogic {
 	}
 
 	@Override
-	public boolean cultivate(BlockPos pos, ForgeDirection direction, int extent) {
+	public boolean cultivate(BlockPos pos, EnumFacing direction, int extent) {
 		return false;
 	}
 
 	private final HashMap<Vect, Integer> lastExtents = new HashMap<Vect, Integer>();
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, ForgeDirection direction, int extent) {
+	public Collection<ICrop> harvest(BlockPos pos, EnumFacing direction, int extent) {
 
 		Vect start = new Vect(pos);
 		if (!lastExtents.containsKey(start)) {
@@ -183,13 +183,13 @@ public class FarmLogicOrchard extends FarmLogic {
 			return false;
 		}
 
-		TileEntity tile = world.getTileEntity(position.x, position.y, position.z);
+		TileEntity tile = world.getTileEntity(position.toBlockPos());
 		if (tile instanceof IFruitBearer) {
 			return true;
 		}
 
 		for (IFarmable farmable : farmables) {
-			if (farmable.isSaplingAt(world, position.x, position.y, position.z)) {
+			if (farmable.isSaplingAt(world, position.toBlockPos())) {
 				return true;
 			}
 		}
@@ -203,7 +203,7 @@ public class FarmLogicOrchard extends FarmLogic {
 			return null;
 		}
 
-		TileEntity tile = world.getTileEntity(position.x, position.y, position.z);
+		TileEntity tile = world.getTileEntity(position.toBlockPos());
 
 		if (tile instanceof IFruitBearer) {
 			IFruitBearer fruitBearer = (IFruitBearer) tile;
@@ -212,7 +212,7 @@ public class FarmLogicOrchard extends FarmLogic {
 			}
 		} else {
 			for (IFarmable seed : farmables) {
-				ICrop crop = seed.getCropAt(world, position.x, position.y, position.z);
+				ICrop crop = seed.getCropAt(world, position.toBlockPos());
 				if (crop != null) {
 					return crop;
 				}

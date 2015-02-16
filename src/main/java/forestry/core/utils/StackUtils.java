@@ -437,7 +437,7 @@ public class StackUtils {
 		Item item = stack.getItem();
 
 		if (item instanceof ItemBlock) {
-			return ((ItemBlock) item).field_150939_a;
+			return ((ItemBlock) item).block;
 		} else {
 			return null;
 		}

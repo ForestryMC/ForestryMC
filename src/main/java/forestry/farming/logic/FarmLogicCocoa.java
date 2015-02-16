@@ -18,14 +18,15 @@ import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockOldLog;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -83,7 +84,7 @@ public class FarmLogicCocoa extends FarmLogic {
 	private final HashMap<Vect, Integer> lastExtentsCultivation = new HashMap<Vect, Integer>();
 
 	@Override
-	public boolean cultivate(BlockPos pos, ForgeDirection direction, int extent) {
+	public boolean cultivate(BlockPos pos, EnumFacing direction, int extent) {
 
 		Vect start = new Vect(pos);
 		if (!lastExtentsCultivation.containsKey(start)) {
@@ -107,7 +108,7 @@ public class FarmLogicCocoa extends FarmLogic {
 	private final HashMap<Vect, Integer> lastExtentsHarvest = new HashMap<Vect, Integer>();
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, ForgeDirection direction, int extent) {
+	public Collection<ICrop> harvest(BlockPos pos, EnumFacing direction, int extent) {
 
 		Vect start = new Vect(pos);
 		if (!lastExtentsHarvest.containsKey(start)) {
@@ -132,16 +133,18 @@ public class FarmLogicCocoa extends FarmLogic {
 		World world = getWorld();
 
 		MutableVect current = new MutableVect(position);
-		while (VectUtil.isWoodBlock(world, current) && BlockLog.func_150165_c(VectUtil.getBlockMeta(world, current)) == 3) {
+		while (VectUtil.isWoodBlock(world, current)
+				&& VectUtil.getBlockState(world, current).getProperties().containsKey(BlockOldLog.VARIANT)
+				&& VectUtil.getBlockState(world, current).getValue(BlockOldLog.VARIANT) == BlockPlanks.EnumType.JUNGLE) {
 
-			for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
-				if (direction == ForgeDirection.UP || direction == ForgeDirection.DOWN) {
+			for (EnumFacing direction : EnumFacing.values()) { //TODO Change to VALUES when updating to Forge 11.14.1.1317
+				if (direction == EnumFacing.UP || direction == EnumFacing.DOWN) {
 					continue;
 				}
 
-				Vect candidate = new Vect(current.x + direction.offsetX, current.y, current.z + direction.offsetZ);
+				Vect candidate = new Vect(current.x + direction.getFrontOffsetX(), current.y, current.z + direction.getFrontOffsetZ());
 				if (VectUtil.isAirBlock(world, candidate)) {
-					return housing.plantGermling(cocoa, world, candidate.x, candidate.y, candidate.z);
+					return housing.plantGermling(cocoa, world, candidate.toBlockPos());
 				}
 			}
 
@@ -163,8 +166,8 @@ public class FarmLogicCocoa extends FarmLogic {
 		Block block = VectUtil.getBlock(getWorld(), position);
 
 		ICrop crop = null;
-		if (!block.isWood(getWorld(), position.x, position.y, position.z)) {
-			crop = cocoa.getCropAt(getWorld(), position.x, position.y, position.z);
+		if (!block.isWood(getWorld(), position.toBlockPos())) {
+			crop = cocoa.getCropAt(getWorld(), position.toBlockPos());
 			if (crop == null) {
 				return crops;
 			}
@@ -215,7 +218,7 @@ public class FarmLogicCocoa extends FarmLogic {
 						continue;
 					}
 
-					ICrop crop = cocoa.getCropAt(world, candidate.x, candidate.y, candidate.z);
+					ICrop crop = cocoa.getCropAt(world, candidate.toBlockPos());
 					if (crop != null) {
 						crops.push(crop);
 						candidates.add(candidate);

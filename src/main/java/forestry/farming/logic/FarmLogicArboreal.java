@@ -25,11 +25,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -132,7 +132,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	private final HashMap<Vect, Integer> lastExtentsHarvest = new HashMap<Vect, Integer>();
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, ForgeDirection direction, int extent) {
+	public Collection<ICrop> harvest(BlockPos pos, EnumFacing direction, int extent) {
 
 		Vect start = new Vect(pos);
 		if (!lastExtentsHarvest.containsKey(start)) {
@@ -162,7 +162,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		// Determine what type we want to harvest.
 		IFarmable germling = null;
 		for (IFarmable germl : germlings) {
-			ICrop crop = germl.getCropAt(world, position.x, position.y, position.z);
+			ICrop crop = germl.getCropAt(world, position.toBlockPos());
 			if (crop == null) {
 				continue;
 			}
@@ -219,7 +219,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 						continue;
 					}
 
-					ICrop crop = germling.getCropAt(world, candidate.x, candidate.y, candidate.z);
+					ICrop crop = germling.getCropAt(world, candidate.toBlockPos());
 					if (crop != null) {
 						crops.push(crop);
 						candidates.add(candidate);
@@ -233,7 +233,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	protected boolean maintainGermlings(BlockPos pos, ForgeDirection direction, int extent) {
+	protected boolean maintainGermlings(BlockPos pos, EnumFacing direction, int extent) {
 
 		World world = getWorld();
 

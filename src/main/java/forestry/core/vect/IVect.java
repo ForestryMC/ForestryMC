@@ -11,12 +11,12 @@
 package forestry.core.vect;
 
 import net.minecraft.util.BlockPos;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 /**
  * Represents a position or dimensions.
  */
+//TODO Either remove or give a big refactor.
 public interface IVect {
 	int getX();
 
@@ -28,7 +28,7 @@ public interface IVect {
 
 	IVect add(int x, int y, int z);
 
-	IVect add(ForgeDirection direction);
+	IVect add(EnumFacing direction);
 
 	BlockPos toBlockPos();
 }

@@ -17,9 +17,9 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.farming.IFarmHousing;
@@ -72,7 +72,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 	}
 
 	@Override
-	public boolean cultivate(BlockPos pos, ForgeDirection direction, int extent) {
+	public boolean cultivate(BlockPos pos, EnumFacing direction, int extent) {
 
 		if (maintainSoil(pos, direction, extent)) {
 			return true;
@@ -89,7 +89,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		return false;
 	}
 
-	private boolean maintainSoil(BlockPos pos, ForgeDirection direction, int extent) {
+	private boolean maintainSoil(BlockPos pos, EnumFacing direction, int extent) {
 
 		World world = getWorld();
 
@@ -101,7 +101,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 				ItemStack blockStack = VectUtil.getAsItemStack(world, position);
 				if (!isAcceptedGround(blockStack) && housing.hasResources(resource)) {
 					produce.addAll(BlockUtil.getBlockDrops(getWorld(), position));
-					setBlock(position, Blocks.air, 0);
+					setBlock(position, Blocks.air.getDefaultState());
 					return trySetSoil(position);
 				}
 
@@ -122,7 +122,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		return false;
 	}
 
-	private boolean maintainWater(BlockPos pos, ForgeDirection direction, int extent) {
+	private boolean maintainWater(BlockPos pos, EnumFacing direction, int extent) {
 		// Still not done, check water then
 		World world = getWorld();
 		for (int i = 0; i < extent; i++) {
@@ -136,7 +136,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		return false;
 	}
 
-	protected boolean maintainCrops(BlockPos pos, ForgeDirection direction, int extent) {
+	protected boolean maintainCrops(BlockPos pos, EnumFacing direction, int extent) {
 		return false;
 	}
 
@@ -144,7 +144,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		if (!housing.hasResources(resource)) {
 			return false;
 		}
-		setBlock(position, StackUtils.getBlock(ground), ground.getItemDamage());
+		setBlock(position, StackUtils.getBlock(ground).getStateFromMeta(ground.getItemDamage()));
 		housing.removeResources(resource);
 		return true;
 	}
@@ -159,7 +159,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		}
 
 		produce.addAll(BlockUtil.getBlockDrops(world, position));
-		setBlock(position, Blocks.water, 0);
+		setBlock(position, Blocks.water.getDefaultState());
 		housing.removeLiquid(STACK_WATER);
 		return true;
 	}

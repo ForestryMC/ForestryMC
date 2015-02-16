@@ -26,6 +26,7 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -709,12 +710,12 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	}
 
 	@Override
-	public void setFarmLogic(ForgeDirection direction, IFarmLogic logic) {
+	public void setFarmLogic(EnumFacing direction, IFarmLogic logic) {
 		farmLogics[direction.ordinal() - 2] = logic;
 	}
 
 	@Override
-	public void resetFarmLogic(ForgeDirection direction) {
+	public void resetFarmLogic(EnumFacing direction) {
 		setFarmLogic(direction, new FarmLogicArboreal(this));
 	}
 

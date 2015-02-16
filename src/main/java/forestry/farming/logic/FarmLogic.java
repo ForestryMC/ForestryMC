@@ -14,12 +14,12 @@ import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmLogic;
@@ -77,16 +77,15 @@ public abstract class FarmLogic implements IFarmLogic {
 	}
 
 	protected final boolean isWaterSourceBlock(World world, Vect position) {
-		return world.getBlock(position.x, position.y, position.z) == Blocks.water &&
-				world.getBlockMetadata(position.x, position.y, position.z) == 0;
+		return world.getBlockState(position.toBlockPos()) == Blocks.water.getDefaultState(); //TODO Fix
 	}
 
-	protected final Vect translateWithOffset(BlockPos pos, ForgeDirection direction, int step) {
-		return new Vect(x + direction.offsetX * step, y + direction.offsetY * step, z + direction.offsetZ * step); //TODO Fix in next pass
+	protected final Vect translateWithOffset(BlockPos pos, EnumFacing direction, int step) {
+		return new Vect(pos.offset(direction, step));
 	}
 
-	protected final void setBlock(Vect position, Block block, int meta) {
-		getWorld().setBlock(position.x, position.y, position.z, block, meta, Defaults.FLAG_BLOCK_UPDATE | Defaults.FLAG_BLOCK_SYNCH);
+	protected final void setBlock(Vect position, IBlockState state) {
+		getWorld().setBlockState(position.toBlockPos(), state, Defaults.FLAG_BLOCK_UPDATE | Defaults.FLAG_BLOCK_SYNCH);
 	}
 
 }

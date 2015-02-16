@@ -17,10 +17,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -90,12 +90,12 @@ public class FarmLogicPoale extends FarmLogic {
 	}
 
 	@Override
-	public boolean cultivate(BlockPos pos, ForgeDirection direction, int extent) {
+	public boolean cultivate(BlockPos pos, EnumFacing direction, int extent) {
 		return false;
 	}
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, ForgeDirection direction, int extent) {
+	public Collection<ICrop> harvest(BlockPos pos, EnumFacing direction, int extent) {
 		World world = getWorld();
 
 		Stack<ICrop> crops = new Stack<ICrop>();

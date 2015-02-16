@@ -13,8 +13,7 @@ package forestry.core.vect;
 import java.util.Random;
 
 import net.minecraft.util.BlockPos;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 /**
  * Represents an unchangeable position or dimensions.
@@ -80,8 +79,8 @@ public class Vect implements IVect {
 	}
 
 	@Override
-	public Vect add(ForgeDirection direction) {
-		return add(direction.offsetX, direction.offsetY, direction.offsetZ);
+	public Vect add(EnumFacing direction) {
+		return add(direction.getFrontOffsetX(), direction.getFrontOffsetY(), direction.getFrontOffsetZ());
 	}
 
 	public Vect multiply(float factor) {
