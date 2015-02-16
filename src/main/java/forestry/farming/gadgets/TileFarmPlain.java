@@ -364,7 +364,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		}
 
 		// Cultivation and collection
-		boolean didWork = false;
+		FarmWorkStatus farmWorkStatus = new FarmWorkStatus();
 
 		for (Map.Entry<ForgeDirection, List<FarmTarget>> entry : targets.entrySet()) {
 
@@ -381,26 +381,38 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 			// Always try to collect windfall first.
 			if (collectWindfall(logic)) {
-				didWork = true;
+				farmWorkStatus.didWork = true;
 			} else {
 				List<FarmTarget> farmTargets = entry.getValue();
 
 				if (stage == Stage.HARVEST) {
-					didWork = harvestTargets(farmTargets, logic);
+					farmWorkStatus.didWork = harvestTargets(farmTargets, logic);
 				} else {
-					didWork = cultivateTargets(farmTargets, logic);
+					farmWorkStatus = cultivateTargets(farmWorkStatus, farmTargets, logic);
 				}
 			}
 
-			if (didWork) {
+			if (farmWorkStatus.didWork) {
 				break;
+			}
+		}
+
+		if (farmWorkStatus.didWork) {
+			setErrorState(EnumErrorCode.OK);
+		} else if (stage == Stage.CULTIVATE) {
+			if (!farmWorkStatus.hasFarmland) {
+				setErrorState(EnumErrorCode.NOFARMLAND);
+			} else if (!farmWorkStatus.hasFertilizer) {
+				setErrorState(EnumErrorCode.NOFERTILIZER);
+			} else if (!farmWorkStatus.hasLiquid) {
+				setErrorState(EnumErrorCode.NOLIQUID);
 			}
 		}
 
 		// Farms alternate between cultivation and harvest.
 		stage = stage.next();
 
-		return didWork;
+		return farmWorkStatus.didWork;
 	}
 
 	private IFarmLogic getFarmLogic(ForgeDirection direction) {
@@ -423,26 +435,28 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		return false;
 	}
 
-	private boolean cultivateTargets(List<FarmTarget> farmTargets, IFarmLogic logic) {
+	private static class FarmWorkStatus {
+		public boolean didWork = false;
+		public boolean hasFarmland = false;
+		public boolean hasFertilizer = false;
+		public boolean hasLiquid = false;
+	}
 
-		boolean didWork = false;
-		boolean hasFarmland = false;
-		boolean hasFertilizer = false;
-		boolean hasLiquid = false;
+	private FarmWorkStatus cultivateTargets(FarmWorkStatus farmWorkStatus, List<FarmTarget> farmTargets, IFarmLogic logic) {
 
 		for (FarmTarget target : farmTargets) {
 
 			if (target.getExtent() <= 0) {
 				break;
 			} else {
-				hasFarmland = true;
+				farmWorkStatus.hasFarmland = true;
 			}
 
 			// Check fertilizer and water
 			if (!hasFertilizer(logic.getFertilizerConsumption())) {
 				continue;
 			} else {
-				hasFertilizer = true;
+				farmWorkStatus.hasFertilizer = true;
 			}
 
 			int liquidAmount = logic.getWaterConsumption(getHydrationModifier());
@@ -450,7 +464,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			if (liquid.amount > 0 && !hasLiquid(liquid)) {
 				continue;
 			} else {
-				hasLiquid = true;
+				farmWorkStatus.hasLiquid = true;
 			}
 
 			if (cultivateTarget(target, logic)) {
@@ -458,21 +472,11 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 				removeFertilizer(logic.getFertilizerConsumption());
 				removeLiquid(liquid);
 
-				didWork = true;
+				farmWorkStatus.didWork = true;
 			}
 		}
 
-		if (!hasFarmland) {
-			setErrorState(EnumErrorCode.NOFARMLAND);
-		} else if (!hasFertilizer) {
-			setErrorState(EnumErrorCode.NOFERTILIZER);
-		} else if (!hasLiquid) {
-			setErrorState(EnumErrorCode.NOLIQUID);
-		} else {
-			setErrorState(EnumErrorCode.OK);
-		}
-
-		return didWork;
+		return farmWorkStatus;
 	}
 
 	private boolean cultivateTarget(FarmTarget target, IFarmLogic logic) {

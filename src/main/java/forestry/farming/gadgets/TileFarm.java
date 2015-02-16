@@ -161,7 +161,7 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	@Override
 	public void fromPacketPayload(PacketPayload payload) {
 		EnumFarmBlock farmType = EnumFarmBlock.values()[payload.shortPayload[0]];
-		if (payload.shortPayload[1] > 0) {
+		if (payload.shortPayload[1] > 0 && !isMaster()) {
 			makeMaster();
 		}
 
