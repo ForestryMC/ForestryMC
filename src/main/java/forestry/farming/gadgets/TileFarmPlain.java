@@ -239,17 +239,25 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			ForgeDirection layoutDirection = getLayoutDirection(farmSide);
 
 			Vect targetLocation = FarmHelper.getFarmMultiblockCorner(world, targetStart, farmSide, layoutDirection.getOpposite());
+			Vect firstLocation = targetLocation.add(farmSide);
+			Vect firstGroundPosition = getGroundPosition(world, firstLocation);
+			if (firstGroundPosition == null) {
+				break;
+			}
+			int groundHeight = firstGroundPosition.getY();
+
 			List<FarmTarget> farmSideTargets = new ArrayList<FarmTarget>();
 			for (int i = 0; i < allowedExtent; i++) {
 				targetLocation = targetLocation.add(farmSide);
+				Vect groundLocation = new Vect(targetLocation.getX(), groundHeight, targetLocation.getZ());
 
 				int targetLimit = targetMaxLimit;
 				if (!Config.squareFarms) {
 					targetLimit = targetMaxLimit - i - 1;
 				}
 
-				Block platform = VectUtil.getBlock(world, targetLocation);
-				Vect soilPosition = new Vect(targetLocation.x, targetLocation.y + 1, targetLocation.z);
+				Block platform = VectUtil.getBlock(world, groundLocation);
+				Vect soilPosition = new Vect(groundLocation.x, groundLocation.y + 1, groundLocation.z);
 				if (!StructureLogicFarm.bricks.contains(platform) || !FarmLogic.canBreakSoil(world, soilPosition)) {
 					break;
 				}
@@ -268,7 +276,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		for (ForgeDirection direction : targets.keySet()) {
 			List<FarmTarget> targetsList = targets.get(direction);
 			if (!targetsList.isEmpty()) {
-				Vect groundPosition = getGroundPosition(worldObj, targetsList.get(0));
+				Vect groundPosition = getGroundPosition(worldObj, targetsList.get(0).getStart());
 
 				for (FarmTarget target : targetsList) {
 					target.setExtentAndYOffset(worldObj, groundPosition);
@@ -277,9 +285,9 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		}
 	}
 
-	private Vect getGroundPosition(World world, FarmTarget firstTarget) {
+	private static Vect getGroundPosition(World world, Vect targetPosition) {
 		for (int yOffset = 2; yOffset > -4; yOffset--) {
-			Vect position = firstTarget.getStart().add(0, yOffset, 0);
+			Vect position = targetPosition.add(0, yOffset, 0);
 			Block ground = VectUtil.getBlock(world, position);
 			if (StructureLogicFarm.bricks.contains(ground)) {
 				return position;
@@ -317,7 +325,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	@Override
 	public boolean doWork() {
 		// System.out.println("Starting doWork()");
-		if (targets == null) {
+		if (targets == null || checkTimer.delayPassed(worldObj, 400)) {
 			Vect targetStart = new Vect(xCoord, yCoord, zCoord);
 
 			int sizeNorthSouth = FarmHelper.getFarmSizeNorthSouth(worldObj, targetStart);
@@ -327,8 +335,6 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			allowedExtent = Math.max(sizeNorthSouth, sizeEastWest) * 3;
 
 			targets = createTargets(worldObj, targetStart, allowedExtent, sizeNorthSouth, sizeEastWest);
-			setExtents();
-		} else if (checkTimer.delayPassed(worldObj, 400)) {
 			setExtents();
 		}
 

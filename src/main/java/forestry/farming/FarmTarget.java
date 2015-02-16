@@ -15,7 +15,6 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.core.gadgets.StructureLogic;
 import forestry.core.vect.MutableVect;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
@@ -45,10 +44,6 @@ public class FarmTarget {
 		return this.yOffset;
 	}
 
-	public int getLimit() {
-		return limit;
-	}
-
 	public int getExtent() {
 		return extent;
 	}
@@ -64,7 +59,7 @@ public class FarmTarget {
 		}
 
 		MutableVect position = new MutableVect(platformPosition);
-		for (extent = 0; extent < getLimit(); extent++) {
+		for (extent = 0; extent < limit; extent++) {
 			Block platform = VectUtil.getBlock(world, position);
 			Vect soilPosition = new Vect(position.x, position.y + 1, position.z);
 			if (!StructureLogicFarm.bricks.contains(platform) || !FarmLogic.canBreakSoil(world, soilPosition)) {
