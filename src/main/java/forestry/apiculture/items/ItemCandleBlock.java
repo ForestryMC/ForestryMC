@@ -4,20 +4,22 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.apiculture.gadgets.BlockCandle;
-import forestry.core.items.ItemForestryBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.apiculture.gadgets.BlockCandle;
+import forestry.core.items.ItemForestryBlock;
 
 public class ItemCandleBlock extends ItemForestryBlock {
 
@@ -47,8 +49,7 @@ public class ItemCandleBlock extends ItemForestryBlock {
 
 		if (BlockCandle.isLit(itemStack)) {
 			value = value + ".lit";
-		}
-		else {
+		} else {
 			value = value + ".stump";
 		}
 		return value;
@@ -57,7 +58,7 @@ public class ItemCandleBlock extends ItemForestryBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconFromDamageForRenderPass(int meta, int pass) {
-		return ((BlockCandle)this.getBlock()).getTextureFromPassAndMeta((meta != 0) ? 8 : 0, pass);
+		return ((BlockCandle) this.getBlock()).getTextureFromPassAndMeta((meta != 0) ? 8 : 0, pass);
 	}
 
 	@Override

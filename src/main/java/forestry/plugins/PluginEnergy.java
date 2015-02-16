@@ -4,14 +4,19 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.plugins;
 
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.network.IGuiHandler;
+
 import forestry.core.GameMode;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
@@ -28,9 +33,6 @@ import forestry.energy.gadgets.EngineClockwork;
 import forestry.energy.gadgets.EngineCopper;
 import forestry.energy.gadgets.EngineDefinition;
 import forestry.energy.proxy.ProxyEnergy;
-import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 
 @Plugin(pluginID = "Energy", name = "Energy", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.energy.description")
 public class PluginEnergy extends ForestryPlugin {
@@ -49,27 +51,27 @@ public class PluginEnergy extends ForestryPlugin {
 
 		definitionEngineCopper = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Defaults.DEFINITION_ENGINECOPPER_META, "forestry.EngineCopper", EngineCopper.class,
 				PluginEnergy.proxy.getRenderDefaultEngine(Defaults.TEXTURE_PATH_BLOCKS + "/engine_copper_"), ShapedRecipeCustom.createShapedRecipe(
-						ForestryBlock.engine.getItemStack(1, Defaults.DEFINITION_ENGINECOPPER_META),
-						"###",
-						" X ",
-						"YVY",
-						'#', "ingotCopper",
-						'X', Blocks.glass,
-						'Y', "gearCopper",
-						'V', Blocks.piston)));
+				ForestryBlock.engine.getItemStack(1, Defaults.DEFINITION_ENGINECOPPER_META),
+				"###",
+				" X ",
+				"YVY",
+				'#', "ingotCopper",
+				'X', Blocks.glass,
+				'Y', "gearCopper",
+				'V', Blocks.piston)));
 		definitionEngineBronze = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Defaults.DEFINITION_ENGINEBRONZE_META, "forestry.EngineBronze", EngineBronze.class,
 				PluginEnergy.proxy.getRenderDefaultEngine(Defaults.TEXTURE_PATH_BLOCKS + "/engine_bronze_"), ShapedRecipeCustom.createShapedRecipe(
-						ForestryBlock.engine.getItemStack(1, Defaults.DEFINITION_ENGINEBRONZE_META),
-						"###",
-						" X ",
-						"YVY",
-						'#', "ingotBronze",
-						'X', Blocks.glass,
-						'Y', "gearBronze",
-						'V', Blocks.piston)));
+				ForestryBlock.engine.getItemStack(1, Defaults.DEFINITION_ENGINEBRONZE_META),
+				"###",
+				" X ",
+				"YVY",
+				'#', "ingotBronze",
+				'X', Blocks.glass,
+				'Y', "gearBronze",
+				'V', Blocks.piston)));
 
 		ShapedRecipeCustom clockworkRecipe = null;
-		if (GameMode.getGameMode().getBooleanSetting("energy.engine.clockwork"))
+		if (GameMode.getGameMode().getBooleanSetting("energy.engine.clockwork")) {
 			clockworkRecipe = ShapedRecipeCustom.createShapedRecipe(
 					ForestryBlock.engine.getItemStack(1, Defaults.DEFINITION_ENGINECLOCKWORK_META),
 					"###",
@@ -80,6 +82,7 @@ public class PluginEnergy extends ForestryPlugin {
 					'Y', Items.clock,
 					'Z', ForestryItem.gearCopper,
 					'V', Blocks.piston);
+		}
 
 		definitionEngineClockwork = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Defaults.DEFINITION_ENGINECLOCKWORK_META, "forestry.EngineClockwork", EngineClockwork.class,
 				PluginEnergy.proxy.getRenderDefaultEngine(Defaults.TEXTURE_PATH_BLOCKS + "/engine_clock_"), clockworkRecipe));

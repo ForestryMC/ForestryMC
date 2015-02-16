@@ -4,22 +4,23 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.utils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ICrashCallable;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
+
 import forestry.core.config.Defaults;
 import forestry.plugins.PluginManager;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ForestryModEnvWarningCallable implements ICrashCallable {
 
@@ -41,8 +42,8 @@ public class ForestryModEnvWarningCallable implements ICrashCallable {
 			@SuppressWarnings("unused")
 			Class<?> c = Class.forName("org.bukkit.Bukkit");
 			modIDs.add("Bukkit, Cauldron, or other Bukkit replacement");
-		}
-		catch (Throwable ignored) {} // No need to do anything.
+		} catch (Throwable ignored) {
+		} // No need to do anything.
 
 
 		this.disabledModules = new ArrayList<String>();
@@ -68,8 +69,9 @@ public class ForestryModEnvWarningCallable implements ICrashCallable {
 		}
 
 		if (disabledModules.size() > 0) {
-			if (message.length() > 0)
+			if (message.length() > 0) {
 				message.append("\r\n");
+			}
 			message.append("Info: The following plugins have been disabled in the config: ");
 			message.append(disabledModules.get(0));
 			for (int i = 1; i < disabledModules.size(); ++i) {

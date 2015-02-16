@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -103,8 +103,9 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 		super.writeToNBT(nbttagcompound);
 
 		nbttagcompound.setInteger("BiomeId", biome.biomeID);
-		if (logic != null)
+		if (logic != null) {
 			logic.writeToNBT(nbttagcompound);
+		}
 	}
 
 	@Override
@@ -159,11 +160,12 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	public void updateClientSide() {
 
 		// / Multiplayer FX
-		if (PluginApiculture.beeInterface.isMated(getInternalInventory().getStackInSlot(SLOT_QUEEN)))
-			if (getErrorState() == EnumErrorCode.OK && worldObj.getTotalWorldTime() % 2 % 2 == 0) {
+		if (PluginApiculture.beeInterface.isMated(getInternalInventory().getStackInSlot(SLOT_QUEEN))) {
+			if (getErrorState() == EnumErrorCode.OK && updateOnInterval(2)) {
 				IBee displayQueen = PluginApiculture.beeInterface.getMember(getInternalInventory().getStackInSlot(SLOT_QUEEN));
 				displayQueen.doFX(logic.getEffectData(), this);
 			}
+		}
 
 	}
 
@@ -173,29 +175,14 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 		logic.update();
 
 		IBee queen = logic.getQueen();
-		if (queen == null)
+		if (queen == null) {
 			return;
+		}
 
 		// Add swarm effects
-		if (worldObj.getTotalWorldTime() % 200 * 10 == 0)
+		if (updateOnInterval(200)) {
 			onQueenChange(getInternalInventory().getStackInSlot(SLOT_QUEEN));
-		/* These should get already done on the client / doesn't work server-side anyway
-		 if (getErrorState() == EnumErrorCode.OK && worldObj.getTotalWorldTime() % 2 % 2 == 0)
-		 queen.doFX(logic.getEffectData(), this);
-
-		 if (getErrorState() == EnumErrorCode.OK && worldObj.getTotalWorldTime() % 50 == 0) {
-		 float f = xCoord + 0.5F;
-		 float f1 = yCoord + 0.0F + (worldObj.rand.nextFloat() * 6F) / 16F;
-		 float f2 = zCoord + 0.5F;
-		 float f3 = 0.52F;
-		 float f4 = worldObj.rand.nextFloat() * 0.6F - 0.3F;
-
-		 Proxies.common.addEntitySwarmFX(worldObj, (f - f3), f1, (f2 + f4), 0F, 0F, 0F);
-		 Proxies.common.addEntitySwarmFX(worldObj, (f + f3), f1, (f2 + f4), 0F, 0F, 0F);
-		 Proxies.common.addEntitySwarmFX(worldObj, (f + f4), f1, (f2 - f3), 0F, 0F, 0F);
-		 Proxies.common.addEntitySwarmFX(worldObj, (f + f4), f1, (f2 + f3), 0F, 0F, 0F);
-		 }*/
-
+		}
 	}
 
 	// @Override
@@ -211,8 +198,9 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	/* NETWORK SYNCH */
 	@Override
 	public void onQueenChange(ItemStack queenStack) {
-		if (!Proxies.common.isSimulating(worldObj))
+		if (!Proxies.common.isSimulating(worldObj)) {
 			return;
+		}
 
 		Proxies.net.sendNetworkPacket(new PacketInventoryStack(PacketIds.IINVENTORY_STACK, xCoord, yCoord, zCoord, SLOT_QUEEN, queenStack), xCoord, yCoord,
 				zCoord);
@@ -222,36 +210,41 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	/* STATE INFORMATION */
 	private int getHealthDisplay() {
 		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(SLOT_QUEEN) == null)
+		if (inventory.getStackInSlot(SLOT_QUEEN) == null) {
 			return 0;
+		}
 
-		if (ForestryItem.beeQueenGE.isItemEqual(inventory.getStackInSlot(SLOT_QUEEN)))
+		if (ForestryItem.beeQueenGE.isItemEqual(inventory.getStackInSlot(SLOT_QUEEN))) {
 			return PluginApiculture.beeInterface.getMember(inventory.getStackInSlot(SLOT_QUEEN)).getHealth();
-		else if (ForestryItem.beePrincessGE.isItemEqual(inventory.getStackInSlot(SLOT_QUEEN)))
+		} else if (ForestryItem.beePrincessGE.isItemEqual(inventory.getStackInSlot(SLOT_QUEEN))) {
 			return displayHealth;
-		else
+		} else {
 			return 0;
+		}
 	}
 
 	private int getMaxHealthDisplay() {
 		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(SLOT_QUEEN) == null)
+		if (inventory.getStackInSlot(SLOT_QUEEN) == null) {
 			return 0;
+		}
 
-		if (ForestryItem.beeQueenGE.isItemEqual(inventory.getStackInSlot(SLOT_QUEEN)))
+		if (ForestryItem.beeQueenGE.isItemEqual(inventory.getStackInSlot(SLOT_QUEEN))) {
 			return PluginApiculture.beeInterface.getMember(inventory.getStackInSlot(SLOT_QUEEN)).getMaxHealth();
-		else if (ForestryItem.beePrincessGE.isItemEqual(inventory.getStackInSlot(SLOT_QUEEN)))
+		} else if (ForestryItem.beePrincessGE.isItemEqual(inventory.getStackInSlot(SLOT_QUEEN))) {
 			return displayHealthMax;
-		else
+		} else {
 			return 0;
+		}
 	}
 
 	/**
 	 * Returns scaled queen health or breeding progress
 	 */
 	public int getHealthScaled(int i) {
-		if (getMaxHealthDisplay() == 0)
+		if (getMaxHealthDisplay() == 0) {
 			return 0;
+		}
 
 		return (getHealthDisplay() * i) / getMaxHealthDisplay();
 	}
@@ -277,23 +270,25 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	/* SMP */
 	// @Override
 	public void getGUINetworkData(int i, int j) {
-		if (logic == null)
+		if (logic == null) {
 			return;
+		}
 
 		switch (i) {
-		case 0:
-			displayHealth = j;
-			break;
-		case 1:
-			displayHealthMax = j;
-			break;
+			case 0:
+				displayHealth = j;
+				break;
+			case 1:
+				displayHealthMax = j;
+				break;
 		}
 	}
 
 	// @Override
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		if (logic == null)
+		if (logic == null) {
 			return;
+		}
 
 		iCrafting.sendProgressBarUpdate(container, 0, logic.getBreedingTime());
 		iCrafting.sendProgressBarUpdate(container, 1, logic.getTotalBreedingTime());

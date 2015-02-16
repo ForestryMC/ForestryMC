@@ -4,27 +4,30 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.core.INBTTagable;
-import forestry.api.core.IToolPipette;
-import forestry.core.config.Config;
-import forestry.core.config.Defaults;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
 import java.util.List;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+
 import net.minecraftforge.fluids.FluidStack;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.core.INBTTagable;
+import forestry.api.core.IToolPipette;
+import forestry.core.config.Defaults;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StringUtil;
 
 public class ItemPipette extends ItemForestry implements IToolPipette {
 
@@ -33,8 +36,9 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 		FluidStack contents;
 
 		public PipetteContents(NBTTagCompound nbttagcompound) {
-			if (nbttagcompound != null)
+			if (nbttagcompound != null) {
 				readFromNBT(nbttagcompound);
+			}
 		}
 
 		@Override
@@ -44,20 +48,23 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 
 		@Override
 		public void writeToNBT(NBTTagCompound nbttagcompound) {
-			if (contents != null)
+			if (contents != null) {
 				contents.writeToNBT(nbttagcompound);
+			}
 		}
 
 		public boolean isFull(int limit) {
-			if (contents == null)
+			if (contents == null) {
 				return false;
+			}
 
 			return contents.fluidID > 0 && contents.amount >= limit;
 		}
 
 		public void addTooltip(List<String> list) {
-			if (contents == null)
+			if (contents == null) {
 				return;
+			}
 
 			String descr = contents.getFluid().getLocalizedName(contents);
 			descr += " (" + contents.amount + " mb)";
@@ -95,27 +102,31 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 
 		if (contained.contents == null) {
 
-			if (liquid.amount > limit)
+			if (liquid.amount > limit) {
 				filled = limit;
-			else
+			} else {
 				filled = liquid.amount;
+			}
 
 			contained.contents = new FluidStack(liquid.fluidID, filled);
 			filled = liquid.amount;
 
 		} else {
 
-			if (contained.contents.amount >= limit)
+			if (contained.contents.amount >= limit) {
 				return 0;
-			if (!contained.contents.isFluidEqual(liquid))
+			}
+			if (!contained.contents.isFluidEqual(liquid)) {
 				return 0;
+			}
 
 			int space = limit - contained.contents.amount;
 
-			if (liquid.amount > space)
+			if (liquid.amount > space) {
 				filled = space;
-			else
+			} else {
 				filled = liquid.amount;
+			}
 
 			contained.contents.amount += filled;
 		}
@@ -153,21 +164,24 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIconFromDamage(int damage) {
-		if (damage <= 0)
+		if (damage <= 0) {
 			return primaryIcon;
-		else
+		} else {
 			return secondaryIcon;
+		}
 	}
 
 	@Override
 	public FluidStack drain(ItemStack pipette, int maxDrain, boolean doDrain) {
 		PipetteContents contained = new PipetteContents(pipette.getTagCompound());
-		if (contained.contents == null || contained.contents.fluidID <= 0)
+		if (contained.contents == null || contained.contents.fluidID <= 0) {
 			return null;
+		}
 
 		int drained = maxDrain;
-		if (contained.contents.amount < drained)
+		if (contained.contents.amount < drained) {
 			drained = contained.contents.amount;
+		}
 
 		if (doDrain) {
 			contained.contents.amount -= drained;

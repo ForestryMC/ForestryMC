@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -63,30 +63,34 @@ public class ItemLetter extends ItemInventoried {
 		public void onGuiSaved(EntityPlayer player) {
 			super.onGuiSaved(player);
 
-			if (parent == null)
+			if (parent == null) {
 				return;
+			}
 
 			// Already delivered mails can't be made usable anymore.
 			int state = getState(parent.getItemDamage());
 			if (state >= 2) {
-				if (state == 2 && letter.countAttachments() <= 0)
+				if (state == 2 && letter.countAttachments() <= 0) {
 					parent.setItemDamage(encodeMeta(3, getSize(parent.getItemDamage())));
+				}
 				return;
 			}
 
 			int type = getType(letter);
 
-			if (parent != null && letter.isMailable() && letter.isPostPaid())
+			if (parent != null && letter.isMailable() && letter.isPostPaid()) {
 				parent.setItemDamage(encodeMeta(1, type));
-			else
+			} else {
 				parent.setItemDamage(encodeMeta(0, type));
+			}
 		}
 
 		@Override
 		public void readFromNBT(NBTTagCompound nbttagcompound) {
 
-			if (nbttagcompound == null)
+			if (nbttagcompound == null) {
 				return;
+			}
 
 			letter = new Letter(nbttagcompound);
 		}
@@ -163,11 +167,13 @@ public class ItemLetter extends ItemInventoried {
 		@Override
 		public EnumErrorCode getErrorState() {
 
-			if (!letter.hasRecipient())
+			if (!letter.hasRecipient()) {
 				return EnumErrorCode.NORECIPIENT;
+			}
 
-			if (!letter.isProcessed() && !letter.isPostPaid())
+			if (!letter.isProcessed() && !letter.isPostPaid()) {
 				return EnumErrorCode.NOTPOSTPAID;
+			}
 
 			return EnumErrorCode.OK;
 		}
@@ -191,13 +197,13 @@ public class ItemLetter extends ItemInventoried {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (Proxies.common.isSimulating(world))
+		if (Proxies.common.isSimulating(world)) {
 			if (itemstack.stackSize == 1) {
-				entityplayer.openGui(ForestryAPI.instance, GuiId.LetterGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY,
-						(int) entityplayer.posZ);
+				entityplayer.openGui(ForestryAPI.instance, GuiId.LetterGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY, (int) entityplayer.posZ);
 			} else {
 				entityplayer.addChatMessage(new ChatComponentTranslation("for.chat.mail.wrongstacksize"));
 			}
+		}
 
 		return itemstack;
 	}
@@ -248,7 +254,7 @@ public class ItemLetter extends ItemInventoried {
 		return meta >> 4;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
 		NBTTagCompound nbttagcompound = itemstack.getTagCompound();
@@ -264,12 +270,13 @@ public class ItemLetter extends ItemInventoried {
 	public static int getType(ILetter letter) {
 		int count = letter.countAttachments();
 
-		if (count > 5)
+		if (count > 5) {
 			return 2;
-		else if (count > 1)
+		} else if (count > 1) {
 			return 1;
-		else
+		} else {
 			return 0;
+		}
 	}
 
 }

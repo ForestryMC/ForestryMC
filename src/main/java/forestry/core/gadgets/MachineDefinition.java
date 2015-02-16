@@ -4,21 +4,16 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.core.interfaces.IBlockRenderer;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -31,7 +26,16 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.core.interfaces.IBlockRenderer;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
 
 public class MachineDefinition {
 
@@ -59,8 +63,9 @@ public class MachineDefinition {
 		this.recipes = recipes;
 
 		this.faceMap = new int[8];
-		for (int i = 0; i < 8; i++)
+		for (int i = 0; i < 8; i++) {
 			faceMap[i] = 0;
+		}
 
 	}
 
@@ -71,15 +76,18 @@ public class MachineDefinition {
 	public void register() {
 		registerTileEntity();
 		registerCrafting();
-		if (renderer != null)
+		if (renderer != null) {
 			Proxies.render.registerTESR(this);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private void registerCrafting() {
-		for (IRecipe recipe : recipes)
-			if(recipe != null)
+		for (IRecipe recipe : recipes) {
+			if (recipe != null) {
 				CraftingManager.getInstance().getRecipeList().add(recipe);
+			}
+		}
 	}
 
 	/**
@@ -97,7 +105,7 @@ public class MachineDefinition {
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
 		list.add(new ItemStack(item, 1, meta));
 	}
@@ -140,9 +148,9 @@ public class MachineDefinition {
 
 	public MachineDefinition setFaces(int... faces) {
 
-		if (faces.length > 6)
+		if (faces.length > 6) {
 			System.arraycopy(faces, 0, faceMap, 0, faces.length);
-		else {
+		} else {
 			System.arraycopy(faces, 0, faceMap, 0, 6);
 			faceMap[6] = faces[0];
 			faceMap[7] = faces[1];
@@ -158,8 +166,9 @@ public class MachineDefinition {
 	public void registerIcons(IIconRegister register) {
 		icons = new IIcon[8];
 
-		for (int i = 0; i < 8; i++)
+		for (int i = 0; i < 8; i++) {
 			icons[i] = TextureManager.getInstance().registerTex(register, teIdent.replace("forestry.", "").toLowerCase(Locale.ENGLISH) + "." + faceMap[i]);
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -174,23 +183,24 @@ public class MachineDefinition {
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side, int metadata) {
 
 		TileEntity tile = world.getTileEntity(x, y, z);
-		if (!(tile instanceof TileForestry))
+		if (!(tile instanceof TileForestry)) {
 			return getBlockTextureFromSideAndMetadata(side, metadata);
+		}
 
 		ForgeDirection dir = ((TileForestry) tile).getOrientation();
 		switch (dir) {
-		case WEST:
-			side = side == 2 ? 4 : side == 3 ? 5 : side == 4 ? 3 : side == 5 ? 2 : side == 0 ? 6 : 7;
-			break;
-		case EAST:
-			side = side == 2 ? 5 : side == 3 ? 4 : side == 4 ? 2 : side == 5 ? 3 : side == 0 ? 6 : 7;
-			break;
-		case SOUTH:
-			break;
-		case NORTH:
-			side = side == 2 ? 3 : side == 3 ? 2 : side == 4 ? 5 : side == 5 ? 4 : side;
-			break;
-		default:
+			case WEST:
+				side = side == 2 ? 4 : side == 3 ? 5 : side == 4 ? 3 : side == 5 ? 2 : side == 0 ? 6 : 7;
+				break;
+			case EAST:
+				side = side == 2 ? 5 : side == 3 ? 4 : side == 4 ? 2 : side == 5 ? 3 : side == 0 ? 6 : 7;
+				break;
+			case SOUTH:
+				break;
+			case NORTH:
+				side = side == 2 ? 3 : side == 3 ? 2 : side == 4 ? 5 : side == 5 ? 4 : side;
+				break;
+			default:
 		}
 
 		return getBlockTextureFromSideAndMetadata(side, metadata);

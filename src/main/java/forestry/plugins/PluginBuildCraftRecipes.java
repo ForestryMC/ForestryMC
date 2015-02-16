@@ -4,17 +4,19 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.plugins;
 
-import buildcraft.api.recipes.BuildcraftRecipeRegistry;
 import cpw.mods.fml.common.Optional;
+
 import forestry.core.config.Defaults;
 import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
+
+import buildcraft.api.recipes.BuildcraftRecipeRegistry;
 
 @Plugin(pluginID = "BC6|Recipes", name = "BuildCraft 6 Recipes", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
 public class PluginBuildCraftRecipes extends ForestryPlugin {

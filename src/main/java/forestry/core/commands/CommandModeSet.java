@@ -11,6 +11,7 @@
 package forestry.core.commands;
 
 import java.util.List;
+
 import net.minecraft.command.ICommandSender;
 import net.minecraft.world.World;
 
@@ -35,10 +36,11 @@ public final class CommandModeSet extends SubCommand {
 		}
 
 		World world;
-		if (args.length == 2)
+		if (args.length == 2) {
 			world = CommandHelpers.getWorld(sender, this, args, 0);
-		else
+		} else {
 			world = CommandHelpers.getWorld(sender, this);
+		}
 
 		String desired = args[args.length - 1];
 

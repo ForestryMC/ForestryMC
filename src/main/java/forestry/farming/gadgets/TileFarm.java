@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -49,10 +49,11 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	/* GUI */
 	@Override
 	public void openGui(EntityPlayer player) {
-		if (this.isMaster())
+		if (this.isMaster()) {
 			player.openGui(ForestryAPI.instance, GuiId.MultiFarmGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
-		else if (this.hasMaster())
+		} else if (this.hasMaster()) {
 			player.openGui(ForestryAPI.instance, GuiId.MultiFarmGUI.ordinal(), worldObj, masterX, masterY, masterZ);
+		}
 	}
 
 	/* SAVING & LOADING */
@@ -66,8 +67,9 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 		farmBlock = EnumFarmBlock.getFromCompound(nbttagcompound);
 
 		// Init for master state
-		if (isMaster)
+		if (isMaster) {
 			makeMaster();
+		}
 
 		structureLogic.readFromNBT(nbttagcompound);
 
@@ -95,19 +97,15 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 
 	@Override
 	public void updateEntity() {
+		super.updateEntity();
 
-		if (!Proxies.common.isSimulating(worldObj))
+		if (!Proxies.common.isSimulating(worldObj)) {
 			updateClientSide();
-		else {
-
-			if (!isInited) {
-				initialize();
-				isInited = true;
-			}
-
+		} else {
 			// Periodic validation if needed
-			if (worldObj.getTotalWorldTime() % 200 == 0 && (!isIntegratedIntoStructure() || isMaster()))
+			if (updateOnInterval(200) && (!isIntegratedIntoStructure() || isMaster())) {
 				validateStructure();
+			}
 
 			updateServerSide();
 		}
@@ -163,8 +161,9 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	@Override
 	public void fromPacketPayload(PacketPayload payload) {
 		EnumFarmBlock farmType = EnumFarmBlock.values()[payload.shortPayload[0]];
-		if (payload.shortPayload[1] > 0)
+		if (payload.shortPayload[1] > 0 && !isMaster()) {
 			makeMaster();
+		}
 
 		// so the client can know if it is part of an integrated structure
 		this.masterY = payload.shortPayload[2];
@@ -196,15 +195,17 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 		setCentralTE(null);
 		this.isMaster = true;
 
-		if (worldObj != null && !worldObj.isRemote)
+		if (worldObj != null && !worldObj.isRemote) {
 			sendNetworkUpdate();
+		}
 	}
 
 	@Override
 	public void onStructureReset() {
 		setCentralTE(null);
-		if (worldObj.getBlockMetadata(xCoord, yCoord, zCoord) == 1)
+		if (worldObj.getBlockMetadata(xCoord, yCoord, zCoord) == 1) {
 			worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 0);
+		}
 		isMaster = false;
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
@@ -212,17 +213,20 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	@Override
 	public ITileStructure getCentralTE() {
 
-		if (!isIntegratedIntoStructure())
+		if (!isIntegratedIntoStructure()) {
 			return null;
+		}
 
-		if (isMaster)
+		if (isMaster) {
 			return this;
+		}
 
 		TileEntity tile = worldObj.getTileEntity(masterX, masterY, masterZ);
 		if (tile instanceof ITileStructure) {
-			ITileStructure master = (ITileStructure)tile;
-			if (master.isMaster())
+			ITileStructure master = (ITileStructure) tile;
+			if (master.isMaster()) {
 				return master;
+			}
 		}
 		return null;
 	}

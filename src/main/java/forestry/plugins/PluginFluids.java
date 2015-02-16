@@ -107,8 +107,9 @@ public class PluginFluids extends ForestryPlugin {
 
 			for (Fluids fluidType : Fluids.values()) {
 				ForestryItem container = fluidType.getContainerForType(type);
-				if (container == null)
+				if (container == null) {
 					continue;
+				}
 
 				ItemLiquidContainer liquidContainer = new ItemLiquidContainer(type, fluidType.getBlock(), fluidType.getColor());
 				fluidType.setProperties(liquidContainer);
@@ -120,13 +121,15 @@ public class PluginFluids extends ForestryPlugin {
 	@Override
 	public void doInit() {
 		for (Fluids fluidType : Fluids.values()) {
-			if (fluidType.getFluid() == null)
+			if (fluidType.getFluid() == null) {
 				continue;
+			}
 
 			for (EnumContainerType type : EnumContainerType.values()) {
 				ForestryItem container = fluidType.getContainerForType(type);
-				if (container == null)
+				if (container == null) {
 					continue;
+				}
 
 				LiquidHelper.injectLiquidContainer(fluidType, container.getItemStack());
 			}
@@ -146,8 +149,9 @@ public class PluginFluids extends ForestryPlugin {
 	@Override
 	public void postInit() {
 		for (Fluids fluidType : Fluids.forestryFluids) {
-			if (fluidType.getFluid() == null)
+			if (fluidType.getFluid() == null) {
 				throw new MissingFluidException(fluidType.getTag());
+			}
 		}
 	}
 
@@ -159,8 +163,9 @@ public class PluginFluids extends ForestryPlugin {
 				for (Fluids fluidType : forestryFluidsWithBlocks) {
 					Fluid fluid = fluidType.getFluid();
 					Block fluidBlock = fluidType.getBlock();
-					if (fluid != null && fluidBlock != null)
+					if (fluid != null && fluidBlock != null) {
 						fluid.setIcons(fluidBlock.getBlockTextureFromSide(1), fluidBlock.getBlockTextureFromSide(2));
+					}
 				}
 			}
 		}

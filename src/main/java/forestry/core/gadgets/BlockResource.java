@@ -4,19 +4,15 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.core.CreativeTabForestry;
-import forestry.core.config.ForestryItem;
-import forestry.core.render.TextureManager;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -26,6 +22,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.core.CreativeTabForestry;
+import forestry.core.config.ForestryItem;
+import forestry.core.render.TextureManager;
 
 public class BlockResource extends Block {
 	public BlockResource() {
@@ -39,8 +42,9 @@ public class BlockResource extends Block {
 	public void dropBlockAsItemWithChance(World world, int x, int y, int z, int metadata, float par6, int par7) {
 		super.dropBlockAsItemWithChance(world, x, y, z, metadata, par6, par7);
 
-		if (metadata == 0)
+		if (metadata == 0) {
 			this.dropXpOnBlockBreak(world, x, y, z, MathHelper.getRandomIntegerInRange(world.rand, 1, 4));
+		}
 	}
 
 	@Override
@@ -49,14 +53,17 @@ public class BlockResource extends Block {
 
 		if (metadata == 0) {
 			int fortmod = world.rand.nextInt(fortune + 2) - 1;
-			if (fortmod < 0)
+			if (fortmod < 0) {
 				fortmod = 0;
+			}
 
 			int amount = (2 + world.rand.nextInt(5)) * (fortmod + 1);
-			if (amount > 0)
+			if (amount > 0) {
 				drops.add(ForestryItem.apatite.getItemStack(amount));
-		} else
+			}
+		} else {
 			drops.add(new ItemStack(this, 1, metadata));
+		}
 
 		return drops;
 	}
@@ -67,7 +74,7 @@ public class BlockResource extends Block {
 	}
 
 	// / CREATIVE INVENTORY
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
 		itemList.add(new ItemStack(this, 1, 0));
@@ -94,14 +101,15 @@ public class BlockResource extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int i, int j) {
-		if (j == 0)
+		if (j == 0) {
 			return iconApatite;
-		else if (j == 1)
+		} else if (j == 1) {
 			return iconCopper;
-		else if (j == 2)
+		} else if (j == 2) {
 			return iconTin;
-		else
+		} else {
 			return null;
+		}
 	}
 
 }

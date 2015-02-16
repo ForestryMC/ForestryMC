@@ -10,13 +10,6 @@
  ******************************************************************************/
 package forestry.core.commands;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.core.config.Defaults;
-import forestry.core.config.Version;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,16 +21,26 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.core.config.Defaults;
+import forestry.core.config.Version;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.StringUtil;
 
 public final class CommandSaveStats extends SubCommand {
 
 	private static final String discoveredSymbol;
 	private static final String blacklistedSymbol;
 	private static final String notCountedSymbol;
+
 	static {
 		discoveredSymbol = StatCollector.translateToLocal("for.chat.command.forestry.stats.save.key.discovered.symbol");
 		blacklistedSymbol = StatCollector.translateToLocal("for.chat.command.forestry.stats.save.key.blacklisted.symbol");
@@ -69,10 +72,11 @@ public final class CommandSaveStats extends SubCommand {
 		World world = CommandHelpers.getWorld(sender, this);
 
 		EntityPlayerMP player;
-		if (args.length > 0)
+		if (args.length > 0) {
 			player = CommandHelpers.getPlayer(sender, args[0]);
-		else
+		} else {
 			player = CommandHelpers.getPlayer(sender, sender.getCommandSenderName());
+		}
 
 		Collection<String> statistics = new ArrayList<String>();
 
@@ -83,9 +87,9 @@ public final class CommandSaveStats extends SubCommand {
 		statistics.add("");
 
 		IBreedingTracker tracker = saveHelper.getBreedingTracker(world, player.getGameProfile());
-		if (tracker == null)
+		if (tracker == null) {
 			statistics.add(StatCollector.translateToLocal("for.chat.command.forestry.stats.save.error4"));
-		else {
+		} else {
 			saveHelper.addExtraInfo(statistics, tracker);
 
 			Collection<IAlleleSpecies> species = saveHelper.getSpecies();
@@ -106,8 +110,9 @@ public final class CommandSaveStats extends SubCommand {
 			statistics.add(StringUtil.line(header.length()));
 			statistics.add("");
 
-			for (IAlleleSpecies allele : species)
+			for (IAlleleSpecies allele : species) {
 				statistics.add(generateSpeciesListEntry(allele, tracker));
+			}
 		}
 
 		File file = new File(Proxies.common.getForestryRoot(), "config/" + Defaults.MOD.toLowerCase(Locale.ENGLISH) + "/stats/" + player.getDisplayName() + "-" + saveHelper.getFileSuffix() + ".log");
@@ -136,13 +141,13 @@ public final class CommandSaveStats extends SubCommand {
 
 			writer.write("# " + Defaults.MOD + newLine + "# " + Version.getVersion() + newLine);
 
-			for (String line : statistics)
+			for (String line : statistics) {
 				writer.write(line + newLine);
+			}
 
 			writer.close();
 
-		}
-		catch (IOException ex) {
+		} catch (IOException ex) {
 			CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.stats.save.error3");
 			ex.printStackTrace();
 			return;
@@ -159,16 +164,19 @@ public final class CommandSaveStats extends SubCommand {
 
 	private String generateSpeciesListEntry(IAlleleSpecies species, IBreedingTracker tracker) {
 		String discovered = "";
-		if (tracker.isDiscovered(species))
+		if (tracker.isDiscovered(species)) {
 			discovered = discoveredSymbol;
+		}
 
 		String blacklisted = "";
-		if (AlleleManager.alleleRegistry.isBlacklisted(species.getUID()))
+		if (AlleleManager.alleleRegistry.isBlacklisted(species.getUID())) {
 			blacklisted = blacklistedSymbol;
+		}
 
 		String notCounted = "";
-		if (!species.isCounted())
+		if (!species.isCounted()) {
 			notCounted = notCountedSymbol;
+		}
 
 		return speciesListEntry(discovered, blacklisted, notCounted, species.getUID(), species.getName(), species.getAuthority());
 	}

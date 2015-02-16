@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -79,8 +79,9 @@ public class ContainerFarm extends ContainerSocketed {
 	public void updateProgressBar(int i, int j) {
 		tile.getGUINetworkData(i, j);
 		TankManager tankManager = tile.getTankManager();
-		if (tankManager != null)
+		if (tankManager != null) {
 			tankManager.processGuiUpdate(i, j);
+		}
 	}
 
 	@Override
@@ -88,8 +89,9 @@ public class ContainerFarm extends ContainerSocketed {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		TankManager tankManager = tile.getTankManager();
-		if (tankManager != null)
+		if (tankManager != null) {
 			tankManager.updateGuiData(this, crafters);
+		}
 
 		for (Object crafter : crafters) {
 			tile.sendGUINetworkData(this, (ICrafting) crafter);
@@ -100,8 +102,9 @@ public class ContainerFarm extends ContainerSocketed {
 	public void addCraftingToCrafters(ICrafting iCrafting) {
 		super.addCraftingToCrafters(iCrafting);
 		TankManager tankManager = tile.getTankManager();
-		if (tankManager != null)
+		if (tankManager != null) {
 			tankManager.initGuiData(this, iCrafting);
+		}
 	}
 
 	public StandardTank getTank(int slot) {

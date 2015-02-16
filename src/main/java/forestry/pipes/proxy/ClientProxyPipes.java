@@ -1,17 +1,20 @@
 /*******************************************************************************
  * Copyright 2011-2014 by SirSengir
- * 
+ *
  * This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
- * 
+ *
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/.
  ******************************************************************************/
 package forestry.pipes.proxy;
 
-import buildcraft.transport.TransportProxyClient;
-import forestry.plugins.PluginPropolisPipe;
 import net.minecraft.item.Item;
+
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
+
+import forestry.plugins.PluginPropolisPipe;
+
+import buildcraft.transport.TransportProxyClient;
 
 public class ClientProxyPipes extends ProxyPipes {
 

@@ -4,15 +4,16 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.energy.circuits;
 
+import net.minecraft.tileentity.TileEntity;
+
 import forestry.core.circuits.Circuit;
 import forestry.energy.gadgets.EngineCopper;
-import net.minecraft.tileentity.TileEntity;
 
 public class CircuitFireDampener extends Circuit {
 
@@ -27,8 +28,9 @@ public class CircuitFireDampener extends Circuit {
 
 	@Override
 	public void onInsertion(int slot, TileEntity tile) {
-		if (!isCircuitable(tile))
+		if (!isCircuitable(tile)) {
 			return;
+		}
 
 	}
 

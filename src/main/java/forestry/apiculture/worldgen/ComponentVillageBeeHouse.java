@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -36,6 +36,7 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
+import forestry.api.genetics.IFlower;
 import forestry.apiculture.gadgets.TileBeehouse;
 import forestry.arboriculture.gadgets.BlockFireproofLog;
 import forestry.arboriculture.gadgets.BlockFireproofPlanks;
@@ -126,8 +127,9 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
 		if (this.averageGroundLevel < 0) {
 			this.averageGroundLevel = this.getAverageGroundLevel(world, structBoundingBox);
-			if (this.averageGroundLevel < 0)
+			if (this.averageGroundLevel < 0) {
 				return true;
+			}
 
 			this.boundingBox.offset(0, this.averageGroundLevel - this.boundingBox.maxY + 8 - 1, 0);
 		}
@@ -190,19 +192,21 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		this.placeBlockAtCurrentPosition(world, Blocks.glass_pane, 0, 6, 2, 5, structBoundingBox);
 
 		// Table/Bench
-		if (random.nextInt(10) < 1)
+		if (random.nextInt(10) < 1) {
 			this.placeBlockAtCurrentPosition(world, ForestryBlock.core.getItemStack(1, Defaults.DEFINITION_ESCRITOIRE_META), 1, 1, 3, structBoundingBox);
-		else
+		} else {
 			this.placeBlockAtCurrentPosition(world, buildingBlocks[0], 1, 1, 3, structBoundingBox);
+		}
 
 		this.placeBlockAtCurrentPosition(world, Blocks.air, 0, 2, 1, 0, structBoundingBox);
 		this.placeBlockAtCurrentPosition(world, Blocks.air, 0, 2, 2, 0, structBoundingBox);
 		this.placeDoorAtCurrentPosition(world, structBoundingBox, random, 2, 1, 0, this.getMetadataWithOffset(Blocks.wooden_door, 1));
 
 		if (isAirBlockAtCurrentPosition(world, 2, 0, -1, structBoundingBox)
-				&& !isAirBlockAtCurrentPosition(world, 2, -1, -1, structBoundingBox))
+				&& !isAirBlockAtCurrentPosition(world, 2, -1, -1, structBoundingBox)) {
 			this.placeBlockAtCurrentPosition(world, Blocks.stone_stairs,
 					this.getMetadataWithOffset(Blocks.stone_stairs, 3), 2, 0, -1, structBoundingBox);
+		}
 
 		this.placeBlockAtCurrentPosition(world, Blocks.air, 0, 6, 1, 5, structBoundingBox);
 		this.placeBlockAtCurrentPosition(world, Blocks.air, 0, 6, 2, 5, structBoundingBox);
@@ -215,11 +219,12 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
 		this.placeDoorAtCurrentPosition(world, structBoundingBox, random, 6, 1, 5, this.getMetadataWithOffset(Blocks.wooden_door, 1));
 
-		for (int i = 0; i < 5; ++i)
+		for (int i = 0; i < 5; ++i) {
 			for (int j = 0; j < 9; ++j) {
 				this.clearCurrentPositionBlocksUpwards(world, j, 7, i, structBoundingBox);
 				this.func_151554_b(world, Blocks.cobblestone, 0, j, -1, i, structBoundingBox);
 			}
+		}
 
 		this.generateStructureChestContents(world, structBoundingBox, random, 7, 1, 4,
 				ChestGenHooks.getItems(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, random),
@@ -234,22 +239,26 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		int rotatedMetaDoor = this.getMetadataWithOffset(Blocks.oak_stairs, 3);
 		int rotatedMetaGarden = this.getMetadataWithOffset(Blocks.oak_stairs, 2);
 
-		for (int i = -1; i <= 2; ++i)
+		for (int i = -1; i <= 2; ++i) {
 			for (int j = 0; j <= 8; ++j) {
 				this.placeBlockAtCurrentPosition(world, Blocks.oak_stairs, rotatedMetaDoor, j, 4 + i, i, structBoundingBox);
 				this.placeBlockAtCurrentPosition(world, Blocks.oak_stairs, rotatedMetaGarden, j, 4 + i, 5 - i, structBoundingBox);
 			}
+		}
 	}
 
 	protected void buildGarden(World world, StructureBoundingBox box) {
 
 		Block ground = Blocks.dirt;
-		if (isInDesert)
+		if (isInDesert) {
 			ground = Blocks.sand;
+		}
 
-		for (int i = 1; i <= 8; i++)
-			for (int j = 6; j <= 10; j++)
+		for (int i = 1; i <= 8; i++) {
+			for (int j = 6; j <= 10; j++) {
 				func_151554_b(world, ground, 0, i, 0, j, box);
+			}
+		}
 	}
 
 	protected void plantFlowerGarden(World world, StructureBoundingBox box, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
@@ -259,20 +268,24 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 			return;
 		}
 
-		for (int i = minY; i <= maxY; ++i)
-			for (int j = minX; j <= maxX; ++j)
-				for (int k = minZ; k <= maxZ; ++k)
+		for (int i = minY; i <= maxY; ++i) {
+			for (int j = minX; j <= maxX; ++j) {
+				for (int k = minZ; k <= maxZ; ++k) {
 					if (world.rand.nextBoolean()) {
 						int xCoord = this.getXWithOffset(j, k);
 						int yCoord = this.getYWithOffset(i);
 						int zCoord = this.getZWithOffset(j, k);
 
-						if (!Blocks.red_flower.canBlockStay(world, xCoord, yCoord, zCoord))
+						if (!Blocks.red_flower.canBlockStay(world, xCoord, yCoord, zCoord)) {
 							continue;
+						}
 
-						ItemStack flower = FlowerManager.plainFlowers.get(world.rand.nextInt(FlowerManager.plainFlowers.size()));
-						this.placeBlockAtCurrentPosition(world, flower, j, i, k, box);
+						IFlower flower = FlowerManager.flowerRegistry.getRandomPlantableFlower(FlowerManager.FlowerTypeVanilla, world.rand);
+						this.placeBlockAtCurrentPosition(world, flower.getBlock(), flower.getMeta(), j, i, k, box);
 					}
+				}
+			}
+		}
 	}
 
 	protected void buildApiaries(World world, StructureBoundingBox box, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
@@ -303,12 +316,13 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
 				for (int i = TileBeehouse.SLOT_FRAMES_1; i < TileBeehouse.SLOT_FRAMES_1 + TileBeehouse.SLOT_FRAMES_COUNT; i++) {
 					float roll = world.rand.nextFloat();
-					if (roll < 0.2f)
+					if (roll < 0.2f) {
 						apiary.setInventorySlotContents(i, ForestryItem.frameUntreated.getItemStack());
-					else if (roll < 0.4f)
+					} else if (roll < 0.4f) {
 						apiary.setInventorySlotContents(i, ForestryItem.frameImpregnated.getItemStack());
-					else if (roll < 0.6)
+					} else if (roll < 0.6) {
 						apiary.setInventorySlotContents(i, ForestryItem.frameProven.getItemStack());
+					}
 				}
 
 			}
@@ -321,20 +335,24 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		BiomeGenBase biome = world.getBiomeGenForCoords(xCoord, zCoord);
 
 		ArrayList<IBeeGenome> candidates;
-		if (BeeManager.villageBees[1] != null && BeeManager.villageBees[1].size() > 0 && world.rand.nextDouble() < 0.2)
+		if (BeeManager.villageBees[1] != null && BeeManager.villageBees[1].size() > 0 && world.rand.nextDouble() < 0.2) {
 			candidates = BeeManager.villageBees[1];
-		else
+		} else {
 			candidates = BeeManager.villageBees[0];
+		}
 
 		// Add bees that can live in this environment
 		ArrayList<IBeeGenome> valid = new ArrayList<IBeeGenome>();
-		for (IBeeGenome genome : candidates)
-			if (checkBiomeHazard(genome, biome.temperature, biome.rainfall))
+		for (IBeeGenome genome : candidates) {
+			if (checkBiomeHazard(genome, biome.temperature, biome.rainfall)) {
 				valid.add(genome);
+			}
+		}
 
 		// No valid ones found, return any of the common ones.
-		if (valid.isEmpty())
+		if (valid.isEmpty()) {
 			return PluginApiculture.beeInterface.getBee(world, BeeManager.villageBees[0].get(world.rand.nextInt(BeeManager.villageBees[0].size())));
+		}
 
 		return PluginApiculture.beeInterface.getBee(world, valid.get(world.rand.nextInt(valid.size())));
 	}
@@ -346,8 +364,9 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
 		Collection<EnumTemperature> toleratedTemperatures = AlleleManager.climateHelper.getToleratedTemperature(beeTemperature, temperatureTolerance);
 
-		if (!toleratedTemperatures.contains(EnumTemperature.getFromValue(temperature)))
+		if (!toleratedTemperatures.contains(EnumTemperature.getFromValue(temperature))) {
 			return false;
+		}
 
 		EnumHumidity beeHumidity = genome.getPrimary().getHumidity();
 		EnumTolerance humidityTolerance = genome.getToleranceHumid();
@@ -360,28 +379,38 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 	protected void fillBoxWith(World world, StructureBoundingBox box, int par3, int par4, int par5, int par6, int par7, int par8, ItemStack buildingBlock,
 			boolean replace) {
 
-		for (int var14 = par4; var14 <= par7; ++var14)
-			for (int var15 = par3; var15 <= par6; ++var15)
-				for (int var16 = par5; var16 <= par8; ++var16)
-					if (!replace || !isAirBlockAtCurrentPosition(world, var15, var14, var16, box))
+		for (int var14 = par4; var14 <= par7; ++var14) {
+			for (int var15 = par3; var15 <= par6; ++var15) {
+				for (int var16 = par5; var16 <= par8; ++var16) {
+					if (!replace || !isAirBlockAtCurrentPosition(world, var15, var14, var16, box)) {
 						this.placeBlockAtCurrentPosition(world, buildingBlock, var15, var14, var16, box);
+					}
+				}
+			}
+		}
 	}
 
-	protected void placeBlockAtCurrentPosition(World world, ItemStack buildingBlock, int par4, int par5, int par6, StructureBoundingBox par7StructureBoundingBox) {
+	protected void placeBlockAtCurrentPosition(World world, ItemStack itemStack, int par4, int par5, int par6, StructureBoundingBox par7StructureBoundingBox) {
+		placeBlockAtCurrentPosition(world, StackUtils.getBlock(itemStack), itemStack.getItemDamage(), par4, par5, par6, par7StructureBoundingBox);
+	}
+
+	protected void placeBlockAtCurrentPosition(World world, Block block, int blockMeta, int par4, int par5, int par6, StructureBoundingBox par7StructureBoundingBox) {
 		int var8 = this.getXWithOffset(par4, par6);
 		int var9 = this.getYWithOffset(par5);
 		int var10 = this.getZWithOffset(par4, par6);
 
-		if (par7StructureBoundingBox.isVecInside(var8, var9, var10))
-			world.setBlock(var8, var9, var10, StackUtils.getBlock(buildingBlock), buildingBlock.getItemDamage(), Defaults.FLAG_BLOCK_SYNCH);
+		if (par7StructureBoundingBox.isVecInside(var8, var9, var10)) {
+			world.setBlock(var8, var9, var10, block, blockMeta, Defaults.FLAG_BLOCK_SYNCH);
+		}
 	}
 
 	@Override
 	protected int getVillagerType(int villagerCount) {
-		if (villagerCount <= 0)
+		if (villagerCount <= 0) {
 			return Defaults.ID_VILLAGER_BEEKEEPER;
-		else
+		} else {
 			return Defaults.ID_VILLAGER_LUMBERJACK;
+		}
 	}
 
 	private boolean isAirBlockAtCurrentPosition(World world, int x, int y, int z, StructureBoundingBox box) {

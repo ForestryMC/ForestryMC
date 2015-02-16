@@ -4,13 +4,22 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.genetics;
 
+import java.util.ArrayList;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.WorldSavedData;
+
 import com.mojang.authlib.GameProfile;
+
+import net.minecraftforge.common.MinecraftForge;
+
 import forestry.api.core.ForestryEvent;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
@@ -20,11 +29,6 @@ import forestry.api.genetics.IMutation;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketNBT;
 import forestry.core.proxy.Proxies;
-import java.util.ArrayList;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.WorldSavedData;
-import net.minecraftforge.common.MinecraftForge;
 
 public abstract class BreedingTracker extends WorldSavedData implements IBreedingTracker {
 
@@ -52,9 +56,8 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 
 	/**
 	 * Returns the common tracker
-	 * 
-	 * @param player
-	 *            used to get worldObj
+	 *
+	 * @param player used to get worldObj
 	 * @return common tracker for this breeding system
 	 */
 	protected abstract IBreedingTracker getCommonTracker(EntityPlayer player);
@@ -86,46 +89,55 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 
-		if (nbttagcompound.hasKey("BMS"))
+		if (nbttagcompound.hasKey("BMS")) {
 			modeName = nbttagcompound.getString("BMS");
+		}
 
 		// / SPECIES
 		discoveredSpecies = new ArrayList<String>();
 		int count = nbttagcompound.getInteger("SpeciesCount");
-		for (int i = 0; i < count; i++)
+		for (int i = 0; i < count; i++) {
 			discoveredSpecies.add(nbttagcompound.getString("SD" + i));
+		}
 
 		// / MUTATIONS
 		discoveredMutations = new ArrayList<String>();
 		count = nbttagcompound.getInteger("MutationsCount");
-		for (int i = 0; i < count; i++)
+		for (int i = 0; i < count; i++) {
 			discoveredMutations.add(nbttagcompound.getString("MD" + i));
+		}
 
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 
-		if (modeName != null && !modeName.isEmpty())
+		if (modeName != null && !modeName.isEmpty()) {
 			nbttagcompound.setString("BMS", modeName);
+		}
 
 		nbttagcompound.setString("TYPE", getPacketTag());
 
 		// / SPECIES
 		nbttagcompound.setInteger("SpeciesCount", discoveredSpecies.size());
-		for (int i = 0; i < discoveredSpecies.size(); i++)
-			if (discoveredSpecies.get(i) != null)
+		for (int i = 0; i < discoveredSpecies.size(); i++) {
+			if (discoveredSpecies.get(i) != null) {
 				nbttagcompound.setString("SD" + i, discoveredSpecies.get(i));
+			}
+		}
 
 		// / MUTATIONS
 		nbttagcompound.setInteger("MutationsCount", discoveredMutations.size());
-		for (int i = 0; i < discoveredMutations.size(); i++)
-			if (discoveredMutations.get(i) != null)
+		for (int i = 0; i < discoveredMutations.size(); i++) {
+			if (discoveredMutations.get(i) != null) {
 				nbttagcompound.setString("MD" + i, discoveredMutations.get(i));
+			}
+		}
 
 	}
 
 	private static final String MUTATION_FORMAT = "%s-%s=%s";
+
 	@Override
 	public void registerMutation(IMutation mutation) {
 		discoveredMutations.add(String.format(MUTATION_FORMAT, mutation.getAllele0().getUID(), mutation.getAllele1().getUID(), mutation.getTemplate()[0].getUID()));
@@ -138,7 +150,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 
 	@Override
 	public boolean isDiscovered(IMutation mutation) {
-		return  discoveredMutations.contains(String.format(MUTATION_FORMAT, mutation.getAllele0().getUID(), mutation.getAllele1().getUID(), mutation.getTemplate()[0].getUID()))
+		return discoveredMutations.contains(String.format(MUTATION_FORMAT, mutation.getAllele0().getUID(), mutation.getAllele1().getUID(), mutation.getTemplate()[0].getUID()))
 				|| discoveredMutations.contains(mutation.getAllele0().getUID() + "-" + mutation.getAllele1().getUID());
 	}
 

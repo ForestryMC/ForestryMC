@@ -21,9 +21,9 @@ public class TreeSpawner implements ITreeSpawner {
 	public boolean spawn(ICommandSender sender, String treeName, EntityPlayer player) {
 		Vec3 look = player.getLookVec();
 
-		int x = (int)Math.round(player.posX + (3 * look.xCoord));
-		int y = (int)Math.round(player.posY);
-		int z = (int)Math.round(player.posZ + (3 * look.zCoord));
+		int x = (int) Math.round(player.posX + (3 * look.xCoord));
+		int y = (int) Math.round(player.posY);
+		int z = (int) Math.round(player.posZ + (3 * look.zCoord));
 
 		WorldGenerator gen = TreeGenHelper.getWorldGen(treeName, player, x, y, z);
 		if (gen == null) {

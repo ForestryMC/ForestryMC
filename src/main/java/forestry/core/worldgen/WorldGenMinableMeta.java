@@ -4,20 +4,22 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.worldgen;
 
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryBlock;
 import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
+import forestry.core.config.Defaults;
+import forestry.core.config.ForestryBlock;
 
 public class WorldGenMinableMeta extends WorldGenerator {
 
@@ -64,13 +66,15 @@ public class WorldGenMinableMeta extends WorldGenerator {
 
 			for (int targetX = xStart; targetX <= xEnd; targetX++) {
 				double d12 = ((targetX + 0.5D) - d6) / (d10 / 2D);
-				if (d12 * d12 >= 1.0D)
+				if (d12 * d12 >= 1.0D) {
 					continue;
+				}
 
 				for (int targetY = yStart; targetY <= yEnd; targetY++) {
 					double d13 = ((targetY + 0.5D) - d7) / (d11 / 2D);
-					if (d12 * d12 + d13 * d13 >= 1.0D)
+					if (d12 * d12 + d13 * d13 >= 1.0D) {
 						continue;
+					}
 
 					for (int targetZ = zStart; targetZ <= zEnd; targetZ++) {
 						double d14 = ((targetZ + 0.5D) - d8) / (d10 / 2D);

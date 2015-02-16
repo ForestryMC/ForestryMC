@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -22,13 +22,15 @@ public class AIButterflyWander extends AIButterflyMovement {
 	@Override
 	public boolean shouldExecute() {
 
-		if (entity.getDestination() != null)
+		if (entity.getDestination() != null) {
 			return false;
+		}
 
 		flightTarget = getRandomDestination();
 		if (flightTarget == null) {
-			if (entity.getState().doesMovement)
+			if (entity.getState().doesMovement) {
 				entity.setState(EnumButterflyState.HOVER);
+			}
 			return false;
 		}
 

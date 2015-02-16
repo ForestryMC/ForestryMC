@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -41,13 +41,15 @@ public class ItemStairs extends ItemForestryBlock {
 	private boolean placeStairs(World world, EntityPlayer player, ItemStack stack, WoodType type, int x, int y, int z, int metadata) {
 
 		boolean placed = ForestryBlock.stairs.setBlock(world, x, y, z, metadata, Defaults.FLAG_BLOCK_SYNCH);
-		if (!placed)
+		if (!placed) {
 			return false;
+		}
 
 		Block block = world.getBlock(x, y, z);
 
-		if (!ForestryBlock.stairs.isBlockEqual(block))
+		if (!ForestryBlock.stairs.isBlockEqual(block)) {
 			return false;
+		}
 
 		block.onBlockPlacedBy(world, x, y, z, player, stack);
 		block.onPostBlockPlaced(world, x, y, z, metadata);
@@ -65,8 +67,9 @@ public class ItemStairs extends ItemForestryBlock {
 	@Override
 	public String getItemStackDisplayName(ItemStack itemStack) {
 		WoodType woodType = WoodType.getFromCompound(itemStack.getTagCompound());
-		if (woodType == null)
+		if (woodType == null) {
 			return null;
+		}
 
 		String displayName;
 		String customUnlocalizedName = "stairs." + woodType.ordinal() + ".name";

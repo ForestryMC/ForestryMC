@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -68,14 +68,18 @@ public class PacketUpdate extends PacketCoordinates {
 		data.writeInt(payload.floatPayload.length);
 		data.writeInt(payload.stringPayload.length);
 
-		for (int intData : payload.intPayload)
+		for (int intData : payload.intPayload) {
 			data.writeInt(intData);
-		for (int shortData : payload.shortPayload)
+		}
+		for (int shortData : payload.shortPayload) {
 			data.writeShort(shortData);
-		for (float floatData : payload.floatPayload)
+		}
+		for (float floatData : payload.floatPayload) {
 			data.writeFloat(floatData);
-		for (String stringData : payload.stringPayload)
+		}
+		for (String stringData : payload.stringPayload) {
 			data.writeUTF(stringData);
+		}
 
 	}
 
@@ -91,14 +95,18 @@ public class PacketUpdate extends PacketCoordinates {
 		payload.floatPayload = new float[data.readInt()];
 		payload.stringPayload = new String[data.readInt()];
 
-		for (int i = 0; i < payload.intPayload.length; i++)
+		for (int i = 0; i < payload.intPayload.length; i++) {
 			payload.intPayload[i] = data.readInt();
-		for (int i = 0; i < payload.shortPayload.length; i++)
+		}
+		for (int i = 0; i < payload.shortPayload.length; i++) {
 			payload.shortPayload[i] = data.readShort();
-		for (int i = 0; i < payload.floatPayload.length; i++)
+		}
+		for (int i = 0; i < payload.floatPayload.length; i++) {
 			payload.floatPayload[i] = data.readFloat();
-		for (int i = 0; i < payload.stringPayload.length; i++)
+		}
+		for (int i = 0; i < payload.stringPayload.length; i++) {
 			payload.stringPayload[i] = data.readUTF();
+		}
 
 	}
 

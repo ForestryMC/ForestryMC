@@ -4,15 +4,23 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.genetics;
 
+import java.util.Collection;
+import java.util.Map;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IIconProvider;
@@ -24,10 +32,6 @@ import forestry.api.genetics.IMutation;
 import forestry.core.config.ForestryItem;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.StringUtil;
-import java.util.Collection;
-import java.util.Map;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
 
@@ -64,21 +68,24 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
 
 	@Override
 	public float getResearchSuitability(ItemStack itemstack) {
-		if (itemstack == null)
+		if (itemstack == null) {
 			return 0f;
+		}
 
-		if (ForestryItem.honeyDrop.isItemEqual(itemstack))
+		if (ForestryItem.honeyDrop.isItemEqual(itemstack)) {
 			return 0.5f;
-		else if (ForestryItem.honeydew.isItemEqual(itemstack))
+		} else if (ForestryItem.honeydew.isItemEqual(itemstack)) {
 			return 0.7f;
-		else if (ForestryItem.beeComb.isItemEqual(itemstack))
+		} else if (ForestryItem.beeComb.isItemEqual(itemstack)) {
 			return 0.4f;
-		else if (getRoot().isMember(itemstack))
+		} else if (getRoot().isMember(itemstack)) {
 			return 1.0f;
+		}
 
 		for (Map.Entry<ItemStack, Float> entry : getRoot().getResearchCatalysts().entrySet()) {
-			if (StackUtils.isIdenticalItem(entry.getKey(), itemstack))
+			if (StackUtils.isIdenticalItem(entry.getKey(), itemstack)) {
 				return entry.getValue();
+			}
 		}
 
 		return 0f;
@@ -96,10 +103,11 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
 			}
 		}
 
-		if (research != null)
-			return new ItemStack[] { research };
-		else
+		if (research != null) {
+			return new ItemStack[]{research};
+		} else {
 			return StackUtils.EMPTY_STACK_ARRAY;
+		}
 
 	}
 

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -27,8 +27,9 @@ public class GuiHandlerArboriculture extends GuiHandlerBase {
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		int cleanId = decodeGuiID(id);
 
-		if (cleanId >= GuiId.values().length)
+		if (cleanId >= GuiId.values().length) {
 			return null;
+		}
 
 		switch (GuiId.values()[cleanId]) {
 
@@ -37,8 +38,9 @@ public class GuiHandlerArboriculture extends GuiHandlerBase {
 
 			case TreealyzerGUI:
 				ItemStack equipped = player.getCurrentEquippedItem();
-				if (equipped == null)
+				if (equipped == null) {
 					return null;
+				}
 
 				return new ContainerAlyzer(new TreealyzerInventory(player, equipped), player);
 
@@ -53,8 +55,9 @@ public class GuiHandlerArboriculture extends GuiHandlerBase {
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		int cleanId = decodeGuiID(id);
 		
-		if (cleanId >= GuiId.values().length)
+		if (cleanId >= GuiId.values().length) {
 			return null;
+		}
 
 		switch (GuiId.values()[cleanId]) {
 
@@ -63,8 +66,9 @@ public class GuiHandlerArboriculture extends GuiHandlerBase {
 
 			case TreealyzerGUI:
 				ItemStack equipped = player.getCurrentEquippedItem();
-				if (equipped == null)
+				if (equipped == null) {
 					return null;
+				}
 
 				return new GuiTreealyzer(player, new TreealyzerInventory(player, equipped));
 

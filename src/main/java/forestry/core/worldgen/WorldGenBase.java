@@ -4,13 +4,14 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.worldgen;
 
 import java.util.Random;
+
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -28,6 +29,7 @@ public abstract class WorldGenBase extends WorldGenerator {
 			this.y = h;
 			this.z = g;
 		}
+
 		public final float x;
 		public final float y;
 		public final float z;
@@ -36,6 +38,7 @@ public abstract class WorldGenBase extends WorldGenerator {
 			return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2) + Math.pow(a.z - b.z, 2));
 		}
 	}
+
 	protected World world;
 	protected Random rand;
 
@@ -78,8 +81,9 @@ public abstract class WorldGenBase extends WorldGenerator {
 		for (int x = (int) start.x; x < (int) start.x + area.x; x++) {
 			for (int y = (int) start.y; y < (int) start.y + area.y; y++) {
 				for (int z = (int) start.z; z < (int) start.z + area.z; z++) {
-					if (Vector.distance(new Vector(x, y, z), new Vector(center.x, y, center.z)) <= (radius) + 0.01)
+					if (Vector.distance(new Vector(x, y, z), new Vector(center.x, y, center.z)) <= (radius) + 0.01) {
 						addBlock(x, y, z, block, replace);
+					}
 				}
 			}
 		}
@@ -97,12 +101,14 @@ public abstract class WorldGenBase extends WorldGenerator {
 			for (int y = (int) start.y; y < (int) start.y + area.y; y++) {
 				for (int z = (int) start.z; z < (int) start.z + area.z; z++) {
 
-					if (rand.nextFloat() > chance)
+					if (rand.nextFloat() > chance) {
 						continue;
+					}
 
 					double distance = Vector.distance(new Vector(x, y, z), new Vector(center.x, y, center.z));
-					if ((radius - width - 0.01 < distance && distance <= (radius) + 0.01))
+					if ((radius - width - 0.01 < distance && distance <= (radius) + 0.01)) {
 						addBlock(x, y, z, block, replace);
+					}
 				}
 			}
 		}
@@ -114,8 +120,9 @@ public abstract class WorldGenBase extends WorldGenerator {
 		for (int x = (int) start.x; x < (int) start.x + area.x; x++) {
 			for (int y = (int) start.y; y < (int) start.y + area.y; y++) {
 				for (int z = (int) start.z; z < (int) start.z + area.z; z++) {
-					if (Vector.distance(new Vector(x, y, z), new Vector(center.x, center.y, center.z)) <= (radius) + 0.01)
+					if (Vector.distance(new Vector(x, y, z), new Vector(center.x, center.y, center.z)) <= (radius) + 0.01) {
 						addBlock(x, y, z, block, replace);
+					}
 				}
 			}
 		}

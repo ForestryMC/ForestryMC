@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -47,10 +47,11 @@ public class InventoryAdapter implements IInventoryAdapter {
 		return this;
 	}
 
-//	public InventoryAdapter enableDebug() {
-//		this.debug = true;
-//		return this;
-//	}
+	//	public InventoryAdapter enableDebug() {
+	//		this.debug = true;
+	//		return this;
+	//	}
+
 	/**
 	 * @return Copy of this inventory. Stacks are copies.
 	 */
@@ -58,13 +59,13 @@ public class InventoryAdapter implements IInventoryAdapter {
 		InventoryAdapter copy = new InventoryAdapter(inventory.getSizeInventory(), inventory.getInventoryName(), inventory.getInventoryStackLimit());
 
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
-			if (inventory.getStackInSlot(i) != null)
+			if (inventory.getStackInSlot(i) != null) {
 				copy.setInventorySlotContents(i, inventory.getStackInSlot(i).copy());
+			}
 		}
 
 		return copy;
 	}
-
 
 
 	/* IINVENTORY */
@@ -146,8 +147,9 @@ public class InventoryAdapter implements IInventoryAdapter {
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
-		if (allowAutomation)
+		if (allowAutomation) {
 			return slotMap[side];
+		}
 		return Defaults.SLOTS_NONE;
 	}
 
@@ -178,8 +180,9 @@ public class InventoryAdapter implements IInventoryAdapter {
 	/* SAVING & LOADING */
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		if (!nbttagcompound.hasKey(inventory.getInventoryName()))
+		if (!nbttagcompound.hasKey(inventory.getInventoryName())) {
 			return;
+		}
 
 		NBTTagList nbttaglist = nbttagcompound.getTagList(inventory.getInventoryName(), 10);
 

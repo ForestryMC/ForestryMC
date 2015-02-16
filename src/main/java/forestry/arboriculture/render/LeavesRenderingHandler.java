@@ -4,11 +4,23 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.render;
+
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+
+import net.minecraftforge.client.IItemRenderer;
+
+import org.lwjgl.opengl.GL11;
 
 import forestry.api.arboriculture.ITree;
 import forestry.arboriculture.gadgets.ForestryBlockLeaves;
@@ -19,15 +31,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.OverlayRenderingHandler;
 import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginArboriculture;
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.client.IItemRenderer;
-import org.lwjgl.opengl.GL11;
 
 /**
  * Ugly but serviceable renderer for leaves, taking fruits into account.
@@ -43,8 +46,9 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 
 		TileLeaves tile = ForestryBlockLeaves.getLeafTile(world, x, y, z);
-		if (tile == null || tile.getTree() == null)
+		if (tile == null || tile.getTree() == null) {
 			return false;
+		}
 
 		// Render the plain leaf block.
 		renderer.renderStandardBlock(block, x, y, z);
@@ -53,8 +57,9 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 		IIcon fruitIcon = tile.getFruitTexture();
 		int fruitColor = tile.getFruitColour();
 
-		if (fruitIcon != null)
+		if (fruitIcon != null) {
 			renderFruitOverlay(world, block, x, y, z, renderer, fruitIcon, fruitColor);
+		}
 
 		return true;
 	}
@@ -148,12 +153,14 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 		Tessellator tessellator = Tessellator.instance;
 		Block block = StackUtils.getBlock(itemStack);
 
-		if (!(itemStack.getItem() instanceof ItemLeavesBlock) || !itemStack.hasTagCompound())
+		if (!(itemStack.getItem() instanceof ItemLeavesBlock) || !itemStack.hasTagCompound()) {
 			return;
+		}
 
 		ITree tree = getTree(itemStack);
-		if (tree == null)
+		if (tree == null) {
 			return;
+		}
 
 		GL11.glEnable(GL11.GL_BLEND);
 
@@ -162,13 +169,14 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 		leaves.setDecorative();
 
 		IIcon leavesIcon = leaves.getIcon(Proxies.render.fancyGraphicsEnabled());
-		if (leavesIcon == null)
+		if (leavesIcon == null) {
 			return;
+		}
 		int color = leaves.determineFoliageColour();
 
-		float r1 = (float)(color >> 16 & 255) / 255.0F;
-		float g1 = (float)(color >> 8 & 255) / 255.0F;
-		float b1 = (float)(color & 255) / 255.0F;
+		float r1 = (float) (color >> 16 & 255) / 255.0F;
+		float g1 = (float) (color >> 8 & 255) / 255.0F;
+		float b1 = (float) (color & 255) / 255.0F;
 		GL11.glColor4f(r1, g1, b1, 1.0F);
 
 		GL11.glTranslatef(x, y, z);
@@ -206,17 +214,19 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 
 
 		// add fruit
-		if (!leaves.hasFruit())
+		if (!leaves.hasFruit()) {
 			return;
+		}
 
 		int fruitColor = leaves.getFruitColour();
 		IIcon fruitTexture = leaves.getFruitTexture();
-		if (fruitTexture == null)
+		if (fruitTexture == null) {
 			return;
+		}
 
-		float r2 = (float)(fruitColor >> 16 & 255) / 255.0F;
-		float g2 = (float)(fruitColor >> 8 & 255) / 255.0F;
-		float b2 = (float)(fruitColor & 255) / 255.0F;
+		float r2 = (float) (fruitColor >> 16 & 255) / 255.0F;
+		float g2 = (float) (fruitColor >> 8 & 255) / 255.0F;
+		float b2 = (float) (fruitColor & 255) / 255.0F;
 		GL11.glColor4f(r2, g2, b2, 1.0F);
 
 		block.setBlockBoundsForItemRender();

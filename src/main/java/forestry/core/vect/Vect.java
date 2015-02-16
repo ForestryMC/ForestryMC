@@ -4,13 +4,15 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.vect;
 
 import java.util.Random;
+
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Represents an unchangeable position or dimensions.
@@ -21,12 +23,17 @@ public class Vect implements IVect {
 	public final int z;
 
 	public Vect(int[] dim) {
-		if (dim.length != 3)
+		if (dim.length != 3) {
 			throw new RuntimeException("Cannot instantiate a vector with less or more than 3 points.");
+		}
 
 		this.x = dim[0];
 		this.y = dim[1];
 		this.z = dim[2];
+	}
+
+	public Vect(IVect vect) {
+		this(vect.getX(), vect.getY(), vect.getZ());
 	}
 
 	public Vect(int x, int y, int z) {
@@ -64,6 +71,11 @@ public class Vect implements IVect {
 		return new Vect(this.x + x, this.y + y, this.z + z);
 	}
 
+	@Override
+	public Vect add(ForgeDirection direction) {
+		return add(direction.offsetX, direction.offsetY, direction.offsetZ);
+	}
+
 	public Vect multiply(float factor) {
 		return new Vect(Math.round(x * factor), Math.round(y * factor), Math.round(z * factor));
 	}
@@ -85,10 +97,12 @@ public class Vect implements IVect {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (!(obj instanceof Vect))
+		}
+		if (!(obj instanceof Vect)) {
 			return false;
+		}
 		Vect other = (Vect) obj;
 		return (x == other.x) && (y == other.y) && (z == other.z);
 	}

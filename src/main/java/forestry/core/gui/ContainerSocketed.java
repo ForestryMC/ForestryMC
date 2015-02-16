@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -48,8 +48,9 @@ public class ContainerSocketed extends ContainerForestry {
 		if (Proxies.common.isSimulating(player.worldObj)) {
 			ItemStack stack = player.inventory.getItemStack();
 			stack.stackSize--;
-			if(stack.stackSize <= 0)
+			if (stack.stackSize <= 0) {
 				player.inventory.setItemStack(null);
+			}
 			Proxies.net.inventoryChangeNotify(player);
 			
 			TileEntity te = (TileEntity) tile;
@@ -67,18 +68,21 @@ public class ContainerSocketed extends ContainerForestry {
 		}
 
 		ItemStack socket = tile.getSocket(slot);
-		if (socket == null)
+		if (socket == null) {
 			return;
+		}
 
 		StackUtils.stowInInventory(socket, player.inventory, true);
 		// Not sufficient space in player's inventory. failed to stow.
-		if (socket.stackSize > 0)
+		if (socket.stackSize > 0) {
 			return;
+		}
 
 		tile.setSocket(slot, null);
 		itemstack.damageItem(1, player);
-		if (itemstack.stackSize <= 0)
+		if (itemstack.stackSize <= 0) {
 			player.inventory.setItemStack(null);
+		}
 
 		TileEntity te = (TileEntity) tile;
 		Proxies.net.sendToPlayer(new PacketSocketUpdate(PacketIds.SOCKET_UPDATE, te.xCoord, te.yCoord, te.zCoord, tile), player);

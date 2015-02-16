@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -31,7 +31,6 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
 
@@ -63,17 +62,15 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 
 	@Override
 	public void updateEntity() {
-		if (!Proxies.common.isSimulating(worldObj))
-			updateClientSide();
-		else {
-			if (!isInited) {
-				initialize();
-				isInited = true;
-			}
+		super.updateEntity();
 
+		if (!Proxies.common.isSimulating(worldObj)) {
+			updateClientSide();
+		} else {
 			// Periodic validation if needed
-			if (worldObj.getTotalWorldTime() % 200 == 0 && (!isIntegratedIntoStructure() || isMaster()))
+			if (updateOnInterval(200) && (!isIntegratedIntoStructure() || isMaster())) {
 				validateStructure();
+			}
 
 			updateServerSide();
 		}
@@ -99,8 +96,9 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 		this.masterZ = nbttagcompound.getInteger("MasterZ");
 
 		// Init for master state
-		if (isMaster)
-			makeMaster();		
+		if (isMaster) {
+			makeMaster();
+		}
 		
 		super.readFromNBT(nbttagcompound);
 
@@ -135,8 +133,9 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 
 	@Override
 	public void fromPacketPayload(PacketPayload payload) {
-		if (payload.shortPayload[0] > 0)
+		if (payload.shortPayload[0] > 0) {
 			makeMaster();
+		}
 
 		// so the client can know if it is part of an integrated structure
 		this.masterY = payload.shortPayload[1];
@@ -158,15 +157,17 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 		setCentralTE(null);
 		isMaster = true;
 
-		if (getInternalInventory() instanceof FakeInventoryAdapter)
+		if (getInternalInventory() instanceof FakeInventoryAdapter) {
 			createInventory();
+		}
 	}
 
 	@Override
 	public void onStructureReset() {
 		setCentralTE(null);
-		if (worldObj.getBlockMetadata(xCoord, yCoord, zCoord) == 1)
+		if (worldObj.getBlockMetadata(xCoord, yCoord, zCoord) == 1) {
 			worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 0);
+		}
 		isMaster = false;
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
@@ -174,21 +175,25 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	@Override
 	public ITileStructure getCentralTE() {
 
-		if (!isIntegratedIntoStructure())
+		if (!isIntegratedIntoStructure()) {
 			return null;
+		}
 
 		if (!isMaster()) {
 			TileEntity tile = worldObj.getTileEntity(masterX, masterY, masterZ);
 			if (tile instanceof ITileStructure) {
 				ITileStructure master = (ITileStructure) worldObj.getTileEntity(masterX, masterY, masterZ);
-				if (master.isMaster())
+				if (master.isMaster()) {
 					return master;
-				else
+				} else {
 					return null;
-			} else
+				}
+			} else {
 				return null;
-		} else
+			}
+		} else {
 			return this;
+		}
 
 	}
 

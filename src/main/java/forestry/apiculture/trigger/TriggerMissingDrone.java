@@ -4,19 +4,22 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.trigger;
 
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.IStatementParameter;
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
 import forestry.core.EnumErrorCode;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.triggers.Trigger;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
 
 public class TriggerMissingDrone extends Trigger {
 
@@ -30,8 +33,9 @@ public class TriggerMissingDrone extends Trigger {
 	@Override
 	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
 
-		if (!(tile instanceof IErrorSource))
+		if (!(tile instanceof IErrorSource)) {
 			return false;
+		}
 
 		return ((IErrorSource) tile).getErrorState() == EnumErrorCode.NODRONE;
 

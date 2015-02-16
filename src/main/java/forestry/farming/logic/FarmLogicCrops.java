@@ -4,11 +4,25 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.farming.logic;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Stack;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+
+import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
@@ -18,17 +32,7 @@ import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.core.vect.IVect;
 import forestry.core.vect.Vect;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Stack;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import forestry.core.vect.VectUtil;
 
 public abstract class FarmLogicCrops extends FarmLogicWatered {
 
@@ -37,7 +41,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 
 	public FarmLogicCrops(IFarmHousing housing, IFarmable[] seeds) {
 		super(housing,
-				new ItemStack[] { new ItemStack(Blocks.dirt) },
+				new ItemStack[]{new ItemStack(Blocks.dirt)},
 				new ItemStack(Blocks.farmland));
 
 		this.seeds = seeds;
@@ -50,16 +54,20 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 
 	@Override
 	public boolean isAcceptedGermling(ItemStack itemstack) {
-		for (IFarmable germling : seeds)
-			if (germling.isGermling(itemstack))
+		for (IFarmable germling : seeds) {
+			if (germling.isGermling(itemstack)) {
 				return true;
+			}
+		}
 		return false;
 	}
 
 	public boolean isWindfall(ItemStack itemstack) {
-		for (IFarmable germling : seeds)
-			if (germling.isWindfall(itemstack))
+		for (IFarmable germling : seeds) {
+			if (germling.isWindfall(itemstack)) {
 				return true;
+			}
+		}
 		return false;
 	}
 
@@ -102,16 +110,21 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 	@Override
 	protected boolean maintainCrops(int x, int y, int z, ForgeDirection direction, int extent) {
 
+		World world = getWorld();
+
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(x, y, z, direction, i);
-			if (!isAirBlock(position) && !Utils.isReplaceableBlock(getWorld(), position.x, position.y, position.z))
+			if (!VectUtil.isAirBlock(world, position) && !Utils.isReplaceableBlock(getWorld(), position.x, position.y, position.z)) {
 				continue;
+			}
 
-			ItemStack below = getAsItemStack(position.add(0, -1, 0));
-			if (ground.getItem() != below.getItem())
+			ItemStack below = VectUtil.getAsItemStack(world, position.add(0, -1, 0));
+			if (ground.getItem() != below.getItem()) {
 				continue;
-			if (below.getItemDamage() <= 0)
+			}
+			if (below.getItemDamage() <= 0) {
 				continue;
+			}
 
 			return trySetCrop(position);
 		}
@@ -122,9 +135,11 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 	private boolean trySetCrop(IVect position) {
 		World world = getWorld();
 
-		for (IFarmable candidate : seeds)
-			if (housing.plantGermling(candidate, world, position.getX(), position.getY(), position.getZ()))
+		for (IFarmable candidate : seeds) {
+			if (housing.plantGermling(candidate, world, position.getX(), position.getY(), position.getZ())) {
 				return true;
+			}
+		}
 
 		return false;
 	}
@@ -138,8 +153,9 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 			Vect position = translateWithOffset(x, y + 1, z, direction, i);
 			for (IFarmable seed : seeds) {
 				ICrop crop = seed.getCropAt(world, position.x, position.y, position.z);
-				if (crop != null)
+				if (crop != null) {
 					crops.push(crop);
+				}
 			}
 		}
 		return crops;

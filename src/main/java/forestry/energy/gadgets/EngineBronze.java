@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -19,7 +19,6 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -53,10 +52,11 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	public PacketPayload getPacketPayload() {
 		PacketPayload payload = super.getPacketPayload();
 
-		if (shutdown)
+		if (shutdown) {
 			payload.append(new int[]{1});
-		else
+		} else {
 			payload.append(new int[]{0});
+		}
 
 		return payload;
 	}
@@ -67,6 +67,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 
 		shutdown = payload.intPayload[3] > 0;
 	}
+
 	private final FilteredTank fuelTank;
 	private final FilteredTank heatingTank;
 	private final TankManager tankManager;
@@ -114,20 +115,23 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	@Override
 	public void updateServerSide() {
 		super.updateServerSide();
-		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
+		if (!updateOnInterval(20)) {
 			return;
+		}
 
 		IInventoryAdapter inventory = getInternalInventory();
 		// Check if we have suitable items waiting in the item slot
-		if (inventory.getStackInSlot(SLOT_CAN) != null)
+		if (inventory.getStackInSlot(SLOT_CAN) != null) {
 			FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
+		}
 
-		if (getHeatLevel() <= 0.2 && heatingTank.getFluidAmount() <= 0)
+		if (getHeatLevel() <= 0.2 && heatingTank.getFluidAmount() <= 0) {
 			setErrorState(EnumErrorCode.NOHEAT);
-		else if (burnTime <= 0 && fuelTank.getFluidAmount() <= 0)
+		} else if (burnTime <= 0 && fuelTank.getFluidAmount() <= 0) {
 			setErrorState(EnumErrorCode.NOFUEL);
-		else
+		} else {
 			setErrorState(EnumErrorCode.OK);
+		}
 	}
 
 	/**
@@ -144,18 +148,21 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 
 			// If we have reached a safe temperature, we reenable energy
 			// transfer
-			if (heatStage > 0.25 && shutdown)
+			if (heatStage > 0.25 && shutdown) {
 				shutdown(false);
-			else if (shutdown)
+			} else if (shutdown)
 
+			{
 				if (heatingTank.getFluidAmount() > 0 && Fluids.LAVA.is(heatingTank.getFluid())) {
 					addHeat(Defaults.ENGINE_HEAT_VALUE_LAVA);
 					heatingTank.drain(1, true);
 				}
+			}
 
 			// We need a minimum temperature to generate energy
 			if (heatStage > 0.2)
 
+			{
 				if (burnTime > 0) {
 					burnTime--;
 					currentOutput = determineFuelValue(FluidRegistry.getFluid(currentFluidId));
@@ -165,12 +172,14 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 					currentFluidId = fuelTank.getFluid().getFluid().getID();
 					fuelTank.drain(Defaults.BUCKET_VOLUME, true);
 				}
-			else
+			} else {
 				shutdown(true);
+			}
 		}
 
-		if (burnTime <= 0)
+		if (burnTime <= 0) {
 			currentFluidId = -1;
+		}
 	}
 
 	private void shutdown(boolean val) {
@@ -179,24 +188,28 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 
 	@Override
 	public int dissipateHeat() {
-		if (heat <= 0)
+		if (heat <= 0) {
 			return 0;
+		}
 
 		int loss = 1; // Basic loss even when running
 
-		if (!isBurning())
+		if (!isBurning()) {
 			loss++;
+		}
 
 		double heatStage = getHeatLevel();
-		if (heatStage > 0.55)
+		if (heatStage > 0.55) {
 			loss++;
+		}
 
 		// Lose extra heat when using water as fuel.
 		if (fuelTank.getFluidAmount() > 0) {
 			FluidStack fuelFluidStack = fuelTank.getFluid();
 			EngineBronzeFuel fuel = FuelManager.bronzeEngineFuel.get(fuelFluidStack.getFluid());
-			if (fuel != null)
+			if (fuel != null) {
 				loss = loss * fuel.dissipationMultiplier;
+			}
 		}
 
 		heat -= loss;
@@ -210,12 +223,13 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 
 		if (isActivated() && burnTime > 0) {
 			double heatStage = getHeatLevel();
-			if (heatStage >= 0.75)
+			if (heatStage >= 0.75) {
 				generate += Defaults.ENGINE_BRONZE_HEAT_GENERATION_ENERGY * 3;
-			else if (heatStage > 0.24)
+			} else if (heatStage > 0.24) {
 				generate += Defaults.ENGINE_BRONZE_HEAT_GENERATION_ENERGY * 2;
-			else if (heatStage > 0.2)
+			} else if (heatStage > 0.2) {
 				generate += Defaults.ENGINE_BRONZE_HEAT_GENERATION_ENERGY;
+			}
 		}
 
 		heat += generate;
@@ -227,35 +241,22 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	 * Returns the fuel value (power per cycle) an item of the passed fluid
 	 */
 	private int determineFuelValue(Fluid fluid) {
-		if (FuelManager.bronzeEngineFuel.containsKey(fluid))
+		if (FuelManager.bronzeEngineFuel.containsKey(fluid)) {
 			return FuelManager.bronzeEngineFuel.get(fluid).powerPerCycle;
-		else
+		} else {
 			return 0;
+		}
 	}
 
 	/**
 	 * @return Duration of burn cycle of one bucket
 	 */
 	private int determineBurnTime(Fluid fluid) {
-		if (FuelManager.bronzeEngineFuel.containsKey(fluid))
+		if (FuelManager.bronzeEngineFuel.containsKey(fluid)) {
 			return FuelManager.bronzeEngineFuel.get(fluid).burnDuration;
-		else
+		} else {
 			return 0;
-	}
-
-	protected ItemStack replenishByContainer(ItemStack inventoryStack, FluidContainerData container, StandardTank tank) {
-		if (container == null)
-			return inventoryStack;
-
-		if (tank.fill(container.fluid, false) >= container.fluid.amount) {
-			tank.fill(container.fluid, true);
-			if (container.filledContainer != null && container.filledContainer.getItem().hasContainerItem(container.filledContainer))
-				inventoryStack = container.emptyContainer.copy();
-			else
-				inventoryStack.stackSize--;
 		}
-
-		return inventoryStack;
 	}
 
 	// / STATE INFORMATION
@@ -266,22 +267,15 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 
 	@Override
 	public int getBurnTimeRemainingScaled(int i) {
-		if (totalTime == 0)
+		if (totalTime == 0) {
 			return 0;
+		}
 
 		return (burnTime * i) / totalTime;
 	}
 
 	public int getOperatingTemperatureScaled(int i) {
 		return (int) Math.round((heat * i) / (maxHeat * 0.2));
-	}
-
-	public int getFuelScaled(int i) {
-		return (fuelTank.getFluidAmount() * i) / Defaults.ENGINE_TANK_CAPACITY;
-	}
-
-	public int getHeatingFuelScaled(int i) {
-		return (heatingTank.getFluidAmount() * i) / Defaults.ENGINE_TANK_CAPACITY;
 	}
 
 	@Override
@@ -293,8 +287,9 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 
 		if (nbt.hasKey("currentFluid")) {
 			Fluid fluid = FluidRegistry.getFluid(nbt.getString("currentFluid"));
-			if (fluid != null)
+			if (fluid != null) {
 				currentFluidId = fluid.getID();
+			}
 		}
 
 		tankManager.readTanksFromNBT(nbt);
@@ -309,8 +304,9 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		nbt.setInteger("EngineTotalTime", totalTime);
 
 		Fluid fluid = FluidRegistry.getFluid(currentFluidId);
-		if (fluid != null)
+		if (fluid != null) {
 			nbt.setString("currentFluid", fluid.getName());
+		}
 
 		tankManager.writeTanksToNBT(nbt);
 	}
@@ -321,24 +317,24 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		id -= tankManager.maxMessageId() + 1;
 
 		switch (id) {
-		case 0:
-			burnTime = data;
-			break;
-		case 1:
-			totalTime = data;
-			break;
-		case 2:
-			currentOutput = data;
-			break;
-		case 3:
-			energyManager.fromPacketInt(data);
-			break;
-		case 4:
-			heat = data;
-			break;
-		case 5:
-			currentFluidId = data;
-			break;
+			case 0:
+				burnTime = data;
+				break;
+			case 1:
+				totalTime = data;
+				break;
+			case 2:
+				currentOutput = data;
+				break;
+			case 3:
+				energyManager.fromPacketInt(data);
+				break;
+			case 4:
+				heat = data;
+				break;
+			case 5:
+				currentFluidId = data;
+				break;
 		}
 	}
 

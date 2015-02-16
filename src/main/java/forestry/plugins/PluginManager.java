@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -12,17 +12,7 @@ package forestry.plugins;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
-import forestry.Forestry;
-import forestry.core.interfaces.IOreDictionaryHandler;
-import forestry.core.interfaces.IPacketHandler;
-import forestry.core.interfaces.IPickupHandler;
-import forestry.core.interfaces.IResupplyHandler;
-import forestry.core.interfaces.ISaveEventHandler;
-import forestry.core.proxy.Proxies;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -30,6 +20,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
+
 import net.minecraft.command.CommandHandler;
 import net.minecraft.command.ICommand;
 import net.minecraft.server.MinecraftServer;
@@ -39,6 +30,19 @@ import net.minecraft.world.chunk.IChunkProvider;
 
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+
+import cpw.mods.fml.common.IFuelHandler;
+import cpw.mods.fml.common.event.FMLInterModComms;
+import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
+
+import forestry.Forestry;
+import forestry.core.interfaces.IOreDictionaryHandler;
+import forestry.core.interfaces.IPacketHandler;
+import forestry.core.interfaces.IPickupHandler;
+import forestry.core.interfaces.IResupplyHandler;
+import forestry.core.interfaces.ISaveEventHandler;
+import forestry.core.proxy.Proxies;
 
 public class PluginManager {
 
@@ -74,15 +78,20 @@ public class PluginManager {
 		LEPIDOPTEROLOGY(new PluginLepidopterology()),
 		MAIL(new PluginMail()),
 		STORAGE(new PluginStorage()),
+		BIOMESOPLENTY(new PluginBiomesOPlenty()),
 		BUILDCRAFT_FUELS(new PluginBuildCraftFuels()),
 		BUILDCRAFT_RECIPES(new PluginBuildCraftRecipes()),
 		BUILDCRAFT_STATEMENTS(new PluginBuildCraftStatements()),
 		BUILDCRAFT_TRANSPORT(new PluginBuildCraftTransport()),
 		PROPOLIS_PIPE(new PluginPropolisPipe()),
+		EXTRAUTILITIES(new PluginExtraUtilities()),
 		EQUIVELENT_EXCHANGE(new PluginEE()),
 		FARM_CRAFTORY(new PluginFarmCraftory()),
 		INDUSTRIALCRAFT(new PluginIC2()),
-		NATURA(new PluginNatura()),;
+		HARVESTCRAFT(new PluginHarvestCraft()),
+		MAGICALCROPS(new PluginMagicalCrops()),
+		NATURA(new PluginNatura()),
+		UNDERGROUND_BIOMES(new PluginUndergroundBiomes());
 
 		private final ForestryPlugin instance;
 		private final boolean canBeDisabled;
@@ -147,8 +156,9 @@ public class PluginManager {
 		Iterator<Module> it = toLoad.iterator();
 		while (it.hasNext()) {
 			Module m = it.next();
-			if (!m.canBeDisabled())
+			if (!m.canBeDisabled()) {
 				continue;
+			}
 			if (!isEnabled(config, m)) {
 				it.remove();
 				Proxies.log.info("Module disabled: {0}", m);
@@ -180,8 +190,9 @@ public class PluginManager {
 		unloadedModules.removeAll(toLoad);
 		loadedModules.addAll(toLoad);
 
-		if (config.hasChanged())
+		if (config.hasChanged()) {
 			config.save();
+		}
 
 		Locale.setDefault(locale);
 
@@ -204,32 +215,39 @@ public class PluginManager {
 		Proxies.log.fine("Registering Handlers for Plugin: {0}", plugin);
 
 		IGuiHandler guiHandler = plugin.getGuiHandler();
-		if (guiHandler != null)
+		if (guiHandler != null) {
 			guiHandlers.add(guiHandler);
+		}
 
 		IPacketHandler packetHandler = plugin.getPacketHandler();
-		if (packetHandler != null)
+		if (packetHandler != null) {
 			packetHandlers.add(packetHandler);
+		}
 
 		IPickupHandler pickupHandler = plugin.getPickupHandler();
-		if (pickupHandler != null)
+		if (pickupHandler != null) {
 			pickupHandlers.add(pickupHandler);
+		}
 
 		ISaveEventHandler saveHandler = plugin.getSaveEventHandler();
-		if (saveHandler != null)
+		if (saveHandler != null) {
 			saveEventHandlers.add(saveHandler);
+		}
 
 		IResupplyHandler resupplyHandler = plugin.getResupplyHandler();
-		if (resupplyHandler != null)
+		if (resupplyHandler != null) {
 			resupplyHandlers.add(resupplyHandler);
+		}
 
 		IOreDictionaryHandler dictionaryHandler = plugin.getDictionaryHandler();
-		if (dictionaryHandler != null)
+		if (dictionaryHandler != null) {
 			dictionaryHandlers.add(dictionaryHandler);
+		}
 
 		IFuelHandler fuelHandler = plugin.getFuelHandler();
-		if (fuelHandler != null)
+		if (fuelHandler != null) {
 			GameRegistry.registerFuelHandler((fuelHandler));
+		}
 	}
 
 	public static void runInit() {
@@ -274,20 +292,24 @@ public class PluginManager {
 		for (Module m : loadedModules) {
 			ForestryPlugin plugin = m.instance;
 			ICommand[] commands = plugin.getConsoleCommands();
-			if (commands == null)
+			if (commands == null) {
 				continue;
-			for (ICommand command : commands)
+			}
+			for (ICommand command : commands) {
 				commandManager.registerCommand(command);
+			}
 		}
 	}
 
 	public static void processIMCMessages(ImmutableList<FMLInterModComms.IMCMessage> messages) {
-		for (FMLInterModComms.IMCMessage message : messages)
+		for (FMLInterModComms.IMCMessage message : messages) {
 			for (Module m : loadedModules) {
 				ForestryPlugin plugin = m.instance;
-				if (plugin.processIMCMessage(message))
+				if (plugin.processIMCMessage(message)) {
 					break;
+				}
 			}
+		}
 	}
 
 	public static void populateChunk(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
@@ -311,8 +333,9 @@ public class PluginManager {
 		Property prop = config.get(CATEGORY_MODULES, m.configName(), true, comment);
 		boolean enabled = prop.getBoolean();
 
-		if (!enabled)
+		if (!enabled) {
 			configDisabledModules.add(m);
+		}
 
 		return enabled;
 	}

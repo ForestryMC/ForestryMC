@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -88,8 +88,8 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 		tankManager = new TankManager(liquidTank);
 
 		recipes = new HygroregulatorRecipe[]{new HygroregulatorRecipe(new FluidStack(water, 1), 1, 0.01f, -0.005f),
-			new HygroregulatorRecipe(new FluidStack(lava, 1), 10, -0.01f, +0.005f),
-			new HygroregulatorRecipe(new FluidStack(liquidIce, 1), 10, 0.02f, -0.01f)};
+				new HygroregulatorRecipe(new FluidStack(lava, 1), 10, -0.01f, +0.005f),
+				new HygroregulatorRecipe(new FluidStack(liquidIce, 1), 10, 0.02f, -0.01f)};
 	}
 
 	@Override
@@ -131,18 +131,21 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 					component.addHumidityChange(currentRecipe.humidChange, 0.0f, 1.0f);
 					component.addTemperatureChange(currentRecipe.tempChange, 0.0f, 2.0f);
 				}
-			} else
+			} else {
 				transferTime = 0;
+			}
 		}
 
-		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
+		if (!updateOnInterval(20)) {
 			return;
+		}
 
 		IInventoryAdapter canInventory = getInternalInventory();
 
 		// Check if we have suitable items waiting in the item slot
-		if (canInventory.getStackInSlot(0) != null)
+		if (canInventory.getStackInSlot(0) != null) {
 			FluidHelper.drainContainers(tankManager, canInventory, 0);
+		}
 
 	}
 

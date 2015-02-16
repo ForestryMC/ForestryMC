@@ -47,12 +47,15 @@ public class ContainerBackpack extends ContainerItemInventory {
 		}
 
 		// Player inventory
-		for (int i = 0; i < 3; i++)
-			for (int j = 0; j < 9; j++)
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 9; j++) {
 				addSecuredSlot(player.inventory, j + i * 9 + 9, 8 + j * 18, 11 + startY + lines * 18 + i * 18);
+			}
+		}
 		// Player hotbar
-		for (int i = 0; i < 9; i++)
+		for (int i = 0; i < 9; i++) {
 			addSecuredSlot(player.inventory, i, 8 + i * 18, 11 + startY + lines * 18 + 58);
+		}
 	}
 
 }

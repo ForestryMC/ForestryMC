@@ -4,25 +4,29 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.network;
 
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
-import cpw.mods.fml.common.registry.GameData;
-import forestry.core.proxy.Proxies;
-import io.netty.buffer.Unpooled;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+
+import cpw.mods.fml.common.network.internal.FMLProxyPacket;
+import cpw.mods.fml.common.registry.GameData;
+
+import forestry.core.proxy.Proxies;
+
+import io.netty.buffer.Unpooled;
 
 public class ForestryPacket {
 
@@ -64,8 +68,9 @@ public class ForestryPacket {
 			short meta = data.readShort();
 			itemstack = new ItemStack(item, stackSize, meta);
 
-			if (item.isDamageable() || Proxies.common.needsTagCompoundSynched(item))
+			if (item.isDamageable() || Proxies.common.needsTagCompoundSynched(item)) {
 				itemstack.stackTagCompound = this.readNBTTagCompound(data);
+			}
 		}
 
 		return itemstack;
@@ -73,15 +78,16 @@ public class ForestryPacket {
 
 	protected void writeItemStack(ItemStack itemstack, DataOutputStream data) throws IOException {
 
-		if (itemstack == null)
+		if (itemstack == null) {
 			data.writeUTF("");
-		else {
+		} else {
 			data.writeUTF(GameData.getItemRegistry().getNameForObject(itemstack.getItem()));
 			data.writeByte(itemstack.stackSize);
 			data.writeShort(itemstack.getItemDamage());
 
-			if (itemstack.getItem().isDamageable() || Proxies.common.needsTagCompoundSynched(itemstack.getItem()))
+			if (itemstack.getItem().isDamageable() || Proxies.common.needsTagCompoundSynched(itemstack.getItem())) {
 				this.writeNBTTagCompound(itemstack.stackTagCompound, data);
+			}
 		}
 	}
 
@@ -89,9 +95,9 @@ public class ForestryPacket {
 
 		short length = data.readShort();
 
-		if (length < 0)
+		if (length < 0) {
 			return null;
-		else {
+		} else {
 			byte[] compressed = new byte[length];
 			data.readFully(compressed);
 			return CompressedStreamTools.readCompressed(new ByteArrayInputStream(compressed));
@@ -101,9 +107,9 @@ public class ForestryPacket {
 
 	protected void writeNBTTagCompound(NBTTagCompound nbttagcompound, DataOutputStream data) throws IOException {
 
-		if (nbttagcompound == null)
+		if (nbttagcompound == null) {
 			data.writeShort(-1);
-		else {
+		} else {
 			byte[] compressed = CompressedStreamTools.compress(nbttagcompound);
 			data.writeShort((short) compressed.length);
 			data.write(compressed);

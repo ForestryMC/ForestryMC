@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -42,24 +42,28 @@ public abstract class Genome implements IGenome {
 	}
 
 	public Genome(IChromosome[] chromosomes) {
-		if(chromosomes.length != getDefaultTemplate().length)
+		if (chromosomes.length != getDefaultTemplate().length) {
 			throw new IllegalArgumentException(String.format("Tried to create a genome for '%s' from an invalid chromosome template.", getSpeciesRoot().getUID()));
+		}
 		this.chromosomes = chromosomes;
 	}
 
 	// NBT RETRIEVAL
 	public static Chromosome getChromosome(ItemStack itemStack, IChromosomeType chromosomeType) {
 		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
-		if (nbtTagCompound == null)
+		if (nbtTagCompound == null) {
 			return null;
+		}
 
 		NBTTagCompound genome = nbtTagCompound.getCompoundTag("Genome");
-		if (genome == null)
+		if (genome == null) {
 			return null;
+		}
 
 		NBTTagList chromosomes = genome.getTagList("Chromosomes", 10);
-		if (chromosomes == null)
+		if (chromosomes == null) {
 			return null;
+		}
 
 		for (int i = 0; i < chromosomes.tagCount(); i++) {
 			NBTTagCompound chromosomeTag = chromosomes.getCompoundTagAt(i);
@@ -74,8 +78,9 @@ public abstract class Genome implements IGenome {
 
 	public static IAllele getActiveAllele(ItemStack itemStack, IChromosomeType chromosomeType) {
 		Chromosome chromosome = getChromosome(itemStack, chromosomeType);
-		if (chromosome == null)
+		if (chromosome == null) {
 			return null;
+		}
 		return chromosome.getActiveAllele();
 	}
 
@@ -102,8 +107,9 @@ public abstract class Genome implements IGenome {
 					}
 				}
 				
-				if (chromosome.hasInvalidAlleles(getSpeciesRoot().getKaryotype()[byte0].getAlleleClass()))
+				if (chromosome.hasInvalidAlleles(getSpeciesRoot().getKaryotype()[byte0].getAlleleClass())) {
 					throw new RuntimeException("Found Chromosome with invalid Alleles.\nNBTTagCompound: " + nbttaglist + "\nSee config option \"genetics.clear.invalid.chromosomes\".");
+				}
 			}
 		}
 
@@ -114,11 +120,12 @@ public abstract class Genome implements IGenome {
 		// handle old saves that have missing chromosomes
 		IChromosome speciesChromosome = chromosomes[EnumTreeChromosome.SPECIES.ordinal()];
 		if (speciesChromosome != null) {
-			IAlleleSpecies species = (IAlleleSpecies)speciesChromosome.getActiveAllele();
+			IAlleleSpecies species = (IAlleleSpecies) speciesChromosome.getActiveAllele();
 			IAllele[] template = getSpeciesRoot().getTemplate(species.getUID());
 			for (int i = 0; i < chromosomes.length; i++) {
-				if ((chromosomes[i] == null) && (template[i] != null))
+				if ((chromosomes[i] == null) && (template[i] != null)) {
 					chromosomes[i] = new Chromosome(template[i]);
+				}
 			}
 		}
 	}
@@ -127,13 +134,14 @@ public abstract class Genome implements IGenome {
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 
 		NBTTagList nbttaglist = new NBTTagList();
-		for (int i = 0; i < chromosomes.length; i++)
+		for (int i = 0; i < chromosomes.length; i++) {
 			if (chromosomes[i] != null) {
 				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 				nbttagcompound1.setByte(SLOT_TAG, (byte) i);
 				chromosomes[i].writeToNBT(nbttagcompound1);
 				nbttaglist.appendTag(nbttagcompound1);
 			}
+		}
 		nbttagcompound.setTag("Chromosomes", nbttaglist);
 
 	}
@@ -167,21 +175,26 @@ public abstract class Genome implements IGenome {
 	@Override
 	public boolean isGeneticEqual(IGenome other) {
 		IChromosome[] genetics = other.getChromosomes();
-		if (chromosomes.length != genetics.length)
+		if (chromosomes.length != genetics.length) {
 			return false;
+		}
 
 		for (int i = 0; i < chromosomes.length; i++) {
 			IChromosome chromosome = chromosomes[i];
 			IChromosome otherChromosome = genetics[i];
-			if (chromosome == null && otherChromosome == null)
+			if (chromosome == null && otherChromosome == null) {
 				continue;
-			if (chromosome == null || otherChromosome == null)
+			}
+			if (chromosome == null || otherChromosome == null) {
 				return false;
+			}
 
-			if (!chromosome.getPrimaryAllele().getUID().equals(otherChromosome.getPrimaryAllele().getUID()))
+			if (!chromosome.getPrimaryAllele().getUID().equals(otherChromosome.getPrimaryAllele().getUID())) {
 				return false;
-			if (!chromosome.getSecondaryAllele().getUID().equals(otherChromosome.getSecondaryAllele().getUID()))
+			}
+			if (!chromosome.getSecondaryAllele().getUID().equals(otherChromosome.getSecondaryAllele().getUID())) {
 				return false;
+			}
 		}
 
 		return true;

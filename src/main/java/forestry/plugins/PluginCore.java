@@ -4,12 +4,13 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.plugins;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import net.minecraft.block.material.Material;
@@ -65,9 +66,9 @@ import forestry.core.items.ItemForestryPickaxe;
 import forestry.core.items.ItemForestryShovel;
 import forestry.core.items.ItemFruit;
 import forestry.core.items.ItemMisc;
-import forestry.core.items.ItemOverlay;
 import forestry.core.items.ItemOverlay.OverlayInfo;
 import forestry.core.items.ItemPipette;
+import forestry.core.items.ItemElectronTube;
 import forestry.core.items.ItemTypedBlock;
 import forestry.core.items.ItemWrench;
 import forestry.core.proxy.Proxies;
@@ -210,12 +211,26 @@ public class PluginCore extends ForestryPlugin {
 		// / CIRCUIT BOARDS
 		ForestryItem.circuitboards.registerItem(new ItemCircuitBoard(), "chipsets");
 		ForestryItem.solderingIron.registerItem(new ItemSolderingIron(), "solderingIron");
-		ForestryItem.tubes.registerItem(new ItemOverlay(CreativeTabForestry.tabForestry,
-				new OverlayInfo("ex-0", 0xffffff, 0xe3b78e), new OverlayInfo("ex-1", 0xffffff, 0xe1eef4),
-				new OverlayInfo("ex-2", 0xffffff, 0xddc276), new OverlayInfo("ex-3", 0xffffff, 0xd8d8d8), new OverlayInfo("ex-4", 0xffffff, 0xffff8b),
-				new OverlayInfo("ex-5", 0xffffff, 0x7bd1b8), new OverlayInfo("ex-6", 0xffffff, 0x866bc0), new OverlayInfo("ex-7", 0xfff87e, 0xd96600),
-				new OverlayInfo("ex-8", 0xffffff, 0x444444), new OverlayInfo("ex-9", 0xffffff, 0xbfffdd), new OverlayInfo("ex-10", 0xffffff, 0x68ccee),
-				new OverlayInfo("ex-11", 0xffffff, 0x1c57c6)), "thermionicTubes");
+
+		Color tubeCoverNormal = Color.WHITE;
+		Color tubeCoverGold = new Color(0xFFF87E);
+		Color tubeCoverEnder = new Color(0x255661);
+
+		ForestryItem.tubes.registerItem(new ItemElectronTube(CreativeTabForestry.tabForestry,
+				new OverlayInfo("ex-0", tubeCoverNormal, new Color(0xe3b78e)),
+				new OverlayInfo("ex-1", tubeCoverNormal, new Color(0xE6F8FF)),
+				new OverlayInfo("ex-2", tubeCoverNormal, new Color(0xddc276)),
+				new OverlayInfo("ex-3", tubeCoverNormal, new Color(0xCCCCCC)),
+				new OverlayInfo("ex-4", tubeCoverNormal, new Color(0xffff8b)),
+				new OverlayInfo("ex-5", tubeCoverNormal, new Color(0x8CF5E3)),
+				new OverlayInfo("ex-6", tubeCoverNormal, new Color(0x866bc0)),
+				new OverlayInfo("ex-7", tubeCoverGold, new Color(0xd96600)),
+				new OverlayInfo("ex-8", tubeCoverNormal, new Color(0x444444)),
+				new OverlayInfo("ex-9", tubeCoverNormal, new Color(0x00CC41)),
+				new OverlayInfo("ex-10", tubeCoverNormal, new Color(0x579CD9)),
+				new OverlayInfo("ex-11", tubeCoverNormal, new Color(0x1c57c6)),
+				new OverlayInfo("ex-12", tubeCoverEnder, new Color(0x33adad))
+		), "thermionicTubes");
 
 		// / CARTONS
 		ForestryItem.carton.registerItem((new ItemForestry()), "carton");
@@ -272,13 +287,20 @@ public class PluginCore extends ForestryPlugin {
 	@Override
 	protected void registerCrates() {
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-		crateRegistry.registerCrate(Blocks.log, "cratedWood");
+		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 0), "cratedWood");
+		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 1), "cratedSpruceWood");
+		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 2), "cratedBirchWood");
+		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 3), "cratedJungleWood");
+		crateRegistry.registerCrate(new ItemStack(Blocks.log2, 1, 0), "cratedAcaciaWood");
+		crateRegistry.registerCrate(new ItemStack(Blocks.log2, 1, 1), "cratedDarkOakWood");
 		crateRegistry.registerCrate(Blocks.cobblestone, "cratedCobblestone");
-		crateRegistry.registerCrate(Blocks.dirt, "cratedDirt");
+		crateRegistry.registerCrate(new ItemStack(Blocks.dirt, 1, 0), "cratedDirt");
+		crateRegistry.registerCrate(new ItemStack(Blocks.dirt, 1, 2), "cratedPodzol");
 		crateRegistry.registerCrate(Blocks.stone, "cratedStone");
 		crateRegistry.registerCrate(Blocks.brick_block, "cratedBrick");
 		crateRegistry.registerCrate(Blocks.cactus, "cratedCacti");
-		crateRegistry.registerCrate(Blocks.sand, "cratedSand");
+		crateRegistry.registerCrate(new ItemStack(Blocks.sand, 1, 0), "cratedSand");
+		crateRegistry.registerCrate(new ItemStack(Blocks.sand, 1, 1), "cratedRedSand");
 		crateRegistry.registerCrate(Blocks.obsidian, "cratedObsidian");
 		crateRegistry.registerCrate(Blocks.netherrack, "cratedNetherrack");
 		crateRegistry.registerCrate(Blocks.soul_sand, "cratedSoulsand");
@@ -306,7 +328,12 @@ public class PluginCore extends ForestryPlugin {
 		crateRegistry.registerCrate(new ItemStack(Items.coal, 1, 0), "cratedCoal");
 		crateRegistry.registerCrate(Blocks.gravel, "cratedGravel");
 		crateRegistry.registerCrate(Items.wheat_seeds, "cratedSeeds");
-		crateRegistry.registerCrate(Blocks.sapling, "cratedSaplings");
+		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 0), "cratedSaplings");
+		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 1), "cratedSpruceSapling");
+		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 2), "cratedBirchSapling");
+		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 3), "cratedJungleSapling");
+		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 4), "cratedAcaciaSapling");
+		crateRegistry.registerCrate(new ItemStack(Blocks.sapling, 1, 5), "cratedDarkOakSapling");
 		crateRegistry.registerCrate(Items.potato, "cratedPotatoes");
 		crateRegistry.registerCrate(Items.carrot, "cratedCarrots");
 
@@ -324,8 +351,9 @@ public class PluginCore extends ForestryPlugin {
 		Proxies.common.addSmelting(ForestryBlock.resources.getItemStack(1, 2), ForestryItem.ingotTin.getItemStack(), 0.5f);
 
 		/* BRONZE INGOTS */
-		if (Config.isCraftingBronzeEnabled())
+		if (Config.isCraftingBronzeEnabled()) {
 			Proxies.common.addShapelessRecipe(ForestryItem.ingotBronze.getItemStack(4), "ingotTin", "ingotCopper", "ingotCopper", "ingotCopper");
+		}
 
 		/* STURDY MACHINE */
 		Proxies.common.addRecipe(ForestryItem.sturdyCasing.getItemStack(), "###", "# #", "###", '#', "ingotBronze");
@@ -358,24 +386,31 @@ public class PluginCore extends ForestryPlugin {
 		Proxies.common.addRecipe(ForestryItem.wrench.getItemStack(), "# #", " # ", " # ", '#', "ingotBronze");
 
 		// Manure and Fertilizer
-		if (GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat").stackSize > 0)
+		if (GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat").stackSize > 0) {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat"), " X ", "X#X", " X ", '#', Blocks.dirt, 'X', Items.wheat);
-		if (GameMode.getGameMode().getStackSetting("recipe.output.compost.ash").stackSize > 0)
+		}
+		if (GameMode.getGameMode().getStackSetting("recipe.output.compost.ash").stackSize > 0) {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.compost.ash"), " X ", "X#X", " X ", '#', Blocks.dirt, 'X', "dustAsh");
-		if (GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.apatite").stackSize > 0)
+		}
+		if (GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.apatite").stackSize > 0) {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.apatite"), " # ", " X ", " # ", '#', Blocks.sand, 'X', "gemApatite");
-		if (GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.ash").stackSize > 0)
+		}
+		if (GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.ash").stackSize > 0) {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.ash"), "###", "#X#", "###", '#', "dustAsh", 'X', "gemApatite");
+		}
 
 		// Humus
-		if (GameMode.getGameMode().getStackSetting("recipe.output.humus.compost").stackSize > 0)
+		if (GameMode.getGameMode().getStackSetting("recipe.output.humus.compost").stackSize > 0) {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.humus.compost"), "###", "#X#", "###", '#', Blocks.dirt, 'X', ForestryItem.fertilizerBio);
-		if (GameMode.getGameMode().getStackSetting("recipe.output.humus.fertilizer").stackSize > 0)
+		}
+		if (GameMode.getGameMode().getStackSetting("recipe.output.humus.fertilizer").stackSize > 0) {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.humus.fertilizer"), "###", "#X#", "###", '#', Blocks.dirt, 'X', ForestryItem.fertilizerCompound);
+		}
 
 		// Bog earth
-		if (GameMode.getGameMode().getStackSetting("recipe.output.bogearth.bucket").stackSize > 0)
+		if (GameMode.getGameMode().getStackSetting("recipe.output.bogearth.bucket").stackSize > 0) {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.bucket"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', Items.water_bucket, 'Y', Blocks.sand);
+		}
 
 		if (GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can").stackSize > 0) {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.canWater, 'Y', Blocks.sand);
@@ -419,10 +454,12 @@ public class PluginCore extends ForestryPlugin {
 
 			@Override
 			public int getBurnTime(ItemStack fuel) {
-				if (fuel != null && fuel.getItem() == ForestryItem.peat.item())
+				if (fuel != null && fuel.getItem() == ForestryItem.peat.item()) {
 					return 2000;
-				if (fuel != null && fuel.getItem() == ForestryItem.bituminousPeat.item())
+				}
+				if (fuel != null && fuel.getItem() == ForestryItem.bituminousPeat.item()) {
 					return 4200;
+				}
 
 				return 0;
 			}

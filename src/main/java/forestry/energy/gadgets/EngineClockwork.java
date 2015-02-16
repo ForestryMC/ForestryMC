@@ -4,23 +4,25 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.energy.gadgets;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.nbt.NBTTagCompound;
+
+import net.minecraftforge.common.util.FakePlayer;
 
 import forestry.core.TemperatureState;
 import forestry.core.config.Defaults;
 import forestry.core.gadgets.Engine;
 import forestry.core.gadgets.TileBase;
 import forestry.core.utils.DamageSourceForestry;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.FakePlayer;
 
 public class EngineClockwork extends Engine {
 
@@ -44,22 +46,26 @@ public class EngineClockwork extends Engine {
 	@Override
 	public void openGui(EntityPlayer player, TileBase tile) {
 		
-		if (!(player instanceof EntityPlayerMP))
+		if (!(player instanceof EntityPlayerMP)) {
 			return;
+		}
 
-		if (player instanceof FakePlayer)
+		if (player instanceof FakePlayer) {
 			return;
+		}
 		
-		if(tension <= 0)
+		if (tension <= 0) {
 			tension = WIND_TENSION_BASE;
-		else if(tension < ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) {
-			tension += (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE - tension) / (ENGINE_CLOCKWORK_WIND_MAX  + WIND_TENSION_BASE) * WIND_TENSION_BASE;
-		} else
+		} else if (tension < ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) {
+			tension += (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE - tension) / (ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE) * WIND_TENSION_BASE;
+		} else {
 			return;
+		}
 		
 		player.addExhaustion(WIND_EXHAUSTION);
-		if(tension > ENGINE_CLOCKWORK_WIND_MAX + (0.1*WIND_TENSION_BASE))
+		if (tension > ENGINE_CLOCKWORK_WIND_MAX + (0.1 * WIND_TENSION_BASE)) {
 			player.attackEntityFrom(damageSourceEngineClockwork, 6);
+		}
 		tension = tension > ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE ? ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE : tension;
 		delay = WIND_DELAY;
 		sendNetworkUpdate();
@@ -101,21 +107,23 @@ public class EngineClockwork extends Engine {
 	@Override
 	public void burn() {
 		
-		heat = (int)(tension * 10000);
+		heat = (int) (tension * 10000);
 		
-		if(delay > 0) {
+		if (delay > 0) {
 			delay--;
 			return;
 		}
 		
-		if(!isBurning())
+		if (!isBurning()) {
 			return;
+		}
 		
-		if(tension > 0.01f)
+		if (tension > 0.01f) {
 			tension *= 0.9995f;
-		else
+		} else {
 			tension = 0;
-		energyManager.generateEnergy(ENGINE_CLOCKWORK_ENERGY_PER_CYCLE * (int)tension);
+		}
+		energyManager.generateEnergy(ENGINE_CLOCKWORK_ENERGY_PER_CYCLE * (int) tension);
 	}
 
 	@Override
@@ -127,28 +135,35 @@ public class EngineClockwork extends Engine {
 	public TemperatureState getTemperatureState() {
 		double scaled = (heat / 10000) / ENGINE_CLOCKWORK_WIND_MAX;
 
-		if (scaled < 0.20)
+		if (scaled < 0.20) {
 			return TemperatureState.COOL;
-		else if (scaled < 0.45)
+		} else if (scaled < 0.45) {
 			return TemperatureState.WARMED_UP;
-		else if (scaled < 0.65)
+		} else if (scaled < 0.65) {
 			return TemperatureState.OPERATING_TEMPERATURE;
-		else if (scaled < 0.85)
+		} else if (scaled < 0.85) {
 			return TemperatureState.RUNNING_HOT;
-		else
+		} else {
 			return TemperatureState.OVERHEATING;
+		}
 	}
 
 	@Override
 	public float getPistonSpeed() {
-		if(delay > 0)
+		if (delay > 0) {
 			return 0;
+		}
 		
 		float fromClockwork = (tension / ENGINE_CLOCKWORK_WIND_MAX) * Defaults.ENGINE_PISTON_SPEED_MAX;
-		return fromClockwork >= 0.01f ? fromClockwork : energyManager.getTotalEnergyStored() > 0 ? 0.01f : 0;
+		return fromClockwork >= 0.01f ? fromClockwork : 0;
 	}
 	
-	@Override public void getGUINetworkData(int i, int j) {}
-	@Override public void sendGUINetworkData(Container containerEngine, ICrafting iCrafting) {}
+	@Override
+	public void getGUINetworkData(int i, int j) {
+	}
+
+	@Override
+	public void sendGUINetworkData(Container containerEngine, ICrafting iCrafting) {
+	}
 
 }

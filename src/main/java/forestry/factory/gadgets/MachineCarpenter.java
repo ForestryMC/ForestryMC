@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -92,16 +92,20 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		public boolean matches(FluidStack resource, ItemStack item, InventoryCrafting inventorycrafting, World world) {
 
 			// Check liquid
-			if (liquid != null && resource == null)
+			if (liquid != null && resource == null) {
 				return false;
-			if (liquid != null && !liquid.isFluidEqual(resource))
+			}
+			if (liquid != null && !liquid.isFluidEqual(resource)) {
 				return false;
+			}
 
 			// Check box
-			if (box != null && item == null)
+			if (box != null && item == null) {
 				return false;
-			if (box != null && !box.isItemEqual(item))
+			}
+			if (box != null && !box.isItemEqual(item)) {
 				return false;
+			}
 
 			return internal.matches(inventorycrafting, world);
 		}
@@ -133,8 +137,8 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		public void addCrating(ItemStack itemStack) {
 			ItemStack uncrated = ((forestry.core.items.ItemCrated) itemStack.getItem()).getContained(itemStack);
 			addRecipe(Defaults.CARPENTER_CRATING_CYCLES, Fluids.WATER.getFluid(Defaults.CARPENTER_CRATING_LIQUID_QUANTITY),
-					ForestryItem.crate.getItemStack(), itemStack, new Object[] { "###", "###", "###", '#', uncrated });
-			addRecipe(null, new ItemStack(uncrated.getItem(), 9, uncrated.getItemDamage()), new Object[] { "#", '#', itemStack });
+					ForestryItem.crate.getItemStack(), itemStack, new Object[]{"###", "###", "###", '#', uncrated});
+			addRecipe(null, new ItemStack(uncrated.getItem(), 9, uncrated.getItemDamage()), new Object[]{"#", '#', itemStack});
 		}
 
 		@Override
@@ -150,8 +154,8 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		@Override
 		public void addCrating(String toCrate, ItemStack unpack, ItemStack crated) {
 			addRecipe(Defaults.CARPENTER_CRATING_CYCLES, Fluids.WATER.getFluid(Defaults.CARPENTER_CRATING_LIQUID_QUANTITY),
-					ForestryItem.crate.getItemStack(), crated, new Object[] { "###", "###", "###", '#', toCrate });
-			addRecipe(null, new ItemStack(unpack.getItem(), 9, unpack.getItemDamage()), new Object[] { "#", '#', crated });
+					ForestryItem.crate.getItemStack(), crated, new Object[]{"###", "###", "###", '#', toCrate});
+			addRecipe(null, new ItemStack(unpack.getItem(), 9, unpack.getItemDamage()), new Object[]{"#", '#', crated});
 		}
 
 		@Override
@@ -167,8 +171,9 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		@Override
 		public void addRecipe(int packagingTime, FluidStack liquid, ItemStack box, ItemStack product, Object materials[]) {
 			recipes.add(new Recipe(packagingTime, liquid, box, ShapedRecipeCustom.createShapedRecipe(product, materials)));
-			if (liquid != null)
+			if (liquid != null) {
 				recipeFluids.add(liquid.getFluid());
+			}
 			if (box != null && !isBox(box)) {
 				boxes.add(box);
 			}
@@ -176,19 +181,22 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 		public static Recipe findMatchingRecipe(FluidStack liquid, ItemStack item, InventoryCrafting inventorycrafting, World world) {
 			for (Recipe recipe : recipes) {
-				if (recipe.matches(liquid, item, inventorycrafting, world))
+				if (recipe.matches(liquid, item, inventorycrafting, world)) {
 					return recipe;
+				}
 			}
 			return null;
 		}
 
 		public static boolean isBox(ItemStack resource) {
-			if (resource == null)
+			if (resource == null) {
 				return false;
+			}
 
 			for (ItemStack box : boxes) {
-				if (StackUtils.isIdenticalItem(box, resource))
+				if (StackUtils.isIdenticalItem(box, resource)) {
 					return true;
+				}
 			}
 
 			return false;
@@ -246,8 +254,9 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			@Override
 			public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
 				if (GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT)) {
-					if (lastRecipe != null)
+					if (lastRecipe != null) {
 						return lastRecipe.isIngredient(itemStack);
+					}
 				}
 				return true;
 			}
@@ -322,37 +331,41 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 	public void setCurrentRecipe(MachineCarpenter.Recipe currentRecipe) {
 		this.currentRecipe = currentRecipe;
-		if (currentRecipe != null)
+		if (currentRecipe != null) {
 			lastRecipe = currentRecipe;
+		}
 	}
 
 	@Override
 	public void updateServerSide() {
 
-		if (worldObj.getTotalWorldTime() % 20 != 0)
+		if (!updateOnInterval(20)) {
 			return;
+		}
 		IInventoryAdapter accessibleInventory = getInternalInventory();
 		// Check if we have suitable items waiting in the item slot
 		if (accessibleInventory.getStackInSlot(SLOT_CAN_INPUT) != null) {
 			FluidHelper.drainContainers(tankManager, accessibleInventory, SLOT_CAN_INPUT);
 		}
 
-		if (worldObj.getTotalWorldTime() % 40 != 0)
+		if (!updateOnInterval(40)) {
 			return;
+		}
 
 		if (currentRecipe == null) {
 			ContainerCarpenter container = new ContainerCarpenter(this);
 			setCurrentRecipe(MachineCarpenter.RecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), container.craftMatrix, worldObj));
 		}
 
-		if (currentRecipe == null)
+		if (currentRecipe == null) {
 			setErrorState(EnumErrorCode.NORECIPE);
-		else if (!validateResources())
+		} else if (!validateResources()) {
 			setErrorState(EnumErrorCode.NORESOURCE);
-		else if (energyManager.getTotalEnergyStored() == 0)
+		} else if (energyManager.getTotalEnergyStored() == 0) {
 			setErrorState(EnumErrorCode.NOPOWER);
-		else
+		} else {
 			setErrorState(EnumErrorCode.OK);
+		}
 
 	}
 
@@ -376,32 +389,36 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 				totalTime = 0;
 
 				// Remove resources
-				if (!removeResources(currentRecipe))
+				if (!removeResources(currentRecipe)) {
 					return false;
+				}
 
 				// Update product display
-				if (activeContainer != null)
+				if (activeContainer != null) {
 					activeContainer.updateProductDisplay();
+				}
 
 				return tryAddPending();
 			}
 			return true;
-		} else if (pendingProduct != null)
+		} else if (pendingProduct != null) {
 			return tryAddPending();
-		else {
+		} else {
 
 			if (currentRecipe != null) {
 
-				if (!validateResources())
+				if (!validateResources()) {
 					return false;
+				}
 
 				// Enough items available, start the process
 				packageTime = totalTime = currentRecipe.packagingTime;
 				currentProduct = currentRecipe.getCraftingResult();
 
 				// Update product display
-				if (activeContainer != null)
+				if (activeContainer != null) {
 					activeContainer.updateProductDisplay();
+				}
 
 				return true;
 			}
@@ -412,19 +429,24 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 	private boolean validateResources() {
 		// Check whether liquid is needed and if there is enough available
-		if (currentRecipe.liquid != null)
-			if (resourceTank.getFluidAmount() < currentRecipe.liquid.amount)
+		if (currentRecipe.liquid != null) {
+			if (resourceTank.getFluidAmount() < currentRecipe.liquid.amount) {
 				return false;
+			}
+		}
 
 		IInventoryAdapter accessibleInventory = getInternalInventory();
 		// Check whether boxes are available
-		if (currentRecipe.box != null)
-			if (accessibleInventory.getStackInSlot(SLOT_BOX) == null)
+		if (currentRecipe.box != null) {
+			if (accessibleInventory.getStackInSlot(SLOT_BOX) == null) {
 				return false;
+			}
+		}
 
 		// Need at least one matched set
 		ItemStack[] set = InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
-		ItemStack[] stock = InvTools.getStacks(accessibleInventory, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);;
+		ItemStack[] stock = InvTools.getStacks(accessibleInventory, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+		;
 		return StackUtils.containsSets(set, stock, true, false) > 0;
 	}
 
@@ -433,16 +455,18 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		// Remove resources
 		if (recipe.liquid != null) {
 			FluidStack amountDrained = resourceTank.drain(recipe.liquid.amount, false);
-			if (amountDrained != null && amountDrained.amount == recipe.liquid.amount)
+			if (amountDrained != null && amountDrained.amount == recipe.liquid.amount) {
 				resourceTank.drain(recipe.liquid.amount, true);
-			else
+			} else {
 				return false;
+			}
 		}
 		// Remove boxes
 		if (recipe.box != null) {
 			ItemStack removed = getInternalInventory().decrStackSize(SLOT_BOX, 1);
-			if (removed == null || removed.stackSize == 0)
+			if (removed == null || removed.stackSize == 0) {
 				return false;
+			}
 		}
 		return removeSets(1, InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT));
 	}
@@ -479,22 +503,25 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 	@Override
 	public boolean hasWork() {
-		if (currentRecipe == null)
+		if (currentRecipe == null) {
 			return false;
+		}
 
 		IInventoryAdapter accessibleInventory = getInternalInventory();
 		// Stop working if the output slot cannot take more
 		if (accessibleInventory.getStackInSlot(SLOT_PRODUCT) != null
 				&& accessibleInventory.getStackInSlot(SLOT_PRODUCT).getMaxStackSize() - accessibleInventory.getStackInSlot(SLOT_PRODUCT).stackSize < currentRecipe
-				.getCraftingResult().stackSize)
+				.getCraftingResult().stackSize) {
 			return false;
+		}
 
 		return validateResources();
 	}
 
 	public int getCraftingProgressScaled(int i) {
-		if (totalTime == 0)
+		if (totalTime == 0) {
 			return 0;
+		}
 
 		return (packageTime * i) / totalTime;
 
@@ -514,12 +541,12 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	public void getGUINetworkData(int i, int j) {
 		i -= tankManager.maxMessageId() + 1;
 		switch (i) {
-		case 0:
-			packageTime = j;
-			break;
-		case 1:
-			totalTime = j;
-			break;
+			case 0:
+				packageTime = j;
+				break;
+			case 1:
+				totalTime = j;
+				break;
 		}
 	}
 

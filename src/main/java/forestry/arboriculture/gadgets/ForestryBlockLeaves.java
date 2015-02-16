@@ -4,30 +4,17 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.IToolGrafter;
-import forestry.api.arboriculture.ITree;
-import forestry.api.core.IToolScoop;
-import forestry.api.core.Tabs;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IButterfly;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StackUtils;
-import forestry.plugins.PluginArboriculture;
-import forestry.plugins.PluginLepidopterology;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+
 import net.minecraft.block.BlockNewLeaf;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -42,7 +29,24 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.IToolGrafter;
+import forestry.api.arboriculture.ITree;
+import forestry.api.core.IToolScoop;
+import forestry.api.core.Tabs;
+import forestry.api.lepidopterology.EnumFlutterType;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StackUtils;
+import forestry.plugins.PluginArboriculture;
+import forestry.plugins.PluginLepidopterology;
 
 public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProvider {
 
@@ -58,8 +62,9 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 
 	public static TileLeaves getLeafTile(IBlockAccess world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(x, y, z);
-		if (tile instanceof TileLeaves)
+		if (tile instanceof TileLeaves) {
 			return (TileLeaves) tile;
+		}
 		return null;
 	}
 
@@ -68,8 +73,9 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 		ITree tree = leaves.getTree();
 
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		if (tree == null)
+		if (tree == null) {
 			return nbttagcompound;
+		}
 
 		tree.writeToNBT(nbttagcompound);
 		return nbttagcompound;
@@ -77,7 +83,7 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	@SuppressWarnings({"unchecked","rawtypes"})
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
 
 		for (ITree tree : PluginArboriculture.treeInterface.getIndividualTemplates()) {
@@ -99,8 +105,9 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 	@Override
 	public void onBlockHarvested(World world, int x, int y, int z, int metadata, EntityPlayer player) {
 		TileLeaves leafTile = getLeafTile(world, x, y, z);
-		if (leafTile == null || leafTile.isDecorative())
+		if (leafTile == null || leafTile.isDecorative()) {
 			return;
+		}
 
 		int fortune = EnchantmentHelper.getFortuneModifier(player);
 		float saplingModifier = 1.0f;
@@ -111,8 +118,9 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 				if (held != null && held.getItem() instanceof IToolGrafter) {
 					saplingModifier = ((IToolGrafter) held.getItem()).getSaplingModifier(held, world, player, x, y, z);
 					held.damageItem(1, player);
-					if (held.stackSize <= 0)
+					if (held.stackSize <= 0) {
 						player.destroyCurrentEquippedItem();
+					}
 				}
 			}
 		}
@@ -125,8 +133,9 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 		drops.remove();
 
 		// leaves not harvested, get drops normally
-		if (ret == null)
+		if (ret == null) {
 			ret = getLeafDrop(world, x, y, z, 1.0f, fortune);
+		}
 
 		return ret;
 	}
@@ -135,18 +144,22 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 		ArrayList<ItemStack> prod = new ArrayList<ItemStack>();
 
 		TileLeaves tile = getLeafTile(world, x, y, z);
-		if (tile == null || tile.getTree() == null || tile.isDecorative())
+		if (tile == null || tile.getTree() == null || tile.isDecorative()) {
 			return prod;
+		}
 
 		// Add saplings
 		ITree[] saplings = tile.getTree().getSaplings(world, x, y, z, saplingModifier);
-		for (ITree sapling : saplings)
-			if (sapling != null)
+		for (ITree sapling : saplings) {
+			if (sapling != null) {
 				prod.add(PluginArboriculture.treeInterface.getMemberStack(sapling, EnumGermlingType.SAPLING.ordinal()));
+			}
+		}
 
 		// Add fruits
-		if (tile.hasFruit())
+		if (tile.hasFruit()) {
 			Collections.addAll(prod, tile.getTree().produceStacks(world, x, y, z, tile.getRipeningTime()));
+		}
 
 		return prod;
 	}
@@ -170,8 +183,9 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 		ArrayList<ItemStack> ret = super.onSheared(item, world, x, y, z, fortune);
 
 		NBTTagCompound treeNBT = getTagCompoundForTree(world, x, y, z);
-		for (ItemStack stack : ret)
+		for (ItemStack stack : ret) {
 			stack.setTagCompound(treeNBT);
+		}
 
 		return ret;
 	}
@@ -179,8 +193,9 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 	@Override
 	public void beginLeavesDecay(World world, int x, int y, int z) {
 		TileLeaves tile = getLeafTile(world, x, y, z);
-		if (tile == null || tile.isDecorative())
+		if (tile == null || tile.isDecorative()) {
 			return;
+		}
 		super.beginLeavesDecay(world, x, y, z);
 	}
 	
@@ -188,17 +203,20 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random random) {
 		TileLeaves tileLeaves = getLeafTile(world, x, y, z);
-		if (tileLeaves == null || tileLeaves.isDecorative())
+		if (tileLeaves == null || tileLeaves.isDecorative()) {
 			return;
+		}
 
 		super.updateTick(world, x, y, z, random);
 
 		// check leaves tile again because they can decay in super.updateTick
-		if (tileLeaves.isInvalid())
+		if (tileLeaves.isInvalid()) {
 			return;
+		}
 
-		if (world.rand.nextFloat() > 0.1)
+		if (world.rand.nextFloat() > 0.1) {
 			return;
+		}
 		tileLeaves.onBlockTick();
 	}
 
@@ -218,12 +236,14 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 	public int colorMultiplier(IBlockAccess world, int x, int y, int z) {
 
 		TileLeaves leaves = getLeafTile(world, x, y, z);
-		if (leaves == null)
+		if (leaves == null) {
 			return super.colorMultiplier(world, x, y, z);
+		}
 
 		int colour = leaves.getFoliageColour(Proxies.common.getClientInstance().thePlayer);
-		if (colour == PluginArboriculture.proxy.getFoliageColorBasic())
+		if (colour == PluginArboriculture.proxy.getFoliageColorBasic()) {
 			colour = super.colorMultiplier(world, x, y, z);
+		}
 
 		return colour;
 	}
@@ -253,8 +273,9 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 	@Override
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 		TileLeaves leaves = getLeafTile(world, x, y, z);
-		if (leaves != null)
+		if (leaves != null) {
 			return leaves.getIcon(Proxies.render.fancyGraphicsEnabled());
+		}
 
 		return defaultIcon;
 	}
@@ -278,12 +299,13 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 
 	@Override
 	public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
-		if (face == ForgeDirection.DOWN)
+		if (face == ForgeDirection.DOWN) {
 			return 20;
-		else if (face != ForgeDirection.UP)
+		} else if (face != ForgeDirection.UP) {
 			return 10;
-		else
+		} else {
 			return 5;
+		}
 	}
 
 	@Override

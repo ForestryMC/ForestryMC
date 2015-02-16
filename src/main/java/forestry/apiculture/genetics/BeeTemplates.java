@@ -4,17 +4,18 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import java.util.Arrays;
+
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IMutation;
 import forestry.core.genetics.Allele;
-import java.util.Arrays;
 
 public class BeeTemplates {
 
@@ -292,7 +293,7 @@ public class BeeTemplates {
 	public static IAllele[] getAustereBranchTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
 		alleles[EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceBoth1;
-		alleles[EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceUp1;
+		alleles[EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceDown1;
 		alleles[EnumBeeChromosome.NOCTURNAL.ordinal()] = Allele.boolTrue;
 		alleles[EnumBeeChromosome.FLOWER_PROVIDER.ordinal()] = Allele.flowersCacti;
 		return alleles;
@@ -327,8 +328,8 @@ public class BeeTemplates {
 	// / TROPICAL BRANCH
 	public static IAllele[] getTropicalBranchTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceBoth1;
-		alleles[EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceDown1;
+		alleles[EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceUp1;
+		alleles[EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceUp1;
 		alleles[EnumBeeChromosome.FLOWER_PROVIDER.ordinal()] = Allele.flowersJungle;
 		alleles[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectMiasmic;
 		return alleles;
@@ -400,6 +401,7 @@ public class BeeTemplates {
 	public static IAllele[] getFrozenBranchTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
 		alleles[EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceUp1;
+		alleles[EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceBoth1;
 		alleles[EnumBeeChromosome.FLOWER_PROVIDER.ordinal()] = Allele.flowersSnow;
 		alleles[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectGlacial;
 		return alleles;
@@ -571,7 +573,6 @@ public class BeeTemplates {
 		IAllele[] alleles = getDefaultTemplate();
 		alleles[EnumBeeChromosome.FLOWER_PROVIDER.ordinal()] = Allele.flowersMushrooms;
 		alleles[EnumBeeChromosome.FLOWERING.ordinal()] = Allele.floweringSlower;
-		alleles[EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceBoth1;
 		alleles[EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceBoth1;
 		return alleles;
 	}
@@ -598,7 +599,7 @@ public class BeeTemplates {
 		alleles[EnumBeeChromosome.NOCTURNAL.ordinal()] = Allele.boolTrue;
 		alleles[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectMycophilic;
 		alleles[EnumBeeChromosome.TERRITORY.ordinal()] = Allele.territoryLarger;
-		return alleles;		
+		return alleles;
 	}
 
 	/* MONASTIC BRANCH */

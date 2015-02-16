@@ -4,21 +4,23 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.genetics;
+
+import java.util.List;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.items.ItemArmorApiarist;
 import forestry.core.genetics.EffectData;
-import java.util.List;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
 
 public class AlleleEffectCreeper extends AlleleEffectThrottled {
 
@@ -33,11 +35,13 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 
 	@Override
 	public IEffectData validateStorage(IEffectData storedData) {
-		if (!(storedData instanceof EffectData))
+		if (!(storedData instanceof EffectData)) {
 			return new EffectData(3, 0);
+		}
 
-		if (((EffectData) storedData).getIntSize() < 3)
+		if (((EffectData) storedData).getIntSize() < 3) {
 			return new EffectData(3, 0);
+		}
 
 		return storedData;
 	}
@@ -47,8 +51,9 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 
 		World world = housing.getWorld();
 
-		if (isHalted(storedData, housing))
+		if (isHalted(storedData, housing)) {
 			return storedData;
+		}
 
 		// If we are already triggered, we continue the explosion sequence.
 		if (storedData.getInteger(indexExplosionTimer) > 0) {
@@ -72,9 +77,9 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 			// armor.
 			int count = ItemArmorApiarist.wearsItems(player, getUID(), true);
 			// Full set, no damage/effect
-			if (count > 3)
+			if (count > 3) {
 				continue;
-			else if (count > 2) {
+			} else if (count > 2) {
 				chance = 5;
 				storedData.setInteger(indexExplosionForce, 6);
 			} else if (count > 1) {
@@ -85,8 +90,9 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 				storedData.setInteger(indexExplosionForce, 10);
 			}
 
-			if (world.rand.nextInt(1000) >= chance)
+			if (world.rand.nextInt(1000) >= chance) {
 				continue;
+			}
 
 			world.playSoundEffect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord(), "mob.creeper", 4F,
 					(1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F) * 0.7F);
@@ -103,8 +109,9 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 		explosionTimer--;
 		storedData.setInteger(indexExplosionTimer, explosionTimer);
 
-		if (explosionTimer > 0)
+		if (explosionTimer > 0) {
 			return;
+		}
 
 		world.createExplosion(null, x, y, z, storedData.getInteger(indexExplosionForce), false);
 	}

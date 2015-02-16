@@ -4,30 +4,33 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.render;
 
-import forestry.core.gadgets.Mill;
-import forestry.core.interfaces.IBlockRenderer;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.ForestryResource;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.common.util.ForgeDirection;
+
 import org.lwjgl.opengl.GL11;
+
+import forestry.core.gadgets.Mill;
+import forestry.core.interfaces.IBlockRenderer;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.ForestryResource;
 
 public class RenderMill extends TileEntitySpecialRenderer implements IBlockRenderer {
 
 	private final ModelBase model = new ModelBase() {
 	};
 
-	private static enum Textures { PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE }
+	private static enum Textures {PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE}
 
 	private ResourceLocation[] textures;
 
@@ -80,8 +83,8 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
 		textures[Textures.BLADE_1.ordinal()] = new ForestryResource(baseTexture + "blade1.png");
 		textures[Textures.BLADE_2.ordinal()] = new ForestryResource(baseTexture + "blade2.png");
 
-		for(int i = 0; i < 8; i++) {
-			textures[Textures.CHARGE.ordinal() + i] = new ForestryResource(baseTexture + "column_"+ i +".png");
+		for (int i = 0; i < 8; i++) {
+			textures[Textures.CHARGE.ordinal() + i] = new ForestryResource(baseTexture + "column_" + i + ".png");
 		}
 	}
 
@@ -110,47 +113,49 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
 
 		float step;
 
-		if (progress > 0.5)
+		if (progress > 0.5) {
 			step = 3.99F - (progress - 0.5F) * 2F * 3.99F;
-		else
+		} else {
 			step = progress * 2F * 3.99F;
+		}
 
-		float[] angle = { 0, 0, 0 };
-		float[] translate = { 0, 0, 0 };
+		float[] angle = {0, 0, 0};
+		float[] translate = {0, 0, 0};
 		float tfactor = step / 16;
 
-		if (orientation == null)
+		if (orientation == null) {
 			orientation = ForgeDirection.WEST;
+		}
 		switch (orientation) {
-		case EAST:
-			// angle [2] = (float) Math.PI / 2;
-			angle[1] = (float) Math.PI;
-			angle[2] = (float) -Math.PI / 2;
-			translate[0] = 1;
-			break;
-		case WEST:
-			// 2, -PI/2
-			angle[2] = (float) Math.PI / 2;
-			translate[0] = -1;
-			break;
-		case UP:
-			translate[1] = 1;
-			break;
-		case DOWN:
-			angle[2] = (float) Math.PI;
-			translate[1] = -1;
-			break;
-		case SOUTH:
-			angle[0] = (float) Math.PI / 2;
-			angle[2] = (float) Math.PI / 2;
-			translate[2] = 1;
-			break;
-		case NORTH:
-		default:
-			angle[0] = (float) -Math.PI / 2;
-			angle[2] = (float) Math.PI / 2;
-			translate[2] = -1;
-			break;
+			case EAST:
+				// angle [2] = (float) Math.PI / 2;
+				angle[1] = (float) Math.PI;
+				angle[2] = (float) -Math.PI / 2;
+				translate[0] = 1;
+				break;
+			case WEST:
+				// 2, -PI/2
+				angle[2] = (float) Math.PI / 2;
+				translate[0] = -1;
+				break;
+			case UP:
+				translate[1] = 1;
+				break;
+			case DOWN:
+				angle[2] = (float) Math.PI;
+				translate[1] = -1;
+				break;
+			case SOUTH:
+				angle[0] = (float) Math.PI / 2;
+				angle[2] = (float) Math.PI / 2;
+				translate[2] = 1;
+				break;
+			case NORTH:
+			default:
+				angle[0] = (float) -Math.PI / 2;
+				angle[2] = (float) Math.PI / 2;
+				translate[2] = -1;
+				break;
 		}
 
 		pedestal.rotateAngleX = angle[0];

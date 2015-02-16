@@ -31,6 +31,11 @@ import forestry.api.core.IArmorNaturalist;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.IButterflyNursery;
+import forestry.arboriculture.genetics.CheckPollinatable;
+import forestry.arboriculture.genetics.CheckPollinatableTree;
+import forestry.arboriculture.genetics.ICheckPollinatable;
 import forestry.core.genetics.ItemGE;
 import forestry.plugins.PluginArboriculture;
 
@@ -43,8 +48,9 @@ public class GeneticsUtil {
 			ersatzSpecimenMaterials = new HashSet<Material>();
 			for (ItemStack ersatzSpecimen : AlleleManager.ersatzSpecimen.keySet()) {
 				Block ersatzBlock = StackUtils.getBlock(ersatzSpecimen);
-				if (ersatzBlock != null)
+				if (ersatzBlock != null) {
 					ersatzSpecimenMaterials.add(ersatzBlock.getMaterial());
+				}
 			}
 		}
 		return ersatzSpecimenMaterials;
@@ -58,6 +64,36 @@ public class GeneticsUtil {
 		ItemStack armorItem = player.inventory.armorInventory[3];
 		return armorItem != null && armorItem.getItem() instanceof IArmorNaturalist
 				&& ((IArmorNaturalist) armorItem.getItem()).canSeePollination(player, armorItem, true);
+	}
+
+	public static boolean canNurse(IButterfly butterfly, World world, final int x, final int y, final int z) {
+		TileEntity tile = world.getTileEntity(x, y, z);
+
+		if (tile instanceof IButterflyNursery) {
+			return ((IButterflyNursery) tile).canNurse(butterfly);
+		}
+
+		// vanilla leaves can always be converted and then nurse
+		return getErsatzPollen(world, x, y, z) != null;
+	}
+
+	/**
+	 * Returns an ICheckPollinatable that can be checked but not mated.
+	 * Used to check for pollination traits without altering the world by changing vanilla leaves to forestry ones.
+	 */
+	public static ICheckPollinatable getCheckPollinatable(World world, final int x, final int y, final int z) {
+		TileEntity tile = world.getTileEntity(x, y, z);
+
+		if (tile instanceof IPollinatable) {
+			return new CheckPollinatable((IPollinatable) tile);
+		}
+
+		ITree pollen = getErsatzPollen(world, x, y, z);
+		if (pollen != null) {
+			return new CheckPollinatableTree(pollen);
+		}
+
+		return null;
 	}
 
 	public static IPollinatable getOrCreatePollinatable(GameProfile owner, World world, final int x, final int y, final int z) {
@@ -78,8 +114,9 @@ public class GeneticsUtil {
 
 	public static ITree getErsatzPollen(World world, final int x, final int y, final int z) {
 		Block block = world.getBlock(x, y, z);
-		if (!isErsatzMaterial(block))
+		if (!isErsatzMaterial(block)) {
 			return null;
+		}
 
 		int meta = world.getBlockMetadata(x, y, z);
 
@@ -93,28 +130,32 @@ public class GeneticsUtil {
 		}
 		ItemStack itemStack = new ItemStack(block, meta);
 		IIndividual tree = getGeneticEquivalent(itemStack);
-		if (tree instanceof ITree)
+		if (tree instanceof ITree) {
 			return (ITree) tree;
+		}
 
 		return null;
 	}
 
 	public static IIndividual getGeneticEquivalent(ItemStack itemStack) {
 		Item item = itemStack.getItem();
-		if (item instanceof ItemGE)
+		if (item instanceof ItemGE) {
 			return ((ItemGE) item).getIndividual(itemStack);
+		}
 
 		for (Map.Entry<ItemStack, IIndividual> entry : AlleleManager.ersatzSaplings.entrySet()) {
-			if (StackUtils.isIdenticalItem(itemStack, entry.getKey()))
+			if (StackUtils.isIdenticalItem(itemStack, entry.getKey())) {
 				return entry.getValue().copy();
+			}
 		}
 		return null;
 	}
 
 	public static ItemStack convertSaplingToGeneticEquivalent(ItemStack foreign) {
 		IIndividual tree = getGeneticEquivalent(foreign);
-		if (!(tree instanceof ITree))
+		if (!(tree instanceof ITree)) {
 			return null;
+		}
 
 		ItemStack ersatz = PluginArboriculture.treeInterface.getMemberStack(tree, EnumGermlingType.SAPLING.ordinal());
 		ersatz.stackSize = foreign.stackSize;

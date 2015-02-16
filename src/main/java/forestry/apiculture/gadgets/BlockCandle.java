@@ -4,23 +4,16 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.core.Tabs;
-import forestry.core.ForestryClient;
-import forestry.core.config.Defaults;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -36,8 +29,19 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.core.Tabs;
+import forestry.core.ForestryClient;
+import forestry.core.config.Defaults;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StackUtils;
+import forestry.core.utils.StringUtil;
 
 public class BlockCandle extends BlockTorch {
 
@@ -92,7 +96,7 @@ public class BlockCandle extends BlockTorch {
 	@Override
 	public int getLightValue(IBlockAccess world, int x, int y, int z) {
 		int meta = world.getBlockMetadata(x, y, z);
-		return (isLit(meta))? 14 : 0;
+		return (isLit(meta)) ? 14 : 0;
 	}
 
 	/*@SideOnly(Side.CLIENT)
@@ -111,16 +115,13 @@ public class BlockCandle extends BlockTorch {
 		if (pass == 0) {
 			if (isLit(meta)) {
 				i = this.litTip;
-			}
-			else {
+			} else {
 				i = this.unlitTip;
 			}
-		}
-		else {
+		} else {
 			if (isLit(meta)) {
 				i = this.litStump;
-			}
-			else {
+			} else {
 				i = this.unlitStump;
 			}
 		}
@@ -136,22 +137,22 @@ public class BlockCandle extends BlockTorch {
 		return colour;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
 		itemList.add(new ItemStack(this, 1, 0));
 	}
 
 	// Dye names correspond to colour values as below.
-	private static final String[] dyes = {	"dyeWhite",		"dyeOrange",	"dyeMagenta",	"dyeLightBlue",
-		"dyeYellow",	"dyeLime",		"dyePink",		"dyeGray",
-		"dyeLightGray",	"dyeCyan",		"dyePurple",	"dyeBlue",
-		"dyeBrown",		"dyeGreen",		"dyeRed",		"dyeBlack" };
+	private static final String[] dyes = {"dyeWhite", "dyeOrange", "dyeMagenta", "dyeLightBlue",
+			"dyeYellow", "dyeLime", "dyePink", "dyeGray",
+			"dyeLightGray", "dyeCyan", "dyePurple", "dyeBlue",
+			"dyeBrown", "dyeGreen", "dyeRed", "dyeBlack"};
 
-	private static final int[][] colours = {	{ 255, 255, 255 } , { 219, 125,  62 } , { 255,  20, 255 } , { 107, 138, 201 } ,
-		{ 255, 255,  20 } , {  20, 255,  20 } , { 208, 132, 153 } , {  74,  74,  74 } ,
-		{ 154, 161, 161 } , {  20, 255, 255 } , { 126,  61, 181 } , {  20,  20, 255 } ,
-		{  79,  50,  31 } , {  53,  70,  27 } , { 150,  52,  48 } , {  20,  20,  20 } };
+	private static final int[][] colours = {{255, 255, 255}, {219, 125, 62}, {255, 20, 255}, {107, 138, 201},
+			{255, 255, 20}, {20, 255, 20}, {208, 132, 153}, {74, 74, 74},
+			{154, 161, 161}, {20, 255, 255}, {126, 61, 181}, {20, 20, 255},
+			{79, 50, 31}, {53, 70, 27}, {150, 52, 48}, {20, 20, 20}};
 
 	public static final String colourTagName = "colour";
 
@@ -165,18 +166,17 @@ public class BlockCandle extends BlockTorch {
 		if (!isLit(meta)) {
 			if (held == null || !lightingItems.contains(held.getItem())) {
 				toggleLitState = false;
-			}
-			else if (StackUtils.equals(this, held) && isLit(held)) {
+			} else if (StackUtils.equals(this, held) && isLit(held)) {
 				toggleLitState = true;
 			}
 		}
 
 		if (held != null) {
 			// Ensure a TileEntity exists. May be able to remove this in future versions.
-			TileCandle te = (TileCandle)world.getTileEntity(x, y, z);
+			TileCandle te = (TileCandle) world.getTileEntity(x, y, z);
 			if (te == null) {
 				world.setTileEntity(x, y, z, this.createTileEntity(world, meta));
-				te = (TileCandle)world.getTileEntity(x, y, z);
+				te = (TileCandle) world.getTileEntity(x, y, z);
 			}
 
 			if (StackUtils.equals(this, held)) {
@@ -184,18 +184,15 @@ public class BlockCandle extends BlockTorch {
 					// Copy the colour of an unlit, coloured candle.
 					if (held.hasTagCompound() && held.getTagCompound().hasKey(colourTagName)) {
 						te.setColour(held.getTagCompound().getInteger(colourTagName));
-					}
-					else {
+					} else {
 						// Reset to white if item has no
 						te.setColour(0xffffff);
 					}
-				}
-				else {
+				} else {
 					toggleLitState = true;
 				}
 				flag = true;
-			}
-			else {
+			} else {
 				// Check for dye-able ness.
 				boolean matched = false;
 				for (int i = 0; i < dyes.length; ++i) {
@@ -203,8 +200,7 @@ public class BlockCandle extends BlockTorch {
 						if (OreDictionary.itemMatches(stack, held, true)) {
 							if (isLit(meta)) {
 								te.setColour(colours[i][0], colours[i][1], colours[i][2]);
-							}
-							else {
+							} else {
 								te.addColour(colours[i][0], colours[i][1], colours[i][2]);
 							}
 							world.markBlockForUpdate(x, y, z);
@@ -232,7 +228,7 @@ public class BlockCandle extends BlockTorch {
 	@Override
 	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
 		if (!world.isRemote) {
-			TileCandle tc = (TileCandle)world.getTileEntity(x, y, z);
+			TileCandle tc = (TileCandle) world.getTileEntity(x, y, z);
 			int newMeta = isLit(meta) ? 1 : 0;
 			ItemStack stack = new ItemStack(this, 1, newMeta);
 			if (tc != null && tc.getColour() != 0xffffff) {
@@ -248,7 +244,7 @@ public class BlockCandle extends BlockTorch {
 
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack itemStack) {
-		TileCandle tc = (TileCandle)(world.getTileEntity(x, y, z));
+		TileCandle tc = (TileCandle) (world.getTileEntity(x, y, z));
 		tc.setColour(this.getColourValueFromItemStack(itemStack));
 		if (isLit(itemStack)) {
 			int meta = world.getBlockMetadata(x, y, z);
@@ -274,8 +270,7 @@ public class BlockCandle extends BlockTorch {
 				world.setBlockToAir(x, y, z);
 			}
 			return false;
-		}
-		else {
+		} else {
 			return true;
 		}
 	}
@@ -291,28 +286,19 @@ public class BlockCandle extends BlockTorch {
 			double d3 = 0.2199999988079071D;
 			double d4 = 0.27000001072883606D;
 
-			if (l == 1)
-			{
+			if (l == 1) {
 				world.spawnParticle("smoke", d0 - d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
 				world.spawnParticle("flame", d0 - d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
-			}
-			else if (l == 2)
-			{
+			} else if (l == 2) {
 				world.spawnParticle("smoke", d0 + d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
 				world.spawnParticle("flame", d0 + d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
-			}
-			else if (l == 3)
-			{
+			} else if (l == 3) {
 				world.spawnParticle("smoke", d0, d1 + d3, d2 - d4, 0.0D, 0.0D, 0.0D);
 				world.spawnParticle("flame", d0, d1 + d3, d2 - d4, 0.0D, 0.0D, 0.0D);
-			}
-			else if (l == 4)
-			{
+			} else if (l == 4) {
 				world.spawnParticle("smoke", d0, d1 + d3, d2 + d4, 0.0D, 0.0D, 0.0D);
 				world.spawnParticle("flame", d0, d1 + d3, d2 + d4, 0.0D, 0.0D, 0.0D);
-			}
-			else
-			{
+			} else {
 				world.spawnParticle("smoke", d0, d1, d2, 0.0D, 0.0D, 0.0D);
 				world.spawnParticle("flame", d0, d1, d2, 0.0D, 0.0D, 0.0D);
 			}
@@ -320,64 +306,48 @@ public class BlockCandle extends BlockTorch {
 	}
 
 	@Override
-	protected boolean func_150108_b(World par1World, int par2, int par3, int par4, Block block)
-	{
-		if (this.func_150109_e(par1World, par2, par3, par4))
-		{
+	protected boolean func_150108_b(World par1World, int par2, int par3, int par4, Block block) {
+		if (this.func_150109_e(par1World, par2, par3, par4)) {
 			int i1 = par1World.getBlockMetadata(par2, par3, par4) & 0x07;
 			boolean flag = false;
 
-			if (!par1World.isSideSolid(par2 - 1, par3, par4, ForgeDirection.EAST, true) && i1 == 1)
-			{
+			if (!par1World.isSideSolid(par2 - 1, par3, par4, ForgeDirection.EAST, true) && i1 == 1) {
 				flag = true;
 			}
 
-			if (!par1World.isSideSolid(par2 + 1, par3, par4, ForgeDirection.WEST, true) && i1 == 2)
-			{
+			if (!par1World.isSideSolid(par2 + 1, par3, par4, ForgeDirection.WEST, true) && i1 == 2) {
 				flag = true;
 			}
 
-			if (!par1World.isSideSolid(par2, par3, par4 - 1, ForgeDirection.SOUTH, true) && i1 == 3)
-			{
+			if (!par1World.isSideSolid(par2, par3, par4 - 1, ForgeDirection.SOUTH, true) && i1 == 3) {
 				flag = true;
 			}
 
-			if (!par1World.isSideSolid(par2, par3, par4 + 1, ForgeDirection.NORTH, true) && i1 == 4)
-			{
+			if (!par1World.isSideSolid(par2, par3, par4 + 1, ForgeDirection.NORTH, true) && i1 == 4) {
 				flag = true;
 			}
 
-			if (!this.canPlaceTorchOn(par1World, par2, par3 - 1, par4) && i1 == 5)
-			{
+			if (!this.canPlaceTorchOn(par1World, par2, par3 - 1, par4) && i1 == 5) {
 				flag = true;
 			}
 
-			if (flag)
-			{
+			if (flag) {
 				this.dropBlockAsItem(par1World, par2, par3, par4, par1World.getBlockMetadata(par2, par3, par4), 0);
 				par1World.setBlockToAir(par2, par3, par4);
 				return true;
-			}
-			else
-			{
+			} else {
 				return false;
 			}
-		}
-		else
-		{
+		} else {
 			return true;
 		}
 	}
 
 	// Yes, function hiding. Go away.
-	public boolean canPlaceTorchOn(World par1World, int par2, int par3, int par4)
-	{
-		if (World.doesBlockHaveSolidTopSurface(par1World, par2, par3, par4))
-		{
+	public boolean canPlaceTorchOn(World par1World, int par2, int par3, int par4) {
+		if (World.doesBlockHaveSolidTopSurface(par1World, par2, par3, par4)) {
 			return true;
-		}
-		else
-		{
+		} else {
 			Block block = par1World.getBlock(par2, par3, par4);
 			return block.canPlaceTorchOnTop(par1World, par2, par3, par4);
 		}
@@ -407,7 +377,9 @@ public class BlockCandle extends BlockTorch {
 	}
 
 	public void addItemToLightingList(Item item) {
-		if (item == null) throw new NullPointerException();
+		if (item == null) {
+			throw new NullPointerException();
+		}
 
 		if (!this.lightingItems.contains(item)) {
 			this.lightingItems.add(item);

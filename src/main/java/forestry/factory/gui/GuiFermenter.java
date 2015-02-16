@@ -4,17 +4,18 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.factory.gui;
 
+import net.minecraft.entity.player.InventoryPlayer;
+
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.factory.gadgets.MachineFermenter;
-import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiFermenter extends GuiForestryTitled<MachineFermenter> {
 
@@ -31,13 +32,15 @@ public class GuiFermenter extends GuiForestryTitled<MachineFermenter> {
 
 		// Fuel remaining
 		int fuelRemain = machine.getBurnTimeRemainingScaled(16);
-		if (fuelRemain > 0)
+		if (fuelRemain > 0) {
 			drawTexturedModalRect(guiLeft + 98, guiTop + 46 + 17 - fuelRemain, 176, 78 + 17 - fuelRemain, 4, fuelRemain);
+		}
 
 		// Raw bio mush remaining
 		int bioRemain = machine.getFermentationProgressScaled(16);
-		if (bioRemain > 0)
+		if (bioRemain > 0) {
 			drawTexturedModalRect(guiLeft + 74, guiTop + 32 + 17 - bioRemain, 176, 60 + 17 - bioRemain, 4, bioRemain);
+		}
 	}
 
 }

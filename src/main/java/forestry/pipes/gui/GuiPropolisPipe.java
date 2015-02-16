@@ -1,11 +1,22 @@
 /*******************************************************************************
  * Copyright 2011-2014 by SirSengir
- * 
+ *
  * This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
- * 
+ *
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/.
  ******************************************************************************/
 package forestry.pipes.gui;
+
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map.Entry;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.IIcon;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
+import org.lwjgl.opengl.GL11;
 
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IApiaristTracker;
@@ -27,17 +38,10 @@ import forestry.pipes.EnumFilterType;
 import forestry.pipes.PipeItemsPropolis;
 import forestry.pipes.PipeLogicPropolis;
 import forestry.plugins.PluginApiculture;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map.Entry;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
-import org.lwjgl.opengl.GL11;
 
 /**
  * GuiScreen for propolis pipes.
- * 
+ *
  * @author SirSengir
  */
 public class GuiPropolisPipe<T extends TileForestry> extends GuiForestry<T> {
@@ -61,10 +65,12 @@ public class GuiPropolisPipe<T extends TileForestry> extends GuiForestry<T> {
 		public void draw(int startX, int startY) {
 			EnumFilterType type = logic.getTypeFilter(orientation);
 			IIcon icon = null;
-			if (type != null)
+			if (type != null) {
 				icon = type.getIcon();
-			if(icon == null)
+			}
+			if (icon == null) {
 				return;
+			}
 
 			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
 			Proxies.common.bindTexture(SpriteSheet.ITEMS);
@@ -81,12 +87,13 @@ public class GuiPropolisPipe<T extends TileForestry> extends GuiForestry<T> {
 		@Override
 		public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
 			EnumFilterType change;
-			if (mouseButton == 1)
+			if (mouseButton == 1) {
 				change = EnumFilterType.CLOSED;
-			else if (getType().ordinal() < EnumFilterType.values().length - 1)
+			} else if (getType().ordinal() < EnumFilterType.values().length - 1) {
 				change = EnumFilterType.values()[getType().ordinal() + 1];
-			else
+			} else {
 				change = EnumFilterType.CLOSED;
+			}
 			pipeLogic.setTypeFilter(orientation, change);
 
 		}
@@ -121,8 +128,9 @@ public class GuiPropolisPipe<T extends TileForestry> extends GuiForestry<T> {
 
 		@Override
 		public void draw(int startX, int startY) {
-			if (!isDefined())
+			if (!isDefined()) {
 				return;
+			}
 
 			IAlleleSpecies species = logic.getSpeciesFilter(orientation, pattern, allele);
 			GL11.glDisable(GL11.GL_LIGHTING);
@@ -148,22 +156,24 @@ public class GuiPropolisPipe<T extends TileForestry> extends GuiForestry<T> {
 		@Override
 		protected String getLegacyTooltip(EntityPlayer player) {
 			IAlleleSpecies species = logic.getSpeciesFilter(orientation, pattern, allele);
-			if (species != null)
+			if (species != null) {
 				return species.getName();
-			else
+			} else {
 				return null;
+			}
 		}
 
 		@Override
 		public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
 			IAlleleSpecies change = null;
-			if (mouseButton == 1)
+			if (mouseButton == 1) {
 				change = null;
-			else if (getSpecies() == null) {
+			} else if (getSpecies() == null) {
 
 				for (Entry<String, IAllele> entry : AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet()) {
-					if (!(entry.getValue() instanceof IAlleleBeeSpecies))
+					if (!(entry.getValue() instanceof IAlleleBeeSpecies)) {
 						continue;
+					}
 
 					change = (IAlleleBeeSpecies) entry.getValue();
 					break;
@@ -174,21 +184,25 @@ public class GuiPropolisPipe<T extends TileForestry> extends GuiForestry<T> {
 				Iterator<Entry<String, IAllele>> it = AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet().iterator();
 				while (it.hasNext()) {
 					Entry<String, IAllele> entry = it.next();
-					if (!(entry.getValue() instanceof IAlleleBeeSpecies))
+					if (!(entry.getValue() instanceof IAlleleBeeSpecies)) {
 						continue;
+					}
 
 					IAlleleBeeSpecies species = (IAlleleBeeSpecies) entry.getValue();
-					if (!species.getUID().equals(getSpecies().getUID()))
+					if (!species.getUID().equals(getSpecies().getUID())) {
 						continue;
+					}
 
 					while (it.hasNext()) {
 						Entry<String, IAllele> entry2 = it.next();
-						if (!(entry2.getValue() instanceof IAlleleBeeSpecies))
+						if (!(entry2.getValue() instanceof IAlleleBeeSpecies)) {
 							continue;
+						}
 
 						IAlleleBeeSpecies next = (IAlleleBeeSpecies) entry2.getValue();
-						if (!Config.isDebug && next.isSecret() && !tracker.isDiscovered(next))
+						if (!Config.isDebug && next.isSecret() && !tracker.isDiscovered(next)) {
 							continue;
+						}
 
 						change = next;
 						break;
@@ -208,20 +222,25 @@ public class GuiPropolisPipe<T extends TileForestry> extends GuiForestry<T> {
 
 		pipeLogic = pipe.pipeLogic;
 		// Request filter set update if on client
-		if (!Proxies.common.isSimulating(pipe.getWorld()))
+		if (!Proxies.common.isSimulating(pipe.getWorld())) {
 			pipeLogic.requestFilterSet();
+		}
 
 		xSize = 175;
 		ySize = 225;
 
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < 6; i++) {
 			widgetManager.add(new TypeFilterSlot(8, 18 + i * 18, ForgeDirection.values()[i], pipeLogic));
+		}
 
 		IApiaristTracker tracker = PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, player.getGameProfile());
-		for (int i = 0; i < 6; i++)
-			for (int j = 0; j < 3; j++)
-				for (int k = 0; k < 2; k++)
+		for (int i = 0; i < 6; i++) {
+			for (int j = 0; j < 3; j++) {
+				for (int k = 0; k < 2; k++) {
 					widgetManager.add(new SpeciesFilterSlot(tracker, 44 + j * 45 + k * 18, 18 + i * 18, ForgeDirection.values()[i], j, k, pipeLogic));
+				}
+			}
+		}
 	}
 
 	@Override

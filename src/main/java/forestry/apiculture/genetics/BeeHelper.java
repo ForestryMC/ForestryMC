@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -69,9 +69,11 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 		if (beeSpeciesCount < 0) {
 			beeSpeciesCount = 0;
 			for (Entry<String, IAllele> entry : AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet()) {
-				if (entry.getValue() instanceof IAlleleBeeSpecies)
-					if (((IAlleleBeeSpecies) entry.getValue()).isCounted())
+				if (entry.getValue() instanceof IAlleleBeeSpecies) {
+					if (((IAlleleBeeSpecies) entry.getValue()).isCounted()) {
 						beeSpeciesCount++;
+					}
+				}
 			}
 		}
 
@@ -95,25 +97,26 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 
 	@Override
 	public ItemStack getMemberStack(IIndividual bee, int type) {
-		if (!isMember(bee))
+		if (!isMember(bee)) {
 			return null;
+		}
 
 		Item beeItem;
 		switch (EnumBeeType.VALUES[type]) {
-		case QUEEN:
-			beeItem = ForestryItem.beeQueenGE.item();
-			break;
-		case PRINCESS:
-			beeItem = ForestryItem.beePrincessGE.item();
-			break;
-		case DRONE:
-			beeItem = ForestryItem.beeDroneGE.item();
-			break;
-		case LARVAE:
-			beeItem = ForestryItem.beeLarvaeGE.item();
-			break;
-		default:
-			throw new RuntimeException("Cannot instantiate a bee of type " + type);
+			case QUEEN:
+				beeItem = ForestryItem.beeQueenGE.item();
+				break;
+			case PRINCESS:
+				beeItem = ForestryItem.beePrincessGE.item();
+				break;
+			case DRONE:
+				beeItem = ForestryItem.beeDroneGE.item();
+				break;
+			case LARVAE:
+				beeItem = ForestryItem.beeLarvaeGE.item();
+				break;
+			default:
+				throw new RuntimeException("Cannot instantiate a bee of type " + type);
 		}
 
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
@@ -125,17 +128,19 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 
 	@Override
 	public EnumBeeType getType(ItemStack stack) {
-		if (stack == null)
+		if (stack == null) {
 			return EnumBeeType.NONE;
+		}
 
-		if (ForestryItem.beeDroneGE.isItemEqual(stack))
+		if (ForestryItem.beeDroneGE.isItemEqual(stack)) {
 			return EnumBeeType.DRONE;
-		else if (ForestryItem.beePrincessGE.isItemEqual(stack))
+		} else if (ForestryItem.beePrincessGE.isItemEqual(stack)) {
 			return EnumBeeType.PRINCESS;
-		else if (ForestryItem.beeQueenGE.isItemEqual(stack))
+		} else if (ForestryItem.beeQueenGE.isItemEqual(stack)) {
 			return EnumBeeType.QUEEN;
-		else if (ForestryItem.beeLarvaeGE.isItemEqual(stack))
+		} else if (ForestryItem.beeLarvaeGE.isItemEqual(stack)) {
 			return EnumBeeType.LARVAE;
+		}
 
 		return EnumBeeType.NONE;
 	}
@@ -147,8 +152,9 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 
 	@Override
 	public boolean isMated(ItemStack stack) {
-		if (getType(stack) != EnumBeeType.QUEEN)
+		if (getType(stack) != EnumBeeType.QUEEN) {
 			return false;
+		}
 
 		IBee bee = getMember(stack);
 		return bee.getMate() != null;
@@ -156,8 +162,9 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 
 	@Override
 	public IBee getMember(ItemStack stack) {
-		if (!isMember(stack))
+		if (!isMember(stack)) {
 			return null;
+		}
 
 		return new Bee(stack.getTagCompound());
 	}
@@ -225,19 +232,23 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 
 	@Override
 	public Collection<IBeeMutation> getMutations(boolean shuffle) {
-		if (shuffle)
+		if (shuffle) {
 			Collections.shuffle(beeMutations);
+		}
 		return beeMutations;
 	}
 
 	@Override
 	public void registerMutation(IMutation mutation) {
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getTemplate()[0].getUID()))
+		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getTemplate()[0].getUID())) {
 			return;
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele0().getUID()))
+		}
+		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele0().getUID())) {
 			return;
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele1().getUID()))
+		}
+		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele1().getUID())) {
 			return;
+		}
 
 		beeMutations.add((IBeeMutation) mutation);
 	}
@@ -258,14 +269,16 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 
 	@Override
 	public IBeekeepingMode getBeekeepingMode(World world) {
-		if (activeBeekeepingMode != null)
+		if (activeBeekeepingMode != null) {
 			return activeBeekeepingMode;
+		}
 
 		// No beekeeping mode yet, get it.
 		IApiaristTracker tracker = getBreedingTracker(world, null);
 		String mode = tracker.getModeName();
-		if (mode == null || mode.isEmpty())
+		if (mode == null || mode.isEmpty()) {
 			mode = PluginApiculture.beekeepingMode;
+		}
 
 		setBeekeepingMode(world, mode);
 		FMLCommonHandler.instance().getFMLLogger().debug("Set beekeeping mode for a world to " + mode);
@@ -287,8 +300,9 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	@Override
 	public IBeekeepingMode getBeekeepingMode(String name) {
 		for (IBeekeepingMode mode : beekeepingModes) {
-			if (mode.getName().equals(name) || mode.getName().equals(name.toLowerCase(Locale.ENGLISH)))
+			if (mode.getName().equals(name) || mode.getName().equals(name.toLowerCase(Locale.ENGLISH))) {
 				return mode;
+			}
 		}
 
 		FMLCommonHandler.instance().getFMLLogger().debug("Failed to find a beekeeping mode called '%s', reverting to fallback.");

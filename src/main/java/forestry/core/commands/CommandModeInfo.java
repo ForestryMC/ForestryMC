@@ -11,11 +11,13 @@
 package forestry.core.commands;
 
 import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.StringUtils;
 
 public class CommandModeInfo extends SubCommand {
 	private final String[] modeStringArr;
@@ -49,8 +51,9 @@ public class CommandModeInfo extends SubCommand {
 		green.setColor(EnumChatFormatting.GREEN);
 		CommandHelpers.sendLocalizedChatMessage(sender, green, modeName);
 
-		for (String desc : modeHelper.getDescription(modeName))
+		for (String desc : modeHelper.getDescription(modeName)) {
 			CommandHelpers.sendLocalizedChatMessage(sender, "for." + desc);
+		}
 	}
 
 	@Override

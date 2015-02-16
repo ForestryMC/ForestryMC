@@ -11,9 +11,11 @@
 package forestry.core.gui.tooltips;
 
 import com.google.common.collect.ForwardingList;
-import forestry.core.utils.StringUtil;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import forestry.core.utils.StringUtil;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -44,27 +46,33 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
 	public boolean add(List lines) {
 		boolean changed = false;
 		for (Object line : lines) {
-			if (line instanceof String)
+			if (line instanceof String) {
 				changed |= add((String) line);
+			}
 		}
 		return changed;
 	}
 
 	public void onTick(boolean mouseOver) {
-		if (delay == 0)
+		if (delay == 0) {
 			return;
+		}
 		if (mouseOver) {
-			if (mouseOverStart == 0)
+			if (mouseOverStart == 0) {
 				mouseOverStart = System.currentTimeMillis();
-		} else
+			}
+		} else {
 			mouseOverStart = 0;
+		}
 	}
 
 	public boolean isReady() {
-		if (delay == 0)
+		if (delay == 0) {
 			return true;
-		if (mouseOverStart == 0)
+		}
+		if (mouseOverStart == 0) {
 			return false;
+		}
 		return System.currentTimeMillis() - mouseOverStart >= delay;
 	}
 

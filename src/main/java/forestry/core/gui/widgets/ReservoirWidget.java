@@ -4,18 +4,21 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
+import net.minecraft.util.IIcon;
+
+import net.minecraftforge.fluids.FluidStack;
+
+import org.lwjgl.opengl.GL11;
+
 import forestry.core.gui.WidgetManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.opengl.GL11;
 
 public class ReservoirWidget extends TankWidget {
 
@@ -28,15 +31,18 @@ public class ReservoirWidget extends TankWidget {
 	public void draw(int startX, int startY) {
 
 		FluidStack contents = getTank().getFluid();
-		if(contents == null || contents.amount <= 0 || contents.getFluid() == null)
+		if (contents == null || contents.amount <= 0 || contents.getFluid() == null) {
 			return;
+		}
 		IIcon liquidIcon = contents.getFluid().getIcon(contents);
-		if(liquidIcon == null)
+		if (liquidIcon == null) {
 			return;
+		}
 
 		int squaled = (contents.amount * height) / getTank().getCapacity();
-		if (squaled > height)
+		if (squaled > height) {
 			squaled = height;
+		}
 
 		Proxies.common.bindTexture(SpriteSheet.BLOCKS);
 		int start = 0;
@@ -56,8 +62,9 @@ public class ReservoirWidget extends TankWidget {
 			manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos + height - x - start, liquidIcon, 16, 16 - (16 - x));
 			start = start + 16;
 
-			if (x == 0 || squaled == 0)
+			if (x == 0 || squaled == 0) {
 				break;
+			}
 		}
 
 	}

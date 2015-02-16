@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -46,15 +46,17 @@ public class Utils {
 	private static Random rand;
 
 	public static int getUID() {
-		if (rand == null)
+		if (rand == null) {
 			rand = new Random();
+		}
 
 		return rand.nextInt();
 	}
 
 	public static void dropInventory(TileForestry tile, World world, int x, int y, int z) {
-		if (tile == null)
+		if (tile == null) {
 			return;
+		}
 
 		// Release inventory
 		if (tile instanceof ITileStructure) {
@@ -62,8 +64,9 @@ public class Utils {
 			IInventory inventory = ((ITileStructure) tile).getInventory();
 			if (inventory != null) {
 				for (int i = 0; i < inventory.getSizeInventory(); i++) {
-					if (inventory.getStackInSlot(i) == null)
+					if (inventory.getStackInSlot(i) == null) {
 						continue;
+					}
 
 					StackUtils.dropItemStackAsEntity(inventory.getStackInSlot(i), world, x, y, z);
 					inventory.setInventorySlotContents(i, null);
@@ -75,8 +78,9 @@ public class Utils {
 
 				ItemStack itemstack = tile.getStackInSlot(slot);
 
-				if (itemstack == null)
+				if (itemstack == null) {
 					continue;
+				}
 
 				float f = world.rand.nextFloat() * 0.8F + 0.1F;
 				float f1 = world.rand.nextFloat() * 0.8F + 0.1F;
@@ -85,8 +89,9 @@ public class Utils {
 				while (itemstack.stackSize > 0) {
 
 					int stackPartial = world.rand.nextInt(21) + 10;
-					if (stackPartial > itemstack.stackSize)
+					if (stackPartial > itemstack.stackSize) {
 						stackPartial = itemstack.stackSize;
+					}
 					ItemStack drop = itemstack.splitStack(stackPartial);
 					EntityItem entityitem = new EntityItem(world, x + f, y + f1, z + f2, drop);
 					float accel = 0.05F;
@@ -105,18 +110,20 @@ public class Utils {
 	}
 
 	public static IInventory getChest(IInventory inventory) {
-		if (!(inventory instanceof TileEntityChest))
+		if (!(inventory instanceof TileEntityChest)) {
 			return inventory;
+		}
 
 		TileEntityChest chest = (TileEntityChest) inventory;
 
-		Vect[] adjacent = new Vect[] { new Vect(chest.xCoord + 1, chest.yCoord, chest.zCoord), new Vect(chest.xCoord - 1, chest.yCoord, chest.zCoord),
-				new Vect(chest.xCoord, chest.yCoord, chest.zCoord + 1), new Vect(chest.xCoord, chest.yCoord, chest.zCoord - 1) };
+		Vect[] adjacent = new Vect[]{new Vect(chest.xCoord + 1, chest.yCoord, chest.zCoord), new Vect(chest.xCoord - 1, chest.yCoord, chest.zCoord),
+				new Vect(chest.xCoord, chest.yCoord, chest.zCoord + 1), new Vect(chest.xCoord, chest.yCoord, chest.zCoord - 1)};
 
 		for (Vect pos : adjacent) {
 			TileEntity otherchest = chest.getWorldObj().getTileEntity(pos.x, pos.y, pos.z);
-			if (otherchest instanceof TileEntityChest)
+			if (otherchest instanceof TileEntityChest) {
 				return new InventoryLargeChest("", chest, (TileEntityChest) otherchest);
+			}
 		}
 
 		return inventory;
@@ -149,15 +156,18 @@ public class Utils {
 	public static boolean canWrench(EntityPlayer player, int x, int y, int z) {
 
 		ItemStack itemstack = player.getCurrentEquippedItem();
-		if (itemstack == null)
+		if (itemstack == null) {
 			return false;
+		}
 
-		if (!(itemstack.getItem() instanceof IToolWrench))
+		if (!(itemstack.getItem() instanceof IToolWrench)) {
 			return false;
+		}
 
 		IToolWrench wrench = (IToolWrench) itemstack.getItem();
-		if (!wrench.canWrench(player, x, y, z))
+		if (!wrench.canWrench(player, x, y, z)) {
 			return false;
+		}
 
 		return true;
 	}
@@ -165,27 +175,30 @@ public class Utils {
 	public static void useWrench(EntityPlayer player, int x, int y, int z) {
 		ItemStack itemstack = player.getCurrentEquippedItem();
 
-		if (itemstack == null)
+		if (itemstack == null) {
 			return;
+		}
 
-		if (!(itemstack.getItem() instanceof IToolWrench))
+		if (!(itemstack.getItem() instanceof IToolWrench)) {
 			return;
+		}
 
 		((IToolWrench) itemstack.getItem()).wrenchUsed(player, x, y, z);
 	}
 
 	public static EnumTankLevel rateTankLevel(int scaled) {
 
-		if (scaled < 5)
+		if (scaled < 5) {
 			return EnumTankLevel.EMPTY;
-		else if (scaled < 30)
+		} else if (scaled < 30) {
 			return EnumTankLevel.LOW;
-		else if (scaled < 60)
+		} else if (scaled < 60) {
 			return EnumTankLevel.MEDIUM;
-		else if (scaled < 90)
+		} else if (scaled < 90) {
 			return EnumTankLevel.HIGH;
-		else
+		} else {
 			return EnumTankLevel.MAXIMUM;
+		}
 	}
 
 	public static boolean isReplaceableBlock(World world, int x, int y, int z) {
@@ -213,11 +226,13 @@ public class Utils {
 		int z = tile.zCoord;
 		World world = tile.getWorldObj();
 		
-		if(tile.isInvalid())
+		if (tile.isInvalid()) {
 			return false;
+		}
 		
-		if (world.getTileEntity(x, y, z) != tile)
+		if (world.getTileEntity(x, y, z) != tile) {
 			return false;
+		}
 
 		return player.getDistanceSq(x + 0.5D, y + 0.5D, z + 0.5D) <= 64.0D;
 
@@ -228,8 +243,9 @@ public class Utils {
 	}
 
 	public static Entity spawnEntity(World world, Class<? extends Entity> entityClass, double x, double y, double z) {
-		if (!EntityList.classToStringMapping.containsKey(entityClass))
+		if (!EntityList.classToStringMapping.containsKey(entityClass)) {
 			return null;
+		}
 
 		return spawnEntity(world, EntityList.createEntityByName((String) EntityList.classToStringMapping.get(entityClass), world), x, y, z);
 	}
@@ -280,8 +296,9 @@ public class Utils {
 	}
 
 	public static String getFingerprint(Certificate certificate) {
-		if (certificate == null)
+		if (certificate == null) {
 			return "Certificate invalid";
+		}
 
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA-1");
@@ -293,6 +310,7 @@ public class Utils {
 			return null;
 		}
 	}
+
 	private static final String HEX = "0123456789abcdef";
 
 	private static String tohex(byte[] checksum) {

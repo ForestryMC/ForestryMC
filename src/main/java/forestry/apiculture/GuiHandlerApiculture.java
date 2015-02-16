@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -37,7 +37,7 @@ import forestry.apiculture.gui.GuiBeealyzer;
 import forestry.apiculture.gui.GuiHabitatLocator;
 import forestry.apiculture.gui.GuiImprinter;
 import forestry.apiculture.items.ItemBeealyzer.BeealyzerInventory;
-import forestry.apiculture.items.ItemBiomefinder.BiomefinderInventory;
+import forestry.apiculture.items.ItemHabitatLocator.HabitatLocatorInventory;
 import forestry.apiculture.items.ItemImprinter.ImprinterInventory;
 import forestry.core.GuiHandlerBase;
 import forestry.core.gui.ContainerAlyzer;
@@ -51,55 +51,59 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 		int cleanId = decodeGuiID(id);
 		int guiData = decodeGuiData(id);
 
-		if (cleanId >= GuiId.values().length)
+		if (cleanId >= GuiId.values().length) {
 			return null;
+		}
 
 		ItemStack equipped;
 		switch (GuiId.values()[cleanId]) {
 
-		case AlvearyGUI:
-			return new GuiAlveary(player.inventory, (TileAlvearyPlain) getTileForestry(world, x, y, z));
+			case AlvearyGUI:
+				return new GuiAlveary(player.inventory, (TileAlvearyPlain) getTileForestry(world, x, y, z));
 
-		case AlvearySieveGUI:
-			return new GuiAlvearySieve(player.inventory, (TileAlvearySieve) getTileForestry(world, x, y, z));
+			case AlvearySieveGUI:
+				return new GuiAlvearySieve(player.inventory, (TileAlvearySieve) getTileForestry(world, x, y, z));
 
-		case AlvearySwarmerGUI:
-			return new GuiAlvearySwarmer(player.inventory, (TileAlvearySwarmer) getTileForestry(world, x, y, z));
+			case AlvearySwarmerGUI:
+				return new GuiAlvearySwarmer(player.inventory, (TileAlvearySwarmer) getTileForestry(world, x, y, z));
 
-		case ApiaristChestGUI:
-			return getNaturalistChestGui(BeeHelper.UID, player, world, x, y, z, guiData);
+			case ApiaristChestGUI:
+				return getNaturalistChestGui(BeeHelper.UID, player, world, x, y, z, guiData);
 
-		case ApiaryGUI:
-			return new GuiApiary(player.inventory, (TileApiary) getTileForestry(world, x, y, z));
+			case ApiaryGUI:
+				return new GuiApiary(player.inventory, (TileApiary) getTileForestry(world, x, y, z));
 
-		case BeealyzerGUI:
-			equipped = player.getCurrentEquippedItem();
-			if (equipped == null)
+			case BeealyzerGUI:
+				equipped = player.getCurrentEquippedItem();
+				if (equipped == null) {
+					return null;
+				}
+
+				return new GuiBeealyzer(player, new BeealyzerInventory(player, equipped));
+
+			case BeehouseGUI:
+				return new GuiApiary(player.inventory, (TileBeehouse) getTileForestry(world, x, y, z));
+
+			case HabitatLocatorGUI:
+				equipped = player.getCurrentEquippedItem();
+				if (equipped == null) {
+					return null;
+				}
+
+				return new GuiHabitatLocator(player.inventory, new HabitatLocatorInventory(equipped));
+
+			case HygroregulatorGUI:
+				return new GuiAlvearyHygroregulator(player.inventory, (TileAlvearyHygroregulator) getTileForestry(world, x, y, z));
+
+			case ImprinterGUI:
+				equipped = player.getCurrentEquippedItem();
+				if (equipped == null) {
+					return null;
+				}
+				return new GuiImprinter(player.inventory, new ImprinterInventory(player, equipped));
+
+			default:
 				return null;
-
-			return new GuiBeealyzer(player, new BeealyzerInventory(player, equipped));
-
-		case BeehouseGUI:
-			return new GuiApiary(player.inventory, (TileBeehouse) getTileForestry(world, x, y, z));
-
-		case HabitatLocatorGUI:
-			equipped = player.getCurrentEquippedItem();
-			if (equipped == null)
-				return null;
-
-			return new GuiHabitatLocator(player.inventory, new BiomefinderInventory(equipped));
-
-		case HygroregulatorGUI:
-			return new GuiAlvearyHygroregulator(player.inventory, (TileAlvearyHygroregulator) getTileForestry(world, x, y, z));
-
-		case ImprinterGUI:
-			equipped = player.getCurrentEquippedItem();
-			if (equipped == null)
-				return null;
-			return new GuiImprinter(player.inventory, new ImprinterInventory(player, equipped));
-
-		default:
-			return null;
 
 		}
 	}
@@ -109,60 +113,64 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 		int cleanId = decodeGuiID(id);
 		int guiData = decodeGuiData(id);
 
-		if (cleanId >= GuiId.values().length)
+		if (cleanId >= GuiId.values().length) {
 			return null;
+		}
 
 		ItemStack equipped;
 		switch (GuiId.values()[cleanId]) {
 
-		case AlvearyGUI:
-			synchApiaristTracker(world, player);
-			return new ContainerAlveary(player.inventory, (TileAlvearyPlain) getTileForestry(world, x, y, z));
+			case AlvearyGUI:
+				synchApiaristTracker(world, player);
+				return new ContainerAlveary(player.inventory, (TileAlvearyPlain) getTileForestry(world, x, y, z));
 
-		case AlvearySieveGUI:
-			return new ContainerAlvearySieve(player.inventory, (TileAlvearySieve) getTileForestry(world, x, y, z));
+			case AlvearySieveGUI:
+				return new ContainerAlvearySieve(player.inventory, (TileAlvearySieve) getTileForestry(world, x, y, z));
 
-		case AlvearySwarmerGUI:
-			return new ContainerAlvearySwarmer(player.inventory, (TileAlvearySwarmer) getTileForestry(world, x, y, z));
+			case AlvearySwarmerGUI:
+				return new ContainerAlvearySwarmer(player.inventory, (TileAlvearySwarmer) getTileForestry(world, x, y, z));
 
-		case ApiaristChestGUI:
-			return getNaturalistChestContainer(BeeHelper.UID, player, world, x, y, z, guiData);
+			case ApiaristChestGUI:
+				return getNaturalistChestContainer(BeeHelper.UID, player, world, x, y, z, guiData);
 
-		case ApiaryGUI:
-			synchApiaristTracker(world, player);
-			return new ContainerApiary(player.inventory, (TileApiary) getTileForestry(world, x, y, z), true);
+			case ApiaryGUI:
+				synchApiaristTracker(world, player);
+				return new ContainerApiary(player.inventory, (TileApiary) getTileForestry(world, x, y, z), true);
 
-		case BeealyzerGUI:
-			equipped = player.getCurrentEquippedItem();
-			if (equipped == null)
+			case BeealyzerGUI:
+				equipped = player.getCurrentEquippedItem();
+				if (equipped == null) {
+					return null;
+				}
+
+				synchApiaristTracker(world, player);
+				return new ContainerAlyzer(new BeealyzerInventory(player, equipped), player);
+
+			case BeehouseGUI:
+				synchApiaristTracker(world, player);
+				return new ContainerApiary(player.inventory, (TileBeehouse) getTileForestry(world, x, y, z), false);
+
+			case HabitatLocatorGUI:
+				equipped = player.getCurrentEquippedItem();
+				if (equipped == null) {
+					return null;
+				}
+
+				return new ContainerHabitatLocator(player.inventory, new HabitatLocatorInventory(equipped));
+
+			case HygroregulatorGUI:
+				return new ContainerAlvearyHygroregulator(player.inventory, (TileAlvearyHygroregulator) getTileForestry(world, x, y, z));
+
+			case ImprinterGUI:
+				synchApiaristTracker(world, player);
+				equipped = player.getCurrentEquippedItem();
+				if (equipped == null) {
+					return null;
+				}
+				return new ContainerImprinter(player.inventory, new ImprinterInventory(player, equipped));
+
+			default:
 				return null;
-
-			synchApiaristTracker(world, player);
-			return new ContainerAlyzer(new BeealyzerInventory(player, equipped), player);
-
-		case BeehouseGUI:
-			synchApiaristTracker(world, player);
-			return new ContainerApiary(player.inventory, (TileBeehouse) getTileForestry(world, x, y, z), false);
-
-		case HabitatLocatorGUI:
-			equipped = player.getCurrentEquippedItem();
-			if (equipped == null)
-				return null;
-
-			return new ContainerHabitatLocator(player.inventory, new BiomefinderInventory(equipped));
-
-		case HygroregulatorGUI:
-			return new ContainerAlvearyHygroregulator(player.inventory, (TileAlvearyHygroregulator) getTileForestry(world, x, y, z));
-
-		case ImprinterGUI:
-			synchApiaristTracker(world, player);
-			equipped = player.getCurrentEquippedItem();
-			if (equipped == null)
-				return null;
-			return new ContainerImprinter(player.inventory, new ImprinterInventory(player, equipped));
-
-		default:
-			return null;
 
 		}
 	}

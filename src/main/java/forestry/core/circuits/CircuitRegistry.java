@@ -4,11 +4,19 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.circuits;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
@@ -16,12 +24,6 @@ import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitLibrary;
 import forestry.api.circuits.ICircuitRegistry;
 import forestry.core.config.ForestryItem;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 
 public class CircuitRegistry implements ICircuitRegistry {
 
@@ -50,18 +52,20 @@ public class CircuitRegistry implements ICircuitRegistry {
 	/* CIRCUIT LAYOUTS */
 	@Override
 	public ICircuitLayout getDefaultLayout() {
-		if (layoutMap.containsKey("forestry.engine.tin"))
+		if (layoutMap.containsKey("forestry.engine.tin")) {
 			return layoutMap.get("forestry.engine.tin");
-		else if (!layoutMap.isEmpty())
+		} else if (!layoutMap.isEmpty()) {
 			return layoutMap.values().iterator().next();
-		else
+		} else {
 			return DUMMY_LAYOUT;
+		}
 	}
 
 	@Override
 	public Map<String, ICircuitLayout> getRegisteredLayouts() {
-		if (layoutMap.isEmpty())
+		if (layoutMap.isEmpty()) {
 			return DUMMY_MAP;
+		}
 		return layoutMap;
 	}
 
@@ -72,10 +76,11 @@ public class CircuitRegistry implements ICircuitRegistry {
 
 	@Override
 	public ICircuitLayout getLayout(String uid) {
-		if (layoutMap.containsKey(uid))
+		if (layoutMap.containsKey(uid)) {
 			return layoutMap.get(uid);
-		else
+		} else {
 			return null;
+		}
 	}
 
 	/* CIRCUITS */
@@ -101,8 +106,9 @@ public class CircuitRegistry implements ICircuitRegistry {
 
 	@Override
 	public ICircuit getFromLegacyMap(int id) {
-		if (!legacyMap.containsKey(id))
+		if (!legacyMap.containsKey(id)) {
 			return null;
+		}
 
 		return getCircuit(legacyMap.get(id));
 	}
@@ -118,8 +124,9 @@ public class CircuitRegistry implements ICircuitRegistry {
 	@Override
 	public ICircuitBoard getCircuitboard(ItemStack itemstack) {
 		NBTTagCompound nbttagcompound = itemstack.getTagCompound();
-		if (nbttagcompound == null)
+		if (nbttagcompound == null) {
 			return null;
+		}
 
 		return new CircuitBoard(nbttagcompound);
 	}

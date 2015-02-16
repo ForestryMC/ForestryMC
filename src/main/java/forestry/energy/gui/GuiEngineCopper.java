@@ -4,15 +4,16 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.energy.gui;
 
+import net.minecraft.entity.player.InventoryPlayer;
+
 import forestry.core.config.Defaults;
 import forestry.energy.gadgets.EngineCopper;
-import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiEngineCopper extends GuiEngine {
 
@@ -21,7 +22,7 @@ public class GuiEngineCopper extends GuiEngine {
 	}
 
 	protected EngineCopper getEngine() {
-		return (EngineCopper)tile;
+		return (EngineCopper) tile;
 	}
 
 	@Override

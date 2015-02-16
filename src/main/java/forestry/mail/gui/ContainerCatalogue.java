@@ -4,15 +4,17 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.mail.gui;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,6 +23,7 @@ import net.minecraft.inventory.ICrafting;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
+import forestry.api.mail.IPostOffice;
 import forestry.api.mail.IPostalState;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
@@ -36,119 +39,93 @@ import forestry.mail.network.PacketLetterInfo;
 public class ContainerCatalogue extends Container implements IGuiSelectable {
 
 	private final EntityPlayer player;
-	private final LinkedHashMap<IMailAddress, ITradeStation> stations;
-	private TradeStationInfo currentTrade = null;
-	private Iterator<ITradeStation> iterator = null;
+	private final List<ITradeStation> stations = new ArrayList<ITradeStation>();
 
-	private int maxItPos = 0;
-	private int currentItPos = 0;
+	private TradeStationInfo currentTrade = null;
+
+	private int stationIndex = 0;
+
+	// for display on client
+	private int stationCount;
 
 	private boolean needsSynch = true;
 	private int currentFilter = 1;
 
-	private static final String[] FILTER_NAMES = new String[] { "all", "online", "offline" };
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	private static final Set<IPostalState>[] FILTERS = new EnumSet[] {
-		EnumSet.noneOf(EnumStationState.class),
-		EnumSet.of(EnumStationState.OK),
-		EnumSet.of(EnumStationState.INSUFFICIENT_OFFER, EnumStationState.INSUFFICIENT_TRADE_GOOD, EnumStationState.INSUFFICIENT_BUFFER, EnumStationState.INSUFFICIENT_PAPER, EnumStationState.INSUFFICIENT_STAMPS)
-	};
+	private static final String[] FILTER_NAMES = new String[]{"all", "online", "offline"};
+	private static final List<Set<IPostalState>> FILTERS = new ArrayList<Set<IPostalState>>();
+
+	static {
+		EnumSet<EnumStationState> all = EnumSet.allOf(EnumStationState.class);
+		EnumSet<EnumStationState> online = EnumSet.of(EnumStationState.OK);
+		EnumSet<EnumStationState> offline = EnumSet.copyOf(all);
+		offline.removeAll(online);
+
+		FILTERS.add(Collections.<IPostalState>unmodifiableSet(all));
+		FILTERS.add(Collections.<IPostalState>unmodifiableSet(online));
+		FILTERS.add(Collections.<IPostalState>unmodifiableSet(offline));
+	}
 
 	public ContainerCatalogue(EntityPlayer player) {
 		this.player = player;
 
-		// Filter out any trade stations which do not actually offer anything.
-		stations = new LinkedHashMap<IMailAddress, ITradeStation>();
-		rebuildStationsList();
+		if (Proxies.common.isSimulating(player.worldObj)) {
+			rebuildStationsList();
+		}
 	}
 
-	public int getMaxCount() { return maxItPos; }
-	public int getCurrentPos() { return currentItPos; }
+	public int getPageCount() {
+		return Math.max(stationCount, 1);
+	}
 
-	public String getFilterIdent() { return FILTER_NAMES[currentFilter]; }
+	public int getPageNumber() {
+		return stationIndex + 1;
+	}
+
+	public String getFilterIdent() {
+		return FILTER_NAMES[currentFilter];
+	}
 
 	private void rebuildStationsList() {
 		stations.clear();
-		for(ITradeStation station : PostManager.postRegistry.getPostOffice(player.worldObj).getActiveTradeStations(player.worldObj).values()) {
+
+		IPostOffice postOffice = PostManager.postRegistry.getPostOffice(player.worldObj);
+		Map<IMailAddress, ITradeStation> tradeStations = postOffice.getActiveTradeStations(player.worldObj);
+
+		for (ITradeStation station : tradeStations.values()) {
 			TradeStationInfo info = station.getTradeInfo();
-			if(info.tradegood == null)
-				continue;
 
-			if(!FILTERS[currentFilter].isEmpty()) {
-				if(!FILTERS[currentFilter].contains(info.state))
-					continue;
+			// Filter out any trade stations which do not actually offer anything.
+			if (info.tradegood != null && FILTERS.get(currentFilter).contains(info.state)) {
+				stations.add(station);
 			}
-
-			stations.put(station.getAddress(), station);
 		}
-		maxItPos = stations.size();
-		resetIteration();
 
+		stationIndex = 0;
+		updateTradeInfo();
 	}
 
-	private void resetIteration() {
-		if(!stations.isEmpty()) {
-			iterator = stations.values().iterator();
-			updateTradeInfo(iterator.next());
-		} else
-			updateTradeInfo(null);
-
-		currentItPos = 1;
-	}
-
-	public void advanceIteration() {
-
-		if(!Proxies.common.isSimulating(player.worldObj)) {
+	public void nextPage() {
+		if (!Proxies.common.isSimulating(player.worldObj)) {
 			sendSelection(true);
 			return;
 		}
 
-		if(stations.isEmpty())
-			return;
-
-		if(iterator.hasNext()) {
-			currentItPos++;
-			updateTradeInfo(iterator.next());
-		} else
-			resetIteration();
+		stationIndex = (stationIndex + 1) % stations.size();
+		updateTradeInfo();
 	}
 
-	public void regressIteration() {
-
-		if(!Proxies.common.isSimulating(player.worldObj)) {
+	public void previousPage() {
+		if (!Proxies.common.isSimulating(player.worldObj)) {
 			sendSelection(false);
 			return;
 		}
 
-		if(stations.isEmpty())
-			return;
-
-		iterator = stations.values().iterator();
-		ITradeStation previous = null;
-		currentItPos = 0;
-
-		while(iterator.hasNext()) {
-			ITradeStation current = iterator.next();
-			if(!current.getAddress().equals(currentTrade.address)) {
-				currentItPos++;
-				previous = current;
-				continue;
-			}
-
-			if(previous == null) {
-				Iterator<ITradeStation> it = stations.values().iterator();
-				currentItPos = stations.size();
-				while(it.hasNext())
-					previous = it.next();
-
-			}
-			updateTradeInfo(previous);
-			break;
-		}
+		stationIndex = (stationIndex - 1 + stations.size()) % stations.size();
+		updateTradeInfo();
 	}
 
 	public void cycleFilter() {
-		if(!Proxies.common.isSimulating(player.worldObj)) {
+		if (!Proxies.common.isSimulating(player.worldObj)) {
 			PacketPayload payload = new PacketPayload(1, 0, 0);
 			payload.intPayload[0] = 2;
 			PacketUpdate packet = new PacketUpdate(PacketIds.GUI_SELECTION_CHANGE, payload);
@@ -156,10 +133,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 			return;
 		}
 
-		if(currentFilter < FILTERS.length -1)
-			currentFilter++;
-		else
-			currentFilter = 0;
+		currentFilter = (currentFilter + 1) % FILTERS.size();
 
 		rebuildStationsList();
 	}
@@ -172,15 +146,18 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 	}
 
 	/* Managing Trade info */
-	public void updateTradeInfo(ITradeStation station) {
+	private void updateTradeInfo() {
 		// Updating is done by the server.
-		if (!Proxies.common.isSimulating(player.worldObj))
+		if (!Proxies.common.isSimulating(player.worldObj)) {
 			return;
+		}
 
-		if(station != null)
+		if (!stations.isEmpty()) {
+			ITradeStation station = stations.get(stationIndex);
 			setTradeInfo(station.getTradeInfo());
-		else
+		} else {
 			setTradeInfo(null);
+		}
 		needsSynch = true;
 	}
 
@@ -200,11 +177,11 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
-		if(needsSynch) {
+		if (needsSynch) {
 			for (Object crafter1 : crafters) {
 				ICrafting crafter = (ICrafting) crafter1;
-				crafter.sendProgressBarUpdate(this, 0, currentItPos);
-				crafter.sendProgressBarUpdate(this, 1, maxItPos);
+				crafter.sendProgressBarUpdate(this, 0, stationIndex);
+				crafter.sendProgressBarUpdate(this, 1, stations.size());
 				crafter.sendProgressBarUpdate(this, 2, currentFilter);
 			}
 
@@ -215,16 +192,16 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 
 	@Override
 	public void updateProgressBar(int i, int j) {
-		switch(i) {
-		case 0:
-			currentItPos = j;
-			break;
-		case 1:
-			maxItPos = j;
-			break;
-		case 2:
-			currentFilter = j;
-			break;
+		switch (i) {
+			case 0:
+				stationIndex = j;
+				break;
+			case 1:
+				stationCount = j;
+				break;
+			case 2:
+				currentFilter = j;
+				break;
 		}
 	}
 
@@ -237,11 +214,12 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 	public void handleSelectionChange(EntityPlayer player, PacketUpdate packet) {
 
 		if (packet.payload.intPayload[0] == 0) {
-			advanceIteration();
-		} else if(packet.payload.intPayload[0] == 1)
-			regressIteration();
-		else if(packet.payload.intPayload[0] == 2)
+			nextPage();
+		} else if (packet.payload.intPayload[0] == 1) {
+			previousPage();
+		} else if (packet.payload.intPayload[0] == 2) {
 			cycleFilter();
+		}
 
 		needsSynch = true;
 	}

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -17,6 +17,7 @@ import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.Slot;
 
 import forestry.core.gui.ContainerLiquidTanks;
+import forestry.core.gui.slots.SlotCraftMatrix;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.gui.slots.SlotOutput;
@@ -103,8 +104,9 @@ public class ContainerCarpenter extends ContainerLiquidTanks implements IContain
 	@Override
 	public void onCraftMatrixChanged(IInventory iinventory, int slot) {
 		craftingInventory.setInventorySlotContents(slot, iinventory.getStackInSlot(slot));
-		if (slot < craftMatrix.stackList.length)
+		if (slot < craftMatrix.stackList.length) {
 			craftMatrix.stackList[slot] = iinventory.getStackInSlot(slot);
+		}
 		resetProductDisplay();
 	}
 
@@ -125,17 +127,19 @@ public class ContainerCarpenter extends ContainerLiquidTanks implements IContain
 
 	private void updateProductSlot() {
 		// Update crafting display
-		if (machine.currentRecipe != null)
+		if (machine.currentRecipe != null) {
 			craftResult.setInventorySlotContents(0, machine.currentRecipe.getCraftingResult());
-		else
+		} else {
 			craftResult.setInventorySlotContents(0, null);
+		}
 	}
 
 	@Override
 	public void onContainerClosed(EntityPlayer entityplayer) {
 		machine.activeContainer = null;
-		if (entityplayer == null)
+		if (entityplayer == null) {
 			return;
+		}
 
 		InventoryPlayer inventoryplayer = entityplayer.inventory;
 		if (inventoryplayer.getItemStack() != null) {

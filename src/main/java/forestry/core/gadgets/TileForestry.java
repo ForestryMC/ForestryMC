@@ -4,13 +4,14 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.gadgets;
 
 import java.util.Collection;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
@@ -58,9 +59,12 @@ import buildcraft.api.statements.ITriggerProvider;
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
 public abstract class TileForestry extends TileEntity implements INetworkedEntity, IRestrictedAccess, IErrorSource, ITriggerProvider, ISidedInventory, IFilterSlotDelegate {
 
+	private static Random rand = new Random();
+
 	protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 	protected boolean isInited = false;
 	private IInventoryAdapter inventory = FakeInventoryAdapter.instance();
+	private int tickCount = rand.nextInt(128);
 
 	public AdjacentTileCache getTileCache() {
 		return tileCache;
@@ -92,24 +96,33 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	public void rotateAfterPlacement(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack stack) {
 
 		int l = MathHelper.floor_double(((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
-		if (l == 0)
+		if (l == 0) {
 			setOrientation(ForgeDirection.NORTH);
-		if (l == 1)
+		}
+		if (l == 1) {
 			setOrientation(ForgeDirection.EAST);
-		if (l == 2)
+		}
+		if (l == 2) {
 			setOrientation(ForgeDirection.SOUTH);
-		if (l == 3)
+		}
+		if (l == 3) {
 			setOrientation(ForgeDirection.WEST);
+		}
 
 	}
 
 	// / UPDATING
 	@Override
 	public void updateEntity() {
+		tickCount++;
 		if (!isInited) {
 			initialize();
 			isInited = true;
 		}
+	}
+
+	public final boolean updateOnInterval(int tickInterval) {
+		return tickCount % tickInterval == 0;
 	}
 
 	public abstract void initialize();
@@ -121,17 +134,20 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 
 		inventory.readFromNBT(data);
 
-		if (data.hasKey("Access"))
+		if (data.hasKey("Access")) {
 			access = EnumAccess.values()[data.getInteger("Access")];
-		else
+		} else {
 			access = EnumAccess.SHARED;
-		if (data.hasKey("owner"))
+		}
+		if (data.hasKey("owner")) {
 			owner = NBTUtil.func_152459_a(data.getCompoundTag("owner"));
+		}
 
-		if (data.hasKey("Orientation"))
+		if (data.hasKey("Orientation")) {
 			orientation = ForgeDirection.values()[data.getInteger("Orientation")];
-		else
+		} else {
 			orientation = ForgeDirection.WEST;
+		}
 
 	}
 
@@ -145,8 +161,9 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 			NBTUtil.func_152460_a(nbt, owner);
 			data.setTag("owner", nbt);
 		}
-		if (orientation != null)
+		if (orientation != null) {
 			data.setInteger("Orientation", orientation.ordinal());
+		}
 	}
 
 	// / SMP
@@ -196,12 +213,14 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	// / REDSTONE INFO
+
 	/**
 	 * @return true if tile is activated by redstone current.
 	 */
 	public boolean isActivated() {
 		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 	}
+
 	// / ORIENTATION
 	private ForgeDirection orientation = ForgeDirection.WEST;
 
@@ -210,17 +229,20 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	public void setOrientation(ForgeDirection orientation) {
-		if (this.orientation == orientation)
+		if (this.orientation == orientation) {
 			return;
+		}
 		this.orientation = orientation;
 		this.sendNetworkUpdate();
 	}
+
 	// / ERROR HANDLING
 	public IErrorState errorState = EnumErrorCode.OK;
 
 	public void setErrorState(IErrorState state) {
-		if (this.errorState == state)
+		if (this.errorState == state) {
 			return;
+		}
 		this.errorState = state;
 		this.sendNetworkUpdate();
 	}
@@ -234,6 +256,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	public IErrorState getErrorState() {
 		return errorState;
 	}
+
 	// / OWNERSHIP
 	private GameProfile owner = null;
 	private EnumAccess access = EnumAccess.SHARED;
@@ -284,22 +307,25 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 
 	@Override
 	public boolean isOwner(EntityPlayer player) {
-		if (owner != null && player != null)
+		if (owner != null && player != null) {
 			return PlayerUtil.isSameGameProfile(owner, player.getGameProfile());
+		}
 		return false;
 	}
 
 	@Override
 	public boolean switchAccessRule(EntityPlayer player) {
-		if (!isOwner(player))
+		if (!isOwner(player)) {
 			return false;
+		}
 
 		boolean couldPipesConnect = allowsPipeConnections();
 
 		int ordinal = (access.ordinal() + 1) % EnumAccess.values().length;
 		access = EnumAccess.values()[ordinal];
-		if (!this.worldObj.isRemote)
+		if (!this.worldObj.isRemote) {
 			sendNetworkUpdate();
+		}
 
 		boolean canPipesConnect = allowsPipeConnections();
 		if (couldPipesConnect != canPipesConnect) {
@@ -312,6 +338,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	/* NAME */
+
 	/**
 	 * Gets the tile's unlocalized name, based on the block at the location of this entity (client-only).
 	 */
@@ -380,8 +407,9 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 
 	@Override
 	public final boolean isUseableByPlayer(EntityPlayer player) {
-		if (!Utils.isUseableByPlayer(player, this) || !allowsViewing(player))
+		if (!Utils.isUseableByPlayer(player, this) || !allowsViewing(player)) {
 			return false;
+		}
 		return getInternalInventory().isUseableByPlayer(player);
 	}
 
@@ -392,11 +420,13 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 
 	@Override
 	public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
-		if (itemStack == null || !allowsPipeConnections())
+		if (itemStack == null || !allowsPipeConnections()) {
 			return false;
+		}
 
-		if (!canSlotAccept(slotIndex, itemStack))
+		if (!canSlotAccept(slotIndex, itemStack)) {
 			return false;
+		}
 
 		return getInternalInventory().isItemValidForSlot(slotIndex, itemStack);
 	}
@@ -413,22 +443,25 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 
 	@Override
 	public final int[] getAccessibleSlotsFromSide(int side) {
-		if (!allowsPipeConnections())
+		if (!allowsPipeConnections()) {
 			return Defaults.SLOTS_NONE;
+		}
 		return getInternalInventory().getAccessibleSlotsFromSide(side);
 	}
 
 	@Override
 	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, int side) {
-		if (itemStack == null || !allowsPipeConnections())
+		if (itemStack == null || !allowsPipeConnections()) {
 			return false;
+		}
 		return isItemValidForSlot(slotIndex, itemStack);
 	}
 
 	@Override
 	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, int side) {
-		if (itemStack == null || !allowsPipeConnections())
+		if (itemStack == null || !allowsPipeConnections()) {
 			return false;
+		}
 		return getInternalInventory().canExtractItem(slotIndex, itemStack, side);
 	}
 }

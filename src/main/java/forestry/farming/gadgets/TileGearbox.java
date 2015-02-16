@@ -4,11 +4,15 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.farming.gadgets;
+
+import net.minecraft.nbt.NBTTagCompound;
+
+import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.core.ITileStructure;
 import forestry.api.farming.IFarmHousing;
@@ -16,8 +20,6 @@ import forestry.core.EnumErrorCode;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.energy.EnergyManager;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileGearbox extends TileFarm implements IPowerHandler {
 
@@ -63,8 +65,9 @@ public class TileGearbox extends TileFarm implements IPowerHandler {
 		
 		if (energyManager.getTotalEnergyStored() == 0) {
 			ITileStructure central = getCentralTE();
-			if (!(central instanceof TileForestry))
+			if (!(central instanceof TileForestry)) {
 				return;
+			}
 
 			TileForestry centralHousing = (TileForestry) central;
 			centralHousing.setErrorState(EnumErrorCode.NOPOWER);
@@ -81,10 +84,11 @@ public class TileGearbox extends TileFarm implements IPowerHandler {
 			workCounter++;
 		}
 
-		if (workCounter >= WORK_CYCLES && worldObj.getTotalWorldTime() % 5 == 0) {
+		if (workCounter >= WORK_CYCLES && updateOnInterval(5)) {
 			ITileStructure central = getCentralTE();
-			if (!(central instanceof IFarmHousing))
+			if (!(central instanceof IFarmHousing)) {
 				return;
+			}
 
 			if (((IFarmHousing) central).doWork()) {
 				workCounter = 0;

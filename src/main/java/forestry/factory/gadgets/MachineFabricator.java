@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -68,18 +68,21 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		}
 
 		public boolean matches(ItemStack plan, ItemStack[][] resources) {
-			if (this.plan != null && !StackUtils.isCraftingEquivalent(this.plan, plan))
+			if (this.plan != null && !StackUtils.isCraftingEquivalent(this.plan, plan)) {
 				return false;
+			}
 
 			return internal.matches(resources);
 		}
 
 		public boolean hasLiquid(FluidStack resource) {
-			if (resource == null)
+			if (resource == null) {
 				return molten == null;
+			}
 
-			if (!resource.isFluidEqual(molten))
+			if (!resource.isFluidEqual(molten)) {
 				return false;
+			}
 
 			return molten.amount <= resource.amount;
 		}
@@ -105,10 +108,12 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		private final int meltingPoint;
 
 		public Smelting(ItemStack resource, FluidStack molten, int meltingPoint) {
-			if (resource == null)
+			if (resource == null) {
 				throw new IllegalArgumentException("Resource cannot be null");
-			if (molten == null)
+			}
+			if (molten == null) {
 				throw new IllegalArgumentException("Molten cannot be null");
+			}
 
 			this.resource = resource;
 			this.product = molten;
@@ -156,9 +161,11 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 			}
 
 			for (Recipe recipe : recipes) {
-				if (recipe.matches(plan, gridResources))
-					if (recipe.hasLiquid(liquid))
+				if (recipe.matches(plan, gridResources)) {
+					if (recipe.hasLiquid(liquid)) {
 						return recipe;
+					}
+				}
 			}
 
 			return null;
@@ -166,8 +173,9 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 
 		public static boolean isPlan(ItemStack plan) {
 			for (Recipe recipe : recipes) {
-				if (StackUtils.isIdenticalItem(recipe.getPlan(), plan))
+				if (StackUtils.isIdenticalItem(recipe.getPlan(), plan)) {
 					return true;
+				}
 			}
 
 			return false;
@@ -175,32 +183,37 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 
 		public static boolean isResourceLiquid(FluidStack liquid) {
 			for (Recipe recipe : recipes) {
-				if (recipe.hasLiquid(liquid))
+				if (recipe.hasLiquid(liquid)) {
 					return true;
+				}
 			}
 
 			return false;
 		}
 
 		public static Smelting findMatchingSmelting(ItemStack resource) {
-			if (resource == null)
+			if (resource == null) {
 				return null;
+			}
 
 			for (Smelting smelting : smeltings) {
-				if (StackUtils.isCraftingEquivalent(smelting.resource, resource))
+				if (StackUtils.isCraftingEquivalent(smelting.resource, resource)) {
 					return smelting;
+				}
 			}
 
 			return null;
 		}
 
 		public static Smelting findMatchingSmelting(FluidStack product) {
-			if (product == null)
+			if (product == null) {
 				return null;
+			}
 
 			for (Smelting smelting : smeltings) {
-				if (smelting.matches(product))
+				if (smelting.matches(product)) {
 					return smelting;
+				}
 			}
 
 			return null;
@@ -312,8 +325,9 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 			int filled = moltenTank.fill(pendingSmelt, true);
 			pendingSmelt.amount -= filled;
 
-			if (pendingSmelt.amount <= 0)
+			if (pendingSmelt.amount <= 0) {
 				pendingSmelt = null;
+			}
 			// Smelt if necessary and possible
 		} else if (moltenTank.getFluidAmount() < moltenTank.getCapacity() && inventory.getStackInSlot(SLOT_METAL) != null) {
 			Smelting smelt = RecipeManager.findMatchingSmelting(inventory.getStackInSlot(SLOT_METAL));
@@ -325,39 +339,45 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		} else if (moltenTank.getFluidAmount() > 0) {
 			// Remove smelt if we have gone below melting point
 			Smelting smelt = RecipeManager.findMatchingSmelting(moltenTank.getFluid());
-			if (smelt != null && heat < smelt.meltingPoint)
+			if (smelt != null && heat < smelt.meltingPoint) {
 				moltenTank.drain(5, true);
+			}
 		}
 
 		this.dissipateHeat();
 
-		if (energyManager.getTotalEnergyStored() == 0 && heat == 0)
+		if (energyManager.getTotalEnergyStored() == 0 && heat == 0) {
 			setErrorState(EnumErrorCode.NOPOWER);
-		else if (getErrorState() == EnumErrorCode.NOPOWER)
+		} else if (getErrorState() == EnumErrorCode.NOPOWER) {
 			setErrorState(EnumErrorCode.OK);
+		}
 	}
 
 	@Override
 	public boolean workCycle() {
+		craftResult(false, null);
 		return addHeat(25);
 	}
 
 	private boolean addHeat(int addition) {
-		if (this.heat >= MAX_HEAT)
+		if (this.heat >= MAX_HEAT) {
 			return false;
+		}
 
 		this.heat += addition;
-		if (this.heat > MAX_HEAT)
+		if (this.heat > MAX_HEAT) {
 			this.heat = MAX_HEAT;
+		}
 
 		return true;
 	}
 
 	private void dissipateHeat() {
-		if (heat > 2500)
+		if (heat > 2500) {
 			this.heat -= 2;
-		else if (heat > 0)
+		} else if (heat > 0) {
 			this.heat--;
+		}
 	}
 
 	private Recipe getRecipe() {
@@ -377,24 +397,41 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 	public ItemStack getResult() {
 		Recipe myRecipe = getRecipe();
 
-		if (myRecipe == null)
+		if (myRecipe == null) {
 			return null;
+		}
 
 		return myRecipe.internal.getRecipeOutput().copy();
 	}
 
 	@Override
 	public ItemStack takenFromSlot(int slotIndex, boolean consumeRecipe, EntityPlayer player) {
-		if (slotIndex != SLOT_RESULT)
+		if (slotIndex != SLOT_RESULT) {
 			return null;
+		}
 
+		craftResult(consumeRecipe, player);
+
+		IInventoryAdapter inventory = getInternalInventory();
+
+		// Return result
+		return inventory.decrStackSize(SLOT_RESULT, 1);
+	}
+
+	private void craftResult(boolean consumeRecipe, EntityPlayer player) {
 		Recipe myRecipe = getRecipe();
-		if (myRecipe == null)
-			return null;
+		if (myRecipe == null) {
+			return;
+		}
+
+		IInventoryAdapter inventory = getInternalInventory();
+
+		if (inventory.getStackInSlot(SLOT_RESULT) != null) {
+			return;
+		}
 
 		FluidStack liquid = myRecipe.molten;
 
-		IInventoryAdapter inventory = getInternalInventory();
 		// Remove resources
 		ItemStack[] crafting = InvTools.getStacks(inventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
 		if (removeFromInventory(1, crafting, player, false)) {
@@ -403,25 +440,27 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		} else if (consumeRecipe) {
 			removeFromCraftMatrix(myRecipe);
 			moltenTank.drain(liquid.amount, true);
-		} else
-			return null;
+		} else {
+			return;
+		}
 
-		ItemStack result = myRecipe.internal.getRecipeOutput().copy();
+		ItemStack result = getResult();
 		// Damage plan
 		if (inventory.getStackInSlot(SLOT_PLAN) != null) {
 			Item planItem = inventory.getStackInSlot(SLOT_PLAN).getItem();
-			if (planItem instanceof ICraftingPlan)
+			if (planItem instanceof ICraftingPlan) {
 				inventory.setInventorySlotContents(SLOT_PLAN, ((ICraftingPlan) planItem).planUsed(inventory.getStackInSlot(SLOT_PLAN), result));
+			}
 		}
 
-		// Return result
-		return result;
+		inventory.setInventorySlotContents(SLOT_RESULT, result);
 	}
 
 	private void removeFromCraftMatrix(Recipe recipe) {
 		for (IInvSlot slot : InventoryIterator.getIterable(invCrafting)) {
-			if (slot.getStackInSlot() == null)
+			if (slot.getStackInSlot() == null) {
 				continue;
+			}
 			slot.decreaseStackInSlot();
 		}
 
@@ -429,9 +468,9 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 
 	private boolean removeFromInventory(int count, ItemStack[] set, EntityPlayer player, boolean doRemove) {
 		IInventoryAdapter inventory = getInternalInventory();
-		if (doRemove)
+		if (doRemove) {
 			return InvTools.removeSets(inventory, count, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
-		else {
+		} else {
 			ItemStack[] stock = InvTools.getStacks(inventory, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
 			return StackUtils.containsSets(set, stock) >= count;
 		}
@@ -447,8 +486,9 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		IInventoryAdapter inventory = getInternalInventory();
 		ItemStack itemToMelt = inventory.getStackInSlot(SLOT_METAL);
 		Smelting smelting = RecipeManager.findMatchingSmelting(itemToMelt);
-		if (smelting != null && moltenTank.fill(smelting.getProduct(), false) > 0)
+		if (smelting != null && moltenTank.fill(smelting.getProduct(), false) > 0) {
 			return true;
+		}
 
 		ItemStack plan = inventory.getStackInSlot(SLOT_PLAN);
 		ItemStack[] resources = InvTools.getStacks(inventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
@@ -463,12 +503,14 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 	public int getMeltingPoint() {
 		if (moltenTank.getFluidAmount() > 0) {
 			Smelting smelt = RecipeManager.findMatchingSmelting(moltenTank.getFluid());
-			if (smelt != null)
+			if (smelt != null) {
 				return smelt.meltingPoint;
+			}
 		} else if (this.getStackInSlot(SLOT_METAL) != null) {
 			Smelting smelt = RecipeManager.findMatchingSmelting(this.getStackInSlot(SLOT_METAL));
-			if (smelt != null)
+			if (smelt != null) {
 				return smelt.meltingPoint;
+			}
 		}
 
 		return 0;
@@ -476,15 +518,17 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 
 	public int getMeltingPointScaled(int i) {
 		// / For SMP clients
-		if (guiMeltingPoint > 0)
+		if (guiMeltingPoint > 0) {
 			return (guiMeltingPoint * i) / MAX_HEAT;
+		}
 
 		int meltingPoint = getMeltingPoint();
 
-		if (meltingPoint <= 0)
+		if (meltingPoint <= 0) {
 			return 0;
-		else
+		} else {
 			return (meltingPoint * i) / MAX_HEAT;
+		}
 	}
 
 	/* SMP */
@@ -492,10 +536,11 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 	public void getGUINetworkData(int i, int j) {
 		int messageId = tankManager.maxMessageId() + 1;
 
-		if (i == messageId)
+		if (i == messageId) {
 			heat = j;
-		else if (i == messageId + 1)
+		} else if (i == messageId + 1) {
 			guiMeltingPoint = j;
+		}
 	}
 
 	@Override

@@ -4,13 +4,24 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.genetics;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import net.minecraft.item.ItemStack;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleHandler;
 import forestry.api.genetics.IAlleleRegistry;
@@ -24,14 +35,6 @@ import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.ForestryItem;
 import forestry.core.genetics.ItemResearchNote.EnumNoteType;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import net.minecraft.item.ItemStack;
 
 public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
 
@@ -52,24 +55,29 @@ public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
 
 	@Override
 	public ISpeciesRoot getSpeciesRoot(String uid) {
-		if(rootMap.containsKey(uid))
+		if (rootMap.containsKey(uid)) {
 			return rootMap.get(uid);
+		}
 		return null;
 	}
 
 	@Override
 	public ISpeciesRoot getSpeciesRoot(ItemStack stack) {
-		for(ISpeciesRoot root : rootMap.values())
-			if(root.isMember(stack))
+		for (ISpeciesRoot root : rootMap.values()) {
+			if (root.isMember(stack)) {
 				return root;
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public ISpeciesRoot getSpeciesRoot(Class<? extends IIndividual> clz) {
-		for(ISpeciesRoot root : rootMap.values())
-			if(root.getMemberClass().isAssignableFrom(clz))
+		for (ISpeciesRoot root : rootMap.values()) {
+			if (root.getMemberClass().isAssignableFrom(clz)) {
 				return root;
+			}
+		}
 		return null;
 	}
 
@@ -82,8 +90,9 @@ public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
 	@Override
 	public IIndividual getIndividual(ItemStack stack) {
 		ISpeciesRoot root = getSpeciesRoot(stack);
-		if(root == null)
+		if (root == null) {
 			return null;
+		}
 
 		return root.getMember(stack);
 	}
@@ -137,11 +146,13 @@ public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
 		alleleMap.put(allele.getUID(), allele);
 		if (allele instanceof IAlleleSpecies) {
 			IClassification branch = ((IAlleleSpecies) allele).getBranch();
-			if (branch != null)
+			if (branch != null) {
 				branch.addMemberSpecies((IAlleleSpecies) allele);
+			}
 		}
-		for (IAlleleHandler handler : this.alleleHandlers)
+		for (IAlleleHandler handler : this.alleleHandlers) {
 			handler.onRegisterAllele(allele);
+		}
 	}
 
 	@Override
@@ -168,13 +179,15 @@ public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
 	@Override
 	public void registerClassification(IClassification branch) {
 
-		if (classificationMap.containsKey(branch.getUID()))
+		if (classificationMap.containsKey(branch.getUID())) {
 			throw new RuntimeException(String.format("Could not add new classification '%s', because the key is already taken by %s.", branch.getUID(),
 					classificationMap.get(branch.getUID())));
+		}
 
 		classificationMap.put(branch.getUID(), branch);
-		for (IAlleleHandler handler : this.alleleHandlers)
+		for (IAlleleHandler handler : this.alleleHandlers) {
 			handler.onRegisterClassification(branch);
+		}
 	}
 
 	@Override
@@ -196,8 +209,9 @@ public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
 	@Override
 	public void registerFruitFamily(IFruitFamily family) {
 		fruitMap.put(family.getUID(), family);
-		for (IAlleleHandler handler : this.alleleHandlers)
+		for (IAlleleHandler handler : this.alleleHandlers) {
 			handler.onRegisterFruitFamily(family);
+		}
 	}
 
 	@Override
@@ -218,8 +232,9 @@ public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
 
 	@Override
 	public IAllele getFromLegacyMap(int id) {
-		if (!legacyMap.containsKey(id))
+		if (!legacyMap.containsKey(id)) {
 			return null;
+		}
 
 		return getAllele(legacyMap.get(id));
 	}

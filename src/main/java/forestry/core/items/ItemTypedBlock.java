@@ -1,8 +1,9 @@
 package forestry.core.items;
 
-import forestry.core.IItemTyped;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+
+import forestry.core.IItemTyped;
 
 /**
  * For blocks whose type depends on metadata.
@@ -19,12 +20,13 @@ public class ItemTypedBlock extends ItemForestryBlock {
 	public String getUnlocalizedName(ItemStack itemstack) {
 		Block block = getBlock();
 		if (block instanceof IItemTyped) {
-			IItemTyped blockTyped = (IItemTyped)block;
+			IItemTyped blockTyped = (IItemTyped) block;
 			Enum type = blockTyped.getTypeFromMeta(itemstack.getItemDamage());
-			if (type != null)
+			if (type != null) {
 				return getBlock().getUnlocalizedName() + "." + type.ordinal();
-			else
+			} else {
 				return null;
+			}
 		}
 		return super.getUnlocalizedName(itemstack);
 	}

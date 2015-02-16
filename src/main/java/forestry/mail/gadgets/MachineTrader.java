@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -52,16 +52,18 @@ public class MachineTrader extends TileBase {
 
 	@Override
 	public void openGui(EntityPlayer player, TileBase tile) {
-		if (isLinked())
+		if (isLinked()) {
 			player.openGui(ForestryAPI.instance, GuiId.TraderGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
-		else
+		} else {
 			player.openGui(ForestryAPI.instance, GuiId.TraderNameGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
+		}
 	}
 
 	@Override
 	public void onRemoval() {
-		if (isLinked())
+		if (isLinked()) {
 			PostManager.postRegistry.deleteTradeStation(worldObj, address);
+		}
 	}
 
 	/* SAVING & LOADING */
@@ -80,14 +82,16 @@ public class MachineTrader extends TileBase {
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 
-		if (nbttagcompound.hasKey("address"))
+		if (nbttagcompound.hasKey("address")) {
 			address = MailAddress.loadFromNBT(nbttagcompound.getCompoundTag("address"));
+		}
 	}
 
 	@Override
 	public PacketPayload getPacketPayload() {
-		if (address == null || address.getName() == null)
+		if (address == null || address.getName() == null) {
 			return null;
+		}
 
 		PacketPayload payload = new PacketPayload(0, 0, 1);
 		payload.stringPayload[0] = address.getName();
@@ -106,6 +110,7 @@ public class MachineTrader extends TileBase {
 	}
 
 	/* UPDATING */
+
 	/**
 	 * The trade station should show errors for missing stamps and paper first.
 	 * Once it is able to send letters, it should display other error states.
@@ -113,19 +118,23 @@ public class MachineTrader extends TileBase {
 	@Override
 	public void updateServerSide() {
 
-		if (!isLinked() || worldObj.getTotalWorldTime() % 4 != 0)
+		if (!isLinked() || !updateOnInterval(10)) {
 			return;
+		}
 
 		EnumErrorCode errorCode = EnumErrorCode.OK;
 
-		if (!hasPostageMin(3))
+		if (!hasPostageMin(3)) {
 			errorCode = EnumErrorCode.NOSTAMPS;
+		}
 
-		if (!hasPaperMin(2))
-			if (errorCode == EnumErrorCode.NOSTAMPS)
+		if (!hasPaperMin(2)) {
+			if (errorCode == EnumErrorCode.NOSTAMPS) {
 				errorCode = EnumErrorCode.NOSTAMPSNOPAPER;
-			else
+			} else {
 				errorCode = EnumErrorCode.NOPAPER;
+			}
+		}
 
 		if (errorCode != EnumErrorCode.OK) {
 			setErrorState(errorCode);
@@ -152,11 +161,12 @@ public class MachineTrader extends TileBase {
 			return;
 		}
 
-		if (inventory instanceof TradeStation)
+		if (inventory instanceof TradeStation) {
 			if (!((TradeStation) inventory).canReceivePayment()) {
 				setErrorState(EnumErrorCode.NOSPACE);
 				return;
 			}
+		}
 
 		setErrorState(EnumErrorCode.OK);
 	}
@@ -176,12 +186,15 @@ public class MachineTrader extends TileBase {
 		IInventory tradeInventory = this.getInternalInventory();
 		for (int i = startSlot; i < startSlot + countSlots; i++) {
 			ItemStack itemInSlot = tradeInventory.getStackInSlot(i);
-			if (itemInSlot == null)
+			if (itemInSlot == null) {
 				continue;
-			if (item == null || StackUtils.isIdenticalItem(itemInSlot, item))
+			}
+			if (item == null || StackUtils.isIdenticalItem(itemInSlot, item)) {
 				count += itemInSlot.stackSize;
-			if (count >= itemCount)
+			}
+			if (count >= itemCount) {
 				return true;
+			}
 		}
 
 		return false;
@@ -198,12 +211,13 @@ public class MachineTrader extends TileBase {
 		IInventory tradeInventory = this.getInternalInventory();
 		for (int i = startSlot; i < startSlot + countSlots; i++) {
 			ItemStack itemInSlot = tradeInventory.getStackInSlot(i);
-			if (itemInSlot == null)
+			if (itemInSlot == null) {
 				total += 64;
-			else {
+			} else {
 				total += itemInSlot.getMaxStackSize();
-				if (item == null || StackUtils.isIdenticalItem(itemInSlot, item))
+				if (item == null || StackUtils.isIdenticalItem(itemInSlot, item)) {
 					count += itemInSlot.stackSize;
+				}
 			}
 		}
 
@@ -217,8 +231,9 @@ public class MachineTrader extends TileBase {
 	public boolean hasInputBufMin(float percentage) {
 		IInventory inventory = getInternalInventory();
 		ItemStack tradeGood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
-		if (tradeGood == null)
+		if (tradeGood == null) {
 			return true;
+		}
 		return percentOccupied(TradeStation.SLOT_SEND_BUFFER, TradeStation.SLOT_SEND_BUFFER_COUNT, tradeGood) > percentage;
 	}
 
@@ -233,14 +248,17 @@ public class MachineTrader extends TileBase {
 		IInventory tradeInventory = this.getInternalInventory();
 		for (int i = TradeStation.SLOT_STAMPS_1; i < TradeStation.SLOT_STAMPS_1 + TradeStation.SLOT_STAMPS_COUNT; i++) {
 			ItemStack stamp = tradeInventory.getStackInSlot(i);
-			if (stamp == null)
+			if (stamp == null) {
 				continue;
-			if (!(stamp.getItem() instanceof IStamps))
+			}
+			if (!(stamp.getItem() instanceof IStamps)) {
 				continue;
+			}
 
 			posted += ((IStamps) stamp.getItem()).getPostage(stamp).getValue() * stamp.stackSize;
-			if (posted >= postage)
+			if (posted >= postage) {
 				return true;
+			}
 		}
 
 		return false;
@@ -252,11 +270,13 @@ public class MachineTrader extends TileBase {
 	}
 
 	public void setAddress(IMailAddress address) {
-		if (address == null)
+		if (address == null) {
 			throw new NullPointerException("address must not be null");
+		}
 
-		if (this.address.isValid() && this.address.equals(address))
+		if (this.address.isValid() && this.address.equals(address)) {
 			return;
+		}
 
 		if (Proxies.common.isSimulating(worldObj)) {
 			if (!PostManager.postRegistry.isValidTradeAddress(worldObj, address)) {
@@ -282,7 +302,7 @@ public class MachineTrader extends TileBase {
 			return super.getInternalInventory();
 		}
 
-		return (TradeStation)PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerProfile(), address);
+		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerProfile(), address);
 	}
 
 	/* ITRIGGERPROVIDER */

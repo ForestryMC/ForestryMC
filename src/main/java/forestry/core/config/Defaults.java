@@ -4,13 +4,14 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.config;
 
 import java.util.Locale;
+
 import net.minecraftforge.oredict.OreDictionary;
 
 public class Defaults {
@@ -31,16 +32,16 @@ public class Defaults {
 	public static final int BUCKET_VOLUME = 1000;
 	public static final int FLUID_PER_HONEY_DROP = 100;
 
-	public static final int[] FACINGS = { 0, 1, 2, 3, 4, 5 };
+	public static final int[] FACINGS = {0, 1, 2, 3, 4, 5};
 	public static final int FACING_UP = 1;
 	public static final int FACING_DOWN = 0;
 	public static final int FACING_NORTH = 2;
 	public static final int FACING_SOUTH = 3;
 	public static final int FACING_WEST = 4;
 	public static final int FACING_EAST = 5;
-	public static final int[] FACING_SIDES = { FACING_NORTH, FACING_SOUTH, FACING_WEST, FACING_EAST };
-	public static final int[] FACING_NORTHSOUTH = { FACING_NORTH, FACING_SOUTH };
-	public static final int[] FACING_WESTEAST = { FACING_WEST, FACING_EAST };
+	public static final int[] FACING_SIDES = {FACING_NORTH, FACING_SOUTH, FACING_WEST, FACING_EAST};
+	public static final int[] FACING_NORTHSOUTH = {FACING_NORTH, FACING_SOUTH};
+	public static final int[] FACING_WESTEAST = {FACING_WEST, FACING_EAST};
 	public static final int[] FACINGS_NONE = new int[0];
 
 	public static final int[] SLOTS_NONE = new int[0];

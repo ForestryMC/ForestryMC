@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -46,12 +46,14 @@ public class ItemFlutterlyzer extends ItemInventoried {
 
 			// Analyzed slot occupied, abort
 			if (inventoryStacks[SLOT_ANALYZE_1] != null || inventoryStacks[SLOT_ANALYZE_2] != null || inventoryStacks[SLOT_ANALYZE_3] != null
-					|| inventoryStacks[SLOT_ANALYZE_4] != null || inventoryStacks[SLOT_ANALYZE_5] != null)
+					|| inventoryStacks[SLOT_ANALYZE_4] != null || inventoryStacks[SLOT_ANALYZE_5] != null) {
 				return;
+			}
 
 			// Source slot to analyze empty
-			if (getStackInSlot(SLOT_SPECIMEN) == null)
+			if (getStackInSlot(SLOT_SPECIMEN) == null) {
 				return;
+			}
 
 			IButterfly butterfly = PluginLepidopterology.butterflyInterface.getMember(getStackInSlot(SLOT_SPECIMEN));
 			// No tree, abort
@@ -63,8 +65,9 @@ public class ItemFlutterlyzer extends ItemInventoried {
 			if (!butterfly.isAnalyzed()) {
 
 				// Requires energy
-				if (!isEnergy(getStackInSlot(SLOT_ENERGY)))
+				if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
 					return;
+				}
 
 				butterfly.analyze();
 				if (player != null) {
@@ -107,8 +110,9 @@ public class ItemFlutterlyzer extends ItemInventoried {
 
 		@Override
 		public EnumErrorCode getErrorState() {
-			if (PluginLepidopterology.butterflyInterface.isMember(inventoryStacks[SLOT_SPECIMEN]) && !isEnergy(getStackInSlot(SLOT_ENERGY)))
+			if (PluginLepidopterology.butterflyInterface.isMember(inventoryStacks[SLOT_SPECIMEN]) && !isEnergy(getStackInSlot(SLOT_ENERGY))) {
 				return EnumErrorCode.NOHONEY;
+			}
 
 			return EnumErrorCode.OK;
 		}
@@ -122,9 +126,10 @@ public class ItemFlutterlyzer extends ItemInventoried {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (Proxies.common.isSimulating(world))
+		if (Proxies.common.isSimulating(world)) {
 			entityplayer.openGui(ForestryAPI.instance, GuiId.FlutterlyzerGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY,
 					(int) entityplayer.posZ);
+		}
 
 		return itemstack;
 	}

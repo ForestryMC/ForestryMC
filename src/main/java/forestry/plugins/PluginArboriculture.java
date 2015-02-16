@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -45,6 +45,8 @@ import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
+import forestry.api.storage.ICrateRegistry;
+import forestry.api.storage.StorageManager;
 import forestry.arboriculture.EventHandlerArboriculture;
 import forestry.arboriculture.FruitProviderNone;
 import forestry.arboriculture.FruitProviderPod;
@@ -336,6 +338,16 @@ public class PluginArboriculture extends ForestryPlugin {
 			Proxies.render.registerVillagerSkin(Defaults.ID_VILLAGER_LUMBERJACK, Defaults.TEXTURE_SKIN_LUMBERJACK);
 			VillagerRegistry.instance().registerVillageTradeHandler(Defaults.ID_VILLAGER_LUMBERJACK, new VillageHandlerArboriculture());
 		}
+		if (PluginManager.Module.FACTORY.isEnabled()) {
+			ICrateRegistry crateRegistry = StorageManager.crateRegistry;
+			crateRegistry.registerCrate(EnumFruit.CHERRY.getStack(), "cratedCherry");
+			crateRegistry.registerCrate(EnumFruit.WALNUT.getStack(), "cratedWalnut");
+			crateRegistry.registerCrate(EnumFruit.CHESTNUT.getStack(), "cratedChestnut");
+			crateRegistry.registerCrate(EnumFruit.LEMON.getStack(), "cratedLemon");
+			crateRegistry.registerCrate(EnumFruit.PLUM.getStack(), "cratedPlum");
+			crateRegistry.registerCrate(EnumFruit.PAPAYA.getStack(), "cratedPapaya");
+			crateRegistry.registerCrate(EnumFruit.DATES.getStack(), "cratedDates");
+		}
 	}
 
 	@Override
@@ -364,21 +376,26 @@ public class PluginArboriculture extends ForestryPlugin {
 	@Override
 	protected void registerBackpackItems() {
 
-		for (ForestryBlock block : logs)
+		for (ForestryBlock block : logs) {
 			BackpackManager.definitions.get("forester").addValidItem(block.getWildcard());
+		}
 
-		for (ForestryBlock block : fireproofLogs)
+		for (ForestryBlock block : fireproofLogs) {
 			BackpackManager.definitions.get("forester").addValidItem(block.getWildcard());
+		}
 
 		BackpackManager.definitions.get("forester").addValidItem(ForestryItem.sapling.getWildcard());
 		BackpackManager.definitions.get("forester").addValidItem(ForestryItem.fruits.getWildcard());
 
-		for (ForestryBlock block : slabs)
+		for (ForestryBlock block : slabs) {
 			BackpackManager.definitions.get("builder").addValidItem(block.getWildcard());
-		for (ForestryBlock block : fences)
+		}
+		for (ForestryBlock block : fences) {
 			BackpackManager.definitions.get("builder").addValidItem(block.getWildcard());
-		for (ForestryBlock block : planks)
+		}
+		for (ForestryBlock block : planks) {
 			BackpackManager.definitions.get("builder").addValidItem(block.getWildcard());
+		}
 
 		BackpackManager.definitions.get("builder").addValidItem(ForestryBlock.stairs.getWildcard());
 	}
@@ -390,26 +407,35 @@ public class PluginArboriculture extends ForestryPlugin {
 	@Override
 	protected void registerRecipes() {
 
-		for (ForestryBlock log : logs)
+		for (ForestryBlock log : logs) {
 			Proxies.common.addSmelting(log.getWildcard(), new ItemStack(Items.coal, 1, 1), 0.15F);
+		}
 
 		// / Plank recipes
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 4; i++) {
 			Proxies.common.addShapelessRecipe(ForestryBlock.planks1.getItemStack(4, i), ForestryBlock.log1.getItemStack(1, i));
-		for (int i = 0; i < 4; i++)
+		}
+		for (int i = 0; i < 4; i++) {
 			Proxies.common.addShapelessRecipe(ForestryBlock.planks1.getItemStack(4, 4 + i), ForestryBlock.log2.getItemStack(1, i));
-		for (int i = 0; i < 4; i++)
+		}
+		for (int i = 0; i < 4; i++) {
 			Proxies.common.addShapelessRecipe(ForestryBlock.planks1.getItemStack(4, 8 + i), ForestryBlock.log3.getItemStack(1, i));
-		for (int i = 0; i < 4; i++)
+		}
+		for (int i = 0; i < 4; i++) {
 			Proxies.common.addShapelessRecipe(ForestryBlock.planks1.getItemStack(4, 12 + i), ForestryBlock.log4.getItemStack(1, i));
-		for (int i = 0; i < 4; i++)
+		}
+		for (int i = 0; i < 4; i++) {
 			Proxies.common.addShapelessRecipe(ForestryBlock.planks2.getItemStack(4, i), ForestryBlock.log5.getItemStack(1, i));
-		for (int i = 0; i < 4; i++)
+		}
+		for (int i = 0; i < 4; i++) {
 			Proxies.common.addShapelessRecipe(ForestryBlock.planks2.getItemStack(4, 4 + i), ForestryBlock.log6.getItemStack(1, i));
-		for (int i = 0; i < 4; i++)
+		}
+		for (int i = 0; i < 4; i++) {
 			Proxies.common.addShapelessRecipe(ForestryBlock.planks2.getItemStack(4, 8 + i), ForestryBlock.log7.getItemStack(1, i));
-		for (int i = 0; i < 1; i++)
+		}
+		for (int i = 0; i < 1; i++) {
 			Proxies.common.addShapelessRecipe(ForestryBlock.planks2.getItemStack(4, 12 + i), ForestryBlock.log8.getItemStack(1, i));
+		}
 
 		// Fabricator recipes
 		if (PluginManager.Module.FACTORY.isEnabled() && PluginManager.Module.APICULTURE.isEnabled()) {
@@ -420,8 +446,9 @@ public class PluginArboriculture extends ForestryPlugin {
 				ForestryBlock fireproofLog = BlockFireproofLog.getFireproofLog(blockLog);
 
 				for (int i = 0; i < 4; i++) {
-					if (forestryBlock == ForestryBlock.log8 && i > 0)
+					if (forestryBlock == ForestryBlock.log8 && i > 0) {
 						break;
+					}
 
 					ItemStack logStack = forestryBlock.getItemStack(1, i);
 					ItemStack fireproofLogStack = fireproofLog.getItemStack(1, i);
@@ -437,7 +464,7 @@ public class PluginArboriculture extends ForestryPlugin {
 			// Fireproof plank recipes
 			ForestryBlock plank = ForestryBlock.planks1;
 			for (int i = 0; i < 16; i++) {
-				ForestryBlock fireproofPlank = BlockFireproofPlanks.getFireproofPlanks((BlockPlanks)plank.block());
+				ForestryBlock fireproofPlank = BlockFireproofPlanks.getFireproofPlanks((BlockPlanks) plank.block());
 				ItemStack plankStack = plank.getItemStack(1, i);
 				ItemStack fireproofPlankStack = fireproofPlank.getItemStack(5, i);
 				RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), fireproofPlankStack, new Object[]{
@@ -449,7 +476,7 @@ public class PluginArboriculture extends ForestryPlugin {
 			}
 			plank = ForestryBlock.planks2;
 			for (int i = 0; i < 12; i++) {
-				ForestryBlock fireproofPlank = BlockFireproofPlanks.getFireproofPlanks((BlockPlanks)plank.block());
+				ForestryBlock fireproofPlank = BlockFireproofPlanks.getFireproofPlanks((BlockPlanks) plank.block());
 				ItemStack plankStack = plank.getItemStack(1, i);
 				ItemStack fireproofPlankStack = fireproofPlank.getItemStack(5, i);
 				RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), fireproofPlankStack, new Object[]{
@@ -462,47 +489,57 @@ public class PluginArboriculture extends ForestryPlugin {
 		}
 
 		// / Fireproof Plank recipes
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 4; i++) {
 			Proxies.common.addShapelessRecipe(ForestryBlock.fireproofPlanks1.getItemStack(4, i), ForestryBlock.fireproofLog1.getItemStack(1, i));
-		for (int i = 0; i < 4; i++)
+		}
+		for (int i = 0; i < 4; i++) {
 			Proxies.common.addShapelessRecipe(ForestryBlock.fireproofPlanks1.getItemStack(4, 4 + i), ForestryBlock.fireproofLog2.getItemStack(1, i));
-		for (int i = 0; i < 4; i++)
+		}
+		for (int i = 0; i < 4; i++) {
 			Proxies.common.addShapelessRecipe(ForestryBlock.fireproofPlanks1.getItemStack(4, 8 + i), ForestryBlock.fireproofLog3.getItemStack(1, i));
-		for (int i = 0; i < 4; i++)
+		}
+		for (int i = 0; i < 4; i++) {
 			Proxies.common.addShapelessRecipe(ForestryBlock.fireproofPlanks1.getItemStack(4, 12 + i), ForestryBlock.fireproofLog4.getItemStack(1, i));
-		for (int i = 0; i < 4; i++)
+		}
+		for (int i = 0; i < 4; i++) {
 			Proxies.common.addShapelessRecipe(ForestryBlock.fireproofPlanks2.getItemStack(4, i), ForestryBlock.fireproofLog5.getItemStack(1, i));
-		for (int i = 0; i < 4; i++)
+		}
+		for (int i = 0; i < 4; i++) {
 			Proxies.common.addShapelessRecipe(ForestryBlock.fireproofPlanks2.getItemStack(4, 4 + i), ForestryBlock.fireproofLog6.getItemStack(1, i));
-		for (int i = 0; i < 4; i++)
+		}
+		for (int i = 0; i < 4; i++) {
 			Proxies.common.addShapelessRecipe(ForestryBlock.fireproofPlanks2.getItemStack(4, 8 + i), ForestryBlock.fireproofLog7.getItemStack(1, i));
-		for (int i = 0; i < 1; i++)
+		}
+		for (int i = 0; i < 1; i++) {
 			Proxies.common.addShapelessRecipe(ForestryBlock.fireproofPlanks2.getItemStack(4, 12 + i), ForestryBlock.fireproofLog8.getItemStack(1, i));
+		}
 
 		// Slab recipes
 		for (WoodType woodType : WoodType.values()) {
 			int i = woodType.ordinal();
-			if (i < 8)
+			if (i < 8) {
 				Proxies.common.addPriorityRecipe(ForestryBlock.slabs1.getItemStack(6, i % 8), "###", '#', ForestryBlock.planks1.getItemStack(1, i % 16));
-			else if (i < 16)
+			} else if (i < 16) {
 				Proxies.common.addPriorityRecipe(ForestryBlock.slabs2.getItemStack(6, i % 8), "###", '#', ForestryBlock.planks1.getItemStack(1, i % 16));
-			else if (i < 24)
+			} else if (i < 24) {
 				Proxies.common.addPriorityRecipe(ForestryBlock.slabs3.getItemStack(6, i % 8), "###", '#', ForestryBlock.planks2.getItemStack(1, i % 16));
-			else if (i < 32)
+			} else if (i < 32) {
 				Proxies.common.addPriorityRecipe(ForestryBlock.slabs4.getItemStack(6, i % 8), "###", '#', ForestryBlock.planks2.getItemStack(1, i % 16));
-			else
+			} else {
 				throw new RuntimeException("Wood type has no slabs defined");
+			}
 		}
 
 		// Fence recipes
 		for (WoodType woodType : WoodType.values()) {
 			int i = woodType.ordinal();
-			if (i < 16)
+			if (i < 16) {
 				Proxies.common.addRecipe(ForestryBlock.fences1.getItemStack(4, i % 16), "###", "# #", '#', ForestryBlock.planks1.getItemStack(1, i % 16));
-			else if (i < 32)
+			} else if (i < 32) {
 				Proxies.common.addRecipe(ForestryBlock.fences2.getItemStack(4, i % 16), "###", "# #", '#', ForestryBlock.planks2.getItemStack(1, i % 16));
-			else
+			} else {
 				throw new RuntimeException("Wood type has no fences defined");
+			}
 		}
 
 		if (PluginManager.Module.FACTORY.isEnabled()) {
@@ -532,12 +569,13 @@ public class PluginArboriculture extends ForestryPlugin {
 		for (WoodType woodType : WoodType.values()) {
 			ForestryBlock planks;
 			int i = woodType.ordinal();
-			if (i < 16)
+			if (i < 16) {
 				planks = ForestryBlock.planks1;
-			else if (i < 32)
+			} else if (i < 32) {
 				planks = ForestryBlock.planks2;
-			else
+			} else {
 				throw new RuntimeException("Wood type has no planks defined");
+			}
 
 			NBTTagCompound compound = new NBTTagCompound();
 			woodType.saveToCompound(compound);
@@ -782,50 +820,50 @@ public class PluginArboriculture extends ForestryPlugin {
 		IFruitFamily nux = new FruitFamily("nuts", "Nux");
 
 		/* Logs */
-		final ItemStack oakLog =    new ItemStack(Blocks.log, 1, 0);
+		final ItemStack oakLog = new ItemStack(Blocks.log, 1, 0);
 		final ItemStack spruceLog = new ItemStack(Blocks.log, 1, 1);
-		final ItemStack birchLog =  new ItemStack(Blocks.log, 1, 2);
+		final ItemStack birchLog = new ItemStack(Blocks.log, 1, 2);
 		final ItemStack jungleLog = new ItemStack(Blocks.log, 1, 3);
 
-		final ItemStack acaciaLog =  new ItemStack(Blocks.log2, 1, 0);
+		final ItemStack acaciaLog = new ItemStack(Blocks.log2, 1, 0);
 		final ItemStack darkOakLog = new ItemStack(Blocks.log2, 1, 1);
 
-		final ItemStack larchLog =        ForestryBlock.log1.getItemStack(1, 0);
-		final ItemStack teakLog =         ForestryBlock.log1.getItemStack(1, 1);
+		final ItemStack larchLog = ForestryBlock.log1.getItemStack(1, 0);
+		final ItemStack teakLog = ForestryBlock.log1.getItemStack(1, 1);
 		final ItemStack desertAcaciaLog = ForestryBlock.log1.getItemStack(1, 2);
-		final ItemStack limeLog =         ForestryBlock.log1.getItemStack(1, 3);
+		final ItemStack limeLog = ForestryBlock.log1.getItemStack(1, 3);
 
 		final ItemStack chestnutLog = ForestryBlock.log2.getItemStack(1, 0);
-		final ItemStack wengeLog =    ForestryBlock.log2.getItemStack(1, 1);
-		final ItemStack baobabLog =   ForestryBlock.log2.getItemStack(1, 2);
-		final ItemStack sequioaLog =  ForestryBlock.log2.getItemStack(1, 3);
+		final ItemStack wengeLog = ForestryBlock.log2.getItemStack(1, 1);
+		final ItemStack baobabLog = ForestryBlock.log2.getItemStack(1, 2);
+		final ItemStack sequioaLog = ForestryBlock.log2.getItemStack(1, 3);
 
-		final ItemStack kapokLog =    ForestryBlock.log3.getItemStack(1, 0);
-		final ItemStack ebonyLog =    ForestryBlock.log3.getItemStack(1, 1);
+		final ItemStack kapokLog = ForestryBlock.log3.getItemStack(1, 0);
+		final ItemStack ebonyLog = ForestryBlock.log3.getItemStack(1, 1);
 		final ItemStack mahoganyLog = ForestryBlock.log3.getItemStack(1, 2);
-		final ItemStack balsaLog =    ForestryBlock.log3.getItemStack(1, 3);
+		final ItemStack balsaLog = ForestryBlock.log3.getItemStack(1, 3);
 
 		final ItemStack willowLog = ForestryBlock.log4.getItemStack(1, 0);
 		final ItemStack walnutLog = ForestryBlock.log4.getItemStack(1, 1);
 		final ItemStack sipiriLog = ForestryBlock.log4.getItemStack(1, 2);
 		final ItemStack cherryLog = ForestryBlock.log4.getItemStack(1, 3);
 
-		final ItemStack mahoeLog =  ForestryBlock.log5.getItemStack(1, 0);
+		final ItemStack mahoeLog = ForestryBlock.log5.getItemStack(1, 0);
 		final ItemStack poplarLog = ForestryBlock.log5.getItemStack(1, 1);
-		final ItemStack dateLog =   ForestryBlock.log5.getItemStack(1, 2);
+		final ItemStack dateLog = ForestryBlock.log5.getItemStack(1, 2);
 		final ItemStack papayaLog = ForestryBlock.log5.getItemStack(1, 3);
 
-		final ItemStack pineLog =  ForestryBlock.log6.getItemStack(1, 0);
-		final ItemStack plumLog =  ForestryBlock.log6.getItemStack(1, 1);
+		final ItemStack pineLog = ForestryBlock.log6.getItemStack(1, 0);
+		final ItemStack plumLog = ForestryBlock.log6.getItemStack(1, 1);
 		final ItemStack mapleLog = ForestryBlock.log6.getItemStack(1, 2);
 		final ItemStack lemonLog = ForestryBlock.log6.getItemStack(1, 3);
 
 		final ItemStack giganteumLog = ForestryBlock.log7.getItemStack(1, 0);
-		final ItemStack ipeLog 		 = ForestryBlock.log7.getItemStack(1, 1);
-		final ItemStack padaukLog    = ForestryBlock.log7.getItemStack(1, 2);
-		final ItemStack cocoboloLog  = ForestryBlock.log7.getItemStack(1, 3);
+		final ItemStack ipeLog = ForestryBlock.log7.getItemStack(1, 1);
+		final ItemStack padaukLog = ForestryBlock.log7.getItemStack(1, 2);
+		final ItemStack cocoboloLog = ForestryBlock.log7.getItemStack(1, 3);
 		
-		final ItemStack zebrawoodLog  = ForestryBlock.log8.getItemStack(1, 0);
+		final ItemStack zebrawoodLog = ForestryBlock.log8.getItemStack(1, 0);
 
 		// Deciduous
 		Allele.treeOak = new AlleleTreeSpecies("treeOak", false, "appleOak", quercus, "robur",
@@ -860,7 +898,7 @@ public class PluginArboriculture extends ForestryPlugin {
 				.addFruitFamily(pomes);
 		Allele.treeLemon = new AlleleTreeSpecies("treeLemon", true, "lemon", citrus, "limon",
 				0x88af54, 0xa3b850, WorldGenLemon.class, lemonLog).addFruitFamily(pomes).addFruitFamily(
-						prunes);
+				prunes);
 		Allele.treePlum = new AlleleTreeSpecies("treePlum", true, "plum", prunus, "domestica",
 				0x589246, 0xa3b850, WorldGenPlum.class, plumLog).addFruitFamily(pomes)
 				.addFruitFamily(prunes);
@@ -881,10 +919,10 @@ public class PluginArboriculture extends ForestryPlugin {
 
 		Allele.treeSequioa = new AlleleTreeSpecies("treeSequioa", false, "coastSequoia", sequoia,
 				"sempervirens", 0x418e71, 0x569896, WorldGenSequoia.class, sequioaLog).setLeafIndices(
-						"conifers").setGirth(3);
+				"conifers").setGirth(3);
 		Allele.treeGiganteum = new AlleleTreeSpecies("treeGigant", false, "giantSequoia",
 				sequoiadendron, "giganteum", 0x738434, WorldGenGiganteum.class, giganteumLog).setLeafIndices(
-						"conifers").setGirth(4);
+				"conifers").setGirth(4);
 
 		// Jungle
 		Allele.treeJungle = new AlleleTreeSpecies("treeJungle", false, "jungle", tropical,
@@ -893,8 +931,8 @@ public class PluginArboriculture extends ForestryPlugin {
 		Allele.treeTeak = new AlleleTreeSpecies("treeTeak", true, "teak", tectona, "grandis",
 				0xfeff8f, 0xffd98f, WorldGenTeak.class, teakLog)
 				.addFruitFamily(jungle).setLeafIndices("jungle");
-		Allele.treeIpe = new AlleleTreeSpecies("treeIpe", true, "ipe", tabebuia, "serratifolia", 
-				0xfdd207, 0xad8f04,	WorldGenIpe.class, ipeLog)
+		Allele.treeIpe = new AlleleTreeSpecies("treeIpe", true, "ipe", tabebuia, "serratifolia",
+				0xfdd207, 0xad8f04, WorldGenIpe.class, ipeLog)
 				.addFruitFamily(jungle).setLeafIndices("jungle").setGirth(2);
 		Allele.treeKapok = new AlleleTreeSpecies("treeKapok", true, "kapok", ceiba, "pentandra",
 				0x89987b, 0x89aa9e, WorldGenKapok.class, kapokLog).addFruitFamily(jungle)
@@ -1149,17 +1187,17 @@ public class PluginArboriculture extends ForestryPlugin {
 
 		TreeTemplates.willowA = new TreeMutation(Allele.treeOak, Allele.treeBirch,
 				TreeTemplates.getWillowTemplate(), 10).setTemperatureRainfall(0.7f, 1.5f, 0.9f,
-						2.0f);
+				2.0f);
 		TreeTemplates.willowB = new TreeMutation(Allele.treeOak, Allele.treeLime,
 				TreeTemplates.getWillowTemplate(), 10).setTemperatureRainfall(0.7f, 1.5f, 0.9f,
-						2.0f);
+				2.0f);
 		TreeTemplates.willowC = new TreeMutation(Allele.treeLime, Allele.treeBirch,
 				TreeTemplates.getWillowTemplate(), 10).setTemperatureRainfall(0.7f, 1.5f, 0.9f,
-						2.0f);
+				2.0f);
 
 		TreeTemplates.sipiriA = new TreeMutation(Allele.treeKapok, Allele.treeMahogany,
 				TreeTemplates.getSipiriTemplate(), 10).setTemperatureRainfall(0.9f, 1.9f, 0.9f,
-						2.0f);
+				2.0f);
 
 		TreeTemplates.poplarA = new TreeMutation(Allele.treeBirch, Allele.treeWillow,
 				TreeTemplates.getPoplarTemplate(), 5);
@@ -1180,8 +1218,15 @@ public class PluginArboriculture extends ForestryPlugin {
 		return new IFuelHandler() {
 			@Override
 			public int getBurnTime(ItemStack fuel) {
-				if (ForestryItem.sapling.isItemEqual(fuel))
+				if (ForestryItem.sapling.isItemEqual(fuel)) {
 					return 100;
+				}
+
+				for (ForestryBlock slab : slabs) {
+					if (slab.isItemEqual(fuel)) {
+						return 150;
+					}
+				}
 
 				return 0;
 			}
@@ -1198,10 +1243,11 @@ public class PluginArboriculture extends ForestryPlugin {
 		if (message.key.equals("add-fence-block") && message.isStringMessage()) {
 			Block block = GameData.getBlockRegistry().getRaw(message.getStringValue());
 
-			if (block == null || block == Blocks.air)
+			if (block == null || block == Blocks.air) {
 				Proxies.log.warning("invalid add-fence-block IMC: can't resolve block name %s.", message.getStringValue());
-			else
+			} else {
 				validFences.add(block);
+			}
 		}
 		return super.processIMCMessage(message);
 	}
@@ -1228,12 +1274,12 @@ public class PluginArboriculture extends ForestryPlugin {
 		ITree tree = new Tree(PluginArboriculture.treeInterface.templateAsGenome(template));
 		ItemStack treeItem;
 		switch (type) {
-		default:
-		case POLLEN:
-			treeItem = ForestryItem.pollenFertile.getItemStack();
-			break;
-		case SAPLING:
-			treeItem = ForestryItem.sapling.getItemStack();
+			default:
+			case POLLEN:
+				treeItem = ForestryItem.pollenFertile.getItemStack();
+				break;
+			case SAPLING:
+				treeItem = ForestryItem.sapling.getItemStack();
 		}
 		NBTTagCompound nbtTagCompound = new NBTTagCompound();
 		tree.writeToNBT(nbtTagCompound);

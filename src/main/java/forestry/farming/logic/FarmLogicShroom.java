@@ -4,28 +4,31 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.farming.logic;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.farming.Farmables;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
 import java.util.ArrayList;
 import java.util.Collection;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.farming.Farmables;
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmable;
 
 public class FarmLogicShroom extends FarmLogicArboreal {
 
 	public FarmLogicShroom(IFarmHousing housing) {
 		super(housing,
-				new ItemStack[] { new ItemStack(Blocks.mycelium) },
+				new ItemStack[]{new ItemStack(Blocks.mycelium)},
 				new ItemStack(Blocks.mycelium),
 				Farmables.farmables.get("farmShroom").toArray(new IFarmable[0]));
 		yOffset = -1;
@@ -33,10 +36,11 @@ public class FarmLogicShroom extends FarmLogicArboreal {
 
 	@Override
 	public String getName() {
-		if (isManual)
+		if (isManual) {
 			return "Manual Shroom Farm";
-		else
+		} else {
 			return "Managed Shroom Farm";
+		}
 	}
 
 	@Override

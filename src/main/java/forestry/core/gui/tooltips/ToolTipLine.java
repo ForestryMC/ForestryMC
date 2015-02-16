@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -13,7 +13,6 @@ package forestry.core.gui.tooltips;
 import net.minecraft.util.EnumChatFormatting;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ToolTipLine {
@@ -41,8 +40,9 @@ public class ToolTipLine {
 	}
 
 	public String toString() {
-		if (color == null)
+		if (color == null) {
 			return text;
+		}
 		return color + text;
 	}
 

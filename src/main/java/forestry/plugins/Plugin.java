@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.plugins;
@@ -10,7 +10,7 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * Optional annotation to provide additional information on IPlugins. This information will be available via the "/forestry plugin info $pluginID" command ingame.
- * 
+ *
  * @author SirSengir
  */
 @Retention(RetentionPolicy.RUNTIME)

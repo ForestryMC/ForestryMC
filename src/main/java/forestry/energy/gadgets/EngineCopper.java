@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -89,11 +89,13 @@ public class EngineCopper extends Engine implements ISidedInventory {
 
 	private int getFuelSlot() {
 		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(SLOT_FUEL) == null)
+		if (inventory.getStackInSlot(SLOT_FUEL) == null) {
 			return -1;
+		}
 
-		if (determineFuelValue(inventory.getStackInSlot(SLOT_FUEL)) > 0)
+		if (determineFuelValue(inventory.getStackInSlot(SLOT_FUEL)) > 0) {
 			return SLOT_FUEL;
+		}
 
 		return -1;
 	}
@@ -101,13 +103,16 @@ public class EngineCopper extends Engine implements ISidedInventory {
 	private int getFreeWasteSlot() {
 		IInventoryAdapter inventory = getInternalInventory();
 		for (int i = SLOT_WASTE_1; i <= SLOT_WASTE_COUNT; i++) {
-			if (inventory.getStackInSlot(i) == null)
+			if (inventory.getStackInSlot(i) == null) {
 				return i;
-			if (!ForestryItem.ash.isItemEqual(inventory.getStackInSlot(i)))
+			}
+			if (!ForestryItem.ash.isItemEqual(inventory.getStackInSlot(i))) {
 				continue;
+			}
 
-			if (inventory.getStackInSlot(i).stackSize < 64)
+			if (inventory.getStackInSlot(i).stackSize < 64) {
 				return i;
+			}
 		}
 
 		return -1;
@@ -117,8 +122,9 @@ public class EngineCopper extends Engine implements ISidedInventory {
 	public void updateServerSide() {
 		super.updateServerSide();
 
-		if (worldObj.getTotalWorldTime() % 40 != 0)
+		if (!updateOnInterval(40)) {
 			return;
+		}
 
 		dumpStash();
 
@@ -131,10 +137,11 @@ public class EngineCopper extends Engine implements ISidedInventory {
 		}
 
 		int fuelSlot = getFuelSlot();
-		if (fuelSlot >= 0 && determineBurnDuration(getInternalInventory().getStackInSlot(fuelSlot)) > 0)
+		if (fuelSlot >= 0 && determineBurnDuration(getInternalInventory().getStackInSlot(fuelSlot)) > 0) {
 			setErrorState(EnumErrorCode.OK);
-		else
+		} else {
 			setErrorState(EnumErrorCode.NOFUEL);
+		}
 	}
 
 	@Override
@@ -167,17 +174,20 @@ public class EngineCopper extends Engine implements ISidedInventory {
 
 	@Override
 	public int dissipateHeat() {
-		if (heat <= 0)
+		if (heat <= 0) {
 			return 0;
+		}
 
 		int loss = 0;
 
-		if (!isBurning())
+		if (!isBurning()) {
 			loss += 1;
+		}
 
 		TemperatureState tempState = getTemperatureState();
-		if (tempState == TemperatureState.OVERHEATING || tempState == TemperatureState.OPERATING_TEMPERATURE)
+		if (tempState == TemperatureState.OVERHEATING || tempState == TemperatureState.OPERATING_TEMPERATURE) {
 			loss += 1;
+		}
 
 		heat -= loss;
 		return loss;
@@ -190,8 +200,9 @@ public class EngineCopper extends Engine implements ISidedInventory {
 
 		if (isBurning()) {
 			heatToAdd++;
-			if (((double) energyManager.getTotalEnergyStored() / (double) maxEnergy) > 0.5)
+			if (((double) energyManager.getTotalEnergyStored() / (double) maxEnergy) > 0.5) {
 				heatToAdd++;
+			}
 		}
 
 		addHeat(heatToAdd);
@@ -201,17 +212,19 @@ public class EngineCopper extends Engine implements ISidedInventory {
 	private void addAsh(int amount) {
 
 		ashProduction += amount;
-		if (ashProduction < ashForItem)
+		if (ashProduction < ashForItem) {
 			return;
+		}
 
 		// If we have reached the necessary amount, we need to add ash
 		int wasteslot = getFreeWasteSlot();
 		if (wasteslot >= 0) {
 			IInventoryAdapter inventory = getInternalInventory();
-			if (inventory.getStackInSlot(wasteslot) == null)
+			if (inventory.getStackInSlot(wasteslot) == null) {
 				inventory.setInventorySlotContents(wasteslot, ForestryItem.ash.getItemStack());
-			else
+			} else {
 				inventory.getStackInSlot(wasteslot).stackSize++;
+			}
 		}
 		// Reset
 		ashProduction = 0;
@@ -223,38 +236,43 @@ public class EngineCopper extends Engine implements ISidedInventory {
 	 * Returns the fuel value (power per cycle) an item of the passed ItemStack provides
 	 */
 	private int determineFuelValue(ItemStack fuel) {
-		if (FuelManager.copperEngineFuel.containsKey(fuel))
+		if (FuelManager.copperEngineFuel.containsKey(fuel)) {
 			return FuelManager.copperEngineFuel.get(fuel).powerPerCycle;
-		else
+		} else {
 			return 0;
+		}
 	}
 
 	/**
 	 * Returns the fuel value (power per cycle) an item of the passed ItemStack provides
 	 */
 	private int determineBurnDuration(ItemStack fuel) {
-		if (FuelManager.copperEngineFuel.containsKey(fuel))
+		if (FuelManager.copperEngineFuel.containsKey(fuel)) {
 			return FuelManager.copperEngineFuel.get(fuel).burnDuration;
-		else
+		} else {
 			return 0;
+		}
 	}
 
 	/* AUTO-EJECTING */
 	private IInventory getWasteInventory() {
 		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory == null)
+		if (inventory == null) {
 			return null;
+		}
 
 		return new InventoryMapper(inventory, SLOT_WASTE_1, SLOT_WASTE_COUNT);
 	}
 
 	private void dumpStash() {
 		IInventory wasteInventory = getWasteInventory();
-		if (wasteInventory == null)
+		if (wasteInventory == null) {
 			return;
+		}
 
-		if (!InvTools.moveOneItemToPipe(wasteInventory, tileCache))
+		if (!InvTools.moveOneItemToPipe(wasteInventory, tileCache)) {
 			InvTools.moveItemStack(wasteInventory, inventoryCache.getAdjacentInventories());
+		}
 	}
 
 	// / STATE INFORMATION
@@ -265,8 +283,9 @@ public class EngineCopper extends Engine implements ISidedInventory {
 
 	@Override
 	public int getBurnTimeRemainingScaled(int i) {
-		if (totalBurnTime == 0)
+		if (totalBurnTime == 0) {
 			return 0;
+		}
 
 		return (burnTime * i) / totalBurnTime;
 	}
@@ -274,8 +293,9 @@ public class EngineCopper extends Engine implements ISidedInventory {
 	@Override
 	public boolean hasFuelMin(float percentage) {
 		int fuelSlot = this.getFuelSlot();
-		if (fuelSlot < 0)
+		if (fuelSlot < 0) {
 			return false;
+		}
 
 		IInventoryAdapter inventory = getInternalInventory();
 		return ((float) inventory.getStackInSlot(fuelSlot).stackSize / (float) inventory.getStackInSlot(fuelSlot).getMaxStackSize()) > percentage;
@@ -288,22 +308,25 @@ public class EngineCopper extends Engine implements ISidedInventory {
 
 		String fuelItemName = nbttagcompound.getString("EngineFuelItem");
 
-		if (!fuelItemName.isEmpty())
+		if (!fuelItemName.isEmpty()) {
 			fuelItem = GameData.getItemRegistry().getRaw(fuelItemName);
+		}
 
 		fuelItemMeta = nbttagcompound.getInteger("EngineFuelMeta");
 		burnTime = nbttagcompound.getInteger("EngineBurnTime");
 		totalBurnTime = nbttagcompound.getInteger("EngineTotalTime");
-		if (nbttagcompound.hasKey("AshProduction"))
+		if (nbttagcompound.hasKey("AshProduction")) {
 			ashProduction = nbttagcompound.getInteger("AshProduction");
+		}
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 
-		if (fuelItem != null)
+		if (fuelItem != null) {
 			nbttagcompound.setString("EngineFuelItem", GameData.getItemRegistry().getNameForObject(fuelItem));
+		}
 
 		nbttagcompound.setInteger("EngineFuelMeta", fuelItemMeta);
 		nbttagcompound.setInteger("EngineBurnTime", burnTime);
@@ -316,21 +339,21 @@ public class EngineCopper extends Engine implements ISidedInventory {
 	public void getGUINetworkData(int i, int j) {
 
 		switch (i) {
-		case 0:
-			burnTime = j;
-			break;
-		case 1:
-			totalBurnTime = j;
-			break;
-		case 2:
-			currentOutput = j;
-			break;
-		case 3:
-			energyManager.fromPacketInt(j);
-			break;
-		case 4:
-			heat = j;
-			break;
+			case 0:
+				burnTime = j;
+				break;
+			case 1:
+				totalBurnTime = j;
+				break;
+			case 2:
+				currentOutput = j;
+				break;
+			case 3:
+				energyManager.fromPacketInt(j);
+				break;
+			case 4:
+				heat = j;
+				break;
 		}
 	}
 

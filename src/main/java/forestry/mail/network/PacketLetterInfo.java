@@ -4,24 +4,27 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.mail.network;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.UUID;
+
+import net.minecraft.item.ItemStack;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.PostManager;
 import forestry.api.mail.TradeStationInfo;
 import forestry.core.network.ForestryPacket;
 import forestry.mail.EnumStationState;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.UUID;
-import net.minecraft.item.ItemStack;
 
 public class PacketLetterInfo extends ForestryPacket {
 
@@ -35,10 +38,11 @@ public class PacketLetterInfo extends ForestryPacket {
 	public PacketLetterInfo(int id, EnumAddressee type, TradeStationInfo info, IMailAddress address) {
 		super(id);
 		this.type = type;
-		if (type == EnumAddressee.TRADER)
+		if (type == EnumAddressee.TRADER) {
 			this.tradeInfo = info;
-		else if (type == EnumAddressee.PLAYER)
+		} else if (type == EnumAddressee.PLAYER) {
 			this.address = address;
+		}
 	}
 
 	@Override
@@ -83,8 +87,9 @@ public class PacketLetterInfo extends ForestryPacket {
 
 			writeItemStack(tradeInfo.tradegood, data);
 			data.writeShort(tradeInfo.required.length);
-			for (int i = 0; i < tradeInfo.required.length; i++)
+			for (int i = 0; i < tradeInfo.required.length; i++) {
 				writeItemStack(tradeInfo.required[i], data);
+			}
 			data.writeShort(tradeInfo.state.ordinal());
 		}
 	}
@@ -92,20 +97,23 @@ public class PacketLetterInfo extends ForestryPacket {
 	@Override
 	public void readData(DataInputStream data) throws IOException {
 
-		if (data.readShort() < 0)
+		if (data.readShort() < 0) {
 			return;
+		}
 
 		type = EnumAddressee.fromString(data.readUTF());
 
 		if (type == EnumAddressee.PLAYER) {
-			if (data.readShort() < 0)
+			if (data.readShort() < 0) {
 				return;
+			}
 			GameProfile player = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readUTF());
 			this.address = PostManager.postRegistry.getMailAddress(player);
 
 		} else if (type == EnumAddressee.TRADER) {
-			if (data.readShort() < 0)
+			if (data.readShort() < 0) {
 				return;
+			}
 			IMailAddress address = PostManager.postRegistry.getMailAddress(data.readUTF());
 			GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readUTF());
 			ItemStack tradegood;
@@ -113,8 +121,9 @@ public class PacketLetterInfo extends ForestryPacket {
 
 			tradegood = readItemStack(data);
 			required = new ItemStack[data.readShort()];
-			for (int i = 0; i < required.length; i++)
+			for (int i = 0; i < required.length; i++) {
 				required[i] = readItemStack(data);
+			}
 
 			this.tradeInfo = new TradeStationInfo(address, owner, tradegood, required, EnumStationState.values()[data.readShort()]);
 		}

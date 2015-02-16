@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -15,12 +15,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Stack;
 
+import org.apache.commons.lang3.StringUtils;
+
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.opengl.GL11;
 
 import forestry.api.apiculture.EnumBeeChromosome;
@@ -70,24 +71,27 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 	}
 
 	protected final int getColorCoding(boolean dominant) {
-		if (dominant)
+		if (dominant) {
 			return fontColor.get("gui.beealyzer.dominant");
-		else
+		} else {
 			return fontColor.get("gui.beealyzer.recessive");
+		}
 	}
 
 	protected final void drawLine(String text, int x, IIndividual individual, IChromosomeType chromosome, boolean inactive) {
-		if (!inactive)
+		if (!inactive) {
 			drawLine(text, x, getColorCoding(individual.getGenome().getActiveAllele(chromosome).isDominant()));
-		else
+		} else {
 			drawLine(text, x, getColorCoding(individual.getGenome().getInactiveAllele(chromosome).isDominant()));
+		}
 	}
 
 	protected final void drawSplitLine(String text, int x, int maxWidth, IIndividual individual, IChromosomeType chromosome, boolean inactive) {
-		if (!inactive)
+		if (!inactive) {
 			drawSplitLine(text, x, maxWidth, getColorCoding(individual.getGenome().getActiveAllele(chromosome).isDominant()));
-		else
+		} else {
 			drawSplitLine(text, x, maxWidth, getColorCoding(individual.getGenome().getInactiveAllele(chromosome).isDominant()));
+		}
 	}
 
 	protected final void drawRow(String text0, String text1, String text2, IIndividual individual, IChromosomeType chromosome) {
@@ -129,12 +133,12 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 
 	}
 
-	protected final void drawSpeciesRow(String text0, IIndividual individual, IChromosomeType chromosome){
+	protected final void drawSpeciesRow(String text0, IIndividual individual, IChromosomeType chromosome) {
 		drawSpeciesRow(text0, individual, chromosome, null, null);
 	}
 
-	protected final String checkCustomName(String key){
-		if(StringUtil.canTranslate(key)){
+	protected final String checkCustomName(String key) {
+		if (StringUtil.canTranslate(key)) {
 			return StringUtil.localize(key);
 		} else {
 			return null;
@@ -196,8 +200,9 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 		IClassification classification = individual.getGenome().getPrimary().getBranch();
 		while (classification != null) {
 
-			if (classification.getScientific() != null && !classification.getScientific().isEmpty())
+			if (classification.getScientific() != null && !classification.getScientific().isEmpty()) {
 				hierarchy.push(classification);
+			}
 			classification = classification.getParent();
 		}
 
@@ -208,8 +213,9 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 		while (!hierarchy.isEmpty()) {
 
 			group = hierarchy.pop();
-			if (overcrowded && group.getLevel().isDroppable())
+			if (overcrowded && group.getLevel().isDroppable()) {
 				continue;
+			}
 
 			drawLine(group.getScientific(), x, group.getLevel().getColour());
 			drawLine(group.getLevel().name(), 155, group.getLevel().getColour());
@@ -219,8 +225,9 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 
 		// Add the species name
 		String binomial = individual.getGenome().getPrimary().getBinomial();
-		if (group != null && group.getLevel() == EnumClassLevel.GENUS)
+		if (group != null && group.getLevel() == EnumClassLevel.GENUS) {
 			binomial = group.getScientific().substring(0, 1) + ". " + binomial.toLowerCase(Locale.ENGLISH);
+		}
 
 		drawLine(binomial, x, 0xebae85);
 		drawLine("SPECIES", 155, 0xebae85);
@@ -236,14 +243,15 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 
 		newLine();
 		String description = individual.getGenome().getPrimary().getDescription();
-		if (StringUtils.isBlank(description) || description.startsWith("for.description."))
+		if (StringUtils.isBlank(description) || description.startsWith("for.description.")) {
 			drawSplitLine(StringUtil.localize("gui.alyzer.nodescription"), 12, 208, 0x666666);
-		else {
+		} else {
 			String tokens[] = description.split("\\|");
 			drawSplitLine(tokens[0], 12, 208, 0x666666);
-			if (tokens.length > 1)
+			if (tokens.length > 1) {
 				fontRendererObj.drawStringWithShadow("- " + tokens[1], adjustToFactor(guiLeft + 208) - fontRendererObj.getStringWidth("- " + tokens[1]),
 						adjustToFactor(guiTop + 145 - 14), 0x99cc32);
+			}
 		}
 
 		endPage();
@@ -263,23 +271,26 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 
 		HashMap<IMutation, IAllele> combinations = new HashMap<IMutation, IAllele>();
 
-		for (IMutation mutation : speciesRoot.getCombinations(individual.getGenome().getPrimary()))
+		for (IMutation mutation : speciesRoot.getCombinations(individual.getGenome().getPrimary())) {
 			combinations.put(mutation, individual.getGenome().getPrimary());
+		}
 
-		for (IMutation mutation : speciesRoot.getCombinations(individual.getGenome().getSecondary()))
+		for (IMutation mutation : speciesRoot.getCombinations(individual.getGenome().getSecondary())) {
 			combinations.put(mutation, individual.getGenome().getSecondary());
+		}
 
 		int columnWidth = 50;
 		int x = 0;
 
 		for (Map.Entry<IMutation, IAllele> mutation : combinations.entrySet()) {
 
-			if (breedingTracker.isDiscovered(mutation.getKey()))
+			if (breedingTracker.isDiscovered(mutation.getKey())) {
 				drawMutationInfo(mutation.getKey(), mutation.getValue(), COLUMN_0 + x);
-			else {
+			} else {
 				// Do not display secret undiscovered mutations.
-				if (mutation.getKey().isSecret())
+				if (mutation.getKey().isSecret()) {
 					continue;
+				}
 
 				drawUnknownMutation(mutation.getKey(), mutation.getValue(), COLUMN_0 + x);
 			}
@@ -362,34 +373,34 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		switch (tolerance) {
-		case BOTH_1:
-		case BOTH_2:
-		case BOTH_3:
-		case BOTH_4:
-		case BOTH_5:
-			drawBothSymbol(x, getLineY() - 1);
-			drawLine(text, x + (int) (20 * factor), textColor);
-			break;
-		case DOWN_1:
-		case DOWN_2:
-		case DOWN_3:
-		case DOWN_4:
-		case DOWN_5:
-			drawDownSymbol(x, getLineY() - 1);
-			drawLine(text, x + (int) (20 * factor), textColor);
-			break;
-		case UP_1:
-		case UP_2:
-		case UP_3:
-		case UP_4:
-		case UP_5:
-			drawUpSymbol(x, getLineY() - 1);
-			drawLine(text, x + (int) (20 * factor), textColor);
-			break;
-		default:
-			drawNoneSymbol(x, getLineY() - 1);
-			drawLine("(0)", x + (int) (20 * factor), textColor);
-			break;
+			case BOTH_1:
+			case BOTH_2:
+			case BOTH_3:
+			case BOTH_4:
+			case BOTH_5:
+				drawBothSymbol(x, getLineY() - 1);
+				drawLine(text, x + (int) (20 * factor), textColor);
+				break;
+			case DOWN_1:
+			case DOWN_2:
+			case DOWN_3:
+			case DOWN_4:
+			case DOWN_5:
+				drawDownSymbol(x, getLineY() - 1);
+				drawLine(text, x + (int) (20 * factor), textColor);
+				break;
+			case UP_1:
+			case UP_2:
+			case UP_3:
+			case UP_4:
+			case UP_5:
+				drawUpSymbol(x, getLineY() - 1);
+				drawLine(text, x + (int) (20 * factor), textColor);
+				break;
+			default:
+				drawNoneSymbol(x, getLineY() - 1);
+				drawLine("(0)", x + (int) (20 * factor), textColor);
+				break;
 		}
 	}
 

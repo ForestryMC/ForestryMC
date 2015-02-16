@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -30,7 +30,6 @@ import forestry.plugins.PluginManager.Stage;
  * Make sure to only reference it in postInit or later.
  *
  * @author SirSengir
- *
  */
 public enum ForestryItem {
 
@@ -87,7 +86,7 @@ public enum ForestryItem {
 	kitShovel,
 	// Do not touch - contagious!
 	tent,
-	biomeFinder,
+	habitatLocator,
 	// Moistener
 	mouldyWheat,
 	decayingWheat,
@@ -199,8 +198,9 @@ public enum ForestryItem {
 	private Item item;
 
 	public void registerItem(Item item, String name) {
-		if (!EnumSet.of(Stage.PRE_INIT, Stage.INIT).contains(PluginManager.getStage()))
+		if (!EnumSet.of(Stage.PRE_INIT, Stage.INIT).contains(PluginManager.getStage())) {
 			throw new RuntimeException("Tried to register Item outside of Pre-Init or Init");
+		}
 		this.item = item;
 		item.setUnlocalizedName("for." + name);
 		Proxies.common.registerItem(item);
@@ -231,8 +231,9 @@ public enum ForestryItem {
 	}
 
 	public ItemStack getItemStack(int qty, int meta) {
-		if (item == null)
+		if (item == null) {
 			return null;
+		}
 		return new ItemStack(item, qty, meta);
 	}
 }

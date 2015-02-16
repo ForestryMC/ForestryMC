@@ -4,22 +4,15 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.core.Tabs;
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryBlock;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StackUtils;
-import forestry.core.utils.StringUtil;
 import java.util.List;
 import java.util.Random;
+
 import net.minecraft.block.BlockTorch;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -29,6 +22,16 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.core.Tabs;
+import forestry.core.config.Defaults;
+import forestry.core.config.ForestryBlock;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StackUtils;
+import forestry.core.utils.StringUtil;
 
 public class BlockStump extends BlockTorch {
 
@@ -45,7 +48,7 @@ public class BlockStump extends BlockTorch {
 		this.blockIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanBlockName(this));
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
 		itemList.add(new ItemStack(this, 1, 0));
@@ -57,8 +60,8 @@ public class BlockStump extends BlockTorch {
 		ItemStack held = player.getCurrentEquippedItem();
 		if (held != null &&
 				(held.getItem() == Items.flint_and_steel ||
-				held.getItem() == Items.flint ||
-				StackUtils.equals(Blocks.torch, held))) {
+						held.getItem() == Items.flint ||
+						StackUtils.equals(Blocks.torch, held))) {
 			world.setBlock(x, y, z, ForestryBlock.candle.block(), world.getBlockMetadata(x, y, z) | 0x08, Defaults.FLAG_BLOCK_SYNCH);
 			TileCandle tc = new TileCandle();
 			tc.setColour(0); // default to white

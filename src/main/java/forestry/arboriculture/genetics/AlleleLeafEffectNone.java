@@ -4,23 +4,24 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.genetics;
+
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 
 import forestry.api.arboriculture.IAlleleLeafEffect;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.Allele;
 import forestry.core.vect.Vect;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
 
 public class AlleleLeafEffectNone extends Allele implements IAlleleLeafEffect {
 
-	private static final int[] DEFAULT_EFFECT_AREA = new int[] { 12, 12, 12 };
+	private static final int[] DEFAULT_EFFECT_AREA = new int[]{12, 12, 12};
 
 	public AlleleLeafEffectNone(String uid) {
 		super(uid, true);

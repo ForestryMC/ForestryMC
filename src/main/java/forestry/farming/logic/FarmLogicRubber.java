@@ -4,32 +4,37 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.farming.logic;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmHousing;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.StackUtils;
-import forestry.core.vect.Vect;
-import forestry.plugins.PluginIC2;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmHousing;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.StackUtils;
+import forestry.core.vect.Vect;
+import forestry.core.vect.VectUtil;
+import forestry.plugins.PluginIC2;
 
 public class FarmLogicRubber extends FarmLogic {
 
@@ -46,10 +51,11 @@ public class FarmLogicRubber extends FarmLogic {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon() {
-		if (!inActive)
+		if (!inActive) {
 			return PluginIC2.resin.getIconIndex();
-		else
+		} else {
 			return Items.gunpowder.getIconFromDamage(0);
+		}
 	}
 
 	@Override
@@ -91,16 +97,19 @@ public class FarmLogicRubber extends FarmLogic {
 
 	@Override
 	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
-		if (inActive)
+		if (inActive) {
 			return null;
+		}
 
 		Vect start = new Vect(x, y, z);
-		if (!lastExtents.containsKey(start))
+		if (!lastExtents.containsKey(start)) {
 			lastExtents.put(start, 0);
+		}
 
 		int lastExtent = lastExtents.get(start);
-		if (lastExtent > extent)
+		if (lastExtent > extent) {
 			lastExtent = 0;
+		}
 
 		Vect position = translateWithOffset(x, y + 1, z, direction, lastExtent);
 		Collection<ICrop> crops = getHarvestBlocks(position);
@@ -115,20 +124,25 @@ public class FarmLogicRubber extends FarmLogic {
 		Set<Vect> seen = new HashSet<Vect>();
 		Stack<ICrop> crops = new Stack<ICrop>();
 
-		// Determine what type we want to harvest.
-		Block block = getBlock(position);
-		if (!StackUtils.equals(block, PluginIC2.rubberwood))
-			return crops;
+		World world = getWorld();
 
-		int meta = this.getBlockMeta(position);
-		if (meta >= 2 && meta <= 5)
+		// Determine what type we want to harvest.
+		Block block = VectUtil.getBlock(world, position);
+		if (!StackUtils.equals(block, PluginIC2.rubberwood)) {
+			return crops;
+		}
+
+		int meta = VectUtil.getBlockMeta(world, position);
+		if (meta >= 2 && meta <= 5) {
 			crops.push(new CropRubber(getWorld(), block, meta, position));
+		}
 
 		ArrayList<Vect> candidates = processHarvestBlock(crops, seen, position);
 		ArrayList<Vect> temp = new ArrayList<Vect>();
 		while (!candidates.isEmpty() && crops.size() < 100) {
-			for (Vect candidate : candidates)
+			for (Vect candidate : candidates) {
 				temp.addAll(processHarvestBlock(crops, seen, candidate));
+			}
 			candidates.clear();
 			candidates.addAll(temp);
 			temp.clear();
@@ -145,18 +159,21 @@ public class FarmLogicRubber extends FarmLogic {
 		// Get additional candidates to return
 		for (int j = 0; j < 2; j++) {
 			Vect candidate = new Vect(position.x, position.y + j, position.z);
-			if (candidate.equals(position))
+			if (candidate.equals(position)) {
 				continue;
+			}
 
 			// See whether the given position has already been processed
-			if (seen.contains(candidate))
+			if (seen.contains(candidate)) {
 				continue;
+			}
 
-			Block block = getBlock(candidate);
+			Block block = VectUtil.getBlock(world, candidate);
 			if (StackUtils.equals(block, PluginIC2.rubberwood)) {
-				int meta = this.getBlockMeta(candidate);
-				if (meta >= 2 && meta <= 5)
+				int meta = VectUtil.getBlockMeta(world, candidate);
+				if (meta >= 2 && meta <= 5) {
 					crops.push(new CropRubber(world, block, meta, candidate));
+				}
 				candidates.add(candidate);
 				seen.add(candidate);
 			}

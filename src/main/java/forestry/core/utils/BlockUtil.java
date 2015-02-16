@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -30,7 +30,7 @@ import cofh.api.energy.IEnergyReceiver;
 
 public class BlockUtil {
 
-	public static ArrayList<ItemStack> getBlockItemStack(World world, Vect posBlock) {
+	public static ArrayList<ItemStack> getBlockDrops(World world, Vect posBlock) {
 		Block block = world.getBlock(posBlock.x, posBlock.y, posBlock.z);
 		int meta = world.getBlockMetadata(posBlock.x, posBlock.y, posBlock.z);
 
@@ -39,9 +39,10 @@ public class BlockUtil {
 	}
 
 	public static boolean isEnergyReceiver(ForgeDirection side, TileEntity tile) {
-		if (!(tile instanceof IEnergyReceiver))
+		if (!(tile instanceof IEnergyReceiver)) {
 			return false;
-
+		}
+		
 		IEnergyReceiver receptor = (IEnergyReceiver) tile;
 		return receptor.canConnectEnergy(side);
 	}
@@ -49,8 +50,9 @@ public class BlockUtil {
 	public static boolean tryPlantPot(World world, int x, int y, int z, Block block) {
 
 		int direction = getDirectionalMetadata(world, x, y, z);
-		if (direction < 0)
+		if (direction < 0) {
 			return false;
+		}
 
 		world.setBlock(x, y, z, block, direction, Defaults.FLAG_BLOCK_SYNCH);
 		return true;
@@ -58,8 +60,9 @@ public class BlockUtil {
 
 	public static int getDirectionalMetadata(World world, int x, int y, int z) {
 		for (int i = 0; i < 4; i++) {
-			if (!isValidPot(world, x, y, z, i))
+			if (!isValidPot(world, x, y, z, i)) {
 				continue;
+			}
 			return i;
 		}
 		return -1;
@@ -69,10 +72,11 @@ public class BlockUtil {
 		x += Direction.offsetX[notchDirection];
 		z += Direction.offsetZ[notchDirection];
 		Block block = world.getBlock(x, y, z);
-		if (block == Blocks.log)
+		if (block == Blocks.log) {
 			return BlockLog.func_150165_c(world.getBlockMetadata(x, y, z)) == 3;
-		else
+		} else {
 			return block.isWood(world, x, y, z);
+		}
 	}
 
 	public static int getMaturityPod(int metadata) {

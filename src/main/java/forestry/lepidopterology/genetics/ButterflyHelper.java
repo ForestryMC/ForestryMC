@@ -4,13 +4,25 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map.Entry;
+
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosomeType;
@@ -29,15 +41,6 @@ import forestry.core.genetics.SpeciesRoot;
 import forestry.core.utils.Utils;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.plugins.PluginLepidopterology;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map.Entry;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 
 public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 
@@ -59,9 +62,11 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 		if (butterflySpeciesCount < 0) {
 			butterflySpeciesCount = 0;
 			for (Entry<String, IAllele> entry : AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet()) {
-				if (entry.getValue() instanceof IAlleleButterflySpecies)
-					if (((IAlleleButterflySpecies) entry.getValue()).isCounted())
+				if (entry.getValue() instanceof IAlleleButterflySpecies) {
+					if (((IAlleleButterflySpecies) entry.getValue()).isCounted()) {
 						butterflySpeciesCount++;
+					}
+				}
 			}
 		}
 
@@ -75,17 +80,19 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 
 	@Override
 	public EnumFlutterType getType(ItemStack stack) {
-		if(stack == null)
+		if (stack == null) {
 			return EnumFlutterType.NONE;
+		}
 
-		if(ForestryItem.butterflyGE.isItemEqual(stack))
+		if (ForestryItem.butterflyGE.isItemEqual(stack)) {
 			return EnumFlutterType.BUTTERFLY;
-		else if(ForestryItem.serumGE.isItemEqual(stack))
+		} else if (ForestryItem.serumGE.isItemEqual(stack)) {
 			return EnumFlutterType.SERUM;
-		else if(ForestryItem.caterpillarGE.isItemEqual(stack))
+		} else if (ForestryItem.caterpillarGE.isItemEqual(stack)) {
 			return EnumFlutterType.CATERPILLAR;
-		else
+		} else {
 			return EnumFlutterType.NONE;
+		}
 	}
 
 	@Override
@@ -100,10 +107,12 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 
 	@Override
 	public IButterfly getMember(ItemStack stack) {
-		if(!stack.hasTagCompound())
+		if (!stack.hasTagCompound()) {
 			return null;
-		if(!isMember(stack))
+		}
+		if (!isMember(stack)) {
 			return null;
+		}
 
 		return new Butterfly(stack.getTagCompound());
 	}
@@ -117,17 +126,17 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 	public ItemStack getMemberStack(IIndividual butterfly, int type) {
 
 		Item butterflyItem;
-		switch(EnumFlutterType.VALUES[type]) {
-		case SERUM:
-			butterflyItem = ForestryItem.serumGE.item();
-			break;
-		case CATERPILLAR:
-			butterflyItem = ForestryItem.caterpillarGE.item();
-			break;
-		case BUTTERFLY:
-		default:
-			butterflyItem = ForestryItem.butterflyGE.item();
-			break;
+		switch (EnumFlutterType.VALUES[type]) {
+			case SERUM:
+				butterflyItem = ForestryItem.serumGE.item();
+				break;
+			case CATERPILLAR:
+				butterflyItem = ForestryItem.caterpillarGE.item();
+				break;
+			case BUTTERFLY:
+			default:
+				butterflyItem = ForestryItem.butterflyGE.item();
+				break;
 		}
 
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
@@ -140,14 +149,15 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 
 	@Override
 	public EntityLiving spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z) {
-		return (EntityButterfly)Utils.spawnEntity(world, new EntityButterfly(world, butterfly), x, y, z);
+		return (EntityButterfly) Utils.spawnEntity(world, new EntityButterfly(world, butterfly), x, y, z);
 	}
 
 	@Override
 	public boolean isMated(ItemStack stack) {
 		IButterfly butterfly = getMember(stack);
-		if(butterfly == null)
+		if (butterfly == null) {
 			return false;
+		}
 
 		return butterfly.getMate() != null;
 	}
@@ -197,20 +207,24 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 
 	@Override
 	public void registerMutation(IMutation mutation) {
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getTemplate()[0].getUID()))
+		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getTemplate()[0].getUID())) {
 			return;
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele0().getUID()))
+		}
+		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele0().getUID())) {
 			return;
-		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele1().getUID()))
+		}
+		if (AlleleManager.alleleRegistry.isBlacklisted(mutation.getAllele1().getUID())) {
 			return;
+		}
 
-		butterflyMutations.add((IButterflyMutation)mutation);
+		butterflyMutations.add((IButterflyMutation) mutation);
 	}
 
 	@Override
 	public Collection<IButterflyMutation> getMutations(boolean shuffle) {
-		if (shuffle)
+		if (shuffle) {
 			Collections.shuffle(butterflyMutations);
+		}
 		return butterflyMutations;
 	}
 

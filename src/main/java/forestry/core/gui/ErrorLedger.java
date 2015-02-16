@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -32,8 +32,9 @@ public class ErrorLedger extends Ledger {
 	@Override
 	public void draw(int x, int y) {
 		IErrorState state = tile.getErrorState();
-		if (state == EnumErrorCode.OK)
+		if (state == EnumErrorCode.OK) {
 			return;
+		}
 
 		// Draw background
 		drawBackground(x, y);

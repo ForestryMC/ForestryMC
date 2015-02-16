@@ -10,11 +10,14 @@
  ******************************************************************************/
 package forestry.core.commands;
 
+import java.util.Collection;
+
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IBreedingTracker;
-import java.util.Collection;
-import net.minecraft.world.World;
 
 public interface IStatsSaveHelper {
 

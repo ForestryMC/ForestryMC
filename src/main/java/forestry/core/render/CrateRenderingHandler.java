@@ -46,7 +46,7 @@ public class CrateRenderingHandler implements IItemRenderer {
 
 	@Override
 	public boolean handleRenderType(ItemStack stack, ItemRenderType type) {
-		switch(type){
+		switch (type) {
 			case INVENTORY:
 			case ENTITY:
 			case EQUIPPED:
@@ -64,14 +64,15 @@ public class CrateRenderingHandler implements IItemRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
-		if (type == ItemRenderType.INVENTORY)
+		if (type == ItemRenderType.INVENTORY) {
 			render(ItemRenderType.INVENTORY, stack);
-		else if (type == ItemRenderType.ENTITY)
-			if (RenderManager.instance.options.fancyGraphics)
+		} else if (type == ItemRenderType.ENTITY) {
+			if (RenderManager.instance.options.fancyGraphics) {
 				renderAsEntity(stack, (EntityItem) data[1]);
-			else
+			} else {
 				renderAsEntityFlat(stack);
-		else if (type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON) {
+			}
+		} else if (type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON) {
 			GL11.glPushMatrix();
 			renderEquipped(stack);
 
@@ -98,8 +99,9 @@ public class CrateRenderingHandler implements IItemRenderer {
 		int meta = stack.getItemDamage();
 		for (int pass = 0; pass < stack.getItem().getRenderPasses(meta); ++pass) {
 			IIcon icon = stack.getItem().getIconFromDamageForRenderPass(meta, pass);
-			if(icon == null)
+			if (icon == null) {
 				continue;
+			}
 
 			if (renderItem.renderWithColor) {
 				int color = stack.getItem().getColorFromItemStack(stack, pass);
@@ -124,9 +126,15 @@ public class CrateRenderingHandler implements IItemRenderer {
 	private void renderAsEntity(ItemStack stack, EntityItem entity) {
 		GL11.glPushMatrix();
 		byte iterations = 1;
-		if (stack.stackSize > 1) iterations = 2;
-		if (stack.stackSize > 15) iterations = 3;
-		if (stack.stackSize > 31) iterations = 4;
+		if (stack.stackSize > 1) {
+			iterations = 2;
+		}
+		if (stack.stackSize > 15) {
+			iterations = 3;
+		}
+		if (stack.stackSize > 31) {
+			iterations = 4;
+		}
 
 		Random rand = new Random(187L);
 
@@ -140,8 +148,9 @@ public class CrateRenderingHandler implements IItemRenderer {
 				float offsetX = (rand.nextFloat() * 2.0F - 1.0F) * 0.3F / 0.5F;
 				float offsetY = (rand.nextFloat() * 2.0F - 1.0F) * 0.3F / 0.5F;
 				GL11.glTranslatef(offsetX, offsetY, offsetZ);
-			} else
+			} else {
 				GL11.glTranslatef(0f, 0f, offsetZ);
+			}
 
 			renderIn3D(stack);
 
@@ -162,14 +171,16 @@ public class CrateRenderingHandler implements IItemRenderer {
 	private void renderIn3D(ItemStack stack) {
 		GL11.glPushMatrix();
 		Tessellator tessellator = Tessellator.instance;
-		if (RenderManager.instance.renderEngine == null)
+		if (RenderManager.instance.renderEngine == null) {
 			return;
+		}
 
 		int meta = stack.getItemDamage();
 		for (int pass = 0; pass < stack.getItem().getRenderPasses(meta); ++pass) {
 			IIcon icon = stack.getItem().getIconFromDamageForRenderPass(meta, pass);
-			if(icon == null)
+			if (icon == null) {
 				continue;
+			}
 
 			if (renderItem.renderWithColor) {
 				int color = stack.getItem().getColorFromItemStack(stack, pass);
@@ -185,10 +196,11 @@ public class CrateRenderingHandler implements IItemRenderer {
 			float minV = icon.getMinV();
 			float maxV = icon.getMaxV();
 
-			if (stack.getItemSpriteNumber() == 0)
+			if (stack.getItemSpriteNumber() == 0) {
 				RenderManager.instance.renderEngine.bindTexture(BLOCK_TEXTURE);
-			else
+			} else {
 				RenderManager.instance.renderEngine.bindTexture(ITEM_TEXTURE);
+			}
 
 			ItemRenderer.renderItemIn2D(tessellator, maxU, minV, minU, maxV, icon.getIconWidth(), icon.getIconHeight(), PIXEL);
 
@@ -229,9 +241,15 @@ public class CrateRenderingHandler implements IItemRenderer {
 	private void renderAsEntityFlat(ItemStack stack) {
 		GL11.glPushMatrix();
 		byte iterations = 1;
-		if (stack.stackSize > 1) iterations = 2;
-		if (stack.stackSize > 15) iterations = 3;
-		if (stack.stackSize > 31) iterations = 4;
+		if (stack.stackSize > 1) {
+			iterations = 2;
+		}
+		if (stack.stackSize > 15) {
+			iterations = 3;
+		}
+		if (stack.stackSize > 31) {
+			iterations = 4;
+		}
 
 		Random rand = new Random(187L);
 
@@ -276,8 +294,9 @@ public class CrateRenderingHandler implements IItemRenderer {
 			float scale = 0.5f;
 			GL11.glScalef(scale, scale, 1);
 			GL11.glTranslatef(6f, 8f, 0);
-			if (type == ItemRenderType.ENTITY)
+			if (type == ItemRenderType.ENTITY) {
 				GL11.glTranslatef(0, 0, -0.1f);
+			}
 
 			if (contained.getItem() instanceof ItemBlock) {
 				GL11.glScalef(16f, 16f, 1f);
@@ -287,8 +306,9 @@ public class CrateRenderingHandler implements IItemRenderer {
 			} else {
 				for (int pass = 0; pass < contained.getItem().getRenderPasses(meta); ++pass) {
 					IIcon containedTexture = contained.getItem().getIconFromDamageForRenderPass(meta, pass);
-					if (containedTexture == null)
+					if (containedTexture == null) {
 						continue;
+					}
 
 					if (renderItem.renderWithColor) {
 						int color = contained.getItem().getColorFromItemStack(contained, pass);
@@ -309,8 +329,9 @@ public class CrateRenderingHandler implements IItemRenderer {
 	}
 
 	private static ItemStack getContainedFromCrate(ItemStack crate) {
-		if (crate == null)
+		if (crate == null) {
 			return null;
+		}
 
 		Item crateItem = crate.getItem();
 		if (crateItem instanceof IGenericCrate) {

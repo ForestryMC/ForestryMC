@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.vect;
 
+import net.minecraftforge.common.util.ForgeDirection;
+
 /**
  * Represents changeable positions or dimensions.
  */
@@ -44,22 +46,31 @@ public class MutableVect implements IVect {
 		return this;
 	}
 
+	@Override
+	public MutableVect add(ForgeDirection direction) {
+		this.x += direction.offsetX;
+		this.y += direction.offsetY;
+		this.z += direction.offsetZ;
+		return this;
+	}
+
 	public boolean advancePositionInArea(Vect area) {
 		// Increment z first until end reached
-		if (z < area.z - 1)
+		if (z < area.z - 1) {
 			z++;
-		else {
+		} else {
 			z = 0;
 
-			if (x < area.x - 1)
+			if (x < area.x - 1) {
 				x++;
-			else {
+			} else {
 				x = 0;
 
-				if (y < area.y - 1)
+				if (y < area.y - 1) {
 					y++;
-				else
+				} else {
 					return false;
+				}
 			}
 		}
 

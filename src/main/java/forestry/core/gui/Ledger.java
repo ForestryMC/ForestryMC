@@ -4,20 +4,22 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.gui;
+
+import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Defaults;
 import forestry.core.config.SessionVars;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.utils.ForestryResource;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 /**
  * Side ledger for guis
@@ -51,17 +53,17 @@ public abstract class Ledger {
 
 	public void update() {
 		// Width
-		if (open && currentWidth < maxWidth)
+		if (open && currentWidth < maxWidth) {
 			currentWidth += OPEN_SPEED;
-		else if (!open && currentWidth > minWidth) {
+		} else if (!open && currentWidth > minWidth) {
 			currentWidth -= OPEN_SPEED;
 			currentWidth = currentWidth > minWidth ? currentWidth : minWidth;
 		}
 
 		// Height
-		if (open && currentHeight < maxHeight)
+		if (open && currentHeight < maxHeight) {
 			currentHeight += OPEN_SPEED;
-		else if (!open && currentHeight > minHeight) {
+		} else if (!open && currentHeight > minHeight) {
 			currentHeight -= OPEN_SPEED;
 			currentHeight = currentHeight > minHeight ? currentHeight : minHeight;
 		}
@@ -72,6 +74,7 @@ public abstract class Ledger {
 	}
 
 	public abstract void draw(int x, int y);
+
 	public abstract String getTooltip();
 
 	public boolean handleMouseClicked(int x, int y, int mouseButton) {

@@ -4,18 +4,20 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import java.util.EnumSet;
+
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+
 import forestry.api.arboriculture.EnumGrowthConditions;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.core.utils.StringUtil;
-import java.util.EnumSet;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 
 public class GrowthProviderTropical extends GrowthProvider {
 
@@ -29,11 +31,13 @@ public class GrowthProviderTropical extends GrowthProvider {
 
 		EnumGrowthConditions result = EnumGrowthConditions.HOSTILE;
 		for (EnumGrowthConditions cond : conditions) {
-			if (cond == EnumGrowthConditions.HOSTILE)
+			if (cond == EnumGrowthConditions.HOSTILE) {
 				return EnumGrowthConditions.HOSTILE;
+			}
 
-			if (cond.ordinal() > result.ordinal())
+			if (cond.ordinal() > result.ordinal()) {
 				result = cond;
+			}
 		}
 
 		return result;

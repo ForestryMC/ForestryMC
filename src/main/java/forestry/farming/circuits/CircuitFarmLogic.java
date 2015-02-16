@@ -4,17 +4,19 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.farming.circuits;
 
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmLogic;
 import forestry.core.circuits.Circuit;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class CircuitFarmLogic extends Circuit {
 
@@ -38,21 +40,23 @@ public class CircuitFarmLogic extends Circuit {
 	}
 
 	IFarmHousing getCircuitable(TileEntity tile) {
-		if (!isCircuitable(tile))
+		if (!isCircuitable(tile)) {
 			return null;
-		return (IFarmHousing)tile;
+		}
+		return (IFarmHousing) tile;
 	}
 
 	@Override
 	@SuppressWarnings("rawtypes")
 	public void onInsertion(int slot, TileEntity tile) {
 		IFarmHousing housing = getCircuitable(tile);
-		if (housing == null)
+		if (housing == null) {
 			return;
+		}
 
 		IFarmLogic logic;
 		try {
-			logic = logicClass.getConstructor(new Class[] { IFarmHousing.class }).newInstance(housing);
+			logic = logicClass.getConstructor(new Class[]{IFarmHousing.class}).newInstance(housing);
 		} catch (Exception ex) {
 			throw new RuntimeException("Failed to instantiate logic of class " + logicClass.getName() + ": " + ex.getMessage());
 		}
@@ -72,8 +76,9 @@ public class CircuitFarmLogic extends Circuit {
 
 	@Override
 	public void onRemoval(int slot, TileEntity tile) {
-		if (!isCircuitable(tile))
+		if (!isCircuitable(tile)) {
 			return;
+		}
 
 		((IFarmHousing) tile).resetFarmLogic(ForgeDirection.values()[slot + 2]);
 	}

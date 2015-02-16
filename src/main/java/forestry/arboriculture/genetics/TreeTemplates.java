@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -417,18 +417,22 @@ public class TreeTemplates {
 
 	public static Chromosome[] templateAsChromosomes(IAllele[] template) {
 		Chromosome[] chromosomes = new Chromosome[template.length];
-		for (int i = 0; i < template.length; i++)
-			if (template[i] != null)
+		for (int i = 0; i < template.length; i++) {
+			if (template[i] != null) {
 				chromosomes[i] = new Chromosome(template[i]);
+			}
+		}
 
 		return chromosomes;
 	}
 
 	public static Chromosome[] templateAsChromosomes(IAllele[] templateActive, IAllele[] templateInactive) {
 		Chromosome[] chromosomes = new Chromosome[templateActive.length];
-		for (int i = 0; i < templateActive.length; i++)
-			if (templateActive[i] != null)
+		for (int i = 0; i < templateActive.length; i++) {
+			if (templateActive[i] != null) {
 				chromosomes[i] = new Chromosome(templateActive[i], templateInactive[i]);
+			}
+		}
 
 		return chromosomes;
 	}

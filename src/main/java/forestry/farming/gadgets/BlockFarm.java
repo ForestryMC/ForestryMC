@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.particle.EffectRenderer;
+import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -32,23 +34,29 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.core.gadgets.BlockStructure;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.ParticleHelper;
+import forestry.core.render.ParticleHelperCallback;
 import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginFarming;
 
 public class BlockFarm extends BlockStructure {
 
+	private static BlockFarm instance;
+
 	public BlockFarm() {
 		super(Material.rock);
 		setHardness(1.0f);
+		instance = this;
 	}
 
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
 		for (int i = 0; i < 6; i++) {
-			if (i == 1)
+			if (i == 1) {
 				continue;
+			}
 
 			for (EnumFarmBlock block : EnumFarmBlock.values()) {
 				ItemStack stack = new ItemStack(item, 1, i);
@@ -63,16 +71,18 @@ public class BlockFarm extends BlockStructure {
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
 		ArrayList<ItemStack> drops = getDrops(world, x, y, z, 0, 0);
-		if (drops.isEmpty())
+		if (drops.isEmpty()) {
 			return super.getPickBlock(target, world, x, y, z, player);
+		}
 		return drops.get(0);
 	}
 
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack stack) {
 		super.onBlockPlacedBy(world, x, y, z, entityliving, stack);
-		if (!stack.hasTagCompound())
+		if (!stack.hasTagCompound()) {
 			return;
+		}
 
 		TileFarm tile = (TileFarm) world.getTileEntity(x, y, z);
 		tile.setFarmBlock(EnumFarmBlock.getFromCompound(stack.getTagCompound()));
@@ -116,16 +126,16 @@ public class BlockFarm extends BlockStructure {
 	@Override
 	public TileEntity createTileEntity(World world, int metadata) {
 		switch (metadata) {
-		case 2:
-			return new TileGearbox();
-		case 3:
-			return new TileHatch();
-		case 4:
-			return new TileValve();
-		case 5:
-			return new TileControl();
-		default:
-			return new TileFarmPlain();
+			case 2:
+				return new TileGearbox();
+			case 3:
+				return new TileHatch();
+			case 4:
+				return new TileValve();
+			case 5:
+				return new TileControl();
+			default:
+				return new TileFarmPlain();
 		}
 	}
 
@@ -146,6 +156,42 @@ public class BlockFarm extends BlockStructure {
 		EnumFarmBlock.registerIcons(register);
 	}
 
+
+	private static class ParticleCallback implements ParticleHelperCallback {
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public void addHitEffects(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
+			setTexture(fx, world, x, y, z, meta);
+		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public void addDestroyEffects(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
+			setTexture(fx, world, x, y, z, meta);
+		}
+
+		@SideOnly(Side.CLIENT)
+		private void setTexture(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
+			fx.setParticleIcon(instance.getIcon(world, x, y, z, 0));
+		}
+
+	}
+
+	private static final ParticleHelperCallback callback = new ParticleCallback();
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
+		return ParticleHelper.addHitEffects(worldObj, instance, target, effectRenderer, callback);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean addDestroyEffects(World worldObj, int x, int y, int z, int meta, EffectRenderer effectRenderer) {
+		return ParticleHelper.addDestroyEffects(worldObj, instance, x, y, z, meta, effectRenderer, callback);
+	}
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIcon(int side, int metadata) {
@@ -161,24 +207,25 @@ public class BlockFarm extends BlockStructure {
 	public IIcon getOverlayTextureForBlock(int side, int metadata) {
 
 		EnumFarmBlock type = EnumFarmBlock.BRICK_STONE;
-		if (metadata == 0 && side == 2)
+		if (metadata == 0 && side == 2) {
 			return type.getIcon(TileFarm.TYPE_REVERSE);
-		else if (metadata == 0 && (side == 0 || side == 1))
+		} else if (metadata == 0 && (side == 0 || side == 1)) {
 			return type.getIcon(TileFarm.TYPE_TOP);
+		}
 
 		switch (metadata) {
-		case 1:
-			return type.getIcon(TileFarm.TYPE_BAND);
-		case 2:
-			return type.getIcon(TileFarm.TYPE_GEARS);
-		case 3:
-			return type.getIcon(TileFarm.TYPE_HATCH);
-		case 4:
-			return type.getIcon(TileFarm.TYPE_VALVE);
-		case 5:
-			return type.getIcon(TileFarm.TYPE_CONTROL);
-		default:
-			return type.getIcon(TileFarm.TYPE_PLAIN);
+			case 1:
+				return type.getIcon(TileFarm.TYPE_BAND);
+			case 2:
+				return type.getIcon(TileFarm.TYPE_GEARS);
+			case 3:
+				return type.getIcon(TileFarm.TYPE_HATCH);
+			case 4:
+				return type.getIcon(TileFarm.TYPE_VALVE);
+			case 5:
+				return type.getIcon(TileFarm.TYPE_CONTROL);
+			default:
+				return type.getIcon(TileFarm.TYPE_PLAIN);
 		}
 	}
 
@@ -193,8 +240,9 @@ public class BlockFarm extends BlockStructure {
 		TileEntity tile = world.getTileEntity(x, y, z);
 		ItemStack base = EnumFarmBlock.BRICK_STONE.getBase();
 
-		if (tile instanceof TileFarm)
+		if (tile instanceof TileFarm) {
 			base = ((TileFarm) tile).farmBlock.getBase();
+		}
 
 		return StackUtils.getBlock(base).getIcon(side, base.getItemDamage());
 	}

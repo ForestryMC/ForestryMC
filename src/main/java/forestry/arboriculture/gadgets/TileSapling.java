@@ -4,15 +4,16 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
-import forestry.plugins.PluginArboriculture;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
+import forestry.plugins.PluginArboriculture;
 
 public class TileSapling extends TileTreeContainer {
 
@@ -43,8 +44,9 @@ public class TileSapling extends TileTreeContainer {
 	public int tryGrow(boolean bonemealed) {
 
 		int result = 0;
-		if (this.getTree() == null)
+		if (this.getTree() == null) {
 			return result;
+		}
 
 		int maturity = (int) (getTree().getRequiredMaturity() * PluginArboriculture.treeInterface.getTreekeepingMode(worldObj).getMaturationModifier(
 				getTree().getGenome(), 1f));
@@ -54,8 +56,9 @@ public class TileSapling extends TileTreeContainer {
 			result = 1;
 		}
 
-		if (timesTicked < maturity)
+		if (timesTicked < maturity) {
 			return result;
+		}
 
 		WorldGenerator generator = this.getTree().getTreeGenerator(worldObj, xCoord, yCoord, zCoord, bonemealed);
 		if (generator.generate(worldObj, worldObj.rand, xCoord, yCoord, zCoord)) {

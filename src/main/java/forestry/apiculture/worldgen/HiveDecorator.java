@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -30,7 +30,6 @@ import forestry.core.config.Defaults;
 import forestry.plugins.PluginApiculture;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class HiveDecorator {
@@ -84,15 +83,17 @@ public class HiveDecorator {
 		BiomeGenBase biome = world.getBiomeGenForCoords(worldX, worldZ);
 		EnumHumidity humidity = EnumHumidity.getFromValue(biome.rainfall);
 
-		if (!hive.isGoodBiome(biome) || !hive.isGoodHumidity(humidity))
+		if (!hive.isGoodBiome(biome) || !hive.isGoodHumidity(humidity)) {
 			return false;
+		}
 
-		for (int tries = 0; tries < 4; tries ++) {
+		for (int tries = 0; tries < 4; tries++) {
 			int x = worldX + rand.nextInt(16);
 			int z = worldZ + rand.nextInt(16);
 
-			if (tryGenHive(world, x, z, hive))
+			if (tryGenHive(world, x, z, hive)) {
 				return true;
+			}
 		}
 
 		return false;
@@ -108,8 +109,9 @@ public class HiveDecorator {
 			for (int z = 0; z < 16; z++) {
 				Collections.shuffle(hives, world.rand);
 				for (Hive hive : hives) {
-					if (!hive.isGoodBiome(biome) || !hive.isGoodHumidity(humidity))
+					if (!hive.isGoodBiome(biome) || !hive.isGoodHumidity(humidity)) {
 						continue;
+					}
 
 					tryGenHive(world, worldX + x, worldZ + z, hive);
 				}
@@ -121,19 +123,23 @@ public class HiveDecorator {
 
 		int y = hive.getYForHive(world, x, z);
 
-		if (y < 0)
+		if (y < 0) {
 			return false;
+		}
 
-		if (!hive.canReplace(world, x, y, z))
+		if (!hive.canReplace(world, x, y, z)) {
 			return false;
+		}
 
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 		EnumTemperature temperature = EnumTemperature.getFromValue(biome.getFloatTemperature(x, y, z));
-		if (!hive.isGoodTemperature(temperature))
+		if (!hive.isGoodTemperature(temperature)) {
 			return false;
+		}
 
-		if (!hive.isValidLocation(world, x, y, z))
+		if (!hive.isValidLocation(world, x, y, z)) {
 			return false;
+		}
 
 		return setHive(world, x, y, z, hive);
 	}
@@ -141,12 +147,14 @@ public class HiveDecorator {
 	protected boolean setHive(World world, int x, int y, int z, Hive hive) {
 		Block hiveBlock = hive.getHiveBlock();
 		boolean placed = world.setBlock(x, y, z, hiveBlock, hive.getHiveMeta(), Defaults.FLAG_BLOCK_SYNCH);
-		if (!placed)
+		if (!placed) {
 			return false;
+		}
 
 		Block placedBlock = world.getBlock(x, y, z);
-		if (!Block.isEqualTo(hiveBlock, placedBlock))
+		if (!Block.isEqualTo(hiveBlock, placedBlock)) {
 			return false;
+		}
 
 		hiveBlock.onBlockAdded(world, x, y, z);
 		world.markBlockForUpdate(x, y, z);

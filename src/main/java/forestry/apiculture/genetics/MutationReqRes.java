@@ -4,19 +4,20 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.core.utils.StackUtils;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 public class MutationReqRes extends BeeMutation {
 
@@ -32,18 +33,21 @@ public class MutationReqRes extends BeeMutation {
 		float chance = super.getChance(housing, allele0, allele1, genome0, genome1);
 
 		// If we have no chance anyway, we don't need to check.
-		if (chance <= 0)
+		if (chance <= 0) {
 			return 0;
+		}
 
 		World world = housing.getWorld();
-		if (blockRequired == null)
+		if (blockRequired == null) {
 			return chance;
+		}
 
 		Block block = world.getBlock(housing.getXCoord(), housing.getYCoord() - 1, housing.getZCoord());
 		int meta = world.getBlockMetadata(housing.getXCoord(), housing.getYCoord() - 1, housing.getZCoord());
-		if (StackUtils.equals(block, blockRequired) && meta == blockRequired.getItemDamage())
+		if (StackUtils.equals(block, blockRequired) && meta == blockRequired.getItemDamage()) {
 			return chance;
-		else
+		} else {
 			return 0;
+		}
 	}
 }

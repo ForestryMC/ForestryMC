@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -86,13 +86,13 @@ public class FarmItemRenderer implements IItemRenderer {
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
 		switch (type) {
-		case ENTITY:
-		case EQUIPPED_FIRST_PERSON:
-		case EQUIPPED:
-		case INVENTORY:
-			return true;
-		default:
-			return false;
+			case ENTITY:
+			case EQUIPPED_FIRST_PERSON:
+			case EQUIPPED:
+			case INVENTORY:
+				return true;
+			default:
+				return false;
 		}
 	}
 
@@ -104,17 +104,17 @@ public class FarmItemRenderer implements IItemRenderer {
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 		switch (type) {
-		case ENTITY:
-			renderFarmBlock((RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
-			break;
-		case EQUIPPED:
-		case EQUIPPED_FIRST_PERSON:
-			renderFarmBlock((RenderBlocks) data[0], item, 0f, 0f, 0f);
-			break;
-		case INVENTORY:
-			renderFarmBlock((RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
-			break;
-		default:
+			case ENTITY:
+				renderFarmBlock((RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+				break;
+			case EQUIPPED:
+			case EQUIPPED_FIRST_PERSON:
+				renderFarmBlock((RenderBlocks) data[0], item, 0f, 0f, 0f);
+				break;
+			case INVENTORY:
+				renderFarmBlock((RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+				break;
+			default:
 		}
 	}
 

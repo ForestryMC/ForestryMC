@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -80,6 +80,8 @@ public class Config {
 	public static final ArrayList<String> collectorStamps = new ArrayList<String>();
 
 	public static boolean squareFarms = false;
+	public static boolean ExUtilEnderLily = true;
+	public static boolean MagicalCropsSupport = true;
 
 	// Mail
 	public static boolean mailAlertEnabled = true;
@@ -107,6 +109,14 @@ public class Config {
 
 	public static float getBeehivesRate() {
 		return generateBeehivesRate;
+	}
+	
+	public static boolean isExUtilEnderLilyEnabled() {
+		return ExUtilEnderLily;
+	}
+
+	public static boolean isMagicalCropsSupportEnabled() {
+		return MagicalCropsSupport;
 	}
 
 	public static void load() {
@@ -194,7 +204,7 @@ public class Config {
 		property.comment = "if crafting of stamps is generally allowed, these stamps are still excluded from crafting.";
 		try {
 			collectorStamps.addAll(Arrays.asList(parseStamps(property.value)));
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			config.set("crafting.stamps.collector", CATEGORY_COMMON, defaultCollectors);
 			collectorStamps.addAll(Arrays.asList(parseStamps(defaultCollectors)));
 		}
@@ -237,11 +247,20 @@ public class Config {
 		property.comment = "set to true to have farms use a square layout instead of a diamond one.";
 		Config.squareFarms = Boolean.parseBoolean(property.value);
 
+		Property supportEnderlily = config.get("tweaks.farms.exutilenderlily", CATEGORY_COMMON, true);
+		supportEnderlily.comment = "set to false to disable multifarm support for ExtraUtilities Ender-lily seeds.";
+		ExUtilEnderLily = Boolean.parseBoolean(supportEnderlily.value);
+
+		Property supportMagicalCrops = config.get("tweaks.farms.magicalcropssupport", CATEGORY_COMMON, true);
+		supportMagicalCrops.comment = "set to false to disable multifarm support for Magical Crops crops.";
+		MagicalCropsSupport = Boolean.parseBoolean(supportMagicalCrops.value);
+
 		property = config.get("structures.schemata.disabled", CATEGORY_COMMON, "");
 		property.comment = "add schemata keys to disable them. current keys: alveary3x3;farm3x3;farm3x4;farm3x5;farm4x4;farm5x5";
 		disabledStructures.addAll(Arrays.asList(parseStructureKeys(property.value)));
-		for (String str : disabledStructures)
+		for (String str : disabledStructures) {
 			Proxies.log.finer("Disabled structure '%s'.", str);
+		}
 
 		config.save();
 
@@ -257,25 +276,30 @@ public class Config {
 		property.comment = "set to true to force recreation of the game mode definitions in config/forestry/gamemodes";
 		boolean recreate = Boolean.parseBoolean(property.value);
 
-		if (recreate)
+		if (recreate) {
 			Proxies.log.info("Recreating all gamemode definitions from the defaults. This may be caused by an upgrade");
+		}
 
 		// Make sure the default mode files are there.
 		File easyMode = config.getCategoryFile("gamemodes/EASY");
-		if (recreate)
+		if (recreate) {
 			CopyFileToFS(easyMode, "/config/forestry/gamemodes/EASY.conf");
+		}
 
 		File opMode = config.getCategoryFile("gamemodes/OP");
-		if (!opMode.exists() || recreate)
+		if (!opMode.exists() || recreate) {
 			CopyFileToFS(opMode, "/config/forestry/gamemodes/OP.conf");
+		}
 
 		File normalMode = config.getCategoryFile("gamemodes/NORMAL");
-		if (!normalMode.exists() || recreate)
+		if (!normalMode.exists() || recreate) {
 			CopyFileToFS(normalMode, "/config/forestry/gamemodes/NORMAL.conf");
+		}
 
 		File hardMode = config.getCategoryFile("gamemodes/HARD");
-		if (!hardMode.exists() || recreate)
+		if (!hardMode.exists() || recreate) {
 			CopyFileToFS(hardMode, "/config/forestry/gamemodes/HARD.conf");
+		}
 
 		config.set("difficulty.recreate.definitions", CATEGORY_COMMON, false);
 	}
@@ -285,13 +309,15 @@ public class Config {
 		for (Fluids fluid : Fluids.values()) {
 			property = config.get("disable.fluid." + fluid.getTag(), CATEGORY_FLUIDS, false);
 			property.comment = "set to true to disable the fluid for " + fluid.getTag();
-			if (Boolean.parseBoolean(property.value))
+			if (Boolean.parseBoolean(property.value)) {
 				Config.disabledFluids.add(fluid.getTag());
+			}
 
 			property = config.get("disable.fluidBlock." + fluid.getTag(), CATEGORY_FLUIDS, false);
 			property.comment = "set to true to disable the in-world FluidBlock for " + fluid.getTag();
-			if (Boolean.parseBoolean(property.value))
+			if (Boolean.parseBoolean(property.value)) {
 				Config.disabledBlocks.add(fluid.getTag());
+			}
 		}
 	}
 
@@ -307,15 +333,18 @@ public class Config {
 		byte[] buffer = new byte[4096];
 		try {
 
-			if (destination.getParentFile() != null)
+			if (destination.getParentFile() != null) {
 				destination.getParentFile().mkdirs();
+			}
 
-			if (!destination.exists() && !destination.createNewFile())
+			if (!destination.exists() && !destination.createNewFile()) {
 				return;
+			}
 
 			outstream = new FileOutputStream(destination);
-			while ((readBytes = stream.read(buffer)) > 0)
+			while ((readBytes = stream.read(buffer)) > 0) {
 				outstream.write(buffer, 0, readBytes);
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -332,29 +361,33 @@ public class Config {
 			ex.printStackTrace();
 		}
 
-		for (String key : prop.stringPropertyNames())
+		for (String key : prop.stringPropertyNames()) {
 			hints.put(key, parseHints(prop.getProperty(key)));
+		}
 	}
 
 	private static String[] parseHints(String list) {
-		if (list.isEmpty())
+		if (list.isEmpty()) {
 			return new String[0];
-		else
+		} else {
 			return list.split("[;]+");
+		}
 	}
 
 	private static String[] parseStructureKeys(String list) {
-		if (list.isEmpty())
+		if (list.isEmpty()) {
 			return new String[0];
-		else
+		} else {
 			return list.split("[;]+");
+		}
 
 	}
 
 	private static String[] parseStamps(String list) {
-		if (list.isEmpty())
+		if (list.isEmpty()) {
 			return new String[0];
-		else
+		} else {
 			return list.split("[;]+");
+		}
 	}
 }

@@ -4,16 +4,17 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.render;
 
-import forestry.apiculture.entities.EntityBee;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+
+import forestry.apiculture.entities.EntityBee;
 
 public class RenderBee extends RenderLiving {
 
@@ -21,7 +22,7 @@ public class RenderBee extends RenderLiving {
 
 	public RenderBee() {
 		super(new ModelBee(), 0.15f);
-		beeModel = (ModelBee)mainModel;
+		beeModel = (ModelBee) mainModel;
 	}
 
 	public void renderBee(EntityBee entity, double posX, double posY, double posZ, float par8, float par9) {
@@ -36,6 +37,6 @@ public class RenderBee extends RenderLiving {
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		return ((EntityBee)entity).getTexture();
+		return ((EntityBee) entity).getTexture();
 	}
 }

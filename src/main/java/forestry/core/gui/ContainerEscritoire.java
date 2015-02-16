@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -41,26 +41,30 @@ public class ContainerEscritoire extends ContainerForestry implements IGuiSelect
 			addSlotToContainer(new SlotFiltered(tile, TileEscritoire.SLOT_INPUT_1 + i, 17, 49 + i * 18).setBlockedTexture("slots/blocked_2"));
 		}
 
-		for(int i = 0; i < 3; i++) {
+		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 2; j++) {
 				addSlotToContainer(new SlotOutput(tile, TileEscritoire.SLOT_RESULTS_1 + (i * 2) + j, 177 + j * 18, 85 + i * 18));
 			}
 		}
 
 		// Player inventory
-		for (int i = 0; i < 3; i++)
-			for (int j = 0; j < 9; j++)
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 9; j++) {
 				addSlotToContainer(new Slot(player.inventory, j + i * 9 + 9, 34 + j * 18, 153 + i * 18));
+			}
+		}
 		// Player hotbar
-		for (int k = 0; k < 9; k++)
+		for (int k = 0; k < 9; k++) {
 			addSlotToContainer(new Slot(player.inventory, k, 34 + k * 18, 211));
+		}
 	}
 
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		if(lastUpdate == tile.getGame().getLastUpdate())
+		if (lastUpdate == tile.getGame().getLastUpdate()) {
 			return;
+		}
 
 		lastUpdate = tile.getGame().getLastUpdate();
 		tile.sendBoard(player);

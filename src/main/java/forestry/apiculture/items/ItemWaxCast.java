@@ -4,15 +4,16 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import net.minecraft.item.ItemStack;
+
 import forestry.core.interfaces.ICraftingPlan;
 import forestry.core.items.ItemForestry;
-import net.minecraft.item.ItemStack;
 
 public class ItemWaxCast extends ItemForestry implements ICraftingPlan {
 
@@ -26,10 +27,11 @@ public class ItemWaxCast extends ItemForestry implements ICraftingPlan {
 	@Override
 	public ItemStack planUsed(ItemStack plan, ItemStack result) {
 		plan.setItemDamage(plan.getItemDamage() + result.stackSize);
-		if (plan.getItemDamage() >= plan.getMaxDamage())
+		if (plan.getItemDamage() >= plan.getMaxDamage()) {
 			return null;
-		else
+		} else {
 			return plan;
+		}
 	}
 
 }

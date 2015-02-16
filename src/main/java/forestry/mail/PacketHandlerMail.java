@@ -4,11 +4,16 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.mail;
+
+import java.io.DataInputStream;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 
 import forestry.core.interfaces.IPacketHandler;
 import forestry.core.network.PacketIds;
@@ -20,9 +25,6 @@ import forestry.mail.gui.ContainerTradeName;
 import forestry.mail.network.PacketLetterInfo;
 import forestry.mail.network.PacketPOBoxInfo;
 import forestry.plugins.PluginMail;
-import java.io.DataInputStream;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 
 public class PacketHandlerMail implements IPacketHandler {
 
@@ -33,34 +35,34 @@ public class PacketHandlerMail implements IPacketHandler {
 
 			PacketUpdate packet;
 			switch (packetID) {
-			case PacketIds.LETTER_INFO:
-				PacketLetterInfo packetT = new PacketLetterInfo();
-				packetT.readData(data);
-				onLetterInfo(packetT);
-				break;
-			case PacketIds.POBOX_INFO:
-				PacketPOBoxInfo packetP = new PacketPOBoxInfo();
-				packetP.readData(data);
-				onPOBoxInfo(packetP);
-				break;
-			case PacketIds.LETTER_RECIPIENT:
-				packet = new PacketUpdate();
-				packet.readData(data);
-				onLetterRecipient(player, packet);
-				break;
-			case PacketIds.LETTER_TEXT:
-				packet = new PacketUpdate();
-				packet.readData(data);
-				onLetterText(player, packet);
-				break;
-			case PacketIds.TRADING_ADDRESS_SET:
-				packet = new PacketUpdate();
-				packet.readData(data);
-				onAddressSet(player, packet);
-				break;
-			case PacketIds.POBOX_INFO_REQUEST:
-				onPOBoxInfoRequest(player);
-				break;
+				case PacketIds.LETTER_INFO:
+					PacketLetterInfo packetT = new PacketLetterInfo();
+					packetT.readData(data);
+					onLetterInfo(packetT);
+					break;
+				case PacketIds.POBOX_INFO:
+					PacketPOBoxInfo packetP = new PacketPOBoxInfo();
+					packetP.readData(data);
+					onPOBoxInfo(packetP);
+					break;
+				case PacketIds.LETTER_RECIPIENT:
+					packet = new PacketUpdate();
+					packet.readData(data);
+					onLetterRecipient(player, packet);
+					break;
+				case PacketIds.LETTER_TEXT:
+					packet = new PacketUpdate();
+					packet.readData(data);
+					onLetterText(player, packet);
+					break;
+				case PacketIds.TRADING_ADDRESS_SET:
+					packet = new PacketUpdate();
+					packet.readData(data);
+					onAddressSet(player, packet);
+					break;
+				case PacketIds.POBOX_INFO_REQUEST:
+					onPOBoxInfoRequest(player);
+					break;
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -72,7 +74,7 @@ public class PacketHandlerMail implements IPacketHandler {
 		Container container = Proxies.common.getClientInstance().thePlayer.openContainer;
 		if (container instanceof ContainerLetter) {
 			((ContainerLetter) container).handleLetterInfoUpdate(packet);
-		} else if(container instanceof ContainerCatalogue) {
+		} else if (container instanceof ContainerCatalogue) {
 			((ContainerCatalogue) container).handleTradeInfoUpdate(packet);
 		}
 
@@ -84,22 +86,25 @@ public class PacketHandlerMail implements IPacketHandler {
 	}
 
 	private void onAddressSet(EntityPlayer player, PacketUpdate packet) {
-		if (!(player.openContainer instanceof ContainerTradeName))
+		if (!(player.openContainer instanceof ContainerTradeName)) {
 			return;
+		}
 
 		((ContainerTradeName) player.openContainer).handleSetAddress(packet);
 	}
 
 	private void onLetterText(EntityPlayer player, PacketUpdate packet) {
-		if (!(player.openContainer instanceof ContainerLetter))
+		if (!(player.openContainer instanceof ContainerLetter)) {
 			return;
+		}
 
 		((ContainerLetter) player.openContainer).handleSetText(packet);
 	}
 
 	private void onLetterRecipient(EntityPlayer player, PacketUpdate packet) {
-		if (!(player.openContainer instanceof ContainerLetter))
+		if (!(player.openContainer instanceof ContainerLetter)) {
 			return;
+		}
 
 		((ContainerLetter) player.openContainer).handleSetRecipient(player, packet);
 	}
@@ -107,8 +112,9 @@ public class PacketHandlerMail implements IPacketHandler {
 	private void onPOBoxInfoRequest(EntityPlayer player) {
 		MailAddress address = new MailAddress(player.getGameProfile());
 		POBox pobox = PostRegistry.getPOBox(player.worldObj, address);
-		if (pobox == null)
+		if (pobox == null) {
 			return;
+		}
 
 		Proxies.net.sendToPlayer(new PacketPOBoxInfo(PacketIds.POBOX_INFO, pobox.getPOBoxInfo()), player);
 	}

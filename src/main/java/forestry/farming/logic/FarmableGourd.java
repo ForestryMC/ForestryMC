@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -34,22 +34,26 @@ public class FarmableGourd implements IFarmable {
 
 	@Override
 	public boolean isSaplingAt(World world, int x, int y, int z) {
-		if (world.isAirBlock(x, y, z))
+		if (world.isAirBlock(x, y, z)) {
 			return false;
+		}
 
 		return StackUtils.equals(world.getBlock(x, y, z), stem);
 	}
 
 	@Override
 	public ICrop getCropAt(World world, int x, int y, int z) {
-		if (world.isAirBlock(x, y, z))
+		if (world.isAirBlock(x, y, z)) {
 			return null;
+		}
 
-		if (!StackUtils.equals(world.getBlock(x, y, z), fruit))
+		if (!StackUtils.equals(world.getBlock(x, y, z), fruit)) {
 			return null;
+		}
 
-		if (world.getBlockMetadata(x, y, z) != fruit.getItemDamage())
+		if (world.getBlockMetadata(x, y, z) != fruit.getItemDamage()) {
 			return null;
+		}
 
 		return new CropBlock(world, StackUtils.getBlock(fruit), fruit.getItemDamage(), new Vect(x, y, z));
 	}

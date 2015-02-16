@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -34,16 +34,19 @@ public class RecipeUtil {
 	private static final Container DUMMY_CONTAINER = new ContainerDummy();
 
 	public static void injectLeveledRecipe(ItemStack resource, int fermentationValue, Fluids output) {
-		if (RecipeManagers.fermenterManager == null)
+		if (RecipeManagers.fermenterManager == null) {
 			return;
+		}
 
 		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, output.getFluid(1), Fluids.WATER.getFluid(1));
 
-		if (FluidRegistry.isFluidRegistered(Fluids.JUICE.getFluid()))
+		if (FluidRegistry.isFluidRegistered(Fluids.JUICE.getFluid())) {
 			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.JUICE.getFluid(1));
+		}
 
-		if (FluidRegistry.isFluidRegistered(Fluids.HONEY.getFluid()))
+		if (FluidRegistry.isFluidRegistered(Fluids.HONEY.getFluid())) {
 			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.HONEY.getFluid(1));
+		}
 	}
 
 	/**
@@ -58,8 +61,9 @@ public class RecipeUtil {
 			String oreDictName = OreDictionary.getOreName(oreId);
 			oreDictNames.add(oreDictName);
 		}
-		if (oreDictNames.isEmpty())
+		if (oreDictNames.isEmpty()) {
 			return Collections.singletonList(itemStack);
+		}
 		return oreDictNames;
 	}
 
@@ -102,8 +106,9 @@ public class RecipeUtil {
 
 	public static boolean canCraftRecipe(World world, ItemStack[] recipeItems, ItemStack recipeOutput, ItemStack[] availableItems) {
 		// Need at least one matched set
-		if (StackUtils.containsSets(recipeItems, availableItems, true, true) == 0)
+		if (StackUtils.containsSets(recipeItems, availableItems, true, true) == 0) {
 			return false;
+		}
 
 		// Check that it doesn't make a different recipe.
 		// For example:
@@ -119,8 +124,9 @@ public class RecipeUtil {
 
 		for (int slot = 0; slot < recipeItems.length; slot++) {
 			ItemStack recipeStack = recipeItems[slot];
-			if (recipeStack == null)
+			if (recipeStack == null) {
 				continue;
+			}
 
 			// Use crafting equivalent (not oredict) items first
 			for (ItemStack stockStack : stockCopy) {

@@ -4,20 +4,22 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.ILepidopteristTracker;
 import forestry.core.genetics.BreedingTracker;
 import forestry.plugins.PluginLepidopterology;
-import net.minecraft.entity.player.EntityPlayer;
 
 public class LepidopteristTracker extends BreedingTracker implements ILepidopteristTracker {
 

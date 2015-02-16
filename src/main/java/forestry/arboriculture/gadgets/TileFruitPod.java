@@ -4,14 +4,25 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.Packet;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -24,14 +35,6 @@ import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 
 public class TileFruitPod extends TileEntity implements INetworkedEntity, IFruitBearer {
 
@@ -47,8 +50,9 @@ public class TileFruitPod extends TileEntity implements INetworkedEntity, IFruit
 		this.allele = allele;
 		this.sappiness = sappiness;
 		this.indices = new int[indices.length];
-		for (int i = 0; i < indices.length; i++)
+		for (int i = 0; i < indices.length; i++) {
 			this.indices[i] = indices[i];
+		}
 	}
 
 	/* SAVING & LOADING */
@@ -57,10 +61,11 @@ public class TileFruitPod extends TileEntity implements INetworkedEntity, IFruit
 		super.readFromNBT(nbttagcompound);
 
 		IAllele stored = AlleleManager.alleleRegistry.getAllele(nbttagcompound.getString("UID"));
-		if (stored != null && stored instanceof IAlleleFruit)
-			allele = (IAlleleFruit)stored;
-		else
+		if (stored != null && stored instanceof IAlleleFruit) {
+			allele = (IAlleleFruit) stored;
+		} else {
 			allele = (IAlleleFruit) AlleleManager.alleleRegistry.getAllele("fruitCocoa");
+		}
 
 		maturity = nbttagcompound.getShort("MT");
 		sappiness = nbttagcompound.getFloat("SP");
@@ -71,8 +76,9 @@ public class TileFruitPod extends TileEntity implements INetworkedEntity, IFruit
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 
-		if (allele != null)
+		if (allele != null) {
 			nbttagcompound.setString("UID", allele.getUID());
+		}
 
 		nbttagcompound.setShort("MT", maturity);
 		nbttagcompound.setFloat("SP", sappiness);
@@ -80,6 +86,7 @@ public class TileFruitPod extends TileEntity implements INetworkedEntity, IFruit
 	}
 
 	/* UPDATING */
+
 	/**
 	 * This doesn't use normal TE updates
 	 */
@@ -105,10 +112,11 @@ public class TileFruitPod extends TileEntity implements INetworkedEntity, IFruit
 
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int metadata, int side) {
-		if (maturity < indices.length)
+		if (maturity < indices.length) {
 			return TextureManager.getInstance().getIcon((short) indices[maturity]);
-		else
+		} else {
 			return null;
+		}
 	}
 
 	public short getMaturity() {
@@ -158,20 +166,22 @@ public class TileFruitPod extends TileEntity implements INetworkedEntity, IFruit
 	/* IFRUITBEARER */
 	@Override
 	public boolean hasFruit() {
-		return true                                                ;
+		return true;
 	}
 
 	@Override
 	public IFruitFamily getFruitFamily() {
-		if (allele == null)
+		if (allele == null) {
 			return null;
+		}
 		return allele.getProvider().getFamily();
 	}
 
 	@Override
 	public Collection<ItemStack> pickFruit(ItemStack tool) {
-		if (allele == null)
+		if (allele == null) {
 			return new ArrayList<ItemStack>();
+		}
 
 
 		Collection<ItemStack> fruits = Arrays.asList(getDrop());
@@ -182,7 +192,7 @@ public class TileFruitPod extends TileEntity implements INetworkedEntity, IFruit
 
 	@Override
 	public float getRipeness() {
-		return (float)maturity / MAX_MATURITY;
+		return (float) maturity / MAX_MATURITY;
 	}
 
 	@Override

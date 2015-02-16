@@ -4,19 +4,22 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.render;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import forestry.core.ForestryClient;
-import forestry.core.interfaces.IBlockRenderer;
 import java.util.HashMap;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
+
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+
+import forestry.core.ForestryClient;
+import forestry.core.interfaces.IBlockRenderer;
 
 public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
@@ -27,8 +30,9 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 		if (block.getRenderType() == ForestryClient.byBlockModelId) {
 			TileRendererIndex index = new TileRendererIndex(block, metadata);
-			if (byBlockRenderer.containsKey(index))
+			if (byBlockRenderer.containsKey(index)) {
 				byBlockRenderer.get(index).inventoryRender(-0.5, -0.5, -0.5, 0, 0);
+			}
 		}
 
 	}

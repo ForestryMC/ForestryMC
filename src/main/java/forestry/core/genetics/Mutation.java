@@ -4,19 +4,20 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.genetics;
 
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IMutation;
-import java.util.ArrayList;
-import java.util.Collection;
 
 public abstract class Mutation implements IMutation {
 
@@ -63,10 +64,11 @@ public abstract class Mutation implements IMutation {
 		
 		EnumTemperature temp1 = EnumTemperature.getFromValue(minTemperature);
 		EnumTemperature temp2 = EnumTemperature.getFromValue(maxTemperature);
-		if(temp1 != temp2)
+		if (temp1 != temp2) {
 			specialConditions.add(String.format("Temperature between %s and %s.", temp1, temp2));
-		else
+		} else {
 			specialConditions.add(String.format("Temperature %s required.", temp1));
+		}
 		return this;
 	}
 
@@ -77,10 +79,11 @@ public abstract class Mutation implements IMutation {
 		EnumHumidity temp1 = EnumHumidity.getFromValue(minRainfall);
 		EnumHumidity temp2 = EnumHumidity.getFromValue(maxRainfall);
 
-		if(temp1 != temp2)
+		if (temp1 != temp2) {
 			specialConditions.add(String.format("Humidity between %s and %s.", temp1, temp2));
-		else
+		} else {
 			specialConditions.add(String.format("Humidity %s required.", temp1));
+		}
 		return this;
 	}
 
@@ -117,10 +120,11 @@ public abstract class Mutation implements IMutation {
 
 	@Override
 	public IAllele getPartner(IAllele allele) {
-		if (allele0.getUID().equals(allele.getUID()))
+		if (allele0.getUID().equals(allele.getUID())) {
 			return allele1;
-		else
+		} else {
 			return allele0;
+		}
 	}
 
 	@Override

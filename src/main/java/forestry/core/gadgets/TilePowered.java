@@ -4,21 +4,25 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import buildcraft.api.tiles.IHasWork;
+import net.minecraft.nbt.NBTTagCompound;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
 import cpw.mods.fml.common.Optional;
+
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
 import forestry.energy.EnergyManager;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+
+import buildcraft.api.tiles.IHasWork;
 
 @Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = "BuildCraftAPI|tiles")
 public abstract class TilePowered extends TileBase implements IRenderableMachine, IPowerHandler, IHasWork {
@@ -50,16 +54,23 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		if (!Proxies.common.isSimulating(worldObj))
+		if (!Proxies.common.isSimulating(worldObj)) {
 			return;
+		}
+
+		// Disable powered machines on a direct redstone signal
+		if (worldObj.getBlockPowerInput(xCoord, yCoord, zCoord) >= 15) {
+			return;
+		}
 
 		if (workCounter < WORK_CYCLES && energyManager.consumeEnergyToDoWork()) {
 			workCounter++;
 		}
 
-		if (workCounter >= WORK_CYCLES && worldObj.getTotalWorldTime() % 5 == 0) {
-			if (workCycle())
+		if (workCounter >= WORK_CYCLES && updateOnInterval(5)) {
+			if (workCycle()) {
 				workCounter = 0;
+			}
 		}
 	}
 

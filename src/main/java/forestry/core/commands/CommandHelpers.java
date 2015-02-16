@@ -4,16 +4,16 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.commands;
 
-import forestry.core.utils.StringUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -25,8 +25,9 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
+import forestry.core.utils.StringUtil;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class CommandHelpers {
@@ -37,8 +38,9 @@ public class CommandHelpers {
 			try {
 				int dim = Integer.parseInt(args[worldArgIndex]);
 				World world = MinecraftServer.getServer().worldServerForDimension(dim);
-				if (world != null)
+				if (world != null) {
 					return world;
+				}
 			} catch (Exception ex) {
 				throwWrongUsage(sender, command);
 			}
@@ -84,8 +86,9 @@ public class CommandHelpers {
 	}
 
 	public static void processChildCommand(ICommandSender sender, SubCommand child, String[] args) {
-		if (!sender.canCommandSenderUseCommand(child.getPermissionLevel(), child.getFullCommandString()))
+		if (!sender.canCommandSenderUseCommand(child.getPermissionLevel(), child.getFullCommandString())) {
 			throw new WrongUsageException(StringUtil.localize("chat.command.noperms"));
+		}
 		String[] newargs = new String[args.length - 1];
 		System.arraycopy(args, 1, newargs, 0, newargs.length);
 		child.processCommand(sender, newargs);
@@ -103,12 +106,14 @@ public class CommandHelpers {
 		body.setColor(EnumChatFormatting.GRAY);
 
 		List<String> commandAliases = command.getCommandAliases();
-		if (commandAliases.size() > 0)
+		if (commandAliases.size() > 0) {
 			sendLocalizedChatMessage(sender, body, "for.chat.command.aliases", commandAliases.toString().replace("[", "").replace("]", ""));
+		}
 
 		int permLevel = command.getPermissionLevel();
-		if (permLevel > 0)
+		if (permLevel > 0) {
 			sendLocalizedChatMessage(sender, body, "for.chat.command.permlevel", permLevel);
+		}
 
 		sendLocalizedChatMessage(sender, body, "for.chat.command." + commandString + ".help");
 
@@ -137,18 +142,20 @@ public class CommandHelpers {
 	}
 
 	public static boolean matches(String commandName, IForestryCommand command) {
-		if (commandName.equals(command.getCommandName()))
+		if (commandName.equals(command.getCommandName())) {
 			return true;
-		else if (command.getCommandAliases() != null)
+		} else if (command.getCommandAliases() != null) {
 			for (String alias : command.getCommandAliases()) {
-				if (commandName.equals(alias))
+				if (commandName.equals(alias)) {
 					return true;
+				}
 			}
+		}
 		return false;
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<String> getListOfStringsMatchingLastWord(String[] strings, String ... lastWords) {
+	public static List<String> getListOfStringsMatchingLastWord(String[] strings, String... lastWords) {
 		return CommandBase.getListOfStringsMatchingLastWord(strings, lastWords);
 	}
 

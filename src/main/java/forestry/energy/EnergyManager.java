@@ -1,14 +1,16 @@
 package forestry.energy;
 
-import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyHandler;
-import cofh.api.energy.IEnergyReceiver;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.core.GameMode;
 import forestry.core.utils.BlockUtil;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+
+import cofh.api.energy.EnergyStorage;
+import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyReceiver;
 
 public class EnergyManager implements IEnergyHandler {
 	private enum EnergyTransferMode {
@@ -88,15 +90,17 @@ public class EnergyManager implements IEnergyHandler {
 	/* IEnergyHandler */
 	@Override
 	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
-		if (!canReceive())
+		if (!canReceive()) {
 			return 0;
+		}
 		return energyStorage.receiveEnergy(maxReceive, simulate);
 	}
 
 	@Override
 	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
-		if (!canExtract())
+		if (!canExtract()) {
 			return 0;
+		}
 		return energyStorage.extractEnergy(maxExtract, simulate);
 	}
 
@@ -133,11 +137,13 @@ public class EnergyManager implements IEnergyHandler {
 
 	/**
 	 * Consumes one work cycle's worth of energy.
+	 *
 	 * @return true if the energy to do work was consumed
 	 */
 	public boolean consumeEnergyToDoWork() {
-		if (energyStorage.getEnergyStored() < energyPerWork)
+		if (energyStorage.getEnergyStored() < energyPerWork) {
 			return false;
+		}
 		energyStorage.modifyEnergyStored(-energyPerWork);
 		return true;
 	}
@@ -145,6 +151,7 @@ public class EnergyManager implements IEnergyHandler {
 	/**
 	 * Sends as much energy as it can to the tile at orientation.
 	 * For power sources. Ignores canExtract()
+	 *
 	 * @return amount sent
 	 */
 	public int sendEnergy(ForgeDirection orientation, TileEntity tile) {
@@ -154,6 +161,7 @@ public class EnergyManager implements IEnergyHandler {
 	/**
 	 * Sends amount of energy to the tile at orientation.
 	 * For power sources. Ignores canExtract()
+	 *
 	 * @return amount sent
 	 */
 	public int sendEnergy(ForgeDirection orientation, TileEntity tile, int amount) {

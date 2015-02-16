@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -54,8 +54,9 @@ public class ItemCrated extends Item implements IGenericCrate {
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 
 		if (Proxies.common.isSimulating(world)) {
-			if (contained == null  || itemstack.stackSize == 0)
+			if (contained == null || itemstack.stackSize == 0) {
 				return itemstack;
+			}
 
 			itemstack.stackSize--;
 			EntityItem entity = new EntityItem(world, entityplayer.posX, entityplayer.posY, entityplayer.posZ, new ItemStack(contained.getItem(), 9,

@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import net.minecraft.util.ResourceLocation;
+
 import forestry.core.gadgets.TileForestry;
 import forestry.core.utils.StringUtil;
-import net.minecraft.util.ResourceLocation;
 
 public abstract class GuiForestryTitled<T extends TileForestry> extends GuiForestry<T> {
 

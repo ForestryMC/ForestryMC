@@ -4,11 +4,18 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.farming.gadgets;
+
+import java.util.Collection;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.core.ITileStructure;
 import forestry.api.farming.ICrop;
@@ -16,12 +23,10 @@ import forestry.api.farming.IFarmComponent;
 import forestry.api.farming.IFarmListener;
 import forestry.api.farming.IFarmLogic;
 import forestry.core.vect.Vect;
-import java.util.Collection;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileControl extends TileFarm implements IFarmListener {
+
+	private boolean isRegistered = false;
 
 	public TileControl() {
 		fixedType = TYPE_CONTROL;
@@ -29,8 +34,10 @@ public class TileControl extends TileFarm implements IFarmListener {
 
 	@Override
 	protected void updateServerSide() {
-		if (!isInited)
+		if (!isRegistered) {
 			registerWithMaster();
+			isRegistered = true;
+		}
 	}
 
 	@Override
@@ -39,17 +46,16 @@ public class TileControl extends TileFarm implements IFarmListener {
 		registerWithMaster();
 	}
 
-	private boolean isInited = false;
-
 	private void registerWithMaster() {
 
-		isInited = true;
-		if (!hasMaster())
+		if (!hasMaster()) {
 			return;
+		}
 
 		ITileStructure central = getCentralTE();
-		if (!(central instanceof IFarmComponent))
+		if (!(central instanceof IFarmComponent)) {
 			return;
+		}
 
 		((IFarmComponent) central).registerListener(this);
 	}
@@ -69,7 +75,19 @@ public class TileControl extends TileFarm implements IFarmListener {
 		Vect side = new Vect(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
 
 		ForgeDirection opp = direction.getOpposite();
-		int dir = opp.offsetZ < 0 ? 2 : opp.offsetZ > 0 ? 3 : opp.offsetX < 0 ? 4 : opp.offsetX > 0 ? 5 : 0;
+		int dir;
+		if (opp.offsetZ < 0) {
+			dir = 2;
+		} else if (opp.offsetZ > 0) {
+			dir = 3;
+		} else if (opp.offsetX < 0) {
+			dir = 4;
+		} else if (opp.offsetX > 0) {
+			dir = 5;
+		} else {
+			dir = 0;
+		}
+
 		return worldObj.getIndirectPowerLevelTo(side.x, side.y, side.z, dir) > 0 || worldObj.isBlockProvidingPowerTo(side.x, side.y, side.z, dir) > 0;
 	}
 

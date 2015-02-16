@@ -1,10 +1,7 @@
 package forestry.core.gadgets;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.core.CreativeTabForestry;
-import forestry.core.render.TextureManager;
 import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -12,6 +9,12 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import forestry.core.CreativeTabForestry;
+import forestry.core.render.TextureManager;
 
 public class BlockResourceStorageBlock extends Block {
 	
@@ -31,7 +34,7 @@ public class BlockResourceStorageBlock extends Block {
 	@SideOnly(Side.CLIENT)
 	private IIcon iconBronze;
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs creativeTabs, List itemList) {
 		itemList.add(new ItemStack(this, 1, 0));
@@ -64,7 +67,7 @@ public class BlockResourceStorageBlock extends Block {
 			icon = iconCopper;
 		} else if (meta == 2) {
 			icon = iconTin;
-		} else  {
+		} else {
 			icon = iconBronze;
 		}
 		

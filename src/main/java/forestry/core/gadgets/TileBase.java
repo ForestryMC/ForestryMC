@@ -4,16 +4,17 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import forestry.core.interfaces.IHintSource;
 import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
-import net.minecraft.entity.player.EntityPlayer;
 
 public abstract class TileBase extends TileForestry implements IHintSource {
 
@@ -32,10 +33,11 @@ public abstract class TileBase extends TileForestry implements IHintSource {
 
 		super.updateEntity();
 
-		if (!Proxies.common.isSimulating(worldObj))
+		if (!Proxies.common.isSimulating(worldObj)) {
 			updateClientSide();
-		else
+		} else {
 			updateServerSide();
+		}
 	}
 
 	protected void updateClientSide() {

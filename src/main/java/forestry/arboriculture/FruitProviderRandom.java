@@ -4,22 +4,24 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture;
 
-import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.genetics.IFruitFamily;
-import forestry.plugins.PluginArboriculture;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.genetics.IFruitFamily;
+import forestry.plugins.PluginArboriculture;
 
 /**
  * Simple fruit provider which drops from any leaf block according to yield and either marks all leave blocks as fruit leaves or none.
@@ -50,9 +52,11 @@ public class FruitProviderRandom extends FruitProviderNone {
 
 		float modeYieldMod = PluginArboriculture.treeInterface.getTreekeepingMode(world).getYieldModifier(genome, 1f);
 
-		for (Map.Entry<ItemStack, Float> entry : products.entrySet())
-			if (world.rand.nextFloat() <= genome.getYield() * modeYieldMod * entry.getValue())
+		for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
+			if (world.rand.nextFloat() <= genome.getYield() * modeYieldMod * entry.getValue()) {
 				product.add(entry.getKey().copy());
+			}
+		}
 
 		return product.toArray(new ItemStack[product.size()]);
 	}

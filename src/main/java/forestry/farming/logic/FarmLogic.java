@@ -4,18 +4,17 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.farming.logic;
 
-import java.util.HashSet;
+import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -26,8 +25,8 @@ import forestry.api.farming.IFarmLogic;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.render.SpriteSheet;
-import forestry.core.vect.IVect;
 import forestry.core.vect.Vect;
+import forestry.core.vect.VectUtil;
 
 public abstract class FarmLogic implements IFarmLogic {
 
@@ -35,7 +34,19 @@ public abstract class FarmLogic implements IFarmLogic {
 
 	protected boolean isManual;
 
-	private static final HashSet<Block> breakable = new HashSet<Block>();
+	private static final ImmutableSet<Block> breakableSoil = ImmutableSet.of(
+			Blocks.air,
+			Blocks.dirt,
+			Blocks.grass,
+			Blocks.sand,
+			Blocks.farmland,
+			Blocks.mycelium,
+			Blocks.soul_sand,
+			Blocks.water,
+			Blocks.flowing_water,
+			Blocks.end_stone,
+			ForestryBlock.soil.block()
+	);
 
 	public FarmLogic(IFarmHousing housing) {
 		this.housing = housing;
@@ -46,20 +57,9 @@ public abstract class FarmLogic implements IFarmLogic {
 		return this;
 	}
 
-	public boolean canBreakGround(Block block) {
-		if (breakable.isEmpty()) {
-			breakable.add(Blocks.air);
-			breakable.add(Blocks.dirt);
-			breakable.add(Blocks.grass);
-			breakable.add(Blocks.sand);
-			breakable.add(Blocks.farmland);
-			breakable.add(Blocks.mycelium);
-			breakable.add(Blocks.soul_sand);
-			breakable.add(Blocks.water);
-			breakable.add(Blocks.flowing_water);
-			breakable.add(ForestryBlock.soil.block());
-		}
-		return breakable.contains(block);
+	public static boolean canBreakSoil(World world, Vect position) {
+		Block block = VectUtil.getBlock(world, position);
+		return breakableSoil.contains(block) || block.isReplaceable(world, position.getX(), position.getY(), position.getZ());
 	}
 
 	protected World getWorld() {
@@ -71,10 +71,6 @@ public abstract class FarmLogic implements IFarmLogic {
 		return SpriteSheet.ITEMS.getLocation();
 	}
 
-	protected final boolean isAirBlock(IVect position) {
-		return getWorld().isAirBlock(position.getX(), position.getY(), position.getZ());
-	}
-
 	protected final boolean isAirBlock(Block block) {
 		return block.getMaterial() == Material.air;
 	}
@@ -82,23 +78,6 @@ public abstract class FarmLogic implements IFarmLogic {
 	protected final boolean isWaterSourceBlock(World world, Vect position) {
 		return world.getBlock(position.x, position.y, position.z) == Blocks.water &&
 				world.getBlockMetadata(position.x, position.y, position.z) == 0;
-	}
-
-	protected final boolean isWoodBlock(IVect position) {
-		Block block = getBlock(position);
-		return block.isWood(getWorld(), position.getX(), position.getY(), position.getZ());
-	}
-
-	protected final Block getBlock(IVect position) {
-		return getWorld().getBlock(position.getX(), position.getY(), position.getZ());
-	}
-
-	protected final int getBlockMeta(IVect position) {
-		return getWorld().getBlockMetadata(position.getX(), position.getY(), position.getZ());
-	}
-
-	protected final ItemStack getAsItemStack(IVect position) {
-		return new ItemStack(getBlock(position), 1, getBlockMeta(position));
 	}
 
 	protected final Vect translateWithOffset(int x, int y, int z, ForgeDirection direction, int step) {

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -26,11 +26,12 @@ public abstract class BeverageEffect implements IBeverageEffect {
 	public BeverageEffect(int id) {
 		this.id = id;
 
-		if (BeverageManager.effectList[id] != null)
+		if (BeverageManager.effectList[id] != null) {
 			throw new RuntimeException("Beverage effect slot " + id + " was already occupied by " + BeverageManager.effectList[id].toString()
 					+ " when trying to add " + this.toString());
-		else
+		} else {
 			BeverageManager.effectList[id] = this;
+		}
 	}
 
 	public int getId() {
@@ -43,9 +44,10 @@ public abstract class BeverageEffect implements IBeverageEffect {
 
 	@Override
 	public String getDescription() {
-		if (getLevel() != null)
+		if (getLevel() != null) {
 			return StringUtil.localize(description) + " " + getLevel();
-		else
+		} else {
 			return StringUtil.localize(description);
+		}
 	}
 }

@@ -4,18 +4,21 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.gui;
 
+import java.util.ArrayList;
+
+import net.minecraft.client.Minecraft;
+
+import org.lwjgl.opengl.GL11;
+
 import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
-import java.util.ArrayList;
-import net.minecraft.client.Minecraft;
-import org.lwjgl.opengl.GL11;
 
 public class WidgetManager {
 
@@ -42,8 +45,9 @@ public class WidgetManager {
 
 	protected Widget getAtPosition(int mX, int mY) {
 		for (Widget slot : widgets) {
-			if (slot.isMouseOver(mX, mY))
+			if (slot.isMouseOver(mX, mY)) {
 				return slot;
+			}
 		}
 
 		return null;
@@ -63,8 +67,9 @@ public class WidgetManager {
 
 	public void handleMouseClicked(int mouseX, int mouseY, int mouseButton) {
 		Widget slot = getAtPosition(mouseX - gui.getGuiLeft(), mouseY - gui.getGuiTop());
-		if (slot != null)
+		if (slot != null) {
 			slot.handleMouseClick(mouseX, mouseY, mouseButton);
+		}
 	}
 
 	public void handleMouseRelease(int mouseX, int mouseY, int eventType) {
@@ -73,7 +78,7 @@ public class WidgetManager {
 		}
 	}
 
-	public void handleMouseMove(int mouseX, int mouseY,  int mouseButton, long time) {
+	public void handleMouseMove(int mouseX, int mouseY, int mouseButton, long time) {
 		for (Widget slot : widgets) {
 			slot.handleMouseMove(mouseX, mouseY, mouseButton, time);
 		}

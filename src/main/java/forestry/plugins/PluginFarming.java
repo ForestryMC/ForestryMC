@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -33,6 +33,7 @@ import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmable;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
+import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
@@ -94,6 +95,8 @@ public class PluginFarming extends ForestryPlugin {
 		Farmables.farmables.put("farmArboreal", new ArrayList<IFarmable>());
 		Farmables.farmables.get("farmArboreal").add(new FarmableVanillaSapling());
 		Farmables.farmables.get("farmArboreal").add(new FarmableGE());
+
+		Farmables.farmables.put("farmOrchard", new ArrayList<IFarmable>());
 
 		Farmables.farmables.put("farmShroom", new ArrayList<IFarmable>());
 		Farmables.farmables.get("farmShroom").add(new FarmableVanillaShroom(Blocks.brown_mushroom, 0));
@@ -201,15 +204,17 @@ public class PluginFarming extends ForestryPlugin {
 
 			try {
 				Block sapling = GameData.getBlockRegistry().getRaw(items[0]);
-				if (sapling == null || sapling == Blocks.air)
+				if (sapling == null || sapling == Blocks.air) {
 					throw new RuntimeException("can't find block for " + items[0]);
+				}
 
-				if (items.length == 2)
+				if (items.length == 2) {
 					Farmables.farmables.get(tokens[0]).add(new FarmableGenericSapling(sapling, Integer.parseInt(items[1])));
-				else {
+				} else {
 					Item windfall = GameData.getItemRegistry().getRaw(items[2]);
-					if (windfall == null)
+					if (windfall == null) {
 						throw new RuntimeException("can't find item for " + items[2]);
+					}
 
 					Farmables.farmables.get(tokens[0]).add(
 							new FarmableGenericSapling(sapling, Integer.parseInt(items[1]),
@@ -242,11 +247,13 @@ public class PluginFarming extends ForestryPlugin {
 
 			try {
 				Item seed = GameData.getItemRegistry().getRaw(items[0]);
-				if (seed == null)
+				if (seed == null) {
 					throw new RuntimeException("can't find item for " + items[0]);
+				}
 				Block crop = GameData.getBlockRegistry().getRaw(items[2]);
-				if (crop == null || crop == Blocks.air)
+				if (crop == null || crop == Blocks.air) {
 					throw new RuntimeException("can't find block for " + items[2]);
+				}
 
 				Farmables.farmables.get(tokens[0]).add(
 						new FarmableGenericCrop(new ItemStack(seed, 1, Integer.parseInt(items[1])),
@@ -334,7 +341,12 @@ public class PluginFarming extends ForestryPlugin {
 		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 10), Circuit.farmShroomManual);
 		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 11), Circuit.farmCocoaManual);
 
-		if (PluginIC2.resin != null && PluginIC2.rubberwood != null)
+		if (PluginIC2.resin != null && PluginIC2.rubberwood != null) {
 			ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 8), Circuit.farmRubberManual);
+		}
+
+		if (PluginExtraUtilities.ExUEnderLilly != null && Config.isExUtilEnderLilyEnabled()) {
+			ChipsetManager.solderManager.addRecipe(layoutManaged, ForestryItem.tubes.getItemStack(1, 12), Circuit.farmEnderManaged);
+		}
 	}
 }

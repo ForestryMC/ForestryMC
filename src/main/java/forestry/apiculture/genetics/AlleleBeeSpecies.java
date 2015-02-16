@@ -4,15 +4,27 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Locale;
+
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -29,14 +41,6 @@ import forestry.core.config.Defaults;
 import forestry.core.genetics.AlleleSpecies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Locale;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
 
 public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies, IIconProvider {
 
@@ -65,7 +69,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 			IJubilanceProvider jubilanceProvider) {
 		super(uid, dominant, name, branch, binomial);
 
-		this.root = (IBeeRoot)AlleleManager.alleleRegistry.getSpeciesRoot("rootBees");
+		this.root = (IBeeRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootBees");
 		this.primaryColour = primaryColor;
 		this.secondaryColour = secondaryColor;
 		this.jubilanceProvider = jubilanceProvider;
@@ -83,8 +87,9 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	}
 
 	public AlleleBeeSpecies addProduct(ItemStack product, int chance) {
-		if (product == null || product.getItem() == null)
+		if (product == null || product.getItem() == null) {
 			throw new IllegalArgumentException("Tried to add null product");
+		}
 		this.products.put(product, chance);
 		return this;
 	}
@@ -111,16 +116,18 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 		int highest = 0;
 		exclude.add(species);
 
-		for(IMutation mutation : getRoot().getPaths(species, EnumBeeChromosome.SPECIES)) {
-			if(!exclude.contains(mutation.getAllele0())) {
+		for (IMutation mutation : getRoot().getPaths(species, EnumBeeChromosome.SPECIES)) {
+			if (!exclude.contains(mutation.getAllele0())) {
 				int otherAdvance = getGeneticAdvancement(mutation.getAllele0(), exclude);
-				if(otherAdvance > highest)
+				if (otherAdvance > highest) {
 					highest = otherAdvance;
+				}
 			}
-			if(!exclude.contains(mutation.getAllele1())) {
+			if (!exclude.contains(mutation.getAllele1())) {
 				int otherAdvance = getGeneticAdvancement(mutation.getAllele1(), exclude);
-				if(otherAdvance > highest)
+				if (otherAdvance > highest) {
 					highest = otherAdvance;
+				}
 			}
 		}
 
@@ -129,15 +136,20 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 	@Override
 	public float getResearchSuitability(ItemStack itemstack) {
-		if(itemstack == null)
+		if (itemstack == null) {
 			return 0f;
+		}
 
-		for(ItemStack stack : products.keySet())
-			if(stack.isItemEqual(itemstack))
+		for (ItemStack stack : products.keySet()) {
+			if (stack.isItemEqual(itemstack)) {
 				return 1.0f;
-		for(ItemStack stack : specialty.keySet())
-			if(stack.isItemEqual(itemstack))
+			}
+		}
+		for (ItemStack stack : specialty.keySet()) {
+			if (stack.isItemEqual(itemstack)) {
 				return 1.0f;
+			}
+		}
 
 		return super.getResearchSuitability(itemstack);
 	}
@@ -147,13 +159,13 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 		ArrayList<ItemStack> bounty = new ArrayList<ItemStack>();
 		Collections.addAll(bounty, super.getResearchBounty(world, researcher, individual, bountyLevel));
 
-		if(bountyLevel > 10) {
-			for(ItemStack stack : specialty.keySet()) {
-				bounty.add(StackUtils.copyWithRandomSize(stack, (int)((float)bountyLevel / 2), world.rand));
+		if (bountyLevel > 10) {
+			for (ItemStack stack : specialty.keySet()) {
+				bounty.add(StackUtils.copyWithRandomSize(stack, (int) ((float) bountyLevel / 2), world.rand));
 			}
 		}
-		for(ItemStack stack : products.keySet()) {
-			bounty.add(StackUtils.copyWithRandomSize(stack, (int)((float)bountyLevel / 2), world.rand));
+		for (ItemStack stack : products.keySet()) {
+			bounty.add(StackUtils.copyWithRandomSize(stack, (int) ((float) bountyLevel / 2), world.rand));
 		}
 		return bounty.toArray(new ItemStack[bounty.size()]);
 	}
@@ -186,10 +198,12 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 	@Override
 	public int getIconColour(int renderPass) {
-		if (renderPass == 0)
+		if (renderPass == 0) {
 			return primaryColour;
-		if (renderPass == 1)
+		}
+		if (renderPass == 1) {
 			return secondaryColour;
+		}
 		return 0xffffff;
 	}
 
@@ -204,8 +218,9 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 		IIcon body1 = TextureManager.getInstance().registerTex(register, "bees/" + iconType + "/body1");
 
 		for (int i = 0; i < EnumBeeType.values().length; i++) {
-			if(EnumBeeType.values()[i] == EnumBeeType.NONE)
+			if (EnumBeeType.values()[i] == EnumBeeType.NONE) {
 				continue;
+			}
 
 			icons[i][0] = TextureManager.getInstance().registerTex(register, "bees/" + iconType + "/" + EnumBeeType.values()[i].toString().toLowerCase(Locale.ENGLISH) + ".outline");
 			icons[i][1] = (EnumBeeType.values()[i] != EnumBeeType.LARVAE) ? body1

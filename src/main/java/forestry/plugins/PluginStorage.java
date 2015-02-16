@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -98,7 +98,7 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 	private Configuration config;
 
 	@Override
-	@SuppressWarnings({"unchecked","rawtypes"})
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void preInit() {
 		BackpackManager.backpackInterface = new BackpackHelper();
 
@@ -166,8 +166,9 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 	}
 
 	public static void addBackpackItem(String pack, ItemStack stack) {
-		if (stack == null)
+		if (stack == null) {
 			return;
+		}
 		BackpackManager.definitions.get(pack).addValidItem(stack);
 	}
 
@@ -180,7 +181,7 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 	}
 
 	public static void scanForItems() {
-		for (Object id : Block.blockRegistry.getKeys())
+		for (Object id : Block.blockRegistry.getKeys()) {
 			try {
 				Block block = (Block) Block.blockRegistry.getObject(id);
 
@@ -188,8 +189,9 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 						|| block instanceof IShearable
 						|| block instanceof BlockLog
 						|| block instanceof BlockMelon
-						|| block instanceof BlockPumpkin)
+						|| block instanceof BlockPumpkin) {
 					addBackpackItem("forester", block);
+				}
 				if (block instanceof BlockStairs || block.getRenderType() == 10
 						|| block instanceof BlockFence || block.getRenderType() == 11
 						|| block instanceof BlockFenceGate || block.getRenderType() == 21
@@ -204,25 +206,29 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 						|| block instanceof BlockFurnace
 						|| block instanceof BlockLadder || block.getRenderType() == 8
 						|| block instanceof BlockTrapDoor
-						|| block.getUnlocalizedName().contains("door"))
+						|| block.getUnlocalizedName().contains("door")) {
 					addBackpackItem("builder", block);
+				}
 			} catch (Throwable error) {
 				error.printStackTrace();
 			}
+		}
 
-		for (Object id : Item.itemRegistry.getKeys())
+		for (Object id : Item.itemRegistry.getKeys()) {
 			try {
 				Item item = (Item) Item.itemRegistry.getObject(id);
 
-				if (item instanceof IPlantable)
+				if (item instanceof IPlantable) {
 					addBackpackItem("forester", item);
-				else if (item instanceof ItemFood)
+				} else if (item instanceof ItemFood) {
 					addBackpackItem("hunter", item);
-				else if (item instanceof ItemDoor)
+				} else if (item instanceof ItemDoor) {
 					addBackpackItem("builder", item);
+				}
 			} catch (Throwable error) {
 				error.printStackTrace();
 			}
+		}
 	}
 
 	@Override
@@ -561,8 +567,9 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 		String[] parts = list.split("[;]+");
 
 		for (String part : parts) {
-			if (part.isEmpty())
+			if (part.isEmpty()) {
 				continue;
+			}
 
 			String[] ident = part.split("[:]+");
 
@@ -574,15 +581,16 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 			String name = ident[0] + ":" + ident[1];
 			int meta;
 
-			if (ident.length == 2)
+			if (ident.length == 2) {
 				meta = 0;
-			else
+			} else {
 				try {
 					meta = ident[2].equals("*") ? OreDictionary.WILDCARD_VALUE : NumberFormat.getIntegerInstance().parse(ident[2]).intValue();
 				} catch (ParseException e) {
 					Proxies.log.warning("Failed to add block/item of (" + part + ") to " + backpackIdent + " since its metadata isn't formatted properly. Suitable are integer values or *.");
 					continue;
 				}
+			}
 
 			Item item = GameData.getItemRegistry().getRaw(name);
 
@@ -620,29 +628,30 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 			return;
 		}
 
-		if (name.startsWith("ingot"))
+		if (name.startsWith("ingot")) {
 			minerItems.add(ore);
-		else if (name.startsWith("ore"))
+		} else if (name.startsWith("ore")) {
 			minerItems.add(ore);
-		else if (name.startsWith("gem"))
+		} else if (name.startsWith("gem")) {
 			minerItems.add(ore);
-		else if (name.startsWith("dust"))
+		} else if (name.startsWith("dust")) {
 			minerItems.add(ore);
-		else if (name.startsWith("crystal"))
+		} else if (name.startsWith("crystal")) {
 			minerItems.add(ore);
-		else if (name.startsWith("cluster"))
+		} else if (name.startsWith("cluster")) {
 			minerItems.add(ore);
-		else if (name.startsWith("shard"))
+		} else if (name.startsWith("shard")) {
 			minerItems.add(ore);
-		else if (name.startsWith("clump"))
+		} else if (name.startsWith("clump")) {
 			minerItems.add(ore);
-		else if (name.matches("dropUranium"))
+		} else if (name.matches("dropUranium")) {
 			minerItems.add(ore);
-		else if (name.equals("treeLeaves") || name.equals("treeSapling") || name.equals("logWood"))
+		} else if (name.equals("treeLeaves") || name.equals("treeSapling") || name.equals("logWood")) {
 			foresterItems.add(ore);
-		else if (name.equals("stairWood") || name.equals("plankWood") || name.equals("slabWood"))
+		} else if (name.equals("stairWood") || name.equals("plankWood") || name.equals("slabWood")) {
 			builderItems.add(ore);
-		else if (name.startsWith("wood"))
+		} else if (name.startsWith("wood")) {
 			foresterItems.add(ore);
+		}
 	}
 }

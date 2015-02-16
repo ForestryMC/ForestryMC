@@ -4,27 +4,28 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.core.config;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
-import forestry.Forestry;
-import forestry.core.proxy.Proxies;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
+
+import forestry.Forestry;
+import forestry.core.proxy.Proxies;
+
 /**
  * With permission from pahimar.
  *
  * @author Pahimar
- *
  */
 public class Version {
 
@@ -32,16 +33,17 @@ public class Version {
 
 		CURRENT, OUTDATED, CONNECTION_ERROR
 	}
+
 	public static final String VERSION = "@VERSION@";
 	public static final String BUILD_NUMBER = "@BUILD_NUMBER@";
-	public static final String[] FAILED_CHANGELOG = new String[] { String.format("Unable to retrieve changelog for %s", Defaults.MOD) };
+	public static final String[] FAILED_CHANGELOG = new String[]{String.format("Unable to retrieve changelog for %s", Defaults.MOD)};
 	public static final String FINGERPRINT = "@FINGERPRINT@";
 	public static final String FORGEPRINT = "de4cf8a3f3bc15635810044c39240bf96804ea7d";
 	private static final String REMOTE_VERSION_FILE = "http://bit.ly/forestryver";
 	private static final String REMOTE_CHANGELOG_ROOT = "https://dl.dropbox.com/u/44760587/forestry/changelog/";
-	private static final String REMOTE_FINGERPRINT_ROOT = new String(new byte[] { 104, 116, 116, 112, 115, 58, 47, 47, 100, 108, 46, 100, 114, 111, 112, 98,
-		111, 120, 46, 99, 111, 109, 47, 117, 47, 52, 52, 55, 54, 48, 53, 56, 55, 47, 102, 111, 114, 101, 115, 116, 114, 121, 47, 102, 105, 110, 103, 101,
-		114, 112, 114, 105, 110, 116, 115, 47 });
+	private static final String REMOTE_FINGERPRINT_ROOT = new String(new byte[]{104, 116, 116, 112, 115, 58, 47, 47, 100, 108, 46, 100, 114, 111, 112, 98,
+			111, 120, 46, 99, 111, 109, 47, 117, 47, 52, 52, 55, 54, 48, 53, 56, 55, 47, 102, 111, 114, 101, 115, 116, 114, 121, 47, 102, 105, 110, 103, 101,
+			114, 112, 114, 105, 110, 116, 115, 47});
 	public static EnumUpdateState currentVersion = EnumUpdateState.CURRENT;
 	public static final String FORGE_VERSION = "@FORGE_VERSION@";
 	public static String remoteFingerprint;
@@ -58,15 +60,17 @@ public class Version {
 	}
 
 	public static boolean needsUpdateNoticeAndMarkAsSeen() {
-		if (!isOutdated())
+		if (!isOutdated()) {
 			return false;
+		}
 
 		Property property = Config.config.get("vars.version.seen", Config.CATEGORY_COMMON, VERSION);
 		property.comment = "indicates the last version the user has been informed about and will suppress further notices on it.";
 		String seenVersion = property.value;
 
-		if (recommendedVersion == null || recommendedVersion.equals(seenVersion))
+		if (recommendedVersion == null || recommendedVersion.equals(seenVersion)) {
 			return false;
+		}
 
 		property.value = recommendedVersion;
 		Config.config.save();
@@ -78,9 +82,9 @@ public class Version {
 	}
 
 	public static void updateRemoteFingerprints() {
-		remoteFingerprint = retrieveRemoteString(REMOTE_FINGERPRINT_ROOT + new String(new byte[] { 102, 111, 114, 101, 115, 116, 114, 121, 46, 107, 101, 121 })
+		remoteFingerprint = retrieveRemoteString(REMOTE_FINGERPRINT_ROOT + new String(new byte[]{102, 111, 114, 101, 115, 116, 114, 121, 46, 107, 101, 121})
 				+ "1", FINGERPRINT);
-		remoteFingerprint = retrieveRemoteString(REMOTE_FINGERPRINT_ROOT + new String(new byte[] { 102, 111, 114, 103, 101, 46, 107, 101, 121 }) + "1",
+		remoteFingerprint = retrieveRemoteString(REMOTE_FINGERPRINT_ROOT + new String(new byte[]{102, 111, 114, 103, 101, 46, 107, 101, 121}) + "1",
 				FORGEPRINT);
 	}
 
@@ -88,7 +92,7 @@ public class Version {
 		try {
 
 			HttpURLConnection conn;
-			 do {
+			do {
 				URL url = new URL(location);
 				conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestProperty("User-Agent",
@@ -100,8 +104,9 @@ public class Version {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
 			String line;
-			if ((line = reader.readLine()) != null)
+			if ((line = reader.readLine()) != null) {
 				return line;
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -138,8 +143,9 @@ public class Version {
 					}
 				}
 
-				if (recommendedVersion == null)
+				if (recommendedVersion == null) {
 					return;
+				}
 
 				int result = FMLCommonHandler.instance().findContainerFor(Forestry.instance).getProcessedVersion().compareTo(new DefaultArtifactVersion(recommendedVersion));
 				if (result >= 0) {
@@ -154,7 +160,7 @@ public class Version {
 				currentVersion = EnumUpdateState.OUTDATED;
 
 			} catch (Exception e) {
-//				e.printStackTrace();
+				//				e.printStackTrace();
 				Proxies.log.warning("Unable to read from remote version authority.");
 				currentVersion = EnumUpdateState.CONNECTION_ERROR;
 			}
@@ -174,7 +180,7 @@ public class Version {
 		try {
 			String location = REMOTE_CHANGELOG_ROOT + version;
 			HttpURLConnection conn = null;
-			 do {
+			do {
 				URL url = new URL(location);
 				conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestProperty("User-Agent",
@@ -188,10 +194,12 @@ public class Version {
 			String line = null;
 			ArrayList<String> changelog = new ArrayList<String>();
 			while ((line = reader.readLine()) != null) {
-				if (line.startsWith("#"))
+				if (line.startsWith("#")) {
 					continue;
-				if (line.isEmpty())
+				}
+				if (line.isEmpty()) {
 					continue;
+				}
 
 				changelog.add(line);
 			}
@@ -199,10 +207,10 @@ public class Version {
 			return changelog.toArray(new String[changelog.size()]);
 
 		} catch (Exception ex) {
-//			ex.printStackTrace();
+			//			ex.printStackTrace();
 			Proxies.log.warning("Unable to read changelog from remote site.");
 		}
 
-		return new String[] { String.format("Unable to retrieve changelog for %s %s", Defaults.MOD, version) };
+		return new String[]{String.format("Unable to retrieve changelog for %s %s", Defaults.MOD, version)};
 	}
 }

@@ -1,11 +1,13 @@
 package forestry.apiculture.genetics;
 
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.world.World;
+
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
-import java.util.Random;
-import net.minecraft.block.Block;
-import net.minecraft.world.World;
 
 public class AlleleEffectFertile extends AlleleEffectThrottled {
 	

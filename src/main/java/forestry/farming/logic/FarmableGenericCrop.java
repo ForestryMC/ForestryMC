@@ -4,19 +4,20 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
 package forestry.farming.logic;
 
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.core.vect.Vect;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmable;
+import forestry.core.vect.Vect;
 
 public class FarmableGenericCrop implements IFarmable {
 
@@ -37,23 +38,27 @@ public class FarmableGenericCrop implements IFarmable {
 
 	@Override
 	public ICrop getCropAt(World world, int x, int y, int z) {
-		if (world.getBlock(x, y, z) != block)
+		if (world.getBlock(x, y, z) != block) {
 			return null;
-		if (world.getBlockMetadata(x, y, z) != mature)
+		}
+		if (world.getBlockMetadata(x, y, z) != mature) {
 			return null;
+		}
 
 		return new CropBlock(world, block, mature, new Vect(x, y, z));
 	}
 
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
-		if (seed.getItem() != itemstack.getItem())
+		if (seed.getItem() != itemstack.getItem()) {
 			return false;
+		}
 
-		if (seed.getItemDamage() >= 0)
+		if (seed.getItemDamage() >= 0) {
 			return seed.getItemDamage() == itemstack.getItemDamage();
-		else
+		} else {
 			return true;
+		}
 	}
 
 	@Override

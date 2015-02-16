@@ -7,27 +7,32 @@
  ******************************************************************************/
 package forestry.pipes;
 
-import buildcraft.api.core.IIconProvider;
-import buildcraft.transport.BlockGenericPipe;
-import buildcraft.transport.Pipe;
-import buildcraft.transport.PipeTransportItems;
-import buildcraft.transport.TransportConstants;
-import buildcraft.transport.pipes.events.PipeEventItem;
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.nbt.NBTTagCompound;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import forestry.api.apiculture.IBee;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.IAllele;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginApiculture;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+
+import buildcraft.api.core.IIconProvider;
+import buildcraft.transport.BlockGenericPipe;
+import buildcraft.transport.Pipe;
+import buildcraft.transport.PipeTransportItems;
+import buildcraft.transport.TransportConstants;
+import buildcraft.transport.pipes.events.PipeEventItem;
 
 public class PipeItemsPropolis extends Pipe<PipeTransportItems> {
 
@@ -56,28 +61,33 @@ public class PipeItemsPropolis extends Pipe<PipeTransportItems> {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIconProvider getIconProvider() {
-		if (provider == null)
+		if (provider == null) {
 			provider = new PipeIconProvider();
+		}
 
 		return provider;
 	}
 
 	@Override
 	public int getIconIndex(ForgeDirection direction) {
-		if (direction == ForgeDirection.UNKNOWN)
+		if (direction == ForgeDirection.UNKNOWN) {
 			return 0;
+		}
 
 		return direction.ordinal() + 1;
 	}
 
 	@Override
 	public boolean blockActivated(EntityPlayer player) {
-		if (!Proxies.common.isSimulating(getWorld()))
+		if (!Proxies.common.isSimulating(getWorld())) {
 			return true;
+		}
 
-		if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() != null)
-			if (Block.getBlockFromItem(player.getCurrentEquippedItem().getItem()) instanceof BlockGenericPipe)
+		if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() != null) {
+			if (Block.getBlockFromItem(player.getCurrentEquippedItem().getItem()) instanceof BlockGenericPipe) {
 				return false;
+			}
+		}
 
 		player.openGui(ForestryAPI.instance, GuiId.PropolisPipeGUI.ordinal(), player.worldObj, container.xCoord, container.yCoord, container.zCoord);
 
@@ -93,15 +103,17 @@ public class PipeItemsPropolis extends Pipe<PipeTransportItems> {
 		EnumFilterType type = EnumFilterType.getType(event.item.getItemStack());
 		IBee bee = null;
 
-		if (type != EnumFilterType.ITEM)
+		if (type != EnumFilterType.ITEM) {
 			bee = PluginApiculture.beeInterface.getMember(event.item.getItemStack());
+		}
 
 		// Filtered outputs
 		for (ForgeDirection dir : event.destinations) {
 
 			// Continue if this direction is closed.
-			if (pipeLogic.isClosed(dir))
+			if (pipeLogic.isClosed(dir)) {
 				continue;
+			}
 
 			if (pipeLogic.isIndiscriminate(dir)) {
 				defaultOrientations.add(dir);
@@ -109,8 +121,9 @@ public class PipeItemsPropolis extends Pipe<PipeTransportItems> {
 			}
 
 			// We need to match the type for this orientation's filter
-			if (!pipeLogic.matchType(dir, type, bee))
+			if (!pipeLogic.matchType(dir, type, bee)) {
 				continue;
+			}
 
 			// Passing the type filter is enough for non-bee items.
 			if (type == EnumFilterType.ITEM) {
@@ -127,19 +140,21 @@ public class PipeItemsPropolis extends Pipe<PipeTransportItems> {
 
 			// Bees need to match one of the genome filters
 			for (IAllele[] pattern : filters) {
-				if (pipeLogic.matchAllele(pattern[0], bee.getIdent()) && pipeLogic.matchAllele(pattern[1], bee.getGenome().getSecondary().getUID()))
+				if (pipeLogic.matchAllele(pattern[0], bee.getIdent()) && pipeLogic.matchAllele(pattern[1], bee.getGenome().getSecondary().getUID())) {
 					filteredOrientations.add(dir);
+				}
 			}
 		}
 
 		event.destinations.clear();
 
-		if (filteredOrientations.size() > 0)
+		if (filteredOrientations.size() > 0) {
 			event.destinations.addAll(filteredOrientations);
-		else if (typedOrientations.size() > 0)
+		} else if (typedOrientations.size() > 0) {
 			event.destinations.addAll(typedOrientations);
-		else
+		} else {
 			event.destinations.addAll(defaultOrientations);
+		}
 	}
 
 	public void eventHandler(PipeEventItem.Entered event) {

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -47,22 +47,25 @@ public class MachinePhilatelist extends TileBase implements IInventory {
 	// / UPDATING
 	@Override
 	public void updateServerSide() {
-		if (worldObj.getTotalWorldTime() % 20 * 10 != 0)
+		if (!updateOnInterval(20)) {
 			return;
+		}
 
 		ItemStack stamp = null;
 
 		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(SLOT_FILTER) == null)
+		if (inventory.getStackInSlot(SLOT_FILTER) == null) {
 			stamp = PostManager.postRegistry.getPostOffice(worldObj).getAnyStamp(1);
-		else {
+		} else {
 			ItemStack filter = inventory.getStackInSlot(SLOT_FILTER);
-			if (filter.getItem() instanceof IStamps)
+			if (filter.getItem() instanceof IStamps) {
 				stamp = PostManager.postRegistry.getPostOffice(worldObj).getAnyStamp(((IStamps) filter.getItem()).getPostage(filter), 1);
+			}
 		}
 
-		if (stamp == null)
+		if (stamp == null) {
 			return;
+		}
 
 		// Store it.
 		StackUtils.stowInInventory(stamp, inventory, true, SLOT_BUFFER_1, SLOT_BUFFER_COUNT);

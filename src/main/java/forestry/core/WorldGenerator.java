@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -67,32 +67,36 @@ public class WorldGenerator implements IWorldGenerator {
 		chunkZ = chunkZ << 4;
 
 		// / APATITE
-		if (Config.generateApatiteOre)
+		if (Config.generateApatiteOre) {
 			if (random.nextFloat() < 0.8f) {
 				int randPosX = chunkX + random.nextInt(16);
 				int randPosY = random.nextInt(world.getActualHeight() - 72) + 56; // Does not generate below y = 64
 				int randPosZ = chunkZ + random.nextInt(16);
-				if (apatiteGenerator.generate(world, random, randPosX, randPosY, randPosZ))
+				if (apatiteGenerator.generate(world, random, randPosX, randPosY, randPosZ)) {
 					Proxies.log.finest("Generated apatite vein around %s/%s/%s", randPosX, randPosY, randPosZ);
+				}
 			}
+		}
 
 		// / COPPER
-		if (Config.generateCopperOre)
+		if (Config.generateCopperOre) {
 			for (int i = 0; i < 20; i++) {
 				int randPosX = chunkX + random.nextInt(16);
 				int randPosY = random.nextInt(76) + 32;
 				int randPosZ = chunkZ + random.nextInt(16);
 				copperGenerator.generate(world, random, randPosX, randPosY, randPosZ);
 			}
+		}
 
 		// / TIN
-		if (Config.generateTinOre)
+		if (Config.generateTinOre) {
 			for (int i = 0; i < 18; i++) {
 				int randPosX = chunkX + random.nextInt(16);
 				int randPosY = random.nextInt(76) + 16;
 				int randPosZ = chunkZ + random.nextInt(16);
 				tinGenerator.generate(world, random, randPosX, randPosY, randPosZ);
 			}
+		}
 	}
 
 }

@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -13,6 +13,13 @@ package forestry.mail.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.input.Keyboard;
+
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.TradeStationInfo;
 import forestry.core.config.SessionVars;
@@ -20,20 +27,13 @@ import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.utils.StringUtil;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.ResourceLocation;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
 public class GuiCatalogue extends GuiForestry<TileForestry> {
 
 	private static final String boldUnderline = EnumChatFormatting.BOLD.toString() + EnumChatFormatting.UNDERLINE;
 
-//	GuiButton buttonTrade;
-//	GuiButton buttonClose;
+	//	GuiButton buttonTrade;
+	//	GuiButton buttonClose;
 
 	private GuiButton buttonFilter;
 	private GuiButton buttonCopy;
@@ -45,7 +45,7 @@ public class GuiCatalogue extends GuiForestry<TileForestry> {
 		super(new ResourceLocation("textures/gui/book.png"), new ContainerCatalogue(player));
 		this.xSize = 192;
 		this.ySize = 192;
-		container = (ContainerCatalogue)inventorySlots;
+		container = (ContainerCatalogue) inventorySlots;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -77,13 +77,14 @@ public class GuiCatalogue extends GuiForestry<TileForestry> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		fontRendererObj.drawString(String.format("%s / %s", container.getCurrentPos(), container.getMaxCount()), guiLeft + xSize - 72, guiTop + 12, fontColor.get("gui.book"));
+		fontRendererObj.drawString(String.format("%s / %s", container.getPageNumber(), container.getPageCount()), guiLeft + xSize - 72, guiTop + 12, fontColor.get("gui.book"));
 
 		clearTradeInfoWidgets();
-		if(container.getTradeInfo() != null)
+		if (container.getTradeInfo() != null) {
 			drawTradePreview(guiLeft + 38, guiTop + 30);
-		else
+		} else {
 			drawNoTrade(guiLeft + 38, guiTop + 30);
+		}
 
 		buttonFilter.displayString = StringUtil.localize("gui.mail.filter." + container.getFilterIdent());
 		buttonCopy.enabled = container.getTradeInfo() != null && container.getTradeInfo().state.isOk();
@@ -107,10 +108,11 @@ public class GuiCatalogue extends GuiForestry<TileForestry> {
 			addTradeInfoWidget(new ItemStackWidget(x - guiLeft + i * 18, y - guiTop + 56, info.required[i]));
 		}
 
-		if(info.state.isOk())
+		if (info.state.isOk()) {
 			fontRendererObj.drawSplitString(EnumChatFormatting.DARK_GREEN + StringUtil.localize("chat.mail." + info.state.getIdentifier()), x, y + 82, 119, fontColor.get("gui.book"));
-		else
+		} else {
 			fontRendererObj.drawSplitString(EnumChatFormatting.DARK_RED + StringUtil.localize("chat.mail." + info.state.getIdentifier()), x, y + 82, 119, fontColor.get("gui.book"));
+		}
 	}
 
 	private void addTradeInfoWidget(ItemStackWidget widget) {
@@ -127,27 +129,27 @@ public class GuiCatalogue extends GuiForestry<TileForestry> {
 
 	@Override
 	protected void actionPerformed(GuiButton button) {
-		switch(button.id) {
-		case 0:
-			mc.thePlayer.closeScreen();
-			break;
-		case 2:
-			container.advanceIteration();
-			break;
-		case 3:
-			container.regressIteration();
-			break;
-		case 4:
-			container.cycleFilter();
-			break;
-		case 5:
-			TradeStationInfo info = container.getTradeInfo();
-			if(info != null) {
-				SessionVars.setStringVar("mail.letter.recipient", info.address.getName());
-				SessionVars.setStringVar("mail.letter.addressee", EnumAddressee.TRADER.toString());
-			}
-			mc.thePlayer.closeScreen();
-			break;
+		switch (button.id) {
+			case 0:
+				mc.thePlayer.closeScreen();
+				break;
+			case 2:
+				container.nextPage();
+				break;
+			case 3:
+				container.previousPage();
+				break;
+			case 4:
+				container.cycleFilter();
+				break;
+			case 5:
+				TradeStationInfo info = container.getTradeInfo();
+				if (info != null) {
+					SessionVars.setStringVar("mail.letter.recipient", info.address.getName());
+					SessionVars.setStringVar("mail.letter.addressee", EnumAddressee.TRADER.toString());
+				}
+				mc.thePlayer.closeScreen();
+				break;
 		}
 	}
 }

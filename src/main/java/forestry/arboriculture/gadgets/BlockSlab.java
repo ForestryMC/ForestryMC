@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -66,8 +66,9 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 	@Override
 	public IIcon getIcon(int side, int meta) {
 		WoodType type = getWoodType(meta);
-		if (type == null)
+		if (type == null) {
 			return null;
+		}
 		return type.getPlankIcon();
 	}
 
@@ -86,13 +87,14 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 		return "SomeSlab";
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
 		int totalWoods = WoodType.values().length;
 		int count = Math.min(totalWoods - (cat.ordinal() * slabsPerCat), slabsPerCat);
-		for (int i = 0; i < count; i++)
+		for (int i = 0; i < count; i++) {
 			itemList.add(new ItemStack(this, 1, i));
+		}
 	}
 
 	/* PROPERTIES */
@@ -114,10 +116,11 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 	@Override
 	public WoodType getWoodType(int meta) {
 		int woodOrdinal = (meta % slabsPerCat) + cat.ordinal() * slabsPerCat;
-		if(woodOrdinal < WoodType.VALUES.length)
+		if (woodOrdinal < WoodType.VALUES.length) {
 			return WoodType.VALUES[woodOrdinal];
-		else
+		} else {
 			return null;
+		}
 	}
 
 	@Override

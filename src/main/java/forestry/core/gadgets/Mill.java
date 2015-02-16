@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/lgpl-3.0.txt
- * 
+ *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
@@ -55,10 +55,12 @@ public abstract class Mill extends TileBase {
 
 		// Stop gracefully if discharged.
 		if (charge <= 0) {
-			if (stage > 0)
+			if (stage > 0) {
 				progress += speed;
-			if (progress > 0.5)
+			}
+			if (progress > 0.5) {
 				stage = 2;
+			}
 			if (progress > 1) {
 				progress = 0;
 				stage = 0;
@@ -68,8 +70,9 @@ public abstract class Mill extends TileBase {
 
 		// Update blades
 		progress += speed;
-		if (stage <= 0)
+		if (stage <= 0) {
 			stage = 1;
+		}
 
 		if (progress > 0.5 && stage == 1) {
 			stage = 2;
@@ -83,8 +86,9 @@ public abstract class Mill extends TileBase {
 			stage = 0;
 
 			// Fully charged! Do something!
-			if (charge >= 7)
+			if (charge >= 7) {
 				activate();
+			}
 		}
 
 	}
