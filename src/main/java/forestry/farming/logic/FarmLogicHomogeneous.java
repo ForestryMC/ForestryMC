@@ -92,12 +92,8 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 		World world = getWorld();
 
 		for (int i = 0; i < extent; i++) {
-<<<<<<< HEAD
 			Vect position = translateWithOffset(pos, direction, i);
-=======
-			Vect position = translateWithOffset(x, yGround, z, direction, i);
 			Block soil = VectUtil.getBlock(world, position);
->>>>>>> origin/dev
 
 			if (StructureLogicFarm.bricks.contains(soil)) {
 				break;

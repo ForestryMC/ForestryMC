@@ -60,23 +60,7 @@ public abstract class FarmLogic implements IFarmLogic {
 
 	public static boolean canBreakSoil(World world, Vect position) {
 		Block block = VectUtil.getBlock(world, position);
-<<<<<<< HEAD
-		if (breakable.isEmpty()) {
-			breakable.add(Blocks.air);
-			breakable.add(Blocks.dirt);
-			breakable.add(Blocks.grass);
-			breakable.add(Blocks.sand);
-			breakable.add(Blocks.farmland);
-			breakable.add(Blocks.mycelium);
-			breakable.add(Blocks.soul_sand);
-			breakable.add(Blocks.water);
-			breakable.add(Blocks.flowing_water);
-			breakable.add(ForestryBlock.soil.block());
-		}
-		return breakable.contains(block) || block.isReplaceable(world, position.toBlockPos());
-=======
-		return breakableSoil.contains(block) || block.isReplaceable(world, position.getX(), position.getY(), position.getZ());
->>>>>>> origin/dev
+		return breakableSoil.contains(block) || block.isReplaceable(world, position.toBlockPos());
 	}
 
 	protected World getWorld() {
