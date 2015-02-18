@@ -338,16 +338,6 @@ public class PluginArboriculture extends ForestryPlugin {
 			Proxies.render.registerVillagerSkin(Defaults.ID_VILLAGER_LUMBERJACK, Defaults.TEXTURE_SKIN_LUMBERJACK);
 			VillagerRegistry.instance().registerVillageTradeHandler(Defaults.ID_VILLAGER_LUMBERJACK, new VillageHandlerArboriculture());
 		}
-		if (PluginManager.Module.FACTORY.isEnabled()) {
-			ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-			crateRegistry.registerCrate(EnumFruit.CHERRY.getStack(), "cratedCherry");
-			crateRegistry.registerCrate(EnumFruit.WALNUT.getStack(), "cratedWalnut");
-			crateRegistry.registerCrate(EnumFruit.CHESTNUT.getStack(), "cratedChestnut");
-			crateRegistry.registerCrate(EnumFruit.LEMON.getStack(), "cratedLemon");
-			crateRegistry.registerCrate(EnumFruit.PLUM.getStack(), "cratedPlum");
-			crateRegistry.registerCrate(EnumFruit.PAPAYA.getStack(), "cratedPapaya");
-			crateRegistry.registerCrate(EnumFruit.DATES.getStack(), "cratedDates");
-		}
 	}
 
 	@Override
@@ -402,6 +392,14 @@ public class PluginArboriculture extends ForestryPlugin {
 
 	@Override
 	protected void registerCrates() {
+		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
+		crateRegistry.registerCrate(EnumFruit.CHERRY.getStack(), "cratedCherry");
+		crateRegistry.registerCrate(EnumFruit.WALNUT.getStack(), "cratedWalnut");
+		crateRegistry.registerCrate(EnumFruit.CHESTNUT.getStack(), "cratedChestnut");
+		crateRegistry.registerCrate(EnumFruit.LEMON.getStack(), "cratedLemon");
+		crateRegistry.registerCrate(EnumFruit.PLUM.getStack(), "cratedPlum");
+		crateRegistry.registerCrate(EnumFruit.PAPAYA.getStack(), "cratedPapaya");
+		crateRegistry.registerCrate(EnumFruit.DATES.getStack(), "cratedDates");
 	}
 
 	@Override
