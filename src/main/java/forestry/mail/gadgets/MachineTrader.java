@@ -25,6 +25,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.common.Optional;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorState;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
@@ -173,7 +174,12 @@ public class MachineTrader extends TileBase {
 
 	/* STATE INFORMATION */
 	public boolean isLinked() {
-		return address.isValid() && getErrorState() != EnumErrorCode.NOTALPHANUMERIC && getErrorState() != EnumErrorCode.NOTUNIQUE;
+		if (address == null || !address.isValid()) {
+			return false;
+		}
+
+		IErrorState errorState = getErrorState();
+		return errorState != EnumErrorCode.NOTALPHANUMERIC && errorState != EnumErrorCode.NOTUNIQUE;
 	}
 
 	/**
@@ -274,7 +280,7 @@ public class MachineTrader extends TileBase {
 			throw new NullPointerException("address must not be null");
 		}
 
-		if (this.address.isValid() && this.address.equals(address)) {
+		if (this.address != null && this.address.isValid() && this.address.equals(address)) {
 			return;
 		}
 
