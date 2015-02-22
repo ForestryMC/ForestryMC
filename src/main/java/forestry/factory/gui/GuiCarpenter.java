@@ -27,12 +27,6 @@ public class GuiCarpenter extends GuiForestryTitled<MachineCarpenter> {
 	}
 
 	@Override
-	public void onGuiClosed() {
-		super.onGuiClosed();
-		inventorySlots.onContainerClosed(mc.thePlayer);
-	}
-
-	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 		MachineCarpenter machine = tile;
