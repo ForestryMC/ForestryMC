@@ -17,6 +17,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
@@ -28,8 +29,8 @@ import forestry.core.proxy.Proxies;
 public class Configuration {
 
 	private final String newLine;
-	private final ArrayList<String> purge = new ArrayList<String>();
-	private final TreeMap<String, ArrayList<Property>> categorized = new TreeMap<String, ArrayList<Property>>();
+	private final List<String> purge = new ArrayList<String>();
+	private final TreeMap<String, List<Property>> categorized = new TreeMap<String, List<Property>>();
 
 	public Configuration() {
 		newLine = System.getProperty("line.separator");
@@ -38,7 +39,7 @@ public class Configuration {
 	public void addPurge(String key) {
 		purge.add(key);
 	}
-	
+
 	public Property get(String key, String category, boolean defaultVal) {
 
 		Property existing = getExisting(key, category);
@@ -171,7 +172,10 @@ public class Configuration {
 		try {
 
 			if (file.getParentFile() != null) {
-				file.getParentFile().mkdirs();
+				boolean createdDir = file.getParentFile().mkdirs();
+				if (!createdDir) {
+					return;
+				}
 			}
 
 			if (!file.exists()) {
@@ -229,17 +233,20 @@ public class Configuration {
 	}
 
 	public void save() {
-		for (Map.Entry<String, ArrayList<Property>> entry : categorized.entrySet()) {
+		for (Map.Entry<String, List<Property>> entry : categorized.entrySet()) {
 			saveFile(getCategoryFile(entry.getKey()), entry.getValue());
 		}
 	}
 
-	private void saveFile(File file, ArrayList<Property> properties) {
+	private void saveFile(File file, List<Property> properties) {
 
 		try {
 
 			if (file.getParentFile() != null) {
-				file.getParentFile().mkdirs();
+				boolean createdDir = file.getParentFile().mkdirs();
+				if (!createdDir) {
+					return;
+				}
 			}
 
 			if (!file.exists() && !file.createNewFile()) {
@@ -262,11 +269,10 @@ public class Configuration {
 			writer.write("# backpacks.conf\t-\t Contains custom configurations for backpacks" + newLine);
 			writer.write("# pipes.conf\t\t-\t Configures item id for the apiarist's pipe" + newLine);
 			writer.write("# gamemodes/\t\t-\t Configures available gamemodes");
-			TreeMap<String, ArrayList<Property>> subsectioned = getSubsectioned(properties);
+			TreeMap<String, List<Property>> subsectioned = getSubsectioned(properties);
 
-			for (Map.Entry<String, ArrayList<Property>> entry : subsectioned.entrySet()) {
-				writer.write(newLine + newLine + "#####################" + newLine + "# " + entry.getKey().toUpperCase() + newLine + "#####################"
-						+ newLine);
+			for (Map.Entry<String, List<Property>> entry : subsectioned.entrySet()) {
+				writer.write(newLine + newLine + "#####################" + newLine + "# " + entry.getKey().toUpperCase() + newLine + "#####################" + newLine);
 
 				for (Property property : entry.getValue()) {
 					if (purge.contains(property.key)) {
@@ -287,8 +293,8 @@ public class Configuration {
 
 	}
 
-	private TreeMap<String, ArrayList<Property>> getSubsectioned(ArrayList<Property> properties) {
-		TreeMap<String, ArrayList<Property>> subsectioned = new TreeMap<String, ArrayList<Property>>();
+	private TreeMap<String, List<Property>> getSubsectioned(List<Property> properties) {
+		TreeMap<String, List<Property>> subsectioned = new TreeMap<String, List<Property>>();
 
 		for (Property property : properties) {
 			String subsection = property.key.split("\\.")[0];
