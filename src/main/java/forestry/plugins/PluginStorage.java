@@ -567,6 +567,7 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 		String[] parts = list.split("(\\s*;\\s*)+");
 
 		for (String part : parts) {
+			part = part.trim();
 			if (part.isEmpty()) {
 				continue;
 			}
