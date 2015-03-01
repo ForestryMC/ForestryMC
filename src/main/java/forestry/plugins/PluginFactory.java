@@ -422,8 +422,6 @@ public class PluginFactory extends ForestryPlugin {
 		// Boxes
 		RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null, ForestryItem.carton.getItemStack(2),
 				" # ", "# #", " # ", '#', "pulpWood");
-		RecipeManagers.carpenterManager.addRecipe(20, Fluids.WATER.getFluid(1000), null, ForestryItem.crate.getItemStack(24),
-				" # ", "# #", " # ", '#', "logWood");
 
 		// Assembly Kits
 		RecipeManagers.carpenterManager.addRecipe(20, null, ForestryItem.carton.getItemStack(), ForestryItem.kitPickaxe.getItemStack(), new Object[]{

@@ -376,7 +376,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			packageTime--;
 
 			// Check whether we have become invalid and need to abort production
-			if (currentRecipe == null || !currentProduct.isItemEqual(currentRecipe.getCraftingResult()) || !validateResources()) {
+			if (currentRecipe == null || currentProduct == null || !currentProduct.isItemEqual(currentRecipe.getCraftingResult()) || !validateResources()) {
 				currentProduct = null;
 				packageTime = totalTime = 0;
 				return false;

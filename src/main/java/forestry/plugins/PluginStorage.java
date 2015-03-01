@@ -537,6 +537,11 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 
 		if (PluginManager.Module.FACTORY.isEnabled()) {
 			// / CARPENTER
+
+			// / CRATES
+			RecipeManagers.carpenterManager.addRecipe(20, Fluids.WATER.getFluid(1000), null, ForestryItem.crate.getItemStack(24),
+					" # ", "# #", " # ", '#', "logWood");
+
 			// / BACKPACKS T2
 			RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, ForestryItem.minerBackpackT2.getItemStack(),
 					"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
