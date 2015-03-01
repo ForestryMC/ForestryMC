@@ -1102,21 +1102,25 @@ public abstract class InvTools {
 		// Add to existing stacks first
 		for (int i = startSlot; i < startSlot + slots; i++) {
 
+			ItemStack inventoryStack = inventory.getStackInSlot(i);
 			// Empty slot. Add
-			if (inventory.getStackInSlot(i) == null) {
+			if (inventoryStack == null || inventoryStack.getItem() == null) {
 				continue;
 			}
 
 			// Already occupied by different item, skip this slot.
-			if (!inventory.getStackInSlot(i).isItemEqual(stack)) {
+			if (!inventoryStack.isStackable()) {
 				continue;
 			}
-			if (!ItemStack.areItemStackTagsEqual(inventory.getStackInSlot(i), stack)) {
+			if (!inventoryStack.isItemEqual(stack)) {
+				continue;
+			}
+			if (!ItemStack.areItemStackTagsEqual(inventoryStack, stack)) {
 				continue;
 			}
 
 			int remain = stack.stackSize - added;
-			int space = inventory.getStackInSlot(i).getMaxStackSize() - inventory.getStackInSlot(i).stackSize;
+			int space = inventoryStack.getMaxStackSize() - inventoryStack.stackSize;
 			// No space left, skip this slot.
 			if (space <= 0) {
 				continue;
@@ -1124,14 +1128,14 @@ public abstract class InvTools {
 			// Enough space
 			if (space >= remain) {
 				if (doAdd) {
-					inventory.getStackInSlot(i).stackSize += remain;
+					inventoryStack.stackSize += remain;
 				}
 				return stack.stackSize;
 			}
 
 			// Not enough space
 			if (doAdd) {
-				inventory.getStackInSlot(i).stackSize = inventory.getStackInSlot(i).getMaxStackSize();
+				inventoryStack.stackSize = inventoryStack.getMaxStackSize();
 			}
 
 			added += space;
