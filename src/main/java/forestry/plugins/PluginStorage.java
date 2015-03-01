@@ -564,14 +564,15 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 	}
 
 	private static void parseBackpackItems(String backpackIdent, String list, IBackpackDefinition target) {
-		String[] parts = list.split("[;]+");
+		String[] parts = list.split("(\\s*;\\s*)+");
 
 		for (String part : parts) {
+			part = part.trim();
 			if (part.isEmpty()) {
 				continue;
 			}
 
-			String[] ident = part.split("[:]+");
+			String[] ident = part.split(":+");
 
 			if (ident.length != 2 && ident.length != 3) {
 				Proxies.log.warning("Failed to add block/item of (" + part + ") to " + backpackIdent + " since it isn't formatted properly. Suitable are <name>, <name>:<meta> or <name>:*, e.g. IC2:blockWall:*.");
