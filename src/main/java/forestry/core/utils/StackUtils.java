@@ -11,6 +11,7 @@
 package forestry.core.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -338,11 +339,20 @@ public class StackUtils {
 
 		if (oreDictionary) {
 			int[] idsBase = OreDictionary.getOreIDs(base);
-			for (int idBase : idsBase) {
-				for (ItemStack itemstack : OreDictionary.getOres(OreDictionary.getOreName(idBase))) {
-					if (comparison.getItem() == itemstack.getItem() && (itemstack.getItemDamage() == OreDictionary.WILDCARD_VALUE || comparison.getItemDamage() == itemstack.getItemDamage())) {
-						return true;
-					}
+			Arrays.sort(idsBase);
+			int[] idsComp = OreDictionary.getOreIDs(comparison);
+			Arrays.sort(idsComp);
+
+			// check if the sorted arrays "idsBase" and "idsComp" have any ID in common.
+			int iBase = 0;
+			int iComp = 0;
+			while (iBase < idsBase.length && iComp < idsComp.length) {
+				if (idsBase[iBase] < idsComp[iComp]) {
+					iBase++;
+				} else if (idsBase[iBase] > idsComp[iComp]) {
+					iComp++;
+				} else {
+					return true;
 				}
 			}
 		}
