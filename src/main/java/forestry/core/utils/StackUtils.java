@@ -10,8 +10,11 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -28,8 +31,11 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.oredict.OreDictionary;
 
+import cpw.mods.fml.common.registry.GameData;
+
 import forestry.core.config.Defaults;
 import forestry.core.inventory.InvTools;
+import forestry.core.proxy.Proxies;
 
 public class StackUtils {
 
@@ -459,5 +465,67 @@ public class StackUtils {
 
 	public static boolean equals(Block block, int meta, ItemStack stack) {
 		return block == getBlock(stack) && meta == stack.getItemDamage();
+	}
+
+	public static List<ItemStack> parseItemStackStrings(String itemStackStrings) {
+		String[] parts = itemStackStrings.split("(\\s*;\\s*)+");
+
+		List<ItemStack> itemStacks = new ArrayList<ItemStack>();
+
+		for (String itemStackString : parts) {
+			ItemStack itemStack = StackUtils.parseItemStackString(itemStackString);
+			if (itemStack != null) {
+				itemStacks.add(itemStack);
+			}
+		}
+
+		return itemStacks;
+	}
+
+	public static ItemStack parseItemStackString(String itemStackString) {
+		itemStackString = itemStackString.trim();
+		if (itemStackString.isEmpty()) {
+			return null;
+		}
+
+		String[] parts = itemStackString.split(":+");
+
+		if (parts.length != 2 && parts.length != 3) {
+			Proxies.log.warning("ItemStack string (" + itemStackString + ") isn't formatted properly. Suitable formats are <modId>:<name>, <modId>:<name>:<meta> or <modId>:<name>:*, e.g. IC2:blockWall:*");
+			return null;
+		}
+
+		String name = parts[0] + ":" + parts[1];
+		int meta;
+
+		if (parts.length == 2) {
+			meta = 0;
+		} else {
+			try {
+				meta = parts[2].equals("*") ? OreDictionary.WILDCARD_VALUE : NumberFormat.getIntegerInstance().parse(parts[2]).intValue();
+			} catch (ParseException e) {
+				Proxies.log.warning("ItemStack string (" + itemStackString + ") has improperly formatter metadata. Suitable metadata are integer values or *.");
+				return null;
+			}
+		}
+
+		Item item = GameData.getItemRegistry().getRaw(name);
+
+		if (item == null) {
+			Block block = GameData.getBlockRegistry().getRaw(name);
+
+			if (block != null) {
+				item = Item.getItemFromBlock(block);
+			}
+			if (item == null) {
+				Proxies.log.warning("Failed to find (" + itemStackString + ") in the Forge item and block registries.");
+				return null;
+			}
+		}
+		ItemStack itemStack = new ItemStack(item, 1, meta);
+
+		Proxies.log.finer("Parsed (" + itemStackString + ") into: " + itemStack);
+
+		return itemStack;
 	}
 }

@@ -11,6 +11,7 @@
 package forestry.plugins;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,7 +20,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
@@ -155,6 +155,7 @@ import forestry.core.items.ItemScoop;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.EntitySnowFX;
 import forestry.core.utils.ShapedRecipeCustom;
+import forestry.core.utils.StackUtils;
 
 @Plugin(pluginID = "Apiculture", name = "Apiculture", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.apiculture.description")
 public class PluginApiculture extends ForestryPlugin {
@@ -297,7 +298,7 @@ public class PluginApiculture extends ForestryPlugin {
 		secondPrincessChance = Integer.parseInt(secondPrincess.value);
 
 		property = apicultureConfig.get("beekeeping.flowers.custom", CONFIG_CATEGORY, "");
-		property.comment = "add additional flower blocks for apiaries here in the format id:meta. separate blocks using ';'. will be treated like vanilla flowers. not recommended for flowers implemented as tile entities.";
+		property.comment = "add additional flower blocks for apiaries here in the format modid:name or modid:name:meta. separate blocks using ';'. wildcard for metadata: '*'. will be treated like vanilla flowers. not recommended for flowers implemented as tile entities.";
 		parseAdditionalFlowers(property.value, FlowerManager.plainFlowers);
 
 		property = apicultureConfig.get("species.blacklist", CONFIG_CATEGORY, "");
@@ -1215,38 +1216,8 @@ public class PluginApiculture extends ForestryPlugin {
 	}
 
 	private void parseAdditionalFlowers(String list, ArrayList<ItemStack> target) {
-		String[] parts = list.split("[;]+");
-
-		for (String part : parts) {
-			if (part.isEmpty()) {
-				continue;
-			}
-
-			String[] ident = part.split("[:]+");
-
-			if (ident.length != 1 && ident.length != 2) {
-				Proxies.log.warning("Failed to add flower of (" + part + ") to vanilla flower provider since it isn't formatted properly.");
-				continue;
-			}
-
-			Item item = GameData.getItemRegistry().getRaw(ident[0]);
-
-			if (item == null) {
-				Block block = GameData.getBlockRegistry().getRaw(ident[0]);
-
-				if (block == null || block == Blocks.air || Item.getItemFromBlock(block) == null) {
-					Proxies.log.warning("Failed to add flower of (" + part + ") to vanilla flower provider since it couldn't be found.");
-					continue;
-				}
-
-				item = Item.getItemFromBlock(block);
-			}
-
-			int meta = ident.length > 1 ? Integer.parseInt(ident[1]) : 0;
-
-			Proxies.log.finer("Adding flower of (" + part + ") to vanilla flower provider.");
-			target.add(new ItemStack(item, 1, meta));
-		}
+		List<ItemStack> flowers = StackUtils.parseItemStackStrings(list);
+		target.addAll(flowers);
 	}
 
 	private void parseBeeBlacklist(String list) {
