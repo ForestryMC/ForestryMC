@@ -32,7 +32,7 @@ public class PickupHandlerCore implements IPickupHandler {
 			root.getBreedingTracker(entityitem.worldObj, entityPlayer.getGameProfile()).registerPickup(root.getMember(itemstack));
 		}
 
-		return true;
+		return false;
 	}
 
 }

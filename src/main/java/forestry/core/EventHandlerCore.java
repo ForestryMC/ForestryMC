@@ -47,7 +47,7 @@ public class EventHandlerCore {
 		}
 
 		for (IPickupHandler handler : PluginManager.pickupHandlers) {
-			if (!handler.onItemPickup(event.entityPlayer, event.item)) {
+			if (handler.onItemPickup(event.entityPlayer, event.item)) {
 				event.setResult(Result.ALLOW);
 				return;
 			}

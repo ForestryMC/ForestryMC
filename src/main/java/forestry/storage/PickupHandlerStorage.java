@@ -31,7 +31,7 @@ public class PickupHandlerStorage implements IPickupHandler {
 
 		// Do not pick up if a backpack is open
 		if (player.openContainer instanceof ContainerBackpack || player.openContainer instanceof ContainerNaturalistBackpack) {
-			return true;
+			return false;
 		}
 
 		// Make sure to top off manually placed itemstacks in player inventory first
@@ -57,7 +57,7 @@ public class PickupHandlerStorage implements IPickupHandler {
 			}
 		}
 
-		return itemstack.stackSize > 0;
+		return itemstack.stackSize == 0;
 	}
 
 	/**

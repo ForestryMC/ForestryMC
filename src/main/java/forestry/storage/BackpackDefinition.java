@@ -11,7 +11,9 @@
 package forestry.storage;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -79,7 +81,7 @@ public class BackpackDefinition implements IBackpackDefinition {
 
 	@Override
 	public void addValidItem(ItemStack validItem) {
-		if (validItem.getItem() != null) {
+		if (validItem.getItem() != null && !isValidItem(validItem)) {
 			this.validItems.add(validItem);
 		}
 	}
@@ -94,6 +96,16 @@ public class BackpackDefinition implements IBackpackDefinition {
 		return validItems;
 	}
 
+	// isValidItem can get called multiple times per tick if the player's inventory is full
+	// and they are standing on multiple items.
+	// It is a slow call, so we need a cache to make it fast
+	private Map<ItemStack, Boolean> isValidItemCache = new LinkedHashMap<ItemStack, Boolean>() {
+		@Override
+		protected boolean removeEldestEntry(Map.Entry<ItemStack, Boolean> eldest) {
+			return size() > 64;
+		}
+	};
+
 	@Override
 	public boolean isValidItem(EntityPlayer player, ItemStack itemstack) {
 		return isValidItem(itemstack);
@@ -101,12 +113,19 @@ public class BackpackDefinition implements IBackpackDefinition {
 
 	@Override
 	public boolean isValidItem(ItemStack itemstack) {
+		Boolean cached = isValidItemCache.get(itemstack);
+		if (cached != null) {
+			return cached;
+		}
+
 		for (ItemStack stack : getValidItems()) {
 			if (StackUtils.isCraftingEquivalent(stack, itemstack, true, false)) {
+				isValidItemCache.put(itemstack, true);
 				return true;
 			}
 		}
 
+		isValidItemCache.put(itemstack, false);
 		return false;
 	}
 }
