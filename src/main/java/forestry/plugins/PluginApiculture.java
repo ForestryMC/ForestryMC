@@ -202,6 +202,7 @@ public class PluginApiculture extends ForestryPlugin {
 
 		ForestryBlock.apiculture.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "apiculture");
 		ForestryBlock.apiculture.block().setCreativeTab(Tabs.tabApiculture);
+		ForestryBlock.apiculture.block().setHarvestLevel("axe", 0);
 
 		definitionApiary = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_APIARY_META, "forestry.Apiary", TileApiary.class,
 				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.apiculture.getItemStack(1, Defaults.DEFINITION_APIARY_META),
