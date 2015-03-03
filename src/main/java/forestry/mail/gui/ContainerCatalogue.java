@@ -110,6 +110,9 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 			return;
 		}
 
+		if (stations.size() == 0) {
+			return;
+		}
 		stationIndex = (stationIndex + 1) % stations.size();
 		updateTradeInfo();
 	}
@@ -120,6 +123,9 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 			return;
 		}
 
+		if (stations.size() == 0) {
+			return;
+		}
 		stationIndex = (stationIndex - 1 + stations.size()) % stations.size();
 		updateTradeInfo();
 	}
