@@ -29,26 +29,23 @@ import forestry.core.render.SpriteSheet;
 import forestry.core.utils.StringUtil;
 import forestry.energy.gadgets.EngineBronze;
 
-public class GuiEngineBronze extends GuiEngine {
+public class GuiEngineBronze extends GuiEngine<ContainerEngineBronze, EngineBronze> {
 
 	protected class BiogasSlot extends Widget {
 
-		private final EngineBronze engine;
-
 		public BiogasSlot(WidgetManager manager, int xPos, int yPos, EngineBronze engine) {
 			super(manager, xPos, yPos);
-			this.engine = engine;
 			this.height = 16;
 		}
 
 		@Override
 		public void draw(int startX, int startY) {
 
-			if (engine == null || engine.totalTime <= 0) {
+			if (inventory == null || inventory.totalTime <= 0) {
 				return;
 			}
 
-			Fluid fluid = FluidRegistry.getFluid(engine.currentFluidId);
+			Fluid fluid = FluidRegistry.getFluid(inventory.currentFluidId);
 			if (fluid == null) {
 				return;
 			}
@@ -57,7 +54,7 @@ public class GuiEngineBronze extends GuiEngine {
 				return;
 			}
 
-			int squaled = (engine.burnTime * height) / engine.totalTime;
+			int squaled = (inventory.burnTime * height) / inventory.totalTime;
 			if (squaled > height) {
 				squaled = height;
 			}
@@ -91,7 +88,7 @@ public class GuiEngineBronze extends GuiEngine {
 
 		@Override
 		public String getLegacyTooltip(EntityPlayer player) {
-			Fluid fluid = FluidRegistry.getFluid(engine.currentFluidId);
+			Fluid fluid = FluidRegistry.getFluid(inventory.currentFluidId);
 			if (fluid == null) {
 				return StringUtil.localize("gui.empty");
 			}
@@ -108,15 +105,11 @@ public class GuiEngineBronze extends GuiEngine {
 		widgetManager.add(new BiogasSlot(this.widgetManager, 30, 47, tile));
 	}
 
-	protected EngineBronze getEngine() {
-		return (EngineBronze) tile;
-	}
-
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		int temp = getEngine().getOperatingTemperatureScaled(16);
+		int temp = inventory.getOperatingTemperatureScaled(16);
 		if (temp > 16) {
 			temp = 16;
 		}

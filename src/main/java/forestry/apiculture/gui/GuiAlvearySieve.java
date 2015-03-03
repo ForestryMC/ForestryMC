@@ -16,11 +16,10 @@ import forestry.apiculture.gadgets.TileAlvearySieve;
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestry;
 
-public class GuiAlvearySieve extends GuiForestry<TileAlvearySieve> {
+public class GuiAlvearySieve extends GuiForestry<ContainerAlvearySieve, TileAlvearySieve> {
 
 	public GuiAlvearySieve(InventoryPlayer inventory, TileAlvearySieve tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/sieve.png", new ContainerAlvearySieve(inventory, tile));
+		super(Defaults.TEXTURE_PATH_GUI + "/sieve.png", new ContainerAlvearySieve(inventory, tile), tile);
 	}
-
 
 }

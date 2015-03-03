@@ -17,17 +17,16 @@ import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.SessionVars;
-import forestry.core.gadgets.TileForestry;
 import forestry.core.proxy.Proxies;
 
 public class LedgerManager {
 
-	public final GuiForestry<? extends TileForestry> gui;
+	public final GuiForestry gui;
 	public final Minecraft minecraft;
 
 	protected final ArrayList<Ledger> ledgers = new ArrayList<Ledger>();
 
-	public LedgerManager(GuiForestry<? extends TileForestry> gui) {
+	public LedgerManager(GuiForestry gui) {
 		this.gui = gui;
 		this.minecraft = Proxies.common.getClientInstance();
 	}

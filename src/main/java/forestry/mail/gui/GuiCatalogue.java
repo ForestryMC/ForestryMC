@@ -15,6 +15,7 @@ import java.util.List;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 
@@ -23,12 +24,11 @@ import org.lwjgl.input.Keyboard;
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.TradeStationInfo;
 import forestry.core.config.SessionVars;
-import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.utils.StringUtil;
 
-public class GuiCatalogue extends GuiForestry<TileForestry> {
+public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 
 	private static final String boldUnderline = EnumChatFormatting.BOLD.toString() + EnumChatFormatting.UNDERLINE;
 
@@ -39,13 +39,11 @@ public class GuiCatalogue extends GuiForestry<TileForestry> {
 	private GuiButton buttonCopy;
 
 	private final List<ItemStackWidget> tradeInfoWidgets = new ArrayList<ItemStackWidget>();
-	private final ContainerCatalogue container;
 
 	public GuiCatalogue(EntityPlayer player) {
-		super(new ResourceLocation("textures/gui/book.png"), new ContainerCatalogue(player));
+		super(new ResourceLocation("textures/gui/book.png"), new ContainerCatalogue(player), null);
 		this.xSize = 192;
 		this.ySize = 192;
-		container = (ContainerCatalogue) inventorySlots;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -17,7 +17,7 @@ import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.factory.gadgets.MachineSqueezer;
 
-public class GuiSqueezer extends GuiForestryTitled<MachineSqueezer> {
+public class GuiSqueezer extends GuiForestryTitled<ContainerSqueezer, MachineSqueezer> {
 
 	public GuiSqueezer(InventoryPlayer inventory, MachineSqueezer tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/squeezer.png", new ContainerSqueezer(inventory, tile), tile);
@@ -26,7 +26,7 @@ public class GuiSqueezer extends GuiForestryTitled<MachineSqueezer> {
 
 	@Override
 	protected void drawWidgets() {
-		int progress = tile.getProgressScaled(43);
+		int progress = inventory.getProgressScaled(43);
 		drawTexturedModalRect(75, 20, 176, 60, 43 - progress, 18);
 
 		super.drawWidgets();

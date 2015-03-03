@@ -15,6 +15,7 @@ import java.util.HashMap;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
@@ -26,7 +27,6 @@ import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.Defaults;
-import forestry.core.gadgets.TileForestry;
 import forestry.core.genetics.EnumMutateChance;
 import forestry.core.gui.buttons.GuiBetterButton;
 import forestry.core.gui.buttons.StandardButtonTextureSets;
@@ -36,13 +36,13 @@ import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
-public class GuiNaturalistInventory extends GuiForestry<TileForestry> {
+public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInventory> {
 	private final ISpeciesRoot speciesRoot;
 	private final IBreedingTracker breedingTracker;
 	private final HashMap<String, ItemStack> iconStacks = new HashMap<String, ItemStack>();
 	private final int pageCurrent, pageMax;
 
-	public GuiNaturalistInventory(ISpeciesRoot speciesRoot, EntityPlayer player, ContainerForestry container, IPagedInventory inventory, int page, int maxPages) {
+	public GuiNaturalistInventory(ISpeciesRoot speciesRoot, EntityPlayer player, Container container, IPagedInventory inventory, int page, int maxPages) {
 		super(Defaults.TEXTURE_PATH_GUI + "/apiaristinventory.png", container, inventory);
 
 		this.speciesRoot = speciesRoot;

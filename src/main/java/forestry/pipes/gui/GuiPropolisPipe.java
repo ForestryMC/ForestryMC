@@ -12,6 +12,7 @@ import java.util.Locale;
 import java.util.Map.Entry;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.util.IIcon;
 
 import net.minecraftforge.common.util.ForgeDirection;
@@ -27,7 +28,6 @@ import forestry.apiculture.items.ItemBeeGE;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
-import forestry.core.gadgets.TileForestry;
 import forestry.core.genetics.ItemGE;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.widgets.Widget;
@@ -44,7 +44,7 @@ import forestry.plugins.PluginApiculture;
  *
  * @author SirSengir
  */
-public class GuiPropolisPipe<T extends TileForestry> extends GuiForestry<T> {
+public class GuiPropolisPipe extends GuiForestry<ContainerPropolisPipe, IInventory> {
 
 	class TypeFilterSlot extends Widget {
 
@@ -218,7 +218,7 @@ public class GuiPropolisPipe<T extends TileForestry> extends GuiForestry<T> {
 	private final PipeLogicPropolis pipeLogic;
 
 	public GuiPropolisPipe(EntityPlayer player, PipeItemsPropolis pipe) {
-		super(Defaults.TEXTURE_PATH_GUI + "/analyzer.png", new ContainerPropolisPipe(player.inventory, pipe));
+		super(Defaults.TEXTURE_PATH_GUI + "/analyzer.png", new ContainerPropolisPipe(player.inventory, pipe), null);
 
 		pipeLogic = pipe.pipeLogic;
 		// Request filter set update if on client

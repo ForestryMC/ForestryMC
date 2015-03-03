@@ -17,7 +17,7 @@ import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.factory.gadgets.MachineBottler;
 
-public class GuiBottler extends GuiForestryTitled<MachineBottler> {
+public class GuiBottler extends GuiForestryTitled<ContainerBottler, MachineBottler> {
 
 	public GuiBottler(InventoryPlayer inventory, MachineBottler processor) {
 		super(Defaults.TEXTURE_PATH_GUI + "/bottler.png", new ContainerBottler(inventory, processor), processor);
@@ -27,10 +27,10 @@ public class GuiBottler extends GuiForestryTitled<MachineBottler> {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		MachineBottler boiler = tile;
+		MachineBottler bottler = inventory;
 
-		if (boiler.isWorking()) {
-			int i1 = boiler.getFillProgressScaled(24);
+		if (bottler.isWorking()) {
+			int i1 = bottler.getFillProgressScaled(24);
 			drawTexturedModalRect(guiLeft + 80, guiTop + 39, 176, 74, 24 - i1, 16);
 		}
 	}

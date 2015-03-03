@@ -17,7 +17,7 @@ import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 
-public class GuiAlvearyHygroregulator extends GuiForestryTitled<TileAlvearyHygroregulator> {
+public class GuiAlvearyHygroregulator extends GuiForestryTitled<ContainerAlvearyHygroregulator, TileAlvearyHygroregulator> {
 
 	public GuiAlvearyHygroregulator(InventoryPlayer inventory, TileAlvearyHygroregulator tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/hygroregulator.png", new ContainerAlvearyHygroregulator(inventory, tile), tile);

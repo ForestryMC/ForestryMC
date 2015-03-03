@@ -22,20 +22,16 @@ import forestry.core.gui.GuiForestry;
 import forestry.core.utils.StringUtil;
 import forestry.mail.gadgets.MachineTrader;
 
-public class GuiTradeName extends GuiForestry<MachineTrader> {
+public class GuiTradeName extends GuiForestry<ContainerTradeName, MachineTrader> {
 
 	private GuiTextField addressNameField;
 
 	private boolean addressNameFocus;
 
-	private final ContainerTradeName container;
-
 	public GuiTradeName(InventoryPlayer inventoryplayer, MachineTrader tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/tradername.png", new ContainerTradeName(inventoryplayer, tile), tile);
 		this.xSize = 176;
 		this.ySize = 90;
-
-		this.container = (ContainerTradeName) inventorySlots;
 	}
 
 	@Override

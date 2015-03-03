@@ -33,7 +33,7 @@ import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 
-public class GuiEscritoire extends GuiForestry<TileEscritoire> {
+public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoire> {
 
 	private static enum Notes {
 		level1, level2, level3, level4, success, failure
@@ -65,11 +65,11 @@ public class GuiEscritoire extends GuiForestry<TileEscritoire> {
 		}
 
 		private boolean hasToken() {
-			return tile.getGame().getToken(index) != null;
+			return inventory.getGame().getToken(index) != null;
 		}
 
 		private GameToken getToken() {
-			return tile.getGame().getToken(index);
+			return inventory.getGame().getToken(index);
 		}
 
 		@Override
@@ -168,21 +168,16 @@ public class GuiEscritoire extends GuiForestry<TileEscritoire> {
 	}
 
 	private final ItemStack LEVEL_ITEM;
-	protected ContainerEscritoire container;
-	private final TileEscritoire tile;
 	private String researchNote = "";
 	private long lastUpdate;
 
 	public GuiEscritoire(EntityPlayer player, TileEscritoire tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/escritoire.png", new ContainerEscritoire(player, tile));
+		super(Defaults.TEXTURE_PATH_GUI + "/escritoire.png", new ContainerEscritoire(player, tile), tile);
 
 		LEVEL_ITEM = new ItemStack(Items.paper);
 
 		xSize = 228;
 		ySize = 235;
-
-		this.container = (ContainerEscritoire) inventorySlots;
-		this.tile = tile;
 
 		widgetManager.add(new ProbeButton(widgetManager, 14, 16));
 
@@ -222,7 +217,7 @@ public class GuiEscritoire extends GuiForestry<TileEscritoire> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		for (int i = 0; i <= tile.getGame().getBountyLevel() / 4; i++) {
+		for (int i = 0; i <= inventory.getGame().getBountyLevel() / 4; i++) {
 			RenderHelper.enableGUIStandardItemLighting();
 			GuiForestry.itemRender.renderItemAndEffectIntoGUI(mc.fontRenderer,
 					mc.renderEngine, LEVEL_ITEM, guiLeft + 170 + i * 8, guiTop + 7);
@@ -235,7 +230,7 @@ public class GuiEscritoire extends GuiForestry<TileEscritoire> {
 		newLine();
 		newLine();
 		String format = EnumChatFormatting.UNDERLINE + EnumChatFormatting.ITALIC.toString();
-		drawLine(format + "Attempt No. " + (NaturalistGame.BOUNTY_MAX - tile.getGame().getBountyLevel()), 171, fontColor.get("gui.mail.lettertext"));
+		drawLine(format + "Attempt No. " + (NaturalistGame.BOUNTY_MAX - inventory.getGame().getBountyLevel()), 171, fontColor.get("gui.mail.lettertext"));
 		newLine();
 		drawSplitLine(getResearchNote(), 171, 46, fontColor.get("gui.mail.lettertext"));
 
@@ -243,19 +238,19 @@ public class GuiEscritoire extends GuiForestry<TileEscritoire> {
 	}
 
 	private String getResearchNote() {
-		if (lastUpdate == tile.getGame().getLastUpdate()) {
+		if (lastUpdate == inventory.getGame().getLastUpdate()) {
 			return researchNote;
 		}
 
-		if (!tile.getGame().isInited()) {
+		if (!inventory.getGame().isInited()) {
 			researchNote = StringUtil.localize("gui.escritoire.instructions");
 		} else {
-			if (tile.getGame().isWon()) {
+			if (inventory.getGame().isWon()) {
 				researchNote = getRandomNote(researchNotes.get(Notes.success));
-			} else if (tile.getGame().isEnded()) {
+			} else if (inventory.getGame().isEnded()) {
 				researchNote = getRandomNote(researchNotes.get(Notes.failure));
 			} else {
-				int bounty = tile.getGame().getBountyLevel();
+				int bounty = inventory.getGame().getBountyLevel();
 				if (bounty >= NaturalistGame.BOUNTY_MAX) {
 					researchNote = getRandomNote(researchNotes.get(Notes.level1));
 				} else if (bounty > NaturalistGame.BOUNTY_MAX / 2) {
@@ -268,7 +263,7 @@ public class GuiEscritoire extends GuiForestry<TileEscritoire> {
 			}
 		}
 
-		lastUpdate = tile.getGame().getLastUpdate();
+		lastUpdate = inventory.getGame().getLastUpdate();
 		return researchNote;
 	}
 

@@ -38,18 +38,16 @@ import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.Defaults;
-import forestry.core.gadgets.TileForestry;
 import forestry.core.genetics.EnumMutateChance;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
-public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
+public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 
 	protected static final int COLUMN_0 = 12;
 	protected static final int COLUMN_1 = 85;
 	protected static final int COLUMN_2 = 150;
 
-	protected final IInventory inventory;
 	protected final ISpeciesRoot speciesRoot;
 	protected final IBreedingTracker breedingTracker;
 
@@ -57,15 +55,14 @@ public abstract class GuiAlyzer extends GuiForestry<TileForestry> {
 
 	protected HashMap<String, ItemStack> iconStacks = new HashMap<String, ItemStack>();
 
-	public GuiAlyzer(String speciesRoot, EntityPlayer player, ContainerForestry container, IInventory inventory, String guiName) {
-		super(Defaults.TEXTURE_PATH_GUI + "/beealyzer2.png", container);
+	public GuiAlyzer(String speciesRoot, EntityPlayer player, ContainerAlyzer container, IInventory inventory, String guiName) {
+		super(Defaults.TEXTURE_PATH_GUI + "/beealyzer2.png", container, inventory);
 
 		this.xSize = 246;
 		this.ySize = 238;
 
 		this.guiName = guiName;
 
-		this.inventory = inventory;
 		this.speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(speciesRoot);
 		this.breedingTracker = this.speciesRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
 	}

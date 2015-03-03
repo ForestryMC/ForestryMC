@@ -17,7 +17,7 @@ import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.factory.gadgets.MachineFermenter;
 
-public class GuiFermenter extends GuiForestryTitled<MachineFermenter> {
+public class GuiFermenter extends GuiForestryTitled<ContainerFermenter, MachineFermenter> {
 
 	public GuiFermenter(InventoryPlayer inventory, MachineFermenter tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/fermenter.png", new ContainerFermenter(inventory, tile), tile);
@@ -28,7 +28,7 @@ public class GuiFermenter extends GuiForestryTitled<MachineFermenter> {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		MachineFermenter machine = tile;
+		MachineFermenter machine = inventory;
 
 		// Fuel remaining
 		int fuelRemain = machine.getBurnTimeRemainingScaled(16);

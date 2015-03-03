@@ -18,7 +18,7 @@ import forestry.core.gui.widgets.TankWidget;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.Utils;
 
-public class GuiAnalyzer extends GuiForestryTitled<TileAnalyzer> {
+public class GuiAnalyzer extends GuiForestryTitled<ContainerAnalyzer, TileAnalyzer> {
 
 	public GuiAnalyzer(InventoryPlayer inventory, TileAnalyzer tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/alyzer.png", new ContainerAnalyzer(inventory, tile), tile);
@@ -29,7 +29,7 @@ public class GuiAnalyzer extends GuiForestryTitled<TileAnalyzer> {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		TileAnalyzer machine = tile;
+		TileAnalyzer machine = inventory;
 		drawAnalyzeMeter(guiLeft + 64, guiTop + 30, machine.getProgressScaled(46), Utils.rateTankLevel(machine.getProgressScaled(100)));
 
 	}

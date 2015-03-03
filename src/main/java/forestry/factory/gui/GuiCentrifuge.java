@@ -16,7 +16,7 @@ import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.factory.gadgets.MachineCentrifuge;
 
-public class GuiCentrifuge extends GuiForestryTitled<MachineCentrifuge> {
+public class GuiCentrifuge extends GuiForestryTitled<ContainerCentrifuge, MachineCentrifuge> {
 
 	public GuiCentrifuge(InventoryPlayer inventory, MachineCentrifuge tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/centrifuge.png", new ContainerCentrifuge(inventory, tile), tile);
@@ -25,7 +25,7 @@ public class GuiCentrifuge extends GuiForestryTitled<MachineCentrifuge> {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		MachineCentrifuge machine = tile;
+		MachineCentrifuge machine = inventory;
 
 		int progress = 16 - machine.getProgressScaled(16);
 		drawTexturedModalRect(guiLeft + 62, guiTop + 36 + 17 - progress, 176, 17 - progress, 4, progress);

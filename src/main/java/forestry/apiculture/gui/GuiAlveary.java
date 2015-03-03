@@ -18,7 +18,7 @@ import forestry.core.gui.GuiForestryTitled;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.Utils;
 
-public class GuiAlveary extends GuiForestryTitled<TileAlvearyPlain> {
+public class GuiAlveary extends GuiForestryTitled<ContainerAlveary, TileAlvearyPlain> {
 
 	public GuiAlveary(InventoryPlayer inventory, TileAlvearyPlain tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/alveary.png", new ContainerAlveary(inventory, tile), tile);
@@ -30,7 +30,7 @@ public class GuiAlveary extends GuiForestryTitled<TileAlvearyPlain> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		TileAlvearyPlain machine = tile;
+		TileAlvearyPlain machine = inventory;
 		drawHealthMeter(guiLeft + 20, guiTop + 37, machine.getHealthScaled(46), Utils.rateTankLevel(machine.getHealthScaled(100)));
 	}
 

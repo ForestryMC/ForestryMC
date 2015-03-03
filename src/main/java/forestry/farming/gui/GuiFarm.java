@@ -29,7 +29,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 import forestry.farming.gadgets.TileFarmPlain;
 
-public class GuiFarm extends GuiForestry<TileFarmPlain> {
+public class GuiFarm extends GuiForestry<ContainerFarm, TileFarmPlain> {
 
 	protected class FarmLedger extends Ledger {
 
@@ -54,20 +54,20 @@ public class GuiFarm extends GuiForestry<TileFarmPlain> {
 
 			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.hydration"), x + 22, y + 8, fontColor.get("ledger.power.header"));
 			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.hydr.heat") + ":", x + 22, y + 20, fontColor.get("ledger.power.subheader"));
-			fontRendererObj.drawString(StringUtil.floatAsPercent(farm.getHydrationTempModifier()), x + 22, y + 32, fontColor.get("ledger.power.text"));
+			fontRendererObj.drawString(StringUtil.floatAsPercent(inventory.getHydrationTempModifier()), x + 22, y + 32, fontColor.get("ledger.power.text"));
 			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.hydr.humid") + ":", x + 22, y + 44, fontColor.get("ledger.power.subheader"));
-			fontRendererObj.drawString(StringUtil.floatAsPercent(farm.getHydrationHumidModifier()), x + 22, y + 56, fontColor.get("ledger.power.text"));
+			fontRendererObj.drawString(StringUtil.floatAsPercent(inventory.getHydrationHumidModifier()), x + 22, y + 56, fontColor.get("ledger.power.text"));
 			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.hydr.rainfall") + ":", x + 22, y + 68, fontColor.get("ledger.power.subheader"));
-			fontRendererObj.drawString(StringUtil.floatAsPercent(farm.getHydrationRainfallModifier()) + " (" + farm.getDrought() + " d)", x + 22, y + 80,
+			fontRendererObj.drawString(StringUtil.floatAsPercent(inventory.getHydrationRainfallModifier()) + " (" + inventory.getDrought() + " d)", x + 22, y + 80,
 					fontColor.get("ledger.power.text"));
 			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.hydr.overall") + ":", x + 22, y + 92, fontColor.get("ledger.power.subheader"));
-			fontRendererObj.drawString(StringUtil.floatAsPercent(farm.getHydrationModifier()), x + 22, y + 104, fontColor.get("ledger.power.text"));
+			fontRendererObj.drawString(StringUtil.floatAsPercent(inventory.getHydrationModifier()), x + 22, y + 104, fontColor.get("ledger.power.text"));
 
 		}
 
 		@Override
 		public String getTooltip() {
-			return StringUtil.floatAsPercent(farm.getHydrationModifier()) + " " + StringUtil.localize("gui.hydration");
+			return StringUtil.floatAsPercent(inventory.getHydrationModifier()) + " " + StringUtil.localize("gui.hydration");
 		}
 	}
 
@@ -81,7 +81,7 @@ public class GuiFarm extends GuiForestry<TileFarmPlain> {
 		}
 
 		private IFarmLogic getLogic() {
-			return farm.getFarmLogics()[slot];
+			return inventory.getFarmLogics()[slot];
 		}
 
 		private IIcon getIconIndex() {
@@ -120,12 +120,10 @@ public class GuiFarm extends GuiForestry<TileFarmPlain> {
 				}
 				toolTip.add(getLogic().getName());
 				toolTip.add("Fertilizer: " + getLogic().getFertilizerConsumption());
-				toolTip.add("Water: " + getLogic().getWaterConsumption(farm.getHydrationModifier()));
+				toolTip.add("Water: " + getLogic().getWaterConsumption(inventory.getHydrationModifier()));
 			}
 		};
 	}
-
-	private final TileFarmPlain farm;
 
 	public GuiFarm(EntityPlayer player, TileFarmPlain tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/mfarm.png", new ContainerFarm(player.inventory, tile), tile);
@@ -141,12 +139,11 @@ public class GuiFarm extends GuiForestry<TileFarmPlain> {
 
 		this.xSize = 216;
 		this.ySize = 220;
-		this.farm = tile;
 	}
 
 	@Override
-	protected void initLedgers(Object inventory) {
-		super.initLedgers(inventory);
+	protected void initLedgers() {
+		super.initLedgers();
 		ledgerManager.insert(new FarmLedger());
 	}
 
@@ -162,7 +159,7 @@ public class GuiFarm extends GuiForestry<TileFarmPlain> {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
 		// Fuel remaining
-		int fertilizerRemain = tile.getStoredFertilizerScaled(16);
+		int fertilizerRemain = inventory.getStoredFertilizerScaled(16);
 		if (fertilizerRemain > 0) {
 			drawTexturedModalRect(guiLeft + 81, guiTop + 94 + 17 - fertilizerRemain, xSize, 17 - fertilizerRemain, 4, fertilizerRemain);
 		}
