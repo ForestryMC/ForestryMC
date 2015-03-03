@@ -10,14 +10,15 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import forestry.core.config.Defaults;
-import forestry.core.proxy.Proxies;
-import forestry.core.vect.Vect;
+import java.util.Collection;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import java.util.Collection;
+import forestry.core.config.Defaults;
+import forestry.core.proxy.Proxies;
+import forestry.core.vect.Vect;
 
 public class CropBasicFruit extends Crop {
 

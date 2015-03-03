@@ -34,90 +34,90 @@ import forestry.core.vect.VectUtil;
 
 public class FarmLogicEnder extends FarmLogicHomogeneous {
 
-    public FarmLogicEnder(IFarmHousing housing) {
-        super(housing,
-                new ItemStack[]{new ItemStack(Blocks.end_stone)},
-                new ItemStack(Blocks.end_stone),
-                Farmables.farmables.get("farmEnder").toArray(new IFarmable[0]));
+	public FarmLogicEnder(IFarmHousing housing) {
+		super(housing,
+				new ItemStack[]{new ItemStack(Blocks.end_stone)},
+				new ItemStack(Blocks.end_stone),
+				Farmables.farmables.get("farmEnder").toArray(new IFarmable[0]));
 
-    }
+	}
 
-    @Override
-    public String getName() {
-        return "Managed Ender Farm";
-    }
+	@Override
+	public String getName() {
+		return "Managed Ender Farm";
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon() {
-        return Items.ender_eye.getIconFromDamage(0);
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon() {
+		return Items.ender_eye.getIconFromDamage(0);
+	}
 
-    @Override
-    public int getFertilizerConsumption() {
-        return 20;
-    }
+	@Override
+	public int getFertilizerConsumption() {
+		return 20;
+	}
 
-    @Override
-    public int getWaterConsumption(float hydrationModifier) {
-        return 0;
-    }
+	@Override
+	public int getWaterConsumption(float hydrationModifier) {
+		return 0;
+	}
 
-    @Override
-    public Collection<ItemStack> collect() {
-        return null;
-    }
+	@Override
+	public Collection<ItemStack> collect() {
+		return null;
+	}
 
-    @Override
-    public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
-        World world = getWorld();
+	@Override
+	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
+		World world = getWorld();
 
-        Stack<ICrop> crops = new Stack<ICrop>();
-        for (int i = 0; i < extent; i++) {
-            Vect position = translateWithOffset(x, y + 1, z, direction, i);
-            for (IFarmable farmable : germlings) {
-                ICrop crop = farmable.getCropAt(world, position.x, position.y, position.z);
-                if (crop != null) {
-                    crops.push(crop);
-                }
-            }
+		Stack<ICrop> crops = new Stack<ICrop>();
+		for (int i = 0; i < extent; i++) {
+			Vect position = translateWithOffset(x, y + 1, z, direction, i);
+			for (IFarmable farmable : germlings) {
+				ICrop crop = farmable.getCropAt(world, position.x, position.y, position.z);
+				if (crop != null) {
+					crops.push(crop);
+				}
+			}
 
-        }
-        return crops;
+		}
+		return crops;
 
-    }
+	}
 
-    @Override
-    protected boolean maintainGermlings(int x, int y, int z, ForgeDirection direction, int extent) {
-        World world = getWorld();
+	@Override
+	protected boolean maintainGermlings(int x, int y, int z, ForgeDirection direction, int extent) {
+		World world = getWorld();
 
-        for (int i = 0; i < extent; i++) {
-            Vect position = translateWithOffset(x, y, z, direction, i);
-            if (!VectUtil.isAirBlock(world, position) && !Utils.isReplaceableBlock(world, position.x, position.y, position.z)) {
-                continue;
-            }
+		for (int i = 0; i < extent; i++) {
+			Vect position = translateWithOffset(x, y, z, direction, i);
+			if (!VectUtil.isAirBlock(world, position) && !Utils.isReplaceableBlock(world, position.x, position.y, position.z)) {
+				continue;
+			}
 
-            ItemStack below = VectUtil.getAsItemStack(world, position.add(0, -1, 0));
-            if (!isAcceptedSoil(below)) {
-                continue;
-            }
+			ItemStack below = VectUtil.getAsItemStack(world, position.add(0, -1, 0));
+			if (!isAcceptedSoil(below)) {
+				continue;
+			}
 
-            return trySetCrop(position);
-        }
+			return trySetCrop(position);
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    private boolean trySetCrop(Vect position) {
-        World world = getWorld();
+	private boolean trySetCrop(Vect position) {
+		World world = getWorld();
 
-        for (IFarmable candidate : germlings) {
-            if (housing.plantGermling(candidate, world, position.x, position.y, position.z)) {
-                return true;
-            }
-        }
+		for (IFarmable candidate : germlings) {
+			if (housing.plantGermling(candidate, world, position.x, position.y, position.z)) {
+				return true;
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
 }

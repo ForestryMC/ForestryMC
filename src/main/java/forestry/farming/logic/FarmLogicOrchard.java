@@ -161,7 +161,7 @@ public class FarmLogicOrchard extends FarmLogic {
 					if (VectUtil.isWoodBlock(world, candidate)) {
 						candidates.add(candidate);
 						seen.add(candidate);
-					} else if (isFruitBearer(world, candidate)){
+					} else if (isFruitBearer(world, candidate)) {
 						candidates.add(candidate);
 						seen.add(candidate);
 
