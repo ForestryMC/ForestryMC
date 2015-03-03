@@ -75,10 +75,9 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 		if (!hasSpin) {
 			currentAngle = targetAngle;
 		} else {
-			double angleChange;
-
-			for (angleChange = targetAngle - currentAngle; angleChange < -Math.PI; angleChange += (Math.PI * 2D)) {
-				;
+			double angleChange = targetAngle - currentAngle;
+			while (angleChange < -Math.PI) {
+				angleChange += (Math.PI * 2D);
 			}
 
 			while (angleChange >= Math.PI) {
@@ -98,10 +97,9 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 			this.currentAngle += this.angleDelta;
 		}
 
-		int i;
-
-		for (i = (int) ((this.currentAngle / (Math.PI * 2D) + 1.0d) * this.framesTextureData.size()) % this.framesTextureData.size(); i < 0; i = (i + this.framesTextureData.size()) % this.framesTextureData.size()) {
-			;
+		int i = (int) ((this.currentAngle / (Math.PI * 2D) + 1.0d) * this.framesTextureData.size()) % this.framesTextureData.size();
+		while (i < 0) {
+			i = (i + this.framesTextureData.size()) % this.framesTextureData.size();
 		}
 
 		if (i != this.frameCounter) {
