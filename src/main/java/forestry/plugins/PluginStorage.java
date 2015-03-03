@@ -445,7 +445,10 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 		builderItems.add(new ItemStack(Blocks.stone));
 		builderItems.add(new ItemStack(Blocks.brick_block));
 		builderItems.add(new ItemStack(Blocks.planks, 1, Defaults.WILDCARD));
+		builderItems.add(new ItemStack(Blocks.clay));
 		builderItems.add(new ItemStack(Blocks.hardened_clay, 1, Defaults.WILDCARD));
+		builderItems.add(new ItemStack(Blocks.stained_hardened_clay, 1, Defaults.WILDCARD));
+		builderItems.add(new ItemStack(Blocks.packed_ice));
 		builderItems.add(new ItemStack(Blocks.nether_brick));
 		builderItems.add(new ItemStack(Blocks.nether_brick_fence));
 		builderItems.add(new ItemStack(Blocks.stone_stairs));
