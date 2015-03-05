@@ -168,7 +168,7 @@ public class PluginFactory extends ForestryPlugin {
 
 		BlockBase factoryPlain = ((BlockBase) ForestryBlock.factoryPlain.block());
 
-		definitionFabricator = factoryPlain.addDefinition(new MachineDefinition(Defaults.DEFINITION_FABRICATOR_META, "forestry.Fabricator", MachineFabricator.class,
+		definitionFabricator = factoryPlain.addDefinition(new MachineNBTDefinition(Defaults.DEFINITION_FABRICATOR_META, "forestry.Fabricator", MachineFabricator.class,
 				ShapedRecipeCustom.createShapedRecipe(
 						ForestryBlock.factoryPlain.getItemStack(1, Defaults.DEFINITION_FABRICATOR_META),
 						"X#X",

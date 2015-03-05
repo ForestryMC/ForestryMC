@@ -45,7 +45,7 @@ public class ContainerFabricator extends ContainerLiquidTanks implements IContai
 		// Crafting matrix
 		for (int l = 0; l < 3; l++) {
 			for (int k = 0; k < 3; k++) {
-				addSlotToContainer(new SlotCraftMatrix(this, tile, MachineFabricator.SLOT_CRAFTING_1 + k + l * 3, 67 + k * 18, 17 + l * 18));
+				addSlotToContainer(new SlotCraftMatrix(this, tile.getCraftingInventory(), MachineFabricator.SLOT_CRAFTING_1 + k + l * 3, 67 + k * 18, 17 + l * 18));
 			}
 		}
 

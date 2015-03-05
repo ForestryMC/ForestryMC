@@ -17,6 +17,7 @@ import java.util.Map;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -43,10 +44,10 @@ import forestry.core.interfaces.ICraftingPlan;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InvTools;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
-import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.GuiId;
 import forestry.core.utils.GuiUtil;
 import forestry.core.utils.ShapedRecipeCustom;
@@ -237,13 +238,19 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 	public static final short SLOT_METAL = 0;
 	public static final short SLOT_PLAN = 1;
 	public static final short SLOT_RESULT = 2;
-	public static final short SLOT_CRAFTING_1 = 3;
-	public static final short SLOT_CRAFTING_COUNT = 9;
+	// FIXME 1.8: change indexes and use correct SLOT_COUNT of 21
+	// left this way for now to avoid losing items in existing fabricators
+	public static final short SLOT_CRAFTING_LEGACY_1 = 3;
+	public static final short SLOT_CRAFTING_LEGACY_COUNT = 9;
 	public static final short SLOT_INVENTORY_1 = 12;
 	public static final short SLOT_INVENTORY_COUNT = 18;
+	public static final short SLOT_COUNT = 30;
+
+	public static final short SLOT_CRAFTING_1 = 0;
+	public static final short SLOT_CRAFTING_COUNT = 9;
 
 	/* MEMBER */
-	private final InventoryMapper invCrafting;
+	private final TileInventoryAdapter craftingInventory;
 	private final TankManager tankManager;
 	private final FilteredTank moltenTank;
 	private int heat = 0;
@@ -253,7 +260,8 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 
 	public MachineFabricator() {
 		super(1100, 50, 3300);
-		setInternalInventory(new TileInventoryAdapter(this, 30, "Items") {
+		craftingInventory = new TileInventoryAdapter(this, SLOT_CRAFTING_COUNT, "CraftItems");
+		setInternalInventory(new TileInventoryAdapter(this, SLOT_COUNT, "Items") {
 			@Override
 			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 				if (slotIndex == SLOT_METAL) {
@@ -269,7 +277,6 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 				return slotIndex == SLOT_RESULT;
 			}
 		});
-		invCrafting = new InventoryMapper(getInternalInventory(), SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
 		moltenTank = new FilteredTank(2 * Defaults.BUCKET_VOLUME, Fluids.GLASS.getFluid());
 		moltenTank.tankMode = StandardTank.TankMode.INTERNAL;
 		tankManager = new TankManager(moltenTank);
@@ -296,6 +303,8 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 			pendingSmelt.writeToNBT(smelt);
 			nbttagcompound.setTag("PendingSmelt", smelt);
 		}
+
+		craftingInventory.writeToNBT(nbttagcompound);
 	}
 
 	@Override
@@ -313,6 +322,20 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 			pendingSmelt = FluidStack.loadFluidStackFromNBT(smelt);
 		}
 
+		craftingInventory.readFromNBT(nbttagcompound);
+
+		// FIXME 1.8: wont need this
+		// move items from legacy crafting area to the new one
+		IInventory inventory = getInternalInventory();
+		for (int slot = SLOT_CRAFTING_LEGACY_1; slot < SLOT_CRAFTING_LEGACY_1 + SLOT_CRAFTING_LEGACY_COUNT; slot++) {
+			ItemStack stack = inventory.getStackInSlot(slot);
+			if (stack != null) {
+				inventory.setInventorySlotContents(slot, null);
+
+				int newSlot = slot - SLOT_CRAFTING_LEGACY_1;
+				craftingInventory.setInventorySlotContents(newSlot, stack);
+			}
+		}
 	}
 
 	/* UPDATING */
@@ -383,7 +406,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 	private Recipe getRecipe() {
 		IInventoryAdapter inventory = getInternalInventory();
 		ItemStack plan = inventory.getStackInSlot(SLOT_PLAN);
-		ItemStack[] crafting = InvTools.getStacks(inventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
+		ItemStack[] crafting = InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
 		return RecipeManager.findMatchingRecipe(plan, moltenTank.getFluid(), crafting);
 	}
 
@@ -433,7 +456,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		FluidStack liquid = myRecipe.molten;
 
 		// Remove resources
-		ItemStack[] crafting = InvTools.getStacks(inventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
+		ItemStack[] crafting = InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
 		if (removeFromInventory(1, crafting, player, false)) {
 			removeFromInventory(1, crafting, player, true);
 			moltenTank.drain(liquid.amount, true);
@@ -457,7 +480,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 	}
 
 	private void removeFromCraftMatrix(Recipe recipe) {
-		for (IInvSlot slot : InventoryIterator.getIterable(invCrafting)) {
+		for (IInvSlot slot : InventoryIterator.getIterable(craftingInventory)) {
 			if (slot.getStackInSlot() == null) {
 				continue;
 			}
@@ -491,7 +514,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		}
 
 		ItemStack plan = inventory.getStackInSlot(SLOT_PLAN);
-		ItemStack[] resources = InvTools.getStacks(inventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
+		ItemStack[] resources = InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
 
 		return RecipeManager.findMatchingRecipe(plan, moltenTank.getFluid(), resources) != null;
 	}
@@ -548,6 +571,13 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		int messageId = tankManager.maxMessageId() + 1;
 		iCrafting.sendProgressBarUpdate(container, messageId, heat);
 		iCrafting.sendProgressBarUpdate(container, messageId + 1, getMeltingPoint());
+	}
+
+	/**
+	 * @return Inaccessible crafting inventory for the craft grid.
+	 */
+	public InventoryAdapter getCraftingInventory() {
+		return craftingInventory;
 	}
 
 	/* ILIQUIDCONTAINER */
