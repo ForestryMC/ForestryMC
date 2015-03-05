@@ -136,7 +136,7 @@ public class TileAlvearySieve extends TileAlveary implements ICrafter, IBeeListe
 	}
 
 	@Override
-	public ItemStack takenFromSlot(int slotIndex, boolean consumeRecipe, EntityPlayer player) {
+	public ItemStack takenFromSlot(int slotIndex, EntityPlayer player) {
 		IInventoryAdapter inventory = getInternalInventory();
 		if (slotIndex == SLOT_SIEVE) {
 			destroyPollen();

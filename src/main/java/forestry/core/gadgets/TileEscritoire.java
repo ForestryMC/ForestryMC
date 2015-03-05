@@ -191,7 +191,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 	}
 
 	@Override
-	public ItemStack takenFromSlot(int slotIndex, boolean consumeRecipe, EntityPlayer player) {
+	public ItemStack takenFromSlot(int slotIndex, EntityPlayer player) {
 		if (slotIndex == SLOT_ANALYZE) {
 			game.reset();
 		}

@@ -48,7 +48,7 @@ public abstract class SlotWatched extends SlotForestry {
 	@Override
 	public void onPickupFromSlot(EntityPlayer player, ItemStack itemStack) {
 		if (crafter != null) {
-			crafter.takenFromSlot(getSlotIndex(), true, player);
+			crafter.takenFromSlot(getSlotIndex(), player);
 		}
 	}
 
