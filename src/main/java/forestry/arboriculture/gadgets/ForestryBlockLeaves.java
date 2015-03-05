@@ -165,9 +165,8 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 	}
 
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
-
-		ItemStack itemStack = super.getPickBlock(target, world, x, y, z, player);
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+		ItemStack itemStack = super.getPickBlock(target, world, x, y, z);
 		NBTTagCompound treeNBT = getTagCompoundForTree(world, x, y, z);
 		itemStack.setTagCompound(treeNBT);
 		return itemStack;

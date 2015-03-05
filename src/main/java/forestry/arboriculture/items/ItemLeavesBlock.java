@@ -41,14 +41,7 @@ public class ItemLeavesBlock extends ItemForestryBlock {
 			return PluginArboriculture.proxy.getFoliageColorBasic();
 		}
 		ITree tree = getTree(itemstack);
-		if (tree == null) {
-			return PluginArboriculture.proxy.getFoliageColorBasic();
-		}
 		return tree.getGenome().getPrimary().getLeafColour(tree);
-	}
-
-	private ITree getTree(ItemStack itemStack) {
-		return new Tree(itemStack.getTagCompound());
 	}
 
 	@Override
@@ -57,11 +50,12 @@ public class ItemLeavesBlock extends ItemForestryBlock {
 			return false;
 		}
 		ITree tree = getTree(stack);
-		if (tree == null) {
-			return false;
-		}
 		GameProfile owner = player.getGameProfile();
 		return PluginArboriculture.treeInterface.setLeaves(world, tree, owner, x, y, z, true);
+	}
+
+	private ITree getTree(ItemStack itemStack) {
+		return new Tree(itemStack.getTagCompound());
 	}
 
 }

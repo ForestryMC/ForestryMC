@@ -155,7 +155,7 @@ public class BlockSapling extends BlockTreeContainer {
 	}
 
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
 		TileSapling sapling = getSaplingTile(world, x, y, z);
 		if (sapling == null || sapling.getTree() == null) {
 			return null;
