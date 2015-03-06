@@ -67,7 +67,7 @@ public class BlockArbStairs extends BlockStairs {
 	}
 
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
 		int meta = world.getBlockMetadata(x, y, z);
 		if (Proxies.common.isSimulating(world) && canHarvestBlock(player, meta)) {
 			if (!player.capabilities.isCreativeMode) {

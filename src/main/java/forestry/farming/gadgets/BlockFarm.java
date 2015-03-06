@@ -89,7 +89,7 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
 		int meta = world.getBlockMetadata(x, y, z);
 		if (Proxies.common.isSimulating(world) && canHarvestBlock(player, meta)) {
 			List<ItemStack> drops = getDrops(world, x, y, z, 0, 0);

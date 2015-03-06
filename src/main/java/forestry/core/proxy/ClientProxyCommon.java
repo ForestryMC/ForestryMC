@@ -87,7 +87,7 @@ public class ClientProxyCommon extends ProxyCommon {
 
 	@Override
 	public boolean isOp(EntityPlayer player) {
-		return true;
+		return false;
 	}
 
 	@Override

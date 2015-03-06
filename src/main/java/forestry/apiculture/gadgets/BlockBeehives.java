@@ -60,7 +60,7 @@ public class BlockBeehives extends BlockContainer {
 	}
 
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
 		if (canHarvestBlock(player, world.getBlockMetadata(x, y, z))) {
 			// Handle TE'd beehives
 			TileEntity tile = world.getTileEntity(x, y, z);

@@ -263,12 +263,12 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 
 	@Override
 	public final boolean allowsRemoval(EntityPlayer player) {
-		return Config.disablePermissions || !isOwnable() || !isOwned() || isOwner(player) || Proxies.common.isOp(player);
+		return Config.disablePermissions || getAccess() == EnumAccess.SHARED || !isOwnable() || !isOwned() || isOwner(player) || Proxies.common.isOp(player);
 	}
 
 	@Override
 	public final boolean allowsAlteration(EntityPlayer player) {
-		return allowsRemoval(player) || getAccess() == EnumAccess.SHARED;
+		return allowsRemoval(player);
 	}
 
 	@Override
