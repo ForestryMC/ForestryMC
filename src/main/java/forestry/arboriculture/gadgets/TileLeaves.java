@@ -31,6 +31,7 @@ import net.minecraftforge.common.EnumPlantType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafTickHandler;
@@ -121,7 +122,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if (tree != null) {
 			setTree(tree);
 		} else if (speciesUID != null) {
-			setTree(speciesUID, false);
+			setTree(speciesUID, false, null);
 		}
 	}
 
@@ -193,7 +194,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		effectData = tree.doEffect(effectData, worldObj, biome.biomeID, xCoord, yCoord, zCoord);
 	}
 
-	public void setTree(String speciesUID, boolean isPollinatedState) {
+	public void setTree(String speciesUID, boolean isPollinatedState, String fruitAlleleUID) {
 		ITree tree = getTree();
 		if (tree != null && tree.getIdent().equals(speciesUID)) {
 			return;
@@ -201,6 +202,13 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 		IAllele[] treeTemplate = PluginArboriculture.treeInterface.getTemplate(speciesUID);
 		if (treeTemplate != null) {
+			if (fruitAlleleUID != null) {
+				IAllele fruitAllele = AlleleManager.alleleRegistry.getAllele(fruitAlleleUID);
+				if (fruitAllele != null) {
+					treeTemplate[EnumTreeChromosome.FRUITS.ordinal()] = fruitAllele;
+				}
+			}
+
 			ITree newTree = PluginArboriculture.treeInterface.templateAsIndividual(treeTemplate);
 			if (isPollinatedState) {
 				newTree.mate(newTree);
@@ -387,9 +395,10 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		isPollinatedState = packet.isPollinated();
 
 		colourFruits = packet.getColourFruits();
+		String fruitAlleleUID = packet.getFruitAlleleUID();
 
 		speciesUID = packet.getSpeciesUID();
-		setTree(speciesUID, isPollinatedState);
+		setTree(speciesUID, isPollinatedState, fruitAlleleUID);
 
 		worldObj.func_147479_m(xCoord, yCoord, zCoord);
 	}

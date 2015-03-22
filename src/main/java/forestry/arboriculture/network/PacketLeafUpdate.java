@@ -17,6 +17,7 @@ import java.io.IOException;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.ITree;
 import forestry.arboriculture.gadgets.TileLeaves;
 import forestry.core.network.ForestryPacket;
@@ -32,6 +33,7 @@ public class PacketLeafUpdate extends ForestryPacket implements ILocatedPacket {
 
 	private byte leafState = 0;
 	private int colourFruits = -1;
+	private String fruitAlleleUID;
 	private String speciesUID = "";
 	
 	public PacketLeafUpdate() {
@@ -47,13 +49,11 @@ public class PacketLeafUpdate extends ForestryPacket implements ILocatedPacket {
 		leafState = 0;
 		if (leaves.hasFruit()) {
 			leafState |= hasFruitFlag;
+			fruitAlleleUID = leaves.getTree().getGenome().getActiveAllele(EnumTreeChromosome.FRUITS).getUID();
+			colourFruits = leaves.getFruitColour();
 		}
 		if (leaves.isPollinated()) {
 			leafState |= isPollinatedFlag;
-		}
-
-		if (leaves.hasFruit()) {
-			colourFruits = leaves.getFruitColour();
 		}
 
 		ITree tree = leaves.getTree();
@@ -69,7 +69,11 @@ public class PacketLeafUpdate extends ForestryPacket implements ILocatedPacket {
 		data.writeShort(posZ);
 		data.writeByte(leafState);
 		data.writeUTF(speciesUID);
-		data.writeInt(colourFruits);
+
+		if (isFruitLeaf()) {
+			data.writeUTF(fruitAlleleUID);
+			data.writeInt(colourFruits);
+		}
 	}
 	
 	@Override
@@ -79,15 +83,23 @@ public class PacketLeafUpdate extends ForestryPacket implements ILocatedPacket {
 		posZ = data.readShort();
 		leafState = data.readByte();
 		speciesUID = data.readUTF();
-		colourFruits = data.readInt();
-	}
 
+		if (isFruitLeaf()) {
+			fruitAlleleUID = data.readUTF();
+			colourFruits = data.readInt();
+		}
+	}
+	
 	public boolean isFruitLeaf() {
 		return (leafState & hasFruitFlag) > 0;
 	}
 
 	public boolean isPollinated() {
 		return (leafState & isPollinatedFlag) > 0;
+	}
+
+	public String getFruitAlleleUID() {
+		return fruitAlleleUID;
 	}
 
 	public int getColourFruits() {

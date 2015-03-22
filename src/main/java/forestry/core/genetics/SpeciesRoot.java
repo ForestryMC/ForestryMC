@@ -11,6 +11,7 @@
 package forestry.core.genetics;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -61,7 +62,8 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 
 	@Override
 	public IAllele[] getTemplate(String identifier) {
-		return speciesTemplates.get(identifier);
+		IAllele[] template = speciesTemplates.get(identifier);
+		return Arrays.copyOf(template, template.length);
 	}
 
 	/* MUTATIONS */
