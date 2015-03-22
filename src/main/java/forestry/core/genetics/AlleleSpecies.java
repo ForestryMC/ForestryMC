@@ -151,34 +151,40 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
 		return this.branch;
 	}
 
-	public AlleleSpecies setComplexity(int complexity) {
+	@SuppressWarnings("unchecked")
+	public <T extends AlleleSpecies> T setComplexity(int complexity) {
 		this.complexity = complexity;
-		return this;
+		return (T) this;
 	}
 
-	public AlleleSpecies setTemperature(EnumTemperature temperature) {
+	@SuppressWarnings("unchecked")
+	public <T extends AlleleSpecies> T setTemperature(EnumTemperature temperature) {
 		climate = temperature;
-		return this;
+		return (T) this;
 	}
 
-	public AlleleSpecies setHumidity(EnumHumidity humidity) {
+	@SuppressWarnings("unchecked")
+	public <T extends AlleleSpecies> T setHumidity(EnumHumidity humidity) {
 		this.humidity = humidity;
-		return this;
+		return (T) this;
 	}
 
-	public AlleleSpecies setHasEffect() {
+	@SuppressWarnings("unchecked")
+	public <T extends AlleleSpecies> T setHasEffect() {
 		hasEffect = true;
-		return this;
+		return (T) this;
 	}
 
-	public AlleleSpecies setIsSecret() {
+	@SuppressWarnings("unchecked")
+	public <T extends AlleleSpecies> T setIsSecret() {
 		isSecret = true;
-		return this;
+		return (T) this;
 	}
 
-	public AlleleSpecies setIsNotCounted() {
+	@SuppressWarnings("unchecked")
+	public <T extends AlleleSpecies> T setIsNotCounted() {
 		isCounted = false;
-		return this;
+		return (T) this;
 	}
 
 	@Override

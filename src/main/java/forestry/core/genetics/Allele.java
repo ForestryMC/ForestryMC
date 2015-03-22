@@ -14,10 +14,15 @@ import java.util.EnumSet;
 
 import net.minecraftforge.common.EnumPlantType;
 
+import forestry.api.apiculture.IAlleleBeeSpecies;
+import forestry.api.arboriculture.IAlleleFruit;
+import forestry.api.arboriculture.IAlleleGrowth;
+import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.ILegacyHandler;
+import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.core.config.Defaults;
 import forestry.core.utils.StringUtil;
 
@@ -53,171 +58,171 @@ public class Allele implements IAllele {
 
 	// / BEES // SPECIES
 	// Common Branch
-	public static AlleleSpecies speciesForest;
-	public static AlleleSpecies speciesMeadows;
-	public static AlleleSpecies speciesCommon;
-	public static AlleleSpecies speciesCultivated;
+	public static IAlleleBeeSpecies speciesForest;
+	public static IAlleleBeeSpecies speciesMeadows;
+	public static IAlleleBeeSpecies speciesCommon;
+	public static IAlleleBeeSpecies speciesCultivated;
 
 	// Noble Branch
-	public static AlleleSpecies speciesNoble;
-	public static AlleleSpecies speciesMajestic;
-	public static AlleleSpecies speciesImperial;
+	public static IAlleleBeeSpecies speciesNoble;
+	public static IAlleleBeeSpecies speciesMajestic;
+	public static IAlleleBeeSpecies speciesImperial;
 
 	// Industrious Branch
-	public static AlleleSpecies speciesDiligent;
-	public static AlleleSpecies speciesUnweary;
-	public static AlleleSpecies speciesIndustrious;
+	public static IAlleleBeeSpecies speciesDiligent;
+	public static IAlleleBeeSpecies speciesUnweary;
+	public static IAlleleBeeSpecies speciesIndustrious;
 
 	// Heroic Branch
-	public static AlleleSpecies speciesSteadfast;
-	public static AlleleSpecies speciesValiant;
-	public static AlleleSpecies speciesHeroic;
+	public static IAlleleBeeSpecies speciesSteadfast;
+	public static IAlleleBeeSpecies speciesValiant;
+	public static IAlleleBeeSpecies speciesHeroic;
 
 	// Infernal Branch
-	public static AlleleSpecies speciesSinister;
-	public static AlleleSpecies speciesFiendish;
-	public static AlleleSpecies speciesDemonic;
+	public static IAlleleBeeSpecies speciesSinister;
+	public static IAlleleBeeSpecies speciesFiendish;
+	public static IAlleleBeeSpecies speciesDemonic;
 
 	// Austere Branch
-	public static AlleleSpecies speciesModest;
-	public static AlleleSpecies speciesFrugal;
-	public static AlleleSpecies speciesAustere;
+	public static IAlleleBeeSpecies speciesModest;
+	public static IAlleleBeeSpecies speciesFrugal;
+	public static IAlleleBeeSpecies speciesAustere;
 
 	// / Tropical Branch
-	public static AlleleSpecies speciesTropical;
-	public static AlleleSpecies speciesExotic;
-	public static AlleleSpecies speciesEdenic;
+	public static IAlleleBeeSpecies speciesTropical;
+	public static IAlleleBeeSpecies speciesExotic;
+	public static IAlleleBeeSpecies speciesEdenic;
 
 	// End Branch
-	public static AlleleSpecies speciesEnded;
-	public static AlleleSpecies speciesSpectral;
-	public static AlleleSpecies speciesPhantasmal;
+	public static IAlleleBeeSpecies speciesEnded;
+	public static IAlleleBeeSpecies speciesSpectral;
+	public static IAlleleBeeSpecies speciesPhantasmal;
 
 	// Frozen Branch
-	public static AlleleSpecies speciesWintry;
-	public static AlleleSpecies speciesIcy;
-	public static AlleleSpecies speciesGlacial;
+	public static IAlleleBeeSpecies speciesWintry;
+	public static IAlleleBeeSpecies speciesIcy;
+	public static IAlleleBeeSpecies speciesGlacial;
 
 	// Vengeful Branch
-	public static AlleleSpecies speciesVindictive;
-	public static AlleleSpecies speciesVengeful;
-	public static AlleleSpecies speciesAvenging;
+	public static IAlleleBeeSpecies speciesVindictive;
+	public static IAlleleBeeSpecies speciesVengeful;
+	public static IAlleleBeeSpecies speciesAvenging;
 
 	// Reddened Branch (EE)
-	public static AlleleSpecies speciesDarkened;
-	public static AlleleSpecies speciesReddened;
-	public static AlleleSpecies speciesOmega;
+	public static IAlleleBeeSpecies speciesDarkened;
+	public static IAlleleBeeSpecies speciesReddened;
+	public static IAlleleBeeSpecies speciesOmega;
 
 	// Festive branch
-	public static AlleleSpecies speciesLeporine; // Easter
-	public static AlleleSpecies speciesMerry; // Christmas
-	public static AlleleSpecies speciesTipsy; // New Year
+	public static IAlleleBeeSpecies speciesLeporine; // Easter
+	public static IAlleleBeeSpecies speciesMerry; // Christmas
+	public static IAlleleBeeSpecies speciesTipsy; // New Year
 	// 35 Solstice
-	public static AlleleSpecies speciesTricky; // Halloween
+	public static IAlleleBeeSpecies speciesTricky; // Halloween
 	// 37 Thanksgiving
 	// 39 New Year
 
 	// Agrarian branch
-	public static AlleleSpecies speciesRural;
-	public static AlleleSpecies speciesFarmerly;
-	public static AlleleSpecies speciesArgrarian;
+	public static IAlleleBeeSpecies speciesRural;
+	public static IAlleleBeeSpecies speciesFarmerly;
+	public static IAlleleBeeSpecies speciesArgrarian;
 
 	// Boggy branch
-	public static AlleleSpecies speciesMarshy;
-	public static AlleleSpecies speciesMiry;
-	public static AlleleSpecies speciesBoggy;
+	public static IAlleleBeeSpecies speciesMarshy;
+	public static IAlleleBeeSpecies speciesMiry;
+	public static IAlleleBeeSpecies speciesBoggy;
 
 	// Monastic branch
-	public static AlleleSpecies speciesMonastic;
-	public static AlleleSpecies speciesSecluded;
-	public static AlleleSpecies speciesHermitic;
+	public static IAlleleBeeSpecies speciesMonastic;
+	public static IAlleleBeeSpecies speciesSecluded;
+	public static IAlleleBeeSpecies speciesHermitic;
 
 	// / TREES // SPECIES 512 - 1023
-	public static AlleleSpecies treeOak;
-	public static AlleleSpecies treeBirch;
-	public static AlleleSpecies treeSpruce;
-	public static AlleleSpecies treePine;
-	public static AlleleSpecies treeJungle;
-	public static AlleleSpecies treeAcacia;
-	public static AlleleSpecies treeDarkOak;
+	public static IAlleleTreeSpecies treeOak;
+	public static IAlleleTreeSpecies treeBirch;
+	public static IAlleleTreeSpecies treeSpruce;
+	public static IAlleleTreeSpecies treePine;
+	public static IAlleleTreeSpecies treeJungle;
+	public static IAlleleTreeSpecies treeAcacia;
+	public static IAlleleTreeSpecies treeDarkOak;
 	
-	public static AlleleSpecies treeLarch;
-	public static AlleleSpecies treeTeak;
-	public static AlleleSpecies treeDesertAcacia;
-	public static AlleleSpecies treeLime;
-	public static AlleleSpecies treeChestnut;
-	public static AlleleSpecies treeWenge;
-	public static AlleleSpecies treeBaobab;
-	public static AlleleSpecies treeSequioa;
-	public static AlleleSpecies treeGiganteum;
+	public static IAlleleTreeSpecies treeLarch;
+	public static IAlleleTreeSpecies treeTeak;
+	public static IAlleleTreeSpecies treeDesertAcacia;
+	public static IAlleleTreeSpecies treeLime;
+	public static IAlleleTreeSpecies treeChestnut;
+	public static IAlleleTreeSpecies treeWenge;
+	public static IAlleleTreeSpecies treeBaobab;
+	public static IAlleleTreeSpecies treeSequioa;
+	public static IAlleleTreeSpecies treeGiganteum;
 
-	public static AlleleSpecies treeKapok;
-	public static AlleleSpecies treeEbony;
-	public static AlleleSpecies treeMahogany;
-	public static AlleleSpecies treeBalsa;
-	public static AlleleSpecies treePapaya;
-	public static AlleleSpecies treeWalnut;
-	public static AlleleSpecies treeDate;
-	public static AlleleSpecies treeCherry;
+	public static IAlleleTreeSpecies treeKapok;
+	public static IAlleleTreeSpecies treeEbony;
+	public static IAlleleTreeSpecies treeMahogany;
+	public static IAlleleTreeSpecies treeBalsa;
+	public static IAlleleTreeSpecies treePapaya;
+	public static IAlleleTreeSpecies treeWalnut;
+	public static IAlleleTreeSpecies treeDate;
+	public static IAlleleTreeSpecies treeCherry;
 
-	public static AlleleSpecies treeWillow;
-	public static AlleleSpecies treeSipiri;
+	public static IAlleleTreeSpecies treeWillow;
+	public static IAlleleTreeSpecies treeSipiri;
 
-	public static AlleleSpecies treeMahoe;
-	public static AlleleSpecies treePoplar;
+	public static IAlleleTreeSpecies treeMahoe;
+	public static IAlleleTreeSpecies treePoplar;
 
-	public static AlleleSpecies treeLemon;
-	public static AlleleSpecies treePlum;
+	public static IAlleleTreeSpecies treeLemon;
+	public static IAlleleTreeSpecies treePlum;
 
-	public static AlleleSpecies treeMaple;
+	public static IAlleleTreeSpecies treeMaple;
 
-	public static AlleleSpecies treeIpe;
-	public static AlleleSpecies treePadauk;
-	public static AlleleSpecies treeCocobolo;
-	public static AlleleSpecies treeZebrawood;
+	public static IAlleleTreeSpecies treeIpe;
+	public static IAlleleTreeSpecies treePadauk;
+	public static IAlleleTreeSpecies treeCocobolo;
+	public static IAlleleTreeSpecies treeZebrawood;
 	
 	/// BUTTERFLIES // SPECIES
 	// Moths
-	public static AlleleSpecies mothBrimstone;
-	public static AlleleSpecies mothLatticedHeath;
-	public static AlleleSpecies mothAtlas;
+	public static IAlleleButterflySpecies mothBrimstone;
+	public static IAlleleButterflySpecies mothLatticedHeath;
+	public static IAlleleButterflySpecies mothAtlas;
 	
 	// Butterflies
-	public static AlleleSpecies lepiCabbageWhite;
-	public static AlleleSpecies lepiGlasswing;
-	public static AlleleSpecies lepiEmeraldPeacock;
-	public static AlleleSpecies lepiThoasSwallow;
-	public static AlleleSpecies lepiCitrusSwallow;
-	public static AlleleSpecies lepiZebraSwallow;
-	public static AlleleSpecies lepiBlackSwallow;
-	public static AlleleSpecies lepiDianaFrit;
+	public static IAlleleButterflySpecies lepiCabbageWhite;
+	public static IAlleleButterflySpecies lepiGlasswing;
+	public static IAlleleButterflySpecies lepiEmeraldPeacock;
+	public static IAlleleButterflySpecies lepiThoasSwallow;
+	public static IAlleleButterflySpecies lepiCitrusSwallow;
+	public static IAlleleButterflySpecies lepiZebraSwallow;
+	public static IAlleleButterflySpecies lepiBlackSwallow;
+	public static IAlleleButterflySpecies lepiDianaFrit;
 	
-	public static AlleleSpecies lepiSpeckledWood;
-	public static AlleleSpecies lepiMadeiranSpeckledWood;
-	public static AlleleSpecies lepiCanarySpeckledWood;
+	public static IAlleleButterflySpecies lepiSpeckledWood;
+	public static IAlleleButterflySpecies lepiMadeiranSpeckledWood;
+	public static IAlleleButterflySpecies lepiCanarySpeckledWood;
 	
-	public static AlleleSpecies lepiMenelausBlueMorpho;
-	public static AlleleSpecies lepiPeleidesBlueMorpho;
-	public static AlleleSpecies lepiRhetenorBlueMorpho;
+	public static IAlleleButterflySpecies lepiMenelausBlueMorpho;
+	public static IAlleleButterflySpecies lepiPeleidesBlueMorpho;
+	public static IAlleleButterflySpecies lepiRhetenorBlueMorpho;
 	
-	public static AlleleSpecies lepiBrimstone;
-	public static AlleleSpecies lepiAurora;
-	public static AlleleSpecies lepiPostillion;
-	public static AlleleSpecies lepiPalaenoSulphur;
-	public static AlleleSpecies lepiReseda;
-	public static AlleleSpecies lepiSpringAzure;
-	public static AlleleSpecies lepiGozoraAzure;
-	public static AlleleSpecies lepiComma;
-	public static AlleleSpecies lepiBatesia;
-	public static AlleleSpecies lepiBlueWing;
+	public static IAlleleButterflySpecies lepiBrimstone;
+	public static IAlleleButterflySpecies lepiAurora;
+	public static IAlleleButterflySpecies lepiPostillion;
+	public static IAlleleButterflySpecies lepiPalaenoSulphur;
+	public static IAlleleButterflySpecies lepiReseda;
+	public static IAlleleButterflySpecies lepiSpringAzure;
+	public static IAlleleButterflySpecies lepiGozoraAzure;
+	public static IAlleleButterflySpecies lepiComma;
+	public static IAlleleButterflySpecies lepiBatesia;
+	public static IAlleleButterflySpecies lepiBlueWing;
 	
-	public static AlleleSpecies lepiMonarch;
-	public static AlleleSpecies lepiBlueDuke;
-	public static AlleleSpecies lepiGlassyTiger;
-	public static AlleleSpecies lepiPostman;
-	public static AlleleSpecies lepiSpicebush;
-	public static AlleleSpecies lepiMalachite;
-	public static AlleleSpecies lepiLLacewing;
+	public static IAlleleButterflySpecies lepiMonarch;
+	public static IAlleleButterflySpecies lepiBlueDuke;
+	public static IAlleleButterflySpecies lepiGlassyTiger;
+	public static IAlleleButterflySpecies lepiPostman;
+	public static IAlleleButterflySpecies lepiSpicebush;
+	public static IAlleleButterflySpecies lepiMalachite;
+	public static IAlleleButterflySpecies lepiLLacewing;
 	
 	// / ALL // GENERIC
 	public static Allele boolFalse;
@@ -261,23 +266,23 @@ public class Allele implements IAllele {
 	public static Allele fertilityMaximum;
 
 	// / TREES // GROWTH PROVIDER 1350 - 1399
-	public static Allele growthLightlevel;
-	public static Allele growthAcacia;
-	public static Allele growthTropical;
+	public static IAlleleGrowth growthLightlevel;
+	public static IAlleleGrowth growthAcacia;
+	public static IAlleleGrowth growthTropical;
 
 	// TREES FRUIT PROVIDERS
-	public static Allele fruitNone;
-	public static Allele fruitApple;
-	public static Allele fruitCocoa;
-	public static Allele fruitChestnut;
-	public static Allele fruitCoconut;
-	public static Allele fruitWalnut;
-	public static Allele fruitCherry;
-	public static Allele fruitDates;
-	public static Allele fruitPapaya;
-	public static Allele fruitLemon;
-	public static Allele fruitPlum;
-	public static Allele fruitJujube;
+	public static IAlleleFruit fruitNone;
+	public static IAlleleFruit fruitApple;
+	public static IAlleleFruit fruitCocoa;
+	public static IAlleleFruit fruitChestnut;
+	public static IAlleleFruit fruitCoconut;
+	public static IAlleleFruit fruitWalnut;
+	public static IAlleleFruit fruitCherry;
+	public static IAlleleFruit fruitDates;
+	public static IAlleleFruit fruitPapaya;
+	public static IAlleleFruit fruitLemon;
+	public static IAlleleFruit fruitPlum;
+	public static IAlleleFruit fruitJujube;
 
 	// / TREES // HEIGHT 1400 - 1449
 	public static Allele heightSmallest;
