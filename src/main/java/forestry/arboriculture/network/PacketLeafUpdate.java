@@ -14,28 +14,35 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+import forestry.api.arboriculture.ITree;
 import forestry.arboriculture.gadgets.TileLeaves;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.ILocatedPacket;
 import forestry.core.network.PacketIds;
-import forestry.core.network.PacketTileNBT;
 
-public class PacketLeafUpdate extends PacketTileNBT {
+public class PacketLeafUpdate extends ForestryPacket implements ILocatedPacket {
 
-	private static short hasFruitFlag = 1;
-	private static short isPollinatedFlag = 1 << 1;
+	private static final short hasFruitFlag = 1;
+	private static final short isPollinatedFlag = 1 << 1;
+
+	private int posX, posY, posZ;
 
 	private byte leafState = 0;
-	public short textureIndexFancy;
-	public short textureIndexPlain;
-	public short textureIndexFruit;
-	
-	public int colourLeaves;
-	public int colourFruits;
+	private int colourFruits = -1;
+	private String speciesUID = "";
 	
 	public PacketLeafUpdate() {
 	}
 
 	public PacketLeafUpdate(TileLeaves leaves) {
-		super(PacketIds.LEAF_UPDATE, leaves);
+		super(PacketIds.LEAF_UPDATE);
+
+		posX = leaves.getXCoord();
+		posY = leaves.getYCoord();
+		posZ = leaves.getZCoord();
 
 		leafState = 0;
 		if (leaves.hasFruit()) {
@@ -44,34 +51,34 @@ public class PacketLeafUpdate extends PacketTileNBT {
 		if (leaves.isPollinated()) {
 			leafState |= isPollinatedFlag;
 		}
-		textureIndexFancy = leaves.determineTextureIndex(true);
-		textureIndexPlain = leaves.determineTextureIndex(false);
-		textureIndexFruit = leaves.determineOverlayIndex();
-		colourLeaves = leaves.determineFoliageColour();
-		colourFruits = leaves.determineFruitColour();
+
+		if (leaves.hasFruit()) {
+			colourFruits = leaves.getFruitColour();
+		}
+
+		ITree tree = leaves.getTree();
+		if (tree != null) {
+			speciesUID = tree.getIdent();
+		}
 	}
 
 	@Override
 	public void writeData(DataOutputStream data) throws IOException {
-		super.writeData(data);
-
+		data.writeShort(posX);
+		data.writeShort(posY);
+		data.writeShort(posZ);
 		data.writeByte(leafState);
-		data.writeShort(textureIndexFancy);
-		data.writeShort(textureIndexPlain);
-		data.writeShort(textureIndexFruit);
-		data.writeInt(colourLeaves);
+		data.writeUTF(speciesUID);
 		data.writeInt(colourFruits);
 	}
 	
 	@Override
 	public void readData(DataInputStream data) throws IOException {
-		super.readData(data);
-
+		posX = data.readShort();
+		posY = data.readShort();
+		posZ = data.readShort();
 		leafState = data.readByte();
-		textureIndexFancy = data.readShort();
-		textureIndexPlain = data.readShort();
-		textureIndexFruit = data.readShort();
-		colourLeaves = data.readInt();
+		speciesUID = data.readUTF();
 		colourFruits = data.readInt();
 	}
 
@@ -81,5 +88,18 @@ public class PacketLeafUpdate extends PacketTileNBT {
 
 	public boolean isPollinated() {
 		return (leafState & isPollinatedFlag) > 0;
+	}
+
+	public int getColourFruits() {
+		return colourFruits;
+	}
+
+	public String getSpeciesUID() {
+		return speciesUID;
+	}
+
+	@Override
+	public TileEntity getTarget(World world) {
+		return world.getTileEntity(posX, posY, posZ);
 	}
 }

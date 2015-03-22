@@ -42,6 +42,7 @@ import forestry.api.core.IToolScoop;
 import forestry.api.core.Tabs;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
+import forestry.arboriculture.items.ItemLeavesBlock;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
@@ -68,16 +69,10 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 		return null;
 	}
 
-	private static NBTTagCompound getTagCompoundForTree(IBlockAccess world, int x, int y, int z) {
+	private static NBTTagCompound getTagCompoundForLeaves(IBlockAccess world, int x, int y, int z) {
 		TileLeaves leaves = getLeafTile(world, x, y, z);
-		ITree tree = leaves.getTree();
-
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		if (tree == null) {
-			return nbttagcompound;
-		}
-
-		tree.writeToNBT(nbttagcompound);
+		leaves.writeToNBT(nbttagcompound);
 		return nbttagcompound;
 	}
 
@@ -87,11 +82,15 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
 
 		for (ITree tree : PluginArboriculture.treeInterface.getIndividualTemplates()) {
-			NBTTagCompound treeNBT = new NBTTagCompound();
-			tree.writeToNBT(treeNBT);
+			TileLeaves leaves = new TileLeaves();
+			leaves.setDecorative();
+			leaves.setTree(tree);
+
+			NBTTagCompound leavesNBT = new NBTTagCompound();
+			leaves.writeToNBT(leavesNBT);
 
 			ItemStack itemStack = new ItemStack(item, 1, 0);
-			itemStack.setTagCompound(treeNBT);
+			itemStack.setTagCompound(leavesNBT);
 
 			list.add(itemStack);
 		}
@@ -167,8 +166,8 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
 		ItemStack itemStack = super.getPickBlock(target, world, x, y, z);
-		NBTTagCompound treeNBT = getTagCompoundForTree(world, x, y, z);
-		itemStack.setTagCompound(treeNBT);
+		NBTTagCompound leavesNBT = getTagCompoundForLeaves(world, x, y, z);
+		itemStack.setTagCompound(leavesNBT);
 		return itemStack;
 	}
 
@@ -181,9 +180,12 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 	public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
 		ArrayList<ItemStack> ret = super.onSheared(item, world, x, y, z, fortune);
 
-		NBTTagCompound treeNBT = getTagCompoundForTree(world, x, y, z);
+		NBTTagCompound leavesNBT = getTagCompoundForLeaves(world, x, y, z);
 		for (ItemStack stack : ret) {
-			stack.setTagCompound(treeNBT);
+			if (stack.getItem() instanceof ItemLeavesBlock) {
+				NBTTagCompound leavesNBTCopy = (NBTTagCompound) leavesNBT.copy();
+				stack.setTagCompound(leavesNBTCopy);
+			}
 		}
 
 		return ret;

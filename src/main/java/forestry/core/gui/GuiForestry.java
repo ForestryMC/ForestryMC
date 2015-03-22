@@ -14,7 +14,6 @@ import java.awt.Color;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -456,7 +455,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 
 		@Override
 		public ToolTip getToolTip() {
-			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+			EntityPlayer player = Proxies.common.getPlayer();
 			ToolTip tip = new ToolTip();
 			tip.add(itemStack.getTooltip(player, false));
 			return tip;

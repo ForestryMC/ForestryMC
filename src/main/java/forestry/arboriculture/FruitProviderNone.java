@@ -50,7 +50,7 @@ public class FruitProviderNone implements IFruitProvider {
 	private final String key;
 	private final IFruitFamily family;
 
-	int ripeningPeriod = 10;
+	protected int ripeningPeriod = 10;
 
 	OverlayType overlay = null;
 

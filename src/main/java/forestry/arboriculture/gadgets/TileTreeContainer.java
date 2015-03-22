@@ -73,9 +73,6 @@ public abstract class TileTreeContainer extends TileEntity implements INetworked
 	/* CONTAINED TREE */
 	public void setTree(ITree tree) {
 		this.containedTree = tree;
-		if (tree != null) {
-			sendNetworkUpdate();
-		}
 	}
 
 	public ITree getTree() {
