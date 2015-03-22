@@ -14,6 +14,7 @@ import forestry.api.genetics.IPollinatable;
 import forestry.arboriculture.genetics.FakePollinatable;
 import forestry.arboriculture.genetics.ICheckPollinatable;
 import forestry.core.utils.GeneticsUtil;
+import forestry.plugins.PluginLepidopterology;
 
 public class AIButterflyPollinate extends AIButterflyInteract {
 
@@ -26,7 +27,7 @@ public class AIButterflyPollinate extends AIButterflyInteract {
 	 */
 	@Override
 	protected boolean canInteract() {
-		if (entity.cooldownPollination > 0) {
+		if (entity.cooldownPollination > 0 || !PluginLepidopterology.isPollinationAllowed()) {
 			return false;
 		}
 
