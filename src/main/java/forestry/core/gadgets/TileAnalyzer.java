@@ -238,12 +238,14 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 		// Look for bees in input slots.
 		IInvSlot slot = getInputSlot();
-		ItemStack inputStack = slot.getStackInSlot();
-		setInventorySlotContents(SLOT_ANALYZE, inputStack);
-		slot.setStackInSlot(null);
-		resourceTank.drain(HONEY_REQUIRED, true);
-		analyzeTime = TIME_TO_ANALYZE;
-		sendNetworkUpdate();
+		if (slot != null) {
+			ItemStack inputStack = slot.getStackInSlot();
+			setInventorySlotContents(SLOT_ANALYZE, inputStack);
+			slot.setStackInSlot(null);
+			resourceTank.drain(HONEY_REQUIRED, true);
+			analyzeTime = TIME_TO_ANALYZE;
+			sendNetworkUpdate();
+		}
 		return true;
 	}
 
