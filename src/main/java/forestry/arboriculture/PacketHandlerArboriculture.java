@@ -11,6 +11,7 @@
 package forestry.arboriculture;
 
 import java.io.DataInputStream;
+import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -25,27 +26,24 @@ import forestry.core.proxy.Proxies;
 public class PacketHandlerArboriculture implements IPacketHandler {
 
 	@Override
-	public void onPacketData(int packetID, DataInputStream data, EntityPlayer player) {
-		try {
+	public boolean onPacketData(int packetID, DataInputStream data, EntityPlayer player) throws IOException {
 
-			switch (packetID) {
-				case PacketIds.LEAF_UPDATE: {
-					PacketLeafUpdate packet = new PacketLeafUpdate();
-					packet.readData(data);
-					onLeafUpdate(packet);
-					break;
-				}
-				case PacketIds.RIPENING_UPDATE: {
-					PacketRipeningUpdate packet = new PacketRipeningUpdate();
-					packet.readData(data);
-					onRipeningUpdate(packet);
-					break;
-				}
+		switch (packetID) {
+			case PacketIds.LEAF_UPDATE: {
+				PacketLeafUpdate packet = new PacketLeafUpdate();
+				packet.readData(data);
+				onLeafUpdate(packet);
+				return true;
 			}
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
+			case PacketIds.RIPENING_UPDATE: {
+				PacketRipeningUpdate packet = new PacketRipeningUpdate();
+				packet.readData(data);
+				onRipeningUpdate(packet);
+				return true;
+			}
 		}
+
+		return false;
 	}
 
 	private void onLeafUpdate(PacketLeafUpdate packet) {

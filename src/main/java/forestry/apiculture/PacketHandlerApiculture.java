@@ -11,6 +11,7 @@
 package forestry.apiculture;
 
 import java.io.DataInputStream;
+import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -23,23 +24,20 @@ import forestry.core.proxy.Proxies;
 public class PacketHandlerApiculture implements IPacketHandler {
 
 	@Override
-	public void onPacketData(int packetID, DataInputStream data, EntityPlayer player) {
+	public boolean onPacketData(int packetID, DataInputStream data, EntityPlayer player) throws IOException {
 
-		try {
-
-			switch (packetID) {
-				case PacketIds.HABITAT_BIOME_POINTER:
-					PacketCoordinates packetC = new PacketCoordinates();
-					packetC.readData(data);
-					Proxies.common.setHabitatLocatorCoordinates(player, packetC.getCoordinates());
-					break;
-				case PacketIds.IMPRINT_SELECTION_GET:
-					onImprintSelectionGet(player);
-					break;
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		switch (packetID) {
+			case PacketIds.HABITAT_BIOME_POINTER:
+				PacketCoordinates packetC = new PacketCoordinates();
+				packetC.readData(data);
+				Proxies.common.setHabitatLocatorCoordinates(player, packetC.getCoordinates());
+				return true;
+			case PacketIds.IMPRINT_SELECTION_GET:
+				onImprintSelectionGet(player);
+				return true;
 		}
+
+		return false;
 	}
 
 	private void onImprintSelectionGet(EntityPlayer playerEntity) {

@@ -60,16 +60,15 @@ public class PacketHandler {
 
 	@SubscribeEvent
 	public void onPacket(ClientCustomPacketEvent event) {
-		onPacketData(new ByteBufInputStream(event.packet.payload()),
-				null);
+		onPacketData(new ByteBufInputStream(event.packet.payload()), null);
 	}
 
-	public void onPacketData(InputStream is, EntityPlayerMP player) {
+	/** Returns true if the packet has been handled */
+	public boolean onPacketData(InputStream is, EntityPlayerMP player) {
 		DataInputStream data = new DataInputStream(is);
 		PacketUpdate packetU;
 
 		try {
-
 			int packetId = data.readByte();
 
 			switch (packetId) {
@@ -78,81 +77,84 @@ public class PacketHandler {
 					PacketTileUpdate packetT = new PacketTileUpdate();
 					packetT.readData(data);
 					onTileUpdate(packetT);
-					break;
+					return true;
 				case PacketIds.TILE_UPDATE:
 					PacketUpdate packetUpdate = new PacketUpdate();
 					packetUpdate.readData(data);
 					onTileUpdate(packetUpdate);
-					break;
+					return true;
 				case PacketIds.TILE_NBT:
 					PacketTileNBT packetN = new PacketTileNBT();
 					packetN.readData(data);
 					onTileUpdate(packetN);
-					break;
+					return true;
 				case PacketIds.SOCKET_UPDATE:
 					PacketSocketUpdate packetS = new PacketSocketUpdate();
 					packetS.readData(data);
 					onSocketUpdate(packetS);
-					break;
+					return true;
 				case PacketIds.IINVENTORY_STACK:
 					PacketInventoryStack packetQ = new PacketInventoryStack();
 					packetQ.readData(data);
 					onInventoryStack(packetQ);
-					break;
+					return true;
 				case PacketIds.FX_SIGNAL:
 					PacketFXSignal packetF = new PacketFXSignal();
 					packetF.readData(data);
 					packetF.executeFX();
-					break;
+					return true;
 
 				case PacketIds.PIPETTE_CLICK:
 					packetU = new PacketUpdate();
 					packetU.readData(data);
 					onPipetteClick(packetU, player);
-					break;
+					return true;
 				case PacketIds.SOLDERING_IRON_CLICK:
 					packetU = new PacketUpdate();
 					packetU.readData(data);
 					onSolderingIronClick(packetU, player);
-					break;
+					return true;
 				case PacketIds.CHIPSET_CLICK:
 					packetU = new PacketUpdate();
 					packetU.readData(data);
 					onChipsetClick(packetU, player);
-					break;
+					return true;
 				case PacketIds.ACCESS_SWITCH:
 					PacketCoordinates packetC = new PacketCoordinates();
 					packetC.readData(data);
 					onAccessSwitch(packetC, player);
-					break;
+					return true;
 				case PacketIds.GUI_SELECTION:
 					PacketUpdate packetI = new PacketUpdate();
 					packetI.readData(data);
 					onGuiSelection(packetI);
-					break;
+					return true;
 				case PacketIds.GUI_SELECTION_CHANGE:
 					PacketUpdate packetZ = new PacketUpdate();
 					packetZ.readData(data);
 					onGuiChange(player, packetZ);
-					break;
+					return true;
 				case PacketIds.GENOME_TRACKER_UPDATE:
 					PacketNBT packetTR = new PacketNBT();
 					packetTR.readData(data);
 					onGenomeTrackerUpdate(packetTR);
-					break;
+					return true;
 				case PacketIds.GUI_INTEGER:
 					PacketGuiInteger packet = new PacketGuiInteger();
 					packet.readData(data);
-					break;
+					return true;
 				default:
 					for (forestry.core.interfaces.IPacketHandler handler : PluginManager.packetHandlers) {
-						handler.onPacketData(packetId, data, player);
+						if (handler.onPacketData(packetId, data, player)) {
+							return true;
+						}
 					}
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 
+		return false;
 	}
 
 	public void sendPacket(FMLProxyPacket packet) {
