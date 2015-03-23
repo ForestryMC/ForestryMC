@@ -295,9 +295,6 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		return (analyzeTime * i) / TIME_TO_ANALYZE;
 	}
 
-	public int getResourceScaled(int i) {
-		return (resourceTank.getFluidAmount() * i) / Defaults.PROCESSOR_TANK_CAPACITY;
-	}
 
 	public ItemStack getIndividualOnDisplay() {
 		return getStackInSlot(SLOT_ANALYZE);

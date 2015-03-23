@@ -86,10 +86,6 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		super.validate();
 	}
 
-	public Vect Coords() {
-		return new Vect(xCoord, yCoord, zCoord);
-	}
-
 	public void openGui(EntityPlayer player) {
 	}
 

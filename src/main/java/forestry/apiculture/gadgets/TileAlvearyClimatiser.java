@@ -51,10 +51,6 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 		this.textureOn = textureOn;
 	}
 
-	@Override
-	public void openGui(EntityPlayer player) {
-	}
-
 	/* UPDATING */
 	@Override
 	protected void updateServerSide() {
