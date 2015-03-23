@@ -524,4 +524,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 	}
 
+	@Override
+	protected float getSoundVolume() {
+		return 0.1F;
+	}
+
 }
