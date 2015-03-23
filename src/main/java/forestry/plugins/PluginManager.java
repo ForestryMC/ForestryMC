@@ -266,6 +266,7 @@ public class PluginManager {
 			}
 
 			plugin.doInit();
+			plugin.registerRecipes();
 			Proxies.log.fine("Init Complete: {0}", plugin);
 		}
 	}
@@ -275,7 +276,6 @@ public class PluginManager {
 		for (Module m : loadedModules) {
 			ForestryPlugin plugin = m.instance;
 			Proxies.log.fine("Post-Init Start: {0}", plugin);
-			plugin.registerRecipes();
 			plugin.postInit();
 			Proxies.log.fine("Post-Init Complete: {0}", plugin);
 		}
