@@ -176,17 +176,6 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 			return false;
 		}
 
-		public static boolean isLiquidResource(FluidStack liquid) {
-			if (liquid == null) {
-				return false;
-			}
-			return recipeFluidInputs.contains(liquid.getFluid());
-		}
-
-		public static boolean isLiquidProduct(FluidStack liquid) {
-			return recipeFluidOutputs.contains(liquid.getFluid());
-		}
-
 		@Override
 		public Map<Object[], Object[]> getRecipes() {
 			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
