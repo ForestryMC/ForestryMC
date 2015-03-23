@@ -67,7 +67,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	private int colourLeaves;
 	private int colourFruits;
-	private String speciesUID;
 
 	private short textureIndexFancy = 48;
 	private short textureIndexPlain = 64;
@@ -114,15 +113,9 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			isDecorative = nbttagcompound.getBoolean("DEC");
 		}
 
-		if (nbttagcompound.hasKey("UID")) {
-			speciesUID = "forestry." + nbttagcompound.getString("UID");
-		}
-
 		ITree tree = getTree();
 		if (tree != null) {
 			setTree(tree);
-		} else if (speciesUID != null) {
-			setTree(speciesUID, false, null);
 		}
 	}
 
@@ -141,11 +134,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			nbttagcompound.setTag("CATER", subcompound);
 		}
 		nbttagcompound.setBoolean("DEC", isDecorative);
-
-		if (speciesUID != null) {
-			String strippedUID = speciesUID.replace("forestry.", "");
-			nbttagcompound.setString("UID", strippedUID);
-		}
 	}
 
 	@Override
@@ -252,8 +240,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		} else if (caterpillar != null) {
 			colourLeaves = Utils.multiplyRGBComponents(colourLeaves, 1.5f);
 		}
-
-		speciesUID = tree.getIdent();
 	}
 
 	/* INFORMATION */
@@ -397,7 +383,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		colourFruits = packet.getColourFruits();
 		String fruitAlleleUID = packet.getFruitAlleleUID();
 
-		speciesUID = packet.getSpeciesUID();
+		String speciesUID = packet.getSpeciesUID();
 		setTree(speciesUID, isPollinatedState, fruitAlleleUID);
 
 		worldObj.func_147479_m(xCoord, yCoord, zCoord);

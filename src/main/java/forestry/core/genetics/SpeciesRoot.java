@@ -63,6 +63,9 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 	@Override
 	public IAllele[] getTemplate(String identifier) {
 		IAllele[] template = speciesTemplates.get(identifier);
+		if (template == null) {
+			return null;
+		}
 		return Arrays.copyOf(template, template.length);
 	}
 

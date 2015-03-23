@@ -89,7 +89,7 @@ public class PacketLeafUpdate extends ForestryPacket implements ILocatedPacket {
 			colourFruits = data.readInt();
 		}
 	}
-	
+
 	public boolean isFruitLeaf() {
 		return (leafState & hasFruitFlag) > 0;
 	}
