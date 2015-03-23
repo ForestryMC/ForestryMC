@@ -35,6 +35,7 @@ import forestry.core.items.ItemNBTTile;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.RecipeUtil;
 import forestry.core.utils.ShapedRecipeCustom;
+import forestry.factory.DummyManagers;
 import forestry.factory.GuiHandlerFactory;
 import forestry.factory.gadgets.MachineBottler;
 import forestry.factory.gadgets.MachineCarpenter;
@@ -65,6 +66,21 @@ public class PluginFactory extends ForestryPlugin {
 	public static MachineDefinition definitionFabricator;
 	public static MachineDefinition definitionRaintank;
 	public static MachineDefinition definitionWorktable;
+
+	@Override
+	protected void disabledPreInit() {
+		super.disabledPreInit();
+
+		RecipeManagers.craftingProviders = Arrays.asList(
+				RecipeManagers.carpenterManager = new DummyManagers.CarpenterManager(),
+				RecipeManagers.centrifugeManager = new DummyManagers.CentrifugeManager(),
+				RecipeManagers.fabricatorManager = new DummyManagers.FabricatorManager(),
+				RecipeManagers.fermenterManager = new DummyManagers.FermenterManager(),
+				RecipeManagers.moistenerManager = new DummyManagers.MoistenerManager(),
+				RecipeManagers.squeezerManager = new DummyManagers.SqueezerManager(),
+				RecipeManagers.stillManager = new DummyManagers.StillManager()
+		);
+	}
 
 	@Override
 	public void preInit() {

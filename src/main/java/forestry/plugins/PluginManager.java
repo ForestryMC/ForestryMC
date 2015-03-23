@@ -62,7 +62,7 @@ public class PluginManager {
 
 	public enum Stage {
 
-		SETUP, PRE_INIT, INIT, POST_INIT, INIT_DISABLED, FINISHED
+		SETUP, PRE_INIT, PRE_INIT_DISABLED, INIT, POST_INIT, POST_INIT_DISABLED, FINISHED
 	}
 
 	public enum Module {
@@ -137,10 +137,6 @@ public class PluginManager {
 		return loadedModules.contains(module);
 	}
 
-	public static void addPlugin(ForestryPlugin plugin) {
-
-	}
-
 	public static void runPreInit() {
 		stage = Stage.SETUP;
 		Locale locale = Locale.getDefault();
@@ -209,6 +205,14 @@ public class PluginManager {
 			plugin.registerItems();
 			Proxies.log.fine("Pre-Init Complete: {0}", plugin);
 		}
+
+		stage = Stage.PRE_INIT_DISABLED;
+		for (Module m : unloadedModules) {
+			ForestryPlugin plugin = m.instance;
+			Proxies.log.fine("Disabled-Pre-Init Start: {0}", plugin);
+			plugin.disabledPreInit();
+			Proxies.log.fine("Disabled-Pre-Init Complete: {0}", plugin);
+		}
 	}
 
 	private static void loadPlugin(ForestryPlugin plugin) {
@@ -276,12 +280,12 @@ public class PluginManager {
 			Proxies.log.fine("Post-Init Complete: {0}", plugin);
 		}
 
-		stage = Stage.INIT_DISABLED;
+		stage = Stage.POST_INIT_DISABLED;
 		for (Module m : unloadedModules) {
 			ForestryPlugin plugin = m.instance;
-			Proxies.log.fine("Disabled-Init Start: {0}", plugin);
-			plugin.disabledInit();
-			Proxies.log.fine("Disabled-Init Complete: {0}", plugin);
+			Proxies.log.fine("Disabled-Post-Init Start: {0}", plugin);
+			plugin.disabledPostInit();
+			Proxies.log.fine("Disabled-Post-Init Complete: {0}", plugin);
 		}
 		stage = Stage.FINISHED;
 	}

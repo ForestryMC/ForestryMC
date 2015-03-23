@@ -44,13 +44,16 @@ public abstract class ForestryPlugin {
 	protected void preInit() {
 	}
 
+	protected void disabledPreInit() {
+	}
+
 	protected void doInit() {
 	}
 
 	protected void postInit() {
 	}
 
-	protected void disabledInit() {
+	protected void disabledPostInit() {
 	}
 
 	public boolean processIMCMessage(IMCMessage message) {
