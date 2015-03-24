@@ -162,22 +162,18 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		}
 	}
 
-	// / SMP
-	@Override
-	public void sendNetworkUpdate() {
-		PacketTileUpdate packet = new PacketTileUpdate(this);
-		Proxies.net.sendNetworkPacket(packet, xCoord, yCoord, zCoord);
-	}
-
 	@Override
 	public Packet getDescriptionPacket() {
 		PacketTileUpdate packet = new PacketTileUpdate(this);
 		return packet.getPacket();
 	}
 
-	public abstract PacketPayload getPacketPayload();
-
-	public abstract void fromPacketPayload(PacketPayload payload);
+	/* INetworkedEntity */
+	@Override
+	public void sendNetworkUpdate() {
+		PacketTileUpdate packet = new PacketTileUpdate(this);
+		Proxies.net.sendNetworkPacket(packet, xCoord, yCoord, zCoord);
+	}
 
 	@Override
 	public void fromPacket(ForestryPacket packetRaw) {
@@ -191,6 +187,10 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		access = packet.getAccess();
 		fromPacketPayload(packet.payload);
 	}
+
+	public abstract PacketPayload getPacketPayload();
+
+	public abstract void fromPacketPayload(PacketPayload payload);
 
 	public void onRemoval() {
 	}
