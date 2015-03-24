@@ -185,11 +185,6 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			return;
 		}
 
-		if (energyManager.getTotalEnergyStored() == 0) {
-			setErrorState(EnumErrorCode.NOPOWER);
-			return;
-		}
-
 		setErrorState(EnumErrorCode.OK);
 	}
 
