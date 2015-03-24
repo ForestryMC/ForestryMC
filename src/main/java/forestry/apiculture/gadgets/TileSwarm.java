@@ -43,7 +43,7 @@ public class TileSwarm extends TileEntity {
 
 	public TileSwarm setContained(ItemStack[] bees) {
 		for (ItemStack itemstack : bees) {
-			InvTools.addStack(contained, itemstack, false, true);
+			InvTools.addStack(contained, itemstack, true);
 		}
 
 		return this;

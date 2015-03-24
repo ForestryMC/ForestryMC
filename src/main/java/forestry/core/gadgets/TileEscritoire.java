@@ -142,7 +142,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 		}
 
 		for (ItemStack itemstack : individual.getGenome().getPrimary().getResearchBounty(worldObj, gameProfile, individual, game.getBountyLevel())) {
-			InvTools.addStack(getInternalInventory(), itemstack, SLOT_RESULTS_1, SLOTS_RESULTS_COUNT, false, true);
+			InvTools.addStack(getInternalInventory(), itemstack, SLOT_RESULTS_1, SLOTS_RESULTS_COUNT, true);
 		}
 	}
 
