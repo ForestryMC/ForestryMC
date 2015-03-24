@@ -24,6 +24,7 @@ import org.lwjgl.opengl.GL11;
 
 import forestry.arboriculture.gadgets.ForestryBlockLeaves;
 import forestry.arboriculture.gadgets.TileLeaves;
+import forestry.arboriculture.genetics.TreeHelper;
 import forestry.arboriculture.items.ItemLeavesBlock;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.OverlayRenderingHandler;
@@ -147,12 +148,16 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 		Tessellator tessellator = Tessellator.instance;
 		Block block = StackUtils.getBlock(itemStack);
 
-		if (!(itemStack.getItem() instanceof ItemLeavesBlock) || !itemStack.hasTagCompound()) {
+		if (!(itemStack.getItem() instanceof ItemLeavesBlock)) {
 			return;
 		}
 
 		TileLeaves leaves = new TileLeaves();
-		leaves.readFromNBT(itemStack.getTagCompound());
+		if (itemStack.hasTagCompound()) {
+			leaves.readFromNBT(itemStack.getTagCompound());
+		} else {
+			leaves.setTree(TreeHelper.treeTemplates.get(0));
+		}
 
 		GL11.glEnable(GL11.GL_BLEND);
 
