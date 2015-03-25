@@ -91,6 +91,7 @@ public class PluginManager {
 		HARVESTCRAFT(new PluginHarvestCraft()),
 		MAGICALCROPS(new PluginMagicalCrops()),
 		NATURA(new PluginNatura()),
+		PLANTMEGAPACK(new PluginPlantMegaPack()),
 		UNDERGROUND_BIOMES(new PluginUndergroundBiomes());
 
 		private final ForestryPlugin instance;

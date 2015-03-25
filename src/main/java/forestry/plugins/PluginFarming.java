@@ -114,10 +114,10 @@ public class PluginFarming extends ForestryPlugin {
 		Farmables.farmables.get("farmInfernal").add(new FarmableGenericCrop(new ItemStack(Items.nether_wart), Blocks.nether_wart, 3));
 
 		Farmables.farmables.put("farmPoales", new ArrayList<IFarmable>());
-		Farmables.farmables.get("farmPoales").add(new FarmableStacked(Blocks.reeds, 3));
+		Farmables.farmables.get("farmPoales").add(new FarmableStacked(Blocks.reeds, 3, 0));
 
 		Farmables.farmables.put("farmSucculentes", new ArrayList<IFarmable>());
-		Farmables.farmables.get("farmSucculentes").add(new FarmableStacked(Blocks.cactus, 3));
+		Farmables.farmables.get("farmSucculentes").add(new FarmableStacked(Blocks.cactus, 3, 0));
 
 		Farmables.farmables.put("farmVegetables", new ArrayList<IFarmable>());
 		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(Items.potato), Blocks.potatoes, 7));
