@@ -25,10 +25,12 @@ public class FarmableStacked implements IFarmable {
 
 	private final Block block;
 	private final int matureHeight;
+	private final int matureMeta;
 
-	public FarmableStacked(Block block, int matureHeight) {
+	public FarmableStacked(Block block, int matureHeight, int matureMeta) {
 		this.block = block;
 		this.matureHeight = matureHeight;
+		this.matureMeta = matureMeta;
 	}
 
 	@Override
@@ -41,8 +43,7 @@ public class FarmableStacked implements IFarmable {
 		if (world.getBlock(x, y + (matureHeight - 1), z) != block) {
 			return null;
 		}
-
-		return new CropBlock(world, block, 0, new Vect(x, y + (matureHeight - 1), z));
+		return new CropBlock(world, block, matureMeta, new Vect(x, y + (matureHeight - 1), z));
 	}
 
 	@Override
