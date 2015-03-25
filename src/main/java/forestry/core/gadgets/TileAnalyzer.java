@@ -39,11 +39,8 @@ import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.inventory.wrappers.InventoryMapper;
-import forestry.core.network.ForestryPacket;
 import forestry.core.network.GuiId;
 import forestry.core.network.PacketPayload;
-import forestry.core.network.PacketTileUpdate;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.GuiUtil;
 import forestry.plugins.PluginApiculture;
 
@@ -215,8 +212,8 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		payload.stringPayload = new String[1];
 		payload.shortPayload = new short[2];
 		payload.stringPayload[0] = displayIndividual.getIdent();
-		payload.shortPayload[0] = (short)type;
-		payload.shortPayload[1] = (short)displayStack.stackSize;
+		payload.shortPayload[0] = (short) type;
+		payload.shortPayload[1] = (short) displayStack.stackSize;
 		return payload;
 	}
 

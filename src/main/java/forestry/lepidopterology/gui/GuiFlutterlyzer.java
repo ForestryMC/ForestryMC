@@ -25,6 +25,7 @@ import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleTolerance;
 import forestry.api.genetics.IMutation;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
+import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.core.config.ForestryItem;
 import forestry.core.genetics.AlleleBoolean;
@@ -45,9 +46,11 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 		ArrayList<ItemStack> butterflyList = new ArrayList<ItemStack>();
 		((ItemButterflyGE) ForestryItem.butterflyGE.item()).addCreativeItems(butterflyList, false);
 		for (ItemStack butterflyStack : butterflyList) {
-			iconStacks.put(ButterflyGenome.getSpecies(butterflyStack).getUID(), butterflyStack);
+			IAlleleButterflySpecies species = ButterflyGenome.getSpecies(butterflyStack);
+			if (species != null) {
+				iconStacks.put(species.getUID(), butterflyStack);
+			}
 		}
-
 	}
 
 	@Override
@@ -263,40 +266,38 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 		newLine();
 		newLine();
 
-		RenderHelper.enableGUIStandardItemLighting();
-
-		HashMap<IMutation, IAllele> combinations = new HashMap<IMutation, IAllele>();
-
-		/*
-		for (IMutation mutation : TreeTemplates.getCombinations(butterfly.getGenome().getPrimary()))
-			combinations.put(mutation, butterfly.getGenome().getPrimary());
-
-		for (IMutation mutation : TreeTemplates.getCombinations(butterfly.getGenome().getSecondary()))
-			combinations.put(mutation, butterfly.getGenome().getSecondary());
-		 */
-
-		int columnWidth = 50;
-		int x = 0;
-
-		for (Map.Entry<IMutation, IAllele> mutation : combinations.entrySet()) {
-
-			//if (breedingTracker.isDiscovered(mutation.getKey()))
-			drawMutationInfo(mutation.getKey(), mutation.getValue(), COLUMN_0 + x);
-			/*else {
-				// Do not display secret undiscovered mutations.
-				if (mutation.getKey().isSecret())
-					continue;
-
-				drawUnknownMutation(mutation.getKey(), mutation.getValue(), COLUMN_0 + x);
-			} */
-
-			x += columnWidth;
-			if (x > 150) {
-				x = 0;
-				newLine();
-				newLine();
-			}
-		}
+//		RenderHelper.enableGUIStandardItemLighting();
+//
+//		HashMap<IMutation, IAllele> combinations = new HashMap<IMutation, IAllele>();
+//
+//		for (IMutation mutation : TreeTemplates.getCombinations(butterfly.getGenome().getPrimary()))
+//			combinations.put(mutation, butterfly.getGenome().getPrimary());
+//
+//		for (IMutation mutation : TreeTemplates.getCombinations(butterfly.getGenome().getSecondary()))
+//			combinations.put(mutation, butterfly.getGenome().getSecondary());
+//
+// 		int columnWidth = 50;
+//		int x = 0;
+//
+//		for (Map.Entry<IMutation, IAllele> mutation : combinations.entrySet()) {
+//
+//			//if (breedingTracker.isDiscovered(mutation.getKey()))
+//			drawMutationInfo(mutation.getKey(), mutation.getValue(), COLUMN_0 + x);
+//			/*else {
+//				// Do not display secret undiscovered mutations.
+//				if (mutation.getKey().isSecret())
+//					continue;
+//
+//				drawUnknownMutation(mutation.getKey(), mutation.getValue(), COLUMN_0 + x);
+//			} */
+//
+//			x += columnWidth;
+//			if (x > 150) {
+//				x = 0;
+//				newLine();
+//				newLine();
+//			}
+//		}
 
 		endPage();
 

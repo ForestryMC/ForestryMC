@@ -72,6 +72,9 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 	private static NBTTagCompound getTagCompoundForLeaves(IBlockAccess world, int x, int y, int z) {
 		TileLeaves leaves = getLeafTile(world, x, y, z);
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
+		if (leaves == null) {
+			return nbttagcompound;
+		}
 		leaves.writeToNBT(nbttagcompound);
 		return nbttagcompound;
 	}

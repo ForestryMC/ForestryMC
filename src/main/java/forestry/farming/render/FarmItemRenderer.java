@@ -32,6 +32,9 @@ public class FarmItemRenderer implements IItemRenderer {
 
 		Tessellator tessellator = Tessellator.instance;
 		BlockFarm block = (BlockFarm) StackUtils.getBlock(item);
+		if (block == null) {
+			return;
+		}
 
 		block.setBlockBoundsForItemRender();
 		render.setRenderBoundsFromBlock(block);

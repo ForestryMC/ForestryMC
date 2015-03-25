@@ -23,7 +23,7 @@ public enum EnumAccess {
 	@SideOnly(Side.CLIENT)
 	private IIcon icon;
 
-	private EnumAccess(String name) {
+	EnumAccess(String name) {
 		this.name = name;
 	}
 

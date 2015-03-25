@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;

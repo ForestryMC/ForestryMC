@@ -28,7 +28,7 @@ import forestry.core.interfaces.IBlockRenderer;
 
 public class RenderAnalyzer extends TileEntitySpecialRenderer implements IBlockRenderer {
 
-	private ModelAnalyzer model;
+	private final ModelAnalyzer model;
 	private final EntityItem dummyEntityItem = new EntityItem(null);
 	private final RenderItem customRenderItem;
 	private long lastTick;

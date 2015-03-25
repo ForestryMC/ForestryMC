@@ -45,9 +45,11 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter, ImprinterInven
 		List<ItemStack> beeList = new ArrayList<ItemStack>();
 		((ItemBeeGE) ForestryItem.beeDroneGE.item()).addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
-			iconStacks.put(BeeGenome.getSpecies(beeStack).getUID(), beeStack);
+			IAlleleBeeSpecies species = BeeGenome.getSpecies(beeStack);
+			if (species != null) {
+				iconStacks.put(species.getUID(), beeStack);
+			}
 		}
-
 	}
 
 	@Override

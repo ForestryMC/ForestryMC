@@ -22,18 +22,18 @@ import forestry.core.proxy.Proxies;
 
 public class PacketFXSignal extends ForestryPacket {
 
-	public static enum VisualFXType {
+	public enum VisualFXType {
 		NONE, BLOCK_DESTROY, SAPLING_PLACE
 	}
 
-	public static enum SoundFXType {
+	public enum SoundFXType {
 		NONE(""), BLOCK_DESTROY(""), BLOCK_PLACE(""), LEAF("step.grass"), LOG("dig.wood"), DIRT("dig.gravel");
 
 		public final String soundFile;
 		public final float volume = 1.0f;
 		public final float pitch = 1.0f;
 
-		private SoundFXType(String soundFile) {
+		SoundFXType(String soundFile) {
 			this.soundFile = soundFile;
 		}
 	}

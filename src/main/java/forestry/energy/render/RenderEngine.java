@@ -36,7 +36,7 @@ public class RenderEngine extends TileEntitySpecialRenderer implements IBlockRen
 	private final ModelRenderer piston;
 	private final ModelRenderer extension;
 
-	private static enum Textures {
+	private enum Textures {
 
 		BASE, PISTON, EXTENSION, TRUNK_HIGHEST, TRUNK_HIGHER, TRUNK_HIGH, TRUNK_MEDIUM, TRUNK_LOW
 	}

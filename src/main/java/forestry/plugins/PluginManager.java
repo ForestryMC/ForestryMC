@@ -96,11 +96,11 @@ public class PluginManager {
 		private final ForestryPlugin instance;
 		private final boolean canBeDisabled;
 
-		private Module(ForestryPlugin plugin) {
+		Module(ForestryPlugin plugin) {
 			this(plugin, true);
 		}
 
-		private Module(ForestryPlugin plugin, boolean canBeDisabled) {
+		Module(ForestryPlugin plugin, boolean canBeDisabled) {
 			this.instance = plugin;
 			this.canBeDisabled = canBeDisabled;
 		}

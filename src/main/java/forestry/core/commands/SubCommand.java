@@ -29,7 +29,7 @@ public abstract class SubCommand implements IForestryCommand {
 		EVERYONE(0), ADMIN(2);
 		public final int permLevel;
 
-		private PermLevel(int permLevel) {
+		PermLevel(int permLevel) {
 			this.permLevel = permLevel;
 		}
 

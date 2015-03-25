@@ -43,7 +43,7 @@ import forestry.core.utils.StringUtil;
 
 public class ItemResearchNote extends ItemForestry {
 
-	public static enum EnumNoteType {
+	public enum EnumNoteType {
 		NONE, MUTATION, SPECIES;
 
 		public static final EnumNoteType[] VALUES = values();

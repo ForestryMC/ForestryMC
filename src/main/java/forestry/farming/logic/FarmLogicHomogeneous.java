@@ -28,13 +28,13 @@ import forestry.farming.gadgets.StructureLogicFarm;
 
 public abstract class FarmLogicHomogeneous extends FarmLogic {
 
-	protected final ItemStack[] resource;
+	protected final ItemStack resource;
 	protected final ItemStack soilBlock;
-	protected final IFarmable[] germlings;
+	protected final Iterable<IFarmable> germlings;
 
 	ArrayList<ItemStack> produce = new ArrayList<ItemStack>();
 
-	public FarmLogicHomogeneous(IFarmHousing housing, ItemStack[] resource, ItemStack soilBlock, IFarmable[] germlings) {
+	public FarmLogicHomogeneous(IFarmHousing housing, ItemStack resource, ItemStack soilBlock, Iterable<IFarmable> germlings) {
 		super(housing);
 		this.resource = resource;
 		this.soilBlock = soilBlock;
@@ -47,7 +47,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 
 	@Override
 	public boolean isAcceptedResource(ItemStack itemstack) {
-		return resource[0].isItemEqual(itemstack);
+		return resource.isItemEqual(itemstack);
 	}
 
 	@Override
@@ -84,7 +84,8 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 	}
 
 	private boolean maintainSoil(int x, int yGround, int z, ForgeDirection direction, int extent) {
-		if (!housing.hasResources(resource)) {
+		ItemStack[] resources = new ItemStack[]{resource};
+		if (!housing.hasResources(resources)) {
 			return false;
 		}
 
@@ -113,7 +114,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 			produce.addAll(BlockUtil.getBlockDrops(world, position));
 
 			setBlock(position, StackUtils.getBlock(soilBlock), soilBlock.getItemDamage());
-			housing.removeResources(resource);
+			housing.removeResources(resources);
 			return true;
 		}
 

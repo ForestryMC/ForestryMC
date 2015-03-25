@@ -37,7 +37,7 @@ public class FruitProviderNone implements IFruitProvider {
 		}
 	}
 
-	private static HashMap<String, OverlayType> overlayTypes = new HashMap<String, OverlayType>();
+	private static final HashMap<String, OverlayType> overlayTypes = new HashMap<String, OverlayType>();
 
 	static {
 		overlayTypes.put("berries", new OverlayType("berries", (short) 1000));

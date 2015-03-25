@@ -99,12 +99,7 @@ public class BackpackDefinition implements IBackpackDefinition {
 	// isValidItem can get called multiple times per tick if the player's inventory is full
 	// and they are standing on multiple items.
 	// It is a slow call, so we need a cache to make it fast
-	private Map<ItemStack, Boolean> isValidItemCache = new LinkedHashMap<ItemStack, Boolean>() {
-		@Override
-		protected boolean removeEldestEntry(Map.Entry<ItemStack, Boolean> eldest) {
-			return size() > 64;
-		}
-	};
+	private final Map<ItemStack, Boolean> isValidItemCache = new ValidItemCache();
 
 	@Override
 	public boolean isValidItem(EntityPlayer player, ItemStack itemstack) {
@@ -127,5 +122,12 @@ public class BackpackDefinition implements IBackpackDefinition {
 
 		isValidItemCache.put(itemstack, false);
 		return false;
+	}
+
+	private static class ValidItemCache extends LinkedHashMap<ItemStack, Boolean> {
+		@Override
+		protected boolean removeEldestEntry(Map.Entry<ItemStack, Boolean> eldest) {
+			return size() > 64;
+		}
 	}
 }

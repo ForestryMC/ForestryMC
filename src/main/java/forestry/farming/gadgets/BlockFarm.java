@@ -13,6 +13,7 @@ package forestry.farming.gadgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityDiggingFX;
@@ -200,7 +201,12 @@ public class BlockFarm extends BlockStructure {
 
 	@SideOnly(Side.CLIENT)
 	public IIcon getBlockTextureFromSideAndMetadata(EnumFarmBlock type, int side, int metadata) {
-		return StackUtils.getBlock(type.getBase()).getIcon(side, type.getBase().getItemDamage());
+		Block block = StackUtils.getBlock(type.getBase());
+		if (block == null) {
+			return null;
+		}
+		int damage = type.getBase().getItemDamage();
+		return block.getIcon(side, damage);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -244,6 +250,11 @@ public class BlockFarm extends BlockStructure {
 			base = ((TileFarm) tile).farmBlock.getBase();
 		}
 
-		return StackUtils.getBlock(base).getIcon(side, base.getItemDamage());
+		Block block = StackUtils.getBlock(base);
+		if (block == null) {
+			return null;
+		}
+
+		return block.getIcon(side, base.getItemDamage());
 	}
 }

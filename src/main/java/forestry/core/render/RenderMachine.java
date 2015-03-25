@@ -36,7 +36,7 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 	private final ModelRenderer resourceTank;
 	private final ModelRenderer productTank;
 
-	private static enum Textures {
+	private enum Textures {
 		BASE,
 		TANK_R_EMPTY, TANK_R_LOW, TANK_R_MEDIUM, TANK_R_HIGH, TANK_R_MAXIMUM,
 		TANK_P_EMPTY, TANK_P_LOW, TANK_P_MEDIUM, TANK_P_HIGH, TANK_P_MAXIMUM
@@ -115,46 +115,35 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 		EnumTankLevel melangeLevel = EnumTankLevel.values()[melangeLevelInt];
 
 		GL11.glPushMatrix();
-		// GL11.glDisable(2896 /* GL_LIGHTING */);
 		GL11.glDisable(GL11.GL_LIGHTING);
-
 		GL11.glTranslatef((float) x, (float) y, (float) z);
 
 		float[] angle = {0, 0, 0};
-		float[] translate = {0, 0, 0};
 
 		if (orientation == null) {
 			orientation = ForgeDirection.WEST;
 		}
 		switch (orientation) {
 			case EAST:
-				// angle [2] = (float) Math.PI / 2;
 				angle[1] = (float) Math.PI;
 				angle[2] = (float) -Math.PI / 2;
-				translate[0] = 1;
 				break;
 			case WEST:
-				// 2, -PI/2
 				angle[2] = (float) Math.PI / 2;
-				translate[0] = -1;
 				break;
 			case UP:
-				translate[1] = 1;
 				break;
 			case DOWN:
 				angle[2] = (float) Math.PI;
-				translate[1] = -1;
 				break;
 			case SOUTH:
 				angle[0] = (float) Math.PI / 2;
 				angle[2] = (float) Math.PI / 2;
-				translate[2] = 1;
 				break;
 			case NORTH:
 			default:
 				angle[0] = (float) -Math.PI / 2;
 				angle[2] = (float) Math.PI / 2;
-				translate[2] = -1;
 				break;
 		}
 
@@ -226,7 +215,6 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 		Proxies.common.bindTexture(texture);
 		productTank.render(factor);
 
-		// GL11.glEnable(2896 /* GL_LIGHTING */);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
 	}

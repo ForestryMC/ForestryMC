@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.farming.gadgets;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public enum EnumFarmBlock {
 
 	private final ItemStack base;
 
-	private EnumFarmBlock(ItemStack base) {
+	EnumFarmBlock(ItemStack base) {
 		this.base = base;
 	}
 

@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import java.security.MessageDigest;
-import java.security.cert.Certificate;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -23,10 +21,8 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -37,7 +33,6 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.ITileStructure;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.proxy.Proxies;
-import forestry.core.vect.Vect;
 
 import buildcraft.api.tools.IToolWrench;
 
@@ -109,26 +104,6 @@ public class Utils {
 
 	}
 
-	public static IInventory getChest(IInventory inventory) {
-		if (!(inventory instanceof TileEntityChest)) {
-			return inventory;
-		}
-
-		TileEntityChest chest = (TileEntityChest) inventory;
-
-		Vect[] adjacent = new Vect[]{new Vect(chest.xCoord + 1, chest.yCoord, chest.zCoord), new Vect(chest.xCoord - 1, chest.yCoord, chest.zCoord),
-				new Vect(chest.xCoord, chest.yCoord, chest.zCoord + 1), new Vect(chest.xCoord, chest.yCoord, chest.zCoord - 1)};
-
-		for (Vect pos : adjacent) {
-			TileEntity otherchest = chest.getWorldObj().getTileEntity(pos.x, pos.y, pos.z);
-			if (otherchest instanceof TileEntityChest) {
-				return new InventoryLargeChest("", chest, (TileEntityChest) otherchest);
-			}
-		}
-
-		return inventory;
-	}
-
 	public static <T> T[] concat(T[] first, T[] second) {
 		T[] result = Arrays.copyOf(first, first.length + second.length);
 		System.arraycopy(second, 0, result, first.length, second.length);
@@ -165,11 +140,7 @@ public class Utils {
 		}
 
 		IToolWrench wrench = (IToolWrench) itemstack.getItem();
-		if (!wrench.canWrench(player, x, y, z)) {
-			return false;
-		}
-
-		return true;
+		return wrench.canWrench(player, x, y, z);
 	}
 
 	public static void useWrench(EntityPlayer player, int x, int y, int z) {
@@ -212,14 +183,6 @@ public class Utils {
 				|| block.getMaterial().isReplaceable();
 	}
 
-	public static boolean isLiquidBlock(World world, int x, int y, int z) {
-		return isLiquidBlock(world.getBlock(x, y, z));
-	}
-
-	public static boolean isLiquidBlock(Block block) {
-		return block == Blocks.water || block == Blocks.flowing_water || block == Blocks.lava || block == Blocks.flowing_lava;
-	}
-
 	public static boolean isUseableByPlayer(EntityPlayer player, TileEntity tile) {
 		int x = tile.xCoord;
 		int y = tile.yCoord;
@@ -242,28 +205,45 @@ public class Utils {
 		return world.getBiomeGenForCoordsBody(x, z);
 	}
 
-	public static Entity spawnEntity(World world, Class<? extends Entity> entityClass, double x, double y, double z) {
+	private static <E extends EntityLiving> E createEntity(World world, Class<E> entityClass) {
 		if (!EntityList.classToStringMapping.containsKey(entityClass)) {
 			return null;
 		}
 
-		return spawnEntity(world, EntityList.createEntityByName((String) EntityList.classToStringMapping.get(entityClass), world), x, y, z);
-	}
-
-	public static Entity spawnEntity(World world, Entity spawn, double x, double y, double z) {
-
-		if (spawn != null && spawn instanceof EntityLiving) {
-
-			EntityLiving living = (EntityLiving) spawn;
-			spawn.setLocationAndAngles(x, y, z, MathHelper.wrapAngleTo180_float(world.rand.nextFloat() * 360.0f), 0.0f);
-			living.rotationYawHead = living.rotationYaw;
-			living.renderYawOffset = living.rotationYaw;
-			living.onSpawnWithEgg(null);
-			world.spawnEntityInWorld(spawn);
-			living.playLivingSound();
+		String entityString = (String) EntityList.classToStringMapping.get(entityClass);
+		if (entityString == null) {
+			return null;
 		}
 
-		return spawn;
+		Entity entity = EntityList.createEntityByName(entityString, world);
+		if (entity == null) {
+			return null;
+		}
+
+		//noinspection unchecked
+		return (E) entity;
+	}
+
+	public static <E extends EntityLiving> E spawnEntity(World world, Class<E> entityClass, double x, double y, double z) {
+		E entityLiving = createEntity(world, entityClass);
+		if (entityLiving == null) {
+			return null;
+		}
+		return spawnEntity(world, entityLiving, x, y, z);
+	}
+
+	public static <E extends EntityLiving> E spawnEntity(World world, E living, double x, double y, double z) {
+		if (living == null) {
+			return null;
+		}
+
+		living.setLocationAndAngles(x, y, z, MathHelper.wrapAngleTo180_float(world.rand.nextFloat() * 360.0f), 0.0f);
+		living.rotationYawHead = living.rotationYaw;
+		living.renderYawOffset = living.rotationYaw;
+		living.onSpawnWithEgg(null);
+		world.spawnEntityInWorld(living);
+		living.playLivingSound();
+		return living;
 	}
 
 	public static void registerEntity(Class<? extends Entity> entityClass, String ident, int id, int eggForeground, int eggBackground, int trackingRange, int updateFrequency, boolean sendVelocity) {
@@ -293,32 +273,5 @@ public class Utils {
 		b = b <= 255 ? b : 255;
 
 		return ((r & 0x0ff) << 16) | ((g & 0x0ff) << 8) | (b & 0x0ff);
-	}
-
-	public static String getFingerprint(Certificate certificate) {
-		if (certificate == null) {
-			return "Certificate invalid";
-		}
-
-		try {
-			MessageDigest md = MessageDigest.getInstance("SHA-1");
-			byte[] der = certificate.getEncoded();
-			md.update(der);
-			byte[] digest = md.digest();
-			return tohex(digest);
-		} catch (Exception ex) {
-			return null;
-		}
-	}
-
-	private static final String HEX = "0123456789abcdef";
-
-	private static String tohex(byte[] checksum) {
-
-		final StringBuilder hex = new StringBuilder(2 * checksum.length);
-		for (byte bty : checksum) {
-			hex.append(HEX.charAt((bty & 0xf0) >> 4)).append(HEX.charAt((bty & 0x0f)));
-		}
-		return hex.toString();
 	}
 }

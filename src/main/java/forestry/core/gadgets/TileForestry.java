@@ -49,7 +49,6 @@ import forestry.core.utils.AdjacentTileCache;
 import forestry.core.utils.EnumAccess;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Utils;
-import forestry.core.vect.Vect;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.ITriggerExternal;
@@ -59,7 +58,7 @@ import buildcraft.api.statements.ITriggerProvider;
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
 public abstract class TileForestry extends TileEntity implements INetworkedEntity, IRestrictedAccess, IErrorSource, ITriggerProvider, ISidedInventory, IFilterSlotDelegate {
 
-	private static Random rand = new Random();
+	private static final Random rand = new Random();
 
 	protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 	protected boolean isInited = false;

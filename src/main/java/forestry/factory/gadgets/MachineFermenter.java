@@ -108,11 +108,6 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 				return false;
 			}
 
-			// No liquid required
-			if (liquid == null) {
-				return true;
-			}
-
 			// Liquid required but none given
 			if (liqu == null) {
 				return false;

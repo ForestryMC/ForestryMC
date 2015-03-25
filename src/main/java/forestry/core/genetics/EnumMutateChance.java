@@ -15,7 +15,7 @@ public enum EnumMutateChance {
 
 	public final int colour;
 	
-	private EnumMutateChance(int colour) {
+	EnumMutateChance(int colour) {
 		this.colour = colour;
 	}
 	

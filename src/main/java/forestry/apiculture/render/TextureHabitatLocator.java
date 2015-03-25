@@ -45,13 +45,13 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 		Minecraft minecraft = Minecraft.getMinecraft();
 
 		if (minecraft.theWorld != null && minecraft.thePlayer != null) {
-			updateCompass(minecraft.theWorld, minecraft.thePlayer.posX, minecraft.thePlayer.posZ, minecraft.thePlayer.rotationYaw, false, true);
+			updateCompass(minecraft.theWorld, minecraft.thePlayer.posX, minecraft.thePlayer.posZ, minecraft.thePlayer.rotationYaw);
 		} else {
-			updateCompass(null, 0.0d, 0.0d, 0.0d, true, true);
+			updateCompass(null, 0.0d, 0.0d, 0.0d);
 		}
 	}
 
-	public void updateCompass(World world, double playerX, double playerZ, double playerYaw, boolean par8, boolean hasSpin) {
+	public void updateCompass(World world, double playerX, double playerZ, double playerYaw) {
 
 		double targetAngle;
 
@@ -72,30 +72,26 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 			}
 		}
 
-		if (!hasSpin) {
-			currentAngle = targetAngle;
-		} else {
-			double angleChange = targetAngle - currentAngle;
-			while (angleChange < -Math.PI) {
-				angleChange += (Math.PI * 2D);
-			}
-
-			while (angleChange >= Math.PI) {
-				angleChange -= (Math.PI * 2D);
-			}
-
-			if (angleChange < -1.0D) {
-				angleChange = -1.0D;
-			}
-
-			if (angleChange > 1.0D) {
-				angleChange = 1.0D;
-			}
-
-			this.angleDelta += angleChange * 0.1D;
-			this.angleDelta *= 0.8D;
-			this.currentAngle += this.angleDelta;
+		double angleChange = targetAngle - currentAngle;
+		while (angleChange < -Math.PI) {
+			angleChange += (Math.PI * 2D);
 		}
+
+		while (angleChange >= Math.PI) {
+			angleChange -= (Math.PI * 2D);
+		}
+
+		if (angleChange < -1.0D) {
+			angleChange = -1.0D;
+		}
+
+		if (angleChange > 1.0D) {
+			angleChange = 1.0D;
+		}
+
+		this.angleDelta += angleChange * 0.1D;
+		this.angleDelta *= 0.8D;
+		this.currentAngle += this.angleDelta;
 
 		int i = (int) ((this.currentAngle / (Math.PI * 2D) + 1.0d) * this.framesTextureData.size()) % this.framesTextureData.size();
 		while (i < 0) {

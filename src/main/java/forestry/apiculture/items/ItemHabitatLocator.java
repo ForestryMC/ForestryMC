@@ -61,14 +61,14 @@ public class ItemHabitatLocator extends ItemInventoried {
 		private static final short SLOT_ANALYZED = 1;
 
 		public Set<BiomeGenBase> biomesToSearch = new HashSet<BiomeGenBase>();
-		private ItemHabitatLocator habitatLocator;
+		private final ItemHabitatLocator habitatLocator;
 
 		public HabitatLocatorInventory(ItemStack itemstack) {
 			super(ItemHabitatLocator.class, 3, itemstack);
 			this.habitatLocator = (ItemHabitatLocator) itemstack.getItem();
 		}
 
-		private boolean isEnergy(ItemStack itemstack) {
+		private static boolean isEnergy(ItemStack itemstack) {
 			if (itemstack == null || itemstack.stackSize <= 0) {
 				return false;
 			}

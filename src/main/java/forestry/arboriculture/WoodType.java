@@ -34,11 +34,11 @@ public enum WoodType {
 	public static final WoodType[] VALUES = values();
 	private final float hardness;
 
-	private WoodType() {
+	WoodType() {
 		this(2.0f);
 	}
 
-	private WoodType(float hardness) {
+	WoodType(float hardness) {
 		this.hardness = hardness;
 	}
 

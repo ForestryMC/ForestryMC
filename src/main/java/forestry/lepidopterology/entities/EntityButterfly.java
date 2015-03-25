@@ -60,7 +60,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 		public final boolean doesMovement;
 
-		private EnumButterflyState(boolean doesMovement) {
+		EnumButterflyState(boolean doesMovement) {
 			this.doesMovement = doesMovement;
 		}
 

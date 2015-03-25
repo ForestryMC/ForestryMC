@@ -148,7 +148,7 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 		Tessellator tessellator = Tessellator.instance;
 		Block block = StackUtils.getBlock(itemStack);
 
-		if (!(itemStack.getItem() instanceof ItemLeavesBlock)) {
+		if (!(itemStack.getItem() instanceof ItemLeavesBlock) || block == null) {
 			return;
 		}
 

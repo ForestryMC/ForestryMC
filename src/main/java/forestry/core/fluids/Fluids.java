@@ -325,15 +325,15 @@ public enum Fluids {
 	private final int density, viscosity;
 	private final Color color;
 
-	private Fluids() {
+	Fluids() {
 		this(null);
 	}
 
-	private Fluids(Color color) {
+	Fluids(Color color) {
 		this(color, 1000, 1000);
 	}
 
-	private Fluids(Color color, int density, int viscosity) {
+	Fluids(Color color, int density, int viscosity) {
 		this.tag = name().toLowerCase(Locale.ENGLISH);
 		this.color = color;
 		this.density = density;

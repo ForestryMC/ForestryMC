@@ -228,7 +228,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	/**
 	 * List of possible mutations on species alleles.
 	 */
-	private static ArrayList<IBeeMutation> beeMutations = new ArrayList<IBeeMutation>();
+	private static final ArrayList<IBeeMutation> beeMutations = new ArrayList<IBeeMutation>();
 
 	@Override
 	public Collection<IBeeMutation> getMutations(boolean shuffle) {
