@@ -14,39 +14,30 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.ITree;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
 import forestry.arboriculture.gadgets.TileLeaves;
-import forestry.core.network.ForestryPacket;
-import forestry.core.network.ILocatedPacket;
 import forestry.core.network.PacketIds;
+import forestry.plugins.PluginArboriculture;
 
-public class PacketLeafUpdate extends ForestryPacket implements ILocatedPacket {
+public class PacketLeaf extends PacketTreeContainer {
 
 	private static final short hasFruitFlag = 1;
 	private static final short isPollinatedFlag = 1 << 1;
 
-	private int posX, posY, posZ;
-
 	private byte leafState = 0;
 	private int colourFruits = -1;
 	private String fruitAlleleUID;
-	private String speciesUID = "";
-	
-	public PacketLeafUpdate() {
+
+	public PacketLeaf() {
+
 	}
 
-	public PacketLeafUpdate(TileLeaves leaves) {
-		super(PacketIds.LEAF_UPDATE);
+	public PacketLeaf(TileLeaves leaves) {
+		super(PacketIds.LEAF, leaves);
 
-		posX = leaves.getXCoord();
-		posY = leaves.getYCoord();
-		posZ = leaves.getZCoord();
-
-		leafState = 0;
 		if (leaves.hasFruit()) {
 			leafState |= hasFruitFlag;
 			fruitAlleleUID = leaves.getTree().getGenome().getActiveAllele(EnumTreeChromosome.FRUITS).getUID();
@@ -55,20 +46,12 @@ public class PacketLeafUpdate extends ForestryPacket implements ILocatedPacket {
 		if (leaves.isPollinated()) {
 			leafState |= isPollinatedFlag;
 		}
-
-		ITree tree = leaves.getTree();
-		if (tree != null) {
-			speciesUID = tree.getIdent();
-		}
 	}
 
 	@Override
 	public void writeData(DataOutputStream data) throws IOException {
-		data.writeShort(posX);
-		data.writeShort(posY);
-		data.writeShort(posZ);
+		super.writeData(data);
 		data.writeByte(leafState);
-		data.writeUTF(speciesUID);
 
 		if (isFruitLeaf()) {
 			data.writeUTF(fruitAlleleUID);
@@ -78,11 +61,8 @@ public class PacketLeafUpdate extends ForestryPacket implements ILocatedPacket {
 	
 	@Override
 	public void readData(DataInputStream data) throws IOException {
-		posX = data.readShort();
-		posY = data.readShort();
-		posZ = data.readShort();
+		super.readData(data);
 		leafState = data.readByte();
-		speciesUID = data.readUTF();
 
 		if (isFruitLeaf()) {
 			fruitAlleleUID = data.readUTF();
@@ -98,20 +78,28 @@ public class PacketLeafUpdate extends ForestryPacket implements ILocatedPacket {
 		return (leafState & isPollinatedFlag) > 0;
 	}
 
-	public String getFruitAlleleUID() {
-		return fruitAlleleUID;
-	}
-
 	public int getColourFruits() {
 		return colourFruits;
 	}
 
-	public String getSpeciesUID() {
-		return speciesUID;
-	}
-
 	@Override
-	public TileEntity getTarget(World world) {
-		return world.getTileEntity(posX, posY, posZ);
+	public ITree getTree() {
+		IAllele[] treeTemplate = PluginArboriculture.treeInterface.getTemplate(speciesUID);
+		if (treeTemplate == null) {
+			return null;
+		}
+
+		if (fruitAlleleUID != null) {
+			IAllele fruitAllele = AlleleManager.alleleRegistry.getAllele(fruitAlleleUID);
+			if (fruitAllele != null) {
+				treeTemplate[EnumTreeChromosome.FRUITS.ordinal()] = fruitAllele;
+			}
+		}
+
+		ITree tree = PluginArboriculture.treeInterface.templateAsIndividual(treeTemplate);
+		if (isPollinated()) {
+			tree.mate(tree);
+		}
+		return tree;
 	}
 }

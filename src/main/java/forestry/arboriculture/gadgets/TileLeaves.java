@@ -31,7 +31,6 @@ import net.minecraftforge.common.EnumPlantType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafTickHandler;
@@ -42,7 +41,6 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFruitBearer;
 import forestry.api.genetics.IFruitFamily;
@@ -52,7 +50,7 @@ import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.IButterflyRoot;
-import forestry.arboriculture.network.PacketLeafUpdate;
+import forestry.arboriculture.network.PacketLeaf;
 import forestry.arboriculture.network.PacketRipeningUpdate;
 import forestry.core.EnumErrorCode;
 import forestry.core.genetics.Allele;
@@ -180,29 +178,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		}
 
 		effectData = tree.doEffect(effectData, worldObj, biome.biomeID, xCoord, yCoord, zCoord);
-	}
-
-	public void setTree(String speciesUID, boolean isPollinatedState, String fruitAlleleUID) {
-		ITree tree = getTree();
-		if (tree != null && tree.getIdent().equals(speciesUID)) {
-			return;
-		}
-
-		IAllele[] treeTemplate = PluginArboriculture.treeInterface.getTemplate(speciesUID);
-		if (treeTemplate != null) {
-			if (fruitAlleleUID != null) {
-				IAllele fruitAllele = AlleleManager.alleleRegistry.getAllele(fruitAlleleUID);
-				if (fruitAllele != null) {
-					treeTemplate[EnumTreeChromosome.FRUITS.ordinal()] = fruitAllele;
-				}
-			}
-
-			ITree newTree = PluginArboriculture.treeInterface.templateAsIndividual(treeTemplate);
-			if (isPollinatedState) {
-				newTree.mate(newTree);
-			}
-			setTree(newTree);
-		}
 	}
 
 	@Override
@@ -353,13 +328,13 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	/* NETWORK */
 	@Override
 	public Packet getDescriptionPacket() {
-		return new PacketLeafUpdate(this).getPacket();
+		return new PacketLeaf(this).getPacket();
 	}
 
 	@Override
 	public void sendNetworkUpdate() {
-		PacketLeafUpdate leafUpdate = new PacketLeafUpdate(this);
-		Proxies.net.sendNetworkPacket(leafUpdate, xCoord, yCoord, zCoord);
+		PacketLeaf packet = new PacketLeaf(this);
+		Proxies.net.sendNetworkPacket(packet, xCoord, yCoord, zCoord);
 	}
 
 	private void sendNetworkUpdateRipening() {
@@ -375,16 +350,20 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public void fromPacket(ForestryPacket packetRaw) {
-		PacketLeafUpdate packet = (PacketLeafUpdate) packetRaw;
+		PacketLeaf packet = (PacketLeaf) packetRaw;
 
 		isFruitLeaf = packet.isFruitLeaf();
 		isPollinatedState = packet.isPollinated();
 
 		colourFruits = packet.getColourFruits();
-		String fruitAlleleUID = packet.getFruitAlleleUID();
 
-		String speciesUID = packet.getSpeciesUID();
-		setTree(speciesUID, isPollinatedState, fruitAlleleUID);
+		ITree tree = getTree();
+		if (!packet.matchesTree(tree)) {
+			ITree newTree = packet.getTree();
+			if (newTree != null) {
+				setTree(newTree);
+			}
+		}
 
 		worldObj.func_147479_m(xCoord, yCoord, zCoord);
 	}

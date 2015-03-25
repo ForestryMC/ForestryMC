@@ -11,8 +11,13 @@
 package forestry.arboriculture.gadgets;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.Packet;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
+import forestry.api.arboriculture.ITree;
+import forestry.arboriculture.network.PacketSapling;
+import forestry.core.network.ForestryPacket;
+import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginArboriculture;
 
 public class TileSapling extends TileTreeContainer {
@@ -67,6 +72,35 @@ public class TileSapling extends TileTreeContainer {
 		}
 
 		return 3;
+	}
+
+	@Override
+	public Packet getDescriptionPacket() {
+		return new PacketSapling(this).getPacket();
+	}
+
+	@Override
+	public void sendNetworkUpdate() {
+		PacketSapling saplingPacket = new PacketSapling(this);
+		Proxies.net.sendNetworkPacket(saplingPacket, xCoord, yCoord, zCoord);
+	}
+
+	@Override
+	public void fromPacket(ForestryPacket packetRaw) {
+		PacketSapling packet = (PacketSapling) packetRaw;
+
+		ITree tree = getTree();
+		if (packet.matchesTree(tree)) {
+			return;
+		}
+
+		ITree newTree = packet.getTree();
+		if (newTree == null) {
+			return;
+		}
+
+		setTree(newTree);
+		worldObj.func_147479_m(xCoord, yCoord, zCoord);
 	}
 
 }
