@@ -22,21 +22,17 @@ import forestry.plugins.PluginArboriculture;
 
 public class ArboristTracker extends BreedingTracker implements IArboristTracker {
 
-	public ArboristTracker(String s) {
-		this(s, null);
-	}
-
 	public ArboristTracker(String s, GameProfile player) {
 		super(s, player);
 	}
 
 	@Override
-	protected IBreedingTracker getCommonTracker(EntityPlayer player) {
-		return PluginArboriculture.treeInterface.getBreedingTracker(player.worldObj, null);
+	protected IBreedingTracker getBreedingTracker(EntityPlayer player) {
+		return PluginArboriculture.treeInterface.getBreedingTracker(player.worldObj, player.getGameProfile());
 	}
 
 	@Override
-	protected String getPacketTag() {
+	protected String speciesRootUID() {
 		return TreeHelper.UID;
 	}
 

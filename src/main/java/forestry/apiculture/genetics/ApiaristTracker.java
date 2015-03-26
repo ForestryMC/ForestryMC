@@ -24,10 +24,6 @@ import forestry.plugins.PluginApiculture;
 
 public class ApiaristTracker extends BreedingTracker implements IApiaristTracker {
 
-	public ApiaristTracker(String s) {
-		this(s, null);
-	}
-
 	public ApiaristTracker(String s, GameProfile player) {
 		super(s, player);
 	}
@@ -107,12 +103,12 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	}
 
 	@Override
-	protected IBreedingTracker getCommonTracker(EntityPlayer player) {
-		return PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, null);
+	protected IBreedingTracker getBreedingTracker(EntityPlayer player) {
+		return PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, player.getGameProfile());
 	}
 
 	@Override
-	protected String getPacketTag() {
+	protected String speciesRootUID() {
 		return BeeHelper.UID;
 	}
 

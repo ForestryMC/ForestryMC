@@ -11,6 +11,7 @@
 package forestry.core.genetics;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,14 +27,15 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
+import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.network.PacketIds;
 import forestry.core.network.PacketNBT;
 import forestry.core.proxy.Proxies;
 
 public abstract class BreedingTracker extends WorldSavedData implements IBreedingTracker {
 
-	private ArrayList<String> discoveredSpecies = new ArrayList<String>();
-	private ArrayList<String> discoveredMutations = new ArrayList<String>();
+	private List<String> discoveredSpecies = new ArrayList<String>();
+	private List<String> discoveredMutations = new ArrayList<String>();
 	private String modeName;
 
 	private final GameProfile username;
@@ -60,16 +62,19 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	 * @param player used to get worldObj
 	 * @return common tracker for this breeding system
 	 */
-	protected abstract IBreedingTracker getCommonTracker(EntityPlayer player);
+	protected abstract IBreedingTracker getBreedingTracker(EntityPlayer player);
 
 	/**
 	 * Tag stored in NBT to identify the type of the tracker being synced
 	 */
-	protected abstract String getPacketTag();
+	protected abstract String speciesRootUID();
 
 	@Override
 	public void synchToPlayer(EntityPlayer player) {
-		setModeName(getCommonTracker(player).getModeName());
+		IBreedingTracker breedingTracker = getBreedingTracker(player);
+		String modeName = breedingTracker.getModeName();
+		setModeName(modeName);
+
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		encodeToNBT(nbttagcompound);
 		Proxies.net.sendToPlayer(new PacketNBT(PacketIds.GENOME_TRACKER_UPDATE, nbttagcompound), player);
@@ -116,7 +121,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 			nbttagcompound.setString("BMS", modeName);
 		}
 
-		nbttagcompound.setString("TYPE", getPacketTag());
+		nbttagcompound.setString("TYPE", speciesRootUID());
 
 		// / SPECIES
 		nbttagcompound.setInteger("SpeciesCount", discoveredSpecies.size());
@@ -138,20 +143,35 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 
 	private static final String MUTATION_FORMAT = "%s-%s=%s";
 
+	private static String getMutationString(IMutation mutation) {
+		String species0 = mutation.getAllele0().getUID();
+		String species1 = mutation.getAllele1().getUID();
+		String resultSpecies = mutation.getTemplate()[0].getUID();
+		return String.format(MUTATION_FORMAT, species0, species1, resultSpecies);
+	}
+
 	@Override
 	public void registerMutation(IMutation mutation) {
-		discoveredMutations.add(String.format(MUTATION_FORMAT, mutation.getAllele0().getUID(), mutation.getAllele1().getUID(), mutation.getTemplate()[0].getUID()));
+		String mutationString = getMutationString(mutation);
+		discoveredMutations.add(mutationString);
 		markDirty();
-		MinecraftForge.EVENT_BUS.post(new ForestryEvent.MutationDiscovered(
-				AlleleManager.alleleRegistry.getSpeciesRoot(this.getPacketTag()),
-				username,
-				mutation, this));
+
+		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(speciesRootUID());
+		ForestryEvent event = new ForestryEvent.MutationDiscovered(speciesRoot, username, mutation, this);
+		MinecraftForge.EVENT_BUS.post(event);
 	}
 
 	@Override
 	public boolean isDiscovered(IMutation mutation) {
-		return discoveredMutations.contains(String.format(MUTATION_FORMAT, mutation.getAllele0().getUID(), mutation.getAllele1().getUID(), mutation.getTemplate()[0].getUID()))
-				|| discoveredMutations.contains(mutation.getAllele0().getUID() + "-" + mutation.getAllele1().getUID());
+		String mutationString = getMutationString(mutation);
+		if (discoveredMutations.contains(mutationString)) {
+			return true;
+		}
+
+		// TODO: remove legacy handling
+		String species0 = mutation.getAllele0().getUID();
+		String species1 = mutation.getAllele1().getUID();
+		return discoveredMutations.contains(mutationString) || discoveredMutations.contains(species0 + '-' + species1);
 	}
 
 	@Override
@@ -174,10 +194,10 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	public void registerSpecies(IAlleleSpecies species) {
 		if (!discoveredSpecies.contains(species.getUID())) {
 			discoveredSpecies.add(species.getUID());
-			MinecraftForge.EVENT_BUS.post(new ForestryEvent.SpeciesDiscovered(
-					AlleleManager.alleleRegistry.getSpeciesRoot(this.getPacketTag()),
-					username,
-					species, this));
+
+			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(speciesRootUID());
+			ForestryEvent event = new ForestryEvent.SpeciesDiscovered(speciesRoot, username, species, this);
+			MinecraftForge.EVENT_BUS.post(event);
 		}
 	}
 
