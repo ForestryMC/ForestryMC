@@ -48,18 +48,18 @@ import forestry.storage.BackpackMode;
 
 public class ItemBackpack extends ItemInventoried {
 
-	private final IBackpackDefinition info;
+	private final IBackpackDefinition definition;
 	private final EnumBackpackType type;
 
-	public ItemBackpack(IBackpackDefinition info, EnumBackpackType type) {
+	public ItemBackpack(IBackpackDefinition definition, EnumBackpackType type) {
 		super();
-		this.info = info;
+		this.definition = definition;
 		this.type = type;
 		setMaxStackSize(1);
 	}
 
 	public IBackpackDefinition getDefinition() {
-		return info;
+		return definition;
 	}
 
 	/**
@@ -198,7 +198,7 @@ public class ItemBackpack extends ItemInventoried {
 				continue;
 			}
 
-			if (!info.isValidItem(player, targetStack)) {
+			if (!definition.isValidItem(player, targetStack)) {
 				continue;
 			}
 
@@ -250,9 +250,9 @@ public class ItemBackpack extends ItemInventoried {
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
 		try {
-			return info.getName(itemstack);
+			return definition.getName(itemstack);
 		} catch (Error e) {
-			return info.getName();
+			return definition.getName();
 		}
 	}
 
@@ -291,9 +291,9 @@ public class ItemBackpack extends ItemInventoried {
 	public int getColorFromItemStack(ItemStack itemstack, int j) {
 
 		if (j == 0) {
-			return info.getPrimaryColour();
+			return definition.getPrimaryColour();
 		} else if (j == 1) {
-			return info.getSecondaryColour();
+			return definition.getSecondaryColour();
 		} else {
 			return 0xffffff;
 		}

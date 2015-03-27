@@ -12,9 +12,6 @@ package forestry.plugins;
 
 import com.google.common.collect.ImmutableList;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;

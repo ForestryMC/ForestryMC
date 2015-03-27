@@ -35,6 +35,7 @@ import forestry.core.items.ItemNBTTile;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.RecipeUtil;
 import forestry.core.utils.ShapedRecipeCustom;
+import forestry.factory.DummyManagers;
 import forestry.factory.GuiHandlerFactory;
 import forestry.factory.gadgets.MachineBottler;
 import forestry.factory.gadgets.MachineCarpenter;
@@ -65,6 +66,21 @@ public class PluginFactory extends ForestryPlugin {
 	public static MachineDefinition definitionFabricator;
 	public static MachineDefinition definitionRaintank;
 	public static MachineDefinition definitionWorktable;
+
+	@Override
+	protected void disabledPreInit() {
+		super.disabledPreInit();
+
+		RecipeManagers.craftingProviders = Arrays.asList(
+				RecipeManagers.carpenterManager = new DummyManagers.CarpenterManager(),
+				RecipeManagers.centrifugeManager = new DummyManagers.CentrifugeManager(),
+				RecipeManagers.fabricatorManager = new DummyManagers.FabricatorManager(),
+				RecipeManagers.fermenterManager = new DummyManagers.FermenterManager(),
+				RecipeManagers.moistenerManager = new DummyManagers.MoistenerManager(),
+				RecipeManagers.squeezerManager = new DummyManagers.SqueezerManager(),
+				RecipeManagers.stillManager = new DummyManagers.StillManager()
+		);
+	}
 
 	@Override
 	public void preInit() {
@@ -168,7 +184,7 @@ public class PluginFactory extends ForestryPlugin {
 
 		BlockBase factoryPlain = ((BlockBase) ForestryBlock.factoryPlain.block());
 
-		definitionFabricator = factoryPlain.addDefinition(new MachineDefinition(Defaults.DEFINITION_FABRICATOR_META, "forestry.Fabricator", MachineFabricator.class,
+		definitionFabricator = factoryPlain.addDefinition(new MachineNBTDefinition(Defaults.DEFINITION_FABRICATOR_META, "forestry.Fabricator", MachineFabricator.class,
 				ShapedRecipeCustom.createShapedRecipe(
 						ForestryBlock.factoryPlain.getItemStack(1, Defaults.DEFINITION_FABRICATOR_META),
 						"X#X",
@@ -422,8 +438,6 @@ public class PluginFactory extends ForestryPlugin {
 		// Boxes
 		RecipeManagers.carpenterManager.addRecipe(5, Fluids.WATER.getFluid(1000), null, ForestryItem.carton.getItemStack(2),
 				" # ", "# #", " # ", '#', "pulpWood");
-		RecipeManagers.carpenterManager.addRecipe(20, Fluids.WATER.getFluid(1000), null, ForestryItem.crate.getItemStack(24),
-				" # ", "# #", " # ", '#', "logWood");
 
 		// Assembly Kits
 		RecipeManagers.carpenterManager.addRecipe(20, null, ForestryItem.carton.getItemStack(), ForestryItem.kitPickaxe.getItemStack(), new Object[]{

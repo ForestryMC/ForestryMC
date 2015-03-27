@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -44,12 +42,10 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
-import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.registry.GameData;
 
 import forestry.api.core.Tabs;
 import forestry.api.recipes.RecipeManagers;
@@ -70,6 +66,7 @@ import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemCrated;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.StackUtils;
 import forestry.storage.BackpackDefinition;
 import forestry.storage.BackpackHelper;
 import forestry.storage.CrateRegistry;
@@ -121,23 +118,23 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 		config = new Configuration();
 
 		Property backpackConf = config.get("backpacks.miner.items", CONFIG_CATEGORY, "");
-		backpackConf.comment = "add additional blocks and items for the miner's backpack here in the format id:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		parseBackpackItems("Miner's Backpack", backpackConf.value, BackpackManager.definitions.get("miner"));
+		backpackConf.comment = "add additional blocks and items for the miner's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
+		parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("miner"));
 		backpackConf = config.get("backpacks.digger.items", CONFIG_CATEGORY, "");
-		backpackConf.comment = "add additional blocks and items for the digger's backpack here in the format id:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		parseBackpackItems("Digger's Backpack", backpackConf.value, BackpackManager.definitions.get("digger"));
+		backpackConf.comment = "add additional blocks and items for the digger's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
+		parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("digger"));
 		backpackConf = config.get("backpacks.forester.items", CONFIG_CATEGORY, "");
-		backpackConf.comment = "add additional blocks and items for the forester's backpack here in the format id:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		parseBackpackItems("Forester's Backpack", backpackConf.value, BackpackManager.definitions.get("forester"));
+		backpackConf.comment = "add additional blocks and items for the forester's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
+		parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("forester"));
 		backpackConf = config.get("backpacks.hunter.items", CONFIG_CATEGORY, "");
-		backpackConf.comment = "add additional blocks and items for the hunter's backpack here in the format id:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		parseBackpackItems("Hunter's Backpack", backpackConf.value, BackpackManager.definitions.get("hunter"));
+		backpackConf.comment = "add additional blocks and items for the hunter's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
+		parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("hunter"));
 		backpackConf = config.get("backpacks.adventurer.items", CONFIG_CATEGORY, "");
-		backpackConf.comment = "add blocks and items for the adventurer's backpack here in the format id:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		parseBackpackItems("Adventurer's Backpack", backpackConf.value, BackpackManager.definitions.get("adventurer"));
+		backpackConf.comment = "add blocks and items for the adventurer's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
+		parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("adventurer"));
 		backpackConf = config.get("backpacks.builder.items", CONFIG_CATEGORY, "");
-		backpackConf.comment = "add blocks and items for the builder's backpack here in the format id:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		parseBackpackItems("Builder's Backpack", backpackConf.value, BackpackManager.definitions.get("builder"));
+		backpackConf.comment = "add blocks and items for the builder's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
+		parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("builder"));
 
 		config.save();
 
@@ -249,7 +246,7 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 				return true;
 			}
 
-			parseBackpackItems(tokens[0] + "'s Backpack", tokens[1], BackpackManager.definitions.get(tokens[0]));
+			parseBackpackItems(tokens[1], BackpackManager.definitions.get(tokens[0]));
 
 			return true;
 		}
@@ -448,7 +445,10 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 		builderItems.add(new ItemStack(Blocks.stone));
 		builderItems.add(new ItemStack(Blocks.brick_block));
 		builderItems.add(new ItemStack(Blocks.planks, 1, Defaults.WILDCARD));
+		builderItems.add(new ItemStack(Blocks.clay));
 		builderItems.add(new ItemStack(Blocks.hardened_clay, 1, Defaults.WILDCARD));
+		builderItems.add(new ItemStack(Blocks.stained_hardened_clay, 1, Defaults.WILDCARD));
+		builderItems.add(new ItemStack(Blocks.packed_ice));
 		builderItems.add(new ItemStack(Blocks.nether_brick));
 		builderItems.add(new ItemStack(Blocks.nether_brick_fence));
 		builderItems.add(new ItemStack(Blocks.stone_stairs));
@@ -537,6 +537,11 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 
 		if (PluginManager.Module.FACTORY.isEnabled()) {
 			// / CARPENTER
+
+			// / CRATES
+			RecipeManagers.carpenterManager.addRecipe(20, Fluids.WATER.getFluid(1000), null, ForestryItem.crate.getItemStack(24),
+					" # ", "# #", " # ", '#', "logWood");
+
 			// / BACKPACKS T2
 			RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, ForestryItem.minerBackpackT2.getItemStack(),
 					"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
@@ -563,51 +568,9 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 	protected void registerCrates() {
 	}
 
-	private static void parseBackpackItems(String backpackIdent, String list, IBackpackDefinition target) {
-		String[] parts = list.split("[;]+");
-
-		for (String part : parts) {
-			if (part.isEmpty()) {
-				continue;
-			}
-
-			String[] ident = part.split("[:]+");
-
-			if (ident.length != 2 && ident.length != 3) {
-				Proxies.log.warning("Failed to add block/item of (" + part + ") to " + backpackIdent + " since it isn't formatted properly. Suitable are <name>, <name>:<meta> or <name>:*, e.g. IC2:blockWall:*.");
-				continue;
-			}
-
-			String name = ident[0] + ":" + ident[1];
-			int meta;
-
-			if (ident.length == 2) {
-				meta = 0;
-			} else {
-				try {
-					meta = ident[2].equals("*") ? OreDictionary.WILDCARD_VALUE : NumberFormat.getIntegerInstance().parse(ident[2]).intValue();
-				} catch (ParseException e) {
-					Proxies.log.warning("Failed to add block/item of (" + part + ") to " + backpackIdent + " since its metadata isn't formatted properly. Suitable are integer values or *.");
-					continue;
-				}
-			}
-
-			Item item = GameData.getItemRegistry().getRaw(name);
-
-			if (item == null) {
-				Block block = GameData.getBlockRegistry().getRaw(name);
-
-				if (block == null || Item.getItemFromBlock(block) == null) {
-					Proxies.log.warning("Failed to add block/item of (" + part + ") to " + backpackIdent + " since it couldn't be found.");
-					continue;
-				}
-
-				item = Item.getItemFromBlock(block);
-			}
-
-			Proxies.log.finer("Adding block/item of (" + part + ") to " + backpackIdent + ".");
-			target.addValidItem(new ItemStack(item, 1, meta));
-		}
+	private static void parseBackpackItems(String list, IBackpackDefinition target) {
+		List<ItemStack> backpackItems = StackUtils.parseItemStackStrings(list);
+		target.addValidItems(backpackItems);
 	}
 
 	@Override

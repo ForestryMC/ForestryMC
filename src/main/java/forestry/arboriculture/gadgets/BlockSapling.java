@@ -155,7 +155,7 @@ public class BlockSapling extends BlockTreeContainer {
 	}
 
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
 		TileSapling sapling = getSaplingTile(world, x, y, z);
 		if (sapling == null || sapling.getTree() == null) {
 			return null;
@@ -164,7 +164,7 @@ public class BlockSapling extends BlockTreeContainer {
 	}
 
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
 		if (Proxies.common.isSimulating(world) && canHarvestBlock(player, world.getBlockMetadata(x, y, z))) {
 			if (!player.capabilities.isCreativeMode) {
 				dropAsSapling(world, x, y, z);

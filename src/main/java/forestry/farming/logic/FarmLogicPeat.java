@@ -34,8 +34,7 @@ import forestry.core.vect.VectUtil;
 public class FarmLogicPeat extends FarmLogicWatered {
 
 	public FarmLogicPeat(IFarmHousing housing) {
-		super(housing, new ItemStack[]{ForestryBlock.soil.getItemStack(1, 1)},
-				ForestryBlock.soil.getItemStack(1, 1));
+		super(housing, ForestryBlock.soil.getItemStack(1, 1), ForestryBlock.soil.getItemStack(1, 1));
 	}
 
 	@Override

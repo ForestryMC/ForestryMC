@@ -60,7 +60,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 		public final boolean doesMovement;
 
-		private EnumButterflyState(boolean doesMovement) {
+		EnumButterflyState(boolean doesMovement) {
 			this.doesMovement = doesMovement;
 		}
 
@@ -522,6 +522,11 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 		return prevSwingProgress + flap * partialTicktime;
 
+	}
+
+	@Override
+	protected float getSoundVolume() {
+		return 0.1F;
 	}
 
 }

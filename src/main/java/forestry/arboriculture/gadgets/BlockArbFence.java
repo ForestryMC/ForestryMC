@@ -36,7 +36,7 @@ import forestry.plugins.PluginArboriculture;
 
 public class BlockArbFence extends BlockFence implements IWoodTyped {
 
-	public static enum FenceCat {
+	public enum FenceCat {
 		CAT0, CAT1
 	}
 

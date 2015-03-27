@@ -17,6 +17,7 @@ import java.util.Map;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -43,10 +44,8 @@ import forestry.core.interfaces.ICraftingPlan;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InvTools;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
-import forestry.core.inventory.wrappers.IInvSlot;
-import forestry.core.inventory.wrappers.InventoryIterator;
-import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.GuiId;
 import forestry.core.utils.GuiUtil;
 import forestry.core.utils.ShapedRecipeCustom;
@@ -80,11 +79,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 				return molten == null;
 			}
 
-			if (!resource.isFluidEqual(molten)) {
-				return false;
-			}
-
-			return molten.amount <= resource.amount;
+			return resource.containsFluid(molten);
 		}
 
 		public ItemStack getPlan() {
@@ -181,16 +176,6 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 			return false;
 		}
 
-		public static boolean isResourceLiquid(FluidStack liquid) {
-			for (Recipe recipe : recipes) {
-				if (recipe.hasLiquid(liquid)) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
 		public static Smelting findMatchingSmelting(ItemStack resource) {
 			if (resource == null) {
 				return null;
@@ -237,23 +222,28 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 	public static final short SLOT_METAL = 0;
 	public static final short SLOT_PLAN = 1;
 	public static final short SLOT_RESULT = 2;
-	public static final short SLOT_CRAFTING_1 = 3;
-	public static final short SLOT_CRAFTING_COUNT = 9;
+	// FIXME 1.8: change indexes and use correct SLOT_COUNT of 21
+	// left this way for now to avoid losing items in existing fabricators
+	public static final short SLOT_CRAFTING_LEGACY_1 = 3;
+	public static final short SLOT_CRAFTING_LEGACY_COUNT = 9;
 	public static final short SLOT_INVENTORY_1 = 12;
 	public static final short SLOT_INVENTORY_COUNT = 18;
+	public static final short SLOT_COUNT = 30;
+
+	public static final short SLOT_CRAFTING_1 = 0;
+	public static final short SLOT_CRAFTING_COUNT = 9;
 
 	/* MEMBER */
-	private final InventoryMapper invCrafting;
+	private final TileInventoryAdapter craftingInventory;
 	private final TankManager tankManager;
 	private final FilteredTank moltenTank;
 	private int heat = 0;
 	private int guiMeltingPoint = 0;
 
-	private FluidStack pendingSmelt;
-
 	public MachineFabricator() {
 		super(1100, 50, 3300);
-		setInternalInventory(new TileInventoryAdapter(this, 30, "Items") {
+		craftingInventory = new TileInventoryAdapter(this, SLOT_CRAFTING_COUNT, "CraftItems");
+		setInternalInventory(new TileInventoryAdapter(this, SLOT_COUNT, "Items") {
 			@Override
 			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 				if (slotIndex == SLOT_METAL) {
@@ -269,7 +259,6 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 				return slotIndex == SLOT_RESULT;
 			}
 		});
-		invCrafting = new InventoryMapper(getInternalInventory(), SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
 		moltenTank = new FilteredTank(2 * Defaults.BUCKET_VOLUME, Fluids.GLASS.getFluid());
 		moltenTank.tankMode = StandardTank.TankMode.INTERNAL;
 		tankManager = new TankManager(moltenTank);
@@ -290,12 +279,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		// Tank
 		tankManager.writeTanksToNBT(nbttagcompound);
 
-		// Pending Smelt
-		if (pendingSmelt != null) {
-			NBTTagCompound smelt = new NBTTagCompound();
-			pendingSmelt.writeToNBT(smelt);
-			nbttagcompound.setTag("PendingSmelt", smelt);
-		}
+		craftingInventory.writeToNBT(nbttagcompound);
 	}
 
 	@Override
@@ -307,36 +291,31 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		// Tank
 		tankManager.readTanksFromNBT(nbttagcompound);
 
-		// Pending Smelt
-		if (nbttagcompound.hasKey("PendingSmelt")) {
-			NBTTagCompound smelt = nbttagcompound.getCompoundTag("PendingSmelt");
-			pendingSmelt = FluidStack.loadFluidStackFromNBT(smelt);
-		}
+		craftingInventory.readFromNBT(nbttagcompound);
 
+		// FIXME 1.8: wont need this
+		// move items from legacy crafting area to the new one
+		IInventory inventory = getInternalInventory();
+		for (int slot = SLOT_CRAFTING_LEGACY_1; slot < SLOT_CRAFTING_LEGACY_1 + SLOT_CRAFTING_LEGACY_COUNT; slot++) {
+			ItemStack stack = inventory.getStackInSlot(slot);
+			if (stack != null) {
+				inventory.setInventorySlotContents(slot, null);
+
+				int newSlot = slot - SLOT_CRAFTING_LEGACY_1;
+				craftingInventory.setInventorySlotContents(newSlot, stack);
+			}
+		}
 	}
 
 	/* UPDATING */
 	@Override
 	public void updateServerSide() {
-		IInventoryAdapter inventory = getInternalInventory();
-		// Add pending smelt
-		if (pendingSmelt != null) {
 
-			int filled = moltenTank.fill(pendingSmelt, true);
-			pendingSmelt.amount -= filled;
+		if (!moltenTank.isFull()) {
+			trySmelting();
+		}
 
-			if (pendingSmelt.amount <= 0) {
-				pendingSmelt = null;
-			}
-			// Smelt if necessary and possible
-		} else if (moltenTank.getFluidAmount() < moltenTank.getCapacity() && inventory.getStackInSlot(SLOT_METAL) != null) {
-			Smelting smelt = RecipeManager.findMatchingSmelting(inventory.getStackInSlot(SLOT_METAL));
-			if (smelt != null && smelt.meltingPoint <= heat) {
-
-				this.decrStackSize(SLOT_METAL, 1);
-				pendingSmelt = smelt.product.copy();
-			}
-		} else if (moltenTank.getFluidAmount() > 0) {
+		if (!moltenTank.isEmpty()) {
 			// Remove smelt if we have gone below melting point
 			Smelting smelt = RecipeManager.findMatchingSmelting(moltenTank.getFluid());
 			if (smelt != null && heat < smelt.meltingPoint) {
@@ -353,9 +332,29 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		}
 	}
 
+	private void trySmelting() {
+		IInventoryAdapter inventory = getInternalInventory();
+
+		ItemStack smeltResource = inventory.getStackInSlot(SLOT_METAL);
+		if (smeltResource == null) {
+			return;
+		}
+
+		Smelting smelt = RecipeManager.findMatchingSmelting(smeltResource);
+		if (smelt == null || smelt.meltingPoint > heat) {
+			return;
+		}
+
+		FluidStack smeltFluid = smelt.getProduct();
+		if (moltenTank.fill(smeltFluid, false) == smeltFluid.amount) {
+			this.decrStackSize(SLOT_METAL, 1);
+			moltenTank.fill(smeltFluid, true);
+		}
+	}
+
 	@Override
 	public boolean workCycle() {
-		craftResult(false, null);
+		craftResult(null);
 		return addHeat(25);
 	}
 
@@ -383,7 +382,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 	private Recipe getRecipe() {
 		IInventoryAdapter inventory = getInternalInventory();
 		ItemStack plan = inventory.getStackInSlot(SLOT_PLAN);
-		ItemStack[] crafting = InvTools.getStacks(inventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
+		ItemStack[] crafting = InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
 		return RecipeManager.findMatchingRecipe(plan, moltenTank.getFluid(), crafting);
 	}
 
@@ -405,22 +404,22 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 	}
 
 	@Override
-	public ItemStack takenFromSlot(int slotIndex, boolean consumeRecipe, EntityPlayer player) {
+	public ItemStack takenFromSlot(int slotIndex, EntityPlayer player) {
 		if (slotIndex != SLOT_RESULT) {
 			return null;
 		}
 
-		craftResult(consumeRecipe, player);
-
-		IInventoryAdapter inventory = getInternalInventory();
-
-		// Return result
-		return inventory.decrStackSize(SLOT_RESULT, 1);
+		return getInternalInventory().decrStackSize(SLOT_RESULT, 1);
 	}
 
-	private void craftResult(boolean consumeRecipe, EntityPlayer player) {
+	private void craftResult(EntityPlayer player) {
 		Recipe myRecipe = getRecipe();
 		if (myRecipe == null) {
+			return;
+		}
+
+		ItemStack result = getResult();
+		if (result == null) {
 			return;
 		}
 
@@ -433,18 +432,19 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		FluidStack liquid = myRecipe.molten;
 
 		// Remove resources
-		ItemStack[] crafting = InvTools.getStacks(inventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
-		if (removeFromInventory(1, crafting, player, false)) {
-			removeFromInventory(1, crafting, player, true);
-			moltenTank.drain(liquid.amount, true);
-		} else if (consumeRecipe) {
-			removeFromCraftMatrix(myRecipe);
-			moltenTank.drain(liquid.amount, true);
-		} else {
+		ItemStack[] crafting = InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
+		if (!removeFromInventory(crafting, player, false)) {
 			return;
 		}
 
-		ItemStack result = getResult();
+		FluidStack canDrain = moltenTank.drain(liquid.amount, false);
+		if (canDrain == null || !canDrain.isFluidStackIdentical(liquid)) {
+			return;
+		}
+
+		removeFromInventory(crafting, player, true);
+		moltenTank.drain(liquid.amount, true);
+
 		// Damage plan
 		if (inventory.getStackInSlot(SLOT_PLAN) != null) {
 			Item planItem = inventory.getStackInSlot(SLOT_PLAN).getItem();
@@ -456,23 +456,13 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		inventory.setInventorySlotContents(SLOT_RESULT, result);
 	}
 
-	private void removeFromCraftMatrix(Recipe recipe) {
-		for (IInvSlot slot : InventoryIterator.getIterable(invCrafting)) {
-			if (slot.getStackInSlot() == null) {
-				continue;
-			}
-			slot.decreaseStackInSlot();
-		}
-
-	}
-
-	private boolean removeFromInventory(int count, ItemStack[] set, EntityPlayer player, boolean doRemove) {
+	private boolean removeFromInventory(ItemStack[] set, EntityPlayer player, boolean doRemove) {
 		IInventoryAdapter inventory = getInternalInventory();
 		if (doRemove) {
-			return InvTools.removeSets(inventory, count, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
+			return InvTools.removeSets(inventory, 1, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
 		} else {
 			ItemStack[] stock = InvTools.getStacks(inventory, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
-			return StackUtils.containsSets(set, stock) >= count;
+			return StackUtils.containsSets(set, stock) >= 1;
 		}
 	}
 
@@ -491,7 +481,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		}
 
 		ItemStack plan = inventory.getStackInSlot(SLOT_PLAN);
-		ItemStack[] resources = InvTools.getStacks(inventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
+		ItemStack[] resources = InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
 
 		return RecipeManager.findMatchingRecipe(plan, moltenTank.getFluid(), resources) != null;
 	}
@@ -548,6 +538,13 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		int messageId = tankManager.maxMessageId() + 1;
 		iCrafting.sendProgressBarUpdate(container, messageId, heat);
 		iCrafting.sendProgressBarUpdate(container, messageId + 1, getMeltingPoint());
+	}
+
+	/**
+	 * @return Inaccessible crafting inventory for the craft grid.
+	 */
+	public InventoryAdapter getCraftingInventory() {
+		return craftingInventory;
 	}
 
 	/* ILIQUIDCONTAINER */

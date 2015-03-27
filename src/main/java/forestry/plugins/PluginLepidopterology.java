@@ -69,6 +69,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 	private Configuration config;
 	public static int spawnConstraint = 100;
 	public static int entityConstraint = 1000;
+	private static boolean allowPollination = true;
 	public static IClassification geometridae;
 	public static IClassification saturniidae;
 	public static IClassification pieridae;
@@ -109,6 +110,10 @@ public class PluginLepidopterology extends ForestryPlugin {
 		property = config.get("entities.maximum.allowed", CONFIG_CATEGORY, entityConstraint);
 		property.comment = "determines the global butterfly entity count above which butterflies will stay in item form and will not take flight anymore.";
 		entityConstraint = Integer.parseInt(property.value);
+
+		property = config.get("entities.pollination.allowed", CONFIG_CATEGORY, allowPollination);
+		property.comment = "determines whether butterflies can pollinate leaves.";
+		allowPollination = Boolean.parseBoolean(property.value);
 
 		config.save();
 
@@ -323,5 +328,9 @@ public class PluginLepidopterology extends ForestryPlugin {
 	@Override
 	public IGuiHandler getGuiHandler() {
 		return new GuiHandlerLepidopterology();
+	}
+
+	public static boolean isPollinationAllowed() {
+		return allowPollination;
 	}
 }

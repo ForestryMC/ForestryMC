@@ -17,7 +17,7 @@ import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.factory.gadgets.MachineCarpenter;
 
-public class GuiCarpenter extends GuiForestryTitled<MachineCarpenter> {
+public class GuiCarpenter extends GuiForestryTitled<ContainerCarpenter, MachineCarpenter> {
 
 	public GuiCarpenter(InventoryPlayer inventory, MachineCarpenter tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/carpenter.png", new ContainerCarpenter(inventory, tile), tile);
@@ -27,15 +27,9 @@ public class GuiCarpenter extends GuiForestryTitled<MachineCarpenter> {
 	}
 
 	@Override
-	public void onGuiClosed() {
-		super.onGuiClosed();
-		inventorySlots.onContainerClosed(mc.thePlayer);
-	}
-
-	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		MachineCarpenter machine = tile;
+		MachineCarpenter machine = inventory;
 
 		if (machine.isWorking()) {
 			int progressScaled = 16 - machine.getCraftingProgressScaled(16);

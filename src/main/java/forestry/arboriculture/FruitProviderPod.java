@@ -31,13 +31,13 @@ import forestry.plugins.PluginArboriculture;
 
 public class FruitProviderPod extends FruitProviderNone {
 
-	public static enum EnumPodType {
+	public enum EnumPodType {
 		COCOA((short) 2000, (short) 2001, (short) 2002), DATES((short) 2010, (short) 2011, (short) 2012),
 		PAPAYA((short) 2013, (short) 2014, (short) 2015);//, COCONUT((short)2016, (short)2017, (short)2018);
 
 		public final short[] uids;
 
-		private EnumPodType(short stage1, short stage2, short stage3) {
+		EnumPodType(short stage1, short stage2, short stage3) {
 			uids = new short[]{stage1, stage2, stage3};
 		}
 	}

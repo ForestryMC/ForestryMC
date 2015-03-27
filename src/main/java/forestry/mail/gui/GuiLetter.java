@@ -26,7 +26,6 @@ import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.PostManager;
 import forestry.core.config.Defaults;
 import forestry.core.config.SessionVars;
-import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.GuiTextBox;
 import forestry.core.gui.widgets.Widget;
@@ -34,7 +33,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 import forestry.mail.items.ItemLetter.LetterInventory;
 
-public class GuiLetter extends GuiForestry<TileForestry> {
+public class GuiLetter extends GuiForestry<ContainerLetter, LetterInventory> {
 
 	protected class AddresseeSlot extends Widget {
 
@@ -80,14 +79,12 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 	private boolean textFocus;
 
 	private final ArrayList<Widget> tradeInfoWidgets;
-	private final ContainerLetter container;
 
 	public GuiLetter(EntityPlayer player, LetterInventory inventory) {
 		super(Defaults.TEXTURE_PATH_GUI + "/letter.png", new ContainerLetter(player, inventory), inventory);
 		this.xSize = 194;
 		this.ySize = 227;
 
-		this.container = (ContainerLetter) inventorySlots;
 		this.isProcessedLetter = container.getLetter().isProcessed();
 		this.widgetManager.add(new AddresseeSlot(16, 12));
 		this.tradeInfoWidgets = new ArrayList<Widget>();

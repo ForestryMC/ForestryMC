@@ -18,7 +18,7 @@ public enum EnumCircuitBoardType {
 	final int primaryColor;
 	final int secondaryColor;
 
-	private EnumCircuitBoardType(short sockets, int primaryColor, int secondaryColor) {
+	EnumCircuitBoardType(short sockets, int primaryColor, int secondaryColor) {
 		this.sockets = sockets;
 		this.primaryColor = primaryColor;
 		this.secondaryColor = secondaryColor;

@@ -14,7 +14,6 @@ import java.awt.Color;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -23,6 +22,7 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
@@ -34,7 +34,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import forestry.core.config.Config;
-import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.tooltips.ToolTipLine;
@@ -52,49 +51,35 @@ import codechicken.nei.api.INEIGuiHandler;
 import codechicken.nei.api.TaggedInventoryArea;
 
 @Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = "NotEnoughItems")
-public abstract class GuiForestry<T extends TileForestry> extends GuiContainer implements INEIGuiHandler {
+public abstract class GuiForestry<C extends Container, I extends IInventory> extends GuiContainer implements INEIGuiHandler {
 
-	/* WIDGETS */
 	protected final WidgetManager widgetManager;
-	/* LEDGERS */
 	protected final LedgerManager ledgerManager;
-	protected final T tile;
+	protected final I inventory;
+	protected final C container;
 	protected final FontColour fontColor;
 	public final ResourceLocation textureFile;
 
-	public GuiForestry(String texture, Container container) {
-		this(new ResourceLocation("forestry", texture), container, null);
-	}
-
-	public GuiForestry(String texture, Container container, Object inventory) {
+	public GuiForestry(String texture, C container, I inventory) {
 		this(new ResourceLocation("forestry", texture), container, inventory);
 	}
 
-	public GuiForestry(ResourceLocation texture, Container container) {
-		this(texture, container, null);
-	}
-
-	@SuppressWarnings("unchecked")
-	public GuiForestry(ResourceLocation texture, Container container, Object inventory) {
+	public GuiForestry(ResourceLocation texture, C container, I inventory) {
 		super(container);
 		this.widgetManager = new WidgetManager(this);
 		this.ledgerManager = new LedgerManager(this);
 
 		this.textureFile = texture;
-		this.inventorySlots = container;
 
-		if (inventory instanceof TileForestry) {
-			this.tile = (T) inventory;
-		} else {
-			this.tile = null;
-		}
+		this.inventory = inventory;
+		this.container = container;
 
 		fontColor = new FontColour(Proxies.common.getSelectedTexturePack(Proxies.common.getClientInstance()));
-		initLedgers(inventory);
+		initLedgers();
 	}
 
 	/* LEDGERS */
-	protected void initLedgers(Object inventory) {
+	protected void initLedgers() {
 
 		if (inventory instanceof IErrorSource && ((IErrorSource) inventory).throwsErrors()) {
 			ledgerManager.add(new ErrorLedger(ledgerManager, (IErrorSource) inventory));
@@ -470,7 +455,7 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 
 		@Override
 		public ToolTip getToolTip() {
-			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+			EntityPlayer player = Proxies.common.getPlayer();
 			ToolTip tip = new ToolTip();
 			tip.add(itemStack.getTooltip(player, false));
 			return tip;

@@ -11,13 +11,16 @@
 package forestry.arboriculture;
 
 import java.io.DataInputStream;
+import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
 import forestry.arboriculture.gadgets.TileLeaves;
-import forestry.arboriculture.network.PacketLeafUpdate;
+import forestry.arboriculture.gadgets.TileSapling;
+import forestry.arboriculture.network.PacketLeaf;
 import forestry.arboriculture.network.PacketRipeningUpdate;
+import forestry.arboriculture.network.PacketSapling;
 import forestry.core.interfaces.IPacketHandler;
 import forestry.core.network.PacketIds;
 import forestry.core.proxy.Proxies;
@@ -25,30 +28,40 @@ import forestry.core.proxy.Proxies;
 public class PacketHandlerArboriculture implements IPacketHandler {
 
 	@Override
-	public void onPacketData(int packetID, DataInputStream data, EntityPlayer player) {
-		try {
+	public boolean onPacketData(int packetID, DataInputStream data, EntityPlayer player) throws IOException {
 
-			switch (packetID) {
-				case PacketIds.LEAF_UPDATE: {
-					PacketLeafUpdate packet = new PacketLeafUpdate();
-					packet.readData(data);
-					onLeafUpdate(packet);
-					break;
-				}
-				case PacketIds.RIPENING_UPDATE: {
-					PacketRipeningUpdate packet = new PacketRipeningUpdate();
-					packet.readData(data);
-					onRipeningUpdate(packet);
-					break;
-				}
+		switch (packetID) {
+			case PacketIds.SAPLING: {
+				PacketSapling packet = new PacketSapling();
+				packet.readData(data);
+				onSaplingPacket(packet);
+				return true;
 			}
+			case PacketIds.LEAF: {
+				PacketLeaf packet = new PacketLeaf();
+				packet.readData(data);
+				onLeafPacket(packet);
+				return true;
+			}
+			case PacketIds.RIPENING_UPDATE: {
+				PacketRipeningUpdate packet = new PacketRipeningUpdate();
+				packet.readData(data);
+				onRipeningUpdate(packet);
+				return true;
+			}
+		}
 
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		return false;
+	}
+
+	private void onSaplingPacket(PacketSapling packet) {
+		TileEntity tile = packet.getTarget(Proxies.common.getRenderWorld());
+		if (tile instanceof TileSapling) {
+			((TileSapling) tile).fromPacket(packet);
 		}
 	}
 
-	private void onLeafUpdate(PacketLeafUpdate packet) {
+	private void onLeafPacket(PacketLeaf packet) {
 
 		TileEntity tile = packet.getTarget(Proxies.common.getRenderWorld());
 		if (tile instanceof TileLeaves) {

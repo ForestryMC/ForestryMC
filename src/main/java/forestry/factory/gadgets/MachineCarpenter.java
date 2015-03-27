@@ -376,7 +376,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			packageTime--;
 
 			// Check whether we have become invalid and need to abort production
-			if (currentRecipe == null || !currentProduct.isItemEqual(currentRecipe.getCraftingResult()) || !validateResources()) {
+			if (currentRecipe == null || currentProduct == null || !currentProduct.isItemEqual(currentRecipe.getCraftingResult()) || !validateResources()) {
 				currentProduct = null;
 				packageTime = totalTime = 0;
 				return false;
@@ -446,7 +446,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		// Need at least one matched set
 		ItemStack[] set = InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
 		ItemStack[] stock = InvTools.getStacks(accessibleInventory, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
-		;
+
 		return StackUtils.containsSets(set, stock, true, false) > 0;
 	}
 

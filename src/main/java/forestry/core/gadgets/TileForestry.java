@@ -49,7 +49,6 @@ import forestry.core.utils.AdjacentTileCache;
 import forestry.core.utils.EnumAccess;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Utils;
-import forestry.core.vect.Vect;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.ITriggerExternal;
@@ -59,7 +58,7 @@ import buildcraft.api.statements.ITriggerProvider;
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
 public abstract class TileForestry extends TileEntity implements INetworkedEntity, IRestrictedAccess, IErrorSource, ITriggerProvider, ISidedInventory, IFilterSlotDelegate {
 
-	private static Random rand = new Random();
+	private static final Random rand = new Random();
 
 	protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 	protected boolean isInited = false;
@@ -84,10 +83,6 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	public void validate() {
 		tileCache.purge();
 		super.validate();
-	}
-
-	public Vect Coords() {
-		return new Vect(xCoord, yCoord, zCoord);
 	}
 
 	public void openGui(EntityPlayer player) {
@@ -166,22 +161,18 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		}
 	}
 
-	// / SMP
-	@Override
-	public void sendNetworkUpdate() {
-		PacketTileUpdate packet = new PacketTileUpdate(this);
-		Proxies.net.sendNetworkPacket(packet, xCoord, yCoord, zCoord);
-	}
-
 	@Override
 	public Packet getDescriptionPacket() {
 		PacketTileUpdate packet = new PacketTileUpdate(this);
 		return packet.getPacket();
 	}
 
-	public abstract PacketPayload getPacketPayload();
-
-	public abstract void fromPacketPayload(PacketPayload payload);
+	/* INetworkedEntity */
+	@Override
+	public void sendNetworkUpdate() {
+		PacketTileUpdate packet = new PacketTileUpdate(this);
+		Proxies.net.sendNetworkPacket(packet, xCoord, yCoord, zCoord);
+	}
 
 	@Override
 	public void fromPacket(ForestryPacket packetRaw) {
@@ -195,6 +186,10 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		access = packet.getAccess();
 		fromPacketPayload(packet.payload);
 	}
+
+	public abstract PacketPayload getPacketPayload();
+
+	public abstract void fromPacketPayload(PacketPayload payload);
 
 	public void onRemoval() {
 	}
@@ -263,12 +258,12 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 
 	@Override
 	public final boolean allowsRemoval(EntityPlayer player) {
-		return Config.disablePermissions || !isOwnable() || !isOwned() || isOwner(player) || Proxies.common.isOp(player);
+		return Config.disablePermissions || getAccess() == EnumAccess.SHARED || !isOwnable() || !isOwned() || isOwner(player) || Proxies.common.isOp(player);
 	}
 
 	@Override
 	public final boolean allowsAlteration(EntityPlayer player) {
-		return allowsRemoval(player) || getAccess() == EnumAccess.SHARED;
+		return allowsRemoval(player);
 	}
 
 	@Override

@@ -37,7 +37,7 @@ public class FruitProviderNone implements IFruitProvider {
 		}
 	}
 
-	private static HashMap<String, OverlayType> overlayTypes = new HashMap<String, OverlayType>();
+	private static final HashMap<String, OverlayType> overlayTypes = new HashMap<String, OverlayType>();
 
 	static {
 		overlayTypes.put("berries", new OverlayType("berries", (short) 1000));
@@ -50,7 +50,7 @@ public class FruitProviderNone implements IFruitProvider {
 	private final String key;
 	private final IFruitFamily family;
 
-	int ripeningPeriod = 10;
+	protected int ripeningPeriod = 10;
 
 	OverlayType overlay = null;
 

@@ -34,7 +34,7 @@ public final class AdjacentTileCache {
 	private final TileEntity source;
 	private final Set<ICacheListener> listeners = new LinkedHashSet<ICacheListener>();
 
-	public static interface ICacheListener {
+	public interface ICacheListener {
 
 		void changed();
 

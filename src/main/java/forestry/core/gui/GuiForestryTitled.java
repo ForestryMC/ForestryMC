@@ -10,24 +10,25 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 
 import forestry.core.gadgets.TileForestry;
 import forestry.core.utils.StringUtil;
 
-public abstract class GuiForestryTitled<T extends TileForestry> extends GuiForestry<T> {
+public abstract class GuiForestryTitled<C extends Container, I extends TileForestry> extends GuiForestry<C, I> {
 
-	public GuiForestryTitled(String texture, ContainerForestry container, Object inventory) {
+	public GuiForestryTitled(String texture, C container, I inventory) {
 		super(texture, container, inventory);
 	}
 
-	public GuiForestryTitled(ResourceLocation texture, ContainerForestry container, Object inventory) {
+	public GuiForestryTitled(ResourceLocation texture, C container, I inventory) {
 		super(texture, container, inventory);
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		String name = StringUtil.localizeTile(tile.getUnlocalizedName());
+		String name = StringUtil.localizeTile(inventory.getUnlocalizedName());
 		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.title"));
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 	}

@@ -45,15 +45,12 @@ import forestry.core.vect.VectUtil;
 
 public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
-	public FarmLogicArboreal(IFarmHousing housing, ItemStack[] resource, ItemStack ground, IFarmable[] germlings) {
+	public FarmLogicArboreal(IFarmHousing housing, ItemStack resource, ItemStack ground, Iterable<IFarmable> germlings) {
 		super(housing, resource, ground, germlings);
 	}
 
 	public FarmLogicArboreal(IFarmHousing housing) {
-		super(housing,
-				new ItemStack[]{new ItemStack(Blocks.dirt)},
-				ForestryBlock.soil.getItemStack(1, 0),
-				Farmables.farmables.get("farmArboreal").toArray(new IFarmable[0]));
+		super(housing, new ItemStack(Blocks.dirt), ForestryBlock.soil.getItemStack(1, 0), Farmables.farmables.get("farmArboreal"));
 	}
 
 	@Override

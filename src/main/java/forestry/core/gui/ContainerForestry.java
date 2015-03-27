@@ -182,14 +182,23 @@ public class ContainerForestry extends Container {
 	}
 
 	private boolean tryShiftItem(ItemStack stackToShift, int numSlots) {
+		boolean success = tryShiftItem(stackToShift, numSlots, true);
+		if (stackToShift.stackSize > 0) {
+			success |= tryShiftItem(stackToShift, numSlots, false);
+		}
+		return success;
+	}
+
+	// if mergeOnly = true, don't shift into empty slots.
+	private boolean tryShiftItem(ItemStack stackToShift, int numSlots, boolean mergeOnly) {
 		for (int machineIndex = 0; machineIndex < numSlots - 9 * 4; machineIndex++) {
 			Slot slot = (Slot) inventorySlots.get(machineIndex);
+			if (mergeOnly && slot.getStack() == null) {
+				continue;
+			}
 			if (slot instanceof SlotForestry) {
 				SlotForestry slotForestry = (SlotForestry) slot;
-				if (!slotForestry.canShift()) {
-					continue;
-				}
-				if (slotForestry.isPhantom()) {
+				if (!slotForestry.canShift() || slotForestry.isPhantom()) {
 					continue;
 				}
 			}

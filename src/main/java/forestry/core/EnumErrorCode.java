@@ -64,11 +64,11 @@ public enum EnumErrorCode implements IErrorState {
 	@SideOnly(Side.CLIENT)
 	private IIcon icon;
 
-	private EnumErrorCode(String name) {
+	EnumErrorCode(String name) {
 		this(name, name);
 	}
 
-	private EnumErrorCode(String name, String iconName) {
+	EnumErrorCode(String name, String iconName) {
 		this.name = name;
 		this.iconName = iconName;
 	}

@@ -8,5 +8,5 @@ import forestry.core.interfaces.IFilterSlotDelegate;
 public interface IInventoryAdapter extends ISidedInventory, IFilterSlotDelegate, INBTTagable {
 
 	/* Sided */
-	public IInventoryAdapter configureSided(int[] sides, int[] slots);
+	IInventoryAdapter configureSided(int[] sides, int[] slots);
 }

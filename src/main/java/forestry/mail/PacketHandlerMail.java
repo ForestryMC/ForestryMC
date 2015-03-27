@@ -11,6 +11,7 @@
 package forestry.mail;
 
 import java.io.DataInputStream;
+import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -29,44 +30,41 @@ import forestry.plugins.PluginMail;
 public class PacketHandlerMail implements IPacketHandler {
 
 	@Override
-	public void onPacketData(int packetID, DataInputStream data, EntityPlayer player) {
+	public boolean onPacketData(int packetID, DataInputStream data, EntityPlayer player) throws IOException {
 
-		try {
-
-			PacketUpdate packet;
-			switch (packetID) {
-				case PacketIds.LETTER_INFO:
-					PacketLetterInfo packetT = new PacketLetterInfo();
-					packetT.readData(data);
-					onLetterInfo(packetT);
-					break;
-				case PacketIds.POBOX_INFO:
-					PacketPOBoxInfo packetP = new PacketPOBoxInfo();
-					packetP.readData(data);
-					onPOBoxInfo(packetP);
-					break;
-				case PacketIds.LETTER_RECIPIENT:
-					packet = new PacketUpdate();
-					packet.readData(data);
-					onLetterRecipient(player, packet);
-					break;
-				case PacketIds.LETTER_TEXT:
-					packet = new PacketUpdate();
-					packet.readData(data);
-					onLetterText(player, packet);
-					break;
-				case PacketIds.TRADING_ADDRESS_SET:
-					packet = new PacketUpdate();
-					packet.readData(data);
-					onAddressSet(player, packet);
-					break;
-				case PacketIds.POBOX_INFO_REQUEST:
-					onPOBoxInfoRequest(player);
-					break;
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		PacketUpdate packet;
+		switch (packetID) {
+			case PacketIds.LETTER_INFO:
+				PacketLetterInfo packetT = new PacketLetterInfo();
+				packetT.readData(data);
+				onLetterInfo(packetT);
+				return true;
+			case PacketIds.POBOX_INFO:
+				PacketPOBoxInfo packetP = new PacketPOBoxInfo();
+				packetP.readData(data);
+				onPOBoxInfo(packetP);
+				return true;
+			case PacketIds.LETTER_RECIPIENT:
+				packet = new PacketUpdate();
+				packet.readData(data);
+				onLetterRecipient(player, packet);
+				return true;
+			case PacketIds.LETTER_TEXT:
+				packet = new PacketUpdate();
+				packet.readData(data);
+				onLetterText(player, packet);
+				return true;
+			case PacketIds.TRADING_ADDRESS_SET:
+				packet = new PacketUpdate();
+				packet.readData(data);
+				onAddressSet(player, packet);
+				return true;
+			case PacketIds.POBOX_INFO_REQUEST:
+				onPOBoxInfoRequest(player);
+				return true;
 		}
+
+		return false;
 	}
 
 	private void onLetterInfo(PacketLetterInfo packet) {

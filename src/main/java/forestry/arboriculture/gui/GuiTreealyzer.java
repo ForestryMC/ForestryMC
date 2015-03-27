@@ -25,6 +25,7 @@ import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IAlleleGrowth;
+import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITree;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleInteger;
@@ -49,7 +50,10 @@ public class GuiTreealyzer extends GuiAlyzer {
 		ArrayList<ItemStack> treeList = new ArrayList<ItemStack>();
 		((ItemGermlingGE) ForestryItem.sapling.item()).addCreativeItems(treeList, false);
 		for (ItemStack treeStack : treeList) {
-			iconStacks.put(TreeGenome.getSpecies(treeStack).getUID(), treeStack);
+			IAlleleTreeSpecies species = TreeGenome.getSpecies(treeStack);
+			if (species != null) {
+				iconStacks.put(species.getUID(), treeStack);
+			}
 		}
 	}
 

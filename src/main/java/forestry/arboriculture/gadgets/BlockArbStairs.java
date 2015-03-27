@@ -67,7 +67,7 @@ public class BlockArbStairs extends BlockStairs {
 	}
 
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
 		int meta = world.getBlockMetadata(x, y, z);
 		if (Proxies.common.isSimulating(world) && canHarvestBlock(player, meta)) {
 			if (!player.capabilities.isCreativeMode) {
@@ -111,8 +111,8 @@ public class BlockArbStairs extends BlockStairs {
 	}
 
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
-		ItemStack itemStack = super.getPickBlock(target, world, x, y, z, player);
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+		ItemStack itemStack = super.getPickBlock(target, world, x, y, z);
 		NBTTagCompound stairsNBT = getTagCompoundForStairs(world, x, y, z);
 		itemStack.setTagCompound(stairsNBT);
 		return itemStack;

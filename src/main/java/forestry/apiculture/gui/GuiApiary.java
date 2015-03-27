@@ -19,7 +19,7 @@ import forestry.core.gui.GuiForestryTitled;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.Utils;
 
-public class GuiApiary extends GuiForestryTitled<TileBeehouse> {
+public class GuiApiary extends GuiForestryTitled<ContainerApiary, TileBeehouse> {
 
 	public GuiApiary(InventoryPlayer inventory, TileApiary tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/apiary.png", new ContainerApiary(inventory, tile, true), tile);
@@ -37,7 +37,7 @@ public class GuiApiary extends GuiForestryTitled<TileBeehouse> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		TileBeehouse machine = tile;
+		TileBeehouse machine = inventory;
 		drawHealthMeter(guiLeft + 20, guiTop + 37, machine.getHealthScaled(46), Utils.rateTankLevel(machine.getHealthScaled(100)));
 	}
 

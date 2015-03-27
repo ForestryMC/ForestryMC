@@ -63,6 +63,6 @@ public class SlotCrafter extends SlotCrafting {
 	public void onPickupFromSlot(EntityPlayer player, ItemStack itemStack) {
 		FMLCommonHandler.instance().firePlayerCraftingEvent(player, itemStack, craftMatrix);
 		this.onCrafting(itemStack, itemStack.stackSize); // handles crafting achievements, maps, and statistics
-		crafter.takenFromSlot(getSlotIndex(), true, player);
+		crafter.takenFromSlot(getSlotIndex(), player);
 	}
 }

@@ -22,6 +22,7 @@ import forestry.plugins.PluginArboriculture;
 
 public class ArboristTracker extends BreedingTracker implements IArboristTracker {
 
+	/** Required for creation from map storage */
 	public ArboristTracker(String s) {
 		this(s, null);
 	}
@@ -31,12 +32,12 @@ public class ArboristTracker extends BreedingTracker implements IArboristTracker
 	}
 
 	@Override
-	protected IBreedingTracker getCommonTracker(EntityPlayer player) {
-		return PluginArboriculture.treeInterface.getBreedingTracker(player.worldObj, null);
+	protected IBreedingTracker getBreedingTracker(EntityPlayer player) {
+		return PluginArboriculture.treeInterface.getBreedingTracker(player.worldObj, player.getGameProfile());
 	}
 
 	@Override
-	protected String getPacketTag() {
+	protected String speciesRootUID() {
 		return TreeHelper.UID;
 	}
 

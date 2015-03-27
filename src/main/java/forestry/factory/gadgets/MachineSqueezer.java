@@ -227,10 +227,6 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 		if (getErrorState() == EnumErrorCode.NORECIPE && currentRecipe != null) {
 			setErrorState(EnumErrorCode.OK);
 		}
-
-		if (energyManager.getTotalEnergyStored() == 0) {
-			setErrorState(EnumErrorCode.NOPOWER);
-		}
 	}
 
 	@Override

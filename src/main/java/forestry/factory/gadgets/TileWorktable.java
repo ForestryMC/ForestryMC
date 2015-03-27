@@ -181,7 +181,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 	}
 
 	@Override
-	public ItemStack takenFromSlot(int slotIndex, boolean consumeRecipe, EntityPlayer player) {
+	public ItemStack takenFromSlot(int slotIndex, EntityPlayer player) {
 		if (!removeResources(player)) {
 			return null;
 		}

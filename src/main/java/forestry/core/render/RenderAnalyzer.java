@@ -28,12 +28,12 @@ import forestry.core.interfaces.IBlockRenderer;
 
 public class RenderAnalyzer extends TileEntitySpecialRenderer implements IBlockRenderer {
 
-	private ModelAnalyzer model;
+	private final ModelAnalyzer model;
 	private final EntityItem dummyEntityItem = new EntityItem(null);
 	private final RenderItem customRenderItem;
 	private long lastTick;
 
-	public RenderAnalyzer() {
+	public RenderAnalyzer(String baseTexture) {
 		customRenderItem = new RenderItem() {
 			@Override
 			public boolean shouldBob() {
@@ -46,10 +46,6 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer implements IBlockR
 			}
 		};
 		customRenderItem.setRenderManager(RenderManager.instance);
-	}
-
-	public RenderAnalyzer(String baseTexture) {
-		this();
 		this.model = new ModelAnalyzer(baseTexture);
 	}
 

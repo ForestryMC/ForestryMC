@@ -36,13 +36,11 @@ import forestry.core.vect.VectUtil;
 
 public abstract class FarmLogicCrops extends FarmLogicWatered {
 
-	private final IFarmable[] seeds;
+	private final Iterable<IFarmable> seeds;
 	private static final ItemStack farmland = new ItemStack(Blocks.farmland, 1, Defaults.WILDCARD);
 
-	public FarmLogicCrops(IFarmHousing housing, IFarmable[] seeds) {
-		super(housing,
-				new ItemStack[]{new ItemStack(Blocks.dirt)},
-				new ItemStack(Blocks.farmland));
+	public FarmLogicCrops(IFarmHousing housing, Iterable<IFarmable> seeds) {
+		super(housing, new ItemStack(Blocks.dirt), new ItemStack(Blocks.farmland));
 
 		this.seeds = seeds;
 	}

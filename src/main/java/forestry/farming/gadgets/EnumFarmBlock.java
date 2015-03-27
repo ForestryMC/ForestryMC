@@ -57,7 +57,7 @@ public enum EnumFarmBlock {
 
 	private final ItemStack base;
 
-	private EnumFarmBlock(ItemStack base) {
+	EnumFarmBlock(ItemStack base) {
 		this.base = base;
 	}
 

@@ -5,11 +5,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.arboriculture.ITree;
-import forestry.arboriculture.genetics.Tree;
+import forestry.arboriculture.gadgets.TileLeaves;
 import forestry.core.items.ItemForestryBlock;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginArboriculture;
 
@@ -25,43 +23,46 @@ public class ItemLeavesBlock extends ItemForestryBlock {
 		if (!itemstack.hasTagCompound()) {
 			return type;
 		}
-		ITree tree = getTree(itemstack);
-		String customTreeKey = "trees.custom.leaves." + tree.getGenome().getPrimary().getUnlocalizedName().replace("trees.species.", "");
+
+		TileLeaves tileLeaves = new TileLeaves();
+		tileLeaves.readFromNBT(itemstack.getTagCompound());
+
+		String unlocalizedName = tileLeaves.getUnlocalizedName();
+
+		String customTreeKey = "trees.custom.leaves." + unlocalizedName.replace("trees.species.", "");
 		if (StringUtil.canTranslate(customTreeKey)) {
 			return StringUtil.localize(customTreeKey);
 		}
+
 		String grammar = StringUtil.localize("trees.grammar.leaves");
+		String localizedName = StringUtil.localize(unlocalizedName);
 
-		return grammar.replaceAll("%SPECIES", tree.getDisplayName()).replaceAll("%TYPE", type);
+		return grammar.replaceAll("%SPECIES", localizedName).replaceAll("%TYPE", type);
 	}
 
 	@Override
-	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
-		if (!itemstack.hasTagCompound()) {
+	public int getColorFromItemStack(ItemStack itemStack, int renderPass) {
+		if (!itemStack.hasTagCompound()) {
 			return PluginArboriculture.proxy.getFoliageColorBasic();
 		}
-		ITree tree = getTree(itemstack);
-		if (tree == null) {
-			return PluginArboriculture.proxy.getFoliageColorBasic();
-		}
-		return tree.getGenome().getPrimary().getLeafColour(tree);
-	}
 
-	private ITree getTree(ItemStack itemStack) {
-		return new Tree(itemStack.getTagCompound());
+		TileLeaves tileLeaves = new TileLeaves();
+		tileLeaves.readFromNBT(itemStack.getTagCompound());
+
+		return tileLeaves.getFoliageColour(Proxies.common.getPlayer());
 	}
 
 	@Override
-	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
-		if (!stack.hasTagCompound()) {
+	public boolean placeBlockAt(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
+		if (!itemStack.hasTagCompound()) {
 			return false;
 		}
-		ITree tree = getTree(stack);
-		if (tree == null) {
-			return false;
-		}
-		GameProfile owner = player.getGameProfile();
-		return PluginArboriculture.treeInterface.setLeaves(world, tree, owner, x, y, z, true);
+
+		TileLeaves tileLeaves = new TileLeaves();
+		tileLeaves.readFromNBT(itemStack.getTagCompound());
+		tileLeaves.getTree().setLeavesDecorative(world, player.getGameProfile(), x, y, z);
+
+		return true;
 	}
 
 }

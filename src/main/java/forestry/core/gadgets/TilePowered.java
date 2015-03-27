@@ -16,6 +16,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.common.Optional;
 
+import forestry.core.EnumErrorCode;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.proxy.Proxies;
@@ -63,13 +64,16 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 			return;
 		}
 
-		if (workCounter < WORK_CYCLES && energyManager.consumeEnergyToDoWork()) {
-			workCounter++;
-		}
-
-		if (workCounter >= WORK_CYCLES && updateOnInterval(5)) {
-			if (workCycle()) {
+		if (workCounter < WORK_CYCLES) {
+			if (energyManager.consumeEnergyToDoWork()) {
+				workCounter++;
+			} else {
+				setErrorState(EnumErrorCode.NOPOWER);
+			}
+		} else {
+			if (updateOnInterval(5) && workCycle()) {
 				workCounter = 0;
+				setErrorState(EnumErrorCode.OK);
 			}
 		}
 	}

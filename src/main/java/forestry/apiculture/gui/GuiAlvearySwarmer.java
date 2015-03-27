@@ -16,10 +16,10 @@ import forestry.apiculture.gadgets.TileAlvearySwarmer;
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestry;
 
-public class GuiAlvearySwarmer extends GuiForestry<TileAlvearySwarmer> {
+public class GuiAlvearySwarmer extends GuiForestry<ContainerAlvearySwarmer, TileAlvearySwarmer> {
 
 	public GuiAlvearySwarmer(InventoryPlayer inventory, TileAlvearySwarmer tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/swarmer.png", new ContainerAlvearySwarmer(inventory, tile));
+		super(Defaults.TEXTURE_PATH_GUI + "/swarmer.png", new ContainerAlvearySwarmer(inventory, tile), tile);
 	}
 
 }

@@ -16,8 +16,8 @@ import forestry.core.utils.StringUtil;
 
 public class FruitFamily implements IFruitFamily {
 
-	private String uid;
-	private String scientific;
+	private final String uid;
+	private final String scientific;
 
 	public FruitFamily(String uid, String scientific) {
 		this.uid = uid;

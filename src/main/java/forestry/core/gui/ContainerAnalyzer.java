@@ -16,6 +16,7 @@ import net.minecraft.inventory.Slot;
 import forestry.core.gadgets.TileAnalyzer;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
+import forestry.core.gui.slots.SlotWorking;
 
 public class ContainerAnalyzer extends ContainerLiquidTanks {
 
@@ -30,7 +31,7 @@ public class ContainerAnalyzer extends ContainerLiquidTanks {
 		}
 
 		// Analyze slot
-		addSlotToContainer(new SlotFiltered(tile, TileAnalyzer.SLOT_ANALYZE, 73, 59));
+		addSlotToContainer(new SlotWorking(tile, TileAnalyzer.SLOT_ANALYZE, 73, 59));
 
 		// Can slot
 		addSlotToContainer(new SlotFiltered(tile, TileAnalyzer.SLOT_CAN, 143, 24));

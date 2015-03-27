@@ -22,15 +22,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
 
 public class FarmLogicShroom extends FarmLogicArboreal {
 
 	public FarmLogicShroom(IFarmHousing housing) {
-		super(housing,
-				new ItemStack[]{new ItemStack(Blocks.mycelium)},
-				new ItemStack(Blocks.mycelium),
-				Farmables.farmables.get("farmShroom").toArray(new IFarmable[0]));
+		super(housing, new ItemStack(Blocks.mycelium), new ItemStack(Blocks.mycelium), Farmables.farmables.get("farmShroom"));
 		yOffset = -1;
 	}
 

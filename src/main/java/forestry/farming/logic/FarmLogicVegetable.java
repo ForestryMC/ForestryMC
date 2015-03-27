@@ -18,12 +18,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
 
 public class FarmLogicVegetable extends FarmLogicCrops {
 
 	public FarmLogicVegetable(IFarmHousing housing) {
-		super(housing, Farmables.farmables.get("farmVegetables").toArray(new IFarmable[0]));
+		super(housing, Farmables.farmables.get("farmVegetables"));
 	}
 
 	@Override

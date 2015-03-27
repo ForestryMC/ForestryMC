@@ -188,6 +188,9 @@ public class PluginFluids extends ForestryPlugin {
 				if (filledBucket != null) {
 					event.result = new ItemStack(filledBucket);
 					event.setResult(Event.Result.ALLOW);
+					if (!event.world.isRemote) {
+						event.world.setBlockToAir(x, y, z);
+					}
 				}
 			}
 		}

@@ -12,8 +12,8 @@ package forestry.core.network;
 
 public interface INetworkedEntity {
 
-	public void sendNetworkUpdate();
+	void sendNetworkUpdate();
 
-	public void fromPacket(ForestryPacket packet);
+	void fromPacket(ForestryPacket packet);
 
 }

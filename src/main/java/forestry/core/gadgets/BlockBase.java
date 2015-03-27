@@ -209,7 +209,7 @@ public class BlockBase extends BlockForestry {
 	}
 
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
 
 		IOwnable tile = (IOwnable) world.getTileEntity(x, y, z);
 		if (tile == null) {

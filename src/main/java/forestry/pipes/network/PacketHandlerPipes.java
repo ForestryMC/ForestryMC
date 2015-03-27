@@ -8,6 +8,7 @@
 package forestry.pipes.network;
 
 import java.io.DataInputStream;
+import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -44,39 +45,40 @@ public class PacketHandlerPipes implements IPacketHandler {
 	}
 
 	@Override
-	public void onPacketData(int packetID, DataInputStream data, EntityPlayer player) {
+	public boolean onPacketData(int packetID, DataInputStream data, EntityPlayer player) throws IOException {
 
-		try {
-			PacketUpdate packetU;
-			switch (packetID) {
-				// CLIENT
-				case PacketIds.PROP_SEND_FILTER_SET:
-					PacketNBT packetN = new PacketNBT();
-					packetN.readData(data);
-					onFilterSet(packetN);
-					break;
-
-				// SERVER
-				case PacketIds.PROP_REQUEST_FILTER_SET:
-					PacketCoordinates packetC = new PacketCoordinates();
-					packetC.readData(data);
-					onRequestFilterSet(player, packetC);
-					break;
-				case PacketIds.PROP_SEND_FILTER_CHANGE_TYPE:
-					packetU = new PacketUpdate();
-					packetU.readData(data);
-					onTypeFilterChange(player, packetU);
-					break;
-				case PacketIds.PROP_SEND_FILTER_CHANGE_GENOME:
-					packetU = new PacketUpdate();
-					packetU.readData(data);
-					onGenomeFilterChange(player, packetU);
-					break;
-
+		switch (packetID) {
+			// CLIENT
+			case PacketIds.PROP_SEND_FILTER_SET: {
+				PacketNBT packetN = new PacketNBT();
+				packetN.readData(data);
+				onFilterSet(packetN);
+				return true;
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
+
+			// SERVER
+			case PacketIds.PROP_REQUEST_FILTER_SET: {
+				PacketCoordinates packetC = new PacketCoordinates();
+				packetC.readData(data);
+				onRequestFilterSet(player, packetC);
+				return true;
+			}
+			case PacketIds.PROP_SEND_FILTER_CHANGE_TYPE: {
+				PacketUpdate packetU = new PacketUpdate();
+				packetU.readData(data);
+				onTypeFilterChange(player, packetU);
+				return true;
+			}
+			case PacketIds.PROP_SEND_FILTER_CHANGE_GENOME: {
+				PacketUpdate packetU = new PacketUpdate();
+				packetU.readData(data);
+				onGenomeFilterChange(player, packetU);
+				return true;
+			}
+
 		}
+
+		return false;
 	}
 
 	private void onFilterSet(PacketNBT packet) {

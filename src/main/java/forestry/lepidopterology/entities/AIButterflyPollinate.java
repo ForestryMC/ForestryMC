@@ -14,6 +14,7 @@ import forestry.api.genetics.IPollinatable;
 import forestry.arboriculture.genetics.FakePollinatable;
 import forestry.arboriculture.genetics.ICheckPollinatable;
 import forestry.core.utils.GeneticsUtil;
+import forestry.plugins.PluginLepidopterology;
 
 public class AIButterflyPollinate extends AIButterflyInteract {
 
@@ -26,7 +27,7 @@ public class AIButterflyPollinate extends AIButterflyInteract {
 	 */
 	@Override
 	protected boolean canInteract() {
-		if (entity.cooldownPollination > 0) {
+		if (entity.cooldownPollination > 0 || !PluginLepidopterology.isPollinationAllowed()) {
 			return false;
 		}
 
@@ -46,14 +47,18 @@ public class AIButterflyPollinate extends AIButterflyInteract {
 	public void updateTask() {
 		if (continueExecuting()) {
 			ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(entity.worldObj, rest.posX, rest.posY, rest.posZ);
-			if (entity.getPollen() == null) {
-				entity.setPollen(checkPollinatable.getPollen());
-				//				Proxies.log.finest("A butterfly '%s' grabbed a pollen '%s' at %s/%s/%s.", entity.getButterfly().getIdent(), entity.getPollen().getIdent(), rest.posX, rest.posY, rest.posZ);
-			} else if (checkPollinatable.canMateWith(entity.getPollen())) {
-				IPollinatable realPollinatable = GeneticsUtil.getOrCreatePollinatable(null, entity.worldObj, rest.posX, rest.posY, rest.posZ);
-				realPollinatable.mateWith(entity.getPollen());
-				//				Proxies.log.finest("A butterfly '%s' unloaded pollen '%s' at %s/%s/%s.", entity.getButterfly().getIdent(), entity.getPollen().getIdent(), rest.posX, rest.posY, rest.posZ);
-				entity.setPollen(null);
+			if (checkPollinatable != null) {
+				if (entity.getPollen() == null) {
+					entity.setPollen(checkPollinatable.getPollen());
+//					Proxies.log.finest("A butterfly '%s' grabbed a pollen '%s' at %s/%s/%s.", entity.getButterfly().getIdent(), entity.getPollen().getIdent(), rest.posX, rest.posY, rest.posZ);
+				} else if (checkPollinatable.canMateWith(entity.getPollen())) {
+					IPollinatable realPollinatable = GeneticsUtil.getOrCreatePollinatable(null, entity.worldObj, rest.posX, rest.posY, rest.posZ);
+					if (realPollinatable != null) {
+						realPollinatable.mateWith(entity.getPollen());
+//						Proxies.log.finest("A butterfly '%s' unloaded pollen '%s' at %s/%s/%s.", entity.getButterfly().getIdent(), entity.getPollen().getIdent(), rest.posX, rest.posY, rest.posZ);
+						entity.setPollen(null);
+					}
+				}
 			}
 			setHasInteracted();
 			entity.cooldownPollination = EntityButterfly.COOLDOWNS;

@@ -17,7 +17,7 @@ import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.factory.gadgets.MachineStill;
 
-public class GuiStill extends GuiForestryTitled<MachineStill> {
+public class GuiStill extends GuiForestryTitled<ContainerStill, MachineStill> {
 
 	public GuiStill(InventoryPlayer inventory, MachineStill tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/still.png", new ContainerStill(inventory, tile), tile);
@@ -28,13 +28,13 @@ public class GuiStill extends GuiForestryTitled<MachineStill> {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		MachineStill boiler = tile;
+		MachineStill still = inventory;
 
-		if (boiler.isWorking()) {
+		if (still.isWorking()) {
 			drawTexturedModalRect(guiLeft + 81, guiTop + 57, 176, 60, 14, 14);
 		}
 
-		int massRemaining = boiler.getDistillationProgressScaled(16);
+		int massRemaining = still.getDistillationProgressScaled(16);
 		if (massRemaining > 0) {
 			drawTexturedModalRect(guiLeft + 84, guiTop + 17 + 17 - massRemaining, 176, 74 + 17 - massRemaining, 4, massRemaining);
 		}

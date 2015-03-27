@@ -29,14 +29,13 @@ import org.lwjgl.opengl.GL11;
 
 import forestry.apiculture.items.ItemHabitatLocator.HabitatLocatorInventory;
 import forestry.core.config.Defaults;
-import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
 
-public class GuiHabitatLocator extends GuiForestry<TileForestry> {
+public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, HabitatLocatorInventory> {
 
 	public class HabitatSlot extends Widget {
 
@@ -103,12 +102,10 @@ public class GuiHabitatLocator extends GuiForestry<TileForestry> {
 
 	private int startX;
 	private int startY;
-	private final HabitatLocatorInventory inventory;
 
 	public GuiHabitatLocator(InventoryPlayer inventory, HabitatLocatorInventory item) {
 		super(Defaults.TEXTURE_PATH_GUI + "/biomefinder.png", new ContainerHabitatLocator(inventory, item), item);
 
-		this.inventory = item;
 		this.inventory.tryAnalyze();
 		xSize = 176;
 		ySize = 184;

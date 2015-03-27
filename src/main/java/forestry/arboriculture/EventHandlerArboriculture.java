@@ -44,7 +44,7 @@ public class EventHandlerArboriculture {
 			}
 		} else if (tile instanceof IFruitBearer) {
 			IFruitBearer bearer = (IFruitBearer) tile;
-			if (bearer.getRipeness() <= 1.0f) {
+			if (bearer.getRipeness() < 1.0f) {
 				bearer.addRipeness(1.0f);
 				event.setResult(Result.ALLOW);
 			}

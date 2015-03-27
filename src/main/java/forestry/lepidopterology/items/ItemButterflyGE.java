@@ -45,7 +45,7 @@ import forestry.plugins.PluginLepidopterology;
 
 public class ItemButterflyGE extends ItemGE {
 
-	private static Random rand = new Random();
+	private static final Random rand = new Random();
 
 	private final EnumFlutterType type;
 

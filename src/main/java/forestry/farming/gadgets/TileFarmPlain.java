@@ -548,21 +548,21 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		for (IFarmLogic logic : getFarmLogics()) {
 			// Germlings try to go into germling slots first.
 			if (logic.isAcceptedGermling(produce)) {
-				produce.stackSize -= InvTools.addStack(inventory, produce, SLOT_GERMLINGS_1, SLOT_GERMLINGS_COUNT, false, true);
+				produce.stackSize -= InvTools.addStack(inventory, produce, SLOT_GERMLINGS_1, SLOT_GERMLINGS_COUNT, true);
 			}
 			if (produce.stackSize <= 0) {
 				return;
 			}
 
 			if (logic.isAcceptedResource(produce)) {
-				produce.stackSize -= InvTools.addStack(inventory, produce, SLOT_RESOURCES_1, SLOT_RESOURCES_COUNT, false, true);
+				produce.stackSize -= InvTools.addStack(inventory, produce, SLOT_RESOURCES_1, SLOT_RESOURCES_COUNT, true);
 			}
 			if (produce.stackSize <= 0) {
 				return;
 			}
 		}
 
-		produce.stackSize -= InvTools.addStack(inventory, produce, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT, false, true);
+		produce.stackSize -= InvTools.addStack(inventory, produce, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT, true);
 	}
 
 	private boolean cullCrop(ICrop crop, IFarmLogic provider) {
@@ -610,7 +610,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			// Special case germlings
 			for (IFarmLogic logic : farmLogics) {
 				if (logic.isAcceptedGermling(harvest)) {
-					harvest.stackSize -= InvTools.addStack(inventory, harvest, SLOT_GERMLINGS_1, SLOT_GERMLINGS_COUNT, false, true);
+					harvest.stackSize -= InvTools.addStack(inventory, harvest, SLOT_GERMLINGS_1, SLOT_GERMLINGS_COUNT, true);
 					break;
 				}
 			}
@@ -620,7 +620,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 				continue;
 			}
 
-			harvest.stackSize -= InvTools.addStack(inventory, harvest, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT, false, true);
+			harvest.stackSize -= InvTools.addStack(inventory, harvest, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT, true);
 			if (harvest.stackSize <= 0) {
 				continue;
 			}

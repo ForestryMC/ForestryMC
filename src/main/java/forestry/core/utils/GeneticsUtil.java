@@ -61,9 +61,22 @@ public class GeneticsUtil {
 	}
 
 	public static boolean hasNaturalistEye(EntityPlayer player) {
-		ItemStack armorItem = player.inventory.armorInventory[3];
-		return armorItem != null && armorItem.getItem() instanceof IArmorNaturalist
-				&& ((IArmorNaturalist) armorItem.getItem()).canSeePollination(player, armorItem, true);
+		if (player == null) {
+			return false;
+		}
+
+		ItemStack armorItemStack = player.inventory.armorInventory[3];
+		if (armorItemStack == null) {
+			return false;
+		}
+
+		Item armorItem = armorItemStack.getItem();
+		if (!(armorItem instanceof IArmorNaturalist)) {
+			return false;
+		}
+
+		IArmorNaturalist armorNaturalist = (IArmorNaturalist) armorItem;
+		return armorNaturalist.canSeePollination(player, armorItemStack, true);
 	}
 
 	public static boolean canNurse(IButterfly butterfly, World world, final int x, final int y, final int z) {
@@ -105,7 +118,7 @@ public class GeneticsUtil {
 
 		ITree pollen = getErsatzPollen(world, x, y, z);
 		if (pollen != null) {
-			PluginArboriculture.treeInterface.setLeaves(world, pollen, owner, x, y, z);
+			pollen.setLeaves(world, owner, x, y, z);
 			return (IPollinatable) world.getTileEntity(x, y, z);
 		}
 

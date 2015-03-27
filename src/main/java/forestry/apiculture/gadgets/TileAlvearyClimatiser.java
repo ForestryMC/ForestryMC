@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;
@@ -49,10 +48,6 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 		energyManager.setReceiveOnly();
 		this.textureOff = textureOff;
 		this.textureOn = textureOn;
-	}
-
-	@Override
-	public void openGui(EntityPlayer player) {
 	}
 
 	/* UPDATING */

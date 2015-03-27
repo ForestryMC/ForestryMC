@@ -35,10 +35,7 @@ import forestry.core.vect.VectUtil;
 public class FarmLogicInfernal extends FarmLogicHomogeneous {
 
 	public FarmLogicInfernal(IFarmHousing housing) {
-		super(housing,
-				new ItemStack[]{new ItemStack(Blocks.soul_sand)},
-				new ItemStack(Blocks.soul_sand),
-				Farmables.farmables.get("farmInfernal").toArray(new IFarmable[0]));
+		super(housing, new ItemStack(Blocks.soul_sand), new ItemStack(Blocks.soul_sand), Farmables.farmables.get("farmInfernal"));
 	}
 
 	@Override

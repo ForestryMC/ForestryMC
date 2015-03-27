@@ -21,8 +21,13 @@ import java.util.TreeMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFlowerPot;
 import net.minecraft.world.World;
+
+import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.genetics.IFlower;
@@ -50,8 +55,13 @@ public final class FlowerRegistry implements IFlowerRegistry {
 	}
 
 	@Override
+	public void registerAcceptableFlower(Block block, String... flowerTypes) {
+		registerFlower(block, OreDictionary.WILDCARD_VALUE, 0.0, flowerTypes);
+	}
+
+	@Override
 	public void registerAcceptableFlower(Block block, int meta, String... flowerTypes) {
-		registerFlower(block, meta, null, flowerTypes);
+		registerFlower(block, meta, 0.0, flowerTypes);
 	}
 
 	@Override
@@ -59,14 +69,11 @@ public final class FlowerRegistry implements IFlowerRegistry {
 		registerFlower(block, meta, weight, flowerTypes);
 	}
 
-	private void registerFlower(Block block, int meta, Double weight, String... flowerTypes) {
+	private void registerFlower(Block block, int meta, double weight, String... flowerTypes) {
 		if (block == null) {
 			return;
 		}
-		if (meta == Short.MAX_VALUE || meta == -1) {
-			return;
-		}
-		if (weight == null || weight <= 0.0) {
+		if (weight <= 0.0) {
 			weight = 0.0;
 		}
 		if (weight >= 1.0) {
@@ -102,19 +109,26 @@ public final class FlowerRegistry implements IFlowerRegistry {
 		}
 
 		Block block = world.getBlock(x, y, z);
-		int meta = world.getBlockMetadata(x, y, z);
 
-		if (world.isAirBlock(x, y, z) || block.equals(Blocks.bedrock) || block.equals(Blocks.dirt) || block.equals(Blocks.grass)) {
+		if (block.isAir(world, x, y, z) || block.equals(Blocks.bedrock) || block.equals(Blocks.dirt) || block.equals(Blocks.grass)) {
 			return false;
 		}
 
-		for (IFlower flower : this.registeredFlowers.get(flowerType)) {
-			if (Block.isEqualTo(flower.getBlock(), block) && flower.getMeta() == meta) {
-				return true;
-			}
+		int meta;
+
+		TileEntity tile = world.getTileEntity(x, y, z);
+		if (tile instanceof TileEntityFlowerPot) {
+			TileEntityFlowerPot tileFlowerPot = (TileEntityFlowerPot) tile;
+			Item item = tileFlowerPot.getFlowerPotItem();
+			block = Block.getBlockFromItem(item);
+			meta = tileFlowerPot.getFlowerPotData();
+		} else {
+			meta = world.getBlockMetadata(x, y, z);
 		}
 
-		return false;
+		Flower flower = new Flower(block, meta, 0);
+		List<IFlower> acceptedFlowers = this.registeredFlowers.get(flowerType);
+		return acceptedFlowers.contains(flower);
 	}
 
 	@Override
@@ -201,20 +215,19 @@ public final class FlowerRegistry implements IFlowerRegistry {
 		registerPlantableFlower(Blocks.cactus, 0, 1.0, FlowerManager.FlowerTypeCacti);
 
 		// Register acceptable plants
-		registerAcceptableFlower(Blocks.flower_pot, 1, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerAcceptableFlower(Blocks.flower_pot, 2, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerAcceptableFlower(Blocks.flower_pot, 7, FlowerManager.FlowerTypeMushrooms);
-		registerAcceptableFlower(Blocks.flower_pot, 8, FlowerManager.FlowerTypeMushrooms);
-		registerAcceptableFlower(Blocks.flower_pot, 9, FlowerManager.FlowerTypeCacti);
-		registerAcceptableFlower(Blocks.flower_pot, 11, FlowerManager.FlowerTypeJungle);
+		registerAcceptableFlower(Blocks.red_flower, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		registerAcceptableFlower(Blocks.yellow_flower, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		registerAcceptableFlower(Blocks.brown_mushroom, FlowerManager.FlowerTypeMushrooms);
+		registerAcceptableFlower(Blocks.red_mushroom, FlowerManager.FlowerTypeMushrooms);
+		registerAcceptableFlower(Blocks.cactus, FlowerManager.FlowerTypeCacti);
 
-		registerAcceptableFlower(Blocks.dragon_egg, 0, FlowerManager.FlowerTypeEnd);
-		registerAcceptableFlower(Blocks.vine, 0, FlowerManager.FlowerTypeJungle);
-		registerAcceptableFlower(Blocks.tallgrass, 2, FlowerManager.FlowerTypeJungle);
-		registerAcceptableFlower(Blocks.wheat, 7, FlowerManager.FlowerTypeWheat);
-		registerAcceptableFlower(Blocks.pumpkin_stem, 0, FlowerManager.FlowerTypeGourd);
-		registerAcceptableFlower(Blocks.melon_stem, 0, FlowerManager.FlowerTypeGourd);
-		registerAcceptableFlower(Blocks.nether_wart, 0, FlowerManager.FlowerTypeNether);
+		registerAcceptableFlower(Blocks.dragon_egg, FlowerManager.FlowerTypeEnd);
+		registerAcceptableFlower(Blocks.vine, FlowerManager.FlowerTypeJungle);
+		registerAcceptableFlower(Blocks.tallgrass, FlowerManager.FlowerTypeJungle);
+		registerAcceptableFlower(Blocks.wheat, FlowerManager.FlowerTypeWheat);
+		registerAcceptableFlower(Blocks.pumpkin_stem, FlowerManager.FlowerTypeGourd);
+		registerAcceptableFlower(Blocks.melon_stem, FlowerManager.FlowerTypeGourd);
+		registerAcceptableFlower(Blocks.nether_wart, FlowerManager.FlowerTypeNether);
 
 		registerAcceptableFlower(Blocks.double_plant, 0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
 		registerAcceptableFlower(Blocks.double_plant, 1, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);

@@ -108,11 +108,6 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 				return false;
 			}
 
-			// No liquid required
-			if (liquid == null) {
-				return true;
-			}
-
 			// Liquid required but none given
 			if (liqu == null) {
 				return false;
@@ -174,17 +169,6 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 				}
 			}
 			return false;
-		}
-
-		public static boolean isLiquidResource(FluidStack liquid) {
-			if (liquid == null) {
-				return false;
-			}
-			return recipeFluidInputs.contains(liquid.getFluid());
-		}
-
-		public static boolean isLiquidProduct(FluidStack liquid) {
-			return recipeFluidOutputs.contains(liquid.getFluid());
 		}
 
 		@Override

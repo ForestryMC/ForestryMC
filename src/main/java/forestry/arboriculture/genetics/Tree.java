@@ -44,17 +44,23 @@ import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IGenome;
-import forestry.api.world.ITreeGenData;
+import forestry.arboriculture.gadgets.ForestryBlockLeaves;
+import forestry.arboriculture.gadgets.TileLeaves;
+import forestry.core.config.Defaults;
+import forestry.core.config.ForestryBlock;
 import forestry.core.genetics.Allele;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.Individual;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginArboriculture;
 
-public class Tree extends Individual implements ITree, ITreeGenData, IPlantable {
+public class Tree extends Individual implements ITree, IPlantable {
 
 	private ITreeGenome genome;
 	private ITreeGenome mate;
+
+	private EnumSet<EnumPlantType> plantTypes;
+	private EnumPlantType plantType;
 
 	/* CONSTRUCTOR */
 	public Tree(NBTTagCompound nbttagcompound) {
@@ -62,12 +68,7 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 	}
 
 	public Tree(ITreeGenome genome) {
-		this.genome = genome;
-	}
-
-	public Tree(World world, ITreeGenome genome) {
-		this.genome = genome;
-
+		setGenome(genome);
 	}
 
 	/* SAVING & LOADING */
@@ -77,10 +78,11 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 		super.readFromNBT(nbttagcompound);
 
 		if (nbttagcompound.hasKey("Genome")) {
-			genome = new TreeGenome(nbttagcompound.getCompoundTag("Genome"));
+			setGenome(new TreeGenome(nbttagcompound.getCompoundTag("Genome")));
 		} else {
-			genome = PluginArboriculture.treeInterface.templateAsGenome(TreeTemplates.getOakTemplate());
+			setGenome(PluginArboriculture.treeInterface.templateAsGenome(TreeTemplates.getOakTemplate()));
 		}
+
 		if (nbttagcompound.hasKey("Mate")) {
 			mate = new TreeGenome(nbttagcompound.getCompoundTag("Mate"));
 		}
@@ -170,8 +172,6 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 		return false;
 	}
 
-	private EnumPlantType plantType;
-
 	@Override
 	public EnumPlantType getPlantType(IBlockAccess world, int x, int y, int z) {
 		return plantType;
@@ -220,7 +220,38 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 
 	@Override
 	public void setLeaves(World world, GameProfile owner, int x, int y, int z) {
-		PluginArboriculture.treeInterface.setLeaves(world, this, owner, x, y, z);
+		setLeaves(world, owner, x, y, z, false);
+	}
+
+	@Override
+	public void setLeavesDecorative(World world, GameProfile owner, int x, int y, int z) {
+		setLeaves(world, owner, x, y, z, true);
+	}
+
+	private void setLeaves(World world, GameProfile owner, int x, int y, int z, boolean decorative) {
+		boolean placed = ForestryBlock.leaves.setBlock(world, x, y, z, 0, Defaults.FLAG_BLOCK_SYNCH);
+		if (!placed) {
+			return;
+		}
+
+		if (!ForestryBlock.leaves.isBlockEqual(world, x, y, z)) {
+			world.setBlockToAir(x, y, z);
+			return;
+		}
+
+		TileLeaves tileLeaves = ForestryBlockLeaves.getLeafTile(world, x, y, z);
+		if (tileLeaves == null) {
+			world.setBlockToAir(x, y, z);
+			return;
+		}
+
+		tileLeaves.setOwner(owner);
+		if (decorative) {
+			tileLeaves.setDecorative();
+		}
+		tileLeaves.setTree(this.copy());
+
+		world.markBlockForUpdate(x, y, z);
 	}
 
 	@Override
@@ -248,7 +279,13 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 	/* INFORMATION */
 	@Override
 	public ITreeGenome getGenome() {
-		return this.genome;
+		return genome;
+	}
+
+	private void setGenome(ITreeGenome genome) {
+		this.genome = genome;
+		plantTypes = genome.getPlantTypes();
+		plantTypes.add(genome.getPrimary().getPlantType());
 	}
 
 	@Override
@@ -270,9 +307,7 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 
 	@Override
 	public EnumSet<EnumPlantType> getPlantTypes() {
-		EnumSet<EnumPlantType> tolerated = genome.getPlantTypes();
-		tolerated.add(genome.getPrimary().getPlantType());
-		return tolerated;
+		return plantTypes;
 	}
 
 	@Override
@@ -349,7 +384,7 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 		}
 
 		if (mutated != null) {
-			return new Tree(world, new TreeGenome(mutated));
+			return new Tree(new TreeGenome(mutated));
 		}
 
 		for (int i = 0; i < parent1.length; i++) {
@@ -358,7 +393,7 @@ public class Tree extends Individual implements ITree, ITreeGenData, IPlantable 
 			}
 		}
 
-		return new Tree(world, new TreeGenome(chromosomes));
+		return new Tree(new TreeGenome(chromosomes));
 	}
 
 	private IChromosome[] mutateSpecies(World world, int x, int y, int z, IGenome genomeOne, IGenome genomeTwo) {

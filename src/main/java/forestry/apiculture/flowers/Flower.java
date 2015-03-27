@@ -12,6 +12,8 @@ package forestry.apiculture.flowers;
 
 import net.minecraft.block.Block;
 
+import net.minecraftforge.oredict.OreDictionary;
+
 import forestry.api.genetics.IFlower;
 
 final class Flower implements IFlower {
@@ -32,13 +34,13 @@ final class Flower implements IFlower {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Flower)) {
+		if (!(obj instanceof IFlower)) {
 			return false;
 		}
 
-		Flower flower = (Flower) obj;
+		IFlower flower = (IFlower) obj;
 
-		return Block.isEqualTo(this.block, flower.block) && this.meta == flower.meta;
+		return Block.isEqualTo(this.block, flower.getBlock()) && (this.meta == OreDictionary.WILDCARD_VALUE || flower.getMeta() == OreDictionary.WILDCARD_VALUE || this.meta == flower.getMeta());
 	}
 
 	@Override

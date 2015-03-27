@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
+import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleArea;
@@ -41,7 +42,10 @@ public class GuiBeealyzer extends GuiAlyzer {
 		ArrayList<ItemStack> beeList = new ArrayList<ItemStack>();
 		((ItemBeeGE) ForestryItem.beeDroneGE.item()).addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
-			iconStacks.put(BeeGenome.getSpecies(beeStack).getUID(), beeStack);
+			IAlleleBeeSpecies species = BeeGenome.getSpecies(beeStack);
+			if (species != null) {
+				iconStacks.put(species.getUID(), beeStack);
+			}
 		}
 	}
 

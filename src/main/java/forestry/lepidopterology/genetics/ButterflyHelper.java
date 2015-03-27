@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map.Entry;
 
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -148,8 +147,8 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	@Override
-	public EntityLiving spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z) {
-		return (EntityButterfly) Utils.spawnEntity(world, new EntityButterfly(world, butterfly), x, y, z);
+	public EntityButterfly spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z) {
+		return Utils.spawnEntity(world, new EntityButterfly(world, butterfly), x, y, z);
 	}
 
 	@Override

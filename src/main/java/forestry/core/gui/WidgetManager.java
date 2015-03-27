@@ -16,17 +16,16 @@ import net.minecraft.client.Minecraft;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
 
 public class WidgetManager {
 
-	public final GuiForestry<? extends TileForestry> gui;
+	public final GuiForestry gui;
 	public final Minecraft minecraft;
 	protected final ArrayList<Widget> widgets = new ArrayList<Widget>();
 
-	public WidgetManager(GuiForestry<? extends TileForestry> gui) {
+	public WidgetManager(GuiForestry gui) {
 		this.gui = gui;
 		this.minecraft = Proxies.common.getClientInstance();
 	}

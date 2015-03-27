@@ -33,7 +33,7 @@ import forestry.arboriculture.WoodType;
 
 public class BlockPlanks extends Block implements IWoodTyped {
 
-	public static enum PlankCat {
+	public enum PlankCat {
 		CAT0, CAT1
 	}
 

@@ -21,11 +21,7 @@ import com.mojang.authlib.GameProfile;
 import forestry.api.arboriculture.ITree;
 import forestry.arboriculture.genetics.Tree;
 import forestry.core.interfaces.IOwnable;
-import forestry.core.network.ForestryPacket;
 import forestry.core.network.INetworkedEntity;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketTileNBT;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.PlayerUtil;
 
 /**
@@ -73,9 +69,6 @@ public abstract class TileTreeContainer extends TileEntity implements INetworked
 	/* CONTAINED TREE */
 	public void setTree(ITree tree) {
 		this.containedTree = tree;
-		if (tree != null) {
-			sendNetworkUpdate();
-		}
 	}
 
 	public ITree getTree() {
@@ -99,21 +92,7 @@ public abstract class TileTreeContainer extends TileEntity implements INetworked
 
 	/* INETWORKEDENTITY */
 	@Override
-	public Packet getDescriptionPacket() {
-		return new PacketTileNBT(PacketIds.TILE_NBT, this).getPacket();
-	}
-
-	@Override
-	public void sendNetworkUpdate() {
-		Proxies.net.sendNetworkPacket(new PacketTileNBT(PacketIds.TILE_NBT, this), xCoord, yCoord, zCoord);
-	}
-
-	@Override
-	public void fromPacket(ForestryPacket packetRaw) {
-		PacketTileNBT packet = (PacketTileNBT) packetRaw;
-		this.readFromNBT(packet.getTagCompound());
-		worldObj.func_147479_m(xCoord, yCoord, zCoord);
-	}
+	public abstract Packet getDescriptionPacket();
 
 	/* IOWNABLE */
 	public GameProfile owner = null;

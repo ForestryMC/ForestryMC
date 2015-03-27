@@ -30,7 +30,7 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
 	private final ModelBase model = new ModelBase() {
 	};
 
-	private static enum Textures {PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE}
+	private enum Textures {PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE}
 
 	private ResourceLocation[] textures;
 

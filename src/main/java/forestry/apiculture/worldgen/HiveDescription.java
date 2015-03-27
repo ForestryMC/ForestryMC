@@ -58,7 +58,7 @@ public enum HiveDescription implements IHiveDescription {
 	private final IBeeGenome beeGenome;
 	private final IHiveGen hiveGen;
 
-	private HiveDescription(int meta, float genChance, IAllele[] beeTemplate, IHiveGen hiveGen) {
+	HiveDescription(int meta, float genChance, IAllele[] beeTemplate, IHiveGen hiveGen) {
 		this.meta = meta;
 		this.genChance = genChance;
 		this.beeGenome = PluginApiculture.beeInterface.templateAsGenome(beeTemplate);

@@ -11,11 +11,13 @@
 package forestry.core.interfaces;
 
 import java.io.DataInputStream;
+import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 
 public interface IPacketHandler {
 
-	void onPacketData(int packetID, DataInputStream data, EntityPlayer player);
+	/** Returns true if the packet has been handled */
+	boolean onPacketData(int packetID, DataInputStream data, EntityPlayer player) throws IOException;
 
 }

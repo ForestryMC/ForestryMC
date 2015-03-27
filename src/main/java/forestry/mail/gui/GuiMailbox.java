@@ -16,7 +16,7 @@ import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestry;
 import forestry.mail.gadgets.MachineMailbox;
 
-public class GuiMailbox extends GuiForestry<MachineMailbox> {
+public class GuiMailbox extends GuiForestry<ContainerMailbox, MachineMailbox> {
 
 	public GuiMailbox(InventoryPlayer player, MachineMailbox tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/mailbox.png", new ContainerMailbox(player, tile), tile);

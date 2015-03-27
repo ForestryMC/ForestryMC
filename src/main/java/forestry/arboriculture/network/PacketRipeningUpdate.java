@@ -23,18 +23,18 @@ import forestry.core.network.PacketIds;
 
 public class PacketRipeningUpdate extends ForestryPacket {
 
-	public int colourFruits;
+	private int colourFruits;
 	private int posX, posY, posZ;
 
 	public PacketRipeningUpdate() {
 	}
 
-	public PacketRipeningUpdate(TileLeaves leaves, int fruitColour) {
+	public PacketRipeningUpdate(TileLeaves leaves) {
 		super(PacketIds.RIPENING_UPDATE);
 		posX = leaves.xCoord;
 		posY = leaves.yCoord;
 		posZ = leaves.zCoord;
-		colourFruits = fruitColour;
+		colourFruits = leaves.getFruitColour();
 	}
 
 	@Override
@@ -55,6 +55,10 @@ public class PacketRipeningUpdate extends ForestryPacket {
 		posY = data.readInt();
 		posZ = data.readInt();
 		colourFruits = data.readInt();
+	}
+
+	public int getColourFruits() {
+		return colourFruits;
 	}
 
 	public TileEntity getTarget(World world) {

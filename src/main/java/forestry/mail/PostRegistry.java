@@ -82,7 +82,7 @@ public class PostRegistry implements IPostRegistry {
 	 */
 	@Override
 	public boolean isValidTradeAddress(World world, IMailAddress address) {
-		return address.isTrader() && address.getName().matches("^[a-zA-Z0-9]+$");
+		return address != null && address.isTrader() && address.getName().matches("^[a-zA-Z0-9]+$");
 	}
 
 	/**
@@ -92,12 +92,12 @@ public class PostRegistry implements IPostRegistry {
 	 */
 	@Override
 	public boolean isAvailableTradeAddress(World world, IMailAddress address) {
-		return getTradeStation(world, address) == null;
+		return address != null && getTradeStation(world, address) == null;
 	}
 
 	@Override
 	public TradeStation getTradeStation(World world, IMailAddress address) {
-		if (address.getName() == null) {
+		if (address == null || address.getName() == null) {
 			return null;
 		}
 

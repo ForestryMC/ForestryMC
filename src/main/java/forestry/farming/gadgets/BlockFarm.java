@@ -13,6 +13,7 @@ package forestry.farming.gadgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityDiggingFX;
@@ -69,10 +70,10 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
 		ArrayList<ItemStack> drops = getDrops(world, x, y, z, 0, 0);
 		if (drops.isEmpty()) {
-			return super.getPickBlock(target, world, x, y, z, player);
+			return super.getPickBlock(target, world, x, y, z);
 		}
 		return drops.get(0);
 	}
@@ -89,7 +90,7 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
 		int meta = world.getBlockMetadata(x, y, z);
 		if (Proxies.common.isSimulating(world) && canHarvestBlock(player, meta)) {
 			List<ItemStack> drops = getDrops(world, x, y, z, 0, 0);
@@ -200,7 +201,12 @@ public class BlockFarm extends BlockStructure {
 
 	@SideOnly(Side.CLIENT)
 	public IIcon getBlockTextureFromSideAndMetadata(EnumFarmBlock type, int side, int metadata) {
-		return StackUtils.getBlock(type.getBase()).getIcon(side, type.getBase().getItemDamage());
+		Block block = StackUtils.getBlock(type.getBase());
+		if (block == null) {
+			return null;
+		}
+		int damage = type.getBase().getItemDamage();
+		return block.getIcon(side, damage);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -244,6 +250,11 @@ public class BlockFarm extends BlockStructure {
 			base = ((TileFarm) tile).farmBlock.getBase();
 		}
 
-		return StackUtils.getBlock(base).getIcon(side, base.getItemDamage());
+		Block block = StackUtils.getBlock(base);
+		if (block == null) {
+			return null;
+		}
+
+		return block.getIcon(side, base.getItemDamage());
 	}
 }
