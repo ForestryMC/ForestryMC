@@ -71,6 +71,7 @@ public class PluginManager {
 		FLUIDS(new PluginFluids(), false),
 		APICULTURE(new PluginApiculture()),
 		ARBORICULTURE(new PluginArboriculture()),
+		CHISEL(new PluginChisel()),
 		ENERGY(new PluginEnergy()),
 		FACTORY(new PluginFactory()),
 		FARMING(new PluginFarming()),
