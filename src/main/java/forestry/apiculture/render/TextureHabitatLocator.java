@@ -30,8 +30,8 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 	public double currentAngle;
 	public double angleDelta;
 
-	public TextureHabitatLocator() {
-		super("biomefinder");
+	public TextureHabitatLocator(String iconName) {
+		super(iconName);
 		instance = this;
 	}
 

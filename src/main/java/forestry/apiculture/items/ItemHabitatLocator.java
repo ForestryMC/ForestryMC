@@ -146,6 +146,8 @@ public class ItemHabitatLocator extends ItemInventoried {
 
 	}
 
+	private static final String iconName = "forestry:biomefinder";
+
 	private Set<BiomeGenBase> biomesToSearch = new HashSet<BiomeGenBase>();
 	private boolean biomeFound = false;
 	private int searchRadiusIteration = 0;
@@ -173,8 +175,8 @@ public class ItemHabitatLocator extends ItemInventoried {
 	@Override
 	public void registerIcons(IIconRegister register) {
 		if (register instanceof TextureMap) {
-			TextureAtlasSprite texture = new TextureHabitatLocator();
-			((TextureMap) register).setTextureEntry("forestry:biomefinder", texture);
+			TextureAtlasSprite texture = new TextureHabitatLocator(iconName);
+			((TextureMap) register).setTextureEntry(iconName, texture);
 			itemIcon = texture;
 		}
 	}
