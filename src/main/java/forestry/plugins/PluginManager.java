@@ -78,12 +78,15 @@ public class PluginManager {
 		LEPIDOPTEROLOGY(new PluginLepidopterology()),
 		MAIL(new PluginMail()),
 		STORAGE(new PluginStorage()),
+
 		BIOMESOPLENTY(new PluginBiomesOPlenty()),
 		BUILDCRAFT_FUELS(new PluginBuildCraftFuels()),
 		BUILDCRAFT_RECIPES(new PluginBuildCraftRecipes()),
 		BUILDCRAFT_STATEMENTS(new PluginBuildCraftStatements()),
 		BUILDCRAFT_TRANSPORT(new PluginBuildCraftTransport()),
 		PROPOLIS_PIPE(new PluginPropolisPipe()),
+
+		CHISEL(new PluginChisel()),
 		EXTRAUTILITIES(new PluginExtraUtilities()),
 		EQUIVELENT_EXCHANGE(new PluginEE()),
 		FARM_CRAFTORY(new PluginFarmCraftory()),
