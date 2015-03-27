@@ -18,7 +18,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
 
 public class FarmLogicCereal extends FarmLogicCrops {
 
