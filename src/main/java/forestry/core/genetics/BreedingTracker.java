@@ -171,7 +171,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 		// TODO: remove legacy handling
 		String species0 = mutation.getAllele0().getUID();
 		String species1 = mutation.getAllele1().getUID();
-		return discoveredMutations.contains(mutationString) || discoveredMutations.contains(species0 + '-' + species1);
+		return discoveredMutations.contains(species0 + '-' + species1);
 	}
 
 	@Override

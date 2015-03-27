@@ -24,6 +24,11 @@ import forestry.plugins.PluginApiculture;
 
 public class ApiaristTracker extends BreedingTracker implements IApiaristTracker {
 
+	/** Required for creation from map storage */
+	public ApiaristTracker(String s) {
+		this(s, null);
+	}
+
 	public ApiaristTracker(String s, GameProfile player) {
 		super(s, player);
 	}

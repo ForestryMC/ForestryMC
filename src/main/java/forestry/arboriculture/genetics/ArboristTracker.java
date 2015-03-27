@@ -22,6 +22,11 @@ import forestry.plugins.PluginArboriculture;
 
 public class ArboristTracker extends BreedingTracker implements IArboristTracker {
 
+	/** Required for creation from map storage */
+	public ArboristTracker(String s) {
+		this(s, null);
+	}
+
 	public ArboristTracker(String s, GameProfile player) {
 		super(s, player);
 	}

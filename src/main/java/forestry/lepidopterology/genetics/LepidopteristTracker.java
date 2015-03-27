@@ -23,6 +23,11 @@ import forestry.plugins.PluginLepidopterology;
 
 public class LepidopteristTracker extends BreedingTracker implements ILepidopteristTracker {
 
+	/** Required for creation from map storage */
+	public LepidopteristTracker(String s) {
+		this(s, null);
+	}
+
 	public LepidopteristTracker(String s, GameProfile player) {
 		super(s, player);
 	}
