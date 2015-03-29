@@ -8,13 +8,15 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.apiculture;
+package forestry.apiculture.network;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 
+import forestry.apiculture.gadgets.TileCandle;
 import forestry.apiculture.gui.ContainerImprinter;
 import forestry.core.interfaces.IPacketHandler;
 import forestry.core.network.PacketCoordinates;
@@ -27,20 +29,28 @@ public class PacketHandlerApiculture implements IPacketHandler {
 	public boolean onPacketData(int packetID, DataInputStream data, EntityPlayer player) throws IOException {
 
 		switch (packetID) {
-			case PacketIds.HABITAT_BIOME_POINTER:
+			case PacketIds.HABITAT_BIOME_POINTER: {
 				PacketCoordinates packetC = new PacketCoordinates();
 				packetC.readData(data);
 				Proxies.common.setHabitatLocatorCoordinates(player, packetC.getCoordinates());
 				return true;
-			case PacketIds.IMPRINT_SELECTION_GET:
+			}
+			case PacketIds.IMPRINT_SELECTION_GET: {
 				onImprintSelectionGet(player);
 				return true;
+			}
+			case PacketIds.CANDLE: {
+				PacketUpdateCandle updateCandle = new PacketUpdateCandle();
+				updateCandle.readData(data);
+				onCandleUpdate(updateCandle);
+				return true;
+			}
 		}
 
 		return false;
 	}
 
-	private void onImprintSelectionGet(EntityPlayer playerEntity) {
+	private static void onImprintSelectionGet(EntityPlayer playerEntity) {
 
 		if (!(playerEntity.openContainer instanceof ContainerImprinter)) {
 			return;
@@ -48,6 +58,13 @@ public class PacketHandlerApiculture implements IPacketHandler {
 
 		((ContainerImprinter) playerEntity.openContainer).sendSelection(playerEntity);
 
+	}
+
+	private static void onCandleUpdate(PacketUpdateCandle updateCandle) {
+		TileEntity tileEntity = updateCandle.getTarget(Proxies.common.getRenderWorld());
+		if (tileEntity instanceof TileCandle) {
+			((TileCandle) tileEntity).onPacketUpdate(updateCandle);
+		}
 	}
 
 }

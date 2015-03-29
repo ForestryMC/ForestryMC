@@ -38,11 +38,7 @@ public class PacketTileUpdate extends PacketUpdate {
 	}
 
 	public PacketTileUpdate(TileForestry tile) {
-		super(PacketIds.TILE_FORESTRY_UPDATE, tile.getPacketPayload());
-
-		posX = tile.xCoord;
-		posY = tile.yCoord;
-		posZ = tile.zCoord;
+		super(PacketIds.TILE_FORESTRY_UPDATE, tile);
 
 		orientation = tile.getOrientation();
 		errorState = tile.getErrorState();

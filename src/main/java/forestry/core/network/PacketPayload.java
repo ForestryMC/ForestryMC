@@ -60,15 +60,6 @@ public class PacketPayload {
 		this.intPayload = Utils.concat(this.intPayload, other);
 	}
 
-	/*
-	 * public void splitTail(IndexInPayload index) { PacketPayload payload = new PacketPayload(intPayload.length - index.intIndex, floatPayload.length -
-	 * index.floatIndex, stringPayload.length - index.stringIndex);
-	 * 
-	 * if (intPayload.length > 0) { System.arraycopy(intPayload, index.intIndex, payload.intPayload, 0, payload.intPayload.length); } if (floatPayload.length >
-	 * 0) { System.arraycopy(floatPayload, index.floatIndex, payload.floatPayload, 0, payload.floatPayload.length); } if (stringPayload.length > 0) {
-	 * System.arraycopy(stringPayload, index.stringIndex, payload.stringPayload, 0, payload.stringPayload.length); } }
-	 */
-
 	public boolean isEmpty() {
 		return intPayload.length == 0 && shortPayload.length == 0 && floatPayload.length == 0 && stringPayload.length == 0;
 	}

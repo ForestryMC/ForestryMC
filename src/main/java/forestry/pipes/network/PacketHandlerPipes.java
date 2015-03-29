@@ -30,13 +30,8 @@ import buildcraft.transport.TileGenericPipe;
 
 public class PacketHandlerPipes implements IPacketHandler {
 
-	@SuppressWarnings("rawtypes")
-	private Pipe getPipe(World world, int x, int y, int z) {
-		TileEntity tile = world.getTileEntity(x, y, z);
-		if (tile == null) {
-			return null;
-		}
-
+	private static Pipe getPipe(World world, PacketCoordinates packet) {
+		TileEntity tile = packet.getTarget(world);
 		if (!(tile instanceof TileGenericPipe)) {
 			return null;
 		}
@@ -81,7 +76,7 @@ public class PacketHandlerPipes implements IPacketHandler {
 		return false;
 	}
 
-	private void onFilterSet(PacketNBT packet) {
+	private static void onFilterSet(PacketNBT packet) {
 		Container container = Proxies.common.getClientInstance().thePlayer.openContainer;
 
 		if (container instanceof ContainerPropolisPipe) {
@@ -90,10 +85,9 @@ public class PacketHandlerPipes implements IPacketHandler {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	private void onTypeFilterChange(EntityPlayer player, PacketUpdate packet) {
+	private static void onTypeFilterChange(EntityPlayer player, PacketUpdate packet) {
 
-		Pipe pipe = getPipe(player.worldObj, packet.posX, packet.posY, packet.posZ);
+		Pipe pipe = getPipe(player.worldObj, packet);
 		if (pipe == null) {
 			return;
 		}
@@ -104,10 +98,9 @@ public class PacketHandlerPipes implements IPacketHandler {
 
 	}
 
-	@SuppressWarnings("rawtypes")
-	private void onGenomeFilterChange(EntityPlayer player, PacketUpdate packet) {
+	private static void onGenomeFilterChange(EntityPlayer player, PacketUpdate packet) {
 
-		Pipe pipe = getPipe(player.worldObj, packet.posX, packet.posY, packet.posZ);
+		Pipe pipe = getPipe(player.worldObj, packet);
 		if (pipe == null) {
 			return;
 		}
@@ -117,10 +110,9 @@ public class PacketHandlerPipes implements IPacketHandler {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	private void onRequestFilterSet(EntityPlayer player, PacketCoordinates packet) {
+	private static void onRequestFilterSet(EntityPlayer player, PacketCoordinates packet) {
 
-		Pipe pipe = getPipe(player.worldObj, packet.posX, packet.posY, packet.posZ);
+		Pipe pipe = getPipe(player.worldObj, packet);
 		if (pipe == null) {
 			return;
 		}

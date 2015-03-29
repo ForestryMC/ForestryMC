@@ -20,7 +20,7 @@ import cpw.mods.fml.common.registry.GameData;
 
 import forestry.core.proxy.Proxies;
 
-public class PacketFXSignal extends ForestryPacket {
+public class PacketFXSignal extends PacketCoordinates {
 
 	public enum VisualFXType {
 		NONE, BLOCK_DESTROY, SAPLING_PLACE
@@ -41,9 +41,6 @@ public class PacketFXSignal extends ForestryPacket {
 	private VisualFXType visualFX;
 	private SoundFXType soundFX;
 
-	private int xCoord;
-	private int yCoord;
-	private int zCoord;
 	private Block block;
 	private int meta;
 
@@ -59,49 +56,42 @@ public class PacketFXSignal extends ForestryPacket {
 	}
 
 	public PacketFXSignal(VisualFXType visualFX, SoundFXType soundFX, int xCoord, int yCoord, int zCoord, Block block, int meta) {
-		super(PacketIds.FX_SIGNAL);
+		super(PacketIds.FX_SIGNAL, xCoord, yCoord, zCoord);
 		this.visualFX = visualFX;
 		this.soundFX = soundFX;
-		this.xCoord = xCoord;
-		this.yCoord = yCoord;
-		this.zCoord = zCoord;
 		this.block = block;
 		this.meta = meta;
 	}
 
 	@Override
 	public void writeData(DataOutputStream data) throws IOException {
+		super.writeData(data);
 		data.writeShort(visualFX.ordinal());
 		data.writeShort(soundFX.ordinal());
-		data.writeInt(xCoord);
-		data.writeInt(yCoord);
-		data.writeInt(zCoord);
 		data.writeUTF(GameData.getBlockRegistry().getNameForObject(block));
 		data.writeInt(meta);
 	}
 
 	@Override
 	public void readData(DataInputStream data) throws IOException {
+		super.readData(data);
 		this.visualFX = VisualFXType.values()[data.readShort()];
 		this.soundFX = SoundFXType.values()[data.readShort()];
-		this.xCoord = data.readInt();
-		this.yCoord = data.readInt();
-		this.zCoord = data.readInt();
 		this.block = GameData.getBlockRegistry().getRaw(data.readUTF());
 		this.meta = data.readInt();
 	}
 
 	public void executeFX() {
 		if (visualFX != VisualFXType.NONE) {
-			Proxies.common.addBlockDestroyEffects(Proxies.common.getRenderWorld(), xCoord, yCoord, zCoord, block, meta);
+			Proxies.common.addBlockDestroyEffects(Proxies.common.getRenderWorld(), getPosX(), getPosY(), getPosZ(), block, meta);
 		}
 		if (soundFX != SoundFXType.NONE) {
 			if (soundFX == SoundFXType.BLOCK_DESTROY) {
-				Proxies.common.playBlockBreakSoundFX(Proxies.common.getRenderWorld(), xCoord, yCoord, zCoord, block);
+				Proxies.common.playBlockBreakSoundFX(Proxies.common.getRenderWorld(), getPosX(), getPosY(), getPosZ(), block);
 			} else if (soundFX == SoundFXType.BLOCK_PLACE) {
-				Proxies.common.playBlockPlaceSoundFX(Proxies.common.getRenderWorld(), xCoord, yCoord, zCoord, block);
+				Proxies.common.playBlockPlaceSoundFX(Proxies.common.getRenderWorld(), getPosX(), getPosY(), getPosZ(), block);
 			} else {
-				Proxies.common.playSoundFX(Proxies.common.getRenderWorld(), xCoord, yCoord, zCoord, soundFX.soundFile, soundFX.volume, soundFX.pitch);
+				Proxies.common.playSoundFX(Proxies.common.getRenderWorld(), getPosX(), getPosY(), getPosZ(), soundFX.soundFile, soundFX.volume, soundFX.pitch);
 			}
 		}
 	}

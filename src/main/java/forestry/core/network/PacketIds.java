@@ -23,6 +23,7 @@ public class PacketIds {
 	public static final int TILE_NBT = 5;
 
 	public static final int HABITAT_BIOME_POINTER = 20;
+	public static final int CANDLE = 21;
 
 	public static final int GUI_SELECTION_CHANGE = 30;
 	public static final int IMPRINT_SELECTION_GET = 31;
