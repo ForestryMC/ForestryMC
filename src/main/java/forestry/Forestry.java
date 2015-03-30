@@ -60,8 +60,7 @@ import forestry.core.utils.StringUtil;
 				+ "after:Buildcraft|Core@[6.1.7,);"
 				+ "after:ExtrabiomesXL;"
 				+ "after:BiomesOPlenty;"
-				+ "after:IC2@[2.0.140,);"
-				+ "before:UndergroundBiomes")
+				+ "after:IC2@[2.0.140,);")
 //, certificateFingerprint = Version.FINGERPRINT)
 public class Forestry {
 
