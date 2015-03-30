@@ -71,11 +71,7 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		public boolean matches(FluidStack res) {
-			if (res == null) {
-				return false;
-			}
-
-			return input.isFluidEqual(res);
+			return res != null && res.containsFluid(input);
 		}
 	}
 

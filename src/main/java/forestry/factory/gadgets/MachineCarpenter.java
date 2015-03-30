@@ -91,19 +91,14 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 		public boolean matches(FluidStack resource, ItemStack item, InventoryCrafting inventorycrafting, World world) {
 
-			// Check liquid
-			if (liquid != null && resource == null) {
-				return false;
-			}
-			if (liquid != null && !liquid.isFluidEqual(resource)) {
-				return false;
+			if (liquid != null) {
+				if (resource == null || !resource.containsFluid(liquid)) {
+					return false;
+				}
 			}
 
 			// Check box
-			if (box != null && item == null) {
-				return false;
-			}
-			if (box != null && !box.isItemEqual(item)) {
+			if (!StackUtils.isCraftingEquivalent(box, item)) {
 				return false;
 			}
 

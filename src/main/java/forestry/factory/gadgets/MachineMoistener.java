@@ -74,13 +74,7 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 		}
 
 		public boolean matches(ItemStack res) {
-			if (res == null && resource == null) {
-				return true;
-			} else if (res == null || resource == null) {
-				return false;
-			} else {
-				return resource.isItemEqual(res);
-			}
+			return StackUtils.isCraftingEquivalent(resource, res);
 		}
 	}
 

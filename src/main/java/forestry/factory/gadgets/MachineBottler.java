@@ -81,11 +81,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		}
 
 		public boolean matches(FluidStack res, ItemStack empty) {
-			return input.isFluidEqual(res) && res.amount >= input.amount && can.isItemEqual(empty);
-		}
-
-		public boolean hasInput(FluidStack res) {
-			return input.isFluidEqual(res);
+			return res != null && res.containsFluid(input) && can.isItemEqual(empty);
 		}
 	}
 

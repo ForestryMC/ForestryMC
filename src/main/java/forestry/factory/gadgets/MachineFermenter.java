@@ -96,34 +96,11 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		}
 
 		public boolean matches(ItemStack res, FluidStack liqu) {
-			// No recipe without resource!
-			if (res == null) {
+			if (!StackUtils.isCraftingEquivalent(resource, res)) {
 				return false;
 			}
 
-			if (resource.getItem() != res.getItem()) {
-				return false;
-			}
-			if (resource.getItemDamage() != Defaults.WILDCARD && resource.getItemDamage() != res.getItemDamage()) {
-				return false;
-			}
-
-			// Liquid required but none given
-			if (liqu == null) {
-				return false;
-			}
-
-			// Wrong liquid
-			if (!liquid.isFluidEqual(liqu)) {
-				return false;
-			}
-
-			// Enough liquid
-			if (liquid.amount <= liqu.amount) {
-				return true;
-			}
-
-			return false;
+			return liqu != null && liqu.containsFluid(liquid);
 		}
 	}
 

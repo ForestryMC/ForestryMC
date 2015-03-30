@@ -43,6 +43,7 @@ import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.utils.GuiUtil;
+import forestry.core.utils.StackUtils;
 import forestry.factory.triggers.FactoryTriggers;
 
 import buildcraft.api.statements.ITriggerExternal;
@@ -74,13 +75,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 		}
 
 		public boolean matches(ItemStack res) {
-			if (res == null && resource == null) {
-				return true;
-			} else if (res == null || resource == null) {
-				return false;
-			} else {
-				return resource.isItemEqual(res);
-			}
+			return StackUtils.isCraftingEquivalent(resource, res);
 		}
 	}
 
