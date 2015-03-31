@@ -86,6 +86,53 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 
 		);
 
+		Map<String, Integer> nonGrowingFlowers = new HashMap<String, Integer>();
+		nonGrowingFlowers.put("flowerAchillea", 9); // number of flowers in the block, usually meta+1
+		nonGrowingFlowers.put("flowerAlpineThistle", 1);
+		nonGrowingFlowers.put("flowerAzalea", 13);
+		nonGrowingFlowers.put("flowerBegonia", 9);
+		nonGrowingFlowers.put("flowerBell", 10);
+		nonGrowingFlowers.put("flowerBirdofParadise", 1);
+		nonGrowingFlowers.put("flowerBlueStar", 1);
+		nonGrowingFlowers.put("flowerBurningLove", 1);
+		nonGrowingFlowers.put("flowerCandelabraAloe", 1);
+		nonGrowingFlowers.put("flowerCarnation", 7);
+		nonGrowingFlowers.put("flowerCelosia", 7);
+		//nonGrowingFlowers.put("flowerColumbine",5); //poisonous
+		nonGrowingFlowers.put("flowerDahlia", 8);
+		nonGrowingFlowers.put("flowerDaisy", 8);
+		nonGrowingFlowers.put("flowerDelphinium", 4);
+		nonGrowingFlowers.put("flowerDottedBlazingstar", 1);
+		nonGrowingFlowers.put("flowerElephantEars", 1);
+		nonGrowingFlowers.put("flowerFoamFlower", 1);
+		nonGrowingFlowers.put("flowerFuchsia", 1);
+		nonGrowingFlowers.put("flowerGeranium", 5);
+		nonGrowingFlowers.put("flowerGladiolus", 9);
+		nonGrowingFlowers.put("flowerHawkweed", 4);
+		nonGrowingFlowers.put("flowerHydrangea", 6);
+		nonGrowingFlowers.put("flowerJacobsLadder", 1);
+		nonGrowingFlowers.put("flowerLily", 5);
+		nonGrowingFlowers.put("flowerLionsTail", 1);
+		nonGrowingFlowers.put("flowerLupine", 10);
+		nonGrowingFlowers.put("flowerMarigold", 2);
+		nonGrowingFlowers.put("flowerMediterraneanSeaHolly", 1);
+		//nonGrowingFlowers.put("flowerMezereon",1); //poisonous
+		nonGrowingFlowers.put("flowerNemesia", 12);
+		nonGrowingFlowers.put("flowerNewGuineaImpatiens", 1);
+		nonGrowingFlowers.put("flowerParrotsBeak", 1);
+		nonGrowingFlowers.put("flowerPeruvianLily", 1);
+		nonGrowingFlowers.put("flowerPurpleConeflower", 1);
+		nonGrowingFlowers.put("flowerRose", 13);
+		nonGrowingFlowers.put("flowerRoseCampion", 1);
+		nonGrowingFlowers.put("flowerStreamsideBluebells", 1);
+		nonGrowingFlowers.put("flowerTorchLily", 1);
+		nonGrowingFlowers.put("flowerTulip", 7);
+		nonGrowingFlowers.put("flowerViolet", 1);
+		nonGrowingFlowers.put("flowerWildCarrot", 1); //is not actually a carrot
+		nonGrowingFlowers.put("flowerWildDaffodil", 1);
+		nonGrowingFlowers.put("flowerWoodlandPinkroot", 1);
+		nonGrowingFlowers.put("flowerYellowToadflax", 1);
+
 		Map<String, Integer> cactusPlant = new HashMap<String, Integer>();
 		cactusPlant.put("cactusArmatocereusMatucanensis", 6);
 		cactusPlant.put("cactusBaseballBat", 6);
@@ -118,7 +165,7 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 			Block landCropBlock = GameRegistry.findBlock(PlantMP, "crop" + landCrop);
 			ItemStack seedStack = GameRegistry.findItemStack(PlantMP, "seed" + landCrop, 1);
 			ItemStack foodStack = GameRegistry.findItemStack(PlantMP, "food" + landCrop, 1);
-			if (landCropBlock != null && seedStack != null) {
+			if (landCropBlock != null) {
 				if (foodStack != null) {
 					RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{foodStack}, Fluids.JUICE.getFluid(juiceAmount));
 				}
@@ -134,6 +181,15 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 			if (desertPlantBlock != null && desertPlantStack != null) {
 				FlowerManager.flowerRegistry.registerAcceptableFlower(desertPlantBlock, FlowerManager.FlowerTypeCacti);
 				Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(desertPlantStack, desertPlantBlock, 4));
+			}
+		}
+
+		for (Map.Entry<String, Integer> flower : nonGrowingFlowers.entrySet()) {
+			Block flowerPlantBlock = GameRegistry.findBlock(PlantMP, flower.getKey());
+			if (flowerPlantBlock != null) {
+				for (int i = 0; i < flower.getValue(); i++) {
+					FlowerManager.flowerRegistry.registerPlantableFlower(flowerPlantBlock, i, 0.75, FlowerManager.FlowerTypeVanilla);
+				}
 			}
 		}
 
