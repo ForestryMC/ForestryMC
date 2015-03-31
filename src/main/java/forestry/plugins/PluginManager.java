@@ -69,6 +69,7 @@ public class PluginManager {
 
 		CORE(new PluginCore(), false),
 		FLUIDS(new PluginFluids(), false),
+
 		APICULTURE(new PluginApiculture()),
 		ARBORICULTURE(new PluginArboriculture()),
 		ENERGY(new PluginEnergy()),
@@ -79,19 +80,19 @@ public class PluginManager {
 		MAIL(new PluginMail()),
 		STORAGE(new PluginStorage()),
 
-		BIOMESOPLENTY(new PluginBiomesOPlenty()),
 		BUILDCRAFT_FUELS(new PluginBuildCraftFuels()),
 		BUILDCRAFT_RECIPES(new PluginBuildCraftRecipes()),
 		BUILDCRAFT_STATEMENTS(new PluginBuildCraftStatements()),
 		BUILDCRAFT_TRANSPORT(new PluginBuildCraftTransport()),
 		PROPOLIS_PIPE(new PluginPropolisPipe()),
-
+		
+		BIOMESOPLENTY(new PluginBiomesOPlenty()),
 		CHISEL(new PluginChisel()),
 		EXTRAUTILITIES(new PluginExtraUtilities()),
 		EQUIVELENT_EXCHANGE(new PluginEE()),
 		FARM_CRAFTORY(new PluginFarmCraftory()),
-		INDUSTRIALCRAFT(new PluginIC2()),
 		HARVESTCRAFT(new PluginHarvestCraft()),
+		INDUSTRIALCRAFT(new PluginIC2()),
 		MAGICALCROPS(new PluginMagicalCrops()),
 		NATURA(new PluginNatura()),
 		PLANTMEGAPACK(new PluginPlantMegaPack()),
