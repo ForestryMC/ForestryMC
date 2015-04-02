@@ -142,7 +142,8 @@ public class PluginHarvestCraft extends ForestryPlugin {
 				"tomato",
 				"wintersquash",
 				"zucchini",
-				"bambooshoot"
+				"bambooshoot",
+				"spinach"
 		);
 
 		ImmutableList<String> grains = ImmutableList.of(
@@ -197,6 +198,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 			}
 			if (berrySeed != null && berryBlock != null) {
 				Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(berrySeed, berryBlock, 7));
+				Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(berryBlock, 7));
 			}
 			plants.add(berryName);
 		}
@@ -214,6 +216,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 			}
 			if (fruitSeed != null && fruitBlock != null) {
 				Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(fruitSeed, fruitBlock, 7));
+				Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(fruitBlock, 7));
 			}
 			plants.add(fruitName);
 		}
@@ -232,6 +235,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 			}
 			if (vegetableSeed != null && vegetableBlock != null) {
 				Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(vegetableSeed, vegetableBlock, 7));
+				Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(vegetableBlock, 7));
 			}
 			plants.add(vegetableName);
 		}
@@ -248,6 +252,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 			}
 			if (grainSeed != null && grainBlock != null) {
 				Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(grainSeed, grainBlock, 7));
+				Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(grainBlock, 7));
 			}
 			plants.add(grainName);
 		}
@@ -287,6 +292,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 			}
 			if (genericCropSeed != null && genericCropBlock != null) {
 				Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(genericCropSeed, genericCropBlock, 7));
+				Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(genericCropBlock, 7));
 			}
 			plants.add(cropName);
 		}
@@ -307,6 +313,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 			}
 			if (cropnutSeed != null && cropnutBlock != null) {
 				Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(cropnutSeed, cropnutBlock, 7));
+				Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(cropnutBlock, 7));
 			}
 			if (cropnut != null) {
 				RecipeManagers.squeezerManager.addRecipe(20, new ItemStack[]{cropnut}, Fluids.SEEDOIL.getFluid(3 * seedamount));
