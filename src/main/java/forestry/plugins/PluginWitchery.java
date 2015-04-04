@@ -11,8 +11,8 @@
 package forestry.plugins;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.block.Block;
@@ -31,6 +31,7 @@ import forestry.core.config.Defaults;
 import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.RecipeUtil;
+import forestry.farming.logic.FarmableBasicFruit;
 import forestry.farming.logic.FarmableGenericCrop;
 
 @Plugin(pluginID = "Witchery", name = "Witchery", author = "Nirek", url = Defaults.URL, unlocalizedDescription = "for.plugin.witchery.description")
@@ -57,15 +58,14 @@ public class PluginWitchery extends ForestryPlugin {
 				"glintweed"
 		);
 
-		Map<String, Integer> cropSeed = new HashMap<String, Integer>();
-		//"artichoke", 4 water plant
-		cropSeed.put("belladonna", 4);
-		cropSeed.put("mandrake", 4);
-		cropSeed.put("mindrake", 4);
-		cropSeed.put("snowbell", 4);
-		cropSeed.put("wolfsbane", 7);
-		cropSeed.put("wormwood", 4);
-
+		ImmutableMap<String, Integer> cropSeed = ImmutableMap.<String, Integer>builder()
+				.put("belladonna", 4)
+				.put("mandrake", 4)
+				.put("mindrake", 4)
+				.put("snowbell", 4)
+				.put("wolfsbane", 7)
+				.put("wormwood", 4)
+				.build();
 		ImmutableList<String> cropDirect = ImmutableList.of(
 				"garlic" //meta 5
 		);
@@ -88,6 +88,7 @@ public class PluginWitchery extends ForestryPlugin {
 			ItemStack cropDirectStack = GameRegistry.findItemStack(Witch, cropDirectName, 1);
 			if (cropDirectStack != null && cropDirectBlock != null) {
 				Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(cropDirectStack, cropDirectBlock, 5));
+				Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(cropDirectBlock, 5));
 			}
 		}
 		for (Map.Entry<String, Integer> cropSeedName : cropSeed.entrySet()) {
@@ -96,8 +97,12 @@ public class PluginWitchery extends ForestryPlugin {
 			if (cropSeedStack != null && cropSeedBlock != null) {
 				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{cropSeedStack}, Fluids.SEEDOIL.getFluid(seedamount));
 				Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(cropSeedStack, cropSeedBlock, cropSeedName.getValue()));
+				Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(cropSeedBlock, cropSeedName.getValue()));
 			}
 
 		}
+		Block artichokeBlock = GameRegistry.findBlock(Witch, "artichoke");
+		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(artichokeBlock, 4));
+
 	}
 }
