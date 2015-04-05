@@ -103,44 +103,87 @@ public class PluginNatura extends ForestryPlugin {
 		berryBlack = GameRegistry.findItemStack(NATURA, "berryBlack", 1);
 		berryMalo = GameRegistry.findItemStack(NATURA, "berryMalo", 1);
 		itemBarley = GameRegistry.findItemStack(NATURA, "barleyFood", 1);
-
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-		crateRegistry.registerCrate(berryBlight, "cratedNaturaBerryBlight");
-		crateRegistry.registerCrate(berryDusk, "cratedNaturaBerryDusk");
-		crateRegistry.registerCrate(berrySky, "cratedNaturaBerrySky");
-		crateRegistry.registerCrate(berrySting, "cratedNaturaBerrySting");
-		crateRegistry.registerCrate(berryRasp, "cratedNaturaBerryRasp");
-		crateRegistry.registerCrate(berryBlue, "cratedNaturaBerryBlue");
-		crateRegistry.registerCrate(berryBlack, "cratedNaturaBerryBlack");
-		crateRegistry.registerCrate(berryMalo, "cratedNaturaBerryMalo");
-		crateRegistry.registerCrate(itemBarley, "cratedNaturaBarley");
-		crateRegistry.registerCrate(new ItemStack(saplingNatura, 1, 0), "cratedNaturaSaplingRedwood");
-		crateRegistry.registerCrate(new ItemStack(saplingNatura, 1, 1), "cratedNaturaSaplingEucalyptus");
-		crateRegistry.registerCrate(new ItemStack(saplingNatura, 1, 2), "cratedNaturaSaplingHopseed");
-		crateRegistry.registerCrate(new ItemStack(saplingNatura, 1, 3), "cratedNaturaSaplingSakura");
-		crateRegistry.registerCrate(new ItemStack(saplingNatura, 1, 4), "cratedNaturaSaplingGhostwood");
-		crateRegistry.registerCrate(new ItemStack(saplingNatura, 1, 5), "cratedNaturaSaplingBlood");
-		crateRegistry.registerCrate(new ItemStack(saplingNatura, 1, 6), "cratedNaturaSaplingDarkwood");
-		crateRegistry.registerCrate(new ItemStack(saplingNatura, 1, 7), "cratedNaturaSaplingFusewood");
-		crateRegistry.registerCrate(new ItemStack(saplingNaturaRare, 1, 0), "cratedNaturaSaplingMaple");
-		crateRegistry.registerCrate(new ItemStack(saplingNaturaRare, 1, 1), "cratedNaturaSaplingSilverbell");
-		crateRegistry.registerCrate(new ItemStack(saplingNaturaRare, 1, 2), "cratedNaturaSaplingPurpleheart");
-		crateRegistry.registerCrate(new ItemStack(saplingNaturaRare, 1, 3), "cratedNaturaSaplingTiger");
-		crateRegistry.registerCrate(new ItemStack(saplingNaturaRare, 1, 4), "cratedNaturaSaplingWillow");
-		crateRegistry.registerCrate(new ItemStack(GameRegistry.findItem(NATURA, "Natura.netherfood"), 1, 0), "cratedNaturaPotashApple");
-		crateRegistry.registerCrate(new ItemStack(GameRegistry.findItem(NATURA, "Glowshroom"), 1, 0), "cratedNaturaGreenGlowshroom");
-		crateRegistry.registerCrate(new ItemStack(GameRegistry.findItem(NATURA, "Glowshroom"), 1, 1), "cratedNaturaPurpleGlowshroom");
-		crateRegistry.registerCrate(new ItemStack(GameRegistry.findItem(NATURA, "Glowshroom"), 1, 2), "cratedNaturaBlueGlowshroom");
-		crateRegistry.registerCrate(new ItemStack(logNatura, 1, 0), "cratedNaturaLogEucalyptus");
-		crateRegistry.registerCrate(new ItemStack(logNatura, 1, 1), "cratedNaturaLogSakura");
-		crateRegistry.registerCrate(new ItemStack(logNatura, 1, 2), "cratedNaturaLogGhostwood");
-		crateRegistry.registerCrate(new ItemStack(logNatura, 1, 3), "cratedNaturaLogHopseed");
-		crateRegistry.registerCrate(new ItemStack(logWillow, 1, 0), "cratedNaturaLogWillow");
-		crateRegistry.registerCrate(new ItemStack(GameRegistry.findItem(NATURA, "bloodwood"), 1, 0), "cratedNaturaLogBloodwood");
-		crateRegistry.registerCrate(new ItemStack(GameRegistry.findItem(NATURA, "Dark Tree"), 1, 0), "cratedNaturaLogDarkwood");
-		crateRegistry.registerCrate(new ItemStack(GameRegistry.findItem(NATURA, "Dark Tree"), 1, 1), "cratedNaturaLogFusewood");
-		crateRegistry.registerCrate(new ItemStack(GameRegistry.findItem(NATURA, "heatsand"), 1, 0), "cratedNaturaBlockHeatsand");
-		crateRegistry.registerCrate(new ItemStack(GameRegistry.findItem(NATURA, "soil.tainted"), 1, 0), "cratedNaturaBlockTainted");
+
+		if (berryBlight != null) {
+			crateRegistry.registerCrate(berryBlight, "cratedNaturaBerryBlight");
+		}
+		if (berryDusk != null) {
+			crateRegistry.registerCrate(berryDusk, "cratedNaturaBerryDusk");
+		}
+		if (berrySky != null) {
+			crateRegistry.registerCrate(berrySky, "cratedNaturaBerrySky");
+		}
+		if (berrySting != null) {
+			crateRegistry.registerCrate(berrySting, "cratedNaturaBerrySting");
+		}
+		if (berryRasp != null) {
+			crateRegistry.registerCrate(berryRasp, "cratedNaturaBerryRasp");
+		}
+		if (berryBlue != null) {
+			crateRegistry.registerCrate(berryBlue, "cratedNaturaBerryBlue");
+		}
+		if (berryBlack != null) {
+			crateRegistry.registerCrate(berryBlack, "cratedNaturaBerryBlack");
+		}
+		if (berryMalo != null) {
+			crateRegistry.registerCrate(berryMalo, "cratedNaturaBerryMalo");
+		}
+		if (itemBarley != null) {
+			crateRegistry.registerCrate(itemBarley, "cratedNaturaBarley");
+		}
+		if (saplingNatura != null) {
+			crateRegistry.registerCrate(new ItemStack(saplingNatura, 1, 0), "cratedNaturaSaplingRedwood");
+			crateRegistry.registerCrate(new ItemStack(saplingNatura, 1, 1), "cratedNaturaSaplingEucalyptus");
+			crateRegistry.registerCrate(new ItemStack(saplingNatura, 1, 2), "cratedNaturaSaplingHopseed");
+			crateRegistry.registerCrate(new ItemStack(saplingNatura, 1, 3), "cratedNaturaSaplingSakura");
+			crateRegistry.registerCrate(new ItemStack(saplingNatura, 1, 4), "cratedNaturaSaplingGhostwood");
+			crateRegistry.registerCrate(new ItemStack(saplingNatura, 1, 5), "cratedNaturaSaplingBlood");
+			crateRegistry.registerCrate(new ItemStack(saplingNatura, 1, 6), "cratedNaturaSaplingDarkwood");
+			crateRegistry.registerCrate(new ItemStack(saplingNatura, 1, 7), "cratedNaturaSaplingFusewood");
+		}
+
+		if (saplingNaturaRare != null) {
+			crateRegistry.registerCrate(new ItemStack(saplingNaturaRare, 1, 0), "cratedNaturaSaplingMaple");
+			crateRegistry.registerCrate(new ItemStack(saplingNaturaRare, 1, 1), "cratedNaturaSaplingSilverbell");
+			crateRegistry.registerCrate(new ItemStack(saplingNaturaRare, 1, 2), "cratedNaturaSaplingPurpleheart");
+			crateRegistry.registerCrate(new ItemStack(saplingNaturaRare, 1, 3), "cratedNaturaSaplingTiger");
+			crateRegistry.registerCrate(new ItemStack(saplingNaturaRare, 1, 4), "cratedNaturaSaplingWillow");
+		}
+		Item potashApple = GameRegistry.findItem(NATURA, "Natura.netherfood");
+		if (potashApple != null) {
+			crateRegistry.registerCrate(new ItemStack(potashApple, 1, 0), "cratedNaturaPotashApple");
+		}
+		Item glowShroom = GameRegistry.findItem(NATURA, "Glowshroom");
+		if (glowShroom != null) {
+			crateRegistry.registerCrate(new ItemStack(glowShroom, 1, 0), "cratedNaturaGreenGlowshroom");
+			crateRegistry.registerCrate(new ItemStack(glowShroom, 1, 1), "cratedNaturaPurpleGlowshroom");
+			crateRegistry.registerCrate(new ItemStack(glowShroom, 1, 2), "cratedNaturaBlueGlowshroom");
+		}
+		if (logNatura != null) {
+			crateRegistry.registerCrate(new ItemStack(logNatura, 1, 0), "cratedNaturaLogEucalyptus");
+			crateRegistry.registerCrate(new ItemStack(logNatura, 1, 1), "cratedNaturaLogSakura");
+			crateRegistry.registerCrate(new ItemStack(logNatura, 1, 2), "cratedNaturaLogGhostwood");
+			crateRegistry.registerCrate(new ItemStack(logNatura, 1, 3), "cratedNaturaLogHopseed");
+			crateRegistry.registerCrate(new ItemStack(logWillow, 1, 0), "cratedNaturaLogWillow");
+		}
+		Item bloodWood = GameRegistry.findItem(NATURA, "bloodwood");
+		if (bloodWood != null) {
+			crateRegistry.registerCrate(new ItemStack(bloodWood, 1, 0), "cratedNaturaLogBloodwood");
+		}
+		Item darkTree = GameRegistry.findItem(NATURA, "Dark Tree");
+		if (darkTree != null) {
+			crateRegistry.registerCrate(new ItemStack(darkTree, 1, 0), "cratedNaturaLogDarkwood");
+			crateRegistry.registerCrate(new ItemStack(darkTree, 1, 1), "cratedNaturaLogFusewood");
+		}
+		Item heatSand = GameRegistry.findItem(NATURA, "heatsand");
+		if (heatSand != null) {
+			crateRegistry.registerCrate(new ItemStack(heatSand, 1, 0), "cratedNaturaBlockHeatsand");
+		}
+		Item taintedSoil = GameRegistry.findItem(NATURA, "soil.tainted");
+		if (taintedSoil != null) {
+			crateRegistry.registerCrate(new ItemStack(taintedSoil, 1, 0), "cratedNaturaBlockTainted");
+		}
 	}
 
 	@Override
