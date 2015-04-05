@@ -20,7 +20,7 @@ public class ClientProxyStorage extends ProxyStorage {
 	private static final CrateRenderingHandler crateRenderer = new CrateRenderingHandler();
 
 	@Override
-	public void registerCrate(ItemCrated crate) {
+	public void registerCrateForRendering(ItemCrated crate) {
 		MinecraftForgeClient.registerItemRenderer(crate, crateRenderer);
 	}
 }

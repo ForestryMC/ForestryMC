@@ -41,19 +41,19 @@ public abstract class ForestryPlugin {
 		return EnumSet.of(PluginManager.Module.CORE);
 	}
 
-	protected void preInit() {
+	protected void setupAPI() {
 	}
 
-	protected void disabledPreInit() {
+	protected void disabledSetupAPI() {
+	}
+
+	protected void preInit() {
 	}
 
 	protected void doInit() {
 	}
 
 	protected void postInit() {
-	}
-
-	protected void disabledPostInit() {
 	}
 
 	public boolean processIMCMessage(IMCMessage message) {
@@ -99,6 +99,9 @@ public abstract class ForestryPlugin {
 	}
 
 	protected void registerItems() {
+	}
+
+	protected void registerTriggers() {
 	}
 
 	protected void registerBackpackItems() {

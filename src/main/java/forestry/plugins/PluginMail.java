@@ -64,17 +64,21 @@ public class PluginMail extends ForestryPlugin {
 	public static StampInfo[] stampDefinitions;
 
 	@Override
+	protected void setupAPI() {
+		super.setupAPI();
+
+		PostManager.postRegistry = new PostRegistry();
+		PostManager.postRegistry.registerCarrier(new PostalCarrier(EnumAddressee.PLAYER));
+		PostManager.postRegistry.registerCarrier(new PostalCarrier(EnumAddressee.TRADER));
+	}
+
+	@Override
 	public void preInit() {
 		super.preInit();
 		
 		PluginCore.rootCommand.addChildCommand(new CommandMail());
 
 		new TickHandlerMailClient();
-
-		// Triggers
-		if (PluginManager.Module.BUILDCRAFT_STATEMENTS.isEnabled()) {
-			MailTriggers.initialize();
-		}
 
 		ForestryBlock.mail.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "mail");
 
@@ -102,10 +106,11 @@ public class PluginMail extends ForestryPlugin {
 
 		definitionPhilatelist = mail.addDefinition(new MachineDefinition(Defaults.DEFINITION_PHILATELIST_META, "forestry.Philatelist", MachinePhilatelist.class)
 				.setFaces(0, 1, 2, 3, 2, 2, 0, 7));
+	}
 
-		PostManager.postRegistry = new PostRegistry();
-		PostManager.postRegistry.registerCarrier(new PostalCarrier(EnumAddressee.PLAYER));
-		PostManager.postRegistry.registerCarrier(new PostalCarrier(EnumAddressee.TRADER));
+	@Override
+	protected void registerTriggers() {
+		MailTriggers.initialize();
 	}
 
 	@Override
@@ -115,11 +120,6 @@ public class PluginMail extends ForestryPlugin {
 		definitionMailbox.register();
 		definitionTradestation.register();
 		definitionPhilatelist.register();
-	}
-
-	@Override
-	public void postInit() {
-		super.postInit();
 	}
 
 	@Override
@@ -149,14 +149,6 @@ public class PluginMail extends ForestryPlugin {
 
 		/* CATALOGUE */
 		ForestryItem.catalogue.registerItem(new ItemCatalogue(), "catalogue");
-	}
-
-	@Override
-	protected void registerBackpackItems() {
-	}
-
-	@Override
-	protected void registerCrates() {
 	}
 
 	@Override
@@ -202,10 +194,5 @@ public class PluginMail extends ForestryPlugin {
 	@Override
 	public ISaveEventHandler getSaveEventHandler() {
 		return new SaveEventHandlerMail();
-	}
-
-	@Override
-	public IOreDictionaryHandler getDictionaryHandler() {
-		return null;
 	}
 }

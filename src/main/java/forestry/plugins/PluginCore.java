@@ -84,11 +84,8 @@ public class PluginCore extends ForestryPlugin {
 	public static final RootCommand rootCommand = new RootCommand();
 
 	@Override
-	public void preInit() {
-		super.preInit();
-
-		rootCommand.addChildCommand(new CommandVersion());
-		rootCommand.addChildCommand(new CommandPlugins());
+	protected void setupAPI() {
+		super.setupAPI();
 
 		ChipsetManager.solderManager = new ItemSolderingIron.SolderManager();
 
@@ -101,7 +98,15 @@ public class PluginCore extends ForestryPlugin {
 		AlleleManager.climateHelper = new ClimateHelper();
 		alleleRegistry.initialize();
 
-		Allele.initialize();
+		Allele.setupLegacyAPI();
+	}
+
+	@Override
+	public void preInit() {
+		super.preInit();
+
+		rootCommand.addChildCommand(new CommandVersion());
+		rootCommand.addChildCommand(new CommandPlugins());
 
 		ForestryBlock.core.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "core");
 
@@ -277,14 +282,6 @@ public class PluginCore extends ForestryPlugin {
 	}
 
 	@Override
-	public void postInit() {
-	}
-
-	@Override
-	protected void registerBackpackItems() {
-	}
-
-	@Override
 	protected void registerCrates() {
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
 		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 0), "cratedWood");
@@ -450,19 +447,21 @@ public class PluginCore extends ForestryPlugin {
 
 	@Override
 	public IFuelHandler getFuelHandler() {
-		return new IFuelHandler() {
+		return new FuelHandler();
+	}
 
-			@Override
-			public int getBurnTime(ItemStack fuel) {
-				if (fuel != null && fuel.getItem() == ForestryItem.peat.item()) {
-					return 2000;
-				}
-				if (fuel != null && fuel.getItem() == ForestryItem.bituminousPeat.item()) {
-					return 4200;
-				}
+	private static class FuelHandler implements IFuelHandler {
 
-				return 0;
+		@Override
+		public int getBurnTime(ItemStack fuel) {
+			if (fuel != null && fuel.getItem() == ForestryItem.peat.item()) {
+				return 2000;
 			}
-		};
+			if (fuel != null && fuel.getItem() == ForestryItem.bituminousPeat.item()) {
+				return 4200;
+			}
+
+			return 0;
+		}
 	}
 }

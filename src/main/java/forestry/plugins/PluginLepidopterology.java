@@ -84,12 +84,18 @@ public class PluginLepidopterology extends ForestryPlugin {
 	public static MachineDefinition definitionChest;
 
 	@Override
-	public void preInit() {
-		ForestryBlock.lepidopterology.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "lepidopterology");
-		ForestryBlock.lepidopterology.block().setCreativeTab(Tabs.tabLepidopterology);
+	protected void setupAPI() {
+		super.setupAPI();
 
 		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginLepidopterology.butterflyInterface = new ButterflyHelper());
 		createAlleles();
+		registerTemplates();
+	}
+
+	@Override
+	public void preInit() {
+		ForestryBlock.lepidopterology.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "lepidopterology");
+		ForestryBlock.lepidopterology.block().setCreativeTab(Tabs.tabLepidopterology);
 	}
 
 	@Override
@@ -121,7 +127,6 @@ public class PluginLepidopterology extends ForestryPlugin {
 
 		Utils.registerEntity(EntityButterfly.class, "butterflyGE", 0, 0x000000, 0xffffff, 50, 1, true);
 		proxy.initializeRendering();
-		registerTemplates();
 
 		BlockBase lepidopterology = ((BlockBase) ForestryBlock.lepidopterology.block());
 		definitionChest = lepidopterology.addDefinition((new MachineDefinition(Defaults.DEFINITION_LEPICHEST_META, "forestry.LepiChest", TileLepidopteristChest.class,
@@ -159,7 +164,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 				Items.redstone, 'D', Items.diamond);
 	}
 
-	private void createAlleles() {
+	private static void createAlleles() {
 
 		IClassification lepidoptera = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "lepidoptera", "Lepidoptera");
 		AlleleManager.alleleRegistry.getClassification("class.insecta").addMemberGroup(lepidoptera);
@@ -273,7 +278,13 @@ public class PluginLepidopterology extends ForestryPlugin {
 		Allele.butterflyNone = new AlleleEffectNone("bfNone", false);
 	}
 
-	private void registerTemplates() {
+	private static IClassification createButterflyBranch(IClassification family, String scientific) {
+		IClassification branch = new Branch("moth." + scientific.toLowerCase(Locale.ENGLISH), scientific);
+		branch.setParent(family);
+		return branch;
+	}
+
+	private static void registerTemplates() {
 		butterflyInterface.registerTemplate(ButterflyTemplates.getBrimstoneMothTemplate());
 		butterflyInterface.registerTemplate(ButterflyTemplates.getLatticedHeathTemplate());
 		butterflyInterface.registerTemplate(ButterflyTemplates.getAtlasMothTemplate());
@@ -317,12 +328,6 @@ public class PluginLepidopterology extends ForestryPlugin {
 		butterflyInterface.registerTemplate(ButterflyTemplates.getMalachiteTemplate());
 		butterflyInterface.registerTemplate(ButterflyTemplates.getLeopardLacewingTemplate());
 
-	}
-
-	private IClassification createButterflyBranch(IClassification family, String scientific) {
-		IClassification branch = new Branch("moth." + scientific.toLowerCase(Locale.ENGLISH), scientific);
-		branch.setParent(family);
-		return branch;
 	}
 
 	@Override

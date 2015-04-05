@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import java.util.Arrays;
+import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -68,10 +68,25 @@ public class PluginFactory extends ForestryPlugin {
 	public static MachineDefinition definitionWorktable;
 
 	@Override
-	protected void disabledPreInit() {
-		super.disabledPreInit();
+	protected void setupAPI() {
+		super.setupAPI();
 
-		RecipeManagers.craftingProviders = Arrays.asList(
+		RecipeManagers.craftingProviders = ImmutableList.of(
+				RecipeManagers.carpenterManager = new MachineCarpenter.RecipeManager(),
+				RecipeManagers.centrifugeManager = new MachineCentrifuge.RecipeManager(),
+				RecipeManagers.fabricatorManager = new MachineFabricator.RecipeManager(),
+				RecipeManagers.fermenterManager = new MachineFermenter.RecipeManager(),
+				RecipeManagers.moistenerManager = new MachineMoistener.RecipeManager(),
+				RecipeManagers.squeezerManager = new MachineSqueezer.RecipeManager(),
+				RecipeManagers.stillManager = new MachineStill.RecipeManager()
+		);
+	}
+
+	@Override
+	protected void disabledSetupAPI() {
+		super.disabledSetupAPI();
+
+		RecipeManagers.craftingProviders = ImmutableList.of(
 				RecipeManagers.carpenterManager = new DummyManagers.CarpenterManager(),
 				RecipeManagers.centrifugeManager = new DummyManagers.CentrifugeManager(),
 				RecipeManagers.fabricatorManager = new DummyManagers.FabricatorManager(),
@@ -85,16 +100,6 @@ public class PluginFactory extends ForestryPlugin {
 	@Override
 	public void preInit() {
 		super.preInit();
-
-		RecipeManagers.craftingProviders = Arrays.asList(
-				RecipeManagers.carpenterManager = new MachineCarpenter.RecipeManager(),
-				RecipeManagers.centrifugeManager = new MachineCentrifuge.RecipeManager(),
-				RecipeManagers.fabricatorManager = new MachineFabricator.RecipeManager(),
-				RecipeManagers.fermenterManager = new MachineFermenter.RecipeManager(),
-				RecipeManagers.moistenerManager = new MachineMoistener.RecipeManager(),
-				RecipeManagers.squeezerManager = new MachineSqueezer.RecipeManager(),
-				RecipeManagers.stillManager = new MachineStill.RecipeManager()
-		);
 
 		ForestryBlock.factoryTESR.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "factory");
 
@@ -215,11 +220,11 @@ public class PluginFactory extends ForestryPlugin {
 						'W', Blocks.crafting_table,
 						'C', Blocks.chest))
 				.setFaces(0, 1, 2, 3, 4, 4));
+	}
 
-		// Triggers
-		if (PluginManager.Module.BUILDCRAFT_STATEMENTS.isEnabled()) {
-			FactoryTriggers.initialize();
-		}
+	@Override
+	protected void registerTriggers() {
+		FactoryTriggers.initialize();
 	}
 
 	@Override

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -96,7 +97,11 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 
 	@Override
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	public void preInit() {
+	protected void setupAPI() {
+		super.setupAPI();
+
+		StorageManager.crateRegistry = new CrateRegistry();
+
 		BackpackManager.backpackInterface = new BackpackHelper();
 
 		BackpackManager.backpackItems = new ArrayList[6];
@@ -108,7 +113,35 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 		BackpackManager.backpackItems[4] = adventurerItems;
 		BackpackManager.backpackItems[5] = builderItems;
 
-		StorageManager.crateRegistry = new CrateRegistry();
+		BackpackDefinition definition;
+
+		if (PluginManager.Module.APICULTURE.isEnabled()) {
+			definition = new BackpackDefinitionApiarist("apiarist", new Color(0xc4923d).getRGB());
+			BackpackManager.definitions.put(definition.getKey(), definition);
+		}
+
+		if (PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {
+			definition = new BackpackDefinitionLepidopterist("lepidopterist", new Color(0x995b31).getRGB());
+			BackpackManager.definitions.put(definition.getKey(), definition);
+		}
+
+		definition = new BackpackDefinition("miner",  new Color(0x36187d).getRGB());
+		BackpackManager.definitions.put(definition.getKey(), definition);
+
+		definition = new BackpackDefinition("digger",  new Color(0x363cc5).getRGB());
+		BackpackManager.definitions.put(definition.getKey(), definition);
+
+		definition = new BackpackDefinition("forester",  new Color(0x347427).getRGB());
+		BackpackManager.definitions.put(definition.getKey(), definition);
+
+		definition = new BackpackDefinition("hunter",  new Color(0x412215).getRGB());
+		BackpackManager.definitions.put(definition.getKey(), definition);
+
+		definition = new BackpackDefinition("adventurer",  new Color(0x7fb8c2).getRGB());
+		BackpackManager.definitions.put(definition.getKey(), definition);
+
+		definition = new BackpackDefinition("builder",  new Color(0xdd3a3a).getRGB());
+		BackpackManager.definitions.put(definition.getKey(), definition);
 	}
 
 	@Override
@@ -147,7 +180,7 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 	}
 
 	public static void registerCrate(ItemCrated crate) {
-		proxy.registerCrate(crate);
+		proxy.registerCrateForRendering(crate);
 		crates.add(crate);
 	}
 
@@ -274,47 +307,41 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 		ForestryItem.crate.registerItem((new ItemCrated(null, false)), "crate");
 
 		// BACKPACKS
-		BackpackDefinition definition;
+		IBackpackDefinition definition;
 
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			definition = new BackpackDefinitionApiarist("apiarist", 0xc4923d);
-			BackpackManager.definitions.put(definition.getKey(), definition);
-			ForestryItem.apiaristBackpack.registerItem(new ItemNaturalistBackpack(GuiId.ApiaristBackpackGUI.ordinal(), definition).setCreativeTab(Tabs.tabApiculture), "apiaristBag");
+			definition = BackpackManager.definitions.get("apiarist");
+			Item backpack = new ItemNaturalistBackpack(GuiId.ApiaristBackpackGUI.ordinal(), definition).setCreativeTab(Tabs.tabApiculture);
+			ForestryItem.apiaristBackpack.registerItem(backpack, "apiaristBag");
 		}
 
 		if (PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {
-			definition = new BackpackDefinitionLepidopterist("lepidopterist", 0x995b31);
-			BackpackManager.definitions.put(definition.getKey(), definition);
-			ForestryItem.lepidopteristBackpack.registerItem(new ItemNaturalistBackpack(GuiId.LepidopteristBackpackGUI.ordinal(), definition).setCreativeTab(Tabs.tabLepidopterology), "lepidopteristBag");
+			definition = BackpackManager.definitions.get("lepidopterist");
+			Item backpack = new ItemNaturalistBackpack(GuiId.LepidopteristBackpackGUI.ordinal(), definition).setCreativeTab(Tabs.tabLepidopterology);
+			ForestryItem.lepidopteristBackpack.registerItem(backpack, "lepidopteristBag");
 		}
 
-		definition = new BackpackDefinition("miner", 0x36187d);
-		BackpackManager.definitions.put(definition.getKey(), definition);
+		definition = BackpackManager.definitions.get("miner");
 		ForestryItem.minerBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "minerBag");
 		ForestryItem.minerBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "minerBagT2");
 
-		definition = new BackpackDefinition("digger", 0x363cc5);
-		BackpackManager.definitions.put(definition.getKey(), definition);
+		definition = BackpackManager.definitions.get("digger");
 		ForestryItem.diggerBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "diggerBag");
 		ForestryItem.diggerBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "diggerBagT2");
 
-		definition = new BackpackDefinition("forester", 0x347427);
-		BackpackManager.definitions.put(definition.getKey(), definition);
+		definition = BackpackManager.definitions.get("forester");
 		ForestryItem.foresterBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "foresterBag");
 		ForestryItem.foresterBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "foresterBagT2");
 
-		definition = new BackpackDefinition("hunter", 0x412215);
-		BackpackManager.definitions.put(definition.getKey(), definition);
+		definition = BackpackManager.definitions.get("hunter");
 		ForestryItem.hunterBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "hunterBag");
 		ForestryItem.hunterBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "hunterBagT2");
 
-		definition = new BackpackDefinition("adventurer", 0x7fb8c2);
-		BackpackManager.definitions.put(definition.getKey(), definition);
+		definition = BackpackManager.definitions.get("adventurer");
 		ForestryItem.adventurerBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "adventurerBag");
 		ForestryItem.adventurerBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "adventurerBagT2");
 
-		definition = new BackpackDefinition("builder", 0xdd3a3a);
-		BackpackManager.definitions.put(definition.getKey(), definition);
+		definition = BackpackManager.definitions.get("builder");
 		ForestryItem.builderBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "builderBag");
 		ForestryItem.builderBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "builderBagT2");
 	}

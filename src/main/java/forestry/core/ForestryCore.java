@@ -59,6 +59,7 @@ public class ForestryCore {
 		
 		EnumErrorCode.init();
 
+		PluginManager.runSetup();
 		PluginManager.runPreInit();
 	}
 
