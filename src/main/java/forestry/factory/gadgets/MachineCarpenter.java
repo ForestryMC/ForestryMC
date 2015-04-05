@@ -98,7 +98,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			}
 
 			// Check box
-			if (!StackUtils.isCraftingEquivalent(box, item)) {
+			if (box != null && !StackUtils.isCraftingEquivalent(box, item)) {
 				return false;
 			}
 
