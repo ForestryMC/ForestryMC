@@ -72,9 +72,7 @@ public class WorldGenerator implements IWorldGenerator {
 				int randPosX = chunkX + random.nextInt(16);
 				int randPosY = random.nextInt(world.getActualHeight() - 72) + 56; // Does not generate below y = 64
 				int randPosZ = chunkZ + random.nextInt(16);
-				if (apatiteGenerator.generate(world, random, randPosX, randPosY, randPosZ)) {
-					Proxies.log.finest("Generated apatite vein around %s/%s/%s", randPosX, randPosY, randPosZ);
-				}
+				apatiteGenerator.generate(world, random, randPosX, randPosY, randPosZ);
 			}
 		}
 
