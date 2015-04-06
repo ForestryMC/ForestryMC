@@ -188,18 +188,35 @@ public class PluginApiculture extends ForestryPlugin {
 	public static MachineDefinition definitionBeehouse;
 	public static MachineDefinition definitionAnalyzer;
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
-	public void preInit() {
-		super.preInit();
-
-		MinecraftForge.EVENT_BUS.register(this);
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	protected void setupAPI() {
+		super.setupAPI();
 
 		HiveManager.hiveRegistry = hiveRegistry = new HiveRegistry();
 		HiveManager.genHelper = new HiveGenHelper();
 		createHiveDropArrays();
 
 		FlowerManager.flowerRegistry = new FlowerRegistry();
+
+		BeeManager.villageBees = new ArrayList[]{new ArrayList<IBeeGenome>(), new ArrayList<IBeeGenome>()};
+
+		// Init bee interface
+		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginApiculture.beeInterface = new BeeHelper());
+
+		// Modes
+		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.easy);
+		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.normal);
+		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.hard);
+		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.hardcore);
+		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.insane);
+	}
+
+	@Override
+	public void preInit() {
+		super.preInit();
+
+		MinecraftForge.EVENT_BUS.register(this);
 
 		ForestryBlock.apiculture.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "apiculture");
 		ForestryBlock.apiculture.block().setCreativeTab(Tabs.tabApiculture);
@@ -240,10 +257,6 @@ public class PluginApiculture extends ForestryPlugin {
 
 		ForestryBlock.beehives.registerBlock(new BlockBeehives(), ItemForestryBlock.class, "beehives");
 
-		// Init bee interface
-		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginApiculture.beeInterface = new BeeHelper());
-		BeeManager.villageBees = new ArrayList[]{new ArrayList<IBeeGenome>(), new ArrayList<IBeeGenome>()};
-
 		// Candles
 		ForestryBlock.candle.registerBlock(new BlockCandle(), ItemCandleBlock.class, "candle");
 		ForestryBlock.stump.registerBlock(new BlockStump(), ItemForestryBlock.class, "stump");
@@ -261,13 +274,6 @@ public class PluginApiculture extends ForestryPlugin {
 			// Register village components with the Structure registry.
 			VillageHandlerApiculture.registerVillageComponents();
 		}
-
-		// Modes
-		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.easy);
-		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.normal);
-		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.hard);
-		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.hardcore);
-		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.insane);
 
 		// Commands
 		PluginCore.rootCommand.addChildCommand(new CommandBee());
@@ -426,10 +432,6 @@ public class PluginApiculture extends ForestryPlugin {
 		// TOOLS
 		ForestryItem.scoop.registerItem(new ItemScoop(), "scoop");
 		ForestryItem.scoop.item().setHarvestLevel("scoop", 3);
-	}
-
-	@Override
-	protected void registerBackpackItems() {
 	}
 
 	@Override
@@ -703,7 +705,7 @@ public class PluginApiculture extends ForestryPlugin {
 		definitionChest.register();
 	}
 
-	public IRecipe[] createAlyzerRecipes(Block block, int meta) {
+	public static IRecipe[] createAlyzerRecipes(Block block, int meta) {
 		ArrayList<IRecipe> recipes = new ArrayList<IRecipe>();
 		recipes.add(ShapedRecipeCustom.createShapedRecipe(new ItemStack(block, 1, meta), "XTX", " Y ", "X X", 'Y', ForestryItem.sturdyCasing, 'T', ForestryItem.beealyzer, 'X', "ingotBronze"));
 		recipes.add(ShapedRecipeCustom.createShapedRecipe(new ItemStack(block, 1, meta), "XTX", " Y ", "X X", 'Y', ForestryItem.sturdyCasing, 'T', ForestryItem.treealyzer, 'X', "ingotBronze"));
@@ -733,7 +735,7 @@ public class PluginApiculture extends ForestryPlugin {
 		swampDrops.add(new HiveDrop(BeeTemplates.getValiantTemplate(), new ItemStack[]{ForestryItem.beeComb.getItemStack(1, 15)}, 3));
 	}
 
-	private void registerDungeonLoot() {
+	private static void registerDungeonLoot() {
 		int rarity;
 		if (Config.dungeonLootRare) {
 			rarity = 5;
@@ -760,7 +762,7 @@ public class PluginApiculture extends ForestryPlugin {
 		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(getBeeItemFromTemplate(BeeTemplates.getMeadowsTemplate(), EnumBeeType.PRINCESS), 1, 1, 5));
 	}
 
-	private ItemStack getBeeItemFromTemplate(IAllele[] template, EnumBeeType beeType) {
+	private static ItemStack getBeeItemFromTemplate(IAllele[] template, EnumBeeType beeType) {
 		IBee bee = new Bee(PluginApiculture.beeInterface.templateAsGenome(template));
 		ItemStack beeItem;
 		switch (beeType) {
@@ -810,7 +812,7 @@ public class PluginApiculture extends ForestryPlugin {
 		BeeManager.hiveDrops[7] = swarmDrops;
 	}
 
-	private void createHives() {
+	private static void createHives() {
 		hiveRegistry.registerHive(HiveRegistry.forest, HiveDescription.FOREST);
 		hiveRegistry.registerHive(HiveRegistry.meadows, HiveDescription.MEADOWS);
 		hiveRegistry.registerHive(HiveRegistry.desert, HiveDescription.DESERT);
@@ -830,7 +832,7 @@ public class PluginApiculture extends ForestryPlugin {
 		hiveRegistry.addDrops(HiveRegistry.swamp, swampDrops);
 	}
 
-	private void createAlleles() {
+	private static void createAlleles() {
 
 		IClassification hymnoptera = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "hymnoptera", "Hymnoptera");
 		AlleleManager.alleleRegistry.getClassification("class.insecta").addMemberGroup(hymnoptera);

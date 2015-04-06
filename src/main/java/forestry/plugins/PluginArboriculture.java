@@ -195,6 +195,21 @@ public class PluginArboriculture extends ForestryPlugin {
 			ForestryBlock.fences2);
 
 	@Override
+	protected void setupAPI() {
+		super.setupAPI();
+
+		// Init tree interface
+		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginArboriculture.treeInterface = new TreeHelper());
+
+		// Modes
+		PluginArboriculture.treeInterface.registerTreekeepingMode(TreekeepingMode.easy);
+		PluginArboriculture.treeInterface.registerTreekeepingMode(TreekeepingMode.normal);
+		PluginArboriculture.treeInterface.registerTreekeepingMode(TreekeepingMode.hard);
+		PluginArboriculture.treeInterface.registerTreekeepingMode(TreekeepingMode.hardcore);
+		PluginArboriculture.treeInterface.registerTreekeepingMode(TreekeepingMode.insane);
+	}
+
+	@Override
 	public void preInit() {
 		super.preInit();
 
@@ -290,14 +305,8 @@ public class PluginArboriculture extends ForestryPlugin {
 						'Y', Blocks.chest))
 				.setFaces(0, 1, 2, 3, 4, 4, 0, 7));
 
-		// Init tree interface
-		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginArboriculture.treeInterface = new TreeHelper());
-
 		// Init rendering
 		proxy.initializeRendering();
-
-		// Create alleles
-		createAlleles();
 
 		// Register vanilla and forestry fence ids
 		validFences.add(ForestryBlock.fences1.block());
@@ -306,15 +315,14 @@ public class PluginArboriculture extends ForestryPlugin {
 		validFences.add(Blocks.fence_gate);
 		validFences.add(Blocks.nether_brick_fence);
 
-		// Modes
-		PluginArboriculture.treeInterface.registerTreekeepingMode(TreekeepingMode.easy);
-		PluginArboriculture.treeInterface.registerTreekeepingMode(TreekeepingMode.normal);
-		PluginArboriculture.treeInterface.registerTreekeepingMode(TreekeepingMode.hard);
-		PluginArboriculture.treeInterface.registerTreekeepingMode(TreekeepingMode.hardcore);
-		PluginArboriculture.treeInterface.registerTreekeepingMode(TreekeepingMode.insane);
-
 		// Commands
 		PluginCore.rootCommand.addChildCommand(new CommandTree());
+
+		// Create alleles
+		createAlleles();
+		createMutations();
+		registerTemplates();
+		registerErsatzGenomes();
 	}
 
 	@Override
@@ -326,10 +334,6 @@ public class PluginArboriculture extends ForestryPlugin {
 		GameRegistry.registerTileEntity(TileStairs.class, "forestry.Stairs");
 		GameRegistry.registerTileEntity(TileFruitPod.class, "forestry.Pods");
 		definitionChest.register();
-
-		createMutations();
-		registerTemplates();
-		registerErsatzGenomes();
 
 		MinecraftForge.EVENT_BUS.register(new EventHandlerArboriculture());
 
@@ -590,7 +594,7 @@ public class PluginArboriculture extends ForestryPlugin {
 		Proxies.common.addRecipe(ForestryItem.grafter.getItemStack(), "  B", " # ", "#  ", 'B', "ingotBronze", '#', Items.stick);
 	}
 
-	private void createAlleles() {
+	private static void createAlleles() {
 
 		// Divisions
 		IClassification angiosperms = AlleleManager.alleleRegistry.createAndRegisterClassification(
@@ -1037,7 +1041,7 @@ public class PluginArboriculture extends ForestryPlugin {
 
 	}
 
-	private void registerTemplates() {
+	private static void registerTemplates() {
 		treeInterface.registerTemplate(TreeTemplates.getOakTemplate());
 		treeInterface.registerTemplate(TreeTemplates.getBirchTemplate());
 		treeInterface.registerTemplate(TreeTemplates.getSpruceTemplate());
@@ -1084,7 +1088,7 @@ public class PluginArboriculture extends ForestryPlugin {
 		treeInterface.registerTemplate(TreeTemplates.getDateTemplate());
 	}
 
-	private void registerErsatzGenomes() {
+	private static void registerErsatzGenomes() {
 		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves, 1, 0), new Tree(
 				TreeTemplates.templateAsGenome(TreeTemplates.getOakTemplate())));
 		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves, 1, 1), new Tree(
@@ -1112,7 +1116,7 @@ public class PluginArboriculture extends ForestryPlugin {
 				TreeTemplates.templateAsGenome(TreeTemplates.getDarkOakTemplate())));
 	}
 
-	private void createMutations() {
+	private static void createMutations() {
 
 		// Decidious
 		TreeTemplates.limeA = new TreeMutation(Allele.treeBirch, Allele.treeOak,
@@ -1213,22 +1217,7 @@ public class PluginArboriculture extends ForestryPlugin {
 
 	@Override
 	public IFuelHandler getFuelHandler() {
-		return new IFuelHandler() {
-			@Override
-			public int getBurnTime(ItemStack fuel) {
-				if (ForestryItem.sapling.isItemEqual(fuel)) {
-					return 100;
-				}
-
-				for (ForestryBlock slab : slabs) {
-					if (slab.isItemEqual(fuel)) {
-						return 150;
-					}
-				}
-
-				return 0;
-			}
-		};
+		return new FuelHandler();
 	}
 
 	@Override
@@ -1250,25 +1239,25 @@ public class PluginArboriculture extends ForestryPlugin {
 		return super.processIMCMessage(message);
 	}
 
-	private void registerDungeonLoot() {
+	private static void registerDungeonLoot() {
 		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(ForestryItem.grafter.getItemStack(), 1, 1, 8));
 
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getOakTemplate(), EnumGermlingType.SAPLING), 2, 3, 6));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getSpruceTemplate(), EnumGermlingType.SAPLING), 2, 3, 6));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getBirchTemplate(), EnumGermlingType.SAPLING), 2, 3, 6));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getLarchTemplate(), EnumGermlingType.SAPLING), 1, 2, 4));
-		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getLimeTemplate(), EnumGermlingType.SAPLING), 1, 2, 4));
+		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(getTreeItemFromTemplate(TreeTemplates.getOakTemplate(), EnumGermlingType.SAPLING), 2, 3, 6));
+		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(getTreeItemFromTemplate(TreeTemplates.getSpruceTemplate(), EnumGermlingType.SAPLING), 2, 3, 6));
+		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(getTreeItemFromTemplate(TreeTemplates.getBirchTemplate(), EnumGermlingType.SAPLING), 2, 3, 6));
+		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(getTreeItemFromTemplate(TreeTemplates.getLarchTemplate(), EnumGermlingType.SAPLING), 1, 2, 4));
+		ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(getTreeItemFromTemplate(TreeTemplates.getLimeTemplate(), EnumGermlingType.SAPLING), 1, 2, 4));
 
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getOakTemplate(), EnumGermlingType.POLLEN), 2, 3, 4));
-			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getSpruceTemplate(), EnumGermlingType.POLLEN), 2, 3, 4));
-			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getBirchTemplate(), EnumGermlingType.POLLEN), 2, 3, 4));
-			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getLarchTemplate(), EnumGermlingType.POLLEN), 1, 2, 3));
-			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(this.getTreeItemFromTemplate(TreeTemplates.getLimeTemplate(), EnumGermlingType.POLLEN), 1, 2, 3));
+			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(getTreeItemFromTemplate(TreeTemplates.getOakTemplate(), EnumGermlingType.POLLEN), 2, 3, 4));
+			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(getTreeItemFromTemplate(TreeTemplates.getSpruceTemplate(), EnumGermlingType.POLLEN), 2, 3, 4));
+			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(getTreeItemFromTemplate(TreeTemplates.getBirchTemplate(), EnumGermlingType.POLLEN), 2, 3, 4));
+			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(getTreeItemFromTemplate(TreeTemplates.getLarchTemplate(), EnumGermlingType.POLLEN), 1, 2, 3));
+			ChestGenHooks.addItem(Defaults.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(getTreeItemFromTemplate(TreeTemplates.getLimeTemplate(), EnumGermlingType.POLLEN), 1, 2, 3));
 		}
 	}
 
-	private ItemStack getTreeItemFromTemplate(IAllele[] template, EnumGermlingType type) {
+	private static ItemStack getTreeItemFromTemplate(IAllele[] template, EnumGermlingType type) {
 		ITree tree = new Tree(PluginArboriculture.treeInterface.templateAsGenome(template));
 		ItemStack treeItem;
 		switch (type) {
@@ -1283,5 +1272,22 @@ public class PluginArboriculture extends ForestryPlugin {
 		tree.writeToNBT(nbtTagCompound);
 		treeItem.setTagCompound(nbtTagCompound);
 		return treeItem;
+	}
+
+	private static class FuelHandler implements IFuelHandler {
+		@Override
+		public int getBurnTime(ItemStack fuel) {
+			if (ForestryItem.sapling.isItemEqual(fuel)) {
+				return 100;
+			}
+
+			for (ForestryBlock slab : slabs) {
+				if (slab.isItemEqual(fuel)) {
+					return 150;
+				}
+			}
+
+			return 0;
+		}
 	}
 }

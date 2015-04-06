@@ -61,8 +61,7 @@ public class PluginManager {
 	private static Stage stage = Stage.SETUP;
 
 	public enum Stage {
-
-		SETUP, PRE_INIT, PRE_INIT_DISABLED, INIT, POST_INIT, POST_INIT_DISABLED, FINISHED
+		SETUP, SETUP_DISABLED, PRE_INIT, INIT, POST_INIT, FINISHED
 	}
 
 	public enum Module {
@@ -140,84 +139,6 @@ public class PluginManager {
 		return loadedModules.contains(module);
 	}
 
-	public static void runPreInit() {
-		stage = Stage.SETUP;
-		Locale locale = Locale.getDefault();
-		Locale.setDefault(Locale.ENGLISH);
-
-		Configuration config = new Configuration(new File(Forestry.instance.getConfigFolder(), MODULE_CONFIG_FILE_NAME));
-
-		config.load();
-		config.addCustomCategoryComment(CATEGORY_MODULES, "Disabling these modules can greatly change how the mod functions.\n"
-				+ "Your mileage may vary, please report any issues.");
-
-		Set<Module> toLoad = EnumSet.allOf(Module.class);
-		Iterator<Module> it = toLoad.iterator();
-		while (it.hasNext()) {
-			Module m = it.next();
-			if (!m.canBeDisabled()) {
-				continue;
-			}
-			if (!isEnabled(config, m)) {
-				it.remove();
-				Proxies.log.info("Module disabled: {0}", m);
-				continue;
-			}
-			ForestryPlugin plugin = m.instance;
-			if (!plugin.isAvailable()) {
-				it.remove();
-				Proxies.log.info("Module {0} failed to load: {1}", plugin, plugin.getFailMessage());
-				continue;
-			}
-		}
-		boolean changed;
-		do {
-			changed = false;
-			it = toLoad.iterator();
-			while (it.hasNext()) {
-				Module m = it.next();
-				Set<Module> deps = m.instance().getDependancies();
-				if (!toLoad.containsAll(deps)) {
-					it.remove();
-					changed = true;
-					Proxies.log.warning("Module {0} is missing dependencies: {1}", m, deps);
-					continue;
-				}
-			}
-		} while (changed);
-
-		unloadedModules.removeAll(toLoad);
-		loadedModules.addAll(toLoad);
-
-		if (config.hasChanged()) {
-			config.save();
-		}
-
-		Locale.setDefault(locale);
-
-		stage = Stage.PRE_INIT;
-		for (Module m : loadedModules) {
-			ForestryPlugin plugin = m.instance;
-			loadPlugin(plugin);
-		}
-
-		for (Module m : loadedModules) {
-			ForestryPlugin plugin = m.instance;
-			Proxies.log.fine("Pre-Init Start: {0}", plugin);
-			plugin.preInit();
-			plugin.registerItems();
-			Proxies.log.fine("Pre-Init Complete: {0}", plugin);
-		}
-
-		stage = Stage.PRE_INIT_DISABLED;
-		for (Module m : unloadedModules) {
-			ForestryPlugin plugin = m.instance;
-			Proxies.log.fine("Disabled-Pre-Init Start: {0}", plugin);
-			plugin.disabledPreInit();
-			Proxies.log.fine("Disabled-Pre-Init Complete: {0}", plugin);
-		}
-	}
-
 	private static void loadPlugin(ForestryPlugin plugin) {
 		Proxies.log.fine("Registering Handlers for Plugin: {0}", plugin);
 
@@ -257,17 +178,110 @@ public class PluginManager {
 		}
 	}
 
+	private static void configureModules() {
+		Locale locale = Locale.getDefault();
+		Locale.setDefault(Locale.ENGLISH);
+
+		Configuration config = new Configuration(new File(Forestry.instance.getConfigFolder(), MODULE_CONFIG_FILE_NAME));
+
+		config.load();
+		config.addCustomCategoryComment(CATEGORY_MODULES, "Disabling these modules can greatly change how the mod functions.\n"
+				+ "Your mileage may vary, please report any issues.");
+
+		Set<Module> toLoad = EnumSet.allOf(Module.class);
+		Iterator<Module> it = toLoad.iterator();
+		while (it.hasNext()) {
+			Module m = it.next();
+			if (!m.canBeDisabled()) {
+				continue;
+			}
+			if (!isEnabled(config, m)) {
+				it.remove();
+				Proxies.log.info("Module disabled: {0}", m);
+				continue;
+			}
+			ForestryPlugin plugin = m.instance;
+			if (!plugin.isAvailable()) {
+				it.remove();
+				Proxies.log.info("Module {0} failed to load: {1}", plugin, plugin.getFailMessage());
+				continue;
+			}
+		}
+
+		boolean changed;
+		do {
+			changed = false;
+			it = toLoad.iterator();
+			while (it.hasNext()) {
+				Module m = it.next();
+				Set<Module> deps = m.instance().getDependancies();
+				if (!toLoad.containsAll(deps)) {
+					it.remove();
+					changed = true;
+					Proxies.log.warning("Module {0} is missing dependencies: {1}", m, deps);
+					continue;
+				}
+			}
+		} while (changed);
+
+		unloadedModules.removeAll(toLoad);
+		loadedModules.addAll(toLoad);
+
+		if (config.hasChanged()) {
+			config.save();
+		}
+
+		Locale.setDefault(locale);
+	}
+
+	public static void runSetup() {
+		stage = Stage.SETUP;
+		configureModules();
+
+		for (Module m : loadedModules) {
+			ForestryPlugin plugin = m.instance;
+			Proxies.log.fine("Setup Start: {0}", plugin);
+			plugin.setupAPI();
+			Proxies.log.fine("Setup Complete: {0}", plugin);
+		}
+
+		stage = Stage.SETUP_DISABLED;
+		for (Module m : unloadedModules) {
+			ForestryPlugin plugin = m.instance;
+			Proxies.log.fine("Disabled-Setup Start: {0}", plugin);
+			plugin.disabledSetupAPI();
+			Proxies.log.fine("Disabled-Setup Complete: {0}", plugin);
+		}
+	}
+
+	public static void runPreInit() {
+		stage = Stage.PRE_INIT;
+		for (Module m : loadedModules) {
+			ForestryPlugin plugin = m.instance;
+			loadPlugin(plugin);
+		}
+
+		for (Module m : loadedModules) {
+			ForestryPlugin plugin = m.instance;
+			Proxies.log.fine("Pre-Init Start: {0}", plugin);
+			plugin.preInit();
+			plugin.registerItems();
+			if (Module.BUILDCRAFT_STATEMENTS.isEnabled()) {
+				plugin.registerTriggers();
+			}
+			if (Module.STORAGE.isEnabled()) {
+				plugin.registerBackpackItems();
+				plugin.registerCrates();
+			}
+			Proxies.log.fine("Pre-Init Complete: {0}", plugin);
+		}
+	}
+
 	public static void runInit() {
 		stage = Stage.INIT;
 		for (Module m : loadedModules) {
 			ForestryPlugin plugin = m.instance;
 			Proxies.log.fine("Init Start: {0}", plugin);
-
-			if (Module.STORAGE.isEnabled()) {
-				plugin.registerBackpackItems();
-				plugin.registerCrates();
-			}
-
 			plugin.doInit();
 			plugin.registerRecipes();
 			Proxies.log.fine("Init Complete: {0}", plugin);
@@ -283,13 +297,6 @@ public class PluginManager {
 			Proxies.log.fine("Post-Init Complete: {0}", plugin);
 		}
 
-		stage = Stage.POST_INIT_DISABLED;
-		for (Module m : unloadedModules) {
-			ForestryPlugin plugin = m.instance;
-			Proxies.log.fine("Disabled-Post-Init Start: {0}", plugin);
-			plugin.disabledPostInit();
-			Proxies.log.fine("Disabled-Post-Init Complete: {0}", plugin);
-		}
 		stage = Stage.FINISHED;
 	}
 

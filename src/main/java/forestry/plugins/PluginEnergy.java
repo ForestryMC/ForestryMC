@@ -23,8 +23,6 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
-import forestry.core.interfaces.IOreDictionaryHandler;
-import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemForestryBlock;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.energy.GuiHandlerEnergy;
@@ -98,33 +96,7 @@ public class PluginEnergy extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerItems() {
-	}
-
-	@Override
-	protected void registerBackpackItems() {
-	}
-
-	@Override
-	protected void registerRecipes() {
-	}
-
-	@Override
-	protected void registerCrates() {
-	}
-
-	@Override
 	public IGuiHandler getGuiHandler() {
 		return new GuiHandlerEnergy();
-	}
-
-	@Override
-	public ISaveEventHandler getSaveEventHandler() {
-		return null;
-	}
-
-	@Override
-	public IOreDictionaryHandler getDictionaryHandler() {
-		return null;
 	}
 }

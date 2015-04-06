@@ -14,7 +14,7 @@ import forestry.core.items.ItemCrated;
 
 public class ProxyStorage {
 
-	public void registerCrate(ItemCrated crate) {
+	public void registerCrateForRendering(ItemCrated crate) {
 	}
 
 }

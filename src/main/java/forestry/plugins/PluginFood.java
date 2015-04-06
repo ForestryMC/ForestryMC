@@ -36,8 +36,8 @@ import forestry.food.items.ItemInfuser;
 public class PluginFood extends ForestryPlugin {
 
 	@Override
-	public void preInit() {
-		super.preInit();
+	protected void setupAPI() {
+		super.setupAPI();
 
 		// Init seasoner
 		BeverageManager.infuserManager = new ItemInfuser.MixtureManager();
@@ -73,10 +73,6 @@ public class PluginFood extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerBackpackItems() {
-	}
-
-	@Override
 	protected void registerRecipes() {
 		// INFUSER
 		Proxies.common.addRecipe(ForestryItem.infuser.getItemStack(),
@@ -86,21 +82,7 @@ public class PluginFood extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerCrates() {
-	}
-
-	@Override
 	public IGuiHandler getGuiHandler() {
 		return new GuiHandlerFood();
-	}
-
-	@Override
-	public ISaveEventHandler getSaveEventHandler() {
-		return null;
-	}
-
-	@Override
-	public IOreDictionaryHandler getDictionaryHandler() {
-		return null;
 	}
 }

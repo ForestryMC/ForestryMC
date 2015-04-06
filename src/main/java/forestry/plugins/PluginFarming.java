@@ -85,10 +85,15 @@ public class PluginFarming extends ForestryPlugin {
 	public static ItemStack farmFertilizer;
 
 	@Override
-	public void preInit() {
-		super.preInit();
+	protected void setupAPI() {
+		super.setupAPI();
 
 		Farmables.farmInterface = new FarmHelper();
+	}
+
+	@Override
+	public void preInit() {
+		super.preInit();
 
 		ForestryBlock.mushroom.registerBlock(new BlockMushroom(), ItemTypedBlock.class, "mushroom");
 
@@ -130,16 +135,16 @@ public class PluginFarming extends ForestryPlugin {
 
 		proxy.initializeRendering();
 
-		// Triggers
-		if (PluginManager.Module.BUILDCRAFT_STATEMENTS.isEnabled()) {
-			FarmingTriggers.initialize();
-		}
-
 		// Layouts
 		ICircuitLayout layoutManaged = new CircuitLayout("farms.managed");
 		ChipsetManager.circuitRegistry.registerLayout(layoutManaged);
 		ICircuitLayout layoutManual = new CircuitLayout("farms.manual");
 		ChipsetManager.circuitRegistry.registerLayout(layoutManual);
+	}
+
+	@Override
+	protected void registerTriggers() {
+		FarmingTriggers.initialize();
 	}
 
 	@Override

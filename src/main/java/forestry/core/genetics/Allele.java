@@ -225,45 +225,45 @@ public class Allele implements IAllele {
 	public static IAlleleButterflySpecies lepiLLacewing;
 	
 	// / ALL // GENERIC
-	public static Allele boolFalse;
-	public static Allele boolTrue;
+	public static final Allele boolFalse = new AlleleBoolean("boolFalse", false);
+	public static final Allele boolTrue = new AlleleBoolean("boolTrue", true);
 
-	public static Allele int1;
-	public static Allele int2;
-	public static Allele int3;
-	public static Allele int4;
-	public static Allele int5;
-	public static Allele int6;
-	public static Allele int7;
-	public static Allele int8;
-	public static Allele int9;
-	public static Allele int10;
+	public static final Allele int1 = new AlleleInteger("i1d", 1, true);
+	public static final Allele int2 = new AlleleInteger("i2d", 2, true);
+	public static final Allele int3 = new AlleleInteger("i3d", 3, true);
+	public static final Allele int4 = new AlleleInteger("i4d", 4, true);
+	public static final Allele int5 = new AlleleInteger("i5d", 5, true);
+	public static final Allele int6 = new AlleleInteger("i6d", 6, true);
+	public static final Allele int7 = new AlleleInteger("i7d", 7, true);
+	public static final Allele int8 = new AlleleInteger("i8d", 8, true);
+	public static final Allele int9 = new AlleleInteger("i9d", 9, true);
+	public static final Allele int10 = new AlleleInteger("i10d", 10, true);
 
 	// / BEES // SPEED 1100 - 1199
-	public static Allele speedSlowest;
-	public static Allele speedSlower;
-	public static Allele speedSlow;
-	public static Allele speedNorm;
-	public static Allele speedFast;
-	public static Allele speedFaster;
-	public static Allele speedFastest;
+	public static final Allele speedSlowest = new AlleleFloat("speedSlowest", 0.3f, true).setName("speed", "slowest");
+	public static final Allele speedSlower = new AlleleFloat("speedSlower", 0.6f, true).setName("speed", "slower");
+	public static final Allele speedSlow = new AlleleFloat("speedSlow", 0.8f, true).setName("speed", "slow");
+	public static final Allele speedNorm = new AlleleFloat("speedNorm", 1.0f).setName("speed", "normal");
+	public static final Allele speedFast = new AlleleFloat("speedFast", 1.2f, true).setName("speed", "fast");
+	public static final Allele speedFaster = new AlleleFloat("speedFaster", 1.4f).setName("speed", "faster");
+	public static final Allele speedFastest = new AlleleFloat("speedFastest", 1.7f).setName("speed", "fastest");
 
 	// / BEES // LIFESPAN 1200 - 1299
-	public static Allele lifespanShortest;
-	public static Allele lifespanShorter;
-	public static Allele lifespanShort;
-	public static Allele lifespanShortened;
-	public static Allele lifespanNormal;
-	public static Allele lifespanElongated;
-	public static Allele lifespanLong;
-	public static Allele lifespanLonger;
-	public static Allele lifespanLongest;
+	public static final Allele lifespanShortest = new AlleleInteger("lifespanShortest", 10, false).setName("gui.shortestlife");
+	public static final Allele lifespanShorter = new AlleleInteger("lifespanShorter", 20, true).setName("gui.shorterlife");
+	public static final Allele lifespanShort = new AlleleInteger("lifespanShort", 30, true).setName("gui.shortlife");
+	public static final Allele lifespanShortened = new AlleleInteger("lifespanShortened", 35, true).setName("gui.shortenedlife");
+	public static final Allele lifespanNormal = new AlleleInteger("lifespanNormal", 40).setName("gui.normallife");
+	public static final Allele lifespanElongated = new AlleleInteger("lifespanElongated", 45, true).setName("gui.elongatedlife");
+	public static final Allele lifespanLong = new AlleleInteger("lifespanLong", 50).setName("gui.longlife");
+	public static final Allele lifespanLonger = new AlleleInteger("lifespanLonger", 60).setName("gui.longerlife");
+	public static final Allele lifespanLongest = new AlleleInteger("lifespanLongest", 70).setName("gui.longestlife");
 
 	// / BEES // FERTILITY 1300 - 1349
-	public static Allele fertilityLow;
-	public static Allele fertilityNormal;
-	public static Allele fertilityHigh;
-	public static Allele fertilityMaximum;
+	public static final Allele fertilityLow = new AlleleInteger("fertilityLow", 1, true);
+	public static final Allele fertilityNormal = new AlleleInteger("fertilityNormal", 2, true);
+	public static final Allele fertilityHigh = new AlleleInteger("fertilityHigh", 3);
+	public static final Allele fertilityMaximum = new AlleleInteger("fertilityMaximum", 4);
 
 	// / TREES // GROWTH PROVIDER 1350 - 1399
 	public static IAlleleGrowth growthLightlevel;
@@ -285,41 +285,41 @@ public class Allele implements IAllele {
 	public static IAlleleFruit fruitJujube;
 
 	// / TREES // HEIGHT 1400 - 1449
-	public static Allele heightSmallest;
-	public static Allele heightSmaller;
-	public static Allele heightSmall;
-	public static Allele heightAverage;
-	public static Allele heightLarge;
-	public static Allele heightLarger;
-	public static Allele heightLargest;
-	public static Allele heightGigantic;
+	public static final Allele heightSmallest = new AlleleFloat("heightSmallest", 0.25f).setName("height", "smallest");
+	public static final Allele heightSmaller = new AlleleFloat("heightSmaller", 0.5f).setName("height", "smaller");
+	public static final Allele heightSmall = new AlleleFloat("heightSmall", 0.75f).setName("height", "small");
+	public static final Allele heightAverage = new AlleleFloat("heightMax10", 1.0f).setName("height", "average");
+	public static final Allele heightLarge = new AlleleFloat("heightLarge", 1.25f).setName("height", "large");
+	public static final Allele heightLarger = new AlleleFloat("heightLarger", 1.5f).setName("height", "larger");
+	public static final Allele heightLargest = new AlleleFloat("heightLargest", 1.75f).setName("height", "largest");
+	public static final Allele heightGigantic = new AlleleFloat("heightGigantic", 2.0f).setName("height", "gigantic");
 
 	/// BUTTERFLIES // SIZE
-	public static Allele sizeSmallest;
-	public static Allele sizeSmaller;
-	public static Allele sizeSmall;
-	public static Allele sizeAverage;
-	public static Allele sizeLarge;
-	public static Allele sizeLarger;
-	public static Allele sizeLargest;
+	public static final Allele sizeSmallest = new AlleleFloat("sizeSmallest", 0.3f).setName("size", "smallest");
+	public static final Allele sizeSmaller = new AlleleFloat("sizeSmaller", 0.4f).setName("size", "smaller");
+	public static final Allele sizeSmall = new AlleleFloat("sizeSmall", 0.5f).setName("size", "small");
+	public static final Allele sizeAverage = new AlleleFloat("sizeAverage", 0.6f).setName("size", "average");
+	public static final Allele sizeLarge = new AlleleFloat("sizeLarge", 0.75f).setName("size", "large");
+	public static final Allele sizeLarger = new AlleleFloat("sizeLarger", 0.9f).setName("size", "larger");
+	public static final Allele sizeLargest = new AlleleFloat("sizeLargest", 1.0f).setName("size", "largest");
 	
 	// / BOTH // TOLERANCE 1450 - 1499
-	public static Allele toleranceNone;
-	public static Allele toleranceBoth1;
-	public static Allele toleranceBoth2;
-	public static Allele toleranceBoth3;
-	public static Allele toleranceBoth4;
-	public static Allele toleranceBoth5;
-	public static Allele toleranceUp1;
-	public static Allele toleranceUp2;
-	public static Allele toleranceUp3;
-	public static Allele toleranceUp4;
-	public static Allele toleranceUp5;
-	public static Allele toleranceDown1;
-	public static Allele toleranceDown2;
-	public static Allele toleranceDown3;
-	public static Allele toleranceDown4;
-	public static Allele toleranceDown5;
+	public static final Allele toleranceNone = new AlleleTolerance("toleranceNone", EnumTolerance.NONE);
+	public static final Allele toleranceBoth1 = new AlleleTolerance("toleranceBoth1", EnumTolerance.BOTH_1, true);
+	public static final Allele toleranceBoth2 = new AlleleTolerance("toleranceBoth2", EnumTolerance.BOTH_2);
+	public static final Allele toleranceBoth3 = new AlleleTolerance("toleranceBoth3", EnumTolerance.BOTH_3);
+	public static final Allele toleranceBoth4 = new AlleleTolerance("toleranceBoth4", EnumTolerance.BOTH_4);
+	public static final Allele toleranceBoth5 = new AlleleTolerance("toleranceBoth5", EnumTolerance.BOTH_5);
+	public static final Allele toleranceUp1 = new AlleleTolerance("toleranceUp1", EnumTolerance.UP_1, true);
+	public static final Allele toleranceUp2 = new AlleleTolerance("toleranceUp2", EnumTolerance.UP_2);
+	public static final Allele toleranceUp3 = new AlleleTolerance("toleranceUp3", EnumTolerance.UP_3);
+	public static final Allele toleranceUp4 = new AlleleTolerance("toleranceUp4", EnumTolerance.UP_4);
+	public static final Allele toleranceUp5 = new AlleleTolerance("toleranceUp5", EnumTolerance.UP_5);
+	public static final Allele toleranceDown1 = new AlleleTolerance("toleranceDown1", EnumTolerance.DOWN_1, true);
+	public static final Allele toleranceDown2 = new AlleleTolerance("toleranceDown2", EnumTolerance.DOWN_2);
+	public static final Allele toleranceDown3 = new AlleleTolerance("toleranceDown3", EnumTolerance.DOWN_3);
+	public static final Allele toleranceDown4 = new AlleleTolerance("toleranceDown4", EnumTolerance.DOWN_4);
+	public static final Allele toleranceDown5 = new AlleleTolerance("toleranceDown5", EnumTolerance.DOWN_5);
 
 	// / BEES // FLOWER PROVIDERS 1500 - 1599
 	public static Allele flowersVanilla;
@@ -333,56 +333,56 @@ public class Allele implements IAllele {
 	public static Allele flowersGourd;
 
 	// / TREES // FERTILITY 1600 - 1649
-	public static Allele saplingsLowest;
-	public static Allele saplingsLower;
-	public static Allele saplingsLow;
-	public static Allele saplingsAverage;
-	public static Allele saplingsHigh;
-	public static Allele saplingsHigher;
-	public static Allele saplingsHighest;
+	public static final Allele saplingsLowest = new AlleleFloat("saplingsLowest", 0.01f, true).setName("saplings", "lowest");
+	public static final Allele saplingsLower = new AlleleFloat("saplingsLower", 0.025f, true).setName("saplings", "lower");
+	public static final Allele saplingsLow = new AlleleFloat("saplingsLow", 0.035f, true).setName("saplings", "low");
+	public static final Allele saplingsAverage = new AlleleFloat("saplingsDefault", 0.05f, true).setName("saplings", "average");
+	public static final Allele saplingsHigh = new AlleleFloat("saplingsDouble", 0.1f, true).setName("saplings", "high");
+	public static final Allele saplingsHigher = new AlleleFloat("saplingsTriple", 0.2f, true).setName("saplings", "higher");
+	public static final Allele saplingsHighest = new AlleleFloat("saplingsHighest", 0.3f, true).setName("saplings", "highest");
 
 	// / TREES // YIELD 1650 - 1699
-	public static Allele yieldLowest;
-	public static Allele yieldLower;
-	public static Allele yieldLow;
-	public static Allele yieldAverage;
-	public static Allele yieldHigh;
-	public static Allele yieldHigher;
-	public static Allele yieldHighest;
+	public static final Allele yieldLowest = new AlleleFloat("yieldLowest", 0.025f, true).setName("yield", "lowest");
+	public static final Allele yieldLower = new AlleleFloat("yieldLower", 0.05f, true).setName("yield", "lower");
+	public static final Allele yieldLow = new AlleleFloat("yieldLow", 0.1f, true).setName("yield", "low");
+	public static final Allele yieldAverage = new AlleleFloat("yieldDefault", 0.2f, true).setName("yield", "average");
+	public static final Allele yieldHigh = new AlleleFloat("yieldHigh", 0.3f, false).setName("yield", "high");
+	public static final Allele yieldHigher = new AlleleFloat("yieldHigher", 0.35f, false).setName("yield", "higher");
+	public static final Allele yieldHighest = new AlleleFloat("yieldHighest", 0.4f, false).setName("yield", "highest");
 
 	// TREES // SAPPINESS
-	public static Allele sappinessLowest;
-	public static Allele sappinessLower;
-	public static Allele sappinessLow;
-	public static Allele sappinessAverage;
-	public static Allele sappinessHigh;
-	public static Allele sappinessHigher;
-	public static Allele sappinessHighest;
+	public static final Allele sappinessLowest = new AlleleFloat("sappinessLowest", 0.1f, true).setName("sappiness", "lowest");
+	public static final Allele sappinessLower = new AlleleFloat("sappinessLower", 0.2f, true).setName("sappiness", "lower");
+	public static final Allele sappinessLow = new AlleleFloat("sappinessLow", 0.3f, true).setName("sappiness", "low");
+	public static final Allele sappinessAverage = new AlleleFloat("sappinessAverage", 0.4f, true).setName("sappiness", "average");
+	public static final Allele sappinessHigh = new AlleleFloat("sappinessHigh", 0.6f, true).setName("sappiness", "high");
+	public static final Allele sappinessHigher = new AlleleFloat("sappinessHigher", 0.8f, false).setName("sappiness", "higher");
+	public static final Allele sappinessHighest = new AlleleFloat("sappinessHighest", 1.0f, false).setName("sappiness", "highest");
 
 	// TREES // MATURATION TIME
-	public static Allele maturationSlowest;
-	public static Allele maturationSlower;
-	public static Allele maturationSlow;
-	public static Allele maturationAverage;
-	public static Allele maturationFast;
-	public static Allele maturationFaster;
-	public static Allele maturationFastest;
+	public static final Allele maturationSlowest = new AlleleInteger("maturationSlowest", 10, true).setName("maturity", "slowest");
+	public static final Allele maturationSlower = new AlleleInteger("maturationSlower", 7).setName("maturity", "slower");
+	public static final Allele maturationSlow = new AlleleInteger("maturationSlow", 5, true).setName("maturity", "slow");
+	public static final Allele maturationAverage = new AlleleInteger("maturationAverage", 4).setName("maturity", "average");
+	public static final Allele maturationFast = new AlleleInteger("maturationFast", 3).setName("maturity", "fast");
+	public static final Allele maturationFaster = new AlleleInteger("maturationFaster", 2).setName("maturity", "faster");
+	public static final Allele maturationFastest = new AlleleInteger("maturationFastest", 1).setName("maturity", "fastest");
 
 	// / BEES // FLOWER GROWTH 1700 - 1749
-	public static Allele floweringSlowest;
-	public static Allele floweringSlower;
-	public static Allele floweringSlow;
-	public static Allele floweringAverage;
-	public static Allele floweringFast;
-	public static Allele floweringFaster;
-	public static Allele floweringFastest;
-	public static Allele floweringMaximum;
+	public static final Allele floweringSlowest = new AlleleInteger("floweringSlowest", 5, true).setName("flowering", "slowest");
+	public static final Allele floweringSlower = new AlleleInteger("floweringSlower", 10).setName("flowering", "slower");
+	public static final Allele floweringSlow = new AlleleInteger("floweringSlow", 15).setName("flowering", "slow");
+	public static final Allele floweringAverage = new AlleleInteger("floweringAverage", 20).setName("flowering", "average");
+	public static final Allele floweringFast = new AlleleInteger("floweringFast", 25).setName("flowering", "fast");
+	public static final Allele floweringFaster = new AlleleInteger("floweringFaster", 30).setName("flowering", "faster");
+	public static final Allele floweringFastest = new AlleleInteger("floweringFastest", 35).setName("flowering", "fastest");
+	public static final Allele floweringMaximum = new AlleleInteger("floweringMaximum", 99, true).setName("flowering", "maximum");
 
 	// / BOTH // TERRITORY 1750 - 1799
-	public static Allele territoryDefault;
-	public static Allele territoryLarge;
-	public static Allele territoryLarger;
-	public static Allele territoryLargest;
+	public static final Allele territoryDefault = new AlleleArea("territoryDefault", new int[]{9, 6, 9}).setName("territory", "average");
+	public static final Allele territoryLarge = new AlleleArea("territoryLarge", new int[]{11, 8, 11}).setName("territory", "large");
+	public static final Allele territoryLarger = new AlleleArea("territoryLarger", new int[]{13, 12, 13}).setName("territory", "larger");
+	public static final Allele territoryLargest = new AlleleArea("territoryLargest", new int[]{15, 13, 15}).setName("territory", "largest");
 
 	// / BEES // EFFECTS 1800 - 1899
 	public static Allele effectNone;
@@ -412,164 +412,20 @@ public class Allele implements IAllele {
 	public static Allele butterflyNone;
 	
 	// These are "secondary" plant attributes, i.e. the tree can double as one.
-	public static Allele plantTypeNone;
-	public static Allele plantTypePlains;
-	public static Allele plantTypeDesert;
-	public static Allele plantTypeBeach;
-	public static Allele plantTypeCave;
-	public static Allele plantTypeWater;
-	public static Allele plantTypeNether;
-	public static Allele plantTypeCrop;
+	public static final Allele plantTypeNone = new AllelePlantType("plantTypeNone", EnumSet.noneOf(EnumPlantType.class), true);
+	public static final Allele plantTypePlains = new AllelePlantType("plantTypePlains", EnumPlantType.Plains);
+	public static final Allele plantTypeDesert = new AllelePlantType("plantTypeDesert", EnumPlantType.Desert);
+	public static final Allele plantTypeBeach = new AllelePlantType("plantTypeBeach", EnumPlantType.Beach);
+	public static final Allele plantTypeCave = new AllelePlantType("plantTypeCave", EnumPlantType.Cave);
+	public static final Allele plantTypeWater = new AllelePlantType("plantTypeWater", EnumPlantType.Water);
+	public static final Allele plantTypeNether = new AllelePlantType("plantTypeNether", EnumPlantType.Nether);
+	public static final Allele plantTypeCrop = new AllelePlantType("plantTypeCrop", EnumPlantType.Crop);
 
 	// / TREES // FIREPROOF
-	public static Allele fireproofFalse;
-	public static Allele fireproofTrue;
+	public static final Allele fireproofFalse = new AlleleBoolean("fireproofFalse", false);
+	public static final Allele fireproofTrue = new AlleleBoolean("fireproofTrue", true);
 
-	public static void initialize() {
-		// ALL // GENERIC
-		boolFalse = new AlleleBoolean("boolFalse", false);
-		boolTrue = new AlleleBoolean("boolTrue", true);
-
-		int1 = new AlleleInteger("i1d", 1, true);
-		int2 = new AlleleInteger("i2d", 2, true);
-		int3 = new AlleleInteger("i3d", 3, true);
-		int4 = new AlleleInteger("i4d", 4, true);
-		int5 = new AlleleInteger("i5d", 5, true);
-		int6 = new AlleleInteger("i6d", 6, true);
-		int7 = new AlleleInteger("i7d", 7, true);
-		int8 = new AlleleInteger("i8d", 8, true);
-		int9 = new AlleleInteger("i9d", 9, true);
-		int10 = new AlleleInteger("i10d", 10, true);
-
-		// BEES // SPEED
-		speedSlowest = new AlleleFloat("speedSlowest", 0.3f, true).setName("speed", "slowest");
-		speedSlower = new AlleleFloat("speedSlower", 0.6f, true).setName("speed", "slower");
-		speedSlow = new AlleleFloat("speedSlow", 0.8f, true).setName("speed", "slow");
-		speedNorm = new AlleleFloat("speedNorm", 1.0f).setName("speed", "normal");
-		speedFast = new AlleleFloat("speedFast", 1.2f, true).setName("speed", "fast");
-		speedFaster = new AlleleFloat("speedFaster", 1.4f).setName("speed", "faster");
-		speedFastest = new AlleleFloat("speedFastest", 1.7f).setName("speed", "fastest");
-
-		// BEES // LIFESPAN
-		lifespanShortest = new AlleleInteger("lifespanShortest", 10, false).setName("gui.shortestlife");
-		lifespanShorter = new AlleleInteger("lifespanShorter", 20, true).setName("gui.shorterlife");
-		lifespanShort = new AlleleInteger("lifespanShort", 30, true).setName("gui.shortlife");
-		lifespanShortened = new AlleleInteger("lifespanShortened", 35, true).setName("gui.shortenedlife");
-		lifespanNormal = new AlleleInteger("lifespanNormal", 40).setName("gui.normallife");
-		lifespanElongated = new AlleleInteger("lifespanElongated", 45, true).setName("gui.elongatedlife");
-		lifespanLong = new AlleleInteger("lifespanLong", 50).setName("gui.longlife");
-		lifespanLonger = new AlleleInteger("lifespanLonger", 60).setName("gui.longerlife");
-		lifespanLongest = new AlleleInteger("lifespanLongest", 70).setName("gui.longestlife");
-
-		// BEES // FERTILITY
-		fertilityLow = new AlleleInteger("fertilityLow", 1, true);
-		fertilityNormal = new AlleleInteger("fertilityNormal", 2, true);
-		fertilityHigh = new AlleleInteger("fertilityHigh", 3);
-		fertilityMaximum = new AlleleInteger("fertilityMaximum", 4);
-
-		// TREES // HEIGHT
-		heightSmallest = new AlleleFloat("heightSmallest", 0.25f).setName("height", "smallest");
-		heightSmaller = new AlleleFloat("heightSmaller", 0.5f).setName("height", "smaller");
-		heightSmall = new AlleleFloat("heightSmall", 0.75f).setName("height", "small");
-		heightAverage = new AlleleFloat("heightMax10", 1.0f).setName("height", "average");
-		heightLarge = new AlleleFloat("heightLarge", 1.25f).setName("height", "large");
-		heightLarger = new AlleleFloat("heightLarger", 1.5f).setName("height", "larger");
-		heightLargest = new AlleleFloat("heightLargest", 1.75f).setName("height", "largest");
-		heightGigantic = new AlleleFloat("heightGigantic", 2.0f).setName("height", "gigantic");
-
-		// BUTTERFLIES // SIZE
-		sizeSmallest = new AlleleFloat("sizeSmallest", 0.3f).setName("size", "smallest");
-		sizeSmaller = new AlleleFloat("sizeSmaller", 0.4f).setName("size", "smaller");
-		sizeSmall = new AlleleFloat("sizeSmall", 0.5f).setName("size", "small");
-		sizeAverage = new AlleleFloat("sizeAverage", 0.6f).setName("size", "average");
-		sizeLarge = new AlleleFloat("sizeLarge", 0.75f).setName("size", "large");
-		sizeLarger = new AlleleFloat("sizeLarger", 0.9f).setName("size", "larger");
-		sizeLargest = new AlleleFloat("sizeLargest", 1.0f).setName("size", "largest");
-
-		// BEES // TOLERANCE
-		toleranceNone = new AlleleTolerance("toleranceNone", EnumTolerance.NONE);
-		toleranceBoth1 = new AlleleTolerance("toleranceBoth1", EnumTolerance.BOTH_1, true);
-		toleranceBoth2 = new AlleleTolerance("toleranceBoth2", EnumTolerance.BOTH_2);
-		toleranceBoth3 = new AlleleTolerance("toleranceBoth3", EnumTolerance.BOTH_3);
-		toleranceBoth4 = new AlleleTolerance("toleranceBoth4", EnumTolerance.BOTH_4);
-		toleranceBoth5 = new AlleleTolerance("toleranceBoth5", EnumTolerance.BOTH_5);
-		toleranceUp1 = new AlleleTolerance("toleranceUp1", EnumTolerance.UP_1, true);
-		toleranceUp2 = new AlleleTolerance("toleranceUp2", EnumTolerance.UP_2);
-		toleranceUp3 = new AlleleTolerance("toleranceUp3", EnumTolerance.UP_3);
-		toleranceUp4 = new AlleleTolerance("toleranceUp4", EnumTolerance.UP_4);
-		toleranceUp5 = new AlleleTolerance("toleranceUp5", EnumTolerance.UP_5);
-		toleranceDown1 = new AlleleTolerance("toleranceDown1", EnumTolerance.DOWN_1, true);
-		toleranceDown2 = new AlleleTolerance("toleranceDown2", EnumTolerance.DOWN_2);
-		toleranceDown3 = new AlleleTolerance("toleranceDown3", EnumTolerance.DOWN_3);
-		toleranceDown4 = new AlleleTolerance("toleranceDown4", EnumTolerance.DOWN_4);
-		toleranceDown5 = new AlleleTolerance("toleranceDown5", EnumTolerance.DOWN_5);
-
-		// TREES // FERTILITY
-		saplingsLowest = new AlleleFloat("saplingsLowest", 0.01f, true).setName("saplings", "lowest");
-		saplingsLower = new AlleleFloat("saplingsLower", 0.025f, true).setName("saplings", "lower");
-		saplingsLow = new AlleleFloat("saplingsLow", 0.035f, true).setName("saplings", "low");
-		saplingsAverage = new AlleleFloat("saplingsDefault", 0.05f, true).setName("saplings", "average");
-		saplingsHigh = new AlleleFloat("saplingsDouble", 0.1f, true).setName("saplings", "high");
-		saplingsHigher = new AlleleFloat("saplingsTriple", 0.2f, true).setName("saplings", "higher");
-		saplingsHighest = new AlleleFloat("saplingsHighest", 0.3f, true).setName("saplings", "highest");
-
-		// TREES // YIELD
-		yieldLowest = new AlleleFloat("yieldLowest", 0.025f, true).setName("yield", "lowest");
-		yieldLower = new AlleleFloat("yieldLower", 0.05f, true).setName("yield", "lower");
-		yieldLow = new AlleleFloat("yieldLow", 0.1f, true).setName("yield", "low");
-		yieldAverage = new AlleleFloat("yieldDefault", 0.2f, true).setName("yield", "average");
-		yieldHigh = new AlleleFloat("yieldHigh", 0.3f, false).setName("yield", "high");
-		yieldHigher = new AlleleFloat("yieldHigher", 0.35f, false).setName("yield", "higher");
-		yieldHighest = new AlleleFloat("yieldHighest", 0.4f, false).setName("yield", "highest");
-
-		// TREES // SAPPINESS
-		sappinessLowest = new AlleleFloat("sappinessLowest", 0.1f, true).setName("sappiness", "lowest");
-		sappinessLower = new AlleleFloat("sappinessLower", 0.2f, true).setName("sappiness", "lower");
-		sappinessLow = new AlleleFloat("sappinessLow", 0.3f, true).setName("sappiness", "low");
-		sappinessAverage = new AlleleFloat("sappinessAverage", 0.4f, true).setName("sappiness", "average");
-		sappinessHigh = new AlleleFloat("sappinessHigh", 0.6f, true).setName("sappiness", "high");
-		sappinessHigher = new AlleleFloat("sappinessHigher", 0.8f, false).setName("sappiness", "higher");
-		sappinessHighest = new AlleleFloat("sappinessHighest", 1.0f, false).setName("sappiness", "highest");
-
-		// TREES // MATURATION TIME
-		maturationSlowest = new AlleleInteger("maturationSlowest", 10, true).setName("maturity", "slowest");
-		maturationSlower = new AlleleInteger("maturationSlower", 7).setName("maturity", "slower");
-		maturationSlow = new AlleleInteger("maturationSlow", 5, true).setName("maturity", "slow");
-		maturationAverage = new AlleleInteger("maturationAverage", 4).setName("maturity", "average");
-		maturationFast = new AlleleInteger("maturationFast", 3).setName("maturity", "fast");
-		maturationFaster = new AlleleInteger("maturationFaster", 2).setName("maturity", "faster");
-		maturationFastest = new AlleleInteger("maturationFastest", 1).setName("maturity", "fastest");
-
-		// BEES // FLOWER GROWTH
-		floweringSlowest = new AlleleInteger("floweringSlowest", 5, true).setName("flowering", "slowest");
-		floweringSlower = new AlleleInteger("floweringSlower", 10).setName("flowering", "slower");
-		floweringSlow = new AlleleInteger("floweringSlow", 15).setName("flowering", "slow");
-		floweringAverage = new AlleleInteger("floweringAverage", 20).setName("flowering", "average");
-		floweringFast = new AlleleInteger("floweringFast", 25).setName("flowering", "fast");
-		floweringFaster = new AlleleInteger("floweringFaster", 30).setName("flowering", "faster");
-		floweringFastest = new AlleleInteger("floweringFastest", 35).setName("flowering", "fastest");
-		floweringMaximum = new AlleleInteger("floweringMaximum", 99, true).setName("flowering", "maximum");
-
-		// BOTH // TERRITORY
-		territoryDefault = new AlleleArea("territoryDefault", new int[]{9, 6, 9}).setName("territory", "average");
-		territoryLarge = new AlleleArea("territoryLarge", new int[]{11, 8, 11}).setName("territory", "large");
-		territoryLarger = new AlleleArea("territoryLarger", new int[]{13, 12, 13}).setName("territory", "larger");
-		territoryLargest = new AlleleArea("territoryLargest", new int[]{15, 13, 15}).setName("territory", "largest");
-
-		// TREES // PLANTS
-		plantTypeNone = new AllelePlantType("plantTypeNone", EnumSet.noneOf(EnumPlantType.class), true);
-		plantTypePlains = new AllelePlantType("plantTypePlains", EnumPlantType.Plains);
-
-		plantTypeDesert = new AllelePlantType("plantTypeDesert", EnumPlantType.Desert);
-		plantTypeBeach = new AllelePlantType("plantTypeBeach", EnumPlantType.Beach);
-		plantTypeCave = new AllelePlantType("plantTypeCave", EnumPlantType.Cave);
-		plantTypeWater = new AllelePlantType("plantTypeWater", EnumPlantType.Water);
-		plantTypeNether = new AllelePlantType("plantTypeNether", EnumPlantType.Nether);
-		plantTypeCrop = new AllelePlantType("plantTypeCrop", EnumPlantType.Crop);
-
-		fireproofFalse = new AlleleBoolean("fireproofFalse", false);
-		fireproofTrue = new AlleleBoolean("fireproofTrue", true);
-
+	public static void setupLegacyAPI() {
 		// LEGACY MAPPINGS
 		ILegacyHandler legacy = (ILegacyHandler) AlleleManager.alleleRegistry;
 
@@ -703,7 +559,6 @@ public class Allele implements IAllele {
 		legacy.registerLegacyMapping(1751, "forestry.territoryLarge");
 		legacy.registerLegacyMapping(1752, "forestry.territoryLarger");
 		legacy.registerLegacyMapping(1753, "forestry.territoryLargest");
-
 	}
 
 	@Override
