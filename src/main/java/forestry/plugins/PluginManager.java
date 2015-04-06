@@ -141,7 +141,7 @@ public class PluginManager {
 		return loadedModules.contains(module);
 	}
 
-	private static void loadPlugin(ForestryPlugin plugin) {
+	private static void registerHandlers(ForestryPlugin plugin) {
 		Proxies.log.fine("Registering Handlers for Plugin: {0}", plugin);
 
 		IGuiHandler guiHandler = plugin.getGuiHandler();
@@ -260,12 +260,8 @@ public class PluginManager {
 		stage = Stage.PRE_INIT;
 		for (Module m : loadedModules) {
 			ForestryPlugin plugin = m.instance;
-			loadPlugin(plugin);
-		}
-
-		for (Module m : loadedModules) {
-			ForestryPlugin plugin = m.instance;
 			Proxies.log.fine("Pre-Init Start: {0}", plugin);
+			registerHandlers(plugin);
 			plugin.preInit();
 			plugin.registerItems();
 			if (Module.BUILDCRAFT_STATEMENTS.isEnabled()) {
