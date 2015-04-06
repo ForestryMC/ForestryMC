@@ -253,9 +253,10 @@ public class PluginNatura extends ForestryPlugin {
 
 		if (itemBarley != null) {
 			RecipeUtil.injectLeveledRecipe(itemBarley, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
-		}
-		if (GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat").stackSize > 0) {
-			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat"), " X ", "X#X", " X ", '#', Blocks.dirt, 'X', itemBarley);
+			if (GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat").stackSize > 0) {
+				ItemStack compostWheat = GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat");
+				Proxies.common.addRecipe(compostWheat, " X ", "X#X", " X ", '#', Blocks.dirt, 'X', itemBarley);
+			}
 		}
 	}
 
