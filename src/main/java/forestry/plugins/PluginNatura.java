@@ -66,8 +66,8 @@ public class PluginNatura extends ForestryPlugin {
 	}
 
 	@Override
-	public void doInit() {
-		super.doInit();
+	public void preInit() {
+		super.preInit();
 
 		logNatura = GameRegistry.findBlock(NATURA, "tree");
 		logWillow = GameRegistry.findBlock(NATURA, "willow");
@@ -103,6 +103,12 @@ public class PluginNatura extends ForestryPlugin {
 		berryBlack = GameRegistry.findItemStack(NATURA, "berryBlack", 1);
 		berryMalo = GameRegistry.findItemStack(NATURA, "berryMalo", 1);
 		itemBarley = GameRegistry.findItemStack(NATURA, "barleyFood", 1);
+	}
+
+	@Override
+	protected void registerCrates() {
+		super.registerCrates();
+
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
 
 		if (berryBlight != null) {
