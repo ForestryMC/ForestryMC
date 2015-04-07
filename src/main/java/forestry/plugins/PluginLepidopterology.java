@@ -88,14 +88,14 @@ public class PluginLepidopterology extends ForestryPlugin {
 		super.setupAPI();
 
 		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginLepidopterology.butterflyInterface = new ButterflyHelper());
-		createAlleles();
-		registerTemplates();
 	}
 
 	@Override
 	public void preInit() {
 		ForestryBlock.lepidopterology.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "lepidopterology");
 		ForestryBlock.lepidopterology.block().setCreativeTab(Tabs.tabLepidopterology);
+
+		createAlleles();
 	}
 
 	@Override
@@ -127,6 +127,8 @@ public class PluginLepidopterology extends ForestryPlugin {
 
 		Utils.registerEntity(EntityButterfly.class, "butterflyGE", 0, 0x000000, 0xffffff, 50, 1, true);
 		proxy.initializeRendering();
+
+		registerTemplates();
 
 		BlockBase lepidopterology = ((BlockBase) ForestryBlock.lepidopterology.block());
 		definitionChest = lepidopterology.addDefinition((new MachineDefinition(Defaults.DEFINITION_LEPICHEST_META, "forestry.LepiChest", TileLepidopteristChest.class,
