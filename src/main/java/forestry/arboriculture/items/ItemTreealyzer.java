@@ -95,8 +95,6 @@ public class ItemTreealyzer extends ItemInventoried {
 
 		@Override
 		public void markDirty() {
-			// if (!Proxies.common.isSimulating(player.worldObj))
-			// return;
 			tryAnalyze();
 		}
 
