@@ -136,9 +136,9 @@ public class ItemImprinter extends ItemForestry {
 
 		@Override
 		public void markDirty() {
-			if (!Proxies.common.isSimulating(player.worldObj)) {
-				return;
-			}
+			// if (!Proxies.common.isSimulating(player.worldObj)) {
+			// 	return;
+			// }
 			tryImprint();
 		}
 

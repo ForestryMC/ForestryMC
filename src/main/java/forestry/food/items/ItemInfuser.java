@@ -310,9 +310,9 @@ public class ItemInfuser extends ItemForestry {
 
 		@Override
 		public void markDirty() {
-			if (!Proxies.common.isSimulating(player.worldObj)) {
-				return;
-			}
+			// if (!Proxies.common.isSimulating(player.worldObj)) {
+			// 	return;
+			// }
 			trySeasoning();
 		}
 
