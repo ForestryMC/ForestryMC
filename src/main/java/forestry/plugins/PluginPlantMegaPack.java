@@ -73,18 +73,17 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 				"Tomato"
 		);
 
-		ImmutableList<String> desertPlant = ImmutableList.of(
-				"desertApachePlume",
-				"desertBrittlebush",
-				"desertBroadLeafGilia",
-				"desertBroomSnakeweed",
-				"desertKangarooPaw",
-				"desertOcotillo",
-				"desertPeninsulaOnion",
-				"desertSeepwood",
-				"desertWhiteSage"
-
-		);
+		ImmutableMap<String, Integer> desertPlant = ImmutableMap.<String, Integer>builder()
+				.put("desertApachePlume", 4)
+				.put("desertBrittlebush", 4)
+				.put("desertBroadLeafGilia", 4)
+				.put("desertBroomSnakeweed", 4)
+				.put("desertKangarooPaw", 4)
+				.put("desertOcotillo", 4)
+				.put("desertPeninsulaOnion", 4)
+				.put("desertSeepwood", 4)
+				.put("desertWhiteSage", 4)
+				.build();
 
 		ImmutableMap<String, Integer> nonGrowingFlowers = ImmutableMap.<String, Integer>builder()
 				.put("flowerAchillea", 9) // number of flowers in the block, usually meta+1
@@ -145,6 +144,35 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 				.put("cactusSnowPole", 6)
 				.put("cactusToothpick", 6)
 				.build();
+		ImmutableMap<String, Integer> forestPlant = ImmutableMap.<String, Integer>builder()
+				.put("forestArcticGentian", 1)
+				.put("forestAustralianBugle", 2)
+				.put("forestBroadleafMeadowsweet", 2)
+				.put("forestDeadnettle", 2)
+				.put("forestDeceivingTrillium", 2)
+				.put("forestFairySlipper", 2)
+				.put("forestHorseweed", 2)
+				.put("forestKneelingAngelica", 2)
+						//.put("forestLilyoftheValley", //poisonous
+				.put("forestNorthernPitcherPlant", 2)
+				.put("forestPinesap", 2)
+				.put("forestRedHelleborine", 2)
+				.put("forestSalal", 2)
+				.put("forestVanillaLeaf", 1)
+				.put("forestWesternWallflower", 2)
+				.put("forestWildColumbine", 2)
+				.put("forestWildMint", 2)
+				.put("forestWolfsFootClubmoss", 1)
+				.build();
+		ImmutableMap<String, Integer> plainsPlant = ImmutableMap.<String, Integer>builder()
+				.put("plainsPrairieBrome", 6) //skips some metas
+				.put("plainsPrairieSage", 4)
+				.put("plainsReedCanaryGrass", 6) //skips some metas
+				.put("plainsShortrayFleabane", 4)
+				.put("plainsSmallPasqueFlower", 4)
+				.put("plainsSmoothAster", 4)
+				.put("plainsThreeFloweredAvens", 4)
+				.build();
 
 		ImmutableList<String> waterPlant = ImmutableList.of(
 				"waterKelpGiantGRN",
@@ -177,15 +205,6 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 			}
 		}
 
-		for (String dPlant : desertPlant) {
-			Block desertPlantBlock = GameRegistry.findBlock(PlantMP, dPlant);
-			ItemStack desertPlantStack = GameRegistry.findItemStack(PlantMP, dPlant, 1);
-			if (desertPlantBlock != null && desertPlantStack != null) {
-				FlowerManager.flowerRegistry.registerAcceptableFlower(desertPlantBlock, FlowerManager.FlowerTypeCacti);
-				Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(desertPlantStack, desertPlantBlock, 4));
-			}
-		}
-
 		for (Map.Entry<String, Integer> flower : nonGrowingFlowers.entrySet()) {
 			Block flowerPlantBlock = GameRegistry.findBlock(PlantMP, flower.getKey());
 			if (flowerPlantBlock != null) {
@@ -195,19 +214,30 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 			}
 		}
 
-		for (Map.Entry<String, Integer> cPlant : cactusPlant.entrySet()) {
-			Block cactusPlantBlock = GameRegistry.findBlock(PlantMP, cPlant.getKey());
-			ItemStack cactusPlantStack = GameRegistry.findItemStack(PlantMP, cPlant.getKey(), 1);
-			if (cactusPlantBlock != null) {
-				FlowerManager.flowerRegistry.registerAcceptableFlower(cactusPlantBlock, FlowerManager.FlowerTypeCacti);
-				Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(cactusPlantStack, cactusPlantBlock, cPlant.getValue()));
-			}
-		}
+		addMetaFlower(cactusPlant, FlowerManager.FlowerTypeCacti, false);
+		addMetaFlower(desertPlant, FlowerManager.FlowerTypeCacti, false);
+
+		addMetaFlower(forestPlant, FlowerManager.FlowerTypeVanilla, true);
+		addMetaFlower(plainsPlant, FlowerManager.FlowerTypeVanilla, true);
 
 		for (String wPlant : waterPlant) {
 			ItemStack waterPlantStack = GameRegistry.findItemStack(PlantMP, wPlant, 1);
 			if (waterPlantStack != null) {
 				RecipeUtil.injectLeveledRecipe(waterPlantStack, GameMode.getGameMode().getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+			}
+		}
+	}
+
+	private void addMetaFlower(ImmutableMap<String, Integer> flowerMap, String flowertype, boolean plantable) {
+		for (Map.Entry<String, Integer> flower : flowerMap.entrySet()) {
+			Block flowerBlock = GameRegistry.findBlock(PlantMP, flower.getKey());
+			ItemStack flowerStack = GameRegistry.findItemStack(PlantMP, flower.getKey(), 1);
+			FlowerManager.flowerRegistry.registerAcceptableFlower(flowerBlock, flowertype);
+			if (plantable && flowerBlock != null) {
+				FlowerManager.flowerRegistry.registerPlantableFlower(flowerBlock, 0, 0.75, flowertype);
+			}
+			if (flowerStack != null && flowerBlock != null) {
+				Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(flowerStack, flowerBlock, flower.getValue()));
 			}
 		}
 	}
