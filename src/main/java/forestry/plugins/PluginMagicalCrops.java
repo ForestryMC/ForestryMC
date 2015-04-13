@@ -44,7 +44,7 @@ public class PluginMagicalCrops extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerRecipes() {
+	protected void postInit() {
 
 		ImmutableList<String> magicSeeds = ImmutableList.of(
 				"Essence",
