@@ -68,6 +68,7 @@ import forestry.core.items.ItemCrated;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
+import forestry.factory.gadgets.MachineCarpenter;
 import forestry.storage.BackpackDefinition;
 import forestry.storage.BackpackHelper;
 import forestry.storage.CrateRegistry;
@@ -185,12 +186,13 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 	}
 
 	public static void createCrateRecipes() {
+		MachineCarpenter.RecipeManager carpenterManager = (MachineCarpenter.RecipeManager) RecipeManagers.carpenterManager;
 		for (ItemCrated crate : crates) {
 			ItemStack itemStack = new ItemStack(crate);
 			if (crate.usesOreDict()) {
-				RecipeManagers.carpenterManager.addCratingWithOreDict(itemStack);
+				carpenterManager.addCratingWithOreDict(itemStack);
 			} else {
-				RecipeManagers.carpenterManager.addCrating(itemStack);
+				carpenterManager.addCrating(itemStack);
 			}
 		}
 	}

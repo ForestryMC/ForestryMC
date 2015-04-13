@@ -11,7 +11,6 @@
 package forestry.farming.gadgets;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -258,11 +257,6 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 
 	protected boolean hasMaster() {
 		return this.masterY >= 0;
-	}
-
-	@Override
-	public final IInventory getInventory() {
-		return getStructureInventory();
 	}
 
 	@Override

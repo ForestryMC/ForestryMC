@@ -117,7 +117,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		if (tryBreedingPrincess() || !hasHealthyQueen()) {
 			return;
 		}
-		
+
 		if (!queenCanWork()) {
 			return;
 		}
@@ -136,10 +136,10 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 			
 			// Need a flower
 			if (queen.hasFlower(housing)) {
-				housing.setErrorState(EnumErrorCode.OK.ordinal());
+				housing.setErrorState(EnumErrorCode.OK);
 				doQueenWorkCycle();
 			} else {
-				housing.setErrorState(EnumErrorCode.NOFLOWER.ordinal());
+				housing.setErrorState(EnumErrorCode.NOFLOWER);
 			}
 		}
 	}
@@ -203,11 +203,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		}
 
 		if (housingErrorState != null) {
-			try {
-				housing.setErrorState(housingErrorState);
-			} catch (Error e) {
-				housing.setErrorState(housingErrorState.ordinal());
-			}
+			housing.setErrorState(housingErrorState);
 		}
 
 		return housingErrorState != EnumErrorCode.NOSPACE;
@@ -232,11 +228,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 			}
 		}
 		if (housingErrorState != null) {
-			try {
-				housing.setErrorState(housingErrorState);
-			} catch (Error e) {
-				housing.setErrorState(housingErrorState.ordinal());
-			}
+			housing.setErrorState(housingErrorState);
 		}
 		return hasQueen;
 	}
@@ -247,9 +239,9 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		// Princess available? Try to breed!
 		if (ForestryItem.beePrincessGE.isItemEqual(housing.getQueen())) {
 			if (ForestryItem.beeDroneGE.isItemEqual(housing.getDrone())) {
-				housing.setErrorState(EnumErrorCode.OK.ordinal());
+				housing.setErrorState(EnumErrorCode.OK);
 			} else {
-				housing.setErrorState(EnumErrorCode.NODRONE.ordinal());
+				housing.setErrorState(EnumErrorCode.NODRONE);
 			}
 			tickBreed();
 			isBreedingPrincess = true;
@@ -259,35 +251,16 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	private boolean queenCanWork() {
-		try {
-			boolean canWork = true;
-			// Not while raining, at night or without light
-			IErrorState state = queen.canWork(housing);
-			if (state != EnumErrorCode.OK) {
-				housing.setErrorState(state);
-				canWork = false;
-			} else if (housing.getErrorState() != EnumErrorCode.NOFLOWER) {
-				housing.setErrorState(EnumErrorCode.OK);
-			}
-			return canWork;
-		} catch (Error e) {
-			Proxies.log.logErrorAPI("Forestry", e, IBee.class);
-			return queenCanWorkDeprecated();
-		}
-	}
-
-	// fallback for outdated APIs
-	private boolean queenCanWorkDeprecated() {
-		boolean canWork = true;
-		// Not while raining, at night or without light
-		EnumErrorCode state = EnumErrorCode.values()[queen.isWorking(housing)];
+		IErrorState state = queen.canWork(housing);
 		if (state != EnumErrorCode.OK) {
-			housing.setErrorState(state.ordinal());
-			canWork = false;
-		} else if (housing.getErrorOrdinal() != EnumErrorCode.NOFLOWER.ordinal()) {
-			housing.setErrorState(EnumErrorCode.OK.ordinal());
+			housing.setErrorState(state);
+			return false;
 		}
-		return canWork;
+
+		if (housing.getErrorState() != EnumErrorCode.NOFLOWER) {
+			housing.setErrorState(EnumErrorCode.OK);
+		}
+		return true;
 	}
 
 	// / BREEDING

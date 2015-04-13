@@ -90,7 +90,7 @@ public class BeeMutation extends Mutation implements IBeeMutation {
 		if (restrictBiomeTypes.size() > 0) {
 			boolean noneMatched = true;
 
-			BiomeGenBase biome = BiomeGenBase.getBiome(housing.getBiomeId());
+			BiomeGenBase biome = housing.getBiome();
 			if (strictBiomeCheck) {
 				BiomeDictionary.Type[] types = BiomeDictionary.getTypesForBiome(biome);
 				if (types.length == 1 && restrictBiomeTypes.contains(types[0])) {

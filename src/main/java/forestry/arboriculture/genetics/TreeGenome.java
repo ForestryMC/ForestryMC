@@ -93,49 +93,17 @@ public class TreeGenome extends Genome implements ITreeGenome {
 
 	@Override
 	public float getSappiness() {
-		// FIXME: Legacy handling.
-		if (getChromosomes()[EnumTreeChromosome.SAPPINESS.ordinal()] == null) {
-			getChromosomes()[EnumTreeChromosome.SAPPINESS.ordinal()] = new Chromosome(Allele.sappinessLowest);
-		}
-
-		IAllele allele = getActiveAllele(EnumTreeChromosome.SAPPINESS);
-		// FIXME: More legacy handling
-		if (allele instanceof IAlleleFloat) {
-			return ((IAlleleFloat) allele).getValue();
-		} else {
-			getChromosomes()[EnumTreeChromosome.SAPPINESS.ordinal()] = new Chromosome(Allele.sappinessLowest);
-			return 0.1f;
-		}
+		return ((IAlleleFloat) getActiveAllele(EnumTreeChromosome.SAPPINESS)).getValue();
 	}
 
 	@Override
 	public EnumSet<EnumPlantType> getPlantTypes() {
-		// / FIXME: Needs some legacy handling.
-		if (!(getActiveAllele(EnumTreeChromosome.PLANT) instanceof AllelePlantType)) {
-			getChromosomes()[EnumTreeChromosome.PLANT.ordinal()] = new Chromosome(Allele.plantTypeNone);
-		}
-
 		return ((AllelePlantType) getActiveAllele(EnumTreeChromosome.PLANT)).getPlantTypes();
 	}
 
 	@Override
 	public int getMaturationTime() {
-		if (getChromosomes()[EnumTreeChromosome.MATURATION.ordinal()] == null) {
-			getChromosomes()[EnumTreeChromosome.MATURATION.ordinal()] = new Chromosome(Allele.maturationSlowest);
-		}
-
 		return ((IAlleleInteger) getActiveAllele(EnumTreeChromosome.MATURATION)).getValue();
-	}
-
-	private IAllele translateGirth(int girth) {
-		switch (girth) {
-			case 2:
-				return Allele.int2;
-			case 3:
-				return Allele.int3;
-			default:
-				return Allele.int1;
-		}
 	}
 
 	@Override

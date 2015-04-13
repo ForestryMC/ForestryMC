@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -86,33 +85,6 @@ public class CircuitBoard implements ICircuitBoard {
 
 		ArrayList<ICircuit> readcircuits = new ArrayList<ICircuit>();
 
-		// FIXME: Legacy I
-		if (nbttagcompound.hasKey("CS")) {
-
-			NBTTagList nbttaglist = nbttagcompound.getTagList("CS", 10);
-			for (int i = 0; i < nbttaglist.tagCount(); i++) {
-				NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-				readcircuits.add(ChipsetManager.circuitRegistry.getFromLegacyMap(nbttagcompound1.getInteger("I")));
-			}
-
-			circuits = readcircuits.toArray(new ICircuit[readcircuits.size()]);
-			return;
-
-		}
-
-		// FIXME: Legacy II
-		if (nbttagcompound.hasKey("CL")) {
-			NBTTagList nbttaglist = nbttagcompound.getTagList("CL", 10);
-			for (int i = 0; i < nbttaglist.tagCount(); i++) {
-				NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-				readcircuits.add(ChipsetManager.circuitRegistry.getCircuit(nbttagcompound1.getString("I")));
-			}
-
-			circuits = readcircuits.toArray(new ICircuit[readcircuits.size()]);
-			return;
-		}
-
-		// New
 		if (circuits != null) {
 			return;
 		}

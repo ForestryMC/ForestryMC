@@ -32,7 +32,6 @@ import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.core.GameMode;
 import forestry.core.circuits.Circuit;
-import forestry.core.circuits.CircuitId;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.config.Config;
 import forestry.core.config.Configuration;
@@ -174,12 +173,6 @@ public class PluginIC2 extends ForestryPlugin {
 
 		ICircuitLayout layoutEngineTin = new CircuitLayout("engine.tin");
 		ChipsetManager.circuitRegistry.registerLayout(layoutEngineTin);
-
-		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_CHOKE_I, "forestry.energyChoke1");
-		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.FIRE_DAMPENER_I, "forestry.energyDampener1");
-		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_EFFICIENCY_I, "forestry.energyEfficiency1");
-		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_BOOST_I, "forestry.energyBoost1");
-		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_BOOST_II, "forestry.energyBoost2");
 	}
 
 	@Override

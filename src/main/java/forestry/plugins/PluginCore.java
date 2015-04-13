@@ -89,9 +89,7 @@ public class PluginCore extends ForestryPlugin {
 
 		ChipsetManager.solderManager = new ItemSolderingIron.SolderManager();
 
-		CircuitRegistry circuitRegistry = new CircuitRegistry();
-		ChipsetManager.circuitRegistry = circuitRegistry;
-		circuitRegistry.initialize();
+		ChipsetManager.circuitRegistry = new CircuitRegistry();
 
 		AlleleRegistry alleleRegistry = new AlleleRegistry();
 		AlleleManager.alleleRegistry = alleleRegistry;

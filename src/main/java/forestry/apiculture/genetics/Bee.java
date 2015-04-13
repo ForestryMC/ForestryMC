@@ -137,11 +137,6 @@ public class Bee extends IndividualLiving implements IBee {
 		this.isNatural = flag;
 	}
 
-	@Override
-	public boolean isIrregularMating() {
-		return false;
-	}
-
 	public boolean isNatural() {
 		return this.isNatural;
 	}
@@ -245,16 +240,13 @@ public class Bee extends IndividualLiving implements IBee {
 	}
 
 	@Override
-	public int isWorking(IBeeHousing housing) {
-		return canWork(housing).ordinal();
-	}
-
-	@Override
 	public EnumErrorCode canWork(IBeeHousing housing) {
 
 		World world = housing.getWorld();
+		BiomeGenBase biome = housing.getBiome();
+
 		// / Rain needs tolerant flyers
-		if (world.isRaining() && !genome.getTolerantFlyer() && BiomeHelper.canRainOrSnow(housing.getBiomeId()) && !housing.isSealed()) {
+		if (world.isRaining() && !genome.getTolerantFlyer() && BiomeHelper.canRainOrSnow(biome) && !housing.isSealed()) {
 			return EnumErrorCode.ISRAINING;
 		}
 
@@ -276,7 +268,6 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		// / No sky, except if in hell
-		BiomeGenBase biome = BiomeGenBase.getBiome(housing.getBiomeId());
 		if (biome == null) {
 			return EnumErrorCode.NOSKY;
 		}
@@ -341,18 +332,6 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		return hasFlower;
-	}
-
-	@Override
-	public ArrayList<Integer> getSuitableBiomeIds() {
-		ArrayList<Integer> suitableBiomes = new ArrayList<Integer>();
-		for (BiomeGenBase biome : BiomeGenBase.getBiomeGenArray()) {
-			if (isSuitableBiome(biome)) {
-				suitableBiomes.add(biome.biomeID);
-			}
-		}
-
-		return suitableBiomes;
 	}
 
 	@Override

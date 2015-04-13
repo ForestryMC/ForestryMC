@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.world.World;
-
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
@@ -37,10 +35,6 @@ public class AlleleEffectNone extends Allele implements IAlleleBeeEffect {
 
 	@Override
 	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		return doEffect(genome, storedData, housing.getWorld(), housing.getBiomeId(), housing.getXCoord(), housing.getYCoord(), housing.getZCoord());
-	}
-
-	protected IEffectData doEffect(IBeeGenome genome, IEffectData storedData, World world, int biomeid, int x, int y, int z) {
 		return storedData;
 	}
 

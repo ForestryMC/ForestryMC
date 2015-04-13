@@ -24,17 +24,16 @@ public class JubilanceDefault implements IJubilanceProvider {
 
 	@Override
 	public boolean isJubilant(IAlleleBeeSpecies species, IBeeGenome genome, IBeeHousing housing) {
-		BiomeGenBase biome = BiomeGenBase.getBiome(housing.getBiomeId());
+		BiomeGenBase biome = housing.getBiome();
 
-		if (EnumTemperature.getFromValue(biome.temperature) != species.getTemperature() ||
-				EnumHumidity.getFromValue(biome.rainfall) != species.getHumidity()) {
-			return false;
-		}
+		EnumTemperature temperature = EnumTemperature.getFromBiome(biome);
+		EnumHumidity humidity = EnumHumidity.getFromValue(biome.rainfall);
 
-		return true;
+		return temperature == species.getTemperature() && humidity == species.getHumidity();
+
 	}
 
-	protected AxisAlignedBB getBounding(IBeeGenome genome, IBeeHousing housing, float modifier) {
+	protected static AxisAlignedBB getBounding(IBeeGenome genome, IBeeHousing housing, float modifier) {
 		int[] areaAr = genome.getTerritory();
 		Vect area = new Vect(areaAr[0], areaAr[1], areaAr[2]).multiply(modifier);
 		Vect offset = new Vect(-Math.round(area.x / 2), -Math.round(area.y / 2), -Math.round(area.z / 2));

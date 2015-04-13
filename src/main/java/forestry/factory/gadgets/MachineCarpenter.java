@@ -128,17 +128,15 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		private static final Set<Fluid> recipeFluids = new HashSet<Fluid>();
 		private static final List<ItemStack> boxes = new ArrayList<ItemStack>();
 
-		@Override
 		public void addCrating(ItemStack itemStack) {
-			ItemStack uncrated = ((forestry.core.items.ItemCrated) itemStack.getItem()).getContained(itemStack);
+			ItemStack uncrated = ((forestry.core.items.ItemCrated) itemStack.getItem()).getContained();
 			addRecipe(Defaults.CARPENTER_CRATING_CYCLES, Fluids.WATER.getFluid(Defaults.CARPENTER_CRATING_LIQUID_QUANTITY),
 					ForestryItem.crate.getItemStack(), itemStack, new Object[]{"###", "###", "###", '#', uncrated});
 			addRecipe(null, new ItemStack(uncrated.getItem(), 9, uncrated.getItemDamage()), new Object[]{"#", '#', itemStack});
 		}
 
-		@Override
 		public void addCratingWithOreDict(ItemStack itemStack) {
-			ItemStack uncrated = ((forestry.core.items.ItemCrated) itemStack.getItem()).getContained(itemStack);
+			ItemStack uncrated = ((forestry.core.items.ItemCrated) itemStack.getItem()).getContained();
 			int[] oreIds = OreDictionary.getOreIDs(uncrated);
 			for (int oreId : oreIds) {
 				String oreName = OreDictionary.getOreName(oreId);
@@ -146,7 +144,6 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			}
 		}
 
-		@Override
 		public void addCrating(String toCrate, ItemStack unpack, ItemStack crated) {
 			addRecipe(Defaults.CARPENTER_CRATING_CYCLES, Fluids.WATER.getFluid(Defaults.CARPENTER_CRATING_LIQUID_QUANTITY),
 					ForestryItem.crate.getItemStack(), crated, new Object[]{"###", "###", "###", '#', toCrate});

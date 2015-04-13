@@ -78,8 +78,6 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	public static final int SLOT_PRODUCT_1 = 2;
 	public static final int SLOT_PRODUCT_COUNT = 7;
 	public static final int SLOT_FRAMES_1 = 9;
-	public static final int SLOT_FRAMES_2 = 10;
-	public static final int SLOT_FRAMES_3 = 11;
 	public static final int SLOT_FRAMES_COUNT = 3;
 	private final IBeekeepingLogic logic;
 	private BiomeGenBase biome;
@@ -249,14 +247,6 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 		return (getHealthDisplay() * i) / getMaxHealthDisplay();
 	}
 
-	public int getTemperatureScaled(int i) {
-		return Math.round(i * (getExactTemperature() / 2));
-	}
-
-	public int getHumidityScaled(int i) {
-		return Math.round(i * getExactHumidity());
-	}
-
 	public void updateBiome() {
 		if (worldObj != null) {
 			BiomeGenBase biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
@@ -311,11 +301,6 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	}
 
 	@Override
-	public int getBiomeId() {
-		return biome.biomeID;
-	}
-
-	@Override
 	public BiomeGenBase getBiome() {
 		return biome;
 	}
@@ -343,16 +328,6 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	@Override
 	public World getWorld() {
 		return worldObj;
-	}
-
-	@Override
-	public void setErrorState(int state) {
-		setErrorState(EnumErrorCode.values()[state]);
-	}
-
-	@Override
-	public int getErrorOrdinal() {
-		return getErrorState().getID();
 	}
 
 	@Override

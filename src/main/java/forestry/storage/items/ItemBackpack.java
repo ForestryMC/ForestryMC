@@ -107,7 +107,7 @@ public class ItemBackpack extends ItemInventoried {
 		return evaluateTileHit(itemstack, player, world, x, y, z, side, hitX, hitY, hitZ);
 	}
 
-	public ItemStack tryStowing(EntityPlayer player, ItemStack backpackStack, ItemStack stack) {
+	public static ItemStack tryStowing(EntityPlayer player, ItemStack backpackStack, ItemStack stack) {
 
 		ItemBackpack backpack = ((ItemBackpack) backpackStack.getItem());
 		ItemInventory inventory = new ItemInventoryBackpack(ItemBackpack.class, backpack.getBackpackSize(), backpackStack);
@@ -131,7 +131,7 @@ public class ItemBackpack extends ItemInventoried {
 		return null;
 	}
 
-	private void switchMode(ItemStack itemstack) {
+	private static void switchMode(ItemStack itemstack) {
 		BackpackMode mode = getMode(itemstack);
 		int nextMode = mode.ordinal() + 1;
 		if (!Config.enableBackpackResupply && nextMode == BackpackMode.RESUPPLY.ordinal()) {
@@ -141,7 +141,7 @@ public class ItemBackpack extends ItemInventoried {
 		itemstack.setItemDamage(nextMode);
 	}
 
-	private IInventory getInventoryHit(World world, int x, int y, int z, int side) {
+	private static IInventory getInventoryHit(World world, int x, int y, int z, int side) {
 		TileEntity targeted = world.getTileEntity(x, y, z);
 		return InvTools.getInventoryFromTile(targeted, ForgeDirection.getOrientation(side));
 	}
@@ -164,7 +164,7 @@ public class ItemBackpack extends ItemInventoried {
 
 			BackpackMode mode = getMode(stack);
 			if (mode == BackpackMode.RECEIVE) {
-				tryChestReceive(player, backpackInventory, inventory);
+				tryChestReceive(backpackInventory, inventory);
 			} else {
 				tryChestTransfer(backpackInventory, inventory);
 			}
@@ -177,7 +177,7 @@ public class ItemBackpack extends ItemInventoried {
 		return false;
 	}
 
-	private void tryChestTransfer(ItemInventoryBackpack backpackInventory, IInventory target) {
+	private static void tryChestTransfer(ItemInventoryBackpack backpackInventory, IInventory target) {
 
 		for (IInvSlot slot : InventoryIterator.getIterable(backpackInventory)) {
 			ItemStack packStack = slot.getStackInSlot();
@@ -190,7 +190,7 @@ public class ItemBackpack extends ItemInventoried {
 		}
 	}
 
-	private void tryChestReceive(EntityPlayer player, ItemInventoryBackpack backpackInventory, IInventory target) {
+	private void tryChestReceive(ItemInventoryBackpack backpackInventory, IInventory target) {
 
 		for (IInvSlot slot : InventoryIterator.getIterable(target)) {
 			ItemStack targetStack = slot.getStackInSlot();
@@ -198,7 +198,7 @@ public class ItemBackpack extends ItemInventoried {
 				continue;
 			}
 
-			if (!definition.isValidItem(player, targetStack)) {
+			if (!definition.isValidItem(targetStack)) {
 				continue;
 			}
 
@@ -249,11 +249,7 @@ public class ItemBackpack extends ItemInventoried {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
-		try {
-			return definition.getName(itemstack);
-		} catch (Error e) {
-			return definition.getName();
-		}
+		return definition.getName(itemstack);
 	}
 
 	/* ICONS */

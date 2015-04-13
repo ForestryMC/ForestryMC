@@ -230,11 +230,6 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	}
 
 	@Override
-	public final IInventoryAdapter getInventory() {
-		return getStructureInventory();
-	}
-
-	@Override
 	public IInventoryAdapter getStructureInventory() {
 		return getInternalInventory();
 	}

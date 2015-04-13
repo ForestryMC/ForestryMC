@@ -164,14 +164,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	@Override
 	public boolean isDiscovered(IMutation mutation) {
 		String mutationString = getMutationString(mutation);
-		if (discoveredMutations.contains(mutationString)) {
-			return true;
-		}
-
-		// TODO: remove legacy handling
-		String species0 = mutation.getAllele0().getUID();
-		String species1 = mutation.getAllele1().getUID();
-		return discoveredMutations.contains(species0 + '-' + species1);
+		return discoveredMutations.contains(mutationString);
 	}
 
 	@Override

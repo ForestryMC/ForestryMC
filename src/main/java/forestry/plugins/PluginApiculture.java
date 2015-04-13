@@ -169,14 +169,14 @@ public class PluginApiculture extends ForestryPlugin {
 	public static int ticksPerBeeWorkCycle = 550;
 	public static boolean apiarySideSensitive = false;
 	public static boolean fancyRenderedBees = false;
-	private ArrayList<IHiveDrop> forestDrops;
-	private ArrayList<IHiveDrop> meadowsDrops;
-	private ArrayList<IHiveDrop> desertDrops;
-	private ArrayList<IHiveDrop> jungleDrops;
-	private ArrayList<IHiveDrop> endDrops;
-	private ArrayList<IHiveDrop> snowDrops;
-	private ArrayList<IHiveDrop> swampDrops;
-	private ArrayList<IHiveDrop> swarmDrops;
+	private final List<IHiveDrop> forestDrops = new ArrayList<IHiveDrop>();
+	private final List<IHiveDrop> meadowsDrops = new ArrayList<IHiveDrop>();
+	private final List<IHiveDrop> desertDrops = new ArrayList<IHiveDrop>();
+	private final List<IHiveDrop> jungleDrops = new ArrayList<IHiveDrop>();
+	private final List<IHiveDrop> endDrops = new ArrayList<IHiveDrop>();
+	private final List<IHiveDrop> snowDrops = new ArrayList<IHiveDrop>();
+	private final List<IHiveDrop> swampDrops = new ArrayList<IHiveDrop>();
+
 	/**
 	 * See {@link IBeeRoot} for details
 	 */
@@ -195,7 +195,6 @@ public class PluginApiculture extends ForestryPlugin {
 
 		HiveManager.hiveRegistry = hiveRegistry = new HiveRegistry();
 		HiveManager.genHelper = new HiveGenHelper();
-		createHiveDropArrays();
 
 		FlowerManager.flowerRegistry = new FlowerRegistry();
 
@@ -779,37 +778,6 @@ public class PluginApiculture extends ForestryPlugin {
 		beeItem.setTagCompound(nbtTagCompound);
 
 		return beeItem;
-	}
-
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	@Deprecated // deprecated since 3.1. remove when BeeManager.hiveDrops is removed
-	private void createHiveDropArrays() {
-
-		BeeManager.hiveDrops = new ArrayList[8];
-
-		forestDrops = new ArrayList<IHiveDrop>();
-		BeeManager.hiveDrops[0] = forestDrops;
-
-		meadowsDrops = new ArrayList<IHiveDrop>();
-		BeeManager.hiveDrops[1] = meadowsDrops;
-
-		desertDrops = new ArrayList<IHiveDrop>();
-		BeeManager.hiveDrops[2] = desertDrops;
-
-		jungleDrops = new ArrayList<IHiveDrop>();
-		BeeManager.hiveDrops[3] = jungleDrops;
-
-		endDrops = new ArrayList<IHiveDrop>();
-		BeeManager.hiveDrops[4] = endDrops;
-
-		snowDrops = new ArrayList<IHiveDrop>();
-		BeeManager.hiveDrops[5] = snowDrops;
-
-		swampDrops = new ArrayList<IHiveDrop>();
-		BeeManager.hiveDrops[6] = swampDrops;
-
-		swarmDrops = new ArrayList<IHiveDrop>();
-		BeeManager.hiveDrops[7] = swarmDrops;
 	}
 
 	private static void createHives() {

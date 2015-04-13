@@ -37,7 +37,8 @@ public class AlleleEffectGlacial extends AlleleEffectThrottled {
 			return storedData;
 		}
 
-		EnumTemperature temp = EnumTemperature.getFromValue(BiomeGenBase.getBiome(housing.getBiomeId()).temperature);
+		BiomeGenBase biome = housing.getBiome();
+		EnumTemperature temp = EnumTemperature.getFromBiome(biome);
 
 		switch (temp) {
 			case HELLISH:

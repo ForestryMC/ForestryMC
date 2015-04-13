@@ -368,11 +368,6 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 	}
 
 	@Override
-	public int getBiomeId() {
-		return biome.biomeID;
-	}
-
-	@Override
 	public BiomeGenBase getBiome() {
 		return biome;
 	}
@@ -448,16 +443,6 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 	@Override
 	public World getWorld() {
 		return worldObj;
-	}
-
-	@Override
-	public void setErrorState(int state) {
-		setErrorState(EnumErrorCode.values()[state]);
-	}
-
-	@Override
-	public int getErrorOrdinal() {
-		return getErrorState().getID();
 	}
 
 	@Override

@@ -491,11 +491,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public int getBiomeId() {
-		return biome.biomeID;
-	}
-
-	@Override
 	public BiomeGenBase getBiome() {
 		return biome;
 	}
@@ -511,16 +506,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public void setErrorState(int state) {
-	}
-
-	@Override
 	public void setErrorState(IErrorState state) {
-	}
-
-	@Override
-	public int getErrorOrdinal() {
-		return 0;
 	}
 
 	@Override
