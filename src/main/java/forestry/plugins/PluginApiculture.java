@@ -52,7 +52,6 @@ import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeRoot;
-import forestry.api.apiculture.IHiveDrop;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -169,13 +168,6 @@ public class PluginApiculture extends ForestryPlugin {
 	public static int ticksPerBeeWorkCycle = 550;
 	public static boolean apiarySideSensitive = false;
 	public static boolean fancyRenderedBees = false;
-	private final List<IHiveDrop> forestDrops = new ArrayList<IHiveDrop>();
-	private final List<IHiveDrop> meadowsDrops = new ArrayList<IHiveDrop>();
-	private final List<IHiveDrop> desertDrops = new ArrayList<IHiveDrop>();
-	private final List<IHiveDrop> jungleDrops = new ArrayList<IHiveDrop>();
-	private final List<IHiveDrop> endDrops = new ArrayList<IHiveDrop>();
-	private final List<IHiveDrop> snowDrops = new ArrayList<IHiveDrop>();
-	private final List<IHiveDrop> swampDrops = new ArrayList<IHiveDrop>();
 
 	/**
 	 * See {@link IBeeRoot} for details
@@ -362,7 +354,6 @@ public class PluginApiculture extends ForestryPlugin {
 	public void postInit() {
 		super.postInit();
 		registerDungeonLoot();
-		updateHiveDrops();
 	}
 
 	@Override
@@ -395,7 +386,8 @@ public class PluginApiculture extends ForestryPlugin {
 
 		// / BEE RESOURCES
 		ForestryItem.honeyDrop.registerItem(new ItemOverlay(Tabs.tabApiculture,
-				new OverlayInfo("honey", 0xecb42d, 0xe8c814), new OverlayInfo("charged", 0x800505, 0x9c0707).setIsSecret(),
+				new OverlayInfo("honey", 0xecb42d, 0xe8c814),
+				new OverlayInfo("charged", 0x800505, 0x9c0707).setIsSecret(),
 				new OverlayInfo("omega", 0x191919, 0x4a8ca7).setIsSecret()), "honeyDrop");
 		OreDictionary.registerOre("dropHoney", ForestryItem.honeyDrop.getItemStack());
 
@@ -406,7 +398,9 @@ public class PluginApiculture extends ForestryPlugin {
 		OreDictionary.registerOre("itemPollen", ForestryItem.pollenCluster.getItemStack());
 
 		ForestryItem.propolis.registerItem(new ItemOverlay(Tabs.tabApiculture,
-						new OverlayInfo("normal", 0xc5b24e), new OverlayInfo("sticky", 0xc68e57), new OverlayInfo("pulsating", 0x2ccdb1).setIsSecret(),
+						new OverlayInfo("normal", 0xc5b24e),
+						new OverlayInfo("sticky", 0xc68e57),
+						new OverlayInfo("pulsating", 0x2ccdb1).setIsSecret(),
 						new OverlayInfo("silky", 0xddff00)),
 				"propolis");
 
@@ -653,7 +647,7 @@ public class PluginApiculture extends ForestryPlugin {
 			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 2), ForestryItem.refractoryWax.getItemStack(), ForestryItem.phosphor.getItemStack(2), 70);
 			// Stringy combs
 			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 3), ForestryItem.propolis.getItemStack(), ForestryItem.honeyDrop.getItemStack(), 40);
-			// Drippig combs
+			// Dripping combs
 			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 5), ForestryItem.honeydew.getItemStack(), ForestryItem.honeyDrop.getItemStack(), 40);
 			// Frozen combs
 			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 4), new ItemStack[]{ForestryItem.beeswax.getItemStack(),
@@ -711,27 +705,47 @@ public class PluginApiculture extends ForestryPlugin {
 		return recipes.toArray(new IRecipe[recipes.size()]);
 	}
 
-	private void registerBeehiveDrops() {
-		forestDrops.add(new HiveDrop(BeeTemplates.getForestTemplate(), new ItemStack[]{ForestryItem.beeComb.getItemStack(1, 0)}, 80).setIgnobleShare(0.7f));
-		forestDrops.add(new HiveDrop(BeeTemplates.getForestRainResistTemplate(), new ItemStack[]{ForestryItem.beeComb.getItemStack(1, 0)}, 8));
-		forestDrops.add(new HiveDrop(BeeTemplates.getValiantTemplate(), new ItemStack[]{ForestryItem.beeComb.getItemStack(1, 0)}, 3));
+	private static void registerBeehiveDrops() {
+		ItemStack honeyComb = ForestryItem.beeComb.getItemStack(1, 0);
+		hiveRegistry.addDrops(HiveRegistry.forest,
+				new HiveDrop(80, BeeTemplates.getForestTemplate(), honeyComb).setIgnobleShare(0.7f),
+				new HiveDrop(8, BeeTemplates.getForestRainResistTemplate(), honeyComb),
+				new HiveDrop(3, BeeTemplates.getValiantTemplate(), honeyComb)
+		);
 
-		meadowsDrops.add(new HiveDrop(BeeTemplates.getMeadowsTemplate(), new ItemStack[]{ForestryItem.beeComb.getItemStack(1, 0)}, 80).setIgnobleShare(0.7f));
-		meadowsDrops.add(new HiveDrop(BeeTemplates.getValiantTemplate(), new ItemStack[]{ForestryItem.beeComb.getItemStack(1, 0)}, 3));
+		hiveRegistry.addDrops(HiveRegistry.meadows,
+				new HiveDrop(80, BeeTemplates.getMeadowsTemplate(), honeyComb).setIgnobleShare(0.7f),
+				new HiveDrop(3, BeeTemplates.getValiantTemplate(), honeyComb)
+		);
 
-		desertDrops.add(new HiveDrop(BeeTemplates.getModestTemplate(), new ItemStack[]{ForestryItem.beeComb.getItemStack(1, 7)}, 80).setIgnobleShare(0.7f));
-		desertDrops.add(new HiveDrop(BeeTemplates.getValiantTemplate(), new ItemStack[]{ForestryItem.beeComb.getItemStack(1, 7)}, 3));
+		ItemStack parchedComb = ForestryItem.beeComb.getItemStack(1, 7);
+		hiveRegistry.addDrops(HiveRegistry.desert,
+				new HiveDrop(80, BeeTemplates.getModestTemplate(), parchedComb).setIgnobleShare(0.7f),
+				new HiveDrop(3, BeeTemplates.getValiantTemplate(), parchedComb)
+		);
 
-		jungleDrops.add(new HiveDrop(BeeTemplates.getTropicalTemplate(), new ItemStack[]{ForestryItem.beeComb.getItemStack(1, 6)}, 80).setIgnobleShare(0.7f));
-		jungleDrops.add(new HiveDrop(BeeTemplates.getValiantTemplate(), new ItemStack[]{ForestryItem.beeComb.getItemStack(1, 6)}, 3));
+		ItemStack silkyComb = ForestryItem.beeComb.getItemStack(1, 6);
+		hiveRegistry.addDrops(HiveRegistry.jungle,
+				new HiveDrop(80, BeeTemplates.getTropicalTemplate(), silkyComb).setIgnobleShare(0.7f),
+				new HiveDrop(3, BeeTemplates.getValiantTemplate(), silkyComb)
+		);
 
-		endDrops.add(new HiveDrop(BeeTemplates.getEnderTemplate(), new ItemStack[]{ForestryItem.beeComb.getItemStack(1, 8)}, 90));
+		ItemStack mysteriousComb = ForestryItem.beeComb.getItemStack(1, 8);
+		hiveRegistry.addDrops(HiveRegistry.end,
+				new HiveDrop(90, BeeTemplates.getEnderTemplate(), mysteriousComb)
+		);
 
-		snowDrops.add(new HiveDrop(BeeTemplates.getWintryTemplate(), new ItemStack[]{ForestryItem.beeComb.getItemStack(1, 4)}, 80).setIgnobleShare(0.5f));
-		snowDrops.add(new HiveDrop(BeeTemplates.getValiantTemplate(), new ItemStack[]{ForestryItem.beeComb.getItemStack(1, 4)}, 3));
+		ItemStack frozenComb = ForestryItem.beeComb.getItemStack(1, 4);
+		hiveRegistry.addDrops(HiveRegistry.snow,
+				new HiveDrop(80, BeeTemplates.getWintryTemplate(), frozenComb).setIgnobleShare(0.5f),
+				new HiveDrop(3, BeeTemplates.getValiantTemplate(), frozenComb)
+		);
 
-		swampDrops.add(new HiveDrop(BeeTemplates.getMarshyTemplate(), new ItemStack[]{ForestryItem.beeComb.getItemStack(1, 15)}, 80).setIgnobleShare(0.4f));
-		swampDrops.add(new HiveDrop(BeeTemplates.getValiantTemplate(), new ItemStack[]{ForestryItem.beeComb.getItemStack(1, 15)}, 3));
+		ItemStack mossyComb = ForestryItem.beeComb.getItemStack(1, 15);
+		hiveRegistry.addDrops(HiveRegistry.swamp,
+				new HiveDrop(80, BeeTemplates.getMarshyTemplate(), mossyComb).setIgnobleShare(0.4f),
+				new HiveDrop(3, BeeTemplates.getValiantTemplate(), mossyComb)
+		);
 	}
 
 	private static void registerDungeonLoot() {
@@ -788,16 +802,6 @@ public class PluginApiculture extends ForestryPlugin {
 		hiveRegistry.registerHive(HiveRegistry.end, HiveDescription.END);
 		hiveRegistry.registerHive(HiveRegistry.snow, HiveDescription.SNOW);
 		hiveRegistry.registerHive(HiveRegistry.swamp, HiveDescription.SWAMP);
-	}
-
-	private void updateHiveDrops() {
-		hiveRegistry.addDrops(HiveRegistry.forest, forestDrops);
-		hiveRegistry.addDrops(HiveRegistry.meadows, meadowsDrops);
-		hiveRegistry.addDrops(HiveRegistry.desert, desertDrops);
-		hiveRegistry.addDrops(HiveRegistry.jungle, jungleDrops);
-		hiveRegistry.addDrops(HiveRegistry.end, endDrops);
-		hiveRegistry.addDrops(HiveRegistry.snow, snowDrops);
-		hiveRegistry.addDrops(HiveRegistry.swamp, swampDrops);
 	}
 
 	private static void createAlleles() {
@@ -1131,7 +1135,7 @@ public class PluginApiculture extends ForestryPlugin {
 		BeeTemplates.avengingA = new BeeMutation(Allele.speciesVengeful, Allele.speciesVindictive, BeeTemplates.getAvengingTemplate(), 4);
 	}
 
-	private void registerTemplates() {
+	private static void registerTemplates() {
 		beeInterface.registerTemplate(BeeTemplates.getForestTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getMeadowsTemplate());
 		beeInterface.registerTemplate(BeeTemplates.getCommonTemplate());
@@ -1185,12 +1189,12 @@ public class PluginApiculture extends ForestryPlugin {
 		return secondPrincessChance;
 	}
 
-	private void parseAdditionalFlowers(String list, ArrayList<ItemStack> target) {
+	private static void parseAdditionalFlowers(String list, ArrayList<ItemStack> target) {
 		List<ItemStack> flowers = StackUtils.parseItemStackStrings(list);
 		target.addAll(flowers);
 	}
 
-	private void parseBeeBlacklist(String list) {
+	private static void parseBeeBlacklist(String list) {
 		String[] items = list.split("[;]+");
 
 		for (String item : items) {

@@ -29,7 +29,7 @@ public class HiveDrop implements IHiveDrop {
 	private final int chance;
 	private float ignobleShare = 0.0f;
 
-	public HiveDrop(IAllele[] template, ItemStack[] bonus, int chance) {
+	public HiveDrop(int chance, IAllele[] template, ItemStack... bonus) {
 		this.template = template;
 		this.chance = chance;
 
