@@ -18,6 +18,7 @@ import forestry.api.arboriculture.ITreeMutation;
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IGenome;
 import forestry.core.genetics.Mutation;
 import forestry.plugins.PluginArboriculture;
@@ -26,7 +27,7 @@ public class TreeMutation extends Mutation implements ITreeMutation {
 
 	private final ITreeRoot root;
 
-	public TreeMutation(IAllele allele0, IAllele allele1, IAllele[] template, int chance) {
+	public TreeMutation(IAlleleSpecies allele0, IAlleleSpecies allele1, IAllele[] template, int chance) {
 		super(allele0, allele1, template, chance);
 		
 		root = (ITreeRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees");
@@ -52,10 +53,10 @@ public class TreeMutation extends Mutation implements ITreeMutation {
 
 		processedChance *= PluginArboriculture.treeInterface.getTreekeepingMode(world).getMutationModifier((ITreeGenome) genome0, (ITreeGenome) genome1, 1f);
 
-		if (this.allele0.getUID().equals(allele0.getUID()) && this.allele1.getUID().equals(allele1.getUID())) {
+		if (this.species0.getUID().equals(allele0.getUID()) && this.species1.getUID().equals(allele1.getUID())) {
 			return processedChance;
 		}
-		if (this.allele1.getUID().equals(allele0.getUID()) && this.allele0.getUID().equals(allele1.getUID())) {
+		if (this.species1.getUID().equals(allele0.getUID()) && this.species0.getUID().equals(allele1.getUID())) {
 			return processedChance;
 		}
 

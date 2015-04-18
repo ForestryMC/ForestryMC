@@ -52,7 +52,7 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	private final Map<ItemStack, Float> caterpillarLoot = new HashMap<ItemStack, Float>();
 
 	public AlleleButterflySpecies(String uid, boolean isDominant, String name, IClassification branch, String binomial, int serumColour) {
-		super(uid, isDominant, "butterflies.species." + branch.getParent().getUID().substring((branch.getParent().getLevel().name().toLowerCase(Locale.ENGLISH)).length() + 1) + "." + name, branch, binomial);
+		super(uid, isDominant, "butterflies.species." + branch.getParent().getUID().substring((branch.getParent().getLevel().name().toLowerCase(Locale.ENGLISH)).length() + 1) + "." + name, branch, binomial, true);
 		this.root = (IButterflyRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies");
 		this.serumColour = serumColour;
 		texture = "forestry:" + Defaults.TEXTURE_PATH_ENTITIES + "/butterflies/" + uid + ".png";

@@ -23,8 +23,8 @@ public class MutationReqRes extends BeeMutation {
 
 	private final ItemStack blockRequired;
 
-	public MutationReqRes(IAllele allele0, IAllele allele1, IAllele[] template, int chance, ItemStack blockRequired) {
-		super(allele0, allele1, template, chance);
+	public MutationReqRes(BeeDefinition bee0, BeeDefinition bee1, BeeDefinition result, int chance, ItemStack blockRequired) {
+		super(bee0, bee1, result, chance);
 		this.blockRequired = blockRequired;
 	}
 

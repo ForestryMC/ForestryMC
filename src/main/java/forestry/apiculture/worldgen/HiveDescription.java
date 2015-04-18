@@ -26,24 +26,22 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
-import forestry.api.genetics.IAllele;
-import forestry.apiculture.genetics.BeeTemplates;
+import forestry.apiculture.genetics.BeeDefinition;
 import forestry.core.config.ForestryBlock;
-import forestry.plugins.PluginApiculture;
 
 public enum HiveDescription implements IHiveDescription {
 
-	FOREST(1, 3.0f, BeeTemplates.getForestTemplate(), HiveManager.genHelper.tree()),
-	MEADOWS(2, 1.0f, BeeTemplates.getMeadowsTemplate(), HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass)),
-	DESERT(3, 1.0f, BeeTemplates.getModestTemplate(), HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass, Blocks.sand, Blocks.sandstone)),
-	JUNGLE(4, 4.0f, BeeTemplates.getTropicalTemplate(), HiveManager.genHelper.tree()),
-	END(5, 4.0f, BeeTemplates.getEnderTemplate(), HiveManager.genHelper.ground(Blocks.end_stone)) {
+	FOREST(1, 3.0f, BeeDefinition.FOREST, HiveManager.genHelper.tree()),
+	MEADOWS(2, 1.0f, BeeDefinition.MEADOWS, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass)),
+	DESERT(3, 1.0f, BeeDefinition.MODEST, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass, Blocks.sand, Blocks.sandstone)),
+	JUNGLE(4, 4.0f, BeeDefinition.TROPICAL, HiveManager.genHelper.tree()),
+	END(5, 4.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.end_stone)) {
 		@Override
 		public boolean isGoodBiome(BiomeGenBase biome) {
 			return BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.END);
 		}
 	},
-	SNOW(6, 2.0f, BeeTemplates.getWintryTemplate(), HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass, Blocks.snow)) {
+	SNOW(6, 2.0f, BeeDefinition.WINTRY, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass, Blocks.snow)) {
 		@Override
 		public void postGen(World world, int x, int y, int z) {
 			if (world.isAirBlock(x, y + 1, z)) {
@@ -51,17 +49,17 @@ public enum HiveDescription implements IHiveDescription {
 			}
 		}
 	},
-	SWAMP(7, 2.0f, BeeTemplates.getMarshyTemplate(), HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass)),;
+	SWAMP(7, 2.0f, BeeDefinition.MARSHY, HiveManager.genHelper.ground(Blocks.dirt, Blocks.grass)),;
 
 	private final int meta;
 	private final float genChance;
 	private final IBeeGenome beeGenome;
 	private final IHiveGen hiveGen;
 
-	HiveDescription(int meta, float genChance, IAllele[] beeTemplate, IHiveGen hiveGen) {
+	HiveDescription(int meta, float genChance, BeeDefinition beeTemplate, IHiveGen hiveGen) {
 		this.meta = meta;
 		this.genChance = genChance;
-		this.beeGenome = PluginApiculture.beeInterface.templateAsGenome(beeTemplate);
+		this.beeGenome = beeTemplate.getGenome();
 		this.hiveGen = hiveGen;
 	}
 

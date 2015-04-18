@@ -28,9 +28,8 @@ public class MutationEMC extends MutationReqRes {
 	private final Class<?> condenserClass;
 	private final Field emcField;
 
-	public MutationEMC(IAllele allele0, IAllele allele1, IAllele[] template, int chance, ItemStack blockRequired, Class<?> condenserClass, Field emcField,
-			int emcRequired) {
-		super(allele0, allele1, template, chance, blockRequired);
+	public MutationEMC(BeeDefinition bee0, BeeDefinition bee1, BeeDefinition result, int chance, ItemStack blockRequired, Class<?> condenserClass, Field emcField, int emcRequired) {
+		super(bee0, bee1, result, chance, blockRequired);
 
 		this.condenserClass = condenserClass;
 		this.emcField = emcField;

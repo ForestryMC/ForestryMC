@@ -45,7 +45,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
 	private EnumTemperature climate = EnumTemperature.NORMAL;
 	private EnumHumidity humidity = EnumHumidity.NORMAL;
 
-	public AlleleSpecies(String uid, boolean isDominant, String name, IClassification branch, String binomial) {
+	public AlleleSpecies(String uid, boolean isDominant, String name, IClassification branch, String binomial, boolean doRegister) {
 		super(uid, isDominant, true);
 
 		this.branch = branch;
@@ -53,7 +53,10 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
 		this.binomial = binomial;
 		this.description = StringUtil.localize("description." + uid);
 
-		AlleleManager.alleleRegistry.registerAllele(this);
+		// FIXME: do not register here
+		if (doRegister) {
+			AlleleManager.alleleRegistry.registerAllele(this);
+		}
 	}
 
 	@Override

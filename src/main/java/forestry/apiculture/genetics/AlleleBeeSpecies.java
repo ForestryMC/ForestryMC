@@ -32,7 +32,6 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeRoot;
 import forestry.api.core.IIconProvider;
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
@@ -41,12 +40,11 @@ import forestry.core.config.Defaults;
 import forestry.core.genetics.AlleleSpecies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
+import forestry.plugins.PluginApiculture;
 
 public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies, IIconProvider {
 
 	public IJubilanceProvider jubilanceProvider;
-
-	private final IBeeRoot root;
 
 	private final HashMap<ItemStack, Integer> products = new HashMap<ItemStack, Integer>();
 	private final HashMap<ItemStack, Integer> specialty = new HashMap<ItemStack, Integer>();
@@ -57,19 +55,14 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 	private static final String iconType = "default";
 
-	public AlleleBeeSpecies(String uid, boolean dominant, String name, IClassification branch, int primaryColor, int secondaryColor) {
-		this(uid, dominant, name, branch, null, primaryColor, secondaryColor);
-	}
-
 	public AlleleBeeSpecies(String uid, boolean dominant, String name, IClassification branch, String binomial, int primaryColor, int secondaryColor) {
 		this(uid, dominant, name, branch, binomial, primaryColor, secondaryColor, new JubilanceDefault());
 	}
 
 	public AlleleBeeSpecies(String uid, boolean dominant, String name, IClassification branch, String binomial, int primaryColor, int secondaryColor,
 			IJubilanceProvider jubilanceProvider) {
-		super(uid, dominant, name, branch, binomial);
+		super(uid, dominant, name, branch, binomial, false);
 
-		this.root = (IBeeRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootBees");
 		this.primaryColour = primaryColor;
 		this.secondaryColour = secondaryColor;
 		this.jubilanceProvider = jubilanceProvider;
@@ -78,7 +71,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 	@Override
 	public IBeeRoot getRoot() {
-		return root;
+		return PluginApiculture.beeInterface;
 	}
 
 	public AlleleBeeSpecies setEntityTexture(String texture) {

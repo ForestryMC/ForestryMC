@@ -107,12 +107,9 @@ public class MutationTimeLimited extends BeeMutation {
 	private final DayMonth start;
 	private final DayMonth end;
 
-	public MutationTimeLimited(IAllele allele0, IAllele allele1, IAllele[] template, int chance, DayMonth start) {
-		this(allele0, allele1, template, chance, start, null);
-	}
+	protected MutationTimeLimited(BeeDefinition bee0, BeeDefinition bee1, BeeDefinition result, int chance, DayMonth start, DayMonth end) {
+		super(bee0, bee1, result, chance);
 
-	public MutationTimeLimited(IAllele allele0, IAllele allele1, IAllele[] template, int chance, DayMonth start, DayMonth end) {
-		super(allele0, allele1, template, chance);
 		this.start = start;
 		this.end = end;
 	}

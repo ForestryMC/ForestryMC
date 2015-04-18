@@ -221,7 +221,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 
 	@Override
 	public IAllele[] getDefaultTemplate() {
-		return BeeTemplates.getDefaultTemplate();
+		return EnumBeeBranch.HONEY.getTemplate();
 	}
 
 	/* MUTATIONS */

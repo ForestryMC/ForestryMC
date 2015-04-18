@@ -93,7 +93,7 @@ public class Bee extends IndividualLiving implements IBee {
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 
 		if (nbttagcompound == null) {
-			this.genome = PluginApiculture.beeInterface.templateAsGenome(BeeTemplates.getForestTemplate());
+			genome = BeeDefinition.FOREST.getGenome();
 			return;
 		}
 
@@ -110,7 +110,7 @@ public class Bee extends IndividualLiving implements IBee {
 		if (nbttagcompound.hasKey("Genome")) {
 			genome = new BeeGenome(nbttagcompound.getCompoundTag("Genome"));
 		} else {
-			genome = PluginApiculture.beeInterface.templateAsGenome(BeeTemplates.getForestTemplate());
+			genome = BeeDefinition.FOREST.getGenome();
 		}
 
 		if (nbttagcompound.hasKey("Mate")) {

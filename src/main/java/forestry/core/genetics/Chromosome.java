@@ -46,20 +46,6 @@ public class Chromosome implements IChromosome {
 	// / SAVING & LOADING
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-
-		// Legacy
-		if (nbttagcompound.hasKey("PrimaryId")) {
-			primary = ((ILegacyHandler) AlleleManager.alleleRegistry).getFromLegacyMap(nbttagcompound.getInteger("PrimaryId"));
-			secondary = ((ILegacyHandler) AlleleManager.alleleRegistry).getFromLegacyMap(nbttagcompound.getInteger("SecondaryId"));
-
-			if (primary == null || secondary == null) {
-				throw new RuntimeException("Legacy conversion of chromosome failed. Did one of your bee addons not update? No legacy mapping for ids: "
-						+ nbttagcompound.getInteger("PrimaryId") + " - " + nbttagcompound.getInteger("SecondaryId"));
-			}
-
-			return;
-		}
-
 		primary = AlleleManager.alleleRegistry.getAllele(nbttagcompound.getString(UID0_TAG));
 		secondary = AlleleManager.alleleRegistry.getAllele(nbttagcompound.getString(UID1_TAG));
 	}
@@ -82,6 +68,9 @@ public class Chromosome implements IChromosome {
 
 	@Override
 	public IAllele getActiveAllele() {
+		if (primary == null || secondary == null) {
+			Proxies.log.severe("Chromosome is missing alleles");
+		}
 		if (primary.isDominant()) {
 			return primary;
 		}

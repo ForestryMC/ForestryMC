@@ -10,13 +10,13 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-
 import java.util.ArrayList;
 import java.util.Collection;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IMutation;
 
 public abstract class Mutation implements IMutation {
@@ -24,8 +24,8 @@ public abstract class Mutation implements IMutation {
 	protected final int chance;
 	boolean isSecret = false;
 
-	protected final IAllele allele0;
-	protected final IAllele allele1;
+	protected final IAllele species0;
+	protected final IAllele species1;
 
 	private final IAllele[] template;
 
@@ -36,9 +36,9 @@ public abstract class Mutation implements IMutation {
 
 	protected final ArrayList<String> specialConditions = new ArrayList<String>();
 
-	public Mutation(IAllele allele0, IAllele allele1, IAllele[] template, int chance) {
-		this.allele0 = allele0;
-		this.allele1 = allele1;
+	public Mutation(IAlleleSpecies species0, IAlleleSpecies species1, IAllele[] template, int chance) {
+		this.species0 = species0;
+		this.species1 = species1;
 		this.template = template;
 		this.chance = chance;
 	}
@@ -95,12 +95,12 @@ public abstract class Mutation implements IMutation {
 
 	@Override
 	public IAllele getAllele0() {
-		return allele0;
+		return species0;
 	}
 
 	@Override
 	public IAllele getAllele1() {
-		return allele1;
+		return species1;
 	}
 
 	@Override
@@ -115,15 +115,15 @@ public abstract class Mutation implements IMutation {
 
 	@Override
 	public boolean isPartner(IAllele allele) {
-		return allele0.getUID().equals(allele.getUID()) || allele1.getUID().equals(allele.getUID());
+		return species0.getUID().equals(allele.getUID()) || species1.getUID().equals(allele.getUID());
 	}
 
 	@Override
 	public IAllele getPartner(IAllele allele) {
-		if (allele0.getUID().equals(allele.getUID())) {
-			return allele1;
+		if (species0.getUID().equals(allele.getUID())) {
+			return species1;
 		} else {
-			return allele0;
+			return species0;
 		}
 	}
 

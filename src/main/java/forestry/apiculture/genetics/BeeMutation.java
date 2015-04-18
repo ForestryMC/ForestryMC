@@ -11,6 +11,7 @@
 package forestry.apiculture.genetics;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -21,32 +22,25 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeMutation;
 import forestry.api.apiculture.IBeeRoot;
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.core.genetics.Mutation;
 import forestry.plugins.PluginApiculture;
 
 public class BeeMutation extends Mutation implements IBeeMutation {
-
-	private final IBeeRoot root;
-
 	boolean requiresDay = false;
 	boolean requiresNight = false;
 
-	private final ArrayList<BiomeDictionary.Type> restrictBiomeTypes = new ArrayList<BiomeDictionary.Type>();
+	private final List<BiomeDictionary.Type> restrictBiomeTypes = new ArrayList<BiomeDictionary.Type>();
 	private boolean strictBiomeCheck = false;
 
-	public BeeMutation(IAllele allele0, IAllele allele1, IAllele[] template, int chance) {
-		super(allele0, allele1, template, chance);
-
-		root = (IBeeRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootBees");
-		PluginApiculture.beeInterface.registerMutation(this);
+	public BeeMutation(BeeDefinition bee0, BeeDefinition bee1, BeeDefinition result, int chance) {
+		super(bee0.getGenome().getPrimary(), bee1.getGenome().getPrimary(), result.getTemplate(), chance);
 	}
 
 	@Override
 	public IBeeRoot getRoot() {
-		return root;
+		return PluginApiculture.beeInterface;
 	}
 
 	public BeeMutation enableStrictBiomeCheck() {
@@ -124,10 +118,10 @@ public class BeeMutation extends Mutation implements IBeeMutation {
 			return 0;
 		}
 
-		if (this.allele0.getUID().equals(allele0.getUID()) && this.allele1.getUID().equals(allele1.getUID())) {
+		if (this.species0.getUID().equals(allele0.getUID()) && this.species1.getUID().equals(allele1.getUID())) {
 			return processedChance;
 		}
-		if (this.allele1.getUID().equals(allele0.getUID()) && this.allele0.getUID().equals(allele1.getUID())) {
+		if (this.species1.getUID().equals(allele0.getUID()) && this.species0.getUID().equals(allele1.getUID())) {
 			return processedChance;
 		}
 
