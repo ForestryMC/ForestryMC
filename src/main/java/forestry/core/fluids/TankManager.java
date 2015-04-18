@@ -127,7 +127,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 		StandardTank tank = tanks.get(tankIndex);
 		FluidStack fluidStack = tank.getFluid();
 		if (fluidStack != null) {
-			data.writeShort(fluidStack.getFluidID());
+			data.writeShort(fluidStack.getFluid().getID());
 			data.writeInt(fluidStack.amount);
 			data.writeInt(fluidStack.getFluid().getColor(fluidStack));
 		} else {
@@ -172,7 +172,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 		int fluidId = -1;
 		int fluidAmount = 0;
 		if (fluidStack != null && fluidStack.amount > 0) {
-			fluidId = fluidStack.getFluidID();
+			fluidId = fluidStack.getFluid().getID();
 			fluidAmount = fluidStack.amount;
 		}
 
@@ -199,7 +199,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 				int fluidId = -1;
 				int fluidAmount = 0;
 				if (fluidStack != null) {
-					fluidId = fluidStack.getFluidID();
+					fluidId = fluidStack.getFluid().getID();
 					fluidAmount = fluidStack.amount;
 				}
 				player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidId);
@@ -207,7 +207,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 				Proxies.net.sendToPlayer(packet, player);
 			} else if (fluidStack != null && prev != null) {
 				if (fluidStack.getFluid() != prev.getFluid()) {
-					player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidStack.getFluidID());
+					player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidStack.getFluid().getID());
 				}
 				if (fluidStack.amount != prev.amount) {
 					PacketGuiInteger packet = new PacketGuiInteger(container.windowId, tankIndex * NETWORK_DATA + 1, fluidStack.amount);

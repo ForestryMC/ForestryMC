@@ -56,7 +56,7 @@ import forestry.core.utils.StringUtil;
 		modid = Defaults.MOD,
 		name = "Forestry",
 		version = Version.VERSION,
-		dependencies = "required-after:Forge@[10.13.3.1370,);"
+		dependencies = "required-after:Forge@[10.13.0.1207,);"
 				+ "after:Buildcraft|Core@[6.1.7,);"
 				+ "after:ExtrabiomesXL;"
 				+ "after:BiomesOPlenty;"

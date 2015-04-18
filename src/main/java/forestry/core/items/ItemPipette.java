@@ -58,7 +58,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 				return false;
 			}
 
-			return contents.getFluidID() > 0 && contents.amount >= limit;
+			return contents.getFluid().getID() > 0 && contents.amount >= limit;
 		}
 
 		public void addTooltip(List<String> list) {
@@ -174,7 +174,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 	@Override
 	public FluidStack drain(ItemStack pipette, int maxDrain, boolean doDrain) {
 		PipetteContents contained = new PipetteContents(pipette.getTagCompound());
-		if (contained.contents == null || contained.contents.getFluidID() <= 0) {
+		if (contained.contents == null || contained.contents.getFluid().getID() <= 0) {
 			return null;
 		}
 
