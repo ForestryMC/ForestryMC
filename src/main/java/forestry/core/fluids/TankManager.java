@@ -234,12 +234,12 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 
 		switch (messageId % NETWORK_DATA) {
 			case 0: {
-				int amount = tank.getFluidAmount();
 				Fluid fluid = FluidRegistry.getFluid(data);
 				if (fluid != null) {
-					FluidStack fluidStack = new FluidStack(fluid, amount);
+					FluidStack fluidStack = new FluidStack(fluid, 0);
 					tank.setFluid(fluidStack);
 				}
+				break;
 			}
 			case 1: {
 				FluidStack fluidStack = tank.getFluid();
