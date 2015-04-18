@@ -349,13 +349,5 @@ public class PluginFarming extends ForestryPlugin {
 		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 6), Circuit.farmGourdManual);
 		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 10), Circuit.farmShroomManual);
 		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 11), Circuit.farmCocoaManual);
-
-		if (PluginIC2.resin != null && PluginIC2.rubberwood != null) {
-			ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 8), Circuit.farmRubberManual);
-		}
-
-		if (PluginExtraUtilities.ExUEnderLilly != null && Config.isExUtilEnderLilyEnabled()) {
-			ChipsetManager.solderManager.addRecipe(layoutManaged, ForestryItem.tubes.getItemStack(1, 12), Circuit.farmEnderManaged);
-		}
 	}
 }

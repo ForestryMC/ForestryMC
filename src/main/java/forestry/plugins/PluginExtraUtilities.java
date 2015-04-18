@@ -17,11 +17,14 @@ import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
+import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.ICircuitLayout;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmable;
 import forestry.core.circuits.Circuit;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
+import forestry.core.config.ForestryItem;
 import forestry.core.proxy.Proxies;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicEnder;
@@ -53,6 +56,16 @@ public class PluginExtraUtilities extends ForestryPlugin {
 		if (Config.isExUtilEnderLilyEnabled()) {
 			Circuit.farmEnderManaged = new CircuitFarmLogic("managedEnder", FarmLogicEnder.class);
 			Farmables.farmables.get("farmEnder").add(new FarmableGenericCrop(new ItemStack(ExUEnderLilly, 1, 0), ExUEnderLilly, 7));
+		}
+	}
+
+	@Override
+	protected void registerRecipes() {
+		super.registerRecipes();
+
+		if (PluginManager.Module.FARMING.isEnabled() && Config.isExUtilEnderLilyEnabled()) {
+			ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.managed");
+			ChipsetManager.solderManager.addRecipe(layoutManaged, ForestryItem.tubes.getItemStack(1, 12), Circuit.farmEnderManaged);
 		}
 	}
 }
