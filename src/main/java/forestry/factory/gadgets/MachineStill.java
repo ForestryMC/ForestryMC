@@ -242,7 +242,7 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 				// Start next cycle if enough bio mass is available
 				distillationTime = distillationTotalTime = resourceRequired;
 				resourceTank.drain(resourceRequired, true);
-				bufferedLiquid = new FluidStack(currentRecipe.input.fluidID, resourceRequired);
+				bufferedLiquid = new FluidStack(currentRecipe.input, resourceRequired);
 
 				setErrorState(EnumErrorCode.OK);
 				return true;
@@ -257,7 +257,7 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 		Recipe sameRec = RecipeManager.findMatchingRecipe(resourceTank.getFluid());
 
 		if (sameRec == null && bufferedLiquid != null && distillationTime > 0) {
-			sameRec = RecipeManager.findMatchingRecipe(new FluidStack(bufferedLiquid.fluidID, distillationTime));
+			sameRec = RecipeManager.findMatchingRecipe(new FluidStack(bufferedLiquid, distillationTime));
 		}
 
 		if (sameRec == null) {

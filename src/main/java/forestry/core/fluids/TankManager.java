@@ -29,6 +29,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -126,7 +127,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 		StandardTank tank = tanks.get(tankIndex);
 		FluidStack fluidStack = tank.getFluid();
 		if (fluidStack != null) {
-			data.writeShort(fluidStack.fluidID);
+			data.writeShort(fluidStack.getFluid().getID());
 			data.writeInt(fluidStack.amount);
 			data.writeInt(fluidStack.getFluid().getColor(fluidStack));
 		} else {
@@ -146,8 +147,11 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 		}
 		StandardTank tank = tanks.get(tankIndex);
 		int fluidId = data.readShort();
-		if (fluidId != -1) {
-			tank.setFluid(new FluidStack(fluidId, data.readInt()));
+		Fluid fluid = FluidRegistry.getFluid(fluidId);
+		if (fluid != null) {
+			int amount = data.readInt();
+			FluidStack fluidStack = new FluidStack(fluid, amount);
+			tank.setFluid(fluidStack);
 			tank.colorCache = data.readInt();
 		} else {
 			tank.setFluid(null);
@@ -195,7 +199,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 				int fluidId = -1;
 				int fluidAmount = 0;
 				if (fluidStack != null) {
-					fluidId = fluidStack.fluidID;
+					fluidId = fluidStack.getFluid().getID();
 					fluidAmount = fluidStack.amount;
 				}
 				player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidId);
@@ -203,7 +207,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 				Proxies.net.sendToPlayer(packet, player);
 			} else if (fluidStack != null && prev != null) {
 				if (fluidStack.getFluid() != prev.getFluid()) {
-					player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidStack.fluidID);
+					player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidStack.getFluid().getID());
 				}
 				if (fluidStack.amount != prev.amount) {
 					PacketGuiInteger packet = new PacketGuiInteger(container.windowId, tankIndex * NETWORK_DATA + 1, fluidStack.amount);
@@ -227,33 +231,28 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 			return;
 		}
 		StandardTank tank = tanks.get(tankIndex);
-		FluidStack fluidStack = tank.getFluid();
-		if (fluidStack == null) {
-			fluidStack = new FluidStack(-1, 0);
-			tank.setFluid(fluidStack);
-		}
-		int fluidId = fluidStack.fluidID;
-		int amount = fluidStack.amount;
-		int color = tank.colorCache;
-		boolean newLiquid = false;
+
 		switch (messageId % NETWORK_DATA) {
-			case 0:
-				fluidId = data;
-				newLiquid = true;
+			case 0: {
+				int amount = tank.getFluidAmount();
+				Fluid fluid = FluidRegistry.getFluid(data);
+				if (fluid != null) {
+					FluidStack fluidStack = new FluidStack(fluid, amount);
+					tank.setFluid(fluidStack);
+				}
+			}
+			case 1: {
+				FluidStack fluidStack = tank.getFluid();
+				if (fluidStack != null) {
+					fluidStack.amount = data;
+				}
 				break;
-			case 1:
-				amount = data;
+			}
+			case 2: {
+				tank.colorCache = data;
 				break;
-			case 2:
-				color = data;
-				break;
+			}
 		}
-		if (newLiquid) {
-			fluidStack = new FluidStack(fluidId, 0);
-			tank.setFluid(fluidStack);
-		}
-		fluidStack.amount = amount;
-		tank.colorCache = color;
 	}
 
 	@Override
