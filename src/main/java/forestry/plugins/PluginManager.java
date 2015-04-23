@@ -89,8 +89,6 @@ public class PluginManager {
 		BIOMESOPLENTY(new PluginBiomesOPlenty()),
 		CHISEL(new PluginChisel()),
 		EXTRAUTILITIES(new PluginExtraUtilities()),
-		EQUIVELENT_EXCHANGE(new PluginEE()),
-		FARM_CRAFTORY(new PluginFarmCraftory()),
 		HARVESTCRAFT(new PluginHarvestCraft()),
 		INDUSTRIALCRAFT(new PluginIC2()),
 		MAGICALCROPS(new PluginMagicalCrops()),
