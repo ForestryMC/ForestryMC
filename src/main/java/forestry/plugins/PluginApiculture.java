@@ -101,7 +101,7 @@ import forestry.apiculture.genetics.AlleleFlowers;
 import forestry.apiculture.genetics.BeeHelper;
 import forestry.apiculture.genetics.BeekeepingMode;
 import forestry.apiculture.genetics.BeeDefinition;
-import forestry.apiculture.genetics.EnumBeeBranch;
+import forestry.apiculture.genetics.BeeBranchDefinition;
 import forestry.apiculture.genetics.HiveDrop;
 import forestry.apiculture.items.ItemAlvearyBlock;
 import forestry.apiculture.items.ItemArmorApiarist;
@@ -780,7 +780,7 @@ public class PluginApiculture extends ForestryPlugin {
 		IClassification apidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "apidae", "Apidae");
 		hymnoptera.addMemberGroup(apidae);
 
-		for (EnumBeeBranch beeBranch : EnumBeeBranch.values()) {
+		for (BeeBranchDefinition beeBranch : BeeBranchDefinition.values()) {
 			apidae.addMemberGroup(beeBranch.getBranch());
 		}
 

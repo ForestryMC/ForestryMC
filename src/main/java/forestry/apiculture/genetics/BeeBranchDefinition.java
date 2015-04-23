@@ -6,7 +6,7 @@ import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.genetics.IAllele;
 import forestry.core.genetics.Allele;
 
-public enum EnumBeeBranch {
+public enum BeeBranchDefinition {
 	HONEY("Apis"),
 	NOBLE("Probapis"),
 	INDUSTRIOUS("Industrapis"),
@@ -110,7 +110,7 @@ public enum EnumBeeBranch {
 
 	private final BranchBees branch;
 
-	EnumBeeBranch(String scientific) {
+	BeeBranchDefinition(String scientific) {
 		branch = new BranchBees(this.name().toLowerCase(), scientific);
 	}
 
@@ -134,7 +134,6 @@ public enum EnumBeeBranch {
 		if (defaultTemplate == null) {
 			defaultTemplate = new IAllele[EnumBeeChromosome.values().length];
 
-			defaultTemplate[EnumBeeChromosome.SPECIES.ordinal()] = Allele.speciesForest;
 			defaultTemplate[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlowest;
 			defaultTemplate[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanShorter;
 			defaultTemplate[EnumBeeChromosome.FERTILITY.ordinal()] = Allele.fertilityNormal;

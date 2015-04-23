@@ -14,7 +14,6 @@ import java.util.EnumSet;
 
 import net.minecraftforge.common.EnumPlantType;
 
-import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IAlleleGrowth;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
@@ -55,87 +54,6 @@ public class Allele implements IAllele {
 	public boolean isDominant() {
 		return isDominant;
 	}
-
-	// / BEES // SPECIES
-	// Common Branch
-	public static IAlleleBeeSpecies speciesForest;
-	public static IAlleleBeeSpecies speciesMeadows;
-	public static IAlleleBeeSpecies speciesCommon;
-	public static IAlleleBeeSpecies speciesCultivated;
-
-	// Noble Branch
-	public static IAlleleBeeSpecies speciesNoble;
-	public static IAlleleBeeSpecies speciesMajestic;
-	public static IAlleleBeeSpecies speciesImperial;
-
-	// Industrious Branch
-	public static IAlleleBeeSpecies speciesDiligent;
-	public static IAlleleBeeSpecies speciesUnweary;
-	public static IAlleleBeeSpecies speciesIndustrious;
-
-	// Heroic Branch
-	public static IAlleleBeeSpecies speciesSteadfast;
-	public static IAlleleBeeSpecies speciesValiant;
-	public static IAlleleBeeSpecies speciesHeroic;
-
-	// Infernal Branch
-	public static IAlleleBeeSpecies speciesSinister;
-	public static IAlleleBeeSpecies speciesFiendish;
-	public static IAlleleBeeSpecies speciesDemonic;
-
-	// Austere Branch
-	public static IAlleleBeeSpecies speciesModest;
-	public static IAlleleBeeSpecies speciesFrugal;
-	public static IAlleleBeeSpecies speciesAustere;
-
-	// / Tropical Branch
-	public static IAlleleBeeSpecies speciesTropical;
-	public static IAlleleBeeSpecies speciesExotic;
-	public static IAlleleBeeSpecies speciesEdenic;
-
-	// End Branch
-	public static IAlleleBeeSpecies speciesEnded;
-	public static IAlleleBeeSpecies speciesSpectral;
-	public static IAlleleBeeSpecies speciesPhantasmal;
-
-	// Frozen Branch
-	public static IAlleleBeeSpecies speciesWintry;
-	public static IAlleleBeeSpecies speciesIcy;
-	public static IAlleleBeeSpecies speciesGlacial;
-
-	// Vengeful Branch
-	public static IAlleleBeeSpecies speciesVindictive;
-	public static IAlleleBeeSpecies speciesVengeful;
-	public static IAlleleBeeSpecies speciesAvenging;
-
-	// Reddened Branch (EE)
-	public static IAlleleBeeSpecies speciesDarkened;
-	public static IAlleleBeeSpecies speciesReddened;
-	public static IAlleleBeeSpecies speciesOmega;
-
-	// Festive branch
-	public static IAlleleBeeSpecies speciesLeporine; // Easter
-	public static IAlleleBeeSpecies speciesMerry; // Christmas
-	public static IAlleleBeeSpecies speciesTipsy; // New Year
-	// 35 Solstice
-	public static IAlleleBeeSpecies speciesTricky; // Halloween
-	// 37 Thanksgiving
-	// 39 New Year
-
-	// Agrarian branch
-	public static IAlleleBeeSpecies speciesRural;
-	public static IAlleleBeeSpecies speciesFarmerly;
-	public static IAlleleBeeSpecies speciesArgrarian;
-
-	// Boggy branch
-	public static IAlleleBeeSpecies speciesMarshy;
-	public static IAlleleBeeSpecies speciesMiry;
-	public static IAlleleBeeSpecies speciesBoggy;
-
-	// Monastic branch
-	public static IAlleleBeeSpecies speciesMonastic;
-	public static IAlleleBeeSpecies speciesSecluded;
-	public static IAlleleBeeSpecies speciesHermitic;
 
 	// / TREES // SPECIES 512 - 1023
 	public static IAlleleTreeSpecies treeOak;

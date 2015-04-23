@@ -26,7 +26,7 @@ import forestry.plugins.PluginApiculture;
 
 public enum BeeDefinition implements IBeeDefinition {
 	/* HONEY BRANCH */
-	FOREST(EnumBeeBranch.HONEY, "nigrocincta", true, new Color(0x19d0ec), new Color(0xffdc16)) {
+	FOREST(BeeBranchDefinition.HONEY, "nigrocincta", true, new Color(0x19d0ec), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 0), 30);
@@ -43,7 +43,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			// found in hives
 		}
 	},
-	MEADOWS(EnumBeeBranch.HONEY, "florea", true, new Color(0xef131e), new Color(0xffdc16)) {
+	MEADOWS(BeeBranchDefinition.HONEY, "florea", true, new Color(0xef131e), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 0), 30);
@@ -59,7 +59,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			// found in hives
 		}
 	},
-	COMMON(EnumBeeBranch.HONEY, "cerana", true, new Color(0xb2b2b2), new Color(0xffdc16)) {
+	COMMON(BeeBranchDefinition.HONEY, "cerana", true, new Color(0xb2b2b2), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 0), 35);
@@ -81,7 +81,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			}
 		}
 	},
-	CULTIVATED(EnumBeeBranch.HONEY, "mellifera", true, new Color(0x5734ec), new Color(0xffdc16)) {
+	CULTIVATED(BeeBranchDefinition.HONEY, "mellifera", true, new Color(0x5734ec), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 0), 40);
@@ -102,7 +102,7 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 
 	/* NOBLE BRANCH */
-	NOBLE(EnumBeeBranch.NOBLE, "nobilis", false, new Color(0xec9a19), new Color(0xffdc16)) {
+	NOBLE(BeeBranchDefinition.NOBLE, "nobilis", false, new Color(0xec9a19), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 5), 20);
@@ -120,7 +120,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			registerMutation(COMMON, CULTIVATED, 10);
 		}
 	},
-	MAJESTIC(EnumBeeBranch.NOBLE, "regalis", true, new Color(0x7f0000), new Color(0xffdc16)) {
+	MAJESTIC(BeeBranchDefinition.NOBLE, "regalis", true, new Color(0x7f0000), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 5), 30);
@@ -138,7 +138,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			registerMutation(NOBLE, CULTIVATED, 8);
 		}
 	},
-	IMPERIAL(EnumBeeBranch.NOBLE, "imperatorius", false, new Color(0xa3e02f), new Color(0xffdc16)) {
+	IMPERIAL(BeeBranchDefinition.NOBLE, "imperatorius", false, new Color(0xa3e02f), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 5), 20)
@@ -160,7 +160,7 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 
 	/* INDUSTRIOUS BRANCH */
-	DILIGENT(EnumBeeBranch.INDUSTRIOUS, "sedulus", false, new Color(0xc219ec), new Color(0xffdc16)) {
+	DILIGENT(BeeBranchDefinition.INDUSTRIOUS, "sedulus", false, new Color(0xc219ec), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 3), 20);
@@ -178,7 +178,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			registerMutation(COMMON, CULTIVATED, 10);
 		}
 	},
-	UNWEARY(EnumBeeBranch.INDUSTRIOUS, "assiduus", true, new Color(0x19ec5a), new Color(0xffdc16)) {
+	UNWEARY(BeeBranchDefinition.INDUSTRIOUS, "assiduus", true, new Color(0x19ec5a), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 3), 30);
@@ -195,7 +195,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			registerMutation(DILIGENT, CULTIVATED, 8);
 		}
 	},
-	INDUSTRIOUS(EnumBeeBranch.INDUSTRIOUS, "industria", false, new Color(0xffffff), new Color(0xffdc16)) {
+	INDUSTRIOUS(BeeBranchDefinition.INDUSTRIOUS, "industria", false, new Color(0xffffff), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 3), 20)
@@ -217,7 +217,7 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 
 	/* HEROIC BRANCH */
-	STEADFAST(EnumBeeBranch.HEROIC, "legio", false, new Color(0x4d2b15), new Color(0xffdc16)) {
+	STEADFAST(BeeBranchDefinition.HEROIC, "legio", false, new Color(0x4d2b15), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 1), 20)
@@ -237,7 +237,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			// only found in dungeons chests
 		}
 	},
-	VALIANT(EnumBeeBranch.HEROIC, "centurio", true, new Color(0x626bdd), new Color(0xffdc16)) {
+	VALIANT(BeeBranchDefinition.HEROIC, "centurio", true, new Color(0x626bdd), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 1), 30)
@@ -257,7 +257,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			// found rarely at random in other bee's hives
 		}
 	},
-	HEROIC(EnumBeeBranch.HEROIC, "kraphti", false, new Color(0xb3d5e4), new Color(0xffdc16)) {
+	HEROIC(BeeBranchDefinition.HEROIC, "kraphti", false, new Color(0xb3d5e4), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 1), 40)
@@ -282,7 +282,7 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 
 	/* INFERNAL BRANCH */
-	SINISTER(EnumBeeBranch.INFERNAL, "caecus", false, new Color(0xb3d5e4), new Color(0x9a2323)) {
+	SINISTER(BeeBranchDefinition.INFERNAL, "caecus", false, new Color(0xb3d5e4), new Color(0x9a2323)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 2), 45)
@@ -306,7 +306,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			}
 		}
 	},
-	FIENDISH(EnumBeeBranch.INFERNAL, "diabolus", true, new Color(0xd7bee5), new Color(0x9a2323)) {
+	FIENDISH(BeeBranchDefinition.INFERNAL, "diabolus", true, new Color(0xd7bee5), new Color(0x9a2323)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 2), 55)
@@ -331,7 +331,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			}
 		}
 	},
-	DEMONIC(EnumBeeBranch.INFERNAL, "draco", false, new Color(0xf4e400), new Color(0x9a2323)) {
+	DEMONIC(BeeBranchDefinition.INFERNAL, "draco", false, new Color(0xf4e400), new Color(0x9a2323)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 2), 45)
@@ -357,7 +357,7 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 
 	/* AUSTERE BRANCH */
-	MODEST(EnumBeeBranch.AUSTERE, "modicus", false, new Color(0xc5be86), new Color(0xffdc16)) {
+	MODEST(BeeBranchDefinition.AUSTERE, "modicus", false, new Color(0xc5be86), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 7), 20)
@@ -376,7 +376,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			// found in hives
 		}
 	},
-	FRUGAL(EnumBeeBranch.AUSTERE, "permodestus", true, new Color(0xe8dcb1), new Color(0xffdc16)) {
+	FRUGAL(BeeBranchDefinition.AUSTERE, "permodestus", true, new Color(0xe8dcb1), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 7), 30)
@@ -398,7 +398,7 @@ public enum BeeDefinition implements IBeeDefinition {
 					.setTemperatureRainfall(1.9f, 2.0f, 0.0f, 0.1f);
 		}
 	},
-	AUSTERE(EnumBeeBranch.AUSTERE, "correpere", false, new Color(0xfffac2), new Color(0xffdc16)) {
+	AUSTERE(BeeBranchDefinition.AUSTERE, "correpere", false, new Color(0xfffac2), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 7), 20)
@@ -424,7 +424,7 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 
 	/* TROPICAL BRANCH */
-	TROPICAL(EnumBeeBranch.TROPICAL, "mendelia", false, new Color(0x378020), new Color(0xffdc16)) {
+	TROPICAL(BeeBranchDefinition.TROPICAL, "mendelia", false, new Color(0x378020), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 6), 20)
@@ -444,7 +444,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			// found in hives
 		}
 	},
-	EXOTIC(EnumBeeBranch.TROPICAL, "darwini", true, new Color(0x304903), new Color(0xffdc16)) {
+	EXOTIC(BeeBranchDefinition.TROPICAL, "darwini", true, new Color(0x304903), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 6), 30)
@@ -464,7 +464,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			registerMutation(AUSTERE, TROPICAL, 12);
 		}
 	},
-	EDENIC(EnumBeeBranch.TROPICAL, "humboldti", false, new Color(0x393d0d), new Color(0xffdc16)) {
+	EDENIC(BeeBranchDefinition.TROPICAL, "humboldti", false, new Color(0x393d0d), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 6), 20)
@@ -489,7 +489,7 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 
 	/* END BRANCH */
-	ENDED(EnumBeeBranch.END, "notchi", false, new Color(0xe079fa), new Color(0xd9de9e)) {
+	ENDED(BeeBranchDefinition.END, "notchi", false, new Color(0xe079fa), new Color(0xd9de9e)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 8), 30)
@@ -507,7 +507,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			// found in hives
 		}
 	},
-	SPECTRAL(EnumBeeBranch.END, "idolum", true, new Color(0xa98bed), new Color(0xd9de9e)) {
+	SPECTRAL(BeeBranchDefinition.END, "idolum", true, new Color(0xa98bed), new Color(0xd9de9e)) {
 
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
@@ -526,7 +526,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			registerMutation(HERMITIC, ENDED, 4);
 		}
 	},
-	PHANTASMAL(EnumBeeBranch.END, "lemur", false, new Color(0xcc00fa), new Color(0xd9de9e)) {
+	PHANTASMAL(BeeBranchDefinition.END, "lemur", false, new Color(0xcc00fa), new Color(0xd9de9e)) {
 
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
@@ -550,7 +550,7 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 
 	/* FROZEN BRANCH */
-	WINTRY(EnumBeeBranch.FROZEN, "brumalis", false, new Color(0xa0ffc8), new Color(0xdaf5f3)) {
+	WINTRY(BeeBranchDefinition.FROZEN, "brumalis", false, new Color(0xa0ffc8), new Color(0xdaf5f3)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 4), 30)
@@ -570,7 +570,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			// found in hives
 		}
 	},
-	ICY(EnumBeeBranch.FROZEN, "coagulis", true, new Color(0xa0ffff), new Color(0xdaf5f3)) {
+	ICY(BeeBranchDefinition.FROZEN, "coagulis", true, new Color(0xa0ffff), new Color(0xdaf5f3)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 4), 20)
@@ -591,7 +591,7 @@ public enum BeeDefinition implements IBeeDefinition {
 					.setTemperature(0f, 0.15f);
 		}
 	},
-	GLACIAL(EnumBeeBranch.FROZEN, "glacialis", false, new Color(0xefffff), new Color(0xdaf5f3)) {
+	GLACIAL(BeeBranchDefinition.FROZEN, "glacialis", false, new Color(0xefffff), new Color(0xdaf5f3)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 4), 20)
@@ -615,7 +615,7 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 
 	/* VENGEFUL BRANCH */
-	VINDICTIVE(EnumBeeBranch.VENGEFUL, "ultio", false, new Color(0xeafff3), new Color(0xffdc16)) {
+	VINDICTIVE(BeeBranchDefinition.VENGEFUL, "ultio", false, new Color(0xeafff3), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 9), 25)
@@ -633,7 +633,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			registerMutation(MONASTIC, DEMONIC, 4).setIsSecret();
 		}
 	},
-	VENGEFUL(EnumBeeBranch.VENGEFUL, "punire", false, new Color(0xc2de00), new Color(0xffdc16)) {
+	VENGEFUL(BeeBranchDefinition.VENGEFUL, "punire", false, new Color(0xc2de00), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 9), 40)
@@ -652,7 +652,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			registerMutation(MONASTIC, VINDICTIVE, 8).setIsSecret();
 		}
 	},
-	AVENGING(EnumBeeBranch.VENGEFUL, "hostimentum", false, new Color(0xddff00), new Color(0xffdc16)) {
+	AVENGING(BeeBranchDefinition.VENGEFUL, "hostimentum", false, new Color(0xddff00), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 9), 40)
@@ -673,7 +673,8 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 
 	/* FESTIVE BRANCH */
-	LEPORINE(EnumBeeBranch.FESTIVE, "lepus", false, new Color(0xfeff8f), new Color(0x3cd757)) {
+	// Easter
+	LEPORINE(BeeBranchDefinition.FESTIVE, "lepus", false, new Color(0xfeff8f), new Color(0x3cd757)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 6), 30)
@@ -692,7 +693,8 @@ public enum BeeDefinition implements IBeeDefinition {
 			registerMutationTimeLimited(MEADOWS, FOREST, 10, 3, 29, 4, 15).setIsSecret();
 		}
 	},
-	MERRY(EnumBeeBranch.FESTIVE, "feliciter", false, new Color(0xffffff), new Color(0xd40000)) {
+	// Christmas
+	MERRY(BeeBranchDefinition.FESTIVE, "feliciter", false, new Color(0xffffff), new Color(0xd40000)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 4), 30)
@@ -713,7 +715,8 @@ public enum BeeDefinition implements IBeeDefinition {
 			registerMutationTimeLimited(WINTRY, FOREST, 10, 12, 21, 12, 27).setIsSecret();
 		}
 	},
-	TIPSY(EnumBeeBranch.FESTIVE, "ebrius", false, new Color(0xffffff), new Color(0xc219ec)) {
+	// New Year
+	TIPSY(BeeBranchDefinition.FESTIVE, "ebrius", false, new Color(0xffffff), new Color(0xc219ec)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 4), 30)
@@ -734,8 +737,9 @@ public enum BeeDefinition implements IBeeDefinition {
 			registerMutationTimeLimited(WINTRY, MEADOWS, 10, 12, 27, 1, 2).setIsSecret();
 		}
 	},
-	// 35 Solstice
-	TRICKY(EnumBeeBranch.FESTIVE, "libita", false, new Color(0x49413B), new Color(0xFF6A00)) {
+	// (missing) Solstice
+	// Halloween
+	TRICKY(BeeBranchDefinition.FESTIVE, "libita", false, new Color(0x49413B), new Color(0xFF6A00)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 0), 40)
@@ -760,10 +764,10 @@ public enum BeeDefinition implements IBeeDefinition {
 			registerMutationTimeLimited(SINISTER, COMMON, 10, 10, 15, 11, 3).setIsSecret();
 		}
 	},
-	// 37 Thanksgiving
+	// (missing) Thanksgiving
 
 	/* AGRARIAN BRANCH */
-	RURAL(EnumBeeBranch.AGRARIAN, "rustico", false, new Color(0xfeff8f), new Color(0xffdc16)) {
+	RURAL(BeeBranchDefinition.AGRARIAN, "rustico", false, new Color(0xfeff8f), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 14), 20);
@@ -781,7 +785,7 @@ public enum BeeDefinition implements IBeeDefinition {
 					.enableStrictBiomeCheck();
 		}
 	},
-	FARMERLY(EnumBeeBranch.AGRARIAN, "arator", true, new Color(0xD39728), new Color(0xffdc16)) {
+	FARMERLY(BeeBranchDefinition.AGRARIAN, "arator", true, new Color(0xD39728), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 14), 27);
@@ -800,7 +804,7 @@ public enum BeeDefinition implements IBeeDefinition {
 					.enableStrictBiomeCheck();
 		}
 	},
-	AGRARIAN(EnumBeeBranch.AGRARIAN, "arator", true, new Color(0xFFCA75), new Color(0xFFE047)) {
+	AGRARIAN(BeeBranchDefinition.AGRARIAN, "arator", true, new Color(0xFFCA75), new Color(0xFFE047)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 14), 35)
@@ -824,7 +828,7 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 
 	/* BOGGY BRANCH */
-	MARSHY(EnumBeeBranch.BOGGY, "adorasti", true, new Color(0x546626), new Color(0xffdc16)) {
+	MARSHY(BeeBranchDefinition.BOGGY, "adorasti", true, new Color(0x546626), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 15), 30)
@@ -841,7 +845,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			// found in hives
 		}
 	},
-	MIRY(EnumBeeBranch.BOGGY, "humidium", true, new Color(0x92AF42), new Color(0xffdc16)) {
+	MIRY(BeeBranchDefinition.BOGGY, "humidium", true, new Color(0x92AF42), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 15), 36)
@@ -861,7 +865,7 @@ public enum BeeDefinition implements IBeeDefinition {
 					.setTemperatureRainfall(0.75f, 0.94f, 0.75f, 2.0f);
 		}
 	},
-	BOGGY(EnumBeeBranch.BOGGY, "paluster", true, new Color(0x698948), new Color(0xffdc16)) {
+	BOGGY(BeeBranchDefinition.BOGGY, "paluster", true, new Color(0x698948), new Color(0xffdc16)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 15), 39)
@@ -885,7 +889,7 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 
 	/* MONASTIC BRANCH */
-	MONASTIC(EnumBeeBranch.MONASTIC, "monachus", false, new Color(0x42371c), new Color(0xfff7b6)) {
+	MONASTIC(BeeBranchDefinition.MONASTIC, "monachus", false, new Color(0x42371c), new Color(0xfff7b6)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 14), 30)
@@ -903,7 +907,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			// can only be bought from Apiarist Villagers
 		}
 	},
-	SECLUDED(EnumBeeBranch.MONASTIC, "contractus", true, new Color(0x7b6634), new Color(0xfff7b6)) {
+	SECLUDED(BeeBranchDefinition.MONASTIC, "contractus", true, new Color(0x7b6634), new Color(0xfff7b6)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addSpecialty(ForestryItem.beeComb.getItemStack(1, 16), 20)
@@ -920,7 +924,7 @@ public enum BeeDefinition implements IBeeDefinition {
 			registerMutation(MONASTIC, AUSTERE, 12);
 		}
 	},
-	HERMITIC(EnumBeeBranch.MONASTIC, "anachoreta", false, new Color(0xffd46c), new Color(0xfff7b6)) {
+	HERMITIC(BeeBranchDefinition.MONASTIC, "anachoreta", false, new Color(0xffd46c), new Color(0xfff7b6)) {
 		@Override
 		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
 			beeSpecies.addSpecialty(ForestryItem.beeComb.getItemStack(1, 16), 20)
@@ -942,12 +946,12 @@ public enum BeeDefinition implements IBeeDefinition {
 
 	public static final EnumSet<BeeDefinition> overworldHiveBees = EnumSet.of(FOREST, MARSHY, MEADOWS, MODEST, TROPICAL, WINTRY);
 
-	private final EnumBeeBranch branch;
+	private final BeeBranchDefinition branch;
 	private final AlleleBeeSpecies species;
 	private IAllele[] template;
 	private IBeeGenome genome;
 	
-	BeeDefinition(EnumBeeBranch branch, String binomial, boolean dominant, Color primary, Color secondary) {
+	BeeDefinition(BeeBranchDefinition branch, String binomial, boolean dominant, Color primary, Color secondary) {
 		String lowercaseName = this.toString().toLowerCase(Locale.ENGLISH);
 		String uid = "species" + WordUtils.capitalize(lowercaseName);
 		String name = "bees.species." + lowercaseName;
