@@ -33,9 +33,9 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.FLOWERING.ordinal()] = Allele.floweringSlower;
-			template[EnumBeeChromosome.FERTILITY.ordinal()] = Allele.fertilityHigh;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.FLOWERING, Allele.floweringSlower);
+			setAllele(EnumBeeChromosome.FERTILITY, Allele.fertilityHigh);
 		}
 
 		@Override
@@ -50,8 +50,8 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.FLOWERING.ordinal()] = Allele.floweringSlower;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.FLOWERING, Allele.floweringSlower);
 		}
 
 		@Override
@@ -66,8 +66,8 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlower;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
 		}
 
 		@Override
@@ -88,9 +88,9 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedFast;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanShortest;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedFast);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanShortest);
 		}
 
 		@Override
@@ -109,10 +109,10 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlower;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanShort;
-			template[EnumBeeChromosome.FLOWERING.ordinal()] = Allele.floweringSlow;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanShort);
+			setAllele(EnumBeeChromosome.FLOWERING, Allele.floweringSlow);
 		}
 
 		@Override
@@ -127,10 +127,10 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedNorm;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanShortened;
-			template[EnumBeeChromosome.FERTILITY.ordinal()] = Allele.fertilityMaximum;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedNorm);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanShortened);
+			setAllele(EnumBeeChromosome.FERTILITY, Allele.fertilityMaximum);
 		}
 
 		@Override
@@ -147,10 +147,10 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlower;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanNormal;
-			template[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectBeatific;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanNormal);
+			setAllele(EnumBeeChromosome.EFFECT, Allele.effectBeatific);
 		}
 
 		@Override
@@ -167,10 +167,10 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlower;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanShort;
-			template[EnumBeeChromosome.FLOWERING.ordinal()] = Allele.floweringSlow;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanShort);
+			setAllele(EnumBeeChromosome.FLOWERING, Allele.floweringSlow);
 		}
 
 		@Override
@@ -185,9 +185,9 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedNorm;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanShortened;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedNorm);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanShortened);
 		}
 
 		@Override
@@ -204,10 +204,10 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlower;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanNormal;
-			template[EnumBeeChromosome.FLOWERING.ordinal()] = Allele.floweringFast;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanNormal);
+			setAllele(EnumBeeChromosome.FLOWERING, Allele.floweringFast);
 		}
 
 		@Override
@@ -225,11 +225,11 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlower;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanNormal;
-			template[EnumBeeChromosome.NOCTURNAL.ordinal()] = Allele.boolTrue;
-			template[EnumBeeChromosome.CAVE_DWELLING.ordinal()] = Allele.boolTrue;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanNormal);
+			setAllele(EnumBeeChromosome.NOCTURNAL, Allele.boolTrue);
+			setAllele(EnumBeeChromosome.CAVE_DWELLING, Allele.boolTrue);
 		}
 
 		@Override
@@ -245,11 +245,11 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlow;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanLong;
-			template[EnumBeeChromosome.NOCTURNAL.ordinal()] = Allele.boolTrue;
-			template[EnumBeeChromosome.CAVE_DWELLING.ordinal()] = Allele.boolTrue;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlow);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLong);
+			setAllele(EnumBeeChromosome.NOCTURNAL, Allele.boolTrue);
+			setAllele(EnumBeeChromosome.CAVE_DWELLING, Allele.boolTrue);
 		}
 
 		@Override
@@ -265,12 +265,12 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlow;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanLong;
-			template[EnumBeeChromosome.NOCTURNAL.ordinal()] = Allele.boolTrue;
-			template[EnumBeeChromosome.CAVE_DWELLING.ordinal()] = Allele.boolTrue;
-			template[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectHeroic;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlow);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLong);
+			setAllele(EnumBeeChromosome.NOCTURNAL, Allele.boolTrue);
+			setAllele(EnumBeeChromosome.CAVE_DWELLING, Allele.boolTrue);
+			setAllele(EnumBeeChromosome.EFFECT, Allele.effectHeroic);
 		}
 
 		@Override
@@ -292,10 +292,10 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlower;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanNormal;
-			template[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectAggressive;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanNormal);
+			setAllele(EnumBeeChromosome.EFFECT, Allele.effectAggressive);
 		}
 
 		@Override
@@ -317,10 +317,10 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedNorm;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanLong;
-			template[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectAggressive;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedNorm);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLong);
+			setAllele(EnumBeeChromosome.EFFECT, Allele.effectAggressive);
 		}
 
 		@Override
@@ -343,10 +343,10 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlower;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanLonger;
-			template[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectIgnition;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLonger);
+			setAllele(EnumBeeChromosome.EFFECT, Allele.effectIgnition);
 		}
 
 		@Override
@@ -366,9 +366,9 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlower;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanShort;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanShort);
 		}
 
 		@Override
@@ -385,9 +385,9 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedNorm;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanLong;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedNorm);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLong);
 		}
 
 		@Override
@@ -409,11 +409,11 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlowest;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanLonger;
-			template[EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceDown2;
-			template[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectCreeper;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlowest);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLonger);
+			setAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE, Allele.toleranceDown2);
+			setAllele(EnumBeeChromosome.EFFECT, Allele.effectCreeper);
 		}
 
 		@Override
@@ -434,9 +434,9 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlower;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanShort;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanShort);
 		}
 
 		@Override
@@ -454,9 +454,9 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedNorm;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanLong;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedNorm);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLong);
 		}
 
 		@Override
@@ -475,11 +475,11 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlowest;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanLonger;
-			template[EnumBeeChromosome.TEMPERATURE_TOLERANCE.ordinal()] = Allele.toleranceBoth2;
-			template[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectExploration;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlowest);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLonger);
+			setAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE, Allele.toleranceBoth2);
+			setAllele(EnumBeeChromosome.EFFECT, Allele.effectExploration);
 		}
 
 		@Override
@@ -498,7 +498,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
+		protected void setAlleles() {
 
 		}
 
@@ -517,8 +517,8 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectReanimation;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.EFFECT, Allele.effectReanimation);
 		}
 		
 		@Override
@@ -537,10 +537,10 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlowest;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanLongest;
-			template[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectResurrection;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlowest);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLongest);
+			setAllele(EnumBeeChromosome.EFFECT, Allele.effectResurrection);
 		}
 		
 		@Override
@@ -559,10 +559,10 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlower;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanShort;
-			template[EnumBeeChromosome.FERTILITY.ordinal()] = Allele.fertilityMaximum;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanShort);
+			setAllele(EnumBeeChromosome.FERTILITY, Allele.fertilityMaximum);
 		}
 
 		@Override
@@ -580,9 +580,9 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlow;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanShort;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlow);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanShort);
 		}
 
 		@Override
@@ -602,9 +602,9 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlower;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanShort;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanShort);
 		}
 
 		@Override
@@ -623,9 +623,9 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlower;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanNormal;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanNormal);
 		}
 		
 		@Override
@@ -641,9 +641,9 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedNorm;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanLonger;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedNorm);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLonger);
 		}
 		
 		@Override
@@ -661,9 +661,9 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlowest;
-			template[EnumBeeChromosome.LIFESPAN.ordinal()] = Allele.lifespanLongest;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlowest);
+			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLongest);
 		}
 		
 		@Override
@@ -684,8 +684,8 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectFestiveEaster;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.EFFECT, Allele.effectFestiveEaster);
 		}
 
 		@Override
@@ -705,9 +705,9 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.NOCTURNAL.ordinal()] = Allele.boolTrue;
-			template[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectSnowing;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.NOCTURNAL, Allele.boolTrue);
+			setAllele(EnumBeeChromosome.EFFECT, Allele.effectSnowing);
 		}
 
 		@Override
@@ -727,9 +727,9 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.NOCTURNAL.ordinal()] = Allele.boolTrue;
-			template[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectDrunkard;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.NOCTURNAL, Allele.boolTrue);
+			setAllele(EnumBeeChromosome.EFFECT, Allele.effectDrunkard);
 		}
 
 		@Override
@@ -753,10 +753,10 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.NOCTURNAL.ordinal()] = Allele.boolTrue;
-			template[EnumBeeChromosome.TOLERANT_FLYER.ordinal()] = Allele.boolTrue;
-			template[EnumBeeChromosome.FLOWER_PROVIDER.ordinal()] = Allele.flowersGourd;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.NOCTURNAL, Allele.boolTrue);
+			setAllele(EnumBeeChromosome.TOLERANT_FLYER, Allele.boolTrue);
+			setAllele(EnumBeeChromosome.FLOWER_PROVIDER, Allele.flowersGourd);
 		}
 
 		@Override
@@ -774,7 +774,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
+		protected void setAlleles() {
 
 		}
 
@@ -792,9 +792,9 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlow;
-			template[EnumBeeChromosome.TERRITORY.ordinal()] = Allele.territoryLarge;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlow);
+			setAllele(EnumBeeChromosome.TERRITORY, Allele.territoryLarge);
 		}
 
 		@Override
@@ -812,11 +812,11 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.SPEED.ordinal()] = Allele.speedSlow;
-			template[EnumBeeChromosome.HUMIDITY_TOLERANCE.ordinal()] = Allele.toleranceBoth2;
-			template[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectFertile;
-			template[EnumBeeChromosome.TERRITORY.ordinal()] = Allele.territoryLarge;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlow);
+			setAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE, Allele.toleranceBoth2);
+			setAllele(EnumBeeChromosome.EFFECT, Allele.effectFertile);
+			setAllele(EnumBeeChromosome.TERRITORY, Allele.territoryLarge);
 		}
 
 		@Override
@@ -836,7 +836,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
+		protected void setAlleles() {
 
 		}
 
@@ -853,10 +853,10 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.FERTILITY.ordinal()] = Allele.fertilityMaximum;
-			template[EnumBeeChromosome.TOLERANT_FLYER.ordinal()] = Allele.boolTrue;
-			template[EnumBeeChromosome.NOCTURNAL.ordinal()] = Allele.boolTrue;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.FERTILITY, Allele.fertilityMaximum);
+			setAllele(EnumBeeChromosome.TOLERANT_FLYER, Allele.boolTrue);
+			setAllele(EnumBeeChromosome.NOCTURNAL, Allele.boolTrue);
 		}
 
 		@Override
@@ -874,11 +874,11 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.TOLERANT_FLYER.ordinal()] = Allele.boolTrue;
-			template[EnumBeeChromosome.NOCTURNAL.ordinal()] = Allele.boolTrue;
-			template[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectMycophilic;
-			template[EnumBeeChromosome.TERRITORY.ordinal()] = Allele.territoryLarger;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.TOLERANT_FLYER, Allele.boolTrue);
+			setAllele(EnumBeeChromosome.NOCTURNAL, Allele.boolTrue);
+			setAllele(EnumBeeChromosome.EFFECT, Allele.effectMycophilic);
+			setAllele(EnumBeeChromosome.TERRITORY, Allele.territoryLarger);
 		}
 
 		@Override
@@ -898,7 +898,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
+		protected void setAlleles() {
 
 		}
 
@@ -915,8 +915,8 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.FLOWERING.ordinal()] = Allele.floweringFastest;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.FLOWERING, Allele.floweringFastest);
 		}
 
 		@Override
@@ -933,9 +933,9 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void initializeTemplate(IAllele[] template) {
-			template[EnumBeeChromosome.FLOWERING.ordinal()] = Allele.floweringFastest;
-			template[EnumBeeChromosome.EFFECT.ordinal()] = Allele.effectRepulsion;
+		protected void setAlleles() {
+			setAllele(EnumBeeChromosome.FLOWERING, Allele.floweringFastest);
+			setAllele(EnumBeeChromosome.EFFECT, Allele.effectRepulsion);
 		}
 		
 		@Override
@@ -962,7 +962,7 @@ public enum BeeDefinition implements IBeeDefinition {
 
 	protected abstract void setSpeciesProperties(AlleleBeeSpecies beeSpecies);
 
-	protected abstract void initializeTemplate(IAllele[] template);
+	protected abstract void setAlleles();
 
 	public static void initBees() {
 		for (BeeDefinition bee : values()) {
@@ -980,8 +980,8 @@ public enum BeeDefinition implements IBeeDefinition {
 		setSpeciesProperties(species);
 
 		template = branch.getTemplate();
-		template[EnumBeeChromosome.SPECIES.ordinal()] = species;
-		initializeTemplate(template);
+		setAllele(EnumBeeChromosome.SPECIES, species);
+		setAlleles();
 
 		genome = PluginApiculture.beeInterface.templateAsGenome(template);
 
@@ -1004,6 +1004,10 @@ public enum BeeDefinition implements IBeeDefinition {
 		MutationTimeLimited beeMutation = new MutationTimeLimited(parent1, parent2, this, chance, start, end);
 		PluginApiculture.beeInterface.registerMutation(beeMutation);
 		return beeMutation;
+	}
+	
+	protected final void setAllele(EnumBeeChromosome chromosome, IAllele allele) {
+		template[chromosome.ordinal()] = allele;
 	}
 
 	@Override
