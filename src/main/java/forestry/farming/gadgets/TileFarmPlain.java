@@ -273,8 +273,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	}
 
 	private void setExtents() {
-		for (ForgeDirection direction : targets.keySet()) {
-			List<FarmTarget> targetsList = targets.get(direction);
+		for (List<FarmTarget> targetsList : targets.values()) {
 			if (!targetsList.isEmpty()) {
 				Vect groundPosition = getGroundPosition(worldObj, targetsList.get(0).getStart());
 

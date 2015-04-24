@@ -964,6 +964,8 @@ public enum BeeDefinition implements IBeeDefinition {
 
 	protected abstract void setAlleles();
 
+	protected abstract void registerMutations();
+
 	public static void initBees() {
 		for (BeeDefinition bee : values()) {
 			bee.init();
@@ -988,8 +990,6 @@ public enum BeeDefinition implements IBeeDefinition {
 		AlleleManager.alleleRegistry.registerAllele(species);
 		PluginApiculture.beeInterface.registerTemplate(template);
 	}
-
-	protected abstract void registerMutations();
 
 	protected final BeeMutation registerMutation(BeeDefinition parent1, BeeDefinition parent2, int chance) {
 		BeeMutation beeMutation = new BeeMutation(parent1, parent2, this, chance);

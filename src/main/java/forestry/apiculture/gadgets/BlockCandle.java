@@ -316,13 +316,13 @@ public class BlockCandle extends BlockTorch {
 		return itemStack.getItemDamage() > 0;
 	}
 
-	public void addItemToLightingList(Item item) {
+	public static void addItemToLightingList(Item item) {
 		if (item == null) {
 			throw new NullPointerException();
 		}
 
-		if (!this.lightingItems.contains(item)) {
-			this.lightingItems.add(item);
+		if (!lightingItems.contains(item)) {
+			lightingItems.add(item);
 		}
 	}
 
