@@ -41,6 +41,7 @@ import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.GuiId;
 import forestry.core.network.PacketPayload;
+import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.GuiUtil;
 import forestry.plugins.PluginApiculture;
 
@@ -74,7 +75,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			@Override
 			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 				if (GuiUtil.isIndexInRange(slotIndex, SLOT_INPUT_1, SLOT_INPUT_COUNT)) {
-					return AlleleManager.alleleRegistry.isIndividual(itemStack);
+					return AlleleManager.alleleRegistry.isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack) != null;
 				} else if (slotIndex == SLOT_CAN) {
 					Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
 					return resourceTank.accepts(fluid);
@@ -172,6 +173,10 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		ItemStack inputStack = slot.getStackInSlot();
+		ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(inputStack);
+		if (ersatz != null) {
+			inputStack = ersatz;
+		}
 		IIndividual individual = AlleleManager.alleleRegistry.getIndividual(inputStack);
 		if (!individual.isAnalyzed()) {
 			if (resourceTank.getFluidAmount() < HONEY_REQUIRED) {
@@ -191,7 +196,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	private IInvSlot getInputSlot() {
 		for (IInvSlot slot : InventoryIterator.getIterable(invInput)) {
 			ItemStack inputStack = slot.getStackInSlot();
-			if (inputStack != null && AlleleManager.alleleRegistry.isIndividual(inputStack)) {
+			if (inputStack != null && (AlleleManager.alleleRegistry.isIndividual(inputStack) || GeneticsUtil.getGeneticEquivalent(inputStack) != null)) {
 				return slot;
 			}
 		}
