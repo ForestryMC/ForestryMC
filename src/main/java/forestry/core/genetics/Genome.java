@@ -12,6 +12,8 @@ package forestry.core.genetics;
 
 import com.google.common.base.Objects;
 
+import java.util.Arrays;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -22,6 +24,7 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IGenome;
+import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.Config;
 import forestry.core.proxy.Proxies;
 
@@ -49,7 +52,7 @@ public abstract class Genome implements IGenome {
 	}
 
 	// NBT RETRIEVAL
-	public static Chromosome getChromosome(ItemStack itemStack, IChromosomeType chromosomeType) {
+	public static IChromosome getChromosome(ItemStack itemStack, IChromosomeType chromosomeType, ISpeciesRoot speciesRoot) {
 		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
 		if (nbtTagCompound == null) {
 			return null;
@@ -60,24 +63,59 @@ public abstract class Genome implements IGenome {
 			return null;
 		}
 
-		NBTTagList chromosomes = genome.getTagList("Chromosomes", 10);
+		IChromosome[] chromosomes = getChromosomes(genome, speciesRoot);
 		if (chromosomes == null) {
 			return null;
 		}
 
-		for (int i = 0; i < chromosomes.tagCount(); i++) {
-			NBTTagCompound chromosomeTag = chromosomes.getCompoundTagAt(i);
-			byte byte0 = chromosomeTag.getByte(SLOT_TAG);
-
-			if (byte0 == chromosomeType.ordinal()) {
-				return Chromosome.loadChromosomeFromNBT(chromosomeTag);
-			}
-		}
-		return null;
+		return chromosomes[chromosomeType.ordinal()];
 	}
 
-	public static IAllele getActiveAllele(ItemStack itemStack, IChromosomeType chromosomeType) {
-		Chromosome chromosome = getChromosome(itemStack, chromosomeType);
+	public static IChromosome[] getChromosomes(NBTTagCompound genomeNBT, ISpeciesRoot speciesRoot) {
+
+		NBTTagList chromosomesNBT = genomeNBT.getTagList("Chromosomes", 10);
+		IChromosome[] chromosomes = new IChromosome[speciesRoot.getDefaultTemplate().length];
+
+		for (int i = 0; i < chromosomesNBT.tagCount(); i++) {
+			NBTTagCompound chromosomeNBT = chromosomesNBT.getCompoundTagAt(i);
+			byte chromosomeOrdinal = chromosomeNBT.getByte(SLOT_TAG);
+
+			if (chromosomeOrdinal >= 0 && chromosomeOrdinal < chromosomes.length) {
+				Chromosome chromosome = Chromosome.loadChromosomeFromNBT(chromosomeNBT);
+				chromosomes[chromosomeOrdinal] = chromosome;
+
+				if (Config.clearInvalidChromosomes) {
+					IAllele template = speciesRoot.getDefaultTemplate()[chromosomeOrdinal];
+					Class<? extends IAllele> chromosomeClass = speciesRoot.getKaryotype()[chromosomeOrdinal].getAlleleClass();
+					if (chromosome.overrideInvalidAlleles(template, chromosomeClass)) {
+						chromosome.writeToNBT(chromosomeNBT);
+					}
+				}
+
+				if (chromosome.hasInvalidAlleles(speciesRoot.getKaryotype()[chromosomeOrdinal].getAlleleClass())) {
+					throw new RuntimeException("Found Chromosome with invalid Alleles.\nNBTTagCompound: " + chromosomesNBT + "\nSee config option \"genetics.clear.invalid.chromosomes\".");
+				}
+			}
+		}
+
+		// handle old saves that have missing chromosomes
+		IChromosome speciesChromosome = chromosomes[EnumTreeChromosome.SPECIES.ordinal()];
+		if (speciesChromosome != null) {
+			IAlleleSpecies species = (IAlleleSpecies) speciesChromosome.getActiveAllele();
+			IAllele[] template = speciesRoot.getTemplate(species.getUID());
+			for (int i = 0; i < chromosomes.length; i++) {
+				IAllele allele = template[i];
+				if ((chromosomes[i] == null) && (allele != null)) {
+					chromosomes[i] = new Chromosome(allele);
+				}
+			}
+		}
+
+		return chromosomes;
+	}
+
+	public static IAllele getActiveAllele(ItemStack itemStack, IChromosomeType chromosomeType, ISpeciesRoot speciesRoot) {
+		IChromosome chromosome = getChromosome(itemStack, chromosomeType, speciesRoot);
 		if (chromosome == null) {
 			return null;
 		}
@@ -87,47 +125,7 @@ public abstract class Genome implements IGenome {
 	// / SAVING & LOADING
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-
-		NBTTagList nbttaglist = nbttagcompound.getTagList("Chromosomes", 10);
-		chromosomes = new Chromosome[chromosomes.length];
-
-		Boolean invalidGenome = false;
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-			byte byte0 = nbttagcompound1.getByte(SLOT_TAG);
-			
-			if (byte0 >= 0 && byte0 < chromosomes.length) {
-				Chromosome chromosome = Chromosome.loadChromosomeFromNBT(nbttagcompound1);
-				chromosomes[byte0] = chromosome;
-
-				if (Config.clearInvalidChromosomes) {
-					if (chromosome.overrideInvalidAlleles(getDefaultTemplate()[byte0], getSpeciesRoot().getKaryotype()[byte0].getAlleleClass())) {
-						invalidGenome = true;
-					}
-				}
-				
-				if (chromosome.hasInvalidAlleles(getSpeciesRoot().getKaryotype()[byte0].getAlleleClass())) {
-					throw new RuntimeException("Found Chromosome with invalid Alleles.\nNBTTagCompound: " + nbttaglist + "\nSee config option \"genetics.clear.invalid.chromosomes\".");
-				}
-			}
-		}
-
-		if (invalidGenome) {
-			Proxies.log.warning("Overrode alleles for genome:\n{0}\nOriginal NBTTagCompound: {1}", this, nbttaglist);
-		}
-
-		// handle old saves that have missing chromosomes
-		IChromosome speciesChromosome = chromosomes[EnumTreeChromosome.SPECIES.ordinal()];
-		if (speciesChromosome != null) {
-			IAlleleSpecies species = (IAlleleSpecies) speciesChromosome.getActiveAllele();
-			IAllele[] template = getSpeciesRoot().getTemplate(species.getUID());
-			for (int i = 0; i < chromosomes.length; i++) {
-				if ((chromosomes[i] == null) && (template[i] != null)) {
-					chromosomes[i] = new Chromosome(template[i]);
-				}
-			}
-		}
+		chromosomes = getChromosomes(nbttagcompound, getSpeciesRoot());
 	}
 
 	@Override
@@ -143,13 +141,12 @@ public abstract class Genome implements IGenome {
 			}
 		}
 		nbttagcompound.setTag("Chromosomes", nbttaglist);
-
 	}
 
 	// / INFORMATION RETRIEVAL
 	@Override
 	public IChromosome[] getChromosomes() {
-		return chromosomes;
+		return Arrays.copyOf(chromosomes, chromosomes.length);
 	}
 
 	@Override

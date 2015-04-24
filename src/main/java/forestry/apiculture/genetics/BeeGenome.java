@@ -18,7 +18,6 @@ import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.genetics.EnumTolerance;
-import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IAlleleInteger;
@@ -73,12 +72,7 @@ public class BeeGenome extends Genome implements IBeeGenome {
 
 	// NBT RETRIEVAL
 	public static IAlleleBeeSpecies getSpecies(ItemStack itemStack) {
-		IAllele speciesAllele = Genome.getActiveAllele(itemStack, EnumBeeChromosome.SPECIES);
-		if (speciesAllele instanceof IAlleleBeeSpecies) {
-			return (IAlleleBeeSpecies) speciesAllele;
-		} else {
-			return null;
-		}
+		return (IAlleleBeeSpecies) getActiveAllele(itemStack, EnumBeeChromosome.SPECIES, PluginApiculture.beeInterface);
 	}
 
 	// / INFORMATION RETRIEVAL

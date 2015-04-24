@@ -25,14 +25,11 @@ import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.IGrowthProvider;
 import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.genetics.Allele;
 import forestry.core.genetics.AllelePlantType;
-import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.Genome;
 import forestry.plugins.PluginArboriculture;
 
@@ -48,12 +45,7 @@ public class TreeGenome extends Genome implements ITreeGenome {
 
 	// NBT RETRIEVAL
 	public static IAlleleTreeSpecies getSpecies(ItemStack itemStack) {
-		IAllele speciesAllele = Genome.getActiveAllele(itemStack, EnumTreeChromosome.SPECIES);
-		if (speciesAllele instanceof IAlleleTreeSpecies) {
-			return (IAlleleTreeSpecies) speciesAllele;
-		} else {
-			return null;
-		}
+		return (IAlleleTreeSpecies) getActiveAllele(itemStack, EnumTreeChromosome.SPECIES, PluginArboriculture.treeInterface);
 	}
 
 	@Override
