@@ -354,7 +354,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		housing.onQueenDeath(getQueen());
 
 		// Princess
-		boolean secondPrincess = this.housing.getWorld().rand.nextInt(100) < PluginApiculture.getSecondPrincessChance();
+		boolean secondPrincess = this.housing.getWorld().rand.nextInt(10000) < PluginApiculture.getSecondPrincessChance() * 100;
 		int count = secondPrincess ? 2 : 1;
 		while (count > 0) {
 			count--;

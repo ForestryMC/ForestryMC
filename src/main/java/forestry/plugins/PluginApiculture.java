@@ -152,7 +152,7 @@ public class PluginApiculture extends ForestryPlugin {
 	private static final String CONFIG_CATEGORY = "apiculture";
 	private Configuration apicultureConfig;
 	public static String beekeepingMode = "NORMAL";
-	private static int secondPrincessChance = 0;
+	private static float secondPrincessChance = 0;
 	public static int ticksPerBeeWorkCycle = 550;
 	public static boolean apiarySideSensitive = false;
 	public static boolean fancyRenderedBees = false;
@@ -279,8 +279,8 @@ public class PluginApiculture extends ForestryPlugin {
 		Proxies.log.finer("Beekeeping mode read from config: " + beekeepingMode);
 
 		Property secondPrincess = apicultureConfig.get("beekeeping.secondprincess", CONFIG_CATEGORY, secondPrincessChance);
-		secondPrincess.comment = "percent chance of second princess drop, for limited/skyblock maps.";
-		secondPrincessChance = Integer.parseInt(secondPrincess.value);
+		secondPrincess.comment = "percent chance of second princess drop, for limited/skyblock maps. Acceptable values up to 2 decimals.";
+		secondPrincessChance = Float.parseFloat(secondPrincess.value);
 
 		property = apicultureConfig.get("beekeeping.flowers.custom", CONFIG_CATEGORY, "");
 		property.comment = "add additional flower blocks for apiaries here in the format modid:name or modid:name:meta. separate blocks using ';'. wildcard for metadata: '*'. will be treated like vanilla flowers. not recommended for flowers implemented as tile entities.";
@@ -817,7 +817,7 @@ public class PluginApiculture extends ForestryPlugin {
 		Allele.effectMycophilic = new AlleleEffectFungification("effectMycophilic");
 	}
 
-	public static int getSecondPrincessChance() {
+	public static float getSecondPrincessChance() {
 		return secondPrincessChance;
 	}
 
