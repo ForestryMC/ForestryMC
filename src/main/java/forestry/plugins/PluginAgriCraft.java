@@ -10,12 +10,18 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.farming.Farmables;
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.GameMode;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
 import forestry.farming.logic.FarmableBasicAgricraft;
 
@@ -31,11 +37,55 @@ public class PluginAgriCraft extends ForestryPlugin {
 
 	@Override
 	public String getFailMessage() {
-		return "AgriCraft";
+		return "AgriCraft not found";
 	}
 
 	@Override
 	protected void registerRecipes() {
+
+		ImmutableList<String> seeds = ImmutableList.of(
+				"Allium", //Vanilla
+				"Dandelion",
+				"Daisy",
+				"TulipRed",
+				"TulipPink",
+				"TulipOrange",
+				"TulipWhite",
+				"Sugarcane",
+				"Cactus",
+				"Carrot",
+				"Potato",
+				"Poppy",
+				"Orchid",
+				"ShroomRed",
+				"ShroomBrown",
+
+				"BotaniaCyan", //Botania
+				"BotaniaLime",
+				"BotaniaRed",
+				"BotaniaLightGray",
+				"BotaniaOrange",
+				"BotaniaBlack",
+				"BotaniaLightBlue",
+				"BotaniaPink",
+				"BotaniaWhite",
+				"BotaniaGreen",
+				"BotaniaYellow",
+				"BotaniaMagenta",
+				"BotaniaBrown",
+				"BotaniaPurple",
+				"BotaniaBlue",
+				"BotaniaGray"
+
+
+		);
+		int seedamount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");
+		for (String seedName : seeds) {
+			ItemStack seed = GameRegistry.findItemStack(AgriCraft, "seed" + seedName, 1);
+			if (seed != null) {
+				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{seed}, Fluids.SEEDOIL.getFluid(seedamount));
+			}
+		}
 
 		Block cropBlock = GameRegistry.findBlock(AgriCraft, "crops");
 		if (cropBlock != null) {
