@@ -13,6 +13,7 @@ package forestry.apiculture.genetics;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -24,12 +25,11 @@ import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.genetics.AlleleArea;
-import forestry.core.genetics.AlleleBoolean;
-import forestry.core.genetics.AlleleTolerance;
 import forestry.core.genetics.Genome;
+import forestry.core.genetics.alleles.AlleleArea;
+import forestry.core.genetics.alleles.AlleleBoolean;
+import forestry.core.genetics.alleles.AlleleTolerance;
 import forestry.core.vect.Vect;
-import forestry.plugins.PluginApiculture;
 
 public class BeeGenome extends Genome implements IBeeGenome {
 	/**
@@ -72,7 +72,7 @@ public class BeeGenome extends Genome implements IBeeGenome {
 
 	// NBT RETRIEVAL
 	public static IAlleleBeeSpecies getSpecies(ItemStack itemStack) {
-		return (IAlleleBeeSpecies) getActiveAllele(itemStack, EnumBeeChromosome.SPECIES, PluginApiculture.beeInterface);
+		return (IAlleleBeeSpecies) getActiveAllele(itemStack, EnumBeeChromosome.SPECIES, BeeManager.beeRoot);
 	}
 
 	// / INFORMATION RETRIEVAL
@@ -149,6 +149,6 @@ public class BeeGenome extends Genome implements IBeeGenome {
 
 	@Override
 	public ISpeciesRoot getSpeciesRoot() {
-		return PluginApiculture.beeInterface;
+		return BeeManager.beeRoot;
 	}
 }

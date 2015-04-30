@@ -48,9 +48,9 @@ import forestry.arboriculture.gadgets.ForestryBlockLeaves;
 import forestry.arboriculture.gadgets.TileLeaves;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
-import forestry.core.genetics.Allele;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.Individual;
+import forestry.core.genetics.alleles.Allele;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginArboriculture;
 

@@ -34,7 +34,6 @@ import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.network.GuiId;
 import forestry.core.network.PacketPayload;
 import forestry.core.utils.StackUtils;
-import forestry.plugins.PluginApiculture;
 
 public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 
@@ -93,9 +92,9 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 		}
 
 		// Queue swarm spawn
-		IBee princess = PluginApiculture.beeInterface.getMember(princessStack);
+		IBee princess = BeeManager.beeRoot.getMember(princessStack);
 		princess.setIsNatural(false);
-		pendingSpawns.push(PluginApiculture.beeInterface.getMemberStack(princess, EnumBeeType.PRINCESS.ordinal()));
+		pendingSpawns.push(BeeManager.beeRoot.getMemberStack(princess, EnumBeeType.PRINCESS.ordinal()));
 	}
 
 	private ItemStack getPrincessStack() {
@@ -110,7 +109,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 
 		IBeeHousing housing = (IBeeHousing) master;
 		ItemStack princessStack = housing.getQueen();
-		if (princessStack == null || !PluginApiculture.beeInterface.isMated(princessStack)) {
+		if (princessStack == null || !BeeManager.beeRoot.isMated(princessStack)) {
 			return null;
 		}
 

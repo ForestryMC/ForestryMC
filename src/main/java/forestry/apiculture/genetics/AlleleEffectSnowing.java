@@ -25,8 +25,8 @@ import forestry.core.vect.Vect;
 
 public class AlleleEffectSnowing extends AlleleEffectThrottled {
 
-	public AlleleEffectSnowing(String uid) {
-		super(uid, "snowing", false, 20, true, true);
+	public AlleleEffectSnowing() {
+		super("snowing", false, 20, true, true);
 	}
 
 	@Override

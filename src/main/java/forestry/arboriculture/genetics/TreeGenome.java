@@ -29,8 +29,8 @@ import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.genetics.AllelePlantType;
 import forestry.core.genetics.Genome;
+import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.plugins.PluginArboriculture;
 
 public class TreeGenome extends Genome implements ITreeGenome {

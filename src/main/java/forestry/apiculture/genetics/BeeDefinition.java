@@ -12,30 +12,33 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.BiomeDictionary;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
+import forestry.api.apiculture.IAlleleBeeSpecies;
+import forestry.api.apiculture.IAlleleBeeSpeciesCustom;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeMutationCustom;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.core.config.ForestryItem;
-import forestry.core.genetics.Allele;
-import forestry.plugins.PluginApiculture;
+import forestry.core.genetics.alleles.Allele;
+import forestry.core.genetics.alleles.EnumAllele;
 
 public enum BeeDefinition implements IBeeDefinition {
 	/* HONEY BRANCH */
 	FOREST(BeeBranchDefinition.HONEY, "nigrocincta", true, new Color(0x19d0ec), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 0), 30);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.FLOWERING, Allele.floweringSlower);
-			setAllele(EnumBeeChromosome.FERTILITY, Allele.fertilityHigh);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.SLOWER);
+			Allele.helper.set(template, EnumBeeChromosome.FERTILITY, EnumAllele.Fertility.HIGH);
 		}
 
 		@Override
@@ -45,13 +48,13 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 	MEADOWS(BeeBranchDefinition.HONEY, "florea", true, new Color(0xef131e), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 0), 30);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.FLOWERING, Allele.floweringSlower);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.SLOWER);
 		}
 
 		@Override
@@ -61,13 +64,13 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 	COMMON(BeeBranchDefinition.HONEY, "cerana", true, new Color(0xb2b2b2), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 0), 35);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
 		}
 
 		@Override
@@ -83,14 +86,14 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 	CULTIVATED(BeeBranchDefinition.HONEY, "mellifera", true, new Color(0x5734ec), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 0), 40);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedFast);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanShortest);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.FAST);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTEST);
 		}
 
 		@Override
@@ -104,15 +107,15 @@ public enum BeeDefinition implements IBeeDefinition {
 	/* NOBLE BRANCH */
 	NOBLE(BeeBranchDefinition.NOBLE, "nobilis", false, new Color(0xec9a19), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 5), 20);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanShort);
-			setAllele(EnumBeeChromosome.FLOWERING, Allele.floweringSlow);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORT);
+			Allele.helper.set(template, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.SLOW);
 		}
 
 		@Override
@@ -122,15 +125,15 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 	MAJESTIC(BeeBranchDefinition.NOBLE, "regalis", true, new Color(0x7f0000), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 5), 30);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedNorm);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanShortened);
-			setAllele(EnumBeeChromosome.FERTILITY, Allele.fertilityMaximum);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.NORMAL);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTENED);
+			Allele.helper.set(template, EnumBeeChromosome.FERTILITY, EnumAllele.Fertility.MAXIMUM);
 		}
 
 		@Override
@@ -140,17 +143,17 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 	IMPERIAL(BeeBranchDefinition.NOBLE, "imperatorius", false, new Color(0xa3e02f), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 5), 20)
 					.addProduct(ForestryItem.royalJelly.getItemStack(), 15)
 					.setHasEffect();
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanNormal);
-			setAllele(EnumBeeChromosome.EFFECT, Allele.effectBeatific);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.NORMAL);
+			Allele.helper.set(template, EnumBeeChromosome.EFFECT, Allele.effectBeatific);
 		}
 
 		@Override
@@ -162,15 +165,15 @@ public enum BeeDefinition implements IBeeDefinition {
 	/* INDUSTRIOUS BRANCH */
 	DILIGENT(BeeBranchDefinition.INDUSTRIOUS, "sedulus", false, new Color(0xc219ec), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 3), 20);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanShort);
-			setAllele(EnumBeeChromosome.FLOWERING, Allele.floweringSlow);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORT);
+			Allele.helper.set(template, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.SLOW);
 		}
 
 		@Override
@@ -180,14 +183,14 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 	UNWEARY(BeeBranchDefinition.INDUSTRIOUS, "assiduus", true, new Color(0x19ec5a), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 3), 30);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedNorm);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanShortened);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.NORMAL);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTENED);
 		}
 
 		@Override
@@ -197,17 +200,17 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 	INDUSTRIOUS(BeeBranchDefinition.INDUSTRIOUS, "industria", false, new Color(0xffffff), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 3), 20)
 					.addProduct(ForestryItem.pollenCluster.getItemStack(), 15)
 					.setHasEffect();
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanNormal);
-			setAllele(EnumBeeChromosome.FLOWERING, Allele.floweringFast);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.NORMAL);
+			Allele.helper.set(template, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.FAST);
 		}
 
 		@Override
@@ -219,17 +222,17 @@ public enum BeeDefinition implements IBeeDefinition {
 	/* HEROIC BRANCH */
 	STEADFAST(BeeBranchDefinition.HEROIC, "legio", false, new Color(0x4d2b15), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 1), 20)
 					.setHasEffect();
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanNormal);
-			setAllele(EnumBeeChromosome.NOCTURNAL, Allele.boolTrue);
-			setAllele(EnumBeeChromosome.CAVE_DWELLING, Allele.boolTrue);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.NORMAL);
+			Allele.helper.set(template, EnumBeeChromosome.NOCTURNAL, true);
+			Allele.helper.set(template, EnumBeeChromosome.CAVE_DWELLING, true);
 		}
 
 		@Override
@@ -239,17 +242,17 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 	VALIANT(BeeBranchDefinition.HEROIC, "centurio", true, new Color(0x626bdd), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 1), 30)
 					.addSpecialty(new ItemStack(Items.sugar), 15);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlow);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLong);
-			setAllele(EnumBeeChromosome.NOCTURNAL, Allele.boolTrue);
-			setAllele(EnumBeeChromosome.CAVE_DWELLING, Allele.boolTrue);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOW);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONG);
+			Allele.helper.set(template, EnumBeeChromosome.NOCTURNAL, true);
+			Allele.helper.set(template, EnumBeeChromosome.CAVE_DWELLING, true);
 		}
 
 		@Override
@@ -259,43 +262,41 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 	HEROIC(BeeBranchDefinition.HEROIC, "kraphti", false, new Color(0xb3d5e4), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 1), 40)
 					.setHasEffect();
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlow);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLong);
-			setAllele(EnumBeeChromosome.NOCTURNAL, Allele.boolTrue);
-			setAllele(EnumBeeChromosome.CAVE_DWELLING, Allele.boolTrue);
-			setAllele(EnumBeeChromosome.EFFECT, Allele.effectHeroic);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOW);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONG);
+			Allele.helper.set(template, EnumBeeChromosome.NOCTURNAL, true);
+			Allele.helper.set(template, EnumBeeChromosome.CAVE_DWELLING, true);
+			Allele.helper.set(template, EnumBeeChromosome.EFFECT, Allele.effectHeroic);
 		}
 
 		@Override
 		protected void registerMutations() {
 			registerMutation(STEADFAST, VALIANT, 6)
-					.restrictBiomeType(BiomeDictionary.Type.FOREST)
-					.enableStrictBiomeCheck();
+					.restrictBiomeType(BiomeDictionary.Type.FOREST);
 		}
 	},
 
 	/* INFERNAL BRANCH */
 	SINISTER(BeeBranchDefinition.INFERNAL, "caecus", false, new Color(0xb3d5e4), new Color(0x9a2323)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 2), 45)
-					.setEntityTexture("sinisterBee")
 					.setTemperature(EnumTemperature.HELLISH)
 					.setHumidity(EnumHumidity.ARID);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanNormal);
-			setAllele(EnumBeeChromosome.EFFECT, Allele.effectAggressive);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.NORMAL);
+			Allele.helper.set(template, EnumBeeChromosome.EFFECT, Allele.effectAggressive);
 		}
 
 		@Override
@@ -308,19 +309,18 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 	FIENDISH(BeeBranchDefinition.INFERNAL, "diabolus", true, new Color(0xd7bee5), new Color(0x9a2323)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 2), 55)
 					.addProduct(ForestryItem.ash.getItemStack(), 15)
-					.setEntityTexture("sinisterBee")
 					.setTemperature(EnumTemperature.HELLISH)
 					.setHumidity(EnumHumidity.ARID);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedNorm);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLong);
-			setAllele(EnumBeeChromosome.EFFECT, Allele.effectAggressive);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.NORMAL);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONG);
+			Allele.helper.set(template, EnumBeeChromosome.EFFECT, Allele.effectAggressive);
 		}
 
 		@Override
@@ -333,20 +333,19 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 	DEMONIC(BeeBranchDefinition.INFERNAL, "draco", false, new Color(0xf4e400), new Color(0x9a2323)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 2), 45)
 					.addProduct(new ItemStack(Items.glowstone_dust), 15)
-					.setEntityTexture("sinisterBee")
 					.setHasEffect()
 					.setTemperature(EnumTemperature.HELLISH)
 					.setHumidity(EnumHumidity.ARID);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLonger);
-			setAllele(EnumBeeChromosome.EFFECT, Allele.effectIgnition);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONGER);
+			Allele.helper.set(template, EnumBeeChromosome.EFFECT, Allele.effectIgnition);
 		}
 
 		@Override
@@ -359,16 +358,16 @@ public enum BeeDefinition implements IBeeDefinition {
 	/* AUSTERE BRANCH */
 	MODEST(BeeBranchDefinition.AUSTERE, "modicus", false, new Color(0xc5be86), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 7), 20)
 					.setTemperature(EnumTemperature.HOT)
 					.setHumidity(EnumHumidity.ARID);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanShort);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORT);
 		}
 
 		@Override
@@ -378,29 +377,31 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 	FRUGAL(BeeBranchDefinition.AUSTERE, "permodestus", true, new Color(0xe8dcb1), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 7), 30)
 					.setTemperature(EnumTemperature.HOT)
 					.setHumidity(EnumHumidity.ARID);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedNorm);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLong);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.NORMAL);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONG);
 		}
 
 		@Override
 		protected void registerMutations() {
 			registerMutation(MODEST, SINISTER, 16)
-					.setTemperatureRainfall(1.9f, 2.0f, 0.0f, 0.1f);
+					.restrictTemperature(EnumTemperature.HOT, EnumTemperature.HELLISH)
+					.restrictHumidity(EnumHumidity.ARID);
 			registerMutation(MODEST, FIENDISH, 10)
-					.setTemperatureRainfall(1.9f, 2.0f, 0.0f, 0.1f);
+					.restrictTemperature(EnumTemperature.HOT, EnumTemperature.HELLISH)
+					.restrictHumidity(EnumHumidity.ARID);
 		}
 	},
 	AUSTERE(BeeBranchDefinition.AUSTERE, "correpere", false, new Color(0xfffac2), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 7), 20)
 					.addSpecialty(ForestryItem.beeComb.getItemStack(1, 10), 50)
 					.setHasEffect()
@@ -409,34 +410,34 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlowest);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLonger);
-			setAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE, Allele.toleranceDown2);
-			setAllele(EnumBeeChromosome.EFFECT, Allele.effectCreeper);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWEST);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONGER);
+			Allele.helper.set(template, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.DOWN_2);
+			Allele.helper.set(template, EnumBeeChromosome.EFFECT, Allele.effectCreeper);
 		}
 
 		@Override
 		protected void registerMutations() {
 			registerMutation(MODEST, FRUGAL, 8)
-					.setTemperatureRainfall(1.9f, 2.0f, 0.0f, 0.1f);
+					.restrictTemperature(EnumTemperature.HOT, EnumTemperature.HELLISH)
+					.restrictHumidity(EnumHumidity.ARID);
 		}
 	},
 
 	/* TROPICAL BRANCH */
 	TROPICAL(BeeBranchDefinition.TROPICAL, "mendelia", false, new Color(0x378020), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 6), 20)
-					.setEntityTexture("tropicalBee")
 					.setTemperature(EnumTemperature.WARM)
 					.setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanShort);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORT);
 		}
 
 		@Override
@@ -446,17 +447,16 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 	EXOTIC(BeeBranchDefinition.TROPICAL, "darwini", true, new Color(0x304903), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 6), 30)
-					.setEntityTexture("tropicalBee")
 					.setTemperature(EnumTemperature.WARM)
 					.setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedNorm);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLong);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.NORMAL);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONG);
 		}
 
 		@Override
@@ -466,20 +466,19 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 	EDENIC(BeeBranchDefinition.TROPICAL, "humboldti", false, new Color(0x393d0d), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 6), 20)
-					.setEntityTexture("tropicalBee")
 					.setHasEffect()
 					.setTemperature(EnumTemperature.WARM)
 					.setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlowest);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLonger);
-			setAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE, Allele.toleranceBoth2);
-			setAllele(EnumBeeChromosome.EFFECT, Allele.effectExploration);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWEST);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONGER);
+			Allele.helper.set(template, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.BOTH_2);
+			Allele.helper.set(template, EnumBeeChromosome.EFFECT, Allele.effectExploration);
 		}
 
 		@Override
@@ -491,14 +490,13 @@ public enum BeeDefinition implements IBeeDefinition {
 	/* END BRANCH */
 	ENDED(BeeBranchDefinition.END, "notchi", false, new Color(0xe079fa), new Color(0xd9de9e)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 8), 30)
-					.setEntityTexture("endBee")
 					.setTemperature(EnumTemperature.COLD);
 		}
 
 		@Override
-		protected void setAlleles() {
+		protected void setAlleles(IAllele[] template) {
 
 		}
 
@@ -510,15 +508,14 @@ public enum BeeDefinition implements IBeeDefinition {
 	SPECTRAL(BeeBranchDefinition.END, "idolum", true, new Color(0xa98bed), new Color(0xd9de9e)) {
 
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 8), 50)
-					.setEntityTexture("endBee")
 					.setTemperature(EnumTemperature.COLD);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.EFFECT, Allele.effectReanimation);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.EFFECT, Allele.effectReanimation);
 		}
 		
 		@Override
@@ -529,18 +526,17 @@ public enum BeeDefinition implements IBeeDefinition {
 	PHANTASMAL(BeeBranchDefinition.END, "lemur", false, new Color(0xcc00fa), new Color(0xd9de9e)) {
 
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 8), 40)
-					.setEntityTexture("endBee")
 					.setHasEffect()
 					.setTemperature(EnumTemperature.COLD);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlowest);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLongest);
-			setAllele(EnumBeeChromosome.EFFECT, Allele.effectResurrection);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWEST);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONGEST);
+			Allele.helper.set(template, EnumBeeChromosome.EFFECT, Allele.effectResurrection);
 		}
 		
 		@Override
@@ -552,17 +548,16 @@ public enum BeeDefinition implements IBeeDefinition {
 	/* FROZEN BRANCH */
 	WINTRY(BeeBranchDefinition.FROZEN, "brumalis", false, new Color(0xa0ffc8), new Color(0xdaf5f3)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 4), 30)
-					.setEntityTexture("icyBee")
 					.setTemperature(EnumTemperature.ICY);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanShort);
-			setAllele(EnumBeeChromosome.FERTILITY, Allele.fertilityMaximum);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORT);
+			Allele.helper.set(template, EnumBeeChromosome.FERTILITY, EnumAllele.Fertility.MAXIMUM);
 		}
 
 		@Override
@@ -572,60 +567,58 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 	ICY(BeeBranchDefinition.FROZEN, "coagulis", true, new Color(0xa0ffff), new Color(0xdaf5f3)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 4), 20)
 					.addProduct(ForestryItem.craftingMaterial.getItemStack(1, 5), 20)
-					.setEntityTexture("icyBee")
 					.setTemperature(EnumTemperature.ICY);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlow);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanShort);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOW);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORT);
 		}
 
 		@Override
 		protected void registerMutations() {
 			registerMutation(INDUSTRIOUS, WINTRY, 12)
-					.setTemperature(0f, 0.15f);
+					.restrictTemperature(EnumTemperature.ICY, EnumTemperature.COLD);
 		}
 	},
 	GLACIAL(BeeBranchDefinition.FROZEN, "glacialis", false, new Color(0xefffff), new Color(0xdaf5f3)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 4), 20)
 					.addProduct(ForestryItem.craftingMaterial.getItemStack(1, 5), 40)
-					.setEntityTexture("icyBee")
 					.setTemperature(EnumTemperature.ICY)
 					.setHasEffect();
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanShort);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORT);
 		}
 
 		@Override
 		protected void registerMutations() {
 			registerMutation(ICY, WINTRY, 8)
-					.setTemperature(0f, 0.15f);
+					.restrictTemperature(EnumTemperature.ICY, EnumTemperature.COLD);
 		}
 	},
 
 	/* VENGEFUL BRANCH */
 	VINDICTIVE(BeeBranchDefinition.VENGEFUL, "ultio", false, new Color(0xeafff3), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 9), 25)
 					.setIsNotCounted();
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlower);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanNormal);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.NORMAL);
 		}
 		
 		@Override
@@ -635,15 +628,15 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 	VENGEFUL(BeeBranchDefinition.VENGEFUL, "punire", false, new Color(0xc2de00), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 9), 40)
 					.setIsNotCounted();
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedNorm);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLonger);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.NORMAL);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONGER);
 		}
 		
 		@Override
@@ -654,16 +647,16 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 	AVENGING(BeeBranchDefinition.VENGEFUL, "hostimentum", false, new Color(0xddff00), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 9), 40)
 					.setHasEffect()
 					.setIsNotCounted();
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlowest);
-			setAllele(EnumBeeChromosome.LIFESPAN, Allele.lifespanLongest);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWEST);
+			Allele.helper.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONGEST);
 		}
 		
 		@Override
@@ -676,7 +669,7 @@ public enum BeeDefinition implements IBeeDefinition {
 	// Easter
 	LEPORINE(BeeBranchDefinition.FESTIVE, "lepus", false, new Color(0xfeff8f), new Color(0x3cd757)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 6), 30)
 					.addProduct(new ItemStack(Items.egg), 10)
 					.setHasEffect()
@@ -684,19 +677,21 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.EFFECT, Allele.effectFestiveEaster);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.EFFECT, Allele.effectFestiveEaster);
 		}
 
 		@Override
 		protected void registerMutations() {
-			registerMutationTimeLimited(MEADOWS, FOREST, 10, 3, 29, 4, 15).setIsSecret();
+			registerMutation(MEADOWS, FOREST, 10)
+					.restrictDateRange(3, 29, 4, 15)
+					.setIsSecret();
 		}
 	},
 	// Christmas
 	MERRY(BeeBranchDefinition.FESTIVE, "feliciter", false, new Color(0xffffff), new Color(0xd40000)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 4), 30)
 					.addProduct(ForestryItem.craftingMaterial.getItemStack(1, 5), 20)
 					.setTemperature(EnumTemperature.ICY)
@@ -705,20 +700,22 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.NOCTURNAL, Allele.boolTrue);
-			setAllele(EnumBeeChromosome.EFFECT, Allele.effectSnowing);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.NOCTURNAL, true);
+			Allele.helper.set(template, EnumBeeChromosome.EFFECT, Allele.effectSnowing);
 		}
 
 		@Override
 		protected void registerMutations() {
-			registerMutationTimeLimited(WINTRY, FOREST, 10, 12, 21, 12, 27).setIsSecret();
+			registerMutation(WINTRY, FOREST, 10)
+					.restrictDateRange(12, 21, 12, 27)
+					.setIsSecret();
 		}
 	},
 	// New Year
 	TIPSY(BeeBranchDefinition.FESTIVE, "ebrius", false, new Color(0xffffff), new Color(0xc219ec)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 4), 30)
 					.addProduct(ForestryItem.craftingMaterial.getItemStack(1, 5), 20)
 					.setTemperature(EnumTemperature.ICY)
@@ -727,21 +724,23 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.NOCTURNAL, Allele.boolTrue);
-			setAllele(EnumBeeChromosome.EFFECT, Allele.effectDrunkard);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.NOCTURNAL, true);
+			Allele.helper.set(template, EnumBeeChromosome.EFFECT, Allele.effectDrunkard);
 		}
 
 		@Override
 		protected void registerMutations() {
-			registerMutationTimeLimited(WINTRY, MEADOWS, 10, 12, 27, 1, 2).setIsSecret();
+			registerMutation(WINTRY, MEADOWS, 10)
+					.restrictDateRange(12, 27, 1, 2)
+					.setIsSecret();
 		}
 	},
 	// (missing) Solstice
 	// Halloween
 	TRICKY(BeeBranchDefinition.FESTIVE, "libita", false, new Color(0x49413B), new Color(0xFF6A00)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 0), 40)
 					.addProduct(new ItemStack(Items.cookie), 15)
 					.addSpecialty(new ItemStack(Items.skull, 1, 0), 2)
@@ -753,15 +752,17 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.NOCTURNAL, Allele.boolTrue);
-			setAllele(EnumBeeChromosome.TOLERANT_FLYER, Allele.boolTrue);
-			setAllele(EnumBeeChromosome.FLOWER_PROVIDER, Allele.flowersGourd);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.NOCTURNAL, true);
+			Allele.helper.set(template, EnumBeeChromosome.TOLERANT_FLYER, true);
+			Allele.helper.set(template, EnumBeeChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.GOURD);
 		}
 
 		@Override
 		protected void registerMutations() {
-			registerMutationTimeLimited(SINISTER, COMMON, 10, 10, 15, 11, 3).setIsSecret();
+			registerMutation(SINISTER, COMMON, 10)
+					.restrictDateRange(10, 15, 11, 3)
+					.setIsSecret();
 		}
 	},
 	// (missing) Thanksgiving
@@ -769,74 +770,71 @@ public enum BeeDefinition implements IBeeDefinition {
 	/* AGRARIAN BRANCH */
 	RURAL(BeeBranchDefinition.AGRARIAN, "rustico", false, new Color(0xfeff8f), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 14), 20);
 		}
 
 		@Override
-		protected void setAlleles() {
+		protected void setAlleles(IAllele[] template) {
 
 		}
 
 		@Override
 		protected void registerMutations() {
 			registerMutation(MEADOWS, DILIGENT, 12)
-					.restrictBiomeType(BiomeDictionary.Type.PLAINS)
-					.enableStrictBiomeCheck();
+					.restrictBiomeType(BiomeDictionary.Type.PLAINS);
 		}
 	},
 	FARMERLY(BeeBranchDefinition.AGRARIAN, "arator", true, new Color(0xD39728), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 14), 27);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlow);
-			setAllele(EnumBeeChromosome.TERRITORY, Allele.territoryLarge);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOW);
+			Allele.helper.set(template, EnumBeeChromosome.TERRITORY, EnumAllele.Territory.LARGE);
 		}
 
 		@Override
 		protected void registerMutations() {
 			registerMutation(RURAL, UNWEARY, 10)
-					.restrictBiomeType(BiomeDictionary.Type.PLAINS)
-					.enableStrictBiomeCheck();
+					.restrictBiomeType(BiomeDictionary.Type.PLAINS);
 		}
 	},
 	AGRARIAN(BeeBranchDefinition.AGRARIAN, "arator", true, new Color(0xFFCA75), new Color(0xFFE047)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 14), 35)
 					.setHasEffect();
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.SPEED, Allele.speedSlow);
-			setAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE, Allele.toleranceBoth2);
-			setAllele(EnumBeeChromosome.EFFECT, Allele.effectFertile);
-			setAllele(EnumBeeChromosome.TERRITORY, Allele.territoryLarge);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOW);
+			Allele.helper.set(template, EnumBeeChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.BOTH_2);
+			Allele.helper.set(template, EnumBeeChromosome.EFFECT, Allele.effectFertile);
+			Allele.helper.set(template, EnumBeeChromosome.TERRITORY, EnumAllele.Territory.LARGE);
 		}
 
 		@Override
 		protected void registerMutations() {
 			registerMutation(FARMERLY, INDUSTRIOUS, 6)
-					.restrictBiomeType(BiomeDictionary.Type.PLAINS)
-					.enableStrictBiomeCheck();
+					.restrictBiomeType(BiomeDictionary.Type.PLAINS);
 		}
 	},
 
 	/* BOGGY BRANCH */
 	MARSHY(BeeBranchDefinition.BOGGY, "adorasti", true, new Color(0x546626), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 15), 30)
 					.setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override
-		protected void setAlleles() {
+		protected void setAlleles(IAllele[] template) {
 
 		}
 
@@ -847,58 +845,60 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 	MIRY(BeeBranchDefinition.BOGGY, "humidium", true, new Color(0x92AF42), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 15), 36)
 					.setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.FERTILITY, Allele.fertilityMaximum);
-			setAllele(EnumBeeChromosome.TOLERANT_FLYER, Allele.boolTrue);
-			setAllele(EnumBeeChromosome.NOCTURNAL, Allele.boolTrue);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.FERTILITY, EnumAllele.Fertility.MAXIMUM);
+			Allele.helper.set(template, EnumBeeChromosome.TOLERANT_FLYER, true);
+			Allele.helper.set(template, EnumBeeChromosome.NOCTURNAL, true);
 		}
 
 		@Override
 		protected void registerMutations() {
 			registerMutation(MARSHY, NOBLE, 15)
-					.setTemperatureRainfall(0.75f, 0.94f, 0.75f, 2.0f);
+					.restrictTemperature(EnumTemperature.WARM)
+					.restrictHumidity(EnumHumidity.DAMP);
 		}
 	},
 	BOGGY(BeeBranchDefinition.BOGGY, "paluster", true, new Color(0x698948), new Color(0xffdc16)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 15), 39)
 					.addSpecialty(ForestryItem.peat.getItemStack(), 8)
 					.setHumidity(EnumHumidity.DAMP);
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.TOLERANT_FLYER, Allele.boolTrue);
-			setAllele(EnumBeeChromosome.NOCTURNAL, Allele.boolTrue);
-			setAllele(EnumBeeChromosome.EFFECT, Allele.effectMycophilic);
-			setAllele(EnumBeeChromosome.TERRITORY, Allele.territoryLarger);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.TOLERANT_FLYER, true);
+			Allele.helper.set(template, EnumBeeChromosome.NOCTURNAL, true);
+			Allele.helper.set(template, EnumBeeChromosome.EFFECT, Allele.effectMycophilic);
+			Allele.helper.set(template, EnumBeeChromosome.TERRITORY, EnumAllele.Territory.LARGER);
 		}
 
 		@Override
 		protected void registerMutations() {
 			registerMutation(MARSHY, MIRY, 9)
-					.setTemperatureRainfall(0.75f, 0.94f, 0.75f, 2.0f);
+					.restrictTemperature(EnumTemperature.WARM)
+					.restrictHumidity(EnumHumidity.DAMP);
 		}
 	},
 
 	/* MONASTIC BRANCH */
 	MONASTIC(BeeBranchDefinition.MONASTIC, "monachus", false, new Color(0x42371c), new Color(0xfff7b6)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 14), 30)
 					.addSpecialty(ForestryItem.beeComb.getItemStack(1, 16), 10)
 					.setJubilanceProvider(new JubilanceProviderHermit());
 		}
 
 		@Override
-		protected void setAlleles() {
+		protected void setAlleles(IAllele[] template) {
 
 		}
 
@@ -909,14 +909,14 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 	SECLUDED(BeeBranchDefinition.MONASTIC, "contractus", true, new Color(0x7b6634), new Color(0xfff7b6)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addSpecialty(ForestryItem.beeComb.getItemStack(1, 16), 20)
 					.setJubilanceProvider(new JubilanceProviderHermit());
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.FLOWERING, Allele.floweringFastest);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.FASTEST);
 		}
 
 		@Override
@@ -926,16 +926,16 @@ public enum BeeDefinition implements IBeeDefinition {
 	},
 	HERMITIC(BeeBranchDefinition.MONASTIC, "anachoreta", false, new Color(0xffd46c), new Color(0xfff7b6)) {
 		@Override
-		protected void setSpeciesProperties(AlleleBeeSpecies beeSpecies) {
+		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addSpecialty(ForestryItem.beeComb.getItemStack(1, 16), 20)
 					.setJubilanceProvider(new JubilanceProviderHermit())
 					.setHasEffect();
 		}
 
 		@Override
-		protected void setAlleles() {
-			setAllele(EnumBeeChromosome.FLOWERING, Allele.floweringFastest);
-			setAllele(EnumBeeChromosome.EFFECT, Allele.effectRepulsion);
+		protected void setAlleles(IAllele[] template) {
+			Allele.helper.set(template, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.FASTEST);
+			Allele.helper.set(template, EnumBeeChromosome.EFFECT, Allele.effectRepulsion);
 		}
 		
 		@Override
@@ -947,22 +947,26 @@ public enum BeeDefinition implements IBeeDefinition {
 	public static final EnumSet<BeeDefinition> overworldHiveBees = EnumSet.of(FOREST, MARSHY, MEADOWS, MODEST, TROPICAL, WINTRY);
 
 	private final BeeBranchDefinition branch;
-	private final AlleleBeeSpecies species;
+	private final IAlleleBeeSpeciesCustom species;
+
 	private IAllele[] template;
 	private IBeeGenome genome;
 	
 	BeeDefinition(BeeBranchDefinition branch, String binomial, boolean dominant, Color primary, Color secondary) {
 		String lowercaseName = this.toString().toLowerCase(Locale.ENGLISH);
-		String uid = "species" + WordUtils.capitalize(lowercaseName);
+		String species = "species" + WordUtils.capitalize(lowercaseName);
+
+		String uid = "forestry." + species;
+		String description = "for.description." + species;
 		String name = "bees.species." + lowercaseName;
 
-		this.species = new AlleleBeeSpecies(uid, dominant, name, branch.getBranch(), binomial, primary.getRGB(), secondary.getRGB());
 		this.branch = branch;
+		this.species = BeeManager.beeFactory.createSpecies(uid, dominant, "Sengir", name, description, branch.getBranch(), binomial, primary.getRGB(), secondary.getRGB());
 	}
 
-	protected abstract void setSpeciesProperties(AlleleBeeSpecies beeSpecies);
+	protected abstract void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies);
 
-	protected abstract void setAlleles();
+	protected abstract void setAlleles(IAllele[] template);
 
 	protected abstract void registerMutations();
 
@@ -982,32 +986,16 @@ public enum BeeDefinition implements IBeeDefinition {
 		setSpeciesProperties(species);
 
 		template = branch.getTemplate();
-		setAllele(EnumBeeChromosome.SPECIES, species);
-		setAlleles();
+		Allele.helper.set(template, EnumBeeChromosome.SPECIES, species);
+		setAlleles(template);
 
-		genome = PluginApiculture.beeInterface.templateAsGenome(template);
+		genome = BeeManager.beeRoot.templateAsGenome(template);
 
-		AlleleManager.alleleRegistry.registerAllele(species);
-		PluginApiculture.beeInterface.registerTemplate(template);
+		BeeManager.beeRoot.registerTemplate(template);
 	}
 
-	protected final BeeMutation registerMutation(BeeDefinition parent1, BeeDefinition parent2, int chance) {
-		BeeMutation beeMutation = new BeeMutation(parent1, parent2, this, chance);
-		PluginApiculture.beeInterface.registerMutation(beeMutation);
-		return beeMutation;
-	}
-
-	protected final BeeMutation registerMutationTimeLimited(BeeDefinition parent1, BeeDefinition parent2, int chance, int startMonth, int startDay, int endMonth, int endDay) {
-		MutationTimeLimited.DayMonth start = new MutationTimeLimited.DayMonth(startDay, startMonth);
-		MutationTimeLimited.DayMonth end = new MutationTimeLimited.DayMonth(endDay, endMonth);
-
-		MutationTimeLimited beeMutation = new MutationTimeLimited(parent1, parent2, this, chance, start, end);
-		PluginApiculture.beeInterface.registerMutation(beeMutation);
-		return beeMutation;
-	}
-	
-	protected final void setAllele(EnumBeeChromosome chromosome, IAllele allele) {
-		template[chromosome.ordinal()] = allele;
+	protected final IBeeMutationCustom registerMutation(BeeDefinition parent1, BeeDefinition parent2, int chance) {
+		return BeeManager.beeMutationFactory.createMutation(parent1.species, parent2.species, getTemplate(), chance);
 	}
 
 	@Override
@@ -1028,7 +1016,7 @@ public enum BeeDefinition implements IBeeDefinition {
 	@Override
 	public final ItemStack getMemberStack(EnumBeeType beeType) {
 		IBee bee = getIndividual();
-		return PluginApiculture.beeInterface.getMemberStack(bee, beeType.ordinal());
+		return BeeManager.beeRoot.getMemberStack(bee, beeType.ordinal());
 	}
 
 	public final IBeeDefinition getRainResist() {

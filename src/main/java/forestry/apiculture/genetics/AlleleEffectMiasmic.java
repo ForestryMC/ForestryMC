@@ -28,8 +28,8 @@ public class AlleleEffectMiasmic extends AlleleEffectThrottled {
 
 	private static final int infectionChance = 50;
 
-	public AlleleEffectMiasmic(String uid) {
-		super(uid, "misasmic", false, 50, false, false);
+	public AlleleEffectMiasmic() {
+		super("miasmic", false, 50, false, false);
 	}
 
 	@Override

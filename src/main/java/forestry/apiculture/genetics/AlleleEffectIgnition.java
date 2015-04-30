@@ -28,8 +28,8 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
 	private static final int ignitionChance = 50;
 	private static final int fireDuration = 500;
 
-	public AlleleEffectIgnition(String uid) {
-		super(uid, "ignition", false, 20, false, true);
+	public AlleleEffectIgnition() {
+		super("ignition", false, 20, false, true);
 	}
 
 	@Override

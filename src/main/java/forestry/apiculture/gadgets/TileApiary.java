@@ -20,6 +20,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.common.Optional;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IHiveFrame;
 import forestry.api.core.ForestryAPI;
@@ -27,7 +28,6 @@ import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.core.gadgets.TileBase;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.GuiId;
-import forestry.plugins.PluginApiculture;
 
 import buildcraft.api.statements.ITriggerExternal;
 
@@ -136,7 +136,7 @@ public class TileApiary extends TileBeehouse {
 	@Override
 	public void wearOutEquipment(int amount) {
 		IInventoryAdapter inventory = getInternalInventory();
-		int wear = Math.round(amount * PluginApiculture.beeInterface.getBeekeepingMode(worldObj).getWearModifier());
+		int wear = Math.round(amount * BeeManager.beeRoot.getBeekeepingMode(worldObj).getWearModifier());
 
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
 			if (inventory.getStackInSlot(i) == null) {
@@ -149,7 +149,7 @@ public class TileApiary extends TileBeehouse {
 			inventory.setInventorySlotContents(
 					i,
 					((IHiveFrame) inventory.getStackInSlot(i).getItem()).frameUsed(this, inventory.getStackInSlot(i),
-							PluginApiculture.beeInterface.getMember(inventory.getStackInSlot(SLOT_QUEEN)), wear));
+							BeeManager.beeRoot.getMember(inventory.getStackInSlot(SLOT_QUEEN)), wear));
 		}
 	}
 

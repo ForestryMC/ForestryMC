@@ -25,6 +25,7 @@ import com.mojang.authlib.GameProfile;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -215,7 +216,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 
 	@Override
 	public void registerTemplate(String identifier, IAllele[] template) {
-		beeTemplates.add(new Bee(PluginApiculture.beeInterface.templateAsGenome(template)));
+		beeTemplates.add(new Bee(BeeManager.beeRoot.templateAsGenome(template)));
 		speciesTemplates.put(identifier, template);
 	}
 

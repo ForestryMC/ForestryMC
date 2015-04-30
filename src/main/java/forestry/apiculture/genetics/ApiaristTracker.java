@@ -15,12 +15,12 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import com.mojang.authlib.GameProfile;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.core.genetics.BreedingTracker;
-import forestry.plugins.PluginApiculture;
 
 public class ApiaristTracker extends BreedingTracker implements IApiaristTracker {
 
@@ -67,7 +67,7 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 		if (!individual.isPureBred(EnumBeeChromosome.SPECIES)) {
 			return;
 		}
-		if (PluginApiculture.beeInterface.getCombinations(individual.getGenome().getPrimary()).size() > 0) {
+		if (BeeManager.beeRoot.getCombinations(individual.getGenome().getPrimary()).size() > 0) {
 			return;
 		}
 
@@ -109,7 +109,7 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 
 	@Override
 	protected IBreedingTracker getBreedingTracker(EntityPlayer player) {
-		return PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, player.getGameProfile());
+		return BeeManager.beeRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
 	}
 
 	@Override

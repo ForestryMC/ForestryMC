@@ -8,12 +8,13 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.genetics;
+package forestry.core.genetics.alleles;
 
 import java.util.Collection;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -25,19 +26,18 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IIconProvider;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IAlleleSpeciesCustom;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.core.config.ForestryItem;
 import forestry.core.utils.StackUtils;
-import forestry.core.utils.StringUtil;
 
-public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
+public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCustom {
 
 	private final String binomial;
+	private final String authority;
 	private String description = null;
-	private int complexity = 3;
 	private boolean hasEffect = false;
 	private boolean isSecret = false;
 	private boolean isCounted = true;
@@ -45,13 +45,14 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
 	private EnumTemperature climate = EnumTemperature.NORMAL;
 	private EnumHumidity humidity = EnumHumidity.NORMAL;
 
-	public AlleleSpecies(String uid, boolean isDominant, String name, IClassification branch, String binomial, boolean doRegister) {
+	public AlleleSpecies(String uid, String authority, String unlocalizedDescription, boolean isDominant, String name, IClassification branch, String binomial, boolean doRegister) {
 		super(uid, isDominant, true);
 
 		this.branch = branch;
 		this.name = name;
 		this.binomial = binomial;
-		this.description = StringUtil.localize("description." + uid);
+		this.description = StatCollector.translateToLocal(unlocalizedDescription);
+		this.authority = authority;
 
 		// FIXME: do not register here
 		if (doRegister) {
@@ -62,11 +63,6 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
 	@Override
 	public String getDescription() {
 		return description;
-	}
-
-	@Override
-	public int getComplexity() {
-		return complexity;
 	}
 
 	@Override
@@ -146,7 +142,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
 
 	@Override
 	public String getAuthority() {
-		return "Sengir";
+		return authority;
 	}
 
 	@Override
@@ -154,39 +150,47 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
 		return this.branch;
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T extends AlleleSpecies> T setComplexity(int complexity) {
-		this.complexity = complexity;
-		return (T) this;
+	@Override
+	public IAlleleSpeciesCustom setTemperature(EnumTemperature temperature) {
+		climate = temperature;
+		return this;
 	}
 
+	@Override
+	public IAlleleSpeciesCustom setHumidity(EnumHumidity humidity) {
+		this.humidity = humidity;
+		return this;
+	}
+
+	@Override
+	public IAlleleSpeciesCustom setHasEffect() {
+		hasEffect = true;
+		return this;
+	}
+
+	@Override
+	public IAlleleSpeciesCustom setIsSecret() {
+		isSecret = true;
+		return this;
+	}
+
+	@Override
+	public IAlleleSpeciesCustom setIsNotCounted() {
+		isCounted = false;
+		return this;
+	}
+
+	@Deprecated
 	@SuppressWarnings("unchecked")
-	public <T extends AlleleSpecies> T setTemperature(EnumTemperature temperature) {
+	public <T extends AlleleSpecies> T setTemperatureDeprecated(EnumTemperature temperature) {
 		climate = temperature;
 		return (T) this;
 	}
 
+	@Deprecated
 	@SuppressWarnings("unchecked")
-	public <T extends AlleleSpecies> T setHumidity(EnumHumidity humidity) {
+	public <T extends AlleleSpecies> T setHumidityDeprecated(EnumHumidity humidity) {
 		this.humidity = humidity;
-		return (T) this;
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T extends AlleleSpecies> T setHasEffect() {
-		hasEffect = true;
-		return (T) this;
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T extends AlleleSpecies> T setIsSecret() {
-		isSecret = true;
-		return (T) this;
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T extends AlleleSpecies> T setIsNotCounted() {
-		isCounted = false;
 		return (T) this;
 	}
 

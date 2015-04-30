@@ -127,11 +127,6 @@ public class Defaults {
 	public static final int SLOTS_BACKPACK_T2 = 45;
 	public static final int SLOTS_BACKPACK_APIARIST = 125;
 
-	// Bee ids
-	public static final int ID_BEE_SPECIES_REDDENED = 31;
-	public static final int ID_BEE_SPECIES_DARKENED = 32;
-	public static final int ID_BEE_SPECIES_OMEGA = 33;
-
 	// Food stuff
 	public static final int FOOD_AMBROSIA_HEAL = 8;
 	public static final int FOOD_JUICE_HEAL = 2;

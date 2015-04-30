@@ -76,6 +76,11 @@ public class Vect implements IVect {
 		return add(direction.offsetX, direction.offsetY, direction.offsetZ);
 	}
 
+	@Override
+	public int[] toArray() {
+		return new int[]{x, y, z};
+	}
+
 	public Vect multiply(float factor) {
 		return new Vect(Math.round(x * factor), Math.round(y * factor), Math.round(z * factor));
 	}

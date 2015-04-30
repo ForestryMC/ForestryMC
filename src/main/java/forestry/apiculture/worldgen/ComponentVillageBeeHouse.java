@@ -46,7 +46,6 @@ import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.utils.StackUtils;
-import forestry.plugins.PluginApiculture;
 import forestry.plugins.PluginManager;
 
 public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
@@ -310,9 +309,9 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 				TileBeehouse apiary = ((TileBeehouse) tile);
 				apiary.initialize();
 				apiary.setInventorySlotContents(TileBeehouse.SLOT_QUEEN,
-						PluginApiculture.beeInterface.getMemberStack(getVillageBee(world, xCoord, yCoord, zCoord), EnumBeeType.PRINCESS.ordinal()));
+						BeeManager.beeRoot.getMemberStack(getVillageBee(world, xCoord, yCoord, zCoord), EnumBeeType.PRINCESS.ordinal()));
 				apiary.setInventorySlotContents(TileBeehouse.SLOT_DRONE,
-						PluginApiculture.beeInterface.getMemberStack(getVillageBee(world, xCoord, yCoord, zCoord), EnumBeeType.DRONE.ordinal()));
+						BeeManager.beeRoot.getMemberStack(getVillageBee(world, xCoord, yCoord, zCoord), EnumBeeType.DRONE.ordinal()));
 
 				for (int i = TileBeehouse.SLOT_FRAMES_1; i < TileBeehouse.SLOT_FRAMES_1 + TileBeehouse.SLOT_FRAMES_COUNT; i++) {
 					float roll = world.rand.nextFloat();
@@ -351,10 +350,10 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
 		// No valid ones found, return any of the common ones.
 		if (valid.isEmpty()) {
-			return PluginApiculture.beeInterface.getBee(world, BeeManager.villageBees[0].get(world.rand.nextInt(BeeManager.villageBees[0].size())));
+			return BeeManager.beeRoot.getBee(world, BeeManager.villageBees[0].get(world.rand.nextInt(BeeManager.villageBees[0].size())));
 		}
 
-		return PluginApiculture.beeInterface.getBee(world, valid.get(world.rand.nextInt(valid.size())));
+		return BeeManager.beeRoot.getBee(world, valid.get(world.rand.nextInt(valid.size())));
 	}
 
 	private boolean checkBiomeHazard(IBeeGenome genome, float temperature, float humidity) {
