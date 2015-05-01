@@ -54,7 +54,7 @@ public class PluginEnergy extends ForestryPlugin {
 				" X ",
 				"YVY",
 				'#', "ingotCopper",
-				'X', Blocks.glass,
+				'X', "blockGlass",
 				'Y', "gearCopper",
 				'V', Blocks.piston)));
 		definitionEngineBronze = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Defaults.DEFINITION_ENGINEBRONZE_META, "forestry.EngineBronze", EngineBronze.class,
@@ -64,7 +64,7 @@ public class PluginEnergy extends ForestryPlugin {
 				" X ",
 				"YVY",
 				'#', "ingotBronze",
-				'X', Blocks.glass,
+				'X', "blockGlass",
 				'Y', "gearBronze",
 				'V', Blocks.piston)));
 
@@ -76,9 +76,9 @@ public class PluginEnergy extends ForestryPlugin {
 					" X ",
 					"ZVY",
 					'#', "plankWood",
-					'X', Blocks.glass,
+					'X', "blockGlass",
 					'Y', Items.clock,
-					'Z', ForestryItem.gearCopper,
+					'Z', "gearCopper",
 					'V', Blocks.piston);
 		}
 
