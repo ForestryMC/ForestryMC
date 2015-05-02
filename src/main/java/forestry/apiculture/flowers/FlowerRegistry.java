@@ -204,16 +204,6 @@ public final class FlowerRegistry implements IFlowerRegistry {
 	}
 
 	private void registerVanillaFlowers() {
-		// Register plantable plants
-		for (int meta = 0; meta <= 8; meta++) {
-			registerPlantableFlower(Blocks.red_flower, meta, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		}
-
-		registerPlantableFlower(Blocks.yellow_flower, 0, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerPlantableFlower(Blocks.brown_mushroom, 0, 1.0, FlowerManager.FlowerTypeMushrooms);
-		registerPlantableFlower(Blocks.red_mushroom, 0, 1.0, FlowerManager.FlowerTypeMushrooms);
-		registerPlantableFlower(Blocks.cactus, 0, 1.0, FlowerManager.FlowerTypeCacti);
-
 		// Register acceptable plants
 		registerAcceptableFlower(Blocks.red_flower, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
 		registerAcceptableFlower(Blocks.yellow_flower, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
@@ -233,6 +223,17 @@ public final class FlowerRegistry implements IFlowerRegistry {
 		registerAcceptableFlower(Blocks.double_plant, 1, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
 		registerAcceptableFlower(Blocks.double_plant, 4, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
 		registerAcceptableFlower(Blocks.double_plant, 5, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+
+		// Register plantable plants
+		for (int meta = 0; meta <= 8; meta++) {
+			registerPlantableFlower(Blocks.red_flower, meta, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		}
+
+		registerPlantableFlower(Blocks.yellow_flower, 0, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		registerPlantableFlower(Blocks.brown_mushroom, 0, 1.0, FlowerManager.FlowerTypeMushrooms);
+		registerPlantableFlower(Blocks.red_mushroom, 0, 1.0, FlowerManager.FlowerTypeMushrooms);
+		registerPlantableFlower(Blocks.cactus, 0, 1.0, FlowerManager.FlowerTypeCacti);
+
 	}
 
 	private void registerVanillaGrowthRules() {
