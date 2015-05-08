@@ -230,7 +230,6 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 		}
 
-		@SideOnly(Side.CLIENT)
 		private static final IIcon[][] icons = new IIcon[EnumBeeType.values().length][3];
 
 		@SideOnly(Side.CLIENT)
