@@ -46,8 +46,13 @@ import forestry.core.utils.StackUtils;
 
 public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpeciesCustom {
 
+	@Deprecated
 	private final Map<ItemStack, Integer> products = new HashMap<ItemStack, Integer>();
+	@Deprecated
 	private final Map<ItemStack, Integer> specialty = new HashMap<ItemStack, Integer>();
+
+	private final Map<ItemStack, Float> productChances = new HashMap<ItemStack, Float>();
+	private final Map<ItemStack, Float> specialtyChances = new HashMap<ItemStack, Float>();
 
 	private final int primaryColour;
 	private final int secondaryColour;
@@ -71,20 +76,30 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	}
 
 	@Override
-	public IAlleleBeeSpeciesCustom addProduct(ItemStack product, int chance) {
+	public IAlleleBeeSpeciesCustom addProduct(ItemStack product, Float chance) {
 		if (product == null || product.getItem() == null) {
 			throw new IllegalArgumentException("Tried to add null product");
 		}
-		this.products.put(product, chance);
+		if (chance <= 0.0f || chance > 1.0f) {
+			throw new IllegalArgumentException("chance must be in the range (0, 1]");
+		}
+		this.productChances.put(product, chance);
+		int intChance = Math.max(1, Math.round(chance * 100));
+		this.products.put(product, intChance);
 		return this;
 	}
 
 	@Override
-	public IAlleleBeeSpeciesCustom addSpecialty(ItemStack specialty, int chance) {
+	public IAlleleBeeSpeciesCustom addSpecialty(ItemStack specialty, Float chance) {
 		if (specialty == null || specialty.getItem() == null) {
 			throw new IllegalArgumentException("Tried to add null specialty");
 		}
-		this.specialty.put(specialty, chance);
+		if (chance <= 0.0f || chance > 1.0f) {
+			throw new IllegalArgumentException("chance must be in the range (0, 1]");
+		}
+		this.specialtyChances.put(specialty, chance);
+		int intChance = Math.max(1, Math.round(chance * 100));
+		this.specialty.put(specialty, intChance);
 		return this;
 	}
 
@@ -136,12 +151,12 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 			return 0f;
 		}
 
-		for (ItemStack stack : products.keySet()) {
+		for (ItemStack stack : productChances.keySet()) {
 			if (stack.isItemEqual(itemstack)) {
 				return 1.0f;
 			}
 		}
-		for (ItemStack stack : specialty.keySet()) {
+		for (ItemStack stack : specialtyChances.keySet()) {
 			if (stack.isItemEqual(itemstack)) {
 				return 1.0f;
 			}
@@ -156,11 +171,11 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 		Collections.addAll(bounty, super.getResearchBounty(world, researcher, individual, bountyLevel));
 
 		if (bountyLevel > 10) {
-			for (ItemStack stack : specialty.keySet()) {
+			for (ItemStack stack : specialtyChances.keySet()) {
 				bounty.add(StackUtils.copyWithRandomSize(stack, (int) ((float) bountyLevel / 2), world.rand));
 			}
 		}
-		for (ItemStack stack : products.keySet()) {
+		for (ItemStack stack : productChances.keySet()) {
 			bounty.add(StackUtils.copyWithRandomSize(stack, (int) ((float) bountyLevel / 2), world.rand));
 		}
 		return bounty.toArray(new ItemStack[bounty.size()]);
@@ -178,8 +193,18 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	}
 
 	@Override
+	public Map<ItemStack, Float> getProductChances() {
+		return productChances;
+	}
+
+	@Override
 	public Map<ItemStack, Integer> getSpecialty() {
 		return specialty;
+	}
+
+	@Override
+	public Map<ItemStack, Float> getSpecialtyChances() {
+		return specialtyChances;
 	}
 
 	@Override
