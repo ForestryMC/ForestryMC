@@ -12,16 +12,24 @@ package forestry.core.genetics;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.world.World;
+
+import net.minecraftforge.common.BiomeDictionary;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IMutation;
+import forestry.api.genetics.IGenome;
+import forestry.api.genetics.IMutationCondition;
+import forestry.api.genetics.IMutationCustom;
 
-public abstract class Mutation implements IMutation {
+public abstract class Mutation implements IMutationCustom {
 
-	protected final int chance;
+	private final int chance;
 	boolean isSecret = false;
 
 	protected final IAllele species0;
@@ -29,12 +37,8 @@ public abstract class Mutation implements IMutation {
 
 	private final IAllele[] template;
 
-	protected float minTemperature = 0.0f;
-	protected float maxTemperature = 2.0f;
-	protected float minRainfall = 0.0f;
-	protected float maxRainfall = 2.0f;
-
-	protected final ArrayList<String> specialConditions = new ArrayList<String>();
+	private final List<IMutationCondition> mutationConditions = new ArrayList<IMutationCondition>();
+	private final List<String> specialConditions = new ArrayList<String>();
 
 	public Mutation(IAlleleSpecies species0, IAlleleSpecies species1, IAllele[] template, int chance) {
 		this.species0 = species0;
@@ -43,54 +47,84 @@ public abstract class Mutation implements IMutation {
 		this.chance = chance;
 	}
 	
-	
-	public Mutation setSpecialConditions(Collection<String> conditions) {
-		specialConditions.addAll(conditions);
-		return this;
-	}
-	
 	public Collection<String> getSpecialConditions() {
 		return specialConditions;
 	}
 
+	@Override
 	public Mutation setIsSecret() {
 		isSecret = true;
 		return this;
 	}
 
-	public Mutation setTemperature(float minTemperature, float maxTemperature) {
-		this.minTemperature = minTemperature;
-		this.maxTemperature = maxTemperature;
-		
-		EnumTemperature temp1 = EnumTemperature.getFromValue(minTemperature);
-		EnumTemperature temp2 = EnumTemperature.getFromValue(maxTemperature);
-		if (temp1 != temp2) {
-			specialConditions.add(String.format("Temperature between %s and %s.", temp1, temp2));
-		} else {
-			specialConditions.add(String.format("Temperature %s required.", temp1));
-		}
+	@Override
+	public Mutation restrictTemperature(EnumTemperature temperature) {
+		return restrictTemperature(temperature, temperature);
+	}
+
+	@Override
+	public Mutation restrictTemperature(EnumTemperature minTemperature, EnumTemperature maxTemperature) {
+		IMutationCondition mutationCondition = new MutationConditionTemperature(minTemperature, maxTemperature);
+		return addMutationCondition(mutationCondition);
+	}
+
+	@Override
+	public Mutation restrictHumidity(EnumHumidity humidity) {
+		return restrictHumidity(humidity, humidity);
+	}
+
+	@Override
+	public Mutation restrictHumidity(EnumHumidity minHumidity, EnumHumidity maxHumidity) {
+		IMutationCondition mutationCondition = new MutationConditionHumidity(minHumidity, maxHumidity);
+		return addMutationCondition(mutationCondition);
+	}
+
+	@Override
+	public Mutation restrictBiomeType(BiomeDictionary.Type... types) {
+		IMutationCondition mutationCondition = new MutationConditionBiome(types);
+		return addMutationCondition(mutationCondition);
+	}
+
+	@Override
+	public Mutation requireDay() {
+		IMutationCondition mutationCondition = new MutationConditionDaytime(true);
+		return addMutationCondition(mutationCondition);
+	}
+
+	@Override
+	public Mutation requireNight() {
+		IMutationCondition mutationCondition = new MutationConditionDaytime(false);
+		return addMutationCondition(mutationCondition);
+	}
+
+	@Override
+	public Mutation restrictDateRange(int startMonth, int startDay, int endMonth, int endDay) {
+		IMutationCondition mutationCondition = new MutationConditionTimeLimited(startMonth, startDay, endMonth, endDay);
+		return addMutationCondition(mutationCondition);
+	}
+
+	@Override
+	public Mutation requireResource(Block block, int meta) {
+		IMutationCondition mutationCondition = new MutationConditionRequiresResource(block, meta);
+		return addMutationCondition(mutationCondition);
+	}
+
+	@Override
+	public Mutation addMutationCondition(IMutationCondition mutationCondition) {
+		mutationConditions.add(mutationCondition);
+		specialConditions.add(mutationCondition.getDescription());
 		return this;
 	}
 
-	public Mutation setRainfall(float minRainfall, float maxRainfall) {
-		this.minRainfall = minRainfall;
-		this.maxRainfall = maxRainfall;
-		
-		EnumHumidity temp1 = EnumHumidity.getFromValue(minRainfall);
-		EnumHumidity temp2 = EnumHumidity.getFromValue(maxRainfall);
-
-		if (temp1 != temp2) {
-			specialConditions.add(String.format("Humidity between %s and %s.", temp1, temp2));
-		} else {
-			specialConditions.add(String.format("Humidity %s required.", temp1));
+	protected float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
+		float mutationChance = chance;
+		for (IMutationCondition mutationCondition : mutationConditions) {
+			mutationChance *= mutationCondition.getChance(world, x, y, z, allele0, allele1, genome0, genome1);
+			if (mutationChance == 0) {
+				return 0;
+			}
 		}
-		return this;
-	}
-
-	public Mutation setTemperatureRainfall(float minTemperature, float maxTemperature, float minRainfall, float maxRainfall) {
-		setTemperature(minTemperature, maxTemperature);
-		setRainfall(minRainfall, maxRainfall);
-		return this;
+		return mutationChance;
 	}
 
 	@Override

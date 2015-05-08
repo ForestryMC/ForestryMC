@@ -8,21 +8,17 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.genetics;
+package forestry.core.genetics.alleles;
 
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlleleTolerance;
 
-public class AlleleTolerance extends Allele implements IAlleleTolerance {
+public class AlleleTolerance extends AlleleForestry implements IAlleleTolerance {
 
 	private final EnumTolerance value;
 
-	public AlleleTolerance(String uid, EnumTolerance value) {
-		this(uid, value, false);
-	}
-
-	public AlleleTolerance(String uid, EnumTolerance value, boolean isDominant) {
-		super(uid, isDominant);
+	public AlleleTolerance(String category, String name, EnumTolerance value, boolean isDominant) {
+		super(category, name, isDominant);
 		this.value = value;
 	}
 

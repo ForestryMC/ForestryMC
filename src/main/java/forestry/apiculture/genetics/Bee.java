@@ -24,6 +24,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -42,7 +43,6 @@ import forestry.api.genetics.IAlleleTolerance;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFlowerProvider;
-import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
 import forestry.arboriculture.genetics.FakePollinatable;
@@ -57,7 +57,6 @@ import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.StringUtil;
 import forestry.core.vect.MutableVect;
 import forestry.core.vect.Vect;
-import forestry.plugins.PluginApiculture;
 
 public class Bee extends IndividualLiving implements IBee {
 
@@ -408,7 +407,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 	@Override
 	public void age(World world, float housingLifespanModifier) {
-		IBeekeepingMode mode = PluginApiculture.beeInterface.getBeekeepingMode(world);
+		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(world);
 		float finalModifier = housingLifespanModifier * mode.getLifespanModifier(genome, mate, housingLifespanModifier);
 
 		super.age(world, finalModifier);
@@ -461,7 +460,7 @@ public class Bee extends IndividualLiving implements IBee {
 			Proxies.log.warning("Failed to produce in an apiary because the beehousing was null.");
 			return null;
 		}
-		IBeekeepingMode mode = PluginApiculture.beeInterface.getBeekeepingMode(housing.getWorld());
+		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(housing.getWorld());
 		if (mode == null) {
 			Proxies.log.warning("Failed to produce in an apiary because the beekeeping mode was null.");
 			return null;
@@ -519,7 +518,7 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		// Fatigued queens do not produce princesses.
-		if (PluginApiculture.beeInterface.getBeekeepingMode(housing.getWorld()).isFatigued(this, housing)) {
+		if (BeeManager.beeRoot.getBeekeepingMode(housing.getWorld()).isFatigued(this, housing)) {
 			return null;
 		}
 
@@ -538,7 +537,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 		ArrayList<IBee> bees = new ArrayList<IBee>();
 
-		int toCreate = PluginApiculture.beeInterface.getBeekeepingMode(world).getFinalFertility(this, world, housing.getXCoord(), housing.getYCoord(),
+		int toCreate = BeeManager.beeRoot.getBeekeepingMode(world).getFinalFertility(this, world, housing.getXCoord(), housing.getYCoord(),
 				housing.getZCoord());
 
 		if (toCreate <= 0) {
@@ -585,42 +584,42 @@ public class Bee extends IndividualLiving implements IBee {
 			}
 		}
 
-		IBeekeepingMode mode = PluginApiculture.beeInterface.getBeekeepingMode(world);
+		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(world);
 		return new Bee(new BeeGenome(chromosomes), mode.isNaturalOffspring(this), generation);
 	}
 
-	private IChromosome[] mutateSpecies(IBeeHousing housing, IGenome genomeOne, IGenome genomeTwo) {
+	private static IChromosome[] mutateSpecies(IBeeHousing housing, IBeeGenome genomeOne, IBeeGenome genomeTwo) {
 
 		World world = housing.getWorld();
 
 		IChromosome[] parent1 = genomeOne.getChromosomes();
 		IChromosome[] parent2 = genomeTwo.getChromosomes();
 
-		IGenome genome0;
-		IGenome genome1;
-		IAllele allele0;
-		IAllele allele1;
+		IBeeGenome genome0;
+		IBeeGenome genome1;
+		IAlleleBeeSpecies allele0;
+		IAlleleBeeSpecies allele1;
 
 		if (world.rand.nextBoolean()) {
-			allele0 = parent1[EnumBeeChromosome.SPECIES.ordinal()].getPrimaryAllele();
-			allele1 = parent2[EnumBeeChromosome.SPECIES.ordinal()].getSecondaryAllele();
+			allele0 = (IAlleleBeeSpecies) parent1[EnumBeeChromosome.SPECIES.ordinal()].getPrimaryAllele();
+			allele1 = (IAlleleBeeSpecies) parent2[EnumBeeChromosome.SPECIES.ordinal()].getSecondaryAllele();
 
 			genome0 = genomeOne;
 			genome1 = genomeTwo;
 		} else {
-			allele0 = parent2[EnumBeeChromosome.SPECIES.ordinal()].getPrimaryAllele();
-			allele1 = parent1[EnumBeeChromosome.SPECIES.ordinal()].getSecondaryAllele();
+			allele0 = (IAlleleBeeSpecies) parent2[EnumBeeChromosome.SPECIES.ordinal()].getPrimaryAllele();
+			allele1 = (IAlleleBeeSpecies) parent1[EnumBeeChromosome.SPECIES.ordinal()].getSecondaryAllele();
 
 			genome0 = genomeTwo;
 			genome1 = genomeOne;
 		}
 
-		for (IBeeMutation mutation : PluginApiculture.beeInterface.getMutations(true)) {
+		for (IBeeMutation mutation : BeeManager.beeRoot.getMutations(true)) {
 			float chance = mutation.getChance(housing, allele0, allele1, genome0, genome1);
 			if (chance > world.rand.nextFloat() * 100) {
-				IApiaristTracker breedingTracker = PluginApiculture.beeInterface.getBreedingTracker(world, housing.getOwnerName());
+				IApiaristTracker breedingTracker = BeeManager.beeRoot.getBreedingTracker(world, housing.getOwnerName());
 				breedingTracker.registerMutation(mutation);
-				return PluginApiculture.beeInterface.templateAsChromosomes(mutation.getTemplate());
+				return BeeManager.beeRoot.templateAsChromosomes(mutation.getTemplate());
 			}
 		}
 

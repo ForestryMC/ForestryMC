@@ -14,13 +14,13 @@ import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
-import forestry.core.genetics.Allele;
+import forestry.core.genetics.alleles.AlleleForestry;
 import forestry.plugins.PluginApiculture;
 
-public class AlleleEffectNone extends Allele implements IAlleleBeeEffect {
+public class AlleleEffectNone extends AlleleForestry implements IAlleleBeeEffect {
 
-	public AlleleEffectNone(String uid) {
-		super(uid, true);
+	public AlleleEffectNone(String name) {
+		super("effect", name, true);
 	}
 
 	@Override

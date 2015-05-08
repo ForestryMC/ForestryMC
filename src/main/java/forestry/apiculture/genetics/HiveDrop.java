@@ -17,10 +17,10 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IHiveDrop;
-import forestry.plugins.PluginApiculture;
 
 public class HiveDrop implements IHiveDrop {
 
@@ -48,7 +48,7 @@ public class HiveDrop implements IHiveDrop {
 			bee.setIsNatural(false);
 		}
 
-		return PluginApiculture.beeInterface.getMemberStack(bee, EnumBeeType.PRINCESS.ordinal());
+		return BeeManager.beeRoot.getMemberStack(bee, EnumBeeType.PRINCESS.ordinal());
 	}
 
 	@Override

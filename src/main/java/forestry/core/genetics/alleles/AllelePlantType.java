@@ -8,28 +8,29 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.genetics;
+package forestry.core.genetics.alleles;
 
 import java.util.EnumSet;
+import java.util.Locale;
 
 import net.minecraftforge.common.EnumPlantType;
 
 import forestry.api.genetics.IAllelePlantType;
 
-public class AllelePlantType extends Allele implements IAllelePlantType {
+public class AllelePlantType extends AlleleForestry implements IAllelePlantType {
 
 	private final EnumSet<EnumPlantType> types;
 
-	protected AllelePlantType(String uid, EnumPlantType type) {
-		this(uid, type, false);
+	protected AllelePlantType(EnumPlantType type) {
+		this(type, false);
 	}
 
-	protected AllelePlantType(String uid, EnumPlantType type, boolean isDominant) {
-		this(uid, EnumSet.of(type), isDominant);
+	protected AllelePlantType(EnumPlantType type, boolean isDominant) {
+		this(type.toString().toLowerCase(Locale.ENGLISH), EnumSet.of(type), isDominant);
 	}
 
-	protected AllelePlantType(String uid, EnumSet<EnumPlantType> types, boolean isDominant) {
-		super(uid, isDominant);
+	protected AllelePlantType(String name, EnumSet<EnumPlantType> types, boolean isDominant) {
+		super("plantType", name, isDominant);
 		this.types = types;
 	}
 

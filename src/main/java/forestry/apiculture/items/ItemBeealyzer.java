@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBee;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
@@ -26,7 +27,6 @@ import forestry.core.inventory.AlyzerInventory;
 import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.plugins.PluginApiculture;
 
 public class ItemBeealyzer extends ItemInventoried {
 
@@ -39,7 +39,7 @@ public class ItemBeealyzer extends ItemInventoried {
 
 		@Override
 		protected boolean isSpecimen(ItemStack itemStack) {
-			return PluginApiculture.beeInterface.isMember(itemStack);
+			return BeeManager.beeRoot.isMember(itemStack);
 		}
 
 		private void tryAnalyze() {
@@ -48,7 +48,7 @@ public class ItemBeealyzer extends ItemInventoried {
 				return;
 			}
 
-			IBee bee = PluginApiculture.beeInterface.getMember(getStackInSlot(SLOT_SPECIMEN));
+			IBee bee = BeeManager.beeRoot.getMember(getStackInSlot(SLOT_SPECIMEN));
 			// No bee, abort
 			if (bee == null) {
 				return;
@@ -64,8 +64,8 @@ public class ItemBeealyzer extends ItemInventoried {
 
 				bee.analyze();
 				if (player != null) {
-					PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(bee.getGenome().getPrimary());
-					PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(bee.getGenome().getSecondary());
+					BeeManager.beeRoot.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(bee.getGenome().getPrimary());
+					BeeManager.beeRoot.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(bee.getGenome().getSecondary());
 				}
 
 				NBTTagCompound nbttagcompound = new NBTTagCompound();
@@ -104,7 +104,7 @@ public class ItemBeealyzer extends ItemInventoried {
 
 		@Override
 		public EnumErrorCode getErrorState() {
-			if (PluginApiculture.beeInterface.isMember(inventoryStacks[SLOT_SPECIMEN]) && !isEnergy(getStackInSlot(SLOT_ENERGY))) {
+			if (BeeManager.beeRoot.isMember(inventoryStacks[SLOT_SPECIMEN]) && !isEnergy(getStackInSlot(SLOT_ENERGY))) {
 				return EnumErrorCode.NOHONEY;
 			}
 

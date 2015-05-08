@@ -18,12 +18,12 @@ import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
 import forestry.core.config.Defaults;
 import forestry.core.utils.ForestryResource;
-import forestry.plugins.PluginApiculture;
 
 public class EntityBee extends EntityCreature implements IAnimals {
 
@@ -48,7 +48,7 @@ public class EntityBee extends EntityCreature implements IAnimals {
 		if (bee != null) {
 			contained = bee;
 		} else {
-			contained = PluginApiculture.beeInterface.templateAsIndividual(PluginApiculture.beeInterface.getDefaultTemplate());
+			contained = BeeManager.beeRoot.templateAsIndividual(BeeManager.beeRoot.getDefaultTemplate());
 		}
 
 		//isImmuneToFire = contained.getGenome().getFireResist();

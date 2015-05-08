@@ -16,11 +16,25 @@ import net.minecraft.world.biome.BiomeGenBase;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IJubilanceProvider;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.core.vect.Vect;
 
 public class JubilanceDefault implements IJubilanceProvider {
+
+	private static JubilanceDefault instance;
+
+	public static JubilanceDefault getInstance() {
+		if (instance == null) {
+			instance = new JubilanceDefault();
+		}
+		return instance;
+	}
+
+	protected JubilanceDefault() {
+
+	}
 
 	@Override
 	public boolean isJubilant(IAlleleBeeSpecies species, IBeeGenome genome, IBeeHousing housing) {

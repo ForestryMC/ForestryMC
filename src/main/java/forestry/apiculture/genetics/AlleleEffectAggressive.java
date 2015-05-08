@@ -27,8 +27,8 @@ public class AlleleEffectAggressive extends AlleleEffectThrottled {
 
 	public static final DamageSource damageSourceBeeAggressive = new DamageSourceForestry("bee.aggressive");
 
-	public AlleleEffectAggressive(String uid) {
-		super(uid, "aggressive", true, 40, false, false);
+	public AlleleEffectAggressive() {
+		super("aggressive", true, 40, false, false);
 	}
 
 	@Override

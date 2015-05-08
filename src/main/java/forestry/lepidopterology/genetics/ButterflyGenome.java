@@ -24,9 +24,9 @@ import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.IAlleleButterflyEffect;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterflyGenome;
-import forestry.core.genetics.AlleleBoolean;
-import forestry.core.genetics.AlleleTolerance;
 import forestry.core.genetics.Genome;
+import forestry.core.genetics.alleles.AlleleBoolean;
+import forestry.core.genetics.alleles.AlleleTolerance;
 import forestry.plugins.PluginLepidopterology;
 
 public class ButterflyGenome extends Genome implements IButterflyGenome {

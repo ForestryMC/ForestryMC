@@ -29,8 +29,8 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 	private final byte indexExplosionTimer = 1;
 	private final byte indexExplosionForce = 2;
 
-	public AlleleEffectCreeper(String uid) {
-		super(uid, "creeper", true, 20, false, true);
+	public AlleleEffectCreeper() {
+		super("creeper", true, 20, false, true);
 	}
 
 	@Override

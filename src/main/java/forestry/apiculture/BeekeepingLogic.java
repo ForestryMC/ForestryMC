@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.apiculture.IBee;
@@ -217,7 +218,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 			housingErrorState = EnumErrorCode.NOQUEEN;
 			hasQueen = false;
 		} else {
-			IBee queen = PluginApiculture.beeInterface.getMember(housing.getQueen());
+			IBee queen = BeeManager.beeRoot.getMember(housing.getQueen());
 			// Kill dying queens
 			if (!queen.isAlive()) {
 				killQueen(queen);
@@ -283,8 +284,8 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		}
 
 		// Replace
-		IBee princess = PluginApiculture.beeInterface.getMember(housing.getQueen());
-		IBee drone = PluginApiculture.beeInterface.getMember(housing.getDrone());
+		IBee princess = BeeManager.beeRoot.getMember(housing.getQueen());
+		IBee drone = BeeManager.beeRoot.getMember(housing.getDrone());
 		princess.mate(drone);
 
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
@@ -296,7 +297,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		housing.onQueenChange(housing.getQueen());
 
 		// Register the new queen with the breeding tracker
-		PluginApiculture.beeInterface.getBreedingTracker(housing.getWorld(), housing.getOwnerName()).registerQueen(princess);
+		BeeManager.beeRoot.getBreedingTracker(housing.getWorld(), housing.getOwnerName()).registerQueen(princess);
 
 		// Remove drone
 		housing.getDrone().stackSize--;
@@ -349,7 +350,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	private void spawnOffspring(IBee queen) {
 
 		Stack<ItemStack> offspring = new Stack<ItemStack>();
-		IApiaristTracker breedingTracker = PluginApiculture.beeInterface.getBreedingTracker(housing.getWorld(), housing.getOwnerName());
+		IApiaristTracker breedingTracker = BeeManager.beeRoot.getBreedingTracker(housing.getWorld(), housing.getOwnerName());
 
 		housing.onQueenDeath(getQueen());
 
@@ -360,7 +361,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 			count--;
 			IBee heiress = queen.spawnPrincess(housing);
 			if (heiress != null) {
-				ItemStack princess = PluginApiculture.beeInterface.getMemberStack(heiress, EnumBeeType.PRINCESS.ordinal());
+				ItemStack princess = BeeManager.beeRoot.getMemberStack(heiress, EnumBeeType.PRINCESS.ordinal());
 				breedingTracker.registerPrincess(heiress);
 				offspring.push(princess);
 			}
@@ -369,7 +370,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		// Drones
 		IBee[] larvae = queen.spawnDrones(housing);
 		for (IBee larva : larvae) {
-			ItemStack drone = PluginApiculture.beeInterface.getMemberStack(larva, EnumBeeType.DRONE.ordinal());
+			ItemStack drone = BeeManager.beeRoot.getMemberStack(larva, EnumBeeType.DRONE.ordinal());
 			breedingTracker.registerDrone(larva);
 			offspring.push(drone);
 		}

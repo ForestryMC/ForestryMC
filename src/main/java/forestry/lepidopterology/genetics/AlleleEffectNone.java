@@ -13,12 +13,12 @@ package forestry.lepidopterology.genetics;
 import forestry.api.genetics.IEffectData;
 import forestry.api.lepidopterology.IAlleleButterflyEffect;
 import forestry.api.lepidopterology.IEntityButterfly;
-import forestry.core.genetics.Allele;
+import forestry.core.genetics.alleles.AlleleForestry;
 
-public class AlleleEffectNone extends Allele implements IAlleleButterflyEffect {
+public class AlleleEffectNone extends AlleleForestry implements IAlleleButterflyEffect {
 
-	public AlleleEffectNone(String uid, boolean isDominant) {
-		super(uid, isDominant, false);
+	public AlleleEffectNone(String prefix, String name, boolean isDominant) {
+		super(prefix, name, isDominant);
 	}
 
 	@Override

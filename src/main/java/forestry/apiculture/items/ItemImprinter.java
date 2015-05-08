@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
 import forestry.api.core.ForestryAPI;
@@ -24,7 +25,6 @@ import forestry.core.inventory.ItemInventory;
 import forestry.core.items.ItemForestry;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.plugins.PluginApiculture;
 
 public class ItemImprinter extends ItemForestry {
 
@@ -44,7 +44,7 @@ public class ItemImprinter extends ItemForestry {
 		}
 
 		public void advancePrimary() {
-			if (primaryIndex < PluginApiculture.beeInterface.getIndividualTemplates().size() - 1) {
+			if (primaryIndex < BeeManager.beeRoot.getIndividualTemplates().size() - 1) {
 				primaryIndex++;
 			} else {
 				primaryIndex = 0;
@@ -52,7 +52,7 @@ public class ItemImprinter extends ItemForestry {
 		}
 
 		public void advanceSecondary() {
-			if (secondaryIndex < PluginApiculture.beeInterface.getIndividualTemplates().size() - 1) {
+			if (secondaryIndex < BeeManager.beeRoot.getIndividualTemplates().size() - 1) {
 				secondaryIndex++;
 			} else {
 				secondaryIndex = 0;
@@ -63,7 +63,7 @@ public class ItemImprinter extends ItemForestry {
 			if (primaryIndex > 0) {
 				primaryIndex--;
 			} else {
-				primaryIndex = PluginApiculture.beeInterface.getIndividualTemplates().size() - 1;
+				primaryIndex = BeeManager.beeRoot.getIndividualTemplates().size() - 1;
 			}
 		}
 
@@ -71,22 +71,22 @@ public class ItemImprinter extends ItemForestry {
 			if (secondaryIndex > 0) {
 				secondaryIndex--;
 			} else {
-				secondaryIndex = PluginApiculture.beeInterface.getIndividualTemplates().size() - 1;
+				secondaryIndex = BeeManager.beeRoot.getIndividualTemplates().size() - 1;
 			}
 		}
 
 		public IAlleleBeeSpecies getPrimary() {
-			return PluginApiculture.beeInterface.getIndividualTemplates().get(primaryIndex).getGenome().getPrimary();
+			return BeeManager.beeRoot.getIndividualTemplates().get(primaryIndex).getGenome().getPrimary();
 		}
 
 		public IAlleleBeeSpecies getSecondary() {
-			return PluginApiculture.beeInterface.getIndividualTemplates().get(secondaryIndex).getGenome().getPrimary();
+			return BeeManager.beeRoot.getIndividualTemplates().get(secondaryIndex).getGenome().getPrimary();
 		}
 
 		public IBee getSelectedBee() {
-			return new Bee(PluginApiculture.beeInterface.templateAsGenome(
-					PluginApiculture.beeInterface.getGenomeTemplates().get(PluginApiculture.beeInterface.getIndividualTemplates().get(primaryIndex).getIdent()),
-					PluginApiculture.beeInterface.getGenomeTemplates().get(PluginApiculture.beeInterface.getIndividualTemplates().get(secondaryIndex).getIdent())));
+			return new Bee(BeeManager.beeRoot.templateAsGenome(
+					BeeManager.beeRoot.getGenomeTemplates().get(BeeManager.beeRoot.getIndividualTemplates().get(primaryIndex).getIdent()),
+					BeeManager.beeRoot.getGenomeTemplates().get(BeeManager.beeRoot.getIndividualTemplates().get(secondaryIndex).getIdent())));
 		}
 
 		public int getPrimaryIndex() {
@@ -112,7 +112,7 @@ public class ItemImprinter extends ItemForestry {
 			}
 
 			// Only imprint bees
-			if (!PluginApiculture.beeInterface.isMember(inventoryStacks[specimenSlot])) {
+			if (!BeeManager.beeRoot.isMember(inventoryStacks[specimenSlot])) {
 				return;
 			}
 
@@ -146,7 +146,7 @@ public class ItemImprinter extends ItemForestry {
 
 		@Override
 		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			return PluginApiculture.beeInterface.isMember(itemStack);
+			return BeeManager.beeRoot.isMember(itemStack);
 		}
 
 	}

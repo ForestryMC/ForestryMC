@@ -21,8 +21,8 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 	public static final int MAX_BLOCK_FIND_TRIES = 10;
 	public static final int ENTITY_THROTTLE = 6;
 	
-	public AlleleEffectFungification(String uid) {
-		super(uid, "mycophilic", true, 10, false, false);
+	public AlleleEffectFungification() {
+		super("mycophilic", true, 10, false, false);
 	}
 
 	@Override
