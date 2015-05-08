@@ -89,7 +89,9 @@ public final class FlowerRegistry implements IFlowerRegistry {
 			index = flowers.indexOf(newFlower);
 			if (index == -1) {
 				flowers.add(newFlower);
-			} else if (flowers.get(index).getWeight() > newFlower.getWeight()) {
+			} else if (flowers.get(index).getMeta() != newFlower.getMeta()) {
+				flowers.add(newFlower);
+			} else if (flowers.get(index).getWeight() < newFlower.getWeight()) {
 				flowers.get(index).setWeight(newFlower.getWeight());
 			}
 
