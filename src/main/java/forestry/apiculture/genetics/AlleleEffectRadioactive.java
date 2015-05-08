@@ -34,8 +34,8 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 
 	public static final DamageSource damageSourceBeeRadioactive = new DamageSourceForestry("bee.radioactive");
 
-	public AlleleEffectRadioactive() {
-		super("radioactive", true, 40, false, true);
+	public AlleleEffectRadioactive(String uid) {
+		super(uid, "radioactive", true, 40, false, true);
 	}
 
 	@Override

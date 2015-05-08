@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -28,11 +27,12 @@ import forestry.apiculture.genetics.BeeGenome;
 import forestry.apiculture.items.ItemBeeGE;
 import forestry.apiculture.items.ItemBeealyzer.BeealyzerInventory;
 import forestry.core.config.ForestryItem;
-import forestry.core.genetics.alleles.AlleleBoolean;
+import forestry.core.genetics.AlleleBoolean;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StringUtil;
 import forestry.core.vect.Vect;
+import forestry.plugins.PluginApiculture;
 
 public class GuiBeealyzer extends GuiAlyzer {
 
@@ -65,8 +65,8 @@ public class GuiBeealyzer extends GuiAlyzer {
 			if (inventory.getStackInSlot(k) == null) {
 				continue;
 			}
-			bee = BeeManager.beeRoot.getMember(inventory.getStackInSlot(k));
-			beeType = BeeManager.beeRoot.getType(inventory.getStackInSlot(k));
+			bee = PluginApiculture.beeInterface.getMember(inventory.getStackInSlot(k));
+			beeType = PluginApiculture.beeInterface.getType(inventory.getStackInSlot(k));
 			if (bee == null || !bee.isAnalyzed()) {
 				continue;
 			}

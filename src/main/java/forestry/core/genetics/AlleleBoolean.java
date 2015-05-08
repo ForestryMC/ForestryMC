@@ -8,16 +8,20 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.genetics.alleles;
+package forestry.core.genetics;
 
 import forestry.api.genetics.IAlleleBoolean;
 
-public class AlleleBoolean extends AlleleForestry implements IAlleleBoolean {
+public class AlleleBoolean extends Allele implements IAlleleBoolean {
 
-	private final boolean value;
+	final boolean value;
 
-	public AlleleBoolean(String category, boolean value, boolean isDominant) {
-		super(category, Boolean.toString(value), isDominant);
+	public AlleleBoolean(String uid, boolean value) {
+		this(uid, value, false);
+	}
+
+	public AlleleBoolean(String uid, boolean value, boolean isDominant) {
+		super(uid, isDominant);
 		this.value = value;
 	}
 

@@ -19,7 +19,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.genetics.AlleleManager;
@@ -38,6 +37,7 @@ import forestry.core.utils.StringUtil;
 import forestry.pipes.EnumFilterType;
 import forestry.pipes.PipeItemsPropolis;
 import forestry.pipes.PipeLogicPropolis;
+import forestry.plugins.PluginApiculture;
 
 /**
  * GuiScreen for propolis pipes.
@@ -233,7 +233,7 @@ public class GuiPropolisPipe extends GuiForestry<ContainerPropolisPipe, IInvento
 			widgetManager.add(new TypeFilterSlot(8, 18 + i * 18, ForgeDirection.values()[i], pipeLogic));
 		}
 
-		IApiaristTracker tracker = BeeManager.beeRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
+		IApiaristTracker tracker = PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, player.getGameProfile());
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 3; j++) {
 				for (int k = 0; k < 2; k++) {

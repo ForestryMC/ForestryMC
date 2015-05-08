@@ -31,8 +31,8 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 	private final boolean isBadEffect;
 	private final int duration;
 
-	public AlleleEffectPotion(String name, boolean isDominant, Potion potion, int duration, boolean requiresWorking) {
-		super(name, isDominant, 200, requiresWorking, false);
+	public AlleleEffectPotion(String uid, String name, boolean isDominant, Potion potion, int duration, boolean requiresWorking) {
+		super(uid, name, isDominant, 200, requiresWorking, false);
 		this.potion = potion;
 		this.isBadEffect = isBadEffect(potion);
 		this.duration = duration;

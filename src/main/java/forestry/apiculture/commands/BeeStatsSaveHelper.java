@@ -18,7 +18,6 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.genetics.AlleleManager;
@@ -27,6 +26,7 @@ import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.core.commands.IStatsSaveHelper;
 import forestry.core.utils.StringUtil;
+import forestry.plugins.PluginApiculture;
 
 public class BeeStatsSaveHelper implements IStatsSaveHelper {
 
@@ -69,7 +69,7 @@ public class BeeStatsSaveHelper implements IStatsSaveHelper {
 
 	@Override
 	public IBreedingTracker getBreedingTracker(World world, GameProfile gameProfile) {
-		return BeeManager.beeRoot.getBreedingTracker(world, gameProfile);
+		return PluginApiculture.beeInterface.getBreedingTracker(world, gameProfile);
 	}
 
 }

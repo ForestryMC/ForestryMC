@@ -11,6 +11,7 @@
 package forestry.arboriculture.genetics;
 
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreeMutation;
@@ -40,8 +41,13 @@ public class TreeMutation extends Mutation implements ITreeMutation {
 	
 	@Override
 	public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
-		float processedChance = super.getChance(world, x, y, z, allele0, allele1, genome0, genome1);
-		if (processedChance <= 0) {
+		float processedChance = chance;
+
+		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenAt(x, z);
+		if (biome.temperature < minTemperature || biome.temperature > maxTemperature) {
+			return 0;
+		}
+		if (biome.rainfall < minRainfall || biome.rainfall > maxRainfall) {
 			return 0;
 		}
 

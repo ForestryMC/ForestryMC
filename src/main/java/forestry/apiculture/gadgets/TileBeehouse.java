@@ -20,7 +20,6 @@ import net.minecraft.world.biome.BiomeGenBase;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
@@ -46,6 +45,7 @@ import forestry.core.network.PacketTileUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.GuiUtil;
 import forestry.core.utils.Utils;
+import forestry.plugins.PluginApiculture;
 
 public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 
@@ -57,11 +57,11 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 		@Override
 		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 			if (slotIndex == SLOT_QUEEN) {
-				return BeeManager.beeRoot.isMember(itemStack) && !BeeManager.beeRoot.isDrone(itemStack);
+				return PluginApiculture.beeInterface.isMember(itemStack) && !PluginApiculture.beeInterface.isDrone(itemStack);
 			} else if (GuiUtil.isIndexInRange(slotIndex, SLOT_FRAMES_1, SLOT_FRAMES_COUNT)) {
 				return itemStack.getItem() instanceof IHiveFrame;
 			} else if (slotIndex == SLOT_DRONE) {
-				return BeeManager.beeRoot.isDrone(itemStack);
+				return PluginApiculture.beeInterface.isDrone(itemStack);
 			}
 			return false;
 		}
@@ -86,7 +86,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 
 	public TileBeehouse() {
 		setHints(Config.hints.get("apiary"));
-		logic = BeeManager.beeRoot.createBeekeepingLogic(this);
+		logic = PluginApiculture.beeInterface.createBeekeepingLogic(this);
 		setInternalInventory(new BeehouseInventoryAdapter(this, 12, "Items").disableAutomation());
 	}
 
@@ -158,9 +158,9 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	public void updateClientSide() {
 
 		// / Multiplayer FX
-		if (BeeManager.beeRoot.isMated(getInternalInventory().getStackInSlot(SLOT_QUEEN))) {
+		if (PluginApiculture.beeInterface.isMated(getInternalInventory().getStackInSlot(SLOT_QUEEN))) {
 			if (getErrorState() == EnumErrorCode.OK && updateOnInterval(2)) {
-				IBee displayQueen = BeeManager.beeRoot.getMember(getInternalInventory().getStackInSlot(SLOT_QUEEN));
+				IBee displayQueen = PluginApiculture.beeInterface.getMember(getInternalInventory().getStackInSlot(SLOT_QUEEN));
 				displayQueen.doFX(logic.getEffectData(), this);
 			}
 		}
@@ -213,7 +213,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 		}
 
 		if (ForestryItem.beeQueenGE.isItemEqual(inventory.getStackInSlot(SLOT_QUEEN))) {
-			return BeeManager.beeRoot.getMember(inventory.getStackInSlot(SLOT_QUEEN)).getHealth();
+			return PluginApiculture.beeInterface.getMember(inventory.getStackInSlot(SLOT_QUEEN)).getHealth();
 		} else if (ForestryItem.beePrincessGE.isItemEqual(inventory.getStackInSlot(SLOT_QUEEN))) {
 			return displayHealth;
 		} else {
@@ -228,7 +228,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 		}
 
 		if (ForestryItem.beeQueenGE.isItemEqual(inventory.getStackInSlot(SLOT_QUEEN))) {
-			return BeeManager.beeRoot.getMember(inventory.getStackInSlot(SLOT_QUEEN)).getMaxHealth();
+			return PluginApiculture.beeInterface.getMember(inventory.getStackInSlot(SLOT_QUEEN)).getMaxHealth();
 		} else if (ForestryItem.beePrincessGE.isItemEqual(inventory.getStackInSlot(SLOT_QUEEN))) {
 			return displayHealthMax;
 		} else {

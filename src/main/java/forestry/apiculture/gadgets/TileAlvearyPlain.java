@@ -24,7 +24,6 @@ import net.minecraft.world.biome.BiomeGenBase;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
@@ -52,6 +51,7 @@ import forestry.core.network.PacketIds;
 import forestry.core.network.PacketInventoryStack;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Utils;
+import forestry.plugins.PluginApiculture;
 
 public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IBeeHousing, IClimatised, IHintSource {
 
@@ -190,9 +190,9 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 
 		// / Multiplayer FX
 		ItemStack queenStack = inventory.getStackInSlot(SLOT_QUEEN);
-		if (BeeManager.beeRoot.isMated(queenStack)) {
+		if (PluginApiculture.beeInterface.isMated(queenStack)) {
 			if (getErrorState() == EnumErrorCode.OK && updateOnInterval(2)) {
-				IBee displayQueen = BeeManager.beeRoot.getMember(queenStack);
+				IBee displayQueen = PluginApiculture.beeInterface.getMember(queenStack);
 				displayQueen.doFX(beekeepingLogic.getEffectData(), this);
 			}
 		}
@@ -227,9 +227,9 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 			return 0;
 		}
 
-		if (BeeManager.beeRoot.isMated(inventory.getStackInSlot(SLOT_QUEEN))) {
-			return BeeManager.beeRoot.getMember(inventory.getStackInSlot(SLOT_QUEEN)).getHealth();
-		} else if (!BeeManager.beeRoot.isDrone(inventory.getStackInSlot(SLOT_QUEEN))) {
+		if (PluginApiculture.beeInterface.isMated(inventory.getStackInSlot(SLOT_QUEEN))) {
+			return PluginApiculture.beeInterface.getMember(inventory.getStackInSlot(SLOT_QUEEN)).getHealth();
+		} else if (!PluginApiculture.beeInterface.isDrone(inventory.getStackInSlot(SLOT_QUEEN))) {
 			return displayHealth;
 		} else {
 			return 0;
@@ -242,9 +242,9 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 			return 0;
 		}
 
-		if (BeeManager.beeRoot.isMated(inventory.getStackInSlot(SLOT_QUEEN))) {
-			return BeeManager.beeRoot.getMember(inventory.getStackInSlot(SLOT_QUEEN)).getMaxHealth();
-		} else if (!BeeManager.beeRoot.isDrone(inventory.getStackInSlot(SLOT_QUEEN))) {
+		if (PluginApiculture.beeInterface.isMated(inventory.getStackInSlot(SLOT_QUEEN))) {
+			return PluginApiculture.beeInterface.getMember(inventory.getStackInSlot(SLOT_QUEEN)).getMaxHealth();
+		} else if (!PluginApiculture.beeInterface.isDrone(inventory.getStackInSlot(SLOT_QUEEN))) {
 			return displayHealthMax;
 		} else {
 			return 0;
@@ -266,9 +266,9 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 			@Override
 			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 				if (slotIndex == SLOT_QUEEN) {
-					return BeeManager.beeRoot.isMember(itemStack) && !BeeManager.beeRoot.isDrone(itemStack);
+					return PluginApiculture.beeInterface.isMember(itemStack) && !PluginApiculture.beeInterface.isDrone(itemStack);
 				} else if (slotIndex == SLOT_DRONE) {
-					return BeeManager.beeRoot.isDrone(itemStack);
+					return PluginApiculture.beeInterface.isDrone(itemStack);
 				}
 				return false;
 			}
@@ -284,7 +284,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 	public void makeMaster() {
 		super.makeMaster();
 		if (beekeepingLogic == null) {
-			this.beekeepingLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
+			this.beekeepingLogic = PluginApiculture.beeInterface.createBeekeepingLogic(this);
 		}
 	}
 

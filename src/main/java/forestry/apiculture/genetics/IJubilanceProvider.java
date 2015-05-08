@@ -8,25 +8,12 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.genetics.alleles;
+package forestry.apiculture.genetics;
 
-import forestry.api.genetics.IAlleleFloat;
+import forestry.api.apiculture.IAlleleBeeSpecies;
+import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeHousing;
 
-public class AlleleFloat extends AlleleForestry implements IAlleleFloat {
-
-	private final float value;
-
-	public AlleleFloat(String prefix, String name, float value) {
-		this(prefix, name, value, false);
-	}
-
-	public AlleleFloat(String prefix, String name, float value, boolean isDominant) {
-		super(prefix, name, isDominant);
-		this.value = value;
-	}
-
-	@Override
-	public float getValue() {
-		return value;
-	}
+public interface IJubilanceProvider {
+	boolean isJubilant(IAlleleBeeSpecies species, IBeeGenome genome, IBeeHousing housing);
 }

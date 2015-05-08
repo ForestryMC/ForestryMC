@@ -26,6 +26,7 @@ import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.Config;
+import forestry.core.proxy.Proxies;
 
 public abstract class Genome implements IGenome {
 
@@ -92,7 +93,7 @@ public abstract class Genome implements IGenome {
 				}
 
 				if (chromosome.hasInvalidAlleles(speciesRoot.getKaryotype()[chromosomeOrdinal].getAlleleClass())) {
-					throw new RuntimeException("Found Chromosome with invalid Alleles.\nNBTTagCompound: " + chromosomesNBT + "\nSee config option \"genetics.clear.invalid.chromosomes\".\nMissing: " + chromosomeNBT);
+					throw new RuntimeException("Found Chromosome with invalid Alleles.\nNBTTagCompound: " + chromosomesNBT + "\nSee config option \"genetics.clear.invalid.chromosomes\".");
 				}
 			}
 		}

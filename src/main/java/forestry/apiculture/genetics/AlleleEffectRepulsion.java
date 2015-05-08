@@ -22,8 +22,8 @@ import forestry.api.genetics.IEffectData;
 
 public class AlleleEffectRepulsion extends AlleleEffectThrottled {
 
-	public AlleleEffectRepulsion() {
-		super("repulsion", false, 100, true, true);
+	public AlleleEffectRepulsion(String uid) {
+		super(uid, "repulsion", false, 100, true, true);
 	}
 
 	@Override

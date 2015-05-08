@@ -32,7 +32,6 @@ import net.minecraftforge.common.BiomeDictionary;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBee;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -51,6 +50,7 @@ import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 import forestry.core.vect.Vect;
+import forestry.plugins.PluginApiculture;
 
 public class ItemHabitatLocator extends ItemInventoried {
 
@@ -91,7 +91,7 @@ public class ItemHabitatLocator extends ItemInventoried {
 				setInventorySlotContents(SLOT_SPECIMEN, null);
 			}
 
-			IBee bee = BeeManager.beeRoot.getMember(getStackInSlot(SLOT_ANALYZED));
+			IBee bee = PluginApiculture.beeInterface.getMember(getStackInSlot(SLOT_ANALYZED));
 
 			// No bee, abort
 			if (bee == null) {
@@ -126,7 +126,7 @@ public class ItemHabitatLocator extends ItemInventoried {
 
 		@Override
 		public EnumErrorCode getErrorState() {
-			if (BeeManager.beeRoot.isMember(inventoryStacks[SLOT_SPECIMEN]) && !isEnergy(getStackInSlot(SLOT_ENERGY))) {
+			if (PluginApiculture.beeInterface.isMember(inventoryStacks[SLOT_SPECIMEN]) && !isEnergy(getStackInSlot(SLOT_ENERGY))) {
 				return EnumErrorCode.NOHONEY;
 			}
 
@@ -139,7 +139,7 @@ public class ItemHabitatLocator extends ItemInventoried {
 				Item item = itemStack.getItem();
 				return item == ForestryItem.honeydew.item() || item == ForestryItem.honeyDrop.item();
 			} else if (slotIndex == SLOT_SPECIMEN) {
-				return BeeManager.beeRoot.isMember(itemStack);
+				return PluginApiculture.beeInterface.isMember(itemStack);
 			}
 			return false;
 		}

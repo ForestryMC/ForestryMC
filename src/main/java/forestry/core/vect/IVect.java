@@ -27,6 +27,4 @@ public interface IVect {
 	IVect add(int x, int y, int z);
 
 	IVect add(ForgeDirection direction);
-
-	int[] toArray();
 }

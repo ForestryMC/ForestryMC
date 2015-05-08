@@ -22,8 +22,8 @@ import forestry.api.genetics.IEffectData;
 
 public class AlleleEffectHeroic extends AlleleEffectThrottled {
 
-	public AlleleEffectHeroic() {
-		super("heroic", false, 40, true, false);
+	public AlleleEffectHeroic(String uid) {
+		super(uid, "heroic", false, 40, true, false);
 	}
 
 	@Override

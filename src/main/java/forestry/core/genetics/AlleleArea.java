@@ -8,17 +8,22 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.genetics.alleles;
+package forestry.core.genetics;
 
 import forestry.api.genetics.IAlleleArea;
+import forestry.core.utils.StringUtil;
 import forestry.core.vect.Vect;
 
-public class AlleleArea extends AlleleForestry implements IAlleleArea {
+public class AlleleArea extends Allele implements IAlleleArea {
 
 	private final int[] area;
 
-	public AlleleArea(String prefix, String name, int[] value, boolean isDominant) {
-		super(prefix, name, isDominant, false);
+	public AlleleArea(String uid, int[] value) {
+		this(uid, value, false);
+	}
+
+	public AlleleArea(String uid, int[] value, boolean isDominant) {
+		super(uid, isDominant);
 		this.area = value;
 	}
 	
@@ -29,4 +34,15 @@ public class AlleleArea extends AlleleForestry implements IAlleleArea {
 	public Vect getArea() {
 		return new Vect(area);
 	}
+
+	public AlleleArea setName(String customPrefix, String name) {
+		String customName = "gui." + customPrefix + "." + name;
+		if (StringUtil.canTranslate(customName)) {
+			this.name = customName;
+		} else {
+			this.name = "gui." + name;
+		}
+		return this;
+	}
+
 }

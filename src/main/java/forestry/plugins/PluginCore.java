@@ -52,11 +52,10 @@ import forestry.core.gadgets.BlockSoil;
 import forestry.core.gadgets.BlockStainedGlass;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.gadgets.TileEscritoire;
+import forestry.core.genetics.Allele;
+import forestry.core.genetics.AlleleRegistry;
 import forestry.core.genetics.ClimateHelper;
 import forestry.core.genetics.ItemResearchNote;
-import forestry.core.genetics.alleles.Allele;
-import forestry.core.genetics.alleles.AlleleHelper;
-import forestry.core.genetics.alleles.AlleleRegistry;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemArmorNaturalist;
@@ -84,8 +83,6 @@ public class PluginCore extends ForestryPlugin {
 	public static ForestryModEnvWarningCallable crashCallable;
 	public static final RootCommand rootCommand = new RootCommand();
 
-	private AlleleHelper alleleHelper;
-
 	@Override
 	protected void setupAPI() {
 		super.setupAPI();
@@ -99,7 +96,7 @@ public class PluginCore extends ForestryPlugin {
 		AlleleManager.climateHelper = new ClimateHelper();
 		alleleRegistry.initialize();
 
-		Allele.setupAPI();
+		Allele.setupLegacyAPI();
 	}
 
 	@Override
@@ -108,8 +105,6 @@ public class PluginCore extends ForestryPlugin {
 
 		rootCommand.addChildCommand(new CommandVersion());
 		rootCommand.addChildCommand(new CommandPlugins());
-
-		Allele.helper = alleleHelper = new AlleleHelper();
 
 		ForestryBlock.core.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "core");
 
@@ -144,8 +139,6 @@ public class PluginCore extends ForestryPlugin {
 
 		definitionEscritoire.register();
 		crashCallable = new ForestryModEnvWarningCallable();
-
-		alleleHelper.init();
 
 		RecipeSorter.register("forestry:shapedrecipecustom", ShapedRecipeCustom.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
 	}

@@ -8,20 +8,21 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.genetics.alleles;
+package forestry.core.genetics;
 
 import forestry.api.genetics.IAlleleInteger;
+import forestry.core.utils.StringUtil;
 
-public class AlleleInteger extends AlleleForestry implements IAlleleInteger {
+public class AlleleInteger extends Allele implements IAlleleInteger {
 
 	private final int value;
 
-	public AlleleInteger(String prefix, String name, int value) {
-		this(prefix, name, value, false);
+	public AlleleInteger(String uid, int value) {
+		this(uid, value, false);
 	}
 
-	public AlleleInteger(String prefix, String name, int value, boolean isDominant) {
-		super(prefix, name, isDominant);
+	public AlleleInteger(String uid, int value, boolean isDominant) {
+		super(uid, isDominant);
 		this.value = value;
 	}
 
@@ -29,4 +30,15 @@ public class AlleleInteger extends AlleleForestry implements IAlleleInteger {
 	public int getValue() {
 		return value;
 	}
+
+	public AlleleInteger setName(String customPrefix, String name) {
+		String customName = "gui." + customPrefix + "." + name;
+		if (StringUtil.canTranslate(customName)) {
+			this.name = customName;
+		} else {
+			this.name = "gui." + name;
+		}
+		return this;
+	}
+
 }

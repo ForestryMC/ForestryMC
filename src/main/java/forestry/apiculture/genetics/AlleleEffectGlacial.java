@@ -24,8 +24,8 @@ import forestry.core.vect.Vect;
 
 public class AlleleEffectGlacial extends AlleleEffectThrottled {
 
-	public AlleleEffectGlacial() {
-		super("glacial", false, 200, true, false);
+	public AlleleEffectGlacial(String uid) {
+		super(uid, "glacial", false, 200, true, false);
 	}
 
 	@Override

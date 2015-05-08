@@ -16,15 +16,15 @@ import net.minecraft.world.World;
 import forestry.api.arboriculture.IAlleleLeafEffect;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.genetics.IEffectData;
-import forestry.core.genetics.alleles.AlleleForestry;
+import forestry.core.genetics.Allele;
 import forestry.core.vect.Vect;
 
-public class AlleleLeafEffectNone extends AlleleForestry implements IAlleleLeafEffect {
+public class AlleleLeafEffectNone extends Allele implements IAlleleLeafEffect {
 
 	private static final int[] DEFAULT_EFFECT_AREA = new int[]{12, 12, 12};
 
-	public AlleleLeafEffectNone() {
-		super("leaves", "none", true);
+	public AlleleLeafEffectNone(String uid) {
+		super(uid, true);
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class AlleleLeafEffectNone extends AlleleForestry implements IAlleleLeafE
 		return storedData;
 	}
 
-	protected static AxisAlignedBB getBounding(int x, int y, int z, float modifier) {
+	protected AxisAlignedBB getBounding(int x, int y, int z, float modifier) {
 		int[] areaAr = DEFAULT_EFFECT_AREA;
 		Vect area = new Vect(areaAr[0], areaAr[1], areaAr[2]).multiply(modifier);
 		Vect offset = new Vect(-Math.round(area.x / 2), -Math.round(area.y / 2), -Math.round(area.z / 2));

@@ -20,10 +20,10 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBee;
 import forestry.apiculture.entities.EntityBee;
 import forestry.core.proxy.Proxies;
+import forestry.plugins.PluginApiculture;
 
 public class BeeItemRenderer implements IItemRenderer {
 
@@ -67,16 +67,16 @@ public class BeeItemRenderer implements IItemRenderer {
 	}
 
 	private IBee initBee(ItemStack item, boolean scaled) {
-		IBee bee = BeeManager.beeRoot.getMember(item);
+		IBee bee = PluginApiculture.beeInterface.getMember(item);
 		if (bee == null) {
-			bee = BeeManager.beeRoot.templateAsIndividual(BeeManager.beeRoot.getDefaultTemplate());
+			bee = PluginApiculture.beeInterface.templateAsIndividual(PluginApiculture.beeInterface.getDefaultTemplate());
 		}
 
 		if (entity == null) {
 			entity = new EntityBee(Proxies.common.getClientInstance().theWorld);
 		}
 		entity.setSpecies(bee.getGenome().getPrimary());
-		entity.setType(BeeManager.beeRoot.getType(item));
+		entity.setType(PluginApiculture.beeInterface.getType(item));
 		/*
 		if(scaled)
 			entity.setScale(butterfly.getSize());

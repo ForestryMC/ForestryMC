@@ -10,49 +10,110 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.world.World;
+import java.util.ArrayList;
+import java.util.List;
 
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IAlleleBeeSpecies;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+
+import net.minecraftforge.common.BiomeDictionary;
+
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.IBeeMutationCustom;
+import forestry.api.apiculture.IBeeMutation;
 import forestry.api.apiculture.IBeeRoot;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.core.genetics.Mutation;
+import forestry.plugins.PluginApiculture;
 
-public class BeeMutation extends Mutation implements IBeeMutationCustom {
+public class BeeMutation extends Mutation implements IBeeMutation {
+	boolean requiresDay = false;
+	boolean requiresNight = false;
 
-	public BeeMutation(IAlleleBeeSpecies bee0, IAlleleBeeSpecies bee1, IAllele[] result, int chance) {
-		super(bee0, bee1, result, chance);
+	private final List<BiomeDictionary.Type> restrictBiomeTypes = new ArrayList<BiomeDictionary.Type>();
+	private boolean strictBiomeCheck = false;
+
+	public BeeMutation(BeeDefinition bee0, BeeDefinition bee1, BeeDefinition result, int chance) {
+		super(bee0.getGenome().getPrimary(), bee1.getGenome().getPrimary(), result.getTemplate(), chance);
 	}
 
 	@Override
 	public IBeeRoot getRoot() {
-		return BeeManager.beeRoot;
+		return PluginApiculture.beeInterface;
+	}
+
+	public BeeMutation enableStrictBiomeCheck() {
+		strictBiomeCheck = true;
+		return this;
+	}
+
+	public BeeMutation restrictBiomeType(BiomeDictionary.Type type) {
+		restrictBiomeTypes.add(type);
+		specialConditions.add(String.format("Is restricted to %s-like environments.", type.toString()));
+		return this;
+	}
+
+	public BeeMutation requireDay() {
+		requiresDay = true;
+		requiresNight = false;
+		specialConditions.add("Can only occur during the day.");
+		return this;
+	}
+
+	public BeeMutation requireNight() {
+		requiresDay = false;
+		requiresNight = true;
+		specialConditions.add("Can only occur during the night.");
+		return this;
 	}
 
 	@Override
 	public float getChance(IBeeHousing housing, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
-		return getChance(housing, (IAlleleBeeSpecies) allele0, (IAlleleBeeSpecies) allele1, (IBeeGenome) genome0, (IBeeGenome) genome1);
-	}
-
-	@Override
-	public float getChance(IBeeHousing housing, IAlleleBeeSpecies allele0, IAlleleBeeSpecies allele1, IBeeGenome genome0, IBeeGenome genome1) {
 
 		World world = housing.getWorld();
-		int x = housing.getXCoord();
-		int y = housing.getYCoord();
-		int z = housing.getZCoord();
-
-		float processedChance = super.getChance(world, x, y, z, allele0, allele1, genome0, genome1);
-		if (processedChance <= 0) {
+		if (requiresDay && !world.isDaytime()) {
 			return 0;
 		}
 
-		processedChance *= housing.getMutationModifier(genome0, genome1, 1f);
-		processedChance *= BeeManager.beeRoot.getBeekeepingMode(world).getMutationModifier(genome0, genome1, 1f);
+		if (requiresNight && world.isDaytime()) {
+			return 0;
+		}
+
+		// Skip if we are restricted by biomes and this one does not match.
+		if (restrictBiomeTypes.size() > 0) {
+			boolean noneMatched = true;
+
+			BiomeGenBase biome = housing.getBiome();
+			if (strictBiomeCheck) {
+				BiomeDictionary.Type[] types = BiomeDictionary.getTypesForBiome(biome);
+				if (types.length == 1 && restrictBiomeTypes.contains(types[0])) {
+					noneMatched = false;
+				}
+			} else {
+				for (BiomeDictionary.Type type : restrictBiomeTypes) {
+					if (BiomeDictionary.isBiomeOfType(biome, type)) {
+						noneMatched = false;
+						break;
+					}
+				}
+			}
+
+			if (noneMatched) {
+				return 0;
+			}
+		}
+
+		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenAt(housing.getXCoord(), housing.getZCoord());
+		if (biome.temperature < minTemperature || biome.temperature > maxTemperature) {
+			return 0;
+		}
+		if (biome.rainfall < minRainfall || biome.rainfall > maxRainfall) {
+			return 0;
+		}
+
+		float processedChance = chance * housing.getMutationModifier((IBeeGenome) genome0, (IBeeGenome) genome1, 1f)
+				* PluginApiculture.beeInterface.getBeekeepingMode(world).getMutationModifier((IBeeGenome) genome0, (IBeeGenome) genome1, 1f);
 		if (processedChance <= 0) {
 			return 0;
 		}

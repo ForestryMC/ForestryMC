@@ -21,8 +21,8 @@ import forestry.api.genetics.IEffectData;
 
 public class AlleleEffectExploration extends AlleleEffectThrottled {
 
-	public AlleleEffectExploration() {
-		super("exploration", false, 80, true, false);
+	public AlleleEffectExploration(String uid) {
+		super(uid, "exploration", false, 80, true, false);
 	}
 
 	@Override

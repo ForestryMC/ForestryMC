@@ -2,13 +2,13 @@ package forestry.apiculture.genetics;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.genetics.IAllele;
-import forestry.core.genetics.alleles.Allele;
+import forestry.core.genetics.Allele;
+import forestry.plugins.PluginApiculture;
 
 public abstract class BeeVariation implements IBeeDefinition {
 
@@ -18,7 +18,7 @@ public abstract class BeeVariation implements IBeeDefinition {
 	public BeeVariation(IBeeDefinition bee) {
 		template = bee.getTemplate();
 		initializeTemplate(template);
-		genome = BeeManager.beeRoot.templateAsGenome(template);
+		genome = PluginApiculture.beeInterface.templateAsGenome(template);
 	}
 
 	protected abstract void initializeTemplate(IAllele[] template);
@@ -41,7 +41,7 @@ public abstract class BeeVariation implements IBeeDefinition {
 	@Override
 	public final ItemStack getMemberStack(EnumBeeType beeType) {
 		IBee bee = getIndividual();
-		return BeeManager.beeRoot.getMemberStack(bee, beeType.ordinal());
+		return PluginApiculture.beeInterface.getMemberStack(bee, beeType.ordinal());
 	}
 
 	public static class RainResist extends BeeVariation {
@@ -51,7 +51,7 @@ public abstract class BeeVariation implements IBeeDefinition {
 
 		@Override
 		protected void initializeTemplate(IAllele[] template) {
-			Allele.helper.set(template, EnumBeeChromosome.TOLERANT_FLYER, true);
+			template[EnumBeeChromosome.TOLERANT_FLYER.ordinal()] = Allele.boolTrue;
 		}
 	}
 }

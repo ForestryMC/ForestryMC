@@ -13,8 +13,8 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 	
 	public static final int MAX_BLOCK_FIND_TRIES = 5;
 
-	public AlleleEffectFertile() {
-		super("fertile", false, 6, true, false);
+	public AlleleEffectFertile(String uid) {
+		super(uid, "fertile", false, 6, true, false);
 	}
 
 	@Override

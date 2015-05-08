@@ -24,7 +24,6 @@ import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -39,6 +38,7 @@ import forestry.apiculture.genetics.BeeGenome;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.utils.StringUtil;
+import forestry.plugins.PluginApiculture;
 
 public class ItemBeeGE extends ItemGE {
 
@@ -123,7 +123,7 @@ public class ItemBeeGE extends ItemGE {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void addCreativeItems(List itemList, boolean hideSecrets) {
 
-		for (IIndividual individual : BeeManager.beeRoot.getIndividualTemplates()) {
+		for (IIndividual individual : PluginApiculture.beeInterface.getIndividualTemplates()) {
 			// Don't show secret bees unless ordered to.
 			if (hideSecrets && individual.isSecret() && !Config.isDebug) {
 				continue;
@@ -188,7 +188,7 @@ public class ItemBeeGE extends ItemGE {
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconFromSpecies(IAlleleBeeSpecies species, int renderPass) {
 		if (species == null) {
-			species = (IAlleleBeeSpecies) BeeManager.beeRoot.getDefaultTemplate()[EnumBeeChromosome.SPECIES.ordinal()];
+			species = (IAlleleBeeSpecies) PluginApiculture.beeInterface.getDefaultTemplate()[EnumBeeChromosome.SPECIES.ordinal()];
 		}
 
 		return species.getIcon(type, renderPass);

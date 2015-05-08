@@ -53,7 +53,7 @@ import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.arboriculture.network.PacketLeaf;
 import forestry.arboriculture.network.PacketRipeningUpdate;
 import forestry.core.EnumErrorCode;
-import forestry.core.genetics.alleles.Allele;
+import forestry.core.genetics.Allele;
 import forestry.core.network.ForestryPacket;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;

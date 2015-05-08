@@ -23,7 +23,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
-import forestry.api.apiculture.BeeManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -44,6 +43,7 @@ import forestry.core.network.GuiId;
 import forestry.core.network.PacketPayload;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.GuiUtil;
+import forestry.plugins.PluginApiculture;
 
 public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankContainer {
 
@@ -211,7 +211,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		IIndividual displayIndividual = AlleleManager.alleleRegistry.getIndividual(displayStack);
-		int type = BeeManager.beeRoot.getType(displayStack).ordinal();
+		int type = PluginApiculture.beeInterface.getType(displayStack).ordinal();
 
 		PacketPayload payload = new PacketPayload();
 		payload.stringPayload = new String[1];
@@ -229,10 +229,10 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			int type = payload.shortPayload[0];
 			int stackSize = payload.shortPayload[1];
 
-			IAllele[] template = BeeManager.beeRoot.getTemplate(individualUID);
-			IIndividual individual = BeeManager.beeRoot.templateAsIndividual(template);
+			IAllele[] template = PluginApiculture.beeInterface.getTemplate(individualUID);
+			IIndividual individual = PluginApiculture.beeInterface.templateAsIndividual(template);
 
-			newIndividualOnDisplay = BeeManager.beeRoot.getMemberStack(individual, type);
+			newIndividualOnDisplay = PluginApiculture.beeInterface.getMemberStack(individual, type);
 			newIndividualOnDisplay.stackSize = stackSize;
 		}
 

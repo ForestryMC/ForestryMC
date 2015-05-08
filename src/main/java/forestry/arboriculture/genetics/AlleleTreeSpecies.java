@@ -40,7 +40,7 @@ import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.worldgen.WorldGenArboriculture;
 import forestry.arboriculture.worldgen.WorldGenBalsa;
 import forestry.core.config.ForestryItem;
-import forestry.core.genetics.alleles.AlleleSpecies;
+import forestry.core.genetics.AlleleSpecies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.Utils;
 
@@ -93,7 +93,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 
 	public AlleleTreeSpecies(String uid, boolean isDominant, String name, IClassification branch, String binomial, int primaryColor, int secondaryColor,
 			Class<? extends WorldGenArboriculture> generator, ItemStack wood) {
-		super("forestry." + uid, "Sengir", "for.description." + uid, isDominant, "trees.species." + name, branch, binomial, true);
+		super(uid, isDominant, "trees.species." + name, branch, binomial, true);
 
 		this.root = (ITreeRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees");
 		this.generatorClass = generator;
@@ -238,8 +238,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister register) {
 		if (vanillaMap < 0) {
-			String name = uid.substring("forestry.".length());
-			icon = TextureManager.getInstance().registerTex(register, "germlings/sapling." + name);
+			icon = TextureManager.getInstance().registerTex(register, "germlings/sapling." + uid);
 		} else {
 			icon = Blocks.sapling.getIcon(0, vanillaMap);
 		}

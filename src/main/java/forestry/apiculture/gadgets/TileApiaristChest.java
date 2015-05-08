@@ -10,14 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import forestry.api.apiculture.BeeManager;
+import forestry.api.genetics.AlleleManager;
+import forestry.apiculture.genetics.BeeHelper;
 import forestry.core.gadgets.TileNaturalistChest;
 import forestry.core.network.GuiId;
 
 public class TileApiaristChest extends TileNaturalistChest {
 
 	public TileApiaristChest() {
-		super(BeeManager.beeRoot, GuiId.ApiaristChestGUI.ordinal());
+		super(AlleleManager.alleleRegistry.getSpeciesRoot(BeeHelper.UID), GuiId.ApiaristChestGUI.ordinal());
 	}
 
 }

@@ -54,11 +54,6 @@ public class MutableVect implements IVect {
 		return this;
 	}
 
-	@Override
-	public int[] toArray() {
-		return new int[]{x, y, z};
-	}
-
 	public boolean advancePositionInArea(Vect area) {
 		// Increment z first until end reached
 		if (z < area.z - 1) {

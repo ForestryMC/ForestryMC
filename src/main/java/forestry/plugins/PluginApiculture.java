@@ -49,6 +49,7 @@ import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeRoot;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
@@ -61,6 +62,7 @@ import forestry.apiculture.GuiHandlerApiculture;
 import forestry.apiculture.SaveEventHandlerApiculture;
 import forestry.apiculture.VillageHandlerApiculture;
 import forestry.apiculture.commands.CommandBee;
+import forestry.apiculture.flowers.FlowerProvider;
 import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.gadgets.BlockAlveary;
 import forestry.apiculture.gadgets.BlockBeehives;
@@ -95,14 +97,12 @@ import forestry.apiculture.genetics.AlleleEffectRadioactive;
 import forestry.apiculture.genetics.AlleleEffectRepulsion;
 import forestry.apiculture.genetics.AlleleEffectResurrection;
 import forestry.apiculture.genetics.AlleleEffectSnowing;
-import forestry.apiculture.genetics.BeeBranchDefinition;
-import forestry.apiculture.genetics.BeeDefinition;
-import forestry.apiculture.genetics.BeeFactory;
+import forestry.apiculture.genetics.AlleleFlowers;
 import forestry.apiculture.genetics.BeeHelper;
-import forestry.apiculture.genetics.BeeMutationFactory;
 import forestry.apiculture.genetics.BeekeepingMode;
+import forestry.apiculture.genetics.BeeDefinition;
+import forestry.apiculture.genetics.BeeBranchDefinition;
 import forestry.apiculture.genetics.HiveDrop;
-import forestry.apiculture.genetics.JubilanceFactory;
 import forestry.apiculture.items.ItemAlvearyBlock;
 import forestry.apiculture.items.ItemArmorApiarist;
 import forestry.apiculture.items.ItemBeeGE;
@@ -131,7 +131,7 @@ import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.gadgets.TileAnalyzer;
-import forestry.core.genetics.alleles.Allele;
+import forestry.core.genetics.Allele;
 import forestry.core.interfaces.IPacketHandler;
 import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemForestry;
@@ -157,6 +157,10 @@ public class PluginApiculture extends ForestryPlugin {
 	public static boolean apiarySideSensitive = false;
 	public static boolean fancyRenderedBees = false;
 
+	/**
+	 * See {@link IBeeRoot} for details
+	 */
+	public static IBeeRoot beeInterface;
 	public static HiveRegistry hiveRegistry;
 
 	public static MachineDefinition definitionApiary;
@@ -176,20 +180,15 @@ public class PluginApiculture extends ForestryPlugin {
 
 		BeeManager.villageBees = new ArrayList[]{new ArrayList<IBeeGenome>(), new ArrayList<IBeeGenome>()};
 
-		BeeManager.beeFactory = new BeeFactory();
-		BeeManager.beeMutationFactory = new BeeMutationFactory();
-		BeeManager.jubilanceFactory = new JubilanceFactory();
-
 		// Init bee interface
-		BeeManager.beeRoot = new BeeHelper();
-		AlleleManager.alleleRegistry.registerSpeciesRoot(BeeManager.beeRoot);
+		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginApiculture.beeInterface = new BeeHelper());
 
 		// Modes
-		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.easy);
-		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.normal);
-		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.hard);
-		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.hardcore);
-		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.insane);
+		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.easy);
+		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.normal);
+		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.hard);
+		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.hardcore);
+		PluginApiculture.beeInterface.registerBeekeepingMode(BeekeepingMode.insane);
 	}
 
 	@Override
@@ -785,26 +784,37 @@ public class PluginApiculture extends ForestryPlugin {
 			apidae.addMemberGroup(beeBranch.getBranch());
 		}
 
+		// / BEES // FLOWER PROVIDERS 1500 - 1599
+		Allele.flowersVanilla = new AlleleFlowers("flowersVanilla", new FlowerProvider(FlowerManager.FlowerTypeVanilla, "flowers.vanilla"), true);
+		Allele.flowersNether = new AlleleFlowers("flowersNether", new FlowerProvider(FlowerManager.FlowerTypeNether, "flowers.nether"));
+		Allele.flowersCacti = new AlleleFlowers("flowersCacti", new FlowerProvider(FlowerManager.FlowerTypeCacti, "flowers.cacti"));
+		Allele.flowersMushrooms = new AlleleFlowers("flowersMushrooms", new FlowerProvider(FlowerManager.FlowerTypeMushrooms, "flowers.mushroom"));
+		Allele.flowersEnd = new AlleleFlowers("flowersEnd", new FlowerProvider(FlowerManager.FlowerTypeEnd, "flowers.end"));
+		Allele.flowersJungle = new AlleleFlowers("flowersJungle", new FlowerProvider(FlowerManager.FlowerTypeJungle, "flowers.jungle"));
+		Allele.flowersSnow = new AlleleFlowers("flowersSnow", new FlowerProvider(FlowerManager.FlowerTypeSnow, "flowers.vanilla"), true);
+		Allele.flowersWheat = new AlleleFlowers("flowersWheat", new FlowerProvider(FlowerManager.FlowerTypeWheat, "flowers.wheat"), true);
+		Allele.flowersGourd = new AlleleFlowers("flowersGourd", new FlowerProvider(FlowerManager.FlowerTypeGourd, "flowers.gourd"), true);
+
 		// / BEES // EFFECTS 1800 - 1899
-		Allele.effectNone = new AlleleEffectNone("none");
-		Allele.effectAggressive = new AlleleEffectAggressive();
-		Allele.effectHeroic = new AlleleEffectHeroic();
-		Allele.effectBeatific = new AlleleEffectPotion("beatific", false, Potion.regeneration, 100, true);
-		Allele.effectMiasmic = new AlleleEffectMiasmic();
-		Allele.effectMisanthrope = new AlleleEffectMisanthrope();
-		Allele.effectGlacial = new AlleleEffectGlacial();
-		Allele.effectRadioactive = new AlleleEffectRadioactive();
-		Allele.effectCreeper = new AlleleEffectCreeper();
-		Allele.effectIgnition = new AlleleEffectIgnition();
-		Allele.effectExploration = new AlleleEffectExploration();
-		Allele.effectFestiveEaster = new AlleleEffectNone("festiveEaster");
-		Allele.effectSnowing = new AlleleEffectSnowing();
-		Allele.effectDrunkard = new AlleleEffectPotion("drunkard", false, Potion.confusion, 100, false);
-		Allele.effectReanimation = new AlleleEffectResurrection("reanimation", AlleleEffectResurrection.getReanimationList());
-		Allele.effectResurrection = new AlleleEffectResurrection("resurrection", AlleleEffectResurrection.getResurrectionList());
-		Allele.effectRepulsion = new AlleleEffectRepulsion();
-		Allele.effectFertile = new AlleleEffectFertile();
-		Allele.effectMycophilic = new AlleleEffectFungification();
+		Allele.effectNone = new AlleleEffectNone("effectNone");
+		Allele.effectAggressive = new AlleleEffectAggressive("effectAggressive");
+		Allele.effectHeroic = new AlleleEffectHeroic("effectHeroic");
+		Allele.effectBeatific = new AlleleEffectPotion("effectBeatific", "beatific", false, Potion.regeneration, 100, true);
+		Allele.effectMiasmic = new AlleleEffectMiasmic("effectMiasmic");
+		Allele.effectMisanthrope = new AlleleEffectMisanthrope("effectMisanthrope");
+		Allele.effectGlacial = new AlleleEffectGlacial("effectGlacial");
+		Allele.effectRadioactive = new AlleleEffectRadioactive("effectRadioactive");
+		Allele.effectCreeper = new AlleleEffectCreeper("effectCreeper");
+		Allele.effectIgnition = new AlleleEffectIgnition("effectIgnition");
+		Allele.effectExploration = new AlleleEffectExploration("effectExploration");
+		Allele.effectFestiveEaster = new AlleleEffectNone("effectFestiveEaster");
+		Allele.effectSnowing = new AlleleEffectSnowing("effectSnowing");
+		Allele.effectDrunkard = new AlleleEffectPotion("effectDrunkard", "drunkard", false, Potion.confusion, 100, false);
+		Allele.effectReanimation = new AlleleEffectResurrection("effectReanimation", "reanimation", AlleleEffectResurrection.getReanimationList());
+		Allele.effectResurrection = new AlleleEffectResurrection("effectResurrection", "resurrection", AlleleEffectResurrection.getResurrectionList());
+		Allele.effectRepulsion = new AlleleEffectRepulsion("effectRepulsion");
+		Allele.effectFertile = new AlleleEffectFertile("effectFertile");
+		Allele.effectMycophilic = new AlleleEffectFungification("effectMycophilic");
 	}
 
 	public static float getSecondPrincessChance() {
