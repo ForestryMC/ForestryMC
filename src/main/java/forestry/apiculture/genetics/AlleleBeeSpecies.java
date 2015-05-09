@@ -59,6 +59,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 	private IBeeIconProvider beeIconProvider;
 	private IJubilanceProvider jubilanceProvider;
+	private boolean nocturnal = false;
 
 	public AlleleBeeSpecies(String uid, String authority, String unlocalizedDescription, boolean dominant, String name, IClassification branch, String binomial, int primaryColor, int secondaryColor) {
 		super(uid, authority, unlocalizedDescription, dominant, name, branch, binomial, false);
@@ -106,6 +107,12 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	@Override
 	public IAlleleBeeSpeciesCustom setJubilanceProvider(IJubilanceProvider provider) {
 		this.jubilanceProvider = provider;
+		return this;
+	}
+
+	@Override
+	public IAlleleBeeSpeciesCustom setNocturnal() {
+		nocturnal = true;
 		return this;
 	}
 
@@ -184,7 +191,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	/* OTHER */
 	@Override
 	public boolean isNocturnal() {
-		return false;
+		return nocturnal;
 	}
 
 	@Override
