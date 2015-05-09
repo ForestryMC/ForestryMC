@@ -55,6 +55,7 @@ import forestry.core.gadgets.TileEscritoire;
 import forestry.core.genetics.ClimateHelper;
 import forestry.core.genetics.ItemResearchNote;
 import forestry.core.genetics.alleles.Allele;
+import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.AlleleRegistry;
 import forestry.core.interfaces.IPickupHandler;
@@ -97,6 +98,7 @@ public class PluginCore extends ForestryPlugin {
 		AlleleRegistry alleleRegistry = new AlleleRegistry();
 		AlleleManager.alleleRegistry = alleleRegistry;
 		AlleleManager.climateHelper = new ClimateHelper();
+		AlleleManager.alleleFactory = new AlleleFactory();
 		alleleRegistry.initialize();
 
 		Allele.setupAPI();

@@ -957,7 +957,7 @@ public enum BeeDefinition implements IBeeDefinition {
 
 		String uid = "forestry." + species;
 		String description = "for.description." + species;
-		String name = "bees.species." + lowercaseName;
+		String name = "for.bees.species." + lowercaseName;
 
 		this.branch = branch;
 		this.species = BeeManager.beeFactory.createSpecies(uid, dominant, "Sengir", name, description, branch.getBranch(), binomial, primary.getRGB(), secondary.getRGB());

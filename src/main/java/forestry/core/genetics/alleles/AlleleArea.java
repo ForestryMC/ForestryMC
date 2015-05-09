@@ -13,12 +13,12 @@ package forestry.core.genetics.alleles;
 import forestry.api.genetics.IAlleleArea;
 import forestry.core.vect.Vect;
 
-public class AlleleArea extends AlleleForestry implements IAlleleArea {
+public class AlleleArea extends AlleleCategorized implements IAlleleArea {
 
 	private final int[] area;
 
-	public AlleleArea(String prefix, String name, int[] value, boolean isDominant) {
-		super(prefix, name, isDominant, false);
+	public AlleleArea(String modId, String category, String name, int[] value, boolean isDominant) {
+		super(modId, category, name, isDominant);
 		this.area = value;
 	}
 	

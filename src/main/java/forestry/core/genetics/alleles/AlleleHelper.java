@@ -22,11 +22,12 @@ import forestry.api.genetics.IAlleleBoolean;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IChromosomeType;
 import forestry.apiculture.flowers.FlowerProvider;
-import forestry.apiculture.genetics.AlleleFlowers;
 import forestry.core.vect.IVect;
 import forestry.plugins.PluginManager;
 
 public class AlleleHelper implements IAlleleHelper {
+
+	private static final String modId = "forestry";
 
 	private final Map<Class, Map<?, ? extends IAllele>> alleleMaps = new HashMap<Class, Map<?, ? extends IAllele>>();
 
@@ -79,14 +80,14 @@ public class AlleleHelper implements IAlleleHelper {
 
 		Map<Integer, IAlleleInteger> integers = new HashMap<Integer, IAlleleInteger>();
 		for (int i = 1; i <= 10; i++) {
-			IAlleleInteger alleleInteger = new AlleleInteger("i", i + "d", i, true);
+			IAlleleInteger alleleInteger = new AlleleInteger(modId, "i", i + "d", i, true);
 			integers.put(i, alleleInteger);
 		}
 		alleleMaps.put(Integer.class, integers);
 
 		Map<Boolean, IAlleleBoolean> booleans = new HashMap<Boolean, IAlleleBoolean>();
-		booleans.put(true, new AlleleBoolean("bool", true, false));
-		booleans.put(false, new AlleleBoolean("bool", false, false));
+		booleans.put(true, new AlleleBoolean(modId, "bool", true, false));
+		booleans.put(false, new AlleleBoolean(modId, "bool", false, false));
 		alleleMaps.put(Boolean.class, booleans);
 	}
 
@@ -144,18 +145,18 @@ public class AlleleHelper implements IAlleleHelper {
 
 		Class<?> valueClass = value.getClass();
 		if (Float.class.isAssignableFrom(valueClass)) {
-			return new AlleleFloat(category, name, (Float) value, isDominant);
+			return AlleleManager.alleleFactory.createFloat(modId, category, name, (Float) value, isDominant);
 		} else if (Integer.class.isAssignableFrom(valueClass)) {
-			return new AlleleInteger(category, name, (Integer) value, isDominant);
+			return AlleleManager.alleleFactory.createInteger(modId, category, name, (Integer) value, isDominant);
 		} else if (IVect.class.isAssignableFrom(valueClass)) {
-			int[] area = ((IVect) value).toArray();
-			return new AlleleArea(category, name, area, isDominant);
+			IVect area = (IVect) value;
+			return AlleleManager.alleleFactory.createArea(modId, category, name, area.getX(), area.getY(), area.getZ(), isDominant);
 		} else if (Boolean.class.isAssignableFrom(valueClass)) {
-			return new AlleleBoolean(category, (Boolean) value, isDominant);
+			return AlleleManager.alleleFactory.createBoolean(modId, category, (Boolean) value, isDominant);
 		} else if (EnumTolerance.class.isAssignableFrom(valueClass)) {
-			return new AlleleTolerance(category, name, (EnumTolerance) value, isDominant);
+			return new AlleleTolerance(modId, category, name, (EnumTolerance) value, isDominant);
 		} else if (FlowerProvider.class.isAssignableFrom(valueClass)) {
-			return new AlleleFlowers(category, name, (FlowerProvider) value, isDominant);
+			return AlleleManager.alleleFactory.createFlowers(modId, category, name, (FlowerProvider) value, isDominant);
 		}
 		throw new RuntimeException("could not create allele for category: " + category + " and value " + valueClass);
 	}

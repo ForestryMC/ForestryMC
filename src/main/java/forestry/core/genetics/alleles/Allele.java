@@ -12,6 +12,8 @@ package forestry.core.genetics.alleles;
 
 import java.util.EnumSet;
 
+import net.minecraft.util.StatCollector;
+
 import net.minecraftforge.common.EnumPlantType;
 
 import forestry.api.arboriculture.IAlleleFruit;
@@ -21,20 +23,23 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.ILegacyHandler;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
-import forestry.core.utils.StringUtil;
 
 public abstract class Allele implements IAllele {
 
 	protected final String uid;
 	protected final boolean isDominant;
-	protected String name;
+	protected final String unlocalizedName;
 
-	protected Allele(String uid, boolean isDominant, boolean skipRegister) {
+	protected Allele(String uid, String unlocalizedName, boolean isDominant) {
+		this(uid, unlocalizedName, isDominant, true);
+	}
+
+	protected Allele(String uid, String unlocalizedName, boolean isDominant, boolean doRegister) {
 		this.uid = uid;
 		this.isDominant = isDominant;
-		this.name = "allele." + uid;
+		this.unlocalizedName = unlocalizedName;
 		
-		if (!skipRegister) {
+		if (doRegister) {
 			AlleleManager.alleleRegistry.registerAllele(this);
 		}
 	}
@@ -49,7 +54,7 @@ public abstract class Allele implements IAllele {
 		return isDominant;
 	}
 
-	public static IAlleleHelper helper;
+	public static AlleleHelper helper;
 
 	// / TREES // SPECIES 512 - 1023
 	public static IAlleleTreeSpecies treeOak;
@@ -328,12 +333,12 @@ public abstract class Allele implements IAllele {
 
 	@Override
 	public String getName() {
-		return StringUtil.localize(getUnlocalizedName());
+		return StatCollector.translateToLocal(getUnlocalizedName());
 	}
 
 	@Override
 	public String getUnlocalizedName() {
-		return name;
+		return unlocalizedName;
 	}
 
 	@Override

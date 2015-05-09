@@ -16,15 +16,15 @@ import net.minecraft.world.World;
 import forestry.api.arboriculture.IAlleleLeafEffect;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.genetics.IEffectData;
-import forestry.core.genetics.alleles.AlleleForestry;
+import forestry.core.genetics.alleles.AlleleCategorized;
 import forestry.core.vect.Vect;
 
-public class AlleleLeafEffectNone extends AlleleForestry implements IAlleleLeafEffect {
+public class AlleleLeafEffectNone extends AlleleCategorized implements IAlleleLeafEffect {
 
 	private static final int[] DEFAULT_EFFECT_AREA = new int[]{12, 12, 12};
 
 	public AlleleLeafEffectNone() {
-		super("leaves", "none", true);
+		super("forestry", "leaves", "none", true);
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class AlleleLeafEffectNone extends AlleleForestry implements IAlleleLeafE
 
 	@Override
 	public String getUnlocalizedName() {
-		return "arboriculture.effect.none";
+		return "for.arboriculture.effect.none";
 	}
 
 	@Override

@@ -14,13 +14,13 @@ import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
-import forestry.core.genetics.alleles.AlleleForestry;
+import forestry.core.genetics.alleles.AlleleCategorized;
 import forestry.plugins.PluginApiculture;
 
-public class AlleleEffectNone extends AlleleForestry implements IAlleleBeeEffect {
+public class AlleleEffectNone extends AlleleCategorized implements IAlleleBeeEffect {
 
 	public AlleleEffectNone(String name) {
-		super("effect", name, true);
+		super("forestry", "effect", name, true);
 	}
 
 	@Override
@@ -36,11 +36,6 @@ public class AlleleEffectNone extends AlleleForestry implements IAlleleBeeEffect
 	@Override
 	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 		return storedData;
-	}
-
-	@Override
-	public String getUnlocalizedName() {
-		return "apiculture.effect.none";
 	}
 
 	@Override

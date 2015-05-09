@@ -27,7 +27,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.core.IIconProvider;
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
 import forestry.api.lepidopterology.EnumFlutterType;
@@ -35,10 +34,9 @@ import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.core.config.Defaults;
 import forestry.core.genetics.alleles.AlleleSpecies;
+import forestry.plugins.PluginLepidopterology;
 
 public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButterflySpecies {
-
-	private final IButterflyRoot root;
 
 	private final String texture;
 	private final int serumColour;
@@ -51,16 +49,20 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	private final Map<ItemStack, Float> butterflyLoot = new HashMap<ItemStack, Float>();
 	private final Map<ItemStack, Float> caterpillarLoot = new HashMap<ItemStack, Float>();
 
-	public AlleleButterflySpecies(String uid, boolean isDominant, String name, IClassification branch, String binomial, int serumColour) {
-		super("forestry." + uid, "Sengir", "for.description." + uid, isDominant, "butterflies.species." + branch.getParent().getUID().substring((branch.getParent().getLevel().name().toLowerCase(Locale.ENGLISH)).length() + 1) + "." + name, branch, binomial, true);
-		this.root = (IButterflyRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies");
+	public AlleleButterflySpecies(String uid, boolean isDominant, String speciesName, IClassification branch, String binomial, int serumColour) {
+		super("forestry." + uid, getUnlocalizedName(speciesName, branch), "Sengir", "for.description." + uid, isDominant, branch, binomial, true);
 		this.serumColour = serumColour;
 		texture = "forestry:" + Defaults.TEXTURE_PATH_ENTITIES + "/butterflies/" + uid + ".png";
 	}
 
+	private static String getUnlocalizedName(String name, IClassification branch) {
+		IClassification parent = branch.getParent();
+		return "for.butterflies.species." + parent.getUID().substring((parent.getLevel().name().toLowerCase(Locale.ENGLISH)).length() + 1) + '.' + name;
+	}
+
 	@Override
 	public IButterflyRoot getRoot() {
-		return root;
+		return PluginLepidopterology.butterflyInterface;
 	}
 
 	public AlleleButterflySpecies setRarity(float rarity) {

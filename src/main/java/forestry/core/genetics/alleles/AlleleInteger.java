@@ -12,16 +12,12 @@ package forestry.core.genetics.alleles;
 
 import forestry.api.genetics.IAlleleInteger;
 
-public class AlleleInteger extends AlleleForestry implements IAlleleInteger {
+public class AlleleInteger extends AlleleCategorized implements IAlleleInteger {
 
 	private final int value;
 
-	public AlleleInteger(String prefix, String name, int value) {
-		this(prefix, name, value, false);
-	}
-
-	public AlleleInteger(String prefix, String name, int value, boolean isDominant) {
-		super(prefix, name, isDominant);
+	public AlleleInteger(String modId, String category, String name, int value, boolean isDominant) {
+		super(modId, category, name, isDominant);
 		this.value = value;
 	}
 

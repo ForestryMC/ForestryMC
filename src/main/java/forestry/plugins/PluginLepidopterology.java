@@ -277,7 +277,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 
 		Allele.lepiDianaFrit = new AlleleButterflySpecies("lepiDianaFrit", true, "dianaFritillary", speyeria, "diana", 0xffac05).setRarity(0.6f);
 
-		Allele.butterflyNone = new AlleleEffectNone("bf", "none", false);
+		Allele.butterflyNone = new AlleleEffectNone();
 	}
 
 	private static IClassification createButterflyBranch(IClassification family, String scientific) {

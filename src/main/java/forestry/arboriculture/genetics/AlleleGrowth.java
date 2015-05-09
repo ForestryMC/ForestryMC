@@ -12,9 +12,9 @@ package forestry.arboriculture.genetics;
 
 import forestry.api.arboriculture.IAlleleGrowth;
 import forestry.api.arboriculture.IGrowthProvider;
-import forestry.core.genetics.alleles.AlleleForestry;
+import forestry.core.genetics.alleles.AlleleCategorized;
 
-public class AlleleGrowth extends AlleleForestry implements IAlleleGrowth {
+public class AlleleGrowth extends AlleleCategorized implements IAlleleGrowth {
 
 	private final IGrowthProvider provider;
 
@@ -23,7 +23,7 @@ public class AlleleGrowth extends AlleleForestry implements IAlleleGrowth {
 	}
 
 	public AlleleGrowth(String name, IGrowthProvider provider, boolean isDominant) {
-		super("growth", name, isDominant);
+		super("forestry", "growth", name, isDominant);
 		this.provider = provider;
 	}
 

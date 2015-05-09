@@ -37,19 +37,19 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCust
 
 	private final String binomial;
 	private final String authority;
-	private String description = null;
+	private final String description;
+	private final IClassification branch;
+
 	private boolean hasEffect = false;
 	private boolean isSecret = false;
 	private boolean isCounted = true;
-	private IClassification branch = null;
 	private EnumTemperature climate = EnumTemperature.NORMAL;
 	private EnumHumidity humidity = EnumHumidity.NORMAL;
 
-	public AlleleSpecies(String uid, String authority, String unlocalizedDescription, boolean isDominant, String name, IClassification branch, String binomial, boolean doRegister) {
-		super(uid, isDominant, true);
+	public AlleleSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean isDominant, IClassification branch, String binomial, boolean doRegister) {
+		super(uid, unlocalizedName, isDominant, false);
 
 		this.branch = branch;
-		this.name = name;
 		this.binomial = binomial;
 		this.description = StatCollector.translateToLocal(unlocalizedDescription);
 		this.authority = authority;

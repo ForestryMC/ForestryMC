@@ -86,14 +86,14 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 
 	private final ItemStack wood;
 
-	public AlleleTreeSpecies(String uid, boolean isDominant, String name, IClassification branch, String binomial, int primaryColor,
+	public AlleleTreeSpecies(String uid, boolean isDominant, String speciesName, IClassification branch, String binomial, int primaryColor,
 			Class<? extends WorldGenArboriculture> generator, ItemStack wood) {
-		this(uid, isDominant, name, branch, binomial, primaryColor, Utils.multiplyRGBComponents(primaryColor, 1.35f), generator, wood);
+		this(uid, isDominant, speciesName, branch, binomial, primaryColor, Utils.multiplyRGBComponents(primaryColor, 1.35f), generator, wood);
 	}
 
-	public AlleleTreeSpecies(String uid, boolean isDominant, String name, IClassification branch, String binomial, int primaryColor, int secondaryColor,
+	public AlleleTreeSpecies(String uid, boolean isDominant, String speciesName, IClassification branch, String binomial, int primaryColor, int secondaryColor,
 			Class<? extends WorldGenArboriculture> generator, ItemStack wood) {
-		super("forestry." + uid, "Sengir", "for.description." + uid, isDominant, "trees.species." + name, branch, binomial, true);
+		super("forestry." + uid, "for.trees.species." + speciesName, "Sengir", "for.description." + uid, isDominant,  branch, binomial, true);
 
 		this.root = (ITreeRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees");
 		this.generatorClass = generator;

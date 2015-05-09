@@ -12,12 +12,12 @@ package forestry.core.genetics.alleles;
 
 import forestry.api.genetics.IAlleleBoolean;
 
-public class AlleleBoolean extends AlleleForestry implements IAlleleBoolean {
+public class AlleleBoolean extends AlleleCategorized implements IAlleleBoolean {
 
 	private final boolean value;
 
-	public AlleleBoolean(String category, boolean value, boolean isDominant) {
-		super(category, Boolean.toString(value), isDominant);
+	public AlleleBoolean(String modId, String category, boolean value, boolean isDominant) {
+		super(modId, category, Boolean.toString(value), isDominant);
 		this.value = value;
 	}
 

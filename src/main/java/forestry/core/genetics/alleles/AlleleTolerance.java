@@ -13,56 +13,16 @@ package forestry.core.genetics.alleles;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlleleTolerance;
 
-public class AlleleTolerance extends AlleleForestry implements IAlleleTolerance {
+public class AlleleTolerance extends AlleleCategorized implements IAlleleTolerance {
 
 	private final EnumTolerance value;
 
-	public AlleleTolerance(String category, String name, EnumTolerance value, boolean isDominant) {
-		super(category, name, isDominant);
+	public AlleleTolerance(String modId, String category, String name, EnumTolerance value, boolean isDominant) {
+		super(modId, category, name, isDominant);
 		this.value = value;
 	}
 
 	public EnumTolerance getValue() {
 		return value;
 	}
-
-	public String getUnlocalizedName() {
-		switch (value) {
-			case BOTH_1:
-				return "gui.beealyzer.tolerance.both1";
-			case BOTH_2:
-				return "gui.beealyzer.tolerance.both2";
-			case BOTH_3:
-				return "gui.beealyzer.tolerance.both3";
-			case BOTH_4:
-				return "gui.beealyzer.tolerance.both4";
-			case BOTH_5:
-				return "gui.beealyzer.tolerance.both5";
-			case DOWN_1:
-				return "gui.beealyzer.tolerance.down1";
-			case DOWN_2:
-				return "gui.beealyzer.tolerance.down2";
-			case DOWN_3:
-				return "gui.beealyzer.tolerance.down3";
-			case DOWN_4:
-				return "gui.beealyzer.tolerance.down4";
-			case DOWN_5:
-				return "gui.beealyzer.tolerance.down5";
-			case NONE:
-				return "gui.beealyzer.tolerance.none";
-			case UP_1:
-				return "gui.beealyzer.tolerance.up1";
-			case UP_2:
-				return "gui.beealyzer.tolerance.up2";
-			case UP_3:
-				return "gui.beealyzer.tolerance.up3";
-			case UP_4:
-				return "gui.beealyzer.tolerance.up4";
-			case UP_5:
-				return "gui.beealyzer.tolerance.up5";
-			default:
-				return "";
-		}
-	}
-
 }
