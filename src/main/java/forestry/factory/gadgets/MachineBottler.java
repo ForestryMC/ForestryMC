@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Stack;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -23,7 +22,6 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.util.ForgeDirection;
@@ -59,9 +57,9 @@ import buildcraft.api.statements.ITriggerExternal;
 public class MachineBottler extends TilePowered implements ISidedInventory, ILiquidTankContainer {
 
 	/* CONSTANTS */
-	public static final short SLOT_RESOURCE = 0;
-	public static final short SLOT_PRODUCT = 1;
-	public static final short SLOT_CAN = 2;
+	public static final short SLOT_INPUT_EMPTY_CAN = 0;
+	public static final short SLOT_OUTPUT = 1;
+	public static final short SLOT_INPUT_FULL_CAN = 2;
 
 	public static final short CYCLES_FILLING_DEFAULT = 5;
 
@@ -98,7 +96,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		 */
 		public static Recipe findMatchingRecipe(FluidStack res, ItemStack empty) {
 			// We need both ingredients
-			if (res == null || empty == null) {
+			if (res == null || empty == null || !FluidHelper.isEmptyContainer(empty)) {
 				return null;
 			}
 
@@ -109,13 +107,11 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 			}
 			
 			// No recipe matched. See if the liquid dictionary has anything.
-			if (FluidHelper.isEmptyContainer(empty)) {
-				ItemStack filled = FluidHelper.getFilledContainer(res, empty);
-				if (filled != null) {
-					Recipe recipe = new Recipe(CYCLES_FILLING_DEFAULT, res, empty, filled);
-					recipes.add(recipe);
-					return recipe;
-				}
+			ItemStack filled = FluidHelper.getFilledContainer(res, empty);
+			if (filled != null) {
+				Recipe recipe = new Recipe(CYCLES_FILLING_DEFAULT, res, empty, filled);
+				recipes.add(recipe);
+				return recipe;
 			}
 
 			return null;
@@ -146,33 +142,14 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	public final StandardTank resourceTank;
 	private final TankManager tankManager;
 
-	private boolean productPending = false;
-
 	private Recipe currentRecipe;
-	private final Stack<ItemStack> pendingProducts = new Stack<ItemStack>();
 	private int fillingTime;
 	private int fillingTotalTime;
 
 	public MachineBottler() {
 		super(1100, 50, 4000);
 
-		setInternalInventory(new TileInventoryAdapter(this, 3, "Items") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				if (slotIndex == SLOT_RESOURCE) {
-					return FluidContainerRegistry.isEmptyContainer(itemStack);
-				} else if (slotIndex == SLOT_CAN) {
-					FluidStack fluidStack = FluidHelper.getFluidStackInContainer(itemStack);
-					return RecipeManager.isInput(fluidStack);
-				}
-				return false;
-			}
-
-			@Override
-			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-				return slotIndex == SLOT_PRODUCT;
-			}
-		});
+		setInternalInventory(new BottlerInventoryAdapter(this));
 
 		setHints(Config.hints.get("bottler"));
 		resourceTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
@@ -191,21 +168,8 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 
 		nbttagcompound.setInteger("FillingTime", fillingTime);
 		nbttagcompound.setInteger("FillingTotalTime", fillingTotalTime);
-		nbttagcompound.setBoolean("ProductPending", productPending);
 
 		tankManager.writeTanksToNBT(nbttagcompound);
-
-		NBTTagList nbttaglist = new NBTTagList();
-		ItemStack[] offspring = pendingProducts.toArray(new ItemStack[pendingProducts.size()]);
-		for (int i = 0; i < offspring.length; i++) {
-			if (offspring[i] != null) {
-				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setByte("Slot", (byte) i);
-				offspring[i].writeToNBT(nbttagcompound1);
-				nbttaglist.appendTag(nbttagcompound1);
-			}
-		}
-		nbttagcompound.setTag("PendingProducts", nbttaglist);
 	}
 
 	@Override
@@ -214,15 +178,8 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 
 		fillingTime = nbttagcompound.getInteger("FillingTime");
 		fillingTotalTime = nbttagcompound.getInteger("FillingTotalTime");
-		productPending = nbttagcompound.getBoolean("ProductPending");
 
 		tankManager.readTanksFromNBT(nbttagcompound);
-
-		NBTTagList nbttaglist = nbttagcompound.getTagList("PendingProducts", 10);
-		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-			pendingProducts.add(ItemStack.loadItemStackFromNBT(nbttagcompound1));
-		}
 
 		checkRecipe();
 	}
@@ -233,32 +190,16 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 			return;
 		}
 
-		IInventoryAdapter inventory = getInternalInventory();
-
-		// Check if we have suitable items waiting in the item slot
-		if (inventory.getStackInSlot(SLOT_CAN) != null) {
-			FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
+		if (getStackInSlot(SLOT_INPUT_FULL_CAN) != null) {
+			FluidHelper.drainContainers(tankManager, this, SLOT_INPUT_FULL_CAN);
 		}
 
 		checkRecipe();
-		if (getErrorState() == EnumErrorCode.NORECIPE && currentRecipe != null) {
-			setErrorState(EnumErrorCode.OK);
-		}
 	}
 
 	@Override
 	public boolean workCycle() {
-
 		checkRecipe();
-
-		// If we add pending products, we skip to the next work cycle.
-		if (tryAddPending()) {
-			return false;
-		}
-
-		if (!pendingProducts.isEmpty()) {
-			return false;
-		}
 
 		// Continue work if nothing needs to be added
 		if (fillingTime <= 0) {
@@ -266,42 +207,39 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		}
 
 		if (currentRecipe == null) {
-			setErrorState(EnumErrorCode.NORECIPE);
+			return false;
+		}
+
+		if (!InvTools.tryAddStack(this, currentRecipe.bottled, SLOT_OUTPUT, 1, true, false)) {
+			setErrorState(EnumErrorCode.NOSPACE);
 			return false;
 		}
 
 		fillingTime--;
-		// Still not done, return
 		if (fillingTime > 0) {
-			setErrorState(EnumErrorCode.OK);
 			return true;
 		}
 
-		// We are done, add products to queue and remove resources
-		pendingProducts.push(currentRecipe.bottled.copy());
+		FluidHelper.fillContainers(tankManager, this, SLOT_INPUT_EMPTY_CAN, SLOT_OUTPUT, currentRecipe.input.getFluid());
 
-		IInventoryAdapter inventory = getInternalInventory();
-		inventory.decrStackSize(SLOT_RESOURCE, 1);
-		resourceTank.drain(currentRecipe.input.amount, true);
 		checkRecipe();
 		resetRecipe();
 
-		while (tryAddPending()) {
-			;
-		}
 		return true;
 	}
 
 	public void checkRecipe() {
-		IInventoryAdapter inventory = getInternalInventory();
-		Recipe sameRec = RecipeManager.findMatchingRecipe(resourceTank.getFluid(), inventory.getStackInSlot(SLOT_RESOURCE));
+		ItemStack emptyCan = getStackInSlot(SLOT_INPUT_EMPTY_CAN);
+		Recipe recipe = RecipeManager.findMatchingRecipe(resourceTank.getFluid(), emptyCan);
 
-		if (sameRec == null) {
+		if (recipe == null) {
 			setErrorState(EnumErrorCode.NORECIPE);
+		} else {
+			setErrorState(EnumErrorCode.OK);
 		}
 
-		if (currentRecipe != sameRec) {
-			currentRecipe = sameRec;
+		if (currentRecipe != recipe) {
+			currentRecipe = recipe;
 			resetRecipe();
 		}
 	}
@@ -317,25 +255,6 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		fillingTotalTime = currentRecipe.cyclesPerUnit;
 	}
 
-	private boolean tryAddPending() {
-		if (pendingProducts.isEmpty()) {
-			return false;
-		}
-
-		ItemStack next = pendingProducts.peek();
-		if (addProduct(next, true)) {
-			pendingProducts.pop();
-			return true;
-		}
-
-		setErrorState(EnumErrorCode.NOSPACE);
-		return false;
-	}
-
-	private boolean addProduct(ItemStack product, boolean all) {
-		return InvTools.tryAddStack(getInternalInventory(), product, SLOT_PRODUCT, 1, all);
-	}
-
 	// / STATE INFORMATION
 	@Override
 	public boolean isWorking() {
@@ -345,11 +264,11 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	@Override
 	public boolean hasResourcesMin(float percentage) {
 		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(SLOT_RESOURCE) == null) {
+		if (inventory.getStackInSlot(SLOT_INPUT_EMPTY_CAN) == null) {
 			return false;
 		}
 
-		return ((float) inventory.getStackInSlot(SLOT_RESOURCE).stackSize / (float) inventory.getStackInSlot(SLOT_RESOURCE).getMaxStackSize()) > percentage;
+		return ((float) inventory.getStackInSlot(SLOT_INPUT_EMPTY_CAN).stackSize / (float) inventory.getStackInSlot(SLOT_INPUT_EMPTY_CAN).getMaxStackSize()) > percentage;
 	}
 
 	@Override
@@ -442,4 +361,25 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		return res;
 	}
 
+	private static class BottlerInventoryAdapter extends TileInventoryAdapter {
+		public BottlerInventoryAdapter(MachineBottler machineBottler) {
+			super(machineBottler, 3, "Items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_INPUT_EMPTY_CAN) {
+				return FluidContainerRegistry.isEmptyContainer(itemStack);
+			} else if (slotIndex == SLOT_INPUT_FULL_CAN) {
+				FluidStack fluidStack = FluidHelper.getFluidStackInContainer(itemStack);
+				return RecipeManager.isInput(fluidStack);
+			}
+			return false;
+		}
+
+		@Override
+		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+			return slotIndex == SLOT_OUTPUT;
+		}
+	}
 }

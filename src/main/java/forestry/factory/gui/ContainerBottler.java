@@ -27,9 +27,9 @@ public class ContainerBottler extends ContainerLiquidTanks {
 
 		this.tile = tile;
 
-		this.addSlotToContainer(new SlotFiltered(tile, MachineBottler.SLOT_RESOURCE, 116, 19));
-		this.addSlotToContainer(new SlotOutput(tile, MachineBottler.SLOT_PRODUCT, 116, 55));
-		this.addSlotToContainer(new SlotFiltered(tile, MachineBottler.SLOT_CAN, 26, 38));
+		this.addSlotToContainer(new SlotFiltered(tile, MachineBottler.SLOT_INPUT_EMPTY_CAN, 116, 19));
+		this.addSlotToContainer(new SlotOutput(tile, MachineBottler.SLOT_OUTPUT, 116, 55));
+		this.addSlotToContainer(new SlotFiltered(tile, MachineBottler.SLOT_INPUT_FULL_CAN, 26, 38));
 
 		int var3;
 		for (var3 = 0; var3 < 3; ++var3) {
