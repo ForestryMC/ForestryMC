@@ -87,7 +87,9 @@ public class PluginManager {
 
 		CHISEL(new PluginChisel()),
 		EXTRAUTILITIES(new PluginExtraUtilities()),
-		EQUIVELENT_EXCHANGE(new PluginEE()),
+		// EE2 is old news. Kill it later.
+		//EQUIVELENT_EXCHANGE(new PluginEE()),
+		EQUIVALENT_EXCHANGE_3(new PluginEE3()),
 		FARM_CRAFTORY(new PluginFarmCraftory()),
 		INDUSTRIALCRAFT(new PluginIC2()),
 		HARVESTCRAFT(new PluginHarvestCraft()),

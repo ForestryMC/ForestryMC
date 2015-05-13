@@ -39,7 +39,7 @@ ext.CraftGuideRepo = "https://github.com/Uristqwerty/CraftGuide.git"
 ext.CraftGuideTmp = "build/tmp/CraftGuide"
 
 minecraft {
-	version = mcversion + "-" + forgeversion
+	version = forgeversion
 	runDir = "run"
 
 	replace '@VERSION@', project.version
@@ -70,6 +70,16 @@ repositories {
 		name = "ic2"
 		url = "http://maven.ic2.player.to/"
 	}
+
+    // EE3 deps
+    maven { // The repo from which to get waila
+        name "Mobius Repo"
+        url "http://mobiusstrip.eu/maven"
+    }
+    maven { // the repo from which to get NEI and stuff
+        name 'CB Repo'
+        url "http://chickenbones.net/maven/"
+    }
 }
 
 configurations {
@@ -80,6 +90,7 @@ configurations {
 dependencies {
 	api 'net.industrial-craft:industrialcraft-2:2.2.575-experimental:api'
 	api 'com.mod-buildcraft:buildcraft:6.3.1:dev'
+	compile "com.pahimar.ee3:EquivalentExchange3:1.7.10-0.3.505:dev"
 }
 
 processResources {
@@ -104,6 +115,7 @@ processResources {
 }
 
 runClient {
+	args "--noCoreSearch"
 	if (project.hasProperty('mcUsername')) {
 		args "--username=" + project.mcUsername
 	}

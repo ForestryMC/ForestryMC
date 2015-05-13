@@ -11,6 +11,7 @@
 package forestry.core.gadgets;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
@@ -26,13 +27,10 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.IFluidHandler;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.core.fluids.FluidHelper;
 import forestry.core.interfaces.IOwnable;
 import forestry.core.items.ItemNBTTile;
@@ -275,5 +273,9 @@ public class BlockBase extends BlockForestry {
 	@Override
 	public boolean getUseNeighborBrightness() {
 		return hasTESR;
+	}
+	
+	public final List<MachineDefinition> getMachineDefinitions() {
+		return Collections.unmodifiableList(definitions);
 	}
 }
