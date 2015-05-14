@@ -51,11 +51,6 @@ public class PluginEE3 extends ForestryPlugin {
 		if (isAvailable()) {
 			setupDefaultEMV();
 			registerTransmutationBlacklist();
-			LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-			Configuration config = ctx.getConfiguration();
-			LoggerConfig loggerConfig = config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME); 
-			loggerConfig.setLevel(Level.TRACE);
-			ctx.updateLoggers();
 		}
 	}
 	
