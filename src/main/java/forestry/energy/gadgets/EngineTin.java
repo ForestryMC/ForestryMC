@@ -44,7 +44,6 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		public int euForCycle;
 		public int rfPerCycle;
 		public int euStorage;
-		public int euMaxAccept = 512;
 
 		public EuConfig(int euForCycle, int rfPerCycle, int euStorage) {
 			this.euForCycle = euForCycle;
@@ -65,15 +64,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		super(Defaults.ENGINE_TIN_HEAT_MAX, 100000, 4000);
 		setHints(Config.hints.get("engine.tin"));
 
-		setInternalInventory(new TileInventoryAdapter(this, 1, "electrical") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				if (slotIndex == SLOT_BATTERY) {
-					return ElectricItem.manager.getCharge(itemStack) > 0;
-				}
-				return false;
-			}
-		});
+		setInternalInventory(new EngineTinInventoryAdapter(this));
 
 		if (PluginIC2.instance.isAvailable()) {
 			ic2EnergySink = new BasicSink(this, euConfig.euStorage, 3);
@@ -241,7 +232,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		return Math.min(i, (int) (ic2EnergySink.getEnergyStored() * i) / ic2EnergySink.getCapacity());
 	}
 
-	public EnumTankLevel rateLevel(int scaled) {
+	public static EnumTankLevel rateLevel(int scaled) {
 
 		if (scaled < 5) {
 			return EnumTankLevel.EMPTY;
@@ -340,4 +331,17 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		}
 	}
 
+	private static class EngineTinInventoryAdapter extends TileInventoryAdapter {
+		public EngineTinInventoryAdapter(EngineTin engineTin) {
+			super(engineTin, 1, "electrical");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_BATTERY) {
+				return ElectricItem.manager.getCharge(itemStack) > 0;
+			}
+			return false;
+		}
+	}
 }
