@@ -597,18 +597,18 @@ public class Bee extends IndividualLiving implements IBee {
 
 		IBeeGenome genome0;
 		IBeeGenome genome1;
-		IAlleleBeeSpecies allele0;
-		IAlleleBeeSpecies allele1;
+		IAllele allele0;
+		IAllele allele1;
 
 		if (world.rand.nextBoolean()) {
-			allele0 = (IAlleleBeeSpecies) parent1[EnumBeeChromosome.SPECIES.ordinal()].getPrimaryAllele();
-			allele1 = (IAlleleBeeSpecies) parent2[EnumBeeChromosome.SPECIES.ordinal()].getSecondaryAllele();
+			allele0 = parent1[EnumBeeChromosome.SPECIES.ordinal()].getPrimaryAllele();
+			allele1 = parent2[EnumBeeChromosome.SPECIES.ordinal()].getSecondaryAllele();
 
 			genome0 = genomeOne;
 			genome1 = genomeTwo;
 		} else {
-			allele0 = (IAlleleBeeSpecies) parent2[EnumBeeChromosome.SPECIES.ordinal()].getPrimaryAllele();
-			allele1 = (IAlleleBeeSpecies) parent1[EnumBeeChromosome.SPECIES.ordinal()].getSecondaryAllele();
+			allele0 = parent2[EnumBeeChromosome.SPECIES.ordinal()].getPrimaryAllele();
+			allele1 = parent1[EnumBeeChromosome.SPECIES.ordinal()].getSecondaryAllele();
 
 			genome0 = genomeTwo;
 			genome1 = genomeOne;
