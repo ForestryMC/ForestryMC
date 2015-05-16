@@ -403,6 +403,10 @@ public class Bee extends IndividualLiving implements IBee {
 		if (genome.getNocturnal()) {
 			list.add(EnumChatFormatting.RED + GenericRatings.rateActivityTime(genome.getNocturnal(), false));
 		}
+
+		if (genome.getTolerantFlyer()) {
+			list.add(EnumChatFormatting.WHITE + StringUtil.localize("gui.flyer.tooltip"));
+		}
 	}
 
 	@Override
