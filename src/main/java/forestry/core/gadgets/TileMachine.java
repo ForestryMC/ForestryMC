@@ -36,12 +36,6 @@ public abstract class TileMachine extends TileForestry implements IClimatised, I
 	public TileMachine() {
 	}
 
-	// / IERRORSOURCE
-	@Override
-	public boolean throwsErrors() {
-		return false;
-	}
-
 	// / IHINTSOURCE
 	@Override
 	public boolean hasHints() {

@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -25,6 +28,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorState;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IIndividual;
@@ -34,6 +38,7 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
+import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
@@ -71,24 +76,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	/* CONSTRUCTOR */
 	public TileAnalyzer() {
 		super(800, 40, Defaults.MACHINE_MAX_ENERGY);
-		setInternalInventory(new TileInventoryAdapter(this, 12, "Items") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				if (GuiUtil.isIndexInRange(slotIndex, SLOT_INPUT_1, SLOT_INPUT_COUNT)) {
-					return AlleleManager.alleleRegistry.isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack) != null;
-				} else if (slotIndex == SLOT_CAN) {
-					Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-					return resourceTank.accepts(fluid);
-				}
-
-				return false;
-			}
-
-			@Override
-			public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
-				return GuiUtil.isIndexInRange(slotIndex, SLOT_OUTPUT_1, SLOT_OUTPUT_COUNT);
-			}
-		});
+		setInternalInventory(new AnalyzerInventoryAdapter(this));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, Fluids.HONEY.getFluid());
 		tankManager = new TankManager(resourceTank);
 		invInput = new InventoryMapper(getInternalInventory(), SLOT_INPUT_1, SLOT_INPUT_COUNT);
@@ -122,6 +110,8 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 	@Override
 	protected void updateServerSide() {
+		super.updateServerSide();
+
 		if (updateOnInterval(20)) {
 			// Check if we have suitable items waiting in the can slot
 			FluidHelper.drainContainers(tankManager, this, SLOT_CAN);
@@ -135,8 +125,8 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 		if (stackToAnalyze != null) {
 			IIndividual individual = AlleleManager.alleleRegistry.getIndividual(stackToAnalyze);
+
 			if (individual == null) {
-				setErrorState(EnumErrorCode.UNKNOWN);
 				return false;
 			}
 
@@ -153,22 +143,25 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 					stackToAnalyze.setTagCompound(nbttagcompound);
 				}
 
-				if (InvTools.tryAddStack(invOutput, stackToAnalyze, true)) {
+				boolean added = InvTools.tryAddStack(invOutput, stackToAnalyze, true);
+
+				if (added) {
 					setInventorySlotContents(SLOT_ANALYZE, null);
-					sendNetworkUpdate();
-					return true;
-				} else {
-					setErrorState(EnumErrorCode.NOSPACE);
-					return false;
+					setNeedsNetworkUpdate();
 				}
+
+				setErrorCondition(!added, EnumErrorCode.NOSPACE);
+
+				return added;
 			}
 		}
 
 		// Look for bees in input slots.
 		IInvSlot slot = getInputSlot();
-		if (slot == null) {
-			// Nothing to analyze
-			setErrorState(EnumErrorCode.NOTHINGANALYZE);
+
+		boolean noInput = (slot == null);
+		setErrorCondition(noInput, EnumErrorCode.NOTHINGANALYZE);
+		if (noInput) {
 			return false;
 		}
 
@@ -179,8 +172,9 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		}
 		IIndividual individual = AlleleManager.alleleRegistry.getIndividual(inputStack);
 		if (!individual.isAnalyzed()) {
-			if (resourceTank.getFluidAmount() < HONEY_REQUIRED) {
-				setErrorState(EnumErrorCode.NORESOURCE);
+			boolean hasHoney = resourceTank.getFluidAmount() >= HONEY_REQUIRED;
+			setErrorCondition(!hasHoney, EnumErrorCode.NORESOURCE);
+			if (!hasHoney) {
 				return false;
 			}
 			resourceTank.drain(HONEY_REQUIRED, true);
@@ -188,8 +182,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		}
 		setInventorySlotContents(SLOT_ANALYZE, inputStack);
 		slot.setStackInSlot(null);
-		setErrorState(EnumErrorCode.OK);
-		sendNetworkUpdate();
+		setNeedsNetworkUpdate();
 		return true;
 	}
 
@@ -251,7 +244,9 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 	@Override
 	public boolean hasWork() {
-		return getErrorState() == EnumErrorCode.OK || getErrorState() == EnumErrorCode.NOPOWER;
+		Set<IErrorState> errors = new HashSet<IErrorState>(getErrorStates());
+		errors.remove(EnumErrorCode.NOPOWER);
+		return errors.size() == 0;
 	}
 
 	public int getProgressScaled(int i) {
@@ -319,5 +314,28 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return tankManager.getTankInfo(from);
+	}
+
+	private static class AnalyzerInventoryAdapter extends TileInventoryAdapter<TileAnalyzer> {
+		public AnalyzerInventoryAdapter(TileAnalyzer analyzer) {
+			super(analyzer, 12, "Items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (GuiUtil.isIndexInRange(slotIndex, SLOT_INPUT_1, SLOT_INPUT_COUNT)) {
+				return AlleleManager.alleleRegistry.isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack) != null;
+			} else if (slotIndex == SLOT_CAN) {
+				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+				return tile.resourceTank.accepts(fluid);
+			}
+
+			return false;
+		}
+
+		@Override
+		public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
+			return GuiUtil.isIndexInRange(slotIndex, SLOT_OUTPUT_1, SLOT_OUTPUT_COUNT);
+		}
 	}
 }

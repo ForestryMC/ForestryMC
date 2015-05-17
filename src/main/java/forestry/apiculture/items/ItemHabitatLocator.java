@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -37,6 +39,7 @@ import forestry.api.apiculture.IBee;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorState;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.apiculture.render.TextureHabitatLocator;
@@ -120,17 +123,22 @@ public class ItemHabitatLocator extends ItemInventoried {
 
 		// / IERRORSOURCE
 		@Override
-		public boolean throwsErrors() {
-			return true;
-		}
-
-		@Override
-		public EnumErrorCode getErrorState() {
-			if (BeeManager.beeRoot.isMember(inventoryStacks[SLOT_SPECIMEN]) && !isEnergy(getStackInSlot(SLOT_ENERGY))) {
-				return EnumErrorCode.NOHONEY;
+		public ImmutableSet<IErrorState> getErrorStates() {
+			if (getStackInSlot(SLOT_ANALYZED) != null) {
+				return ImmutableSet.of();
 			}
 
-			return EnumErrorCode.OK;
+			ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
+
+			if (!BeeManager.beeRoot.isMember(inventoryStacks[SLOT_SPECIMEN])) {
+				errorStates.add(EnumErrorCode.NOTHINGANALYZE);
+			}
+
+			if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
+				errorStates.add(EnumErrorCode.NOHONEY);
+			}
+
+			return errorStates.build();
 		}
 
 		@Override

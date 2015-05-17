@@ -85,7 +85,7 @@ public class EngineClockwork extends Engine {
 	}
 	
 	@Override
-	public boolean isActivated() {
+	public boolean isRedstoneActivated() {
 		return true;
 	}
 

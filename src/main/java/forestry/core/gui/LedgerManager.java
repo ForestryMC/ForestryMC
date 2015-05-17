@@ -10,25 +10,40 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 
 import org.lwjgl.opengl.GL11;
 
+import forestry.api.core.IErrorState;
 import forestry.core.config.SessionVars;
+import forestry.core.interfaces.IErrorSource;
 import forestry.core.proxy.Proxies;
 
 public class LedgerManager {
 
 	public final GuiForestry gui;
 	public final Minecraft minecraft;
+	@Nullable
+	public IErrorSource errorSource;
 
-	protected final ArrayList<Ledger> ledgers = new ArrayList<Ledger>();
+	protected final List<Ledger> ledgers = new ArrayList<Ledger>();
+	protected final List<ErrorLedger> errorLedgers = new ArrayList<ErrorLedger>();
 
 	public LedgerManager(GuiForestry gui) {
 		this.gui = gui;
 		this.minecraft = Proxies.common.getClientInstance();
+	}
+
+	public void add(IErrorSource errorSource) {
+		this.errorSource = errorSource;
+		int maxErrorLedgerCount = (gui.getSizeY() - 10) / Ledger.minHeight;
+		for (int i = 0; i < maxErrorLedgerCount; i++) {
+			errorLedgers.add(new ErrorLedger(this));
+		}
 	}
 
 	public void add(Ledger ledger) {
@@ -47,21 +62,42 @@ public class LedgerManager {
 
 	protected Ledger getAtPosition(int mX, int mY) {
 
-		int xShift = ((gui.width - gui.getSizeX()) / 2) + gui.getSizeX();
-		int yShift = ((gui.height - gui.getSizeY()) / 2) + 8;
+		if (ledgers.size() > 0) {
+			final int xShift = ((gui.width - gui.getSizeX()) / 2) + gui.getSizeX();
+			int yShift = ((gui.height - gui.getSizeY()) / 2) + 8;
 
-		for (Ledger ledger : ledgers) {
-			if (!ledger.isVisible()) {
-				continue;
+			for (Ledger ledger : ledgers) {
+				if (!ledger.isVisible()) {
+					continue;
+				}
+
+				ledger.currentShiftX = xShift;
+				ledger.currentShiftY = yShift;
+				if (ledger.intersectsWith(mX, mY)) {
+					return ledger;
+				}
+
+				yShift += ledger.getHeight();
 			}
+		}
 
-			ledger.currentShiftX = xShift;
-			ledger.currentShiftY = yShift;
-			if (ledger.intersectsWith(mX, mY, xShift, yShift)) {
-				return ledger;
+		if (errorSource != null) {
+			final int xShiftError = ((gui.width - gui.getSizeX()) / 2);
+			int yShiftError = ((gui.height - gui.getSizeY()) / 2) + 8;
+
+			for (ErrorLedger errorLedger : errorLedgers) {
+				if (!errorLedger.isVisible()) {
+					continue;
+				}
+
+				errorLedger.currentShiftX = xShiftError - errorLedger.currentWidth;
+				errorLedger.currentShiftY = yShiftError;
+				if (errorLedger.intersectsWith(mX, mY)) {
+					return errorLedger;
+				}
+
+				yShiftError += errorLedger.getHeight();
 			}
-
-			yShift += ledger.getHeight();
 		}
 
 		return null;
@@ -80,6 +116,28 @@ public class LedgerManager {
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			ledger.draw(gui.getSizeX(), yPos);
 			yPos += ledger.getHeight();
+		}
+
+		if (errorSource != null) {
+			yPos = 8;
+
+			int index = 0;
+			for (IErrorState errorState : errorSource.getErrorStates()) {
+				if (index >= errorLedgers.size()) {
+					break;
+				}
+				ErrorLedger errorLedger = errorLedgers.get(index++);
+				errorLedger.setState(errorState);
+
+				errorLedger.update();
+				if (!errorLedger.isVisible()) {
+					continue;
+				}
+
+				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+				errorLedger.draw(-errorLedger.currentWidth, yPos);
+				yPos += errorLedger.getHeight();
+			}
 		}
 	}
 
@@ -108,7 +166,14 @@ public class LedgerManager {
 			// ledger itself.
 			if (ledger != null && !ledger.handleMouseClicked(x, y, mouseButton)) {
 
-				for (Ledger other : ledgers) {
+				List<? extends Ledger> toggleLedgers;
+				if (ledgers.contains(ledger)) {
+					toggleLedgers = ledgers;
+				} else {
+					toggleLedgers = errorLedgers;
+				}
+
+				for (Ledger other : toggleLedgers) {
 					if (other != ledger && other.isOpen()) {
 						other.toggleOpen();
 					}

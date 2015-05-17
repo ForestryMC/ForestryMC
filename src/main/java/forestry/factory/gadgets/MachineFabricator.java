@@ -242,23 +242,8 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 
 	public MachineFabricator() {
 		super(1100, 50, 3300);
-		craftingInventory = new TileInventoryAdapter(this, SLOT_CRAFTING_COUNT, "CraftItems");
-		setInternalInventory(new TileInventoryAdapter(this, SLOT_COUNT, "Items") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				if (slotIndex == SLOT_METAL) {
-					return RecipeManager.findMatchingSmelting(itemStack) != null;
-				} else if (slotIndex == SLOT_PLAN) {
-					return RecipeManager.isPlan(itemStack);
-				}
-				return GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
-			}
-
-			@Override
-			public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
-				return slotIndex == SLOT_RESULT;
-			}
-		});
+		craftingInventory = new TileInventoryAdapter<MachineFabricator>(this, SLOT_CRAFTING_COUNT, "CraftItems");
+		setInternalInventory(new FabricatorInventoryAdapter(this));
 		moltenTank = new FilteredTank(2 * Defaults.BUCKET_VOLUME, Fluids.GLASS.getFluid());
 		moltenTank.tankMode = StandardTank.TankMode.INTERNAL;
 		tankManager = new TankManager(moltenTank);
@@ -310,6 +295,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 	/* UPDATING */
 	@Override
 	public void updateServerSide() {
+		super.updateServerSide();
 
 		if (!moltenTank.isFull()) {
 			trySmelting();
@@ -324,12 +310,6 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		}
 
 		this.dissipateHeat();
-
-		if (energyManager.getTotalEnergyStored() == 0 && heat == 0) {
-			setErrorState(EnumErrorCode.NOPOWER);
-		} else if (getErrorState() == EnumErrorCode.NOPOWER) {
-			setErrorState(EnumErrorCode.OK);
-		}
 	}
 
 	private void trySmelting() {
@@ -583,4 +563,24 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		return tankManager.getTankInfo(from);
 	}
 
+	private static class FabricatorInventoryAdapter extends TileInventoryAdapter<MachineFabricator> {
+		public FabricatorInventoryAdapter(MachineFabricator fabricator) {
+			super(fabricator, MachineFabricator.SLOT_COUNT, "Items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_METAL) {
+				return RecipeManager.findMatchingSmelting(itemStack) != null;
+			} else if (slotIndex == SLOT_PLAN) {
+				return RecipeManager.isPlan(itemStack);
+			}
+			return GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+		}
+
+		@Override
+		public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
+			return slotIndex == SLOT_RESULT;
+		}
+	}
 }

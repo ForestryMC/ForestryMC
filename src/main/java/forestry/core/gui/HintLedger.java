@@ -12,6 +12,8 @@ package forestry.core.gui;
 
 import java.util.Random;
 
+import net.minecraft.client.gui.FontRenderer;
+
 import forestry.core.interfaces.IHintSource;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
@@ -24,9 +26,13 @@ public class HintLedger extends Ledger {
 	public HintLedger(LedgerManager manager, IHintSource tile) {
 		super(manager);
 		this.hints = tile.getHints();
-		maxHeight = 96;
 		position = new Random().nextInt(hints.length);
 		overlayColor = manager.gui.fontColor.get("ledger.hint.background");
+
+		String helpString = StringUtil.localize("hints." + hints[position] + ".desc");
+		FontRenderer fontRenderer = manager.minecraft.fontRenderer;
+		int lineCount = fontRenderer.listFormattedStringToWidth(helpString, maxWidth - 28).size();
+		maxHeight = lineCount * (fontRenderer.FONT_HEIGHT + 2) + 20;
 	}
 
 	@Override
@@ -42,7 +48,7 @@ public class HintLedger extends Ledger {
 			return;
 		}
 
-		manager.minecraft.fontRenderer.drawStringWithShadow(StringUtil.localize("gui.didyouknow") + "?", x + 22, y + 8,
+		manager.minecraft.fontRenderer.drawStringWithShadow(StringUtil.localize("gui.didyouknow") + '?', x + 22, y + 8,
 				manager.gui.fontColor.get("ledger.hint.header"));
 		manager.minecraft.fontRenderer.drawSplitString(StringUtil.localize("hints." + hints[position] + ".desc"), x + 22, y + 20, maxWidth - 28,
 				manager.gui.fontColor.get("ledger.hint.text"));

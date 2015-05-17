@@ -19,9 +19,7 @@ import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBee;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
-import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
-import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IHintSource;
 import forestry.core.inventory.AlyzerInventory;
 import forestry.core.items.ItemInventoried;
@@ -30,7 +28,7 @@ import forestry.core.proxy.Proxies;
 
 public class ItemBeealyzer extends ItemInventoried {
 
-	public static class BeealyzerInventory extends AlyzerInventory implements IErrorSource, IHintSource {
+	public static class BeealyzerInventory extends AlyzerInventory implements IHintSource {
 
 		public BeealyzerInventory(EntityPlayer player, ItemStack itemStack) {
 			super(ItemBeealyzer.class, 7, itemStack);
@@ -94,21 +92,6 @@ public class ItemBeealyzer extends ItemInventoried {
 		@Override
 		public String[] getHints() {
 			return Config.hints.get("beealyzer");
-		}
-
-		// / IERRORSOURCE
-		@Override
-		public boolean throwsErrors() {
-			return true;
-		}
-
-		@Override
-		public EnumErrorCode getErrorState() {
-			if (BeeManager.beeRoot.isMember(inventoryStacks[SLOT_SPECIMEN]) && !isEnergy(getStackInSlot(SLOT_ENERGY))) {
-				return EnumErrorCode.NOHONEY;
-			}
-
-			return EnumErrorCode.OK;
 		}
 	}
 

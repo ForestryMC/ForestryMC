@@ -18,9 +18,7 @@ import net.minecraft.world.World;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
 import forestry.api.lepidopterology.IButterfly;
-import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
-import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IHintSource;
 import forestry.core.inventory.AlyzerInventory;
 import forestry.core.items.ItemInventoried;
@@ -30,7 +28,7 @@ import forestry.plugins.PluginLepidopterology;
 
 public class ItemFlutterlyzer extends ItemInventoried {
 
-	public static class FlutterlyzerInventory extends AlyzerInventory implements IErrorSource, IHintSource {
+	public static class FlutterlyzerInventory extends AlyzerInventory implements IHintSource {
 
 		public FlutterlyzerInventory(EntityPlayer player, ItemStack itemStack) {
 			super(ItemFlutterlyzer.class, 7, itemStack);
@@ -100,21 +98,6 @@ public class ItemFlutterlyzer extends ItemInventoried {
 		@Override
 		public String[] getHints() {
 			return Config.hints.get("flutterlyzer");
-		}
-
-		/* IERRORSOURCE */
-		@Override
-		public boolean throwsErrors() {
-			return true;
-		}
-
-		@Override
-		public EnumErrorCode getErrorState() {
-			if (PluginLepidopterology.butterflyInterface.isMember(inventoryStacks[SLOT_SPECIMEN]) && !isEnergy(getStackInSlot(SLOT_ENERGY))) {
-				return EnumErrorCode.NOHONEY;
-			}
-
-			return EnumErrorCode.OK;
 		}
 	}
 

@@ -19,7 +19,6 @@ import cpw.mods.fml.common.Optional;
 import forestry.core.EnumErrorCode;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.interfaces.IRenderableMachine;
-import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
 import forestry.energy.EnergyManager;
 
@@ -53,27 +52,28 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 	private int workCounter;
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
-		if (!Proxies.common.isSimulating(worldObj)) {
+	protected void updateServerSide() {
+		super.updateServerSide();
+
+		// Disable powered machines on a direct redstone signal
+		boolean disabled = (worldObj.getBlockPowerInput(xCoord, yCoord, zCoord) >= 15);
+		setErrorCondition(disabled, EnumErrorCode.DISABLED);
+		if (disabled) {
 			return;
 		}
 
-		// Disable powered machines on a direct redstone signal
-		if (worldObj.getBlockPowerInput(xCoord, yCoord, zCoord) >= 15) {
-			return;
+		if (updateOnInterval(20)) {
+			boolean hasEnergy = energyManager.hasEnergyToDoWork();
+			setErrorCondition(!hasEnergy, EnumErrorCode.NOPOWER);
 		}
 
 		if (workCounter < WORK_CYCLES) {
 			if (energyManager.consumeEnergyToDoWork()) {
 				workCounter++;
-			} else {
-				setErrorState(EnumErrorCode.NOPOWER);
 			}
 		} else {
 			if (updateOnInterval(5) && workCycle()) {
 				workCounter = 0;
-				setErrorState(EnumErrorCode.OK);
 			}
 		}
 	}

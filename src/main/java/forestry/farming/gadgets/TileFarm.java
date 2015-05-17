@@ -94,26 +94,11 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	public void initialize() {
 	}
 
-	@Override
-	public void updateEntity() {
-		super.updateEntity();
-
-		if (!Proxies.common.isSimulating(worldObj)) {
-			updateClientSide();
-		} else {
-			// Periodic validation if needed
-			if (updateOnInterval(200) && (!isIntegratedIntoStructure() || isMaster())) {
-				validateStructure();
-			}
-
-			updateServerSide();
-		}
-	}
-
 	protected void updateServerSide() {
-	}
-
-	protected void updateClientSide() {
+		// Periodic validation if needed
+		if (updateOnInterval(200) && (!isIntegratedIntoStructure() || isMaster())) {
+			validateStructure();
+		}
 	}
 
 	/* CONSTRUCTION MATERIAL */

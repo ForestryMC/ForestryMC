@@ -132,7 +132,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 
 		int loss = 0;
 
-		if (!isBurning() || !isActivated()) {
+		if (!isBurning() || !isRedstoneActivated()) {
 			loss += 1;
 		}
 
@@ -149,7 +149,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	public int generateHeat() {
 
 		int gain = 0;
-		if (isActivated() && isBurning()) {
+		if (isRedstoneActivated() && isBurning()) {
 			gain++;
 			if (((double) energyManager.getTotalEnergyStored() / (double) maxEnergy) > 0.5) {
 				gain++;
@@ -164,8 +164,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	@Override
 	public void updateServerSide() {
 		// No work to be done if IC2 is unavailable.
-		if (ic2EnergySink == null) {
-			setErrorState(EnumErrorCode.NOENERGYNET);
+		if (setErrorCondition(ic2EnergySink == null, EnumErrorCode.NOENERGYNET)) {
 			return;
 		}
 
@@ -174,7 +173,6 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		super.updateServerSide();
 
 		if (forceCooldown) {
-			setErrorState(EnumErrorCode.FORCEDCOOLDOWN);
 			return;
 		}
 
@@ -187,11 +185,8 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 			return;
 		}
 
-		if (!ic2EnergySink.canUseEnergy(euConfig.euForCycle)) {
-			setErrorState(EnumErrorCode.NOFUEL);
-		} else {
-			setErrorState(EnumErrorCode.OK);
-		}
+		boolean canUseEnergy = ic2EnergySink.canUseEnergy(euConfig.euForCycle);
+		setErrorCondition(!canUseEnergy, EnumErrorCode.NOFUEL);
 	}
 
 	@Override
@@ -199,7 +194,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 
 		currentOutput = 0;
 
-		if (!isActivated()) {
+		if (!isRedstoneActivated()) {
 			return;
 		}
 
@@ -211,7 +206,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	}
 
 	private void replenishFromBattery(int slot) {
-		if (!isActivated()) {
+		if (!isRedstoneActivated()) {
 			return;
 		}
 
@@ -331,7 +326,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		}
 	}
 
-	private static class EngineTinInventoryAdapter extends TileInventoryAdapter {
+	private static class EngineTinInventoryAdapter extends TileInventoryAdapter<EngineTin> {
 		public EngineTinInventoryAdapter(EngineTin engineTin) {
 			super(engineTin, 1, "electrical");
 		}

@@ -10,8 +10,12 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
@@ -32,7 +36,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.common.Optional;
 
 import forestry.api.core.IErrorState;
-import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.interfaces.IErrorSource;
@@ -63,7 +66,8 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 	protected boolean isInited = false;
 	private IInventoryAdapter inventory = FakeInventoryAdapter.instance();
-	private int tickCount = rand.nextInt(128);
+	private int tickCount = rand.nextInt(256);
+	private boolean needsNetworkUpdate = false;
 
 	public AdjacentTileCache getTileCache() {
 		return tileCache;
@@ -108,15 +112,33 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 
 	// / UPDATING
 	@Override
-	public void updateEntity() {
+	public final void updateEntity() {
 		tickCount++;
+
 		if (!isInited) {
 			initialize();
 			isInited = true;
 		}
+
+		if (Proxies.common.isSimulating(worldObj)) {
+			updateServerSide();
+		} else {
+			updateClientSide();
+		}
+
+		if (needsNetworkUpdate) {
+			needsNetworkUpdate = false;
+			sendNetworkUpdate();
+		}
 	}
 
-	public final boolean updateOnInterval(int tickInterval) {
+	protected void updateClientSide() {
+	}
+
+	protected void updateServerSide() {
+	}
+
+	protected final boolean updateOnInterval(int tickInterval) {
 		return tickCount % tickInterval == 0;
 	}
 
@@ -181,7 +203,10 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 			orientation = packet.getOrientation();
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
-		errorState = packet.getErrorState();
+
+		errorStates.clear();
+		errorStates.addAll(packet.getErrorStates());
+
 		owner = packet.getOwner();
 		access = packet.getAccess();
 		fromPacketPayload(packet.payload);
@@ -212,7 +237,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	/**
 	 * @return true if tile is activated by redstone current.
 	 */
-	public boolean isActivated() {
+	public boolean isRedstoneActivated() {
 		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 	}
 
@@ -231,25 +256,52 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		this.sendNetworkUpdate();
 	}
 
+	protected final void setNeedsNetworkUpdate() {
+		needsNetworkUpdate = true;
+	}
+
 	// / ERROR HANDLING
-	public IErrorState errorState = EnumErrorCode.OK;
+	private final Set<IErrorState> errorStates = new HashSet<IErrorState>();
 
-	public void setErrorState(IErrorState state) {
-		if (this.errorState == state) {
-			return;
+	public final boolean setErrorCondition(boolean condition, IErrorState errorState) {
+		if (condition) {
+			if (errorStates.add(errorState)) {
+				setNeedsNetworkUpdate();
+			}
+		} else {
+			if (errorStates.remove(errorState)) {
+				setNeedsNetworkUpdate();
+			}
 		}
-		this.errorState = state;
-		this.sendNetworkUpdate();
+		return condition;
+	}
+
+	@Deprecated
+	protected final void addErrorState(IErrorState state) {
+		if (errorStates.add(state)) {
+			setNeedsNetworkUpdate();
+		}
+	}
+
+	@Deprecated
+	protected final void removeErrorStates() {
+		if (errorStates.size() > 0) {
+			setNeedsNetworkUpdate();
+		}
+		errorStates.clear();
+	}
+
+	public final boolean hasErrorState(IErrorState state) {
+		return errorStates.contains(state);
+	}
+
+	public final boolean hasErrorState() {
+		return errorStates.size() > 0;
 	}
 
 	@Override
-	public boolean throwsErrors() {
-		return true;
-	}
-
-	@Override
-	public IErrorState getErrorState() {
-		return errorState;
+	public ImmutableSet<IErrorState> getErrorStates() {
+		return ImmutableSet.copyOf(errorStates);
 	}
 
 	// / OWNERSHIP

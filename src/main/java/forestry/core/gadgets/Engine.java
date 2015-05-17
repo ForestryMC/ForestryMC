@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
+import forestry.core.EnumErrorCode;
 import forestry.core.TemperatureState;
 import forestry.core.config.Defaults;
 import forestry.core.network.PacketPayload;
@@ -131,13 +132,18 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 			forceCooldown = false;
 		}
 
+		setErrorCondition(forceCooldown, EnumErrorCode.FORCEDCOOLDOWN);
+
+		boolean enabledRedstone = isRedstoneActivated();
+		setErrorCondition(!enabledRedstone, EnumErrorCode.NOREDSTONE);
+
 		// Determine targeted tile
 		TileEntity tile = worldObj.getTileEntity(xCoord + getOrientation().offsetX, yCoord + getOrientation().offsetY, zCoord + getOrientation().offsetZ);
 
 		float newPistonSpeed = getPistonSpeed();
 		if (newPistonSpeed != pistonSpeedServer) {
 			pistonSpeedServer = newPistonSpeed;
-			sendNetworkUpdate();
+			setNeedsNetworkUpdate();
 		}
 
 		if (stagePiston != 0) {
@@ -153,9 +159,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 				progress = 0;
 				stagePiston = 0;
 			}
-
-		} else if (canPowerTo(tile)) // If we are not already running, check if
-		{
+		} else if (enabledRedstone && BlockUtil.isEnergyReceiver(getOrientation().getOpposite(), tile)) {
 			if (energyManager.getEnergyStored(getOrientation()) > 0) {
 				stagePiston = 1; // If we can transfer energy, start running
 				setActive(true);
@@ -174,11 +178,6 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 		} else {
 			energyManager.drainEnergy(20);
 		}
-
-	}
-
-	private boolean canPowerTo(TileEntity tile) {
-		return isActivated() && BlockUtil.isEnergyReceiver(getOrientation().getOpposite(), tile);
 	}
 
 	private void setActive(boolean isActive) {
@@ -187,7 +186,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 		}
 
 		this.isActive = isActive;
-		sendNetworkUpdate();
+		setNeedsNetworkUpdate();
 	}
 
 	/* INTERACTION */
@@ -223,7 +222,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 	}
 
 	public int getCurrentOutput() {
-		if (isBurning() && isActivated()) {
+		if (isBurning() && isRedstoneActivated()) {
 			return currentOutput;
 		} else {
 			return 0;

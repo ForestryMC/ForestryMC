@@ -27,7 +27,12 @@ import forestry.core.utils.ForestryResource;
 public abstract class Ledger {
 	
 	private static final int OPEN_SPEED = 8;
-	private static final ResourceLocation ledgerTexture = new ForestryResource(Defaults.TEXTURE_PATH_GUI + "/ledger.png");
+	protected static final int maxWidth = 124;
+	protected static final int minWidth = 24;
+	public static final int minHeight = 24;
+
+	private static final ResourceLocation ledgerTextureRight = new ForestryResource(Defaults.TEXTURE_PATH_GUI + "/ledger.png");
+	private static final ResourceLocation ledgerTextureLeft = new ForestryResource(Defaults.TEXTURE_PATH_GUI + "/ledgerLeft.png");
 	
 	protected final LedgerManager manager;
 
@@ -37,18 +42,24 @@ public abstract class Ledger {
 
 	public int currentShiftX = 0;
 	public int currentShiftY = 0;
-
-	protected int limitWidth = 128;
-	protected int maxWidth = 124;
-	protected int minWidth = 24;
 	protected int currentWidth = minWidth;
-
 	protected int maxHeight = 24;
-	protected int minHeight = 24;
+
 	protected int currentHeight = minHeight;
 
+	protected final ResourceLocation texture;
+
 	public Ledger(LedgerManager manager) {
+		this(manager, true);
+	}
+
+	public Ledger(LedgerManager manager, boolean rightSide) {
 		this.manager = manager;
+		if (rightSide) {
+			texture = ledgerTextureRight;
+		} else {
+			texture = ledgerTextureLeft;
+		}
 	}
 
 	public void update() {
@@ -81,8 +92,8 @@ public abstract class Ledger {
 		return false;
 	}
 
-	public boolean intersectsWith(int mouseX, int mouseY, int shiftX, int shiftY) {
-		return mouseX >= shiftX && mouseX <= shiftX + currentWidth && mouseY >= shiftY && mouseY <= shiftY + getHeight();
+	public boolean intersectsWith(int mouseX, int mouseY) {
+		return mouseX >= currentShiftX && mouseX <= currentShiftX + currentWidth && mouseY >= currentShiftY && mouseY <= currentShiftY + getHeight();
 	}
 
 	public void setFullyOpen() {
@@ -121,13 +132,13 @@ public abstract class Ledger {
 
 		GL11.glColor4f(colorR, colorG, colorB, 1.0F);
 
-		Proxies.common.bindTexture(ledgerTexture);
-		
-		manager.gui.drawTexturedModalRect(x, y, 0, 256 - currentHeight, 4, currentHeight);
-		manager.gui.drawTexturedModalRect(x + 4, y, 256 - currentWidth + 4, 0, currentWidth - 4, 4);
-		manager.gui.drawTexturedModalRect(x, y, 0, 0, 4, 4);
+		Proxies.common.bindTexture(texture);
 
-		manager.gui.drawTexturedModalRect(x + 4, y + 4, 256 - currentWidth + 4, 256 - currentHeight + 4, currentWidth - 4, currentHeight - 4);
+		manager.gui.drawTexturedModalRect(x, y + 4, 0, 256 - currentHeight + 4, 4, currentHeight - 4); // left edge
+		manager.gui.drawTexturedModalRect(x + 4, y, 256 - currentWidth + 4, 0, currentWidth - 4, 4); // top edge
+		manager.gui.drawTexturedModalRect(x, y, 0, 0, 4, 4); // top left corner
+
+		manager.gui.drawTexturedModalRect(x + 4, y + 4, 256 - currentWidth + 4, 256 - currentHeight + 4, currentWidth - 4, currentHeight - 4); // body + bottom + right
 
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
 	}

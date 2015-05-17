@@ -18,6 +18,7 @@ import forestry.core.config.Defaults;
 public enum EnumErrorCode implements IErrorState {
 
 	UNKNOWN("unknown"),
+	@Deprecated // use no error code
 	OK("ok"),
 	INVALIDBIOME("invalidBiome"),
 	ISRAINING("isRaining"),
@@ -48,16 +49,21 @@ public enum EnumErrorCode implements IErrorState {
 	NOSTAMPS("noStamps"),
 	NOCIRCUITBOARD("noCircuitBoard"),
 	NOCIRCUITLAYOUT("noCircuitLayout"),
+	@Deprecated // wrong stack size is prevented in code
 	WRONGSTACKSIZE("wrongStacksize"),
 	NOFERTILIZER("noFertilizer"),
 	NOFARMLAND("noFarmland"),
 	CIRCUITMISMATCH("circuitMismatch"),
 	NOLIQUID("noLiquid"),
 	NOPAPER("noPaper"),
+	@Deprecated // use two error codes instead: NOSTAMPS and NOPAPER
 	NOSTAMPSNOPAPER("noStampsNoPaper", "noStamps"),
 	NOSUPPLIES("noSupplies", "noResource"),
 	NOTRADE("noTrade", "noResource"),
-	NOPOWER("noPower");
+	NOPOWER("noPower"),
+	NOREDSTONE("noRedstone", "disabled"), // needs redstone signal
+	DISABLED("disabledRedstone", "disabled") // disabled by redstone signal
+	;
 
 	private final String name;
 	private final String iconName;

@@ -152,14 +152,14 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 		return true;
 	}
 
-	private class EscritoireInventoryAdapter extends TileInventoryAdapter {
+	private static class EscritoireInventoryAdapter extends TileInventoryAdapter<TileEscritoire> {
 		public EscritoireInventoryAdapter(TileEscritoire escritoire) {
 			super(escritoire, 12, "Items");
 		}
 
 		@Override
 		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (slotIndex >= SLOT_INPUT_1 && slotIndex < SLOT_INPUT_1 + Math.min(game.getSampleSize(), SLOTS_INPUT_COUNT)) {
+			if (slotIndex >= SLOT_INPUT_1 && slotIndex < SLOT_INPUT_1 + Math.min(tile.game.getSampleSize(), SLOTS_INPUT_COUNT)) {
 				ItemStack specimen = getStackInSlot(SLOT_ANALYZE);
 				if (specimen == null) {
 					return false;
@@ -186,7 +186,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 			}
 
 			if (GuiUtil.isIndexInRange(slotIndex, SLOT_INPUT_1, SLOTS_INPUT_COUNT)) {
-				if (slotIndex >= SLOT_INPUT_1 + game.getSampleSize()) {
+				if (slotIndex >= SLOT_INPUT_1 + tile.game.getSampleSize()) {
 					return true;
 				}
 			}
@@ -202,14 +202,14 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 		@Override
 		public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
 			super.setInventorySlotContents(slotIndex, itemstack);
-			if (slotIndex == SLOT_ANALYZE && Proxies.common.isSimulating(worldObj)) {
+			if (slotIndex == SLOT_ANALYZE && Proxies.common.isSimulating(tile.worldObj)) {
 				if (!AlleleManager.alleleRegistry.isIndividual(getStackInSlot(SLOT_ANALYZE)) && getStackInSlot(SLOT_ANALYZE) != null) {
 					ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(getStackInSlot(SLOT_ANALYZE));
 					if (ersatz != null) {
 						setInventorySlotContents(SLOT_ANALYZE, ersatz);
 					}
 				}
-				game.initialize(getStackInSlot(SLOT_ANALYZE));
+				tile.game.initialize(getStackInSlot(SLOT_ANALYZE));
 			}
 		}
 	}

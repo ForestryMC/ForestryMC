@@ -69,16 +69,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	public TileAlvearyHygroregulator() {
 		super(BLOCK_META);
 
-		setInternalInventory(new TileInventoryAdapter(this, 1, "CanInv") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				if (slotIndex == SLOT_INPUT) {
-					Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-					return liquidTank.accepts(fluid);
-				}
-				return false;
-			}
-		});
+		setInternalInventory(new HygroInventoryAdapter(this));
 
 		Fluid water = Fluids.WATER.getFluid();
 		Fluid lava = Fluids.LAVA.getFluid();
@@ -230,5 +221,20 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 
 	@Override
 	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
+	}
+
+	private static class HygroInventoryAdapter extends TileInventoryAdapter<TileAlvearyHygroregulator> {
+		public HygroInventoryAdapter(TileAlvearyHygroregulator alvearyHygroregulator) {
+			super(alvearyHygroregulator, 1, "CanInv");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_INPUT) {
+				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+				return tile.liquidTank.accepts(fluid);
+			}
+			return false;
+		}
 	}
 }

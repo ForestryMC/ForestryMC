@@ -21,21 +21,6 @@ import forestry.core.gui.IPagedInventory;
 import forestry.core.inventory.TileInventoryAdapter;
 
 public abstract class TileNaturalistChest extends TileBase implements IPagedInventory {
-
-	private static class NaturalistInventoryAdapter extends TileInventoryAdapter {
-		private final ISpeciesRoot speciesRoot;
-
-		public NaturalistInventoryAdapter(TileNaturalistChest tile, int size, String name, ISpeciesRoot speciesRoot) {
-			super(tile, size, name);
-			this.speciesRoot = speciesRoot;
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemstack) {
-			return speciesRoot.isMember(itemstack);
-		}
-	}
-
 	private final int guiID;
 
 	public TileNaturalistChest(ISpeciesRoot speciesRoot, int guiId) {
@@ -54,14 +39,17 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 		player.openGui(ForestryAPI.instance, GuiHandler.encodeGuiData(guiID, page), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
-	/* UPDATING */
-	@Override
-	public void updateServerSide() {
-	}
+	private static class NaturalistInventoryAdapter extends TileInventoryAdapter<TileNaturalistChest> {
+		private final ISpeciesRoot speciesRoot;
 
-	/* ERROR HANDLING */
-	@Override
-	public boolean throwsErrors() {
-		return false;
+		public NaturalistInventoryAdapter(TileNaturalistChest tile, int size, String name, ISpeciesRoot speciesRoot) {
+			super(tile, size, name);
+			this.speciesRoot = speciesRoot;
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemstack) {
+			return speciesRoot.isMember(itemstack);
+		}
 	}
 }

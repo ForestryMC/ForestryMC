@@ -83,17 +83,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		super(Defaults.ENGINE_BRONZE_HEAT_MAX, 300000, 5000);
 		setHints(Config.hints.get("engine.bronze"));
 
-		setInternalInventory(new TileInventoryAdapter(this, 1, "Items") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				if (slotIndex == SLOT_CAN) {
-					Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-					return tankManager.accepts(fluid);
-				}
-
-				return false;
-			}
-		});
+		setInternalInventory(new EngineBronzeInventoryAdapter(this));
 
 		fuelTank = new FilteredTank(Defaults.ENGINE_TANK_CAPACITY, FuelManager.bronzeEngineFuel.keySet());
 		fuelTank.tankMode = StandardTank.TankMode.INPUT;
@@ -125,13 +115,11 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 			FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
 		}
 
-		if (getHeatLevel() <= 0.2 && heatingTank.getFluidAmount() <= 0) {
-			setErrorState(EnumErrorCode.NOHEAT);
-		} else if (burnTime <= 0 && fuelTank.getFluidAmount() <= 0) {
-			setErrorState(EnumErrorCode.NOFUEL);
-		} else {
-			setErrorState(EnumErrorCode.OK);
-		}
+		boolean hasHeat = getHeatLevel() > 0.2 || heatingTank.getFluidAmount() > 0;
+		setErrorCondition(!hasHeat, EnumErrorCode.NOHEAT);
+
+		boolean hasFuel = burnTime > 0 || fuelTank.getFluidAmount() > 0;
+		setErrorCondition(!hasFuel, EnumErrorCode.NOFUEL);
 	}
 
 	/**
@@ -142,7 +130,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 
 		currentOutput = 0;
 
-		if (isActivated() && (fuelTank.getFluidAmount() >= Defaults.BUCKET_VOLUME || burnTime > 0)) {
+		if (isRedstoneActivated() && (fuelTank.getFluidAmount() >= Defaults.BUCKET_VOLUME || burnTime > 0)) {
 
 			double heatStage = getHeatLevel();
 
@@ -221,7 +209,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 
 		int generate = 0;
 
-		if (isActivated() && burnTime > 0) {
+		if (isRedstoneActivated() && burnTime > 0) {
 			double heatStage = getHeatLevel();
 			if (heatStage >= 0.75) {
 				generate += Defaults.ENGINE_BRONZE_HEAT_GENERATION_ENERGY * 3;
@@ -380,4 +368,19 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		return tankManager.getTankInfo(from);
 	}
 
+	private static class EngineBronzeInventoryAdapter extends TileInventoryAdapter<EngineBronze> {
+		public EngineBronzeInventoryAdapter(EngineBronze engineBronze) {
+			super(engineBronze, 1, "Items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_CAN) {
+				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+				return tile.tankManager.accepts(fluid);
+			}
+
+			return false;
+		}
+	}
 }

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -66,6 +67,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	public final static int SLOT_CRAFTING_COUNT = 9;
 	public final static int SLOT_BOX = 9;
 	public final static int SLOT_PRODUCT = 10;
+	public final static int SLOT_PRODUCT_COUNT = 1;
 	public final static int SLOT_CAN_INPUT = 11;
 	public final static short SLOT_INVENTORY_1 = 12;
 	public final static short SLOT_INVENTORY_COUNT = 18;
@@ -211,6 +213,8 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	public final FilteredTank resourceTank;
 	private final TankManager tankManager;
 	private final TileInventoryAdapter craftingInventory;
+
+	@Nullable
 	public MachineCarpenter.Recipe currentRecipe;
 	public MachineCarpenter.Recipe lastRecipe;
 	public ContainerCarpenter activeContainer;
@@ -227,37 +231,8 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		super(1100, 50, 4000);
 		setHints(Config.hints.get("carpenter"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluids);
-		craftingInventory = new TileInventoryAdapter(this, 10, "CraftItems");
-		setInternalInventory(new TileInventoryAdapter(this, 30, "Items") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				if (slotIndex == SLOT_CAN_INPUT) {
-					Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-					return tankManager.accepts(fluid);
-				} else if (slotIndex == SLOT_BOX) {
-					return MachineCarpenter.RecipeManager.isBox(itemStack);
-				} else if (canSlotAccept(SLOT_CAN_INPUT, itemStack) || canSlotAccept(SLOT_BOX, itemStack)) {
-					return false;
-				}
-
-				return GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
-			}
-
-			@Override
-			public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
-				if (GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT)) {
-					if (lastRecipe != null) {
-						return lastRecipe.isIngredient(itemStack);
-					}
-				}
-				return true;
-			}
-
-			@Override
-			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-				return slotIndex == SLOT_PRODUCT;
-			}
-		});
+		craftingInventory = new TileInventoryAdapter<MachineCarpenter>(this, 10, "CraftItems");
+		setInternalInventory(new CarpenterInventoryAdapter(this));
 		InvTools.configureSided(getInternalInventory(), Defaults.FACINGS, SLOT_BOX, 20);
 
 		tankManager = new TankManager(resourceTank);
@@ -321,7 +296,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		setCurrentRecipe(RecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), container.craftMatrix, worldObj));
 	}
 
-	public void setCurrentRecipe(MachineCarpenter.Recipe currentRecipe) {
+	public void setCurrentRecipe(@Nullable MachineCarpenter.Recipe currentRecipe) {
 		this.currentRecipe = currentRecipe;
 		if (currentRecipe != null) {
 			lastRecipe = currentRecipe;
@@ -330,6 +305,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 	@Override
 	public void updateServerSide() {
+		super.updateServerSide();
 
 		if (!updateOnInterval(20)) {
 			return;
@@ -349,16 +325,8 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			setCurrentRecipe(MachineCarpenter.RecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), container.craftMatrix, worldObj));
 		}
 
-		if (currentRecipe == null) {
-			setErrorState(EnumErrorCode.NORECIPE);
-		} else if (!validateResources()) {
-			setErrorState(EnumErrorCode.NORESOURCE);
-		} else if (energyManager.getTotalEnergyStored() == 0) {
-			setErrorState(EnumErrorCode.NOPOWER);
-		} else {
-			setErrorState(EnumErrorCode.OK);
-		}
-
+		setErrorCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
+		setErrorCondition(!validateResources(), EnumErrorCode.NORESOURCE);
 	}
 
 	@Override
@@ -420,6 +388,9 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	}
 
 	private boolean validateResources() {
+		if (currentRecipe == null) {
+			return true;
+		}
 		// Check whether liquid is needed and if there is enough available
 		if (currentRecipe.liquid != null) {
 			if (resourceTank.getFluidAmount() < currentRecipe.liquid.amount) {
@@ -469,22 +440,18 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	}
 
 	private boolean tryAddPending() {
-		IInventoryAdapter accessibleInventory = getInternalInventory();
-		if (accessibleInventory.getStackInSlot(SLOT_PRODUCT) == null) {
-			accessibleInventory.setInventorySlotContents(SLOT_PRODUCT, pendingProduct.copy());
-			pendingProduct = null;
-			return true;
+		if (pendingProduct == null) {
+			return false;
 		}
 
-		if (accessibleInventory.getStackInSlot(SLOT_PRODUCT).isItemEqual(pendingProduct)
-				&& accessibleInventory.getStackInSlot(SLOT_PRODUCT).stackSize <= accessibleInventory.getStackInSlot(SLOT_PRODUCT).getMaxStackSize() - pendingProduct.stackSize) {
-			accessibleInventory.getStackInSlot(SLOT_PRODUCT).stackSize += pendingProduct.stackSize;
+		boolean added = InvTools.tryAddStack(this, pendingProduct, SLOT_PRODUCT, SLOT_PRODUCT_COUNT, true);
+
+		if (added) {
 			pendingProduct = null;
-			return true;
 		}
 
-		setErrorState(EnumErrorCode.NOSPACE);
-		return false;
+		setErrorCondition(!added, EnumErrorCode.NOSPACE);
+		return added;
 	}
 
 	/* STATE INFORMATION */
@@ -596,4 +563,38 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		setCurrentRecipe(RecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftMatrix, getWorldObj()));
 	}
 
+	private static class CarpenterInventoryAdapter extends TileInventoryAdapter<MachineCarpenter> {
+		public CarpenterInventoryAdapter(MachineCarpenter carpenter) {
+			super(carpenter, 30, "Items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_CAN_INPUT) {
+				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+				return tile.tankManager.accepts(fluid);
+			} else if (slotIndex == SLOT_BOX) {
+				return RecipeManager.isBox(itemStack);
+			} else if (canSlotAccept(SLOT_CAN_INPUT, itemStack) || canSlotAccept(SLOT_BOX, itemStack)) {
+				return false;
+			}
+
+			return GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+		}
+
+		@Override
+		public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
+			if (GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT)) {
+				if (tile.lastRecipe != null) {
+					return tile.lastRecipe.isIngredient(itemStack);
+				}
+			}
+			return true;
+		}
+
+		@Override
+		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+			return slotIndex == SLOT_PRODUCT;
+		}
+	}
 }

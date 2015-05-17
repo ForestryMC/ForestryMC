@@ -10,9 +10,11 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.client.gui.FontRenderer;
+
 import forestry.api.core.IErrorState;
-import forestry.core.EnumErrorCode;
-import forestry.core.interfaces.IErrorSource;
 import forestry.core.utils.StringUtil;
 
 /**
@@ -20,47 +22,61 @@ import forestry.core.utils.StringUtil;
  */
 public class ErrorLedger extends Ledger {
 
-	private final IErrorSource tile;
+	@Nullable
+	private IErrorState state;
 
-	public ErrorLedger(LedgerManager manager, IErrorSource tile) {
-		super(manager);
-		this.tile = tile;
+	public ErrorLedger(LedgerManager manager) {
+		super(manager, false);
 		maxHeight = 72;
 		overlayColor = manager.gui.fontColor.get("ledger.error.background");
 	}
 
+	public void setState(@Nullable IErrorState state) {
+		this.state = state;
+		if (state != null) {
+			String helpString = StringUtil.localize(state.getHelp());
+			FontRenderer fontRenderer = manager.minecraft.fontRenderer;
+			int lineCount = fontRenderer.listFormattedStringToWidth(helpString, maxWidth - 28).size();
+			maxHeight = lineCount * (fontRenderer.FONT_HEIGHT + 2) + 20;
+		}
+	}
+
 	@Override
 	public void draw(int x, int y) {
-		IErrorState state = tile.getErrorState();
-		if (state == EnumErrorCode.OK) {
+		if (state == null) {
 			return;
 		}
+
+
 
 		// Draw background
 		drawBackground(x, y);
 
 		// Draw icon
-		drawIcon(state.getIcon(), x + 3, y + 4);
+		drawIcon(state.getIcon(), x + 5, y + 4);
 
 		// Write description if fully opened
 		if (isFullyOpened()) {
-			// fontRendererObj.drawStringWithShadow(getTooltip(), x + 22, y +
-			// 8, 0xe1c92f);
-			manager.minecraft.fontRenderer.drawStringWithShadow(getTooltip(), x + 22, y + 8, manager.gui.fontColor.get("ledger.error.header"));
-			manager.minecraft.fontRenderer.drawSplitString(StringUtil.localize(tile.getErrorState().getHelp()), x + 22, y + 20, maxWidth - 28,
-					manager.gui.fontColor.get("ledger.error.text"));
+			FontRenderer fontRenderer = manager.minecraft.fontRenderer;
+
+			fontRenderer.drawStringWithShadow(getTooltip(), x + 24, y + 8, manager.gui.fontColor.get("ledger.error.header"));
+
+			String helpString = StringUtil.localize(state.getHelp());
+			fontRenderer.drawSplitString(helpString, x + 24, y + 20, maxWidth - 28, manager.gui.fontColor.get("ledger.error.text"));
 		}
 	}
 
 	@Override
 	public boolean isVisible() {
-		IErrorState state = tile.getErrorState();
-		return state != EnumErrorCode.OK;
+		return state != null;
 	}
 
 	@Override
 	public String getTooltip() {
-		return StringUtil.localize(tile.getErrorState().getDescription());
+		if (state == null) {
+			return "";
+		}
+		return StringUtil.localize(state.getDescription());
 	}
 
 }

@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.core.interfaces;
 
+import com.google.common.collect.ImmutableSet;
+
 import forestry.api.core.IErrorState;
 
 public interface IErrorSource {
 
-	boolean throwsErrors();
-
-	IErrorState getErrorState();
+	ImmutableSet<IErrorState> getErrorStates();
 
 }

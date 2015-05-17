@@ -141,11 +141,15 @@ public class EnergyManager implements IEnergyHandler {
 	 * @return true if the energy to do work was consumed
 	 */
 	public boolean consumeEnergyToDoWork() {
-		if (energyStorage.getEnergyStored() < energyPerWork) {
+		if (!hasEnergyToDoWork()) {
 			return false;
 		}
 		energyStorage.modifyEnergyStored(-energyPerWork);
 		return true;
+	}
+
+	public boolean hasEnergyToDoWork() {
+		return energyStorage.getEnergyStored() >= energyPerWork;
 	}
 
 	/**

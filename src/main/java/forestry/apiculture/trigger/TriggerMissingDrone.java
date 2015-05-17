@@ -37,8 +37,7 @@ public class TriggerMissingDrone extends Trigger {
 			return false;
 		}
 
-		return ((IErrorSource) tile).getErrorState() == EnumErrorCode.NODRONE;
-
+		return ((IErrorSource) tile).getErrorStates().contains(EnumErrorCode.NODRONE);
 	}
 
 }

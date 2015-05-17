@@ -49,7 +49,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 	private final TileInventoryAdapter craftingInventory;
 
 	public TileWorktable() {
-		craftingInventory = new TileInventoryAdapter(this, 10, "CraftItems");
+		craftingInventory = new TileInventoryAdapter<TileWorktable>(this, 10, "CraftItems");
 		setInternalInventory(new WorktableInventoryAdapter(this));
 
 		memorized = new RecipeMemory();
@@ -208,7 +208,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 		return craftingInventory;
 	}
 
-	private static class WorktableInventoryAdapter extends TileInventoryAdapter {
+	private static class WorktableInventoryAdapter extends TileInventoryAdapter<TileWorktable> {
 		public WorktableInventoryAdapter(TileWorktable worktable) {
 			super(worktable, 18, "Items");
 		}

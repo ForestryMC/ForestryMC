@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +39,7 @@ import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.core.BiomeHelper;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.core.IErrorState;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleTolerance;
@@ -239,48 +242,56 @@ public class Bee extends IndividualLiving implements IBee {
 	}
 
 	@Override
-	public EnumErrorCode canWork(IBeeHousing housing) {
-
+	public Set<IErrorState> getCanWork(IBeeHousing housing) {
 		World world = housing.getWorld();
 		BiomeGenBase biome = housing.getBiome();
 
+		ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
+
 		// / Rain needs tolerant flyers
 		if (world.isRaining() && !genome.getTolerantFlyer() && BiomeHelper.canRainOrSnow(biome) && !housing.isSealed()) {
-			return EnumErrorCode.ISRAINING;
+			errorStates.add(EnumErrorCode.ISRAINING);
 		}
 
 		// / Night or darkness requires nocturnal species
 		if (world.isDaytime()) {
 			if (!canWorkDuringDay()) {
-				return EnumErrorCode.NOTNIGHT;
+				errorStates.add(EnumErrorCode.NOTNIGHT);
 			}
 		} else if (!canWorkAtNight() && !housing.isSelfLighted()) {
-			return EnumErrorCode.NOTDAY;
+			errorStates.add(EnumErrorCode.NOTDAY);
 		}
 
 		if (world.getBlockLightValue(housing.getXCoord(), housing.getYCoord() + 2, housing.getZCoord()) > Defaults.APIARY_MIN_LEVEL_LIGHT) {
 			if (!canWorkDuringDay()) {
-				return EnumErrorCode.NOTGLOOMY;
+				errorStates.add(EnumErrorCode.NOTGLOOMY);
 			}
 		} else if (!canWorkAtNight() && !housing.isSelfLighted()) {
-			return EnumErrorCode.NOTLUCID;
+			errorStates.add(EnumErrorCode.NOTLUCID);
 		}
 
 		// / No sky, except if in hell
-		if (biome == null) {
-			return EnumErrorCode.NOSKY;
-		}
-		if (!BiomeHelper.isBiomeHellish(biome) && !world.canBlockSeeTheSky(housing.getXCoord(), housing.getYCoord() + 3, housing.getZCoord())
-				&& !genome.getCaveDwelling() && !housing.isSunlightSimulated()) {
-			return EnumErrorCode.NOSKY;
+		if (biome != null && !BiomeHelper.isBiomeHellish(biome) && !world.canBlockSeeTheSky(housing.getXCoord(), housing.getYCoord() + 3, housing.getZCoord())
+					&& !genome.getCaveDwelling() && !housing.isSunlightSimulated()) {
+			errorStates.add(EnumErrorCode.NOSKY);
 		}
 
 		// / And finally climate check
 		if (!isSuitableClimate(housing.getTemperature(), housing.getHumidity())) {
-			return EnumErrorCode.INVALIDBIOME;
+			errorStates.add(EnumErrorCode.INVALIDBIOME);
 		}
 
-		return EnumErrorCode.OK;
+		return errorStates.build();
+	}
+
+	@Override
+	public IErrorState canWork(IBeeHousing housing) {
+		Set<IErrorState> errorStates = getCanWork(housing);
+		if (errorStates.size() == 0) {
+			return EnumErrorCode.OK;
+		} else {
+			return errorStates.iterator().next();
+		}
 	}
 
 	private boolean canWorkAtNight() {

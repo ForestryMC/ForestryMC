@@ -45,12 +45,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 
 	public TileAlvearySwarmer() {
 		super(BLOCK_META);
-		setInternalInventory(new TileInventoryAdapter(this, 4, "SwarmInv") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				return StackUtils.containsItemStack(BeeManager.inducers.keySet(), itemStack);
-			}
-		});
+		setInternalInventory(new SwarmerInventoryAdapter(this));
 	}
 
 	@Override
@@ -151,7 +146,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 	private void setIsActive(boolean isActive) {
 		if (this.isActive != isActive) {
 			this.isActive = isActive;
-			sendNetworkUpdate();
+			setNeedsNetworkUpdate();
 		}
 	}
 
@@ -220,5 +215,16 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 		}
 		nbttagcompound.setTag("PendingSpawns", nbttaglist);
 
+	}
+
+	private static class SwarmerInventoryAdapter extends TileInventoryAdapter<TileAlvearySwarmer> {
+		public SwarmerInventoryAdapter(TileAlvearySwarmer alvearySwarmer) {
+			super(alvearySwarmer, 4, "SwarmInv");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			return StackUtils.containsItemStack(BeeManager.inducers.keySet(), itemStack);
+		}
 	}
 }

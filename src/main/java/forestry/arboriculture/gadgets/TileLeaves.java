@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -503,6 +505,16 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	@Override
 	public EnumHumidity getHumidity() {
 		return null;
+	}
+
+	@Override
+	public boolean setErrorCondition(boolean condition, IErrorState errorState) {
+		return condition;
+	}
+
+	@Override
+	public ImmutableSet<IErrorState> getErrorStates() {
+		return ImmutableSet.of();
 	}
 
 	@Override

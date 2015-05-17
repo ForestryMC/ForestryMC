@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.mail.items;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -25,6 +27,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorState;
 import forestry.api.mail.ILetter;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
@@ -160,22 +163,19 @@ public class ItemLetter extends ItemInventoried {
 
 		// / IERRORSOURCE
 		@Override
-		public boolean throwsErrors() {
-			return true;
-		}
+		public ImmutableSet<IErrorState> getErrorStates() {
 
-		@Override
-		public EnumErrorCode getErrorState() {
+			ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
 
 			if (!letter.hasRecipient()) {
-				return EnumErrorCode.NORECIPIENT;
+				errorStates.add(EnumErrorCode.NORECIPIENT);
 			}
 
 			if (!letter.isProcessed() && !letter.isPostPaid()) {
-				return EnumErrorCode.NOTPOSTPAID;
+				errorStates.add(EnumErrorCode.NOTPOSTPAID);
 			}
 
-			return EnumErrorCode.OK;
+			return errorStates.build();
 		}
 
 		/* IHINTSOURCE */

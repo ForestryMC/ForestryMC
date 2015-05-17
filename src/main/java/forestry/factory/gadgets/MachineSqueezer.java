@@ -148,31 +148,7 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 
 	public MachineSqueezer() {
 		super(1100, 50, 4000);
-		setInternalInventory(new TileInventoryAdapter(this, 12, "Items") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				if (slotIndex == SLOT_CAN_INPUT) {
-					return FluidHelper.isEmptyContainer(itemStack);
-				}
-
-				if (slotIndex >= SLOT_RESOURCE_1 && slotIndex < SLOT_RESOURCE_1 + SLOTS_RESOURCE_COUNT) {
-					if (FluidHelper.isEmptyContainer(itemStack)) {
-						return false;
-					}
-
-					if (RecipeManager.canUse(itemStack)) {
-						return true;
-					}
-				}
-
-				return false;
-			}
-
-			@Override
-			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-				return slotIndex == SLOT_REMNANT || slotIndex == SLOT_CAN_OUTPUT;
-			}
-		});
+		setInternalInventory(new SqueezerInventoryAdapter(this));
 		setHints(Config.hints.get("squeezer"));
 		productTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluids);
 		productTank.tankMode = StandardTank.TankMode.OUTPUT;
@@ -209,6 +185,7 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 	// / WORKING
 	@Override
 	public void updateServerSide() {
+		super.updateServerSide();
 
 		if (!updateOnInterval(20)) {
 			return;
@@ -224,31 +201,29 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 		}
 
 		checkRecipe();
-		if (getErrorState() == EnumErrorCode.NORECIPE && currentRecipe != null) {
-			setErrorState(EnumErrorCode.OK);
-		}
 	}
 
 	@Override
 	public boolean workCycle() {
 
-		checkRecipe();
-
-		if (getErrorState() == EnumErrorCode.NORECIPE) {
+		if (!checkRecipe()) {
 			return false;
 		}
 
-		FluidStack resultFluid = currentRecipe.liquid.copy();
-		if (productTank.fill(resultFluid, false) < resultFluid.amount) {
-			setErrorState(EnumErrorCode.NOSPACETANK);
+		FluidStack resultFluid = currentRecipe.liquid;
+		boolean canFill = productTank.fill(resultFluid, false) == resultFluid.amount;
+		setErrorCondition(!canFill, EnumErrorCode.NOSPACETANK);
+
+		if (!canFill) {
 			return false;
 		}
 
 		ItemStack remnant = null;
 		if (currentRecipe.remnants != null) {
 			remnant = currentRecipe.remnants.copy();
-			if (!InvTools.tryAddStack(getInternalInventory(), remnant, SLOT_REMNANT, SLOT_REMNANT_COUNT, true, false)) {
-				setErrorState(EnumErrorCode.NOSPACE);
+			boolean canAdd = InvTools.tryAddStack(getInternalInventory(), remnant, SLOT_REMNANT, SLOT_REMNANT_COUNT, true, false);
+			setErrorCondition(!canAdd, EnumErrorCode.NOSPACE);
+			if (!canAdd) {
 				return false;
 			}
 		}
@@ -264,7 +239,6 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 		productionTime--;
 		// Still not done, return
 		if (productionTime > 0) {
-			setErrorState(EnumErrorCode.OK);
 			return true;
 		}
 
@@ -277,29 +251,26 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 			InvTools.tryAddStack(getInternalInventory(), remnant, SLOT_REMNANT, SLOT_REMNANT_COUNT, true);
 		}
 
-		setErrorState(EnumErrorCode.OK);
-
 		checkRecipe();
-		resetRecipe();
+		resetRecipeTimes();
 
 		return true;
 	}
 
-	private void checkRecipe() {
+	private boolean checkRecipe() {
 		ItemStack[] resources = InvTools.getStacks(getInternalInventory(), SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT);
-		Recipe sameRec = RecipeManager.findMatchingRecipe(resources);
+		Recipe matchingRecipe = RecipeManager.findMatchingRecipe(resources);
 
-		if (sameRec == null) {
-			setErrorState(EnumErrorCode.NORECIPE);
+		if (currentRecipe != matchingRecipe) {
+			currentRecipe = matchingRecipe;
+			resetRecipeTimes();
 		}
 
-		if (currentRecipe != sameRec) {
-			currentRecipe = sameRec;
-			resetRecipe();
-		}
+		setErrorCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
+		return currentRecipe != null;
 	}
 
-	private void resetRecipe() {
+	private void resetRecipeTimes() {
 		if (currentRecipe == null) {
 			productionTime = 0;
 			timePerItem = 0;
@@ -397,5 +368,35 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return tankManager.getTankInfo(from);
+	}
+
+	private static class SqueezerInventoryAdapter extends TileInventoryAdapter<MachineSqueezer> {
+		public SqueezerInventoryAdapter(MachineSqueezer squeezer) {
+			super(squeezer, 12, "Items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_CAN_INPUT) {
+				return FluidHelper.isEmptyContainer(itemStack);
+			}
+
+			if (slotIndex >= SLOT_RESOURCE_1 && slotIndex < SLOT_RESOURCE_1 + SLOTS_RESOURCE_COUNT) {
+				if (FluidHelper.isEmptyContainer(itemStack)) {
+					return false;
+				}
+
+				if (RecipeManager.canUse(itemStack)) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		@Override
+		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+			return slotIndex == SLOT_REMNANT || slotIndex == SLOT_CAN_OUTPUT;
+		}
 	}
 }

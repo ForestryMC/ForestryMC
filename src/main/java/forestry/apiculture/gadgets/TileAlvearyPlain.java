@@ -91,7 +91,6 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 
 	private void setBiomeInformation() {
 		this.biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
-		setErrorState(EnumErrorCode.OK);
 	}
 
 	/* LOADING & SAVING */
@@ -105,7 +104,6 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 		if (beekeepingLogic != null) {
 			beekeepingLogic.readFromNBT(nbttagcompound);
 		}
-
 	}
 
 	@Override
@@ -118,7 +116,6 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 		if (beekeepingLogic != null) {
 			beekeepingLogic.writeToNBT(nbttagcompound);
 		}
-
 	}
 
 	/* UPDATING */
@@ -130,6 +127,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 
 	@Override
 	protected void updateServerSide() {
+		super.updateServerSide();
 
 		if (beekeepingLogic == null) {
 			return;
@@ -157,23 +155,22 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 			}
 		}
 
-		if (getErrorState() == EnumErrorCode.OK) {
+		if (!hasErrorState()) {
 			queen.doFX(beekeepingLogic.getEffectData(), this);
+
+			if (updateOnInterval(50)) {
+				float f = xCoord + 0.5F;
+				float f1 = yCoord + 0.0F + (worldObj.rand.nextFloat() * 6F) / 16F;
+				float f2 = zCoord + 0.5F;
+				float f3 = 0.52F;
+				float f4 = worldObj.rand.nextFloat() * 0.6F - 0.3F;
+
+				Proxies.common.addEntitySwarmFX(worldObj, (f - f3), f1, (f2 + f4), 0F, 0F, 0F);
+				Proxies.common.addEntitySwarmFX(worldObj, (f + f3), f1, (f2 + f4), 0F, 0F, 0F);
+				Proxies.common.addEntitySwarmFX(worldObj, (f + f4), f1, (f2 - f3), 0F, 0F, 0F);
+				Proxies.common.addEntitySwarmFX(worldObj, (f + f4), f1, (f2 + f3), 0F, 0F, 0F);
+			}
 		}
-
-		if (getErrorState() == EnumErrorCode.OK && updateOnInterval(50)) {
-			float f = xCoord + 0.5F;
-			float f1 = yCoord + 0.0F + (worldObj.rand.nextFloat() * 6F) / 16F;
-			float f2 = zCoord + 0.5F;
-			float f3 = 0.52F;
-			float f4 = worldObj.rand.nextFloat() * 0.6F - 0.3F;
-
-			Proxies.common.addEntitySwarmFX(worldObj, (f - f3), f1, (f2 + f4), 0F, 0F, 0F);
-			Proxies.common.addEntitySwarmFX(worldObj, (f + f3), f1, (f2 + f4), 0F, 0F, 0F);
-			Proxies.common.addEntitySwarmFX(worldObj, (f + f4), f1, (f2 - f3), 0F, 0F, 0F);
-			Proxies.common.addEntitySwarmFX(worldObj, (f + f4), f1, (f2 + f3), 0F, 0F, 0F);
-		}
-
 	}
 
 	@Override
@@ -183,15 +180,19 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 			return;
 		}
 
-		ISidedInventory inventory = getStructureInventory();
-		if (inventory == null) {
+		if (hasErrorState()) {
 			return;
 		}
 
-		// / Multiplayer FX
-		ItemStack queenStack = inventory.getStackInSlot(SLOT_QUEEN);
-		if (BeeManager.beeRoot.isMated(queenStack)) {
-			if (getErrorState() == EnumErrorCode.OK && updateOnInterval(2)) {
+		if (updateOnInterval(2)) {
+			ISidedInventory inventory = getStructureInventory();
+			if (inventory == null) {
+				return;
+			}
+
+			// / Multiplayer FX
+			ItemStack queenStack = inventory.getStackInSlot(SLOT_QUEEN);
+			if (BeeManager.beeRoot.isMated(queenStack)) {
 				IBee displayQueen = BeeManager.beeRoot.getMember(queenStack);
 				displayQueen.doFX(beekeepingLogic.getEffectData(), this);
 			}
@@ -262,22 +263,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 	/* STRUCTURE MANAGMENT */
 	@Override
 	protected void createInventory() {
-		setInternalInventory(new TileInventoryAdapter(this, 9, "Items") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				if (slotIndex == SLOT_QUEEN) {
-					return BeeManager.beeRoot.isMember(itemStack) && !BeeManager.beeRoot.isDrone(itemStack);
-				} else if (slotIndex == SLOT_DRONE) {
-					return BeeManager.beeRoot.isDrone(itemStack);
-				}
-				return false;
-			}
-
-			@Override
-			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-				return slotIndex != SLOT_QUEEN && slotIndex != SLOT_DRONE;
-			}
-		});
+		setInternalInventory(new AlvearyInventoryAdapter(this));
 	}
 
 	@Override
@@ -460,6 +446,15 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 		return InvTools.tryAddStack(inventory, product, SLOT_PRODUCT_1, inventory.getSizeInventory() - SLOT_PRODUCT_1, all);
 	}
 
+	@Deprecated
+	@Override
+	public void setErrorState(IErrorState state) {
+		removeErrorStates();
+		if (state != EnumErrorCode.OK) {
+			addErrorState(state);
+		}
+	}
+
 	@Override
 	public void wearOutEquipment(int amount) {
 		for (IBeeListener eventHandler : eventHandlers) {
@@ -609,16 +604,26 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 	}
 
 	/* IERRORSOURCE */
+	@Deprecated
 	@Override
 	public IErrorState getErrorState() {
+		Set<IErrorState> errorStates = null;
 		if (hasMaster()) {
-			ITileStructure tile = this.getCentralTE();
+			ITileStructure tile = getCentralTE();
 			if (tile != null) {
-				return ((IErrorSource) tile).getErrorState();
+				errorStates = ((IErrorSource) tile).getErrorStates();
 			}
 		}
 
-		return errorState;
+		if (errorStates == null) {
+			errorStates = this.getErrorStates();
+		}
+
+		if (errorStates.size() == 0) {
+			return EnumErrorCode.OK;
+		} else {
+			return getErrorStates().iterator().next();
+		}
 	}
 
 	/* ICLIMATISED */
@@ -658,5 +663,26 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 	@Override
 	public GameProfile getOwnerName() {
 		return this.getOwnerProfile();
+	}
+
+	private static class AlvearyInventoryAdapter extends TileInventoryAdapter<TileAlvearyPlain> {
+		public AlvearyInventoryAdapter(TileAlvearyPlain tileAlvearyPlain) {
+			super(tileAlvearyPlain, 9, "Items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_QUEEN) {
+				return BeeManager.beeRoot.isMember(itemStack) && !BeeManager.beeRoot.isDrone(itemStack);
+			} else if (slotIndex == SLOT_DRONE) {
+				return BeeManager.beeRoot.isDrone(itemStack);
+			}
+			return false;
+		}
+
+		@Override
+		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+			return slotIndex != SLOT_QUEEN && slotIndex != SLOT_DRONE;
+		}
 	}
 }
