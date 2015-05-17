@@ -154,6 +154,22 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		if (queenWorkCycleThrottle >= PluginApiculture.ticksPerBeeWorkCycle) {
 			queenWorkCycleThrottle = 0;
 
+			boolean hasFlower = queen.hasFlower(housing);
+
+			if (housingSupportsMultipleErrorStates) {
+				housing.setErrorCondition(!hasFlower, EnumErrorCode.NOFLOWER);
+			} else {
+				if (hasFlower) {
+					housing.setErrorState(EnumErrorCode.OK);
+				} else {
+					housing.setErrorState(EnumErrorCode.NOFLOWER);
+				}
+			}
+
+			if (!hasFlower) {
+				return;
+			}
+
 			doProduction();
 			queen.plantFlowerRandom(housing);
 			doPollination();
@@ -278,7 +294,6 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	private boolean queenCanWork() {
-		boolean hasFlower = queen.hasFlower(housing);
 
 		if (housingSupportsMultipleErrorStates) {
 			try {
@@ -287,9 +302,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 					housing.setErrorCondition(true, errorState);
 				}
 
-				housing.setErrorCondition(!hasFlower, EnumErrorCode.NOFLOWER);
-
-				return (errorStates.size() == 0) && hasFlower;
+				return (errorStates.size() == 0);
 			} catch (Throwable ignored) {
 				// queen might not support getCanWork(housing)
 			}
@@ -298,13 +311,6 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		IErrorState state = queen.canWork(housing);
 		if (state != EnumErrorCode.OK) {
 			housing.setErrorState(state);
-			return false;
-		}
-
-		if (hasFlower) {
-			housing.setErrorState(EnumErrorCode.OK);
-		} else {
-			housing.setErrorState(EnumErrorCode.NOFLOWER);
 			return false;
 		}
 
