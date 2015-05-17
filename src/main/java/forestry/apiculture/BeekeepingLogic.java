@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.item.ItemStack;
@@ -34,10 +35,13 @@ import forestry.plugins.PluginApiculture;
 public class BeekeepingLogic implements IBeekeepingLogic {
 
 	private static final int MAX_POLLINATION_ATTEMPTS = 20;
+	private static final int totalBreedingTime = Defaults.APIARY_BREEDING_TIME;
+
 	private final IBeeHousing housing;
+	private final boolean housingSupportsMultipleErrorStates;
+
 	// Breeding
 	private int breedingTime;
-	private final int totalBreedingTime = Defaults.APIARY_BREEDING_TIME;
 	private int queenWorkCycleThrottle;
 	private IEffectData effectData[] = new IEffectData[2];
 	private IBee queen;
@@ -47,6 +51,14 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 	public BeekeepingLogic(IBeeHousing housing) {
 		this.housing = housing;
+
+		Set<IErrorState> errorStateSet = null;
+		try {
+			errorStateSet = housing.getErrorStates();
+		} catch (Throwable ignored) {
+		}
+
+		housingSupportsMultipleErrorStates = (errorStateSet != null);
 	}
 
 	// / SAVING & LOADING
@@ -87,7 +99,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 	@Override
 	public int getTotalBreedingTime() {
-		return this.totalBreedingTime;
+		return totalBreedingTime;
 	}
 
 	@Override
@@ -108,6 +120,13 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	/* UPDATING */
 	@Override
 	public void update() {
+
+		if (housingSupportsMultipleErrorStates) {
+			Set<IErrorState> errorStates = housing.getErrorStates();
+			for (IErrorState errorState : errorStates) {
+				housing.setErrorCondition(false, errorState);
+			}
+		}
 
 		this.queen = null;
 
@@ -134,24 +153,15 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		queenWorkCycleThrottle++;
 		if (queenWorkCycleThrottle >= PluginApiculture.ticksPerBeeWorkCycle) {
 			queenWorkCycleThrottle = 0;
-			
-			// Need a flower
-			if (queen.hasFlower(housing)) {
-				housing.setErrorState(EnumErrorCode.OK);
-				doQueenWorkCycle();
-			} else {
-				housing.setErrorState(EnumErrorCode.NOFLOWER);
-			}
+
+			doProduction();
+			queen.plantFlowerRandom(housing);
+			doPollination();
+
+			// Age the queen
+			queen.age(housing.getWorld(), housing.getLifespanModifier(queen.getGenome(), queen.getMate(), 0f));
+			updateQueenItemNBT();
 		}
-	}
-	
-	private void doQueenWorkCycle() {
-		doProduction();
-		queen.plantFlowerRandom(housing);
-		doPollination();
-		// Age the queen
-		queen.age(housing.getWorld(), housing.getLifespanModifier(queen.getGenome(), queen.getMate(), 0f));
-		updateQueenItemNBT();
 	}
 
 	private void doProduction() {
@@ -204,7 +214,12 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		}
 
 		if (housingErrorState != null) {
-			housing.setErrorState(housingErrorState);
+			if (housingSupportsMultipleErrorStates) {
+				boolean hasSpace = (housingErrorState == EnumErrorCode.OK);
+				housing.setErrorCondition(!hasSpace, EnumErrorCode.NOSPACE);
+			} else {
+				housing.setErrorState(housingErrorState);
+			}
 		}
 
 		return housingErrorState != EnumErrorCode.NOSPACE;
@@ -228,9 +243,15 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 				this.queen = queen;
 			}
 		}
-		if (housingErrorState != null) {
-			housing.setErrorState(housingErrorState);
+
+		if (housingSupportsMultipleErrorStates) {
+			housing.setErrorCondition(!hasQueen, EnumErrorCode.NOQUEEN);
+		} else {
+			if (housingErrorState != null) {
+				housing.setErrorState(housingErrorState);
+			}
 		}
+
 		return hasQueen;
 	}
 	
@@ -239,10 +260,15 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 		// Princess available? Try to breed!
 		if (ForestryItem.beePrincessGE.isItemEqual(housing.getQueen())) {
-			if (ForestryItem.beeDroneGE.isItemEqual(housing.getDrone())) {
-				housing.setErrorState(EnumErrorCode.OK);
+			boolean hasDrone = ForestryItem.beeDroneGE.isItemEqual(housing.getDrone());
+			if (housingSupportsMultipleErrorStates) {
+				housing.setErrorCondition(!hasDrone, EnumErrorCode.NODRONE);
 			} else {
-				housing.setErrorState(EnumErrorCode.NODRONE);
+				if (hasDrone) {
+					housing.setErrorState(EnumErrorCode.OK);
+				} else {
+					housing.setErrorState(EnumErrorCode.NODRONE);
+				}
 			}
 			tickBreed();
 			isBreedingPrincess = true;
@@ -252,15 +278,36 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	private boolean queenCanWork() {
+		boolean hasFlower = queen.hasFlower(housing);
+
+		if (housingSupportsMultipleErrorStates) {
+			try {
+				Set<IErrorState> errorStates = queen.getCanWork(housing);
+				for (IErrorState errorState : errorStates) {
+					housing.setErrorCondition(true, errorState);
+				}
+
+				housing.setErrorCondition(!hasFlower, EnumErrorCode.NOFLOWER);
+
+				return (errorStates.size() == 0) && hasFlower;
+			} catch (Throwable ignored) {
+				// queen might not support getCanWork(housing)
+			}
+		}
+
 		IErrorState state = queen.canWork(housing);
 		if (state != EnumErrorCode.OK) {
 			housing.setErrorState(state);
 			return false;
 		}
 
-		if (housing.getErrorState() != EnumErrorCode.NOFLOWER) {
+		if (hasFlower) {
 			housing.setErrorState(EnumErrorCode.OK);
+		} else {
+			housing.setErrorState(EnumErrorCode.NOFLOWER);
+			return false;
 		}
+
 		return true;
 	}
 
