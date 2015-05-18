@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.SessionVars;
 import forestry.core.proxy.Proxies;
@@ -26,7 +27,6 @@ import forestry.core.utils.ForestryResource;
  */
 public abstract class Ledger {
 	
-	private static final int OPEN_SPEED = 8;
 	protected static final int maxWidth = 124;
 	protected static final int minWidth = 24;
 	public static final int minHeight = 24;
@@ -65,18 +65,28 @@ public abstract class Ledger {
 	public void update() {
 		// Width
 		if (open && currentWidth < maxWidth) {
-			currentWidth += OPEN_SPEED;
+			currentWidth += Config.guiTabSpeed;
+			if (currentWidth > maxWidth) {
+				currentWidth = maxWidth;
+			}
 		} else if (!open && currentWidth > minWidth) {
-			currentWidth -= OPEN_SPEED;
-			currentWidth = currentWidth > minWidth ? currentWidth : minWidth;
+			currentWidth -= Config.guiTabSpeed;
+			if (currentWidth < minWidth) {
+				currentWidth = minWidth;
+			}
 		}
 
 		// Height
 		if (open && currentHeight < maxHeight) {
-			currentHeight += OPEN_SPEED;
+			currentHeight += Config.guiTabSpeed;
+			if (currentHeight > maxHeight) {
+				currentHeight = maxHeight;
+			}
 		} else if (!open && currentHeight > minHeight) {
-			currentHeight -= OPEN_SPEED;
-			currentHeight = currentHeight > minHeight ? currentHeight : minHeight;
+			currentHeight -= Config.guiTabSpeed;
+			if (currentHeight < minHeight) {
+				currentHeight = minHeight;
+			}
 		}
 	}
 
