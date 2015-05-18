@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -29,8 +30,10 @@ import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
 import forestry.core.config.ForestryItem;
+import forestry.core.network.PacketIds;
+import forestry.core.proxy.Proxies;
 import forestry.mail.items.ItemLetter;
-import forestry.plugins.PluginMail;
+import forestry.mail.network.PacketPOBoxInfo;
 
 public class PostRegistry implements IPostRegistry {
 
@@ -69,7 +72,11 @@ public class PostRegistry implements IPostRegistry {
 			world.setItemData(POBox.SAVE_NAME + address, pobox);
 			pobox.markDirty();
 			cachedPOBoxes.put(address, pobox);
-			PluginMail.proxy.setPOBoxInfo(world, address, pobox.getPOBoxInfo());
+
+			EntityPlayer player = Proxies.common.getPlayer(world, address.getPlayerProfile());
+			if (player != null) {
+				Proxies.net.sendToPlayer(new PacketPOBoxInfo(PacketIds.POBOX_INFO, pobox.getPOBoxInfo()), player);
+			}
 		}
 
 		return pobox;
@@ -206,10 +213,10 @@ public class PostRegistry implements IPostRegistry {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		letter.writeToNBT(nbttagcompound);
 
-		ItemStack mailstack = ForestryItem.letters.getItemStack(1, ItemLetter.encodeMeta(1, ItemLetter.getType(letter)));
-		mailstack.setTagCompound(nbttagcompound);
+		ItemStack letterStack = ItemLetter.createStampedLetterStack(letter);
+		letterStack.setTagCompound(nbttagcompound);
 
-		return mailstack;
+		return letterStack;
 	}
 
 	@Override

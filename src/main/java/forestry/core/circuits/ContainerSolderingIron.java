@@ -11,7 +11,6 @@
 package forestry.core.circuits;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.api.circuits.ICircuitLayout;
 import forestry.core.circuits.ItemSolderingIron.SolderingInventory;
@@ -26,8 +25,8 @@ import forestry.core.proxy.Proxies;
 
 public class ContainerSolderingIron extends ContainerItemInventory<SolderingInventory> implements IGuiSelectable {
 
-	public ContainerSolderingIron(InventoryPlayer inventoryplayer, SolderingInventory inventory) {
-		super(inventory);
+	public ContainerSolderingIron(EntityPlayer player, SolderingInventory inventory) {
+		super(inventory, player.inventory, 8, 123);
 
 		// Input
 		this.addSlotToContainer(new SlotFiltered(inventory, 0, 152, 12));
@@ -40,18 +39,6 @@ public class ContainerSolderingIron extends ContainerItemInventory<SolderingInve
 		this.addSlotToContainer(new SlotFiltered(inventory, 3, 12, 52));
 		this.addSlotToContainer(new SlotFiltered(inventory, 4, 12, 72));
 		this.addSlotToContainer(new SlotFiltered(inventory, 5, 12, 92));
-
-		// Player inventory
-		for (int i1 = 0; i1 < 3; i1++) {
-			for (int l1 = 0; l1 < 9; l1++) {
-				addSecuredSlot(inventoryplayer, l1 + i1 * 9 + 9, 8 + l1 * 18, 123 + i1 * 18);
-			}
-		}
-		// Player hotbar
-		for (int j1 = 0; j1 < 9; j1++) {
-			addSecuredSlot(inventoryplayer, j1, 8 + j1 * 18, 181);
-		}
-
 	}
 
 	public ICircuitLayout getLayout() {

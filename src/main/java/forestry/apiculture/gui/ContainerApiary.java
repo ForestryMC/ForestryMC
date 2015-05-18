@@ -12,21 +12,17 @@ package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.Slot;
 
 import forestry.apiculture.gadgets.TileBeehouse;
-import forestry.core.gui.ContainerForestry;
+import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 
-public class ContainerApiary extends ContainerForestry {
-
-	private final TileBeehouse tile;
+public class ContainerApiary extends ContainerTile<TileBeehouse> {
 
 	public ContainerApiary(InventoryPlayer player, TileBeehouse tile, boolean hasFrames) {
-		super(tile);
+		super(tile, player, 8, 108);
 
-		this.tile = tile;
 		tile.sendNetworkUpdate();
 
 		// Queen/Princess
@@ -50,17 +46,6 @@ public class ContainerApiary extends ContainerForestry {
 		this.addSlotToContainer(new SlotOutput(tile, 6, 95, 65));
 		this.addSlotToContainer(new SlotOutput(tile, 7, 95, 39));
 		this.addSlotToContainer(new SlotOutput(tile, 8, 116, 26));
-
-		// Player inventory
-		for (int i1 = 0; i1 < 3; i1++) {
-			for (int l1 = 0; l1 < 9; l1++) {
-				addSlotToContainer(new Slot(player, l1 + i1 * 9 + 9, 8 + l1 * 18, 108 + i1 * 18));
-			}
-		}
-		// Player hotbar
-		for (int j1 = 0; j1 < 9; j1++) {
-			addSlotToContainer(new Slot(player, j1, 8 + j1 * 18, 166));
-		}
 	}
 
 	@Override

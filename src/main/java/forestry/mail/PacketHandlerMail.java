@@ -23,9 +23,9 @@ import forestry.core.proxy.Proxies;
 import forestry.mail.gui.ContainerCatalogue;
 import forestry.mail.gui.ContainerLetter;
 import forestry.mail.gui.ContainerTradeName;
+import forestry.mail.gui.GuiMailboxInfo;
 import forestry.mail.network.PacketLetterInfo;
 import forestry.mail.network.PacketPOBoxInfo;
-import forestry.plugins.PluginMail;
 
 public class PacketHandlerMail implements IPacketHandler {
 
@@ -79,8 +79,7 @@ public class PacketHandlerMail implements IPacketHandler {
 	}
 
 	private void onPOBoxInfo(PacketPOBoxInfo packet) {
-		MailAddress address = new MailAddress(Proxies.common.getClientInstance().thePlayer.getGameProfile());
-		PluginMail.proxy.setPOBoxInfo(Proxies.common.getRenderWorld(), address, packet.poboxInfo);
+		GuiMailboxInfo.instance.setPOBoxInfo(packet.poboxInfo);
 	}
 
 	private void onAddressSet(EntityPlayer player, PacketUpdate packet) {

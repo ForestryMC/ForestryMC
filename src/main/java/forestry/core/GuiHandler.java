@@ -48,7 +48,7 @@ public class GuiHandler extends GuiHandlerBase {
 					if (equipped == null) {
 						return null;
 					}
-					return new GuiSolderingIron(player.inventory, new SolderingInventory(equipped));
+					return new GuiSolderingIron(player, new SolderingInventory(player, equipped));
 
 				default:
 					for (IGuiHandler handler : PluginManager.guiHandlers) {
@@ -83,7 +83,7 @@ public class GuiHandler extends GuiHandlerBase {
 					if (equipped == null) {
 						return null;
 					}
-					return new ContainerSolderingIron(player.inventory, new SolderingInventory(equipped));
+					return new ContainerSolderingIron(player, new SolderingInventory(player, equipped));
 
 				default:
 					for (IGuiHandler handler : PluginManager.guiHandlers) {

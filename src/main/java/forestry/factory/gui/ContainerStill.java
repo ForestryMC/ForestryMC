@@ -11,32 +11,19 @@
 package forestry.factory.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.factory.gadgets.MachineStill;
 
-public class ContainerStill extends ContainerLiquidTanks {
+public class ContainerStill extends ContainerLiquidTanks<MachineStill> {
 
 	public ContainerStill(InventoryPlayer player, MachineStill tile) {
-		super(tile);
+		super(tile, player, 8, 84);
 
 		this.addSlotToContainer(new SlotOutput(tile, MachineStill.SLOT_PRODUCT, 150, 54));
 		this.addSlotToContainer(new SlotFiltered(tile, MachineStill.SLOT_RESOURCE, 150, 18));
 		this.addSlotToContainer(new SlotFiltered(tile, MachineStill.SLOT_CAN, 10, 36));
-
-		for (int i = 0; i < 3; ++i) {
-			for (int j = 0; j < 9; ++j) {
-				this.addSlotToContainer(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
-			}
-		}
-
-		for (int i = 0; i < 9; ++i) {
-			this.addSlotToContainer(new Slot(player, i, 8 + i * 18, 142));
-		}
-
 	}
-
 }

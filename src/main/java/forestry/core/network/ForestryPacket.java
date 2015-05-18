@@ -24,8 +24,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 import cpw.mods.fml.common.registry.GameData;
 
-import forestry.core.proxy.Proxies;
-
 import io.netty.buffer.Unpooled;
 
 public class ForestryPacket {
@@ -68,7 +66,7 @@ public class ForestryPacket {
 			short meta = data.readShort();
 			itemstack = new ItemStack(item, stackSize, meta);
 
-			if (item.isDamageable() || Proxies.common.needsTagCompoundSynched(item)) {
+			if (item.isDamageable() || item.getShareTag()) {
 				itemstack.stackTagCompound = this.readNBTTagCompound(data);
 			}
 		}
@@ -85,7 +83,7 @@ public class ForestryPacket {
 			data.writeByte(itemstack.stackSize);
 			data.writeShort(itemstack.getItemDamage());
 
-			if (itemstack.getItem().isDamageable() || Proxies.common.needsTagCompoundSynched(itemstack.getItem())) {
+			if (itemstack.getItem().isDamageable() || itemstack.getItem().getShareTag()) {
 				this.writeNBTTagCompound(itemstack.stackTagCompound, data);
 			}
 		}

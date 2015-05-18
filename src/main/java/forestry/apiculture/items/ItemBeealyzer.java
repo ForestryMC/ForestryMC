@@ -31,8 +31,7 @@ public class ItemBeealyzer extends ItemInventoried {
 	public static class BeealyzerInventory extends AlyzerInventory implements IHintSource {
 
 		public BeealyzerInventory(EntityPlayer player, ItemStack itemStack) {
-			super(ItemBeealyzer.class, 7, itemStack);
-			this.player = player;
+			super(player, 7, itemStack);
 		}
 
 		@Override

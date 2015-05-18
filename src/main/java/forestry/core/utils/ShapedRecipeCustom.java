@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.minecraft.block.Block;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -71,15 +72,28 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 	}
 
 	@Override
-	public boolean matches(InventoryCrafting inventorycrafting, World world) {
+	public boolean matches(InventoryCrafting inventoryCrafting, World world) {
+		return matches((IInventory) inventoryCrafting, world);
+	}
+
+	public boolean matches(IInventory inventoryCrafting, World world) {
 		ItemStack[][] resources = new ItemStack[3][3];
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				resources[i][j] = inventorycrafting.getStackInRowAndColumn(i, j);
+				resources[i][j] = getStackInRowAndColumn(inventoryCrafting, i, j);
 			}
 		}
 
 		return matches(resources);
+	}
+
+	public ItemStack getStackInRowAndColumn(IInventory inventory, int i, int j) {
+		if (i >= 0 && i < width) {
+			int k = i + j * width;
+			return inventory.getStackInSlot(k);
+		} else {
+			return null;
+		}
 	}
 
 	public boolean matches(ItemStack[][] resources) {

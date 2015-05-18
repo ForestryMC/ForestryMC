@@ -8,37 +8,30 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.gui.slots;
+package forestry.core.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.player.InventoryPlayer;
 
-public class SlotLocked extends SlotForestry {
+import forestry.core.gadgets.TileForestry;
 
-	public SlotLocked(IInventory par1iInventory, int par2, int par3, int par4) {
-		super(par1iInventory, par2, par3, par4);
-		setCanAdjustPhantom(false);
-		blockShift();
-		setPhantom();
+public class ContainerTile<T extends TileForestry> extends ContainerForestry {
+
+	protected final T tile;
+
+	public ContainerTile(T tileForestry, InventoryPlayer playerInventory, int xInv, int yInv) {
+		this.tile = tileForestry;
+
+		addPlayerInventory(playerInventory, xInv, yInv);
 	}
 
 	@Override
-	public void onPickupFromSlot(EntityPlayer player, ItemStack itemStack) {
+	protected final boolean canAccess(EntityPlayer player) {
+		return player != null && tile.allowsAlteration(player);
 	}
 
 	@Override
-	public boolean isItemValid(ItemStack par1ItemStack) {
-		return false;
-	}
-
-	@Override
-	public boolean getHasStack() {
-		return false;
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i) {
-		return null;
+	public final boolean canInteractWith(EntityPlayer entityplayer) {
+		return tile.isUseableByPlayer(entityplayer);
 	}
 }

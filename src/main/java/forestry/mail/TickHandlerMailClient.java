@@ -15,8 +15,10 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.RenderTickEvent;
 
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.PacketIds;
+import forestry.core.proxy.Proxies;
 import forestry.mail.gui.GuiMailboxInfo;
-import forestry.plugins.PluginMail;
 
 public class TickHandlerMailClient {
 	public TickHandlerMailClient() {
@@ -29,10 +31,10 @@ public class TickHandlerMailClient {
 			return;
 		}
 
-		if (GuiMailboxInfo.instance != null) {
+		if (GuiMailboxInfo.instance.hasPOBoxInfo()) {
 			GuiMailboxInfo.instance.render(0, 0);
 		} else {
-			PluginMail.proxy.resetMailboxInfo();
+			Proxies.net.sendToServer(new ForestryPacket(PacketIds.POBOX_INFO_REQUEST));
 		}
 	}
 }

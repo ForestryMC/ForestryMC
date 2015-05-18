@@ -90,7 +90,7 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 					return null;
 				}
 
-				return new GuiHabitatLocator(player.inventory, new HabitatLocatorInventory(equipped));
+				return new GuiHabitatLocator(player, new HabitatLocatorInventory(player, equipped));
 
 			case HygroregulatorGUI:
 				return new GuiAlvearyHygroregulator(player.inventory, (TileAlvearyHygroregulator) getTileForestry(world, x, y, z));
@@ -156,7 +156,7 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 					return null;
 				}
 
-				return new ContainerHabitatLocator(player.inventory, new HabitatLocatorInventory(equipped));
+				return new ContainerHabitatLocator(player, new HabitatLocatorInventory(player, equipped));
 
 			case HygroregulatorGUI:
 				return new ContainerAlvearyHygroregulator(player.inventory, (TileAlvearyHygroregulator) getTileForestry(world, x, y, z));
@@ -175,7 +175,7 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 		}
 	}
 
-	private void synchApiaristTracker(World world, EntityPlayer player) {
+	private static void synchApiaristTracker(World world, EntityPlayer player) {
 		BeeManager.beeRoot.getBreedingTracker(world, player.getGameProfile()).synchToPlayer(player);
 	}
 }

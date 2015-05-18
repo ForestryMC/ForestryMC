@@ -66,8 +66,8 @@ public class ItemHabitatLocator extends ItemInventoried {
 		public Set<BiomeGenBase> biomesToSearch = new HashSet<BiomeGenBase>();
 		private final ItemHabitatLocator habitatLocator;
 
-		public HabitatLocatorInventory(ItemStack itemstack) {
-			super(ItemHabitatLocator.class, 3, itemstack);
+		public HabitatLocatorInventory(EntityPlayer player, ItemStack itemstack) {
+			super(player, 3, itemstack);
 			this.habitatLocator = (ItemHabitatLocator) itemstack.getItem();
 		}
 
@@ -130,7 +130,8 @@ public class ItemHabitatLocator extends ItemInventoried {
 
 			ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
 
-			if (!BeeManager.beeRoot.isMember(inventoryStacks[SLOT_SPECIMEN])) {
+			ItemStack specimen = getStackInSlot(SLOT_SPECIMEN);
+			if (!BeeManager.beeRoot.isMember(specimen)) {
 				errorStates.add(EnumErrorCode.NOTHINGANALYZE);
 			}
 

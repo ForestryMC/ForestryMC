@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -103,8 +102,8 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, Habi
 	private int startX;
 	private int startY;
 
-	public GuiHabitatLocator(InventoryPlayer inventory, HabitatLocatorInventory item) {
-		super(Defaults.TEXTURE_PATH_GUI + "/biomefinder.png", new ContainerHabitatLocator(inventory, item), item);
+	public GuiHabitatLocator(EntityPlayer player, HabitatLocatorInventory item) {
+		super(Defaults.TEXTURE_PATH_GUI + "/biomefinder.png", new ContainerHabitatLocator(player, item), item);
 
 		this.inventory.tryAnalyze();
 		xSize = 176;

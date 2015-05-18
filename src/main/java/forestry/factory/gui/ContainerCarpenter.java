@@ -25,19 +25,17 @@ import forestry.core.interfaces.IContainerCrafting;
 import forestry.core.proxy.Proxies;
 import forestry.factory.gadgets.MachineCarpenter;
 
-public class ContainerCarpenter extends ContainerLiquidTanks implements IContainerCrafting {
+public class ContainerCarpenter extends ContainerLiquidTanks<MachineCarpenter> implements IContainerCrafting {
 
-	private MachineCarpenter machine;
 	private final IInventory craftingInventory;
 	public final InventoryCraftingAuto craftMatrix;
 	public final InventoryCraftResult craftResult;
 
 	public ContainerCarpenter(InventoryPlayer inventoryplayer, MachineCarpenter tile) {
-		super(tile);
+		super(tile, inventoryplayer, 8, 136);
 
-		machine = tile;
-		machine.activeContainer = this;
-		craftingInventory = machine.getCraftingInventory();
+		this.tile.activeContainer = this;
+		craftingInventory = this.tile.getCraftingInventory();
 
 		craftMatrix = new InventoryCraftingAuto(this, 3, 3);
 		craftResult = new InventoryCraftResult();
@@ -45,16 +43,16 @@ public class ContainerCarpenter extends ContainerLiquidTanks implements IContain
 		// Internal inventory
 		for (int i = 0; i < 2; i++) {
 			for (int k = 0; k < 9; k++) {
-				addSlotToContainer(new Slot(machine, MachineCarpenter.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 90 + i * 18));
+				addSlotToContainer(new Slot(this.tile, MachineCarpenter.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 90 + i * 18));
 			}
 		}
 
 		// Liquid Input
-		this.addSlotToContainer(new SlotFiltered(machine, MachineCarpenter.SLOT_CAN_INPUT, 120, 20));
+		this.addSlotToContainer(new SlotFiltered(this.tile, MachineCarpenter.SLOT_CAN_INPUT, 120, 20));
 		// Boxes
-		this.addSlotToContainer(new SlotFiltered(machine, MachineCarpenter.SLOT_BOX, 83, 20));
+		this.addSlotToContainer(new SlotFiltered(this.tile, MachineCarpenter.SLOT_BOX, 83, 20));
 		// Product
-		this.addSlotToContainer(new SlotOutput(machine, MachineCarpenter.SLOT_PRODUCT, 120, 56));
+		this.addSlotToContainer(new SlotOutput(this.tile, MachineCarpenter.SLOT_PRODUCT, 120, 56));
 
 		// CraftResult display
 		addSlotToContainer(new SlotLocked(craftResult, 0, 80, 51));
@@ -65,29 +63,6 @@ public class ContainerCarpenter extends ContainerLiquidTanks implements IContain
 				addSlotToContainer(new SlotCraftMatrix(this, craftingInventory, k1 + l * 3, 10 + k1 * 18, 20 + l * 18));
 			}
 		}
-
-		// Player inventory
-		for (int i1 = 0; i1 < 3; i1++) {
-			for (int l1 = 0; l1 < 9; l1++) {
-				addSlotToContainer(new Slot(inventoryplayer, l1 + i1 * 9 + 9, 8 + l1 * 18, 136 + i1 * 18));
-			}
-		}
-		// Player hotbar
-		for (int j1 = 0; j1 < 9; j1++) {
-			addSlotToContainer(new Slot(inventoryplayer, j1, 8 + j1 * 18, 194));
-		}
-
-		// Update crafting matrix with current contents of tileentity.
-		for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
-			craftMatrix.setInventorySlotContents(i, craftingInventory.getStackInSlot(i));
-		}
-	}
-
-	public ContainerCarpenter(MachineCarpenter tile) {
-		super(tile);
-		craftMatrix = new InventoryCraftingAuto(this, 3, 3);
-		craftResult = new InventoryCraftResult();
-		craftingInventory = tile.getCraftingInventory();
 
 		// Update crafting matrix with current contents of tileentity.
 		for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
@@ -119,16 +94,16 @@ public class ContainerCarpenter extends ContainerLiquidTanks implements IContain
 	}
 
 	private void resetProductDisplay() {
-		if (machine != null) {
-			machine.resetProductDisplay(craftMatrix);
+		if (tile != null) {
+			tile.resetProductDisplay(craftMatrix);
 			updateProductSlot();
 		}
 	}
 
 	private void updateProductSlot() {
 		// Update crafting display
-		if (machine.currentRecipe != null) {
-			craftResult.setInventorySlotContents(0, machine.currentRecipe.getCraftingResult());
+		if (tile.currentRecipe != null) {
+			craftResult.setInventorySlotContents(0, tile.currentRecipe.getCraftingResult());
 		} else {
 			craftResult.setInventorySlotContents(0, null);
 		}
@@ -136,7 +111,7 @@ public class ContainerCarpenter extends ContainerLiquidTanks implements IContain
 
 	@Override
 	public void onContainerClosed(EntityPlayer entityplayer) {
-		machine.activeContainer = null;
+		tile.activeContainer = null;
 		if (entityplayer == null) {
 			return;
 		}

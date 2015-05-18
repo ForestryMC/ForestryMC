@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.EntityPlayer;
 
 import forestry.apiculture.items.ItemHabitatLocator.HabitatLocatorInventory;
 import forestry.core.gui.ContainerItemInventory;
@@ -19,8 +19,8 @@ import forestry.core.gui.slots.SlotOutput;
 
 public class ContainerHabitatLocator extends ContainerItemInventory<HabitatLocatorInventory> {
 
-	public ContainerHabitatLocator(InventoryPlayer inventoryplayer, HabitatLocatorInventory inventory) {
-		super(inventory);
+	public ContainerHabitatLocator(EntityPlayer player, HabitatLocatorInventory inventory) {
+		super(inventory, player.inventory, 8, 102);
 
 		// Energy
 		this.addSlotToContainer(new SlotFiltered(inventory, 2, 152, 8));
@@ -29,16 +29,5 @@ public class ContainerHabitatLocator extends ContainerItemInventory<HabitatLocat
 		this.addSlotToContainer(new SlotFiltered(inventory, 0, 152, 32));
 		// Analyzed bee
 		this.addSlotToContainer(new SlotOutput(inventory, 1, 152, 75));
-
-		// Player inventory
-		for (int i1 = 0; i1 < 3; i1++) {
-			for (int l1 = 0; l1 < 9; l1++) {
-				addSecuredSlot(inventoryplayer, l1 + i1 * 9 + 9, 8 + l1 * 18, 102 + i1 * 18);
-			}
-		}
-		// Player hotbar
-		for (int j1 = 0; j1 < 9; j1++) {
-			addSecuredSlot(inventoryplayer, j1, 8 + j1 * 18, 160);
-		}
 	}
 }

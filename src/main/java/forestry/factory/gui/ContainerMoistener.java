@@ -12,7 +12,6 @@ package forestry.factory.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotCraftAuto;
@@ -21,14 +20,10 @@ import forestry.core.gui.slots.SlotWorking;
 import forestry.core.interfaces.IContainerCrafting;
 import forestry.factory.gadgets.MachineMoistener;
 
-public class ContainerMoistener extends ContainerLiquidTanks implements IContainerCrafting {
-
-	protected final MachineMoistener tile;
+public class ContainerMoistener extends ContainerLiquidTanks<MachineMoistener> implements IContainerCrafting {
 
 	public ContainerMoistener(InventoryPlayer player, MachineMoistener tile) {
-		super(tile);
-
-		this.tile = tile;
+		super(tile, player, 8, 8);
 
 		// Stash
 		for (int l = 0; l < 2; l++) {
@@ -48,19 +43,6 @@ public class ContainerMoistener extends ContainerLiquidTanks implements IContain
 		this.addSlotToContainer(new SlotFiltered(tile, 10, 143, 55));
 		// Boxes
 		this.addSlotToContainer(new SlotCraftAuto(this, tile, 11, 143, 19));
-
-		// Player inventory
-		int var3;
-		for (var3 = 0; var3 < 3; ++var3) {
-			for (int var4 = 0; var4 < 9; ++var4) {
-				this.addSlotToContainer(new Slot(player, var4 + var3 * 9 + 9, 8 + var4 * 18, 84 + var3 * 18));
-			}
-		}
-
-		for (var3 = 0; var3 < 9; ++var3) {
-			this.addSlotToContainer(new Slot(player, var3, 8 + var3 * 18, 142));
-		}
-
 	}
 
 	@Override

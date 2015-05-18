@@ -21,6 +21,7 @@ import java.util.Set;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -91,7 +92,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			return internal.getRecipeOutput();
 		}
 
-		public boolean matches(FluidStack resource, ItemStack item, InventoryCrafting inventorycrafting, World world) {
+		public boolean matches(FluidStack resource, ItemStack item, IInventory inventorycrafting, World world) {
 
 			if (liquid != null) {
 				if (resource == null || !resource.containsFluid(liquid)) {
@@ -173,7 +174,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			}
 		}
 
-		public static Recipe findMatchingRecipe(FluidStack liquid, ItemStack item, InventoryCrafting inventorycrafting, World world) {
+		public static Recipe findMatchingRecipe(FluidStack liquid, ItemStack item, IInventory inventorycrafting, World world) {
 			for (Recipe recipe : recipes) {
 				if (recipe.matches(liquid, item, inventorycrafting, world)) {
 					return recipe;
@@ -292,8 +293,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		}
 
 		// Reset recipe according to contents
-		ContainerCarpenter container = new ContainerCarpenter(this);
-		setCurrentRecipe(RecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), container.craftMatrix, worldObj));
+		setCurrentRecipe(RecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory, worldObj));
 	}
 
 	public void setCurrentRecipe(@Nullable MachineCarpenter.Recipe currentRecipe) {
@@ -321,8 +321,8 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		}
 
 		if (currentRecipe == null) {
-			ContainerCarpenter container = new ContainerCarpenter(this);
-			setCurrentRecipe(MachineCarpenter.RecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), container.craftMatrix, worldObj));
+			Recipe recipe = MachineCarpenter.RecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory, worldObj);
+			setCurrentRecipe(recipe);
 		}
 
 		setErrorCondition(currentRecipe == null, EnumErrorCode.NORECIPE);

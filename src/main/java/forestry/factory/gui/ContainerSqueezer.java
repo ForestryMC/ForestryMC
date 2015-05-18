@@ -11,17 +11,16 @@
 package forestry.factory.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.factory.gadgets.MachineSqueezer;
 
-public class ContainerSqueezer extends ContainerLiquidTanks {
+public class ContainerSqueezer extends ContainerLiquidTanks<MachineSqueezer> {
 
 	public ContainerSqueezer(InventoryPlayer player, MachineSqueezer tile) {
-		super(tile);
+		super(tile, player, 8, 84);
 
 		// Resource inventory
 		for (int l = 0; l < 3; l++) {
@@ -37,17 +36,5 @@ public class ContainerSqueezer extends ContainerLiquidTanks {
 		this.addSlotToContainer(new SlotFiltered(tile, MachineSqueezer.SLOT_CAN_INPUT, 106, 55));
 		// Output slot
 		this.addSlotToContainer(new SlotOutput(tile, MachineSqueezer.SLOT_CAN_OUTPUT, 140, 55));
-
-		// Player inventory
-		for (int i1 = 0; i1 < 3; i1++) {
-			for (int l1 = 0; l1 < 9; l1++) {
-				addSlotToContainer(new Slot(player, l1 + i1 * 9 + 9, 8 + l1 * 18, 84 + i1 * 18));
-			}
-		}
-		// Player hotbar
-		for (int j1 = 0; j1 < 9; j1++) {
-			addSlotToContainer(new Slot(player, j1, 8 + j1 * 18, 142));
-		}
 	}
-
 }

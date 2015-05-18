@@ -12,12 +12,11 @@ package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import forestry.apiculture.items.ItemImprinter.ImprinterInventory;
-import forestry.core.gui.ContainerForestry;
+import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
@@ -26,30 +25,17 @@ import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 
-public class ContainerImprinter extends ContainerForestry implements IGuiSelectable {
+public class ContainerImprinter extends ContainerItemInventory<ImprinterInventory> implements IGuiSelectable {
 
-	public final ImprinterInventory inventory;
 	private boolean isNetSynced = false;
 
 	public ContainerImprinter(InventoryPlayer inventoryplayer, ImprinterInventory inventory) {
-		super(inventory);
+		super(inventory, inventoryplayer, 8, 103);
 
-		this.inventory = inventory;
 		// Input
 		this.addSlotToContainer(new SlotFiltered(inventory, 0, 152, 12));
 		// Output
 		this.addSlotToContainer(new SlotOutput(inventory, 1, 152, 72));
-
-		// Player inventory
-		for (int i1 = 0; i1 < 3; i1++) {
-			for (int l1 = 0; l1 < 9; l1++) {
-				addSlotToContainer(new Slot(inventoryplayer, l1 + i1 * 9 + 9, 8 + l1 * 18, 103 + i1 * 18));
-			}
-		}
-		// Player hotbar
-		for (int j1 = 0; j1 < 9; j1++) {
-			addSlotToContainer(new Slot(inventoryplayer, j1, 8 + j1 * 18, 161));
-		}
 	}
 
 	@Override
@@ -69,7 +55,6 @@ public class ContainerImprinter extends ContainerForestry implements IGuiSelecta
 			Proxies.common.dropItemPlayer(entityplayer, stack);
 			inventory.setInventorySlotContents(i, null);
 		}
-
 	}
 
 	public void advanceSelection(int index, World world) {

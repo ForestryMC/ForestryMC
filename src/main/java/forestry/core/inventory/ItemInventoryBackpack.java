@@ -1,5 +1,6 @@
 package forestry.core.inventory;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -10,8 +11,8 @@ public class ItemInventoryBackpack extends ItemInventory {
 
 	private final IBackpackDefinition backpackDefinition;
 
-	public ItemInventoryBackpack(Class<? extends Item> itemClass, int size, ItemStack itemstack) {
-		super(itemClass, size, itemstack);
+	public ItemInventoryBackpack(EntityPlayer player, int size, ItemStack parent) {
+		super(player, size, parent);
 
 		if (parent == null) {
 			throw new IllegalArgumentException("Parent cannot be null.");

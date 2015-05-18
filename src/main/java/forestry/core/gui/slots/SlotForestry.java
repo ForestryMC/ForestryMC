@@ -20,11 +20,11 @@ import forestry.core.gui.tooltips.ToolTip;
 
 public class SlotForestry extends Slot implements IToolTipProvider {
 
-	protected boolean isPhantom;
-	protected boolean isInfinite;
-	protected boolean canAdjustPhantom = true;
-	protected boolean canShift = true;
-	protected int stackLimit;
+	private boolean isPhantom;
+	private boolean isInfinite;
+	private boolean canAdjustPhantom = true;
+	private boolean canShift = true;
+	private int stackLimit;
 	private ToolTip toolTips;
 
 	public SlotForestry(IInventory inventory, int slotIndex, int xPos, int yPos) {
@@ -59,11 +59,6 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 
 	public SlotForestry setCanAdjustPhantom(boolean canAdjust) {
 		this.canAdjustPhantom = canAdjust;
-		return this;
-	}
-
-	public SlotForestry setCanShift(boolean canShift) {
-		this.canShift = canShift;
 		return this;
 	}
 

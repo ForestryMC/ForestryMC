@@ -76,11 +76,6 @@ public class ClientProxyCommon extends ProxyCommon {
 	}
 
 	@Override
-	public int getBlockModelIdEngine() {
-		return ForestryClient.blockModelIdEngine;
-	}
-
-	@Override
 	public int getByBlockModelId() {
 		return ForestryClient.byBlockModelId;
 	}

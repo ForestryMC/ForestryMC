@@ -11,16 +11,19 @@
 package forestry.factory.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 
+import forestry.core.interfaces.IContainerCrafting;
+
 public class InventoryCraftingAuto extends InventoryCrafting {
 
-	private final ContainerCarpenter eventHandler;
+	private final IContainerCrafting eventHandler;
 	public final ItemStack stackList[];
 	private final int inventoryWidth;
 
-	public InventoryCraftingAuto(ContainerCarpenter container, int i, int j) {
+	public <T extends Container & IContainerCrafting> InventoryCraftingAuto(T container, int i, int j) {
 		super(container, i, j);
 		int k = i * j;
 		stackList = new ItemStack[k];

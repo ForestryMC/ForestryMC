@@ -13,32 +13,28 @@ package forestry.mail.gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.mail.IMailAddress;
-import forestry.api.mail.PostManager;
-import forestry.core.gui.ContainerForestry;
+import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotOutput;
+import forestry.core.network.PacketIds;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.GuiUtil;
 import forestry.mail.POBox;
+import forestry.mail.POBoxInfo;
 import forestry.mail.gadgets.MachineMailbox;
-import forestry.plugins.PluginMail;
+import forestry.mail.network.PacketPOBoxInfo;
 
-public class ContainerMailbox extends ContainerForestry {
+public class ContainerMailbox extends ContainerTile<MachineMailbox> {
 
 	public static final short SLOT_LETTERS = 0;
 	public static final short SLOT_LETTERS_COUNT = 7 * 12;
 
-	private final MachineMailbox mailbox;
 	private final POBox mailInventory;
 
 	public ContainerMailbox(InventoryPlayer player, MachineMailbox tile) {
-		super(tile);
+		super(tile, player, 35, 145);
 		IInventory inventory = tile.getOrCreateMailInventory(player.player.worldObj, player.player.getGameProfile());
-
-		// Mailbox contents
-		this.mailbox = tile;
 
 		if (inventory instanceof POBox) {
 			this.mailInventory = (POBox) inventory;
@@ -51,28 +47,16 @@ public class ContainerMailbox extends ContainerForestry {
 				addSlotToContainer(new SlotOutput(inventory, j + i * 9, 8 + j * 18, 8 + i * 18));
 			}
 		}
-
-		// Player inventory
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 9; j++) {
-				addSlotToContainer(new Slot(player, j + i * 9 + 9, 35 + j * 18, 145 + i * 18));
-			}
-		}
-		// Player hotbar
-		for (int i = 0; i < 9; i++) {
-			addSlotToContainer(new Slot(player, i, 35 + i * 18, 203));
-		}
-
 	}
 
 	@Override
 	public ItemStack slotClick(int slotIndex, int button, int par3, EntityPlayer player) {
 		ItemStack stack = super.slotClick(slotIndex, button, par3, player);
 
-		if (slotIndex >= SLOT_LETTERS && slotIndex < SLOT_LETTERS + SLOT_LETTERS_COUNT) {
+		if (GuiUtil.isIndexInRange(slotIndex, SLOT_LETTERS, SLOT_LETTERS_COUNT)) {
 			if (Proxies.common.isSimulating(player.worldObj) && mailInventory != null) {
-				IMailAddress address = PostManager.postRegistry.getMailAddress(player.getGameProfile());
-				PluginMail.proxy.setPOBoxInfo(mailbox.getWorldObj(), address, mailInventory.getPOBoxInfo());
+				POBoxInfo info = mailInventory.getPOBoxInfo();
+				Proxies.net.sendToPlayer(new PacketPOBoxInfo(PacketIds.POBOX_INFO, info), player);
 			}
 		}
 

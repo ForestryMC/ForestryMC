@@ -12,7 +12,6 @@ package forestry.mail.gadgets;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -26,7 +25,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.common.Optional;
 
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.IErrorState;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;

@@ -30,17 +30,14 @@ public class ItemImprinter extends ItemForestry {
 
 	public static class ImprinterInventory extends ItemInventory {
 
-		private final short specimenSlot = 0;
-		private final short imprintedSlot = 1;
+		private static final short specimenSlot = 0;
+		private static final short imprintedSlot = 1;
 
 		private int primaryIndex = 0;
 		private int secondaryIndex = 0;
 
-		private final EntityPlayer player;
-
 		public ImprinterInventory(EntityPlayer player, ItemStack itemStack) {
-			super(ItemImprinter.class, 2, itemStack);
-			this.player = player;
+			super(player, 2, itemStack);
 		}
 
 		public void advancePrimary() {
@@ -107,17 +104,18 @@ public class ItemImprinter extends ItemForestry {
 
 		private void tryImprint() {
 
-			if (inventoryStacks[specimenSlot] == null) {
+			ItemStack specimen = getStackInSlot(specimenSlot);
+			if (specimen == null) {
 				return;
 			}
 
 			// Only imprint bees
-			if (!BeeManager.beeRoot.isMember(inventoryStacks[specimenSlot])) {
+			if (!BeeManager.beeRoot.isMember(specimen)) {
 				return;
 			}
 
 			// Needs space
-			if (inventoryStacks[imprintedSlot] != null) {
+			if (getStackInSlot(imprintedSlot) != null) {
 				return;
 			}
 
@@ -128,10 +126,10 @@ public class ItemImprinter extends ItemForestry {
 
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
 			imprint.writeToNBT(nbttagcompound);
-			inventoryStacks[specimenSlot].setTagCompound(nbttagcompound);
+			specimen.setTagCompound(nbttagcompound);
 
-			inventoryStacks[imprintedSlot] = inventoryStacks[specimenSlot];
-			inventoryStacks[specimenSlot] = null;
+			setInventorySlotContents(imprintedSlot, specimen);
+			setInventorySlotContents(specimenSlot, null);
 		}
 
 		@Override

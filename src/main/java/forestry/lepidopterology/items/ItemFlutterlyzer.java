@@ -31,8 +31,7 @@ public class ItemFlutterlyzer extends ItemInventoried {
 	public static class FlutterlyzerInventory extends AlyzerInventory implements IHintSource {
 
 		public FlutterlyzerInventory(EntityPlayer player, ItemStack itemStack) {
-			super(ItemFlutterlyzer.class, 7, itemStack);
-			this.player = player;
+			super(player, 7, itemStack);
 		}
 
 		@Override
@@ -41,13 +40,6 @@ public class ItemFlutterlyzer extends ItemInventoried {
 		}
 
 		private void tryAnalyze() {
-
-			// Analyzed slot occupied, abort
-			if (inventoryStacks[SLOT_ANALYZE_1] != null || inventoryStacks[SLOT_ANALYZE_2] != null || inventoryStacks[SLOT_ANALYZE_3] != null
-					|| inventoryStacks[SLOT_ANALYZE_4] != null || inventoryStacks[SLOT_ANALYZE_5] != null) {
-				return;
-			}
-
 			// Source slot to analyze empty
 			if (getStackInSlot(SLOT_SPECIMEN) == null) {
 				return;

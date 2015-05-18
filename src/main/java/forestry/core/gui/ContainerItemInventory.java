@@ -17,21 +17,22 @@ import net.minecraft.item.ItemStack;
 
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.inventory.ItemInventory;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.StackUtils;
 
 public abstract class ContainerItemInventory<I extends ItemInventory> extends ContainerForestry {
 
 	protected final I inventory;
 
-	public ContainerItemInventory(I inventory) {
-		super(inventory);
+	public ContainerItemInventory(I inventory, InventoryPlayer playerInventory, int xInv, int yInv) {
 		this.inventory = inventory;
+
+		addPlayerInventory(playerInventory, xInv, yInv);
 	}
 
-	protected void addSecuredSlot(InventoryPlayer playerInventory, int slot, int x, int y) {
+	@Override
+	protected void addHotbarSlot(InventoryPlayer playerInventory, int slot, int x, int y) {
 		ItemStack stackInSlot = playerInventory.getStackInSlot(slot);
-		if (StackUtils.isIdenticalItem(inventory.parent, stackInSlot)) {
+
+		if (inventory.isParentItemInventory(stackInSlot)) {
 			addSlotToContainer(new SlotLocked(playerInventory, slot, x, y));
 		} else {
 			addSlotToContainer(new Slot(playerInventory, slot, x, y));
@@ -39,12 +40,12 @@ public abstract class ContainerItemInventory<I extends ItemInventory> extends Co
 	}
 
 	@Override
-	public void onContainerClosed(EntityPlayer player) {
-		super.onContainerClosed(player);
-		if (!Proxies.common.isSimulating(player.worldObj)) {
-			return;
-		}
+	protected final boolean canAccess(EntityPlayer player) {
+		return canInteractWith(player);
+	}
 
-		inventory.onGuiSaved(player);
+	@Override
+	public final boolean canInteractWith(EntityPlayer entityplayer) {
+		return inventory.isUseableByPlayer(entityplayer);
 	}
 }

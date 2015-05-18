@@ -11,7 +11,6 @@
 package forestry.storage;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -34,20 +33,15 @@ public class GuiHandlerStorage extends GuiHandlerBase {
 
 	public static class PagedBackpackInventory extends ItemInventoryBackpack implements IPagedInventory {
 
-		//private final int x, y, z;
 		private final int guiId;
 
-		public PagedBackpackInventory(Class<? extends Item> itemClass, int size, ItemStack itemstack, int x, int y, int z, int guiId) {
-			super(itemClass, size, itemstack);
-			/*this.x = x;
-			this.y = y;
-			this.z = z;*/
+		public PagedBackpackInventory(EntityPlayer player, int size, ItemStack itemstack, int guiId) {
+			super(player, size, itemstack);
 			this.guiId = guiId;
 		}
 
 		@Override
 		public void flipPage(EntityPlayer player, int page) {
-			onGuiSaved(player);
 			player.openGui(ForestryAPI.instance, encodeGuiData(guiId, page), player.worldObj, (int) player.posX, (int) player.posY, (int) player.posZ);
 		}
 	}
@@ -70,22 +64,22 @@ public class GuiHandlerStorage extends GuiHandlerBase {
 					return null;
 				}
 				ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot("rootBees");
-				PagedBackpackInventory inventory = new PagedBackpackInventory(ItemBackpack.class, Defaults.SLOTS_BACKPACK_APIARIST, equipped, x, y, z, cleanId);
-				return new GuiNaturalistInventory(speciesRoot, player, new ContainerNaturalistBackpack(player.inventory, inventory, guiData, 25), inventory, guiData, 5);
+				PagedBackpackInventory inventory = new PagedBackpackInventory(player, Defaults.SLOTS_BACKPACK_APIARIST, equipped, cleanId);
+				return new GuiNaturalistInventory(speciesRoot, player, new ContainerNaturalistBackpack(player, inventory, guiData, 25), inventory, guiData, 5);
 
 			case BackpackGUI:
 				equipped = getBackpackItem(player);
 				if (equipped == null) {
 					return null;
 				}
-				return new GuiBackpack(new ContainerBackpack(player, new ItemInventoryBackpack(ItemBackpack.class, Defaults.SLOTS_BACKPACK_DEFAULT, equipped)));
+				return new GuiBackpack(new ContainerBackpack(player, ContainerBackpack.Size.DEFAULT, equipped));
 
 			case BackpackT2GUI:
 				equipped = getBackpackItem(player);
 				if (equipped == null) {
 					return null;
 				}
-				return new GuiBackpackT2(new ContainerBackpack(player, new ItemInventoryBackpack(ItemBackpack.class, Defaults.SLOTS_BACKPACK_T2, equipped)));
+				return new GuiBackpackT2(new ContainerBackpack(player, ContainerBackpack.Size.T2, equipped));
 
 			case LepidopteristBackpackGUI:
 				equipped = getBackpackItem(player);
@@ -93,8 +87,8 @@ public class GuiHandlerStorage extends GuiHandlerBase {
 					return null;
 				}
 				speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies");
-				inventory = new PagedBackpackInventory(ItemBackpack.class, Defaults.SLOTS_BACKPACK_APIARIST, equipped, x, y, z, id);
-				return new GuiNaturalistInventory(speciesRoot, player, new ContainerNaturalistBackpack(player.inventory, inventory, guiData, 25), inventory, guiData, 5);
+				inventory = new PagedBackpackInventory(player, Defaults.SLOTS_BACKPACK_APIARIST, equipped, id);
+				return new GuiNaturalistInventory(speciesRoot, player, new ContainerNaturalistBackpack(player, inventory, guiData, 25), inventory, guiData, 5);
 
 			default:
 				return null;
@@ -102,7 +96,7 @@ public class GuiHandlerStorage extends GuiHandlerBase {
 		}
 	}
 
-	private ItemStack getBackpackItem(EntityPlayer player) {
+	private static ItemStack getBackpackItem(EntityPlayer player) {
 		ItemStack equipped = player.getCurrentEquippedItem();
 		if (equipped == null) {
 			return null;
@@ -131,7 +125,7 @@ public class GuiHandlerStorage extends GuiHandlerBase {
 					return null;
 				}
 
-				return new ContainerNaturalistBackpack(player.inventory, new PagedBackpackInventory(ItemBackpack.class, Defaults.SLOTS_BACKPACK_APIARIST, equipped, x, y, z, cleanId), guiData, 25);
+				return new ContainerNaturalistBackpack(player, new PagedBackpackInventory(player, Defaults.SLOTS_BACKPACK_APIARIST, equipped, cleanId), guiData, 25);
 
 			case BackpackGUI:
 				equipped = getBackpackItem(player);
@@ -139,7 +133,7 @@ public class GuiHandlerStorage extends GuiHandlerBase {
 					return null;
 				}
 
-				return new ContainerBackpack(player, new ItemInventoryBackpack(ItemBackpack.class, Defaults.SLOTS_BACKPACK_DEFAULT, equipped));
+				return new ContainerBackpack(player, ContainerBackpack.Size.DEFAULT, equipped);
 
 			case BackpackT2GUI:
 				equipped = getBackpackItem(player);
@@ -147,7 +141,7 @@ public class GuiHandlerStorage extends GuiHandlerBase {
 					return null;
 				}
 
-				return new ContainerBackpack(player, new ItemInventoryBackpack(ItemBackpack.class, Defaults.SLOTS_BACKPACK_T2, equipped));
+				return new ContainerBackpack(player, ContainerBackpack.Size.T2, equipped);
 
 			case LepidopteristBackpackGUI:
 				equipped = getBackpackItem(player);
@@ -155,7 +149,7 @@ public class GuiHandlerStorage extends GuiHandlerBase {
 					return null;
 				}
 
-				return new ContainerNaturalistBackpack(player.inventory, new PagedBackpackInventory(ItemBackpack.class, Defaults.SLOTS_BACKPACK_APIARIST, equipped, x, y, z, cleanId), guiData, 25);
+				return new ContainerNaturalistBackpack(player, new PagedBackpackInventory(player, Defaults.SLOTS_BACKPACK_APIARIST, equipped, cleanId), guiData, 25);
 
 			default:
 				return null;

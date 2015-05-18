@@ -237,15 +237,15 @@ public class Letter implements ILetter, INBTTagable {
 
 	@Override
 	public String getRecipientString() {
-		String recipientString = "";
+		StringBuilder recipientString = new StringBuilder();
 		for (IMailAddress address : recipient) {
 			if (recipientString.length() > 0) {
-				recipientString += ", ";
+				recipientString.append(", ");
 			}
-			recipientString += address.getName();
+			recipientString.append(address.getName());
 		}
 
-		return recipientString;
+		return recipientString.toString();
 	}
 
 	@Override

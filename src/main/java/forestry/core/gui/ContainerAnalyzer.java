@@ -11,17 +11,16 @@
 package forestry.core.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 
 import forestry.core.gadgets.TileAnalyzer;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.gui.slots.SlotWorking;
 
-public class ContainerAnalyzer extends ContainerLiquidTanks {
+public class ContainerAnalyzer extends ContainerLiquidTanks<TileAnalyzer> {
 
 	public ContainerAnalyzer(InventoryPlayer player, TileAnalyzer tile) {
-		super(tile);
+		super(tile, player, 8, 94);
 
 		// Input buffer
 		for (int i = 0; i < 3; i++) {
@@ -42,18 +41,5 @@ public class ContainerAnalyzer extends ContainerLiquidTanks {
 				addSlotToContainer(new SlotOutput(tile, TileAnalyzer.SLOT_OUTPUT_1 + i * 2 + k, 134 + k * 18, 48 + i * 18));
 			}
 		}
-
-		// Player inventory
-		for (int i1 = 0; i1 < 3; i1++) {
-			for (int l1 = 0; l1 < 9; l1++) {
-				addSlotToContainer(new Slot(player, l1 + i1 * 9 + 9, 8 + l1 * 18, 94 + i1 * 18));
-			}
-		}
-		// Player hotbar
-		for (int j1 = 0; j1 < 9; j1++) {
-			addSlotToContainer(new Slot(player, j1, 8 + j1 * 18, 152));
-		}
-
 	}
-
 }

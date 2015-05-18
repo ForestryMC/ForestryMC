@@ -218,10 +218,6 @@ public class ProxyCommon {
 	public void addEntityExplodeFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
 	}
 
-	public boolean needsTagCompoundSynched(Item item) {
-		return item.getShareTag();
-	}
-
 	public void addBlockDestroyEffects(World world, int xCoord, int yCoord, int zCoord, Block block, int i) {
 		sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.BLOCK_DESTROY, world, xCoord, yCoord, zCoord, block, i);
 	}
@@ -253,14 +249,6 @@ public class ProxyCommon {
 
 	public Minecraft getClientInstance() {
 		return FMLClientHandler.instance().getClient();
-	}
-
-	public int getBlockModelIdEngine() {
-		return 0;
-	}
-
-	public void closeGUI(EntityPlayer player) {
-		player.closeScreen();
 	}
 
 	/* DEPENDENCY HANDLING */

@@ -79,18 +79,22 @@ public class SlotHelper {
 	}
 
 	private static boolean shiftItemStack(List inventorySlots, ItemStack stackInSlot, int slotIndex, int numSlots) {
-		if (isInPlayerInventory(slotIndex, numSlots)) {
+		if (isInPlayerInventory(slotIndex)) {
 			if (shiftToMachineInventory(inventorySlots, stackInSlot, numSlots)) {
 				return true;
 			}
 
-			if (isInPlayerHotbar(slotIndex, numSlots)) {
-				return shiftToPlayerInventoryNoHotbar(inventorySlots, stackInSlot, numSlots);
+			if (isInPlayerHotbar(slotIndex)) {
+				return shiftToPlayerInventoryNoHotbar(inventorySlots, stackInSlot);
 			} else {
-				return shiftToHotbar(inventorySlots, stackInSlot, numSlots);
+				return shiftToHotbar(inventorySlots, stackInSlot);
 			}
 		} else {
-			return shiftToPlayerInventory(inventorySlots, stackInSlot, numSlots);
+			boolean shifted = shiftToHotbar(inventorySlots, stackInSlot);
+			if (!shifted) {
+				shifted = shiftToPlayerInventoryNoHotbar(inventorySlots, stackInSlot);
+			}
+			return shifted;
 		}
 	}
 
@@ -139,10 +143,10 @@ public class SlotHelper {
 		slot.putStack(phantomStack);
 	}
 
-	private static boolean shiftItemStackToRange(List inventorySlots, ItemStack stackToShift, int start, int end) {
+	private static boolean shiftItemStackToRange(List inventorySlots, ItemStack stackToShift, int start, int count) {
 		boolean changed = false;
 		if (stackToShift.isStackable()) {
-			for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < end; slotIndex++) {
+			for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < start + count; slotIndex++) {
 				Slot slot = (Slot) inventorySlots.get(slotIndex);
 				ItemStack stackInSlot = slot.getStack();
 				if (stackInSlot != null && StackUtils.isIdenticalItem(stackInSlot, stackToShift)) {
@@ -163,7 +167,7 @@ public class SlotHelper {
 			}
 		}
 		if (stackToShift.stackSize > 0) {
-			for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < end; slotIndex++) {
+			for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < start + count; slotIndex++) {
 				Slot slot = (Slot) inventorySlots.get(slotIndex);
 				ItemStack stackInSlot = slot.getStack();
 				if (stackInSlot == null) {
@@ -183,28 +187,22 @@ public class SlotHelper {
 	private static final int playerInventorySize = 9 * 4;
 	private static final int playerHotbarSize = 9;
 
-	private static boolean isInPlayerInventory(int slotIndex, int numSlots) {
-		return slotIndex >= numSlots - playerInventorySize;
+	private static boolean isInPlayerInventory(int slotIndex) {
+		return slotIndex < playerInventorySize;
 	}
 
-	private static boolean isInPlayerHotbar(int slotIndex, int numSlots) {
-		return slotIndex >= numSlots - playerHotbarSize;
+	private static boolean isInPlayerHotbar(int slotIndex) {
+		return GuiUtil.isIndexInRange(slotIndex, playerInventorySize - playerHotbarSize, playerInventorySize);
 	}
 
-	private static boolean shiftToPlayerInventory(List inventorySlots, ItemStack stackInSlot, int numSlots) {
-		int playerInventoryStart = numSlots - playerInventorySize;
-		return shiftItemStackToRange(inventorySlots, stackInSlot, playerInventoryStart, numSlots);
+	private static boolean shiftToPlayerInventoryNoHotbar(List inventorySlots, ItemStack stackInSlot) {
+		int playerHotbarStart = playerInventorySize - playerHotbarSize;
+		return shiftItemStackToRange(inventorySlots, stackInSlot, 0, playerHotbarStart);
 	}
 
-	private static boolean shiftToPlayerInventoryNoHotbar(List inventorySlots, ItemStack stackInSlot, int numSlots) {
-		int playerInventoryStart = numSlots - playerInventorySize;
-		int playerHotbarStart = numSlots - playerHotbarSize;
-		return shiftItemStackToRange(inventorySlots, stackInSlot, playerInventoryStart, playerHotbarStart);
-	}
-
-	private static boolean shiftToHotbar(List inventorySlots, ItemStack stackInSlot, int numSlots) {
-		int playerHotbarStart = numSlots - playerHotbarSize;
-		return shiftItemStackToRange(inventorySlots, stackInSlot, playerHotbarStart, numSlots);
+	private static boolean shiftToHotbar(List inventorySlots, ItemStack stackInSlot) {
+		int playerHotbarStart = playerInventorySize - playerHotbarSize;
+		return shiftItemStackToRange(inventorySlots, stackInSlot, playerHotbarStart, playerHotbarSize);
 	}
 
 	private static boolean shiftToMachineInventory(List inventorySlots, ItemStack stackToShift, int numSlots) {
@@ -220,7 +218,7 @@ public class SlotHelper {
 
 	// if mergeOnly = true, don't shift into empty slots.
 	private static boolean shiftToMachineInventory(List inventorySlots, ItemStack stackToShift, int numSlots, boolean mergeOnly) {
-		for (int machineIndex = 0; machineIndex < numSlots - playerInventorySize; machineIndex++) {
+		for (int machineIndex = playerInventorySize; machineIndex < numSlots; machineIndex++) {
 			Slot slot = (Slot) inventorySlots.get(machineIndex);
 			if (mergeOnly && slot.getStack() == null) {
 				continue;
@@ -234,7 +232,7 @@ public class SlotHelper {
 			if (!slot.isItemValid(stackToShift)) {
 				continue;
 			}
-			if (shiftItemStackToRange(inventorySlots, stackToShift, machineIndex, machineIndex + 1)) {
+			if (shiftItemStackToRange(inventorySlots, stackToShift, machineIndex, 1)) {
 				return true;
 			}
 		}

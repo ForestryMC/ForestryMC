@@ -108,18 +108,15 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 		private static final short ingredientSlot1 = 2;
 		private static final short ingredientSlotCount = 4;
 
-		public SolderingInventory(ItemStack itemStack) {
-			super(ItemSolderingIron.class, 6, itemStack);
-			init();
+		public SolderingInventory(EntityPlayer player, ItemStack itemStack) {
+			super(player, 6, itemStack);
+
+			layouts.setCurrent(ChipsetManager.circuitRegistry.getDefaultLayout());
 		}
 
 		@Override
 		public int getInventoryStackLimit() {
 			return 1;
-		}
-
-		private void init() {
-			layouts.setCurrent(ChipsetManager.circuitRegistry.getDefaultLayout());
 		}
 
 		public ICircuitLayout getLayout() {
@@ -143,7 +140,7 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 			ArrayList<ICircuit> circuits = new ArrayList<ICircuit>();
 
 			for (short i = 0; i < type.sockets; i++) {
-				ItemStack ingredient = inventoryStacks[ingredientSlot1 + i];
+				ItemStack ingredient = getStackInSlot(ingredientSlot1 + i);
 				if (ingredient == null) {
 					continue;
 				}
@@ -172,7 +169,7 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 				return;
 			}
 
-			ItemStack blank = inventoryStacks[blankSlot];
+			ItemStack blank = getStackInSlot(blankSlot);
 			// Requires blank slot
 			if (blank == null) {
 				return;
@@ -180,7 +177,7 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 			if (blank.stackSize > 1) {
 				return;
 			}
-			if (inventoryStacks[finishedSlot] != null) {
+			if (getStackInSlot(finishedSlot) != null) {
 				return;
 			}
 
@@ -202,8 +199,12 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 			}
 
 			circuits = getCircuits(type, true);
-			inventoryStacks[finishedSlot] = ItemCircuitBoard.createCircuitboard(type, layouts.getCurrent(), circuits.toArray(new ICircuit[circuits.size()]));
-			inventoryStacks[blankSlot] = null;
+
+			ICircuit[] circuitsArray = circuits.toArray(new ICircuit[circuits.size()]);
+			ItemStack circuitBoard = ItemCircuitBoard.createCircuitboard(type, layouts.getCurrent(), circuitsArray);
+
+			setInventorySlotContents(finishedSlot, circuitBoard);
+			setInventorySlotContents(blankSlot, null);
 		}
 
 		public static int getCount(ICircuit circuit, ArrayList<ICircuit> circuits) {
@@ -229,7 +230,7 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 				errorStates.add(EnumErrorCode.NOCIRCUITLAYOUT);
 			}
 
-			ItemStack blankCircuitBoard = inventoryStacks[blankSlot];
+			ItemStack blankCircuitBoard = getStackInSlot(blankSlot);
 
 			if (blankCircuitBoard == null) {
 				errorStates.add(EnumErrorCode.NOCIRCUITBOARD);
@@ -238,7 +239,7 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 
 				int circuitCount = 0;
 				for (short i = 0; i < type.sockets; i++) {
-					if (inventoryStacks[ingredientSlot1 + i] != null) {
+					if (getStackInSlot(ingredientSlot1 + i) != null) {
 						circuitCount++;
 					}
 				}

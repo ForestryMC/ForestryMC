@@ -110,7 +110,7 @@ public class ItemBackpack extends ItemInventoried {
 	public static ItemStack tryStowing(EntityPlayer player, ItemStack backpackStack, ItemStack stack) {
 
 		ItemBackpack backpack = ((ItemBackpack) backpackStack.getItem());
-		ItemInventory inventory = new ItemInventoryBackpack(ItemBackpack.class, backpack.getBackpackSize(), backpackStack);
+		ItemInventory inventory = new ItemInventoryBackpack(player, backpack.getBackpackSize(), backpackStack);
 		if (backpackStack.getItemDamage() == 1) {
 			return stack;
 		}
@@ -127,7 +127,6 @@ public class ItemBackpack extends ItemInventoried {
 		ItemStack remainder = InvTools.moveItemStack(stack, inventory);
 		stack.stackSize = remainder == null ? 0 : remainder.stackSize;
 
-		inventory.save();
 		return null;
 	}
 
@@ -160,7 +159,7 @@ public class ItemBackpack extends ItemInventoried {
 			}
 
 			// Create our own backpack inventory
-			ItemInventoryBackpack backpackInventory = new ItemInventoryBackpack(ItemBackpack.class, getBackpackSize(), stack);
+			ItemInventoryBackpack backpackInventory = new ItemInventoryBackpack(player, getBackpackSize(), stack);
 
 			BackpackMode mode = getMode(stack);
 			if (mode == BackpackMode.RECEIVE) {
@@ -168,8 +167,6 @@ public class ItemBackpack extends ItemInventoried {
 			} else {
 				tryChestTransfer(backpackInventory, inventory);
 			}
-
-			backpackInventory.save();
 
 			return true;
 		}
