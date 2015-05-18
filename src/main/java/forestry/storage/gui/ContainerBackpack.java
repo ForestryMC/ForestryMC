@@ -17,10 +17,10 @@ import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.inventory.ItemInventoryBackpack;
 
-public class ContainerBackpack extends ContainerItemInventory {
+public class ContainerBackpack extends ContainerItemInventory<ItemInventoryBackpack> {
 
-	public ContainerBackpack(final EntityPlayer player, ItemInventoryBackpack inventory) {
-		super(inventory, player);
+	public ContainerBackpack(EntityPlayer player, ItemInventoryBackpack inventory) {
+		super(inventory);
 
 		int lines = 0;
 		int columns = 0;

@@ -24,8 +24,8 @@ import forestry.core.utils.SlotHelper;
 
 public class ContainerForestry extends Container {
 
-	protected final IInventory inventoryAccess;
-	protected final IRestrictedAccess restrictedAccess;
+	private final IInventory inventoryAccess;
+	private final IRestrictedAccess restrictedAccess;
 
 	public ContainerForestry(TileForestry tileForestry) {
 		this.inventoryAccess = tileForestry;

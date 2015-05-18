@@ -218,14 +218,6 @@ public class ItemBackpack extends ItemInventoried {
 		}
 	}
 
-	public boolean isBackpack(ItemStack stack) {
-		if (stack == null) {
-			return false;
-		}
-
-		return stack.getItem() == this;
-	}
-
 	public int getBackpackSize() {
 		return getSlotsForType(type);
 	}

@@ -11,7 +11,7 @@
 package forestry.core.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
@@ -20,29 +20,21 @@ import forestry.core.inventory.ItemInventory;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
 
-public abstract class ContainerItemInventory extends ContainerForestry {
+public abstract class ContainerItemInventory<I extends ItemInventory> extends ContainerForestry {
 
-	protected final EntityPlayer player;
-	protected final ItemInventory inventory;
+	protected final I inventory;
 
-	public ContainerItemInventory(ItemInventory inventory, EntityPlayer player) {
+	public ContainerItemInventory(I inventory) {
 		super(inventory);
 		this.inventory = inventory;
-		this.player = player;
 	}
 
-	protected void addSecuredSlot(IInventory other, int slot, int x, int y) {
-		ItemStack stackInSlot = other.getStackInSlot(slot);
+	protected void addSecuredSlot(InventoryPlayer playerInventory, int slot, int x, int y) {
+		ItemStack stackInSlot = playerInventory.getStackInSlot(slot);
 		if (StackUtils.isIdenticalItem(inventory.parent, stackInSlot)) {
-			addSlotToContainer(new SlotLocked(other, slot, x, y));
+			addSlotToContainer(new SlotLocked(playerInventory, slot, x, y));
 		} else {
-			addSlotToContainer(new Slot(other, slot, x, y));
-		}
-	}
-
-	public void saveInventory(EntityPlayer entityplayer) {
-		if (inventory.isItemInventory) {
-			inventory.onGuiSaved(entityplayer);
+			addSlotToContainer(new Slot(playerInventory, slot, x, y));
 		}
 	}
 
@@ -53,6 +45,6 @@ public abstract class ContainerItemInventory extends ContainerForestry {
 			return;
 		}
 
-		saveInventory(player);
+		inventory.onGuiSaved(player);
 	}
 }

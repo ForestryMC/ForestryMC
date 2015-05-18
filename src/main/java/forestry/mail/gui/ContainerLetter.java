@@ -39,19 +39,16 @@ import forestry.mail.items.ItemLetter;
 import forestry.mail.items.ItemLetter.LetterInventory;
 import forestry.mail.network.PacketLetterInfo;
 
-public class ContainerLetter extends ContainerItemInventory {
+public class ContainerLetter extends ContainerItemInventory<LetterInventory> {
 
-	private final LetterInventory letterInventory;
 	private EnumAddressee carrierType = EnumAddressee.PLAYER;
 	private TradeStationInfo tradeInfo = null;
 
 	public ContainerLetter(EntityPlayer player, LetterInventory inventory) {
-		super(inventory, player);
-
-		letterInventory = inventory;
+		super(inventory);
 
 		// Rip open delivered mails
-		if (Proxies.common.isSimulating(player.worldObj) && letterInventory.getLetter().isProcessed() && inventory.parent != null
+		if (Proxies.common.isSimulating(player.worldObj) && inventory.getLetter().isProcessed() && inventory.parent != null
 				&& ItemLetter.getState(inventory.parent.getItemDamage()) < 2) {
 			inventory.parent.setItemDamage(ItemLetter.encodeMeta(2, ItemLetter.getSize(inventory.parent.getItemDamage())));
 		}
@@ -82,11 +79,11 @@ public class ContainerLetter extends ContainerItemInventory {
 		}
 
 		// Set recipient type
-		if (letterInventory.getLetter() != null) {
-			if (letterInventory.getLetter().getRecipients() != null) {
-				if (letterInventory.getLetter().getRecipients().length > 0) {
-					this.carrierType = letterInventory.getLetter().getRecipients()[0].getType();
-				}
+		ILetter letter = inventory.getLetter();
+		if (letter != null) {
+			IMailAddress[] recipients = letter.getRecipients();
+			if (recipients != null && recipients.length > 0) {
+				this.carrierType = recipients[0].getType();
 			}
 		}
 	}
@@ -95,7 +92,7 @@ public class ContainerLetter extends ContainerItemInventory {
 	public void onContainerClosed(EntityPlayer entityplayer) {
 
 		if (Proxies.common.isSimulating(entityplayer.worldObj)) {
-			ILetter letter = letterInventory.getLetter();
+			ILetter letter = inventory.getLetter();
 			if (!letter.isProcessed()) {
 				IMailAddress sender = PostManager.postRegistry.getMailAddress(entityplayer.getGameProfile());
 				letter.setSender(sender);
@@ -106,7 +103,7 @@ public class ContainerLetter extends ContainerItemInventory {
 	}
 
 	public ILetter getLetter() {
-		return letterInventory.getLetter();
+		return inventory.getLetter();
 	}
 
 	public void setCarrierType(EnumAddressee type) {
@@ -135,7 +132,7 @@ public class ContainerLetter extends ContainerItemInventory {
 		setCarrierType(postal.getType());
 	}
 
-	public void setRecipient(String recipientName, EnumAddressee type) {
+	public static void setRecipient(String recipientName, EnumAddressee type) {
 		if (StringUtils.isBlank(recipientName) || type == null) {
 			return;
 		}

@@ -17,10 +17,10 @@ import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 
-public class ContainerHabitatLocator extends ContainerItemInventory {
+public class ContainerHabitatLocator extends ContainerItemInventory<HabitatLocatorInventory> {
 
 	public ContainerHabitatLocator(InventoryPlayer inventoryplayer, HabitatLocatorInventory inventory) {
-		super(inventory, inventoryplayer.player);
+		super(inventory);
 
 		// Energy
 		this.addSlotToContainer(new SlotFiltered(inventory, 2, 152, 8));

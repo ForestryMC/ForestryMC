@@ -25,7 +25,6 @@ import forestry.core.utils.Utils;
 public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagable {
 
 	public final Class<? extends Item> itemClass;
-	public final boolean isItemInventory;
 	public ItemStack parent;
 	protected ItemStack[] inventoryStacks;
 
@@ -35,7 +34,6 @@ public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagab
 		inventoryStacks = new ItemStack[size];
 
 		parent = itemstack;
-		isItemInventory = true;
 
 		// Set an uid to identify the itemstack on SMP
 		setUID(false);

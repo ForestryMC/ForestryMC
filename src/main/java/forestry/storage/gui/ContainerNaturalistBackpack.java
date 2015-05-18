@@ -19,14 +19,10 @@ import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.network.PacketUpdate;
 import forestry.storage.GuiHandlerStorage.PagedBackpackInventory;
 
-public class ContainerNaturalistBackpack extends ContainerItemInventory implements IGuiSelectable {
-
-	private final PagedBackpackInventory inv;
+public class ContainerNaturalistBackpack extends ContainerItemInventory<PagedBackpackInventory> implements IGuiSelectable {
 
 	public ContainerNaturalistBackpack(InventoryPlayer player, PagedBackpackInventory inventory, int page, int pageSize) {
-		super(inventory, player.player);
-
-		this.inv = inventory;
+		super(inventory);
 
 		// Inventory
 		for (int x = 0; x < 5; x++) {
@@ -49,7 +45,7 @@ public class ContainerNaturalistBackpack extends ContainerItemInventory implemen
 
 	@Override
 	public void handleSelectionChange(EntityPlayer player, PacketUpdate packet) {
-		inv.flipPage(player, packet.payload.intPayload[0]);
+		inventory.flipPage(player, packet.payload.intPayload[0]);
 	}
 
 	@Override

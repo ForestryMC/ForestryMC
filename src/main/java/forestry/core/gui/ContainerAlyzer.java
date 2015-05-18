@@ -8,15 +8,10 @@ import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.inventory.AlyzerInventory;
 import forestry.core.proxy.Proxies;
 
-public class ContainerAlyzer extends ContainerItemInventory {
-
-	private final AlyzerInventory inventory;
+public class ContainerAlyzer extends ContainerItemInventory<AlyzerInventory> {
 
 	public ContainerAlyzer(AlyzerInventory inventory, EntityPlayer player) {
-		super(inventory, player);
-
-		InventoryPlayer inventoryplayer = player.inventory;
-		this.inventory = inventory;
+		super(inventory);
 
 		final int xPosLeftSlots = 223;
 
@@ -39,6 +34,8 @@ public class ContainerAlyzer extends ContainerItemInventory {
 		final int ySpacePlayerInv = 18;
 
 		// Player inventory
+		InventoryPlayer inventoryplayer = player.inventory;
+
 		for (int i1 = 0; i1 < 3; i1++) {
 			for (int l1 = 0; l1 < 9; l1++) {
 				int slot = l1 + i1 * 9 + 9;

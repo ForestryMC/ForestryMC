@@ -12,7 +12,6 @@ package forestry.core.circuits;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.world.World;
 
 import forestry.api.circuits.ICircuitLayout;
 import forestry.core.circuits.ItemSolderingIron.SolderingInventory;
@@ -25,13 +24,10 @@ import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 
-public class ContainerSolderingIron extends ContainerItemInventory implements IGuiSelectable {
-
-	private final SolderingInventory inventory;
+public class ContainerSolderingIron extends ContainerItemInventory<SolderingInventory> implements IGuiSelectable {
 
 	public ContainerSolderingIron(InventoryPlayer inventoryplayer, SolderingInventory inventory) {
-		super(inventory, inventoryplayer.player);
-		this.inventory = inventory;
+		super(inventory);
 
 		// Input
 		this.addSlotToContainer(new SlotFiltered(inventory, 0, 152, 12));
@@ -62,21 +58,21 @@ public class ContainerSolderingIron extends ContainerItemInventory implements IG
 		return inventory.getLayout();
 	}
 
-	public void advanceSelection(int index, World world) {
+	public static void advanceSelection(int index) {
 		PacketPayload payload = new PacketPayload(2, 0, 0);
 		payload.intPayload[0] = index;
 		payload.intPayload[1] = 0;
 		sendSelectionChange(payload);
 	}
 
-	public void regressSelection(int index, World world) {
+	public static void regressSelection(int index) {
 		PacketPayload payload = new PacketPayload(2, 0, 0);
 		payload.intPayload[0] = index;
 		payload.intPayload[1] = 1;
 		sendSelectionChange(payload);
 	}
 
-	private void sendSelectionChange(PacketPayload payload) {
+	private static void sendSelectionChange(PacketPayload payload) {
 		PacketUpdate packet = new PacketUpdate(PacketIds.GUI_SELECTION_CHANGE, payload);
 		Proxies.net.sendToServer(packet);
 	}

@@ -67,9 +67,9 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, Solder
 		super.actionPerformed(guibutton);
 
 		if (guibutton.id == 1) {
-			((ContainerSolderingIron) inventorySlots).regressSelection(0, Proxies.common.getRenderWorld());
+			ContainerSolderingIron.regressSelection(0);
 		} else if (guibutton.id == 2) {
-			((ContainerSolderingIron) inventorySlots).advanceSelection(0, Proxies.common.getRenderWorld());
+			ContainerSolderingIron.advanceSelection(0);
 		}
 	}
 
