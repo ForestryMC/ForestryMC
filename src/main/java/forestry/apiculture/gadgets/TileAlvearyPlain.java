@@ -136,7 +136,8 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 			return;
 		}
 
-		beekeepingLogic.update();
+		if (beekeepingLogic.canWork())
+			beekeepingLogic.doWork();
 
 		// Equalize humidity and temperature
 		equalizeTemperature();

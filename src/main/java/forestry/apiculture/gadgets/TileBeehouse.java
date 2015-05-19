@@ -169,7 +169,8 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	@Override
 	public void updateServerSide() {
 
-		logic.update();
+		if (logic.canWork())
+			logic.doWork();
 
 		IBee queen = logic.getQueen();
 		if (queen == null) {
