@@ -82,19 +82,6 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 		return combinations;
 	}
 
-	@Deprecated
-	@Override
-	public Collection<? extends IMutation> getPaths(IAllele result, int chromosomeOrdinal) {
-		ArrayList<IMutation> paths = new ArrayList<IMutation>();
-		for (IMutation mutation : getMutations(false)) {
-			if (mutation.getTemplate()[chromosomeOrdinal] == result) {
-				paths.add(mutation);
-			}
-		}
-		
-		return paths;
-	}
-
 	@Override
 	public Collection<? extends IMutation> getPaths(IAllele result, IChromosomeType chromosomeType) {
 		ArrayList<IMutation> paths = new ArrayList<IMutation>();

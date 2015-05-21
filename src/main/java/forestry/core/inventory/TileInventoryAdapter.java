@@ -14,15 +14,15 @@ import net.minecraft.item.ItemStack;
 
 import forestry.core.gadgets.TileForestry;
 
-public class TileInventoryAdapter extends InventoryAdapter {
+public class TileInventoryAdapter<T extends TileForestry> extends InventoryAdapter {
 
-	private final TileForestry tile;
+	protected final T tile;
 
-	public TileInventoryAdapter(TileForestry tile, int size, String name) {
+	public TileInventoryAdapter(T tile, int size, String name) {
 		this(tile, size, name, 64);
 	}
 
-	public TileInventoryAdapter(TileForestry tile, int size, String name, int stackLimit) {
+	public TileInventoryAdapter(T tile, int size, String name, int stackLimit) {
 		super(size, name, stackLimit);
 		this.tile = tile;
 	}

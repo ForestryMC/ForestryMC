@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.mail.items;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -25,6 +27,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorState;
 import forestry.api.mail.ILetter;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
@@ -42,46 +45,67 @@ import forestry.mail.Letter;
 
 public class ItemLetter extends ItemInventoried {
 
+	private enum LetterState {
+		FRESH, STAMPED, OPENED, EMPTIED
+	}
+
+	private enum LetterSize {
+		EMPTY, SMALL, BIG
+	}
+
 	public static class LetterInventory extends ItemInventory implements IErrorSource, IHintSource {
+		private ILetter letter;
 
-		ILetter letter;
-
-		public LetterInventory(ItemStack itemstack) {
-			super(ItemLetter.class, 0, itemstack);
-
-			// Set an uid to identify the itemstack on SMP
-			setUID(true);
-
-			readFromNBT(itemstack.getTagCompound());
+		public LetterInventory(EntityPlayer player, ItemStack itemstack) {
+			super(player, 0, itemstack);
 		}
 
 		public ILetter getLetter() {
-			return this.letter;
+			return letter;
 		}
 
-		@Override
-		public void onGuiSaved(EntityPlayer player) {
-			super.onGuiSaved(player);
-
+		public void onContainerClosed() {
+			ItemStack parent = getParent();
 			if (parent == null) {
 				return;
 			}
 
-			// Already delivered mails can't be made usable anymore.
-			int state = getState(parent.getItemDamage());
-			if (state >= 2) {
-				if (state == 2 && letter.countAttachments() <= 0) {
-					parent.setItemDamage(encodeMeta(3, getSize(parent.getItemDamage())));
-				}
-				return;
+			LetterState state = getState(parent.getItemDamage());
+			LetterSize size = getSize(parent.getItemDamage());
+
+			switch (state) {
+				case OPENED:
+					if (letter.countAttachments() <= 0) {
+						int meta = encodeMeta(LetterState.EMPTIED, size);
+						parent.setItemDamage(meta);
+					}
+					break;
+				case FRESH:
+				case STAMPED:
+					if (letter.isMailable() && letter.isPostPaid()) {
+						int meta = encodeMeta(LetterState.STAMPED, size);
+						parent.setItemDamage(meta);
+					} else {
+						int meta = encodeMeta(LetterState.FRESH, size);
+						parent.setItemDamage(meta);
+					}
+					break;
+				case EMPTIED:
 			}
 
-			int type = getType(letter);
+			letter.writeToNBT(parent.getTagCompound());
+		}
 
-			if (parent != null && letter.isMailable() && letter.isPostPaid()) {
-				parent.setItemDamage(encodeMeta(1, type));
-			} else {
-				parent.setItemDamage(encodeMeta(0, type));
+		public void onLetterOpened() {
+			ItemStack parent = getParent();
+			if (parent != null) {
+				int oldMeta = parent.getItemDamage();
+				LetterState state = getState(oldMeta);
+				if (state == LetterState.FRESH || state == LetterState.STAMPED) {
+					LetterSize size = ItemLetter.getSize(oldMeta);
+					int newMeta = ItemLetter.encodeMeta(LetterState.OPENED, size);
+					parent.setItemDamage(newMeta);
+				}
 			}
 		}
 
@@ -96,18 +120,16 @@ public class ItemLetter extends ItemInventoried {
 		}
 
 		@Override
-		public void writeToNBT(NBTTagCompound nbttagcompound) {
-			letter.writeToNBT(nbttagcompound);
-		}
-
-		@Override
 		public ItemStack decrStackSize(int i, int j) {
-			return letter.decrStackSize(i, j);
+			ItemStack result = letter.decrStackSize(i, j);
+			letter.writeToNBT(getParent().getTagCompound());
+			return result;
 		}
 
 		@Override
 		public void setInventorySlotContents(int i, ItemStack itemstack) {
 			letter.setInventorySlotContents(i, itemstack);
+			letter.writeToNBT(getParent().getTagCompound());
 		}
 
 		@Override
@@ -160,22 +182,19 @@ public class ItemLetter extends ItemInventoried {
 
 		// / IERRORSOURCE
 		@Override
-		public boolean throwsErrors() {
-			return true;
-		}
+		public ImmutableSet<IErrorState> getErrorStates() {
 
-		@Override
-		public EnumErrorCode getErrorState() {
+			ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
 
 			if (!letter.hasRecipient()) {
-				return EnumErrorCode.NORECIPIENT;
+				errorStates.add(EnumErrorCode.NORECIPIENT);
 			}
 
 			if (!letter.isProcessed() && !letter.isPostPaid()) {
-				return EnumErrorCode.NOTPOSTPAID;
+				errorStates.add(EnumErrorCode.NOTPOSTPAID);
 			}
 
-			return EnumErrorCode.OK;
+			return errorStates.build();
 		}
 
 		/* IHINTSOURCE */
@@ -191,8 +210,10 @@ public class ItemLetter extends ItemInventoried {
 
 	}
 
-	public ItemLetter() {
-		super();
+	public static ItemStack createStampedLetterStack(ILetter letter) {
+		LetterSize size = getSize(letter);
+		int meta = encodeMeta(LetterState.STAMPED, size);
+		return ForestryItem.letters.getItemStack(1, meta);
 	}
 
 	@Override
@@ -227,31 +248,44 @@ public class ItemLetter extends ItemInventoried {
 			icons[i][2] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".opened");
 			icons[i][3] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".emptied");
 		}
-
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIconFromDamage(int damage) {
 
-		int state = getState(damage);
-		int size = getSize(damage);
+		LetterState state = getState(damage);
+		LetterSize size = getSize(damage);
 
-		return icons[size][state];
+		return icons[size.ordinal()][state.ordinal()];
 	}
 
-	public static int encodeMeta(int state, int size) {
-		int meta = size << 4;
-		meta |= state;
+	public static int encodeMeta(LetterState state, LetterSize size) {
+		int meta = size.ordinal() << 4;
+		meta |= state.ordinal();
 		return meta;
 	}
 
-	public static int getState(int meta) {
-		return meta & 0x0f;
+	public static LetterState getState(int meta) {
+		int ordinal = meta & 0x0f;
+		return LetterState.values()[ordinal];
 	}
 
-	public static int getSize(int meta) {
-		return meta >> 4;
+	public static LetterSize getSize(int meta) {
+		int ordinal = meta >> 4;
+		return LetterSize.values()[ordinal];
+	}
+
+	public static LetterSize getSize(ILetter letter) {
+		int count = letter.countAttachments();
+
+		if (count > 5) {
+			return LetterSize.BIG;
+		} else if (count > 1) {
+			return LetterSize.SMALL;
+		} else {
+			return LetterSize.EMPTY;
+		}
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
@@ -259,24 +293,11 @@ public class ItemLetter extends ItemInventoried {
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
 		NBTTagCompound nbttagcompound = itemstack.getTagCompound();
 		if (nbttagcompound == null) {
-			list.add("<" + StringUtil.localize("gui.blank") + ">");
+			list.add('<' + StringUtil.localize("gui.blank") + '>');
 			return;
 		}
 
 		ILetter letter = new Letter(nbttagcompound);
 		letter.addTooltip(list);
 	}
-
-	public static int getType(ILetter letter) {
-		int count = letter.countAttachments();
-
-		if (count > 5) {
-			return 2;
-		} else if (count > 1) {
-			return 1;
-		} else {
-			return 0;
-		}
-	}
-
 }

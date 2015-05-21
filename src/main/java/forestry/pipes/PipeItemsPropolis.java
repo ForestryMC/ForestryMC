@@ -20,12 +20,12 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBee;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.IAllele;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.plugins.PluginApiculture;
 
 import buildcraft.api.core.IIconProvider;
 import buildcraft.transport.BlockGenericPipe;
@@ -104,7 +104,7 @@ public class PipeItemsPropolis extends Pipe<PipeTransportItems> {
 		IBee bee = null;
 
 		if (type != EnumFilterType.ITEM) {
-			bee = PluginApiculture.beeInterface.getMember(event.item.getItemStack());
+			bee = BeeManager.beeRoot.getMember(event.item.getItemStack());
 		}
 
 		// Filtered outputs

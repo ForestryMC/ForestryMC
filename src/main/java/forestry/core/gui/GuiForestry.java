@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import javax.annotation.Nonnull;
 import java.awt.Color;
 import java.util.Collection;
 import java.util.List;
@@ -81,8 +82,8 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 	/* LEDGERS */
 	protected void initLedgers() {
 
-		if (inventory instanceof IErrorSource && ((IErrorSource) inventory).throwsErrors()) {
-			ledgerManager.add(new ErrorLedger(ledgerManager, (IErrorSource) inventory));
+		if (inventory instanceof IErrorSource) {
+			ledgerManager.add((IErrorSource) inventory);
 		}
 
 		if (inventory instanceof IClimatised && ((IClimatised) inventory).isClimatized()) {
@@ -457,7 +458,9 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		public ToolTip getToolTip() {
 			EntityPlayer player = Proxies.common.getPlayer();
 			ToolTip tip = new ToolTip();
-			tip.add(itemStack.getTooltip(player, false));
+			if (itemStack != null) {
+				tip.add(itemStack.getTooltip(player, false));
+			}
 			return tip;
 		}
 	}

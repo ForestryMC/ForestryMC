@@ -15,7 +15,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -46,11 +45,6 @@ public class BackpackDefinition implements IBackpackDefinition {
 	@Override
 	public String getKey() {
 		return name;
-	}
-
-	@Override
-	public String getName() {
-		return "Update Forestry!";
 	}
 
 	@Override
@@ -100,11 +94,6 @@ public class BackpackDefinition implements IBackpackDefinition {
 	// and they are standing on multiple items.
 	// It is a slow call, so we need a cache to make it fast
 	private final Map<ItemStack, Boolean> isValidItemCache = new ValidItemCache();
-
-	@Override
-	public boolean isValidItem(EntityPlayer player, ItemStack itemstack) {
-		return isValidItem(itemstack);
-	}
 
 	@Override
 	public boolean isValidItem(ItemStack itemstack) {

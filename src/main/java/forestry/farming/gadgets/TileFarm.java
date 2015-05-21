@@ -11,7 +11,6 @@
 package forestry.farming.gadgets;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -95,26 +94,11 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	public void initialize() {
 	}
 
-	@Override
-	public void updateEntity() {
-		super.updateEntity();
-
-		if (!Proxies.common.isSimulating(worldObj)) {
-			updateClientSide();
-		} else {
-			// Periodic validation if needed
-			if (updateOnInterval(200) && (!isIntegratedIntoStructure() || isMaster())) {
-				validateStructure();
-			}
-
-			updateServerSide();
-		}
-	}
-
 	protected void updateServerSide() {
-	}
-
-	protected void updateClientSide() {
+		// Periodic validation if needed
+		if (updateOnInterval(200) && (!isIntegratedIntoStructure() || isMaster())) {
+			validateStructure();
+		}
 	}
 
 	/* CONSTRUCTION MATERIAL */
@@ -258,11 +242,6 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 
 	protected boolean hasMaster() {
 		return this.masterY >= 0;
-	}
-
-	@Override
-	public final IInventory getInventory() {
-		return getStructureInventory();
 	}
 
 	@Override

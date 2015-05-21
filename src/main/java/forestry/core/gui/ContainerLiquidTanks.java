@@ -12,6 +12,7 @@ package forestry.core.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -30,13 +31,10 @@ import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 
-public class ContainerLiquidTanks extends ContainerForestry {
+public class ContainerLiquidTanks<T extends TileForestry & ILiquidTankContainer> extends ContainerTile<T> {
 
-	private final ILiquidTankContainer tile;
-
-	public <T extends TileForestry & ILiquidTankContainer> ContainerLiquidTanks(T tile) {
-		super(tile);
-		this.tile = tile;
+	public ContainerLiquidTanks(T tile, InventoryPlayer playerInventory, int xInv, int yInv) {
+		super(tile, playerInventory, xInv, yInv);
 	}
 
 	@SideOnly(Side.CLIENT)

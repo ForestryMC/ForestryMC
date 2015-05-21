@@ -32,7 +32,6 @@ import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.core.GameMode;
 import forestry.core.circuits.Circuit;
-import forestry.core.circuits.CircuitId;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.config.Config;
 import forestry.core.config.Configuration;
@@ -174,12 +173,6 @@ public class PluginIC2 extends ForestryPlugin {
 
 		ICircuitLayout layoutEngineTin = new CircuitLayout("engine.tin");
 		ChipsetManager.circuitRegistry.registerLayout(layoutEngineTin);
-
-		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_CHOKE_I, "forestry.energyChoke1");
-		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.FIRE_DAMPENER_I, "forestry.energyDampener1");
-		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_EFFICIENCY_I, "forestry.energyEfficiency1");
-		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_BOOST_I, "forestry.energyBoost1");
-		ChipsetManager.circuitRegistry.registerLegacyMapping(CircuitId.ELECTRIC_BOOST_II, "forestry.energyBoost2");
 	}
 
 	@Override
@@ -326,6 +319,11 @@ public class PluginIC2 extends ForestryPlugin {
 		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 1), Circuit.energyElectricBoost1);
 		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 2), Circuit.energyElectricBoost2);
 		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 3), Circuit.energyElectricEfficiency1);
+		
+		if (PluginManager.Module.FARMING.isEnabled() && resin != null && rubberwood != null) {
+			ICircuitLayout layoutManual = ChipsetManager.circuitRegistry.getLayout("forestry.farms.manual");
+			ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 8), Circuit.farmRubberManual);
+		}
 	}
 
 }

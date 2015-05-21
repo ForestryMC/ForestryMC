@@ -26,7 +26,7 @@ public class JubilanceProviderHermit extends JubilanceDefault {
 
 	@Override
 	public boolean isJubilant(IAlleleBeeSpecies species, IBeeGenome genome, IBeeHousing housing) {
-		AxisAlignedBB bounding = this.getBounding(genome, housing, 1.0f);
+		AxisAlignedBB bounding = getBounding(genome, housing, 1.0f);
 
 		@SuppressWarnings("rawtypes")
 		List list = housing.getWorld().getEntitiesWithinAABB(EntityLiving.class, bounding);

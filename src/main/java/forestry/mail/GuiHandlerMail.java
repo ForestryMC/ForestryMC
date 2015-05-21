@@ -64,7 +64,7 @@ public class GuiHandlerMail extends GuiHandlerBase {
 				}
 
 				if (equipped.getItem() instanceof ItemLetter) {
-					return new GuiLetter(player, new LetterInventory(equipped));
+					return new GuiLetter(player, new LetterInventory(player, equipped));
 				} else {
 					return null;
 				}
@@ -110,7 +110,7 @@ public class GuiHandlerMail extends GuiHandlerBase {
 				}
 
 				if (equipped.getItem() instanceof ItemLetter) {
-					return new ContainerLetter(player, new LetterInventory(equipped));
+					return new ContainerLetter(player, new LetterInventory(player, equipped));
 				} else {
 					return null;
 				}

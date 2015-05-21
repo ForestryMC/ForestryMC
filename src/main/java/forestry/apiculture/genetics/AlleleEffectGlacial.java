@@ -24,8 +24,8 @@ import forestry.core.vect.Vect;
 
 public class AlleleEffectGlacial extends AlleleEffectThrottled {
 
-	public AlleleEffectGlacial(String uid) {
-		super(uid, "glacial", false, 200, true, false);
+	public AlleleEffectGlacial() {
+		super("glacial", false, 200, true, false);
 	}
 
 	@Override
@@ -37,7 +37,8 @@ public class AlleleEffectGlacial extends AlleleEffectThrottled {
 			return storedData;
 		}
 
-		EnumTemperature temp = EnumTemperature.getFromValue(BiomeGenBase.getBiome(housing.getBiomeId()).temperature);
+		BiomeGenBase biome = housing.getBiome();
+		EnumTemperature temp = EnumTemperature.getFromBiome(biome);
 
 		switch (temp) {
 			case HELLISH:

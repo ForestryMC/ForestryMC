@@ -49,13 +49,8 @@ public class TileWorktable extends TileBase implements ICrafter {
 	private final TileInventoryAdapter craftingInventory;
 
 	public TileWorktable() {
-		craftingInventory = new TileInventoryAdapter(this, 10, "CraftItems");
-		setInternalInventory(new TileInventoryAdapter(this, 18, "Items") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				return GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
-			}
-		});
+		craftingInventory = new TileInventoryAdapter<TileWorktable>(this, 10, "CraftItems");
+		setInternalInventory(new WorktableInventoryAdapter(this));
 
 		memorized = new RecipeMemory();
 	}
@@ -211,5 +206,16 @@ public class TileWorktable extends TileBase implements ICrafter {
 	 */
 	public InventoryAdapter getCraftingInventory() {
 		return craftingInventory;
+	}
+
+	private static class WorktableInventoryAdapter extends TileInventoryAdapter<TileWorktable> {
+		public WorktableInventoryAdapter(TileWorktable worktable) {
+			super(worktable, 18, "Items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			return GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+		}
 	}
 }

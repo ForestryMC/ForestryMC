@@ -144,7 +144,7 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 		}
 	}
 
-	private void renderItem(RenderBlocks renderer, ItemStack itemStack, float x, float y, float z) {
+	private static void renderItem(RenderBlocks renderer, ItemStack itemStack, float x, float y, float z) {
 		Tessellator tessellator = Tessellator.instance;
 		Block block = StackUtils.getBlock(itemStack);
 

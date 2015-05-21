@@ -58,17 +58,7 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 	public MachineGenerator() {
 		setHints(Config.hints.get("generator"));
 
-		setInternalInventory(new TileInventoryAdapter(this, 1, "Items") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				if (slotIndex == SLOT_CAN) {
-					Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-					return tankManager.accepts(fluid);
-				}
-
-				return false;
-			}
-		});
+		setInternalInventory(new GeneratorInventoryAdapter(this));
 
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, FuelManager.generatorFuel.keySet());
 		tankManager = new TankManager(resourceTank);
@@ -135,8 +125,7 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 		}
 
 		// No work to be done if IC2 is unavailable.
-		if (ic2EnergySource == null) {
-			setErrorState(EnumErrorCode.NOENERGYNET);
+		if (setErrorCondition(ic2EnergySource == null, EnumErrorCode.NOENERGYNET)) {
 			return;
 		}
 
@@ -158,11 +147,8 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 
 		}
 
-		if (resourceTank.getFluidAmount() <= 0) {
-			setErrorState(EnumErrorCode.NOFUEL);
-		} else {
-			setErrorState(EnumErrorCode.OK);
-		}
+		boolean hasFuel = resourceTank.getFluidAmount() > 0;
+		setErrorCondition(!hasFuel, EnumErrorCode.NOFUEL);
 	}
 
 	public boolean isWorking() {
@@ -246,4 +232,19 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 		return tankManager.getTankInfo(from);
 	}
 
+	private static class GeneratorInventoryAdapter extends TileInventoryAdapter<MachineGenerator> {
+		public GeneratorInventoryAdapter(MachineGenerator generator) {
+			super(generator, 1, "Items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_CAN) {
+				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+				return tile.tankManager.accepts(fluid);
+			}
+
+			return false;
+		}
+	}
 }

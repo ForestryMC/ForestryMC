@@ -217,7 +217,6 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	private void setBiomeInformation() {
 		this.biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
-		setErrorState(EnumErrorCode.OK);
 	}
 
 	private static TreeMap<ForgeDirection, List<FarmTarget>> createTargets(World world, Vect targetStart, final int allowedExtent, final int farmSizeNorthSouth, final int farmSizeEastWest) {
@@ -273,8 +272,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	}
 
 	private void setExtents() {
-		for (ForgeDirection direction : targets.keySet()) {
-			List<FarmTarget> targetsList = targets.get(direction);
+		for (List<FarmTarget> targetsList : targets.values()) {
 			if (!targetsList.isEmpty()) {
 				Vect groundPosition = getGroundPosition(worldObj, targetsList.get(0).getStart());
 
@@ -297,27 +295,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	}
 
 	protected void createInventory() {
-		setInternalInventory(new TileInventoryAdapter(this, SLOT_COUNT, "Items") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				if (GuiUtil.isIndexInRange(slotIndex, SLOT_FERTILIZER, SLOT_FERTILIZER_COUNT)) {
-					return acceptsAsFertilizer(itemStack);
-				} else if (GuiUtil.isIndexInRange(slotIndex, SLOT_GERMLINGS_1, SLOT_GERMLINGS_COUNT)) {
-					return acceptsAsGermling(itemStack);
-				} else if (GuiUtil.isIndexInRange(slotIndex, SLOT_RESOURCES_1, SLOT_RESOURCES_COUNT)) {
-					return acceptsAsResource(itemStack);
-				} else if (GuiUtil.isIndexInRange(slotIndex, SLOT_CAN, SLOT_CAN_COUNT)) {
-					Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-					return tankManager.accepts(fluid);
-				}
-				return false;
-			}
-
-			@Override
-			public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
-				return GuiUtil.isIndexInRange(slotIndex, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT);
-			}
-		});
+		setInternalInventory(new FarmPlainInventoryAdapter(this));
 		FilteredTank liquidTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, FluidRegistry.WATER);
 		tankManager = new TankManager(liquidTank);
 	}
@@ -345,16 +323,14 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 		// System.out.println("Nothing pending added.");
 		// Abort if we still have produce waiting.
-		if (!pendingProduce.isEmpty()) {
-			setErrorState(EnumErrorCode.NOSPACE);
+		if (setErrorCondition(!pendingProduce.isEmpty(), EnumErrorCode.NOSPACE)) {
 			return false;
 		}
 
 		// System.out.println("Product queue empty.");
 		if (storedFertilizer <= BUFFER_FERTILIZER) {
 			replenishFertilizer();
-			if (storedFertilizer <= 0) {
-				setErrorState(EnumErrorCode.NOFERTILIZER);
+			if (setErrorCondition(storedFertilizer <= 0, EnumErrorCode.NOFERTILIZER)) {
 				return false;
 			}
 		}
@@ -403,15 +379,11 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			}
 		}
 
-		if (farmWorkStatus.didWork) {
-			setErrorState(EnumErrorCode.OK);
-		} else if (stage == Stage.CULTIVATE) {
-			if (!farmWorkStatus.hasFarmland) {
-				setErrorState(EnumErrorCode.NOFARMLAND);
-			} else if (!farmWorkStatus.hasFertilizer) {
-				setErrorState(EnumErrorCode.NOFERTILIZER);
-			} else if (!farmWorkStatus.hasLiquid) {
-				setErrorState(EnumErrorCode.NOLIQUID);
+		if (!farmWorkStatus.didWork) {
+			if (stage == Stage.CULTIVATE) {
+				setErrorCondition(!farmWorkStatus.hasFarmland, EnumErrorCode.NOFARMLAND);
+				setErrorCondition(!farmWorkStatus.hasFertilizer, EnumErrorCode.NOFERTILIZER);
+				setErrorCondition(!farmWorkStatus.hasLiquid, EnumErrorCode.NOLIQUID);
 			}
 		}
 
@@ -575,15 +547,16 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		}
 
 		// Check fertilizer
-		if (!hasFertilizer(provider.getFertilizerConsumption())) {
-			setErrorState(EnumErrorCode.NOFERTILIZER);
+		Boolean hasFertilizer = hasFertilizer(provider.getFertilizerConsumption());
+		if (setErrorCondition(!hasFertilizer, EnumErrorCode.NOFERTILIZER)) {
 			return false;
 		}
 
 		// Check water
-		FluidStack liquid = Fluids.WATER.getFluid(provider.getWaterConsumption(getHydrationModifier()));
-		if (liquid.amount > 0 && !hasLiquid(liquid)) {
-			setErrorState(EnumErrorCode.NOLIQUID);
+		FluidStack requiredLiquid = Fluids.WATER.getFluid(provider.getWaterConsumption(getHydrationModifier()));
+		boolean hasLiquid = requiredLiquid.amount == 0 || hasLiquid(requiredLiquid);
+
+		if (setErrorCondition(!hasLiquid, EnumErrorCode.NOLIQUID)) {
 			return false;
 		}
 
@@ -595,7 +568,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 		// Remove fertilizer and water
 		removeFertilizer(provider.getFertilizerConsumption());
-		removeLiquid(liquid);
+		removeLiquid(requiredLiquid);
 
 		// Let event handlers handle the harvest first.
 		for (IFarmListener listener : eventHandlers) {
@@ -637,13 +610,15 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		}
 
 		ItemStack next = pendingProduce.peek();
-		if (InvTools.tryAddStack(getInternalInventory(), next, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT, true, true)) {
+		boolean added = InvTools.tryAddStack(getInternalInventory(), next, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT, true, true);
+
+		if (added) {
 			pendingProduce.pop();
-			return true;
 		}
 
-		setErrorState(EnumErrorCode.NOSPACE);
-		return false;
+		setErrorCondition(!added, EnumErrorCode.NOSPACE);
+
+		return added;
 	}
 
 	/* FERTILIZER HANDLING */
@@ -1021,5 +996,31 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	@Override
 	public boolean isOwnable() {
 		return true;
+	}
+
+	private static class FarmPlainInventoryAdapter extends TileInventoryAdapter<TileFarmPlain> {
+		public FarmPlainInventoryAdapter(TileFarmPlain tile) {
+			super(tile, TileFarmPlain.SLOT_COUNT, "Items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (GuiUtil.isIndexInRange(slotIndex, SLOT_FERTILIZER, SLOT_FERTILIZER_COUNT)) {
+				return tile.acceptsAsFertilizer(itemStack);
+			} else if (GuiUtil.isIndexInRange(slotIndex, SLOT_GERMLINGS_1, SLOT_GERMLINGS_COUNT)) {
+				return tile.acceptsAsGermling(itemStack);
+			} else if (GuiUtil.isIndexInRange(slotIndex, SLOT_RESOURCES_1, SLOT_RESOURCES_COUNT)) {
+				return tile.acceptsAsResource(itemStack);
+			} else if (GuiUtil.isIndexInRange(slotIndex, SLOT_CAN, SLOT_CAN_COUNT)) {
+				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+				return tile.tankManager.accepts(fluid);
+			}
+			return false;
+		}
+
+		@Override
+		public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
+			return GuiUtil.isIndexInRange(slotIndex, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT);
+		}
 	}
 }

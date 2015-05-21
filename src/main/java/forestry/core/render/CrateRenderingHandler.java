@@ -29,7 +29,7 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.api.recipes.IGenericCrate;
+import forestry.core.items.ItemCrated;
 
 /**
  * Adapted from RenderTankCartItem by CovertJaguar <http://www.railcraft.info>
@@ -334,8 +334,8 @@ public class CrateRenderingHandler implements IItemRenderer {
 		}
 
 		Item crateItem = crate.getItem();
-		if (crateItem instanceof IGenericCrate) {
-			return ((IGenericCrate) crateItem).getContained(crate);
+		if (crateItem instanceof ItemCrated) {
+			return ((ItemCrated) crateItem).getContained();
 		}
 		return null;
 	}

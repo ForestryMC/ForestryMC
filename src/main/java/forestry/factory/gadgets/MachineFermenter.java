@@ -96,34 +96,11 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		}
 
 		public boolean matches(ItemStack res, FluidStack liqu) {
-			// No recipe without resource!
-			if (res == null) {
+			if (!StackUtils.isCraftingEquivalent(resource, res)) {
 				return false;
 			}
 
-			if (resource.getItem() != res.getItem()) {
-				return false;
-			}
-			if (resource.getItemDamage() != Defaults.WILDCARD && resource.getItemDamage() != res.getItemDamage()) {
-				return false;
-			}
-
-			// Liquid required but none given
-			if (liqu == null) {
-				return false;
-			}
-
-			// Wrong liquid
-			if (!liquid.isFluidEqual(liqu)) {
-				return false;
-			}
-
-			// Enough liquid
-			if (liquid.amount <= liqu.amount) {
-				return true;
-			}
-
-			return false;
+			return liqu != null && liqu.containsFluid(liquid);
 		}
 	}
 
@@ -198,27 +175,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 
 	public MachineFermenter() {
 		super(2000, 150, 8000);
-		setInternalInventory(new TileInventoryAdapter(this, 5, "Items") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				if (slotIndex == SLOT_RESOURCE) {
-					return RecipeManager.isResource(itemStack);
-				} else if (slotIndex == SLOT_INPUT) {
-					Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-					return resourceTank.accepts(fluid);
-				} else if (slotIndex == SLOT_CAN_INPUT) {
-					return FluidHelper.isEmptyContainer(itemStack);
-				} else if (slotIndex == SLOT_FUEL) {
-					return FuelManager.fermenterFuel.containsKey(itemStack);
-				}
-				return false;
-			}
-
-			@Override
-			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-				return slotIndex == SLOT_CAN_OUTPUT;
-			}
-		});
+		setInternalInventory(new FermenterInventoryAdapter(this));
 		setHints(Config.hints.get("fermenter"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluidInputs);
 		resourceTank.tankMode = StandardTank.TankMode.INPUT;
@@ -261,6 +218,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 
 	@Override
 	public void updateServerSide() {
+		super.updateServerSide();
 
 		if (!updateOnInterval(20)) {
 			return;
@@ -280,19 +238,14 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 			}
 		}
 
-		if (RecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid()) != null) {
-			if (resourceTank.getFluidAmount() < fuelCurrentFerment) {
-				setErrorState(EnumErrorCode.NORESOURCE);
-			} else {
-				setErrorState(EnumErrorCode.OK);
-			}
-		} else if (inventory.getStackInSlot(SLOT_FUEL) == null && fuelBurnTime <= 0) {
-			setErrorState(EnumErrorCode.NOFUEL);
-		} else if (energyManager.getTotalEnergyStored() == 0) {
-			setErrorState(EnumErrorCode.NOPOWER);
-		} else {
-			setErrorState(EnumErrorCode.NORECIPE);
-		}
+		boolean hasRecipe = RecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid()) != null;
+		setErrorCondition(!hasRecipe, EnumErrorCode.NORECIPE);
+
+		boolean hasResource = resourceTank.getFluidAmount() >= fuelCurrentFerment;
+		setErrorCondition(!hasResource, EnumErrorCode.NORESOURCE);
+
+		boolean hasFuel = inventory.getStackInSlot(SLOT_FUEL) != null || fuelBurnTime > 0;
+		setErrorCondition(!hasFuel, EnumErrorCode.NOFUEL);
 	}
 
 	@Override
@@ -598,5 +551,31 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		res.add(FactoryTriggers.lowResource25);
 		res.add(FactoryTriggers.lowResource10);
 		return res;
+	}
+
+	private static class FermenterInventoryAdapter extends TileInventoryAdapter<MachineFermenter> {
+		public FermenterInventoryAdapter(MachineFermenter fermenter) {
+			super(fermenter, 5, "Items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_RESOURCE) {
+				return RecipeManager.isResource(itemStack);
+			} else if (slotIndex == SLOT_INPUT) {
+				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+				return tile.resourceTank.accepts(fluid);
+			} else if (slotIndex == SLOT_CAN_INPUT) {
+				return FluidHelper.isEmptyContainer(itemStack);
+			} else if (slotIndex == SLOT_FUEL) {
+				return FuelManager.fermenterFuel.containsKey(itemStack);
+			}
+			return false;
+		}
+
+		@Override
+		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+			return slotIndex == SLOT_CAN_OUTPUT;
+		}
 	}
 }

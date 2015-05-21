@@ -31,7 +31,7 @@ import forestry.core.utils.StringUtil;
 
 public class ItemPipette extends ItemForestry implements IToolPipette {
 
-	class PipetteContents implements INBTTagable {
+	static class PipetteContents implements INBTTagable {
 
 		FluidStack contents;
 

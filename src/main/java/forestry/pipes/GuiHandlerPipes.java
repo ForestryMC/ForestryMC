@@ -13,10 +13,10 @@ import net.minecraft.world.World;
 
 import cpw.mods.fml.common.network.IGuiHandler;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.core.network.GuiId;
 import forestry.pipes.gui.ContainerPropolisPipe;
 import forestry.pipes.gui.GuiPropolisPipe;
-import forestry.plugins.PluginApiculture;
 
 import buildcraft.transport.Pipe;
 import buildcraft.transport.TileGenericPipe;
@@ -63,7 +63,7 @@ public class GuiHandlerPipes implements IGuiHandler {
 
 		switch (GuiId.values()[id]) {
 			case PropolisPipeGUI:
-				PluginApiculture.beeInterface.getBreedingTracker(world, player.getGameProfile()).synchToPlayer(player);
+				BeeManager.beeRoot.getBreedingTracker(world, player.getGameProfile()).synchToPlayer(player);
 				return new ContainerPropolisPipe(player.inventory, (PipeItemsPropolis) getPipe(world, x, y, z));
 			default:
 				return null;

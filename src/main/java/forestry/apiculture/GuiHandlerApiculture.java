@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.apiculture.gadgets.TileAlvearyHygroregulator;
 import forestry.apiculture.gadgets.TileAlvearyPlain;
 import forestry.apiculture.gadgets.TileAlvearySieve;
@@ -42,7 +43,6 @@ import forestry.apiculture.items.ItemImprinter.ImprinterInventory;
 import forestry.core.GuiHandlerBase;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.network.GuiId;
-import forestry.plugins.PluginApiculture;
 
 public class GuiHandlerApiculture extends GuiHandlerBase {
 
@@ -90,7 +90,7 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 					return null;
 				}
 
-				return new GuiHabitatLocator(player.inventory, new HabitatLocatorInventory(equipped));
+				return new GuiHabitatLocator(player, new HabitatLocatorInventory(player, equipped));
 
 			case HygroregulatorGUI:
 				return new GuiAlvearyHygroregulator(player.inventory, (TileAlvearyHygroregulator) getTileForestry(world, x, y, z));
@@ -156,7 +156,7 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 					return null;
 				}
 
-				return new ContainerHabitatLocator(player.inventory, new HabitatLocatorInventory(equipped));
+				return new ContainerHabitatLocator(player, new HabitatLocatorInventory(player, equipped));
 
 			case HygroregulatorGUI:
 				return new ContainerAlvearyHygroregulator(player.inventory, (TileAlvearyHygroregulator) getTileForestry(world, x, y, z));
@@ -175,7 +175,7 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 		}
 	}
 
-	private void synchApiaristTracker(World world, EntityPlayer player) {
-		PluginApiculture.beeInterface.getBreedingTracker(world, player.getGameProfile()).synchToPlayer(player);
+	private static void synchApiaristTracker(World world, EntityPlayer player) {
+		BeeManager.beeRoot.getBreedingTracker(world, player.getGameProfile()).synchToPlayer(player);
 	}
 }

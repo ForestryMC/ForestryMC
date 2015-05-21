@@ -16,7 +16,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 import forestry.api.mail.EnumAddressee;
@@ -30,7 +29,6 @@ import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
-import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPacketHandler;
 import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemForestryBlock;
@@ -50,14 +48,11 @@ import forestry.mail.items.ItemCatalogue;
 import forestry.mail.items.ItemLetter;
 import forestry.mail.items.ItemStamps;
 import forestry.mail.items.ItemStamps.StampInfo;
-import forestry.mail.proxy.ProxyMail;
 import forestry.mail.triggers.MailTriggers;
 
 @Plugin(pluginID = "Mail", name = "Mail", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.mail.description")
 public class PluginMail extends ForestryPlugin {
 
-	@SidedProxy(clientSide = "forestry.mail.proxy.ClientProxyMail", serverSide = "forestry.mail.proxy.ProxyMail")
-	public static ProxyMail proxy;
 	public static MachineDefinition definitionMailbox;
 	public static MachineDefinition definitionTradestation;
 	public static MachineDefinition definitionPhilatelist;

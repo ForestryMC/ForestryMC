@@ -15,31 +15,28 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBee;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
-import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
-import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IHintSource;
 import forestry.core.inventory.AlyzerInventory;
 import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.plugins.PluginApiculture;
 
 public class ItemBeealyzer extends ItemInventoried {
 
-	public static class BeealyzerInventory extends AlyzerInventory implements IErrorSource, IHintSource {
+	public static class BeealyzerInventory extends AlyzerInventory implements IHintSource {
 
 		public BeealyzerInventory(EntityPlayer player, ItemStack itemStack) {
-			super(ItemBeealyzer.class, 7, itemStack);
-			this.player = player;
+			super(player, 7, itemStack);
 		}
 
 		@Override
 		protected boolean isSpecimen(ItemStack itemStack) {
-			return PluginApiculture.beeInterface.isMember(itemStack);
+			return BeeManager.beeRoot.isMember(itemStack);
 		}
 
 		private void tryAnalyze() {
@@ -48,7 +45,7 @@ public class ItemBeealyzer extends ItemInventoried {
 				return;
 			}
 
-			IBee bee = PluginApiculture.beeInterface.getMember(getStackInSlot(SLOT_SPECIMEN));
+			IBee bee = BeeManager.beeRoot.getMember(getStackInSlot(SLOT_SPECIMEN));
 			// No bee, abort
 			if (bee == null) {
 				return;
@@ -64,8 +61,8 @@ public class ItemBeealyzer extends ItemInventoried {
 
 				bee.analyze();
 				if (player != null) {
-					PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(bee.getGenome().getPrimary());
-					PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(bee.getGenome().getSecondary());
+					BeeManager.beeRoot.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(bee.getGenome().getPrimary());
+					BeeManager.beeRoot.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(bee.getGenome().getSecondary());
 				}
 
 				NBTTagCompound nbttagcompound = new NBTTagCompound();
@@ -82,8 +79,6 @@ public class ItemBeealyzer extends ItemInventoried {
 
 		@Override
 		public void markDirty() {
-			// if (!Proxies.common.isSimulating(player.worldObj))
-			// return;
 			tryAnalyze();
 		}
 
@@ -96,21 +91,6 @@ public class ItemBeealyzer extends ItemInventoried {
 		@Override
 		public String[] getHints() {
 			return Config.hints.get("beealyzer");
-		}
-
-		// / IERRORSOURCE
-		@Override
-		public boolean throwsErrors() {
-			return true;
-		}
-
-		@Override
-		public EnumErrorCode getErrorState() {
-			if (PluginApiculture.beeInterface.isMember(inventoryStacks[SLOT_SPECIMEN]) && !isEnergy(getStackInSlot(SLOT_ENERGY))) {
-				return EnumErrorCode.NOHONEY;
-			}
-
-			return EnumErrorCode.OK;
 		}
 	}
 

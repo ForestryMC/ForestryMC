@@ -11,34 +11,17 @@
 package forestry.energy.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.energy.gadgets.EngineBronze;
 
-public class ContainerEngineBronze extends ContainerLiquidTanks {
-
-	protected final EngineBronze engine;
+public class ContainerEngineBronze extends ContainerLiquidTanks<EngineBronze> {
 
 	public ContainerEngineBronze(InventoryPlayer player, EngineBronze engine) {
-		super(engine);
-
-		this.engine = engine;
+		super(engine, player, 8, 84);
 
 		this.addSlotToContainer(new SlotFiltered(engine, EngineBronze.SLOT_CAN, 143, 40));
-
-		int i;
-		for (i = 0; i < 3; ++i) {
-			for (int var4 = 0; var4 < 9; ++var4) {
-				this.addSlotToContainer(new Slot(player, var4 + i * 9 + 9, 8 + var4 * 18, 84 + i * 18));
-			}
-		}
-
-		for (i = 0; i < 9; ++i) {
-			this.addSlotToContainer(new Slot(player, i, 8 + i * 18, 142));
-		}
-
 	}
 
 }

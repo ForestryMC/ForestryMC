@@ -13,6 +13,8 @@ package forestry.core.network;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import com.mojang.authlib.GameProfile;
@@ -21,31 +23,27 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.core.ErrorStateRegistry;
 import forestry.api.core.IErrorState;
-import forestry.core.EnumErrorCode;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.utils.EnumAccess;
 
 public class PacketTileUpdate extends PacketUpdate {
 
 	private ForgeDirection orientation = ForgeDirection.WEST;
-	private IErrorState errorState = EnumErrorCode.OK;
+	private final Set<IErrorState> errorStates;
 
 	private boolean isOwnable = false;
 	private EnumAccess access = EnumAccess.SHARED;
 	private GameProfile owner = null;
 
 	public PacketTileUpdate() {
+		errorStates = new HashSet<IErrorState>();
 	}
 
 	public PacketTileUpdate(TileForestry tile) {
-		super(PacketIds.TILE_FORESTRY_UPDATE, tile.getPacketPayload());
-
-		posX = tile.xCoord;
-		posY = tile.yCoord;
-		posZ = tile.zCoord;
+		super(PacketIds.TILE_FORESTRY_UPDATE, tile);
 
 		orientation = tile.getOrientation();
-		errorState = tile.getErrorState();
+		errorStates = tile.getErrorStates();
 
 		isOwnable = tile.isOwnable();
 		access = tile.getAccess();
@@ -56,8 +54,12 @@ public class PacketTileUpdate extends PacketUpdate {
 	public void writeData(DataOutputStream data) throws IOException {
 		super.writeData(data);
 
-		data.writeByte(this.orientation.ordinal());
-		data.writeShort(this.errorState.getID());
+		data.writeByte(orientation.ordinal());
+
+		data.writeShort(errorStates.size());
+		for (IErrorState errorState : errorStates) {
+			data.writeShort(errorState.getID());
+		}
 
 		// TODO: Should this really be sent to the client? Huge network cost.
 		// As far as I know, only GUIs need it, and there are better ways to get the information to a GUI.
@@ -82,7 +84,13 @@ public class PacketTileUpdate extends PacketUpdate {
 		super.readData(data);
 
 		orientation = ForgeDirection.getOrientation(data.readByte());
-		errorState = ErrorStateRegistry.getErrorState(data.readShort());
+
+		short errorStateCount = data.readShort();
+		for (int i = 0; i < errorStateCount; i++) {
+			short errorStateId = data.readShort();
+			IErrorState errorState = ErrorStateRegistry.getErrorState(errorStateId);
+			errorStates.add(errorState);
+		}
 
 		int ordinal = data.readByte();
 		isOwnable = ordinal >= 0;
@@ -98,18 +106,18 @@ public class PacketTileUpdate extends PacketUpdate {
 	}
 
 	public ForgeDirection getOrientation() {
-		return this.orientation;
+		return orientation;
 	}
 
-	public IErrorState getErrorState() {
-		return this.errorState;
+	public Set<IErrorState> getErrorStates() {
+		return errorStates;
 	}
 
 	public EnumAccess getAccess() {
-		return this.access;
+		return access;
 	}
 
 	public GameProfile getOwner() {
-		return this.owner;
+		return owner;
 	}
 }

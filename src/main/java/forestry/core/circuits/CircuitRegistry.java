@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -31,7 +30,6 @@ public class CircuitRegistry implements ICircuitRegistry {
 	public static final Map<String, ICircuitLayout> DUMMY_MAP = new LinkedHashMap<String, ICircuitLayout>();
 	private final Map<String, ICircuitLayout> layoutMap = new LinkedHashMap<String, ICircuitLayout>();
 	private final Map<String, ICircuit> circuitMap = new LinkedHashMap<String, ICircuit>();
-	private final Map<Integer, String> legacyMap = new HashMap<Integer, String>();
 
 	static {
 		DUMMY_MAP.put("dummy", DUMMY_LAYOUT);
@@ -97,23 +95,6 @@ public class CircuitRegistry implements ICircuitRegistry {
 	@Override
 	public ICircuit getCircuit(String uid) {
 		return circuitMap.get(uid);
-	}
-
-	@Override
-	public void registerLegacyMapping(int id, String uid) {
-		this.legacyMap.put(id, uid);
-	}
-
-	@Override
-	public ICircuit getFromLegacyMap(int id) {
-		if (!legacyMap.containsKey(id)) {
-			return null;
-		}
-
-		return getCircuit(legacyMap.get(id));
-	}
-
-	public void initialize() {
 	}
 
 	@Override

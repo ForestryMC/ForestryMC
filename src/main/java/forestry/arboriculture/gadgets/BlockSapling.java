@@ -11,8 +11,10 @@
 package forestry.arboriculture.gadgets;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,7 +39,7 @@ import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginArboriculture;
 
-public class BlockSapling extends BlockTreeContainer {
+public class BlockSapling extends BlockTreeContainer implements IGrowable {
 
 	public static TileSapling getSaplingTile(IBlockAccess world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(x, y, z);
@@ -185,5 +187,26 @@ public class BlockSapling extends BlockTreeContainer {
 			StackUtils.dropItemStackAsEntity(saplingStack, world, x, y, z);
 		}
 
+	}
+
+	@Override
+	/** canFertilize */
+	public boolean func_149851_a(World worldIn, int x, int y, int z, boolean isClient) {
+		return true;
+	}
+
+	@Override
+	/** shouldFertilize */
+	public boolean func_149852_a(World world, Random random, int x, int y, int z) {
+		return (double) world.rand.nextFloat() < 0.45D;
+	}
+
+	@Override
+	/** fertilize */
+	public void func_149853_b(World world, Random random, int x, int y, int z) {
+		TileSapling saplingTile = getSaplingTile(world, x, y, z);
+		if (saplingTile != null) {
+			saplingTile.tryGrow(true);
+		}
 	}
 }

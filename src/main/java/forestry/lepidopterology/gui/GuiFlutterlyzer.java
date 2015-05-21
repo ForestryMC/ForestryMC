@@ -11,25 +11,20 @@
 package forestry.lepidopterology.gui;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleTolerance;
-import forestry.api.genetics.IMutation;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.core.config.ForestryItem;
-import forestry.core.genetics.AlleleBoolean;
 import forestry.core.genetics.GenericRatings;
+import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StringUtil;
@@ -257,49 +252,5 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 		}
 
 		endPage();
-	}
-
-	private void drawAnalyticsPage4(IButterfly butterfly) {
-
-		startPage(COLUMN_0, COLUMN_1, COLUMN_2);
-		drawLine(StringUtil.localize("gui.beealyzer.mutations") + ":", COLUMN_0);
-		newLine();
-		newLine();
-
-//		RenderHelper.enableGUIStandardItemLighting();
-//
-//		HashMap<IMutation, IAllele> combinations = new HashMap<IMutation, IAllele>();
-//
-//		for (IMutation mutation : TreeTemplates.getCombinations(butterfly.getGenome().getPrimary()))
-//			combinations.put(mutation, butterfly.getGenome().getPrimary());
-//
-//		for (IMutation mutation : TreeTemplates.getCombinations(butterfly.getGenome().getSecondary()))
-//			combinations.put(mutation, butterfly.getGenome().getSecondary());
-//
-// 		int columnWidth = 50;
-//		int x = 0;
-//
-//		for (Map.Entry<IMutation, IAllele> mutation : combinations.entrySet()) {
-//
-//			//if (breedingTracker.isDiscovered(mutation.getKey()))
-//			drawMutationInfo(mutation.getKey(), mutation.getValue(), COLUMN_0 + x);
-//			/*else {
-//				// Do not display secret undiscovered mutations.
-//				if (mutation.getKey().isSecret())
-//					continue;
-//
-//				drawUnknownMutation(mutation.getKey(), mutation.getValue(), COLUMN_0 + x);
-//			} */
-//
-//			x += columnWidth;
-//			if (x > 150) {
-//				x = 0;
-//				newLine();
-//				newLine();
-//			}
-//		}
-
-		endPage();
-
 	}
 }

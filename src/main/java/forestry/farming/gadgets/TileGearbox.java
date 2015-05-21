@@ -62,15 +62,17 @@ public class TileGearbox extends TileFarm implements IPowerHandler {
 	@Override
 	protected void updateServerSide() {
 		super.updateServerSide();
-		
-		if (energyManager.getTotalEnergyStored() == 0) {
-			ITileStructure central = getCentralTE();
-			if (!(central instanceof TileForestry)) {
-				return;
-			}
 
-			TileForestry centralHousing = (TileForestry) central;
-			centralHousing.setErrorState(EnumErrorCode.NOPOWER);
+		ITileStructure central = getCentralTE();
+		if (!(central instanceof TileForestry)) {
+			return;
+		}
+
+		TileForestry centralHousing = (TileForestry) central;
+
+		boolean hasPower = energyManager.getTotalEnergyStored() > 0;
+
+		if (centralHousing.setErrorCondition(!hasPower, EnumErrorCode.NOPOWER)) {
 			return;
 		}
 
@@ -85,7 +87,6 @@ public class TileGearbox extends TileFarm implements IPowerHandler {
 		}
 
 		if (workCounter >= WORK_CYCLES && updateOnInterval(5)) {
-			ITileStructure central = getCentralTE();
 			if (!(central instanceof IFarmHousing)) {
 				return;
 			}

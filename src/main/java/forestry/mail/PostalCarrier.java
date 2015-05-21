@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.mail;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -24,9 +25,11 @@ import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.IPostalState;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
+import forestry.core.network.PacketIds;
+import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
-import forestry.plugins.PluginMail;
+import forestry.mail.network.PacketPOBoxInfo;
 
 public class PostalCarrier implements IPostalCarrier {
 
@@ -63,7 +66,7 @@ public class PostalCarrier implements IPostalCarrier {
 		}
 	}
 
-	private IPostalState handleTradeLetter(World world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
+	private static IPostalState handleTradeLetter(World world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
 		ITradeStation trade = PostManager.postRegistry.getTradeStation(world, recipient);
 		if (trade == null) {
 			return EnumDeliveryState.NO_MAILBOX;
@@ -72,7 +75,7 @@ public class PostalCarrier implements IPostalCarrier {
 		return trade.handleLetter(world, recipient, letterstack, doLodge);
 	}
 
-	private EnumDeliveryState storeInPOBox(World world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
+	private static EnumDeliveryState storeInPOBox(World world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
 
 		POBox pobox = PostRegistry.getPOBox(world, recipient);
 		if (pobox == null) {
@@ -82,7 +85,10 @@ public class PostalCarrier implements IPostalCarrier {
 		if (!pobox.storeLetter(letterstack.copy())) {
 			return EnumDeliveryState.MAILBOX_FULL;
 		} else {
-			PluginMail.proxy.setPOBoxInfo(world, recipient, pobox.getPOBoxInfo());
+			EntityPlayer player = Proxies.common.getPlayer(world, recipient.getPlayerProfile());
+			if (player != null) {
+				Proxies.net.sendToPlayer(new PacketPOBoxInfo(PacketIds.POBOX_INFO, pobox.getPOBoxInfo()), player);
+			}
 		}
 
 		return EnumDeliveryState.OK;

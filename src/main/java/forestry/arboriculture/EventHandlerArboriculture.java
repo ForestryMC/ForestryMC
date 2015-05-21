@@ -19,7 +19,6 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 import forestry.api.genetics.IFruitBearer;
 import forestry.arboriculture.gadgets.TileFruitPod;
-import forestry.arboriculture.gadgets.TileSapling;
 import forestry.core.proxy.Proxies;
 
 public class EventHandlerArboriculture {
@@ -32,12 +31,7 @@ public class EventHandlerArboriculture {
 		}
 
 		TileEntity tile = event.world.getTileEntity(event.x, event.y, event.z);
-		if (tile instanceof TileSapling) {
-			int result = ((TileSapling) tile).tryGrow(true);
-			if (result == 1 || result == 2) {
-				event.setResult(Result.ALLOW);
-			}
-		} else if (tile instanceof TileFruitPod) {
+		if (tile instanceof TileFruitPod) {
 			if (((TileFruitPod) tile).canMature()) {
 				((TileFruitPod) tile).mature();
 				event.setResult(Result.ALLOW);

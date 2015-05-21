@@ -72,8 +72,8 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 
 	private final List<Resurrectable> resurrectables;
 
-	public AlleleEffectResurrection(String uid, String name, List<Resurrectable> resurrectables) {
-		super(uid, name, true, 40, true, true);
+	public AlleleEffectResurrection(String name, List<Resurrectable> resurrectables) {
+		super(name, true, 40, true, true);
 		this.resurrectables = resurrectables;
 	}
 

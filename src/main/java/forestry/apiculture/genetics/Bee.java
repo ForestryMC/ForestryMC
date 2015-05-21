@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -36,13 +39,13 @@ import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.core.BiomeHelper;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.api.core.IErrorState;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleTolerance;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFlowerProvider;
-import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
 import forestry.arboriculture.genetics.FakePollinatable;
@@ -57,7 +60,6 @@ import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.StringUtil;
 import forestry.core.vect.MutableVect;
 import forestry.core.vect.Vect;
-import forestry.plugins.PluginApiculture;
 
 public class Bee extends IndividualLiving implements IBee {
 
@@ -93,7 +95,7 @@ public class Bee extends IndividualLiving implements IBee {
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 
 		if (nbttagcompound == null) {
-			this.genome = PluginApiculture.beeInterface.templateAsGenome(BeeTemplates.getForestTemplate());
+			genome = BeeDefinition.FOREST.getGenome();
 			return;
 		}
 
@@ -110,7 +112,7 @@ public class Bee extends IndividualLiving implements IBee {
 		if (nbttagcompound.hasKey("Genome")) {
 			genome = new BeeGenome(nbttagcompound.getCompoundTag("Genome"));
 		} else {
-			genome = PluginApiculture.beeInterface.templateAsGenome(BeeTemplates.getForestTemplate());
+			genome = BeeDefinition.FOREST.getGenome();
 		}
 
 		if (nbttagcompound.hasKey("Mate")) {
@@ -135,11 +137,6 @@ public class Bee extends IndividualLiving implements IBee {
 
 	public void setIsNatural(boolean flag) {
 		this.isNatural = flag;
-	}
-
-	@Override
-	public boolean isIrregularMating() {
-		return false;
 	}
 
 	public boolean isNatural() {
@@ -245,52 +242,56 @@ public class Bee extends IndividualLiving implements IBee {
 	}
 
 	@Override
-	public int isWorking(IBeeHousing housing) {
-		return canWork(housing).ordinal();
-	}
-
-	@Override
-	public EnumErrorCode canWork(IBeeHousing housing) {
-
+	public Set<IErrorState> getCanWork(IBeeHousing housing) {
 		World world = housing.getWorld();
+		BiomeGenBase biome = housing.getBiome();
+
+		ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
+
 		// / Rain needs tolerant flyers
-		if (world.isRaining() && !genome.getTolerantFlyer() && BiomeHelper.canRainOrSnow(housing.getBiomeId()) && !housing.isSealed()) {
-			return EnumErrorCode.ISRAINING;
+		if (world.isRaining() && !genome.getTolerantFlyer() && BiomeHelper.canRainOrSnow(biome) && !housing.isSealed()) {
+			errorStates.add(EnumErrorCode.ISRAINING);
 		}
 
 		// / Night or darkness requires nocturnal species
 		if (world.isDaytime()) {
 			if (!canWorkDuringDay()) {
-				return EnumErrorCode.NOTNIGHT;
+				errorStates.add(EnumErrorCode.NOTNIGHT);
 			}
 		} else if (!canWorkAtNight() && !housing.isSelfLighted()) {
-			return EnumErrorCode.NOTDAY;
+			errorStates.add(EnumErrorCode.NOTDAY);
 		}
 
 		if (world.getBlockLightValue(housing.getXCoord(), housing.getYCoord() + 2, housing.getZCoord()) > Defaults.APIARY_MIN_LEVEL_LIGHT) {
 			if (!canWorkDuringDay()) {
-				return EnumErrorCode.NOTGLOOMY;
+				errorStates.add(EnumErrorCode.NOTGLOOMY);
 			}
 		} else if (!canWorkAtNight() && !housing.isSelfLighted()) {
-			return EnumErrorCode.NOTLUCID;
+			errorStates.add(EnumErrorCode.NOTLUCID);
 		}
 
 		// / No sky, except if in hell
-		BiomeGenBase biome = BiomeGenBase.getBiome(housing.getBiomeId());
-		if (biome == null) {
-			return EnumErrorCode.NOSKY;
-		}
-		if (!BiomeHelper.isBiomeHellish(biome) && !world.canBlockSeeTheSky(housing.getXCoord(), housing.getYCoord() + 3, housing.getZCoord())
-				&& !genome.getCaveDwelling() && !housing.isSunlightSimulated()) {
-			return EnumErrorCode.NOSKY;
+		if (biome != null && !BiomeHelper.isBiomeHellish(biome) && !world.canBlockSeeTheSky(housing.getXCoord(), housing.getYCoord() + 3, housing.getZCoord())
+					&& !genome.getCaveDwelling() && !housing.isSunlightSimulated()) {
+			errorStates.add(EnumErrorCode.NOSKY);
 		}
 
 		// / And finally climate check
 		if (!isSuitableClimate(housing.getTemperature(), housing.getHumidity())) {
-			return EnumErrorCode.INVALIDBIOME;
+			errorStates.add(EnumErrorCode.INVALIDBIOME);
 		}
 
-		return EnumErrorCode.OK;
+		return errorStates.build();
+	}
+
+	@Override
+	public IErrorState canWork(IBeeHousing housing) {
+		Set<IErrorState> errorStates = getCanWork(housing);
+		if (errorStates.size() == 0) {
+			return EnumErrorCode.OK;
+		} else {
+			return errorStates.iterator().next();
+		}
 	}
 
 	private boolean canWorkAtNight() {
@@ -344,18 +345,6 @@ public class Bee extends IndividualLiving implements IBee {
 	}
 
 	@Override
-	public ArrayList<Integer> getSuitableBiomeIds() {
-		ArrayList<Integer> suitableBiomes = new ArrayList<Integer>();
-		for (BiomeGenBase biome : BiomeGenBase.getBiomeGenArray()) {
-			if (isSuitableBiome(biome)) {
-				suitableBiomes.add(biome.biomeID);
-			}
-		}
-
-		return suitableBiomes;
-	}
-
-	@Override
 	public ArrayList<BiomeGenBase> getSuitableBiomes() {
 		ArrayList<BiomeGenBase> suitableBiomes = new ArrayList<BiomeGenBase>();
 		for (BiomeGenBase biome : BiomeGenBase.getBiomeGenArray()) {
@@ -403,15 +392,15 @@ public class Bee extends IndividualLiving implements IBee {
 		IAlleleTolerance tempToleranceAllele = (IAlleleTolerance) getGenome().getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
 		IAlleleTolerance humidToleranceAllele = (IAlleleTolerance) getGenome().getActiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE);
 
-		String unlocalizedCustomSpeed = "tooltip.worker." + speedAllele.getUnlocalizedName().replaceFirst("gui.", "");
+		String unlocalizedCustomSpeed = "tooltip.worker." + speedAllele.getUnlocalizedName().replaceAll("(.*)\\.", "");
 		String speed;
 		if (StringUtil.canTranslate(unlocalizedCustomSpeed)) {
 			speed = StringUtil.localize(unlocalizedCustomSpeed);
 		} else {
-			speed = speedAllele.getName() + " " + StringUtil.localize("gui.worker");
+			speed = speedAllele.getName() + ' ' + StringUtil.localize("gui.worker");
 		}
 
-		String lifespan = genome.getActiveAllele(EnumBeeChromosome.LIFESPAN).getName() + " " + StringUtil.localize("gui.life");
+		String lifespan = genome.getActiveAllele(EnumBeeChromosome.LIFESPAN).getName() + ' ' + StringUtil.localize("gui.life");
 		String tempTolerance = EnumChatFormatting.GREEN + "T: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / " + tempToleranceAllele.getName();
 		String humidTolerance = EnumChatFormatting.GREEN + "H: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / " + humidToleranceAllele.getName();
 		String flowers = genome.getFlowerProvider().getDescription();
@@ -425,11 +414,15 @@ public class Bee extends IndividualLiving implements IBee {
 		if (genome.getNocturnal()) {
 			list.add(EnumChatFormatting.RED + GenericRatings.rateActivityTime(genome.getNocturnal(), false));
 		}
+
+		if (genome.getTolerantFlyer()) {
+			list.add(EnumChatFormatting.WHITE + StringUtil.localize("gui.flyer.tooltip"));
+		}
 	}
 
 	@Override
 	public void age(World world, float housingLifespanModifier) {
-		IBeekeepingMode mode = PluginApiculture.beeInterface.getBeekeepingMode(world);
+		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(world);
 		float finalModifier = housingLifespanModifier * mode.getLifespanModifier(genome, mate, housingLifespanModifier);
 
 		super.age(world, finalModifier);
@@ -482,7 +475,7 @@ public class Bee extends IndividualLiving implements IBee {
 			Proxies.log.warning("Failed to produce in an apiary because the beehousing was null.");
 			return null;
 		}
-		IBeekeepingMode mode = PluginApiculture.beeInterface.getBeekeepingMode(housing.getWorld());
+		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(housing.getWorld());
 		if (mode == null) {
 			Proxies.log.warning("Failed to produce in an apiary because the beekeeping mode was null.");
 			return null;
@@ -540,7 +533,7 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		// Fatigued queens do not produce princesses.
-		if (PluginApiculture.beeInterface.getBeekeepingMode(housing.getWorld()).isFatigued(this, housing)) {
+		if (BeeManager.beeRoot.getBeekeepingMode(housing.getWorld()).isFatigued(this, housing)) {
 			return null;
 		}
 
@@ -559,7 +552,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 		ArrayList<IBee> bees = new ArrayList<IBee>();
 
-		int toCreate = PluginApiculture.beeInterface.getBeekeepingMode(world).getFinalFertility(this, world, housing.getXCoord(), housing.getYCoord(),
+		int toCreate = BeeManager.beeRoot.getBeekeepingMode(world).getFinalFertility(this, world, housing.getXCoord(), housing.getYCoord(),
 				housing.getZCoord());
 
 		if (toCreate <= 0) {
@@ -606,19 +599,19 @@ public class Bee extends IndividualLiving implements IBee {
 			}
 		}
 
-		IBeekeepingMode mode = PluginApiculture.beeInterface.getBeekeepingMode(world);
+		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(world);
 		return new Bee(new BeeGenome(chromosomes), mode.isNaturalOffspring(this), generation);
 	}
 
-	private IChromosome[] mutateSpecies(IBeeHousing housing, IGenome genomeOne, IGenome genomeTwo) {
+	private static IChromosome[] mutateSpecies(IBeeHousing housing, IBeeGenome genomeOne, IBeeGenome genomeTwo) {
 
 		World world = housing.getWorld();
 
 		IChromosome[] parent1 = genomeOne.getChromosomes();
 		IChromosome[] parent2 = genomeTwo.getChromosomes();
 
-		IGenome genome0;
-		IGenome genome1;
+		IBeeGenome genome0;
+		IBeeGenome genome1;
 		IAllele allele0;
 		IAllele allele1;
 
@@ -636,12 +629,12 @@ public class Bee extends IndividualLiving implements IBee {
 			genome1 = genomeOne;
 		}
 
-		for (IBeeMutation mutation : PluginApiculture.beeInterface.getMutations(true)) {
+		for (IBeeMutation mutation : BeeManager.beeRoot.getMutations(true)) {
 			float chance = mutation.getChance(housing, allele0, allele1, genome0, genome1);
 			if (chance > world.rand.nextFloat() * 100) {
-				IApiaristTracker breedingTracker = PluginApiculture.beeInterface.getBreedingTracker(world, housing.getOwnerName());
+				IApiaristTracker breedingTracker = BeeManager.beeRoot.getBreedingTracker(world, housing.getOwnerName());
 				breedingTracker.registerMutation(mutation);
-				return PluginApiculture.beeInterface.templateAsChromosomes(mutation.getTemplate());
+				return BeeManager.beeRoot.templateAsChromosomes(mutation.getTemplate());
 			}
 		}
 

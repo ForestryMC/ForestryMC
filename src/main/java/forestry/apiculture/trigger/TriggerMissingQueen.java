@@ -37,6 +37,6 @@ public class TriggerMissingQueen extends Trigger {
 			return false;
 		}
 
-		return ((IErrorSource) tile).getErrorState() == EnumErrorCode.NOQUEEN;
+		return ((IErrorSource) tile).getErrorStates().contains(EnumErrorCode.NOQUEEN);
 	}
 }

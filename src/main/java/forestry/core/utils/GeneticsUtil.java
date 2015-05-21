@@ -139,9 +139,12 @@ public class GeneticsUtil {
 				// Treat them as decorative and don't pollinate.
 				return null;
 			}
-			meta %= 3;
+			if(block == Blocks.leaves2) {
+				meta = meta + 4; //Dark Oak and Acacia are their own leaf block, but added on the end of sapling
+			}
+			block = Blocks.sapling;
 		}
-		ItemStack itemStack = new ItemStack(block, meta);
+		ItemStack itemStack = new ItemStack(block, 1, meta);
 		IIndividual tree = getGeneticEquivalent(itemStack);
 		if (tree instanceof ITree) {
 			return (ITree) tree;

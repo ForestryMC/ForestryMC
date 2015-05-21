@@ -14,6 +14,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import forestry.core.gadgets.TileForestry;
+
 public class PacketUpdate extends PacketCoordinates {
 
 	public PacketPayload payload;
@@ -22,7 +24,12 @@ public class PacketUpdate extends PacketCoordinates {
 	}
 
 	public PacketUpdate(int id) {
-		this(id, null);
+		this(id, 0, 0, 0, null);
+	}
+
+	public PacketUpdate(int id, TileForestry tile) {
+		super(id, tile);
+		this.payload = tile.getPacketPayload();
 	}
 
 	public PacketUpdate(int id, PacketPayload payload) {

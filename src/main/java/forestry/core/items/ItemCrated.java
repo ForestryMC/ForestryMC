@@ -22,12 +22,11 @@ import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import forestry.api.recipes.IGenericCrate;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 
-public class ItemCrated extends Item implements IGenericCrate {
+public class ItemCrated extends Item {
 
 	private final ItemStack contained;
 	private final boolean usesOreDict;
@@ -41,12 +40,7 @@ public class ItemCrated extends Item implements IGenericCrate {
 		return usesOreDict;
 	}
 
-	@Override
-	public void setContained(ItemStack crated, ItemStack contained) {
-	}
-
-	@Override
-	public ItemStack getContained(ItemStack crate) {
+	public ItemStack getContained() {
 		return contained;
 	}
 

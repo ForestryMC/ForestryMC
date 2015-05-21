@@ -79,11 +79,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		}
 
 		public boolean matches(FluidStack res, ItemStack empty) {
-			return input.isFluidEqual(res) && res.amount >= input.amount && can.isItemEqual(empty);
-		}
-
-		public boolean hasInput(FluidStack res) {
-			return input.isFluidEqual(res);
+			return res != null && res.containsFluid(input) && can.isItemEqual(empty);
 		}
 	}
 
@@ -186,6 +182,8 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 
 	@Override
 	public void updateServerSide() {
+		super.updateServerSide();
+
 		if (!updateOnInterval(20)) {
 			return;
 		}
@@ -210,8 +208,9 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 			return false;
 		}
 
-		if (!InvTools.tryAddStack(this, currentRecipe.bottled, SLOT_OUTPUT, 1, true, false)) {
-			setErrorState(EnumErrorCode.NOSPACE);
+		boolean added = InvTools.tryAddStack(this, currentRecipe.bottled, SLOT_OUTPUT, 1, true, false);
+
+		if (setErrorCondition(!added, EnumErrorCode.NOSPACE)) {
 			return false;
 		}
 
@@ -232,16 +231,12 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		ItemStack emptyCan = getStackInSlot(SLOT_INPUT_EMPTY_CAN);
 		Recipe recipe = RecipeManager.findMatchingRecipe(resourceTank.getFluid(), emptyCan);
 
-		if (recipe == null) {
-			setErrorState(EnumErrorCode.NORECIPE);
-		} else {
-			setErrorState(EnumErrorCode.OK);
-		}
-
 		if (currentRecipe != recipe) {
 			currentRecipe = recipe;
 			resetRecipe();
 		}
+
+		setErrorCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
 	}
 
 	private void resetRecipe() {
@@ -361,7 +356,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		return res;
 	}
 
-	private static class BottlerInventoryAdapter extends TileInventoryAdapter {
+	private static class BottlerInventoryAdapter extends TileInventoryAdapter<MachineBottler> {
 		public BottlerInventoryAdapter(MachineBottler machineBottler) {
 			super(machineBottler, 3, "Items");
 		}

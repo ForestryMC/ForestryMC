@@ -34,7 +34,6 @@ import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.network.GuiId;
 import forestry.core.network.PacketPayload;
 import forestry.core.utils.StackUtils;
-import forestry.plugins.PluginApiculture;
 
 public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 
@@ -46,12 +45,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 
 	public TileAlvearySwarmer() {
 		super(BLOCK_META);
-		setInternalInventory(new TileInventoryAdapter(this, 4, "SwarmInv") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				return StackUtils.containsItemStack(BeeManager.inducers.keySet(), itemStack);
-			}
-		});
+		setInternalInventory(new SwarmerInventoryAdapter(this));
 	}
 
 	@Override
@@ -93,9 +87,9 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 		}
 
 		// Queue swarm spawn
-		IBee princess = PluginApiculture.beeInterface.getMember(princessStack);
+		IBee princess = BeeManager.beeRoot.getMember(princessStack);
 		princess.setIsNatural(false);
-		pendingSpawns.push(PluginApiculture.beeInterface.getMemberStack(princess, EnumBeeType.PRINCESS.ordinal()));
+		pendingSpawns.push(BeeManager.beeRoot.getMemberStack(princess, EnumBeeType.PRINCESS.ordinal()));
 	}
 
 	private ItemStack getPrincessStack() {
@@ -110,7 +104,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 
 		IBeeHousing housing = (IBeeHousing) master;
 		ItemStack princessStack = housing.getQueen();
-		if (princessStack == null || !PluginApiculture.beeInterface.isMated(princessStack)) {
+		if (princessStack == null || !BeeManager.beeRoot.isMated(princessStack)) {
 			return null;
 		}
 
@@ -152,7 +146,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 	private void setIsActive(boolean isActive) {
 		if (this.isActive != isActive) {
 			this.isActive = isActive;
-			sendNetworkUpdate();
+			setNeedsNetworkUpdate();
 		}
 	}
 
@@ -221,5 +215,16 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 		}
 		nbttagcompound.setTag("PendingSpawns", nbttaglist);
 
+	}
+
+	private static class SwarmerInventoryAdapter extends TileInventoryAdapter<TileAlvearySwarmer> {
+		public SwarmerInventoryAdapter(TileAlvearySwarmer alvearySwarmer) {
+			super(alvearySwarmer, 4, "SwarmInv");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			return StackUtils.containsItemStack(BeeManager.inducers.keySet(), itemStack);
+		}
 	}
 }

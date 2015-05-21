@@ -20,7 +20,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
@@ -56,7 +56,7 @@ public class Utils {
 		// Release inventory
 		if (tile instanceof ITileStructure) {
 
-			IInventory inventory = ((ITileStructure) tile).getInventory();
+			ISidedInventory inventory = ((ITileStructure) tile).getStructureInventory();
 			if (inventory != null) {
 				for (int i = 0; i < inventory.getSizeInventory(); i++) {
 					if (inventory.getStackInSlot(i) == null) {
@@ -216,12 +216,7 @@ public class Utils {
 		}
 
 		Entity entity = EntityList.createEntityByName(entityString, world);
-		if (entity == null) {
-			return null;
-		}
-
-		//noinspection unchecked
-		return (E) entity;
+		return entityClass.cast(entity);
 	}
 
 	public static <E extends EntityLiving> E spawnEntity(World world, Class<E> entityClass, double x, double y, double z) {

@@ -333,7 +333,7 @@ public class PluginFactory extends ForestryPlugin {
 		RecipeManagers.moistenerManager.addRecipe(new ItemStack(Blocks.stonebrick), new ItemStack(Blocks.stonebrick, 1, 1), 20000);
 
 		// FERMENTER
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 6; i++) {
 			RecipeUtil.injectLeveledRecipe(new ItemStack(Blocks.sapling, 1, i), GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 		}
 

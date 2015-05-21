@@ -35,21 +35,6 @@ public class DummyManagers {
 		}
 
 		@Override
-		public void addCrating(String toCrate, ItemStack unpack, ItemStack crated) {
-
-		}
-
-		@Override
-		public void addCrating(ItemStack itemStack) {
-
-		}
-
-		@Override
-		public void addCratingWithOreDict(ItemStack itemStack) {
-
-		}
-
-		@Override
 		public Map<Object[], Object[]> getRecipes() {
 			return null;
 		}

@@ -52,8 +52,8 @@ public class PickupHandlerStorage implements IPickupHandler {
 			}
 
 			ItemBackpack backpack = ((ItemBackpack) pack.getItem());
-			if (backpack.getDefinition().isValidItem(player, itemstack)) {
-				backpack.tryStowing(player, pack, itemstack);
+			if (backpack.getDefinition().isValidItem(itemstack)) {
+				ItemBackpack.tryStowing(player, pack, itemstack);
 			}
 		}
 
@@ -64,7 +64,7 @@ public class PickupHandlerStorage implements IPickupHandler {
 	 * This tops off existing stacks in the player's inventory. That way you can keep f.e. a stack of dirt or cobblestone in your inventory which gets refreshed
 	 * constantly by picked up items.
 	 */
-	private void topOffPlayerInventory(EntityPlayer player, ItemStack itemstack) {
+	private static void topOffPlayerInventory(EntityPlayer player, ItemStack itemstack) {
 
 		// Add to player inventory first, if there is an incomplete stack in
 		// there.

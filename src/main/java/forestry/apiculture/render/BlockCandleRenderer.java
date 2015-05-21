@@ -13,6 +13,7 @@ package forestry.apiculture.render;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
@@ -26,19 +27,13 @@ public class BlockCandleRenderer implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
-		/*BlockCandle bc = (BlockCandle)block;
-		Tessellator tessellator = Tessellator.instance;
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0.0F, -1.0F, 0.0F);
-		IIcon iconA = (bc.isLit(meta)) ? bc.
-		this.renderTorchAtAngle(block, -0.5D, -0.5D, -0.5D, 0.0D, 0.0D, 0);
-    	tessellator.draw();*/
+
 	}
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 		if (block.getRenderType() == ForestryClient.candleRenderId) {
-			this.renderBlockCandle(world, x, y, z, (BlockCandle) block, modelId, renderer);
+			renderBlockCandle(world, x, y, z, (BlockCandle) block);
 		}
 		return true;
 	}
@@ -53,13 +48,20 @@ public class BlockCandleRenderer implements ISimpleBlockRenderingHandler {
 		return ForestryClient.candleRenderId;
 	}
 
-	public boolean renderBlockCandle(IBlockAccess world, int x, int y, int z, BlockCandle block, int modelId, RenderBlocks renderer) {
+	private static boolean renderBlockCandle(IBlockAccess world, int x, int y, int z, BlockCandle block) {
 		int meta = world.getBlockMetadata(x, y, z);
-		IIcon iconA = block.getTextureFromPassAndMeta(meta, 0);
-		IIcon iconB = block.getTextureFromPassAndMeta(meta, 1);
-		meta = meta & 0x7;
-		TileCandle tc = (TileCandle) world.getTileEntity(x, y, z);
-		int colour = tc.getColour();
+		TileEntity tileEntity = world.getTileEntity(x, y, z);
+		if (!(tileEntity instanceof TileCandle)) {
+			return false;
+		}
+		TileCandle tileCandle = (TileCandle) tileEntity;
+
+		boolean isLit = tileCandle.isLit();
+
+		IIcon iconA = block.getTextureFromPassAndLit(0, isLit);
+		IIcon iconB = block.getTextureFromPassAndLit(1, isLit);
+
+		int colour = tileCandle.getColour();
 		Tessellator tessellator = Tessellator.instance;
 		tessellator.setBrightness(world.getLightBrightnessForSkyBlocks(x, y, z, block.getLightValue(world, x, y, z)));
 		tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
@@ -68,26 +70,26 @@ public class BlockCandleRenderer implements ISimpleBlockRenderingHandler {
 		double d2 = 0.20000000298023224D;
 
 		if (meta == 1) {
-			this.renderCandleAtAngle(iconA, x - d1, y + d2, z, -d0, 0.0D, 0xffffff);
-			this.renderCandleAtAngle(iconB, x - d1, y + d2, z, -d0, 0.0D, colour);
+			renderCandleAtAngle(iconA, x - d1, y + d2, z, -d0, 0.0D, 0xffffff);
+			renderCandleAtAngle(iconB, x - d1, y + d2, z, -d0, 0.0D, colour);
 		} else if (meta == 2) {
-			this.renderCandleAtAngle(iconA, x + d1, y + d2, z, d0, 0.0D, 0xffffff);
-			this.renderCandleAtAngle(iconB, x + d1, y + d2, z, d0, 0.0D, colour);
+			renderCandleAtAngle(iconA, x + d1, y + d2, z, d0, 0.0D, 0xffffff);
+			renderCandleAtAngle(iconB, x + d1, y + d2, z, d0, 0.0D, colour);
 		} else if (meta == 3) {
-			this.renderCandleAtAngle(iconA, x, y + d2, z - d1, 0.0D, -d0, 0xffffff);
-			this.renderCandleAtAngle(iconB, x, y + d2, z - d1, 0.0D, -d0, colour);
+			renderCandleAtAngle(iconA, x, y + d2, z - d1, 0.0D, -d0, 0xffffff);
+			renderCandleAtAngle(iconB, x, y + d2, z - d1, 0.0D, -d0, colour);
 		} else if (meta == 4) {
-			this.renderCandleAtAngle(iconA, x, y + d2, z + d1, 0.0D, d0, 0xffffff);
-			this.renderCandleAtAngle(iconB, x, y + d2, z + d1, 0.0D, d0, colour);
+			renderCandleAtAngle(iconA, x, y + d2, z + d1, 0.0D, d0, 0xffffff);
+			renderCandleAtAngle(iconB, x, y + d2, z + d1, 0.0D, d0, colour);
 		} else {
-			this.renderCandleAtAngle(iconA, x, y, z, 0.0D, 0.0D, 0xffffff);
-			this.renderCandleAtAngle(iconB, x, y, z, 0.0D, 0.0D, colour);
+			renderCandleAtAngle(iconA, x, y, z, 0.0D, 0.0D, 0xffffff);
+			renderCandleAtAngle(iconB, x, y, z, 0.0D, 0.0D, colour);
 		}
 
 		return true;
 	}
 
-	public void renderCandleAtAngle(IIcon icon, double x, double y, double z, double par8, double par10, int colour) {
+	private static void renderCandleAtAngle(IIcon icon, double x, double y, double z, double par8, double par10, int colour) {
 		Tessellator tessellator = Tessellator.instance;
 		double minU = icon.getMinU();
 		double minV = icon.getMinV();

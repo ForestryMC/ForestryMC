@@ -66,6 +66,7 @@ import forestry.farming.logic.FarmLogicPoale;
 import forestry.farming.logic.FarmLogicShroom;
 import forestry.farming.logic.FarmLogicSucculent;
 import forestry.farming.logic.FarmLogicVegetable;
+import forestry.farming.logic.FarmableBasicFruit;
 import forestry.farming.logic.FarmableGE;
 import forestry.farming.logic.FarmableGenericCrop;
 import forestry.farming.logic.FarmableGenericSapling;
@@ -102,6 +103,9 @@ public class PluginFarming extends ForestryPlugin {
 		Farmables.farmables.get("farmArboreal").add(new FarmableGE());
 
 		Farmables.farmables.put("farmOrchard", new ArrayList<IFarmable>());
+		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.wheat, 7));
+		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.potatoes, 7));
+		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(Blocks.carrots, 7));
 
 		Farmables.farmables.put("farmShroom", new ArrayList<IFarmable>());
 		Farmables.farmables.get("farmShroom").add(new FarmableVanillaShroom(Blocks.brown_mushroom, 0));
@@ -345,13 +349,5 @@ public class PluginFarming extends ForestryPlugin {
 		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 6), Circuit.farmGourdManual);
 		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 10), Circuit.farmShroomManual);
 		ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 11), Circuit.farmCocoaManual);
-
-		if (PluginIC2.resin != null && PluginIC2.rubberwood != null) {
-			ChipsetManager.solderManager.addRecipe(layoutManual, ForestryItem.tubes.getItemStack(1, 8), Circuit.farmRubberManual);
-		}
-
-		if (PluginExtraUtilities.ExUEnderLilly != null && Config.isExUtilEnderLilyEnabled()) {
-			ChipsetManager.solderManager.addRecipe(layoutManaged, ForestryItem.tubes.getItemStack(1, 12), Circuit.farmEnderManaged);
-		}
 	}
 }

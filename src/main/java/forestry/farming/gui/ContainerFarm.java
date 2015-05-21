@@ -12,7 +12,6 @@ package forestry.farming.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.Slot;
 
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.StandardTank;
@@ -21,14 +20,10 @@ import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.farming.gadgets.TileFarmPlain;
 
-public class ContainerFarm extends ContainerSocketed {
+public class ContainerFarm extends ContainerSocketed<TileFarmPlain> {
 
-	private final TileFarmPlain tile;
-
-	public ContainerFarm(InventoryPlayer playerinventory, TileFarmPlain tile) {
-		super(tile, tile);
-
-		this.tile = tile;
+	public ContainerFarm(InventoryPlayer playerInventory, TileFarmPlain tile) {
+		super(tile, playerInventory, 28, 138);
 
 		// Resources
 		for (int i = 0; i < 3; i++) {
@@ -62,17 +57,6 @@ public class ContainerFarm extends ContainerSocketed {
 		addSlotToContainer(new SlotFiltered(tile, TileFarmPlain.SLOT_FERTILIZER, 63, 95));
 		// Can Slot
 		addSlotToContainer(new SlotFiltered(tile, TileFarmPlain.SLOT_CAN, 15, 95));
-
-		// Player inventory
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 9; j++) {
-				addSlotToContainer(new Slot(playerinventory, j + i * 9 + 9, 28 + j * 18, 138 + i * 18));
-			}
-		}
-		// Player hotbar
-		for (int i = 0; i < 9; i++) {
-			addSlotToContainer(new Slot(playerinventory, i, 28 + i * 18, 196));
-		}
 	}
 
 	@Override

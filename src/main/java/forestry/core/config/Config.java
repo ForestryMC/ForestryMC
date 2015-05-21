@@ -86,6 +86,9 @@ public class Config {
 	// Mail
 	public static boolean mailAlertEnabled = true;
 
+	// Gui tabs (Ledger)
+	public static int guiTabSpeed = 8;
+
 	// Hints
 	public static boolean disableHints = false;
 	public static final HashMap<String, String[]> hints = new HashMap<String, String[]>();
@@ -212,6 +215,10 @@ public class Config {
 		Property indicatorEnable = config.get("tweaks.mailalert.enabled", CATEGORY_COMMON, true);
 		indicatorEnable.comment = "set to false to disable the mail alert box";
 		mailAlertEnabled = Boolean.parseBoolean(indicatorEnable.value);
+
+		Property guiTabSpeedProp = config.get("tweaks.gui.tab.speed", CATEGORY_COMMON, guiTabSpeed);
+		guiTabSpeedProp.comment = "set the speed at which the gui side tabs open and close.";
+		guiTabSpeed = Integer.parseInt(guiTabSpeedProp.value);
 
 		Property clearGenome = config.get("genetics.clear.invalid.chromosomes", CATEGORY_COMMON, clearInvalidChromosomes);
 		clearGenome.comment = "set to true to clear chromosomes which contain invalid alleles. might rescue your save if it is crashing after the removal of a bee addon.";

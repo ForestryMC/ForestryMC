@@ -35,26 +35,16 @@ import forestry.core.network.PacketPayload;
 import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.mail.Letter;
-import forestry.mail.items.ItemLetter;
 import forestry.mail.items.ItemLetter.LetterInventory;
 import forestry.mail.network.PacketLetterInfo;
 
-public class ContainerLetter extends ContainerItemInventory {
+public class ContainerLetter extends ContainerItemInventory<LetterInventory> {
 
-	private final LetterInventory letterInventory;
 	private EnumAddressee carrierType = EnumAddressee.PLAYER;
 	private TradeStationInfo tradeInfo = null;
 
 	public ContainerLetter(EntityPlayer player, LetterInventory inventory) {
-		super(inventory, player);
-
-		letterInventory = inventory;
-
-		// Rip open delivered mails
-		if (Proxies.common.isSimulating(player.worldObj) && letterInventory.getLetter().isProcessed() && inventory.parent != null
-				&& ItemLetter.getState(inventory.parent.getItemDamage()) < 2) {
-			inventory.parent.setItemDamage(ItemLetter.encodeMeta(2, ItemLetter.getSize(inventory.parent.getItemDamage())));
-		}
+		super(inventory, player.inventory, 17, 145);
 
 		// Init slots
 
@@ -70,23 +60,19 @@ public class ContainerLetter extends ContainerItemInventory {
 			}
 		}
 
-		// Player inventory
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 9; j++) {
-				addSecuredSlot(player.inventory, j + i * 9 + 9, 17 + j * 18, 145 + i * 18);
+		// Rip open delivered mails
+		if (Proxies.common.isSimulating(player.worldObj)) {
+			if (inventory.getLetter().isProcessed()) {
+				inventory.onLetterOpened();
 			}
-		}
-		// Player hotbar
-		for (int i = 0; i < 9; i++) {
-			addSecuredSlot(player.inventory, i, 17 + i * 18, 203);
 		}
 
 		// Set recipient type
-		if (letterInventory.getLetter() != null) {
-			if (letterInventory.getLetter().getRecipients() != null) {
-				if (letterInventory.getLetter().getRecipients().length > 0) {
-					this.carrierType = letterInventory.getLetter().getRecipients()[0].getType();
-				}
+		ILetter letter = inventory.getLetter();
+		if (letter != null) {
+			IMailAddress[] recipients = letter.getRecipients();
+			if (recipients != null && recipients.length > 0) {
+				this.carrierType = recipients[0].getType();
 			}
 		}
 	}
@@ -95,18 +81,20 @@ public class ContainerLetter extends ContainerItemInventory {
 	public void onContainerClosed(EntityPlayer entityplayer) {
 
 		if (Proxies.common.isSimulating(entityplayer.worldObj)) {
-			ILetter letter = letterInventory.getLetter();
+			ILetter letter = inventory.getLetter();
 			if (!letter.isProcessed()) {
 				IMailAddress sender = PostManager.postRegistry.getMailAddress(entityplayer.getGameProfile());
 				letter.setSender(sender);
 			}
 		}
 
+		inventory.onContainerClosed();
+
 		super.onContainerClosed(entityplayer);
 	}
 
 	public ILetter getLetter() {
-		return letterInventory.getLetter();
+		return inventory.getLetter();
 	}
 
 	public void setCarrierType(EnumAddressee type) {
@@ -135,7 +123,7 @@ public class ContainerLetter extends ContainerItemInventory {
 		setCarrierType(postal.getType());
 	}
 
-	public void setRecipient(String recipientName, EnumAddressee type) {
+	public static void setRecipient(String recipientName, EnumAddressee type) {
 		if (StringUtils.isBlank(recipientName) || type == null) {
 			return;
 		}
@@ -203,7 +191,8 @@ public class ContainerLetter extends ContainerItemInventory {
 	}
 
 	public void handleSetText(PacketUpdate packet) {
-		getLetter().setText(packet.payload.stringPayload[0]);
+		String text = packet.payload.stringPayload[0];
+		getLetter().setText(text);
 	}
 
 	/* Managing Trade info */

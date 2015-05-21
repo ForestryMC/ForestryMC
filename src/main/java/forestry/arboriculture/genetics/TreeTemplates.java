@@ -14,8 +14,9 @@ import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IMutation;
-import forestry.core.genetics.Allele;
 import forestry.core.genetics.Chromosome;
+import forestry.core.genetics.alleles.Allele;
+import forestry.core.genetics.alleles.EnumAllele;
 
 public class TreeTemplates {
 
@@ -73,343 +74,343 @@ public class TreeTemplates {
 	public static IAllele[] getDefaultTemplate() {
 		IAllele[] alleles = new IAllele[EnumTreeChromosome.values().length];
 
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeOak;
-		alleles[EnumTreeChromosome.FRUITS.ordinal()] = Allele.fruitNone;
-		alleles[EnumTreeChromosome.GROWTH.ordinal()] = Allele.growthLightlevel;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightSmall;
-		alleles[EnumTreeChromosome.FERTILITY.ordinal()] = Allele.saplingsLower;
-		alleles[EnumTreeChromosome.YIELD.ordinal()] = Allele.yieldLowest;
-		alleles[EnumTreeChromosome.PLANT.ordinal()] = Allele.plantTypeNone;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLowest;
-		alleles[EnumTreeChromosome.TERRITORY.ordinal()] = Allele.territoryDefault;
-		alleles[EnumTreeChromosome.EFFECT.ordinal()] = Allele.leavesNone;
-		alleles[EnumTreeChromosome.MATURATION.ordinal()] = Allele.maturationAverage;
-		alleles[EnumTreeChromosome.GIRTH.ordinal()] = Allele.int1;
-		alleles[EnumTreeChromosome.FIREPROOF.ordinal()] = Allele.fireproofFalse;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeOak);
+		Allele.helper.set(alleles, EnumTreeChromosome.FRUITS, Allele.fruitNone);
+		Allele.helper.set(alleles, EnumTreeChromosome.GROWTH, Allele.growthLightlevel);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.SMALL);
+		Allele.helper.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.LOWER);
+		Allele.helper.set(alleles, EnumTreeChromosome.YIELD, EnumAllele.Yield.LOWEST);
+		Allele.helper.set(alleles, EnumTreeChromosome.PLANT, Allele.plantTypeNone);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWEST);
+		Allele.helper.set(alleles, EnumTreeChromosome.TERRITORY, EnumAllele.Territory.AVERAGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.EFFECT, Allele.leavesNone);
+		Allele.helper.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.AVERAGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.GIRTH, 1);
+		Allele.helper.set(alleles, EnumTreeChromosome.FIREPROOF, EnumAllele.Fireproof.FALSE);
 
 		return alleles;
 	}
 
 	public static IAllele[] getOakTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.FRUITS.ordinal()] = Allele.fruitApple;
-		alleles[EnumTreeChromosome.FERTILITY.ordinal()] = Allele.saplingsAverage;
-		alleles[EnumTreeChromosome.MATURATION.ordinal()] = Allele.maturationFaster;
+		Allele.helper.set(alleles, EnumTreeChromosome.FRUITS, Allele.fruitApple);
+		Allele.helper.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.AVERAGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.FASTER);
 		return alleles;
 	}
 
 	public static IAllele[] getBirchTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeBirch;
-		alleles[EnumTreeChromosome.FERTILITY.ordinal()] = Allele.saplingsAverage;
-		alleles[EnumTreeChromosome.MATURATION.ordinal()] = Allele.maturationFaster;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeBirch);
+		Allele.helper.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.AVERAGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.FASTER);
 		return alleles;
 	}
 
 	public static IAllele[] getSpruceTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeSpruce;
-		alleles[EnumTreeChromosome.FERTILITY.ordinal()] = Allele.saplingsAverage;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightAverage;
-		alleles[EnumTreeChromosome.MATURATION.ordinal()] = Allele.maturationFaster;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeSpruce);
+		Allele.helper.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.AVERAGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.AVERAGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.FASTER);
 		return alleles;
 	}
 
 	public static IAllele[] getJungleTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeJungle;
-		alleles[EnumTreeChromosome.FRUITS.ordinal()] = Allele.fruitCocoa;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightLarger;
-		alleles[EnumTreeChromosome.MATURATION.ordinal()] = Allele.maturationFast;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeJungle);
+		Allele.helper.set(alleles, EnumTreeChromosome.FRUITS, Allele.fruitCocoa);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.LARGER);
+		Allele.helper.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.FAST);
 		return alleles;
 	}
 	
 	public static IAllele[] getAcaciaTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeAcacia;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeAcacia);
 		return alleles;
 	}
 	
 	public static IAllele[] getDarkOakTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeDarkOak;
-		alleles[EnumTreeChromosome.FERTILITY.ordinal()] = Allele.saplingsAverage;
-		alleles[EnumTreeChromosome.MATURATION.ordinal()] = Allele.maturationFaster;
-		alleles[EnumTreeChromosome.GIRTH.ordinal()] = Allele.int2;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeDarkOak);
+		Allele.helper.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.AVERAGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.FASTER);
+		Allele.helper.set(alleles, EnumTreeChromosome.GIRTH, 2);
 		return alleles;
 	}
 
 	public static IAllele[] getBalsaTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeBalsa;
-		alleles[EnumTreeChromosome.FERTILITY.ordinal()] = Allele.saplingsHigh;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLower;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightLarge;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeBalsa);
+		Allele.helper.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.HIGH);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.LARGE);
 		return alleles;
 	}
 
 	public static IAllele[] getSequoiaTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeSequioa;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightLargest;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLower;
-		alleles[EnumTreeChromosome.MATURATION.ordinal()] = Allele.maturationSlower;
-		alleles[EnumTreeChromosome.GIRTH.ordinal()] = Allele.int3;
-		alleles[EnumTreeChromosome.FIREPROOF.ordinal()] = Allele.fireproofTrue;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeSequioa);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.LARGEST);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
+		Allele.helper.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.SLOWER);
+		Allele.helper.set(alleles, EnumTreeChromosome.GIRTH, 3);
+		Allele.helper.set(alleles, EnumTreeChromosome.FIREPROOF, EnumAllele.Fireproof.TRUE);
 		return alleles;
 	}
 
 	public static IAllele[] getGiganteumTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeGiganteum;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightGigantic;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLowest;
-		alleles[EnumTreeChromosome.MATURATION.ordinal()] = Allele.maturationSlowest;
-		alleles[EnumTreeChromosome.GIRTH.ordinal()] = Allele.int4;
-		alleles[EnumTreeChromosome.FIREPROOF.ordinal()] = Allele.fireproofTrue;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeGiganteum);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.GIGANTIC);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWEST);
+		Allele.helper.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.SLOWEST);
+		Allele.helper.set(alleles, EnumTreeChromosome.GIRTH, 4);
+		Allele.helper.set(alleles, EnumTreeChromosome.FIREPROOF, EnumAllele.Fireproof.TRUE);
 		return alleles;
 	}
 
 	public static IAllele[] getLarchTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeLarch;
-		alleles[EnumTreeChromosome.FERTILITY.ordinal()] = Allele.saplingsLow;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLower;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightAverage;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeLarch);
+		Allele.helper.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.LOW);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.AVERAGE);
 		return alleles;
 	}
 
 	public static IAllele[] getPineTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treePine;
-		alleles[EnumTreeChromosome.FERTILITY.ordinal()] = Allele.saplingsLow;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLower;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightAverage;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treePine);
+		Allele.helper.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.LOW);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.AVERAGE);
 		return alleles;
 	}
 
 	public static IAllele[] getCherryTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeCherry;
-		alleles[EnumTreeChromosome.FRUITS.ordinal()] = Allele.fruitCherry;
-		alleles[EnumTreeChromosome.FERTILITY.ordinal()] = Allele.saplingsLow;
-		alleles[EnumTreeChromosome.YIELD.ordinal()] = Allele.yieldAverage;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLow;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightSmaller;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeCherry);
+		Allele.helper.set(alleles, EnumTreeChromosome.FRUITS, Allele.fruitCherry);
+		Allele.helper.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.LOW);
+		Allele.helper.set(alleles, EnumTreeChromosome.YIELD, EnumAllele.Yield.AVERAGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOW);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.SMALLER);
 		return alleles;
 	}
 
 	public static IAllele[] getLimeTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeLime;
-		alleles[EnumTreeChromosome.FERTILITY.ordinal()] = Allele.saplingsLow;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLower;
-		alleles[EnumTreeChromosome.YIELD.ordinal()] = Allele.yieldLower;
-		//alleles[EnumTreeChromosome.EFFECT.ordinal()] = Allele.leavesBrimstone;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeLime);
+		Allele.helper.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.LOW);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
+		Allele.helper.set(alleles, EnumTreeChromosome.YIELD, EnumAllele.Yield.LOWER);
+		//Allele.helper.set(alleles, EnumTreeChromosome.EFFECT, Allele.leavesBrimstone);
 		return alleles;
 	}
 
 	public static IAllele[] getTeakTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeTeak;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLower;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeTeak);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
 		return alleles;
 	}
 
 	public static IAllele[] getKapokTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeKapok;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightLarge;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLow;
-		alleles[EnumTreeChromosome.MATURATION.ordinal()] = Allele.maturationSlow;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeKapok);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.LARGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOW);
+		Allele.helper.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.SLOW);
 		return alleles;
 	}
 
 	public static IAllele[] getEbonyTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeEbony;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightAverage;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLow;
-		alleles[EnumTreeChromosome.MATURATION.ordinal()] = Allele.maturationSlower;
-		alleles[EnumTreeChromosome.GIRTH.ordinal()] = Allele.int3;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeEbony);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.AVERAGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOW);
+		Allele.helper.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.SLOWER);
+		Allele.helper.set(alleles, EnumTreeChromosome.GIRTH, 3);
 		return alleles;
 	}
 
 	public static IAllele[] getMahoganyTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeMahogany;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightLarge;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLow;
-		alleles[EnumTreeChromosome.MATURATION.ordinal()] = Allele.maturationSlow;
-		alleles[EnumTreeChromosome.GIRTH.ordinal()] = Allele.int2;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeMahogany);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.LARGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOW);
+		Allele.helper.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.SLOW);
+		Allele.helper.set(alleles, EnumTreeChromosome.GIRTH, 2);
 		return alleles;
 	}
 
 	public static IAllele[] getChestnutTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeChestnut;
-		alleles[EnumTreeChromosome.FRUITS.ordinal()] = Allele.fruitChestnut;
-		alleles[EnumTreeChromosome.YIELD.ordinal()] = Allele.yieldAverage;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLower;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightLarge;
-		alleles[EnumTreeChromosome.GIRTH.ordinal()] = Allele.int2;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeChestnut);
+		Allele.helper.set(alleles, EnumTreeChromosome.FRUITS, Allele.fruitChestnut);
+		Allele.helper.set(alleles, EnumTreeChromosome.YIELD, EnumAllele.Yield.AVERAGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.LARGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.GIRTH, 2);
 		return alleles;
 	}
 
 	public static IAllele[] getDesertAcaciaTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeDesertAcacia;
-		alleles[EnumTreeChromosome.PLANT.ordinal()] = Allele.plantTypeDesert;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeDesertAcacia);
+		Allele.helper.set(alleles, EnumTreeChromosome.PLANT, Allele.plantTypeDesert);
 		return alleles;
 	}
 
 	public static IAllele[] getWengeTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeWenge;
-		alleles[EnumTreeChromosome.FERTILITY.ordinal()] = Allele.saplingsLowest;
-		alleles[EnumTreeChromosome.GIRTH.ordinal()] = Allele.int2;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeWenge);
+		Allele.helper.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.LOWEST);
+		Allele.helper.set(alleles, EnumTreeChromosome.GIRTH, 2);
 		return alleles;
 	}
 
 	public static IAllele[] getBaobabTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeBaobab;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightLarge;
-		alleles[EnumTreeChromosome.PLANT.ordinal()] = Allele.plantTypeDesert;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLower;
-		alleles[EnumTreeChromosome.MATURATION.ordinal()] = Allele.maturationSlow;
-		alleles[EnumTreeChromosome.GIRTH.ordinal()] = Allele.int3;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeBaobab);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.LARGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.PLANT, Allele.plantTypeDesert);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
+		Allele.helper.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.SLOW);
+		Allele.helper.set(alleles, EnumTreeChromosome.GIRTH, 3);
 		return alleles;
 	}
 
 	public static IAllele[] getWalnutTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeWalnut;
-		alleles[EnumTreeChromosome.FRUITS.ordinal()] = Allele.fruitWalnut;
-		alleles[EnumTreeChromosome.FERTILITY.ordinal()] = Allele.saplingsLower;
-		alleles[EnumTreeChromosome.YIELD.ordinal()] = Allele.yieldAverage;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLower;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightAverage;
-		alleles[EnumTreeChromosome.GIRTH.ordinal()] = Allele.int2;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeWalnut);
+		Allele.helper.set(alleles, EnumTreeChromosome.FRUITS, Allele.fruitWalnut);
+		Allele.helper.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.LOWER);
+		Allele.helper.set(alleles, EnumTreeChromosome.YIELD, EnumAllele.Yield.AVERAGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.AVERAGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.GIRTH, 2);
 		return alleles;
 	}
 
 	public static IAllele[] getWillowTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeWillow;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightAverage;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLow;
-		alleles[EnumTreeChromosome.MATURATION.ordinal()] = Allele.maturationFaster;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeWillow);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.AVERAGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOW);
+		Allele.helper.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.FASTER);
 		return alleles;
 	}
 
 	public static IAllele[] getSipiriTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeSipiri;
-		alleles[EnumTreeChromosome.GROWTH.ordinal()] = Allele.growthTropical;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightLarge;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLow;
-		alleles[EnumTreeChromosome.MATURATION.ordinal()] = Allele.maturationSlow;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeSipiri);
+		Allele.helper.set(alleles, EnumTreeChromosome.GROWTH, Allele.growthTropical);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.LARGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOW);
+		Allele.helper.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.SLOW);
 		return alleles;
 	}
 
 	public static IAllele[] getMahoeTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeMahoe;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightSmall;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessHigh;
-		alleles[EnumTreeChromosome.MATURATION.ordinal()] = Allele.maturationSlowest;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeMahoe);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.SMALL);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.HIGH);
+		Allele.helper.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.SLOWEST);
 		return alleles;
 	}
 
 	public static IAllele[] getPoplarTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treePoplar;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightSmall;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLow;
-		alleles[EnumTreeChromosome.MATURATION.ordinal()] = Allele.maturationSlower;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treePoplar);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.SMALL);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOW);
+		Allele.helper.set(alleles, EnumTreeChromosome.MATURATION, EnumAllele.Maturation.SLOWER);
 		return alleles;
 	}
 
 	public static IAllele[] getLemonTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeLemon;
-		alleles[EnumTreeChromosome.FRUITS.ordinal()] = Allele.fruitLemon;
-		alleles[EnumTreeChromosome.YIELD.ordinal()] = Allele.yieldLower;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessAverage;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightSmallest;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeLemon);
+		Allele.helper.set(alleles, EnumTreeChromosome.FRUITS, Allele.fruitLemon);
+		Allele.helper.set(alleles, EnumTreeChromosome.YIELD, EnumAllele.Yield.LOWER);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.AVERAGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.SMALLEST);
 		return alleles;
 	}
 
 	public static IAllele[] getPlumTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treePlum;
-		alleles[EnumTreeChromosome.FRUITS.ordinal()] = Allele.fruitPlum;
-		alleles[EnumTreeChromosome.YIELD.ordinal()] = Allele.yieldHigh;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessAverage;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightSmallest;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treePlum);
+		Allele.helper.set(alleles, EnumTreeChromosome.FRUITS, Allele.fruitPlum);
+		Allele.helper.set(alleles, EnumTreeChromosome.YIELD, EnumAllele.Yield.HIGH);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.AVERAGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.SMALLEST);
 		return alleles;
 	}
 
 	public static IAllele[] getMapleTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeMaple;
-		alleles[EnumTreeChromosome.FERTILITY.ordinal()] = Allele.saplingsLow;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLower;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightAverage;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeMaple);
+		Allele.helper.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.LOW);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.AVERAGE);
 		return alleles;
 	}
 
 	public static IAllele[] getPapayaTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treePapaya;
-		alleles[EnumTreeChromosome.FRUITS.ordinal()] = Allele.fruitPapaya;
-		alleles[EnumTreeChromosome.FERTILITY.ordinal()] = Allele.saplingsLow;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLower;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightAverage;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treePapaya);
+		Allele.helper.set(alleles, EnumTreeChromosome.FRUITS, Allele.fruitPapaya);
+		Allele.helper.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.LOW);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.AVERAGE);
 		return alleles;
 	}
 
 	public static IAllele[] getDateTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeDate;
-		alleles[EnumTreeChromosome.FRUITS.ordinal()] = Allele.fruitDates;
-		alleles[EnumTreeChromosome.FERTILITY.ordinal()] = Allele.saplingsLow;
-		alleles[EnumTreeChromosome.YIELD.ordinal()] = Allele.yieldLow;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLow;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightAverage;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeDate);
+		Allele.helper.set(alleles, EnumTreeChromosome.FRUITS, Allele.fruitDates);
+		Allele.helper.set(alleles, EnumTreeChromosome.FERTILITY, EnumAllele.Saplings.LOW);
+		Allele.helper.set(alleles, EnumTreeChromosome.YIELD, EnumAllele.Yield.LOW);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOW);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.AVERAGE);
 		return alleles;
 	}
 
 	public static IAllele[] getIpeTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeIpe;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLower;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightLarge;
-		alleles[EnumTreeChromosome.GIRTH.ordinal()] = Allele.int2;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeIpe);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.LARGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.GIRTH, 2);
 		return alleles;
 	}
 	
 	public static IAllele[] getPadaukTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treePadauk;
-		alleles[EnumTreeChromosome.SAPPINESS.ordinal()] = Allele.sappinessLower;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightLarge;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treePadauk);
+		Allele.helper.set(alleles, EnumTreeChromosome.SAPPINESS, EnumAllele.Sappiness.LOWER);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.LARGE);
 		return alleles;
 	}
 	
 	public static IAllele[] getCocoboloTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeCocobolo;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightLargest;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeCocobolo);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.LARGEST);
 		return alleles;
 	}
 	
 	public static IAllele[] getZebrawoodTemplate() {
 		IAllele[] alleles = getDefaultTemplate();
-		alleles[EnumTreeChromosome.SPECIES.ordinal()] = Allele.treeZebrawood;
-		alleles[EnumTreeChromosome.HEIGHT.ordinal()] = Allele.heightLarge;
-		alleles[EnumTreeChromosome.GIRTH.ordinal()] = Allele.int2;
+		Allele.helper.set(alleles, EnumTreeChromosome.SPECIES, Allele.treeZebrawood);
+		Allele.helper.set(alleles, EnumTreeChromosome.HEIGHT, EnumAllele.Height.LARGE);
+		Allele.helper.set(alleles, EnumTreeChromosome.GIRTH, 2);
 		return alleles;
 	}
 	

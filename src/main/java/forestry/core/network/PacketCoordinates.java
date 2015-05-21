@@ -20,11 +20,15 @@ import net.minecraft.world.World;
 
 public class PacketCoordinates extends ForestryPacket implements ILocatedPacket {
 
-	public int posX;
-	public int posY;
-	public int posZ;
+	private int posX;
+	private int posY;
+	private int posZ;
 
 	public PacketCoordinates() {
+	}
+
+	public PacketCoordinates(int id, TileEntity tileEntity) {
+		this(id, tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
 	}
 
 	public PacketCoordinates(int id, ChunkCoordinates coordinates) {
@@ -58,6 +62,18 @@ public class PacketCoordinates extends ForestryPacket implements ILocatedPacket 
 
 	public ChunkCoordinates getCoordinates() {
 		return new ChunkCoordinates(posX, posY, posZ);
+	}
+
+	public int getPosX() {
+		return posX;
+	}
+
+	public int getPosY() {
+		return posY;
+	}
+
+	public int getPosZ() {
+		return posZ;
 	}
 
 	@Override

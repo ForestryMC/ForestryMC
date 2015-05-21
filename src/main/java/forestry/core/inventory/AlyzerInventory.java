@@ -1,12 +1,16 @@
 package forestry.core.inventory;
 
+import com.google.common.collect.ImmutableSet;
+
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import forestry.api.core.IErrorState;
+import forestry.core.EnumErrorCode;
 import forestry.core.config.ForestryItem;
+import forestry.core.interfaces.IErrorSource;
 
-public abstract class AlyzerInventory extends ItemInventory {
+public abstract class AlyzerInventory extends ItemInventory implements IErrorSource {
 
 	public static final int SLOT_SPECIMEN = 0;
 	public static final int SLOT_ANALYZE_1 = 1;
@@ -16,13 +20,14 @@ public abstract class AlyzerInventory extends ItemInventory {
 	public static final int SLOT_ANALYZE_5 = 6;
 	public static final int SLOT_ENERGY = 5;
 
-	protected EntityPlayer player;
+	protected final EntityPlayer player;
 
-	public AlyzerInventory(Class<? extends Item> itemClass, int size, ItemStack itemstack) {
-		super(itemClass, size, itemstack);
+	public AlyzerInventory(EntityPlayer player, int size, ItemStack itemstack) {
+		super(player, size, itemstack);
+		this.player = player;
 	}
 
-	protected boolean isEnergy(ItemStack itemstack) {
+	protected static boolean isEnergy(ItemStack itemstack) {
 		if (itemstack == null || itemstack.stackSize <= 0) {
 			return false;
 		}
@@ -55,4 +60,18 @@ public abstract class AlyzerInventory extends ItemInventory {
 		}
 	}
 
+	@Override
+	public final ImmutableSet<IErrorState> getErrorStates() {
+		ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
+
+		if (!hasSpecimen()) {
+			errorStates.add(EnumErrorCode.NOTHINGANALYZE);
+		}
+
+		if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
+			errorStates.add(EnumErrorCode.NOHONEY);
+		}
+
+		return errorStates.build();
+	}
 }

@@ -60,26 +60,11 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 		}
 	}
 
-	@Override
-	public void updateEntity() {
-		super.updateEntity();
-
-		if (!Proxies.common.isSimulating(worldObj)) {
-			updateClientSide();
-		} else {
-			// Periodic validation if needed
-			if (updateOnInterval(200) && (!isIntegratedIntoStructure() || isMaster())) {
-				validateStructure();
-			}
-
-			updateServerSide();
-		}
-	}
-
 	protected void updateServerSide() {
-	}
-
-	protected void updateClientSide() {
+		// Periodic validation if needed
+		if (updateOnInterval(200) && (!isIntegratedIntoStructure() || isMaster())) {
+			validateStructure();
+		}
 	}
 
 	/* TEXTURES */
@@ -227,11 +212,6 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	@Override
 	public boolean isIntegratedIntoStructure() {
 		return isMaster || masterY >= 0;
-	}
-
-	@Override
-	public final IInventoryAdapter getInventory() {
-		return getStructureInventory();
 	}
 
 	@Override

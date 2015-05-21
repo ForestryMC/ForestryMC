@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -32,10 +34,12 @@ import net.minecraftforge.common.BiomeDictionary;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBee;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorState;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.apiculture.render.TextureHabitatLocator;
@@ -50,7 +54,6 @@ import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 import forestry.core.vect.Vect;
-import forestry.plugins.PluginApiculture;
 
 public class ItemHabitatLocator extends ItemInventoried {
 
@@ -63,8 +66,8 @@ public class ItemHabitatLocator extends ItemInventoried {
 		public Set<BiomeGenBase> biomesToSearch = new HashSet<BiomeGenBase>();
 		private final ItemHabitatLocator habitatLocator;
 
-		public HabitatLocatorInventory(ItemStack itemstack) {
-			super(ItemHabitatLocator.class, 3, itemstack);
+		public HabitatLocatorInventory(EntityPlayer player, ItemStack itemstack) {
+			super(player, 3, itemstack);
 			this.habitatLocator = (ItemHabitatLocator) itemstack.getItem();
 		}
 
@@ -91,7 +94,7 @@ public class ItemHabitatLocator extends ItemInventoried {
 				setInventorySlotContents(SLOT_SPECIMEN, null);
 			}
 
-			IBee bee = PluginApiculture.beeInterface.getMember(getStackInSlot(SLOT_ANALYZED));
+			IBee bee = BeeManager.beeRoot.getMember(getStackInSlot(SLOT_ANALYZED));
 
 			// No bee, abort
 			if (bee == null) {
@@ -120,17 +123,23 @@ public class ItemHabitatLocator extends ItemInventoried {
 
 		// / IERRORSOURCE
 		@Override
-		public boolean throwsErrors() {
-			return true;
-		}
-
-		@Override
-		public EnumErrorCode getErrorState() {
-			if (PluginApiculture.beeInterface.isMember(inventoryStacks[SLOT_SPECIMEN]) && !isEnergy(getStackInSlot(SLOT_ENERGY))) {
-				return EnumErrorCode.NOHONEY;
+		public ImmutableSet<IErrorState> getErrorStates() {
+			if (getStackInSlot(SLOT_ANALYZED) != null) {
+				return ImmutableSet.of();
 			}
 
-			return EnumErrorCode.OK;
+			ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
+
+			ItemStack specimen = getStackInSlot(SLOT_SPECIMEN);
+			if (!BeeManager.beeRoot.isMember(specimen)) {
+				errorStates.add(EnumErrorCode.NOTHINGANALYZE);
+			}
+
+			if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
+				errorStates.add(EnumErrorCode.NOHONEY);
+			}
+
+			return errorStates.build();
 		}
 
 		@Override
@@ -139,7 +148,7 @@ public class ItemHabitatLocator extends ItemInventoried {
 				Item item = itemStack.getItem();
 				return item == ForestryItem.honeydew.item() || item == ForestryItem.honeyDrop.item();
 			} else if (slotIndex == SLOT_SPECIMEN) {
-				return PluginApiculture.beeInterface.isMember(itemStack);
+				return BeeManager.beeRoot.isMember(itemStack);
 			}
 			return false;
 		}

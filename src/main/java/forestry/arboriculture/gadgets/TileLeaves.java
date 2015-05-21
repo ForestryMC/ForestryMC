@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -53,7 +55,7 @@ import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.arboriculture.network.PacketLeaf;
 import forestry.arboriculture.network.PacketRipeningUpdate;
 import forestry.core.EnumErrorCode;
-import forestry.core.genetics.Allele;
+import forestry.core.genetics.alleles.Allele;
 import forestry.core.network.ForestryPacket;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
@@ -491,11 +493,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public int getBiomeId() {
-		return biome.biomeID;
-	}
-
-	@Override
 	public BiomeGenBase getBiome() {
 		return biome;
 	}
@@ -511,16 +508,17 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public void setErrorState(int state) {
+	public boolean setErrorCondition(boolean condition, IErrorState errorState) {
+		return condition;
+	}
+
+	@Override
+	public ImmutableSet<IErrorState> getErrorStates() {
+		return ImmutableSet.of();
 	}
 
 	@Override
 	public void setErrorState(IErrorState state) {
-	}
-
-	@Override
-	public int getErrorOrdinal() {
-		return 0;
 	}
 
 	@Override

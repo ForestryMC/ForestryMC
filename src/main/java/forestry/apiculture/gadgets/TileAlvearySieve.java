@@ -39,12 +39,7 @@ public class TileAlvearySieve extends TileAlveary implements ICrafter, IBeeListe
 
 	public TileAlvearySieve() {
 		super(BLOCK_META);
-		setInternalInventory(new TileInventoryAdapter(this, 5, "Items", 1) {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				return StackUtils.isIdenticalItem(ForestryItem.craftingMaterial.getItemStack(1, 3), itemStack);
-			}
-		});
+		setInternalInventory(new AlvearySieveInventoryAdapter(this));
 	}
 
 	@Override
@@ -186,5 +181,16 @@ public class TileAlvearySieve extends TileAlveary implements ICrafter, IBeeListe
 	@Override
 	public boolean onEggLaid(IBee queen) {
 		return false;
+	}
+
+	private static class AlvearySieveInventoryAdapter extends TileInventoryAdapter<TileAlvearySieve> {
+		public AlvearySieveInventoryAdapter(TileAlvearySieve alvearySieve) {
+			super(alvearySieve, 5, "Items", 1);
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			return StackUtils.isIdenticalItem(ForestryItem.craftingMaterial.getItemStack(1, 3), itemStack);
+		}
 	}
 }

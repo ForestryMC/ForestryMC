@@ -68,6 +68,7 @@ public class PluginManager {
 
 		CORE(new PluginCore(), false),
 		FLUIDS(new PluginFluids(), false),
+
 		APICULTURE(new PluginApiculture()),
 		ARBORICULTURE(new PluginArboriculture()),
 		ENERGY(new PluginEnergy()),
@@ -78,22 +79,22 @@ public class PluginManager {
 		MAIL(new PluginMail()),
 		STORAGE(new PluginStorage()),
 
-		BIOMESOPLENTY(new PluginBiomesOPlenty()),
 		BUILDCRAFT_FUELS(new PluginBuildCraftFuels()),
 		BUILDCRAFT_RECIPES(new PluginBuildCraftRecipes()),
 		BUILDCRAFT_STATEMENTS(new PluginBuildCraftStatements()),
 		BUILDCRAFT_TRANSPORT(new PluginBuildCraftTransport()),
 		PROPOLIS_PIPE(new PluginPropolisPipe()),
-
+		
+		AGRICRAFT(new PluginAgriCraft()),
+		BIOMESOPLENTY(new PluginBiomesOPlenty()),
 		CHISEL(new PluginChisel()),
 		EXTRAUTILITIES(new PluginExtraUtilities()),
-		EQUIVELENT_EXCHANGE(new PluginEE()),
-		FARM_CRAFTORY(new PluginFarmCraftory()),
-		INDUSTRIALCRAFT(new PluginIC2()),
 		HARVESTCRAFT(new PluginHarvestCraft()),
+		INDUSTRIALCRAFT(new PluginIC2()),
 		MAGICALCROPS(new PluginMagicalCrops()),
 		NATURA(new PluginNatura()),
-		PLANTMEGAPACK(new PluginPlantMegaPack());
+		PLANTMEGAPACK(new PluginPlantMegaPack()),
+		WITCHERY(new PluginWitchery());
 
 		private final ForestryPlugin instance;
 		private final boolean canBeDisabled;
@@ -139,7 +140,7 @@ public class PluginManager {
 		return loadedModules.contains(module);
 	}
 
-	private static void loadPlugin(ForestryPlugin plugin) {
+	private static void registerHandlers(ForestryPlugin plugin) {
 		Proxies.log.fine("Registering Handlers for Plugin: {0}", plugin);
 
 		IGuiHandler guiHandler = plugin.getGuiHandler();
@@ -258,12 +259,8 @@ public class PluginManager {
 		stage = Stage.PRE_INIT;
 		for (Module m : loadedModules) {
 			ForestryPlugin plugin = m.instance;
-			loadPlugin(plugin);
-		}
-
-		for (Module m : loadedModules) {
-			ForestryPlugin plugin = m.instance;
 			Proxies.log.fine("Pre-Init Start: {0}", plugin);
+			registerHandlers(plugin);
 			plugin.preInit();
 			plugin.registerItems();
 			if (Module.BUILDCRAFT_STATEMENTS.isEnabled()) {

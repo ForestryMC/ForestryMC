@@ -4,19 +4,14 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
 import forestry.api.arboriculture.ITree;
 import forestry.api.genetics.IAllele;
 import forestry.arboriculture.gadgets.TileTreeContainer;
-import forestry.core.network.ForestryPacket;
-import forestry.core.network.ILocatedPacket;
+import forestry.core.network.PacketCoordinates;
 import forestry.plugins.PluginArboriculture;
 
-public class PacketTreeContainer extends ForestryPacket implements ILocatedPacket {
+public class PacketTreeContainer extends PacketCoordinates {
 
-	private int posX, posY, posZ;
 	protected String speciesUID = "";
 
 	public PacketTreeContainer() {
@@ -24,11 +19,7 @@ public class PacketTreeContainer extends ForestryPacket implements ILocatedPacke
 	}
 
 	public PacketTreeContainer(int id, TileTreeContainer treeContainer) {
-		super(id);
-
-		posX = treeContainer.xCoord;
-		posY = treeContainer.yCoord;
-		posZ = treeContainer.zCoord;
+		super(id, treeContainer);
 
 		ITree tree = treeContainer.getTree();
 		if (tree != null) {
@@ -38,23 +29,14 @@ public class PacketTreeContainer extends ForestryPacket implements ILocatedPacke
 
 	@Override
 	public void writeData(DataOutputStream data) throws IOException {
-		data.writeShort(posX);
-		data.writeShort(posY);
-		data.writeShort(posZ);
+		super.writeData(data);
 		data.writeUTF(speciesUID);
 	}
 
 	@Override
 	public void readData(DataInputStream data) throws IOException {
-		posX = data.readShort();
-		posY = data.readShort();
-		posZ = data.readShort();
+		super.readData(data);
 		speciesUID = data.readUTF();
-	}
-
-	@Override
-	public TileEntity getTarget(World world) {
-		return world.getTileEntity(posX, posY, posZ);
 	}
 
 	public boolean matchesTree(ITree tree) {

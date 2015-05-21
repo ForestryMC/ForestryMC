@@ -18,9 +18,7 @@ import net.minecraft.world.World;
 import forestry.api.arboriculture.ITree;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
-import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
-import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IHintSource;
 import forestry.core.inventory.AlyzerInventory;
 import forestry.core.items.ItemInventoried;
@@ -31,11 +29,10 @@ import forestry.plugins.PluginArboriculture;
 
 public class ItemTreealyzer extends ItemInventoried {
 
-	public static class TreealyzerInventory extends AlyzerInventory implements IErrorSource, IHintSource {
+	public static class TreealyzerInventory extends AlyzerInventory implements IHintSource {
 
 		public TreealyzerInventory(EntityPlayer player, ItemStack itemStack) {
-			super(ItemTreealyzer.class, 7, itemStack);
-			this.player = player;
+			super(player, 7, itemStack);
 		}
 
 		@Override
@@ -44,13 +41,6 @@ public class ItemTreealyzer extends ItemInventoried {
 		}
 
 		private void tryAnalyze() {
-
-			// Analyzed slot occupied, abort
-			if (inventoryStacks[SLOT_ANALYZE_1] != null || inventoryStacks[SLOT_ANALYZE_2] != null || inventoryStacks[SLOT_ANALYZE_3] != null
-					|| inventoryStacks[SLOT_ANALYZE_4] != null || inventoryStacks[SLOT_ANALYZE_5] != null) {
-				return;
-			}
-
 			// Source slot to analyze empty
 			if (getStackInSlot(SLOT_SPECIMEN) == null) {
 				return;
@@ -95,8 +85,6 @@ public class ItemTreealyzer extends ItemInventoried {
 
 		@Override
 		public void markDirty() {
-			// if (!Proxies.common.isSimulating(player.worldObj))
-			// return;
 			tryAnalyze();
 		}
 
@@ -109,21 +97,6 @@ public class ItemTreealyzer extends ItemInventoried {
 		@Override
 		public String[] getHints() {
 			return Config.hints.get("treealyzer");
-		}
-
-		// / IERRORSOURCE
-		@Override
-		public boolean throwsErrors() {
-			return true;
-		}
-
-		@Override
-		public EnumErrorCode getErrorState() {
-			if (PluginArboriculture.treeInterface.isMember(inventoryStacks[SLOT_SPECIMEN]) && !isEnergy(getStackInSlot(SLOT_ENERGY))) {
-				return EnumErrorCode.NOHONEY;
-			}
-
-			return EnumErrorCode.OK;
 		}
 	}
 

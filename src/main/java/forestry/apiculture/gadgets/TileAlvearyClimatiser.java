@@ -75,7 +75,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 		}
 
 		if ((wasInactive && workingTime > 0) || (!wasInactive && workingTime == 0)) {
-			sendNetworkUpdate();
+			setNeedsNetworkUpdate();
 		}
 	}
 

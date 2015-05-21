@@ -43,6 +43,7 @@ import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.utils.GuiUtil;
+import forestry.core.utils.StackUtils;
 import forestry.factory.triggers.FactoryTriggers;
 
 import buildcraft.api.statements.ITriggerExternal;
@@ -74,13 +75,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 		}
 
 		public boolean matches(ItemStack res) {
-			if (res == null && resource == null) {
-				return true;
-			} else if (res == null || resource == null) {
-				return false;
-			} else {
-				return resource.isItemEqual(res);
-			}
+			return StackUtils.isCraftingEquivalent(resource, res);
 		}
 	}
 
@@ -154,17 +149,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 
 	public MachineCentrifuge() {
 		super(800, 40, Defaults.MACHINE_MAX_ENERGY);
-		setInternalInventory(new TileInventoryAdapter(this, 10, "Items") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				return slotIndex == SLOT_RESOURCE && RecipeManager.findMatchingRecipe(itemStack) != null;
-			}
-
-			@Override
-			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-				return GuiUtil.isIndexInRange(slotIndex, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT);
-			}
-		});
+		setInternalInventory(new CentrifugeInventoryAdapter(this));
 		setHints(Config.hints.get("centrifuge"));
 	}
 
@@ -212,6 +197,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 
 	@Override
 	public void updateServerSide() {
+		super.updateServerSide();
 
 		if (!updateOnInterval(20)) {
 			return;
@@ -219,9 +205,6 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 
 		// Check and reset recipe if necessary
 		checkRecipe();
-		if (getErrorState() == EnumErrorCode.NORECIPE && currentRecipe != null) {
-			setErrorState(EnumErrorCode.OK);
-		}
 	}
 
 	@Override
@@ -250,7 +233,6 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 		productionTime--;
 		// Still not done, return
 		if (productionTime > 0) {
-			setErrorState(EnumErrorCode.OK);
 			return true;
 		}
 
@@ -265,26 +247,24 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 
 		getInternalInventory().decrStackSize(SLOT_RESOURCE, 1);
 		checkRecipe();
-		resetRecipe();
+		resetRecipeTimes();
 
 		tryAddPending();
 		return true;
 	}
 
 	public void checkRecipe() {
-		Recipe sameRec = RecipeManager.findMatchingRecipe(getInternalInventory().getStackInSlot(SLOT_RESOURCE));
+		Recipe machingRecipe = RecipeManager.findMatchingRecipe(getInternalInventory().getStackInSlot(SLOT_RESOURCE));
 
-		if (sameRec == null) {
-			setErrorState(EnumErrorCode.NORECIPE);
+		if (currentRecipe != machingRecipe) {
+			currentRecipe = machingRecipe;
+			resetRecipeTimes();
 		}
 
-		if (currentRecipe != sameRec) {
-			currentRecipe = sameRec;
-			resetRecipe();
-		}
+		setErrorCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
 	}
 
-	private void resetRecipe() {
+	private void resetRecipeTimes() {
 		if (currentRecipe == null) {
 			productionTime = 0;
 			timePerItem = 0;
@@ -301,17 +281,15 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 		}
 
 		ItemStack next = pendingProducts.peek();
-		if (addProduct(next, true)) {
+
+		boolean added = InvTools.tryAddStack(this, next, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT, true);
+
+		if (added) {
 			pendingProducts.pop();
-			return true;
 		}
 
-		setErrorState(EnumErrorCode.NOSPACE);
-		return false;
-	}
-
-	private boolean addProduct(ItemStack product, boolean all) {
-		return InvTools.tryAddStack(getInternalInventory(), product, 1, getSizeInventory() - 1, all);
+		setErrorCondition(!added, EnumErrorCode.NOSPACE);
+		return added;
 	}
 
 	@Override
@@ -367,5 +345,21 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 		res.add(FactoryTriggers.lowResource25);
 		res.add(FactoryTriggers.lowResource10);
 		return res;
+	}
+
+	private static class CentrifugeInventoryAdapter extends TileInventoryAdapter<MachineCentrifuge> {
+		public CentrifugeInventoryAdapter(MachineCentrifuge centrifuge) {
+			super(centrifuge, 10, "Items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			return slotIndex == SLOT_RESOURCE && RecipeManager.findMatchingRecipe(itemStack) != null;
+		}
+
+		@Override
+		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+			return GuiUtil.isIndexInRange(slotIndex, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT);
+		}
 	}
 }

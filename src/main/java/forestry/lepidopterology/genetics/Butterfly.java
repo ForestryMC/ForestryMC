@@ -73,8 +73,8 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 			list.add(EnumChatFormatting.RED + StringUtil.localize("gui.fecundated").toUpperCase(Locale.ENGLISH));
 		}
 		list.add(EnumChatFormatting.YELLOW + genome.getActiveAllele(EnumButterflyChromosome.SIZE).getName());
-		list.add(EnumChatFormatting.WHITE + genome.getActiveAllele(EnumButterflyChromosome.SPEED).getName() + " " + StringUtil.localize("gui.flyer"));
-		list.add(genome.getActiveAllele(EnumButterflyChromosome.LIFESPAN).getName() + " " + StringUtil.localize("gui.life"));
+		list.add(EnumChatFormatting.DARK_GREEN + genome.getActiveAllele(EnumButterflyChromosome.SPEED).getName());
+		list.add(genome.getActiveAllele(EnumButterflyChromosome.LIFESPAN).getName() + ' ' + StringUtil.localize("gui.life"));
 
 		IAlleleTolerance tempTolerance = (IAlleleTolerance) getGenome().getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE);
 		list.add(EnumChatFormatting.GREEN + "T: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / " + tempTolerance.getName());
@@ -83,6 +83,10 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		list.add(EnumChatFormatting.GREEN + "H: " + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / " + humidTolerance.getName());
 
 		list.add(EnumChatFormatting.RED + GenericRatings.rateActivityTime(genome.getNocturnal(), genome.getPrimary().isNocturnal()));
+
+		if (genome.getTolerantFlyer()) {
+			list.add(EnumChatFormatting.WHITE + StringUtil.localize("gui.flyer.tooltip"));
+		}
 	}
 
 	/* SAVING & LOADING */

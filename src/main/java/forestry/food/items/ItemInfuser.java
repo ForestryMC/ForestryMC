@@ -241,44 +241,45 @@ public class ItemInfuser extends ItemForestry {
 	// / INVENTORY MANAGMENT
 	public static class InfuserInventory extends ItemInventory {
 
-		private final short inputSlot = 0;
-		private final short outputSlot = 1;
-		private final short ingredientSlot1 = 2;
-		private final short ingredientSlotCount = 4;
-		private final EntityPlayer player;
+		private static final short inputSlot = 0;
+		private static final short outputSlot = 1;
+		private static final short ingredientSlot1 = 2;
+		private static final short ingredientSlotCount = 4;
 
 		public InfuserInventory(EntityPlayer player, ItemStack itemStack) {
-			super(ItemInfuser.class, 6, itemStack);
-			this.player = player;
+			super(player, 6, itemStack);
 		}
 
 		private void trySeasoning() {
 
 			// Need input
-			if (inventoryStacks[inputSlot] == null) {
+			ItemStack input = getStackInSlot(inputSlot);
+			if (input == null) {
 				return;
 			}
 
 			// Output slot may not be occupied
-			if (inventoryStacks[outputSlot] != null) {
+			if (getStackInSlot(outputSlot) != null) {
 				return;
 			}
 
 			// Need a valid base
-			if (!inventoryStacks[inputSlot].isItemEqual(ForestryItem.beverage.getItemStack())) {
+			if (!input.isItemEqual(ForestryItem.beverage.getItemStack())) {
 				return;
 			}
 
 			// Create the seasoned item
 			ItemStack[] ingredients = new ItemStack[4];
-			System.arraycopy(inventoryStacks, ingredientSlot1, ingredients, 0, 4);
+			for (int i = 0; i < 4; i++) {
+				ingredients[i] = getStackInSlot(i + ingredientSlot1);
+			}
 
 			// Only continue if there is anything to season
 			if (!BeverageManager.infuserManager.hasMixtures(ingredients)) {
 				return;
 			}
 
-			ItemStack seasoned = BeverageManager.infuserManager.getSeasoned(inventoryStacks[inputSlot], ingredients);
+			ItemStack seasoned = BeverageManager.infuserManager.getSeasoned(input, ingredients);
 			if (seasoned == null) {
 				return;
 			}
@@ -289,30 +290,27 @@ public class ItemInfuser extends ItemForestry {
 				ItemStack ghost = templ.copy();
 
 				for (int i = ingredientSlot1; i < this.getSizeInventory(); i++) {
-					if (inventoryStacks[i] == null) {
+					ItemStack ingredient = getStackInSlot(i);
+					if (ingredient == null) {
 						continue;
 					}
 					if (ghost.stackSize <= 0) {
 						break;
 					}
 
-					if ((ghost.getItemDamage() >= 0 && inventoryStacks[i].isItemEqual(ghost))
-							|| (ghost.getItemDamage() < 0 && ghost.getItem() == inventoryStacks[i].getItem())) {
+					if ((ghost.getItemDamage() >= 0 && ingredient.isItemEqual(ghost))
+							|| (ghost.getItemDamage() < 0 && ghost.getItem() == ingredient.getItem())) {
 						ItemStack removed = decrStackSize(i, 1);
 						ghost.stackSize -= removed.stackSize;
 					}
 				}
 			}
 			decrStackSize(inputSlot, 1);
-			inventoryStacks[outputSlot] = seasoned;
-
+			setInventorySlotContents(outputSlot, seasoned);
 		}
 
 		@Override
 		public void markDirty() {
-			if (!Proxies.common.isSimulating(player.worldObj)) {
-				return;
-			}
 			trySeasoning();
 		}
 
@@ -324,9 +322,9 @@ public class ItemInfuser extends ItemForestry {
 		@Override
 		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 			if (slotIndex == inputSlot) {
-				ForestryItem.beverage.isItemEqual(itemStack);
+				return ForestryItem.beverage.isItemEqual(itemStack);
 			} else if (slotIndex >= ingredientSlot1 && slotIndex < ingredientSlot1 + ingredientSlotCount) {
-				BeverageManager.infuserManager.isIngredient(itemStack);
+				return BeverageManager.infuserManager.isIngredient(itemStack);
 			}
 			return false;
 		}

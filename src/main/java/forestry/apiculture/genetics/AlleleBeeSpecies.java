@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
@@ -25,82 +26,99 @@ import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
-import forestry.api.apiculture.IAlleleBeeSpecies;
+import forestry.api.apiculture.IAlleleBeeSpeciesCustom;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeeIconProvider;
 import forestry.api.apiculture.IBeeRoot;
+import forestry.api.apiculture.IJubilanceProvider;
 import forestry.api.core.IIconProvider;
-import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
-import forestry.core.config.Defaults;
-import forestry.core.genetics.AlleleSpecies;
+import forestry.core.genetics.alleles.AlleleSpecies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
 
-public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies, IIconProvider {
+public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpeciesCustom {
 
-	public IJubilanceProvider jubilanceProvider;
+	@Deprecated
+	private final Map<ItemStack, Integer> products = new HashMap<ItemStack, Integer>();
+	@Deprecated
+	private final Map<ItemStack, Integer> specialty = new HashMap<ItemStack, Integer>();
 
-	private final IBeeRoot root;
+	private final Map<ItemStack, Float> productChances = new HashMap<ItemStack, Float>();
+	private final Map<ItemStack, Float> specialtyChances = new HashMap<ItemStack, Float>();
 
-	private final HashMap<ItemStack, Integer> products = new HashMap<ItemStack, Integer>();
-	private final HashMap<ItemStack, Integer> specialty = new HashMap<ItemStack, Integer>();
-
-	private String texture;
 	private final int primaryColour;
 	private final int secondaryColour;
 
-	private static final String iconType = "default";
+	private IBeeIconProvider beeIconProvider;
+	private IJubilanceProvider jubilanceProvider;
+	private boolean nocturnal = false;
 
-	public AlleleBeeSpecies(String uid, boolean dominant, String name, IClassification branch, int primaryColor, int secondaryColor) {
-		this(uid, dominant, name, branch, null, primaryColor, secondaryColor);
-	}
+	public AlleleBeeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, int primaryColor, int secondaryColor) {
+		super(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, false);
 
-	public AlleleBeeSpecies(String uid, boolean dominant, String name, IClassification branch, String binomial, int primaryColor, int secondaryColor) {
-		this(uid, dominant, name, branch, binomial, primaryColor, secondaryColor, new JubilanceDefault());
-	}
-
-	public AlleleBeeSpecies(String uid, boolean dominant, String name, IClassification branch, String binomial, int primaryColor, int secondaryColor,
-			IJubilanceProvider jubilanceProvider) {
-		super(uid, dominant, name, branch, binomial);
-
-		this.root = (IBeeRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootBees");
 		this.primaryColour = primaryColor;
 		this.secondaryColour = secondaryColor;
-		this.jubilanceProvider = jubilanceProvider;
-		texture = Defaults.TEXTURE_PATH_ENTITIES + "/bees/honeyBee.png";
+
+		setCustomBeeIconProvider(DefaultBeeIconProvider.getInstance());
+		setJubilanceProvider(JubilanceDefault.getInstance());
 	}
 
 	@Override
 	public IBeeRoot getRoot() {
-		return root;
+		return BeeManager.beeRoot;
 	}
 
-	public AlleleBeeSpecies setEntityTexture(String texture) {
-		this.texture = Defaults.TEXTURE_PATH_ENTITIES + "/bees/" + texture + ".png";
-		return this;
-	}
-
-	public AlleleBeeSpecies addProduct(ItemStack product, int chance) {
+	@Override
+	public IAlleleBeeSpeciesCustom addProduct(ItemStack product, Float chance) {
 		if (product == null || product.getItem() == null) {
 			throw new IllegalArgumentException("Tried to add null product");
 		}
-		this.products.put(product, chance);
+		if (chance <= 0.0f || chance > 1.0f) {
+			throw new IllegalArgumentException("chance must be in the range (0, 1]");
+		}
+		this.productChances.put(product, chance);
+		int intChance = Math.max(1, Math.round(chance * 100));
+		this.products.put(product, intChance);
 		return this;
 	}
 
-	public AlleleBeeSpecies addSpecialty(ItemStack specialty, int chance) {
-		this.specialty.put(specialty, chance);
+	@Override
+	public IAlleleBeeSpeciesCustom addSpecialty(ItemStack specialty, Float chance) {
+		if (specialty == null || specialty.getItem() == null) {
+			throw new IllegalArgumentException("Tried to add null specialty");
+		}
+		if (chance <= 0.0f || chance > 1.0f) {
+			throw new IllegalArgumentException("chance must be in the range (0, 1]");
+		}
+		this.specialtyChances.put(specialty, chance);
+		int intChance = Math.max(1, Math.round(chance * 100));
+		this.specialty.put(specialty, intChance);
 		return this;
 	}
 
-	public AlleleBeeSpecies setJubilanceProvider(IJubilanceProvider provider) {
+	@Override
+	public IAlleleBeeSpeciesCustom setJubilanceProvider(IJubilanceProvider provider) {
 		this.jubilanceProvider = provider;
+		return this;
+	}
+
+	@Override
+	public IAlleleBeeSpeciesCustom setNocturnal() {
+		nocturnal = true;
+		return this;
+	}
+
+	@Override
+	public IAlleleBeeSpeciesCustom setCustomBeeIconProvider(IBeeIconProvider beeIconProvider) {
+		this.beeIconProvider = beeIconProvider;
 		return this;
 	}
 
@@ -140,12 +158,12 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 			return 0f;
 		}
 
-		for (ItemStack stack : products.keySet()) {
+		for (ItemStack stack : productChances.keySet()) {
 			if (stack.isItemEqual(itemstack)) {
 				return 1.0f;
 			}
 		}
-		for (ItemStack stack : specialty.keySet()) {
+		for (ItemStack stack : specialtyChances.keySet()) {
 			if (stack.isItemEqual(itemstack)) {
 				return 1.0f;
 			}
@@ -160,11 +178,11 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 		Collections.addAll(bounty, super.getResearchBounty(world, researcher, individual, bountyLevel));
 
 		if (bountyLevel > 10) {
-			for (ItemStack stack : specialty.keySet()) {
+			for (ItemStack stack : specialtyChances.keySet()) {
 				bounty.add(StackUtils.copyWithRandomSize(stack, (int) ((float) bountyLevel / 2), world.rand));
 			}
 		}
-		for (ItemStack stack : products.keySet()) {
+		for (ItemStack stack : productChances.keySet()) {
 			bounty.add(StackUtils.copyWithRandomSize(stack, (int) ((float) bountyLevel / 2), world.rand));
 		}
 		return bounty.toArray(new ItemStack[bounty.size()]);
@@ -173,17 +191,27 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	/* OTHER */
 	@Override
 	public boolean isNocturnal() {
-		return false;
+		return nocturnal;
 	}
 
 	@Override
-	public HashMap<ItemStack, Integer> getProducts() {
+	public Map<ItemStack, Integer> getProducts() {
 		return products;
 	}
 
 	@Override
-	public HashMap<ItemStack, Integer> getSpecialty() {
+	public Map<ItemStack, Float> getProductChances() {
+		return productChances;
+	}
+
+	@Override
+	public Map<ItemStack, Integer> getSpecialty() {
 		return specialty;
+	}
+
+	@Override
+	public Map<ItemStack, Float> getSpecialtyChances() {
+		return specialtyChances;
 	}
 
 	@Override
@@ -192,8 +220,14 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	}
 
 	@Override
-	public String getEntityTexture() {
-		return texture;
+	@SideOnly(Side.CLIENT)
+	public IIconProvider getIconProvider() {
+		return new BeeIconProviderWrapper(beeIconProvider);
+	}
+
+	@Override
+	public IIcon getIcon(EnumBeeType type, int renderPass) {
+		return beeIconProvider.getIcon(type, renderPass);
 	}
 
 	@Override
@@ -207,45 +241,69 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 		return 0xffffff;
 	}
 
-	@SideOnly(Side.CLIENT)
-	private static IIcon[][] icons;
-
-	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
-		icons = new IIcon[EnumBeeType.values().length][3];
-
-		IIcon body1 = TextureManager.getInstance().registerTex(register, "bees/" + iconType + "/body1");
-
-		for (int i = 0; i < EnumBeeType.values().length; i++) {
-			if (EnumBeeType.values()[i] == EnumBeeType.NONE) {
-				continue;
-			}
-
-			icons[i][0] = TextureManager.getInstance().registerTex(register, "bees/" + iconType + "/" + EnumBeeType.values()[i].toString().toLowerCase(Locale.ENGLISH) + ".outline");
-			icons[i][1] = (EnumBeeType.values()[i] != EnumBeeType.LARVAE) ? body1
-					: TextureManager.getInstance().registerTex(register, "bees/" + iconType + "/" + EnumBeeType.values()[i].toString().toLowerCase(Locale.ENGLISH) + ".body");
-			icons[i][2] = TextureManager.getInstance().registerTex(register, "bees/" + iconType + "/" + EnumBeeType.values()[i].toString().toLowerCase(Locale.ENGLISH) + ".body2");
-		}
-
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(EnumBeeType type, int renderPass) {
-		return icons[type.ordinal()][renderPass];
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIconProvider getIconProvider() {
-		return this;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(short texUID) {
+	public String getEntityTexture() {
 		return null;
 	}
 
+	private static class DefaultBeeIconProvider implements IBeeIconProvider {
+
+		private static final String iconType = "default";
+		private static DefaultBeeIconProvider instance;
+
+		public static DefaultBeeIconProvider getInstance() {
+			if (instance == null) {
+				instance = new DefaultBeeIconProvider();
+			}
+			return instance;
+		}
+
+		private DefaultBeeIconProvider() {
+
+		}
+
+		private static final IIcon[][] icons = new IIcon[EnumBeeType.values().length][3];
+
+		@SideOnly(Side.CLIENT)
+		@Override
+		public void registerIcons(IIconRegister register) {
+			IIcon body1 = TextureManager.getInstance().registerTex(register, "bees/" + iconType + "/body1");
+
+			for (int i = 0; i < EnumBeeType.values().length; i++) {
+				if (EnumBeeType.values()[i] == EnumBeeType.NONE) {
+					continue;
+				}
+
+				icons[i][0] = TextureManager.getInstance().registerTex(register, "bees/" + iconType + '/' + EnumBeeType.values()[i].toString().toLowerCase(Locale.ENGLISH) + ".outline");
+				icons[i][1] = (EnumBeeType.values()[i] != EnumBeeType.LARVAE) ? body1
+						: TextureManager.getInstance().registerTex(register, "bees/" + iconType + '/' + EnumBeeType.values()[i].toString().toLowerCase(Locale.ENGLISH) + ".body");
+				icons[i][2] = TextureManager.getInstance().registerTex(register, "bees/" + iconType + '/' + EnumBeeType.values()[i].toString().toLowerCase(Locale.ENGLISH) + ".body2");
+			}
+		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public IIcon getIcon(EnumBeeType type, int renderPass) {
+			return icons[type.ordinal()][renderPass];
+		}
+	}
+
+	private static class BeeIconProviderWrapper implements IIconProvider {
+
+		private final IBeeIconProvider beeIconProvider;
+
+		public BeeIconProviderWrapper(IBeeIconProvider beeIconProvider) {
+			this.beeIconProvider = beeIconProvider;
+		}
+
+		@Override
+		public IIcon getIcon(short texUID) {
+			return null;
+		}
+
+		@Override
+		public void registerIcons(IIconRegister register) {
+			beeIconProvider.registerIcons(register);
+		}
+	}
 }

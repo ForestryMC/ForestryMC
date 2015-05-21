@@ -28,24 +28,6 @@ public abstract class TileBase extends TileForestry implements IHintSource {
 	public void initialize() {
 	}
 
-	@Override
-	public void updateEntity() {
-
-		super.updateEntity();
-
-		if (!Proxies.common.isSimulating(worldObj)) {
-			updateClientSide();
-		} else {
-			updateServerSide();
-		}
-	}
-
-	protected void updateClientSide() {
-	}
-
-	protected void updateServerSide() {
-	}
-
 	/* NETWORK */
 	@Override
 	public PacketPayload getPacketPayload() {
@@ -57,8 +39,7 @@ public abstract class TileBase extends TileForestry implements IHintSource {
 	}
 
 	/* INTERACTION */
-	public void openGui(EntityPlayer player, TileBase tile) {
-	}
+	public abstract void openGui(EntityPlayer player, TileBase tile);
 
 	public boolean canDrainWithBucket() {
 		return false;

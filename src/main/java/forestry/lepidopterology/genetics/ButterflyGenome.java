@@ -14,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.genetics.EnumTolerance;
-import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IAlleleInteger;
@@ -25,9 +24,9 @@ import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.api.lepidopterology.IAlleleButterflyEffect;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.IButterflyGenome;
-import forestry.core.genetics.AlleleBoolean;
-import forestry.core.genetics.AlleleTolerance;
 import forestry.core.genetics.Genome;
+import forestry.core.genetics.alleles.AlleleBoolean;
+import forestry.core.genetics.alleles.AlleleTolerance;
 import forestry.plugins.PluginLepidopterology;
 
 public class ButterflyGenome extends Genome implements IButterflyGenome {
@@ -43,12 +42,7 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 
 	// NBT RETRIEVAL
 	public static IAlleleButterflySpecies getSpecies(ItemStack itemStack) {
-		IAllele speciesAllele = Genome.getActiveAllele(itemStack, EnumButterflyChromosome.SPECIES);
-		if (speciesAllele instanceof IAlleleButterflySpecies) {
-			return (IAlleleButterflySpecies) speciesAllele;
-		} else {
-			return null;
-		}
+		return (IAlleleButterflySpecies) getActiveAllele(itemStack, EnumButterflyChromosome.SPECIES, PluginLepidopterology.butterflyInterface);
 	}
 
 	/* SPECIES */

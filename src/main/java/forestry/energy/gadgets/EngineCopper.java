@@ -69,17 +69,7 @@ public class EngineCopper extends Engine implements ISidedInventory {
 		setHints(Config.hints.get("engine.copper"));
 
 		ashForItem = Defaults.ENGINE_COPPER_ASH_FOR_ITEM;
-		setInternalInventory(new TileInventoryAdapter(this, 5, "Items") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				return slotIndex == SLOT_FUEL && FuelManager.copperEngineFuel.containsKey(itemStack);
-			}
-
-			@Override
-			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-				return GuiUtil.isIndexInRange(slotIndex, SLOT_WASTE_1, SLOT_WASTE_COUNT);
-			}
-		});
+		setInternalInventory(new EngineCopperInventoryAdapter(this));
 	}
 
 	@Override
@@ -128,20 +118,9 @@ public class EngineCopper extends Engine implements ISidedInventory {
 
 		dumpStash();
 
-		if (mayBurn() && burnTime > 0) {
-			setErrorState(EnumErrorCode.OK);
-			return;
-		} else if (forceCooldown) {
-			setErrorState(EnumErrorCode.FORCEDCOOLDOWN);
-			return;
-		}
-
 		int fuelSlot = getFuelSlot();
-		if (fuelSlot >= 0 && determineBurnDuration(getInternalInventory().getStackInSlot(fuelSlot)) > 0) {
-			setErrorState(EnumErrorCode.OK);
-		} else {
-			setErrorState(EnumErrorCode.NOFUEL);
-		}
+		boolean hasFuel = fuelSlot >= 0 && determineBurnDuration(getInternalInventory().getStackInSlot(fuelSlot)) > 0;
+		setErrorCondition(!hasFuel, EnumErrorCode.NOFUEL);
 	}
 
 	@Override
@@ -153,11 +132,11 @@ public class EngineCopper extends Engine implements ISidedInventory {
 			burnTime--;
 			addAsh(1);
 
-			if (isActivated()) {
+			if (isRedstoneActivated()) {
 				currentOutput = determineFuelValue(new ItemStack(fuelItem, 1, fuelItemMeta));
 				energyManager.generateEnergy(currentOutput);
 			}
-		} else if (isActivated()) {
+		} else if (isRedstoneActivated()) {
 			int fuelslot = getFuelSlot();
 			int wasteslot = getFreeWasteSlot();
 
@@ -376,4 +355,19 @@ public class EngineCopper extends Engine implements ISidedInventory {
 		return res;
 	}
 
+	private static class EngineCopperInventoryAdapter extends TileInventoryAdapter<EngineCopper> {
+		public EngineCopperInventoryAdapter(EngineCopper engineCopper) {
+			super(engineCopper, 5, "Items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			return slotIndex == SLOT_FUEL && FuelManager.copperEngineFuel.containsKey(itemStack);
+		}
+
+		@Override
+		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+			return GuiUtil.isIndexInRange(slotIndex, SLOT_WASTE_1, SLOT_WASTE_COUNT);
+		}
+	}
 }

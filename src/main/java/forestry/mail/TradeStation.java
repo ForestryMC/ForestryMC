@@ -47,7 +47,6 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			super(size, name);
 		}
 
-
 		@Override
 		public int[] getAccessibleSlotsFromSide(int side) {
 
@@ -295,7 +294,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		mail.writeToNBT(nbttagcompound);
 
-		ItemStack mailstack = ForestryItem.letters.getItemStack(1, ItemLetter.encodeMeta(1, ItemLetter.getType(mail)));
+		ItemStack mailstack = ItemLetter.createStampedLetterStack(mail);
 		mailstack.setTagCompound(nbttagcompound);
 
 		IPostalState responseState = PostManager.postRegistry.getPostOffice(world).lodgeLetter(world, mailstack, doLodge);
@@ -329,7 +328,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			confirm.addStamps(ForestryItem.stamps.getItemStack(1, EnumPostage.P_1.ordinal() - 1));
 			confirm.writeToNBT(nbttagcompound);
 
-			ItemStack confirmstack = ForestryItem.letters.getItemStack(1, ItemLetter.encodeMeta(1, ItemLetter.getType(confirm)));
+			ItemStack confirmstack = ItemLetter.createStampedLetterStack(confirm);
 			confirmstack.setTagCompound(nbttagcompound);
 
 			PostManager.postRegistry.getPostOffice(world).lodgeLetter(world, confirmstack, doLodge);

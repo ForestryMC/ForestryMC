@@ -17,20 +17,19 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.EnumErrorCode;
-import forestry.core.genetics.Allele;
 import forestry.core.genetics.EffectData;
+import forestry.core.genetics.alleles.AlleleCategorized;
 import forestry.core.vect.Vect;
 import forestry.plugins.PluginApiculture;
 
-public abstract class AlleleEffectThrottled extends Allele implements IAlleleBeeEffect {
+public abstract class AlleleEffectThrottled extends AlleleCategorized implements IAlleleBeeEffect {
 
 	private boolean isCombinable = false;
 	private final int throttle;
 	private boolean requiresWorkingQueen = false;
 
-	public AlleleEffectThrottled(String uid, String name, boolean isDominant, int throttle, boolean requiresWorking, boolean isCombinable) {
-		super(uid, isDominant);
-		this.name = "apiculture.effect." + name;
+	public AlleleEffectThrottled(String name, boolean isDominant, int throttle, boolean requiresWorking, boolean isCombinable) {
+		super("forestry", "effect", name, isDominant);
 		this.throttle = throttle;
 		this.isCombinable = isCombinable;
 		this.requiresWorkingQueen = requiresWorking;

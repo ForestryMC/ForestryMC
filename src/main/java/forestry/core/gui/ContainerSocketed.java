@@ -11,6 +11,7 @@
 package forestry.core.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
@@ -23,13 +24,10 @@ import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
 
-public class ContainerSocketed extends ContainerForestry {
+public class ContainerSocketed<T extends TileForestry & ISocketable> extends ContainerTile<T> {
 
-	private final ISocketable tile;
-
-	public ContainerSocketed(TileForestry inventory, ISocketable tile) {
-		super(inventory);
-		this.tile = tile;
+	public ContainerSocketed(T tile, InventoryPlayer playerInventory, int xInv, int yInv) {
+		super(tile, playerInventory, xInv, yInv);
 	}
 
 	public void handleChipsetClick(int slot, EntityPlayer player, ItemStack itemstack) {

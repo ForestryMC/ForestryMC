@@ -71,11 +71,7 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		public boolean matches(FluidStack res) {
-			if (res == null) {
-				return false;
-			}
-
-			return input.isFluidEqual(res);
+			return res != null && res.containsFluid(input);
 		}
 	}
 
@@ -133,23 +129,7 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 
 	public MachineStill() {
 		super(1100, 50, 8000);
-		setInternalInventory(new TileInventoryAdapter(this, 3, "Items") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				if (slotIndex == SLOT_RESOURCE) {
-					return FluidHelper.isEmptyContainer(itemStack);
-				} else if (slotIndex == SLOT_CAN) {
-					Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-					return resourceTank.accepts(fluid);
-				}
-				return false;
-			}
-
-			@Override
-			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-				return slotIndex == SLOT_PRODUCT;
-			}
-		});
+		setInternalInventory(new StillInventoryAdapter(this));
 		setHints(Config.hints.get("still"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluidInputs);
 		resourceTank.tankMode = StandardTank.TankMode.INPUT;
@@ -187,6 +167,7 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 
 	@Override
 	public void updateServerSide() {
+		super.updateServerSide();
 
 		if (!updateOnInterval(20)) {
 			return;
@@ -207,13 +188,6 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		checkRecipe();
-		if (getErrorState() == EnumErrorCode.NORECIPE && currentRecipe != null) {
-			setErrorState(EnumErrorCode.OK);
-		}
-
-		if (energyManager.getTotalEnergyStored() == 0) {
-			setErrorState(EnumErrorCode.NOPOWER);
-		}
 	}
 
 	@Override
@@ -222,29 +196,29 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 		checkRecipe();
 
 		// Ongoing process
-		if (distillationTime > 0 && currentRecipe != null) {
+		if (distillationTime > 0 && !hasErrorState()) {
 
 			distillationTime -= currentRecipe.input.amount;
 			productTank.fill(currentRecipe.output, true);
 
-			setErrorState(EnumErrorCode.OK);
 			return true;
 
 		} else if (currentRecipe != null) {
 
 			int resourceRequired = currentRecipe.timePerUnit * currentRecipe.input.amount;
 
-			if (productTank.fill(currentRecipe.output, false) < currentRecipe.output.amount) {
-				setErrorState(EnumErrorCode.NOSPACETANK);
-			} else if (resourceTank.getFluidAmount() < resourceRequired) {
-				setErrorState(EnumErrorCode.NORESOURCE);
-			} else {
+			boolean canFill = productTank.fill(currentRecipe.output, false) == currentRecipe.output.amount;
+			setErrorCondition(!canFill, EnumErrorCode.NOSPACETANK);
+
+			boolean hasResource = resourceTank.getFluidAmount() >= resourceRequired;
+			setErrorCondition(!hasResource, EnumErrorCode.NORESOURCE);
+
+			if (!hasErrorState()) {
 				// Start next cycle if enough bio mass is available
 				distillationTime = distillationTotalTime = resourceRequired;
 				resourceTank.drain(resourceRequired, true);
 				bufferedLiquid = new FluidStack(currentRecipe.input, resourceRequired);
 
-				setErrorState(EnumErrorCode.OK);
 				return true;
 			}
 		}
@@ -254,23 +228,17 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	public void checkRecipe() {
-		Recipe sameRec = RecipeManager.findMatchingRecipe(resourceTank.getFluid());
+		Recipe matchingRecipe = RecipeManager.findMatchingRecipe(resourceTank.getFluid());
 
-		if (sameRec == null && bufferedLiquid != null && distillationTime > 0) {
-			sameRec = RecipeManager.findMatchingRecipe(new FluidStack(bufferedLiquid, distillationTime));
+		if (matchingRecipe == null && bufferedLiquid != null && distillationTime > 0) {
+			matchingRecipe = RecipeManager.findMatchingRecipe(new FluidStack(bufferedLiquid, distillationTime));
 		}
 
-		if (sameRec == null) {
-			setErrorState(EnumErrorCode.NORECIPE);
+		if (currentRecipe != matchingRecipe) {
+			currentRecipe = matchingRecipe;
 		}
 
-		if (currentRecipe != sameRec) {
-			currentRecipe = sameRec;
-			resetRecipe();
-		}
-	}
-
-	private void resetRecipe() {
+		setErrorCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
 	}
 
 	@Override
@@ -371,4 +339,25 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 		return tankManager.getTankInfo(from);
 	}
 
+	private static class StillInventoryAdapter extends TileInventoryAdapter<MachineStill> {
+		public StillInventoryAdapter(MachineStill still) {
+			super(still, 3, "Items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_RESOURCE) {
+				return FluidHelper.isEmptyContainer(itemStack);
+			} else if (slotIndex == SLOT_CAN) {
+				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+				return tile.resourceTank.accepts(fluid);
+			}
+			return false;
+		}
+
+		@Override
+		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+			return slotIndex == SLOT_PRODUCT;
+		}
+	}
 }
