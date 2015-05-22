@@ -234,8 +234,7 @@ public class StackUtils {
 
 			boolean matched = false;
 			for (ItemStack cached : condensed) {
-				if (cached.isItemEqual(stack)
-						|| (craftingEquivalency && isCraftingEquivalent(cached, stack, true, false))) {
+				if ((cached.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(cached, stack)) || (craftingEquivalency && isCraftingEquivalent(cached, stack, true, false))) {
 					cached.stackSize += maxCountedPerStack > 0 && stack.stackSize > maxCountedPerStack ? maxCountedPerStack : stack.stackSize;
 					matched = true;
 				}
@@ -285,12 +284,11 @@ public class StackUtils {
 			for (ItemStack offer : condensedOffered) {
 
 				if (isCraftingEquivalent(req, offer, oreDictionary, craftingTools)) {
-					matched = true;
 
 					int stackCount = (int) Math.floor(offer.stackSize / req.stackSize);
-					if (stackCount <= 0) {
-						return 0;
-					} else if (count == 0) {
+					matched |= (stackCount > 0);
+
+					if (count == 0) {
 						count = stackCount;
 					} else if (count > stackCount) {
 						count = stackCount;
@@ -341,6 +339,12 @@ public class StackUtils {
 
 		if (base == null || comparison == null) {
 			return false;
+		}
+
+		if (base.hasTagCompound() && !base.stackTagCompound.hasNoTags()) {
+			if (!ItemStack.areItemStacksEqual(base, comparison)) {
+				return false;
+			}
 		}
 
 		if (oreDictionary) {
