@@ -90,7 +90,7 @@ public class LedgerManager {
 					continue;
 				}
 
-				errorLedger.currentShiftX = xShiftError - errorLedger.currentWidth;
+				errorLedger.currentShiftX = xShiftError - errorLedger.getWidth();
 				errorLedger.currentShiftY = yShiftError;
 				if (errorLedger.intersectsWith(mX, mY)) {
 					return errorLedger;
@@ -135,7 +135,7 @@ public class LedgerManager {
 				}
 
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				errorLedger.draw(-errorLedger.currentWidth, yPos);
+				errorLedger.draw(-errorLedger.getWidth(), yPos);
 				yPos += errorLedger.getHeight();
 			}
 		}

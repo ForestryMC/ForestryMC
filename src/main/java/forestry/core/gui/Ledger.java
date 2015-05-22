@@ -42,10 +42,10 @@ public abstract class Ledger {
 
 	public int currentShiftX = 0;
 	public int currentShiftY = 0;
-	protected int currentWidth = minWidth;
+	protected float currentWidth = minWidth;
 	protected int maxHeight = 24;
 
-	protected int currentHeight = minHeight;
+	protected float currentHeight = minHeight;
 
 	protected final ResourceLocation texture;
 
@@ -62,15 +62,32 @@ public abstract class Ledger {
 		}
 	}
 
+	// adjust the update's move amount to match the look of 60 fps (16.67 ms per update)
+	private static final float msPerUpdate = 16.667f;
+	private long lastUpdateTime = 0;
+
 	public void update() {
+
+		long updateTime;
+		if (lastUpdateTime == 0) {
+			lastUpdateTime = System.currentTimeMillis();
+			updateTime = lastUpdateTime + Math.round(msPerUpdate);
+		} else {
+			updateTime = System.currentTimeMillis();
+		}
+
+		float moveAmount = Config.guiTabSpeed * (updateTime - lastUpdateTime) / msPerUpdate;
+
+		lastUpdateTime = updateTime;
+
 		// Width
 		if (open && currentWidth < maxWidth) {
-			currentWidth += Config.guiTabSpeed;
+			currentWidth += moveAmount;
 			if (currentWidth > maxWidth) {
 				currentWidth = maxWidth;
 			}
 		} else if (!open && currentWidth > minWidth) {
-			currentWidth -= Config.guiTabSpeed;
+			currentWidth -= moveAmount;
 			if (currentWidth < minWidth) {
 				currentWidth = minWidth;
 			}
@@ -78,12 +95,12 @@ public abstract class Ledger {
 
 		// Height
 		if (open && currentHeight < maxHeight) {
-			currentHeight += Config.guiTabSpeed;
+			currentHeight += moveAmount;
 			if (currentHeight > maxHeight) {
 				currentHeight = maxHeight;
 			}
 		} else if (!open && currentHeight > minHeight) {
-			currentHeight -= Config.guiTabSpeed;
+			currentHeight -= moveAmount;
 			if (currentHeight < minHeight) {
 				currentHeight = minHeight;
 			}
@@ -91,7 +108,11 @@ public abstract class Ledger {
 	}
 
 	public int getHeight() {
-		return currentHeight;
+		return Math.round(currentHeight);
+	}
+
+	public int getWidth() {
+		return Math.round(currentWidth);
 	}
 
 	public abstract void draw(int x, int y);
@@ -144,11 +165,14 @@ public abstract class Ledger {
 
 		Proxies.common.bindTexture(texture);
 
-		manager.gui.drawTexturedModalRect(x, y + 4, 0, 256 - currentHeight + 4, 4, currentHeight - 4); // left edge
-		manager.gui.drawTexturedModalRect(x + 4, y, 256 - currentWidth + 4, 0, currentWidth - 4, 4); // top edge
+		int height = getHeight();
+		int width = getWidth();
+
+		manager.gui.drawTexturedModalRect(x, y + 4, 0, 256 - height + 4, 4, height - 4); // left edge
+		manager.gui.drawTexturedModalRect(x + 4, y, 256 - width + 4, 0, width - 4, 4); // top edge
 		manager.gui.drawTexturedModalRect(x, y, 0, 0, 4, 4); // top left corner
 
-		manager.gui.drawTexturedModalRect(x + 4, y + 4, 256 - currentWidth + 4, 256 - currentHeight + 4, currentWidth - 4, currentHeight - 4); // body + bottom + right
+		manager.gui.drawTexturedModalRect(x + 4, y + 4, 256 - width + 4, 256 - height + 4, width - 4, height - 4); // body + bottom + right
 
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
 	}
