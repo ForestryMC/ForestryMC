@@ -134,13 +134,19 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 		this.queen = null;
 
-		Boolean canWork = addPendingProducts();
+		boolean hasSpace = addPendingProducts();
 
-		if (!hasBreedablePrincess()) {
-			canWork = hasHealthyQueen() && (canWork & queenCanWork()) && hasFlowers();
+		if (hasBreedablePrincess()) {
+			return hasSpace;
 		}
 
-		return canWork;
+		if (hasHealthyQueen()) {
+			boolean canWork = queenCanWork();
+			boolean hasFlowers = hasFlowers();
+			return hasSpace && canWork && hasFlowers;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -160,7 +166,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	private Boolean hasFlowers() {
-		if (hasFlowersCooldown<=0) {
+		if (hasFlowersCooldown <= 0) {
 			hasFlowersCached = queen.hasFlower(housing);
 			hasFlowersCooldown = PluginApiculture.ticksPerBeeWorkCycle;
 		} else {
@@ -387,11 +393,8 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 			return false;
 		}
 
-		if (!housing.canBreed()) {
-			return false;
-		}
+		return housing.canBreed();
 
-		return true;
 	}
 
 	private void killQueen(IBee queen) {
