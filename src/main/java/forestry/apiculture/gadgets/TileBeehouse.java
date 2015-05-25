@@ -249,7 +249,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 
 	public void updateBiome() {
 		if (worldObj != null) {
-			BiomeGenBase biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
+			BiomeGenBase biome = worldObj.getBiomeGenForCoordsBody(xCoord, zCoord);
 			if (biome != null) {
 				this.biome = biome;
 			}

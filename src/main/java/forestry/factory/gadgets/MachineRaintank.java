@@ -67,7 +67,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 	public void validate() {
 		// Raintanks in desert biomes are useless
 		if (worldObj != null) {
-			BiomeGenBase biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
+			BiomeGenBase biome = worldObj.getBiomeGenForCoordsBody(xCoord, zCoord);
 			isValidBiome = BiomeHelper.canRainOrSnow(biome);
 			setErrorCondition(!isValidBiome, EnumErrorCode.INVALIDBIOME);
 		}

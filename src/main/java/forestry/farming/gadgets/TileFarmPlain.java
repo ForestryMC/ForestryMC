@@ -216,7 +216,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	}
 
 	private void setBiomeInformation() {
-		this.biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
+		this.biome = worldObj.getBiomeGenForCoordsBody(xCoord, zCoord);
 	}
 
 	private static TreeMap<ForgeDirection, List<FarmTarget>> createTargets(World world, Vect targetStart, final int allowedExtent, final int farmSizeNorthSouth, final int farmSizeEastWest) {

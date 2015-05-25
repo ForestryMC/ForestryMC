@@ -91,7 +91,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if (worldObj == null) {
 			return;
 		}
-		biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
+		biome = worldObj.getBiomeGenForCoordsBody(xCoord, zCoord);
 	}
 
 	/* SAVING & LOADING */

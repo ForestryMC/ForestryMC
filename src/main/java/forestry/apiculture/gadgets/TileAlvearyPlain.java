@@ -90,7 +90,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 	}
 
 	private void setBiomeInformation() {
-		this.biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
+		this.biome = worldObj.getBiomeGenForCoordsBody(xCoord, zCoord);
 	}
 
 	/* LOADING & SAVING */

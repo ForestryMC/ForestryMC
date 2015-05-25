@@ -201,10 +201,6 @@ public class Utils {
 
 	}
 
-	public static BiomeGenBase getBiomeAt(World world, int x, int z) {
-		return world.getBiomeGenForCoordsBody(x, z);
-	}
-
 	private static <E extends EntityLiving> E createEntity(World world, Class<E> entityClass) {
 		if (!EntityList.classToStringMapping.containsKey(entityClass)) {
 			return null;
