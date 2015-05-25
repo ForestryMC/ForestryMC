@@ -37,9 +37,6 @@ import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.config.Version;
 import forestry.core.fluids.Fluids;
-import forestry.core.gadgets.TileEngine;
-import forestry.core.gadgets.TileMachine;
-import forestry.core.gadgets.TileMill;
 import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginManager;
 
@@ -105,11 +102,6 @@ public class ForestryCore {
 
 		// Register gui handler
 		NetworkRegistry.INSTANCE.registerGuiHandler(basemod, new GuiHandler());
-
-		// Register machines
-		GameRegistry.registerTileEntity(TileMill.class, "forestry.Grower");
-		GameRegistry.registerTileEntity(TileEngine.class, "forestry.Engine");
-		GameRegistry.registerTileEntity(TileMachine.class, "forestry.Machine");
 
 		PluginManager.runInit();
 	}
