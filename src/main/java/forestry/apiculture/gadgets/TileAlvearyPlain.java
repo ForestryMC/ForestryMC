@@ -308,7 +308,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 
 	@Override
 	public void addTemperatureChange(float change, float boundaryDown, float boundaryUp) {
-		float temperature = biome.temperature;
+		float temperature = biome.getFloatTemperature(xCoord, yCoord, zCoord);
 		tempChange = Math.min(boundaryUp - temperature, Math.max(boundaryDown - temperature, tempChange + change));
 	}
 
@@ -635,7 +635,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 
 	@Override
 	public float getExactTemperature() {
-		return biome.temperature + this.tempChange;
+		return biome.getFloatTemperature(xCoord, yCoord, zCoord) + this.tempChange;
 	}
 
 	@Override

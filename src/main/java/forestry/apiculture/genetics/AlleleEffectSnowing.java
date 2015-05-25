@@ -38,8 +38,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 			return storedData;
 		}
 
-		BiomeGenBase biome = housing.getBiome();
-		EnumTemperature temp = EnumTemperature.getFromBiome(biome);
+		EnumTemperature temp = housing.getTemperature();
 
 		switch (temp) {
 			case HELLISH:

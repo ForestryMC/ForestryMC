@@ -973,7 +973,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	@Override
 	public float getExactTemperature() {
-		return biome.temperature;
+		return biome.getFloatTemperature(xCoord, yCoord, zCoord);
 	}
 
 	@Override

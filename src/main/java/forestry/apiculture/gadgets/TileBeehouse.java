@@ -114,7 +114,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 
 	@Override
 	public EnumTemperature getTemperature() {
-		return EnumTemperature.getFromBiome(biome);
+		return EnumTemperature.getFromBiome(biome, xCoord, yCoord, zCoord);
 	}
 
 	@Override
@@ -144,7 +144,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 
 	@Override
 	public float getExactTemperature() {
-		return biome.temperature;
+		return biome.getFloatTemperature(xCoord, yCoord, zCoord);
 	}
 
 	@Override
