@@ -23,7 +23,7 @@ import forestry.factory.gadgets.MachineMoistener;
 public class ContainerMoistener extends ContainerLiquidTanks<MachineMoistener> implements IContainerCrafting {
 
 	public ContainerMoistener(InventoryPlayer player, MachineMoistener tile) {
-		super(tile, player, 8, 8);
+		super(tile, player, 8, 84);
 
 		// Stash
 		for (int l = 0; l < 2; l++) {
