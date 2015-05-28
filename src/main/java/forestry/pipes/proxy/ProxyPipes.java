@@ -20,7 +20,7 @@ import forestry.pipes.PipeItemsPropolis;
 import forestry.plugins.PluginPropolisPipe;
 
 import buildcraft.BuildCraftTransport;
-import buildcraft.core.CreativeTabBuildCraft;
+import buildcraft.core.BCCreativeTab;
 import buildcraft.transport.BlockGenericPipe;
 import buildcraft.transport.ItemPipe;
 import buildcraft.transport.Pipe;
@@ -32,11 +32,11 @@ public class ProxyPipes {
 	}
 
 	public void initPropolisPipe() {
-		PluginPropolisPipe.pipeItemsPropolis = createPipe(PipeItemsPropolis.class, CreativeTabBuildCraft.PIPES);
+		PluginPropolisPipe.pipeItemsPropolis = createPipe(PipeItemsPropolis.class, BCCreativeTab.get("pipes"));
 	}
 
 	@SuppressWarnings("rawtypes")
-	public Item createPipe(Class<? extends Pipe> clas, CreativeTabBuildCraft creativeTab) {
+	public Item createPipe(Class<? extends Pipe> clas, BCCreativeTab creativeTab) {
 
 		return registerPipe(clas, creativeTab);
 	}
@@ -45,10 +45,10 @@ public class ProxyPipes {
 	 * Overriding the method in BlockGenericPipe to fix localizations.
 	 */
 	@SuppressWarnings("rawtypes")
-	public static ItemPipe registerPipe(Class<? extends Pipe> clas, CreativeTabBuildCraft creativeTab) {
+	public static ItemPipe registerPipe(Class<? extends Pipe> clas, BCCreativeTab creativeTab) {
 		ItemPipe item = null;
 		try {
-			Constructor<ItemPipe> ctor = ItemPipe.class.getDeclaredConstructor(CreativeTabBuildCraft.class);
+			Constructor<ItemPipe> ctor = ItemPipe.class.getDeclaredConstructor(BCCreativeTab.class);
 			ctor.setAccessible(true);
 			item = ctor.newInstance(creativeTab);
 		} catch (Exception e) {
