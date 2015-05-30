@@ -20,19 +20,20 @@ import forestry.core.utils.StringUtil;
 
 public class HintLedger extends Ledger {
 
-	private final int position;
-	private final String[] hints;
+	private final String hintString;
+	private final String hintTooltip;
 
 	public HintLedger(LedgerManager manager, IHintSource tile) {
-		super(manager);
-		this.hints = tile.getHints();
-		position = new Random().nextInt(hints.length);
-		overlayColor = manager.gui.fontColor.get("ledger.hint.background");
+		super(manager, "hint");
+		String[] hints = tile.getHints();
+		int position = new Random().nextInt(hints.length);
 
-		String helpString = StringUtil.localize("hints." + hints[position] + ".desc");
+		hintString = StringUtil.localize("hints." + hints[position] + ".desc");
+		hintTooltip = StringUtil.localize("hints." + hints[position] + ".tag");
+
 		FontRenderer fontRenderer = manager.minecraft.fontRenderer;
-		int lineCount = fontRenderer.listFormattedStringToWidth(helpString, maxWidth - 28).size();
-		maxHeight = lineCount * (fontRenderer.FONT_HEIGHT + 2) + 20;
+		int lineCount = fontRenderer.listFormattedStringToWidth(hintString, maxWidth - 28).size();
+		maxHeight = (lineCount + 1) * fontRenderer.FONT_HEIGHT + 20;
 	}
 
 	@Override
@@ -48,16 +49,12 @@ public class HintLedger extends Ledger {
 			return;
 		}
 
-		manager.minecraft.fontRenderer.drawStringWithShadow(StringUtil.localize("gui.didyouknow") + '?', x + 22, y + 8,
-				manager.gui.fontColor.get("ledger.hint.header"));
-		manager.minecraft.fontRenderer.drawSplitString(StringUtil.localize("hints." + hints[position] + ".desc"), x + 22, y + 20, maxWidth - 28,
-				manager.gui.fontColor.get("ledger.hint.text"));
-
+		drawHeader(StringUtil.localize("gui.didyouknow") + '?', x + 22, y + 8);
+		drawSplitText(hintString, x + 22, y + 20, maxWidth - 28);
 	}
 
 	@Override
 	public String getTooltip() {
-		return StringUtil.localize("hints." + hints[position] + ".tag");
+		return hintTooltip;
 	}
-
 }

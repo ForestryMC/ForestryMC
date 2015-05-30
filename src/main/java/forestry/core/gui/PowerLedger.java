@@ -20,10 +20,9 @@ public class PowerLedger extends Ledger {
 	private final IPowerHandler tile;
 
 	public PowerLedger(LedgerManager manager, IPowerHandler tile) {
-		super(manager);
+		super(manager, "power");
 		this.tile = tile;
 		maxHeight = 94;
-		overlayColor = manager.gui.fontColor.get("ledger.power.background");
 	}
 
 	@Override
@@ -39,17 +38,17 @@ public class PowerLedger extends Ledger {
 		}
 
 		EnergyManager energyManager = tile.getEnergyManager();
-		manager.minecraft.fontRenderer.drawStringWithShadow(StringUtil.localize("gui.energy"), x + 22, y + 8, manager.gui.fontColor.get("ledger.power.header"));
-		manager.minecraft.fontRenderer.drawStringWithShadow(StringUtil.localize("gui.stored") + ":", x + 22, y + 20,
-				manager.gui.fontColor.get("ledger.power.subheader"));
-		manager.minecraft.fontRenderer.drawString(energyManager.getTotalEnergyStored() + " RF", x + 22, y + 32, manager.gui.fontColor.get("ledger.power.text"));
-		manager.minecraft.fontRenderer.drawStringWithShadow(StringUtil.localize("gui.maxenergy") + ":", x + 22, y + 44,
-				manager.gui.fontColor.get("ledger.power.subheader"));
-		manager.minecraft.fontRenderer.drawString(energyManager.getMaxEnergyStored() + " RF", x + 22, y + 56, manager.gui.fontColor.get("ledger.power.text"));
-		manager.minecraft.fontRenderer.drawStringWithShadow(StringUtil.localize("gui.maxenergyreceive") + ":", x + 22, y + 68,
-				manager.gui.fontColor.get("ledger.power.subheader"));
-		manager.minecraft.fontRenderer.drawString(energyManager.getMaxEnergyReceived() + " RF", x + 22, y + 80, manager.gui.fontColor.get("ledger.power.text"));
 
+		drawHeader(StringUtil.localize("gui.energy"), x + 22, y + 8);
+
+		drawSubheader(StringUtil.localize("gui.stored") + ':', x + 22, y + 20);
+		drawText(energyManager.getTotalEnergyStored() + " RF", x + 22, y + 32);
+
+		drawSubheader(StringUtil.localize("gui.maxenergy") + ':', x + 22, y + 44);
+		drawText(energyManager.getMaxEnergyStored() + " RF", x + 22, y + 56);
+
+		drawSubheader(StringUtil.localize("gui.maxenergyreceive") + ':', x + 22, y + 68);
+		drawText(energyManager.getMaxEnergyReceived() + " RF", x + 22, y + 80);
 	}
 
 	@Override

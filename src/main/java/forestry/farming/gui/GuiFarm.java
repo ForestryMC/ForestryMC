@@ -34,9 +34,8 @@ public class GuiFarm extends GuiForestry<ContainerFarm, TileFarmPlain> {
 	protected class FarmLedger extends Ledger {
 
 		public FarmLedger() {
-			super(ledgerManager);
+			super(ledgerManager, "farm");
 			maxHeight = 118;
-			overlayColor = fontColor.get("ledger.farm.background");
 		}
 
 		@Override
@@ -52,22 +51,24 @@ public class GuiFarm extends GuiForestry<ContainerFarm, TileFarmPlain> {
 				return;
 			}
 
-			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.hydration"), x + 22, y + 8, fontColor.get("ledger.power.header"));
-			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.hydr.heat") + ":", x + 22, y + 20, fontColor.get("ledger.power.subheader"));
-			fontRendererObj.drawString(StringUtil.floatAsPercent(inventory.getHydrationTempModifier()), x + 22, y + 32, fontColor.get("ledger.power.text"));
-			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.hydr.humid") + ":", x + 22, y + 44, fontColor.get("ledger.power.subheader"));
-			fontRendererObj.drawString(StringUtil.floatAsPercent(inventory.getHydrationHumidModifier()), x + 22, y + 56, fontColor.get("ledger.power.text"));
-			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.hydr.rainfall") + ":", x + 22, y + 68, fontColor.get("ledger.power.subheader"));
-			fontRendererObj.drawString(StringUtil.floatAsPercent(inventory.getHydrationRainfallModifier()) + " (" + inventory.getDrought() + " d)", x + 22, y + 80,
-					fontColor.get("ledger.power.text"));
-			fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.hydr.overall") + ":", x + 22, y + 92, fontColor.get("ledger.power.subheader"));
-			fontRendererObj.drawString(StringUtil.floatAsPercent(inventory.getHydrationModifier()), x + 22, y + 104, fontColor.get("ledger.power.text"));
+			drawHeader(StringUtil.localize("gui.hydration"), x + 22, y + 8);
 
+			drawSubheader(StringUtil.localize("gui.hydr.heat") + ':', x + 22, y + 20);
+			drawText(StringUtil.floatAsPercent(inventory.getHydrationTempModifier()), x + 22, y + 32);
+
+			drawSubheader(StringUtil.localize("gui.hydr.humid") + ':', x + 22, y + 44);
+			drawText(StringUtil.floatAsPercent(inventory.getHydrationHumidModifier()), x + 22, y + 56);
+
+			drawSubheader(StringUtil.localize("gui.hydr.rainfall") + ':', x + 22, y + 68);
+			drawText(StringUtil.floatAsPercent(inventory.getHydrationRainfallModifier()) + " (" + inventory.getDrought() + " d)", x + 22, y + 80);
+
+			drawSubheader(StringUtil.localize("gui.hydr.overall") + ':', x + 22, y + 92);
+			drawText(StringUtil.floatAsPercent(inventory.getHydrationModifier()), x + 22, y + 104);
 		}
 
 		@Override
 		public String getTooltip() {
-			return StringUtil.floatAsPercent(inventory.getHydrationModifier()) + " " + StringUtil.localize("gui.hydration");
+			return StringUtil.floatAsPercent(inventory.getHydrationModifier()) + ' ' + StringUtil.localize("gui.hydration");
 		}
 	}
 

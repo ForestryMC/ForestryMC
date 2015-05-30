@@ -30,36 +30,44 @@ public abstract class Ledger {
 	protected static final int maxWidth = 124;
 	protected static final int minWidth = 24;
 	public static final int minHeight = 24;
+	protected int maxHeight = 24;
 
 	private static final ResourceLocation ledgerTextureRight = new ForestryResource(Defaults.TEXTURE_PATH_GUI + "/ledger.png");
 	private static final ResourceLocation ledgerTextureLeft = new ForestryResource(Defaults.TEXTURE_PATH_GUI + "/ledgerLeft.png");
 	
 	protected final LedgerManager manager;
 
-	private boolean open;
+	protected final int fontColorHeader;
+	protected final int fontColorText;
+	protected final int fontColorSubheader;
+	protected final int overlayColor;
 
-	protected int overlayColor = 0xffffff;
+	private boolean open;
 
 	public int currentShiftX = 0;
 	public int currentShiftY = 0;
-	protected float currentWidth = minWidth;
-	protected int maxHeight = 24;
 
+	protected float currentWidth = minWidth;
 	protected float currentHeight = minHeight;
 
 	protected final ResourceLocation texture;
 
-	public Ledger(LedgerManager manager) {
-		this(manager, true);
+	public Ledger(LedgerManager manager, String name) {
+		this(manager, name, true);
 	}
 
-	public Ledger(LedgerManager manager, boolean rightSide) {
+	public Ledger(LedgerManager manager, String name, boolean rightSide) {
 		this.manager = manager;
 		if (rightSide) {
 			texture = ledgerTextureRight;
 		} else {
 			texture = ledgerTextureLeft;
 		}
+
+		fontColorHeader = manager.gui.fontColor.get("ledger." + name + ".header");
+		fontColorSubheader = manager.gui.fontColor.get("ledger." + name + ".subheader");
+		fontColorText = manager.gui.fontColor.get("ledger." + name + ".text");
+		overlayColor = manager.gui.fontColor.get("ledger." + name + ".background");
 	}
 
 	// adjust the update's move amount to match the look of 60 fps (16.67 ms per update)
@@ -186,6 +194,21 @@ public abstract class Ledger {
 			manager.gui.drawTexturedModelRectFromIcon(x, y, icon, 16, 16);
 			GL11.glEnable(GL11.GL_LIGHTING);
 		}
+	}
 
+	protected void drawHeader(String string, int x, int y) {
+		manager.minecraft.fontRenderer.drawStringWithShadow(string, x, y, fontColorHeader);
+	}
+
+	protected void drawSubheader(String string, int x, int y) {
+		manager.minecraft.fontRenderer.drawStringWithShadow(string, x, y, fontColorSubheader);
+	}
+
+	protected void drawText(String string, int x, int y) {
+		manager.minecraft.fontRenderer.drawString(string, x, y, fontColorText);
+	}
+
+	protected void drawSplitText(String string, int x, int y, int width) {
+		manager.minecraft.fontRenderer.drawSplitString(string, x, y, width, fontColorText);
 	}
 }
