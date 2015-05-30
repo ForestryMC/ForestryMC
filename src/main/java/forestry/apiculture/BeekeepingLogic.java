@@ -208,6 +208,9 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	private void doProduction() {
 		// Produce and add stacks
 		ItemStack[] products = queen.produceStacks(housing);
+		if (products == null) {
+			return;
+		}
 		housing.wearOutEquipment(1);
 		for (ItemStack stack : products) {
 			housing.addProduct(stack, false);
