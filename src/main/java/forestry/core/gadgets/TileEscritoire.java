@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -24,11 +28,8 @@ import forestry.core.interfaces.ICrafter;
 import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
-import forestry.core.network.ForestryPacket;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketTileNBT;
-import forestry.core.network.PacketTileUpdate;
+import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.GeneticsUtil;
@@ -57,17 +58,17 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 
 	/* SAVING & LOADING */
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
-
-		game.writeToNBT(nbttagcompound);
-	}
-
-	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 
 		game.readFromNBT(nbttagcompound);
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
+		super.writeToNBT(nbttagcompound);
+
+		game.writeToNBT(nbttagcompound);
 	}
 
 	/* GAME */
@@ -109,19 +110,21 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 	}
 
 	/* NETWORK */
-	@Override
-	public void fromPacket(ForestryPacket packetRaw) {
-		if (packetRaw instanceof PacketTileUpdate) {
-			super.fromPacket(packetRaw);
-			return;
-		}
 
-		PacketTileNBT packet = (PacketTileNBT) packetRaw;
-		readFromNBT(packet.getTagCompound());
+	@Override
+	public void writeData(DataOutputStream data) throws IOException {
+		super.writeData(data);
+		game.writeData(data);
+	}
+
+	@Override
+	public void readData(DataInputStream data) throws IOException {
+		super.readData(data);
+		game.readData(data);
 	}
 
 	public void sendBoard(EntityPlayer player) {
-		Proxies.net.sendToPlayer(new PacketTileNBT(PacketIds.TILE_NBT, this), player);
+		Proxies.net.sendToPlayer(new PacketTileStream(this), player);
 	}
 
 	@Override

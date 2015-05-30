@@ -37,18 +37,16 @@ import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.TileBase;
-import forestry.core.gadgets.TileForestry;
 import forestry.core.interfaces.IClimatised;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketIds;
+import forestry.core.network.PacketId;
 import forestry.core.network.PacketInventoryStack;
-import forestry.core.network.PacketTileUpdate;
+import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.GuiUtil;
-import forestry.core.utils.Utils;
 
 public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	// CONSTANTS
@@ -200,9 +198,8 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 			return;
 		}
 
-		Proxies.net.sendNetworkPacket(new PacketInventoryStack(PacketIds.IINVENTORY_STACK, xCoord, yCoord, zCoord, SLOT_QUEEN, queenStack), xCoord, yCoord,
-				zCoord);
-		Proxies.net.sendNetworkPacket(new PacketTileUpdate(this), xCoord, yCoord, zCoord);
+		Proxies.net.sendNetworkPacket(new PacketInventoryStack(PacketId.IINVENTORY_STACK, xCoord, yCoord, zCoord, SLOT_QUEEN, queenStack));
+		Proxies.net.sendNetworkPacket(new PacketTileStream(this));
 	}
 
 	/* STATE INFORMATION */
@@ -409,7 +406,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	/* IHousing */
 	@Override
 	public GameProfile getOwnerName() {
-		return this.getOwnerProfile();
+		return this.getOwner();
 	}
 
 	protected static class BeehouseInventoryAdapter extends TileInventoryAdapter<TileBeehouse> {

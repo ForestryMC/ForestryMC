@@ -18,30 +18,28 @@ import net.minecraft.tileentity.TileEntity;
 
 import forestry.apiculture.gadgets.TileCandle;
 import forestry.apiculture.gui.ContainerImprinter;
-import forestry.core.interfaces.IPacketHandler;
+import forestry.core.network.IPacketHandler;
 import forestry.core.network.PacketCoordinates;
-import forestry.core.network.PacketIds;
+import forestry.core.network.PacketId;
 import forestry.core.proxy.Proxies;
 
 public class PacketHandlerApiculture implements IPacketHandler {
 
 	@Override
-	public boolean onPacketData(int packetID, DataInputStream data, EntityPlayer player) throws IOException {
+	public boolean onPacketData(PacketId packetID, DataInputStream data, EntityPlayer player) throws IOException {
 
 		switch (packetID) {
-			case PacketIds.HABITAT_BIOME_POINTER: {
-				PacketCoordinates packetC = new PacketCoordinates();
-				packetC.readData(data);
-				Proxies.common.setHabitatLocatorCoordinates(player, packetC.getCoordinates());
+			case HABITAT_BIOME_POINTER: {
+				PacketCoordinates packet = new PacketCoordinates(data);
+				Proxies.common.setHabitatLocatorCoordinates(player, packet.getCoordinates());
 				return true;
 			}
-			case PacketIds.IMPRINT_SELECTION_GET: {
+			case IMPRINT_SELECTION_GET: {
 				onImprintSelectionGet(player);
 				return true;
 			}
-			case PacketIds.CANDLE: {
-				PacketUpdateCandle updateCandle = new PacketUpdateCandle();
-				updateCandle.readData(data);
+			case CANDLE: {
+				PacketUpdateCandle updateCandle = new PacketUpdateCandle(data);
 				onCandleUpdate(updateCandle);
 				return true;
 			}

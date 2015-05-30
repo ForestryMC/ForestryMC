@@ -15,4 +15,8 @@ import net.minecraft.world.World;
 
 public interface ILocatedPacket {
 	TileEntity getTarget(World world);
+
+	int getPosX();
+	int getPosY();
+	int getPosZ();
 }

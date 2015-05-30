@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import java.util.Arrays;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -25,7 +24,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 
 import cpw.mods.fml.common.registry.EntityRegistry;
 
@@ -102,30 +100,6 @@ public class Utils {
 			}
 		}
 
-	}
-
-	public static <T> T[] concat(T[] first, T[] second) {
-		T[] result = Arrays.copyOf(first, first.length + second.length);
-		System.arraycopy(second, 0, result, first.length, second.length);
-		return result;
-	}
-
-	public static int[] concat(int[] first, int[] second) {
-		int[] result = Arrays.copyOf(first, first.length + second.length);
-		System.arraycopy(second, 0, result, first.length, second.length);
-		return result;
-	}
-
-	public static short[] concat(short[] first, short[] second) {
-		short[] result = Arrays.copyOf(first, first.length + second.length);
-		System.arraycopy(second, 0, result, first.length, second.length);
-		return result;
-	}
-
-	public static float[] concat(float[] first, float[] second) {
-		float[] result = Arrays.copyOf(first, first.length + second.length);
-		System.arraycopy(second, 0, result, first.length, second.length);
-		return result;
 	}
 
 	public static boolean canWrench(EntityPlayer player, int x, int y, int z) {

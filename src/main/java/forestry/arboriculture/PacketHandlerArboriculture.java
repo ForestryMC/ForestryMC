@@ -17,35 +17,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
 import forestry.arboriculture.gadgets.TileLeaves;
-import forestry.arboriculture.gadgets.TileSapling;
-import forestry.arboriculture.network.PacketLeaf;
 import forestry.arboriculture.network.PacketRipeningUpdate;
-import forestry.arboriculture.network.PacketSapling;
-import forestry.core.interfaces.IPacketHandler;
-import forestry.core.network.PacketIds;
+import forestry.core.network.IPacketHandler;
+import forestry.core.network.PacketId;
 import forestry.core.proxy.Proxies;
 
 public class PacketHandlerArboriculture implements IPacketHandler {
 
 	@Override
-	public boolean onPacketData(int packetID, DataInputStream data, EntityPlayer player) throws IOException {
+	public boolean onPacketData(PacketId packetID, DataInputStream data, EntityPlayer player) throws IOException {
 
 		switch (packetID) {
-			case PacketIds.SAPLING: {
-				PacketSapling packet = new PacketSapling();
-				packet.readData(data);
-				onSaplingPacket(packet);
-				return true;
-			}
-			case PacketIds.LEAF: {
-				PacketLeaf packet = new PacketLeaf();
-				packet.readData(data);
-				onLeafPacket(packet);
-				return true;
-			}
-			case PacketIds.RIPENING_UPDATE: {
-				PacketRipeningUpdate packet = new PacketRipeningUpdate();
-				packet.readData(data);
+			case RIPENING_UPDATE: {
+				PacketRipeningUpdate packet = new PacketRipeningUpdate(data);
 				onRipeningUpdate(packet);
 				return true;
 			}
@@ -54,29 +38,10 @@ public class PacketHandlerArboriculture implements IPacketHandler {
 		return false;
 	}
 
-	private void onSaplingPacket(PacketSapling packet) {
-		TileEntity tile = packet.getTarget(Proxies.common.getRenderWorld());
-		if (tile instanceof TileSapling) {
-			((TileSapling) tile).fromPacket(packet);
-		}
-	}
-
-	private void onLeafPacket(PacketLeaf packet) {
-
-		TileEntity tile = packet.getTarget(Proxies.common.getRenderWorld());
-		if (tile instanceof TileLeaves) {
-			((TileLeaves) tile).fromPacket(packet);
-		}
-
-	}
-
-	private void onRipeningUpdate(PacketRipeningUpdate packet) {
-
+	private static void onRipeningUpdate(PacketRipeningUpdate packet) {
 		TileEntity tile = packet.getTarget(Proxies.common.getRenderWorld());
 		if (tile instanceof TileLeaves) {
 			((TileLeaves) tile).fromRipeningPacket(packet);
 		}
-
 	}
-
 }

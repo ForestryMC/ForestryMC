@@ -140,7 +140,7 @@ public class PipeItemsPropolis extends Pipe<PipeTransportItems> {
 
 			// Bees need to match one of the genome filters
 			for (IAllele[] pattern : filters) {
-				if (pipeLogic.matchAllele(pattern[0], bee.getIdent()) && pipeLogic.matchAllele(pattern[1], bee.getGenome().getSecondary().getUID())) {
+				if (matchAllele(pattern[0], bee.getIdent()) && matchAllele(pattern[1], bee.getGenome().getSecondary().getUID())) {
 					filteredOrientations.add(dir);
 				}
 			}
@@ -154,6 +154,14 @@ public class PipeItemsPropolis extends Pipe<PipeTransportItems> {
 			event.destinations.addAll(typedOrientations);
 		} else {
 			event.destinations.addAll(defaultOrientations);
+		}
+	}
+
+	private static boolean matchAllele(IAllele filter, String ident) {
+		if (filter == null) {
+			return true;
+		} else {
+			return filter.getUID().equals(ident);
 		}
 	}
 

@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -31,7 +34,6 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
 
 import buildcraft.api.statements.ITriggerExternal;
@@ -106,24 +108,23 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	}
 
 	@Override
-	public PacketPayload getPacketPayload() {
-		PacketPayload payload = new PacketPayload(0, 2);
-		payload.shortPayload[0] = (short) (isMaster() ? 1 : 0);
+	public void writeData(DataOutputStream data) throws IOException {
+		super.writeData(data);
+		data.writeBoolean(isMaster);
 
 		// so the client can know if it is part of an integrated structure
-		payload.shortPayload[1] = (short) this.masterY;
-
-		return payload;
+		data.writeShort(masterY);
 	}
 
 	@Override
-	public void fromPacketPayload(PacketPayload payload) {
-		if (payload.shortPayload[0] > 0) {
+	public void readData(DataInputStream data) throws IOException {
+		super.readData(data);
+		if (data.readBoolean()) {
 			makeMaster();
 		}
 
 		// so the client can know if it is part of an integrated structure
-		this.masterY = payload.shortPayload[1];
+		masterY = data.readShort();
 	}
 
 	/* ITILESTRUCTURE */

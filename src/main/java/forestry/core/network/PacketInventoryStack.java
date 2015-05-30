@@ -21,27 +21,27 @@ public class PacketInventoryStack extends PacketCoordinates {
 	public int slotIndex;
 	public ItemStack itemstack;
 
-	public PacketInventoryStack() {
+	public PacketInventoryStack(DataInputStream data) throws IOException {
+		super(data);
 	}
 
-	public PacketInventoryStack(int id, int posX, int posY, int posZ, int slotIndex, ItemStack itemstack) {
+	public PacketInventoryStack(PacketId id, int posX, int posY, int posZ, int slotIndex, ItemStack itemstack) {
 		super(id, posX, posY, posZ);
 		this.slotIndex = slotIndex;
 		this.itemstack = itemstack;
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	protected void writeData(DataOutputStream data) throws IOException {
 		super.writeData(data);
 		data.writeInt(slotIndex);
-		writeItemStack(itemstack, data);
+		PacketHelper.writeItemStack(itemstack, data);
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	protected void readData(DataInputStream data) throws IOException {
 		super.readData(data);
 		slotIndex = data.readInt();
-		itemstack = readItemStack(data);
+		itemstack = PacketHelper.readItemStack(data);
 	}
-
 }

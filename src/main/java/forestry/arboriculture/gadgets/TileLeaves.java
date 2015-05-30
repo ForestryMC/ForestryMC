@@ -12,6 +12,9 @@ package forestry.arboriculture.gadgets;
 
 import com.google.common.collect.ImmutableSet;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -33,6 +36,7 @@ import net.minecraftforge.common.EnumPlantType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafTickHandler;
@@ -43,6 +47,7 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFruitBearer;
 import forestry.api.genetics.IFruitFamily;
@@ -52,11 +57,10 @@ import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.IButterflyRoot;
-import forestry.arboriculture.network.PacketLeaf;
 import forestry.arboriculture.network.PacketRipeningUpdate;
 import forestry.core.EnumErrorCode;
 import forestry.core.genetics.alleles.Allele;
-import forestry.core.network.ForestryPacket;
+import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.GeneticsUtil;
@@ -330,13 +334,11 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	/* NETWORK */
 	@Override
 	public Packet getDescriptionPacket() {
-		return new PacketLeaf(this).getPacket();
+		return new PacketTileStream(this).getPacket();
 	}
 
-	@Override
 	public void sendNetworkUpdate() {
-		PacketLeaf packet = new PacketLeaf(this);
-		Proxies.net.sendNetworkPacket(packet, xCoord, yCoord, zCoord);
+		Proxies.net.sendNetworkPacket(new PacketTileStream(this));
 	}
 
 	private void sendNetworkUpdateRipening() {
@@ -347,31 +349,76 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		colourFruits = newColourFruits;
 
 		PacketRipeningUpdate ripeningUpdate = new PacketRipeningUpdate(this);
-		Proxies.net.sendNetworkPacket(ripeningUpdate, xCoord, yCoord, zCoord);
+		Proxies.net.sendNetworkPacket(ripeningUpdate);
+	}
+
+	private static final short hasFruitFlag = 1;
+	private static final short isPollinatedFlag = 1 << 1;
+
+	@Override
+	public void writeData(DataOutputStream data) throws IOException {
+		super.writeData(data);
+
+		byte leafState = 0;
+		boolean hasFruit = hasFruit();
+
+		if (isPollinated()) {
+			leafState |= isPollinatedFlag;
+		}
+
+		if (hasFruit) {
+			leafState |= hasFruitFlag;
+		}
+
+		data.writeByte(leafState);
+
+		if (hasFruit) {
+			String fruitAlleleUID = getTree().getGenome().getActiveAllele(EnumTreeChromosome.FRUITS).getUID();
+			int colourFruits = getFruitColour();
+
+			data.writeUTF(fruitAlleleUID);
+			data.writeInt(colourFruits);
+		}
 	}
 
 	@Override
-	public void fromPacket(ForestryPacket packetRaw) {
-		PacketLeaf packet = (PacketLeaf) packetRaw;
+	public void readData(DataInputStream data) throws IOException {
 
-		isFruitLeaf = packet.isFruitLeaf();
-		isPollinatedState = packet.isPollinated();
+		String speciesUID = data.readUTF(); // this is called instead of super.readData, be careful!
 
-		colourFruits = packet.getColourFruits();
+		byte leafState = data.readByte();
+		boolean hasFruit = (leafState & hasFruitFlag) > 0;
+		boolean isPollinated = (leafState & isPollinatedFlag) > 0;
+		String fruitAlleleUID = null;
 
-		ITree tree = getTree();
-		if (!packet.matchesTree(tree)) {
-			ITree newTree = packet.getTree();
-			if (newTree != null) {
-				setTree(newTree);
+		if (hasFruit) {
+			fruitAlleleUID = data.readUTF();
+			colourFruits = data.readInt();
+		}
+
+		IAllele[] treeTemplate = PluginArboriculture.treeInterface.getTemplate(speciesUID);
+
+		if (fruitAlleleUID != null) {
+			IAllele fruitAllele = AlleleManager.alleleRegistry.getAllele(fruitAlleleUID);
+			if (fruitAllele != null) {
+				treeTemplate[EnumTreeChromosome.FRUITS.ordinal()] = fruitAllele;
 			}
 		}
 
-		worldObj.func_147479_m(xCoord, yCoord, zCoord);
+		if (treeTemplate != null) {
+			ITree tree = PluginArboriculture.treeInterface.templateAsIndividual(treeTemplate);
+			if (isPollinated) {
+				tree.mate(tree);
+			}
+
+			setTree(tree);
+
+			worldObj.func_147479_m(xCoord, yCoord, zCoord);
+		}
 	}
 
 	public void fromRipeningPacket(PacketRipeningUpdate packet) {
-		int newColourFruits = packet.getColourFruits();
+		int newColourFruits = packet.getValue();
 		if (newColourFruits == colourFruits) {
 			return;
 		}
@@ -465,7 +512,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		}
 	}
 
-	private void attemptButterflySpawn(World world, IButterfly butterfly, double x, double y, double z) {
+	private static void attemptButterflySpawn(World world, IButterfly butterfly, double x, double y, double z) {
 		IButterflyRoot butterflyRoot = (IButterflyRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies");
 		if (butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), x, y + 0.1f, z) != null) {
 			Proxies.log.finest("A caterpillar '%s' hatched at %s/%s/%s.", butterfly.getDisplayName(), x, y, z);
@@ -560,6 +607,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	/* IHousing */
 	@Override
 	public GameProfile getOwnerName() {
-		return this.getOwnerProfile();
+		return this.getOwner();
 	}
 }

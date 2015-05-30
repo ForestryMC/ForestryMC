@@ -13,14 +13,12 @@ package forestry.core.gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 
 import forestry.core.gadgets.TileForestry;
 import forestry.core.interfaces.ISocketable;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketPayload;
+import forestry.core.network.PacketId;
+import forestry.core.network.PacketSlotClick;
 import forestry.core.network.PacketSocketUpdate;
-import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
 
@@ -32,9 +30,8 @@ public class ContainerSocketed<T extends TileForestry & ISocketable> extends Con
 
 	public void handleChipsetClick(int slot, EntityPlayer player, ItemStack itemstack) {
 		if (!Proxies.common.isSimulating(player.worldObj)) {
-			PacketPayload payload = new PacketPayload(1, 0, 0);
-			payload.intPayload[0] = slot;
-			Proxies.net.sendToServer(new PacketUpdate(PacketIds.CHIPSET_CLICK, payload));
+			PacketSlotClick packet = new PacketSlotClick(PacketId.CHIPSET_CLICK, tile, slot);
+			Proxies.net.sendToServer(packet);
 			player.inventory.setItemStack(null);
 			return;
 		}
@@ -50,18 +47,16 @@ public class ContainerSocketed<T extends TileForestry & ISocketable> extends Con
 				player.inventory.setItemStack(null);
 			}
 			Proxies.net.inventoryChangeNotify(player);
-			
-			TileEntity te = (TileEntity) tile;
-			Proxies.net.sendToPlayer(new PacketSocketUpdate(PacketIds.SOCKET_UPDATE, te.xCoord, te.yCoord, te.zCoord, tile), player);
-		}
 
+			PacketSocketUpdate packet = new PacketSocketUpdate(PacketId.SOCKET_UPDATE, tile);
+			Proxies.net.sendToPlayer(packet, player);
+		}
 	}
 
 	public void handleSolderingIronClick(int slot, EntityPlayer player, ItemStack itemstack) {
 		if (!Proxies.common.isSimulating(player.worldObj)) {
-			PacketPayload payload = new PacketPayload(1, 0, 0);
-			payload.intPayload[0] = slot;
-			Proxies.net.sendToServer(new PacketUpdate(PacketIds.SOLDERING_IRON_CLICK, payload));
+			PacketSlotClick packet = new PacketSlotClick(PacketId.SOLDERING_IRON_CLICK, tile, slot);
+			Proxies.net.sendToServer(packet);
 			return;
 		}
 
@@ -82,9 +77,7 @@ public class ContainerSocketed<T extends TileForestry & ISocketable> extends Con
 			player.inventory.setItemStack(null);
 		}
 
-		TileEntity te = (TileEntity) tile;
-		Proxies.net.sendToPlayer(new PacketSocketUpdate(PacketIds.SOCKET_UPDATE, te.xCoord, te.yCoord, te.zCoord, tile), player);
-
+		PacketSocketUpdate packet = new PacketSocketUpdate(PacketId.SOCKET_UPDATE, tile);
+		Proxies.net.sendToPlayer(packet, player);
 	}
-
 }

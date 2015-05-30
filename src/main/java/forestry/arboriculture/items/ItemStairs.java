@@ -60,7 +60,7 @@ public class ItemStairs extends ItemForestryBlock {
 			return false;
 		}
 
-		((TileStairs) tile).setType(type);
+		((TileStairs) tile).setWoodType(type);
 		return true;
 	}
 

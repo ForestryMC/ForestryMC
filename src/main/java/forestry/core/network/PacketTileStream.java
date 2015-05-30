@@ -14,53 +14,36 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 
-public class PacketTileNBT extends PacketNBT implements ILocatedPacket {
+import forestry.core.proxy.Proxies;
 
-	private int posX;
-	private int posY;
-	private int posZ;
+public class PacketTileStream extends PacketCoordinates {
 
-	public PacketTileNBT() {
+	private IStreamable streamable;
+
+	public PacketTileStream(DataInputStream data) throws IOException {
+		super(data);
 	}
 
-	public PacketTileNBT(int id, TileEntity tile) {
-		super(id);
-
-		posX = tile.xCoord;
-		posY = tile.yCoord;
-		posZ = tile.zCoord;
-
-		this.nbttagcompound = new NBTTagCompound();
-		tile.writeToNBT(nbttagcompound);
+	public <T extends TileEntity & IStreamable> PacketTileStream(T streamable) {
+		super(PacketId.TILE_FORESTRY_UPDATE, streamable);
+		this.streamable = streamable;
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
-
-		data.writeInt(posX);
-		data.writeInt(posY);
-		data.writeInt(posZ);
-
+	protected void writeData(DataOutputStream data) throws IOException {
 		super.writeData(data);
+		streamable.writeData(data);
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
-
-		posX = data.readInt();
-		posY = data.readInt();
-		posZ = data.readInt();
-
+	protected void readData(DataInputStream data) throws IOException {
 		super.readData(data);
-	}
 
-	@Override
-	public TileEntity getTarget(World world) {
-		return world.getTileEntity(posX, posY, posZ);
+		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
+		if (tile instanceof IStreamable) {
+			((IStreamable) tile).readData(data);
+		}
 	}
-
 }

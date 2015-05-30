@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,7 +41,6 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
@@ -46,7 +48,6 @@ import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketPayload;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.GuiUtil;
 
@@ -197,30 +198,33 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	/* Network */
-	public PacketPayload getPacketPayload() {
+	@Override
+	public void writeData(DataOutputStream data) throws IOException {
+		super.writeData(data);
 		ItemStack displayStack = getIndividualOnDisplay();
 		if (displayStack == null) {
-			return null;
+			data.writeBoolean(false);
+		} else {
+			data.writeBoolean(true);
+
+			IIndividual displayIndividual = AlleleManager.alleleRegistry.getIndividual(displayStack);
+			int type = BeeManager.beeRoot.getType(displayStack).ordinal();
+
+			data.writeUTF(displayIndividual.getIdent());
+			data.writeShort(type);
+			data.writeShort(displayStack.stackSize);
 		}
-
-		IIndividual displayIndividual = AlleleManager.alleleRegistry.getIndividual(displayStack);
-		int type = BeeManager.beeRoot.getType(displayStack).ordinal();
-
-		PacketPayload payload = new PacketPayload();
-		payload.stringPayload = new String[1];
-		payload.shortPayload = new short[2];
-		payload.stringPayload[0] = displayIndividual.getIdent();
-		payload.shortPayload[0] = (short) type;
-		payload.shortPayload[1] = (short) displayStack.stackSize;
-		return payload;
 	}
 
-	public void fromPacketPayload(PacketPayload payload) {
+	@Override
+	public void readData(DataInputStream data) throws IOException {
+		super.readData(data);
+
 		ItemStack newIndividualOnDisplay = null;
-		if (!payload.isEmpty()) {
-			String individualUID = payload.stringPayload[0];
-			int type = payload.shortPayload[0];
-			int stackSize = payload.shortPayload[1];
+		if (data.readBoolean()) {
+			String individualUID = data.readUTF();
+			int type = data.readShort();
+			int stackSize = data.readShort();
 
 			IAllele[] template = BeeManager.beeRoot.getTemplate(individualUID);
 			IIndividual individual = BeeManager.beeRoot.templateAsIndividual(template);

@@ -13,8 +13,6 @@ package forestry.mail.gui;
 import java.util.Iterator;
 import java.util.UUID;
 
-import org.apache.commons.lang3.StringUtils;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
@@ -30,13 +28,13 @@ import forestry.api.mail.PostManager;
 import forestry.api.mail.TradeStationInfo;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFiltered;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketPayload;
-import forestry.core.network.PacketUpdate;
+import forestry.core.network.PacketId;
+import forestry.core.network.PacketString;
 import forestry.core.proxy.Proxies;
 import forestry.mail.Letter;
 import forestry.mail.items.ItemLetter.LetterInventory;
 import forestry.mail.network.PacketLetterInfo;
+import forestry.mail.network.PacketRequestLetterInfo;
 
 public class ContainerLetter extends ContainerItemInventory<LetterInventory> {
 
@@ -123,37 +121,11 @@ public class ContainerLetter extends ContainerItemInventory<LetterInventory> {
 		setCarrierType(postal.getType());
 	}
 
-	public static void setRecipient(String recipientName, EnumAddressee type) {
-		if (StringUtils.isBlank(recipientName) || type == null) {
-			return;
-		}
+	public void handleRequestLetterInfo(EntityPlayer player, PacketRequestLetterInfo packet) {
+		String recipientName = packet.getRecipientName();
+		EnumAddressee type = packet.getAddressType();
 
-		// / Send to server
-		PacketPayload payload = new PacketPayload(0, 0, 2);
-		payload.stringPayload[0] = recipientName;
-		payload.stringPayload[1] = type.toString();
-
-		PacketUpdate packet = new PacketUpdate(PacketIds.LETTER_RECIPIENT, payload);
-		Proxies.net.sendToServer(packet);
-	}
-
-	public void handleSetRecipient(EntityPlayer player, PacketUpdate packet) {
-		String recipientName = packet.payload.stringPayload[0];
-		String typeName = packet.payload.stringPayload[1];
-
-		EnumAddressee type = EnumAddressee.fromString(typeName);
-		IMailAddress recipient;
-		if (type == EnumAddressee.PLAYER) {
-			GameProfile gameProfile = MinecraftServer.getServer().func_152358_ax().func_152655_a(recipientName);
-			if (gameProfile == null) {
-				gameProfile = new GameProfile(new UUID(0, 0), recipientName);
-			}
-			recipient = PostManager.postRegistry.getMailAddress(gameProfile);
-		} else if (type == EnumAddressee.TRADER) {
-			recipient = PostManager.postRegistry.getMailAddress(recipientName);
-		} else {
-			return;
-		}
+		IMailAddress recipient = getRecipient(recipientName, type);
 
 		getLetter().setRecipient(recipient);
 		
@@ -163,7 +135,24 @@ public class ContainerLetter extends ContainerItemInventory<LetterInventory> {
 		}
 		
 		// Update info on client
-		Proxies.net.sendToPlayer(new PacketLetterInfo(PacketIds.LETTER_INFO, type, tradeInfo, recipient), player);
+		Proxies.net.sendToPlayer(new PacketLetterInfo(PacketId.LETTER_INFO, type, tradeInfo, recipient), player);
+	}
+
+	public static IMailAddress getRecipient(String recipientName, EnumAddressee type) {
+		switch (type) {
+			case PLAYER: {
+				GameProfile gameProfile = MinecraftServer.getServer().func_152358_ax().func_152655_a(recipientName);
+				if (gameProfile == null) {
+					gameProfile = new GameProfile(new UUID(0, 0), recipientName);
+				}
+				return PostManager.postRegistry.getMailAddress(gameProfile);
+			}
+			case TRADER: {
+				return PostManager.postRegistry.getMailAddress(recipientName);
+			}
+			default:
+				return null;
+		}
 	}
 
 	public IMailAddress getRecipient() {
@@ -181,17 +170,13 @@ public class ContainerLetter extends ContainerItemInventory<LetterInventory> {
 	public void setText(String text) {
 		getLetter().setText(text);
 
-		// / Send to server
-		PacketPayload payload = new PacketPayload(0, 0, 1);
-		payload.stringPayload[0] = text;
-
-		PacketUpdate packet = new PacketUpdate(PacketIds.LETTER_TEXT, payload);
+		PacketString packet = new PacketString(PacketId.LETTER_TEXT, text);
 		Proxies.net.sendToServer(packet);
 
 	}
 
-	public void handleSetText(PacketUpdate packet) {
-		String text = packet.payload.stringPayload[0];
+	public void handleSetText(PacketString packet) {
+		String text = packet.getString();
 		getLetter().setText(text);
 	}
 

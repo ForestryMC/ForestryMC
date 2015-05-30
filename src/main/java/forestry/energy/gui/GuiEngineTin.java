@@ -31,9 +31,24 @@ public class GuiEngineTin extends GuiEngine<ContainerEngineTin, EngineTin> {
 		EngineTin engine = inventory;
 		int storageHeight = engine.getStorageScaled(46);
 		int storageMaxHeight = engine.getStorageScaled(100);
-		EnumTankLevel rated = engine.rateLevel(storageMaxHeight);
+		EnumTankLevel rated = rateLevel(storageMaxHeight);
 
 		drawHealthMeter(guiLeft + 74, guiTop + 25, storageHeight, rated);
+	}
+
+	public static EnumTankLevel rateLevel(int scaled) {
+
+		if (scaled < 5) {
+			return EnumTankLevel.EMPTY;
+		} else if (scaled < 30) {
+			return EnumTankLevel.LOW;
+		} else if (scaled < 60) {
+			return EnumTankLevel.MEDIUM;
+		} else if (scaled < 90) {
+			return EnumTankLevel.HIGH;
+		} else {
+			return EnumTankLevel.MAXIMUM;
+		}
 	}
 
 	private void drawHealthMeter(int x, int y, int height, EnumTankLevel rated) {

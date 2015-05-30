@@ -55,7 +55,7 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.network.PacketCoordinates;
 import forestry.core.network.PacketFXSignal;
-import forestry.core.network.PacketIds;
+import forestry.core.network.PacketId;
 import forestry.core.render.SpriteSheet;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginManager;
@@ -145,7 +145,7 @@ public class ProxyCommon {
 
 	public void setHabitatLocatorCoordinates(Entity player, ChunkCoordinates coordinates) {
 		if (coordinates != null) {
-			Forestry.packetHandler.sendPacket(new PacketCoordinates(PacketIds.HABITAT_BIOME_POINTER, coordinates).getPacket(), (EntityPlayerMP) player);
+			Forestry.packetHandler.sendPacket(new PacketCoordinates(PacketId.HABITAT_BIOME_POINTER, coordinates).getPacket(), (EntityPlayerMP) player);
 		}
 	}
 
@@ -203,7 +203,7 @@ public class ProxyCommon {
 	}
 
 	public void playSoundFX(World world, int x, int y, int z, Block block) {
-		Proxies.net.sendNetworkPacket(new PacketFXSignal(PacketFXSignal.SoundFXType.LEAF, x, y, z, block, 0), x, y, z);
+		Proxies.net.sendNetworkPacket(new PacketFXSignal(PacketFXSignal.SoundFXType.LEAF, x, y, z, block, 0));
 	}
 
 	public void playSoundFX(World world, int x, int y, int z, String sound, float volume, float pitch) {
@@ -235,7 +235,7 @@ public class ProxyCommon {
 	public void sendFXSignal(PacketFXSignal.VisualFXType visualFX, PacketFXSignal.SoundFXType soundFX, World world, int xCoord, int yCoord, int zCoord,
 			Block block, int i) {
 		if (Proxies.common.isSimulating(world)) {
-			Proxies.net.sendNetworkPacket(new PacketFXSignal(visualFX, soundFX, xCoord, yCoord, zCoord, block, i), xCoord, yCoord, zCoord);
+			Proxies.net.sendNetworkPacket(new PacketFXSignal(visualFX, soundFX, xCoord, yCoord, zCoord, block, i));
 		}
 	}
 

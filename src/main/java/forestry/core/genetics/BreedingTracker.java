@@ -28,7 +28,7 @@ import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.network.PacketIds;
+import forestry.core.network.PacketId;
 import forestry.core.network.PacketNBT;
 import forestry.core.proxy.Proxies;
 
@@ -77,7 +77,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		encodeToNBT(nbttagcompound);
-		Proxies.net.sendToPlayer(new PacketNBT(PacketIds.GENOME_TRACKER_UPDATE, nbttagcompound), player);
+		Proxies.net.sendToPlayer(new PacketNBT(PacketId.GENOME_TRACKER_UPDATE, nbttagcompound), player);
 	}
 
 	/* HELPER FUNCTIONS TO PREVENT OBFUSCATION OF INTERFACE METHODS */

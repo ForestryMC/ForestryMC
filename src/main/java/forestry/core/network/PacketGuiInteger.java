@@ -26,11 +26,12 @@ public class PacketGuiInteger extends ForestryPacket {
 
 	private int windowId, dataId, value;
 
-	public PacketGuiInteger() {
-		super();
+	public PacketGuiInteger(DataInputStream data) throws IOException {
+		super(data);
 	}
 
 	public PacketGuiInteger(int windowId, int dataId, int value) {
+		super(PacketId.GUI_INTEGER);
 		this.windowId = windowId;
 		this.dataId = dataId;
 		this.value = value;
@@ -44,7 +45,7 @@ public class PacketGuiInteger extends ForestryPacket {
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	protected void readData(DataInputStream data) throws IOException {
 		windowId = data.readByte();
 		dataId = data.readByte();
 		value = data.readInt();
@@ -55,10 +56,4 @@ public class PacketGuiInteger extends ForestryPacket {
 			player.openContainer.updateProgressBar(dataId, value);
 		}
 	}
-
-	@Override
-	public int getID() {
-		return PacketIds.GUI_INTEGER;
-	}
-
 }

@@ -10,12 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.apiculture.IAlvearyComponent;
-import forestry.core.network.PacketPayload;
 import forestry.energy.EnergyManager;
 
 import cofh.api.energy.IEnergyHandler;
@@ -109,22 +112,21 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 		nbttagcompound.setInteger("Heating", workingTime);
 	}
 
-
 	/* NETWORK */
 	@Override
-	public void fromPacketPayload(PacketPayload payload) {
-		short workingTime = payload.shortPayload[0];
+	public void writeData(DataOutputStream data) throws IOException {
+		super.writeData(data);
+		data.writeShort(workingTime);
+	}
+
+	@Override
+	public void readData(DataInputStream data) throws IOException {
+		super.readData(data);
+		short workingTime = data.readShort();
 		if (this.workingTime != workingTime) {
 			this.workingTime = workingTime;
 			worldObj.func_147479_m(xCoord, yCoord, zCoord);
 		}
-	}
-
-	@Override
-	public PacketPayload getPacketPayload() {
-		PacketPayload payload = new PacketPayload(0, 1);
-		payload.shortPayload[0] = (short) workingTime;
-		return payload;
 	}
 
 	/* IEnergyHandler */

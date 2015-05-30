@@ -14,10 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
-import forestry.api.arboriculture.ITree;
-import forestry.arboriculture.network.PacketSapling;
-import forestry.core.network.ForestryPacket;
-import forestry.core.proxy.Proxies;
+import forestry.core.network.PacketTileStream;
 import forestry.plugins.PluginArboriculture;
 
 public class TileSapling extends TileTreeContainer {
@@ -67,7 +64,7 @@ public class TileSapling extends TileTreeContainer {
 
 		WorldGenerator generator = this.getTree().getTreeGenerator(worldObj, xCoord, yCoord, zCoord, bonemealed);
 		if (generator.generate(worldObj, worldObj.rand, xCoord, yCoord, zCoord)) {
-			PluginArboriculture.treeInterface.getBreedingTracker(worldObj, getOwnerProfile()).registerBirth(getTree());
+			PluginArboriculture.treeInterface.getBreedingTracker(worldObj, getOwner()).registerBirth(getTree());
 			return 2;
 		}
 
@@ -76,31 +73,6 @@ public class TileSapling extends TileTreeContainer {
 
 	@Override
 	public Packet getDescriptionPacket() {
-		return new PacketSapling(this).getPacket();
+		return new PacketTileStream(this).getPacket();
 	}
-
-	@Override
-	public void sendNetworkUpdate() {
-		PacketSapling saplingPacket = new PacketSapling(this);
-		Proxies.net.sendNetworkPacket(saplingPacket, xCoord, yCoord, zCoord);
-	}
-
-	@Override
-	public void fromPacket(ForestryPacket packetRaw) {
-		PacketSapling packet = (PacketSapling) packetRaw;
-
-		ITree tree = getTree();
-		if (packet.matchesTree(tree)) {
-			return;
-		}
-
-		ITree newTree = packet.getTree();
-		if (newTree == null) {
-			return;
-		}
-
-		setTree(newTree);
-		worldObj.func_147479_m(xCoord, yCoord, zCoord);
-	}
-
 }

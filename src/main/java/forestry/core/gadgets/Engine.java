@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -23,7 +27,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import forestry.core.EnumErrorCode;
 import forestry.core.TemperatureState;
 import forestry.core.config.Defaults;
-import forestry.core.network.PacketPayload;
 import forestry.core.utils.BlockUtil;
 import forestry.energy.EnergyManager;
 
@@ -31,33 +34,7 @@ import cofh.api.energy.IEnergyConnection;
 
 public abstract class Engine extends TileBase implements IEnergyConnection {
 
-	@Override
-	public PacketPayload getPacketPayload() {
-		PacketPayload payload = new PacketPayload(3, 1, 0);
-
-		if (this.isActive) {
-			payload.intPayload[0] = 1;
-		} else {
-			payload.intPayload[0] = 0;
-		}
-		payload.intPayload[1] = energyManager.toPacketInt();
-		payload.intPayload[2] = heat;
-
-		payload.floatPayload[0] = pistonSpeedServer;
-		return payload;
-	}
-
-	@Override
-	public void fromPacketPayload(PacketPayload payload) {
-
-		isActive = payload.intPayload[0] > 0;
-		energyManager.fromPacketInt(payload.intPayload[1]);
-		heat = payload.intPayload[2];
-
-		pistonSpeedServer = payload.floatPayload[0];
-	}
-
-	public boolean isActive = false; // Used for smp.
+	public boolean active = false; // Used for smp.
 	/**
 	 * Indicates whether the piston is receding from or approaching the
 	 * combustion chamber
@@ -118,7 +95,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 				stagePiston = 0;
 				progress = 0;
 			}
-		} else if (this.isActive) {
+		} else if (this.active) {
 			stagePiston = 1;
 		}
 	}
@@ -181,11 +158,11 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 	}
 
 	private void setActive(boolean isActive) {
-		if (this.isActive == isActive) {
+		if (this.active == isActive) {
 			return;
 		}
 
-		this.isActive = isActive;
+		this.active = isActive;
 		setNeedsNetworkUpdate();
 	}
 
@@ -294,6 +271,25 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 		nbt.setInteger("EngineHeat", heat);
 		nbt.setFloat("EngineProgress", progress);
 		nbt.setBoolean("ForceCooldown", forceCooldown);
+	}
+
+	/* NETWORK */
+	@Override
+	public void writeData(DataOutputStream data) throws IOException {
+		super.writeData(data);
+		data.writeBoolean(active);
+		data.writeInt(heat);
+		data.writeFloat(pistonSpeedServer);
+		energyManager.writeData(data);
+	}
+
+	@Override
+	public void readData(DataInputStream data) throws IOException {
+		super.readData(data);
+		active = data.readBoolean();
+		heat = data.readInt();
+		pistonSpeedServer = data.readFloat();
+		energyManager.readData(data);
 	}
 
 	/* SMP GUI */

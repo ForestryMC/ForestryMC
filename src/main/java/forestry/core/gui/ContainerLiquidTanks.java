@@ -26,9 +26,8 @@ import forestry.api.core.IToolPipette;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketPayload;
-import forestry.core.network.PacketUpdate;
+import forestry.core.network.PacketId;
+import forestry.core.network.PacketSlotClick;
 import forestry.core.proxy.Proxies;
 
 public class ContainerLiquidTanks<T extends TileForestry & ILiquidTankContainer> extends ContainerTile<T> {
@@ -44,9 +43,7 @@ public class ContainerLiquidTanks<T extends TileForestry & ILiquidTankContainer>
 			return;
 		}
 
-		PacketPayload payload = new PacketPayload(1, 0, 0);
-		payload.intPayload[0] = slot;
-		Proxies.net.sendToServer(new PacketUpdate(PacketIds.PIPETTE_CLICK, payload));
+		Proxies.net.sendToServer(new PacketSlotClick(PacketId.PIPETTE_CLICK, tile, slot));
 	}
 
 	public void handlePipetteClick(int slot, EntityPlayerMP player) {

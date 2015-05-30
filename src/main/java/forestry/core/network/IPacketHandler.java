@@ -10,10 +10,14 @@
  ******************************************************************************/
 package forestry.core.network;
 
-public interface INetworkedEntity {
+import java.io.DataInputStream;
+import java.io.IOException;
 
-	void sendNetworkUpdate();
+import net.minecraft.entity.player.EntityPlayer;
 
-	void fromPacket(ForestryPacket packet);
+public interface IPacketHandler {
+
+	/** Returns true if the packet has been handled */
+	boolean onPacketData(PacketId packetID, DataInputStream data, EntityPlayer player) throws IOException;
 
 }

@@ -15,7 +15,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.core.gadgets.TileNaturalistChest;
 import forestry.core.gui.slots.SlotFiltered;
-import forestry.core.network.PacketUpdate;
+import forestry.core.network.PacketGuiSelect;
 
 public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistChest> implements IGuiSelectable {
 
@@ -31,11 +31,11 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
 	}
 
 	@Override
-	public void handleSelectionChange(EntityPlayer player, PacketUpdate packet) {
-		tile.flipPage(player, packet.payload.intPayload[0]);
+	public void handleSelectionChange(EntityPlayer player, PacketGuiSelect packet) {
+		tile.flipPage(player, packet.getPrimaryIndex());
 	}
 
 	@Override
-	public void setSelection(PacketUpdate packet) {
+	public void setSelection(PacketGuiSelect packet) {
 	}
 }

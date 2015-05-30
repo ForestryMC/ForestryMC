@@ -10,8 +10,13 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.inventory.IInventory;
@@ -23,14 +28,16 @@ import forestry.api.core.INBTTagable;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketHelper;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Utils;
 
-public class NaturalistGame implements INBTTagable {
+public class NaturalistGame implements INBTTagable, IStreamable {
 
 	public static final int BOUNTY_MAX = 16;
 
-	public static class GameToken implements INBTTagable {
+	public static class GameToken implements INBTTagable, IStreamable {
 
 		private static final String[] OVERLAY_NONE = new String[0];
 		private static final String[] OVERLAY_FAILED = new String[]{"errors/errored"};
@@ -40,6 +47,10 @@ public class NaturalistGame implements INBTTagable {
 		protected boolean isFailed = false;
 		protected boolean isProbed = false;
 		protected boolean isRevealed = false;
+
+		public GameToken() {
+
+		}
 
 		public GameToken(ItemStack tokenStack) {
 			this.tokenStack = tokenStack;
@@ -71,6 +82,25 @@ public class NaturalistGame implements INBTTagable {
 				tokenStack.writeToNBT(stackcompound);
 				nbttagcompound.setTag("tokenStack", stackcompound);
 			}
+		}
+
+		/* NETWORK */
+		@Override
+		public void writeData(DataOutputStream data) throws IOException {
+			data.writeBoolean(isFailed);
+			data.writeBoolean(isProbed);
+			data.writeBoolean(isRevealed);
+
+			PacketHelper.writeItemStack(tokenStack, data);
+		}
+
+		@Override
+		public void readData(DataInputStream data) throws IOException {
+			isFailed = data.readBoolean();
+			isProbed = data.readBoolean();
+			isRevealed = data.readBoolean();
+
+			tokenStack = PacketHelper.readItemStack(data);
 		}
 
 		public boolean isVisible() {
@@ -161,6 +191,29 @@ public class NaturalistGame implements INBTTagable {
 		}
 
 		lastUpdate = System.currentTimeMillis();
+	}
+
+	/* NETWORK */
+	@Override
+	public void writeData(DataOutputStream data) throws IOException {
+		data.writeBoolean(isEnded);
+		data.writeInt(bountyLevel);
+		data.writeLong(lastUpdate);
+
+		List<GameToken> gameTokensList = gameTokens == null ? null : Arrays.asList(gameTokens);
+		PacketHelper.writeStreamables(gameTokensList, data);
+	}
+
+	@Override
+	public void readData(DataInputStream data) throws IOException {
+		isEnded = data.readBoolean();
+		bountyLevel = data.readInt();
+		lastUpdate = data.readLong();
+
+		List<GameToken> gameTokensList = PacketHelper.readStreamables(GameToken.class, data);
+		if (gameTokensList != null) {
+			this.gameTokens = gameTokensList.toArray(new GameToken[gameTokensList.size()]);
+		}
 	}
 
 	/* INTERACTION */
@@ -284,8 +337,9 @@ public class NaturalistGame implements INBTTagable {
 				continue;
 			}
 
-			gameTokens[tokenIndices[processedTokens]].isProbed = true;
-			gameTokens[tokenIndices[processedTokens]].isRevealed = true;
+			GameToken token = gameTokens[tokenIndices[processedTokens]];
+			token.isProbed = true;
+			token.isRevealed = true;
 
 			processedTokens++;
 			if (processedTokens >= tokenIndices.length) {
@@ -296,32 +350,34 @@ public class NaturalistGame implements INBTTagable {
 		lastUpdate = System.currentTimeMillis();
 	}
 
-	public void choose(int tokenIndex) {
+	public void choose(final int tokenIndex) {
 		if (isEnded) {
 			return;
 		}
 		if (gameTokens == null || tokenIndex >= gameTokens.length) {
 			return;
 		}
-		if (gameTokens[tokenIndex].isRevealed && !gameTokens[tokenIndex].isProbed) {
+
+		GameToken token = gameTokens[tokenIndex];
+		if (token.isRevealed && !token.isProbed) {
 			return;
 		}
 		hideProbedTokens();
 
-		Collection<GameToken> singles = getRevealedSingles(gameTokens[tokenIndex]);
+		Collection<GameToken> singles = getRevealedSingles(token);
 		if (singles.size() > 0) {
 			boolean matched = false;
 			for (GameToken single : singles) {
-				if (single.matches(gameTokens[tokenIndex])) {
+				if (single.matches(token)) {
 					matched = true;
 					break;
 				}
 			}
 			if (!matched) {
-				gameTokens[tokenIndex].isFailed = true;
+				token.isFailed = true;
 			}
 		}
-		gameTokens[tokenIndex].isRevealed = true;
+		token.isRevealed = true;
 		checkGameEnd();
 		lastUpdate = System.currentTimeMillis();
 	}
@@ -420,10 +476,6 @@ public class NaturalistGame implements INBTTagable {
 	}
 
 	/* RETRIEVAL */
-	public int getBoardSize() {
-		return gameTokens != null ? gameTokens.length : 0;
-	}
-
 	public int getSampleSize() {
 		if (gameTokens == null) {
 			return 0;
@@ -435,12 +487,5 @@ public class NaturalistGame implements INBTTagable {
 
 	public GameToken getToken(int index) {
 		return gameTokens != null ? index < gameTokens.length ? gameTokens[index] : null : null;
-	}
-
-	public void setToken(int index, NBTTagCompound nbttagcompound) {
-		if (gameTokens == null) {
-			gameTokens = new GameToken[24];
-		}
-		gameTokens[index] = new GameToken(nbttagcompound);
 	}
 }

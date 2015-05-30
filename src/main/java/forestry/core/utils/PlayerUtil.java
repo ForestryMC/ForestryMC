@@ -26,7 +26,7 @@ public class PlayerUtil {
 	}
 
 	public static String getOwnerName(IOwnable ownable) {
-		GameProfile profile = ownable.getOwnerProfile();
+		GameProfile profile = ownable.getOwner();
 		if (profile == null) {
 			return StringUtil.localize("gui.derelict");
 		} else {

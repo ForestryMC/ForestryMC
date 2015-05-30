@@ -31,7 +31,6 @@ import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.utils.DelayTimer;
-import forestry.core.utils.EnumTankLevel;
 import forestry.plugins.PluginIC2;
 
 import ic2.api.energy.prefab.BasicSink;
@@ -227,21 +226,6 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		return Math.min(i, (int) (ic2EnergySink.getEnergyStored() * i) / ic2EnergySink.getCapacity());
 	}
 
-	public static EnumTankLevel rateLevel(int scaled) {
-
-		if (scaled < 5) {
-			return EnumTankLevel.EMPTY;
-		} else if (scaled < 30) {
-			return EnumTankLevel.LOW;
-		} else if (scaled < 60) {
-			return EnumTankLevel.MEDIUM;
-		} else if (scaled < 90) {
-			return EnumTankLevel.HIGH;
-		} else {
-			return EnumTankLevel.MAXIMUM;
-		}
-	}
-
 	// / SMP GUI
 	@Override
 	public void getGUINetworkData(int i, int j) {
@@ -252,7 +236,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 				currentOutput = j;
 				break;
 			case 1:
-				energyManager.fromPacketInt(j);
+				energyManager.fromGuiInt(j);
 				break;
 			case 2:
 				heat = j;
@@ -269,7 +253,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	@Override
 	public void sendGUINetworkData(Container containerEngine, ICrafting iCrafting) {
 		iCrafting.sendProgressBarUpdate(containerEngine, 0, currentOutput);
-		iCrafting.sendProgressBarUpdate(containerEngine, 1, energyManager.toPacketInt());
+		iCrafting.sendProgressBarUpdate(containerEngine, 1, energyManager.toGuiInt());
 		iCrafting.sendProgressBarUpdate(containerEngine, 2, heat);
 		if (ic2EnergySink != null) {
 			iCrafting.sendProgressBarUpdate(containerEngine, 3, (short) ic2EnergySink.getEnergyStored());

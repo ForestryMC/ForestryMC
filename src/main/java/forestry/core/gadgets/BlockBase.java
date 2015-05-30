@@ -216,7 +216,7 @@ public class BlockBase extends BlockForestry {
 			return world.setBlockToAir(x, y, z);
 		}
 
-		if (tile.isOwnable() && !tile.allowsRemoval(player)) {
+		if (tile.isOwned() && !tile.allowsRemoval(player)) {
 			return false;
 		}
 

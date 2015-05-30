@@ -16,7 +16,7 @@ import cpw.mods.fml.common.network.IGuiHandler;
 
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
-import forestry.core.interfaces.IPacketHandler;
+import forestry.core.network.IPacketHandler;
 import forestry.core.proxy.Proxies;
 import forestry.pipes.GuiHandlerPipes;
 import forestry.pipes.network.PacketHandlerPipes;

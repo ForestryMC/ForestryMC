@@ -20,9 +20,9 @@ import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketPayload;
-import forestry.core.network.PacketUpdate;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.PacketGuiSelect;
+import forestry.core.network.PacketId;
 import forestry.core.proxy.Proxies;
 
 public class ContainerImprinter extends ContainerItemInventory<ImprinterInventory> implements IGuiSelectable {
@@ -57,50 +57,36 @@ public class ContainerImprinter extends ContainerItemInventory<ImprinterInventor
 		}
 	}
 
-	public void advanceSelection(int index, World world) {
-		PacketPayload payload = new PacketPayload(2, 0, 0);
-		payload.intPayload[0] = index;
-		payload.intPayload[1] = 0;
-		sendSelectionChange(payload);
+	public void advanceSelection(int index) {
+		sendSelectionChange(index, 0);
 	}
 
-	public void regressSelection(int index, World world) {
-		PacketPayload payload = new PacketPayload(2, 0, 0);
-		payload.intPayload[0] = index;
-		payload.intPayload[1] = 1;
-		sendSelectionChange(payload);
-	}
-
-	private void sendSelectionChange(PacketPayload payload) {
-		PacketUpdate packet = new PacketUpdate(PacketIds.GUI_SELECTION_CHANGE, payload);
-		Proxies.net.sendToServer(packet);
-		isNetSynced = false;
-	}
-
-	@Override
-	public void setSelection(PacketUpdate packet) {
-		inventory.setPrimaryIndex(packet.payload.intPayload[0]);
-		inventory.setSecondaryIndex(packet.payload.intPayload[1]);
+	public void regressSelection(int index) {
+		sendSelectionChange(index, 1);
 	}
 
 	public void updateContainer(World world) {
 		if (!isNetSynced && !Proxies.common.isSimulating(world)) {
 			isNetSynced = true;
-			Proxies.net.sendToServer(new PacketUpdate(PacketIds.IMPRINT_SELECTION_GET));
+			Proxies.net.sendToServer(new ForestryPacket(PacketId.IMPRINT_SELECTION_GET));
 		}
 	}
 
-	@Override
-	public void handleSelectionChange(EntityPlayer player, PacketUpdate packet) {
+	private void sendSelectionChange(int index, int advance) {
+		ForestryPacket packet = new PacketGuiSelect(PacketId.GUI_SELECTION_CHANGE, index, advance);
+		Proxies.net.sendToServer(packet);
+		isNetSynced = false;
+	}
 
-		if (packet.payload.intPayload[1] == 0) {
-			if (packet.payload.intPayload[0] == 0) {
+	@Override
+	public void handleSelectionChange(EntityPlayer player, PacketGuiSelect packet) {
+		if (packet.getSecondaryIndex() == 0) {
+			if (packet.getPrimaryIndex() == 0) {
 				inventory.advancePrimary();
 			} else {
 				inventory.advanceSecondary();
 			}
-
-		} else if (packet.payload.intPayload[0] == 0) {
+		} else if (packet.getPrimaryIndex() == 0) {
 			inventory.regressPrimary();
 		} else {
 			inventory.regressSecondary();
@@ -108,9 +94,13 @@ public class ContainerImprinter extends ContainerItemInventory<ImprinterInventor
 	}
 
 	public void sendSelection(EntityPlayer player) {
-		PacketPayload payload = new PacketPayload(2, 0, 0);
-		payload.intPayload[0] = inventory.getPrimaryIndex();
-		payload.intPayload[1] = inventory.getSecondaryIndex();
-		Proxies.net.sendToPlayer(new PacketUpdate(PacketIds.GUI_SELECTION, payload), player);
+		ForestryPacket packet = new PacketGuiSelect(PacketId.GUI_SELECTION_SET, inventory.getPrimaryIndex(), inventory.getSecondaryIndex());
+		Proxies.net.sendToPlayer(packet, player);
+	}
+
+	@Override
+	public void setSelection(PacketGuiSelect packetPayload) {
+		inventory.setPrimaryIndex(packetPayload.getPrimaryIndex());
+		inventory.setSecondaryIndex(packetPayload.getSecondaryIndex());
 	}
 }

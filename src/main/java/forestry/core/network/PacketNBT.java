@@ -22,14 +22,11 @@ public class PacketNBT extends ForestryPacket {
 
 	protected NBTTagCompound nbttagcompound;
 
-	public PacketNBT() {
+	public PacketNBT(DataInputStream data) throws IOException {
+		super(data);
 	}
 
-	public PacketNBT(int id) {
-		super(id);
-	}
-
-	public PacketNBT(int id, NBTTagCompound nbttagcompound) {
+	public PacketNBT(PacketId id, NBTTagCompound nbttagcompound) {
 		super(id);
 		this.nbttagcompound = nbttagcompound;
 	}
@@ -42,7 +39,7 @@ public class PacketNBT extends ForestryPacket {
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	protected void readData(DataInputStream data) throws IOException {
 		short length = data.readShort();
 		byte[] compressed = new byte[length];
 		data.readFully(compressed);

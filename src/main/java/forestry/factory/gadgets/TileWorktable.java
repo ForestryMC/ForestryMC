@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
@@ -23,11 +27,8 @@ import forestry.core.interfaces.ICrafter;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
-import forestry.core.network.ForestryPacket;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketTileNBT;
-import forestry.core.network.PacketTileUpdate;
+import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.GuiUtil;
 import forestry.core.utils.RecipeUtil;
@@ -66,7 +67,6 @@ public class TileWorktable extends TileBase implements ICrafter {
 		super.writeToNBT(nbttagcompound);
 
 		craftingInventory.writeToNBT(nbttagcompound);
-
 		memorized.writeToNBT(nbttagcompound);
 	}
 
@@ -75,24 +75,28 @@ public class TileWorktable extends TileBase implements ICrafter {
 		super.readFromNBT(nbttagcompound);
 
 		craftingInventory.readFromNBT(nbttagcompound);
-
 		memorized.readFromNBT(nbttagcompound);
 	}
 
 	/* NETWORK */
 	@Override
-	public void fromPacket(ForestryPacket packetRaw) {
-		if (packetRaw instanceof PacketTileUpdate) {
-			super.fromPacket(packetRaw);
-			return;
-		}
+	public void writeData(DataOutputStream data) throws IOException {
+		super.writeData(data);
 
-		PacketTileNBT packet = (PacketTileNBT) packetRaw;
-		readFromNBT(packet.getTagCompound());
+		craftingInventory.writeData(data);
+		memorized.writeData(data);
+	}
+
+	@Override
+	public void readData(DataInputStream data) throws IOException {
+		super.readData(data);
+
+		craftingInventory.readData(data);
+		memorized.readData(data);
 	}
 
 	public void sendAll(EntityPlayer player) {
-		Proxies.net.sendToPlayer(new PacketTileNBT(PacketIds.TILE_NBT, this), player);
+		Proxies.net.sendToPlayer(new PacketTileStream(this), player);
 	}
 
 	@Override

@@ -48,10 +48,9 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketIds;
+import forestry.core.network.PacketId;
 import forestry.core.network.PacketInventoryStack;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.Utils;
 
 public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IBeeHousing, IClimatised, IHintSource {
 
@@ -59,7 +58,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 	public static final int SLOT_QUEEN = 0;
 	public static final int SLOT_DRONE = 1;
 	public static final int SLOT_PRODUCT_1 = 2;
-	public static final int SLOT_PRODUCTION_COUNT = 7;
+	public static final int SLOT_PRODUCT_COUNT = 7;
 	public static final int BLOCK_META = 0;
 
 	// / MEMBERS
@@ -444,7 +443,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 			return false;
 		}
 
-		return InvTools.tryAddStack(inventory, product, SLOT_PRODUCT_1, inventory.getSizeInventory() - SLOT_PRODUCT_1, all);
+		return InvTools.tryAddStack(inventory, product, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT, all);
 	}
 
 	@Deprecated
@@ -469,8 +468,8 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 			return;
 		}
 
-		Proxies.net.sendNetworkPacket(new PacketInventoryStack(PacketIds.IINVENTORY_STACK, xCoord, yCoord, zCoord, SLOT_QUEEN, queenStack), xCoord, yCoord,
-				zCoord);
+		PacketInventoryStack packet = new PacketInventoryStack(PacketId.IINVENTORY_STACK, xCoord, yCoord, zCoord, SLOT_QUEEN, queenStack);
+		Proxies.net.sendNetworkPacket(packet);
 
 		for (IBeeListener eventHandler : eventHandlers) {
 			eventHandler.onQueenChange(queenStack);
@@ -654,16 +653,10 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 		return Config.hints.get("alveary");
 	}
 
-	/* IOWNABLE */
-	@Override
-	public boolean isOwnable() {
-		return true;
-	}
-
 	/* IHousing */
 	@Override
 	public GameProfile getOwnerName() {
-		return this.getOwnerProfile();
+		return this.getOwner();
 	}
 
 	private static class AlvearyInventoryAdapter extends TileInventoryAdapter<TileAlvearyPlain> {

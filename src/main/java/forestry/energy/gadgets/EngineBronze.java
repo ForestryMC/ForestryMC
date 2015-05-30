@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.energy.gadgets;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -40,33 +44,11 @@ import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketPayload;
 
 public class EngineBronze extends Engine implements ISidedInventory, ILiquidTankContainer {
 
 	/* CONSTANTS */
 	public static final short SLOT_CAN = 0;
-
-	/* NETWORK */
-	@Override
-	public PacketPayload getPacketPayload() {
-		PacketPayload payload = super.getPacketPayload();
-
-		if (shutdown) {
-			payload.append(new int[]{1});
-		} else {
-			payload.append(new int[]{0});
-		}
-
-		return payload;
-	}
-
-	@Override
-	public void fromPacketPayload(PacketPayload payload) {
-		super.fromPacketPayload(payload);
-
-		shutdown = payload.intPayload[3] > 0;
-	}
 
 	private final FilteredTank fuelTank;
 	private final FilteredTank heatingTank;
@@ -156,7 +138,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 					currentOutput = determineFuelValue(FluidRegistry.getFluid(currentFluidId));
 					energyManager.generateEnergy(currentOutput);
 				} else {
-					burnTime = totalTime = this.determineBurnTime(fuelTank.getFluid().getFluid());
+					burnTime = totalTime = determineBurnTime(fuelTank.getFluid().getFluid());
 					currentFluidId = fuelTank.getFluid().getFluid().getID();
 					fuelTank.drain(Defaults.BUCKET_VOLUME, true);
 				}
@@ -228,7 +210,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	/**
 	 * Returns the fuel value (power per cycle) an item of the passed fluid
 	 */
-	private int determineFuelValue(Fluid fluid) {
+	private static int determineFuelValue(Fluid fluid) {
 		if (FuelManager.bronzeEngineFuel.containsKey(fluid)) {
 			return FuelManager.bronzeEngineFuel.get(fluid).powerPerCycle;
 		} else {
@@ -239,7 +221,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	/**
 	 * @return Duration of burn cycle of one bucket
 	 */
-	private int determineBurnTime(Fluid fluid) {
+	private static int determineBurnTime(Fluid fluid) {
 		if (FuelManager.bronzeEngineFuel.containsKey(fluid)) {
 			return FuelManager.bronzeEngineFuel.get(fluid).burnDuration;
 		} else {
@@ -299,6 +281,19 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		tankManager.writeTanksToNBT(nbt);
 	}
 
+	/* NETWORK */
+	@Override
+	public void writeData(DataOutputStream data) throws IOException {
+		super.writeData(data);
+		data.writeBoolean(shutdown);
+	}
+
+	@Override
+	public void readData(DataInputStream data) throws IOException {
+		super.readData(data);
+		shutdown = data.readBoolean();
+	}
+
 	/* GUI */
 	@Override
 	public void getGUINetworkData(int id, int data) {
@@ -315,7 +310,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 				currentOutput = data;
 				break;
 			case 3:
-				energyManager.fromPacketInt(data);
+				energyManager.fromGuiInt(data);
 				break;
 			case 4:
 				heat = data;
@@ -332,7 +327,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		iCrafting.sendProgressBarUpdate(containerEngine, i, burnTime);
 		iCrafting.sendProgressBarUpdate(containerEngine, i + 1, totalTime);
 		iCrafting.sendProgressBarUpdate(containerEngine, i + 2, currentOutput);
-		iCrafting.sendProgressBarUpdate(containerEngine, i + 3, energyManager.toPacketInt());
+		iCrafting.sendProgressBarUpdate(containerEngine, i + 3, energyManager.toGuiInt());
 		iCrafting.sendProgressBarUpdate(containerEngine, i + 4, heat);
 		iCrafting.sendProgressBarUpdate(containerEngine, i + 5, currentFluidId);
 	}

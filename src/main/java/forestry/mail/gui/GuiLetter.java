@@ -32,6 +32,7 @@ import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 import forestry.mail.items.ItemLetter.LetterInventory;
+import forestry.mail.network.PacketRequestLetterInfo;
 
 public class GuiLetter extends GuiForestry<ContainerLetter, LetterInventory> {
 
@@ -271,7 +272,8 @@ public class GuiLetter extends GuiForestry<ContainerLetter, LetterInventory> {
 			return;
 		}
 
-		container.setRecipient(recipientName, type);
+		PacketRequestLetterInfo packet = new PacketRequestLetterInfo(recipientName, type);
+		Proxies.net.sendToServer(packet);
 	}
 
 	private void setText() {

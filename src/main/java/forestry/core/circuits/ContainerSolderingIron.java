@@ -18,9 +18,9 @@ import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketPayload;
-import forestry.core.network.PacketUpdate;
+import forestry.core.network.PacketGuiSelect;
+import forestry.core.network.PacketId;
+import forestry.core.network.PacketString;
 import forestry.core.proxy.Proxies;
 
 public class ContainerSolderingIron extends ContainerItemInventory<SolderingInventory> implements IGuiSelectable {
@@ -46,38 +46,26 @@ public class ContainerSolderingIron extends ContainerItemInventory<SolderingInve
 	}
 
 	public static void advanceSelection(int index) {
-		PacketPayload payload = new PacketPayload(2, 0, 0);
-		payload.intPayload[0] = index;
-		payload.intPayload[1] = 0;
-		sendSelectionChange(payload);
+		sendSelectionChange(index, 0);
 	}
 
 	public static void regressSelection(int index) {
-		PacketPayload payload = new PacketPayload(2, 0, 0);
-		payload.intPayload[0] = index;
-		payload.intPayload[1] = 1;
-		sendSelectionChange(payload);
+		sendSelectionChange(index, 1);
 	}
 
-	private static void sendSelectionChange(PacketPayload payload) {
-		PacketUpdate packet = new PacketUpdate(PacketIds.GUI_SELECTION_CHANGE, payload);
+	private static void sendSelectionChange(int index, int advance) {
+		PacketGuiSelect packet = new PacketGuiSelect(PacketId.GUI_SELECTION_CHANGE, index, advance);
 		Proxies.net.sendToServer(packet);
 	}
 
 	@Override
-	public void setSelection(PacketUpdate packet) {
-		inventory.setLayout(packet.payload.stringPayload[0]);
-	}
+	public void handleSelectionChange(EntityPlayer player, PacketGuiSelect packet) {
 
-	@Override
-	public void handleSelectionChange(EntityPlayer player, PacketUpdate packet) {
-
-		if (packet.payload.intPayload[1] == 0) {
-			if (packet.payload.intPayload[0] == 0) {
+		if (packet.getSecondaryIndex() == 0) {
+			if (packet.getPrimaryIndex() == 0) {
 				inventory.advanceLayout();
 			}
-
-		} else if (packet.payload.intPayload[0] == 0) {
+		} else if (packet.getPrimaryIndex() == 0) {
 			inventory.regressLayout();
 		}
 
@@ -85,9 +73,15 @@ public class ContainerSolderingIron extends ContainerItemInventory<SolderingInve
 	}
 
 	public void sendSelection(EntityPlayer player) {
-		PacketPayload payload = new PacketPayload(0, 0, 1);
-		payload.stringPayload[0] = inventory.getLayout().getUID();
-		Proxies.net.sendToPlayer(new PacketUpdate(PacketIds.GUI_SELECTION, payload), player);
+		PacketString packet = new PacketString(PacketId.GUI_LAYOUT_SELECT, inventory.getLayout().getUID());
+		Proxies.net.sendToPlayer(packet, player);
 	}
 
+	@Override
+	public void setSelection(PacketGuiSelect packet) {
+	}
+
+	public void setLayout(String layoutUID) {
+		inventory.setLayout(layoutUID);
+	}
 }

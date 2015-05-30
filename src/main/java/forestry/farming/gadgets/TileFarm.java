@@ -10,6 +10,10 @@
  ******************************************************************************/
 package forestry.farming.gadgets;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -27,8 +31,6 @@ import forestry.api.farming.IFarmListener;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketPayload;
-import forestry.core.proxy.Proxies;
 
 public abstract class TileFarm extends TileForestry implements IFarmComponent {
 
@@ -129,28 +131,28 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	}
 
 	/* TILEFORESTRY */
-	@Override
-	public PacketPayload getPacketPayload() {
-		PacketPayload payload = new PacketPayload(0, 3);
-		payload.shortPayload[0] = (short) farmBlock.ordinal();
 
-		payload.shortPayload[1] = (short) (isMaster() ? 1 : 0);
+	@Override
+	public void writeData(DataOutputStream data) throws IOException {
+		super.writeData(data);
+		data.writeShort(farmBlock.ordinal());
+		data.writeBoolean(isMaster());
 
 		// so the client can know if it is part of an integrated structure
-		payload.shortPayload[2] = (short) masterY;
-
-		return payload;
+		data.writeShort(masterY);
 	}
 
 	@Override
-	public void fromPacketPayload(PacketPayload payload) {
-		EnumFarmBlock farmType = EnumFarmBlock.values()[payload.shortPayload[0]];
-		if (payload.shortPayload[1] > 0 && !isMaster()) {
+	public void readData(DataInputStream data) throws IOException {
+		super.readData(data);
+		short farmBlockOrdinal = data.readShort();
+		EnumFarmBlock farmType = EnumFarmBlock.values()[farmBlockOrdinal];
+		if (data.readBoolean() && !isMaster()) {
 			makeMaster();
 		}
 
 		// so the client can know if it is part of an integrated structure
-		this.masterY = payload.shortPayload[2];
+		this.masterY = data.readShort();
 
 		if (this.farmBlock != farmType) {
 			this.farmBlock = farmType;

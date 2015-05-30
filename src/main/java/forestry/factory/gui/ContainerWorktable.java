@@ -21,9 +21,8 @@ import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotCraftMatrix;
 import forestry.core.gui.slots.SlotCrafter;
 import forestry.core.interfaces.IContainerCrafting;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketPayload;
-import forestry.core.network.PacketUpdate;
+import forestry.core.network.PacketGuiSelect;
+import forestry.core.network.PacketId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
 import forestry.factory.gadgets.TileWorktable;
@@ -105,26 +104,23 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		sendRecipeClick(0, tile.getMemory().capacity);
 	}
 
-	public void sendRecipeClick(int mouseButton, int recipeIndex) {
-		PacketPayload payload = new PacketPayload(2, 0, 0);
-		payload.intPayload[0] = mouseButton;
-		payload.intPayload[1] = recipeIndex;
-		PacketUpdate packet = new PacketUpdate(PacketIds.GUI_SELECTION_CHANGE, payload);
+	public static void sendRecipeClick(int mouseButton, int recipeIndex) {
+		PacketGuiSelect packet = new PacketGuiSelect(PacketId.GUI_SELECTION_CHANGE, mouseButton, recipeIndex);
 		Proxies.net.sendToServer(packet);
 	}
 
 	@Override
-	public void handleSelectionChange(EntityPlayer player, PacketUpdate packet) {
-		if (packet.payload.intPayload[0] > 0) {
-			tile.getMemory().toggleLock(player.worldObj, packet.payload.intPayload[1]);
+	public void handleSelectionChange(EntityPlayer player, PacketGuiSelect packet) {
+		if (packet.getPrimaryIndex() > 0) {
+			tile.getMemory().toggleLock(player.worldObj, packet.getSecondaryIndex());
 		} else {
-			tile.chooseRecipe(packet.payload.intPayload[1]);
+			tile.chooseRecipe(packet.getSecondaryIndex());
 			updateMatrix();
 			updateRecipe();
 		}
 	}
 
 	@Override
-	public void setSelection(PacketUpdate packet) {
+	public void setSelection(PacketGuiSelect packet) {
 	}
 }

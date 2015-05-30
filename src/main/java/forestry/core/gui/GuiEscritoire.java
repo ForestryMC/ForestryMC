@@ -28,6 +28,8 @@ import forestry.core.gadgets.NaturalistGame;
 import forestry.core.gadgets.NaturalistGame.GameToken;
 import forestry.core.gadgets.TileEscritoire;
 import forestry.core.gui.widgets.Widget;
+import forestry.core.network.PacketGuiSelect;
+import forestry.core.network.PacketId;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
@@ -120,7 +122,8 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 
 		@Override
 		public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
-			container.sendTokenClick(index);
+			PacketGuiSelect packet = new PacketGuiSelect(PacketId.GUI_SELECTION_CHANGE, index, 0);
+			Proxies.net.sendToServer(packet);
 		}
 	}
 
@@ -149,7 +152,8 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 		@Override
 		public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
 			pressed = true;
-			container.sendProbeClick();
+			PacketGuiSelect packet = new PacketGuiSelect(PacketId.GUI_SELECTION_CHANGE, -1, 0);
+			Proxies.net.sendToServer(packet);
 		}
 
 		@Override

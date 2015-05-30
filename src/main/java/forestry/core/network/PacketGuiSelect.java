@@ -8,48 +8,45 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.arboriculture.network;
+package forestry.core.network;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import forestry.arboriculture.gadgets.TileFruitPod;
-import forestry.arboriculture.gadgets.TileLeaves;
-import forestry.core.network.PacketCoordinates;
-import forestry.core.network.PacketId;
+public class PacketGuiSelect extends ForestryPacket {
+	private int primaryIndex;
+	private int secondaryIndex;
 
-public class PacketRipeningUpdate extends PacketCoordinates {
-
-	private int value;
-
-	public PacketRipeningUpdate(DataInputStream data) throws IOException {
+	public PacketGuiSelect(DataInputStream data) throws IOException {
 		super(data);
 	}
 
-	public PacketRipeningUpdate(TileFruitPod fruitPod) {
-		super(PacketId.RIPENING_UPDATE, fruitPod);
-		value = fruitPod.getMaturity();
-	}
-
-	public PacketRipeningUpdate(TileLeaves leaves) {
-		super(PacketId.RIPENING_UPDATE, leaves);
-		value = leaves.getFruitColour();
+	public PacketGuiSelect(PacketId id, int primaryIndex, int secondaryIndex) {
+		super(id);
+		this.primaryIndex = primaryIndex;
+		this.secondaryIndex = secondaryIndex;
 	}
 
 	@Override
 	public void writeData(DataOutputStream data) throws IOException {
 		super.writeData(data);
-		data.writeInt(value);
+		data.writeInt(primaryIndex);
+		data.writeInt(secondaryIndex);
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	protected void readData(DataInputStream data) throws IOException {
 		super.readData(data);
-		value = data.readInt();
+		primaryIndex = data.readInt();
+		secondaryIndex = data.readInt();
 	}
 
-	public int getValue() {
-		return value;
+	public int getPrimaryIndex() {
+		return primaryIndex;
+	}
+
+	public int getSecondaryIndex() {
+		return secondaryIndex;
 	}
 }

@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.Stack;
 
@@ -32,7 +35,6 @@ import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketPayload;
 import forestry.core.utils.StackUtils;
 
 public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
@@ -41,7 +43,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 	public static final int BLOCK_META = 2;
 
 	private final Stack<ItemStack> pendingSpawns = new Stack<ItemStack>();
-	private boolean isActive;
+	private boolean active;
 
 	public TileAlvearySwarmer() {
 		super(BLOCK_META);
@@ -144,27 +146,28 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 	}
 
 	private void setIsActive(boolean isActive) {
-		if (this.isActive != isActive) {
-			this.isActive = isActive;
+		if (this.active != isActive) {
+			this.active = isActive;
 			setNeedsNetworkUpdate();
 		}
 	}
 
 	/* NETWORK */
+
 	@Override
-	public void fromPacketPayload(PacketPayload payload) {
-		boolean act = payload.shortPayload[0] > 0;
-		if (this.isActive != act) {
-			this.isActive = act;
-			worldObj.func_147479_m(xCoord, yCoord, zCoord);
-		}
+	public void writeData(DataOutputStream data) throws IOException {
+		super.writeData(data);
+		data.writeBoolean(active);
 	}
 
 	@Override
-	public PacketPayload getPacketPayload() {
-		PacketPayload payload = new PacketPayload(0, 1);
-		payload.shortPayload[0] = (short) (isActive ? 1 : 0);
-		return payload;
+	public void readData(DataInputStream data) throws IOException {
+		super.readData(data);
+		boolean active = data.readBoolean();
+		if (this.active != active) {
+			this.active = active;
+			worldObj.func_147479_m(xCoord, yCoord, zCoord);
+		}
 	}
 
 	@Override
@@ -179,7 +182,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 			return BlockAlveary.BOTTOM;
 		}
 
-		if (isActive) {
+		if (active) {
 			return BlockAlveary.ALVEARY_SWARMER_ON;
 		} else {
 			return BlockAlveary.ALVEARY_SWARMER_OFF;

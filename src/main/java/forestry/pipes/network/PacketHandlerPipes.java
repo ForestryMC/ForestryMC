@@ -15,11 +15,11 @@ import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import forestry.core.interfaces.IPacketHandler;
+import forestry.core.network.ILocatedPacket;
+import forestry.core.network.IPacketHandler;
 import forestry.core.network.PacketCoordinates;
-import forestry.core.network.PacketIds;
+import forestry.core.network.PacketId;
 import forestry.core.network.PacketNBT;
-import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.pipes.PipeItemsPropolis;
 import forestry.pipes.PipeLogicPropolis;
@@ -30,7 +30,7 @@ import buildcraft.transport.TileGenericPipe;
 
 public class PacketHandlerPipes implements IPacketHandler {
 
-	private static Pipe getPipe(World world, PacketCoordinates packet) {
+	private static Pipe getPipe(World world, ILocatedPacket packet) {
 		TileEntity tile = packet.getTarget(world);
 		if (!(tile instanceof TileGenericPipe)) {
 			return null;
@@ -40,34 +40,30 @@ public class PacketHandlerPipes implements IPacketHandler {
 	}
 
 	@Override
-	public boolean onPacketData(int packetID, DataInputStream data, EntityPlayer player) throws IOException {
+	public boolean onPacketData(PacketId packetID, DataInputStream data, EntityPlayer player) throws IOException {
 
 		switch (packetID) {
 			// CLIENT
-			case PacketIds.PROP_SEND_FILTER_SET: {
-				PacketNBT packetN = new PacketNBT();
-				packetN.readData(data);
-				onFilterSet(packetN);
+			case PROP_SEND_FILTER_SET: {
+				PacketNBT packet = new PacketNBT(data);
+				onFilterSet(packet);
 				return true;
 			}
 
 			// SERVER
-			case PacketIds.PROP_REQUEST_FILTER_SET: {
-				PacketCoordinates packetC = new PacketCoordinates();
-				packetC.readData(data);
-				onRequestFilterSet(player, packetC);
+			case PROP_REQUEST_FILTER_SET: {
+				PacketCoordinates packet = new PacketCoordinates(data);
+				onRequestFilterSet(player, packet);
 				return true;
 			}
-			case PacketIds.PROP_SEND_FILTER_CHANGE_TYPE: {
-				PacketUpdate packetU = new PacketUpdate();
-				packetU.readData(data);
-				onTypeFilterChange(player, packetU);
+			case PROP_SEND_FILTER_CHANGE_TYPE: {
+				PacketTypeFilterChange packet = new PacketTypeFilterChange(data);
+				onTypeFilterChange(player, packet);
 				return true;
 			}
-			case PacketIds.PROP_SEND_FILTER_CHANGE_GENOME: {
-				PacketUpdate packetU = new PacketUpdate();
-				packetU.readData(data);
-				onGenomeFilterChange(player, packetU);
+			case PROP_SEND_FILTER_CHANGE_GENOME: {
+				PacketGenomeFilterChange packet = new PacketGenomeFilterChange(data);
+				onGenomeFilterChange(player, packet);
 				return true;
 			}
 
@@ -85,7 +81,7 @@ public class PacketHandlerPipes implements IPacketHandler {
 		}
 	}
 
-	private static void onTypeFilterChange(EntityPlayer player, PacketUpdate packet) {
+	private static void onTypeFilterChange(EntityPlayer player, PacketTypeFilterChange packet) {
 
 		Pipe pipe = getPipe(player.worldObj, packet);
 		if (pipe == null) {
@@ -93,12 +89,12 @@ public class PacketHandlerPipes implements IPacketHandler {
 		}
 
 		if (pipe instanceof PipeItemsPropolis) {
-			((PipeItemsPropolis) pipe).pipeLogic.handleTypeFilterChange(packet.payload);
+			((PipeItemsPropolis) pipe).pipeLogic.handleTypeFilterChange(packet);
 		}
 
 	}
 
-	private static void onGenomeFilterChange(EntityPlayer player, PacketUpdate packet) {
+	private static void onGenomeFilterChange(EntityPlayer player, PacketGenomeFilterChange packet) {
 
 		Pipe pipe = getPipe(player.worldObj, packet);
 		if (pipe == null) {
@@ -106,7 +102,7 @@ public class PacketHandlerPipes implements IPacketHandler {
 		}
 
 		if (pipe instanceof PipeItemsPropolis) {
-			((PipeItemsPropolis) pipe).pipeLogic.handleGenomeFilterChange(packet.payload);
+			((PipeItemsPropolis) pipe).pipeLogic.handleGenomeFilterChange(packet);
 		}
 	}
 

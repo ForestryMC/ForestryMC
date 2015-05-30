@@ -30,9 +30,9 @@ import forestry.core.config.Defaults;
 import forestry.core.genetics.EnumMutateChance;
 import forestry.core.gui.buttons.GuiBetterButton;
 import forestry.core.gui.buttons.StandardButtonTextureSets;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketPayload;
-import forestry.core.network.PacketUpdate;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.PacketGuiSelect;
+import forestry.core.network.PacketId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
@@ -93,10 +93,8 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 		buttonList.add(new GuiBetterButton(2, guiLeft + 180, guiTop + 7, StandardButtonTextureSets.RIGHT_BUTTON_SMALL));
 	}
 
-	private void flipPage(int page) {
-		PacketPayload payload = new PacketPayload(1, 0, 0);
-		payload.intPayload[0] = page;
-		PacketUpdate packet = new PacketUpdate(PacketIds.GUI_SELECTION_CHANGE, payload);
+	private static void flipPage(int page) {
+		ForestryPacket packet = new PacketGuiSelect(PacketId.GUI_SELECTION_CHANGE, page, 0);
 		Proxies.net.sendToServer(packet);
 	}
 

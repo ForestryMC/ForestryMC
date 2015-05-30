@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,16 +31,21 @@ import net.minecraft.world.World;
 import forestry.api.core.INBTTagable;
 import forestry.core.gui.ContainerDummy;
 import forestry.core.inventory.InventoryAdapter;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketHelper;
 import forestry.core.utils.PlainInventory;
 
-public class RecipeMemory implements INBTTagable {
+public class RecipeMemory implements INBTTagable, IStreamable {
 
-	public static final class Recipe implements INBTTagable {
+	public static final class Recipe implements INBTTagable, IStreamable {
 
 		private InventoryAdapter matrix;
 		private long lastUsed;
 		private boolean locked;
 		private ItemStack cachedRecipeOutput;
+
+		public Recipe() {
+		}
 
 		public Recipe(InventoryCrafting crafting) {
 			this.matrix = new InventoryAdapter(new PlainInventory(crafting));
@@ -104,6 +112,23 @@ public class RecipeMemory implements INBTTagable {
 			matrix.writeToNBT(nbttagcompound);
 			nbttagcompound.setLong("LastUsed", lastUsed);
 			nbttagcompound.setBoolean("Locked", locked);
+		}
+
+		@Override
+		public void writeData(DataOutputStream data) throws IOException {
+			sanitizeMatrix();
+			matrix.writeData(data);
+			data.writeLong(lastUsed);
+			data.writeBoolean(locked);
+		}
+
+		@Override
+		public void readData(DataInputStream data) throws IOException {
+			matrix = new InventoryAdapter(new InventoryCrafting(DUMMY_CONTAINER, 3, 3));
+			matrix.readData(data);
+			sanitizeMatrix();
+			lastUsed = data.readLong();
+			locked = data.readBoolean();
 		}
 
 		/**
@@ -275,4 +300,15 @@ public class RecipeMemory implements INBTTagable {
 		nbttagcompound.setTag("RecipeMemory", nbttaglist);
 	}
 
+	@Override
+	public void writeData(DataOutputStream data) throws IOException {
+		PacketHelper.writeStreamables(recipes, data);
+	}
+
+	@Override
+	public void readData(DataInputStream data) throws IOException {
+		recipes.clear();
+		List<Recipe> newRecipes = PacketHelper.readStreamables(Recipe.class, data);
+		recipes.addAll(newRecipes);
+	}
 }

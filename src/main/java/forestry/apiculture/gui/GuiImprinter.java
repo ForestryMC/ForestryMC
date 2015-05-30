@@ -106,9 +106,9 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter, ImprinterInven
 		}
 
 		if (k == 0) {
-			container.advanceSelection(slot, Proxies.common.getRenderWorld());
+			container.advanceSelection(slot);
 		} else {
-			container.regressSelection(slot, Proxies.common.getRenderWorld());
+			container.regressSelection(slot);
 		}
 	}
 

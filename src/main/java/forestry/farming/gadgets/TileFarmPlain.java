@@ -62,7 +62,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.DelayTimer;
 import forestry.core.utils.GuiUtil;
 import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
 import forestry.farming.FarmHelper;
@@ -776,7 +775,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	@Override
 	public void removeResources(ItemStack[] resources) {
-		EntityPlayer player = Proxies.common.getPlayer(worldObj, getOwnerProfile());
+		EntityPlayer player = Proxies.common.getPlayer(worldObj, getOwner());
 		InvTools.removeSets(getInternalInventory(), 1, resources, SLOT_RESOURCES_1, SLOT_RESOURCES_COUNT, player, false, true, true);
 	}
 
@@ -805,7 +804,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 				continue;
 			}
 
-			EntityPlayer player = Proxies.common.getPlayer(world, getOwnerProfile());
+			EntityPlayer player = Proxies.common.getPlayer(world, getOwner());
 			if (!germling.plantSaplingAt(player, inventory.getStackInSlot(i), world, x, y, z)) {
 				continue;
 			}
@@ -990,12 +989,6 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	@Override
 	public String[] getHints() {
 		return Config.hints.get("farm");
-	}
-
-	/* IOWNABLE */
-	@Override
-	public boolean isOwnable() {
-		return true;
 	}
 
 	private static class FarmPlainInventoryAdapter extends TileInventoryAdapter<TileFarmPlain> {

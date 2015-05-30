@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.mail.gadgets;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -32,7 +35,6 @@ import forestry.core.EnumErrorCode;
 import forestry.core.gadgets.TileBase;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketPayload;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
 import forestry.mail.MailAddress;
@@ -87,26 +89,19 @@ public class MachineTrader extends TileBase {
 		}
 	}
 
-	@Override
-	public PacketPayload getPacketPayload() {
-		if (address == null || address.getName() == null) {
-			return null;
-		}
+	/* NETWORK */
 
-		PacketPayload payload = new PacketPayload(0, 0, 1);
-		payload.stringPayload[0] = address.getName();
-		return payload;
+	@Override
+	public void writeData(DataOutputStream data) throws IOException {
+		super.writeData(data);
+		data.writeUTF(address.getName());
 	}
 
 	@Override
-	public void fromPacketPayload(PacketPayload payload) {
-		if (payload.isEmpty()) {
-			address = null;
-			return;
-		}
-
-		String addressName = payload.stringPayload[0];
-		address = PostManager.postRegistry.getMailAddress(addressName);
+	public void readData(DataInputStream data) throws IOException {
+		super.readData(data);
+		String address = data.readUTF();
+		this.address = PostManager.postRegistry.getMailAddress(address);
 	}
 
 	/* UPDATING */
@@ -263,7 +258,7 @@ public class MachineTrader extends TileBase {
 
 			if (hasValidTradeAddress & hasUniqueTradeAddress) {
 				this.address = address;
-				PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerProfile(), address);
+				PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwner(), address);
 			}
 		}
 	}
@@ -275,7 +270,7 @@ public class MachineTrader extends TileBase {
 			return super.getInternalInventory();
 		}
 
-		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwnerProfile(), address);
+		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwner(), address);
 	}
 
 	/* ITRIGGERPROVIDER */

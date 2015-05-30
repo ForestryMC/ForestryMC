@@ -20,24 +20,23 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.core.network.PacketCoordinates;
-import forestry.core.network.PacketIds;
+import forestry.core.network.PacketId;
 import forestry.core.network.PacketNBT;
-import forestry.core.network.PacketPayload;
-import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
+import forestry.pipes.network.PacketGenomeFilterChange;
+import forestry.pipes.network.PacketTypeFilterChange;
 
 import buildcraft.transport.Pipe;
+import buildcraft.transport.PipeTransportItems;
 
 public class PipeLogicPropolis {
 
-	@SuppressWarnings("rawtypes")
-	private final Pipe pipe;
+	private final Pipe<PipeTransportItems> pipe;
 	
 	private final EnumFilterType[] typeFilter = new EnumFilterType[6];
 	private final IAllele[][][] genomeFilter = new IAllele[6][3][2];
 
-	@SuppressWarnings("rawtypes")
-	public PipeLogicPropolis(Pipe pipe) {
+	public PipeLogicPropolis(Pipe<PipeTransportItems> pipe) {
 		this.pipe = pipe;
 		for (int i = 0; i < typeFilter.length; i++) {
 			typeFilter[i] = EnumFilterType.CLOSED;
@@ -51,11 +50,11 @@ public class PipeLogicPropolis {
 
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 3; j++) {
-				if (nbttagcompound.hasKey("GenomeFilterS" + i + "-" + j + "-" + 0)) {
-					genomeFilter[i][j][0] = AlleleManager.alleleRegistry.getAllele(nbttagcompound.getString("GenomeFilterS" + i + "-" + j + "-" + 0));
+				if (nbttagcompound.hasKey("GenomeFilterS" + i + '-' + j + '-' + 0)) {
+					genomeFilter[i][j][0] = AlleleManager.alleleRegistry.getAllele(nbttagcompound.getString("GenomeFilterS" + i + '-' + j + '-' + 0));
 				}
-				if (nbttagcompound.hasKey("GenomeFilterS" + i + "-" + j + "-" + 1)) {
-					genomeFilter[i][j][1] = AlleleManager.alleleRegistry.getAllele(nbttagcompound.getString("GenomeFilterS" + i + "-" + j + "-" + 1));
+				if (nbttagcompound.hasKey("GenomeFilterS" + i + '-' + j + '-' + 1)) {
+					genomeFilter[i][j][1] = AlleleManager.alleleRegistry.getAllele(nbttagcompound.getString("GenomeFilterS" + i + '-' + j + '-' + 1));
 				}
 			}
 		}
@@ -69,10 +68,10 @@ public class PipeLogicPropolis {
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 3; j++) {
 				if (genomeFilter[i][j][0] != null) {
-					nbttagcompound.setString("GenomeFilterS" + i + "-" + j + "-" + 0, genomeFilter[i][j][0].getUID());
+					nbttagcompound.setString("GenomeFilterS" + i + '-' + j + '-' + 0, genomeFilter[i][j][0].getUID());
 				}
 				if (genomeFilter[i][j][1] != null) {
-					nbttagcompound.setString("GenomeFilterS" + i + "-" + j + "-" + 1, genomeFilter[i][j][1].getUID());
+					nbttagcompound.setString("GenomeFilterS" + i + '-' + j + '-' + 1, genomeFilter[i][j][1].getUID());
 				}
 			}
 		}
@@ -89,7 +88,7 @@ public class PipeLogicPropolis {
 	public boolean matchType(ForgeDirection orientation, EnumFilterType type, IBee bee) {
 		EnumFilterType filter = typeFilter[orientation.ordinal()];
 		if (filter == EnumFilterType.BEE) {
-			return type != EnumFilterType.ITEM && type != EnumFilterType.CLOSED && type != EnumFilterType.CLOSED;
+			return type != EnumFilterType.ITEM && type != EnumFilterType.CLOSED;
 		}
 
 		// Special bee filtering
@@ -122,14 +121,6 @@ public class PipeLogicPropolis {
 
 		// Compare the remaining
 		return filter == type;
-	}
-
-	public boolean matchAllele(IAllele filter, String ident) {
-		if (filter == null) {
-			return true;
-		} else {
-			return filter.getUID().equals(ident);
-		}
 	}
 
 	public ArrayList<IAllele[]> getGenomeFilters(ForgeDirection orientation) {
@@ -184,53 +175,43 @@ public class PipeLogicPropolis {
 		}
 	}
 
-	// Server side
+	/* NETWORK */
 	public void sendFilterSet(EntityPlayer player) {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		this.writeToNBT(nbttagcompound);
-		Proxies.net.sendToPlayer(new PacketNBT(PacketIds.PROP_SEND_FILTER_SET, nbttagcompound), player);
-	}
-
-	public void handleTypeFilterChange(PacketPayload payload) {
-		typeFilter[payload.intPayload[0]] = EnumFilterType.values()[payload.intPayload[1]];
-	}
-
-	public void handleGenomeFilterChange(PacketPayload payload) {
-		if (!payload.stringPayload[0].equals("NULL")) {
-			genomeFilter[payload.intPayload[0]][payload.intPayload[1]][payload.intPayload[2]] = AlleleManager.alleleRegistry
-					.getAllele(payload.stringPayload[0]);
-		} else {
-			genomeFilter[payload.intPayload[0]][payload.intPayload[1]][payload.intPayload[2]] = null;
-		}
-	}
-
-	// Client side
-	public void requestFilterSet() {
-		Proxies.net.sendToServer(new PacketCoordinates(PacketIds.PROP_REQUEST_FILTER_SET, pipe.container.xCoord, pipe.container.yCoord, pipe.container.zCoord));
-	}
-
-	public void sendTypeFilterChange(ForgeDirection orientation, EnumFilterType filter) {
-		PacketPayload payload = new PacketPayload(2, 0, 0);
-		payload.intPayload[0] = orientation.ordinal();
-		payload.intPayload[1] = filter.ordinal();
-		Proxies.net.sendToServer(new PacketUpdate(PacketIds.PROP_SEND_FILTER_CHANGE_TYPE, pipe.container.xCoord, pipe.container.yCoord, pipe.container.zCoord, payload));
-	}
-
-	public void sendGenomeFilterChange(ForgeDirection orientation, int pattern, int allele, IAllele species) {
-		PacketPayload payload = new PacketPayload(3, 0, 1);
-		payload.intPayload[0] = orientation.ordinal();
-		payload.intPayload[1] = pattern;
-		payload.intPayload[2] = allele;
-		if (species != null) {
-			payload.stringPayload[0] = species.getUID();
-		} else {
-			payload.stringPayload[0] = "NULL";
-		}
-
-		Proxies.net.sendToServer(new PacketUpdate(PacketIds.PROP_SEND_FILTER_CHANGE_GENOME, pipe.container.xCoord, pipe.container.yCoord, pipe.container.zCoord, payload));
+		Proxies.net.sendToPlayer(new PacketNBT(PacketId.PROP_SEND_FILTER_SET, nbttagcompound), player);
 	}
 
 	public void handleFilterSet(PacketNBT packet) {
 		this.readFromNBT(packet.getTagCompound());
+	}
+
+	public void requestFilterSet() {
+		Proxies.net.sendToServer(new PacketCoordinates(PacketId.PROP_REQUEST_FILTER_SET, pipe.container));
+	}
+
+	public void sendTypeFilterChange(ForgeDirection orientation, EnumFilterType filter) {
+		PacketTypeFilterChange packet = new PacketTypeFilterChange(pipe.container, orientation, filter);
+		Proxies.net.sendToServer(packet);
+	}
+
+	public void handleTypeFilterChange(PacketTypeFilterChange packet) {
+		int orientation = packet.getOrientation();
+		int filterOrdinal = packet.getFilter();
+		typeFilter[orientation] = EnumFilterType.values()[filterOrdinal];
+	}
+
+	public void sendGenomeFilterChange(ForgeDirection orientation, int pattern, int allele, IAllele species) {
+		PacketGenomeFilterChange packet = new PacketGenomeFilterChange(pipe.container, orientation, pattern, allele, species);
+		Proxies.net.sendToServer(packet);
+	}
+
+	public void handleGenomeFilterChange(PacketGenomeFilterChange packet) {
+		IAllele species = packet.getSpecies();
+		int orientation = packet.getOrientation();
+		int pattern = packet.getPattern();
+		int allele = packet.getAllele();
+
+		genomeFilter[orientation][pattern][allele] = species;
 	}
 }

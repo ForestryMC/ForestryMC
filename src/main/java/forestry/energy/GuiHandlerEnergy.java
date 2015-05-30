@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 
 import forestry.core.GuiHandlerBase;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketIds;
+import forestry.core.network.PacketId;
 import forestry.core.network.PacketSocketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.energy.gadgets.EngineBronze;
@@ -76,7 +76,7 @@ public class GuiHandlerEnergy extends GuiHandlerBase {
 
 			case EngineTinGUI:
 				EngineTin tile = (EngineTin) getTileForestry(world, x, y, z);
-				Proxies.net.sendToPlayer(new PacketSocketUpdate(PacketIds.SOCKET_UPDATE, x, y, z, tile), player);
+				Proxies.net.sendToPlayer(new PacketSocketUpdate(PacketId.SOCKET_UPDATE, tile), player);
 				return new ContainerEngineTin(player.inventory, tile);
 
 			case GeneratorGUI:

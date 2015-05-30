@@ -38,10 +38,10 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.Forestry;
 import forestry.core.interfaces.IOreDictionaryHandler;
-import forestry.core.interfaces.IPacketHandler;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.IResupplyHandler;
 import forestry.core.interfaces.ISaveEventHandler;
+import forestry.core.network.IPacketHandler;
 import forestry.core.proxy.Proxies;
 
 public class PluginManager {

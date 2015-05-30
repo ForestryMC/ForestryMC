@@ -18,7 +18,7 @@ import net.minecraft.util.IIcon;
 import forestry.core.interfaces.IOwnable;
 import forestry.core.interfaces.IRestrictedAccess;
 import forestry.core.network.PacketCoordinates;
-import forestry.core.network.PacketIds;
+import forestry.core.network.PacketId;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.EnumAccess;
@@ -99,7 +99,7 @@ public class OwnerLedger extends Ledger {
 		if (isAccessButton(x, y) && tile instanceof IRestrictedAccess) {
 			if (!Proxies.common.isSimulating(((TileEntity) tile).getWorldObj())) {
 				TileEntity te = (TileEntity) tile;
-				Proxies.net.sendToServer(new PacketCoordinates(PacketIds.ACCESS_SWITCH, te.xCoord, te.yCoord, te.zCoord));
+				Proxies.net.sendToServer(new PacketCoordinates(PacketId.ACCESS_SWITCH, te));
 			}
 
 			((IRestrictedAccess) tile).switchAccessRule(manager.minecraft.thePlayer);

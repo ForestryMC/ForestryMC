@@ -1,18 +1,23 @@
 package forestry.energy;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.core.GameMode;
+import forestry.core.network.IStreamable;
 import forestry.core.utils.BlockUtil;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyReceiver;
 
-public class EnergyManager implements IEnergyHandler {
+public class EnergyManager implements IEnergyHandler, IStreamable {
 	private enum EnergyTransferMode {
 		EXTRACT, RECEIVE, BOTH
 	}
@@ -79,11 +84,23 @@ public class EnergyManager implements IEnergyHandler {
 	}
 
 	/* Packets */
-	public int toPacketInt() {
+	@Override
+	public void writeData(DataOutputStream data) throws IOException {
+		int energyStored = energyStorage.getEnergyStored();
+		data.writeInt(energyStored);
+	}
+
+	@Override
+	public void readData(DataInputStream data) throws IOException {
+		int energyStored = data.readInt();
+		energyStorage.setEnergyStored(energyStored);
+	}
+
+	public int toGuiInt() {
 		return energyStorage.getEnergyStored();
 	}
 
-	public void fromPacketInt(int packetInt) {
+	public void fromGuiInt(int packetInt) {
 		energyStorage.setEnergyStored(packetInt);
 	}
 
