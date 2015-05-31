@@ -16,6 +16,7 @@ import com.google.common.collect.Lists;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Random;
@@ -37,6 +38,7 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.Forestry;
+import forestry.api.core.ForestryAPI;
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.IResupplyHandler;
@@ -114,7 +116,7 @@ public class PluginManager {
 		}
 
 		public boolean isEnabled() {
-			return isModuleLoaded(this);
+			return ForestryAPI.enabledPlugins.contains(toString());
 		}
 
 		public boolean canBeDisabled() {
@@ -135,10 +137,6 @@ public class PluginManager {
 
 	public static EnumSet<Module> getLoadedModules() {
 		return EnumSet.copyOf(loadedModules);
-	}
-
-	public static boolean isModuleLoaded(Module module) {
-		return loadedModules.contains(module);
 	}
 
 	private static void registerHandlers(ForestryPlugin plugin) {
@@ -228,6 +226,11 @@ public class PluginManager {
 
 		unloadedModules.removeAll(toLoad);
 		loadedModules.addAll(toLoad);
+
+		ForestryAPI.enabledPlugins = new HashSet<String>();
+		for (Module m : loadedModules) {
+			ForestryAPI.enabledPlugins.add(m.toString());
+		}
 
 		if (config.hasChanged()) {
 			config.save();
