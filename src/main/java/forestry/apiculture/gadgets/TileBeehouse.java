@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,22 +36,24 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.IIndividual;
+import forestry.apiculture.network.PacketActiveUpdate;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.TileBase;
+import forestry.core.interfaces.IActivatable;
 import forestry.core.interfaces.IClimatised;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
+import forestry.core.network.PacketHelper;
 import forestry.core.network.PacketId;
 import forestry.core.network.PacketInventoryStack;
-import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.GuiUtil;
 
-public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
+public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised, IActivatable {
 	// CONSTANTS
 	public static final int SLOT_QUEEN = 0;
 	public static final int SLOT_DRONE = 1;
@@ -60,6 +65,9 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	private BiomeGenBase biome;
 	private int displayHealthMax = 0;
 	private int displayHealth = 0;
+
+	// CLIENT
+	private boolean active;
 
 	public TileBeehouse() {
 		setHints(Config.hints.get("apiary"));
@@ -91,6 +99,26 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 		biome = BiomeGenBase.getBiome(biomeId);
 		logic.readFromNBT(nbttagcompound);
 
+	}
+
+	@Override
+	public void writeData(DataOutputStream data) throws IOException {
+		super.writeData(data);
+		data.writeBoolean(active);
+		if (active) {
+			ItemStack queen = getStackInSlot(SLOT_QUEEN);
+			PacketHelper.writeItemStack(queen, data);
+		}
+	}
+
+	@Override
+	public void readData(DataInputStream data) throws IOException {
+		super.readData(data);
+		active = data.readBoolean();
+		if (active) {
+			ItemStack queen = PacketHelper.readItemStack(data);
+			setInventorySlotContents(SLOT_QUEEN, queen);
+		}
 	}
 
 	@Override
@@ -153,31 +181,34 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	/* UPDATING */
 	@Override
 	public void updateClientSide() {
-
-		// / Multiplayer FX
-		if (BeeManager.beeRoot.isMated(getInternalInventory().getStackInSlot(SLOT_QUEEN))) {
-			if (!hasErrorState() && updateOnInterval(2)) {
-				IBee displayQueen = BeeManager.beeRoot.getMember(getInternalInventory().getStackInSlot(SLOT_QUEEN));
+		if (isActive() && updateOnInterval(2)) {
+			ItemStack queenStack = getStackInSlot(SLOT_QUEEN);
+			if (BeeManager.beeRoot.isMated(queenStack)) {
+				IBee displayQueen = BeeManager.beeRoot.getMember(queenStack);
 				displayQueen.doFX(logic.getEffectData(), this);
+
+				if (updateOnInterval(50)) {
+					float fxX = xCoord + 0.5F;
+					float fxY = yCoord + 0.25F + (worldObj.rand.nextFloat() * 6F) / 16F;
+					float fxZ = zCoord + 0.5F;
+					float f3 = 0.6F;
+					float f4 = worldObj.rand.nextFloat() * f3 - 0.5F;
+
+					Proxies.common.addEntitySwarmFX(worldObj, (fxX - f3), fxY, (fxZ + f4), 0F, 0F, 0F);
+					Proxies.common.addEntitySwarmFX(worldObj, (fxX + f3), fxY, (fxZ + f4), 0F, 0F, 0F);
+					Proxies.common.addEntitySwarmFX(worldObj, (fxX + f4), fxY, (fxZ - f3), 0F, 0F, 0F);
+					Proxies.common.addEntitySwarmFX(worldObj, (fxX + f4), fxY, (fxZ + f3), 0F, 0F, 0F);
+				}
 			}
 		}
-
 	}
 
 	@Override
 	public void updateServerSide() {
-
-		if (logic.canWork())
+		boolean canWork = logic.canWork();
+		setActive(canWork);
+		if (canWork) {
 			logic.doWork();
-
-		IBee queen = logic.getQueen();
-		if (queen == null) {
-			return;
-		}
-
-		// Add swarm effects
-		if (updateOnInterval(200)) {
-			onQueenChange(getInternalInventory().getStackInSlot(SLOT_QUEEN));
 		}
 	}
 
@@ -198,8 +229,8 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 			return;
 		}
 
-		Proxies.net.sendNetworkPacket(new PacketInventoryStack(PacketId.IINVENTORY_STACK, xCoord, yCoord, zCoord, SLOT_QUEEN, queenStack));
-		Proxies.net.sendNetworkPacket(new PacketTileStream(this));
+		PacketInventoryStack packet = new PacketInventoryStack(PacketId.IINVENTORY_STACK, xCoord, yCoord, zCoord, SLOT_QUEEN, queenStack);
+		Proxies.net.sendNetworkPacket(packet);
 	}
 
 	/* STATE INFORMATION */
@@ -407,6 +438,23 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 	@Override
 	public GameProfile getOwnerName() {
 		return this.getOwner();
+	}
+
+	@Override
+	public boolean isActive() {
+		return active;
+	}
+
+	@Override
+	public void setActive(boolean active) {
+		if (this.active == active) {
+			return;
+		}
+		this.active = active;
+
+		if (!worldObj.isRemote) {
+			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this));
+		}
 	}
 
 	protected static class BeehouseInventoryAdapter extends TileInventoryAdapter<TileBeehouse> {

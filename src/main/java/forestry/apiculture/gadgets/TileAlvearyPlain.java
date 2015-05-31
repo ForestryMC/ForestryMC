@@ -53,6 +53,7 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
+import forestry.core.network.PacketHelper;
 import forestry.core.network.PacketId;
 import forestry.core.network.PacketInventoryStack;
 import forestry.core.proxy.Proxies;
@@ -129,12 +130,20 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 	public void writeData(DataOutputStream data) throws IOException {
 		super.writeData(data);
 		data.writeBoolean(active);
+		if (active) {
+			ItemStack queen = getStackInSlot(SLOT_QUEEN);
+			PacketHelper.writeItemStack(queen, data);
+		}
 	}
 
 	@Override
 	public void readData(DataInputStream data) throws IOException {
 		super.readData(data);
 		active = data.readBoolean();
+		if (active) {
+			ItemStack queen = PacketHelper.readItemStack(data);
+			setInventorySlotContents(SLOT_QUEEN, queen);
+		}
 	}
 
 	@Override
@@ -181,36 +190,6 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 		// Equalize humidity and temperature
 		equalizeTemperature();
 		equalizeHumidity();
-
-		IBee queen = beekeepingLogic.getQueen();
-		if (queen == null) {
-			return;
-		}
-
-		// Add swarm effects
-		if (updateOnInterval(200)) {
-			ISidedInventory inventory = getStructureInventory();
-			if (inventory != null) {
-				onQueenChange(inventory.getStackInSlot(SLOT_QUEEN));
-			}
-		}
-
-		if (!hasErrorState()) {
-			queen.doFX(beekeepingLogic.getEffectData(), this);
-
-			if (updateOnInterval(50)) {
-				float f = xCoord + 0.5F;
-				float f1 = yCoord + 0.0F + (worldObj.rand.nextFloat() * 6F) / 16F;
-				float f2 = zCoord + 0.5F;
-				float f3 = 0.52F;
-				float f4 = worldObj.rand.nextFloat() * 0.6F - 0.3F;
-
-				Proxies.common.addEntitySwarmFX(worldObj, (f - f3), f1, (f2 + f4), 0F, 0F, 0F);
-				Proxies.common.addEntitySwarmFX(worldObj, (f + f3), f1, (f2 + f4), 0F, 0F, 0F);
-				Proxies.common.addEntitySwarmFX(worldObj, (f + f4), f1, (f2 - f3), 0F, 0F, 0F);
-				Proxies.common.addEntitySwarmFX(worldObj, (f + f4), f1, (f2 + f3), 0F, 0F, 0F);
-			}
-		}
 	}
 
 	@Override
@@ -225,16 +204,23 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 		}
 
 		if (updateOnInterval(2)) {
-			ISidedInventory inventory = getStructureInventory();
-			if (inventory == null) {
-				return;
-			}
-
-			// / Multiplayer FX
-			ItemStack queenStack = inventory.getStackInSlot(SLOT_QUEEN);
+			ItemStack queenStack = getStackInSlot(SLOT_QUEEN);
 			if (BeeManager.beeRoot.isMated(queenStack)) {
 				IBee displayQueen = BeeManager.beeRoot.getMember(queenStack);
 				displayQueen.doFX(beekeepingLogic.getEffectData(), this);
+
+				if (updateOnInterval(50)) {
+					float fxX = xCoord + 0.5F;
+					float fxY = yCoord + 0.25F + (worldObj.rand.nextFloat() * 6F) / 16F;
+					float fxZ = zCoord + 0.5F;
+					float f3 = 1.6F;
+					float f4 = worldObj.rand.nextFloat() * f3 - 0.5F;
+
+					Proxies.common.addEntitySwarmFX(worldObj, (fxX - f3), fxY, (fxZ + f4), 0F, 0F, 0F);
+					Proxies.common.addEntitySwarmFX(worldObj, (fxX + f3), fxY, (fxZ + f4), 0F, 0F, 0F);
+					Proxies.common.addEntitySwarmFX(worldObj, (fxX + f4), fxY, (fxZ - f3), 0F, 0F, 0F);
+					Proxies.common.addEntitySwarmFX(worldObj, (fxX + f4), fxY, (fxZ + f3), 0F, 0F, 0F);
+				}
 			}
 		}
 	}
