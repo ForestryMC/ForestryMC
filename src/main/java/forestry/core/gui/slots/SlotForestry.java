@@ -21,7 +21,6 @@ import forestry.core.gui.tooltips.ToolTip;
 public class SlotForestry extends Slot implements IToolTipProvider {
 
 	private boolean isPhantom;
-	private boolean isInfinite;
 	private boolean canAdjustPhantom = true;
 	private boolean canShift = true;
 	private int stackLimit;
@@ -33,11 +32,6 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 			throw new IllegalArgumentException("Inventory must not be null");
 		}
 		this.stackLimit = -1;
-	}
-
-	public SlotForestry setInfinite() {
-		this.isInfinite = true;
-		return this;
 	}
 
 	public SlotForestry setPhantom() {
@@ -91,22 +85,6 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 		} else {
 			return stackLimit;
 		}
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i) {
-		if (!isInfinite) {
-			return super.decrStackSize(i);
-		}
-
-		ItemStack stack = inventory.getStackInSlot(getSlotIndex());
-		if (stack == null) {
-			return null;
-		}
-
-		ItemStack result = stack.copy();
-		result.stackSize = i;
-		return result;
 	}
 
 	/**

@@ -16,8 +16,8 @@ import net.minecraft.item.ItemStack;
 
 public class SlotLocked extends SlotForestry {
 
-	public SlotLocked(IInventory par1iInventory, int par2, int par3, int par4) {
-		super(par1iInventory, par2, par3, par4);
+	public SlotLocked(IInventory inventory, int slotIndex, int xPos, int yPos) {
+		super(inventory, slotIndex, xPos, yPos);
 		setCanAdjustPhantom(false);
 		blockShift();
 		setPhantom();
