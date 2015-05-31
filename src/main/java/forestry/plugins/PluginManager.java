@@ -88,6 +88,7 @@ public class PluginManager {
 		AGRICRAFT(new PluginAgriCraft()),
 		BIOMESOPLENTY(new PluginBiomesOPlenty()),
 		CHISEL(new PluginChisel()),
+		ENDERIO(new PluginEnderIO()),
 		EXTRAUTILITIES(new PluginExtraUtilities()),
 		HARVESTCRAFT(new PluginHarvestCraft()),
 		INDUSTRIALCRAFT(new PluginIC2()),
