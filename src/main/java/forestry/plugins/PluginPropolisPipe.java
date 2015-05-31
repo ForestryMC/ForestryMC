@@ -33,7 +33,8 @@ public class PluginPropolisPipe extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isModLoaded("BuildCraft|Transport");
+		return Proxies.common.isModLoaded("BuildCraft|Transport") &&
+				Proxies.common.isModLoaded("BuildCraft|Core", "[6.0, 7.0)");
 	}
 
 	@Override
