@@ -97,7 +97,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 			ledgerManager.add(new HintLedger(ledgerManager, (IHintSource) inventory));
 		}
 
-		if (inventory instanceof IOwnable && ((IOwnable) inventory).isOwned()) {
+		if (inventory instanceof IOwnable) {
 			ledgerManager.add(new OwnerLedger(ledgerManager, (IOwnable) inventory));
 		}
 

@@ -38,10 +38,10 @@ public class GuiHandler extends GuiHandlerBase {
 			switch (GuiId.values()[cleanId]) {
 
 				case AnalyzerGUI:
-					return new GuiAnalyzer(player.inventory, (TileAnalyzer) getTileForestry(world, x, y, z));
+					return new GuiAnalyzer(player.inventory, getTileForestry(world, x, y, z, TileAnalyzer.class));
 
 				case NaturalistBenchGUI:
-					return new GuiEscritoire(player, (TileEscritoire) getTileForestry(world, x, y, z));
+					return new GuiEscritoire(player, getTileForestry(world, x, y, z, TileEscritoire.class));
 
 				case SolderingIronGUI:
 					ItemStack equipped = player.getCurrentEquippedItem();
@@ -73,10 +73,10 @@ public class GuiHandler extends GuiHandlerBase {
 			switch (GuiId.values()[cleanId]) {
 
 				case AnalyzerGUI:
-					return new ContainerAnalyzer(player.inventory, (TileAnalyzer) getTileForestry(world, x, y, z));
+					return new ContainerAnalyzer(player.inventory, getTileForestry(world, x, y, z, TileAnalyzer.class));
 
 				case NaturalistBenchGUI:
-					return new ContainerEscritoire(player, (TileEscritoire) getTileForestry(world, x, y, z));
+					return new ContainerEscritoire(player, getTileForestry(world, x, y, z, TileEscritoire.class));
 
 				case SolderingIronGUI:
 					ItemStack equipped = player.getCurrentEquippedItem();

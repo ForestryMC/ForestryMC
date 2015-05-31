@@ -33,7 +33,7 @@ public class GuiHandlerFarming extends GuiHandlerBase {
 
 		switch (GuiId.values()[id]) {
 			case MultiFarmGUI:
-				TileFarmPlain tile = (TileFarmPlain) getTileForestry(world, x, y, z);
+				TileFarmPlain tile = getTileForestry(world, x, y, z, TileFarmPlain.class);
 				Proxies.net.sendToPlayer(new PacketSocketUpdate(PacketId.SOCKET_UPDATE, tile), player);
 				return new ContainerFarm(player.inventory, tile);
 			default:
@@ -50,7 +50,7 @@ public class GuiHandlerFarming extends GuiHandlerBase {
 
 		switch (GuiId.values()[id]) {
 			case MultiFarmGUI:
-				return new GuiFarm(player, (TileFarmPlain) getTileForestry(world, x, y, z));
+				return new GuiFarm(player, getTileForestry(world, x, y, z, TileFarmPlain.class));
 			default:
 				return null;
 

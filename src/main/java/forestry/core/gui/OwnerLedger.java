@@ -31,13 +31,12 @@ import forestry.core.utils.StringUtil;
 public class OwnerLedger extends Ledger {
 
 	private final IOwnable tile;
-	private final boolean playerIsOwner;
 
 	public OwnerLedger(LedgerManager manager, IOwnable tile) {
 		super(manager, "owner");
 		this.tile = tile;
 
-		playerIsOwner = tile.isOwner(manager.minecraft.thePlayer);
+		boolean playerIsOwner = tile.isOwner(manager.minecraft.thePlayer);
 
 		if (playerIsOwner) {
 			maxHeight = 60;
@@ -52,6 +51,11 @@ public class OwnerLedger extends Ledger {
 		int shiftY = currentShiftY + 44;
 
 		return mouseX >= shiftX && mouseX <= currentShiftX + currentWidth && mouseY >= shiftY && mouseY <= shiftY + 12;
+	}
+
+	@Override
+	public boolean isVisible() {
+		return tile.isOwned();
 	}
 
 	@Override
@@ -78,6 +82,7 @@ public class OwnerLedger extends Ledger {
 
 		drawText(PlayerUtil.getOwnerName(tile), x + 22, y + 20);
 
+		boolean playerIsOwner = tile.isOwner(manager.minecraft.thePlayer);
 		if (playerIsOwner && tile instanceof IRestrictedAccess) {
 			drawSubheader(StringUtil.localize("gui.access") + ':', x + 22, y + 32);
 			// Access rules

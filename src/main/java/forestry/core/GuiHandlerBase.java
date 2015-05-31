@@ -21,22 +21,28 @@ import forestry.core.gadgets.TileForestry;
 import forestry.core.gadgets.TileNaturalistChest;
 import forestry.core.gui.ContainerNaturalistInventory;
 import forestry.core.gui.GuiNaturalistInventory;
+import forestry.core.network.PacketTileGuiOpened;
 import forestry.core.proxy.Proxies;
 
 public abstract class GuiHandlerBase implements IGuiHandler {
 
-	public TileForestry getTileForestry(World world, int x, int y, int z) {
+	public <T extends TileForestry> T getTileForestry(World world, int x, int y, int z, Class<T> tileClass) {
+		T tileForestry = null;
 		try {
-			return (TileForestry) world.getTileEntity(x, y, z);
-		} catch (Exception ex) {
-			Proxies.log.warning("Failed to cast a tile entity to a TileForestry at " + x + "/" + y + "/" + z);
+			tileForestry = tileClass.cast(world.getTileEntity(x, y, z));
+		} catch (ClassCastException ex) {
+			Proxies.log.warning("Failed to cast a tile entity to a TileForestry at " + x + '/' + y + '/' + z);
 		}
 
-		return null;
+		if (tileForestry != null && !world.isRemote) {
+			Proxies.net.sendNetworkPacket(new PacketTileGuiOpened(tileForestry));
+		}
+
+		return tileForestry;
 	}
 
 	public GuiNaturalistInventory getNaturalistChestGui(String rootUID, EntityPlayer player, World world, int x, int y, int z, int page) {
-		TileNaturalistChest tile = (TileNaturalistChest) getTileForestry(world, x, y, z);
+		TileNaturalistChest tile = getTileForestry(world, x, y, z, TileNaturalistChest.class);
 		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(rootUID);
 		return new GuiNaturalistInventory(speciesRoot, player, new ContainerNaturalistInventory(player.inventory, tile, page, 25), tile, page, 5);
 	}
@@ -44,7 +50,7 @@ public abstract class GuiHandlerBase implements IGuiHandler {
 	public ContainerNaturalistInventory getNaturalistChestContainer(String rootUID, EntityPlayer player, World world, int x, int y, int z, int page) {
 		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(rootUID);
 		speciesRoot.getBreedingTracker(world, player.getGameProfile()).synchToPlayer(player);
-		return new ContainerNaturalistInventory(player.inventory, (TileNaturalistChest) getTileForestry(world, x, y, z), page, 25);
+		return new ContainerNaturalistInventory(player.inventory, getTileForestry(world, x, y, z, TileNaturalistChest.class), page, 25);
 	}
 
 	public static int encodeGuiData(int guiId, int data) {

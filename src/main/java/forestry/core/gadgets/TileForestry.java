@@ -51,7 +51,6 @@ import forestry.core.interfaces.IRestrictedAccess;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.IStreamable;
-import forestry.core.network.PacketErrorUpdate;
 import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.AdjacentTileCache;
@@ -118,8 +117,6 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IR
 
 	}
 
-	private ImmutableSet<IErrorState> previousErrorStates;
-
 	// / UPDATING
 	@Override
 	public final void updateEntity() {
@@ -136,16 +133,10 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IR
 			updateClientSide();
 		}
 
-		ImmutableSet<IErrorState> errorStates = getErrorStates();
-
 		if (needsNetworkUpdate) {
 			needsNetworkUpdate = false;
 			sendNetworkUpdate();
-		} else if (!errorStates.equals(previousErrorStates)) {
-			sendErrorUpdate();
 		}
-
-		previousErrorStates = errorStates;
 	}
 
 	protected void updateClientSide() {
@@ -211,28 +202,8 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IR
 		Proxies.net.sendNetworkPacket(packet);
 	}
 
-	public final void sendErrorUpdate() {
-		PacketErrorUpdate packet = new PacketErrorUpdate(this);
-		Proxies.net.sendNetworkPacket(packet);
-	}
-
 	public void writeData(DataOutputStream data) throws IOException {
 		data.writeByte(orientation.ordinal());
-
-		writeErrorData(data);
-
-		// TODO: Should this really be sent to the client? Huge network cost.
-		// As far as I know, only GUIs need it, and there are better ways to get the information to a GUI.
-		// -CovertJaguar
-		if (owner == null) {
-			data.writeBoolean(false);
-		} else {
-			data.writeBoolean(true);
-			data.writeByte(access.ordinal());
-			data.writeLong(owner.getId().getMostSignificantBits());
-			data.writeLong(owner.getId().getLeastSignificantBits());
-			data.writeUTF(owner.getName());
-		}
 
 		if (this instanceof ILiquidTankContainer) {
 			TankManager tankManager = ((ILiquidTankContainer) this).getTankManager();
@@ -244,14 +215,6 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IR
 
 	public void readData(DataInputStream data) throws IOException {
 		orientation = ForgeDirection.getOrientation(data.readByte());
-
-		readErrorData(data);
-
-		if (data.readBoolean()) {
-			byte accessOrdinal = data.readByte();
-			access = EnumAccess.values()[accessOrdinal];
-			owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readUTF());
-		}
 
 		if (this instanceof ILiquidTankContainer) {
 			TankManager tankManager = ((ILiquidTankContainer) this).getTankManager();
@@ -276,6 +239,29 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IR
 			short errorStateId = data.readShort();
 			IErrorState errorState = ErrorStateRegistry.getErrorState(errorStateId);
 			errorStates.add(errorState);
+		}
+	}
+
+	public final void writeGuiData(DataOutputStream data) throws IOException {
+		writeErrorData(data);
+
+		if (owner == null) {
+			data.writeByte(-1);
+		} else {
+			data.writeByte(access.ordinal());
+			data.writeLong(owner.getId().getMostSignificantBits());
+			data.writeLong(owner.getId().getLeastSignificantBits());
+			data.writeUTF(owner.getName());
+		}
+	}
+
+	public final void readGuiData(DataInputStream data) throws IOException {
+		readErrorData(data);
+
+		byte accessOrdinal = data.readByte();
+		if (accessOrdinal >= 0) {
+			access = EnumAccess.values()[accessOrdinal];
+			owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readUTF());
 		}
 	}
 

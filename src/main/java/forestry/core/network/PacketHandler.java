@@ -35,6 +35,7 @@ import forestry.api.core.ForestryEvent;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.apiculture.network.PacketActiveUpdate;
 import forestry.core.circuits.ContainerSolderingIron;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.gadgets.TileForestry;
@@ -85,6 +86,14 @@ public class PacketHandler {
 				}
 				case TILE_FORESTRY_ERROR_UPDATE: {
 					PacketErrorUpdate packet = new PacketErrorUpdate(data);
+					return true;
+				}
+				case TILE_FORESTRY_GUI_OPENED: {
+					PacketTileGuiOpened.onPacketData(data);
+					return true;
+				}
+				case TILE_FORESTRY_ACTIVE: {
+					PacketActiveUpdate.onPacketData(data);
 					return true;
 				}
 				case SOCKET_UPDATE: {

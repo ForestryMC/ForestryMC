@@ -59,19 +59,19 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 		switch (GuiId.values()[cleanId]) {
 
 			case AlvearyGUI:
-				return new GuiAlveary(player.inventory, (TileAlvearyPlain) getTileForestry(world, x, y, z));
+				return new GuiAlveary(player.inventory, getTileForestry(world, x, y, z, TileAlvearyPlain.class));
 
 			case AlvearySieveGUI:
-				return new GuiAlvearySieve(player.inventory, (TileAlvearySieve) getTileForestry(world, x, y, z));
+				return new GuiAlvearySieve(player.inventory, getTileForestry(world, x, y, z, TileAlvearySieve.class));
 
 			case AlvearySwarmerGUI:
-				return new GuiAlvearySwarmer(player.inventory, (TileAlvearySwarmer) getTileForestry(world, x, y, z));
+				return new GuiAlvearySwarmer(player.inventory, getTileForestry(world, x, y, z, TileAlvearySwarmer.class));
 
 			case ApiaristChestGUI:
 				return getNaturalistChestGui(BeeHelper.UID, player, world, x, y, z, guiData);
 
 			case ApiaryGUI:
-				return new GuiApiary(player.inventory, (TileApiary) getTileForestry(world, x, y, z));
+				return new GuiApiary(player.inventory, getTileForestry(world, x, y, z, TileApiary.class));
 
 			case BeealyzerGUI:
 				equipped = player.getCurrentEquippedItem();
@@ -82,7 +82,7 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 				return new GuiBeealyzer(player, new BeealyzerInventory(player, equipped));
 
 			case BeehouseGUI:
-				return new GuiApiary(player.inventory, (TileBeehouse) getTileForestry(world, x, y, z));
+				return new GuiApiary(player.inventory, getTileForestry(world, x, y, z, TileBeehouse.class));
 
 			case HabitatLocatorGUI:
 				equipped = player.getCurrentEquippedItem();
@@ -93,7 +93,7 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 				return new GuiHabitatLocator(player, new HabitatLocatorInventory(player, equipped));
 
 			case HygroregulatorGUI:
-				return new GuiAlvearyHygroregulator(player.inventory, (TileAlvearyHygroregulator) getTileForestry(world, x, y, z));
+				return new GuiAlvearyHygroregulator(player.inventory, getTileForestry(world, x, y, z, TileAlvearyHygroregulator.class));
 
 			case ImprinterGUI:
 				equipped = player.getCurrentEquippedItem();
@@ -122,20 +122,20 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 
 			case AlvearyGUI:
 				synchApiaristTracker(world, player);
-				return new ContainerAlveary(player.inventory, (TileAlvearyPlain) getTileForestry(world, x, y, z));
+				return new ContainerAlveary(player.inventory, getTileForestry(world, x, y, z, TileAlvearyPlain.class));
 
 			case AlvearySieveGUI:
-				return new ContainerAlvearySieve(player.inventory, (TileAlvearySieve) getTileForestry(world, x, y, z));
+				return new ContainerAlvearySieve(player.inventory, getTileForestry(world, x, y, z, TileAlvearySieve.class));
 
 			case AlvearySwarmerGUI:
-				return new ContainerAlvearySwarmer(player.inventory, (TileAlvearySwarmer) getTileForestry(world, x, y, z));
+				return new ContainerAlvearySwarmer(player.inventory, getTileForestry(world, x, y, z, TileAlvearySwarmer.class));
 
 			case ApiaristChestGUI:
 				return getNaturalistChestContainer(BeeHelper.UID, player, world, x, y, z, guiData);
 
 			case ApiaryGUI:
 				synchApiaristTracker(world, player);
-				return new ContainerApiary(player.inventory, (TileApiary) getTileForestry(world, x, y, z), true);
+				return new ContainerApiary(player.inventory, getTileForestry(world, x, y, z, TileApiary.class), true);
 
 			case BeealyzerGUI:
 				equipped = player.getCurrentEquippedItem();
@@ -148,7 +148,7 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 
 			case BeehouseGUI:
 				synchApiaristTracker(world, player);
-				return new ContainerApiary(player.inventory, (TileBeehouse) getTileForestry(world, x, y, z), false);
+				return new ContainerApiary(player.inventory, getTileForestry(world, x, y, z, TileBeehouse.class), false);
 
 			case HabitatLocatorGUI:
 				equipped = player.getCurrentEquippedItem();
@@ -159,7 +159,7 @@ public class GuiHandlerApiculture extends GuiHandlerBase {
 				return new ContainerHabitatLocator(player, new HabitatLocatorInventory(player, equipped));
 
 			case HygroregulatorGUI:
-				return new ContainerAlvearyHygroregulator(player.inventory, (TileAlvearyHygroregulator) getTileForestry(world, x, y, z));
+				return new ContainerAlvearyHygroregulator(player.inventory, getTileForestry(world, x, y, z, TileAlvearyHygroregulator.class));
 
 			case ImprinterGUI:
 				synchApiaristTracker(world, player);

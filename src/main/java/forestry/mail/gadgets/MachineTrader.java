@@ -132,7 +132,7 @@ public class MachineTrader extends TileBase {
 			setErrorCondition(!hasSupplies, EnumErrorCode.NOSUPPLIES);
 		}
 
-		if (inventory instanceof TradeStation) {
+		if (inventory instanceof TradeStation && updateOnInterval(200)) {
 			boolean canReceivePayment = ((TradeStation) inventory).canReceivePayment();
 			setErrorCondition(!canReceivePayment, EnumErrorCode.NOSPACE);
 		}

@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -39,8 +42,10 @@ import forestry.api.core.IErrorState;
 import forestry.api.core.ITileStructure;
 import forestry.api.genetics.IIndividual;
 import forestry.apiculture.gui.ContainerAlveary;
+import forestry.apiculture.network.PacketActiveUpdate;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
+import forestry.core.interfaces.IActivatable;
 import forestry.core.interfaces.IClimatised;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IHintSource;
@@ -52,7 +57,7 @@ import forestry.core.network.PacketId;
 import forestry.core.network.PacketInventoryStack;
 import forestry.core.proxy.Proxies;
 
-public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IBeeHousing, IClimatised, IHintSource {
+public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IBeeHousing, IClimatised, IHintSource, IActivatable {
 
 	// / CONSTANTS
 	public static final int SLOT_QUEEN = 0;
@@ -68,6 +73,9 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 	protected float humidChange = 0.0f;
 	private int displayHealthMax = 0;
 	private int displayHealth = 0;
+
+	// CLIENT
+	private boolean active;
 
 	public TileAlvearyPlain() {
 		super(0);
@@ -117,6 +125,35 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 		}
 	}
 
+	@Override
+	public void writeData(DataOutputStream data) throws IOException {
+		super.writeData(data);
+		data.writeBoolean(active);
+	}
+
+	@Override
+	public void readData(DataInputStream data) throws IOException {
+		super.readData(data);
+		active = data.readBoolean();
+	}
+
+	@Override
+	public boolean isActive() {
+		return active;
+	}
+
+	@Override
+	public void setActive(boolean active) {
+		if (this.active == active) {
+			return;
+		}
+		this.active = active;
+
+		if (!worldObj.isRemote) {
+			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this));
+		}
+	}
+
 	/* UPDATING */
 	@Override
 	public void initialize() {
@@ -135,8 +172,11 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 			return;
 		}
 
-		if (beekeepingLogic.canWork())
+		boolean canWork = beekeepingLogic.canWork();
+		setActive(canWork);
+		if (canWork) {
 			beekeepingLogic.doWork();
+		}
 
 		// Equalize humidity and temperature
 		equalizeTemperature();
@@ -180,7 +220,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 			return;
 		}
 
-		if (hasErrorState()) {
+		if (!active) {
 			return;
 		}
 

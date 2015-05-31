@@ -24,15 +24,18 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
+import forestry.apiculture.network.PacketActiveUpdate;
 import forestry.core.EnumErrorCode;
 import forestry.core.TemperatureState;
 import forestry.core.config.Defaults;
+import forestry.core.interfaces.IActivatable;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
 import forestry.energy.EnergyManager;
 
 import cofh.api.energy.IEnergyConnection;
 
-public abstract class Engine extends TileBase implements IEnergyConnection {
+public abstract class Engine extends TileBase implements IEnergyConnection, IActivatable {
 
 	public boolean active = false; // Used for smp.
 	/**
@@ -157,13 +160,21 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 		}
 	}
 
-	private void setActive(boolean isActive) {
-		if (this.active == isActive) {
+	@Override
+	public boolean isActive() {
+		return active;
+	}
+
+	@Override
+	public void setActive(boolean active) {
+		if (this.active == active) {
 			return;
 		}
+		this.active = active;
 
-		this.active = isActive;
-		setNeedsNetworkUpdate();
+		if (!worldObj.isRemote) {
+			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this));
+		}
 	}
 
 	/* INTERACTION */

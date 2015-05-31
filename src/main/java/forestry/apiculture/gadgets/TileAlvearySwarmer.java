@@ -28,16 +28,19 @@ import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.ForestryAPI;
+import forestry.apiculture.network.PacketActiveUpdate;
 import forestry.apiculture.worldgen.Hive;
 import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveDescriptionSwarmer;
+import forestry.core.interfaces.IActivatable;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.network.GuiId;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
 
-public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
+public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, IActivatable {
 
 	/* CONSTANTS */
 	public static final int BLOCK_META = 2;
@@ -61,12 +64,12 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 		super.updateServerSide();
 
 		if (pendingSpawns.size() > 0) {
-			setIsActive(true);
+			setActive(true);
 			if (updateOnInterval(1000)) {
 				trySpawnSwarm();
 			}
 		} else {
-			setIsActive(false);
+			setActive(false);
 		}
 
 		if (!updateOnInterval(500)) {
@@ -145,13 +148,6 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 		}
 	}
 
-	private void setIsActive(boolean isActive) {
-		if (this.active != isActive) {
-			this.active = isActive;
-			setNeedsNetworkUpdate();
-		}
-	}
-
 	/* NETWORK */
 
 	@Override
@@ -218,6 +214,24 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 		}
 		nbttagcompound.setTag("PendingSpawns", nbttaglist);
 
+	}
+
+	@Override
+	public boolean isActive() {
+		return active;
+	}
+
+	@Override
+	public void setActive(boolean active) {
+		if (this.active == active) {
+			return;
+		}
+
+		this.active = active;
+
+		if (!worldObj.isRemote) {
+			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this));
+		}
 	}
 
 	private static class SwarmerInventoryAdapter extends TileInventoryAdapter<TileAlvearySwarmer> {
