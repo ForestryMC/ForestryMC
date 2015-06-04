@@ -26,7 +26,7 @@ import forestry.core.proxy.Proxies;
 
 public abstract class GuiHandlerBase implements IGuiHandler {
 
-	public <T extends TileForestry> T getTileForestry(World world, int x, int y, int z, Class<T> tileClass) {
+	public <T extends TileForestry> T getTileForestry(World world, int x, int y, int z, EntityPlayer player, Class<T> tileClass) {
 		T tileForestry = null;
 		try {
 			tileForestry = tileClass.cast(world.getTileEntity(x, y, z));
@@ -35,14 +35,14 @@ public abstract class GuiHandlerBase implements IGuiHandler {
 		}
 
 		if (tileForestry != null && !world.isRemote) {
-			Proxies.net.sendNetworkPacket(new PacketTileGuiOpened(tileForestry));
+			tileForestry.sendGuiUpdate(player);
 		}
 
 		return tileForestry;
 	}
 
 	public GuiNaturalistInventory getNaturalistChestGui(String rootUID, EntityPlayer player, World world, int x, int y, int z, int page) {
-		TileNaturalistChest tile = getTileForestry(world, x, y, z, TileNaturalistChest.class);
+		TileNaturalistChest tile = getTileForestry(world, x, y, z, player, TileNaturalistChest.class);
 		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(rootUID);
 		return new GuiNaturalistInventory(speciesRoot, player, new ContainerNaturalistInventory(player.inventory, tile, page, 25), tile, page, 5);
 	}
@@ -50,7 +50,7 @@ public abstract class GuiHandlerBase implements IGuiHandler {
 	public ContainerNaturalistInventory getNaturalistChestContainer(String rootUID, EntityPlayer player, World world, int x, int y, int z, int page) {
 		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(rootUID);
 		speciesRoot.getBreedingTracker(world, player.getGameProfile()).synchToPlayer(player);
-		return new ContainerNaturalistInventory(player.inventory, getTileForestry(world, x, y, z, TileNaturalistChest.class), page, 25);
+		return new ContainerNaturalistInventory(player.inventory, getTileForestry(world, x, y, z, player, TileNaturalistChest.class), page, 25);
 	}
 
 	public static int encodeGuiData(int guiId, int data) {

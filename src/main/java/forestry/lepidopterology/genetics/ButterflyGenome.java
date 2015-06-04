@@ -17,6 +17,7 @@ import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IAlleleInteger;
+import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.ISpeciesRoot;
@@ -42,6 +43,11 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 
 	// NBT RETRIEVAL
 	public static IAlleleButterflySpecies getSpecies(ItemStack itemStack) {
+		IAlleleSpecies species = getSpeciesDirectly(itemStack);
+		if (species instanceof IAlleleButterflySpecies) {
+			return (IAlleleButterflySpecies) species;
+		}
+
 		return (IAlleleButterflySpecies) getActiveAllele(itemStack, EnumButterflyChromosome.SPECIES, PluginLepidopterology.butterflyInterface);
 	}
 

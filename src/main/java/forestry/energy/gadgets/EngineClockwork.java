@@ -68,7 +68,7 @@ public class EngineClockwork extends Engine {
 		}
 		tension = tension > ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE ? ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE : tension;
 		delay = WIND_DELAY;
-		sendNetworkUpdate();
+		setNeedsNetworkUpdate();
 	}
 
 	/* LOADING & SAVING */

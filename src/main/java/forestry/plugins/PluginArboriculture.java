@@ -56,7 +56,7 @@ import forestry.arboriculture.FruitProviderPod.EnumPodType;
 import forestry.arboriculture.FruitProviderRandom;
 import forestry.arboriculture.FruitProviderRipening;
 import forestry.arboriculture.GuiHandlerArboriculture;
-import forestry.arboriculture.PacketHandlerArboriculture;
+import forestry.arboriculture.network.PacketHandlerArboriculture;
 import forestry.arboriculture.VillageHandlerArboriculture;
 import forestry.arboriculture.WoodType;
 import forestry.arboriculture.commands.CommandTree;

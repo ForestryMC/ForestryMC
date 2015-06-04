@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.arboriculture;
+package forestry.arboriculture.network;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -17,7 +17,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
 import forestry.arboriculture.gadgets.TileLeaves;
-import forestry.arboriculture.network.PacketRipeningUpdate;
 import forestry.core.network.IPacketHandler;
 import forestry.core.network.PacketId;
 import forestry.core.proxy.Proxies;

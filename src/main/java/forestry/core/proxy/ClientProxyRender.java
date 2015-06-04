@@ -75,27 +75,31 @@ public class ClientProxyRender extends ProxyRender {
 		return new RenderEscritoire();
 	}
 
-	private boolean shouldSpawnParticle(World world, boolean canDisable) {
-		if (canDisable && !Config.enableParticleFX) {
+	public static boolean shouldSpawnParticle(World world) {
+		if (!Config.enableParticleFX) {
 			return false;
 		}
+
 		Minecraft mc = FMLClientHandler.instance().getClient();
 		int particleSetting = mc.gameSettings.particleSetting;
-		if (!canDisable && particleSetting > 1) {
-			particleSetting = 1;
+
+		// minimal
+		if (particleSetting == 2) {
+			return world.rand.nextInt(10) == 0;
 		}
-		if (particleSetting == 1 && world.rand.nextInt(3) == 0) {
-			particleSetting = 2;
+
+		// decreased
+		if (particleSetting == 1) {
+			return world.rand.nextInt(3) != 0;
 		}
-		if (particleSetting > 1) {
-			return false;
-		}
+
+		// all
 		return true;
 	}
 
 	@Override
 	public void addSnowFX(World world, double xCoord, double yCoord, double zCoord, int color, int areaX, int areaY, int areaZ) {
-		if (!shouldSpawnParticle(world, true)) {
+		if (!shouldSpawnParticle(world)) {
 			return;
 		}
 

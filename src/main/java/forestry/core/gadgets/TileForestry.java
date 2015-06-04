@@ -51,6 +51,7 @@ import forestry.core.interfaces.IRestrictedAccess;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.IStreamable;
+import forestry.core.network.PacketTileGuiOpened;
 import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.AdjacentTileCache;
@@ -242,6 +243,11 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IR
 		}
 	}
 
+	public final void sendGuiUpdate(EntityPlayer player) {
+		PacketTileGuiOpened packet = new PacketTileGuiOpened(this);
+		Proxies.net.sendToPlayer(packet, player);
+	}
+
 	public final void writeGuiData(DataOutputStream data) throws IOException {
 		writeErrorData(data);
 
@@ -296,7 +302,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IR
 			return;
 		}
 		this.orientation = orientation;
-		this.sendNetworkUpdate();
+		this.setNeedsNetworkUpdate();
 	}
 
 	protected final void setNeedsNetworkUpdate() {
@@ -400,14 +406,14 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IR
 		int ordinal = (access.ordinal() + 1) % EnumAccess.values().length;
 		access = EnumAccess.values()[ordinal];
 		if (!this.worldObj.isRemote) {
-			sendNetworkUpdate();
-		}
+			sendGuiUpdate(player);
 
-		boolean canPipesConnect = allowsPipeConnections();
-		if (couldPipesConnect != canPipesConnect) {
-			// pipes connected to this need to update
-			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, blockType);
-			markDirty();
+			boolean canPipesConnect = allowsPipeConnections();
+			if (couldPipesConnect != canPipesConnect) {
+				// pipes connected to this need to update
+				worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, blockType);
+				markDirty();
+			}
 		}
 
 		return true;
@@ -447,7 +453,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IR
 	}
 
 	@Override
-	public final ItemStack decrStackSize(int slotIndex, int amount) {
+	public ItemStack decrStackSize(int slotIndex, int amount) {
 		return getInternalInventory().decrStackSize(slotIndex, amount);
 	}
 
@@ -457,7 +463,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IR
 	}
 
 	@Override
-	public final void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
+	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
 		getInternalInventory().setInventorySlotContents(slotIndex, itemstack);
 	}
 

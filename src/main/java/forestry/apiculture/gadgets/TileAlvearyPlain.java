@@ -18,7 +18,6 @@ import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -72,11 +71,12 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 	protected BiomeGenBase biome;
 	protected float tempChange = 0.0f;
 	protected float humidChange = 0.0f;
-	private int displayHealthMax = 0;
-	private int displayHealth = 0;
 
 	// CLIENT
 	private boolean active;
+	private int displayHealthMax = 0;
+	private int displayHealth = 0;
+	private IBee displayQueen;
 
 	public TileAlvearyPlain() {
 		super(0);
@@ -194,33 +194,20 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 
 	@Override
 	protected void updateClientSide() {
+		if (isMaster() && active && (displayQueen != null) && updateOnInterval(2)) {
+			displayQueen.doFX(beekeepingLogic.getEffectData(), this);
 
-		if (!isMaster()) {
-			return;
-		}
+			if (updateOnInterval(50)) {
+				float fxX = xCoord + 0.5F;
+				float fxY = yCoord + 0.25F + (worldObj.rand.nextFloat() * 6F) / 16F;
+				float fxZ = zCoord + 0.5F;
+				float f3 = 1.6F;
+				float f4 = worldObj.rand.nextFloat() * f3 - 0.5F;
 
-		if (!active) {
-			return;
-		}
-
-		if (updateOnInterval(2)) {
-			ItemStack queenStack = getStackInSlot(SLOT_QUEEN);
-			if (BeeManager.beeRoot.isMated(queenStack)) {
-				IBee displayQueen = BeeManager.beeRoot.getMember(queenStack);
-				displayQueen.doFX(beekeepingLogic.getEffectData(), this);
-
-				if (updateOnInterval(50)) {
-					float fxX = xCoord + 0.5F;
-					float fxY = yCoord + 0.25F + (worldObj.rand.nextFloat() * 6F) / 16F;
-					float fxZ = zCoord + 0.5F;
-					float f3 = 1.6F;
-					float f4 = worldObj.rand.nextFloat() * f3 - 0.5F;
-
-					Proxies.common.addEntitySwarmFX(worldObj, (fxX - f3), fxY, (fxZ + f4), 0F, 0F, 0F);
-					Proxies.common.addEntitySwarmFX(worldObj, (fxX + f3), fxY, (fxZ + f4), 0F, 0F, 0F);
-					Proxies.common.addEntitySwarmFX(worldObj, (fxX + f4), fxY, (fxZ - f3), 0F, 0F, 0F);
-					Proxies.common.addEntitySwarmFX(worldObj, (fxX + f4), fxY, (fxZ + f3), 0F, 0F, 0F);
-				}
+				Proxies.common.addEntitySwarmFX(worldObj, (fxX - f3), fxY, (fxZ + f4), 0F, 0F, 0F);
+				Proxies.common.addEntitySwarmFX(worldObj, (fxX + f3), fxY, (fxZ + f4), 0F, 0F, 0F);
+				Proxies.common.addEntitySwarmFX(worldObj, (fxX + f4), fxY, (fxZ - f3), 0F, 0F, 0F);
+				Proxies.common.addEntitySwarmFX(worldObj, (fxX + f4), fxY, (fxZ + f3), 0F, 0F, 0F);
 			}
 		}
 	}
@@ -249,32 +236,26 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 
 	/* STATE INFORMATION */
 	private int getHealthDisplay() {
-		IInventory inventory = getStructureInventory();
-		if (inventory == null || inventory.getStackInSlot(SLOT_QUEEN) == null) {
+		if (displayQueen == null) {
 			return 0;
 		}
 
-		if (BeeManager.beeRoot.isMated(inventory.getStackInSlot(SLOT_QUEEN))) {
-			return BeeManager.beeRoot.getMember(inventory.getStackInSlot(SLOT_QUEEN)).getHealth();
-		} else if (!BeeManager.beeRoot.isDrone(inventory.getStackInSlot(SLOT_QUEEN))) {
-			return displayHealth;
+		if (displayQueen.getMate() != null) {
+			return displayQueen.getHealth();
 		} else {
-			return 0;
+			return displayHealth;
 		}
 	}
 
 	private int getMaxHealthDisplay() {
-		IInventory inventory = getStructureInventory();
-		if (inventory == null || inventory.getStackInSlot(SLOT_QUEEN) == null) {
+		if (displayQueen == null) {
 			return 0;
 		}
 
-		if (BeeManager.beeRoot.isMated(inventory.getStackInSlot(SLOT_QUEEN))) {
-			return BeeManager.beeRoot.getMember(inventory.getStackInSlot(SLOT_QUEEN)).getMaxHealth();
-		} else if (!BeeManager.beeRoot.isDrone(inventory.getStackInSlot(SLOT_QUEEN))) {
-			return displayHealthMax;
+		if (displayQueen.getMate() != null) {
+			return displayQueen.getMaxHealth();
 		} else {
-			return 0;
+			return displayHealthMax;
 		}
 	}
 
@@ -372,6 +353,30 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 	@Override
 	public void setQueen(ItemStack itemstack) {
 		setInventorySlotContents(SLOT_QUEEN, itemstack);
+	}
+
+	@Override
+	public ItemStack decrStackSize(int slotIndex, int amount) {
+		ItemStack itemStack = super.decrStackSize(slotIndex, amount);
+		if (isMaster() && slotIndex == SLOT_QUEEN) {
+			handleQueenChange();
+		}
+		return itemStack;
+	}
+
+	@Override
+	public void setInventorySlotContents(int slotIndex, ItemStack itemStack) {
+		super.setInventorySlotContents(slotIndex, itemStack);
+		if (isMaster() && slotIndex == SLOT_QUEEN) {
+			handleQueenChange();
+		}
+	}
+
+	private void handleQueenChange() {
+		if (!Proxies.common.isSimulating(worldObj)) {
+			ItemStack itemStack = getStackInSlot(SLOT_QUEEN);
+			displayQueen = BeeManager.beeRoot.getMember(itemStack);
+		}
 	}
 
 	@Override

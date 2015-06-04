@@ -23,13 +23,14 @@ import forestry.core.gui.slots.SlotCrafter;
 import forestry.core.interfaces.IContainerCrafting;
 import forestry.core.network.PacketGuiSelect;
 import forestry.core.network.PacketId;
+import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
 import forestry.factory.gadgets.TileWorktable;
+import forestry.factory.network.PacketWorktableMemoryUpdate;
 
 public class ContainerWorktable extends ContainerTile<TileWorktable> implements IContainerCrafting, IGuiSelectable {
 
-	private final EntityPlayer player;
 	private final InventoryCrafting craftMatrix = new InventoryCrafting(this, 3, 3);
 	private long lastUpdate;
 
@@ -59,9 +60,6 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		// Update crafting matrix with current contents of tileentity.
 		updateMatrix();
 		updateRecipe();
-
-		this.player = player;
-		tile.sendAll(player);
 	}
 
 	@Override
@@ -72,7 +70,13 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		}
 
 		lastUpdate = tile.getMemory().getLastUpdate();
-		tile.sendAll(player);
+
+		PacketWorktableMemoryUpdate packet = new PacketWorktableMemoryUpdate(tile);
+		for (Object crafter : crafters) {
+			if (crafter instanceof EntityPlayer) {
+				Proxies.net.sendToPlayer(packet, (EntityPlayer) crafter);
+			}
+		}
 	}
 
 	@Override

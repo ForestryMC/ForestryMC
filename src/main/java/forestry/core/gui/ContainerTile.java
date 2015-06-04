@@ -48,7 +48,7 @@ public class ContainerTile<T extends TileForestry> extends ContainerForestry {
 
 		ImmutableSet<IErrorState> errorStates = tile.getErrorStates();
 
-		if (!errorStates.equals(previousErrorStates)) {
+		if ((previousErrorStates != null) && !errorStates.equals(previousErrorStates)) {
 			PacketErrorUpdate packet = new PacketErrorUpdate(tile);
 			for (Object crafter : crafters) {
 				if (crafter instanceof EntityPlayer) {

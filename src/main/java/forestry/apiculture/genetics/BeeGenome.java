@@ -12,19 +12,24 @@ package forestry.apiculture.genetics;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeGenome;
+import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.EnumTolerance;
+import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.api.genetics.IAlleleInteger;
+import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.Genome;
 import forestry.core.genetics.alleles.AlleleArea;
 import forestry.core.genetics.alleles.AlleleBoolean;
@@ -72,6 +77,11 @@ public class BeeGenome extends Genome implements IBeeGenome {
 
 	// NBT RETRIEVAL
 	public static IAlleleBeeSpecies getSpecies(ItemStack itemStack) {
+		IAlleleSpecies species = getSpeciesDirectly(itemStack);
+		if (species instanceof IAlleleBeeSpecies) {
+			return (IAlleleBeeSpecies) species;
+		}
+
 		return (IAlleleBeeSpecies) getActiveAllele(itemStack, EnumBeeChromosome.SPECIES, BeeManager.beeRoot);
 	}
 

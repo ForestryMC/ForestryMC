@@ -23,8 +23,6 @@ public class ContainerApiary extends ContainerTile<TileBeehouse> {
 	public ContainerApiary(InventoryPlayer player, TileBeehouse tile, boolean hasFrames) {
 		super(tile, player, 8, 108);
 
-		tile.sendNetworkUpdate();
-
 		// Queen/Princess
 		this.addSlotToContainer(new SlotFiltered(tile, TileBeehouse.SLOT_QUEEN, 29, 39));
 

@@ -22,9 +22,9 @@ import forestry.apiculture.render.BeeItemRenderer;
 import forestry.apiculture.render.EntityBeeFX;
 import forestry.apiculture.render.ParticleRenderer;
 import forestry.apiculture.render.RenderBee;
-import forestry.core.config.Config;
 import forestry.core.config.ForestryItem;
 import forestry.core.interfaces.IBlockRenderer;
+import forestry.core.proxy.ClientProxyRender;
 import forestry.core.render.RenderAnalyzer;
 import forestry.core.render.TextureManager;
 import forestry.plugins.PluginApiculture;
@@ -44,7 +44,7 @@ public class ClientProxyApiculture extends ProxyApiculture {
 
 	@Override
 	public void addBeeHiveFX(String icon, World world, double xCoord, double yCoord, double zCoord, int color, int areaX, int areaY, int areaZ) {
-		if (!Config.enableParticleFX) {
+		if (!ClientProxyRender.shouldSpawnParticle(world)) {
 			return;
 		}
 
@@ -66,7 +66,7 @@ public class ClientProxyApiculture extends ProxyApiculture {
 
 	@Override
 	public void addBeeSwarmFX(String icon, World world, double xCoord, double yCoord, double zCoord, int color) {
-		if (!Config.enableParticleFX) {
+		if (!ClientProxyRender.shouldSpawnParticle(world)) {
 			return;
 		}
 

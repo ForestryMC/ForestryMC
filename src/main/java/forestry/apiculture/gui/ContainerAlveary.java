@@ -23,8 +23,6 @@ public class ContainerAlveary extends ContainerTile<TileAlvearyPlain> {
 	public ContainerAlveary(InventoryPlayer player, TileAlvearyPlain tile) {
 		super(tile, player, 8, 108);
 
-		tile.sendNetworkUpdate();
-
 		// Queen/Princess
 		this.addSlotToContainer(new SlotFiltered(tile, TileAlvearyPlain.SLOT_QUEEN, 29, 39));
 

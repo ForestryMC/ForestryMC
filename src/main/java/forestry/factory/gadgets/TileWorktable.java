@@ -95,10 +95,6 @@ public class TileWorktable extends TileBase implements ICrafter {
 		memorized.readData(data);
 	}
 
-	public void sendAll(EntityPlayer player) {
-		Proxies.net.sendToPlayer(new PacketTileStream(this), player);
-	}
-
 	@Override
 	public void validate() {
 		super.validate();

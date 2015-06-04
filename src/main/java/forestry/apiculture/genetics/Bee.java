@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import com.google.common.collect.ImmutableSet;
-
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -246,7 +245,7 @@ public class Bee extends IndividualLiving implements IBee {
 		World world = housing.getWorld();
 		BiomeGenBase biome = housing.getBiome();
 
-		ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
+		Set<IErrorState> errorStates = new HashSet<IErrorState>();
 
 		// / Rain needs tolerant flyers
 		if (world.isRaining() && !genome.getTolerantFlyer() && BiomeHelper.canRainOrSnow(biome) && !housing.isSealed()) {
@@ -281,7 +280,7 @@ public class Bee extends IndividualLiving implements IBee {
 			errorStates.add(EnumErrorCode.INVALIDBIOME);
 		}
 
-		return errorStates.build();
+		return errorStates;
 	}
 
 	@Override
