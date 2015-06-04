@@ -80,20 +80,12 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 		ItemStack[][] resources = new ItemStack[3][3];
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				resources[i][j] = getStackInRowAndColumn(inventoryCrafting, i, j);
+				int k = i + j * 3;
+				resources[i][j] = inventoryCrafting.getStackInSlot(k);
 			}
 		}
 
 		return matches(resources);
-	}
-
-	public ItemStack getStackInRowAndColumn(IInventory inventory, int i, int j) {
-		if (i >= 0 && i < width) {
-			int k = i + j * width;
-			return inventory.getStackInSlot(k);
-		} else {
-			return null;
-		}
 	}
 
 	public boolean matches(ItemStack[][] resources) {
