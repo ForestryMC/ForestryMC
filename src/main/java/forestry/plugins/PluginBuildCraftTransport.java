@@ -13,7 +13,6 @@ package forestry.plugins;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.core.config.Defaults;
@@ -35,13 +34,16 @@ public class PluginBuildCraftTransport extends ForestryPlugin {
 		return "BuildCraft|Transport not found";
 	}
 
-	@Optional.Method(modid = "BuildCraft|Transport")
 	@Override
 	protected void registerRecipes() {
-
-		Item pipeWaterproof = GameRegistry.findItem(BCT, "pipeWaterproof");
-		if (pipeWaterproof != null) {
-			Proxies.common.addRecipe(new ItemStack(pipeWaterproof), "#", '#', ForestryItem.beeswax);
+		Item beeswax = ForestryItem.beeswax.item();
+		if (beeswax != null) {
+			Item pipeWaterproof = GameRegistry.findItem(BCT, "pipeWaterproof");
+			if (pipeWaterproof != null) {
+				Proxies.common.addShapelessRecipe(new ItemStack(pipeWaterproof), beeswax);
+			} else {
+				Proxies.log.fine("No BuildCraft pipe waterproof found.");
+			}
 		}
 	}
 }
