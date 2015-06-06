@@ -109,7 +109,7 @@ public class PacketHandlerMail implements IPacketHandler {
 
 	private static void onPOBoxInfoRequest(EntityPlayer player) {
 		MailAddress address = new MailAddress(player.getGameProfile());
-		POBox pobox = PostRegistry.getPOBox(player.worldObj, address);
+		POBox pobox = PostRegistry.getOrCreatePOBox(player.worldObj, address);
 		if (pobox == null) {
 			return;
 		}
