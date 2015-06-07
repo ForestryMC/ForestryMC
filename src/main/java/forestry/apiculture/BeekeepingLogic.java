@@ -176,7 +176,11 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		}
 	}
 
-	private Boolean hasFlowers() {
+	private boolean hasFlowers() {
+		if (queen == null) {
+			return true;
+		}
+
 		if (hasFlowersCooldown <= 0) {
 			hasFlowersCached = queen.hasFlower(housing);
 			hasFlowersCooldown = PluginApiculture.ticksPerBeeWorkCycle / ticksPerCheckCanWork;
@@ -203,6 +207,10 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	private void queenWorkTick() {
+		if (queen == null) {
+			return;
+		}
+
 		// Effects only fire when queen can work.
 		effectData = queen.doEffect(effectData, housing);
 
@@ -222,6 +230,10 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	private void doProduction() {
+		if (queen == null) {
+			return;
+		}
+
 		// Produce and add stacks
 		ItemStack[] products = queen.produceStacks(housing);
 		if (products == null) {
@@ -234,6 +246,10 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	private void doPollination() {
+		if (queen == null) {
+			return;
+		}
+
 		// Get pollen if none available yet
 		if (pollen == null) {
 			pollen = queen.retrievePollen(housing);
@@ -253,6 +269,10 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	private void updateQueenItemNBT() {
+		if (queen == null) {
+			return;
+		}
+
 		// Write the changed queen back into the item stack.
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		queen.writeToNBT(nbttagcompound);
@@ -303,7 +323,10 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 			hasQueen = false;
 			queen = null;
 		} else if (!isQueenAlive(queenStack)) {
-			killQueen(queen);
+			if (queen == null) {
+				queen = BeeManager.beeRoot.getMember(queenStack);
+			}
+			killQueen();
 			housingErrorState = EnumErrorCode.OK;
 			hasQueen = false;
 			queen = null;
@@ -344,6 +367,9 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	private boolean queenCanWork() {
+		if (queen == null) {
+			return false;
+		}
 
 		if (housingSupportsMultipleErrorStates) {
 			try {
@@ -425,7 +451,11 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 	}
 
-	private void killQueen(IBee queen) {
+	private void killQueen() {
+		if (queen == null) {
+			return;
+		}
+
 		if (queen.canSpawn()) {
 			spawnOffspring(queen);
 			housing.getQueen().stackSize = 0;
