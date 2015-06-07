@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import com.google.common.collect.ImmutableMap;
+
 import java.util.EnumSet;
 
 import net.minecraft.init.Blocks;
@@ -278,7 +280,7 @@ public class PluginIC2 extends ForestryPlugin {
 		}
 
 		if (resin != null) {
-			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.propolis.getItemStack(), resin);
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.propolis.getItemStack(), ImmutableMap.of(resin, 1.0f));
 		} else {
 			Proxies.log.fine("Missing IC2 resin, skipping centrifuge recipe for propolis to resin.");
 		}
