@@ -146,6 +146,10 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 		if (getInternalInventory() instanceof FakeInventoryAdapter) {
 			createInventory();
 		}
+
+		if (worldObj != null && !worldObj.isRemote) {
+			setNeedsNetworkUpdate();
+		}
 	}
 
 	@Override

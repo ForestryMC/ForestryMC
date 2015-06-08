@@ -358,7 +358,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 	@Override
 	public ItemStack decrStackSize(int slotIndex, int amount) {
 		ItemStack itemStack = super.decrStackSize(slotIndex, amount);
-		if (isMaster() && slotIndex == SLOT_QUEEN) {
+		if (slotIndex == SLOT_QUEEN) {
 			handleQueenChange();
 		}
 		return itemStack;
@@ -367,15 +367,18 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 	@Override
 	public void setInventorySlotContents(int slotIndex, ItemStack itemStack) {
 		super.setInventorySlotContents(slotIndex, itemStack);
-		if (isMaster() && slotIndex == SLOT_QUEEN) {
+		if (slotIndex == SLOT_QUEEN) {
 			handleQueenChange();
 		}
 	}
 
 	private void handleQueenChange() {
 		if (!Proxies.common.isSimulating(worldObj)) {
-			ItemStack itemStack = getStackInSlot(SLOT_QUEEN);
-			displayQueen = BeeManager.beeRoot.getMember(itemStack);
+			TileAlvearyPlain master = (TileAlvearyPlain) getCentralTE();
+			if (master != null) {
+				ItemStack itemStack = getStackInSlot(SLOT_QUEEN);
+				master.displayQueen = BeeManager.beeRoot.getMember(itemStack);
+			}
 		}
 	}
 

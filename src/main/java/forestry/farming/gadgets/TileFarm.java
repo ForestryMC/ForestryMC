@@ -182,7 +182,7 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 		this.isMaster = true;
 
 		if (worldObj != null && !worldObj.isRemote) {
-			sendNetworkUpdate();
+			setNeedsNetworkUpdate();
 		}
 	}
 
