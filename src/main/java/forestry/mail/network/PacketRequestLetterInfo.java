@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.mail.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import forestry.api.mail.EnumAddressee;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.PacketId;
 
@@ -23,7 +23,7 @@ public class PacketRequestLetterInfo extends ForestryPacket {
 	private String recipientName;
 	private short addressType;
 
-	public PacketRequestLetterInfo(DataInputStream data) throws IOException {
+	public PacketRequestLetterInfo(DataInputStreamForestry data) throws IOException {
 		super(data);
 	}
 
@@ -34,14 +34,14 @@ public class PacketRequestLetterInfo extends ForestryPacket {
 	}
 
 	@Override
-	protected void writeData(DataOutputStream data) throws IOException {
+	protected void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
 		data.writeUTF(recipientName);
 		data.writeShort(addressType);
 	}
 
 	@Override
-	protected void readData(DataInputStream data) throws IOException {
+	protected void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		recipientName = data.readUTF();
 		addressType = data.readShort();

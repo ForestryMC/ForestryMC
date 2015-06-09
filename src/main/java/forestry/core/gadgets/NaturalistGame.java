@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,8 +26,9 @@ import forestry.api.core.INBTTagable;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
-import forestry.core.network.PacketHelper;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Utils;
 
@@ -86,21 +85,19 @@ public class NaturalistGame implements INBTTagable, IStreamable {
 
 		/* NETWORK */
 		@Override
-		public void writeData(DataOutputStream data) throws IOException {
+		public void writeData(DataOutputStreamForestry data) throws IOException {
 			data.writeBoolean(isFailed);
 			data.writeBoolean(isProbed);
 			data.writeBoolean(isRevealed);
-
-			PacketHelper.writeItemStack(tokenStack, data);
+			data.writeItemStack(tokenStack);
 		}
 
 		@Override
-		public void readData(DataInputStream data) throws IOException {
+		public void readData(DataInputStreamForestry data) throws IOException {
 			isFailed = data.readBoolean();
 			isProbed = data.readBoolean();
 			isRevealed = data.readBoolean();
-
-			tokenStack = PacketHelper.readItemStack(data);
+			tokenStack = data.readItemStack();
 		}
 
 		public boolean isVisible() {
@@ -195,22 +192,22 @@ public class NaturalistGame implements INBTTagable, IStreamable {
 
 	/* NETWORK */
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(DataOutputStreamForestry data) throws IOException {
 		data.writeBoolean(isEnded);
 		data.writeInt(bountyLevel);
 		data.writeLong(lastUpdate);
 
 		List<GameToken> gameTokensList = gameTokens == null ? null : Arrays.asList(gameTokens);
-		PacketHelper.writeStreamables(gameTokensList, data);
+		data.writeStreamables(gameTokensList);
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		isEnded = data.readBoolean();
 		bountyLevel = data.readInt();
 		lastUpdate = data.readLong();
 
-		List<GameToken> gameTokensList = PacketHelper.readStreamables(GameToken.class, data);
+		List<GameToken> gameTokensList = data.readStreamables(GameToken.class);
 		if (gameTokensList != null) {
 			this.gameTokens = gameTokensList.toArray(new GameToken[gameTokensList.size()]);
 		}

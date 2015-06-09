@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.DataInputStream;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,6 +17,6 @@ import net.minecraft.entity.player.EntityPlayer;
 public interface IPacketHandler {
 
 	/** Returns true if the packet has been handled */
-	boolean onPacketData(PacketId packetID, DataInputStream data, EntityPlayer player) throws IOException;
+	boolean onPacketData(PacketId packetID, DataInputStreamForestry data, EntityPlayer player) throws IOException;
 
 }

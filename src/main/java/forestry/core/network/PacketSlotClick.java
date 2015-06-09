@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.tileentity.TileEntity;
@@ -19,7 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 public class PacketSlotClick extends PacketCoordinates {
 	private int slot;
 
-	public PacketSlotClick(DataInputStream data) throws IOException {
+	public PacketSlotClick(DataInputStreamForestry data) throws IOException {
 		super(data);
 	}
 
@@ -29,15 +27,15 @@ public class PacketSlotClick extends PacketCoordinates {
 	}
 
 	@Override
-	protected void readData(DataInputStream data) throws IOException {
+	protected void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
-		this.slot = data.readInt();
+		this.slot = data.readVarInt();
 	}
 
 	@Override
-	protected void writeData(DataOutputStream data) throws IOException {
+	protected void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
-		data.writeInt(slot);
+		data.writeVarInt(slot);
 	}
 
 	public int getSlot() {

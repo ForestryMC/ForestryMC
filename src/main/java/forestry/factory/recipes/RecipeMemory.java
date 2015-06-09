@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -31,8 +29,9 @@ import net.minecraft.world.World;
 import forestry.api.core.INBTTagable;
 import forestry.core.gui.ContainerDummy;
 import forestry.core.inventory.InventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
-import forestry.core.network.PacketHelper;
 import forestry.core.utils.PlainInventory;
 
 public class RecipeMemory implements INBTTagable, IStreamable {
@@ -115,7 +114,7 @@ public class RecipeMemory implements INBTTagable, IStreamable {
 		}
 
 		@Override
-		public void writeData(DataOutputStream data) throws IOException {
+		public void writeData(DataOutputStreamForestry data) throws IOException {
 			sanitizeMatrix();
 			matrix.writeData(data);
 			data.writeLong(lastUsed);
@@ -123,7 +122,7 @@ public class RecipeMemory implements INBTTagable, IStreamable {
 		}
 
 		@Override
-		public void readData(DataInputStream data) throws IOException {
+		public void readData(DataInputStreamForestry data) throws IOException {
 			matrix = new InventoryAdapter(new InventoryCrafting(DUMMY_CONTAINER, 3, 3));
 			matrix.readData(data);
 			sanitizeMatrix();
@@ -301,14 +300,14 @@ public class RecipeMemory implements INBTTagable, IStreamable {
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
-		PacketHelper.writeStreamables(recipes, data);
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		data.writeStreamables(recipes);
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		recipes.clear();
-		List<Recipe> newRecipes = PacketHelper.readStreamables(Recipe.class, data);
+		List<Recipe> newRecipes = data.readStreamables(Recipe.class);
 		recipes.addAll(newRecipes);
 	}
 }

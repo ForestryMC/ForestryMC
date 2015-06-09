@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -34,6 +32,8 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.proxy.Proxies;
 
 import buildcraft.api.statements.ITriggerExternal;
@@ -108,23 +108,23 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
 		data.writeBoolean(isMaster);
 
 		// so the client can know if it is part of an integrated structure
-		data.writeShort(masterY);
+		data.writeVarInt(masterY);
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		if (data.readBoolean()) {
 			makeMaster();
 		}
 
 		// so the client can know if it is part of an integrated structure
-		masterY = data.readShort();
+		masterY = data.readVarInt();
 	}
 
 	/* ITILESTRUCTURE */

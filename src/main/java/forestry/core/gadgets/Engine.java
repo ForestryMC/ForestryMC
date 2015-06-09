@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -29,6 +27,8 @@ import forestry.core.EnumErrorCode;
 import forestry.core.TemperatureState;
 import forestry.core.config.Defaults;
 import forestry.core.interfaces.IActivatable;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
 import forestry.energy.EnergyManager;
@@ -286,7 +286,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection, IAct
 
 	/* NETWORK */
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
 		data.writeBoolean(active);
 		data.writeInt(heat);
@@ -295,7 +295,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection, IAct
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		active = data.readBoolean();
 		heat = data.readInt();

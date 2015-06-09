@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.tileentity.TileEntity;
@@ -24,7 +22,7 @@ public class PacketCoordinates extends ForestryPacket implements ILocatedPacket 
 	private int posY;
 	private int posZ;
 
-	public PacketCoordinates(DataInputStream data) throws IOException {
+	public PacketCoordinates(DataInputStreamForestry data) throws IOException {
 		super(data);
 	}
 
@@ -44,17 +42,17 @@ public class PacketCoordinates extends ForestryPacket implements ILocatedPacket 
 	}
 
 	@Override
-	protected void writeData(DataOutputStream data) throws IOException {
-		data.writeInt(posX);
-		data.writeInt(posY);
-		data.writeInt(posZ);
+	protected void writeData(DataOutputStreamForestry data) throws IOException {
+		data.writeVarInt(posX);
+		data.writeVarInt(posY);
+		data.writeVarInt(posZ);
 	}
 
 	@Override
-	protected void readData(DataInputStream data) throws IOException {
-		posX = data.readInt();
-		posY = data.readInt();
-		posZ = data.readInt();
+	protected void readData(DataInputStreamForestry data) throws IOException {
+		posX = data.readVarInt();
+		posY = data.readVarInt();
+		posZ = data.readVarInt();
 	}
 
 	public final ChunkCoordinates getCoordinates() {

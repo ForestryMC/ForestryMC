@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -47,6 +45,8 @@ import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.inventory.wrappers.InventoryMapper;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.GuiUtil;
@@ -199,7 +199,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 	/* Network */
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
 		ItemStack displayStack = getIndividualOnDisplay();
 		if (displayStack == null) {
@@ -217,7 +217,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 
 		ItemStack newIndividualOnDisplay = null;

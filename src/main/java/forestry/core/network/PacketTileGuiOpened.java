@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.tileentity.TileEntity;
@@ -23,11 +21,11 @@ public class PacketTileGuiOpened extends PacketCoordinates {
 
 	private TileForestry tileForestry;
 
-	public static void onPacketData(DataInputStream data) throws IOException {
+	public static void onPacketData(DataInputStreamForestry data) throws IOException {
 		new PacketTileGuiOpened(data);
 	}
 
-	private PacketTileGuiOpened(DataInputStream data) throws IOException {
+	private PacketTileGuiOpened(DataInputStreamForestry data) throws IOException {
 		super(data);
 	}
 
@@ -37,13 +35,13 @@ public class PacketTileGuiOpened extends PacketCoordinates {
 	}
 
 	@Override
-	protected void writeData(DataOutputStream data) throws IOException {
+	protected void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
 		tileForestry.writeGuiData(data);
 	}
 
 	@Override
-	protected void readData(DataInputStream data) throws IOException {
+	protected void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 
 		TileEntity tile = getTarget(Proxies.common.getRenderWorld());

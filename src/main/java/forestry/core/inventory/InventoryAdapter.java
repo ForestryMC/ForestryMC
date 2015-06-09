@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,8 +19,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
 import forestry.core.config.Defaults;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
-import forestry.core.network.PacketHelper;
 import forestry.core.utils.PlainInventory;
 
 /**
@@ -214,12 +213,12 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
-		PacketHelper.writeInventory(inventory, data);
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		data.writeInventory(inventory);
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
-		PacketHelper.readInventory(inventory, data);
+	public void readData(DataInputStreamForestry data) throws IOException {
+		data.readInventory(inventory);
 	}
 }

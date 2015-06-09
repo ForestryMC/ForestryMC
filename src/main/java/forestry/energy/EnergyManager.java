@@ -1,7 +1,5 @@
 package forestry.energy;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -10,6 +8,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.core.GameMode;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.utils.BlockUtil;
 
@@ -85,13 +85,13 @@ public class EnergyManager implements IEnergyHandler, IStreamable {
 
 	/* Packets */
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(DataOutputStreamForestry data) throws IOException {
 		int energyStored = energyStorage.getEnergyStored();
 		data.writeInt(energyStored);
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		int energyStored = data.readInt();
 		energyStorage.setEnergyStored(energyStored);
 	}

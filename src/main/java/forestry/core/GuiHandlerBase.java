@@ -21,7 +21,6 @@ import forestry.core.gadgets.TileForestry;
 import forestry.core.gadgets.TileNaturalistChest;
 import forestry.core.gui.ContainerNaturalistInventory;
 import forestry.core.gui.GuiNaturalistInventory;
-import forestry.core.network.PacketTileGuiOpened;
 import forestry.core.proxy.Proxies;
 
 public abstract class GuiHandlerBase implements IGuiHandler {
@@ -35,7 +34,7 @@ public abstract class GuiHandlerBase implements IGuiHandler {
 		}
 
 		if (tileForestry != null && !world.isRemote) {
-			tileForestry.sendGuiUpdate(player);
+			tileForestry.sendGuiOpened(player);
 		}
 
 		return tileForestry;

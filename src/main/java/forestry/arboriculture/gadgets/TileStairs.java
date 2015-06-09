@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,6 +17,8 @@ import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 
 import forestry.arboriculture.WoodType;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
@@ -76,13 +76,13 @@ public class TileStairs extends TileEntity implements IStreamable {
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
-		data.writeShort(woodType.ordinal());
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		data.writeVarInt(woodType.ordinal());
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
-		short woodTypeOrdinal = data.readShort();
+	public void readData(DataInputStreamForestry data) throws IOException {
+		int woodTypeOrdinal = data.readVarInt();
 		woodType = WoodType.values()[woodTypeOrdinal];
 		worldObj.func_147479_m(xCoord, yCoord, zCoord);
 	}

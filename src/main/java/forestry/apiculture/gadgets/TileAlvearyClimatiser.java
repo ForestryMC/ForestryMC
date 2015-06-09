@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,6 +19,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.apiculture.network.PacketActiveUpdate;
 import forestry.core.interfaces.IActivatable;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.proxy.Proxies;
 import forestry.energy.EnergyManager;
 
@@ -117,13 +117,13 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 
 	/* NETWORK */
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
 		data.writeBoolean(active);
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		setActive(data.readBoolean());
 	}

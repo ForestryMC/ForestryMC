@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.DataInputStream;
 import java.io.InputStream;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -69,7 +68,7 @@ public class PacketHandler {
 	/** Returns true if the packet has been handled */
 	private static boolean onPacketData(FMLProxyPacket fmlPacket, EntityPlayerMP player) {
 		InputStream is = new ByteBufInputStream(fmlPacket.payload());
-		DataInputStream data = new DataInputStream(is);
+		DataInputStreamForestry data = new DataInputStreamForestry(is);
 
 		try {
 			int packetIdOrdinal = data.readByte();
@@ -81,11 +80,11 @@ public class PacketHandler {
 			switch (packetId) {
 
 				case TILE_FORESTRY_UPDATE: {
-					PacketTileStream packet = new PacketTileStream(data);
+					PacketTileStream.onPacketData(data);
 					return true;
 				}
 				case TILE_FORESTRY_ERROR_UPDATE: {
-					PacketErrorUpdate packet = new PacketErrorUpdate(data);
+					PacketErrorUpdate.onPacketData(data);
 					return true;
 				}
 				case TILE_FORESTRY_GUI_OPENED: {
@@ -99,11 +98,6 @@ public class PacketHandler {
 				case SOCKET_UPDATE: {
 					PacketSocketUpdate packetS = new PacketSocketUpdate(data);
 					onSocketUpdate(packetS);
-					return true;
-				}
-				case IINVENTORY_STACK: {
-					PacketInventoryStack packet = new PacketInventoryStack(data);
-					onInventoryStack(packet);
 					return true;
 				}
 				case FX_SIGNAL: {
@@ -239,18 +233,6 @@ public class PacketHandler {
 		ISocketable socketable = (ISocketable) tile;
 		for (int i = 0; i < packet.itemStacks.length; i++) {
 			socketable.setSocket(i, packet.itemStacks[i]);
-		}
-	}
-
-	private static void onInventoryStack(PacketInventoryStack packet) {
-
-		TileEntity tile = packet.getTarget(Proxies.common.getRenderWorld());
-		if (tile == null) {
-			return;
-		}
-
-		if (tile instanceof IInventory) {
-			((IInventory) tile).setInventorySlotContents(packet.slotIndex, packet.itemstack);
 		}
 	}
 

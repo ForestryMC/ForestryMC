@@ -12,8 +12,6 @@ package forestry.core.gadgets;
 
 import com.google.common.collect.ImmutableSet;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
@@ -50,6 +48,8 @@ import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.interfaces.IRestrictedAccess;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketTileGuiOpened;
 import forestry.core.network.PacketTileStream;
@@ -203,7 +203,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IR
 		Proxies.net.sendNetworkPacket(packet);
 	}
 
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(DataOutputStreamForestry data) throws IOException {
 		data.writeByte(orientation.ordinal());
 
 		if (this instanceof ILiquidTankContainer) {
@@ -214,7 +214,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IR
 		}
 	}
 
-	public void readData(DataInputStream data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		orientation = ForgeDirection.getOrientation(data.readByte());
 
 		if (this instanceof ILiquidTankContainer) {
@@ -225,14 +225,14 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IR
 		}
 	}
 
-	public final void writeErrorData(DataOutputStream data) throws IOException {
+	public final void writeErrorData(DataOutputStreamForestry data) throws IOException {
 		data.writeShort(errorStates.size());
 		for (IErrorState errorState : errorStates) {
 			data.writeShort(errorState.getID());
 		}
 	}
 
-	public final void readErrorData(DataInputStream data) throws IOException {
+	public final void readErrorData(DataInputStreamForestry data) throws IOException {
 		errorStates.clear();
 
 		short errorStateCount = data.readShort();
@@ -243,12 +243,12 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IR
 		}
 	}
 
-	public final void sendGuiUpdate(EntityPlayer player) {
+	public final void sendGuiOpened(EntityPlayer player) {
 		PacketTileGuiOpened packet = new PacketTileGuiOpened(this);
 		Proxies.net.sendToPlayer(packet, player);
 	}
 
-	public final void writeGuiData(DataOutputStream data) throws IOException {
+	public final void writeGuiData(DataOutputStreamForestry data) throws IOException {
 		writeErrorData(data);
 
 		if (owner == null) {
@@ -261,7 +261,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IR
 		}
 	}
 
-	public final void readGuiData(DataInputStream data) throws IOException {
+	public final void readGuiData(DataInputStreamForestry data) throws IOException {
 		readErrorData(data);
 
 		byte accessOrdinal = data.readByte();
@@ -406,7 +406,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IR
 		int ordinal = (access.ordinal() + 1) % EnumAccess.values().length;
 		access = EnumAccess.values()[ordinal];
 		if (!this.worldObj.isRemote) {
-			sendGuiUpdate(player);
+			sendGuiOpened(player);
 
 			boolean canPipesConnect = allowsPipeConnections();
 			if (couldPipesConnect != canPipesConnect) {

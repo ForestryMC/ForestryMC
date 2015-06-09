@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.energy.gadgets;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -43,6 +41,8 @@ import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 
 public class EngineBronze extends Engine implements ISidedInventory, ILiquidTankContainer {
@@ -283,13 +283,13 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 
 	/* NETWORK */
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
 		data.writeBoolean(shutdown);
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		shutdown = data.readBoolean();
 	}

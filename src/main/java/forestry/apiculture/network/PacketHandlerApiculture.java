@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.network;
 
-import java.io.DataInputStream;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import forestry.apiculture.gadgets.TileCandle;
 import forestry.apiculture.gui.ContainerImprinter;
+import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.IPacketHandler;
 import forestry.core.network.PacketCoordinates;
 import forestry.core.network.PacketId;
@@ -26,7 +26,7 @@ import forestry.core.proxy.Proxies;
 public class PacketHandlerApiculture implements IPacketHandler {
 
 	@Override
-	public boolean onPacketData(PacketId packetID, DataInputStream data, EntityPlayer player) throws IOException {
+	public boolean onPacketData(PacketId packetID, DataInputStreamForestry data, EntityPlayer player) throws IOException {
 
 		switch (packetID) {
 			case HABITAT_BIOME_POINTER: {

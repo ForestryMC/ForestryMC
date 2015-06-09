@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,6 +24,8 @@ import forestry.api.arboriculture.ITree;
 import forestry.api.genetics.IAllele;
 import forestry.arboriculture.genetics.Tree;
 import forestry.core.interfaces.IOwnable;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.utils.PlayerUtil;
 import forestry.plugins.PluginArboriculture;
@@ -69,7 +69,7 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(DataOutputStreamForestry data) throws IOException {
 		String speciesUID = "";
 		ITree tree = getTree();
 		if (tree != null) {
@@ -79,7 +79,7 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		String speciesUID = data.readUTF();
 		ITree tree = getTree(speciesUID);
 		setTree(tree);

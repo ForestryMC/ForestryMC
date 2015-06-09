@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +30,8 @@ import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IFruitBearer;
 import forestry.api.genetics.IFruitFamily;
 import forestry.arboriculture.network.PacketRipeningUpdate;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
@@ -176,7 +176,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(DataOutputStreamForestry data) throws IOException {
 		data.writeShort(maturity);
 		data.writeShort(indices.length);
 		for (int i : indices) {
@@ -185,7 +185,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		maturity = data.readShort();
 		int indicesLength = data.readShort();
 		indices = new int[indicesLength];

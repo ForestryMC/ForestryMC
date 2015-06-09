@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
+
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 
 public abstract class Mill extends TileBase {
 
@@ -36,7 +37,7 @@ public abstract class Mill extends TileBase {
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
 		data.writeInt(charge);
 		data.writeFloat(speed);
@@ -44,7 +45,7 @@ public abstract class Mill extends TileBase {
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		charge = data.readInt();
 		speed = data.readFloat();

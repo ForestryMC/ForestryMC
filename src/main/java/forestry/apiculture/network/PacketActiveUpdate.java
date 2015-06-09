@@ -10,14 +10,14 @@
  ******************************************************************************/
 package forestry.apiculture.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.tileentity.TileEntity;
 
 import forestry.core.gadgets.TileForestry;
 import forestry.core.interfaces.IActivatable;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.PacketCoordinates;
 import forestry.core.network.PacketId;
 import forestry.core.proxy.Proxies;
@@ -26,11 +26,11 @@ public class PacketActiveUpdate extends PacketCoordinates {
 
 	private IActivatable activatable;
 
-	public static void onPacketData(DataInputStream data) throws IOException {
+	public static void onPacketData(DataInputStreamForestry data) throws IOException {
 		new PacketActiveUpdate(data);
 	}
 
-	private PacketActiveUpdate(DataInputStream data) throws IOException {
+	private PacketActiveUpdate(DataInputStreamForestry data) throws IOException {
 		super(data);
 	}
 
@@ -40,13 +40,13 @@ public class PacketActiveUpdate extends PacketCoordinates {
 	}
 
 	@Override
-	protected void writeData(DataOutputStream data) throws IOException {
+	protected void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
 		data.writeBoolean(activatable.isActive());
 	}
 
 	@Override
-	protected void readData(DataInputStream data) throws IOException {
+	protected void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 
 		boolean active = data.readBoolean();

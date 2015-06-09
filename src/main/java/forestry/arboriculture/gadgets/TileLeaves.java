@@ -12,8 +12,6 @@ package forestry.arboriculture.gadgets;
 
 import com.google.common.collect.ImmutableSet;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -60,6 +58,8 @@ import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.arboriculture.network.PacketRipeningUpdate;
 import forestry.core.EnumErrorCode;
 import forestry.core.genetics.alleles.Allele;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
@@ -356,7 +356,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	private static final short isPollinatedFlag = 1 << 1;
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
 
 		byte leafState = 0;
@@ -382,7 +382,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 
 		String speciesUID = data.readUTF(); // this is called instead of super.readData, be careful!
 

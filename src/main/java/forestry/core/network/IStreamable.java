@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 public interface IStreamable {
-	void writeData(DataOutputStream data) throws IOException;
-	void readData(DataInputStream data) throws IOException;
+	void writeData(DataOutputStreamForestry data) throws IOException;
+
+	void readData(DataInputStreamForestry data) throws IOException;
 }

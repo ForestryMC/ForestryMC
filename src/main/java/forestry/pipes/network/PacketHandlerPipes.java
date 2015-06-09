@@ -7,7 +7,6 @@
  ******************************************************************************/
 package forestry.pipes.network;
 
-import java.io.DataInputStream;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,6 +14,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.ILocatedPacket;
 import forestry.core.network.IPacketHandler;
 import forestry.core.network.PacketCoordinates;
@@ -40,7 +40,7 @@ public class PacketHandlerPipes implements IPacketHandler {
 	}
 
 	@Override
-	public boolean onPacketData(PacketId packetID, DataInputStream data, EntityPlayer player) throws IOException {
+	public boolean onPacketData(PacketId packetID, DataInputStreamForestry data, EntityPlayer player) throws IOException {
 
 		switch (packetID) {
 			// CLIENT

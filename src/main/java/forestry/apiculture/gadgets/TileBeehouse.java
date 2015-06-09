@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Set;
 
@@ -44,8 +42,9 @@ import forestry.core.interfaces.IActivatable;
 import forestry.core.interfaces.IClimatised;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketHelper;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.GuiUtil;
 
@@ -99,21 +98,21 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised, 
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
 		data.writeBoolean(active);
 		if (active) {
 			ItemStack queen = getStackInSlot(SLOT_QUEEN);
-			PacketHelper.writeItemStack(queen, data);
+			data.writeItemStack(queen);
 		}
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		active = data.readBoolean();
 		if (active) {
-			ItemStack queen = PacketHelper.readItemStack(data);
+			ItemStack queen = data.readItemStack();
 			setInventorySlotContents(SLOT_QUEEN, queen);
 		}
 	}

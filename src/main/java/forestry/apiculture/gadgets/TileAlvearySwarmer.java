@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.Stack;
@@ -36,6 +34,8 @@ import forestry.core.interfaces.IActivatable;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
@@ -151,13 +151,13 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 	/* NETWORK */
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
 		data.writeBoolean(active);
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		boolean active = data.readBoolean();
 		if (this.active != active) {

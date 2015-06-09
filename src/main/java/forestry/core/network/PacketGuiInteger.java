@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -26,7 +24,7 @@ public class PacketGuiInteger extends ForestryPacket {
 
 	private int windowId, dataId, value;
 
-	public PacketGuiInteger(DataInputStream data) throws IOException {
+	public PacketGuiInteger(DataInputStreamForestry data) throws IOException {
 		super(data);
 	}
 
@@ -38,14 +36,14 @@ public class PacketGuiInteger extends ForestryPacket {
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(DataOutputStreamForestry data) throws IOException {
 		data.writeByte(windowId);
 		data.writeByte(dataId);
 		data.writeInt(value);
 	}
 
 	@Override
-	protected void readData(DataInputStream data) throws IOException {
+	protected void readData(DataInputStreamForestry data) throws IOException {
 		windowId = data.readByte();
 		dataId = data.readByte();
 		value = data.readInt();

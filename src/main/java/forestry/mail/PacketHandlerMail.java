@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.mail;
 
-import java.io.DataInputStream;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 
+import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.IPacketHandler;
 import forestry.core.network.PacketId;
 import forestry.core.network.PacketString;
@@ -31,7 +31,7 @@ import forestry.mail.network.PacketRequestLetterInfo;
 public class PacketHandlerMail implements IPacketHandler {
 
 	@Override
-	public boolean onPacketData(PacketId packetID, DataInputStream data, EntityPlayer player) throws IOException {
+	public boolean onPacketData(PacketId packetID, DataInputStreamForestry data, EntityPlayer player) throws IOException {
 
 		switch (packetID) {
 			case LETTER_INFO: {

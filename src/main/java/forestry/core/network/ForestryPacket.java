@@ -11,8 +11,6 @@
 package forestry.core.network;
 
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
@@ -24,7 +22,7 @@ public class ForestryPacket {
 	protected static final String channel = "FOR";
 	private final PacketId id;
 
-	public ForestryPacket(DataInputStream data) throws IOException {
+	public ForestryPacket(DataInputStreamForestry data) throws IOException {
 		this.id = PacketId.INVALID;
 		readData(data);
 	}
@@ -35,7 +33,7 @@ public class ForestryPacket {
 
 	public final FMLProxyPacket getPacket() {
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-		DataOutputStream data = new DataOutputStream(bytes);
+		DataOutputStreamForestry data = new DataOutputStreamForestry(bytes);
 
 		try {
 			data.writeByte(id.ordinal());
@@ -47,9 +45,9 @@ public class ForestryPacket {
 		return new FMLProxyPacket(Unpooled.wrappedBuffer(bytes.toByteArray()), channel);
 	}
 
-	protected void writeData(DataOutputStream data) throws IOException {
+	protected void writeData(DataOutputStreamForestry data) throws IOException {
 	}
 
-	protected void readData(DataInputStream data) throws IOException {
+	protected void readData(DataInputStreamForestry data) throws IOException {
 	}
 }

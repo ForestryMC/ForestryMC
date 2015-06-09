@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.farming.gadgets;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,6 +28,8 @@ import forestry.api.farming.IFarmComponent;
 import forestry.api.farming.IFarmListener;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 
 public abstract class TileFarm extends TileForestry implements IFarmComponent {
@@ -133,7 +133,7 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	/* TILEFORESTRY */
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
 		data.writeShort(farmBlock.ordinal());
 		data.writeBoolean(isMaster());
@@ -143,7 +143,7 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		short farmBlockOrdinal = data.readShort();
 		EnumFarmBlock farmType = EnumFarmBlock.values()[farmBlockOrdinal];
