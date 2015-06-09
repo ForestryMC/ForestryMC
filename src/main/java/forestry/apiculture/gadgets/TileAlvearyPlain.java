@@ -391,7 +391,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 
 	@Override
 	public EnumTemperature getTemperature() {
-		if (BiomeHelper.isBiomeHellish(biome) && tempChange >= 0) {
+		if (isHellish() && tempChange >= 0) {
 			return EnumTemperature.HELLISH;
 		}
 
@@ -573,6 +573,10 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 
 	@Override
 	public boolean isHellish() {
+		if (BiomeHelper.isBiomeHellish(biome)) {
+			return true;
+		}
+
 		for (IBeeModifier modifier : modifiers) {
 			if (modifier.isHellish()) {
 				return true;
