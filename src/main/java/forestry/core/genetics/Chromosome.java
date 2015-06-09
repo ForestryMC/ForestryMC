@@ -68,7 +68,7 @@ public class Chromosome implements IChromosome {
 	@Override
 	public IAllele getActiveAllele() {
 		if (primary == null || secondary == null) {
-			Proxies.log.severe("Chromosome is missing alleles");
+			return null;
 		}
 		if (primary.isDominant()) {
 			return primary;
