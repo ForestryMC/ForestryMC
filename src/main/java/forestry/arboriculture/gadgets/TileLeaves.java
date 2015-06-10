@@ -387,11 +387,11 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		String speciesUID = data.readUTF(); // this is called instead of super.readData, be careful!
 
 		byte leafState = data.readByte();
-		boolean hasFruit = (leafState & hasFruitFlag) > 0;
-		boolean isPollinated = (leafState & isPollinatedFlag) > 0;
+		isFruitLeaf = (leafState & hasFruitFlag) > 0;
+		isPollinatedState = (leafState & isPollinatedFlag) > 0;
 		String fruitAlleleUID = null;
 
-		if (hasFruit) {
+		if (isFruitLeaf) {
 			fruitAlleleUID = data.readUTF();
 			colourFruits = data.readInt();
 		}
@@ -407,7 +407,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 		if (treeTemplate != null) {
 			ITree tree = PluginArboriculture.treeInterface.templateAsIndividual(treeTemplate);
-			if (isPollinated) {
+			if (isPollinatedState) {
 				tree.mate(tree);
 			}
 
