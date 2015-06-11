@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -44,7 +45,7 @@ public class CropBasicAgriCraft extends Crop {
 			harvest.remove(1); //AgriCraft returns cropsticks in 0, seeds in 1 in getDrops, removing since harvesting doesn't return them.
 		}
 			harvest.remove(0);
-		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, block, 0);
+		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, Blocks.melon_block, 0);
 		world.setBlockMetadataWithNotify(pos.x, pos.y, pos.z, 0, Defaults.FLAG_BLOCK_SYNCH);
 		return harvest;
 	}
