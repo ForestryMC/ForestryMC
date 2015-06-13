@@ -37,7 +37,7 @@ import forestry.core.utils.StringUtil;
 
 public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoire> {
 
-	private static enum Notes {
+	private enum Notes {
 		level1, level2, level3, level4, success, failure
 	}
 
@@ -48,7 +48,7 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 		for (Notes notesLevel : Notes.values()) {
 			int levelCount = Integer.valueOf(StringUtil.localize("gui.escritoire.notes." + notesLevel + ".count"));
 			for (int i = 1; i <= levelCount; i++) {
-				String note = StringUtil.localize("gui.escritoire.notes." + notesLevel + "." + i);
+				String note = StringUtil.localize("gui.escritoire.notes." + notesLevel + '.' + i);
 				researchNotes.put(notesLevel, note);
 			}
 		}

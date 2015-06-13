@@ -224,7 +224,11 @@ public class NaturalistGame implements INBTTagable, IStreamable {
 		if (boardSize % 2 != 0) {
 			boardSize = Math.round((float) boardSize / 2) * 2;
 		}
-		boardSize = boardSize <= 22 ? boardSize >= 6 ? boardSize : 6 : 22;
+		if (boardSize > 22) {
+			boardSize = 22;
+		} else if (boardSize < 6) {
+			boardSize = 6;
+		}
 
 		isEnded = false;
 		bountyLevel = BOUNTY_MAX;
@@ -446,10 +450,7 @@ public class NaturalistGame implements INBTTagable, IStreamable {
 		ArrayList<GameToken> singles = new ArrayList<GameToken>();
 
 		for (GameToken token : gameTokens) {
-			if (!token.isRevealed) {
-				continue;
-			}
-			if (token == exclude) {
+			if (!token.isRevealed || token == exclude) {
 				continue;
 			}
 
@@ -479,10 +480,14 @@ public class NaturalistGame implements INBTTagable, IStreamable {
 		}
 
 		int samples = gameTokens.length / 4;
-		return samples >= 2 ? samples : 2;
+		return Math.max(samples, 2);
 	}
 
 	public GameToken getToken(int index) {
-		return gameTokens != null ? index < gameTokens.length ? gameTokens[index] : null : null;
+		if (gameTokens != null && index < gameTokens.length) {
+			return gameTokens[index];
+		}
+
+		return null;
 	}
 }
