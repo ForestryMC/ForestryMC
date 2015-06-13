@@ -13,8 +13,6 @@ package forestry.plugins;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBasePressurePlate;
@@ -268,16 +266,13 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 		if (message.key.equals("add-backpack-items")) {
 			String[] tokens = message.getStringValue().split("@");
 			if (tokens.length != 2) {
-				Logger.getLogger("Forestry").log(Level.INFO,
-						String.format("Received an invalid 'add-backpack-items' request %s from mod %s", message.getStringValue(), message.getSender()));
+				logInvalidIMCMessage(message);
 				return true;
 			}
 
 			if (!BackpackManager.definitions.containsKey(tokens[0])) {
-				Logger.getLogger("Forestry").log(
-						Level.INFO,
-						String.format("Received an invalid 'add-backpack-items' request %s from mod %s for non-existent backpack %s.",
-								message.getStringValue(), message.getSender(), tokens[0]));
+				String errorMessage = getInvalidIMCMessageText(message);
+				Proxies.log.warning("%s For non-existent backpack %s.", errorMessage, tokens[0]);
 				return true;
 			}
 

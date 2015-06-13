@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -22,35 +22,29 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.core.ITileStructure;
-import forestry.core.config.ForestryBlock;
 import forestry.core.gadgets.BlockStructure.EnumStructureState;
 import forestry.core.gadgets.StructureLogic;
 import forestry.core.utils.Schemata;
 import forestry.core.utils.Schemata.EnumStructureBlock;
-import forestry.core.utils.StackUtils;
 import forestry.core.vect.Vect;
 
 public class StructureLogicAlveary extends StructureLogic {
 
 	/* CONSTANTS */
 	public static final String UID_ALVEARY = "alveary";
-	public static final Schemata SCHEMATA_ALVEARY = new Schemata("alveary3x3", 5, 6, 5, "FFFFF", "FFFFF", "FFFFF", "FFFFF", "FFFFF", "FFFFF", "FFFFF", "FAAAF",
-			"FAAAF", "FABAF", "FCCCF", "FFFFF", "FFFFF", "FAAAF", "FAAAF", "FBMBF", "FCCCF", "FFFFF", "FFFFF", "FAAAF", "FAAAF", "FABAF", "FCCCF", "FFFFF",
+	public static final Schemata SCHEMATA_ALVEARY = new Schemata("alveary3x3", 5, 6, 5,
+			"FFFFF", "FFFFF", "FFFFF", "FFFFF", "FFFFF", "FFFFF",
+			"FFFFF", "FAAAF", "FAAAF", "FABAF", "FCCCF", "FFFFF",
+			"FFFFF", "FAAAF", "FAAAF", "FBMBF", "FCCCF", "FFFFF",
+			"FFFFF", "FAAAF", "FAAAF", "FABAF", "FCCCF", "FFFFF",
 			"FFFFF", "FFFFF", "FFFFF", "FFFFF", "FFFFF", "FFFFF").setOffsets(-2, -3, -2);
 
-	public static final HashSet<Block> slabBlocks = new HashSet<Block>();
+	private static final Set<Block> slabBlocks = new HashSet<Block>();
+	private static final Set<Integer> slabOreDictIds = new HashSet<Integer>();
 
 	static {
-		slabBlocks.add(Blocks.wooden_slab);
-		slabBlocks.add(ForestryBlock.slabs1.block());
-		slabBlocks.add(ForestryBlock.slabs2.block());
-		slabBlocks.add(ForestryBlock.slabs3.block());
-		slabBlocks.add(ForestryBlock.slabs4.block());
-		ArrayList<ItemStack> slabs = OreDictionary.getOres("slabWood");
-		for (ItemStack slab : slabs) {
-		slabBlocks.add(StackUtils.getBlock(slab));
-		}
-
+		int slabWoodId = OreDictionary.getOreID("slabWood");
+		slabOreDictIds.add(slabWoodId);
 	}
 
 	public StructureLogicAlveary(ITileStructure structure) {
@@ -110,7 +104,7 @@ public class StructureLogicAlveary extends StructureLogic {
 							}
 							break;
 						case BLOCK_C:
-							if (!slabBlocks.contains(block)) {
+							if (!isWoodSlabBlock(block)) {
 								return EnumStructureState.INVALID;
 							}
 							if ((structureTile.getWorldObj().getBlockMetadata(x, y, z) & 8) != 0) {
@@ -135,6 +129,21 @@ public class StructureLogicAlveary extends StructureLogic {
 		}
 
 		return EnumStructureState.VALID;
+	}
+
+	private static boolean isWoodSlabBlock(Block block) {
+		int[] oreIds = OreDictionary.getOreIDs(new ItemStack(block));
+		for (int oreId : oreIds) {
+			if (slabOreDictIds.contains(oreId)) {
+				return true;
+			}
+		}
+
+		return slabBlocks.contains(block);
+	}
+
+	public static void addSlabBlock(Block block) {
+		slabBlocks.add(block);
 	}
 
 }

@@ -15,8 +15,6 @@ import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -902,30 +900,26 @@ public class PluginApiculture extends ForestryPlugin {
 		if (message.key.equals("add-candle-lighting-id")) {
 			ItemStack value = message.getItemStackValue();
 			if (value != null) {
-				((BlockCandle) ForestryBlock.candle.block()).addItemToLightingList(value.getItem());
+				BlockCandle.addItemToLightingList(value.getItem());
 			} else {
-				Logger.getLogger("Forestry").log(Level.WARNING,
-						"Received an invalid 'add-candle-lighting-id' request from mod %s. Please contact the author and report this issue.",
-						message.getSender());
+				logInvalidIMCMessage(message);
 			}
 			return true;
 		} else if (message.key.equals("add-alveary-slab") && message.isStringMessage()) {
 			try {
 				Block block = GameData.getBlockRegistry().getRaw(message.getStringValue());
 
-				if (block == null || block == Blocks.air) {
-					Logger.getLogger("Forestry").log(Level.WARNING,
-							"Received an invalid 'add-alveary-slab' request from mod %s. Please contact the author and report this issue.",
-							message.getSender());
+				if (block != null && block != Blocks.air) {
+					StructureLogicAlveary.addSlabBlock(block);
 				} else {
-					StructureLogicAlveary.slabBlocks.add(block);
+					logInvalidIMCMessage(message);
 				}
 			} catch (Exception e) {
-				Logger.getLogger("Forestry").log(Level.WARNING,
-						"Received an invalid 'add-alveary-slab' request from mod %s. Please contact the author and report this issue.",
-						message.getSender());
+				logInvalidIMCMessage(message);
 			}
+			return true;
 		}
+
 		return super.processIMCMessage(message);
 	}
 

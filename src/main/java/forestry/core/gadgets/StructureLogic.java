@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -32,7 +32,7 @@ public abstract class StructureLogic implements IStructureLogic {
 	protected Schemata[] schematas;
 	protected short activeSchemata = -1;
 	protected boolean isRotated = false;
-	protected HashMap<EnumStructureBlock, Integer> metaOnValid = new HashMap<EnumStructureBlock, Integer>();
+	protected EnumMap<EnumStructureBlock, Integer> metaOnValid = new EnumMap<EnumStructureBlock, Integer>(EnumStructureBlock.class);
 
 	public StructureLogic(String uid, ITileStructure structure) {
 		this.uid = uid;

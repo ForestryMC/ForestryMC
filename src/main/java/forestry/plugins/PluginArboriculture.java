@@ -56,7 +56,6 @@ import forestry.arboriculture.FruitProviderPod.EnumPodType;
 import forestry.arboriculture.FruitProviderRandom;
 import forestry.arboriculture.FruitProviderRipening;
 import forestry.arboriculture.GuiHandlerArboriculture;
-import forestry.arboriculture.network.PacketHandlerArboriculture;
 import forestry.arboriculture.VillageHandlerArboriculture;
 import forestry.arboriculture.WoodType;
 import forestry.arboriculture.commands.CommandTree;
@@ -97,6 +96,7 @@ import forestry.arboriculture.items.ItemLeavesBlock;
 import forestry.arboriculture.items.ItemStairs;
 import forestry.arboriculture.items.ItemTreealyzer;
 import forestry.arboriculture.items.ItemWoodBlock;
+import forestry.arboriculture.network.PacketHandlerArboriculture;
 import forestry.arboriculture.proxy.ProxyArboriculture;
 import forestry.arboriculture.worldgen.WorldGenAcacia;
 import forestry.arboriculture.worldgen.WorldGenAcaciaVanilla;
@@ -1235,11 +1235,12 @@ public class PluginArboriculture extends ForestryPlugin {
 		if (message.key.equals("add-fence-block") && message.isStringMessage()) {
 			Block block = GameData.getBlockRegistry().getRaw(message.getStringValue());
 
-			if (block == null || block == Blocks.air) {
-				Proxies.log.warning("invalid add-fence-block IMC: can't resolve block name %s.", message.getStringValue());
-			} else {
+			if (block != null && block != Blocks.air) {
 				validFences.add(block);
+			} else {
+				logInvalidIMCMessage(message);
 			}
+			return true;
 		}
 		return super.processIMCMessage(message);
 	}

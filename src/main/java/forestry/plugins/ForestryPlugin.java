@@ -26,6 +26,7 @@ import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.IResupplyHandler;
 import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.network.IPacketHandler;
+import forestry.core.proxy.Proxies;
 
 public abstract class ForestryPlugin {
 
@@ -58,6 +59,26 @@ public abstract class ForestryPlugin {
 
 	public boolean processIMCMessage(IMCMessage message) {
 		return false;
+	}
+
+	protected static String getInvalidIMCMessageText(IMCMessage message) {
+		final Object messageValue;
+		if (message.isItemStackMessage()) {
+			messageValue = message.getItemStackValue().toString();
+		} else if (message.isNBTMessage()) {
+			messageValue = message.getNBTValue();
+		} else if (message.isStringMessage()) {
+			messageValue = message.getStringValue();
+		} else {
+			messageValue = "";
+		}
+
+		return String.format("Received an invalid '%s' request '%s' from mod '%s'. Please contact the author and report this issue.", message.key, messageValue, message.getSender());
+	}
+
+	protected static void logInvalidIMCMessage(IMCMessage message) {
+		String invalidIMCMessageText = getInvalidIMCMessageText(message);
+		Proxies.log.warning(invalidIMCMessageText);
 	}
 
 	public IGuiHandler getGuiHandler() {

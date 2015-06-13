@@ -19,7 +19,7 @@ public class Schemata {
 
 		private final char key;
 
-		private EnumStructureBlock(char key) {
+		EnumStructureBlock(char key) {
 			this.key = key;
 		}
 
