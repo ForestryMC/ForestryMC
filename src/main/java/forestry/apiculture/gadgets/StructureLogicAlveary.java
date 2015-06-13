@@ -10,11 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.core.ITileStructure;
@@ -23,6 +27,7 @@ import forestry.core.gadgets.BlockStructure.EnumStructureState;
 import forestry.core.gadgets.StructureLogic;
 import forestry.core.utils.Schemata;
 import forestry.core.utils.Schemata.EnumStructureBlock;
+import forestry.core.utils.StackUtils;
 import forestry.core.vect.Vect;
 
 public class StructureLogicAlveary extends StructureLogic {
@@ -41,6 +46,11 @@ public class StructureLogicAlveary extends StructureLogic {
 		slabBlocks.add(ForestryBlock.slabs2.block());
 		slabBlocks.add(ForestryBlock.slabs3.block());
 		slabBlocks.add(ForestryBlock.slabs4.block());
+		ArrayList<ItemStack> slabs = OreDictionary.getOres("slabWood");
+		for (ItemStack slab : slabs) {
+		slabBlocks.add(StackUtils.getBlock(slab));
+		}
+
 	}
 
 	public StructureLogicAlveary(ITileStructure structure) {
