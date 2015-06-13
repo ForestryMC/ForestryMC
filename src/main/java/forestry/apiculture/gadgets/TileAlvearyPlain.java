@@ -283,6 +283,8 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 		super.onStructureReset();
 		modifiers.clear();
 		eventHandlers.clear();
+
+		setActive(false);
 	}
 
 	/* IALVEARYCOMPONENT */
