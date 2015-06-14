@@ -53,6 +53,97 @@ public class ItemLetter extends ItemInventoried {
 		EMPTY, SMALL, BIG
 	}
 
+	public static ItemStack createStampedLetterStack(ILetter letter) {
+		LetterSize size = getSize(letter);
+		int meta = encodeMeta(LetterState.STAMPED, size);
+		return ForestryItem.letters.getItemStack(1, meta);
+	}
+
+	@Override
+	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+		if (Proxies.common.isSimulating(world)) {
+			if (itemstack.stackSize == 1) {
+				entityplayer.openGui(ForestryAPI.instance, GuiId.LetterGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY, (int) entityplayer.posZ);
+			} else {
+				entityplayer.addChatMessage(new ChatComponentTranslation("for.chat.mail.wrongstacksize"));
+			}
+		}
+
+		return itemstack;
+	}
+
+	@Override
+	public boolean getShareTag() {
+		return true;
+	}
+
+	/* ICONS */
+	@SideOnly(Side.CLIENT)
+	private IIcon[][] icons;
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerIcons(IIconRegister register) {
+		icons = new IIcon[3][4];
+		for (int i = 0; i < 3; i++) {
+			icons[i][0] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".fresh");
+			icons[i][1] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".stamped");
+			icons[i][2] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".opened");
+			icons[i][3] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".emptied");
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public IIcon getIconFromDamage(int damage) {
+
+		LetterState state = getState(damage);
+		LetterSize size = getSize(damage);
+
+		return icons[size.ordinal()][state.ordinal()];
+	}
+
+	public static int encodeMeta(LetterState state, LetterSize size) {
+		int meta = size.ordinal() << 4;
+		meta |= state.ordinal();
+		return meta;
+	}
+
+	public static LetterState getState(int meta) {
+		int ordinal = meta & 0x0f;
+		return LetterState.values()[ordinal];
+	}
+
+	public static LetterSize getSize(int meta) {
+		int ordinal = meta >> 4;
+		return LetterSize.values()[ordinal];
+	}
+
+	public static LetterSize getSize(ILetter letter) {
+		int count = letter.countAttachments();
+
+		if (count > 5) {
+			return LetterSize.BIG;
+		} else if (count > 1) {
+			return LetterSize.SMALL;
+		} else {
+			return LetterSize.EMPTY;
+		}
+	}
+
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	@Override
+	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
+		NBTTagCompound nbttagcompound = itemstack.getTagCompound();
+		if (nbttagcompound == null) {
+			list.add('<' + StringUtil.localize("gui.blank") + '>');
+			return;
+		}
+
+		ILetter letter = new Letter(nbttagcompound);
+		letter.addTooltip(list);
+	}
+
 	public static class LetterInventory extends ItemInventory implements IErrorSource, IHintSource {
 		private ILetter letter;
 
@@ -153,11 +244,6 @@ public class ItemLetter extends ItemInventoried {
 		}
 
 		@Override
-		public void markDirty() {
-			letter.markDirty();
-		}
-
-		@Override
 		public boolean isUseableByPlayer(EntityPlayer entityplayer) {
 			return letter.isUseableByPlayer(entityplayer);
 		}
@@ -210,94 +296,4 @@ public class ItemLetter extends ItemInventoried {
 
 	}
 
-	public static ItemStack createStampedLetterStack(ILetter letter) {
-		LetterSize size = getSize(letter);
-		int meta = encodeMeta(LetterState.STAMPED, size);
-		return ForestryItem.letters.getItemStack(1, meta);
-	}
-
-	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (Proxies.common.isSimulating(world)) {
-			if (itemstack.stackSize == 1) {
-				entityplayer.openGui(ForestryAPI.instance, GuiId.LetterGUI.ordinal(), world, (int) entityplayer.posX, (int) entityplayer.posY, (int) entityplayer.posZ);
-			} else {
-				entityplayer.addChatMessage(new ChatComponentTranslation("for.chat.mail.wrongstacksize"));
-			}
-		}
-
-		return itemstack;
-	}
-
-	@Override
-	public boolean getShareTag() {
-		return true;
-	}
-
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	private IIcon[][] icons;
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerIcons(IIconRegister register) {
-		icons = new IIcon[3][4];
-		for (int i = 0; i < 3; i++) {
-			icons[i][0] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".fresh");
-			icons[i][1] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".stamped");
-			icons[i][2] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".opened");
-			icons[i][3] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".emptied");
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIconFromDamage(int damage) {
-
-		LetterState state = getState(damage);
-		LetterSize size = getSize(damage);
-
-		return icons[size.ordinal()][state.ordinal()];
-	}
-
-	public static int encodeMeta(LetterState state, LetterSize size) {
-		int meta = size.ordinal() << 4;
-		meta |= state.ordinal();
-		return meta;
-	}
-
-	public static LetterState getState(int meta) {
-		int ordinal = meta & 0x0f;
-		return LetterState.values()[ordinal];
-	}
-
-	public static LetterSize getSize(int meta) {
-		int ordinal = meta >> 4;
-		return LetterSize.values()[ordinal];
-	}
-
-	public static LetterSize getSize(ILetter letter) {
-		int count = letter.countAttachments();
-
-		if (count > 5) {
-			return LetterSize.BIG;
-		} else if (count > 1) {
-			return LetterSize.SMALL;
-		} else {
-			return LetterSize.EMPTY;
-		}
-	}
-
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	@Override
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
-		NBTTagCompound nbttagcompound = itemstack.getTagCompound();
-		if (nbttagcompound == null) {
-			list.add('<' + StringUtil.localize("gui.blank") + '>');
-			return;
-		}
-
-		ILetter letter = new Letter(nbttagcompound);
-		letter.addTooltip(list);
-	}
 }

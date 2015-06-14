@@ -48,4 +48,12 @@ public abstract class ContainerItemInventory<I extends ItemInventory> extends Co
 	public final boolean canInteractWith(EntityPlayer entityplayer) {
 		return inventory.isUseableByPlayer(entityplayer);
 	}
+
+	@Override
+	public final ItemStack slotClick(int slotIndex, int button, int modifier, EntityPlayer player) {
+		ItemStack result = super.slotClick(slotIndex, button, modifier, player);
+		inventory.onSlotClick(player);
+		return result;
+	}
+
 }

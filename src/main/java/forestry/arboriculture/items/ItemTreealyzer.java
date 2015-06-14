@@ -40,7 +40,8 @@ public class ItemTreealyzer extends ItemInventoried {
 			return GeneticsUtil.getGeneticEquivalent(itemStack) instanceof ITree;
 		}
 
-		private void tryAnalyze() {
+		@Override
+		public void onSlotClick(EntityPlayer player) {
 			// Source slot to analyze empty
 			if (getStackInSlot(SLOT_SPECIMEN) == null) {
 				return;
@@ -81,11 +82,6 @@ public class ItemTreealyzer extends ItemInventoried {
 
 			setInventorySlotContents(SLOT_ANALYZE_1, getStackInSlot(SLOT_SPECIMEN));
 			setInventorySlotContents(SLOT_SPECIMEN, null);
-		}
-
-		@Override
-		public void markDirty() {
-			tryAnalyze();
 		}
 
 		// / IHINTSOURCE

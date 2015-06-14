@@ -176,6 +176,9 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
 		return Integer.toString(i, Character.MAX_RADIX);
 	}
 
+	public void onSlotClick(EntityPlayer player) {
+	}
+
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
 		ItemStack stack = getStackInSlot(i);
@@ -250,7 +253,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
 	}
 
 	@Override
-	public void markDirty() {
+	public final void markDirty() {
 	}
 
 	@Override

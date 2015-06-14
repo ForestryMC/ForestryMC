@@ -39,7 +39,8 @@ public class ItemFlutterlyzer extends ItemInventoried {
 			return PluginLepidopterology.butterflyInterface.isMember(itemStack);
 		}
 
-		private void tryAnalyze() {
+		@Override
+		public void onSlotClick(EntityPlayer player) {
 			// Source slot to analyze empty
 			if (getStackInSlot(SLOT_SPECIMEN) == null) {
 				return;
@@ -74,11 +75,6 @@ public class ItemFlutterlyzer extends ItemInventoried {
 
 			setInventorySlotContents(SLOT_ANALYZE_1, getStackInSlot(SLOT_SPECIMEN));
 			setInventorySlotContents(SLOT_SPECIMEN, null);
-		}
-
-		@Override
-		public void markDirty() {
-			tryAnalyze();
 		}
 
 		/* IHINTSOURCE */

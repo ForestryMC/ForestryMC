@@ -12,6 +12,8 @@ package forestry.core.vect;
 
 import java.util.Random;
 
+import net.minecraft.entity.Entity;
+
 import net.minecraftforge.common.util.ForgeDirection;
 
 /**
@@ -40,6 +42,12 @@ public class Vect implements IVect {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+	}
+
+	public Vect(Entity entity) {
+		this.x = (int) Math.round(entity.posX);
+		this.y = (int) Math.round(entity.posY);
+		this.z = (int) Math.round(entity.posZ);
 	}
 
 	public static Vect getRandomPositionInArea(Random random, IVect area) {

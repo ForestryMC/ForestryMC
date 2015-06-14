@@ -11,8 +11,8 @@
 package forestry.apiculture.gui;
 
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -35,6 +35,102 @@ import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
 
 public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, HabitatLocatorInventory> {
+
+	private final HabitatSlot[] habitatSlots = new HabitatSlot[]{
+			new HabitatSlot(0, "Ocean"), // ocean, beach
+			new HabitatSlot(1, "Plains"),
+			new HabitatSlot(2, "Desert"), // desert, desert hills
+			new HabitatSlot(3, "Forest"), // forest, forestHills, river
+			new HabitatSlot(4, "Jungle"), // jungle, jungleHills
+			new HabitatSlot(5, "Taiga"), // taiga, taigaHills
+			new HabitatSlot(6, "Hills"), // extremeHills, extremeHillsEdge
+			new HabitatSlot(7, "Swamp"),
+			new HabitatSlot(8, "Snow"), // Ice plains, mountains, frozen rivers, frozen oceans
+			new HabitatSlot(9, "Mushroom"),
+			new HabitatSlot(10, "Nether"),
+			new HabitatSlot(11, "End")};
+	private final Map<BiomeDictionary.Type, HabitatSlot> biomeToHabitat = new EnumMap<BiomeDictionary.Type, HabitatSlot>(BiomeDictionary.Type.class);
+
+	private int startX;
+	private int startY;
+
+	public GuiHabitatLocator(EntityPlayer player, HabitatLocatorInventory item) {
+		super(Defaults.TEXTURE_PATH_GUI + "/biomefinder.png", new ContainerHabitatLocator(player, item), item);
+
+		xSize = 176;
+		ySize = 184;
+
+		int x;
+		int y;
+		for (HabitatSlot slot : habitatSlots) {
+
+			if (slot.slot > 5) {
+				x = 18 + (slot.slot - 6) * 20;
+				y = 50;
+			} else {
+				x = 18 + slot.slot * 20;
+				y = 32;
+			}
+
+			slot.setPosition(x, y);
+			this.widgetManager.add(slot);
+		}
+
+		biomeToHabitat.put(BiomeDictionary.Type.OCEAN, habitatSlots[0]);
+		biomeToHabitat.put(BiomeDictionary.Type.BEACH, habitatSlots[0]);
+		biomeToHabitat.put(BiomeDictionary.Type.PLAINS, habitatSlots[1]);
+		biomeToHabitat.put(BiomeDictionary.Type.SANDY, habitatSlots[2]);
+		biomeToHabitat.put(BiomeDictionary.Type.FOREST, habitatSlots[3]);
+		biomeToHabitat.put(BiomeDictionary.Type.RIVER, habitatSlots[3]);
+		biomeToHabitat.put(BiomeDictionary.Type.JUNGLE, habitatSlots[4]);
+		biomeToHabitat.put(BiomeDictionary.Type.CONIFEROUS, habitatSlots[5]);
+		biomeToHabitat.put(BiomeDictionary.Type.MOUNTAIN, habitatSlots[6]);
+		biomeToHabitat.put(BiomeDictionary.Type.SWAMP, habitatSlots[7]);
+		biomeToHabitat.put(BiomeDictionary.Type.SNOWY, habitatSlots[8]);
+		biomeToHabitat.put(BiomeDictionary.Type.MUSHROOM, habitatSlots[9]);
+		biomeToHabitat.put(BiomeDictionary.Type.NETHER, habitatSlots[10]);
+		biomeToHabitat.put(BiomeDictionary.Type.END, habitatSlots[11]);
+	}
+
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
+
+		String str = StatCollector.translateToLocal("item.for.habitatLocator.name").toUpperCase();
+		fontRendererObj.drawString(str, startX + 8 + getCenteredOffset(str, 138), startY + 16, fontColor.get("gui.screen"));
+
+		// Set active according to valid biomes.
+		Set<BiomeDictionary.Type> activeBiomeTypes = EnumSet.noneOf(BiomeDictionary.Type.class);
+
+		for (HabitatSlot habitatSlot : habitatSlots) {
+			habitatSlot.isActive = false;
+		}
+
+		for (BiomeGenBase biome : inventory.getBiomesToSearch()) {
+			Collections.addAll(activeBiomeTypes, BiomeDictionary.getTypesForBiome(biome));
+		}
+
+		for (BiomeDictionary.Type biomeType : activeBiomeTypes) {
+			HabitatSlot habitatSlot = biomeToHabitat.get(biomeType);
+			if (habitatSlot != null) {
+				habitatSlot.isActive = true;
+			}
+		}
+
+		for (HabitatSlot slot : habitatSlots) {
+			slot.draw(startX, startY);
+		}
+		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Reset afterwards.
+
+	}
+
+	@Override
+	public void initGui() {
+		super.initGui();
+
+		startX = (this.width - this.xSize) / 2;
+		startY = (this.height - this.ySize) / 2;
+	}
 
 	public class HabitatSlot extends Widget {
 
@@ -82,103 +178,6 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, Habi
 			}
 		}
 
-	}
-
-	private final HabitatSlot[] habitatSlots = new HabitatSlot[]{
-			new HabitatSlot(0, "Ocean"), // ocean, beach
-			new HabitatSlot(1, "Plains"),
-			new HabitatSlot(2, "Desert"), // desert, desert hills
-			new HabitatSlot(3, "Forest"), // forest, forestHills, river
-			new HabitatSlot(4, "Jungle"), // jungle, jungleHills
-			new HabitatSlot(5, "Taiga"), // taiga, taigaHills
-			new HabitatSlot(6, "Hills"), // extremeHills, extremeHillsEdge
-			new HabitatSlot(7, "Swamp"),
-			new HabitatSlot(8, "Snow"), // Ice plains, mountains, frozen rivers, frozen oceans
-			new HabitatSlot(9, "Mushroom"),
-			new HabitatSlot(10, "Nether"),
-			new HabitatSlot(11, "End")};
-	private final Map<BiomeDictionary.Type, HabitatSlot> biomeToHabitat = new HashMap<BiomeDictionary.Type, HabitatSlot>();
-
-	private int startX;
-	private int startY;
-
-	public GuiHabitatLocator(EntityPlayer player, HabitatLocatorInventory item) {
-		super(Defaults.TEXTURE_PATH_GUI + "/biomefinder.png", new ContainerHabitatLocator(player, item), item);
-
-		this.inventory.tryAnalyze();
-		xSize = 176;
-		ySize = 184;
-
-		int x;
-		int y;
-		for (HabitatSlot slot : habitatSlots) {
-
-			if (slot.slot > 5) {
-				x = 18 + (slot.slot - 6) * 20;
-				y = 50;
-			} else {
-				x = 18 + slot.slot * 20;
-				y = 32;
-			}
-
-			slot.setPosition(x, y);
-			this.widgetManager.add(slot);
-		}
-
-		biomeToHabitat.put(BiomeDictionary.Type.OCEAN, habitatSlots[0]);
-		biomeToHabitat.put(BiomeDictionary.Type.BEACH, habitatSlots[0]);
-		biomeToHabitat.put(BiomeDictionary.Type.PLAINS, habitatSlots[1]);
-		biomeToHabitat.put(BiomeDictionary.Type.SANDY, habitatSlots[2]);
-		biomeToHabitat.put(BiomeDictionary.Type.FOREST, habitatSlots[3]);
-		biomeToHabitat.put(BiomeDictionary.Type.RIVER, habitatSlots[3]);
-		biomeToHabitat.put(BiomeDictionary.Type.JUNGLE, habitatSlots[4]);
-		biomeToHabitat.put(BiomeDictionary.Type.CONIFEROUS, habitatSlots[5]);
-		biomeToHabitat.put(BiomeDictionary.Type.MOUNTAIN, habitatSlots[6]);
-		biomeToHabitat.put(BiomeDictionary.Type.SWAMP, habitatSlots[7]);
-		biomeToHabitat.put(BiomeDictionary.Type.SNOWY, habitatSlots[8]);
-		biomeToHabitat.put(BiomeDictionary.Type.MUSHROOM, habitatSlots[9]);
-		biomeToHabitat.put(BiomeDictionary.Type.NETHER, habitatSlots[10]);
-		biomeToHabitat.put(BiomeDictionary.Type.END, habitatSlots[11]);
-	}
-
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-
-		String str = StatCollector.translateToLocal("item.for.habitatLocator.name").toUpperCase();
-		fontRendererObj.drawString(str, startX + 8 + getCenteredOffset(str, 138), startY + 16, fontColor.get("gui.screen"));
-
-		// Set active according to valid biomes.
-		Set<BiomeDictionary.Type> activeBiomeTypes = new HashSet<BiomeDictionary.Type>();
-
-		for (HabitatSlot habitatSlot : habitatSlots) {
-			habitatSlot.isActive = false;
-		}
-
-		for (BiomeGenBase biome : inventory.biomesToSearch) {
-			Collections.addAll(activeBiomeTypes, BiomeDictionary.getTypesForBiome(biome));
-		}
-
-		for (BiomeDictionary.Type biomeType : activeBiomeTypes) {
-			HabitatSlot habitatSlot = biomeToHabitat.get(biomeType);
-			if (habitatSlot != null) {
-				habitatSlot.isActive = true;
-			}
-		}
-
-		for (HabitatSlot slot : habitatSlots) {
-			slot.draw(startX, startY);
-		}
-		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Reset afterwards.
-
-	}
-
-	@Override
-	public void initGui() {
-		super.initGui();
-
-		startX = (this.width - this.xSize) / 2;
-		startY = (this.height - this.ySize) / 2;
 	}
 
 }

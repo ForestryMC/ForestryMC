@@ -102,8 +102,8 @@ public class ItemImprinter extends ItemForestry {
 			secondaryIndex = index;
 		}
 
-		private void tryImprint() {
-
+		@Override
+		public void onSlotClick(EntityPlayer player) {
 			ItemStack specimen = getStackInSlot(specimenSlot);
 			if (specimen == null) {
 				return;
@@ -130,11 +130,6 @@ public class ItemImprinter extends ItemForestry {
 
 			setInventorySlotContents(imprintedSlot, specimen);
 			setInventorySlotContents(specimenSlot, null);
-		}
-
-		@Override
-		public void markDirty() {
-			tryImprint();
 		}
 
 		@Override
