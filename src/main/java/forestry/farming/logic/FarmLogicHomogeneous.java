@@ -100,7 +100,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 			}
 
 			ItemStack soilStack = VectUtil.getAsItemStack(world, position);
-			if (isAcceptedSoil(soilStack) || !canBreakSoil(world, position)) {
+			if (isAcceptedSoil(soilStack)) {
 				continue;
 			}
 

@@ -62,7 +62,7 @@ public class FarmTarget {
 		for (extent = 0; extent < limit; extent++) {
 			Block platform = VectUtil.getBlock(world, position);
 			Vect soilPosition = new Vect(position.x, position.y + 1, position.z);
-			if (!StructureLogicFarm.bricks.contains(platform) || !FarmLogic.canBreakSoil(world, soilPosition)) {
+			if (!StructureLogicFarm.bricks.contains(platform)) {
 				break;
 			}
 			position.add(getDirection());

@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import com.google.common.collect.ImmutableSet;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -23,30 +21,14 @@ import net.minecraftforge.common.util.ForgeDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmLogic;
 import forestry.core.config.Defaults;
-import forestry.core.config.ForestryBlock;
 import forestry.core.render.SpriteSheet;
 import forestry.core.vect.Vect;
-import forestry.core.vect.VectUtil;
 
 public abstract class FarmLogic implements IFarmLogic {
 
 	protected final IFarmHousing housing;
 
 	protected boolean isManual;
-
-	private static final ImmutableSet<Block> breakableSoil = ImmutableSet.of(
-			Blocks.air,
-			Blocks.dirt,
-			Blocks.grass,
-			Blocks.sand,
-			Blocks.farmland,
-			Blocks.mycelium,
-			Blocks.soul_sand,
-			Blocks.water,
-			Blocks.flowing_water,
-			Blocks.end_stone,
-			ForestryBlock.soil.block()
-	);
 
 	public FarmLogic(IFarmHousing housing) {
 		this.housing = housing;
@@ -55,11 +37,6 @@ public abstract class FarmLogic implements IFarmLogic {
 	public FarmLogic setManual(boolean flag) {
 		isManual = flag;
 		return this;
-	}
-
-	public static boolean canBreakSoil(World world, Vect position) {
-		Block block = VectUtil.getBlock(world, position);
-		return breakableSoil.contains(block) || block.isReplaceable(world, position.getX(), position.getY(), position.getZ());
 	}
 
 	protected World getWorld() {

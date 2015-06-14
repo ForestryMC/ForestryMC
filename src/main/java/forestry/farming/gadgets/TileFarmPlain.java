@@ -256,7 +256,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 				Block platform = VectUtil.getBlock(world, groundLocation);
 				Vect soilPosition = new Vect(groundLocation.x, groundLocation.y + 1, groundLocation.z);
-				if (!StructureLogicFarm.bricks.contains(platform) || !FarmLogic.canBreakSoil(world, soilPosition)) {
+				if (!StructureLogicFarm.bricks.contains(platform)) {
 					break;
 				}
 
