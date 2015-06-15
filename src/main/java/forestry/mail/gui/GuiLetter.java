@@ -30,45 +30,12 @@ import forestry.core.gui.GuiForestry;
 import forestry.core.gui.GuiTextBox;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.SpriteSheet;
 import forestry.core.utils.StringUtil;
 import forestry.mail.items.ItemLetter.LetterInventory;
 import forestry.mail.network.PacketRequestLetterInfo;
 
 public class GuiLetter extends GuiForestry<ContainerLetter, LetterInventory> {
-
-	protected class AddresseeSlot extends Widget {
-
-		public AddresseeSlot(int xPos, int yPos) {
-			super(widgetManager, xPos, yPos);
-			this.width = 26;
-			this.height = 15;
-		}
-
-		@Override
-		public void draw(int startX, int startY) {
-
-			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
-			//mc.renderEngine.bindTexture(Defaults.TEXTURE_PATH_GUI + "/letter.png");
-			IPostalCarrier carrier = PostManager.postRegistry.getCarrier(container.getCarrierType());
-			if (carrier != null) {
-				drawTexturedModelRectFromIcon(startX + xPos, startY + yPos - 5, carrier.getIcon(), 26, 26);
-			}
-
-		}
-
-		@Override
-		protected String getLegacyTooltip(EntityPlayer player) {
-			return StringUtil.localize("gui.addressee." + container.getCarrierType().toString());
-		}
-
-		@Override
-		public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
-			if (!isProcessedLetter) {
-				container.advanceCarrierType();
-			}
-		}
-
-	}
 
 	private final boolean isProcessedLetter;
 	private boolean checkedSessionVars;
@@ -283,4 +250,37 @@ public class GuiLetter extends GuiForestry<ContainerLetter, LetterInventory> {
 
 		container.setText(this.text.getText());
 	}
+
+	protected class AddresseeSlot extends Widget {
+
+		public AddresseeSlot(int xPos, int yPos) {
+			super(widgetManager, xPos, yPos);
+			this.width = 26;
+			this.height = 15;
+		}
+
+		@Override
+		public void draw(int startX, int startY) {
+			IPostalCarrier carrier = PostManager.postRegistry.getCarrier(container.getCarrierType());
+			if (carrier != null) {
+				GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
+				Proxies.common.bindTexture(SpriteSheet.ITEMS);
+				drawTexturedModelRectFromIcon(startX + xPos, startY + yPos - 5, carrier.getIcon(), 26, 26);
+			}
+		}
+
+		@Override
+		protected String getLegacyTooltip(EntityPlayer player) {
+			return StringUtil.localize("gui.addressee." + container.getCarrierType().toString());
+		}
+
+		@Override
+		public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
+			if (!isProcessedLetter) {
+				container.advanceCarrierType();
+			}
+		}
+
+	}
+
 }
