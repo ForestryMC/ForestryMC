@@ -28,6 +28,7 @@ import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
+import forestry.farming.gadgets.StructureLogicFarm;
 
 public abstract class FarmLogicWatered extends FarmLogic {
 
@@ -95,17 +96,23 @@ public abstract class FarmLogicWatered extends FarmLogic {
 
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(x, y, z, direction, i);
-			Block block = VectUtil.getBlock(world, position);
-			if (!isAirBlock(block) && !Utils.isReplaceableBlock(block)) {
+			Block soil = VectUtil.getBlock(world, position);
 
-				ItemStack blockStack = VectUtil.getAsItemStack(world, position);
-				if (!isAcceptedGround(blockStack) && housing.hasResources(resources)) {
-					produce.addAll(BlockUtil.getBlockDrops(getWorld(), position));
-					setBlock(position, Blocks.air, 0);
-					return trySetSoil(position);
-				}
-
+			ItemStack soilStack = VectUtil.getAsItemStack(world, position);
+			if (isAcceptedGround(soilStack) || !housing.hasResources(resources)) {
 				continue;
+			}
+
+			Vect platformPosition = position.add(0, -1, 0);
+			Block platformBlock = VectUtil.getBlock(world, platformPosition);
+			if (!StructureLogicFarm.bricks.contains(platformBlock)) {
+				break;
+			}
+
+			if (!isAirBlock(soil) && !Utils.isReplaceableBlock(soil)) {
+				produce.addAll(BlockUtil.getBlockDrops(getWorld(), position));
+				setBlock(position, Blocks.air, 0);
+				return trySetSoil(position);
 			}
 
 			if (isManual || isWaterSourceBlock(world, position)) {
@@ -127,6 +134,12 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		World world = getWorld();
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(x, y, z, direction, i);
+
+			Vect platformPosition = position.add(0, -1, 0);
+			Block platformBlock = VectUtil.getBlock(world, platformPosition);
+			if (!StructureLogicFarm.bricks.contains(platformBlock)) {
+				break;
+			}
 
 			if (trySetWater(world, position)) {
 				return true;
