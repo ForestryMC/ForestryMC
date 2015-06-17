@@ -145,12 +145,12 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
 					}
 				}
 
-				migrateToNewNBT();
+				writeToParentNBT();
 			}
 		}
 	}
 
-	private void migrateToNewNBT() {
+	private void writeToParentNBT() {
 		ItemStack parent = getParent();
 		if (parent == null) {
 			return;
@@ -254,6 +254,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
 
 	@Override
 	public final void markDirty() {
+		writeToParentNBT();
 	}
 
 	@Override
