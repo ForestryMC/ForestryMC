@@ -231,7 +231,7 @@ public class PluginStorage extends ForestryPlugin {
 	}
 
 	private static void old_parseBackpackItems(String list, IBackpackDefinition backpackDefinition) {
-		List<ItemStack> backpackItems = StackUtils.parseItemStackStrings(list);
+		List<ItemStack> backpackItems = StackUtils.parseItemStackStrings(list, 0);
 		backpackDefinition.addValidItems(backpackItems);
 	}
 
@@ -425,7 +425,7 @@ public class PluginStorage extends ForestryPlugin {
 			backpackConf.comment = "Add itemStacks for the " + backpackName + "'s backpack here in the format 'modid:name:meta'. For wildcard metadata the format is 'modid:name'.";
 
 			String[] backpackItemList = backpackConf.getStringList();
-			backpackItems = StackUtils.parseItemStackStrings(backpackItemList);
+			backpackItems = StackUtils.parseItemStackStrings(backpackItemList, OreDictionary.WILDCARD_VALUE);
 		}
 
 		{
@@ -487,7 +487,7 @@ public class PluginStorage extends ForestryPlugin {
 			}
 
 			IBackpackDefinition backpackDefinition = BackpackManager.definitions.get(tokens[0]);
-			List<ItemStack> itemStacks = StackUtils.parseItemStackStrings(tokens[1]);
+			List<ItemStack> itemStacks = StackUtils.parseItemStackStrings(tokens[1], 0);
 			backpackDefinition.addValidItems(itemStacks);
 
 			return true;

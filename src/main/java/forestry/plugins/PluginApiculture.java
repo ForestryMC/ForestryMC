@@ -859,7 +859,7 @@ public class PluginApiculture extends ForestryPlugin {
 	}
 
 	private static void parseAdditionalFlowers(String list, ArrayList<ItemStack> target) {
-		List<ItemStack> flowers = StackUtils.parseItemStackStrings(list);
+		List<ItemStack> flowers = StackUtils.parseItemStackStrings(list, 0);
 		target.addAll(flowers);
 	}
 

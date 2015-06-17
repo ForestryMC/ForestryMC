@@ -471,17 +471,17 @@ public class StackUtils {
 		return block == getBlock(stack) && meta == stack.getItemDamage();
 	}
 
-	public static List<ItemStack> parseItemStackStrings(String itemStackStrings) {
+	public static List<ItemStack> parseItemStackStrings(String itemStackStrings, int missingMetaValue) {
 		String[] parts = itemStackStrings.split("(\\s*;\\s*)+");
-		return parseItemStackStrings(parts);
+		return parseItemStackStrings(parts, missingMetaValue);
 	}
 
-	public static List<ItemStack> parseItemStackStrings(String[] parts) {
+	public static List<ItemStack> parseItemStackStrings(String[] parts, int missingMetaValue) {
 
 		List<ItemStack> itemStacks = new ArrayList<ItemStack>();
 
 		for (String itemStackString : parts) {
-			ItemStack itemStack = StackUtils.parseItemStackString(itemStackString);
+			ItemStack itemStack = StackUtils.parseItemStackString(itemStackString, missingMetaValue);
 			if (itemStack != null) {
 				itemStacks.add(itemStack);
 			}
@@ -490,7 +490,7 @@ public class StackUtils {
 		return itemStacks;
 	}
 
-	public static ItemStack parseItemStackString(String itemStackString) {
+	public static ItemStack parseItemStackString(String itemStackString, int missingMetaValue) {
 		itemStackString = itemStackString.trim();
 		if (itemStackString.isEmpty()) {
 			return null;
@@ -507,7 +507,7 @@ public class StackUtils {
 		int meta;
 
 		if (parts.length == 2) {
-			meta = OreDictionary.WILDCARD_VALUE;
+			meta = missingMetaValue;
 		} else {
 			try {
 				meta = parts[2].equals("*") ? OreDictionary.WILDCARD_VALUE : NumberFormat.getIntegerInstance().parse(parts[2]).intValue();
