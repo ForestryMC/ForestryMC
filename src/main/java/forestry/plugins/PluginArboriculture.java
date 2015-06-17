@@ -46,7 +46,6 @@ import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.recipes.RecipeManagers;
-import forestry.api.storage.BackpackManager;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.arboriculture.EventHandlerArboriculture;
@@ -281,9 +280,11 @@ public class PluginArboriculture extends ForestryPlugin {
 		// Stairs
 		ForestryBlock.stairs.registerBlock(new BlockArbStairs(ForestryBlock.planks1.block(), 0), ItemStairs.class, "stairs");
 		ForestryBlock.stairs.block().setHarvestLevel("axe", 0);
+		OreDictionary.registerOre("stairWood", ForestryBlock.stairs.getWildcard());
 
 		// Saplings
 		ForestryBlock.saplingGE.registerBlock(new BlockSapling(), ItemForestryBlock.class, "saplingGE");
+		OreDictionary.registerOre("treeSapling", ForestryBlock.saplingGE.getWildcard());
 
 		// Leaves
 		ForestryBlock.leaves.registerBlock(new ForestryBlockLeaves(), ItemLeavesBlock.class, "leaves");
@@ -367,33 +368,6 @@ public class PluginArboriculture extends ForestryPlugin {
 		ForestryItem.grafter.registerItem(new ItemGrafter(4), "grafter");
 		ForestryItem.grafterProven.registerItem(new ItemGrafter(149), "grafterProven");
 
-	}
-
-	@Override
-	protected void registerBackpackItems() {
-
-		for (ForestryBlock block : logs) {
-			BackpackManager.definitions.get("forester").addValidItem(block.getWildcard());
-		}
-
-		for (ForestryBlock block : fireproofLogs) {
-			BackpackManager.definitions.get("forester").addValidItem(block.getWildcard());
-		}
-
-		BackpackManager.definitions.get("forester").addValidItem(ForestryItem.sapling.getWildcard());
-		BackpackManager.definitions.get("forester").addValidItem(ForestryItem.fruits.getWildcard());
-
-		for (ForestryBlock block : slabs) {
-			BackpackManager.definitions.get("builder").addValidItem(block.getWildcard());
-		}
-		for (ForestryBlock block : fences) {
-			BackpackManager.definitions.get("builder").addValidItem(block.getWildcard());
-		}
-		for (ForestryBlock block : planks) {
-			BackpackManager.definitions.get("builder").addValidItem(block.getWildcard());
-		}
-
-		BackpackManager.definitions.get("builder").addValidItem(ForestryBlock.stairs.getWildcard());
 	}
 
 	@Override

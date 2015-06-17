@@ -21,7 +21,6 @@ import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.network.IGuiHandler;
 
-import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.IResupplyHandler;
 import forestry.core.interfaces.ISaveEventHandler;
@@ -86,10 +85,6 @@ public abstract class ForestryPlugin {
 	}
 
 	public ISaveEventHandler getSaveEventHandler() {
-		return null;
-	}
-
-	public IOreDictionaryHandler getDictionaryHandler() {
 		return null;
 	}
 

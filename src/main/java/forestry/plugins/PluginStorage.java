@@ -11,57 +11,59 @@
 package forestry.plugins;
 
 import java.awt.Color;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockBasePressurePlate;
 import net.minecraft.block.BlockButton;
 import net.minecraft.block.BlockChest;
+import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.BlockLadder;
 import net.minecraft.block.BlockLever;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockMelon;
-import net.minecraft.block.BlockPumpkin;
 import net.minecraft.block.BlockRedstoneDiode;
+import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.BlockWall;
 import net.minecraft.block.BlockWorkbench;
+import net.minecraft.block.IGrowable;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDoor;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
+import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.network.IGuiHandler;
 
+import forestry.Forestry;
 import forestry.api.core.Tabs;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.StorageManager;
-import forestry.core.config.Configuration;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
-import forestry.core.config.Property;
 import forestry.core.fluids.Fluids;
-import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.IResupplyHandler;
-import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemCrated;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
@@ -79,10 +81,9 @@ import forestry.storage.items.ItemNaturalistBackpack.BackpackDefinitionLepidopte
 import forestry.storage.proxy.ProxyStorage;
 
 @Plugin(pluginID = "Storage", name = "Storage", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.storage.description")
-public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandler {
+public class PluginStorage extends ForestryPlugin {
 
 	private static final List<ItemCrated> crates = new ArrayList<ItemCrated>();
-	private static final String CONFIG_CATEGORY = "backpacks";
 
 	@SidedProxy(clientSide = "forestry.storage.proxy.ClientProxyStorage", serverSide = "forestry.storage.proxy.ProxyStorage")
 	public static ProxyStorage proxy;
@@ -92,7 +93,6 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 	private final ArrayList<ItemStack> hunterItems = new ArrayList<ItemStack>();
 	private final ArrayList<ItemStack> adventurerItems = new ArrayList<ItemStack>();
 	private final ArrayList<ItemStack> builderItems = new ArrayList<ItemStack>();
-	private Configuration config;
 
 	@Override
 	@SuppressWarnings({"unchecked", "rawtypes"})
@@ -145,37 +145,313 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 
 	@Override
 	public void postInit() {
-		scanForItems();
+		File configFile = new File(Forestry.instance.getConfigFolder(), "backpacks.cfg");
+		if (!configFile.exists()) {
+			setDefaultsForConfig();
+		}
 
-		config = new Configuration();
+		File oldConfigFile = new File(Forestry.instance.getConfigFolder(), "backpacks.conf");
+		if (oldConfigFile.exists()) {
+			loadOldConfig();
 
-		Property backpackConf = config.get("backpacks.miner.items", CONFIG_CATEGORY, "");
-		backpackConf.comment = "add additional blocks and items for the miner's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("miner"));
-		backpackConf = config.get("backpacks.digger.items", CONFIG_CATEGORY, "");
-		backpackConf.comment = "add additional blocks and items for the digger's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("digger"));
-		backpackConf = config.get("backpacks.forester.items", CONFIG_CATEGORY, "");
-		backpackConf.comment = "add additional blocks and items for the forester's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("forester"));
-		backpackConf = config.get("backpacks.hunter.items", CONFIG_CATEGORY, "");
-		backpackConf.comment = "add additional blocks and items for the hunter's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("hunter"));
-		backpackConf = config.get("backpacks.adventurer.items", CONFIG_CATEGORY, "");
-		backpackConf.comment = "add blocks and items for the adventurer's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("adventurer"));
-		backpackConf = config.get("backpacks.builder.items", CONFIG_CATEGORY, "");
-		backpackConf.comment = "add blocks and items for the builder's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
-		parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("builder"));
+			File oldConfigFileRenamed = new File(Forestry.instance.getConfigFolder(), "backpacks.conf.old");
+			if (oldConfigFile.renameTo(oldConfigFileRenamed)) {
+				Proxies.log.info("Migrated backpack settings to the new file 'backpacks.cfg' and renamed 'backpacks.config' to 'backpacks.conf.old'.");
+			}
+		}
+
+		Configuration config = new Configuration(configFile);
+
+		handleBackpackConfig(config, "miner");
+		handleBackpackConfig(config, "digger");
+		handleBackpackConfig(config, "forester");
+		handleBackpackConfig(config, "hunter");
+		handleBackpackConfig(config, "adventurer");
+		handleBackpackConfig(config, "builder");
 
 		config.save();
 
-		BackpackManager.definitions.get("miner").addValidItems(minerItems);
-		BackpackManager.definitions.get("digger").addValidItems(diggerItems);
-		BackpackManager.definitions.get("forester").addValidItems(foresterItems);
-		BackpackManager.definitions.get("hunter").addValidItems(hunterItems);
-		BackpackManager.definitions.get("adventurer").addValidItems(adventurerItems);
-		BackpackManager.definitions.get("builder").addValidItems(builderItems);
+		BackpackDefinition forester = (BackpackDefinition) BackpackManager.definitions.get("forester");
+		forester.addValidBlockClasses(Arrays.<Class>asList(
+				IPlantable.class,
+				IGrowable.class,
+				IShearable.class
+		));
+		forester.addValidItemClasses(Arrays.<Class>asList(
+				IPlantable.class,
+				IGrowable.class
+		));
+
+		BackpackDefinition builder = (BackpackDefinition) BackpackManager.definitions.get("builder");
+		builder.addValidBlockClasses(Arrays.<Class>asList(
+				BlockStairs.class,
+				BlockFence.class,
+				BlockFenceGate.class,
+				BlockWall.class,
+				BlockBasePressurePlate.class,
+				BlockLever.class,
+				BlockButton.class,
+				BlockTorch.class,
+				BlockRedstoneDiode.class,
+				BlockChest.class,
+				BlockWorkbench.class,
+				BlockFurnace.class,
+				BlockLadder.class,
+				BlockTrapDoor.class,
+				BlockDoor.class,
+				BlockSlab.class
+		));
+		builder.addValidItemClass(ItemDoor.class);
+	}
+
+	private static void loadOldConfig() {
+
+		final forestry.core.config.Configuration config = new forestry.core.config.Configuration();
+
+		final String CONFIG_CATEGORY = "backpacks";
+
+		forestry.core.config.Property backpackConf = config.get("backpacks.miner.items", CONFIG_CATEGORY, "");
+		backpackConf.comment = "add additional blocks and items for the miner's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
+		old_parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("miner"));
+		backpackConf = config.get("backpacks.digger.items", CONFIG_CATEGORY, "");
+		backpackConf.comment = "add additional blocks and items for the digger's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
+		old_parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("digger"));
+		backpackConf = config.get("backpacks.forester.items", CONFIG_CATEGORY, "");
+		backpackConf.comment = "add additional blocks and items for the forester's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
+		old_parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("forester"));
+		backpackConf = config.get("backpacks.hunter.items", CONFIG_CATEGORY, "");
+		backpackConf.comment = "add additional blocks and items for the hunter's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
+		old_parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("hunter"));
+		backpackConf = config.get("backpacks.adventurer.items", CONFIG_CATEGORY, "");
+		backpackConf.comment = "add blocks and items for the adventurer's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
+		old_parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("adventurer"));
+		backpackConf = config.get("backpacks.builder.items", CONFIG_CATEGORY, "");
+		backpackConf.comment = "add blocks and items for the builder's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
+		old_parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("builder"));
+	}
+
+	private static void old_parseBackpackItems(String list, IBackpackDefinition backpackDefinition) {
+		List<ItemStack> backpackItems = StackUtils.parseItemStackStrings(list);
+		backpackDefinition.addValidItems(backpackItems);
+	}
+
+	private void setDefaultsForConfig() {
+
+		final BackpackDefinition miner = (BackpackDefinition) BackpackManager.definitions.get("miner");
+		final BackpackDefinition digger = (BackpackDefinition) BackpackManager.definitions.get("digger");
+		final BackpackDefinition forester = (BackpackDefinition) BackpackManager.definitions.get("forester");
+		final BackpackDefinition adventurer = (BackpackDefinition) BackpackManager.definitions.get("adventurer");
+		final BackpackDefinition builder = (BackpackDefinition) BackpackManager.definitions.get("builder");
+		final BackpackDefinition hunter = (BackpackDefinition) BackpackManager.definitions.get("hunter");
+
+		miner.addValidItems(minerItems);
+		digger.addValidItems(diggerItems);
+		forester.addValidItems(foresterItems);
+		hunter.addValidItems(hunterItems);
+		adventurer.addValidItems(adventurerItems);
+		builder.addValidItems(builderItems);
+
+		final Pattern minerOreDictPattern = Pattern.compile("(ore|dust|gem|ingot|nugget|crushed|cluster|denseore)[A-Z].*");
+		final Pattern diggerOreDictPattern = Pattern.compile("(stone)[A-Z].*");
+		final Pattern foresterOreDictPattern = Pattern.compile("(crop|seed|tree)[A-Z].*");
+		final Pattern builderOreDictPattern = Pattern.compile("(block|paneGlass|slabWood|stainedClay|stainedGlass)[A-Z].*");
+
+		final List<String> minerOreDictNames = new ArrayList<String>();
+		final List<String> diggerOreDictNames = new ArrayList<String>(Arrays.asList(
+				"cobblestone",
+				"stone",
+				"sand"
+		));
+		final List<String> foresterOreDictNames = new ArrayList<String>(Arrays.asList(
+				"logWood",
+				"stickWood",
+				"woodStick",
+				"saplingTree"
+		));
+		final List<String> builderOreDictNames = new ArrayList<String>(Arrays.asList(
+				"stone",
+				"plankWood",
+				"stairWood",
+				"slabWood",
+				"fenceWood",
+				"glass",
+				"blockGlass",
+				"paneGlass"
+		));
+
+		for (String name : OreDictionary.getOreNames()) {
+			if (minerOreDictPattern.matcher(name).matches()) {
+				minerOreDictNames.add(name);
+			} else if (diggerOreDictPattern.matcher(name).matches()) {
+				if (name.equals("stoneRod")) {
+					continue;
+				}
+				diggerOreDictNames.add(name);
+			} else if (foresterOreDictPattern.matcher(name).matches()) {
+				foresterOreDictNames.add(name);
+			} else if (builderOreDictPattern.matcher(name).matches()) {
+				if (name.equals("blockHopper")) {
+					continue;
+				}
+				builderOreDictNames.add(name);
+			}
+		}
+
+		miner.addValidOreDictNames(minerOreDictNames);
+		miner.addValidItems(Arrays.asList(
+				new ItemStack(Blocks.obsidian),
+				new ItemStack(Blocks.coal_ore),
+				new ItemStack(Items.coal),
+				ForestryItem.bronzePickaxe.getItemStack(),
+				ForestryItem.kitPickaxe.getItemStack(),
+				ForestryItem.brokenBronzePickaxe.getItemStack()
+		));
+
+		digger.addValidOreDictNames(diggerOreDictNames);
+		digger.addValidItems(Arrays.asList(
+				new ItemStack(Blocks.dirt, 1, Defaults.WILDCARD),
+				new ItemStack(Blocks.gravel),
+				new ItemStack(Items.flint),
+				new ItemStack(Blocks.netherrack),
+				new ItemStack(Blocks.sandstone, 1, 0),
+				new ItemStack(Items.clay_ball),
+				new ItemStack(Blocks.soul_sand),
+				ForestryItem.bronzeShovel.getItemStack(),
+				ForestryItem.kitShovel.getItemStack(),
+				ForestryItem.brokenBronzeShovel.getItemStack()
+		));
+
+		forester.addValidOreDictNames(foresterOreDictNames);
+		forester.addValidItems(Arrays.asList(
+				new ItemStack(Blocks.red_mushroom),
+				new ItemStack(Blocks.brown_mushroom),
+				new ItemStack(Blocks.red_flower),
+				new ItemStack(Blocks.yellow_flower),
+				new ItemStack(Blocks.cactus),
+				new ItemStack(Blocks.tallgrass, 1, Defaults.WILDCARD),
+				new ItemStack(Blocks.vine),
+				new ItemStack(Blocks.pumpkin),
+				new ItemStack(Blocks.melon_block),
+				new ItemStack(Items.golden_apple),
+				new ItemStack(Items.nether_wart),
+				new ItemStack(Items.pumpkin_seeds),
+				new ItemStack(Items.melon_seeds)
+		));
+
+		hunter.addValidItems(Arrays.asList(
+				new ItemStack(Items.feather),
+				new ItemStack(Items.gunpowder),
+				new ItemStack(Items.blaze_powder),
+				new ItemStack(Items.blaze_rod),
+				new ItemStack(Items.bone),
+				new ItemStack(Items.string),
+				new ItemStack(Items.rotten_flesh),
+				new ItemStack(Items.ghast_tear),
+				new ItemStack(Items.gold_nugget),
+				new ItemStack(Items.arrow),
+				new ItemStack(Items.porkchop),
+				new ItemStack(Items.cooked_porkchop),
+				new ItemStack(Items.beef),
+				new ItemStack(Items.cooked_beef),
+				new ItemStack(Items.chicken),
+				new ItemStack(Items.cooked_chicken),
+				new ItemStack(Items.leather),
+				new ItemStack(Items.egg),
+				new ItemStack(Items.ender_pearl),
+				new ItemStack(Items.spider_eye),
+				new ItemStack(Items.fermented_spider_eye),
+				new ItemStack(Items.slime_ball),
+				new ItemStack(Items.dye, 1, 0),
+				new ItemStack(Blocks.hay_block),
+				new ItemStack(Blocks.wool, 1, Defaults.WILDCARD),
+				new ItemStack(Items.ender_eye),
+				new ItemStack(Items.magma_cream),
+				new ItemStack(Items.speckled_melon),
+				new ItemStack(Items.fish),
+				new ItemStack(Items.cooked_fished),
+				new ItemStack(Items.lead),
+				new ItemStack(Items.fishing_rod),
+				new ItemStack(Items.name_tag),
+				new ItemStack(Items.saddle),
+				new ItemStack(Items.diamond_horse_armor),
+				new ItemStack(Items.golden_horse_armor),
+				new ItemStack(Items.iron_horse_armor)
+		));
+
+		builder.addValidOreDictNames(builderOreDictNames);
+		builder.addValidItems(Arrays.asList(
+				new ItemStack(Blocks.torch),
+				new ItemStack(Blocks.redstone_torch),
+				new ItemStack(Blocks.redstone_lamp),
+				new ItemStack(Blocks.stonebrick, 1, Defaults.WILDCARD),
+				new ItemStack(Blocks.sandstone, 1, 1),
+				new ItemStack(Blocks.sandstone, 1, 2),
+				new ItemStack(Blocks.brick_block),
+				new ItemStack(Blocks.clay),
+				new ItemStack(Blocks.hardened_clay, 1, Defaults.WILDCARD),
+				new ItemStack(Blocks.stained_hardened_clay, 1, Defaults.WILDCARD),
+				new ItemStack(Blocks.packed_ice),
+				new ItemStack(Blocks.nether_brick),
+				new ItemStack(Blocks.crafting_table),
+				new ItemStack(Blocks.furnace),
+				new ItemStack(Blocks.lever),
+				new ItemStack(Blocks.dispenser),
+				new ItemStack(Blocks.dropper),
+				new ItemStack(Blocks.ladder),
+				new ItemStack(Blocks.iron_bars),
+				new ItemStack(Blocks.quartz_block, 1, Defaults.WILDCARD),
+				new ItemStack(Items.sign),
+				new ItemStack(Items.item_frame)
+		));
+
+		if (PluginManager.Module.APICULTURE.isEnabled()) {
+			builder.addValidItem(ForestryBlock.candle.getWildcard());
+			builder.addValidItem(ForestryBlock.stump.getWildcard());
+		}
+	}
+
+	private static void handleBackpackConfig(Configuration config, String backpackName) {
+		BackpackDefinition backpackDefinition = (BackpackDefinition) BackpackManager.definitions.get(backpackName);
+
+		List<ItemStack> backpackItems;
+		List<String> backpackOreDict = new ArrayList<String>();
+
+		{
+			List<String> validItems = backpackDefinition.getValidItemStacks();
+			Collections.sort(validItems);
+			String[] defaultValidItems = validItems.toArray(new String[validItems.size()]);
+
+			Property backpackConf = config.get("backpacks." + backpackName, "itemStacks", defaultValidItems);
+			backpackConf.comment = "Add itemStacks for the " + backpackName + "'s backpack here in the format 'modid:name:meta'. For wildcard metadata the format is 'modid:name'.";
+
+			String[] backpackItemList = backpackConf.getStringList();
+			backpackItems = StackUtils.parseItemStackStrings(backpackItemList);
+		}
+
+		{
+			List<Integer> oreIds = backpackDefinition.getValidOreIds();
+			String[] defaultOreNames = new String[oreIds.size()];
+			for (int i = 0; i < oreIds.size(); i++) {
+				int oreId = oreIds.get(i);
+				defaultOreNames[i] = OreDictionary.getOreName(oreId);
+			}
+
+			List<String> defaultOreNamesList = new ArrayList<String>();
+			Collections.addAll(defaultOreNamesList, defaultOreNames);
+			Collections.sort(defaultOreNamesList);
+			defaultOreNames = defaultOreNamesList.toArray(new String[defaultOreNamesList.size()]);
+
+			Property backpackConf = config.get("backpacks." + backpackName, "oreDict", defaultOreNames);
+			backpackConf.comment = "Add ore dictionary names for the " + backpackName + "'s backpack here in the format 'oreDictName'.";
+
+			String[] oreDictNameList = backpackConf.getStringList();
+			Collections.addAll(backpackOreDict, oreDictNameList);
+		}
+
+		backpackDefinition.clearAllValid();
+
+		backpackDefinition.addValidItems(backpackItems);
+		backpackDefinition.addValidOreDictNames(backpackOreDict);
 	}
 
 	public static void registerCrate(ItemCrated crate) {
@@ -195,72 +471,6 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 		}
 	}
 
-	public static void addBackpackItem(String pack, ItemStack stack) {
-		if (stack == null) {
-			return;
-		}
-		BackpackManager.definitions.get(pack).addValidItem(stack);
-	}
-
-	public static void addBackpackItem(String pack, Block block) {
-		BackpackManager.definitions.get(pack).addValidItem(new ItemStack(block, 1, Defaults.WILDCARD));
-	}
-
-	public static void addBackpackItem(String pack, Item item) {
-		BackpackManager.definitions.get(pack).addValidItem(new ItemStack(item, 1, Defaults.WILDCARD));
-	}
-
-	public static void scanForItems() {
-		for (Object id : Block.blockRegistry.getKeys()) {
-			try {
-				Block block = (Block) Block.blockRegistry.getObject(id);
-
-				if (block instanceof IPlantable
-						|| block instanceof IShearable
-						|| block instanceof BlockLog
-						|| block instanceof BlockMelon
-						|| block instanceof BlockPumpkin) {
-					addBackpackItem("forester", block);
-				}
-				if (block instanceof BlockStairs || block.getRenderType() == 10
-						|| block instanceof BlockFence || block.getRenderType() == 11
-						|| block instanceof BlockFenceGate || block.getRenderType() == 21
-						|| block instanceof BlockWall || block.getRenderType() == 32
-						|| block instanceof BlockBasePressurePlate
-						|| block instanceof BlockLever
-						|| block instanceof BlockButton
-						|| block instanceof BlockTorch
-						|| block instanceof BlockRedstoneDiode
-						|| block instanceof BlockChest || block.getRenderType() == 22
-						|| block instanceof BlockWorkbench
-						|| block instanceof BlockFurnace
-						|| block instanceof BlockLadder || block.getRenderType() == 8
-						|| block instanceof BlockTrapDoor
-						|| block.getUnlocalizedName().contains("door")) {
-					addBackpackItem("builder", block);
-				}
-			} catch (Throwable error) {
-				error.printStackTrace();
-			}
-		}
-
-		for (Object id : Item.itemRegistry.getKeys()) {
-			try {
-				Item item = (Item) Item.itemRegistry.getObject(id);
-
-				if (item instanceof IPlantable) {
-					addBackpackItem("forester", item);
-				} else if (item instanceof ItemFood) {
-					addBackpackItem("hunter", item);
-				} else if (item instanceof ItemDoor) {
-					addBackpackItem("builder", item);
-				}
-			} catch (Throwable error) {
-				error.printStackTrace();
-			}
-		}
-	}
-
 	@Override
 	public boolean processIMCMessage(IMCMessage message) {
 		if (message.key.equals("add-backpack-items")) {
@@ -276,7 +486,9 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 				return true;
 			}
 
-			parseBackpackItems(tokens[1], BackpackManager.definitions.get(tokens[0]));
+			IBackpackDefinition backpackDefinition = BackpackManager.definitions.get(tokens[0]);
+			List<ItemStack> itemStacks = StackUtils.parseItemStackStrings(tokens[1]);
+			backpackDefinition.addValidItems(itemStacks);
 
 			return true;
 		}
@@ -341,173 +553,6 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 		definition = BackpackManager.definitions.get("builder");
 		ForestryItem.builderBackpack.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T1), "builderBag");
 		ForestryItem.builderBackpackT2.registerItem(BackpackManager.backpackInterface.addBackpack(definition, EnumBackpackType.T2), "builderBagT2");
-	}
-
-	@Override
-	protected void registerBackpackItems() {
-
-		// [0] Set valid items in miner's backpack
-		minerItems.add(new ItemStack(Blocks.obsidian));
-		minerItems.add(new ItemStack(Blocks.coal_ore));
-		minerItems.add(new ItemStack(Items.coal));
-		minerItems.add(new ItemStack(Blocks.diamond_ore));
-		minerItems.add(new ItemStack(Items.diamond));
-		minerItems.add(new ItemStack(Blocks.gold_ore));
-		minerItems.add(new ItemStack(Items.gold_ingot));
-		minerItems.add(new ItemStack(Blocks.iron_ore));
-		minerItems.add(new ItemStack(Items.iron_ingot));
-		minerItems.add(new ItemStack(Blocks.lapis_ore));
-		minerItems.add(new ItemStack(Blocks.redstone_ore));
-		minerItems.add(new ItemStack(Items.redstone));
-		minerItems.add(new ItemStack(Items.dye, 1, 4));
-		minerItems.add(new ItemStack(Items.glowstone_dust));
-		minerItems.add(new ItemStack(Items.emerald));
-		minerItems.add(new ItemStack(Blocks.diamond_block));
-		minerItems.add(new ItemStack(Blocks.emerald_block));
-		minerItems.add(new ItemStack(Blocks.gold_block));
-		minerItems.add(new ItemStack(Blocks.iron_block));
-		minerItems.add(new ItemStack(Blocks.lapis_block));
-		minerItems.add(ForestryItem.bronzePickaxe.getItemStack());
-		minerItems.add(ForestryItem.kitPickaxe.getItemStack());
-		minerItems.add(ForestryItem.brokenBronzePickaxe.getItemStack());
-		minerItems.add(new ItemStack(Items.quartz));
-		minerItems.add(new ItemStack(Blocks.emerald_ore));
-		minerItems.add(new ItemStack(Blocks.quartz_ore));
-
-		// [1] Set valid items in digger's backpack
-		diggerItems.add(new ItemStack(Blocks.dirt));
-		diggerItems.add(new ItemStack(Blocks.cobblestone));
-		diggerItems.add(new ItemStack(Blocks.sand));
-		diggerItems.add(new ItemStack(Blocks.sandstone));
-		diggerItems.add(new ItemStack(Blocks.gravel));
-		diggerItems.add(new ItemStack(Items.flint));
-		diggerItems.add(new ItemStack(Blocks.netherrack));
-		diggerItems.add(new ItemStack(Items.clay_ball));
-		diggerItems.add(new ItemStack(Blocks.soul_sand));
-		diggerItems.add(ForestryItem.bronzeShovel.getItemStack());
-		diggerItems.add(ForestryItem.kitShovel.getItemStack());
-		diggerItems.add(ForestryItem.brokenBronzeShovel.getItemStack());
-
-		// [2] Set valid items in forester's backpack
-		foresterItems.add(new ItemStack(Blocks.sapling, 1, Defaults.WILDCARD));
-		foresterItems.add(new ItemStack(Blocks.red_mushroom));
-		foresterItems.add(new ItemStack(Blocks.brown_mushroom));
-		foresterItems.add(new ItemStack(Blocks.log, 1, Defaults.WILDCARD));
-		foresterItems.add(new ItemStack(Items.wheat_seeds));
-		foresterItems.add(new ItemStack(Blocks.red_flower));
-		foresterItems.add(new ItemStack(Blocks.yellow_flower));
-		foresterItems.add(new ItemStack(Blocks.leaves, 1, Defaults.WILDCARD));
-		foresterItems.add(new ItemStack(Blocks.cactus));
-		foresterItems.add(new ItemStack(Blocks.tallgrass, 1, Defaults.WILDCARD));
-		foresterItems.add(new ItemStack(Blocks.vine));
-		foresterItems.add(new ItemStack(Blocks.pumpkin));
-		foresterItems.add(new ItemStack(Blocks.melon_block));
-		foresterItems.add(new ItemStack(Items.apple));
-		foresterItems.add(new ItemStack(Items.golden_apple));
-		foresterItems.add(new ItemStack(Items.nether_wart));
-		foresterItems.add(new ItemStack(Items.pumpkin_seeds));
-		foresterItems.add(new ItemStack(Items.melon_seeds));
-		foresterItems.add(new ItemStack(Items.wheat));
-		if (PluginManager.Module.ARBORICULTURE.isEnabled()) {
-			foresterItems.add(ForestryBlock.saplingGE.getWildcard());
-		}
-
-		// [3] Set valid items in hunter's backpack
-		hunterItems.add(new ItemStack(Items.feather));
-		hunterItems.add(new ItemStack(Items.gunpowder));
-		hunterItems.add(new ItemStack(Items.blaze_powder));
-		hunterItems.add(new ItemStack(Items.blaze_rod));
-		hunterItems.add(new ItemStack(Items.bone));
-		hunterItems.add(new ItemStack(Items.string));
-		hunterItems.add(new ItemStack(Items.rotten_flesh));
-		hunterItems.add(new ItemStack(Items.ghast_tear));
-		hunterItems.add(new ItemStack(Items.gold_nugget));
-		hunterItems.add(new ItemStack(Items.arrow));
-		hunterItems.add(new ItemStack(Items.porkchop));
-		hunterItems.add(new ItemStack(Items.cooked_porkchop));
-		hunterItems.add(new ItemStack(Items.beef));
-		hunterItems.add(new ItemStack(Items.cooked_beef));
-		hunterItems.add(new ItemStack(Items.chicken));
-		hunterItems.add(new ItemStack(Items.cooked_chicken));
-		hunterItems.add(new ItemStack(Items.leather));
-		hunterItems.add(new ItemStack(Items.egg));
-		hunterItems.add(new ItemStack(Items.ender_pearl));
-		hunterItems.add(new ItemStack(Items.spider_eye));
-		hunterItems.add(new ItemStack(Items.fermented_spider_eye));
-		hunterItems.add(new ItemStack(Items.slime_ball));
-		hunterItems.add(new ItemStack(Items.dye, 1, 0));
-		hunterItems.add(new ItemStack(Blocks.hay_block));
-		hunterItems.add(new ItemStack(Blocks.wool));
-		hunterItems.add(new ItemStack(Blocks.wool, 1, Defaults.WILDCARD));
-		hunterItems.add(new ItemStack(Items.ender_eye));
-		hunterItems.add(new ItemStack(Items.magma_cream));
-		hunterItems.add(new ItemStack(Items.speckled_melon));
-		hunterItems.add(new ItemStack(Items.fish));
-		hunterItems.add(new ItemStack(Items.cooked_fished));
-		hunterItems.add(new ItemStack(Items.lead));
-		hunterItems.add(new ItemStack(Items.fishing_rod));
-		hunterItems.add(new ItemStack(Items.name_tag));
-		hunterItems.add(new ItemStack(Items.saddle));
-		hunterItems.add(new ItemStack(Items.diamond_horse_armor));
-		hunterItems.add(new ItemStack(Items.golden_horse_armor));
-		hunterItems.add(new ItemStack(Items.iron_horse_armor));
-
-		// [4] Set valid items in adventurer's backpack
-
-		// [5] Set valid items in builder's backpack
-		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			builderItems.add(ForestryBlock.candle.getWildcard());
-			builderItems.add(ForestryBlock.stump.getWildcard());
-		}
-
-		builderItems.add(new ItemStack(Blocks.torch));
-		builderItems.add(new ItemStack(Blocks.redstone_torch));
-		builderItems.add(new ItemStack(Blocks.redstone_lamp));
-		builderItems.add(new ItemStack(Blocks.stonebrick, 1, Defaults.WILDCARD));
-		builderItems.add(new ItemStack(Blocks.sandstone, 1, 1));
-		builderItems.add(new ItemStack(Blocks.sandstone, 1, 2));
-		builderItems.add(new ItemStack(Blocks.stone));
-		builderItems.add(new ItemStack(Blocks.brick_block));
-		builderItems.add(new ItemStack(Blocks.planks, 1, Defaults.WILDCARD));
-		builderItems.add(new ItemStack(Blocks.clay));
-		builderItems.add(new ItemStack(Blocks.hardened_clay, 1, Defaults.WILDCARD));
-		builderItems.add(new ItemStack(Blocks.stained_hardened_clay, 1, Defaults.WILDCARD));
-		builderItems.add(new ItemStack(Blocks.packed_ice));
-		builderItems.add(new ItemStack(Blocks.nether_brick));
-		builderItems.add(new ItemStack(Blocks.nether_brick_fence));
-		builderItems.add(new ItemStack(Blocks.stone_stairs));
-		builderItems.add(new ItemStack(Blocks.oak_stairs));
-		builderItems.add(new ItemStack(Blocks.brick_stairs));
-		builderItems.add(new ItemStack(Blocks.nether_brick_stairs));
-		builderItems.add(new ItemStack(Blocks.stone_brick_stairs));
-		builderItems.add(new ItemStack(Blocks.glass));
-		builderItems.add(new ItemStack(Blocks.glass_pane));
-		builderItems.add(new ItemStack(Blocks.chest));
-		builderItems.add(new ItemStack(Blocks.crafting_table));
-		builderItems.add(new ItemStack(Blocks.furnace));
-		builderItems.add(new ItemStack(Blocks.lever));
-		builderItems.add(new ItemStack(Blocks.wooden_button));
-		builderItems.add(new ItemStack(Blocks.stone_button));
-		builderItems.add(new ItemStack(Blocks.dispenser));
-		builderItems.add(new ItemStack(Blocks.dropper));
-		builderItems.add(new ItemStack(Blocks.ladder));
-		builderItems.add(new ItemStack(Blocks.fence));
-		builderItems.add(new ItemStack(Blocks.fence_gate));
-		builderItems.add(new ItemStack(Blocks.iron_bars));
-		builderItems.add(new ItemStack(Blocks.stone_slab, 1, Defaults.WILDCARD));
-		builderItems.add(new ItemStack(Blocks.quartz_block, 1, Defaults.WILDCARD));
-		builderItems.add(new ItemStack(Blocks.quartz_stairs));
-		builderItems.add(new ItemStack(Blocks.sandstone_stairs));
-		builderItems.add(new ItemStack(Blocks.birch_stairs));
-		builderItems.add(new ItemStack(Blocks.spruce_stairs));
-		builderItems.add(new ItemStack(Blocks.jungle_stairs));
-		builderItems.add(new ItemStack(Blocks.cobblestone_wall, 1, Defaults.WILDCARD));
-		builderItems.add(new ItemStack(Items.iron_door));
-		builderItems.add(new ItemStack(Items.wooden_door));
-		builderItems.add(new ItemStack(Items.sign));
-		builderItems.add(new ItemStack(Items.repeater));
-		builderItems.add(new ItemStack(Items.comparator));
-		builderItems.add(new ItemStack(Items.item_frame));
 	}
 
 	@Override
@@ -588,57 +633,4 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 		}
 	}
 
-	@Override
-	protected void registerCrates() {
-	}
-
-	private static void parseBackpackItems(String list, IBackpackDefinition target) {
-		List<ItemStack> backpackItems = StackUtils.parseItemStackStrings(list);
-		target.addValidItems(backpackItems);
-	}
-
-	@Override
-	public ISaveEventHandler getSaveEventHandler() {
-		return null;
-	}
-
-	@Override
-	public IOreDictionaryHandler getDictionaryHandler() {
-		return this;
-	}
-
-	@Override
-	public void onOreRegistration(String name, ItemStack ore) {
-
-		if (ore == null) {
-			Proxies.log.warning("An ore/item of type %s was registered with the Forge ore dictionary, however the passed itemstack is null. Someone broke it. :(", name);
-			return;
-		}
-
-		if (name.startsWith("ingot")) {
-			minerItems.add(ore);
-		} else if (name.startsWith("ore")) {
-			minerItems.add(ore);
-		} else if (name.startsWith("gem")) {
-			minerItems.add(ore);
-		} else if (name.startsWith("dust")) {
-			minerItems.add(ore);
-		} else if (name.startsWith("crystal")) {
-			minerItems.add(ore);
-		} else if (name.startsWith("cluster")) {
-			minerItems.add(ore);
-		} else if (name.startsWith("shard")) {
-			minerItems.add(ore);
-		} else if (name.startsWith("clump")) {
-			minerItems.add(ore);
-		} else if (name.matches("dropUranium")) {
-			minerItems.add(ore);
-		} else if (name.equals("treeLeaves") || name.equals("treeSapling") || name.equals("logWood")) {
-			foresterItems.add(ore);
-		} else if (name.equals("stairWood") || name.equals("plankWood") || name.equals("slabWood")) {
-			builderItems.add(ore);
-		} else if (name.startsWith("wood")) {
-			foresterItems.add(ore);
-		}
-	}
 }

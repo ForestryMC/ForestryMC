@@ -473,6 +473,10 @@ public class StackUtils {
 
 	public static List<ItemStack> parseItemStackStrings(String itemStackStrings) {
 		String[] parts = itemStackStrings.split("(\\s*;\\s*)+");
+		return parseItemStackStrings(parts);
+	}
+
+	public static List<ItemStack> parseItemStackStrings(String[] parts) {
 
 		List<ItemStack> itemStacks = new ArrayList<ItemStack>();
 
@@ -499,16 +503,16 @@ public class StackUtils {
 			return null;
 		}
 
-		String name = parts[0] + ":" + parts[1];
+		String name = parts[0] + ':' + parts[1];
 		int meta;
 
 		if (parts.length == 2) {
-			meta = 0;
+			meta = OreDictionary.WILDCARD_VALUE;
 		} else {
 			try {
 				meta = parts[2].equals("*") ? OreDictionary.WILDCARD_VALUE : NumberFormat.getIntegerInstance().parse(parts[2]).intValue();
 			} catch (ParseException e) {
-				Proxies.log.warning("ItemStack string (" + itemStackString + ") has improperly formatter metadata. Suitable metadata are integer values or *.");
+				Proxies.log.warning("ItemStack string (" + itemStackString + ") has improperly formatted metadata. Suitable metadata are integer values or *.");
 				return null;
 			}
 		}

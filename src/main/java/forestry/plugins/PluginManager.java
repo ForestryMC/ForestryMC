@@ -39,7 +39,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.Forestry;
 import forestry.api.core.ForestryAPI;
-import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.IResupplyHandler;
 import forestry.core.interfaces.ISaveEventHandler;
@@ -56,7 +55,6 @@ public class PluginManager {
 	public static final ArrayList<IPickupHandler> pickupHandlers = Lists.newArrayList();
 	public static final ArrayList<ISaveEventHandler> saveEventHandlers = Lists.newArrayList();
 	public static final ArrayList<IResupplyHandler> resupplyHandlers = Lists.newArrayList();
-	public static final ArrayList<IOreDictionaryHandler> dictionaryHandlers = Lists.newArrayList();
 
 	private static final Set<Module> loadedModules = EnumSet.noneOf(Module.class);
 	private static final Set<Module> unloadedModules = EnumSet.allOf(Module.class);
@@ -165,11 +163,6 @@ public class PluginManager {
 		IResupplyHandler resupplyHandler = plugin.getResupplyHandler();
 		if (resupplyHandler != null) {
 			resupplyHandlers.add(resupplyHandler);
-		}
-
-		IOreDictionaryHandler dictionaryHandler = plugin.getDictionaryHandler();
-		if (dictionaryHandler != null) {
-			dictionaryHandlers.add(dictionaryHandler);
 		}
 
 		IFuelHandler fuelHandler = plugin.getFuelHandler();

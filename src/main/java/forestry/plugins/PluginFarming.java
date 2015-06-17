@@ -36,8 +36,6 @@ import forestry.core.circuits.CircuitLayout;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
-import forestry.core.interfaces.IOreDictionaryHandler;
-import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemTypedBlock;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ShapedRecipeCustom;
@@ -279,28 +277,6 @@ public class PluginFarming extends ForestryPlugin {
 	@Override
 	public IGuiHandler getGuiHandler() {
 		return new GuiHandlerFarming();
-	}
-
-	@Override
-	public ISaveEventHandler getSaveEventHandler() {
-		return null;
-	}
-
-	@Override
-	public IOreDictionaryHandler getDictionaryHandler() {
-		return null;
-	}
-
-	@Override
-	protected void registerItems() {
-	}
-
-	@Override
-	protected void registerBackpackItems() {
-	}
-
-	@Override
-	protected void registerCrates() {
 	}
 
 	@Override

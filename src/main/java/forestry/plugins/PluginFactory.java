@@ -264,14 +264,6 @@ public class PluginFactory extends ForestryPlugin {
 	}
 
 	@Override
-	protected void registerItems() {
-	}
-
-	@Override
-	protected void registerBackpackItems() {
-	}
-
-	@Override
 	protected void registerRecipes() {
 
 		// / FABRICATOR

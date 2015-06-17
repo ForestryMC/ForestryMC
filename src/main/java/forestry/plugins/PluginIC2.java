@@ -30,6 +30,7 @@ import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
+import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.core.GameMode;
@@ -215,21 +216,23 @@ public class PluginIC2 extends ForestryPlugin {
 	@Override
 	@Optional.Method(modid = "IC2")
 	protected void registerBackpackItems() {
-		if (BackpackManager.backpackItems == null) {
+		if (BackpackManager.definitions == null) {
 			return;
 		}
 
+		IBackpackDefinition forester = BackpackManager.definitions.get("forester");
+
 		if (resin != null) {
-			BackpackManager.definitions.get("forester").addValidItem(resin);
+			forester.addValidItem(resin);
 		}
 		if (rubber != null) {
-			BackpackManager.definitions.get("forester").addValidItem(rubber);
+			forester.addValidItem(rubber);
 		}
 		if (rubbersapling != null) {
-			BackpackManager.definitions.get("forester").addValidItem(rubbersapling);
+			forester.addValidItem(rubbersapling);
 		}
 		if (rubberleaves != null) {
-			BackpackManager.definitions.get("forester").addValidItem(rubberleaves);
+			forester.addValidItem(rubberleaves);
 		}
 	}
 

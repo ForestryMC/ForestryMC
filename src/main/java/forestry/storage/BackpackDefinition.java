@@ -15,13 +15,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 
+import net.minecraftforge.oredict.OreDictionary;
+
 import forestry.api.storage.IBackpackDefinition;
-import forestry.core.utils.StackUtils;
 
 public class BackpackDefinition implements IBackpackDefinition {
 
@@ -30,7 +32,10 @@ public class BackpackDefinition implements IBackpackDefinition {
 	private final int primaryColor; // - c03384
 	private final int secondaryColor;
 
-	private final ArrayList<ItemStack> validItems = new ArrayList<ItemStack>();
+	private final List<String> validItemStacks = new ArrayList<String>();
+	private final List<Integer> validOreIds = new ArrayList<Integer>();
+	private final List<Class> validItemClasses = new ArrayList<Class>();
+	private final List<Class> validBlockClasses = new ArrayList<Class>();
 
 	public BackpackDefinition(String name, int primaryColor) {
 		this(name, primaryColor, 0xffffff);
@@ -75,19 +80,88 @@ public class BackpackDefinition implements IBackpackDefinition {
 
 	@Override
 	public void addValidItem(ItemStack validItem) {
-		if (validItem.getItem() != null) {
-			this.validItems.add(validItem);
+		if (validItem == null) {
+			return;
 		}
+
+		Item item = validItem.getItem();
+		if (item == null) {
+			return;
+		}
+
+		String itemStackString = item.delegate.name();
+
+		int meta = validItem.getItemDamage();
+		if (meta != OreDictionary.WILDCARD_VALUE) {
+			itemStackString = itemStackString + ':' + meta;
+		}
+
+		this.validItemStacks.add(itemStackString);
 	}
 
+	public void clearAllValid() {
+		validItemStacks.clear();
+		validOreIds.clear();
+	}
+
+	@Override
 	public void addValidItems(List<ItemStack> validItems) {
 		for (ItemStack validItem : validItems) {
 			addValidItem(validItem);
 		}
 	}
 
-	public ArrayList<ItemStack> getValidItems() {
-		return validItems;
+	public void addValidOreDictName(String oreDictName) {
+		if (OreDictionary.doesOreNameExist(oreDictName)) {
+			int oreId = OreDictionary.getOreID(oreDictName);
+			validOreIds.add(oreId);
+		}
+	}
+
+	public void addValidOreDictNames(List<String> oreDictNames) {
+		for (String oreDictName : oreDictNames) {
+			addValidOreDictName(oreDictName);
+		}
+	}
+
+	public void addValidItemClass(Class itemClass) {
+		if (itemClass != null) {
+			validItemClasses.add(itemClass);
+		}
+	}
+
+	public void addValidItemClasses(List<Class> itemClasses) {
+		for (Class itemClass : itemClasses) {
+			addValidItemClass(itemClass);
+		}
+	}
+
+	public void addValidBlockClass(Class blockClass) {
+		if (blockClass != null) {
+			validBlockClasses.add(blockClass);
+		}
+	}
+
+	public void addValidBlockClasses(List<Class> blockClasses) {
+		for (Class blockClass : blockClasses) {
+			addValidBlockClass(blockClass);
+		}
+	}
+
+	public List<String> getValidItemStacks() {
+		return validItemStacks;
+	}
+
+	public List<Integer> getValidOreIds() {
+		return validOreIds;
+	}
+
+	public List<Class> getValidBlockClasses() {
+		return validBlockClasses;
+	}
+
+	public List<Class> getValidItemClasses() {
+		return validItemClasses;
 	}
 
 	// isValidItem can get called multiple times per tick if the player's inventory is full
@@ -96,20 +170,65 @@ public class BackpackDefinition implements IBackpackDefinition {
 	private final Map<ItemStack, Boolean> isValidItemCache = new ValidItemCache();
 
 	@Override
-	public boolean isValidItem(ItemStack itemstack) {
-		Boolean cached = isValidItemCache.get(itemstack);
-		if (cached != null) {
-			return cached;
+	public boolean isValidItem(ItemStack itemStack) {
+		if (itemStack == null) {
+			return false;
 		}
 
-		for (ItemStack stack : getValidItems()) {
-			if (StackUtils.isCraftingEquivalent(stack, itemstack, true, false)) {
-				isValidItemCache.put(itemstack, true);
+		Boolean isValid = isValidItemCache.get(itemStack);
+		if (isValid != null) {
+			return isValid;
+		}
+
+		isValid = isValidItemUncached(itemStack);
+		isValidItemCache.put(itemStack, isValid);
+		return isValid;
+	}
+
+	private boolean isValidItemUncached(ItemStack itemStack) {
+		Item item = itemStack.getItem();
+		if (item == null) {
+			return false;
+		}
+
+		String itemStackStringWild = item.delegate.name();
+		if (validItemStacks.contains(itemStackStringWild)) {
+			return true;
+		}
+
+		int meta = itemStack.getItemDamage();
+		if (meta != OreDictionary.WILDCARD_VALUE) {
+			String itemStackString = itemStackStringWild + ':' + meta;
+			if (validItemStacks.contains(itemStackString)) {
 				return true;
 			}
 		}
 
-		isValidItemCache.put(itemstack, false);
+		int[] oreIds = OreDictionary.getOreIDs(itemStack);
+		for (int oreId : oreIds) {
+			if (validOreIds.contains(oreId)) {
+				validItemStacks.add(itemStackStringWild);
+				return true;
+			}
+		}
+
+		for (Class itemClass : validItemClasses) {
+			if (itemClass.isInstance(item)) {
+				validItemStacks.add(itemStackStringWild);
+				return true;
+			}
+		}
+
+		Block block = Block.getBlockFromItem(item);
+		if (block != null) {
+			for (Class blockClass : validBlockClasses) {
+				if (blockClass.isInstance(block)) {
+					validItemStacks.add(itemStackStringWild);
+					return true;
+				}
+			}
+		}
+
 		return false;
 	}
 
