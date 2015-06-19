@@ -46,7 +46,8 @@ public abstract class Mutation implements IMutationCustom {
 		this.template = template;
 		this.chance = chance;
 	}
-	
+
+	@Override
 	public Collection<String> getSpecialConditions() {
 		return specialConditions;
 	}
