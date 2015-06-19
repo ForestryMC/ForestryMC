@@ -15,7 +15,6 @@ import java.io.InputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.tileentity.TileEntity;
@@ -148,6 +147,10 @@ public class PacketHandler {
 				}
 				case GUI_INTEGER: {
 					PacketGuiInteger packet = new PacketGuiInteger(data);
+					return true;
+				}
+				case GUI_ITEMSTACK: {
+					PacketItemStackDisplay.onPacketData(data);
 					return true;
 				}
 				default: {
