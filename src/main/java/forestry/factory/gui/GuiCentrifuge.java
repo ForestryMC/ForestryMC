@@ -27,7 +27,7 @@ public class GuiCentrifuge extends GuiForestryTitled<ContainerCentrifuge, Machin
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 		MachineCentrifuge machine = inventory;
 
-		int progress = 16 - machine.getProgressScaled(16);
+		int progress = machine.getProgressScaled(16);
 		drawTexturedModalRect(guiLeft + 62, guiTop + 36 + 17 - progress, 176, 17 - progress, 4, progress);
 	}
 }

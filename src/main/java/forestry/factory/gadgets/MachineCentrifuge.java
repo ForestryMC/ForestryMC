@@ -232,7 +232,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 			return i;
 		}
 
-		return (productionTime * i) / timePerItem;
+		return ((timePerItem - productionTime) * i) / timePerItem;
 	}
 
 	/* GUI */

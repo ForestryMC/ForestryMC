@@ -343,8 +343,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			return 0;
 		}
 
-		return (packageTime * i) / totalTime;
-
+		return ((totalTime - packageTime) * i) / totalTime;
 	}
 
 	public int getResourceScaled(int i) {
