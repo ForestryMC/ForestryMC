@@ -20,25 +20,33 @@ import net.minecraftforge.common.util.FakePlayer;
 import forestry.Forestry;
 import forestry.core.config.Defaults;
 import forestry.core.network.ForestryPacket;
+import forestry.core.network.ILocatedPacket;
 
 public class ProxyNetwork {
 
-	public void sendNetworkPacket(ForestryPacket packet, int x, int y, int z) {
+	public <P extends ForestryPacket & ILocatedPacket> void sendNetworkPacket(P packet) {
 		if (packet == null) {
 			return;
 		}
+		int x = packet.getPosX();
+		int y = packet.getPosY();
+		int z = packet.getPosZ();
 
 		World[] worlds = DimensionManager.getWorlds();
 		for (World world : worlds) {
 			for (int j = 0; j < world.playerEntities.size(); j++) {
 				EntityPlayerMP player = (EntityPlayerMP) world.playerEntities.get(j);
-
-				if (Math.abs(player.posX - x) <= Defaults.NET_MAX_UPDATE_DISTANCE && Math.abs(player.posY - y) <= Defaults.NET_MAX_UPDATE_DISTANCE
-						&& Math.abs(player.posZ - z) <= Defaults.NET_MAX_UPDATE_DISTANCE) {
+				if (isPlayerInRange(player, x, y, z)) {
 					Forestry.packetHandler.sendPacket(packet.getPacket(), player);
 				}
 			}
 		}
+	}
+
+	private static boolean isPlayerInRange(EntityPlayerMP player, int x, int y, int z) {
+		return Math.abs(player.posX - x) <= Defaults.NET_MAX_UPDATE_DISTANCE &&
+				Math.abs(player.posY - y) <= Defaults.NET_MAX_UPDATE_DISTANCE &&
+				Math.abs(player.posZ - z) <= Defaults.NET_MAX_UPDATE_DISTANCE;
 	}
 
 	public void sendToPlayer(ForestryPacket packet, EntityPlayer entityplayer) {

@@ -328,7 +328,7 @@ public class EngineCopper extends Engine implements ISidedInventory {
 				currentOutput = j;
 				break;
 			case 3:
-				energyManager.fromPacketInt(j);
+				energyManager.fromGuiInt(j);
 				break;
 			case 4:
 				heat = j;
@@ -341,7 +341,7 @@ public class EngineCopper extends Engine implements ISidedInventory {
 		iCrafting.sendProgressBarUpdate(containerEngine, 0, burnTime);
 		iCrafting.sendProgressBarUpdate(containerEngine, 1, totalBurnTime);
 		iCrafting.sendProgressBarUpdate(containerEngine, 2, currentOutput);
-		iCrafting.sendProgressBarUpdate(containerEngine, 3, energyManager.toPacketInt());
+		iCrafting.sendProgressBarUpdate(containerEngine, 3, energyManager.toGuiInt());
 		iCrafting.sendProgressBarUpdate(containerEngine, 4, heat);
 	}
 

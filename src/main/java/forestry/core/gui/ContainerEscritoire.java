@@ -15,10 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import forestry.core.gadgets.TileEscritoire;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketPayload;
-import forestry.core.network.PacketUpdate;
-import forestry.core.proxy.Proxies;
+import forestry.core.network.PacketGuiSelect;
 
 public class ContainerEscritoire extends ContainerTile<TileEscritoire> implements IGuiSelectable {
 
@@ -32,7 +29,7 @@ public class ContainerEscritoire extends ContainerTile<TileEscritoire> implement
 		this.player = player;
 
 		// Analyze slot
-		addSlotToContainer(new SlotFiltered(this.tile, TileEscritoire.SLOT_ANALYZE, 97, 67).setCrafter(this.tile));
+		addSlotToContainer(new SlotFiltered(this.tile, TileEscritoire.SLOT_ANALYZE, 97, 67).setCrafter(this.tile).setStackLimit(1));
 
 		for (int i = 0; i < TileEscritoire.SLOTS_INPUT_COUNT; i++) {
 			addSlotToContainer(new SlotFiltered(this.tile, TileEscritoire.SLOT_INPUT_1 + i, 17, 49 + i * 18).setBlockedTexture("slots/blocked_2"));
@@ -56,35 +53,20 @@ public class ContainerEscritoire extends ContainerTile<TileEscritoire> implement
 		tile.sendBoard(player);
 	}
 
-	public void sendTokenClick(int index) {
-		PacketPayload payload = new PacketPayload(1, 0, 0);
-		payload.intPayload[0] = index;
-		PacketUpdate packet = new PacketUpdate(PacketIds.GUI_SELECTION_CHANGE, payload);
-		Proxies.net.sendToServer(packet);
-	}
-
-	public void sendProbeClick() {
-		PacketPayload payload = new PacketPayload(1, 0, 0);
-		payload.intPayload[0] = -1;
-		PacketUpdate packet = new PacketUpdate(PacketIds.GUI_SELECTION_CHANGE, payload);
-		Proxies.net.sendToServer(packet);
-	}
-
 	@Override
-	public void handleSelectionChange(EntityPlayer player, PacketUpdate packet) {
+	public void handleSelectionChange(EntityPlayer player, PacketGuiSelect packet) {
 		if (!tile.getGame().isEnded()) {
-			int index = packet.payload.intPayload[0];
+			int index = packet.getPrimaryIndex();
 			if (index == -1) {
 				tile.probe();
 			} else {
-				tile.getGame().choose(packet.payload.intPayload[0]);
+				tile.getGame().choose(index);
 				tile.processTurnResult(player.getGameProfile());
 			}
 		}
 	}
 
 	@Override
-	public void setSelection(PacketUpdate packet) {
+	public void setSelection(PacketGuiSelect packet) {
 	}
-
 }

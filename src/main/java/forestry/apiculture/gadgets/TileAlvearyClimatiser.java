@@ -10,17 +10,23 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
+import java.io.IOException;
+
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.apiculture.IAlvearyComponent;
-import forestry.core.network.PacketPayload;
+import forestry.apiculture.network.PacketActiveUpdate;
+import forestry.core.interfaces.IActivatable;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.proxy.Proxies;
 import forestry.energy.EnergyManager;
 
 import cofh.api.energy.IEnergyHandler;
 
-public abstract class TileAlvearyClimatiser extends TileAlveary implements IEnergyHandler {
+public abstract class TileAlvearyClimatiser extends TileAlveary implements IEnergyHandler, IActivatable {
 
 	public static class ClimateControl {
 
@@ -41,6 +47,9 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 	private final int textureOff;
 	private final int textureOn;
 
+	// CLIENT
+	private boolean active;
+
 	public TileAlvearyClimatiser(ClimateControl control, int textureOff, int textureOn, int componentBlockMeta) {
 		super(componentBlockMeta);
 		this.climateControl = control;
@@ -59,8 +68,6 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 			return;
 		}
 
-		boolean wasInactive = (workingTime == 0);
-
 		if (workingTime < 20 && energyManager.consumeEnergyToDoWork()) {
 			// consume 10 RF per tick of work
 			workingTime += energyManager.getEnergyPerWork() / 10;
@@ -74,9 +81,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 			}
 		}
 
-		if ((wasInactive && workingTime > 0) || (!wasInactive && workingTime == 0)) {
-			setNeedsNetworkUpdate();
-		}
+		setActive(workingTime > 0);
 	}
 
 	@Override
@@ -87,7 +92,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 	/* TEXTURES */
 	@Override
 	public int getIcon(int side, int metadata) {
-		if (workingTime > 0) {
+		if (active) {
 			return textureOn;
 		} else {
 			return textureOff;
@@ -100,6 +105,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 		super.readFromNBT(nbttagcompound);
 		energyManager.readFromNBT(nbttagcompound);
 		workingTime = nbttagcompound.getInteger("Heating");
+		setActive(workingTime > 0);
 	}
 
 	@Override
@@ -109,22 +115,37 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 		nbttagcompound.setInteger("Heating", workingTime);
 	}
 
-
 	/* NETWORK */
 	@Override
-	public void fromPacketPayload(PacketPayload payload) {
-		short workingTime = payload.shortPayload[0];
-		if (this.workingTime != workingTime) {
-			this.workingTime = workingTime;
-			worldObj.func_147479_m(xCoord, yCoord, zCoord);
-		}
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
+		data.writeBoolean(active);
 	}
 
 	@Override
-	public PacketPayload getPacketPayload() {
-		PacketPayload payload = new PacketPayload(0, 1);
-		payload.shortPayload[0] = (short) workingTime;
-		return payload;
+	public void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
+		setActive(data.readBoolean());
+	}
+
+	@Override
+	public boolean isActive() {
+		return active;
+	}
+
+	@Override
+	public void setActive(boolean active) {
+		if (this.active == active) {
+			return;
+		}
+
+		this.active = active;
+
+		if (worldObj.isRemote) {
+			worldObj.func_147479_m(xCoord, yCoord, zCoord);
+		} else {
+			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this));
+		}
 	}
 
 	/* IEnergyHandler */

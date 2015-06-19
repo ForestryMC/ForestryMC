@@ -21,16 +21,16 @@ import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotCraftMatrix;
 import forestry.core.gui.slots.SlotCrafter;
 import forestry.core.interfaces.IContainerCrafting;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketPayload;
-import forestry.core.network.PacketUpdate;
+import forestry.core.network.PacketGuiSelect;
+import forestry.core.network.PacketId;
+import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
 import forestry.factory.gadgets.TileWorktable;
+import forestry.factory.network.PacketWorktableMemoryUpdate;
 
 public class ContainerWorktable extends ContainerTile<TileWorktable> implements IContainerCrafting, IGuiSelectable {
 
-	private final EntityPlayer player;
 	private final InventoryCrafting craftMatrix = new InventoryCrafting(this, 3, 3);
 	private long lastUpdate;
 
@@ -60,9 +60,6 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		// Update crafting matrix with current contents of tileentity.
 		updateMatrix();
 		updateRecipe();
-
-		this.player = player;
-		tile.sendAll(player);
 	}
 
 	@Override
@@ -73,7 +70,13 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		}
 
 		lastUpdate = tile.getMemory().getLastUpdate();
-		tile.sendAll(player);
+
+		PacketWorktableMemoryUpdate packet = new PacketWorktableMemoryUpdate(tile);
+		for (Object crafter : crafters) {
+			if (crafter instanceof EntityPlayer) {
+				Proxies.net.sendToPlayer(packet, (EntityPlayer) crafter);
+			}
+		}
 	}
 
 	@Override
@@ -105,26 +108,23 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		sendRecipeClick(0, tile.getMemory().capacity);
 	}
 
-	public void sendRecipeClick(int mouseButton, int recipeIndex) {
-		PacketPayload payload = new PacketPayload(2, 0, 0);
-		payload.intPayload[0] = mouseButton;
-		payload.intPayload[1] = recipeIndex;
-		PacketUpdate packet = new PacketUpdate(PacketIds.GUI_SELECTION_CHANGE, payload);
+	public static void sendRecipeClick(int mouseButton, int recipeIndex) {
+		PacketGuiSelect packet = new PacketGuiSelect(PacketId.GUI_SELECTION_CHANGE, mouseButton, recipeIndex);
 		Proxies.net.sendToServer(packet);
 	}
 
 	@Override
-	public void handleSelectionChange(EntityPlayer player, PacketUpdate packet) {
-		if (packet.payload.intPayload[0] > 0) {
-			tile.getMemory().toggleLock(player.worldObj, packet.payload.intPayload[1]);
+	public void handleSelectionChange(EntityPlayer player, PacketGuiSelect packet) {
+		if (packet.getPrimaryIndex() > 0) {
+			tile.getMemory().toggleLock(player.worldObj, packet.getSecondaryIndex());
 		} else {
-			tile.chooseRecipe(packet.payload.intPayload[1]);
+			tile.chooseRecipe(packet.getSecondaryIndex());
 			updateMatrix();
 			updateRecipe();
 		}
 	}
 
 	@Override
-	public void setSelection(PacketUpdate packet) {
+	public void setSelection(PacketGuiSelect packet) {
 	}
 }

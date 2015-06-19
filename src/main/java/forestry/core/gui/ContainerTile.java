@@ -10,10 +10,15 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import com.google.common.collect.ImmutableSet;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 
+import forestry.api.core.IErrorState;
 import forestry.core.gadgets.TileForestry;
+import forestry.core.network.PacketErrorUpdate;
+import forestry.core.proxy.Proxies;
 
 public class ContainerTile<T extends TileForestry> extends ContainerForestry {
 
@@ -33,5 +38,25 @@ public class ContainerTile<T extends TileForestry> extends ContainerForestry {
 	@Override
 	public final boolean canInteractWith(EntityPlayer entityplayer) {
 		return tile.isUseableByPlayer(entityplayer);
+	}
+
+	private ImmutableSet<IErrorState> previousErrorStates;
+
+	@Override
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
+
+		ImmutableSet<IErrorState> errorStates = tile.getErrorStates();
+
+		if ((previousErrorStates != null) && !errorStates.equals(previousErrorStates)) {
+			PacketErrorUpdate packet = new PacketErrorUpdate(tile);
+			for (Object crafter : crafters) {
+				if (crafter instanceof EntityPlayer) {
+					Proxies.net.sendToPlayer(packet, (EntityPlayer) crafter);
+				}
+			}
+		}
+
+		previousErrorStates = errorStates;
 	}
 }

@@ -80,7 +80,7 @@ public class MachineMailbox extends TileBase implements IMailContainer {
 	@Override
 	public void updateServerSide() {
 		if (!isLinked) {
-			getOrCreateMailInventory(worldObj, getOwnerProfile());
+			getOrCreateMailInventory(worldObj, getOwner());
 			isLinked = true;
 		}
 	}
@@ -112,7 +112,7 @@ public class MachineMailbox extends TileBase implements IMailContainer {
 	@Override
 	public boolean hasMail() {
 
-		IInventory mailInventory = getOrCreateMailInventory(worldObj, getOwnerProfile());
+		IInventory mailInventory = getOrCreateMailInventory(worldObj, getOwner());
 		for (int i = 0; i < mailInventory.getSizeInventory(); i++) {
 			if (mailInventory.getStackInSlot(i) != null) {
 				return true;

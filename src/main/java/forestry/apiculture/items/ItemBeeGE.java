@@ -150,7 +150,7 @@ public class ItemBeeGE extends ItemGE {
 	@Override
 	public int getColourFromSpecies(IAlleleSpecies species, int renderPass) {
 
-		if (species != null && species instanceof IAlleleBeeSpecies) {
+		if (species instanceof IAlleleBeeSpecies) {
 			return species.getIconColour(renderPass);
 		} else {
 			return 0xffffff;

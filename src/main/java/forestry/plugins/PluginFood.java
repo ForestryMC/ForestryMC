@@ -20,8 +20,6 @@ import forestry.api.food.IBeverageEffect;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
-import forestry.core.interfaces.IOreDictionaryHandler;
-import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemForestryFood;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.LiquidHelper;

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import com.google.common.collect.ImmutableMap;
+
 import java.util.EnumSet;
 
 import net.minecraft.init.Blocks;
@@ -28,6 +30,7 @@ import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
+import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.core.GameMode;
@@ -213,21 +216,23 @@ public class PluginIC2 extends ForestryPlugin {
 	@Override
 	@Optional.Method(modid = "IC2")
 	protected void registerBackpackItems() {
-		if (BackpackManager.backpackItems == null) {
+		if (BackpackManager.definitions == null) {
 			return;
 		}
 
+		IBackpackDefinition forester = BackpackManager.definitions.get("forester");
+
 		if (resin != null) {
-			BackpackManager.definitions.get("forester").addValidItem(resin);
+			forester.addValidItem(resin);
 		}
 		if (rubber != null) {
-			BackpackManager.definitions.get("forester").addValidItem(rubber);
+			forester.addValidItem(rubber);
 		}
 		if (rubbersapling != null) {
-			BackpackManager.definitions.get("forester").addValidItem(rubbersapling);
+			forester.addValidItem(rubbersapling);
 		}
 		if (rubberleaves != null) {
-			BackpackManager.definitions.get("forester").addValidItem(rubberleaves);
+			forester.addValidItem(rubberleaves);
 		}
 	}
 
@@ -278,7 +283,7 @@ public class PluginIC2 extends ForestryPlugin {
 		}
 
 		if (resin != null) {
-			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.propolis.getItemStack(), resin);
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.propolis.getItemStack(), ImmutableMap.of(resin, 1.0f));
 		} else {
 			Proxies.log.fine("Missing IC2 resin, skipping centrifuge recipe for propolis to resin.");
 		}

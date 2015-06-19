@@ -127,17 +127,14 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 			}
 		}
 
-		if (!updateOnInterval(20)) {
-			return;
+		if (updateOnInterval(20)) {
+			IInventoryAdapter canInventory = getInternalInventory();
+
+			// Check if we have suitable items waiting in the item slot
+			if (canInventory.getStackInSlot(0) != null) {
+				FluidHelper.drainContainers(tankManager, canInventory, 0);
+			}
 		}
-
-		IInventoryAdapter canInventory = getInternalInventory();
-
-		// Check if we have suitable items waiting in the item slot
-		if (canInventory.getStackInSlot(0) != null) {
-			FluidHelper.drainContainers(tankManager, canInventory, 0);
-		}
-
 	}
 
 	@Override

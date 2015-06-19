@@ -26,9 +26,8 @@ public class ErrorLedger extends Ledger {
 	private IErrorState state;
 
 	public ErrorLedger(LedgerManager manager) {
-		super(manager, false);
+		super(manager, "error", false);
 		maxHeight = 72;
-		overlayColor = manager.gui.fontColor.get("ledger.error.background");
 	}
 
 	public void setState(@Nullable IErrorState state) {
@@ -37,7 +36,7 @@ public class ErrorLedger extends Ledger {
 			String helpString = StringUtil.localize(state.getHelp());
 			FontRenderer fontRenderer = manager.minecraft.fontRenderer;
 			int lineCount = fontRenderer.listFormattedStringToWidth(helpString, maxWidth - 28).size();
-			maxHeight = lineCount * (fontRenderer.FONT_HEIGHT + 2) + 20;
+			maxHeight = (lineCount + 1) * fontRenderer.FONT_HEIGHT + 20;
 		}
 	}
 
@@ -47,8 +46,6 @@ public class ErrorLedger extends Ledger {
 			return;
 		}
 
-
-
 		// Draw background
 		drawBackground(x, y);
 
@@ -57,12 +54,10 @@ public class ErrorLedger extends Ledger {
 
 		// Write description if fully opened
 		if (isFullyOpened()) {
-			FontRenderer fontRenderer = manager.minecraft.fontRenderer;
-
-			fontRenderer.drawStringWithShadow(getTooltip(), x + 24, y + 8, manager.gui.fontColor.get("ledger.error.header"));
+			drawHeader(getTooltip(), x + 24, y + 8);
 
 			String helpString = StringUtil.localize(state.getHelp());
-			fontRenderer.drawSplitString(helpString, x + 24, y + 20, maxWidth - 28, manager.gui.fontColor.get("ledger.error.text"));
+			drawSplitText(helpString, x + 24, y + 20, maxWidth - 28);
 		}
 	}
 

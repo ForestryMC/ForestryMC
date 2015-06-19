@@ -157,8 +157,8 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 			return false;
 		}
 
-		IBee bee = getMember(stack);
-		return bee.getMate() != null;
+		NBTTagCompound nbt = stack.getTagCompound();
+		return nbt != null && nbt.hasKey("Mate");
 	}
 
 	@Override

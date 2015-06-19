@@ -12,10 +12,12 @@ package forestry.core.gadgets;
 
 import com.google.common.collect.ImmutableSet;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
@@ -35,18 +37,22 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.common.Optional;
 
+import forestry.api.core.ErrorStateRegistry;
 import forestry.api.core.IErrorState;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
+import forestry.core.fluids.TankManager;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IFilterSlotDelegate;
+import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.interfaces.IRestrictedAccess;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.network.ForestryPacket;
-import forestry.core.network.INetworkedEntity;
-import forestry.core.network.PacketPayload;
-import forestry.core.network.PacketTileUpdate;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketTileGuiOpened;
+import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.AdjacentTileCache;
 import forestry.core.utils.EnumAccess;
@@ -59,15 +65,17 @@ import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.statements.ITriggerProvider;
 
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
-public abstract class TileForestry extends TileEntity implements INetworkedEntity, IRestrictedAccess, IErrorSource, ITriggerProvider, ISidedInventory, IFilterSlotDelegate {
+public abstract class TileForestry extends TileEntity implements IStreamable, IRestrictedAccess, IErrorSource, ITriggerProvider, ISidedInventory, IFilterSlotDelegate {
 
 	private static final Random rand = new Random();
 
-	protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
-	protected boolean isInited = false;
 	private IInventoryAdapter inventory = FakeInventoryAdapter.instance();
 	private int tickCount = rand.nextInt(256);
 	private boolean needsNetworkUpdate = false;
+	private ForgeDirection orientation = ForgeDirection.WEST;
+
+	protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
+	protected boolean isInited = false;
 
 	public AdjacentTileCache getTileCache() {
 		return tileCache;
@@ -184,37 +192,84 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	@Override
-	public Packet getDescriptionPacket() {
-		PacketTileUpdate packet = new PacketTileUpdate(this);
+	public final Packet getDescriptionPacket() {
+		PacketTileStream packet = new PacketTileStream(this);
 		return packet.getPacket();
 	}
 
 	/* INetworkedEntity */
-	@Override
-	public void sendNetworkUpdate() {
-		PacketTileUpdate packet = new PacketTileUpdate(this);
-		Proxies.net.sendNetworkPacket(packet, xCoord, yCoord, zCoord);
+	public final void sendNetworkUpdate() {
+		PacketTileStream packet = new PacketTileStream(this);
+		Proxies.net.sendNetworkPacket(packet);
 	}
 
-	@Override
-	public void fromPacket(ForestryPacket packetRaw) {
-		PacketTileUpdate packet = (PacketTileUpdate) packetRaw;
-		if (orientation != packet.getOrientation()) {
-			orientation = packet.getOrientation();
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		data.writeByte(orientation.ordinal());
+
+		if (this instanceof ILiquidTankContainer) {
+			TankManager tankManager = ((ILiquidTankContainer) this).getTankManager();
+			if (tankManager != null) {
+				tankManager.writePacketData(data);
+			}
 		}
-
-		errorStates.clear();
-		errorStates.addAll(packet.getErrorStates());
-
-		owner = packet.getOwner();
-		access = packet.getAccess();
-		fromPacketPayload(packet.payload);
 	}
 
-	public abstract PacketPayload getPacketPayload();
+	public void readData(DataInputStreamForestry data) throws IOException {
+		orientation = ForgeDirection.getOrientation(data.readByte());
 
-	public abstract void fromPacketPayload(PacketPayload payload);
+		if (this instanceof ILiquidTankContainer) {
+			TankManager tankManager = ((ILiquidTankContainer) this).getTankManager();
+			if (tankManager != null) {
+				tankManager.readPacketData(data);
+			}
+		}
+	}
+
+	public final void writeErrorData(DataOutputStreamForestry data) throws IOException {
+		data.writeShort(errorStates.size());
+		for (IErrorState errorState : errorStates) {
+			data.writeShort(errorState.getID());
+		}
+	}
+
+	public final void readErrorData(DataInputStreamForestry data) throws IOException {
+		errorStates.clear();
+
+		short errorStateCount = data.readShort();
+		for (int i = 0; i < errorStateCount; i++) {
+			short errorStateId = data.readShort();
+			IErrorState errorState = ErrorStateRegistry.getErrorState(errorStateId);
+			errorStates.add(errorState);
+		}
+	}
+
+	public final void sendGuiOpened(EntityPlayer player) {
+		PacketTileGuiOpened packet = new PacketTileGuiOpened(this);
+		Proxies.net.sendToPlayer(packet, player);
+	}
+
+	public final void writeGuiData(DataOutputStreamForestry data) throws IOException {
+		writeErrorData(data);
+
+		if (owner == null) {
+			data.writeByte(-1);
+		} else {
+			data.writeByte(access.ordinal());
+			data.writeLong(owner.getId().getMostSignificantBits());
+			data.writeLong(owner.getId().getLeastSignificantBits());
+			data.writeUTF(owner.getName());
+		}
+	}
+
+	public final void readGuiData(DataInputStreamForestry data) throws IOException {
+		readErrorData(data);
+
+		byte accessOrdinal = data.readByte();
+		if (accessOrdinal >= 0) {
+			access = EnumAccess.values()[accessOrdinal];
+			owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readUTF());
+		}
+	}
 
 	public void onRemoval() {
 	}
@@ -233,17 +288,11 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	// / REDSTONE INFO
-
-	/**
-	 * @return true if tile is activated by redstone current.
-	 */
 	public boolean isRedstoneActivated() {
 		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 	}
 
 	// / ORIENTATION
-	private ForgeDirection orientation = ForgeDirection.WEST;
-
 	public ForgeDirection getOrientation() {
 		return this.orientation;
 	}
@@ -253,7 +302,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 			return;
 		}
 		this.orientation = orientation;
-		this.sendNetworkUpdate();
+		this.setNeedsNetworkUpdate();
 	}
 
 	protected final void setNeedsNetworkUpdate() {
@@ -265,29 +314,20 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 
 	public final boolean setErrorCondition(boolean condition, IErrorState errorState) {
 		if (condition) {
-			if (errorStates.add(errorState)) {
-				setNeedsNetworkUpdate();
-			}
+			errorStates.add(errorState);
 		} else {
-			if (errorStates.remove(errorState)) {
-				setNeedsNetworkUpdate();
-			}
+			errorStates.remove(errorState);
 		}
 		return condition;
 	}
 
 	@Deprecated
 	protected final void addErrorState(IErrorState state) {
-		if (errorStates.add(state)) {
-			setNeedsNetworkUpdate();
-		}
+		errorStates.add(state);
 	}
 
 	@Deprecated
 	protected final void removeErrorStates() {
-		if (errorStates.size() > 0) {
-			setNeedsNetworkUpdate();
-		}
 		errorStates.clear();
 	}
 
@@ -310,7 +350,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 
 	@Override
 	public final boolean allowsRemoval(EntityPlayer player) {
-		return Config.disablePermissions || getAccess() == EnumAccess.SHARED || !isOwnable() || !isOwned() || isOwner(player) || Proxies.common.isOp(player);
+		return Config.disablePermissions || getAccess() == EnumAccess.SHARED || !isOwned() || isOwner(player) || Proxies.common.isOp(player);
 	}
 
 	@Override
@@ -333,17 +373,12 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	@Override
-	public boolean isOwnable() {
-		return false;
-	}
-
-	@Override
 	public boolean isOwned() {
 		return owner != null;
 	}
 
 	@Override
-	public GameProfile getOwnerProfile() {
+	public GameProfile getOwner() {
 		return owner;
 	}
 
@@ -371,14 +406,14 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		int ordinal = (access.ordinal() + 1) % EnumAccess.values().length;
 		access = EnumAccess.values()[ordinal];
 		if (!this.worldObj.isRemote) {
-			sendNetworkUpdate();
-		}
+			sendGuiOpened(player);
 
-		boolean canPipesConnect = allowsPipeConnections();
-		if (couldPipesConnect != canPipesConnect) {
-			// pipes connected to this need to update
-			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, blockType);
-			markDirty();
+			boolean canPipesConnect = allowsPipeConnections();
+			if (couldPipesConnect != canPipesConnect) {
+				// pipes connected to this need to update
+				worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, blockType);
+				markDirty();
+			}
 		}
 
 		return true;
@@ -391,7 +426,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	 */
 	public String getUnlocalizedName() {
 		String blockUnlocalizedName = getBlockType().getUnlocalizedName().replace("tile.for.", "");
-		return blockUnlocalizedName + "." + getBlockMetadata() + ".name";
+		return blockUnlocalizedName + '.' + getBlockMetadata() + ".name";
 	}
 
 	/* INVENTORY BASICS */
@@ -418,7 +453,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	@Override
-	public final ItemStack decrStackSize(int slotIndex, int amount) {
+	public ItemStack decrStackSize(int slotIndex, int amount) {
 		return getInternalInventory().decrStackSize(slotIndex, amount);
 	}
 
@@ -428,7 +463,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	@Override
-	public final void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
+	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
 		getInternalInventory().setInventorySlotContents(slotIndex, itemstack);
 	}
 

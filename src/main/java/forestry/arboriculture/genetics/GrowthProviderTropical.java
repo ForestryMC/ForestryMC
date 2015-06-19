@@ -25,7 +25,10 @@ public class GrowthProviderTropical extends GrowthProvider {
 	public EnumGrowthConditions getGrowthConditions(ITreeGenome genome, World world, int xPos, int yPos, int zPos) {
 		EnumGrowthConditions light = getConditionFromLight(world, xPos, yPos, zPos);
 		EnumGrowthConditions moisture = getConditionsFromRainfall(world, xPos, yPos, zPos, BiomeGenBase.jungle.rainfall, 2.0f);
-		EnumGrowthConditions temperature = getConditionsFromTemperature(world, xPos, yPos, zPos, BiomeGenBase.jungle.temperature, BiomeGenBase.desert.temperature - 0.1f);
+
+		float jungleTemperature = BiomeGenBase.jungle.getFloatTemperature(xPos, yPos, zPos);
+		float desertTemperature = BiomeGenBase.desert.getFloatTemperature(xPos, yPos, zPos);
+		EnumGrowthConditions temperature = getConditionsFromTemperature(world, xPos, yPos, zPos, jungleTemperature, desertTemperature - 0.1f);
 
 		EnumSet<EnumGrowthConditions> conditions = EnumSet.of(light, moisture, temperature);
 

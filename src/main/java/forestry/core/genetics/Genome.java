@@ -51,6 +51,37 @@ public abstract class Genome implements IGenome {
 	}
 
 	// NBT RETRIEVAL
+	/**
+	 * Quickly gets the species without loading the whole genome.
+	 * We need this because the client uses the species for rendering.
+	 */
+	protected static IAlleleSpecies getSpeciesDirectly(ItemStack itemStack) {
+		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
+		if (nbtTagCompound == null) {
+			return null;
+		}
+
+		NBTTagCompound genomeNBT = nbtTagCompound.getCompoundTag("Genome");
+		if (genomeNBT == null) {
+			return null;
+		}
+
+		NBTTagList chromosomesNBT = genomeNBT.getTagList("Chromosomes", 10);
+		if (chromosomesNBT == null) {
+			return null;
+		}
+
+		NBTTagCompound chromosomeNBT = chromosomesNBT.getCompoundTagAt(0);
+		Chromosome chromosome = Chromosome.loadChromosomeFromNBT(chromosomeNBT);
+
+		IAllele activeAllele = chromosome.getActiveAllele();
+		if (!(activeAllele instanceof IAlleleSpecies)) {
+			return null;
+		}
+
+		return (IAlleleSpecies) activeAllele;
+	}
+
 	public static IChromosome getChromosome(ItemStack itemStack, IChromosomeType chromosomeType, ISpeciesRoot speciesRoot) {
 		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
 		if (nbtTagCompound == null) {

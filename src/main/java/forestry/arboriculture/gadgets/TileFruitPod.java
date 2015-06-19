@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,15 +29,15 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IFruitBearer;
 import forestry.api.genetics.IFruitFamily;
-import forestry.core.network.ForestryPacket;
-import forestry.core.network.INetworkedEntity;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketPayload;
-import forestry.core.network.PacketUpdate;
+import forestry.arboriculture.network.PacketRipeningUpdate;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 
-public class TileFruitPod extends TileEntity implements INetworkedEntity, IFruitBearer {
+public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamable {
 
 	private static final short MAX_MATURITY = 2;
 
@@ -130,37 +131,11 @@ public class TileFruitPod extends TileEntity implements INetworkedEntity, IFruit
 	/* NETWORK */
 	@Override
 	public Packet getDescriptionPacket() {
-		return toPacket().getPacket();
-	}
-
-	@Override
-	public void sendNetworkUpdate() {
-		Proxies.net.sendNetworkPacket(toPacket(), xCoord, yCoord, zCoord);
+		return new PacketTileStream(this).getPacket();
 	}
 
 	private void sendNetworkUpdateRipening() {
-		Proxies.net.sendNetworkPacket(new PacketUpdate(PacketIds.TILE_UPDATE, xCoord, yCoord, zCoord, maturity), xCoord, yCoord, zCoord);
-	}
-
-	private ForestryPacket toPacket() {
-
-		PacketPayload payload = new PacketPayload(indices.length, 1);
-		payload.shortPayload[0] = maturity;
-		payload.intPayload = indices;
-
-		return new PacketUpdate(PacketIds.TILE_UPDATE, xCoord, yCoord, zCoord, payload);
-	}
-
-	@Override
-	public void fromPacket(ForestryPacket packetRaw) {
-		PacketUpdate packet = (PacketUpdate) packetRaw;
-		maturity = packet.payload.shortPayload[0];
-
-		if (packet.payload.intPayload != null && packet.payload.intPayload.length > 0) {
-			indices = packet.payload.intPayload;
-		}
-
-		worldObj.func_147479_m(xCoord, yCoord, zCoord);
+		Proxies.net.sendNetworkPacket(new PacketRipeningUpdate(this));
 	}
 
 	/* IFRUITBEARER */
@@ -183,7 +158,6 @@ public class TileFruitPod extends TileEntity implements INetworkedEntity, IFruit
 			return new ArrayList<ItemStack>();
 		}
 
-
 		Collection<ItemStack> fruits = Arrays.asList(getDrop());
 		maturity = 0;
 		sendNetworkUpdateRipening();
@@ -201,4 +175,24 @@ public class TileFruitPod extends TileEntity implements INetworkedEntity, IFruit
 		sendNetworkUpdateRipening();
 	}
 
+	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		data.writeShort(maturity);
+		data.writeShort(indices.length);
+		for (int i : indices) {
+			data.writeInt(i);
+		}
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		maturity = data.readShort();
+		int indicesLength = data.readShort();
+		indices = new int[indicesLength];
+		for (int i = 0; i < indicesLength; i++) {
+			indices[i] = data.readInt();
+		}
+
+		worldObj.func_147479_m(xCoord, yCoord, zCoord);
+	}
 }

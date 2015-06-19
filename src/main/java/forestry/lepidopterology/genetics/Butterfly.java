@@ -135,7 +135,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 			return false;
 		}
 
-		BiomeGenBase biome = Utils.getBiomeAt(world, (int) x, (int) z);
+		BiomeGenBase biome = world.getBiomeGenForCoordsBody((int) x, (int) z);
 		if (getGenome().getPrimary().getSpawnBiomes().size() > 0) {
 			boolean noneMatched = true;
 
@@ -158,7 +158,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 			}
 		}
 
-		return isAcceptedEnvironment(biome);
+		return isAcceptedEnvironment(world, x, y, z);
 	}
 
 	@Override
@@ -166,7 +166,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		if (!canFly(world)) {
 			return false;
 		}
-		return isAcceptedEnvironment(Utils.getBiomeAt(world, (int) x, (int) z));
+		return isAcceptedEnvironment(world, x, y, z);
 	}
 
 	private boolean canFly(World world) {
@@ -178,12 +178,14 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 	@Override
 	public boolean isAcceptedEnvironment(World world, double x, double y, double z) {
-		return isAcceptedEnvironment(Utils.getBiomeAt(world, (int) x, (int) z));
+		return isAcceptedEnvironment(world, (int)x, (int)y, (int)z);
 	}
 
-	private boolean isAcceptedEnvironment(BiomeGenBase biome) {
-		return AlleleManager.climateHelper.isWithinLimits(EnumTemperature.getFromValue(biome.temperature),
-				EnumHumidity.getFromValue(biome.rainfall),
+	private boolean isAcceptedEnvironment(World world, int x, int y, int z) {
+		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, x, y, z);
+		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(biome.rainfall);
+		return AlleleManager.climateHelper.isWithinLimits(biomeTemperature, biomeHumidity,
 				getGenome().getPrimary().getTemperature(), getGenome().getToleranceTemp(),
 				getGenome().getPrimary().getHumidity(), getGenome().getToleranceHumid());
 	}
@@ -221,7 +223,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		return new Butterfly(new ButterflyGenome(chromosomes));
 	}
 
-	private IChromosome[] mutateSpecies(IButterflyNursery nursery, IGenome genomeOne, IGenome genomeTwo) {
+	private static IChromosome[] mutateSpecies(IButterflyNursery nursery, IGenome genomeOne, IGenome genomeTwo) {
 
 		World world = nursery.getWorld();
 

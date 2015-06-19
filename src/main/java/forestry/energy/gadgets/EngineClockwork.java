@@ -68,7 +68,7 @@ public class EngineClockwork extends Engine {
 		}
 		tension = tension > ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE ? ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE : tension;
 		delay = WIND_DELAY;
-		sendNetworkUpdate();
+		setNeedsNetworkUpdate();
 	}
 
 	/* LOADING & SAVING */
@@ -155,7 +155,10 @@ public class EngineClockwork extends Engine {
 		}
 		
 		float fromClockwork = (tension / ENGINE_CLOCKWORK_WIND_MAX) * Defaults.ENGINE_PISTON_SPEED_MAX;
-		return fromClockwork >= 0.01f ? fromClockwork : 0;
+
+		fromClockwork = Math.round(fromClockwork * 100f) / 100f;
+
+		return fromClockwork;
 	}
 	
 	@Override

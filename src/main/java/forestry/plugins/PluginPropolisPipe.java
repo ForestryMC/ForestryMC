@@ -16,7 +16,7 @@ import cpw.mods.fml.common.network.IGuiHandler;
 
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
-import forestry.core.interfaces.IPacketHandler;
+import forestry.core.network.IPacketHandler;
 import forestry.core.proxy.Proxies;
 import forestry.pipes.GuiHandlerPipes;
 import forestry.pipes.network.PacketHandlerPipes;
@@ -33,7 +33,8 @@ public class PluginPropolisPipe extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isModLoaded("BuildCraft|Transport");
+		return Proxies.common.isModLoaded("BuildCraft|Transport") &&
+				Proxies.common.isModLoaded("BuildCraft|Core", "[6.0, 7.0)");
 	}
 
 	@Override

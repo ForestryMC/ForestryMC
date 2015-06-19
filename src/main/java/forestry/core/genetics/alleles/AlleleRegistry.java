@@ -13,7 +13,6 @@ package forestry.core.genetics.alleles;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -30,14 +29,13 @@ import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ILegacyHandler;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.config.ForestryItem;
 import forestry.core.genetics.Classification;
 import forestry.core.genetics.ItemResearchNote.EnumNoteType;
 
-public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
+public class AlleleRegistry implements IAlleleRegistry {
 
 	private static final int ALLELE_ARRAY_SIZE = 2048;
 
@@ -103,11 +101,6 @@ public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
 	private final LinkedHashMap<String, IAllele> deprecatedAlleleMap = new LinkedHashMap<String, IAllele>(32);
 	private final LinkedHashMap<String, IClassification> classificationMap = new LinkedHashMap<String, IClassification>(128);
 	private final LinkedHashMap<String, IFruitFamily> fruitMap = new LinkedHashMap<String, IFruitFamily>(64);
-
-	private final HashMap<Integer, String> metaMapToUID = new HashMap<Integer, String>();
-	private final HashMap<String, Integer> uidMapToMeta = new HashMap<String, Integer>();
-
-	private final HashMap<Integer, String> legacyMap = new HashMap<Integer, String>();
 
 	/*
 	 * Internal HashSet of all alleleHandlers, which trigger when an allele or branch is registered
@@ -223,21 +216,6 @@ public class AlleleRegistry implements IAlleleRegistry, ILegacyHandler {
 	@Override
 	public IFruitFamily getFruitFamily(String uid) {
 		return fruitMap.get(uid);
-	}
-
-	/* LEGACY MAPPINGS */
-	@Override
-	public void registerLegacyMapping(int id, String uid) {
-		this.legacyMap.put(id, uid);
-	}
-
-	@Override
-	public IAllele getFromLegacyMap(int id) {
-		if (!legacyMap.containsKey(id)) {
-			return null;
-		}
-
-		return getAllele(legacyMap.get(id));
 	}
 
 	/* ALLELE HANDLERS */

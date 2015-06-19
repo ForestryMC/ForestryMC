@@ -30,6 +30,7 @@ import net.minecraftforge.common.ChestGenHooks;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;
+import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.core.EnumHumidity;
@@ -328,7 +329,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		}
 	}
 
-	private IBee getVillageBee(World world, int xCoord, int yCoord, int zCoord) {
+	private static IBee getVillageBee(World world, int xCoord, int yCoord, int zCoord) {
 
 		// Get current biome
 		BiomeGenBase biome = world.getBiomeGenForCoords(xCoord, zCoord);
@@ -340,10 +341,13 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 			candidates = BeeManager.villageBees[0];
 		}
 
+		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, xCoord, yCoord, zCoord);
+		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(biome.rainfall);
+
 		// Add bees that can live in this environment
-		ArrayList<IBeeGenome> valid = new ArrayList<IBeeGenome>();
+		List<IBeeGenome> valid = new ArrayList<IBeeGenome>();
 		for (IBeeGenome genome : candidates) {
-			if (checkBiomeHazard(genome, biome.temperature, biome.rainfall)) {
+			if (checkBiomeHazard(genome, biomeTemperature, biomeHumidity)) {
 				valid.add(genome);
 			}
 		}
@@ -356,23 +360,11 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		return BeeManager.beeRoot.getBee(world, valid.get(world.rand.nextInt(valid.size())));
 	}
 
-	private boolean checkBiomeHazard(IBeeGenome genome, float temperature, float humidity) {
-
-		EnumTemperature beeTemperature = genome.getPrimary().getTemperature();
-		EnumTolerance temperatureTolerance = genome.getToleranceTemp();
-
-		Collection<EnumTemperature> toleratedTemperatures = AlleleManager.climateHelper.getToleratedTemperature(beeTemperature, temperatureTolerance);
-
-		if (!toleratedTemperatures.contains(EnumTemperature.getFromValue(temperature))) {
-			return false;
-		}
-
-		EnumHumidity beeHumidity = genome.getPrimary().getHumidity();
-		EnumTolerance humidityTolerance = genome.getToleranceHumid();
-
-		Collection<EnumHumidity> toleratedHumidity = AlleleManager.climateHelper.getToleratedHumidity(beeHumidity, humidityTolerance);
-
-		return toleratedHumidity.contains(EnumHumidity.getFromValue(humidity));
+	private static boolean checkBiomeHazard(IBeeGenome genome, EnumTemperature biomeTemperature, EnumHumidity biomeHumidity) {
+		IAlleleBeeSpecies species = genome.getPrimary();
+		return AlleleManager.climateHelper.isWithinLimits(biomeTemperature, biomeHumidity,
+				species.getTemperature(), genome.getToleranceTemp(),
+				species.getHumidity(), genome.getToleranceHumid());
 	}
 
 	protected void fillBoxWith(World world, StructureBoundingBox box, int par3, int par4, int par5, int par6, int par7, int par8, ItemStack buildingBlock,

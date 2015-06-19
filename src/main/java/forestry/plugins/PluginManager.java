@@ -16,6 +16,7 @@ import com.google.common.collect.Lists;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Random;
@@ -37,11 +38,11 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.Forestry;
-import forestry.core.interfaces.IOreDictionaryHandler;
-import forestry.core.interfaces.IPacketHandler;
+import forestry.api.core.ForestryAPI;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.IResupplyHandler;
 import forestry.core.interfaces.ISaveEventHandler;
+import forestry.core.network.IPacketHandler;
 import forestry.core.proxy.Proxies;
 
 public class PluginManager {
@@ -54,7 +55,6 @@ public class PluginManager {
 	public static final ArrayList<IPickupHandler> pickupHandlers = Lists.newArrayList();
 	public static final ArrayList<ISaveEventHandler> saveEventHandlers = Lists.newArrayList();
 	public static final ArrayList<IResupplyHandler> resupplyHandlers = Lists.newArrayList();
-	public static final ArrayList<IOreDictionaryHandler> dictionaryHandlers = Lists.newArrayList();
 
 	private static final Set<Module> loadedModules = EnumSet.noneOf(Module.class);
 	private static final Set<Module> unloadedModules = EnumSet.allOf(Module.class);
@@ -88,6 +88,7 @@ public class PluginManager {
 		AGRICRAFT(new PluginAgriCraft()),
 		BIOMESOPLENTY(new PluginBiomesOPlenty()),
 		CHISEL(new PluginChisel()),
+		ENDERIO(new PluginEnderIO()),
 		EXTRAUTILITIES(new PluginExtraUtilities()),
 		HARVESTCRAFT(new PluginHarvestCraft()),
 		INDUSTRIALCRAFT(new PluginIC2()),
@@ -113,7 +114,7 @@ public class PluginManager {
 		}
 
 		public boolean isEnabled() {
-			return isModuleLoaded(this);
+			return ForestryAPI.enabledPlugins.contains(toString());
 		}
 
 		public boolean canBeDisabled() {
@@ -134,10 +135,6 @@ public class PluginManager {
 
 	public static EnumSet<Module> getLoadedModules() {
 		return EnumSet.copyOf(loadedModules);
-	}
-
-	public static boolean isModuleLoaded(Module module) {
-		return loadedModules.contains(module);
 	}
 
 	private static void registerHandlers(ForestryPlugin plugin) {
@@ -166,11 +163,6 @@ public class PluginManager {
 		IResupplyHandler resupplyHandler = plugin.getResupplyHandler();
 		if (resupplyHandler != null) {
 			resupplyHandlers.add(resupplyHandler);
-		}
-
-		IOreDictionaryHandler dictionaryHandler = plugin.getDictionaryHandler();
-		if (dictionaryHandler != null) {
-			dictionaryHandlers.add(dictionaryHandler);
 		}
 
 		IFuelHandler fuelHandler = plugin.getFuelHandler();
@@ -227,6 +219,11 @@ public class PluginManager {
 
 		unloadedModules.removeAll(toLoad);
 		loadedModules.addAll(toLoad);
+
+		ForestryAPI.enabledPlugins = new HashSet<String>();
+		for (Module m : loadedModules) {
+			ForestryAPI.enabledPlugins.add(m.toString());
+		}
 
 		if (config.hasChanged()) {
 			config.save();

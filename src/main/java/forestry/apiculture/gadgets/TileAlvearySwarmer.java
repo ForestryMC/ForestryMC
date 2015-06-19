@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
+import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.Stack;
 
@@ -25,23 +26,27 @@ import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.ForestryAPI;
+import forestry.apiculture.network.PacketActiveUpdate;
 import forestry.apiculture.worldgen.Hive;
 import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveDescriptionSwarmer;
+import forestry.core.interfaces.IActivatable;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.inventory.wrappers.IInvSlot;
 import forestry.core.inventory.wrappers.InventoryIterator;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketPayload;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
 
-public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
+public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, IActivatable {
 
 	/* CONSTANTS */
 	public static final int BLOCK_META = 2;
 
 	private final Stack<ItemStack> pendingSpawns = new Stack<ItemStack>();
-	private boolean isActive;
+	private boolean active;
 
 	public TileAlvearySwarmer() {
 		super(BLOCK_META);
@@ -59,12 +64,12 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 		super.updateServerSide();
 
 		if (pendingSpawns.size() > 0) {
-			setIsActive(true);
+			setActive(true);
 			if (updateOnInterval(1000)) {
 				trySpawnSwarm();
 			}
 		} else {
-			setIsActive(false);
+			setActive(false);
 		}
 
 		if (!updateOnInterval(500)) {
@@ -143,28 +148,22 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 		}
 	}
 
-	private void setIsActive(boolean isActive) {
-		if (this.isActive != isActive) {
-			this.isActive = isActive;
-			setNeedsNetworkUpdate();
-		}
+	/* NETWORK */
+
+	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
+		data.writeBoolean(active);
 	}
 
-	/* NETWORK */
 	@Override
-	public void fromPacketPayload(PacketPayload payload) {
-		boolean act = payload.shortPayload[0] > 0;
-		if (this.isActive != act) {
-			this.isActive = act;
+	public void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
+		boolean active = data.readBoolean();
+		if (this.active != active) {
+			this.active = active;
 			worldObj.func_147479_m(xCoord, yCoord, zCoord);
 		}
-	}
-
-	@Override
-	public PacketPayload getPacketPayload() {
-		PacketPayload payload = new PacketPayload(0, 1);
-		payload.shortPayload[0] = (short) (isActive ? 1 : 0);
-		return payload;
 	}
 
 	@Override
@@ -179,7 +178,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 			return BlockAlveary.BOTTOM;
 		}
 
-		if (isActive) {
+		if (active) {
 			return BlockAlveary.ALVEARY_SWARMER_ON;
 		} else {
 			return BlockAlveary.ALVEARY_SWARMER_OFF;
@@ -215,6 +214,24 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 		}
 		nbttagcompound.setTag("PendingSpawns", nbttaglist);
 
+	}
+
+	@Override
+	public boolean isActive() {
+		return active;
+	}
+
+	@Override
+	public void setActive(boolean active) {
+		if (this.active == active) {
+			return;
+		}
+
+		this.active = active;
+
+		if (!worldObj.isRemote) {
+			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this));
+		}
 	}
 
 	private static class SwarmerInventoryAdapter extends TileInventoryAdapter<TileAlvearySwarmer> {

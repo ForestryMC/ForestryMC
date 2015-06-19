@@ -33,7 +33,7 @@ import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.ForestryClient;
 import forestry.core.TickHandlerCoreClient;
 import forestry.core.WorldGenerator;
-import forestry.core.config.Config;
+import forestry.core.render.EntityHoneydustFX;
 import forestry.core.render.SpriteSheet;
 
 public class ClientProxyCommon extends ProxyCommon {
@@ -162,26 +162,25 @@ public class ClientProxyCommon extends ProxyCommon {
 	// FIXME: This is causing crashes.
 	@Override
 	public void addEntityBiodustFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
-		if (!Config.enableParticleFX) {
+		if (!ClientProxyRender.shouldSpawnParticle(world)) {
 			return;
 		}
 
 		// ModLoader.getMinecraftInstance().effectRenderer.addEffect(new EntityBiodustFX(world, d1, d2, d3, f1, f2, f3));
 	}
 
-	// FIXME: This is causing crashes.
 	@Override
 	public void addEntitySwarmFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
-		if (!Config.enableParticleFX) {
+		if (!ClientProxyRender.shouldSpawnParticle(world)) {
 			return;
 		}
 
-		// ModLoader.getMinecraftInstance().effectRenderer.addEffect(new EntityHoneydustFX(world, d1, d2, d3, f1, f2, f3));
+		getClientInstance().effectRenderer.addEffect(new EntityHoneydustFX(world, d1, d2, d3, f1, f2, f3));
 	}
 
 	@Override
 	public void addEntityExplodeFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
-		if (!Config.enableParticleFX) {
+		if (!ClientProxyRender.shouldSpawnParticle(world)) {
 			return;
 		}
 

@@ -23,7 +23,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
@@ -47,10 +47,10 @@ import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
+import forestry.core.interfaces.IItemStackDisplay;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InvTools;
-import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
@@ -59,9 +59,8 @@ import forestry.core.utils.GuiUtil;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
-import forestry.factory.gui.ContainerCarpenter;
 
-public class MachineCarpenter extends TilePowered implements ISidedInventory, ILiquidTankContainer {
+public class MachineCarpenter extends TilePowered implements ISidedInventory, ILiquidTankContainer, IItemStackDisplay {
 
 	/* CONSTANTS */
 	public final static int SLOT_CRAFTING_1 = 0;
@@ -72,6 +71,397 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	public final static int SLOT_CAN_INPUT = 11;
 	public final static short SLOT_INVENTORY_1 = 12;
 	public final static short SLOT_INVENTORY_COUNT = 18;
+
+	/* MEMBER */
+	public final FilteredTank resourceTank;
+	private final TankManager tankManager;
+	private final TileInventoryAdapter craftingInventory;
+	private final InventoryCraftResult craftPreviewInventory;
+
+	@Nullable
+	public MachineCarpenter.Recipe currentRecipe;
+	public MachineCarpenter.Recipe lastRecipe;
+	private int packageTime;
+	private int totalTime;
+	private ItemStack pendingProduct;
+
+	public ItemStack getBoxStack() {
+		return getInternalInventory().getStackInSlot(SLOT_BOX);
+	}
+
+	public MachineCarpenter() {
+		super(1100, 50, 4000);
+		setHints(Config.hints.get("carpenter"));
+		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluids);
+
+		craftingInventory = new TileInventoryAdapter<MachineCarpenter>(this, 10, "CraftItems");
+		craftPreviewInventory = new InventoryCraftResult();
+		setInternalInventory(new CarpenterInventoryAdapter(this));
+
+		InvTools.configureSided(getInternalInventory(), Defaults.FACINGS, SLOT_BOX, 20);
+
+		tankManager = new TankManager(resourceTank);
+	}
+
+	@Override
+	public void openGui(EntityPlayer player, TileBase tile) {
+		player.openGui(ForestryAPI.instance, GuiId.CarpenterGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
+	}
+
+	/* LOADING & SAVING */
+	@Override
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
+		super.writeToNBT(nbttagcompound);
+
+		nbttagcompound.setInteger("PackageTime", packageTime);
+		nbttagcompound.setInteger("PackageTotalTime", totalTime);
+
+		tankManager.writeTanksToNBT(nbttagcompound);
+
+		craftingInventory.writeToNBT(nbttagcompound);
+
+		// Write pending product
+		if (pendingProduct != null) {
+			NBTTagCompound nbttagcompoundP = new NBTTagCompound();
+			pendingProduct.writeToNBT(nbttagcompoundP);
+			nbttagcompound.setTag("PendingProduct", nbttagcompoundP);
+		}
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound nbttagcompound) {
+		super.readFromNBT(nbttagcompound);
+
+		packageTime = nbttagcompound.getInteger("PackageTime");
+		totalTime = nbttagcompound.getInteger("PackageTotalTime");
+
+		tankManager.readTanksFromNBT(nbttagcompound);
+
+		craftingInventory.readFromNBT(nbttagcompound);
+
+		// Load pending product
+		if (nbttagcompound.hasKey("PendingProduct")) {
+			NBTTagCompound nbttagcompoundP = nbttagcompound.getCompoundTag("PendingProduct");
+			pendingProduct = ItemStack.loadItemStackFromNBT(nbttagcompoundP);
+		}
+
+		// Reset recipe according to contents
+		setCurrentRecipe(RecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory, worldObj));
+	}
+
+	public void resetRecipe() {
+		if (worldObj.isRemote) {
+			return;
+		}
+		setCurrentRecipe(RecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory, getWorldObj()));
+	}
+
+	private void setCurrentRecipe(@Nullable MachineCarpenter.Recipe currentRecipe) {
+		this.currentRecipe = currentRecipe;
+
+		final ItemStack craftingResult;
+
+		if (currentRecipe != null) {
+			lastRecipe = currentRecipe;
+			craftingResult = currentRecipe.getCraftingResult();
+		} else {
+			craftingResult = null;
+		}
+
+		craftPreviewInventory.setInventorySlotContents(0, craftingResult);
+	}
+
+	@Override
+	public void updateServerSide() {
+		super.updateServerSide();
+
+		if (!updateOnInterval(20)) {
+			return;
+		}
+		IInventoryAdapter accessibleInventory = getInternalInventory();
+		// Check if we have suitable items waiting in the item slot
+		if (accessibleInventory.getStackInSlot(SLOT_CAN_INPUT) != null) {
+			FluidHelper.drainContainers(tankManager, accessibleInventory, SLOT_CAN_INPUT);
+		}
+
+		if (!updateOnInterval(40)) {
+			return;
+		}
+
+		if (currentRecipe == null) {
+			Recipe recipe = MachineCarpenter.RecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory, worldObj);
+			if (recipe != null) {
+				setCurrentRecipe(recipe);
+			}
+		}
+
+		setErrorCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
+		setErrorCondition(!validateResources(), EnumErrorCode.NORESOURCE);
+	}
+
+	@Override
+	public boolean workCycle() {
+
+		if (packageTime > 0) {
+			packageTime--;
+
+			// Check whether we have become invalid and need to abort production
+			if (currentRecipe == null || !validateResources()) {
+				packageTime = totalTime = 0;
+				return false;
+			}
+
+			if (packageTime <= 0) {
+
+				pendingProduct = currentRecipe.getCraftingResult();
+				totalTime = 0;
+
+				// Remove resources
+				if (!removeResources(currentRecipe)) {
+					return false;
+				}
+
+				// Update product display
+				resetRecipe();
+
+				return tryAddPending();
+			}
+			return true;
+		} else if (pendingProduct != null) {
+			return tryAddPending();
+		} else if (currentRecipe != null) {
+
+			if (!validateResources()) {
+				return false;
+			}
+
+			// Enough items available, start the process
+			packageTime = totalTime = currentRecipe.packagingTime;
+
+			// Update product display
+			resetRecipe();
+
+			return true;
+		} else {
+
+			return false;
+		}
+	}
+
+	private boolean validateResources() {
+		if (currentRecipe == null) {
+			return true;
+		}
+		// Check whether liquid is needed and if there is enough available
+		if (currentRecipe.liquid != null) {
+			if (resourceTank.getFluidAmount() < currentRecipe.liquid.amount) {
+				return false;
+			}
+		}
+
+		IInventoryAdapter accessibleInventory = getInternalInventory();
+		// Check whether boxes are available
+		if (currentRecipe.box != null) {
+			if (accessibleInventory.getStackInSlot(SLOT_BOX) == null) {
+				return false;
+			}
+		}
+
+		// Need at least one matched set
+		ItemStack[] set = InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
+		ItemStack[] stock = InvTools.getStacks(accessibleInventory, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+
+		return StackUtils.containsSets(set, stock, true, false) > 0;
+	}
+
+	private boolean removeResources(Recipe recipe) {
+
+		// Remove resources
+		if (recipe.liquid != null) {
+			FluidStack amountDrained = resourceTank.drain(recipe.liquid.amount, false);
+			if (amountDrained != null && amountDrained.amount == recipe.liquid.amount) {
+				resourceTank.drain(recipe.liquid.amount, true);
+			} else {
+				return false;
+			}
+		}
+		// Remove boxes
+		if (recipe.box != null) {
+			ItemStack removed = getInternalInventory().decrStackSize(SLOT_BOX, 1);
+			if (removed == null || removed.stackSize == 0) {
+				return false;
+			}
+		}
+		return removeSets(1, InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT));
+	}
+
+	private boolean removeSets(int count, ItemStack[] set) {
+		EntityPlayer player = Proxies.common.getPlayer(worldObj, getOwner());
+		return InvTools.removeSets(getInternalInventory(), count, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
+	}
+
+	private boolean tryAddPending() {
+		if (pendingProduct == null) {
+			return false;
+		}
+
+		boolean added = InvTools.tryAddStack(this, pendingProduct, SLOT_PRODUCT, SLOT_PRODUCT_COUNT, true);
+
+		if (added) {
+			pendingProduct = null;
+		}
+
+		setErrorCondition(!added, EnumErrorCode.NOSPACE);
+		return added;
+	}
+
+	/* STATE INFORMATION */
+	@Override
+	public boolean isWorking() {
+		return packageTime > 0 || pendingProduct != null || currentRecipe != null && validateResources();
+	}
+
+	@Override
+	public boolean hasWork() {
+		if (currentRecipe == null) {
+			return false;
+		}
+
+		IInventoryAdapter accessibleInventory = getInternalInventory();
+		// Stop working if the output slot cannot take more
+		if (accessibleInventory.getStackInSlot(SLOT_PRODUCT) != null
+				&& accessibleInventory.getStackInSlot(SLOT_PRODUCT).getMaxStackSize() - accessibleInventory.getStackInSlot(SLOT_PRODUCT).stackSize < currentRecipe
+				.getCraftingResult().stackSize) {
+			return false;
+		}
+
+		return validateResources();
+	}
+
+	public int getCraftingProgressScaled(int i) {
+		if (totalTime == 0) {
+			return 0;
+		}
+
+		return ((totalTime - packageTime) * i) / totalTime;
+	}
+
+	public int getResourceScaled(int i) {
+		return (resourceTank.getFluidAmount() * i) / Defaults.PROCESSOR_TANK_CAPACITY;
+	}
+
+	@Override
+	public EnumTankLevel getPrimaryLevel() {
+		return Utils.rateTankLevel(getResourceScaled(100));
+	}
+
+	/* SMP GUI */
+	@Override
+	public void getGUINetworkData(int i, int j) {
+		i -= tankManager.maxMessageId() + 1;
+		switch (i) {
+			case 0:
+				packageTime = j;
+				break;
+			case 1:
+				totalTime = j;
+				break;
+		}
+	}
+
+	@Override
+	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
+		int i = tankManager.maxMessageId() + 1;
+		iCrafting.sendProgressBarUpdate(container, i, packageTime);
+		iCrafting.sendProgressBarUpdate(container, i + 1, totalTime);
+	}
+
+	/**
+	 * @return Inaccessible crafting inventory for the craft grid.
+	 */
+	public IInventory getCraftingInventory() {
+		return craftingInventory;
+	}
+
+	public IInventory getCraftPreviewInventory() {
+		return craftPreviewInventory;
+	}
+
+	@Override
+	public void handleItemStackForDisplay(ItemStack itemStack) {
+		craftPreviewInventory.setInventorySlotContents(0, itemStack);
+	}
+
+	// IFLUIDCONTAINER IMPLEMENTATION
+	@Override
+	public int fill(ForgeDirection direction, FluidStack resource, boolean doFill) {
+		return tankManager.fill(direction, resource, doFill);
+	}
+
+	@Override
+	public TankManager getTankManager() {
+		return tankManager;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		return tankManager.drain(from, resource, doDrain);
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return tankManager.drain(from, maxDrain, doDrain);
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return tankManager.canFill(from, fluid);
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return tankManager.canDrain(from, fluid);
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return tankManager.getTankInfo(from);
+	}
+
+	private static class CarpenterInventoryAdapter extends TileInventoryAdapter<MachineCarpenter> {
+		public CarpenterInventoryAdapter(MachineCarpenter carpenter) {
+			super(carpenter, 30, "Items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_CAN_INPUT) {
+				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+				return tile.tankManager.accepts(fluid);
+			} else if (slotIndex == SLOT_BOX) {
+				return RecipeManager.isBox(itemStack);
+			} else if (canSlotAccept(SLOT_CAN_INPUT, itemStack) || canSlotAccept(SLOT_BOX, itemStack)) {
+				return false;
+			}
+
+			return GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+		}
+
+		@Override
+		public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
+			if (GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT)) {
+				if (tile.lastRecipe != null) {
+					return tile.lastRecipe.isIngredient(itemStack);
+				}
+			}
+			return true;
+		}
+
+		@Override
+		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+			return slotIndex == SLOT_PRODUCT;
+		}
+	}
 
 	/* RECIPE MANAGMENT */
 	public static class Recipe {
@@ -210,391 +600,4 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		}
 	}
 
-	/* MEMBER */
-	public final FilteredTank resourceTank;
-	private final TankManager tankManager;
-	private final TileInventoryAdapter craftingInventory;
-
-	@Nullable
-	public MachineCarpenter.Recipe currentRecipe;
-	public MachineCarpenter.Recipe lastRecipe;
-	public ContainerCarpenter activeContainer;
-	private int packageTime;
-	private int totalTime;
-	private ItemStack currentProduct;
-	private ItemStack pendingProduct;
-
-	public ItemStack getBoxStack() {
-		return getInternalInventory().getStackInSlot(SLOT_BOX);
-	}
-
-	public MachineCarpenter() {
-		super(1100, 50, 4000);
-		setHints(Config.hints.get("carpenter"));
-		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluids);
-		craftingInventory = new TileInventoryAdapter<MachineCarpenter>(this, 10, "CraftItems");
-		setInternalInventory(new CarpenterInventoryAdapter(this));
-		InvTools.configureSided(getInternalInventory(), Defaults.FACINGS, SLOT_BOX, 20);
-
-		tankManager = new TankManager(resourceTank);
-	}
-
-	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
-		player.openGui(ForestryAPI.instance, GuiId.CarpenterGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
-	}
-
-	/* LOADING & SAVING */
-	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
-
-		nbttagcompound.setInteger("PackageTime", packageTime);
-		nbttagcompound.setInteger("PackageTotalTime", totalTime);
-
-		tankManager.writeTanksToNBT(nbttagcompound);
-
-		craftingInventory.writeToNBT(nbttagcompound);
-
-		// Write pending product
-		if (pendingProduct != null) {
-			NBTTagCompound nbttagcompoundP = new NBTTagCompound();
-			pendingProduct.writeToNBT(nbttagcompoundP);
-			nbttagcompound.setTag("PendingProduct", nbttagcompoundP);
-		}
-		// Write current product
-		if (currentProduct != null) {
-			NBTTagCompound nbttagcompoundC = new NBTTagCompound();
-			currentProduct.writeToNBT(nbttagcompoundC);
-			nbttagcompound.setTag("CurrentProduct", nbttagcompoundC);
-		}
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-
-		packageTime = nbttagcompound.getInteger("PackageTime");
-		totalTime = nbttagcompound.getInteger("PackageTotalTime");
-
-		tankManager.readTanksFromNBT(nbttagcompound);
-
-		craftingInventory.readFromNBT(nbttagcompound);
-
-		// Load pending product
-		if (nbttagcompound.hasKey("PendingProduct")) {
-			NBTTagCompound nbttagcompoundP = nbttagcompound.getCompoundTag("PendingProduct");
-			pendingProduct = ItemStack.loadItemStackFromNBT(nbttagcompoundP);
-		}
-		// Load current product
-		if (nbttagcompound.hasKey("CurrentProduct")) {
-			NBTTagCompound nbttagcompoundP = nbttagcompound.getCompoundTag("CurrentProduct");
-			currentProduct = ItemStack.loadItemStackFromNBT(nbttagcompoundP);
-		}
-
-		// Reset recipe according to contents
-		setCurrentRecipe(RecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory, worldObj));
-	}
-
-	public void setCurrentRecipe(@Nullable MachineCarpenter.Recipe currentRecipe) {
-		this.currentRecipe = currentRecipe;
-		if (currentRecipe != null) {
-			lastRecipe = currentRecipe;
-		}
-	}
-
-	@Override
-	public void updateServerSide() {
-		super.updateServerSide();
-
-		if (!updateOnInterval(20)) {
-			return;
-		}
-		IInventoryAdapter accessibleInventory = getInternalInventory();
-		// Check if we have suitable items waiting in the item slot
-		if (accessibleInventory.getStackInSlot(SLOT_CAN_INPUT) != null) {
-			FluidHelper.drainContainers(tankManager, accessibleInventory, SLOT_CAN_INPUT);
-		}
-
-		if (!updateOnInterval(40)) {
-			return;
-		}
-
-		if (currentRecipe == null) {
-			Recipe recipe = MachineCarpenter.RecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory, worldObj);
-			setCurrentRecipe(recipe);
-		}
-
-		setErrorCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
-		setErrorCondition(!validateResources(), EnumErrorCode.NORESOURCE);
-	}
-
-	@Override
-	public boolean workCycle() {
-
-		if (packageTime > 0) {
-			packageTime--;
-
-			// Check whether we have become invalid and need to abort production
-			if (currentRecipe == null || currentProduct == null || !currentProduct.isItemEqual(currentRecipe.getCraftingResult()) || !validateResources()) {
-				currentProduct = null;
-				packageTime = totalTime = 0;
-				return false;
-			}
-
-			if (packageTime <= 0) {
-
-				pendingProduct = currentProduct;
-				currentProduct = null;
-				totalTime = 0;
-
-				// Remove resources
-				if (!removeResources(currentRecipe)) {
-					return false;
-				}
-
-				// Update product display
-				if (activeContainer != null) {
-					activeContainer.updateProductDisplay();
-				}
-
-				return tryAddPending();
-			}
-			return true;
-		} else if (pendingProduct != null) {
-			return tryAddPending();
-		} else {
-
-			if (currentRecipe != null) {
-
-				if (!validateResources()) {
-					return false;
-				}
-
-				// Enough items available, start the process
-				packageTime = totalTime = currentRecipe.packagingTime;
-				currentProduct = currentRecipe.getCraftingResult();
-
-				// Update product display
-				if (activeContainer != null) {
-					activeContainer.updateProductDisplay();
-				}
-
-				return true;
-			}
-
-			return false;
-		}
-	}
-
-	private boolean validateResources() {
-		if (currentRecipe == null) {
-			return true;
-		}
-		// Check whether liquid is needed and if there is enough available
-		if (currentRecipe.liquid != null) {
-			if (resourceTank.getFluidAmount() < currentRecipe.liquid.amount) {
-				return false;
-			}
-		}
-
-		IInventoryAdapter accessibleInventory = getInternalInventory();
-		// Check whether boxes are available
-		if (currentRecipe.box != null) {
-			if (accessibleInventory.getStackInSlot(SLOT_BOX) == null) {
-				return false;
-			}
-		}
-
-		// Need at least one matched set
-		ItemStack[] set = InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
-		ItemStack[] stock = InvTools.getStacks(accessibleInventory, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
-
-		return StackUtils.containsSets(set, stock, true, false) > 0;
-	}
-
-	private boolean removeResources(Recipe recipe) {
-
-		// Remove resources
-		if (recipe.liquid != null) {
-			FluidStack amountDrained = resourceTank.drain(recipe.liquid.amount, false);
-			if (amountDrained != null && amountDrained.amount == recipe.liquid.amount) {
-				resourceTank.drain(recipe.liquid.amount, true);
-			} else {
-				return false;
-			}
-		}
-		// Remove boxes
-		if (recipe.box != null) {
-			ItemStack removed = getInternalInventory().decrStackSize(SLOT_BOX, 1);
-			if (removed == null || removed.stackSize == 0) {
-				return false;
-			}
-		}
-		return removeSets(1, InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT));
-	}
-
-	private boolean removeSets(int count, ItemStack[] set) {
-		EntityPlayer player = Proxies.common.getPlayer(worldObj, getOwnerProfile());
-		return InvTools.removeSets(getInternalInventory(), count, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
-	}
-
-	private boolean tryAddPending() {
-		if (pendingProduct == null) {
-			return false;
-		}
-
-		boolean added = InvTools.tryAddStack(this, pendingProduct, SLOT_PRODUCT, SLOT_PRODUCT_COUNT, true);
-
-		if (added) {
-			pendingProduct = null;
-		}
-
-		setErrorCondition(!added, EnumErrorCode.NOSPACE);
-		return added;
-	}
-
-	/* STATE INFORMATION */
-	@Override
-	public boolean isWorking() {
-		return packageTime > 0 || pendingProduct != null || currentRecipe != null && validateResources();
-	}
-
-	@Override
-	public boolean hasWork() {
-		if (currentRecipe == null) {
-			return false;
-		}
-
-		IInventoryAdapter accessibleInventory = getInternalInventory();
-		// Stop working if the output slot cannot take more
-		if (accessibleInventory.getStackInSlot(SLOT_PRODUCT) != null
-				&& accessibleInventory.getStackInSlot(SLOT_PRODUCT).getMaxStackSize() - accessibleInventory.getStackInSlot(SLOT_PRODUCT).stackSize < currentRecipe
-				.getCraftingResult().stackSize) {
-			return false;
-		}
-
-		return validateResources();
-	}
-
-	public int getCraftingProgressScaled(int i) {
-		if (totalTime == 0) {
-			return 0;
-		}
-
-		return (packageTime * i) / totalTime;
-
-	}
-
-	public int getResourceScaled(int i) {
-		return (resourceTank.getFluidAmount() * i) / Defaults.PROCESSOR_TANK_CAPACITY;
-	}
-
-	@Override
-	public EnumTankLevel getPrimaryLevel() {
-		return Utils.rateTankLevel(getResourceScaled(100));
-	}
-
-	/* SMP GUI */
-	@Override
-	public void getGUINetworkData(int i, int j) {
-		i -= tankManager.maxMessageId() + 1;
-		switch (i) {
-			case 0:
-				packageTime = j;
-				break;
-			case 1:
-				totalTime = j;
-				break;
-		}
-	}
-
-	@Override
-	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		int i = tankManager.maxMessageId() + 1;
-		iCrafting.sendProgressBarUpdate(container, i, packageTime);
-		iCrafting.sendProgressBarUpdate(container, i + 1, totalTime);
-	}
-
-	/**
-	 * @return Inaccessible crafting inventory for the craft grid.
-	 */
-	public InventoryAdapter getCraftingInventory() {
-		return craftingInventory;
-	}
-
-	// IFLUIDCONTAINER IMPLEMENTATION
-	@Override
-	public int fill(ForgeDirection direction, FluidStack resource, boolean doFill) {
-		return tankManager.fill(direction, resource, doFill);
-	}
-
-	@Override
-	public TankManager getTankManager() {
-		return tankManager;
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return tankManager.drain(from, resource, doDrain);
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return tankManager.drain(from, maxDrain, doDrain);
-	}
-
-	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return tankManager.canFill(from, fluid);
-	}
-
-	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return tankManager.canDrain(from, fluid);
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return tankManager.getTankInfo(from);
-	}
-
-	public void resetProductDisplay(InventoryCrafting craftMatrix) {
-		setCurrentRecipe(RecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftMatrix, getWorldObj()));
-	}
-
-	private static class CarpenterInventoryAdapter extends TileInventoryAdapter<MachineCarpenter> {
-		public CarpenterInventoryAdapter(MachineCarpenter carpenter) {
-			super(carpenter, 30, "Items");
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (slotIndex == SLOT_CAN_INPUT) {
-				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-				return tile.tankManager.accepts(fluid);
-			} else if (slotIndex == SLOT_BOX) {
-				return RecipeManager.isBox(itemStack);
-			} else if (canSlotAccept(SLOT_CAN_INPUT, itemStack) || canSlotAccept(SLOT_BOX, itemStack)) {
-				return false;
-			}
-
-			return GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
-		}
-
-		@Override
-		public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
-			if (GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT)) {
-				if (tile.lastRecipe != null) {
-					return tile.lastRecipe.isIngredient(itemStack);
-				}
-			}
-			return true;
-		}
-
-		@Override
-		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-			return slotIndex == SLOT_PRODUCT;
-		}
-	}
 }

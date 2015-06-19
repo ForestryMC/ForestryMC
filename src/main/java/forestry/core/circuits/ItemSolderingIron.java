@@ -164,7 +164,8 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 			return circuits;
 		}
 
-		public void trySolder() {
+		@Override
+		public void onSlotClick(EntityPlayer player) {
 			if (layouts.getCurrent() == CircuitRegistry.DUMMY_LAYOUT) {
 				return;
 			}
@@ -215,11 +216,6 @@ public class ItemSolderingIron extends ItemForestry implements ISolderingIron {
 				}
 			}
 			return count;
-		}
-
-		@Override
-		public void markDirty() {
-			trySolder();
 		}
 
 		@Override

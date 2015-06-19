@@ -100,27 +100,6 @@ public class Defaults {
 
 	public static final int DEFINITION_ARBCHEST_META = 0;
 
-	// Package Ids
-	public static final int ID_PACKAGE_MACHINE_FERMENTER = 0;
-	public static final int ID_PACKAGE_MACHINE_STILL = 1;
-	public static final int ID_PACKAGE_MACHINE_BOTTLER = 2;
-	public static final int ID_PACKAGE_MACHINE_RAINTANK = 3;
-	public static final int ID_PACKAGE_MACHINE_GENERATOR = 4;
-	public static final int ID_PACKAGE_MACHINE_CARPENTER = 5;
-	public static final int ID_PACKAGE_MACHINE_MOISTENER = 6;
-	public static final int ID_PACKAGE_MACHINE_APIARY = 7;
-	public static final int ID_PACKAGE_MACHINE_CENTRIFUGE = 8;
-	public static final int ID_PACKAGE_MACHINE_SQUEEZER = 9;
-	public static final int ID_PACKAGE_MACHINE_ALVEARY = 10;
-	public static final int ID_PACKAGE_MACHINE_FABRICATOR = 11;
-
-	public static final int ID_PACKAGE_MILL_RAINMAKER = 1;
-	public static final int ID_PACKAGE_MILL_APIARIST_CHEST = 3;
-	public static final int ID_PACKAGE_MILL_ANALYZER = 4;
-	public static final int ID_PACKAGE_MILL_MAILBOX = 5;
-	public static final int ID_PACKAGE_MILL_TRADER = 6;
-	public static final int ID_PACKAGE_MILL_PHILATELIST = 7;
-
 	// Item Ids
 
 	public static final int SLOTS_BACKPACK_DEFAULT = 15;

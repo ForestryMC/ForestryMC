@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
@@ -19,17 +21,21 @@ import net.minecraft.tileentity.TileEntity;
 import com.mojang.authlib.GameProfile;
 
 import forestry.api.arboriculture.ITree;
+import forestry.api.genetics.IAllele;
 import forestry.arboriculture.genetics.Tree;
 import forestry.core.interfaces.IOwnable;
-import forestry.core.network.INetworkedEntity;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamable;
 import forestry.core.utils.PlayerUtil;
+import forestry.plugins.PluginArboriculture;
 
 /**
  * This is the base TE class for any block that needs to contain tree genome information.
  *
  * @author SirSengir
  */
-public abstract class TileTreeContainer extends TileEntity implements INetworkedEntity, IOwnable {
+public abstract class TileTreeContainer extends TileEntity implements IStreamable, IOwnable {
 
 	private ITree containedTree;
 
@@ -44,7 +50,6 @@ public abstract class TileTreeContainer extends TileEntity implements INetworked
 		if (nbttagcompound.hasKey("owner")) {
 			owner = NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("owner"));
 		}
-
 	}
 
 	@Override
@@ -61,7 +66,31 @@ public abstract class TileTreeContainer extends TileEntity implements INetworked
 			NBTUtil.func_152460_a(nbt, owner);
 			nbttagcompound.setTag("owner", nbt);
 		}
+	}
 
+	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		String speciesUID = "";
+		ITree tree = getTree();
+		if (tree != null) {
+			speciesUID = tree.getIdent();
+		}
+		data.writeUTF(speciesUID);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		String speciesUID = data.readUTF();
+		ITree tree = getTree(speciesUID);
+		setTree(tree);
+	}
+
+	public static ITree getTree(String speciesUID) {
+		IAllele[] treeTemplate = PluginArboriculture.treeInterface.getTemplate(speciesUID);
+		if (treeTemplate == null) {
+			return null;
+		}
+		return PluginArboriculture.treeInterface.templateAsIndividual(treeTemplate);
 	}
 
 	/* CLIENT INFORMATION */
@@ -103,17 +132,12 @@ public abstract class TileTreeContainer extends TileEntity implements INetworked
 	}
 
 	@Override
-	public boolean isOwnable() {
-		return false;
-	}
-
-	@Override
 	public boolean isOwned() {
 		return owner != null;
 	}
 
 	@Override
-	public GameProfile getOwnerProfile() {
+	public GameProfile getOwner() {
 		return owner;
 	}
 

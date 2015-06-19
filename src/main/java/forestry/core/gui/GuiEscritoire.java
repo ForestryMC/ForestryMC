@@ -28,6 +28,8 @@ import forestry.core.gadgets.NaturalistGame;
 import forestry.core.gadgets.NaturalistGame.GameToken;
 import forestry.core.gadgets.TileEscritoire;
 import forestry.core.gui.widgets.Widget;
+import forestry.core.network.PacketGuiSelect;
+import forestry.core.network.PacketId;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
@@ -35,7 +37,7 @@ import forestry.core.utils.StringUtil;
 
 public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoire> {
 
-	private static enum Notes {
+	private enum Notes {
 		level1, level2, level3, level4, success, failure
 	}
 
@@ -46,7 +48,7 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 		for (Notes notesLevel : Notes.values()) {
 			int levelCount = Integer.valueOf(StringUtil.localize("gui.escritoire.notes." + notesLevel + ".count"));
 			for (int i = 1; i <= levelCount; i++) {
-				String note = StringUtil.localize("gui.escritoire.notes." + notesLevel + "." + i);
+				String note = StringUtil.localize("gui.escritoire.notes." + notesLevel + '.' + i);
 				researchNotes.put(notesLevel, note);
 			}
 		}
@@ -120,7 +122,8 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 
 		@Override
 		public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
-			container.sendTokenClick(index);
+			PacketGuiSelect packet = new PacketGuiSelect(PacketId.GUI_SELECTION_CHANGE, index, 0);
+			Proxies.net.sendToServer(packet);
 		}
 	}
 
@@ -149,7 +152,8 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 		@Override
 		public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
 			pressed = true;
-			container.sendProbeClick();
+			PacketGuiSelect packet = new PacketGuiSelect(PacketId.GUI_SELECTION_CHANGE, -1, 0);
+			Proxies.net.sendToServer(packet);
 		}
 
 		@Override

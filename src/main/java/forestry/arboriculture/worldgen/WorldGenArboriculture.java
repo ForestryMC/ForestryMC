@@ -65,7 +65,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	private GameProfile getOwner() {
 		TileEntity tile = world.getTileEntity(startX, startY, startZ);
 		if (tile instanceof TileSapling) {
-			return ((TileSapling) tile).getOwnerProfile();
+			return ((TileSapling) tile).getOwner();
 		} else {
 			return null;
 		}

@@ -46,7 +46,6 @@ import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.recipes.RecipeManagers;
-import forestry.api.storage.BackpackManager;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.arboriculture.EventHandlerArboriculture;
@@ -56,7 +55,6 @@ import forestry.arboriculture.FruitProviderPod.EnumPodType;
 import forestry.arboriculture.FruitProviderRandom;
 import forestry.arboriculture.FruitProviderRipening;
 import forestry.arboriculture.GuiHandlerArboriculture;
-import forestry.arboriculture.PacketHandlerArboriculture;
 import forestry.arboriculture.VillageHandlerArboriculture;
 import forestry.arboriculture.WoodType;
 import forestry.arboriculture.commands.CommandTree;
@@ -97,6 +95,7 @@ import forestry.arboriculture.items.ItemLeavesBlock;
 import forestry.arboriculture.items.ItemStairs;
 import forestry.arboriculture.items.ItemTreealyzer;
 import forestry.arboriculture.items.ItemWoodBlock;
+import forestry.arboriculture.network.PacketHandlerArboriculture;
 import forestry.arboriculture.proxy.ProxyArboriculture;
 import forestry.arboriculture.worldgen.WorldGenAcacia;
 import forestry.arboriculture.worldgen.WorldGenAcaciaVanilla;
@@ -143,9 +142,9 @@ import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.genetics.FruitFamily;
 import forestry.core.genetics.alleles.Allele;
-import forestry.core.interfaces.IPacketHandler;
 import forestry.core.items.ItemForestryBlock;
 import forestry.core.items.ItemFruit.EnumFruit;
+import forestry.core.network.IPacketHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.RecipeUtil;
 import forestry.core.utils.ShapedRecipeCustom;
@@ -281,9 +280,11 @@ public class PluginArboriculture extends ForestryPlugin {
 		// Stairs
 		ForestryBlock.stairs.registerBlock(new BlockArbStairs(ForestryBlock.planks1.block(), 0), ItemStairs.class, "stairs");
 		ForestryBlock.stairs.block().setHarvestLevel("axe", 0);
+		OreDictionary.registerOre("stairWood", ForestryBlock.stairs.getWildcard());
 
 		// Saplings
 		ForestryBlock.saplingGE.registerBlock(new BlockSapling(), ItemForestryBlock.class, "saplingGE");
+		OreDictionary.registerOre("treeSapling", ForestryBlock.saplingGE.getWildcard());
 
 		// Leaves
 		ForestryBlock.leaves.registerBlock(new ForestryBlockLeaves(), ItemLeavesBlock.class, "leaves");
@@ -367,33 +368,6 @@ public class PluginArboriculture extends ForestryPlugin {
 		ForestryItem.grafter.registerItem(new ItemGrafter(4), "grafter");
 		ForestryItem.grafterProven.registerItem(new ItemGrafter(149), "grafterProven");
 
-	}
-
-	@Override
-	protected void registerBackpackItems() {
-
-		for (ForestryBlock block : logs) {
-			BackpackManager.definitions.get("forester").addValidItem(block.getWildcard());
-		}
-
-		for (ForestryBlock block : fireproofLogs) {
-			BackpackManager.definitions.get("forester").addValidItem(block.getWildcard());
-		}
-
-		BackpackManager.definitions.get("forester").addValidItem(ForestryItem.sapling.getWildcard());
-		BackpackManager.definitions.get("forester").addValidItem(ForestryItem.fruits.getWildcard());
-
-		for (ForestryBlock block : slabs) {
-			BackpackManager.definitions.get("builder").addValidItem(block.getWildcard());
-		}
-		for (ForestryBlock block : fences) {
-			BackpackManager.definitions.get("builder").addValidItem(block.getWildcard());
-		}
-		for (ForestryBlock block : planks) {
-			BackpackManager.definitions.get("builder").addValidItem(block.getWildcard());
-		}
-
-		BackpackManager.definitions.get("builder").addValidItem(ForestryBlock.stairs.getWildcard());
 	}
 
 	@Override
@@ -538,9 +512,13 @@ public class PluginArboriculture extends ForestryPlugin {
 		for (WoodType woodType : WoodType.values()) {
 			int i = woodType.ordinal();
 			if (i < 16) {
+				// TODO remove first recipe on 1.8
 				Proxies.common.addRecipe(ForestryBlock.fences1.getItemStack(4, i % 16), "###", "# #", '#', ForestryBlock.planks1.getItemStack(1, i % 16));
+				Proxies.common.addRecipe(ForestryBlock.fences1.getItemStack(3, i % 16), "#X#", "#X#", '#', ForestryBlock.planks1.getItemStack(1, i % 16), 'X', "stickWood");
 			} else if (i < 32) {
+				// TODO remove first recipe on 1.8
 				Proxies.common.addRecipe(ForestryBlock.fences2.getItemStack(4, i % 16), "###", "# #", '#', ForestryBlock.planks2.getItemStack(1, i % 16));
+				Proxies.common.addRecipe(ForestryBlock.fences2.getItemStack(3, i % 16), "#X#", "#X#", '#', ForestryBlock.planks2.getItemStack(1, i % 16), 'X', "stickWood");
 			} else {
 				throw new RuntimeException("Wood type has no fences defined");
 			}
@@ -1231,11 +1209,12 @@ public class PluginArboriculture extends ForestryPlugin {
 		if (message.key.equals("add-fence-block") && message.isStringMessage()) {
 			Block block = GameData.getBlockRegistry().getRaw(message.getStringValue());
 
-			if (block == null || block == Blocks.air) {
-				Proxies.log.warning("invalid add-fence-block IMC: can't resolve block name %s.", message.getStringValue());
-			} else {
+			if (block != null && block != Blocks.air) {
 				validFences.add(block);
+			} else {
+				logInvalidIMCMessage(message);
 			}
+			return true;
 		}
 		return super.processIMCMessage(message);
 	}

@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import com.google.common.collect.ImmutableSet;
-
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -246,7 +245,7 @@ public class Bee extends IndividualLiving implements IBee {
 		World world = housing.getWorld();
 		BiomeGenBase biome = housing.getBiome();
 
-		ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
+		Set<IErrorState> errorStates = new HashSet<IErrorState>();
 
 		// / Rain needs tolerant flyers
 		if (world.isRaining() && !genome.getTolerantFlyer() && BiomeHelper.canRainOrSnow(biome) && !housing.isSealed()) {
@@ -281,7 +280,7 @@ public class Bee extends IndividualLiving implements IBee {
 			errorStates.add(EnumErrorCode.INVALIDBIOME);
 		}
 
-		return errorStates.build();
+		return errorStates;
 	}
 
 	@Override
@@ -467,10 +466,6 @@ public class Bee extends IndividualLiving implements IBee {
 
 	@Override
 	public ItemStack[] produceStacks(IBeeHousing housing) {
-		if (!hasFlower(housing)) {
-			return null;
-		}
-
 		if (housing == null) {
 			Proxies.log.warning("Failed to produce in an apiary because the beehousing was null.");
 			return null;
@@ -481,7 +476,7 @@ public class Bee extends IndividualLiving implements IBee {
 			return null;
 		}
 
-		ArrayList<ItemStack> products = new ArrayList<ItemStack>();
+		List<ItemStack> products = new ArrayList<ItemStack>();
 
 		IAlleleBeeSpecies primary = genome.getPrimary();
 		IAlleleBeeSpecies secondary = genome.getSecondary();
@@ -507,20 +502,17 @@ public class Bee extends IndividualLiving implements IBee {
 			}
 		}
 
-		// We are done if the we are not jubilant.
-		if (!primary.isJubilant(genome, housing) || !secondary.isJubilant(genome, housing)) {
-			return products.toArray(new ItemStack[products.size()]);
-		}
-
 		// / Specialty products
-		for (Map.Entry<ItemStack, Integer> entry : primary.getSpecialty().entrySet()) {
-			if (housing.getWorld().rand.nextInt(100) < entry.getValue() * speed) {
-				products.add(entry.getKey().copy());
+		if (primary.isJubilant(genome, housing) && secondary.isJubilant(genome, housing)) {
+			for (Map.Entry<ItemStack, Integer> entry : primary.getSpecialty().entrySet()) {
+				if (housing.getWorld().rand.nextInt(100) < entry.getValue() * speed) {
+					products.add(entry.getKey().copy());
+				}
 			}
 		}
 
-		return genome.getFlowerProvider().affectProducts(housing.getWorld(), this, housing.getXCoord(), housing.getYCoord(), housing.getZCoord(),
-				products.toArray(new ItemStack[products.size()]));
+		ItemStack[] productsArray = products.toArray(new ItemStack[products.size()]);
+		return genome.getFlowerProvider().affectProducts(housing.getWorld(), this, housing.getXCoord(), housing.getYCoord(), housing.getZCoord(), productsArray);
 	}
 
 	/* REPRODUCTION */

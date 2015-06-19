@@ -33,12 +33,9 @@ import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmable;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
-import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
-import forestry.core.interfaces.IOreDictionaryHandler;
-import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemTypedBlock;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ShapedRecipeCustom;
@@ -193,21 +190,20 @@ public class PluginFarming extends ForestryPlugin {
 
 		if (message.key.equals("add-farmable-sapling")) {
 			String[] tokens = message.getStringValue().split("@");
-			String errormsg = String.format("Received an invalid 'add-farmable-sapling' request '%s' from mod %s", message.getStringValue(),
-					message.getSender());
+			String errormsg = getInvalidIMCMessageText(message);
 			if (tokens.length != 2) {
-				Proxies.log.info(errormsg + ".");
+				Proxies.log.warning(errormsg);
 				return true;
 			}
 
 			if (!Farmables.farmables.containsKey(tokens[0])) {
-				Proxies.log.info("%s for non-existent farm %s.", errormsg, tokens[0]);
+				Proxies.log.warning("%s For non-existent farm %s.", errormsg, tokens[0]);
 				return true;
 			}
 
 			String[] items = tokens[1].split("[\\.]+");
 			if (items.length != 2 && items.length != 4) {
-				Proxies.log.info("%s for farm '%s': id definitions did not match.", errormsg, tokens[0]);
+				Proxies.log.warning("%s For farm '%s': id definitions did not match.", errormsg, tokens[0]);
 				return true;
 			}
 
@@ -230,27 +226,27 @@ public class PluginFarming extends ForestryPlugin {
 									new ItemStack(windfall, 1, Integer.parseInt(items[3]))));
 				}
 			} catch (Exception ex) {
-				Proxies.log.info("%s for farm '%s': ", errormsg, tokens[0], ex.getMessage());
+				Proxies.log.warning("%s for farm '%s': %s", errormsg, tokens[0], ex.getMessage());
 			}
 			return true;
 
 		} else if (message.key.equals("add-farmable-crop")) {
 
 			String[] tokens = message.getStringValue().split("@");
-			String errormsg = String.format("Received an invalid 'add-farmable-crop' request '%s' from mod %s", message.getStringValue(), message.getSender());
+			String errormsg = getInvalidIMCMessageText(message);
 			if (tokens.length != 2) {
-				Proxies.log.info(errormsg + ".");
+				Proxies.log.warning(errormsg);
 				return true;
 			}
 
 			if (!Farmables.farmables.containsKey(tokens[0])) {
-				Proxies.log.info("%s for non-existent farm %s.", errormsg, tokens[0]);
+				Proxies.log.warning("%s For non-existent farm %s.", errormsg, tokens[0]);
 				return true;
 			}
 
 			String[] items = tokens[1].split("[\\.]+");
 			if (items.length != 4) {
-				Proxies.log.info("%s for farm '%s': id definitions did not match.", errormsg, tokens[0]);
+				Proxies.log.warning("%s For farm '%s': id definitions did not match.", errormsg, tokens[0]);
 				return true;
 			}
 
@@ -269,7 +265,7 @@ public class PluginFarming extends ForestryPlugin {
 								crop,
 								Integer.parseInt(items[3])));
 			} catch (Exception ex) {
-				Proxies.log.info("%s for farm '%s': ", errormsg, tokens[0], ex.getMessage());
+				Proxies.log.warning("%s for farm '%s': %s", errormsg, tokens[0], ex.getMessage());
 			}
 
 			return true;
@@ -281,28 +277,6 @@ public class PluginFarming extends ForestryPlugin {
 	@Override
 	public IGuiHandler getGuiHandler() {
 		return new GuiHandlerFarming();
-	}
-
-	@Override
-	public ISaveEventHandler getSaveEventHandler() {
-		return null;
-	}
-
-	@Override
-	public IOreDictionaryHandler getDictionaryHandler() {
-		return null;
-	}
-
-	@Override
-	protected void registerItems() {
-	}
-
-	@Override
-	protected void registerBackpackItems() {
-	}
-
-	@Override
-	protected void registerCrates() {
 	}
 
 	@Override

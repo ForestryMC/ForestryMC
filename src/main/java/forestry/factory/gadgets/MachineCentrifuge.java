@@ -10,11 +10,15 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
+import com.google.common.collect.ImmutableMap;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
 
@@ -33,6 +37,7 @@ import cpw.mods.fml.common.Optional;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.ICentrifugeManager;
+import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
@@ -55,93 +60,8 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 	public static final int SLOT_PRODUCT_1 = 1;
 	public static final int SLOT_PRODUCT_COUNT = 9;
 
-	/* RECIPE MANAGMENT */
-	public static class Recipe {
-
-		public final int timePerItem;
-		public final ItemStack resource;
-		public final HashMap<ItemStack, Integer> products;
-
-		public Recipe(int timePerItem, ItemStack resource, HashMap<ItemStack, Integer> products) {
-			this.timePerItem = timePerItem;
-			this.resource = resource;
-			this.products = products;
-
-			for (ItemStack item : products.keySet()) {
-				if (item == null) {
-					throw new IllegalArgumentException("Tried to register a null product of " + resource);
-				}
-			}
-		}
-
-		public boolean matches(ItemStack res) {
-			return StackUtils.isCraftingEquivalent(resource, res);
-		}
-	}
-
-	public static class RecipeManager implements ICentrifugeManager {
-
-		public static final ArrayList<MachineCentrifuge.Recipe> recipes = new ArrayList<MachineCentrifuge.Recipe>();
-
-		@Override
-		public void addRecipe(int timePerItem, ItemStack resource, HashMap<ItemStack, Integer> products) {
-			recipes.add(new Recipe(timePerItem, resource, products));
-		}
-
-		@Override
-		public void addRecipe(int timePerItem, ItemStack resource, ItemStack[] produce, int[] chances) {
-			HashMap<ItemStack, Integer> products = new HashMap<ItemStack, Integer>();
-
-			int i = 0;
-			for (ItemStack prod : produce) {
-				products.put(prod, chances[i]);
-				i++;
-			}
-
-			addRecipe(timePerItem, resource, products);
-		}
-
-		@Override
-		public void addRecipe(int timePerItem, ItemStack resource, ItemStack primary, ItemStack secondary, int chance) {
-			HashMap<ItemStack, Integer> products = new HashMap<ItemStack, Integer>();
-			products.put(primary, 100);
-			if (secondary != null) {
-				products.put(secondary, chance);
-			}
-			addRecipe(timePerItem, resource, products);
-		}
-
-		@Override
-		public void addRecipe(int timePerItem, ItemStack resource, ItemStack primary) {
-			HashMap<ItemStack, Integer> products = new HashMap<ItemStack, Integer>();
-			products.put(primary, 100);
-			addRecipe(timePerItem, resource, products);
-		}
-
-		public static Recipe findMatchingRecipe(ItemStack item) {
-			for (Recipe recipe : recipes) {
-				if (recipe.matches(item)) {
-					return recipe;
-				}
-			}
-			return null;
-		}
-
-		@Override
-		public Map<Object[], Object[]> getRecipes() {
-			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
-
-			for (Recipe recipe : recipes) {
-				Set<ItemStack> productsKeys = recipe.products.keySet();
-				recipeList.put(new Object[]{recipe.resource}, productsKeys.toArray(new ItemStack[productsKeys.size()]));
-			}
-
-			return recipeList;
-		}
-	}
-
 	/* MEMBER */
-	public MachineCentrifuge.Recipe currentRecipe;
+	public ICentrifugeRecipe currentRecipe;
 
 	private final Stack<ItemStack> pendingProducts = new Stack<ItemStack>();
 	private int productionTime;
@@ -237,13 +157,8 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 		}
 
 		// We are done, add products to queue
-		for (Map.Entry<ItemStack, Integer> entry : currentRecipe.products.entrySet()) {
-			if (entry.getValue() >= 100) {
-				pendingProducts.push(entry.getKey().copy());
-			} else if (worldObj.rand.nextInt(100) < entry.getValue()) {
-				pendingProducts.push(entry.getKey().copy());
-			}
-		}
+		Collection<ItemStack> products = currentRecipe.getProducts(worldObj.rand);
+		pendingProducts.addAll(products);
 
 		getInternalInventory().decrStackSize(SLOT_RESOURCE, 1);
 		checkRecipe();
@@ -254,7 +169,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 	}
 
 	public void checkRecipe() {
-		Recipe machingRecipe = RecipeManager.findMatchingRecipe(getInternalInventory().getStackInSlot(SLOT_RESOURCE));
+		ICentrifugeRecipe machingRecipe = RecipeManager.findMatchingRecipe(getInternalInventory().getStackInSlot(SLOT_RESOURCE));
 
 		if (currentRecipe != machingRecipe) {
 			currentRecipe = machingRecipe;
@@ -271,8 +186,8 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 			return;
 		}
 
-		productionTime = currentRecipe.timePerItem;
-		timePerItem = currentRecipe.timePerItem;
+		productionTime = currentRecipe.getProcessingTime();
+		timePerItem = currentRecipe.getProcessingTime();
 	}
 
 	private boolean tryAddPending() {
@@ -317,7 +232,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 			return i;
 		}
 
-		return (productionTime * i) / timePerItem;
+		return ((timePerItem - productionTime) * i) / timePerItem;
 	}
 
 	/* GUI */
@@ -362,4 +277,135 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 			return GuiUtil.isIndexInRange(slotIndex, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT);
 		}
 	}
+
+	/* RECIPE MANAGEMENT */
+	public static class CentrifugeRecipe implements ICentrifugeRecipe {
+
+		private final int processingTime;
+		private final ItemStack input;
+		private final Map<ItemStack, Float> outputs;
+
+		public CentrifugeRecipe(int processingTime, ItemStack input, Map<ItemStack, Float> outputs) {
+			this.processingTime = processingTime;
+			this.input = input;
+			this.outputs = outputs;
+
+			for (ItemStack item : outputs.keySet()) {
+				if (item == null) {
+					throw new IllegalArgumentException("Tried to register a null product of " + input);
+				}
+			}
+		}
+
+		@Override
+		public ItemStack getInput() {
+			return input;
+		}
+
+		@Override
+		public int getProcessingTime() {
+			return processingTime;
+		}
+
+		@Override
+		public Collection<ItemStack> getProducts(Random random) {
+			List<ItemStack> products = new ArrayList<ItemStack>();
+
+			for (Map.Entry<ItemStack, Float> entry : this.outputs.entrySet()) {
+				float probability = entry.getValue();
+
+				if (probability >= 1.0) {
+					products.add(entry.getKey().copy());
+				} else if (random.nextFloat() < probability) {
+					products.add(entry.getKey().copy());
+				}
+			}
+
+			return products;
+		}
+
+		@Override
+		public Map<ItemStack, Float> getAllProducts() {
+			return ImmutableMap.copyOf(outputs);
+		}
+	}
+
+	public static class RecipeManager implements ICentrifugeManager {
+
+		public static final List<ICentrifugeRecipe> recipes = new ArrayList<ICentrifugeRecipe>();
+
+		@Override
+		public void addRecipe(ICentrifugeRecipe recipe) {
+			recipes.add(recipe);
+		}
+
+		@Override
+		public void addRecipe(int timePerItem, ItemStack resource, Map<ItemStack, Float> products) {
+			ICentrifugeRecipe recipe = new CentrifugeRecipe(timePerItem, resource, products);
+			addRecipe(recipe);
+		}
+
+		@Override
+		public void addRecipe(int timePerItem, ItemStack resource, HashMap<ItemStack, Integer> products) {
+			Map<ItemStack, Float> floatProducts = new HashMap<ItemStack, Float>();
+			for (Map.Entry<ItemStack, Integer> entry : products.entrySet()) {
+				floatProducts.put(entry.getKey(), entry.getValue() / 100.0f);
+			}
+
+			addRecipe(timePerItem, resource, floatProducts);
+		}
+
+		@Override
+		public void addRecipe(int timePerItem, ItemStack resource, ItemStack[] produce, int[] chances) {
+			Map<ItemStack, Float> products = new HashMap<ItemStack, Float>();
+
+			int i = 0;
+			for (ItemStack prod : produce) {
+				products.put(prod, chances[i] / 100f);
+				i++;
+			}
+
+			addRecipe(timePerItem, resource, products);
+		}
+
+		@Override
+		public void addRecipe(int timePerItem, ItemStack resource, ItemStack primary, ItemStack secondary, int chance) {
+			Map<ItemStack, Float> products = new HashMap<ItemStack, Float>();
+			products.put(primary, 1.0f);
+			if (secondary != null) {
+				products.put(secondary, chance / 100f);
+			}
+			addRecipe(timePerItem, resource, products);
+		}
+
+		@Override
+		public void addRecipe(int timePerItem, ItemStack resource, ItemStack primary) {
+			Map<ItemStack, Float> products = new HashMap<ItemStack, Float>();
+			products.put(primary, 1.0f);
+			addRecipe(timePerItem, resource, products);
+		}
+
+		public static ICentrifugeRecipe findMatchingRecipe(ItemStack item) {
+			for (ICentrifugeRecipe recipe : recipes) {
+				ItemStack recipeInput = recipe.getInput();
+				if (StackUtils.isCraftingEquivalent(recipeInput, item)) {
+					return recipe;
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public Map<Object[], Object[]> getRecipes() {
+			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
+
+			for (ICentrifugeRecipe recipe : recipes) {
+				Set<ItemStack> productsKeys = recipe.getAllProducts().keySet();
+				recipeList.put(new Object[]{recipe.getInput()}, productsKeys.toArray(new ItemStack[productsKeys.size()]));
+			}
+
+			return recipeList;
+		}
+	}
+
 }

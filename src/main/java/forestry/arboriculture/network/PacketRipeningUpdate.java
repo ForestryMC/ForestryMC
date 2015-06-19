@@ -10,58 +10,46 @@
  ******************************************************************************/
 package forestry.arboriculture.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
+import forestry.arboriculture.gadgets.TileFruitPod;
 import forestry.arboriculture.gadgets.TileLeaves;
-import forestry.core.network.ForestryPacket;
-import forestry.core.network.PacketIds;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.PacketCoordinates;
+import forestry.core.network.PacketId;
 
-public class PacketRipeningUpdate extends ForestryPacket {
+public class PacketRipeningUpdate extends PacketCoordinates {
 
-	private int colourFruits;
-	private int posX, posY, posZ;
+	private int value;
 
-	public PacketRipeningUpdate() {
+	public PacketRipeningUpdate(DataInputStreamForestry data) throws IOException {
+		super(data);
+	}
+
+	public PacketRipeningUpdate(TileFruitPod fruitPod) {
+		super(PacketId.RIPENING_UPDATE, fruitPod);
+		value = fruitPod.getMaturity();
 	}
 
 	public PacketRipeningUpdate(TileLeaves leaves) {
-		super(PacketIds.RIPENING_UPDATE);
-		posX = leaves.xCoord;
-		posY = leaves.yCoord;
-		posZ = leaves.zCoord;
-		colourFruits = leaves.getFruitColour();
+		super(PacketId.RIPENING_UPDATE, leaves);
+		value = leaves.getFruitColour();
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
-
-		data.writeInt(posX);
-		data.writeInt(posY);
-		data.writeInt(posZ);
-		data.writeInt(colourFruits);
+		data.writeInt(value);
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
-
-		posX = data.readInt();
-		posY = data.readInt();
-		posZ = data.readInt();
-		colourFruits = data.readInt();
+		value = data.readInt();
 	}
 
-	public int getColourFruits() {
-		return colourFruits;
-	}
-
-	public TileEntity getTarget(World world) {
-		return world.getTileEntity(posX, posY, posZ);
+	public int getValue() {
+		return value;
 	}
 }

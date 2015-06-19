@@ -250,7 +250,8 @@ public class ItemInfuser extends ItemForestry {
 			super(player, 6, itemStack);
 		}
 
-		private void trySeasoning() {
+		@Override
+		public void onSlotClick(EntityPlayer player) {
 
 			// Need input
 			ItemStack input = getStackInSlot(inputSlot);
@@ -307,11 +308,6 @@ public class ItemInfuser extends ItemForestry {
 			}
 			decrStackSize(inputSlot, 1);
 			setInventorySlotContents(outputSlot, seasoned);
-		}
-
-		@Override
-		public void markDirty() {
-			trySeasoning();
 		}
 
 		@Override

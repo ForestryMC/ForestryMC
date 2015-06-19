@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 
 import forestry.core.GuiHandlerBase;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketIds;
+import forestry.core.network.PacketId;
 import forestry.core.network.PacketSocketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.energy.gadgets.EngineBronze;
@@ -43,16 +43,16 @@ public class GuiHandlerEnergy extends GuiHandlerBase {
 		switch (GuiId.values()[id]) {
 
 			case EngineBronzeGUI:
-				return new GuiEngineBronze(player.inventory, (EngineBronze) getTileForestry(world, x, y, z));
+				return new GuiEngineBronze(player.inventory, getTileForestry(world, x, y, z, player, EngineBronze.class));
 
 			case EngineCopperGUI:
-				return new GuiEngineCopper(player.inventory, (EngineCopper) getTileForestry(world, x, y, z));
+				return new GuiEngineCopper(player.inventory, getTileForestry(world, x, y, z, player, EngineCopper.class));
 
 			case EngineTinGUI:
-				return new GuiEngineTin(player.inventory, (EngineTin) getTileForestry(world, x, y, z));
+				return new GuiEngineTin(player.inventory, getTileForestry(world, x, y, z, player, EngineTin.class));
 
 			case GeneratorGUI:
-				return new GuiGenerator(player.inventory, (MachineGenerator) getTileForestry(world, x, y, z));
+				return new GuiGenerator(player.inventory, getTileForestry(world, x, y, z, player, MachineGenerator.class));
 
 			default:
 				return null;
@@ -69,18 +69,18 @@ public class GuiHandlerEnergy extends GuiHandlerBase {
 		switch (GuiId.values()[id]) {
 
 			case EngineBronzeGUI:
-				return new ContainerEngineBronze(player.inventory, (EngineBronze) getTileForestry(world, x, y, z));
+				return new ContainerEngineBronze(player.inventory, getTileForestry(world, x, y, z, player, EngineBronze.class));
 
 			case EngineCopperGUI:
-				return new ContainerEngineCopper(player.inventory, (EngineCopper) getTileForestry(world, x, y, z));
+				return new ContainerEngineCopper(player.inventory, getTileForestry(world, x, y, z, player, EngineCopper.class));
 
 			case EngineTinGUI:
-				EngineTin tile = (EngineTin) getTileForestry(world, x, y, z);
-				Proxies.net.sendToPlayer(new PacketSocketUpdate(PacketIds.SOCKET_UPDATE, x, y, z, tile), player);
+				EngineTin tile = getTileForestry(world, x, y, z, player, EngineTin.class);
+				Proxies.net.sendToPlayer(new PacketSocketUpdate(PacketId.SOCKET_UPDATE, tile), player);
 				return new ContainerEngineTin(player.inventory, tile);
 
 			case GeneratorGUI:
-				return new ContainerGenerator(player.inventory, (MachineGenerator) getTileForestry(world, x, y, z));
+				return new ContainerGenerator(player.inventory, getTileForestry(world, x, y, z, player, MachineGenerator.class));
 
 			default:
 				return null;

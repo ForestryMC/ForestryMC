@@ -79,7 +79,7 @@ public class BlockArbStairs extends BlockStairs {
 
 					ItemStack stack = new ItemStack(this, 1, 0);
 					NBTTagCompound compound = new NBTTagCompound();
-					stairs.getType().saveToCompound(compound);
+					stairs.getWoodType().saveToCompound(compound);
 					stack.setTagCompound(compound);
 					StackUtils.dropItemStackAsEntity(stack, world, x, y, z);
 				}
@@ -122,11 +122,11 @@ public class BlockArbStairs extends BlockStairs {
 		TileStairs stairs = getStairTile(world, x, y, z);
 
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		if (stairs == null || stairs.getType() == null) {
+		if (stairs == null || stairs.getWoodType() == null) {
 			return nbttagcompound;
 		}
 
-		stairs.getType().saveToCompound(nbttagcompound);
+		stairs.getWoodType().saveToCompound(nbttagcompound);
 		return nbttagcompound;
 	}
 
@@ -141,8 +141,8 @@ public class BlockArbStairs extends BlockStairs {
 	@Override
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 		TileStairs stairs = getStairTile(world, x, y, z);
-		if (stairs != null && stairs.getType() != null) {
-			return stairs.getType().getPlankIcon();
+		if (stairs != null && stairs.getWoodType() != null) {
+			return stairs.getWoodType().getPlankIcon();
 		} else {
 			return WoodType.LARCH.getPlankIcon();
 		}

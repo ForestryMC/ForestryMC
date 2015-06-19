@@ -32,7 +32,7 @@ public class GuiCarpenter extends GuiForestryTitled<ContainerCarpenter, MachineC
 		MachineCarpenter machine = inventory;
 
 		if (machine.isWorking()) {
-			int progressScaled = 16 - machine.getCraftingProgressScaled(16);
+			int progressScaled = machine.getCraftingProgressScaled(16);
 			drawTexturedModalRect(guiLeft + 98, guiTop + 51 + 16 - progressScaled, 176, 60 + 16 - progressScaled, 4, progressScaled);
 		}
 	}

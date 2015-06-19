@@ -21,11 +21,11 @@ import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.network.IGuiHandler;
 
-import forestry.core.interfaces.IOreDictionaryHandler;
-import forestry.core.interfaces.IPacketHandler;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.IResupplyHandler;
 import forestry.core.interfaces.ISaveEventHandler;
+import forestry.core.network.IPacketHandler;
+import forestry.core.proxy.Proxies;
 
 public abstract class ForestryPlugin {
 
@@ -60,15 +60,31 @@ public abstract class ForestryPlugin {
 		return false;
 	}
 
+	protected static String getInvalidIMCMessageText(IMCMessage message) {
+		final Object messageValue;
+		if (message.isItemStackMessage()) {
+			messageValue = message.getItemStackValue().toString();
+		} else if (message.isNBTMessage()) {
+			messageValue = message.getNBTValue();
+		} else if (message.isStringMessage()) {
+			messageValue = message.getStringValue();
+		} else {
+			messageValue = "";
+		}
+
+		return String.format("Received an invalid '%s' request '%s' from mod '%s'. Please contact the author and report this issue.", message.key, messageValue, message.getSender());
+	}
+
+	protected static void logInvalidIMCMessage(IMCMessage message) {
+		String invalidIMCMessageText = getInvalidIMCMessageText(message);
+		Proxies.log.warning(invalidIMCMessageText);
+	}
+
 	public IGuiHandler getGuiHandler() {
 		return null;
 	}
 
 	public ISaveEventHandler getSaveEventHandler() {
-		return null;
-	}
-
-	public IOreDictionaryHandler getDictionaryHandler() {
 		return null;
 	}
 

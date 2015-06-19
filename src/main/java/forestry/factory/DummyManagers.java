@@ -9,6 +9,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.ICarpenterManager;
 import forestry.api.recipes.ICentrifugeManager;
+import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.api.recipes.IFabricatorManager;
 import forestry.api.recipes.IFermenterManager;
 import forestry.api.recipes.IMoistenerManager;
@@ -41,6 +42,16 @@ public class DummyManagers {
 	}
 
 	public static class CentrifugeManager implements ICentrifugeManager {
+
+		@Override
+		public void addRecipe(ICentrifugeRecipe recipe) {
+
+		}
+
+		@Override
+		public void addRecipe(int timePerItem, ItemStack resource, Map<ItemStack, Float> products) {
+
+		}
 
 		@Override
 		public void addRecipe(int timePerItem, ItemStack resource, HashMap<ItemStack, Integer> products) {

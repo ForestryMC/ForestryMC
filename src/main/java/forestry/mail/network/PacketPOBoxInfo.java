@@ -10,27 +10,29 @@
  ******************************************************************************/
 package forestry.mail.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.ForestryPacket;
+import forestry.core.network.PacketId;
 import forestry.mail.POBoxInfo;
 
 public class PacketPOBoxInfo extends ForestryPacket {
 
 	public POBoxInfo poboxInfo;
 
-	public PacketPOBoxInfo() {
+	public PacketPOBoxInfo(DataInputStreamForestry data) throws IOException {
+		super(data);
 	}
 
-	public PacketPOBoxInfo(int id, POBoxInfo info) {
+	public PacketPOBoxInfo(PacketId id, POBoxInfo info) {
 		super(id);
 		this.poboxInfo = info;
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	protected void writeData(DataOutputStreamForestry data) throws IOException {
 		if (poboxInfo == null) {
 			data.writeShort(-1);
 			return;
@@ -42,7 +44,7 @@ public class PacketPOBoxInfo extends ForestryPacket {
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	protected void readData(DataInputStreamForestry data) throws IOException {
 
 		short isNotNull = data.readShort();
 		if (isNotNull < 0) {

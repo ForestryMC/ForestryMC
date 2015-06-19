@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import com.google.common.collect.ImmutableMap;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -132,13 +132,13 @@ import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.gadgets.TileAnalyzer;
 import forestry.core.genetics.alleles.Allele;
-import forestry.core.interfaces.IPacketHandler;
 import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemForestry;
 import forestry.core.items.ItemForestryBlock;
 import forestry.core.items.ItemOverlay;
 import forestry.core.items.ItemOverlay.OverlayInfo;
 import forestry.core.items.ItemScoop;
+import forestry.core.network.IPacketHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.EntitySnowFX;
 import forestry.core.utils.ShapedRecipeCustom;
@@ -628,50 +628,97 @@ public class PluginApiculture extends ForestryPlugin {
 
 			// / CENTRIFUGE
 			// Honey combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 0), ForestryItem.beeswax.getItemStack(), ForestryItem.honeyDrop.getItemStack(), 90);
-			// Cocoa combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 1), ForestryItem.beeswax.getItemStack(), new ItemStack(Items.dye, 1, 3), 50);
-			// Simmering combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 2), ForestryItem.refractoryWax.getItemStack(), ForestryItem.phosphor.getItemStack(2), 70);
-			// Stringy combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 3), ForestryItem.propolis.getItemStack(), ForestryItem.honeyDrop.getItemStack(), 40);
-			// Dripping combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 5), ForestryItem.honeydew.getItemStack(), ForestryItem.honeyDrop.getItemStack(), 40);
-			// Frozen combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 4), new ItemStack[]{ForestryItem.beeswax.getItemStack(),
-					ForestryItem.honeyDrop.getItemStack(), new ItemStack(Items.snowball), ForestryItem.pollenCluster.getItemStack(1, 1)}, new int[]{80, 70, 40, 20});
-			// Silky combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 6), ForestryItem.honeyDrop.getItemStack(), ForestryItem.propolis.getItemStack(1, 3), 80);
-			// Parched combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 7), ForestryItem.beeswax.getItemStack(), ForestryItem.honeyDrop.getItemStack(), 90);
-			// Mysterious combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 8), new ItemStack[]{ForestryItem.honeyDrop.getItemStack(),
-					ForestryItem.propolis.getItemStack(1, 2)}, new int[]{40, 100});
-			// Irradiated combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 9), new ItemStack[]{}, new int[]{});
-			// Powdery combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 10), new ItemStack[]{ForestryItem.honeyDrop.getItemStack(),
-					ForestryItem.beeswax.getItemStack(), new ItemStack(Items.gunpowder)}, new int[]{20, 20, 90});
-			// Reddened Combs
-			RecipeManagers.centrifugeManager.addRecipe(80, ForestryItem.beeComb.getItemStack(1, 11),
-					new ItemStack[]{ForestryItem.honeyDrop.getItemStack(2, 1)}, new int[]{100});
-			// Darkened Combs
-			RecipeManagers.centrifugeManager.addRecipe(80, ForestryItem.beeComb.getItemStack(1, 12),
-					new ItemStack[]{ForestryItem.honeyDrop.getItemStack(1, 1)}, new int[]{100});
-			// Omega Combs
-			RecipeManagers.centrifugeManager.addRecipe(400, ForestryItem.beeComb.getItemStack(1, 13), new ItemStack[]{ForestryItem.honeyDrop.getItemStack(1, 2)}, new int[]{100});
-			// Wheaten Combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 14), new ItemStack[]{ForestryItem.honeyDrop.getItemStack(),
-					ForestryItem.beeswax.getItemStack(), new ItemStack(Items.wheat)}, new int[]{20, 20, 80});
-			// Mossy Combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 15), ForestryItem.beeswax.getItemStack(), ForestryItem.honeyDrop.getItemStack(), 90);
-			// Mellow Combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 16), new ItemStack[]{ForestryItem.honeydew.getItemStack(),
-					ForestryItem.beeswax.getItemStack(), new ItemStack(Items.quartz)}, new int[]{60, 20, 30});
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 0), ImmutableMap.of(
+					ForestryItem.beeswax.getItemStack(), 1.0f,
+					ForestryItem.honeyDrop.getItemStack(), 0.9f
+			));
 
-			// Silk
-			RecipeManagers.centrifugeManager.addRecipe(5, ForestryItem.propolis.getItemStack(1, 3), new ItemStack[]{
-					ForestryItem.craftingMaterial.getItemStack(1, 2), ForestryItem.propolis.getItemStack()}, new int[]{60, 10});
+			// Cocoa combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 1), ImmutableMap.of(
+					ForestryItem.beeswax.getItemStack(), 1.0f,
+					new ItemStack(Items.dye, 1, 3), 0.5f
+			));
+
+			// Simmering combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 2), ImmutableMap.of(
+					ForestryItem.refractoryWax.getItemStack(), 1.0f,
+					ForestryItem.phosphor.getItemStack(2), 0.7f
+			));
+
+			// Stringy combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 3), ImmutableMap.of(
+					ForestryItem.propolis.getItemStack(), 1.0f,
+					ForestryItem.honeyDrop.getItemStack(), 0.4f
+			));
+
+			// Dripping combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 5), ImmutableMap.of(
+					ForestryItem.honeydew.getItemStack(), 1.0f,
+					ForestryItem.honeyDrop.getItemStack(), 0.4f
+			));
+
+			// Frozen combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 4), ImmutableMap.of(
+					ForestryItem.beeswax.getItemStack(), 0.8f,
+					ForestryItem.honeyDrop.getItemStack(), 0.7f,
+					new ItemStack(Items.snowball), 0.4f,
+					ForestryItem.pollenCluster.getItemStack(1, 1), 0.2f
+			));
+
+			// Silky combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 6), ImmutableMap.of(
+					ForestryItem.honeyDrop.getItemStack(), 1.0f,
+					ForestryItem.propolis.getItemStack(1, 3), 0.8f
+			));
+
+			// Parched combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 7), ImmutableMap.of(
+					ForestryItem.beeswax.getItemStack(), 1.0f,
+					ForestryItem.honeyDrop.getItemStack(), 0.9f
+			));
+
+			// Mysterious combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 8), ImmutableMap.of(
+					ForestryItem.propolis.getItemStack(1, 2), 1.0f,
+					ForestryItem.honeyDrop.getItemStack(), 0.4f
+			));
+
+			// Irradiated combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 9), ImmutableMap.<ItemStack, Float>of(
+			));
+
+			// Powdery combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 10), ImmutableMap.of(
+					ForestryItem.honeyDrop.getItemStack(), 0.2f,
+					ForestryItem.beeswax.getItemStack(), 0.2f,
+					new ItemStack(Items.gunpowder), 0.9f
+			));
+
+			// Wheaten Combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 14), ImmutableMap.of(
+					ForestryItem.honeyDrop.getItemStack(), 0.2f,
+					ForestryItem.beeswax.getItemStack(), 0.2f,
+					new ItemStack(Items.wheat), 0.8f
+			));
+
+			// Mossy Combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 15), ImmutableMap.of(
+					ForestryItem.beeswax.getItemStack(), 1.0f,
+					ForestryItem.honeyDrop.getItemStack(), 0.9f
+			));
+
+			// Mellow Combs
+			RecipeManagers.centrifugeManager.addRecipe(20, ForestryItem.beeComb.getItemStack(1, 16), ImmutableMap.of(
+					ForestryItem.honeydew.getItemStack(), 0.6f,
+					ForestryItem.beeswax.getItemStack(), 0.2f,
+					new ItemStack(Items.quartz), 0.3f
+			));
+
+			// Silky Propolis
+			RecipeManagers.centrifugeManager.addRecipe(5, ForestryItem.propolis.getItemStack(1, 3), ImmutableMap.of(
+					ForestryItem.craftingMaterial.getItemStack(1, 2), 0.6f,
+					ForestryItem.propolis.getItemStack(), 0.1f
+			));
 
 			// / FERMENTER
 			RecipeManagers.fermenterManager.addRecipe(ForestryItem.honeydew.getItemStack(), 500, 1.0f, Fluids.SHORT_MEAD.getFluid(1), Fluids.HONEY.getFluid(1));
@@ -812,7 +859,7 @@ public class PluginApiculture extends ForestryPlugin {
 	}
 
 	private static void parseAdditionalFlowers(String list, ArrayList<ItemStack> target) {
-		List<ItemStack> flowers = StackUtils.parseItemStackStrings(list);
+		List<ItemStack> flowers = StackUtils.parseItemStackStrings(list, 0);
 		target.addAll(flowers);
 	}
 
@@ -853,30 +900,26 @@ public class PluginApiculture extends ForestryPlugin {
 		if (message.key.equals("add-candle-lighting-id")) {
 			ItemStack value = message.getItemStackValue();
 			if (value != null) {
-				((BlockCandle) ForestryBlock.candle.block()).addItemToLightingList(value.getItem());
+				BlockCandle.addItemToLightingList(value.getItem());
 			} else {
-				Logger.getLogger("Forestry").log(Level.WARNING,
-						"Received an invalid 'add-candle-lighting-id' request from mod %s. Please contact the author and report this issue.",
-						message.getSender());
+				logInvalidIMCMessage(message);
 			}
 			return true;
 		} else if (message.key.equals("add-alveary-slab") && message.isStringMessage()) {
 			try {
 				Block block = GameData.getBlockRegistry().getRaw(message.getStringValue());
 
-				if (block == null || block == Blocks.air) {
-					Logger.getLogger("Forestry").log(Level.WARNING,
-							"Received an invalid 'add-alveary-slab' request from mod %s. Please contact the author and report this issue.",
-							message.getSender());
+				if (block != null && block != Blocks.air) {
+					StructureLogicAlveary.addSlabBlock(block);
 				} else {
-					StructureLogicAlveary.slabBlocks.add(block);
+					logInvalidIMCMessage(message);
 				}
 			} catch (Exception e) {
-				Logger.getLogger("Forestry").log(Level.WARNING,
-						"Received an invalid 'add-alveary-slab' request from mod %s. Please contact the author and report this issue.",
-						message.getSender());
+				logInvalidIMCMessage(message);
 			}
+			return true;
 		}
+
 		return super.processIMCMessage(message);
 	}
 

@@ -73,6 +73,11 @@ public class BlockResource extends Block {
 		return world.getBlockMetadata(x, y, z);
 	}
 
+	@Override
+	public int damageDropped(int meta) {
+		return meta;
+	}
+
 	// / CREATIVE INVENTORY
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override

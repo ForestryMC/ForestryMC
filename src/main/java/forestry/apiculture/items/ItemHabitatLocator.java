@@ -57,107 +57,9 @@ import forestry.core.vect.Vect;
 
 public class ItemHabitatLocator extends ItemInventoried {
 
-	public static class HabitatLocatorInventory extends ItemInventory implements IErrorSource, IHintSource {
-
-		private static final short SLOT_ENERGY = 2;
-		private static final short SLOT_SPECIMEN = 0;
-		private static final short SLOT_ANALYZED = 1;
-
-		public Set<BiomeGenBase> biomesToSearch = new HashSet<BiomeGenBase>();
-		private final ItemHabitatLocator habitatLocator;
-
-		public HabitatLocatorInventory(EntityPlayer player, ItemStack itemstack) {
-			super(player, 3, itemstack);
-			this.habitatLocator = (ItemHabitatLocator) itemstack.getItem();
-		}
-
-		private static boolean isEnergy(ItemStack itemstack) {
-			if (itemstack == null || itemstack.stackSize <= 0) {
-				return false;
-			}
-
-			return ForestryItem.honeyDrop.isItemEqual(itemstack) || ForestryItem.honeydew.isItemEqual(itemstack);
-		}
-
-		public void tryAnalyze() {
-
-			if (getStackInSlot(SLOT_SPECIMEN) != null) {
-				// Requires energy
-				if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
-					return;
-				}
-
-				// Decrease energy
-				decrStackSize(SLOT_ENERGY, 1);
-
-				setInventorySlotContents(SLOT_ANALYZED, getStackInSlot(SLOT_SPECIMEN));
-				setInventorySlotContents(SLOT_SPECIMEN, null);
-			}
-
-			IBee bee = BeeManager.beeRoot.getMember(getStackInSlot(SLOT_ANALYZED));
-
-			// No bee, abort
-			if (bee == null) {
-				return;
-			}
-
-			biomesToSearch = new HashSet<BiomeGenBase>(bee.getSuitableBiomes());
-			habitatLocator.startBiomeSearch(biomesToSearch);
-		}
-
-		@Override
-		public void markDirty() {
-			tryAnalyze();
-		}
-
-		// / IHINTSOURCE
-		@Override
-		public boolean hasHints() {
-			return Config.hints.get("habitatlocator") != null && Config.hints.get("habitatlocator").length > 0;
-		}
-
-		@Override
-		public String[] getHints() {
-			return Config.hints.get("habitatlocator");
-		}
-
-		// / IERRORSOURCE
-		@Override
-		public ImmutableSet<IErrorState> getErrorStates() {
-			if (getStackInSlot(SLOT_ANALYZED) != null) {
-				return ImmutableSet.of();
-			}
-
-			ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
-
-			ItemStack specimen = getStackInSlot(SLOT_SPECIMEN);
-			if (!BeeManager.beeRoot.isMember(specimen)) {
-				errorStates.add(EnumErrorCode.NOTHINGANALYZE);
-			}
-
-			if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
-				errorStates.add(EnumErrorCode.NOHONEY);
-			}
-
-			return errorStates.build();
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (slotIndex == SLOT_ENERGY) {
-				Item item = itemStack.getItem();
-				return item == ForestryItem.honeydew.item() || item == ForestryItem.honeyDrop.item();
-			} else if (slotIndex == SLOT_SPECIMEN) {
-				return BeeManager.beeRoot.isMember(itemStack);
-			}
-			return false;
-		}
-
-	}
-
 	private static final String iconName = "forestry:biomefinder";
 
-	private Set<BiomeGenBase> biomesToSearch = new HashSet<BiomeGenBase>();
+	private Set<BiomeGenBase> targetBiomes = new HashSet<BiomeGenBase>();
 	private boolean biomeFound = false;
 	private int searchRadiusIteration = 0;
 	private int searchAngleIteration = 0;
@@ -204,13 +106,16 @@ public class ItemHabitatLocator extends ItemInventoried {
 		list.add(StringUtil.localize("gui.humidity") + ": " + AlleleManager.climateHelper.toDisplay(humidity));
 	}
 
-	public void startBiomeSearch(Set<BiomeGenBase> biomesToSearch) {
+	public void startBiomeSearch(IBee bee, EntityPlayer player) {
 
-		this.biomesToSearch = biomesToSearch;
+		this.targetBiomes = new HashSet<BiomeGenBase>(bee.getSuitableBiomes());
 		this.searchAngleIteration = 0;
 		this.searchRadiusIteration = 0;
 		this.biomeFound = false;
-		this.searchCenter = null;
+		this.searchCenter = new Vect(player);
+
+		BiomeGenBase currentBiome = player.worldObj.getBiomeGenForCoords(searchCenter.x, searchCenter.z);
+		removeInvalidBiomes(currentBiome, targetBiomes);
 
 		// reset the locator coordinates
 		Proxies.common.setHabitatLocatorCoordinates(null, null);
@@ -223,14 +128,7 @@ public class ItemHabitatLocator extends ItemInventoried {
 			return;
 		}
 
-		if (this.searchCenter == null) {
-			this.searchCenter = new Vect((int) player.posX, (int) player.posY, (int) player.posZ);
-
-			BiomeGenBase currentBiome = world.getBiomeGenForCoords(searchCenter.x, searchCenter.z);
-			removeInvalidBiomes(currentBiome, biomesToSearch);
-		}
-
-		if (biomesToSearch.isEmpty()) {
+		if (targetBiomes.isEmpty()) {
 			return;
 		}
 
@@ -239,7 +137,7 @@ public class ItemHabitatLocator extends ItemInventoried {
 			return;
 		}
 
-		ChunkCoordinates target = findNearestBiome(player, biomesToSearch);
+		ChunkCoordinates target = findNearestBiome(player, targetBiomes);
 
 		// send an update if we find the biome
 		if (target != null) {
@@ -254,7 +152,7 @@ public class ItemHabitatLocator extends ItemInventoried {
 		final int maxSearchRadiusIterations = 500;
 		final int spacing = 20;
 
-		Vect playerPos = new Vect((int) player.posX, (int) player.posY, (int) player.posZ);
+		Vect playerPos = new Vect(player);
 
 		// If we are in a valid spot, we point to ourselves.
 		ChunkCoordinates coordinates = getChunkCoordinates(playerPos, player.worldObj, biomesToSearch);
@@ -369,4 +267,105 @@ public class ItemHabitatLocator extends ItemInventoried {
 			biomesToSearch.removeAll(endBiomes);
 		}
 	}
+
+	public static class HabitatLocatorInventory extends ItemInventory implements IErrorSource, IHintSource {
+
+		private static final short SLOT_ENERGY = 2;
+		private static final short SLOT_SPECIMEN = 0;
+		private static final short SLOT_ANALYZED = 1;
+
+		private final ItemHabitatLocator habitatLocator;
+
+		public HabitatLocatorInventory(EntityPlayer player, ItemStack itemstack) {
+			super(player, 3, itemstack);
+			this.habitatLocator = (ItemHabitatLocator) itemstack.getItem();
+		}
+
+		private static boolean isEnergy(ItemStack itemstack) {
+			if (itemstack == null || itemstack.stackSize <= 0) {
+				return false;
+			}
+
+			return ForestryItem.honeyDrop.isItemEqual(itemstack) || ForestryItem.honeydew.isItemEqual(itemstack);
+		}
+
+		@Override
+		public void onSlotClick(EntityPlayer player) {
+
+			if (getStackInSlot(SLOT_ANALYZED) != null) {
+				if (habitatLocator.biomeFound) {
+					return;
+				}
+			} else if (getStackInSlot(SLOT_SPECIMEN) != null) {
+				// Requires energy
+				if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
+					return;
+				}
+
+				// Decrease energy
+				decrStackSize(SLOT_ENERGY, 1);
+
+				setInventorySlotContents(SLOT_ANALYZED, getStackInSlot(SLOT_SPECIMEN));
+				setInventorySlotContents(SLOT_SPECIMEN, null);
+			}
+
+			IBee bee = BeeManager.beeRoot.getMember(getStackInSlot(SLOT_ANALYZED));
+
+			// No bee, abort
+			if (bee == null) {
+				return;
+			}
+
+			habitatLocator.startBiomeSearch(bee, player);
+		}
+
+		public Set<BiomeGenBase> getBiomesToSearch() {
+			return habitatLocator.targetBiomes;
+		}
+
+		// / IHINTSOURCE
+		@Override
+		public boolean hasHints() {
+			return Config.hints.get("habitatlocator") != null && Config.hints.get("habitatlocator").length > 0;
+		}
+
+		@Override
+		public String[] getHints() {
+			return Config.hints.get("habitatlocator");
+		}
+
+		// / IERRORSOURCE
+		@Override
+		public ImmutableSet<IErrorState> getErrorStates() {
+			if (getStackInSlot(SLOT_ANALYZED) != null) {
+				return ImmutableSet.of();
+			}
+
+			ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
+
+			ItemStack specimen = getStackInSlot(SLOT_SPECIMEN);
+			if (!BeeManager.beeRoot.isMember(specimen)) {
+				errorStates.add(EnumErrorCode.NOTHINGANALYZE);
+			}
+
+			if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
+				errorStates.add(EnumErrorCode.NOHONEY);
+			}
+
+			return errorStates.build();
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_ENERGY) {
+				Item item = itemStack.getItem();
+				return item == ForestryItem.honeydew.item() || item == ForestryItem.honeyDrop.item();
+			} else if (slotIndex == SLOT_SPECIMEN) {
+				return BeeManager.beeRoot.isMember(itemStack);
+			}
+			return false;
+		}
+
+	}
+
 }

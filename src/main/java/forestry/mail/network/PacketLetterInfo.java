@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.mail.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -23,7 +21,10 @@ import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.PostManager;
 import forestry.api.mail.TradeStationInfo;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.ForestryPacket;
+import forestry.core.network.PacketId;
 import forestry.mail.EnumStationState;
 
 public class PacketLetterInfo extends ForestryPacket {
@@ -32,10 +33,11 @@ public class PacketLetterInfo extends ForestryPacket {
 	public TradeStationInfo tradeInfo;
 	public IMailAddress address;
 
-	public PacketLetterInfo() {
+	public PacketLetterInfo(DataInputStreamForestry data) throws IOException {
+		super(data);
 	}
 
-	public PacketLetterInfo(int id, EnumAddressee type, TradeStationInfo info, IMailAddress address) {
+	public PacketLetterInfo(PacketId id, EnumAddressee type, TradeStationInfo info, IMailAddress address) {
 		super(id);
 		this.type = type;
 		if (type == EnumAddressee.TRADER) {
@@ -46,7 +48,7 @@ public class PacketLetterInfo extends ForestryPacket {
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(DataOutputStreamForestry data) throws IOException {
 
 		if (type == null) {
 			data.writeShort(-1);
@@ -85,17 +87,15 @@ public class PacketLetterInfo extends ForestryPacket {
 			data.writeLong(tradeInfo.owner.getId().getLeastSignificantBits());
 			data.writeUTF(tradeInfo.owner.getName());
 
-			writeItemStack(tradeInfo.tradegood, data);
-			data.writeShort(tradeInfo.required.length);
-			for (int i = 0; i < tradeInfo.required.length; i++) {
-				writeItemStack(tradeInfo.required[i], data);
-			}
+			data.writeItemStack(tradeInfo.tradegood);
+			data.writeItemStacks(tradeInfo.required);
+
 			data.writeShort(tradeInfo.state.ordinal());
 		}
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	public void readData(DataInputStreamForestry data) throws IOException {
 
 		if (data.readShort() < 0) {
 			return;
@@ -119,11 +119,8 @@ public class PacketLetterInfo extends ForestryPacket {
 			ItemStack tradegood;
 			ItemStack[] required;
 
-			tradegood = readItemStack(data);
-			required = new ItemStack[data.readShort()];
-			for (int i = 0; i < required.length; i++) {
-				required[i] = readItemStack(data);
-			}
+			tradegood = data.readItemStack();
+			required = data.readItemStacks();
 
 			this.tradeInfo = new TradeStationInfo(address, owner, tradegood, required, EnumStationState.values()[data.readShort()]);
 		}

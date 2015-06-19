@@ -47,7 +47,7 @@ public class GrowthProvider implements IGrowthProvider {
 		return new String[0];
 	}
 
-	protected EnumGrowthConditions getConditionsFromRainfall(World world, int xPos, int yPos, int zPos, float min, float max) {
+	protected static EnumGrowthConditions getConditionsFromRainfall(World world, int xPos, int yPos, int zPos, float min, float max) {
 
 		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenAt(xPos, zPos);
 		if (biome.rainfall < min || biome.rainfall > max) {
@@ -57,17 +57,18 @@ public class GrowthProvider implements IGrowthProvider {
 		return EnumGrowthConditions.EXCELLENT;
 	}
 
-	protected EnumGrowthConditions getConditionsFromTemperature(World world, int xPos, int yPos, int zPos, float min, float max) {
+	protected static EnumGrowthConditions getConditionsFromTemperature(World world, int xPos, int yPos, int zPos, float min, float max) {
 
 		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenAt(xPos, zPos);
-		if (biome.temperature < min || biome.temperature > max) {
+		float biomeTemperature = biome.getFloatTemperature(xPos, yPos, zPos);
+		if (biomeTemperature < min || biomeTemperature > max) {
 			return EnumGrowthConditions.HOSTILE;
 		}
 
 		return EnumGrowthConditions.EXCELLENT;
 	}
 
-	protected EnumGrowthConditions getConditionFromLight(World world, int xPos, int yPos, int zPos) {
+	protected static EnumGrowthConditions getConditionFromLight(World world, int xPos, int yPos, int zPos) {
 		int lightvalue = world.getBlockLightValue(xPos, yPos + 1, zPos);
 
 		if (lightvalue > 13) {
@@ -93,7 +94,7 @@ public class GrowthProvider implements IGrowthProvider {
 	 * return EnumGrowthConditions.HOSTILE; }
 	 */
 
-	protected boolean hasRoom(ITreeGenome genome, World world, int xPos, int yPos, int zPos, int expectedGirth, int expectedHeight) {
+	protected static boolean hasRoom(ITreeGenome genome, World world, int xPos, int yPos, int zPos, int expectedGirth, int expectedHeight) {
 
 		int offset = (expectedGirth - 1) / 2;
 		// if(offset <= 0)
@@ -103,7 +104,7 @@ public class GrowthProvider implements IGrowthProvider {
 				new Vect(-offset + expectedGirth, expectedHeight + 1, -offset + expectedGirth));
 	}
 
-	protected final boolean checkArea(World world, Vect start, Vect area) {
+	protected static boolean checkArea(World world, Vect start, Vect area) {
 		for (int x = start.x; x < start.x + area.x; x++) {
 			for (int y = start.y; y < start.y + area.y; y++) {
 				for (int z = start.z; z < start.z + area.z; z++) {
@@ -116,7 +117,7 @@ public class GrowthProvider implements IGrowthProvider {
 		return true;
 	}
 
-	protected boolean hasSufficientSaplings(ITreeGenome genome, World world, int xPos, int yPos, int zPos, int expectedGirth) {
+	protected static boolean hasSufficientSaplings(ITreeGenome genome, World world, int xPos, int yPos, int zPos, int expectedGirth) {
 
 		if (expectedGirth == 1) {
 			return true;

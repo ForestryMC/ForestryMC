@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -17,12 +19,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
 import forestry.core.config.Defaults;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamable;
 import forestry.core.utils.PlainInventory;
 
 /**
  * With permission from Krapht.
  */
-public class InventoryAdapter implements IInventoryAdapter {
+public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 
 	protected final IInventory inventory;
 	private boolean allowAutomation = true;
@@ -205,5 +210,15 @@ public class InventoryAdapter implements IInventoryAdapter {
 			}
 		}
 		nbttagcompound.setTag(inventory.getInventoryName(), nbttaglist);
+	}
+
+	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		data.writeInventory(inventory);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		data.readInventory(inventory);
 	}
 }

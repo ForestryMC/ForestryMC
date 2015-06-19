@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.tileentity.TileEntity;
@@ -24,18 +22,19 @@ public class PacketCoordinates extends ForestryPacket implements ILocatedPacket 
 	private int posY;
 	private int posZ;
 
-	public PacketCoordinates() {
+	public PacketCoordinates(DataInputStreamForestry data) throws IOException {
+		super(data);
 	}
 
-	public PacketCoordinates(int id, TileEntity tileEntity) {
+	public PacketCoordinates(PacketId id, TileEntity tileEntity) {
 		this(id, tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
 	}
 
-	public PacketCoordinates(int id, ChunkCoordinates coordinates) {
+	public PacketCoordinates(PacketId id, ChunkCoordinates coordinates) {
 		this(id, coordinates.posX, coordinates.posY, coordinates.posZ);
 	}
 
-	public PacketCoordinates(int id, int posX, int posY, int posZ) {
+	public PacketCoordinates(PacketId id, int posX, int posY, int posZ) {
 		super(id);
 		this.posX = posX;
 		this.posY = posY;
@@ -43,42 +42,37 @@ public class PacketCoordinates extends ForestryPacket implements ILocatedPacket 
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
-
-		data.writeInt(posX);
-		data.writeInt(posY);
-		data.writeInt(posZ);
-
+	protected void writeData(DataOutputStreamForestry data) throws IOException {
+		data.writeVarInt(posX);
+		data.writeVarInt(posY);
+		data.writeVarInt(posZ);
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
-
-		posX = data.readInt();
-		posY = data.readInt();
-		posZ = data.readInt();
-
+	protected void readData(DataInputStreamForestry data) throws IOException {
+		posX = data.readVarInt();
+		posY = data.readVarInt();
+		posZ = data.readVarInt();
 	}
 
-	public ChunkCoordinates getCoordinates() {
+	public final ChunkCoordinates getCoordinates() {
 		return new ChunkCoordinates(posX, posY, posZ);
 	}
 
-	public int getPosX() {
+	public final int getPosX() {
 		return posX;
 	}
 
-	public int getPosY() {
+	public final int getPosY() {
 		return posY;
 	}
 
-	public int getPosZ() {
+	public final int getPosZ() {
 		return posZ;
 	}
 
 	@Override
-	public TileEntity getTarget(World world) {
+	public final TileEntity getTarget(World world) {
 		return world.getTileEntity(posX, posY, posZ);
 	}
-
 }

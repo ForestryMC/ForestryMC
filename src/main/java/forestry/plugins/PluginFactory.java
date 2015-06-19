@@ -32,6 +32,7 @@ import forestry.core.gadgets.MachineDefinition;
 import forestry.core.gadgets.MachineNBTDefinition;
 import forestry.core.items.ItemForestryBlock;
 import forestry.core.items.ItemNBTTile;
+import forestry.core.network.IPacketHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.RecipeUtil;
 import forestry.core.utils.ShapedRecipeCustom;
@@ -48,6 +49,7 @@ import forestry.factory.gadgets.MachineSqueezer;
 import forestry.factory.gadgets.MachineStill;
 import forestry.factory.gadgets.MillRainmaker;
 import forestry.factory.gadgets.TileWorktable;
+import forestry.factory.network.PacketHandlerFactory;
 import forestry.factory.recipes.CraftGuideIntegration;
 import forestry.factory.triggers.FactoryTriggers;
 
@@ -80,6 +82,11 @@ public class PluginFactory extends ForestryPlugin {
 				RecipeManagers.squeezerManager = new MachineSqueezer.RecipeManager(),
 				RecipeManagers.stillManager = new MachineStill.RecipeManager()
 		);
+	}
+
+	@Override
+	public IPacketHandler getPacketHandler() {
+		return new PacketHandlerFactory();
 	}
 
 	@Override
@@ -254,14 +261,6 @@ public class PluginFactory extends ForestryPlugin {
 		} else {
 			Proxies.log.info("Skipping CraftGuide integration.");
 		}
-	}
-
-	@Override
-	protected void registerItems() {
-	}
-
-	@Override
-	protected void registerBackpackItems() {
 	}
 
 	@Override

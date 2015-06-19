@@ -235,9 +235,11 @@ public class GuiPropolisPipe extends GuiForestry<ContainerPropolisPipe, IInvento
 
 		IApiaristTracker tracker = BeeManager.beeRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
 		for (int i = 0; i < 6; i++) {
-			for (int j = 0; j < 3; j++) {
-				for (int k = 0; k < 2; k++) {
-					widgetManager.add(new SpeciesFilterSlot(tracker, 44 + j * 45 + k * 18, 18 + i * 18, ForgeDirection.values()[i], j, k, pipeLogic));
+			for (int pattern = 0; pattern < 3; pattern++) {
+				for (int allele = 0; allele < 2; allele++) {
+					int x = 44 + pattern * 45 + allele * 18;
+					int y = 18 + i * 18;
+					widgetManager.add(new SpeciesFilterSlot(tracker, x, y, ForgeDirection.values()[i], pattern, allele, pipeLogic));
 				}
 			}
 		}

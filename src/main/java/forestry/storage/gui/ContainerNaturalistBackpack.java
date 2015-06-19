@@ -15,7 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotFiltered;
-import forestry.core.network.PacketUpdate;
+import forestry.core.network.PacketGuiSelect;
 import forestry.storage.GuiHandlerStorage.PagedBackpackInventory;
 
 public class ContainerNaturalistBackpack extends ContainerItemInventory<PagedBackpackInventory> implements IGuiSelectable {
@@ -32,11 +32,11 @@ public class ContainerNaturalistBackpack extends ContainerItemInventory<PagedBac
 	}
 
 	@Override
-	public void handleSelectionChange(EntityPlayer player, PacketUpdate packet) {
-		inventory.flipPage(player, packet.payload.intPayload[0]);
+	public void handleSelectionChange(EntityPlayer player, PacketGuiSelect packet) {
+		inventory.flipPage(player, packet.getPrimaryIndex());
 	}
 
 	@Override
-	public void setSelection(PacketUpdate packet) {
+	public void setSelection(PacketGuiSelect packet) {
 	}
 }

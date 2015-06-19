@@ -100,8 +100,6 @@ public class PluginCore extends ForestryPlugin {
 		AlleleManager.climateHelper = new ClimateHelper();
 		AlleleManager.alleleFactory = new AlleleFactory();
 		alleleRegistry.initialize();
-
-		Allele.setupAPI();
 	}
 
 	@Override

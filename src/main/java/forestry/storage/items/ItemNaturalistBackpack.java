@@ -29,8 +29,8 @@ public class ItemNaturalistBackpack extends ItemBackpack {
 		}
 
 		@Override
-		public boolean isValidItem(ItemStack stack) {
-			return BeeManager.beeRoot.isMember(stack);
+		public boolean isValidItem(ItemStack itemStack) {
+			return BeeManager.beeRoot.isMember(itemStack);
 		}
 	}
 
@@ -41,8 +41,8 @@ public class ItemNaturalistBackpack extends ItemBackpack {
 		}
 
 		@Override
-		public boolean isValidItem(ItemStack stack) {
-			return PluginLepidopterology.butterflyInterface.isMember(stack);
+		public boolean isValidItem(ItemStack itemStack) {
+			return PluginLepidopterology.butterflyInterface.isMember(itemStack);
 		}
 	}
 

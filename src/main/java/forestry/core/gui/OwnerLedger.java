@@ -18,7 +18,7 @@ import net.minecraft.util.IIcon;
 import forestry.core.interfaces.IOwnable;
 import forestry.core.interfaces.IRestrictedAccess;
 import forestry.core.network.PacketCoordinates;
-import forestry.core.network.PacketIds;
+import forestry.core.network.PacketId;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.EnumAccess;
@@ -33,8 +33,16 @@ public class OwnerLedger extends Ledger {
 	private final IOwnable tile;
 
 	public OwnerLedger(LedgerManager manager, IOwnable tile) {
-		super(manager);
+		super(manager, "owner");
 		this.tile = tile;
+
+		boolean playerIsOwner = tile.isOwner(manager.minecraft.thePlayer);
+
+		if (playerIsOwner) {
+			maxHeight = 60;
+		} else {
+			maxHeight = 36;
+		}
 	}
 
 	public boolean isAccessButton(int mouseX, int mouseY) {
@@ -46,17 +54,12 @@ public class OwnerLedger extends Ledger {
 	}
 
 	@Override
+	public boolean isVisible() {
+		return tile.isOwned();
+	}
+
+	@Override
 	public void draw(int x, int y) {
-
-		// Update state
-		boolean playerIsOwner = tile.isOwner(manager.minecraft.thePlayer);
-
-		if (playerIsOwner) {
-			maxHeight = 60;
-		} else {
-			maxHeight = 36;
-		}
-
 		// Draw background
 		drawBackground(x, y);
 
@@ -75,16 +78,16 @@ public class OwnerLedger extends Ledger {
 			return;
 		}
 
-		manager.minecraft.fontRenderer.drawStringWithShadow(StringUtil.localize("gui.owner"), x + 22, y + 8, manager.gui.fontColor.get("ledger.owner.header"));
+		drawHeader(StringUtil.localize("gui.owner"), x + 22, y + 8);
 
-		manager.minecraft.fontRenderer.drawString(PlayerUtil.getOwnerName(tile), x + 22, y + 20, manager.gui.fontColor.get("ledger.owner.text"));
+		drawText(PlayerUtil.getOwnerName(tile), x + 22, y + 20);
 
+		boolean playerIsOwner = tile.isOwner(manager.minecraft.thePlayer);
 		if (playerIsOwner && tile instanceof IRestrictedAccess) {
-			manager.minecraft.fontRenderer.drawStringWithShadow(StringUtil.localize("gui.access") + ":", x + 22, y + 32,
-					manager.gui.fontColor.get("ledger.owner.subheader"));
+			drawSubheader(StringUtil.localize("gui.access") + ':', x + 22, y + 32);
 			// Access rules
 			drawIcon(accessIcon, x + 20, y + 40);
-			manager.minecraft.fontRenderer.drawString(StringUtil.localize(access.getName()), x + 38, y + 44, manager.gui.fontColor.get("ledger.owner.text"));
+			drawText(StringUtil.localize(access.getName()), x + 38, y + 44);
 		}
 	}
 
@@ -99,7 +102,7 @@ public class OwnerLedger extends Ledger {
 		if (isAccessButton(x, y) && tile instanceof IRestrictedAccess) {
 			if (!Proxies.common.isSimulating(((TileEntity) tile).getWorldObj())) {
 				TileEntity te = (TileEntity) tile;
-				Proxies.net.sendToServer(new PacketCoordinates(PacketIds.ACCESS_SWITCH, te.xCoord, te.yCoord, te.zCoord));
+				Proxies.net.sendToServer(new PacketCoordinates(PacketId.ACCESS_SWITCH, te));
 			}
 
 			((IRestrictedAccess) tile).switchAccessRule(manager.minecraft.thePlayer);
@@ -108,5 +111,4 @@ public class OwnerLedger extends Ledger {
 
 		return false;
 	}
-
 }

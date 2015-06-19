@@ -70,13 +70,13 @@ public class GuiHandlerMail extends GuiHandlerBase {
 				}
 
 			case MailboxGUI:
-				return new GuiMailbox(player.inventory, (MachineMailbox) getTileForestry(world, x, y, z));
+				return new GuiMailbox(player.inventory, getTileForestry(world, x, y, z, player, MachineMailbox.class));
 			case PhilatelistGUI:
-				return new GuiPhilatelist(player.inventory, (MachinePhilatelist) getTileForestry(world, x, y, z));
+				return new GuiPhilatelist(player.inventory, getTileForestry(world, x, y, z, player, MachinePhilatelist.class));
 			case TraderGUI:
-				return new GuiTrader(player.inventory, (MachineTrader) getTileForestry(world, x, y, z));
+				return new GuiTrader(player.inventory, getTileForestry(world, x, y, z, player, MachineTrader.class));
 			case TraderNameGUI:
-				return new GuiTradeName(player.inventory, (MachineTrader) getTileForestry(world, x, y, z));
+				return new GuiTradeName(player.inventory, getTileForestry(world, x, y, z, player, MachineTrader.class));
 			default:
 				return null;
 
@@ -116,13 +116,13 @@ public class GuiHandlerMail extends GuiHandlerBase {
 				}
 
 			case MailboxGUI:
-				return new ContainerMailbox(player.inventory, (MachineMailbox) getTileForestry(world, x, y, z));
+				return new ContainerMailbox(player.inventory, getTileForestry(world, x, y, z, player, MachineMailbox.class));
 			case PhilatelistGUI:
-				return new ContainerPhilatelist(player.inventory, (MachinePhilatelist) getTileForestry(world, x, y, z));
+				return new ContainerPhilatelist(player.inventory, getTileForestry(world, x, y, z, player, MachinePhilatelist.class));
 			case TraderGUI:
-				return new ContainerTrader(player.inventory, (MachineTrader) getTileForestry(world, x, y, z));
+				return new ContainerTrader(player.inventory, getTileForestry(world, x, y, z, player, MachineTrader.class));
 			case TraderNameGUI:
-				return new ContainerTradeName(player.inventory, (MachineTrader) getTileForestry(world, x, y, z));
+				return new ContainerTradeName(player.inventory, getTileForestry(world, x, y, z, player, MachineTrader.class));
 			default:
 				return null;
 

@@ -13,29 +13,12 @@ package forestry.core.gadgets;
 import net.minecraft.entity.player.EntityPlayer;
 
 import forestry.core.interfaces.IHintSource;
-import forestry.core.network.PacketPayload;
-import forestry.core.proxy.Proxies;
 
 public abstract class TileBase extends TileForestry implements IHintSource {
-
-	@Override
-	public boolean isOwnable() {
-		return true;
-	}
 
 	/* UPDATING */
 	@Override
 	public void initialize() {
-	}
-
-	/* NETWORK */
-	@Override
-	public PacketPayload getPacketPayload() {
-		return null;
-	}
-
-	@Override
-	public void fromPacketPayload(PacketPayload payload) {
 	}
 
 	/* INTERACTION */

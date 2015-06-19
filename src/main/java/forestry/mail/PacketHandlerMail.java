@@ -10,15 +10,15 @@
  ******************************************************************************/
 package forestry.mail;
 
-import java.io.DataInputStream;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 
-import forestry.core.interfaces.IPacketHandler;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketUpdate;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.IPacketHandler;
+import forestry.core.network.PacketId;
+import forestry.core.network.PacketString;
 import forestry.core.proxy.Proxies;
 import forestry.mail.gui.ContainerCatalogue;
 import forestry.mail.gui.ContainerLetter;
@@ -26,48 +26,49 @@ import forestry.mail.gui.ContainerTradeName;
 import forestry.mail.gui.GuiMailboxInfo;
 import forestry.mail.network.PacketLetterInfo;
 import forestry.mail.network.PacketPOBoxInfo;
+import forestry.mail.network.PacketRequestLetterInfo;
 
 public class PacketHandlerMail implements IPacketHandler {
 
 	@Override
-	public boolean onPacketData(int packetID, DataInputStream data, EntityPlayer player) throws IOException {
+	public boolean onPacketData(PacketId packetID, DataInputStreamForestry data, EntityPlayer player) throws IOException {
 
-		PacketUpdate packet;
 		switch (packetID) {
-			case PacketIds.LETTER_INFO:
-				PacketLetterInfo packetT = new PacketLetterInfo();
-				packetT.readData(data);
-				onLetterInfo(packetT);
+			case LETTER_INFO: {
+				PacketLetterInfo packet = new PacketLetterInfo(data);
+				onLetterInfo(packet);
 				return true;
-			case PacketIds.POBOX_INFO:
-				PacketPOBoxInfo packetP = new PacketPOBoxInfo();
-				packetP.readData(data);
-				onPOBoxInfo(packetP);
+			}
+			case POBOX_INFO: {
+				PacketPOBoxInfo packet = new PacketPOBoxInfo(data);
+				onPOBoxInfo(packet);
 				return true;
-			case PacketIds.LETTER_RECIPIENT:
-				packet = new PacketUpdate();
-				packet.readData(data);
-				onLetterRecipient(player, packet);
+			}
+			case LETTER_REQUEST_INFO: {
+				PacketRequestLetterInfo packet = new PacketRequestLetterInfo(data);
+				onLetterRequestInfo(player, packet);
 				return true;
-			case PacketIds.LETTER_TEXT:
-				packet = new PacketUpdate();
-				packet.readData(data);
+			}
+			case LETTER_TEXT: {
+				PacketString packet = new PacketString(data);
 				onLetterText(player, packet);
 				return true;
-			case PacketIds.TRADING_ADDRESS_SET:
-				packet = new PacketUpdate();
-				packet.readData(data);
+			}
+			case TRADING_ADDRESS_SET: {
+				PacketString packet = new PacketString(data);
 				onAddressSet(player, packet);
 				return true;
-			case PacketIds.POBOX_INFO_REQUEST:
+			}
+			case POBOX_INFO_REQUEST: {
 				onPOBoxInfoRequest(player);
 				return true;
+			}
 		}
 
 		return false;
 	}
 
-	private void onLetterInfo(PacketLetterInfo packet) {
+	private static void onLetterInfo(PacketLetterInfo packet) {
 
 		Container container = Proxies.common.getClientInstance().thePlayer.openContainer;
 		if (container instanceof ContainerLetter) {
@@ -78,11 +79,11 @@ public class PacketHandlerMail implements IPacketHandler {
 
 	}
 
-	private void onPOBoxInfo(PacketPOBoxInfo packet) {
+	private static void onPOBoxInfo(PacketPOBoxInfo packet) {
 		GuiMailboxInfo.instance.setPOBoxInfo(packet.poboxInfo);
 	}
 
-	private void onAddressSet(EntityPlayer player, PacketUpdate packet) {
+	private static void onAddressSet(EntityPlayer player, PacketString packet) {
 		if (!(player.openContainer instanceof ContainerTradeName)) {
 			return;
 		}
@@ -90,7 +91,7 @@ public class PacketHandlerMail implements IPacketHandler {
 		((ContainerTradeName) player.openContainer).handleSetAddress(packet);
 	}
 
-	private void onLetterText(EntityPlayer player, PacketUpdate packet) {
+	private static void onLetterText(EntityPlayer player, PacketString packet) {
 		if (!(player.openContainer instanceof ContainerLetter)) {
 			return;
 		}
@@ -98,22 +99,22 @@ public class PacketHandlerMail implements IPacketHandler {
 		((ContainerLetter) player.openContainer).handleSetText(packet);
 	}
 
-	private void onLetterRecipient(EntityPlayer player, PacketUpdate packet) {
+	private static void onLetterRequestInfo(EntityPlayer player, PacketRequestLetterInfo packet) {
 		if (!(player.openContainer instanceof ContainerLetter)) {
 			return;
 		}
 
-		((ContainerLetter) player.openContainer).handleSetRecipient(player, packet);
+		((ContainerLetter) player.openContainer).handleRequestLetterInfo(player, packet);
 	}
 
-	private void onPOBoxInfoRequest(EntityPlayer player) {
+	private static void onPOBoxInfoRequest(EntityPlayer player) {
 		MailAddress address = new MailAddress(player.getGameProfile());
-		POBox pobox = PostRegistry.getPOBox(player.worldObj, address);
+		POBox pobox = PostRegistry.getOrCreatePOBox(player.worldObj, address);
 		if (pobox == null) {
 			return;
 		}
 
-		Proxies.net.sendToPlayer(new PacketPOBoxInfo(PacketIds.POBOX_INFO, pobox.getPOBoxInfo()), player);
+		Proxies.net.sendToPlayer(new PacketPOBoxInfo(PacketId.POBOX_INFO, pobox.getPOBoxInfo()), player);
 	}
 
 }

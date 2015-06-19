@@ -18,6 +18,7 @@ import net.minecraft.util.AxisAlignedBB;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
+import forestry.core.vect.Vect;
 
 /**
  * Hermits will not produce if there are any other living creatures nearby.
@@ -31,6 +32,17 @@ public class JubilanceProviderHermit extends JubilanceDefault {
 		@SuppressWarnings("rawtypes")
 		List list = housing.getWorld().getEntitiesWithinAABB(EntityLiving.class, bounding);
 		return list.size() <= 0;
+	}
+
+	private static AxisAlignedBB getBounding(IBeeGenome genome, IBeeHousing housing, float modifier) {
+		int[] areaAr = genome.getTerritory();
+		Vect area = new Vect(areaAr[0], areaAr[1], areaAr[2]).multiply(modifier);
+		Vect offset = new Vect(-Math.round(area.x / 2), -Math.round(area.y / 2), -Math.round(area.z / 2));
+
+		Vect min = new Vect(housing.getXCoord() + offset.x, housing.getYCoord() + offset.y, housing.getZCoord() + offset.z);
+		Vect max = new Vect(housing.getXCoord() + offset.x + area.x, housing.getYCoord() + offset.y + area.y, housing.getZCoord() + offset.z + area.z);
+
+		return AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
 	}
 
 }

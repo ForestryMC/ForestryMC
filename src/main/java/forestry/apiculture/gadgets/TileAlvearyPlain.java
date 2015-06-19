@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
+import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -39,27 +39,28 @@ import forestry.api.core.IErrorState;
 import forestry.api.core.ITileStructure;
 import forestry.api.genetics.IIndividual;
 import forestry.apiculture.gui.ContainerAlveary;
+import forestry.apiculture.network.PacketActiveUpdate;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
+import forestry.core.interfaces.IActivatable;
 import forestry.core.interfaces.IClimatised;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IHintSource;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketInventoryStack;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.Utils;
 
-public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IBeeHousing, IClimatised, IHintSource {
+public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IBeeHousing, IClimatised, IHintSource, IActivatable {
 
 	// / CONSTANTS
 	public static final int SLOT_QUEEN = 0;
 	public static final int SLOT_DRONE = 1;
 	public static final int SLOT_PRODUCT_1 = 2;
-	public static final int SLOT_PRODUCTION_COUNT = 7;
+	public static final int SLOT_PRODUCT_COUNT = 7;
 	public static final int BLOCK_META = 0;
 
 	// / MEMBERS
@@ -67,8 +68,12 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 	protected BiomeGenBase biome;
 	protected float tempChange = 0.0f;
 	protected float humidChange = 0.0f;
+
+	// CLIENT
+	private boolean active;
 	private int displayHealthMax = 0;
 	private int displayHealth = 0;
+	private IBee displayQueen;
 
 	public TileAlvearyPlain() {
 		super(0);
@@ -90,7 +95,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 	}
 
 	private void setBiomeInformation() {
-		this.biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
+		this.biome = worldObj.getBiomeGenForCoordsBody(xCoord, zCoord);
 	}
 
 	/* LOADING & SAVING */
@@ -118,6 +123,43 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 		}
 	}
 
+	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
+		data.writeBoolean(active);
+		if (active) {
+			ItemStack queen = getStackInSlot(SLOT_QUEEN);
+			data.writeItemStack(queen);
+		}
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
+		active = data.readBoolean();
+		if (active) {
+			ItemStack queen = data.readItemStack();
+			setInventorySlotContents(SLOT_QUEEN, queen);
+		}
+	}
+
+	@Override
+	public boolean isActive() {
+		return active;
+	}
+
+	@Override
+	public void setActive(boolean active) {
+		if (this.active == active) {
+			return;
+		}
+		this.active = active;
+
+		if (!worldObj.isRemote) {
+			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this));
+		}
+	}
+
 	/* UPDATING */
 	@Override
 	public void initialize() {
@@ -136,65 +178,33 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 			return;
 		}
 
-		beekeepingLogic.update();
+		boolean canWork = beekeepingLogic.canWork();
+		setActive(canWork);
+		if (canWork) {
+			beekeepingLogic.doWork();
+		}
 
 		// Equalize humidity and temperature
 		equalizeTemperature();
 		equalizeHumidity();
-
-		IBee queen = beekeepingLogic.getQueen();
-		if (queen == null) {
-			return;
-		}
-
-		// Add swarm effects
-		if (updateOnInterval(200)) {
-			ISidedInventory inventory = getStructureInventory();
-			if (inventory != null) {
-				onQueenChange(inventory.getStackInSlot(SLOT_QUEEN));
-			}
-		}
-
-		if (!hasErrorState()) {
-			queen.doFX(beekeepingLogic.getEffectData(), this);
-
-			if (updateOnInterval(50)) {
-				float f = xCoord + 0.5F;
-				float f1 = yCoord + 0.0F + (worldObj.rand.nextFloat() * 6F) / 16F;
-				float f2 = zCoord + 0.5F;
-				float f3 = 0.52F;
-				float f4 = worldObj.rand.nextFloat() * 0.6F - 0.3F;
-
-				Proxies.common.addEntitySwarmFX(worldObj, (f - f3), f1, (f2 + f4), 0F, 0F, 0F);
-				Proxies.common.addEntitySwarmFX(worldObj, (f + f3), f1, (f2 + f4), 0F, 0F, 0F);
-				Proxies.common.addEntitySwarmFX(worldObj, (f + f4), f1, (f2 - f3), 0F, 0F, 0F);
-				Proxies.common.addEntitySwarmFX(worldObj, (f + f4), f1, (f2 + f3), 0F, 0F, 0F);
-			}
-		}
 	}
 
 	@Override
 	protected void updateClientSide() {
+		if (isMaster() && active && (displayQueen != null) && updateOnInterval(2)) {
+			displayQueen.doFX(beekeepingLogic.getEffectData(), this);
 
-		if (!isMaster()) {
-			return;
-		}
+			if (updateOnInterval(50)) {
+				float fxX = xCoord + 0.5F;
+				float fxY = yCoord + 0.25F + (worldObj.rand.nextFloat() * 6F) / 16F;
+				float fxZ = zCoord + 0.5F;
+				float f3 = 1.6F;
+				float f4 = worldObj.rand.nextFloat() * f3 - 0.5F;
 
-		if (hasErrorState()) {
-			return;
-		}
-
-		if (updateOnInterval(2)) {
-			ISidedInventory inventory = getStructureInventory();
-			if (inventory == null) {
-				return;
-			}
-
-			// / Multiplayer FX
-			ItemStack queenStack = inventory.getStackInSlot(SLOT_QUEEN);
-			if (BeeManager.beeRoot.isMated(queenStack)) {
-				IBee displayQueen = BeeManager.beeRoot.getMember(queenStack);
-				displayQueen.doFX(beekeepingLogic.getEffectData(), this);
+				Proxies.common.addEntitySwarmFX(worldObj, (fxX - f3), fxY, (fxZ + f4), 0F, 0F, 0F);
+				Proxies.common.addEntitySwarmFX(worldObj, (fxX + f3), fxY, (fxZ + f4), 0F, 0F, 0F);
+				Proxies.common.addEntitySwarmFX(worldObj, (fxX + f4), fxY, (fxZ - f3), 0F, 0F, 0F);
+				Proxies.common.addEntitySwarmFX(worldObj, (fxX + f4), fxY, (fxZ + f3), 0F, 0F, 0F);
 			}
 		}
 	}
@@ -223,32 +233,26 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 
 	/* STATE INFORMATION */
 	private int getHealthDisplay() {
-		IInventory inventory = getStructureInventory();
-		if (inventory == null || inventory.getStackInSlot(SLOT_QUEEN) == null) {
+		if (displayQueen == null) {
 			return 0;
 		}
 
-		if (BeeManager.beeRoot.isMated(inventory.getStackInSlot(SLOT_QUEEN))) {
-			return BeeManager.beeRoot.getMember(inventory.getStackInSlot(SLOT_QUEEN)).getHealth();
-		} else if (!BeeManager.beeRoot.isDrone(inventory.getStackInSlot(SLOT_QUEEN))) {
-			return displayHealth;
+		if (displayQueen.getMate() != null) {
+			return displayQueen.getHealth();
 		} else {
-			return 0;
+			return displayHealth;
 		}
 	}
 
 	private int getMaxHealthDisplay() {
-		IInventory inventory = getStructureInventory();
-		if (inventory == null || inventory.getStackInSlot(SLOT_QUEEN) == null) {
+		if (displayQueen == null) {
 			return 0;
 		}
 
-		if (BeeManager.beeRoot.isMated(inventory.getStackInSlot(SLOT_QUEEN))) {
-			return BeeManager.beeRoot.getMember(inventory.getStackInSlot(SLOT_QUEEN)).getMaxHealth();
-		} else if (!BeeManager.beeRoot.isDrone(inventory.getStackInSlot(SLOT_QUEEN))) {
-			return displayHealthMax;
+		if (displayQueen.getMate() != null) {
+			return displayQueen.getMaxHealth();
 		} else {
-			return 0;
+			return displayHealthMax;
 		}
 	}
 
@@ -279,6 +283,8 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 		super.onStructureReset();
 		modifiers.clear();
 		eventHandlers.clear();
+
+		setActive(false);
 	}
 
 	/* IALVEARYCOMPONENT */
@@ -307,7 +313,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 
 	@Override
 	public void addTemperatureChange(float change, float boundaryDown, float boundaryUp) {
-		float temperature = biome.temperature;
+		float temperature = biome.getFloatTemperature(xCoord, yCoord, zCoord);
 		tempChange = Math.min(boundaryUp - temperature, Math.max(boundaryDown - temperature, tempChange + change));
 	}
 
@@ -349,6 +355,33 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 	}
 
 	@Override
+	public ItemStack decrStackSize(int slotIndex, int amount) {
+		ItemStack itemStack = super.decrStackSize(slotIndex, amount);
+		if (slotIndex == SLOT_QUEEN) {
+			handleQueenChange();
+		}
+		return itemStack;
+	}
+
+	@Override
+	public void setInventorySlotContents(int slotIndex, ItemStack itemStack) {
+		super.setInventorySlotContents(slotIndex, itemStack);
+		if (slotIndex == SLOT_QUEEN) {
+			handleQueenChange();
+		}
+	}
+
+	private void handleQueenChange() {
+		if (!Proxies.common.isSimulating(worldObj)) {
+			TileAlvearyPlain master = (TileAlvearyPlain) getCentralTE();
+			if (master != null) {
+				ItemStack itemStack = getStackInSlot(SLOT_QUEEN);
+				master.displayQueen = BeeManager.beeRoot.getMember(itemStack);
+			}
+		}
+	}
+
+	@Override
 	public void setDrone(ItemStack itemstack) {
 		setInventorySlotContents(SLOT_DRONE, itemstack);
 	}
@@ -360,7 +393,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 
 	@Override
 	public EnumTemperature getTemperature() {
-		if (BiomeHelper.isBiomeHellish(biome) && tempChange >= 0) {
+		if (isHellish() && tempChange >= 0) {
 			return EnumTemperature.HELLISH;
 		}
 
@@ -443,7 +476,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 			return false;
 		}
 
-		return InvTools.tryAddStack(inventory, product, SLOT_PRODUCT_1, inventory.getSizeInventory() - SLOT_PRODUCT_1, all);
+		return InvTools.tryAddStack(inventory, product, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT, all);
 	}
 
 	@Deprecated
@@ -467,9 +500,6 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 		if (!Proxies.common.isSimulating(worldObj)) {
 			return;
 		}
-
-		Proxies.net.sendNetworkPacket(new PacketInventoryStack(PacketIds.IINVENTORY_STACK, xCoord, yCoord, zCoord, SLOT_QUEEN, queenStack), xCoord, yCoord,
-				zCoord);
 
 		for (IBeeListener eventHandler : eventHandlers) {
 			eventHandler.onQueenChange(queenStack);
@@ -545,6 +575,10 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 
 	@Override
 	public boolean isHellish() {
+		if (BiomeHelper.isBiomeHellish(biome)) {
+			return true;
+		}
+
 		for (IBeeModifier modifier : modifiers) {
 			if (modifier.isHellish()) {
 				return true;
@@ -634,7 +668,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 
 	@Override
 	public float getExactTemperature() {
-		return biome.temperature + this.tempChange;
+		return biome.getFloatTemperature(xCoord, yCoord, zCoord) + this.tempChange;
 	}
 
 	@Override
@@ -653,16 +687,10 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 		return Config.hints.get("alveary");
 	}
 
-	/* IOWNABLE */
-	@Override
-	public boolean isOwnable() {
-		return true;
-	}
-
 	/* IHousing */
 	@Override
 	public GameProfile getOwnerName() {
-		return this.getOwnerProfile();
+		return this.getOwner();
 	}
 
 	private static class AlvearyInventoryAdapter extends TileInventoryAdapter<TileAlvearyPlain> {

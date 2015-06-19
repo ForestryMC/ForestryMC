@@ -10,27 +10,29 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
+import java.io.IOException;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 
 import forestry.arboriculture.WoodType;
-import forestry.core.network.ForestryPacket;
-import forestry.core.network.INetworkedEntity;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketTileNBT;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
 
-public class TileStairs extends TileEntity implements INetworkedEntity {
+public class TileStairs extends TileEntity implements IStreamable {
 
-	private WoodType type;
+	private WoodType woodType;
 
-	public WoodType getType() {
-		return this.type;
+	public WoodType getWoodType() {
+		return this.woodType;
 	}
 
-	public void setType(WoodType type) {
-		this.type = type;
+	public void setWoodType(WoodType woodType) {
+		this.woodType = woodType;
 		sendNetworkUpdate();
 	}
 
@@ -40,7 +42,7 @@ public class TileStairs extends TileEntity implements INetworkedEntity {
 		super.readFromNBT(nbttagcompound);
 
 		if (nbttagcompound.hasKey("WT")) {
-			type = WoodType.VALUES[nbttagcompound.getShort("WT")];
+			woodType = WoodType.VALUES[nbttagcompound.getShort("WT")];
 		}
 	}
 
@@ -48,8 +50,8 @@ public class TileStairs extends TileEntity implements INetworkedEntity {
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 
-		if (type != null) {
-			nbttagcompound.setShort("WT", (short) type.ordinal());
+		if (woodType != null) {
+			nbttagcompound.setShort("WT", (short) woodType.ordinal());
 		}
 	}
 
@@ -66,19 +68,22 @@ public class TileStairs extends TileEntity implements INetworkedEntity {
 	/* INETWORKEDENTITY */
 	@Override
 	public Packet getDescriptionPacket() {
-		return new PacketTileNBT(PacketIds.TILE_NBT, this).getPacket();
+		return new PacketTileStream(this).getPacket();
 	}
 
-	@Override
 	public void sendNetworkUpdate() {
-		Proxies.net.sendNetworkPacket(new PacketTileNBT(PacketIds.TILE_NBT, this), xCoord, yCoord, zCoord);
+		Proxies.net.sendNetworkPacket(new PacketTileStream(this));
 	}
 
 	@Override
-	public void fromPacket(ForestryPacket packetRaw) {
-		PacketTileNBT packet = (PacketTileNBT) packetRaw;
-		this.readFromNBT(packet.getTagCompound());
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		data.writeVarInt(woodType.ordinal());
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		int woodTypeOrdinal = data.readVarInt();
+		woodType = WoodType.values()[woodTypeOrdinal];
 		worldObj.func_147479_m(xCoord, yCoord, zCoord);
 	}
-
 }

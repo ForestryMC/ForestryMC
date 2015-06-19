@@ -8,10 +8,15 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.interfaces;
+package forestry.core.network;
 
-import net.minecraft.item.ItemStack;
+import java.io.IOException;
 
-public interface IOreDictionaryHandler {
-	void onOreRegistration(String name, ItemStack ore);
+import net.minecraft.entity.player.EntityPlayer;
+
+public interface IPacketHandler {
+
+	/** Returns true if the packet has been handled */
+	boolean onPacketData(PacketId packetID, DataInputStreamForestry data, EntityPlayer player) throws IOException;
+
 }

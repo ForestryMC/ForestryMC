@@ -72,7 +72,8 @@ public class EnumAllele {
 		AVERAGE(20),
 		FAST(25),
 		FASTER(30),
-		FASTEST(35);
+		FASTEST(35),
+		MAXIMUM(99, true);
 
 		private final Integer value;
 		private final boolean dominant;

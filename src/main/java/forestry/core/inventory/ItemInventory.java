@@ -145,12 +145,12 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
 					}
 				}
 
-				migrateToNewNBT();
+				writeToParentNBT();
 			}
 		}
 	}
 
-	private void migrateToNewNBT() {
+	private void writeToParentNBT() {
 		ItemStack parent = getParent();
 		if (parent == null) {
 			return;
@@ -174,6 +174,9 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
 
 	private static String getSlotNBTKey(int i) {
 		return Integer.toString(i, Character.MAX_RADIX);
+	}
+
+	public void onSlotClick(EntityPlayer player) {
 	}
 
 	@Override
@@ -250,7 +253,8 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate {
 	}
 
 	@Override
-	public void markDirty() {
+	public final void markDirty() {
+		writeToParentNBT();
 	}
 
 	@Override

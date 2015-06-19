@@ -80,7 +80,8 @@ public class ItemCrated extends Item {
 		if (contained == null) {
 			return StatCollector.translateToLocal("item.for.crate.name");
 		} else {
-			return StringUtil.localize("item.crated.adj") + " " + Proxies.common.getDisplayName(contained);
+			String containedName = Proxies.common.getDisplayName(contained);
+			return StringUtil.localizeAndFormat("item.crated.grammar", containedName);
 		}
 	}
 

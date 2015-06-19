@@ -11,10 +11,12 @@
 package forestry.factory.recipes;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 
 import net.minecraft.item.ItemStack;
 
+import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.factory.gadgets.MachineCentrifuge;
@@ -51,17 +53,17 @@ public class CraftGuideCentrifuge implements RecipeProvider {
 		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_CENTRIFUGE_META);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
-		for (MachineCentrifuge.Recipe recipe : MachineCentrifuge.RecipeManager.recipes) {
+		for (ICentrifugeRecipe recipe : MachineCentrifuge.RecipeManager.recipes) {
 			Object[] array = new Object[11];
 
-			ArrayList<Entry<ItemStack, Integer>> entries = new ArrayList<Entry<ItemStack, Integer>>(recipe.products.entrySet());
+			List<Entry<ItemStack, Float>> entries = new ArrayList<Entry<ItemStack, Float>>(recipe.getAllProducts().entrySet());
 
 			for (int i = 0; i < Math.min(entries.size(), 9); i++) {
-				Entry<ItemStack, Integer> entry = entries.get(i);
+				Entry<ItemStack, Float> entry = entries.get(i);
 				array[i] = entry.getValue() > 0 ? new Object[]{entry.getKey(), entry.getValue()} : null;
 			}
 
-			array[9] = recipe.resource;
+			array[9] = recipe.getInput();
 			array[10] = machine;
 
 			generator.addRecipe(template, array);

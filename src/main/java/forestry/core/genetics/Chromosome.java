@@ -19,7 +19,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosome;
-import forestry.api.genetics.ILegacyHandler;
 import forestry.core.proxy.Proxies;
 
 public class Chromosome implements IChromosome {
@@ -69,7 +68,7 @@ public class Chromosome implements IChromosome {
 	@Override
 	public IAllele getActiveAllele() {
 		if (primary == null || secondary == null) {
-			Proxies.log.severe("Chromosome is missing alleles");
+			return null;
 		}
 		if (primary.isDominant()) {
 			return primary;

@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import javax.annotation.Nonnull;
 import java.awt.Color;
 import java.util.Collection;
 import java.util.List;
@@ -98,7 +97,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 			ledgerManager.add(new HintLedger(ledgerManager, (IHintSource) inventory));
 		}
 
-		if (inventory instanceof IOwnable && ((IOwnable) inventory).isOwnable()) {
+		if (inventory instanceof IOwnable) {
 			ledgerManager.add(new OwnerLedger(ledgerManager, (IOwnable) inventory));
 		}
 

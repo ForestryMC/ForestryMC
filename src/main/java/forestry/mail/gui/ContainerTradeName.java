@@ -18,9 +18,8 @@ import net.minecraft.inventory.Container;
 
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.PostManager;
-import forestry.core.network.PacketIds;
-import forestry.core.network.PacketPayload;
-import forestry.core.network.PacketUpdate;
+import forestry.core.network.PacketId;
+import forestry.core.network.PacketString;
 import forestry.core.proxy.Proxies;
 import forestry.mail.gadgets.MachineTrader;
 
@@ -42,18 +41,15 @@ public class ContainerTradeName extends Container {
 			return;
 		}
 
-		PacketPayload payload = new PacketPayload(0, 0, 1);
-		payload.stringPayload[0] = addressName;
-
-		PacketUpdate packet = new PacketUpdate(PacketIds.TRADING_ADDRESS_SET, payload);
+		PacketString packet = new PacketString(PacketId.TRADING_ADDRESS_SET, addressName);
 		Proxies.net.sendToServer(packet);
 
 		IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
 		machine.setAddress(address);
 	}
 
-	public void handleSetAddress(PacketUpdate packet) {
-		String addressName = packet.payload.stringPayload[0];
+	public void handleSetAddress(PacketString packet) {
+		String addressName = packet.getString();
 		IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
 		machine.setAddress(address);
 	}

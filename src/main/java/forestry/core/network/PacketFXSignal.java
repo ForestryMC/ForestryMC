@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.block.Block;
@@ -30,11 +28,13 @@ public class PacketFXSignal extends PacketCoordinates {
 		NONE(""), BLOCK_DESTROY(""), BLOCK_PLACE(""), LEAF("step.grass"), LOG("dig.wood"), DIRT("dig.gravel");
 
 		public final String soundFile;
-		public final float volume = 1.0f;
-		public final float pitch = 1.0f;
+		public final float volume;
+		public final float pitch;
 
 		SoundFXType(String soundFile) {
 			this.soundFile = soundFile;
+			this.volume = 1.0f;
+			this.pitch = 1.0f;
 		}
 	}
 
@@ -44,7 +44,8 @@ public class PacketFXSignal extends PacketCoordinates {
 	private Block block;
 	private int meta;
 
-	public PacketFXSignal() {
+	public PacketFXSignal(DataInputStreamForestry data) throws IOException {
+		super(data);
 	}
 
 	public PacketFXSignal(VisualFXType type, int xCoord, int yCoord, int zCoord, Block block, int meta) {
@@ -56,7 +57,7 @@ public class PacketFXSignal extends PacketCoordinates {
 	}
 
 	public PacketFXSignal(VisualFXType visualFX, SoundFXType soundFX, int xCoord, int yCoord, int zCoord, Block block, int meta) {
-		super(PacketIds.FX_SIGNAL, xCoord, yCoord, zCoord);
+		super(PacketId.FX_SIGNAL, xCoord, yCoord, zCoord);
 		this.visualFX = visualFX;
 		this.soundFX = soundFX;
 		this.block = block;
@@ -64,7 +65,7 @@ public class PacketFXSignal extends PacketCoordinates {
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
 		data.writeShort(visualFX.ordinal());
 		data.writeShort(soundFX.ordinal());
@@ -73,7 +74,7 @@ public class PacketFXSignal extends PacketCoordinates {
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	protected void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		this.visualFX = VisualFXType.values()[data.readShort()];
 		this.soundFX = SoundFXType.values()[data.readShort()];
@@ -95,5 +96,4 @@ public class PacketFXSignal extends PacketCoordinates {
 			}
 		}
 	}
-
 }
