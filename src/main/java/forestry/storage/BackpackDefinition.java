@@ -112,10 +112,10 @@ public class BackpackDefinition implements IBackpackDefinition {
 	}
 
 	public void addValidOreDictName(String oreDictName) {
-		if (OreDictionary.doesOreNameExist(oreDictName)) {
+//		if (OreDictionary.doesOreNameExist(oreDictName)) { //TODO: add this back when using a forge version that supports it
 			int oreId = OreDictionary.getOreID(oreDictName);
 			validOreIds.add(oreId);
-		}
+//		}
 	}
 
 	public void addValidOreDictNames(List<String> oreDictNames) {
