@@ -3,6 +3,7 @@ package forestry.arboriculture.items;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import forestry.arboriculture.gadgets.TileLeaves;
@@ -35,7 +36,7 @@ public class ItemLeavesBlock extends ItemForestryBlock {
 		}
 
 		String grammar = StringUtil.localize("trees.grammar.leaves");
-		String localizedName = StringUtil.localize(unlocalizedName);
+		String localizedName = StatCollector.translateToLocal(unlocalizedName);
 
 		return grammar.replaceAll("%SPECIES", localizedName).replaceAll("%TYPE", type);
 	}
