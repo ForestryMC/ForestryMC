@@ -27,11 +27,9 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
-import forestry.api.apiculture.BeeManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IIndividual;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Defaults;
@@ -39,6 +37,7 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
+import forestry.core.interfaces.IItemStackDisplay;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
@@ -48,10 +47,12 @@ import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
+import forestry.core.network.PacketItemStackDisplay;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.GuiUtil;
 
-public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankContainer {
+public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankContainer, IItemStackDisplay {
 
 	/* CONSTANTS */
 	public static final int TIME_TO_ANALYZE = 125;
@@ -148,7 +149,8 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 				if (added) {
 					setInventorySlotContents(SLOT_ANALYZE, null);
-					setNeedsNetworkUpdate();
+					PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
+					Proxies.net.sendNetworkPacket(packet);
 				}
 
 				setErrorCondition(!added, EnumErrorCode.NOSPACE);
@@ -183,7 +185,8 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		}
 		setInventorySlotContents(SLOT_ANALYZE, inputStack);
 		slot.setStackInSlot(null);
-		setNeedsNetworkUpdate();
+		PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
+		Proxies.net.sendNetworkPacket(packet);
 		return true;
 	}
 
@@ -202,39 +205,19 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
 		ItemStack displayStack = getIndividualOnDisplay();
-		if (displayStack == null) {
-			data.writeBoolean(false);
-		} else {
-			data.writeBoolean(true);
-
-			IIndividual displayIndividual = AlleleManager.alleleRegistry.getIndividual(displayStack);
-			int type = BeeManager.beeRoot.getType(displayStack).ordinal();
-
-			data.writeUTF(displayIndividual.getIdent());
-			data.writeShort(type);
-			data.writeShort(displayStack.stackSize);
-		}
+		data.writeItemStack(displayStack);
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
+		individualOnDisplayClient = data.readItemStack();
+	}
 
-		ItemStack newIndividualOnDisplay = null;
-		if (data.readBoolean()) {
-			String individualUID = data.readUTF();
-			int type = data.readShort();
-			int stackSize = data.readShort();
-
-			IAllele[] template = BeeManager.beeRoot.getTemplate(individualUID);
-			IIndividual individual = BeeManager.beeRoot.templateAsIndividual(template);
-
-			newIndividualOnDisplay = BeeManager.beeRoot.getMemberStack(individual, type);
-			newIndividualOnDisplay.stackSize = stackSize;
-		}
-
-		if (!ItemStack.areItemStacksEqual(newIndividualOnDisplay, individualOnDisplayClient)) {
-			individualOnDisplayClient = newIndividualOnDisplay;
+	@Override
+	public void handleItemStackForDisplay(ItemStack itemStack) {
+		if (!ItemStack.areItemStacksEqual(itemStack, individualOnDisplayClient)) {
+			individualOnDisplayClient = itemStack;
 			worldObj.func_147479_m(xCoord, yCoord, zCoord);
 		}
 	}
