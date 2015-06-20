@@ -35,9 +35,6 @@ ext.dirLang = "./lang"
 ext.apiForestry = "./api/forestry"
 ext.apiRedstoneFlux = "./api/redstoneflux"
 
-ext.CraftGuideRepo = "https://github.com/Uristqwerty/CraftGuide.git"
-ext.CraftGuideTmp = "build/tmp/CraftGuide"
-
 minecraft {
 	version = mcversion + "-" + forgeversion
 	runDir = "run"
@@ -47,13 +44,6 @@ minecraft {
 }
 
 sourceSets {
-	api {
-		java {
-			srcDir CraftGuideTmp + "/src"
-			include '**/CraftGuide/api/**'
-		}
-	}
-	
 	main {
 		java {
 			srcDir project.apiForestry
@@ -160,23 +150,6 @@ task bumpPatch << {
 	saveVersion()
 }
 
-import org.ajoberstar.grgit.Grgit
-
-task initCraftGuide << {
-	def localRepo = file(CraftGuideTmp)
-
-	if (localRepo.exists()) {
-		println 'Updating CraftGuide repo'
-		def grgit = Grgit.open(localRepo)
-		grgit.pull()
-		grgit.close()
-	} else {
-		println 'Cloning CraftGuide repo'
-		def grgit = Grgit.clone(dir: localRepo, uri: CraftGuideRepo)
-		grgit.close()
-	}
-}
-
 jar {
 	destinationDir = file("build/tmp")
 	archiveName = "main.jar"
@@ -197,6 +170,7 @@ task mainJarSigned ( type: Jar, dependsOn: 'reobf' ) {
 	from (zipTree(jar.getArchivePath())) {
 		exclude '**/api/**'
 		exclude '**/codechicken/**'
+		exclude '**/uristqwerty/**'
 	}
 
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -223,6 +197,7 @@ task mainJar ( type: Zip, dependsOn: mainJarSigned ) {
 	from (zipTree(jar.getArchivePath())) {
 		include '**'
 		exclude '**/codechicken/**'
+		exclude '**/uristqwerty/**'
 	}
 
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -235,6 +210,7 @@ task devJarSigned ( type: Jar, dependsOn: 'classes' ) {
 	from(sourceSets.main.output) {
 		exclude '**/api/**'
 		exclude '**/codechicken/**'
+		exclude '**/uristqwerty/**'
 	}
 
 	destinationDir = file("build/tmp")
@@ -260,11 +236,13 @@ task devJar ( type: Zip, dependsOn: devJarSigned ) {
 	from(sourceSets.main.allSource) {
 		include '**'
 		exclude '**/codechicken/**'
+		exclude '**/uristqwerty/**'
 	}
 
 	from(sourceSets.main.output) {
 		include '**'
 		exclude '**/codechicken/**'
+		exclude '**/uristqwerty/**'
 	}
 
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -298,10 +276,6 @@ task release (dependsOn: [releaseInit, apiJar, devJar, mainJar]) {
 mainJar.shouldRunAfter releaseInit
 devJar.shouldRunAfter releaseInit
 apiJar.shouldRunAfter releaseInit
-
-afterEvaluate {
-	compileApiJava.dependsOn initCraftGuide
-}
 
 artifacts {
 	archives apiJar
