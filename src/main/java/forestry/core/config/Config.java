@@ -92,7 +92,7 @@ public class Config {
 	// Hints
 	public static boolean disableHints = false;
 	public static final HashMap<String, String[]> hints = new HashMap<String, String[]>();
-	public static boolean disableEnergyStat = false;
+	public static boolean enableEnergyStat = true;
 
 	public static boolean isStructureEnabled(String uid) {
 		return !Config.disabledStructures.contains(uid);
@@ -237,10 +237,10 @@ public class Config {
 		Config.disableHints = Boolean.parseBoolean(property.value);
 		property = config.get("tweaks.energystat.disabled", CATEGORY_COMMON, true);
 		property.comment = "set to true to disable energy statistics on energy consumers.";
-		Config.disableEnergyStat = !isDebug && Boolean.parseBoolean(property.value);
+		Config.enableEnergyStat = !Boolean.parseBoolean(property.value);
 		property = config.get("tweaks.tooltip.liquidamount.disabled", CATEGORY_COMMON, false);
 		property.comment = "set to true to disable displaying liquid amounts in tank tooltips.";
-		Config.tooltipLiquidAmount = isDebug || !Boolean.parseBoolean(property.value);
+		Config.tooltipLiquidAmount = !Boolean.parseBoolean(property.value);
 
 		property = config.get("tweaks.permissions.disabled", CATEGORY_COMMON, false);
 		property.comment = "set to true to disable access restrictions on forestry machines.";

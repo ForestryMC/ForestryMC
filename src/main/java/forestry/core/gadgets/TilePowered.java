@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import java.io.IOException;
+
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;
@@ -19,6 +21,8 @@ import cpw.mods.fml.common.Optional;
 import forestry.core.EnumErrorCode;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.interfaces.IRenderableMachine;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.utils.EnumTankLevel;
 import forestry.energy.EnergyManager;
 
@@ -90,6 +94,18 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		energyManager.readFromNBT(nbt);
+	}
+
+	@Override
+	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+		super.writeGuiData(data);
+		energyManager.writeData(data);
+	}
+
+	@Override
+	public void readGuiData(DataInputStreamForestry data) throws IOException {
+		super.readGuiData(data);
+		energyManager.readData(data);
 	}
 
 	// / ADDITIONAL LIQUID HANDLING

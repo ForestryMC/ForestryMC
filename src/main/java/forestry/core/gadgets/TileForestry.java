@@ -248,7 +248,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IR
 		Proxies.net.sendToPlayer(packet, player);
 	}
 
-	public final void writeGuiData(DataOutputStreamForestry data) throws IOException {
+	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
 		writeErrorData(data);
 
 		if (owner == null) {
@@ -261,7 +261,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IR
 		}
 	}
 
-	public final void readGuiData(DataInputStreamForestry data) throws IOException {
+	public void readGuiData(DataInputStreamForestry data) throws IOException {
 		readErrorData(data);
 
 		byte accessOrdinal = data.readByte();

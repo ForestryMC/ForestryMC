@@ -37,7 +37,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import forestry.core.fluids.tanks.FakeTank;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.inventory.ITileFilter;
-import forestry.core.network.PacketGuiInteger;
+import forestry.core.network.PacketProgressBarUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.NBTUtil;
 import forestry.core.utils.NBTUtil.NBTList;
@@ -177,7 +177,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 		}
 
 		player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidId);
-		PacketGuiInteger packet = new PacketGuiInteger(container.windowId, tankIndex * NETWORK_DATA + 1, fluidAmount);
+		PacketProgressBarUpdate packet = new PacketProgressBarUpdate(container.windowId, tankIndex * NETWORK_DATA + 1, fluidAmount);
 		Proxies.net.sendToPlayer(packet, (EntityPlayerMP) player);
 	}
 
@@ -203,18 +203,18 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 					fluidAmount = fluidStack.amount;
 				}
 				player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidId);
-				PacketGuiInteger packet = new PacketGuiInteger(container.windowId, tankIndex * NETWORK_DATA + 1, fluidAmount);
+				PacketProgressBarUpdate packet = new PacketProgressBarUpdate(container.windowId, tankIndex * NETWORK_DATA + 1, fluidAmount);
 				Proxies.net.sendToPlayer(packet, player);
 			} else if (fluidStack != null && prev != null) {
 				if (fluidStack.getFluid() != prev.getFluid()) {
 					player.sendProgressBarUpdate(container, tankIndex * NETWORK_DATA, fluidStack.getFluid().getID());
 				}
 				if (fluidStack.amount != prev.amount) {
-					PacketGuiInteger packet = new PacketGuiInteger(container.windowId, tankIndex * NETWORK_DATA + 1, fluidStack.amount);
+					PacketProgressBarUpdate packet = new PacketProgressBarUpdate(container.windowId, tankIndex * NETWORK_DATA + 1, fluidStack.amount);
 					Proxies.net.sendToPlayer(packet, player);
 				}
 				if (color != pColor) {
-					PacketGuiInteger packet = new PacketGuiInteger(container.windowId, tankIndex * NETWORK_DATA + 2, color);
+					PacketProgressBarUpdate packet = new PacketProgressBarUpdate(container.windowId, tankIndex * NETWORK_DATA + 2, color);
 					Proxies.net.sendToPlayer(packet, player);
 				}
 			}

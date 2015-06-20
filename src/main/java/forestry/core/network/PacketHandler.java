@@ -145,12 +145,16 @@ public class PacketHandler {
 					onGenomeTrackerUpdate(packet);
 					return true;
 				}
-				case GUI_INTEGER: {
-					PacketGuiInteger packet = new PacketGuiInteger(data);
+				case GUI_PROGRESS_BAR: {
+					PacketProgressBarUpdate.onPacketData(data);
 					return true;
 				}
 				case GUI_ITEMSTACK: {
 					PacketItemStackDisplay.onPacketData(data);
+					return true;
+				}
+				case GUI_ENERGY: {
+					PacketGuiEnergy.onPacketData(data);
 					return true;
 				}
 				default: {

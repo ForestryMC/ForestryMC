@@ -17,8 +17,10 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.api.core.IErrorState;
 import forestry.core.gadgets.TileForestry;
+import forestry.core.interfaces.IPowerHandler;
 import forestry.core.network.PacketErrorUpdate;
-import forestry.core.proxy.Proxies;
+import forestry.core.network.PacketGuiEnergy;
+import forestry.energy.EnergyManager;
 
 public class ContainerTile<T extends TileForestry> extends ContainerForestry {
 
@@ -41,6 +43,7 @@ public class ContainerTile<T extends TileForestry> extends ContainerForestry {
 	}
 
 	private ImmutableSet<IErrorState> previousErrorStates;
+	private int previousEnergyManagerData = 0;
 
 	@Override
 	public void detectAndSendChanges() {
@@ -50,13 +53,27 @@ public class ContainerTile<T extends TileForestry> extends ContainerForestry {
 
 		if ((previousErrorStates != null) && !errorStates.equals(previousErrorStates)) {
 			PacketErrorUpdate packet = new PacketErrorUpdate(tile);
-			for (Object crafter : crafters) {
-				if (crafter instanceof EntityPlayer) {
-					Proxies.net.sendToPlayer(packet, (EntityPlayer) crafter);
-				}
-			}
+			sendPacketToCrafters(packet);
 		}
 
 		previousErrorStates = errorStates;
+
+		if (tile instanceof IPowerHandler) {
+			EnergyManager energyManager = ((IPowerHandler) tile).getEnergyManager();
+			int energyManagerData = energyManager.toGuiInt();
+			if (energyManagerData != previousEnergyManagerData) {
+				PacketGuiEnergy packet = new PacketGuiEnergy(windowId, energyManagerData);
+				sendPacketToCrafters(packet);
+
+				previousEnergyManagerData = energyManagerData;
+			}
+		}
+	}
+
+	public void onGuiEnergy(int energyStored) {
+		if (tile instanceof IPowerHandler) {
+			EnergyManager energyManager = ((IPowerHandler) tile).getEnergyManager();
+			energyManager.fromGuiInt(energyStored);
+		}
 	}
 }

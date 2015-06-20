@@ -20,16 +20,20 @@ import cpw.mods.fml.client.FMLClientHandler;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 
-public class PacketGuiInteger extends ForestryPacket {
+public class PacketProgressBarUpdate extends ForestryPacket {
 
 	private int windowId, dataId, value;
 
-	public PacketGuiInteger(DataInputStreamForestry data) throws IOException {
+	public static void onPacketData(DataInputStreamForestry data) throws IOException {
+		new PacketProgressBarUpdate(data);
+	}
+
+	public PacketProgressBarUpdate(DataInputStreamForestry data) throws IOException {
 		super(data);
 	}
 
-	public PacketGuiInteger(int windowId, int dataId, int value) {
-		super(PacketId.GUI_INTEGER);
+	public PacketProgressBarUpdate(int windowId, int dataId, int value) {
+		super(PacketId.GUI_PROGRESS_BAR);
 		this.windowId = windowId;
 		this.dataId = dataId;
 		this.value = value;

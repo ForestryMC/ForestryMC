@@ -23,7 +23,6 @@ import forestry.core.gui.slots.SlotCrafter;
 import forestry.core.interfaces.IContainerCrafting;
 import forestry.core.network.PacketGuiSelect;
 import forestry.core.network.PacketId;
-import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
 import forestry.factory.gadgets.TileWorktable;
@@ -72,11 +71,7 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		lastUpdate = tile.getMemory().getLastUpdate();
 
 		PacketWorktableMemoryUpdate packet = new PacketWorktableMemoryUpdate(tile);
-		for (Object crafter : crafters) {
-			if (crafter instanceof EntityPlayer) {
-				Proxies.net.sendToPlayer(packet, (EntityPlayer) crafter);
-			}
-		}
+		sendPacketToCrafters(packet);
 	}
 
 	@Override

@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -23,7 +22,6 @@ import forestry.core.gui.slots.SlotLocked;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.interfaces.IContainerCrafting;
 import forestry.core.network.PacketItemStackDisplay;
-import forestry.core.proxy.Proxies;
 import forestry.factory.gadgets.MachineCarpenter;
 
 public class ContainerCarpenter extends ContainerLiquidTanks<MachineCarpenter> implements IContainerCrafting {
@@ -74,11 +72,7 @@ public class ContainerCarpenter extends ContainerLiquidTanks<MachineCarpenter> i
 			oldCraftPreview = newCraftPreview;
 
 			PacketItemStackDisplay packet = new PacketItemStackDisplay(tile, newCraftPreview);
-			for (Object crafter : crafters) {
-				if (crafter instanceof EntityPlayer) {
-					Proxies.net.sendToPlayer(packet, (EntityPlayer) crafter);
-				}
-			}
+			sendPacketToCrafters(packet);
 		}
 	}
 
