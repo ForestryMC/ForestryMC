@@ -84,6 +84,7 @@ import forestry.storage.proxy.ProxyStorage;
 public class PluginStorage extends ForestryPlugin {
 
 	private static final List<ItemCrated> crates = new ArrayList<ItemCrated>();
+	private static final String CONFIG_CATEGORY = "backpacks";
 
 	@SidedProxy(clientSide = "forestry.storage.proxy.ClientProxyStorage", serverSide = "forestry.storage.proxy.ProxyStorage")
 	public static ProxyStorage proxy;
@@ -145,18 +146,22 @@ public class PluginStorage extends ForestryPlugin {
 
 	@Override
 	public void postInit() {
-		File configFile = new File(Forestry.instance.getConfigFolder(), "backpacks.cfg");
+		final String oldConfig = CONFIG_CATEGORY + ".conf";
+		final String newConfig = CONFIG_CATEGORY + ".cfg";
+
+		File configFile = new File(Forestry.instance.getConfigFolder(), newConfig);
 		if (!configFile.exists()) {
 			setDefaultsForConfig();
 		}
 
-		File oldConfigFile = new File(Forestry.instance.getConfigFolder(), "backpacks.conf");
+		File oldConfigFile = new File(Forestry.instance.getConfigFolder(), oldConfig);
 		if (oldConfigFile.exists()) {
 			loadOldConfig();
 
-			File oldConfigFileRenamed = new File(Forestry.instance.getConfigFolder(), "backpacks.conf.old");
+			final String oldConfigRenamed = CONFIG_CATEGORY + ".conf.old";
+			File oldConfigFileRenamed = new File(Forestry.instance.getConfigFolder(), oldConfigRenamed);
 			if (oldConfigFile.renameTo(oldConfigFileRenamed)) {
-				Proxies.log.info("Migrated backpack settings to the new file 'backpacks.cfg' and renamed 'backpacks.config' to 'backpacks.conf.old'.");
+				Proxies.log.info("Migrated " + CONFIG_CATEGORY + " settings to the new file '" + newConfig + "' and renamed '" + oldConfig + "' to '" + oldConfigRenamed + "'.");
 			}
 		}
 
@@ -207,8 +212,6 @@ public class PluginStorage extends ForestryPlugin {
 	private static void loadOldConfig() {
 
 		final forestry.core.config.Configuration config = new forestry.core.config.Configuration();
-
-		final String CONFIG_CATEGORY = "backpacks";
 
 		forestry.core.config.Property backpackConf = config.get("backpacks.miner.items", CONFIG_CATEGORY, "");
 		backpackConf.comment = "add additional blocks and items for the miner's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";

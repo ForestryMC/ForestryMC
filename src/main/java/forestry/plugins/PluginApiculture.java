@@ -12,8 +12,12 @@ package forestry.plugins;
 
 import com.google.common.collect.ImmutableMap;
 
+import java.io.File;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -32,6 +36,8 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -45,15 +51,19 @@ import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import forestry.Forestry;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IClassification.EnumClassLevel;
+import forestry.api.genetics.IFlower;
+import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
@@ -122,11 +132,9 @@ import forestry.apiculture.worldgen.HiveGenHelper;
 import forestry.apiculture.worldgen.HiveRegistry;
 import forestry.core.GameMode;
 import forestry.core.config.Config;
-import forestry.core.config.Configuration;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
-import forestry.core.config.Property;
 import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
@@ -150,9 +158,9 @@ public class PluginApiculture extends ForestryPlugin {
 	@SidedProxy(clientSide = "forestry.apiculture.proxy.ClientProxyApiculture", serverSide = "forestry.apiculture.proxy.ProxyApiculture")
 	public static ProxyApiculture proxy;
 	private static final String CONFIG_CATEGORY = "apiculture";
-	private Configuration apicultureConfig;
+	public static final String[] EMPTY_STRINGS = new String[0];
 	public static String beekeepingMode = "NORMAL";
-	private static float secondPrincessChance = 0;
+	private static double secondPrincessChance = 0;
 	public static int ticksPerBeeWorkCycle = 550;
 	public static boolean apiarySideSensitive = false;
 	public static boolean fancyRenderedBees = false;
@@ -163,6 +171,9 @@ public class PluginApiculture extends ForestryPlugin {
 	public static MachineDefinition definitionChest;
 	public static MachineDefinition definitionBeehouse;
 	public static MachineDefinition definitionAnalyzer;
+
+	private final Map<String, String[]> defaultAcceptedFlowers = new HashMap<String, String[]>();
+	private final Map<String, String[]> defaultPlantableFlowers = new HashMap<String, String[]>();
 
 	@Override
 	@SuppressWarnings({"unchecked", "rawtypes"})
@@ -261,37 +272,70 @@ public class PluginApiculture extends ForestryPlugin {
 
 	@Override
 	public void doInit() {
-		super.doInit();
+		final String oldConfig = CONFIG_CATEGORY + ".conf";
+		final String newConfig = CONFIG_CATEGORY + ".cfg";
 
-		// Config
-		apicultureConfig = new Configuration();
+		File configFile = new File(Forestry.instance.getConfigFolder(), newConfig);
+		if (!configFile.exists()) {
+			setDefaultsForConfig();
+		}
 
-		Property property = apicultureConfig.get("apiary.sidesensitive", CONFIG_CATEGORY, apiarySideSensitive);
+		File oldConfigFile = new File(Forestry.instance.getConfigFolder(), oldConfig);
+		if (oldConfigFile.exists()) {
+			loadOldConfig();
+
+			final String oldConfigRenamed = CONFIG_CATEGORY + ".conf.old";
+			File oldConfigFileRenamed = new File(Forestry.instance.getConfigFolder(), oldConfigRenamed);
+			if (oldConfigFile.renameTo(oldConfigFileRenamed)) {
+				Proxies.log.info("Migrated " + CONFIG_CATEGORY + " settings to the new file '" + newConfig + "' and renamed '" + oldConfig + "' to '" + oldConfigRenamed + "'.");
+			}
+		}
+
+		Configuration config = new Configuration(configFile);
+
+		Property property = config.get("apiary", "sidesensitive", apiarySideSensitive);
 		property.comment = "set to false if apiaries should output all items regardless of side a pipe is attached to";
-		apiarySideSensitive = Boolean.parseBoolean(property.value);
+		apiarySideSensitive = property.getBoolean();
 
-		property = apicultureConfig.get("render.bees.fancy", CONFIG_CATEGORY, fancyRenderedBees);
+		property = config.get("render.bees", "fancy", fancyRenderedBees);
 		property.comment = "set to true to enable a fancy butterfly-like renderer for bees. (experimental!)";
-		fancyRenderedBees = Boolean.parseBoolean(property.value);
+		fancyRenderedBees = property.getBoolean();
 
-		property = apicultureConfig.get("beekeeping.mode", CONFIG_CATEGORY, "NORMAL");
-		property.comment = "change beekeeping modes here. possible values EASY, NORMAL, HARD, HARDCORE, INSANE. mods may add additional modes.";
-		beekeepingMode = property.value.trim();
+		List<IBeekeepingMode> beekeepingModes = BeeManager.beeRoot.getBeekeepingModes();
+		String[] validBeekeepingModeNames = new String[beekeepingModes.size()];
+		for (int i = 0; i < beekeepingModes.size(); i++) {
+			validBeekeepingModeNames[i] = beekeepingModes.get(i).getName();
+		}
+		property = config.get("beekeeping", "mode", "NORMAL", "Change the beekeeping mode. Accepted values are EASY, NORMAL, HARD, HARDCORE, and INSANE.", validBeekeepingModeNames);
+		beekeepingMode = property.getString();
 		Proxies.log.finer("Beekeeping mode read from config: " + beekeepingMode);
 
-		Property secondPrincess = apicultureConfig.get("beekeeping.secondprincess", CONFIG_CATEGORY, secondPrincessChance);
-		secondPrincess.comment = "percent chance of second princess drop, for limited/skyblock maps. Acceptable values up to 2 decimals.";
-		secondPrincessChance = Float.parseFloat(secondPrincess.value);
+		property = config.get("beekeeping", "secondPrincess", secondPrincessChance, "percent chance of a second princess drop, for limited/skyblock maps.", 0.0, 100.0);
+		secondPrincessChance = property.getDouble();
 
-		property = apicultureConfig.get("beekeeping.flowers.custom", CONFIG_CATEGORY, "");
-		property.comment = "add additional flower blocks for apiaries here in the format modid:name or modid:name:meta. separate blocks using ';'. wildcard for metadata: '*'. will be treated like vanilla flowers. not recommended for flowers implemented as tile entities.";
-		parseAdditionalFlowers(property.value, FlowerManager.plainFlowers);
+		for (String flowerType : FlowerManager.flowerRegistry.getFlowerTypes()) {
+			String[] defaultAccepted = defaultAcceptedFlowers.get(flowerType);
+			if (defaultAccepted == null) {
+				defaultAccepted = EMPTY_STRINGS;
+			}
+			property = config.get("beekeeping.flowers." + flowerType, "accepted", defaultAccepted);
+			property.comment = "Accepted flowers allow bees to work. Format is 'modid:name:meta', one per line. The format for wildcard  metadata is 'modid:name'.";
+			parseAcceptedFlowers(property, flowerType);
 
-		property = apicultureConfig.get("species.blacklist", CONFIG_CATEGORY, "");
-		property.comment = "add species to blacklist identified by their uid and seperated with ';'.";
-		parseBeeBlacklist(property.value);
+			String[] defaultPlantable = defaultPlantableFlowers.get(flowerType);
+			if (defaultPlantable == null) {
+				defaultPlantable = EMPTY_STRINGS;
+			}
+			property = config.get("beekeeping.flowers." + flowerType, "plantable", defaultPlantable);
+			property.comment = "Plantable flowers are placed by bees. All plantable flowers are automatically accepted flowers. Format is 'weight:modid:name:meta', one per line. 'weight' is between 0.0 and 1.0. The format for wildcard  metadata is 'weight:modid:name'.";
+			parsePlantableFlowers(property, flowerType);
+		}
 
-		apicultureConfig.save();
+		property = config.get("species.blacklist", CONFIG_CATEGORY, EMPTY_STRINGS);
+		property.comment = "add species to blacklist identified by their uid, one per line.";
+		parseBeeBlacklist(property.getStringList());
+
+		config.save();
 
 		// Genetics
 		createAlleles();
@@ -342,6 +386,98 @@ public class PluginApiculture extends ForestryPlugin {
 	public void postInit() {
 		super.postInit();
 		registerDungeonLoot();
+	}
+
+	private void setDefaultsForConfig() {
+		
+		IFlowerRegistry flowerRegistry = FlowerManager.flowerRegistry;
+
+		// Register acceptable plants
+		flowerRegistry.registerAcceptableFlower(Blocks.dragon_egg, FlowerManager.FlowerTypeEnd);
+		flowerRegistry.registerAcceptableFlower(Blocks.vine, FlowerManager.FlowerTypeJungle);
+		flowerRegistry.registerAcceptableFlower(Blocks.tallgrass, FlowerManager.FlowerTypeJungle);
+		flowerRegistry.registerAcceptableFlower(Blocks.wheat, FlowerManager.FlowerTypeWheat);
+		flowerRegistry.registerAcceptableFlower(Blocks.pumpkin_stem, FlowerManager.FlowerTypeGourd);
+		flowerRegistry.registerAcceptableFlower(Blocks.melon_stem, FlowerManager.FlowerTypeGourd);
+		flowerRegistry.registerAcceptableFlower(Blocks.nether_wart, FlowerManager.FlowerTypeNether);
+		
+		flowerRegistry.registerAcceptableFlower(Blocks.double_plant, 0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		flowerRegistry.registerAcceptableFlower(Blocks.double_plant, 1, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		flowerRegistry.registerAcceptableFlower(Blocks.double_plant, 4, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		flowerRegistry.registerAcceptableFlower(Blocks.double_plant, 5, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		
+		// Register plantable plants
+		for (int meta = 0; meta <= 8; meta++) {
+			flowerRegistry.registerPlantableFlower(Blocks.red_flower, meta, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		}
+
+		flowerRegistry.registerPlantableFlower(Blocks.yellow_flower, 0, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+		flowerRegistry.registerPlantableFlower(Blocks.brown_mushroom, 0, 1.0, FlowerManager.FlowerTypeMushrooms);
+		flowerRegistry.registerPlantableFlower(Blocks.red_mushroom, 0, 1.0, FlowerManager.FlowerTypeMushrooms);
+		flowerRegistry.registerPlantableFlower(Blocks.cactus, 0, 1.0, FlowerManager.FlowerTypeCacti);
+
+		DecimalFormat weightDecimalFormat = new DecimalFormat("#.000");
+
+		for (String flowerType : FlowerManager.flowerRegistry.getFlowerTypes()) {
+			List<IFlower> flowers = FlowerManager.flowerRegistry.getAcceptableFlowers(flowerType);
+			List<String> acceptedFlowerNames = new ArrayList<String>();
+			List<String> plantableFlowerNames = new ArrayList<String>();
+			if (flowers != null) {
+				for (IFlower flower : flowers) {
+					String name = flower.getBlock().delegate.name();
+					int meta = flower.getMeta();
+					if (flower.getMeta() != OreDictionary.WILDCARD_VALUE) {
+						name = name + ':' + meta;
+					}
+
+					if (flower.isPlantable()) {
+						double weight = flower.getWeight();
+						String weightString = weightDecimalFormat.format(weight);
+						plantableFlowerNames.add(weightString + ':' + name);
+					} else {
+						acceptedFlowerNames.add(name);
+					}
+				}
+			}
+
+			String[] acceptedFlowerNamesArray = acceptedFlowerNames.toArray(new String[acceptedFlowerNames.size()]);
+			defaultAcceptedFlowers.put(flowerType, acceptedFlowerNamesArray);
+
+			String[] plantableFlowerNamesArray = plantableFlowerNames.toArray(new String[plantableFlowerNames.size()]);
+			defaultPlantableFlowers.put(flowerType, plantableFlowerNamesArray);
+		}
+	}
+
+	private void loadOldConfig() {
+		// Config
+		forestry.core.config.Configuration apicultureConfig = new forestry.core.config.Configuration();
+
+		forestry.core.config.Property property = apicultureConfig.get("apiary.sidesensitive", CONFIG_CATEGORY, apiarySideSensitive);
+		property.comment = "set to false if apiaries should output all items regardless of side a pipe is attached to";
+		apiarySideSensitive = Boolean.parseBoolean(property.value);
+
+		property = apicultureConfig.get("render.bees.fancy", CONFIG_CATEGORY, fancyRenderedBees);
+		property.comment = "set to true to enable a fancy butterfly-like renderer for bees. (experimental!)";
+		fancyRenderedBees = Boolean.parseBoolean(property.value);
+
+		property = apicultureConfig.get("beekeeping.mode", CONFIG_CATEGORY, "NORMAL");
+		property.comment = "change beekeeping modes here. possible values EASY, NORMAL, HARD, HARDCORE, INSANE. mods may add additional modes.";
+		beekeepingMode = property.value.trim();
+		Proxies.log.finer("Beekeeping mode read from config: " + beekeepingMode);
+
+		property = apicultureConfig.get("beekeeping.secondprincess", CONFIG_CATEGORY, (float) secondPrincessChance);
+		property.comment = "percent chance of second princess drop, for limited/skyblock maps. Acceptable values up to 2 decimals.";
+		secondPrincessChance = Float.parseFloat(property.value);
+
+		property = apicultureConfig.get("beekeeping.flowers.custom", CONFIG_CATEGORY, "");
+		property.comment = "add additional flower blocks for apiaries here in the format modid:name or modid:name:meta. separate blocks using ';'. wildcard for metadata: '*'. will be treated like vanilla flowers. not recommended for flowers implemented as tile entities.";
+		parseAdditionalFlowers(property.value, FlowerManager.plainFlowers);
+
+		property = apicultureConfig.get("species.blacklist", CONFIG_CATEGORY, "");
+		property.comment = "add species to blacklist identified by their uid and seperated with ';'.";
+		parseBeeBlacklist(property.value);
+
+		apicultureConfig.save();
 	}
 
 	@Override
@@ -854,7 +990,7 @@ public class PluginApiculture extends ForestryPlugin {
 		Allele.effectMycophilic = new AlleleEffectFungification();
 	}
 
-	public static float getSecondPrincessChance() {
+	public static double getSecondPrincessChance() {
 		return secondPrincessChance;
 	}
 
@@ -865,7 +1001,10 @@ public class PluginApiculture extends ForestryPlugin {
 
 	private static void parseBeeBlacklist(String list) {
 		String[] items = list.split("[;]+");
+		parseBeeBlacklist(items);
+	}
 
+	private static void parseBeeBlacklist(String[] items) {
 		for (String item : items) {
 			if (item.isEmpty()) {
 				continue;
@@ -873,6 +1012,50 @@ public class PluginApiculture extends ForestryPlugin {
 
 			FMLCommonHandler.instance().getFMLLogger().debug("Blacklisting bee species identified by " + item);
 			AlleleManager.alleleRegistry.blacklistAllele(item);
+		}
+	}
+
+	private static void parseAcceptedFlowers(Property property, String flowerType) {
+		List<ItemStack> acceptedFlowerItemStacks = StackUtils.parseItemStackStrings(property.getStringList(), OreDictionary.WILDCARD_VALUE);
+		for (ItemStack acceptedFlower : acceptedFlowerItemStacks) {
+			Block acceptedFlowerBlock = Block.getBlockFromItem(acceptedFlower.getItem());
+			int meta = acceptedFlower.getItemDamage();
+			if (acceptedFlowerBlock != null) {
+				FlowerManager.flowerRegistry.registerAcceptableFlower(acceptedFlowerBlock, meta, flowerType);
+			} else {
+				Proxies.log.warning("No block found for '" + acceptedFlower + "' in config '" + property.getName() + "'.");
+			}
+		}
+	}
+
+	private static void parsePlantableFlowers(Property property, String flowerType) {
+		for (String string : property.getStringList()) {
+			int idx = string.indexOf(':');
+
+			String weightString = string.substring(0, idx);
+			double weight;
+			try {
+				weight = Double.parseDouble(weightString);
+			} catch (NumberFormatException e) {
+				Proxies.log.warning("Invalid weight for plantable flower in config. (" + property.getName() + ')');
+				continue;
+			}
+
+			String itemStackString = string.substring(idx + 1);
+			ItemStack plantableFlower = StackUtils.parseItemStackString(itemStackString, OreDictionary.WILDCARD_VALUE);
+
+			if (plantableFlower == null) {
+				Proxies.log.warning("No block found for '" + string + "' in config '" + property.getName() + "'.");
+				continue;
+			}
+
+			Block plantableFlowerBlock = Block.getBlockFromItem(plantableFlower.getItem());
+			int meta = plantableFlower.getItemDamage();
+			if (plantableFlowerBlock != null) {
+				FlowerManager.flowerRegistry.registerPlantableFlower(plantableFlowerBlock, meta, weight, flowerType);
+			} else {
+				Proxies.log.warning("No block found for '" + plantableFlower + "' in config '" + property.getName() + "'.");
+			}
 		}
 	}
 

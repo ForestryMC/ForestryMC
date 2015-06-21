@@ -11,12 +11,16 @@
 package forestry.apiculture.flowers;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.TreeMap;
 
 import net.minecraft.block.Block;
@@ -37,6 +41,17 @@ import forestry.api.genetics.IIndividual;
 
 public final class FlowerRegistry implements IFlowerRegistry {
 
+	private final Set<String> defaultFlowerTypes = ImmutableSet.of(
+			FlowerManager.FlowerTypeVanilla,
+			FlowerManager.FlowerTypeNether,
+			FlowerManager.FlowerTypeCacti,
+			FlowerManager.FlowerTypeMushrooms,
+			FlowerManager.FlowerTypeEnd,
+			FlowerManager.FlowerTypeJungle,
+			FlowerManager.FlowerTypeSnow,
+			FlowerManager.FlowerTypeWheat,
+			FlowerManager.FlowerTypeGourd
+	);
 	private final ArrayListMultimap<String, IFlower> registeredFlowers;
 	private final ArrayListMultimap<String, IFlowerGrowthRule> growthRules;
 	private final Map<String, TreeMap<Double, IFlower>> chances;
@@ -50,7 +65,6 @@ public final class FlowerRegistry implements IFlowerRegistry {
 
 		this.hasDeprecatedFlowersImported = false;
 
-		registerVanillaFlowers();
 		registerVanillaGrowthRules();
 	}
 
@@ -82,7 +96,7 @@ public final class FlowerRegistry implements IFlowerRegistry {
 
 		Flower newFlower = new Flower(block, meta, weight);
 		Integer index;
-		
+
 		for (String flowerType : flowerTypes) {
 			List<IFlower> flowers = this.registeredFlowers.get(flowerType);
 
@@ -174,6 +188,11 @@ public final class FlowerRegistry implements IFlowerRegistry {
 		return chancesMap.get(chancesMap.lowerKey(rand.nextDouble() * maxKey));
 	}
 
+	@Override
+	public Collection<String> getFlowerTypes() {
+		return Sets.union(defaultFlowerTypes, registeredFlowers.keySet());
+	}
+
 	private TreeMap<Double, IFlower> getChancesMap(String flowerType) {
 		if (!this.chances.containsKey(flowerType)) {
 			TreeMap<Double, IFlower> flowerChances = new TreeMap<Double, IFlower>();
@@ -203,39 +222,6 @@ public final class FlowerRegistry implements IFlowerRegistry {
 
 			hasDeprecatedFlowersImported = true;
 		}
-	}
-
-	private void registerVanillaFlowers() {
-		// Register acceptable plants
-		registerAcceptableFlower(Blocks.red_flower, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerAcceptableFlower(Blocks.yellow_flower, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerAcceptableFlower(Blocks.brown_mushroom, FlowerManager.FlowerTypeMushrooms);
-		registerAcceptableFlower(Blocks.red_mushroom, FlowerManager.FlowerTypeMushrooms);
-		registerAcceptableFlower(Blocks.cactus, FlowerManager.FlowerTypeCacti);
-
-		registerAcceptableFlower(Blocks.dragon_egg, FlowerManager.FlowerTypeEnd);
-		registerAcceptableFlower(Blocks.vine, FlowerManager.FlowerTypeJungle);
-		registerAcceptableFlower(Blocks.tallgrass, FlowerManager.FlowerTypeJungle);
-		registerAcceptableFlower(Blocks.wheat, FlowerManager.FlowerTypeWheat);
-		registerAcceptableFlower(Blocks.pumpkin_stem, FlowerManager.FlowerTypeGourd);
-		registerAcceptableFlower(Blocks.melon_stem, FlowerManager.FlowerTypeGourd);
-		registerAcceptableFlower(Blocks.nether_wart, FlowerManager.FlowerTypeNether);
-
-		registerAcceptableFlower(Blocks.double_plant, 0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerAcceptableFlower(Blocks.double_plant, 1, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerAcceptableFlower(Blocks.double_plant, 4, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerAcceptableFlower(Blocks.double_plant, 5, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-
-		// Register plantable plants
-		for (int meta = 0; meta <= 8; meta++) {
-			registerPlantableFlower(Blocks.red_flower, meta, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		}
-
-		registerPlantableFlower(Blocks.yellow_flower, 0, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
-		registerPlantableFlower(Blocks.brown_mushroom, 0, 1.0, FlowerManager.FlowerTypeMushrooms);
-		registerPlantableFlower(Blocks.red_mushroom, 0, 1.0, FlowerManager.FlowerTypeMushrooms);
-		registerPlantableFlower(Blocks.cactus, 0, 1.0, FlowerManager.FlowerTypeCacti);
-
 	}
 
 	private void registerVanillaGrowthRules() {
