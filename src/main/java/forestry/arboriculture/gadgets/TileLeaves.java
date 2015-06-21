@@ -328,7 +328,11 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	public String getUnlocalizedName() {
-		return getTree().getGenome().getPrimary().getUnlocalizedName();
+		ITree tree = getTree();
+		if (tree == null) {
+			return "for.leaves.corrupted";
+		}
+		return tree.getGenome().getPrimary().getUnlocalizedName();
 	}
 
 	/* NETWORK */
