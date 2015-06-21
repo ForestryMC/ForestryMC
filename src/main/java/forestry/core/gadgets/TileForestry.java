@@ -350,7 +350,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IR
 
 	@Override
 	public final boolean allowsRemoval(EntityPlayer player) {
-		return Config.disablePermissions || getAccess() == EnumAccess.SHARED || !isOwned() || isOwner(player) || Proxies.common.isOp(player);
+		return !Config.enablePermissions || getAccess() == EnumAccess.SHARED || !isOwned() || isOwner(player) || Proxies.common.isOp(player);
 	}
 
 	@Override

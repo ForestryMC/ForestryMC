@@ -211,9 +211,9 @@ public class PluginStorage extends ForestryPlugin {
 
 	private static void loadOldConfig() {
 
-		final forestry.core.config.Configuration config = new forestry.core.config.Configuration();
+		final forestry.core.config.deprecated.Configuration config = new forestry.core.config.deprecated.Configuration();
 
-		forestry.core.config.Property backpackConf = config.get("backpacks.miner.items", CONFIG_CATEGORY, "");
+		forestry.core.config.deprecated.Property backpackConf = config.get("backpacks.miner.items", CONFIG_CATEGORY, "");
 		backpackConf.comment = "add additional blocks and items for the miner's backpack here in the format modid:name:meta. separate blocks and items using ';'. wildcard for metadata: '*'";
 		old_parseBackpackItems(backpackConf.value, BackpackManager.definitions.get("miner"));
 		backpackConf = config.get("backpacks.digger.items", CONFIG_CATEGORY, "");

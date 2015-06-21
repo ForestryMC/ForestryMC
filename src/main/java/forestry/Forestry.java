@@ -63,7 +63,6 @@ import forestry.core.utils.StringUtil;
 				+ "after:IC2@[2.0.140,);"
 				+ "after:Natura@[2.2.0,);"
 				+ "after:HardcoreEnderExpansion;")
-//, certificateFingerprint = Version.FINGERPRINT)
 public class Forestry {
 
 	@Mod.Instance(Defaults.MOD)

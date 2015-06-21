@@ -144,6 +144,9 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 
 		@Override
 		public void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint) {
+			if (resource == null || molten == null) {
+				return;
+			}
 			smeltings.add(new Smelting(resource, molten, meltingPoint));
 		}
 

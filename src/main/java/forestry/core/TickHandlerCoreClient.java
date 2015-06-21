@@ -14,22 +14,18 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
-import forestry.core.config.Config;
-import forestry.core.config.Version;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.GeneticsUtil;
 
 public class TickHandlerCoreClient {
 
 	private static final ConcurrentLinkedQueue<String> messages = new ConcurrentLinkedQueue<String>();
-	private boolean naggedVersion, naggedVerify;
 	private boolean hasNaturalistView;
 
 	public TickHandlerCoreClient() {
@@ -60,18 +56,6 @@ public class TickHandlerCoreClient {
 			while ((message = messages.poll()) != null) {
 				player.addChatMessage(new ChatComponentText(message));
 			}
-		}
-
-		if (!naggedVersion && !Config.disableVersionCheck && Version.needsUpdateNoticeAndMarkAsSeen()) {
-			queueChatMessage(EnumChatFormatting.RED + String.format("New version of Forestry available: %s for Minecraft %s", Version.getRecommendedVersion(),
-					Proxies.common.getMinecraftVersion()));
-			queueChatMessage(EnumChatFormatting.RED + "This message only displays once. Type '/forestry version' to see the changelog.");
-			naggedVersion = true;
-		}
-
-		if (!naggedVerify && Config.invalidFingerprint) {
-			queueChatMessage(EnumChatFormatting.GOLD + "Forestry's jar file was tampered with. Some machines have shut down and beekeeping has grown dangerous. Get a new jar from the official download page to fix that!");
-			naggedVerify = true;
 		}
 	}
 }

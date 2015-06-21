@@ -526,7 +526,7 @@ public class StackUtils {
 				item = Item.getItemFromBlock(block);
 			}
 			if (item == null) {
-				Proxies.log.warning("Failed to find (" + itemStackString + ") in the Forge item and block registries.");
+				Proxies.log.warning("Failed to find item for (" + itemStackString + ") in the Forge registry.");
 				return null;
 			}
 		}

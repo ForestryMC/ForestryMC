@@ -8,37 +8,25 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.config;
+package forestry.core.config.deprecated;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Map;
 import java.util.TreeMap;
 
 import net.minecraftforge.common.config.Configuration.UnicodeInputStreamReader;
 
+import forestry.core.config.Defaults;
 import forestry.core.proxy.Proxies;
 
+@Deprecated
 public class Configuration {
 
-	private final String newLine;
-	private final ArrayList<String> purge = new ArrayList<String>();
 	private final TreeMap<String, ArrayList<Property>> categorized = new TreeMap<String, ArrayList<Property>>();
 
-	public Configuration() {
-		newLine = System.getProperty("line.separator");
-	}
-
-	public void addPurge(String key) {
-		purge.add(key);
-	}
-	
 	public Property get(String key, String category, boolean defaultVal) {
 
 		Property existing = getExisting(key, category);
@@ -227,78 +215,4 @@ public class Configuration {
 			ex.printStackTrace();
 		}
 	}
-
-	public void save() {
-		for (Map.Entry<String, ArrayList<Property>> entry : categorized.entrySet()) {
-			saveFile(getCategoryFile(entry.getKey()), entry.getValue());
-		}
-	}
-
-	private void saveFile(File file, ArrayList<Property> properties) {
-
-		try {
-
-			if (file.getParentFile() != null) {
-				file.getParentFile().mkdirs();
-			}
-
-			if (!file.exists() && !file.createNewFile()) {
-				return;
-			}
-
-			if (!file.canWrite()) {
-				return;
-			}
-
-			FileOutputStream fileout = new FileOutputStream(file);
-			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fileout, "UTF-8"));
-
-			writer.write("# " + Defaults.MOD + newLine + "# " + Version.getVersion() + newLine);
-
-			writer.write("#" + newLine + "# Config files:" + newLine);
-			writer.write("# common.conf\t\t-\t Contains all options common to Forestry" + newLine);
-			writer.write("# fluids.conf\t\t-\t Contains all options for fluids" + newLine);
-			writer.write("# apiculture.conf\t-\t Contains all options for bee breeding" + newLine);
-			writer.write("# backpacks.conf\t-\t Contains custom configurations for backpacks" + newLine);
-			writer.write("# pipes.conf\t\t-\t Configures item id for the apiarist's pipe" + newLine);
-			writer.write("# gamemodes/\t\t-\t Configures available gamemodes");
-			TreeMap<String, ArrayList<Property>> subsectioned = getSubsectioned(properties);
-
-			for (Map.Entry<String, ArrayList<Property>> entry : subsectioned.entrySet()) {
-				writer.write(newLine + newLine + "#####################" + newLine + "# " + entry.getKey().toUpperCase() + newLine + "#####################"
-						+ newLine);
-
-				for (Property property : entry.getValue()) {
-					if (purge.contains(property.key)) {
-						continue;
-					}
-					if (property.comment != null) {
-						writer.write("# " + property.comment + newLine);
-					}
-					writer.write(property.key + "=" + property.value + newLine);
-				}
-			}
-
-			writer.close();
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-	}
-
-	private TreeMap<String, ArrayList<Property>> getSubsectioned(ArrayList<Property> properties) {
-		TreeMap<String, ArrayList<Property>> subsectioned = new TreeMap<String, ArrayList<Property>>();
-
-		for (Property property : properties) {
-			String subsection = property.key.split("\\.")[0];
-			if (!subsectioned.containsKey(subsection)) {
-				subsectioned.put(subsection, new ArrayList<Property>());
-			}
-			subsectioned.get(subsection).add(property);
-		}
-
-		return subsectioned;
-	}
-
 }

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import java.io.File;
 import java.util.EnumSet;
 import java.util.Locale;
 
@@ -18,11 +19,14 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.crafting.CraftingManager;
 
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 import net.minecraftforge.oredict.RecipeSorter;
 
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.network.IGuiHandler;
 
+import forestry.Forestry;
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -33,17 +37,16 @@ import forestry.api.genetics.IClassification.EnumClassLevel;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.config.Configuration;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
-import forestry.core.config.Property;
 import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.genetics.Branch;
 import forestry.core.genetics.alleles.Allele;
 import forestry.core.items.ItemForestryBlock;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.core.utils.Utils;
 import forestry.lepidopterology.ButterflySpawner;
@@ -66,7 +69,6 @@ public class PluginLepidopterology extends ForestryPlugin {
 	@SidedProxy(clientSide = "forestry.lepidopterology.proxy.ClientProxyLepidopterology", serverSide = "forestry.lepidopterology.proxy.ProxyLepidopterology")
 	public static ProxyLepidopterology proxy;
 	private static final String CONFIG_CATEGORY = "lepidopterology";
-	private Configuration config;
 	public static int spawnConstraint = 100;
 	public static int entityConstraint = 1000;
 	private static boolean allowPollination = true;
@@ -107,19 +109,34 @@ public class PluginLepidopterology extends ForestryPlugin {
 
 	@Override
 	public void doInit() {
-		config = new Configuration();
+		final String oldConfig = CONFIG_CATEGORY + ".conf";
+		final String newConfig = CONFIG_CATEGORY + ".cfg";
 
-		Property property = config.get("entities.spawn.limit", CONFIG_CATEGORY, spawnConstraint);
-		property.comment = "determines the global butterfly entity count above which natural spawning of butterflies ceases.";
-		spawnConstraint = Integer.parseInt(property.value);
+		File configFile = new File(Forestry.instance.getConfigFolder(), newConfig);
+		File oldConfigFile = new File(Forestry.instance.getConfigFolder(), oldConfig);
+		if (oldConfigFile.exists()) {
+			loadOldConfig();
 
-		property = config.get("entities.maximum.allowed", CONFIG_CATEGORY, entityConstraint);
-		property.comment = "determines the global butterfly entity count above which butterflies will stay in item form and will not take flight anymore.";
-		entityConstraint = Integer.parseInt(property.value);
+			final String oldConfigRenamed = CONFIG_CATEGORY + ".conf.old";
+			File oldConfigFileRenamed = new File(Forestry.instance.getConfigFolder(), oldConfigRenamed);
+			if (oldConfigFile.renameTo(oldConfigFileRenamed)) {
+				Proxies.log.info("Migrated " + CONFIG_CATEGORY + " settings to the new file '" + newConfig + "' and renamed '" + oldConfig + "' to '" + oldConfigRenamed + "'.");
+			}
+		}
 
-		property = config.get("entities.pollination.allowed", CONFIG_CATEGORY, allowPollination);
-		property.comment = "determines whether butterflies can pollinate leaves.";
-		allowPollination = Boolean.parseBoolean(property.value);
+		Configuration config = new Configuration(configFile);
+
+		Property property = config.get("entities", "spawn.limit", spawnConstraint);
+		property.comment = "Butterflies will stop natural spawning once this limit is reached.";
+		spawnConstraint = property.getInt();
+
+		property = config.get("entities", "maximum", entityConstraint);
+		property.comment = "New butterflies will stay in item form and will not take flight once this limit is reached.";
+		entityConstraint = property.getInt();
+
+		property = config.get("entities", "pollination", allowPollination);
+		property.comment = "Allow butterflies to pollinate leaves.";
+		allowPollination = property.getBoolean();
 
 		config.save();
 
@@ -146,6 +163,22 @@ public class PluginLepidopterology extends ForestryPlugin {
 		((ITreeRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees")).registerLeafTickHandler(new ButterflySpawner());
 
 		RecipeSorter.register("forestry:lepidopterologymating", MatingRecipe.class, RecipeSorter.Category.SHAPELESS, "before:minecraft:shapeless");
+	}
+
+	private void loadOldConfig() {
+		forestry.core.config.deprecated.Configuration config = new forestry.core.config.deprecated.Configuration();
+
+		forestry.core.config.deprecated.Property property = config.get("entities.spawn.limit", CONFIG_CATEGORY, spawnConstraint);
+		property.comment = "determines the global butterfly entity count above which natural spawning of butterflies ceases.";
+		spawnConstraint = Integer.parseInt(property.value);
+
+		property = config.get("entities.maximum.allowed", CONFIG_CATEGORY, entityConstraint);
+		property.comment = "determines the global butterfly entity count above which butterflies will stay in item form and will not take flight anymore.";
+		entityConstraint = Integer.parseInt(property.value);
+
+		property = config.get("entities.pollination.allowed", CONFIG_CATEGORY, allowPollination);
+		property.comment = "determines whether butterflies can pollinate leaves.";
+		allowPollination = Boolean.parseBoolean(property.value);
 	}
 
 	@Override

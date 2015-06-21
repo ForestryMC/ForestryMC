@@ -50,9 +50,6 @@ public class ForestryCore {
 		MinecraftForge.EVENT_BUS.register(new EventHandlerCore());
 
 		Config.load();
-		if (!Config.disableVersionCheck) {
-			Version.versionCheck();
-		}
 		
 		EnumErrorCode.init();
 

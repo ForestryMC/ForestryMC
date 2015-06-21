@@ -450,9 +450,9 @@ public class PluginApiculture extends ForestryPlugin {
 
 	private void loadOldConfig() {
 		// Config
-		forestry.core.config.Configuration apicultureConfig = new forestry.core.config.Configuration();
+		forestry.core.config.deprecated.Configuration apicultureConfig = new forestry.core.config.deprecated.Configuration();
 
-		forestry.core.config.Property property = apicultureConfig.get("apiary.sidesensitive", CONFIG_CATEGORY, apiarySideSensitive);
+		forestry.core.config.deprecated.Property property = apicultureConfig.get("apiary.sidesensitive", CONFIG_CATEGORY, apiarySideSensitive);
 		property.comment = "set to false if apiaries should output all items regardless of side a pipe is attached to";
 		apiarySideSensitive = Boolean.parseBoolean(property.value);
 
@@ -476,8 +476,6 @@ public class PluginApiculture extends ForestryPlugin {
 		property = apicultureConfig.get("species.blacklist", CONFIG_CATEGORY, "");
 		property.comment = "add species to blacklist identified by their uid and seperated with ';'.";
 		parseBeeBlacklist(property.value);
-
-		apicultureConfig.save();
 	}
 
 	@Override
@@ -1066,14 +1064,14 @@ public class PluginApiculture extends ForestryPlugin {
 
 	@Override
 	public void populateChunk(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
-		if (Config.generateBeehives) {
+		if (Config.getBeehivesAmount() > 0.0) {
 			HiveDecorator.instance().decorateHives(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
 		}
 	}
 
 	@Override
 	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
-		if (Config.generateBeehives) {
+		if (Config.getBeehivesAmount() > 0.0) {
 			HiveDecorator.instance().decorateHives(world, rand, chunkX, chunkZ);
 		}
 	}

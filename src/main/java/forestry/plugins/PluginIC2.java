@@ -36,8 +36,6 @@ import forestry.api.storage.StorageManager;
 import forestry.core.GameMode;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
-import forestry.core.config.Config;
-import forestry.core.config.Configuration;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
@@ -67,10 +65,6 @@ import ic2.api.recipe.Recipes;
 public class PluginIC2 extends ForestryPlugin {
 
 	public static PluginIC2 instance;
-	public static Configuration config;
-
-	// Ignore IC2?
-	public static boolean ignore;
 
 	// Forestry stuff
 	public static MachineDefinition definitionGenerator;
@@ -182,8 +176,6 @@ public class PluginIC2 extends ForestryPlugin {
 	@Optional.Method(modid = "IC2")
 	public void doInit() {
 		super.doInit();
-
-		config = Config.config;
 
 		// Remove some items from the recycler
 		if (Recipes.recyclerBlacklist != null) {

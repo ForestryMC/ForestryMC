@@ -93,7 +93,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 			ledgerManager.add(new PowerLedger(ledgerManager, (IPowerHandler) inventory));
 		}
 
-		if (!Config.disableHints && inventory instanceof IHintSource && ((IHintSource) inventory).hasHints()) {
+		if (Config.enableHints && inventory instanceof IHintSource && ((IHintSource) inventory).hasHints()) {
 			ledgerManager.add(new HintLedger(ledgerManager, (IHintSource) inventory));
 		}
 

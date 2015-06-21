@@ -149,7 +149,7 @@ public class PluginFluids extends ForestryPlugin {
 	@Override
 	public void postInit() {
 		for (Fluids fluidType : Fluids.forestryFluids) {
-			if (fluidType.getFluid() == null) {
+			if (fluidType.getFluid() == null && Config.isFluidEnabled(fluidType)) {
 				throw new MissingFluidException(fluidType.getTag());
 			}
 		}

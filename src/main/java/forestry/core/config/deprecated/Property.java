@@ -8,8 +8,9 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.config;
+package forestry.core.config.deprecated;
 
+@Deprecated
 public class Property {
 	public final String key;
 	public String value;
