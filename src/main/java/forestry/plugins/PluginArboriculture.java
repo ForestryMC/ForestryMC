@@ -340,7 +340,7 @@ public class PluginArboriculture extends ForestryPlugin {
 
 		MinecraftForge.EVENT_BUS.register(new EventHandlerArboriculture());
 
-		if (Config.enableVillager) {
+		if (Config.enableVillagers) {
 			VillagerRegistry.instance().registerVillagerId(Defaults.ID_VILLAGER_LUMBERJACK);
 			Proxies.render.registerVillagerSkin(Defaults.ID_VILLAGER_LUMBERJACK, Defaults.TEXTURE_SKIN_LUMBERJACK);
 			VillagerRegistry.instance().registerVillageTradeHandler(Defaults.ID_VILLAGER_LUMBERJACK, new VillageHandlerArboriculture());

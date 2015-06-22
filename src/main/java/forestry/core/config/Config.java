@@ -22,12 +22,14 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import net.minecraftforge.common.config.Configuration;
+import net.minecraft.util.StatCollector;
+
 import net.minecraftforge.common.config.Property;
 
 import forestry.Forestry;
 import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.StringUtil;
 
 public class Config {
 
@@ -60,9 +62,9 @@ public class Config {
 	public static boolean generateApatiteOre = true;
 	public static boolean generateCopperOre = true;
 	public static boolean generateTinOre = true;
-	private static double generateBeehivesAmount = 1.0;
+	private static float generateBeehivesAmount = 1.0f;
 	public static boolean generateBeehivesDebug = false;
-	public static boolean enableVillager = true;
+	public static boolean enableVillagers = true;
 
 	// Retrogen
 	public static boolean doRetrogen = false;
@@ -171,170 +173,102 @@ public class Config {
 
 	private static void loadNewConfigCommon(File configFileCommon) {
 
-		Configuration config = new Configuration(configFileCommon);
+		LocalizedConfiguration config = new LocalizedConfiguration(configFileCommon, "1.0.0");
 
-		Property property;
+		gameMode = config.getStringLocalized("difficulty", "game.mode", "EASY", new String[]{"OP, EASY, NORMAL, HARD"});
 
-		property = config.get("difficulty", "gamemode", "EASY");
-		property.comment = "set to your preferred game mode. available modes are OP, EASY, NORMAL, HARD. mismatch with the server may cause visual glitches with recipes. setting an unavailable mode will create a new mode definition file.";
-		gameMode = property.getString();
-
-		property = config.get("difficulty", "recreate.definitions", true);
-		property.comment = "set to true to force recreation of the game mode definitions in config/forestry/gamemodes";
-		boolean recreate = property.getBoolean();
-		property.set(false);
-
+		boolean recreate = config.getBooleanLocalized("difficulty", "recreate.definitions", true);
 		if (recreate) {
 			Proxies.log.info("Recreating all gamemode definitions from the defaults. This may be caused by an upgrade");
-		}
 
-		// Make sure the default mode files are there.
-		File easyMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/EASY.cfg");
-		if (recreate) {
+			String recreateDefinitionsComment = StringUtil.localize("config.difficulty.recreate.definitions.comment");
+			Property property = config.get("difficulty", "recreate.definitions", true, recreateDefinitionsComment);
+			property.set(false);
+
+			// Make sure the default mode files are there.
+			File easyMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/EASY.cfg");
 			CopyFileToFS(easyMode, "/config/forestry/gamemodes/EASY.cfg");
-		}
 
-		File opMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/OP.cfg");
-		if (!opMode.exists() || recreate) {
+			File opMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/OP.cfg");
 			CopyFileToFS(opMode, "/config/forestry/gamemodes/OP.cfg");
-		}
 
-		File normalMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/NORMAL.cfg");
-		if (!normalMode.exists() || recreate) {
+			File normalMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/NORMAL.cfg");
 			CopyFileToFS(normalMode, "/config/forestry/gamemodes/NORMAL.cfg");
-		}
 
-		File hardMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/HARD.cfg");
-		if (!hardMode.exists() || recreate) {
+			File hardMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/HARD.cfg");
 			CopyFileToFS(hardMode, "/config/forestry/gamemodes/HARD.cfg");
 		}
 
-		property = config.get("performance", "particleFX.enabled", enableParticleFX);
-		property.comment = "Set to false to disable particle fx on slower machines. Note that Forestry respects Minecraft's reduced particle video settings.";
-		enableParticleFX = property.getBoolean();
+		enableParticleFX = config.getBooleanLocalized("performance", "particleFX", enableParticleFX);
 
 		// RetroGen
 
-		String retroGenMessage = "Forestry will attempt worldGen in chunks that were created before the mod was added.";
-		property = config.get("world.retrogen", "normal", doRetrogen);
-		property.comment = "Set to true, " + retroGenMessage;
-		doRetrogen = property.getBoolean();
-
-		String forcedRetroGenMessage = "Forestry will attempt worldGen in all chunks for this game instance. Config option will be set to false after this run.";
-		property = config.get("world.retrogen", "forced", forceRetrogen);
-		property.comment = "Set to true, " + forcedRetroGenMessage;
-		forceRetrogen = property.getBoolean();
-		property.setToDefault();
+		doRetrogen = config.getBooleanLocalized("world.generate.retrogen", "normal", doRetrogen);
+		forceRetrogen = config.getBooleanLocalized("world.generate.retrogen", "forced", forceRetrogen);
 
 		if (forceRetrogen) {
-			Proxies.log.info(forcedRetroGenMessage);
+			Property property = config.get("world.generate.retrogen", "forced", false);
+			property.set(false);
+
+			Proxies.log.info("Enabled force retrogen.");
 			doRetrogen = true;
 		} else if (doRetrogen) {
-			Proxies.log.info(retroGenMessage);
+			Proxies.log.info("Enabled retrogen.");
 		}
 
-		property = config.get("world.generate.beehives", "amount", generateBeehivesAmount);
-		property.comment = "Set how often beehives spawn. 1.0 is default, 0.0 is disabled, 2.0 is double, 0.5 is half, etc.";
-		generateBeehivesAmount = property.getDouble();
+		generateBeehivesAmount = config.getFloatLocalized("world.generate.beehives", "amount", generateBeehivesAmount, 0.0f, 10.0f);
+		generateBeehivesDebug = config.getBooleanLocalized("world.generate.beehives", "debug", generateBeehivesDebug);
 
-		property = config.get("world.generate.beehives", "debug", generateBeehivesDebug);
-		property.comment = "Force Forestry to generate a beehive at every possible location (only useful to developers).";
-		generateBeehivesDebug = property.getBoolean();
+		generateApatiteOre = config.getBooleanLocalized("world.generate.ore", "apatite", generateApatiteOre);
+		generateCopperOre = config.getBooleanLocalized("world.generate.ore", "copper", generateCopperOre);
+		generateTinOre = config.getBooleanLocalized("world.generate.ore", "tin", generateTinOre);
 
-		property = config.get("world.generate.ore", "apatite", generateApatiteOre);
-		property.comment = "Generate apatite ore blocks in the world";
-		generateApatiteOre = property.getBoolean();
+		enableVillagers = config.getBooleanLocalized("world.generate", "villagers", enableVillagers);
 
-		property = config.get("world.generate.ore", "copper", generateCopperOre);
-		property.comment = "Generate copper ore blocks in the world";
-		generateCopperOre = property.getBoolean();
+		craftingBronzeEnabled = config.getBooleanLocalized("crafting", "bronze", craftingBronzeEnabled);
+		craftingStampsEnabled = config.getBooleanLocalized("crafting.stamps", "enabled", true);
 
-		property = config.get("world.generate.ore", "tin", generateTinOre);
-		property.comment = "Generate tin ore blocks in the world";
-		generateTinOre = property.getBoolean();
-
-		property = config.get("world.generate", "villager", enableVillager);
-		property.comment = "Create forestry villagers and their houses";
-		enableVillager = property.getBoolean();
-
-		property = config.get("crafting", "bronze", craftingBronzeEnabled);
-		property.comment = "Enable crafting recipe for bronze";
-		craftingBronzeEnabled = property.getBoolean();
-
-		property = config.get("crafting.stamps", "enabled", true);
-		property.comment = "Enable crafting recipes for all types of stamps.";
-		craftingStampsEnabled = property.getBoolean();
-
-		String defaultCollectors = "20n;50n;100n;200n";
-		property = config.get("crafting.stamps", "excluded", defaultCollectors.split(";"));
-		property.comment = "Excluded specific stamps from crafting.";
+		String[] allStamps = new String[]{"1n", "2n", "5n", "10n", "20n", "50n", "100n"};
+		String[] defaultCollectors = new String[]{"20n", "50n", "100n"};
+		String[] stamps = config.getStringListLocalized("crafting.stamps", "disabled", defaultCollectors, allStamps);
 		try {
-			collectorStamps.addAll(Arrays.asList(property.getStringList()));
+			collectorStamps.addAll(Arrays.asList(stamps));
 		} catch (Exception ex) {
-			Proxies.log.warning("Failed to read config for 'crafting.stamps.collector', setting to default.");
+			Proxies.log.warning("Failed to read config for 'crafting.stamps.disabled', setting to default.");
+			Property property = config.get("crafting.stamps", "disabled", defaultCollectors);
 			property.setToDefault();
-			collectorStamps.addAll(Arrays.asList(parseStamps(defaultCollectors)));
+			collectorStamps.addAll(Arrays.asList(defaultCollectors));
 		}
 
-		property = config.get("genetics", "clear.invalid.chromosomes", clearInvalidChromosomes);
-		property.comment = "Clear chromosomes which contain invalid alleles. Might rescue your save if it is crashing after the removal of a bee addon.";
-		clearInvalidChromosomes = property.getBoolean();
+		clearInvalidChromosomes = config.getBooleanLocalized("genetics", "clear.invalid.chromosomes", clearInvalidChromosomes);
+		dungeonLootRare = config.getBooleanLocalized("difficulty", "loot.rare", dungeonLootRare);
 
-		property = config.get("difficulty", "dungeonloot.rare", dungeonLootRare);
-		property.comment = "Make dungeon loot generated by forestry rarer";
-		dungeonLootRare = property.getBoolean();
+		enableBackpackResupply = config.getBooleanLocalized("performance.backpacks", "resupply", enableBackpackResupply);
 
-		property = config.get("performance.backpacks", "resupply", enableBackpackResupply);
-		property.comment = "Enable backpack resupply. You may want to set this to false on busy servers.";
-		enableBackpackResupply = property.getBoolean();
+		mailAlertEnabled = config.getBooleanLocalized("tweaks.gui", "mail.alert", mailAlertEnabled);
 
-		property = config.get("tweaks.gui", "mail.alert", mailAlertEnabled);
-		property.comment = "Display the mail alert box when you get mail.";
-		mailAlertEnabled = property.getBoolean();
+		guiTabSpeed = config.getIntLocalized("tweaks.gui.tabs", "speed", guiTabSpeed, 1, 50);
+		enableHints = config.getBooleanLocalized("tweaks.gui.tabs", "hints", enableHints);
+		enableEnergyStat = config.getBooleanLocalized("tweaks.gui.tabs", "energy", enableEnergyStat);
 
-		property = config.get("tweaks.gui.tabs", "speed", guiTabSpeed);
-		property.comment = "Set the speed at which the gui side tabs open and close.";
-		guiTabSpeed = property.getInt();
+		tooltipLiquidAmount = config.getBooleanLocalized("tweaks.gui.tooltip", "liquidamount", tooltipLiquidAmount);
 
-		property = config.get("tweaks.gui.tabs", "hints", enableHints);
-		property.comment = "Display the hints tab on machine and engine guis.";
-		enableHints = property.getBoolean();
+		enablePermissions = config.getBooleanLocalized("tweaks", "permissions", enablePermissions);
 
-		property = config.get("tweaks.gui.tabs", "energystat", enableEnergyStat);
-		property.comment = "Display the energy statistics tab on energy consumers.";
-		enableEnergyStat = property.getBoolean();
+		squareFarms = config.getBooleanLocalized("tweaks.farms", "square", squareFarms);
+		enableExUtilEnderLily = config.getBooleanLocalized("tweaks.farms", "enderlily", enableExUtilEnderLily);
+		enableMagicalCropsSupport = config.getBooleanLocalized("tweaks.farms", "magicalcrops", enableMagicalCropsSupport);
 
-		property = config.get("tweaks.gui.tooltip", "liquidamount", tooltipLiquidAmount);
-		property.comment = "Display liquid amounts in tank tooltips.";
-		tooltipLiquidAmount = property.getBoolean();
-
-		property = config.get("tweaks", "permissions", enablePermissions);
-		property.comment = "Enable access restrictions on forestry machines.";
-		enablePermissions = property.getBoolean();
-
-		property = config.get("tweaks.farms", "squared", squareFarms);
-		property.comment = "Give farms a square layout instead of a diamond one.";
-		squareFarms = property.getBoolean();
-
-		property = config.get("tweaks.farms", "enderlily", enableExUtilEnderLily);
-		property.comment = "Enable farm support for ExtraUtilities Ender-lily seeds.";
-		enableExUtilEnderLily = property.getBoolean();
-
-		property = config.get("tweaks.farms", "magicalcrops", enableMagicalCropsSupport);
-		property.comment = "Enable farm support for Magical Crops.";
-		enableMagicalCropsSupport = property.getBoolean();
-
+		String[] availableStructures = new String[]{"alveary3x3", "farm3x3", "farm3x4", "farm3x5", "farm4x4", "farm5x5"};
 		String[] disabledStructureArray = disabledStructures.toArray(new String[disabledStructures.size()]);
-		property = config.get("structures.schemata", "disabled", disabledStructureArray);
-		property.comment = "Add schemata keys to disable them.  One per line. Available keys: alveary3x3, farm3x3, farm3x4, farm3x5, farm4x4, farm5x5";
-		disabledStructures.addAll(Arrays.asList(property.getStringList()));
+		disabledStructureArray = config.getStringListLocalized("structures", "disabled", disabledStructureArray, availableStructures);
+
+		disabledStructures.addAll(Arrays.asList(disabledStructureArray));
 		for (String str : disabledStructures) {
 			Proxies.log.finer("Disabled structure '%s'.", str);
 		}
 
-		property = config.get("debug", "enabled", isDebug);
-		property.comment = "Enable Debug mode (only useful to developers).";
-		isDebug = property.getBoolean();
+		isDebug = config.getBooleanLocalized("debug", "enabled", isDebug);
 
 		config.save();
 	}
@@ -375,7 +309,7 @@ public class Config {
 		property.comment = "set to false to force forestry to skip generating own apatite ore blocks in the world";
 		generateApatiteOre = Boolean.parseBoolean(property.value);
 
-		property = configOld.get("world.generate.beehives.rate", CATEGORY_COMMON, (float) generateBeehivesAmount);
+		property = configOld.get("world.generate.beehives.rate", CATEGORY_COMMON, generateBeehivesAmount);
 		property.comment = "set how many beehives spawn. Default is 1.0, double is 2.0, half is 0.5 etc.";
 		generateBeehivesAmount = Float.parseFloat(property.value);
 
@@ -383,7 +317,7 @@ public class Config {
 		property.comment = "set to false to force forestry to skip generating beehives in the world";
 		boolean generateBeehives = Boolean.parseBoolean(property.value);
 		if (!generateBeehives) {
-			generateBeehivesAmount = 0.0;
+			generateBeehivesAmount = 0.0f;
 		}
 
 		property = configOld.get("world.generate.beehives.debug", CATEGORY_DEBUG, false);
@@ -400,7 +334,7 @@ public class Config {
 
 		property = configOld.get("world.generate.villager", CATEGORY_COMMON, true);
 		property.comment = "set to false to disable the creation of forestry villagers and their houses";
-		enableVillager = Boolean.parseBoolean(property.value);
+		enableVillagers = Boolean.parseBoolean(property.value);
 
 		property = configOld.get("crafting.bronze.enabled", CATEGORY_COMMON, true);
 		property.comment = "set to false to disable crafting recipe for bronze";
@@ -475,19 +409,22 @@ public class Config {
 	}
 
 	private static void loadNewConfigFluids(File configFile) {
-		net.minecraftforge.common.config.Configuration config = new net.minecraftforge.common.config.Configuration(configFile);
+		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
 
-		net.minecraftforge.common.config.Property property;
 		for (Fluids fluid : Fluids.forestryFluids) {
+			String fluidName = StatCollector.translateToLocal("fluid." + fluid.getTag());
+
 			boolean enabledFluid = !Config.disabledFluids.contains(fluid.getTag());
-			property = config.get("enableFluid", fluid.getTag(), enabledFluid);
-			if (!property.getBoolean()) {
+			String enableFluidComment = StringUtil.localizeAndFormatRaw("for.config.fluids.enable.format", fluidName);
+			enabledFluid = config.getBoolean("enableFluid", fluid.getTag(), enabledFluid, enableFluidComment);
+			if (!enabledFluid) {
 				Config.disabledFluids.add(fluid.getTag());
 			}
 
 			boolean enabledFluidBlock = !Config.disabledBlocks.contains(fluid.getTag());
-			property = config.get("enableFluidBlock", fluid.getTag(), enabledFluidBlock);
-			if (!property.getBoolean()) {
+			String enableFluidBlockComment = StringUtil.localizeAndFormatRaw("for.config.fluid.blocks.enable.format", fluidName);
+			enabledFluidBlock = config.getBoolean("enableFluidBlock", fluid.getTag(), enabledFluidBlock, enableFluidBlockComment);
+			if (!enabledFluidBlock) {
 				Config.disabledBlocks.add(fluid.getTag());
 			}
 		}

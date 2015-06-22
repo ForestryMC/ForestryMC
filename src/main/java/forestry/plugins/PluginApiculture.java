@@ -36,7 +36,6 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -135,6 +134,7 @@ import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
+import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
@@ -151,6 +151,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.EntitySnowFX;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.core.utils.StackUtils;
+import forestry.core.utils.StringUtil;
 
 @Plugin(pluginID = "Apiculture", name = "Apiculture", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.apiculture.description")
 public class PluginApiculture extends ForestryPlugin {
@@ -160,7 +161,7 @@ public class PluginApiculture extends ForestryPlugin {
 	private static final String CONFIG_CATEGORY = "apiculture";
 	public static final String[] EMPTY_STRINGS = new String[0];
 	public static String beekeepingMode = "NORMAL";
-	private static double secondPrincessChance = 0;
+	private static float secondPrincessChance = 0;
 	public static int ticksPerBeeWorkCycle = 550;
 	public static boolean apiarySideSensitive = false;
 	public static boolean fancyRenderedBees = false;
@@ -261,7 +262,7 @@ public class PluginApiculture extends ForestryPlugin {
 			ApicultureTriggers.initialize();
 		}
 
-		if (Config.enableVillager) {
+		if (Config.enableVillagers) {
 			// Register village components with the Structure registry.
 			VillageHandlerApiculture.registerVillageComponents();
 		}
@@ -291,35 +292,29 @@ public class PluginApiculture extends ForestryPlugin {
 			}
 		}
 
-		Configuration config = new Configuration(configFile);
-
-		Property property = config.get("apiary", "sidesensitive", apiarySideSensitive);
-		property.comment = "set to false if apiaries should output all items regardless of side a pipe is attached to";
-		apiarySideSensitive = property.getBoolean();
-
-		property = config.get("render.bees", "fancy", fancyRenderedBees);
-		property.comment = "set to true to enable a fancy butterfly-like renderer for bees. (experimental!)";
-		fancyRenderedBees = property.getBoolean();
+		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
 
 		List<IBeekeepingMode> beekeepingModes = BeeManager.beeRoot.getBeekeepingModes();
 		String[] validBeekeepingModeNames = new String[beekeepingModes.size()];
 		for (int i = 0; i < beekeepingModes.size(); i++) {
 			validBeekeepingModeNames[i] = beekeepingModes.get(i).getName();
 		}
-		property = config.get("beekeeping", "mode", "NORMAL", "Change the beekeeping mode. Accepted values are EASY, NORMAL, HARD, HARDCORE, and INSANE.", validBeekeepingModeNames);
-		beekeepingMode = property.getString();
+
+		beekeepingMode = config.getStringLocalized("beekeeping", "mode", "NORMAL", validBeekeepingModeNames);
 		Proxies.log.finer("Beekeeping mode read from config: " + beekeepingMode);
 
-		property = config.get("beekeeping", "secondPrincess", secondPrincessChance, "percent chance of a second princess drop, for limited/skyblock maps.", 0.0, 100.0);
-		secondPrincessChance = property.getDouble();
+		secondPrincessChance = config.getFloatLocalized("beekeeping", "second.princess", secondPrincessChance, 0.0f, 100.0f);
+
+		String acceptedFlowerMessage = StringUtil.localize("config.beekeeping.flowers.accepted.comment");
+		String plantableFlowerMessage = StringUtil.localize("config.beekeeping.flowers.plantable.comment");
 
 		for (String flowerType : FlowerManager.flowerRegistry.getFlowerTypes()) {
 			String[] defaultAccepted = defaultAcceptedFlowers.get(flowerType);
 			if (defaultAccepted == null) {
 				defaultAccepted = EMPTY_STRINGS;
 			}
-			property = config.get("beekeeping.flowers." + flowerType, "accepted", defaultAccepted);
-			property.comment = "Accepted flowers allow bees to work. Format is 'modid:name:meta', one per line. The format for wildcard  metadata is 'modid:name'.";
+			Property property = config.get("beekeeping.flowers." + flowerType, "accepted", defaultAccepted);
+			property.comment = acceptedFlowerMessage;
 			parseAcceptedFlowers(property, flowerType);
 
 			String[] defaultPlantable = defaultPlantableFlowers.get(flowerType);
@@ -327,13 +322,12 @@ public class PluginApiculture extends ForestryPlugin {
 				defaultPlantable = EMPTY_STRINGS;
 			}
 			property = config.get("beekeeping.flowers." + flowerType, "plantable", defaultPlantable);
-			property.comment = "Plantable flowers are placed by bees. All plantable flowers are automatically accepted flowers. Format is 'weight:modid:name:meta', one per line. 'weight' is between 0.0 and 1.0. The format for wildcard  metadata is 'weight:modid:name'.";
+			property.comment = plantableFlowerMessage;
 			parsePlantableFlowers(property, flowerType);
 		}
 
-		property = config.get("species.blacklist", CONFIG_CATEGORY, EMPTY_STRINGS);
-		property.comment = "add species to blacklist identified by their uid, one per line.";
-		parseBeeBlacklist(property.getStringList());
+		String[] blacklist = config.getStringListLocalized("species", "blacklist", EMPTY_STRINGS);
+		parseBeeBlacklist(blacklist);
 
 		config.save();
 
@@ -370,7 +364,7 @@ public class PluginApiculture extends ForestryPlugin {
 		BeeManager.villageBees[1].add(BeeDefinition.COMMON.getGenome());
 		BeeManager.villageBees[1].add(BeeDefinition.VALIANT.getGenome());
 
-		if (Config.enableVillager) {
+		if (Config.enableVillagers) {
 			// Register villager stuff
 			VillageHandlerApiculture villageHandler = new VillageHandlerApiculture();
 			VillagerRegistry.instance().registerVillageCreationHandler(villageHandler);
@@ -465,7 +459,7 @@ public class PluginApiculture extends ForestryPlugin {
 		beekeepingMode = property.value.trim();
 		Proxies.log.finer("Beekeeping mode read from config: " + beekeepingMode);
 
-		property = apicultureConfig.get("beekeeping.secondprincess", CONFIG_CATEGORY, (float) secondPrincessChance);
+		property = apicultureConfig.get("beekeeping.secondprincess", CONFIG_CATEGORY, secondPrincessChance);
 		property.comment = "percent chance of second princess drop, for limited/skyblock maps. Acceptable values up to 2 decimals.";
 		secondPrincessChance = Float.parseFloat(property.value);
 

@@ -17,15 +17,13 @@ import java.util.Map;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
-
 import forestry.Forestry;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IGameMode;
 import forestry.core.config.Config;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
+import forestry.core.config.LocalizedConfiguration;
 import forestry.core.proxy.Proxies;
 
 public class GameMode implements IGameMode {
@@ -39,6 +37,7 @@ public class GameMode implements IGameMode {
 		return ForestryAPI.activeMode;
 	}
 
+	private static final String GAMEMODE_KEY = "gamemode";
 	private String identifier = "EASY";
 	private final String category;
 
@@ -102,45 +101,46 @@ public class GameMode implements IGameMode {
 			}
 		}
 
-		Configuration config = new Configuration(newConfigFile);
+		LocalizedConfiguration config = new LocalizedConfiguration(newConfigFile, "1.0.0");
 
-		initSettingFloat(config, "energy", "demand.modifier", ENERGY_DEMAND_MODIFIER, "modifies the energy required to activate machines, as well as the max amount of energy stored and accepted.");
-		initSettingInt(config, "farms", "fertilizer.value", FARM_FERTILIZER_VALUE, "modifies the time a piece of fertilizer lasts in a farm.");
+		initSettingFloat(config, "energy", "demand.modifier", ENERGY_DEMAND_MODIFIER);
+		initSettingBoolean(config, "energy", "engine.clockwork", true);
 
-		initSettingFloat(config, "fuel.ethanol", "generator", FUEL_MODIFIER, "modifies the energy provided by ethanol in a Bio Generator.");
-		initSettingFloat(config, "fuel.ethanol", "combustion", FUEL_MODIFIER, "modifies the energy provided by ethanol in Buildcraft Combustion Engines.");
-		initSettingFloat(config, "fuel.biomass", "generator", FUEL_MODIFIER, "modifies the energy provided by Biomass in a Bio Generator.");
-		initSettingFloat(config, "fuel.biomass", "biogas", FUEL_MODIFIER, "modifies the energy provided by Biomass in Biogas Engines.");
+		initSettingInt(config, "farms", "fertilizer.value", FARM_FERTILIZER_VALUE);
 
-		initSettingStack(config, "recipe.output.fertilizer", "apatite", recipeFertilizerOutputApatite, "amount of fertilizer yielded by the recipe using apatite.");
-		initSettingStack(config, "recipe.output.fertilizer", "ash", recipeFertilizerOutputAsh, "amount of fertilizer yielded by the recipe using ash.");
-		initSettingStack(config, "recipe.output.compost", "wheat", recipeCompostOutputWheat, "amount of compost yielded by the recipe using wheat.");
-		initSettingStack(config, "recipe.output.compost", "ash", recipeCompostOutputAsh, "amount of compost yielded by the recipe using ash.");
-		initSettingStack(config, "recipe.output.humus", "fertilizer", recipeHumusOutputFertilizer, "amount of humus yielded by the recipe using fertilizer.");
-		initSettingStack(config, "recipe.output.humus", "compost", recipeHumusOutputCompost, "amount of humus yielded by the recipe using compost.");
-		initSettingStack(config, "recipe.output.bogearth", "bucket", recipeBogEarthOutputBucket, "amount of bog earth yielded by the recipe using buckets.");
-		initSettingStack(config, "recipe.output.bogearth", "can", recipeBogEarthOutputCans, "amount of bog earth yielded by the recipes using cans, cells or capsules.");
+		initSettingFloat(config, "fuel.ethanol", "generator", FUEL_MODIFIER);
+		initSettingFloat(config, "fuel.ethanol", "combustion", FUEL_MODIFIER);
+		initSettingFloat(config, "fuel.biomass", "generator", FUEL_MODIFIER);
+		initSettingFloat(config, "fuel.biomass", "biogas", FUEL_MODIFIER);
 
-		initSettingStack(config, "recipe.output", "can", recipeCanOutput, "amount yielded by the recipe for tin cans.");
-		initSettingStack(config, "recipe.output", "capsule", recipeCapsuleOutput, "amount yielded by the recipe for wax capsules.");
-		initSettingStack(config, "recipe.output", "refractory", recipeRefractoryOutput, "amount yielded by the recipe for refractory capsules.");
+		initSettingStack(config, "recipe.output.fertilizer", "apatite", recipeFertilizerOutputApatite);
+		initSettingStack(config, "recipe.output.fertilizer", "ash", recipeFertilizerOutputAsh);
+		initSettingStack(config, "recipe.output.compost", "wheat", recipeCompostOutputWheat);
+		initSettingStack(config, "recipe.output.compost", "ash", recipeCompostOutputAsh);
+		initSettingStack(config, "recipe.output.humus", "fertilizer", recipeHumusOutputFertilizer);
+		initSettingStack(config, "recipe.output.humus", "compost", recipeHumusOutputCompost);
+		initSettingStack(config, "recipe.output.bogearth", "bucket", recipeBogEarthOutputBucket);
+		initSettingStack(config, "recipe.output.bogearth", "can", recipeBogEarthOutputCans);
+		initSettingStack(config, "recipe.output", "can", recipeCanOutput);
+		initSettingStack(config, "recipe.output", "capsule", recipeCapsuleOutput);
+		initSettingStack(config, "recipe.output", "refractory", recipeRefractoryOutput);
 
-		initSettingInt(config, "fermenter.cycles", "fertilizer", FERMENTATION_DURATION_FERTILIZER, "modifies the amount of cycles fertilizer can keep a fermenter going.");
-		initSettingInt(config, "fermenter.cycles", "compost", FERMENTATION_DURATION_COMPOST, "modifies the amount of cycles compost can keep a fermenter going.");
+		initSettingInt(config, "fermenter.cycles", "fertilizer", FERMENTATION_DURATION_FERTILIZER);
+		initSettingInt(config, "fermenter.cycles", "compost", FERMENTATION_DURATION_COMPOST);
 
-		initSettingInt(config, "fermenter.value", "fertilizer", FERMENTED_CYCLE_FERTILIZER, "modifies the amount of biomass per cycle a fermenter will produce using fertilizer.");
-		initSettingInt(config, "fermenter.value", "compost", FERMENTED_CYCLE_COMPOST, "modifies the amount of biomass per cycle a fermenter will produce using compost.");
+		initSettingInt(config, "fermenter.value", "fertilizer", FERMENTED_CYCLE_FERTILIZER);
+		initSettingInt(config, "fermenter.value", "compost", FERMENTED_CYCLE_COMPOST);
 
-		initSettingInt(config, "fermenter.yield", "sapling", FERMENTED_SAPLING, "modifies the base amount of biomass a sapling will yield in a fermenter, affected by sappiness trait.");
-		initSettingInt(config, "fermenter.yield", "cactus", FERMENTED_CACTI, "modifies the amount of biomass a piece of cactus will yield in a fermenter.");
-		initSettingInt(config, "fermenter.yield", "wheat", FERMENTED_WHEAT, "modifies the amount of biomass a piece of wheat will yield in a fermenter.");
-		initSettingInt(config, "fermenter.yield", "cane", FERMENTED_CANE, "modifies the amount of biomass a piece of sugar cane will yield in a fermenter.");
-		initSettingInt(config, "fermenter.yield", "mushroom", FERMENTED_MUSHROOM, "modifies the amount of biomass a mushroom will yield in a fermenter.");
+		initSettingInt(config, "fermenter.yield", "sapling", FERMENTED_SAPLING);
+		initSettingInt(config, "fermenter.yield", "cactus", FERMENTED_CACTI);
+		initSettingInt(config, "fermenter.yield", "wheat", FERMENTED_WHEAT);
+		initSettingInt(config, "fermenter.yield", "cane", FERMENTED_CANE);
+		initSettingInt(config, "fermenter.yield", "mushroom", FERMENTED_MUSHROOM);
 
-		initSettingInt(config, "squeezer.liquid", "seed", SQUEEZED_LIQUID_SEED, "modifies the amount of seed oil squeezed from a single seed. other sources are based off this.");
-		initSettingInt(config, "squeezer.liquid", "apple", SQUEEZED_LIQUID_APPLE, "modifies the amount of juice squeezed from a single apple. other sources are based off this.");
-		initSettingInt(config, "squeezer.mulch", "apple", SQUEEZED_MULCH_APPLE, "modifies the chance of mulch per squeezed apple.");
-		initSettingBoolean(config, "energy", "engine.clockwork", true, "set to false to disable the clockwork engine.");
+		initSettingInt(config, "squeezer.liquid", "seed", SQUEEZED_LIQUID_SEED);
+		initSettingInt(config, "squeezer.liquid", "apple", SQUEEZED_LIQUID_APPLE);
+
+		initSettingInt(config, "squeezer.mulch", "apple", SQUEEZED_MULCH_APPLE);
 
 		config.save();
 	}
@@ -185,20 +185,20 @@ public class GameMode implements IGameMode {
 		initSettingBoolean_old("energy.engine.clockwork", true, "set to false to disable the clockwork engine.");
 	}
 
-	private void initSettingFloat(Configuration config, String category, String key, double def, String comment) {
-		String fullKey = category + '.' + key;
+	private void initSettingFloat(LocalizedConfiguration config, String category, String name, float def) {
+		String fullName = category + '.' + name;
 		// legacy conversion of old format to new format
 		{
-			Float oldSetting = floatSettings.get(fullKey);
+			Float oldSetting = floatSettings.get(fullName);
 			if (oldSetting != null) {
 				def = oldSetting;
 			}
 		}
-		Property property = config.get(category, key, def, comment);
-		floatSettings.put(fullKey, (float) property.getDouble());
+		float floatValue = config.getFloatLocalized(GAMEMODE_KEY + '.' + category, name, def, 0.0f, 10.0f);
+		floatSettings.put(fullName, floatValue);
 	}
 
-	private void initSettingInt(Configuration config, String category, String key, int def, String comment) {
+	private void initSettingInt(LocalizedConfiguration config, String category, String key, int def) {
 		String fullKey = category + '.' + key;
 		// legacy conversion of old format to new format
 		{
@@ -207,11 +207,11 @@ public class GameMode implements IGameMode {
 				def = oldSetting;
 			}
 		}
-		Property property = config.get(category, key, def, comment);
-		integerSettings.put(fullKey, property.getInt());
+		int intValue = config.getIntLocalized(GAMEMODE_KEY + '.' + category, key, def, 0, 2000);
+		integerSettings.put(fullKey, intValue);
 	}
 
-	private void initSettingStack(Configuration config, String category, String key, ItemStack def, String comment) {
+	private void initSettingStack(LocalizedConfiguration config, String category, String key, ItemStack def) {
 		String fullKey = category + '.' + key;
 		// legacy conversion of old format to new format
 		{
@@ -220,13 +220,13 @@ public class GameMode implements IGameMode {
 				def = oldSetting;
 			}
 		}
-		Property property = config.get(category, key, def.stackSize, comment);
+		int stackSize = config.getIntLocalized(GAMEMODE_KEY + '.' + category, key, def.stackSize, 0, 64);
 		ItemStack changed = def.copy();
-		changed.stackSize = property.getInt();
+		changed.stackSize = stackSize;
 		stackSettings.put(fullKey, changed);
 	}
 
-	private void initSettingBoolean(Configuration config, String category, String key, boolean def, String comment) {
+	private void initSettingBoolean(LocalizedConfiguration config, String category, String key, boolean def) {
 		String fullKey = category + '.' + key;
 		// legacy conversion of old format to new format
 		{
@@ -235,8 +235,8 @@ public class GameMode implements IGameMode {
 				def = oldSetting;
 			}
 		}
-		Property property = config.get(category, key, def, comment);
-		booleanSettings.put(fullKey, property.getBoolean());
+		boolean booleanValue = config.getBooleanLocalized(GAMEMODE_KEY + '.' + category, key, def);
+		booleanSettings.put(fullKey, booleanValue);
 	}
 
 	private void initSettingStack_old(String ident, ItemStack def, String comment) {

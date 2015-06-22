@@ -43,7 +43,6 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.IShearable;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -61,6 +60,7 @@ import forestry.api.storage.StorageManager;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
+import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.IResupplyHandler;
@@ -68,6 +68,7 @@ import forestry.core.items.ItemCrated;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
+import forestry.core.utils.StringUtil;
 import forestry.factory.gadgets.MachineCarpenter;
 import forestry.storage.BackpackDefinition;
 import forestry.storage.BackpackHelper;
@@ -165,7 +166,7 @@ public class PluginStorage extends ForestryPlugin {
 			}
 		}
 
-		Configuration config = new Configuration(configFile);
+		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
 
 		handleBackpackConfig(config, "miner");
 		handleBackpackConfig(config, "digger");
@@ -413,7 +414,7 @@ public class PluginStorage extends ForestryPlugin {
 		}
 	}
 
-	private static void handleBackpackConfig(Configuration config, String backpackName) {
+	private static void handleBackpackConfig(LocalizedConfiguration config, String backpackName) {
 		BackpackDefinition backpackDefinition = (BackpackDefinition) BackpackManager.definitions.get(backpackName);
 
 		List<ItemStack> backpackItems;
@@ -424,8 +425,8 @@ public class PluginStorage extends ForestryPlugin {
 			Collections.sort(validItems);
 			String[] defaultValidItems = validItems.toArray(new String[validItems.size()]);
 
-			Property backpackConf = config.get("backpacks." + backpackName, "itemStacks", defaultValidItems);
-			backpackConf.comment = "Add itemStacks for the " + backpackName + "'s backpack here in the format 'modid:name:meta'. For wildcard metadata the format is 'modid:name'.";
+			Property backpackConf = config.get("backpacks." + backpackName, "item.stacks", defaultValidItems);
+			backpackConf.comment = StringUtil.localizeAndFormat("config.backpacks.item.stacks.format", backpackName);
 
 			String[] backpackItemList = backpackConf.getStringList();
 			backpackItems = StackUtils.parseItemStackStrings(backpackItemList, OreDictionary.WILDCARD_VALUE);
@@ -444,8 +445,8 @@ public class PluginStorage extends ForestryPlugin {
 			Collections.sort(defaultOreNamesList);
 			defaultOreNames = defaultOreNamesList.toArray(new String[defaultOreNamesList.size()]);
 
-			Property backpackConf = config.get("backpacks." + backpackName, "oreDict", defaultOreNames);
-			backpackConf.comment = "Add ore dictionary names for the " + backpackName + "'s backpack here in the format 'oreDictName'.";
+			Property backpackConf = config.get("backpacks." + backpackName, "ore.dict", defaultOreNames);
+			backpackConf.comment = StringUtil.localizeAndFormat("config.backpacks.ore.dict.format", backpackName);
 
 			String[] oreDictNameList = backpackConf.getStringList();
 			Collections.addAll(backpackOreDict, oreDictNameList);

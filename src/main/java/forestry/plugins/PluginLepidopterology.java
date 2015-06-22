@@ -19,8 +19,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.crafting.CraftingManager;
 
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
 import net.minecraftforge.oredict.RecipeSorter;
 
 import cpw.mods.fml.common.SidedProxy;
@@ -40,6 +38,7 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
+import forestry.core.config.LocalizedConfiguration;
 import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
@@ -124,21 +123,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 			}
 		}
 
-		Configuration config = new Configuration(configFile);
-
-		Property property = config.get("entities", "spawn.limit", spawnConstraint);
-		property.comment = "Butterflies will stop natural spawning once this limit is reached.";
-		spawnConstraint = property.getInt();
-
-		property = config.get("entities", "maximum", entityConstraint);
-		property.comment = "New butterflies will stay in item form and will not take flight once this limit is reached.";
-		entityConstraint = property.getInt();
-
-		property = config.get("entities", "pollination", allowPollination);
-		property.comment = "Allow butterflies to pollinate leaves.";
-		allowPollination = property.getBoolean();
-
-		config.save();
+		loadNewConfig(configFile);
 
 		PluginCore.rootCommand.addChildCommand(new CommandButterfly());
 
@@ -165,7 +150,17 @@ public class PluginLepidopterology extends ForestryPlugin {
 		RecipeSorter.register("forestry:lepidopterologymating", MatingRecipe.class, RecipeSorter.Category.SHAPELESS, "before:minecraft:shapeless");
 	}
 
-	private void loadOldConfig() {
+	private static void loadNewConfig(File configFile) {
+		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
+
+		spawnConstraint = config.getIntLocalized("butterfly.entities", "spawn.limit", spawnConstraint, 0, 500);
+		entityConstraint = config.getIntLocalized("butterfly.entities", "maximum", entityConstraint, 0, 5000);
+		allowPollination = config.getBooleanLocalized("butterfly.entities", "pollination", allowPollination);
+
+		config.save();
+	}
+
+	private static void loadOldConfig() {
 		forestry.core.config.deprecated.Configuration config = new forestry.core.config.deprecated.Configuration();
 
 		forestry.core.config.deprecated.Property property = config.get("entities.spawn.limit", CONFIG_CATEGORY, spawnConstraint);
