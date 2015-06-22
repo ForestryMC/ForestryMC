@@ -39,6 +39,9 @@ public class Config {
 
 	public static forestry.core.config.deprecated.Configuration configOld;
 
+	public static LocalizedConfiguration configCommon;
+	public static LocalizedConfiguration configFluid;
+
 	public static String gameMode;
 
 	private static final Set<String> disabledStructures = new HashSet<String>();
@@ -173,16 +176,16 @@ public class Config {
 
 	private static void loadNewConfigCommon(File configFileCommon) {
 
-		LocalizedConfiguration config = new LocalizedConfiguration(configFileCommon, "1.0.0");
+		configCommon = new LocalizedConfiguration(configFileCommon, "1.0.0");
 
-		gameMode = config.getStringLocalized("difficulty", "game.mode", "EASY", new String[]{"OP, EASY, NORMAL, HARD"});
+		gameMode = configCommon.getStringLocalized("difficulty", "game.mode", "EASY", new String[]{"OP, EASY, NORMAL, HARD"});
 
-		boolean recreate = config.getBooleanLocalized("difficulty", "recreate.definitions", true);
+		boolean recreate = configCommon.getBooleanLocalized("difficulty", "recreate.definitions", true);
 		if (recreate) {
 			Proxies.log.info("Recreating all gamemode definitions from the defaults. This may be caused by an upgrade");
 
 			String recreateDefinitionsComment = StringUtil.localize("config.difficulty.recreate.definitions.comment");
-			Property property = config.get("difficulty", "recreate.definitions", true, recreateDefinitionsComment);
+			Property property = configCommon.get("difficulty", "recreate.definitions", true, recreateDefinitionsComment);
 			property.set(false);
 
 			// Make sure the default mode files are there.
@@ -199,15 +202,15 @@ public class Config {
 			CopyFileToFS(hardMode, "/config/forestry/gamemodes/HARD.cfg");
 		}
 
-		enableParticleFX = config.getBooleanLocalized("performance", "particleFX", enableParticleFX);
+		enableParticleFX = configCommon.getBooleanLocalized("performance", "particleFX", enableParticleFX);
 
 		// RetroGen
 
-		doRetrogen = config.getBooleanLocalized("world.generate.retrogen", "normal", doRetrogen);
-		forceRetrogen = config.getBooleanLocalized("world.generate.retrogen", "forced", forceRetrogen);
+		doRetrogen = configCommon.getBooleanLocalized("world.generate.retrogen", "normal", doRetrogen);
+		forceRetrogen = configCommon.getBooleanLocalized("world.generate.retrogen", "forced", forceRetrogen);
 
 		if (forceRetrogen) {
-			Property property = config.get("world.generate.retrogen", "forced", false);
+			Property property = configCommon.get("world.generate.retrogen", "forced", false);
 			property.set(false);
 
 			Proxies.log.info("Enabled force retrogen.");
@@ -216,61 +219,61 @@ public class Config {
 			Proxies.log.info("Enabled retrogen.");
 		}
 
-		generateBeehivesAmount = config.getFloatLocalized("world.generate.beehives", "amount", generateBeehivesAmount, 0.0f, 10.0f);
-		generateBeehivesDebug = config.getBooleanLocalized("world.generate.beehives", "debug", generateBeehivesDebug);
+		generateBeehivesAmount = configCommon.getFloatLocalized("world.generate.beehives", "amount", generateBeehivesAmount, 0.0f, 10.0f);
+		generateBeehivesDebug = configCommon.getBooleanLocalized("world.generate.beehives", "debug", generateBeehivesDebug);
 
-		generateApatiteOre = config.getBooleanLocalized("world.generate.ore", "apatite", generateApatiteOre);
-		generateCopperOre = config.getBooleanLocalized("world.generate.ore", "copper", generateCopperOre);
-		generateTinOre = config.getBooleanLocalized("world.generate.ore", "tin", generateTinOre);
+		generateApatiteOre = configCommon.getBooleanLocalized("world.generate.ore", "apatite", generateApatiteOre);
+		generateCopperOre = configCommon.getBooleanLocalized("world.generate.ore", "copper", generateCopperOre);
+		generateTinOre = configCommon.getBooleanLocalized("world.generate.ore", "tin", generateTinOre);
 
-		enableVillagers = config.getBooleanLocalized("world.generate", "villagers", enableVillagers);
+		enableVillagers = configCommon.getBooleanLocalized("world.generate", "villagers", enableVillagers);
 
-		craftingBronzeEnabled = config.getBooleanLocalized("crafting", "bronze", craftingBronzeEnabled);
-		craftingStampsEnabled = config.getBooleanLocalized("crafting.stamps", "enabled", true);
+		craftingBronzeEnabled = configCommon.getBooleanLocalized("crafting", "bronze", craftingBronzeEnabled);
+		craftingStampsEnabled = configCommon.getBooleanLocalized("crafting.stamps", "enabled", true);
 
 		String[] allStamps = new String[]{"1n", "2n", "5n", "10n", "20n", "50n", "100n"};
 		String[] defaultCollectors = new String[]{"20n", "50n", "100n"};
-		String[] stamps = config.getStringListLocalized("crafting.stamps", "disabled", defaultCollectors, allStamps);
+		String[] stamps = configCommon.getStringListLocalized("crafting.stamps", "disabled", defaultCollectors, allStamps);
 		try {
 			collectorStamps.addAll(Arrays.asList(stamps));
 		} catch (Exception ex) {
 			Proxies.log.warning("Failed to read config for 'crafting.stamps.disabled', setting to default.");
-			Property property = config.get("crafting.stamps", "disabled", defaultCollectors);
+			Property property = configCommon.get("crafting.stamps", "disabled", defaultCollectors);
 			property.setToDefault();
 			collectorStamps.addAll(Arrays.asList(defaultCollectors));
 		}
 
-		clearInvalidChromosomes = config.getBooleanLocalized("genetics", "clear.invalid.chromosomes", clearInvalidChromosomes);
-		dungeonLootRare = config.getBooleanLocalized("difficulty", "loot.rare", dungeonLootRare);
+		clearInvalidChromosomes = configCommon.getBooleanLocalized("genetics", "clear.invalid.chromosomes", clearInvalidChromosomes);
+		dungeonLootRare = configCommon.getBooleanLocalized("difficulty", "loot.rare", dungeonLootRare);
 
-		enableBackpackResupply = config.getBooleanLocalized("performance.backpacks", "resupply", enableBackpackResupply);
+		enableBackpackResupply = configCommon.getBooleanLocalized("performance", "backpacks.resupply", enableBackpackResupply);
 
-		mailAlertEnabled = config.getBooleanLocalized("tweaks.gui", "mail.alert", mailAlertEnabled);
+		mailAlertEnabled = configCommon.getBooleanLocalized("tweaks.gui", "mail.alert", mailAlertEnabled);
 
-		guiTabSpeed = config.getIntLocalized("tweaks.gui.tabs", "speed", guiTabSpeed, 1, 50);
-		enableHints = config.getBooleanLocalized("tweaks.gui.tabs", "hints", enableHints);
-		enableEnergyStat = config.getBooleanLocalized("tweaks.gui.tabs", "energy", enableEnergyStat);
+		guiTabSpeed = configCommon.getIntLocalized("tweaks.gui.tabs", "speed", guiTabSpeed, 1, 50);
+		enableHints = configCommon.getBooleanLocalized("tweaks.gui.tabs", "hints", enableHints);
+		enableEnergyStat = configCommon.getBooleanLocalized("tweaks.gui.tabs", "energy", enableEnergyStat);
 
-		tooltipLiquidAmount = config.getBooleanLocalized("tweaks.gui.tooltip", "liquidamount", tooltipLiquidAmount);
+		tooltipLiquidAmount = configCommon.getBooleanLocalized("tweaks.gui.tooltip", "liquidamount", tooltipLiquidAmount);
 
-		enablePermissions = config.getBooleanLocalized("tweaks", "permissions", enablePermissions);
+		enablePermissions = configCommon.getBooleanLocalized("tweaks", "permissions", enablePermissions);
 
-		squareFarms = config.getBooleanLocalized("tweaks.farms", "square", squareFarms);
-		enableExUtilEnderLily = config.getBooleanLocalized("tweaks.farms", "enderlily", enableExUtilEnderLily);
-		enableMagicalCropsSupport = config.getBooleanLocalized("tweaks.farms", "magicalcrops", enableMagicalCropsSupport);
+		squareFarms = configCommon.getBooleanLocalized("tweaks.farms", "square", squareFarms);
+		enableExUtilEnderLily = configCommon.getBooleanLocalized("tweaks.farms", "enderlily", enableExUtilEnderLily);
+		enableMagicalCropsSupport = configCommon.getBooleanLocalized("tweaks.farms", "magicalcrops", enableMagicalCropsSupport);
 
 		String[] availableStructures = new String[]{"alveary3x3", "farm3x3", "farm3x4", "farm3x5", "farm4x4", "farm5x5"};
 		String[] disabledStructureArray = disabledStructures.toArray(new String[disabledStructures.size()]);
-		disabledStructureArray = config.getStringListLocalized("structures", "disabled", disabledStructureArray, availableStructures);
+		disabledStructureArray = configCommon.getStringListLocalized("structures", "disabled", disabledStructureArray, availableStructures);
 
 		disabledStructures.addAll(Arrays.asList(disabledStructureArray));
 		for (String str : disabledStructures) {
 			Proxies.log.finer("Disabled structure '%s'.", str);
 		}
 
-		isDebug = config.getBooleanLocalized("debug", "enabled", isDebug);
+		isDebug = configCommon.getBooleanLocalized("debug", "enabled", isDebug);
 
-		config.save();
+		configCommon.save();
 	}
 
 	private static void loadOldConfigCommon() {
@@ -409,27 +412,27 @@ public class Config {
 	}
 
 	private static void loadNewConfigFluids(File configFile) {
-		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
+		configFluid = new LocalizedConfiguration(configFile, "1.0.0");
 
 		for (Fluids fluid : Fluids.forestryFluids) {
 			String fluidName = StatCollector.translateToLocal("fluid." + fluid.getTag());
 
 			boolean enabledFluid = !Config.disabledFluids.contains(fluid.getTag());
 			String enableFluidComment = StringUtil.localizeAndFormatRaw("for.config.fluids.enable.format", fluidName);
-			enabledFluid = config.getBoolean("enableFluid", fluid.getTag(), enabledFluid, enableFluidComment);
+			enabledFluid = configFluid.getBoolean("enableFluid", fluid.getTag(), enabledFluid, enableFluidComment);
 			if (!enabledFluid) {
 				Config.disabledFluids.add(fluid.getTag());
 			}
 
 			boolean enabledFluidBlock = !Config.disabledBlocks.contains(fluid.getTag());
 			String enableFluidBlockComment = StringUtil.localizeAndFormatRaw("for.config.fluid.blocks.enable.format", fluidName);
-			enabledFluidBlock = config.getBoolean("enableFluidBlock", fluid.getTag(), enabledFluidBlock, enableFluidBlockComment);
+			enabledFluidBlock = configFluid.getBoolean("enableFluidBlock", fluid.getTag(), enabledFluidBlock, enableFluidBlockComment);
 			if (!enabledFluidBlock) {
 				Config.disabledBlocks.add(fluid.getTag());
 			}
 		}
 
-		config.save();
+		configFluid.save();
 	}
 
 	private static void loadOldConfigFluids() {
