@@ -19,6 +19,7 @@ buildscript {
 
 apply plugin: 'forge'
 apply plugin: 'maven'
+apply plugin: 'java'
 
 loadProperties()
 
@@ -74,6 +75,7 @@ configurations {
 dependencies {
 	api 'net.industrial-craft:industrialcraft-2:2.2.713-experimental:api'
 	api name: "buildcraft", version: "6.4.10", classifier: "dev"
+	testCompile 'junit:junit:4.12'
 }
 
 processResources {

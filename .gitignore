@@ -6,6 +6,7 @@
 !/gradle/wrapper
 !/src
 !/api
+!/test
 
 # files
 !/.gitignore
