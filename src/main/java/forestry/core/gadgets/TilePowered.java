@@ -59,8 +59,7 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 	protected void updateServerSide() {
 		super.updateServerSide();
 
-		// Disable powered machines on a direct redstone signal
-		boolean disabled = (worldObj.getBlockPowerInput(xCoord, yCoord, zCoord) >= 15);
+		boolean disabled = isRedstoneActivated();
 		setErrorCondition(disabled, EnumErrorCode.DISABLED);
 		if (disabled) {
 			return;
