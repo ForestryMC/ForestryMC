@@ -25,6 +25,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -32,6 +33,9 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import forestry.api.fuels.FuelManager;
+import forestry.api.fuels.GeneratorFuel;
+import forestry.core.GameMode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
@@ -138,6 +142,14 @@ public class PluginFluids extends ForestryPlugin {
 				LiquidHelper.injectLiquidContainer(fluidType, filledContainer);
 			}
 		}
+
+		FluidStack ethanol = Fluids.ETHANOL.getFluid(1);
+		GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * GameMode.getGameMode().getFloatSetting("fuel.ethanol.generator")), 4);
+		FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
+
+		FluidStack biomass = Fluids.BIOMASS.getFluid(1);
+		GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * GameMode.getGameMode().getFloatSetting("fuel.biomass.generator")), 1);
+		FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
 	}
 
 	public static class MissingFluidException extends RuntimeException {

@@ -18,16 +18,12 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fluids.FluidStack;
-
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameData;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitLayout;
-import forestry.api.fuels.FuelManager;
-import forestry.api.fuels.GeneratorFuel;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
@@ -189,14 +185,6 @@ public class PluginIC2 extends ForestryPlugin {
 
 		definitionEngineTin.register();
 		definitionGenerator.register();
-
-		FluidStack ethanol = Fluids.ETHANOL.getFluid(1);
-		GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * GameMode.getGameMode().getFloatSetting("fuel.ethanol.generator")), 4);
-		FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
-
-		FluidStack biomass = Fluids.BIOMASS.getFluid(1);
-		GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * GameMode.getGameMode().getFloatSetting("fuel.biomass.generator")), 1);
-		FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
 
 		Circuit.energyElectricChoke1 = new CircuitElectricChoke("electric.choke.1");
 		Circuit.energyFireDampener1 = new CircuitFireDampener("dampener.1");
