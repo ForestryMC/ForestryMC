@@ -133,19 +133,11 @@ public class EngineClockwork extends Engine {
 
 	@Override
 	public TemperatureState getTemperatureState() {
-		double scaled = (heat / 10000) / ENGINE_CLOCKWORK_WIND_MAX;
-
-		if (scaled < 0.20) {
-			return TemperatureState.COOL;
-		} else if (scaled < 0.45) {
-			return TemperatureState.WARMED_UP;
-		} else if (scaled < 0.65) {
-			return TemperatureState.OPERATING_TEMPERATURE;
-		} else if (scaled < 0.85) {
-			return TemperatureState.RUNNING_HOT;
-		} else {
-			return TemperatureState.OVERHEATING;
+		TemperatureState state = TemperatureState.getState(heat / 10000, ENGINE_CLOCKWORK_WIND_MAX);
+		if (state == TemperatureState.MELTING) {
+			state = TemperatureState.OVERHEATING;
 		}
+		return state;
 	}
 
 	@Override
