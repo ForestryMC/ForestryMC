@@ -111,12 +111,20 @@ public class ItemLetter extends ItemInventoried {
 
 	public static LetterState getState(int meta) {
 		int ordinal = meta & 0x0f;
-		return LetterState.values()[ordinal];
+		LetterState[] values = LetterState.values();
+		if (ordinal >= values.length) {
+			ordinal = 0;
+		}
+		return values[ordinal];
 	}
 
 	public static LetterSize getSize(int meta) {
 		int ordinal = meta >> 4;
-		return LetterSize.values()[ordinal];
+		LetterSize[] values = LetterSize.values();
+		if (ordinal >= values.length) {
+			ordinal = 0;
+		}
+		return values[ordinal];
 	}
 
 	public static LetterSize getSize(ILetter letter) {
@@ -167,22 +175,23 @@ public class ItemLetter extends ItemInventoried {
 			switch (state) {
 				case OPENED:
 					if (letter.countAttachments() <= 0) {
-						int meta = encodeMeta(LetterState.EMPTIED, size);
-						parent.setItemDamage(meta);
+						state = LetterState.EMPTIED;
 					}
 					break;
 				case FRESH:
 				case STAMPED:
 					if (letter.isMailable() && letter.isPostPaid()) {
-						int meta = encodeMeta(LetterState.STAMPED, size);
-						parent.setItemDamage(meta);
+						state = LetterState.STAMPED;
 					} else {
-						int meta = encodeMeta(LetterState.FRESH, size);
-						parent.setItemDamage(meta);
+						state = LetterState.FRESH;
 					}
+					size = getSize(letter);
 					break;
 				case EMPTIED:
 			}
+
+			int meta = encodeMeta(state, size);
+			parent.setItemDamage(meta);
 
 			letter.writeToNBT(parent.getTagCompound());
 		}
