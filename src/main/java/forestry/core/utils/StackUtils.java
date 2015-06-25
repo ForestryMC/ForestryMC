@@ -471,35 +471,88 @@ public class StackUtils {
 		return block == getBlock(stack) && meta == stack.getItemDamage();
 	}
 
-	public static List<ItemStack> parseItemStackStrings(String itemStackStrings, int missingMetaValue) {
-		String[] parts = itemStackStrings.split("(\\s*;\\s*)+");
-		return parseItemStackStrings(parts, missingMetaValue);
+	public static class Stack {
+		private final String name;
+		private final int meta;
+
+		public Stack(String name, int meta) {
+			this.name = name;
+			this.meta = meta;
+		}
+
+		public Item getItem() {
+			Item item = GameData.getItemRegistry().getRaw(name);
+			if (item == null) {
+				Proxies.log.warning("Failed to find item for (" + name + ") in the Forge registry.");
+			}
+			return item;
+		}
+
+		public Block getBlock() {
+			Block block = GameData.getBlockRegistry().getRaw(name);
+			if (block == null) {
+				Proxies.log.warning("Failed to find block for (" + name + ") in the Forge registry.");
+			}
+			return block;
+		}
+
+		public int getMeta() {
+			return meta;
+		}
 	}
 
-	public static List<ItemStack> parseItemStackStrings(String[] parts, int missingMetaValue) {
+	public static List<ItemStack> parseItemStackStrings(String[] itemStackStrings, int missingMetaValue) {
+		List<Stack> stacks = parseStackStrings(itemStackStrings, missingMetaValue);
+		return getItemStacks(stacks);
+	}
 
-		List<ItemStack> itemStacks = new ArrayList<ItemStack>();
+	public static List<ItemStack> parseItemStackStrings(String itemStackStrings, int missingMetaValue) {
+		List<Stack> stacks = parseStackStrings(itemStackStrings, missingMetaValue);
+		return getItemStacks(stacks);
+	}
 
-		for (String itemStackString : parts) {
-			ItemStack itemStack = StackUtils.parseItemStackString(itemStackString, missingMetaValue);
-			if (itemStack != null) {
+	private static List<ItemStack> getItemStacks(List<Stack> stacks) {
+		List<ItemStack> itemStacks = new ArrayList<ItemStack>(stacks.size());
+		for (Stack stack : stacks) {
+			Item item = stack.getItem();
+			if (item != null) {
+				int meta = stack.getMeta();
+				ItemStack itemStack = new ItemStack(item, meta, 1);
 				itemStacks.add(itemStack);
 			}
 		}
-
 		return itemStacks;
 	}
 
-	public static ItemStack parseItemStackString(String itemStackString, int missingMetaValue) {
-		itemStackString = itemStackString.trim();
-		if (itemStackString.isEmpty()) {
+	public static List<Stack> parseStackStrings(String itemStackStrings, int missingMetaValue) {
+		String[] parts = itemStackStrings.split("(\\s*;\\s*)+");
+		return parseStackStrings(parts, missingMetaValue);
+	}
+
+	public static List<Stack> parseStackStrings(String[] parts, int missingMetaValue) {
+
+		List<Stack> stacks = new ArrayList<Stack>();
+
+		for (String itemStackString : parts) {
+			Stack stack = parseStackString(itemStackString, missingMetaValue);
+			if (stack != null) {
+				stacks.add(stack);
+			}
+		}
+
+		return stacks;
+	}
+
+	public static Stack parseStackString(String stackString, int missingMetaValue) {
+		stackString = stackString.trim();
+		if (stackString.isEmpty()) {
 			return null;
 		}
 
-		String[] parts = itemStackString.split(":+");
+		String[] parts = stackString.split(":+");
 
 		if (parts.length != 2 && parts.length != 3) {
-			Proxies.log.warning("ItemStack string (" + itemStackString + ") isn't formatted properly. Suitable formats are <modId>:<name>, <modId>:<name>:<meta> or <modId>:<name>:*, e.g. IC2:blockWall:*");
+			Proxies.log.warning("Stack string (" + stackString + ") isn't formatted properly. Suitable formats are <modId>:<name>, <modId>:<name>:<meta> or <modId>:<name>:*, e.g. IC2:blockWall:*");
 			return null;
 		}
 
@@ -512,28 +565,11 @@ public class StackUtils {
 			try {
 				meta = parts[2].equals("*") ? OreDictionary.WILDCARD_VALUE : NumberFormat.getIntegerInstance().parse(parts[2]).intValue();
 			} catch (ParseException e) {
-				Proxies.log.warning("ItemStack string (" + itemStackString + ") has improperly formatted metadata. Suitable metadata are integer values or *.");
+				Proxies.log.warning("ItemStack string (" + stackString + ") has improperly formatted metadata. Suitable metadata are integer values or *.");
 				return null;
 			}
 		}
 
-		Item item = GameData.getItemRegistry().getRaw(name);
-
-		if (item == null) {
-			Block block = GameData.getBlockRegistry().getRaw(name);
-
-			if (block != null) {
-				item = Item.getItemFromBlock(block);
-			}
-			if (item == null) {
-				Proxies.log.warning("Failed to find item for (" + itemStackString + ") in the Forge registry.");
-				return null;
-			}
-		}
-		ItemStack itemStack = new ItemStack(item, 1, meta);
-
-		Proxies.log.finer("Parsed (" + itemStackString + ") into: " + itemStack);
-
-		return itemStack;
+		return new Stack(name, meta);
 	}
 }

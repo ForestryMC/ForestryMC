@@ -1008,10 +1008,10 @@ public class PluginApiculture extends ForestryPlugin {
 	}
 
 	private static void parseAcceptedFlowers(Property property, String flowerType) {
-		List<ItemStack> acceptedFlowerItemStacks = StackUtils.parseItemStackStrings(property.getStringList(), OreDictionary.WILDCARD_VALUE);
-		for (ItemStack acceptedFlower : acceptedFlowerItemStacks) {
-			Block acceptedFlowerBlock = Block.getBlockFromItem(acceptedFlower.getItem());
-			int meta = acceptedFlower.getItemDamage();
+		List<StackUtils.Stack> acceptedFlowerItemStacks = StackUtils.parseStackStrings(property.getStringList(), OreDictionary.WILDCARD_VALUE);
+		for (StackUtils.Stack acceptedFlower : acceptedFlowerItemStacks) {
+			Block acceptedFlowerBlock = acceptedFlower.getBlock();
+			int meta = acceptedFlower.getMeta();
 			if (acceptedFlowerBlock != null) {
 				FlowerManager.flowerRegistry.registerAcceptableFlower(acceptedFlowerBlock, meta, flowerType);
 			} else {
@@ -1034,15 +1034,13 @@ public class PluginApiculture extends ForestryPlugin {
 			}
 
 			String itemStackString = string.substring(idx + 1);
-			ItemStack plantableFlower = StackUtils.parseItemStackString(itemStackString, OreDictionary.WILDCARD_VALUE);
-
+			StackUtils.Stack plantableFlower = StackUtils.parseStackString(itemStackString, OreDictionary.WILDCARD_VALUE);
 			if (plantableFlower == null) {
-				Proxies.log.warning("No block found for '" + string + "' in config '" + property.getName() + "'.");
 				continue;
 			}
 
-			Block plantableFlowerBlock = Block.getBlockFromItem(plantableFlower.getItem());
-			int meta = plantableFlower.getItemDamage();
+			Block plantableFlowerBlock = plantableFlower.getBlock();
+			int meta = plantableFlower.getMeta();
 			if (plantableFlowerBlock != null) {
 				FlowerManager.flowerRegistry.registerPlantableFlower(plantableFlowerBlock, meta, weight, flowerType);
 			} else {
