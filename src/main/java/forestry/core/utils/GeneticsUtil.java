@@ -41,23 +41,23 @@ import forestry.plugins.PluginArboriculture;
 
 public class GeneticsUtil {
 
-	private static Set<Material> ersatzSpecimenMaterials;
+	private static Set<Block> ersatzSpecimenBlocks;
 
-	private static Set<Material> getErsatzSpecimenMaterials() {
-		if (ersatzSpecimenMaterials == null) {
-			ersatzSpecimenMaterials = new HashSet<Material>();
+	private static Set<Block> getErsatzBlocks() {
+		if (ersatzSpecimenBlocks == null) {
+			ersatzSpecimenBlocks = new HashSet<Block>();
 			for (ItemStack ersatzSpecimen : AlleleManager.ersatzSpecimen.keySet()) {
 				Block ersatzBlock = StackUtils.getBlock(ersatzSpecimen);
 				if (ersatzBlock != null) {
-					ersatzSpecimenMaterials.add(ersatzBlock.getMaterial());
+					ersatzSpecimenBlocks.add(ersatzBlock);
 				}
 			}
 		}
-		return ersatzSpecimenMaterials;
+		return ersatzSpecimenBlocks;
 	}
 
-	private static boolean isErsatzMaterial(Block block) {
-		return block != null && getErsatzSpecimenMaterials().contains(block.getMaterial());
+	private static boolean isErsatzBlock(Block block) {
+		return block != null && getErsatzBlocks().contains(block);
 	}
 
 	public static boolean hasNaturalistEye(EntityPlayer player) {
@@ -127,7 +127,7 @@ public class GeneticsUtil {
 
 	public static ITree getErsatzPollen(World world, final int x, final int y, final int z) {
 		Block block = world.getBlock(x, y, z);
-		if (!isErsatzMaterial(block)) {
+		if (!isErsatzBlock(block)) {
 			return null;
 		}
 
