@@ -421,8 +421,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		}
 	}
 
-	public void fromRipeningPacket(PacketRipeningUpdate packet) {
-		int newColourFruits = packet.getValue();
+	public void fromRipeningPacket(int newColourFruits) {
 		if (newColourFruits == colourFruits) {
 			return;
 		}

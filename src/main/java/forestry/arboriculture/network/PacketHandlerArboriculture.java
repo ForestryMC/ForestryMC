@@ -13,13 +13,10 @@ package forestry.arboriculture.network;
 import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
 
-import forestry.arboriculture.gadgets.TileLeaves;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.IPacketHandler;
 import forestry.core.network.PacketId;
-import forestry.core.proxy.Proxies;
 
 public class PacketHandlerArboriculture implements IPacketHandler {
 
@@ -28,8 +25,7 @@ public class PacketHandlerArboriculture implements IPacketHandler {
 
 		switch (packetID) {
 			case RIPENING_UPDATE: {
-				PacketRipeningUpdate packet = new PacketRipeningUpdate(data);
-				onRipeningUpdate(packet);
+				PacketRipeningUpdate.onPacketData(data);
 				return true;
 			}
 		}
@@ -37,10 +33,4 @@ public class PacketHandlerArboriculture implements IPacketHandler {
 		return false;
 	}
 
-	private static void onRipeningUpdate(PacketRipeningUpdate packet) {
-		TileEntity tile = packet.getTarget(Proxies.common.getRenderWorld());
-		if (tile instanceof TileLeaves) {
-			((TileLeaves) tile).fromRipeningPacket(packet);
-		}
-	}
 }

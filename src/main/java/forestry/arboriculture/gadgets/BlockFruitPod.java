@@ -139,4 +139,30 @@ public class BlockFruitPod extends BlockCocoa {
 		return PluginArboriculture.modelIdPods;
 	}
 
+	/* IGrowable */
+
+	@Override
+	// canFertilize
+	public boolean func_149851_a(World world, int x, int y, int z, boolean isClient) {
+		TileFruitPod podTile = getPodTile(world, x, y, z);
+		if (podTile != null) {
+			return podTile.canMature();
+		}
+		return false;
+	}
+
+	@Override
+	// shouldFertilize
+	public boolean func_149852_a(World world, Random random, int x, int y, int z) {
+		return true;
+	}
+
+	@Override
+	// fertilize
+	public void func_149853_b(World world, Random random, int x, int y, int z) {
+		TileFruitPod podTile = getPodTile(world, x, y, z);
+		if (podTile != null) {
+			podTile.mature();
+		}
+	}
 }

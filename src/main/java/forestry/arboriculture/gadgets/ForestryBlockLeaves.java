@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.BlockNewLeaf;
+import net.minecraft.block.IGrowable;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -49,7 +50,7 @@ import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginArboriculture;
 import forestry.plugins.PluginLepidopterology;
 
-public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProvider {
+public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProvider, IGrowable {
 
 	public ForestryBlockLeaves() {
 		this.setCreativeTab(Tabs.tabArboriculture);
@@ -328,4 +329,30 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 		return super.onBlockActivated(world, x, y, z, player, par6, par7, par8, par9);
 	}
 
+	/* IGrowable */
+
+	@Override
+	// canFertilize
+	public boolean func_149851_a(World world, int x, int y, int z, boolean isClient) {
+		TileLeaves leafTile = getLeafTile(world, x, y, z);
+		if (leafTile != null) {
+			return leafTile.hasFruit() && leafTile.getRipeness() < 1.0f;
+		}
+		return false;
+	}
+
+	@Override
+	// shouldFertilize
+	public boolean func_149852_a(World world, Random random, int x, int y, int z) {
+		return true;
+	}
+
+	@Override
+	// fertilize
+	public void func_149853_b(World world, Random random, int x, int y, int z) {
+		TileLeaves leafTile = getLeafTile(world, x, y, z);
+		if (leafTile != null) {
+			leafTile.addRipeness(1.0f);
+		}
+	}
 }
