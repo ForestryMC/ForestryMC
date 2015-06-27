@@ -138,6 +138,14 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 		Proxies.net.sendNetworkPacket(new PacketRipeningUpdate(this));
 	}
 
+	public void fromRipeningPacket(int newMaturity) {
+		if (newMaturity == maturity) {
+			return;
+		}
+		maturity = (short) newMaturity;
+		worldObj.func_147479_m(xCoord, yCoord, zCoord);
+	}
+
 	/* IFRUITBEARER */
 	@Override
 	public boolean hasFruit() {

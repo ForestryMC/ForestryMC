@@ -23,7 +23,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.WeightedRandomChestContent;
 
 import net.minecraftforge.common.ChestGenHooks;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.IFuelHandler;
@@ -48,7 +47,6 @@ import forestry.api.genetics.IFruitFamily;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
-import forestry.arboriculture.EventHandlerArboriculture;
 import forestry.arboriculture.FruitProviderNone;
 import forestry.arboriculture.FruitProviderPod;
 import forestry.arboriculture.FruitProviderPod.EnumPodType;
@@ -337,8 +335,6 @@ public class PluginArboriculture extends ForestryPlugin {
 		GameRegistry.registerTileEntity(TileStairs.class, "forestry.Stairs");
 		GameRegistry.registerTileEntity(TileFruitPod.class, "forestry.Pods");
 		definitionChest.register();
-
-		MinecraftForge.EVENT_BUS.register(new EventHandlerArboriculture());
 
 		if (Config.enableVillager) {
 			VillagerRegistry.instance().registerVillagerId(Defaults.ID_VILLAGER_LUMBERJACK);
