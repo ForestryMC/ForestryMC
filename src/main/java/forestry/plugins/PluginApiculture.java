@@ -394,6 +394,7 @@ public class PluginApiculture extends ForestryPlugin {
 		flowerRegistry.registerAcceptableFlower(Blocks.pumpkin_stem, FlowerManager.FlowerTypeGourd);
 		flowerRegistry.registerAcceptableFlower(Blocks.melon_stem, FlowerManager.FlowerTypeGourd);
 		flowerRegistry.registerAcceptableFlower(Blocks.nether_wart, FlowerManager.FlowerTypeNether);
+		flowerRegistry.registerAcceptableFlower(Blocks.cactus, FlowerManager.FlowerTypeCacti);
 		
 		flowerRegistry.registerAcceptableFlower(Blocks.double_plant, 0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
 		flowerRegistry.registerAcceptableFlower(Blocks.double_plant, 1, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
