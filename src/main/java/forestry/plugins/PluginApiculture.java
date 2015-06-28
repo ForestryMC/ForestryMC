@@ -14,9 +14,11 @@ import com.google.common.collect.ImmutableMap;
 
 import java.io.File;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
@@ -324,6 +326,11 @@ public class PluginApiculture extends ForestryPlugin {
 			property = config.get("beekeeping.flowers." + flowerType, "plantable", defaultPlantable);
 			property.comment = plantableFlowerMessage;
 			parsePlantableFlowers(property, flowerType);
+
+			List<IFlower> acceptableFlowers = FlowerManager.flowerRegistry.getAcceptableFlowers(flowerType);
+			if (acceptableFlowers == null || acceptableFlowers.size() == 0) {
+				Proxies.log.severe("Flower type '" + flowerType + "' has no valid flowers set in apiculture.cfg. Add valid flowers or delete the config to set it to default.");
+			}
 		}
 
 		String[] blacklist = config.getStringListLocalized("species", "blacklist", EMPTY_STRINGS);
@@ -411,7 +418,9 @@ public class PluginApiculture extends ForestryPlugin {
 		flowerRegistry.registerPlantableFlower(Blocks.red_mushroom, 0, 1.0, FlowerManager.FlowerTypeMushrooms);
 		flowerRegistry.registerPlantableFlower(Blocks.cactus, 0, 1.0, FlowerManager.FlowerTypeCacti);
 
-		DecimalFormat weightDecimalFormat = new DecimalFormat("#.000");
+		DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.ENGLISH);
+		DecimalFormat weightDecimalFormat = new DecimalFormat("#.000", decimalFormatSymbols);
+		weightDecimalFormat.setGroupingUsed(false);
 
 		for (String flowerType : FlowerManager.flowerRegistry.getFlowerTypes()) {
 			List<IFlower> flowers = FlowerManager.flowerRegistry.getAcceptableFlowers(flowerType);
