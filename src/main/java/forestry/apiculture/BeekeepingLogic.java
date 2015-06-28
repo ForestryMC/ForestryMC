@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.Stack;
 
@@ -36,7 +37,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 	private static final int MAX_POLLINATION_ATTEMPTS = 20;
 	private static final int totalBreedingTime = Defaults.APIARY_BREEDING_TIME;
-	private static final int ticksPerCheckCanWork = 10;
+	private static final int ticksPerCheckQueenCanWork = 10;
 
 	private final IBeeHousing housing;
 	private final boolean housingSupportsMultipleErrorStates;
@@ -53,8 +54,8 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	// Cached flowers check
 	private boolean hasFlowersCached = false;
 	private int hasFlowersCooldown = 0;
-	private boolean canWorkCached = false;
-	private int canWorkCooldown = 0;
+	private Set<IErrorState> queenCanWorkCached = Collections.emptySet();
+	private int queenCanWorkCooldown = 0;
 
 	public BeekeepingLogic(IBeeHousing housing) {
 		this.housing = housing;
@@ -128,16 +129,6 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 	@Override
 	public boolean canWork() {
-		if (canWorkCooldown > 0) {
-			canWorkCooldown--;
-		} else {
-			canWorkCached = checkCanWork();
-			canWorkCooldown = ticksPerCheckCanWork;
-		}
-		return canWorkCached;
-	}
-
-	private boolean checkCanWork() {
 		if (housingSupportsMultipleErrorStates) {
 			Set<IErrorState> errorStates = housing.getErrorStates();
 			for (IErrorState errorState : errorStates) {
@@ -183,7 +174,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 		if (hasFlowersCooldown <= 0) {
 			hasFlowersCached = queen.hasFlower(housing);
-			hasFlowersCooldown = PluginApiculture.ticksPerBeeWorkCycle / ticksPerCheckCanWork;
+			hasFlowersCooldown = PluginApiculture.ticksPerBeeWorkCycle;
 
 			// check more often if we haven't found flowers
 			if (!hasFlowersCached) {
@@ -318,7 +309,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 		ItemStack queenStack = housing.getQueen();
 
-		if (queenStack == null || !ForestryItem.beeQueenGE.isItemEqual(housing.getQueen())) {
+		if (queenStack == null || !ForestryItem.beeQueenGE.isItemEqual(queenStack)) {
 			housingErrorState = EnumErrorCode.NOQUEEN;
 			hasQueen = false;
 			queen = null;
@@ -367,30 +358,46 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	private boolean queenCanWork() {
-		if (queen == null) {
-			return false;
+		if (queenCanWorkCooldown > 0) {
+			queenCanWorkCooldown--;
+		} else {
+			if (queen == null) {
+				return false;
+			}
+			queenCanWorkCached = checkQueenCanWork();
+			queenCanWorkCooldown = ticksPerCheckQueenCanWork;
 		}
 
-		if (housingSupportsMultipleErrorStates) {
-			try {
-				Set<IErrorState> errorStates = queen.getCanWork(housing);
+		Set<IErrorState> errorStates = queenCanWorkCached;
+
+		if (errorStates.size() > 0) {
+			if (housingSupportsMultipleErrorStates) {
 				for (IErrorState errorState : errorStates) {
 					housing.setErrorCondition(true, errorState);
 				}
-
-				return (errorStates.size() == 0);
-			} catch (Throwable ignored) {
-				// queen might not support getCanWork(housing)
+			} else {
+				IErrorState state = errorStates.iterator().next();
+				housing.setErrorState(state);
 			}
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	private Set<IErrorState> checkQueenCanWork() {
+		try {
+			return queen.getCanWork(housing);
+		} catch (Throwable ignored) {
+			// queen might not support getCanWork
 		}
 
 		IErrorState state = queen.canWork(housing);
 		if (state != EnumErrorCode.OK) {
-			housing.setErrorState(state);
-			return false;
+			return Collections.singleton(state);
 		}
 
-		return true;
+		return Collections.emptySet();
 	}
 
 	// / BREEDING
