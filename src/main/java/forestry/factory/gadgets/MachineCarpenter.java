@@ -98,7 +98,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		craftPreviewInventory = new InventoryCraftResult();
 		setInternalInventory(new CarpenterInventoryAdapter(this));
 
-		InvTools.configureSided(getInternalInventory(), Defaults.FACINGS, SLOT_BOX, 20);
+		InvTools.configureSided(getInternalInventory(), Defaults.FACINGS, SLOT_BOX, 21);
 
 		tankManager = new TankManager(resourceTank);
 	}
