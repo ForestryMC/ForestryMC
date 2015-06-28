@@ -97,6 +97,10 @@ public class PluginManager {
 		PLANTMEGAPACK(new PluginPlantMegaPack()),
 		WITCHERY(new PluginWitchery());
 
+		static {
+			ForestryAPI.enabledPlugins = new HashSet<String>();
+		}
+
 		private final ForestryPlugin instance;
 		private final boolean canBeDisabled;
 
@@ -220,7 +224,6 @@ public class PluginManager {
 		unloadedModules.removeAll(toLoad);
 		loadedModules.addAll(toLoad);
 
-		ForestryAPI.enabledPlugins = new HashSet<String>();
 		for (Module m : loadedModules) {
 			ForestryAPI.enabledPlugins.add(m.toString());
 		}

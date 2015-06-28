@@ -61,11 +61,11 @@ public class PacketHandler {
 
 	@SubscribeEvent
 	public void onPacket(ClientCustomPacketEvent event) {
-		onPacketData(event.packet, null);
+		onPacketData(event.packet, Proxies.common.getPlayer());
 	}
 
 	/** Returns true if the packet has been handled */
-	private static boolean onPacketData(FMLProxyPacket fmlPacket, EntityPlayerMP player) {
+	private static boolean onPacketData(FMLProxyPacket fmlPacket, EntityPlayer player) {
 		InputStream is = new ByteBufInputStream(fmlPacket.payload());
 		DataInputStreamForestry data = new DataInputStreamForestry(is);
 
@@ -107,7 +107,7 @@ public class PacketHandler {
 
 				case PIPETTE_CLICK: {
 					PacketSlotClick packet = new PacketSlotClick(data);
-					onPipetteClick(packet, player);
+					onPipetteClick(packet, (EntityPlayerMP) player);
 					return true;
 				}
 				case SOLDERING_IRON_CLICK: {
