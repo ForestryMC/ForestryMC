@@ -91,6 +91,7 @@ public class PluginManager {
 		ENDERIO(new PluginEnderIO()),
 		EXTRAUTILITIES(new PluginExtraUtilities()),
 		HARVESTCRAFT(new PluginHarvestCraft()),
+		IMMERSIVEENGINEERING(new PluginImmersiveEngineering()),
 		INDUSTRIALCRAFT(new PluginIC2()),
 		MAGICALCROPS(new PluginMagicalCrops()),
 		NATURA(new PluginNatura()),

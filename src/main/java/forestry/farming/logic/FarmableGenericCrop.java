@@ -24,11 +24,13 @@ public class FarmableGenericCrop implements IFarmable {
 	private final ItemStack seed;
 	private final Block block;
 	private final int mature;
+	ItemStack[] windfall;
 
-	public FarmableGenericCrop(ItemStack seed, Block block, int mature) {
+	public FarmableGenericCrop(ItemStack seed, Block block, int mature, ItemStack... windfall) {
 		this.seed = seed;
 		this.block = block;
 		this.mature = mature;
+		this.windfall = windfall;
 	}
 
 	@Override
@@ -68,6 +70,11 @@ public class FarmableGenericCrop implements IFarmable {
 
 	@Override
 	public boolean isWindfall(ItemStack itemstack) {
+		for (ItemStack drop : windfall) {
+			if (drop.isItemEqual(itemstack)) {
+				return true;
+			}
+		}
 		return false;
 	}
 
