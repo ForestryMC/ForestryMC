@@ -27,6 +27,8 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+
 import org.lwjgl.input.Keyboard;
 
 import forestry.apiculture.render.TextureHabitatLocator;
@@ -52,7 +54,7 @@ public class ClientProxyCommon extends ProxyCommon {
 	public void registerTickHandlers(WorldGenerator worldGenerator) {
 		super.registerTickHandlers(worldGenerator);
 
-		new TickHandlerCoreClient();
+		FMLCommonHandler.instance().bus().register(new TickHandlerCoreClient());
 	}
 
 	@Override

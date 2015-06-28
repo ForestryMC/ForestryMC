@@ -10,12 +10,8 @@
  ******************************************************************************/
 package forestry.core;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
@@ -25,16 +21,7 @@ import forestry.core.utils.GeneticsUtil;
 
 public class TickHandlerCoreClient {
 
-	private static final ConcurrentLinkedQueue<String> messages = new ConcurrentLinkedQueue<String>();
-	private boolean hasNaturalistView;
-
-	public TickHandlerCoreClient() {
-		FMLCommonHandler.instance().bus().register(this);
-	}
-
-	public void queueChatMessage(String message) {
-		messages.add(message);
-	}
+	private boolean hasNaturalistEye;
 
 	@SubscribeEvent
 	public void onPlayerTick(PlayerTickEvent event) {
@@ -42,20 +29,13 @@ public class TickHandlerCoreClient {
 			return;
 		}
 
-		EntityPlayer player = Proxies.common.getClientInstance().thePlayer;
+		EntityPlayer player = event.player;
 		boolean hasNaturalistEye = GeneticsUtil.hasNaturalistEye(player);
-		if (hasNaturalistEye != hasNaturalistView) {
-			hasNaturalistView = !hasNaturalistView;
+		if (this.hasNaturalistEye != hasNaturalistEye) {
+			this.hasNaturalistEye = hasNaturalistEye;
 			Proxies.common.getClientInstance().renderGlobal.markBlockRangeForRenderUpdate(
 					(int) player.posX - 32, (int) player.posY - 32, (int) player.posZ - 32,
 					(int) player.posX + 32, (int) player.posY + 32, (int) player.posZ + 32);
-		}
-
-		if (messages.size() > 0) {
-			String message;
-			while ((message = messages.poll()) != null) {
-				player.addChatMessage(new ChatComponentText(message));
-			}
 		}
 	}
 }

@@ -32,6 +32,7 @@ import net.minecraft.world.WorldServer;
 
 import com.mojang.authlib.GameProfile;
 
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -67,7 +68,9 @@ public class ProxyCommon {
 	}
 
 	public void registerTickHandlers(WorldGenerator worldGenerator) {
-		new TickHandlerCoreServer(worldGenerator);
+		TickHandlerCoreServer tickHandlerCoreServer = new TickHandlerCoreServer(worldGenerator);
+		FMLCommonHandler.instance().bus().register(tickHandlerCoreServer);
+		MinecraftForge.EVENT_BUS.register(tickHandlerCoreServer);
 	}
 
 	public void registerBlock(Block block, Class<? extends ItemBlock> itemClass) {
