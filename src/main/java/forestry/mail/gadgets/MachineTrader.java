@@ -36,9 +36,11 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.EnumAccess;
 import forestry.core.utils.StackUtils;
 import forestry.mail.MailAddress;
 import forestry.mail.TradeStation;
+import forestry.mail.network.PacketTraderAddress;
 import forestry.mail.triggers.MailTriggers;
 
 import buildcraft.api.statements.ITriggerExternal;
@@ -94,14 +96,23 @@ public class MachineTrader extends TileBase {
 	@Override
 	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
-		data.writeUTF(address.getName());
+		String name = null;
+		if (address != null) {
+			name = address.getName();
+		}
+		if (name == null) {
+			name = "";
+		}
+		data.writeUTF(name);
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		String address = data.readUTF();
-		this.address = PostManager.postRegistry.getMailAddress(address);
+		if (address.length() > 0) {
+			this.address = PostManager.postRegistry.getMailAddress(address);
+		}
 	}
 
 	/* UPDATING */
@@ -240,6 +251,22 @@ public class MachineTrader extends TileBase {
 		return address;
 	}
 
+	public void handleSetAddress(String addressName) {
+		IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
+		setAddress(address);
+
+		if (!worldObj.isRemote) {
+			IMailAddress newAddress = getAddress();
+			if (newAddress != null) {
+				String newAddressName = newAddress.getName();
+				if (newAddressName != null && newAddressName.equals(addressName)) {
+					PacketTraderAddress packetResponse = new PacketTraderAddress(this, addressName);
+					Proxies.net.sendNetworkPacket(packetResponse);
+				}
+			}
+		}
+	}
+
 	public void setAddress(IMailAddress address) {
 		if (address == null) {
 			throw new NullPointerException("address must not be null");
@@ -260,6 +287,8 @@ public class MachineTrader extends TileBase {
 				this.address = address;
 				PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwner(), address);
 			}
+		} else {
+			this.address = address;
 		}
 	}
 
@@ -271,6 +300,15 @@ public class MachineTrader extends TileBase {
 		}
 
 		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwner(), address);
+	}
+
+	@Override
+	public EnumAccess getAccess() {
+		if (isLinked()) {
+			return super.getAccess();
+		} else {
+			return EnumAccess.PRIVATE;
+		}
 	}
 
 	/* ITRIGGERPROVIDER */

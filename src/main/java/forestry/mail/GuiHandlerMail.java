@@ -76,7 +76,7 @@ public class GuiHandlerMail extends GuiHandlerBase {
 			case TraderGUI:
 				return new GuiTrader(player.inventory, getTileForestry(world, x, y, z, player, MachineTrader.class));
 			case TraderNameGUI:
-				return new GuiTradeName(player.inventory, getTileForestry(world, x, y, z, player, MachineTrader.class));
+				return new GuiTradeName(getTileForestry(world, x, y, z, player, MachineTrader.class));
 			default:
 				return null;
 
@@ -122,7 +122,7 @@ public class GuiHandlerMail extends GuiHandlerBase {
 			case TraderGUI:
 				return new ContainerTrader(player.inventory, getTileForestry(world, x, y, z, player, MachineTrader.class));
 			case TraderNameGUI:
-				return new ContainerTradeName(player.inventory, getTileForestry(world, x, y, z, player, MachineTrader.class));
+				return new ContainerTradeName(getTileForestry(world, x, y, z, player, MachineTrader.class));
 			default:
 				return null;
 

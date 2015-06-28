@@ -14,19 +14,21 @@ import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.tileentity.TileEntity;
 
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.IPacketHandler;
 import forestry.core.network.PacketId;
 import forestry.core.network.PacketString;
 import forestry.core.proxy.Proxies;
+import forestry.mail.gadgets.MachineTrader;
 import forestry.mail.gui.ContainerCatalogue;
 import forestry.mail.gui.ContainerLetter;
-import forestry.mail.gui.ContainerTradeName;
 import forestry.mail.gui.GuiMailboxInfo;
 import forestry.mail.network.PacketLetterInfo;
 import forestry.mail.network.PacketPOBoxInfo;
 import forestry.mail.network.PacketRequestLetterInfo;
+import forestry.mail.network.PacketTraderAddress;
 
 public class PacketHandlerMail implements IPacketHandler {
 
@@ -55,8 +57,8 @@ public class PacketHandlerMail implements IPacketHandler {
 				return true;
 			}
 			case TRADING_ADDRESS_SET: {
-				PacketString packet = new PacketString(data);
-				onAddressSet(player, packet);
+				PacketTraderAddress packet = new PacketTraderAddress(data);
+				handleTradeAddressSet(player, packet);
 				return true;
 			}
 			case POBOX_INFO_REQUEST: {
@@ -83,12 +85,15 @@ public class PacketHandlerMail implements IPacketHandler {
 		GuiMailboxInfo.instance.setPOBoxInfo(packet.poboxInfo);
 	}
 
-	private static void onAddressSet(EntityPlayer player, PacketString packet) {
-		if (!(player.openContainer instanceof ContainerTradeName)) {
+	private static void handleTradeAddressSet(EntityPlayer player, PacketTraderAddress packet) {
+		TileEntity tile = packet.getTarget(player.worldObj);
+		if (!(tile instanceof MachineTrader)) {
 			return;
 		}
 
-		((ContainerTradeName) player.openContainer).handleSetAddress(packet);
+		String addressName = packet.getAddressName();
+
+		((MachineTrader) tile).handleSetAddress(addressName);
 	}
 
 	private static void onLetterText(EntityPlayer player, PacketString packet) {

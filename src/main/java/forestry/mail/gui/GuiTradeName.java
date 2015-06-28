@@ -13,23 +13,22 @@ package forestry.mail.gui;
 import org.apache.commons.lang3.StringUtils;
 
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.InventoryPlayer;
 
 import org.lwjgl.input.Keyboard;
 
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestry;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 import forestry.mail.gadgets.MachineTrader;
+import forestry.mail.network.PacketTraderAddress;
 
 public class GuiTradeName extends GuiForestry<ContainerTradeName, MachineTrader> {
 
 	private GuiTextField addressNameField;
 
-	private boolean addressNameFocus;
-
-	public GuiTradeName(InventoryPlayer inventoryplayer, MachineTrader tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/tradername.png", new ContainerTradeName(inventoryplayer, tile), tile);
+	public GuiTradeName(MachineTrader tile) {
+		super(Defaults.TEXTURE_PATH_GUI + "/tradername.png", new ContainerTradeName(tile), tile);
 		this.xSize = 176;
 		this.ySize = 90;
 	}
@@ -51,8 +50,7 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName, MachineTrader>
 		// Set focus or enter text into address
 		if (addressNameField.isFocused()) {
 			if (eventKey == Keyboard.KEY_RETURN) {
-				addressNameFocus = true;
-				addressNameField.setFocused(false);
+				setAddress();
 			} else {
 				addressNameField.textboxKeyTyped(eventCharacter, eventKey);
 			}
@@ -70,36 +68,24 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName, MachineTrader>
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
-		// Close gui screen if we linked up.
-		if (container.machine.isLinked()) {
-			this.mc.thePlayer.closeScreen();
-			this.mc.setIngameFocus();
-		}
-
-		// Check for focus changes
-		if (addressNameFocus && !addressNameField.isFocused()) {
-			this.setAddress();
-		}
-		addressNameFocus = addressNameField.isFocused();
-
 		super.drawGuiContainerBackgroundLayer(var1, var2, var3);
 
 		String prompt = StringUtil.localize("gui.mail.nametrader");
 		fontRendererObj.drawString(prompt, guiLeft + this.getCenteredOffset(prompt), guiTop + 16, fontColor.get("gui.mail.text"));
 		addressNameField.drawTextBox();
-
 	}
 
 	@Override
 	public void onGuiClosed() {
-		setAddress();
 		super.onGuiClosed();
+		setAddress();
 	}
 
 	private void setAddress() {
 		String address = addressNameField.getText();
 		if (StringUtils.isNotBlank(address)) {
-			container.setAddress(address);
+			PacketTraderAddress packet = new PacketTraderAddress(inventory, address);
+			Proxies.net.sendToServer(packet);
 		}
 	}
 

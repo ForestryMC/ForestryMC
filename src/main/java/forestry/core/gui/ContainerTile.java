@@ -26,6 +26,10 @@ public class ContainerTile<T extends TileForestry> extends ContainerForestry {
 
 	protected final T tile;
 
+	public ContainerTile(T tileForestry) {
+		this.tile = tileForestry;
+	}
+
 	public ContainerTile(T tileForestry, InventoryPlayer playerInventory, int xInv, int yInv) {
 		this.tile = tileForestry;
 
