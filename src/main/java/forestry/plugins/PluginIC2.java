@@ -18,12 +18,17 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameData;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitLayout;
+import forestry.api.fuels.EngineBronzeFuel;
+import forestry.api.fuels.FuelManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
@@ -284,6 +289,11 @@ public class PluginIC2 extends ForestryPlugin {
 			FMLInterModComms.sendMessage(Defaults.MOD, "add-farmable-sapling", imc);
 		}
 
+		FluidStack biogas = FluidRegistry.getFluidStack("ic2biogas", 1000); // 80% value of biomass in the biogas engine
+		if (biogas != null && PluginManager.Module.ENERGY.isEnabled()) {
+			FuelManager.bronzeEngineFuel.put(biogas.getFluid(), new EngineBronzeFuel(Fluids.BIOMASS.getFluid(),
+					Defaults.ENGINE_FUEL_VALUE_BIOMASS, (int) ((Defaults.ENGINE_CYCLE_DURATION_BIOMASS * GameMode.getGameMode().getFloatSetting("fuel.biomass.biogas")) * 0.8), 1));
+		}
 		if (lavaCell != null) {
 			LiquidHelper.injectTinContainer(Fluids.LAVA, Defaults.BUCKET_VOLUME, lavaCell, emptyCell);
 		}
