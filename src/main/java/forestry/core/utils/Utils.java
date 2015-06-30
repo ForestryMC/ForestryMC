@@ -19,87 +19,64 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
+import net.minecraftforge.oredict.OreDictionary;
+
 import cpw.mods.fml.common.registry.EntityRegistry;
 
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.ITileStructure;
-import forestry.core.gadgets.TileForestry;
 import forestry.core.proxy.Proxies;
 
 import buildcraft.api.tools.IToolWrench;
 
 public class Utils {
 
-	private static Random rand;
+	private static final int slabWoodId = OreDictionary.getOreID("slabWood");
+	private static final Random rand = new Random();
 
 	public static int getUID() {
-		if (rand == null) {
-			rand = new Random();
-		}
-
 		return rand.nextInt();
 	}
 
-	public static void dropInventory(TileForestry tile, World world, int x, int y, int z) {
-		if (tile == null) {
+	public static void dropInventory(IInventory inventory, World world, int x, int y, int z) {
+		if (inventory == null) {
 			return;
 		}
 
 		// Release inventory
-		if (tile instanceof ITileStructure) {
+		for (int slot = 0; slot < inventory.getSizeInventory(); slot++) {
 
-			ISidedInventory inventory = ((ITileStructure) tile).getStructureInventory();
-			if (inventory != null) {
-				for (int i = 0; i < inventory.getSizeInventory(); i++) {
-					if (inventory.getStackInSlot(i) == null) {
-						continue;
-					}
+			ItemStack itemstack = inventory.getStackInSlot(slot);
 
-					StackUtils.dropItemStackAsEntity(inventory.getStackInSlot(i), world, x, y, z);
-					inventory.setInventorySlotContents(i, null);
-				}
+			if (itemstack == null) {
+				continue;
 			}
-		} else {
 
-			for (int slot = 0; slot < tile.getSizeInventory(); slot++) {
+			float f = world.rand.nextFloat() * 0.8F + 0.1F;
+			float f1 = world.rand.nextFloat() * 0.8F + 0.1F;
+			float f2 = world.rand.nextFloat() * 0.8F + 0.1F;
 
-				ItemStack itemstack = tile.getStackInSlot(slot);
-
-				if (itemstack == null) {
-					continue;
+			while (itemstack.stackSize > 0) {
+				int stackPartial = world.rand.nextInt(21) + 10;
+				if (stackPartial > itemstack.stackSize) {
+					stackPartial = itemstack.stackSize;
 				}
-
-				float f = world.rand.nextFloat() * 0.8F + 0.1F;
-				float f1 = world.rand.nextFloat() * 0.8F + 0.1F;
-				float f2 = world.rand.nextFloat() * 0.8F + 0.1F;
-
-				while (itemstack.stackSize > 0) {
-
-					int stackPartial = world.rand.nextInt(21) + 10;
-					if (stackPartial > itemstack.stackSize) {
-						stackPartial = itemstack.stackSize;
-					}
-					ItemStack drop = itemstack.splitStack(stackPartial);
-					EntityItem entityitem = new EntityItem(world, x + f, y + f1, z + f2, drop);
-					float accel = 0.05F;
-					entityitem.motionX = (float) world.rand.nextGaussian() * accel;
-					entityitem.motionY = (float) world.rand.nextGaussian() * accel + 0.2F;
-					entityitem.motionZ = (float) world.rand.nextGaussian() * accel;
-					world.spawnEntityInWorld(entityitem);
-
-				}
-
-				tile.setInventorySlotContents(slot, null);
-
+				ItemStack drop = itemstack.splitStack(stackPartial);
+				EntityItem entityitem = new EntityItem(world, x + f, y + f1, z + f2, drop);
+				float accel = 0.05F;
+				entityitem.motionX = (float) world.rand.nextGaussian() * accel;
+				entityitem.motionY = (float) world.rand.nextGaussian() * accel + 0.2F;
+				entityitem.motionZ = (float) world.rand.nextGaussian() * accel;
+				world.spawnEntityInWorld(entityitem);
 			}
+
+			inventory.setInventorySlotContents(slot, null);
 		}
-
 	}
 
 	public static boolean canWrench(EntityPlayer player, int x, int y, int z) {
@@ -144,6 +121,17 @@ public class Utils {
 		} else {
 			return EnumTankLevel.MAXIMUM;
 		}
+	}
+
+	public static boolean isWoodSlabBlock(Block block) {
+		int[] oreIds = OreDictionary.getOreIDs(new ItemStack(block));
+		for (int oreId : oreIds) {
+			if (oreId == slabWoodId) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public static boolean isReplaceableBlock(World world, int x, int y, int z) {
@@ -214,6 +202,17 @@ public class Utils {
 	public static void registerEntity(Class<? extends Entity> entityClass, String ident, int id, int eggForeground, int eggBackground, int trackingRange, int updateFrequency, boolean sendVelocity) {
 		EntityRegistry.registerModEntity(entityClass, ident, id, ForestryAPI.instance, trackingRange, updateFrequency, sendVelocity);
 		Proxies.log.finer("Registered entity %s (%s) with id %s.", ident, entityClass.toString(), id);
+	}
+
+	public static <T extends TileEntity> T getTile(World world, int x, int y, int z, Class<T> tileClass) {
+		T tileEntity = null;
+		try {
+			tileEntity = tileClass.cast(world.getTileEntity(x, y, z));
+		} catch (ClassCastException ex) {
+			Proxies.log.warning("Failed to cast a tile entity to a " + tileClass.getName() + " at " + x + '/' + y + '/' + z);
+		}
+
+		return tileEntity;
 	}
 
 	public static int addRGBComponents(int colour, int r, int g, int b) {

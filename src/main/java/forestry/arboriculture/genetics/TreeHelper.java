@@ -45,9 +45,7 @@ import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.arboriculture.gadgets.BlockFruitPod;
-import forestry.arboriculture.gadgets.ForestryBlockLeaves;
 import forestry.arboriculture.gadgets.TileFruitPod;
-import forestry.arboriculture.gadgets.TileLeaves;
 import forestry.arboriculture.gadgets.TileSapling;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
@@ -160,6 +158,9 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 
 	@Override
 	public ItemStack getMemberStack(IIndividual tree, int type) {
+		if (!isMember(tree)) {
+			return null;
+		}
 
 		Item germlingItem;
 		switch (EnumGermlingType.VALUES[type]) {
@@ -205,33 +206,6 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 		sapling.setTree(tree.copy());
 		sapling.setOwner(owner);
 		world.markBlockForUpdate(x, y, z);
-
-		return true;
-	}
-
-	@Override
-	public boolean setLeaves(World world, IIndividual tree, GameProfile owner, int x, int y, int z) {
-		return setLeaves(world, tree, owner, x, y, z, false);
-	}
-
-	@Override
-	public boolean setLeaves(World world, IIndividual tree, GameProfile owner, int x, int y, int z, boolean decorative) {
-
-		if (decorative) {
-			((ITree) tree).setLeavesDecorative(world, owner, x, y, z);
-		} else {
-			((ITree) tree).setLeaves(world, owner, x, y, z);
-		}
-
-		if (!ForestryBlock.leaves.isBlockEqual(world, x, y, z)) {
-			return false;
-		}
-
-		TileLeaves tileLeaves = ForestryBlockLeaves.getLeafTile(world, x, y, z);
-		if (tileLeaves == null) {
-			world.setBlockToAir(x, y, z);
-			return false;
-		}
 
 		return true;
 	}

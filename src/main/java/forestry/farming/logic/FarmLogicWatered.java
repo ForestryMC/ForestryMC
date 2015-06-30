@@ -18,9 +18,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.fluids.Fluids;
 import forestry.core.utils.BlockUtil;
@@ -72,7 +72,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 	}
 
 	@Override
-	public boolean cultivate(int x, int y, int z, ForgeDirection direction, int extent) {
+	public boolean cultivate(int x, int y, int z, FarmDirection direction, int extent) {
 
 		if (maintainSoil(x, y, z, direction, extent)) {
 			return true;
@@ -89,7 +89,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		return false;
 	}
 
-	private boolean maintainSoil(int x, int y, int z, ForgeDirection direction, int extent) {
+	private boolean maintainSoil(int x, int y, int z, FarmDirection direction, int extent) {
 
 		World world = getWorld();
 		ItemStack[] resources = new ItemStack[]{resource};
@@ -99,7 +99,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 			Block soil = VectUtil.getBlock(world, position);
 
 			ItemStack soilStack = VectUtil.getAsItemStack(world, position);
-			if (isAcceptedGround(soilStack) || !housing.hasResources(resources)) {
+			if (isAcceptedGround(soilStack) || !housing.getFarmInventory().hasResources(resources)) {
 				continue;
 			}
 
@@ -129,7 +129,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		return false;
 	}
 
-	private boolean maintainWater(int x, int y, int z, ForgeDirection direction, int extent) {
+	private boolean maintainWater(int x, int y, int z, FarmDirection direction, int extent) {
 		// Still not done, check water then
 		World world = getWorld();
 		for (int i = 0; i < extent; i++) {
@@ -149,17 +149,17 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		return false;
 	}
 
-	protected boolean maintainCrops(int x, int y, int z, ForgeDirection direction, int extent) {
+	protected boolean maintainCrops(int x, int y, int z, FarmDirection direction, int extent) {
 		return false;
 	}
 
 	private boolean trySetSoil(Vect position) {
 		ItemStack[] resources = new ItemStack[]{resource};
-		if (!housing.hasResources(resources)) {
+		if (!housing.getFarmInventory().hasResources(resources)) {
 			return false;
 		}
 		setBlock(position, StackUtils.getBlock(ground), ground.getItemDamage());
-		housing.removeResources(resources);
+		housing.getFarmInventory().removeResources(resources);
 		return true;
 	}
 

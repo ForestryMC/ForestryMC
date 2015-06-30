@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -47,6 +48,8 @@ import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.Utils;
@@ -181,6 +184,18 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	}
 
 	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
+		tankManager.writePacketData(data);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
+		tankManager.readPacketData(data);
+	}
+
+	@Override
 	public void updateServerSide() {
 		super.updateServerSide();
 
@@ -210,7 +225,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 
 		boolean added = InvTools.tryAddStack(this, currentRecipe.bottled, SLOT_OUTPUT, 1, true, false);
 
-		if (setErrorCondition(!added, EnumErrorCode.NOSPACE)) {
+		if (getErrorLogic().setCondition(!added, EnumErrorCode.NOSPACE)) {
 			return false;
 		}
 
@@ -236,7 +251,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 			resetRecipe();
 		}
 
-		setErrorCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
+		getErrorLogic().setCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
 	}
 
 	private void resetRecipe() {

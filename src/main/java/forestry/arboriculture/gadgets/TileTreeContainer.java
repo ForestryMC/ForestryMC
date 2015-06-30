@@ -12,7 +12,6 @@ package forestry.arboriculture.gadgets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.Packet;
@@ -23,11 +22,9 @@ import com.mojang.authlib.GameProfile;
 import forestry.api.arboriculture.ITree;
 import forestry.api.genetics.IAllele;
 import forestry.arboriculture.genetics.Tree;
-import forestry.core.interfaces.IOwnable;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
-import forestry.core.utils.PlayerUtil;
 import forestry.plugins.PluginArboriculture;
 
 /**
@@ -35,9 +32,10 @@ import forestry.plugins.PluginArboriculture;
  *
  * @author SirSengir
  */
-public abstract class TileTreeContainer extends TileEntity implements IStreamable, IOwnable {
+public abstract class TileTreeContainer extends TileEntity implements IStreamable {
 
 	private ITree containedTree;
+	private GameProfile owner;
 
 	/* SAVING & LOADING */
 	@Override
@@ -104,6 +102,15 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 		return this.containedTree;
 	}
 
+	/* Owner */
+	public GameProfile getOwner() {
+		return owner;
+	}
+
+	public void setOwner(GameProfile owner) {
+		this.owner = owner;
+	}
+
 	/* UPDATING */
 
 	/**
@@ -122,37 +129,5 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	/* INETWORKEDENTITY */
 	@Override
 	public abstract Packet getDescriptionPacket();
-
-	/* IOWNABLE */
-	public GameProfile owner = null;
-
-	@Override
-	public boolean allowsRemoval(EntityPlayer player) {
-		return true;
-	}
-
-	@Override
-	public boolean isOwned() {
-		return owner != null;
-	}
-
-	@Override
-	public GameProfile getOwner() {
-		return owner;
-	}
-
-	@Override
-	public void setOwner(EntityPlayer player) {
-		this.owner = player.getGameProfile();
-	}
-
-	public void setOwner(GameProfile playername) {
-		this.owner = playername;
-	}
-
-	@Override
-	public boolean isOwner(EntityPlayer player) {
-		return PlayerUtil.isSameGameProfile(owner, player.getGameProfile());
-	}
 
 }

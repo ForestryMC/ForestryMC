@@ -95,7 +95,6 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 		if (world.rand.nextFloat() < ageModifier) {
 			decreaseHealth();
 		}
-
 	}
 
 	public void decreaseHealth() {
@@ -103,6 +102,5 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 			health--;
 		}
 	}
-
 
 }

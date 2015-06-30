@@ -44,7 +44,7 @@ public class CropBasicAgriCraft extends Crop {
 		if (harvest.size() > 1) {
 			harvest.remove(1); //AgriCraft returns cropsticks in 0, seeds in 1 in getDrops, removing since harvesting doesn't return them.
 		}
-			harvest.remove(0);
+		harvest.remove(0);
 		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, Blocks.melon_block, 0);
 		world.setBlockMetadataWithNotify(pos.x, pos.y, pos.z, 0, Defaults.FLAG_BLOCK_SYNCH);
 		return harvest;

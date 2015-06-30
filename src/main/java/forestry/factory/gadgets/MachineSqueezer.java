@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,6 +30,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.ISqueezerManager;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
@@ -43,6 +45,8 @@ import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
@@ -182,6 +186,18 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 		checkRecipe();
 	}
 
+	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
+		tankManager.writePacketData(data);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
+		tankManager.readPacketData(data);
+	}
+
 	// / WORKING
 	@Override
 	public void updateServerSide() {
@@ -210,9 +226,11 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 			return false;
 		}
 
+		IErrorLogic errorLogic = getErrorLogic();
+
 		FluidStack resultFluid = currentRecipe.liquid;
 		boolean canFill = productTank.fill(resultFluid, false) == resultFluid.amount;
-		setErrorCondition(!canFill, EnumErrorCode.NOSPACETANK);
+		errorLogic.setCondition(!canFill, EnumErrorCode.NOSPACETANK);
 
 		if (!canFill) {
 			return false;
@@ -222,7 +240,7 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 		if (currentRecipe.remnants != null) {
 			remnant = currentRecipe.remnants.copy();
 			boolean canAdd = InvTools.tryAddStack(getInternalInventory(), remnant, SLOT_REMNANT, SLOT_REMNANT_COUNT, true, false);
-			setErrorCondition(!canAdd, EnumErrorCode.NOSPACE);
+			errorLogic.setCondition(!canAdd, EnumErrorCode.NOSPACE);
 			if (!canAdd) {
 				return false;
 			}
@@ -266,7 +284,7 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 			resetRecipeTimes();
 		}
 
-		setErrorCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
+		getErrorLogic().setCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
 		return currentRecipe != null;
 	}
 
@@ -282,7 +300,7 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 	}
 
 	private boolean removeResources(ItemStack[] stacks) {
-		EntityPlayer player = Proxies.common.getPlayer(worldObj, getOwner());
+		EntityPlayer player = Proxies.common.getPlayer(worldObj, getAccessHandler().getOwner());
 		return InvTools.removeSets(getInternalInventory(), 1, stacks, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT, player, false, true, true);
 	}
 

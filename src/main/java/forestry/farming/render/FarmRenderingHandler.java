@@ -17,7 +17,7 @@ import net.minecraft.world.IBlockAccess;
 
 import forestry.core.config.ForestryBlock;
 import forestry.core.render.OverlayRenderingHandler;
-import forestry.farming.gadgets.BlockFarm;
+import forestry.farming.multiblock.BlockFarm;
 import forestry.plugins.PluginFarming;
 
 public class FarmRenderingHandler extends OverlayRenderingHandler {

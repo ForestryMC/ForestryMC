@@ -448,8 +448,9 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 			}
 			if (flowerStack != null && flowerBlock != null) {
 				Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(flowerStack, flowerBlock, flower.getValue()));
-				if( flower.getValue() < 5 )
-				Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(flowerBlock, flower.getValue()));
+				if (flower.getValue() < 5) {
+					Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(flowerBlock, flower.getValue()));
+				}
 			}
 		}
 	}

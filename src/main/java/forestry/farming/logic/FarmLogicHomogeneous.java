@@ -16,8 +16,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
+import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.utils.BlockUtil;
@@ -70,7 +69,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 	}
 
 	@Override
-	public boolean cultivate(int x, int y, int z, ForgeDirection direction, int extent) {
+	public boolean cultivate(int x, int y, int z, FarmDirection direction, int extent) {
 
 		if (maintainSoil(x, y, z, direction, extent)) {
 			return true;
@@ -83,9 +82,9 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 		return false;
 	}
 
-	private boolean maintainSoil(int x, int yGround, int z, ForgeDirection direction, int extent) {
+	private boolean maintainSoil(int x, int yGround, int z, FarmDirection direction, int extent) {
 		ItemStack[] resources = new ItemStack[]{resource};
-		if (!housing.hasResources(resources)) {
+		if (!housing.getFarmInventory().hasResources(resources)) {
 			return false;
 		}
 
@@ -114,12 +113,12 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 			produce.addAll(BlockUtil.getBlockDrops(world, position));
 
 			setBlock(position, StackUtils.getBlock(soilBlock), soilBlock.getItemDamage());
-			housing.removeResources(resources);
+			housing.getFarmInventory().removeResources(resources);
 			return true;
 		}
 
 		return false;
 	}
 
-	protected abstract boolean maintainGermlings(int x, int ySaplings, int z, ForgeDirection direction, int extent);
+	protected abstract boolean maintainGermlings(int x, int ySaplings, int z, FarmDirection direction, int extent);
 }

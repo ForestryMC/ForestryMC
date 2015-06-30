@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.item.ItemStack;
@@ -46,6 +47,8 @@ import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginLepidopterology;
 
 public class Butterfly extends IndividualLiving implements IButterfly {
+
+	private static final Random rand = new Random();
 
 	public IButterflyGenome genome;
 	public IButterflyGenome mate;
@@ -196,8 +199,6 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 			return null;
 		}
 
-		World world = nursery.getWorld();
-
 		IChromosome[] chromosomes = new IChromosome[genome.getChromosomes().length];
 		IChromosome[] parent1 = genome.getChromosomes();
 		IChromosome[] parent2 = mate.getChromosomes();
@@ -215,7 +216,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 		for (int i = 0; i < parent1.length; i++) {
 			if (parent1[i] != null && parent2[i] != null) {
-				chromosomes[i] = Chromosome.inheritChromosome(world.rand, parent1[i], parent2[i]);
+				chromosomes[i] = Chromosome.inheritChromosome(rand, parent1[i], parent2[i]);
 			}
 		}
 
@@ -223,8 +224,6 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	}
 
 	private static IChromosome[] mutateSpecies(IButterflyNursery nursery, IGenome genomeOne, IGenome genomeTwo) {
-
-		World world = nursery.getWorld();
 
 		IChromosome[] parent1 = genomeOne.getChromosomes();
 		IChromosome[] parent2 = genomeTwo.getChromosomes();
@@ -234,7 +233,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		IAllele allele0;
 		IAllele allele1;
 
-		if (world.rand.nextBoolean()) {
+		if (rand.nextBoolean()) {
 			allele0 = parent1[EnumButterflyChromosome.SPECIES.ordinal()].getPrimaryAllele();
 			allele1 = parent2[EnumButterflyChromosome.SPECIES.ordinal()].getSecondaryAllele();
 
@@ -250,7 +249,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 		for (IButterflyMutation mutation : PluginLepidopterology.butterflyInterface.getMutations(true)) {
 			float chance = mutation.getChance(nursery, allele0, allele1, genome0, genome1);
-			if (chance > world.rand.nextFloat() * 100) {
+			if (chance > rand.nextFloat() * 100) {
 				return PluginLepidopterology.butterflyInterface.templateAsChromosomes(mutation.getTemplate());
 			}
 		}
@@ -302,7 +301,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		float metabolism = (float) getGenome().getMetabolism() / 10;
 
 		for (Map.Entry<ItemStack, Float> entry : getGenome().getPrimary().getCaterpillarLoot().entrySet()) {
-			if (nursery.getWorld().rand.nextFloat() < entry.getValue() * metabolism) {
+			if (rand.nextFloat() < entry.getValue() * metabolism) {
 				drop.add(entry.getKey().copy());
 			}
 		}

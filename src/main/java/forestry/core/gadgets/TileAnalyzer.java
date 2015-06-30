@@ -153,7 +153,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 					Proxies.net.sendNetworkPacket(packet);
 				}
 
-				setErrorCondition(!added, EnumErrorCode.NOSPACE);
+				getErrorLogic().setCondition(!added, EnumErrorCode.NOSPACE);
 
 				return added;
 			}
@@ -163,7 +163,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		IInvSlot slot = getInputSlot();
 
 		boolean noInput = (slot == null);
-		setErrorCondition(noInput, EnumErrorCode.NOTHINGANALYZE);
+		getErrorLogic().setCondition(noInput, EnumErrorCode.NOTHINGANALYZE);
 		if (noInput) {
 			return false;
 		}
@@ -176,7 +176,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		IIndividual individual = AlleleManager.alleleRegistry.getIndividual(inputStack);
 		if (!individual.isAnalyzed()) {
 			boolean hasHoney = resourceTank.getFluidAmount() >= HONEY_REQUIRED;
-			setErrorCondition(!hasHoney, EnumErrorCode.NORESOURCE);
+			getErrorLogic().setCondition(!hasHoney, EnumErrorCode.NORESOURCE);
 			if (!hasHoney) {
 				return false;
 			}
@@ -206,12 +206,14 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		super.writeData(data);
 		ItemStack displayStack = getIndividualOnDisplay();
 		data.writeItemStack(displayStack);
+		tankManager.writePacketData(data);
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		individualOnDisplayClient = data.readItemStack();
+		tankManager.readPacketData(data);
 	}
 
 	@Override
@@ -231,7 +233,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 	@Override
 	public boolean hasWork() {
-		Set<IErrorState> errors = new HashSet<IErrorState>(getErrorStates());
+		Set<IErrorState> errors = new HashSet<IErrorState>(getErrorLogic().getErrorStates());
 		errors.remove(EnumErrorCode.NOPOWER);
 		return errors.size() == 0;
 	}

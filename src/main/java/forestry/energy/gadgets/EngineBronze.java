@@ -26,6 +26,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.FuelManager;
 import forestry.core.EnumErrorCode;
@@ -97,11 +98,13 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 			FluidHelper.drainContainers(tankManager, inventory, SLOT_CAN);
 		}
 
+		IErrorLogic errorLogic = getErrorLogic();
+
 		boolean hasHeat = getHeatLevel() > 0.2 || heatingTank.getFluidAmount() > 0;
-		setErrorCondition(!hasHeat, EnumErrorCode.NOHEAT);
+		errorLogic.setCondition(!hasHeat, EnumErrorCode.NOHEAT);
 
 		boolean hasFuel = burnTime > 0 || fuelTank.getFluidAmount() > 0;
-		setErrorCondition(!hasFuel, EnumErrorCode.NOFUEL);
+		errorLogic.setCondition(!hasFuel, EnumErrorCode.NOFUEL);
 	}
 
 	/**
@@ -286,12 +289,14 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	public void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
 		data.writeBoolean(shutdown);
+		tankManager.writePacketData(data);
 	}
 
 	@Override
 	public void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 		shutdown = data.readBoolean();
+		tankManager.readPacketData(data);
 	}
 
 	/* GUI */

@@ -36,14 +36,11 @@ public class TriggerNoFrames extends Trigger {
 			return false;
 		}
 
-		for (int i = TileApiary.SLOT_FRAMES_1; i < TileApiary.SLOT_FRAMES_1 + TileApiary.SLOT_FRAMES_COUNT; i++) {
-			if (((TileApiary) tile).getStackInSlot(i) != null) {
-				return false;
-			}
-		}
+		TileApiary apiary = (TileApiary) tile;
 
-		return true;
+		TileApiary.ApiaryInventory inventory = (TileApiary.ApiaryInventory) apiary.getInternalInventory();
 
+		return inventory.getFrames().size() == 0;
 	}
 
 }

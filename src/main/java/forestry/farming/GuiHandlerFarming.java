@@ -18,9 +18,9 @@ import forestry.core.network.GuiId;
 import forestry.core.network.PacketId;
 import forestry.core.network.PacketSocketUpdate;
 import forestry.core.proxy.Proxies;
-import forestry.farming.gadgets.TileFarmPlain;
 import forestry.farming.gui.ContainerFarm;
 import forestry.farming.gui.GuiFarm;
+import forestry.farming.multiblock.TileFarm;
 
 public class GuiHandlerFarming extends GuiHandlerBase {
 
@@ -33,7 +33,7 @@ public class GuiHandlerFarming extends GuiHandlerBase {
 
 		switch (GuiId.values()[id]) {
 			case MultiFarmGUI:
-				TileFarmPlain tile = getTileForestry(world, x, y, z, player, TileFarmPlain.class);
+				TileFarm tile = getTile(world, x, y, z, player, TileFarm.class);
 				Proxies.net.sendToPlayer(new PacketSocketUpdate(PacketId.SOCKET_UPDATE, tile), player);
 				return new ContainerFarm(player.inventory, tile);
 			default:
@@ -50,7 +50,7 @@ public class GuiHandlerFarming extends GuiHandlerBase {
 
 		switch (GuiId.values()[id]) {
 			case MultiFarmGUI:
-				return new GuiFarm(player, getTileForestry(world, x, y, z, player, TileFarmPlain.class));
+				return new GuiFarm(player, getTile(world, x, y, z, player, TileFarm.class));
 			default:
 				return null;
 

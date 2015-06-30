@@ -14,6 +14,7 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.IBeeGenome;
@@ -26,8 +27,8 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 
 	private static final int explosionChance = 50;
 	private static final byte defaultForce = 12;
-	private final byte indexExplosionTimer = 1;
-	private final byte indexExplosionForce = 2;
+	private static final byte indexExplosionTimer = 1;
+	private static final byte indexExplosionForce = 2;
 
 	public AlleleEffectCreeper() {
 		super("creeper", true, 20, false, true);
@@ -50,6 +51,7 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
 		World world = housing.getWorld();
+		ChunkCoordinates housingCoords = housing.getCoordinates();
 
 		if (isHalted(storedData, housing)) {
 			return storedData;
@@ -57,7 +59,7 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 
 		// If we are already triggered, we continue the explosion sequence.
 		if (storedData.getInteger(indexExplosionTimer) > 0) {
-			progressExplosion(storedData, world, housing.getXCoord(), housing.getYCoord(), housing.getZCoord());
+			progressExplosion(storedData, world, housingCoords.posX, housingCoords.posY, housingCoords.posZ);
 			return storedData;
 		}
 
@@ -94,7 +96,7 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 				continue;
 			}
 
-			world.playSoundEffect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord(), "mob.creeper", 4F,
+			world.playSoundEffect(housingCoords.posX, housingCoords.posY, housingCoords.posZ, "mob.creeper", 4F,
 					(1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F) * 0.7F);
 			storedData.setInteger(indexExplosionTimer, 2); // Set explosion
 			// timer
@@ -103,7 +105,7 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 		return storedData;
 	}
 
-	private void progressExplosion(IEffectData storedData, World world, int x, int y, int z) {
+	private static void progressExplosion(IEffectData storedData, World world, int x, int y, int z) {
 
 		int explosionTimer = storedData.getInteger(indexExplosionTimer);
 		explosionTimer--;

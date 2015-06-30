@@ -70,13 +70,13 @@ public class GuiHandlerMail extends GuiHandlerBase {
 				}
 
 			case MailboxGUI:
-				return new GuiMailbox(player.inventory, getTileForestry(world, x, y, z, player, MachineMailbox.class));
+				return new GuiMailbox(player.inventory, getTile(world, x, y, z, player, MachineMailbox.class));
 			case PhilatelistGUI:
-				return new GuiPhilatelist(player.inventory, getTileForestry(world, x, y, z, player, MachinePhilatelist.class));
+				return new GuiPhilatelist(player.inventory, getTile(world, x, y, z, player, MachinePhilatelist.class));
 			case TraderGUI:
-				return new GuiTrader(player.inventory, getTileForestry(world, x, y, z, player, MachineTrader.class));
+				return new GuiTrader(player.inventory, getTile(world, x, y, z, player, MachineTrader.class));
 			case TraderNameGUI:
-				return new GuiTradeName(getTileForestry(world, x, y, z, player, MachineTrader.class));
+				return new GuiTradeName(getTile(world, x, y, z, player, MachineTrader.class));
 			default:
 				return null;
 
@@ -116,13 +116,13 @@ public class GuiHandlerMail extends GuiHandlerBase {
 				}
 
 			case MailboxGUI:
-				return new ContainerMailbox(player.inventory, getTileForestry(world, x, y, z, player, MachineMailbox.class));
+				return new ContainerMailbox(player.inventory, getTile(world, x, y, z, player, MachineMailbox.class));
 			case PhilatelistGUI:
-				return new ContainerPhilatelist(player.inventory, getTileForestry(world, x, y, z, player, MachinePhilatelist.class));
+				return new ContainerPhilatelist(player.inventory, getTile(world, x, y, z, player, MachinePhilatelist.class));
 			case TraderGUI:
-				return new ContainerTrader(player.inventory, getTileForestry(world, x, y, z, player, MachineTrader.class));
+				return new ContainerTrader(player.inventory, getTile(world, x, y, z, player, MachineTrader.class));
 			case TraderNameGUI:
-				return new ContainerTradeName(getTileForestry(world, x, y, z, player, MachineTrader.class));
+				return new ContainerTradeName(getTile(world, x, y, z, player, MachineTrader.class));
 			default:
 				return null;
 

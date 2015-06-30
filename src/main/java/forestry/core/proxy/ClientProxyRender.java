@@ -24,7 +24,6 @@ import forestry.core.config.Config;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.interfaces.IBlockRenderer;
 import forestry.core.render.BlockRenderingHandler;
-import forestry.core.render.EntitySnowFX;
 import forestry.core.render.RenderEscritoire;
 import forestry.core.render.RenderMachine;
 import forestry.core.render.RenderMill;
@@ -95,19 +94,6 @@ public class ClientProxyRender extends ProxyRender {
 
 		// all
 		return true;
-	}
-
-	@Override
-	public void addSnowFX(World world, double xCoord, double yCoord, double zCoord, int color, int areaX, int areaY, int areaZ) {
-		if (!shouldSpawnParticle(world)) {
-			return;
-		}
-
-		double spawnX = xCoord + world.rand.nextInt(areaX * 2) - areaX;
-		double spawnY = yCoord + world.rand.nextInt(areaY);
-		double spawnZ = zCoord + world.rand.nextInt(areaZ * 2) - areaZ;
-
-		Proxies.common.getClientInstance().effectRenderer.addEffect(new EntitySnowFX(world, spawnX, spawnY, spawnZ, 0.0f, 0.0f, 0.0f));
 	}
 
 	@Override

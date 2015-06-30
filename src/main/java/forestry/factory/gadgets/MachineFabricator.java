@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +32,6 @@ import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.IFabricatorManager;
-import forestry.core.EnumErrorCode;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
@@ -46,6 +46,8 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.utils.GuiUtil;
 import forestry.core.utils.ShapedRecipeCustom;
@@ -293,6 +295,18 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 				craftingInventory.setInventorySlotContents(newSlot, stack);
 			}
 		}
+	}
+
+	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
+		tankManager.writePacketData(data);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
+		tankManager.readPacketData(data);
 	}
 
 	/* UPDATING */
@@ -578,14 +592,14 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 			} else if (slotIndex == SLOT_PLAN) {
 				return RecipeManager.isPlan(itemStack);
 			} else if (GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT)) {
-				if (RecipeManager.isPlan(itemStack) ) {
+				if (RecipeManager.isPlan(itemStack)) {
 					return false;
-				}else if (RecipeManager.findMatchingSmelting(itemStack) != null) {
+				} else if (RecipeManager.findMatchingSmelting(itemStack) != null) {
 					return false;
 				}
 			}
-				return GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
-			}
+			return GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+		}
 
 		@Override
 		public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {

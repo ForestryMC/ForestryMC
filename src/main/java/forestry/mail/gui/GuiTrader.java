@@ -27,7 +27,7 @@ public class GuiTrader extends GuiForestry<ContainerTrader, MachineTrader> {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		String name = StringUtil.localizeTile(inventory.getUnlocalizedName());
+		String name = StringUtil.localizeTile(inventory.getUnlocalizedTitle());
 		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.mail.text"));
 
 		String receive = StringUtil.localize("gui.mail.receive");

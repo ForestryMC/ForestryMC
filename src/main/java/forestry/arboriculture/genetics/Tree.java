@@ -42,11 +42,9 @@ import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreeMutation;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleBoolean;
-import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFruitFamily;
-import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutation;
 import forestry.arboriculture.gadgets.ForestryBlockLeaves;
 import forestry.arboriculture.gadgets.TileLeaves;
@@ -120,14 +118,14 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	/* EFFECTS */
 	@Override
-	public IEffectData[] doEffect(IEffectData[] storedData, World world, int biomeid, int x, int y, int z) {
+	public IEffectData[] doEffect(IEffectData[] storedData, World world, int x, int y, int z) {
 		IAlleleLeafEffect effect = (IAlleleLeafEffect) getGenome().getActiveAllele(EnumTreeChromosome.EFFECT);
 
 		if (effect == null) {
 			return null;
 		}
 
-		storedData[0] = doEffect(effect, storedData[0], world, biomeid, x, y, z);
+		storedData[0] = doEffect(effect, storedData[0], world, x, y, z);
 
 		// Return here if the primary can already not be combined
 		if (!effect.isCombinable()) {
@@ -139,18 +137,18 @@ public class Tree extends Individual implements ITree, IPlantable {
 			return storedData;
 		}
 
-		storedData[1] = doEffect(secondary, storedData[1], world, biomeid, x, y, z);
+		storedData[1] = doEffect(secondary, storedData[1], world, x, y, z);
 
 		return storedData;
 	}
 
-	private IEffectData doEffect(IAlleleLeafEffect effect, IEffectData storedData, World world, int biomeid, int x, int y, int z) {
+	private IEffectData doEffect(IAlleleLeafEffect effect, IEffectData storedData, World world, int x, int y, int z) {
 		storedData = effect.validateStorage(storedData);
 		return effect.doEffect(getGenome(), storedData, world, x, y, z);
 	}
 
 	@Override
-	public IEffectData[] doFX(IEffectData[] storedData, World world, int biomeid, int x, int y, int z) {
+	public IEffectData[] doFX(IEffectData[] storedData, World world, int x, int y, int z) {
 		return null;
 	}
 
@@ -359,11 +357,6 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	/* REPRODUCTION */
 	@Override
-	public ITree[] getSaplings(World world, int x, int y, int z, float modifier) {
-		return getSaplings(world, null, x, y, z, modifier);
-	}
-
-	@Override
 	public ITree[] getSaplings(World world, GameProfile playerProfile, int x, int y, int z, float modifier) {
 		ArrayList<ITree> prod = new ArrayList<ITree>();
 
@@ -406,15 +399,15 @@ public class Tree extends Individual implements ITree, IPlantable {
 		return new Tree(new TreeGenome(chromosomes));
 	}
 
-	private static IChromosome[] mutateSpecies(World world, @Nullable GameProfile playerProfile, int x, int y, int z, IGenome genomeOne, IGenome genomeTwo) {
+	private static IChromosome[] mutateSpecies(World world, @Nullable GameProfile playerProfile, int x, int y, int z, ITreeGenome genomeOne, ITreeGenome genomeTwo) {
 
 		IChromosome[] parent1 = genomeOne.getChromosomes();
 		IChromosome[] parent2 = genomeTwo.getChromosomes();
 
-		IGenome genome0;
-		IGenome genome1;
-		IAlleleSpecies allele0;
-		IAlleleSpecies allele1;
+		ITreeGenome genome0;
+		ITreeGenome genome1;
+		IAlleleTreeSpecies allele0;
+		IAlleleTreeSpecies allele1;
 
 		if (world.rand.nextBoolean()) {
 			allele0 = (IAlleleTreeSpecies) parent1[EnumTreeChromosome.SPECIES.ordinal()].getPrimaryAllele();

@@ -93,7 +93,7 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 
 	public AlleleTreeSpecies(String uid, boolean isDominant, String speciesName, IClassification branch, String binomial, int primaryColor, int secondaryColor,
 			Class<? extends WorldGenArboriculture> generator, ItemStack wood) {
-		super("forestry." + uid, "for.trees.species." + speciesName, "Sengir", "for.description." + uid, isDominant,  branch, binomial, true);
+		super("forestry." + uid, "for.trees.species." + speciesName, "Sengir", "for.description." + uid, isDominant, branch, binomial, true);
 
 		this.root = (ITreeRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees");
 		this.generatorClass = generator;

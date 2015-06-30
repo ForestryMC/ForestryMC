@@ -33,15 +33,16 @@ import cpw.mods.fml.common.Optional;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import forestry.api.core.IErrorLogicSource;
+import forestry.api.core.IErrorSource;
 import forestry.core.config.Config;
+import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.tooltips.ToolTipLine;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.interfaces.IClimatised;
-import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IHintSource;
-import forestry.core.interfaces.IOwnable;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.FontColour;
@@ -85,7 +86,12 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 			ledgerManager.add((IErrorSource) inventory);
 		}
 
-		if (inventory instanceof IClimatised && ((IClimatised) inventory).isClimatized()) {
+		if (inventory instanceof IErrorLogicSource) {
+			IErrorLogicSource errorLogicSource = (IErrorLogicSource) inventory;
+			ledgerManager.add(errorLogicSource.getErrorLogic());
+		}
+
+		if (inventory instanceof IClimatised) {
 			ledgerManager.add(new ClimateLedger(ledgerManager, (IClimatised) inventory));
 		}
 
@@ -97,8 +103,8 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 			ledgerManager.add(new HintLedger(ledgerManager, (IHintSource) inventory));
 		}
 
-		if (inventory instanceof IOwnable) {
-			ledgerManager.add(new OwnerLedger(ledgerManager, (IOwnable) inventory));
+		if (inventory instanceof TileForestry) {
+			ledgerManager.add(new OwnerLedger(ledgerManager, (TileForestry) inventory));
 		}
 
 	}

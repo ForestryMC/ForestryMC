@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,6 +29,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.IStillManager;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
@@ -41,6 +43,8 @@ import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.Utils;
@@ -166,6 +170,18 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
+		tankManager.writePacketData(data);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
+		tankManager.readPacketData(data);
+	}
+
+	@Override
 	public void updateServerSide() {
 		super.updateServerSide();
 
@@ -193,10 +209,12 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 	@Override
 	public boolean workCycle() {
 
+		IErrorLogic errorLogic = getErrorLogic();
+
 		checkRecipe();
 
 		// Ongoing process
-		if (distillationTime > 0 && !hasErrorState()) {
+		if (distillationTime > 0 && !errorLogic.hasErrors()) {
 
 			distillationTime -= currentRecipe.input.amount;
 			productTank.fill(currentRecipe.output, true);
@@ -208,12 +226,12 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 			int resourceRequired = currentRecipe.timePerUnit * currentRecipe.input.amount;
 
 			boolean canFill = productTank.fill(currentRecipe.output, false) == currentRecipe.output.amount;
-			setErrorCondition(!canFill, EnumErrorCode.NOSPACETANK);
+			errorLogic.setCondition(!canFill, EnumErrorCode.NOSPACETANK);
 
 			boolean hasResource = resourceTank.getFluidAmount() >= resourceRequired;
-			setErrorCondition(!hasResource, EnumErrorCode.NORESOURCE);
+			errorLogic.setCondition(!hasResource, EnumErrorCode.NORESOURCE);
 
-			if (!hasErrorState()) {
+			if (!errorLogic.hasErrors()) {
 				// Start next cycle if enough bio mass is available
 				distillationTime = distillationTotalTime = resourceRequired;
 				resourceTank.drain(resourceRequired, true);
@@ -238,7 +256,7 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 			currentRecipe = matchingRecipe;
 		}
 
-		setErrorCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
+		getErrorLogic().setCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
 	}
 
 	@Override

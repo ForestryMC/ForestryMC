@@ -11,88 +11,73 @@
 package forestry.farming.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
 
-import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.StandardTank;
+import net.minecraftforge.fluids.IFluidTank;
+
+import forestry.core.fluids.ITankManager;
 import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
-import forestry.farming.gadgets.TileFarmPlain;
+import forestry.core.network.PacketGuiUpdate;
+import forestry.farming.multiblock.FarmInventory;
+import forestry.farming.multiblock.TileFarm;
 
-public class ContainerFarm extends ContainerSocketed<TileFarmPlain> {
+public class ContainerFarm extends ContainerSocketed<TileFarm> {
 
-	public ContainerFarm(InventoryPlayer playerInventory, TileFarmPlain tile) {
+	public ContainerFarm(InventoryPlayer playerInventory, TileFarm tile) {
 		super(tile, playerInventory, 28, 138);
 
 		// Resources
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 2; j++) {
-				addSlotToContainer(new SlotFiltered(tile, TileFarmPlain.SLOT_RESOURCES_1 + j + i * 2, 123 + j * 18, 22 + i * 18));
+				addSlotToContainer(new SlotFiltered(tile, FarmInventory.SLOT_RESOURCES_1 + j + i * 2, 123 + j * 18, 22 + i * 18));
 			}
 		}
 
 		// Germlings
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 2; j++) {
-				addSlotToContainer(new SlotFiltered(tile, TileFarmPlain.SLOT_GERMLINGS_1 + j + i * 2, 164 + j * 18, 22 + i * 18));
+				addSlotToContainer(new SlotFiltered(tile, FarmInventory.SLOT_GERMLINGS_1 + j + i * 2, 164 + j * 18, 22 + i * 18));
 			}
 		}
 
 		// Production 1
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
-				addSlotToContainer(new SlotOutput(tile, TileFarmPlain.SLOT_PRODUCTION_1 + j + i * 2, 123 + j * 18, 86 + i * 18));
+				addSlotToContainer(new SlotOutput(tile, FarmInventory.SLOT_PRODUCTION_1 + j + i * 2, 123 + j * 18, 86 + i * 18));
 			}
 		}
 
 		// Production 2
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
-				addSlotToContainer(new SlotOutput(tile, TileFarmPlain.SLOT_PRODUCTION_1 + 4 + j + i * 2, 164 + j * 18, 86 + i * 18));
+				addSlotToContainer(new SlotOutput(tile, FarmInventory.SLOT_PRODUCTION_1 + 4 + j + i * 2, 164 + j * 18, 86 + i * 18));
 			}
 		}
 
 		// Fertilizer
-		addSlotToContainer(new SlotFiltered(tile, TileFarmPlain.SLOT_FERTILIZER, 63, 95));
+		addSlotToContainer(new SlotFiltered(tile, FarmInventory.SLOT_FERTILIZER, 63, 95));
 		// Can Slot
-		addSlotToContainer(new SlotFiltered(tile, TileFarmPlain.SLOT_CAN, 15, 95));
+		addSlotToContainer(new SlotFiltered(tile, FarmInventory.SLOT_CAN, 15, 95));
 	}
 
 	@Override
 	public void updateProgressBar(int i, int j) {
-		tile.getGUINetworkData(i, j);
-		TankManager tankManager = tile.getTankManager();
+		ITankManager tankManager = tile.getFarmController().getTankManager();
 		if (tankManager != null) {
 			tankManager.processGuiUpdate(i, j);
 		}
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		TankManager tankManager = tile.getTankManager();
-		if (tankManager != null) {
-			tankManager.updateGuiData(this, crafters);
-		}
-
-		for (Object crafter : crafters) {
-			tile.sendGUINetworkData(this, (ICrafting) crafter);
-		}
+		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
+		sendPacketToCrafters(packet);
 	}
 
-	@Override
-	public void addCraftingToCrafters(ICrafting iCrafting) {
-		super.addCraftingToCrafters(iCrafting);
-		TankManager tankManager = tile.getTankManager();
-		if (tankManager != null) {
-			tankManager.initGuiData(this, iCrafting);
-		}
-	}
-
-	public StandardTank getTank(int slot) {
-		return tile.getTankManager().get(slot);
+	public IFluidTank getTank(int slot) {
+		return tile.getFarmController().getTankManager().getTank(slot);
 	}
 
 }

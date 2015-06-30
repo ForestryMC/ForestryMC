@@ -40,6 +40,10 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
 		this(tile, cache, null, null);
 	}
 
+	public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache, ITileFilter filter) {
+		this(tile, cache, filter, null);
+	}
+
 	public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache, ITileFilter filter, Comparator<IInventory> sorter) {
 		this.cache = cache;
 		this.filter = filter;

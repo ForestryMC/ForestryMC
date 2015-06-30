@@ -11,6 +11,7 @@
 package forestry.factory.gadgets;
 
 import javax.annotation.Nullable;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,6 +37,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.ICarpenterManager;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
@@ -52,6 +54,8 @@ import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
@@ -80,7 +84,6 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 	@Nullable
 	public MachineCarpenter.Recipe currentRecipe;
-	public MachineCarpenter.Recipe lastRecipe;
 	private int packageTime;
 	private int totalTime;
 	private ItemStack pendingProduct;
@@ -149,6 +152,18 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		setCurrentRecipe(RecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory, worldObj));
 	}
 
+	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
+		tankManager.writePacketData(data);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
+		tankManager.readPacketData(data);
+	}
+
 	public void resetRecipe() {
 		if (worldObj.isRemote) {
 			return;
@@ -162,7 +177,6 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		final ItemStack craftingResult;
 
 		if (currentRecipe != null) {
-			lastRecipe = currentRecipe;
 			craftingResult = currentRecipe.getCraftingResult();
 		} else {
 			craftingResult = null;
@@ -195,8 +209,9 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			}
 		}
 
-		setErrorCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
-		setErrorCondition(!validateResources(), EnumErrorCode.NORESOURCE);
+		IErrorLogic errorLogic = getErrorLogic();
+		errorLogic.setCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
+		errorLogic.setCondition(!validateResources(), EnumErrorCode.NORESOURCE);
 	}
 
 	@Override
@@ -296,7 +311,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	}
 
 	private boolean removeSets(int count, ItemStack[] set) {
-		EntityPlayer player = Proxies.common.getPlayer(worldObj, getOwner());
+		EntityPlayer player = Proxies.common.getPlayer(worldObj, getAccessHandler().getOwner());
 		return InvTools.removeSets(getInternalInventory(), count, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
 	}
 
@@ -311,7 +326,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			pendingProduct = null;
 		}
 
-		setErrorCondition(!added, EnumErrorCode.NOSPACE);
+		getErrorLogic().setCondition(!added, EnumErrorCode.NOSPACE);
 		return added;
 	}
 
@@ -445,16 +460,6 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			}
 
 			return GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
-		}
-
-		@Override
-		public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
-			if (GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT)) {
-				if (tile.lastRecipe != null) {
-					return tile.lastRecipe.isIngredient(itemStack);
-				}
-			}
-			return true;
 		}
 
 		@Override

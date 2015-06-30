@@ -12,7 +12,7 @@ package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 
-import forestry.apiculture.gadgets.TileAlvearySwarmer;
+import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
 

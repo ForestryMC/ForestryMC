@@ -33,16 +33,20 @@ import forestry.api.core.ForestryEvent;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.ISpeciesRoot;
+import forestry.apiculture.multiblock.IAlvearyController;
+import forestry.apiculture.multiblock.TileAlveary;
 import forestry.apiculture.network.PacketActiveUpdate;
 import forestry.core.circuits.ContainerSolderingIron;
 import forestry.core.circuits.ItemCircuitBoard;
-import forestry.core.gadgets.TileForestry;
 import forestry.core.genetics.BreedingTracker;
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.IGuiSelectable;
+import forestry.core.interfaces.IRestrictedAccessTile;
 import forestry.core.interfaces.ISocketable;
 import forestry.core.proxy.Proxies;
+import forestry.farming.multiblock.IFarmController;
+import forestry.farming.multiblock.TileFarm;
 import forestry.plugins.PluginManager;
 
 import io.netty.buffer.ByteBufInputStream;
@@ -88,7 +92,7 @@ public class PacketHandler {
 					return true;
 				}
 				case TILE_FORESTRY_GUI_OPENED: {
-					PacketTileGuiOpened.onPacketData(data);
+					PacketGuiUpdate.onPacketData(data);
 					return true;
 				}
 				case TILE_FORESTRY_ACTIVE: {
@@ -272,12 +276,21 @@ public class PacketHandler {
 	private static void onAccessSwitch(PacketCoordinates packet, EntityPlayer playerEntity) {
 		assert FMLCommonHandler.instance().getEffectiveSide().isServer();
 
-		TileForestry tile = (TileForestry) packet.getTarget(playerEntity.worldObj);
-		if (tile == null) {
-			return;
-		}
+		TileEntity tile = packet.getTarget(playerEntity.worldObj);
 
-		tile.switchAccessRule(playerEntity);
+		if (tile instanceof TileAlveary) {
+			TileAlveary tileAlveary = (TileAlveary) tile;
+			IAlvearyController alvearyController = tileAlveary.getAlvearyController();
+			alvearyController.getAccessHandler().switchAccessRule(playerEntity);
+		} else if (tile instanceof TileFarm) {
+			TileFarm tileFarm = (TileFarm) tile;
+			IFarmController farmController = tileFarm.getFarmController();
+			farmController.getAccessHandler().switchAccessRule(playerEntity);
+		} else if (tile instanceof IRestrictedAccessTile) {
+			IRestrictedAccessTile restrictedAccessTile = (IRestrictedAccessTile) tile;
+
+			restrictedAccessTile.getAccessHandler().switchAccessRule(playerEntity);
+		}
 	}
 
 	private static void onPipetteClick(PacketSlotClick packet, EntityPlayerMP player) {

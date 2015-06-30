@@ -120,7 +120,7 @@ public class EngineCopper extends Engine implements ISidedInventory {
 
 		int fuelSlot = getFuelSlot();
 		boolean hasFuel = fuelSlot >= 0 && determineBurnDuration(getInternalInventory().getStackInSlot(fuelSlot)) > 0;
-		setErrorCondition(!hasFuel, EnumErrorCode.NOFUEL);
+		getErrorLogic().setCondition(!hasFuel, EnumErrorCode.NOFUEL);
 	}
 
 	@Override
@@ -249,7 +249,7 @@ public class EngineCopper extends Engine implements ISidedInventory {
 			return;
 		}
 
-		if (!InvTools.moveOneItemToPipe(wasteInventory, tileCache)) {
+		if (!InvTools.moveOneItemToPipe(wasteInventory, getTileCache())) {
 			InvTools.moveItemStack(wasteInventory, inventoryCache.getAdjacentInventories());
 		}
 	}

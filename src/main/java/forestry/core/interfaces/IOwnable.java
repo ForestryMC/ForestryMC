@@ -20,10 +20,8 @@ public interface IOwnable {
 
 	GameProfile getOwner();
 
-	void setOwner(EntityPlayer player);
+	void setOwner(GameProfile owner);
 
 	boolean isOwner(EntityPlayer player);
-
-	boolean allowsRemoval(EntityPlayer player);
 
 }

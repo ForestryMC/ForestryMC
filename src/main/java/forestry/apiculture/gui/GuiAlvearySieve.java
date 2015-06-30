@@ -12,11 +12,11 @@ package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 
-import forestry.apiculture.gadgets.TileAlvearySieve;
+import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.core.config.Defaults;
-import forestry.core.gui.GuiForestry;
+import forestry.core.gui.GuiForestryTitled;
 
-public class GuiAlvearySieve extends GuiForestry<ContainerAlvearySieve, TileAlvearySieve> {
+public class GuiAlvearySieve extends GuiForestryTitled<ContainerAlvearySieve, TileAlvearySieve> {
 
 	public GuiAlvearySieve(InventoryPlayer inventory, TileAlvearySieve tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/sieve.png", new ContainerAlvearySieve(inventory, tile), tile);

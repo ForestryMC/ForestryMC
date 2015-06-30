@@ -34,7 +34,6 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
-import forestry.apiculture.genetics.Bee;
 import forestry.apiculture.genetics.BeeGenome;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
@@ -55,7 +54,7 @@ public class ItemBeeGE extends ItemGE {
 
 	@Override
 	public IBee getIndividual(ItemStack itemstack) {
-		return new Bee(itemstack.getTagCompound());
+		return BeeManager.beeRoot.getMember(itemstack);
 	}
 
 	@Override
@@ -80,7 +79,7 @@ public class ItemBeeGE extends ItemGE {
 			return super.getItemStackDisplayName(itemstack);
 		}
 
-		IBee individual = new Bee(itemstack.getTagCompound());
+		IBee individual = BeeManager.beeRoot.getMember(itemstack);
 		String customBeeKey = "bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.", "");
 		if (StringUtil.canTranslate(customBeeKey)) {
 			return StringUtil.localize(customBeeKey);
@@ -99,7 +98,7 @@ public class ItemBeeGE extends ItemGE {
 		}
 
 		if (type != EnumBeeType.DRONE) {
-			IBee individual = new Bee(itemstack.getTagCompound());
+			IBee individual = BeeManager.beeRoot.getMember(itemstack);
 			if (individual.isNatural()) {
 				list.add(EnumChatFormatting.YELLOW + EnumChatFormatting.ITALIC.toString() + StringUtil.localize("bees.stock.pristine"));
 			} else {

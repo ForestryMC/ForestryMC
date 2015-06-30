@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
+import forestry.api.core.IErrorLogic;
 import forestry.apiculture.network.PacketActiveUpdate;
 import forestry.core.EnumErrorCode;
 import forestry.core.TemperatureState;
@@ -112,10 +113,11 @@ public abstract class Engine extends TileBase implements IEnergyConnection, IAct
 			forceCooldown = false;
 		}
 
-		setErrorCondition(forceCooldown, EnumErrorCode.FORCEDCOOLDOWN);
+		IErrorLogic errorLogic = getErrorLogic();
+		errorLogic.setCondition(forceCooldown, EnumErrorCode.FORCEDCOOLDOWN);
 
 		boolean enabledRedstone = isRedstoneActivated();
-		setErrorCondition(!enabledRedstone, EnumErrorCode.NOREDSTONE);
+		errorLogic.setCondition(!enabledRedstone, EnumErrorCode.NOREDSTONE);
 
 		// Determine targeted tile
 		TileEntity tile = worldObj.getTileEntity(xCoord + getOrientation().offsetX, yCoord + getOrientation().offsetY, zCoord + getOrientation().offsetZ);

@@ -10,7 +10,11 @@
  ******************************************************************************/
 package forestry.core.vect;
 
+import net.minecraft.util.ChunkCoordinates;
+
 import net.minecraftforge.common.util.ForgeDirection;
+
+import forestry.api.farming.FarmDirection;
 
 /**
  * Represents changeable positions or dimensions.
@@ -24,6 +28,22 @@ public class MutableVect implements IVect {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+	}
+
+	public MutableVect(int[] dim) {
+		if (dim.length != 3) {
+			throw new RuntimeException("Cannot instantiate a vector with less or more than 3 points.");
+		}
+
+		this.x = dim[0];
+		this.y = dim[1];
+		this.z = dim[2];
+	}
+
+	public MutableVect(ChunkCoordinates coordinates) {
+		this.x = coordinates.posX;
+		this.y = coordinates.posY;
+		this.z = coordinates.posZ;
 	}
 
 	public MutableVect(IVect vect) {
@@ -55,8 +75,20 @@ public class MutableVect implements IVect {
 	}
 
 	@Override
+	public IVect add(FarmDirection direction) {
+		return add(direction.getForgeDirection());
+	}
+
+	@Override
 	public int[] toArray() {
 		return new int[]{x, y, z};
+	}
+
+	public MutableVect multiply(float factor) {
+		this.x *= factor;
+		this.y *= factor;
+		this.z *= factor;
+		return this;
 	}
 
 	public boolean advancePositionInArea(Vect area) {

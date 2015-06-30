@@ -20,6 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
 import forestry.core.EnumErrorCode;
 import forestry.core.TemperatureState;
 import forestry.core.config.Config;
@@ -30,7 +31,6 @@ import forestry.core.interfaces.ISocketable;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
-import forestry.core.utils.DelayTimer;
 import forestry.plugins.PluginIC2;
 
 import ic2.api.energy.prefab.BasicSink;
@@ -56,8 +56,6 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	private final EuConfig euConfig = new EuConfig(Defaults.ENGINE_TIN_EU_FOR_CYCLE, Defaults.ENGINE_TIN_ENERGY_PER_CYCLE, Defaults.ENGINE_TIN_MAX_EU_STORED);
 
 	protected BasicSink ic2EnergySink;
-
-	private final DelayTimer delayUpdateTimer = new DelayTimer();
 
 	public EngineTin() {
 		super(Defaults.ENGINE_TIN_HEAT_MAX, 100000, 4000);
@@ -162,8 +160,10 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	// / WORK
 	@Override
 	public void updateServerSide() {
+		IErrorLogic errorLogic = getErrorLogic();
+
 		// No work to be done if IC2 is unavailable.
-		if (setErrorCondition(ic2EnergySink == null, EnumErrorCode.NOENERGYNET)) {
+		if (errorLogic.setCondition(ic2EnergySink == null, EnumErrorCode.NOENERGYNET)) {
 			return;
 		}
 
@@ -180,12 +180,12 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		}
 
 		// Updating of gui delayed to prevent it from going crazy
-		if (!delayUpdateTimer.delayPassed(worldObj, 80)) {
+		if (!updateOnInterval(80)) {
 			return;
 		}
 
 		boolean canUseEnergy = ic2EnergySink.canUseEnergy(euConfig.euForCycle);
-		setErrorCondition(!canUseEnergy, EnumErrorCode.NOFUEL);
+		errorLogic.setCondition(!canUseEnergy, EnumErrorCode.NOFUEL);
 	}
 
 	@Override

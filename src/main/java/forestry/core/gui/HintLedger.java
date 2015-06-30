@@ -12,9 +12,11 @@ package forestry.core.gui;
 
 import java.util.Random;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 
 import forestry.core.interfaces.IHintSource;
+import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 
@@ -31,7 +33,8 @@ public class HintLedger extends Ledger {
 		hintString = StringUtil.localize("hints." + hints[position] + ".desc");
 		hintTooltip = StringUtil.localize("hints." + hints[position] + ".tag");
 
-		FontRenderer fontRenderer = manager.minecraft.fontRenderer;
+		Minecraft minecraft = Proxies.common.getClientInstance();
+		FontRenderer fontRenderer = minecraft.fontRenderer;
 		int lineCount = fontRenderer.listFormattedStringToWidth(hintString, maxWidth - 28).size();
 		maxHeight = (lineCount + 1) * fontRenderer.FONT_HEIGHT + 20;
 	}

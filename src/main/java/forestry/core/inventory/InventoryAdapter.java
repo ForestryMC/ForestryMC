@@ -29,7 +29,7 @@ import forestry.core.utils.PlainInventory;
  */
 public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 
-	protected final IInventory inventory;
+	private final IInventory inventory;
 	private boolean allowAutomation = true;
 
 	//private boolean debug = false;

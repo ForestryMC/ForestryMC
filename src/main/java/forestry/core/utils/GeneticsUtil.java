@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -139,7 +138,7 @@ public class GeneticsUtil {
 				// Treat them as decorative and don't pollinate.
 				return null;
 			}
-			if(block == Blocks.leaves2) {
+			if (block == Blocks.leaves2) {
 				meta = meta + 4; //Dark Oak and Acacia are their own leaf block, but added on the end of sapling
 			}
 			block = Blocks.sapling;

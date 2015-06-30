@@ -45,12 +45,6 @@ import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
 
 public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpeciesCustom {
-
-	@Deprecated
-	private final Map<ItemStack, Integer> products = new HashMap<ItemStack, Integer>();
-	@Deprecated
-	private final Map<ItemStack, Integer> specialty = new HashMap<ItemStack, Integer>();
-
 	private final Map<ItemStack, Float> productChances = new HashMap<ItemStack, Float>();
 	private final Map<ItemStack, Float> specialtyChances = new HashMap<ItemStack, Float>();
 
@@ -85,8 +79,6 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 			throw new IllegalArgumentException("chance must be in the range (0, 1]");
 		}
 		this.productChances.put(product, chance);
-		int intChance = Math.max(1, Math.round(chance * 100));
-		this.products.put(product, intChance);
 		return this;
 	}
 
@@ -99,8 +91,6 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 			throw new IllegalArgumentException("chance must be in the range (0, 1]");
 		}
 		this.specialtyChances.put(specialty, chance);
-		int intChance = Math.max(1, Math.round(chance * 100));
-		this.specialty.put(specialty, intChance);
 		return this;
 	}
 
@@ -195,18 +185,8 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	}
 
 	@Override
-	public Map<ItemStack, Integer> getProducts() {
-		return products;
-	}
-
-	@Override
 	public Map<ItemStack, Float> getProductChances() {
 		return productChances;
-	}
-
-	@Override
-	public Map<ItemStack, Integer> getSpecialty() {
-		return specialty;
 	}
 
 	@Override

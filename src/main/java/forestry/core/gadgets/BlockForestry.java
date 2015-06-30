@@ -21,10 +21,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.core.CreativeTabForestry;
 import forestry.core.interfaces.IOwnable;
+import forestry.core.interfaces.IRestrictedAccessTile;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.Utils;
 
 public abstract class BlockForestry extends BlockContainer {
 
@@ -36,28 +38,16 @@ public abstract class BlockForestry extends BlockContainer {
 
 	@Override
 	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
-		IOwnable tile = (IOwnable) world.getTileEntity(x, y, z);
-		if (!tile.isOwned() || tile.allowsRemoval(player)) {
-			return super.removedByPlayer(world, player, x, y, z);
-		} else {
-			return false;
-		}
-	}
-
-	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-
-		if (!Proxies.common.isSimulating(world)) {
-			return;
-		}
-
 		TileEntity tile = world.getTileEntity(x, y, z);
-		if (tile instanceof TileForestry) {
-			TileForestry tileForestry = (TileForestry) tile;
-			Utils.dropInventory(tileForestry, world, x, y, z);
-			tileForestry.onRemoval();
+
+		if (tile instanceof IRestrictedAccessTile) {
+			IRestrictedAccessTile restrictedAccessTile = (IRestrictedAccessTile) tile;
+			if (!restrictedAccessTile.getAccessHandler().allowsRemoval(player)) {
+				return false;
+			}
 		}
-		super.breakBlock(world, x, y, z, block, meta);
+
+		return super.removedByPlayer(world, player, x, y, z);
 	}
 
 	@Override
@@ -67,9 +57,22 @@ public abstract class BlockForestry extends BlockContainer {
 			return;
 		}
 
-		TileForestry tile = (TileForestry) world.getTileEntity(i, j, k);
 		if (entityliving instanceof EntityPlayer) {
-			tile.setOwner(((EntityPlayer) entityliving));
+			TileEntity tile = world.getTileEntity(i, j, k);
+
+			IOwnable ownable;
+
+			if (tile instanceof IRestrictedAccessTile) {
+				ownable = ((IRestrictedAccessTile) tile).getAccessHandler();
+			} else if (tile instanceof IOwnable) {
+				ownable = (IOwnable) tile;
+			} else {
+				return;
+			}
+
+			EntityPlayer player = (EntityPlayer) entityliving;
+			GameProfile gameProfile = player.getGameProfile();
+			ownable.setOwner(gameProfile);
 		}
 	}
 

@@ -15,10 +15,13 @@ import net.minecraft.util.AxisAlignedBB;
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeeModifier;
 import forestry.api.genetics.IEffectData;
-import forestry.core.EnumErrorCode;
+import forestry.apiculture.BeeHousingModifier;
 import forestry.core.genetics.EffectData;
 import forestry.core.genetics.alleles.AlleleCategorized;
+import forestry.core.vect.IVect;
+import forestry.core.vect.MutableVect;
 import forestry.core.vect.Vect;
 import forestry.plugins.PluginApiculture;
 
@@ -55,7 +58,7 @@ public abstract class AlleleEffectThrottled extends AlleleCategorized implements
 
 	public boolean isHalted(IEffectData storedData, IBeeHousing housing) {
 
-		if (requiresWorkingQueen && housing.getErrorState() != EnumErrorCode.OK) {
+		if (requiresWorkingQueen && housing.getErrorLogic().hasErrors()) {
 			return true;
 		}
 
@@ -75,27 +78,27 @@ public abstract class AlleleEffectThrottled extends AlleleCategorized implements
 	@Override
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
-		int[] area = getModifiedArea(genome, housing);
+		IVect area = getModifiedArea(genome, housing);
 
-		PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getXCoord(), housing.getYCoord(),
-				housing.getZCoord(), genome.getPrimary().getIconColour(0), area[0], area[1], area[2]);
+		PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getCoordinates(), genome.getPrimary().getIconColour(0), area);
 		return storedData;
 	}
 
-	protected int[] getModifiedArea(IBeeGenome genome, IBeeHousing housing) {
-		int[] area = genome.getTerritory();
-		area[0] *= housing.getTerritoryModifier(genome, 1f) * 3;
-		area[1] *= housing.getTerritoryModifier(genome, 1f) * 3;
-		area[2] *= housing.getTerritoryModifier(genome, 1f) * 3;
+	protected IVect getModifiedArea(IBeeGenome genome, IBeeHousing housing) {
+		IBeeModifier beeModifier = new BeeHousingModifier(housing);
+		float territoryModifier = beeModifier.getTerritoryModifier(genome, 1f);
 
-		if (area[0] < 1) {
-			area[0] = 1;
+		MutableVect area = new MutableVect(genome.getTerritory());
+		area.multiply(territoryModifier * 3);
+
+		if (area.x < 1) {
+			area.x = 1;
 		}
-		if (area[1] < 1) {
-			area[1] = 1;
+		if (area.y < 1) {
+			area.y = 1;
 		}
-		if (area[2] < 1) {
-			area[2] = 1;
+		if (area.z < 1) {
+			area.z = 1;
 		}
 
 		return area;
@@ -106,9 +109,8 @@ public abstract class AlleleEffectThrottled extends AlleleCategorized implements
 		Vect area = new Vect(areaAr[0], areaAr[1], areaAr[2]).multiply(modifier);
 		Vect offset = new Vect(-Math.round(area.x / 2), -Math.round(area.y / 2), -Math.round(area.z / 2));
 
-		// Radioactivity hurts players and mobs
-		Vect min = new Vect(housing.getXCoord() + offset.x, housing.getYCoord() + offset.y, housing.getZCoord() + offset.z);
-		Vect max = new Vect(housing.getXCoord() + offset.x + area.x, housing.getYCoord() + offset.y + area.y, housing.getZCoord() + offset.z + area.z);
+		Vect min = new Vect(housing.getCoordinates()).add(offset);
+		Vect max = min.add(area);
 
 		return AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
 	}

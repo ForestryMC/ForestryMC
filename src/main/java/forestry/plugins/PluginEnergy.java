@@ -20,7 +20,6 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import forestry.core.GameMode;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.items.ItemForestryBlock;

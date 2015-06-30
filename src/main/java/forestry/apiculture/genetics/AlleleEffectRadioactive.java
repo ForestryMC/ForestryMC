@@ -25,8 +25,8 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.gadgets.BlockAlveary;
-import forestry.apiculture.gadgets.TileAlveary;
 import forestry.apiculture.items.ItemArmorApiarist;
+import forestry.apiculture.multiblock.TileAlveary;
 import forestry.core.utils.DamageSourceForestry;
 import forestry.core.vect.Vect;
 
@@ -52,8 +52,8 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 		Vect offset = new Vect(-Math.round(area.x / 2), -Math.round(area.y / 2), -Math.round(area.z / 2));
 
 		// Radioactivity hurts players and mobs
-		Vect min = new Vect(housing.getXCoord() + offset.x, housing.getYCoord() + offset.y, housing.getZCoord() + offset.z);
-		Vect max = new Vect(housing.getXCoord() + offset.x + area.x, housing.getYCoord() + offset.y + area.y, housing.getZCoord() + offset.z + area.z);
+		Vect min = new Vect(housing.getCoordinates()).add(offset);
+		Vect max = min.add(area);
 
 		AxisAlignedBB hurtBox = AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
 
@@ -91,15 +91,16 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 
 			Vect randomPos = new Vect(rand.nextInt(area.x), rand.nextInt(area.y), rand.nextInt(area.z));
 
-			Vect posBlock = randomPos.add(new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord()));
+			Vect posHousing = new Vect(housing.getCoordinates());
+			Vect posBlock = randomPos.add(posHousing);
 			posBlock = posBlock.add(offset);
 
 			if (posBlock.y <= 1 || posBlock.y >= housing.getWorld().getActualHeight()) {
 				continue;
 			}
 
-			// Don't destroy ourself and blocks below us.
-			if (posBlock.x == housing.getXCoord() && posBlock.z == housing.getZCoord() && posBlock.y <= housing.getYCoord()) {
+			// Don't destroy ourselves or blocks below us.
+			if (posBlock.x == posHousing.x && posBlock.z == posHousing.z && posBlock.y <= posHousing.y) {
 				continue;
 			}
 

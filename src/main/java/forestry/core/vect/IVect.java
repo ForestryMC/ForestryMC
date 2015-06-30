@@ -12,6 +12,8 @@ package forestry.core.vect;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
+import forestry.api.farming.FarmDirection;
+
 /**
  * Represents a position or dimensions.
  */
@@ -27,6 +29,8 @@ public interface IVect {
 	IVect add(int x, int y, int z);
 
 	IVect add(ForgeDirection direction);
+
+	IVect add(FarmDirection direction);
 
 	int[] toArray();
 }

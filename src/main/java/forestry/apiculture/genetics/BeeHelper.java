@@ -29,7 +29,6 @@ import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
-import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
@@ -38,14 +37,12 @@ import forestry.api.apiculture.IBeeMutation;
 import forestry.api.apiculture.IBeeRoot;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.apiculture.IBeekeepingMode;
-import forestry.api.core.IStructureLogic;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.apiculture.BeekeepingLogic;
-import forestry.apiculture.gadgets.StructureLogicAlveary;
 import forestry.core.config.ForestryItem;
 import forestry.core.genetics.SpeciesRoot;
 import forestry.plugins.PluginApiculture;
@@ -167,12 +164,12 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 			return null;
 		}
 
-		return new Bee(stack.getTagCompound());
+		return Bee.fromNBT(stack.getTagCompound());
 	}
 
 	@Override
 	public IBee getMember(NBTTagCompound compound) {
-		return new Bee(compound);
+		return Bee.fromNBT(compound);
 	}
 
 	@Override
@@ -255,8 +252,8 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	}
 
 	/* BREEDING MODES */
-	final ArrayList<IBeekeepingMode> beekeepingModes = new ArrayList<IBeekeepingMode>();
-	public static IBeekeepingMode activeBeekeepingMode;
+	private final ArrayList<IBeekeepingMode> beekeepingModes = new ArrayList<IBeekeepingMode>();
+	private static IBeekeepingMode activeBeekeepingMode;
 
 	@Override
 	public void resetBeekeepingMode() {
@@ -327,11 +324,6 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	@Override
 	public IBeekeepingLogic createBeekeepingLogic(IBeeHousing housing) {
 		return new BeekeepingLogic(housing);
-	}
-
-	@Override
-	public IStructureLogic createAlvearyStructureLogic(IAlvearyComponent structure) {
-		return new StructureLogicAlveary(structure);
 	}
 
 	@Override

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -26,6 +28,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.core.BiomeHelper;
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
@@ -35,11 +38,11 @@ import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
 
 public class MachineRaintank extends TileBase implements ISidedInventory, ILiquidTankContainer {
 
@@ -69,7 +72,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 		if (worldObj != null) {
 			BiomeGenBase biome = worldObj.getBiomeGenForCoordsBody(xCoord, zCoord);
 			isValidBiome = BiomeHelper.canRainOrSnow(biome);
-			setErrorCondition(!isValidBiome, EnumErrorCode.INVALIDBIOME);
+			getErrorLogic().setCondition(!isValidBiome, EnumErrorCode.INVALIDBIOME);
 		}
 
 		super.validate();
@@ -99,20 +102,34 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 	}
 
 	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
+		tankManager.writePacketData(data);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
+		tankManager.readPacketData(data);
+	}
+
+	@Override
 	public void updateServerSide() {
 
 		if (!updateOnInterval(20)) {
 			return;
 		}
 
-		setErrorCondition(!isValidBiome, EnumErrorCode.INVALIDBIOME);
+		IErrorLogic errorLogic = getErrorLogic();
+
+		errorLogic.setCondition(!isValidBiome, EnumErrorCode.INVALIDBIOME);
 
 		boolean hasSky = worldObj.canBlockSeeTheSky(xCoord, yCoord + 1, zCoord);
-		setErrorCondition(!hasSky, EnumErrorCode.NOSKY);
+		errorLogic.setCondition(!hasSky, EnumErrorCode.NOSKY);
 
-		setErrorCondition(!worldObj.isRaining(), EnumErrorCode.NOTRAINING);
+		errorLogic.setCondition(!worldObj.isRaining(), EnumErrorCode.NOTRAINING);
 
-		if (!hasErrorState()) {
+		if (!errorLogic.hasErrors()) {
 			resourceTank.fill(STACK_WATER, true);
 		}
 		

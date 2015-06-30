@@ -51,6 +51,7 @@ public abstract class Genome implements IGenome {
 	}
 
 	// NBT RETRIEVAL
+
 	/**
 	 * Quickly gets the species without loading the whole genome.
 	 * We need this because the client uses the species for rendering.

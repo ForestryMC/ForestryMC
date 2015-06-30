@@ -19,8 +19,8 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 import forestry.core.utils.StackUtils;
-import forestry.farming.gadgets.BlockFarm;
-import forestry.farming.gadgets.EnumFarmBlock;
+import forestry.farming.multiblock.BlockFarm;
+import forestry.farming.multiblock.EnumFarmBlockTexture;
 
 public class FarmItemRenderer implements IItemRenderer {
 
@@ -39,7 +39,7 @@ public class FarmItemRenderer implements IItemRenderer {
 		block.setBlockBoundsForItemRender();
 		render.setRenderBoundsFromBlock(block);
 
-		EnumFarmBlock type = EnumFarmBlock.getFromCompound(item.getTagCompound());
+		EnumFarmBlockTexture type = EnumFarmBlockTexture.getFromCompound(item.getTagCompound());
 
 		GL11.glTranslatef(translateX, translateY, translateZ);
 

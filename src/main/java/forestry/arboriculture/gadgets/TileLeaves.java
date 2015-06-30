@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
-import com.google.common.collect.ImmutableSet;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,11 +21,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-
-import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.common.EnumPlantType;
 
@@ -41,9 +37,6 @@ import forestry.api.arboriculture.ILeafTickHandler;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreekeepingMode;
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
-import forestry.api.core.IErrorState;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IEffectData;
@@ -56,7 +49,6 @@ import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.arboriculture.network.PacketRipeningUpdate;
-import forestry.core.EnumErrorCode;
 import forestry.core.genetics.alleles.Allele;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -87,16 +79,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	private int maturationTime;
 	private int damage;
 
-	private BiomeGenBase biome;
-
 	private IEffectData effectData[] = new IEffectData[2];
-
-	private void updateBiome() {
-		if (worldObj == null) {
-			return;
-		}
-		biome = worldObj.getBiomeGenForCoordsBody(xCoord, zCoord);
-	}
 
 	/* SAVING & LOADING */
 	@Override
@@ -142,10 +125,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public void onBlockTick() {
-		if (biome == null) {
-			updateBiome();
-		}
-
 		ITree tree = getTree();
 		if (isDecorative || tree == null) {
 			return;
@@ -155,7 +134,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 		boolean isDestroyed = isDestroyed(tree, damage);
 		for (ILeafTickHandler tickHandler : genome.getPrimary().getRoot().getLeafTickHandlers()) {
-			if (tickHandler.onRandomLeafTick(tree, worldObj, biome.biomeID, xCoord, yCoord, zCoord, isDestroyed)) {
+			if (tickHandler.onRandomLeafTick(tree, worldObj, xCoord, yCoord, zCoord, isDestroyed)) {
 				return;
 			}
 		}
@@ -183,7 +162,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			matureCaterpillar();
 		}
 
-		effectData = tree.doEffect(effectData, worldObj, biome.biomeID, xCoord, yCoord, zCoord);
+		effectData = tree.doEffect(effectData, worldObj, xCoord, yCoord, zCoord);
 	}
 
 	@Override
@@ -523,62 +502,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public World getWorld() {
-		return worldObj;
-	}
-
-	@Override
-	public int getXCoord() {
-		return xCoord;
-	}
-
-	@Override
-	public int getYCoord() {
-		return yCoord;
-	}
-
-	@Override
-	public int getZCoord() {
-		return zCoord;
-	}
-
-	@Override
-	public BiomeGenBase getBiome() {
-		return biome;
-	}
-
-	@Override
-	public EnumTemperature getTemperature() {
-		return null;
-	}
-
-	@Override
-	public EnumHumidity getHumidity() {
-		return null;
-	}
-
-	@Override
-	public boolean setErrorCondition(boolean condition, IErrorState errorState) {
-		return condition;
-	}
-
-	@Override
-	public ImmutableSet<IErrorState> getErrorStates() {
-		return ImmutableSet.of();
-	}
-
-	@Override
-	public void setErrorState(IErrorState state) {
-	}
-
-	@Override
-	public EnumErrorCode getErrorState() {
-		return null;
-	}
-
-	@Override
-	public boolean addProduct(ItemStack product, boolean all) {
-		return false;
+	public ChunkCoordinates getCoordinates() {
+		return new ChunkCoordinates(xCoord, yCoord, zCoord);
 	}
 
 	@Override
@@ -607,9 +532,4 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		return !isDecorative && !isDestroyed(tree, damage) && caterpillar == null;
 	}
 
-	/* IHousing */
-	@Override
-	public GameProfile getOwnerName() {
-		return this.getOwner();
-	}
 }

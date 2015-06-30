@@ -14,7 +14,6 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 
 public interface IClimatised {
-	boolean isClimatized();
 
 	EnumTemperature getTemperature();
 

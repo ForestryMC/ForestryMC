@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -46,7 +47,6 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -77,14 +77,6 @@ import forestry.apiculture.gadgets.BlockAlveary;
 import forestry.apiculture.gadgets.BlockBeehives;
 import forestry.apiculture.gadgets.BlockCandle;
 import forestry.apiculture.gadgets.BlockStump;
-import forestry.apiculture.gadgets.StructureLogicAlveary;
-import forestry.apiculture.gadgets.TileAlvearyFan;
-import forestry.apiculture.gadgets.TileAlvearyHeater;
-import forestry.apiculture.gadgets.TileAlvearyHygroregulator;
-import forestry.apiculture.gadgets.TileAlvearyPlain;
-import forestry.apiculture.gadgets.TileAlvearySieve;
-import forestry.apiculture.gadgets.TileAlvearyStabiliser;
-import forestry.apiculture.gadgets.TileAlvearySwarmer;
 import forestry.apiculture.gadgets.TileApiaristChest;
 import forestry.apiculture.gadgets.TileApiary;
 import forestry.apiculture.gadgets.TileBeehouse;
@@ -124,6 +116,14 @@ import forestry.apiculture.items.ItemHiveFrame;
 import forestry.apiculture.items.ItemHoneycomb;
 import forestry.apiculture.items.ItemImprinter;
 import forestry.apiculture.items.ItemWaxCast;
+import forestry.apiculture.multiblock.TileAlveary;
+import forestry.apiculture.multiblock.TileAlvearyFan;
+import forestry.apiculture.multiblock.TileAlvearyHeater;
+import forestry.apiculture.multiblock.TileAlvearyHygroregulator;
+import forestry.apiculture.multiblock.TileAlvearyPlain;
+import forestry.apiculture.multiblock.TileAlvearySieve;
+import forestry.apiculture.multiblock.TileAlvearyStabiliser;
+import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.apiculture.network.PacketHandlerApiculture;
 import forestry.apiculture.proxy.ProxyApiculture;
 import forestry.apiculture.trigger.ApicultureTriggers;
@@ -164,7 +164,7 @@ public class PluginApiculture extends ForestryPlugin {
 	public static final String[] EMPTY_STRINGS = new String[0];
 	public static String beekeepingMode = "NORMAL";
 	private static float secondPrincessChance = 0;
-	public static int ticksPerBeeWorkCycle = 550;
+	public static final int ticksPerBeeWorkCycle = 550;
 	public static boolean apiarySideSensitive = false;
 	public static boolean fancyRenderedBees = false;
 
@@ -327,7 +327,7 @@ public class PluginApiculture extends ForestryPlugin {
 			property.comment = plantableFlowerMessage;
 			parsePlantableFlowers(property, flowerType);
 
-			List<IFlower> acceptableFlowers = FlowerManager.flowerRegistry.getAcceptableFlowers(flowerType);
+			Set<IFlower> acceptableFlowers = FlowerManager.flowerRegistry.getAcceptableFlowers(flowerType);
 			if (acceptableFlowers == null || acceptableFlowers.size() == 0) {
 				Proxies.log.severe("Flower type '" + flowerType + "' has no valid flowers set in apiculture.cfg. Add valid flowers or delete the config to set it to default.");
 			}
@@ -425,7 +425,7 @@ public class PluginApiculture extends ForestryPlugin {
 		weightDecimalFormat.setGroupingUsed(false);
 
 		for (String flowerType : FlowerManager.flowerRegistry.getFlowerTypes()) {
-			List<IFlower> flowers = FlowerManager.flowerRegistry.getAcceptableFlowers(flowerType);
+			Set<IFlower> flowers = FlowerManager.flowerRegistry.getAcceptableFlowers(flowerType);
 			List<String> acceptedFlowerNames = new ArrayList<String>();
 			List<String> plantableFlowerNames = new ArrayList<String>();
 			if (flowers != null) {
@@ -474,10 +474,6 @@ public class PluginApiculture extends ForestryPlugin {
 		property = apicultureConfig.get("beekeeping.secondprincess", CONFIG_CATEGORY, secondPrincessChance);
 		property.comment = "percent chance of second princess drop, for limited/skyblock maps. Acceptable values up to 2 decimals.";
 		secondPrincessChance = Float.parseFloat(property.value);
-
-		property = apicultureConfig.get("beekeeping.flowers.custom", CONFIG_CATEGORY, "");
-		property.comment = "add additional flower blocks for apiaries here in the format modid:name or modid:name:meta. separate blocks using ';'. wildcard for metadata: '*'. will be treated like vanilla flowers. not recommended for flowers implemented as tile entities.";
-		parseAdditionalFlowers(property.value, FlowerManager.plainFlowers);
 
 		property = apicultureConfig.get("species.blacklist", CONFIG_CATEGORY, "");
 		property.comment = "add species to blacklist identified by their uid and seperated with ';'.";
@@ -677,14 +673,14 @@ public class PluginApiculture extends ForestryPlugin {
 				'#', ForestryItem.beeswax);
 
 		// / ALVEARY
-		Proxies.common.addRecipe(ForestryBlock.alveary.getItemStack(),
+		Proxies.common.addRecipe(ForestryBlock.alveary.getItemStack(1, TileAlveary.PLAIN_META),
 				"###",
 				"#X#",
 				"###",
 				'X', ForestryItem.impregnatedCasing,
 				'#', ForestryItem.craftingMaterial.getItemStack(1, 6));
 		// SWARMER
-		Proxies.common.addRecipe(ForestryBlock.alveary.getItemStack(1, 2),
+		Proxies.common.addRecipe(ForestryBlock.alveary.getItemStack(1, TileAlveary.SWARMER_META),
 				"#G#",
 				" X ",
 				"#G#",
@@ -692,7 +688,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'X', ForestryBlock.alveary,
 				'G', Items.gold_ingot);
 		// FAN
-		Proxies.common.addRecipe(ForestryBlock.alveary.getItemStack(1, 3),
+		Proxies.common.addRecipe(ForestryBlock.alveary.getItemStack(1, TileAlveary.FAN_META),
 				"I I",
 				" X ",
 				"I#I",
@@ -700,7 +696,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'X', ForestryBlock.alveary,
 				'I', Items.iron_ingot);
 		// HEATER
-		Proxies.common.addRecipe(ForestryBlock.alveary.getItemStack(1, 4),
+		Proxies.common.addRecipe(ForestryBlock.alveary.getItemStack(1, TileAlveary.HEATER_META),
 				"#I#",
 				" X ",
 				"YYY",
@@ -708,7 +704,7 @@ public class PluginApiculture extends ForestryPlugin {
 				'X', ForestryBlock.alveary,
 				'I', Items.iron_ingot, 'Y', Blocks.stone);
 		// HYGROREGULATOR
-		Proxies.common.addRecipe(ForestryBlock.alveary.getItemStack(1, 5),
+		Proxies.common.addRecipe(ForestryBlock.alveary.getItemStack(1, TileAlveary.HYGRO_META),
 				"GIG",
 				"GXG",
 				"GIG",
@@ -716,14 +712,14 @@ public class PluginApiculture extends ForestryPlugin {
 				'I', Items.iron_ingot,
 				'G', Blocks.glass);
 		// STABILISER
-		Proxies.common.addRecipe(ForestryBlock.alveary.getItemStack(1, 6),
+		Proxies.common.addRecipe(ForestryBlock.alveary.getItemStack(1, TileAlveary.STABILIZER_META),
 				"G G",
 				"GXG",
 				"G G",
 				'X', ForestryBlock.alveary,
 				'G', Items.quartz);
 		// SIEVE
-		Proxies.common.addRecipe(ForestryBlock.alveary.getItemStack(1, TileAlvearySieve.BLOCK_META),
+		Proxies.common.addRecipe(ForestryBlock.alveary.getItemStack(1, TileAlveary.SIEVE_META),
 				"III",
 				" X ",
 				"WWW",
@@ -1091,17 +1087,8 @@ public class PluginApiculture extends ForestryPlugin {
 			}
 			return true;
 		} else if (message.key.equals("add-alveary-slab") && message.isStringMessage()) {
-			try {
-				Block block = GameData.getBlockRegistry().getRaw(message.getStringValue());
-
-				if (block != null && block != Blocks.air) {
-					StructureLogicAlveary.addSlabBlock(block);
-				} else {
-					logInvalidIMCMessage(message);
-				}
-			} catch (Exception e) {
-				logInvalidIMCMessage(message);
-			}
+			String messageString = String.format("Received a '%s' request from mod '%s'. This IMC message has been replaced with the oreDictionary for 'slabWood'. Please contact the author and report this issue.", message.key, message.getSender());
+			Proxies.log.warning(messageString);
 			return true;
 		}
 

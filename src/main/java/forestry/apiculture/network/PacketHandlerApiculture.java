@@ -43,6 +43,10 @@ public class PacketHandlerApiculture implements IPacketHandler {
 				onCandleUpdate(updateCandle);
 				return true;
 			}
+			case BEE_LOGIC_ACTIVE: {
+				PacketBeekeepingLogicActive.onPacketData(data);
+				return true;
+			}
 		}
 
 		return false;

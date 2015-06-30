@@ -23,7 +23,6 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 import forestry.core.config.Config;
 import forestry.core.config.ForestryBlock;
-import forestry.core.proxy.Proxies;
 import forestry.core.worldgen.WorldGenMinableMeta;
 import forestry.plugins.PluginManager;
 

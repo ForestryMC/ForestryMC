@@ -11,7 +11,6 @@
 package forestry.apiculture.worldgen;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
@@ -36,9 +35,8 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IFlower;
-import forestry.apiculture.gadgets.TileBeehouse;
+import forestry.apiculture.gadgets.TileApiary;
 import forestry.arboriculture.gadgets.BlockFireproofLog;
 import forestry.arboriculture.gadgets.BlockFireproofPlanks;
 import forestry.arboriculture.gadgets.BlockLog;
@@ -298,38 +296,52 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		int yCoord = this.getYWithOffset(y);
 		int zCoord = this.getZWithOffset(x, z);
 
-		if (box.isVecInside(xCoord, yCoord, zCoord) && !ForestryBlock.apiculture.isBlockEqual(world, xCoord, yCoord, zCoord)
-				&& world.blockExists(xCoord, yCoord - 1, zCoord)) {
+		if (!box.isVecInside(xCoord, yCoord, zCoord) || ForestryBlock.apiculture.isBlockEqual(world, xCoord, yCoord, zCoord)
+				|| !world.blockExists(xCoord, yCoord - 1, zCoord)) {
+			return;
+		}
 
-			world.setBlock(xCoord, yCoord, zCoord, ForestryBlock.apiculture.block(), Defaults.DEFINITION_APIARY_META,
-					Defaults.FLAG_BLOCK_SYNCH);
-			ForestryBlock.apiculture.block().onBlockAdded(world, xCoord, yCoord, zCoord);
+		world.setBlock(xCoord, yCoord, zCoord, ForestryBlock.apiculture.block(), Defaults.DEFINITION_APIARY_META, Defaults.FLAG_BLOCK_SYNCH);
+		ForestryBlock.apiculture.block().onBlockAdded(world, xCoord, yCoord, zCoord);
 
-			TileEntity tile = world.getTileEntity(xCoord, yCoord, zCoord);
-			if (tile instanceof TileBeehouse) {
-				TileBeehouse apiary = ((TileBeehouse) tile);
-				apiary.initialize();
-				apiary.setInventorySlotContents(TileBeehouse.SLOT_QUEEN,
-						BeeManager.beeRoot.getMemberStack(getVillageBee(world, xCoord, yCoord, zCoord), EnumBeeType.PRINCESS.ordinal()));
-				apiary.setInventorySlotContents(TileBeehouse.SLOT_DRONE,
-						BeeManager.beeRoot.getMemberStack(getVillageBee(world, xCoord, yCoord, zCoord), EnumBeeType.DRONE.ordinal()));
+		TileEntity tile = world.getTileEntity(xCoord, yCoord, zCoord);
+		if (!(tile instanceof TileApiary)) {
+			return;
+		}
 
-				for (int i = TileBeehouse.SLOT_FRAMES_1; i < TileBeehouse.SLOT_FRAMES_1 + TileBeehouse.SLOT_FRAMES_COUNT; i++) {
-					float roll = world.rand.nextFloat();
-					if (roll < 0.2f) {
-						apiary.setInventorySlotContents(i, ForestryItem.frameUntreated.getItemStack());
-					} else if (roll < 0.4f) {
-						apiary.setInventorySlotContents(i, ForestryItem.frameImpregnated.getItemStack());
-					} else if (roll < 0.6) {
-						apiary.setInventorySlotContents(i, ForestryItem.frameProven.getItemStack());
-					}
-				}
+		TileApiary apiary = (TileApiary) tile;
 
-			}
+		ItemStack randomVillagePrincess = getRandomVillageBeeStack(world, xCoord, yCoord, zCoord, EnumBeeType.PRINCESS);
+		apiary.getBeeInventory().setQueen(randomVillagePrincess);
+
+		ItemStack randomVillageDrone = getRandomVillageBeeStack(world, xCoord, yCoord, zCoord, EnumBeeType.DRONE);
+		apiary.getBeeInventory().setDrone(randomVillageDrone);
+
+		for (int i = TileApiary.ApiaryInventory.SLOT_FRAMES_1; i < TileApiary.ApiaryInventory.SLOT_FRAMES_1 + TileApiary.ApiaryInventory.SLOT_FRAMES_COUNT; i++) {
+			ItemStack randomFrame = getRandomFrame(world.rand);
+			apiary.setInventorySlotContents(i, randomFrame);
 		}
 	}
 
-	private static IBee getVillageBee(World world, int xCoord, int yCoord, int zCoord) {
+	private static ItemStack getRandomFrame(Random random) {
+		float roll = random.nextFloat();
+		if (roll < 0.2f) {
+			return ForestryItem.frameUntreated.getItemStack();
+		} else if (roll < 0.4f) {
+			return ForestryItem.frameImpregnated.getItemStack();
+		} else if (roll < 0.6) {
+			return ForestryItem.frameProven.getItemStack();
+		} else {
+			return null;
+		}
+	}
+
+	private static ItemStack getRandomVillageBeeStack(World world, int xCoord, int yCoord, int zCoord, EnumBeeType beeType) {
+		IBee randomVillageBee = getRandomVillageBee(world, xCoord, yCoord, zCoord);
+		return BeeManager.beeRoot.getMemberStack(randomVillageBee, beeType.ordinal());
+	}
+
+	private static IBee getRandomVillageBee(World world, int xCoord, int yCoord, int zCoord) {
 
 		// Get current biome
 		BiomeGenBase biome = world.getBiomeGenForCoords(xCoord, zCoord);

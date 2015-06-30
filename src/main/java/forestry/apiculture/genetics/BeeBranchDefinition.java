@@ -108,8 +108,7 @@ public enum BeeBranchDefinition {
 			Allele.helper.set(alleles, EnumBeeChromosome.CAVE_DWELLING, true);
 			Allele.helper.set(alleles, EnumBeeChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.WHEAT);
 		}
-	}
-	;
+	};
 
 	private final IClassification branch;
 

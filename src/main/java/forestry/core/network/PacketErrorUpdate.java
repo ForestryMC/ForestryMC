@@ -14,12 +14,13 @@ import java.io.IOException;
 
 import net.minecraft.tileentity.TileEntity;
 
-import forestry.core.gadgets.TileForestry;
+import forestry.api.core.IErrorLogic;
+import forestry.api.core.IErrorLogicSource;
 import forestry.core.proxy.Proxies;
 
 public class PacketErrorUpdate extends PacketCoordinates {
 
-	private TileForestry tileForestry;
+	private IErrorLogic errorLogic;
 
 	public static void onPacketData(DataInputStreamForestry data) throws IOException {
 		new PacketErrorUpdate(data);
@@ -29,15 +30,15 @@ public class PacketErrorUpdate extends PacketCoordinates {
 		super(data);
 	}
 
-	public PacketErrorUpdate(TileForestry tileForestry) {
-		super(PacketId.TILE_FORESTRY_ERROR_UPDATE, tileForestry);
-		this.tileForestry = tileForestry;
+	public PacketErrorUpdate(TileEntity tile, IErrorLogicSource errorLogicSource) {
+		super(PacketId.TILE_FORESTRY_ERROR_UPDATE, tile);
+		this.errorLogic = errorLogicSource.getErrorLogic();
 	}
 
 	@Override
 	protected void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
-		tileForestry.writeErrorData(data);
+		errorLogic.writeData(data);
 	}
 
 	@Override
@@ -45,8 +46,10 @@ public class PacketErrorUpdate extends PacketCoordinates {
 		super.readData(data);
 
 		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
-		if (tile instanceof TileForestry) {
-			((TileForestry) tile).readErrorData(data);
+		if (tile instanceof IErrorLogicSource) {
+			IErrorLogicSource errorSourceTile = (IErrorLogicSource) tile;
+			errorLogic = errorSourceTile.getErrorLogic();
+			errorLogic.readData(data);
 		}
 	}
 }

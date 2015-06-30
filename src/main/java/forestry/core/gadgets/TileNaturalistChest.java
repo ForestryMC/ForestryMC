@@ -53,6 +53,8 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 		}
 
 		@Override
-		public boolean canExtractItem(int slotIndex, ItemStack stack, int side) { return true;	}
+		public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
+			return true;
+		}
 	}
 }

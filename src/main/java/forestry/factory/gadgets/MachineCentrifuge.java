@@ -176,7 +176,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 			resetRecipeTimes();
 		}
 
-		setErrorCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
+		getErrorLogic().setCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
 	}
 
 	private void resetRecipeTimes() {
@@ -203,7 +203,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 			pendingProducts.pop();
 		}
 
-		setErrorCondition(!added, EnumErrorCode.NOSPACE);
+		getErrorLogic().setCondition(!added, EnumErrorCode.NOSPACE);
 		return added;
 	}
 
@@ -343,46 +343,6 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 		public void addRecipe(int timePerItem, ItemStack resource, Map<ItemStack, Float> products) {
 			ICentrifugeRecipe recipe = new CentrifugeRecipe(timePerItem, resource, products);
 			addRecipe(recipe);
-		}
-
-		@Override
-		public void addRecipe(int timePerItem, ItemStack resource, HashMap<ItemStack, Integer> products) {
-			Map<ItemStack, Float> floatProducts = new HashMap<ItemStack, Float>();
-			for (Map.Entry<ItemStack, Integer> entry : products.entrySet()) {
-				floatProducts.put(entry.getKey(), entry.getValue() / 100.0f);
-			}
-
-			addRecipe(timePerItem, resource, floatProducts);
-		}
-
-		@Override
-		public void addRecipe(int timePerItem, ItemStack resource, ItemStack[] produce, int[] chances) {
-			Map<ItemStack, Float> products = new HashMap<ItemStack, Float>();
-
-			int i = 0;
-			for (ItemStack prod : produce) {
-				products.put(prod, chances[i] / 100f);
-				i++;
-			}
-
-			addRecipe(timePerItem, resource, products);
-		}
-
-		@Override
-		public void addRecipe(int timePerItem, ItemStack resource, ItemStack primary, ItemStack secondary, int chance) {
-			Map<ItemStack, Float> products = new HashMap<ItemStack, Float>();
-			products.put(primary, 1.0f);
-			if (secondary != null) {
-				products.put(secondary, chance / 100f);
-			}
-			addRecipe(timePerItem, resource, products);
-		}
-
-		@Override
-		public void addRecipe(int timePerItem, ItemStack resource, ItemStack primary) {
-			Map<ItemStack, Float> products = new HashMap<ItemStack, Float>();
-			products.put(primary, 1.0f);
-			addRecipe(timePerItem, resource, products);
 		}
 
 		public static ICentrifugeRecipe findMatchingRecipe(ItemStack item) {

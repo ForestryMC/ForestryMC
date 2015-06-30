@@ -54,6 +54,7 @@ import forestry.core.WorldGenerator;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
+import forestry.core.multiblock.MultiblockServerTickHandler;
 import forestry.core.network.PacketCoordinates;
 import forestry.core.network.PacketFXSignal;
 import forestry.core.network.PacketId;
@@ -71,6 +72,8 @@ public class ProxyCommon {
 		TickHandlerCoreServer tickHandlerCoreServer = new TickHandlerCoreServer(worldGenerator);
 		FMLCommonHandler.instance().bus().register(tickHandlerCoreServer);
 		MinecraftForge.EVENT_BUS.register(tickHandlerCoreServer);
+
+		FMLCommonHandler.instance().bus().register(new MultiblockServerTickHandler());
 	}
 
 	public void registerBlock(Block block, Class<? extends ItemBlock> itemClass) {
@@ -219,6 +222,9 @@ public class ProxyCommon {
 	}
 
 	public void addEntityExplodeFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
+	}
+
+	public void addEntitySnowFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
 	}
 
 	public void addBlockDestroyEffects(World world, int xCoord, int yCoord, int zCoord, Block block, int i) {

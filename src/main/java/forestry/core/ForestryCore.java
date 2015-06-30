@@ -35,8 +35,8 @@ import forestry.api.fuels.RainSubstrate;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
-import forestry.core.config.Version;
 import forestry.core.fluids.Fluids;
+import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.proxy.Proxies;
 import forestry.plugins.PluginManager;
 
@@ -45,12 +45,14 @@ public class ForestryCore {
 	public void preInit(File modLocation, Object basemod) {
 		ForestryAPI.instance = basemod;
 		ForestryAPI.forestryConstants = new ForestryConstants();
+		ForestryAPI.errorStateRegistry = new ErrorStateRegistry();
 
 		// Register event handler
 		MinecraftForge.EVENT_BUS.register(new EventHandlerCore());
+		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
 
 		Config.load();
-		
+
 		EnumErrorCode.init();
 
 		PluginManager.runSetup();

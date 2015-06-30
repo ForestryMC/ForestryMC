@@ -11,12 +11,13 @@
 package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
 
-import forestry.apiculture.gadgets.TileAlvearyPlain;
+import forestry.apiculture.BeeHousingInventory;
+import forestry.apiculture.multiblock.TileAlvearyPlain;
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
+import forestry.core.network.PacketGuiUpdate;
 
 public class ContainerAlveary extends ContainerTile<TileAlvearyPlain> {
 
@@ -24,10 +25,10 @@ public class ContainerAlveary extends ContainerTile<TileAlvearyPlain> {
 		super(tile, player, 8, 108);
 
 		// Queen/Princess
-		this.addSlotToContainer(new SlotFiltered(tile, TileAlvearyPlain.SLOT_QUEEN, 29, 39));
+		this.addSlotToContainer(new SlotFiltered(tile, BeeHousingInventory.SLOT_QUEEN, 29, 39));
 
 		// Drone
-		this.addSlotToContainer(new SlotFiltered(tile, TileAlvearyPlain.SLOT_DRONE, 29, 65));
+		this.addSlotToContainer(new SlotFiltered(tile, BeeHousingInventory.SLOT_DRONE, 29, 65));
 
 		// Product Inventory
 		this.addSlotToContainer(new SlotOutput(tile, 2, 116, 52));
@@ -40,15 +41,9 @@ public class ContainerAlveary extends ContainerTile<TileAlvearyPlain> {
 	}
 
 	@Override
-	public void updateProgressBar(int i, int j) {
-		tile.getGUINetworkData(i, j);
-	}
-
-	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		for (Object crafter : crafters) {
-			tile.sendGUINetworkData(this, (ICrafting) crafter);
-		}
+		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
+		sendPacketToCrafters(packet);
 	}
 }

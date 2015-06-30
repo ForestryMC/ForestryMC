@@ -126,22 +126,22 @@ public class PluginStorage extends ForestryPlugin {
 			BackpackManager.definitions.put(definition.getKey(), definition);
 		}
 
-		definition = new BackpackDefinition("miner",  new Color(0x36187d).getRGB());
+		definition = new BackpackDefinition("miner", new Color(0x36187d).getRGB());
 		BackpackManager.definitions.put(definition.getKey(), definition);
 
-		definition = new BackpackDefinition("digger",  new Color(0x363cc5).getRGB());
+		definition = new BackpackDefinition("digger", new Color(0x363cc5).getRGB());
 		BackpackManager.definitions.put(definition.getKey(), definition);
 
-		definition = new BackpackDefinition("forester",  new Color(0x347427).getRGB());
+		definition = new BackpackDefinition("forester", new Color(0x347427).getRGB());
 		BackpackManager.definitions.put(definition.getKey(), definition);
 
-		definition = new BackpackDefinition("hunter",  new Color(0x412215).getRGB());
+		definition = new BackpackDefinition("hunter", new Color(0x412215).getRGB());
 		BackpackManager.definitions.put(definition.getKey(), definition);
 
-		definition = new BackpackDefinition("adventurer",  new Color(0x7fb8c2).getRGB());
+		definition = new BackpackDefinition("adventurer", new Color(0x7fb8c2).getRGB());
 		BackpackManager.definitions.put(definition.getKey(), definition);
 
-		definition = new BackpackDefinition("builder",  new Color(0xdd3a3a).getRGB());
+		definition = new BackpackDefinition("builder", new Color(0xdd3a3a).getRGB());
 		BackpackManager.definitions.put(definition.getKey(), definition);
 	}
 

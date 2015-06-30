@@ -13,12 +13,14 @@ package forestry.core.gadgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -34,7 +36,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.core.fluids.FluidHelper;
-import forestry.core.interfaces.IOwnable;
+import forestry.core.interfaces.IAccessHandler;
+import forestry.core.interfaces.IRestrictedAccessTile;
 import forestry.core.items.ItemNBTTile;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.PlayerUtil;
@@ -178,8 +181,10 @@ public class BlockBase extends BlockForestry {
 			return false;
 		}
 
+		IAccessHandler access = tile.getAccessHandler();
+
 		ItemStack current = player.getCurrentEquippedItem();
-		if (current != null && current.getItem() != Items.bucket && tile instanceof IFluidHandler && tile.allowsAlteration(player)) {
+		if (current != null && current.getItem() != Items.bucket && tile instanceof IFluidHandler && access.allowsAlteration(player)) {
 			if (FluidHelper.handleRightClick((IFluidHandler) tile, ForgeDirection.getOrientation(side), player, true, tile.canDrainWithBucket())) {
 				return true;
 			}
@@ -189,10 +194,10 @@ public class BlockBase extends BlockForestry {
 			return true;
 		}
 
-		if (tile.allowsViewing(player)) {
+		if (access.allowsViewing(player)) {
 			tile.openGui(player, tile);
 		} else {
-			player.addChatMessage(new ChatComponentTranslation("for.chat.accesslocked", PlayerUtil.getOwnerName(tile)));
+			player.addChatMessage(new ChatComponentTranslation("for.chat.accesslocked", PlayerUtil.getOwnerName(access)));
 		}
 		return true;
 	}
@@ -211,12 +216,14 @@ public class BlockBase extends BlockForestry {
 	@Override
 	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
 
-		IOwnable tile = (IOwnable) world.getTileEntity(x, y, z);
+		IRestrictedAccessTile tile = (IRestrictedAccessTile) world.getTileEntity(x, y, z);
 		if (tile == null) {
 			return world.setBlockToAir(x, y, z);
 		}
 
-		if (tile.isOwned() && !tile.allowsRemoval(player)) {
+		IAccessHandler accessHandler = tile.getAccessHandler();
+
+		if (accessHandler.isOwned() && !accessHandler.allowsRemoval(player)) {
 			return false;
 		}
 
@@ -225,6 +232,24 @@ public class BlockBase extends BlockForestry {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+
+		if (!Proxies.common.isSimulating(world)) {
+			return;
+		}
+
+		TileEntity tile = world.getTileEntity(x, y, z);
+		if (tile instanceof IInventory) {
+			IInventory inventory = (IInventory) tile;
+			Utils.dropInventory(inventory, world, x, y, z);
+			if (tile instanceof TileForestry) {
+				((TileForestry) tile).onRemoval();
+			}
+		}
+		super.breakBlock(world, x, y, z, block, meta);
 	}
 
 	@Override

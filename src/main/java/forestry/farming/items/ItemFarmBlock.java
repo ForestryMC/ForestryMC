@@ -18,7 +18,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.gadgets.IStructureBlockItem;
-import forestry.farming.gadgets.EnumFarmBlock;
+import forestry.farming.multiblock.EnumFarmBlockTexture;
 
 public class ItemFarmBlock extends ItemBlock implements IStructureBlockItem {
 
@@ -39,7 +39,7 @@ public class ItemFarmBlock extends ItemBlock implements IStructureBlockItem {
 			return;
 		}
 
-		info.add(EnumFarmBlock.getFromCompound(itemstack.getTagCompound()).getName());
+		info.add(EnumFarmBlockTexture.getFromCompound(itemstack.getTagCompound()).getName());
 	}
 
 	@Override

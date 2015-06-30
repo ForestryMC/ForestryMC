@@ -154,13 +154,7 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 		}
 
 		// Add saplings
-		ITree[] saplings;
-		try {
-			saplings = tile.getTree().getSaplings(world, playerProfile, x, y, z, saplingModifier);
-		} catch (Throwable ignored) {
-			// legacy
-			saplings = tile.getTree().getSaplings(world, x, y, z, saplingModifier);
-		}
+		ITree[] saplings = tile.getTree().getSaplings(world, playerProfile, x, y, z, saplingModifier);
 
 		for (ITree sapling : saplings) {
 			if (sapling != null) {

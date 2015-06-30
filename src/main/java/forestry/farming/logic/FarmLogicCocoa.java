@@ -29,6 +29,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
@@ -83,7 +84,7 @@ public class FarmLogicCocoa extends FarmLogic {
 	private final HashMap<Vect, Integer> lastExtentsCultivation = new HashMap<Vect, Integer>();
 
 	@Override
-	public boolean cultivate(int x, int y, int z, ForgeDirection direction, int extent) {
+	public boolean cultivate(int x, int y, int z, FarmDirection direction, int extent) {
 
 		Vect start = new Vect(x, y, z);
 		if (!lastExtentsCultivation.containsKey(start)) {
@@ -107,7 +108,7 @@ public class FarmLogicCocoa extends FarmLogic {
 	private final HashMap<Vect, Integer> lastExtentsHarvest = new HashMap<Vect, Integer>();
 
 	@Override
-	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
+	public Collection<ICrop> harvest(int x, int y, int z, FarmDirection direction, int extent) {
 
 		Vect start = new Vect(x, y, z);
 		if (!lastExtentsHarvest.containsKey(start)) {

@@ -249,7 +249,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 			Block grainBlock = GameRegistry.findBlock(HC, "pam" + grainName + "Crop");
 			if (grain != null && wheatamount.stackSize > 0) {
 				Proxies.common.addRecipe(wheatamount, " X ", "X#X", " X ", '#', Blocks.dirt, 'X', grain);
-				FuelManager.moistenerResource.put(grain, new MoistenerFuel(grain, ForestryItem.mouldyWheat.getItemStack(), 0,	300));
+				FuelManager.moistenerResource.put(grain, new MoistenerFuel(grain, ForestryItem.mouldyWheat.getItemStack(), 0, 300));
 			}
 			if (grainSeed != null) {
 				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{grainSeed}, Fluids.SEEDOIL.getFluid(seedamount));

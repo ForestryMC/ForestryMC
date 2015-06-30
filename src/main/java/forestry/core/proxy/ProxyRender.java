@@ -11,7 +11,6 @@
 package forestry.core.proxy;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.world.World;
 
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.interfaces.IBlockRenderer;
@@ -47,9 +46,6 @@ public class ProxyRender {
 
 	public IBlockRenderer getRenderEscritoire() {
 		return null;
-	}
-
-	public void addSnowFX(World world, double xCoord, double yCoord, double zCoord, int color, int areaX, int areaY, int areaZ) {
 	}
 
 	public short registerItemTexUID(IIconRegister register, short uid, String ident) {

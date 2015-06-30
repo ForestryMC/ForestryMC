@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +29,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
 import forestry.api.recipes.IMoistenerManager;
@@ -43,6 +45,8 @@ import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.GuiUtil;
@@ -193,6 +197,18 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 	}
 
 	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
+		tankManager.writePacketData(data);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
+		tankManager.readPacketData(data);
+	}
+
+	@Override
 	public void updateServerSide() {
 
 		IInventoryAdapter inventory = getInternalInventory();
@@ -204,9 +220,11 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 		// Let's get to work
 		int lightvalue = worldObj.getBlockLightValue(xCoord, yCoord + 1, zCoord);
 
+		IErrorLogic errorLogic = getErrorLogic();
+
 		// Not working in broad daylight
 		boolean gloomy = lightvalue <= 11;
-		if (setErrorCondition(!gloomy, EnumErrorCode.NOTGLOOMY)) {
+		if (errorLogic.setCondition(!gloomy, EnumErrorCode.NOTGLOOMY)) {
 			return;
 		}
 
@@ -226,7 +244,7 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 		if (burnTime > 0 && pendingProduct == null) {
 			// Not working if there is no water available.
 			boolean hasLiquid = resourceTank.getFluidAmount() > 0;
-			if (setErrorCondition(!hasLiquid, EnumErrorCode.NORESOURCE)) {
+			if (errorLogic.setCondition(!hasLiquid, EnumErrorCode.NORESOURCE)) {
 				return;
 			}
 
@@ -269,7 +287,7 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 			}
 		}
 
-		setErrorCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
+		errorLogic.setCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
 	}
 
 	private boolean tryAddPending() {
@@ -278,7 +296,7 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 		}
 
 		boolean added = InvTools.tryAddStack(this, pendingProduct, SLOT_PRODUCT, 1, true);
-		setErrorCondition(!added, EnumErrorCode.NOSPACE);
+		getErrorLogic().setCondition(!added, EnumErrorCode.NOSPACE);
 
 		if (added) {
 			pendingProduct = null;
@@ -294,7 +312,7 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 			resetRecipe();
 		}
 
-		setErrorCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
+		getErrorLogic().setCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
 	}
 
 	private void resetRecipe() {
@@ -373,45 +391,46 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 	}
 
 	private boolean rotateWorkingSlot() {
-		IInventoryAdapter inventory = getInternalInventory();
+		IErrorLogic errorLogic = getErrorLogic();
+
 		// Put working slot contents into inventory if space is available
-		if (inventory.getStackInSlot(SLOT_WORKING) != null) {
+		if (getStackInSlot(SLOT_WORKING) != null) {
 			// Get the result of the consumed item in the working slot
 			ItemStack deposit;
-			if (FuelManager.moistenerResource.containsKey(inventory.getStackInSlot(SLOT_WORKING))) {
-				MoistenerFuel res = FuelManager.moistenerResource.get(inventory.getStackInSlot(SLOT_WORKING));
+			if (FuelManager.moistenerResource.containsKey(getStackInSlot(SLOT_WORKING))) {
+				MoistenerFuel res = FuelManager.moistenerResource.get(getStackInSlot(SLOT_WORKING));
 				deposit = res.product.copy();
 			} else {
-				deposit = inventory.getStackInSlot(SLOT_WORKING).copy();
+				deposit = getStackInSlot(SLOT_WORKING).copy();
 			}
 
 			int targetSlot = getFreeReservoirSlot(deposit);
 			// We stop the whole thing, if we don't have any room anymore.
-			if (setErrorCondition(targetSlot < 0, EnumErrorCode.NOSPACE)) {
+			if (errorLogic.setCondition(targetSlot < 0, EnumErrorCode.NOSPACE)) {
 				return false;
 			}
 
-			if (inventory.getStackInSlot(targetSlot) == null) {
-				inventory.setInventorySlotContents(targetSlot, deposit);
+			if (getStackInSlot(targetSlot) == null) {
+				setInventorySlotContents(targetSlot, deposit);
 			} else {
-				inventory.getStackInSlot(targetSlot).stackSize++;
+				getStackInSlot(targetSlot).stackSize++;
 			}
 
 			decrStackSize(SLOT_WORKING, 1);
 		}
 
-		if (inventory.getStackInSlot(SLOT_WORKING) != null) {
+		if (getStackInSlot(SLOT_WORKING) != null) {
 			return true;
 		}
 
 		// Let's look for a new resource to put into the working slot.
 		int resourceSlot = getNextResourceSlot(SLOT_RESERVOIR_1, SLOT_RESERVOIR_1 + SLOT_RESERVOIR_COUNT);
 		// Nothing found, stop.
-		if (setErrorCondition(resourceSlot < 0, EnumErrorCode.NORESOURCE)) {
+		if (errorLogic.setCondition(resourceSlot < 0, EnumErrorCode.NORESOURCE)) {
 			return false;
 		}
 
-		inventory.setInventorySlotContents(SLOT_WORKING, inventory.decrStackSize(resourceSlot, 1));
+		setInventorySlotContents(SLOT_WORKING, decrStackSize(resourceSlot, 1));
 		return true;
 	}
 
@@ -634,7 +653,7 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 				return true;
 			}
 
-			if (GuiUtil.isIndexInRange(slotIndex, SLOT_STASH_1, (SLOT_STASH_COUNT+SLOT_RESERVOIR_COUNT))) {
+			if (GuiUtil.isIndexInRange(slotIndex, SLOT_STASH_1, (SLOT_STASH_COUNT + SLOT_RESERVOIR_COUNT))) {
 				return !FuelManager.moistenerResource.containsKey(itemstack);
 			}
 

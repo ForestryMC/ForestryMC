@@ -18,6 +18,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
+import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmLogic;
 import forestry.core.config.Defaults;
@@ -57,7 +58,8 @@ public abstract class FarmLogic implements IFarmLogic {
 				world.getBlockMetadata(position.x, position.y, position.z) == 0;
 	}
 
-	protected final Vect translateWithOffset(int x, int y, int z, ForgeDirection direction, int step) {
+	protected final Vect translateWithOffset(int x, int y, int z, FarmDirection farmDirection, int step) {
+		ForgeDirection direction = farmDirection.getForgeDirection();
 		return new Vect(x + direction.offsetX * step, y + direction.offsetY * step, z + direction.offsetZ * step);
 	}
 

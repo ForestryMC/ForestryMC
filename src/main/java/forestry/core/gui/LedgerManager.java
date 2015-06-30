@@ -10,7 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import javax.annotation.Nullable;
+import com.google.common.collect.ImmutableSet;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,16 +19,15 @@ import net.minecraft.client.Minecraft;
 
 import org.lwjgl.opengl.GL11;
 
+import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.core.config.SessionVars;
-import forestry.core.interfaces.IErrorSource;
+import forestry.core.delegates.FakeErrorSource;
 import forestry.core.proxy.Proxies;
 
 public class LedgerManager {
 
 	public final GuiForestry gui;
-	public final Minecraft minecraft;
-	@Nullable
 	public IErrorSource errorSource;
 
 	protected final List<Ledger> ledgers = new ArrayList<Ledger>();
@@ -35,10 +35,14 @@ public class LedgerManager {
 
 	public LedgerManager(GuiForestry gui) {
 		this.gui = gui;
-		this.minecraft = Proxies.common.getClientInstance();
+		this.errorSource = FakeErrorSource.instance;
 	}
 
 	public void add(IErrorSource errorSource) {
+		if (errorSource == null) {
+			return;
+		}
+
 		this.errorSource = errorSource;
 		int maxErrorLedgerCount = (gui.getSizeY() - 10) / Ledger.minHeight;
 		for (int i = 0; i < maxErrorLedgerCount; i++) {
@@ -81,23 +85,21 @@ public class LedgerManager {
 			}
 		}
 
-		if (errorSource != null) {
-			final int xShiftError = ((gui.width - gui.getSizeX()) / 2);
-			int yShiftError = ((gui.height - gui.getSizeY()) / 2) + 8;
+		final int xShiftError = ((gui.width - gui.getSizeX()) / 2);
+		int yShiftError = ((gui.height - gui.getSizeY()) / 2) + 8;
 
-			for (ErrorLedger errorLedger : errorLedgers) {
-				if (!errorLedger.isVisible()) {
-					continue;
-				}
-
-				errorLedger.currentShiftX = xShiftError - errorLedger.getWidth();
-				errorLedger.currentShiftY = yShiftError;
-				if (errorLedger.intersectsWith(mX, mY)) {
-					return errorLedger;
-				}
-
-				yShiftError += errorLedger.getHeight();
+		for (ErrorLedger errorLedger : errorLedgers) {
+			if (!errorLedger.isVisible()) {
+				continue;
 			}
+
+			errorLedger.currentShiftX = xShiftError - errorLedger.getWidth();
+			errorLedger.currentShiftY = yShiftError;
+			if (errorLedger.intersectsWith(mX, mY)) {
+				return errorLedger;
+			}
+
+			yShiftError += errorLedger.getHeight();
 		}
 
 		return null;
@@ -118,26 +120,25 @@ public class LedgerManager {
 			yPos += ledger.getHeight();
 		}
 
-		if (errorSource != null) {
-			yPos = 8;
+		ImmutableSet<IErrorState> errorStates = errorSource.getErrorStates();
 
-			int index = 0;
-			for (IErrorState errorState : errorSource.getErrorStates()) {
-				if (index >= errorLedgers.size()) {
-					break;
-				}
-				ErrorLedger errorLedger = errorLedgers.get(index++);
-				errorLedger.setState(errorState);
-
-				errorLedger.update();
-				if (!errorLedger.isVisible()) {
-					continue;
-				}
-
-				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				errorLedger.draw(-errorLedger.getWidth(), yPos);
-				yPos += errorLedger.getHeight();
+		yPos = 8;
+		int index = 0;
+		for (IErrorState errorState : errorStates) {
+			if (index >= errorLedgers.size()) {
+				break;
 			}
+			ErrorLedger errorLedger = errorLedgers.get(index++);
+			errorLedger.setState(errorState);
+
+			errorLedger.update();
+			if (!errorLedger.isVisible()) {
+				continue;
+			}
+
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			errorLedger.draw(-errorLedger.getWidth(), yPos);
+			yPos += errorLedger.getHeight();
 		}
 	}
 
@@ -149,6 +150,7 @@ public class LedgerManager {
 			int startY = mouseY - ((gui.height - gui.getSizeY()) / 2) - 12;
 
 			String tooltip = ledger.getTooltip();
+			Minecraft minecraft = Proxies.common.getClientInstance();
 			int textWidth = minecraft.fontRenderer.getStringWidth(tooltip);
 			gui.drawGradientRect(startX - 3, startY - 3, startX + textWidth + 3, startY + 8 + 3, 0xc0000000, 0xc0000000);
 			minecraft.fontRenderer.drawStringWithShadow(tooltip, startX, startY, -1);

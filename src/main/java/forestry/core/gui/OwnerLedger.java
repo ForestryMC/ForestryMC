@@ -12,13 +12,12 @@ package forestry.core.gui;
 
 import java.util.Locale;
 
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IIcon;
 
-import forestry.core.interfaces.IOwnable;
-import forestry.core.interfaces.IRestrictedAccess;
-import forestry.core.network.PacketCoordinates;
-import forestry.core.network.PacketId;
+import forestry.core.interfaces.IAccessHandler;
+import forestry.core.interfaces.IRestrictedAccessTile;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.EnumAccess;
@@ -30,13 +29,15 @@ import forestry.core.utils.StringUtil;
  */
 public class OwnerLedger extends Ledger {
 
-	private final IOwnable tile;
+	private final IAccessHandler accessHandler;
 
-	public OwnerLedger(LedgerManager manager, IOwnable tile) {
+	public OwnerLedger(LedgerManager manager, IRestrictedAccessTile tile) {
 		super(manager, "owner");
-		this.tile = tile;
 
-		boolean playerIsOwner = tile.isOwner(manager.minecraft.thePlayer);
+		this.accessHandler = tile.getAccessHandler();
+
+		Minecraft minecraft = Proxies.common.getClientInstance();
+		boolean playerIsOwner = accessHandler.isOwner(minecraft.thePlayer);
 
 		if (playerIsOwner) {
 			maxHeight = 60;
@@ -55,7 +56,7 @@ public class OwnerLedger extends Ledger {
 
 	@Override
 	public boolean isVisible() {
-		return tile.isOwned();
+		return accessHandler.isOwned();
 	}
 
 	@Override
@@ -64,13 +65,8 @@ public class OwnerLedger extends Ledger {
 		drawBackground(x, y);
 
 		// Draw icon
-		EnumAccess access;
-		if (tile instanceof IRestrictedAccess) {
-			access = ((IRestrictedAccess) tile).getAccess();
-		} else {
-			access = EnumAccess.SHARED;
-		}
-		IIcon accessIcon = TextureManager.getInstance().getDefault("misc/access." + access.toString().toLowerCase(Locale.ENGLISH));
+		EnumAccess accessType = accessHandler.getAccessType();
+		IIcon accessIcon = TextureManager.getInstance().getDefault("misc/access." + accessType.toString().toLowerCase(Locale.ENGLISH));
 		drawIcon(accessIcon, x + 3, y + 4);
 
 		// Draw description
@@ -80,33 +76,31 @@ public class OwnerLedger extends Ledger {
 
 		drawHeader(StringUtil.localize("gui.owner"), x + 22, y + 8);
 
-		drawText(PlayerUtil.getOwnerName(tile), x + 22, y + 20);
+		drawText(PlayerUtil.getOwnerName(accessHandler), x + 22, y + 20);
 
-		boolean playerIsOwner = tile.isOwner(manager.minecraft.thePlayer);
-		if (playerIsOwner && tile instanceof IRestrictedAccess) {
+		Minecraft minecraft = Proxies.common.getClientInstance();
+		boolean playerIsOwner = accessHandler.isOwner(minecraft.thePlayer);
+		if (playerIsOwner) {
 			drawSubheader(StringUtil.localize("gui.access") + ':', x + 22, y + 32);
 			// Access rules
 			drawIcon(accessIcon, x + 20, y + 40);
-			drawText(StringUtil.localize(access.getName()), x + 38, y + 44);
+			drawText(StringUtil.localize(accessType.getName()), x + 38, y + 44);
 		}
 	}
 
 	@Override
 	public String getTooltip() {
-		return StringUtil.localize("gui.owner") + ": " + PlayerUtil.getOwnerName(tile);
+		return StringUtil.localize("gui.owner") + ": " + PlayerUtil.getOwnerName(accessHandler);
 	}
 
 	@Override
 	public boolean handleMouseClicked(int x, int y, int mouseButton) {
 
-		if (isAccessButton(x, y) && tile instanceof IRestrictedAccess) {
-			if (!Proxies.common.isSimulating(((TileEntity) tile).getWorldObj())) {
-				TileEntity te = (TileEntity) tile;
-				Proxies.net.sendToServer(new PacketCoordinates(PacketId.ACCESS_SWITCH, te));
-			}
+		if (isAccessButton(x, y)) {
+			Minecraft minecraft = Proxies.common.getClientInstance();
+			EntityPlayer player = minecraft.thePlayer;
 
-			((IRestrictedAccess) tile).switchAccessRule(manager.minecraft.thePlayer);
-			return true;
+			return accessHandler.switchAccessRule(player);
 		}
 
 		return false;

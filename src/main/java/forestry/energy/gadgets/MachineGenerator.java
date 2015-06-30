@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.energy.gadgets;
 
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -23,6 +25,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
 import forestry.core.EnumErrorCode;
@@ -36,6 +39,8 @@ import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.Utils;
@@ -96,6 +101,18 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 	}
 
 	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
+		tankManager.writePacketData(data);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
+		tankManager.readPacketData(data);
+	}
+
+	@Override
 	public void onChunkUnload() {
 		if (ic2EnergySource != null) {
 			ic2EnergySource.onChunkUnload();
@@ -124,8 +141,10 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 			}
 		}
 
+		IErrorLogic errorLogic = getErrorLogic();
+
 		// No work to be done if IC2 is unavailable.
-		if (setErrorCondition(ic2EnergySource == null, EnumErrorCode.NOENERGYNET)) {
+		if (errorLogic.setCondition(ic2EnergySource == null, EnumErrorCode.NOENERGYNET)) {
 			return;
 		}
 
@@ -148,7 +167,7 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 		}
 
 		boolean hasFuel = resourceTank.getFluidAmount() > 0;
-		setErrorCondition(!hasFuel, EnumErrorCode.NOFUEL);
+		errorLogic.setCondition(!hasFuel, EnumErrorCode.NOFUEL);
 	}
 
 	public boolean isWorking() {

@@ -40,17 +40,9 @@ import forestry.core.items.ItemTypedBlock;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.farming.EventHandlerFarming;
-import forestry.farming.FarmHelper;
 import forestry.farming.GuiHandlerFarming;
 import forestry.farming.circuits.CircuitFarmLogic;
-import forestry.farming.gadgets.BlockFarm;
 import forestry.farming.gadgets.BlockMushroom;
-import forestry.farming.gadgets.EnumFarmBlock;
-import forestry.farming.gadgets.TileControl;
-import forestry.farming.gadgets.TileFarmPlain;
-import forestry.farming.gadgets.TileGearbox;
-import forestry.farming.gadgets.TileHatch;
-import forestry.farming.gadgets.TileValve;
 import forestry.farming.items.ItemFarmBlock;
 import forestry.farming.logic.FarmLogicArboreal;
 import forestry.farming.logic.FarmLogicCereal;
@@ -71,6 +63,13 @@ import forestry.farming.logic.FarmableGourd;
 import forestry.farming.logic.FarmableStacked;
 import forestry.farming.logic.FarmableVanillaSapling;
 import forestry.farming.logic.FarmableVanillaShroom;
+import forestry.farming.multiblock.BlockFarm;
+import forestry.farming.multiblock.EnumFarmBlockTexture;
+import forestry.farming.multiblock.TileControl;
+import forestry.farming.multiblock.TileFarmPlain;
+import forestry.farming.multiblock.TileGearbox;
+import forestry.farming.multiblock.TileHatch;
+import forestry.farming.multiblock.TileValve;
 import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.triggers.FarmingTriggers;
 
@@ -81,13 +80,6 @@ public class PluginFarming extends ForestryPlugin {
 	public static ProxyFarming proxy;
 	public static int modelIdFarmBlock;
 	public static ItemStack farmFertilizer;
-
-	@Override
-	protected void setupAPI() {
-		super.setupAPI();
-
-		Farmables.farmInterface = new FarmHelper();
-	}
 
 	@Override
 	public void preInit() {
@@ -283,7 +275,7 @@ public class PluginFarming extends ForestryPlugin {
 	protected void registerRecipes() {
 
 		ItemStack basic = ForestryBlock.farm.getItemStack(1, 0);
-		for (EnumFarmBlock block : EnumFarmBlock.values()) {
+		for (EnumFarmBlockTexture block : EnumFarmBlockTexture.values()) {
 			NBTTagCompound compound = new NBTTagCompound();
 			block.saveToCompound(compound);
 

@@ -16,10 +16,13 @@ import java.util.Random;
 
 import net.minecraft.world.World;
 
+import forestry.api.apiculture.DefaultBeeModifier;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingMode;
+import forestry.apiculture.BeeHousingModifier;
 
 public class BeekeepingMode implements IBeekeepingMode {
 
@@ -29,22 +32,18 @@ public class BeekeepingMode implements IBeekeepingMode {
 	public static final IBeekeepingMode hardcore = new BeekeepingMode("HARDCORE", 0.5f, 5.0f, 0.8f, true, true);
 	public static final IBeekeepingMode insane = new BeekeepingMode("INSANE", 0.2f, 10.0f, 0.6f, true, true);
 
-	final Random rand;
-	final String name;
-	final float mutationModifier;
-	final float lifespanModifier;
-	final float speedModifier;
-	final boolean reducesFertility;
-	final boolean canFatigue;
+	private final Random rand;
+	private final String name;
+	private final boolean reducesFertility;
+	private final boolean canFatigue;
+	private final IBeeModifier beeModifier;
 
 	public BeekeepingMode(String name, float mutationModifier, float lifespanModifier, float speedModifier, boolean reducesFertility, boolean canFatigue) {
 		this.rand = new Random();
 		this.name = name;
-		this.mutationModifier = mutationModifier;
-		this.lifespanModifier = lifespanModifier;
-		this.speedModifier = speedModifier;
 		this.reducesFertility = reducesFertility;
 		this.canFatigue = canFatigue;
+		this.beeModifier = new BeekeepingModeBeeModifier(mutationModifier, lifespanModifier, speedModifier);
 	}
 
 	@Override
@@ -61,36 +60,6 @@ public class BeekeepingMode implements IBeekeepingMode {
 
 	@Override
 	public float getWearModifier() {
-		return 1.0f;
-	}
-
-	@Override
-	public float getMutationModifier(IBeeGenome genome, IBeeGenome mate, float currentModifier) {
-		return this.mutationModifier;
-	}
-
-	@Override
-	public float getLifespanModifier(IBeeGenome genome, IBeeGenome mate, float currentModifier) {
-		return this.lifespanModifier;
-	}
-
-	@Override
-	public float getProductionModifier(IBeeGenome genome, float currentModifier) {
-		return this.speedModifier;
-	}
-
-	@Override
-	public float getTerritoryModifier(IBeeGenome genome, float currentModifier) {
-		return 1.0f;
-	}
-
-	@Override
-	public float getFloweringModifier(IBeeGenome genome, float currentModifier) {
-		return 1.0f;
-	}
-
-	@Override
-	public float getGeneticDecay(IBeeGenome genome, float currentModifier) {
 		return 1.0f;
 	}
 
@@ -115,17 +84,17 @@ public class BeekeepingMode implements IBeekeepingMode {
 			return false;
 		}
 
-		if (queen.getGeneration() > 96 + rand.nextInt(6) + rand.nextInt(6) &&
-				rand.nextFloat() < 0.02f * housing.getGeneticDecay(queen.getGenome(), 1f)) {
-			return true;
-		}
+		IBeeModifier beeModifier = new BeeHousingModifier(housing);
 
-		return false;
+		return queen.getGeneration() > 96 + rand.nextInt(6) + rand.nextInt(6) &&
+				rand.nextFloat() < 0.02f * beeModifier.getGeneticDecay(queen.getGenome(), 1f);
 	}
 
 	@Override
 	public boolean isOverworked(IBee queen, IBeeHousing housing) {
-		float productionModifier = housing.getProductionModifier(queen.getGenome(), 1f);
+		IBeeModifier beeModifier = new BeeHousingModifier(housing);
+
+		float productionModifier = beeModifier.getProductionModifier(queen.getGenome(), 1f);
 		if (productionModifier > 16) {
 			if (housing.getWorld().rand.nextFloat() * 100 < 0.01 * ((productionModifier * productionModifier) - 100)) {
 				return true;
@@ -137,7 +106,9 @@ public class BeekeepingMode implements IBeekeepingMode {
 	
 	@Override
 	public boolean isDegenerating(IBee queen, IBee offspring, IBeeHousing housing) {
-		float mutationModifier = housing.getMutationModifier(queen.getGenome(), queen.getMate(), 1.0f);
+		IBeeModifier beeModifier = new BeeHousingModifier(housing);
+
+		float mutationModifier = beeModifier.getMutationModifier(queen.getGenome(), queen.getMate(), 1.0f);
 		if (mutationModifier > 10) {
 			if (housing.getWorld().rand.nextFloat() * 100 < 0.4 * ((mutationModifier * mutationModifier) - 100)) {
 				return true;
@@ -158,23 +129,34 @@ public class BeekeepingMode implements IBeekeepingMode {
 	}
 
 	@Override
-	public boolean isSealed() {
-		return false;
+	public IBeeModifier getBeeModifier() {
+		return beeModifier;
 	}
 
-	@Override
-	public boolean isSelfLighted() {
-		return false;
-	}
+	private static class BeekeepingModeBeeModifier extends DefaultBeeModifier {
+		private final float mutationModifier;
+		private final float lifespanModifier;
+		private final float speedModifier;
 
-	@Override
-	public boolean isSunlightSimulated() {
-		return false;
-	}
+		public BeekeepingModeBeeModifier(float mutationModifier, float lifespanModifier, float speedModifier) {
+			this.mutationModifier = mutationModifier;
+			this.lifespanModifier = lifespanModifier;
+			this.speedModifier = speedModifier;
+		}
 
-	@Override
-	public boolean isHellish() {
-		return false;
-	}
+		@Override
+		public float getMutationModifier(IBeeGenome genome, IBeeGenome mate, float currentModifier) {
+			return this.mutationModifier;
+		}
 
+		@Override
+		public float getLifespanModifier(IBeeGenome genome, IBeeGenome mate, float currentModifier) {
+			return this.lifespanModifier;
+		}
+
+		@Override
+		public float getProductionModifier(IBeeGenome genome, float currentModifier) {
+			return this.speedModifier;
+		}
+	}
 }

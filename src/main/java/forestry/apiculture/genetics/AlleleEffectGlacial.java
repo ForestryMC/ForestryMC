@@ -13,7 +13,6 @@ package forestry.apiculture.genetics;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
@@ -50,13 +49,12 @@ public class AlleleEffectGlacial extends AlleleEffectThrottled {
 		int[] areaAr = genome.getTerritory();
 		Vect area = new Vect(areaAr[0], areaAr[1], areaAr[2]);
 		Vect offset = new Vect(-Math.round(area.x / 2), -Math.round(area.y / 2), -Math.round(area.z / 2));
+		Vect housingCoords = new Vect(housing.getCoordinates());
 
 		for (int i = 0; i < 10; i++) {
 
-			Vect randomPos = new Vect(world.rand.nextInt(area.x), world.rand.nextInt(area.y), world.rand.nextInt(area.z));
-
-			Vect posBlock = randomPos.add(new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord()));
-			posBlock = posBlock.add(offset);
+			Vect randomPos = Vect.getRandomPositionInArea(world.rand, area);
+			Vect posBlock = Vect.add(randomPos, housingCoords, offset);
 
 			// Freeze water
 			Block block = world.getBlock(posBlock.x, posBlock.y, posBlock.z);

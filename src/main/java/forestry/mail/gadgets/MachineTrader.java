@@ -26,6 +26,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.common.Optional;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
@@ -36,7 +37,6 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.EnumAccess;
 import forestry.core.utils.StackUtils;
 import forestry.mail.MailAddress;
 import forestry.mail.TradeStation;
@@ -128,24 +128,26 @@ public class MachineTrader extends TileBase {
 			return;
 		}
 
-		setErrorCondition(!hasPostageMin(3), EnumErrorCode.NOSTAMPS);
-		setErrorCondition(!hasPaperMin(2), EnumErrorCode.NOPAPER);
+		IErrorLogic errorLogic = getErrorLogic();
+
+		errorLogic.setCondition(!hasPostageMin(3), EnumErrorCode.NOSTAMPS);
+		errorLogic.setCondition(!hasPaperMin(2), EnumErrorCode.NOPAPER);
 
 		IInventory inventory = getInternalInventory();
 		ItemStack tradeGood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
-		setErrorCondition(tradeGood == null, EnumErrorCode.NOTRADE);
+		errorLogic.setCondition(tradeGood == null, EnumErrorCode.NOTRADE);
 
 		boolean hasRequest = hasItemCount(TradeStation.SLOT_EXCHANGE_1, TradeStation.SLOT_EXCHANGE_COUNT, null, 1);
-		setErrorCondition(!hasRequest, EnumErrorCode.NOTRADE);
+		errorLogic.setCondition(!hasRequest, EnumErrorCode.NOTRADE);
 
 		if (tradeGood != null) {
 			boolean hasSupplies = hasItemCount(TradeStation.SLOT_SEND_BUFFER, TradeStation.SLOT_SEND_BUFFER_COUNT, tradeGood, tradeGood.stackSize);
-			setErrorCondition(!hasSupplies, EnumErrorCode.NOSUPPLIES);
+			errorLogic.setCondition(!hasSupplies, EnumErrorCode.NOSUPPLIES);
 		}
 
 		if (inventory instanceof TradeStation && updateOnInterval(200)) {
 			boolean canReceivePayment = ((TradeStation) inventory).canReceivePayment();
-			setErrorCondition(!canReceivePayment, EnumErrorCode.NOSPACE);
+			errorLogic.setCondition(!canReceivePayment, EnumErrorCode.NOSPACE);
 		}
 	}
 
@@ -155,7 +157,9 @@ public class MachineTrader extends TileBase {
 			return false;
 		}
 
-		return !hasErrorState(EnumErrorCode.NOTALPHANUMERIC) && !hasErrorState(EnumErrorCode.NOTUNIQUE);
+		IErrorLogic errorLogic = getErrorLogic();
+
+		return !errorLogic.contains(EnumErrorCode.NOTALPHANUMERIC) && !errorLogic.contains(EnumErrorCode.NOTUNIQUE);
 	}
 
 	/**
@@ -277,15 +281,17 @@ public class MachineTrader extends TileBase {
 		}
 
 		if (Proxies.common.isSimulating(worldObj)) {
+			IErrorLogic errorLogic = getErrorLogic();
+
 			boolean hasValidTradeAddress = PostManager.postRegistry.isValidTradeAddress(worldObj, address);
-			setErrorCondition(!hasValidTradeAddress, EnumErrorCode.NOTALPHANUMERIC);
+			errorLogic.setCondition(!hasValidTradeAddress, EnumErrorCode.NOTALPHANUMERIC);
 
 			boolean hasUniqueTradeAddress = PostManager.postRegistry.isAvailableTradeAddress(worldObj, address);
-			setErrorCondition(!hasUniqueTradeAddress, EnumErrorCode.NOTUNIQUE);
+			errorLogic.setCondition(!hasUniqueTradeAddress, EnumErrorCode.NOTUNIQUE);
 
 			if (hasValidTradeAddress & hasUniqueTradeAddress) {
 				this.address = address;
-				PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwner(), address);
+				PostManager.postRegistry.getOrCreateTradeStation(worldObj, getAccessHandler().getOwner(), address);
 			}
 		} else {
 			this.address = address;
@@ -299,16 +305,7 @@ public class MachineTrader extends TileBase {
 			return super.getInternalInventory();
 		}
 
-		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation(worldObj, getOwner(), address);
-	}
-
-	@Override
-	public EnumAccess getAccess() {
-		if (isLinked()) {
-			return super.getAccess();
-		} else {
-			return EnumAccess.PRIVATE;
-		}
+		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation(worldObj, getAccessHandler().getOwner(), address);
 	}
 
 	/* ITRIGGERPROVIDER */

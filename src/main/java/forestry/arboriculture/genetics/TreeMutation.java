@@ -19,7 +19,6 @@ import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IGenome;
 import forestry.core.genetics.Mutation;
 import forestry.plugins.PluginArboriculture;
 
@@ -37,11 +36,6 @@ public class TreeMutation extends Mutation implements ITreeMutation {
 	@Override
 	public ITreeRoot getRoot() {
 		return root;
-	}
-	
-	@Override
-	public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
-		return getChance(world, x, y, z, (IAlleleTreeSpecies) allele0, (IAlleleTreeSpecies) allele1, (ITreeGenome) genome0, (ITreeGenome) genome1);
 	}
 
 	@Override

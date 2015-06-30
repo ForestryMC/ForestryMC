@@ -50,12 +50,12 @@ public class AIButterflyPollinate extends AIButterflyInteract {
 			if (checkPollinatable != null) {
 				if (entity.getPollen() == null) {
 					entity.setPollen(checkPollinatable.getPollen());
-//					Proxies.log.finest("A butterfly '%s' grabbed a pollen '%s' at %s/%s/%s.", entity.getButterfly().getIdent(), entity.getPollen().getIdent(), rest.posX, rest.posY, rest.posZ);
+					//					Proxies.log.finest("A butterfly '%s' grabbed a pollen '%s' at %s/%s/%s.", entity.getButterfly().getIdent(), entity.getPollen().getIdent(), rest.posX, rest.posY, rest.posZ);
 				} else if (checkPollinatable.canMateWith(entity.getPollen())) {
 					IPollinatable realPollinatable = GeneticsUtil.getOrCreatePollinatable(null, entity.worldObj, rest.posX, rest.posY, rest.posZ);
 					if (realPollinatable != null) {
 						realPollinatable.mateWith(entity.getPollen());
-//						Proxies.log.finest("A butterfly '%s' unloaded pollen '%s' at %s/%s/%s.", entity.getButterfly().getIdent(), entity.getPollen().getIdent(), rest.posX, rest.posY, rest.posZ);
+						//						Proxies.log.finest("A butterfly '%s' unloaded pollen '%s' at %s/%s/%s.", entity.getButterfly().getIdent(), entity.getPollen().getIdent(), rest.posX, rest.posY, rest.posZ);
 						entity.setPollen(null);
 					}
 				}

@@ -10,6 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,6 +26,7 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -35,6 +41,7 @@ import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeeMutation;
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.core.BiomeHelper;
@@ -43,7 +50,6 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IAlleleTolerance;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IEffectData;
@@ -51,6 +57,7 @@ import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
+import forestry.apiculture.BeeHousingModifier;
 import forestry.arboriculture.genetics.FakePollinatable;
 import forestry.arboriculture.genetics.ICheckPollinatable;
 import forestry.core.EnumErrorCode;
@@ -62,7 +69,6 @@ import forestry.core.genetics.IndividualLiving;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.StringUtil;
-import forestry.core.vect.MutableVect;
 import forestry.core.vect.Vect;
 
 public class Bee extends IndividualLiving implements IBee {
@@ -73,8 +79,24 @@ public class Bee extends IndividualLiving implements IBee {
 	public IBeeGenome genome;
 	public IBeeGenome mate;
 
+	private static final LoadingCache<NBTTagCompound, Bee> getBeeCache = CacheBuilder.newBuilder()
+			.maximumSize(128)
+			.build(new CacheLoader<NBTTagCompound, Bee>() {
+				@Override
+				public Bee load(@Nonnull NBTTagCompound tagCompound) {
+					return new Bee(tagCompound);
+				}
+			});
+
 	/* CONSTRUCTOR */
-	public Bee(NBTTagCompound nbttagcompound) {
+	public static Bee fromNBT(NBTTagCompound nbtTagCompound) {
+		if (nbtTagCompound == null) {
+			return null;
+		}
+		return getBeeCache.getUnchecked(nbtTagCompound);
+	}
+
+	private Bee(NBTTagCompound nbttagcompound) {
 		readFromNBT(nbttagcompound);
 	}
 
@@ -252,8 +274,10 @@ public class Bee extends IndividualLiving implements IBee {
 
 		Set<IErrorState> errorStates = new HashSet<IErrorState>();
 
+		IBeeModifier beeModifier = new BeeHousingModifier(housing);
+
 		// / Rain needs tolerant flyers
-		if (world.isRaining() && !genome.getTolerantFlyer() && BiomeHelper.canRainOrSnow(biome) && !housing.isSealed()) {
+		if (world.isRaining() && !genome.getTolerantFlyer() && BiomeHelper.canRainOrSnow(biome) && !beeModifier.isSealed()) {
 			errorStates.add(EnumErrorCode.ISRAINING);
 		}
 
@@ -262,21 +286,20 @@ public class Bee extends IndividualLiving implements IBee {
 			if (!canWorkDuringDay()) {
 				errorStates.add(EnumErrorCode.NOTNIGHT);
 			}
-		} else if (!canWorkAtNight() && !housing.isSelfLighted()) {
+		} else if (!canWorkAtNight() && !beeModifier.isSelfLighted()) {
 			errorStates.add(EnumErrorCode.NOTDAY);
 		}
 
-		if (world.getBlockLightValue(housing.getXCoord(), housing.getYCoord() + 2, housing.getZCoord()) > Defaults.APIARY_MIN_LEVEL_LIGHT) {
+		if (housing.getBlockLightValue() > Defaults.APIARY_MIN_LEVEL_LIGHT) {
 			if (!canWorkDuringDay()) {
 				errorStates.add(EnumErrorCode.NOTGLOOMY);
 			}
-		} else if (!canWorkAtNight() && !housing.isSelfLighted()) {
+		} else if (!canWorkAtNight() && !beeModifier.isSelfLighted()) {
 			errorStates.add(EnumErrorCode.NOTLUCID);
 		}
 
 		// / No sky, except if in hell
-		if (biome != null && !BiomeHelper.isBiomeHellish(biome) && !world.canBlockSeeTheSky(housing.getXCoord(), housing.getYCoord() + 3, housing.getZCoord())
-					&& !genome.getCaveDwelling() && !housing.isSunlightSimulated()) {
+		if (biome != null && !BiomeHelper.isBiomeHellish(biome) && !housing.canBlockSeeTheSky() && !genome.getCaveDwelling() && !beeModifier.isSunlightSimulated()) {
 			errorStates.add(EnumErrorCode.NOSKY);
 		}
 
@@ -286,16 +309,6 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		return errorStates;
-	}
-
-	@Override
-	public IErrorState canWork(IBeeHousing housing) {
-		Set<IErrorState> errorStates = getCanWork(housing);
-		if (errorStates.size() == 0) {
-			return EnumErrorCode.OK;
-		} else {
-			return errorStates.iterator().next();
-		}
 	}
 
 	private boolean canWorkAtNight() {
@@ -320,32 +333,6 @@ public class Bee extends IndividualLiving implements IBee {
 		return AlleleManager.climateHelper.isWithinLimits(temperature, humidity,
 				genome.getPrimary().getTemperature(), genome.getToleranceTemp(),
 				genome.getPrimary().getHumidity(), genome.getToleranceHumid());
-	}
-
-	@Override
-	public boolean hasFlower(IBeeHousing housing) {
-
-		IFlowerProvider provider = genome.getFlowerProvider();
-
-		Vect housingPos = new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord());
-		Vect area = getArea(genome, housing);
-		Vect offset = new Vect(-area.x / 2, -area.y / 2, -area.z / 2);
-
-		boolean hasFlower = false;
-
-		MutableVect posCurrent = new MutableVect(0, 0, 0);
-		while (posCurrent.advancePositionInArea(area)) {
-
-			Vect posBlock = Vect.add(housingPos, posCurrent, offset);
-
-			if (provider.isAcceptedFlower(housing.getWorld(), this, posBlock.x, posBlock.y, posBlock.z)) {
-				hasFlower = true;
-				break;
-			}
-
-		}
-
-		return hasFlower;
 	}
 
 	@Override
@@ -427,7 +414,8 @@ public class Bee extends IndividualLiving implements IBee {
 	@Override
 	public void age(World world, float housingLifespanModifier) {
 		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(world);
-		float finalModifier = housingLifespanModifier * mode.getLifespanModifier(genome, mate, housingLifespanModifier);
+		IBeeModifier beeModifier = mode.getBeeModifier();
+		float finalModifier = housingLifespanModifier * beeModifier.getLifespanModifier(genome, mate, housingLifespanModifier);
 
 		super.age(world, finalModifier);
 	}
@@ -440,9 +428,9 @@ public class Bee extends IndividualLiving implements IBee {
 		IAlleleBeeSpecies primary = genome.getPrimary();
 		IAlleleBeeSpecies secondary = genome.getSecondary();
 
-		products.addAll(primary.getProducts().keySet());
+		products.addAll(primary.getProductChances().keySet());
 
-		Set<ItemStack> secondaryProducts = secondary.getProducts().keySet();
+		Set<ItemStack> secondaryProducts = secondary.getProductChances().keySet();
 		// Remove duplicates
 		for (ItemStack second : secondaryProducts) {
 			boolean skip = false;
@@ -465,7 +453,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 	@Override
 	public ItemStack[] getSpecialtyList() {
-		Set<ItemStack> specialties = genome.getPrimary().getSpecialty().keySet();
+		Set<ItemStack> specialties = genome.getPrimary().getSpecialtyChances().keySet();
 		return specialties.toArray(new ItemStack[specialties.size()]);
 	}
 
@@ -491,33 +479,37 @@ public class Bee extends IndividualLiving implements IBee {
 			setIsNatural(false);
 		}
 
+		IBeeModifier beeHousingModifier = new BeeHousingModifier(housing);
+		IBeeModifier beeModeModifier = mode.getBeeModifier();
+
 		// Bee genetic speed * beehousing * beekeeping mode
-		float speed = genome.getSpeed() * housing.getProductionModifier(genome, 1f) * mode.getProductionModifier(genome, 1f);
+		float speed = genome.getSpeed() * beeHousingModifier.getProductionModifier(genome, 1f) * beeModeModifier.getProductionModifier(genome, 1f);
 
 		// / Primary Products
-		for (Map.Entry<ItemStack, Integer> entry : primary.getProducts().entrySet()) {
-			if (housing.getWorld().rand.nextInt(100) < entry.getValue() * speed) {
+		for (Map.Entry<ItemStack, Float> entry : primary.getProductChances().entrySet()) {
+			if (housing.getWorld().rand.nextFloat() < entry.getValue() * speed) {
 				products.add(entry.getKey().copy());
 			}
 		}
 		// / Secondary Products
-		for (Map.Entry<ItemStack, Integer> entry : secondary.getProducts().entrySet()) {
-			if (housing.getWorld().rand.nextInt(100) < Math.round(entry.getValue() / 2) * speed) {
+		for (Map.Entry<ItemStack, Float> entry : secondary.getProductChances().entrySet()) {
+			if (housing.getWorld().rand.nextFloat() < Math.round(entry.getValue() / 2) * speed) {
 				products.add(entry.getKey().copy());
 			}
 		}
 
 		// / Specialty products
 		if (primary.isJubilant(genome, housing) && secondary.isJubilant(genome, housing)) {
-			for (Map.Entry<ItemStack, Integer> entry : primary.getSpecialty().entrySet()) {
-				if (housing.getWorld().rand.nextInt(100) < entry.getValue() * speed) {
+			for (Map.Entry<ItemStack, Float> entry : primary.getSpecialtyChances().entrySet()) {
+				if (housing.getWorld().rand.nextFloat() < entry.getValue() * speed) {
 					products.add(entry.getKey().copy());
 				}
 			}
 		}
 
 		ItemStack[] productsArray = products.toArray(new ItemStack[products.size()]);
-		return genome.getFlowerProvider().affectProducts(housing.getWorld(), this, housing.getXCoord(), housing.getYCoord(), housing.getZCoord(), productsArray);
+		ChunkCoordinates housingCoordinates = housing.getCoordinates();
+		return genome.getFlowerProvider().affectProducts(housing.getWorld(), this, housingCoordinates.posX, housingCoordinates.posY, housingCoordinates.posZ, productsArray);
 	}
 
 	/* REPRODUCTION */
@@ -547,10 +539,10 @@ public class Bee extends IndividualLiving implements IBee {
 			return null;
 		}
 
-		ArrayList<IBee> bees = new ArrayList<IBee>();
+		List<IBee> bees = new ArrayList<IBee>();
 
-		int toCreate = BeeManager.beeRoot.getBeekeepingMode(world).getFinalFertility(this, world, housing.getXCoord(), housing.getYCoord(),
-				housing.getZCoord());
+		ChunkCoordinates housingCoordinates = housing.getCoordinates();
+		int toCreate = BeeManager.beeRoot.getBeekeepingMode(world).getFinalFertility(this, world, housingCoordinates.posX, housingCoordinates.posY, housingCoordinates.posZ);
 
 		if (toCreate <= 0) {
 			toCreate = 1;
@@ -609,8 +601,9 @@ public class Bee extends IndividualLiving implements IBee {
 
 		IBeeGenome genome0;
 		IBeeGenome genome1;
-		IAlleleSpecies allele0;
-		IAlleleSpecies allele1;
+
+		IAlleleBeeSpecies allele0;
+		IAlleleBeeSpecies allele1;
 
 		if (world.rand.nextBoolean()) {
 			allele0 = (IAlleleBeeSpecies) parent1[EnumBeeChromosome.SPECIES.ordinal()].getPrimaryAllele();
@@ -626,7 +619,7 @@ public class Bee extends IndividualLiving implements IBee {
 			genome1 = genomeOne;
 		}
 
-		GameProfile playerProfile = housing.getOwnerName();
+		GameProfile playerProfile = housing.getOwner();
 		IApiaristTracker breedingTracker = BeeManager.beeRoot.getBreedingTracker(world, playerProfile);
 
 		List<IMutation> combinations = BeeManager.beeRoot.getCombinations(allele0, allele1, true);
@@ -646,8 +639,8 @@ public class Bee extends IndividualLiving implements IBee {
 			}
 
 			if (chance > world.rand.nextFloat() * 100) {
-				breedingTracker.registerMutation(beeMutation);
-				return BeeManager.beeRoot.templateAsChromosomes(beeMutation.getTemplate());
+				breedingTracker.registerMutation(mutation);
+				return BeeManager.beeRoot.templateAsChromosomes(mutation.getTemplate());
 			}
 		}
 
@@ -658,7 +651,9 @@ public class Bee extends IndividualLiving implements IBee {
 	@Override
 	public IIndividual retrievePollen(IBeeHousing housing) {
 
-		int chance = Math.round(genome.getFlowering() * housing.getFloweringModifier(getGenome(), 1f));
+		IBeeModifier beeModifier = new BeeHousingModifier(housing);
+
+		int chance = Math.round(genome.getFlowering() * beeModifier.getFloweringModifier(getGenome(), 1f));
 
 		World world = housing.getWorld();
 		Random random = world.rand;
@@ -668,9 +663,9 @@ public class Bee extends IndividualLiving implements IBee {
 			return null;
 		}
 
-		Vect area = getArea(genome, housing);
+		Vect area = getArea(genome, beeModifier);
 		Vect offset = new Vect(-area.x / 2, -area.y / 4, -area.z / 2);
-		Vect housingPos = new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord());
+		Vect housingPos = new Vect(housing.getCoordinates());
 
 		IIndividual pollen = null;
 
@@ -699,7 +694,9 @@ public class Bee extends IndividualLiving implements IBee {
 	@Override
 	public boolean pollinateRandom(IBeeHousing housing, IIndividual pollen) {
 
-		int chance = (int) (genome.getFlowering() * housing.getFloweringModifier(getGenome(), 1f));
+		IBeeModifier beeModifier = new BeeHousingModifier(housing);
+
+		int chance = (int) (genome.getFlowering() * beeModifier.getFloweringModifier(getGenome(), 1f));
 
 		World world = housing.getWorld();
 		Random random = world.rand;
@@ -709,9 +706,9 @@ public class Bee extends IndividualLiving implements IBee {
 			return false;
 		}
 
-		Vect area = getArea(genome, housing);
+		Vect area = getArea(genome, beeModifier);
 		Vect offset = new Vect(-area.x / 2, -area.y / 4, -area.z / 2);
-		Vect housingPos = new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord());
+		Vect housingPos = new Vect(housing.getCoordinates());
 
 		for (int i = 0; i < 30; i++) {
 
@@ -730,7 +727,7 @@ public class Bee extends IndividualLiving implements IBee {
 				continue;
 			}
 
-			IPollinatable realPollinatable = GeneticsUtil.getOrCreatePollinatable(housing.getOwnerName(), world, posBlock.x, posBlock.y, posBlock.z);
+			IPollinatable realPollinatable = GeneticsUtil.getOrCreatePollinatable(housing.getOwner(), world, posBlock.x, posBlock.y, posBlock.z);
 
 			if (realPollinatable != null) {
 				realPollinatable.mateWith(pollen);
@@ -744,7 +741,9 @@ public class Bee extends IndividualLiving implements IBee {
 	@Override
 	public void plantFlowerRandom(IBeeHousing housing) {
 
-		int chance = Math.round(genome.getFlowering() * housing.getFloweringModifier(getGenome(), 1f));
+		IBeeModifier beeModifier = new BeeHousingModifier(housing);
+
+		int chance = Math.round(genome.getFlowering() * beeModifier.getFloweringModifier(getGenome(), 1f));
 
 		World world = housing.getWorld();
 		Random random = world.rand;
@@ -756,9 +755,9 @@ public class Bee extends IndividualLiving implements IBee {
 
 		// Gather required info
 		IFlowerProvider provider = genome.getFlowerProvider();
-		Vect area = getArea(genome, housing);
+		Vect area = getArea(genome, beeModifier);
 		Vect offset = new Vect(-area.x / 2, -area.y / 4, -area.z / 2);
-		Vect housingPos = new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord());
+		Vect housingPos = new Vect(housing.getCoordinates());
 
 		for (int i = 0; i < 10; i++) {
 			Vect randomPos = Vect.getRandomPositionInArea(random, area);
@@ -770,9 +769,9 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 	}
 
-	private static Vect getArea(IBeeGenome genome, IBeeHousing housing) {
+	private static Vect getArea(IBeeGenome genome, IBeeModifier beeModifier) {
 		int[] genomeTerritory = genome.getTerritory();
-		float housingModifier = housing.getTerritoryModifier(genome, 1f);
+		float housingModifier = beeModifier.getTerritoryModifier(genome, 1f);
 		return new Vect(genomeTerritory).multiply(housingModifier * 3.0f);
 	}
 }

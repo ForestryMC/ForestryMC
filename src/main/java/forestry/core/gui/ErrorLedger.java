@@ -12,9 +12,11 @@ package forestry.core.gui;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 
 import forestry.api.core.IErrorState;
+import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
 /**
@@ -34,7 +36,8 @@ public class ErrorLedger extends Ledger {
 		this.state = state;
 		if (state != null) {
 			String helpString = StringUtil.localize(state.getHelp());
-			FontRenderer fontRenderer = manager.minecraft.fontRenderer;
+			Minecraft minecraft = Proxies.common.getClientInstance();
+			FontRenderer fontRenderer = minecraft.fontRenderer;
 			int lineCount = fontRenderer.listFormattedStringToWidth(helpString, maxWidth - 28).size();
 			maxHeight = (lineCount + 1) * fontRenderer.FONT_HEIGHT + 20;
 		}

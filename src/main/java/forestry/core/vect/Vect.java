@@ -13,8 +13,11 @@ package forestry.core.vect;
 import java.util.Random;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ChunkCoordinates;
 
 import net.minecraftforge.common.util.ForgeDirection;
+
+import forestry.api.farming.FarmDirection;
 
 /**
  * Represents an unchangeable position or dimensions.
@@ -42,6 +45,12 @@ public class Vect implements IVect {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+	}
+
+	public Vect(ChunkCoordinates coordinates) {
+		this.x = coordinates.posX;
+		this.y = coordinates.posY;
+		this.z = coordinates.posZ;
 	}
 
 	public Vect(Entity entity) {
@@ -82,6 +91,11 @@ public class Vect implements IVect {
 	@Override
 	public Vect add(ForgeDirection direction) {
 		return add(direction.offsetX, direction.offsetY, direction.offsetZ);
+	}
+
+	@Override
+	public Vect add(FarmDirection direction) {
+		return add(direction.getForgeDirection());
 	}
 
 	@Override

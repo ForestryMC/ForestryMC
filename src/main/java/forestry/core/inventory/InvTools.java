@@ -36,7 +36,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.Optional;
 
-import forestry.core.config.Defaults;
 import forestry.core.inventory.filters.ArrayStackFilter;
 import forestry.core.inventory.filters.IStackFilter;
 import forestry.core.inventory.filters.InvertedStackFilter;
@@ -308,7 +307,7 @@ public abstract class InvTools {
 
 	/**
 	 * Counts the number of items that match the filter. Ignores
-	 * ISpecialInventory and ISidedInventory, and bypasses InventoryMapper to
+	 * ISidedInventory, and bypasses InventoryMapper to
 	 * count from the base IInventory.
 	 */
 	public static int countItems(IInventory inv, ItemStack... filters) {
@@ -886,30 +885,6 @@ public abstract class InvTools {
 		stack.writeToNBT(data);
 	}
 
-	public static IInventoryAdapter configureSidedUp(IInventoryAdapter inventory, int startSlot, int count) {
-		return configureSided(inventory, Defaults.FACING_UP, startSlot, count);
-	}
-
-	public static IInventoryAdapter configureSidedDown(IInventoryAdapter inventory, int startSlot, int count) {
-		return configureSided(inventory, Defaults.FACING_DOWN, startSlot, count);
-	}
-
-	public static IInventoryAdapter configureSidedNorthSouth(IInventoryAdapter inventory, int startSlot, int count) {
-		return configureSided(inventory, Defaults.FACING_NORTHSOUTH, startSlot, count);
-	}
-
-	public static IInventoryAdapter configureSidedWestEast(IInventoryAdapter inventory, int startSlot, int count) {
-		return configureSided(inventory, Defaults.FACING_WESTEAST, startSlot, count);
-	}
-
-	public static IInventoryAdapter configureSidedSides(IInventoryAdapter inventory, int startSlot, int count) {
-		return configureSided(inventory, Defaults.FACING_SIDES, startSlot, count);
-	}
-
-	public static IInventoryAdapter configureSided(IInventoryAdapter inventory, int side, int startSlot, int count) {
-		return configureSided(inventory, new int[]{side}, startSlot, count);
-	}
-
 	public static IInventoryAdapter configureSided(IInventoryAdapter inventory, int[] sides, int startSlot, int count) {
 		int[] slots = new int[count];
 		for (int i = 0; i < count; i++) {
@@ -919,7 +894,7 @@ public abstract class InvTools {
 		return inventory.configureSided(sides, slots);
 	}
 
-		/* REMOVAL */
+	/* REMOVAL */
 
 	/**
 	 * Removes a set of items from an inventory.
@@ -927,6 +902,10 @@ public abstract class InvTools {
 	 * If the inventory doesn't have all the required items, returns false without removing anything.
 	 * If stowContainer is true, items with containers will have their container stowed.
 	 */
+	public static boolean removeSets(IInventory inventory, int count, ItemStack[] set, EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
+		return removeSets(inventory, count, set, 0, inventory.getSizeInventory(), player, stowContainer, oreDictionary, craftingTools);
+	}
+
 	public static boolean removeSets(IInventory inventory, int count, ItemStack[] set, int firstSlotIndex, int slotCount, EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
 
 		ItemStack[] condensedSet = StackUtils.condenseStacks(set, -1, false);
@@ -983,9 +962,17 @@ public abstract class InvTools {
 		return contains(inventory, queryArray, startSlot, slots);
 	}
 
+	public static boolean contains(IInventory inventory, ItemStack[] query) {
+		return contains(inventory, query, 0, inventory.getSizeInventory());
+	}
+
 	public static boolean contains(IInventory inventory, ItemStack[] query, int startSlot, int slots) {
 		ItemStack[] stock = getStacks(inventory, startSlot, slots);
 		return StackUtils.containsSets(query, stock) > 0;
+	}
+
+	public static boolean containsPercent(IInventory inventory, float percent) {
+		return containsPercent(inventory, percent, 0, inventory.getSizeInventory());
 	}
 
 	public static boolean containsPercent(IInventory inventory, float percent, int slot1, int length) {

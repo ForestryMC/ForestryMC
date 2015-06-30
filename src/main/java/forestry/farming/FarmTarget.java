@@ -13,24 +13,22 @@ package forestry.farming;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
+import forestry.api.farming.FarmDirection;
 import forestry.core.vect.MutableVect;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
 import forestry.farming.gadgets.StructureLogicFarm;
-import forestry.farming.logic.FarmLogic;
 
 public class FarmTarget {
 
 	private final Vect start;
-	private final ForgeDirection direction;
+	private final FarmDirection direction;
 	private final int limit;
 
 	private int yOffset;
 	private int extent;
 
-	public FarmTarget(Vect start, ForgeDirection direction, int limit) {
+	public FarmTarget(Vect start, FarmDirection direction, int limit) {
 		this.start = start;
 		this.direction = direction;
 		this.limit = limit;
@@ -48,7 +46,7 @@ public class FarmTarget {
 		return extent;
 	}
 
-	public ForgeDirection getDirection() {
+	public FarmDirection getDirection() {
 		return direction;
 	}
 
@@ -61,11 +59,10 @@ public class FarmTarget {
 		MutableVect position = new MutableVect(platformPosition);
 		for (extent = 0; extent < limit; extent++) {
 			Block platform = VectUtil.getBlock(world, position);
-			Vect soilPosition = new Vect(position.x, position.y + 1, position.z);
 			if (!StructureLogicFarm.bricks.contains(platform)) {
 				break;
 			}
-			position.add(getDirection());
+			position.add(getDirection().getForgeDirection());
 		}
 
 		yOffset = platformPosition.getY() + 1 - getStart().getY();

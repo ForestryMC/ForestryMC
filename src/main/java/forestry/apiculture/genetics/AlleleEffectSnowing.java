@@ -11,8 +11,8 @@
 package forestry.apiculture.genetics;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -21,6 +21,7 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IEffectData;
 import forestry.core.proxy.Proxies;
+import forestry.core.vect.IVect;
 import forestry.core.vect.Vect;
 
 public class AlleleEffectSnowing extends AlleleEffectThrottled {
@@ -56,7 +57,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 
 			Vect randomPos = new Vect(world.rand.nextInt(area.x), world.rand.nextInt(area.y), world.rand.nextInt(area.z));
 
-			Vect posBlock = randomPos.add(new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord()));
+			Vect posBlock = randomPos.add(new Vect(housing.getCoordinates()));
 			posBlock = posBlock.add(offset);
 
 			// Put snow on the ground
@@ -77,9 +78,18 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 	@Override
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 		if (housing.getWorld().rand.nextInt(3) == 0) {
-			int[] area = getModifiedArea(genome, housing);
-			Proxies.render.addSnowFX(housing.getWorld(), housing.getXCoord(), housing.getYCoord(), housing.getZCoord(), genome.getPrimary().getIconColour(0), area[0], area[1], area[2]);
+			IVect area = getModifiedArea(genome, housing);
+
+			ChunkCoordinates coordinates = housing.getCoordinates();
+			World world = housing.getWorld();
+
+			double spawnX = coordinates.posX + world.rand.nextInt(area.getX() * 2) - area.getX();
+			double spawnY = coordinates.posY + world.rand.nextInt(area.getY());
+			double spawnZ = coordinates.posZ + world.rand.nextInt(area.getZ() * 2) - area.getZ();
+
+			Proxies.common.addEntitySnowFX(world, spawnX, spawnY, spawnZ, 0F, 0F, 0F);
 		}
+
 		return storedData;
 	}
 }

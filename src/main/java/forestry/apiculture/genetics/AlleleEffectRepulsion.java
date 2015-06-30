@@ -32,7 +32,7 @@ public class AlleleEffectRepulsion extends AlleleEffectThrottled {
 			return storedData;
 		}
 
-		if (housing.getOwnerName() == null) {
+		if (housing.getOwner() == null) {
 			return storedData;
 		}
 

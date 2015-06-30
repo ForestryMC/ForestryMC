@@ -33,6 +33,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.core.fluids.tanks.FakeTank;
 import forestry.core.fluids.tanks.StandardTank;
@@ -45,7 +46,7 @@ import forestry.core.utils.NBTUtil.NBTList;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TankManager extends ForwardingList<StandardTank> implements IFluidHandler, List<StandardTank> {
+public class TankManager extends ForwardingList<StandardTank> implements ITankManager, List<StandardTank> {
 
 	public static final ITileFilter TANK_FILTER = new ITileFilter() {
 		@Override
@@ -158,13 +159,14 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 		}
 	}
 
+	@Override
 	public void initGuiData(Container container, ICrafting player) {
 		for (StandardTank tank : tanks) {
 			initGuiData(container, player, tank.getTankIndex());
 		}
 	}
 
-	public void initGuiData(Container container, ICrafting player, int tankIndex) {
+	private void initGuiData(Container container, ICrafting player, int tankIndex) {
 		if (tankIndex >= tanks.size()) {
 			return;
 		}
@@ -181,13 +183,14 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 		Proxies.net.sendToPlayer(packet, (EntityPlayerMP) player);
 	}
 
+	@Override
 	public void updateGuiData(Container container, List<EntityPlayerMP> crafters) {
 		for (StandardTank tank : tanks) {
 			updateGuiData(container, crafters, tank.getTankIndex());
 		}
 	}
 
-	public void updateGuiData(Container container, List<EntityPlayerMP> crafters, int tankIndex) {
+	private void updateGuiData(Container container, List<EntityPlayerMP> crafters, int tankIndex) {
 		StandardTank tank = tanks.get(tankIndex);
 		FluidStack fluidStack = tank.getFluid();
 		FluidStack prev = prevFluidStacks.get(tankIndex);
@@ -224,6 +227,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 		prevColor.set(tankIndex, color);
 	}
 
+	@Override
 	public void processGuiUpdate(int messageId, int data) {
 		int tankIndex = messageId / NETWORK_DATA;
 
@@ -253,6 +257,11 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 				break;
 			}
 		}
+	}
+
+	@Override
+	public IFluidTank getTank(int tankIndex) {
+		return get(tankIndex);
 	}
 
 	@Override

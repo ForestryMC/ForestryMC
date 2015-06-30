@@ -21,6 +21,7 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.items.ItemArmorApiarist;
+import forestry.core.vect.IVect;
 import forestry.plugins.PluginApiculture;
 
 public class AlleleEffectIgnition extends AlleleEffectThrottled {
@@ -83,14 +84,12 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
 	@Override
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
-		int[] area = getModifiedArea(genome, housing);
+		IVect area = getModifiedArea(genome, housing);
 
 		if (housing.getWorld().rand.nextBoolean()) {
-			PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getXCoord(), housing.getYCoord(),
-					housing.getZCoord(), genome.getPrimary().getIconColour(0), area[0], area[1], area[2]);
+			PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getCoordinates(), genome.getPrimary().getIconColour(0), area);
 		} else {
-			PluginApiculture.proxy.addBeeHiveFX("particles/ember", housing.getWorld(), housing.getXCoord(), housing.getYCoord(),
-					housing.getZCoord(), 0xffffff, area[0], area[1], area[2]);
+			PluginApiculture.proxy.addBeeHiveFX("particles/ember", housing.getWorld(), housing.getCoordinates(), 0xffffff, area);
 		}
 		return storedData;
 	}

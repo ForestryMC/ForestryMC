@@ -13,8 +13,11 @@ package forestry.apiculture.genetics;
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeeModifier;
 import forestry.api.genetics.IEffectData;
+import forestry.apiculture.BeeHousingModifier;
 import forestry.core.genetics.alleles.AlleleCategorized;
+import forestry.core.vect.MutableVect;
 import forestry.plugins.PluginApiculture;
 
 public class AlleleEffectNone extends AlleleCategorized implements IAlleleBeeEffect {
@@ -41,23 +44,23 @@ public class AlleleEffectNone extends AlleleCategorized implements IAlleleBeeEff
 	@Override
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
-		int[] area = genome.getTerritory();
-		area[0] *= housing.getTerritoryModifier(genome, 1f);
-		area[1] *= housing.getTerritoryModifier(genome, 1f);
-		area[2] *= housing.getTerritoryModifier(genome, 1f);
+		IBeeModifier beeModifier = new BeeHousingModifier(housing);
+		float territoryModifier = beeModifier.getTerritoryModifier(genome, 1f);
 
-		if (area[0] < 1) {
-			area[0] = 1;
+		MutableVect area = new MutableVect(genome.getTerritory());
+		area.multiply(territoryModifier);
+
+		if (area.x < 1) {
+			area.x = 1;
 		}
-		if (area[1] < 1) {
-			area[1] = 1;
+		if (area.y < 1) {
+			area.y = 1;
 		}
-		if (area[2] < 1) {
-			area[2] = 1;
+		if (area.z < 1) {
+			area.z = 1;
 		}
 
-		PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getXCoord(), housing.getYCoord(),
-				housing.getZCoord(), genome.getPrimary().getIconColour(0), area[0], area[1], area[2]);
+		PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getCoordinates(), genome.getPrimary().getIconColour(0), area);
 		return storedData;
 	}
 

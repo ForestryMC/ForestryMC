@@ -14,53 +14,72 @@ import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.tileentity.TileEntity;
 
+import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorState;
-import forestry.core.gadgets.TileForestry;
+import forestry.core.delegates.FakeAccessHandler;
+import forestry.core.interfaces.IAccessHandler;
 import forestry.core.interfaces.IPowerHandler;
+import forestry.core.interfaces.IRestrictedAccessTile;
+import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketErrorUpdate;
 import forestry.core.network.PacketGuiEnergy;
+import forestry.core.network.PacketGuiUpdate;
+import forestry.core.utils.EnumAccess;
+import forestry.core.utils.Utils;
 import forestry.energy.EnergyManager;
 
-public class ContainerTile<T extends TileForestry> extends ContainerForestry {
+public class ContainerTile<T extends TileEntity & IStreamableGui> extends ContainerForestry {
 
 	protected final T tile;
+	protected final IAccessHandler accessHandler;
 
-	public ContainerTile(T tileForestry) {
-		this.tile = tileForestry;
+	public ContainerTile(T tile) {
+		this.tile = tile;
+
+		if (tile instanceof IRestrictedAccessTile) {
+			accessHandler = ((IRestrictedAccessTile) tile).getAccessHandler();
+		} else {
+			accessHandler = FakeAccessHandler.getInstance();
+		}
 	}
 
 	public ContainerTile(T tileForestry, InventoryPlayer playerInventory, int xInv, int yInv) {
-		this.tile = tileForestry;
+		this(tileForestry);
 
 		addPlayerInventory(playerInventory, xInv, yInv);
 	}
 
 	@Override
 	protected final boolean canAccess(EntityPlayer player) {
-		return player != null && tile.allowsAlteration(player);
+		return player != null && accessHandler.allowsAlteration(player);
 	}
 
 	@Override
 	public final boolean canInteractWith(EntityPlayer entityplayer) {
-		return tile.isUseableByPlayer(entityplayer);
+		return Utils.isUseableByPlayer(entityplayer, tile) && accessHandler.allowsViewing(entityplayer);
 	}
 
 	private ImmutableSet<IErrorState> previousErrorStates;
 	private int previousEnergyManagerData = 0;
+	private EnumAccess previousAccess;
 
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
-		ImmutableSet<IErrorState> errorStates = tile.getErrorStates();
+		if (tile instanceof IErrorLogicSource) {
+			IErrorLogicSource errorLogicSource = (IErrorLogicSource) tile;
+			ImmutableSet<IErrorState> errorStates = errorLogicSource.getErrorLogic().getErrorStates();
 
-		if ((previousErrorStates != null) && !errorStates.equals(previousErrorStates)) {
-			PacketErrorUpdate packet = new PacketErrorUpdate(tile);
-			sendPacketToCrafters(packet);
+			if ((previousErrorStates != null) && !errorStates.equals(previousErrorStates)) {
+				PacketErrorUpdate packet = new PacketErrorUpdate(tile, errorLogicSource);
+				sendPacketToCrafters(packet);
+			}
+
+			previousErrorStates = errorStates;
 		}
-
-		previousErrorStates = errorStates;
 
 		if (tile instanceof IPowerHandler) {
 			EnergyManager energyManager = ((IPowerHandler) tile).getEnergyManager();
@@ -70,6 +89,18 @@ public class ContainerTile<T extends TileForestry> extends ContainerForestry {
 				sendPacketToCrafters(packet);
 
 				previousEnergyManagerData = energyManagerData;
+			}
+		}
+
+		if (tile instanceof IRestrictedAccessTile) {
+			IRestrictedAccessTile restrictedAccessTile = (IRestrictedAccessTile) tile;
+			IAccessHandler accessHandler = restrictedAccessTile.getAccessHandler();
+			EnumAccess access = accessHandler.getAccessType();
+			if (access != previousAccess) {
+				PacketGuiUpdate packet = new PacketGuiUpdate(tile);
+				sendPacketToCrafters(packet);
+
+				previousAccess = access;
 			}
 		}
 	}

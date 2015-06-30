@@ -17,7 +17,6 @@ import net.minecraft.item.ItemStack;
 import forestry.api.storage.ICrateRegistry;
 import forestry.core.items.ItemCrated;
 import forestry.core.proxy.Proxies;
-import forestry.plugins.PluginManager;
 import forestry.plugins.PluginStorage;
 
 public class CrateRegistry implements ICrateRegistry {

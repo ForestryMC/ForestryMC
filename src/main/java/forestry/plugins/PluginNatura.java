@@ -260,7 +260,7 @@ public class PluginNatura extends ForestryPlugin {
 				ItemStack compostWheat = GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat");
 				Proxies.common.addRecipe(compostWheat, " X ", "X#X", " X ", '#', Blocks.dirt, 'X', itemBarley);
 			}
-			FuelManager.moistenerResource.put(itemBarley, new MoistenerFuel(itemBarley, ForestryItem.mouldyWheat.getItemStack(), 0,	300));
+			FuelManager.moistenerResource.put(itemBarley, new MoistenerFuel(itemBarley, ForestryItem.mouldyWheat.getItemStack(), 0, 300));
 		}
 	}
 

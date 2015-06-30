@@ -13,16 +13,17 @@ package forestry.core.gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 
-import forestry.core.gadgets.TileForestry;
 import forestry.core.interfaces.ISocketable;
+import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketId;
 import forestry.core.network.PacketSlotClick;
 import forestry.core.network.PacketSocketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
 
-public class ContainerSocketed<T extends TileForestry & ISocketable> extends ContainerTile<T> {
+public class ContainerSocketed<T extends TileEntity & IStreamableGui & ISocketable> extends ContainerTile<T> {
 
 	public ContainerSocketed(T tile, InventoryPlayer playerInventory, int xInv, int yInv) {
 		super(tile, playerInventory, xInv, yInv);

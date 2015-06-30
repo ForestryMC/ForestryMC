@@ -10,16 +10,18 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeeMutationCustom;
 import forestry.api.apiculture.IBeeRoot;
 import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IGenome;
+import forestry.apiculture.BeeHousingModifier;
 import forestry.core.genetics.Mutation;
 
 public class BeeMutation extends Mutation implements IBeeMutationCustom {
@@ -34,24 +36,23 @@ public class BeeMutation extends Mutation implements IBeeMutationCustom {
 	}
 
 	@Override
-	public float getChance(IBeeHousing housing, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
-		return getChance(housing, (IAlleleBeeSpecies) allele0, (IAlleleBeeSpecies) allele1, (IBeeGenome) genome0, (IBeeGenome) genome1);
-	}
-
-	@Override
 	public float getChance(IBeeHousing housing, IAlleleBeeSpecies allele0, IAlleleBeeSpecies allele1, IBeeGenome genome0, IBeeGenome genome1) {
 		World world = housing.getWorld();
-		int x = housing.getXCoord();
-		int y = housing.getYCoord();
-		int z = housing.getZCoord();
+		ChunkCoordinates housingCoordinates = housing.getCoordinates();
+		int x = housingCoordinates.posX;
+		int y = housingCoordinates.posY;
+		int z = housingCoordinates.posZ;
 
 		float processedChance = super.getChance(world, x, y, z, allele0, allele1, genome0, genome1);
 		if (processedChance <= 0) {
 			return 0;
 		}
 
-		processedChance *= housing.getMutationModifier(genome0, genome1, 1f);
-		processedChance *= BeeManager.beeRoot.getBeekeepingMode(world).getMutationModifier(genome0, genome1, 1f);
+		IBeeModifier beeHousingModifier = new BeeHousingModifier(housing);
+		IBeeModifier beeModeModifier = BeeManager.beeRoot.getBeekeepingMode(world).getBeeModifier();
+
+		processedChance *= beeHousingModifier.getMutationModifier(genome0, genome1, processedChance);
+		processedChance *= beeModeModifier.getMutationModifier(genome0, genome1, processedChance);
 
 		return processedChance;
 	}

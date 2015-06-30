@@ -13,8 +13,8 @@ package forestry.core.network;
 import java.io.IOException;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 
-import forestry.core.gadgets.TileForestry;
 import forestry.core.interfaces.ISocketable;
 
 public class PacketSocketUpdate extends PacketCoordinates {
@@ -25,7 +25,7 @@ public class PacketSocketUpdate extends PacketCoordinates {
 		super(data);
 	}
 
-	public <T extends TileForestry & ISocketable> PacketSocketUpdate(PacketId id, T tile) {
+	public <T extends TileEntity & ISocketable> PacketSocketUpdate(PacketId id, T tile) {
 		super(id, tile);
 
 		itemStacks = new ItemStack[tile.getSocketCount()];

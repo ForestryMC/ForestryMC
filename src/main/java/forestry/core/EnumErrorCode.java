@@ -11,15 +11,13 @@ import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import forestry.api.core.ErrorStateRegistry;
+import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorState;
 import forestry.core.config.Defaults;
 
 public enum EnumErrorCode implements IErrorState {
 
 	UNKNOWN("unknown"),
-	@Deprecated // use no error code
-	OK("ok"),
 	INVALIDBIOME("invalidBiome"),
 	ISRAINING("isRaining"),
 	NOTRAINING("notRaining"),
@@ -49,15 +47,12 @@ public enum EnumErrorCode implements IErrorState {
 	NOSTAMPS("noStamps"),
 	NOCIRCUITBOARD("noCircuitBoard"),
 	NOCIRCUITLAYOUT("noCircuitLayout"),
-	@Deprecated // wrong stack size is prevented in code
 	WRONGSTACKSIZE("wrongStacksize"),
 	NOFERTILIZER("noFertilizer"),
 	NOFARMLAND("noFarmland"),
 	CIRCUITMISMATCH("circuitMismatch"),
 	NOLIQUID("noLiquid"),
 	NOPAPER("noPaper"),
-	@Deprecated // use two error codes instead: NOSTAMPS and NOPAPER
-	NOSTAMPSNOPAPER("noStampsNoPaper", "noStamps"),
 	NOSUPPLIES("noSupplies", "noResource"),
 	NOTRADE("noTrade", "noResource"),
 	NOPOWER("noPower"),
@@ -113,7 +108,7 @@ public enum EnumErrorCode implements IErrorState {
 
 	public static void init() {
 		for (IErrorState code : values()) {
-			ErrorStateRegistry.registerErrorState(code);
+			ForestryAPI.errorStateRegistry.registerErrorState(code);
 		}
 	}
 }

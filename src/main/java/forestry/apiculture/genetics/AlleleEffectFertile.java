@@ -3,11 +3,13 @@ package forestry.apiculture.genetics;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
+import forestry.core.vect.IVect;
 
 public class AlleleEffectFertile extends AlleleEffectThrottled {
 	
@@ -25,29 +27,30 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 		}
 		
 		World world = housing.getWorld();
-		int territorySize[] = getModifiedArea(genome, housing);
+		ChunkCoordinates housingCoordinates = housing.getCoordinates();
+		IVect area = getModifiedArea(genome, housing);
 		
-		int blockX = getRandomOffset(world.rand, housing.getXCoord(), territorySize[0]);
-		int blockZ = getRandomOffset(world.rand, housing.getZCoord(), territorySize[2]);
-		int blockMaxY = housing.getYCoord() + territorySize[1] / 2 + 1;
-		int blockMinY = housing.getYCoord() - (territorySize[1] / 2) - 1;
+		int blockX = getRandomOffset(world.rand, housingCoordinates.posX, area.getX());
+		int blockZ = getRandomOffset(world.rand, housingCoordinates.posZ, area.getZ());
+		int blockMaxY = housingCoordinates.posY + (area.getY() / 2) + 1;
+		int blockMinY = housingCoordinates.posY - (area.getY() / 2) - 1;
 		
 		for (int attempt = 0; attempt < MAX_BLOCK_FIND_TRIES; ++attempt) {
 			if (tryTickColumn(world, blockX, blockZ, blockMaxY, blockMinY)) {
 				break;
 			}
-			blockX = getRandomOffset(world.rand, housing.getXCoord(), territorySize[0]);
-			blockZ = getRandomOffset(world.rand, housing.getZCoord(), territorySize[2]);
+			blockX = getRandomOffset(world.rand, housingCoordinates.posX, area.getX());
+			blockZ = getRandomOffset(world.rand, housingCoordinates.posZ, area.getZ());
 		}
 		
 		return storedData;
 	}
 	
-	private int getRandomOffset(Random random, int centrePos, int offset) {
+	private static int getRandomOffset(Random random, int centrePos, int offset) {
 		return centrePos + random.nextInt(offset) - (offset / 2);
 	}
 
-	private boolean tryTickColumn(World world, int x, int z, int maxY, int minY) {
+	private static boolean tryTickColumn(World world, int x, int z, int maxY, int minY) {
 		for (int y = maxY; y >= minY; --y) {
 			if (!world.isAirBlock(x, y, z)) {
 				Block block = world.getBlock(x, y, z);

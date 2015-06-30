@@ -1,6 +1,5 @@
 package forestry.factory;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
@@ -50,26 +49,6 @@ public class DummyManagers {
 
 		@Override
 		public void addRecipe(int timePerItem, ItemStack resource, Map<ItemStack, Float> products) {
-
-		}
-
-		@Override
-		public void addRecipe(int timePerItem, ItemStack resource, HashMap<ItemStack, Integer> products) {
-
-		}
-
-		@Override
-		public void addRecipe(int timePerItem, ItemStack resource, ItemStack[] produce, int[] chances) {
-
-		}
-
-		@Override
-		public void addRecipe(int timePerItem, ItemStack resource, ItemStack primary, ItemStack secondary, int chance) {
-
-		}
-
-		@Override
-		public void addRecipe(int timePerItem, ItemStack resource, ItemStack primary) {
 
 		}
 

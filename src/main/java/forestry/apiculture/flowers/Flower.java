@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.flowers;
 
+import java.util.Objects;
+
 import net.minecraft.block.Block;
 
 import net.minecraftforge.oredict.OreDictionary;
@@ -46,6 +48,11 @@ final class Flower implements IFlower {
 	@Override
 	public int compareTo(IFlower other) {
 		return this.weight.compareTo(other.getWeight());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(block, meta);
 	}
 
 	@Override

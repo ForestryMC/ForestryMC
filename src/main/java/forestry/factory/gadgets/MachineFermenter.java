@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -33,6 +34,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import cpw.mods.fml.common.Optional;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
 import forestry.api.recipes.IFermenterManager;
 import forestry.api.recipes.IVariableFermentable;
@@ -49,6 +51,8 @@ import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.StackUtils;
@@ -217,6 +221,18 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 	}
 
 	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
+		tankManager.writePacketData(data);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
+		tankManager.readPacketData(data);
+	}
+
+	@Override
 	public void updateServerSide() {
 		super.updateServerSide();
 
@@ -238,14 +254,16 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 			}
 		}
 
+		IErrorLogic errorLogic = getErrorLogic();
+
 		boolean hasRecipe = RecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid()) != null;
-		setErrorCondition(!hasRecipe, EnumErrorCode.NORECIPE);
+		errorLogic.setCondition(!hasRecipe, EnumErrorCode.NORECIPE);
 
 		boolean hasResource = resourceTank.getFluidAmount() >= fuelCurrentFerment;
-		setErrorCondition(!hasResource, EnumErrorCode.NORESOURCE);
+		errorLogic.setCondition(!hasResource, EnumErrorCode.NORESOURCE);
 
 		boolean hasFuel = inventory.getStackInSlot(SLOT_FUEL) != null || fuelBurnTime > 0;
-		setErrorCondition(!hasFuel, EnumErrorCode.NOFUEL);
+		errorLogic.setCondition(!hasFuel, EnumErrorCode.NOFUEL);
 	}
 
 	@Override

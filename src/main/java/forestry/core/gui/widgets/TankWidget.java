@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidTank;
 
 import org.lwjgl.opengl.GL11;
 
@@ -49,7 +50,7 @@ public class TankWidget extends Widget {
 		return this;
 	}
 
-	public StandardTank getTank() {
+	public IFluidTank getTank() {
 		Container container = manager.gui.inventorySlots;
 		if (container instanceof ContainerLiquidTanks) {
 			return ((ContainerLiquidTanks) container).getTank(slot);
@@ -61,7 +62,7 @@ public class TankWidget extends Widget {
 
 	@Override
 	public void draw(int startX, int startY) {
-		StandardTank tank = getTank();
+		IFluidTank tank = getTank();
 		if (tank == null) {
 			return;
 		}
@@ -108,11 +109,11 @@ public class TankWidget extends Widget {
 
 	@Override
 	public ToolTip getToolTip() {
-		StandardTank tank = getTank();
-		if (tank == null) {
+		IFluidTank tank = getTank();
+		if (!(tank instanceof StandardTank)) {
 			return null;
 		}
-		return tank.getToolTip();
+		return ((StandardTank) tank).getToolTip();
 	}
 
 	@Override

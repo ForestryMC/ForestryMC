@@ -11,37 +11,36 @@
 package forestry.core;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import cpw.mods.fml.common.network.IGuiHandler;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.gadgets.TileForestry;
 import forestry.core.gadgets.TileNaturalistChest;
 import forestry.core.gui.ContainerNaturalistInventory;
 import forestry.core.gui.GuiNaturalistInventory;
+import forestry.core.network.IStreamableGui;
+import forestry.core.network.PacketGuiUpdate;
 import forestry.core.proxy.Proxies;
+import forestry.core.utils.Utils;
 
 public abstract class GuiHandlerBase implements IGuiHandler {
 
-	public <T extends TileForestry> T getTileForestry(World world, int x, int y, int z, EntityPlayer player, Class<T> tileClass) {
-		T tileForestry = null;
-		try {
-			tileForestry = tileClass.cast(world.getTileEntity(x, y, z));
-		} catch (ClassCastException ex) {
-			Proxies.log.warning("Failed to cast a tile entity to a TileForestry at " + x + '/' + y + '/' + z);
-		}
+	public static <T extends TileEntity> T getTile(World world, int x, int y, int z, EntityPlayer player, Class<T> tileClass) {
+		T tileForestry = Utils.getTile(world, x, y, z, tileClass);
 
-		if (tileForestry != null && !world.isRemote) {
-			tileForestry.sendGuiOpened(player);
+		if (tileForestry instanceof IStreamableGui && !world.isRemote) {
+			PacketGuiUpdate packet = new PacketGuiUpdate((IStreamableGui) tileForestry);
+			Proxies.net.sendToPlayer(packet, player);
 		}
 
 		return tileForestry;
 	}
 
 	public GuiNaturalistInventory getNaturalistChestGui(String rootUID, EntityPlayer player, World world, int x, int y, int z, int page) {
-		TileNaturalistChest tile = getTileForestry(world, x, y, z, player, TileNaturalistChest.class);
+		TileNaturalistChest tile = getTile(world, x, y, z, player, TileNaturalistChest.class);
 		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(rootUID);
 		return new GuiNaturalistInventory(speciesRoot, player, new ContainerNaturalistInventory(player.inventory, tile, page, 25), tile, page, 5);
 	}
@@ -49,7 +48,7 @@ public abstract class GuiHandlerBase implements IGuiHandler {
 	public ContainerNaturalistInventory getNaturalistChestContainer(String rootUID, EntityPlayer player, World world, int x, int y, int z, int page) {
 		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(rootUID);
 		speciesRoot.getBreedingTracker(world, player.getGameProfile()).synchToPlayer(player);
-		return new ContainerNaturalistInventory(player.inventory, getTileForestry(world, x, y, z, player, TileNaturalistChest.class), page, 25);
+		return new ContainerNaturalistInventory(player.inventory, getTile(world, x, y, z, player, TileNaturalistChest.class), page, 25);
 	}
 
 	public static int encodeGuiData(int guiId, int data) {

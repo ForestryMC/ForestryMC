@@ -35,7 +35,9 @@ import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.ForestryClient;
 import forestry.core.TickHandlerCoreClient;
 import forestry.core.WorldGenerator;
+import forestry.core.multiblock.MultiblockClientTickHandler;
 import forestry.core.render.EntityHoneydustFX;
+import forestry.core.render.EntitySnowFX;
 import forestry.core.render.SpriteSheet;
 
 public class ClientProxyCommon extends ProxyCommon {
@@ -55,6 +57,7 @@ public class ClientProxyCommon extends ProxyCommon {
 		super.registerTickHandlers(worldGenerator);
 
 		FMLCommonHandler.instance().bus().register(new TickHandlerCoreClient());
+		FMLCommonHandler.instance().bus().register(new MultiblockClientTickHandler());
 	}
 
 	@Override
@@ -187,6 +190,15 @@ public class ClientProxyCommon extends ProxyCommon {
 		}
 
 		getClientInstance().effectRenderer.addEffect(new EntityExplodeFX(world, d1, d2, d3, f1, f2, f3));
+	}
+
+	@Override
+	public void addEntitySnowFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
+		if (!ClientProxyRender.shouldSpawnParticle(world)) {
+			return;
+		}
+
+		getClientInstance().effectRenderer.addEffect(new EntitySnowFX(world, d1, d2, d3, f1, f2, f3));
 	}
 
 	@Override

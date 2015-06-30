@@ -16,21 +16,22 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidTank;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.core.IToolPipette;
-import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.gadgets.TileForestry;
 import forestry.core.interfaces.ILiquidTankContainer;
+import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketId;
 import forestry.core.network.PacketSlotClick;
 import forestry.core.proxy.Proxies;
 
-public class ContainerLiquidTanks<T extends TileForestry & ILiquidTankContainer> extends ContainerTile<T> {
+public class ContainerLiquidTanks<T extends TileEntity & ILiquidTankContainer & IStreamableGui> extends ContainerTile<T> {
 
 	public ContainerLiquidTanks(T tile, InventoryPlayer playerInventory, int xInv, int yInv) {
 		super(tile, playerInventory, xInv, yInv);
@@ -59,7 +60,7 @@ public class ContainerLiquidTanks<T extends TileForestry & ILiquidTankContainer>
 		}
 
 		IToolPipette pipette = (IToolPipette) held;
-		StandardTank tank = tile.getTankManager().get(slot);
+		IFluidTank tank = tile.getTankManager().getTank(slot);
 		int liquidAmount = tank.getFluidAmount();
 
 		if (pipette.canPipette(itemstack) && liquidAmount > 0) {
@@ -102,7 +103,7 @@ public class ContainerLiquidTanks<T extends TileForestry & ILiquidTankContainer>
 		tile.getTankManager().initGuiData(this, icrafting);
 	}
 
-	public StandardTank getTank(int slot) {
-		return tile.getTankManager().get(slot);
+	public IFluidTank getTank(int slot) {
+		return tile.getTankManager().getTank(slot);
 	}
 }

@@ -10,12 +10,14 @@
  ******************************************************************************/
 package forestry.apiculture.proxy;
 
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
 import forestry.core.interfaces.IBlockRenderer;
+import forestry.core.vect.IVect;
 
 public class ProxyApiculture {
-	public void addBeeHiveFX(String texture, World world, double xCoord, double yCoord, double zCoord, int color, int areaX, int areaY, int areaZ) {
+	public void addBeeHiveFX(String texture, World world, ChunkCoordinates coordinates, int color, IVect area) {
 	}
 
 	public void addBeeSwarmFX(String texture, World world, double xCoord, double yCoord, double zCoord, int color) {

@@ -14,7 +14,6 @@ import java.io.IOException;
 
 import net.minecraft.tileentity.TileEntity;
 
-import forestry.core.gadgets.TileForestry;
 import forestry.core.interfaces.IActivatable;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -24,7 +23,7 @@ import forestry.core.proxy.Proxies;
 
 public class PacketActiveUpdate extends PacketCoordinates {
 
-	private IActivatable activatable;
+	private boolean active;
 
 	public static void onPacketData(DataInputStreamForestry data) throws IOException {
 		new PacketActiveUpdate(data);
@@ -34,22 +33,22 @@ public class PacketActiveUpdate extends PacketCoordinates {
 		super(data);
 	}
 
-	public <T extends TileForestry & IActivatable> PacketActiveUpdate(T tile) {
-		super(PacketId.TILE_FORESTRY_ACTIVE, tile);
-		this.activatable = tile;
+	public PacketActiveUpdate(IActivatable tile) {
+		super(PacketId.TILE_FORESTRY_ACTIVE, tile.getCoordinates());
+		this.active = tile.isActive();
 	}
 
 	@Override
 	protected void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
-		data.writeBoolean(activatable.isActive());
+		data.writeBoolean(active);
 	}
 
 	@Override
 	protected void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 
-		boolean active = data.readBoolean();
+		active = data.readBoolean();
 
 		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
 		if (tile instanceof IActivatable) {

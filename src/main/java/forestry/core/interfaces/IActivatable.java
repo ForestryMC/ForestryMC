@@ -10,8 +10,13 @@
  ******************************************************************************/
 package forestry.core.interfaces;
 
+import net.minecraft.util.ChunkCoordinates;
+
 /* Networked tile entities that have a client side "active" flag */
 public interface IActivatable {
+
+	ChunkCoordinates getCoordinates();
+
 	boolean isActive();
 
 	void setActive(boolean active);

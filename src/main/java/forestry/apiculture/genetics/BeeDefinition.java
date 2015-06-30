@@ -505,7 +505,6 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 	},
 	SPECTRAL(BeeBranchDefinition.END, "idolum", true, new Color(0xa98bed), new Color(0xd9de9e)) {
-
 		@Override
 		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 8), 0.50f)
@@ -523,7 +522,6 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 	},
 	PHANTASMAL(BeeBranchDefinition.END, "lemur", false, new Color(0xcc00fa), new Color(0xd9de9e)) {
-
 		@Override
 		protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
 			beeSpecies.addProduct(ForestryItem.beeComb.getItemStack(1, 8), 0.40f)

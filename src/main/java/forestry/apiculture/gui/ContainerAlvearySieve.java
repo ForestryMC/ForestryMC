@@ -12,7 +12,7 @@ package forestry.apiculture.gui;
 
 import net.minecraft.entity.player.InventoryPlayer;
 
-import forestry.apiculture.gadgets.TileAlvearySieve;
+import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
@@ -27,6 +27,6 @@ public class ContainerAlvearySieve extends ContainerTile<TileAlvearySieve> {
 		addSlotToContainer(new SlotOutput(tile, 2, 73, 39).setCrafter(tile));
 		addSlotToContainer(new SlotOutput(tile, 3, 94, 26).setCrafter(tile));
 
-		addSlotToContainer(new SlotFiltered(tile, TileAlvearySieve.SLOT_SIEVE, 43, 39).setCrafter(tile));
+		addSlotToContainer(new SlotFiltered(tile, TileAlvearySieve.AlvearySieveInventory.SLOT_SIEVE, 43, 39).setCrafter(tile));
 	}
 }

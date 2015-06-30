@@ -18,6 +18,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.common.Optional;
 
+import forestry.api.core.IErrorLogic;
 import forestry.core.EnumErrorCode;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.interfaces.IRenderableMachine;
@@ -59,15 +60,17 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 	protected void updateServerSide() {
 		super.updateServerSide();
 
+		IErrorLogic errorLogic = getErrorLogic();
+
 		boolean disabled = isRedstoneActivated();
-		setErrorCondition(disabled, EnumErrorCode.DISABLED);
+		errorLogic.setCondition(disabled, EnumErrorCode.DISABLED);
 		if (disabled) {
 			return;
 		}
 
 		if (updateOnInterval(20)) {
 			boolean hasEnergy = energyManager.hasEnergyToDoWork();
-			setErrorCondition(!hasEnergy, EnumErrorCode.NOPOWER);
+			errorLogic.setCondition(!hasEnergy, EnumErrorCode.NOPOWER);
 		}
 
 		if (workCounter < WORK_CYCLES) {

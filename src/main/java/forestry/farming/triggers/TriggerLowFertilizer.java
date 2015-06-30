@@ -10,14 +10,14 @@
  ******************************************************************************/
 package forestry.farming.triggers;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.api.core.ITileStructure;
+import forestry.core.inventory.InvTools;
 import forestry.core.triggers.Trigger;
-import forestry.farming.gadgets.TileFarmPlain;
-import forestry.farming.gadgets.TileHatch;
+import forestry.farming.multiblock.TileHatch;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
@@ -42,11 +42,8 @@ public class TriggerLowFertilizer extends Trigger {
 			return false;
 		}
 
-		ITileStructure central = ((TileHatch) tile).getCentralTE();
-		if (central == null || !(central instanceof TileFarmPlain)) {
-			return false;
-		}
-
-		return !((TileFarmPlain) central).hasFertilizerPercent(threshold);
+		TileHatch tileHatch = (TileHatch) tile;
+		IInventory fertilizerInventory = tileHatch.getFarmController().getFarmInventory().getFertilizerInventory();
+		return InvTools.containsPercent(fertilizerInventory, threshold);
 	}
 }

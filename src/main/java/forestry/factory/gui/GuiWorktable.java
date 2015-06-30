@@ -72,7 +72,7 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable, TileWork
 
 		@Override
 		public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
-			container.sendRecipeClick(mouseButton, slotNumber);
+			ContainerWorktable.sendRecipeClick(mouseButton, slotNumber);
 		}
 	}
 

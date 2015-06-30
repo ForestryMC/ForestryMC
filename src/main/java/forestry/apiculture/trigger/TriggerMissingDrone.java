@@ -14,9 +14,8 @@ import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.apiculture.gadgets.TileAlveary;
+import forestry.api.core.IErrorLogicSource;
 import forestry.core.EnumErrorCode;
-import forestry.core.interfaces.IErrorSource;
 import forestry.core.triggers.Trigger;
 
 import buildcraft.api.statements.IStatementContainer;
@@ -34,14 +33,12 @@ public class TriggerMissingDrone extends Trigger {
 	@Override
 	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
 
-		if (!(tile instanceof IErrorSource)) {
+		if (!(tile instanceof IErrorLogicSource)) {
 			return false;
 		}
-		if (tile instanceof TileAlveary) {
-			tile = (TileAlveary) ((TileAlveary) tile).getCentralTE();
-		}
-		
-		return ((IErrorSource) tile).getErrorStates().contains(EnumErrorCode.NODRONE);
+
+		IErrorLogicSource apiary = (IErrorLogicSource) tile;
+		return apiary.getErrorLogic().contains(EnumErrorCode.NODRONE);
 	}
 
 }

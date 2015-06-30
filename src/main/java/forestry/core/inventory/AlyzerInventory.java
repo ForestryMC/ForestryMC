@@ -5,10 +5,10 @@ import com.google.common.collect.ImmutableSet;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
+import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.ForestryItem;
-import forestry.core.interfaces.IErrorSource;
 
 public abstract class AlyzerInventory extends ItemInventory implements IErrorSource {
 

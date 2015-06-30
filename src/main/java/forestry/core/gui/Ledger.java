@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
@@ -197,18 +198,22 @@ public abstract class Ledger {
 	}
 
 	protected void drawHeader(String string, int x, int y) {
-		manager.minecraft.fontRenderer.drawStringWithShadow(string, x, y, fontColorHeader);
+		Minecraft minecraft = Proxies.common.getClientInstance();
+		minecraft.fontRenderer.drawStringWithShadow(string, x, y, fontColorHeader);
 	}
 
 	protected void drawSubheader(String string, int x, int y) {
-		manager.minecraft.fontRenderer.drawStringWithShadow(string, x, y, fontColorSubheader);
+		Minecraft minecraft = Proxies.common.getClientInstance();
+		minecraft.fontRenderer.drawStringWithShadow(string, x, y, fontColorSubheader);
 	}
 
 	protected void drawText(String string, int x, int y) {
-		manager.minecraft.fontRenderer.drawString(string, x, y, fontColorText);
+		Minecraft minecraft = Proxies.common.getClientInstance();
+		minecraft.fontRenderer.drawString(string, x, y, fontColorText);
 	}
 
 	protected void drawSplitText(String string, int x, int y, int width) {
-		manager.minecraft.fontRenderer.drawSplitString(string, x, y, width, fontColorText);
+		Minecraft minecraft = Proxies.common.getClientInstance();
+		minecraft.fontRenderer.drawSplitString(string, x, y, width, fontColorText);
 	}
 }

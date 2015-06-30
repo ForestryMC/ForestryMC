@@ -14,19 +14,16 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
-import forestry.api.core.ITileStructure;
+import forestry.core.multiblock.MultiblockControllerBase;
+import forestry.core.multiblock.MultiblockTileEntityBase;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Utils;
 
 public abstract class BlockStructure extends BlockForestry {
-
-	public enum EnumStructureState {
-		VALID, INVALID, INDETERMINATE
-	}
 
 	public BlockStructure(Material material) {
 		super(material);
@@ -38,64 +35,72 @@ public abstract class BlockStructure extends BlockForestry {
 		return false;
 	}
 
-	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-		TileEntity tile = world.getTileEntity(x, y, z);
-
-		super.breakBlock(world, x, y, z, block, meta);
-
-		if (tile instanceof ITileStructure) {
-			ITileStructure structure = (ITileStructure) tile;
-			if (structure.isIntegratedIntoStructure() && !structure.isMaster()) {
-				ITileStructure central = structure.getCentralTE();
-				if (central != null) {
-					central.validateStructure();
-				}
-			}
-		}
-	}
+	private long previousMessageTick = 0;
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
-
 		if (player.isSneaking()) {
 			return false;
 		}
 
-		TileForestry tile = (TileForestry) world.getTileEntity(x, y, z);
-		if (!Utils.isUseableByPlayer(player, tile)) {
+		MultiblockTileEntityBase part;
+		MultiblockControllerBase controller;
+
+		TileEntity tile = world.getTileEntity(x, y, z);
+		if (tile instanceof MultiblockTileEntityBase) {
+			part = (MultiblockTileEntityBase) tile;
+			controller = part.getMultiblockController();
+		} else {
 			return false;
 		}
 
-		// GUIs can only be opened on integrated structure blocks.
-		if (tile instanceof ITileStructure) {
-			if (!((ITileStructure) tile).isIntegratedIntoStructure()) {
-				return false;
+		// If the player's hands are empty and they right-click on a multiblock, they get a
+		// multiblock-debugging message if the machine is not assembled.
+		if (player.getCurrentEquippedItem() == null) {
+			if (controller != null) {
+				Exception e = controller.getLastValidationException();
+				if (e != null) {
+					long tick = world.getTotalWorldTime();
+					if (tick > previousMessageTick + 20) {
+						player.addChatMessage(new ChatComponentText(e.getMessage()));
+						previousMessageTick = tick;
+					}
+					return true;
+				}
+			} else {
+				player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("for.multiblock.error.notConnected")));
+				return true;
 			}
 		}
 
-		if (Proxies.common.isSimulating(world)) {
-			if (tile.allowsViewing(player)) {
-				tile.openGui(player);
-			} else {
-				player.addChatMessage(new ChatComponentTranslation("for.chat.accesslocked", PlayerUtil.getOwnerName(tile)));
-			}
+		// Don't open the GUI if the multiblock isn't assembled
+		if (controller == null || !controller.isAssembled()) {
+			return false;
+		}
+
+		if (!world.isRemote) {
+			part.openGui(player);
 		}
 		return true;
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbor) {
-		super.onNeighborBlockChange(world, x, y, z, neighbor);
+	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+
 		if (!Proxies.common.isSimulating(world)) {
 			return;
 		}
 
 		TileEntity tile = world.getTileEntity(x, y, z);
-		if (!(tile instanceof ITileStructure)) {
-			return;
-		}
+		if (tile instanceof MultiblockTileEntityBase) {
+			MultiblockTileEntityBase part = (MultiblockTileEntityBase) tile;
 
-		((ITileStructure) tile).validateStructure();
+			// drop inventory if we're the last part remaining
+			if (part.getNeighboringParts().length == 0) {
+				Utils.dropInventory(part, world, x, y, z);
+			}
+		}
+		super.breakBlock(world, x, y, z, block, meta);
 	}
+
 }

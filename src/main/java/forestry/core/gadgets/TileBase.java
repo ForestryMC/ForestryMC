@@ -16,11 +16,6 @@ import forestry.core.interfaces.IHintSource;
 
 public abstract class TileBase extends TileForestry implements IHintSource {
 
-	/* UPDATING */
-	@Override
-	public void initialize() {
-	}
-
 	/* INTERACTION */
 	public abstract void openGui(EntityPlayer player, TileBase tile);
 

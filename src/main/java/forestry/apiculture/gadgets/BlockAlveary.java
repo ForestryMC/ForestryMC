@@ -28,7 +28,16 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.core.Tabs;
 import forestry.apiculture.MaterialBeehive;
+import forestry.apiculture.multiblock.TileAlveary;
+import forestry.apiculture.multiblock.TileAlvearyFan;
+import forestry.apiculture.multiblock.TileAlvearyHeater;
+import forestry.apiculture.multiblock.TileAlvearyHygroregulator;
+import forestry.apiculture.multiblock.TileAlvearyPlain;
+import forestry.apiculture.multiblock.TileAlvearySieve;
+import forestry.apiculture.multiblock.TileAlvearyStabiliser;
+import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.core.gadgets.BlockStructure;
+import forestry.core.multiblock.MultiblockRegistry;
 import forestry.core.render.TextureManager;
 
 public class BlockAlveary extends BlockStructure {
@@ -78,17 +87,17 @@ public class BlockAlveary extends BlockStructure {
 	@Override
 	public TileEntity createTileEntity(World world, int metadata) {
 		switch (metadata) {
-			case TileAlvearySwarmer.BLOCK_META:
+			case TileAlveary.SWARMER_META:
 				return new TileAlvearySwarmer();
-			case TileAlvearyFan.BLOCK_META:
+			case TileAlveary.FAN_META:
 				return new TileAlvearyFan();
-			case TileAlvearyHeater.BLOCK_META:
+			case TileAlveary.HEATER_META:
 				return new TileAlvearyHeater();
-			case TileAlvearyHygroregulator.BLOCK_META:
+			case TileAlveary.HYGRO_META:
 				return new TileAlvearyHygroregulator();
-			case TileAlvearyStabiliser.BLOCK_META:
+			case TileAlveary.STABILIZER_META:
 				return new TileAlvearyStabiliser();
-			case TileAlvearySieve.BLOCK_META:
+			case TileAlveary.SIEVE_META:
 				return new TileAlvearySieve();
 			default:
 				return new TileAlvearyPlain();
@@ -143,27 +152,27 @@ public class BlockAlveary extends BlockStructure {
 	@Override
 	public IIcon getIcon(int side, int metadata) {
 		if ((metadata <= 1
-				|| metadata == TileAlvearySieve.BLOCK_META || metadata == TileAlvearySwarmer.BLOCK_META || metadata == TileAlvearyStabiliser.BLOCK_META)
+				|| metadata == TileAlveary.SIEVE_META || metadata == TileAlveary.SWARMER_META || metadata == TileAlveary.STABILIZER_META)
 				&& (side == 1 || side == 0)) {
 			return icons[BOTTOM];
 		}
 
 		switch (metadata) {
-			case TileAlvearyPlain.BLOCK_META:
+			case TileAlveary.PLAIN_META:
 				return icons[PLAIN];
-			case 1:
+			case TileAlveary.ENTRANCE_META:
 				return icons[ENTRANCE];
-			case TileAlvearySwarmer.BLOCK_META:
+			case TileAlveary.SWARMER_META:
 				return icons[ALVEARY_SWARMER_OFF];
-			case TileAlvearyFan.BLOCK_META:
+			case TileAlveary.FAN_META:
 				return icons[ALVEARY_FAN_OFF];
-			case TileAlvearyHeater.BLOCK_META:
+			case TileAlveary.HEATER_META:
 				return icons[ALVEARY_HEATER_OFF];
-			case TileAlvearyHygroregulator.BLOCK_META:
+			case TileAlveary.HYGRO_META:
 				return icons[ALVEARY_HYGRO];
-			case TileAlvearyStabiliser.BLOCK_META:
+			case TileAlveary.STABILIZER_META:
 				return icons[STABILISER];
-			case TileAlvearySieve.BLOCK_META:
+			case TileAlveary.SIEVE_META:
 				return icons[SIEVE];
 			default:
 				return null;
@@ -241,5 +250,18 @@ public class BlockAlveary extends BlockStructure {
 			return icons[LEFT];
 		}
 
+	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+		super.onNeighborBlockChange(world, x, y, z, block);
+
+		TileEntity tileEntity = world.getTileEntity(x, y, z);
+		if (tileEntity instanceof TileAlveary) {
+			TileAlveary tileAlveary = (TileAlveary) tileEntity;
+
+			// We must check that the slabs on top were not removed
+			MultiblockRegistry.addDirtyController(world, tileAlveary.getMultiblockController());
+		}
 	}
 }

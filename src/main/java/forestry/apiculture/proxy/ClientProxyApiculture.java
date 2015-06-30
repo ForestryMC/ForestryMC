@@ -11,6 +11,7 @@
 package forestry.apiculture.proxy;
 
 import net.minecraft.client.particle.EntityFX;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -27,6 +28,7 @@ import forestry.core.interfaces.IBlockRenderer;
 import forestry.core.proxy.ClientProxyRender;
 import forestry.core.render.RenderAnalyzer;
 import forestry.core.render.TextureManager;
+import forestry.core.vect.IVect;
 import forestry.plugins.PluginApiculture;
 
 public class ClientProxyApiculture extends ProxyApiculture {
@@ -43,7 +45,7 @@ public class ClientProxyApiculture extends ProxyApiculture {
 	}
 
 	@Override
-	public void addBeeHiveFX(String icon, World world, double xCoord, double yCoord, double zCoord, int color, int areaX, int areaY, int areaZ) {
+	public void addBeeHiveFX(String icon, World world, ChunkCoordinates coordinates, int color, IVect area) {
 		if (!ClientProxyRender.shouldSpawnParticle(world)) {
 			return;
 		}
@@ -51,11 +53,11 @@ public class ClientProxyApiculture extends ProxyApiculture {
 		EntityFX fx;
 
 		if (world.rand.nextBoolean()) {
-			fx = new EntityBeeFX(world, xCoord + 0.5D, yCoord + 0.75D, zCoord + 0.5D, 0.0f, 0.0f, 0.0f, color);
+			fx = new EntityBeeFX(world, coordinates.posX + 0.5D, coordinates.posY + 0.75D, coordinates.posZ + 0.5D, 0.0f, 0.0f, 0.0f, color);
 		} else {
-			double spawnX = xCoord + world.rand.nextInt(areaX * 2) - areaX;
-			double spawnY = yCoord + world.rand.nextInt(areaY);
-			double spawnZ = zCoord + world.rand.nextInt(areaZ * 2) - areaZ;
+			double spawnX = coordinates.posX + world.rand.nextInt(area.getX() * 2) - area.getX();
+			double spawnY = coordinates.posY + world.rand.nextInt(area.getY());
+			double spawnZ = coordinates.posZ + world.rand.nextInt(area.getZ() * 2) - area.getZ();
 
 			fx = new EntityBeeFX(world, spawnX, spawnY, spawnZ, 0.0f, 0.0f, 0.0f, color);
 		}
