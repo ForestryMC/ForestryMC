@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import com.google.common.collect.ImmutableList;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,6 +20,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -36,25 +40,26 @@ import forestry.api.genetics.IFruitBearer;
 import forestry.core.config.ForestryItem;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
+import forestry.plugins.PluginManager;
 
 public class FarmLogicOrchard extends FarmLogic {
 
 	private final Collection<IFarmable> farmables;
+	private final HashMap<Vect, Integer> lastExtents = new HashMap<Vect, Integer>();
+	private final ImmutableList<Block> traversalBlocks;
 
 	public FarmLogicOrchard(IFarmHousing housing) {
 		super(housing);
 		this.farmables = Farmables.farmables.get("farmOrchard");
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		return ForestryItem.fruits.item().getIconFromDamage(0);
-	}
-
-	@Override
-	public String getName() {
-		return "Orchard";
+		ImmutableList.Builder<Block> traversalBlocksBuilder = ImmutableList.builder();
+		if (PluginManager.Module.AGRICRAFT.isEnabled()) {
+			traversalBlocksBuilder.add(Blocks.farmland);
+		}
+		if (PluginManager.Module.PLANTMEGAPACK.isEnabled()) {
+			traversalBlocksBuilder.add(Blocks.water);
+		}
+		traversalBlocksBuilder.build();
+		this.traversalBlocks = traversalBlocksBuilder.build();
 	}
 
 	@Override
@@ -87,8 +92,6 @@ public class FarmLogicOrchard extends FarmLogic {
 		return false;
 	}
 
-	private final HashMap<Vect, Integer> lastExtents = new HashMap<Vect, Integer>();
-
 	@Override
 	public Collection<ICrop> harvest(int x, int y, int z, ForgeDirection direction, int extent) {
 
@@ -110,6 +113,17 @@ public class FarmLogicOrchard extends FarmLogic {
 		return crops;
 	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon() {
+		return ForestryItem.fruits.item().getIconFromDamage(0);
+	}
+
+	@Override
+	public String getName() {
+		return "Orchard";
+	}
+
 	private Collection<ICrop> getHarvestBlocks(Vect position) {
 
 		Set<Vect> seen = new HashSet<Vect>();
@@ -118,7 +132,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		World world = getWorld();
 
 		// Determine what type we want to harvest.
-		if (!VectUtil.isWoodBlock(world, position) && !isFruitBearer(world, position)) {
+		if (!VectUtil.isWoodBlock(world, position) && !isBlockTraversable(world, position, traversalBlocks) && !isFruitBearer(world, position)) {
 			return crops;
 		}
 
@@ -157,8 +171,10 @@ public class FarmLogicOrchard extends FarmLogic {
 					if (seen.contains(candidate)) {
 						continue;
 					}
-
-					if (VectUtil.isWoodBlock(world, candidate)) {
+					if (VectUtil.isAirBlock(world, candidate)) {
+						continue;
+					}
+					if (VectUtil.isWoodBlock(world, candidate) || isBlockTraversable(world, candidate, traversalBlocks)) {
 						candidates.add(candidate);
 						seen.add(candidate);
 					} else if (isFruitBearer(world, candidate)) {
@@ -179,10 +195,6 @@ public class FarmLogicOrchard extends FarmLogic {
 
 	private boolean isFruitBearer(World world, Vect position) {
 
-		if (VectUtil.isAirBlock(world, position)) {
-			return false;
-		}
-
 		TileEntity tile = world.getTileEntity(position.x, position.y, position.z);
 		if (tile instanceof IFruitBearer) {
 			return true;
@@ -197,11 +209,18 @@ public class FarmLogicOrchard extends FarmLogic {
 		return false;
 	}
 
-	private ICrop getCrop(World world, Vect position) {
+	private boolean isBlockTraversable(World world, Vect position, ImmutableList<Block> traversalBlocks) {
 
-		if (VectUtil.isAirBlock(world, position)) {
-			return null;
+		Block candidate = VectUtil.getBlock(world, position);
+		for (Block block : traversalBlocks) {
+			if (block == (candidate)) {
+				return true;
+			}
 		}
+		return false;
+	}
+
+	private ICrop getCrop(World world, Vect position) {
 
 		TileEntity tile = world.getTileEntity(position.x, position.y, position.z);
 

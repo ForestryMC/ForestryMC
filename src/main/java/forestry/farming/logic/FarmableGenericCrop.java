@@ -24,7 +24,7 @@ public class FarmableGenericCrop implements IFarmable {
 	private final ItemStack seed;
 	private final Block block;
 	private final int mature;
-	ItemStack[] windfall;
+	private final ItemStack[] windfall;
 
 	public FarmableGenericCrop(ItemStack seed, Block block, int mature, ItemStack... windfall) {
 		this.seed = seed;
