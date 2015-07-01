@@ -147,7 +147,7 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 				.build();
 
 		ImmutableMap<String, Integer> floatingWaterPlant = ImmutableMap.<String, Integer>builder()
-				.put("cropSacredLotus",4)
+				.put("cropSacredLotus", 4)
 				.put("cropWatercress", 4)
 				.put("cropTaro", 4)
 				.put("cropWasabi", 4)
@@ -156,35 +156,45 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 				.put("cropRice", 4)
 				.put("cropWaterSpinach", 4)
 				.put("cropWildRice", 4)
+		
+				.put("immersedArrowArum", 4)
+				.put("immersedCommonReed", 4)
+				.put("immersedDuckPotato", 4)
+				.put("immersedEuropeanBurReed", 4)
+				.put("immersedGreySedge", 4)
+				.put("immersedSimplestemBurReed", 4)
+				.put("immersedSoftstemBulrush", 4)
+				.put("immersedWaterMannagrass", 4)
+				.put("immersedYellowFlag", 4)
 				.build();
 
 		ImmutableMap<String, Integer> fungusPlant = ImmutableMap.<String, Integer>builder()
-				.put("fungusBlackPowderpuff",1)
-				.put("fungusChanterelle",1)
-				//.put("fungusDeathCap",1) poisonous
-				.put("fungusGiantClub",1)
-				.put("fungusParasol",2)
-				.put("fungusStinkhorn",1)
-				.put("fungusWeepingMilkCap",1)
-				.put("fungusWoodBlewit",1)
-				//.put("fungusWoollyGomphus",2) poisonous
+				.put("fungusBlackPowderpuff", 1)
+				.put("fungusChanterelle", 1)
+				//.put("fungusDeathCap", 1) poisonous
+				.put("fungusGiantClub", 1)
+				.put("fungusParasol", 2)
+				.put("fungusStinkhorn", 1)
+				.put("fungusWeepingMilkCap", 1)
+				.put("fungusWoodBlewit", 1)
+				//.put("fungusWoollyGomphus", 2) poisonous
 				.build();
 
 		ImmutableMap<String, Integer> junglePlant = ImmutableMap.<String, Integer>builder()
-				.put("jungleConeHeadedGuzmania",2)
-				.put("jungleDevilsTongue",6)
-				.put("jungleHoneySpurge",1)
-				.put("jungleJungleLantern",6)
-				.put("jungleLazarusBell",2)
-				.put("jungleLobsterClaws",6)
-				.put("jungleLollipopPlant",2)
-				.put("jungleMadagascarPalm",6)
-				.put("junglePalmLily",6)
-				.put("junglePanamaQueen",2)
+				.put("jungleConeHeadedGuzmania", 2)
+				.put("jungleDevilsTongue", 6)
+				.put("jungleHoneySpurge", 1)
+				.put("jungleJungleLantern", 6)
+				.put("jungleLazarusBell", 2)
+				.put("jungleLobsterClaws", 6)
+				.put("jungleLollipopPlant", 2)
+				.put("jungleMadagascarPalm", 6)
+				.put("junglePalmLily", 6)
+				.put("junglePanamaQueen", 2)
 				.put("junglePorteaAlatisepala", 2)
 				.put("jungleRacinaeaFraseri", 6)
 				.put("jungleRicheaDracophylla", 2)
-				//.put("jungleShellflower",4) 2 tall needs specialcase
+				//.put("jungleShellflower", 4) 2 tall needs specialcase
 				.put("jungleSilverVase", 2)
 				.put("jungleStaghornClubmoss", 2)
 				.put("jungleTorchGinger", 2)
@@ -193,6 +203,21 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 				.build();
 
 		ImmutableMap<String, Integer> vanillaPlant = ImmutableMap.<String, Integer>builder()
+				.put("beachHighTideBush", 6)
+				.put("beachSeaLavender", 4)
+				.put("beachSeaSandwort", 4)
+				.put("leafyDustyMiller", 1) //beach plant
+
+				.put("fernCretanBrake", 1)
+				//.put("fernDwarfPalmetto", 0) doesn't grow
+				.put("fernHayScented", 2)
+				.put("fernKangaroo", 2)
+				.put("fernMaidenhairSpleenwort", 3)
+				.put("fernOstrich", 6)
+				.put("fernScalyTree", 6)
+				.put("fernSword", 6)
+				.put("fernWoodsia", 2)
+
 				.put("forestArcticGentian", 1)
 				.put("forestAustralianBugle", 2)
 				.put("forestBroadleafMeadowsweet", 2)
@@ -211,17 +236,28 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 				.put("forestWildColumbine", 2)
 				.put("forestWildMint", 2)
 				.put("forestWolfsFootClubmoss", 1)
-		
-				.put("mountainAlpineArmeria",2)
-				.put("mountainAlpineBellflower",2)
-				.put("mountainBistort",2)
-				.put("mountainEdelweiss",2)
-				.put("mountainHouseleek",2)
-				.put("mountainIris",1)
-				.put("mountainNorthernWillowherb",2)
-				.put("mountainScarletTrumpet",2)
-				.put("mountainYellowBellflower",1)
-				.put("leafyKrisPlant",2) // mountain plaint
+				.put("leafyColeus", 1) //forest plant
+				.put("leafyStonecrop", 1) //forest plant
+
+				.put("grassBlueWheatgrass", 1)
+				.put("grassCord", 6)
+				.put("grassFountain", 2)
+				.put("grassMeadow", 2)
+				.put("grassMeadowFoxtail", 1)
+				.put("grassPrairie", 1)
+				.put("grassSilverMoor", 2)
+				.put("grassSwitch", 6)
+
+				.put("mountainAlpineArmeria", 2)
+				.put("mountainAlpineBellflower", 2)
+				.put("mountainBistort", 2)
+				.put("mountainEdelweiss", 2)
+				.put("mountainHouseleek", 2)
+				.put("mountainIris", 1)
+				.put("mountainNorthernWillowherb", 2)
+				.put("mountainScarletTrumpet", 2)
+				.put("mountainYellowBellflower", 1)
+				.put("leafyKrisPlant", 2) // mountain plaint
 
 				.put("plainsPrairieBrome", 6) //skips some metas
 				.put("plainsPrairieSage", 4)
@@ -230,31 +266,34 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 				.put("plainsSmallPasqueFlower", 4)
 				.put("plainsSmoothAster", 4)
 				.put("plainsThreeFloweredAvens", 4)
-		
-				.put("savannaButterflyWeed",2)
-				.put("savannaHoaryVervain",2)
-				.put("savannaLeadplant",2)
-				.put("savannaMarcela",2)
-				.put("savannaNorthernBedstraw",1)
-				.put("savannaPiersonsMilkVetch",2)
-				.put("savannaPropellerPlant",2)
-				.put("savannaShonaCabbage",2)
+				.put("leafyPricklyLettuce", 1) //plains plant
+				//.put("leafyStingingNettle", 2) plains plant, poisonous
+
+				.put("savannaButterflyWeed", 2)
+				.put("savannaHoaryVervain", 2)
+				.put("savannaLeadplant", 2)
+				.put("savannaMarcela", 2)
+				.put("savannaNorthernBedstraw", 1)
+				.put("savannaPiersonsMilkVetch", 2)
+				.put("savannaPropellerPlant", 2)
+				.put("savannaShonaCabbage", 2)
 				.put("savannaTexasTickseed", 2)
 				.put("leafyPaleYucca", 2) //savanna Plant
-				
+				.put("leafyDevilsShoestring", 2)
+
 				.put("shrubAlpineCurrant", 2)
 				.put("shrubBarberry", 2)
 				.put("shrubBoxwood", 2)
-				.put("shrubButterfly",2)
+				.put("shrubButterfly", 2)
 				.put("shrubCanyonCreekAbelia", 2)
 				.put("shrubCapeJasmine", 2)
 				.put("shrubCedarCylinder", 6)
 				.put("shrubCedarGlobe", 2)
 				.put("shrubCedarPyramid", 6)
-				.put("shrubCypressGreen",1)
-				.put("shrubCypressYellow",1)
-				.put("shrubDaphne",2)
-				//.put("shrubDwarfElder",4) poisonous, also grows 2 tall at meta 4
+				.put("shrubCypressGreen", 1)
+				.put("shrubCypressYellow", 1)
+				.put("shrubDaphne", 2)
+				//.put("shrubDwarfElder", 4) poisonous, also grows 2 tall at meta 4
 				.put("shrubHolly", 2)
 				.put("shrubHummingbirdBush", 2)
 				.put("shrubJuniperSavin", 2)
@@ -292,13 +331,33 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 				.put("Snow", 4)
 				.put("Straw", 4)
 				.build();
+
 		ImmutableList<String> waterPlant = ImmutableList.of(
+				"oceanCommonEelgrass",
+				"oceanCoralWeed",
+				"oceanMozuku",
+				"oceanRockweed",
+				"oceanSeaGrapes",
+				"oceanSeaLettuce",
+				"oceanTangle",
+				"riverAmazonSword",
+				"riverCanadianWaterweed",
+				"riverCoonsTail",
+				"riverEelgrass",
+				"riverWaterWisteria",
+				"riverWrightsWaternymph",
 				"waterKelpGiantGRN",
 				"waterKelpGiantYEL"
 		);
 
+		ImmutableMap<String, String> specialCaseTwoTall = ImmutableMap.<String, String>builder()
+				.put("grassSeaOats", FlowerManager.FlowerTypeVanilla)
+				.put("jungleShellflower", FlowerManager.FlowerTypeJungle)
+				.build();
+
 		int seedamount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");
 		int juiceAmount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple");
+
 		for (String reedLike : reedLikePlant) {
 			Block reedBlock = GameRegistry.findBlock(PlantMP, reedLike);
 			ItemStack reedStack = GameRegistry.findItemStack(PlantMP, reedLike, 1);
@@ -339,6 +398,7 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 				Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(waterPlantBlock, wPlant.getValue()));
 			}
 		}
+
 		juiceAmount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.apple") / 25;
 		juiceAmount = Math.max(juiceAmount, 1); // Produce at least 1 mb of juice.
 
@@ -354,18 +414,22 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 				Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(berryBushCropBlock, berryBushCrop.getValue()));
 			}
 		}
+
 		addMetaFlower(desertPlant, FlowerManager.FlowerTypeCacti, false);
 		addMetaFlower(junglePlant, FlowerManager.FlowerTypeJungle, true);
 		addMetaFlower(vanillaPlant, FlowerManager.FlowerTypeVanilla, true);
 		addMetaFlower(fungusPlant, FlowerManager.FlowerTypeMushrooms, true);
 
-		Block jungleShellBlock = GameRegistry.findBlock(PlantMP, "jungleShellflower");
-		ItemStack jungleShellStack = GameRegistry.findItemStack(PlantMP, "jungleShellflower", 1);
-		if (jungleShellBlock != null && jungleShellStack != null) {
-			FlowerManager.flowerRegistry.registerAcceptableFlower(jungleShellBlock, FlowerManager.FlowerTypeJungle);
-			FlowerManager.flowerRegistry.registerPlantableFlower(jungleShellBlock, 0, 0.75, FlowerManager.FlowerTypeJungle);
-			Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(jungleShellStack, jungleShellBlock, 4));
+		for (Map.Entry<String, String> special : specialCaseTwoTall.entrySet()) {
+			Block plantBlock = GameRegistry.findBlock(PlantMP, special.getKey());
+			ItemStack specialStack = GameRegistry.findItemStack(PlantMP, special.getKey(), 1);
+			if (plantBlock != null && plantBlock != null) {
+				FlowerManager.flowerRegistry.registerAcceptableFlower(plantBlock, special.getValue());
+				FlowerManager.flowerRegistry.registerPlantableFlower(plantBlock, 0, 0.75, special.getValue());
+				Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(specialStack, plantBlock, 4));
+			}
 		}
+
 		for (String wPlant : waterPlant) {
 			ItemStack waterPlantStack = GameRegistry.findItemStack(PlantMP, wPlant, 1);
 			if (waterPlantStack != null) {
