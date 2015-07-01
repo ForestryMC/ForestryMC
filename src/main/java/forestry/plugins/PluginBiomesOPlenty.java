@@ -24,6 +24,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.farming.Farmables;
 import forestry.core.config.Defaults;
 import forestry.core.proxy.Proxies;
+import forestry.farming.logic.FarmableBasicFruit;
 import forestry.farming.logic.FarmableGenericCrop;
 import forestry.farming.logic.FarmableGenericSapling;
 
@@ -74,5 +75,6 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 		Farmables.farmables.get("farmArboreal").add(new FarmableGenericSapling(BoPSaplings, 15, BoPPersimmon));
 
 		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(BoPTurnipSeeds, 1, 0), BoPTurnip, 7));
+		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(BoPTurnip, 7));
 	}
 }

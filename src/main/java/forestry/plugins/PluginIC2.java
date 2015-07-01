@@ -289,7 +289,7 @@ public class PluginIC2 extends ForestryPlugin {
 			FMLInterModComms.sendMessage(Defaults.MOD, "add-farmable-sapling", imc);
 		}
 
-		FluidStack biogas = FluidRegistry.getFluidStack("ic2biogas", 1000); // 80% value of biomass in the biogas engine
+		FluidStack biogas = FluidRegistry.getFluidStack("ic2biogas", 1000);
 		if (biogas != null && PluginManager.Module.ENERGY.isEnabled()) {
 			FuelManager.bronzeEngineFuel.put(biogas.getFluid(), new EngineBronzeFuel(Fluids.BIOMASS.getFluid(),
 					Defaults.ENGINE_FUEL_VALUE_BIOMASS, (int) ((Defaults.ENGINE_CYCLE_DURATION_BIOMASS * GameMode.getGameMode().getFloatSetting("fuel.biomass.biogas"))), 1));
