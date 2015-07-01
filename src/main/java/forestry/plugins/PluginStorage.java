@@ -421,7 +421,7 @@ public class PluginStorage extends ForestryPlugin {
 		List<String> backpackOreDict = new ArrayList<String>();
 
 		{
-			List<String> validItems = backpackDefinition.getValidItemStacks();
+			List<String> validItems = new ArrayList<String>(backpackDefinition.getValidItemStacks());
 			Collections.sort(validItems);
 			String[] defaultValidItems = validItems.toArray(new String[validItems.size()]);
 
@@ -433,7 +433,7 @@ public class PluginStorage extends ForestryPlugin {
 		}
 
 		{
-			List<Integer> oreIds = backpackDefinition.getValidOreIds();
+			List<Integer> oreIds = new ArrayList<Integer>(backpackDefinition.getValidOreIds());
 			String[] defaultOreNames = new String[oreIds.size()];
 			for (int i = 0; i < oreIds.size(); i++) {
 				int oreId = oreIds.get(i);

@@ -517,7 +517,7 @@ public class StackUtils {
 			Item item = stack.getItem();
 			if (item != null) {
 				int meta = stack.getMeta();
-				ItemStack itemStack = new ItemStack(item, meta, 1);
+				ItemStack itemStack = new ItemStack(item, 1, meta);
 				itemStacks.add(itemStack);
 			}
 		}

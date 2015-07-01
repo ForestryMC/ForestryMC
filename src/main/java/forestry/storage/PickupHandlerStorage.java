@@ -14,6 +14,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
+import forestry.api.storage.IBackpackDefinition;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.storage.gui.ContainerBackpack;
 import forestry.storage.gui.ContainerNaturalistBackpack;
@@ -52,7 +53,8 @@ public class PickupHandlerStorage implements IPickupHandler {
 			}
 
 			ItemBackpack backpack = ((ItemBackpack) pack.getItem());
-			if (backpack.getDefinition().isValidItem(itemstack)) {
+			IBackpackDefinition backpackDefinition = backpack.getDefinition();
+			if (backpackDefinition.isValidItem(itemstack)) {
 				ItemBackpack.tryStowing(player, pack, itemstack);
 			}
 		}

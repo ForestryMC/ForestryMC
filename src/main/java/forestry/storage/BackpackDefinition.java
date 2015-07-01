@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.storage;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -32,10 +31,10 @@ public class BackpackDefinition implements IBackpackDefinition {
 	private final int primaryColor; // - c03384
 	private final int secondaryColor;
 
-	private final List<String> validItemStacks = new ArrayList<String>();
-	private final List<Integer> validOreIds = new ArrayList<Integer>();
-	private final List<Class> validItemClasses = new ArrayList<Class>();
-	private final List<Class> validBlockClasses = new ArrayList<Class>();
+	private final Set<String> validItemStacks = new HashSet<String>();
+	private final Set<Integer> validOreIds = new HashSet<Integer>();
+	private final Set<Class> validItemClasses = new HashSet<Class>();
+	private final Set<Class> validBlockClasses = new HashSet<Class>();
 
 	public BackpackDefinition(String name, int primaryColor) {
 		this(name, primaryColor, 0xffffff);
@@ -148,26 +147,21 @@ public class BackpackDefinition implements IBackpackDefinition {
 		}
 	}
 
-	public List<String> getValidItemStacks() {
+	public Set<String> getValidItemStacks() {
 		return validItemStacks;
 	}
 
-	public List<Integer> getValidOreIds() {
+	public Set<Integer> getValidOreIds() {
 		return validOreIds;
 	}
 
-	public List<Class> getValidBlockClasses() {
+	public Set<Class> getValidBlockClasses() {
 		return validBlockClasses;
 	}
 
-	public List<Class> getValidItemClasses() {
+	public Set<Class> getValidItemClasses() {
 		return validItemClasses;
 	}
-
-	// isValidItem can get called multiple times per tick if the player's inventory is full
-	// and they are standing on multiple items.
-	// It is a slow call, so we need a cache to make it fast
-	private final Map<ItemStack, Boolean> isValidItemCache = new ValidItemCache();
 
 	@Override
 	public boolean isValidItem(ItemStack itemStack) {
@@ -175,17 +169,6 @@ public class BackpackDefinition implements IBackpackDefinition {
 			return false;
 		}
 
-		Boolean isValid = isValidItemCache.get(itemStack);
-		if (isValid != null) {
-			return isValid;
-		}
-
-		isValid = isValidItemUncached(itemStack);
-		isValidItemCache.put(itemStack, isValid);
-		return isValid;
-	}
-
-	private boolean isValidItemUncached(ItemStack itemStack) {
 		Item item = itemStack.getItem();
 		if (item == null) {
 			return false;
@@ -232,10 +215,4 @@ public class BackpackDefinition implements IBackpackDefinition {
 		return false;
 	}
 
-	private static class ValidItemCache extends LinkedHashMap<ItemStack, Boolean> {
-		@Override
-		protected boolean removeEldestEntry(Map.Entry<ItemStack, Boolean> eldest) {
-			return size() > 64;
-		}
-	}
 }
