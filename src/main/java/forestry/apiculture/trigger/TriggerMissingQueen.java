@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
+import forestry.apiculture.gadgets.TileAlveary;
 import forestry.core.EnumErrorCode;
 import forestry.core.interfaces.IErrorSource;
 import forestry.core.triggers.Trigger;
@@ -35,6 +36,9 @@ public class TriggerMissingQueen extends Trigger {
 
 		if (!(tile instanceof IErrorSource)) {
 			return false;
+		}
+		if (tile instanceof TileAlveary) {
+			tile = (TileAlveary) ((TileAlveary) tile).getCentralTE();
 		}
 
 		return ((IErrorSource) tile).getErrorStates().contains(EnumErrorCode.NOQUEEN);
