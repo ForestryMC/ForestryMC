@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -34,18 +35,22 @@ import forestry.api.arboriculture.EnumGrowthConditions;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleLeafEffect;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
+import forestry.api.arboriculture.IArboristTracker;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreeMutation;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleBoolean;
+import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IGenome;
+import forestry.api.genetics.IMutation;
 import forestry.arboriculture.gadgets.ForestryBlockLeaves;
 import forestry.arboriculture.gadgets.TileLeaves;
+import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.genetics.Chromosome;
@@ -355,6 +360,11 @@ public class Tree extends Individual implements ITree, IPlantable {
 	/* REPRODUCTION */
 	@Override
 	public ITree[] getSaplings(World world, int x, int y, int z, float modifier) {
+		return getSaplings(world, null, x, y, z, modifier);
+	}
+
+	@Override
+	public ITree[] getSaplings(World world, GameProfile playerProfile, int x, int y, int z, float modifier) {
 		ArrayList<ITree> prod = new ArrayList<ITree>();
 
 		float chance = genome.getFertility() * modifier;
@@ -363,14 +373,14 @@ public class Tree extends Individual implements ITree, IPlantable {
 			if (this.getMate() == null) {
 				prod.add(PluginArboriculture.treeInterface.getTree(world, new TreeGenome(genome.getChromosomes())));
 			} else {
-				prod.add(createOffspring(world, x, y, z));
+				prod.add(createOffspring(world, playerProfile, x, y, z));
 			}
 		}
 
 		return prod.toArray(new ITree[prod.size()]);
 	}
 
-	private ITree createOffspring(World world, int x, int y, int z) {
+	private ITree createOffspring(World world, GameProfile playerProfile, int x, int y, int z) {
 
 		IChromosome[] chromosomes = new IChromosome[genome.getChromosomes().length];
 		IChromosome[] parent1 = genome.getChromosomes();
@@ -378,9 +388,9 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 		// Check for mutation. Replace one of the parents with the mutation
 		// template if mutation occured.
-		IChromosome[] mutated = mutateSpecies(world, x, y, z, genome, mate);
+		IChromosome[] mutated = mutateSpecies(world, playerProfile, x, y, z, genome, mate);
 		if (mutated == null) {
-			mutated = mutateSpecies(world, x, y, z, mate, genome);
+			mutated = mutateSpecies(world, playerProfile, x, y, z, mate, genome);
 		}
 
 		if (mutated != null) {
@@ -396,41 +406,57 @@ public class Tree extends Individual implements ITree, IPlantable {
 		return new Tree(new TreeGenome(chromosomes));
 	}
 
-	private IChromosome[] mutateSpecies(World world, int x, int y, int z, IGenome genomeOne, IGenome genomeTwo) {
+	private static IChromosome[] mutateSpecies(World world, @Nullable GameProfile playerProfile, int x, int y, int z, IGenome genomeOne, IGenome genomeTwo) {
 
 		IChromosome[] parent1 = genomeOne.getChromosomes();
 		IChromosome[] parent2 = genomeTwo.getChromosomes();
 
 		IGenome genome0;
 		IGenome genome1;
-		IAllele allele0;
-		IAllele allele1;
+		IAlleleSpecies allele0;
+		IAlleleSpecies allele1;
 
 		if (world.rand.nextBoolean()) {
-			allele0 = parent1[EnumTreeChromosome.SPECIES.ordinal()].getPrimaryAllele();
-			allele1 = parent2[EnumTreeChromosome.SPECIES.ordinal()].getSecondaryAllele();
+			allele0 = (IAlleleTreeSpecies) parent1[EnumTreeChromosome.SPECIES.ordinal()].getPrimaryAllele();
+			allele1 = (IAlleleTreeSpecies) parent2[EnumTreeChromosome.SPECIES.ordinal()].getSecondaryAllele();
 
 			genome0 = genomeOne;
 			genome1 = genomeTwo;
 		} else {
-			allele0 = parent2[EnumTreeChromosome.SPECIES.ordinal()].getPrimaryAllele();
-			allele1 = parent1[EnumTreeChromosome.SPECIES.ordinal()].getSecondaryAllele();
+			allele0 = (IAlleleTreeSpecies) parent2[EnumTreeChromosome.SPECIES.ordinal()].getPrimaryAllele();
+			allele1 = (IAlleleTreeSpecies) parent1[EnumTreeChromosome.SPECIES.ordinal()].getSecondaryAllele();
 
 			genome0 = genomeTwo;
 			genome1 = genomeOne;
 		}
 
-		for (ITreeMutation mutation : PluginArboriculture.treeInterface.getMutations(true)) {
+		IArboristTracker breedingTracker = null;
+		if (playerProfile != null) {
+			breedingTracker = PluginArboriculture.treeInterface.getBreedingTracker(world, playerProfile);
+		}
 
+		List<IMutation> combinations = PluginArboriculture.treeInterface.getCombinations(allele0, allele1, true);
+		for (IMutation mutation : combinations) {
+			ITreeMutation treeMutation = (ITreeMutation) mutation;
 			// Stop blacklisted species.
 			// if (BeeManager.breedingManager.isBlacklisted(mutation.getTemplate()[0].getUID())) {
 			// continue;
 			// }
-			float chance = mutation.getChance(world, x, y, z, allele0, allele1, genome0, genome1);
+
+			float chance = treeMutation.getChance(world, x, y, z, allele0, allele1, genome0, genome1);
+			if (chance <= 0) {
+				continue;
+			}
+
+			// boost chance for researched mutations
+			if (breedingTracker != null && breedingTracker.isResearched(treeMutation)) {
+				float mutationBoost = chance * (Config.researchMutationBoostMultiplier - 1.0f);
+				mutationBoost = Math.min(Config.maxResearchMutationBoostPercent, mutationBoost);
+				chance += mutationBoost;
+			}
+
 			if (chance > world.rand.nextFloat() * 100) {
-				// IApiaristTracker breedingTracker = BeeManager.breedingManager.getApiaristTracker(world);
-				// breedingTracker.registerMutation(mutation);
-				return PluginArboriculture.treeInterface.templateAsChromosomes(mutation.getTemplate());
+				return PluginArboriculture.treeInterface.templateAsChromosomes(treeMutation.getTemplate());
 			}
 		}
 

@@ -31,6 +31,8 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.relauncher.Side;
@@ -116,18 +118,18 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 		float saplingModifier = 1.0f;
 
 		if (Proxies.common.isSimulating(world)) {
-			if (player != null) {
-				ItemStack held = player.inventory.getCurrentItem();
-				if (held != null && held.getItem() instanceof IToolGrafter) {
-					saplingModifier = ((IToolGrafter) held.getItem()).getSaplingModifier(held, world, player, x, y, z);
-					held.damageItem(1, player);
-					if (held.stackSize <= 0) {
-						player.destroyCurrentEquippedItem();
-					}
+			ItemStack held = player.inventory.getCurrentItem();
+			if (held != null && held.getItem() instanceof IToolGrafter) {
+				saplingModifier = ((IToolGrafter) held.getItem()).getSaplingModifier(held, world, player, x, y, z);
+				held.damageItem(1, player);
+				if (held.stackSize <= 0) {
+					player.destroyCurrentEquippedItem();
 				}
 			}
 		}
-		drops.set(getLeafDrop(world, x, y, z, saplingModifier, fortune));
+		GameProfile playerProfile = player.getGameProfile();
+		ArrayList<ItemStack> leafDrops = getLeafDrop(world, playerProfile, x, y, z, saplingModifier, fortune);
+		drops.set(leafDrops);
 	}
 
 	@Override
@@ -137,13 +139,13 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 
 		// leaves not harvested, get drops normally
 		if (ret == null) {
-			ret = getLeafDrop(world, x, y, z, 1.0f, fortune);
+			ret = getLeafDrop(world, null, x, y, z, 1.0f, fortune);
 		}
 
 		return ret;
 	}
 
-	private ArrayList<ItemStack> getLeafDrop(World world, int x, int y, int z, float saplingModifier, int fortune) {
+	private static ArrayList<ItemStack> getLeafDrop(World world, GameProfile playerProfile, int x, int y, int z, float saplingModifier, int fortune) {
 		ArrayList<ItemStack> prod = new ArrayList<ItemStack>();
 
 		TileLeaves tile = getLeafTile(world, x, y, z);
@@ -152,7 +154,14 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 		}
 
 		// Add saplings
-		ITree[] saplings = tile.getTree().getSaplings(world, x, y, z, saplingModifier);
+		ITree[] saplings;
+		try {
+			saplings = tile.getTree().getSaplings(world, playerProfile, x, y, z, saplingModifier);
+		} catch (Throwable ignored) {
+			// legacy
+			saplings = tile.getTree().getSaplings(world, x, y, z, saplingModifier);
+		}
+
 		for (ITree sapling : saplings) {
 			if (sapling != null) {
 				prod.add(PluginArboriculture.treeInterface.getMemberStack(sapling, EnumGermlingType.SAPLING.ordinal()));

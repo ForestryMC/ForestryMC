@@ -76,7 +76,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		protected void registerMutations() {
 			for (BeeDefinition hiveBee0 : overworldHiveBees) {
 				for (BeeDefinition hiveBee1 : overworldHiveBees) {
-					if (hiveBee0 != hiveBee1) {
+					if (hiveBee0.ordinal() < hiveBee1.ordinal()) {
 						registerMutation(hiveBee0, hiveBee1, 15);
 					}
 				}

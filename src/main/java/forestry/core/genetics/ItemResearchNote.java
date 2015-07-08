@@ -136,16 +136,27 @@ public class ItemResearchNote extends ItemForestry {
 				}
 
 				IBreedingTracker tracker = encoded.getRoot().getBreedingTracker(world, player.getGameProfile());
-				if (tracker.isDiscovered(encoded)) {
+				if (tracker.isResearched(encoded)) {
 					player.addChatMessage(new ChatComponentTranslation("for.chat.cannotmemorizeagain"));
 					return false;
 				}
 
-				tracker.registerSpecies((IAlleleSpecies) encoded.getAllele0());
-				tracker.registerSpecies((IAlleleSpecies) encoded.getAllele1());
-				tracker.registerSpecies((IAlleleSpecies) encoded.getTemplate()[root.getKaryotypeKey().ordinal()]);
-				tracker.registerMutation(encoded);
+				IAlleleSpecies species0 = (IAlleleSpecies) encoded.getAllele0();
+				IAlleleSpecies species1 = (IAlleleSpecies) encoded.getAllele1();
+				IAlleleSpecies speciesResult = (IAlleleSpecies) encoded.getTemplate()[root.getKaryotypeKey().ordinal()];
+
+				tracker.registerSpecies(species0);
+				tracker.registerSpecies(species1);
+				tracker.registerSpecies(speciesResult);
+
+				tracker.researchMutation(encoded);
 				player.addChatMessage(new ChatComponentTranslation("for.chat.memorizednote"));
+
+				player.addChatMessage(new ChatComponentTranslation("for.chat.memorizednote2",
+						EnumChatFormatting.GRAY + species0.getName(),
+						EnumChatFormatting.GRAY + species1.getName(),
+						EnumChatFormatting.GREEN + speciesResult.getName()));
+
 				return true;
 			}
 

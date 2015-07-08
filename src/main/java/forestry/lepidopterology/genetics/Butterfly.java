@@ -43,7 +43,6 @@ import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
 import forestry.core.utils.StringUtil;
-import forestry.core.utils.Utils;
 import forestry.plugins.PluginLepidopterology;
 
 public class Butterfly extends IndividualLiving implements IButterfly {
@@ -178,7 +177,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 	@Override
 	public boolean isAcceptedEnvironment(World world, double x, double y, double z) {
-		return isAcceptedEnvironment(world, (int)x, (int)y, (int)z);
+		return isAcceptedEnvironment(world, (int) x, (int) y, (int) z);
 	}
 
 	private boolean isAcceptedEnvironment(World world, int x, int y, int z) {

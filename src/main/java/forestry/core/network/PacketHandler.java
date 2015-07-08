@@ -37,6 +37,7 @@ import forestry.apiculture.network.PacketActiveUpdate;
 import forestry.core.circuits.ContainerSolderingIron;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.gadgets.TileForestry;
+import forestry.core.genetics.BreedingTracker;
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.IGuiSelectable;
@@ -181,7 +182,7 @@ public class PacketHandler {
 
 		EntityPlayer player = Proxies.common.getPlayer();
 		IBreedingTracker tracker = null;
-		String type = packet.getTagCompound().getString("TYPE");
+		String type = packet.getTagCompound().getString(BreedingTracker.TYPE_KEY);
 
 		ISpeciesRoot root = AlleleManager.alleleRegistry.getSpeciesRoot(type);
 		if (root != null) {

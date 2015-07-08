@@ -25,6 +25,8 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
+import com.mojang.authlib.GameProfile;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IAlleleBeeEffect;
@@ -41,15 +43,18 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IAlleleTolerance;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
 import forestry.arboriculture.genetics.FakePollinatable;
 import forestry.arboriculture.genetics.ICheckPollinatable;
 import forestry.core.EnumErrorCode;
+import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.GenericRatings;
@@ -604,29 +609,45 @@ public class Bee extends IndividualLiving implements IBee {
 
 		IBeeGenome genome0;
 		IBeeGenome genome1;
-		IAllele allele0;
-		IAllele allele1;
+		IAlleleSpecies allele0;
+		IAlleleSpecies allele1;
 
 		if (world.rand.nextBoolean()) {
-			allele0 = parent1[EnumBeeChromosome.SPECIES.ordinal()].getPrimaryAllele();
-			allele1 = parent2[EnumBeeChromosome.SPECIES.ordinal()].getSecondaryAllele();
+			allele0 = (IAlleleBeeSpecies) parent1[EnumBeeChromosome.SPECIES.ordinal()].getPrimaryAllele();
+			allele1 = (IAlleleBeeSpecies) parent2[EnumBeeChromosome.SPECIES.ordinal()].getSecondaryAllele();
 
 			genome0 = genomeOne;
 			genome1 = genomeTwo;
 		} else {
-			allele0 = parent2[EnumBeeChromosome.SPECIES.ordinal()].getPrimaryAllele();
-			allele1 = parent1[EnumBeeChromosome.SPECIES.ordinal()].getSecondaryAllele();
+			allele0 = (IAlleleBeeSpecies) parent2[EnumBeeChromosome.SPECIES.ordinal()].getPrimaryAllele();
+			allele1 = (IAlleleBeeSpecies) parent1[EnumBeeChromosome.SPECIES.ordinal()].getSecondaryAllele();
 
 			genome0 = genomeTwo;
 			genome1 = genomeOne;
 		}
 
-		for (IBeeMutation mutation : BeeManager.beeRoot.getMutations(true)) {
-			float chance = mutation.getChance(housing, allele0, allele1, genome0, genome1);
+		GameProfile playerProfile = housing.getOwnerName();
+		IApiaristTracker breedingTracker = BeeManager.beeRoot.getBreedingTracker(world, playerProfile);
+
+		List<IMutation> combinations = BeeManager.beeRoot.getCombinations(allele0, allele1, true);
+		for (IMutation mutation : combinations) {
+			IBeeMutation beeMutation = (IBeeMutation) mutation;
+
+			float chance = beeMutation.getChance(housing, allele0, allele1, genome0, genome1);
+			if (chance <= 0) {
+				continue;
+			}
+
+			// boost chance for researched mutations
+			if (breedingTracker.isResearched(beeMutation)) {
+				float mutationBoost = chance * (Config.researchMutationBoostMultiplier - 1.0f);
+				mutationBoost = Math.min(Config.maxResearchMutationBoostPercent, mutationBoost);
+				chance += mutationBoost;
+			}
+
 			if (chance > world.rand.nextFloat() * 100) {
-				IApiaristTracker breedingTracker = BeeManager.beeRoot.getBreedingTracker(world, housing.getOwnerName());
-				breedingTracker.registerMutation(mutation);
-				return BeeManager.beeRoot.templateAsChromosomes(mutation.getTemplate());
+				breedingTracker.registerMutation(beeMutation);
+				return BeeManager.beeRoot.templateAsChromosomes(beeMutation.getTemplate());
 			}
 		}
 

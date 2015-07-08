@@ -20,6 +20,7 @@ import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.genetics.BreedingTracker;
 
 public class ApiaristTracker extends BreedingTracker implements IApiaristTracker {
@@ -61,13 +62,16 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 
 	@Override
 	public void registerPickup(IIndividual individual) {
-		if (!individual.getGenome().getPrimary().getRoot().getUID().equals(BeeHelper.UID)) {
+		ISpeciesRoot speciesRoot = individual.getGenome().getPrimary().getRoot();
+		if (!speciesRoot.getUID().equals(speciesRootUID())) {
 			return;
 		}
+
 		if (!individual.isPureBred(EnumBeeChromosome.SPECIES)) {
 			return;
 		}
-		if (BeeManager.beeRoot.getCombinations(individual.getGenome().getPrimary()).size() > 0) {
+
+		if (speciesRoot.getCombinations(individual.getGenome().getPrimary()).size() > 0) {
 			return;
 		}
 

@@ -40,7 +40,6 @@ public class BeeMutation extends Mutation implements IBeeMutationCustom {
 
 	@Override
 	public float getChance(IBeeHousing housing, IAlleleBeeSpecies allele0, IAlleleBeeSpecies allele1, IBeeGenome genome0, IBeeGenome genome1) {
-
 		World world = housing.getWorld();
 		int x = housing.getXCoord();
 		int y = housing.getYCoord();
@@ -53,19 +52,8 @@ public class BeeMutation extends Mutation implements IBeeMutationCustom {
 
 		processedChance *= housing.getMutationModifier(genome0, genome1, 1f);
 		processedChance *= BeeManager.beeRoot.getBeekeepingMode(world).getMutationModifier(genome0, genome1, 1f);
-		if (processedChance <= 0) {
-			return 0;
-		}
 
-		if (this.species0.getUID().equals(allele0.getUID()) && this.species1.getUID().equals(allele1.getUID())) {
-			return processedChance;
-		}
-		if (this.species1.getUID().equals(allele0.getUID()) && this.species0.getUID().equals(allele1.getUID())) {
-			return processedChance;
-		}
-
-		return 0;
-
+		return processedChance;
 	}
 
 }

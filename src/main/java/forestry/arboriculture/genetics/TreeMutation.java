@@ -12,6 +12,7 @@ package forestry.arboriculture.genetics;
 
 import net.minecraft.world.World;
 
+import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreeMutation;
 import forestry.api.arboriculture.ITreeRoot;
@@ -40,21 +41,19 @@ public class TreeMutation extends Mutation implements ITreeMutation {
 	
 	@Override
 	public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
+		return getChance(world, x, y, z, (IAlleleTreeSpecies) allele0, (IAlleleTreeSpecies) allele1, (ITreeGenome) genome0, (ITreeGenome) genome1);
+	}
+
+	@Override
+	public float getChance(World world, int x, int y, int z, IAlleleTreeSpecies allele0, IAlleleTreeSpecies allele1, ITreeGenome genome0, ITreeGenome genome1) {
 		float processedChance = super.getChance(world, x, y, z, allele0, allele1, genome0, genome1);
 		if (processedChance <= 0) {
 			return 0;
 		}
 
-		processedChance *= PluginArboriculture.treeInterface.getTreekeepingMode(world).getMutationModifier((ITreeGenome) genome0, (ITreeGenome) genome1, 1f);
+		processedChance *= PluginArboriculture.treeInterface.getTreekeepingMode(world).getMutationModifier(genome0, genome1, 1f);
 
-		if (this.species0.getUID().equals(allele0.getUID()) && this.species1.getUID().equals(allele1.getUID())) {
-			return processedChance;
-		}
-		if (this.species1.getUID().equals(allele0.getUID()) && this.species0.getUID().equals(allele1.getUID())) {
-			return processedChance;
-		}
-
-		return 0;
+		return processedChance;
 	}
 
 }
