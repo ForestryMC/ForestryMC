@@ -14,6 +14,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,6 +26,7 @@ import java.util.TreeMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -33,11 +35,14 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.oredict.OreDictionary;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.genetics.IFlower;
 import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
+import forestry.plugins.PluginManager;
 
 public final class FlowerRegistry implements IFlowerRegistry {
 
@@ -141,7 +146,19 @@ public final class FlowerRegistry implements IFlowerRegistry {
 		} else {
 			meta = world.getBlockMetadata(x, y, z);
 		}
-
+		if (PluginManager.Module.AGRICRAFT.isEnabled() && (flowerType == FlowerManager.FlowerTypeWheat || flowerType == FlowerManager.FlowerTypeNether)) {
+			Block cropBlock = GameRegistry.findBlock("AgriCraft", "crops");
+			if(block == cropBlock) {
+				ArrayList<ItemStack> drops = block.getDrops(world, x, y, z, 7, 0);
+				if (drops.get(1).getItem() == Items.wheat_seeds && flowerType == FlowerManager.FlowerTypeWheat) {
+					return true;
+				}
+				if (drops.get(1).getItem() == Items.nether_wart && flowerType == FlowerManager.FlowerTypeNether) {
+					return true;
+				}
+			}
+		}
+		
 		Flower flower = new Flower(block, meta, 0);
 		List<IFlower> acceptedFlowers = this.registeredFlowers.get(flowerType);
 		return acceptedFlowers.contains(flower);
