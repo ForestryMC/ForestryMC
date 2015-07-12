@@ -634,7 +634,7 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 				return true;
 			}
 
-			if (GuiUtil.isIndexInRange(slotIndex, SLOT_STASH_1, SLOT_STASH_COUNT)) {
+			if (GuiUtil.isIndexInRange(slotIndex, SLOT_STASH_1, (SLOT_STASH_COUNT+SLOT_RESERVOIR_COUNT))) {
 				return !FuelManager.moistenerResource.containsKey(itemstack);
 			}
 
