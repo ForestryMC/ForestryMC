@@ -253,6 +253,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 			}
 			if (grainSeed != null) {
 				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{grainSeed}, Fluids.SEEDOIL.getFluid(seedamount));
+				RecipeManagers.moistenerManager.addRecipe(grainSeed, new ItemStack(Blocks.mycelium), 5000);
 			}
 			if (grainSeed != null && grainBlock != null) {
 				Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(grainSeed, grainBlock, 7));

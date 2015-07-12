@@ -202,6 +202,7 @@ public class PluginNatura extends ForestryPlugin {
 		ArrayList<ItemStack> seedList = new ArrayList<ItemStack>();
 		if (seedBarley != null) {
 			seedList.add(seedBarley);
+			RecipeManagers.moistenerManager.addRecipe(seedBarley, new ItemStack(Blocks.mycelium), 5000);
 		}
 		if (seedCotton != null) {
 			seedList.add(seedCotton);
