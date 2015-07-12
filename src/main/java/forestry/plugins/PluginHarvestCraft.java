@@ -19,9 +19,12 @@ import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.farming.Farmables;
+import forestry.api.fuels.FuelManager;
+import forestry.api.fuels.MoistenerFuel;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.GameMode;
 import forestry.core.config.Defaults;
+import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.RecipeUtil;
@@ -246,6 +249,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 			Block grainBlock = GameRegistry.findBlock(HC, "pam" + grainName + "Crop");
 			if (grain != null && wheatamount.stackSize > 0) {
 				Proxies.common.addRecipe(wheatamount, " X ", "X#X", " X ", '#', Blocks.dirt, 'X', grain);
+				FuelManager.moistenerResource.put(grain, new MoistenerFuel(grain, ForestryItem.mouldyWheat.getItemStack(), 0,	300));
 			}
 			if (grainSeed != null) {
 				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{grainSeed}, Fluids.SEEDOIL.getFluid(seedamount));

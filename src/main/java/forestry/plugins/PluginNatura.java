@@ -23,6 +23,8 @@ import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import forestry.api.farming.Farmables;
+import forestry.api.fuels.FuelManager;
+import forestry.api.fuels.MoistenerFuel;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
@@ -257,6 +259,7 @@ public class PluginNatura extends ForestryPlugin {
 				ItemStack compostWheat = GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat");
 				Proxies.common.addRecipe(compostWheat, " X ", "X#X", " X ", '#', Blocks.dirt, 'X', itemBarley);
 			}
+			FuelManager.moistenerResource.put(itemBarley, new MoistenerFuel(itemBarley, ForestryItem.mouldyWheat.getItemStack(), 0,	300));
 		}
 	}
 
