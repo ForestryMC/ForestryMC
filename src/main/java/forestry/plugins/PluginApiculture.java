@@ -342,6 +342,8 @@ public class PluginApiculture extends ForestryPlugin {
 		createAlleles();
 		BeeDefinition.initBees();
 
+		AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement("forestry.speciesArgrarian", BeeDefinition.AGRARIAN.getGenome().getPrimary());
+
 		// Hives
 		createHives();
 		registerBeehiveDrops();
