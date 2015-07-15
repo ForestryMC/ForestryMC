@@ -169,6 +169,19 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 			return null;
 		}
 
+		public static boolean isInventoryResource(ItemStack resource)
+		{
+			if(resource == null) {
+				return false;
+			}
+			
+			for (Recipe recipe: recipes) {
+				if (recipe.internal.isIngredient(resource)) {
+					return true;
+				}
+			}
+			return false;
+		}
 		public static boolean isPlan(ItemStack plan) {
 			for (Recipe recipe : recipes) {
 				if (StackUtils.isIdenticalItem(recipe.getPlan(), plan)) {
@@ -577,8 +590,10 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 				return RecipeManager.findMatchingSmelting(itemStack) != null;
 			} else if (slotIndex == SLOT_PLAN) {
 				return RecipeManager.isPlan(itemStack);
+			} else if (GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT)) {
+				return RecipeManager.isInventoryResource(itemStack);
 			}
-			return GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+			return false;
 		}
 
 		@Override
