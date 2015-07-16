@@ -51,5 +51,8 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 		public boolean canSlotAccept(int slotIndex, ItemStack itemstack) {
 			return speciesRoot.isMember(itemstack);
 		}
+
+		@Override
+		public boolean canExtractItem(int slotIndex, ItemStack stack, int side) { return true;	}
 	}
 }
