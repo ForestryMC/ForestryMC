@@ -24,7 +24,11 @@ import forestry.core.worldgen.WorldGenBase;
 
 public abstract class WorldGenArboriculture extends WorldGenBase {
 
-	private static final BlockType vine = new BlockType(Blocks.vine, 0);
+	private static final BlockType vineNorth = new BlockType(Blocks.vine, 1);
+	private static final BlockType vineSouth = new BlockType(Blocks.vine, 4);
+	private static final BlockType vineWest = new BlockType(Blocks.vine, 8);
+	private static final BlockType vineEast = new BlockType(Blocks.vine, 2);
+
 	private static final BlockType air = new BlockTypeVoid();
 
 	protected final ITreeGenData tree;
@@ -184,7 +188,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 		addBlock(x, y, z, leaf, replace);
 	}
 
-	protected final void addVine(int x, int y, int z) {
+	protected final void addVine(int x, int y, int z, BlockType vine) {
 		addBlock(x, y, z, vine, EnumReplaceMode.NONE);
 	}
 
@@ -194,16 +198,16 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 		}
 
 		if (rand.nextFloat() < chance) {
-			addVine(x - 1, y, z);
+			addVine(x - 1, y, z, vineWest);
 		}
 		if (rand.nextFloat() < chance) {
-			addVine(x + 1, y, z);
+			addVine(x + 1, y, z, vineEast);
 		}
 		if (rand.nextFloat() < chance) {
-			addVine(x, y, z - 1);
+			addVine(x, y, z - 1, vineNorth);
 		}
 		if (rand.nextFloat() < chance) {
-			addVine(x, y, z + 1);
+			addVine(x, y, z + 1, vineSouth);
 		}
 	}
 
