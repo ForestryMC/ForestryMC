@@ -578,9 +578,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 			} else if (slotIndex == SLOT_PLAN) {
 				return RecipeManager.isPlan(itemStack);
 			} else if (GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT)) {
-				if (tile.getRecipe() != null) {
-					return tile.getRecipe().internal.isIngredient(itemStack);
-				}else if (RecipeManager.isPlan(itemStack) ) {
+				if (RecipeManager.isPlan(itemStack) ) {
 					return false;
 				}else if (RecipeManager.findMatchingSmelting(itemStack) != null) {
 					return false;
