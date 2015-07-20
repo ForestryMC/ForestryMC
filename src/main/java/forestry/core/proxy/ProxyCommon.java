@@ -209,7 +209,7 @@ public class ProxyCommon {
 	}
 
 	public void playSoundFX(World world, int x, int y, int z, Block block) {
-		Proxies.net.sendNetworkPacket(new PacketFXSignal(PacketFXSignal.SoundFXType.LEAF, x, y, z, block, 0));
+		Proxies.net.sendNetworkPacket(new PacketFXSignal(PacketFXSignal.SoundFXType.LEAF, x, y, z, block, 0), world);
 	}
 
 	public void playSoundFX(World world, int x, int y, int z, String sound, float volume, float pitch) {
@@ -244,7 +244,7 @@ public class ProxyCommon {
 	public void sendFXSignal(PacketFXSignal.VisualFXType visualFX, PacketFXSignal.SoundFXType soundFX, World world, int xCoord, int yCoord, int zCoord,
 			Block block, int i) {
 		if (Proxies.common.isSimulating(world)) {
-			Proxies.net.sendNetworkPacket(new PacketFXSignal(visualFX, soundFX, xCoord, yCoord, zCoord, block, i));
+			Proxies.net.sendNetworkPacket(new PacketFXSignal(visualFX, soundFX, xCoord, yCoord, zCoord, block, i), world);
 		}
 	}
 

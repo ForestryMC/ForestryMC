@@ -265,7 +265,7 @@ public class MachineTrader extends TileBase {
 				String newAddressName = newAddress.getName();
 				if (newAddressName != null && newAddressName.equals(addressName)) {
 					PacketTraderAddress packetResponse = new PacketTraderAddress(this, addressName);
-					Proxies.net.sendNetworkPacket(packetResponse);
+					Proxies.net.sendNetworkPacket(packetResponse, worldObj);
 				}
 			}
 		}

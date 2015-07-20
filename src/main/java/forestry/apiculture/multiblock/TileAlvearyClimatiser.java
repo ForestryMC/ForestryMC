@@ -125,7 +125,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 		if (worldObj.isRemote) {
 			worldObj.func_147479_m(xCoord, yCoord, zCoord);
 		} else {
-			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this));
+			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), worldObj);
 		}
 	}
 

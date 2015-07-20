@@ -27,8 +27,6 @@ public class Defaults {
 	public static final int FLAG_BLOCK_UPDATE = 1;
 	public static final int FLAG_BLOCK_SYNCH = 2;
 
-	public static final int NET_MAX_UPDATE_DISTANCE = 50;
-
 	public static final int BUCKET_VOLUME = 1000;
 	public static final int FLUID_PER_HONEY_DROP = 100;
 

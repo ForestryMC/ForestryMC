@@ -321,7 +321,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	public void sendNetworkUpdate() {
-		Proxies.net.sendNetworkPacket(new PacketTileStream(this));
+		Proxies.net.sendNetworkPacket(new PacketTileStream(this), worldObj);
 	}
 
 	private void sendNetworkUpdateRipening() {
@@ -332,7 +332,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		colourFruits = newColourFruits;
 
 		PacketRipeningUpdate ripeningUpdate = new PacketRipeningUpdate(this);
-		Proxies.net.sendNetworkPacket(ripeningUpdate);
+		Proxies.net.sendNetworkPacket(ripeningUpdate, worldObj);
 	}
 
 	private static final short hasFruitFlag = 1;

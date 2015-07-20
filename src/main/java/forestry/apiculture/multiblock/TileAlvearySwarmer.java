@@ -224,7 +224,7 @@ public class TileAlvearySwarmer extends TileAlvearyWithGui implements ISidedInve
 		this.active = active;
 
 		if (!worldObj.isRemote) {
-			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this));
+			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), worldObj);
 		}
 	}
 

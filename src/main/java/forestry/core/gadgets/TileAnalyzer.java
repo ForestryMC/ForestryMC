@@ -150,7 +150,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 				if (added) {
 					setInventorySlotContents(SLOT_ANALYZE, null);
 					PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
-					Proxies.net.sendNetworkPacket(packet);
+					Proxies.net.sendNetworkPacket(packet, worldObj);
 				}
 
 				getErrorLogic().setCondition(!added, EnumErrorCode.NOSPACE);
@@ -186,7 +186,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		setInventorySlotContents(SLOT_ANALYZE, inputStack);
 		slot.setStackInSlot(null);
 		PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
-		Proxies.net.sendNetworkPacket(packet);
+		Proxies.net.sendNetworkPacket(packet, worldObj);
 		return true;
 	}
 

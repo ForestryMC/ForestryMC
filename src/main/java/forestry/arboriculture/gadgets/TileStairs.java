@@ -72,7 +72,7 @@ public class TileStairs extends TileEntity implements IStreamable {
 	}
 
 	public void sendNetworkUpdate() {
-		Proxies.net.sendNetworkPacket(new PacketTileStream(this));
+		Proxies.net.sendNetworkPacket(new PacketTileStream(this), worldObj);
 	}
 
 	@Override

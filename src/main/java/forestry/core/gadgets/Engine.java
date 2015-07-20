@@ -175,7 +175,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection, IAct
 		this.active = active;
 
 		if (!worldObj.isRemote) {
-			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this));
+			Proxies.net.sendNetworkPacket(new PacketActiveUpdate(this), worldObj);
 		}
 	}
 

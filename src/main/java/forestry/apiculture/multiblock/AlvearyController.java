@@ -342,7 +342,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	@Override
 	public void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess) {
 		PacketGuiUpdate packet = new PacketGuiUpdate(this);
-		Proxies.net.sendNetworkPacket(packet);
+		Proxies.net.sendNetworkPacket(packet, worldObj);
 
 		if (oldAccess == EnumAccess.SHARED || newAccess == EnumAccess.SHARED) {
 			// pipes connected to this need to update

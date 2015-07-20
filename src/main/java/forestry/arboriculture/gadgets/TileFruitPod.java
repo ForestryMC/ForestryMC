@@ -135,7 +135,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	}
 
 	private void sendNetworkUpdateRipening() {
-		Proxies.net.sendNetworkPacket(new PacketRipeningUpdate(this));
+		Proxies.net.sendNetworkPacket(new PacketRipeningUpdate(this), worldObj);
 	}
 
 	public void fromRipeningPacket(int newMaturity) {

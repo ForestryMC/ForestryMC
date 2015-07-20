@@ -148,7 +148,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		this.active = active;
 
 		if (!housing.getWorld().isRemote) {
-			Proxies.net.sendNetworkPacket(new PacketBeekeepingLogicActive(housing));
+			Proxies.net.sendNetworkPacket(new PacketBeekeepingLogicActive(housing), housing.getWorld());
 		}
 	}
 

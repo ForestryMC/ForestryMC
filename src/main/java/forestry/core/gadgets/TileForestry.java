@@ -165,7 +165,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	/* INetworkedEntity */
 	public final void sendNetworkUpdate() {
 		PacketTileStream packet = new PacketTileStream(this);
-		Proxies.net.sendNetworkPacket(packet);
+		Proxies.net.sendNetworkPacket(packet, worldObj);
 	}
 
 	@Override
