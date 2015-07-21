@@ -245,7 +245,7 @@ public class BlockFarm extends BlockStructure {
 		ItemStack base = EnumFarmBlockTexture.BRICK_STONE.getBase();
 
 		if (tile instanceof TileFarm) {
-			base = ((TileFarm) tile).farmBlockTexture.getBase();
+			base = ((TileFarm) tile).getFarmBlockTexture().getBase();
 		}
 
 		Block block = StackUtils.getBlock(base);

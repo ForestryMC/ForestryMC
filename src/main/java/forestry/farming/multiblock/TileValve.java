@@ -23,10 +23,6 @@ import forestry.core.interfaces.ILiquidTankContainer;
 
 public class TileValve extends TileFarm implements ILiquidTankContainer {
 
-	public TileValve() {
-		this.fixedType = TYPE_VALVE;
-	}
-
 	/* ILIQUIDTANKCONTAINER */
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {

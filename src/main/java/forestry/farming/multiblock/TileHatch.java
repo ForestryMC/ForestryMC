@@ -42,7 +42,6 @@ public class TileHatch extends TileFarm implements ISidedInventory, IFarmCompone
 	private final AdjacentInventoryCache inventoryCache;
 
 	public TileHatch() {
-		this.fixedType = TYPE_HATCH;
 		this.tileCache = new AdjacentTileCache(this);
 		this.inventoryCache = new AdjacentInventoryCache(this, tileCache, new ITileFilter() {
 			@Override

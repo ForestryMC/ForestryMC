@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
+import net.minecraft.world.World;
+
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.farming.DefaultFarmListener;
@@ -24,7 +26,6 @@ public class TileControl extends TileFarm implements IFarmComponent.Listener {
 	private final IFarmListener farmListener;
 
 	public TileControl() {
-		this.fixedType = TYPE_CONTROL;
 		this.farmListener = new ControlFarmListener(this);
 	}
 
@@ -35,11 +36,9 @@ public class TileControl extends TileFarm implements IFarmComponent.Listener {
 
 	private static class ControlFarmListener extends DefaultFarmListener {
 		private final TileControl tile;
-		private final Vect position;
 
 		public ControlFarmListener(TileControl tile) {
 			this.tile = tile;
-			this.position = new Vect(tile.xCoord, tile.yCoord, tile.zCoord);
 		}
 
 		@Override
@@ -48,23 +47,11 @@ public class TileControl extends TileFarm implements IFarmComponent.Listener {
 		}
 
 		private boolean hasRedstoneSignal(ForgeDirection direction) {
-			Vect side = position.add(direction);
+			Vect side = new Vect(tile).add(direction);
+			int dir = direction.getOpposite().ordinal();
+			World world = tile.getWorldObj();
 
-			ForgeDirection opp = direction.getOpposite();
-			int dir;
-			if (opp.offsetZ < 0) {
-				dir = 2;
-			} else if (opp.offsetZ > 0) {
-				dir = 3;
-			} else if (opp.offsetX < 0) {
-				dir = 4;
-			} else if (opp.offsetX > 0) {
-				dir = 5;
-			} else {
-				dir = 0;
-			}
-
-			return tile.getWorldObj().getIndirectPowerLevelTo(side.x, side.y, side.z, dir) > 0 || tile.getWorldObj().isBlockProvidingPowerTo(side.x, side.y, side.z, dir) > 0;
+			return world.getIndirectPowerLevelTo(side.x, side.y, side.z, dir) > 0 || world.isBlockProvidingPowerTo(side.x, side.y, side.z, dir) > 0;
 		}
 	}
 

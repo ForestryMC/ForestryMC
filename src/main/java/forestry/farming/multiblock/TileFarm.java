@@ -22,14 +22,11 @@ import net.minecraft.util.StatCollector;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.farming.IFarmComponent;
 import forestry.core.config.Config;
-import forestry.core.interfaces.IClimatised;
 import forestry.core.interfaces.IHintSource;
 import forestry.core.interfaces.ISocketable;
 import forestry.core.inventory.IInventoryAdapter;
@@ -51,6 +48,8 @@ public abstract class TileFarm extends RectangularMultiblockTileEntityBase imple
 	public static final int TYPE_HATCH = 5;
 	public static final int TYPE_VALVE = 6;
 	public static final int TYPE_CONTROL = 7;
+
+	private EnumFarmBlockTexture farmBlockTexture = EnumFarmBlockTexture.BRICK_STONE;
 
 	@Override
 	public void openGui(EntityPlayer player) {
@@ -83,8 +82,6 @@ public abstract class TileFarm extends RectangularMultiblockTileEntityBase imple
 	}
 
 	/* CONSTRUCTION MATERIAL */
-	EnumFarmBlockTexture farmBlockTexture = EnumFarmBlockTexture.BRICK_STONE;
-	protected int fixedType = -1;
 
 	public void setFarmBlockTexture(EnumFarmBlockTexture farmBlockTexture) {
 		if (this.farmBlockTexture != farmBlockTexture) {
@@ -99,15 +96,6 @@ public abstract class TileFarm extends RectangularMultiblockTileEntityBase imple
 
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		/*
-		 * if(fixedType >= 0) return farmBlockTexture.getIcon(fixedType);
-		 * 
-		 * int type = 0; if (meta == 1) type = TYPE_BAND;
-		 * 
-		 * if (meta == 0 && side == 2) type = TYPE_REVERSE; else if (meta == 0 && (side == 0 || side == 1)) type = TYPE_TOP;
-		 * 
-		 * return farmBlockTexture.getIcon(type);
-		 */
 		return null;
 	}
 
