@@ -30,6 +30,12 @@ public class MutableVect implements IVect {
 		this.z = z;
 	}
 
+	public MutableVect(ForgeDirection direction) {
+		this.x = direction.offsetX;
+		this.y = direction.offsetY;
+		this.z = direction.offsetZ;
+	}
+
 	public MutableVect(int[] dim) {
 		if (dim.length != 3) {
 			throw new RuntimeException("Cannot instantiate a vector with less or more than 3 points.");

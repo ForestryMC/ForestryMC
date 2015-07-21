@@ -37,8 +37,8 @@ public class JubilanceProviderHermit extends JubilanceDefault {
 
 	private static AxisAlignedBB getBounding(IBeeGenome genome, IBeeHousing housing, float modifier) {
 		int[] areaAr = genome.getTerritory();
-		Vect area = new Vect(areaAr[0], areaAr[1], areaAr[2]).multiply(modifier);
-		Vect offset = new Vect(-Math.round(area.x / 2), -Math.round(area.y / 2), -Math.round(area.z / 2));
+		Vect area = new Vect(areaAr).multiply(modifier);
+		Vect offset = area.multiply(-1 / 2.0f);
 		
 		ChunkCoordinates housingCoordinates = housing.getCoordinates();
 		

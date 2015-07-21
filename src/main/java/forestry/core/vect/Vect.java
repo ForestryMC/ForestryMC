@@ -13,6 +13,7 @@ package forestry.core.vect;
 import java.util.Random;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 
 import net.minecraftforge.common.util.ForgeDirection;
@@ -38,7 +39,15 @@ public class Vect implements IVect {
 	}
 
 	public Vect(IVect vect) {
-		this(vect.getX(), vect.getY(), vect.getZ());
+		this.x = vect.getX();
+		this.y = vect.getY();
+		this.z = vect.getZ();
+	}
+
+	public Vect(ForgeDirection direction) {
+		this.x = direction.offsetX;
+		this.y = direction.offsetY;
+		this.z = direction.offsetZ;
 	}
 
 	public Vect(int x, int y, int z) {
@@ -51,6 +60,12 @@ public class Vect implements IVect {
 		this.x = coordinates.posX;
 		this.y = coordinates.posY;
 		this.z = coordinates.posZ;
+	}
+
+	public Vect(TileEntity entity) {
+		this.x = entity.xCoord;
+		this.y = entity.yCoord;
+		this.z = entity.zCoord;
 	}
 
 	public Vect(Entity entity) {
@@ -101,6 +116,10 @@ public class Vect implements IVect {
 	@Override
 	public int[] toArray() {
 		return new int[]{x, y, z};
+	}
+
+	public Vect multiply(int factor) {
+		return new Vect(x * factor, y * factor, z * factor);
 	}
 
 	public Vect multiply(float factor) {

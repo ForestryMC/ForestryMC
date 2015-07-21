@@ -47,8 +47,8 @@ public class AlleleEffectGlacial extends AlleleEffectThrottled {
 		}
 
 		int[] areaAr = genome.getTerritory();
-		Vect area = new Vect(areaAr[0], areaAr[1], areaAr[2]);
-		Vect offset = new Vect(-Math.round(area.x / 2), -Math.round(area.y / 2), -Math.round(area.z / 2));
+		Vect area = new Vect(areaAr);
+		Vect offset = area.multiply(-1 / 2.0f);
 		Vect housingCoords = new Vect(housing.getCoordinates());
 
 		for (int i = 0; i < 10; i++) {

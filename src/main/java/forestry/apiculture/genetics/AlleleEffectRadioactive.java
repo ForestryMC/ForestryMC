@@ -48,8 +48,8 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 		}
 
 		int[] areaAr = genome.getTerritory();
-		Vect area = new Vect(areaAr[0] * 2, areaAr[1] * 2, areaAr[2] * 2);
-		Vect offset = new Vect(-Math.round(area.x / 2), -Math.round(area.y / 2), -Math.round(area.z / 2));
+		Vect area = new Vect(areaAr).multiply(2);
+		Vect offset = area.multiply(-1 / 2.0f);
 
 		// Radioactivity hurts players and mobs
 		Vect min = new Vect(housing.getCoordinates()).add(offset);
@@ -89,7 +89,7 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 		// Radioactivity destroys environment
 		for (int i = 0; i < 20; i++) {
 
-			Vect randomPos = new Vect(rand.nextInt(area.x), rand.nextInt(area.y), rand.nextInt(area.z));
+			Vect randomPos = Vect.getRandomPositionInArea(rand, area);
 
 			Vect posHousing = new Vect(housing.getCoordinates());
 			Vect posBlock = randomPos.add(posHousing);

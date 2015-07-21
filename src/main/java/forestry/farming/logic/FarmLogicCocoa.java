@@ -200,7 +200,7 @@ public class FarmLogicCocoa extends FarmLogic {
 		for (int i = -1; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
 				for (int k = -1; k < 2; k++) {
-					Vect candidate = new Vect(position.x + i, position.y + j, position.z + k);
+					Vect candidate = position.add(i, j, k);
 					if (candidate.equals(position)) {
 						continue;
 					}

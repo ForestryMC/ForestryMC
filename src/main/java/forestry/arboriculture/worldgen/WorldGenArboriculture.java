@@ -18,7 +18,6 @@ import com.mojang.authlib.GameProfile;
 import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.gadgets.TileSapling;
 import forestry.core.utils.Utils;
-import forestry.core.vect.Vect;
 import forestry.core.worldgen.BlockType;
 import forestry.core.worldgen.WorldGenBase;
 
@@ -84,10 +83,6 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	public abstract BlockType getLeaf(GameProfile owner);
 
 	public abstract BlockType getWood();
-
-	public final Vect getStartVector() {
-		return new Vect(startX, startY, startZ);
-	}
 
 	protected void generateTreeTrunk(int height, int girth) {
 		generateTreeTrunk(height, girth, 0);

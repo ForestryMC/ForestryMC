@@ -49,11 +49,11 @@ public class AlleleLeafEffectNone extends AlleleCategorized implements IAlleleLe
 
 	protected static AxisAlignedBB getBounding(int x, int y, int z, float modifier) {
 		int[] areaAr = DEFAULT_EFFECT_AREA;
-		Vect area = new Vect(areaAr[0], areaAr[1], areaAr[2]).multiply(modifier);
-		Vect offset = new Vect(-Math.round(area.x / 2), -Math.round(area.y / 2), -Math.round(area.z / 2));
+		Vect area = new Vect(areaAr).multiply(modifier);
+		Vect offset = area.multiply(-1 / 2.0f);
 
-		Vect min = new Vect(x + offset.x, y + offset.y, y + offset.z);
-		Vect max = new Vect(x + offset.x + area.x, y + offset.y + area.y, y + offset.z + area.z);
+		Vect min = offset.add(x, y, z);
+		Vect max = min.add(area);
 
 		return AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
 	}
