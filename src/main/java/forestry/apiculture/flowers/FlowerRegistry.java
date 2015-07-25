@@ -111,10 +111,6 @@ public final class FlowerRegistry implements IFlowerRegistry {
 
 		for (String flowerType : flowerTypes) {
 			Set<IFlower> flowers = this.registeredFlowers.get(flowerType);
-
-			if (flowers.contains(newFlower)) {
-				throw new IllegalArgumentException("Flower type already exists: " + flowerType + " for flower " + block);
-			}
 			flowers.add(newFlower);
 
 			Set<Block> blocks = this.registeredBlocks.get(flowerType);

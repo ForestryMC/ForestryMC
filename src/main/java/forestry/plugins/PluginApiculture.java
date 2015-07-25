@@ -13,12 +13,9 @@ package forestry.plugins;
 import com.google.common.collect.ImmutableMap;
 
 import java.io.File;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -294,7 +291,14 @@ public class PluginApiculture extends ForestryPlugin {
 			}
 		}
 
-		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
+		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "2.0.0");
+		if (!config.getLoadedConfigVersion().equals(config.getDefinedConfigVersion())) {
+			boolean deleted = configFile.delete();
+			if (deleted) {
+				config = new LocalizedConfiguration(configFile, "2.0.0");
+				setDefaultsForConfig();
+			}
+		}
 
 		List<IBeekeepingMode> beekeepingModes = BeeManager.beeRoot.getBeekeepingModes();
 		String[] validBeekeepingModeNames = new String[beekeepingModes.size()];
@@ -420,10 +424,6 @@ public class PluginApiculture extends ForestryPlugin {
 		flowerRegistry.registerPlantableFlower(Blocks.red_mushroom, 0, 1.0, FlowerManager.FlowerTypeMushrooms);
 		flowerRegistry.registerPlantableFlower(Blocks.cactus, 0, 1.0, FlowerManager.FlowerTypeCacti);
 
-		DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols(Locale.ENGLISH);
-		DecimalFormat weightDecimalFormat = new DecimalFormat("#.000", decimalFormatSymbols);
-		weightDecimalFormat.setGroupingUsed(false);
-
 		for (String flowerType : FlowerManager.flowerRegistry.getFlowerTypes()) {
 			Set<IFlower> flowers = FlowerManager.flowerRegistry.getAcceptableFlowers(flowerType);
 			List<String> acceptedFlowerNames = new ArrayList<String>();
@@ -437,9 +437,7 @@ public class PluginApiculture extends ForestryPlugin {
 					}
 
 					if (flower.isPlantable()) {
-						double weight = flower.getWeight();
-						String weightString = weightDecimalFormat.format(weight);
-						plantableFlowerNames.add(weightString + ':' + name);
+						plantableFlowerNames.add(name);
 					} else {
 						acceptedFlowerNames.add(name);
 					}
@@ -454,7 +452,7 @@ public class PluginApiculture extends ForestryPlugin {
 		}
 	}
 
-	private void loadOldConfig() {
+	private static void loadOldConfig() {
 		// Config
 		forestry.core.config.deprecated.Configuration apicultureConfig = new forestry.core.config.deprecated.Configuration();
 
@@ -1032,15 +1030,6 @@ public class PluginApiculture extends ForestryPlugin {
 		for (String string : property.getStringList()) {
 			int idx = string.indexOf(':');
 
-			String weightString = string.substring(0, idx);
-			double weight;
-			try {
-				weight = Double.parseDouble(weightString);
-			} catch (NumberFormatException e) {
-				Proxies.log.warning("Invalid weight for plantable flower in config. (" + property.getName() + ')');
-				continue;
-			}
-
 			String itemStackString = string.substring(idx + 1);
 			StackUtils.Stack plantableFlower = StackUtils.parseStackString(itemStackString, OreDictionary.WILDCARD_VALUE);
 			if (plantableFlower == null) {
@@ -1050,7 +1039,7 @@ public class PluginApiculture extends ForestryPlugin {
 			Block plantableFlowerBlock = plantableFlower.getBlock();
 			int meta = plantableFlower.getMeta();
 			if (plantableFlowerBlock != null) {
-				FlowerManager.flowerRegistry.registerPlantableFlower(plantableFlowerBlock, meta, weight, flowerType);
+				FlowerManager.flowerRegistry.registerPlantableFlower(plantableFlowerBlock, meta, 1.0, flowerType);
 			} else {
 				Proxies.log.warning("No block found for '" + plantableFlower + "' in config '" + property.getName() + "'.");
 			}
