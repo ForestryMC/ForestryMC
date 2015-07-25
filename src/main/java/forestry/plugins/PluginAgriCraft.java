@@ -88,7 +88,7 @@ public class PluginAgriCraft extends ForestryPlugin {
 		}
 
 		Block cropBlock = GameRegistry.findBlock(AgriCraft, "crops");
-		if (cropBlock != null) {
+		if (cropBlock != null && PluginManager.Module.FARMING.isEnabled()) {
 			Farmables.farmables.get("farmOrchard").add(new FarmableBasicAgricraft(cropBlock, 7));
 		}
 	}
