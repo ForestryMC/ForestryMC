@@ -1028,10 +1028,7 @@ public class PluginApiculture extends ForestryPlugin {
 
 	private static void parsePlantableFlowers(Property property, String flowerType) {
 		for (String string : property.getStringList()) {
-			int idx = string.indexOf(':');
-
-			String itemStackString = string.substring(idx + 1);
-			StackUtils.Stack plantableFlower = StackUtils.parseStackString(itemStackString, OreDictionary.WILDCARD_VALUE);
+			StackUtils.Stack plantableFlower = StackUtils.parseStackString(string, OreDictionary.WILDCARD_VALUE);
 			if (plantableFlower == null) {
 				continue;
 			}
