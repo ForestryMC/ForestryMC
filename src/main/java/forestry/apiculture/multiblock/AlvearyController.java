@@ -64,6 +64,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	private final Set<IBeeListener> beeListeners = new HashSet<IBeeListener>();
 	private final Set<IAlvearyComponent.Climatiser> climatisers = new HashSet<IAlvearyComponent.Climatiser>();
 	private final Set<IAlvearyComponent.Active> activeComponents = new HashSet<IAlvearyComponent.Active>();
+	private final Set<IAlvearyComponent> allComponents = new HashSet<IAlvearyComponent>();
 
 	// CLIENT
 	private int breedingProgressPercent = 0;
@@ -102,53 +103,66 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
+	public Iterable<IAlvearyComponent> getComponents() {
+		return allComponents;
+	}
+
+	@Override
 	public void onAttachedPartWithMultiblockData(IMultiblockPart part, NBTTagCompound data) {
 		this.readFromNBT(data);
 	}
 
 	@Override
 	protected void onBlockAdded(IMultiblockPart newPart) {
-		if (newPart instanceof IAlvearyComponent.BeeModifier) {
-			IAlvearyComponent.BeeModifier alvearyBeeModifier = (IAlvearyComponent.BeeModifier) newPart;
-			IBeeModifier beeModifier = alvearyBeeModifier.getBeeModifier();
-			beeModifiers.add(beeModifier);
-		}
+		if (newPart instanceof IAlvearyComponent) {
+			allComponents.add((IAlvearyComponent) newPart);
 
-		if (newPart instanceof IAlvearyComponent.BeeListener) {
-			IAlvearyComponent.BeeListener beeListenerSource = (IAlvearyComponent.BeeListener) newPart;
-			IBeeListener beeListener = beeListenerSource.getBeeListener();
-			beeListeners.add(beeListener);
-		}
+			if (newPart instanceof IAlvearyComponent.BeeModifier) {
+				IAlvearyComponent.BeeModifier alvearyBeeModifier = (IAlvearyComponent.BeeModifier) newPart;
+				IBeeModifier beeModifier = alvearyBeeModifier.getBeeModifier();
+				beeModifiers.add(beeModifier);
+			}
 
-		if (newPart instanceof IAlvearyComponent.Climatiser) {
-			climatisers.add((IAlvearyComponent.Climatiser) newPart);
-		}
+			if (newPart instanceof IAlvearyComponent.BeeListener) {
+				IAlvearyComponent.BeeListener beeListenerSource = (IAlvearyComponent.BeeListener) newPart;
+				IBeeListener beeListener = beeListenerSource.getBeeListener();
+				beeListeners.add(beeListener);
+			}
 
-		if (newPart instanceof IAlvearyComponent.Active) {
-			activeComponents.add((IAlvearyComponent.Active) newPart);
+			if (newPart instanceof IAlvearyComponent.Climatiser) {
+				climatisers.add((IAlvearyComponent.Climatiser) newPart);
+			}
+
+			if (newPart instanceof IAlvearyComponent.Active) {
+				activeComponents.add((IAlvearyComponent.Active) newPart);
+			}
 		}
 	}
 
 	@Override
 	protected void onBlockRemoved(IMultiblockPart oldPart) {
-		if (oldPart instanceof IAlvearyComponent.BeeModifier) {
-			IAlvearyComponent.BeeModifier alvearyBeeModifier = (IAlvearyComponent.BeeModifier) oldPart;
-			IBeeModifier beeModifier = alvearyBeeModifier.getBeeModifier();
-			beeModifiers.remove(beeModifier);
-		}
+		if (oldPart instanceof IAlvearyComponent) {
+			allComponents.remove(oldPart);
 
-		if (oldPart instanceof IAlvearyComponent.BeeListener) {
-			IAlvearyComponent.BeeListener beeListenerSource = (IAlvearyComponent.BeeListener) oldPart;
-			IBeeListener beeListener = beeListenerSource.getBeeListener();
-			beeListeners.remove(beeListener);
-		}
+			if (oldPart instanceof IAlvearyComponent.BeeModifier) {
+				IAlvearyComponent.BeeModifier alvearyBeeModifier = (IAlvearyComponent.BeeModifier) oldPart;
+				IBeeModifier beeModifier = alvearyBeeModifier.getBeeModifier();
+				beeModifiers.remove(beeModifier);
+			}
 
-		if (oldPart instanceof IAlvearyComponent.Climatiser) {
-			climatisers.remove(oldPart);
-		}
+			if (oldPart instanceof IAlvearyComponent.BeeListener) {
+				IAlvearyComponent.BeeListener beeListenerSource = (IAlvearyComponent.BeeListener) oldPart;
+				IBeeListener beeListener = beeListenerSource.getBeeListener();
+				beeListeners.remove(beeListener);
+			}
 
-		if (oldPart instanceof IAlvearyComponent.Active) {
-			activeComponents.remove(oldPart);
+			if (oldPart instanceof IAlvearyComponent.Climatiser) {
+				climatisers.remove(oldPart);
+			}
+
+			if (oldPart instanceof IAlvearyComponent.Active) {
+				activeComponents.remove(oldPart);
+			}
 		}
 	}
 

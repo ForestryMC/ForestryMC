@@ -20,6 +20,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 
 import com.mojang.authlib.GameProfile;
 
+import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
@@ -51,6 +52,11 @@ public class FakeAlvearyController implements IAlvearyController {
 
 	@Override
 	public Iterable<IBeeListener> getBeeListeners() {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public Iterable<IAlvearyComponent> getComponents() {
 		return Collections.emptyList();
 	}
 
