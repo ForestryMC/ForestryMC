@@ -60,10 +60,11 @@ public enum WoodType {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private static final IIcon[][] icons = new IIcon[3][VALUES.length];
+	private static IIcon[][] icons;
 
 	@SideOnly(Side.CLIENT)
 	public static void registerIcons(IIconRegister register) {
+		icons = new IIcon[3][VALUES.length];
 		for (int i = 0; i < VALUES.length; i++) {
 			WoodType woodType = VALUES[i];
 			String woodName = woodType.toString().toLowerCase(Locale.ENGLISH);
