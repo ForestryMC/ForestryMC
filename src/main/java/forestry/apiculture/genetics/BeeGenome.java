@@ -73,6 +73,10 @@ public class BeeGenome extends Genome implements IBeeGenome {
 
 	// NBT RETRIEVAL
 	public static IAlleleBeeSpecies getSpecies(ItemStack itemStack) {
+		if (!BeeManager.beeRoot.isMember(itemStack)) {
+			return null;
+		}
+
 		IAlleleSpecies species = getSpeciesDirectly(itemStack);
 		if (species instanceof IAlleleBeeSpecies) {
 			return (IAlleleBeeSpecies) species;
