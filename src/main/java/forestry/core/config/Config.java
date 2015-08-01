@@ -192,8 +192,6 @@ public class Config {
 			property.set(false);
 
 			// Make sure the default mode files are there.
-			File easyMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/EASY.cfg");
-			CopyFileToFS(easyMode, "/config/forestry/gamemodes/EASY.cfg");
 
 			File opMode = new File(Forestry.instance.getConfigFolder(), "gamemodes/OP.cfg");
 			CopyFileToFS(opMode, "/config/forestry/gamemodes/OP.cfg");

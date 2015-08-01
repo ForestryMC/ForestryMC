@@ -45,8 +45,8 @@ import forestry.core.utils.StringUtil;
 public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory> {
 
 	protected static final int COLUMN_0 = 12;
-	protected static final int COLUMN_1 = 85;
-	protected static final int COLUMN_2 = 150;
+	protected static final int COLUMN_1 = 90;
+	protected static final int COLUMN_2 = 155;
 
 	protected final ISpeciesRoot speciesRoot;
 	protected final IBreedingTracker breedingTracker;
@@ -109,32 +109,27 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 		IAlleleSpecies secondary = individual.getGenome().getSecondary();
 
 		drawLine(text0, column0);
-		int columnwidth = column2 - column1 - 16;
+		int columnwidth = column2 - column1 - 2;
 
 		RenderHelper.enableStandardItemLighting();
-		drawItemStack(iconStacks.get(primary.getUID()), adjustToFactor(guiLeft + column1 + columnwidth - 4), adjustToFactor(guiTop + getLineY()));
-		drawItemStack(iconStacks.get(secondary.getUID()), adjustToFactor(guiLeft + column2 + columnwidth - 2), adjustToFactor(guiTop + getLineY()));
+		drawItemStack(iconStacks.get(primary.getUID()), guiLeft + column1 + (columnwidth - 20), guiTop + 10);
+		drawItemStack(iconStacks.get(secondary.getUID()), guiLeft + column2 + (columnwidth - 20), guiTop + 10);
 		RenderHelper.disableStandardItemLighting();
 
-		String primaryName;
-		String secondaryName;
-
-		primaryName = customPrimaryName == null ? primary.getName() : customPrimaryName;
-		secondaryName = customSecondaryName == null ? secondary.getName() : customSecondaryName;
+		String primaryName = customPrimaryName == null ? primary.getName() : customPrimaryName;
+		String secondaryName = customSecondaryName == null ? secondary.getName() : customSecondaryName;
 
 		drawSplitLine(primaryName, column1, columnwidth, individual, chromosome, false);
 		drawSplitLine(secondaryName, column2, columnwidth, individual, chromosome, true);
 
 		newLine();
-		newLine();
-
 	}
 
 	protected final void drawSpeciesRow(String text0, IIndividual individual, IChromosomeType chromosome) {
 		drawSpeciesRow(text0, individual, chromosome, null, null);
 	}
 
-	protected final String checkCustomName(String key) {
+	protected static String checkCustomName(String key) {
 		if (StringUtil.canTranslate(key)) {
 			return StringUtil.localize(key);
 		} else {
@@ -157,9 +152,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 		drawCenteredLine(title, 8, 208);
 		newLine();
 
-		fontRendererObj.drawSplitString(StringUtil.localize(guiName + ".help"), (int) ((guiLeft + COLUMN_0 + 4) * (1 / factor)),
-				(int) ((guiTop + 42) * (1 / factor)), (int) (195 * (1 / factor)), fontColor.get("gui.screen"));
-		newLine();
+		fontRendererObj.drawSplitString(StringUtil.localize(guiName + ".help"), guiLeft + COLUMN_0 + 4, guiTop + 42, 200, fontColor.get("gui.screen"));
 		newLine();
 		newLine();
 		newLine();
@@ -215,9 +208,9 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 			}
 
 			drawLine(group.getScientific(), x, group.getLevel().getColour());
-			drawLine(group.getLevel().name(), 155, group.getLevel().getColour());
-			newLine();
-			x += 10;
+			drawLine(group.getLevel().name(), 170, group.getLevel().getColour());
+			newLineCompressed();
+			x += 12;
 		}
 
 		// Add the species name
@@ -227,27 +220,26 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 		}
 
 		drawLine(binomial, x, 0xebae85);
-		drawLine("SPECIES", 155, 0xebae85);
+		drawLine("SPECIES", 170, 0xebae85);
 
-		newLine();
 		newLine();
 		drawLine(StringUtil.localize("gui.alyzer.authority") + ": " + individual.getGenome().getPrimary().getAuthority(), 12);
 		if (AlleleManager.alleleRegistry.isBlacklisted(individual.getIdent())) {
 			String extinct = ">> " + StringUtil.localize("gui.alyzer.extinct").toUpperCase() + " <<";
-			fontRendererObj.drawStringWithShadow(extinct, adjustToFactor(guiLeft + 208) - fontRendererObj.getStringWidth(extinct),
-					adjustToFactor(guiTop + getLineY()), fontColor.get("gui.beealyzer.dominant"));
+			fontRendererObj.drawStringWithShadow(extinct, guiLeft + 200 - fontRendererObj.getStringWidth(extinct),
+					guiTop + getLineY(), fontColor.get("gui.beealyzer.dominant"));
 		}
 
 		newLine();
 		String description = individual.getGenome().getPrimary().getDescription();
 		if (StringUtils.isBlank(description) || description.startsWith("for.description.")) {
-			drawSplitLine(StringUtil.localize("gui.alyzer.nodescription"), 12, 208, 0x666666);
+			drawSplitLine(StringUtil.localize("gui.alyzer.nodescription"), 12, 200, 0x666666);
 		} else {
 			String tokens[] = description.split("\\|");
-			drawSplitLine(tokens[0], 12, 208, 0x666666);
+			drawSplitLine(tokens[0], 12, 200, 0x666666);
 			if (tokens.length > 1) {
-				fontRendererObj.drawStringWithShadow("- " + tokens[1], adjustToFactor(guiLeft + 208) - fontRendererObj.getStringWidth("- " + tokens[1]),
-						adjustToFactor(guiTop + 145 - 14), 0x99cc32);
+				String signature = "- " + tokens[1];
+				fontRendererObj.drawStringWithShadow(signature, (guiLeft + 210) - fontRendererObj.getStringWidth(signature), guiTop + 145 - 14, 0x99cc32);
 			}
 		}
 
@@ -255,10 +247,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 
 	}
 
-	protected void drawAnalyticsPage4(IIndividual individual) {
-
-		float factor = this.factor;
-		this.setFactor(1.0f);
+	protected void drawAnalyticsPageMutations(IIndividual individual) {
 
 		startPage(COLUMN_0, COLUMN_1, COLUMN_2);
 		drawLine(StringUtil.localize("gui.beealyzer.mutations") + ":", COLUMN_0);
@@ -296,13 +285,10 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 			if (x >= columnWidth * 4) {
 				x = 0;
 				newLine();
-				newLine();
 			}
 		}
 
 		endPage();
-
-		this.setFactor(factor);
 	}
 
 	protected void drawMutationInfo(IMutation combination, IAllele species, int x) {
@@ -310,7 +296,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 		ItemStack partnerBee = iconStacks.get(combination.getPartner(species).getUID());
 		widgetManager.add(new ItemStackWidget(x, getLineY(), partnerBee));
 
-		drawProbabilityArrow(combination.getBaseChance(), adjustToFactor(guiLeft) + x + 18, adjustToFactor(guiTop) + getLineY() + 4);
+		drawProbabilityArrow(combination.getBaseChance(), guiLeft + x + 18, guiTop + getLineY() + 4);
 
 		IAllele result = combination.getTemplate()[EnumBeeChromosome.SPECIES.ordinal()];
 		ItemStack resultBee = iconStacks.get(result.getUID());
@@ -319,11 +305,11 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 
 	protected void drawUnknownMutation(IMutation combination, IAllele species, int x) {
 
-		drawQuestionMark(adjustToFactor(guiLeft) + x, adjustToFactor(guiTop) + getLineY());
+		drawQuestionMark(guiLeft + x, guiTop + getLineY());
 
-		drawProbabilityArrow(combination.getBaseChance(), adjustToFactor(guiLeft) + x + 18, adjustToFactor(guiTop) + getLineY() + 4);
+		drawProbabilityArrow(combination.getBaseChance(), guiLeft + x + 18, guiTop + getLineY() + 4);
 
-		drawQuestionMark(adjustToFactor(guiLeft) + x + 32, adjustToFactor(guiTop) + getLineY());
+		drawQuestionMark(guiLeft + x + 32, guiTop + getLineY());
 	}
 
 	protected void drawQuestionMark(int x, int y) {
@@ -375,60 +361,64 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 			case BOTH_3:
 			case BOTH_4:
 			case BOTH_5:
-				drawBothSymbol(x, getLineY() - 1);
-				drawLine(text, x + (int) (20 * factor), textColor);
+				drawBothSymbol(x - 2, getLineY() - 1);
+				drawLine(text, x + 14, textColor);
 				break;
 			case DOWN_1:
 			case DOWN_2:
 			case DOWN_3:
 			case DOWN_4:
 			case DOWN_5:
-				drawDownSymbol(x, getLineY() - 1);
-				drawLine(text, x + (int) (20 * factor), textColor);
+				drawDownSymbol(x - 2, getLineY() - 1);
+				drawLine(text, x + 14, textColor);
 				break;
 			case UP_1:
 			case UP_2:
 			case UP_3:
 			case UP_4:
 			case UP_5:
-				drawUpSymbol(x, getLineY() - 1);
-				drawLine(text, x + (int) (20 * factor), textColor);
+				drawUpSymbol(x - 2, getLineY() - 1);
+				drawLine(text, x + 14, textColor);
 				break;
 			default:
-				drawNoneSymbol(x, getLineY() - 1);
-				drawLine("(0)", x + (int) (20 * factor), textColor);
+				drawNoneSymbol(x - 2, getLineY() - 1);
+				drawLine("(0)", x + 14, textColor);
 				break;
 		}
 	}
 
 	private void drawDownSymbol(int x, int y) {
 		Proxies.common.bindTexture(textureFile);
-		drawTexturedModalRect((int) ((guiLeft + x) * (1 / factor)), (int) ((guiTop + getLineY()) * (1 / factor)), 0, 247, 15, 9);
+		drawTexturedModalRect(guiLeft + x, guiTop + y, 0, 247, 15, 9);
 	}
 
 	private void drawUpSymbol(int x, int y) {
 		Proxies.common.bindTexture(textureFile);
-		drawTexturedModalRect((int) ((guiLeft + x) * (1 / factor)), (int) ((guiTop + getLineY()) * (1 / factor)), 15, 247, 15, 9);
+		drawTexturedModalRect(guiLeft + x, guiTop + y, 15, 247, 15, 9);
 	}
 
 	private void drawBothSymbol(int x, int y) {
 		Proxies.common.bindTexture(textureFile);
-		drawTexturedModalRect((int) ((guiLeft + x) * (1 / factor)), (int) ((guiTop + getLineY()) * (1 / factor)), 30, 247, 15, 9);
+		drawTexturedModalRect(guiLeft + x, guiTop + y, 30, 247, 15, 9);
 	}
 
 	private void drawNoneSymbol(int x, int y) {
 		Proxies.common.bindTexture(textureFile);
-		drawTexturedModalRect((int) ((guiLeft + x) * (1 / factor)), (int) ((guiTop + getLineY()) * (1 / factor)), 45, 247, 15, 9);
+		drawTexturedModalRect(guiLeft + x, guiTop + y, 45, 247, 15, 9);
 	}
 
 	protected void drawFertilityInfo(int fertility, int x, int textColor, int texOffset) {
 		// Enable correct lighting.
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		Proxies.common.bindTexture(textureFile);
-		drawTexturedModalRect((int) ((guiLeft + x + 14) * (1 / factor)), (int) ((guiTop + getLineY()) * (1 / factor)), 60, 240 + texOffset, 12, 8);
+		String fertilityString = Integer.toString(fertility) + " x";
 
-		drawLine(Integer.toString(fertility) + " x", x, textColor);
+		int stringWidth = fontRendererObj.getStringWidth(fertilityString);
+
+		Proxies.common.bindTexture(textureFile);
+		drawTexturedModalRect(guiLeft + x + stringWidth + 2, guiTop + getLineY() - 1, 60, 240 + texOffset, 12, 8);
+
+		drawLine(fertilityString, x, textColor);
 	}
 
 }

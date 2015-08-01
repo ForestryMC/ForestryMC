@@ -22,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import forestry.core.config.Defaults;
 import forestry.core.gadgets.NaturalistGame;
@@ -223,20 +224,23 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire, TileEscritoi
 
 		for (int i = 0; i <= inventory.getGame().getBountyLevel() / 4; i++) {
 			RenderHelper.enableGUIStandardItemLighting();
-			GuiForestry.itemRender.renderItemAndEffectIntoGUI(mc.fontRenderer,
-					mc.renderEngine, LEVEL_ITEM, guiLeft + 170 + i * 8, guiTop + 7);
+			GuiForestry.itemRender.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, LEVEL_ITEM, guiLeft + 170 + i * 8, guiTop + 7);
 			RenderHelper.disableStandardItemLighting();
 		}
 
 		startPage();
-		setFactor(0.5f);
+		GL11.glPushMatrix();
+		GL11.glScaled(0.5, 0.5, 0.5);
+		GL11.glTranslated(guiLeft + 170, guiTop + 10, 0.0);
 
 		newLine();
 		newLine();
 		String format = EnumChatFormatting.UNDERLINE + EnumChatFormatting.ITALIC.toString();
-		drawLine(format + "Attempt No. " + (NaturalistGame.BOUNTY_MAX - inventory.getGame().getBountyLevel()), 171, fontColor.get("gui.mail.lettertext"));
+		drawLine(format + "Attempt No. " + (NaturalistGame.BOUNTY_MAX - inventory.getGame().getBountyLevel()), 170, fontColor.get("gui.mail.lettertext"));
 		newLine();
-		drawSplitLine(getResearchNote(), 171, 46, fontColor.get("gui.mail.lettertext"));
+		drawSplitLine(getResearchNote(), 170, 90, fontColor.get("gui.mail.lettertext"));
+
+		GL11.glPopMatrix();
 
 		endPage();
 	}

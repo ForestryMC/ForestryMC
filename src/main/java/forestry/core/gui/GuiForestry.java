@@ -53,6 +53,7 @@ import codechicken.nei.api.TaggedInventoryArea;
 
 @Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = "NotEnoughItems")
 public abstract class GuiForestry<C extends Container, I extends IInventory> extends GuiContainer implements INEIGuiHandler {
+	protected static final int LINE_HEIGHT = 12;
 
 	protected final WidgetManager widgetManager;
 	protected final LedgerManager ledgerManager;
@@ -114,16 +115,10 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 	protected int column1;
 	protected int column2;
 	private int line;
-	protected float factor = 0.75f;
-
-	protected final void setFactor(float factor) {
-		this.factor = factor;
-	}
 
 	protected final void startPage() {
-		line = 12;
+		line = LINE_HEIGHT;
 		GL11.glPushMatrix();
-		GL11.glScalef(factor, factor, factor);
 	}
 
 	protected final void startPage(int column0, int column1, int column2) {
@@ -135,20 +130,20 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		startPage();
 	}
 
-	protected final int adjustToFactor(int fixed) {
-		return (int) (fixed * (1 / factor));
-	}
-
 	protected final int getLineY() {
 		return line;
 	}
 
 	protected final void newLine() {
-		line += 12 * factor;
+		line += LINE_HEIGHT;
+	}
+
+	protected final void newLineCompressed() {
+		line += (LINE_HEIGHT - 2);
 	}
 
 	protected final void newLine(int lineHeight) {
-		line += lineHeight * factor;
+		line += lineHeight;
 	}
 
 	protected final void endPage() {
@@ -159,7 +154,6 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		drawLine(text0, column0, colour0);
 		drawLine(text1, column1, colour1);
 		drawLine(text2, column2, colour2);
-		newLine();
 	}
 
 	protected final void drawLine(String text, int x) {
@@ -175,16 +169,15 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 	}
 
 	protected final void drawCenteredLine(String text, int x, int width, int color) {
-		fontRendererObj.drawString(text, (int) ((guiLeft + x) * (1 / factor)) + (adjustToFactor(width) - fontRendererObj.getStringWidth(text)) / 2,
-				(int) ((guiTop + line) * (1 / factor)), color);
+		fontRendererObj.drawString(text, guiLeft + x + (width - fontRendererObj.getStringWidth(text)) / 2, guiTop + line, color);
 	}
 
 	protected final void drawLine(String text, int x, int color) {
-		fontRendererObj.drawString(text, (int) ((guiLeft + x) * (1 / factor)), (int) ((guiTop + line) * (1 / factor)), color);
+		fontRendererObj.drawString(text, guiLeft + x, guiTop + line, color);
 	}
 
 	protected final void drawSplitLine(String text, int x, int maxWidth, int color) {
-		fontRendererObj.drawSplitString(text, (int) ((guiLeft + x) * (1 / factor)), (int) ((guiTop + line) * (1 / factor)), (int) (maxWidth * (1 / factor)), color);
+		fontRendererObj.drawSplitString(text, guiLeft + x, guiTop + line, maxWidth, color);
 	}
 
 	/* CORE GUI HANDLING */

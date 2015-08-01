@@ -86,7 +86,7 @@ public class GuiBeealyzer extends GuiAlyzer {
 				drawAnalyticsPage3(bee, beeType);
 				break;
 			case 4:
-				drawAnalyticsPage4(bee);
+				drawAnalyticsPageMutations(bee);
 				break;
 			case 6:
 				drawAnalyticsPageClassification(bee);
@@ -112,14 +112,17 @@ public class GuiBeealyzer extends GuiAlyzer {
 			String customSecondaryBeeKey = "bees.custom.beealyzer." + type.getName() + "." + bee.getGenome().getSecondary().getUnlocalizedName().replace("bees.species.", "");
 
 			drawSpeciesRow(StringUtil.localize("gui.species"), bee, EnumBeeChromosome.SPECIES, checkCustomName(customPrimaryBeeKey), checkCustomName(customSecondaryBeeKey));
+			newLine();
 		}
+
 		drawChromosomeRow(StringUtil.localize("gui.lifespan"), bee, EnumBeeChromosome.LIFESPAN);
-
+		newLine();
 		drawChromosomeRow(StringUtil.localize("gui.speed"), bee, EnumBeeChromosome.SPEED);
-
+		newLine();
 		drawChromosomeRow(StringUtil.localize("gui.pollination"), bee, EnumBeeChromosome.FLOWERING);
-
+		newLine();
 		drawChromosomeRow(StringUtil.localize("gui.flowers"), bee, EnumBeeChromosome.FLOWER_PROVIDER);
+		newLine();
 
 		drawLine(StringUtil.localize("gui.fertility"), COLUMN_0);
 		IAlleleInteger primaryFertility = (IAlleleInteger) bee.getGenome().getActiveAllele(EnumBeeChromosome.FERTILITY);
@@ -136,6 +139,8 @@ public class GuiBeealyzer extends GuiAlyzer {
 				new Vect(inactiveTerritory.getValue()).toString(),
 				bee, EnumBeeChromosome.TERRITORY);
 
+		newLine();
+
 		drawChromosomeRow(StringUtil.localize("gui.effect"), bee, EnumBeeChromosome.EFFECT);
 
 		newLine();
@@ -151,30 +156,32 @@ public class GuiBeealyzer extends GuiAlyzer {
 		drawLine(StringUtil.localize("gui.inactive"), COLUMN_2);
 
 		newLine();
-		newLine();
 
 		drawRow(StringUtil.localize("gui.climate"), AlleleManager.climateHelper.toDisplay(bee.getGenome().getPrimary().getTemperature()),
 				AlleleManager.climateHelper.toDisplay(bee.getGenome().getSecondary().getTemperature()), bee, EnumBeeChromosome.SPECIES);
 
+		newLine();
+
 		IAlleleTolerance tempToleranceActive = (IAlleleTolerance) bee.getGenome().getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
 		IAlleleTolerance tempToleranceInactive = (IAlleleTolerance) bee.getGenome().getInactiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
-		drawLine(StringUtil.localize("gui.temptol"), COLUMN_0);
+		drawLine("  " + StringUtil.localize("gui.tolerance"), COLUMN_0);
 		drawToleranceInfo(tempToleranceActive, COLUMN_1);
 		drawToleranceInfo(tempToleranceInactive, COLUMN_2);
 
-		newLine();
+		newLine(16);
 
 		drawRow(StringUtil.localize("gui.humidity"), AlleleManager.climateHelper.toDisplay(bee.getGenome().getPrimary().getHumidity()),
 				AlleleManager.climateHelper.toDisplay(bee.getGenome().getSecondary().getHumidity()), bee, EnumBeeChromosome.SPECIES);
 
+		newLine();
+
 		IAlleleTolerance humidToleranceActive = (IAlleleTolerance) bee.getGenome().getActiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE);
 		IAlleleTolerance humidToleranceInactive = (IAlleleTolerance) bee.getGenome().getInactiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE);
-		drawLine(StringUtil.localize("gui.humidtol"), COLUMN_0);
+		drawLine("  " + StringUtil.localize("gui.tolerance"), COLUMN_0);
 		drawToleranceInfo(humidToleranceActive, COLUMN_1);
 		drawToleranceInfo(humidToleranceInactive, COLUMN_2);
 
-		newLine();
-		newLine();
+		newLine(16);
 
 		String yes = StringUtil.localize("yes");
 		String no = StringUtil.localize("no");
@@ -196,22 +203,22 @@ public class GuiBeealyzer extends GuiAlyzer {
 		drawLine(StringUtil.localize("gui.diurnal"), COLUMN_0);
 		drawLine(diurnal0, COLUMN_1, getColorCoding(false));
 		drawLine(diurnal1, COLUMN_2, getColorCoding(false));
-		newLine();
+		newLineCompressed();
 
 		drawLine(StringUtil.localize("gui.nocturnal"), COLUMN_0);
 		drawLine(nocturnal0, COLUMN_1, getColorCoding(false));
 		drawLine(nocturnal1, COLUMN_2, getColorCoding(false));
-		newLine();
+		newLineCompressed();
 
 		String primary = StringUtil.readableBoolean(bee.getGenome().getTolerantFlyer(), yes, no);
-		String secondary = StringUtil.readableBoolean(((AlleleBoolean) bee.getGenome().getInactiveAllele(EnumBeeChromosome.TOLERANT_FLYER)).getValue(), yes,
-				no);
+		String secondary = StringUtil.readableBoolean(((AlleleBoolean) bee.getGenome().getInactiveAllele(EnumBeeChromosome.TOLERANT_FLYER)).getValue(), yes, no);
 
 		drawRow(StringUtil.localize("gui.flyer"), primary, secondary, bee, EnumBeeChromosome.TOLERANT_FLYER);
 
+		newLineCompressed();
+
 		primary = StringUtil.readableBoolean(bee.getGenome().getCaveDwelling(), yes, no);
-		secondary = StringUtil.readableBoolean(((AlleleBoolean) bee.getGenome().getInactiveAllele(EnumBeeChromosome.CAVE_DWELLING)).getValue(), yes,
-				no);
+		secondary = StringUtil.readableBoolean(((AlleleBoolean) bee.getGenome().getInactiveAllele(EnumBeeChromosome.CAVE_DWELLING)).getValue(), yes, no);
 
 		drawRow(StringUtil.localize("gui.cave"), primary, secondary, bee, EnumBeeChromosome.CAVE_DWELLING);
 
@@ -228,8 +235,7 @@ public class GuiBeealyzer extends GuiAlyzer {
 		}
 
 		if (bee.getGeneration() >= 0) {
-			newLine();
-
+			newLineCompressed();
 			displayText = StringUtil.localizeAndFormat("gui.beealyzer.generations", bee.getGeneration());
 			drawCenteredLine(displayText, 8, 208, fontColor.get("gui.beealyzer.binomial"));
 		}
@@ -239,9 +245,6 @@ public class GuiBeealyzer extends GuiAlyzer {
 
 	private void drawAnalyticsPage3(IBee bee, EnumBeeType type) {
 
-		float factor = this.factor;
-		this.setFactor(1.0f);
-
 		startPage(COLUMN_0, COLUMN_1, COLUMN_2);
 
 		drawLine(StringUtil.localize("gui.beealyzer.produce") + ":", COLUMN_0);
@@ -250,15 +253,16 @@ public class GuiBeealyzer extends GuiAlyzer {
 
 		int x = COLUMN_0;
 		for (ItemStack stack : bee.getProduceList()) {
-			widgetManager.add(new ItemStackWidget(adjustToFactor(x), adjustToFactor(getLineY()), stack));
+			widgetManager.add(new ItemStackWidget(x, getLineY(), stack));
 
 			x += 18;
-			if (x > adjustToFactor(148)) {
+			if (x > 148) {
 				x = COLUMN_0;
 				newLine();
 			}
 		}
 
+		newLine();
 		newLine();
 		newLine();
 		newLine();
@@ -268,18 +272,16 @@ public class GuiBeealyzer extends GuiAlyzer {
 
 		x = COLUMN_0;
 		for (ItemStack stack : bee.getSpecialtyList()) {
-			widgetManager.add(new ItemStackWidget(adjustToFactor(x), adjustToFactor(getLineY()), stack));
+			widgetManager.add(new ItemStackWidget(x, getLineY(), stack));
 
 			x += 18;
-			if (x > adjustToFactor(148)) {
+			if (x > 148) {
 				x = COLUMN_0;
 				newLine();
 			}
 		}
 
 		endPage();
-
-		this.setFactor(factor);
 	}
 
 }

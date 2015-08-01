@@ -162,7 +162,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 
 		drawLine(species.getName(), x);
 		RenderHelper.enableGUIStandardItemLighting();
-		drawItemStack(iconStack, adjustToFactor(guiLeft + x + 69), adjustToFactor(guiTop + getLineY() - 2));
+		drawItemStack(iconStack, guiLeft + x + 69, guiTop + getLineY() - 2);
 		RenderHelper.disableStandardItemLighting();
 
 		newLine();
@@ -196,8 +196,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 	private void drawMutationIcon(IMutation combination, IAlleleSpecies species, int x) {
 
 		RenderHelper.enableGUIStandardItemLighting();
-		drawItemStack(iconStacks.get(combination.getPartner(species).getUID()), adjustToFactor(guiLeft + x),
-				adjustToFactor(guiTop + getLineY()));
+		drawItemStack(iconStacks.get(combination.getPartner(species).getUID()), guiLeft + x, guiTop + getLineY());
 		RenderHelper.disableStandardItemLighting();
 
 		int line = 48;
@@ -224,7 +223,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 		}
 
 		Proxies.common.bindTexture(textureFile);
-		drawTexturedModalRect(adjustToFactor(guiLeft + x), adjustToFactor(guiTop + getLineY()), column, line, 16, 16);
+		drawTexturedModalRect(guiLeft + x, guiTop + getLineY(), column, line, 16, 16);
 
 	}
 
@@ -255,7 +254,7 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
 		}
 
 		Proxies.common.bindTexture(textureFile);
-		drawTexturedModalRect(adjustToFactor(guiLeft + x), adjustToFactor(guiTop + getLineY()), column, line, 16, 16);
+		drawTexturedModalRect(guiLeft + x, guiTop + getLineY(), column, line, 16, 16);
 	}
 
 	@Override
