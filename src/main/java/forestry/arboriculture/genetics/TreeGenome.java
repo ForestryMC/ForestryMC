@@ -46,6 +46,10 @@ public class TreeGenome extends Genome implements ITreeGenome {
 
 	// NBT RETRIEVAL
 	public static IAlleleTreeSpecies getSpecies(ItemStack itemStack) {
+		if (!PluginArboriculture.treeInterface.isMember(itemStack)) {
+			return null;
+		}
+
 		IAlleleSpecies species = getSpeciesDirectly(itemStack);
 		if (species instanceof IAlleleTreeSpecies) {
 			return (IAlleleTreeSpecies) species;

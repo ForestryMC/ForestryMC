@@ -43,6 +43,10 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
 
 	// NBT RETRIEVAL
 	public static IAlleleButterflySpecies getSpecies(ItemStack itemStack) {
+		if (!PluginLepidopterology.butterflyInterface.isMember(itemStack)) {
+			return null;
+		}
+		
 		IAlleleSpecies species = getSpeciesDirectly(itemStack);
 		if (species instanceof IAlleleButterflySpecies) {
 			return (IAlleleButterflySpecies) species;
