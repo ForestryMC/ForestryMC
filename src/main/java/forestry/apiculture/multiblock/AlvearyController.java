@@ -338,6 +338,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	@Override
 	public void formatDescriptionPacket(NBTTagCompound data) {
 		writeToNBT(data);
+		beekeepingLogic.syncToClient();
 	}
 
 	@Override

@@ -32,6 +32,11 @@ public class FakeBeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
+	public void syncToClient() {
+
+	}
+
+	@Override
 	public int getBeeProgressPercent() {
 		return 0;
 	}

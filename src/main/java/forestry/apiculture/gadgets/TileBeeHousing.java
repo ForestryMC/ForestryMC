@@ -13,6 +13,7 @@ package forestry.apiculture.gadgets;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.Packet;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -57,6 +58,12 @@ public abstract class TileBeeHousing extends TileBase implements IBeeHousing, IC
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 		beeLogic.readFromNBT(nbttagcompound);
+	}
+
+	@Override
+	public Packet getDescriptionPacket() {
+		beeLogic.syncToClient();
+		return super.getDescriptionPacket();
 	}
 
 	/* ICLIMATISED */

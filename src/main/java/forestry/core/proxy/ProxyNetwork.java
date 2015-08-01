@@ -12,6 +12,7 @@ package forestry.core.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.management.PlayerManager;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -27,29 +28,22 @@ public class ProxyNetwork {
 		if (packet == null || !(world instanceof WorldServer)) {
 			return;
 		}
-		int x = packet.getPosX();
-		int y = packet.getPosY();
-		int z = packet.getPosZ();
 
 		WorldServer worldServer = (WorldServer) world;
-		int viewDistance = (worldServer.func_73046_m().getConfigurationManager().getViewDistance() + 1) * 16;
+		PlayerManager playerManager = worldServer.getPlayerManager();
+
+		int chunkX = packet.getPosX() >> 4;
+		int chunkZ = packet.getPosZ() >> 4;
 
 		for (Object playerObj : world.playerEntities) {
 			if (playerObj instanceof EntityPlayerMP) {
 				EntityPlayerMP player = (EntityPlayerMP) playerObj;
 
-				if (isPlayerInRange(player, viewDistance, x, y, z)) {
+				if (playerManager.isPlayerWatchingChunk(player, chunkX, chunkZ)) {
 					Forestry.packetHandler.sendPacket(packet.getPacket(), player);
 				}
 			}
 		}
-	}
-
-	private static boolean isPlayerInRange(EntityPlayerMP player, int viewDistance, int x, int y, int z) {
-		double distX = player.posX - x;
-		double distY = player.posY - y;
-		double distZ = player.posZ - z;
-		return (distX * distX) + (distY * distY) + (distZ * distZ) < (viewDistance * viewDistance);
 	}
 
 	public void sendToPlayer(ForestryPacket packet, EntityPlayer entityplayer) {

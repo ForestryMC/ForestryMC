@@ -147,13 +147,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 		}
 		this.active = active;
 
-		if (!housing.getWorld().isRemote) {
-			Proxies.net.sendNetworkPacket(new PacketBeekeepingLogicActive(housing), housing.getWorld());
-		}
-	}
-
-	public boolean isActive() {
-		return active;
+		syncToClient();
 	}
 
 	/* UPDATING */
@@ -417,6 +411,14 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 	}
 
 	/* CLIENT */
+
+	@Override
+	public void syncToClient() {
+		World world = housing.getWorld();
+		if (world != null && !world.isRemote) {
+			Proxies.net.sendNetworkPacket(new PacketBeekeepingLogicActive(housing), world);
+		}
+	}
 
 	@Override
 	public int getBeeProgressPercent() {
