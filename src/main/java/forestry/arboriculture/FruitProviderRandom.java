@@ -20,8 +20,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IFruitFamily;
-import forestry.plugins.PluginArboriculture;
 
 /**
  * Simple fruit provider which drops from any leaf block according to yield and either marks all leave blocks as fruit leaves or none.
@@ -50,7 +50,7 @@ public class FruitProviderRandom extends FruitProviderNone {
 	public ItemStack[] getFruits(ITreeGenome genome, World world, int x, int y, int z, int ripeningTime) {
 		ArrayList<ItemStack> product = new ArrayList<ItemStack>();
 
-		float modeYieldMod = PluginArboriculture.treeInterface.getTreekeepingMode(world).getYieldModifier(genome, 1f);
+		float modeYieldMod = TreeManager.treeRoot.getTreekeepingMode(world).getYieldModifier(genome, 1f);
 
 		for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
 			if (world.rand.nextFloat() <= genome.getYield() * modeYieldMod * entry.getValue()) {

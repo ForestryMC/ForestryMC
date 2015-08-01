@@ -16,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
 import forestry.core.config.Config;
@@ -25,7 +26,6 @@ import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.GeneticsUtil;
-import forestry.plugins.PluginArboriculture;
 
 public class ItemTreealyzer extends ItemInventoried {
 
@@ -47,13 +47,13 @@ public class ItemTreealyzer extends ItemInventoried {
 				return;
 			}
 
-			if (!PluginArboriculture.treeInterface.isMember(getStackInSlot(SLOT_SPECIMEN))) {
+			if (!TreeManager.treeRoot.isMember(getStackInSlot(SLOT_SPECIMEN))) {
 				ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(getStackInSlot(SLOT_SPECIMEN));
 				if (ersatz != null) {
 					setInventorySlotContents(SLOT_SPECIMEN, ersatz);
 				}
 			}
-			ITree tree = PluginArboriculture.treeInterface.getMember(getStackInSlot(SLOT_SPECIMEN));
+			ITree tree = TreeManager.treeRoot.getMember(getStackInSlot(SLOT_SPECIMEN));
 			// No tree, abort
 			if (tree == null) {
 				return;
@@ -69,8 +69,8 @@ public class ItemTreealyzer extends ItemInventoried {
 
 				tree.analyze();
 				if (player != null) {
-					PluginArboriculture.treeInterface.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(tree.getGenome().getPrimary());
-					PluginArboriculture.treeInterface.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(tree.getGenome().getSecondary());
+					TreeManager.treeRoot.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(tree.getGenome().getPrimary());
+					TreeManager.treeRoot.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(tree.getGenome().getSecondary());
 				}
 				NBTTagCompound nbttagcompound = new NBTTagCompound();
 				tree.writeToNBT(nbttagcompound);

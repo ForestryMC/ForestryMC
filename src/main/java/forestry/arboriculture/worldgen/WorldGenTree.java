@@ -10,20 +10,11 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.genetics.IAlleleBoolean;
+import forestry.api.arboriculture.ITreeModifier;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.world.ITreeGenData;
-import forestry.arboriculture.gadgets.BlockFireproofLog;
-import forestry.arboriculture.gadgets.BlockLog;
-import forestry.core.config.ForestryBlock;
-import forestry.core.utils.StackUtils;
-import forestry.core.worldgen.BlockType;
-import forestry.plugins.PluginArboriculture;
 
 public abstract class WorldGenTree extends WorldGenArboriculture {
 
@@ -56,22 +47,21 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 		return new Vector(cent + offset, yCenter, cent + offset);
 	}
 
-	protected void generateAdjustedCylinder(int yCenter, float radius, int height, BlockType block) {
+	protected void generateAdjustedCylinder(int yCenter, float radius, int height, ITreeBlockType block) {
 		generateAdjustedCylinder(yCenter, 0, radius, height, block, EnumReplaceMode.NONE);
 	}
 
-	protected void generateAdjustedCylinder(int yCenter, float radius, int height, BlockType block, EnumReplaceMode replace) {
+	protected void generateAdjustedCylinder(int yCenter, float radius, int height, ITreeBlockType block, EnumReplaceMode replace) {
 		generateAdjustedCylinder(yCenter, 0, radius, height, block, replace);
 	}
 
-	protected void generateAdjustedCylinder(int yCenter, int offset, float radius, int height, BlockType block, EnumReplaceMode replace) {
+	protected void generateAdjustedCylinder(int yCenter, int offset, float radius, int height, ITreeBlockType block, EnumReplaceMode replace) {
 		generateCylinder(getCenteredAt(yCenter, offset), radius + girth, height, block, replace);
 	}
 
 	@Override
 	public boolean canGrow() {
 		return tree.canGrow(world, startX, startY, startZ, tree.getGirth(world, startX, startY, startZ), height);
-
 	}
 
 	@Override
@@ -85,39 +75,26 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 	}
 
 	protected int modifyByHeight(int val, int min, int max) {
-		int determined = Math.round(val * tree.getHeightModifier() * PluginArboriculture.treeInterface.getTreekeepingMode(world).getHeightModifier(null, 1f));
+		ITreeModifier treeModifier = TreeManager.treeRoot.getTreekeepingMode(world);
+		int determined = Math.round(val * tree.getHeightModifier() * treeModifier.getHeightModifier(tree.getGenome(), 1f));
 		return determined < min ? min : determined > max ? max : determined;
 	}
 
-	// TODO: Get access to the tree genome for the treekeeping mode
 	protected int determineHeight(int required, int variation) {
-		int determined = Math.round((required + rand.nextInt(variation)) * tree.getHeightModifier()
-				* PluginArboriculture.treeInterface.getTreekeepingMode(world).getHeightModifier(null, 1f));
-		return determined < minHeight ? minHeight : determined > maxHeight ? maxHeight : determined;
+		ITreeModifier treeModifier = TreeManager.treeRoot.getTreekeepingMode(world);
+		int baseHeight = required + rand.nextInt(variation);
+		int height = Math.round(baseHeight * tree.getHeightModifier() * treeModifier.getHeightModifier(tree.getGenome(), 1f));
+		return height < minHeight ? minHeight : height > maxHeight ? maxHeight : height;
 	}
 
 	@Override
-	public BlockType getLeaf(GameProfile owner) {
-		return new BlockTypeLeaf(owner);
+	public TreeBlockTypeLeaf getLeaf(GameProfile owner) {
+		return new TreeBlockTypeLeaf(owner);
 	}
 
 	@Override
-	public BlockType getWood() {
-		ItemStack woodStack = tree.getGenome().getPrimary().getLogStacks()[0];
-
-		Block block = StackUtils.getBlock(woodStack);
-		int meta = woodStack.getItemDamage();
-
-		// if we have a fireproof tree, return the fireproof log
-		if (block instanceof BlockLog) {
-			IAlleleBoolean fireproof = (IAlleleBoolean) tree.getGenome().getActiveAllele(EnumTreeChromosome.FIREPROOF);
-			if (fireproof.getValue()) {
-				BlockLog blockLog = (BlockLog) block;
-				ForestryBlock fireproofLogBlock = BlockFireproofLog.getFireproofLog(blockLog);
-				return new BlockType(fireproofLogBlock.block(), meta);
-			}
-		}
-
-		return new BlockType(block, meta);
+	public ITreeBlockType getWood() {
+		return new TreeBlockTypeLog();
 	}
+
 }

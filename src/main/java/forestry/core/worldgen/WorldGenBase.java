@@ -15,6 +15,8 @@ import java.util.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
+import forestry.arboriculture.worldgen.ITreeBlockType;
+
 public abstract class WorldGenBase extends WorldGenerator {
 
 	protected enum EnumReplaceMode {
@@ -60,9 +62,9 @@ public abstract class WorldGenBase extends WorldGenerator {
 		return false;
 	}
 
-	protected abstract void addBlock(int x, int y, int z, BlockType type, EnumReplaceMode replace);
+	protected abstract void addBlock(int x, int y, int z, ITreeBlockType type, EnumReplaceMode replace);
 
-	protected final void generateCuboid(Vector start, Vector area, BlockType block, EnumReplaceMode replace) {
+	protected final void generateCuboid(Vector start, Vector area, ITreeBlockType block, EnumReplaceMode replace) {
 		for (int x = (int) start.x; x < (int) start.x + area.x; x++) {
 			for (int y = (int) start.y; y < (int) start.y + area.y; y++) {
 				for (int z = (int) start.z; z < (int) start.z + area.z; z++) {
@@ -75,7 +77,7 @@ public abstract class WorldGenBase extends WorldGenerator {
 	/*
 	 * Center is the bottom middle of the cylinder
 	 */
-	protected final void generateCylinder(Vector center, float radius, int height, BlockType block, EnumReplaceMode replace) {
+	protected final void generateCylinder(Vector center, float radius, int height, ITreeBlockType block, EnumReplaceMode replace) {
 		Vector start = new Vector(center.x - radius, center.y, center.z - radius);
 		Vector area = new Vector(radius * 2 + 1, height, radius * 2 + 1);
 		for (int x = (int) start.x; x < (int) start.x + area.x; x++) {
@@ -89,11 +91,11 @@ public abstract class WorldGenBase extends WorldGenerator {
 		}
 	}
 
-	protected final void generateCircle(Vector center, float radius, int width, int height, BlockType block, EnumReplaceMode replace) {
+	protected final void generateCircle(Vector center, float radius, int width, int height, ITreeBlockType block, EnumReplaceMode replace) {
 		generateCircle(center, radius, width, height, block, 1.0f, replace);
 	}
 
-	protected final void generateCircle(Vector center, float radius, int width, int height, BlockType block, float chance, EnumReplaceMode replace) {
+	protected final void generateCircle(Vector center, float radius, int width, int height, ITreeBlockType block, float chance, EnumReplaceMode replace) {
 		Vector start = new Vector(center.x - radius, center.y, center.z - radius);
 		Vector area = new Vector(radius * 2 + 1, height, radius * 2 + 1);
 
@@ -114,7 +116,7 @@ public abstract class WorldGenBase extends WorldGenerator {
 		}
 	}
 
-	protected final void generateSphere(Vector center, int radius, BlockType block, EnumReplaceMode replace) {
+	protected final void generateSphere(Vector center, int radius, ITreeBlockType block, EnumReplaceMode replace) {
 		Vector start = new Vector(center.x - radius, center.y - radius, center.z - radius);
 		Vector area = new Vector(radius * 2 + 1, radius * 2 + 1, radius * 2 + 1);
 		for (int x = (int) start.x; x < (int) start.x + area.x; x++) {

@@ -17,9 +17,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IIndividual;
 import forestry.core.utils.GeneticsUtil;
-import forestry.plugins.PluginArboriculture;
 
 public class FarmableVanillaSapling extends FarmableGenericSapling {
 
@@ -34,7 +34,7 @@ public class FarmableVanillaSapling extends FarmableGenericSapling {
 			return false;
 		}
 
-		return PluginArboriculture.treeInterface.plantSapling(world, (ITree) tree, player.getGameProfile(), x, y, z);
+		return TreeManager.treeRoot.plantSapling(world, (ITree) tree, player.getGameProfile(), x, y, z);
 	}
 
 }

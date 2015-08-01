@@ -20,8 +20,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IFruitFamily;
-import forestry.plugins.PluginArboriculture;
 
 public class FruitProviderRipening extends FruitProviderNone {
 
@@ -70,7 +70,7 @@ public class FruitProviderRipening extends FruitProviderNone {
 			return new ItemStack[0];
 		}
 
-		float modeYieldMod = PluginArboriculture.treeInterface.getTreekeepingMode(world).getYieldModifier(genome, 1f);
+		float modeYieldMod = TreeManager.treeRoot.getTreekeepingMode(world).getYieldModifier(genome, 1f);
 
 		for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
 			if (world.rand.nextFloat() <= genome.getYield() * entry.getValue() * modeYieldMod * 5.0f * stage) {

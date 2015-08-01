@@ -25,7 +25,42 @@ import forestry.core.utils.StackUtils;
 
 public class StairItemRenderer implements IItemRenderer {
 
-	private void renderStairBlock(RenderBlocks renderBlocks, ItemStack item, float f, float g, float h) {
+	@Override
+	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
+		switch (type) {
+			case ENTITY:
+			case EQUIPPED_FIRST_PERSON:
+			case EQUIPPED:
+			case INVENTORY:
+				return true;
+			default:
+				return false;
+		}
+	}
+
+	@Override
+	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
+		return true;
+	}
+
+	@Override
+	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+		switch (type) {
+			case ENTITY:
+				renderStairBlock((RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+				break;
+			case EQUIPPED:
+			case EQUIPPED_FIRST_PERSON:
+				renderStairBlock((RenderBlocks) data[0], item, 0f, 0.0f, 0.0f);
+				break;
+			case INVENTORY:
+				renderStairBlock((RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+				break;
+			default:
+		}
+	}
+
+	private static void renderStairBlock(RenderBlocks renderBlocks, ItemStack item, float f, float g, float h) {
 
 		Tessellator tessellator = Tessellator.instance;
 		Block block = StackUtils.getBlock(item);
@@ -69,41 +104,6 @@ public class StairItemRenderer implements IItemRenderer {
 			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 		}
 
-	}
-
-	@Override
-	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		switch (type) {
-			case ENTITY:
-			case EQUIPPED_FIRST_PERSON:
-			case EQUIPPED:
-			case INVENTORY:
-				return true;
-			default:
-				return false;
-		}
-	}
-
-	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-		return true;
-	}
-
-	@Override
-	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		switch (type) {
-			case ENTITY:
-				renderStairBlock((RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
-				break;
-			case EQUIPPED:
-			case EQUIPPED_FIRST_PERSON:
-				renderStairBlock((RenderBlocks) data[0], item, 0f, 0.0f, 0.0f);
-				break;
-			case INVENTORY:
-				renderStairBlock((RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
-				break;
-			default:
-		}
 	}
 
 }

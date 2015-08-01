@@ -36,12 +36,11 @@ import forestry.api.apiculture.IBeeIconProvider;
 import forestry.api.apiculture.IBeeRoot;
 import forestry.api.apiculture.IJubilanceProvider;
 import forestry.api.core.IIconProvider;
-import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.IMutation;
 import forestry.core.genetics.alleles.AlleleSpecies;
 import forestry.core.render.TextureManager;
+import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.StackUtils;
 
 public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpeciesCustom {
@@ -51,8 +50,8 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	private final int primaryColour;
 	private final int secondaryColour;
 
-	private IBeeIconProvider beeIconProvider;
-	private IJubilanceProvider jubilanceProvider;
+	private IBeeIconProvider beeIconProvider = DefaultBeeIconProvider.instance;
+	private IJubilanceProvider jubilanceProvider = JubilanceDefault.instance;
 	private boolean nocturnal = false;
 
 	public AlleleBeeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, int primaryColor, int secondaryColor) {
@@ -60,9 +59,6 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 		this.primaryColour = primaryColor;
 		this.secondaryColour = secondaryColor;
-
-		setCustomBeeIconProvider(DefaultBeeIconProvider.getInstance());
-		setJubilanceProvider(JubilanceDefault.getInstance());
 	}
 
 	@Override
@@ -115,31 +111,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	/* RESEARCH */
 	@Override
 	public int getComplexity() {
-		return 1 + getGeneticAdvancement(this, new ArrayList<IAllele>());
-	}
-
-	private int getGeneticAdvancement(IAllele species, ArrayList<IAllele> exclude) {
-
-		int own = 1;
-		int highest = 0;
-		exclude.add(species);
-
-		for (IMutation mutation : getRoot().getPaths(species, EnumBeeChromosome.SPECIES)) {
-			if (!exclude.contains(mutation.getAllele0())) {
-				int otherAdvance = getGeneticAdvancement(mutation.getAllele0(), exclude);
-				if (otherAdvance > highest) {
-					highest = otherAdvance;
-				}
-			}
-			if (!exclude.contains(mutation.getAllele1())) {
-				int otherAdvance = getGeneticAdvancement(mutation.getAllele1(), exclude);
-				if (otherAdvance > highest) {
-					highest = otherAdvance;
-				}
-			}
-		}
-
-		return own + (highest < 0 ? 0 : highest);
+		return GeneticsUtil.getResearchComplexity(this, EnumBeeChromosome.SPECIES);
 	}
 
 	@Override
@@ -228,15 +200,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 	private static class DefaultBeeIconProvider implements IBeeIconProvider {
 
-		private static final String iconType = "default";
-		private static DefaultBeeIconProvider instance;
-
-		public static DefaultBeeIconProvider getInstance() {
-			if (instance == null) {
-				instance = new DefaultBeeIconProvider();
-			}
-			return instance;
-		}
+		public static final DefaultBeeIconProvider instance = new DefaultBeeIconProvider();
 
 		private DefaultBeeIconProvider() {
 
@@ -244,20 +208,28 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 
 		private static final IIcon[][] icons = new IIcon[EnumBeeType.values().length][3];
 
-		@SideOnly(Side.CLIENT)
 		@Override
+		@SideOnly(Side.CLIENT)
 		public void registerIcons(IIconRegister register) {
-			IIcon body1 = TextureManager.getInstance().registerTex(register, "bees/" + iconType + "/body1");
+			String beeIconDir = "bees/default/";
+			TextureManager textureManager = TextureManager.getInstance();
+			IIcon body1 = textureManager.registerTex(register, beeIconDir + "body1");
 
 			for (int i = 0; i < EnumBeeType.values().length; i++) {
-				if (EnumBeeType.values()[i] == EnumBeeType.NONE) {
+				EnumBeeType beeType = EnumBeeType.values()[i];
+				if (beeType == EnumBeeType.NONE) {
 					continue;
 				}
 
-				icons[i][0] = TextureManager.getInstance().registerTex(register, "bees/" + iconType + '/' + EnumBeeType.values()[i].toString().toLowerCase(Locale.ENGLISH) + ".outline");
-				icons[i][1] = (EnumBeeType.values()[i] != EnumBeeType.LARVAE) ? body1
-						: TextureManager.getInstance().registerTex(register, "bees/" + iconType + '/' + EnumBeeType.values()[i].toString().toLowerCase(Locale.ENGLISH) + ".body");
-				icons[i][2] = TextureManager.getInstance().registerTex(register, "bees/" + iconType + '/' + EnumBeeType.values()[i].toString().toLowerCase(Locale.ENGLISH) + ".body2");
+				String beeTypeNameBase = beeIconDir + beeType.toString().toLowerCase(Locale.ENGLISH);
+
+				icons[i][0] = textureManager.registerTex(register, beeTypeNameBase + ".outline");
+				if (beeType == EnumBeeType.LARVAE) {
+					icons[i][1] = textureManager.registerTex(register, beeTypeNameBase + ".body");
+				} else {
+					icons[i][1] = body1;
+				}
+				icons[i][2] = textureManager.registerTex(register, beeTypeNameBase + ".body2");
 			}
 		}
 

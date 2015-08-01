@@ -14,28 +14,21 @@ import net.minecraft.world.World;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.arboriculture.ITreeMutation;
+import forestry.api.arboriculture.ITreeMutationCustom;
 import forestry.api.arboriculture.ITreeRoot;
-import forestry.api.genetics.AlleleManager;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleSpecies;
 import forestry.core.genetics.Mutation;
-import forestry.plugins.PluginArboriculture;
 
-public class TreeMutation extends Mutation implements ITreeMutation {
+public class TreeMutation extends Mutation implements ITreeMutationCustom {
 
-	private final ITreeRoot root;
-
-	public TreeMutation(IAlleleSpecies allele0, IAlleleSpecies allele1, IAllele[] template, int chance) {
+	public TreeMutation(IAlleleTreeSpecies allele0, IAlleleTreeSpecies allele1, IAllele[] template, int chance) {
 		super(allele0, allele1, template, chance);
-		
-		root = (ITreeRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees");
-		PluginArboriculture.treeInterface.registerMutation(this);
 	}
 
 	@Override
 	public ITreeRoot getRoot() {
-		return root;
+		return TreeManager.treeRoot;
 	}
 
 	@Override
@@ -45,7 +38,7 @@ public class TreeMutation extends Mutation implements ITreeMutation {
 			return 0;
 		}
 
-		processedChance *= PluginArboriculture.treeInterface.getTreekeepingMode(world).getMutationModifier(genome0, genome1, 1f);
+		processedChance *= getRoot().getTreekeepingMode(world).getMutationModifier(genome0, genome1, 1f);
 
 		return processedChance;
 	}

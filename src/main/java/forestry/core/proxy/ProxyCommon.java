@@ -23,6 +23,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.potion.Potion;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChunkCoordinates;
@@ -87,6 +88,17 @@ public class ProxyCommon {
 		GameRegistry.registerItem(item, StringUtil.cleanItemName(item));
 	}
 
+
+	/**
+	 * As addRecipe, except that the recipe is injected into the front of the
+	 * crafting manager to avoid certain generic collisions. Notably, all
+	 * Forestry wood crafting into oak stairs & slabs.
+	 */
+	@SuppressWarnings("unchecked")
+	public void addPriorityRecipe(IRecipe recipe) {
+		CraftingManager.getInstance().getRecipeList().add(0, recipe);
+	}
+
 	/**
 	 * As addRecipe, except that the recipe is injected into the front of the
 	 * crafting manager to avoid certain generic collisions. Notably, all
@@ -95,7 +107,7 @@ public class ProxyCommon {
 	@SuppressWarnings("unchecked")
 	public void addPriorityRecipe(ItemStack itemstack, Object... obj) {
 		cleanRecipe(obj);
-		CraftingManager.getInstance().getRecipeList().add(0, new ShapedOreRecipe(itemstack, obj));
+		addPriorityRecipe(new ShapedOreRecipe(itemstack, obj));
 	}
 
 	/**
@@ -106,7 +118,7 @@ public class ProxyCommon {
 	@SuppressWarnings("unchecked")
 	public void addPriorityShapelessRecipe(ItemStack itemstack, Object... obj) {
 		cleanRecipe(obj);
-		CraftingManager.getInstance().getRecipeList().add(0, new ShapelessOreRecipe(itemstack, obj));
+		addPriorityRecipe(new ShapelessOreRecipe(itemstack, obj));
 	}
 
 	@SuppressWarnings("unchecked")

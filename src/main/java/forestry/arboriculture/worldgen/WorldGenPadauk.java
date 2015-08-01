@@ -12,6 +12,8 @@ package forestry.arboriculture.worldgen;
 
 import java.util.Random;
 
+import net.minecraftforge.common.util.ForgeDirection;
+
 import forestry.api.world.ITreeGenData;
 
 public class WorldGenPadauk extends WorldGenTree {
@@ -49,21 +51,22 @@ public class WorldGenPadauk extends WorldGenTree {
 					int offsetValue = (offset[new Random().nextInt(offset.length)]);
 					int maxBranchLength = 3;
 					int branchLength = new Random().nextInt(maxBranchLength + 1);
-					char[] direction = {'z', 'x'};
-					char directionValue = (direction[new Random().nextInt(direction.length)]);
+					ForgeDirection[] direction = {ForgeDirection.NORTH, ForgeDirection.EAST};
+					ForgeDirection directionValue = (direction[new Random().nextInt(direction.length)]);
 					int branchSpawn = leafSpawn;
 
 					for (int j = 1; j < branchLength + 1; j++) {
 						if (j == branchLength && rand.nextBoolean()) { //Just adding a bit of variation to the ends for character
 							branchSpawn += 1;
 						}
-						if (directionValue == 'z') {
-							addZWood(0, branchSpawn, j * offsetValue, EnumReplaceMode.ALL);
-						} else if (directionValue == 'x') {
-							addXWood(j * offsetValue, branchSpawn, 0, EnumReplaceMode.ALL);
+
+						wood.setDirection(directionValue);
+						if (directionValue == ForgeDirection.NORTH) {
+							addWood(0, branchSpawn, j * offsetValue, EnumReplaceMode.ALL);
+						} else if (directionValue == ForgeDirection.EAST) {
+							addWood(j * offsetValue, branchSpawn, 0, EnumReplaceMode.ALL);
 						}
 					}
-					
 				}
 			}
 		}

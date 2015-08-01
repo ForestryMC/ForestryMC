@@ -24,10 +24,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.BlockUtil;
-import forestry.plugins.PluginArboriculture;
 
 public class FruitProviderPod extends FruitProviderNone {
 
@@ -85,7 +85,7 @@ public class FruitProviderPod extends FruitProviderNone {
 		if (type == EnumPodType.COCOA) {
 			return BlockUtil.tryPlantPot(world, x, y, z, Blocks.cocoa);
 		} else {
-			return PluginArboriculture.treeInterface.setFruitBlock(world, (IAlleleFruit) genome.getActiveAllele(EnumTreeChromosome.FRUITS),
+			return TreeManager.treeRoot.setFruitBlock(world, (IAlleleFruit) genome.getActiveAllele(EnumTreeChromosome.FRUITS),
 					genome.getSappiness(), type.uids, x, y, z);
 		}
 	}

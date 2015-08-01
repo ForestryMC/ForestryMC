@@ -11,11 +11,9 @@
 package forestry.arboriculture.gadgets;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
-import forestry.core.network.PacketTileStream;
-import forestry.plugins.PluginArboriculture;
+import forestry.api.arboriculture.TreeManager;
 
 public class TileSapling extends TileTreeContainer {
 
@@ -50,7 +48,7 @@ public class TileSapling extends TileTreeContainer {
 			return result;
 		}
 
-		int maturity = (int) (getTree().getRequiredMaturity() * PluginArboriculture.treeInterface.getTreekeepingMode(worldObj).getMaturationModifier(
+		int maturity = (int) (getTree().getRequiredMaturity() * TreeManager.treeRoot.getTreekeepingMode(worldObj).getMaturationModifier(
 				getTree().getGenome(), 1f));
 
 		if (bonemealed && timesTicked < maturity) {
@@ -64,15 +62,11 @@ public class TileSapling extends TileTreeContainer {
 
 		WorldGenerator generator = this.getTree().getTreeGenerator(worldObj, xCoord, yCoord, zCoord, bonemealed);
 		if (generator.generate(worldObj, worldObj.rand, xCoord, yCoord, zCoord)) {
-			PluginArboriculture.treeInterface.getBreedingTracker(worldObj, getOwner()).registerBirth(getTree());
+			TreeManager.treeRoot.getBreedingTracker(worldObj, getOwner()).registerBirth(getTree());
 			return 2;
 		}
 
 		return 3;
 	}
 
-	@Override
-	public Packet getDescriptionPacket() {
-		return new PacketTileStream(this).getPacket();
-	}
 }

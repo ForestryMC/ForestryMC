@@ -40,22 +40,18 @@ import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreeMutation;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleBoolean;
 import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IMutation;
-import forestry.arboriculture.gadgets.ForestryBlockLeaves;
-import forestry.arboriculture.gadgets.TileLeaves;
 import forestry.core.config.Config;
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryBlock;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.Individual;
 import forestry.core.genetics.alleles.Allele;
 import forestry.core.utils.StringUtil;
-import forestry.plugins.PluginArboriculture;
 
 public class Tree extends Individual implements ITree, IPlantable {
 
@@ -83,7 +79,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 		if (nbttagcompound.hasKey("Genome")) {
 			setGenome(new TreeGenome(nbttagcompound.getCompoundTag("Genome")));
 		} else {
-			setGenome(PluginArboriculture.treeInterface.templateAsGenome(TreeTemplates.getOakTemplate()));
+			setGenome(TreeDefinition.Oak.getGenome());
 		}
 
 		if (nbttagcompound.hasKey("Mate")) {
@@ -155,7 +151,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 	/* GROWTH */
 	@Override
 	public WorldGenerator getTreeGenerator(World world, int x, int y, int z, boolean wasBonemealed) {
-		return genome.getPrimary().getGenerator(this, world, x, y, z);
+		return genome.getPrimary().getGenerator().getWorldGenerator(this);
 	}
 
 	@Override
@@ -223,38 +219,17 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	@Override
 	public void setLeaves(World world, GameProfile owner, int x, int y, int z) {
-		setLeaves(world, owner, x, y, z, false);
+		genome.getPrimary().getGenerator().setLeaves(world, owner, x, y, z, false);
 	}
 
 	@Override
 	public void setLeavesDecorative(World world, GameProfile owner, int x, int y, int z) {
-		setLeaves(world, owner, x, y, z, true);
+		genome.getPrimary().getGenerator().setLeaves(world, owner, x, y, z, true);
 	}
 
-	private void setLeaves(World world, GameProfile owner, int x, int y, int z, boolean decorative) {
-		boolean placed = ForestryBlock.leaves.setBlock(world, x, y, z, 0, Defaults.FLAG_BLOCK_SYNCH);
-		if (!placed) {
-			return;
-		}
-
-		if (!ForestryBlock.leaves.isBlockEqual(world, x, y, z)) {
-			world.setBlockToAir(x, y, z);
-			return;
-		}
-
-		TileLeaves tileLeaves = ForestryBlockLeaves.getLeafTile(world, x, y, z);
-		if (tileLeaves == null) {
-			world.setBlockToAir(x, y, z);
-			return;
-		}
-
-		tileLeaves.setOwner(owner);
-		if (decorative) {
-			tileLeaves.setDecorative();
-		}
-		tileLeaves.setTree(this.copy());
-
-		world.markBlockForUpdate(x, y, z);
+	@Override
+	public void setLogBlock(World world, int x, int y, int z, ForgeDirection facing) {
+		genome.getPrimary().getGenerator().setLogBlock(world, x, y, z, facing);
 	}
 
 	@Override
@@ -364,7 +339,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 		if (world.rand.nextFloat() <= chance) {
 			if (this.getMate() == null) {
-				prod.add(PluginArboriculture.treeInterface.getTree(world, new TreeGenome(genome.getChromosomes())));
+				prod.add(TreeManager.treeRoot.getTree(world, new TreeGenome(genome.getChromosomes())));
 			} else {
 				prod.add(createOffspring(world, playerProfile, x, y, z));
 			}
@@ -425,10 +400,10 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 		IArboristTracker breedingTracker = null;
 		if (playerProfile != null) {
-			breedingTracker = PluginArboriculture.treeInterface.getBreedingTracker(world, playerProfile);
+			breedingTracker = TreeManager.treeRoot.getBreedingTracker(world, playerProfile);
 		}
 
-		List<IMutation> combinations = PluginArboriculture.treeInterface.getCombinations(allele0, allele1, true);
+		List<IMutation> combinations = TreeManager.treeRoot.getCombinations(allele0, allele1, true);
 		for (IMutation mutation : combinations) {
 			ITreeMutation treeMutation = (ITreeMutation) mutation;
 			// Stop blacklisted species.
@@ -449,7 +424,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 			}
 
 			if (chance > world.rand.nextFloat() * 100) {
-				return PluginArboriculture.treeInterface.templateAsChromosomes(treeMutation.getTemplate());
+				return TreeManager.treeRoot.templateAsChromosomes(treeMutation.getTemplate());
 			}
 		}
 

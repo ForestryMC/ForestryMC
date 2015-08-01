@@ -107,7 +107,10 @@ public class AlleleHelper implements IAlleleHelper {
 
 	@Override
 	public <T extends Enum<T> & IChromosomeType> void set(IAllele[] alleles, T chromosomeType, IAllele allele) {
-		if (allele == null || !chromosomeType.getAlleleClass().isInstance(allele)) {
+		if (allele == null) {
+			throw new NullPointerException("Allele must not be null");
+		}
+		if (!chromosomeType.getAlleleClass().isInstance(allele)) {
 			throw new IllegalArgumentException("Allele is the wrong type. Expected: " + chromosomeType + " Got: " + allele);
 		}
 		alleles[chromosomeType.ordinal()] = allele;

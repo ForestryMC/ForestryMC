@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
 
@@ -39,6 +40,7 @@ import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreeMutation;
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.ITreekeepingMode;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosomeType;
@@ -205,7 +207,6 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 		TileSapling sapling = (TileSapling) tile;
 		sapling.setTree(tree.copy());
 		sapling.setOwner(owner);
-		world.markBlockForUpdate(x, y, z);
 
 		return true;
 	}
@@ -330,20 +331,20 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 
 	@Override
 	public void registerTemplate(String identifier, IAllele[] template) {
-		treeTemplates.add(new Tree(PluginArboriculture.treeInterface.templateAsGenome(template)));
+		treeTemplates.add(new Tree(TreeManager.treeRoot.templateAsGenome(template)));
 		speciesTemplates.put(identifier, template);
 	}
 
 	@Override
 	public IAllele[] getDefaultTemplate() {
-		return TreeTemplates.getDefaultTemplate();
+		return TreeDefinition.Oak.getTemplate();
 	}
 
 	/* MUTATIONS */
-	private static final ArrayList<ITreeMutation> treeMutations = new ArrayList<ITreeMutation>();
+	private static final List<ITreeMutation> treeMutations = new ArrayList<ITreeMutation>();
 
 	@Override
-	public ArrayList<ITreeMutation> getMutations(boolean shuffle) {
+	public List<ITreeMutation> getMutations(boolean shuffle) {
 		if (shuffle) {
 			Collections.shuffle(treeMutations);
 		}

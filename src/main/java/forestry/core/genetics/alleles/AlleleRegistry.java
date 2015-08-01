@@ -195,6 +195,15 @@ public class AlleleRegistry implements IAlleleRegistry {
 	}
 
 	@Override
+	public IClassification createAndRegisterClassification(EnumClassLevel level, String uid, String scientific, IClassification... members) {
+		IClassification classification = new Classification(level, uid, scientific);
+		for (IClassification member : members) {
+			classification.addMemberGroup(member);
+		}
+		return classification;
+	}
+
+	@Override
 	public IClassification getClassification(String uid) {
 		return classificationMap.get(uid);
 	}

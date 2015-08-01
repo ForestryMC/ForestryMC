@@ -32,8 +32,8 @@ public abstract class Mutation implements IMutationCustom {
 	private final int chance;
 	boolean isSecret = false;
 
-	protected final IAllele species0;
-	protected final IAllele species1;
+	protected final IAlleleSpecies species0;
+	protected final IAlleleSpecies species1;
 
 	private final IAllele[] template;
 
@@ -129,12 +129,12 @@ public abstract class Mutation implements IMutationCustom {
 	}
 
 	@Override
-	public IAllele getAllele0() {
+	public IAlleleSpecies getAllele0() {
 		return species0;
 	}
 
 	@Override
-	public IAllele getAllele1() {
+	public IAlleleSpecies getAllele1() {
 		return species1;
 	}
 

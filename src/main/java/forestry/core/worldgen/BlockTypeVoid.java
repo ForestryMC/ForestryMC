@@ -8,7 +8,20 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.arboriculture;
+package forestry.core.worldgen;
 
-public interface IWoodFireproof {
+import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
+
+public class BlockTypeVoid extends BlockType {
+
+	public BlockTypeVoid() {
+		super(Blocks.air, 0);
+	}
+
+	@Override
+	public void setBlock(World world, int x, int y, int z) {
+		world.setBlockToAir(x, y, z);
+	}
+
 }

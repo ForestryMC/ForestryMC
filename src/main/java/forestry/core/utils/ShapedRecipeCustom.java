@@ -148,7 +148,7 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 		return true;
 	}
 
-	private boolean checkItemMatch(ItemStack compare, ItemStack resource) {
+	private static boolean checkItemMatch(ItemStack compare, ItemStack resource) {
 
 		if (resource == null && compare == null) {
 			return true;
@@ -170,23 +170,23 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 	}
 
 	@Override
-	public ItemStack getCraftingResult(InventoryCrafting inventorycrafting) {
-		if (preserveNBT) {
-			for (int i = 0; i < inventorycrafting.getSizeInventory(); i++) {
-				if (inventorycrafting.getStackInSlot(i) == null) {
-					continue;
-				}
-				if (!inventorycrafting.getStackInSlot(i).hasTagCompound()) {
-					continue;
-				}
+	public ItemStack getCraftingResult(InventoryCrafting inventoryCrafting) {
+		return getCraftingResult((IInventory) inventoryCrafting);
+	}
 
-				ItemStack crafted = product.copy();
-				crafted.setTagCompound((NBTTagCompound) inventorycrafting.getStackInSlot(i).getTagCompound().copy());
-				return crafted;
+	public ItemStack getCraftingResult(IInventory inventoryCrafting) {
+		ItemStack result = product.copy();
+
+		if (preserveNBT) {
+			NBTTagCompound craftingNbt = RecipeUtil.getCraftingNbt(inventoryCrafting);
+			if (craftingNbt == null) {
+				return null;
 			}
+
+			result.setTagCompound(craftingNbt);
 		}
 
-		return product.copy();
+		return result;
 	}
 
 	@Override
@@ -283,6 +283,13 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 	public static ShapedRecipeCustom buildRecipe(ItemStack product, Object... materials) {
 		ShapedRecipeCustom recipe = createShapedRecipe(product, materials);
 		CraftingManager.getInstance().getRecipeList().add(recipe);
+		return recipe;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static ShapedRecipeCustom buildPriorityRecipe(ItemStack product, Object... materials) {
+		ShapedRecipeCustom recipe = createShapedRecipe(product, materials);
+		CraftingManager.getInstance().getRecipeList().add(0, recipe);
 		return recipe;
 	}
 }

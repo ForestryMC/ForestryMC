@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,15 +40,17 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.IToolGrafter;
 import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IToolScoop;
 import forestry.api.core.Tabs;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.arboriculture.items.ItemLeavesBlock;
+import forestry.arboriculture.render.LeafTexture;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginArboriculture;
 import forestry.plugins.PluginLepidopterology;
@@ -87,7 +90,7 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
 
-		for (ITree tree : PluginArboriculture.treeInterface.getIndividualTemplates()) {
+		for (ITree tree : TreeManager.treeRoot.getIndividualTemplates()) {
 			TileLeaves leaves = new TileLeaves();
 			leaves.setDecorative();
 			leaves.setTree(tree);
@@ -145,7 +148,7 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 		return ret;
 	}
 
-	private static ArrayList<ItemStack> getLeafDrop(World world, GameProfile playerProfile, int x, int y, int z, float saplingModifier, int fortune) {
+	private static ArrayList<ItemStack> getLeafDrop(World world, @Nullable GameProfile playerProfile, int x, int y, int z, float saplingModifier, int fortune) {
 		ArrayList<ItemStack> prod = new ArrayList<ItemStack>();
 
 		TileLeaves tile = getLeafTile(world, x, y, z);
@@ -158,7 +161,7 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 
 		for (ITree sapling : saplings) {
 			if (sapling != null) {
-				prod.add(PluginArboriculture.treeInterface.getMemberStack(sapling, EnumGermlingType.SAPLING.ordinal()));
+				prod.add(TreeManager.treeRoot.getMemberStack(sapling, EnumGermlingType.SAPLING.ordinal()));
 			}
 		}
 
@@ -268,7 +271,8 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
-		defaultIcon = TextureManager.getInstance().registerTex(register, "leaves/deciduous.fancy");
+		LeafTexture.registerAllIcons(register);
+		defaultIcon = LeafTexture.get(EnumLeafType.DECIDUOUS).getFancy();
 	}
 
 	@SideOnly(Side.CLIENT)

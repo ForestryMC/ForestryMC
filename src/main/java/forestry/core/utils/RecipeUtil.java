@@ -15,9 +15,11 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidRegistry;
@@ -65,6 +67,26 @@ public class RecipeUtil {
 			return Collections.singletonList(itemStack);
 		}
 		return oreDictNames;
+	}
+
+	public static NBTTagCompound getCraftingNbt(IInventory inventoryCrafting) {
+		NBTTagCompound craftingNbt = null;
+		for (int i = 0; i < inventoryCrafting.getSizeInventory(); i++) {
+			ItemStack stackInSlot = inventoryCrafting.getStackInSlot(i);
+			if (stackInSlot == null || !stackInSlot.hasTagCompound()) {
+				continue;
+			}
+
+			NBTTagCompound tagCompound = stackInSlot.getTagCompound();
+			// if there are multiple NBT they must all match
+			if (craftingNbt != null && !craftingNbt.equals(tagCompound)) {
+				return null;
+			} else {
+				craftingNbt = tagCompound;
+			}
+		}
+
+		return craftingNbt;
 	}
 
 	public static Object[] getCraftingRecipeAsArray(Object rec) {

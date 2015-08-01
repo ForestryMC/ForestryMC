@@ -10,7 +10,9 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,11 +26,17 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
+import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyNursery;
@@ -36,7 +44,6 @@ import forestry.arboriculture.genetics.CheckPollinatable;
 import forestry.arboriculture.genetics.CheckPollinatableTree;
 import forestry.arboriculture.genetics.ICheckPollinatable;
 import forestry.core.genetics.ItemGE;
-import forestry.plugins.PluginArboriculture;
 
 public class GeneticsUtil {
 
@@ -172,8 +179,34 @@ public class GeneticsUtil {
 			return null;
 		}
 
-		ItemStack ersatz = PluginArboriculture.treeInterface.getMemberStack(tree, EnumGermlingType.SAPLING.ordinal());
+		ItemStack ersatz = TreeManager.treeRoot.getMemberStack(tree, EnumGermlingType.SAPLING.ordinal());
 		ersatz.stackSize = foreign.stackSize;
 		return ersatz;
+	}
+
+	public static int getResearchComplexity(IAlleleSpecies species, IChromosomeType speciesChromosome) {
+		return 1 + getGeneticAdvancement(species, new HashSet<IAlleleSpecies>(), speciesChromosome);
+	}
+
+	private static int getGeneticAdvancement(IAlleleSpecies species, Set<IAlleleSpecies> exclude, IChromosomeType speciesChromosome) {
+		int highest = 0;
+		exclude.add(species);
+
+		for (IMutation mutation : species.getRoot().getPaths(species, speciesChromosome)) {
+			if (!exclude.contains(mutation.getAllele0())) {
+				int otherAdvance = getGeneticAdvancement(mutation.getAllele0(), exclude, speciesChromosome);
+				if (otherAdvance > highest) {
+					highest = otherAdvance;
+				}
+			}
+			if (!exclude.contains(mutation.getAllele1())) {
+				int otherAdvance = getGeneticAdvancement(mutation.getAllele1(), exclude, speciesChromosome);
+				if (otherAdvance > highest) {
+					highest = otherAdvance;
+				}
+			}
+		}
+
+		return 1 + highest;
 	}
 }

@@ -13,6 +13,7 @@ package forestry.factory.gadgets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,7 +23,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.common.util.ForgeDirection;
@@ -32,6 +32,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.recipes.IFabricatorManager;
+import forestry.api.recipes.IFabricatorRecipe;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
@@ -52,174 +53,9 @@ import forestry.core.network.GuiId;
 import forestry.core.utils.GuiUtil;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.core.utils.StackUtils;
+import forestry.factory.recipes.FabricatorRecipe;
 
 public class MachineFabricator extends TilePowered implements ICrafter, ILiquidTankContainer, ISidedInventory {
-
-	/* RECIPE MANAGMENT */
-	public static class Recipe {
-
-		private final ItemStack plan;
-		private final FluidStack molten;
-		private final ShapedRecipeCustom internal;
-
-		public Recipe(ItemStack plan, FluidStack molten, ShapedRecipeCustom internal) {
-			this.plan = plan;
-			this.molten = molten;
-			this.internal = internal;
-		}
-
-		public boolean matches(ItemStack plan, ItemStack[][] resources) {
-			if (this.plan != null && !StackUtils.isCraftingEquivalent(this.plan, plan)) {
-				return false;
-			}
-
-			return internal.matches(resources);
-		}
-
-		public boolean hasLiquid(FluidStack resource) {
-			if (resource == null) {
-				return molten == null;
-			}
-
-			return resource.containsFluid(molten);
-		}
-
-		public ItemStack getPlan() {
-			return plan;
-		}
-
-		public FluidStack getLiquid() {
-			return molten;
-		}
-
-		public IRecipe asIRecipe() {
-			return internal;
-		}
-
-	}
-
-	public static class Smelting {
-
-		private final ItemStack resource;
-		private final FluidStack product;
-		private final int meltingPoint;
-
-		public Smelting(ItemStack resource, FluidStack molten, int meltingPoint) {
-			if (resource == null) {
-				throw new IllegalArgumentException("Resource cannot be null");
-			}
-			if (molten == null) {
-				throw new IllegalArgumentException("Molten cannot be null");
-			}
-
-			this.resource = resource;
-			this.product = molten;
-			this.meltingPoint = meltingPoint;
-		}
-
-		public boolean matches(FluidStack product) {
-			return this.product.isFluidEqual(product);
-		}
-
-		public ItemStack getResource() {
-			return resource;
-		}
-
-		public FluidStack getProduct() {
-			return product;
-		}
-
-		public int getMeltingPoint() {
-			return meltingPoint;
-		}
-	}
-
-	public static class RecipeManager implements IFabricatorManager {
-
-		public static final ArrayList<Recipe> recipes = new ArrayList<Recipe>();
-		public static final ArrayList<Smelting> smeltings = new ArrayList<Smelting>();
-
-		@Override
-		public void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern) {
-			recipes.add(new Recipe(plan, molten, ShapedRecipeCustom.createShapedRecipe(result, pattern)));
-		}
-
-		@Override
-		public void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint) {
-			if (resource == null || molten == null) {
-				return;
-			}
-			smeltings.add(new Smelting(resource, molten, meltingPoint));
-		}
-
-		public static Recipe findMatchingRecipe(ItemStack plan, FluidStack liquid, ItemStack[] resources) {
-			ItemStack[][] gridResources = new ItemStack[3][3];
-			for (int i = 0; i < 3; i++) {
-				for (int j = 0; j < 3; j++) {
-					gridResources[j][i] = resources[i * 3 + j];
-				}
-			}
-
-			for (Recipe recipe : recipes) {
-				if (recipe.matches(plan, gridResources)) {
-					if (recipe.hasLiquid(liquid)) {
-						return recipe;
-					}
-				}
-			}
-
-			return null;
-		}
-
-		public static boolean isPlan(ItemStack plan) {
-			for (Recipe recipe : recipes) {
-				if (StackUtils.isIdenticalItem(recipe.getPlan(), plan)) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		public static Smelting findMatchingSmelting(ItemStack resource) {
-			if (resource == null) {
-				return null;
-			}
-
-			for (Smelting smelting : smeltings) {
-				if (StackUtils.isCraftingEquivalent(smelting.resource, resource)) {
-					return smelting;
-				}
-			}
-
-			return null;
-		}
-
-		public static Smelting findMatchingSmelting(FluidStack product) {
-			if (product == null) {
-				return null;
-			}
-
-			for (Smelting smelting : smeltings) {
-				if (smelting.matches(product)) {
-					return smelting;
-				}
-			}
-
-			return null;
-		}
-
-		@Override
-		public Map<Object[], Object[]> getRecipes() {
-			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
-
-			for (Recipe recipe : recipes) {
-				recipeList.put(recipe.internal.getIngredients(), new Object[]{recipe.internal.getRecipeOutput()});
-			}
-
-			return recipeList;
-		}
-	}
 
 	/* CONSTANTS */
 	private static final int MAX_HEAT = 5000;
@@ -376,7 +212,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		}
 	}
 
-	private Recipe getRecipe() {
+	private IFabricatorRecipe getRecipe() {
 		IInventoryAdapter inventory = getInternalInventory();
 		ItemStack plan = inventory.getStackInSlot(SLOT_PLAN);
 		ItemStack[] crafting = InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
@@ -391,13 +227,13 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 
 	@Override
 	public ItemStack getResult() {
-		Recipe myRecipe = getRecipe();
+		IFabricatorRecipe myRecipe = getRecipe();
 
 		if (myRecipe == null) {
 			return null;
 		}
 
-		return myRecipe.internal.getRecipeOutput().copy();
+		return myRecipe.getCraftingResult(craftingInventory);
 	}
 
 	@Override
@@ -410,7 +246,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 	}
 
 	private void craftResult(EntityPlayer player) {
-		Recipe myRecipe = getRecipe();
+		IFabricatorRecipe myRecipe = getRecipe();
 		if (myRecipe == null) {
 			return;
 		}
@@ -426,7 +262,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 			return;
 		}
 
-		FluidStack liquid = myRecipe.molten;
+		FluidStack liquid = myRecipe.getLiquid();
 
 		// Remove resources
 		ItemStack[] crafting = InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
@@ -604,6 +440,135 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		@Override
 		public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
 			return slotIndex == SLOT_RESULT;
+		}
+	}
+
+	public static class Smelting {
+
+		private final ItemStack resource;
+		private final FluidStack product;
+		private final int meltingPoint;
+
+		public Smelting(ItemStack resource, FluidStack molten, int meltingPoint) {
+			if (resource == null) {
+				throw new IllegalArgumentException("Resource cannot be null");
+			}
+			if (molten == null) {
+				throw new IllegalArgumentException("Molten cannot be null");
+			}
+
+			this.resource = resource;
+			this.product = molten;
+			this.meltingPoint = meltingPoint;
+		}
+
+		public boolean matches(FluidStack product) {
+			return this.product.isFluidEqual(product);
+		}
+
+		public ItemStack getResource() {
+			return resource;
+		}
+
+		public FluidStack getProduct() {
+			return product;
+		}
+
+		public int getMeltingPoint() {
+			return meltingPoint;
+		}
+	}
+
+	public static class RecipeManager implements IFabricatorManager {
+
+		public static final List<IFabricatorRecipe> recipes = new ArrayList<IFabricatorRecipe>();
+		public static final List<Smelting> smeltings = new ArrayList<Smelting>();
+
+		@Override
+		public void addRecipe(IFabricatorRecipe recipe) {
+			recipes.add(recipe);
+		}
+
+		@Override
+		public void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern) {
+			IFabricatorRecipe recipe = new FabricatorRecipe(plan, molten, ShapedRecipeCustom.createShapedRecipe(result, pattern));
+			addRecipe(recipe);
+		}
+
+		@Override
+		public void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint) {
+			if (resource == null || molten == null) {
+				return;
+			}
+			smeltings.add(new Smelting(resource, molten, meltingPoint));
+		}
+
+		public static IFabricatorRecipe findMatchingRecipe(ItemStack plan, FluidStack liquid, ItemStack[] resources) {
+			ItemStack[][] gridResources = new ItemStack[3][3];
+			for (int i = 0; i < 3; i++) {
+				for (int j = 0; j < 3; j++) {
+					gridResources[j][i] = resources[i * 3 + j];
+				}
+			}
+
+			for (IFabricatorRecipe recipe : recipes) {
+				if (recipe.matches(plan, gridResources)) {
+					if (liquid == null || liquid.containsFluid(recipe.getLiquid())) {
+						return recipe;
+					}
+				}
+			}
+
+			return null;
+		}
+
+		public static boolean isPlan(ItemStack plan) {
+			for (IFabricatorRecipe recipe : recipes) {
+				if (StackUtils.isIdenticalItem(recipe.getPlan(), plan)) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		public static Smelting findMatchingSmelting(ItemStack resource) {
+			if (resource == null) {
+				return null;
+			}
+
+			for (Smelting smelting : smeltings) {
+				if (StackUtils.isCraftingEquivalent(smelting.resource, resource)) {
+					return smelting;
+				}
+			}
+
+			return null;
+		}
+
+		public static Smelting findMatchingSmelting(FluidStack product) {
+			if (product == null) {
+				return null;
+			}
+
+			for (Smelting smelting : smeltings) {
+				if (smelting.matches(product)) {
+					return smelting;
+				}
+			}
+
+			return null;
+		}
+
+		@Override
+		public Map<Object[], Object[]> getRecipes() {
+			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
+
+			for (IFabricatorRecipe recipe : recipes) {
+				recipeList.put(recipe.getIngredients(), new Object[]{recipe.getRecipeOutput()});
+			}
+
+			return recipeList;
 		}
 	}
 }

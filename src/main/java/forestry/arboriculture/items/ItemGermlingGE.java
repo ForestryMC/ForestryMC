@@ -23,9 +23,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
@@ -33,6 +33,7 @@ import forestry.api.genetics.IPollinatable;
 import forestry.api.recipes.IVariableFermentable;
 import forestry.arboriculture.genetics.ICheckPollinatable;
 import forestry.arboriculture.genetics.Tree;
+import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.TreeGenome;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
@@ -42,7 +43,6 @@ import forestry.core.render.SpriteSheet;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Utils;
-import forestry.plugins.PluginArboriculture;
 
 public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 
@@ -64,10 +64,10 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 		return TreeGenome.getSpecies(itemStack);
 	}
 
-	private IAlleleTreeSpecies getSpeciesOrDefault(ItemStack itemstack) {
+	private static IAlleleTreeSpecies getSpeciesOrDefault(ItemStack itemstack) {
 		IAlleleTreeSpecies treeSpecies = TreeGenome.getSpecies(itemstack);
 		if (treeSpecies == null) {
-			treeSpecies = (IAlleleTreeSpecies) PluginArboriculture.treeInterface.getDefaultTemplate()[EnumTreeChromosome.SPECIES.ordinal()];
+			treeSpecies = TreeDefinition.Oak.getGenome().getPrimary();
 		}
 
 		return treeSpecies;
@@ -105,13 +105,13 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void addCreativeItems(List itemList, boolean hideSecrets) {
-		for (IIndividual individual : PluginArboriculture.treeInterface.getIndividualTemplates()) {
+		for (IIndividual individual : TreeManager.treeRoot.getIndividualTemplates()) {
 			// Don't show secrets unless ordered to.
 			if (hideSecrets && individual.isSecret() && !Config.isDebug) {
 				continue;
 			}
 
-			itemList.add(PluginArboriculture.treeInterface.getMemberStack(individual, type.ordinal()));
+			itemList.add(TreeManager.treeRoot.getMemberStack(individual, type.ordinal()));
 		}
 	}
 
@@ -145,12 +145,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 
 	@Override
 	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int par7, float facingX, float facingY, float facingZ) {
-
-		if (!Proxies.common.isSimulating(world)) {
-			return false;
-		}
-
-		ITree tree = PluginArboriculture.treeInterface.getMember(itemstack);
+		ITree tree = TreeManager.treeRoot.getMember(itemstack);
 		if (tree == null) {
 			return false;
 		}
@@ -171,7 +166,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 				return false;
 			}
 
-			if (PluginArboriculture.treeInterface.plantSapling(world, tree, player.getGameProfile(), x, y + yShift, z)) {
+			if (TreeManager.treeRoot.plantSapling(world, tree, player.getGameProfile(), x, y + yShift, z)) {
 				Proxies.common.addBlockPlaceEffects(world, x, y, z, world.getBlock(x, y + yShift, z), 0);
 				if (!player.capabilities.isCreativeMode) {
 					itemstack.stackSize--;
@@ -213,7 +208,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 
 	@Override
 	public float getFermentationModifier(ItemStack itemstack) {
-		ITree tree = PluginArboriculture.treeInterface.getMember(itemstack);
+		ITree tree = TreeManager.treeRoot.getMember(itemstack);
 		if (tree == null) {
 			return 1.0f;
 		}

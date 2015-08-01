@@ -15,10 +15,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import com.mojang.authlib.GameProfile;
 
 import forestry.api.arboriculture.IArboristTracker;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.core.genetics.BreedingTracker;
-import forestry.plugins.PluginArboriculture;
 
 public class ArboristTracker extends BreedingTracker implements IArboristTracker {
 
@@ -33,7 +33,7 @@ public class ArboristTracker extends BreedingTracker implements IArboristTracker
 
 	@Override
 	protected IBreedingTracker getBreedingTracker(EntityPlayer player) {
-		return PluginArboriculture.treeInterface.getBreedingTracker(player.worldObj, player.getGameProfile());
+		return TreeManager.treeRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
 	}
 
 	@Override

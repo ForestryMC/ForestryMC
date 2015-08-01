@@ -19,14 +19,15 @@ import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.gadgets.TileSapling;
 import forestry.core.utils.Utils;
 import forestry.core.worldgen.BlockType;
+import forestry.core.worldgen.BlockTypeVoid;
 import forestry.core.worldgen.WorldGenBase;
 
 public abstract class WorldGenArboriculture extends WorldGenBase {
 
-	private static final BlockType vineNorth = new BlockType(Blocks.vine, 1);
-	private static final BlockType vineSouth = new BlockType(Blocks.vine, 4);
-	private static final BlockType vineWest = new BlockType(Blocks.vine, 8);
-	private static final BlockType vineEast = new BlockType(Blocks.vine, 2);
+	private static final ITreeBlockType vineNorth = new TreeBlockType(Blocks.vine, 1);
+	private static final ITreeBlockType vineSouth = new TreeBlockType(Blocks.vine, 4);
+	private static final ITreeBlockType vineWest = new TreeBlockType(Blocks.vine, 8);
+	private static final ITreeBlockType vineEast = new TreeBlockType(Blocks.vine, 2);
 
 	private static final BlockType air = new BlockTypeVoid();
 
@@ -35,8 +36,8 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	protected int startY;
 	protected int startZ;
 
-	protected BlockType leaf;
-	protected BlockType wood;
+	protected TreeBlockTypeLeaf leaf;
+	protected ITreeBlockType wood;
 
 	protected boolean spawnPods = false;
 	protected int minPodHeight = 3;
@@ -80,9 +81,9 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 
 	public abstract boolean canGrow();
 
-	public abstract BlockType getLeaf(GameProfile owner);
+	public abstract TreeBlockTypeLeaf getLeaf(GameProfile owner);
 
-	public abstract BlockType getWood();
+	public abstract ITreeBlockType getWood();
 
 	protected void generateTreeTrunk(int height, int girth) {
 		generateTreeTrunk(height, girth, 0);
@@ -153,7 +154,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	}
 
 	@Override
-	protected void addBlock(int x, int y, int z, BlockType type, EnumReplaceMode replace) {
+	protected void addBlock(int x, int y, int z, ITreeBlockType type, EnumReplaceMode replace) {
 		if (replace == EnumReplaceMode.ALL
 				|| (replace == EnumReplaceMode.SOFT && Utils.isReplaceableBlock(world, startX + x, startY + y, startZ + z))
 				|| world.isAirBlock(startX + x, startY + y, startZ + z)) {
@@ -162,28 +163,18 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	}
 
 	protected final void clearBlock(int x, int y, int z) {
-		air.setBlock(world, tree, startX + x, startY + y, startZ + z);
+		air.setBlock(world, startX + x, startY + y, startZ + z);
 	}
 
 	protected final void addWood(int x, int y, int z, EnumReplaceMode replace) {
 		addBlock(x, y, z, wood, replace);
 	}
 	
-	protected final void addXWood(int x, int y, int z, EnumReplaceMode replace) {
-		BlockType woodX = new BlockType(wood.getBlock(), wood.getMeta() + 4);
-		addBlock(x, y, z, woodX, replace);
-	}
-
-	protected final void addZWood(int x, int y, int z, EnumReplaceMode replace) {
-		BlockType woodZ = new BlockType(wood.getBlock(), wood.getMeta() + 8);
-		addBlock(x, y, z, woodZ, replace);
-	}
-	
 	protected final void addLeaf(int x, int y, int z, EnumReplaceMode replace) {
 		addBlock(x, y, z, leaf, replace);
 	}
 
-	protected final void addVine(int x, int y, int z, BlockType vine) {
+	protected final void addVine(int x, int y, int z, ITreeBlockType vine) {
 		addBlock(x, y, z, vine, EnumReplaceMode.NONE);
 	}
 

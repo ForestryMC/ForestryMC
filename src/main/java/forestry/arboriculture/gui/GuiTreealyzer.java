@@ -27,6 +27,7 @@ import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IAlleleGrowth;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IFruitFamily;
@@ -40,7 +41,6 @@ import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StringUtil;
-import forestry.plugins.PluginArboriculture;
 
 public class GuiTreealyzer extends GuiAlyzer {
 
@@ -72,8 +72,8 @@ public class GuiTreealyzer extends GuiAlyzer {
 			if (inventory.getStackInSlot(k) == null) {
 				continue;
 			}
-			tree = PluginArboriculture.treeInterface.getMember(inventory.getStackInSlot(k));
-			treeType = PluginArboriculture.treeInterface.getType(inventory.getStackInSlot(k));
+			tree = TreeManager.treeRoot.getMember(inventory.getStackInSlot(k));
+			treeType = TreeManager.treeRoot.getType(inventory.getStackInSlot(k));
 			if (tree == null || !tree.isAnalyzed()) {
 				continue;
 			}

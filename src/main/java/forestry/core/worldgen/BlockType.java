@@ -11,36 +11,45 @@
 package forestry.core.worldgen;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import forestry.api.world.ITreeGenData;
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryBlock;
+import net.minecraftforge.common.util.ForgeDirection;
 
-public class BlockType {
+import forestry.core.config.Defaults;
+
+public class BlockType implements IBlockType {
 
 	private final Block block;
-	private final int meta;
+	protected int meta;
 
 	public BlockType(Block block, int meta) {
 		this.block = block;
 		this.meta = meta;
 	}
 
-	public BlockType(ForestryBlock block, int meta) {
-		this.block = block.block();
-		this.meta = meta;
+	@Override
+	public void setDirection(ForgeDirection facing) {
+
 	}
 
-	public void setBlock(World world, ITreeGenData tree, int x, int y, int z) {
+	@Override
+	public void setBlock(World world, int x, int y, int z) {
 		world.setBlock(x, y, z, block, meta, Defaults.FLAG_BLOCK_SYNCH);
 	}
-	
+
+	@Override
 	public int getMeta() {
 		return this.meta;
 	}
-	
+
+	@Override
 	public Block getBlock() {
 		return this.block;
+	}
+
+	@Override
+	public ItemStack getItemStack() {
+		return new ItemStack(block, 1, meta);
 	}
 }

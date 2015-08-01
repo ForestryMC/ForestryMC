@@ -10,6 +10,7 @@ import forestry.api.recipes.ICarpenterManager;
 import forestry.api.recipes.ICentrifugeManager;
 import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.api.recipes.IFabricatorManager;
+import forestry.api.recipes.IFabricatorRecipe;
 import forestry.api.recipes.IFermenterManager;
 import forestry.api.recipes.IMoistenerManager;
 import forestry.api.recipes.ISqueezerManager;
@@ -59,6 +60,11 @@ public class DummyManagers {
 	}
 
 	public static class FabricatorManager implements IFabricatorManager {
+
+		@Override
+		public void addRecipe(IFabricatorRecipe recipe) {
+
+		}
 
 		@Override
 		public void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern) {

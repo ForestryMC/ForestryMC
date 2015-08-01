@@ -32,22 +32,19 @@ import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
 import forestry.plugins.PluginArboriculture;
 
 public class BlockSapling extends BlockTreeContainer implements IGrowable {
 
 	public static TileSapling getSaplingTile(IBlockAccess world, int x, int y, int z) {
-		TileEntity tile = world.getTileEntity(x, y, z);
-		if (!(tile instanceof TileSapling)) {
-			return null;
-		}
-
-		return (TileSapling) tile;
+		return Utils.getTile(world, x, y, z, TileSapling.class);
 	}
 
 	public BlockSapling() {
@@ -162,7 +159,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 		if (sapling == null || sapling.getTree() == null) {
 			return null;
 		}
-		return PluginArboriculture.treeInterface.getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING.ordinal());
+		return TreeManager.treeRoot.getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING.ordinal());
 	}
 
 	@Override
@@ -176,14 +173,14 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 		return world.setBlockToAir(x, y, z);
 	}
 
-	private void dropAsSapling(World world, int x, int y, int z) {
+	private static void dropAsSapling(World world, int x, int y, int z) {
 		if (!Proxies.common.isSimulating(world)) {
 			return;
 		}
 
 		TileSapling sapling = getSaplingTile(world, x, y, z);
 		if (sapling != null && sapling.getTree() != null) {
-			ItemStack saplingStack = PluginArboriculture.treeInterface.getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING.ordinal());
+			ItemStack saplingStack = TreeManager.treeRoot.getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING.ordinal());
 			StackUtils.dropItemStackAsEntity(saplingStack, world, x, y, z);
 		}
 

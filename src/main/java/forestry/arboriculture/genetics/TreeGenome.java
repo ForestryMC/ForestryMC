@@ -25,6 +25,7 @@ import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.IGrowthProvider;
 import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleSpecies;
@@ -32,7 +33,6 @@ import forestry.api.genetics.IChromosome;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.genetics.Genome;
 import forestry.core.genetics.alleles.AllelePlantType;
-import forestry.plugins.PluginArboriculture;
 
 public class TreeGenome extends Genome implements ITreeGenome {
 
@@ -51,7 +51,7 @@ public class TreeGenome extends Genome implements ITreeGenome {
 			return (IAlleleTreeSpecies) species;
 		}
 
-		return (IAlleleTreeSpecies) getActiveAllele(itemStack, EnumTreeChromosome.SPECIES, PluginArboriculture.treeInterface);
+		return (IAlleleTreeSpecies) getActiveAllele(itemStack, EnumTreeChromosome.SPECIES, TreeManager.treeRoot);
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public class TreeGenome extends Genome implements ITreeGenome {
 
 	@Override
 	public ISpeciesRoot getSpeciesRoot() {
-		return PluginArboriculture.treeInterface;
+		return TreeManager.treeRoot;
 	}
 
 }

@@ -10,17 +10,23 @@
  ******************************************************************************/
 package forestry.arboriculture.gadgets;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -34,37 +40,28 @@ import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodType;
 import forestry.plugins.PluginArboriculture;
 
-public class BlockArbFence extends BlockFence implements IWoodTyped {
+public class BlockArbFence extends BlockFence implements IWoodTyped, ITileEntityProvider {
 
-	public enum FenceCat {
-		CAT0, CAT1
-	}
+	private final boolean fireproof;
 
-	public static final int fencesPerCat = 16;
-	private final FenceCat cat;
-
-	public BlockArbFence(FenceCat cat) {
+	public BlockArbFence(boolean fireproof) {
 		super("", Material.wood);
-		this.cat = cat;
+
+		this.fireproof = fireproof;
+
 		setHardness(2.0F);
 		setResistance(5.0F);
+		setHarvestLevel("axe", 0);
 		setStepSound(soundTypeWood);
 		setCreativeTab(Tabs.tabArboriculture);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		int totalWoods = WoodType.values().length;
-		int count = Math.min(totalWoods - (cat.ordinal() * fencesPerCat), fencesPerCat);
-		for (int i = 0; i < count; i++) {
-			itemList.add(new ItemStack(this, 1, i));
+	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List list) {
+		for (WoodType woodType : WoodType.VALUES) {
+			list.add(woodType.getFence(fireproof));
 		}
-	}
-
-	@Override
-	public int damageDropped(int meta) {
-		return meta;
 	}
 
 	@Override
@@ -101,51 +98,82 @@ public class BlockArbFence extends BlockFence implements IWoodTyped {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIcon(int side, int meta) {
-		WoodType woodType = getWoodType(meta);
-		if (woodType == null) {
-			return null;
-		}
-		return woodType.getPlankIcon();
+		return WoodType.ACACIA.getPlankIcon();
 	}
 
-	public boolean isFence(IBlockAccess world, int x, int y, int z) {
+	@Override
+	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+		TileWood wood = BlockWood.getWoodTile(world, x, y, z);
+		WoodType type = wood.getWoodType();
+		return type.getPlankIcon();
+	}
+
+	public static boolean isFence(IBlockAccess world, int x, int y, int z) {
 		Block block = world.getBlock(x, y, z);
 		return PluginArboriculture.validFences.contains(block);
 	}
 
+	@Override
+	public final TileEntity createNewTileEntity(World world, int meta) {
+		return new TileWood();
+	}
+
 	/* PROPERTIES */
 	@Override
-	public boolean isWood(IBlockAccess world, int x, int y, int z) {
-		return true;
+	public final ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+		ItemStack itemStack = new ItemStack(this);
+		NBTTagCompound nbt = BlockWood.getTagCompound(world, x, y, z);
+		itemStack.setTagCompound(nbt);
+		return itemStack;
+	}
+
+	@Override
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
+		return TileWood.blockRemovedByPlayer(this, world, player, x, y, z);
+	}
+
+	@Override
+	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+		world.removeTileEntity(x, y, z);
+		super.breakBlock(world, x, y, z, block, meta);
+	}
+
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+		return new ArrayList<ItemStack>();
+	}
+
+	@Override
+	public final float getBlockHardness(World world, int x, int y, int z) {
+		TileWood wood = BlockWood.getWoodTile(world, x, y, z);
+		if (wood == null) {
+			return WoodType.DEFAULT_HARDNESS;
+		}
+		return wood.getWoodType().getHardness();
+	}
+
+	@Override
+	public final boolean isFlammable(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+		return !isFireproof();
 	}
 
 	@Override
 	public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
-		return 20;
-	}
-
-	@Override
-	public boolean isFlammable(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
-		return true;
+		return isFireproof() ? 0 : 20;
 	}
 
 	@Override
 	public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
-		return 5;
-	}
-
-	@Override
-	public WoodType getWoodType(int meta) {
-		int woodOrdinal = cat.ordinal() * fencesPerCat + meta;
-		if (woodOrdinal < WoodType.VALUES.length) {
-			return WoodType.VALUES[woodOrdinal];
-		} else {
-			return null;
-		}
+		return isFireproof() ? 0 : 5;
 	}
 
 	@Override
 	public String getBlockKind() {
 		return "fences";
+	}
+
+	@Override
+	public boolean isFireproof() {
+		return fireproof;
 	}
 }

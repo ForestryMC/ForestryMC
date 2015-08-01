@@ -6,10 +6,11 @@ import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IClassification;
+import forestry.core.genetics.IBranchDefinition;
 import forestry.core.genetics.alleles.Allele;
 import forestry.core.genetics.alleles.EnumAllele;
 
-public enum BeeBranchDefinition {
+public enum BeeBranchDefinition implements IBranchDefinition {
 	HONEY("Apis"),
 	NOBLE("Probapis"),
 	INDUSTRIOUS("Industrapis"),
@@ -120,12 +121,14 @@ public enum BeeBranchDefinition {
 
 	}
 
+	@Override
 	public final IAllele[] getTemplate() {
 		IAllele[] template = getDefaultTemplate();
 		setBranchProperties(template);
 		return template;
 	}
 
+	@Override
 	public final IClassification getBranch() {
 		return branch;
 	}

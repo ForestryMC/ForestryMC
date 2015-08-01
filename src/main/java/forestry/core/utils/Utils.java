@@ -23,6 +23,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import net.minecraftforge.oredict.OreDictionary;
@@ -204,7 +205,7 @@ public class Utils {
 		Proxies.log.finer("Registered entity %s (%s) with id %s.", ident, entityClass.toString(), id);
 	}
 
-	public static <T extends TileEntity> T getTile(World world, int x, int y, int z, Class<T> tileClass) {
+	public static <T extends TileEntity> T getTile(IBlockAccess world, int x, int y, int z, Class<T> tileClass) {
 		T tileEntity = null;
 		try {
 			tileEntity = tileClass.cast(world.getTileEntity(x, y, z));

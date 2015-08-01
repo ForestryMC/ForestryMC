@@ -18,7 +18,6 @@ import net.minecraftforge.common.EnumPlantType;
 
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IAlleleGrowth;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.lepidopterology.IAlleleButterflySpecies;
@@ -55,50 +54,6 @@ public abstract class Allele implements IAllele {
 
 	public static AlleleHelper helper;
 
-	// / TREES // SPECIES 512 - 1023
-	public static IAlleleTreeSpecies treeOak;
-	public static IAlleleTreeSpecies treeBirch;
-	public static IAlleleTreeSpecies treeSpruce;
-	public static IAlleleTreeSpecies treePine;
-	public static IAlleleTreeSpecies treeJungle;
-	public static IAlleleTreeSpecies treeAcacia;
-	public static IAlleleTreeSpecies treeDarkOak;
-	
-	public static IAlleleTreeSpecies treeLarch;
-	public static IAlleleTreeSpecies treeTeak;
-	public static IAlleleTreeSpecies treeDesertAcacia;
-	public static IAlleleTreeSpecies treeLime;
-	public static IAlleleTreeSpecies treeChestnut;
-	public static IAlleleTreeSpecies treeWenge;
-	public static IAlleleTreeSpecies treeBaobab;
-	public static IAlleleTreeSpecies treeSequioa;
-	public static IAlleleTreeSpecies treeGiganteum;
-
-	public static IAlleleTreeSpecies treeKapok;
-	public static IAlleleTreeSpecies treeEbony;
-	public static IAlleleTreeSpecies treeMahogany;
-	public static IAlleleTreeSpecies treeBalsa;
-	public static IAlleleTreeSpecies treePapaya;
-	public static IAlleleTreeSpecies treeWalnut;
-	public static IAlleleTreeSpecies treeDate;
-	public static IAlleleTreeSpecies treeCherry;
-
-	public static IAlleleTreeSpecies treeWillow;
-	public static IAlleleTreeSpecies treeSipiri;
-
-	public static IAlleleTreeSpecies treeMahoe;
-	public static IAlleleTreeSpecies treePoplar;
-
-	public static IAlleleTreeSpecies treeLemon;
-	public static IAlleleTreeSpecies treePlum;
-
-	public static IAlleleTreeSpecies treeMaple;
-
-	public static IAlleleTreeSpecies treeIpe;
-	public static IAlleleTreeSpecies treePadauk;
-	public static IAlleleTreeSpecies treeCocobolo;
-	public static IAlleleTreeSpecies treeZebrawood;
-	
 	/// BUTTERFLIES // SPECIES
 	// Moths
 	public static IAlleleButterflySpecies mothBrimstone;

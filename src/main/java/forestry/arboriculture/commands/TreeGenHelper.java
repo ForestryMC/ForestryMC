@@ -16,12 +16,12 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.core.commands.SpeciesNotFoundException;
 import forestry.core.commands.TemplateNotFoundException;
 import forestry.core.worldgen.WorldGenBase;
-import forestry.plugins.PluginArboriculture;
 
 public final class TreeGenHelper {
 
@@ -31,7 +31,7 @@ public final class TreeGenHelper {
 			return null;
 		}
 
-		ITree tree = PluginArboriculture.treeInterface.getTree(player.worldObj, treeGenome);
+		ITree tree = TreeManager.treeRoot.getTree(player.worldObj, treeGenome);
 		return tree.getTreeGenerator(player.worldObj, x, y, z, true);
 	}
 
@@ -72,12 +72,12 @@ public final class TreeGenHelper {
 			throw new SpeciesNotFoundException(speciesName);
 		}
 
-		IAllele[] template = PluginArboriculture.treeInterface.getTemplate(species.getUID());
+		IAllele[] template = TreeManager.treeRoot.getTemplate(species.getUID());
 
 		if (template == null) {
 			throw new TemplateNotFoundException(species);
 		}
 
-		return PluginArboriculture.treeInterface.templateAsGenome(template);
+		return TreeManager.treeRoot.templateAsGenome(template);
 	}
 }
