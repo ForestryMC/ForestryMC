@@ -383,6 +383,21 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
+	public EnumTemperature getTemperature() {
+		IBeeModifier beeModifier = new BeeHousingModifier(this);
+		if (beeModifier.isHellish() && tempChange >= 0) {
+			return EnumTemperature.HELLISH;
+		}
+
+		return EnumTemperature.getFromValue(getExactTemperature());
+	}
+
+	@Override
+	public EnumHumidity getHumidity() {
+		return EnumHumidity.getFromValue(getExactHumidity());
+	}
+
+	@Override
 	public GameProfile getOwner() {
 		return getAccessHandler().getOwner();
 	}
@@ -399,22 +414,6 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 			cachedBiome = worldObj.getBiomeGenForCoords(coords.x, coords.z);
 		}
 		return cachedBiome;
-	}
-
-	@Override
-	public EnumTemperature getTemperature() {
-		IBeeModifier beeModifier = new BeeHousingModifier(this);
-		if (beeModifier.isHellish() && tempChange >= 0) {
-			return EnumTemperature.HELLISH;
-		}
-
-		CoordTriplet coords = getReferenceCoord();
-		return EnumTemperature.getFromBiome(getBiome(), coords.x, coords.y, coords.z);
-	}
-
-	@Override
-	public EnumHumidity getHumidity() {
-		return EnumHumidity.getFromValue(getExactHumidity());
 	}
 
 	@Override
