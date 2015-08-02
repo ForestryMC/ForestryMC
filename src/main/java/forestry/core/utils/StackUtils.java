@@ -544,6 +544,10 @@ public class StackUtils {
 	}
 
 	public static Stack parseStackString(String stackString, int missingMetaValue) {
+		if (stackString == null) {
+			return null;
+		}
+
 		stackString = stackString.trim();
 		if (stackString.isEmpty()) {
 			return null;
