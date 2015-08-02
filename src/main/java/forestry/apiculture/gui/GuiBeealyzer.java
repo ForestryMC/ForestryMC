@@ -83,7 +83,7 @@ public class GuiBeealyzer extends GuiAlyzer {
 				drawAnalyticsPage2(bee, beeType);
 				break;
 			case 3:
-				drawAnalyticsPage3(bee, beeType);
+				drawAnalyticsPage3(bee);
 				break;
 			case 4:
 				drawAnalyticsPageMutations(bee);
@@ -243,7 +243,7 @@ public class GuiBeealyzer extends GuiAlyzer {
 		endPage();
 	}
 
-	private void drawAnalyticsPage3(IBee bee, EnumBeeType type) {
+	private void drawAnalyticsPage3(IBee bee) {
 
 		startPage(COLUMN_0, COLUMN_1, COLUMN_2);
 

@@ -30,7 +30,7 @@ import forestry.core.proxy.Proxies;
 
 public abstract class BlockForestry extends BlockContainer {
 
-	public BlockForestry(Material material) {
+	protected BlockForestry(Material material) {
 		super(material);
 		setHardness(1.5f);
 		setCreativeTab(CreativeTabForestry.tabForestry);
@@ -51,13 +51,13 @@ public abstract class BlockForestry extends BlockContainer {
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack itemstack) {
+	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityLiving, ItemStack itemstack) {
 
 		if (!Proxies.common.isSimulating(world)) {
 			return;
 		}
 
-		if (entityliving instanceof EntityPlayer) {
+		if (entityLiving instanceof EntityPlayer) {
 			TileEntity tile = world.getTileEntity(i, j, k);
 
 			IOwnable ownable;
@@ -70,7 +70,7 @@ public abstract class BlockForestry extends BlockContainer {
 				return;
 			}
 
-			EntityPlayer player = (EntityPlayer) entityliving;
+			EntityPlayer player = (EntityPlayer) entityLiving;
 			GameProfile gameProfile = player.getGameProfile();
 			ownable.setOwner(gameProfile);
 		}

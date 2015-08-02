@@ -56,7 +56,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.WorktableGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
@@ -106,7 +106,7 @@ public class TileWorktable extends TileBase implements ICrafter {
 	}
 
 	public void chooseRecipe(int recipeIndex) {
-		if (recipeIndex >= memorized.capacity) {
+		if (recipeIndex >= RecipeMemory.capacity) {
 			for (int slot = 0; slot < craftingInventory.getSizeInventory(); slot++) {
 				craftingInventory.setInventorySlotContents(slot, null);
 			}

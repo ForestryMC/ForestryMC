@@ -207,7 +207,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		return damage > tree.getResilience();
 	}
 
-	public boolean isPollinated() {
+	private boolean isPollinated() {
 		ITree tree = getTree();
 		return tree != null && !isDestroyed(tree, damage) && tree.getMate() != null;
 	}
@@ -315,7 +315,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	/* NETWORK */
-	public void sendNetworkUpdate() {
+	private void sendNetworkUpdate() {
 		Proxies.net.sendNetworkPacket(new PacketTileStream(this), worldObj);
 	}
 

@@ -27,20 +27,20 @@ import forestry.farming.gadgets.StructureLogicFarm;
 
 public abstract class FarmLogicHomogeneous extends FarmLogic {
 
-	protected final ItemStack resource;
-	protected final ItemStack soilBlock;
+	private final ItemStack resource;
+	private final ItemStack soilBlock;
 	protected final Iterable<IFarmable> germlings;
 
 	ArrayList<ItemStack> produce = new ArrayList<ItemStack>();
 
-	public FarmLogicHomogeneous(IFarmHousing housing, ItemStack resource, ItemStack soilBlock, Iterable<IFarmable> germlings) {
+	protected FarmLogicHomogeneous(IFarmHousing housing, ItemStack resource, ItemStack soilBlock, Iterable<IFarmable> germlings) {
 		super(housing);
 		this.resource = resource;
 		this.soilBlock = soilBlock;
 		this.germlings = germlings;
 	}
 
-	public boolean isAcceptedSoil(ItemStack itemStack) {
+	protected boolean isAcceptedSoil(ItemStack itemStack) {
 		return StackUtils.isIdenticalItem(soilBlock, itemStack);
 	}
 
@@ -59,7 +59,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogic {
 		return false;
 	}
 
-	public boolean isWindfall(ItemStack itemstack) {
+	protected boolean isWindfall(ItemStack itemstack) {
 		for (IFarmable germling : germlings) {
 			if (germling.isWindfall(itemstack)) {
 				return true;

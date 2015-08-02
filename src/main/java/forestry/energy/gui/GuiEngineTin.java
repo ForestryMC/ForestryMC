@@ -36,7 +36,7 @@ public class GuiEngineTin extends GuiEngine<ContainerEngineTin, EngineTin> {
 		drawHealthMeter(guiLeft + 74, guiTop + 25, storageHeight, rated);
 	}
 
-	public static EnumTankLevel rateLevel(int scaled) {
+	private static EnumTankLevel rateLevel(int scaled) {
 
 		if (scaled < 5) {
 			return EnumTankLevel.EMPTY;

@@ -112,7 +112,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int metadata, int side) {
+	public IIcon getIcon() {
 		if (maturity < indices.length) {
 			return TextureManager.getInstance().getIcon((short) indices[maturity]);
 		} else {

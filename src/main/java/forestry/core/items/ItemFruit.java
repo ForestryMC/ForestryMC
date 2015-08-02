@@ -29,13 +29,13 @@ import forestry.core.render.TextureManager;
 
 public class ItemFruit extends ItemForestryFood {
 
-	public static enum EnumFruit {
+	public enum EnumFruit {
 		CHERRY("cropCherry"), WALNUT("cropWalnut"), CHESTNUT("cropChestnut"), LEMON("cropLemon"), PLUM("cropPlum"), DATES("cropDate"), PAPAYA("cropPapaya");//, COCONUT("cropCoconut");
 		public static final EnumFruit[] VALUES = values();
 
 		final String oreDict;
 
-		private EnumFruit(String oreDict) {
+		EnumFruit(String oreDict) {
 			this.oreDict = oreDict;
 		}
 

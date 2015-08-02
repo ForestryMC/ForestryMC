@@ -29,11 +29,11 @@ public abstract class Trigger implements ITriggerExternal {
 	private final String uid;
 	private final String unlocalized;
 
-	public Trigger(String uid) {
+	protected Trigger(String uid) {
 		this(uid, uid);
 	}
 
-	public Trigger(String uid, String localization) {
+	protected Trigger(String uid, String localization) {
 		this.uid = "forestry:" + uid;
 		unlocalized = "trigger." + localization;
 		StatementManager.registerStatement(this);

@@ -94,7 +94,7 @@ public class TileSapling extends TileTreeContainer {
 		WorldGenerator generator = tree.getTreeGenerator(worldObj, xCoord, yCoord, zCoord, bonemealed);
 		final boolean generated;
 		if (generator instanceof WorldGenBase) {
-			generated = ((WorldGenBase) generator).generate(worldObj, worldObj.rand, xCoord, yCoord, zCoord, bonemealed);
+			generated = ((WorldGenBase) generator).generate(worldObj, xCoord, yCoord, zCoord, bonemealed);
 		} else {
 			generated = generator.generate(worldObj, worldObj.rand, xCoord, yCoord, zCoord);
 		}

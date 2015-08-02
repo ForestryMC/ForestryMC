@@ -27,7 +27,7 @@ public class PacketGuiEnergy extends ForestryPacket {
 		new PacketGuiEnergy(data);
 	}
 
-	public PacketGuiEnergy(DataInputStreamForestry data) throws IOException {
+	private PacketGuiEnergy(DataInputStreamForestry data) throws IOException {
 		super(data);
 	}
 

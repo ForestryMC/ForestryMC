@@ -40,7 +40,7 @@ public class CreativeTabForestry extends CreativeTabs {
 
 	private final int icon;
 
-	public CreativeTabForestry(int icon, String label) {
+	private CreativeTabForestry(int icon, String label) {
 		super(label);
 		this.icon = icon;
 	}

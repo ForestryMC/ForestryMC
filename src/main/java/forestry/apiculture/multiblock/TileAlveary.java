@@ -29,7 +29,7 @@ public abstract class TileAlveary extends RectangularMultiblockTileEntityBase {
 	public static final int SIEVE_META = 7;
 
 	/* TEXTURES */
-	public int getIcon(int side, int metadata) {
+	public int getIcon(int side) {
 		return BlockAlveary.PLAIN;
 	}
 

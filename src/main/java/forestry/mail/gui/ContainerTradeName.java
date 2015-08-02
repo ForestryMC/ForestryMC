@@ -34,7 +34,7 @@ public class ContainerTradeName extends ContainerTile<MachineTrader> {
 			for (Object crafter : crafters) {
 				if (crafter instanceof EntityPlayer) {
 					EntityPlayer player = (EntityPlayer) crafter;
-					tile.openGui(player, tile);
+					tile.openGui(player);
 				}
 			}
 		}

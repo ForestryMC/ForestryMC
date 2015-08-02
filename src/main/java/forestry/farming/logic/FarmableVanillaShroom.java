@@ -17,7 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
-import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
@@ -48,7 +47,7 @@ public class FarmableVanillaShroom extends FarmableGenericSapling {
 		}
 
 		Proxies.common.addBlockPlaceEffects(world, x, y, z, Blocks.brown_mushroom, 0);
-		return ForestryBlock.mushroom.setBlock(world, x, y, z, meta, Defaults.FLAG_BLOCK_SYNCH);
+		return ForestryBlock.mushroom.setBlock(world, x, y, z, meta);
 	}
 
 }

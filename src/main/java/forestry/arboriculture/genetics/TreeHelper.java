@@ -59,8 +59,8 @@ import forestry.plugins.PluginArboriculture;
 public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 
 	public static final String UID = "rootTrees";
-	public static int treeSpeciesCount = -1;
-	public static ITreekeepingMode activeTreekeepingMode;
+	private static int treeSpeciesCount = -1;
+	private static ITreekeepingMode activeTreekeepingMode;
 	public static final ArrayList<ITree> treeTemplates = new ArrayList<ITree>();
 
 	private final ArrayList<ITreekeepingMode> treekeepingModes = new ArrayList<ITreekeepingMode>();
@@ -218,7 +218,7 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 		if (direction < 0) {
 			return false;
 		}
-		boolean placed = ForestryBlock.pods.setBlock(world, x, y, z, direction, Defaults.FLAG_BLOCK_SYNCH);
+		boolean placed = ForestryBlock.pods.setBlock(world, x, y, z, direction);
 		if (!placed) {
 			return false;
 		}

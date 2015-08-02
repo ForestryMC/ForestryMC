@@ -81,7 +81,7 @@ public class ItemCircuitBoard extends ItemForestryMultiPass {
 		return chipset;
 	}
 
-	public static void saveChipset(ItemStack itemstack, ICircuitBoard circuitboard) {
+	private static void saveChipset(ItemStack itemstack, ICircuitBoard circuitboard) {
 		if (circuitboard == null) {
 			itemstack.setTagCompound(null);
 			return;

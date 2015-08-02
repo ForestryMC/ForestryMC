@@ -61,11 +61,11 @@ public class BlockBase extends BlockForestry {
 	public MachineDefinition addDefinition(MachineDefinition definition) {
 		definition.setBlock(this);
 
-		while (definitions.size() <= definition.meta) {
+		while (definitions.size() <= definition.getMeta()) {
 			definitions.add(null);
 		}
 
-		definitions.set(definition.meta, definition);
+		definitions.set(definition.getMeta(), definition);
 
 		return definition;
 	}
@@ -133,16 +133,6 @@ public class BlockBase extends BlockForestry {
 		return createTileEntity(world, meta); // TODO: refactor to just use Block, not BlockContainer
 	}
 
-	/* BLOCK DROPS */
-	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-		if (getDefinition(metadata).handlesDrops()) {
-			return getDefinition(metadata).getDrops(world, x, y, z, metadata, fortune);
-		} else {
-			return super.getDrops(world, x, y, z, metadata, fortune);
-		}
-	}
-
 	/* INTERACTION */
 	@Override
 	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
@@ -151,8 +141,8 @@ public class BlockBase extends BlockForestry {
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack stack) {
-		super.onBlockPlacedBy(world, x, y, z, entityliving, stack);
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack stack) {
+		super.onBlockPlacedBy(world, x, y, z, entityLiving, stack);
 
 		TileForestry tile = (TileForestry) world.getTileEntity(x, y, z);
 
@@ -163,12 +153,12 @@ public class BlockBase extends BlockForestry {
 			tile.zCoord = z;
 		}
 
-		tile.rotateAfterPlacement(world, x, y, z, entityliving, stack);
+		tile.rotateAfterPlacement(entityLiving);
 	}
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float par7, float par8, float par9) {
-		if (getDefinition(world, x, y, z).onBlockActivated(world, x, y, z, player, side, par7, par8, par9)) {
+		if (getDefinition(world, x, y, z).onBlockActivated(world, x, y, z, player, side)) {
 			return true;
 		}
 
@@ -195,7 +185,7 @@ public class BlockBase extends BlockForestry {
 		}
 
 		if (access.allowsViewing(player)) {
-			tile.openGui(player, tile);
+			tile.openGui(player);
 		} else {
 			player.addChatMessage(new ChatComponentTranslation("for.chat.accesslocked", PlayerUtil.getOwnerName(access)));
 		}
@@ -205,12 +195,6 @@ public class BlockBase extends BlockForestry {
 	@Override
 	public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection axis) {
 		return getDefinition(world, x, y, z).rotateBlock(world, x, y, z, axis);
-	}
-
-	@Override
-	public void onBlockAdded(World world, int x, int y, int z) {
-		super.onBlockAdded(world, x, y, z);
-		getDefinition(world, x, y, z).onBlockAdded(world, x, y, z);
 	}
 
 	@Override
@@ -227,11 +211,7 @@ public class BlockBase extends BlockForestry {
 			return false;
 		}
 
-		if (getDefinition(world, x, y, z).removedByPlayer(world, player, x, y, z)) {
-			return world.setBlockToAir(x, y, z);
-		} else {
-			return false;
-		}
+		return world.setBlockToAir(x, y, z);
 	}
 
 	@Override
@@ -250,15 +230,6 @@ public class BlockBase extends BlockForestry {
 			}
 		}
 		super.breakBlock(world, x, y, z, block, meta);
-	}
-
-	@Override
-	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
-		int metadata = world.getBlockMetadata(x, y, z);
-		if (metadata >= definitions.size() || definitions.get(metadata) == null) {
-			metadata = 0;
-		}
-		return definitions.get(metadata).canConnectRedstone(world, x, y, z, side);
 	}
 
 	@Override
@@ -284,7 +255,7 @@ public class BlockBase extends BlockForestry {
 		if (metadata >= definitions.size() || definitions.get(metadata) == null) {
 			return null;
 		}
-		return definitions.get(metadata).getBlockTextureFromSideAndMetadata(side, metadata);
+		return definitions.get(metadata).getBlockTextureForSide(side);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -294,7 +265,7 @@ public class BlockBase extends BlockForestry {
 		if (metadata >= definitions.size() || definitions.get(metadata) == null) {
 			metadata = 0;
 		}
-		return definitions.get(metadata).getIcon(world, x, y, z, side, metadata);
+		return definitions.get(metadata).getIcon(world, x, y, z, side);
 	}
 
 	@Override

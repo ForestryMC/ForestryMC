@@ -46,7 +46,6 @@ import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.IInventoryAdapter;
@@ -164,18 +163,18 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		}
 	}
 
-	public final FilteredTank resourceTank;
-	public final FilteredTank productTank;
+	private final FilteredTank resourceTank;
+	private final FilteredTank productTank;
 
 	private final TankManager tankManager;
 
 	private Recipe currentRecipe;
 	private float currentResourceModifier;
-	public int fermentationTime = 0;
-	public int fermentationTotalTime = 0;
-	public int fuelBurnTime = 0;
-	public int fuelTotalTime = 0;
-	public int fuelCurrentFerment = 0;
+	private int fermentationTime = 0;
+	private int fermentationTotalTime = 0;
+	private int fuelBurnTime = 0;
+	private int fuelTotalTime = 0;
+	private int fuelCurrentFerment = 0;
 
 	public MachineFermenter() {
 		super(2000, 150, 8000);
@@ -189,7 +188,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.FermenterGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
@@ -363,7 +362,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 	/**
 	 * Returns the burnTime an item of the passed ItemStack provides
 	 */
-	private int determineFuelValue(ItemStack item) {
+	private static int determineFuelValue(ItemStack item) {
 		if (item == null) {
 			return 0;
 		}
@@ -375,7 +374,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		}
 	}
 
-	private int determineFermentPerCycle(ItemStack item) {
+	private static int determineFermentPerCycle(ItemStack item) {
 		if (item == null) {
 			return 0;
 		}
@@ -387,7 +386,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		}
 	}
 
-	private float determineResourceMod(ItemStack itemstack) {
+	private static float determineResourceMod(ItemStack itemstack) {
 		if (!(itemstack.getItem() instanceof IVariableFermentable)) {
 			return 1.0f;
 		}
@@ -491,11 +490,11 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		return Utils.rateTankLevel(getProductScaled(100));
 	}
 
-	public ItemStack getFermentationStack() {
+	private ItemStack getFermentationStack() {
 		return getInternalInventory().getStackInSlot(SLOT_RESOURCE);
 	}
 
-	public ItemStack getFuelStack() {
+	private ItemStack getFuelStack() {
 		return getInternalInventory().getStackInSlot(SLOT_FUEL);
 	}
 

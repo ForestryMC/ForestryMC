@@ -98,7 +98,6 @@ public class ButterflyTemplates {
 		IAllele[] alleles = getDefaultTemplate();
 		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiSpeckledWood);
 		Allele.helper.set(alleles, EnumButterflyChromosome.FERTILITY, 2);
-		;
 		return alleles;
 	}
 
@@ -106,7 +105,6 @@ public class ButterflyTemplates {
 		IAllele[] alleles = getDefaultTemplate();
 		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiMadeiranSpeckledWood);
 		Allele.helper.set(alleles, EnumButterflyChromosome.FERTILITY, 2);
-		;
 		return alleles;
 	}
 
@@ -114,7 +112,6 @@ public class ButterflyTemplates {
 		IAllele[] alleles = getDefaultTemplate();
 		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiCanarySpeckledWood);
 		Allele.helper.set(alleles, EnumButterflyChromosome.FERTILITY, 2);
-		;
 		return alleles;
 	}
 
@@ -124,7 +121,6 @@ public class ButterflyTemplates {
 		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.LARGER);
 		Allele.helper.set(alleles, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTEST);
 		Allele.helper.set(alleles, EnumButterflyChromosome.FERTILITY, 2);
-		;
 		return alleles;
 	}
 
@@ -134,7 +130,6 @@ public class ButterflyTemplates {
 		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.LARGER);
 		Allele.helper.set(alleles, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTEST);
 		Allele.helper.set(alleles, EnumButterflyChromosome.FERTILITY, 2);
-		;
 		return alleles;
 	}
 
@@ -144,7 +139,6 @@ public class ButterflyTemplates {
 		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.LARGER);
 		Allele.helper.set(alleles, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTEST);
 		Allele.helper.set(alleles, EnumButterflyChromosome.FERTILITY, 2);
-		;
 		return alleles;
 	}
 
@@ -217,7 +211,6 @@ public class ButterflyTemplates {
 		Allele.helper.set(alleles, EnumButterflyChromosome.SPECIES, Allele.lepiBlueWing);
 		Allele.helper.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.AVERAGE);
 		Allele.helper.set(alleles, EnumButterflyChromosome.METABOLISM, 5);
-		;
 		return alleles;
 	}
 

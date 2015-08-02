@@ -50,7 +50,7 @@ public class SocketWidget extends Widget {
 		return toolTip;
 	}
 
-	protected final ToolTip toolTip = new ToolTip(500) {
+	private final ToolTip toolTip = new ToolTip(500) {
 		@SuppressWarnings("unchecked")
 		@Override
 		public void refresh() {

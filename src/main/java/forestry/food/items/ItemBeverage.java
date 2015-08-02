@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.food.items;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -69,18 +71,18 @@ public class ItemBeverage extends ItemForestryFood {
 			iconContents = TextureManager.getInstance().registerTex(register, "liquids/" + iconType + ".contents");
 		}
 
-		public IBeverageEffect[] loadEffects(ItemStack stack) {
-			IBeverageEffect[] effects = new IBeverageEffect[0];
+		public static List<IBeverageEffect> loadEffects(ItemStack stack) {
+			List<IBeverageEffect> effectsList = Collections.emptyList();
 
 			NBTTagCompound nbttagcompound = stack.getTagCompound();
 			if (nbttagcompound == null) {
-				return effects;
+				return effectsList;
 			}
 
 			if (nbttagcompound.hasKey("E")) {
 				int effectLength = nbttagcompound.getInteger("L");
 				NBTTagList nbttaglist = nbttagcompound.getTagList("E", 10);
-				effects = new IBeverageEffect[effectLength];
+				IBeverageEffect[] effects = new IBeverageEffect[effectLength];
 				for (int i = 0; i < nbttaglist.tagCount(); i++) {
 					NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 					byte byte0 = nbttagcompound1.getByte("S");
@@ -88,21 +90,23 @@ public class ItemBeverage extends ItemForestryFood {
 						effects[byte0] = BeverageManager.effectList[nbttagcompound1.getInteger("ID")];
 					}
 				}
+				effectsList = Arrays.asList(effects);
 			}
 
-			return effects;
+			return effectsList;
 		}
 
-		public void saveEffects(ItemStack stack, IBeverageEffect[] effects) {
+		public static void saveEffects(ItemStack stack, List<IBeverageEffect> effects) {
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
 
 			NBTTagList nbttaglist = new NBTTagList();
-			nbttagcompound.setInteger("L", effects.length);
-			for (int i = 0; i < effects.length; i++) {
-				if (effects[i] != null) {
+			nbttagcompound.setInteger("L", effects.size());
+			for (int i = 0; i < effects.size(); i++) {
+				IBeverageEffect effect = effects.get(i);
+				if (effect != null) {
 					NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 					nbttagcompound1.setByte("S", (byte) i);
-					nbttagcompound1.setInteger("ID", effects[i].getId());
+					nbttagcompound1.setInteger("ID", effect.getId());
 					nbttaglist.appendTag(nbttagcompound1);
 				}
 			}
@@ -132,9 +136,7 @@ public class ItemBeverage extends ItemForestryFood {
 	@Override
 	public ItemStack onEaten(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 
-		int meta = itemstack.getItemDamage();
-		BeverageInfo beverage = beverages[meta];
-		IBeverageEffect[] effects = beverage.loadEffects(itemstack);
+		List<IBeverageEffect> effects = BeverageInfo.loadEffects(itemstack);
 
 		itemstack.stackSize--;
 		entityplayer.getFoodStats().func_151686_a(this, itemstack);
@@ -200,9 +202,7 @@ public class ItemBeverage extends ItemForestryFood {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
-		int meta = itemstack.getItemDamage();
-		BeverageInfo beverage = beverages[meta];
-		IBeverageEffect[] effects = beverage.loadEffects(itemstack);
+		List<IBeverageEffect> effects = BeverageInfo.loadEffects(itemstack);
 
 		for (IBeverageEffect effect : effects) {
 			if (effect.getDescription() != null) {

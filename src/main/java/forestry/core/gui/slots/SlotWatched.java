@@ -18,7 +18,7 @@ public abstract class SlotWatched extends SlotForestry {
 	private ICrafter crafter;
 	private String blockedTexture = "slots/blocked";
 
-	public SlotWatched(IInventory inventory, int slotIndex, int xPos, int yPos) {
+	protected SlotWatched(IInventory inventory, int slotIndex, int xPos, int yPos) {
 		super(inventory, slotIndex, xPos, yPos);
 	}
 

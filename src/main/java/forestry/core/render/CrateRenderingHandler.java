@@ -40,7 +40,7 @@ public class CrateRenderingHandler implements IItemRenderer {
 	private static final ResourceLocation ITEM_TEXTURE = TextureMap.locationItemsTexture;
 	private static final ResourceLocation GLINT_TEXTURE = new ResourceLocation("textures/misc/enchanted_item_glint.png");
 
-	public static final float PIXEL = 1.0f / 16.0f;
+	private static final float PIXEL = 1.0f / 16.0f;
 
 	private final RenderItem renderItem = new RenderItem();
 

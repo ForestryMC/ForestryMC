@@ -20,6 +20,16 @@ import forestry.core.utils.StringUtil;
 
 public abstract class GuiEngine<C extends Container, I extends Engine> extends GuiForestryTitled<C, I> {
 
+	protected GuiEngine(String texture, C container, I tile) {
+		super(texture, container, tile);
+	}
+
+	@Override
+	protected void initLedgers() {
+		super.initLedgers();
+		ledgerManager.insert(new EngineLedger());
+	}
+
 	protected class EngineLedger extends Ledger {
 
 		public EngineLedger() {
@@ -58,13 +68,4 @@ public abstract class GuiEngine<C extends Container, I extends Engine> extends G
 		}
 	}
 
-	public GuiEngine(String texture, C container, I tile) {
-		super(texture, container, tile);
-	}
-
-	@Override
-	protected void initLedgers() {
-		super.initLedgers();
-		ledgerManager.insert(new EngineLedger());
-	}
 }

@@ -28,7 +28,7 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 	protected int girth;
 	protected int height;
 
-	public WorldGenTree(ITreeGenData tree, int baseHeight, int heightVariation) {
+	protected WorldGenTree(ITreeGenData tree, int baseHeight, int heightVariation) {
 		super(tree);
 		this.baseHeight = baseHeight;
 		this.heightVariation = heightVariation;
@@ -83,7 +83,7 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 		return determined < min ? min : determined > max ? max : determined;
 	}
 
-	protected int determineHeight(World world, int required, int variation) {
+	private int determineHeight(World world, int required, int variation) {
 		ITreeModifier treeModifier = TreeManager.treeRoot.getTreekeepingMode(world);
 		int baseHeight = required + world.rand.nextInt(variation);
 		int height = Math.round(baseHeight * tree.getHeightModifier() * treeModifier.getHeightModifier(tree.getGenome(), 1f));

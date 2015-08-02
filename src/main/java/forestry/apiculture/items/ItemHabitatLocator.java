@@ -106,7 +106,7 @@ public class ItemHabitatLocator extends ItemInventoried {
 		list.add(StringUtil.localize("gui.humidity") + ": " + AlleleManager.climateHelper.toDisplay(humidity));
 	}
 
-	public void startBiomeSearch(IBee bee, EntityPlayer player) {
+	private void startBiomeSearch(IBee bee, EntityPlayer player) {
 
 		this.targetBiomes = new HashSet<BiomeGenBase>(bee.getSuitableBiomes());
 		this.searchAngleIteration = 0;

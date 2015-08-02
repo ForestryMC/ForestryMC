@@ -28,8 +28,8 @@ import forestry.api.genetics.IFruitFamily;
  */
 public class FruitProviderRandom extends FruitProviderNone {
 
-	HashMap<ItemStack, Float> products = new HashMap<ItemStack, Float>();
-	int colour = 0xffffff;
+	private final Map<ItemStack, Float> products = new HashMap<ItemStack, Float>();
+	private int colour = 0xffffff;
 
 	public FruitProviderRandom(String key, IFruitFamily family, ItemStack product, float modifier) {
 		super(key, family);

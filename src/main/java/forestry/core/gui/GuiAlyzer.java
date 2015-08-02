@@ -48,14 +48,14 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 	protected static final int COLUMN_1 = 90;
 	protected static final int COLUMN_2 = 155;
 
-	protected final ISpeciesRoot speciesRoot;
-	protected final IBreedingTracker breedingTracker;
+	private final ISpeciesRoot speciesRoot;
+	private final IBreedingTracker breedingTracker;
 
-	protected final String guiName;
+	private final String guiName;
 
-	protected HashMap<String, ItemStack> iconStacks = new HashMap<String, ItemStack>();
+	protected final Map<String, ItemStack> iconStacks = new HashMap<String, ItemStack>();
 
-	public GuiAlyzer(String speciesRoot, EntityPlayer player, ContainerAlyzer container, IInventory inventory, String guiName) {
+	protected GuiAlyzer(String speciesRoot, EntityPlayer player, ContainerAlyzer container, IInventory inventory, String guiName) {
 		super(Defaults.TEXTURE_PATH_GUI + "/beealyzer2.png", container, inventory);
 
 		this.xSize = 246;
@@ -123,10 +123,6 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 		drawSplitLine(secondaryName, column2, columnwidth, individual, chromosome, true);
 
 		newLine();
-	}
-
-	protected final void drawSpeciesRow(String text0, IIndividual individual, IChromosomeType chromosome) {
-		drawSpeciesRow(text0, individual, chromosome, null, null);
 	}
 
 	protected static String checkCustomName(String key) {
@@ -278,7 +274,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 					continue;
 				}
 
-				drawUnknownMutation(mutation.getKey(), mutation.getValue(), COLUMN_0 + x);
+				drawUnknownMutation(mutation.getKey(), COLUMN_0 + x);
 			}
 
 			x += columnWidth;
@@ -303,7 +299,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 		widgetManager.add(new ItemStackWidget(x + 33, getLineY(), resultBee));
 	}
 
-	protected void drawUnknownMutation(IMutation combination, IAllele species, int x) {
+	private void drawUnknownMutation(IMutation combination, int x) {
 
 		drawQuestionMark(guiLeft + x, guiTop + getLineY());
 
@@ -312,12 +308,12 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 		drawQuestionMark(guiLeft + x + 32, guiTop + getLineY());
 	}
 
-	protected void drawQuestionMark(int x, int y) {
+	private void drawQuestionMark(int x, int y) {
 		Proxies.common.bindTexture(textureFile);
 		drawTexturedModalRect(x, y, 78, 240, 16, 16);
 	}
 
-	protected void drawProbabilityArrow(float chance, int x, int y) {
+	private void drawProbabilityArrow(float chance, int x, int y) {
 		int line = 247;
 		int column = 100;
 		switch (EnumMutateChance.rateChance(chance)) {

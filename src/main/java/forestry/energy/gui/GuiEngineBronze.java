@@ -33,7 +33,7 @@ public class GuiEngineBronze extends GuiEngine<ContainerEngineBronze, EngineBron
 
 	protected class BiogasSlot extends Widget {
 
-		public BiogasSlot(WidgetManager manager, int xPos, int yPos, EngineBronze engine) {
+		public BiogasSlot(WidgetManager manager, int xPos, int yPos) {
 			super(manager, xPos, yPos);
 			this.height = 16;
 		}
@@ -102,7 +102,7 @@ public class GuiEngineBronze extends GuiEngine<ContainerEngineBronze, EngineBron
 		widgetManager.add(new TankWidget(this.widgetManager, 89, 19, 0));
 		widgetManager.add(new TankWidget(this.widgetManager, 107, 19, 1));
 
-		widgetManager.add(new BiogasSlot(this.widgetManager, 30, 47, tile));
+		widgetManager.add(new BiogasSlot(this.widgetManager, 30, 47));
 	}
 
 	@Override

@@ -24,7 +24,7 @@ import buildcraft.transport.TileGenericPipe;
 public class GuiHandlerPipes implements IGuiHandler {
 
 	@SuppressWarnings("rawtypes")
-	private Pipe getPipe(World world, int x, int y, int z) {
+	private static Pipe getPipe(World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(x, y, z);
 		if (tile == null) {
 			return null;

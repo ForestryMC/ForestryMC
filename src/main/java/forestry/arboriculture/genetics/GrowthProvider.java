@@ -27,7 +27,7 @@ public class GrowthProvider implements IGrowthProvider {
 
 	@Override
 	public boolean canGrow(ITreeGenome genome, World world, int xPos, int yPos, int zPos, int expectedGirth, int expectedHeight) {
-		if (!hasRoom(genome, world, xPos, yPos, zPos, expectedGirth, expectedHeight)) {
+		if (!hasRoom(world, xPos, yPos, zPos, expectedGirth, expectedHeight)) {
 			return false;
 		}
 
@@ -90,17 +90,7 @@ public class GrowthProvider implements IGrowthProvider {
 		}
 	}
 
-	/*
-	 * protected EnumGrowthConditions getConditionFromGround(World world, int xPos, int yPos, int zPos) { Block block = Block.blocksList[world.getBlock(xPos,
-	 * yPos - 1, zPos)]; if(block == null) return EnumGrowthConditions.HOSTILE;
-	 * 
-	 * for(EnumPlantType type : this.validPlantTypes) { this.plantType = type; if(block.canSustainPlant(world, xPos, yPos - 1, zPos, ForgeDirection.UP, this))
-	 * return EnumGrowthConditions.EXCELLENT; }
-	 * 
-	 * return EnumGrowthConditions.HOSTILE; }
-	 */
-
-	protected static boolean hasRoom(ITreeGenome genome, World world, int xPos, int yPos, int zPos, int expectedGirth, int expectedHeight) {
+	private static boolean hasRoom(World world, int xPos, int yPos, int zPos, int expectedGirth, int expectedHeight) {
 
 		int offset = (expectedGirth - 1) / 2;
 		// if(offset <= 0)
@@ -111,7 +101,7 @@ public class GrowthProvider implements IGrowthProvider {
 		return checkArea(world, start, area);
 	}
 
-	protected static boolean checkArea(World world, Vect start, Vect area) {
+	private static boolean checkArea(World world, Vect start, Vect area) {
 		for (int x = start.x; x < start.x + area.x; x++) {
 			for (int y = start.y; y < start.y + area.y; y++) {
 				for (int z = start.z; z < start.z + area.z; z++) {
@@ -124,7 +114,7 @@ public class GrowthProvider implements IGrowthProvider {
 		return true;
 	}
 
-	protected static boolean hasSufficientSaplings(ITreeGenome genome, World world, int xPos, int yPos, int zPos, int expectedGirth) {
+	private static boolean hasSufficientSaplings(ITreeGenome genome, World world, int xPos, int yPos, int zPos, int expectedGirth) {
 
 		if (expectedGirth == 1) {
 			return true;

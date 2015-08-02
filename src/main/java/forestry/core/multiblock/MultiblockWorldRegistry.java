@@ -143,7 +143,6 @@ public class MultiblockWorldRegistry {
 						// THIS IS THE ONLY PLACE WHERE MERGES ARE DETECTED
 						// Multiple compatible controllers indicates an impending merge.
 						// Locate the appropriate merge pool(s)
-						boolean hasAddedToPool = false;
 						List<Set<MultiblockControllerBase>> candidatePools = new ArrayList<Set<MultiblockControllerBase>>();
 						for (Set<MultiblockControllerBase> candidatePool : mergePools) {
 							if (!Collections.disjoint(candidatePool, compatibleControllers)) {
@@ -208,13 +207,12 @@ public class MultiblockWorldRegistry {
 		// Any controllers which have had parts removed must be checked to see if some parts are no longer
 		// physically connected to their master.
 		if (dirtyControllers.size() > 0) {
-			Set<IMultiblockPart> newlyDetachedParts = null;
 			for (MultiblockControllerBase controller : dirtyControllers) {
 				// Tell the machine to check if any parts are disconnected.
 				// It should return a set of parts which are no longer connected.
 				// POSTCONDITION: The controller must have informed those parts that
 				// they are no longer connected to this machine.
-				newlyDetachedParts = controller.checkForDisconnections();
+				Set<IMultiblockPart> newlyDetachedParts = controller.checkForDisconnections();
 				
 				if (!controller.isEmpty()) {
 					controller.recalculateMinMaxCoords();

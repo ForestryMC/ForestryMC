@@ -32,11 +32,11 @@ import buildcraft.api.tiles.IHasWork;
 @Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = "BuildCraftAPI|tiles")
 public abstract class TilePowered extends TileBase implements IRenderableMachine, IPowerHandler, IHasWork {
 
-	public static final int WORK_CYCLES = 4;
+	private static final int WORK_CYCLES = 4;
 
-	protected final EnergyManager energyManager;
+	private final EnergyManager energyManager;
 
-	public TilePowered(int maxTransfer, int energyPerWork, int capacity) {
+	protected TilePowered(int maxTransfer, int energyPerWork, int capacity) {
 		this.energyManager = new EnergyManager(maxTransfer, energyPerWork, capacity);
 		this.energyManager.setReceiveOnly();
 	}
@@ -84,7 +84,7 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 		}
 	}
 
-	public abstract boolean workCycle();
+	protected abstract boolean workCycle();
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {

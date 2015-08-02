@@ -109,7 +109,7 @@ public class PluginArboriculture extends ForestryPlugin {
 	public static int modelIdFences;
 	public static int modelIdPods;
 
-	public static MachineDefinition definitionChest;
+	private static MachineDefinition definitionChest;
 	public static final List<Block> validFences = new ArrayList<Block>();
 
 	@Override
@@ -148,14 +148,14 @@ public class PluginArboriculture extends ForestryPlugin {
 		ForestryBlock.fences.registerBlock(new BlockArbFence(false), ItemWoodBlock.class, "fences");
 		OreDictionary.registerOre("fenceWood", ForestryBlock.fences.getWildcard());
 
-		ForestryBlock.stairs.registerBlock(new BlockArbStairs(ForestryBlock.planks.block(), 0, false), ItemWoodBlock.class, "stairs");
+		ForestryBlock.stairs.registerBlock(new BlockArbStairs(ForestryBlock.planks.block(), false), ItemWoodBlock.class, "stairs");
 		OreDictionary.registerOre("stairWood", ForestryBlock.stairs.getWildcard());
 
 		ForestryBlock.logsFireproof.registerBlock(new BlockLog(true), ItemWoodBlock.class, "logsFireproof");
 		ForestryBlock.planksFireproof.registerBlock(new BlockPlanks(true), ItemWoodBlock.class, "planksFireproof");
 		ForestryBlock.slabsFireproof.registerBlock(new BlockSlab(true), ItemWoodBlock.class, "slabsFireproof");
 		ForestryBlock.fencesFireproof.registerBlock(new BlockArbFence(true), ItemWoodBlock.class, "fencesFireproof");
-		ForestryBlock.stairsFireproof.registerBlock(new BlockArbStairs(ForestryBlock.planksFireproof.block(), 0, true), ItemWoodBlock.class, "stairsFireproof");
+		ForestryBlock.stairsFireproof.registerBlock(new BlockArbStairs(ForestryBlock.planksFireproof.block(), true), ItemWoodBlock.class, "stairsFireproof");
 
 		for (WoodType woodType : WoodType.VALUES) {
 			woodType.registerLog(ForestryBlock.logs.block(), false);

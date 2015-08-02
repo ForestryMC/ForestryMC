@@ -108,7 +108,7 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 	/* DROP HANDLING */
 	// Hack: 	When harvesting leaves we need to get the drops in onBlockHarvested,
 	// 			because Mojang destroys the block and tile before calling getDrops.
-	protected ThreadLocal<ArrayList<ItemStack>> drops = new ThreadLocal<ArrayList<ItemStack>>();
+	private final ThreadLocal<ArrayList<ItemStack>> drops = new ThreadLocal<ArrayList<ItemStack>>();
 
 	@Override
 	public void onBlockHarvested(World world, int x, int y, int z, int metadata, EntityPlayer player) {

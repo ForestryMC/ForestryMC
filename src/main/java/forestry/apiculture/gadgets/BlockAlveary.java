@@ -232,7 +232,7 @@ public class BlockAlveary extends BlockStructure {
 			return getIcon(side, 0);
 		}
 
-		return icons[((TileAlveary) tile).getIcon(side, world.getBlockMetadata(x, y, z))];
+		return icons[((TileAlveary) tile).getIcon(side)];
 	}
 
 	@SideOnly(Side.CLIENT)

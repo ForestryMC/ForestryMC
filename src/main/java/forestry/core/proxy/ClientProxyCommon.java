@@ -164,44 +164,31 @@ public class ClientProxyCommon extends ProxyCommon {
 		world.playSound(x + 0.5, y + 0.5, z + 0.5, sound, volume, (1.0f + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2f) * 0.7f, false);
 	}
 
-	/**
-	 * Renders a EntityBiodustFX on client.
-	 */
-	// FIXME: This is causing crashes.
 	@Override
-	public void addEntityBiodustFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
+	public void addEntitySwarmFX(World world, double d1, double d2, double d3) {
 		if (!ClientProxyRender.shouldSpawnParticle(world)) {
 			return;
 		}
 
-		// ModLoader.getMinecraftInstance().effectRenderer.addEffect(new EntityBiodustFX(world, d1, d2, d3, f1, f2, f3));
+		getClientInstance().effectRenderer.addEffect(new EntityHoneydustFX(world, d1, d2, d3, 0, 0, 0));
 	}
 
 	@Override
-	public void addEntitySwarmFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
+	public void addEntityExplodeFX(World world, double d1, double d2, double d3) {
 		if (!ClientProxyRender.shouldSpawnParticle(world)) {
 			return;
 		}
 
-		getClientInstance().effectRenderer.addEffect(new EntityHoneydustFX(world, d1, d2, d3, f1, f2, f3));
+		getClientInstance().effectRenderer.addEffect(new EntityExplodeFX(world, d1, d2, d3, 0, 0, 0));
 	}
 
 	@Override
-	public void addEntityExplodeFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
+	public void addEntitySnowFX(World world, double d1, double d2, double d3) {
 		if (!ClientProxyRender.shouldSpawnParticle(world)) {
 			return;
 		}
 
-		getClientInstance().effectRenderer.addEffect(new EntityExplodeFX(world, d1, d2, d3, f1, f2, f3));
-	}
-
-	@Override
-	public void addEntitySnowFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
-		if (!ClientProxyRender.shouldSpawnParticle(world)) {
-			return;
-		}
-
-		getClientInstance().effectRenderer.addEffect(new EntitySnowFX(world, d1 + world.rand.nextGaussian(), d2, d3 + world.rand.nextGaussian(), f1, f2, f3));
+		getClientInstance().effectRenderer.addEffect(new EntitySnowFX(world, d1 + world.rand.nextGaussian(), d2, d3 + world.rand.nextGaussian()));
 	}
 
 	@Override

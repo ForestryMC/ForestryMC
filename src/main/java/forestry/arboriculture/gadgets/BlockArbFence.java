@@ -108,7 +108,7 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, ITileEntity
 		return type.getPlankIcon();
 	}
 
-	public static boolean isFence(IBlockAccess world, int x, int y, int z) {
+	private static boolean isFence(IBlockAccess world, int x, int y, int z) {
 		Block block = world.getBlock(x, y, z);
 		return PluginArboriculture.validFences.contains(block);
 	}

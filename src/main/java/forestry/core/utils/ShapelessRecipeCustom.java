@@ -15,11 +15,25 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class ShapelessRecipeCustom implements IRecipe {
 
+	@SuppressWarnings("unchecked")
+	public static ShapelessRecipeCustom buildRecipe(ItemStack product, ItemStack... ingredients) {
+		ShapelessRecipeCustom recipe = new ShapelessRecipeCustom(product, ingredients);
+		CraftingManager.getInstance().getRecipeList().add(recipe);
+		return recipe;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static ShapelessRecipeCustom buildPriorityRecipe(ItemStack product, ItemStack... ingredients) {
+		ShapelessRecipeCustom recipe = new ShapelessRecipeCustom(product, ingredients);
+		CraftingManager.getInstance().getRecipeList().add(0, recipe);
+		return recipe;
+	}
+
 	private final List<ItemStack> ingredients;
 	private final ItemStack product;
 	private boolean preserveNBT = false;
 
-	public ShapelessRecipeCustom(ItemStack product, ItemStack... ingredients) {
+	private ShapelessRecipeCustom(ItemStack product, ItemStack... ingredients) {
 		this.ingredients = Arrays.asList(ingredients);
 		this.product = product;
 	}
@@ -84,17 +98,4 @@ public class ShapelessRecipeCustom implements IRecipe {
 		return product.copy();
 	}
 
-	@SuppressWarnings("unchecked")
-	public static ShapelessRecipeCustom buildRecipe(ItemStack product, ItemStack... ingredients) {
-		ShapelessRecipeCustom recipe = new ShapelessRecipeCustom(product, ingredients);
-		CraftingManager.getInstance().getRecipeList().add(recipe);
-		return recipe;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static ShapelessRecipeCustom buildPriorityRecipe(ItemStack product, ItemStack... ingredients) {
-		ShapelessRecipeCustom recipe = new ShapelessRecipeCustom(product, ingredients);
-		CraftingManager.getInstance().getRecipeList().add(0, recipe);
-		return recipe;
-	}
 }

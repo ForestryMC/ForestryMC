@@ -46,7 +46,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 	// CLIENT
 	private boolean active;
 
-	public TileAlvearyClimatiser(IClimitiserDefinition definition) {
+	protected TileAlvearyClimatiser(IClimitiserDefinition definition) {
 		this.definition = definition;
 
 		this.energyManager = new EnergyManager(1000, 50, 2000);
@@ -71,7 +71,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 
 	/* TEXTURES */
 	@Override
-	public int getIcon(int side, int metadata) {
+	public int getIcon(int side) {
 		if (active) {
 			return definition.getIconOn();
 		} else {

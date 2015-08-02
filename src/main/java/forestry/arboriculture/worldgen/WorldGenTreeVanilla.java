@@ -12,8 +12,8 @@ package forestry.arboriculture.worldgen;
 
 import forestry.api.world.ITreeGenData;
 
-public class WorldGenTreeVanilla extends WorldGenTree {
-	public WorldGenTreeVanilla(ITreeGenData tree) {
+public abstract class WorldGenTreeVanilla extends WorldGenTree {
+	protected WorldGenTreeVanilla(ITreeGenData tree) {
 		super(tree, 5, 2);
 	}
 }

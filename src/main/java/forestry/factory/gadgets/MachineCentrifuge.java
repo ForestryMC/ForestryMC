@@ -41,7 +41,6 @@ import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
-import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InvTools;
@@ -61,7 +60,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 	public static final int SLOT_PRODUCT_COUNT = 9;
 
 	/* MEMBER */
-	public ICentrifugeRecipe currentRecipe;
+	private ICentrifugeRecipe currentRecipe;
 
 	private final Stack<ItemStack> pendingProducts = new Stack<ItemStack>();
 	private int productionTime;
@@ -74,7 +73,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.CentrifugeGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
@@ -168,7 +167,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 		return true;
 	}
 
-	public void checkRecipe() {
+	private void checkRecipe() {
 		ICentrifugeRecipe machingRecipe = RecipeManager.findMatchingRecipe(getInternalInventory().getStackInSlot(SLOT_RESOURCE));
 
 		if (currentRecipe != machingRecipe) {

@@ -156,13 +156,13 @@ public final class CommandSaveStats extends SubCommand {
 		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.stats.save.saved", player.getDisplayName());
 	}
 
-	private String generateSpeciesListHeader() {
+	private static String generateSpeciesListHeader() {
 		String authority = StatCollector.translateToLocal("for.gui.alyzer.authority");
 		String species = StatCollector.translateToLocal("for.gui.species");
 		return speciesListEntry(discoveredSymbol, blacklistedSymbol, notCountedSymbol, "UID", species, authority);
 	}
 
-	private String generateSpeciesListEntry(IAlleleSpecies species, IBreedingTracker tracker) {
+	private static String generateSpeciesListEntry(IAlleleSpecies species, IBreedingTracker tracker) {
 		String discovered = "";
 		if (tracker.isDiscovered(species)) {
 			discovered = discoveredSymbol;
@@ -181,7 +181,7 @@ public final class CommandSaveStats extends SubCommand {
 		return speciesListEntry(discovered, blacklisted, notCounted, species.getUID(), species.getName(), species.getAuthority());
 	}
 
-	private String speciesListEntry(String discovered, String blacklisted, String notCounted, String UID, String speciesName, String authority) {
+	private static String speciesListEntry(String discovered, String blacklisted, String notCounted, String UID, String speciesName, String authority) {
 		return String.format("[ %-2s ] [ %-2s ] [ %-2s ]\t%-40s %-20s %-20s", discovered, blacklisted, notCounted, UID, speciesName, authority);
 	}
 }

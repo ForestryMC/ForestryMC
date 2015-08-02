@@ -132,7 +132,7 @@ public class BlockBeehives extends BlockContainer {
 		return meta;
 	}
 
-	private List<IHiveDrop> getDropsForHive(int meta) {
+	private static List<IHiveDrop> getDropsForHive(int meta) {
 		String hiveName = getHiveNameForMeta(meta);
 		if (hiveName == null) {
 			return Collections.emptyList();
@@ -140,7 +140,7 @@ public class BlockBeehives extends BlockContainer {
 		return PluginApiculture.hiveRegistry.getDrops(hiveName);
 	}
 
-	private String getHiveNameForMeta(int meta) {
+	private static String getHiveNameForMeta(int meta) {
 		switch (meta) {
 			case 1:
 				return HiveRegistry.forest;

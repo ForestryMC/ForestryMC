@@ -24,7 +24,7 @@ import forestry.farming.multiblock.EnumFarmBlockTexture;
 
 public class FarmItemRenderer implements IItemRenderer {
 
-	private void renderFarmBlock(RenderBlocks render, ItemStack item, float translateX, float translateY, float translateZ) {
+	private static void renderFarmBlock(RenderBlocks render, ItemStack item, float translateX, float translateY, float translateZ) {
 		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_BLEND);
@@ -45,38 +45,38 @@ public class FarmItemRenderer implements IItemRenderer {
 
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(0.0F, -1F, 0.0F);
-		render.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, block.getBlockTextureFromSideAndMetadata(type, 0, item.getItemDamage()));
-		render.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, block.getOverlayTextureForBlock(0, item.getItemDamage()));
+		render.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, BlockFarm.getBlockTextureForSide(type, 0));
+		render.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, BlockFarm.getOverlayTextureForBlock(0, item.getItemDamage()));
 		tessellator.draw();
 
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(0.0F, 1.0F, 0.0F);
-		render.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, block.getBlockTextureFromSideAndMetadata(type, 1, item.getItemDamage()));
-		render.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, block.getOverlayTextureForBlock(1, item.getItemDamage()));
+		render.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, BlockFarm.getBlockTextureForSide(type, 1));
+		render.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, BlockFarm.getOverlayTextureForBlock(1, item.getItemDamage()));
 		tessellator.draw();
 
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(0.0F, 0.0F, -1F);
-		render.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, block.getBlockTextureFromSideAndMetadata(type, 2, item.getItemDamage()));
-		render.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, block.getOverlayTextureForBlock(2, item.getItemDamage()));
+		render.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, BlockFarm.getBlockTextureForSide(type, 2));
+		render.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, BlockFarm.getOverlayTextureForBlock(2, item.getItemDamage()));
 		tessellator.draw();
 
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(0.0F, 0.0F, 1.0F);
-		render.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, block.getBlockTextureFromSideAndMetadata(type, 3, item.getItemDamage()));
-		render.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, block.getOverlayTextureForBlock(3, item.getItemDamage()));
+		render.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, BlockFarm.getBlockTextureForSide(type, 3));
+		render.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, BlockFarm.getOverlayTextureForBlock(3, item.getItemDamage()));
 		tessellator.draw();
 
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(-1F, 0.0F, 0.0F);
-		render.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, block.getBlockTextureFromSideAndMetadata(type, 4, item.getItemDamage()));
-		render.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, block.getOverlayTextureForBlock(4, item.getItemDamage()));
+		render.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, BlockFarm.getBlockTextureForSide(type, 4));
+		render.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, BlockFarm.getOverlayTextureForBlock(4, item.getItemDamage()));
 		tessellator.draw();
 
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(1.0F, 0.0F, 0.0F);
-		render.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, block.getBlockTextureFromSideAndMetadata(type, 5, item.getItemDamage()));
-		render.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, block.getOverlayTextureForBlock(5, item.getItemDamage()));
+		render.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, BlockFarm.getBlockTextureForSide(type, 5));
+		render.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, BlockFarm.getOverlayTextureForBlock(5, item.getItemDamage()));
 		tessellator.draw();
 
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);

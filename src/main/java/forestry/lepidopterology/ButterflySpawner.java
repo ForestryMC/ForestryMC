@@ -54,7 +54,7 @@ public class ButterflySpawner implements ILeafTickHandler {
 		return false;
 	}
 
-	private void attemptButterflySpawn(World world, IButterfly butterfly, double x, double y, double z) {
+	private static void attemptButterflySpawn(World world, IButterfly butterfly, double x, double y, double z) {
 		if (PluginLepidopterology.butterflyInterface.spawnButterflyInWorld(world, butterfly.copy(), x, y + 0.1f, z) != null) {
 			Proxies.log.finest("Spawned a butterfly '%s' at %s/%s/%s.", butterfly.getDisplayName(), x, y, z);
 		}

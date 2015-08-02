@@ -21,7 +21,7 @@ public abstract class AIButterflyInteract extends AIButterflyBase {
 	private boolean canInteract = false;
 	private boolean hasInteracted = false;
 
-	public AIButterflyInteract(EntityButterfly entity) {
+	protected AIButterflyInteract(EntityButterfly entity) {
 		super(entity);
 		setMutexBits(3);
 	}

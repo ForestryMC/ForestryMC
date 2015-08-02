@@ -26,7 +26,7 @@ public class PacketErrorUpdate extends PacketCoordinates {
 		new PacketErrorUpdate(data);
 	}
 
-	public PacketErrorUpdate(DataInputStreamForestry data) throws IOException {
+	private PacketErrorUpdate(DataInputStreamForestry data) throws IOException {
 		super(data);
 	}
 

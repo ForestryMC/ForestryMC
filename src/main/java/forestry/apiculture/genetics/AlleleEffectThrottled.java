@@ -21,15 +21,11 @@ public abstract class AlleleEffectThrottled extends AlleleEffectNone {
 	private final int throttle;
 	private boolean requiresWorkingQueen = false;
 
-	public AlleleEffectThrottled(String name, boolean isDominant, int throttle, boolean requiresWorking, boolean isCombinable) {
+	protected AlleleEffectThrottled(String name, boolean isDominant, int throttle, boolean requiresWorking, boolean isCombinable) {
 		super(name, isDominant);
 		this.throttle = throttle;
 		this.isCombinable = isCombinable;
 		this.requiresWorkingQueen = requiresWorking;
-	}
-
-	public int getThrottle() {
-		return throttle;
 	}
 
 	@Override
@@ -60,11 +56,11 @@ public abstract class AlleleEffectThrottled extends AlleleEffectNone {
 			return true;
 		}
 
-		int throt = storedData.getInteger(0);
-		throt++;
-		storedData.setInteger(0, throt);
+		int time = storedData.getInteger(0);
+		time++;
+		storedData.setInteger(0, time);
 
-		if (throt < getThrottle()) {
+		if (time < throttle) {
 			return true;
 		}
 

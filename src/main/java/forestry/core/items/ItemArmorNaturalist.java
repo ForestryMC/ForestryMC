@@ -28,8 +28,8 @@ import forestry.core.utils.StringUtil;
 
 public class ItemArmorNaturalist extends ItemArmor implements IArmorNaturalist {
 
-	public ItemArmorNaturalist(int slot) {
-		super(ArmorMaterial.CLOTH, 0, slot);
+	public ItemArmorNaturalist() {
+		super(ArmorMaterial.CLOTH, 0, 0);
 		this.setMaxDamage(100);
 		setCreativeTab(CreativeTabForestry.tabForestry);
 	}

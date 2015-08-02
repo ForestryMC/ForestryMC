@@ -22,8 +22,8 @@ import forestry.core.vect.Vect;
 
 public class CropBasicFruit extends Crop {
 
-	protected final Block block;
-	protected final int meta;
+	private final Block block;
+	private final int meta;
 
 	public CropBasicFruit(World world, Block block, int meta, Vect position) {
 		super(world, position);

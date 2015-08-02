@@ -16,7 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class PacketNBT extends ForestryPacket {
 
-	protected NBTTagCompound nbttagcompound;
+	private NBTTagCompound nbttagcompound;
 
 	public PacketNBT(DataInputStreamForestry data) throws IOException {
 		super(data);

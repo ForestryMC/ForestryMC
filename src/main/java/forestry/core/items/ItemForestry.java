@@ -33,8 +33,8 @@ public class ItemForestry extends Item {
 		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
 
-	public ItemForestry setBonemeal(boolean isBonemeal) {
-		this.isBonemeal = isBonemeal;
+	public ItemForestry setBonemeal() {
+		this.isBonemeal = true;
 		return this;
 	}
 

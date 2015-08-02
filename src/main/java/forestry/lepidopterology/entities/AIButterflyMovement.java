@@ -19,7 +19,7 @@ public abstract class AIButterflyMovement extends AIButterflyBase {
 
 	protected ChunkCoordinates flightTarget;
 
-	public AIButterflyMovement(EntityButterfly entity) {
+	protected AIButterflyMovement(EntityButterfly entity) {
 		super(entity);
 	}
 

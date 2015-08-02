@@ -22,7 +22,7 @@ public class ForestryPacket {
 	protected static final String channel = "FOR";
 	private final PacketId id;
 
-	public ForestryPacket(DataInputStreamForestry data) throws IOException {
+	protected ForestryPacket(DataInputStreamForestry data) throws IOException {
 		this.id = PacketId.INVALID;
 		readData(data);
 	}

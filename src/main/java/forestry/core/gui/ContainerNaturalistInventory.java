@@ -19,13 +19,13 @@ import forestry.core.network.PacketGuiSelect;
 
 public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistChest> implements IGuiSelectable {
 
-	public ContainerNaturalistInventory(InventoryPlayer player, TileNaturalistChest tile, int page, int pageSize) {
+	public ContainerNaturalistInventory(InventoryPlayer player, TileNaturalistChest tile, int page) {
 		super(tile, player, 18, 120);
 
 		// Inventory
 		for (int x = 0; x < 5; x++) {
 			for (int y = 0; y < 5; y++) {
-				addSlotToContainer(new SlotFiltered(tile, y + page * pageSize + x * 5, 100 + y * 18, 21 + x * 18));
+				addSlotToContainer(new SlotFiltered(tile, y + page * 25 + x * 5, 100 + y * 18, 21 + x * 18));
 			}
 		}
 	}

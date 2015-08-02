@@ -86,7 +86,7 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 		setTree(tree);
 	}
 
-	public static ITree getTree(String speciesUID) {
+	private static ITree getTree(String speciesUID) {
 		IAllele[] treeTemplate = TreeManager.treeRoot.getTemplate(speciesUID);
 		if (treeTemplate == null) {
 			return null;

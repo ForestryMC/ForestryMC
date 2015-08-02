@@ -25,7 +25,7 @@ public enum StandardButtonTextureSets implements IButtonTextureSet {
 	RIGHT_BUTTON_SMALL(247, 220, 12, 9);
 	private final int x, y, height, width;
 
-	private StandardButtonTextureSets(int x, int y, int height, int width) {
+	StandardButtonTextureSets(int x, int y, int height, int width) {
 		this.x = x;
 		this.y = y;
 		this.height = height;

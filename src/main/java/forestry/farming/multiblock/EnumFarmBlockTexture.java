@@ -62,7 +62,7 @@ public enum EnumFarmBlockTexture {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int type) {
+	public static IIcon getIcon(int type) {
 		return icons.get(type);
 	}
 

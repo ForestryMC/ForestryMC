@@ -25,7 +25,7 @@ import forestry.core.utils.Utils;
 
 public abstract class BlockStructure extends BlockForestry {
 
-	public BlockStructure(Material material) {
+	protected BlockStructure(Material material) {
 		super(material);
 		setHardness(1.0f);
 	}

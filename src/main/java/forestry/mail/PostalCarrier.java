@@ -25,7 +25,6 @@ import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.IPostalState;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
-import forestry.core.network.PacketId;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
@@ -58,36 +57,36 @@ public class PostalCarrier implements IPostalCarrier {
 	}
 
 	@Override
-	public IPostalState deliverLetter(World world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doDeliver) {
+	public IPostalState deliverLetter(World world, IPostOffice office, IMailAddress recipient, ItemStack letterStack, boolean doDeliver) {
 		if (type == EnumAddressee.TRADER) {
-			return handleTradeLetter(world, office, recipient, letterstack, doDeliver);
+			return handleTradeLetter(world, recipient, letterStack, doDeliver);
 		} else {
-			return storeInPOBox(world, office, recipient, letterstack, doDeliver);
+			return storeInPOBox(world, recipient, letterStack);
 		}
 	}
 
-	private static IPostalState handleTradeLetter(World world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
+	private static IPostalState handleTradeLetter(World world, IMailAddress recipient, ItemStack letterStack, boolean doLodge) {
 		ITradeStation trade = PostManager.postRegistry.getTradeStation(world, recipient);
 		if (trade == null) {
 			return EnumDeliveryState.NO_MAILBOX;
 		}
 
-		return trade.handleLetter(world, recipient, letterstack, doLodge);
+		return trade.handleLetter(world, recipient, letterStack, doLodge);
 	}
 
-	private static EnumDeliveryState storeInPOBox(World world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
+	private static EnumDeliveryState storeInPOBox(World world, IMailAddress recipient, ItemStack letterStack) {
 
 		POBox pobox = PostRegistry.getPOBox(world, recipient);
 		if (pobox == null) {
 			return EnumDeliveryState.NO_MAILBOX;
 		}
 
-		if (!pobox.storeLetter(letterstack.copy())) {
+		if (!pobox.storeLetter(letterStack.copy())) {
 			return EnumDeliveryState.MAILBOX_FULL;
 		} else {
 			EntityPlayer player = Proxies.common.getPlayer(world, recipient.getPlayerProfile());
 			if (player != null) {
-				Proxies.net.sendToPlayer(new PacketPOBoxInfo(PacketId.POBOX_INFO, pobox.getPOBoxInfo()), player);
+				Proxies.net.sendToPlayer(new PacketPOBoxInfo(pobox.getPOBoxInfo()), player);
 			}
 		}
 

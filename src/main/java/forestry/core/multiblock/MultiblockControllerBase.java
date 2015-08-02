@@ -469,7 +469,6 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 			throw new IllegalArgumentException("The controller with the lowest minimum-coord value must consume the one with the higher coords");
 		}
 
-		TileEntity te;
 		Set<IMultiblockPart> partsToAcquire = new HashSet<IMultiblockPart>(other.connectedParts);
 
 		// releases all blocks and references gently so they can be incorporated into another multiblock
@@ -834,7 +833,6 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 			return null;
 		}
 		
-		TileEntity te;
 		IChunkProvider chunkProvider = worldObj.getChunkProvider();
 
 		// Invalidate our reference coord, we'll recalculate it shortly
@@ -889,7 +887,6 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 		// Now visit all connected parts, breadth-first, starting from reference coord's part
 		IMultiblockPart part;
 		LinkedList<IMultiblockPart> partsToCheck = new LinkedList<IMultiblockPart>();
-		IMultiblockPart[] nearbyParts = null;
 		int visitedParts = 0;
 
 		partsToCheck.add(referencePart);
@@ -899,7 +896,7 @@ public abstract class MultiblockControllerBase implements ISidedInventory, IRest
 			part.setVisited();
 			visitedParts++;
 
-			nearbyParts = part.getNeighboringParts(); // Chunk-safe on server, but not on client
+			IMultiblockPart[] nearbyParts = part.getNeighboringParts(); // Chunk-safe on server, but not on client
 			for (IMultiblockPart nearbyPart : nearbyParts) {
 				// Ignore different machines
 				if (nearbyPart.getMultiblockController() != this) {

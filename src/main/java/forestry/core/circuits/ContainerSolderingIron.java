@@ -72,7 +72,7 @@ public class ContainerSolderingIron extends ContainerItemInventory<SolderingInve
 		sendSelection(player);
 	}
 
-	public void sendSelection(EntityPlayer player) {
+	private void sendSelection(EntityPlayer player) {
 		PacketString packet = new PacketString(PacketId.GUI_LAYOUT_SELECT, inventory.getLayout().getUID());
 		Proxies.net.sendToPlayer(packet, player);
 	}

@@ -27,8 +27,8 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 	private ChunkCoordinates targetBiome;
 	private boolean targetBiomeFound;
 
-	public double currentAngle;
-	public double angleDelta;
+	private double currentAngle;
+	private double angleDelta;
 
 	public TextureHabitatLocator(String iconName) {
 		super(iconName);
@@ -51,7 +51,7 @@ public class TextureHabitatLocator extends TextureAtlasSprite {
 		}
 	}
 
-	public void updateCompass(World world, double playerX, double playerZ, double playerYaw) {
+	private void updateCompass(World world, double playerX, double playerZ, double playerYaw) {
 
 		double targetAngle;
 

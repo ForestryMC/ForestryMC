@@ -34,9 +34,9 @@ import forestry.farming.gui.ContainerFarm;
  */
 public class TankWidget extends Widget {
 
-	protected int overlayTexX = 176;
-	protected int overlayTexY = 0;
-	protected int slot = 0;
+	private int overlayTexX = 176;
+	private int overlayTexY = 0;
+	private int slot = 0;
 
 	public TankWidget(WidgetManager manager, int xPos, int yPos, int slot) {
 		super(manager, xPos, yPos);

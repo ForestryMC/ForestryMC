@@ -80,7 +80,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter, ImprinterInven
 		RenderHelper.disableStandardItemLighting();
 	}
 
-	private int getHabitatSlotAtPosition(int i, int j) {
+	private static int getHabitatSlotAtPosition(int i, int j) {
 		int[] xPos = new int[]{12, 12};
 		int[] yPos = new int[]{32, 52};
 

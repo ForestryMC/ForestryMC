@@ -50,8 +50,8 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 	private static final Random rand = new Random();
 
-	public IButterflyGenome genome;
-	public IButterflyGenome mate;
+	private IButterflyGenome genome;
+	private IButterflyGenome mate;
 
 	/* CONSTRUCTOR */
 	public Butterfly(NBTTagCompound nbttagcompound) {

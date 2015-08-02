@@ -119,7 +119,7 @@ public class PacketHandlerMail implements IPacketHandler {
 			return;
 		}
 
-		Proxies.net.sendToPlayer(new PacketPOBoxInfo(PacketId.POBOX_INFO, pobox.getPOBoxInfo()), player);
+		Proxies.net.sendToPlayer(new PacketPOBoxInfo(pobox.getPOBoxInfo()), player);
 	}
 
 }

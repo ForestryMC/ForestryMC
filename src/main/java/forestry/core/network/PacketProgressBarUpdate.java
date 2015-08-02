@@ -28,7 +28,7 @@ public class PacketProgressBarUpdate extends ForestryPacket {
 		new PacketProgressBarUpdate(data);
 	}
 
-	public PacketProgressBarUpdate(DataInputStreamForestry data) throws IOException {
+	private PacketProgressBarUpdate(DataInputStreamForestry data) throws IOException {
 		super(data);
 	}
 

@@ -137,7 +137,7 @@ public class TileAlvearySwarmer extends TileAlvearyWithGui implements ISidedInve
 		int chunkX = (xCoord + worldObj.rand.nextInt(40 * 2) - 40) / 16;
 		int chunkZ = (zCoord + worldObj.rand.nextInt(40 * 2) - 40) / 16;
 
-		if (HiveDecorator.instance().genHive(worldObj, worldObj.rand, chunkX, chunkZ, hive)) {
+		if (HiveDecorator.genHive(worldObj, worldObj.rand, chunkX, chunkZ, hive)) {
 			pendingSpawns.pop();
 		}
 	}
@@ -158,7 +158,7 @@ public class TileAlvearySwarmer extends TileAlvearyWithGui implements ISidedInve
 
 	/* TEXTURES */
 	@Override
-	public int getIcon(int side, int metadata) {
+	public int getIcon(int side) {
 		if (side == 0 || side == 1) {
 			return BlockAlveary.BOTTOM;
 		}

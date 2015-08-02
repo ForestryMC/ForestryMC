@@ -55,8 +55,8 @@ import forestry.core.utils.GuiUtil;
 public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankContainer, IItemStackDisplay {
 
 	/* CONSTANTS */
-	public static final int TIME_TO_ANALYZE = 125;
-	public static final int HONEY_REQUIRED = 100;
+	private static final int TIME_TO_ANALYZE = 125;
+	private static final int HONEY_REQUIRED = 100;
 
 	public static final short SLOT_ANALYZE = 0;
 	public static final short SLOT_CAN = 1;
@@ -68,7 +68,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	/* MEMBER */
 	private int analyzeTime;
 
-	public final FilteredTank resourceTank;
+	private final FilteredTank resourceTank;
 
 	private final TankManager tankManager;
 
@@ -87,7 +87,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 	/* GUI */
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.AnalyzerGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 

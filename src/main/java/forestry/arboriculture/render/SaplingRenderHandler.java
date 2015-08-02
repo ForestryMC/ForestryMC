@@ -27,7 +27,7 @@ import forestry.plugins.PluginArboriculture;
 
 public class SaplingRenderHandler implements ISimpleBlockRenderingHandler {
 
-	public static int renderLayer = 0;
+	private static int renderLayer = 0;
 	
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
@@ -65,7 +65,7 @@ public class SaplingRenderHandler implements ISimpleBlockRenderingHandler {
 		return PluginArboriculture.modelIdSaplings;
 	}
 
-	protected boolean renderCrossedSquares(IAlleleTreeSpecies species, IBlockAccess world, Block block, int x, int y, int z) {
+	private static boolean renderCrossedSquares(IAlleleTreeSpecies species, IBlockAccess world, Block block, int x, int y, int z) {
 
 		Tessellator tess = Tessellator.instance;
 		
@@ -83,11 +83,11 @@ public class SaplingRenderHandler implements ISimpleBlockRenderingHandler {
 		}
 
 		tess.setColorOpaque_F(r, g, b);
-		drawCrossedSquares(world, species, block, x, y, z, x, y, z, 1.0f);
+		drawCrossedSquares(species, x, y, z, 1.0f);
 		return true;
 	}
 
-	protected void drawCrossedSquares(IBlockAccess world, IAlleleTreeSpecies species, Block block, int x, int y, int z, double par3, double par5, double par7, float mod) {
+	private static void drawCrossedSquares(IAlleleTreeSpecies species, double par3, double par5, double par7, float mod) {
 
 		Tessellator tess = Tessellator.instance;
 		IIcon icon = species.getGermlingIcon(EnumGermlingType.SAPLING, renderLayer);

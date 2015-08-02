@@ -150,7 +150,7 @@ public class CommandBeeGive extends SubCommand {
 		return null;
 	}
 
-	String[] getSpecies() {
+	private static String[] getSpecies() {
 		List<String> species = new ArrayList<String>();
 
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
@@ -162,7 +162,7 @@ public class CommandBeeGive extends SubCommand {
 		return species.toArray(new String[species.size()]);
 	}
 
-	EnumBeeType getBeeType(String beeTypeName) {
+	private static EnumBeeType getBeeType(String beeTypeName) {
 		for (EnumBeeType beeType : EnumBeeType.values()) {
 			if (beeType.getName().equalsIgnoreCase(beeTypeName)) {
 				return beeType;

@@ -213,7 +213,6 @@ public class BlockCandle extends BlockTorch {
 
 	private static boolean tryDye(ItemStack held, boolean isLit, TileCandle tileCandle) {
 		// Check for dye-able ness.
-		boolean matched = false;
 		for (Map.Entry<String, Integer> colour : colours.entrySet()) {
 			String colourName = colour.getKey();
 			for (ItemStack stack : OreDictionary.getOres(colourName)) {
@@ -233,7 +232,7 @@ public class BlockCandle extends BlockTorch {
 	/* DROP HANDLING */
 	// Hack: 	When harvesting we need to get the drops in onBlockHarvested,
 	// 			because Mojang destroys the block and tile before calling getDrops.
-	protected ThreadLocal<ItemStack> drop = new ThreadLocal<ItemStack>();
+	private final ThreadLocal<ItemStack> drop = new ThreadLocal<ItemStack>();
 
 	@Override
 	public void onBlockHarvested(World world, int x, int y, int z, int metadata, EntityPlayer player) {
@@ -301,7 +300,7 @@ public class BlockCandle extends BlockTorch {
 		}
 	}
 
-	protected static int getColourValueFromItemStack(ItemStack itemStack) {
+	private static int getColourValueFromItemStack(ItemStack itemStack) {
 		int value = 0xffffff; // default to white.
 		if (itemStack.hasTagCompound()) {
 			NBTTagCompound tag = itemStack.getTagCompound();

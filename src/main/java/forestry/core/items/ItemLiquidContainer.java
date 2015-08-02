@@ -46,7 +46,7 @@ import forestry.core.render.TextureManager;
 
 public class ItemLiquidContainer extends Item {
 
-	public static enum EnumContainerType {
+	public enum EnumContainerType {
 		GLASS, JAR, CAN, CAPSULE, REFRACTORY, BUCKET
 	}
 
@@ -78,7 +78,7 @@ public class ItemLiquidContainer extends Item {
 		return buckets.get(contents);
 	}
 
-	private int getMatchingSlot(EntityPlayer player, ItemStack stack) {
+	private static int getMatchingSlot(EntityPlayer player, ItemStack stack) {
 
 		for (int slot = 0; slot < player.inventory.mainInventory.length; slot++) {
 			ItemStack slotStack = player.inventory.getStackInSlot(slot);
@@ -107,7 +107,7 @@ public class ItemLiquidContainer extends Item {
 		}
 
 		itemstack.stackSize--;
-		entityplayer.getFoodStats().addStats(this.getHealAmount(), this.getSaturationModifier());
+		entityplayer.getFoodStats().addStats(healAmount, saturationModifier);
 		world.playSoundAtEntity(entityplayer, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
 		/*
 		 * if (!world.isRemote && potionId > 0 && world.rand.nextFloat() < potionEffectProbability) entityplayer.addPotionEffect(new PotionEffect(potionId,
@@ -297,15 +297,6 @@ public class ItemLiquidContainer extends Item {
 				return true;
 			}
 		}
-	}
-
-
-	public int getHealAmount() {
-		return healAmount;
-	}
-
-	public float getSaturationModifier() {
-		return saturationModifier;
 	}
 
 	public ItemLiquidContainer setDrink(int healAmount, float saturationModifier) {

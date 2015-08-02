@@ -15,10 +15,8 @@ import java.io.IOException;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -38,29 +36,28 @@ import cofh.api.energy.IEnergyConnection;
 
 public abstract class Engine extends TileBase implements IEnergyConnection, IActivatable {
 
-	public boolean active = false; // Used for smp.
+	private boolean active = false; // Used for smp.
 	/**
 	 * Indicates whether the piston is receding from or approaching the
 	 * combustion chamber
 	 */
-	public int stagePiston = 0;
+	private int stagePiston = 0;
 	/**
 	 * Piston speed as supplied by the server
 	 */
-	public float pistonSpeedServer = 0;
+	private float pistonSpeedServer = 0;
+
 	protected int currentOutput = 0;
-	public final int maxEnergy;
-	public final int maxEnergyExtracted;
-	public int heat;
+	protected final int maxEnergy;
+	protected int heat;
 	protected final int maxHeat;
 	protected boolean forceCooldown = false;
 	public float progress;
 	protected final EnergyManager energyManager;
 
-	public Engine(int maxHeat, int maxEnergy, int maxEnergyExtracted) {
+	protected Engine(int maxHeat, int maxEnergy) {
 		this.maxHeat = maxHeat;
 		this.maxEnergy = maxEnergy;
-		this.maxEnergyExtracted = maxEnergyExtracted;
 		energyManager = new EnergyManager(2000, 100, 1000000);
 
 		// allow engines to chain, but not have energy sucked out of them
@@ -68,7 +65,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection, IAct
 	}
 
 	@Override
-	public void rotateAfterPlacement(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack itemstack) {
+	public void rotateAfterPlacement(EntityLivingBase entityLiving) {
 		rotateEngine();
 	}
 
@@ -80,15 +77,15 @@ public abstract class Engine extends TileBase implements IEnergyConnection, IAct
 		}
 	}
 
-	public abstract int dissipateHeat();
+	protected abstract int dissipateHeat();
 
-	public abstract int generateHeat();
+	protected abstract int generateHeat();
 
-	public boolean mayBurn() {
+	protected boolean mayBurn() {
 		return !forceCooldown;
 	}
 
-	public abstract void burn();
+	protected abstract void burn();
 
 	@Override
 	public void updateClientSide() {
@@ -105,7 +102,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection, IAct
 	}
 
 	@Override
-	public void updateServerSide() {
+	protected void updateServerSide() {
 		TemperatureState energyState = getTemperatureState();
 		if (energyState == TemperatureState.MELTING && heat > 0) {
 			forceCooldown = true;
@@ -201,7 +198,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection, IAct
 		return (double) heat / (double) maxHeat;
 	}
 
-	public abstract boolean isBurning();
+	protected abstract boolean isBurning();
 
 	public int getBurnTimeRemainingScaled(int i) {
 		return 0;
@@ -230,7 +227,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection, IAct
 		return TemperatureState.getState(heat, maxHeat);
 	}
 
-	public float getPistonSpeed() {
+	protected float getPistonSpeed() {
 		switch (getTemperatureState()) {
 			case COOL:
 				return 0.03f;

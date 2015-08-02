@@ -76,7 +76,7 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable, TileWork
 		}
 	}
 
-	private class ClearWorktable extends Widget {
+	private static class ClearWorktable extends Widget {
 
 		public ClearWorktable(WidgetManager manager, int xPos, int yPos) {
 			super(manager, xPos, yPos);
@@ -90,7 +90,7 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable, TileWork
 
 		@Override
 		public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
-			container.clearRecipe();
+			ContainerWorktable.clearRecipe();
 		}
 	}
 

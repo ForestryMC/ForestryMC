@@ -21,7 +21,6 @@ import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.core.ForestryAPI;
-import forestry.core.gadgets.TileBase;
 import forestry.core.network.GuiId;
 
 public class TileBeehouse extends TileBeeHousing {
@@ -46,7 +45,7 @@ public class TileBeehouse extends TileBeeHousing {
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.BeehouseGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
 	}
 

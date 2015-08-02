@@ -51,14 +51,16 @@ import ic2.api.energy.prefab.BasicSource;
 public class MachineGenerator extends TileBase implements ISidedInventory, ILiquidTankContainer, IRenderableMachine {
 
 	// / CONSTANTS
-	public static final short SLOT_CAN = 0;
-	public static final int maxEnergy = 30000;
+	private static final int maxEnergy = 30000;
 
-	public final FilteredTank resourceTank;
+	public static final short SLOT_CAN = 0;
+
 	private final TankManager tankManager;
+	private final FilteredTank resourceTank;
+
 	private int tickCount = 0;
 
-	protected BasicSource ic2EnergySource;
+	private BasicSource ic2EnergySource;
 
 	public MachineGenerator() {
 		setHints(Config.hints.get("generator"));
@@ -74,7 +76,7 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.GeneratorGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 

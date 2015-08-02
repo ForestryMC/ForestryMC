@@ -23,7 +23,7 @@ import forestry.core.vect.IVect;
 
 public class AlleleEffectFertile extends AlleleEffectThrottled {
 	
-	public static final int MAX_BLOCK_FIND_TRIES = 5;
+	private static final int MAX_BLOCK_FIND_TRIES = 5;
 
 	public AlleleEffectFertile() {
 		super("fertile", false, 6, true, false);

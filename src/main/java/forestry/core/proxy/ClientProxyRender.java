@@ -50,7 +50,7 @@ public class ClientProxyRender extends ProxyRender {
 
 	@Override
 	public void registerTESR(MachineDefinition definition) {
-		BlockRenderingHandler.byBlockRenderer.put(new TileRendererIndex(definition.block, definition.meta), definition.renderer);
+		BlockRenderingHandler.byBlockRenderer.put(new TileRendererIndex(definition.getBlock(), definition.getMeta()), definition.renderer);
 		ClientRegistry.bindTileEntitySpecialRenderer(definition.teClass, (TileEntitySpecialRenderer) definition.renderer);
 	}
 

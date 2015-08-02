@@ -25,8 +25,8 @@ public class PacketSocketUpdate extends PacketCoordinates {
 		super(data);
 	}
 
-	public <T extends TileEntity & ISocketable> PacketSocketUpdate(PacketId id, T tile) {
-		super(id, tile);
+	public <T extends TileEntity & ISocketable> PacketSocketUpdate(T tile) {
+		super(PacketId.SOCKET_UPDATE, tile);
 
 		itemStacks = new ItemStack[tile.getSocketCount()];
 		for (int i = 0; i < tile.getSocketCount(); i++) {

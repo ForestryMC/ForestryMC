@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.World;
 
 public class EntityBeeFX extends EntityFX {
-	public EntityBeeFX(World world, double x, double y, double z, float motionScaleX, float motionScaleY, float motionScaleZ, int color) {
+	public EntityBeeFX(World world, double x, double y, double z, int color) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
 
 		particleRed = (color >> 16 & 255) / 255.0F;

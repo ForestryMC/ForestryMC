@@ -103,13 +103,13 @@ public class ItemLetter extends ItemInventoried {
 		return icons[size.ordinal()][state.ordinal()];
 	}
 
-	public static int encodeMeta(LetterState state, LetterSize size) {
+	private static int encodeMeta(LetterState state, LetterSize size) {
 		int meta = size.ordinal() << 4;
 		meta |= state.ordinal();
 		return meta;
 	}
 
-	public static LetterState getState(int meta) {
+	private static LetterState getState(int meta) {
 		int ordinal = meta & 0x0f;
 		LetterState[] values = LetterState.values();
 		if (ordinal >= values.length) {
@@ -118,7 +118,7 @@ public class ItemLetter extends ItemInventoried {
 		return values[ordinal];
 	}
 
-	public static LetterSize getSize(int meta) {
+	private static LetterSize getSize(int meta) {
 		int ordinal = meta >> 4;
 		LetterSize[] values = LetterSize.values();
 		if (ordinal >= values.length) {
@@ -127,7 +127,7 @@ public class ItemLetter extends ItemInventoried {
 		return values[ordinal];
 	}
 
-	public static LetterSize getSize(ILetter letter) {
+	private static LetterSize getSize(ILetter letter) {
 		int count = letter.countAttachments();
 
 		if (count > 5) {

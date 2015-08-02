@@ -1,6 +1,7 @@
 package forestry.core.multiblock;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.world.World;
@@ -14,7 +15,7 @@ import forestry.core.proxy.Proxies;
  */
 public class MultiblockRegistry {
 	// World > WorldRegistry map
-	private static HashMap<World, MultiblockWorldRegistry> registries = new HashMap<World, MultiblockWorldRegistry>();
+	private static final Map<World, MultiblockWorldRegistry> registries = new HashMap<World, MultiblockWorldRegistry>();
 	
 	/**
 	 * Called before Tile Entities are ticked in the world. Do bookkeeping here.

@@ -33,7 +33,7 @@ public class StandardTank extends FluidTank {
 	}
 
 	public TankMode tankMode = TankMode.DEFAULT;
-	public static final int DEFAULT_COLOR = 0xFFFFFF;
+	private static final int DEFAULT_COLOR = 0xFFFFFF;
 	public int colorCache = DEFAULT_COLOR;
 	private int tankIndex;
 

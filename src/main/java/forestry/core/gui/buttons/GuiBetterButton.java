@@ -32,19 +32,6 @@ public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 	private ToolTip toolTip;
 	private boolean useTexWidth = false;
 
-	public GuiBetterButton(int id, int x, int y, String label) {
-		this(id, x, y, 200, StandardButtonTextureSets.LARGE_BUTTON, label);
-	}
-
-	public GuiBetterButton(int id, int x, int y, int width, String label) {
-		this(id, x, y, width, StandardButtonTextureSets.LARGE_BUTTON, label);
-	}
-
-	public GuiBetterButton(int id, int x, int y, int width, IButtonTextureSet texture, String label) {
-		super(id, x, y, width, texture.getHeight(), label);
-		this.texture = texture;
-	}
-
 	public GuiBetterButton(int id, int x, int y, IButtonTextureSet texture) {
 		super(id, x, y, texture.getWidth(), texture.getHeight(), "");
 		this.texture = texture;
@@ -96,7 +83,7 @@ public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 		return mouseX >= xPosition && mouseY >= yPosition && mouseX < xPosition + getWidth() && mouseY < yPosition + getHeight();
 	}
 
-	protected void bindButtonTextures(Minecraft minecraft) {
+	protected static void bindButtonTextures(Minecraft minecraft) {
 		minecraft.renderEngine.bindTexture(TEXTURE);
 	}
 

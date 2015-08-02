@@ -26,11 +26,11 @@ public class EntityIgnitionFX extends EntityFX {
 		this.motionX *= 0.8;
 		this.motionY *= 0.8;
 		this.motionZ *= 0.8;
-		this.motionY = (double)(this.rand.nextFloat() * 0.4F + 0.05F);
+		this.motionY = (double) (this.rand.nextFloat() * 0.4F + 0.05F);
 		this.particleRed = this.particleGreen = this.particleBlue = 1.0F;
 		this.particleScale *= (this.rand.nextFloat() / 2) + 0.3F;
 		this.ignitionParticleScale = this.particleScale;
-		this.particleMaxAge = (int)(16.0 / (Math.random() * 0.8 + 0.2));
+		this.particleMaxAge = (int) (16.0 / (Math.random() * 0.8 + 0.2));
 		this.noClip = false;
 		this.setParticleTextureIndex(49);
 	}

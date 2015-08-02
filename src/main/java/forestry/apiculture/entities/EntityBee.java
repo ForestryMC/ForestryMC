@@ -29,9 +29,9 @@ public class EntityBee extends EntityCreature implements IAnimals {
 
 	private static final String DEFAULT_TEXTURE = Defaults.TEXTURE_PATH_ENTITIES + "/bees/honeyBee.png";
 
-	IBee contained;
-	IAlleleBeeSpecies species;
-	EnumBeeType type = EnumBeeType.DRONE;
+	private IBee contained;
+	private IAlleleBeeSpecies species;
+	private EnumBeeType type = EnumBeeType.DRONE;
 
 	private String beeTexture = DEFAULT_TEXTURE;
 	private long lastUpdate;

@@ -27,14 +27,10 @@ public class WorldGenMinableMeta extends WorldGenerator {
 	private final int mineableBlockMeta;
 	private final int numberOfBlocks;
 
-	public WorldGenMinableMeta(Block block, int meta, int numberOfBlocks) {
-		mineableBlock = block;
+	public WorldGenMinableMeta(ForestryBlock block, int meta, int numberOfBlocks) {
+		mineableBlock = block.block();
 		mineableBlockMeta = meta;
 		this.numberOfBlocks = numberOfBlocks;
-	}
-
-	public WorldGenMinableMeta(ForestryBlock block, int meta, int numberOfBlocks) {
-		this(block.block(), meta, numberOfBlocks);
 	}
 
 	@Override

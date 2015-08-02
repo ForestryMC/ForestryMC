@@ -157,19 +157,18 @@ public class PluginApiculture extends ForestryPlugin {
 	@SidedProxy(clientSide = "forestry.apiculture.proxy.ClientProxyApiculture", serverSide = "forestry.apiculture.proxy.ProxyApiculture")
 	public static ProxyApiculture proxy;
 	private static final String CONFIG_CATEGORY = "apiculture";
-	public static final String[] EMPTY_STRINGS = new String[0];
+	private static final String[] EMPTY_STRINGS = new String[0];
 	public static String beekeepingMode = "NORMAL";
 	private static float secondPrincessChance = 0;
 	public static final int ticksPerBeeWorkCycle = 550;
-	public static boolean apiarySideSensitive = false;
 	public static boolean fancyRenderedBees = false;
 
 	public static HiveRegistry hiveRegistry;
 
-	public static MachineDefinition definitionApiary;
-	public static MachineDefinition definitionChest;
-	public static MachineDefinition definitionBeehouse;
-	public static MachineDefinition definitionAnalyzer;
+	private static MachineDefinition definitionApiary;
+	private static MachineDefinition definitionChest;
+	private static MachineDefinition definitionBeehouse;
+	private static MachineDefinition definitionAnalyzer;
 
 	private final Map<String, String[]> defaultAcceptedFlowers = new HashMap<String, String[]>();
 	private final Map<String, String[]> defaultPlantableFlowers = new HashMap<String, String[]>();
@@ -455,11 +454,7 @@ public class PluginApiculture extends ForestryPlugin {
 		// Config
 		forestry.core.config.deprecated.Configuration apicultureConfig = new forestry.core.config.deprecated.Configuration();
 
-		forestry.core.config.deprecated.Property property = apicultureConfig.get("apiary.sidesensitive", CONFIG_CATEGORY, apiarySideSensitive);
-		property.comment = "set to false if apiaries should output all items regardless of side a pipe is attached to";
-		apiarySideSensitive = Boolean.parseBoolean(property.value);
-
-		property = apicultureConfig.get("render.bees.fancy", CONFIG_CATEGORY, fancyRenderedBees);
+		forestry.core.config.deprecated.Property property = apicultureConfig.get("render.bees.fancy", CONFIG_CATEGORY, fancyRenderedBees);
 		property.comment = "set to true to enable a fancy butterfly-like renderer for bees. (experimental!)";
 		fancyRenderedBees = Boolean.parseBoolean(property.value);
 
@@ -866,7 +861,7 @@ public class PluginApiculture extends ForestryPlugin {
 		definitionChest.register();
 	}
 
-	public static IRecipe[] createAlyzerRecipes(Block block, int meta) {
+	private static IRecipe[] createAlyzerRecipes(Block block, int meta) {
 		ArrayList<IRecipe> recipes = new ArrayList<IRecipe>();
 		recipes.add(ShapedRecipeCustom.createShapedRecipe(new ItemStack(block, 1, meta), "XTX", " Y ", "X X", 'Y', ForestryItem.sturdyCasing, 'T', ForestryItem.beealyzer, 'X', "ingotBronze"));
 		recipes.add(ShapedRecipeCustom.createShapedRecipe(new ItemStack(block, 1, meta), "XTX", " Y ", "X X", 'Y', ForestryItem.sturdyCasing, 'T', ForestryItem.treealyzer, 'X', "ingotBronze"));
@@ -1050,14 +1045,14 @@ public class PluginApiculture extends ForestryPlugin {
 	@Override
 	public void populateChunk(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
 		if (Config.getBeehivesAmount() > 0.0) {
-			HiveDecorator.instance().decorateHives(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
+			HiveDecorator.decorateHives(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
 		}
 	}
 
 	@Override
 	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
 		if (Config.getBeehivesAmount() > 0.0) {
-			HiveDecorator.instance().decorateHives(world, rand, chunkX, chunkZ);
+			HiveDecorator.decorateHives(world, rand, chunkX, chunkZ);
 		}
 	}
 

@@ -15,10 +15,10 @@ import forestry.energy.gadgets.EngineTin;
 
 public abstract class CircuitElectricChange extends Circuit {
 
-	int euChange = 7;
-	int rfChange = 20;
+	private int euChange = 7;
+	private int rfChange = 20;
 
-	public CircuitElectricChange(String uid, boolean requiresDiscovery) {
+	protected CircuitElectricChange(String uid, boolean requiresDiscovery) {
 		super(uid, requiresDiscovery);
 	}
 

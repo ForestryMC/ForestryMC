@@ -146,7 +146,7 @@ public class TileAlvearyHygroregulator extends TileAlvearyWithGui implements IIn
 
 	/* TEXTURES */
 	@Override
-	public int getIcon(int side, int metadata) {
+	public int getIcon(int side) {
 		return BlockAlveary.ALVEARY_HYGRO;
 	}
 

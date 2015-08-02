@@ -26,8 +26,8 @@ public class PacketPOBoxInfo extends ForestryPacket {
 		super(data);
 	}
 
-	public PacketPOBoxInfo(PacketId id, POBoxInfo info) {
-		super(id);
+	public PacketPOBoxInfo(POBoxInfo info) {
+		super(PacketId.POBOX_INFO);
 		this.poboxInfo = info;
 	}
 

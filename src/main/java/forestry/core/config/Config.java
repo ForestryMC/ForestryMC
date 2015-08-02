@@ -79,8 +79,6 @@ public class Config {
 	public static boolean enableBackpackResupply = true;
 
 	// Customization
-	public static boolean tooltipLiquidAmount = true;
-
 	private static boolean craftingBronzeEnabled = true;
 
 	public static boolean craftingStampsEnabled = true;
@@ -88,8 +86,8 @@ public class Config {
 
 	public static int farmSize = 2;
 	public static boolean squareFarms = false;
-	public static boolean enableExUtilEnderLily = true;
-	public static boolean enableMagicalCropsSupport = true;
+	private static boolean enableExUtilEnderLily = true;
+	private static boolean enableMagicalCropsSupport = true;
 
 	// Mail
 	public static boolean mailAlertEnabled = true;
@@ -258,8 +256,6 @@ public class Config {
 		enableHints = configCommon.getBooleanLocalized("tweaks.gui.tabs", "hints", enableHints);
 		enableEnergyStat = configCommon.getBooleanLocalized("tweaks.gui.tabs", "energy", enableEnergyStat);
 
-		tooltipLiquidAmount = configCommon.getBooleanLocalized("tweaks.gui.tooltip", "liquidamount", tooltipLiquidAmount);
-
 		enablePermissions = configCommon.getBooleanLocalized("tweaks", "permissions", enablePermissions);
 
 		farmSize = configCommon.getIntLocalized("tweaks.farms", "size", farmSize, 1, 3);
@@ -388,9 +384,6 @@ public class Config {
 		property = configOld.get("tweaks.energystat.disabled", CATEGORY_COMMON, true);
 		property.comment = "set to true to disable energy statistics on energy consumers.";
 		Config.enableEnergyStat = !Boolean.parseBoolean(property.value);
-		property = configOld.get("tweaks.tooltip.liquidamount.disabled", CATEGORY_COMMON, false);
-		property.comment = "set to true to disable displaying liquid amounts in tank tooltips.";
-		Config.tooltipLiquidAmount = !Boolean.parseBoolean(property.value);
 
 		property = configOld.get("tweaks.permissions.disabled", CATEGORY_COMMON, false);
 		property.comment = "set to true to disable access restrictions on forestry machines.";

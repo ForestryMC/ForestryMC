@@ -47,8 +47,8 @@ import forestry.core.proxy.Proxies;
 
 public class PluginManager {
 
-	public static final String MODULE_CONFIG_FILE_NAME = "modules.cfg";
-	public static final String CATEGORY_MODULES = "modules";
+	private static final String MODULE_CONFIG_FILE_NAME = "modules.cfg";
+	private static final String CATEGORY_MODULES = "modules";
 
 	public static final ArrayList<IGuiHandler> guiHandlers = Lists.newArrayList();
 	public static final ArrayList<IPacketHandler> packetHandlers = Lists.newArrayList();

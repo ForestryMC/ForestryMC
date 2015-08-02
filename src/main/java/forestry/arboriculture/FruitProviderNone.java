@@ -52,7 +52,7 @@ public class FruitProviderNone implements IFruitProvider {
 
 	protected int ripeningPeriod = 10;
 
-	OverlayType overlay = null;
+	private OverlayType overlay = null;
 
 	public FruitProviderNone(String key, IFruitFamily family) {
 		this.key = key;

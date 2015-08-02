@@ -52,7 +52,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 
 	/* GUI */
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.NaturalistBenchGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 

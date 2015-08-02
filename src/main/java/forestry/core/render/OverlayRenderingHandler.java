@@ -22,11 +22,11 @@ public abstract class OverlayRenderingHandler implements ISimpleBlockRenderingHa
 
 	protected static final double OVERLAY_SHIFT = 0.001;
 
-	protected int determineMixedBrightness(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, int mixedBrightness) {
+	private static int determineMixedBrightness(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, int mixedBrightness) {
 		return renderer.renderMinY > 0.0D ? mixedBrightness : block.getMixedBrightnessForBlock(world, x, y, z);
 	}
 
-	protected void renderBottomFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness,
+	protected static void renderBottomFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness,
 			float r, float g, float b) {
 
 		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x, y - 1, z, 0)) {
@@ -41,7 +41,7 @@ public abstract class OverlayRenderingHandler implements ISimpleBlockRenderingHa
 
 	}
 
-	protected void renderTopFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness, float r,
+	protected static void renderTopFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness, float r,
 			float g, float b) {
 
 		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x, y + 1, z, 1)) {
@@ -56,7 +56,7 @@ public abstract class OverlayRenderingHandler implements ISimpleBlockRenderingHa
 
 	}
 
-	protected void renderEastFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness, float r,
+	protected static void renderEastFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness, float r,
 			float g, float b) {
 
 		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x, y, z - 1, 2)) {
@@ -71,7 +71,7 @@ public abstract class OverlayRenderingHandler implements ISimpleBlockRenderingHa
 
 	}
 
-	protected void renderWestFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness, float r,
+	protected static void renderWestFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness, float r,
 			float g, float b) {
 
 		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x, y, z + 1, 3)) {
@@ -86,7 +86,7 @@ public abstract class OverlayRenderingHandler implements ISimpleBlockRenderingHa
 
 	}
 
-	protected void renderNorthFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness,
+	protected static void renderNorthFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness,
 			float r, float g, float b) {
 
 		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x - 1, y, z, 4)) {
@@ -101,7 +101,7 @@ public abstract class OverlayRenderingHandler implements ISimpleBlockRenderingHa
 
 	}
 
-	protected void renderSouthFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness,
+	protected static void renderSouthFace(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon textureIndex, int mixedBrightness,
 			float r, float g, float b) {
 
 		if (!renderer.renderAllFaces && !block.shouldSideBeRendered(world, x + 1, y, z, 5)) {

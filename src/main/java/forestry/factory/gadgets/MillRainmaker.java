@@ -16,7 +16,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.RainSubstrate;
 import forestry.core.gadgets.Mill;
-import forestry.core.gadgets.TileBase;
 import forestry.core.proxy.Proxies;
 
 public class MillRainmaker extends Mill {
@@ -29,7 +28,7 @@ public class MillRainmaker extends Mill {
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		if (!Proxies.common.isSimulating(player.worldObj)) {
 			return;
 		}
@@ -71,7 +70,7 @@ public class MillRainmaker extends Mill {
 		nbttagcompound.setBoolean("Reverse", reverse);
 	}
 
-	public void addCharge(RainSubstrate substrate) {
+	private void addCharge(RainSubstrate substrate) {
 		charge = 1;
 		speed = substrate.speed;
 		duration = substrate.duration;
@@ -90,10 +89,10 @@ public class MillRainmaker extends Mill {
 			float f3 = 0.52F;
 			float f4 = worldObj.rand.nextFloat() * 0.6F - 0.3F;
 
-			Proxies.common.addEntityExplodeFX(worldObj, (f - f3), f1, (f2 + f4), 0F, 0F, 0F);
-			Proxies.common.addEntityExplodeFX(worldObj, (f + f3), f1, (f2 + f4), 0F, 0F, 0F);
-			Proxies.common.addEntityExplodeFX(worldObj, (f + f4), f1, (f2 - f3), 0F, 0F, 0F);
-			Proxies.common.addEntityExplodeFX(worldObj, (f + f4), f1, (f2 + f3), 0F, 0F, 0F);
+			Proxies.common.addEntityExplodeFX(worldObj, (f - f3), f1, (f2 + f4));
+			Proxies.common.addEntityExplodeFX(worldObj, (f + f3), f1, (f2 + f4));
+			Proxies.common.addEntityExplodeFX(worldObj, (f + f4), f1, (f2 - f3));
+			Proxies.common.addEntityExplodeFX(worldObj, (f + f4), f1, (f2 + f3));
 		}
 
 		if (Proxies.common.isSimulating(worldObj)) {

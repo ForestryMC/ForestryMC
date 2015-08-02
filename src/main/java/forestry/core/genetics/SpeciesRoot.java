@@ -45,7 +45,7 @@ public abstract class SpeciesRoot implements ISpeciesRoot {
 	}
 
 	/* TEMPLATES */
-	public final HashMap<String, IAllele[]> speciesTemplates = new HashMap<String, IAllele[]>();
+	protected final HashMap<String, IAllele[]> speciesTemplates = new HashMap<String, IAllele[]>();
 
 	@Override
 	public Map<String, IAllele[]> getGenomeTemplates() {

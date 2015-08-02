@@ -127,7 +127,7 @@ public enum ForestryBlock {
 		return new ItemStack(block, qty, meta);
 	}
 
-	public boolean setBlock(World world, int x, int y, int z, int meta, int flag) {
-		return world.setBlock(x, y, z, block, meta, flag);
+	public boolean setBlock(World world, int x, int y, int z, int meta) {
+		return world.setBlock(x, y, z, block, meta, Defaults.FLAG_BLOCK_SYNCH);
 	}
 }

@@ -36,7 +36,6 @@ import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.Engine;
-import forestry.core.gadgets.TileBase;
 import forestry.core.inventory.AdjacentInventoryCache;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InvTools;
@@ -65,7 +64,7 @@ public class EngineCopper extends Engine implements ISidedInventory {
 	private final AdjacentInventoryCache inventoryCache = new AdjacentInventoryCache(this, getTileCache());
 
 	public EngineCopper() {
-		super(Defaults.ENGINE_COPPER_HEAT_MAX, 200000, 4000);
+		super(Defaults.ENGINE_COPPER_HEAT_MAX, 200000);
 		setHints(Config.hints.get("engine.copper"));
 
 		ashForItem = Defaults.ENGINE_COPPER_ASH_FOR_ITEM;
@@ -73,7 +72,7 @@ public class EngineCopper extends Engine implements ISidedInventory {
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.EngineCopperGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
@@ -137,15 +136,15 @@ public class EngineCopper extends Engine implements ISidedInventory {
 				energyManager.generateEnergy(currentOutput);
 			}
 		} else if (isRedstoneActivated()) {
-			int fuelslot = getFuelSlot();
-			int wasteslot = getFreeWasteSlot();
+			int fuelSlot = getFuelSlot();
+			int wasteSlot = getFreeWasteSlot();
 
-			if (fuelslot >= 0 && wasteslot >= 0) {
+			if (fuelSlot >= 0 && wasteSlot >= 0) {
 				IInventoryAdapter inventory = getInternalInventory();
-				burnTime = totalBurnTime = determineBurnDuration(inventory.getStackInSlot(fuelslot));
+				burnTime = totalBurnTime = determineBurnDuration(inventory.getStackInSlot(fuelSlot));
 				if (burnTime > 0) {
-					fuelItem = inventory.getStackInSlot(fuelslot).getItem();
-					decrStackSize(fuelslot, 1);
+					fuelItem = inventory.getStackInSlot(fuelSlot).getItem();
+					decrStackSize(fuelSlot, 1);
 				}
 			}
 		}
@@ -196,13 +195,13 @@ public class EngineCopper extends Engine implements ISidedInventory {
 		}
 
 		// If we have reached the necessary amount, we need to add ash
-		int wasteslot = getFreeWasteSlot();
-		if (wasteslot >= 0) {
+		int wasteSlot = getFreeWasteSlot();
+		if (wasteSlot >= 0) {
 			IInventoryAdapter inventory = getInternalInventory();
-			if (inventory.getStackInSlot(wasteslot) == null) {
-				inventory.setInventorySlotContents(wasteslot, ForestryItem.ash.getItemStack());
+			if (inventory.getStackInSlot(wasteSlot) == null) {
+				inventory.setInventorySlotContents(wasteSlot, ForestryItem.ash.getItemStack());
 			} else {
-				inventory.getStackInSlot(wasteslot).stackSize++;
+				inventory.getStackInSlot(wasteSlot).stackSize++;
 			}
 		}
 		// Reset
@@ -214,7 +213,7 @@ public class EngineCopper extends Engine implements ISidedInventory {
 	/**
 	 * Returns the fuel value (power per cycle) an item of the passed ItemStack provides
 	 */
-	private int determineFuelValue(ItemStack fuel) {
+	private static int determineFuelValue(ItemStack fuel) {
 		if (FuelManager.copperEngineFuel.containsKey(fuel)) {
 			return FuelManager.copperEngineFuel.get(fuel).powerPerCycle;
 		} else {
@@ -225,7 +224,7 @@ public class EngineCopper extends Engine implements ISidedInventory {
 	/**
 	 * Returns the fuel value (power per cycle) an item of the passed ItemStack provides
 	 */
-	private int determineBurnDuration(ItemStack fuel) {
+	private static int determineBurnDuration(ItemStack fuel) {
 		if (FuelManager.copperEngineFuel.containsKey(fuel)) {
 			return FuelManager.copperEngineFuel.get(fuel).burnDuration;
 		} else {
@@ -345,7 +344,7 @@ public class EngineCopper extends Engine implements ISidedInventory {
 		iCrafting.sendProgressBarUpdate(containerEngine, 4, heat);
 	}
 
-	/* ITRIGGERPROVIDER */
+	/* ITriggerProvider */
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
 	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {

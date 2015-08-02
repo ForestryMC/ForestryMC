@@ -24,7 +24,6 @@ import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -88,9 +87,9 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		super.validate();
 	}
 
-	public void rotateAfterPlacement(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack stack) {
+	public void rotateAfterPlacement(EntityLivingBase entityLiving) {
 
-		int l = MathHelper.floor_double(((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+		int l = MathHelper.floor_double(((entityLiving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
 		if (l == 0) {
 			setOrientation(ForgeDirection.NORTH);
 		}
@@ -163,7 +162,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	/* INetworkedEntity */
-	public final void sendNetworkUpdate() {
+	protected final void sendNetworkUpdate() {
 		PacketTileStream packet = new PacketTileStream(this);
 		Proxies.net.sendNetworkPacket(packet, worldObj);
 	}
@@ -207,7 +206,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	// / REDSTONE INFO
-	public boolean isRedstoneActivated() {
+	protected boolean isRedstoneActivated() {
 		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 	}
 
@@ -266,7 +265,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 		return inventory;
 	}
 
-	public final void setInternalInventory(IInventoryAdapter inv) {
+	protected final void setInternalInventory(IInventoryAdapter inv) {
 		if (inv == null) {
 			throw new NullPointerException("Inventory cannot be null");
 		}

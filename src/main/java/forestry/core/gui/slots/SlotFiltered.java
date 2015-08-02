@@ -20,7 +20,7 @@ import forestry.core.interfaces.IFilterSlotDelegate;
  */
 public class SlotFiltered extends SlotWatched {
 
-	protected final IFilterSlotDelegate filterSlotDelegate;
+	private final IFilterSlotDelegate filterSlotDelegate;
 
 	public <T extends IInventory & IFilterSlotDelegate> SlotFiltered(T filterSlotDelegateInventory, int slotIndex, int xPos, int yPos) {
 		this(filterSlotDelegateInventory, filterSlotDelegateInventory, slotIndex, xPos, yPos);

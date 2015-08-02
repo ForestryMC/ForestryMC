@@ -54,7 +54,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 
 	private final GameProfile username;
 
-	public BreedingTracker(String s, GameProfile username) {
+	protected BreedingTracker(String s, GameProfile username) {
 		super(s);
 		this.username = username;
 	}

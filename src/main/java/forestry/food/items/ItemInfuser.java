@@ -12,6 +12,7 @@ package forestry.food.items;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -180,8 +181,7 @@ public class ItemInfuser extends ItemForestry {
 		@Override
 		public ItemStack getSeasoned(ItemStack base, ItemStack[] ingredients) {
 			Mixture[] mixtures = getMatchingMixtures(ingredients);
-			ArrayList<IBeverageEffect> effects = new ArrayList<IBeverageEffect>();
-			effects.addAll(Arrays.asList(((ItemBeverage) base.getItem()).beverages[base.getItemDamage()].loadEffects(base)));
+			List<IBeverageEffect> effects = ItemBeverage.BeverageInfo.loadEffects(base);
 
 			int weight = 0;
 			int meta = 0;
@@ -195,7 +195,7 @@ public class ItemInfuser extends ItemForestry {
 
 			ItemStack seasoned = base.copy();
 			seasoned.setItemDamage(meta);
-			((ItemBeverage) base.getItem()).beverages[meta].saveEffects(seasoned, effects.toArray(new IBeverageEffect[effects.size()]));
+			ItemBeverage.BeverageInfo.saveEffects(seasoned, effects);
 			return seasoned;
 		}
 	}

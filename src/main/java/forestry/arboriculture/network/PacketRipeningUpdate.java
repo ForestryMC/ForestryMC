@@ -30,7 +30,7 @@ public class PacketRipeningUpdate extends PacketCoordinates {
 		new PacketRipeningUpdate(data);
 	}
 
-	public PacketRipeningUpdate(DataInputStreamForestry data) throws IOException {
+	private PacketRipeningUpdate(DataInputStreamForestry data) throws IOException {
 		super(data);
 	}
 

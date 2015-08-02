@@ -22,7 +22,7 @@ public abstract class Circuit implements ICircuit {
 	private final boolean requiresDiscovery;
 	private int limit = 1;
 
-	public Circuit(String uid, boolean requiresDiscovery) {
+	protected Circuit(String uid, boolean requiresDiscovery) {
 		this.uid = uid;
 		this.requiresDiscovery = requiresDiscovery;
 

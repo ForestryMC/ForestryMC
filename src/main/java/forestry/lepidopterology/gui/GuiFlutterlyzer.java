@@ -102,7 +102,7 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 		newLine();
 		newLine();
 
-		drawSpeciesRow(StringUtil.localize("gui.species"), butterfly, EnumButterflyChromosome.SPECIES);
+		drawSpeciesRow(StringUtil.localize("gui.species"), butterfly, EnumButterflyChromosome.SPECIES, null, null);
 		newLine();
 
 		drawRow(StringUtil.localize("gui.size"), butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.SIZE).getName(),

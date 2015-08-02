@@ -43,7 +43,7 @@ import forestry.plugins.PluginLepidopterology;
 
 public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 
-	public static int butterflySpeciesCount = -1;
+	private static int butterflySpeciesCount = -1;
 	public static final String UID = "rootButterflies";
 
 	@Override
@@ -183,7 +183,7 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 	}
 
 	/* TEMPLATES */
-	public static final ArrayList<IButterfly> butterflyTemplates = new ArrayList<IButterfly>();
+	private static final ArrayList<IButterfly> butterflyTemplates = new ArrayList<IButterfly>();
 
 	@Override
 	public ArrayList<IButterfly> getIndividualTemplates() {

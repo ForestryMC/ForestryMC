@@ -1009,7 +1009,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 
 	@Override
 	public void setLeaves(World world, GameProfile owner, int x, int y, int z, boolean decorative) {
-		boolean placed = ForestryBlock.leaves.setBlock(world, x, y, z, 0, Defaults.FLAG_BLOCK_SYNCH);
+		boolean placed = ForestryBlock.leaves.setBlock(world, x, y, z, 0);
 		if (!placed) {
 			return;
 		}

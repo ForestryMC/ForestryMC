@@ -39,7 +39,6 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.IInventoryAdapter;
@@ -143,7 +142,7 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 
 	/* MEMBER */
 	private final TankManager tankManager;
-	public final FilteredTank productTank;
+	private final FilteredTank productTank;
 
 	private Recipe currentRecipe;
 
@@ -160,7 +159,7 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.SqueezerGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 

@@ -42,7 +42,6 @@ import forestry.core.config.Defaults;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.IInventoryAdapter;
@@ -64,7 +63,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	public static final short SLOT_OUTPUT = 1;
 	public static final short SLOT_INPUT_FULL_CAN = 2;
 
-	public static final short CYCLES_FILLING_DEFAULT = 5;
+	private static final short CYCLES_FILLING_DEFAULT = 5;
 
 	/* RECIPE MANAGMENT */
 	public static class Recipe {
@@ -138,7 +137,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		}
 	}
 
-	public final StandardTank resourceTank;
+	private final StandardTank resourceTank;
 	private final TankManager tankManager;
 
 	private Recipe currentRecipe;
@@ -156,7 +155,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.BottlerGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
@@ -242,7 +241,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 		return true;
 	}
 
-	public void checkRecipe() {
+	private void checkRecipe() {
 		ItemStack emptyCan = getStackInSlot(SLOT_INPUT_EMPTY_CAN);
 		Recipe recipe = RecipeManager.findMatchingRecipe(resourceTank.getFluid(), emptyCan);
 

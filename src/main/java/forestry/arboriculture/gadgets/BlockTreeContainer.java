@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 
 public abstract class BlockTreeContainer extends BlockContainer {
 
-	public BlockTreeContainer(Material material) {
+	protected BlockTreeContainer(Material material) {
 		super(material);
 		setTickRandomly(true);
 	}

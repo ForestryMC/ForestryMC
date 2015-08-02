@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.commands;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -136,7 +137,7 @@ public abstract class SubCommand implements IForestryCommand {
 	}
 
 	@Override
-	public int compareTo(Object command) {
+	public int compareTo(@Nonnull Object command) {
 		return this.compareTo((ICommand) command);
 	}
 

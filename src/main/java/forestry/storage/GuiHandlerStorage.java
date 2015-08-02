@@ -65,7 +65,7 @@ public class GuiHandlerStorage extends GuiHandlerBase {
 				}
 				ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot("rootBees");
 				PagedBackpackInventory inventory = new PagedBackpackInventory(player, Defaults.SLOTS_BACKPACK_APIARIST, equipped, cleanId);
-				return new GuiNaturalistInventory(speciesRoot, player, new ContainerNaturalistBackpack(player, inventory, guiData, 25), inventory, guiData, 5);
+				return new GuiNaturalistInventory(speciesRoot, player, new ContainerNaturalistBackpack(player, inventory, guiData), inventory, guiData, 5);
 
 			case BackpackGUI:
 				equipped = getBackpackItem(player);
@@ -88,7 +88,7 @@ public class GuiHandlerStorage extends GuiHandlerBase {
 				}
 				speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies");
 				inventory = new PagedBackpackInventory(player, Defaults.SLOTS_BACKPACK_APIARIST, equipped, id);
-				return new GuiNaturalistInventory(speciesRoot, player, new ContainerNaturalistBackpack(player, inventory, guiData, 25), inventory, guiData, 5);
+				return new GuiNaturalistInventory(speciesRoot, player, new ContainerNaturalistBackpack(player, inventory, guiData), inventory, guiData, 5);
 
 			default:
 				return null;
@@ -125,7 +125,7 @@ public class GuiHandlerStorage extends GuiHandlerBase {
 					return null;
 				}
 
-				return new ContainerNaturalistBackpack(player, new PagedBackpackInventory(player, Defaults.SLOTS_BACKPACK_APIARIST, equipped, cleanId), guiData, 25);
+				return new ContainerNaturalistBackpack(player, new PagedBackpackInventory(player, Defaults.SLOTS_BACKPACK_APIARIST, equipped, cleanId), guiData);
 
 			case BackpackGUI:
 				equipped = getBackpackItem(player);
@@ -149,7 +149,7 @@ public class GuiHandlerStorage extends GuiHandlerBase {
 					return null;
 				}
 
-				return new ContainerNaturalistBackpack(player, new PagedBackpackInventory(player, Defaults.SLOTS_BACKPACK_APIARIST, equipped, cleanId), guiData, 25);
+				return new ContainerNaturalistBackpack(player, new PagedBackpackInventory(player, Defaults.SLOTS_BACKPACK_APIARIST, equipped, cleanId), guiData);
 
 			default:
 				return null;

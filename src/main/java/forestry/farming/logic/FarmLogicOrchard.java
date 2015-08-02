@@ -208,7 +208,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		return false;
 	}
 
-	private boolean isBlockTraversable(World world, Vect position, ImmutableList<Block> traversalBlocks) {
+	private static boolean isBlockTraversable(World world, Vect position, ImmutableList<Block> traversalBlocks) {
 
 		Block candidate = VectUtil.getBlock(world, position);
 		for (Block block : traversalBlocks) {
@@ -226,7 +226,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		if (tile instanceof IFruitBearer) {
 			IFruitBearer fruitBearer = (IFruitBearer) tile;
 			if (fruitBearer.hasFruit() && fruitBearer.getRipeness() >= 0.9f) {
-				return new CropFruit(world, position, fruitBearer.getFruitFamily());
+				return new CropFruit(world, position);
 			}
 		} else {
 			for (IFarmable seed : farmables) {

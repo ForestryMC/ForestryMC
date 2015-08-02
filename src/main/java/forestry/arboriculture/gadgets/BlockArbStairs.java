@@ -39,8 +39,8 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, ITileEnti
 
 	private final boolean fireproof;
 
-	public BlockArbStairs(Block par2Block, int par3, boolean fireproof) {
-		super(par2Block, par3);
+	public BlockArbStairs(Block par2Block, boolean fireproof) {
+		super(par2Block, 0);
 
 		this.fireproof = fireproof;
 

@@ -27,7 +27,7 @@ public class PacketItemStackDisplay extends PacketCoordinates {
 		new PacketItemStackDisplay(data);
 	}
 
-	public PacketItemStackDisplay(DataInputStreamForestry data) throws IOException {
+	private PacketItemStackDisplay(DataInputStreamForestry data) throws IOException {
 		super(data);
 	}
 

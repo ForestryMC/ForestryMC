@@ -37,8 +37,8 @@ public class PacketLetterInfo extends ForestryPacket {
 		super(data);
 	}
 
-	public PacketLetterInfo(PacketId id, EnumAddressee type, TradeStationInfo info, IMailAddress address) {
-		super(id);
+	public PacketLetterInfo(EnumAddressee type, TradeStationInfo info, IMailAddress address) {
+		super(PacketId.LETTER_INFO);
 		this.type = type;
 		if (type == EnumAddressee.TRADER) {
 			this.tradeInfo = info;

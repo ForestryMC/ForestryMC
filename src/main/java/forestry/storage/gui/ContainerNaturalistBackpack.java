@@ -20,13 +20,13 @@ import forestry.storage.GuiHandlerStorage.PagedBackpackInventory;
 
 public class ContainerNaturalistBackpack extends ContainerItemInventory<PagedBackpackInventory> implements IGuiSelectable {
 
-	public ContainerNaturalistBackpack(EntityPlayer player, PagedBackpackInventory inventory, int page, int pageSize) {
+	public ContainerNaturalistBackpack(EntityPlayer player, PagedBackpackInventory inventory, int page) {
 		super(inventory, player.inventory, 18, 120);
 
 		// Inventory
 		for (int x = 0; x < 5; x++) {
 			for (int y = 0; y < 5; y++) {
-				addSlotToContainer(new SlotFiltered(inventory, y + page * pageSize + x * 5, 100 + y * 18, 21 + x * 18));
+				addSlotToContainer(new SlotFiltered(inventory, y + page * 25 + x * 5, 100 + y * 18, 21 + x * 18));
 			}
 		}
 	}

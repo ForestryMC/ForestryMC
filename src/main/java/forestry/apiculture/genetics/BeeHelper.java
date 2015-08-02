@@ -49,7 +49,7 @@ import forestry.plugins.PluginApiculture;
 
 public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 
-	public static int beeSpeciesCount = -1;
+	private static int beeSpeciesCount = -1;
 	public static final String UID = "rootBees";
 
 	@Override
@@ -204,7 +204,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	}
 
 	/* TEMPLATES */
-	public static final ArrayList<IBee> beeTemplates = new ArrayList<IBee>();
+	private static final ArrayList<IBee> beeTemplates = new ArrayList<IBee>();
 
 	@Override
 	public ArrayList<IBee> getIndividualTemplates() {

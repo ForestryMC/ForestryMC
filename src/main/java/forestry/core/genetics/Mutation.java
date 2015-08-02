@@ -30,17 +30,18 @@ import forestry.api.genetics.IMutationCustom;
 public abstract class Mutation implements IMutationCustom {
 
 	private final int chance;
-	boolean isSecret = false;
 
-	protected final IAlleleSpecies species0;
-	protected final IAlleleSpecies species1;
+	private final IAlleleSpecies species0;
+	private final IAlleleSpecies species1;
 
 	private final IAllele[] template;
 
 	private final List<IMutationCondition> mutationConditions = new ArrayList<IMutationCondition>();
 	private final List<String> specialConditions = new ArrayList<String>();
 
-	public Mutation(IAlleleSpecies species0, IAlleleSpecies species1, IAllele[] template, int chance) {
+	private boolean isSecret = false;
+
+	protected Mutation(IAlleleSpecies species0, IAlleleSpecies species1, IAllele[] template, int chance) {
 		this.species0 = species0;
 		this.species1 = species1;
 		this.template = template;

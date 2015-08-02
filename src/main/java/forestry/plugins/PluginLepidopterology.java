@@ -71,18 +71,10 @@ public class PluginLepidopterology extends ForestryPlugin {
 	public static int spawnConstraint = 100;
 	public static int entityConstraint = 1000;
 	private static boolean allowPollination = true;
-	public static IClassification geometridae;
-	public static IClassification saturniidae;
-	public static IClassification pieridae;
-	public static IClassification nymphalidae;
-	public static IClassification lycaenidae;
-	public static IClassification papilionidae;
-	public static IClassification notchidae;
 	/**
 	 * See {@link IButterflyRoot} for details.
 	 */
 	public static IButterflyRoot butterflyInterface;
-	public static MachineDefinition definitionChest;
 
 	@Override
 	protected void setupAPI() {
@@ -133,7 +125,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 		registerTemplates();
 
 		BlockBase lepidopterology = ((BlockBase) ForestryBlock.lepidopterology.block());
-		definitionChest = lepidopterology.addDefinition((new MachineDefinition(Defaults.DEFINITION_LEPICHEST_META, "forestry.LepiChest", TileLepidopteristChest.class,
+		MachineDefinition definitionChest = lepidopterology.addDefinition((new MachineDefinition(Defaults.DEFINITION_LEPICHEST_META, "forestry.LepiChest", TileLepidopteristChest.class,
 				ShapedRecipeCustom.createShapedRecipe(
 						ForestryBlock.lepidopterology.getItemStack(1, Defaults.DEFINITION_LEPICHEST_META),
 						" # ",
@@ -199,33 +191,33 @@ public class PluginLepidopterology extends ForestryPlugin {
 		IClassification lepidoptera = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.ORDER, "lepidoptera", "Lepidoptera");
 		AlleleManager.alleleRegistry.getClassification("class.insecta").addMemberGroup(lepidoptera);
 
-		geometridae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "geometridae", "Geometridae");
+		IClassification geometridae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "geometridae", "Geometridae");
 		lepidoptera.addMemberGroup(geometridae);
-		saturniidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "saturniidae", "Saturniidae");
+		IClassification saturniidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "saturniidae", "Saturniidae");
 		lepidoptera.addMemberGroup(saturniidae);
 
-		pieridae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "pieridae", "Pieridae");
+		IClassification pieridae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "pieridae", "Pieridae");
 		lepidoptera.addMemberGroup(pieridae);
-		nymphalidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "nymphalidae", "Nymphalidae");
+		IClassification nymphalidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "nymphalidae", "Nymphalidae");
 		lepidoptera.addMemberGroup(nymphalidae);
-		lycaenidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "lycaenidae", "Lycaenidae");
+		IClassification lycaenidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "lycaenidae", "Lycaenidae");
 		lepidoptera.addMemberGroup(lycaenidae);
-		papilionidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "papilionidae", "Papilionidae");
+		IClassification papilionidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "papilionidae", "Papilionidae");
 		lepidoptera.addMemberGroup(papilionidae);
-		notchidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "notchidae", "Notchidae");
+		IClassification notchidae = AlleleManager.alleleRegistry.createAndRegisterClassification(EnumClassLevel.FAMILY, "notchidae", "Notchidae");
 		lepidoptera.addMemberGroup(notchidae);
 
 		/* GEOMETRIDAE */
 		IClassification opisthograptis = createButterflyBranch(geometridae, "Opisthograptis");
 		IClassification chiasmia = createButterflyBranch(geometridae, "Chiasmia");
 
-		Allele.mothBrimstone = new AlleleButterflySpecies("mothBrimstone", true, "brimstone", opisthograptis, "luteolata", 0xffea40).setNocturnal(true).setRarity(1.0f);
-		Allele.mothLatticedHeath = new AlleleButterflySpecies("mothLatticedHeath", true, "latticedHeath", chiasmia, "clathrata", 0xf2f0be).setNocturnal(true).setRarity(0.5f);
+		Allele.mothBrimstone = new AlleleButterflySpecies("mothBrimstone", true, "brimstone", opisthograptis, "luteolata", 0xffea40).setNocturnal().setRarity(1.0f);
+		Allele.mothLatticedHeath = new AlleleButterflySpecies("mothLatticedHeath", true, "latticedHeath", chiasmia, "clathrata", 0xf2f0be).setNocturnal().setRarity(0.5f);
 
 		/* SATURNIIDAE */
 		IClassification attacus = createButterflyBranch(saturniidae, "Attacus");
 
-		Allele.mothAtlas = new AlleleButterflySpecies("mothAtlas", false, "atlas", attacus, "atlas", 0xd96e3d).setNocturnal(true);
+		Allele.mothAtlas = new AlleleButterflySpecies("mothAtlas", false, "atlas", attacus, "atlas", 0xd96e3d).setNocturnal();
 
 		/* PIERIDAE */
 		IClassification pieris = createButterflyBranch(pieridae, "Pieris");

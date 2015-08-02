@@ -18,18 +18,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import forestry.api.genetics.IFruitBearer;
-import forestry.api.genetics.IFruitFamily;
 import forestry.core.network.PacketFXSignal;
 import forestry.core.proxy.Proxies;
 import forestry.core.vect.Vect;
 
 public class CropFruit extends Crop {
 
-	private final IFruitFamily family;
-
-	public CropFruit(World world, Vect position, IFruitFamily family) {
+	public CropFruit(World world, Vect position) {
 		super(world, position);
-		this.family = family;
 	}
 
 	@Override

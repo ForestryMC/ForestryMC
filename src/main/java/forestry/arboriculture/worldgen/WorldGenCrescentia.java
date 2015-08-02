@@ -40,7 +40,7 @@ public class WorldGenCrescentia extends WorldGenTree {
 	}
 
 	@Override
-	public void generateTreeTrunk(World world, int height, int girth) {
+	protected void generateTreeTrunk(World world, int height, int girth) {
 		
 		int offset = (girth - 1) / 2;
 

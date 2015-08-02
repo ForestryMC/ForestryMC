@@ -23,9 +23,9 @@ import forestry.core.network.PacketSocketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
 
-public class ContainerSocketed<T extends TileEntity & IStreamableGui & ISocketable> extends ContainerTile<T> {
+public abstract class ContainerSocketed<T extends TileEntity & IStreamableGui & ISocketable> extends ContainerTile<T> {
 
-	public ContainerSocketed(T tile, InventoryPlayer playerInventory, int xInv, int yInv) {
+	protected ContainerSocketed(T tile, InventoryPlayer playerInventory, int xInv, int yInv) {
 		super(tile, playerInventory, xInv, yInv);
 	}
 
@@ -49,7 +49,7 @@ public class ContainerSocketed<T extends TileEntity & IStreamableGui & ISocketab
 			}
 			Proxies.net.inventoryChangeNotify(player);
 
-			PacketSocketUpdate packet = new PacketSocketUpdate(PacketId.SOCKET_UPDATE, tile);
+			PacketSocketUpdate packet = new PacketSocketUpdate(tile);
 			Proxies.net.sendToPlayer(packet, player);
 		}
 	}
@@ -78,7 +78,7 @@ public class ContainerSocketed<T extends TileEntity & IStreamableGui & ISocketab
 			player.inventory.setItemStack(null);
 		}
 
-		PacketSocketUpdate packet = new PacketSocketUpdate(PacketId.SOCKET_UPDATE, tile);
+		PacketSocketUpdate packet = new PacketSocketUpdate(tile);
 		Proxies.net.sendToPlayer(packet, player);
 	}
 }

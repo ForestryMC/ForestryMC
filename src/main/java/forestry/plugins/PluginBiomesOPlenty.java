@@ -33,11 +33,6 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 
 	private static final String BoP = "BiomesOPlenty";
 
-	public static Block BoPSaplings;
-	public static Block BoPColorizedSaplings;
-	public static Block BoPTurnip;
-	public static Item BoPTurnipSeeds;
-
 	@Override
 	public boolean isAvailable() {
 		return Proxies.common.isModLoaded(BoP);
@@ -52,17 +47,17 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 	public void doInit() {
 		super.doInit();
 
-		BoPSaplings = GameRegistry.findBlock(BoP, "saplings");
-		BoPColorizedSaplings = GameRegistry.findBlock(BoP, "colorizedSaplings");
-		BoPTurnipSeeds = GameRegistry.findItem(BoP, "turnipSeeds");
-		BoPTurnip = GameRegistry.findBlock(BoP, "turnip");
+		Block boPSaplings = GameRegistry.findBlock(BoP, "saplings");
+		Block boPColorizedSaplings = GameRegistry.findBlock(BoP, "colorizedSaplings");
+		Item boPTurnipSeeds = GameRegistry.findItem(BoP, "turnipSeeds");
+		Block boPTurnip = GameRegistry.findBlock(BoP, "turnip");
 
 		List<String> saplingItemKeys = new ArrayList<String>();
 
-		if (BoPSaplings != null) {
+		if (boPSaplings != null) {
 			saplingItemKeys.add("saplings");
 		}
-		if (BoPColorizedSaplings != null) {
+		if (boPColorizedSaplings != null) {
 			saplingItemKeys.add("colorizedSaplings");
 		}
 
@@ -72,9 +67,9 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 			FMLInterModComms.sendMessage(Defaults.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
 		}
 		ItemStack BoPPersimmon = new ItemStack(GameRegistry.findItem(BoP, "food"), 1, 8);
-		Farmables.farmables.get("farmArboreal").add(new FarmableGenericSapling(BoPSaplings, 15, BoPPersimmon));
+		Farmables.farmables.get("farmArboreal").add(new FarmableGenericSapling(boPSaplings, 15, BoPPersimmon));
 
-		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(BoPTurnipSeeds, 1, 0), BoPTurnip, 7));
-		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(BoPTurnip, 7));
+		Farmables.farmables.get("farmVegetables").add(new FarmableGenericCrop(new ItemStack(boPTurnipSeeds, 1, 0), boPTurnip, 7));
+		Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(boPTurnip, 7));
 	}
 }

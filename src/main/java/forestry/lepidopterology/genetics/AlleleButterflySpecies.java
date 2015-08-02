@@ -75,8 +75,8 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 		return this;
 	}
 
-	public AlleleButterflySpecies setNocturnal(boolean isActualNocturnal) {
-		this.isActualNocturnal = isActualNocturnal;
+	public AlleleButterflySpecies setNocturnal() {
+		this.isActualNocturnal = true;
 		return this;
 	}
 

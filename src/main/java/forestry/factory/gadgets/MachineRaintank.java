@@ -79,7 +79,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.RaintankGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 

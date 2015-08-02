@@ -46,7 +46,7 @@ public class OwnerLedger extends Ledger {
 		}
 	}
 
-	public boolean isAccessButton(int mouseX, int mouseY) {
+	private boolean isAccessButton(int mouseX, int mouseY) {
 
 		int shiftX = currentShiftX;
 		int shiftY = currentShiftY + 44;

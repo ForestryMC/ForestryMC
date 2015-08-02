@@ -29,7 +29,6 @@ import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
-import forestry.core.gadgets.MachineNBTDefinition;
 import forestry.core.items.ItemForestryBlock;
 import forestry.core.items.ItemNBTTile;
 import forestry.core.network.IPacketHandler;
@@ -57,17 +56,17 @@ import forestry.factory.triggers.FactoryTriggers;
 @Plugin(pluginID = "Factory", name = "Factory", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.factory.description")
 public class PluginFactory extends ForestryPlugin {
 
-	public static MachineDefinition definitionBottler;
-	public static MachineDefinition definitionCarpenter;
-	public static MachineDefinition definitionCentrifuge;
-	public static MachineDefinition definitionFermenter;
-	public static MachineDefinition definitionMoistener;
-	public static MachineDefinition definitionSqueezer;
-	public static MachineDefinition definitionStill;
-	public static MachineDefinition definitionRainmaker;
-	public static MachineDefinition definitionFabricator;
-	public static MachineDefinition definitionRaintank;
-	public static MachineDefinition definitionWorktable;
+	private static MachineDefinition definitionBottler;
+	private static MachineDefinition definitionCarpenter;
+	private static MachineDefinition definitionCentrifuge;
+	private static MachineDefinition definitionFermenter;
+	private static MachineDefinition definitionMoistener;
+	private static MachineDefinition definitionSqueezer;
+	private static MachineDefinition definitionStill;
+	private static MachineDefinition definitionRainmaker;
+	private static MachineDefinition definitionFabricator;
+	private static MachineDefinition definitionRaintank;
+	private static MachineDefinition definitionWorktable;
 
 	@Override
 	protected void setupAPI() {
@@ -196,7 +195,7 @@ public class PluginFactory extends ForestryPlugin {
 
 		BlockBase factoryPlain = ((BlockBase) ForestryBlock.factoryPlain.block());
 
-		definitionFabricator = factoryPlain.addDefinition(new MachineNBTDefinition(Defaults.DEFINITION_FABRICATOR_META, "forestry.Fabricator", MachineFabricator.class,
+		definitionFabricator = factoryPlain.addDefinition(new MachineDefinition(Defaults.DEFINITION_FABRICATOR_META, "forestry.Fabricator", MachineFabricator.class,
 				ShapedRecipeCustom.createShapedRecipe(
 						ForestryBlock.factoryPlain.getItemStack(1, Defaults.DEFINITION_FABRICATOR_META),
 						"X#X",
@@ -218,7 +217,7 @@ public class PluginFactory extends ForestryPlugin {
 						'Y', ForestryItem.sturdyCasing))
 				.setFaces(0, 1, 0, 0, 0, 0));
 
-		definitionWorktable = factoryPlain.addDefinition(new MachineNBTDefinition(Defaults.DEFINITION_WORKTABLE_META, "forestry.Worktable", TileWorktable.class,
+		definitionWorktable = factoryPlain.addDefinition(new MachineDefinition(Defaults.DEFINITION_WORKTABLE_META, "forestry.Worktable", TileWorktable.class,
 				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.factoryPlain.getItemStack(1, Defaults.DEFINITION_WORKTABLE_META),
 						"B",
 						"W",

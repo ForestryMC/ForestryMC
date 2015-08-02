@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import java.util.Random;
-
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
@@ -20,9 +18,8 @@ import net.minecraft.world.World;
 public class EntitySnowFX extends EntityFX {
 
 	public static IIcon icons[];
-	private static final Random spreadRand = new Random();
 
-	public EntitySnowFX(World world, double x, double y, double z, float motionScaleX, float motionScaleY, float motionScaleZ) {
+	public EntitySnowFX(World world, double x, double y, double z) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
 
 		this.setParticleIcon(icons[rand.nextInt(icons.length)]);

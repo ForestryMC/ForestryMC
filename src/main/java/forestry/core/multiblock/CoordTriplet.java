@@ -1,5 +1,7 @@
 package forestry.core.multiblock;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.world.ChunkCoordIntPair;
 
 import net.minecraftforge.common.util.ForgeDirection;
@@ -69,21 +71,10 @@ public class CoordTriplet implements Comparable {
 		this.z = other.z;
 	}
 
-	public CoordTriplet[] getNeighbors() {
-		return new CoordTriplet[]{
-				new CoordTriplet(x + 1, y, z),
-				new CoordTriplet(x - 1, y, z),
-				new CoordTriplet(x, y + 1, z),
-				new CoordTriplet(x, y - 1, z),
-				new CoordTriplet(x, y, z + 1),
-				new CoordTriplet(x, y, z - 1)
-		};
-	}
-	
 	///// IComparable
 	
 	@Override
-	public int compareTo(Object o) {
+	public int compareTo(@Nonnull Object o) {
 		if (o instanceof CoordTriplet) {
 			CoordTriplet other = (CoordTriplet) o;
 			if (this.x < other.x) {
@@ -103,44 +94,6 @@ public class CoordTriplet implements Comparable {
 			}
 		}
 		return 0;
-	}
-	
-	///// Really confusing code that should be cleaned up
-	
-	public ForgeDirection getDirectionFromSourceCoords(int x, int y, int z) {
-		if (this.x < x) {
-			return ForgeDirection.WEST;
-		} else if (this.x > x) {
-			return ForgeDirection.EAST;
-		} else if (this.y < y) {
-			return ForgeDirection.DOWN;
-		} else if (this.y > y) {
-			return ForgeDirection.UP;
-		} else if (this.z < z) {
-			return ForgeDirection.SOUTH;
-		} else if (this.z > z) {
-			return ForgeDirection.NORTH;
-		} else {
-			return ForgeDirection.UNKNOWN;
-		}
-	}
-	
-	public ForgeDirection getOppositeDirectionFromSourceCoords(int x, int y, int z) {
-		if (this.x < x) {
-			return ForgeDirection.EAST;
-		} else if (this.x > x) {
-			return ForgeDirection.WEST;
-		} else if (this.y < y) {
-			return ForgeDirection.UP;
-		} else if (this.y > y) {
-			return ForgeDirection.DOWN;
-		} else if (this.z < z) {
-			return ForgeDirection.NORTH;
-		} else if (this.z > z) {
-			return ForgeDirection.SOUTH;
-		} else {
-			return ForgeDirection.UNKNOWN;
-		}
 	}
 	
 	@Override

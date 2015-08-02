@@ -39,7 +39,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 
 	ArrayList<ItemStack> produce = new ArrayList<ItemStack>();
 
-	public FarmLogicWatered(IFarmHousing housing, ItemStack resource, ItemStack ground) {
+	protected FarmLogicWatered(IFarmHousing housing, ItemStack resource, ItemStack ground) {
 		super(housing);
 		this.ground = ground;
 		this.resource = resource;
@@ -55,7 +55,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
 		return (int) (20 * hydrationModifier);
 	}
 
-	public boolean isAcceptedGround(ItemStack ground) {
+	protected boolean isAcceptedGround(ItemStack ground) {
 		return StackUtils.isIdenticalItem(this.ground, ground);
 	}
 

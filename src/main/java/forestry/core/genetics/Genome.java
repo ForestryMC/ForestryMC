@@ -34,20 +34,20 @@ public abstract class Genome implements IGenome {
 	private IChromosome[] chromosomes;
 
 	// / CONSTRUCTOR
-	public Genome(NBTTagCompound nbttagcompound) {
+	protected Genome(NBTTagCompound nbttagcompound) {
 		this.chromosomes = new Chromosome[getDefaultTemplate().length];
 		readFromNBT(nbttagcompound);
 	}
 
-	private IAllele[] getDefaultTemplate() {
-		return getSpeciesRoot().getDefaultTemplate();
-	}
-
-	public Genome(IChromosome[] chromosomes) {
+	protected Genome(IChromosome[] chromosomes) {
 		if (chromosomes.length != getDefaultTemplate().length) {
 			throw new IllegalArgumentException(String.format("Tried to create a genome for '%s' from an invalid chromosome template.", getSpeciesRoot().getUID()));
 		}
 		this.chromosomes = chromosomes;
+	}
+
+	private IAllele[] getDefaultTemplate() {
+		return getSpeciesRoot().getDefaultTemplate();
 	}
 
 	// NBT RETRIEVAL
@@ -83,7 +83,7 @@ public abstract class Genome implements IGenome {
 		return (IAlleleSpecies) activeAllele;
 	}
 
-	public static IChromosome getChromosome(ItemStack itemStack, IChromosomeType chromosomeType, ISpeciesRoot speciesRoot) {
+	private static IChromosome getChromosome(ItemStack itemStack, IChromosomeType chromosomeType, ISpeciesRoot speciesRoot) {
 		NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
 		if (nbtTagCompound == null) {
 			return null;
@@ -102,7 +102,7 @@ public abstract class Genome implements IGenome {
 		return chromosomes[chromosomeType.ordinal()];
 	}
 
-	public static IChromosome[] getChromosomes(NBTTagCompound genomeNBT, ISpeciesRoot speciesRoot) {
+	private static IChromosome[] getChromosomes(NBTTagCompound genomeNBT, ISpeciesRoot speciesRoot) {
 
 		NBTTagList chromosomesNBT = genomeNBT.getTagList("Chromosomes", 10);
 		IChromosome[] chromosomes = new IChromosome[speciesRoot.getDefaultTemplate().length];
@@ -145,7 +145,7 @@ public abstract class Genome implements IGenome {
 		return chromosomes;
 	}
 
-	public static IAllele getActiveAllele(ItemStack itemStack, IChromosomeType chromosomeType, ISpeciesRoot speciesRoot) {
+	protected static IAllele getActiveAllele(ItemStack itemStack, IChromosomeType chromosomeType, ISpeciesRoot speciesRoot) {
 		IChromosome chromosome = getChromosome(itemStack, chromosomeType, speciesRoot);
 		if (chromosome == null) {
 			return null;

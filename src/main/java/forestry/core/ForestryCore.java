@@ -127,7 +127,4 @@ public class ForestryCore {
 		PluginManager.processIMCMessages(messages);
 	}
 
-	public String getPriorities() {
-		return "after:mod_IC2;after:mod_BuildCraftCore;after:mod_BuildCraftEnergy;after:mod_BuildCraftFactory;after:mod_BuildCraftSilicon;after:mod_BuildCraftTransport;after:mod_RedPowerWorld";
-	}
 }

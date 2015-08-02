@@ -227,16 +227,13 @@ public class ProxyCommon {
 	public void playSoundFX(World world, int x, int y, int z, String sound, float volume, float pitch) {
 	}
 
-	public void addEntityBiodustFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
+	public void addEntitySwarmFX(World world, double d1, double d2, double d3) {
 	}
 
-	public void addEntitySwarmFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
+	public void addEntityExplodeFX(World world, double d1, double d2, double d3) {
 	}
 
-	public void addEntityExplodeFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
-	}
-
-	public void addEntitySnowFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
+	public void addEntitySnowFX(World world, double d1, double d2, double d3) {
 	}
 
 	public void addEntityIgnitionFX(World world, double d1, double d2, double d3) {

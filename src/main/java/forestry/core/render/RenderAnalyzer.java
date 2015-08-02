@@ -50,7 +50,7 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer implements IBlockR
 	}
 
 	@Override
-	public void inventoryRender(double x, double y, double z, float f, float f1) {
+	public void inventoryRender(double x, double y, double z) {
 		render(null, null, ForgeDirection.WEST, x, y, z);
 	}
 

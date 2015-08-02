@@ -30,12 +30,12 @@ import forestry.core.utils.EnumAccess;
 import forestry.core.utils.Utils;
 import forestry.energy.EnergyManager;
 
-public class ContainerTile<T extends TileEntity & IStreamableGui> extends ContainerForestry {
+public abstract class ContainerTile<T extends TileEntity & IStreamableGui> extends ContainerForestry {
 
 	protected final T tile;
-	protected final IAccessHandler accessHandler;
+	private final IAccessHandler accessHandler;
 
-	public ContainerTile(T tile) {
+	protected ContainerTile(T tile) {
 		this.tile = tile;
 
 		if (tile instanceof IRestrictedAccessTile) {
@@ -45,7 +45,7 @@ public class ContainerTile<T extends TileEntity & IStreamableGui> extends Contai
 		}
 	}
 
-	public ContainerTile(T tileForestry, InventoryPlayer playerInventory, int xInv, int yInv) {
+	protected ContainerTile(T tileForestry, InventoryPlayer playerInventory, int xInv, int yInv) {
 		this(tileForestry);
 
 		addPlayerInventory(playerInventory, xInv, yInv);

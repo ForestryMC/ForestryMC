@@ -26,7 +26,6 @@ import forestry.core.TemperatureState;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.gadgets.Engine;
-import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ISocketable;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
@@ -44,21 +43,21 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		public int rfPerCycle;
 		public int euStorage;
 
-		public EuConfig(int euForCycle, int rfPerCycle, int euStorage) {
-			this.euForCycle = euForCycle;
-			this.rfPerCycle = rfPerCycle;
-			this.euStorage = euStorage;
+		public EuConfig() {
+			this.euForCycle = Defaults.ENGINE_TIN_EU_FOR_CYCLE;
+			this.rfPerCycle = Defaults.ENGINE_TIN_ENERGY_PER_CYCLE;
+			this.euStorage = Defaults.ENGINE_TIN_MAX_EU_STORED;
 		}
 	}
 
 	public static final short SLOT_BATTERY = 0;
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
-	private final EuConfig euConfig = new EuConfig(Defaults.ENGINE_TIN_EU_FOR_CYCLE, Defaults.ENGINE_TIN_ENERGY_PER_CYCLE, Defaults.ENGINE_TIN_MAX_EU_STORED);
+	private final EuConfig euConfig = new EuConfig();
 
-	protected BasicSink ic2EnergySink;
+	private BasicSink ic2EnergySink;
 
 	public EngineTin() {
-		super(Defaults.ENGINE_TIN_HEAT_MAX, 100000, 4000);
+		super(Defaults.ENGINE_TIN_HEAT_MAX, 100000);
 		setHints(Config.hints.get("engine.tin"));
 
 		setInternalInventory(new EngineTinInventoryAdapter(this));
@@ -69,7 +68,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.EngineTinGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
@@ -120,7 +119,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		super.invalidate();
 	}
 
-	// / HEAT MANAGMENT
+	// / HEAT MANAGEMENT
 	@Override
 	public int dissipateHeat() {
 		if (heat <= 0) {
@@ -214,7 +213,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 
 	// / STATE INFORMATION
 	@Override
-	public boolean isBurning() {
+	protected boolean isBurning() {
 		return mayBurn() && ic2EnergySink != null && ic2EnergySink.canUseEnergy(euConfig.euForCycle);
 	}
 
@@ -271,7 +270,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		}
 	}
 
-	/* ISOCKETABLE */
+	/* ISocketable */
 	@Override
 	public int getSocketCount() {
 		return sockets.getSizeInventory();

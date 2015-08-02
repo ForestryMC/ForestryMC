@@ -37,7 +37,7 @@ public abstract class TileBeeHousing extends TileBase implements IBeeHousing, IC
 	// CLIENT
 	private int breedingProgressPercent = 0;
 
-	public TileBeeHousing() {
+	protected TileBeeHousing() {
 		setHints(Config.hints.get("apiary"));
 		this.beeLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
 	}
@@ -102,10 +102,10 @@ public abstract class TileBeeHousing extends TileBase implements IBeeHousing, IC
 				float upSpread = (worldObj.rand.nextFloat() * 6F) / 16F;
 				fxY += upSpread;
 
-				Proxies.common.addEntitySwarmFX(worldObj, (fxX - distanceFromCenter), fxY, (fxZ + leftRightSpreadFromCenter), 0F, 0F, 0F);
-				Proxies.common.addEntitySwarmFX(worldObj, (fxX + distanceFromCenter), fxY, (fxZ + leftRightSpreadFromCenter), 0F, 0F, 0F);
-				Proxies.common.addEntitySwarmFX(worldObj, (fxX + leftRightSpreadFromCenter), fxY, (fxZ - distanceFromCenter), 0F, 0F, 0F);
-				Proxies.common.addEntitySwarmFX(worldObj, (fxX + leftRightSpreadFromCenter), fxY, (fxZ + distanceFromCenter), 0F, 0F, 0F);
+				Proxies.common.addEntitySwarmFX(worldObj, (fxX - distanceFromCenter), fxY, (fxZ + leftRightSpreadFromCenter));
+				Proxies.common.addEntitySwarmFX(worldObj, (fxX + distanceFromCenter), fxY, (fxZ + leftRightSpreadFromCenter));
+				Proxies.common.addEntitySwarmFX(worldObj, (fxX + leftRightSpreadFromCenter), fxY, (fxZ - distanceFromCenter));
+				Proxies.common.addEntitySwarmFX(worldObj, (fxX + leftRightSpreadFromCenter), fxY, (fxZ + distanceFromCenter));
 			}
 		}
 	}

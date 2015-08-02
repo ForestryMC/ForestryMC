@@ -104,7 +104,7 @@ public class BlockForestryFluid extends BlockFluidClassic {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public boolean flowTextureExists() {
+	private boolean flowTextureExists() {
 		try {
 			ResourceLocation resourceLocation = new ResourceLocation(Defaults.ID, "textures/blocks/liquid/" + fluidName + "_flow.png");
 			IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
@@ -153,8 +153,8 @@ public class BlockForestryFluid extends BlockFluidClassic {
 		return flammability;
 	}
 
-	public boolean isFlammable(IBlockAccess world, int x, int y, int z) {
-		return flammable;
+	private static boolean isFlammable(IBlockAccess world, int x, int y, int z) {
+		return world.getBlock(x, y, z).isFlammable(world, x, y, z, ForgeDirection.UNKNOWN);
 	}
 
 	@Override
@@ -214,7 +214,7 @@ public class BlockForestryFluid extends BlockFluidClassic {
 					x = startX + rand.nextInt(3) - 1;
 					z = startZ + rand.nextInt(3) - 1;
 
-					if (world.isAirBlock(x, y + 1, z) && this.isFlammable(world, x, y, z)) {
+					if (world.isAirBlock(x, y + 1, z) && isFlammable(world, x, y, z)) {
 						world.setBlock(x, y + 1, z, Blocks.fire);
 					}
 				}
@@ -233,7 +233,7 @@ public class BlockForestryFluid extends BlockFluidClassic {
 		}
 	}
 
-	private boolean isNeighborFlammable(World world, int x, int y, int z) {
+	private static boolean isNeighborFlammable(World world, int x, int y, int z) {
 		return isFlammable(world, x - 1, y, z) ||
 				isFlammable(world, x + 1, y, z) ||
 				isFlammable(world, x, y, z - 1) ||
@@ -242,7 +242,7 @@ public class BlockForestryFluid extends BlockFluidClassic {
 				isFlammable(world, x, y + 1, z);
 	}
 
-	private boolean isNearFire(World world, int x, int y, int z) {
+	private static boolean isNearFire(World world, int x, int y, int z) {
 		AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(x - 1, y - 1, z - 1, x + 1, y + 1, z + 1);
 		return world.func_147470_e(boundingBox);
 	}

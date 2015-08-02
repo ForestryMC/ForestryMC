@@ -10,13 +10,14 @@
  ******************************************************************************/
 package forestry.plugins;
 
+import java.util.Collections;
+
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.network.IGuiHandler;
 
 import forestry.api.food.BeverageManager;
-import forestry.api.food.IBeverageEffect;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
@@ -65,7 +66,7 @@ public class PluginFood extends ForestryPlugin {
 
 		// Mead
 		ItemStack meadBottle = ForestryItem.beverage.getItemStack();
-		((ItemBeverage) ForestryItem.beverage.item()).beverages[0].saveEffects(meadBottle, new IBeverageEffect[]{BeverageEffect.weakAlcoholic});
+		BeverageInfo.saveEffects(meadBottle, Collections.singletonList(BeverageEffect.weakAlcoholic));
 
 		LiquidHelper.injectLiquidContainer(Fluids.SHORT_MEAD, Defaults.BUCKET_VOLUME, meadBottle, new ItemStack(Items.glass_bottle));
 	}

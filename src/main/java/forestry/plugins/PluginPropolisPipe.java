@@ -63,7 +63,7 @@ public class PluginPropolisPipe extends ForestryPlugin {
 		}
 
 		proxy.initPropolisPipe();
-		proxy.registerCraftingPropolis(ForestryItem.propolis.getItemStack());
+		ProxyPipes.registerCraftingPropolis(ForestryItem.propolis.getItemStack());
 	}
 
 	@Override

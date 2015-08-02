@@ -24,13 +24,13 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	private final int guiID;
 
 	public TileNaturalistChest(ISpeciesRoot speciesRoot, int guiId) {
-		setInternalInventory(new NaturalistInventoryAdapter(this, 125, "Items", speciesRoot));
+		setInternalInventory(new NaturalistInventoryAdapter(this, speciesRoot));
 		setHints(Config.hints.get("apiarist.chest"));
 		this.guiID = guiId;
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, guiID, player.worldObj, xCoord, yCoord, zCoord);
 	}
 
@@ -42,8 +42,8 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	private static class NaturalistInventoryAdapter extends TileInventoryAdapter<TileNaturalistChest> {
 		private final ISpeciesRoot speciesRoot;
 
-		public NaturalistInventoryAdapter(TileNaturalistChest tile, int size, String name, ISpeciesRoot speciesRoot) {
-			super(tile, size, name);
+		public NaturalistInventoryAdapter(TileNaturalistChest tile, ISpeciesRoot speciesRoot) {
+			super(tile, 125, "Items");
 			this.speciesRoot = speciesRoot;
 		}
 

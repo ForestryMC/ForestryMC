@@ -20,7 +20,7 @@ public abstract class AIButterflyBase extends EntityAIBase {
 
 	protected final EntityButterfly entity;
 
-	public AIButterflyBase(EntityButterfly entity) {
+	protected AIButterflyBase(EntityButterfly entity) {
 		this.entity = entity;
 	}
 
@@ -53,7 +53,7 @@ public abstract class AIButterflyBase extends EntityAIBase {
 		}
 	}
 
-	protected boolean validateDestination(ChunkCoordinates dest, boolean allowFluids) {
+	private boolean validateDestination(ChunkCoordinates dest, boolean allowFluids) {
 		if (dest.posY < 1) {
 			return false;
 		}

@@ -73,11 +73,11 @@ import forestry.core.vect.Vect;
 
 public class Bee extends IndividualLiving implements IBee {
 
-	protected int generation;
-	protected boolean isNatural = true;
+	private int generation;
+	private boolean isNatural = true;
 
-	public IBeeGenome genome;
-	public IBeeGenome mate;
+	private IBeeGenome genome;
+	private IBeeGenome mate;
 
 	private static final LoadingCache<NBTTagCompound, Bee> getBeeCache = CacheBuilder.newBuilder()
 			.maximumSize(128)
@@ -109,7 +109,7 @@ public class Bee extends IndividualLiving implements IBee {
 		this(genome, true, 0);
 	}
 
-	public Bee(IBeeGenome genome, boolean isNatural, int generation) {
+	private Bee(IBeeGenome genome, boolean isNatural, int generation) {
 		super(genome.getLifespan());
 		this.genome = genome;
 		this.isNatural = isNatural;
@@ -319,7 +319,7 @@ public class Bee extends IndividualLiving implements IBee {
 		return !genome.getPrimary().isNocturnal() || genome.getNocturnal();
 	}
 
-	public boolean isSuitableBiome(BiomeGenBase biome) {
+	private boolean isSuitableBiome(BiomeGenBase biome) {
 		if (biome == null) {
 			return false;
 		}

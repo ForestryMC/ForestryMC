@@ -10,20 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import net.minecraft.world.World;
-
 import forestry.api.world.ITreeGenData;
 
 public class WorldGenGiganteum extends WorldGenSequoia {
 
 	public WorldGenGiganteum(ITreeGenData tree) {
 		super(tree, 35, 15);
-	}
-
-	@Override
-	public void generate(World world) {
-		super.generate(world);
-		//generateSupportStems(height, girth, 0.8f, 0.6f);
 	}
 
 }

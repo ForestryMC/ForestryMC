@@ -28,8 +28,6 @@ import forestry.core.interfaces.IBlockRenderer;
 import forestry.core.proxy.ClientProxyRender;
 import forestry.core.render.RenderAnalyzer;
 import forestry.core.render.TextureManager;
-import forestry.core.vect.IVect;
-import forestry.core.vect.Vect;
 import forestry.plugins.PluginApiculture;
 
 public class ClientProxyApiculture extends ProxyApiculture {
@@ -51,7 +49,7 @@ public class ClientProxyApiculture extends ProxyApiculture {
 			return;
 		}
 
-		EntityFX fx = new EntityBeeFX(world, coordinates.posX + 0.5D, coordinates.posY + 0.5D, coordinates.posZ + 0.5D, 0.0f, 0.0f, 0.0f, color);
+		EntityFX fx = new EntityBeeFX(world, coordinates.posX + 0.5D, coordinates.posY + 0.5D, coordinates.posZ + 0.5D, color);
 		fx.setParticleIcon(TextureManager.getInstance().getDefault(icon));
 		ParticleRenderer.getInstance().addEffect(fx);
 	}
@@ -65,14 +63,14 @@ public class ClientProxyApiculture extends ProxyApiculture {
 		EntityFX fx;
 
 		if (world.rand.nextBoolean()) {
-			fx = new EntityBeeFX(world, xCoord, yCoord, zCoord, 0.0f, 0.0f, 0.0f, color);
+			fx = new EntityBeeFX(world, xCoord, yCoord, zCoord, color);
 		} else {
 
 			double spawnX = xCoord + world.rand.nextInt(4) - 2;
 			double spawnY = yCoord + world.rand.nextInt(4) - 2;
 			double spawnZ = zCoord + world.rand.nextInt(4) - 2;
 
-			fx = new EntityBeeFX(world, spawnX, spawnY, spawnZ, 0.0f, 0.0f, 0.0f, color);
+			fx = new EntityBeeFX(world, spawnX, spawnY, spawnZ, color);
 		}
 
 		fx.setParticleIcon(TextureManager.getInstance().getDefault(icon));

@@ -73,7 +73,7 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 		return PluginArboriculture.modelIdLeaves;
 	}
 
-	private boolean renderFruitOverlay(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon texture, int multiplier) {
+	private static boolean renderFruitOverlay(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon texture, int multiplier) {
 
 		float mR = (multiplier >> 16 & 255) / 255.0F;
 		float mG = (multiplier >> 8 & 255) / 255.0F;
@@ -88,7 +88,7 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 		return renderFruitOverlayWithColorMultiplier(world, block, x, y, z, mR, mG, mB, renderer, texture);
 	}
 
-	private boolean renderFruitOverlayWithColorMultiplier(IBlockAccess world, Block block, int x, int y, int z, float r, float g, float b,
+	private static boolean renderFruitOverlayWithColorMultiplier(IBlockAccess world, Block block, int x, int y, int z, float r, float g, float b,
 			RenderBlocks renderer, IIcon texture) {
 
 		int mixedBrightness = block.getMixedBrightnessForBlock(world, x, y, z);

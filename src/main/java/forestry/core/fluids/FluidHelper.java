@@ -10,26 +10,19 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.inventory.InvTools;
 import forestry.core.utils.StackUtils;
 
@@ -37,10 +30,6 @@ import forestry.core.utils.StackUtils;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public final class FluidHelper {
-
-	public static final int BUCKET_FILL_TIME = 8;
-	public static final int NETWORK_UPDATE_INTERVAL = 128;
-	public static final int BUCKET_VOLUME = 1000;
 
 	private FluidHelper() {
 	}
@@ -101,36 +90,6 @@ public final class FluidHelper {
 			}
 		}
 		return false;
-	}
-
-	public static void processContainers(StandardTank tank, IInventory inv, int inputSlot, int outputSlot) {
-		processContainers(tank, inv, inputSlot, outputSlot, tank.getFluidType(), true, true);
-	}
-
-	public static void processContainers(StandardTank tank, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill, boolean processFilled, boolean processEmpty) {
-		TankManager tankManger = new TankManager();
-		tankManger.add(tank);
-		processContainers(tankManger, inv, inputSlot, outputSlot, fluidToFill, processFilled, processEmpty);
-	}
-
-	public static void processContainers(TankManager tank, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill) {
-		processContainers(tank, inv, inputSlot, outputSlot, fluidToFill, true, true);
-	}
-
-	public static void processContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill, boolean processFilled, boolean processEmpty) {
-		ItemStack input = inv.getStackInSlot(inputSlot);
-
-		if (input == null) {
-			return;
-		}
-
-		if (processFilled && drainContainers(fluidHandler, inv, inputSlot, outputSlot)) {
-			return;
-		}
-
-		if (processEmpty && fluidToFill != null) {
-			fillContainers(fluidHandler, inv, inputSlot, outputSlot, fluidToFill);
-		}
 	}
 
 	public static boolean fillContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill) {
@@ -212,28 +171,6 @@ public final class FluidHelper {
 		}
 		inv.decrStackSize(inputSlot, 1);
 		return true;
-	}
-
-	public static boolean isContainer(ItemStack stack) {
-		if (stack != null && stack.getItem() instanceof IFluidContainerItem) {
-			return true;
-		}
-		return FluidContainerRegistry.isContainer(stack);
-	}
-
-	public static boolean isFilledContainer(ItemStack stack) {
-		if (FluidContainerRegistry.isFilledContainer(stack)) {
-			return true;
-		}
-
-		Item item = stack.getItem();
-		if (item instanceof IFluidContainerItem) {
-			IFluidContainerItem containerItem = (IFluidContainerItem) item;
-			FluidStack fluidStack = containerItem.getFluid(stack);
-			return fluidStack != null && fluidStack.amount > 0;
-		}
-
-		return false;
 	}
 
 	public static boolean isFillableContainer(ItemStack stack, FluidStack liquid) {
@@ -356,57 +293,4 @@ public final class FluidHelper {
 		return containsFluidStack(stack, new FluidStack(fluid, 1));
 	}
 
-	public static FluidStack drainBlock(World world, int x, int y, int z, boolean doDrain) {
-		return drainBlock(world.getBlock(x, y, z), world, x, y, z, doDrain);
-	}
-
-	public static FluidStack drainBlock(Block block, World world, int x, int y, int z, boolean doDrain) {
-		if (block instanceof IFluidBlock) {
-			IFluidBlock fluidBlock = (IFluidBlock) block;
-			if (fluidBlock.canDrain(world, x, y, z)) {
-				return fluidBlock.drain(world, x, y, z, doDrain);
-			}
-		} else if (block == Blocks.water || block == Blocks.flowing_water) {
-			int meta = world.getBlockMetadata(x, y, z);
-			if (meta != 0) {
-				return null;
-			}
-			if (doDrain) {
-				world.setBlockToAir(x, y, z);
-			}
-			return new FluidStack(FluidRegistry.WATER, FluidContainerRegistry.BUCKET_VOLUME);
-		} else if (block == Blocks.lava || block == Blocks.flowing_lava) {
-			int meta = world.getBlockMetadata(x, y, z);
-			if (meta != 0) {
-				return null;
-			}
-			if (doDrain) {
-				world.setBlockToAir(x, y, z);
-			}
-			return new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME);
-		}
-		return null;
-	}
-
-	public static boolean isFullFluidBlock(World world, int x, int y, int z) {
-		return isFullFluidBlock(world.getBlock(x, y, z), world, x, y, z);
-	}
-
-	public static boolean isFullFluidBlock(Block block, World world, int x, int y, int z) {
-		if (block instanceof BlockLiquid || block instanceof IFluidBlock) {
-			return world.getBlockMetadata(x, y, z) == 0;
-		}
-		return false;
-	}
-
-	public static Fluid getFluid(Block block) {
-		if (block instanceof IFluidBlock) {
-			return ((IFluidBlock) block).getFluid();
-		} else if (block == Blocks.water || block == Blocks.flowing_water) {
-			return FluidRegistry.WATER;
-		} else if (block == Blocks.lava || block == Blocks.flowing_lava) {
-			return FluidRegistry.LAVA;
-		}
-		return null;
-	}
 }

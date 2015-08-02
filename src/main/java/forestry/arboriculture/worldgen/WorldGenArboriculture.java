@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import java.util.Random;
-
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 
@@ -30,26 +28,26 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	private static final ITreeBlockType vineSouth = new TreeBlockType(Blocks.vine, 4);
 	private static final ITreeBlockType vineWest = new TreeBlockType(Blocks.vine, 8);
 	private static final ITreeBlockType vineEast = new TreeBlockType(Blocks.vine, 2);
+	private static final int minPodHeight = 3;
 
 	private static final BlockType air = new BlockTypeVoid();
 
 	protected final ITreeGenData tree;
-	protected int startX;
-	protected int startY;
-	protected int startZ;
+	private int startX;
+	private int startY;
+	private int startZ;
 
 	protected TreeBlockTypeLeaf leaf;
 	protected ITreeBlockType wood;
 
-	protected boolean spawnPods = false;
-	protected int minPodHeight = 3;
+	private boolean spawnPods = false;
 
-	public WorldGenArboriculture(ITreeGenData tree) {
+	protected WorldGenArboriculture(ITreeGenData tree) {
 		this.tree = tree;
 	}
 
 	@Override
-	public boolean generate(World world, Random random, int x, int y, int z, boolean forced) {
+	public boolean generate(World world, int x, int y, int z, boolean forced) {
 		this.spawnPods = tree.allowsFruitBlocks();
 		this.leaf = getLeaf(getOwner(world, x, y, z));
 		this.wood = getWood();
@@ -77,13 +75,13 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 		this.startZ = startZ;
 	}
 
-	public abstract void generate(World world);
+	protected abstract void generate(World world);
 
 	public abstract boolean canGrow(World world, int x, int y, int z);
 
-	public abstract TreeBlockTypeLeaf getLeaf(GameProfile owner);
+	protected abstract TreeBlockTypeLeaf getLeaf(GameProfile owner);
 
-	public abstract ITreeBlockType getWood();
+	protected abstract ITreeBlockType getWood();
 
 	protected void generateTreeTrunk(World world, int height, int girth) {
 		generateTreeTrunk(world, height, girth, 0);

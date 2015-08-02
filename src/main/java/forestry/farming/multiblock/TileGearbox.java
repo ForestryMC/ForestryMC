@@ -22,7 +22,7 @@ import forestry.energy.EnergyManager;
 
 public class TileGearbox extends TileFarm implements IPowerHandler, IFarmComponent.Active {
 
-	public static final int WORK_CYCLES = 4;
+	private static final int WORK_CYCLES = 4;
 
 	private final EnergyManager energyManager;
 

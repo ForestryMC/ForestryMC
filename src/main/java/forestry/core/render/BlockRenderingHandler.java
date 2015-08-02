@@ -31,7 +31,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 		if (block.getRenderType() == ForestryClient.byBlockModelId) {
 			TileRendererIndex index = new TileRendererIndex(block, metadata);
 			if (byBlockRenderer.containsKey(index)) {
-				byBlockRenderer.get(index).inventoryRender(-0.5, -0.5, -0.5, 0, 0);
+				byBlockRenderer.get(index).inventoryRender(-0.5, -0.5, -0.5);
 			}
 		}
 

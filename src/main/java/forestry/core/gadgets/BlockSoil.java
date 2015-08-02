@@ -98,25 +98,25 @@ public class BlockSoil extends Block implements IItemTyped {
 		SoilType type = getTypeFromMeta(meta);
 
 		if (type == SoilType.HUMUS) {
-			updateTickHumus(world, i, j, k, random);
+			updateTickHumus(world, i, j, k);
 		} else if (type == SoilType.BOG_EARTH) {
-			updateTickBogEarth(world, i, j, k, random);
+			updateTickBogEarth(world, i, j, k);
 		}
 	}
 
-	private void updateTickHumus(World world, int i, int j, int k, Random random) {
+	private static void updateTickHumus(World world, int i, int j, int k) {
 		if (isEnrooted(world, i, j, k)) {
 			degradeSoil(world, i, j, k);
 		}
 	}
 
-	private void updateTickBogEarth(World world, int i, int j, int k, Random random) {
+	private static void updateTickBogEarth(World world, int i, int j, int k) {
 		if (isMoistened(world, i, j, k)) {
 			matureBog(world, i, j, k);
 		}
 	}
 
-	private boolean isEnrooted(World world, int x, int y, int z) {
+	private static boolean isEnrooted(World world, int x, int y, int z) {
 
 		for (int i = -1; i < 2; i++) {
 			for (int j = -1; j < 2; j++) {
@@ -136,7 +136,7 @@ public class BlockSoil extends Block implements IItemTyped {
 	/**
 	 * If a tree or sapling is in the vicinity, there is a chance, that the soil will degrade.
 	 */
-	private void degradeSoil(World world, int x, int y, int z) {
+	private static void degradeSoil(World world, int x, int y, int z) {
 
 		if (world.rand.nextInt(140) != 0) {
 			return;
@@ -162,7 +162,7 @@ public class BlockSoil extends Block implements IItemTyped {
 		world.markBlockForUpdate(x, y, z);
 	}
 
-	public static boolean isMoistened(World world, int x, int y, int z) {
+	private static boolean isMoistened(World world, int x, int y, int z) {
 
 		for (int i = -2; i < 3; i++) {
 			for (int j = -2; j < 3; j++) {
@@ -176,7 +176,7 @@ public class BlockSoil extends Block implements IItemTyped {
 		return false;
 	}
 
-	private void matureBog(World world, int i, int j, int k) {
+	private static void matureBog(World world, int i, int j, int k) {
 
 		if (world.rand.nextInt(13) != 0) {
 			return;

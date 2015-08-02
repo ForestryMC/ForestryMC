@@ -171,7 +171,7 @@ public class PluginMagicalCrops extends ForestryPlugin {
 		}
 	}
 
-	private void addRecipes(String seedPrefix, String cropPrefix, String name, int fluidAmount) {
+	private static void addRecipes(String seedPrefix, String cropPrefix, String name, int fluidAmount) {
 		ItemStack seed = GameRegistry.findItemStack(MagCrop, MagCrop + seedPrefix + name, 1);
 		Block crop = GameRegistry.findBlock(MagCrop, MagCrop + cropPrefix + name);
 		if (seed != null) {

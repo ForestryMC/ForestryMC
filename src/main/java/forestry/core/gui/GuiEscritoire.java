@@ -22,7 +22,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import forestry.core.config.Defaults;
 import forestry.core.gadgets.NaturalistGame;

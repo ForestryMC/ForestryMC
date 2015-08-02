@@ -87,7 +87,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		}
 	}
 
-	public static FarmDirection getLayoutDirection(FarmDirection farmSide) {
+	private static FarmDirection getLayoutDirection(FarmDirection farmSide) {
 		switch (farmSide) {
 			case NORTH:
 				return FarmDirection.WEST;
@@ -153,7 +153,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		return tankManager;
 	}
 
-	public BiomeGenBase getBiome() {
+	private BiomeGenBase getBiome() {
 		if (cachedBiome == null) {
 			CoordTriplet coords = getReferenceCoord();
 			cachedBiome = worldObj.getBiomeGenForCoords(coords.x, coords.z);

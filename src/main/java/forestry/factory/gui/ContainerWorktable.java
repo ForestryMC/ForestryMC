@@ -27,6 +27,7 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
 import forestry.factory.gadgets.TileWorktable;
 import forestry.factory.network.PacketWorktableMemoryUpdate;
+import forestry.factory.recipes.RecipeMemory;
 
 public class ContainerWorktable extends ContainerTile<TileWorktable> implements IContainerCrafting, IGuiSelectable {
 
@@ -99,8 +100,8 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		tile.setRecipe(craftMatrix);
 	}
 
-	public void clearRecipe() {
-		sendRecipeClick(0, tile.getMemory().capacity);
+	public static void clearRecipe() {
+		sendRecipeClick(0, RecipeMemory.capacity);
 	}
 
 	public static void sendRecipeClick(int mouseButton, int recipeIndex) {

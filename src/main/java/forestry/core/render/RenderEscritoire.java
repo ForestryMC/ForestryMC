@@ -51,7 +51,7 @@ public class RenderEscritoire extends TileEntitySpecialRenderer implements IBloc
 	}
 
 	@Override
-	public void inventoryRender(double x, double y, double z, float f, float f1) {
+	public void inventoryRender(double x, double y, double z) {
 		render(null, ForgeDirection.EAST, x, y, z);
 	}
 

@@ -25,12 +25,13 @@ import forestry.api.genetics.IFruitFamily;
 
 public class FruitProviderRipening extends FruitProviderNone {
 
-	HashMap<ItemStack, Float> products = new HashMap<ItemStack, Float>();
+	private final Map<ItemStack, Float> products = new HashMap<ItemStack, Float>();
 
-	int colourRipe = 0xffffff;
-	int colourCallow = 0xffffff;
+	private int colourCallow = 0xffffff;
 
-	int diffR, diffG, diffB = 0;
+	private int diffR;
+	private int diffG;
+	private int diffB;
 
 	public FruitProviderRipening(String key, IFruitFamily family, ItemStack product, float modifier) {
 		super(key, family);
@@ -38,7 +39,6 @@ public class FruitProviderRipening extends FruitProviderNone {
 	}
 
 	public FruitProviderRipening setColours(int ripe, int callow) {
-		colourRipe = ripe;
 		colourCallow = callow;
 
 		diffR = (ripe >> 16 & 255) - (callow >> 16 & 255);

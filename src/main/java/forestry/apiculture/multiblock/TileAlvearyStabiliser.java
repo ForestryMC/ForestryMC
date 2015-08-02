@@ -22,7 +22,7 @@ public class TileAlvearyStabiliser extends TileAlveary implements IAlvearyCompon
 
 	/* TEXTURES */
 	@Override
-	public int getIcon(int side, int metadata) {
+	public int getIcon(int side) {
 		if (side == 0 || side == 1) {
 			return BlockAlveary.BOTTOM;
 		}

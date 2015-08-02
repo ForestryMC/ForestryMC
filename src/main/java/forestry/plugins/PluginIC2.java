@@ -68,26 +68,27 @@ public class PluginIC2 extends ForestryPlugin {
 	public static PluginIC2 instance;
 
 	// Forestry stuff
-	public static MachineDefinition definitionGenerator;
-	public static MachineDefinition definitionEngineTin;
+	private static MachineDefinition definitionGenerator;
+	private static MachineDefinition definitionEngineTin;
 
 	// IC2 stuff
-	public static ItemStack plantBall;
-	public static ItemStack compressedPlantBall;
-	public static ItemStack wrench;
-	public static ItemStack treetap;
+	private static ItemStack plantBall;
+	private static ItemStack compressedPlantBall;
+	private static ItemStack wrench;
+	private static ItemStack treetap;
+	private static ItemStack rubbersapling;
+	private static ItemStack rubberleaves;
+	private static ItemStack emptyCell;
+	private static ItemStack lavaCell;
+	private static ItemStack waterCell;
+	private static ItemStack rubber;
+	private static ItemStack scrap;
+	private static ItemStack silver;
+	private static ItemStack brass;
+	private static ItemStack uuMatter;
+
 	public static ItemStack resin;
-	public static ItemStack rubbersapling;
 	public static ItemStack rubberwood;
-	public static ItemStack rubberleaves;
-	public static ItemStack emptyCell;
-	public static ItemStack lavaCell;
-	public static ItemStack waterCell;
-	public static ItemStack rubber;
-	public static ItemStack scrap;
-	public static ItemStack silver;
-	public static ItemStack brass;
-	public static ItemStack uuMatter;
 
 	public PluginIC2() {
 		if (PluginIC2.instance == null) {

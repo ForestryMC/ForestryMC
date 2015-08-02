@@ -16,17 +16,16 @@ import forestry.core.interfaces.IHintSource;
 
 public abstract class TileBase extends TileForestry implements IHintSource {
 
-	/* INTERACTION */
-	public abstract void openGui(EntityPlayer player, TileBase tile);
+	public abstract void openGui(EntityPlayer player);
 
 	public boolean canDrainWithBucket() {
 		return false;
 	}
 
-	/* IHINTSOURCE */
+	/* IHintSource */
 	private String[] hints;
 
-	public void setHints(String[] hints) {
+	protected void setHints(String[] hints) {
 		this.hints = hints;
 	}
 

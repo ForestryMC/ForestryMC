@@ -43,8 +43,8 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 	public static class TradeStationInventory extends InventoryAdapter {
 
-		public TradeStationInventory(int size, String name) {
-			super(size, name);
+		public TradeStationInventory() {
+			super(TradeStation.SLOT_SIZE, "INV");
 		}
 
 		@Override
@@ -111,14 +111,14 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	public static final short SLOT_RECEIVE_BUFFER_COUNT = 15;
 	public static final short SLOT_SEND_BUFFER = 30;
 	public static final short SLOT_SEND_BUFFER_COUNT = 10;
-	public static final short SLOT_SIZE = SLOT_TRADEGOOD_COUNT + SLOT_EXCHANGE_COUNT + SLOT_LETTERS_COUNT + SLOT_STAMPS_COUNT + SLOT_RECEIVE_BUFFER_COUNT + SLOT_SEND_BUFFER_COUNT;
+	public static final int SLOT_SIZE = SLOT_TRADEGOOD_COUNT + SLOT_EXCHANGE_COUNT + SLOT_LETTERS_COUNT + SLOT_STAMPS_COUNT + SLOT_RECEIVE_BUFFER_COUNT + SLOT_SEND_BUFFER_COUNT;
 
 	// / MEMBER
 	private GameProfile owner;
 	private IMailAddress address;
 	private boolean isVirtual = false;
 	private boolean isInvalid = false;
-	private final InventoryAdapter inventory = new TradeStationInventory(SLOT_SIZE, "INV");
+	private final InventoryAdapter inventory = new TradeStationInventory();
 
 	// / CONSTRUCTORS
 	public TradeStation(GameProfile owner, IMailAddress address) {
@@ -350,15 +350,18 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		}
 
 		// How many orders are fillable?
-		int itemCount = 0;
+		float orderCount = 0;
 
 		for (ItemStack stack : InvTools.getStacks(inventory, SLOT_SEND_BUFFER, SLOT_SEND_BUFFER_COUNT)) {
 			if (stack != null && stack.isItemEqual(tradegood) && ItemStack.areItemStackTagsEqual(stack, tradegood)) {
-				itemCount += stack.stackSize;
+				orderCount += (stack.stackSize / (float) tradegood.stackSize);
+				if (orderCount >= max) {
+					return max;
+				}
 			}
 		}
 
-		return (int) Math.floor(itemCount / tradegood.stackSize);
+		return (int) Math.floor(orderCount);
 	}
 
 	public boolean canReceivePayment() {
@@ -677,8 +680,4 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		return inventory.isLocked(slotIndex);
 	}
 
-	@Override
-	public IInventoryAdapter configureSided(int[] sides, int[] slots) {
-		return inventory.configureSided(sides, slots);
-	}
 }

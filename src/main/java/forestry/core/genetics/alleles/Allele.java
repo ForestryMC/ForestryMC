@@ -24,9 +24,9 @@ import forestry.api.lepidopterology.IAlleleButterflySpecies;
 
 public abstract class Allele implements IAllele {
 
-	protected final String uid;
-	protected final boolean isDominant;
-	protected final String unlocalizedName;
+	private final String uid;
+	private final boolean isDominant;
+	private final String unlocalizedName;
 
 	protected Allele(String uid, String unlocalizedName, boolean isDominant) {
 		this(uid, unlocalizedName, isDominant, true);

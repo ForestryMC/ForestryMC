@@ -41,21 +41,21 @@ public class PluginNatura extends ForestryPlugin {
 
 	private static final String NATURA = "Natura";
 
-	public static Block logNatura;
-	public static Block logWillow;
+	private static Block logNatura;
+	private static Block logWillow;
 
-	public static Block leavesNatura;
-	public static Block saplingNatura;
-	public static Block saplingNaturaRare;
-	public static ItemStack berryBlight;
-	public static ItemStack berryDusk;
-	public static ItemStack berrySky;
-	public static ItemStack berrySting;
-	public static ItemStack berryRasp;
-	public static ItemStack berryBlue;
-	public static ItemStack berryBlack;
-	public static ItemStack berryMalo;
-	public static ItemStack itemBarley;
+	private static Block leavesNatura;
+	private static Block saplingNatura;
+	private static Block saplingNaturaRare;
+	private static ItemStack berryBlight;
+	private static ItemStack berryDusk;
+	private static ItemStack berrySky;
+	private static ItemStack berrySting;
+	private static ItemStack berryRasp;
+	private static ItemStack berryBlue;
+	private static ItemStack berryBlack;
+	private static ItemStack berryMalo;
+	private static ItemStack itemBarley;
 
 	@Override
 	public boolean isAvailable() {

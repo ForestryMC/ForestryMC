@@ -52,12 +52,12 @@ public class BlockResource extends Block {
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
 
 		if (metadata == 0) {
-			int fortmod = world.rand.nextInt(fortune + 2) - 1;
-			if (fortmod < 0) {
-				fortmod = 0;
+			int fortuneModifier = world.rand.nextInt(fortune + 2) - 1;
+			if (fortuneModifier < 0) {
+				fortuneModifier = 0;
 			}
 
-			int amount = (2 + world.rand.nextInt(5)) * (fortmod + 1);
+			int amount = (2 + world.rand.nextInt(5)) * (fortuneModifier + 1);
 			if (amount > 0) {
 				drops.add(ForestryItem.apatite.getItemStack(amount));
 			}

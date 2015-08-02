@@ -12,6 +12,7 @@ package forestry.core.fluids;
 
 import com.google.common.collect.ForwardingList;
 
+import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -73,12 +74,12 @@ public class TankManager extends ForwardingList<StandardTank> implements ITankMa
 	}
 
 	@Override
-	public final boolean addAll(Collection<? extends StandardTank> collection) {
+	public final boolean addAll(@Nonnull Collection<? extends StandardTank> collection) {
 		return standardAddAll(collection);
 	}
 
 	@Override
-	public boolean add(StandardTank tank) {
+	public boolean add(@Nonnull StandardTank tank) {
 		boolean added = tanks.add(tank);
 		int index = tanks.indexOf(tank);
 		tank.setTankIndex(index);
@@ -392,7 +393,7 @@ public class TankManager extends ForwardingList<StandardTank> implements ITankMa
 		return false;
 	}
 
-	private boolean tankAcceptsFluid(StandardTank tank, FluidStack fluidStack) {
+	private static boolean tankAcceptsFluid(StandardTank tank, FluidStack fluidStack) {
 		if (fluidStack == null) {
 			return false;
 		}
@@ -402,7 +403,7 @@ public class TankManager extends ForwardingList<StandardTank> implements ITankMa
 		return tank.fill(fluidStack, false) > 0;
 	}
 
-	private boolean tankCanDrain(StandardTank tank) {
+	private static boolean tankCanDrain(StandardTank tank) {
 		if (!tank.canBeDrainedExternally()) {
 			return false;
 		}
@@ -410,7 +411,7 @@ public class TankManager extends ForwardingList<StandardTank> implements ITankMa
 		return drained != null && drained.amount > 0;
 	}
 
-	private boolean tankCanDrainFluid(StandardTank tank, FluidStack fluidStack) {
+	private static boolean tankCanDrainFluid(StandardTank tank, FluidStack fluidStack) {
 		if (fluidStack == null) {
 			return false;
 		}

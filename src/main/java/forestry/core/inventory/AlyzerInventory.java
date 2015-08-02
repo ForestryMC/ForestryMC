@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2011-2014 SirSengir.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser Public License v3
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/lgpl-3.0.txt
+ *
+ * Various Contributors including, but not limited to:
+ * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ ******************************************************************************/
 package forestry.core.inventory;
 
 import com.google.common.collect.ImmutableSet;
@@ -20,11 +30,8 @@ public abstract class AlyzerInventory extends ItemInventory implements IErrorSou
 	public static final int SLOT_ANALYZE_5 = 6;
 	public static final int SLOT_ENERGY = 5;
 
-	protected final EntityPlayer player;
-
 	public AlyzerInventory(EntityPlayer player, int size, ItemStack itemstack) {
 		super(player, size, itemstack);
-		this.player = player;
 	}
 
 	protected static boolean isEnergy(ItemStack itemstack) {
@@ -35,7 +42,7 @@ public abstract class AlyzerInventory extends ItemInventory implements IErrorSou
 		return ForestryItem.honeyDrop.isItemEqual(itemstack) || ForestryItem.honeydew.isItemEqual(itemstack);
 	}
 
-	protected boolean hasSpecimen() {
+	private boolean hasSpecimen() {
 		for (int i = SLOT_SPECIMEN; i <= SLOT_ANALYZE_5; i++) {
 			if (i == SLOT_ENERGY) {
 				continue;

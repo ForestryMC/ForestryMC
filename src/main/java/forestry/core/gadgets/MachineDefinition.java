@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,14 +35,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 import forestry.core.interfaces.IBlockRenderer;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
+import forestry.core.render.TileRendererIndex;
 
 public class MachineDefinition {
 
 	public final Class<? extends TileEntity> teClass;
 
-	public final String teIdent;
-	public Block block;
-	public final int meta;
+	private final String teIdent;
+	private Block block;
+	private final int meta;
 
 	public final IBlockRenderer renderer;
 
@@ -67,6 +67,14 @@ public class MachineDefinition {
 			faceMap[i] = 0;
 		}
 
+	}
+
+	public Block getBlock() {
+		return block;
+	}
+
+	public int getMeta() {
+		return meta;
 	}
 
 	public void setBlock(Block block) {
@@ -110,32 +118,12 @@ public class MachineDefinition {
 		list.add(new ItemStack(item, 1, meta));
 	}
 
-	/* BLOCK DROPS */
-	public boolean handlesDrops() {
-		return false;
-	}
-
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-		return new ArrayList<ItemStack>();
-	}
-
 	/* INTERACTION */
 	public boolean isSolidOnSide(IBlockAccess world, int x, int y, int z, int side) {
 		return true;
 	}
 
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float fXplayerClick, float fY, float fZ) {
-		return false;
-	}
-
-	public void onBlockAdded(World world, int x, int y, int z) {
-	}
-
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
-		return true;
-	}
-
-	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side) {
 		return false;
 	}
 
@@ -172,7 +160,7 @@ public class MachineDefinition {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getBlockTextureFromSideAndMetadata(int side, int metadata) {
+	public IIcon getBlockTextureForSide(int side) {
 		return icons[side];
 	}
 
@@ -180,11 +168,11 @@ public class MachineDefinition {
 	 * 0 - Bottom 1 - Top 2 - Back 3 - Front 4,5 - Sides, 7 - Reversed ?, 8 - Reversed ?
 	 */
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side, int metadata) {
+	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 
 		TileEntity tile = world.getTileEntity(x, y, z);
 		if (!(tile instanceof TileForestry)) {
-			return getBlockTextureFromSideAndMetadata(side, metadata);
+			return getBlockTextureForSide(side);
 		}
 
 		ForgeDirection dir = ((TileForestry) tile).getOrientation();
@@ -203,6 +191,6 @@ public class MachineDefinition {
 			default:
 		}
 
-		return getBlockTextureFromSideAndMetadata(side, metadata);
+		return getBlockTextureForSide(side);
 	}
 }

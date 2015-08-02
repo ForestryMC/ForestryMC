@@ -29,7 +29,7 @@ public abstract class FarmLogic implements IFarmLogic {
 
 	protected boolean isManual;
 
-	public FarmLogic(IFarmHousing housing) {
+	protected FarmLogic(IFarmHousing housing) {
 		this.housing = housing;
 	}
 

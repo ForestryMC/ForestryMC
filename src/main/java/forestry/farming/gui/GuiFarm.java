@@ -26,7 +26,6 @@ import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.SocketWidget;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.core.gui.widgets.Widget;
-import forestry.core.interfaces.IClimatised;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 import forestry.farming.multiblock.IFarmController;

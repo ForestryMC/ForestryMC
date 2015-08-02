@@ -38,7 +38,6 @@ import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.apiculture.IHiveFrame;
 import forestry.api.core.ForestryAPI;
 import forestry.apiculture.trigger.ApicultureTriggers;
-import forestry.core.gadgets.TileBase;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.GuiId;
 import forestry.core.utils.GuiUtil;
@@ -65,7 +64,7 @@ public class TileApiary extends TileBeeHousing {
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.ApiaryGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
 	}
 

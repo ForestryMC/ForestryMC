@@ -38,7 +38,6 @@ import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ICrafter;
 import forestry.core.interfaces.ICraftingPlan;
@@ -91,7 +90,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.FabricatorGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
@@ -323,7 +322,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 		return (heat * i) / MAX_HEAT;
 	}
 
-	public int getMeltingPoint() {
+	private int getMeltingPoint() {
 		if (moltenTank.getFluidAmount() > 0) {
 			Smelting smelt = RecipeManager.findMatchingSmelting(moltenTank.getFluid());
 			if (smelt != null) {

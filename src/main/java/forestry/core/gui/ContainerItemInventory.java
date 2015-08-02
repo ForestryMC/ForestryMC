@@ -22,7 +22,7 @@ public abstract class ContainerItemInventory<I extends ItemInventory> extends Co
 
 	protected final I inventory;
 
-	public ContainerItemInventory(I inventory, InventoryPlayer playerInventory, int xInv, int yInv) {
+	protected ContainerItemInventory(I inventory, InventoryPlayer playerInventory, int xInv, int yInv) {
 		this.inventory = inventory;
 
 		addPlayerInventory(playerInventory, xInv, yInv);

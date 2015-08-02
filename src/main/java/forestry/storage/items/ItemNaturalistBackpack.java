@@ -24,8 +24,8 @@ public class ItemNaturalistBackpack extends ItemBackpack {
 
 	public static class BackpackDefinitionApiarist extends BackpackDefinition {
 
-		public BackpackDefinitionApiarist(String name, int primaryColor) {
-			super(name, primaryColor);
+		public BackpackDefinitionApiarist(int primaryColor) {
+			super("apiarist", primaryColor);
 		}
 
 		@Override
@@ -36,8 +36,8 @@ public class ItemNaturalistBackpack extends ItemBackpack {
 
 	public static class BackpackDefinitionLepidopterist extends BackpackDefinition {
 
-		public BackpackDefinitionLepidopterist(String name, int primaryColor) {
-			super(name, primaryColor);
+		public BackpackDefinitionLepidopterist(int primaryColor) {
+			super("lepidopterist", primaryColor);
 		}
 
 		@Override
@@ -54,7 +54,7 @@ public class ItemNaturalistBackpack extends ItemBackpack {
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, ItemStack itemstack) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, guiId, player.worldObj, (int) player.posX, (int) player.posY, (int) player.posZ);
 	}
 }

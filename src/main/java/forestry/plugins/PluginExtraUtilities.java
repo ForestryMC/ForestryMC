@@ -35,8 +35,6 @@ public class PluginExtraUtilities extends ForestryPlugin {
 
 	private static final String ExU = "ExtraUtilities";
 
-	public static Block ExUEnderLilly;
-
 	@Override
 	public boolean isAvailable() {
 		return Proxies.common.isModLoaded(ExU);
@@ -51,11 +49,11 @@ public class PluginExtraUtilities extends ForestryPlugin {
 	public void doInit() {
 		super.doInit();
 
-		ExUEnderLilly = GameRegistry.findBlock(ExU, "plant/ender_lilly");
+		Block exUEnderLilly = GameRegistry.findBlock(ExU, "plant/ender_lilly");
 		Farmables.farmables.put("farmEnder", new ArrayList<IFarmable>());
 		if (Config.isExUtilEnderLilyEnabled()) {
 			Circuit.farmEnderManaged = new CircuitFarmLogic("managedEnder", FarmLogicEnder.class);
-			Farmables.farmables.get("farmEnder").add(new FarmableGenericCrop(new ItemStack(ExUEnderLilly, 1, 0), ExUEnderLilly, 7));
+			Farmables.farmables.get("farmEnder").add(new FarmableGenericCrop(new ItemStack(exUEnderLilly, 1, 0), exUEnderLilly, 7));
 		}
 	}
 

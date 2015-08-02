@@ -160,16 +160,16 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 
 	private void configureSided() {
 		slotMap = new int[6][0];
-		InvTools.configureSided(this, Defaults.FACINGS, 0, getSizeInventory());
-	}
 
-	@Override
-	public InventoryAdapter configureSided(int[] sides, int[] slots) {
-		for (int side : sides) {
-			slotMap[side] = slots;
+		int count = getSizeInventory();
+		int[] slots = new int[count];
+		for (int i = 0; i < count; i++) {
+			slots[i] = i;
 		}
 
-		return this;
+		for (int side : Defaults.FACINGS) {
+			slotMap[side] = slots;
+		}
 	}
 
 	@Override

@@ -37,7 +37,7 @@ public final class TreeGenHelper {
 
 	public static void generateTree(WorldGenerator gen, EntityPlayer player, int x, int y, int z) {
 		if (gen instanceof WorldGenBase) {
-			((WorldGenBase) gen).generate(player.worldObj, player.worldObj.rand, x, y, z, true);
+			((WorldGenBase) gen).generate(player.worldObj, x, y, z, true);
 		} else {
 			gen.generate(player.worldObj, player.worldObj.rand, x, y, z);
 		}

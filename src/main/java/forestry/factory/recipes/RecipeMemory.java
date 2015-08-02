@@ -146,6 +146,8 @@ public class RecipeMemory implements INBTTagable, IStreamable {
 		}
 	}
 
+	public static final int capacity = 9;
+
 	private static final Container DUMMY_CONTAINER = new ContainerDummy();
 	private static final List<Class<? extends Item>> memoryBlacklist = new ArrayList<Class<? extends Item>>();
 
@@ -155,7 +157,6 @@ public class RecipeMemory implements INBTTagable, IStreamable {
 
 	private LinkedList<Recipe> recipes = new LinkedList<Recipe>();
 	private long lastUpdate;
-	public final int capacity = 9;
 
 	private static boolean isValid(World world, Recipe recipe) {
 		if (recipe == null) {
@@ -225,7 +226,7 @@ public class RecipeMemory implements INBTTagable, IStreamable {
 
 	}
 
-	public Recipe getRecipe(int recipeIndex) {
+	private Recipe getRecipe(int recipeIndex) {
 		if (recipes.size() > recipeIndex) {
 			return recipes.get(recipeIndex);
 		}

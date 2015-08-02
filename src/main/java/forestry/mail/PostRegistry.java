@@ -11,6 +11,7 @@
 package forestry.mail;
 
 import java.io.File;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,7 +31,6 @@ import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
 import forestry.core.config.ForestryItem;
-import forestry.core.network.PacketId;
 import forestry.core.proxy.Proxies;
 import forestry.mail.items.ItemLetter;
 import forestry.mail.network.PacketPOBoxInfo;
@@ -75,7 +75,7 @@ public class PostRegistry implements IPostRegistry {
 
 			EntityPlayer player = Proxies.common.getPlayer(world, address.getPlayerProfile());
 			if (player != null) {
-				Proxies.net.sendToPlayer(new PacketPOBoxInfo(PacketId.POBOX_INFO, pobox.getPOBoxInfo()), player);
+				Proxies.net.sendToPlayer(new PacketPOBoxInfo(pobox.getPOBoxInfo()), player);
 			}
 		}
 
@@ -185,7 +185,7 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	/* CARRIER */
-	private final HashMap<EnumAddressee, IPostalCarrier> carriers = new HashMap<EnumAddressee, IPostalCarrier>();
+	private final Map<EnumAddressee, IPostalCarrier> carriers = new EnumMap<EnumAddressee, IPostalCarrier>(EnumAddressee.class);
 
 	@Override
 	public Map<EnumAddressee, IPostalCarrier> getRegisteredCarriers() {

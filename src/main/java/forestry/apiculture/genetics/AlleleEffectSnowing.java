@@ -23,7 +23,6 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IEffectData;
 import forestry.core.config.Defaults;
 import forestry.core.proxy.Proxies;
-import forestry.core.vect.IVect;
 import forestry.core.vect.Vect;
 
 public class AlleleEffectSnowing extends AlleleEffectThrottled {
@@ -87,7 +86,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 			World world = housing.getWorld();
 
 			Vect spawn = Vect.getRandomPositionInArea(world.rand, area).add(coordinates).add(offset);
-			Proxies.common.addEntitySnowFX(world, spawn.x, spawn.y, spawn.z, 0F, 0F, 0F);
+			Proxies.common.addEntitySnowFX(world, spawn.x, spawn.y, spawn.z);
 			return storedData;
 		} else {
 			return super.doFX(genome, storedData, housing);

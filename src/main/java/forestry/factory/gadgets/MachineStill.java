@@ -38,7 +38,6 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.IInventoryAdapter;
@@ -122,14 +121,14 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	/* MEMBER */
-	public final FilteredTank resourceTank;
-	public final FilteredTank productTank;
+	private final FilteredTank resourceTank;
+	private final FilteredTank productTank;
 	private final TankManager tankManager;
 
 	private Recipe currentRecipe;
 	private FluidStack bufferedLiquid;
-	public int distillationTime = 0;
-	public int distillationTotalTime = 0;
+	private int distillationTime = 0;
+	private int distillationTotalTime = 0;
 
 	public MachineStill() {
 		super(1100, 50, 8000);
@@ -143,7 +142,7 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.StillGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
@@ -245,7 +244,7 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 		return false;
 	}
 
-	public void checkRecipe() {
+	private void checkRecipe() {
 		Recipe matchingRecipe = RecipeManager.findMatchingRecipe(resourceTank.getFluid());
 
 		if (matchingRecipe == null && bufferedLiquid != null && distillationTime > 0) {

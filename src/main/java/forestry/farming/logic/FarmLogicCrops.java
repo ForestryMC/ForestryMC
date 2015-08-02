@@ -38,7 +38,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 	private final Iterable<IFarmable> seeds;
 	private static final ItemStack farmland = new ItemStack(Blocks.farmland, 1, Defaults.WILDCARD);
 
-	public FarmLogicCrops(IFarmHousing housing, Iterable<IFarmable> seeds) {
+	protected FarmLogicCrops(IFarmHousing housing, Iterable<IFarmable> seeds) {
 		super(housing, new ItemStack(Blocks.dirt), new ItemStack(Blocks.farmland));
 
 		this.seeds = seeds;
@@ -59,7 +59,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 		return false;
 	}
 
-	public boolean isWindfall(ItemStack itemstack) {
+	private boolean isWindfall(ItemStack itemstack) {
 		for (IFarmable germling : seeds) {
 			if (germling.isWindfall(itemstack)) {
 				return true;

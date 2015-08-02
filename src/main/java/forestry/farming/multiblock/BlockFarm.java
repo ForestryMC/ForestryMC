@@ -79,8 +79,8 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack stack) {
-		super.onBlockPlacedBy(world, x, y, z, entityliving, stack);
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack stack) {
+		super.onBlockPlacedBy(world, x, y, z, entityLiving, stack);
 		if (!stack.hasTagCompound()) {
 			return;
 		}
@@ -162,17 +162,17 @@ public class BlockFarm extends BlockStructure {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public void addHitEffects(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
-			setTexture(fx, world, x, y, z, meta);
+			setTexture(fx, world, x, y, z);
 		}
 
 		@Override
 		@SideOnly(Side.CLIENT)
 		public void addDestroyEffects(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
-			setTexture(fx, world, x, y, z, meta);
+			setTexture(fx, world, x, y, z);
 		}
 
 		@SideOnly(Side.CLIENT)
-		private void setTexture(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
+		private static void setTexture(EntityDiggingFX fx, World world, int x, int y, int z) {
 			fx.setParticleIcon(instance.getIcon(world, x, y, z, 0));
 		}
 	}
@@ -194,11 +194,11 @@ public class BlockFarm extends BlockStructure {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIcon(int side, int metadata) {
-		return getBlockTextureFromSideAndMetadata(EnumFarmBlockTexture.BRICK, side, metadata);
+		return getBlockTextureForSide(EnumFarmBlockTexture.BRICK, side);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getBlockTextureFromSideAndMetadata(EnumFarmBlockTexture type, int side, int metadata) {
+	public static IIcon getBlockTextureForSide(EnumFarmBlockTexture type, int side) {
 		Block block = StackUtils.getBlock(type.getBase());
 		if (block == null) {
 			return null;
@@ -208,28 +208,27 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getOverlayTextureForBlock(int side, int metadata) {
+	public static IIcon getOverlayTextureForBlock(int side, int metadata) {
 
-		EnumFarmBlockTexture type = EnumFarmBlockTexture.BRICK_STONE;
 		if (metadata == 0 && side == 2) {
-			return type.getIcon(TileFarm.TYPE_REVERSE);
+			return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_REVERSE);
 		} else if (metadata == 0 && (side == 0 || side == 1)) {
-			return type.getIcon(TileFarm.TYPE_TOP);
+			return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_TOP);
 		}
 
 		switch (metadata) {
 			case 1:
-				return type.getIcon(TileFarm.TYPE_BAND);
+				return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_BAND);
 			case 2:
-				return type.getIcon(TileFarm.TYPE_GEARS);
+				return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_GEARS);
 			case 3:
-				return type.getIcon(TileFarm.TYPE_HATCH);
+				return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_HATCH);
 			case 4:
-				return type.getIcon(TileFarm.TYPE_VALVE);
+				return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_VALVE);
 			case 5:
-				return type.getIcon(TileFarm.TYPE_CONTROL);
+				return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_CONTROL);
 			default:
-				return type.getIcon(TileFarm.TYPE_PLAIN);
+				return EnumFarmBlockTexture.getIcon(TileFarm.TYPE_PLAIN);
 		}
 	}
 

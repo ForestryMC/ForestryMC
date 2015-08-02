@@ -33,7 +33,7 @@ public abstract class TileAlvearyWithGui extends TileAlveary implements IStreama
 	private final String unlocalizedTitle;
 	private final GuiId guiId;
 
-	public TileAlvearyWithGui(int meta, GuiId guiId) {
+	protected TileAlvearyWithGui(int meta, GuiId guiId) {
 		this.accessHandler = new AccessHandler(this);
 		this.unlocalizedTitle = "alveary." + meta + ".name";
 		this.guiId = guiId;

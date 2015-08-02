@@ -53,10 +53,10 @@ import forestry.mail.triggers.MailTriggers;
 @Plugin(pluginID = "Mail", name = "Mail", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.mail.description")
 public class PluginMail extends ForestryPlugin {
 
-	public static MachineDefinition definitionMailbox;
-	public static MachineDefinition definitionTradestation;
-	public static MachineDefinition definitionPhilatelist;
-	public static StampInfo[] stampDefinitions;
+	private static MachineDefinition definitionMailbox;
+	private static MachineDefinition definitionTradestation;
+	private static MachineDefinition definitionPhilatelist;
+	private static StampInfo[] stampDefinitions;
 
 	@Override
 	protected void setupAPI() {

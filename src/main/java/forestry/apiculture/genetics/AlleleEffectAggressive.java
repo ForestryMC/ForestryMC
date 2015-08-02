@@ -25,7 +25,7 @@ import forestry.core.utils.DamageSourceForestry;
 
 public class AlleleEffectAggressive extends AlleleEffectThrottled {
 
-	public static final DamageSource damageSourceBeeAggressive = new DamageSourceForestry("bee.aggressive");
+	private static final DamageSource damageSourceBeeAggressive = new DamageSourceForestry("bee.aggressive");
 
 	public AlleleEffectAggressive() {
 		super("aggressive", true, 40, false, false);

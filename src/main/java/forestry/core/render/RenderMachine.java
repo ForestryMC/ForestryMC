@@ -44,7 +44,7 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 
 	private ResourceLocation[] textures;
 
-	public RenderMachine() {
+	private RenderMachine() {
 
 		basefront = new ModelRenderer(model, 0, 0);
 		basefront.addBox(-8F, -8F, -8F, 16, 4, 16);
@@ -94,7 +94,7 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 	}
 
 	@Override
-	public void inventoryRender(double x, double y, double z, float f, float f1) {
+	public void inventoryRender(double x, double y, double z) {
 		render(EnumTankLevel.EMPTY, EnumTankLevel.EMPTY, ForgeDirection.UP, x, y, z);
 	}
 
@@ -109,7 +109,7 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 		render(waterLevel.ordinal(), melangeLevel.ordinal(), orientation, x, y, z);
 	}
 
-	public void render(int waterLevelInt, int melangeLevelInt, ForgeDirection orientation, double x, double y, double z) {
+	private void render(int waterLevelInt, int melangeLevelInt, ForgeDirection orientation, double x, double y, double z) {
 
 		EnumTankLevel waterLevel = EnumTankLevel.values()[waterLevelInt];
 		EnumTankLevel melangeLevel = EnumTankLevel.values()[melangeLevelInt];

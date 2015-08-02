@@ -25,7 +25,7 @@ public abstract class Crop implements ICrop {
 	protected final World world;
 	protected final Vect position;
 
-	public Crop(World world, Vect position) {
+	protected Crop(World world, Vect position) {
 		this.world = world;
 		this.position = position;
 	}
@@ -34,23 +34,12 @@ public abstract class Crop implements ICrop {
 		world.setBlock(position.x, position.y, position.z, block, meta, Defaults.FLAG_BLOCK_SYNCH);
 	}
 
-	protected final void clearBlock(Vect position) {
-		world.setBlockToAir(position.x, position.y, position.z);
-		if (world.getTileEntity(position.x, position.y, position.z) != null) {
-			world.setTileEntity(position.x, position.y, position.z, null);
-		}
-	}
-
 	protected final Block getBlock(Vect position) {
 		return world.getBlock(position.x, position.y, position.z);
 	}
 
 	protected final int getBlockMeta(Vect position) {
 		return world.getBlockMetadata(position.x, position.y, position.z);
-	}
-
-	protected final ItemStack getAsItemStack(Vect position) {
-		return new ItemStack(getBlock(position), 1, getBlockMeta(position));
 	}
 
 	protected abstract boolean isCrop(Vect pos);

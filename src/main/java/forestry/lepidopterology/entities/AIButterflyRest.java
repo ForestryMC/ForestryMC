@@ -94,14 +94,14 @@ public class AIButterflyRest extends AIButterflyBase {
 		return isRest(block) || block.isLeaves(entity.worldObj, x, y - 1, z);
 	}
 
-	private boolean isRest(Block block) {
+	private static boolean isRest(Block block) {
 		if (block instanceof BlockFence) {
 			return true;
 		}
 		return block instanceof BlockWall;
 	}
 
-	private boolean isPlant(Block block) {
+	private static boolean isPlant(Block block) {
 		if (block instanceof BlockFlower) {
 			return true;
 		} else if (block instanceof IPlantable) {

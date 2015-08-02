@@ -38,7 +38,6 @@ import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gadgets.Engine;
-import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
@@ -63,7 +62,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	private boolean shutdown;
 
 	public EngineBronze() {
-		super(Defaults.ENGINE_BRONZE_HEAT_MAX, 300000, 5000);
+		super(Defaults.ENGINE_BRONZE_HEAT_MAX, 300000);
 		setHints(Config.hints.get("engine.bronze"));
 
 		setInternalInventory(new EngineBronzeInventoryAdapter(this));
@@ -81,7 +80,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.EngineBronzeGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 
@@ -119,8 +118,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 
 			double heatStage = getHeatLevel();
 
-			// If we have reached a safe temperature, we reenable energy
-			// transfer
+			// If we have reached a safe temperature, enable energy transfer
 			if (heatStage > 0.25 && shutdown) {
 				shutdown(false);
 			} else if (shutdown)
@@ -234,7 +232,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 
 	// / STATE INFORMATION
 	@Override
-	public boolean isBurning() {
+	protected boolean isBurning() {
 		return mayBurn() && burnTime > 0;
 	}
 

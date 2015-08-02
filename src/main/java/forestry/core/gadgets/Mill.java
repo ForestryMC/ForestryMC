@@ -17,12 +17,12 @@ import forestry.core.network.DataOutputStreamForestry;
 
 public abstract class Mill extends TileBase {
 
+	protected float speed;
+	protected int stage = 0;
 	public int charge = 0;
-	public float speed;
-	public int stage = 0;
 	public float progress;
 
-	public Mill() {
+	protected Mill() {
 		speed = 0.01F;
 	}
 

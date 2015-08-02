@@ -36,12 +36,12 @@ public abstract class Ledger {
 	private static final ResourceLocation ledgerTextureRight = new ForestryResource(Defaults.TEXTURE_PATH_GUI + "/ledger.png");
 	private static final ResourceLocation ledgerTextureLeft = new ForestryResource(Defaults.TEXTURE_PATH_GUI + "/ledgerLeft.png");
 	
-	protected final LedgerManager manager;
+	private final LedgerManager manager;
 
-	protected final int fontColorHeader;
-	protected final int fontColorText;
-	protected final int fontColorSubheader;
-	protected final int overlayColor;
+	private final int fontColorHeader;
+	private final int fontColorText;
+	private final int fontColorSubheader;
+	private final int overlayColor;
 
 	private boolean open;
 
@@ -51,13 +51,13 @@ public abstract class Ledger {
 	protected float currentWidth = minWidth;
 	protected float currentHeight = minHeight;
 
-	protected final ResourceLocation texture;
+	private final ResourceLocation texture;
 
-	public Ledger(LedgerManager manager, String name) {
+	protected Ledger(LedgerManager manager, String name) {
 		this(manager, name, true);
 	}
 
-	public Ledger(LedgerManager manager, String name, boolean rightSide) {
+	protected Ledger(LedgerManager manager, String name, boolean rightSide) {
 		this.manager = manager;
 		if (rightSide) {
 			texture = ledgerTextureRight;

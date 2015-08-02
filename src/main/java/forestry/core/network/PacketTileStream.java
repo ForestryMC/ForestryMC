@@ -24,7 +24,7 @@ public class PacketTileStream extends PacketCoordinates {
 		new PacketTileStream(data);
 	}
 
-	public PacketTileStream(DataInputStreamForestry data) throws IOException {
+	private PacketTileStream(DataInputStreamForestry data) throws IOException {
 		super(data);
 	}
 

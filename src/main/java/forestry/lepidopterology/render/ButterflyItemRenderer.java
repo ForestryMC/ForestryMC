@@ -29,7 +29,7 @@ import forestry.plugins.PluginLepidopterology;
 public class ButterflyItemRenderer implements IItemRenderer {
 
 	private final ModelButterfly model;
-	EntityButterfly entity;
+	private EntityButterfly entity;
 	
 	public ButterflyItemRenderer() {
 		model = new ModelButterfly();
@@ -70,7 +70,7 @@ public class ButterflyItemRenderer implements IItemRenderer {
 		return wingYaw;
 	}
 	
-	public static float getRegularWingYaw(float flap) {
+	private static float getRegularWingYaw(float flap) {
 		return flap < 0.5 ? 0.75f + flap : 1.75f - flap;
 	}
 	

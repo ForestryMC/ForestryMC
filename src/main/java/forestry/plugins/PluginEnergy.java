@@ -36,9 +36,9 @@ public class PluginEnergy extends ForestryPlugin {
 
 	@SidedProxy(clientSide = "forestry.energy.proxy.ClientProxyEnergy", serverSide = "forestry.energy.proxy.ProxyEnergy")
 	public static ProxyEnergy proxy;
-	public static MachineDefinition definitionEngineCopper;
-	public static MachineDefinition definitionEngineBronze;
-	public static MachineDefinition definitionEngineClockwork;
+	private static MachineDefinition definitionEngineCopper;
+	private static MachineDefinition definitionEngineBronze;
+	private static MachineDefinition definitionEngineClockwork;
 
 	@Override
 	public void preInit() {

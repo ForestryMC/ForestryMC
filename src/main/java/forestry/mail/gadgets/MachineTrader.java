@@ -51,11 +51,11 @@ public class MachineTrader extends TileBase {
 
 	public MachineTrader() {
 		address = new MailAddress();
-		setInternalInventory(new TradeStation.TradeStationInventory(TradeStation.SLOT_SIZE, "INV"));
+		setInternalInventory(new TradeStation.TradeStationInventory());
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		if (isLinked()) {
 			player.openGui(ForestryAPI.instance, GuiId.TraderGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
 		} else {
@@ -271,7 +271,7 @@ public class MachineTrader extends TileBase {
 		}
 	}
 
-	public void setAddress(IMailAddress address) {
+	private void setAddress(IMailAddress address) {
 		if (address == null) {
 			throw new NullPointerException("address must not be null");
 		}

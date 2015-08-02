@@ -53,12 +53,12 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 			}
 		}
 
-		public boolean isFull(int limit) {
+		public boolean isFull() {
 			if (contents == null) {
 				return false;
 			}
 
-			return contents.getFluid().getID() > 0 && contents.amount >= limit;
+			return contents.getFluid().getID() > 0 && contents.amount >= 1000;
 		}
 
 		public void addTooltip(List<String> list) {
@@ -90,7 +90,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 	@Override
 	public boolean canPipette(ItemStack itemstack) {
 		PipetteContents contained = new PipetteContents(itemstack.getTagCompound());
-		return !contained.isFull(1000);
+		return !contained.isFull();
 	}
 
 	@Override

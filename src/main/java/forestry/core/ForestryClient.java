@@ -20,7 +20,6 @@ public class ForestryClient extends ForestryCore {
 
 	public static int byBlockModelId;
 	public static int candleRenderId;
-	public static int blockModelIdEngine;
 
 	@Override
 	public void init(Object basemod) {
@@ -29,7 +28,6 @@ public class ForestryClient extends ForestryCore {
 
 		byBlockModelId = Proxies.render.getNextAvailableRenderId();
 		candleRenderId = Proxies.render.getNextAvailableRenderId();
-		blockModelIdEngine = Proxies.render.getNextAvailableRenderId();
 
 		BlockRenderingHandler renderHandler = new BlockRenderingHandler();
 		RenderingRegistry.registerBlockHandler(byBlockModelId, renderHandler);

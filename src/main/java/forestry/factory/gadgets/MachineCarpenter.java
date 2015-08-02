@@ -47,7 +47,6 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.Fluids;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
-import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.IItemStackDisplay;
 import forestry.core.interfaces.ILiquidTankContainer;
@@ -77,18 +76,18 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	public final static short SLOT_INVENTORY_COUNT = 18;
 
 	/* MEMBER */
-	public final FilteredTank resourceTank;
+	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
 	private final TileInventoryAdapter craftingInventory;
 	private final InventoryCraftResult craftPreviewInventory;
 
 	@Nullable
-	public MachineCarpenter.Recipe currentRecipe;
+	private MachineCarpenter.Recipe currentRecipe;
 	private int packageTime;
 	private int totalTime;
 	private ItemStack pendingProduct;
 
-	public ItemStack getBoxStack() {
+	private ItemStack getBoxStack() {
 		return getInternalInventory().getStackInSlot(SLOT_BOX);
 	}
 
@@ -101,13 +100,11 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 		craftPreviewInventory = new InventoryCraftResult();
 		setInternalInventory(new CarpenterInventoryAdapter(this));
 
-		InvTools.configureSided(getInternalInventory(), Defaults.FACINGS, SLOT_BOX, 21);
-
 		tankManager = new TankManager(resourceTank);
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.CarpenterGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 

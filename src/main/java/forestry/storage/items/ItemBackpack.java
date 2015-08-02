@@ -79,7 +79,7 @@ public class ItemBackpack extends ItemInventoried {
 		}
 
 		if (!player.isSneaking()) {
-			openGui(player, itemstack);
+			openGui(player);
 		} else {
 			switchMode(itemstack);
 		}
@@ -104,7 +104,7 @@ public class ItemBackpack extends ItemInventoried {
 			return false;
 		}
 
-		return evaluateTileHit(itemstack, player, world, x, y, z, side, hitX, hitY, hitZ);
+		return evaluateTileHit(itemstack, player, world, x, y, z, side);
 	}
 
 	public static ItemStack tryStowing(EntityPlayer player, ItemStack backpackStack, ItemStack stack) {
@@ -145,7 +145,7 @@ public class ItemBackpack extends ItemInventoried {
 		return InvTools.getInventoryFromTile(targeted, ForgeDirection.getOrientation(side));
 	}
 
-	private boolean evaluateTileHit(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+	private boolean evaluateTileHit(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side) {
 
 		// Shift right-clicking on an inventory tile will attempt to transfer
 		// items contained in the backpack
@@ -205,7 +205,7 @@ public class ItemBackpack extends ItemInventoried {
 
 	}
 
-	public void openGui(EntityPlayer entityplayer, ItemStack itemstack) {
+	protected void openGui(EntityPlayer entityplayer) {
 		if (getBackpackSize() == Defaults.SLOTS_BACKPACK_DEFAULT) {
 			entityplayer.openGui(ForestryAPI.instance, GuiId.BackpackGUI.ordinal(), entityplayer.worldObj, (int) entityplayer.posX, (int) entityplayer.posY,
 					(int) entityplayer.posZ);
@@ -305,7 +305,7 @@ public class ItemBackpack extends ItemInventoried {
 		}
 	}
 
-	public static int getSlotsForType(EnumBackpackType type) {
+	private static int getSlotsForType(EnumBackpackType type) {
 		switch (type) {
 			case APIARIST:
 				return Defaults.SLOTS_BACKPACK_APIARIST;

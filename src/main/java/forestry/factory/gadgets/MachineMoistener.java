@@ -126,13 +126,13 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 		}
 	}
 
-	public final FilteredTank resourceTank;
+	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
-	public MachineMoistener.Recipe currentRecipe;
+	private MachineMoistener.Recipe currentRecipe;
 
-	public int burnTime = 0;
-	public int totalTime = 0;
-	public int productionTime = 0;
+	private int burnTime = 0;
+	private int totalTime = 0;
+	private int productionTime = 0;
 	private int timePerItem = 0;
 	private ItemStack currentProduct;
 	private ItemStack pendingProduct;
@@ -145,7 +145,7 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.MoistenerGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
 	}
 

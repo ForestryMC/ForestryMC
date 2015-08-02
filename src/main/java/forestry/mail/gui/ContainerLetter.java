@@ -135,10 +135,10 @@ public class ContainerLetter extends ContainerItemInventory<LetterInventory> {
 		}
 		
 		// Update info on client
-		Proxies.net.sendToPlayer(new PacketLetterInfo(PacketId.LETTER_INFO, type, tradeInfo, recipient), player);
+		Proxies.net.sendToPlayer(new PacketLetterInfo(type, tradeInfo, recipient), player);
 	}
 
-	public static IMailAddress getRecipient(String recipientName, EnumAddressee type) {
+	private static IMailAddress getRecipient(String recipientName, EnumAddressee type) {
 		switch (type) {
 			case PLAYER: {
 				GameProfile gameProfile = MinecraftServer.getServer().func_152358_ax().func_152655_a(recipientName);
@@ -181,7 +181,7 @@ public class ContainerLetter extends ContainerItemInventory<LetterInventory> {
 	}
 
 	/* Managing Trade info */
-	public void updateTradeInfo(World world, IMailAddress address) {
+	private void updateTradeInfo(World world, IMailAddress address) {
 		// Updating is done by the server.
 		if (!Proxies.common.isSimulating(world)) {
 			return;

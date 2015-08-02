@@ -97,7 +97,7 @@ public class ProxyLog {
 	}
 
 	/* GENERIC */
-	public void log(Level logLevel, String message, Object... params) {
+	private void log(Level logLevel, String message, Object... params) {
 		LogManager.getLogger(Defaults.MOD).log(logLevel, new MessageFormatMessage(String.format(message, params), params));
 	}
 

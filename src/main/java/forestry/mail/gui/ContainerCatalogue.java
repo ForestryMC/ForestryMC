@@ -187,7 +187,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable {
 				crafter.sendProgressBarUpdate(this, 2, currentFilter);
 			}
 
-			Proxies.net.sendToPlayer(new PacketLetterInfo(PacketId.LETTER_INFO, EnumAddressee.TRADER, currentTrade, null), player);
+			Proxies.net.sendToPlayer(new PacketLetterInfo(EnumAddressee.TRADER, currentTrade, null), player);
 			needsSynch = false;
 		}
 	}

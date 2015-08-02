@@ -25,7 +25,7 @@ import forestry.arboriculture.render.LeafIconProvider;
 public class TreeFactory implements ITreeFactory {
 	@Override
 	public IAlleleTreeSpeciesCustom createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, ILeafIconProvider leafIconProvider, IGermlingIconProvider germlingIconProvider, ITreeGenerator generator) {
-		IAlleleTreeSpeciesCustom treeSpecies =  new AlleleTreeSpecies(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, leafIconProvider, germlingIconProvider, generator);
+		IAlleleTreeSpeciesCustom treeSpecies = new AlleleTreeSpecies(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, leafIconProvider, germlingIconProvider, generator);
 		AlleleManager.alleleRegistry.registerAllele(treeSpecies);
 		return treeSpecies;
 	}

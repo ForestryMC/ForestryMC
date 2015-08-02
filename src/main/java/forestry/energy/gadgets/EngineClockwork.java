@@ -21,7 +21,6 @@ import net.minecraftforge.common.util.FakePlayer;
 import forestry.core.TemperatureState;
 import forestry.core.config.Defaults;
 import forestry.core.gadgets.Engine;
-import forestry.core.gadgets.TileBase;
 import forestry.core.utils.DamageSourceForestry;
 
 public class EngineClockwork extends Engine {
@@ -40,11 +39,11 @@ public class EngineClockwork extends Engine {
 	private short delay = 0;
 	
 	public EngineClockwork() {
-		super(ENGINE_CLOCKWORK_HEAT_MAX, 10000, 500);
+		super(ENGINE_CLOCKWORK_HEAT_MAX, 10000);
 	}
 	
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		
 		if (!(player instanceof EntityPlayerMP)) {
 			return;
@@ -127,7 +126,7 @@ public class EngineClockwork extends Engine {
 	}
 
 	@Override
-	public boolean isBurning() {
+	protected boolean isBurning() {
 		return tension > 0;
 	}
 

@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.farming;
 
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.util.ForgeDirection;
@@ -23,49 +22,10 @@ import forestry.core.vect.VectUtil;
 
 public class FarmHelper {
 
-	public static FarmDirection getOpposite(FarmDirection farmDirection) {
+	private static FarmDirection getOpposite(FarmDirection farmDirection) {
 		ForgeDirection forgeDirection = farmDirection.getForgeDirection();
 		ForgeDirection forgeDirectionOpposite = forgeDirection.getOpposite();
 		return FarmDirection.getFarmDirection(forgeDirectionOpposite);
-	}
-
-	public static int getFarmSizeNorthSouth(World world, Vect start) {
-		FarmDirection farmSide = FarmDirection.NORTH;
-		FarmDirection startSide = FarmDirection.EAST;
-
-		Vect corner = getFarmMultiblockCorner(world, start, farmSide, startSide);
-
-		return getFarmSizeInDirection(world, corner, farmSide, getOpposite(startSide));
-	}
-
-	public static int getFarmSizeEastWest(World world, Vect start) {
-		FarmDirection farmSide = FarmDirection.EAST;
-		FarmDirection startSide = FarmDirection.NORTH;
-
-		Vect corner = getFarmMultiblockCorner(world, start, farmSide, startSide);
-
-		return getFarmSizeInDirection(world, corner, farmSide, getOpposite(startSide));
-	}
-
-	private static int getFarmSizeInDirection(World world, Vect start, FarmDirection farmSide, FarmDirection searchDirection) {
-		int size = 0;
-
-		FarmDirection toCenter = getOpposite(farmSide);
-
-		Vect target = start.add(farmSide);
-
-		TileEntity farmTile;
-		do {
-			size++;
-
-			target = target.add(searchDirection);
-
-			Vect farmTileLocation = target.add(toCenter);
-			farmTile = VectUtil.getTile(world, farmTileLocation);
-
-		} while (farmTile instanceof IFarmComponent);
-
-		return size;
 	}
 
 	public static Vect getFarmMultiblockCorner(World world, Vect start, FarmDirection farmSide, FarmDirection layoutDirection) {

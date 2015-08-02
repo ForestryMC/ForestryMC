@@ -131,8 +131,4 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 
 	}
 
-	@Override
-	public IInventoryAdapter configureSided(int[] sides, int[] slots) {
-		return this;
-	}
 }

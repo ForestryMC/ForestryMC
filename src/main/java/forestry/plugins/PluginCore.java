@@ -80,9 +80,8 @@ import forestry.core.utils.ShapedRecipeCustom;
 @Plugin(pluginID = "Core", name = "Core", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.core.description")
 public class PluginCore extends ForestryPlugin {
 
-	public static MachineDefinition definitionEscritoire;
-	// ICrashCallable for highlighting certain mods during crashes.
-	public static ForestryModEnvWarningCallable crashCallable;
+	private static MachineDefinition definitionEscritoire;
+
 	public static final RootCommand rootCommand = new RootCommand();
 
 	private AlleleHelper alleleHelper;
@@ -143,7 +142,7 @@ public class PluginCore extends ForestryPlugin {
 		super.doInit();
 
 		definitionEscritoire.register();
-		crashCallable = new ForestryModEnvWarningCallable();
+		ForestryModEnvWarningCallable.register();
 
 		alleleHelper.init();
 
@@ -169,7 +168,7 @@ public class PluginCore extends ForestryPlugin {
 	protected void registerItems() {
 		// / FERTILIZERS
 		ForestryItem.fertilizerBio.registerItem((new ItemForestry()), "fertilizerBio");
-		ForestryItem.fertilizerCompound.registerItem((new ItemForestry()).setBonemeal(true), "fertilizerCompound");
+		ForestryItem.fertilizerCompound.registerItem((new ItemForestry()).setBonemeal(), "fertilizerCompound");
 
 		// / GEMS
 		ForestryItem.apatite.registerItem((new ItemForestry()), "apatite");
@@ -198,7 +197,7 @@ public class PluginCore extends ForestryPlugin {
 		ForestryItem.craftingMaterial.registerItem(new ItemMisc(), "craftingMaterial");
 
 		/* ARMOR */
-		ForestryItem.naturalistHat.registerItem(new ItemArmorNaturalist(0), "naturalistHelmet");
+		ForestryItem.naturalistHat.registerItem(new ItemArmorNaturalist(), "naturalistHelmet");
 
 		// / PEAT PRODUCTION
 		ForestryItem.peat.registerItem((new ItemForestry()), "peat");

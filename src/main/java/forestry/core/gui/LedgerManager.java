@@ -27,11 +27,12 @@ import forestry.core.proxy.Proxies;
 
 public class LedgerManager {
 
-	public final GuiForestry gui;
-	public IErrorSource errorSource;
+	private final List<Ledger> ledgers = new ArrayList<Ledger>();
+	private final List<ErrorLedger> errorLedgers = new ArrayList<ErrorLedger>();
 
-	protected final List<Ledger> ledgers = new ArrayList<Ledger>();
-	protected final List<ErrorLedger> errorLedgers = new ArrayList<ErrorLedger>();
+	private IErrorSource errorSource;
+
+	public final GuiForestry gui;
 
 	public LedgerManager(GuiForestry gui) {
 		this.gui = gui;
@@ -64,7 +65,7 @@ public class LedgerManager {
 		this.ledgers.add(ledgers.size() - 1, ledger);
 	}
 
-	protected Ledger getAtPosition(int mX, int mY) {
+	private Ledger getAtPosition(int mX, int mY) {
 
 		if (ledgers.size() > 0) {
 			final int xShift = ((gui.width - gui.getSizeX()) / 2) + gui.getSizeX();

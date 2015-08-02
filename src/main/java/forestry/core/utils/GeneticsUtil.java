@@ -10,9 +10,7 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,13 +24,11 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;

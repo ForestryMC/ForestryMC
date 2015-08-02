@@ -15,7 +15,7 @@ public abstract class BeeVariation implements IBeeDefinition {
 	private final IAllele[] template;
 	private final IBeeGenome genome;
 
-	public BeeVariation(IBeeDefinition bee) {
+	protected BeeVariation(IBeeDefinition bee) {
 		template = bee.getTemplate();
 		initializeTemplate(template);
 		genome = BeeManager.beeRoot.templateAsGenome(template);

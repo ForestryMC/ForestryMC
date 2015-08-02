@@ -26,7 +26,7 @@ public class RenderButterfly extends RenderLiving {
 		butterflyModel = (ModelButterfly) mainModel;
 	}
 
-	public void renderButterfly(EntityButterfly entity, double x, double y, double z, float light, float partialTickTime) {
+	private void renderButterfly(EntityButterfly entity, double x, double y, double z, float light, float partialTickTime) {
 		if (!entity.isRenderable()) {
 			return;
 		}

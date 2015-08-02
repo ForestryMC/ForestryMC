@@ -15,12 +15,10 @@ package forestry.core.gui.buttons;
  */
 public interface IButtonTextureSet {
 
-	public int getX();
+	int getX();
+	int getY();
 
-	public int getY();
-
-	public int getHeight();
-
-	public int getWidth();
+	int getHeight();
+	int getWidth();
 
 }

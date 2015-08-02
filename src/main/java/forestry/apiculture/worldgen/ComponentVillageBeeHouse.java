@@ -55,12 +55,12 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
 	private static final Random random = new Random();
 
-	protected int averageGroundLevel = -1;
-	protected boolean isInDesert = false;
-	protected IBlockType planks;
-	protected IBlockType logs;
-	protected IBlockType stairs;
-	protected IBlockType fence;
+	private int averageGroundLevel = -1;
+	private boolean isInDesert = false;
+	private IBlockType planks;
+	private IBlockType logs;
+	private IBlockType stairs;
+	private IBlockType fence;
 
 	public ComponentVillageBeeHouse() {
 		createBuildingBlocks(random);
@@ -90,7 +90,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
 			logs = new BlockType(Blocks.log, random.nextInt(4));
 			planks = new BlockType(Blocks.planks, roofMeta);
-			stairs = new BlockTypeVanillaStairs(Blocks.oak_stairs, roofMeta);
+			stairs = new BlockTypeVanillaStairs(roofMeta);
 			fence = new BlockType(Blocks.fence, 0);
 		}
 	}
@@ -132,7 +132,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		plantFlowerGarden(world, structBoundingBox, 2, 1, 5, 7, 1, 9);
 
 		// Apiaries
-		buildApiaries(world, structBoundingBox, 3, 1, 4, 6, 1, 8);
+		buildApiaries(world, structBoundingBox);
 
 		// Floor
 		fillWithBlocks(world, structBoundingBox, 1, 0, 1, 7, 0, 4, Blocks.planks, Blocks.planks, false);
@@ -228,7 +228,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		}
 	}
 
-	protected void buildGarden(World world, StructureBoundingBox box) {
+	private void buildGarden(World world, StructureBoundingBox box) {
 
 		Block ground = Blocks.dirt;
 		if (isInDesert) {
@@ -242,7 +242,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		}
 	}
 
-	protected void plantFlowerGarden(World world, StructureBoundingBox box, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+	private void plantFlowerGarden(World world, StructureBoundingBox box, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
 
 		if (isInDesert) {
 			placeBlockAtCurrentPosition(world, Blocks.cactus, 0, 4, 1, 7, box);
@@ -269,7 +269,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		}
 	}
 
-	protected void buildApiaries(World world, StructureBoundingBox box, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+	private void buildApiaries(World world, StructureBoundingBox box) {
 		populateApiary(world, box, 3, 1, 8);
 		populateApiary(world, box, 6, 1, 8);
 	}
@@ -362,7 +362,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 				species.getHumidity(), genome.getToleranceHumid());
 	}
 
-	protected void fillBoxWith(World world, StructureBoundingBox box, int par3, int par4, int par5, int par6, int par7, int par8, IBlockType block, boolean replace) {
+	private void fillBoxWith(World world, StructureBoundingBox box, int par3, int par4, int par5, int par6, int par7, int par8, IBlockType block, boolean replace) {
 
 		for (int var14 = par4; var14 <= par7; ++var14) {
 			for (int var15 = par3; var15 <= par6; ++var15) {
@@ -375,7 +375,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		}
 	}
 
-	protected void placeBlockAtCurrentPosition(World world, IBlockType block, int par4, int par5, int par6, StructureBoundingBox par7StructureBoundingBox) {
+	private void placeBlockAtCurrentPosition(World world, IBlockType block, int par4, int par5, int par6, StructureBoundingBox par7StructureBoundingBox) {
 		int x = getXWithOffset(par4, par6);
 		int y = getYWithOffset(par5);
 		int z = getZWithOffset(par4, par6);

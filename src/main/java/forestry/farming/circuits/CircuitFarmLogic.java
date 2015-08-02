@@ -36,7 +36,7 @@ public class CircuitFarmLogic extends Circuit {
 		return tile instanceof IFarmHousing;
 	}
 
-	IFarmHousing getCircuitable(Object tile) {
+	private IFarmHousing getCircuitable(Object tile) {
 		if (!isCircuitable(tile)) {
 			return null;
 		}

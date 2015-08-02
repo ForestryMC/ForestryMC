@@ -26,13 +26,13 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 import forestry.core.proxy.Proxies;
 
-public class ItemForestryTool extends ItemForestry {
+public abstract class ItemForestryTool extends ItemForestry {
 
 	private final ItemStack remnants;
 	protected float efficiencyOnProperMaterial;
 	private final List<Block> blocksEffectiveAgainst;
 
-	public ItemForestryTool(Block[] blocksEffectiveAgainst, ItemStack remnants) {
+	protected ItemForestryTool(Block[] blocksEffectiveAgainst, ItemStack remnants) {
 		super();
 		this.blocksEffectiveAgainst = Arrays.asList(blocksEffectiveAgainst);
 		this.maxStackSize = 1;

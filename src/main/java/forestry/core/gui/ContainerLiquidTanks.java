@@ -31,9 +31,9 @@ import forestry.core.network.PacketId;
 import forestry.core.network.PacketSlotClick;
 import forestry.core.proxy.Proxies;
 
-public class ContainerLiquidTanks<T extends TileEntity & ILiquidTankContainer & IStreamableGui> extends ContainerTile<T> {
+public abstract class ContainerLiquidTanks<T extends TileEntity & ILiquidTankContainer & IStreamableGui> extends ContainerTile<T> {
 
-	public ContainerLiquidTanks(T tile, InventoryPlayer playerInventory, int xInv, int yInv) {
+	protected ContainerLiquidTanks(T tile, InventoryPlayer playerInventory, int xInv, int yInv) {
 		super(tile, playerInventory, xInv, yInv);
 	}
 

@@ -31,17 +31,6 @@ public class Defaults {
 	public static final int FLUID_PER_HONEY_DROP = 100;
 
 	public static final int[] FACINGS = {0, 1, 2, 3, 4, 5};
-	public static final int FACING_UP = 1;
-	public static final int FACING_DOWN = 0;
-	public static final int FACING_NORTH = 2;
-	public static final int FACING_SOUTH = 3;
-	public static final int FACING_WEST = 4;
-	public static final int FACING_EAST = 5;
-	public static final int[] FACING_SIDES = {FACING_NORTH, FACING_SOUTH, FACING_WEST, FACING_EAST};
-	public static final int[] FACING_NORTHSOUTH = {FACING_NORTH, FACING_SOUTH};
-	public static final int[] FACING_WESTEAST = {FACING_WEST, FACING_EAST};
-	public static final int[] FACINGS_NONE = new int[0];
-
 	public static final int[] SLOTS_NONE = new int[0];
 
 	// Textures

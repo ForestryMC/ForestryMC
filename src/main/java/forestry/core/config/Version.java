@@ -97,7 +97,7 @@ public class Version {
 
 				BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
-				String line = null;
+				String line;
 				String mcVersion = Proxies.common.getMinecraftVersion();
 				while ((line = reader.readLine()) != null) {
 					if (line.startsWith(mcVersion) && line.contains(Defaults.MOD)) {
@@ -142,7 +142,7 @@ public class Version {
 
 		try {
 			String location = REMOTE_CHANGELOG_ROOT + version;
-			HttpURLConnection conn = null;
+			HttpURLConnection conn;
 			do {
 				URL url = new URL(location);
 				conn = (HttpURLConnection) url.openConnection();
@@ -154,7 +154,7 @@ public class Version {
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
-			String line = null;
+			String line;
 			ArrayList<String> changelog = new ArrayList<String>();
 			while ((line = reader.readLine()) != null) {
 				if (line.startsWith("#")) {

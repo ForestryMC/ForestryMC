@@ -44,7 +44,7 @@ public class ItemHoneycomb extends ItemForestryMultiPass {
 		}
 	}
 
-	public final CombInfo[] combs = new CombInfo[]{
+	private final CombInfo[] combs = new CombInfo[]{
 			new CombInfo("honey", 0xe8d56a, 0xffa12b), // 0
 			new CombInfo("cocoa", 0x674016, 0xffb62b).setIsSecret(), // 1
 			new CombInfo("simmering", 0x981919, 0xffb62b), // 2
@@ -106,12 +106,8 @@ public class ItemHoneycomb extends ItemForestryMultiPass {
 		}
 	}
 
-	public int getCombTypeCount() {
-		return combs.length;
-	}
-
-	public int getRandomCombType(Random random, boolean includeSecret) {
-		List<Integer> validCombs = new ArrayList<Integer>(getCombTypeCount());
+	private int getRandomCombType(Random random, boolean includeSecret) {
+		List<Integer> validCombs = new ArrayList<Integer>(combs.length);
 		for (int i = 0; i < combs.length; i++) {
 			if (!combs[i].isSecret || includeSecret) {
 				validCombs.add(i);

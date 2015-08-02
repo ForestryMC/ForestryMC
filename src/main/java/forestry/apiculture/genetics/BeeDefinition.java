@@ -951,7 +951,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		}
 	};
 
-	public static final EnumSet<BeeDefinition> overworldHiveBees = EnumSet.of(FOREST, MARSHY, MEADOWS, MODEST, TROPICAL, WINTRY);
+	private static final EnumSet<BeeDefinition> overworldHiveBees = EnumSet.of(FOREST, MARSHY, MEADOWS, MODEST, TROPICAL, WINTRY);
 
 	private final BeeBranchDefinition branch;
 	private final IAlleleBeeSpeciesCustom species;

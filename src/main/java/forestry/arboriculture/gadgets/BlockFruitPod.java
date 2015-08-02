@@ -125,7 +125,7 @@ public class BlockFruitPod extends BlockCocoa {
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 		TileFruitPod pod = getPodTile(world, x, y, z);
 		if (pod != null) {
-			IIcon podIcon = pod.getIcon(world.getBlockMetadata(x, y, z), side);
+			IIcon podIcon = pod.getIcon();
 			if (podIcon != null) {
 				return podIcon;
 			}

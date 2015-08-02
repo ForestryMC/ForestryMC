@@ -108,7 +108,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	public int cooldownPollination = 0;
 	public int cooldownEgg = 0;
 
-	public int lifespanRemaining = 24000 * 7; // one minecraft week in ticks
+	private int lifespanRemaining = 24000 * 7; // one minecraft week in ticks
 
 	/* CONSTRUCTOR */
 	public EntityButterfly(World world) {
@@ -305,7 +305,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		setSize(getScale(), 0.2f);
 	}
 
-	public EntityButterfly setIndividual(IButterfly butterfly) {
+	private EntityButterfly setIndividual(IButterfly butterfly) {
 		if (butterfly != null) {
 			contained = butterfly;
 		} else {

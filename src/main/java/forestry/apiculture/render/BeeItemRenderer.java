@@ -27,8 +27,7 @@ import forestry.core.proxy.Proxies;
 
 public class BeeItemRenderer implements IItemRenderer {
 
-	ModelBee model;
-	EntityBee entity;
+	private EntityBee entity;
 
 	private static float getWingYaw(IBee bee) {
 		float wingYaw = 1f;
@@ -45,7 +44,7 @@ public class BeeItemRenderer implements IItemRenderer {
 		return wingYaw;
 	}
 
-	public static float getIrregularWingYaw(long flapping, float flap) {
+	private static float getIrregularWingYaw(long flapping, float flap) {
 		long irregular = flapping / 1000;
 		float wingYaw;
 
@@ -62,7 +61,7 @@ public class BeeItemRenderer implements IItemRenderer {
 		return wingYaw;
 	}
 
-	public static float getRegularWingYaw(float flap) {
+	private static float getRegularWingYaw(float flap) {
 		return flap < 0.5 ? 0.75f + flap : 1.75f - flap;
 	}
 

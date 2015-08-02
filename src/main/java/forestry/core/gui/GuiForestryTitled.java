@@ -18,7 +18,7 @@ import forestry.core.utils.StringUtil;
 
 public abstract class GuiForestryTitled<C extends Container, I extends ITitled & IInventory> extends GuiForestry<C, I> {
 
-	public GuiForestryTitled(String texture, C container, I inventory) {
+	protected GuiForestryTitled(String texture, C container, I inventory) {
 		super(texture, container, inventory);
 	}
 

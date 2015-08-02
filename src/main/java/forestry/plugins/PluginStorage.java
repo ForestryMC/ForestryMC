@@ -117,12 +117,12 @@ public class PluginStorage extends ForestryPlugin {
 		BackpackDefinition definition;
 
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			definition = new BackpackDefinitionApiarist("apiarist", new Color(0xc4923d).getRGB());
+			definition = new BackpackDefinitionApiarist(new Color(0xc4923d).getRGB());
 			BackpackManager.definitions.put(definition.getKey(), definition);
 		}
 
 		if (PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {
-			definition = new BackpackDefinitionLepidopterist("lepidopterist", new Color(0x995b31).getRGB());
+			definition = new BackpackDefinitionLepidopterist(new Color(0x995b31).getRGB());
 			BackpackManager.definitions.put(definition.getKey(), definition);
 		}
 

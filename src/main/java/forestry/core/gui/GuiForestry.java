@@ -62,11 +62,11 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 	protected final FontColour fontColor;
 	public final ResourceLocation textureFile;
 
-	public GuiForestry(String texture, C container, I inventory) {
+	protected GuiForestry(String texture, C container, I inventory) {
 		this(new ResourceLocation("forestry", texture), container, inventory);
 	}
 
-	public GuiForestry(ResourceLocation texture, C container, I inventory) {
+	protected GuiForestry(ResourceLocation texture, C container, I inventory) {
 		super(container);
 		this.widgetManager = new WidgetManager(this);
 		this.ledgerManager = new LedgerManager(this);
@@ -213,7 +213,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		super.mouseClickMove(mouseX, mouseY, mouseButton, time);
 	}
 
-	public Slot getSlotAtPosition(int par1, int par2) {
+	protected Slot getSlotAtPosition(int par1, int par2) {
 		for (int k = 0; k < this.inventorySlots.inventorySlots.size(); ++k) {
 			Slot slot = (Slot) this.inventorySlots.inventorySlots.get(k);
 
@@ -225,11 +225,11 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		return null;
 	}
 
-	public boolean isMouseOverSlot(Slot par1Slot, int par2, int par3) {
+	private boolean isMouseOverSlot(Slot par1Slot, int par2, int par3) {
 		return this.func_146978_c(par1Slot.xDisplayPosition, par1Slot.yDisplayPosition, 16, 16, par2, par3);
 	}
 
-	public void drawToolTips(ToolTip toolTips, int mouseX, int mouseY) {
+	private void drawToolTips(ToolTip toolTips, int mouseX, int mouseY) {
 		if (toolTips == null) {
 			return;
 		}

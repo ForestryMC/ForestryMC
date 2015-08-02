@@ -16,11 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
@@ -92,11 +88,6 @@ public abstract class TileFarm extends RectangularMultiblockTileEntityBase imple
 
 	public EnumFarmBlockTexture getFarmBlockTexture() {
 		return farmBlockTexture;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta) {
-		return null;
 	}
 
 	/* TILEFORESTRY */
