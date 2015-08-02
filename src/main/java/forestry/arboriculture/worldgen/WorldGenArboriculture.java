@@ -10,13 +10,15 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import java.util.Random;
+
 import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
 import forestry.api.world.ITreeGenData;
-import forestry.arboriculture.gadgets.TileSapling;
+import forestry.arboriculture.gadgets.TileTreeContainer;
 import forestry.core.utils.Utils;
 import forestry.core.worldgen.BlockType;
 import forestry.core.worldgen.BlockTypeVoid;
@@ -47,55 +49,53 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	}
 
 	@Override
-	public boolean subGenerate(int x, int y, int z, boolean forced) {
-		this.startX = x;
-		this.startY = y;
-		this.startZ = z;
-
+	public boolean generate(World world, Random random, int x, int y, int z, boolean forced) {
 		this.spawnPods = tree.allowsFruitBlocks();
-		this.leaf = getLeaf(getOwner());
+		this.leaf = getLeaf(getOwner(world, x, y, z));
 		this.wood = getWood();
 
-		preGenerate();
-		if (!forced && !canGrow()) {
-			return false;
-		} else {
-			generate();
+		preGenerate(world, x, y, z);
+		if (forced || canGrow(world, x, y, z)) {
+			generate(world);
 			return true;
 		}
 
+		return false;
 	}
 
-	private GameProfile getOwner() {
-		TileEntity tile = world.getTileEntity(startX, startY, startZ);
-		if (tile instanceof TileSapling) {
-			return ((TileSapling) tile).getOwner();
-		} else {
+	private static GameProfile getOwner(World world, int x, int y, int z) {
+		TileTreeContainer tile = Utils.getTile(world, x, y, z, TileTreeContainer.class);
+		if (tile == null) {
 			return null;
 		}
+		return tile.getOwner();
 	}
 
-	public abstract void preGenerate();
+	public void preGenerate(World world, int startX, int startY, int startZ) {
+		this.startX = startX;
+		this.startY = startY;
+		this.startZ = startZ;
+	}
 
-	public abstract void generate();
+	public abstract void generate(World world);
 
-	public abstract boolean canGrow();
+	public abstract boolean canGrow(World world, int x, int y, int z);
 
 	public abstract TreeBlockTypeLeaf getLeaf(GameProfile owner);
 
 	public abstract ITreeBlockType getWood();
 
-	protected void generateTreeTrunk(int height, int girth) {
-		generateTreeTrunk(height, girth, 0);
+	protected void generateTreeTrunk(World world, int height, int girth) {
+		generateTreeTrunk(world, height, girth, 0);
 	}
 
-	protected void generateTreeTrunk(int height, int girth, float vines) {
+	protected void generateTreeTrunk(World world, int height, int girth, float vines) {
 		int offset = (girth - 1) / 2;
 		for (int x = 0; x < girth; x++) {
 			for (int z = 0; z < girth; z++) {
 				for (int y = 0; y < height; y++) {
-					addWood(x - offset, y, z - offset, EnumReplaceMode.ALL);
-					addVines(x - offset, y, z - offset, vines);
+					addWood(world, x - offset, y, z - offset, EnumReplaceMode.ALL);
+					addVines(world, x - offset, y, z - offset, vines);
 				}
 			}
 		}
@@ -104,6 +104,11 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 			return;
 		}
 
+		generatePods(world, height, girth);
+
+	}
+
+	protected void generatePods(World world, int height, int girth) {
 		for (int y = minPodHeight; y < height; y++) {
 			for (int x = 0; x < girth; x++) {
 				for (int z = 0; z < girth; z++) {
@@ -119,10 +124,9 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 				}
 			}
 		}
-
 	}
 
-	protected void generateSupportStems(int height, int girth, float chance, float maxHeight) {
+	protected void generateSupportStems(World world, int height, int girth, float chance, float maxHeight) {
 
 		int offset = 1;
 
@@ -142,10 +146,10 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 					continue;
 				}
 
-				int stemHeight = rand.nextInt(Math.round(height * maxHeight));
-				if (rand.nextFloat() < chance) {
+				int stemHeight = world.rand.nextInt(Math.round(height * maxHeight));
+				if (world.rand.nextFloat() < chance) {
 					for (int i = 0; i < stemHeight; i++) {
-						addWood(x, i, z, EnumReplaceMode.SOFT);
+						addWood(world, x, i, z, EnumReplaceMode.SOFT);
 					}
 				}
 			}
@@ -154,7 +158,7 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 	}
 
 	@Override
-	protected void addBlock(int x, int y, int z, ITreeBlockType type, EnumReplaceMode replace) {
+	protected void addBlock(World world, int x, int y, int z, ITreeBlockType type, EnumReplaceMode replace) {
 		if (replace == EnumReplaceMode.ALL
 				|| (replace == EnumReplaceMode.SOFT && Utils.isReplaceableBlock(world, startX + x, startY + y, startZ + z))
 				|| world.isAirBlock(startX + x, startY + y, startZ + z)) {
@@ -162,38 +166,38 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
 		}
 	}
 
-	protected final void clearBlock(int x, int y, int z) {
+	protected final void clearBlock(World world, int x, int y, int z) {
 		air.setBlock(world, startX + x, startY + y, startZ + z);
 	}
 
-	protected final void addWood(int x, int y, int z, EnumReplaceMode replace) {
-		addBlock(x, y, z, wood, replace);
+	protected final void addWood(World world, int x, int y, int z, EnumReplaceMode replace) {
+		addBlock(world, x, y, z, wood, replace);
 	}
 	
-	protected final void addLeaf(int x, int y, int z, EnumReplaceMode replace) {
-		addBlock(x, y, z, leaf, replace);
+	protected final void addLeaf(World world, int x, int y, int z, EnumReplaceMode replace) {
+		addBlock(world, x, y, z, leaf, replace);
 	}
 
-	protected final void addVine(int x, int y, int z, ITreeBlockType vine) {
-		addBlock(x, y, z, vine, EnumReplaceMode.NONE);
+	protected final void addVine(World world, int x, int y, int z, ITreeBlockType vine) {
+		addBlock(world, x, y, z, vine, EnumReplaceMode.NONE);
 	}
 
-	protected final void addVines(int x, int y, int z, float chance) {
+	protected final void addVines(World world, int x, int y, int z, float chance) {
 		if (chance <= 0) {
 			return;
 		}
 
-		if (rand.nextFloat() < chance) {
-			addVine(x - 1, y, z, vineWest);
+		if (world.rand.nextFloat() < chance) {
+			addVine(world, x - 1, y, z, vineWest);
 		}
-		if (rand.nextFloat() < chance) {
-			addVine(x + 1, y, z, vineEast);
+		if (world.rand.nextFloat() < chance) {
+			addVine(world, x + 1, y, z, vineEast);
 		}
-		if (rand.nextFloat() < chance) {
-			addVine(x, y, z - 1, vineNorth);
+		if (world.rand.nextFloat() < chance) {
+			addVine(world, x, y, z - 1, vineNorth);
 		}
-		if (rand.nextFloat() < chance) {
-			addVine(x, y, z + 1, vineSouth);
+		if (world.rand.nextFloat() < chance) {
+			addVine(world, x, y, z + 1, vineSouth);
 		}
 	}
 

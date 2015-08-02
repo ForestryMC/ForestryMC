@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
 
 import forestry.api.arboriculture.ITreeModifier;
@@ -17,29 +19,32 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.world.ITreeGenData;
 
 public abstract class WorldGenTree extends WorldGenArboriculture {
+	private static final int minHeight = 4;
+	private static final int maxHeight = 80;
+
+	private final int baseHeight;
+	private final int heightVariation;
 
 	protected int girth;
 	protected int height;
 
-	protected int minHeight = 4;
-	protected int maxHeight = 80;
-
-	public WorldGenTree(ITreeGenData tree) {
+	public WorldGenTree(ITreeGenData tree, int baseHeight, int heightVariation) {
 		super(tree);
+		this.baseHeight = baseHeight;
+		this.heightVariation = heightVariation;
 	}
 
 	@Override
-	public void generate() {
-		generateTreeTrunk(height, girth);
+	public void generate(World world) {
+		generateTreeTrunk(world, height, girth);
 
 		int leafSpawn = height + 1;
 
-		generateAdjustedCylinder(leafSpawn--, 0, 1, leaf, EnumReplaceMode.NONE);
-		generateAdjustedCylinder(leafSpawn--, 0.5f, 1, leaf, EnumReplaceMode.NONE);
+		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf, EnumReplaceMode.NONE);
+		generateAdjustedCylinder(world, leafSpawn--, 0.5f, 1, leaf, EnumReplaceMode.NONE);
 
-		generateAdjustedCylinder(leafSpawn--, 1.9f, 1, leaf, EnumReplaceMode.NONE);
-		generateAdjustedCylinder(leafSpawn--, 1.9f, 1, leaf, EnumReplaceMode.NONE);
-
+		generateAdjustedCylinder(world, leafSpawn--, 1.9f, 1, leaf, EnumReplaceMode.NONE);
+		generateAdjustedCylinder(world, leafSpawn--, 1.9f, 1, leaf, EnumReplaceMode.NONE);
 	}
 
 	protected Vector getCenteredAt(int yCenter, int offset) {
@@ -47,42 +52,40 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 		return new Vector(cent + offset, yCenter, cent + offset);
 	}
 
-	protected void generateAdjustedCylinder(int yCenter, float radius, int height, ITreeBlockType block) {
-		generateAdjustedCylinder(yCenter, 0, radius, height, block, EnumReplaceMode.NONE);
+	protected void generateAdjustedCylinder(World world, int yCenter, float radius, int height, ITreeBlockType block) {
+		generateAdjustedCylinder(world, yCenter, 0, radius, height, block, EnumReplaceMode.NONE);
 	}
 
-	protected void generateAdjustedCylinder(int yCenter, float radius, int height, ITreeBlockType block, EnumReplaceMode replace) {
-		generateAdjustedCylinder(yCenter, 0, radius, height, block, replace);
+	protected void generateAdjustedCylinder(World world, int yCenter, float radius, int height, ITreeBlockType block, EnumReplaceMode replace) {
+		generateAdjustedCylinder(world, yCenter, 0, radius, height, block, replace);
 	}
 
-	protected void generateAdjustedCylinder(int yCenter, int offset, float radius, int height, ITreeBlockType block, EnumReplaceMode replace) {
-		generateCylinder(getCenteredAt(yCenter, offset), radius + girth, height, block, replace);
-	}
-
-	@Override
-	public boolean canGrow() {
-		return tree.canGrow(world, startX, startY, startZ, tree.getGirth(world, startX, startY, startZ), height);
+	protected void generateAdjustedCylinder(World world, int yCenter, int offset, float radius, int height, ITreeBlockType block, EnumReplaceMode replace) {
+		Vector center = getCenteredAt(yCenter, offset);
+		generateCylinder(world, center, radius + girth, height, block, replace);
 	}
 
 	@Override
-	public void preGenerate() {
-		height = determineHeight(5, 2);
-		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
+	public boolean canGrow(World world, int x, int y, int z) {
+		return tree.canGrow(world, x, y, z, girth, height);
 	}
 
-	protected int determineGirth(int base) {
-		return base;
+	@Override
+	public final void preGenerate(World world, int startX, int startY, int startZ) {
+		super.preGenerate(world, startX, startY, startZ);
+		height = determineHeight(world, baseHeight, heightVariation);
+		girth = tree.getGirth(world, startX, startY, startZ);
 	}
 
-	protected int modifyByHeight(int val, int min, int max) {
+	protected int modifyByHeight(World world, int val, int min, int max) {
 		ITreeModifier treeModifier = TreeManager.treeRoot.getTreekeepingMode(world);
 		int determined = Math.round(val * tree.getHeightModifier() * treeModifier.getHeightModifier(tree.getGenome(), 1f));
 		return determined < min ? min : determined > max ? max : determined;
 	}
 
-	protected int determineHeight(int required, int variation) {
+	protected int determineHeight(World world, int required, int variation) {
 		ITreeModifier treeModifier = TreeManager.treeRoot.getTreekeepingMode(world);
-		int baseHeight = required + rand.nextInt(variation);
+		int baseHeight = required + world.rand.nextInt(variation);
 		int height = Math.round(baseHeight * tree.getHeightModifier() * treeModifier.getHeightModifier(tree.getGenome(), 1f));
 		return height < minHeight ? minHeight : height > maxHeight ? maxHeight : height;
 	}

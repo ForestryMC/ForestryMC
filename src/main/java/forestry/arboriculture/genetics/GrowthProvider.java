@@ -27,9 +27,15 @@ public class GrowthProvider implements IGrowthProvider {
 
 	@Override
 	public boolean canGrow(ITreeGenome genome, World world, int xPos, int yPos, int zPos, int expectedGirth, int expectedHeight) {
-		return hasRoom(genome, world, xPos, yPos, zPos, expectedGirth, expectedHeight)
-				&& getGrowthConditions(genome, world, xPos, yPos, zPos) != EnumGrowthConditions.HOSTILE
-				&& hasSufficientSaplings(genome, world, xPos, yPos, zPos, expectedGirth);
+		if (!hasRoom(genome, world, xPos, yPos, zPos, expectedGirth, expectedHeight)) {
+			return false;
+		}
+
+		if (getGrowthConditions(genome, world, xPos, yPos, zPos) == EnumGrowthConditions.HOSTILE) {
+			return false;
+		}
+
+		return hasSufficientSaplings(genome, world, xPos, yPos, zPos, expectedGirth);
 	}
 
 	@Override
@@ -99,9 +105,10 @@ public class GrowthProvider implements IGrowthProvider {
 		int offset = (expectedGirth - 1) / 2;
 		// if(offset <= 0)
 		// offset = 1;
+		Vect start = new Vect(xPos - offset, yPos + 1, zPos + offset);
+		Vect area = new Vect(-offset + expectedGirth, expectedHeight + 1, -offset + expectedGirth);
 
-		return checkArea(world, new Vect(xPos - offset, yPos + 1, zPos + offset),
-				new Vect(-offset + expectedGirth, expectedHeight + 1, -offset + expectedGirth));
+		return checkArea(world, start, area);
 	}
 
 	protected static boolean checkArea(World world, Vect start, Vect area) {

@@ -37,6 +37,7 @@ import forestry.api.arboriculture.IAlleleLeafEffect;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.IArboristTracker;
 import forestry.api.arboriculture.IFruitProvider;
+import forestry.api.arboriculture.IGrowthProvider;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreeMutation;
@@ -188,7 +189,8 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	@Override
 	public boolean canGrow(World world, int x, int y, int z, int expectedGirth, int expectedHeight) {
-		return genome.getGrowthProvider().canGrow(genome, world, x, y, z, expectedGirth, expectedHeight);
+		IGrowthProvider growthProvider = genome.getGrowthProvider();
+		return growthProvider.canGrow(genome, world, x, y, z, expectedGirth, expectedHeight);
 	}
 
 	@Override

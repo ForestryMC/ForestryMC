@@ -12,7 +12,7 @@ package forestry.arboriculture.worldgen;
 
 import forestry.api.world.ITreeGenData;
 
-public class WorldGenOak extends WorldGenTree {
+public class WorldGenOak extends WorldGenTreeVanilla {
 
 	public WorldGenOak(ITreeGenData tree) {
 		super(tree);

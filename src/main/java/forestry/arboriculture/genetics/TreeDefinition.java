@@ -64,6 +64,7 @@ import forestry.arboriculture.worldgen.WorldGenJungle;
 import forestry.arboriculture.worldgen.WorldGenKapok;
 import forestry.arboriculture.worldgen.WorldGenLarch;
 import forestry.arboriculture.worldgen.WorldGenLemon;
+import forestry.arboriculture.worldgen.WorldGenLime;
 import forestry.arboriculture.worldgen.WorldGenMahoe;
 import forestry.arboriculture.worldgen.WorldGenMahogany;
 import forestry.arboriculture.worldgen.WorldGenMaple;
@@ -158,7 +159,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 	Lime(TreeBranchDefinition.TILIA, "silverLime", "pendula", true, EnumLeafType.DECIDUOUS, new Color(0x5ea107), new Color(0x5ea107).brighter(), WoodType.LIME) {
 		@Override
 		public WorldGenerator getWorldGenerator(ITreeGenData tree) {
-			return new WorldGenDarkOak(tree);
+			return new WorldGenLime(tree);
 		}
 
 		@Override

@@ -188,14 +188,18 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 
 	@Override
 	/** canFertilize */
-	public boolean func_149851_a(World worldIn, int x, int y, int z, boolean isClient) {
+	public boolean func_149851_a(World world, int x, int y, int z, boolean isClient) {
+		TileSapling saplingTile = getSaplingTile(world, x, y, z);
+		if (saplingTile != null) {
+			return saplingTile.canAcceptBoneMeal();
+		}
 		return true;
 	}
 
 	@Override
 	/** shouldFertilize */
 	public boolean func_149852_a(World world, Random random, int x, int y, int z) {
-		return (double) world.rand.nextFloat() < 0.45D;
+		return world.rand.nextFloat() < 0.45F;
 	}
 
 	@Override
