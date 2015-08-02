@@ -87,7 +87,6 @@ import forestry.apiculture.genetics.AlleleEffectFungification;
 import forestry.apiculture.genetics.AlleleEffectGlacial;
 import forestry.apiculture.genetics.AlleleEffectHeroic;
 import forestry.apiculture.genetics.AlleleEffectIgnition;
-import forestry.apiculture.genetics.AlleleEffectMiasmic;
 import forestry.apiculture.genetics.AlleleEffectMisanthrope;
 import forestry.apiculture.genetics.AlleleEffectNone;
 import forestry.apiculture.genetics.AlleleEffectPotion;
@@ -967,20 +966,20 @@ public class PluginApiculture extends ForestryPlugin {
 		}
 
 		// / BEES // EFFECTS 1800 - 1899
-		Allele.effectNone = new AlleleEffectNone("none");
+		Allele.effectNone = new AlleleEffectNone("none", true);
 		Allele.effectAggressive = new AlleleEffectAggressive();
 		Allele.effectHeroic = new AlleleEffectHeroic();
-		Allele.effectBeatific = new AlleleEffectPotion("beatific", false, Potion.regeneration, 100, true);
-		Allele.effectMiasmic = new AlleleEffectMiasmic();
+		Allele.effectBeatific = new AlleleEffectPotion("beatific", false, Potion.regeneration, 100);
+		Allele.effectMiasmic = new AlleleEffectPotion("miasmic", false, Potion.poison, 600, 100, 0.1f);
 		Allele.effectMisanthrope = new AlleleEffectMisanthrope();
 		Allele.effectGlacial = new AlleleEffectGlacial();
 		Allele.effectRadioactive = new AlleleEffectRadioactive();
 		Allele.effectCreeper = new AlleleEffectCreeper();
 		Allele.effectIgnition = new AlleleEffectIgnition();
 		Allele.effectExploration = new AlleleEffectExploration();
-		Allele.effectFestiveEaster = new AlleleEffectNone("festiveEaster");
+		Allele.effectFestiveEaster = new AlleleEffectNone("festiveEaster", true);
 		Allele.effectSnowing = new AlleleEffectSnowing();
-		Allele.effectDrunkard = new AlleleEffectPotion("drunkard", false, Potion.confusion, 100, false);
+		Allele.effectDrunkard = new AlleleEffectPotion("drunkard", false, Potion.confusion, 100);
 		Allele.effectReanimation = new AlleleEffectResurrection("reanimation", AlleleEffectResurrection.getReanimationList());
 		Allele.effectResurrection = new AlleleEffectResurrection("resurrection", AlleleEffectResurrection.getResurrectionList());
 		Allele.effectRepulsion = new AlleleEffectRepulsion();

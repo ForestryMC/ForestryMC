@@ -39,13 +39,9 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 	}
 
 	@Override
-	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
 		World world = housing.getWorld();
-
-		if (isHalted(storedData, housing)) {
-			return storedData;
-		}
 
 		int[] areaAr = genome.getTerritory();
 		Vect area = new Vect(areaAr).multiply(2);

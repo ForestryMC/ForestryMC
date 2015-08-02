@@ -48,14 +48,10 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 	}
 
 	@Override
-	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
 		World world = housing.getWorld();
 		ChunkCoordinates housingCoords = housing.getCoordinates();
-
-		if (isHalted(storedData, housing)) {
-			return storedData;
-		}
 
 		// If we are already triggered, we continue the explosion sequence.
 		if (storedData.getInteger(indexExplosionTimer) > 0) {
@@ -63,7 +59,7 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 			return storedData;
 		}
 
-		AxisAlignedBB infectionBox = getBounding(genome, housing, 1.0f);
+		AxisAlignedBB infectionBox = getBounding(genome, housing);
 
 		@SuppressWarnings("rawtypes")
 		List list = world.getEntitiesWithinAABB(EntityPlayer.class, infectionBox);

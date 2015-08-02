@@ -239,6 +239,12 @@ public class ProxyCommon {
 	public void addEntitySnowFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
 	}
 
+	public void addEntityIgnitionFX(World world, double d1, double d2, double d3) {
+	}
+
+	public void addEntityPotionFX(World world, double d1, double d2, double d3, int color) {
+	}
+
 	public void addBlockDestroyEffects(World world, int xCoord, int yCoord, int zCoord, Block block, int i) {
 		sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.BLOCK_DESTROY, world, xCoord, yCoord, zCoord, block, i);
 	}

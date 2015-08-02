@@ -10,29 +10,19 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.util.AxisAlignedBB;
-
-import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.IBeeModifier;
 import forestry.api.genetics.IEffectData;
-import forestry.apiculture.BeeHousingModifier;
 import forestry.core.genetics.EffectData;
-import forestry.core.genetics.alleles.AlleleCategorized;
-import forestry.core.vect.IVect;
-import forestry.core.vect.MutableVect;
-import forestry.core.vect.Vect;
-import forestry.plugins.PluginApiculture;
 
-public abstract class AlleleEffectThrottled extends AlleleCategorized implements IAlleleBeeEffect {
+public abstract class AlleleEffectThrottled extends AlleleEffectNone {
 
 	private boolean isCombinable = false;
 	private final int throttle;
 	private boolean requiresWorkingQueen = false;
 
 	public AlleleEffectThrottled(String name, boolean isDominant, int throttle, boolean requiresWorking, boolean isCombinable) {
-		super("forestry", "effect", name, isDominant);
+		super(name, isDominant);
 		this.throttle = throttle;
 		this.isCombinable = isCombinable;
 		this.requiresWorkingQueen = requiresWorking;
@@ -56,7 +46,15 @@ public abstract class AlleleEffectThrottled extends AlleleCategorized implements
 		return new EffectData(1, 0);
 	}
 
-	public boolean isHalted(IEffectData storedData, IBeeHousing housing) {
+	@Override
+	public final IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+		if (isThrottled(storedData, housing)) {
+			return storedData;
+		}
+		return doEffectThrottled(genome, storedData, housing);
+	}
+
+	private boolean isThrottled(IEffectData storedData, IBeeHousing housing) {
 
 		if (requiresWorkingQueen && housing.getErrorLogic().hasErrors()) {
 			return true;
@@ -75,43 +73,6 @@ public abstract class AlleleEffectThrottled extends AlleleCategorized implements
 		return false;
 	}
 
-	@Override
-	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	abstract IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing);
 
-		IVect area = getModifiedArea(genome, housing);
-
-		PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getCoordinates(), genome.getPrimary().getIconColour(0), area);
-		return storedData;
-	}
-
-	protected IVect getModifiedArea(IBeeGenome genome, IBeeHousing housing) {
-		IBeeModifier beeModifier = new BeeHousingModifier(housing);
-		float territoryModifier = beeModifier.getTerritoryModifier(genome, 1f);
-
-		MutableVect area = new MutableVect(genome.getTerritory());
-		area.multiply(territoryModifier * 3);
-
-		if (area.x < 1) {
-			area.x = 1;
-		}
-		if (area.y < 1) {
-			area.y = 1;
-		}
-		if (area.z < 1) {
-			area.z = 1;
-		}
-
-		return area;
-	}
-
-	protected AxisAlignedBB getBounding(IBeeGenome genome, IBeeHousing housing, float modifier) {
-		int[] areaAr = genome.getTerritory();
-		Vect area = new Vect(areaAr).multiply(modifier);
-		Vect offset = area.multiply(-1 / 2.0f);
-
-		Vect min = new Vect(housing.getCoordinates()).add(offset);
-		Vect max = min.add(area);
-
-		return AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
-	}
 }

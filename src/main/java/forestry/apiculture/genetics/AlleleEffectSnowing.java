@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
@@ -20,6 +21,7 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IEffectData;
+import forestry.core.config.Defaults;
 import forestry.core.proxy.Proxies;
 import forestry.core.vect.IVect;
 import forestry.core.vect.Vect;
@@ -31,13 +33,9 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 	}
 
 	@Override
-	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
 		World world = housing.getWorld();
-
-		if (isHalted(storedData, housing)) {
-			return storedData;
-		}
 
 		EnumTemperature temp = housing.getTemperature();
 
@@ -49,8 +47,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 			default:
 		}
 
-		int[] areaAr = genome.getTerritory();
-		Vect area = new Vect(areaAr);
+		Vect area = getModifiedArea(genome, housing);
 		Vect offset = area.multiply(-1 / 2.0f);
 
 		for (int i = 0; i < 1; i++) {
@@ -65,11 +62,16 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 				continue;
 			}
 
-			if (!world.isAirBlock(posBlock.x, posBlock.y, posBlock.z)) {
-				continue;
-			}
+			Block block = world.getBlock(posBlock.x, posBlock.y, posBlock.z);
 
-			Proxies.common.setBlockWithNotify(world, posBlock.x, posBlock.y, posBlock.z, Blocks.snow_layer);
+			if (block == Blocks.snow_layer) {
+				int meta = world.getBlockMetadata(posBlock.x, posBlock.y, posBlock.z);
+				if (meta < 7) {
+					world.setBlockMetadataWithNotify(posBlock.x, posBlock.y, posBlock.z, meta + 1, Defaults.FLAG_BLOCK_SYNCH);
+				}
+			} else if (block.isReplaceable(world, posBlock.x, posBlock.y, posBlock.z)) {
+				Proxies.common.setBlockWithNotify(world, posBlock.x, posBlock.y, posBlock.z, Blocks.snow_layer);
+			}
 		}
 
 		return storedData;
@@ -78,18 +80,18 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 	@Override
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 		if (housing.getWorld().rand.nextInt(3) == 0) {
-			IVect area = getModifiedArea(genome, housing);
+			Vect area = getModifiedArea(genome, housing);
+			Vect offset = area.multiply(-0.5F);
 
 			ChunkCoordinates coordinates = housing.getCoordinates();
 			World world = housing.getWorld();
 
-			double spawnX = coordinates.posX + world.rand.nextInt(area.getX() * 2) - area.getX();
-			double spawnY = coordinates.posY + world.rand.nextInt(area.getY());
-			double spawnZ = coordinates.posZ + world.rand.nextInt(area.getZ() * 2) - area.getZ();
-
-			Proxies.common.addEntitySnowFX(world, spawnX, spawnY, spawnZ, 0F, 0F, 0F);
+			Vect spawn = Vect.getRandomPositionInArea(world.rand, area).add(coordinates).add(offset);
+			Proxies.common.addEntitySnowFX(world, spawn.x, spawn.y, spawn.z, 0F, 0F, 0F);
+			return storedData;
+		} else {
+			return super.doFX(genome, storedData, housing);
 		}
-
-		return storedData;
 	}
+
 }

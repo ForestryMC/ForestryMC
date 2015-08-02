@@ -17,7 +17,7 @@ import forestry.core.interfaces.IBlockRenderer;
 import forestry.core.vect.IVect;
 
 public class ProxyApiculture {
-	public void addBeeHiveFX(String texture, World world, ChunkCoordinates coordinates, int color, IVect area) {
+	public void addBeeHiveFX(String texture, World world, ChunkCoordinates coordinates, int color) {
 	}
 
 	public void addBeeSwarmFX(String texture, World world, double xCoord, double yCoord, double zCoord, int color) {

@@ -16,6 +16,8 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.particle.EntityExplodeFX;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.EntitySpellParticleFX;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,6 +39,7 @@ import forestry.core.TickHandlerCoreClient;
 import forestry.core.WorldGenerator;
 import forestry.core.multiblock.MultiblockClientTickHandler;
 import forestry.core.render.EntityHoneydustFX;
+import forestry.core.render.EntityIgnitionFX;
 import forestry.core.render.EntitySnowFX;
 import forestry.core.render.SpriteSheet;
 
@@ -198,7 +201,32 @@ public class ClientProxyCommon extends ProxyCommon {
 			return;
 		}
 
-		getClientInstance().effectRenderer.addEffect(new EntitySnowFX(world, d1, d2, d3, f1, f2, f3));
+		getClientInstance().effectRenderer.addEffect(new EntitySnowFX(world, d1 + world.rand.nextGaussian(), d2, d3 + world.rand.nextGaussian(), f1, f2, f3));
+	}
+
+	@Override
+	public void addEntityIgnitionFX(World world, double d1, double d2, double d3) {
+		if (!ClientProxyRender.shouldSpawnParticle(world)) {
+			return;
+		}
+
+		getClientInstance().effectRenderer.addEffect(new EntityIgnitionFX(world, d1, d2, d3));
+	}
+
+	@Override
+	public void addEntityPotionFX(World world, double d1, double d2, double d3, int color) {
+		if (!ClientProxyRender.shouldSpawnParticle(world)) {
+			return;
+		}
+
+		float red = (color >> 16 & 255) / 255.0F;
+		float green = (color >> 8 & 255) / 255.0F;
+		float blue = (color & 255) / 255.0F;
+
+		EntityFX entityfx = new EntitySpellParticleFX(world, d1, d2, d3, 0, 0, 0);
+		entityfx.setRBGColorF(red, green, blue);
+
+		getClientInstance().effectRenderer.addEffect(entityfx);
 	}
 
 	@Override

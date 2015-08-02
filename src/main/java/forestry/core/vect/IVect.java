@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.vect;
 
+import net.minecraft.util.ChunkCoordinates;
+
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.farming.FarmDirection;
@@ -31,6 +33,8 @@ public interface IVect {
 	IVect add(ForgeDirection direction);
 
 	IVect add(FarmDirection direction);
+
+	IVect add(ChunkCoordinates coordinates);
 
 	int[] toArray();
 }

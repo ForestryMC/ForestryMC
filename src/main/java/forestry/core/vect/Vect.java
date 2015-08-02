@@ -114,6 +114,11 @@ public class Vect implements IVect {
 	}
 
 	@Override
+	public Vect add(ChunkCoordinates coordinates) {
+		return add(coordinates.posX, coordinates.posY, coordinates.posZ);
+	}
+
+	@Override
 	public int[] toArray() {
 		return new int[]{x, y, z};
 	}

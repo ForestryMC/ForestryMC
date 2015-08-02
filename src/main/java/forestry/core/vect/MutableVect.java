@@ -81,8 +81,16 @@ public class MutableVect implements IVect {
 	}
 
 	@Override
-	public IVect add(FarmDirection direction) {
+	public MutableVect add(FarmDirection direction) {
 		return add(direction.getForgeDirection());
+	}
+
+	@Override
+	public MutableVect add(ChunkCoordinates coordinates) {
+		this.x += coordinates.posX;
+		this.y += coordinates.posY;
+		this.z += coordinates.posZ;
+		return this;
 	}
 
 	@Override

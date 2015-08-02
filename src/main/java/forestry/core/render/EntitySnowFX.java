@@ -59,18 +59,14 @@ public class EntitySnowFX extends EntityFX {
 			maxV = this.particleIcon.getMaxV();
 		}
 
-		float brightness = 1.0F;
-		tess.setColorRGBA_F(this.particleRed * brightness, this.particleGreen * brightness, this.particleBlue * brightness, this.particleAlpha);
-
-		spreadRand.setSeed(701);
+		tess.setColorRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
 
 		for (int i = 0; i < 5; i++) {
-			renderParticle(tess, x + spreadRand.nextGaussian() * 8, y, z + spreadRand.nextGaussian() * 8, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY, minU, maxU, minV, maxV, scale);
+			renderParticle(tess, x, y, z, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY, minU, maxU, minV, maxV, scale);
 		}
-
 	}
 
-	private void renderParticle(Tessellator tess, double x, double y, double z, float rotationX, float rotationXZ, float rotationZ, float rotationYZ, float rotationXY,
+	private static void renderParticle(Tessellator tess, double x, double y, double z, float rotationX, float rotationXZ, float rotationZ, float rotationYZ, float rotationXY,
 			float minU, float maxU, float minV, float maxV, float scale) {
 		tess.addVertexWithUV((x - rotationX * scale - rotationYZ * scale), (y - rotationXZ * scale), (z - rotationZ * scale - rotationXY * scale), maxU, maxV);
 		tess.addVertexWithUV((x - rotationX * scale + rotationYZ * scale), (y + rotationXZ * scale), (z - rotationZ * scale + rotationXY * scale), maxU, minV);

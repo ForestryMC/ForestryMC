@@ -27,9 +27,9 @@ public class EntityBeeFX extends EntityFX {
 		this.particleMaxAge = (int) (20.0D / (Math.random() * 0.8D + 0.2D));
 		this.noClip = true;
 
-		this.motionX *= 0.119999999552965164D;
-		this.motionY *= 0.119999999552965164D;
-		this.motionZ *= 0.119999999552965164D;
+		this.motionX *= 0.2D;
+		this.motionY *= 0.015D;
+		this.motionZ *= 0.2D;
 	}
 
 	/**
@@ -41,11 +41,11 @@ public class EntityBeeFX extends EntityFX {
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
 		this.moveEntity(this.motionX, this.motionY, this.motionZ);
-		this.motionX *= 1.08D;
-		this.motionY *= 1.08D;
-		this.motionZ *= 1.08D;
+		this.motionX *= (1 + 0.2D * rand.nextFloat());
+		this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
+		this.motionZ *= (1 + 0.2D * rand.nextFloat());
 
-		if (this.particleMaxAge-- <= 0) {
+		if (this.particleAge++ >= this.particleMaxAge) {
 			this.setDead();
 		}
 	}

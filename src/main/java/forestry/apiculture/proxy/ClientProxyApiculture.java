@@ -29,6 +29,7 @@ import forestry.core.proxy.ClientProxyRender;
 import forestry.core.render.RenderAnalyzer;
 import forestry.core.render.TextureManager;
 import forestry.core.vect.IVect;
+import forestry.core.vect.Vect;
 import forestry.plugins.PluginApiculture;
 
 public class ClientProxyApiculture extends ProxyApiculture {
@@ -45,23 +46,12 @@ public class ClientProxyApiculture extends ProxyApiculture {
 	}
 
 	@Override
-	public void addBeeHiveFX(String icon, World world, ChunkCoordinates coordinates, int color, IVect area) {
+	public void addBeeHiveFX(String icon, World world, ChunkCoordinates coordinates, int color) {
 		if (!ClientProxyRender.shouldSpawnParticle(world)) {
 			return;
 		}
 
-		EntityFX fx;
-
-		if (world.rand.nextBoolean()) {
-			fx = new EntityBeeFX(world, coordinates.posX + 0.5D, coordinates.posY + 0.75D, coordinates.posZ + 0.5D, 0.0f, 0.0f, 0.0f, color);
-		} else {
-			double spawnX = coordinates.posX + world.rand.nextInt(area.getX() * 2) - area.getX();
-			double spawnY = coordinates.posY + world.rand.nextInt(area.getY());
-			double spawnZ = coordinates.posZ + world.rand.nextInt(area.getZ() * 2) - area.getZ();
-
-			fx = new EntityBeeFX(world, spawnX, spawnY, spawnZ, 0.0f, 0.0f, 0.0f, color);
-		}
-
+		EntityFX fx = new EntityBeeFX(world, coordinates.posX + 0.5D, coordinates.posY + 0.5D, coordinates.posZ + 0.5D, 0.0f, 0.0f, 0.0f, color);
 		fx.setParticleIcon(TextureManager.getInstance().getDefault(icon));
 		ParticleRenderer.getInstance().addEffect(fx);
 	}

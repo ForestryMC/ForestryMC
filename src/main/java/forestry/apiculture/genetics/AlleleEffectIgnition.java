@@ -21,8 +21,7 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.items.ItemArmorApiarist;
-import forestry.core.vect.IVect;
-import forestry.plugins.PluginApiculture;
+import forestry.core.proxy.Proxies;
 
 public class AlleleEffectIgnition extends AlleleEffectThrottled {
 
@@ -34,15 +33,11 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
 	}
 
 	@Override
-	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
 		World world = housing.getWorld();
 
-		if (isHalted(storedData, housing)) {
-			return storedData;
-		}
-
-		AxisAlignedBB hurtBox = getBounding(genome, housing, 1.0f);
+		AxisAlignedBB hurtBox = getBounding(genome, housing);
 		@SuppressWarnings("rawtypes")
 		List list = world.getEntitiesWithinAABB(EntityLivingBase.class, hurtBox);
 
@@ -52,8 +47,7 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
 			int chance = ignitionChance;
 			int duration = fireDuration;
 
-			// Players are not attacked if they wear a full set of apiarist's
-			// armor.
+			// Players are not attacked if they wear a full set of apiarist's armor.
 			if (entity instanceof EntityPlayer) {
 				int count = ItemArmorApiarist.wearsItems((EntityPlayer) entity, getUID(), true);
 				// Full set, no damage/effect
@@ -83,13 +77,10 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
 
 	@Override
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-
-		IVect area = getModifiedArea(genome, housing);
-
-		if (housing.getWorld().rand.nextBoolean()) {
-			PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getCoordinates(), genome.getPrimary().getIconColour(0), area);
+		if (housing.getWorld().rand.nextInt(2) != 0) {
+			super.doFX(genome, storedData, housing);
 		} else {
-			PluginApiculture.proxy.addBeeHiveFX("particles/ember", housing.getWorld(), housing.getCoordinates(), 0xffffff, area);
+			Proxies.common.addEntityIgnitionFX(housing.getWorld(), housing.getCoordinates().posX + 0.5, housing.getCoordinates().posY + 1, housing.getCoordinates().posZ + 0.5);
 		}
 		return storedData;
 	}

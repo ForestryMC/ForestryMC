@@ -10,20 +10,25 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import net.minecraft.util.AxisAlignedBB;
+
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.BeeHousingModifier;
+import forestry.apiculture.gadgets.TileBeehouse;
 import forestry.core.genetics.alleles.AlleleCategorized;
+import forestry.core.vect.IVect;
 import forestry.core.vect.MutableVect;
+import forestry.core.vect.Vect;
 import forestry.plugins.PluginApiculture;
 
 public class AlleleEffectNone extends AlleleCategorized implements IAlleleBeeEffect {
 
-	public AlleleEffectNone(String name) {
-		super("forestry", "effect", name, true);
+	public AlleleEffectNone(String valueName, boolean isDominant) {
+		super("forestry", "effect", valueName, isDominant);
 	}
 
 	@Override
@@ -43,7 +48,11 @@ public class AlleleEffectNone extends AlleleCategorized implements IAlleleBeeEff
 
 	@Override
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+		PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getCoordinates(), genome.getPrimary().getIconColour(0));
+		return storedData;
+	}
 
+	protected Vect getModifiedArea(IBeeGenome genome, IBeeHousing housing) {
 		IBeeModifier beeModifier = new BeeHousingModifier(housing);
 		float territoryModifier = beeModifier.getTerritoryModifier(genome, 1f);
 
@@ -60,8 +69,21 @@ public class AlleleEffectNone extends AlleleCategorized implements IAlleleBeeEff
 			area.z = 1;
 		}
 
-		PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getCoordinates(), genome.getPrimary().getIconColour(0), area);
-		return storedData;
+		return new Vect(area);
+	}
+
+	protected AxisAlignedBB getBounding(IBeeGenome genome, IBeeHousing housing) {
+		IBeeModifier beeModifier = new BeeHousingModifier(housing);
+		float territoryModifier = beeModifier.getTerritoryModifier(genome, 1.0f);
+
+		MutableVect area = new MutableVect(genome.getTerritory());
+		area.multiply(territoryModifier);
+		Vect offset = new Vect(area).multiply(-1 / 2.0f);
+
+		Vect min = new Vect(housing.getCoordinates()).add(offset);
+		Vect max = min.add(area);
+
+		return AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
 	}
 
 }

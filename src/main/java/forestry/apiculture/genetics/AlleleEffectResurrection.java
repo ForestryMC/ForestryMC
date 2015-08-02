@@ -78,12 +78,9 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 	}
 
 	@Override
-	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		if (isHalted(storedData, housing)) {
-			return storedData;
-		}
+	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
-		AxisAlignedBB bounding = getBounding(genome, housing, 1.0f);
+		AxisAlignedBB bounding = getBounding(genome, housing);
 		@SuppressWarnings("rawtypes")
 		List list = housing.getWorld().getEntitiesWithinAABB(EntityItem.class, bounding);
 

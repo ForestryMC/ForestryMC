@@ -37,11 +37,8 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 	}
 
 	@Override
-	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		if (isHalted(storedData, housing)) {
-			return storedData;
-		}
-		
+	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+
 		doBlockEffect(genome, housing);
 		
 		int entityThrottle = storedData.getInteger(1);
@@ -82,7 +79,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 	}
 
 	private void doEntityEffect(IBeeGenome genome, IBeeHousing housing) {
-		AxisAlignedBB aabb = this.getBounding(genome, housing, 1f);
+		AxisAlignedBB aabb = this.getBounding(genome, housing);
 		World world = housing.getWorld();
 
 		List entities = world.getEntitiesWithinAABB(EntityCow.class, aabb);
