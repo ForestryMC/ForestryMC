@@ -15,6 +15,7 @@ import java.io.IOException;
 import net.minecraft.tileentity.TileEntity;
 
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.apiculture.BeekeepingLogic;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -51,8 +52,10 @@ public class PacketBeekeepingLogicActive extends PacketCoordinates {
 		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
 		if (tile instanceof IBeeHousing) {
 			IBeeHousing beeHousing = (IBeeHousing) tile;
-			BeekeepingLogic beekeepingLogic = (BeekeepingLogic) beeHousing.getBeekeepingLogic();
-			beekeepingLogic.readData(data);
+			IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();
+			if (beekeepingLogic instanceof BeekeepingLogic) {
+				((BeekeepingLogic) beekeepingLogic).readData(data);
+			}
 		}
 	}
 }

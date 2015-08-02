@@ -52,7 +52,7 @@ final class Flower implements IFlower {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(block, meta);
+		return Objects.hash(block);
 	}
 
 	@Override
