@@ -71,20 +71,20 @@ public class FenceRenderingHandler implements ISimpleBlockRenderingHandler, IIte
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 		switch (type) {
 			case ENTITY:
-				renderItem((RenderBlocks) data[0], item, 0f, 0f, 0f, true);
+				renderItem((RenderBlocks) data[0], item, 0f, 0f, 0f);
 				break;
 			case EQUIPPED:
 			case EQUIPPED_FIRST_PERSON:
-				renderItem((RenderBlocks) data[0], item, 0.5f, 0.5f, 0.5f, true);
+				renderItem((RenderBlocks) data[0], item, 0.5f, 0.5f, 0.5f);
 				break;
 			case INVENTORY:
-				renderItem((RenderBlocks) data[0], item, 0f, 0f, 0f, false);
+				renderItem((RenderBlocks) data[0], item, 0f, 0f, 0f);
 				break;
 			default:
 		}
 	}
 
-	private static void renderItem(RenderBlocks renderer, ItemStack itemStack, float x, float y, float z, boolean fullBlock) {
+	private static void renderItem(RenderBlocks renderer, ItemStack itemStack, float x, float y, float z) {
 		Tessellator tess = Tessellator.instance;
 
 		WoodType woodType = WoodType.getFromCompound(itemStack.getTagCompound());
@@ -118,32 +118,32 @@ public class FenceRenderingHandler implements ISimpleBlockRenderingHandler, IIte
 			GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 			tess.startDrawingQuads();
 			tess.setNormal(0.0F, -1.0F, 0.0F);
-			renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, plankIcon);
+			renderer.renderFaceYNeg(block, x, y, z, plankIcon);
 			tess.draw();
 
 			tess.startDrawingQuads();
 			tess.setNormal(0.0F, 1.0F, 0.0F);
-			renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, plankIcon);
+			renderer.renderFaceYPos(block, x, y, z, plankIcon);
 			tess.draw();
 
 			tess.startDrawingQuads();
 			tess.setNormal(0.0F, 0.0F, -1.0F);
-			renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, plankIcon);
+			renderer.renderFaceZNeg(block, x, y, z, plankIcon);
 			tess.draw();
 
 			tess.startDrawingQuads();
 			tess.setNormal(0.0F, 0.0F, 1.0F);
-			renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, plankIcon);
+			renderer.renderFaceZPos(block, x, y, z, plankIcon);
 			tess.draw();
 
 			tess.startDrawingQuads();
 			tess.setNormal(-1.0F, 0.0F, 0.0F);
-			renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, plankIcon);
+			renderer.renderFaceXNeg(block, x, y, z, plankIcon);
 			tess.draw();
 
 			tess.startDrawingQuads();
 			tess.setNormal(1.0F, 0.0F, 0.0F);
-			renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, plankIcon);
+			renderer.renderFaceXPos(block, x, y, z, plankIcon);
 			tess.draw();
 
 			GL11.glTranslatef(0.5F, 0.5F, 0.5F);

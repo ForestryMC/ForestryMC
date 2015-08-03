@@ -47,20 +47,20 @@ public class StairItemRenderer implements IItemRenderer {
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 		switch (type) {
 			case ENTITY:
-				renderStairBlock((RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+				renderStairBlock((RenderBlocks) data[0], item, 0f, 0f, 0f);
 				break;
 			case EQUIPPED:
 			case EQUIPPED_FIRST_PERSON:
-				renderStairBlock((RenderBlocks) data[0], item, 0f, 0.0f, 0.0f);
+				renderStairBlock((RenderBlocks) data[0], item, 0.5f, 0.5f, 0.5f);
 				break;
 			case INVENTORY:
-				renderStairBlock((RenderBlocks) data[0], item, -0.5f, -0.5f, -0.5f);
+				renderStairBlock((RenderBlocks) data[0], item, 0f, 0f, 0f);
 				break;
 			default:
 		}
 	}
 
-	private static void renderStairBlock(RenderBlocks renderBlocks, ItemStack item, float f, float g, float h) {
+	private static void renderStairBlock(RenderBlocks renderBlocks, ItemStack item, float x, float y, float z) {
 
 		Tessellator tessellator = Tessellator.instance;
 		Block block = StackUtils.getBlock(item);
@@ -79,27 +79,27 @@ public class StairItemRenderer implements IItemRenderer {
 			GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0.0F, -1.0F, 0.0F);
-			renderBlocks.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, texture);
+			renderBlocks.renderFaceYNeg(block, x, y, z, texture);
 			tessellator.draw();
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0.0F, 1.0F, 0.0F);
-			renderBlocks.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, texture);
+			renderBlocks.renderFaceYPos(block, x, y, z, texture);
 			tessellator.draw();
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0.0F, 0.0F, -1.0F);
-			renderBlocks.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, texture);
+			renderBlocks.renderFaceZNeg(block, x, y, z, texture);
 			tessellator.draw();
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0.0F, 0.0F, 1.0F);
-			renderBlocks.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, texture);
+			renderBlocks.renderFaceZPos(block, x, y, z, texture);
 			tessellator.draw();
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(-1.0F, 0.0F, 0.0F);
-			renderBlocks.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, texture);
+			renderBlocks.renderFaceXNeg(block, x, y, z, texture);
 			tessellator.draw();
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(1.0F, 0.0F, 0.0F);
-			renderBlocks.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, texture);
+			renderBlocks.renderFaceXPos(block, x, y, z, texture);
 			tessellator.draw();
 			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 		}
