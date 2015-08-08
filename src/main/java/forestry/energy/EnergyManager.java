@@ -170,13 +170,20 @@ public class EnergyManager implements IEnergyHandler, IStreamable {
 	}
 
 	/**
+	 * @return whether this can send energy to the target tile
+	 */
+	public boolean canSendEnergy(ForgeDirection orientation, TileEntity tile) {
+		return sendEnergy(orientation, tile, Integer.MAX_VALUE, true) > 0;
+	}
+
+	/**
 	 * Sends as much energy as it can to the tile at orientation.
 	 * For power sources. Ignores canExtract()
 	 *
 	 * @return amount sent
 	 */
 	public int sendEnergy(ForgeDirection orientation, TileEntity tile) {
-		return sendEnergy(orientation, tile, Integer.MAX_VALUE);
+		return sendEnergy(orientation, tile, Integer.MAX_VALUE, false);
 	}
 
 	/**
@@ -185,15 +192,15 @@ public class EnergyManager implements IEnergyHandler, IStreamable {
 	 *
 	 * @return amount sent
 	 */
-	public int sendEnergy(ForgeDirection orientation, TileEntity tile, int amount) {
+	public int sendEnergy(ForgeDirection orientation, TileEntity tile, int amount, boolean simulate) {
 		int sent = 0;
 		if (BlockUtil.isEnergyReceiver(orientation.getOpposite(), tile)) {
 			IEnergyReceiver receptor = (IEnergyReceiver) tile;
 
 			int extractable = energyStorage.extractEnergy(amount, true);
 			if (extractable > 0) {
-				sent = receptor.receiveEnergy(orientation.getOpposite(), extractable, false);
-				energyStorage.extractEnergy(sent, false);
+				sent = receptor.receiveEnergy(orientation.getOpposite(), extractable, simulate);
+				energyStorage.extractEnergy(sent, simulate);
 			}
 		}
 		return sent;

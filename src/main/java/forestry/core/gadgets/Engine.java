@@ -129,17 +129,16 @@ public abstract class Engine extends TileBase implements IEnergyConnection, IAct
 
 			progress += pistonSpeedServer;
 
+			energyManager.sendEnergy(getOrientation(), tile);
+
 			if (progress > 0.25 && stagePiston == 1) {
 				stagePiston = 2;
-
-				energyManager.sendEnergy(getOrientation(), tile);
-
 			} else if (progress >= 0.5) {
 				progress = 0;
 				stagePiston = 0;
 			}
 		} else if (enabledRedstone && BlockUtil.isEnergyReceiver(getOrientation().getOpposite(), tile)) {
-			if (energyManager.getEnergyStored(getOrientation()) > 0) {
+			if (energyManager.canSendEnergy(getOrientation(), tile)) {
 				stagePiston = 1; // If we can transfer energy, start running
 				setActive(true);
 			} else {
