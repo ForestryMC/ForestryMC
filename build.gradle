@@ -172,102 +172,55 @@ jar {
 	}
 }
 
-task mainJarSigned ( type: Jar, dependsOn: 'reobf' ) {
-	from (zipTree(jar.getArchivePath())) {
-		exclude '**/api/**'
-		exclude '**/codechicken/**'
-		exclude '**/uristqwerty/**'
-	}
-
-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-	destinationDir = file("build/tmp")
-	archiveName = "signed.jar"
-
-	doLast {
-		if (project.hasProperty('signingKeystore')) {
-			ant.signjar(jar: getArchivePath(),
-				alias: signingAlias,
-				keystore: signingKeystore,
-				storepass: signingStorepass)
-		} else {
-			println 'Signing disabled, gradle.properties is missing.'
-		}
-	}
-}
-
-task mainJar ( type: Zip, dependsOn: mainJarSigned ) {
-	from (zipTree(mainJarSigned.getArchivePath())) {
-		include '**'
-	}
-
+task mainJar(type: Jar, dependsOn: 'reobf') {
 	from (zipTree(jar.getArchivePath())) {
 		include '**'
 		exclude '**/codechicken/**'
 		exclude '**/uristqwerty/**'
 	}
 
-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 	destinationDir = file(dirDest)
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 	includeEmptyDirs = false
-	extension = 'jar'
 }
 
-task devJarSigned ( type: Jar, dependsOn: 'classes' ) {
-	from(sourceSets.main.output) {
-		exclude '**/api/**'
+task devJar(type: Jar, dependsOn: 'classes') {
+	from (sourceSets.main.output) {
 		exclude '**/codechicken/**'
 		exclude '**/uristqwerty/**'
 	}
 
-	destinationDir = file("build/tmp")
-	archiveName = "signed-dev.jar"
-
-	doLast {
-		if (project.hasProperty('signingKeystore')) {
-			ant.signjar(jar: getArchivePath(),
-				alias: signingAlias,
-				keystore: signingKeystore,
-				storepass: signingStorepass)
-		} else {
-			println 'Signing disabled, gradle.properties is missing.'
-		}
-	}
-}
-
-task devJar ( type: Zip, dependsOn: devJarSigned ) {
-	from (zipTree(devJarSigned.getArchivePath())) {
-		include '**'
-	}
-
-	from(sourceSets.main.allSource) {
-		include '**'
-		exclude '**/codechicken/**'
-		exclude '**/uristqwerty/**'
-	}
-
-	from(sourceSets.main.output) {
-		include '**'
-		exclude '**/codechicken/**'
-		exclude '**/uristqwerty/**'
-	}
-
-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 	destinationDir = file(dirDest)
-	extension = 'jar'
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	includeEmptyDirs = false
 
 	classifier = 'dev'
 }
 
 task apiJar(type: Jar, dependsOn: 'classes') {
 	from project.apiForestry
-	
-	from (sourceSets.main.output) {
+	from(sourceSets.main.output) {
 		include 'forestry/api/**'
 	}
-	
+
 	destinationDir = file(dirDest)
-	extension = 'jar'
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	includeEmptyDirs = false
+
 	classifier = 'api'
+}
+
+task sourceJar(type: Jar, dependsOn: 'classes') {
+	from (sourceSets.main.allSource) {
+		exclude '**/codechicken/**'
+		exclude '**/uristqwerty/**'
+	}
+
+	destinationDir = file(dirDest)
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	includeEmptyDirs = false
+
+	classifier = 'sources'
 }
 
 task releaseInit << {
@@ -276,16 +229,18 @@ task releaseInit << {
 	println '*************************************************************'
 }
 
-task release (dependsOn: [releaseInit, apiJar, devJar, mainJar]) {
+task release (dependsOn: [releaseInit, mainJar, apiJar, devJar, sourceJar]) {
 }
 
 mainJar.shouldRunAfter releaseInit
 devJar.shouldRunAfter releaseInit
 apiJar.shouldRunAfter releaseInit
+sourceJar.shouldRunAfter releaseInit
 
 artifacts {
 	archives apiJar
 	archives devJar
+	archives sourceJar
 }
 
 uploadArchives {
@@ -299,6 +254,9 @@ uploadArchives {
 				}
 				addFilter('dev') { artifact, file ->
 					file == devJar.archivePath
+				}
+				addFilter('source') { artifact, file ->
+					file == sourceJar.archivePath
 				}
 			}
 		} else {
