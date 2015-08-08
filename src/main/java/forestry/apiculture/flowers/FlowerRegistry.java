@@ -48,6 +48,7 @@ import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
 import forestry.apiculture.BeeHousingModifier;
+import forestry.core.proxy.Proxies;
 import forestry.core.vect.MutableVect;
 import forestry.core.vect.Vect;
 import forestry.plugins.PluginManager;
@@ -110,6 +111,10 @@ public final class FlowerRegistry implements IFlowerRegistry {
 		Flower newFlower = new Flower(block, meta, weight);
 
 		for (String flowerType : flowerTypes) {
+			if (flowerType == null) {
+				throw new NullPointerException("Tried to register flower with null type. " + block);
+			}
+
 			Set<IFlower> flowers = this.registeredFlowers.get(flowerType);
 			flowers.add(newFlower);
 

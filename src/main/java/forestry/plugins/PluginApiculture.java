@@ -319,7 +319,7 @@ public class PluginApiculture extends ForestryPlugin {
 			}
 			Property property = config.get("beekeeping.flowers." + flowerType, "accepted", defaultAccepted);
 			property.comment = acceptedFlowerMessage;
-			parseAcceptedFlowers(property, flowerType);
+			parseAcceptedFlowers(property.getStringList(), flowerType);
 
 			String[] defaultPlantable = defaultPlantableFlowers.get(flowerType);
 			if (defaultPlantable == null) {
@@ -429,6 +429,11 @@ public class PluginApiculture extends ForestryPlugin {
 			if (flowers != null) {
 				for (IFlower flower : flowers) {
 					String name = flower.getBlock().delegate.name();
+					if (name == null) {
+						Proxies.log.warning("Could not find name for flower: " + flower + " with type: " + flowerType);
+						continue;
+					}
+
 					int meta = flower.getMeta();
 					if (flower.getMeta() != OreDictionary.WILDCARD_VALUE) {
 						name = name + ':' + meta;
@@ -1007,15 +1012,15 @@ public class PluginApiculture extends ForestryPlugin {
 		}
 	}
 
-	private static void parseAcceptedFlowers(Property property, String flowerType) {
-		List<StackUtils.Stack> acceptedFlowerItemStacks = StackUtils.parseStackStrings(property.getStringList(), OreDictionary.WILDCARD_VALUE);
+	private static void parseAcceptedFlowers(String[] acceptedFlowers, String flowerType) {
+		List<StackUtils.Stack> acceptedFlowerItemStacks = StackUtils.parseStackStrings(acceptedFlowers, OreDictionary.WILDCARD_VALUE);
 		for (StackUtils.Stack acceptedFlower : acceptedFlowerItemStacks) {
 			Block acceptedFlowerBlock = acceptedFlower.getBlock();
 			int meta = acceptedFlower.getMeta();
 			if (acceptedFlowerBlock != null) {
 				FlowerManager.flowerRegistry.registerAcceptableFlower(acceptedFlowerBlock, meta, flowerType);
 			} else {
-				Proxies.log.warning("No block found for '" + acceptedFlower + "' in config '" + property.getName() + "'.");
+				Proxies.log.warning("No block found for '" + acceptedFlower + "' in apiculture config for '" + flowerType + "'.");
 			}
 		}
 	}

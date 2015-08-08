@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.flowers;
 
-import java.util.Objects;
+import com.google.common.base.Objects;
 
 import net.minecraft.block.Block;
 
@@ -52,7 +52,7 @@ final class Flower implements IFlower {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(block);
+		return Objects.hashCode(block);
 	}
 
 	@Override
@@ -74,4 +74,10 @@ final class Flower implements IFlower {
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}
+
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this).add("block", block).add("meta", meta).add("weight", weight).toString();
+	}
+
 }
