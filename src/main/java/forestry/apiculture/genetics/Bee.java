@@ -79,24 +79,8 @@ public class Bee extends IndividualLiving implements IBee {
 	private IBeeGenome genome;
 	private IBeeGenome mate;
 
-	private static final LoadingCache<NBTTagCompound, Bee> getBeeCache = CacheBuilder.newBuilder()
-			.maximumSize(128)
-			.build(new CacheLoader<NBTTagCompound, Bee>() {
-				@Override
-				public Bee load(@Nonnull NBTTagCompound tagCompound) {
-					return new Bee(tagCompound);
-				}
-			});
-
 	/* CONSTRUCTOR */
-	public static Bee fromNBT(NBTTagCompound nbtTagCompound) {
-		if (nbtTagCompound == null) {
-			return null;
-		}
-		return getBeeCache.getUnchecked(nbtTagCompound);
-	}
-
-	private Bee(NBTTagCompound nbttagcompound) {
+	public Bee(NBTTagCompound nbttagcompound) {
 		readFromNBT(nbttagcompound);
 	}
 
@@ -136,13 +120,13 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		if (nbttagcompound.hasKey("Genome")) {
-			genome = new BeeGenome(nbttagcompound.getCompoundTag("Genome"));
+			genome = BeeGenome.fromNBT(nbttagcompound.getCompoundTag("Genome"));
 		} else {
 			genome = BeeDefinition.FOREST.getGenome();
 		}
 
 		if (nbttagcompound.hasKey("Mate")) {
-			mate = new BeeGenome(nbttagcompound.getCompoundTag("Mate"));
+			mate = BeeGenome.fromNBT(nbttagcompound.getCompoundTag("Mate"));
 		}
 
 	}

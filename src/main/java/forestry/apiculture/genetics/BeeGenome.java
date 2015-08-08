@@ -10,6 +10,14 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+
+import javax.annotation.Nonnull;
+
+import java.util.concurrent.TimeUnit;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -35,35 +43,41 @@ import forestry.core.vect.Vect;
 public class BeeGenome extends Genome implements IBeeGenome {
 	/**
 	 * 0 - Species (determines product)
-	 *
 	 * 1 - Speed
-	 *
 	 * 2 - Lifespan
-	 *
 	 * 3 - Fertility (Maximum number of offspring)
-	 *
 	 * 4 - Preferred temperature Icy: Snow biomes Cold: Tundra/Steppe, Extreme Mountains/Hills? Normal: Plains, Forests, Mountains Hot: Desert Hellish: Nether
-	 *
 	 * 5 - Temperature tolerance (Range +/-)
-	 *
 	 * 6 - Nocturnal
-	 *
 	 * 7 - Preferred humidity (Arid - Normal - Damp)
-	 *
 	 * 8 - Humidity tolerance (Range +/-)
-	 *
 	 * 9 - Flight interference tolerance (stuff falling from the sky/other hindrances -> tolerates dampness + flight interference tolerance => rain resistance)
-	 *
 	 * 10 - Cave dwelling
-	 *
 	 * 11 - Required flowers
-	 *
 	 * 12 - Flower plant chance
-	 *
 	 * 13 - Territory
 	 */
+
+	private static final LoadingCache<NBTTagCompound, BeeGenome> beeGenomeCache = CacheBuilder.newBuilder()
+			.maximumSize(128)
+			.expireAfterAccess(1, TimeUnit.MINUTES)
+			.build(new CacheLoader<NBTTagCompound, BeeGenome>() {
+				@Override
+				public BeeGenome load(@Nonnull NBTTagCompound tagCompound) {
+					return new BeeGenome(tagCompound);
+				}
+			});
+
+	public static BeeGenome fromNBT(NBTTagCompound nbtTagCompound) {
+		if (nbtTagCompound == null) {
+			return null;
+		}
+
+		return beeGenomeCache.getUnchecked(nbtTagCompound);
+	}
+
 	/* CONSTRUCTOR */
-	public BeeGenome(NBTTagCompound nbttagcompound) {
+	private BeeGenome(NBTTagCompound nbttagcompound) {
 		super(nbttagcompound);
 	}
 

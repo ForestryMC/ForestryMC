@@ -164,12 +164,12 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 			return null;
 		}
 
-		return Bee.fromNBT(stack.getTagCompound());
+		return new Bee(stack.getTagCompound());
 	}
 
 	@Override
 	public IBee getMember(NBTTagCompound compound) {
-		return Bee.fromNBT(compound);
+		return new Bee(compound);
 	}
 
 	@Override
