@@ -430,7 +430,7 @@ public class PluginApiculture extends ForestryPlugin {
 				for (IFlower flower : flowers) {
 					String name = flower.getBlock().delegate.name();
 					if (name == null) {
-						Proxies.log.warning("Could not find name for flower: " + flower + " with type: " + flowerType);
+						Proxies.log.severe("Could not find name for flower: " + flower + " with type: " + flowerType);
 						continue;
 					}
 
