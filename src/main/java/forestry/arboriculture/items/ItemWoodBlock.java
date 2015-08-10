@@ -35,7 +35,7 @@ public class ItemWoodBlock extends ItemForestryBlock {
 		WoodType woodType = WoodType.getFromCompound(stack.getTagCompound());
 		Block block = Block.getBlockFromItem(stack.getItem());
 
-		boolean placed = world.setBlock(x, y, z, block, metadata, Defaults.FLAG_BLOCK_SYNCH);
+		boolean placed = world.setBlock(x, y, z, block, metadata, Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		if (!placed) {
 			return false;
 		}

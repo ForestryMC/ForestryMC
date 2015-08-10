@@ -61,7 +61,7 @@ public abstract class FarmLogic implements IFarmLogic {
 	}
 
 	protected final void setBlock(Vect position, Block block, int meta) {
-		getWorld().setBlock(position.x, position.y, position.z, block, meta, Defaults.FLAG_BLOCK_UPDATE | Defaults.FLAG_BLOCK_SYNCH);
+		getWorld().setBlock(position.x, position.y, position.z, block, meta, Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
 	}
 
 }

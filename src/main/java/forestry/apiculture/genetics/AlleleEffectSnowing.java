@@ -66,7 +66,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 			if (block == Blocks.snow_layer) {
 				int meta = world.getBlockMetadata(posBlock.x, posBlock.y, posBlock.z);
 				if (meta < 7) {
-					world.setBlockMetadataWithNotify(posBlock.x, posBlock.y, posBlock.z, meta + 1, Defaults.FLAG_BLOCK_SYNCH);
+					world.setBlockMetadataWithNotify(posBlock.x, posBlock.y, posBlock.z, meta + 1, Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
 				}
 			} else if (block.isReplaceable(world, posBlock.x, posBlock.y, posBlock.z)) {
 				Proxies.common.setBlockWithNotify(world, posBlock.x, posBlock.y, posBlock.z, Blocks.snow_layer);

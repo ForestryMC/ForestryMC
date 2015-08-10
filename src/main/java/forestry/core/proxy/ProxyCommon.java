@@ -217,7 +217,7 @@ public class ProxyCommon {
 	}
 
 	public boolean setBlockWithNotify(World world, int x, int y, int z, Block block) {
-		return world.setBlock(x, y, z, block, 0, Defaults.FLAG_BLOCK_SYNCH);
+		return world.setBlock(x, y, z, block, 0, Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
 	}
 
 	public void playSoundFX(World world, int x, int y, int z, Block block) {

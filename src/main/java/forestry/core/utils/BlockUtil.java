@@ -54,7 +54,7 @@ public class BlockUtil {
 			return false;
 		}
 
-		world.setBlock(x, y, z, block, direction, Defaults.FLAG_BLOCK_SYNCH);
+		world.setBlock(x, y, z, block, direction, Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		return true;
 	}
 

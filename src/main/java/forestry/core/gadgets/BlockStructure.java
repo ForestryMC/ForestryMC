@@ -56,7 +56,7 @@ public abstract class BlockStructure extends BlockForestry {
 
 		// If the player's hands are empty and they right-click on a multiblock, they get a
 		// multiblock-debugging message if the machine is not assembled.
-		if (player.getCurrentEquippedItem() == null) {
+		if (player.getCurrentEquippedItem() == null && !controller.isAssembled()) {
 			if (controller != null) {
 				Exception e = controller.getLastValidationException();
 				if (e != null) {

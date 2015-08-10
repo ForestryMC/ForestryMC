@@ -26,6 +26,7 @@ public class Defaults {
 
 	public static final int FLAG_BLOCK_UPDATE = 1;
 	public static final int FLAG_BLOCK_SYNCH = 2;
+	public static final int FLAG_BLOCK_SYNCH_AND_UPDATE = FLAG_BLOCK_UPDATE + FLAG_BLOCK_SYNCH;
 
 	public static final int BUCKET_VOLUME = 1000;
 	public static final int FLUID_PER_HONEY_DROP = 100;

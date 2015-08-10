@@ -128,6 +128,6 @@ public enum ForestryBlock {
 	}
 
 	public boolean setBlock(World world, int x, int y, int z, int meta) {
-		return world.setBlock(x, y, z, block, meta, Defaults.FLAG_BLOCK_SYNCH);
+		return world.setBlock(x, y, z, block, meta, Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
 	}
 }

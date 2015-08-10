@@ -39,7 +39,7 @@ public class BlockTypeTileForestry implements IBlockType {
 
 	@Override
 	public void setBlock(World world, int x, int y, int z) {
-		boolean placed = world.setBlock(x, y, z, block, meta, Defaults.FLAG_BLOCK_SYNCH);
+		boolean placed = world.setBlock(x, y, z, block, meta, Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		if (!placed) {
 			return;
 		}

@@ -208,6 +208,9 @@ public class MultiblockWorldRegistry {
 		// physically connected to their master.
 		if (dirtyControllers.size() > 0) {
 			for (MultiblockControllerBase controller : dirtyControllers) {
+				if (controller == null) {
+					continue;
+				}
 				// Tell the machine to check if any parts are disconnected.
 				// It should return a set of parts which are no longer connected.
 				// POSTCONDITION: The controller must have informed those parts that

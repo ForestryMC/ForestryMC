@@ -45,6 +45,7 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.network.IStreamableGui;
+import forestry.core.utils.Utils;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.ITriggerExternal;
@@ -58,10 +59,12 @@ public class TileAlvearyPlain extends TileAlveary implements IBeeHousing, IClima
 	public void onMachineAssembled(MultiblockControllerBase controller) {
 		super.onMachineAssembled(controller);
 
-		// set alveary entrance block meta
-		if (getPartPosition() == PartPosition.Frame) {
-			if (worldObj.getTileEntity(xCoord, yCoord + 1, zCoord) == null) {
-				this.worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, TileAlveary.ENTRANCE_META, 2);
+		if (!worldObj.isRemote) {
+			// set alveary entrance block meta
+			if (getPartPosition() == PartPosition.Frame) {
+				if (Utils.isWoodSlabBlock(worldObj.getBlock(xCoord, yCoord + 1, zCoord))) {
+					this.worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, TileAlveary.ENTRANCE_META, 2);
+				}
 			}
 		}
 	}
@@ -70,8 +73,10 @@ public class TileAlvearyPlain extends TileAlveary implements IBeeHousing, IClima
 	public void onMachineBroken() {
 		super.onMachineBroken();
 
-		// set alveary entrance block meta back to normal
-		this.worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, TileAlveary.PLAIN_META, 2);
+		if (!worldObj.isRemote) {
+			// set alveary entrance block meta back to normal
+			this.worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, TileAlveary.PLAIN_META, 2);
+		}
 	}
 
 	@Override

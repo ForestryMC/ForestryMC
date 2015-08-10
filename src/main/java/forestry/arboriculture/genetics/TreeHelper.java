@@ -189,7 +189,7 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 	@Override
 	public boolean plantSapling(World world, ITree tree, GameProfile owner, int x, int y, int z) {
 
-		boolean placed = world.setBlock(x, y, z, ForestryBlock.saplingGE.block(), 0, Defaults.FLAG_BLOCK_SYNCH);
+		boolean placed = world.setBlock(x, y, z, ForestryBlock.saplingGE.block(), 0, Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		if (!placed) {
 			return false;
 		}

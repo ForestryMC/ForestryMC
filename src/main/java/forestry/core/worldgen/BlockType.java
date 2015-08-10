@@ -35,7 +35,7 @@ public class BlockType implements IBlockType {
 
 	@Override
 	public void setBlock(World world, int x, int y, int z) {
-		world.setBlock(x, y, z, block, meta, Defaults.FLAG_BLOCK_SYNCH);
+		world.setBlock(x, y, z, block, meta, Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
 	}
 
 	@Override
