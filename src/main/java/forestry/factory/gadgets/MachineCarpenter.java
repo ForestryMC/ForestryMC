@@ -297,7 +297,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 	private boolean removeSets(int count, ItemStack[] set) {
 		EntityPlayer player = Proxies.common.getPlayer(worldObj, getOwner());
-		return InvTools.removeSets(getInternalInventory(), count, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
+		return InvTools.removeSets(getInternalInventory(), count, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true);
 	}
 
 	private boolean tryAddPending() {

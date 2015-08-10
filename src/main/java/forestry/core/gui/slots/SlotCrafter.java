@@ -17,22 +17,17 @@ import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 
-import forestry.core.interfaces.ICrafter;
+import forestry.core.interfaces.ICrafterWorktable;
 
 public class SlotCrafter extends SlotCrafting {
 
-	private final ICrafter crafter;
 	private final IInventory craftMatrix;
+	private final ICrafterWorktable crafter;
 
-	public SlotCrafter(EntityPlayer player, IInventory craftMatrix, ICrafter crafter, int slot, int xPos, int yPos) {
+	public SlotCrafter(EntityPlayer player, IInventory craftMatrix, ICrafterWorktable crafter, int slot, int xPos, int yPos) {
 		super(player, craftMatrix, craftMatrix, slot, xPos, yPos);
-		this.crafter = crafter;
 		this.craftMatrix = craftMatrix;
-	}
-
-	@Override
-	public boolean isItemValid(ItemStack par1ItemStack) {
-		return false;
+		this.crafter = crafter;
 	}
 
 	@Override
@@ -51,18 +46,23 @@ public class SlotCrafter extends SlotCrafting {
 
 	@Override
 	public ItemStack getStack() {
-		return this.crafter.getResult();
+		return crafter.getResult();
 	}
 
 	@Override
 	public boolean getHasStack() {
-		return this.getStack() != null && crafter.canTakeStack(getSlotIndex());
+		return getStack() != null && crafter.canTakeStack(getSlotIndex());
 	}
 
 	@Override
 	public void onPickupFromSlot(EntityPlayer player, ItemStack itemStack) {
+		if (!crafter.onCraftingStart(player)) {
+			return;
+		}
+
 		FMLCommonHandler.instance().firePlayerCraftingEvent(player, itemStack, craftMatrix);
-		this.onCrafting(itemStack, itemStack.stackSize); // handles crafting achievements, maps, and statistics
-		crafter.takenFromSlot(getSlotIndex(), player);
+		this.onCrafting(itemStack); // handles crafting achievements, maps, and statistics
+
+		crafter.onCraftingComplete(player);
 	}
 }

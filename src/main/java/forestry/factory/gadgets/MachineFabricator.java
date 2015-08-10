@@ -439,7 +439,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 	private boolean removeFromInventory(ItemStack[] set, EntityPlayer player, boolean doRemove) {
 		IInventoryAdapter inventory = getInternalInventory();
 		if (doRemove) {
-			return InvTools.removeSets(inventory, 1, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
+			return InvTools.removeSets(inventory, 1, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true);
 		} else {
 			ItemStack[] stock = InvTools.getStacks(inventory, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
 			return StackUtils.containsSets(set, stock) >= 1;
