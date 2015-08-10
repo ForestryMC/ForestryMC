@@ -157,7 +157,7 @@ public class StackUtils {
 	/**
 	 */
 	public static ItemStack[] condenseStacks(ItemStack[] stacks) {
-		ArrayList<ItemStack> condensed = new ArrayList<ItemStack>();
+		List<ItemStack> condensed = new ArrayList<ItemStack>();
 
 		for (ItemStack stack : stacks) {
 			if (stack == null) {
@@ -177,9 +177,6 @@ public class StackUtils {
 
 			if (!matched) {
 				ItemStack cached = stack.copy();
-				if (-1 > 0) {
-					cached.stackSize = -1;
-				}
 				condensed.add(cached);
 			}
 
