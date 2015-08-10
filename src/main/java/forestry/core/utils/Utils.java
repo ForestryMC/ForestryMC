@@ -206,14 +206,13 @@ public class Utils {
 	}
 
 	public static <T extends TileEntity> T getTile(IBlockAccess world, int x, int y, int z, Class<T> tileClass) {
-		T tileEntity = null;
-		try {
-			tileEntity = tileClass.cast(world.getTileEntity(x, y, z));
-		} catch (ClassCastException ex) {
-			Proxies.log.warning("Failed to cast a tile entity to a " + tileClass.getName() + " at " + x + '/' + y + '/' + z);
+		TileEntity tileEntity = world.getTileEntity(x, y, z);
+		if (tileClass.isInstance(tileEntity)) {
+			return tileClass.cast(tileEntity);
+		} else {
+			Proxies.log.warning("Failed to cast a tile entity {" + tileEntity + "} to a {" + tileClass.getName() + "} at " + x + '/' + y + '/' + z);
+			return null;
 		}
-
-		return tileEntity;
 	}
 
 	public static int addRGBComponents(int colour, int r, int g, int b) {
