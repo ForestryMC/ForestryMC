@@ -92,7 +92,7 @@ public class FarmInventory extends InventoryAdapterRestricted implements IFarmIn
 	@Override
 	public void removeResources(ItemStack[] resources) {
 		EntityPlayer player = Proxies.common.getPlayer(farmController.getWorld(), farmController.getAccessHandler().getOwner());
-		InvTools.removeSets(resourcesInventory, 1, resources, player, false, true, true);
+		InvTools.removeSets(resourcesInventory, 1, resources, player, false, true);
 	}
 
 	@Override

@@ -36,116 +36,6 @@ import forestry.core.utils.PlainInventory;
 
 public class RecipeMemory implements INBTTagable, IStreamable {
 
-	public static final class Recipe implements INBTTagable, IStreamable {
-
-		private InventoryAdapter matrix;
-		private long lastUsed;
-		private boolean locked;
-		private ItemStack cachedRecipeOutput;
-
-		public Recipe() {
-		}
-
-		public Recipe(InventoryCrafting crafting) {
-			this.matrix = new InventoryAdapter(new PlainInventory(crafting));
-		}
-
-		public Recipe(NBTTagCompound nbttagcompound) {
-			readFromNBT(nbttagcompound);
-		}
-
-		public void updateLastUse(long lastUsed) {
-			this.lastUsed = lastUsed;
-		}
-
-		public void toggleLock() {
-			locked = !locked;
-		}
-
-		public InventoryAdapter getMatrix() {
-			return matrix;
-		}
-
-		public ItemStack getRecipeOutput(World world) {
-			if (cachedRecipeOutput == null) {
-				InventoryCrafting crafting = new InventoryCrafting(DUMMY_CONTAINER, 3, 3);
-				for (int i = 0; i < crafting.getSizeInventory(); i++) {
-					crafting.setInventorySlotContents(i, matrix.getStackInSlot(i));
-				}
-
-				cachedRecipeOutput = CraftingManager.getInstance().findMatchingRecipe(crafting, world);
-			}
-			return cachedRecipeOutput;
-		}
-
-		public long getLastUsed() {
-			return this.lastUsed;
-		}
-
-		public boolean isLocked() {
-			return this.locked;
-		}
-
-		public boolean hasSameOutput(InventoryCrafting crafting, World world) {
-			ItemStack recipeOutput = getRecipeOutput(world);
-			if (recipeOutput == null) {
-				return false;
-			}
-
-			ItemStack matchingRecipeOutput = CraftingManager.getInstance().findMatchingRecipe(crafting, world);
-			return ItemStack.areItemStacksEqual(recipeOutput, matchingRecipeOutput);
-		}
-
-		@Override
-		public final void readFromNBT(NBTTagCompound nbttagcompound) {
-			matrix = new InventoryAdapter(new InventoryCrafting(DUMMY_CONTAINER, 3, 3));
-			matrix.readFromNBT(nbttagcompound);
-			sanitizeMatrix();
-			lastUsed = nbttagcompound.getLong("LastUsed");
-			locked = nbttagcompound.getBoolean("Locked");
-		}
-
-		@Override
-		public void writeToNBT(NBTTagCompound nbttagcompound) {
-			sanitizeMatrix();
-			matrix.writeToNBT(nbttagcompound);
-			nbttagcompound.setLong("LastUsed", lastUsed);
-			nbttagcompound.setBoolean("Locked", locked);
-		}
-
-		@Override
-		public void writeData(DataOutputStreamForestry data) throws IOException {
-			sanitizeMatrix();
-			matrix.writeData(data);
-			data.writeLong(lastUsed);
-			data.writeBoolean(locked);
-		}
-
-		@Override
-		public void readData(DataInputStreamForestry data) throws IOException {
-			matrix = new InventoryAdapter(new InventoryCrafting(DUMMY_CONTAINER, 3, 3));
-			matrix.readData(data);
-			sanitizeMatrix();
-			lastUsed = data.readLong();
-			locked = data.readBoolean();
-		}
-
-		/**
-		 * This is a nasty hack to hide a bug where the recipe stacks somehow
-		 * get the stackSize set to -1. Which makes the recipe no longer work,
-		 * ever. I've seen the bug, even inspected the NBT data of an afflicted
-		 * worktable, but can't duplicate it, and can't trace it. -CovertJaguar
-		 */
-		private void sanitizeMatrix() {
-			for (int slot = 0; slot < matrix.getSizeInventory(); slot++) {
-				ItemStack stack = matrix.getStackInSlot(slot);
-				if (stack != null) {
-					stack.stackSize = 1;
-				}
-			}
-		}
-	}
-
 	public static final int capacity = 9;
 
 	private static final Container DUMMY_CONTAINER = new ContainerDummy();
@@ -311,4 +201,116 @@ public class RecipeMemory implements INBTTagable, IStreamable {
 		List<Recipe> newRecipes = data.readStreamables(Recipe.class);
 		recipes.addAll(newRecipes);
 	}
+
+	public static final class Recipe implements INBTTagable, IStreamable {
+
+		private InventoryAdapter matrix;
+		private long lastUsed;
+		private boolean locked;
+		private ItemStack cachedRecipeOutput;
+
+		public Recipe() {
+			// required for serialization
+		}
+
+		public Recipe(InventoryCrafting crafting) {
+			this.matrix = new InventoryAdapter(new PlainInventory(crafting));
+		}
+
+		public Recipe(NBTTagCompound nbttagcompound) {
+			readFromNBT(nbttagcompound);
+		}
+
+		public void updateLastUse(long lastUsed) {
+			this.lastUsed = lastUsed;
+		}
+
+		public void toggleLock() {
+			locked = !locked;
+		}
+
+		public InventoryAdapter getMatrix() {
+			return matrix;
+		}
+
+		public ItemStack getRecipeOutput(World world) {
+			if (cachedRecipeOutput == null) {
+				InventoryCrafting crafting = new InventoryCrafting(DUMMY_CONTAINER, 3, 3);
+				for (int i = 0; i < crafting.getSizeInventory(); i++) {
+					crafting.setInventorySlotContents(i, matrix.getStackInSlot(i));
+				}
+
+				cachedRecipeOutput = CraftingManager.getInstance().findMatchingRecipe(crafting, world);
+			}
+			return cachedRecipeOutput;
+		}
+
+		public long getLastUsed() {
+			return this.lastUsed;
+		}
+
+		public boolean isLocked() {
+			return this.locked;
+		}
+
+		public boolean hasSameOutput(InventoryCrafting crafting, World world) {
+			ItemStack recipeOutput = getRecipeOutput(world);
+			if (recipeOutput == null) {
+				return false;
+			}
+
+			ItemStack matchingRecipeOutput = CraftingManager.getInstance().findMatchingRecipe(crafting, world);
+			return ItemStack.areItemStacksEqual(recipeOutput, matchingRecipeOutput);
+		}
+
+		@Override
+		public final void readFromNBT(NBTTagCompound nbttagcompound) {
+			matrix = new InventoryAdapter(new InventoryCrafting(DUMMY_CONTAINER, 3, 3));
+			matrix.readFromNBT(nbttagcompound);
+			sanitizeMatrix();
+			lastUsed = nbttagcompound.getLong("LastUsed");
+			locked = nbttagcompound.getBoolean("Locked");
+		}
+
+		@Override
+		public void writeToNBT(NBTTagCompound nbttagcompound) {
+			sanitizeMatrix();
+			matrix.writeToNBT(nbttagcompound);
+			nbttagcompound.setLong("LastUsed", lastUsed);
+			nbttagcompound.setBoolean("Locked", locked);
+		}
+
+		@Override
+		public void writeData(DataOutputStreamForestry data) throws IOException {
+			sanitizeMatrix();
+			matrix.writeData(data);
+			data.writeLong(lastUsed);
+			data.writeBoolean(locked);
+		}
+
+		@Override
+		public void readData(DataInputStreamForestry data) throws IOException {
+			matrix = new InventoryAdapter(new InventoryCrafting(DUMMY_CONTAINER, 3, 3));
+			matrix.readData(data);
+			sanitizeMatrix();
+			lastUsed = data.readLong();
+			locked = data.readBoolean();
+		}
+
+		/**
+		 * This is a nasty hack to hide a bug where the recipe stacks somehow
+		 * get the stackSize set to -1. Which makes the recipe no longer work,
+		 * ever. I've seen the bug, even inspected the NBT data of an afflicted
+		 * worktable, but can't duplicate it, and can't trace it. -CovertJaguar
+		 */
+		private void sanitizeMatrix() {
+			for (int slot = 0; slot < matrix.getSizeInventory(); slot++) {
+				ItemStack stack = matrix.getStackInSlot(slot);
+				if (stack != null) {
+					stack.stackSize = 1;
+				}
+			}
+		}
+	}
+
 }

@@ -316,37 +316,46 @@ public abstract class InvTools {
 	 * If the inventory doesn't have all the required items, returns false without removing anything.
 	 * If stowContainer is true, items with containers will have their container stowed.
 	 */
-	public static boolean removeSets(IInventory inventory, int count, ItemStack[] set, EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
-		return removeSets(inventory, count, set, 0, inventory.getSizeInventory(), player, stowContainer, oreDictionary, craftingTools);
+	public static boolean removeSets(IInventory inventory, int count, ItemStack[] set, EntityPlayer player, boolean stowContainer, boolean oreDictionary) {
+		return removeSets(inventory, count, set, 0, inventory.getSizeInventory(), player, stowContainer, oreDictionary, false) != null;
 	}
 
-	public static boolean removeSets(IInventory inventory, int count, ItemStack[] set, int firstSlotIndex, int slotCount, EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
+	public static boolean removeSets(IInventory inventory, int count, ItemStack[] set, int firstSlotIndex, int slotCount, EntityPlayer player, boolean stowContainer, boolean oreDictionary) {
+		return removeSets(inventory, count, set, firstSlotIndex, slotCount, player, stowContainer, oreDictionary, false) != null;
+	}
 
-		ItemStack[] condensedSet = StackUtils.condenseStacks(set, -1, false);
+	public static ItemStack[] removeSets(IInventory inventory, int count, ItemStack[] set, int firstSlotIndex, int slotCount, EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
 
+		ItemStack[] removed = new ItemStack[set.length];
 		ItemStack[] stock = getStacks(inventory, firstSlotIndex, slotCount);
-		if (StackUtils.containsSets(condensedSet, stock, oreDictionary, craftingTools) < count) {
-			return false;
+
+		if (StackUtils.containsSets(set, stock, oreDictionary, craftingTools) < count) {
+			return null;
 		}
 
-		for (ItemStack stackToRemove : condensedSet) {
+		for (int i = 0; i < set.length; i++) {
+			if (set[i] == null) {
+				continue;
+			}
+			ItemStack stackToRemove = set[i].copy();
 			stackToRemove.stackSize *= count;
 
 			// try to remove the exact stack first
-			removeStack(inventory, stackToRemove, firstSlotIndex, slotCount, player, stowContainer, false, false);
-
-			// remove crafting equivalents next
-			if (stackToRemove.stackSize > 0) {
-				removeStack(inventory, stackToRemove, firstSlotIndex, slotCount, player, stowContainer, oreDictionary, craftingTools);
+			ItemStack removedStack = removeStack(inventory, stackToRemove, firstSlotIndex, slotCount, player, stowContainer, false, false);
+			if (removedStack == null) {
+				// remove crafting equivalents next
+				removedStack = removeStack(inventory, stackToRemove, firstSlotIndex, slotCount, player, stowContainer, oreDictionary, craftingTools);
 			}
+
+			removed[i] = removedStack;
 		}
-		return true;
+		return removed;
 	}
 
 	/**
 	 * Private Helper for removeSetsFromInventory. Assumes removal is possible.
 	 */
-	private static void removeStack(IInventory inventory, ItemStack stackToRemove, int firstSlotIndex, int slotCount, EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
+	private static ItemStack removeStack(IInventory inventory, ItemStack stackToRemove, int firstSlotIndex, int slotCount, EntityPlayer player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
 		for (int j = firstSlotIndex; j < firstSlotIndex + slotCount; j++) {
 			ItemStack stackInSlot = inventory.getStackInSlot(j);
 			if (stackInSlot == null) {
@@ -365,9 +374,10 @@ public abstract class InvTools {
 			}
 
 			if (stackToRemove.stackSize == 0) {
-				return;
+				return removed;
 			}
 		}
+		return null;
 	}
 
 	/* CONTAINS */

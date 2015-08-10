@@ -80,7 +80,7 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 		}
 
 		public boolean matches(ItemStack[] res) {
-			return StackUtils.containsSets(resources, res, true, true) > 0;
+			return StackUtils.containsSets(resources, res, true, false) > 0;
 		}
 	}
 
@@ -300,7 +300,7 @@ public class MachineSqueezer extends TilePowered implements ISidedInventory, ILi
 
 	private boolean removeResources(ItemStack[] stacks) {
 		EntityPlayer player = Proxies.common.getPlayer(worldObj, getAccessHandler().getOwner());
-		return InvTools.removeSets(getInternalInventory(), 1, stacks, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT, player, false, true, true);
+		return InvTools.removeSets(getInternalInventory(), 1, stacks, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT, player, false, true);
 	}
 
 	@Override

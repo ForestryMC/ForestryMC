@@ -19,12 +19,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
+
 import forestry.api.core.ForestryAPI;
 import forestry.core.gadgets.TileBase;
-import forestry.core.interfaces.ICrafter;
+import forestry.core.interfaces.ICrafterWorktable;
 import forestry.core.inventory.InvTools;
-import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
@@ -33,7 +36,7 @@ import forestry.core.utils.GuiUtil;
 import forestry.core.utils.RecipeUtil;
 import forestry.factory.recipes.RecipeMemory;
 
-public class TileWorktable extends TileBase implements ICrafter {
+public class TileWorktable extends TileBase implements ICrafterWorktable {
 
 	/* CONSTANTS */
 	public final static int SLOT_CRAFTING_1 = 0;
@@ -161,11 +164,6 @@ public class TileWorktable extends TileBase implements ICrafter {
 		return RecipeUtil.canCraftRecipe(worldObj, recipeItems, recipeOutput, inventory);
 	}
 
-	private boolean removeResources(EntityPlayer player) {
-		ItemStack[] set = InvTools.getStacks(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
-		return InvTools.removeSets(getInternalInventory(), 1, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, true, true, true);
-	}
-
 	@Override
 	public boolean canTakeStack(int slotIndex) {
 		if (slotIndex == SLOT_CRAFTING_RESULT) {
@@ -175,17 +173,47 @@ public class TileWorktable extends TileBase implements ICrafter {
 	}
 
 	@Override
-	public ItemStack takenFromSlot(int slotIndex, EntityPlayer player) {
-		if (!removeResources(player)) {
-			return null;
+	public boolean onCraftingStart(EntityPlayer player) {
+		ItemStack[] set = InvTools.getStacks(currentRecipe.getMatrix(), SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
+		ItemStack[] removed = InvTools.removeSets(this, 1, set, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT, player, false, true, true);
+
+		for (int i = 0; i < removed.length; i++) {
+			craftingInventory.setInventorySlotContents(i, removed[i]);
 		}
 
+		return removed != null;
+	}
+
+	@Override
+	public void onCraftingComplete(EntityPlayer player) {
+		IInventory craftingInventory = getCraftingInventory();
+		for (int i = 0; i < craftingInventory.getSizeInventory(); ++i) {
+			ItemStack itemStack = craftingInventory.getStackInSlot(i);
+			if (itemStack == null) {
+				continue;
+			}
+
+			if (!itemStack.getItem().hasContainerItem(itemStack)) {
+				continue;
+			}
+
+			ItemStack container = itemStack.getItem().getContainerItem(itemStack);
+
+			if (container != null && container.isItemStackDamageable() && container.getItemDamage() > container.getMaxDamage()) {
+				MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(player, container));
+				continue;
+			}
+
+			if (!InvTools.tryAddStack(this, container, true)) {
+				player.dropPlayerItemWithRandomChoice(container, false);
+			}
+		}
+		
 		if (Proxies.common.isSimulating(worldObj)) {
 			memorized.memorizeRecipe(worldObj, currentRecipe, currentCrafting);
 		}
 
 		updateCraftResult();
-		return currentRecipe.getRecipeOutput(worldObj).copy();
 	}
 
 	@Override
@@ -203,8 +231,8 @@ public class TileWorktable extends TileBase implements ICrafter {
 	/**
 	 * @return Inaccessible crafting inventory for the craft grid.
 	 */
-	public InventoryAdapter getCraftingInventory() {
-		return craftingInventory;
+	public IInventory getCraftingInventory() {
+		return new InventoryMapper(craftingInventory, SLOT_CRAFTING_1, SLOT_CRAFTING_COUNT);
 	}
 
 	private static class WorktableInventoryAdapter extends TileInventoryAdapter<TileWorktable> {

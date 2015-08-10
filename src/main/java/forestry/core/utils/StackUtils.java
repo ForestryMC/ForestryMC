@@ -116,54 +116,6 @@ public class StackUtils {
 		}
 
 		return added;
-
-	}
-
-	public static int addToInventory(ItemStack itemstack, IInventory inventory, boolean doAdd, int slot1, int count) {
-
-		int added = 0;
-
-		for (int i = slot1; i < slot1 + count; i++) {
-			ItemStack inventoryStack = inventory.getStackInSlot(i);
-
-			// Grab those free slots
-			if (inventoryStack == null) {
-				if (doAdd) {
-					inventory.setInventorySlotContents(i, itemstack.copy());
-				}
-				return itemstack.stackSize;
-			}
-
-			// Already full
-			if (inventoryStack.stackSize >= inventoryStack.getMaxStackSize()) {
-				continue;
-			}
-
-			// Not same type
-			if (!inventoryStack.isItemEqual(itemstack)) {
-				continue;
-			}
-
-			int space = inventoryStack.getMaxStackSize() - inventoryStack.stackSize;
-
-			// Enough space to add all
-			if (space > itemstack.stackSize - added) {
-				if (doAdd) {
-					inventoryStack.stackSize += itemstack.stackSize;
-				}
-				return itemstack.stackSize;
-				// Only part can be added
-			} else {
-				if (doAdd) {
-					inventoryStack.stackSize = inventoryStack.getMaxStackSize();
-				}
-				added += space;
-			}
-
-		}
-
-		return added;
-
 	}
 
 	/**
@@ -189,18 +141,6 @@ public class StackUtils {
 		temp.stackSize = 0;
 	}
 
-	public static boolean freeSpaceInStack(ItemStack stack, int maxSize) {
-		if (stack == null) {
-			return true;
-		}
-
-		if (stack.stackSize >= maxSize) {
-			return false;
-		}
-
-		return true;
-	}
-
 	/**
 	 * Creates a split stack of the specified amount, preserving NBT data,
 	 * without decreasing the source stack.
@@ -214,14 +154,9 @@ public class StackUtils {
 		return split;
 	}
 
-	public static ItemStack[] condenseStacks(ItemStack[] stacks) {
-		return condenseStacks(stacks, -1, false);
-	}
-
 	/**
-	 * @param maxCountedPerStack The maximum stacksize counted in a single stack. -1 for unlimited.
 	 */
-	public static ItemStack[] condenseStacks(ItemStack[] stacks, int maxCountedPerStack, boolean craftingEquivalency) {
+	public static ItemStack[] condenseStacks(ItemStack[] stacks) {
 		ArrayList<ItemStack> condensed = new ArrayList<ItemStack>();
 
 		for (ItemStack stack : stacks) {
@@ -234,16 +169,16 @@ public class StackUtils {
 
 			boolean matched = false;
 			for (ItemStack cached : condensed) {
-				if ((cached.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(cached, stack)) || (craftingEquivalency && isCraftingEquivalent(cached, stack, true, false))) {
-					cached.stackSize += maxCountedPerStack > 0 && stack.stackSize > maxCountedPerStack ? maxCountedPerStack : stack.stackSize;
+				if ((cached.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(cached, stack))) {
+					cached.stackSize += stack.stackSize;
 					matched = true;
 				}
 			}
 
 			if (!matched) {
 				ItemStack cached = stack.copy();
-				if (maxCountedPerStack > 0) {
-					cached.stackSize = maxCountedPerStack;
+				if (-1 > 0) {
+					cached.stackSize = -1;
 				}
 				condensed.add(cached);
 			}
@@ -273,34 +208,31 @@ public class StackUtils {
 	 * Counts how many full sets are contained in the passed stock
 	 */
 	public static int containsSets(ItemStack[] set, ItemStack[] stock, boolean oreDictionary, boolean craftingTools) {
-		int count = 0;
+		int totalSets = 0;
 
-		ItemStack[] condensedRequired = StackUtils.condenseStacks(set, -1, oreDictionary);
-		ItemStack[] condensedOffered = StackUtils.condenseStacks(stock, -1, oreDictionary);
+		ItemStack[] condensedRequired = StackUtils.condenseStacks(set);
+		ItemStack[] condensedOffered = StackUtils.condenseStacks(stock);
 
 		for (ItemStack req : condensedRequired) {
 
-			boolean matched = false;
+			int reqCount = 0;
 			for (ItemStack offer : condensedOffered) {
-
 				if (isCraftingEquivalent(req, offer, oreDictionary, craftingTools)) {
-
 					int stackCount = (int) Math.floor(offer.stackSize / req.stackSize);
-					matched |= (stackCount > 0);
-
-					if (count == 0) {
-						count = stackCount;
-					} else if (count > stackCount) {
-						count = stackCount;
-					}
+					reqCount = Math.max(reqCount, stackCount);
 				}
 			}
-			if (!matched) {
+
+			if (reqCount == 0) {
 				return 0;
+			} else if (totalSets == 0) {
+				totalSets = reqCount;
+			} else if (totalSets > reqCount) {
+				totalSets = reqCount;
 			}
 		}
 
-		return count;
+		return totalSets;
 	}
 
 	/**
@@ -437,20 +369,6 @@ public class StackUtils {
 		ItemStack created = template.copy();
 		created.stackSize = size <= 0 ? 1 : size > created.getMaxStackSize() ? created.getMaxStackSize() : size;
 		return created;
-	}
-
-	public static ItemStack consumeItem(ItemStack stack) {
-		if (stack.stackSize == 1) {
-			if (stack.getItem().hasContainerItem(stack)) {
-				return stack.getItem().getContainerItem(stack);
-			} else {
-				return null;
-			}
-		} else {
-			stack.splitStack(1);
-
-			return stack;
-		}
 	}
 
 	public static Block getBlock(ItemStack stack) {
