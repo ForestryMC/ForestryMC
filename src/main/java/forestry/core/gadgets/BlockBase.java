@@ -38,6 +38,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.interfaces.IAccessHandler;
 import forestry.core.interfaces.IRestrictedAccessTile;
+import forestry.core.interfaces.ISocketable;
 import forestry.core.items.ItemNBTTile;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.PlayerUtil;
@@ -198,23 +199,6 @@ public class BlockBase extends BlockForestry {
 	}
 
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
-
-		IRestrictedAccessTile tile = (IRestrictedAccessTile) world.getTileEntity(x, y, z);
-		if (tile == null) {
-			return world.setBlockToAir(x, y, z);
-		}
-
-		IAccessHandler accessHandler = tile.getAccessHandler();
-
-		if (accessHandler.isOwned() && !accessHandler.allowsRemoval(player)) {
-			return false;
-		}
-
-		return world.setBlockToAir(x, y, z);
-	}
-
-	@Override
 	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
 
 		if (!Proxies.common.isSimulating(world)) {
@@ -227,6 +211,9 @@ public class BlockBase extends BlockForestry {
 			Utils.dropInventory(inventory, world, x, y, z);
 			if (tile instanceof TileForestry) {
 				((TileForestry) tile).onRemoval();
+			}
+			if (tile instanceof ISocketable) {
+				Utils.dropSockets((ISocketable) tile, tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord);
 			}
 		}
 		super.breakBlock(world, x, y, z, block, meta);

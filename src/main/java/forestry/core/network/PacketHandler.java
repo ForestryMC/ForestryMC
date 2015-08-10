@@ -117,12 +117,12 @@ public class PacketHandler {
 				}
 				case SOLDERING_IRON_CLICK: {
 					PacketSlotClick packet = new PacketSlotClick(data);
-					onSolderingIronClick(packet, player);
+					onSolderingIronClick(packet, (EntityPlayerMP) player);
 					return true;
 				}
 				case CHIPSET_CLICK: {
 					PacketSlotClick packet = new PacketSlotClick(data);
-					onChipsetClick(packet, player);
+					onChipsetClick(packet, (EntityPlayerMP) player);
 					return true;
 				}
 				case ACCESS_SWITCH: {
@@ -248,7 +248,7 @@ public class PacketHandler {
 		}
 	}
 
-	private static void onChipsetClick(PacketSlotClick packet, EntityPlayer player) {
+	private static void onChipsetClick(PacketSlotClick packet, EntityPlayerMP player) {
 		assert FMLCommonHandler.instance().getEffectiveSide().isServer();
 
 		if (!(player.openContainer instanceof ContainerSocketed)) {
@@ -259,10 +259,10 @@ public class PacketHandler {
 			return;
 		}
 
-		((ContainerSocketed) player.openContainer).handleChipsetClick(packet.getSlot(), player, itemstack);
+		((ContainerSocketed) player.openContainer).handleChipsetClickServer(packet.getSlot(), player, itemstack);
 	}
 
-	private static void onSolderingIronClick(PacketSlotClick packet, EntityPlayer player) {
+	private static void onSolderingIronClick(PacketSlotClick packet, EntityPlayerMP player) {
 		assert FMLCommonHandler.instance().getEffectiveSide().isServer();
 
 		if (!(player.openContainer instanceof ContainerSocketed)) {
@@ -270,7 +270,7 @@ public class PacketHandler {
 		}
 		ItemStack itemstack = player.inventory.getItemStack();
 
-		((ContainerSocketed) player.openContainer).handleSolderingIronClick(packet.getSlot(), player, itemstack);
+		((ContainerSocketed) player.openContainer).handleSolderingIronClickServer(packet.getSlot(), player, itemstack);
 	}
 
 	private static void onAccessSwitch(PacketCoordinates packet, EntityPlayer playerEntity) {

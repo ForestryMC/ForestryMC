@@ -31,6 +31,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.registry.EntityRegistry;
 
 import forestry.api.core.ForestryAPI;
+import forestry.core.interfaces.ISocketable;
 import forestry.core.proxy.Proxies;
 
 import buildcraft.api.tools.IToolWrench;
@@ -51,32 +52,41 @@ public class Utils {
 
 		// Release inventory
 		for (int slot = 0; slot < inventory.getSizeInventory(); slot++) {
-
 			ItemStack itemstack = inventory.getStackInSlot(slot);
-
-			if (itemstack == null) {
-				continue;
-			}
-
-			float f = world.rand.nextFloat() * 0.8F + 0.1F;
-			float f1 = world.rand.nextFloat() * 0.8F + 0.1F;
-			float f2 = world.rand.nextFloat() * 0.8F + 0.1F;
-
-			while (itemstack.stackSize > 0) {
-				int stackPartial = world.rand.nextInt(21) + 10;
-				if (stackPartial > itemstack.stackSize) {
-					stackPartial = itemstack.stackSize;
-				}
-				ItemStack drop = itemstack.splitStack(stackPartial);
-				EntityItem entityitem = new EntityItem(world, x + f, y + f1, z + f2, drop);
-				float accel = 0.05F;
-				entityitem.motionX = (float) world.rand.nextGaussian() * accel;
-				entityitem.motionY = (float) world.rand.nextGaussian() * accel + 0.2F;
-				entityitem.motionZ = (float) world.rand.nextGaussian() * accel;
-				world.spawnEntityInWorld(entityitem);
-			}
-
+			dropItemStackFromInventory(itemstack, world, x, y, z);
 			inventory.setInventorySlotContents(slot, null);
+		}
+	}
+
+	public static void dropSockets(ISocketable socketable, World world, int x, int y, int z) {
+		for (int slot = 0; slot < socketable.getSocketCount(); slot++) {
+			ItemStack itemstack = socketable.getSocket(slot);
+			dropItemStackFromInventory(itemstack, world, x, y, z);
+			socketable.setSocket(slot, null);
+		}
+	}
+
+	public static void dropItemStackFromInventory(ItemStack itemStack, World world, int x, int y, int z) {
+		if (itemStack == null) {
+			return;
+		}
+
+		float f = world.rand.nextFloat() * 0.8F + 0.1F;
+		float f1 = world.rand.nextFloat() * 0.8F + 0.1F;
+		float f2 = world.rand.nextFloat() * 0.8F + 0.1F;
+
+		while (itemStack.stackSize > 0) {
+			int stackPartial = world.rand.nextInt(21) + 10;
+			if (stackPartial > itemStack.stackSize) {
+				stackPartial = itemStack.stackSize;
+			}
+			ItemStack drop = itemStack.splitStack(stackPartial);
+			EntityItem entityitem = new EntityItem(world, x + f, y + f1, z + f2, drop);
+			float accel = 0.05F;
+			entityitem.motionX = (float) world.rand.nextGaussian() * accel;
+			entityitem.motionY = (float) world.rand.nextGaussian() * accel + 0.2F;
+			entityitem.motionZ = (float) world.rand.nextGaussian() * accel;
+			world.spawnEntityInWorld(entityitem);
 		}
 	}
 

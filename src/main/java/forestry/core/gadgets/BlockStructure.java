@@ -18,6 +18,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
+import forestry.core.interfaces.ISocketable;
 import forestry.core.multiblock.MultiblockControllerBase;
 import forestry.core.multiblock.MultiblockTileEntityBase;
 import forestry.core.proxy.Proxies;
@@ -98,6 +99,9 @@ public abstract class BlockStructure extends BlockForestry {
 			// drop inventory if we're the last part remaining
 			if (part.getNeighboringParts().length == 0) {
 				Utils.dropInventory(part, world, x, y, z);
+				if (tile instanceof ISocketable) {
+					Utils.dropSockets((ISocketable) tile, tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord);
+				}
 			}
 		}
 		super.breakBlock(world, x, y, z, block, meta);
