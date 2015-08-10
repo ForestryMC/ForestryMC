@@ -12,6 +12,7 @@ package forestry.core.gui;
 
 import java.awt.Color;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.gui.FontRenderer;
@@ -473,13 +474,13 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 	@Override
 	@Optional.Method(modid = "NotEnoughItems")
 	public Iterable<Integer> getItemSpawnSlots(GuiContainer gui, ItemStack item) {
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
 	@Optional.Method(modid = "NotEnoughItems")
 	public List<TaggedInventoryArea> getInventoryAreas(GuiContainer gui) {
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
