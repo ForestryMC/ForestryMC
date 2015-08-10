@@ -2,6 +2,7 @@ package uristqwerty.CraftGuide.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -34,7 +35,7 @@ public class LiquidFilter implements ItemFilter
 	{
 		String name = liquid.getFluid().getLocalizedName();
 		this.liquid = liquid;
-		liquidName = name.toLowerCase();
+		liquidName = name.toLowerCase(Locale.ENGLISH);
 		tooltip.clear();
 		tooltip.add(name);
 	}
@@ -52,7 +53,7 @@ public class LiquidFilter implements ItemFilter
 		}
 		else if(item instanceof String)
 		{
-			return liquidName.contains(((String)item).toLowerCase());
+			return liquidName.contains(((String)item).toLowerCase(Locale.ENGLISH));
 		}
 		else if(item instanceof List)
 		{

@@ -11,6 +11,7 @@
 package forestry.arboriculture.genetics;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -63,13 +64,13 @@ public enum TreeBranchDefinition implements IBranchDefinition {
 	private final IClassification branch;
 
 	TreeBranchDefinition() {
-		String name = this.name().toLowerCase();
+		String name = this.name().toLowerCase(Locale.ENGLISH);
 		String scientific = WordUtils.capitalize(name);
 		branch = new BranchTrees(name, scientific);
 	}
 
 	TreeBranchDefinition(String scientific) {
-		String name = this.name().toLowerCase();
+		String name = this.name().toLowerCase(Locale.ENGLISH);
 		branch = new BranchTrees(name, scientific);
 	}
 

@@ -1,6 +1,7 @@
 package forestry.apiculture.genetics;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
@@ -114,7 +115,7 @@ public enum BeeBranchDefinition implements IBranchDefinition {
 	private final IClassification branch;
 
 	BeeBranchDefinition(String scientific) {
-		branch = BeeManager.beeFactory.createBranch(this.name().toLowerCase(), scientific);
+		branch = BeeManager.beeFactory.createBranch(this.name().toLowerCase(Locale.ENGLISH), scientific);
 	}
 
 	protected void setBranchProperties(IAllele[] template) {

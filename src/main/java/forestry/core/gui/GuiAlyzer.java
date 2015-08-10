@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Stack;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -168,7 +169,7 @@ public abstract class GuiAlyzer extends GuiForestry<ContainerAlyzer, IInventory>
 		String mode = breedingTracker.getModeName();
 		if (mode != null && !mode.isEmpty()) {
 			newLine();
-			String rules = StringUtil.localize(guiName + ".behaviour") + ": " + StringUtil.capitalize(mode);
+			String rules = StringUtil.localize(guiName + ".behaviour") + ": " + WordUtils.capitalize(mode);
 			drawCenteredLine(rules, 8, 208, fontColor.get(guiName + ".binomial"));
 		}
 
