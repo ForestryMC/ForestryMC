@@ -296,8 +296,8 @@ public class PluginArboriculture extends ForestryPlugin {
 					'X', ForestryBlock.planks.getItemStack()}).setPreserveNBT());
 		}
 
-		ShapedRecipeCustom.buildPriorityRecipe(ForestryBlock.slabs.getItemStack(), "###", '#', ForestryBlock.planks).setPreserveNBT();
-		ShapedRecipeCustom.buildPriorityRecipe(ForestryBlock.slabsFireproof.getItemStack(), "###", '#', ForestryBlock.planksFireproof).setPreserveNBT();
+		ShapedRecipeCustom.buildPriorityRecipe(ForestryBlock.slabs.getItemStack(6), "###", '#', ForestryBlock.planks).setPreserveNBT();
+		ShapedRecipeCustom.buildPriorityRecipe(ForestryBlock.slabsFireproof.getItemStack(6), "###", '#', ForestryBlock.planksFireproof).setPreserveNBT();
 
 		ShapedRecipeCustom.buildRecipe(ForestryBlock.fences.getItemStack(3), "#X#", "#X#", '#', ForestryBlock.planks.getItemStack(1), 'X', "stickWood").setPreserveNBT();
 		ShapedRecipeCustom.buildRecipe(ForestryBlock.fencesFireproof.getItemStack(3), "#X#", "#X#", '#', ForestryBlock.planksFireproof.getItemStack(1), 'X', "stickWood").setPreserveNBT();
