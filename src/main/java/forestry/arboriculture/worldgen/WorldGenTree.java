@@ -53,7 +53,7 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 	}
 
 	protected void generateAdjustedCylinder(World world, int yCenter, float radius, int height, ITreeBlockType block) {
-		generateAdjustedCylinder(world, yCenter, 0, radius, height, block, EnumReplaceMode.NONE);
+		generateAdjustedCylinder(world, yCenter, 0, radius, height, block, EnumReplaceMode.SOFT);
 	}
 
 	protected void generateAdjustedCylinder(World world, int yCenter, float radius, int height, ITreeBlockType block, EnumReplaceMode replace) {
