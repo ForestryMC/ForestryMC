@@ -1064,6 +1064,10 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		return Arrays.copyOf(template, template.length);
 	}
 
+	public final String getUID() {
+		return species.getUID();
+	}
+
 	@Override
 	public final ITreeGenome getGenome() {
 		return genome;

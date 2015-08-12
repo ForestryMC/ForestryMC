@@ -451,6 +451,13 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		sendNetworkUpdateRipening();
 	}
 
+	public String getSpeciesUID() {
+		if (species == null) {
+			return null;
+		}
+		return species.getUID();
+	}
+
 	/* IBUTTERFLYNURSERY */
 	private IButterfly caterpillar;
 

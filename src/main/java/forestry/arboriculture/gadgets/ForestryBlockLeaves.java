@@ -22,11 +22,13 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
@@ -49,6 +51,7 @@ import forestry.api.core.Tabs;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.arboriculture.LeafDecayHelper;
+import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.items.ItemLeavesBlock;
 import forestry.arboriculture.render.LeafTexture;
 import forestry.core.proxy.Proxies;
@@ -210,7 +213,21 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 		}
 		super.beginLeavesDecay(world, x, y, z);
 	}
-	
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+		TileLeaves tileLeaves = getLeafTile(world, x, y, z);
+		if (tileLeaves != null && TreeDefinition.Willow.getUID().equals(tileLeaves.getSpeciesUID())) {
+			return null;
+		}
+		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
+	}
+
+	@Override
+	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
+		entity.motionX *= 0.4D;
+		entity.motionZ *= 0.4D;
+	}
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random random) {
