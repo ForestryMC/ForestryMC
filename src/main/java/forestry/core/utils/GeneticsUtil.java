@@ -39,6 +39,7 @@ import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.arboriculture.genetics.CheckPollinatable;
 import forestry.arboriculture.genetics.CheckPollinatableTree;
 import forestry.arboriculture.genetics.ICheckPollinatable;
+import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 
 public class GeneticsUtil {
@@ -118,10 +119,12 @@ public class GeneticsUtil {
 			return (IPollinatable) tile;
 		}
 
-		ITree pollen = getErsatzPollen(world, x, y, z);
-		if (pollen != null) {
-			pollen.setLeaves(world, owner, x, y, z);
-			return (IPollinatable) world.getTileEntity(x, y, z);
+		if (Config.pollinateVanillaTrees) {
+			ITree pollen = getErsatzPollen(world, x, y, z);
+			if (pollen != null) {
+				pollen.setLeaves(world, owner, x, y, z);
+				return (IPollinatable) world.getTileEntity(x, y, z);
+			}
 		}
 
 		return null;

@@ -57,6 +57,7 @@ public class Config {
 
 	// Genetics
 	public static boolean clearInvalidChromosomes = false;
+	public static boolean pollinateVanillaTrees = true;
 	public static float researchMutationBoostMultiplier = 1.5f;
 	public static float maxResearchMutationBoostPercent = 5.0f;
 
@@ -177,7 +178,7 @@ public class Config {
 
 	private static void loadNewConfigCommon(File configFileCommon) {
 
-		configCommon = new LocalizedConfiguration(configFileCommon, "1.0.0");
+		configCommon = new LocalizedConfiguration(configFileCommon, "1.1.0");
 
 		gameMode = configCommon.getStringLocalized("difficulty", "game.mode", "EASY", new String[]{"OP, EASY, NORMAL, HARD"});
 
@@ -243,6 +244,7 @@ public class Config {
 		}
 
 		clearInvalidChromosomes = configCommon.getBooleanLocalized("genetics", "clear.invalid.chromosomes", clearInvalidChromosomes);
+		pollinateVanillaTrees = configCommon.getBooleanLocalized("genetics", "pollinate.vanilla.trees", pollinateVanillaTrees);
 		researchMutationBoostMultiplier = configCommon.getFloatLocalized("genetics.research.boost", "multiplier", researchMutationBoostMultiplier, 1.0f, 1000.f);
 		maxResearchMutationBoostPercent = configCommon.getFloatLocalized("genetics.research.boost", "max.percent", maxResearchMutationBoostPercent, 0.0f, 100.0f);
 
