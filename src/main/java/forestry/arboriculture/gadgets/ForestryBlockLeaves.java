@@ -48,6 +48,7 @@ import forestry.api.core.IToolScoop;
 import forestry.api.core.Tabs;
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
+import forestry.arboriculture.LeafDecayHelper;
 import forestry.arboriculture.items.ItemLeavesBlock;
 import forestry.arboriculture.render.LeafTexture;
 import forestry.core.proxy.Proxies;
@@ -218,7 +219,7 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 			return;
 		}
 
-		super.updateTick(world, x, y, z, random);
+		LeafDecayHelper.leafDecay(this, world, x, y, z);
 
 		// check leaves tile again because they can decay in super.updateTick
 		if (tileLeaves.isInvalid()) {
