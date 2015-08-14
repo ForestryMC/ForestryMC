@@ -65,7 +65,6 @@ public class RenderEscritoire extends TileEntitySpecialRenderer implements IBloc
 		float factor = (float) (1.0 / 16.0);
 
 		GL11.glPushMatrix();
-		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glTranslatef((float) x + 0.5f, (float) y + 0.875f, (float) z + 0.5f);
 
 		float[] angle = {(float) Math.PI, 0, 0};
@@ -91,7 +90,6 @@ public class RenderEscritoire extends TileEntitySpecialRenderer implements IBloc
 		Proxies.common.bindTexture(texture);
 		modelEscritoire.render(null, angle[0], angle[1], angle[2], 0f, 0f, factor);
 
-		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
 
 		/*

@@ -107,7 +107,6 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
 	private void render(float progress, int charge, ForgeDirection orientation, double x, double y, double z) {
 
 		GL11.glPushMatrix();
-		GL11.glDisable(2896 /* GL_LIGHTING */);
 
 		GL11.glTranslatef((float) x, (float) y, (float) z);
 
@@ -196,7 +195,6 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
 		GL11.glTranslatef(-translate[0] * tfactor, translate[1] * tfactor, -translate[2] * tfactor);
 		blade2.render(factor);
 
-		GL11.glEnable(2896 /* GL_LIGHTING */);
 		GL11.glPopMatrix();
 
 	}
