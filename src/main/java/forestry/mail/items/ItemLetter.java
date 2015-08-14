@@ -39,8 +39,8 @@ import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
-import forestry.core.utils.GuiUtil;
 import forestry.core.utils.StringUtil;
+import forestry.core.utils.Utils;
 import forestry.mail.Letter;
 
 public class ItemLetter extends ItemInventoried {
@@ -266,10 +266,10 @@ public class ItemLetter extends ItemInventoried {
 		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 			if (letter.isProcessed()) {
 				return false;
-			} else if (GuiUtil.isIndexInRange(slotIndex, Letter.SLOT_POSTAGE_1, Letter.SLOT_POSTAGE_COUNT)) {
+			} else if (Utils.isIndexInRange(slotIndex, Letter.SLOT_POSTAGE_1, Letter.SLOT_POSTAGE_COUNT)) {
 				Item item = itemStack.getItem();
 				return item instanceof ItemStamps;
-			} else if (GuiUtil.isIndexInRange(slotIndex, Letter.SLOT_ATTACHMENT_1, Letter.SLOT_ATTACHMENT_COUNT)) {
+			} else if (Utils.isIndexInRange(slotIndex, Letter.SLOT_ATTACHMENT_1, Letter.SLOT_ATTACHMENT_COUNT)) {
 				return !ForestryItem.letters.isItemEqual(itemStack);
 			}
 			return false;

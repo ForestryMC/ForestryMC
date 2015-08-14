@@ -36,7 +36,7 @@ import forestry.core.proxy.Proxies;
 
 import buildcraft.api.tools.IToolWrench;
 
-public class Utils {
+public abstract class Utils {
 
 	private static final int slabWoodId = OreDictionary.getOreID("slabWood");
 	private static final Random rand = new Random();
@@ -223,6 +223,10 @@ public class Utils {
 			Proxies.log.warning("Failed to cast a tile entity {" + tileEntity + "} to a {" + tileClass.getName() + "} at " + x + '/' + y + '/' + z);
 			return null;
 		}
+	}
+
+	public static boolean isIndexInRange(int index, int start, int count) {
+		return (index >= start) && (index < start + count);
 	}
 
 	public static int addRGBComponents(int colour, int r, int g, int b) {

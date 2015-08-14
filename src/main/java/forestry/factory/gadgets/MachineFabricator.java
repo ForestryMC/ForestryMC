@@ -49,9 +49,9 @@ import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
-import forestry.core.utils.GuiUtil;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
 import forestry.factory.recipes.FabricatorRecipe;
 
 public class MachineFabricator extends TilePowered implements ICrafter, ILiquidTankContainer, ISidedInventory {
@@ -426,14 +426,14 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 				return RecipeManager.findMatchingSmelting(itemStack) != null;
 			} else if (slotIndex == SLOT_PLAN) {
 				return RecipeManager.isPlan(itemStack);
-			} else if (GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT)) {
+			} else if (Utils.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT)) {
 				if (RecipeManager.isPlan(itemStack)) {
 					return false;
 				} else if (RecipeManager.findMatchingSmelting(itemStack) != null) {
 					return false;
 				}
 			}
-			return GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+			return Utils.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
 		}
 
 		@Override

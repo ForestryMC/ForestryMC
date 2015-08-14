@@ -49,7 +49,6 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
-import forestry.core.utils.GuiUtil;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
 
@@ -635,7 +634,7 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 				return RecipeManager.isResource(itemStack);
 			}
 
-			if (GuiUtil.isIndexInRange(slotIndex, SLOT_STASH_1, SLOT_STASH_COUNT)) {
+			if (Utils.isIndexInRange(slotIndex, SLOT_STASH_1, SLOT_STASH_COUNT)) {
 				return FuelManager.moistenerResource.containsKey(itemStack);
 			}
 
@@ -653,7 +652,7 @@ public class MachineMoistener extends TileBase implements ISidedInventory, ILiqu
 				return true;
 			}
 
-			if (GuiUtil.isIndexInRange(slotIndex, SLOT_STASH_1, (SLOT_STASH_COUNT + SLOT_RESERVOIR_COUNT))) {
+			if (Utils.isIndexInRange(slotIndex, SLOT_STASH_1, (SLOT_STASH_COUNT + SLOT_RESERVOIR_COUNT))) {
 				return !FuelManager.moistenerResource.containsKey(itemstack);
 			}
 

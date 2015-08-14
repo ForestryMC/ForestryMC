@@ -28,8 +28,8 @@ import forestry.core.inventory.InvTools;
 import forestry.core.inventory.InventoryAdapterRestricted;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.GuiUtil;
 import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
 import forestry.plugins.PluginFarming;
 
 public class FarmInventory extends InventoryAdapterRestricted implements IFarmInventory {
@@ -66,13 +66,13 @@ public class FarmInventory extends InventoryAdapterRestricted implements IFarmIn
 
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (GuiUtil.isIndexInRange(slotIndex, SLOT_FERTILIZER, SLOT_FERTILIZER_COUNT)) {
+		if (Utils.isIndexInRange(slotIndex, SLOT_FERTILIZER, SLOT_FERTILIZER_COUNT)) {
 			return acceptsAsFertilizer(itemStack);
-		} else if (GuiUtil.isIndexInRange(slotIndex, SLOT_GERMLINGS_1, SLOT_GERMLINGS_COUNT)) {
+		} else if (Utils.isIndexInRange(slotIndex, SLOT_GERMLINGS_1, SLOT_GERMLINGS_COUNT)) {
 			return acceptsAsGermling(itemStack);
-		} else if (GuiUtil.isIndexInRange(slotIndex, SLOT_RESOURCES_1, SLOT_RESOURCES_COUNT)) {
+		} else if (Utils.isIndexInRange(slotIndex, SLOT_RESOURCES_1, SLOT_RESOURCES_COUNT)) {
 			return acceptsAsResource(itemStack);
-		} else if (GuiUtil.isIndexInRange(slotIndex, SLOT_CAN, SLOT_CAN_COUNT)) {
+		} else if (Utils.isIndexInRange(slotIndex, SLOT_CAN, SLOT_CAN_COUNT)) {
 			Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
 			return farmController.getTankManager().accepts(fluid);
 		}
@@ -81,7 +81,7 @@ public class FarmInventory extends InventoryAdapterRestricted implements IFarmIn
 
 	@Override
 	public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
-		return GuiUtil.isIndexInRange(slotIndex, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT);
+		return Utils.isIndexInRange(slotIndex, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT);
 	}
 
 	@Override

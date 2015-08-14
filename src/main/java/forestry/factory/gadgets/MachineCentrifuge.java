@@ -46,8 +46,8 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
-import forestry.core.utils.GuiUtil;
 import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
 import forestry.factory.triggers.FactoryTriggers;
 
 import buildcraft.api.statements.ITriggerExternal;
@@ -273,7 +273,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 
 		@Override
 		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-			return GuiUtil.isIndexInRange(slotIndex, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT);
+			return Utils.isIndexInRange(slotIndex, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT);
 		}
 	}
 

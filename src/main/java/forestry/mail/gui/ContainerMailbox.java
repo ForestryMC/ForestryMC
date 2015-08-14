@@ -18,7 +18,7 @@ import net.minecraft.item.ItemStack;
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.GuiUtil;
+import forestry.core.utils.Utils;
 import forestry.mail.POBox;
 import forestry.mail.POBoxInfo;
 import forestry.mail.gadgets.MachineMailbox;
@@ -52,7 +52,7 @@ public class ContainerMailbox extends ContainerTile<MachineMailbox> {
 	public ItemStack slotClick(int slotIndex, int button, int par3, EntityPlayer player) {
 		ItemStack stack = super.slotClick(slotIndex, button, par3, player);
 
-		if (GuiUtil.isIndexInRange(slotIndex, SLOT_LETTERS, SLOT_LETTERS_COUNT)) {
+		if (Utils.isIndexInRange(slotIndex, SLOT_LETTERS, SLOT_LETTERS_COUNT)) {
 			if (Proxies.common.isSimulating(player.worldObj) && mailInventory != null) {
 				POBoxInfo info = mailInventory.getPOBoxInfo();
 				Proxies.net.sendToPlayer(new PacketPOBoxInfo(info), player);

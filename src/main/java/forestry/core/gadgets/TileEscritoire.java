@@ -33,7 +33,7 @@ import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.GeneticsUtil;
-import forestry.core.utils.GuiUtil;
+import forestry.core.utils.Utils;
 
 public class TileEscritoire extends TileBase implements ISidedInventory, IRenderableMachine, ICrafter {
 
@@ -188,7 +188,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 				return true;
 			}
 
-			if (GuiUtil.isIndexInRange(slotIndex, SLOT_INPUT_1, SLOTS_INPUT_COUNT)) {
+			if (Utils.isIndexInRange(slotIndex, SLOT_INPUT_1, SLOTS_INPUT_COUNT)) {
 				if (slotIndex >= SLOT_INPUT_1 + tile.game.getSampleSize()) {
 					return true;
 				}
@@ -199,7 +199,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, IRender
 
 		@Override
 		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-			return GuiUtil.isIndexInRange(slotIndex, SLOT_RESULTS_1, SLOTS_RESULTS_COUNT);
+			return Utils.isIndexInRange(slotIndex, SLOT_RESULTS_1, SLOTS_RESULTS_COUNT);
 		}
 
 		@Override

@@ -35,8 +35,8 @@ import forestry.core.config.ForestryItem;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.InventoryAdapter;
-import forestry.core.utils.GuiUtil;
 import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
 import forestry.mail.items.ItemLetter;
 
 public class TradeStation extends WorldSavedData implements ITradeStation, IInventoryAdapter {
@@ -72,12 +72,12 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 		@Override
 		public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-			return GuiUtil.isIndexInRange(slot, SLOT_RECEIVE_BUFFER, SLOT_RECEIVE_BUFFER_COUNT);
+			return Utils.isIndexInRange(slot, SLOT_RECEIVE_BUFFER, SLOT_RECEIVE_BUFFER_COUNT);
 		}
 
 		@Override
 		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (GuiUtil.isIndexInRange(slotIndex, SLOT_SEND_BUFFER, SLOT_SEND_BUFFER_COUNT)) {
+			if (Utils.isIndexInRange(slotIndex, SLOT_SEND_BUFFER, SLOT_SEND_BUFFER_COUNT)) {
 				for (int i = 0; i < SLOT_TRADEGOOD_COUNT; i++) {
 					ItemStack tradeGood = getStackInSlot(SLOT_TRADEGOOD + i);
 					if (StackUtils.isIdenticalItem(tradeGood, itemStack)) {
@@ -85,10 +85,10 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 					}
 				}
 				return false;
-			} else if (GuiUtil.isIndexInRange(slotIndex, SLOT_LETTERS_1, SLOT_LETTERS_COUNT)) {
+			} else if (Utils.isIndexInRange(slotIndex, SLOT_LETTERS_1, SLOT_LETTERS_COUNT)) {
 				Item item = itemStack.getItem();
 				return item == Items.paper;
-			} else if (GuiUtil.isIndexInRange(slotIndex, SLOT_STAMPS_1, SLOT_STAMPS_COUNT)) {
+			} else if (Utils.isIndexInRange(slotIndex, SLOT_STAMPS_1, SLOT_STAMPS_COUNT)) {
 				Item item = itemStack.getItem();
 				return item instanceof IStamps;
 			}

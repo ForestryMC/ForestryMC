@@ -42,7 +42,7 @@ import forestry.core.inventory.InvTools;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.GuiId;
-import forestry.core.utils.GuiUtil;
+import forestry.core.utils.Utils;
 import forestry.factory.triggers.FactoryTriggers;
 
 import buildcraft.api.statements.ITriggerExternal;
@@ -366,7 +366,7 @@ public class EngineCopper extends Engine implements ISidedInventory {
 
 		@Override
 		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
-			return GuiUtil.isIndexInRange(slotIndex, SLOT_WASTE_1, SLOT_WASTE_COUNT);
+			return Utils.isIndexInRange(slotIndex, SLOT_WASTE_1, SLOT_WASTE_COUNT);
 		}
 	}
 }

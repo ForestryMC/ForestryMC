@@ -192,7 +192,7 @@ public class SlotHelper {
 	}
 
 	private static boolean isInPlayerHotbar(int slotIndex) {
-		return GuiUtil.isIndexInRange(slotIndex, playerInventorySize - playerHotbarSize, playerInventorySize);
+		return Utils.isIndexInRange(slotIndex, playerInventorySize - playerHotbarSize, playerInventorySize);
 	}
 
 	private static boolean shiftToPlayerInventoryNoHotbar(List inventorySlots, ItemStack stackInSlot) {

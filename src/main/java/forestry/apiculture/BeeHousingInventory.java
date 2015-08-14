@@ -18,7 +18,7 @@ import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.core.interfaces.IAccessHandler;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.InventoryAdapterRestricted;
-import forestry.core.utils.GuiUtil;
+import forestry.core.utils.Utils;
 
 public class BeeHousingInventory extends InventoryAdapterRestricted implements IBeeHousingInventory {
 	public static final int SLOT_QUEEN = 0;
@@ -47,7 +47,7 @@ public class BeeHousingInventory extends InventoryAdapterRestricted implements I
 		if (!super.canExtractItem(slotIndex, itemstack, side)) {
 			return false;
 		}
-		return GuiUtil.isIndexInRange(slotIndex, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT);
+		return Utils.isIndexInRange(slotIndex, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT);
 	}
 
 	@Override

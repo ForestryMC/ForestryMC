@@ -50,7 +50,7 @@ import forestry.core.network.GuiId;
 import forestry.core.network.PacketItemStackDisplay;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.GeneticsUtil;
-import forestry.core.utils.GuiUtil;
+import forestry.core.utils.Utils;
 
 public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankContainer, IItemStackDisplay {
 
@@ -312,7 +312,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 		@Override
 		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (GuiUtil.isIndexInRange(slotIndex, SLOT_INPUT_1, SLOT_INPUT_COUNT)) {
+			if (Utils.isIndexInRange(slotIndex, SLOT_INPUT_1, SLOT_INPUT_COUNT)) {
 				return AlleleManager.alleleRegistry.isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack) != null;
 			} else if (slotIndex == SLOT_CAN) {
 				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
@@ -324,7 +324,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 
 		@Override
 		public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
-			return GuiUtil.isIndexInRange(slotIndex, SLOT_OUTPUT_1, SLOT_OUTPUT_COUNT);
+			return Utils.isIndexInRange(slotIndex, SLOT_OUTPUT_1, SLOT_OUTPUT_COUNT);
 		}
 	}
 }

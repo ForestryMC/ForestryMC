@@ -40,7 +40,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.GuiId;
-import forestry.core.utils.GuiUtil;
+import forestry.core.utils.Utils;
 
 import buildcraft.api.statements.ITriggerExternal;
 
@@ -138,7 +138,7 @@ public class TileApiary extends TileBeeHousing {
 
 		@Override
 		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (GuiUtil.isIndexInRange(slotIndex, SLOT_FRAMES_1, SLOT_FRAMES_COUNT)) {
+			if (Utils.isIndexInRange(slotIndex, SLOT_FRAMES_1, SLOT_FRAMES_COUNT)) {
 				return itemStack.getItem() instanceof IHiveFrame;
 			}
 

@@ -32,8 +32,8 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.GuiUtil;
 import forestry.core.utils.RecipeUtil;
+import forestry.core.utils.Utils;
 import forestry.factory.recipes.RecipeMemory;
 
 public class TileWorktable extends TileBase implements ICrafterWorktable {
@@ -242,7 +242,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 
 		@Override
 		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			return GuiUtil.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+			return Utils.isIndexInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
 		}
 	}
 }
