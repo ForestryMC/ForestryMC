@@ -201,7 +201,7 @@ public class PluginFarming extends ForestryPlugin {
 
 			String itemString = tokens[1];
 
-			Matcher matcher = Pattern.compile("(.+?)\\.([0-9][0-9]?)(?:\\.(.+?)\\.([0-9][0-9]?))?").matcher(itemString);
+			Matcher matcher = Pattern.compile("(.+?)\\.(-?[0-9][0-9]?)(?:\\.(.+?)\\.(-?[0-9][0-9]?))?").matcher(itemString);
 			if (!matcher.matches()) {
 				Proxies.log.warning("%s For farm '%s': unable to parse string.", errormsg, tokens[0]);
 				return true;
