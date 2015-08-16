@@ -11,6 +11,10 @@
 package forestry.plugins;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -193,29 +197,40 @@ public class PluginFarming extends ForestryPlugin {
 				return true;
 			}
 
-			String[] items = tokens[1].split("[\\.]+");
-			if (items.length != 2 && items.length != 4) {
-				Proxies.log.warning("%s For farm '%s': id definitions did not match.", errormsg, tokens[0]);
+			Collection<IFarmable> farmables = Farmables.farmables.get(tokens[0]);
+
+			String itemString = tokens[1];
+
+			Matcher matcher = Pattern.compile("(.+?)\\.([0-9][0-9]?)(?:\\.(.+?)\\.([0-9][0-9]?))?").matcher(itemString);
+			if (!matcher.matches()) {
+				Proxies.log.warning("%s For farm '%s': unable to parse string.", errormsg, tokens[0]);
 				return true;
 			}
 
-			try {
-				Block sapling = GameData.getBlockRegistry().getRaw(items[0]);
-				if (sapling == null || sapling == Blocks.air) {
-					throw new RuntimeException("can't find block for " + items[0]);
-				}
+			MatchResult matchResult = matcher.toMatchResult();
+			String saplingString = matchResult.group(1);
+			String saplingMetaString = matchResult.group(2);
+			String windfallString = matchResult.group(3);
+			String windfallMetaString = matchResult.group(4);
 
-				if (items.length == 2) {
-					Farmables.farmables.get(tokens[0]).add(new FarmableGenericSapling(sapling, Integer.parseInt(items[1])));
+			try {
+				Block sapling = GameData.getBlockRegistry().getRaw(saplingString);
+				if (sapling == null || sapling == Blocks.air) {
+					throw new RuntimeException("can't find block for " + saplingString);
+				}
+				int saplingMeta = Integer.parseInt(saplingMetaString);
+
+				if (windfallString == null) {
+					farmables.add(new FarmableGenericSapling(sapling, saplingMeta));
 				} else {
-					Item windfall = GameData.getItemRegistry().getRaw(items[2]);
+					Item windfall = GameData.getItemRegistry().getRaw(windfallString);
 					if (windfall == null) {
-						throw new RuntimeException("can't find item for " + items[2]);
+						throw new RuntimeException("can't find item for " + windfallString);
 					}
 
-					Farmables.farmables.get(tokens[0]).add(
-							new FarmableGenericSapling(sapling, Integer.parseInt(items[1]),
-									new ItemStack(windfall, 1, Integer.parseInt(items[3]))));
+					ItemStack windfallStack = new ItemStack(windfall, 1, Integer.parseInt(windfallMetaString));
+
+					farmables.add(new FarmableGenericSapling(sapling, saplingMeta, windfallStack));
 				}
 			} catch (Exception ex) {
 				Proxies.log.warning("%s for farm '%s': %s", errormsg, tokens[0], ex.getMessage());
