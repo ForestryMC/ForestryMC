@@ -22,6 +22,8 @@ import net.minecraft.util.StatCollector;
 
 import net.minecraftforge.oredict.OreDictionary;
 
+import cpw.mods.fml.common.registry.GameData;
+
 import forestry.api.storage.IBackpackDefinition;
 
 public class BackpackDefinition implements IBackpackDefinition {
@@ -88,7 +90,7 @@ public class BackpackDefinition implements IBackpackDefinition {
 			return;
 		}
 
-		String itemStackString = item.delegate.name();
+		String itemStackString = GameData.getItemRegistry().getNameForObject(item);
 
 		int meta = validItem.getItemDamage();
 		if (meta != OreDictionary.WILDCARD_VALUE) {
@@ -174,7 +176,7 @@ public class BackpackDefinition implements IBackpackDefinition {
 			return false;
 		}
 
-		String itemStackStringWild = item.delegate.name();
+		String itemStackStringWild = GameData.getItemRegistry().getNameForObject(item);
 		if (validItemStacks.contains(itemStackStringWild)) {
 			return true;
 		}

@@ -44,6 +44,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -428,7 +429,7 @@ public class PluginApiculture extends ForestryPlugin {
 			List<String> plantableFlowerNames = new ArrayList<String>();
 			if (flowers != null) {
 				for (IFlower flower : flowers) {
-					String name = flower.getBlock().delegate.name();
+					String name = GameData.getBlockRegistry().getNameForObject(flower.getBlock());
 					if (name == null) {
 						Proxies.log.severe("Could not find name for flower: " + flower + " with type: " + flowerType);
 						continue;
