@@ -139,10 +139,19 @@ public class TileApiary extends TileBeeHousing {
 		@Override
 		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 			if (Utils.isIndexInRange(slotIndex, SLOT_FRAMES_1, SLOT_FRAMES_COUNT)) {
-				return itemStack.getItem() instanceof IHiveFrame;
+				return (itemStack.getItem() instanceof IHiveFrame) && (getStackInSlot(slotIndex) == null);
 			}
 
 			return super.canSlotAccept(slotIndex, itemStack);
+		}
+
+		// override for pipe automation
+		@Override
+		public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
+			if (Utils.isIndexInRange(slotIndex, SLOT_FRAMES_1, SLOT_FRAMES_COUNT)) {
+				return false;
+			}
+			return super.isItemValidForSlot(slotIndex, itemStack);
 		}
 
 		public IInventory getFrameInventory() {

@@ -35,7 +35,7 @@ public class InventoryAdapterRestricted extends InventoryAdapter {
 	}
 
 	@Override
-	public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
+	public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
 		if (itemStack == null || !accessHandler.allowsPipeConnections()) {
 			return false;
 		}
