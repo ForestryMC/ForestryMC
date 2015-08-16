@@ -178,7 +178,7 @@ public class EngineCopper extends Engine implements ISidedInventory {
 
 		if (isBurning()) {
 			heatToAdd++;
-			if (((double) energyManager.getTotalEnergyStored() / (double) maxEnergy) > 0.5) {
+			if (((double) energyManager.getTotalEnergyStored() / (double) energyManager.getMaxEnergyStored()) > 0.5) {
 				heatToAdd++;
 			}
 		}

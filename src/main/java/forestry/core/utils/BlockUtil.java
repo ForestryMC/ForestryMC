@@ -24,8 +24,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.core.config.Defaults;
+import forestry.core.gadgets.Engine;
 import forestry.core.vect.Vect;
 
+import cofh.api.energy.IEnergyConnection;
 import cofh.api.energy.IEnergyReceiver;
 
 public class BlockUtil {
@@ -38,12 +40,12 @@ public class BlockUtil {
 
 	}
 
-	public static boolean isEnergyReceiver(ForgeDirection side, TileEntity tile) {
-		if (!(tile instanceof IEnergyReceiver)) {
+	public static boolean isEnergyReceiverOrEngine(ForgeDirection side, TileEntity tile) {
+		if (!(tile instanceof IEnergyReceiver) && !(tile instanceof Engine)) {
 			return false;
 		}
 
-		IEnergyReceiver receptor = (IEnergyReceiver) tile;
+		IEnergyConnection receptor = (IEnergyConnection) tile;
 		return receptor.canConnectEnergy(side);
 	}
 

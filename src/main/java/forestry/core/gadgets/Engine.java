@@ -48,7 +48,6 @@ public abstract class Engine extends TileBase implements IEnergyConnection, IAct
 	private float pistonSpeedServer = 0;
 
 	protected int currentOutput = 0;
-	protected final int maxEnergy;
 	protected int heat;
 	protected final int maxHeat;
 	protected boolean forceCooldown = false;
@@ -57,8 +56,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection, IAct
 
 	protected Engine(int maxHeat, int maxEnergy) {
 		this.maxHeat = maxHeat;
-		this.maxEnergy = maxEnergy;
-		energyManager = new EnergyManager(2000, 100, 1000000);
+		energyManager = new EnergyManager(2000, 100, maxEnergy);
 
 		// allow engines to chain, but not have energy sucked out of them
 		energyManager.setReceiveOnly();
@@ -137,7 +135,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection, IAct
 				progress = 0;
 				stagePiston = 0;
 			}
-		} else if (enabledRedstone && BlockUtil.isEnergyReceiver(getOrientation().getOpposite(), tile)) {
+		} else if (enabledRedstone && BlockUtil.isEnergyReceiverOrEngine(getOrientation().getOpposite(), tile)) {
 			if (energyManager.canSendEnergy(getOrientation(), tile)) {
 				stagePiston = 1; // If we can transfer energy, start running
 				setActive(true);
@@ -183,7 +181,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection, IAct
 
 			TileEntity tile = worldObj.getTileEntity(xCoord + orient.offsetX, yCoord + orient.offsetY, zCoord + orient.offsetZ);
 
-			if (BlockUtil.isEnergyReceiver(getOrientation().getOpposite(), tile)) {
+			if (BlockUtil.isEnergyReceiverOrEngine(getOrientation().getOpposite(), tile)) {
 				setOrientation(orient);
 				worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, worldObj.getBlock(xCoord, yCoord, zCoord));
 				worldObj.func_147479_m(xCoord, yCoord, zCoord);

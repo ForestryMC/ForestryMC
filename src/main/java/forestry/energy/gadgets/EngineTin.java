@@ -147,7 +147,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		int gain = 0;
 		if (isRedstoneActivated() && isBurning()) {
 			gain++;
-			if (((double) energyManager.getTotalEnergyStored() / (double) maxEnergy) > 0.5) {
+			if (((double) energyManager.getTotalEnergyStored() / (double) energyManager.getMaxEnergyStored()) > 0.5) {
 				gain++;
 			}
 		}

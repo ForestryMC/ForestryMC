@@ -8,6 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.core.GameMode;
+import forestry.core.gadgets.Engine;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
@@ -194,12 +195,18 @@ public class EnergyManager implements IEnergyHandler, IStreamable {
 	 */
 	public int sendEnergy(ForgeDirection orientation, TileEntity tile, int amount, boolean simulate) {
 		int sent = 0;
-		if (BlockUtil.isEnergyReceiver(orientation.getOpposite(), tile)) {
-			IEnergyReceiver receptor = (IEnergyReceiver) tile;
-
+		if (BlockUtil.isEnergyReceiverOrEngine(orientation.getOpposite(), tile)) {
 			int extractable = energyStorage.extractEnergy(amount, true);
 			if (extractable > 0) {
-				sent = receptor.receiveEnergy(orientation.getOpposite(), extractable, simulate);
+
+				if (tile instanceof IEnergyReceiver) {
+					IEnergyReceiver receptor = (IEnergyReceiver) tile;
+					sent = receptor.receiveEnergy(orientation.getOpposite(), extractable, simulate);
+				} else if (tile instanceof Engine) {
+					Engine receptor = (Engine) tile;
+					sent = receptor.getEnergyManager().receiveEnergy(orientation.getOpposite(), extractable, simulate);
+				}
+
 				energyStorage.extractEnergy(sent, simulate);
 			}
 		}
