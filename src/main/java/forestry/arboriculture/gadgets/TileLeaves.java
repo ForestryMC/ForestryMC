@@ -19,9 +19,12 @@ import java.util.EnumSet;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.common.EnumPlantType;
 
@@ -47,6 +50,7 @@ import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.IButterflyRoot;
+import forestry.arboriculture.genetics.Tree;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.network.PacketRipeningUpdate;
 import forestry.core.genetics.alleles.Allele;
@@ -83,43 +87,87 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	/* SAVING & LOADING */
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-
-		ripeningTime = nbttagcompound.getShort("RT");
-		damage = nbttagcompound.getInteger("ENC");
-
-		if (nbttagcompound.hasKey("CATER")) {
-			maturationTime = nbttagcompound.getInteger("CATMAT");
-			caterpillar = (IButterfly) AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies").getMember(nbttagcompound.getCompoundTag("CATER"));
+		// trees from itemStacks will have no coordinates
+		if (nbttagcompound.hasKey("x")) {
+			this.xCoord = nbttagcompound.getInteger("x");
+			this.yCoord = nbttagcompound.getInteger("y");
+			this.zCoord = nbttagcompound.getInteger("z");
 		}
 
-		if (nbttagcompound.hasKey("Decorative")) { //legacy
-			isDecorative = nbttagcompound.getBoolean("Decorative");
+		if (nbttagcompound.hasKey("species")) {
+			isDecorative = true;
+
+			String speciesUID = nbttagcompound.getString("species");
+			IAllele[] treeTemplate = TreeManager.treeRoot.getTemplate(speciesUID);
+			ITree containedTree = TreeManager.treeRoot.templateAsIndividual(treeTemplate);
+			setTree(containedTree);
 		} else {
-			isDecorative = nbttagcompound.getBoolean("DEC");
-		}
+			if (nbttagcompound.hasKey("owner")) {
+				setOwner(NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("owner")));
+			}
 
-		ITree tree = getTree();
-		if (tree != null) {
-			setTree(tree);
+			ripeningTime = nbttagcompound.getShort("RT");
+			damage = nbttagcompound.getInteger("ENC");
+
+			if (nbttagcompound.hasKey("CATER")) {
+				maturationTime = nbttagcompound.getInteger("CATMAT");
+				caterpillar = (IButterfly) AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies").getMember(nbttagcompound.getCompoundTag("CATER"));
+			}
+
+			if (nbttagcompound.hasKey("Decorative")) { //legacy
+				isDecorative = nbttagcompound.getBoolean("Decorative");
+			} else { //legacy
+				isDecorative = nbttagcompound.getBoolean("DEC");
+			}
+
+			if (nbttagcompound.hasKey("ContainedTree")) {
+				setTree(new Tree(nbttagcompound.getCompoundTag("ContainedTree")));
+			}
+		}
+	}
+
+	public void writeToNBTDecorative(NBTTagCompound nbtTagCompound) {
+		String speciesUID = getSpeciesUID();
+		if (speciesUID != null) {
+			nbtTagCompound.setString("species", speciesUID);
 		}
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public void writeToNBT(NBTTagCompound nbtTagCompound) {
+		nbtTagCompound.setString("id", "forestry.Leaves");
+		nbtTagCompound.setInteger("x", this.xCoord);
+		nbtTagCompound.setInteger("y", this.yCoord);
+		nbtTagCompound.setInteger("z", this.zCoord);
 
-		nbttagcompound.setInteger("RT", getRipeningTime());
-		nbttagcompound.setInteger("ENC", damage);
+		if (isDecorative) {
+			writeToNBTDecorative(nbtTagCompound);
+		} else {
+			ITree tree = getTree();
+			if (tree != null) {
+				NBTTagCompound subcompound = new NBTTagCompound();
+				tree.writeToNBT(subcompound);
+				nbtTagCompound.setTag("ContainedTree", subcompound);
+			}
 
-		if (caterpillar != null) {
-			nbttagcompound.setInteger("CATMAT", maturationTime);
+			GameProfile owner = getOwner();
+			if (owner != null) {
+				NBTTagCompound nbt = new NBTTagCompound();
+				NBTUtil.func_152460_a(nbt, owner);
+				nbtTagCompound.setTag("owner", nbt);
+			}
 
-			NBTTagCompound subcompound = new NBTTagCompound();
-			caterpillar.writeToNBT(subcompound);
-			nbttagcompound.setTag("CATER", subcompound);
+			nbtTagCompound.setInteger("RT", getRipeningTime());
+			nbtTagCompound.setInteger("ENC", damage);
+
+			if (caterpillar != null) {
+				nbtTagCompound.setInteger("CATMAT", maturationTime);
+
+				NBTTagCompound subcompound = new NBTTagCompound();
+				caterpillar.writeToNBT(subcompound);
+				nbtTagCompound.setTag("CATER", subcompound);
+			}
 		}
-		nbttagcompound.setBoolean("DEC", isDecorative);
 	}
 
 	@Override
@@ -197,6 +245,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		} else if (caterpillar != null) {
 			colourLeaves = Utils.multiplyRGBComponents(colourLeaves, 1.5f);
 		}
+		markDirty();
 	}
 
 	/* INFORMATION */

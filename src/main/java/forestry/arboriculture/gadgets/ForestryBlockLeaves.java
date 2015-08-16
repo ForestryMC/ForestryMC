@@ -56,6 +56,7 @@ import forestry.arboriculture.items.ItemLeavesBlock;
 import forestry.arboriculture.render.LeafTexture;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
 import forestry.plugins.PluginArboriculture;
 import forestry.plugins.PluginLepidopterology;
 
@@ -79,16 +80,6 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 		return null;
 	}
 
-	private static NBTTagCompound getTagCompoundForLeaves(IBlockAccess world, int x, int y, int z) {
-		TileLeaves leaves = getLeafTile(world, x, y, z);
-		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		if (leaves == null) {
-			return nbttagcompound;
-		}
-		leaves.writeToNBT(nbttagcompound);
-		return nbttagcompound;
-	}
-
 	@SideOnly(Side.CLIENT)
 	@Override
 	@SuppressWarnings({"unchecked", "rawtypes"})
@@ -100,7 +91,7 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 			leaves.setTree(tree);
 
 			NBTTagCompound leavesNBT = new NBTTagCompound();
-			leaves.writeToNBT(leavesNBT);
+			leaves.writeToNBTDecorative(leavesNBT);
 
 			ItemStack itemStack = new ItemStack(item, 1, 0);
 			itemStack.setTagCompound(leavesNBT);
@@ -180,7 +171,9 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
 		ItemStack itemStack = super.getPickBlock(target, world, x, y, z);
-		NBTTagCompound leavesNBT = getTagCompoundForLeaves(world, x, y, z);
+		TileLeaves leaves = getLeafTile(world, x, y, z);
+		NBTTagCompound leavesNBT = new NBTTagCompound();
+		leaves.writeToNBTDecorative(leavesNBT);
 		itemStack.setTagCompound(leavesNBT);
 		return itemStack;
 	}
@@ -194,11 +187,13 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 	public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
 		ArrayList<ItemStack> ret = super.onSheared(item, world, x, y, z, fortune);
 
-		NBTTagCompound leavesNBT = getTagCompoundForLeaves(world, x, y, z);
+		TileLeaves leaves = getLeafTile(world, x, y, z);
+		NBTTagCompound shearedLeavesNBT = new NBTTagCompound();
+		leaves.writeToNBTDecorative(shearedLeavesNBT);
+
 		for (ItemStack stack : ret) {
 			if (stack.getItem() instanceof ItemLeavesBlock) {
-				NBTTagCompound leavesNBTCopy = (NBTTagCompound) leavesNBT.copy();
-				stack.setTagCompound(leavesNBTCopy);
+				stack.setTagCompound(shearedLeavesNBT);
 			}
 		}
 
