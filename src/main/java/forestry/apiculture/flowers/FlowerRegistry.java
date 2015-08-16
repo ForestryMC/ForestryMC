@@ -248,7 +248,7 @@ public final class FlowerRegistry implements IFlowerRegistry {
 
 	@Override
 	public Collection<String> getFlowerTypes() {
-		return Sets.union(defaultFlowerTypes, registeredFlowers.keySet());
+		return new ArrayList<String>(Sets.union(defaultFlowerTypes, registeredFlowers.keySet()));
 	}
 
 	private TreeMap<Double, IFlower> getChancesMap(String flowerType) {
