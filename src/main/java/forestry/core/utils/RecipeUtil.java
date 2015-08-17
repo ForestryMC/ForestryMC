@@ -17,8 +17,10 @@ import java.util.List;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
@@ -108,13 +110,6 @@ public class RecipeUtil {
 		return null;
 	}
 
-	/*
-	 * private static Object[] getSmallShapedRecipeAsArray(int width, int height, Object[] ingredients, ItemStack output) { Object[] result = new Object[5];
-	 * 
-	 * for(int y = 0; y < height; y++) for(int x = 0; x < width; x++) result[y * 2 + x] = ingredients[y * width + x];
-	 * 
-	 * result[4] = output; return result; }
-	 */
 	private static Object[] getShapedRecipeAsArray(int width, int height, Object[] ingredients, ItemStack output) {
 		Object[] result = new Object[10];
 
@@ -175,5 +170,63 @@ public class RecipeUtil {
 		ItemStack output = CraftingManager.getInstance().findMatchingRecipe(crafting, world);
 
 		return ItemStack.areItemStacksEqual(output, recipeOutput);
+	}
+
+	public static List<ItemStack> findMatchingRecipes(InventoryCrafting inventory, World world) {
+		ItemStack repairRecipe = findRepairRecipe(inventory);
+		if (repairRecipe != null) {
+			return Collections.singletonList(repairRecipe);
+		}
+
+		List<ItemStack> matchingRecipes = new ArrayList<ItemStack>();
+
+		for (Object recipe : CraftingManager.getInstance().getRecipeList()) {
+			IRecipe irecipe = (IRecipe) recipe;
+
+			if (irecipe.matches(inventory, world)) {
+				ItemStack result = irecipe.getCraftingResult(inventory);
+				matchingRecipes.add(result);
+			}
+		}
+
+		return matchingRecipes;
+	}
+
+	private static ItemStack findRepairRecipe(InventoryCrafting inventory) {
+		int craftIngredientCount = 0;
+		ItemStack itemstack0 = null;
+		ItemStack itemstack1 = null;
+
+		for (int j = 0; j < inventory.getSizeInventory(); j++) {
+			ItemStack itemstack = inventory.getStackInSlot(j);
+
+			if (itemstack != null) {
+				if (craftIngredientCount == 0) {
+					itemstack0 = itemstack;
+				}
+
+				if (craftIngredientCount == 1) {
+					itemstack1 = itemstack;
+				}
+
+				++craftIngredientCount;
+			}
+		}
+
+		if (craftIngredientCount == 2 && itemstack0.getItem() == itemstack1.getItem() && itemstack0.stackSize == 1 && itemstack1.stackSize == 1 && itemstack0.getItem().isRepairable()) {
+			Item item = itemstack0.getItem();
+			int damage0 = item.getMaxDamage() - itemstack0.getItemDamageForDisplay();
+			int damage1 = item.getMaxDamage() - itemstack1.getItemDamageForDisplay();
+			int repairAmount = damage0 + damage1 + item.getMaxDamage() * 5 / 100;
+			int repairedDamage = item.getMaxDamage() - repairAmount;
+
+			if (repairedDamage < 0) {
+				repairedDamage = 0;
+			}
+
+			return new ItemStack(itemstack0.getItem(), 1, repairedDamage);
+		}
+
+		return null;
 	}
 }
