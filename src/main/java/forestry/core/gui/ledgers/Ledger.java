@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.gui;
+package forestry.core.gui.ledgers;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.IIcon;
@@ -65,10 +65,10 @@ public abstract class Ledger {
 			texture = ledgerTextureLeft;
 		}
 
-		fontColorHeader = manager.gui.fontColor.get("ledger." + name + ".header");
-		fontColorSubheader = manager.gui.fontColor.get("ledger." + name + ".subheader");
-		fontColorText = manager.gui.fontColor.get("ledger." + name + ".text");
-		overlayColor = manager.gui.fontColor.get("ledger." + name + ".background");
+		fontColorHeader = manager.gui.getFontColor().get("ledger." + name + ".header");
+		fontColorSubheader = manager.gui.getFontColor().get("ledger." + name + ".subheader");
+		fontColorText = manager.gui.getFontColor().get("ledger." + name + ".text");
+		overlayColor = manager.gui.getFontColor().get("ledger." + name + ".background");
 	}
 
 	// adjust the update's move amount to match the look of 60 fps (16.67 ms per update)

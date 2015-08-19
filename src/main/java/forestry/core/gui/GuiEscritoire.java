@@ -28,6 +28,7 @@ import forestry.core.gadgets.NaturalistGame;
 import forestry.core.gadgets.NaturalistGame.GameToken;
 import forestry.core.gadgets.TileEscritoire;
 import forestry.core.gui.widgets.Widget;
+import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.network.PacketGuiSelect;
 import forestry.core.network.PacketId;
 import forestry.core.proxy.Proxies;

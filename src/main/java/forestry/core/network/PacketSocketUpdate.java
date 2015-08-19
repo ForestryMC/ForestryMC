@@ -15,7 +15,7 @@ import java.io.IOException;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-import forestry.core.interfaces.ISocketable;
+import forestry.core.circuits.ISocketable;
 
 public class PacketSocketUpdate extends PacketCoordinates {
 

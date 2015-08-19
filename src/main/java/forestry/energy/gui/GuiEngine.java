@@ -14,7 +14,7 @@ import net.minecraft.inventory.Container;
 
 import forestry.core.gadgets.Engine;
 import forestry.core.gui.GuiForestryTitled;
-import forestry.core.gui.Ledger;
+import forestry.core.gui.ledgers.Ledger;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 

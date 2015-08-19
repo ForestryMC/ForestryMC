@@ -22,8 +22,7 @@ import org.lwjgl.opengl.GL11;
 
 import forestry.api.core.IToolPipette;
 import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.gui.ContainerLiquidTanks;
-import forestry.core.gui.WidgetManager;
+import forestry.core.gui.IContainerLiquidTanks;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
@@ -52,8 +51,8 @@ public class TankWidget extends Widget {
 
 	public IFluidTank getTank() {
 		Container container = manager.gui.inventorySlots;
-		if (container instanceof ContainerLiquidTanks) {
-			return ((ContainerLiquidTanks) container).getTank(slot);
+		if (container instanceof IContainerLiquidTanks) {
+			return ((IContainerLiquidTanks) container).getTank(slot);
 		} else if (container instanceof ContainerFarm) {
 			return ((ContainerFarm) container).getTank(slot);
 		}
@@ -124,9 +123,8 @@ public class TankWidget extends Widget {
 		}
 
 		Item held = itemstack.getItem();
-		if (held instanceof IToolPipette && manager.gui.inventorySlots instanceof ContainerLiquidTanks) {
-			((ContainerLiquidTanks) manager.gui.inventorySlots).handlePipetteClickClient(slot, manager.minecraft.thePlayer);
+		if (held instanceof IToolPipette && manager.gui.inventorySlots instanceof IContainerLiquidTanks) {
+			((IContainerLiquidTanks) manager.gui.inventorySlots).handlePipetteClickClient(slot, manager.minecraft.thePlayer);
 		}
-
 	}
 }

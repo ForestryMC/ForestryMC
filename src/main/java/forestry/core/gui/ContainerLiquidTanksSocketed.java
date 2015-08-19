@@ -14,29 +14,34 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.fluids.IFluidTank;
 
+import forestry.core.circuits.ISocketable;
 import forestry.core.interfaces.ILiquidTankContainer;
 
-public abstract class ContainerLiquidTanks<T extends TileEntity & ILiquidTankContainer> extends ContainerTile<T> implements IContainerLiquidTanks {
+public abstract class ContainerLiquidTanksSocketed<T extends TileEntity & ILiquidTankContainer & ISocketable> extends ContainerTile<T> implements IContainerSocketed, IContainerLiquidTanks {
 
-	private final ContainerLiquidTanksHelper<T> helper;
+	private final ContainerSocketedHelper<T> socketedHelper;
+	private final ContainerLiquidTanksHelper<T> tanksHelper;
 
-	protected ContainerLiquidTanks(T tile, InventoryPlayer playerInventory, int xInv, int yInv) {
+	protected ContainerLiquidTanksSocketed(T tile, InventoryPlayer playerInventory, int xInv, int yInv) {
 		super(tile, playerInventory, xInv, yInv);
-		this.helper = new ContainerLiquidTanksHelper<T>(tile);
+		this.socketedHelper = new ContainerSocketedHelper<T>(tile);
+		this.tanksHelper = new ContainerLiquidTanksHelper<T>(tile);
 	}
 
+	/* IContainerLiquidTanks */
 	@Override
 	public void handlePipetteClickClient(int slot, EntityPlayer player) {
-		helper.handlePipetteClickClient(slot, player);
+		tanksHelper.handlePipetteClickClient(slot, player);
 	}
 
 	@Override
 	public void handlePipetteClick(int slot, EntityPlayerMP player) {
-		helper.handlePipetteClick(slot, player);
+		tanksHelper.handlePipetteClick(slot, player);
 	}
 
 	@Override
@@ -66,4 +71,26 @@ public abstract class ContainerLiquidTanks<T extends TileEntity & ILiquidTankCon
 	public IFluidTank getTank(int slot) {
 		return tile.getTankManager().getTank(slot);
 	}
+
+	/* IContainerSocketed */
+	@Override
+	public void handleChipsetClick(int slot) {
+		socketedHelper.handleChipsetClick(slot);
+	}
+
+	@Override
+	public void handleChipsetClickServer(int slot, EntityPlayerMP player, ItemStack itemstack) {
+		socketedHelper.handleChipsetClickServer(slot, player, itemstack);
+	}
+
+	@Override
+	public void handleSolderingIronClick(int slot) {
+		socketedHelper.handleSolderingIronClick(slot);
+	}
+
+	@Override
+	public void handleSolderingIronClickServer(int slot, EntityPlayerMP player, ItemStack itemstack) {
+		socketedHelper.handleSolderingIronClickServer(slot, player, itemstack);
+	}
+
 }

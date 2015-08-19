@@ -17,13 +17,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
+import forestry.core.circuits.ISocketable;
 import forestry.core.circuits.ISolderingIron;
 import forestry.core.circuits.ItemCircuitBoard;
-import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.GuiForestry;
-import forestry.core.gui.WidgetManager;
+import forestry.core.gui.IContainerSocketed;
 import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.interfaces.ISocketable;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
@@ -79,11 +78,11 @@ public class SocketWidget extends Widget {
 		Item held = itemstack.getItem();
 
 		Container container = manager.gui.inventorySlots;
-		if (!(container instanceof ContainerSocketed)) {
+		if (!(container instanceof IContainerSocketed)) {
 			return;
 		}
 
-		ContainerSocketed containerSocketed = (ContainerSocketed) container;
+		IContainerSocketed containerSocketed = (IContainerSocketed) container;
 
 		// Insert chipsets
 		if (held instanceof ItemCircuitBoard) {

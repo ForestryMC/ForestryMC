@@ -23,16 +23,14 @@ public class EnergyManager implements IEnergyHandler, IStreamable {
 		EXTRACT, RECEIVE, BOTH
 	}
 
-	private final int energyPerWork;
 	private final EnergyStorage energyStorage;
 	private EnergyTransferMode mode = EnergyTransferMode.BOTH;
 
-	public EnergyManager(int maxTransfer, int energyPerWork, int capacity) {
-		this.energyPerWork = scaleForDifficulty(energyPerWork);
+	public EnergyManager(int maxTransfer, int capacity) {
 		this.energyStorage = new EnergyStorage(scaleForDifficulty(capacity), scaleForDifficulty(maxTransfer), scaleForDifficulty(maxTransfer));
 	}
 
-	private static int scaleForDifficulty(int energyPerUse) {
+	public static int scaleForDifficulty(int energyPerUse) {
 		return Math.round(energyPerUse * GameMode.getGameMode().getFloatSetting("energy.demand.modifier"));
 	}
 
@@ -149,25 +147,19 @@ public class EnergyManager implements IEnergyHandler, IStreamable {
 		return true;
 	}
 
-	public int getEnergyPerWork() {
-		return energyPerWork;
-	}
-
 	/**
 	 * Consumes one work cycle's worth of energy.
 	 *
 	 * @return true if the energy to do work was consumed
 	 */
-	public boolean consumeEnergyToDoWork() {
-		if (!hasEnergyToDoWork()) {
+	public boolean consumeEnergyToDoWork(int ticksPerWorkCycle, int energyPerWorkCycle) {
+		int energyPerCycle = (int) Math.ceil(energyPerWorkCycle / (float) ticksPerWorkCycle);
+		if (energyStorage.getEnergyStored() < energyPerCycle) {
 			return false;
 		}
-		energyStorage.modifyEnergyStored(-energyPerWork);
-		return true;
-	}
 
-	public boolean hasEnergyToDoWork() {
-		return energyStorage.getEnergyStored() >= energyPerWork;
+		energyStorage.modifyEnergyStored(-energyPerCycle);
+		return true;
 	}
 
 	/**

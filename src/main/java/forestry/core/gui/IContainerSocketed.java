@@ -8,17 +8,17 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.interfaces;
+package forestry.core.gui;
 
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 
-import forestry.core.network.IStreamableGui;
-import forestry.core.utils.EnumAccess;
+public interface IContainerSocketed {
+	void handleChipsetClick(int slot);
 
-public interface IRestrictedAccessTile extends IStreamableGui {
-	IAccessHandler getAccessHandler();
+	void handleChipsetClickServer(int slot, EntityPlayerMP player, ItemStack itemstack);
 
-	ChunkCoordinates getCoordinates();
+	void handleSolderingIronClick(int slot);
 
-	void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess);
+	void handleSolderingIronClickServer(int slot, EntityPlayerMP player, ItemStack itemstack);
 }

@@ -16,7 +16,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.core.gui.WidgetManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 

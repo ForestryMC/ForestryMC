@@ -29,9 +29,7 @@ public class GuiBottler extends GuiForestryTitled<ContainerBottler, MachineBottl
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 		MachineBottler bottler = inventory;
 
-		if (bottler.isWorking()) {
-			int i1 = bottler.getFillProgressScaled(24);
-			drawTexturedModalRect(guiLeft + 80, guiTop + 39, 176, 74, 24 - i1, 16);
-		}
+		int i1 = bottler.getFillProgressScaled(24);
+		drawTexturedModalRect(guiLeft + 80, guiTop + 39, 176, 74, i1, 16);
 	}
 }

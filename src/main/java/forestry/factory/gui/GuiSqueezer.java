@@ -14,20 +14,22 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestryTitled;
+import forestry.core.gui.widgets.SocketWidget;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.factory.gadgets.MachineSqueezer;
 
 public class GuiSqueezer extends GuiForestryTitled<ContainerSqueezer, MachineSqueezer> {
 
 	public GuiSqueezer(InventoryPlayer inventory, MachineSqueezer tile) {
-		super(Defaults.TEXTURE_PATH_GUI + "/squeezer.png", new ContainerSqueezer(inventory, tile), tile);
-		widgetManager.add(new TankWidget(this.widgetManager, 85, 15, 0));
+		super(Defaults.TEXTURE_PATH_GUI + "/squeezersocket.png", new ContainerSqueezer(inventory, tile), tile);
+		widgetManager.add(new TankWidget(this.widgetManager, 122, 18, 0));
+		widgetManager.add(new SocketWidget(this.widgetManager, 75, 20, tile, 0));
 	}
 
 	@Override
 	protected void drawWidgets() {
 		int progress = inventory.getProgressScaled(43);
-		drawTexturedModalRect(75, 20, 176, 60, 43 - progress, 18);
+		drawTexturedModalRect(75, 41, 176, 60, 43 - progress, 18);
 
 		super.drawWidgets();
 	}

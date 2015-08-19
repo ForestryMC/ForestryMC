@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.gui;
+package forestry.core.gui.ledgers;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -23,6 +23,7 @@ import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.core.config.SessionVars;
 import forestry.core.delegates.FakeErrorSource;
+import forestry.core.gui.GuiForestry;
 import forestry.core.proxy.Proxies;
 
 public class LedgerManager {
@@ -106,7 +107,7 @@ public class LedgerManager {
 		return null;
 	}
 
-	protected void drawLedgers() {
+	public void drawLedgers() {
 
 		int yPos = 8;
 		for (Ledger ledger : ledgers) {
@@ -143,7 +144,7 @@ public class LedgerManager {
 		}
 	}
 
-	protected void drawTooltips(int mouseX, int mouseY) {
+	public void drawTooltips(int mouseX, int mouseY) {
 
 		Ledger ledger = getAtPosition(mouseX, mouseY);
 		if (ledger != null) {

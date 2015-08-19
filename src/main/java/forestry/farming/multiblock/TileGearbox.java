@@ -23,6 +23,7 @@ import forestry.energy.EnergyManager;
 public class TileGearbox extends TileFarm implements IPowerHandler, IFarmComponent.Active {
 
 	private static final int WORK_CYCLES = 4;
+	private static final int ENERGY_PER_OPERATION = WORK_CYCLES * 50;
 
 	private final EnergyManager energyManager;
 
@@ -31,7 +32,7 @@ public class TileGearbox extends TileFarm implements IPowerHandler, IFarmCompone
 	private int workCounter;
 
 	public TileGearbox() {
-		energyManager = new EnergyManager(200, 50, 10000);
+		energyManager = new EnergyManager(200, 10000);
 	}
 
 	/* SAVING & LOADING */
@@ -71,7 +72,7 @@ public class TileGearbox extends TileFarm implements IPowerHandler, IFarmCompone
 		}
 
 		// Hard limit to 4 cycles / second.
-		if (workCounter < WORK_CYCLES && energyManager.consumeEnergyToDoWork()) {
+		if (workCounter < WORK_CYCLES && energyManager.consumeEnergyToDoWork(WORK_CYCLES, ENERGY_PER_OPERATION)) {
 			workCounter++;
 		}
 

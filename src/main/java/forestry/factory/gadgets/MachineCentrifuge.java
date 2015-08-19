@@ -12,6 +12,7 @@ package forestry.factory.gadgets;
 
 import com.google.common.collect.ImmutableMap;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,8 +24,6 @@ import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,16 +34,23 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.common.Optional;
 
+import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.ICircuitBoard;
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.ICentrifugeManager;
 import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.core.EnumErrorCode;
+import forestry.core.circuits.ISocketable;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InvTools;
+import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
@@ -52,7 +58,12 @@ import forestry.factory.triggers.FactoryTriggers;
 
 import buildcraft.api.statements.ITriggerExternal;
 
-public class MachineCentrifuge extends TilePowered implements ISidedInventory {
+public class MachineCentrifuge extends TilePowered implements ISocketable, ISidedInventory {
+
+	private static final int TICKS_PER_RECIPE_TIME = 4;
+	private static final int ENERGY_PER_RECIPE_TIME = 210;
+
+	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
 
 	/* CONSTANTS */
 	public static final int SLOT_RESOURCE = 0;
@@ -63,11 +74,9 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 	private ICentrifugeRecipe currentRecipe;
 
 	private final Stack<ItemStack> pendingProducts = new Stack<ItemStack>();
-	private int productionTime;
-	private int timePerItem;
 
 	public MachineCentrifuge() {
-		super(800, 40, Defaults.MACHINE_MAX_ENERGY);
+		super(800, Defaults.MACHINE_MAX_ENERGY, 4200);
 		setInternalInventory(new CentrifugeInventoryAdapter(this));
 		setHints(Config.hints.get("centrifuge"));
 	}
@@ -82,8 +91,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 
-		nbttagcompound.setInteger("ProductionTime", productionTime);
-		nbttagcompound.setInteger("TimePerItem", timePerItem);
+		sockets.writeToNBT(nbttagcompound);
 
 		NBTTagList nbttaglist = new NBTTagList();
 		ItemStack[] offspring = pendingProducts.toArray(new ItemStack[pendingProducts.size()]);
@@ -102,34 +110,36 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 
-		productionTime = nbttagcompound.getInteger("ProductionTime");
-		timePerItem = nbttagcompound.getInteger("TimePerItem");
-
 		NBTTagList nbttaglist = nbttagcompound.getTagList("PendingProducts", 10);
 		for (int i = 0; i < nbttaglist.tagCount(); i++) {
 			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 			pendingProducts.add(ItemStack.loadItemStackFromNBT(nbttagcompound1));
 		}
+		sockets.readFromNBT(nbttagcompound);
 
-		checkRecipe();
+		ItemStack chip = sockets.getStackInSlot(0);
+		if (chip != null) {
+			ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitboard(chip);
+			if (chipset != null) {
+				chipset.onLoad(this);
+			}
+		}
 	}
 
 	@Override
-	public void updateServerSide() {
-		super.updateServerSide();
+	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+		super.writeGuiData(data);
+		sockets.writeData(data);
+	}
 
-		if (!updateOnInterval(20)) {
-			return;
-		}
-
-		// Check and reset recipe if necessary
-		checkRecipe();
+	@Override
+	public void readGuiData(DataInputStreamForestry data) throws IOException {
+		super.readGuiData(data);
+		sockets.readData(data);
 	}
 
 	@Override
 	public boolean workCycle() {
-
-		checkRecipe();
 
 		// If we add pending products, we skip to the next work cycle.
 		if (tryAddPending()) {
@@ -140,19 +150,8 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 			return false;
 		}
 
-		// Continue work if nothing needs to be added
-		if (productionTime <= 0) {
-			return false;
-		}
-
 		if (currentRecipe == null) {
 			return false;
-		}
-
-		productionTime--;
-		// Still not done, return
-		if (productionTime > 0) {
-			return true;
 		}
 
 		// We are done, add products to queue
@@ -160,33 +159,23 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 		pendingProducts.addAll(products);
 
 		getInternalInventory().decrStackSize(SLOT_RESOURCE, 1);
-		checkRecipe();
-		resetRecipeTimes();
 
 		tryAddPending();
 		return true;
 	}
 
 	private void checkRecipe() {
-		ICentrifugeRecipe machingRecipe = RecipeManager.findMatchingRecipe(getInternalInventory().getStackInSlot(SLOT_RESOURCE));
+		ItemStack resource = getStackInSlot(SLOT_RESOURCE);
+		ICentrifugeRecipe matchingRecipe = RecipeManager.findMatchingRecipe(resource);
 
-		if (currentRecipe != machingRecipe) {
-			currentRecipe = machingRecipe;
-			resetRecipeTimes();
+		if (currentRecipe != matchingRecipe) {
+			currentRecipe = matchingRecipe;
+			if (currentRecipe != null) {
+				int recipeTime = currentRecipe.getProcessingTime();
+				setTicksPerWorkCycle(recipeTime * TICKS_PER_RECIPE_TIME);
+				setEnergyPerWorkCycle(recipeTime * ENERGY_PER_RECIPE_TIME);
+			}
 		}
-
-		getErrorLogic().setCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
-	}
-
-	private void resetRecipeTimes() {
-		if (currentRecipe == null) {
-			productionTime = 0;
-			timePerItem = 0;
-			return;
-		}
-
-		productionTime = currentRecipe.getProcessingTime();
-		timePerItem = currentRecipe.getProcessingTime();
 	}
 
 	private boolean tryAddPending() {
@@ -207,11 +196,6 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 	}
 
 	@Override
-	public boolean isWorking() {
-		return currentRecipe != null;
-	}
-
-	@Override
 	public boolean hasResourcesMin(float percentage) {
 		IInventoryAdapter inventory = getInternalInventory();
 		if (inventory.getStackInSlot(SLOT_RESOURCE) == null) {
@@ -223,32 +207,14 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 
 	@Override
 	public boolean hasWork() {
-		return currentRecipe != null;
-	}
+		checkRecipe();
 
-	public int getProgressScaled(int i) {
-		if (timePerItem == 0) {
-			return i;
-		}
+		boolean hasResource = getStackInSlot(SLOT_RESOURCE) != null;
 
-		return ((timePerItem - productionTime) * i) / timePerItem;
-	}
+		IErrorLogic errorLogic = getErrorLogic();
+		errorLogic.setCondition(!hasResource, EnumErrorCode.NORESOURCE);
 
-	/* GUI */
-	public void getGUINetworkData(int i, int j) {
-		switch (i) {
-			case 0:
-				productionTime = j;
-				break;
-			case 1:
-				timePerItem = j;
-				break;
-		}
-	}
-
-	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		iCrafting.sendProgressBarUpdate(container, 0, productionTime);
-		iCrafting.sendProgressBarUpdate(container, 1, timePerItem);
+		return hasResource;
 	}
 
 	/* ITRIGGERPROVIDER */
@@ -274,6 +240,45 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 		@Override
 		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
 			return Utils.isIndexInRange(slotIndex, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT);
+		}
+	}
+
+	/* ISocketable */
+	@Override
+	public int getSocketCount() {
+		return sockets.getSizeInventory();
+	}
+
+	@Override
+	public ItemStack getSocket(int slot) {
+		return sockets.getStackInSlot(slot);
+	}
+
+	@Override
+	public void setSocket(int slot, ItemStack stack) {
+
+		if (stack != null && !ChipsetManager.circuitRegistry.isChipset(stack)) {
+			return;
+		}
+
+		// Dispose correctly of old chipsets
+		if (sockets.getStackInSlot(slot) != null) {
+			if (ChipsetManager.circuitRegistry.isChipset(sockets.getStackInSlot(slot))) {
+				ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitboard(sockets.getStackInSlot(slot));
+				if (chipset != null) {
+					chipset.onRemoval(this);
+				}
+			}
+		}
+
+		sockets.setInventorySlotContents(slot, stack);
+		if (stack == null) {
+			return;
+		}
+
+		ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitboard(stack);
+		if (chipset != null) {
+			chipset.onInsertion(this);
 		}
 	}
 
@@ -344,10 +349,14 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 			addRecipe(recipe);
 		}
 
-		public static ICentrifugeRecipe findMatchingRecipe(ItemStack item) {
+		public static ICentrifugeRecipe findMatchingRecipe(ItemStack itemStack) {
+			if (itemStack == null) {
+				return null;
+			}
+
 			for (ICentrifugeRecipe recipe : recipes) {
 				ItemStack recipeInput = recipe.getInput();
-				if (StackUtils.isCraftingEquivalent(recipeInput, item)) {
+				if (StackUtils.isCraftingEquivalent(recipeInput, itemStack)) {
 					return recipe;
 				}
 			}

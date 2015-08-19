@@ -177,7 +177,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 	private int fuelCurrentFerment = 0;
 
 	public MachineFermenter() {
-		super(2000, 150, 8000);
+		super(2000, 8000, 600);
 		setInternalInventory(new FermenterInventoryAdapter(this));
 		setHints(Config.hints.get("fermenter"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluidInputs);
@@ -394,19 +394,7 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 		return ((IVariableFermentable) itemstack.getItem()).getFermentationModifier(itemstack);
 	}
 
-	@Override
-	public boolean isWorking() {
-		IInventoryAdapter inventory = getInternalInventory();
-		if (currentRecipe == null
-				&& RecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid()) == null) {
-			return false;
-		}
-		if (fuelBurnTime > 0) {
-			return resourceTank.getFluidAmount() > 0 && productTank.getFluidAmount() < Defaults.PROCESSOR_TANK_CAPACITY;
-		} else {
-			return determineFuelValue(getFuelStack()) > 0;
-		}
-	}
+
 
 	@Override
 	public boolean hasResourcesMin(float percentage) {
@@ -428,32 +416,23 @@ public class MachineFermenter extends TilePowered implements ISidedInventory, IL
 
 	@Override
 	public boolean hasWork() {
-		IInventoryAdapter inventory = getInternalInventory();
-		if (this.getFuelStack() == null && fuelBurnTime <= 0) {
+		if (currentRecipe == null && RecipeManager.findMatchingRecipe(getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid()) == null) {
 			return false;
-		} else if (fuelBurnTime <= 0) {
-			if (RecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid()) == null) {
-				return false;
-			}
 		}
 
-		if (this.getFermentationStack() == null && fermentationTime <= 0) {
+		if (fuelBurnTime <= 0 && determineFuelValue(getFuelStack()) <= 0) {
 			return false;
-		} else if (fermentationTime <= 0) {
-			if (RecipeManager.findMatchingRecipe(inventory.getStackInSlot(SLOT_RESOURCE), resourceTank.getFluid()) == null) {
-				return false;
-			}
+		}
+
+		if (fermentationTime <= 0 && this.getFermentationStack() == null) {
+			return false;
 		}
 
 		if (resourceTank.getFluidAmount() <= fuelCurrentFerment) {
 			return false;
 		}
 
-		if (productTank.getFluidAmount() >= productTank.getCapacity()) {
-			return false;
-		}
-
-		return true;
+		return productTank.getFluidAmount() < productTank.getCapacity();
 	}
 
 	public int getBurnTimeRemainingScaled(int i) {

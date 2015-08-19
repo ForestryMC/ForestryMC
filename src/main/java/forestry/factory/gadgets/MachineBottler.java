@@ -145,7 +145,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	private int fillingTotalTime;
 
 	public MachineBottler() {
-		super(1100, 50, 4000);
+		super(1100, 4000, 200);
 
 		setInternalInventory(new BottlerInventoryAdapter(this));
 
@@ -265,10 +265,6 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 	}
 
 	// / STATE INFORMATION
-	@Override
-	public boolean isWorking() {
-		return fillingTime > 0;
-	}
 
 	@Override
 	public boolean hasResourcesMin(float percentage) {
@@ -290,7 +286,7 @@ public class MachineBottler extends TilePowered implements ISidedInventory, ILiq
 			return 0;
 		}
 
-		return (fillingTime * i) / fillingTotalTime;
+		return ((fillingTotalTime - fillingTime) * i) / fillingTotalTime;
 
 	}
 

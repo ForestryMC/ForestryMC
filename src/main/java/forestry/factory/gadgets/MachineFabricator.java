@@ -81,7 +81,7 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 	private int guiMeltingPoint = 0;
 
 	public MachineFabricator() {
-		super(1100, 50, 3300);
+		super(1100, 3300, 200);
 		craftingInventory = new TileInventoryAdapter<MachineFabricator>(this, SLOT_CRAFTING_COUNT, "CraftItems");
 		setInternalInventory(new FabricatorInventoryAdapter(this));
 		moltenTank = new FilteredTank(2 * Defaults.BUCKET_VOLUME, Fluids.GLASS.getFluid());
@@ -296,11 +296,6 @@ public class MachineFabricator extends TilePowered implements ICrafter, ILiquidT
 			ItemStack[] stock = InvTools.getStacks(inventory, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
 			return StackUtils.containsSets(set, stock) >= 1;
 		}
-	}
-
-	@Override
-	public boolean isWorking() {
-		return this.heat <= MAX_HEAT;
 	}
 
 	@Override

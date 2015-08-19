@@ -42,7 +42,6 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
-import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.AdjacentTileCache;
@@ -54,7 +53,7 @@ import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.statements.ITriggerProvider;
 
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
-public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ITriggerProvider, ISidedInventory, IFilterSlotDelegate, IRestrictedAccessTile, IStreamableGui, ITitled {
+public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ITriggerProvider, ISidedInventory, IFilterSlotDelegate, IRestrictedAccessTile, ITitled {
 
 	private static final Random rand = new Random();
 

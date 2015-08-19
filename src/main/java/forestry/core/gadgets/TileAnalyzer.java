@@ -69,15 +69,15 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	private int analyzeTime;
 
 	private final FilteredTank resourceTank;
-
 	private final TankManager tankManager;
-
 	private final IInventory invInput;
 	private final IInventory invOutput;
 
+	private ItemStack individualOnDisplayClient;
+
 	/* CONSTRUCTOR */
 	public TileAnalyzer() {
-		super(800, 40, Defaults.MACHINE_MAX_ENERGY);
+		super(800, Defaults.MACHINE_MAX_ENERGY, 160);
 		setInternalInventory(new AnalyzerInventoryAdapter(this));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, Fluids.HONEY.getFluid());
 		tankManager = new TankManager(resourceTank);
@@ -225,14 +225,17 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	/* STATE INFORMATION */
-	// @Override
-	@Override
-	public boolean isWorking() {
-		return analyzeTime > 0;
-	}
-
 	@Override
 	public boolean hasWork() {
+		ItemStack stackToAnalyze = getStackInSlot(SLOT_ANALYZE);
+		if (stackToAnalyze != null) {
+			return true;
+		}
+
+		if (getInputSlot() != null) {
+			return true;
+		}
+
 		Set<IErrorState> errors = new HashSet<IErrorState>(getErrorLogic().getErrorStates());
 		errors.remove(EnumErrorCode.NOPOWER);
 		return errors.size() == 0;
@@ -241,8 +244,6 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	public int getProgressScaled(int i) {
 		return (analyzeTime * i) / TIME_TO_ANALYZE;
 	}
-
-	private ItemStack individualOnDisplayClient;
 
 	public ItemStack getIndividualOnDisplay() {
 		if (worldObj.isRemote) {

@@ -30,9 +30,7 @@ public class GuiStill extends GuiForestryTitled<ContainerStill, MachineStill> {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 		MachineStill still = inventory;
 
-		if (still.isWorking()) {
-			drawTexturedModalRect(guiLeft + 81, guiTop + 57, 176, 60, 14, 14);
-		}
+		drawTexturedModalRect(guiLeft + 81, guiTop + 57, 176, 60, 14, 14);
 
 		int massRemaining = still.getDistillationProgressScaled(16);
 		if (massRemaining > 0) {

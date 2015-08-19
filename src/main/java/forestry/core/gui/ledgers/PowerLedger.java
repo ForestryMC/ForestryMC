@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.gui;
+package forestry.core.gui.ledgers;
 
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.render.TextureManager;

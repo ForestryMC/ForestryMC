@@ -21,8 +21,12 @@ import net.minecraftforge.fluids.FluidStack;
 
 import cpw.mods.fml.common.network.IGuiHandler;
 
+import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.ICircuitLayout;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.GameMode;
+import forestry.core.circuits.Circuit;
+import forestry.core.circuits.CircuitLayout;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
@@ -37,6 +41,7 @@ import forestry.core.utils.RecipeUtil;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.factory.DummyManagers;
 import forestry.factory.GuiHandlerFactory;
+import forestry.factory.circuits.CircuitSpeedUpgrade;
 import forestry.factory.gadgets.MachineBottler;
 import forestry.factory.gadgets.MachineCarpenter;
 import forestry.factory.gadgets.MachineCentrifuge;
@@ -226,6 +231,10 @@ public class PluginFactory extends ForestryPlugin {
 						'W', Blocks.crafting_table,
 						'C', Blocks.chest))
 				.setFaces(0, 1, 2, 3, 4, 4));
+
+		ICircuitLayout layoutMachineUpgrade = new CircuitLayout("machine.upgrade");
+		ChipsetManager.circuitRegistry.registerLayout(layoutMachineUpgrade);
+
 	}
 
 	@Override
@@ -249,6 +258,9 @@ public class PluginFactory extends ForestryPlugin {
 		definitionRainmaker.register();
 		definitionWorktable.register();
 
+		Circuit.machineSpeedUpgrade1 = new CircuitSpeedUpgrade("machine.speed.boost.1", 0.125f, 0.05f, 4);
+		Circuit.machineSpeedUpgrade2 = new CircuitSpeedUpgrade("machine.speed.boost.2", 0.250f, 0.10f, 4);
+		Circuit.machineEfficiencyUpgrade1 = new CircuitSpeedUpgrade("machine.efficiency.1", 0, -0.10f, 2);
 	}
 
 	@Override
@@ -462,6 +474,12 @@ public class PluginFactory extends ForestryPlugin {
 		if (PluginManager.Module.STORAGE.isEnabled()) {
 			PluginStorage.createCrateRecipes();
 		}
+		ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.machine.upgrade");
+
+		// / Solder Manager
+		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 9), Circuit.machineSpeedUpgrade1);
+		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 7), Circuit.machineSpeedUpgrade2);
+		ChipsetManager.solderManager.addRecipe(layout, ForestryItem.tubes.getItemStack(1, 4), Circuit.machineEfficiencyUpgrade1);
 	}
 
 	@Override

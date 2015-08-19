@@ -19,10 +19,10 @@ import net.minecraft.tileentity.TileEntity;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorState;
 import forestry.core.delegates.FakeAccessHandler;
+import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.IAccessHandler;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.interfaces.IRestrictedAccessTile;
-import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketErrorUpdate;
 import forestry.core.network.PacketGuiEnergy;
 import forestry.core.network.PacketGuiUpdate;
@@ -30,7 +30,7 @@ import forestry.core.utils.EnumAccess;
 import forestry.core.utils.Utils;
 import forestry.energy.EnergyManager;
 
-public abstract class ContainerTile<T extends TileEntity & IStreamableGui> extends ContainerForestry {
+public abstract class ContainerTile<T extends TileEntity> extends ContainerForestry {
 
 	protected final T tile;
 	private final IAccessHandler accessHandler;
@@ -64,6 +64,8 @@ public abstract class ContainerTile<T extends TileEntity & IStreamableGui> exten
 	private ImmutableSet<IErrorState> previousErrorStates;
 	private int previousEnergyManagerData = 0;
 	private EnumAccess previousAccess;
+	private int previousWorkCounter = 0;
+	private int previousTicksPerWorkCycle = 0;
 
 	@Override
 	public void detectAndSendChanges() {
@@ -92,15 +94,42 @@ public abstract class ContainerTile<T extends TileEntity & IStreamableGui> exten
 			}
 		}
 
-		if (tile instanceof IRestrictedAccessTile) {
+		boolean guiUpdated = false;
+
+		if (!guiUpdated && tile instanceof IRestrictedAccessTile) {
 			IRestrictedAccessTile restrictedAccessTile = (IRestrictedAccessTile) tile;
 			IAccessHandler accessHandler = restrictedAccessTile.getAccessHandler();
 			EnumAccess access = accessHandler.getAccessType();
 			if (access != previousAccess) {
-				PacketGuiUpdate packet = new PacketGuiUpdate(tile);
+				PacketGuiUpdate packet = new PacketGuiUpdate(restrictedAccessTile);
 				sendPacketToCrafters(packet);
 
 				previousAccess = access;
+				guiUpdated = true;
+			}
+		}
+
+		if (!guiUpdated && tile instanceof TilePowered) {
+			TilePowered tilePowered = (TilePowered) tile;
+
+			boolean changed = false;
+
+			int workCounter = tilePowered.getWorkCounter();
+			if (workCounter != previousWorkCounter) {
+				changed = true;
+				previousWorkCounter = workCounter;
+			}
+
+			int ticksPerWorkCycle = tilePowered.getTicksPerWorkCycle();
+			if (ticksPerWorkCycle != previousTicksPerWorkCycle) {
+				changed = true;
+				previousTicksPerWorkCycle = ticksPerWorkCycle;
+			}
+
+			if (changed) {
+				PacketGuiUpdate packet = new PacketGuiUpdate(tilePowered);
+				sendPacketToCrafters(packet);
+				guiUpdated = true;
 			}
 		}
 	}

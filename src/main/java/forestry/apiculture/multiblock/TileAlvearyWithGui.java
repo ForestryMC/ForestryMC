@@ -24,10 +24,9 @@ import forestry.core.interfaces.ITitled;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
-import forestry.core.network.IStreamableGui;
 import forestry.core.utils.EnumAccess;
 
-public abstract class TileAlvearyWithGui extends TileAlveary implements IStreamableGui, ITitled, IRestrictedAccessTile {
+public abstract class TileAlvearyWithGui extends TileAlveary implements ITitled, IRestrictedAccessTile {
 
 	private final AccessHandler accessHandler;
 	private final String unlocalizedTitle;

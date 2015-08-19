@@ -15,10 +15,8 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.core.interfaces.IClimatised;
 import forestry.core.interfaces.IRestrictedAccessTile;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.network.IStreamableGui;
 
-
-public interface IAlvearyController extends IBeeHousing, IClimatised, IRestrictedAccessTile, IStreamableGui {
+public interface IAlvearyController extends IBeeHousing, IClimatised, IRestrictedAccessTile {
 	IInventoryAdapter getInternalInventory();
 
 	Iterable<IAlvearyComponent> getComponents();

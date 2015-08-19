@@ -35,10 +35,9 @@ import net.minecraftforge.fluids.IFluidHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import forestry.core.circuits.ISocketable;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.interfaces.IAccessHandler;
-import forestry.core.interfaces.IRestrictedAccessTile;
-import forestry.core.interfaces.ISocketable;
 import forestry.core.items.ItemNBTTile;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.PlayerUtil;

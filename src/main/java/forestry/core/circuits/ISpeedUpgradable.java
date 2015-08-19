@@ -8,17 +8,8 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.interfaces;
+package forestry.core.circuits;
 
-import net.minecraft.util.ChunkCoordinates;
-
-import forestry.core.network.IStreamableGui;
-import forestry.core.utils.EnumAccess;
-
-public interface IRestrictedAccessTile extends IStreamableGui {
-	IAccessHandler getAccessHandler();
-
-	ChunkCoordinates getCoordinates();
-
-	void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess);
+public interface ISpeedUpgradable {
+	void applySpeedUpgrade(double speedChange, double powerChange);
 }

@@ -15,6 +15,8 @@ import net.minecraft.world.World;
 
 import forestry.core.GuiHandlerBase;
 import forestry.core.network.GuiId;
+import forestry.core.network.PacketSocketUpdate;
+import forestry.core.proxy.Proxies;
 import forestry.factory.gadgets.MachineBottler;
 import forestry.factory.gadgets.MachineCarpenter;
 import forestry.factory.gadgets.MachineCentrifuge;

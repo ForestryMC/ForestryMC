@@ -16,7 +16,7 @@ import forestry.apiculture.multiblock.IAlvearyController;
 import forestry.apiculture.multiblock.TileAlvearyPlain;
 import forestry.core.config.Defaults;
 import forestry.core.gui.GuiForestryTitled;
-import forestry.core.gui.OwnerLedger;
+import forestry.core.gui.ledgers.OwnerLedger;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.Utils;
 

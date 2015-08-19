@@ -8,17 +8,17 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.interfaces;
+package forestry.core.gui;
 
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
-import forestry.core.network.IStreamableGui;
-import forestry.core.utils.EnumAccess;
+import net.minecraftforge.fluids.IFluidTank;
 
-public interface IRestrictedAccessTile extends IStreamableGui {
-	IAccessHandler getAccessHandler();
+public interface IContainerLiquidTanks {
+	void handlePipetteClickClient(int slot, EntityPlayer player);
 
-	ChunkCoordinates getCoordinates();
+	void handlePipetteClick(int slot, EntityPlayerMP player);
 
-	void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess);
+	IFluidTank getTank(int slot);
 }

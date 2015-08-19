@@ -8,22 +8,23 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.gui;
+package forestry.core.gui.widgets;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.core.gui.widgets.Widget;
+import forestry.core.gui.GuiForestry;
 import forestry.core.proxy.Proxies;
 
 public class WidgetManager {
 
 	public final GuiForestry gui;
 	public final Minecraft minecraft;
-	protected final ArrayList<Widget> widgets = new ArrayList<Widget>();
+	protected final List<Widget> widgets = new ArrayList<Widget>();
 
 	public WidgetManager(GuiForestry gui) {
 		this.gui = gui;
@@ -42,7 +43,11 @@ public class WidgetManager {
 		this.widgets.clear();
 	}
 
-	protected Widget getAtPosition(int mX, int mY) {
+	public List<Widget> getWidgets() {
+		return widgets;
+	}
+
+	public Widget getAtPosition(int mX, int mY) {
 		for (Widget slot : widgets) {
 			if (slot.isMouseOver(mX, mY)) {
 				return slot;

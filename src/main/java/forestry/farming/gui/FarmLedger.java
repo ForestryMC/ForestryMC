@@ -12,8 +12,8 @@ package forestry.farming.gui;
 
 import net.minecraft.init.Items;
 
-import forestry.core.gui.Ledger;
-import forestry.core.gui.LedgerManager;
+import forestry.core.gui.ledgers.Ledger;
+import forestry.core.gui.ledgers.LedgerManager;
 import forestry.core.utils.StringUtil;
 
 public class FarmLedger extends Ledger {

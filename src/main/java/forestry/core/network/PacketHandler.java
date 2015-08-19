@@ -37,13 +37,13 @@ import forestry.apiculture.multiblock.IAlvearyController;
 import forestry.apiculture.multiblock.TileAlveary;
 import forestry.apiculture.network.PacketActiveUpdate;
 import forestry.core.circuits.ContainerSolderingIron;
+import forestry.core.circuits.ISocketable;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.genetics.BreedingTracker;
-import forestry.core.gui.ContainerLiquidTanks;
-import forestry.core.gui.ContainerSocketed;
+import forestry.core.gui.IContainerLiquidTanks;
+import forestry.core.gui.IContainerSocketed;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.interfaces.IRestrictedAccessTile;
-import forestry.core.interfaces.ISocketable;
 import forestry.core.proxy.Proxies;
 import forestry.farming.multiblock.IFarmController;
 import forestry.farming.multiblock.TileFarm;
@@ -251,7 +251,7 @@ public class PacketHandler {
 	private static void onChipsetClick(PacketSlotClick packet, EntityPlayerMP player) {
 		assert FMLCommonHandler.instance().getEffectiveSide().isServer();
 
-		if (!(player.openContainer instanceof ContainerSocketed)) {
+		if (!(player.openContainer instanceof IContainerSocketed)) {
 			return;
 		}
 		ItemStack itemstack = player.inventory.getItemStack();
@@ -259,18 +259,18 @@ public class PacketHandler {
 			return;
 		}
 
-		((ContainerSocketed) player.openContainer).handleChipsetClickServer(packet.getSlot(), player, itemstack);
+		((IContainerSocketed) player.openContainer).handleChipsetClickServer(packet.getSlot(), player, itemstack);
 	}
 
 	private static void onSolderingIronClick(PacketSlotClick packet, EntityPlayerMP player) {
 		assert FMLCommonHandler.instance().getEffectiveSide().isServer();
 
-		if (!(player.openContainer instanceof ContainerSocketed)) {
+		if (!(player.openContainer instanceof IContainerSocketed)) {
 			return;
 		}
 		ItemStack itemstack = player.inventory.getItemStack();
 
-		((ContainerSocketed) player.openContainer).handleSolderingIronClickServer(packet.getSlot(), player, itemstack);
+		((IContainerSocketed) player.openContainer).handleSolderingIronClickServer(packet.getSlot(), player, itemstack);
 	}
 
 	private static void onAccessSwitch(PacketCoordinates packet, EntityPlayer playerEntity) {
@@ -296,10 +296,8 @@ public class PacketHandler {
 	private static void onPipetteClick(PacketSlotClick packet, EntityPlayerMP player) {
 		assert FMLCommonHandler.instance().getEffectiveSide().isServer();
 
-		if (!(player.openContainer instanceof ContainerLiquidTanks)) {
-			return;
+		if ((player.openContainer instanceof IContainerLiquidTanks)) {
+			((IContainerLiquidTanks) player.openContainer).handlePipetteClick(packet.getSlot(), player);
 		}
-
-		((ContainerLiquidTanks) player.openContainer).handlePipetteClick(packet.getSlot(), player);
 	}
 }

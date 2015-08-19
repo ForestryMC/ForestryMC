@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.interfaces;
+package forestry.core.circuits;
 
 import net.minecraft.item.ItemStack;
 

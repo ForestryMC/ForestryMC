@@ -15,67 +15,34 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-import forestry.core.interfaces.ISocketable;
-import forestry.core.network.IStreamableGui;
-import forestry.core.network.PacketId;
-import forestry.core.network.PacketSlotClick;
-import forestry.core.network.PacketSocketUpdate;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.StackUtils;
+import forestry.core.circuits.ISocketable;
 
-public abstract class ContainerSocketed<T extends TileEntity & IStreamableGui & ISocketable> extends ContainerTile<T> {
+public abstract class ContainerSocketed<T extends TileEntity & ISocketable> extends ContainerTile<T> implements IContainerSocketed {
+
+	private final ContainerSocketedHelper<T> helper;
 
 	protected ContainerSocketed(T tile, InventoryPlayer playerInventory, int xInv, int yInv) {
 		super(tile, playerInventory, xInv, yInv);
+		this.helper = new ContainerSocketedHelper<T>(tile);
 	}
 
+	@Override
 	public void handleChipsetClick(int slot) {
-		PacketSlotClick packet = new PacketSlotClick(PacketId.CHIPSET_CLICK, tile, slot);
-		Proxies.net.sendToServer(packet);
+		helper.handleChipsetClick(slot);
 	}
 
+	@Override
 	public void handleChipsetClickServer(int slot, EntityPlayerMP player, ItemStack itemstack) {
-		ItemStack toSocket = itemstack.copy();
-		toSocket.stackSize = 1;
-		tile.setSocket(slot, toSocket);
-
-		ItemStack stack = player.inventory.getItemStack();
-		stack.stackSize--;
-		if (stack.stackSize <= 0) {
-			player.inventory.setItemStack(null);
-		}
-		player.updateHeldItem();
-
-		PacketSocketUpdate packet = new PacketSocketUpdate(tile);
-		Proxies.net.sendToPlayer(packet, player);
+		helper.handleChipsetClickServer(slot, player, itemstack);
 	}
 
+	@Override
 	public void handleSolderingIronClick(int slot) {
-		PacketSlotClick packet = new PacketSlotClick(PacketId.SOLDERING_IRON_CLICK, tile, slot);
-		Proxies.net.sendToServer(packet);
+		helper.handleSolderingIronClick(slot);
 	}
 
+	@Override
 	public void handleSolderingIronClickServer(int slot, EntityPlayerMP player, ItemStack itemstack) {
-		ItemStack socket = tile.getSocket(slot);
-		if (socket == null) {
-			return;
-		}
-
-		StackUtils.stowInInventory(socket, player.inventory, true);
-		// Not sufficient space in player's inventory. failed to stow.
-		if (socket.stackSize > 0) {
-			return;
-		}
-
-		tile.setSocket(slot, null);
-		itemstack.damageItem(1, player);
-		if (itemstack.stackSize <= 0) {
-			player.inventory.setItemStack(null);
-		}
-		player.updateHeldItem();
-
-
-		PacketSocketUpdate packet = new PacketSocketUpdate(tile);
-		Proxies.net.sendToPlayer(packet, player);
+		helper.handleSolderingIronClickServer(slot, player, itemstack);
 	}
 }

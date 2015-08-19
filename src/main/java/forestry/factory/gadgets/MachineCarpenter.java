@@ -91,7 +91,7 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 	}
 
 	public MachineCarpenter() {
-		super(1100, 50, 4000);
+		super(1100, 4000, 200);
 		setHints(Config.hints.get("carpenter"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluids);
 
@@ -328,21 +328,14 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 
 	/* STATE INFORMATION */
 	@Override
-	public boolean isWorking() {
-		return packageTime > 0 || pendingProduct != null || currentRecipe != null && validateResources();
-	}
-
-	@Override
 	public boolean hasWork() {
 		if (currentRecipe == null) {
 			return false;
 		}
 
-		IInventoryAdapter accessibleInventory = getInternalInventory();
 		// Stop working if the output slot cannot take more
-		if (accessibleInventory.getStackInSlot(SLOT_PRODUCT) != null
-				&& accessibleInventory.getStackInSlot(SLOT_PRODUCT).getMaxStackSize() - accessibleInventory.getStackInSlot(SLOT_PRODUCT).stackSize < currentRecipe
-				.getCraftingResult().stackSize) {
+		ItemStack product = getStackInSlot(SLOT_PRODUCT);
+		if (product != null && product.getMaxStackSize() - product.stackSize < currentRecipe.getCraftingResult().stackSize) {
 			return false;
 		}
 
@@ -497,10 +490,6 @@ public class MachineCarpenter extends TilePowered implements ISidedInventory, IL
 			}
 
 			return internal.matches(inventorycrafting, world);
-		}
-
-		public boolean isIngredient(ItemStack resource) {
-			return internal.isIngredient(resource);
 		}
 
 		public ItemStack getBox() {

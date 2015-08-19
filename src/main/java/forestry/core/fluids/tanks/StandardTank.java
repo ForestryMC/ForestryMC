@@ -131,6 +131,11 @@ public class StandardTank extends FluidTank {
 		return false;
 	}
 
+	public boolean canDrain(int amount) {
+		FluidStack drained = drain(amount, false);
+		return (drained != null) && (drained.amount == amount);
+	}
+
 	@Override
 	public FluidStack drain(int maxDrain, boolean doDrain) {
 		if (maxDrain <= 0) {

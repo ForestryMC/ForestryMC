@@ -131,7 +131,7 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 	private int distillationTotalTime = 0;
 
 	public MachineStill() {
-		super(1100, 50, 8000);
+		super(1100, 8000, 200);
 		setInternalInventory(new StillInventoryAdapter(this));
 		setHints(Config.hints.get("still"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluidInputs);
@@ -256,11 +256,6 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		getErrorLogic().setCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
-	}
-
-	@Override
-	public boolean isWorking() {
-		return distillationTime > 0 || currentRecipe != null && productTank.getFluidAmount() + currentRecipe.output.amount <= Defaults.PROCESSOR_TANK_CAPACITY;
 	}
 
 	@Override

@@ -56,7 +56,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection, IAct
 
 	protected Engine(int maxHeat, int maxEnergy) {
 		this.maxHeat = maxHeat;
-		energyManager = new EnergyManager(2000, 100, maxEnergy);
+		energyManager = new EnergyManager(2000, maxEnergy);
 
 		// allow engines to chain, but not have energy sucked out of them
 		energyManager.setReceiveOnly();

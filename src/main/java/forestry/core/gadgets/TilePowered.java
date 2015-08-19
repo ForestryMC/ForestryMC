@@ -20,6 +20,7 @@ import cpw.mods.fml.common.Optional;
 
 import forestry.api.core.IErrorLogic;
 import forestry.core.EnumErrorCode;
+import forestry.core.circuits.ISpeedUpgradable;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.network.DataInputStreamForestry;
@@ -30,20 +31,53 @@ import forestry.energy.EnergyManager;
 import buildcraft.api.tiles.IHasWork;
 
 @Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = "BuildCraftAPI|tiles")
-public abstract class TilePowered extends TileBase implements IRenderableMachine, IPowerHandler, IHasWork {
-
-	private static final int WORK_CYCLES = 4;
+public abstract class TilePowered extends TileBase implements IRenderableMachine, IPowerHandler, IHasWork, ISpeedUpgradable {
 
 	private final EnergyManager energyManager;
 
-	protected TilePowered(int maxTransfer, int energyPerWork, int capacity) {
-		this.energyManager = new EnergyManager(maxTransfer, energyPerWork, capacity);
+	private int workCounter;
+	private int ticksPerWorkCycle;
+	private int energyPerWorkCycle;
+
+	protected float speedMultiplier = 1.0f;
+	protected float powerMultiplier = 1.0f;
+
+	// the number of work ticks that this machine has had no power
+	private int noPowerTime = 0;
+
+	protected TilePowered(int maxTransfer, int capacity, int energyPerWorkCycle) {
+		this.energyManager = new EnergyManager(maxTransfer, capacity);
 		this.energyManager.setReceiveOnly();
+
+		setEnergyPerWorkCycle(energyPerWorkCycle);
+		this.ticksPerWorkCycle = 4;
+	}
+
+	public int getWorkCounter() {
+		return workCounter;
+	}
+
+	public void setTicksPerWorkCycle(int ticksPerWorkCycle) {
+		this.ticksPerWorkCycle = ticksPerWorkCycle;
+		this.workCounter = 0;
+	}
+
+	public int getTicksPerWorkCycle() {
+		if (worldObj.isRemote) {
+			return ticksPerWorkCycle;
+		}
+		return Math.round(ticksPerWorkCycle / speedMultiplier);
+	}
+
+	public void setEnergyPerWorkCycle(int energyPerWorkCycle) {
+		this.energyPerWorkCycle = EnergyManager.scaleForDifficulty(energyPerWorkCycle);
+	}
+
+	public int getEnergyPerWorkCycle() {
+		return Math.round(energyPerWorkCycle * powerMultiplier);
 	}
 
 	/* STATE INFORMATION */
-	public abstract boolean isWorking();
-
 	public boolean hasResourcesMin(float percentage) {
 		return false;
 	}
@@ -54,11 +88,14 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 
 	public abstract boolean hasWork();
 
-	private int workCounter;
-
 	@Override
 	protected void updateServerSide() {
 		super.updateServerSide();
+
+		// one Forestry work tick happens every 5 game ticks
+		if (!updateOnInterval(5)) {
+			return;
+		}
 
 		IErrorLogic errorLogic = getErrorLogic();
 
@@ -68,23 +105,42 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 			return;
 		}
 
-		if (updateOnInterval(20)) {
-			boolean hasEnergy = energyManager.hasEnergyToDoWork();
-			errorLogic.setCondition(!hasEnergy, EnumErrorCode.NOPOWER);
+		if (!hasWork()) {
+			return;
 		}
 
-		if (workCounter < WORK_CYCLES) {
-			if (energyManager.consumeEnergyToDoWork()) {
+		int ticksPerWorkCycle = getTicksPerWorkCycle();
+
+		if (workCounter < ticksPerWorkCycle) {
+			int energyPerWorkCycle = getEnergyPerWorkCycle();
+			boolean consumedEnergy = energyManager.consumeEnergyToDoWork(ticksPerWorkCycle, energyPerWorkCycle);
+			if (consumedEnergy) {
+				errorLogic.setCondition(false, EnumErrorCode.NOPOWER);
 				workCounter++;
+				noPowerTime = 0;
+			} else {
+				noPowerTime++;
+				if (noPowerTime > 4) {
+					errorLogic.setCondition(true, EnumErrorCode.NOPOWER);
+				}
 			}
 		} else {
-			if (updateOnInterval(5) && workCycle()) {
+			if (workCycle()) {
 				workCounter = 0;
 			}
 		}
 	}
 
 	protected abstract boolean workCycle();
+
+	public int getProgressScaled(int i) {
+		int ticksPerWorkCycle = getTicksPerWorkCycle();
+		if (ticksPerWorkCycle == 0) {
+			return i;
+		}
+
+		return ((ticksPerWorkCycle - workCounter) * i) / ticksPerWorkCycle;
+	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
@@ -102,12 +158,24 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
 		super.writeGuiData(data);
 		energyManager.writeData(data);
+		data.writeVarInt(workCounter);
+		data.writeVarInt(getTicksPerWorkCycle());
 	}
 
 	@Override
 	public void readGuiData(DataInputStreamForestry data) throws IOException {
 		super.readGuiData(data);
 		energyManager.readData(data);
+		workCounter = data.readVarInt();
+		ticksPerWorkCycle = data.readVarInt();
+	}
+
+	/* ISpeedUpgradable */
+	@Override
+	public void applySpeedUpgrade(double speedChange, double powerChange) {
+		speedMultiplier += speedChange;
+		powerMultiplier += powerChange;
+		workCounter = 0;
 	}
 
 	// / ADDITIONAL LIQUID HANDLING

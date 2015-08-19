@@ -18,7 +18,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
-import forestry.core.interfaces.ISocketable;
+import forestry.core.circuits.ISocketable;
 import forestry.core.multiblock.MultiblockControllerBase;
 import forestry.core.multiblock.MultiblockTileEntityBase;
 import forestry.core.proxy.Proxies;

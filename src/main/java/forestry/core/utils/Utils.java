@@ -31,7 +31,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.registry.EntityRegistry;
 
 import forestry.api.core.ForestryAPI;
-import forestry.core.interfaces.ISocketable;
+import forestry.core.circuits.ISocketable;
 import forestry.core.proxy.Proxies;
 
 import buildcraft.api.tools.IToolWrench;

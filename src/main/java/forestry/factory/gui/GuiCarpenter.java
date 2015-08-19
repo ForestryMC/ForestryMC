@@ -30,11 +30,8 @@ public class GuiCarpenter extends GuiForestryTitled<ContainerCarpenter, MachineC
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 		MachineCarpenter machine = inventory;
-
-		if (machine.isWorking()) {
-			int progressScaled = machine.getCraftingProgressScaled(16);
-			drawTexturedModalRect(guiLeft + 98, guiTop + 51 + 16 - progressScaled, 176, 60 + 16 - progressScaled, 4, progressScaled);
-		}
+		int progressScaled = machine.getCraftingProgressScaled(16);
+		drawTexturedModalRect(guiLeft + 98, guiTop + 51 + 16 - progressScaled, 176, 60 + 16 - progressScaled, 4, progressScaled);
 	}
 
 }

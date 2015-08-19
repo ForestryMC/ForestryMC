@@ -12,15 +12,14 @@ package forestry.farming.multiblock;
 
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.farming.IFarmHousing;
+import forestry.core.circuits.ISocketable;
 import forestry.core.fluids.ITankManager;
 import forestry.core.interfaces.IClimatised;
 import forestry.core.interfaces.IRestrictedAccessTile;
-import forestry.core.interfaces.ISocketable;
 import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.network.IStreamableGui;
 import forestry.farming.gui.IFarmLedgerDelegate;
 
-public interface IFarmController extends IFarmHousing, ISocketable, IClimatised, IRestrictedAccessTile, IErrorLogicSource, IStreamableGui {
+public interface IFarmController extends IFarmHousing, ISocketable, IClimatised, IRestrictedAccessTile, IErrorLogicSource {
 	IFarmLedgerDelegate getFarmLedgerDelegate();
 
 	IInventoryAdapter getInternalInventory();

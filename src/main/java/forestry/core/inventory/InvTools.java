@@ -413,6 +413,15 @@ public abstract class InvTools {
 		return ((float) amount / (float) stackMax) >= percent;
 	}
 
+	public static boolean isEmpty(IInventory inventory, int slotStart, int slotCount) {
+		for (int i = slotStart; i < slotStart + slotCount; i++) {
+			if (inventory.getStackInSlot(i) != null) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public static ItemStack[] getStacks(IInventory inventory) {
 		ItemStack[] stacks = new ItemStack[inventory.getSizeInventory()];
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {

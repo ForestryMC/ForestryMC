@@ -98,4 +98,8 @@ public abstract class Circuit implements ICircuit {
 	public static ICircuit farmOrchardManual;
 	public static ICircuit farmRubberManual;
 	public static ICircuit farmEnderManaged;
+
+	public static ICircuit machineSpeedUpgrade1;
+	public static ICircuit machineSpeedUpgrade2;
+	public static ICircuit machineEfficiencyUpgrade1;
 }

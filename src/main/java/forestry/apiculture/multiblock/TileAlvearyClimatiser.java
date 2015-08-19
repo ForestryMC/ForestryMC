@@ -26,6 +26,9 @@ import cofh.api.energy.IEnergyHandler;
 
 public abstract class TileAlvearyClimatiser extends TileAlveary implements IEnergyHandler, IActivatable, IAlvearyComponent.Climatiser {
 
+	private static final int WORK_CYCLES = 1;
+	private static final int ENERGY_PER_OPERATION = 50;
+
 	protected interface IClimitiserDefinition {
 		float getChangePerTransfer();
 
@@ -49,16 +52,16 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IEner
 	protected TileAlvearyClimatiser(IClimitiserDefinition definition) {
 		this.definition = definition;
 
-		this.energyManager = new EnergyManager(1000, 50, 2000);
+		this.energyManager = new EnergyManager(1000, 2000);
 		this.energyManager.setReceiveOnly();
 	}
 
 	/* UPDATING */
 	@Override
 	public void changeClimate(int tick, IClimateControlled climateControlled) {
-		if (workingTime < 20 && energyManager.consumeEnergyToDoWork()) {
-			// consume 10 RF per tick of work
-			workingTime += energyManager.getEnergyPerWork() / 10;
+		if (workingTime < 20 && energyManager.consumeEnergyToDoWork(WORK_CYCLES, ENERGY_PER_OPERATION)) {
+			// one tick of work for every 10 RF
+			workingTime += ENERGY_PER_OPERATION / 10;
 		}
 
 		if (workingTime > 0) {

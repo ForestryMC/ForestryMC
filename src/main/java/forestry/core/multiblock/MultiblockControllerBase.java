@@ -32,7 +32,6 @@ import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
-import forestry.core.network.IStreamableGui;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
@@ -42,7 +41,7 @@ import forestry.core.utils.StringUtil;
  *
  * Subordinate TileEntities implement the IMultiblockPart class and, generally, should not have an update() loop.
  */
-public abstract class MultiblockControllerBase implements ISidedInventory, IRestrictedAccessTile, IStreamableGui, IErrorLogicSource {
+public abstract class MultiblockControllerBase implements ISidedInventory, IRestrictedAccessTile, IErrorLogicSource {
 	public static final short DIMENSION_UNBOUNDED = -1;
 
 	// Multiblock stuff - do not mess with

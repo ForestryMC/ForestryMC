@@ -38,10 +38,16 @@ import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorSource;
 import forestry.core.config.Config;
 import forestry.core.gadgets.TileForestry;
+import forestry.core.gui.ledgers.ClimateLedger;
+import forestry.core.gui.ledgers.HintLedger;
+import forestry.core.gui.ledgers.LedgerManager;
+import forestry.core.gui.ledgers.OwnerLedger;
+import forestry.core.gui.ledgers.PowerLedger;
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.tooltips.ToolTipLine;
 import forestry.core.gui.widgets.Widget;
+import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.interfaces.IClimatised;
 import forestry.core.interfaces.IHintSource;
 import forestry.core.interfaces.IPowerHandler;
@@ -313,7 +319,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 		InventoryPlayer playerInv = mc.thePlayer.inventory;
 
 		if (playerInv.getItemStack() == null) {
-			drawToolTips(widgetManager.widgets, mouseX, mouseY);
+			drawToolTips(widgetManager.getWidgets(), mouseX, mouseY);
 			drawToolTips(buttonList, mouseX, mouseY);
 			drawToolTips(inventorySlots.inventorySlots, mouseX, mouseY);
 		}
@@ -407,6 +413,10 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
 
 	public int getGuiTop() {
 		return guiTop;
+	}
+
+	public FontColour getFontColor() {
+		return fontColor;
 	}
 
 	@Override
