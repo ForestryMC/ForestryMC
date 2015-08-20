@@ -8,14 +8,13 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.factory.recipes;
+package forestry.factory.recipes.craftguide;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.api.recipes.IFabricatorRecipe;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
-import forestry.factory.gadgets.MachineFabricator;
+import forestry.factory.gadgets.MachineBottler;
 
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.LiquidSlot;
@@ -25,19 +24,15 @@ import uristqwerty.CraftGuide.api.RecipeTemplate;
 import uristqwerty.CraftGuide.api.Slot;
 import uristqwerty.CraftGuide.api.SlotType;
 
-public class CraftGuideFabricator implements RecipeProvider {
+public class CraftGuideBottler implements RecipeProvider {
 
-	private final Slot[] slots = new Slot[12];
+	private final Slot[] slots = new Slot[4];
 
-	public CraftGuideFabricator() {
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
-				slots[i + j * 3] = new ItemSlot(i * 18 + 3, j * 18 + 3, 16, 16).drawOwnBackground();
-			}
-		}
-		slots[9] = new ItemSlot(59, 21, 16, 16, true).setSlotType(SlotType.OUTPUT_SLOT).drawOwnBackground();
-		slots[10] = new LiquidSlot(59, 39);
-		slots[11] = new ItemSlot(59, 3, 16, 16).setSlotType(SlotType.MACHINE_SLOT);
+	public CraftGuideBottler() {
+		slots[0] = new ItemSlot(12, 12, 16, 16).drawOwnBackground();
+		slots[1] = new LiquidSlot(12, 30);
+		slots[2] = new ItemSlot(50, 21, 16, 16).setSlotType(SlotType.OUTPUT_SLOT).drawOwnBackground();
+		slots[3] = new ItemSlot(31, 21, 16, 16).setSlotType(SlotType.MACHINE_SLOT);
 	}
 
 	@Override
@@ -47,26 +42,17 @@ public class CraftGuideFabricator implements RecipeProvider {
 			return;
 		}
 
-		ItemStack machine = ForestryBlock.factoryPlain.getItemStack(1, Defaults.DEFINITION_FABRICATOR_META);
+		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_BOTTLER_META);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
-		for (IFabricatorRecipe recipe : MachineFabricator.RecipeManager.recipes) {
-			Object[] array = new Object[12];
+		for (MachineBottler.Recipe recipe : MachineBottler.RecipeManager.recipes) {
+			Object[] array = new Object[4];
 
-			Object[] recipeIngredients = recipe.getIngredients();
-			if (recipeIngredients == null) {
-				continue;
-			}
-
-			System.arraycopy(recipeIngredients, 0, array, 0, recipeIngredients.length);
-			array[9] = recipe.getRecipeOutput();
-
-			if (recipe.getLiquid() != null) {
-				array[10] = recipe.getLiquid();
-			}
-			array[11] = machine;
+			array[0] = recipe.can;
+			array[1] = recipe.input;
+			array[2] = recipe.bottled;
+			array[3] = machine;
 			generator.addRecipe(template, array);
 		}
 	}
-
 }

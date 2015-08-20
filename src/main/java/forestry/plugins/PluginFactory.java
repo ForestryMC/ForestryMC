@@ -54,7 +54,7 @@ import forestry.factory.gadgets.MachineStill;
 import forestry.factory.gadgets.MillRainmaker;
 import forestry.factory.gadgets.TileWorktable;
 import forestry.factory.network.PacketHandlerFactory;
-import forestry.factory.recipes.CraftGuideIntegration;
+import forestry.factory.recipes.craftguide.CraftGuideIntegration;
 import forestry.factory.triggers.FactoryTriggers;
 
 

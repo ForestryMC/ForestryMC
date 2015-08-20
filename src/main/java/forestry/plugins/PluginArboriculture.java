@@ -273,8 +273,8 @@ public class PluginArboriculture extends ForestryPlugin {
 
 		Proxies.common.addSmelting(ForestryBlock.logs.getWildcard(), new ItemStack(Items.coal, 1, 1), 0.15F);
 
-		ShapelessRecipeCustom.buildRecipe(ForestryBlock.planks.getItemStack(4), ForestryBlock.logs.getItemStack()).setPreserveNBT();
-		ShapelessRecipeCustom.buildRecipe(ForestryBlock.planksFireproof.getItemStack(4), ForestryBlock.logsFireproof.getItemStack()).setPreserveNBT();
+		ShapelessRecipeCustom.buildRecipe(ForestryBlock.planks.getItemStack(4), ForestryBlock.logs.getWildcard()).setPreserveNBT();
+		ShapelessRecipeCustom.buildRecipe(ForestryBlock.planksFireproof.getItemStack(4), ForestryBlock.logsFireproof.getWildcard()).setPreserveNBT();
 
 		// Fabricator recipes
 		if (PluginManager.Module.FACTORY.isEnabled() && PluginManager.Module.APICULTURE.isEnabled()) {
@@ -285,7 +285,7 @@ public class PluginArboriculture extends ForestryPlugin {
 					"#X#",
 					" # ",
 					'#', ForestryItem.refractoryWax,
-					'X', ForestryBlock.logs.getItemStack()}).setPreserveNBT());
+					'X', ForestryBlock.logs.getWildcard()}).setPreserveNBT());
 
 			// Fireproof plank recipe
 			RecipeManagers.fabricatorManager.addRecipe(new FabricatorRecipe(null, Fluids.GLASS.getFluid(500), ForestryBlock.planksFireproof.getItemStack(5), new Object[]{
@@ -293,14 +293,14 @@ public class PluginArboriculture extends ForestryPlugin {
 					"#X#",
 					"X#X",
 					'#', ForestryItem.refractoryWax,
-					'X', ForestryBlock.planks.getItemStack()}).setPreserveNBT());
+					'X', ForestryBlock.planks.getWildcard()}).setPreserveNBT());
 		}
 
-		ShapedRecipeCustom.buildPriorityRecipe(ForestryBlock.slabs.getItemStack(6), "###", '#', ForestryBlock.planks).setPreserveNBT();
-		ShapedRecipeCustom.buildPriorityRecipe(ForestryBlock.slabsFireproof.getItemStack(6), "###", '#', ForestryBlock.planksFireproof).setPreserveNBT();
+		ShapedRecipeCustom.buildPriorityRecipe(ForestryBlock.slabs.getItemStack(6), "###", '#', ForestryBlock.planks.getWildcard()).setPreserveNBT();
+		ShapedRecipeCustom.buildPriorityRecipe(ForestryBlock.slabsFireproof.getItemStack(6), "###", '#', ForestryBlock.planksFireproof.getWildcard()).setPreserveNBT();
 
-		ShapedRecipeCustom.buildRecipe(ForestryBlock.fences.getItemStack(3), "#X#", "#X#", '#', ForestryBlock.planks.getItemStack(1), 'X', "stickWood").setPreserveNBT();
-		ShapedRecipeCustom.buildRecipe(ForestryBlock.fencesFireproof.getItemStack(3), "#X#", "#X#", '#', ForestryBlock.planksFireproof.getItemStack(1), 'X', "stickWood").setPreserveNBT();
+		ShapedRecipeCustom.buildRecipe(ForestryBlock.fences.getItemStack(3), "#X#", "#X#", '#', ForestryBlock.planks.getWildcard(), 'X', "stickWood").setPreserveNBT();
+		ShapedRecipeCustom.buildRecipe(ForestryBlock.fencesFireproof.getItemStack(3), "#X#", "#X#", '#', ForestryBlock.planksFireproof.getWildcard(), 'X', "stickWood").setPreserveNBT();
 
 		if (PluginManager.Module.FACTORY.isEnabled()) {
 			// Treealyzer
@@ -330,13 +330,13 @@ public class PluginArboriculture extends ForestryPlugin {
 				"#  ",
 				"## ",
 				"###",
-				'#', ForestryBlock.planks.getItemStack()).setPreserveNBT();
+				'#', ForestryBlock.planks.getWildcard()).setPreserveNBT();
 
 		ShapedRecipeCustom.buildPriorityRecipe(ForestryBlock.stairsFireproof.getItemStack(4),
 				"#  ",
 				"## ",
 				"###",
-				'#', ForestryBlock.planksFireproof.getItemStack()).setPreserveNBT();
+				'#', ForestryBlock.planksFireproof.getWildcard()).setPreserveNBT();
 
 		// Grafter
 		Proxies.common.addRecipe(ForestryItem.grafter.getItemStack(),

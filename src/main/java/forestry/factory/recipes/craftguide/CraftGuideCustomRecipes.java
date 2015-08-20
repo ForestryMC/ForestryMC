@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.factory.recipes;
+package forestry.factory.recipes.craftguide;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;

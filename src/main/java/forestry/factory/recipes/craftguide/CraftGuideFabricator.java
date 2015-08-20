@@ -8,14 +8,14 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.factory.recipes;
+package forestry.factory.recipes.craftguide;
 
 import net.minecraft.item.ItemStack;
 
+import forestry.api.recipes.IFabricatorRecipe;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
-import forestry.core.utils.RecipeUtil;
-import forestry.factory.gadgets.MachineCarpenter;
+import forestry.factory.gadgets.MachineFabricator;
 
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.LiquidSlot;
@@ -25,11 +25,11 @@ import uristqwerty.CraftGuide.api.RecipeTemplate;
 import uristqwerty.CraftGuide.api.Slot;
 import uristqwerty.CraftGuide.api.SlotType;
 
-public class CraftGuideCarpenter implements RecipeProvider {
+public class CraftGuideFabricator implements RecipeProvider {
 
 	private final Slot[] slots = new Slot[12];
 
-	public CraftGuideCarpenter() {
+	public CraftGuideFabricator() {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				slots[i + j * 3] = new ItemSlot(i * 18 + 3, j * 18 + 3, 16, 16).drawOwnBackground();
@@ -47,20 +47,20 @@ public class CraftGuideCarpenter implements RecipeProvider {
 			return;
 		}
 
-		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_CARPENTER_META);
+		ItemStack machine = ForestryBlock.factoryPlain.getItemStack(1, Defaults.DEFINITION_FABRICATOR_META);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
-		for (MachineCarpenter.Recipe recipe : MachineCarpenter.RecipeManager.recipes) {
+		for (IFabricatorRecipe recipe : MachineFabricator.RecipeManager.recipes) {
 			Object[] array = new Object[12];
 
-			Object[] flattened = RecipeUtil.getCraftingRecipeAsArray(recipe.asIRecipe());
-			if (flattened == null) {
-				flattened = generator.getCraftingRecipe(recipe.asIRecipe());
-			}
-			if (flattened == null) {
+			Object[] recipeIngredients = recipe.getIngredients();
+			if (recipeIngredients == null) {
 				continue;
 			}
-			System.arraycopy(flattened, 0, array, 0, flattened.length);
+
+			System.arraycopy(recipeIngredients, 0, array, 0, recipeIngredients.length);
+			array[9] = recipe.getRecipeOutput();
+
 			if (recipe.getLiquid() != null) {
 				array[10] = recipe.getLiquid();
 			}

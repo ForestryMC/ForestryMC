@@ -8,13 +8,14 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.factory.recipes;
+package forestry.factory.recipes.craftguide;
 
 import net.minecraft.item.ItemStack;
 
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.factory.gadgets.MachineSqueezer;
+import forestry.factory.recipes.ISqueezerRecipe;
 
 import uristqwerty.CraftGuide.api.ChanceSlot;
 import uristqwerty.CraftGuide.api.ItemSlot;
@@ -50,15 +51,15 @@ public class CraftGuideSqueezer implements RecipeProvider {
 		ItemStack machine = ForestryBlock.factoryTESR.getItemStack(1, Defaults.DEFINITION_SQUEEZER_META);
 		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
-		for (MachineSqueezer.Recipe recipe : MachineSqueezer.RecipeManager.recipes) {
+		for (ISqueezerRecipe recipe : MachineSqueezer.RecipeManager.recipes) {
 			Object[] array = new Object[12];
 
-			System.arraycopy(recipe.resources, 0, array, 0, recipe.resources.length);
-			if (recipe.remnants != null) {
-				array[9] = recipe.chance > 0 ? new Object[]{recipe.remnants.copy(), recipe.chance} : null;
+			System.arraycopy(recipe.getResources(), 0, array, 0, recipe.getResources().length);
+			if (recipe.getRemnants() != null) {
+				array[9] = recipe.getRemnantsChance() > 0 ? new Object[]{recipe.getRemnants().copy(), recipe.getRemnantsChance()} : null;
 			}
-			if (recipe.liquid != null) {
-				array[10] = recipe.liquid;
+			if (recipe.getFluidOutput() != null) {
+				array[10] = recipe.getFluidOutput();
 			}
 			array[11] = machine;
 			generator.addRecipe(template, array);

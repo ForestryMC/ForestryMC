@@ -51,6 +51,10 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 		return this;
 	}
 
+	public boolean preservesNbt() {
+		return preserveNBT;
+	}
+
 	@Override
 	public int getWidth() {
 		return width;
@@ -63,7 +67,7 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 
 	@Override
 	public ItemStack getRecipeOutput() {
-		return product;
+		return product.copy();
 	}
 
 	@Override

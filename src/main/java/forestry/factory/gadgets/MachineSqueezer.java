@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -41,7 +43,6 @@ import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
-import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
@@ -55,6 +56,8 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.Utils;
+import forestry.factory.recipes.ISqueezerRecipe;
+import forestry.factory.recipes.SqueezerRecipe;
 
 public class MachineSqueezer extends TilePowered implements ISocketable, ISidedInventory, ILiquidTankContainer, ISpeedUpgradable {
 
@@ -65,17 +68,17 @@ public class MachineSqueezer extends TilePowered implements ISocketable, ISidedI
 
 	/* MEMBER */
 	private final TankManager tankManager;
-	private final FilteredTank productTank;
+	private final StandardTank productTank;
 	private final SqueezerInventory inventory;
 
-	private Recipe currentRecipe;
+	private ISqueezerRecipe currentRecipe;
 
 	public MachineSqueezer() {
 		super(1100, 4000, 2000);
 		this.inventory = new SqueezerInventory(this);
 		setInternalInventory(this.inventory);
 		setHints(Config.hints.get("squeezer"));
-		this.productTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluids);
+		this.productTank = new StandardTank(Defaults.PROCESSOR_TANK_CAPACITY);
 		this.productTank.tankMode = StandardTank.TankMode.OUTPUT;
 		this.tankManager = new TankManager(productTank);
 	}
@@ -145,15 +148,15 @@ public class MachineSqueezer extends TilePowered implements ISocketable, ISidedI
 	@Override
 	public boolean workCycle() {
 		EntityPlayer player = Proxies.common.getPlayer(worldObj, getAccessHandler().getOwner());
-		if (!inventory.removeResources(currentRecipe.resources, player)) {
+		if (!inventory.removeResources(currentRecipe.getResources(), player)) {
 			return false;
 		}
 
-		FluidStack resultFluid = currentRecipe.liquid;
+		FluidStack resultFluid = currentRecipe.getFluidOutput();
 		productTank.fill(resultFluid, true);
 
-		if (currentRecipe.remnants != null && worldObj.rand.nextInt(100) < currentRecipe.chance) {
-			ItemStack remnant = currentRecipe.remnants.copy();
+		if (currentRecipe.getRemnants() != null && (worldObj.rand.nextFloat() < currentRecipe.getRemnantsChance())) {
+			ItemStack remnant = currentRecipe.getRemnants().copy();
 			inventory.addRemnant(remnant, true);
 		}
 
@@ -161,13 +164,16 @@ public class MachineSqueezer extends TilePowered implements ISocketable, ISidedI
 	}
 
 	private boolean checkRecipe() {
-		ItemStack[] resources = inventory.getResources();
-		Recipe matchingRecipe = RecipeManager.findMatchingRecipe(resources);
+		ISqueezerRecipe matchingRecipe = null;
+		if (inventory.hasResources()) {
+			ItemStack[] resources = inventory.getResources();
+			matchingRecipe = RecipeManager.findMatchingRecipe(resources);
+		}
 
 		if (currentRecipe != matchingRecipe) {
 			currentRecipe = matchingRecipe;
 			if (currentRecipe != null) {
-				int recipeTime = currentRecipe.timePerItem;
+				int recipeTime = currentRecipe.getProcessingTime();
 				setTicksPerWorkCycle(recipeTime * TICKS_PER_RECIPE_TIME);
 				setEnergyPerWorkCycle(recipeTime * ENERGY_PER_RECIPE_TIME);
 			}
@@ -189,11 +195,11 @@ public class MachineSqueezer extends TilePowered implements ISocketable, ISidedI
 		if (hasResources) {
 			hasRecipe = (currentRecipe != null);
 			if (hasRecipe) {
-				FluidStack resultFluid = currentRecipe.liquid;
+				FluidStack resultFluid = currentRecipe.getFluidOutput();
 				canFill = (productTank.fill(resultFluid, false) == resultFluid.amount);
 
-				if (currentRecipe.remnants != null) {
-					canAdd = inventory.addRemnant(currentRecipe.remnants, false);
+				if (currentRecipe.getRemnants() != null) {
+					canAdd = inventory.addRemnant(currentRecipe.getRemnants(), false);
 				}
 			}
 		}
@@ -361,40 +367,14 @@ public class MachineSqueezer extends TilePowered implements ISocketable, ISidedI
 		}
 	}
 
-	/* RECIPE MANAGMENT */
-	public static class Recipe {
-
-		public final int timePerItem;
-		public final ItemStack[] resources;
-		public final FluidStack liquid;
-		public final ItemStack remnants;
-		public final int chance;
-
-		public Recipe(int timePerItem, ItemStack[] resources, FluidStack liquid, ItemStack remnants, int chance) {
-			this.timePerItem = timePerItem;
-			this.resources = resources;
-			this.liquid = liquid;
-			this.remnants = remnants;
-			this.chance = chance;
-		}
-
-		public boolean matches(ItemStack[] res) {
-			return StackUtils.containsSets(resources, res, true, false) > 0;
-		}
-	}
-
 	public static class RecipeManager implements ISqueezerManager {
 
-		public static final ArrayList<MachineSqueezer.Recipe> recipes = new ArrayList<MachineSqueezer.Recipe>();
-		public static final HashSet<Fluid> recipeFluids = new HashSet<Fluid>();
-		public static final HashSet<ItemStack> recipeInputs = new HashSet<ItemStack>();
+		public static final List<ISqueezerRecipe> recipes = new ArrayList<ISqueezerRecipe>();
+		public static final Set<ItemStack> recipeInputs = new HashSet<ItemStack>();
 
 		@Override
 		public void addRecipe(int timePerItem, ItemStack[] resources, FluidStack liquid, ItemStack remnants, int chance) {
-			recipes.add(new MachineSqueezer.Recipe(timePerItem, resources, liquid, remnants, chance));
-			if (liquid != null) {
-				recipeFluids.add(liquid.getFluid());
-			}
+			recipes.add(new SqueezerRecipe(timePerItem, resources, liquid, remnants, chance / 100.0f));
 			if (resources != null) {
 				recipeInputs.addAll(Arrays.asList(resources));
 			}
@@ -405,9 +385,9 @@ public class MachineSqueezer extends TilePowered implements ISocketable, ISidedI
 			addRecipe(timePerItem, resources, liquid, null, 0);
 		}
 
-		public static Recipe findMatchingRecipe(ItemStack[] items) {
-			for (Recipe recipe : recipes) {
-				if (recipe.matches(items)) {
+		public static ISqueezerRecipe findMatchingRecipe(ItemStack[] items) {
+			for (ISqueezerRecipe recipe : recipes) {
+				if (StackUtils.containsSets(recipe.getResources(), items, true, false) > 0) {
 					return recipe;
 				}
 			}
@@ -431,8 +411,8 @@ public class MachineSqueezer extends TilePowered implements ISocketable, ISidedI
 		public Map<Object[], Object[]> getRecipes() {
 			HashMap<Object[], Object[]> recipeList = new HashMap<Object[], Object[]>();
 
-			for (Recipe recipe : recipes) {
-				recipeList.put(recipe.resources, new Object[]{recipe.remnants, recipe.liquid});
+			for (ISqueezerRecipe recipe : recipes) {
+				recipeList.put(recipe.getResources(), new Object[]{recipe.getRemnants(), recipe.getFluidOutput()});
 			}
 
 			return recipeList;

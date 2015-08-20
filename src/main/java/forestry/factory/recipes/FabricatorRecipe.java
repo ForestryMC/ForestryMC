@@ -52,6 +52,21 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 	}
 
 	@Override
+	public int getWidth() {
+		return internal.getWidth();
+	}
+
+	@Override
+	public int getHeight() {
+		return internal.getHeight();
+	}
+
+	@Override
+	public boolean preservesNbt() {
+		return internal.preservesNbt();
+	}
+
+	@Override
 	@Nullable
 	public ItemStack getPlan() {
 		return plan;

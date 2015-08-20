@@ -31,7 +31,7 @@ public class ShapelessRecipeCustom implements IRecipe {
 
 	private final List<ItemStack> ingredients;
 	private final ItemStack product;
-	private boolean preserveNBT = false;
+	private boolean preservesNbt = false;
 
 	private ShapelessRecipeCustom(ItemStack product, ItemStack... ingredients) {
 		this.ingredients = Arrays.asList(ingredients);
@@ -39,8 +39,12 @@ public class ShapelessRecipeCustom implements IRecipe {
 	}
 
 	public ShapelessRecipeCustom setPreserveNBT() {
-		this.preserveNBT = true;
+		this.preservesNbt = true;
 		return this;
+	}
+
+	public boolean preservesNbt() {
+		return preservesNbt;
 	}
 
 	@Override
@@ -76,7 +80,7 @@ public class ShapelessRecipeCustom implements IRecipe {
 	public ItemStack getCraftingResult(InventoryCrafting inventoryCrafting) {
 		ItemStack result = product.copy();
 
-		if (preserveNBT) {
+		if (preservesNbt) {
 			NBTTagCompound craftingNbt = RecipeUtil.getCraftingNbt(inventoryCrafting);
 			if (craftingNbt == null) {
 				return null;
@@ -91,6 +95,10 @@ public class ShapelessRecipeCustom implements IRecipe {
 	@Override
 	public int getRecipeSize() {
 		return ingredients.size();
+	}
+
+	public List<ItemStack> getIngredients() {
+		return ingredients;
 	}
 
 	@Override
