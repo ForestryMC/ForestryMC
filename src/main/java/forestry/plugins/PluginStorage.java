@@ -593,7 +593,7 @@ public class PluginStorage extends ForestryPlugin {
 		// Digger's Backpack
 		Proxies.common.addRecipe(ForestryItem.diggerBackpack.getItemStack(),
 				"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
-				Blocks.stone, 'Y', "chestWood");
+				"stone", 'Y', "chestWood");
 		// Forester's Backpack
 		Proxies.common.addRecipe(ForestryItem.foresterBackpack.getItemStack(), "X#X", "VYV", "X#X", '#', Blocks.wool,
 				'X', Items.string, 'V', "logWood", 'Y', "chestWood");
@@ -617,22 +617,22 @@ public class PluginStorage extends ForestryPlugin {
 
 			// / BACKPACKS T2
 			RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, ForestryItem.minerBackpackT2.getItemStack(),
-					"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
+					"WXW", "WTW", "WWW", 'X', "gemDiamond", 'W',
 					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.minerBackpack);
 			RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, ForestryItem.diggerBackpackT2.getItemStack(),
-					"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
+					"WXW", "WTW", "WWW", 'X', "gemDiamond", 'W',
 					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.diggerBackpack);
 			RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, ForestryItem.foresterBackpackT2.getItemStack(),
-					"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
+					"WXW", "WTW", "WWW", 'X', "gemDiamond", 'W',
 					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.foresterBackpack);
 			RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, ForestryItem.hunterBackpackT2.getItemStack(),
-					"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
+					"WXW", "WTW", "WWW", 'X', "gemDiamond", 'W',
 					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.hunterBackpack);
 			RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, ForestryItem.adventurerBackpackT2.getItemStack(),
-					"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
+					"WXW", "WTW", "WWW", 'X', "gemDiamond", 'W',
 					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.adventurerBackpack);
 			RecipeManagers.carpenterManager.addRecipe(200, Fluids.WATER.getFluid(1000), null, ForestryItem.builderBackpackT2.getItemStack(),
-					"WXW", "WTW", "WWW", 'X', Items.diamond, 'W',
+					"WXW", "WTW", "WWW", 'X', "gemDiamond", 'W',
 					ForestryItem.craftingMaterial.getItemStack(1, 3), 'T', ForestryItem.builderBackpack);
 		}
 	}

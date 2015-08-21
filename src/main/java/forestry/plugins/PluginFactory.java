@@ -288,7 +288,7 @@ public class PluginFactory extends ForestryPlugin {
 		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 3), new Object[]{
 				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "ingotIron"});
 		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 4), new Object[]{
-				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', Items.gold_ingot});
+				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "ingotGold"});
 		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 5), new Object[]{
 				" X ", "#X#", "XXX", '#', "dustRedstone", 'X', "gemDiamond"});
 		RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 6), new Object[]{

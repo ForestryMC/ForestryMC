@@ -700,7 +700,7 @@ public class PluginApiculture extends ForestryPlugin {
 				"YYY",
 				'#', ForestryItem.tubes.getItemStack(1, 4),
 				'X', ForestryBlock.alveary,
-				'I', "ingotIron", 'Y', Blocks.stone);
+				'I', "ingotIron", 'Y', "stone");
 		// HYGROREGULATOR
 		Proxies.common.addRecipe(ForestryBlock.alveary.getItemStack(1, TileAlveary.HYGRO_META),
 				"GIG",
