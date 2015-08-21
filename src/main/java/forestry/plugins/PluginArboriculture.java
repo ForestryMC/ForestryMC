@@ -194,7 +194,7 @@ public class PluginArboriculture extends ForestryPlugin {
 						"XXX",
 						'#', "blockGlass",
 						'X', "treeSapling",
-						'Y', Blocks.chest))
+						'Y', "chestWood"))
 				.setFaces(0, 1, 2, 3, 4, 4, 0, 7));
 
 		// Init rendering

@@ -133,7 +133,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 						"XXX",
 						'#', "blockGlass",
 						'X', ForestryItem.butterflyGE.getItemStack(1, Defaults.WILDCARD),
-						'Y', Blocks.chest))
+						'Y', "chestWood"))
 				.setFaces(0, 1, 2, 3, 4, 4, 0, 7)));
 		definitionChest.register();
 

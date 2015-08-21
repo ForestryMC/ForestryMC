@@ -589,24 +589,24 @@ public class PluginStorage extends ForestryPlugin {
 		// Miner's Backpack
 		Proxies.common.addRecipe(ForestryItem.minerBackpack.getItemStack(),
 				"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
-				Items.iron_ingot, 'Y', Blocks.chest);
+				"ingotIron", 'Y', "chestWood");
 		// Digger's Backpack
 		Proxies.common.addRecipe(ForestryItem.diggerBackpack.getItemStack(),
 				"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
-				Blocks.stone, 'Y', Blocks.chest);
+				Blocks.stone, 'Y', "chestWood");
 		// Forester's Backpack
 		Proxies.common.addRecipe(ForestryItem.foresterBackpack.getItemStack(), "X#X", "VYV", "X#X", '#', Blocks.wool,
-				'X', Items.string, 'V', "logWood", 'Y', Blocks.chest);
+				'X', Items.string, 'V', "logWood", 'Y', "chestWood");
 		// Hunter's Backpack
 		Proxies.common.addRecipe(ForestryItem.hunterBackpack.getItemStack(),
 				"X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V',
-				Items.feather, 'Y', Blocks.chest);
+				Items.feather, 'Y', "chestWood");
 		// Adventurer's Backpack
 		Proxies.common.addRecipe(ForestryItem.adventurerBackpack.getItemStack(), "X#X", "VYV", "X#X", '#', Blocks.wool,
-				'X', Items.string, 'V', Items.bone, 'Y', Blocks.chest);
+				'X', Items.string, 'V', Items.bone, 'Y', "chestWood");
 		// Builder's Backpack
 		Proxies.common.addRecipe(ForestryItem.builderBackpack.getItemStack(), "X#X", "VYV", "X#X", '#', Blocks.wool,
-				'X', Items.string, 'V', Items.clay_ball, 'Y', Blocks.chest);
+				'X', Items.string, 'V', Items.clay_ball, 'Y', "chestWood");
 
 		if (PluginManager.Module.FACTORY.isEnabled()) {
 			// / CARPENTER

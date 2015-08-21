@@ -229,7 +229,7 @@ public class PluginApiculture extends ForestryPlugin {
 						"XXX",
 						'#', "blockGlass",
 						'X', "beeComb",
-						'Y', Blocks.chest))
+						'Y', "chestWood"))
 				.setFaces(0, 1, 2, 3, 4, 4));
 
 		definitionBeehouse = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_BEEHOUSE_META, "forestry.Beehouse", TileBeehouse.class,

@@ -80,7 +80,7 @@ public class PluginMail extends ForestryPlugin {
 		ShapedRecipeCustom recipe = ShapedRecipeCustom.createShapedRecipe(ForestryBlock.mail.getItemStack(1, Defaults.DEFINITION_MAILBOX_META),
 				" # ", "#Y#", "XXX",
 				'#', "ingotTin",
-				'X', Blocks.chest,
+				'X', "chestWood",
 				'Y', ForestryItem.sturdyCasing);
 
 		BlockBase mail = ((BlockBase) ForestryBlock.mail.block());
@@ -93,7 +93,7 @@ public class PluginMail extends ForestryPlugin {
 				"#Y#",
 				"XWX",
 				'#', ForestryItem.tubes.getItemStack(1, 2),
-				'X', Blocks.chest,
+				'X', "chestWood",
 				'Y', ForestryItem.sturdyCasing,
 				'Z', ForestryItem.tubes.getItemStack(1, 3),
 				'W', ForestryItem.circuitboards.getItemStack(1, 2));

@@ -209,7 +209,7 @@ public class PluginFactory extends ForestryPlugin {
 						'#', "blockGlass",
 						'X', "ingotGold",
 						'Y', ForestryItem.sturdyCasing,
-						'Z', Blocks.chest))
+						'Z', "chestWood"))
 				.setFaces(0, 1, 2, 3, 4, 4));
 
 		definitionRaintank = factoryPlain.addDefinition(new MachineDefinition(Defaults.DEFINITION_RAINTANK_META, "forestry.Raintank", MachineRaintank.class,
@@ -229,7 +229,7 @@ public class PluginFactory extends ForestryPlugin {
 						"C",
 						'B', Items.book,
 						'W', Blocks.crafting_table,
-						'C', Blocks.chest))
+						'C', "chestWood"))
 				.setFaces(0, 1, 2, 3, 4, 4));
 
 		ICircuitLayout layoutMachineUpgrade = new CircuitLayout("machine.upgrade");
