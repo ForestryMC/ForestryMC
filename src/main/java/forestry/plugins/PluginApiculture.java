@@ -227,7 +227,7 @@ public class PluginApiculture extends ForestryPlugin {
 						" # ",
 						"XYX",
 						"XXX",
-						'#', Blocks.glass,
+						'#', "blockGlass",
 						'X', "beeComb",
 						'Y', Blocks.chest))
 				.setFaces(0, 1, 2, 3, 4, 4));
@@ -597,7 +597,7 @@ public class PluginApiculture extends ForestryPlugin {
 				" X ",
 				"X#X",
 				" X ",
-				'#', Items.redstone, 'X', "ingotBronze");
+				'#', "dustRedstone", 'X', "ingotBronze");
 
 		// Bees
 		Proxies.common.addRecipe(ForestryItem.scoop.getItemStack(1),
@@ -684,7 +684,7 @@ public class PluginApiculture extends ForestryPlugin {
 				"#G#",
 				'#', ForestryItem.tubes.getItemStack(1, 5),
 				'X', ForestryBlock.alveary,
-				'G', Items.gold_ingot);
+				'G', "ingotGold");
 		// FAN
 		Proxies.common.addRecipe(ForestryBlock.alveary.getItemStack(1, TileAlveary.FAN_META),
 				"I I",
@@ -692,7 +692,7 @@ public class PluginApiculture extends ForestryPlugin {
 				"I#I",
 				'#', ForestryItem.tubes.getItemStack(1, 4),
 				'X', ForestryBlock.alveary,
-				'I', Items.iron_ingot);
+				'I', "ingotIron");
 		// HEATER
 		Proxies.common.addRecipe(ForestryBlock.alveary.getItemStack(1, TileAlveary.HEATER_META),
 				"#I#",
@@ -700,29 +700,29 @@ public class PluginApiculture extends ForestryPlugin {
 				"YYY",
 				'#', ForestryItem.tubes.getItemStack(1, 4),
 				'X', ForestryBlock.alveary,
-				'I', Items.iron_ingot, 'Y', Blocks.stone);
+				'I', "ingotIron", 'Y', Blocks.stone);
 		// HYGROREGULATOR
 		Proxies.common.addRecipe(ForestryBlock.alveary.getItemStack(1, TileAlveary.HYGRO_META),
 				"GIG",
 				"GXG",
 				"GIG",
 				'X', ForestryBlock.alveary,
-				'I', Items.iron_ingot,
-				'G', Blocks.glass);
+				'I', "ingotIron",
+				'G', "blockGlass");
 		// STABILISER
 		Proxies.common.addRecipe(ForestryBlock.alveary.getItemStack(1, TileAlveary.STABILIZER_META),
 				"G G",
 				"GXG",
 				"G G",
 				'X', ForestryBlock.alveary,
-				'G', Items.quartz);
+				'G', "gemQuartz");
 		// SIEVE
 		Proxies.common.addRecipe(ForestryBlock.alveary.getItemStack(1, TileAlveary.SIEVE_META),
 				"III",
 				" X ",
 				"WWW",
 				'X', ForestryBlock.alveary,
-				'I', Items.iron_ingot,
+				'I', "ingotIron",
 				'W', ForestryItem.craftingMaterial.getItemStack(1, 3));
 
 		if (PluginManager.Module.FACTORY.isEnabled()) {
@@ -731,15 +731,16 @@ public class PluginApiculture extends ForestryPlugin {
 					ForestryItem.propolis.getItemStack(), 5);
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.honeydew.getItemStack()}, Fluids.HONEY.getFluid(Defaults.FLUID_PER_HONEY_DROP));
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.sand)}, Fluids.LAVA.getFluid(2000));
+			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.sand, 1, 1)}, Fluids.LAVA.getFluid(2000));
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{ForestryItem.phosphor.getItemStack(2), new ItemStack(Blocks.dirt)}, Fluids.LAVA.getFluid(1600));
 
 			// / CARPENTER
 			RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, ForestryItem.beealyzer.getItemStack(),
 					"X#X", "X#X", "RDR",
-					'#', Blocks.glass_pane,
+					'#', "paneGlass",
 					'X', "ingotTin",
-					'R', Items.redstone,
-					'D', Items.diamond);
+					'R', "dustRedstone",
+					'D', "gemDiamond");
 			RecipeManagers.carpenterManager.addRecipe(50, Fluids.HONEY.getFluid(500), null, ForestryItem.craftingMaterial.getItemStack(1, 6),
 					" J ", "###", "WPW",
 					'#', "plankWood",

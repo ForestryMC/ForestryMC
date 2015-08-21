@@ -76,7 +76,7 @@ public class PluginFood extends ForestryPlugin {
 		// INFUSER
 		Proxies.common.addRecipe(ForestryItem.infuser.getItemStack(),
 				"X", "#", "X",
-				'#', Items.iron_ingot,
+				'#', "ingotIron",
 				'X', "ingotBronze");
 	}
 

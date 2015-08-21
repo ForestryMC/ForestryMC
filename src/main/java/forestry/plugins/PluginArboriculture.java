@@ -192,7 +192,7 @@ public class PluginArboriculture extends ForestryPlugin {
 						" # ",
 						"XYX",
 						"XXX",
-						'#', Blocks.glass,
+						'#', "blockGlass",
 						'X', "treeSapling",
 						'Y', Blocks.chest))
 				.setFaces(0, 1, 2, 3, 4, 4, 0, 7));
@@ -305,10 +305,10 @@ public class PluginArboriculture extends ForestryPlugin {
 		if (PluginManager.Module.FACTORY.isEnabled()) {
 			// Treealyzer
 			RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, ForestryItem.treealyzer.getItemStack(), "X#X", "X#X", "RDR",
-					'#', Blocks.glass_pane,
+					'#', "paneGlass",
 					'X', "ingotCopper",
-					'R', Items.redstone,
-					'D', Items.diamond);
+					'R', "dustRedstone",
+					'D', "gemDiamond");
 
 			// SQUEEZER RECIPES
 			int seedOilMultiplier = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");

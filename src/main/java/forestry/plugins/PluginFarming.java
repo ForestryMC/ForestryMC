@@ -305,10 +305,10 @@ public class PluginFarming extends ForestryPlugin {
 		ShapedRecipeCustom.buildRecipe(hatch, " # ", "TDT", '#', basic, 'T', "gearTin", 'D', Blocks.trapdoor).setPreserveNBT();
 
 		ItemStack valve = ForestryBlock.farm.getItemStack(1, 4);
-		ShapedRecipeCustom.buildRecipe(valve, " # ", "XTX", '#', basic, 'T', "gearTin", 'X', Blocks.glass).setPreserveNBT();
+		ShapedRecipeCustom.buildRecipe(valve, " # ", "XTX", '#', basic, 'T', "gearTin", 'X', "blockGlass").setPreserveNBT();
 
 		ItemStack control = ForestryBlock.farm.getItemStack(1, 5);
-		ShapedRecipeCustom.buildRecipe(control, " # ", "XTX", '#', basic, 'T', ForestryItem.tubes.getItemStack(1, 4), 'X', Items.redstone).setPreserveNBT();
+		ShapedRecipeCustom.buildRecipe(control, " # ", "XTX", '#', basic, 'T', ForestryItem.tubes.getItemStack(1, 4), 'X', "dustRedstone").setPreserveNBT();
 
 		// Circuits
 		ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.managed");

@@ -131,7 +131,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 						" # ",
 						"XYX",
 						"XXX",
-						'#', Blocks.glass,
+						'#', "blockGlass",
 						'X', ForestryItem.butterflyGE.getItemStack(1, Defaults.WILDCARD),
 						'Y', Blocks.chest))
 				.setFaces(0, 1, 2, 3, 4, 4, 0, 7)));
@@ -182,8 +182,8 @@ public class PluginLepidopterology extends ForestryPlugin {
 		CraftingManager.getInstance().getRecipeList().add(new MatingRecipe());
 
 		RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, ForestryItem.flutterlyzer.getItemStack(),
-				"X#X", "X#X", "RDR", '#', Blocks.glass_pane, 'X', "ingotBronze", 'R',
-				Items.redstone, 'D', Items.diamond);
+				"X#X", "X#X", "RDR", '#', "paneGlass", 'X', "ingotBronze", 'R',
+				"dustRedstone", 'D', "gemDiamond");
 	}
 
 	private static void createAlleles() {

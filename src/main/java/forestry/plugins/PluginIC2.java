@@ -127,7 +127,7 @@ public class PluginIC2 extends ForestryPlugin {
 				" X ",
 				"YVY",
 				'#', "ingotTin",
-				'X', Blocks.glass,
+				'X', "blockGlass",
 				'Y', "gearTin",
 				'V', Blocks.piston)));
 
@@ -137,8 +137,8 @@ public class PluginIC2 extends ForestryPlugin {
 				"X#X",
 				"XYX",
 				"X#X",
-				'#', Blocks.glass,
-				'X', Items.gold_ingot,
+				'#', "blockGlass",
+				'X', "ingotGold",
 				'Y', ForestryItem.sturdyCasing)));
 
 		emptyCell = IC2Items.getItem("cell");
@@ -257,7 +257,7 @@ public class PluginIC2 extends ForestryPlugin {
 		if (rubber != null) {
 			for (Object rubberOreDict : RecipeUtil.getOreDictRecipeEquivalents(rubber)) {
 				RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), ForestryItem.tubes.getItemStack(4, 8),
-						new Object[]{" X ", "#X#", "XXX", '#', Items.redstone, 'X', rubberOreDict});
+						new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', rubberOreDict});
 			}
 		}
 
@@ -304,7 +304,7 @@ public class PluginIC2 extends ForestryPlugin {
 
 			ItemStack bogEarthCan = GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can");
 			if (bogEarthCan.stackSize > 0) {
-				Proxies.common.addRecipe(bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', waterCell, 'Y', Blocks.sand);
+				Proxies.common.addRecipe(bogEarthCan, "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', waterCell, 'Y', "sand");
 			}
 		}
 

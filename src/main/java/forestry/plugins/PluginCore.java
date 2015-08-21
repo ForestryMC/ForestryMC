@@ -381,20 +381,20 @@ public class PluginCore extends ForestryPlugin {
 		Proxies.common.addShapelessRecipe(ForestryItem.kitShovel.getItemStack(), ForestryItem.bronzeShovel, ForestryItem.carton);
 
 		/* NATURALIST'S ARMOR */
-		Proxies.common.addRecipe(ForestryItem.naturalistHat.getItemStack(), " X ", "Y Y", 'X', "ingotBronze", 'Y', Blocks.glass_pane);
+		Proxies.common.addRecipe(ForestryItem.naturalistHat.getItemStack(), " X ", "Y Y", 'X', "ingotBronze", 'Y', "paneGlass");
 
 		// / WRENCH
 		Proxies.common.addRecipe(ForestryItem.wrench.getItemStack(), "# #", " # ", " # ", '#', "ingotBronze");
 
 		// Manure and Fertilizer
 		if (GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat").stackSize > 0) {
-			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat"), " X ", "X#X", " X ", '#', Blocks.dirt, 'X', Items.wheat);
+			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat"), " X ", "X#X", " X ", '#', Blocks.dirt, 'X', "cropWheat");
 		}
 		if (GameMode.getGameMode().getStackSetting("recipe.output.compost.ash").stackSize > 0) {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.compost.ash"), " X ", "X#X", " X ", '#', Blocks.dirt, 'X', "dustAsh");
 		}
 		if (GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.apatite").stackSize > 0) {
-			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.apatite"), " # ", " X ", " # ", '#', Blocks.sand, 'X', "gemApatite");
+			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.apatite"), " # ", " X ", " # ", '#', "sand", 'X', "gemApatite");
 		}
 		if (GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.ash").stackSize > 0) {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.ash"), "###", "#X#", "###", '#', "dustAsh", 'X', "gemApatite");
@@ -410,13 +410,13 @@ public class PluginCore extends ForestryPlugin {
 
 		// Bog earth
 		if (GameMode.getGameMode().getStackSetting("recipe.output.bogearth.bucket").stackSize > 0) {
-			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.bucket"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', Items.water_bucket, 'Y', Blocks.sand);
+			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.bucket"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', Items.water_bucket, 'Y', "sand");
 		}
 
 		if (GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can").stackSize > 0) {
-			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.canWater, 'Y', Blocks.sand);
-			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.waxCapsuleWater, 'Y', Blocks.sand);
-			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.refractoryWater, 'Y', Blocks.sand);
+			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.canWater, 'Y', "sand");
+			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.waxCapsuleWater, 'Y', "sand");
+			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.refractoryWater, 'Y', "sand");
 		}
 
 		// Crafting Material
