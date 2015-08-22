@@ -23,9 +23,9 @@ public class ItemAmbrosia extends ItemForestryFood {
 		setAlwaysEdible();
 		setPotionEffect(Potion.regeneration.id, 40, 0, 1.0F);
 	}
-
+	
 	@Override
-	public boolean hasEffect(ItemStack itemstack, int pass) {
+	public boolean hasEffect(ItemStack stack) {
 		return true;
 	}
 

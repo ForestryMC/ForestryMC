@@ -15,10 +15,13 @@ import org.apache.logging.log4j.Level;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import forestry.core.CreativeTabForestry;
@@ -33,50 +36,49 @@ public abstract class BlockForestry extends BlockContainer {
 		setHardness(1.5f);
 		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
-
+	
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
-		IOwnable tile = (IOwnable) world.getTileEntity(x, y, z);
+	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		IOwnable tile = (IOwnable) world.getTileEntity(pos);
 		if (!tile.isOwnable() || tile.allowsRemoval(player)) {
-			return super.removedByPlayer(world, player, x, y, z, willHarvest);
+			return super.removedByPlayer(world, pos, player, willHarvest);
 		} else {
 			return false;
 		}
 	}
-
+	
 	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		if (!Proxies.common.isSimulating(world)) {
 			return;
 		}
 
-		TileEntity tile = world.getTileEntity(x, y, z);
+		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof TileForestry) {
 			TileForestry tileForestry = (TileForestry) tile;
-			Utils.dropInventory(tileForestry, world, x, y, z);
+			Utils.dropInventory(tileForestry, world, pos);
 			tileForestry.onRemoval();
 		}
-		super.breakBlock(world, x, y, z, block, meta);
+		super.breakBlock(world, pos, state);
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack itemstack) {
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityliving, ItemStack itemstack) {
 
 		if (!Proxies.common.isSimulating(world)) {
 			return;
 		}
 
-		TileForestry tile = (TileForestry) world.getTileEntity(i, j, k);
+		TileForestry tile = (TileForestry) world.getTileEntity(pos);
 		if (entityliving instanceof EntityPlayer) {
 			tile.setOwner(((EntityPlayer) entityliving));
 		}
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block block) {
 		try {
-			TileEntity tile = world.getTileEntity(x, y, z);
+			TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof TileForestry) {
 				((TileForestry) tile).onNeighborBlockChange(block);
 			}
@@ -85,5 +87,7 @@ public abstract class BlockForestry extends BlockContainer {
 			throw error;
 		}
 	}
+	
+	public abstract String getMeshDefinitionName();
 
 }

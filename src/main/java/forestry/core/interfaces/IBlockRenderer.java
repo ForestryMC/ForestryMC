@@ -13,7 +13,7 @@ package forestry.core.interfaces;
 import net.minecraft.tileentity.TileEntity;
 
 public interface IBlockRenderer {
-	public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f);
+	public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f, int p_180535_9_);
 
 	public void inventoryRender(double x, double y, double z, float f, float f1);
 }

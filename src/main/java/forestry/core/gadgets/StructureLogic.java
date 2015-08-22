@@ -12,9 +12,10 @@ package forestry.core.gadgets;
 
 import java.util.HashMap;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-
+import net.minecraft.util.BlockPos;
 import forestry.api.core.IStructureLogic;
 import forestry.api.core.ITileStructure;
 import forestry.core.config.Defaults;
@@ -134,11 +135,11 @@ public abstract class StructureLogic implements IStructureLogic {
 		for (int i = 0; i < dimensions.x; i++) {
 			for (int j = 0; j < schemata.getHeight(); j++) {
 				for (int k = 0; k < dimensions.z; k++) {
-					int x = structureTile.xCoord + i + offsetX;
-					int y = structureTile.yCoord + j + schemata.getyOffset();
-					int z = structureTile.zCoord + k + offsetZ;
+					int x = structureTile.getPos().getX() + i + offsetX;
+					int y = structureTile.getPos().getY() + j + schemata.getyOffset();
+					int z = structureTile.getPos().getZ() + k + offsetZ;
 
-					TileEntity tile = structureTile.getWorldObj().getTileEntity(x, y, z);
+					TileEntity tile = structureTile.getWorld().getTileEntity(new BlockPos(x, y, z));
 					if (!(tile instanceof ITileStructure)) {
 						continue;
 					}
@@ -167,11 +168,12 @@ public abstract class StructureLogic implements IStructureLogic {
 		for (int i = 0; i < dimensions.x; i++) {
 			for (int j = 0; j < schemata.getHeight(); j++) {
 				for (int k = 0; k < dimensions.z; k++) {
-					int x = structureTile.xCoord + i + offsetX;
-					int y = structureTile.yCoord + j + schemata.getyOffset();
-					int z = structureTile.zCoord + k + offsetZ;
+					int x = structureTile.getPos().getX() + i + offsetX;
+					int y = structureTile.getPos().getY() + j + schemata.getyOffset();
+					int z = structureTile.getPos().getZ() + k + offsetZ;
 
-					TileEntity tile = structureTile.getWorldObj().getTileEntity(x, y, z);
+					BlockPos pos = new BlockPos(x, y, z);
+					TileEntity tile = structureTile.getWorld().getTileEntity(pos);
 					if (!(tile instanceof ITileStructure)) {
 						continue;
 					}
@@ -184,8 +186,9 @@ public abstract class StructureLogic implements IStructureLogic {
 					part.setCentralTE((TileEntity) structure);
 					EnumStructureBlock type = schemata.getAt(i, j, k, isRotated);
 					if (metaOnValid.containsKey(type)) {
-						structureTile.getWorldObj().setBlockMetadataWithNotify(x, y, z, metaOnValid.get(type), Defaults.FLAG_BLOCK_SYNCH);
-						structureTile.getWorldObj().markBlockForUpdate(x, y, z);
+						IBlockState state = structureTile.getWorld().getBlockState(pos);
+						structureTile.getWorld().setBlockState(pos, state.getBlock().getStateFromMeta(metaOnValid.get(type)), Defaults.FLAG_BLOCK_SYNCH);
+						structureTile.getWorld().markBlockForUpdate(pos);
 					}
 				}
 			}

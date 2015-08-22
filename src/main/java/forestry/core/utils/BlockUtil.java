@@ -12,34 +12,29 @@ package forestry.core.utils;
 
 import java.util.ArrayList;
 
+import cofh.api.energy.IEnergyReceiver;
+import forestry.core.config.Defaults;
+import forestry.core.vect.Vect;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockCocoa;
-import net.minecraft.block.BlockLog;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.Direction;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import forestry.core.config.Defaults;
-import forestry.core.vect.Vect;
-
-import cofh.api.energy.IEnergyReceiver;
 
 public class BlockUtil {
 
 	public static ArrayList<ItemStack> getBlockDrops(World world, Vect posBlock) {
-		Block block = world.getBlock(posBlock.x, posBlock.y, posBlock.z);
-		int meta = world.getBlockMetadata(posBlock.x, posBlock.y, posBlock.z);
+		IBlockState state = world.getBlockState(new BlockPos(posBlock.x, posBlock.y, posBlock.z));
+		Block block =state.getBlock();
 
-		return block.getDrops(world, posBlock.x, posBlock.y, posBlock.z, meta, 0);
+		return (ArrayList<ItemStack>) block.getDrops(world, new BlockPos(posBlock.x, posBlock.y, posBlock.z), state, 0);
 
 	}
 
-	public static boolean isEnergyReceiver(ForgeDirection side, TileEntity tile) {
+	public static boolean isEnergyReceiver(EnumFacing side, TileEntity tile) {
 		if (!(tile instanceof IEnergyReceiver)) {
 			return false;
 		}
@@ -70,17 +65,20 @@ public class BlockUtil {
 	}
 
 	public static boolean isValidPot(World world, BlockPos pos, int notchDirection) {
-		x += Direction.offsetX[notchDirection];
-		z += Direction.offsetZ[notchDirection];
-		Block block = world.getBlockState(pos).getBlock();
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
+		x += EnumFacing.values()[notchDirection + 2].getFrontOffsetX();
+		z += EnumFacing.values()[notchDirection + 2].getFrontOffsetZ();
+		Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
 		if (block == Blocks.log) {
-			return BlockLog.func_150165_c(world.getBlockMetadata(x, y, z)) == 3;
+			return (world.getBlockState(new BlockPos(x, y, z)).getBlock().getMetaFromState(world.getBlockState(new BlockPos(x, y, z))) & 3) == 3;
 		} else {
-			return block.isWood(world, pos);
+			return block.isWood(world, new BlockPos(x, y, z));
 		}
 	}
 
 	public static int getMaturityPod(int metadata) {
-		return BlockCocoa.func_149987_c(metadata);
+		return (metadata & 12) >> 2;
 	}
 }

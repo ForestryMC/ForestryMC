@@ -11,8 +11,8 @@
 package forestry.core.gadgets;
 
 import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.common.Optional;
 
 import forestry.core.interfaces.IPowerHandler;
@@ -51,14 +51,14 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 	private int workCounter;
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		if (!Proxies.common.isSimulating(worldObj)) {
 			return;
 		}
 
 		// Disable powered machines on a direct redstone signal
-		if (worldObj.getBlockPowerInput(xCoord, yCoord, zCoord) >= 15) {
+		if (worldObj.getStrongPower(pos) >= 15) {
 			return;
 		}
 
@@ -105,27 +105,52 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 	}
 
 	@Override
-	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		return energyManager.receiveEnergy(from, maxReceive, simulate);
 	}
 
 	@Override
-	public int extractEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+	public int extractEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		return energyManager.extractEnergy(from, maxReceive, simulate);
 	}
 
 	@Override
-	public int getEnergyStored(ForgeDirection from) {
+	public int getEnergyStored(EnumFacing from) {
 		return energyManager.getEnergyStored(from);
 	}
 
 	@Override
-	public int getMaxEnergyStored(ForgeDirection from) {
+	public int getMaxEnergyStored(EnumFacing from) {
 		return energyManager.getMaxEnergyStored(from);
 	}
 
 	@Override
-	public boolean canConnectEnergy(ForgeDirection from) {
+	public boolean canConnectEnergy(EnumFacing from) {
 		return energyManager.canConnectEnergy(from);
+	}
+	
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+		
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		return null;
 	}
 }

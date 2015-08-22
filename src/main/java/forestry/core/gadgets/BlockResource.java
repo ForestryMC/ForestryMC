@@ -15,12 +15,15 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -31,46 +34,72 @@ import forestry.core.config.ForestryItem;
 import forestry.core.render.TextureManager;
 
 public class BlockResource extends Block {
+	
+	public static final PropertyEnum RESOURCES = PropertyEnum.create("resource", Resources.class);
+	
 	public BlockResource() {
 		super(Material.rock);
 		setHardness(3F);
 		setResistance(5F);
 		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
+	
+	public enum Resources implements IStringSerializable
+	{
+		APATITE,
+		COPPER,
+		TIN;
 
+		@Override
+		public String getName() {
+			return name().toLowerCase();
+		}
+		
+	}
+	
 	@Override
-	public void dropBlockAsItemWithChance(World world, int x, int y, int z, int metadata, float par6, int par7) {
-		super.dropBlockAsItemWithChance(world, x, y, z, metadata, par6, par7);
-
-		if (metadata == 0) {
-			this.dropXpOnBlockBreak(world, x, y, z, MathHelper.getRandomIntegerInRange(world.rand, 1, 4));
+	public int getMetaFromState(IBlockState state) {
+		return ((Resources)state.getValue(RESOURCES)).ordinal();
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(RESOURCES,  Resources.values()[meta]);
+	}
+	
+	@Override
+	public void dropBlockAsItemWithChance(World world, BlockPos pos, IBlockState state, float chance, int fortune) {
+		super.dropBlockAsItemWithChance(world, pos, state, chance, fortune);
+		if (getMetaFromState(state) == 0) {
+			this.dropXpOnBlockBreak(world, pos, MathHelper.getRandomIntegerInRange(world.rand, 1, 4));
 		}
 	}
 
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
 
-		if (metadata == 0) {
-			int fortmod = world.rand.nextInt(fortune + 2) - 1;
+		if (getMetaFromState(state) == 0) {
+			int fortmod = RANDOM.nextInt(fortune + 2) - 1;
 			if (fortmod < 0) {
 				fortmod = 0;
 			}
 
-			int amount = (2 + world.rand.nextInt(5)) * (fortmod + 1);
+			int amount = (2 + RANDOM.nextInt(5)) * (fortmod + 1);
 			if (amount > 0) {
 				drops.add(ForestryItem.apatite.getItemStack(amount));
 			}
 		} else {
-			drops.add(new ItemStack(this, 1, metadata));
+			drops.add(new ItemStack(this, 1, getMetaFromState(state)));
 		}
 
 		return drops;
 	}
-
+	
 	@Override
-	public int getDamageValue(World world, int x, int y, int z) {
-		return world.getBlockMetadata(x, y, z);
+	public int getDamageValue(World world, BlockPos pos) {
+		IBlockState state = world.getBlockState(pos);
+		return getMetaFromState(state);
 	}
 
 	// / CREATIVE INVENTORY
@@ -80,36 +109,6 @@ public class BlockResource extends Block {
 		itemList.add(new ItemStack(this, 1, 0));
 		itemList.add(new ItemStack(this, 1, 1));
 		itemList.add(new ItemStack(this, 1, 2));
-	}
-
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	private IIcon iconApatite;
-	@SideOnly(Side.CLIENT)
-	private IIcon iconCopper;
-	@SideOnly(Side.CLIENT)
-	private IIcon iconTin;
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister register) {
-		iconApatite = TextureManager.getInstance().registerTex(register, "ores/apatite");
-		iconCopper = TextureManager.getInstance().registerTex(register, "ores/copper");
-		iconTin = TextureManager.getInstance().registerTex(register, "ores/tin");
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int i, int j) {
-		if (j == 0) {
-			return iconApatite;
-		} else if (j == 1) {
-			return iconCopper;
-		} else if (j == 2) {
-			return iconTin;
-		} else {
-			return null;
-		}
 	}
 
 }

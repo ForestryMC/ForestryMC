@@ -10,5 +10,7 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import net.minecraft.util.IChatComponent;
+
 public class TileMill extends TileMachine {
 }

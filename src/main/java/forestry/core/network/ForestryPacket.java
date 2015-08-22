@@ -20,7 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-
+import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 import net.minecraftforge.fml.common.registry.GameData;
 
@@ -50,8 +50,7 @@ public class ForestryPacket {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		return new FMLProxyPacket(Unpooled.wrappedBuffer(bytes.toByteArray()), channel);
+		return new FMLProxyPacket(new PacketBuffer(Unpooled.wrappedBuffer(bytes.toByteArray())), channel);
 	}
 
 	public int getID() {
@@ -69,7 +68,7 @@ public class ForestryPacket {
 			itemstack = new ItemStack(item, stackSize, meta);
 
 			if (item.isDamageable() || Proxies.common.needsTagCompoundSynched(item)) {
-				itemstack.stackTagCompound = this.readNBTTagCompound(data);
+				itemstack.setTagCompound(readNBTTagCompound(data));
 			}
 		}
 
@@ -81,12 +80,12 @@ public class ForestryPacket {
 		if (itemstack == null) {
 			data.writeUTF("");
 		} else {
-			data.writeUTF(GameData.getItemRegistry().getNameForObject(itemstack.getItem()));
+			data.writeUTF((String)GameData.getItemRegistry().getNameForObject(itemstack.getItem()));
 			data.writeByte(itemstack.stackSize);
 			data.writeShort(itemstack.getItemDamage());
 
 			if (itemstack.getItem().isDamageable() || Proxies.common.needsTagCompoundSynched(itemstack.getItem())) {
-				this.writeNBTTagCompound(itemstack.stackTagCompound, data);
+				this.writeNBTTagCompound(itemstack.getTagCompound(), data);
 			}
 		}
 	}
@@ -110,9 +109,8 @@ public class ForestryPacket {
 		if (nbttagcompound == null) {
 			data.writeShort(-1);
 		} else {
-			byte[] compressed = CompressedStreamTools.compress(nbttagcompound);
-			data.writeShort((short) compressed.length);
-			data.write(compressed);
+			data.writeShort((short) nbttagcompound.getKeySet().size());
+			CompressedStreamTools.writeCompressed(nbttagcompound, data);
 		}
 
 	}

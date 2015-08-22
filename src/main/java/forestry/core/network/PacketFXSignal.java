@@ -15,7 +15,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.block.Block;
-
+import net.minecraft.util.BlockPos;
 import net.minecraftforge.fml.common.registry.GameData;
 
 import forestry.core.proxy.Proxies;
@@ -41,30 +41,26 @@ public class PacketFXSignal extends ForestryPacket {
 	private VisualFXType visualFX;
 	private SoundFXType soundFX;
 
-	private int xCoord;
-	private int yCoord;
-	private int zCoord;
+	private BlockPos pos;
 	private Block block;
 	private int meta;
 
 	public PacketFXSignal() {
 	}
 
-	public PacketFXSignal(VisualFXType type, int xCoord, int yCoord, int zCoord, Block block, int meta) {
-		this(type, SoundFXType.NONE, xCoord, yCoord, zCoord, block, meta);
+	public PacketFXSignal(VisualFXType type, BlockPos pos, Block block, int meta) {
+		this(type, SoundFXType.NONE, pos, block, meta);
 	}
 
-	public PacketFXSignal(SoundFXType type, int xCoord, int yCoord, int zCoord, Block block, int meta) {
-		this(VisualFXType.NONE, type, xCoord, yCoord, zCoord, block, meta);
+	public PacketFXSignal(SoundFXType type, BlockPos pos, Block block, int meta) {
+		this(VisualFXType.NONE, type, pos, block, meta);
 	}
 
-	public PacketFXSignal(VisualFXType visualFX, SoundFXType soundFX, int xCoord, int yCoord, int zCoord, Block block, int meta) {
+	public PacketFXSignal(VisualFXType visualFX, SoundFXType soundFX, BlockPos pos, Block block, int meta) {
 		super(PacketIds.FX_SIGNAL);
 		this.visualFX = visualFX;
 		this.soundFX = soundFX;
-		this.xCoord = xCoord;
-		this.yCoord = yCoord;
-		this.zCoord = zCoord;
+		this.pos = pos;
 		this.block = block;
 		this.meta = meta;
 	}
@@ -73,10 +69,10 @@ public class PacketFXSignal extends ForestryPacket {
 	public void writeData(DataOutputStream data) throws IOException {
 		data.writeShort(visualFX.ordinal());
 		data.writeShort(soundFX.ordinal());
-		data.writeInt(xCoord);
-		data.writeInt(yCoord);
-		data.writeInt(zCoord);
-		data.writeUTF(GameData.getBlockRegistry().getNameForObject(block));
+		data.writeInt(pos.getX());
+		data.writeInt(pos.getY());
+		data.writeInt(pos.getZ());
+		data.writeUTF((String)GameData.getBlockRegistry().getNameForObject(block));
 		data.writeInt(meta);
 	}
 
@@ -84,24 +80,25 @@ public class PacketFXSignal extends ForestryPacket {
 	public void readData(DataInputStream data) throws IOException {
 		this.visualFX = VisualFXType.values()[data.readShort()];
 		this.soundFX = SoundFXType.values()[data.readShort()];
-		this.xCoord = data.readInt();
-		this.yCoord = data.readInt();
-		this.zCoord = data.readInt();
+		int xCoord = data.readInt();
+		int yCoord = data.readInt();
+		int zCoord = data.readInt();
+		pos = new BlockPos(xCoord, yCoord, zCoord);
 		this.block = GameData.getBlockRegistry().getRaw(data.readUTF());
 		this.meta = data.readInt();
 	}
 
 	public void executeFX() {
 		if (visualFX != VisualFXType.NONE) {
-			Proxies.common.addBlockDestroyEffects(Proxies.common.getRenderWorld(), xCoord, yCoord, zCoord, block, meta);
+			Proxies.common.addBlockDestroyEffects(Proxies.common.getRenderWorld(), pos, block, meta);
 		}
 		if (soundFX != SoundFXType.NONE) {
 			if (soundFX == SoundFXType.BLOCK_DESTROY) {
-				Proxies.common.playBlockBreakSoundFX(Proxies.common.getRenderWorld(), xCoord, yCoord, zCoord, block);
+				Proxies.common.playBlockBreakSoundFX(Proxies.common.getRenderWorld(), pos, block);
 			} else if (soundFX == SoundFXType.BLOCK_PLACE) {
-				Proxies.common.playBlockPlaceSoundFX(Proxies.common.getRenderWorld(), xCoord, yCoord, zCoord, block);
+				Proxies.common.playBlockPlaceSoundFX(Proxies.common.getRenderWorld(), pos, block);
 			} else {
-				Proxies.common.playSoundFX(Proxies.common.getRenderWorld(), xCoord, yCoord, zCoord, soundFX.soundFile, soundFX.volume, soundFX.pitch);
+				Proxies.common.playSoundFX(Proxies.common.getRenderWorld(), pos, soundFX.soundFile, soundFX.volume, soundFX.pitch);
 			}
 		}
 	}

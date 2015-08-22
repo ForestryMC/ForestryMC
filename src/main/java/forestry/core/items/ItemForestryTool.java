@@ -14,9 +14,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.ForgeHooks;
@@ -39,21 +41,23 @@ public class ItemForestryTool extends ItemForestry {
 		setMaxDamage(200);
 		this.remnants = remnants;
 	}
-
+	
 	@Override
-	public float func_150893_a(ItemStack itemstack, Block block) {
+	public float getStrVsBlock(ItemStack stack, Block block) {
 		if (blocksEffectiveAgainst.contains(block)) {
 			return efficiencyOnProperMaterial;
 		}
 		return 1.0F;
 	}
-
+	
 	@Override
-	public float getDigSpeed(ItemStack itemstack, Block block, int md) {
-		if (ForgeHooks.isToolEffective(itemstack, block, md)) {
-			return efficiencyOnProperMaterial;
-		}
-		return func_150893_a(itemstack, block);
+	public float getDigSpeed(ItemStack itemstack, IBlockState state) {
+        for (String type : getToolClasses(itemstack))
+        {
+            if (state.getBlock().isToolEffective(type, state))
+                return efficiencyOnProperMaterial;
+        }
+		return getStrVsBlock(itemstack, state.getBlock());
 	}
 
 	@SubscribeEvent
@@ -70,7 +74,7 @@ public class ItemForestryTool extends ItemForestry {
 	}
 
 	@Override
-	public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block, int j, int k, int l, EntityLivingBase entityliving) {
+	public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block, BlockPos pos, EntityLivingBase entityliving) {
 		itemstack.damageItem(1, entityliving);
 		return true;
 	}

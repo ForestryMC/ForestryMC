@@ -315,9 +315,9 @@ public class ItemInfuser extends ItemForestry {
 			}
 			trySeasoning();
 		}
-
+		
 		@Override
-		public String getInventoryName() {
+		public String getCommandSenderName() {
 			return "Infuser";
 		}
 

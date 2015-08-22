@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.core.interfaces;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.core.utils.EnumTankLevel;
+import net.minecraft.util.EnumFacing;
 
 public interface IRenderableMachine {
 
-	ForgeDirection getOrientation();
+	EnumFacing getOrientation();
 
 	EnumTankLevel getPrimaryLevel();
 

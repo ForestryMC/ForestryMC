@@ -12,6 +12,7 @@ package forestry.core.worldgen;
 
 import java.util.Random;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -43,20 +44,20 @@ public abstract class WorldGenBase extends WorldGenerator {
 	protected Random rand;
 
 	@Override
-	public final boolean generate(World world, Random random, int x, int y, int z) {
-		return generate(world, random, x, y, z, false);
+	public final boolean generate(World world, Random random, BlockPos pos) {
+		return generate(world, random, pos, false);
 	}
 
-	public final boolean generate(World world, Random random, int x, int y, int z, boolean forced) {
+	public final boolean generate(World world, Random random, BlockPos pos, boolean forced) {
 		this.world = world;
 		this.rand = random;
-		boolean result = subGenerate(x, y, z, forced);
+		boolean result = subGenerate(pos, forced);
 		this.world = null;
 		this.rand = null;
 		return result;
 	}
 
-	public boolean subGenerate(int x, int y, int z, boolean forced) {
+	public boolean subGenerate(BlockPos pos, boolean forced) {
 		return false;
 	}
 

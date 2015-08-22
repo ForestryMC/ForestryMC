@@ -13,7 +13,6 @@ package forestry.core.items;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -31,14 +30,8 @@ public class ItemForestryBlock extends ItemBlock {
 		return i;
 	}
 
-	protected Block getBlock() {
-		return field_150939_a;
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIconFromDamage(int meta) {
-		return this.getBlock().getIcon(1, meta);
+	public Block getBlock() {
+		return block;
 	}
 
 	@Override

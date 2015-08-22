@@ -18,7 +18,7 @@ public class ChunkCoords {
 	public int zCoord;
 
 	public ChunkCoords(Chunk chunk) {
-		this.dimension = chunk.worldObj.provider.dimensionId;
+		this.dimension = chunk.getWorld().provider.getDimensionId();
 		this.xCoord = chunk.xPosition;
 		this.zCoord = chunk.zPosition;
 	}

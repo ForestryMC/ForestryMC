@@ -12,6 +12,7 @@ package forestry.core.proxy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.world.World;
 
@@ -107,14 +108,14 @@ public class ClientProxyRender extends ProxyRender {
 	}
 
 	@Override
-	public short registerItemTexUID(IIconRegister register, short uid, String ident) {
-		TextureManager.getInstance().registerTexUID(register, uid, ident);
+	public short registerItemTexUID(TextureMap map, short uid, String ident) {
+		TextureManager.getInstance().registerTexUID(map, uid, ident);
 		return uid;
 	}
 
 	@Override
-	public short registerTerrainTexUID(IIconRegister register, short uid, String ident) {
-		TextureManager.getInstance().registerTexUID(register, uid, ident);
+	public short registerTerrainTexUID(TextureMap map, short uid, String ident) {
+		TextureManager.getInstance().registerTexUID(map, uid, ident);
 		return uid;
 	}
 

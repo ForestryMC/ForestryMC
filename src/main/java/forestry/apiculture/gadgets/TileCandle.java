@@ -19,23 +19,17 @@ import net.minecraft.tileentity.TileEntity;
 public class TileCandle extends TileEntity {
 	private int colour;
 
-	// This is a non-ticking Tile Entity.
-	@Override
-	public boolean canUpdate() {
-		return false;
-	}
-
 	@Override
 	public Packet getDescriptionPacket() {
 		NBTTagCompound nbt = new NBTTagCompound();
 		writeToNBT(nbt);
 
-		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
+		return new S35PacketUpdateTileEntity(pos, 0, nbt);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		readFromNBT(pkt.func_148857_g());
+		readFromNBT(pkt.getNbtCompound());
 	}
 
 	@Override

@@ -11,6 +11,7 @@
 package forestry.core;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.common.network.IGuiHandler;
@@ -25,26 +26,26 @@ import forestry.core.proxy.Proxies;
 
 public abstract class GuiHandlerBase implements IGuiHandler {
 
-	public TileForestry getTileForestry(World world, int x, int y, int z) {
+	public TileForestry getTileForestry(World world, BlockPos pos) {
 		try {
-			return (TileForestry) world.getTileEntity(x, y, z);
+			return (TileForestry) world.getTileEntity(pos);
 		} catch (Exception ex) {
-			Proxies.log.warning("Failed to cast a tile entity to a TileForestry at " + x + "/" + y + "/" + z);
+			Proxies.log.warning("Failed to cast a tile entity to a TileForestry at " + pos.getX() + "/" + pos.getY() + "/" + pos.getZ());
 		}
 
 		return null;
 	}
 
-	public GuiNaturalistInventory getNaturalistChestGui(String rootUID, EntityPlayer player, World world, int x, int y, int z, int page) {
-		TileNaturalistChest tile = (TileNaturalistChest) getTileForestry(world, x, y, z);
+	public GuiNaturalistInventory getNaturalistChestGui(String rootUID, EntityPlayer player, World world, BlockPos pos, int page) {
+		TileNaturalistChest tile = (TileNaturalistChest) getTileForestry(world, pos);
 		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(rootUID);
 		return new GuiNaturalistInventory(speciesRoot, player, new ContainerNaturalistInventory(player.inventory, tile, page, 25), tile, page, 5);
 	}
 
-	public ContainerNaturalistInventory getNaturalistChestContainer(String rootUID, EntityPlayer player, World world, int x, int y, int z, int page) {
+	public ContainerNaturalistInventory getNaturalistChestContainer(String rootUID, EntityPlayer player, World world, BlockPos pos, int page) {
 		ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(rootUID);
 		speciesRoot.getBreedingTracker(world, player.getGameProfile()).synchToPlayer(player);
-		return new ContainerNaturalistInventory(player.inventory, (TileNaturalistChest) getTileForestry(world, x, y, z), page, 25);
+		return new ContainerNaturalistInventory(player.inventory, (TileNaturalistChest) getTileForestry(world, pos), page, 25);
 	}
 
 	public static int encodeGuiData(int guiId, int data) {

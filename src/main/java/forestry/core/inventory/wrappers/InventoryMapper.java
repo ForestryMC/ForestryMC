@@ -13,8 +13,8 @@ package forestry.core.inventory.wrappers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 
 /**
  * Wrapper class used to specify part of an existing inventory to be treated as
@@ -31,7 +31,7 @@ public class InventoryMapper implements IInventory {
 	private int stackSizeLimit = -1;
 	private boolean checkItems = true;
 
-	public InventoryMapper(IInventory inv, ForgeDirection side) {
+	public InventoryMapper(IInventory inv, EnumFacing side) {
 		this(inv, getInventoryStart(inv, side), getInventorySize(inv, side));
 	}
 
@@ -62,11 +62,11 @@ public class InventoryMapper implements IInventory {
 		this.checkItems = checkItems;
 	}
 
-	protected static int getInventorySize(IInventory inv, ForgeDirection side) {
+	protected static int getInventorySize(IInventory inv, EnumFacing side) {
 		return inv.getSizeInventory();
 	}
 
-	protected static int getInventoryStart(IInventory inv, ForgeDirection side) {
+	protected static int getInventoryStart(IInventory inv, EnumFacing side) {
 		return 0;
 	}
 
@@ -94,11 +94,6 @@ public class InventoryMapper implements IInventory {
 		inv.setInventorySlotContents(start + slot, itemstack);
 	}
 
-	@Override
-	public String getInventoryName() {
-		return inv.getInventoryName();
-	}
-
 	public void setStackSizeLimit(int limit) {
 		stackSizeLimit = limit;
 	}
@@ -119,23 +114,23 @@ public class InventoryMapper implements IInventory {
 	}
 
 	@Override
-	public void openInventory() {
-		inv.openInventory();
+	public void openInventory(EntityPlayer entityplayer) {
+		inv.openInventory(entityplayer);
 	}
 
 	@Override
-	public void closeInventory() {
-		inv.closeInventory();
+	public void closeInventory(EntityPlayer entityplayer) {
+		inv.closeInventory(entityplayer);
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slot) {
 		return inv.getStackInSlotOnClosing(start + slot);
 	}
-
+	
 	@Override
-	public boolean hasCustomInventoryName() {
-		return inv.hasCustomInventoryName();
+	public boolean hasCustomName() {
+		return inv.hasCustomName();
 	}
 
 	@Override
@@ -144,6 +139,36 @@ public class InventoryMapper implements IInventory {
 			return inv.isItemValidForSlot(start + slot, stack);
 		}
 		return true;
+	}
+
+	@Override
+	public String getCommandSenderName() {
+		return inv.getCommandSenderName();
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		return inv.getDisplayName();
+	}
+
+	@Override
+	public int getField(int id) {
+		return inv.getField(id);
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		inv.setField(id, value);	
+	}
+
+	@Override
+	public int getFieldCount() {
+		return inv.getFieldCount();
+	}
+
+	@Override
+	public void clear() {
+		inv.clear();
 	}
 
 }

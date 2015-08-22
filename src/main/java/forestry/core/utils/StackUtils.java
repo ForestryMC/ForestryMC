@@ -21,6 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -317,7 +318,7 @@ public class StackUtils {
 		}
 
 		// When the base stackTagCompound is null or empty, treat it as a wildcard for crafting
-		if (base.stackTagCompound == null || base.stackTagCompound.hasNoTags()) {
+		if (base.getTagCompound() == null || base.getTagCompound().hasNoTags()) {
 			return true;
 		} else {
 			return ItemStack.areItemStackTagsEqual(base, comparison);
@@ -396,7 +397,7 @@ public class StackUtils {
 		}
 	}
 
-	public static void dropItemStackAsEntity(ItemStack items, World world, double x, double y, double z) {
+	public static void dropItemStackAsEntity(ItemStack items, World world, BlockPos pos) {
 		if (items.stackSize <= 0) {
 			return;
 		}
@@ -405,8 +406,8 @@ public class StackUtils {
 		double d = (world.rand.nextFloat() * f1) + (1.0F - f1) * 0.5D;
 		double d1 = (world.rand.nextFloat() * f1) + (1.0F - f1) * 0.5D;
 		double d2 = (world.rand.nextFloat() * f1) + (1.0F - f1) * 0.5D;
-		EntityItem entityitem = new EntityItem(world, x + d, y + d1, z + d2, items);
-		entityitem.delayBeforeCanPickup = 10;
+		EntityItem entityitem = new EntityItem(world, pos.getX() + d, pos.getY() + d1, pos.getZ() + d2, items);
+		entityitem.setPickupDelay(10);
 
 		world.spawnEntityInWorld(entityitem);
 

@@ -13,9 +13,10 @@ package forestry.core.gadgets;
 import java.util.HashMap;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-
+import net.minecraft.util.IChatComponent;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.core.config.Defaults;
@@ -159,7 +160,7 @@ public abstract class TileMachine extends TileForestry implements IClimatised, I
 			createDefinitionMap();
 		}
 
-		Block block = worldObj.getBlock(xCoord, yCoord, zCoord);
+		Block block = worldObj.getBlockState(pos).getBlock();
 		if (!definitionMap.containsKey(block) || !definitionMap.get(block).containsKey(kind)) {
 			commitSeppuku(block, kind);
 			return;
@@ -169,11 +170,11 @@ public abstract class TileMachine extends TileForestry implements IClimatised, I
 		Proxies.log.info("Converting obsolete gadget %s-%s to new '%s' %s-%s", block.getUnlocalizedName(), kind, definition.teIdent, definition.block.getUnlocalizedName(), definition.meta);
 
 		Proxies.log.info("Removing old tile entity...");
-		worldObj.removeTileEntity(xCoord, yCoord, zCoord);
-		worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+		worldObj.removeTileEntity(pos);
+		worldObj.setBlockToAir(pos);
 		Proxies.log.info("Setting to new block id...");
-		worldObj.setBlock(xCoord, yCoord, zCoord, definition.block, definition.meta, Defaults.FLAG_BLOCK_SYNCH);
-		TileEntity tile = worldObj.getTileEntity(xCoord, yCoord, zCoord);
+		worldObj.setBlockState(pos, definition.block.getStateFromMeta(definition.meta), Defaults.FLAG_BLOCK_SYNCH);
+		TileEntity tile = worldObj.getTileEntity(pos);
 		if (tile == null) {
 			throw new RuntimeException("Failed to set new block tile entity!");
 		} else if (tile.getClass() != definition.teClass) {
@@ -190,9 +191,9 @@ public abstract class TileMachine extends TileForestry implements IClimatised, I
 	private NBTTagCompound complementNBT(NBTTagCompound parent, NBTTagCompound inner, MachineDefinition definition) {
 
 		inner.setString("id", definition.teIdent);
-		inner.setInteger("x", this.xCoord);
-		inner.setInteger("y", this.yCoord);
-		inner.setInteger("z", this.zCoord);
+		inner.setInteger("x", pos.getX());
+		inner.setInteger("y", pos.getY());
+		inner.setInteger("z", pos.getZ());
 
 		inner.setInteger("Access", parent.getInteger("Access"));
 		if (parent.hasKey("Owner")) {
@@ -207,8 +208,8 @@ public abstract class TileMachine extends TileForestry implements IClimatised, I
 
 	private void commitSeppuku(Block block, int meta) {
 		Proxies.log.info("Obsolete gadget %s-%s has no replacement defined. Committing sepukku.", block.getUnlocalizedName(), meta);
-		worldObj.removeTileEntity(xCoord, yCoord, zCoord);
-		worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+		worldObj.removeTileEntity(pos);
+		worldObj.setBlockToAir(pos);
 	}
 
 	/**
@@ -220,7 +221,8 @@ public abstract class TileMachine extends TileForestry implements IClimatised, I
 		super.writeToNBT(nbttagcompound);
 
 		// Legacy for old fermenter with strange meta data
-		int kind = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+		IBlockState state = worldObj.getBlockState(pos);
+		int kind = state.getBlock().getMetaFromState(state);
 		nbttagcompound.setInteger("Kind", kind);
 
 		/*
@@ -261,5 +263,30 @@ public abstract class TileMachine extends TileForestry implements IClimatised, I
 
 	@Override
 	public void fromPacketPayload(PacketPayload payload) {
+	}
+	
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+		
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		return null;
 	}
 }

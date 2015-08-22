@@ -12,6 +12,7 @@ package forestry.core;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.common.network.IGuiHandler;
@@ -38,10 +39,10 @@ public class GuiHandler extends GuiHandlerBase {
 			switch (GuiId.values()[cleanId]) {
 
 				case AnalyzerGUI:
-					return new GuiAnalyzer(player.inventory, (TileAnalyzer) getTileForestry(world, x, y, z));
+					return new GuiAnalyzer(player.inventory, (TileAnalyzer) getTileForestry(world, new BlockPos(x, y, z)));
 
 				case NaturalistBenchGUI:
-					return new GuiEscritoire(player, (TileEscritoire) getTileForestry(world, x, y, z));
+					return new GuiEscritoire(player, (TileEscritoire) getTileForestry(world, new BlockPos(x, y, z)));
 
 				case SolderingIronGUI:
 					ItemStack equipped = player.getCurrentEquippedItem();
@@ -73,10 +74,10 @@ public class GuiHandler extends GuiHandlerBase {
 			switch (GuiId.values()[cleanId]) {
 
 				case AnalyzerGUI:
-					return new ContainerAnalyzer(player.inventory, (TileAnalyzer) getTileForestry(world, x, y, z));
+					return new ContainerAnalyzer(player.inventory, (TileAnalyzer) getTileForestry(world, new BlockPos(x, y, z)));
 
 				case NaturalistBenchGUI:
-					return new ContainerEscritoire(player, (TileEscritoire) getTileForestry(world, x, y, z));
+					return new ContainerEscritoire(player, (TileEscritoire) getTileForestry(world, new BlockPos(x, y, z)));
 
 				case SolderingIronGUI:
 					ItemStack equipped = player.getCurrentEquippedItem();

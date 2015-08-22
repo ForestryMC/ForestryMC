@@ -2,8 +2,7 @@ package forestry.energy;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 import forestry.core.GameMode;
 import forestry.core.utils.BlockUtil;
@@ -89,7 +88,7 @@ public class EnergyManager implements IEnergyHandler {
 
 	/* IEnergyHandler */
 	@Override
-	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		if (!canReceive()) {
 			return 0;
 		}
@@ -97,7 +96,7 @@ public class EnergyManager implements IEnergyHandler {
 	}
 
 	@Override
-	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+	public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
 		if (!canExtract()) {
 			return 0;
 		}
@@ -105,7 +104,7 @@ public class EnergyManager implements IEnergyHandler {
 	}
 
 	@Override
-	public int getEnergyStored(ForgeDirection from) {
+	public int getEnergyStored(EnumFacing from) {
 		return energyStorage.getEnergyStored();
 	}
 
@@ -114,7 +113,7 @@ public class EnergyManager implements IEnergyHandler {
 	}
 
 	@Override
-	public int getMaxEnergyStored(ForgeDirection from) {
+	public int getMaxEnergyStored(EnumFacing from) {
 		return energyStorage.getMaxEnergyStored();
 	}
 
@@ -127,7 +126,7 @@ public class EnergyManager implements IEnergyHandler {
 	}
 
 	@Override
-	public boolean canConnectEnergy(ForgeDirection from) {
+	public boolean canConnectEnergy(EnumFacing from) {
 		return true;
 	}
 
@@ -154,7 +153,7 @@ public class EnergyManager implements IEnergyHandler {
 	 *
 	 * @return amount sent
 	 */
-	public int sendEnergy(ForgeDirection orientation, TileEntity tile) {
+	public int sendEnergy(EnumFacing orientation, TileEntity tile) {
 		return sendEnergy(orientation, tile, Integer.MAX_VALUE);
 	}
 
@@ -164,7 +163,7 @@ public class EnergyManager implements IEnergyHandler {
 	 *
 	 * @return amount sent
 	 */
-	public int sendEnergy(ForgeDirection orientation, TileEntity tile, int amount) {
+	public int sendEnergy(EnumFacing orientation, TileEntity tile, int amount) {
 		int sent = 0;
 		if (BlockUtil.isEnergyReceiver(orientation.getOpposite(), tile)) {
 			IEnergyReceiver receptor = (IEnergyReceiver) tile;

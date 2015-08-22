@@ -16,7 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-
+import net.minecraft.util.IChatComponent;
 import forestry.api.core.INBTTagable;
 import forestry.core.interfaces.IFilterSlotDelegate;
 import forestry.core.utils.StackUtils;
@@ -174,11 +174,6 @@ public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagab
 	}
 
 	@Override
-	public String getInventoryName() {
-		return "BeeBag";
-	}
-
-	@Override
 	public int getInventoryStackLimit() {
 		return 64;
 	}
@@ -189,11 +184,6 @@ public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagab
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return true;
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
 		return true;
 	}
 
@@ -213,11 +203,11 @@ public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagab
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
 	}
 
 	@Override
@@ -228,5 +218,40 @@ public class ItemInventory implements IInventory, IFilterSlotDelegate, INBTTagab
 		ItemStack toReturn = inventoryStacks[slot];
 		inventoryStacks[slot] = null;
 		return toReturn;
+	}
+
+	@Override
+	public String getCommandSenderName() {
+		return "BeeBag";
+	}
+
+	@Override
+	public boolean hasCustomName() {
+		return true;
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		return null;
+	}
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+		
 	}
 }

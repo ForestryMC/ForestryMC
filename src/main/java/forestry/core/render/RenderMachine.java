@@ -10,14 +10,6 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
 import org.lwjgl.opengl.GL11;
 
 import forestry.core.interfaces.IBlockRenderer;
@@ -25,6 +17,12 @@ import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.ForestryResource;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 
 public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRenderer {
 
@@ -95,21 +93,21 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 
 	@Override
 	public void inventoryRender(double x, double y, double z, float f, float f1) {
-		render(EnumTankLevel.EMPTY, EnumTankLevel.EMPTY, ForgeDirection.UP, x, y, z);
+		render(EnumTankLevel.EMPTY, EnumTankLevel.EMPTY, EnumFacing.EAST.UP, x, y, z);
 	}
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f) {
+	public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f, int p_180535_9_) {
 		IRenderableMachine generator = (IRenderableMachine) tileentity;
 		render(generator.getPrimaryLevel(), generator.getSecondaryLevel(), generator.getOrientation(), d, d1, d2);
 
 	}
 
-	private void render(EnumTankLevel waterLevel, EnumTankLevel melangeLevel, ForgeDirection orientation, double x, double y, double z) {
+	private void render(EnumTankLevel waterLevel, EnumTankLevel melangeLevel, EnumFacing orientation, double x, double y, double z) {
 		render(waterLevel.ordinal(), melangeLevel.ordinal(), orientation, x, y, z);
 	}
 
-	public void render(int waterLevelInt, int melangeLevelInt, ForgeDirection orientation, double x, double y, double z) {
+	public void render(int waterLevelInt, int melangeLevelInt, EnumFacing orientation, double x, double y, double z) {
 
 		EnumTankLevel waterLevel = EnumTankLevel.values()[waterLevelInt];
 		EnumTankLevel melangeLevel = EnumTankLevel.values()[melangeLevelInt];
@@ -124,7 +122,7 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
 		float[] translate = {0, 0, 0};
 
 		if (orientation == null) {
-			orientation = ForgeDirection.WEST;
+			orientation = EnumFacing.WEST;
 		}
 		switch (orientation) {
 			case EAST:

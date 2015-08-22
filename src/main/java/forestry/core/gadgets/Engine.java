@@ -16,10 +16,12 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
+import sun.awt.windows.WPrinterJob;
 import forestry.core.TemperatureState;
 import forestry.core.config.Defaults;
 import forestry.core.network.PacketPayload;
@@ -86,7 +88,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 	}
 
 	@Override
-	public void rotateAfterPlacement(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack itemstack) {
+	public void rotateAfterPlacement(World world, BlockPos pos, EntityLivingBase entityliving, ItemStack itemstack) {
 		rotateEngine();
 	}
 
@@ -132,7 +134,7 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 		}
 
 		// Determine targeted tile
-		TileEntity tile = worldObj.getTileEntity(xCoord + getOrientation().offsetX, yCoord + getOrientation().offsetY, zCoord + getOrientation().offsetZ);
+		TileEntity tile = worldObj.getTileEntity(new BlockPos(pos.getX() + getOrientation().getFrontOffsetX(), pos.getY() + getOrientation().getFrontOffsetY(), pos.getZ() + getOrientation().getFrontOffsetZ()));
 
 		float newPistonSpeed = getPistonSpeed();
 		if (newPistonSpeed != pistonSpeedServer) {
@@ -194,14 +196,14 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 	public void rotateEngine() {
 
 		for (int i = getOrientation().ordinal() + 1; i <= getOrientation().ordinal() + 6; ++i) {
-			ForgeDirection orient = ForgeDirection.values()[i % 6];
+			EnumFacing orient = EnumFacing.values()[i % 5];
 
-			TileEntity tile = worldObj.getTileEntity(xCoord + orient.offsetX, yCoord + orient.offsetY, zCoord + orient.offsetZ);
+			TileEntity tile = worldObj.getTileEntity(new BlockPos(pos.getX() + orient.getFrontOffsetX(), pos.getY() + orient.getFrontOffsetY(), pos.getZ() + orient.getFrontOffsetZ()));
 
 			if (BlockUtil.isEnergyReceiver(getOrientation().getOpposite(), tile)) {
 				setOrientation(orient);
-				worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, worldObj.getBlock(xCoord, yCoord, zCoord));
-				worldObj.func_147479_m(xCoord, yCoord, zCoord);
+				worldObj.notifyNeighborsOfStateChange(pos, worldObj.getBlockState(pos).getBlock());
+				worldObj.func_147479_m(pos);
 				break;
 			}
 		}
@@ -303,11 +305,36 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 	public abstract void sendGUINetworkData(Container containerEngine, ICrafting iCrafting);
 
 	@Override
-	public boolean canConnectEnergy(ForgeDirection from) {
+	public boolean canConnectEnergy(EnumFacing from) {
 		return energyManager.canConnectEnergy(from);
 	}
 
 	public EnergyManager getEnergyManager() {
 		return energyManager;
+	}
+	
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+		
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		return null;
 	}
 }

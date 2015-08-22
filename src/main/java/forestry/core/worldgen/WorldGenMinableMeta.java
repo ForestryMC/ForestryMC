@@ -14,6 +14,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -38,8 +39,11 @@ public class WorldGenMinableMeta extends WorldGenerator {
 	}
 
 	@Override
-	public boolean generate(World world, Random random, int i, int j, int k) {
+	public boolean generate(World world, Random random, BlockPos pos) {
 
+		int i = pos.getX();
+		int j = pos.getY();
+		int k = pos.getZ();
 		boolean hasGenerated = false;
 
 		float randomBase = random.nextFloat() * 3.141593F;
@@ -78,8 +82,8 @@ public class WorldGenMinableMeta extends WorldGenerator {
 
 					for (int targetZ = zStart; targetZ <= zEnd; targetZ++) {
 						double d14 = ((targetZ + 0.5D) - d8) / (d10 / 2D);
-						if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && world.getBlock(targetX, targetY, targetZ) == Blocks.stone) {
-							world.setBlock(targetX, targetY, targetZ, mineableBlock, mineableBlockMeta, Defaults.FLAG_BLOCK_SYNCH);
+						if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && world.getBlockState(new BlockPos(targetX, targetY, targetZ)) == Blocks.stone) {
+							world.setBlockState(new BlockPos(targetX, targetY, targetZ), mineableBlock.getStateFromMeta(mineableBlockMeta), Defaults.FLAG_BLOCK_SYNCH);
 							hasGenerated = true;
 						}
 					}

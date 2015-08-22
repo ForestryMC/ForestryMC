@@ -12,6 +12,7 @@ package forestry.core.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.DimensionManager;
@@ -23,7 +24,7 @@ import forestry.core.network.ForestryPacket;
 
 public class ProxyNetwork {
 
-	public void sendNetworkPacket(ForestryPacket packet, int x, int y, int z) {
+	public void sendNetworkPacket(ForestryPacket packet, BlockPos pos) {
 		if (packet == null) {
 			return;
 		}
@@ -33,8 +34,8 @@ public class ProxyNetwork {
 			for (int j = 0; j < world.playerEntities.size(); j++) {
 				EntityPlayerMP player = (EntityPlayerMP) world.playerEntities.get(j);
 
-				if (Math.abs(player.posX - x) <= Defaults.NET_MAX_UPDATE_DISTANCE && Math.abs(player.posY - y) <= Defaults.NET_MAX_UPDATE_DISTANCE
-						&& Math.abs(player.posZ - z) <= Defaults.NET_MAX_UPDATE_DISTANCE) {
+				if (Math.abs(player.posX - pos.getX()) <= Defaults.NET_MAX_UPDATE_DISTANCE && Math.abs(player.posY - pos.getY()) <= Defaults.NET_MAX_UPDATE_DISTANCE
+						&& Math.abs(player.posZ - pos.getZ()) <= Defaults.NET_MAX_UPDATE_DISTANCE) {
 					Forestry.packetHandler.sendPacket(packet.getPacket(), player);
 				}
 			}

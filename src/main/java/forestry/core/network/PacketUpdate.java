@@ -14,6 +14,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import net.minecraft.util.BlockPos;
+
 public class PacketUpdate extends PacketCoordinates {
 
 	public PacketPayload payload;
@@ -26,24 +28,24 @@ public class PacketUpdate extends PacketCoordinates {
 	}
 
 	public PacketUpdate(int id, PacketPayload payload) {
-		this(id, 0, 0, 0, payload);
+		this(id, new BlockPos(0, 0, 0), payload);
 	}
 
-	public PacketUpdate(int id, int posX, int posY, int posZ, PacketPayload payload) {
-		super(id, posX, posY, posZ);
+	public PacketUpdate(int id, BlockPos pos, PacketPayload payload) {
+		super(id, pos);
 
 		this.payload = payload;
 	}
 
-	public PacketUpdate(int id, int posX, int posY, int posZ, short val) {
-		super(id, posX, posY, posZ);
+	public PacketUpdate(int id, BlockPos pos, short val) {
+		super(id, pos);
 
 		this.payload = new PacketPayload(0, 1);
 		this.payload.shortPayload[0] = val;
 	}
 
-	public PacketUpdate(int id, int posX, int posY, int posZ, int val) {
-		super(id, posX, posY, posZ);
+	public PacketUpdate(int id, BlockPos pos, int val) {
+		super(id, pos);
 
 		this.payload = new PacketPayload(1, 0);
 		this.payload.intPayload[0] = val;

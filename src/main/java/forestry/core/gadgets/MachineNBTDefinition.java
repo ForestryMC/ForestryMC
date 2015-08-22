@@ -10,11 +10,13 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.core.interfaces.IBlockRenderer;
@@ -40,20 +42,21 @@ public class MachineNBTDefinition extends MachineDefinition {
 
 	/* INTERACTION */
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z) {
-		int meta = world.getBlockMetadata(x, y, z);
-		if (Proxies.common.isSimulating(world) && block.canHarvestBlock(player, meta)) {
-			TileForestry tile = (TileForestry) world.getTileEntity(x, y, z);
-			Utils.dropInventory(tile, world, x, y, z);
+	public boolean removedByPlayer(World world, EntityPlayer player, BlockPos pos) {
+		IBlockState state = world.getBlockState(pos);
+		int meta = state.getBlock().getMetaFromState(state);
+		if (Proxies.common.isSimulating(world) && block.canHarvestBlock(world, pos, player)) {
+			TileForestry tile = (TileForestry) world.getTileEntity(pos);
+			Utils.dropInventory(tile, world, pos);
 
 			ItemStack stack = new ItemStack(block, 1, meta);
 			NBTTagCompound compound = new NBTTagCompound();
 			tile.writeToNBT(compound);
 			stack.setTagCompound(compound);
-			StackUtils.dropItemStackAsEntity(stack, world, x, y, z);
+			StackUtils.dropItemStackAsEntity(stack, world, pos);
 		}
 
-		return world.setBlockToAir(x, y, z);
+		return world.setBlockToAir(pos);
 	}
 
 }

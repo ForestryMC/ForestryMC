@@ -10,7 +10,10 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import forestry.api.recipes.IGenericCrate;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StringUtil;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -18,14 +21,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.recipes.IGenericCrate;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
 
 public class ItemCrated extends Item implements IGenericCrate {
 
@@ -61,8 +58,8 @@ public class ItemCrated extends Item implements IGenericCrate {
 			itemstack.stackSize--;
 			EntityItem entity = new EntityItem(world, entityplayer.posX, entityplayer.posY, entityplayer.posZ, new ItemStack(contained.getItem(), 9,
 					contained.getItemDamage()));
-			entity.delayBeforeCanPickup = 40;
-
+			entity.setPickupDelay(40);
+			
 			float f1 = 0.3F;
 			entity.motionX = -MathHelper.sin((entityplayer.rotationYaw / 180F) * 3.141593F) * MathHelper.cos((entityplayer.rotationPitch / 180F) * 3.141593F)
 					* f1;
@@ -88,13 +85,6 @@ public class ItemCrated extends Item implements IGenericCrate {
 		} else {
 			return StringUtil.localize("item.crated.adj") + " " + Proxies.common.getDisplayName(contained);
 		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerIcons(IIconRegister register) {
-		String textureName = (contained == null) ? "crate" : "crate-filled";
-		itemIcon = TextureManager.getInstance().registerTex(register, textureName);
 	}
 
 }

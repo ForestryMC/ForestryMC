@@ -29,9 +29,9 @@ public abstract class TileBase extends TileForestry implements IHintSource {
 	}
 
 	@Override
-	public void updateEntity() {
+	public void update() {
 
-		super.updateEntity();
+		super.update();
 
 		if (!Proxies.common.isSimulating(worldObj)) {
 			updateClientSide();

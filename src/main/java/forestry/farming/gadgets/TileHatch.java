@@ -16,8 +16,8 @@ import java.util.LinkedList;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.core.ITileStructure;
@@ -32,13 +32,13 @@ import buildcraft.api.statements.ITriggerExternal;
 
 public class TileHatch extends TileFarm implements ISidedInventory {
 
-	private static final ForgeDirection[] dumpDirections = new ForgeDirection[]{ForgeDirection.DOWN};
+	private static final EnumFacing[] dumpDirections = new EnumFacing[]{EnumFacing.DOWN};
 	
 	private final AdjacentInventoryCache inventoryCache = new AdjacentInventoryCache(this, getTileCache(), new ITileFilter() {
 
 		@Override
 		public boolean matches(TileEntity tile) {
-			return !(tile instanceof TileFarm) && tile.yCoord < yCoord;
+			return !(tile instanceof TileFarm) && tile.getPos().getY() < pos.getY();
 		}
 	}, null);
 
@@ -89,7 +89,7 @@ public class TileHatch extends TileFarm implements ISidedInventory {
 	/* ITRIGGERPROVIDER */
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
+	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
 		if (!hasMaster()) {
 			return null;
 		}

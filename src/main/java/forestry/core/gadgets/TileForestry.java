@@ -21,13 +21,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.Packet;
+import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.core.IErrorState;
@@ -56,7 +59,7 @@ import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.statements.ITriggerProvider;
 
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
-public abstract class TileForestry extends TileEntity implements INetworkedEntity, IRestrictedAccess, IErrorSource, ITriggerProvider, ISidedInventory, IFilterSlotDelegate {
+public abstract class TileForestry extends TileEntity implements INetworkedEntity, IRestrictedAccess, IErrorSource, ITriggerProvider, IUpdatePlayerListBox, ISidedInventory, IFilterSlotDelegate {
 
 	private static Random rand = new Random();
 
@@ -86,33 +89,32 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	public Vect Coords() {
-		return new Vect(xCoord, yCoord, zCoord);
+		return new Vect(pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	public void openGui(EntityPlayer player) {
 	}
 
-	public void rotateAfterPlacement(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack stack) {
+	public void rotateAfterPlacement(World world, BlockPos pos, EntityLivingBase entityliving, ItemStack stack) {
 
 		int l = MathHelper.floor_double(((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
 		if (l == 0) {
-			setOrientation(ForgeDirection.NORTH);
+			setOrientation(EnumFacing.NORTH);
 		}
 		if (l == 1) {
-			setOrientation(ForgeDirection.EAST);
+			setOrientation(EnumFacing.EAST);
 		}
 		if (l == 2) {
-			setOrientation(ForgeDirection.SOUTH);
+			setOrientation(EnumFacing.SOUTH);
 		}
 		if (l == 3) {
-			setOrientation(ForgeDirection.WEST);
+			setOrientation(EnumFacing.WEST);
 		}
-
 	}
 
 	// / UPDATING
 	@Override
-	public void updateEntity() {
+	public void update() {
 		tickCount++;
 		if (!isInited) {
 			initialize();
@@ -139,13 +141,13 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 			access = EnumAccess.SHARED;
 		}
 		if (data.hasKey("owner")) {
-			owner = NBTUtil.func_152459_a(data.getCompoundTag("owner"));
+			owner = NBTUtil.readGameProfileFromNBT(data.getCompoundTag("owner"));
 		}
 
 		if (data.hasKey("Orientation")) {
-			orientation = ForgeDirection.values()[data.getInteger("Orientation")];
+			orientation = EnumFacing.values()[data.getInteger("Orientation")];
 		} else {
-			orientation = ForgeDirection.WEST;
+			orientation = EnumFacing.WEST;
 		}
 
 	}
@@ -157,7 +159,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		data.setInteger("Access", access.ordinal());
 		if (this.owner != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
-			NBTUtil.func_152460_a(nbt, owner);
+			NBTUtil.writeGameProfile(nbt, owner);
 			data.setTag("owner", nbt);
 		}
 		if (orientation != null) {
@@ -169,7 +171,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	@Override
 	public void sendNetworkUpdate() {
 		PacketTileUpdate packet = new PacketTileUpdate(this);
-		Proxies.net.sendNetworkPacket(packet, xCoord, yCoord, zCoord);
+		Proxies.net.sendNetworkPacket(packet, pos);
 	}
 
 	@Override
@@ -187,7 +189,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		PacketTileUpdate packet = (PacketTileUpdate) packetRaw;
 		if (orientation != packet.getOrientation()) {
 			orientation = packet.getOrientation();
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			worldObj.markBlockForUpdate(pos);
 		}
 		errorState = packet.getErrorState();
 		owner = packet.getOwner();
@@ -207,7 +209,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
+	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
 		return null;
 	}
 
@@ -217,17 +219,17 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	 * @return true if tile is activated by redstone current.
 	 */
 	public boolean isActivated() {
-		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+		return worldObj.isBlockIndirectlyGettingPowered(pos) > 0;
 	}
 
 	// / ORIENTATION
-	private ForgeDirection orientation = ForgeDirection.WEST;
+	private EnumFacing orientation = EnumFacing.WEST;
 
-	public ForgeDirection getOrientation() {
+	public EnumFacing getOrientation() {
 		return this.orientation;
 	}
 
-	public void setOrientation(ForgeDirection orientation) {
+	public void setOrientation(EnumFacing orientation) {
 		if (this.orientation == orientation) {
 			return;
 		}
@@ -329,7 +331,7 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		boolean canPipesConnect = allowsPipeConnections();
 		if (couldPipesConnect != canPipesConnect) {
 			// pipes connected to this need to update
-			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, blockType);
+			worldObj.notifyNeighborsOfStateChange(pos, blockType);
 			markDirty();
 		}
 
@@ -390,17 +392,17 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	@Override
-	public final void openInventory() {
-		getInternalInventory().openInventory();
+	public final void openInventory(EntityPlayer player) {
+		getInternalInventory().openInventory(player);
 	}
 
 	@Override
-	public final void closeInventory() {
-		getInternalInventory().closeInventory();
+	public final void closeInventory(EntityPlayer player) {
+		getInternalInventory().closeInventory(player);
 	}
-
+	
 	@Override
-	public final String getInventoryName() {
+	public String getCommandSenderName() {
 		return getUnlocalizedName();
 	}
 
@@ -411,10 +413,10 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 		}
 		return getInternalInventory().isUseableByPlayer(player);
 	}
-
+	
 	@Override
-	public final boolean hasCustomInventoryName() {
-		return getInternalInventory().hasCustomInventoryName();
+	public boolean hasCustomName() {
+		return getInternalInventory().hasCustomName();
 	}
 
 	@Override
@@ -439,17 +441,17 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	public boolean isLocked(int slotIndex) {
 		return getInternalInventory().isLocked(slotIndex);
 	}
-
+	
 	@Override
-	public final int[] getAccessibleSlotsFromSide(int side) {
+	public int[] getSlotsForFace(EnumFacing side) {
 		if (!allowsPipeConnections()) {
 			return Defaults.SLOTS_NONE;
 		}
-		return getInternalInventory().getAccessibleSlotsFromSide(side);
+		return getInternalInventory().getSlotsForFace(side);
 	}
 
 	@Override
-	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, int side) {
+	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
 		if (itemStack == null || !allowsPipeConnections()) {
 			return false;
 		}
@@ -457,10 +459,36 @@ public abstract class TileForestry extends TileEntity implements INetworkedEntit
 	}
 
 	@Override
-	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, int side) {
+	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, EnumFacing side) {
 		if (itemStack == null || !allowsPipeConnections()) {
 			return false;
 		}
 		return getInternalInventory().canExtractItem(slotIndex, itemStack, side);
+	}
+	
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+		
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		return null;
 	}
 }

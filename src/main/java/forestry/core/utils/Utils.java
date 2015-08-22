@@ -27,6 +27,7 @@ import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -53,7 +54,7 @@ public class Utils {
 		return rand.nextInt();
 	}
 
-	public static void dropInventory(TileForestry tile, World world, int x, int y, int z) {
+	public static void dropInventory(TileForestry tile, World world, BlockPos pos) {
 		if (tile == null) {
 			return;
 		}
@@ -68,7 +69,7 @@ public class Utils {
 						continue;
 					}
 
-					StackUtils.dropItemStackAsEntity(inventory.getStackInSlot(i), world, x, y, z);
+					StackUtils.dropItemStackAsEntity(inventory.getStackInSlot(i), world, pos);
 					inventory.setInventorySlotContents(i, null);
 				}
 			}
@@ -93,7 +94,7 @@ public class Utils {
 						stackPartial = itemstack.stackSize;
 					}
 					ItemStack drop = itemstack.splitStack(stackPartial);
-					EntityItem entityitem = new EntityItem(world, x + f, y + f1, z + f2, drop);
+					EntityItem entityitem = new EntityItem(world, pos.getX() + f, pos.getY() + f1, pos.getZ() + f2, drop);
 					float accel = 0.05F;
 					entityitem.motionX = (float) world.rand.nextGaussian() * accel;
 					entityitem.motionY = (float) world.rand.nextGaussian() * accel + 0.2F;
@@ -115,12 +116,15 @@ public class Utils {
 		}
 
 		TileEntityChest chest = (TileEntityChest) inventory;
+		int xCoord  = chest.getPos().getX();
+		int yCoord  = chest.getPos().getY();
+		int zCoord  = chest.getPos().getZ();
+		
+		BlockPos[] adjacent = new BlockPos[]{new BlockPos(xCoord + 1, yCoord, zCoord), new BlockPos(xCoord - 1, yCoord, zCoord),
+				new BlockPos(xCoord, yCoord, zCoord + 1), new BlockPos(xCoord, yCoord, zCoord - 1)};
 
-		Vect[] adjacent = new Vect[]{new Vect(chest.xCoord + 1, chest.yCoord, chest.zCoord), new Vect(chest.xCoord - 1, chest.yCoord, chest.zCoord),
-				new Vect(chest.xCoord, chest.yCoord, chest.zCoord + 1), new Vect(chest.xCoord, chest.yCoord, chest.zCoord - 1)};
-
-		for (Vect pos : adjacent) {
-			TileEntity otherchest = chest.getWorldObj().getTileEntity(pos.x, pos.y, pos.z);
+		for (BlockPos pos : adjacent) {
+			TileEntity otherchest = chest.getWorld().getTileEntity(pos);
 			if (otherchest instanceof TileEntityChest) {
 				return new InventoryLargeChest("", chest, (TileEntityChest) otherchest);
 			}
@@ -153,7 +157,7 @@ public class Utils {
 		return result;
 	}
 
-	public static boolean canWrench(EntityPlayer player, int x, int y, int z) {
+	public static boolean canWrench(EntityPlayer player, BlockPos pos) {
 
 		ItemStack itemstack = player.getCurrentEquippedItem();
 		if (itemstack == null) {
@@ -165,14 +169,14 @@ public class Utils {
 		}
 
 		IToolWrench wrench = (IToolWrench) itemstack.getItem();
-		if (!wrench.canWrench(player, x, y, z)) {
+		if (!wrench.canWrench(player, pos)) {
 			return false;
 		}
 
 		return true;
 	}
 
-	public static void useWrench(EntityPlayer player, int x, int y, int z) {
+	public static void useWrench(EntityPlayer player, BlockPos pos) {
 		ItemStack itemstack = player.getCurrentEquippedItem();
 
 		if (itemstack == null) {
@@ -183,7 +187,7 @@ public class Utils {
 			return;
 		}
 
-		((IToolWrench) itemstack.getItem()).wrenchUsed(player, x, y, z);
+		((IToolWrench) itemstack.getItem()).wrenchUsed(player, pos);
 	}
 
 	public static EnumTankLevel rateTankLevel(int scaled) {
@@ -201,8 +205,8 @@ public class Utils {
 		}
 	}
 
-	public static boolean isReplaceableBlock(World world, int x, int y, int z) {
-		Block block = world.getBlock(x, y, z);
+	public static boolean isReplaceableBlock(World world, BlockPos pos) {
+		Block block = world.getBlockState(pos).getBlock();
 
 		return isReplaceableBlock(block);
 	}
@@ -212,8 +216,8 @@ public class Utils {
 				|| block.getMaterial().isReplaceable();
 	}
 
-	public static boolean isLiquidBlock(World world, int x, int y, int z) {
-		return isLiquidBlock(world.getBlock(x, y, z));
+	public static boolean isLiquidBlock(World world, BlockPos pos) {
+		return isLiquidBlock(world.getBlockState(pos).getBlock());
 	}
 
 	public static boolean isLiquidBlock(Block block) {
@@ -221,44 +225,42 @@ public class Utils {
 	}
 
 	public static boolean isUseableByPlayer(EntityPlayer player, TileEntity tile) {
-		int x = tile.xCoord;
-		int y = tile.yCoord;
-		int z = tile.zCoord;
-		World world = tile.getWorldObj();
+		BlockPos pos = tile.getPos();
+		World world = tile.getWorld();
 		
 		if (tile.isInvalid()) {
 			return false;
 		}
 		
-		if (world.getTileEntity(x, y, z) != tile) {
+		if (world.getTileEntity(pos) != tile) {
 			return false;
 		}
 
-		return player.getDistanceSq(x + 0.5D, y + 0.5D, z + 0.5D) <= 64.0D;
+		return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
 
 	}
 
-	public static BiomeGenBase getBiomeAt(World world, int x, int z) {
-		return world.getBiomeGenForCoordsBody(x, z);
+	public static BiomeGenBase getBiomeAt(World world, BlockPos pos) {
+		return world.getBiomeGenForCoordsBody(pos);
 	}
 
-	public static Entity spawnEntity(World world, Class<? extends Entity> entityClass, double x, double y, double z) {
+	public static Entity spawnEntity(World world, Class<? extends Entity> entityClass, BlockPos pos) {
 		if (!EntityList.classToStringMapping.containsKey(entityClass)) {
 			return null;
 		}
 
-		return spawnEntity(world, EntityList.createEntityByName((String) EntityList.classToStringMapping.get(entityClass), world), x, y, z);
+		return spawnEntity(world, EntityList.createEntityByName((String) EntityList.classToStringMapping.get(entityClass), world), pos);
 	}
 
-	public static Entity spawnEntity(World world, Entity spawn, double x, double y, double z) {
+	public static Entity spawnEntity(World world, Entity spawn, BlockPos pos) {
 
 		if (spawn != null && spawn instanceof EntityLiving) {
 
 			EntityLiving living = (EntityLiving) spawn;
-			spawn.setLocationAndAngles(x, y, z, MathHelper.wrapAngleTo180_float(world.rand.nextFloat() * 360.0f), 0.0f);
+			spawn.setLocationAndAngles(pos.getX(), pos.getY(), pos.getZ(), MathHelper.wrapAngleTo180_float(world.rand.nextFloat() * 360.0f), 0.0f);
 			living.rotationYawHead = living.rotationYaw;
 			living.renderYawOffset = living.rotationYaw;
-			living.onSpawnWithEgg(null);
+			living.onSpawnFirstTime(null, null);
 			world.spawnEntityInWorld(spawn);
 			living.playLivingSound();
 		}

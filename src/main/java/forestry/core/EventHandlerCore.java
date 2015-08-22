@@ -93,10 +93,8 @@ public class EventHandlerCore {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void handleTextureRemap(TextureStitchEvent.Pre event) {
-		if (event.map.getTextureType() == 1) {
-			ErrorStateRegistry.initIcons(event.map);
-			TextureManager.getInstance().initDefaultIcons(event.map);
-		}
+		ErrorStateRegistry.initIcons(event.map);
+		TextureManager.getInstance().initDefaultIcons(event.map);
 	}
 
 	@SubscribeEvent

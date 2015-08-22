@@ -11,12 +11,12 @@
 package forestry.core.items;
 
 import net.minecraft.block.Block;
-
+import forestry.api.core.IModelObject;
 import forestry.api.core.IToolScoop;
 import forestry.api.core.Tabs;
 import forestry.core.config.ForestryBlock;
 
-public class ItemScoop extends ItemForestryTool implements IToolScoop {
+public class ItemScoop extends ItemForestryTool implements IToolScoop, IModelObject {
 
 	public ItemScoop() {
 		super(new Block[]{ForestryBlock.beehives.block()}, null);
@@ -31,5 +31,4 @@ public class ItemScoop extends ItemForestryTool implements IToolScoop {
 	public boolean isFull3D() {
 		return true;
 	}
-
 }

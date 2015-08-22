@@ -21,6 +21,7 @@ import forestry.api.apiculture.FlowerManager;
 import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
+import forestry.core.config.Defaults;
 
 public class VanillaFlowerPotGrowthRule implements IFlowerGrowthRule {
 
@@ -62,7 +63,7 @@ public class VanillaFlowerPotGrowthRule implements IFlowerGrowthRule {
 		flowerPotTile.setFlowerPotData(newTile.getFlowerPotItem(), newTile.getFlowerPotData());
 		flowerPotTile.markDirty();
 
-		if (!world.setBlockMetadataWithNotify(x, y, z, 1, 2)) {
+		if (!world.setBlockState(pos, block.getStateFromMeta(1), Defaults.FLAG_BLOCK_SYNCH)) {
 			world.markBlockForUpdate(pos);
 		}
 

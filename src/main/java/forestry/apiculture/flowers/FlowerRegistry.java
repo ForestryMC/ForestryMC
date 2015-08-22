@@ -20,6 +20,7 @@ import java.util.Random;
 import java.util.TreeMap;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -96,16 +97,17 @@ public final class FlowerRegistry implements IFlowerRegistry {
 	}
 
 	@Override
-	public boolean isAcceptedFlower(String flowerType, World world, IIndividual individual, int x, int y, int z) {
+	public boolean isAcceptedFlower(String flowerType, World world, IIndividual individual, BlockPos pos) {
 		internalInitialize();
 		if (!this.registeredFlowers.containsKey(flowerType)) {
 			return false;
 		}
 
-		Block block = world.getBlock(x, y, z);
-		int meta = world.getBlockMetadata(x, y, z);
+		IBlockState state = world.getBlockState(pos);
+		Block block = world.getBlockState(pos).getBlock();
+		int meta = block.getMetaFromState(state);
 
-		if (world.isAirBlock(x, y, z) || block.equals(Blocks.bedrock) || block.equals(Blocks.dirt) || block.equals(Blocks.grass)) {
+		if (world.isAirBlock(pos) || block.equals(Blocks.bedrock) || block.equals(Blocks.dirt) || block.equals(Blocks.grass)) {
 			return false;
 		}
 

@@ -14,12 +14,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
+import forestry.core.config.Defaults;
 
 public class VanillaFertilizeGrowthRule implements IFlowerGrowthRule {
 
@@ -31,11 +33,12 @@ public class VanillaFertilizeGrowthRule implements IFlowerGrowthRule {
 
 	@Override
 	public boolean growFlower(IFlowerRegistry fr, String flowerType, World world, IIndividual individual, BlockPos pos) {
-		Block ground = world.getBlockState(pos).getBlock();
+		IBlockState state = world.getBlockState(pos);
+		Block ground = state.getBlock();
 		int groundMeta;
 		for (Block b : this.allowedItems) {
 			if (b == ground) {
-				groundMeta = world.getBlockMetadata(x, y, z);
+				groundMeta = ground.getMetaFromState(state);
 				if (groundMeta > 6) {
 					return false;
 				}
@@ -45,7 +48,7 @@ public class VanillaFertilizeGrowthRule implements IFlowerGrowthRule {
 					groundMeta = 7;
 				}
 
-				return world.setBlockMetadataWithNotify(x, y, z, groundMeta, 2);
+				return world.setBlockState(pos, ground.getStateFromMeta(groundMeta), Defaults.FLAG_BLOCK_SYNCH);
 			}
 		}
 

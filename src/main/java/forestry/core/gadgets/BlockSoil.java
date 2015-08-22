@@ -16,36 +16,48 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelObject;
+import forestry.api.core.IVariantObject;
 import forestry.core.CreativeTabForestry;
 import forestry.core.IItemTyped;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
+import forestry.core.gadgets.BlockResource.Resources;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 
 /**
  * Humus, bog earth, peat
  */
-public class BlockSoil extends Block implements IItemTyped {
+public class BlockSoil extends Block implements IItemTyped, IVariantObject, IModelObject {
 
-	public enum SoilType {
-		HUMUS, BOG_EARTH, PEAT
+	public static final PropertyEnum SOIL = PropertyEnum.create("soil", Resources.class);
+	
+	public enum SoilType implements IStringSerializable {
+		HUMUS, BOG_EARTH, PEAT;
+		
+		@Override
+		public String getName() {
+			return name().toLowerCase();
+		}
 	}
 
 	private static final int degradeDelimiter = 3;
@@ -62,12 +74,23 @@ public class BlockSoil extends Block implements IItemTyped {
 	public int tickRate(World world) {
 		return 500;
 	}
+	
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return ((SoilType)state.getValue(SOIL)).ordinal();
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(SOIL,  SoilType.values()[meta]);
+	}
 
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 
-		SoilType type = getTypeFromMeta(metadata);
+		SoilType type = getTypeFromMeta(getMetaFromState(state));
 
 		if (type == SoilType.PEAT) {
 			ret.add(ForestryItem.peat.getItemStack());
@@ -82,44 +105,44 @@ public class BlockSoil extends Block implements IItemTyped {
 	}
 
 	@Override
-	public int getDamageValue(World world, int x, int y, int z) {
-		return (world.getBlockMetadata(x, y, z) & 0x03);
+	public int getDamageValue(World world, BlockPos pos) {
+		return (getMetaFromState(world.getBlockState(pos)) & 0x03);
 	}
 
 	@Override
-	public void updateTick(World world, int i, int j, int k, Random random) {
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random random) {
 		if (!Proxies.common.isSimulating(world)) {
 			return;
 		}
 
-		int meta = world.getBlockMetadata(i, j, k);
+		int meta = getMetaFromState(state);
 
 		SoilType type = getTypeFromMeta(meta);
 
 		if (type == SoilType.HUMUS) {
-			updateTickHumus(world, i, j, k, random);
+			updateTickHumus(world, pos, random);
 		} else if (type == SoilType.BOG_EARTH) {
-			updateTickBogEarth(world, i, j, k, random);
+			updateTickBogEarth(world, pos, random);
+		}
+	}
+	
+	private void updateTickHumus(World world, BlockPos pos, Random random) {
+		if (isEnrooted(world, pos)) {
+			degradeSoil(world, pos);
 		}
 	}
 
-	private void updateTickHumus(World world, int i, int j, int k, Random random) {
-		if (isEnrooted(world, i, j, k)) {
-			degradeSoil(world, i, j, k);
+	private void updateTickBogEarth(World world, BlockPos pos, Random random) {
+		if (isMoistened(world, pos)) {
+			matureBog(world, pos);
 		}
 	}
 
-	private void updateTickBogEarth(World world, int i, int j, int k, Random random) {
-		if (isMoistened(world, i, j, k)) {
-			matureBog(world, i, j, k);
-		}
-	}
-
-	private boolean isEnrooted(World world, int x, int y, int z) {
+	private boolean isEnrooted(World world, BlockPos pos) {
 
 		for (int i = -1; i < 2; i++) {
 			for (int j = -1; j < 2; j++) {
-				Block block = world.getBlock(x + i, y + 1, z + j);
+				Block block = world.getBlockState(new BlockPos(pos.getX() + i, pos.getY() + 1, pos.getZ() + j)).getBlock();
 				if (block == Blocks.log || block == Blocks.sapling || block == ForestryBlock.saplingGE.block())
 				// We are not returning true if we are the base of a
 				// sapling.
@@ -135,13 +158,14 @@ public class BlockSoil extends Block implements IItemTyped {
 	/**
 	 * If a tree or sapling is in the vicinity, there is a chance, that the soil will degrade.
 	 */
-	private void degradeSoil(World world, int x, int y, int z) {
+	private void degradeSoil(World world, BlockPos pos) {
 
 		if (world.rand.nextInt(140) != 0) {
 			return;
 		}
 
-		int meta = world.getBlockMetadata(x, y, z);
+		IBlockState state = world.getBlockState(pos);
+		int meta = getMetaFromState(state);
 
 		// Unpack first
 		int type = meta & 0x03;
@@ -154,18 +178,18 @@ public class BlockSoil extends Block implements IItemTyped {
 		meta = (grade << 2 | type);
 
 		if (grade >= degradeDelimiter) {
-			world.setBlock(x, y, z, Blocks.sand, 0, Defaults.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos, Blocks.sand.getStateFromMeta(0), Defaults.FLAG_BLOCK_SYNCH);
 		} else {
-			world.setBlockMetadataWithNotify(x, y, z, meta, Defaults.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos, world.getBlockState(pos).getBlock().getStateFromMeta(meta), Defaults.FLAG_BLOCK_SYNCH);
 		}
-		world.markBlockForUpdate(x, y, z);
+		world.markBlockForUpdate(pos);
 	}
 
-	public static boolean isMoistened(World world, int x, int y, int z) {
+	public static boolean isMoistened(World world, BlockPos pos) {
 
 		for (int i = -2; i < 3; i++) {
 			for (int j = -2; j < 3; j++) {
-				Block block = world.getBlock(x + i, y, z + j);
+				Block block = world.getBlockState(new BlockPos(pos.getX() + i, pos.getY(), pos.getZ() + j)).getBlock();
 				if (block == Blocks.water || block == Blocks.flowing_water) {
 					return true;
 				}
@@ -175,13 +199,14 @@ public class BlockSoil extends Block implements IItemTyped {
 		return false;
 	}
 
-	private void matureBog(World world, int i, int j, int k) {
+	private void matureBog(World world, BlockPos pos) {
 
 		if (world.rand.nextInt(13) != 0) {
 			return;
 		}
 
-		int meta = world.getBlockMetadata(i, j, k);
+		IBlockState state = world.getBlockState(pos);
+		int meta = state.getBlock().getMetaFromState(state);
 
 		// Unpack first
 
@@ -196,18 +221,19 @@ public class BlockSoil extends Block implements IItemTyped {
 		maturity++;
 
 		meta = (maturity << 2 | type);
-		world.setBlockMetadataWithNotify(i, j, k, meta, Defaults.FLAG_BLOCK_SYNCH);
-		world.markBlockForUpdate(i, j, k);
+		world.setBlockState(pos, world.getBlockState(pos).getBlock().getStateFromMeta(meta), Defaults.FLAG_BLOCK_SYNCH);
+		world.markBlockForUpdate(pos);
 	}
 
 	@Override
-	public boolean canSustainPlant(IBlockAccess world, int x, int y, int z, ForgeDirection direction, IPlantable plant) {
-		EnumPlantType plantType = plant.getPlantType(world, x, y, z);
+	public boolean canSustainPlant(IBlockAccess world, BlockPos pos, EnumFacing direction, IPlantable plant) {
+		EnumPlantType plantType = plant.getPlantType(world, pos);
 		if (plantType != EnumPlantType.Crop && plantType != EnumPlantType.Plains) {
 			return false;
 		}
 
-		int meta = world.getBlockMetadata(x, y, z);
+		IBlockState state = world.getBlockState(pos);
+		int meta = state.getBlock().getMetaFromState(state);
 		SoilType type = getTypeFromMeta(meta);
 
 		return type == SoilType.HUMUS;
@@ -241,37 +267,14 @@ public class BlockSoil extends Block implements IItemTyped {
 		itemList.add(new ItemStack(this, 1, 1));
 	}
 
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	private IIcon iconHumus;
-	@SideOnly(Side.CLIENT)
-	private IIcon iconBogEarth;
-	@SideOnly(Side.CLIENT)
-	private IIcon iconPeat;
-
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister register) {
-		iconHumus = TextureManager.getInstance().registerTex(register, "soil/humus");
-		iconBogEarth = TextureManager.getInstance().registerTex(register, "soil/bog");
-		iconPeat = TextureManager.getInstance().registerTex(register, "soil/peat");
+	public ModelType getModelType() {
+		return ModelType.META;
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta) {
-
-		SoilType type = getTypeFromMeta(meta);
-
-		switch (type) {
-			case HUMUS:
-				return iconHumus;
-			case BOG_EARTH:
-				return iconBogEarth;
-			case PEAT:
-				return iconPeat;
-		}
-		return null;
+	public String[] getVariants() {
+		return new String[]{ "humus", "bog_earth", "peat" };
 	}
 
 }

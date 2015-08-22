@@ -141,9 +141,9 @@ public class ItemImprinter extends ItemForestry {
 			}
 			tryImprint();
 		}
-
+		
 		@Override
-		public String getInventoryName() {
+		public String getCommandSenderName() {
 			return "Imprinter";
 		}
 

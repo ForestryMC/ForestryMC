@@ -18,6 +18,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -39,7 +40,10 @@ public class WorldGenBigMushroom extends WorldGenerator {
 	}
 
 	@Override
-	public boolean generate(World world, Random random, int x, int y, int z) {
+	public boolean generate(World world, Random random, BlockPos pos) {
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
 		Block type = mushroom;
 
 		if (type == null) {
@@ -61,8 +65,8 @@ public class WorldGenBigMushroom extends WorldGenerator {
 			for (int j = x - offset; j <= x + offset && flag; j++) {
 				for (int k = z - offset; k <= z + offset && flag; k++) {
 					if (i >= 0 && i < Defaults.WORLD_HEIGHT) {
-						Block block = world.getBlock(j, i, k);
-						if (!block.isAir(world, j, i, k) && block != Blocks.leaves) {
+						Block block = world.getBlockState(new BlockPos(j, i, k)).getBlock();
+						if (!block.isAir(world, new BlockPos(j, i, k)) && block != Blocks.leaves) {
 							flag = false;
 						}
 					} else {
@@ -76,16 +80,16 @@ public class WorldGenBigMushroom extends WorldGenerator {
 			return false;
 		}
 
-		Block ground = world.getBlock(x, y - 1, z);
+		Block ground = world.getBlockState(new BlockPos(x, y - 1, z)).getBlock();
 		if (ground != Blocks.mycelium) {
 			return false;
 		}
 
-		if (!Blocks.brown_mushroom.canPlaceBlockAt(world, x, y, z)) {
+		if (!Blocks.brown_mushroom.canPlaceBlockAt(world, pos)) {
 			return false;
 		}
 
-		func_150515_a(world, x, y - 1, z, Blocks.dirt);
+		func_175906_a(world, new BlockPos(x, y - 1, z), Blocks.dirt);
 
 		int capStartY = y + height;
 		if (type == Blocks.red_mushroom_block) {
@@ -158,8 +162,8 @@ public class WorldGenBigMushroom extends WorldGenerator {
 						remain = 0;
 					}
 
-					if ((remain != 0 || y >= (y + height) - 1) && !world.getBlock(j, i, k).isOpaqueCube()) {
-						setBlockAndNotifyAdequately(world, j, i, k, type, remain);
+					if ((remain != 0 || y >= (y + height) - 1) && !world.getBlockState(new BlockPos(j, i, k)).getBlock().isOpaqueCube()) {
+						setBlockAndNotifyAdequately(world, new BlockPos(j, i, k), type.getStateFromMeta(remain));
 					}
 
 				}
@@ -168,9 +172,9 @@ public class WorldGenBigMushroom extends WorldGenerator {
 		}
 
 		for (int i = 0; i < height; i++) {
-			Block block = world.getBlock(x, y + i, z);
+			Block block = world.getBlockState(new BlockPos(x, y + i, z)).getBlock();
 			if (!block.isOpaqueCube()) {
-				setBlockAndNotifyAdequately(world, x, y + i, z, type, 10);
+				setBlockAndNotifyAdequately(world, new BlockPos(x, y + i, z), type.getStateFromMeta(10));
 			}
 		}
 

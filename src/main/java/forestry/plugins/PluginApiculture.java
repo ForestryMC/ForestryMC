@@ -17,6 +17,11 @@ import java.util.logging.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.ItemModelMesher;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -24,11 +29,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-
+import net.minecraftforge.client.ItemModelMesherForge;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ChestGenHooks;
@@ -153,6 +158,7 @@ import forestry.core.items.ItemOverlay.OverlayInfo;
 import forestry.core.items.ItemScoop;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.EntitySnowFX;
+import forestry.core.render.ModelManager;
 import forestry.core.utils.ShapedRecipeCustom;
 
 @Plugin(pluginID = "Apiculture", name = "Apiculture", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.apiculture.description")
@@ -191,6 +197,7 @@ public class PluginApiculture extends ForestryPlugin {
 	public void preInit() {
 		super.preInit();
 
+		ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 		MinecraftForge.EVENT_BUS.register(this);
 
 		HiveManager.hiveRegistry = hiveRegistry = new HiveRegistry();
@@ -1319,11 +1326,9 @@ public class PluginApiculture extends ForestryPlugin {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void textureHook(TextureStitchEvent.Pre event) {
-		if (event.map.getTextureType() == 1) {
-			EntitySnowFX.icons = new IIcon[3];
-			for (int i = 0; i < EntitySnowFX.icons.length; i++) {
-				EntitySnowFX.icons[i] = event.map.registerIcon("forestry:particles/snow." + (i + 1));
-			}
+		EntitySnowFX.icons = new TextureAtlasSprite[3];
+		for (int i = 0; i < EntitySnowFX.icons.length; i++) {
+			EntitySnowFX.icons[i] = event.map.registerSprite(new ResourceLocation("forestry:textures/items/particles/snow." + (i + 1)));
 		}
 	}
 }

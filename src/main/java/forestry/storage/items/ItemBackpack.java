@@ -18,6 +18,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
@@ -87,12 +89,12 @@ public class ItemBackpack extends ItemInventoried {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-		return getInventoryHit(world, x, y, z, side) != null;
+	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+		return getInventoryHit(world, pos, side) != null;
 	}
 
 	@Override
-	public boolean onItemUseFirst(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+	public boolean onItemUseFirst(ItemStack itemstack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
 
 		if (!Proxies.common.isSimulating(world)) {
 			return false;
@@ -103,7 +105,7 @@ public class ItemBackpack extends ItemInventoried {
 			return false;
 		}
 
-		return evaluateTileHit(itemstack, player, world, x, y, z, side, hitX, hitY, hitZ);
+		return evaluateTileHit(itemstack, player, world, pos, side, hitX, hitY, hitZ);
 	}
 
 	public ItemStack tryStowing(EntityPlayer player, ItemStack backpackStack, ItemStack stack) {
@@ -140,16 +142,16 @@ public class ItemBackpack extends ItemInventoried {
 		itemstack.setItemDamage(nextMode);
 	}
 
-	private IInventory getInventoryHit(World world, int x, int y, int z, int side) {
-		TileEntity targeted = world.getTileEntity(x, y, z);
-		return InvTools.getInventoryFromTile(targeted, ForgeDirection.getOrientation(side));
+	private IInventory getInventoryHit(World world, BlockPos pos, EnumFacing side) {
+		TileEntity targeted = world.getTileEntity(pos);
+		return InvTools.getInventoryFromTile(targeted, side);
 	}
 
-	private boolean evaluateTileHit(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+	private boolean evaluateTileHit(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
 
 		// Shift right-clicking on an inventory tile will attempt to transfer
 		// items contained in the backpack
-		IInventory inventory = getInventoryHit(world, x, y, z, side);
+		IInventory inventory = getInventoryHit(world, pos, side);
 		// Process only inventories
 		if (inventory != null) {
 

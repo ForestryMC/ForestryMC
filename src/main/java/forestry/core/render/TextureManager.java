@@ -13,9 +13,14 @@ package forestry.core.render;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -37,16 +42,16 @@ public class TextureManager implements ITextureManager {
 		return instance;
 	}
 
-	private final HashMap<String, IIcon> defaultIcons = new HashMap<String, IIcon>();
+	private final HashMap<String, TextureAtlasSprite> defaultIcons = new HashMap<String, TextureAtlasSprite>();
 
-	private final IIcon[] textures = new IIcon[2048];
+	private final TextureAtlasSprite[] textures = new TextureAtlasSprite[2048];
 
 	private final ArrayList<IIconProvider> iconProvider = new ArrayList<IIconProvider>();
 
 	private TextureManager() {
 	}
 
-	public void initDefaultIcons(IIconRegister register) {
+	public void initDefaultIcons(TextureMap map) {
 		String[] defaultIconNames = new String[]{"habitats/desert", "habitats/end", "habitats/forest", "habitats/hills", "habitats/jungle", "habitats/mushroom",
 				"habitats/nether", "habitats/ocean", "habitats/plains", "habitats/snow", "habitats/swamp", "habitats/taiga", "misc/access.private",
 				"misc/access.viewable", "misc/access.shared", "misc/energy", "misc/hint",
@@ -57,23 +62,23 @@ public class TextureManager implements ITextureManager {
 				"slots/blocked", "slots/blocked_2", "slots/liquid", "slots/container", "slots/locked",
 				"mail/carrier.player", "mail/carrier.trader"};
 		for (String str : defaultIconNames) {
-			defaultIcons.put(str, registerTex(register, str));
+			defaultIcons.put(str, registerTex(map, str));
 		}
 	}
 
-	public IIcon getDefault(String ident) {
+	public TextureAtlasSprite getDefault(String ident) {
 		return defaultIcons.get(ident);
 	}
 
-	public IIcon registerTex(IIconRegister register, String identifier) {
-		return register.registerIcon("forestry:" + identifier);
+	public TextureAtlasSprite registerTex(TextureMap map, String identifier) {
+		return map.registerSprite(new ResourceLocation("forestry:textures/items/" + identifier + ".png"));
 	}
 
-	public IIcon registerTexUID(IIconRegister register, short uid, String identifier) {
-		return setTexUID(uid, registerTex(register, identifier));
+	public TextureAtlasSprite registerTexUID(TextureMap map, short uid, String identifier) {
+		return setTexUID(uid, registerTex(map, identifier));
 	}
 
-	public IIcon setTexUID(short uid, IIcon texture) {
+	public TextureAtlasSprite setTexUID(short uid, TextureAtlasSprite texture) {
 		textures[uid] = texture;
 		return texture;
 	}
@@ -84,7 +89,7 @@ public class TextureManager implements ITextureManager {
 	}
 
 	@Override
-	public IIcon getIcon(short texUID) {
+	public TextureAtlasSprite getIcon(short texUID) {
 		if (texUID < 0) {
 			return null;
 		}
@@ -93,7 +98,7 @@ public class TextureManager implements ITextureManager {
 		}
 
 		for (IIconProvider provider : iconProvider) {
-			IIcon retr = provider.getIcon(texUID);
+			TextureAtlasSprite retr = provider.getIcon(texUID);
 			if (retr != null) {
 				return retr;
 			}

@@ -17,23 +17,32 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.particle.EntityExplodeFX;
 import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 
 import com.mojang.authlib.GameProfile;
 
 import org.lwjgl.input.Keyboard;
 
+import forestry.api.core.IMeshDefinitionObject;
+import forestry.api.core.IModelObject;
+import forestry.api.core.IVariantObject;
+import forestry.api.core.IModelObject.ModelType;
 import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.ForestryClient;
 import forestry.core.TickHandlerCoreClient;
 import forestry.core.WorldGenerator;
 import forestry.core.config.Config;
+import forestry.core.render.ModelManager;
 import forestry.core.render.SpriteSheet;
 
 public class ClientProxyCommon extends ProxyCommon {
@@ -41,6 +50,18 @@ public class ClientProxyCommon extends ProxyCommon {
 	@Override
 	public void bindTexture(ResourceLocation location) {
 		getClientInstance().getTextureManager().bindTexture(location);
+	}
+	
+	@Override
+	public void registerItem(Item item) {
+		super.registerItem(item);
+		ModelManager.getInstance().registerItemModel(item);
+	}
+	
+	@Override
+	public void registerBlock(Block block, Class<? extends ItemBlock> itemClass) {
+		super.registerBlock(block, itemClass);
+		ModelManager.getInstance().registerItemBlockModel(block);
 	}
 
 	@Override
@@ -61,8 +82,8 @@ public class ClientProxyCommon extends ProxyCommon {
 	}
 
 	@Override
-	public void setHabitatLocatorCoordinates(Entity player, ChunkCoordinates coordinates) {
-		TextureHabitatLocator.getInstance().setTargetCoordinates(coordinates);
+	public void setHabitatLocatorCoordinates(Entity player, BlockPos pos) {
+		TextureHabitatLocator.getInstance().setTargetCoordinates(pos);
 	}
 
 	@Override
@@ -130,35 +151,35 @@ public class ClientProxyCommon extends ProxyCommon {
 	}
 
 	@Override
-	public void playSoundFX(World world, int x, int y, int z, Block block) {
+	public void playSoundFX(World world, BlockPos pos, Block block) {
 		if (Proxies.common.isSimulating(world)) {
-			super.playSoundFX(world, x, y, z, block);
+			super.playSoundFX(world, pos, block);
 		} else {
-			playSoundFX(world, x, y, z, block.stepSound.getStepSound(), block.stepSound.getVolume(), block.stepSound.getFrequency());
+			playSoundFX(world, pos, block.stepSound.getStepSound(), block.stepSound.getVolume(), block.stepSound.getFrequency());
 		}
 	}
 
 	@Override
-	public void playBlockBreakSoundFX(World world, int x, int y, int z, Block block) {
+	public void playBlockBreakSoundFX(World world, BlockPos pos, Block block) {
 		if (Proxies.common.isSimulating(world)) {
-			super.playSoundFX(world, x, y, z, block);
+			super.playSoundFX(world, pos, block);
 		} else {
-			playSoundFX(world, x, y, z, block.stepSound.getBreakSound(), block.stepSound.getVolume() / 4, block.stepSound.getFrequency());
+			playSoundFX(world, pos, block.stepSound.getBreakSound(), block.stepSound.getVolume() / 4, block.stepSound.getFrequency());
 		}
 	}
 
 	@Override
-	public void playBlockPlaceSoundFX(World world, int x, int y, int z, Block block) {
+	public void playBlockPlaceSoundFX(World world, BlockPos pos, Block block) {
 		if (Proxies.common.isSimulating(world)) {
-			super.playSoundFX(world, x, y, z, block);
+			super.playSoundFX(world, pos, block);
 		} else {
-			playSoundFX(world, x, y, z, block.stepSound.getStepSound(), block.stepSound.getVolume() / 4, block.stepSound.getFrequency());
+			playSoundFX(world, pos, block.stepSound.getStepSound(), block.stepSound.getVolume() / 4, block.stepSound.getFrequency());
 		}
 	}
 
 	@Override
-	public void playSoundFX(World world, int x, int y, int z, String sound, float volume, float pitch) {
-		world.playSound(x + 0.5, y + 0.5, z + 0.5, sound, volume, (1.0f + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2f) * 0.7f, false);
+	public void playSoundFX(World world, BlockPos pos, String sound, float volume, float pitch) {
+		world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getX() + 0.5, sound, volume, (1.0f + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2f) * 0.7f, false);
 	}
 
 	/**
@@ -194,20 +215,20 @@ public class ClientProxyCommon extends ProxyCommon {
 	}
 
 	@Override
-	public void addBlockDestroyEffects(World world, int xCoord, int yCoord, int zCoord, Block block, int i) {
+	public void addBlockDestroyEffects(World world, BlockPos pos, Block block, int i) {
 		if (!isSimulating(world)) {
-			getClientInstance().effectRenderer.addBlockDestroyEffects(xCoord, yCoord, zCoord, block, i);
+			getClientInstance().effectRenderer.addBlockDestroyEffects(pos, block, i);
 		} else {
-			super.addBlockDestroyEffects(world, xCoord, yCoord, zCoord, block, i);
+			super.addBlockDestroyEffects(world, pos, block, i);
 		}
 	}
 
 	@Override
-	public void addBlockPlaceEffects(World world, int xCoord, int yCoord, int zCoord, Block block, int i) {
+	public void addBlockPlaceEffects(World world, BlockPos pos, Block block, int i) {
 		if (!isSimulating(world)) {
-			playBlockPlaceSoundFX(world, xCoord, yCoord, zCoord, block);
+			playBlockPlaceSoundFX(world, pos, block);
 		} else {
-			super.addBlockPlaceEffects(world, xCoord, yCoord, zCoord, block, i);
+			super.addBlockPlaceEffects(world, pos, block, i);
 		}
 	}
 

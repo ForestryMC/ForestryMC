@@ -16,6 +16,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -26,6 +27,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -154,11 +157,11 @@ public class BlockCandle extends BlockTorch {
 			{79, 50, 31}, {53, 70, 27}, {150, 52, 48}, {20, 20, 20}};
 
 	public static final String colourTagName = "colour";
-
+	
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing, float facingX, float facingY, float facingZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing facing, float facingX, float facingY, float facingZ) {
 		boolean flag = false;
-		int meta = world.getBlockMetadata(x, y, z);
+		int meta = state.getBlock().getMetaFromState(state);
 		boolean toggleLitState = true;
 		ItemStack held = player.getCurrentEquippedItem();
 
@@ -172,10 +175,10 @@ public class BlockCandle extends BlockTorch {
 
 		if (held != null) {
 			// Ensure a TileEntity exists. May be able to remove this in future versions.
-			TileCandle te = (TileCandle) world.getTileEntity(x, y, z);
+			TileCandle te = (TileCandle) world.getTileEntity(pos);
 			if (te == null) {
-				world.setTileEntity(x, y, z, this.createTileEntity(world, meta));
-				te = (TileCandle) world.getTileEntity(x, y, z);
+				world.setTileEntity(pos, this.createTileEntity(world, meta));
+				te = (TileCandle) world.getTileEntity(pos);
 			}
 
 			if (StackUtils.equals(this, held)) {
@@ -202,7 +205,7 @@ public class BlockCandle extends BlockTorch {
 							} else {
 								te.addColour(colours[i][0], colours[i][1], colours[i][2]);
 							}
-							world.markBlockForUpdate(x, y, z);
+							world.markBlockForUpdate(pos);
 							matched = true;
 							toggleLitState = false;
 							flag = true;
@@ -276,7 +279,7 @@ public class BlockCandle extends BlockTorch {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(World world, int x, int y, int z, Random random) {
+	public void randomDisplayTick(World world, BlockPos pos, Random random) {
 		if (isLit(world.getBlockMetadata(x, y, z))) {
 			int l = world.getBlockMetadata(x, y, z) & 0x07;
 			double d0 = x + 0.5F;
@@ -383,6 +386,11 @@ public class BlockCandle extends BlockTorch {
 		if (!this.lightingItems.contains(item)) {
 			this.lightingItems.add(item);
 		}
+	}
+	
+	@Override
+	public int getRenderColor(IBlockState state) {
+		return super.getRenderColor(state);
 	}
 
 }

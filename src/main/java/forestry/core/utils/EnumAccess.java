@@ -10,8 +10,7 @@
  ******************************************************************************/
 package forestry.core.utils;
 
-import net.minecraft.util.IIcon;
-
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -21,7 +20,7 @@ public enum EnumAccess {
 	private final String name;
 
 	@SideOnly(Side.CLIENT)
-	private IIcon icon;
+	private TextureAtlasSprite icon;
 
 	private EnumAccess(String name) {
 		this.name = name;

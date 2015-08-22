@@ -11,8 +11,7 @@
 package forestry.farming.triggers;
 
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.core.ITileStructure;
@@ -43,7 +42,7 @@ public class TriggerLowLiquid extends Trigger {
 	 * the parameters.
 	 */
 	@Override
-	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
+	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
 		if (!(tile instanceof TileHatch)) {
 			return false;
 		}

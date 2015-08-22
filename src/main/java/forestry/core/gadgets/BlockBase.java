@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -22,7 +23,9 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -65,6 +68,11 @@ public class BlockBase extends BlockForestry {
 
 		return definition;
 	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getProperties().get(key);
+	}
 
 	@Override
 	public boolean isOpaqueCube() {
@@ -85,8 +93,9 @@ public class BlockBase extends BlockForestry {
 		}
 	}
 
-	private MachineDefinition getDefinition(IBlockAccess world, int x, int y, int z) {
-		return getDefinition(world.getBlockMetadata(x, y, z));
+	private MachineDefinition getDefinition(IBlockAccess world, BlockPos pos) {
+		IBlockState state = world.getBlockState(pos);
+		return getDefinition(state.getBlock().getMetaFromState(state));
 	}
 
 	private MachineDefinition getDefinition(int metadata) {
@@ -112,7 +121,8 @@ public class BlockBase extends BlockForestry {
 
 	/* TILE ENTITY CREATION */
 	@Override
-	public TileEntity createTileEntity(World world, int metadata) {
+	public TileEntity createTileEntity(World world, IBlockState state) {
+		int metadata = getMetaFromState(state);
 		if (metadata >= definitions.size() || definitions.get(metadata) == null) {
 			metadata = 0;
 		}
@@ -126,45 +136,44 @@ public class BlockBase extends BlockForestry {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return createTileEntity(world, meta); // TODO: refactor to just use Block, not BlockContainer
+		return createTileEntity(world, getStateFromMeta(meta)); // TODO: refactor to just use Block, not BlockContainer
 	}
 
 	/* BLOCK DROPS */
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		int metadata = getMetaFromState(state);
 		if (getDefinition(metadata).handlesDrops()) {
-			return getDefinition(metadata).getDrops(world, x, y, z, metadata, fortune);
+			return getDefinition(metadata).getDrops(world, pos, state, fortune);
 		} else {
-			return super.getDrops(world, x, y, z, metadata, fortune);
+			return super.getDrops(world, pos, state, fortune);
 		}
 	}
 
 	/* INTERACTION */
 	@Override
-	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
-		MachineDefinition definition = getDefinition(world, x, y, z);
-		return definition != null && definition.isSolidOnSide(world, x, y, z, side.ordinal());
+	public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+		MachineDefinition definition = getDefinition(world, pos);
+		return definition != null && definition.isSolidOnSide(world, pos, side);
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack stack) {
-		super.onBlockPlacedBy(world, x, y, z, entityliving, stack);
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+		super.onBlockPlacedBy(world, pos, state, entityliving, stack);
 
-		TileForestry tile = (TileForestry) world.getTileEntity(x, y, z);
+		TileForestry tile = (TileForestry) world.getTileEntity(pos);
 
 		if (stack.getItem() instanceof ItemNBTTile && stack.hasTagCompound()) {
 			tile.readFromNBT(stack.getTagCompound());
-			tile.xCoord = x;
-			tile.yCoord = y;
-			tile.zCoord = z;
+			tile.setPos(pos);
 		}
 
-		tile.rotateAfterPlacement(world, x, y, z, entityliving, stack);
+		tile.rotateAfterPlacement(world, pos, entityliving, stack);
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float par7, float par8, float par9) {
-		if (getDefinition(world, x, y, z).onBlockActivated(world, x, y, z, player, side, par7, par8, par9)) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (getDefinition(world, pos).onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ)) {
 			return true;
 		}
 
@@ -172,14 +181,14 @@ public class BlockBase extends BlockForestry {
 			return false;
 		}
 
-		TileBase tile = (TileBase) world.getTileEntity(x, y, z);
+		TileBase tile = (TileBase) world.getTileEntity(pos);
 		if (!Utils.isUseableByPlayer(player, tile)) {
 			return false;
 		}
 
 		ItemStack current = player.getCurrentEquippedItem();
 		if (current != null && current.getItem() != Items.bucket && tile instanceof IFluidHandler && tile.allowsAlteration(player)) {
-			if (FluidHelper.handleRightClick((IFluidHandler) tile, ForgeDirection.getOrientation(side), player, true, tile.canDrainWithBucket())) {
+			if (FluidHelper.handleRightClick((IFluidHandler) tile, side, player, true, tile.canDrainWithBucket())) {
 				return true;
 			}
 		}
@@ -197,47 +206,48 @@ public class BlockBase extends BlockForestry {
 	}
 
 	@Override
-	public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection axis) {
-		return getDefinition(world, x, y, z).rotateBlock(world, x, y, z, axis);
+	public boolean rotateBlock(World world, BlockPos pos, EnumFacing side) {
+		return getDefinition(world, pos).rotateBlock(world, pos, side);
 	}
 
 	@Override
-	public void onBlockAdded(World world, int x, int y, int z) {
-		super.onBlockAdded(world, x, y, z);
-		getDefinition(world, x, y, z).onBlockAdded(world, x, y, z);
+	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+		super.onBlockAdded(world, pos, state);
+		getDefinition(world, pos).onBlockAdded(world, pos, state);
 	}
 
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
 
-		IOwnable tile = (IOwnable) world.getTileEntity(x, y, z);
+		IOwnable tile = (IOwnable) world.getTileEntity(pos);
 		if (tile == null) {
-			return world.setBlockToAir(x, y, z);
+			return world.setBlockToAir(pos);
 		}
 
 		if (tile.isOwnable() && !tile.allowsRemoval(player)) {
 			return false;
 		}
 
-		if (getDefinition(world, x, y, z).removedByPlayer(world, player, x, y, z)) {
-			return world.setBlockToAir(x, y, z);
+		if (getDefinition(world, pos).removedByPlayer(world, player, pos)) {
+			return world.setBlockToAir(pos);
 		} else {
 			return false;
 		}
 	}
 
 	@Override
-	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
-		int metadata = world.getBlockMetadata(x, y, z);
+	public boolean canConnectRedstone(IBlockAccess world, BlockPos pos, EnumFacing face) {
+		IBlockState state = world.getBlockState(pos);
+		int metadata = getMetaFromState(state);
 		if (metadata >= definitions.size() || definitions.get(metadata) == null) {
 			metadata = 0;
 		}
-		return definitions.get(metadata).canConnectRedstone(world, x, y, z, side);
+		return definitions.get(metadata).canConnectRedstone(world, pos, face);
 	}
-
+	
 	@Override
-	public int damageDropped(int metadata) {
-		return metadata;
+	public int damageDropped(IBlockState state) {
+		return getMetaFromState(state);
 	}
 
 	/* TEXTURES */

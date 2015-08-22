@@ -10,19 +10,18 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-
+import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelObject;
 import forestry.core.CreativeTabForestry;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 
-public class ItemForestryFood extends ItemFood {
+public class ItemForestryFood extends ItemFood implements IModelObject {
 
 	private boolean isDrink = false;
 
@@ -38,9 +37,9 @@ public class ItemForestryFood extends ItemFood {
 	@Override
 	public EnumAction getItemUseAction(ItemStack itemstack) {
 		if (isDrink) {
-			return EnumAction.drink;
+			return EnumAction.DRINK;
 		} else {
-			return EnumAction.eat;
+			return EnumAction.EAT;
 		}
 	}
 
@@ -48,11 +47,10 @@ public class ItemForestryFood extends ItemFood {
 		isDrink = true;
 		return this;
 	}
-
-	@SideOnly(Side.CLIENT)
+	
 	@Override
-	public void registerIcons(IIconRegister register) {
-		itemIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this));
+	public ModelType getModelType() {
+		return ModelType.DEFAULT;
 	}
 
 }

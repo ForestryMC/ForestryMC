@@ -56,8 +56,8 @@ public class BackpackDefinition implements IBackpackDefinition {
 		Item item = backpack.getItem();
 		String display = ("" + StatCollector.translateToLocal(item.getUnlocalizedNameInefficiently(backpack) + ".name")).trim();
 
-		if (backpack.stackTagCompound != null && backpack.stackTagCompound.hasKey("display", 10)) {
-			NBTTagCompound nbt = backpack.stackTagCompound.getCompoundTag("display");
+		if (backpack.getTagCompound() != null && backpack.getTagCompound().hasKey("display", 10)) {
+			NBTTagCompound nbt = backpack.getTagCompound().getCompoundTag("display");
 
 			if (nbt.hasKey("Name", 8)) {
 				display = nbt.getString("Name");

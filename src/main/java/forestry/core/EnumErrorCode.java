@@ -5,15 +5,14 @@
  ******************************************************************************/
 package forestry.core;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.core.ErrorStateRegistry;
 import forestry.api.core.IErrorState;
 import forestry.core.config.Defaults;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public enum EnumErrorCode implements IErrorState {
 
@@ -62,7 +61,7 @@ public enum EnumErrorCode implements IErrorState {
 	private final String name;
 	private final String iconName;
 	@SideOnly(Side.CLIENT)
-	private IIcon icon;
+	private TextureAtlasSprite icon;
 
 	private EnumErrorCode(String name) {
 		this(name, name);
@@ -85,13 +84,13 @@ public enum EnumErrorCode implements IErrorState {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
-		icon = register.registerIcon("forestry:errors/" + iconName);
+	public void registerIcons(TextureMap map) {
+		icon = map.registerSprite(new ResourceLocation("forestry:textures/items/errors/" + iconName + ".png"));
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public IIcon getIcon() {
+	public TextureAtlasSprite getIcon() {
 		return icon;
 	}
 

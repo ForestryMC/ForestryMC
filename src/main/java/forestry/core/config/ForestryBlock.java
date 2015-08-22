@@ -10,18 +10,25 @@
  ******************************************************************************/
 package forestry.core.config;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.oredict.OreDictionary;
-
+import forestry.api.core.IMeshDefinitionObject;
+import forestry.api.core.IModelObject;
+import forestry.api.core.IModelObject.ModelType;
+import forestry.api.core.IVariantObject;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.ModelManager;
 import forestry.plugins.PluginManager;
 import forestry.plugins.PluginManager.Stage;
 
@@ -94,7 +101,7 @@ public enum ForestryBlock {
 	factoryPlain,
 	lepidopterology;
 	private Block block;
-
+	
 	public void registerBlock(Block block, Class<? extends ItemBlock> itemClass, String name) {
 		if (!EnumSet.of(Stage.PRE_INIT).contains(PluginManager.getStage())) {
 			throw new RuntimeException("Tried to register Block outside of Pre-Init");

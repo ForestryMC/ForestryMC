@@ -13,6 +13,8 @@ package forestry.plugins;
 import java.util.Arrays;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -79,6 +81,14 @@ public class PluginFactory extends ForestryPlugin {
 		);
 
 		ForestryBlock.factoryTESR.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "factory");
+		ForestryBlock.factoryTESR.registerModel(new ItemMeshDefinition() {
+			
+			@Override
+			public ModelResourceLocation getModelLocation(ItemStack stack) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		});
 
 		BlockBase factoryTESR = ((BlockBase) ForestryBlock.factoryTESR.block());
 

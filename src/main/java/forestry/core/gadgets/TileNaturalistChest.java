@@ -46,12 +46,12 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 
 	@Override
 	public void openGui(EntityPlayer player, TileBase tile) {
-		player.openGui(ForestryAPI.instance, guiID, player.worldObj, xCoord, yCoord, zCoord);
+		player.openGui(ForestryAPI.instance, guiID, player.worldObj, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Override
 	public void flipPage(EntityPlayer player, int page) {
-		player.openGui(ForestryAPI.instance, GuiHandler.encodeGuiData(guiID, page), player.worldObj, xCoord, yCoord, zCoord);
+		player.openGui(ForestryAPI.instance, GuiHandler.encodeGuiData(guiID, page), player.worldObj, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	/* UPDATING */

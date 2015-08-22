@@ -11,9 +11,8 @@
 package forestry.farming;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.core.vect.MutableVect;
 import forestry.core.vect.Vect;
@@ -24,13 +23,13 @@ import forestry.farming.logic.FarmLogic;
 public class FarmTarget {
 
 	private final Vect start;
-	private final ForgeDirection direction;
+	private final EnumFacing direction;
 	private final int limit;
 
 	private int yOffset;
 	private int extent;
 
-	public FarmTarget(Vect start, ForgeDirection direction, int limit) {
+	public FarmTarget(Vect start, EnumFacing direction, int limit) {
 		this.start = start;
 		this.direction = direction;
 		this.limit = limit;
@@ -48,7 +47,7 @@ public class FarmTarget {
 		return extent;
 	}
 
-	public ForgeDirection getDirection() {
+	public EnumFacing getDirection() {
 		return direction;
 	}
 

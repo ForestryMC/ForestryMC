@@ -18,6 +18,7 @@ import java.util.TreeSet;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.util.BlockPos;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -81,7 +82,7 @@ public abstract class SubCommand implements IForestryCommand {
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] incomplete) {
+	public List<String> addTabCompletionOptions(ICommandSender sender, String[] incomplete, BlockPos pos) {
 		return CommandHelpers.addStandardTabCompletionOptions(this, sender, incomplete);
 	}
 

@@ -35,6 +35,8 @@ import net.minecraft.block.BlockTorch;
 import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.BlockWall;
 import net.minecraft.block.BlockWorkbench;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -49,7 +51,7 @@ import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.oredict.OreDictionary;
-
+import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.BackpackManager;
@@ -69,6 +71,7 @@ import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemCrated;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.ModelManager;
 import forestry.storage.BackpackDefinition;
 import forestry.storage.BackpackHelper;
 import forestry.storage.CrateRegistry;
@@ -274,6 +277,14 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 	protected void registerItems() {
 		// CRATE
 		ForestryItem.crate.registerItem((new ItemCrated(null, false)), "crate");
+		ForestryItem.crate.registerModel( new ItemMeshDefinition() {
+			
+			@Override
+			public ModelResourceLocation getModelLocation(ItemStack stack) {
+				String textureName = (((ItemCrated)stack.getItem()).getContained(null) == null) ? "crate" : "crate-filled";
+				return ModelManager.getInstance().getModelLocation(textureName);
+			}
+		});
 
 		// BACKPACKS
 		BackpackDefinition definition;
@@ -282,12 +293,14 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 			definition = new BackpackDefinitionApiarist("apiarist", 0xc4923d);
 			BackpackManager.definitions.put(definition.getKey(), definition);
 			ForestryItem.apiaristBackpack.registerItem(new ItemNaturalistBackpack(GuiId.ApiaristBackpackGUI.ordinal(), definition).setCreativeTab(Tabs.tabApiculture), "apiaristBag");
+			ForestryItem.apiaristBackpack.registerModel("backpack");
 		}
 
 		if (PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {
 			definition = new BackpackDefinitionLepidopterist("lepidopterist", 0x995b31);
 			BackpackManager.definitions.put(definition.getKey(), definition);
 			ForestryItem.lepidopteristBackpack.registerItem(new ItemNaturalistBackpack(GuiId.LepidopteristBackpackGUI.ordinal(), definition).setCreativeTab(Tabs.tabLepidopterology), "lepidopteristBag");
+			ForestryItem.lepidopteristBackpack.registerModel("backpack");
 		}
 
 		definition = new BackpackDefinition("miner", 0x36187d);
@@ -421,7 +434,7 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 		hunterItems.add(new ItemStack(Items.magma_cream));
 		hunterItems.add(new ItemStack(Items.speckled_melon));
 		hunterItems.add(new ItemStack(Items.fish));
-		hunterItems.add(new ItemStack(Items.cooked_fished));
+		hunterItems.add(new ItemStack(Items.cooked_fish));
 		hunterItems.add(new ItemStack(Items.lead));
 		hunterItems.add(new ItemStack(Items.fishing_rod));
 		hunterItems.add(new ItemStack(Items.name_tag));
@@ -466,8 +479,18 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 		builderItems.add(new ItemStack(Blocks.dispenser));
 		builderItems.add(new ItemStack(Blocks.dropper));
 		builderItems.add(new ItemStack(Blocks.ladder));
-		builderItems.add(new ItemStack(Blocks.fence));
-		builderItems.add(new ItemStack(Blocks.fence_gate));
+		builderItems.add(new ItemStack(Blocks.oak_fence));
+		builderItems.add(new ItemStack(Blocks.oak_fence_gate));
+		builderItems.add(new ItemStack(Blocks.spruce_fence));
+		builderItems.add(new ItemStack(Blocks.spruce_fence_gate));
+		builderItems.add(new ItemStack(Blocks.birch_fence));
+		builderItems.add(new ItemStack(Blocks.birch_fence_gate));
+		builderItems.add(new ItemStack(Blocks.jungle_fence));
+		builderItems.add(new ItemStack(Blocks.jungle_fence_gate));
+		builderItems.add(new ItemStack(Blocks.dark_oak_fence));
+		builderItems.add(new ItemStack(Blocks.dark_oak_fence_gate));
+		builderItems.add(new ItemStack(Blocks.acacia_fence));
+		builderItems.add(new ItemStack(Blocks.acacia_fence_gate));
 		builderItems.add(new ItemStack(Blocks.iron_bars));
 		builderItems.add(new ItemStack(Blocks.stone_slab, 1, Defaults.WILDCARD));
 		builderItems.add(new ItemStack(Blocks.quartz_block, 1, Defaults.WILDCARD));
@@ -476,9 +499,17 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 		builderItems.add(new ItemStack(Blocks.birch_stairs));
 		builderItems.add(new ItemStack(Blocks.spruce_stairs));
 		builderItems.add(new ItemStack(Blocks.jungle_stairs));
+		builderItems.add(new ItemStack(Blocks.spruce_stairs));
+		builderItems.add(new ItemStack(Blocks.dark_oak_stairs));
+		builderItems.add(new ItemStack(Blocks.acacia_stairs));
 		builderItems.add(new ItemStack(Blocks.cobblestone_wall, 1, Defaults.WILDCARD));
 		builderItems.add(new ItemStack(Items.iron_door));
-		builderItems.add(new ItemStack(Items.wooden_door));
+		builderItems.add(new ItemStack(Items.oak_door));
+		builderItems.add(new ItemStack(Items.spruce_door));
+		builderItems.add(new ItemStack(Items.birch_door));
+		builderItems.add(new ItemStack(Items.jungle_door));
+		builderItems.add(new ItemStack(Items.dark_oak_door));
+		builderItems.add(new ItemStack(Items.acacia_door));
 		builderItems.add(new ItemStack(Items.sign));
 		builderItems.add(new ItemStack(Items.repeater));
 		builderItems.add(new ItemStack(Items.comparator));

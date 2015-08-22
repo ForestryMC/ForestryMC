@@ -10,15 +10,15 @@
  ******************************************************************************/
 package forestry.core.triggers;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
-
+import buildcraft.api.core.SheetIcon;
 import buildcraft.api.statements.IStatement;
 import buildcraft.api.statements.IStatementParameter;
 import buildcraft.api.statements.ITriggerExternal;
@@ -37,7 +37,10 @@ public abstract class Trigger implements ITriggerExternal {
 		this.uid = "forestry:" + uid;
 		unlocalized = "trigger." + localization;
 		StatementManager.registerStatement(this);
+		//icon
 	}
+	
+	//icon = TextureManager.getInstance().registerTex(register, "triggers/" + unlocalized.replace("trigger.", ""));
 
 	@Override
 	public String getUniqueTag() {
@@ -65,18 +68,12 @@ public abstract class Trigger implements ITriggerExternal {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private IIcon icon;
+	private SheetIcon icon;
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
+	public SheetIcon getIcon() {
 		return icon;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister register) {
-		icon = TextureManager.getInstance().registerTex(register, "triggers/" + unlocalized.replace("trigger.", ""));
 	}
 
 	@Override

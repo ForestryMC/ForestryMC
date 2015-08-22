@@ -10,14 +10,25 @@
  ******************************************************************************/
 package forestry.core.config;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.ForgeInternalHandler;
 import net.minecraftforge.oredict.OreDictionary;
-
+import forestry.api.core.IMeshDefinitionObject;
+import forestry.api.core.IModelObject;
+import forestry.api.core.IVariantObject;
+import forestry.api.core.IModelObject.ModelType;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.ModelManager;
 import forestry.plugins.PluginManager;
 import forestry.plugins.PluginManager.Stage;
 

@@ -11,9 +11,8 @@
 package forestry.farming;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.core.IStructureLogic;
 import forestry.api.farming.IFarmComponent;
@@ -31,8 +30,8 @@ public class FarmHelper implements IFarmInterface {
 	}
 
 	public static int getFarmSizeNorthSouth(World world, Vect start) {
-		ForgeDirection farmSide = ForgeDirection.NORTH;
-		ForgeDirection startSide = ForgeDirection.EAST;
+		EnumFacing farmSide = EnumFacing.NORTH;
+		EnumFacing startSide = EnumFacing.EAST;
 
 		Vect corner = getFarmMultiblockCorner(world, start, farmSide, startSide);
 
@@ -40,18 +39,18 @@ public class FarmHelper implements IFarmInterface {
 	}
 
 	public static int getFarmSizeEastWest(World world, Vect start) {
-		ForgeDirection farmSide = ForgeDirection.EAST;
-		ForgeDirection startSide = ForgeDirection.NORTH;
+		EnumFacing farmSide = EnumFacing.EAST;
+		EnumFacing startSide = EnumFacing.NORTH;
 
 		Vect corner = getFarmMultiblockCorner(world, start, farmSide, startSide);
 
 		return getFarmSizeInDirection(world, corner, farmSide, startSide.getOpposite());
 	}
 
-	private static int getFarmSizeInDirection(World world, Vect start, ForgeDirection farmSide, ForgeDirection searchDirection) {
+	private static int getFarmSizeInDirection(World world, Vect start, EnumFacing farmSide, EnumFacing searchDirection) {
 		int size = 0;
 
-		ForgeDirection toCenter = farmSide.getOpposite();
+		EnumFacing toCenter = farmSide.getOpposite();
 
 		Vect target = start.add(farmSide);
 
@@ -69,12 +68,12 @@ public class FarmHelper implements IFarmInterface {
 		return size;
 	}
 
-	public static Vect getFarmMultiblockCorner(World world, Vect start, ForgeDirection direction1, ForgeDirection direction2) {
+	public static Vect getFarmMultiblockCorner(World world, Vect start, EnumFacing direction1, EnumFacing direction2) {
 		Vect edge = getFarmMultiblockEdge(world, start, direction1);
 		return getFarmMultiblockEdge(world, edge, direction2);
 	}
 
-	private static Vect getFarmMultiblockEdge(World world, Vect start, ForgeDirection direction) {
+	private static Vect getFarmMultiblockEdge(World world, Vect start, EnumFacing direction) {
 		MutableVect edge = new MutableVect(start);
 
 		while (VectUtil.getTile(world, edge) instanceof IFarmComponent) {

@@ -35,7 +35,7 @@ public class VanillaMyceliumGrowthRule implements IFlowerGrowthRule {
 		}
 
 		IFlower flower = fr.getRandomPlantableFlower(flowerType, world.rand);
-		return world.setBlockState(pos, flower.getBlock(), flower.getMeta(), Defaults.FLAG_BLOCK_SYNCH);
+		return world.setBlockState(pos, flower.getBlock().getStateFromMeta(flower.getMeta()), Defaults.FLAG_BLOCK_SYNCH);
 	}
 
 }

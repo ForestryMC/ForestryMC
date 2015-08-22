@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.EnumSet;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.Entity;
@@ -25,7 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.potion.Potion;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -142,9 +143,9 @@ public class ProxyCommon {
 		player.dropPlayerItemWithRandomChoice(stack, true);
 	}
 
-	public void setHabitatLocatorCoordinates(Entity player, ChunkCoordinates coordinates) {
-		if (coordinates != null) {
-			Forestry.packetHandler.sendPacket(new PacketCoordinates(PacketIds.HABITAT_BIOME_POINTER, coordinates).getPacket(), (EntityPlayerMP) player);
+	public void setHabitatLocatorCoordinates(Entity player, BlockPos pos) {
+		if (pos != null) {
+			Forestry.packetHandler.sendPacket(new PacketCoordinates(PacketIds.HABITAT_BIOME_POINTER, pos).getPacket(), (EntityPlayerMP) player);
 		}
 	}
 
@@ -174,7 +175,7 @@ public class ProxyCommon {
 
 	public boolean isOp(EntityPlayer player) {
 		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-		return server.getConfigurationManager().func_152596_g(player.getGameProfile());
+		return server.getConfigurationManager().canSendCommands(player.getGameProfile());
 	}
 
 	public double getBlockReachDistance(EntityPlayer entityplayer) {
@@ -197,15 +198,15 @@ public class ProxyCommon {
 		return null;
 	}
 
-	public boolean setBlockWithNotify(World world, int x, int y, int z, Block block) {
-		return world.setBlock(x, y, z, block, 0, Defaults.FLAG_BLOCK_SYNCH);
+	public boolean setBlockWithNotify(World world, BlockPos pos, Block block) {
+		return world.setBlockState(pos, block.getStateFromMeta(0), Defaults.FLAG_BLOCK_SYNCH);
 	}
 
-	public void playSoundFX(World world, int x, int y, int z, Block block) {
-		Proxies.net.sendNetworkPacket(new PacketFXSignal(PacketFXSignal.SoundFXType.LEAF, x, y, z, block, 0), x, y, z);
+	public void playSoundFX(World world, BlockPos pos, Block block) {
+		Proxies.net.sendNetworkPacket(new PacketFXSignal(PacketFXSignal.SoundFXType.LEAF, pos, block, 0), pos);
 	}
 
-	public void playSoundFX(World world, int x, int y, int z, String sound, float volume, float pitch) {
+	public void playSoundFX(World world, BlockPos pos, String sound, float volume, float pitch) {
 	}
 
 	public void addEntityBiodustFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
@@ -221,24 +222,24 @@ public class ProxyCommon {
 		return item.getShareTag();
 	}
 
-	public void addBlockDestroyEffects(World world, int xCoord, int yCoord, int zCoord, Block block, int i) {
-		sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.BLOCK_DESTROY, world, xCoord, yCoord, zCoord, block, i);
+	public void addBlockDestroyEffects(World world, BlockPos pos, Block block, int i) {
+		sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.BLOCK_DESTROY, world, pos, block, i);
 	}
 
-	public void addBlockPlaceEffects(World world, int xCoord, int yCoord, int zCoord, Block block, int i) {
-		sendFXSignal(PacketFXSignal.VisualFXType.NONE, PacketFXSignal.SoundFXType.BLOCK_PLACE, world, xCoord, yCoord, zCoord, block, i);
+	public void addBlockPlaceEffects(World world, BlockPos pos, Block block, int i) {
+		sendFXSignal(PacketFXSignal.VisualFXType.NONE, PacketFXSignal.SoundFXType.BLOCK_PLACE, world, pos, block, i);
 	}
 
-	public void playBlockBreakSoundFX(World world, int x, int y, int z, Block block) {
+	public void playBlockBreakSoundFX(World world, BlockPos pos, Block block) {
 	}
 
-	public void playBlockPlaceSoundFX(World world, int x, int y, int z, Block block) {
+	public void playBlockPlaceSoundFX(World world, BlockPos pos, Block block) {
 	}
 
-	public void sendFXSignal(PacketFXSignal.VisualFXType visualFX, PacketFXSignal.SoundFXType soundFX, World world, int xCoord, int yCoord, int zCoord,
+	public void sendFXSignal(PacketFXSignal.VisualFXType visualFX, PacketFXSignal.SoundFXType soundFX, World world, BlockPos pos,
 			Block block, int i) {
 		if (Proxies.common.isSimulating(world)) {
-			Proxies.net.sendNetworkPacket(new PacketFXSignal(visualFX, soundFX, xCoord, yCoord, zCoord, block, i), xCoord, yCoord, zCoord);
+			Proxies.net.sendNetworkPacket(new PacketFXSignal(visualFX, soundFX, pos, block, i), pos);
 		}
 	}
 

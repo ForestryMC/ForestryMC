@@ -12,8 +12,7 @@ package forestry.farming.triggers;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 import forestry.api.core.ITileStructure;
 import forestry.core.triggers.Trigger;
@@ -52,7 +51,7 @@ public class TriggerLowSoil extends Trigger {
 	 * the parameters.
 	 */
 	@Override
-	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
+	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
 		IStatementParameter parameter = null;
 		if (parameters.length > 0) {
 			parameter = parameters[0];

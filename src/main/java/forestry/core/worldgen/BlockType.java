@@ -11,6 +11,8 @@
 package forestry.core.worldgen;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
@@ -32,8 +34,8 @@ public class BlockType {
 		this.meta = meta;
 	}
 
-	public void setBlock(World world, ITreeGenData tree, int x, int y, int z) {
-		world.setBlock(x, y, z, block, meta, Defaults.FLAG_BLOCK_SYNCH);
+	public void setBlock(World world, ITreeGenData tree, BlockPos pos) {
+		world.setBlockState(pos, block.getStateFromMeta(meta), Defaults.FLAG_BLOCK_SYNCH);
 	}
 	
 	public int getMeta() {

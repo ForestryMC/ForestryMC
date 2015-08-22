@@ -15,28 +15,40 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockHugeMushroom;
 import net.minecraft.block.BlockSapling;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelObject;
+import forestry.api.core.IVariantObject;
 import forestry.core.IItemTyped;
 import forestry.core.config.Defaults;
 import forestry.core.proxy.Proxies;
 import forestry.farming.worldgen.WorldGenBigMushroom;
 
-public class BlockMushroom extends BlockSapling implements IItemTyped {
+public class BlockMushroom extends BlockSapling implements IItemTyped, IVariantObject, IModelObject {
 
-	public enum MushroomType {
-		BROWN, RED
+	public static final PropertyEnum MUSHROOM = PropertyEnum.create("mushroom", MushroomType.class);
+	
+	public enum MushroomType implements IStringSerializable {
+		BROWN, RED;
+
+		@Override
+		public String getName() {
+			return name().toLowerCase();
+		}
 	}
 
 	private final WorldGenerator[] generators;
@@ -50,6 +62,16 @@ public class BlockMushroom extends BlockSapling implements IItemTyped {
 		setCreativeTab(null);
 		setTickRandomly(true);
 	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return ((MushroomType)state.getValue(MUSHROOM)).ordinal();
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(MUSHROOM, ModelType.values()[meta]);
+	}
 
 	@Override
 	public boolean getTickRandomly() {
@@ -58,10 +80,10 @@ public class BlockMushroom extends BlockSapling implements IItemTyped {
 
 	// / DROPS
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int X, int Y, int Z, int metadata, int fortune) {
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 
-		MushroomType type = getTypeFromMeta(metadata);
+		MushroomType type = getTypeFromMeta(getMetaFromState(state));
 
 		ret.add(drops[type.ordinal()]);
 
@@ -72,24 +94,23 @@ public class BlockMushroom extends BlockSapling implements IItemTyped {
 	protected boolean canPlaceBlockOn(Block block) {
 		return block == Blocks.mycelium;
 	}
-
+	
 	@Override
-	public void updateTick(World world, int i, int j, int k, Random random) {
-
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random random) {
 		if (!Proxies.common.isSimulating(world)) {
 			return;
 		}
 
-		int meta = world.getBlockMetadata(i, j, k);
+		int meta = getMetaFromState(state);
 		MushroomType type = getTypeFromMeta(meta);
 		int maturity = meta >> 2;
 
-		tickGermling(world, i, j, k, random, type, maturity);
+		tickGermling(world, pos, state, random, type, maturity);
 	}
 
-	private void tickGermling(World world, int i, int j, int k, Random random, MushroomType type, int maturity) {
+	private void tickGermling(World world, BlockPos pos, IBlockState state, Random random, MushroomType type, int maturity) {
 
-		int lightvalue = world.getBlockLightValue(i, j + 1, k);
+		int lightvalue = world.getLightFromNeighbors(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ()));
 
 		if (random.nextInt(2) != 0) {
 			return;
@@ -99,19 +120,19 @@ public class BlockMushroom extends BlockSapling implements IItemTyped {
 			maturity = 3;
 			int matX = maturity << 2;
 			int meta = (matX | type.ordinal());
-			world.setBlockMetadataWithNotify(i, j, k, meta, Defaults.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos, getStateFromMeta(meta), Defaults.FLAG_BLOCK_SYNCH);
 		} else if (lightvalue <= 7) {
-			func_149878_d(world, i, j, k, random);
+			generateTree(world, pos, state, random);
 		}
 	}
-
+	
 	@Override
-	public void func_149878_d(World world, int i, int j, int k, Random random) {
-		MushroomType type = getTypeFromMeta(world.getBlockMetadata(i, j, k));
+	public void generateTree(World world, BlockPos pos, IBlockState state, Random random) {
+		MushroomType type = getTypeFromMeta(state.getBlock().getMetaFromState(state));
 
-		world.setBlockToAir(i, j, k);
-		if (!generators[type.ordinal()].generate(world, random, i, j, k)) {
-			world.setBlock(i, j, k, this, type.ordinal(), 0);
+		world.setBlockToAir(pos);
+		if (!generators[type.ordinal()].generate(world, random, pos)) {
+			world.setBlockState(pos, getStateFromMeta(type.ordinal()), 0);
 		}
 	}
 
@@ -130,24 +151,14 @@ public class BlockMushroom extends BlockSapling implements IItemTyped {
 		list.add(new ItemStack(item, 1, 1));
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister register) {
+	public ModelType getModelType() {
+		return ModelType.META;
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
-	public IIcon getIcon(int side, int meta) {
-		MushroomType type = getTypeFromMeta(meta);
-
-		switch (type) {
-			case BROWN:
-				return Blocks.brown_mushroom.getIcon(side, meta);
-			case RED:
-				return Blocks.red_mushroom.getIcon(side, meta);
-			default:
-				return null;
-		}
+	public String[] getVariants() {
+		return new String[]{"brown", "red" };
 	}
 
 }

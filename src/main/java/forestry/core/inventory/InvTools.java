@@ -18,23 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.oredict.OreDictionary;
-
+import buildcraft.api.transport.IPipeTile;
 import forestry.core.config.Defaults;
 import forestry.core.inventory.filters.ArrayStackFilter;
 import forestry.core.inventory.filters.IStackFilter;
@@ -51,8 +35,23 @@ import forestry.core.utils.AdjacentTileCache;
 import forestry.core.utils.PlainInventory;
 import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginManager;
-
-import buildcraft.api.transport.IPipeTile;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class InvTools {
 
@@ -62,45 +61,60 @@ public abstract class InvTools {
 	 private static final String TAG_COUNT = "Count";*/
 	private static final String TAG_SLOT = "Slot";
 
-	public static int getXOnSide(int x, ForgeDirection side) {
-		return x + side.offsetX;
+	public static int getXOnSide(int x, EnumFacing side) {
+		return x + side.getFrontOffsetX();
 	}
 
-	public static int getYOnSide(int y, ForgeDirection side) {
-		return y + side.offsetY;
+	public static int getYOnSide(int y, EnumFacing side) {
+		return y + side.getFrontOffsetY();
 	}
 
-	public static int getZOnSide(int z, ForgeDirection side) {
-		return z + side.offsetZ;
+	public static int getZOnSide(int z, EnumFacing side) {
+		return z + side.getFrontOffsetZ();
 	}
 
-	public static boolean blockExistsOnSide(World world, int x, int y, int z, ForgeDirection side) {
-		return world.blockExists(getXOnSide(x, side), getYOnSide(y, side), getZOnSide(z, side));
+	public static boolean blockExistsOnSide(World world, int x, int y, int z, EnumFacing side) {
+		return blockExists(getXOnSide(x, side), getYOnSide(y, side), getZOnSide(z, side), world);
+	}
+	
+    public static boolean blockExists(int x, int y, int z, World world)
+    {
+        return y >= 0 && y < 256 ? world.getChunkProvider().chunkExists(x >> 4, z >> 4) : false;
+    }
+
+	public static int getBlockMetadataOnSide(IBlockAccess world, int i, int j, int k, EnumFacing side) {
+		IBlockState state = getBlockStateOnSide(world, i, j, k, side);
+		return state.getBlock().getMetaFromState(state);
+	}
+	
+	public static IBlockState getBlockStateOnSide(IBlockAccess world, int i, int j, int k, EnumFacing side) {
+		return world.getBlockState(getBlockBlockPosOnSide(world, i, j, k, side));
+	}
+	
+	public static BlockPos getBlockBlockPosOnSide(IBlockAccess world, int i, int j, int k, EnumFacing side) {
+		return new BlockPos(getXOnSide(i, side), getYOnSide(j, side), getZOnSide(k, side));
 	}
 
-	public static int getBlockMetadataOnSide(IBlockAccess world, int i, int j, int k, ForgeDirection side) {
-		return world.getBlockMetadata(getXOnSide(i, side), getYOnSide(j, side), getZOnSide(k, side));
+
+	public static Block getBlockOnSide(IBlockAccess world, int x, int y, int z, EnumFacing side) {
+		return getBlockStateOnSide(world, x, y, z, side).getBlock();
 	}
 
-	public static Block getBlockOnSide(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
-		return world.getBlock(getXOnSide(x, side), getYOnSide(y, side), getZOnSide(z, side));
-	}
-
-	public static TileEntity getBlockTileEntityOnSide(World world, int x, int y, int z, ForgeDirection side) {
+	public static TileEntity getBlockTileEntityOnSide(World world, int x, int y, int z, EnumFacing side) {
 		int sx = getXOnSide(x, side);
 		int sy = getYOnSide(y, side);
 		int sz = getZOnSide(z, side);
-		if (world.blockExists(sx, sy, sz)) {
-			return world.getTileEntity(sx, sy, sz);
+		if (blockExists(sx, sy, sz, world)) {
+			return world.getTileEntity(getBlockBlockPosOnSide(world, x, y, z, side));
 		}
 		return null;
 	}
 
-	public static TileEntity getBlockTileEntityOnSide(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+	public static TileEntity getBlockTileEntityOnSide(IBlockAccess world, int x, int y, int z, EnumFacing side) {
 		int sx = getXOnSide(x, side);
 		int sy = getYOnSide(y, side);
 		int sz = getZOnSide(z, side);
-		return world.getTileEntity(sx, sy, sz);
+		return world.getTileEntity(new BlockPos(sx, sy, sz));
 	}
 
 	public static List<IInventory> getAdjacentInventories(World world, int i, int j, int k) {
@@ -110,7 +124,7 @@ public abstract class InvTools {
 	public static List<IInventory> getAdjacentInventories(World world, int i, int j, int k, Class<? extends IInventory> type) {
 		List<IInventory> list = new ArrayList<IInventory>(5);
 		for (int side = 0; side < 6; side++) {
-			IInventory inv = getInventoryFromSide(world, i, j, k, ForgeDirection.getOrientation(side), type, null);
+			IInventory inv = getInventoryFromSide(world, i, j, k, EnumFacing.getFront(side), type, null);
 			if (inv != null) {
 				list.add(inv);
 			}
@@ -125,7 +139,7 @@ public abstract class InvTools {
 	public static Map<Integer, IInventory> getAdjacentInventoryMap(World world, int i, int j, int k, Class<? extends IInventory> type) {
 		Map<Integer, IInventory> map = new TreeMap<Integer, IInventory>();
 		for (int side = 0; side < 6; side++) {
-			IInventory inv = getInventoryFromSide(world, i, j, k, ForgeDirection.getOrientation(side), type, null);
+			IInventory inv = getInventoryFromSide(world, i, j, k, EnumFacing.getFront(side), type, null);
 			if (inv != null) {
 				map.put(side, inv);
 			}
@@ -133,7 +147,7 @@ public abstract class InvTools {
 		return map;
 	}
 
-	public static IInventory getInventoryFromSide(World world, int x, int y, int z, ForgeDirection side, final Class<? extends IInventory> type, final Class<? extends IInventory> exclude) {
+	public static IInventory getInventoryFromSide(World world, int x, int y, int z, EnumFacing side, final Class<? extends IInventory> type, final Class<? extends IInventory> exclude) {
 		return getInventoryFromSide(world, x, y, z, side, new ITileFilter() {
 			@Override
 			public boolean matches(TileEntity tile) {
@@ -145,7 +159,7 @@ public abstract class InvTools {
 		});
 	}
 
-	public static IInventory getInventoryFromSide(World world, int x, int y, int z, ForgeDirection side, ITileFilter filter) {
+	public static IInventory getInventoryFromSide(World world, int x, int y, int z, EnumFacing side, ITileFilter filter) {
 		TileEntity tile = getBlockTileEntityOnSide(world, x, y, z, side);
 		if (tile == null || !(tile instanceof IInventory) || !filter.matches(tile)) {
 			return null;
@@ -153,7 +167,7 @@ public abstract class InvTools {
 		return getInventoryFromTile(tile, side.getOpposite());
 	}
 
-	public static IInventory getInventoryFromTile(TileEntity tile, ForgeDirection side) {
+	public static IInventory getInventoryFromTile(TileEntity tile, EnumFacing side) {
 		if (tile == null || !(tile instanceof IInventory)) {
 			return null;
 		}
@@ -165,7 +179,7 @@ public abstract class InvTools {
 		return getInventory((IInventory) tile, side);
 	}
 
-	public static IInventory getInventory(IInventory inv, ForgeDirection side) {
+	public static IInventory getInventory(IInventory inv, EnumFacing side) {
 		if (inv == null) {
 			return null;
 		}
@@ -232,11 +246,11 @@ public abstract class InvTools {
 			return;
 		}
 		EntityItem entityItem = new EntityItem(world, x, y + 1.5, z, stack);
-		entityItem.delayBeforeCanPickup = 10;
+		entityItem.setPickupDelay(10);
 		world.spawnEntityInWorld(entityItem);
 	}
 
-	public static boolean isInventoryEmpty(IInventory inv, ForgeDirection side) {
+	public static boolean isInventoryEmpty(IInventory inv, EnumFacing side) {
 		return isInventoryEmpty(getInventory(inv, side));
 	}
 
@@ -251,7 +265,7 @@ public abstract class InvTools {
 		return stack == null;
 	}
 
-	public static boolean isInventoryFull(IInventory inv, ForgeDirection side) {
+	public static boolean isInventoryFull(IInventory inv, EnumFacing side) {
 		return isInventoryFull(getInventory(inv, side));
 	}
 
@@ -531,7 +545,7 @@ public abstract class InvTools {
 		if (a.getItemDamage() != b.getItemDamage()) {
 			return false;
 		}
-		if (a.stackTagCompound != null && !a.stackTagCompound.equals(b.stackTagCompound)) {
+		if (a.getTagCompound() != null && !a.getTagCompound().equals(b.getTagCompound())) {
 			return false;
 		}
 		return true;
@@ -564,7 +578,7 @@ public abstract class InvTools {
 		if (a.getItemDamage() != b.getItemDamage()) {
 			return false;
 		}
-		if (a.stackTagCompound != null && !a.stackTagCompound.equals(b.stackTagCompound)) {
+		if (a.getTagCompound() != null && !a.getTagCompound().equals(b.getTagCompound())) {
 			return false;
 		}
 		return true;
@@ -799,10 +813,10 @@ public abstract class InvTools {
 	 * @return true if an item was inserted, otherwise false.
 	 */
 	public static boolean moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache) {
-		return moveOneItemToPipe(source, tileCache, ForgeDirection.VALID_DIRECTIONS);
+		return moveOneItemToPipe(source, tileCache, EnumFacing.values());
 	}
 
-	public static boolean moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache, ForgeDirection[] directions) {
+	public static boolean moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache, EnumFacing[] directions) {
 		if (PluginManager.Module.BUILDCRAFT_TRANSPORT.isEnabled()) {
 			return internal_moveOneItemToPipe(source, tileCache, directions);
 		}
@@ -811,7 +825,7 @@ public abstract class InvTools {
 	}
 
 	@Optional.Method(modid = "BuildCraftAPI|transport")
-	private static boolean internal_moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache, ForgeDirection[] directions) {
+	private static boolean internal_moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache, EnumFacing[] directions) {
 		IInventory invClone = new InventoryCopy(source);
 		ItemStack stackToMove = removeOneItem(invClone);
 		if (stackToMove == null) {
@@ -821,14 +835,14 @@ public abstract class InvTools {
 			return false;
 		}
 
-		List<Map.Entry<ForgeDirection, IPipeTile>> pipes = new ArrayList<Map.Entry<ForgeDirection, IPipeTile>>();
+		List<Map.Entry<EnumFacing, IPipeTile>> pipes = new ArrayList<Map.Entry<EnumFacing, IPipeTile>>();
 		boolean foundPipe = false;
-		for (ForgeDirection side : directions) {
+		for (EnumFacing side : directions) {
 			TileEntity tile = tileCache.getTileOnSide(side);
 			if (tile instanceof IPipeTile) {
 				IPipeTile pipe = (IPipeTile) tile;
 				if (pipe.getPipeType() == IPipeTile.PipeType.ITEM && pipe.isPipeConnected(side.getOpposite())) {
-					pipes.add(new AbstractMap.SimpleEntry<ForgeDirection, IPipeTile>(side, pipe));
+					pipes.add(new AbstractMap.SimpleEntry<EnumFacing, IPipeTile>(side, pipe));
 					foundPipe = true;
 				}
 			}
@@ -838,8 +852,8 @@ public abstract class InvTools {
 			return false;
 		}
 
-		int choice = tileCache.getSource().getWorldObj().rand.nextInt(pipes.size());
-		Map.Entry<ForgeDirection, IPipeTile> pipe = pipes.get(choice);
+		int choice = tileCache.getSource().getWorld().rand.nextInt(pipes.size());
+		Map.Entry<EnumFacing, IPipeTile> pipe = pipes.get(choice);
 		if (pipe.getValue().injectItem(stackToMove, false, pipe.getKey().getOpposite(), null) > 0) {
 			if (removeOneItem(source, stackToMove) != null) {
 				pipe.getValue().injectItem(stackToMove, true, pipe.getKey().getOpposite(), null);

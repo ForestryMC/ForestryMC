@@ -12,7 +12,6 @@ package forestry.core.genetics;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,7 +19,7 @@ import net.minecraft.util.EnumChatFormatting;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelObject;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.core.proxy.Proxies;
@@ -58,7 +57,7 @@ public abstract class ItemGE extends Item {
 	}
 
 	@Override
-	public boolean hasEffect(ItemStack itemstack, int pass) {
+	public boolean hasEffect(ItemStack itemstack) {
 		IAlleleSpecies species = getSpecies(itemstack);
 		return species != null && species.hasEffect();
 	}
@@ -84,11 +83,6 @@ public abstract class ItemGE extends Item {
 	}
 
 	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerIcons(IIconRegister par1IconRegister) {
-		// Need to disable normal registration.
-	}
 
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {

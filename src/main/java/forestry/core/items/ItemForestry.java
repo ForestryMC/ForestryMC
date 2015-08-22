@@ -10,22 +10,22 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemDye;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelObject;
 import forestry.core.CreativeTabForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemDye;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemForestry extends Item {
+public class ItemForestry extends Item implements IModelObject {
 
 	private boolean isBonemeal = false;
 
@@ -37,24 +37,23 @@ public class ItemForestry extends Item {
 		this.isBonemeal = isBonemeal;
 		return this;
 	}
-
+	
 	@Override
-	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int par7, float par8, float par9, float par10) {
+	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (isBonemeal) {
-			if (ItemDye.applyBonemeal(itemstack, world, x, y, z, player)) {
+			if (ItemDye.applyBonemeal(itemstack, world, pos, player)) {
 				if (Proxies.common.isSimulating(world)) {
-					world.playAuxSFX(2005, x, y, z, 0);
+					world.playAuxSFX(2005, pos, 0);
 				}
 
 				return true;
 			}
 		}
-		return super.onItemUse(itemstack, player, world, x, y, z, par7, par8, par9, par10);
+		return super.onItemUse(itemstack, player, world, pos, side, hitX, hitY, hitZ);
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
-		itemIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this));
+	public ModelType getModelType() {
+		return ModelType.DEFAULT;
 	}
 }

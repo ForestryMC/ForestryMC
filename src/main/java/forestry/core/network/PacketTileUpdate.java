@@ -17,17 +17,16 @@ import java.util.UUID;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.api.core.ErrorStateRegistry;
 import forestry.api.core.IErrorState;
 import forestry.core.EnumErrorCode;
 import forestry.core.gadgets.TileForestry;
 import forestry.core.utils.EnumAccess;
+import net.minecraft.util.EnumFacing;
 
 public class PacketTileUpdate extends PacketUpdate {
 
-	private ForgeDirection orientation = ForgeDirection.WEST;
+	private EnumFacing orientation = EnumFacing.WEST;
 	private IErrorState errorState = EnumErrorCode.OK;
 
 	private boolean isOwnable = false;
@@ -40,9 +39,7 @@ public class PacketTileUpdate extends PacketUpdate {
 	public PacketTileUpdate(TileForestry tile) {
 		super(PacketIds.TILE_FORESTRY_UPDATE, tile.getPacketPayload());
 
-		posX = tile.xCoord;
-		posY = tile.yCoord;
-		posZ = tile.zCoord;
+		pos = tile.getPos();
 
 		orientation = tile.getOrientation();
 		errorState = tile.getErrorState();
@@ -81,7 +78,7 @@ public class PacketTileUpdate extends PacketUpdate {
 	public void readData(DataInputStream data) throws IOException {
 		super.readData(data);
 
-		orientation = ForgeDirection.getOrientation(data.readByte());
+		orientation = EnumFacing.getFront(data.readByte());
 		errorState = ErrorStateRegistry.getErrorState(data.readShort());
 
 		int ordinal = data.readByte();
@@ -97,7 +94,7 @@ public class PacketTileUpdate extends PacketUpdate {
 		}
 	}
 
-	public ForgeDirection getOrientation() {
+	public EnumFacing getOrientation() {
 		return this.orientation;
 	}
 
