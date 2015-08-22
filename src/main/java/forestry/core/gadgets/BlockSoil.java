@@ -40,7 +40,6 @@ import forestry.core.IItemTyped;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
-import forestry.core.gadgets.BlockResource.Resources;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 
@@ -49,7 +48,7 @@ import forestry.core.render.TextureManager;
  */
 public class BlockSoil extends Block implements IItemTyped, IVariantObject, IModelObject {
 
-	public static final PropertyEnum SOIL = PropertyEnum.create("soil", Resources.class);
+	public static final PropertyEnum SOIL = PropertyEnum.create("soil", SoilType.class);
 	
 	public enum SoilType implements IStringSerializable {
 		HUMUS, BOG_EARTH, PEAT;

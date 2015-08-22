@@ -12,6 +12,7 @@ package forestry.mail;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.core.GuiHandlerBase;
@@ -70,13 +71,13 @@ public class GuiHandlerMail extends GuiHandlerBase {
 				}
 
 			case MailboxGUI:
-				return new GuiMailbox(player.inventory, (MachineMailbox) getTileForestry(world, x, y, z));
+				return new GuiMailbox(player.inventory, (MachineMailbox) getTileForestry(world, new BlockPos(x, y, z)));
 			case PhilatelistGUI:
-				return new GuiPhilatelist(player.inventory, (MachinePhilatelist) getTileForestry(world, x, y, z));
+				return new GuiPhilatelist(player.inventory, (MachinePhilatelist) getTileForestry(world, new BlockPos(x, y, z)));
 			case TraderGUI:
-				return new GuiTrader(player.inventory, (MachineTrader) getTileForestry(world, x, y, z));
+				return new GuiTrader(player.inventory, (MachineTrader) getTileForestry(world, new BlockPos(x, y, z)));
 			case TraderNameGUI:
-				return new GuiTradeName(player.inventory, (MachineTrader) getTileForestry(world, x, y, z));
+				return new GuiTradeName(player.inventory, (MachineTrader) getTileForestry(world, new BlockPos(x, y, z)));
 			default:
 				return null;
 
@@ -116,13 +117,13 @@ public class GuiHandlerMail extends GuiHandlerBase {
 				}
 
 			case MailboxGUI:
-				return new ContainerMailbox(player.inventory, (MachineMailbox) getTileForestry(world, x, y, z));
+				return new ContainerMailbox(player.inventory, (MachineMailbox) getTileForestry(world, new BlockPos(x, y, z)));
 			case PhilatelistGUI:
-				return new ContainerPhilatelist(player.inventory, (MachinePhilatelist) getTileForestry(world, x, y, z));
+				return new ContainerPhilatelist(player.inventory, (MachinePhilatelist) getTileForestry(world, new BlockPos(x, y, z)));
 			case TraderGUI:
-				return new ContainerTrader(player.inventory, (MachineTrader) getTileForestry(world, x, y, z));
+				return new ContainerTrader(player.inventory, (MachineTrader) getTileForestry(world, new BlockPos(x, y, z)));
 			case TraderNameGUI:
-				return new ContainerTradeName(player.inventory, (MachineTrader) getTileForestry(world, x, y, z));
+				return new ContainerTradeName(player.inventory, (MachineTrader) getTileForestry(world, new BlockPos(x, y, z)));
 			default:
 				return null;
 

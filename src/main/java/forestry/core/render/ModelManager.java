@@ -76,7 +76,7 @@ public class ModelManager implements IModelManager {
 		}
 		else if(((IModelObject) block).getModelType() == ModelType.MESHDEFINITION && block instanceof IMeshDefinitionObject)
 		{
-			registerModel(Item.getItemFromBlock(block), ((IMeshDefinitionObject)block).getDefinition());
+			registerModel(Item.getItemFromBlock(block), ((IMeshDefinitionObject)block).getMeshDefinition());
 		}
 		else
 		{
@@ -102,7 +102,7 @@ public class ModelManager implements IModelManager {
 			}
 			else if(((IModelObject)item).getModelType() == ModelType.MESHDEFINITION && item instanceof IMeshDefinitionObject)
 			{
-				registerModel(item, ((IMeshDefinitionObject)item).getDefinition());
+				registerModel(item, ((IMeshDefinitionObject)item).getMeshDefinition());
 			}
 			else
 			{

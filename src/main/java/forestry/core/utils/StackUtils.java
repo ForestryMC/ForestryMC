@@ -357,8 +357,7 @@ public class StackUtils {
 
 	public static boolean isCraftingTool(ItemStack itemstack) {
 		return itemstack.getItem().hasContainerItem(itemstack)
-				&& itemstack.getItem().isDamageable()
-				&& !itemstack.getItem().doesContainerItemLeaveCraftingGrid(itemstack);
+				&& itemstack.getItem().isDamageable();
 	}
 
 	public static boolean isThisCraftingTool(ItemStack phantom, ItemStack actual) {
@@ -380,18 +379,9 @@ public class StackUtils {
 		}
 
 		if (container != null) {
-
-			if (itemstack.getItem().doesContainerItemLeaveCraftingGrid(itemstack)) {
-				if (!InvTools.tryAddStack(stowing, container, true)) {
-					if (player != null && !player.inventory.addItemStackToInventory(container)) {
-						player.dropPlayerItemWithRandomChoice(container, true);
-					}
-				}
-			} else {
-				if (!InvTools.tryAddStack(stowing, container, slotIndex, 1, true)) {
-					if (!InvTools.tryAddStack(stowing, container, true) && player != null) {
-						player.dropPlayerItemWithRandomChoice(container, true);
-					}
+			if (!InvTools.tryAddStack(stowing, container, slotIndex, 1, true)) {
+				if (!InvTools.tryAddStack(stowing, container, true) && player != null) {
+					player.dropPlayerItemWithRandomChoice(container, true);
 				}
 			}
 		}

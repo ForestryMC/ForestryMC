@@ -12,11 +12,9 @@ package forestry.core.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -145,29 +143,6 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
 		PipetteContents contained = new PipetteContents(itemstack.getTagCompound());
 		contained.addTooltip(list);
-	}
-
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	private IIcon primaryIcon;
-	@SideOnly(Side.CLIENT)
-	private IIcon secondaryIcon;
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerIcons(IIconRegister register) {
-		primaryIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this) + ".0");
-		secondaryIcon = TextureManager.getInstance().registerTex(register, StringUtil.cleanItemName(this) + ".1");
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIconFromDamage(int damage) {
-		if (damage <= 0) {
-			return primaryIcon;
-		} else {
-			return secondaryIcon;
-		}
 	}
 
 	@Override

@@ -11,6 +11,7 @@
 package forestry.farming.logic;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -42,7 +43,8 @@ public class FarmableBasicFruit implements IFarmable {
 		if (world.getBlockState(pos).getBlock() != block) {
 			return null;
 		}
-		if (world.getBlockMetadata(x, y, z) != matureMeta) { //TODO Revisit in BlockState pass
+		IBlockState state = world.getBlockState(pos);
+		if (block.getMetaFromState(state) != matureMeta) { //TODO Revisit in BlockState pass
 			return null;
 		}
 		return new CropBasicFruit(world, block, matureMeta, new Vect(pos));

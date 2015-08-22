@@ -29,7 +29,6 @@ import forestry.core.gadgets.NaturalistGame.GameToken;
 import forestry.core.gadgets.TileEscritoire;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 
@@ -106,7 +105,7 @@ public class GuiEscritoire extends GuiForestry<TileEscritoire> {
 			manager.gui.setZLevel(150f);
 			for (String ident : getToken().getOverlayIcons()) {
 				RenderHelper.enableGUIStandardItemLighting();
-				Proxies.common.bindTexture(SpriteSheet.ITEMS);
+				Proxies.common.bindTexture();
 				manager.gui.drawTexturedModelRectFromIcon(startX + xPos + 3, startY + yPos + 3, TextureManager.getInstance().getDefault(ident), 16, 16);
 				RenderHelper.disableStandardItemLighting();
 			}
@@ -224,8 +223,7 @@ public class GuiEscritoire extends GuiForestry<TileEscritoire> {
 
 		for (int i = 0; i <= tile.getGame().getBountyLevel() / 4; i++) {
 			RenderHelper.enableGUIStandardItemLighting();
-			GuiForestry.itemRender.renderItemAndEffectIntoGUI(mc.fontRenderer,
-					mc.renderEngine, LEVEL_ITEM, guiLeft + 170 + i * 8, guiTop + 7);
+			mc.getRenderItem().renderItemAndEffectIntoGUI(LEVEL_ITEM, guiLeft + 170 + i * 8, guiTop + 7);
 			RenderHelper.disableStandardItemLighting();
 		}
 

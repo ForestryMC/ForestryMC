@@ -40,6 +40,7 @@ import forestry.core.config.Property;
 import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
+import forestry.core.gadgets.BlockBase.IEnumMachineDefinition;
 import forestry.core.genetics.Allele;
 import forestry.core.genetics.Branch;
 import forestry.core.items.ItemForestryBlock;
@@ -58,6 +59,7 @@ import forestry.lepidopterology.genetics.ButterflyTemplates;
 import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.items.ItemFlutterlyzer;
 import forestry.lepidopterology.proxy.ProxyLepidopterology;
+import forestry.plugins.PluginArboriculture.EnumMachineDefinition;
 
 @Plugin(pluginID = "Lepidopterology", name = "Lepidopterology", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.lepidopterology.description")
 public class PluginLepidopterology extends ForestryPlugin {
@@ -83,7 +85,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 
 	@Override
 	public void preInit() {
-		ForestryBlock.lepidopterology.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "lepidopterology");
+		ForestryBlock.lepidopterology.registerBlock(new BlockBase(Material.iron, getEnumMachineDefinition()), ItemForestryBlock.class, "lepidopterology");
 		ForestryBlock.lepidopterology.block().setCreativeTab(Tabs.tabLepidopterology);
 
 		AlleleManager.alleleRegistry.registerSpeciesRoot(PluginLepidopterology.butterflyInterface = new ButterflyHelper());
@@ -322,5 +324,39 @@ public class PluginLepidopterology extends ForestryPlugin {
 	@Override
 	public IGuiHandler getGuiHandler() {
 		return new GuiHandlerLepidopterology();
+	}
+	
+	@Override
+	protected Class<? extends IEnumMachineDefinition> getEnumMachineDefinition() {
+		return EnumMachineDefinition.class;
+	}
+	
+	private enum EnumMachineDefinition implements IEnumMachineDefinition
+	{
+		CHEST(Defaults.DEFINITION_LEPICHEST_META);
+		
+		private EnumMachineDefinition(String name, int meta) {
+			this.meta = meta;
+			this.name = name;
+		}
+		
+		private EnumMachineDefinition(int meta) {
+			this.meta = meta;
+		}
+
+		private int meta;
+		private String name;
+		@Override
+		public String getName() {
+			if(name != null)
+				return name;
+			return name().toLowerCase().toLowerCase();
+		}
+
+		@Override
+		public int getMeta() {
+			return meta;
+		}
+		
 	}
 }

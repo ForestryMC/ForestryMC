@@ -29,7 +29,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-
+import net.minecraft.util.BlockPos;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
@@ -100,7 +100,7 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 			ItemStack contained = item.getEntityItem();
 			for (Resurrectable entry : resurrectables) {
 				if (StackUtils.isIdenticalItem(entry.res, contained)) {
-					Utils.spawnEntity(housing.getWorld(), entry.risen, item.posX, item.posY, item.posZ);
+					Utils.spawnEntity(housing.getWorld(), entry.risen, new BlockPos(item.posX, item.posY, item.posZ));
 					contained.stackSize--;
 					if (contained.stackSize <= 0) {
 						item.setDead();

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -18,7 +18,6 @@ import org.lwjgl.opengl.GL11;
 import forestry.core.config.Defaults;
 import forestry.core.config.SessionVars;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.SpriteSheet;
 import forestry.core.utils.ForestryResource;
 
 /**
@@ -132,12 +131,12 @@ public abstract class Ledger {
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
 	}
 
-	protected void drawIcon(IIcon icon, int x, int y) {
+	protected void drawIcon(TextureAtlasSprite icon, int x, int y) {
 
 		if (icon != null) {
 			GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
-			Proxies.common.bindTexture(SpriteSheet.ITEMS);
+			Proxies.common.bindTexture();
 			manager.gui.drawTexturedModelRectFromIcon(x, y, icon, 16, 16);
 			GL11.glEnable(GL11.GL_LIGHTING);
 		}

@@ -66,7 +66,7 @@ public class PluginFluids extends ForestryPlugin {
 			if (fluidBlock == null) {
 				fluidBlock = forestryFluid.makeBlock();
 				if (fluidBlock != null) {
-					fluidBlock.setBlockName("forestry.fluid." + forestryFluid.getTag());
+					fluidBlock.setUnlocalizedName("forestry.fluid." + forestryFluid.getTag());
 					Proxies.common.registerBlock(fluidBlock, ItemBlock.class);
 					forestryFluidsWithBlocks.add(forestryFluid);
 				}
@@ -158,13 +158,11 @@ public class PluginFluids extends ForestryPlugin {
 		@SubscribeEvent
 		@SideOnly(Side.CLIENT)
 		public void textureHook(TextureStitchEvent.Post event) {
-			if (event.map.getTextureType() == 0) {
-				for (Fluids fluidType : forestryFluidsWithBlocks) {
-					Fluid fluid = fluidType.getFluid();
-					Block fluidBlock = fluidType.getBlock();
-					if (fluid != null && fluidBlock != null) {
-						fluid.setIcons(fluidBlock.getBlockTextureFromSide(1), fluidBlock.getBlockTextureFromSide(2));
-					}
+			for (Fluids fluidType : forestryFluidsWithBlocks) {
+				Fluid fluid = fluidType.getFluid();
+				Block fluidBlock = fluidType.getBlock();
+				if (fluid != null && fluidBlock != null) {
+					//fluid.setIcons(fluidBlock.getBlockTextureFromSide(1), fluidBlock.getBlockTextureFromSide(2));
 				}
 			}
 		}
@@ -178,10 +176,7 @@ public class PluginFluids extends ForestryPlugin {
 		@SubscribeEvent
 		public void fillBucket(FillBucketEvent event) {
 			MovingObjectPosition movingObjectPosition = event.target;
-			int x = movingObjectPosition.blockX;
-			int y = movingObjectPosition.blockY;
-			int z = movingObjectPosition.blockZ;
-			Block targetedBlock = event.world.getBlock(x, y, z);
+			Block targetedBlock = event.world.getBlockState(movingObjectPosition.getBlockPos()).getBlock();
 			if (targetedBlock instanceof BlockForestryFluid) {
 				Item filledBucket = ItemLiquidContainer.getExistingBucket(targetedBlock);
 				if (filledBucket != null) {

@@ -10,9 +10,10 @@
  ******************************************************************************/
 package forestry.farming.gui;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.util.IIcon;
 
 import org.lwjgl.opengl.GL11;
 
@@ -26,6 +27,7 @@ import forestry.core.gui.widgets.SocketWidget;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 import forestry.farming.gadgets.TileFarmPlain;
 
@@ -46,7 +48,7 @@ public class GuiFarm extends GuiForestry<TileFarmPlain> {
 			drawBackground(x, y);
 
 			// Draw icon
-			drawIcon(Items.water_bucket.getIconFromDamage(0), x + 3, y + 4);
+			drawIcon(TextureManager.getInstance().getTex(mc.getTextureMapBlocks(), "minecraft", "items/bucket"), x + 3, y + 4);
 
 			if (!isFullyOpened()) {
 				return;
@@ -84,7 +86,7 @@ public class GuiFarm extends GuiForestry<TileFarmPlain> {
 			return farm.getFarmLogics()[slot];
 		}
 
-		private IIcon getIconIndex() {
+		private TextureAtlasSprite getIconIndex() {
 			if (getLogic() == null) {
 				return null;
 			}
@@ -99,7 +101,7 @@ public class GuiFarm extends GuiForestry<TileFarmPlain> {
 
 			if (getIconIndex() != null) {
 				GL11.glDisable(GL11.GL_LIGHTING);
-				Proxies.common.bindTexture(getLogic().getSpriteSheet());
+				Proxies.common.bindTexture();
 				manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos, getIconIndex(), 16, 16);
 				GL11.glEnable(GL11.GL_LIGHTING);
 			}

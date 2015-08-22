@@ -16,9 +16,10 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.biome.BiomeGenBase;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -66,7 +67,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 			}
 
 			@Override
-			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+			public boolean canExtractItem(int slotIndex, ItemStack itemstack, EnumFacing side) {
 				return slotIndex == SLOT_PRODUCT;
 			}
 		});
@@ -80,7 +81,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 	public void validate() {
 		// Raintanks in desert and snow biomes are useless
 		if (worldObj != null) {
-			BiomeGenBase biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
+			BiomeGenBase biome = Utils.getBiomeAt(worldObj, pos);
 			if (!BiomeHelper.canRainOrSnow(biome)) {
 				setErrorState(EnumErrorCode.INVALIDBIOME);
 				isValidBiome = false;
@@ -92,7 +93,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 
 	@Override
 	public void openGui(EntityPlayer player, TileBase tile) {
-		player.openGui(ForestryAPI.instance, GuiId.RaintankGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
+		player.openGui(ForestryAPI.instance, GuiId.RaintankGUI.ordinal(), player.worldObj, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Override
@@ -122,7 +123,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 
 		if (!isValidBiome) {
 			setErrorState(EnumErrorCode.INVALIDBIOME);
-		} else if (!worldObj.canBlockSeeTheSky(xCoord, yCoord + 1, zCoord)) {
+		} else if (!worldObj.canBlockSeeSky(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ()))) {
 			setErrorState(EnumErrorCode.NOSKY);
 		} else if (!worldObj.isRaining()) {
 			setErrorState(EnumErrorCode.NOTRAINING);
@@ -187,27 +188,27 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 
 	// / ILIQUIDCONTAINER IMPLEMENTATION
 	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
 		return tankManager.fill(from, resource, doFill);
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
 		return tankManager.drain(from, resource, doDrain);
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
 		return tankManager.drain(from, maxDrain, doDrain);
 	}
 
 	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
+	public boolean canFill(EnumFacing from, Fluid fluid) {
 		return tankManager.canFill(from, fluid);
 	}
 
 	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+	public boolean canDrain(EnumFacing from, Fluid fluid) {
 		return tankManager.canDrain(from, fluid);
 	}
 
@@ -217,7 +218,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 	}
 
 	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+	public FluidTankInfo[] getTankInfo(EnumFacing from) {
 		return tankManager.getTankInfo(from);
 	}
 

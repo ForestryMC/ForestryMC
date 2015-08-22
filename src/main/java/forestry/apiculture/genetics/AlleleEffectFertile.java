@@ -3,6 +3,7 @@ package forestry.apiculture.genetics;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.IBeeGenome;
@@ -27,17 +28,17 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 		World world = housing.getWorld();
 		int territorySize[] = getModifiedArea(genome, housing);
 		
-		int blockX = getRandomOffset(world.rand, housing.getXCoord(), territorySize[0]);
-		int blockZ = getRandomOffset(world.rand, housing.getZCoord(), territorySize[2]);
-		int blockMaxY = housing.getYCoord() + territorySize[1] / 2 + 1;
-		int blockMinY = housing.getYCoord() - (territorySize[1] / 2) - 1;
+		int blockX = getRandomOffset(world.rand, housing.getCoords().getX(), territorySize[0]);
+		int blockZ = getRandomOffset(world.rand, housing.getCoords().getZ(), territorySize[2]);
+		int blockMaxY = housing.getCoords().getY() + territorySize[1] / 2 + 1;
+		int blockMinY = housing.getCoords().getY() - (territorySize[1] / 2) - 1;
 		
 		for (int attempt = 0; attempt < MAX_BLOCK_FIND_TRIES; ++attempt) {
 			if (tryTickColumn(world, blockX, blockZ, blockMaxY, blockMinY)) {
 				break;
 			}
-			blockX = getRandomOffset(world.rand, housing.getXCoord(), territorySize[0]);
-			blockZ = getRandomOffset(world.rand, housing.getZCoord(), territorySize[2]);
+			blockX = getRandomOffset(world.rand, housing.getCoords().getX(), territorySize[0]);
+			blockZ = getRandomOffset(world.rand, housing.getCoords().getZ(), territorySize[2]);
 		}
 		
 		return storedData;
@@ -49,9 +50,9 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 
 	private boolean tryTickColumn(World world, int x, int z, int maxY, int minY) {
 		for (int y = maxY; y >= minY; --y) {
-			if (!world.isAirBlock(x, y, z)) {
-				Block block = world.getBlock(x, y, z);
-				world.scheduleBlockUpdate(x, y, z, block, 5);
+			if (!world.isAirBlock(new BlockPos(x, y, z))) {
+				Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
+				world.scheduleBlockUpdate(new BlockPos(x, y, z), block, 0, 5);
 				return true;
 			}
 		}

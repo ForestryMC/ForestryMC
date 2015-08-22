@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import java.io.IOException;
+
 import org.apache.commons.lang3.StringUtils;
 
 import net.minecraft.client.gui.GuiTextField;
@@ -42,7 +44,7 @@ public class GuiTradeName extends GuiForestry<MachineTrader> {
 	public void initGui() {
 		super.initGui();
 
-		addressNameField = new GuiTextField(this.fontRendererObj, guiLeft + 44, guiTop + 39, 90, 14);
+		addressNameField = new GuiTextField(0, this.fontRendererObj, guiLeft + 44, guiTop + 39, 90, 14);
 		if (container.getAddress() != null) {
 			addressNameField.setText(container.getAddress().getName());
 		}
@@ -50,7 +52,7 @@ public class GuiTradeName extends GuiForestry<MachineTrader> {
 	}
 
 	@Override
-	protected void keyTyped(char eventCharacter, int eventKey) {
+	protected void keyTyped(char eventCharacter, int eventKey) throws IOException {
 
 		// Set focus or enter text into address
 		if (addressNameField.isFocused()) {
@@ -67,7 +69,7 @@ public class GuiTradeName extends GuiForestry<MachineTrader> {
 	}
 
 	@Override
-	protected void mouseClicked(int par1, int par2, int mouseButton) {
+	protected void mouseClicked(int par1, int par2, int mouseButton) throws IOException {
 		super.mouseClicked(par1, par2, mouseButton);
 		addressNameField.mouseClicked(par1, par2, mouseButton);
 	}

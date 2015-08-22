@@ -12,17 +12,22 @@ package forestry.core.gadgets;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
+import forestry.api.core.IModelObject;
 import forestry.api.core.ITileStructure;
+import forestry.api.core.IVariantObject;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.Utils;
 
-public abstract class BlockStructure extends BlockForestry {
+public abstract class BlockStructure extends BlockForestry implements IVariantObject {
 
 	public enum EnumStructureState {
 		VALID, INVALID, INDETERMINATE
@@ -39,10 +44,10 @@ public abstract class BlockStructure extends BlockForestry {
 	}
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-		TileEntity tile = world.getTileEntity(x, y, z);
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		TileEntity tile = world.getTileEntity(pos);
 
-		super.breakBlock(world, x, y, z, block, meta);
+		super.breakBlock(world, pos, state);
 
 		if (tile instanceof ITileStructure) {
 			ITileStructure structure = (ITileStructure) tile;
@@ -56,13 +61,13 @@ public abstract class BlockStructure extends BlockForestry {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float par7, float par8, float par9) {
 
 		if (player.isSneaking()) {
 			return false;
 		}
 
-		TileForestry tile = (TileForestry) world.getTileEntity(x, y, z);
+		TileForestry tile = (TileForestry) world.getTileEntity(pos);
 		if (!Utils.isUseableByPlayer(player, tile)) {
 			return false;
 		}
@@ -85,17 +90,22 @@ public abstract class BlockStructure extends BlockForestry {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbor) {
-		super.onNeighborBlockChange(world, x, y, z, neighbor);
+	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighbor) {
+		super.onNeighborBlockChange(world, pos, state, neighbor);
 		if (!Proxies.common.isSimulating(world)) {
 			return;
 		}
 
-		TileEntity tile = world.getTileEntity(x, y, z);
+		TileEntity tile = world.getTileEntity(pos);
 		if (!(tile instanceof ITileStructure)) {
 			return;
 		}
 
 		((ITileStructure) tile).validateStructure();
+	}
+	
+	@Override
+	public ModelType getModelType() {
+		return ModelType.META;
 	}
 }

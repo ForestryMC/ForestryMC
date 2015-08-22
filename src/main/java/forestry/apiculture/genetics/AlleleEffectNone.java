@@ -37,7 +37,7 @@ public class AlleleEffectNone extends Allele implements IAlleleBeeEffect {
 
 	@Override
 	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		return doEffect(genome, storedData, housing.getWorld(), housing.getBiomeId(), housing.getXCoord(), housing.getYCoord(), housing.getZCoord());
+		return doEffect(genome, storedData, housing.getWorld(), housing.getBiomeId(), housing.getCoords().getX(), housing.getCoords().getY(), housing.getCoords().getZ());
 	}
 
 	protected IEffectData doEffect(IBeeGenome genome, IEffectData storedData, World world, int biomeid, int x, int y, int z) {
@@ -67,8 +67,8 @@ public class AlleleEffectNone extends Allele implements IAlleleBeeEffect {
 			area[2] = 1;
 		}
 
-		PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getXCoord(), housing.getYCoord(),
-				housing.getZCoord(), genome.getPrimary().getIconColour(0), area[0], area[1], area[2]);
+		PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getCoords().getX(), housing.getCoords().getY(),
+				housing.getCoords().getZ(), genome.getPrimary().getIconColour(0), area[0], area[1], area[2]);
 		return storedData;
 	}
 

@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Items;
-import net.minecraft.util.IIcon;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -37,8 +37,8 @@ public class FarmLogicCereal extends FarmLogicCrops {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		return Items.wheat.getIconFromDamage(0);
+	public TextureAtlasSprite getIcon() {
+		return getSprite("minecraft", "items/wheat");
 	}
 
 }

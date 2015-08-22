@@ -11,7 +11,9 @@
 package forestry.apiculture.genetics;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.IBeeHousing;
@@ -42,9 +44,9 @@ public class MutationReqRes extends BeeMutation {
 			return chance;
 		}
 
-		Block block = world.getBlock(housing.getXCoord(), housing.getYCoord() - 1, housing.getZCoord());
-		int meta = world.getBlockMetadata(housing.getXCoord(), housing.getYCoord() - 1, housing.getZCoord());
-		if (StackUtils.equals(block, blockRequired) && meta == blockRequired.getItemDamage()) {
+		IBlockState state = world.getBlockState(new BlockPos(housing.getCoords().getX(), housing.getCoords().getY() - 1, housing.getCoords().getZ()));
+		int meta = state.getBlock().getMetaFromState(state);
+		if (StackUtils.equals(state.getBlock(), blockRequired) && meta == blockRequired.getItemDamage()) {
 			return chance;
 		} else {
 			return 0;

@@ -15,6 +15,9 @@ import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -25,7 +28,7 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmLogic;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
-import forestry.core.render.SpriteSheet;
+import forestry.core.render.TextureManager;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
 
@@ -67,10 +70,6 @@ public abstract class FarmLogic implements IFarmLogic {
 		return housing.getWorld();
 	}
 
-	@Override
-	public ResourceLocation getSpriteSheet() {
-		return SpriteSheet.ITEMS.getLocation();
-	}
 
 	protected final boolean isAirBlock(Block block) {
 		return block.getMaterial() == Material.air;
@@ -86,6 +85,10 @@ public abstract class FarmLogic implements IFarmLogic {
 
 	protected final void setBlock(Vect position, IBlockState state) {
 		getWorld().setBlockState(position.toBlockPos(), state, Defaults.FLAG_BLOCK_UPDATE | Defaults.FLAG_BLOCK_SYNCH);
+	}
+	
+	public TextureAtlasSprite getSprite(String modID, String identifier){
+		return TextureManager.getInstance().getTex(Minecraft.getMinecraft().getTextureMapBlocks(), modID, identifier);
 	}
 
 }

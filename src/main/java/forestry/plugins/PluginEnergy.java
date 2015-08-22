@@ -23,6 +23,7 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
+import forestry.core.gadgets.BlockBase.IEnumMachineDefinition;
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemForestryBlock;
@@ -33,6 +34,7 @@ import forestry.energy.gadgets.EngineClockwork;
 import forestry.energy.gadgets.EngineCopper;
 import forestry.energy.gadgets.EngineDefinition;
 import forestry.energy.proxy.ProxyEnergy;
+import forestry.plugins.PluginApiculture.EnumMachineDefinition;
 
 @Plugin(pluginID = "Energy", name = "Energy", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.energy.description")
 public class PluginEnergy extends ForestryPlugin {
@@ -47,7 +49,7 @@ public class PluginEnergy extends ForestryPlugin {
 	public void preInit() {
 		super.preInit();
 
-		ForestryBlock.engine.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "engine");
+		ForestryBlock.engine.registerBlock(new BlockBase(Material.iron, true, getEnumMachineDefinition()), ItemForestryBlock.class, "engine");
 
 		definitionEngineCopper = ((BlockBase) ForestryBlock.engine.block()).addDefinition(new EngineDefinition(Defaults.DEFINITION_ENGINECOPPER_META, "forestry.EngineCopper", EngineCopper.class,
 				PluginEnergy.proxy.getRenderDefaultEngine(Defaults.TEXTURE_PATH_BLOCKS + "/engine_copper_"), ShapedRecipeCustom.createShapedRecipe(
@@ -126,5 +128,43 @@ public class PluginEnergy extends ForestryPlugin {
 	@Override
 	public IOreDictionaryHandler getDictionaryHandler() {
 		return null;
+	}
+	
+	@Override
+	protected Class<? extends IEnumMachineDefinition> getEnumMachineDefinition() {
+		return EnumMachineDefinition.class;
+	}
+	
+	private enum EnumMachineDefinition implements IEnumMachineDefinition
+	{
+		COPPER(Defaults.DEFINITION_ENGINECOPPER_META),
+		TIN(Defaults.DEFINITION_ENGINETIN_META),
+		BRONZE(Defaults.DEFINITION_ENGINEBRONZE_META),
+		CLOCKWORK(Defaults.DEFINITION_ENGINECLOCKWORK_META),
+		GENERATOR(Defaults.DEFINITION_GENERATOR_META);
+		
+		private EnumMachineDefinition(String name, int meta) {
+			this.meta = meta;
+			this.name = name;
+		}
+		
+		private EnumMachineDefinition(int meta) {
+			this.meta = meta;
+		}
+
+		private int meta;
+		private String name;
+		@Override
+		public String getName() {
+			if(name != null)
+				return name;
+			return name().toLowerCase().toLowerCase();
+		}
+
+		@Override
+		public int getMeta() {
+			return meta;
+		}
+		
 	}
 }

@@ -99,11 +99,11 @@ public class ContainerLiquidTanks extends ContainerForestry {
 			tile.sendGUINetworkData(this, (ICrafting) crafter);
 		}
 	}
-
+	
 	@Override
-	public void addCraftingToCrafters(ICrafting icrafting) {
-		super.addCraftingToCrafters(icrafting);
-		tile.getTankManager().initGuiData(this, icrafting);
+	public void onCraftGuiOpened(ICrafting listener) {
+		super.onCraftGuiOpened(listener);
+		tile.getTankManager().initGuiData(this, listener);
 	}
 
 	public StandardTank getTank(int slot) {

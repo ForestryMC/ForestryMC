@@ -114,7 +114,7 @@ public abstract class FarmLogicCrops extends FarmLogicWatered {
 
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(pos, direction, i);
-			if (!VectUtil.isAirBlock(world, position) && !Utils.isReplaceableBlock(getWorld(), position.x, position.y, position.z)) {
+			if (!VectUtil.isAirBlock(world, position) && !Utils.isReplaceableBlock(getWorld(), position.toBlockPos())) {
 				continue;
 			}
 

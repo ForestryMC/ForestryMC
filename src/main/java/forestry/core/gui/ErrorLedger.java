@@ -46,8 +46,8 @@ public class ErrorLedger extends Ledger {
 		if (isFullyOpened()) {
 			// fontRendererObj.drawStringWithShadow(getTooltip(), x + 22, y +
 			// 8, 0xe1c92f);
-			manager.minecraft.fontRenderer.drawStringWithShadow(getTooltip(), x + 22, y + 8, manager.gui.fontColor.get("ledger.error.header"));
-			manager.minecraft.fontRenderer.drawSplitString(StringUtil.localize(tile.getErrorState().getHelp()), x + 22, y + 20, maxWidth - 28,
+			manager.minecraft.fontRendererObj.drawStringWithShadow(getTooltip(), x + 22, y + 8, manager.gui.fontColor.get("ledger.error.header"));
+			manager.minecraft.fontRendererObj.drawSplitString(StringUtil.localize(tile.getErrorState().getHelp()), x + 22, y + 20, maxWidth - 28,
 					manager.gui.fontColor.get("ledger.error.text"));
 		}
 	}

@@ -13,6 +13,7 @@
 package forestry.mail.commands;
 
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatStyle;
@@ -84,7 +85,7 @@ public class CommandMail extends SubCommand {
 		}
 
 		@Override
-		public void processSubCommand(ICommandSender sender, String[] args) {
+		public void processSubCommand(ICommandSender sender, String[] args) throws WrongUsageException {
 			if (args.length != 1) {
 				CommandHelpers.throwWrongUsage(sender, this);
 			}

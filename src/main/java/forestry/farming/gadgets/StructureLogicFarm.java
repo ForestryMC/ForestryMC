@@ -15,10 +15,11 @@ import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-
+import net.minecraft.util.BlockPos;
 import forestry.api.core.ITileStructure;
 import forestry.api.farming.IFarmComponent;
 import forestry.core.gadgets.BlockStructure.EnumStructureState;
+import forestry.core.inventory.InvTools;
 import forestry.core.gadgets.StructureLogic;
 import forestry.core.utils.Schemata;
 import forestry.core.utils.Schemata.EnumStructureBlock;
@@ -94,11 +95,11 @@ public class StructureLogicFarm extends StructureLogic {
 			for (int j = 0; j < schemata.getHeight(); j++) {
 				for (int k = 0; k < dimensions.z; k++) {
 
-					int x = structureTile.xCoord + i + offsetX;
-					int y = structureTile.yCoord + j + schemata.getyOffset();
-					int z = structureTile.zCoord + k + offsetZ;
+					int x = structureTile.getPos().getX() + i + offsetX;
+					int y = structureTile.getPos().getY() + j + schemata.getyOffset();
+					int z = structureTile.getPos().getZ() + k + offsetZ;
 
-					if (!structureTile.getWorldObj().blockExists(x, y, z)) {
+					if (!InvTools.blockExists(x, y, z, structureTile.getWorld())) {
 						return EnumStructureState.INDETERMINATE;
 					}
 
@@ -108,12 +109,12 @@ public class StructureLogicFarm extends StructureLogic {
 						continue;
 					}
 
-					TileEntity tile = structureTile.getWorldObj().getTileEntity(x, y, z);
-					Block block = structureTile.getWorldObj().getBlock(x, y, z);
+					TileEntity tile = structureTile.getWorld().getTileEntity(new BlockPos(x, y, z));
+					Block block = structureTile.getWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
 
 					switch (required) {
 						case AIR:
-							if (!block.isAir(structureTile.getWorldObj(), x, y, z)) {
+							if (!block.isAir(structureTile.getWorld(), new BlockPos(x, y, z))) {
 								return EnumStructureState.INVALID;
 							}
 							break;

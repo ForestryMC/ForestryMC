@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.mail;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -50,7 +50,7 @@ public class PostalCarrier implements IPostalCarrier {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
+	public TextureAtlasSprite getIcon() {
 		return TextureManager.getInstance().getDefault(iconID);
 	}
 

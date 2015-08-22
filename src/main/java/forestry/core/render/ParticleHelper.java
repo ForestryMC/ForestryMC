@@ -13,13 +13,17 @@ package forestry.core.render;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityDiggingFX;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import sun.awt.windows.WWindowPeer;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -30,55 +34,54 @@ public class ParticleHelper {
 
 	@SideOnly(Side.CLIENT)
 	public static boolean addHitEffects(World world, Block block, MovingObjectPosition target, EffectRenderer effectRenderer, ParticleHelperCallback callback) {
-		int x = target.blockX;
-		int y = target.blockY;
-		int z = target.blockZ;
 
-		int sideHit = target.sideHit;
+		EnumFacing sideHit = target.sideHit;
 
-		if (block != world.getBlock(x, y, z)) {
+		BlockPos pos = target.getBlockPos();
+		if (block != world.getBlockState(pos).getBlock()) {
 			return true;
 		}
 
-		int meta = world.getBlockMetadata(x, y, z);
+		IBlockState state = world.getBlockState(pos);
+		int meta = block.getMetaFromState(state)
 
 		float b = 0.1F;
-		double px = x + rand.nextDouble() * (block.getBlockBoundsMaxX() - block.getBlockBoundsMinX() - (b * 2.0F)) + b + block.getBlockBoundsMinX();
-		double py = y + rand.nextDouble() * (block.getBlockBoundsMaxY() - block.getBlockBoundsMinY() - (b * 2.0F)) + b + block.getBlockBoundsMinY();
-		double pz = z + rand.nextDouble() * (block.getBlockBoundsMaxZ() - block.getBlockBoundsMinZ() - (b * 2.0F)) + b + block.getBlockBoundsMinZ();
+		double px = pos.getX() + rand.nextDouble() * (block.getBlockBoundsMaxX() - block.getBlockBoundsMinX() - (b * 2.0F)) + b + block.getBlockBoundsMinX();
+		double py = pos.getY() + rand.nextDouble() * (block.getBlockBoundsMaxY() - block.getBlockBoundsMinY() - (b * 2.0F)) + b + block.getBlockBoundsMinY();
+		double pz = pos.getZ() + rand.nextDouble() * (block.getBlockBoundsMaxZ() - block.getBlockBoundsMinZ() - (b * 2.0F)) + b + block.getBlockBoundsMinZ();
 
-		if (sideHit == 0) {
-			py = (double) y + block.getBlockBoundsMinY() - (double) b;
+		if (sideHit == EnumFacing.DOWN) {
+			py = (double) pos.getY() + block.getBlockBoundsMinY() - (double) b;
 		}
 
-		if (sideHit == 1) {
-			py = (double) y + block.getBlockBoundsMaxY() + (double) b;
+		if (sideHit == EnumFacing.UP) {
+			py = (double) pos.getY() + block.getBlockBoundsMaxY() + (double) b;
 		}
 
-		if (sideHit == 2) {
-			pz = (double) z + block.getBlockBoundsMinZ() - (double) b;
+		if (sideHit == EnumFacing.NORTH) {
+			pz = (double) pos.getZ() + block.getBlockBoundsMinZ() - (double) b;
 		}
 
-		if (sideHit == 3) {
-			pz = (double) z + block.getBlockBoundsMaxZ() + (double) b;
+		if (sideHit == EnumFacing.SOUTH) {
+			pz = (double) pos.getZ() + block.getBlockBoundsMaxZ() + (double) b;
 		}
 
-		if (sideHit == 4) {
-			px = (double) x + block.getBlockBoundsMinX() - (double) b;
+		if (sideHit == EnumFacing.WEST) {
+			px = (double) pos.getX() + block.getBlockBoundsMinX() - (double) b;
 		}
 
-		if (sideHit == 5) {
-			px = (double) x + block.getBlockBoundsMaxX() + (double) b;
+		if (sideHit == EnumFacing.EAST) {
+			px = (double) pos.getX() + block.getBlockBoundsMaxX() + (double) b;
 		}
 
 		EntityDiggingFX fx = new EntityDiggingFX(world, px, py, pz, 0.0D, 0.0D, 0.0D, block, sideHit, meta);
 		fx.setParticleIcon(block.getIcon(world, x, y, z, 0));
 
 		if (callback != null) {
-			callback.addHitEffects(fx, world, x, y, z, meta);
+			callback.addHitEffects(fx, world, pos.getX(), pos.getY(), pos.getZ(), meta);
 		}
 
-		effectRenderer.addEffect(fx.applyColourMultiplier(x, y, z).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
+		effectRenderer.addEffect(fx.applyColourMultiplier(pos.getX(), pos.getY(), pos.getZ()).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
 
 		return true;
 	}

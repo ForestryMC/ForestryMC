@@ -26,8 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.core.ForestryAPI;
@@ -160,7 +159,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 			}
 
 			@Override
-			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+			public boolean canExtractItem(int slotIndex, ItemStack itemstack, EnumFacing side) {
 				return GuiUtil.isIndexInRange(slotIndex, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT);
 			}
 		});
@@ -169,7 +168,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 
 	@Override
 	public void openGui(EntityPlayer player, TileBase tile) {
-		player.openGui(ForestryAPI.instance, GuiId.CentrifugeGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
+		player.openGui(ForestryAPI.instance, GuiId.CentrifugeGUI.ordinal(), player.worldObj, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	/* LOADING & SAVING */
@@ -365,7 +364,7 @@ public class MachineCentrifuge extends TilePowered implements ISidedInventory {
 	/* ITRIGGERPROVIDER */
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
+	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(FactoryTriggers.lowResource25);
 		res.add(FactoryTriggers.lowResource10);

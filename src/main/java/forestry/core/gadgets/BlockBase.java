@@ -13,9 +13,12 @@ package forestry.core.gadgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.oracle.webservices.internal.api.message.BasePropertySet.PropertyMapEntry;
+
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,35 +29,46 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelObject;
+import forestry.api.core.IVariantObject;
 import forestry.core.fluids.FluidHelper;
+import forestry.core.gadgets.BlockBase.IEnumMachineDefinition;
 import forestry.core.interfaces.IOwnable;
 import forestry.core.items.ItemNBTTile;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.PlayerUtil;
+import forestry.core.utils.StringUtil;
 import forestry.core.utils.Utils;
 
-public class BlockBase extends BlockForestry {
+public class BlockBase extends BlockForestry implements IVariantObject, IModelObject {
 
+	private static final List<String> variants = new ArrayList<String>();
 	private final List<MachineDefinition> definitions = new ArrayList<MachineDefinition>();
 	private final boolean hasTESR;
-
-	public BlockBase(Material material) {
-		this(material, false);
+	private final Class<? extends IEnumMachineDefinition> enumDefinition;
+	private PropertyEnum META;
+	
+	public interface IEnumMachineDefinition extends IStringSerializable
+	{
+		int getMeta();
 	}
 
-	public BlockBase(Material material, boolean hasTESR) {
-		super(material);
+	public BlockBase(Material material, Class<? extends IEnumMachineDefinition> enumDefinition) {
+		this(material, false, enumDefinition);
+	}
 
+	public BlockBase(Material material, boolean hasTESR, Class<? extends IEnumMachineDefinition> enumDefinition) {
+		super(material);
+		this.enumDefinition = enumDefinition;
 		this.hasTESR = hasTESR;
+		META = PropertyEnum.create("meta", enumDefinition);
 	}
 
 	public MachineDefinition addDefinition(MachineDefinition definition) {
@@ -64,14 +78,19 @@ public class BlockBase extends BlockForestry {
 			definitions.add(null);
 		}
 
+		variants.add(StringUtil.cleanTags(definition.teIdent));
 		definitions.set(definition.meta, definition);
-
 		return definition;
 	}
 	
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getProperties().get(key);
+		return ((IEnumMachineDefinition)state.getProperties().get(META)).getMeta();
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(META, meta);
 	}
 
 	@Override
@@ -80,16 +99,11 @@ public class BlockBase extends BlockForestry {
 	}
 
 	@Override
-	public boolean renderAsNormalBlock() {
-		return !hasTESR;
-	}
-
-	@Override
 	public int getRenderType() {
 		if (hasTESR) {
 			return Proxies.common.getByBlockModelId();
 		} else {
-			return 0;
+			return 3;
 		}
 	}
 
@@ -250,39 +264,18 @@ public class BlockBase extends BlockForestry {
 		return getMetaFromState(state);
 	}
 
-	/* TEXTURES */
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerBlockIcons(IIconRegister register) {
-		for (MachineDefinition def : definitions) {
-			if (def == null) {
-				continue;
-			}
-			def.registerIcons(register);
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIcon(int side, int metadata) {
-		if (metadata >= definitions.size() || definitions.get(metadata) == null) {
-			return null;
-		}
-		return definitions.get(metadata).getBlockTextureFromSideAndMetadata(side, metadata);
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		int metadata = world.getBlockMetadata(x, y, z);
-		if (metadata >= definitions.size() || definitions.get(metadata) == null) {
-			metadata = 0;
-		}
-		return definitions.get(metadata).getIcon(world, x, y, z, side, metadata);
-	}
-
 	@Override
 	public boolean getUseNeighborBrightness() {
 		return hasTESR;
+	}
+
+	@Override
+	public ModelType getModelType() {
+		return ModelType.META;
+	}
+
+	@Override
+	public String[] getVariants() {
+		return variants.toArray(new String[variants.size()]);
 	}
 }

@@ -10,17 +10,17 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 /**
  * A simple ledger displaying an icon and one-line description.
  */
 public class PlainLedger extends Ledger {
 
-	private final IIcon icon;
+	private final TextureAtlasSprite icon;
 	private final String text;
 
-	public PlainLedger(LedgerManager manager, IIcon icon, String text) {
+	public PlainLedger(LedgerManager manager, TextureAtlasSprite icon, String text) {
 		super(manager);
 		this.icon = icon;
 		this.text = text;
@@ -30,7 +30,7 @@ public class PlainLedger extends Ledger {
 	public void draw(int x, int y) {
 
 		// Correct maximum width
-		int textWidth = manager.minecraft.fontRenderer.getStringWidth(getTooltip());
+		int textWidth = manager.minecraft.fontRendererObj.getStringWidth(getTooltip());
 		this.maxWidth = textWidth + 24 + 4;
 
 		// Draw background
@@ -41,7 +41,7 @@ public class PlainLedger extends Ledger {
 
 		// Draw description
 		if (isFullyOpened()) {
-			manager.minecraft.fontRenderer.drawString(getTooltip(), x + 22, y + 8, 0x000000);
+			manager.minecraft.fontRendererObj.drawString(getTooltip(), x + 22, y + 8, 0x000000);
 		}
 	}
 

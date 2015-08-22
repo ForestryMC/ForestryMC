@@ -18,6 +18,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
@@ -52,10 +53,10 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 		Vect offset = new Vect(-Math.round(area.x / 2), -Math.round(area.y / 2), -Math.round(area.z / 2));
 
 		// Radioactivity hurts players and mobs
-		Vect min = new Vect(housing.getXCoord() + offset.x, housing.getYCoord() + offset.y, housing.getZCoord() + offset.z);
-		Vect max = new Vect(housing.getXCoord() + offset.x + area.x, housing.getYCoord() + offset.y + area.y, housing.getZCoord() + offset.z + area.z);
+		Vect min = new Vect(housing.getCoords().getX() + offset.x, housing.getCoords().getY() + offset.y, housing.getCoords().getZ() + offset.z);
+		Vect max = new Vect(housing.getCoords().getX() + offset.x + area.x, housing.getCoords().getY() + offset.y + area.y, housing.getCoords().getZ() + offset.z + area.z);
 
-		AxisAlignedBB hurtBox = AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
+		AxisAlignedBB hurtBox = AxisAlignedBB.fromBounds(min.x, min.y, min.z, max.x, max.y, max.z);
 
 		@SuppressWarnings("rawtypes")
 		List list = housing.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, hurtBox);
@@ -91,7 +92,7 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 
 			Vect randomPos = new Vect(rand.nextInt(area.x), rand.nextInt(area.y), rand.nextInt(area.z));
 
-			Vect posBlock = randomPos.add(new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord()));
+			Vect posBlock = randomPos.add(new Vect(housing.getCoords().getX(), housing.getCoords().getY(), housing.getCoords().getZ()));
 			posBlock = posBlock.add(offset);
 
 			if (posBlock.y <= 1 || posBlock.y >= housing.getWorld().getActualHeight()) {
@@ -99,21 +100,21 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 			}
 
 			// Don't destroy ourself and blocks below us.
-			if (posBlock.x == housing.getXCoord() && posBlock.z == housing.getZCoord() && posBlock.y <= housing.getYCoord()) {
+			if (posBlock.x == housing.getCoords().getX() && posBlock.z == housing.getCoords().getZ() && posBlock.y <= housing.getCoords().getY()) {
 				continue;
 			}
 
-			if (world.isAirBlock(posBlock.x, posBlock.y, posBlock.z)) {
+			if (world.isAirBlock(new BlockPos(posBlock.x, posBlock.y, posBlock.z))) {
 				continue;
 			}
 
-			Block block = world.getBlock(posBlock.x, posBlock.y, posBlock.z);
+			Block block = world.getBlockState(new BlockPos(posBlock.x, posBlock.y, posBlock.z)).getBlock();
 
 			if (block instanceof BlockAlveary) {
 				continue;
 			}
 
-			TileEntity tile = world.getTileEntity(posBlock.x, posBlock.y, posBlock.z);
+			TileEntity tile = world.getTileEntity(new BlockPos(posBlock.x, posBlock.y, posBlock.z));
 			if (tile instanceof IBeeHousing) {
 				continue;
 			}
@@ -121,11 +122,11 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 				continue;
 			}
 
-			if (block.getBlockHardness(world, posBlock.x, posBlock.y, posBlock.z) < 0) {
+			if (block.getBlockHardness(world, new BlockPos(posBlock.x, posBlock.y, posBlock.z)) < 0) {
 				continue;
 			}
 
-			world.setBlockToAir(posBlock.x, posBlock.y, posBlock.z);
+			world.setBlockToAir(new BlockPos(posBlock.x, posBlock.y, posBlock.z));
 			break;
 		}
 

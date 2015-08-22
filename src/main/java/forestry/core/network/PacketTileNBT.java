@@ -16,23 +16,20 @@ import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class PacketTileNBT extends PacketNBT implements ILocatedPacket {
 
-	private int posX;
-	private int posY;
-	private int posZ;
+	private BlockPos pos;
 
 	public PacketTileNBT() {
 	}
 
 	public PacketTileNBT(int id, TileEntity tile) {
 		super(id);
-
-		posX = tile.xCoord;
-		posY = tile.yCoord;
-		posZ = tile.zCoord;
+		
+		pos = tile.getPos();
 
 		this.nbttagcompound = new NBTTagCompound();
 		tile.writeToNBT(nbttagcompound);
@@ -41,9 +38,9 @@ public class PacketTileNBT extends PacketNBT implements ILocatedPacket {
 	@Override
 	public void writeData(DataOutputStream data) throws IOException {
 
-		data.writeInt(posX);
-		data.writeInt(posY);
-		data.writeInt(posZ);
+		data.writeInt(pos.getX());
+		data.writeInt(pos.getY());
+		data.writeInt(pos.getZ());
 
 		super.writeData(data);
 	}
@@ -51,16 +48,17 @@ public class PacketTileNBT extends PacketNBT implements ILocatedPacket {
 	@Override
 	public void readData(DataInputStream data) throws IOException {
 
-		posX = data.readInt();
-		posY = data.readInt();
-		posZ = data.readInt();
+		int posX = data.readInt();
+		int posY = data.readInt();
+		int posZ = data.readInt();
+		pos = new BlockPos(posX, posY, posZ);
 
 		super.readData(data);
 	}
 
 	@Override
 	public TileEntity getTarget(World world) {
-		return world.getTileEntity(posX, posY, posZ);
+		return world.getTileEntity(pos);
 	}
 
 }

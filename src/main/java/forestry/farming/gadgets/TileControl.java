@@ -17,8 +17,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.api.core.ITileStructure;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmComponent;

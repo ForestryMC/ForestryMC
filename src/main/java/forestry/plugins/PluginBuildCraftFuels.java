@@ -10,15 +10,12 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fml.common.Optional;
-
 import forestry.core.GameMode;
 import forestry.core.config.Defaults;
 import forestry.core.fluids.Fluids;
 import forestry.core.proxy.Proxies;
-
-import buildcraft.api.fuels.BuildcraftFuelRegistry;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.common.Optional;
 
 @Plugin(pluginID = "BC6|Fuels", name = "BuildCraft 6 Fuels", author = "mezz", url = Defaults.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
 public class PluginBuildCraftFuels extends ForestryPlugin {

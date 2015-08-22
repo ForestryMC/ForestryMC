@@ -18,6 +18,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 
@@ -46,10 +48,9 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		public TradeStationInventory(int size, String name) {
 			super(size, name);
 		}
-
-
+		
 		@Override
-		public int[] getAccessibleSlotsFromSide(int side) {
+		public int[] getSlotsForFace(EnumFacing side) {
 
 			ArrayList<Integer> slots = new ArrayList<Integer>();
 
@@ -72,7 +73,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		}
 
 		@Override
-		public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
+		public boolean canExtractItem(int slot, ItemStack itemStack, EnumFacing side) {
 			return GuiUtil.isIndexInRange(slot, SLOT_RECEIVE_BUFFER, SLOT_RECEIVE_BUFFER_COUNT);
 		}
 
@@ -144,7 +145,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		if (nbttagcompound.hasKey("owner")) {
-			owner = NBTUtil.func_152459_a(nbttagcompound.getCompoundTag("owner"));
+			owner = NBTUtil.readGameProfileFromNBT(nbttagcompound.getCompoundTag("owner"));
 		}
 
 		if (nbttagcompound.hasKey("address")) {
@@ -160,7 +161,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		if (owner != null) {
 			NBTTagCompound nbt = new NBTTagCompound();
-			NBTUtil.func_152460_a(nbt, owner);
+			NBTUtil.writeGameProfile(nbt, owner);
 			nbttagcompound.setTag("owner", nbt);
 		}
 
@@ -619,10 +620,10 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	public ItemStack getStackInSlotOnClosing(int var1) {
 		return inventory.getStackInSlotOnClosing(var1);
 	}
-
+	
 	@Override
-	public String getInventoryName() {
-		return inventory.getInventoryName();
+	public String getCommandSenderName() {
+		return inventory.getCommandSenderName();
 	}
 
 	@Override
@@ -636,11 +637,11 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
 	}
 
 	@Override
@@ -649,22 +650,22 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return true;
 	}
-
+	
 	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return inventory.getAccessibleSlotsFromSide(side);
+	public int[] getSlotsForFace(EnumFacing side) {
+		return inventory.getSlotsForFace(side);
 	}
 
 	@Override
-	public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
+	public boolean canInsertItem(int slot, ItemStack itemStack, EnumFacing side) {
 		return inventory.canInsertItem(slot, itemStack, side);
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
+	public boolean canExtractItem(int slot, ItemStack itemStack, EnumFacing side) {
 		return inventory.canExtractItem(slot, itemStack, side);
 	}
 
@@ -681,5 +682,30 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	@Override
 	public IInventoryAdapter configureSided(int[] sides, int[] slots) {
 		return inventory.configureSided(sides, slots);
+	}
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+		
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		return null;
 	}
 }

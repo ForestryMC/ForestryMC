@@ -25,10 +25,6 @@ public class PacketCoordinates extends ForestryPacket implements ILocatedPacket 
 	public PacketCoordinates() {
 	}
 
-	public PacketCoordinates(int id, int posX, int posY, int posZ) {
-		this(id, new BlockPos(posX, posY, posZ));
-	}
-
 	public PacketCoordinates(int id, BlockPos pos) {
 		super(id);
 		this.pos = pos;

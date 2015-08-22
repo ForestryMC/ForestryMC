@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -51,8 +52,8 @@ public class FarmableGourd implements IFarmable {
 		if (!StackUtils.equals(world.getBlockState(pos).getBlock(), fruit)) {
 			return null;
 		}
-
-		if (world.getBlockMetadata(x, y, z) != fruit.getItemDamage()) {
+		IBlockState state = world.getBlockState(pos);
+		if (state.getBlock().getMetaFromState(state) != fruit.getItemDamage()) {
 			return null;
 		}
 

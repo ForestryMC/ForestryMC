@@ -277,14 +277,6 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 	protected void registerItems() {
 		// CRATE
 		ForestryItem.crate.registerItem((new ItemCrated(null, false)), "crate");
-		ForestryItem.crate.registerModel( new ItemMeshDefinition() {
-			
-			@Override
-			public ModelResourceLocation getModelLocation(ItemStack stack) {
-				String textureName = (((ItemCrated)stack.getItem()).getContained(null) == null) ? "crate" : "crate-filled";
-				return ModelManager.getInstance().getModelLocation(textureName);
-			}
-		});
 
 		// BACKPACKS
 		BackpackDefinition definition;
@@ -293,14 +285,12 @@ public class PluginStorage extends ForestryPlugin implements IOreDictionaryHandl
 			definition = new BackpackDefinitionApiarist("apiarist", 0xc4923d);
 			BackpackManager.definitions.put(definition.getKey(), definition);
 			ForestryItem.apiaristBackpack.registerItem(new ItemNaturalistBackpack(GuiId.ApiaristBackpackGUI.ordinal(), definition).setCreativeTab(Tabs.tabApiculture), "apiaristBag");
-			ForestryItem.apiaristBackpack.registerModel("backpack");
 		}
 
 		if (PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {
 			definition = new BackpackDefinitionLepidopterist("lepidopterist", 0x995b31);
 			BackpackManager.definitions.put(definition.getKey(), definition);
 			ForestryItem.lepidopteristBackpack.registerItem(new ItemNaturalistBackpack(GuiId.LepidopteristBackpackGUI.ordinal(), definition).setCreativeTab(Tabs.tabLepidopterology), "lepidopteristBag");
-			ForestryItem.lepidopteristBackpack.registerModel("backpack");
 		}
 
 		definition = new BackpackDefinition("miner", 0x36187d);

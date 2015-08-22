@@ -52,6 +52,7 @@ import forestry.core.gadgets.BlockSoil;
 import forestry.core.gadgets.BlockStainedGlass;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.gadgets.TileEscritoire;
+import forestry.core.gadgets.BlockBase.IEnumMachineDefinition;
 import forestry.core.genetics.Allele;
 import forestry.core.genetics.AlleleRegistry;
 import forestry.core.genetics.ClimateHelper;
@@ -103,7 +104,7 @@ public class PluginCore extends ForestryPlugin {
 
 		Allele.initialize();
 
-		ForestryBlock.core.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "core");
+		ForestryBlock.core.registerBlock(new BlockBase(Material.iron, true, getEnumMachineDefinition()), ItemForestryBlock.class, "core");
 
 		definitionEscritoire = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_ESCRITOIRE_META, "forestry.Escritoire", TileEscritoire.class,
 				Proxies.render.getRenderEscritoire()));
@@ -111,11 +112,9 @@ public class PluginCore extends ForestryPlugin {
 		ForestryBlock.soil.registerBlock(new BlockSoil(), ItemTypedBlock.class, "soil");
 		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, ForestryBlock.soil.block().getStateFromMeta(0));
 		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, ForestryBlock.soil.block().getStateFromMeta(1));
-		ForestryBlock.soil.registerModel(true);
 
 		ForestryBlock.resources.registerBlock(new BlockResource(), ItemForestryBlock.class, "resources");
 		ForestryBlock.resources.block().setHarvestLevel("pickaxe", 1);
-		ForestryBlock.resources.registerModel(true);
 
 		OreDictionary.registerOre("oreApatite", ForestryBlock.resources.getItemStack(1, 0));
 		OreDictionary.registerOre("oreCopper", ForestryBlock.resources.getItemStack(1, 1));
@@ -123,7 +122,6 @@ public class PluginCore extends ForestryPlugin {
 
 		ForestryBlock.resourceStorage.registerBlock(new BlockResourceStorageBlock(), ItemForestryBlock.class, "resourceStorage");
 		ForestryBlock.resourceStorage.block().setHarvestLevel("pickaxe", 0);
-		ForestryBlock.resourceStorage.registerModel(true);
 
 		OreDictionary.registerOre("blockApatite", ForestryBlock.resourceStorage.getItemStack(1, 0));
 		OreDictionary.registerOre("blockCopper", ForestryBlock.resourceStorage.getItemStack(1, 1));
@@ -131,7 +129,6 @@ public class PluginCore extends ForestryPlugin {
 		OreDictionary.registerOre("blockBronze", ForestryBlock.resourceStorage.getItemStack(1, 3));
 
 		ForestryBlock.glass.registerBlock(new BlockStainedGlass(), ItemForestryBlock.class, "stained");
-		ForestryBlock.glass.registerModel(true);
 	}
 
 	@Override
@@ -163,25 +160,18 @@ public class PluginCore extends ForestryPlugin {
 	protected void registerItems() {
 		// / FERTILIZERS
 		ForestryItem.fertilizerBio.registerItem((new ItemForestry()), "fertilizerBio");
-		ForestryItem.fertilizerBio.registerModel(false);
 		ForestryItem.fertilizerCompound.registerItem((new ItemForestry()).setBonemeal(true), "fertilizerCompound");
-		ForestryItem.fertilizerCompound.registerModel(false);
 
 		// / GEMS
 		ForestryItem.apatite.registerItem((new ItemForestry()), "apatite");
-		ForestryItem.apatite.registerModel(false);
 		OreDictionary.registerOre("gemApatite", ForestryItem.apatite.getItemStack());
 
 		ForestryItem.researchNote.registerItem(new ItemResearchNote(), "researchNote");
-		ForestryItem.researchNote.registerModel(false);
 
 		// / INGOTS
 		ForestryItem.ingotCopper.registerItem(new ItemForestry(), "ingotCopper");
-		ForestryItem.ingotCopper.registerModel(false);
 		ForestryItem.ingotTin.registerItem(new ItemForestry(), "ingotTin");
-		ForestryItem.ingotTin.registerModel(false);
 		ForestryItem.ingotBronze.registerItem(new ItemForestry(), "ingotBronze");
-		ForestryItem.ingotBronze.registerModel(false);
 
 		OreDictionary.registerOre("ingotCopper", ForestryItem.ingotCopper.getItemStack());
 		OreDictionary.registerOre("ingotTin", ForestryItem.ingotTin.getItemStack());
@@ -189,54 +179,39 @@ public class PluginCore extends ForestryPlugin {
 
 		// / TOOLS
 		ForestryItem.wrench.registerItem((new ItemWrench()), "wrench");
-		ForestryItem.wrench.registerModel(false);
 		ForestryItem.pipette.registerItem(new ItemPipette(), "pipette");
-		ForestryItem.pipette.registerModel(false);
 
 		// / MACHINES
 		ForestryItem.sturdyCasing.registerItem((new ItemForestry()), "sturdyMachine");
-		ForestryItem.sturdyCasing.registerModel(false);
 		ForestryItem.hardenedCasing.registerItem((new ItemForestry()), "hardenedMachine");
-		ForestryItem.hardenedCasing.registerModel(false);
 		ForestryItem.impregnatedCasing.registerItem((new ItemForestry()), "impregnatedCasing");
-		ForestryItem.impregnatedCasing.registerModel(false);
 
 		ForestryItem.craftingMaterial.registerItem(new ItemMisc(), "craftingMaterial");
-		ForestryItem.craftingMaterial.registerModel(true);
 
 		/* ARMOR */
 		ForestryItem.naturalistHat.registerItem(new ItemArmorNaturalist(0), "naturalistHelmet");
-		ForestryItem.naturalistHat.registerModel(false);
 
 		// / PEAT PRODUCTION
 		ForestryItem.peat.registerItem((new ItemForestry()), "peat");
-		ForestryItem.peat.registerModel(false);
 		OreDictionary.registerOre("brickPeat", ForestryItem.peat.getItemStack());
 
 		ForestryItem.ash.registerItem((new ItemForestry()), "ash");
-		ForestryItem.ash.registerModel(false);
 		OreDictionary.registerOre("dustAsh", ForestryItem.ash.getItemStack());
 
 		Proxies.common.addSmelting(ForestryItem.peat.getItemStack(), ForestryItem.ash.getItemStack());
 		ForestryItem.bituminousPeat.registerItem(new ItemForestry(), "bituminousPeat");
-		ForestryItem.bituminousPeat.registerModel(false);
 
 		// / GEARS
 		ForestryItem.gearBronze.registerItem((new ItemForestry()), "gearBronze");
-		ForestryItem.gearBronze.registerModel(false);
 		OreDictionary.registerOre("gearBronze", ForestryItem.gearBronze.getItemStack());
 		ForestryItem.gearCopper.registerItem((new ItemForestry()), "gearCopper");
-		ForestryItem.gearCopper.registerModel(false);
 		OreDictionary.registerOre("gearCopper", ForestryItem.gearCopper.getItemStack());
 		ForestryItem.gearTin.registerItem((new ItemForestry()), "gearTin");
-		ForestryItem.gearTin.registerModel(false);
 		OreDictionary.registerOre("gearTin", ForestryItem.gearTin.getItemStack());
 
 		// / CIRCUIT BOARDS
 		ForestryItem.circuitboards.registerItem(new ItemCircuitBoard(), "chipsets");
-		ForestryItem.circuitboards.registerModel(false);
 		ForestryItem.solderingIron.registerItem(new ItemSolderingIron(), "solderingIron");
-		ForestryItem.solderingIron.registerModel(false);
 
 		Color tubeCoverNormal = Color.WHITE;
 		Color tubeCoverGold = new Color(0xFFF87E);
@@ -257,67 +232,49 @@ public class PluginCore extends ForestryPlugin {
 				new OverlayInfo("ex-11", tubeCoverNormal, new Color(0x1c57c6)),
 				new OverlayInfo("ex-12", tubeCoverEnder, new Color(0x33adad))
 		), "thermionicTubes");
-		ForestryItem.tubes.registerModel(false);
 
 		// / CARTONS
 		ForestryItem.carton.registerItem((new ItemForestry()), "carton");
-		ForestryItem.carton.registerModel(false);
 
 		// / CRAFTING CARPENTER
 		ForestryItem.stickImpregnated.registerItem((new ItemForestry()), "oakStick");
-		ForestryItem.stickImpregnated.registerModel(false);
 		ForestryItem.woodPulp.registerItem((new ItemForestry()), "woodPulp");
-		ForestryItem.woodPulp.registerModel(false);
 		OreDictionary.registerOre("pulpWood", ForestryItem.woodPulp.getItemStack());
 
 		// / RECLAMATION
 		ForestryItem.brokenBronzePickaxe.registerItem((new ItemForestry()), "brokenBronzePickaxe");
-		ForestryItem.brokenBronzePickaxe.registerModel(false);
 		ForestryItem.brokenBronzeShovel.registerItem((new ItemForestry()), "brokenBronzeShovel");
-		ForestryItem.brokenBronzeShovel.registerModel(false);
 
 		// / TOOLS
 		ForestryItem.bronzePickaxe.registerItem(new ItemForestryPickaxe(ForestryItem.brokenBronzePickaxe.getItemStack()), "bronzePickaxe");
-		ForestryItem.bronzePickaxe.registerModel(false);
 		ForestryItem.bronzePickaxe.item().setHarvestLevel("pickaxe", 3);
 		MinecraftForge.EVENT_BUS.register(ForestryItem.bronzePickaxe.item());
 		ForestryItem.bronzeShovel.registerItem(new ItemForestryShovel(ForestryItem.brokenBronzeShovel.getItemStack()), "bronzeShovel");
-		ForestryItem.bronzeShovel.registerModel(false);
 		ForestryItem.bronzeShovel.item().setHarvestLevel("shovel", 3);
 		MinecraftForge.EVENT_BUS.register(ForestryItem.bronzeShovel.item());
 
 		// / ASSEMBLY KITS
 		ForestryItem.kitShovel.registerItem(new ItemAssemblyKit(ForestryItem.bronzeShovel.getItemStack()), "kitShovel");
-		ForestryItem.kitShovel.registerModel(false);
 		ForestryItem.kitPickaxe.registerItem(new ItemAssemblyKit(ForestryItem.bronzePickaxe.getItemStack()), "kitPickaxe");
-		ForestryItem.kitPickaxe.registerModel(false);
 
 		// / MOISTENER RESOURCES
 		ForestryItem.mouldyWheat.registerItem((new ItemForestry()), "mouldyWheat");
-		ForestryItem.mouldyWheat.registerModel(false);
 		ForestryItem.decayingWheat.registerItem((new ItemForestry()), "decayingWheat");
-		ForestryItem.decayingWheat.registerModel(false);
 		ForestryItem.mulch.registerItem((new ItemForestry()), "mulch");
-		ForestryItem.mulch.registerModel(false);
 
 		// / RAINMAKER SUBSTRATES
 		ForestryItem.iodineCharge.registerItem((new ItemForestry()), "iodineCapsule");
-		ForestryItem.iodineCharge.registerModel(false);
 
 		ForestryItem.phosphor.registerItem((new ItemForestry()), "phosphor");
-		ForestryItem.phosphor.registerModel(false);
 
 		// / BEE RESOURCES
 		ForestryItem.beeswax.registerItem(new ItemForestry().setCreativeTab(Tabs.tabApiculture), "beeswax");
-		ForestryItem.beeswax.registerModel(false);
 		OreDictionary.registerOre("itemBeeswax", ForestryItem.beeswax.getItemStack());
 
 		ForestryItem.refractoryWax.registerItem(new ItemForestry(), "refractoryWax");
-		ForestryItem.refractoryWax.registerModel(false);
 
 		// FRUITS
 		ForestryItem.fruits.registerItem(new ItemFruit(), "fruits");
-		ForestryItem.fruits.registerModel(true);
 	}
 
 	@Override
@@ -508,5 +465,40 @@ public class PluginCore extends ForestryPlugin {
 				return 0;
 			}
 		};
+	}
+	
+	@Override
+	protected Class<? extends IEnumMachineDefinition> getEnumMachineDefinition() {
+		return EnumMachineDefinition.class;
+	}
+	
+	private enum EnumMachineDefinition implements IEnumMachineDefinition
+	{
+		ESCRITOIRE(Defaults.DEFINITION_ESCRITOIRE_META),
+		ANALYZER(Defaults.DEFINITION_ANALYZER_META);
+		
+		private EnumMachineDefinition(String name, int meta) {
+			this.meta = meta;
+			this.name = name;
+		}
+		
+		private EnumMachineDefinition(int meta) {
+			this.meta = meta;
+		}
+
+		private int meta;
+		private String name;
+		@Override
+		public String getName() {
+			if(name != null)
+				return name;
+			return name().toLowerCase().toLowerCase();
+		}
+
+		@Override
+		public int getMeta() {
+			return meta;
+		}
+		
 	}
 }

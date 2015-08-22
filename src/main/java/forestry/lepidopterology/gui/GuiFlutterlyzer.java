@@ -227,7 +227,7 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 
 		int x = COLUMN_0;
 		for (ItemStack stack : butterfly.getGenome().getPrimary().getButterflyLoot().keySet()) {
-			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, stack, (int) ((guiLeft + x) * (1 / factor)),
+			itemRender.renderItemIntoGUI(stack, (int) ((guiLeft + x) * (1 / factor)),
 					(int) ((guiTop + getLineY()) * (1 / factor)));
 			x += 18;
 			if (x > adjustToFactor(148)) {
@@ -244,7 +244,7 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 
 		x = COLUMN_0;
 		for (ItemStack stack : butterfly.getGenome().getPrimary().getCaterpillarLoot().keySet()) {
-			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, stack, (int) ((guiLeft + x) * (1 / factor)),
+			itemRender.renderItemIntoGUI(stack, (int) ((guiLeft + x) * (1 / factor)),
 					(int) ((guiTop + getLineY()) * (1 / factor)));
 			x += 18;
 			if (x > adjustToFactor(148)) {

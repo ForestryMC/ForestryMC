@@ -13,12 +13,12 @@ package forestry.farming.logic;
 import java.util.Collection;
 import java.util.Stack;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -49,8 +49,8 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getIcon() {
-        return Items.ender_eye.getIconFromDamage(0);
+    public TextureAtlasSprite getIcon() {
+        return getSprite("minecraft", "items/ender_eye");
     }
 
     @Override
@@ -93,7 +93,7 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 
         for (int i = 0; i < extent; i++) {
             Vect position = translateWithOffset(pos, direction, i);
-            if (!VectUtil.isAirBlock(world, position) && !Utils.isReplaceableBlock(world, position.x, position.y, position.z)) {
+            if (!VectUtil.isAirBlock(world, position) && !Utils.isReplaceableBlock(world, position.toBlockPos())) {
                 continue;
             }
 

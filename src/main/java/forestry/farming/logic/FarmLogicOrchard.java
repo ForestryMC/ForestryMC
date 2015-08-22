@@ -18,11 +18,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -48,8 +48,8 @@ public class FarmLogicOrchard extends FarmLogic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		return ForestryItem.fruits.item().getIconFromDamage(0);
+	public TextureAtlasSprite getIcon() {
+		return getSprite("forestry", "items/fruits/cherry");
 	}
 
 	@Override

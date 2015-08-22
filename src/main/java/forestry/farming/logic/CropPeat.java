@@ -47,7 +47,7 @@ public class CropPeat extends Crop {
 		List<ItemStack> drops = new ArrayList<ItemStack>();
 		drops.add(ForestryItem.peat.getItemStack());
 
-		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, world.getBlock(pos.x, pos.y, pos.z), 0);
+		Proxies.common.addBlockDestroyEffects(world, pos.toBlockPos(), world.getBlockState(pos.toBlockPos()).getBlock(), 0);
 		setBlock(pos, Blocks.dirt, 0);
 		return drops;
 	}

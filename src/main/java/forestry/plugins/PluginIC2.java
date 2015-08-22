@@ -296,8 +296,8 @@ public class PluginIC2 extends ForestryPlugin {
 		}
 
 		if (rubbersapling != null && resin != null) {
-			String saplingName = GameData.getBlockRegistry().getNameForObject(StackUtils.getBlock(rubbersapling));
-			String resinName = GameData.getItemRegistry().getNameForObject(resin.getItem());
+			String saplingName = (String) GameData.getBlockRegistry().getNameForObject(StackUtils.getBlock(rubbersapling));
+			String resinName = (String) GameData.getItemRegistry().getNameForObject(resin.getItem());
 			String imc = String.format("farmArboreal@%s.%s.%s.%s",
 					saplingName, rubbersapling.getItemDamage(),
 					resinName, resin.getItemDamage());

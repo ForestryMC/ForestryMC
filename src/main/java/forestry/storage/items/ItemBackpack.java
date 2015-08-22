@@ -13,23 +13,24 @@ package forestry.storage.items;
 import java.util.List;
 import java.util.Locale;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IMeshDefinitionObject;
+import forestry.api.core.IVariantObject;
 import forestry.api.storage.BackpackStowEvent;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
@@ -47,7 +48,7 @@ import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 import forestry.storage.BackpackMode;
 
-public class ItemBackpack extends ItemInventoried {
+public class ItemBackpack extends ItemInventoried implements IMeshDefinitionObject, IVariantObject {
 
 	private final IBackpackDefinition info;
 	private final EnumBackpackType type;
@@ -259,34 +260,7 @@ public class ItemBackpack extends ItemInventoried {
 
 	/* ICONS */
 	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerIcons(IIconRegister register) {
-		icons = new IIcon[6];
-
-		EnumBackpackType t = type == EnumBackpackType.APIARIST ? EnumBackpackType.T1 : type;
-		String typeTag = "backpacks/" + t.toString().toLowerCase(Locale.ENGLISH);
-
-		icons[0] = TextureManager.getInstance().registerTex(register, typeTag + ".cloth");
-		icons[1] = TextureManager.getInstance().registerTex(register, typeTag + ".outline");
-		icons[2] = TextureManager.getInstance().registerTex(register, "backpacks/neutral");
-		icons[3] = TextureManager.getInstance().registerTex(register, "backpacks/locked");
-		icons[4] = TextureManager.getInstance().registerTex(register, "backpacks/receive");
-		icons[5] = TextureManager.getInstance().registerTex(register, "backpacks/resupply");
-	}
-
-	// Return true to enable color overlay - client side only
-	@Override
-	public boolean requiresMultipleRenderPasses() {
-		return true;
-	}
-
-	@Override
-	public int getRenderPasses(int metadata) {
-		return 3;
-	}
+	private ModelResourceLocation[][] models;
 
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int j) {
@@ -297,27 +271,6 @@ public class ItemBackpack extends ItemInventoried {
 			return info.getSecondaryColour();
 		} else {
 			return 0xffffff;
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIconFromDamageForRenderPass(int i, int j) {
-		if (j == 0) {
-			return icons[0];
-		}
-		if (j == 1) {
-			return icons[1];
-		}
-
-		if (i > 2) {
-			return icons[5];
-		} else if (i > 1) {
-			return icons[4];
-		} else if (i > 0) {
-			return icons[3];
-		} else {
-			return icons[2];
 		}
 	}
 
@@ -345,5 +298,31 @@ public class ItemBackpack extends ItemInventoried {
 		} else {
 			return BackpackMode.NORMAL;
 		}
+	}
+
+	@Override
+	public ItemMeshDefinition getMeshDefinition() {
+		return new ItemMeshDefinition() {
+			@Override
+			public ModelResourceLocation getModelLocation(ItemStack stack) {
+				EnumBackpackType t = type == EnumBackpackType.APIARIST ? EnumBackpackType.T1 : type;
+				String typeTag = "backpacks/" + t.toString().toLowerCase(Locale.ENGLISH);
+				int tier = t.ordinal() - 1;
+				if(models == null)
+				{		
+					models = new ModelResourceLocation[4][4];
+					models[tier][0] = new ModelResourceLocation(typeTag + "_neutral" , "inventory");
+					models[tier][1] = new ModelResourceLocation(typeTag + "_locked" , "inventory");
+					models[tier][2] = new ModelResourceLocation(typeTag + "_receive", "inventory");
+					models[tier][3] = new ModelResourceLocation(typeTag + "_resupply", "inventory");
+				}
+				return models[tier][stack.getItemDamage()];
+			}
+		};
+	}
+	
+	@Override
+	public String[] getVariants() {
+		return new String[]{ "neutral", "locked", "receive", "resupply" };
 	}
 }

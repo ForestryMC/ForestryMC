@@ -10,29 +10,36 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBreakable;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
-
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelObject;
+import forestry.api.core.IVariantObject;
 import forestry.core.CreativeTabForestry;
 import forestry.core.render.TextureManager;
 
-public class BlockStainedGlass extends BlockBreakable {
+public class BlockStainedGlass extends BlockBreakable implements IModelObject, IVariantObject {
 
+	public final static PropertyEnum COLOR = PropertyEnum.create("color", EnumDyeColor.class);
+	
 	public BlockStainedGlass() {
-		super("", Material.glass, true);
+		super(Material.glass, true);
 		setHardness(0.3F);
 		setStepSound(soundTypeGlass);
 		setCreativeTab(CreativeTabForestry.tabForestry);
@@ -45,42 +52,29 @@ public class BlockStainedGlass extends BlockBreakable {
 			itemList.add(new ItemStack(this, 1, i));
 		}
 	}
-
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-
+	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister register) {
-		icons = new IIcon[16];
-		for (int i = 0; i < 16; i++) {
-			icons[i] = TextureManager.getInstance().registerTex(register, "stained/" + i);
-		}
+	public int getMetaFromState(IBlockState state) {
+		return ((EnumDyeColor)state.getValue(COLOR)).getMetadata();
 	}
-
+	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta) {
-		return icons[15 - meta];
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		return this.getIcon(side, world.getBlockMetadata(x, y, z));
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(COLOR, EnumDyeColor.byMetadata(meta));
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int meta) {
-		Block block = world.getBlock(x, y, z);
-		return block != this && super.shouldSideBeRendered(world, x, y, z, meta);
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {
+		Block block = world.getBlockState(pos).getBlock();
+		return block != this && super.shouldSideBeRendered(world, pos, side);
 	}
 
+
 	@Override
-	public int damageDropped(int meta) {
-		return meta;
+	public int getDamageValue(World world, BlockPos pos) {
+		IBlockState state = world.getBlockState(pos);
+		return getMetaFromState(state);
 	}
 
 	@Override
@@ -89,23 +83,28 @@ public class BlockStainedGlass extends BlockBreakable {
 	}
 
 	@Override
-	public int getRenderBlockPass() {
-		return 1;
-	}
-
-	@Override
 	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock() {
 		return false;
 	}
 
 	@Override
 	protected boolean canSilkHarvest() {
 		return true;
+	}
+
+	@Override
+	public String[] getVariants() {
+		ArrayList<String> list = new ArrayList<String>();
+		for(EnumDyeColor dye : EnumDyeColor.values())
+		{
+			list.add(dye.getUnlocalizedName());
+		}
+		return list.toArray(new String[list.size()]);
+	}
+
+	@Override
+	public ModelType getModelType() {
+		return ModelType.META;
 	}
 
 }

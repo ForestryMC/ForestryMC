@@ -36,9 +36,8 @@ public class PacketNBT extends ForestryPacket {
 
 	@Override
 	public void writeData(DataOutputStream data) throws IOException {
-		byte[] compressed = CompressedStreamTools.compress(nbttagcompound);
-		data.writeShort(compressed.length);
-		data.write(compressed);
+		data.writeShort((short) nbttagcompound.getKeySet().size());
+		CompressedStreamTools.writeCompressed(nbttagcompound, data);
 	}
 
 	@Override

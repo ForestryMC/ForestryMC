@@ -78,8 +78,8 @@ public abstract class AlleleEffectThrottled extends Allele implements IAlleleBee
 
 		int[] area = getModifiedArea(genome, housing);
 
-		PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getXCoord(), housing.getYCoord(),
-				housing.getZCoord(), genome.getPrimary().getIconColour(0), area[0], area[1], area[2]);
+		PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getCoords().getX(), housing.getCoords().getY(),
+				housing.getCoords().getZ(), genome.getPrimary().getIconColour(0), area[0], area[1], area[2]);
 		return storedData;
 	}
 
@@ -108,9 +108,9 @@ public abstract class AlleleEffectThrottled extends Allele implements IAlleleBee
 		Vect offset = new Vect(-Math.round(area.x / 2), -Math.round(area.y / 2), -Math.round(area.z / 2));
 
 		// Radioactivity hurts players and mobs
-		Vect min = new Vect(housing.getXCoord() + offset.x, housing.getYCoord() + offset.y, housing.getZCoord() + offset.z);
-		Vect max = new Vect(housing.getXCoord() + offset.x + area.x, housing.getYCoord() + offset.y + area.y, housing.getZCoord() + offset.z + area.z);
+		Vect min = new Vect(housing.getCoords().getX() + offset.x, housing.getCoords().getY() + offset.y, housing.getCoords().getZ() + offset.z);
+		Vect max = new Vect(housing.getCoords().getX() + offset.x + area.x, housing.getCoords().getY() + offset.y + area.y, housing.getCoords().getZ() + offset.z + area.z);
 
-		return AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
+		return AxisAlignedBB.fromBounds(min.x, min.y, min.z, max.x, max.y, max.z);
 	}
 }

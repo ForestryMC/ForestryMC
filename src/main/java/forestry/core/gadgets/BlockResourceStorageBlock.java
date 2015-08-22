@@ -1,22 +1,43 @@
 package forestry.core.gadgets;
 
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelObject;
+import forestry.api.core.IVariantObject;
 import forestry.core.CreativeTabForestry;
+import forestry.core.gadgets.BlockResourceStorageBlock.Resources;
 import forestry.core.render.TextureManager;
 
-public class BlockResourceStorageBlock extends Block {
+public class BlockResourceStorageBlock extends Block implements IModelObject, IVariantObject {
+	
+	public static final PropertyEnum RESOURCES = PropertyEnum.create("resource", Resources.class);
+	
+	public enum Resources implements IStringSerializable
+	{
+		APATITE,
+		COPPER,
+		TIN,
+		BRONZE;
+
+		@Override
+		public String getName() {
+			return name().toLowerCase();
+		}
+		
+	}
 	
 	public BlockResourceStorageBlock() {
 		super(Material.iron);
@@ -24,15 +45,16 @@ public class BlockResourceStorageBlock extends Block {
 		setResistance(5F);
 		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
-
-	@SideOnly(Side.CLIENT)
-	private IIcon iconApatite;
-	@SideOnly(Side.CLIENT)
-	private IIcon iconCopper;
-	@SideOnly(Side.CLIENT)
-	private IIcon iconTin;
-	@SideOnly(Side.CLIENT)
-	private IIcon iconBronze;
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return((Resources)state.getValue(RESOURCES)).ordinal();
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(RESOURCES, Resources.values()[meta]);
+	}
 	
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
@@ -44,34 +66,19 @@ public class BlockResourceStorageBlock extends Block {
 	}
 
 	@Override
-	public int damageDropped(int damage) {
-		return damage;
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister register) {
-		iconApatite = TextureManager.getInstance().registerTex(register, "storage/apatite");
-		iconCopper = TextureManager.getInstance().registerTex(register, "storage/copper");
-		iconTin = TextureManager.getInstance().registerTex(register, "storage/tin");
-		iconBronze = TextureManager.getInstance().registerTex(register, "storage/bronze");
+	public int getDamageValue(World world, BlockPos pos) {
+		IBlockState state = world.getBlockState(pos);
+		return getMetaFromState(state);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int i, int meta) {
-		IIcon icon;
-		if (meta == 0) {
-			icon = iconApatite;
-		} else if (meta == 1) {
-			icon = iconCopper;
-		} else if (meta == 2) {
-			icon = iconTin;
-		} else {
-			icon = iconBronze;
-		}
-		
-		return icon;
+	public String[] getVariants() {
+		return new String[]{ "apatite", "copper", "tin", "bronze" };
+	}
+
+	@Override
+	public ModelType getModelType() {
+		return ModelType.META;
 	}
 
 }

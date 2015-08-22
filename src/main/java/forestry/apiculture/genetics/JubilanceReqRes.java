@@ -11,7 +11,9 @@
 package forestry.apiculture.genetics;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.IAlleleBeeSpecies;
@@ -36,9 +38,9 @@ public class JubilanceReqRes implements IJubilanceProvider {
 
 		World world = housing.getWorld();
 
-		Block block = world.getBlock(housing.getXCoord(), housing.getYCoord() - 1, housing.getZCoord());
-		int meta = world.getBlockMetadata(housing.getXCoord(), housing.getYCoord() - 1, housing.getZCoord());
-		return StackUtils.equals(block, meta, blockRequired);
+		IBlockState state = world.getBlockState(new BlockPos(housing.getCoords().getX(), housing.getCoords().getY() - 1, housing.getCoords().getZ()));
+		int meta = state.getBlock().getMetaFromState(state);
+		return StackUtils.equals(state.getBlock(), meta, blockRequired);
 	}
 
 }

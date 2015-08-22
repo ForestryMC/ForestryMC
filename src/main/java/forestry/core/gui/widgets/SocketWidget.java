@@ -12,6 +12,7 @@ package forestry.core.gui.widgets;
 
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -40,7 +41,7 @@ public class SocketWidget extends Widget {
 	public void draw(int startX, int startY) {
 		ItemStack socketStack = tile.getSocket(slot);
 		if (socketStack != null) {
-			GuiForestry.getItemRenderer().renderItemIntoGUI(manager.minecraft.fontRenderer, manager.minecraft.renderEngine, socketStack, startX + xPos, startY
+			Minecraft.getMinecraft().getRenderItem().renderItemIntoGUI(socketStack, startX + xPos, startY
 					+ yPos);
 		}
 	}

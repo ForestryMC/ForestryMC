@@ -17,9 +17,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -33,7 +33,6 @@ import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
 
 public class GuiHabitatLocator extends GuiForestry<TileForestry> {
@@ -57,7 +56,7 @@ public class GuiHabitatLocator extends GuiForestry<TileForestry> {
 			return name;
 		}
 
-		public IIcon getIcon() {
+		public TextureAtlasSprite getIcon() {
 			return TextureManager.getInstance().getDefault(iconIndex);
 		}
 
@@ -78,7 +77,7 @@ public class GuiHabitatLocator extends GuiForestry<TileForestry> {
 					GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 				}
 
-				Proxies.common.bindTexture(SpriteSheet.ITEMS);
+				Proxies.common.bindTexture();
 				manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos, getIcon(), 16, 16);
 				GL11.glEnable(GL11.GL_LIGHTING);
 			}

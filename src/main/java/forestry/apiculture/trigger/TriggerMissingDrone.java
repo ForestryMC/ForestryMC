@@ -11,8 +11,7 @@
 package forestry.apiculture.trigger;
 
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 import forestry.core.EnumErrorCode;
 import forestry.core.interfaces.IErrorSource;
@@ -31,7 +30,7 @@ public class TriggerMissingDrone extends Trigger {
 	 * Return true if the tile given in parameter activates the trigger, given the parameters.
 	 */
 	@Override
-	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
+	public boolean isTriggerActive(TileEntity tile, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
 
 		if (!(tile instanceof IErrorSource)) {
 			return false;

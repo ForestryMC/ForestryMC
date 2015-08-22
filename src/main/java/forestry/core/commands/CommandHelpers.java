@@ -15,7 +15,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -32,7 +34,7 @@ import forestry.core.utils.StringUtil;
  */
 public class CommandHelpers {
 
-	public static World getWorld(ICommandSender sender, IForestryCommand command, String[] args, int worldArgIndex) {
+	public static World getWorld(ICommandSender sender, IForestryCommand command, String[] args, int worldArgIndex) throws WrongUsageException {
 		// Handle passed in world argument
 		if (worldArgIndex < args.length) {
 			try {
@@ -52,7 +54,7 @@ public class CommandHelpers {
 		return sender.getEntityWorld();
 	}
 
-	public static EntityPlayerMP getPlayer(ICommandSender sender, String playerName) {
+	public static EntityPlayerMP getPlayer(ICommandSender sender, String playerName) throws PlayerNotFoundException {
 		return CommandBase.getPlayer(sender, playerName);
 	}
 
@@ -85,7 +87,7 @@ public class CommandHelpers {
 		throw new WrongUsageException(StringUtil.localizeAndFormat("chat.help", command.getCommandUsage(sender)));
 	}
 
-	public static void processChildCommand(ICommandSender sender, SubCommand child, String[] args) {
+	public static void processChildCommand(ICommandSender sender, SubCommand child, String[] args) throws CommandException {
 		if (!sender.canCommandSenderUseCommand(child.getPermissionLevel(), child.getFullCommandString())) {
 			throw new WrongUsageException(StringUtil.localize("chat.command.noperms"));
 		}
@@ -125,7 +127,7 @@ public class CommandHelpers {
 		}
 	}
 
-	public static boolean processStandardCommands(ICommandSender sender, IForestryCommand command, String[] args) {
+	public static boolean processStandardCommands(ICommandSender sender, IForestryCommand command, String[] args) throws CommandException {
 		if (args.length >= 1) {
 			if (args[0].equals("help")) {
 				command.printHelp(sender);
@@ -165,7 +167,7 @@ public class CommandHelpers {
 			for (SubCommand child : command.getChildren()) {
 				if (CommandHelpers.matches(commandName, child)) {
 					String[] incompleteRemaining = Arrays.copyOfRange(incomplete, 1, incomplete.length);
-					return child.addTabCompletionOptions(sender, incompleteRemaining);
+					return child.addTabCompletionOptions(sender, incompleteRemaining, sender.getPosition());
 				}
 			}
 		}

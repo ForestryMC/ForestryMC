@@ -14,6 +14,8 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 
+import java.io.IOException;
+
 import forestry.api.circuits.ICircuitLayout;
 import forestry.core.circuits.ItemSolderingIron.CircuitRecipe;
 import forestry.core.circuits.ItemSolderingIron.SolderingInventory;
@@ -69,7 +71,7 @@ public class GuiSolderingIron extends GuiForestry<TileForestry> {
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton guibutton) {
+	protected void actionPerformed(GuiButton guibutton) throws IOException {
 		super.actionPerformed(guibutton);
 
 		if (guibutton.id == 1) {

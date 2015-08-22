@@ -17,10 +17,6 @@ import net.minecraft.world.World;
 
 public class ProxyRender {
 
-	public int getNextAvailableRenderId() {
-		return 0;
-	}
-
 	public boolean fancyGraphicsEnabled() {
 		return false;
 	}

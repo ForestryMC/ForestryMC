@@ -17,7 +17,10 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
+import net.minecraft.util.BlockPos;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -53,7 +56,7 @@ public class RootCommand extends CommandBase implements IForestryCommand {
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) {
+	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 		if (!CommandHelpers.processStandardCommands(sender, this, args)) {
 			CommandHelpers.throwWrongUsage(sender, this);
 		}
@@ -76,7 +79,7 @@ public class RootCommand extends CommandBase implements IForestryCommand {
 	}
 
 	@Override
-	public List addTabCompletionOptions(ICommandSender sender, String[] incomplete) {
+	public List addTabCompletionOptions(ICommandSender sender, String[] incomplete, BlockPos pos) {
 		return CommandHelpers.addStandardTabCompletionOptions(this, sender, incomplete);
 	}
 

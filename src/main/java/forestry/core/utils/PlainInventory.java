@@ -13,6 +13,7 @@ package forestry.core.utils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IChatComponent;
 
 public class PlainInventory implements IInventory {
 
@@ -31,7 +32,7 @@ public class PlainInventory implements IInventory {
 	}
 
 	public PlainInventory(IInventory tocopy) {
-		this(tocopy.getSizeInventory(), tocopy.getInventoryName(), tocopy.getInventoryStackLimit());
+		this(tocopy.getSizeInventory(), tocopy.getCommandSenderName(), tocopy.getInventoryStackLimit());
 		for (int i = 0; i < tocopy.getSizeInventory(); i++) {
 			if (tocopy.getStackInSlot(i) != null) {
 				this.setInventorySlotContents(i, tocopy.getStackInSlot(i).copy());
@@ -72,9 +73,9 @@ public class PlainInventory implements IInventory {
 	public void setInventorySlotContents(int slotId, ItemStack itemstack) {
 		contents[slotId] = itemstack;
 	}
-
+	
 	@Override
-	public String getInventoryName() {
+	public String getCommandSenderName() {
 		return name;
 	}
 
@@ -96,10 +97,10 @@ public class PlainInventory implements IInventory {
 	public ItemStack getStackInSlotOnClosing(int slotIndex) {
 		return this.getStackInSlot(slotIndex);
 	}
-
+	
 	@Override
-	public boolean hasCustomInventoryName() {
-		return true;
+	public boolean hasCustomName() {
+		return false;
 	}
 
 	@Override
@@ -108,10 +109,35 @@ public class PlainInventory implements IInventory {
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+		return null;
+	}
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+		
 	}
 }

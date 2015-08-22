@@ -72,7 +72,7 @@ public class ContainerMailbox extends ContainerForestry {
 		if (slotIndex >= SLOT_LETTERS && slotIndex < SLOT_LETTERS + SLOT_LETTERS_COUNT) {
 			if (Proxies.common.isSimulating(player.worldObj) && mailInventory != null) {
 				IMailAddress address = PostManager.postRegistry.getMailAddress(player.getGameProfile());
-				PluginMail.proxy.setPOBoxInfo(mailbox.getWorldObj(), address, mailInventory.getPOBoxInfo());
+				PluginMail.proxy.setPOBoxInfo(mailbox.getWorld(), address, mailInventory.getPOBoxInfo());
 			}
 		}
 

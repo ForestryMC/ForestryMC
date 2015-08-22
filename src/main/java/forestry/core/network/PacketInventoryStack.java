@@ -15,6 +15,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 
 public class PacketInventoryStack extends PacketCoordinates {
 
@@ -24,8 +25,8 @@ public class PacketInventoryStack extends PacketCoordinates {
 	public PacketInventoryStack() {
 	}
 
-	public PacketInventoryStack(int id, int posX, int posY, int posZ, int slotIndex, ItemStack itemstack) {
-		super(id, posX, posY, posZ);
+	public PacketInventoryStack(int id, BlockPos pos, int slotIndex, ItemStack itemstack) {
+		super(id, pos);
 		this.slotIndex = slotIndex;
 		this.itemstack = itemstack;
 	}

@@ -147,6 +147,7 @@ import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.gadgets.TileAnalyzer;
+import forestry.core.gadgets.BlockBase.IEnumMachineDefinition;
 import forestry.core.genetics.Allele;
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPacketHandler;
@@ -206,7 +207,7 @@ public class PluginApiculture extends ForestryPlugin {
 
 		FlowerManager.flowerRegistry = new FlowerRegistry();
 
-		ForestryBlock.apiculture.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "apiculture");
+		ForestryBlock.apiculture.registerBlock(new BlockBase(Material.iron, getEnumMachineDefinition()), ItemForestryBlock.class, "apiculture");
 		ForestryBlock.apiculture.block().setCreativeTab(Tabs.tabApiculture);
 
 		definitionApiary = ((BlockBase) ForestryBlock.apiculture.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_APIARY_META, "forestry.Apiary", TileApiary.class,
@@ -1330,5 +1331,41 @@ public class PluginApiculture extends ForestryPlugin {
 		for (int i = 0; i < EntitySnowFX.icons.length; i++) {
 			EntitySnowFX.icons[i] = event.map.registerSprite(new ResourceLocation("forestry:textures/items/particles/snow." + (i + 1)));
 		}
+	}
+	
+	@Override
+	protected Class<? extends IEnumMachineDefinition> getEnumMachineDefinition() {
+		return EnumMachineDefinition.class;
+	}
+	
+	private enum EnumMachineDefinition implements IEnumMachineDefinition
+	{
+		APAIRY(Defaults.DEFINITION_APIARY_META),
+		CHEST(Defaults.DEFINITION_APIARISTCHEST_META),
+		BEEHOUSE(Defaults.DEFINITION_BEEHOUSE_META);
+		
+		private EnumMachineDefinition(String name, int meta) {
+			this.meta = meta;
+			this.name = name;
+		}
+		
+		private EnumMachineDefinition(int meta) {
+			this.meta = meta;
+		}
+
+		private int meta;
+		private String name;
+		@Override
+		public String getName() {
+			if(name != null)
+				return name;
+			return name().toLowerCase().toLowerCase();
+		}
+
+		@Override
+		public int getMeta() {
+			return meta;
+		}
+		
 	}
 }

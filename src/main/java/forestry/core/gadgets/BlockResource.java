@@ -28,12 +28,15 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelObject;
+import forestry.api.core.IVariantObject;
+import forestry.api.core.IModelObject.ModelType;
 import forestry.core.CreativeTabForestry;
 import forestry.core.config.ForestryItem;
+import forestry.core.gadgets.BlockResourceStorageBlock.Resources;
 import forestry.core.render.TextureManager;
 
-public class BlockResource extends Block {
+public class BlockResource extends Block implements IVariantObject, IModelObject{
 	
 	public static final PropertyEnum RESOURCES = PropertyEnum.create("resource", Resources.class);
 	
@@ -42,19 +45,6 @@ public class BlockResource extends Block {
 		setHardness(3F);
 		setResistance(5F);
 		setCreativeTab(CreativeTabForestry.tabForestry);
-	}
-	
-	public enum Resources implements IStringSerializable
-	{
-		APATITE,
-		COPPER,
-		TIN;
-
-		@Override
-		public String getName() {
-			return name().toLowerCase();
-		}
-		
 	}
 	
 	@Override
@@ -109,6 +99,16 @@ public class BlockResource extends Block {
 		itemList.add(new ItemStack(this, 1, 0));
 		itemList.add(new ItemStack(this, 1, 1));
 		itemList.add(new ItemStack(this, 1, 2));
+	}
+
+	@Override
+	public String[] getVariants() {
+		return new String[]{ "apatite", "copper", "tin", "bronze" };
+	}
+
+	@Override
+	public ModelType getModelType() {
+		return ModelType.META;
 	}
 
 }

@@ -26,6 +26,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.IIconProvider;
+import forestry.api.core.IModelProvider;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
@@ -85,12 +86,6 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 	public AlleleButterflySpecies addSpawnBiome(BiomeDictionary.Type biomeTag) {
 		spawnBiomes.add(biomeTag);
 		return this;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIconProvider getIconProvider() {
-		return null;
 	}
 
 	@Override
@@ -180,5 +175,10 @@ public class AlleleButterflySpecies extends AlleleSpecies implements IAlleleButt
 			return 0xffffff;
 		}
 		return serumColour;
+	}
+
+	@Override
+	public IModelProvider getModelProvider() {
+		return null;
 	}
 }

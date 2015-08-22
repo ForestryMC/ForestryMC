@@ -44,15 +44,15 @@ public class ClimateLedger extends Ledger {
 			return;
 		}
 
-		manager.minecraft.fontRenderer.drawStringWithShadow(StringUtil.localize("gui.climate"), x + 22, y + 8,
+		manager.minecraft.fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.climate"), x + 22, y + 8,
 				manager.gui.fontColor.get("ledger.climate.header"));
-		manager.minecraft.fontRenderer.drawStringWithShadow(StringUtil.localize("gui.temperature") + ":", x + 22, y + 20,
+		manager.minecraft.fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.temperature") + ":", x + 22, y + 20,
 				manager.gui.fontColor.get("ledger.climate.subheader"));
-		manager.minecraft.fontRenderer.drawString(AlleleManager.climateHelper.toDisplay(temperature) + " " + StringUtil.floatAsPercent(tile.getExactTemperature()), x + 22,
+		manager.minecraft.fontRendererObj.drawString(AlleleManager.climateHelper.toDisplay(temperature) + " " + StringUtil.floatAsPercent(tile.getExactTemperature()), x + 22,
 				y + 32, manager.gui.fontColor.get("ledger.climate.text"));
-		manager.minecraft.fontRenderer.drawStringWithShadow(StringUtil.localize("gui.humidity") + ":", x + 22, y + 44,
+		manager.minecraft.fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.humidity") + ":", x + 22, y + 44,
 				manager.gui.fontColor.get("ledger.climate.subheader"));
-		manager.minecraft.fontRenderer.drawString(AlleleManager.climateHelper.toDisplay(tile.getHumidity()) + " " + StringUtil.floatAsPercent(tile.getExactHumidity()),
+		manager.minecraft.fontRendererObj.drawString(AlleleManager.climateHelper.toDisplay(tile.getHumidity()) + " " + StringUtil.floatAsPercent(tile.getExactHumidity()),
 				x + 22, y + 56, manager.gui.fontColor.get("ledger.climate.text"));
 	}
 

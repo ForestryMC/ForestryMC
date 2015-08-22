@@ -12,15 +12,16 @@ package forestry.core.fluids;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
@@ -144,10 +145,10 @@ public final class FluidHelper {
 		ItemStack filled = getFilledContainer(fluidToFill, input);
 		if (filled != null && (output == null || (output.stackSize < output.getMaxStackSize() && InvTools.isItemEqual(filled, output)))) {
 			FluidStack fluidInContainer = getFluidStackInContainer(filled);
-			FluidStack drain = fluidHandler.drain(ForgeDirection.UNKNOWN, fluidInContainer, false);
+			FluidStack drain = fluidHandler.drain(null, fluidInContainer, false);
 			if (drain != null && drain.amount == fluidInContainer.amount) {
 				if (doFill) {
-					fluidHandler.drain(ForgeDirection.UNKNOWN, fluidInContainer, true);
+					fluidHandler.drain(null, fluidInContainer, true);
 					if (output == null) {
 						inv.setInventorySlotContents(outputSlot, filled);
 					} else {
@@ -178,7 +179,7 @@ public final class FluidHelper {
 			return false;
 		}
 
-		int used = fluidHandler.fill(ForgeDirection.UNKNOWN, fluidInContainer, false);
+		int used = fluidHandler.fill(null, fluidInContainer, false);
 		if (used < fluidInContainer.amount) {
 			return false;
 		}
@@ -197,7 +198,7 @@ public final class FluidHelper {
 			}
 		}
 
-		fluidHandler.fill(ForgeDirection.UNKNOWN, fluidInContainer, true);
+		fluidHandler.fill(null, fluidInContainer, true);
 
 		if (emptyItem != null) {
 			if (outputSlot == inputSlot) {
@@ -357,45 +358,46 @@ public final class FluidHelper {
 		return containsFluidStack(stack, new FluidStack(fluid, 1));
 	}
 
-	public static FluidStack drainBlock(World world, int x, int y, int z, boolean doDrain) {
-		return drainBlock(world.getBlock(x, y, z), world, x, y, z, doDrain);
+	public static FluidStack drainBlock(World world, BlockPos pos, boolean doDrain) {
+		return drainBlock(world.getBlockState(pos), world, pos, doDrain);
 	}
 
-	public static FluidStack drainBlock(Block block, World world, int x, int y, int z, boolean doDrain) {
+	public static FluidStack drainBlock(IBlockState state, World world, BlockPos pos, boolean doDrain) {
+		Block block = state.getBlock();
+		int meta = block.getMetaFromState(state);
 		if (block instanceof IFluidBlock) {
 			IFluidBlock fluidBlock = (IFluidBlock) block;
-			if (fluidBlock.canDrain(world, x, y, z)) {
-				return fluidBlock.drain(world, x, y, z, doDrain);
+			if (fluidBlock.canDrain(world, pos)) {
+				return fluidBlock.drain(world, pos, doDrain);
 			}
 		} else if (block == Blocks.water || block == Blocks.flowing_water) {
-			int meta = world.getBlockMetadata(x, y, z);
 			if (meta != 0) {
 				return null;
 			}
 			if (doDrain) {
-				world.setBlockToAir(x, y, z);
+				world.setBlockToAir(pos);
 			}
 			return new FluidStack(FluidRegistry.WATER, FluidContainerRegistry.BUCKET_VOLUME);
 		} else if (block == Blocks.lava || block == Blocks.flowing_lava) {
-			int meta = world.getBlockMetadata(x, y, z);
 			if (meta != 0) {
 				return null;
 			}
 			if (doDrain) {
-				world.setBlockToAir(x, y, z);
+				world.setBlockToAir(pos);
 			}
 			return new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME);
 		}
 		return null;
 	}
 
-	public static boolean isFullFluidBlock(World world, int x, int y, int z) {
-		return isFullFluidBlock(world.getBlock(x, y, z), world, x, y, z);
+	public static boolean isFullFluidBlock(World world, BlockPos pos) {
+		return isFullFluidBlock(world.getBlockState(pos), world, pos);
 	}
 
-	public static boolean isFullFluidBlock(Block block, World world, int x, int y, int z) {
+	public static boolean isFullFluidBlock(IBlockState state, World world, BlockPos pos) {
+		Block block = state.getBlock();
 		if (block instanceof BlockLiquid || block instanceof IFluidBlock) {
-			return world.getBlockMetadata(x, y, z) == 0;
+			return block.getMetaFromState(state) == 0;
 		}
 		return false;
 	}

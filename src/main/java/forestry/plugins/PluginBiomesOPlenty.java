@@ -67,7 +67,7 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 
 		for (String key : saplingItemKeys) {
 			Item saplingItem = GameRegistry.findItem(BoP, key);
-			String saplingName = GameData.getItemRegistry().getNameForObject(saplingItem);
+			String saplingName = (String) GameData.getItemRegistry().getNameForObject(saplingItem);
 			FMLInterModComms.sendMessage(Defaults.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
 		}
 		ItemStack BoPPersimmon = new ItemStack(GameRegistry.findItem(BoP, "food"), 1, 8);

@@ -19,6 +19,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -149,7 +150,7 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 
 	@Override
 	public EntityLiving spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z) {
-		return (EntityButterfly) Utils.spawnEntity(world, new EntityButterfly(world, butterfly), x, y, z);
+		return (EntityButterfly) Utils.spawnEntity(world, new EntityButterfly(world, butterfly), new BlockPos((int) x, (int)y, (int) z));
 	}
 
 	@Override

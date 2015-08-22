@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
@@ -99,13 +100,13 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 
 		Keyboard.enableRepeatEvents(true);
 
-		address = new GuiTextField(this.fontRendererObj, guiLeft + 46, guiTop + 13, 93, 13);
+		address = new GuiTextField(0, this.fontRendererObj, guiLeft + 46, guiTop + 13, 93, 13);
 		IMailAddress recipient = container.getRecipient();
 		if (recipient != null) {
 			address.setText(recipient.getName());
 		}
 
-		text = new GuiTextBox(this.fontRendererObj, guiLeft + 17, guiTop + 31, 122, 57);
+		text = new GuiTextBox(1, this.fontRendererObj, guiLeft + 17, guiTop + 31, 122, 57);
 		text.setMaxStringLength(128);
 		if (!container.getText().isEmpty()) {
 			text.setText(container.getText());
@@ -113,7 +114,7 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 	}
 
 	@Override
-	protected void keyTyped(char eventCharacter, int eventKey) {
+	protected void keyTyped(char eventCharacter, int eventKey) throws IOException {
 
 		// Set focus or enter text into address
 		if (this.address.isFocused()) {
@@ -146,7 +147,7 @@ public class GuiLetter extends GuiForestry<TileForestry> {
 	}
 
 	@Override
-	protected void mouseClicked(int par1, int par2, int mouseButton) {
+	protected void mouseClicked(int par1, int par2, int mouseButton) throws IOException {
 		super.mouseClicked(par1, par2, mouseButton);
 
 		this.address.mouseClicked(par1, par2, mouseButton);

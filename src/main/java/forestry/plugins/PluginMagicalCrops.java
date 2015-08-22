@@ -15,9 +15,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
-import cpw.mods.fml.common.registry.GameRegistry;
-
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import forestry.api.farming.Farmables;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.GameMode;
@@ -172,7 +170,7 @@ public class PluginMagicalCrops extends ForestryPlugin {
 	}
 
 	private void addRecipes(String seedPrefix, String cropPrefix, String name, int fluidAmount) {
-		ItemStack seed = GameRegistry.findItemStack(MagCrop, MagCrop + seedPrefix + name, 1);
+		ItemStack seed = new ItemStack(GameRegistry.findItem(MagCrop, MagCrop + seedPrefix + name), 1);
 		Block crop = GameRegistry.findBlock(MagCrop, MagCrop + cropPrefix + name);
 		if (seed != null) {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{seed}, Fluids.SEEDOIL.getFluid(fluidAmount));

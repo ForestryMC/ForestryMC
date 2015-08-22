@@ -11,6 +11,7 @@
 package forestry.farming.logic;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -44,7 +45,8 @@ public class FarmableGE implements IFarmable {
 			return null;
 		}
 
-		return new CropBlock(world, block, world.getBlockMetadata(x, y, z), new Vect(pos));
+		IBlockState state = world.getBlockState(pos);
+		return new CropBlock(world, block, state.getBlock().getMetaFromState(state), new Vect(pos));
 	}
 
 	@Override

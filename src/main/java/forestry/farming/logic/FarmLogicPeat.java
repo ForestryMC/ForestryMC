@@ -14,10 +14,10 @@ import java.util.Collection;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -102,8 +102,8 @@ public class FarmLogicPeat extends FarmLogicWatered {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		return ForestryItem.peat.item().getIconFromDamage(0);
+	public TextureAtlasSprite getIcon() {
+		return getSprite("forestry", "items/peat");
 	}
 
 }

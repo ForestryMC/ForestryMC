@@ -92,9 +92,9 @@ public class LedgerManager {
 			int startY = mouseY - ((gui.height - gui.getSizeY()) / 2) - 12;
 
 			String tooltip = ledger.getTooltip();
-			int textWidth = minecraft.fontRenderer.getStringWidth(tooltip);
+			int textWidth = minecraft.fontRendererObj.getStringWidth(tooltip);
 			gui.drawGradientRect(startX - 3, startY - 3, startX + textWidth + 3, startY + 8 + 3, 0xc0000000, 0xc0000000);
-			minecraft.fontRenderer.drawStringWithShadow(tooltip, startX, startY, -1);
+			minecraft.fontRendererObj.drawStringWithShadow(tooltip, startX, startY, -1);
 		}
 
 	}

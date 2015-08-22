@@ -11,6 +11,7 @@
 package forestry.farming.logic;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -41,7 +42,8 @@ public class FarmableCocoa implements IFarmable {
 		if (block != COCOA_PLANT) {
 			return null;
 		}
-		int meta = world.getBlockMetadata(pos); //TODO Revisit in BlockState pass
+		IBlockState state = world.getBlockState(pos);
+		int meta = state.getBlock().getMetaFromState(state); //TODO Revisit in BlockState pass
 		if (BlockUtil.getMaturityPod(meta) < 2) {
 			return null;
 		}

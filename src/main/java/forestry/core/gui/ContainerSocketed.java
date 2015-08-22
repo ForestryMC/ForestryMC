@@ -54,7 +54,7 @@ public class ContainerSocketed extends ContainerForestry {
 			Proxies.net.inventoryChangeNotify(player);
 			
 			TileEntity te = (TileEntity) tile;
-			Proxies.net.sendToPlayer(new PacketSocketUpdate(PacketIds.SOCKET_UPDATE, te.xCoord, te.yCoord, te.zCoord, tile), player);
+			Proxies.net.sendToPlayer(new PacketSocketUpdate(PacketIds.SOCKET_UPDATE, te.getPos(), tile), player);
 		}
 
 	}
@@ -85,7 +85,7 @@ public class ContainerSocketed extends ContainerForestry {
 		}
 
 		TileEntity te = (TileEntity) tile;
-		Proxies.net.sendToPlayer(new PacketSocketUpdate(PacketIds.SOCKET_UPDATE, te.xCoord, te.yCoord, te.zCoord, tile), player);
+		Proxies.net.sendToPlayer(new PacketSocketUpdate(PacketIds.SOCKET_UPDATE, te.getPos(), tile), player);
 
 	}
 

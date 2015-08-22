@@ -11,6 +11,7 @@
 package forestry.farming.logic;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -43,7 +44,8 @@ public class FarmableGenericCrop implements IFarmable {
 		if (world.getBlockState(pos).getBlock() != block) {
 			return null;
 		}
-		if (world.getBlockMetadata(x, y, z) != mature) {
+		IBlockState state = world.getBlockState(pos);
+		if (block.getMetaFromState(state) != mature) {
 			return null;
 		}
 

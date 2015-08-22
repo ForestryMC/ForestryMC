@@ -30,6 +30,7 @@ import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
+import forestry.core.gadgets.BlockBase.IEnumMachineDefinition;
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPacketHandler;
 import forestry.core.interfaces.ISaveEventHandler;
@@ -76,7 +77,7 @@ public class PluginMail extends ForestryPlugin {
 			MailTriggers.initialize();
 		}
 
-		ForestryBlock.mail.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "mail");
+		ForestryBlock.mail.registerBlock(new BlockBase(Material.iron, getEnumMachineDefinition()), ItemForestryBlock.class, "mail");
 
 		ShapedRecipeCustom recipe = ShapedRecipeCustom.createShapedRecipe(ForestryBlock.mail.getItemStack(1, Defaults.DEFINITION_MAILBOX_META),
 				" # ", "#Y#", "XXX",
@@ -207,5 +208,41 @@ public class PluginMail extends ForestryPlugin {
 	@Override
 	public IOreDictionaryHandler getDictionaryHandler() {
 		return null;
+	}
+	
+	@Override
+	protected Class<? extends IEnumMachineDefinition> getEnumMachineDefinition() {
+		return EnumMachineDefinition.class;
+	}
+	
+	private enum EnumMachineDefinition implements IEnumMachineDefinition
+	{
+		MAILBOX(Defaults.DEFINITION_MAILBOX_META),
+		TRADESTATION(Defaults.DEFINITION_TRADESTATION_META),
+		PHILATELIST(Defaults.DEFINITION_PHILATELIST_META);
+		
+		private EnumMachineDefinition(String name, int meta) {
+			this.meta = meta;
+			this.name = name;
+		}
+		
+		private EnumMachineDefinition(int meta) {
+			this.meta = meta;
+		}
+
+		private int meta;
+		private String name;
+		@Override
+		public String getName() {
+			if(name != null)
+				return name;
+			return name().toLowerCase().toLowerCase();
+		}
+
+		@Override
+		public int getMeta() {
+			return meta;
+		}
+		
 	}
 }

@@ -13,9 +13,9 @@ package forestry.farming.logic;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -45,8 +45,8 @@ public class FarmLogicShroom extends FarmLogicArboreal {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		return Blocks.red_mushroom.getBlockTextureFromSide(0);
+	public TextureAtlasSprite getIcon() {
+		return getSprite("minecraft", "blocks/mushroom_red");
 	}
 
 	@Override

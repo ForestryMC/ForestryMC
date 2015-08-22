@@ -20,7 +20,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.network.IGuiHandler;
-
+import forestry.core.gadgets.BlockBase.IEnumMachineDefinition;
 import forestry.core.interfaces.IOreDictionaryHandler;
 import forestry.core.interfaces.IPacketHandler;
 import forestry.core.interfaces.IPickupHandler;
@@ -105,6 +105,12 @@ public abstract class ForestryPlugin {
 	}
 
 	protected void registerRecipes() {
+	}
+	
+	protected Class<? extends IEnumMachineDefinition> getEnumMachineDefinition()
+	{
+		return null;
+		
 	}
 
 	@Override

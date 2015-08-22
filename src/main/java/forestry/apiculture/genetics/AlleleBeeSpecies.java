@@ -15,9 +15,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
@@ -32,6 +33,7 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeRoot;
 import forestry.api.core.IIconProvider;
+import forestry.api.core.IModelProvider;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IClassification;
@@ -42,7 +44,7 @@ import forestry.core.genetics.AlleleSpecies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
 
-public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies, IIconProvider {
+public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies, IModelProvider {
 
 	public IJubilanceProvider jubilanceProvider;
 
@@ -197,6 +199,7 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public int getIconColour(int renderPass) {
 		if (renderPass == 0) {
 			return primaryColour;
@@ -208,44 +211,37 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	}
 
 	@SideOnly(Side.CLIENT)
-	private static IIcon[][] icons;
+	private static ModelResourceLocation[] models;
 
-	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister register) {
-		icons = new IIcon[EnumBeeType.values().length][3];
-
-		IIcon body1 = TextureManager.getInstance().registerTex(register, "bees/" + iconType + "/body1");
+	@SideOnly(Side.CLIENT)
+	public void registerModels() {
+		models = new ModelResourceLocation[EnumBeeType.values().length];
 
 		for (int i = 0; i < EnumBeeType.values().length; i++) {
 			if (EnumBeeType.values()[i] == EnumBeeType.NONE) {
 				continue;
 			}
-
-			icons[i][0] = TextureManager.getInstance().registerTex(register, "bees/" + iconType + "/" + EnumBeeType.values()[i].toString().toLowerCase(Locale.ENGLISH) + ".outline");
-			icons[i][1] = (EnumBeeType.values()[i] != EnumBeeType.LARVAE) ? body1
-					: TextureManager.getInstance().registerTex(register, "bees/" + iconType + "/" + EnumBeeType.values()[i].toString().toLowerCase(Locale.ENGLISH) + ".body");
-			icons[i][2] = TextureManager.getInstance().registerTex(register, "bees/" + iconType + "/" + EnumBeeType.values()[i].toString().toLowerCase(Locale.ENGLISH) + ".body2");
+			models[i] = new ModelResourceLocation("bees/" + iconType + "/" + EnumBeeType.values()[i].toString().toLowerCase(Locale.ENGLISH), "inventory");
 		}
-
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(EnumBeeType type, int renderPass) {
-		return icons[type.ordinal()][renderPass];
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIconProvider getIconProvider() {
-		return this;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(short texUID) {
+	public ModelResourceLocation getModel() {
 		return null;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ModelResourceLocation getModel(EnumBeeType type) {
+		return models[type.ordinal()];
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IModelProvider getModelProvider() {
+		return this;
 	}
 
 }

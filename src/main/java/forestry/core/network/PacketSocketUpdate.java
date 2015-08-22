@@ -15,7 +15,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.BlockPos;
 import forestry.core.interfaces.ISocketable;
 
 public class PacketSocketUpdate extends PacketCoordinates {
@@ -25,8 +25,8 @@ public class PacketSocketUpdate extends PacketCoordinates {
 	public PacketSocketUpdate() {
 	}
 
-	public PacketSocketUpdate(int id, int posX, int posY, int posZ, ISocketable tile) {
-		super(id, posX, posY, posZ);
+	public PacketSocketUpdate(int id, BlockPos pos, ISocketable tile) {
+		super(id, pos);
 
 		itemstacks = new ItemStack[tile.getSocketCount()];
 		for (int i = 0; i < tile.getSocketCount(); i++) {

@@ -10,14 +10,14 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public abstract class AIButterflyMovement extends AIButterflyBase {
 
-	protected ChunkCoordinates flightTarget;
+	protected BlockPos flightTarget;
 
 	public AIButterflyMovement(EntityButterfly entity) {
 		super(entity);
@@ -37,13 +37,21 @@ public abstract class AIButterflyMovement extends AIButterflyBase {
 		}
 
 		// Continue if we have not yet reached the destination.
-		if (entity.getDestination().getDistanceSquared((int) entity.posX, (int) entity.posY, (int) entity.posZ) > 2.0f) {
+		if (getDistanceSquared(entity.getDestination(), entity.getPosition())> 2.0f) {
 			return true;
 		}
 
 		entity.setDestination(null);
 		return false;
 	}
+	
+    public float getDistanceSquared(BlockPos pos, BlockPos posOther)
+    {
+        float f = (float)(pos.getX() - posOther.getX());
+        float f1 = (float)(pos.getY() - posOther.getY());
+        float f2 = (float)(pos.getZ() - posOther.getZ());
+        return f * f + f1 * f1 + f2 * f2;
+    }
 
 	@Override
 	public void updateTask() {

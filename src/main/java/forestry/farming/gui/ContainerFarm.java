@@ -97,13 +97,13 @@ public class ContainerFarm extends ContainerSocketed {
 			tile.sendGUINetworkData(this, (ICrafting) crafter);
 		}
 	}
-
+	
 	@Override
-	public void addCraftingToCrafters(ICrafting iCrafting) {
-		super.addCraftingToCrafters(iCrafting);
+	public void onCraftGuiOpened(ICrafting listener) {
+		super.onCraftGuiOpened(listener);
 		TankManager tankManager = tile.getTankManager();
 		if (tankManager != null) {
-			tankManager.initGuiData(this, iCrafting);
+			tankManager.initGuiData(this, listener);
 		}
 	}
 

@@ -14,11 +14,13 @@ import java.lang.reflect.Field;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
+import forestry.core.inventory.InvTools;
 import forestry.core.proxy.Proxies;
 import forestry.core.vect.Vect;
 
@@ -52,17 +54,17 @@ public class MutationEMC extends MutationReqRes {
 
 		World world = housing.getWorld();
 
-		Vect[] possibleTargets = new Vect[]{new Vect(housing.getXCoord() + 1, housing.getYCoord(), housing.getZCoord()),
-				new Vect(housing.getXCoord() - 1, housing.getYCoord(), housing.getZCoord()),
-				new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord() + 1),
-				new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord() - 1)};
+		Vect[] possibleTargets = new Vect[]{new Vect(housing.getCoords().getX() + 1, housing.getCoords().getY(), housing.getCoords().getZ()),
+				new Vect(housing.getCoords().getX() - 1, housing.getCoords().getY(), housing.getCoords().getZ()),
+				new Vect(housing.getCoords().getX(), housing.getCoords().getY(), housing.getCoords().getZ() + 1),
+				new Vect(housing.getCoords().getX(), housing.getCoords().getY(), housing.getCoords().getZ() - 1)};
 
 		for (Vect target : possibleTargets) {
-			if (!world.blockExists(target.x, target.y, target.z)) {
+			if (!InvTools.blockExists(target.x, target.y, target.z, world)) {
 				continue;
 			}
 
-			TileEntity entity = world.getTileEntity(target.x, target.y, target.z);
+			TileEntity entity = world.getTileEntity(new BlockPos(target.x, target.y, target.z));
 			if (entity == null) {
 				continue;
 			}

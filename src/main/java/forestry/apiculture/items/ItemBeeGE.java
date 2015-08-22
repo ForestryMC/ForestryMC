@@ -12,6 +12,8 @@ package forestry.apiculture.items;
 
 import java.util.List;
 
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -155,40 +157,33 @@ public class ItemBeeGE extends ItemGE {
 		}
 
 	}
-
-	@Override
-	public boolean requiresMultipleRenderPasses() {
-		return true;
-	}
-
-	@Override
-	public int getRenderPasses(int metadata) {
-		return 3;
-	}
-
-	/* ICONS */
+	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister register) {
+	public void registerModels() {
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleBeeSpecies) {
-				((IAlleleBeeSpecies) allele).getIconProvider().registerIcons(register);
+				((IAlleleBeeSpecies) allele).getModelProvider().registerModels();
 			}
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
-	public IIcon getIcon(ItemStack itemstack, int renderPass) {
-		return getIconFromSpecies(BeeGenome.getSpecies(itemstack), renderPass);
+	public ModelType getModelType() {
+		return null;
 	}
 
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromSpecies(IAlleleBeeSpecies species, int renderPass) {
-		if (species == null) {
-			species = (IAlleleBeeSpecies) PluginApiculture.beeInterface.getDefaultTemplate()[EnumBeeChromosome.SPECIES.ordinal()];
-		}
-
-		return species.getIcon(type, renderPass);
+	@Override
+	public ItemMeshDefinition getMeshDefinition() {
+		return new ItemMeshDefinition() {
+			
+			@Override
+			public ModelResourceLocation getModelLocation(ItemStack stack) {
+				IAlleleBeeSpecies species = (IAlleleBeeSpecies) getSpecies(stack);
+				if(species != null)
+					return species.getModel(type);
+				return null;
+			}
+		};
 	}
 }

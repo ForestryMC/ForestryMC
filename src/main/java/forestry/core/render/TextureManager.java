@@ -15,6 +15,8 @@ import java.util.HashMap;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.model.ModelBakery;
@@ -72,6 +74,14 @@ public class TextureManager implements ITextureManager {
 
 	public TextureAtlasSprite registerTex(TextureMap map, String identifier) {
 		return map.registerSprite(new ResourceLocation("forestry:textures/items/" + identifier + ".png"));
+	}
+	
+	public TextureAtlasSprite getTex(TextureMap map, String identifier) {
+		return map.getTextureExtry(new ResourceLocation("forestry:textures/items/" + identifier + ".png").toString());
+	}
+	
+	public TextureAtlasSprite getTex(TextureMap map, String modID, String identifier) {
+		return map.getTextureExtry(new ResourceLocation(modID + ":textures/" + identifier + ".png").toString());
 	}
 
 	public TextureAtlasSprite registerTexUID(TextureMap map, short uid, String identifier) {

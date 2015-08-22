@@ -23,13 +23,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
+import forestry.api.core.IModelObject;
+import forestry.api.core.IVariantObject;
 import forestry.core.CreativeTabForestry;
 import forestry.core.interfaces.IOwnable;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Utils;
 
-public abstract class BlockForestry extends BlockContainer {
+public abstract class BlockForestry extends BlockContainer implements IModelObject {
 
 	public BlockForestry(Material material) {
 		super(material);
@@ -88,6 +89,9 @@ public abstract class BlockForestry extends BlockContainer {
 		}
 	}
 	
-	public abstract String getMeshDefinitionName();
+	@Override
+	public ModelType getModelType() {
+		return ModelType.DEFAULT;
+	}
 
 }

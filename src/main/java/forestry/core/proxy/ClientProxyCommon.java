@@ -13,9 +13,13 @@ package forestry.core.proxy;
 import java.io.File;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityExplodeFX;
+import net.minecraft.client.particle.EntityExplodeFX.Factory;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.entity.Entity;
@@ -24,7 +28,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
@@ -43,7 +47,6 @@ import forestry.core.TickHandlerCoreClient;
 import forestry.core.WorldGenerator;
 import forestry.core.config.Config;
 import forestry.core.render.ModelManager;
-import forestry.core.render.SpriteSheet;
 
 public class ClientProxyCommon extends ProxyCommon {
 
@@ -65,8 +68,8 @@ public class ClientProxyCommon extends ProxyCommon {
 	}
 
 	@Override
-	public void bindTexture(SpriteSheet spriteSheet) {
-		bindTexture(spriteSheet.getLocation());
+	public void bindTexture() {
+		bindTexture(TextureMap.locationBlocksTexture);
 	}
 
 	@Override
@@ -206,18 +209,17 @@ public class ClientProxyCommon extends ProxyCommon {
 	}
 
 	@Override
-	public void addEntityExplodeFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
+	public void addEntityExplodeFX(World world, double d1, double d2, double d3, double f1, double f2, double f3) {
 		if (!Config.enableParticleFX) {
 			return;
 		}
-
-		getClientInstance().effectRenderer.addEffect(new EntityExplodeFX(world, d1, d2, d3, f1, f2, f3));
+		getClientInstance().effectRenderer.spawnEffectParticle(EnumParticleTypes.EXPLOSION_NORMAL.getParticleID(), d1, d2, d3, f1, f2, f3);
 	}
 
 	@Override
 	public void addBlockDestroyEffects(World world, BlockPos pos, Block block, int i) {
 		if (!isSimulating(world)) {
-			getClientInstance().effectRenderer.addBlockDestroyEffects(pos, block, i);
+			getClientInstance().effectRenderer.addBlockDestroyEffects(pos, block.getStateFromMeta(i));
 		} else {
 			super.addBlockDestroyEffects(world, pos, block, i);
 		}

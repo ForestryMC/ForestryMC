@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.farming.gadgets;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -50,9 +51,9 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	@Override
 	public void openGui(EntityPlayer player) {
 		if (this.isMaster()) {
-			player.openGui(ForestryAPI.instance, GuiId.MultiFarmGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
+			player.openGui(ForestryAPI.instance, GuiId.MultiFarmGUI.ordinal(), worldObj, pos.getX(), pos.getY(), pos.getZ());
 		} else if (this.hasMaster()) {
-			player.openGui(ForestryAPI.instance, GuiId.MultiFarmGUI.ordinal(), worldObj, masterX, masterY, masterZ);
+			player.openGui(ForestryAPI.instance, GuiId.MultiFarmGUI.ordinal(), worldObj, masterPos.getX(), masterPos.getY(), masterPos.getZ());
 		}
 	}
 
@@ -60,9 +61,13 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		this.isMaster = nbttagcompound.getBoolean("IsMaster");
-		this.masterX = nbttagcompound.getInteger("MasterX");
-		this.masterY = nbttagcompound.getInteger("MasterY");
-		this.masterZ = nbttagcompound.getInteger("MasterZ");
+		if(nbttagcompound.hasKey("MasterX"))
+		{
+			int masterX = nbttagcompound.getInteger("MasterX");
+			int masterY = nbttagcompound.getInteger("MasterY");
+			int masterZ = nbttagcompound.getInteger("MasterZ");
+			masterPos = new BlockPos(masterX, masterY, masterZ);
+		}
 
 		farmBlock = EnumFarmBlock.getFromCompound(nbttagcompound);
 
@@ -81,9 +86,12 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 		super.writeToNBT(nbttagcompound);
 
 		nbttagcompound.setBoolean("IsMaster", isMaster);
-		nbttagcompound.setInteger("MasterX", masterX);
-		nbttagcompound.setInteger("MasterY", masterY);
-		nbttagcompound.setInteger("MasterZ", masterZ);
+		if(masterPos != null)
+		{
+			nbttagcompound.setInteger("MasterX", masterPos.getX());
+			nbttagcompound.setInteger("MasterY", masterPos.getY());
+			nbttagcompound.setInteger("MasterZ", masterPos.getZ());
+		}
 
 		farmBlock.saveToCompound(nbttagcompound);
 
@@ -96,8 +104,8 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	}
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 
 		if (!Proxies.common.isSimulating(worldObj)) {
 			updateClientSide();
@@ -130,20 +138,6 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 		return farmBlock;
 	}
 
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta) {
-		/*
-		 * if(fixedType >= 0) return farmBlock.getIcon(fixedType);
-		 * 
-		 * int type = 0; if (meta == 1) type = TYPE_BAND;
-		 * 
-		 * if (meta == 0 && side == 2) type = TYPE_REVERSE; else if (meta == 0 && (side == 0 || side == 1)) type = TYPE_TOP;
-		 * 
-		 * return farmBlock.getIcon(type);
-		 */
-		return null;
-	}
-
 	/* TILEFORESTRY */
 	@Override
 	public PacketPayload getPacketPayload() {
@@ -153,7 +147,7 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 		payload.shortPayload[1] = (short) (isMaster() ? 1 : 0);
 
 		// so the client can know if it is part of an integrated structure
-		payload.shortPayload[2] = (short) masterY;
+		payload.shortPayload[2] = (short) masterPos.getY();
 
 		return payload;
 	}
@@ -166,19 +160,18 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 		}
 
 		// so the client can know if it is part of an integrated structure
-		this.masterY = payload.shortPayload[2];
+		masterPos = new BlockPos(masterPos.getX(), payload.shortPayload[2], masterPos.getZ());
 
 		if (this.farmBlock != farmType) {
 			this.farmBlock = farmType;
-			worldObj.func_147479_m(xCoord, yCoord, zCoord);
+			worldObj.markBlockRangeForRenderUpdate(pos, pos);
 		}
 	}
 
 	/* ITILESTRUCTURE */
 	private final IStructureLogic structureLogic;
 	private boolean isMaster;
-	private int masterX, masterZ;
-	private int masterY = -99;
+	private BlockPos masterPos = new BlockPos(0, -99, 0);
 
 	@Override
 	public String getTypeUID() {
@@ -203,11 +196,12 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	@Override
 	public void onStructureReset() {
 		setCentralTE(null);
-		if (worldObj.getBlockMetadata(xCoord, yCoord, zCoord) == 1) {
-			worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 0);
+		IBlockState state = worldObj.getBlockState(pos);
+		if (state.getBlock().getMetaFromState(state) == 1) {
+			worldObj.setBlockState(pos, state.getBlock().getStateFromMeta(0), 0);
 		}
 		isMaster = false;
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		worldObj.markBlockForUpdate(pos);
 	}
 
 	@Override
@@ -221,7 +215,7 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 			return this;
 		}
 
-		TileEntity tile = worldObj.getTileEntity(masterX, masterY, masterZ);
+		TileEntity tile = worldObj.getTileEntity(masterPos);
 		if (tile instanceof ITileStructure) {
 			ITileStructure master = (ITileStructure) tile;
 			if (master.isMaster()) {
@@ -232,23 +226,20 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	}
 
 	private boolean isSameTile(TileEntity tile) {
-		return tile.xCoord == xCoord && tile.yCoord == yCoord && tile.zCoord == zCoord;
+		return pos.equals(tile.getPos());
 	}
 
 	@Override
 	public void setCentralTE(TileEntity tile) {
 		if (tile == null || tile == this || isSameTile(tile)) {
-			this.masterX = this.masterZ = 0;
-			this.masterY = -99;
+			masterPos = new BlockPos(0, -99, 0);
 			return;
 		}
 
 		this.isMaster = false;
-		this.masterX = tile.xCoord;
-		this.masterY = tile.yCoord;
-		this.masterZ = tile.zCoord;
+		masterPos = tile.getPos();
 
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		worldObj.markBlockForUpdate(pos);
 	}
 
 	@Override
@@ -257,7 +248,7 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 	}
 
 	protected boolean hasMaster() {
-		return this.masterY >= 0;
+		return masterPos.getY() >= 0;
 	}
 
 	@Override
@@ -272,7 +263,7 @@ public abstract class TileFarm extends TileForestry implements IFarmComponent {
 
 	@Override
 	public boolean isIntegratedIntoStructure() {
-		return isMaster || this.masterY >= 0;
+		return isMaster || masterPos.getY() >= 0;
 	}
 
 	@Override

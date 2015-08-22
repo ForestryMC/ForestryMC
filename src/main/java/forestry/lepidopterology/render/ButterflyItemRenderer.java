@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.lepidopterology.render;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -104,7 +105,7 @@ public class ButterflyItemRenderer implements IItemRenderer {
 
 		GL11.glPushMatrix();
 
-		if (RenderItem.renderInFrame) {
+		if (Minecraft.getMinecraft().getRenderItem().) {
 			//GL11.glScalef(-2.0f, 2.0f, 2.0f);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);

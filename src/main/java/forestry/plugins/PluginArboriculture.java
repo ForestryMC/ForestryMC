@@ -138,6 +138,7 @@ import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
+import forestry.core.gadgets.BlockBase.IEnumMachineDefinition;
 import forestry.core.genetics.Allele;
 import forestry.core.genetics.FruitFamily;
 import forestry.core.interfaces.IPacketHandler;
@@ -146,6 +147,7 @@ import forestry.core.items.ItemFruit.EnumFruit;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.RecipeUtil;
 import forestry.core.utils.ShapedRecipeCustom;
+import forestry.plugins.PluginApiculture.EnumMachineDefinition;
 
 @Plugin(pluginID = "Arboriculture", name = "Arboriculture", author = "Binnie & SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.arboriculture.description")
 public class PluginArboriculture extends ForestryPlugin {
@@ -275,7 +277,7 @@ public class PluginArboriculture extends ForestryPlugin {
 		ForestryBlock.pods.registerBlock(new BlockFruitPod(), ItemForestryBlock.class, "pods");
 
 		// Machines
-		ForestryBlock.arboriculture.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "arboriculture");
+		ForestryBlock.arboriculture.registerBlock(new BlockBase(Material.iron, getEnumMachineDefinition()), ItemForestryBlock.class, "arboriculture");
 		ForestryBlock.arboriculture.block().setCreativeTab(Tabs.tabArboriculture);
 
 		definitionChest = ((BlockBase) ForestryBlock.arboriculture.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_ARBCHEST_META,
@@ -301,8 +303,18 @@ public class PluginArboriculture extends ForestryPlugin {
 		// Register vanilla and forestry fence ids
 		validFences.add(ForestryBlock.fences1.block());
 		validFences.add(ForestryBlock.fences2.block());
-		validFences.add(Blocks.fence);
-		validFences.add(Blocks.fence_gate);
+		validFences.add(Blocks.oak_fence);
+		validFences.add(Blocks.spruce_fence);
+		validFences.add(Blocks.birch_fence);
+		validFences.add(Blocks.jungle_fence);
+		validFences.add(Blocks.dark_oak_fence);
+		validFences.add(Blocks.acacia_fence);
+		validFences.add(Blocks.oak_fence_gate);
+		validFences.add(Blocks.spruce_fence_gate);
+		validFences.add(Blocks.birch_fence_gate);
+		validFences.add(Blocks.jungle_fence_gate);
+		validFences.add(Blocks.dark_oak_fence_gate);
+		validFences.add(Blocks.acacia_fence_gate);
 		validFences.add(Blocks.nether_brick_fence);
 
 		// Modes
@@ -1284,5 +1296,39 @@ public class PluginArboriculture extends ForestryPlugin {
 		tree.writeToNBT(nbtTagCompound);
 		treeItem.setTagCompound(nbtTagCompound);
 		return treeItem;
+	}
+	
+	@Override
+	protected Class<? extends IEnumMachineDefinition> getEnumMachineDefinition() {
+		return EnumMachineDefinition.class;
+	}
+	
+	private enum EnumMachineDefinition implements IEnumMachineDefinition
+	{
+		CHEST(Defaults.DEFINITION_ARBCHEST_META);
+		
+		private EnumMachineDefinition(String name, int meta) {
+			this.meta = meta;
+			this.name = name;
+		}
+		
+		private EnumMachineDefinition(int meta) {
+			this.meta = meta;
+		}
+
+		private int meta;
+		private String name;
+		@Override
+		public String getName() {
+			if(name != null)
+				return name;
+			return name().toLowerCase().toLowerCase();
+		}
+
+		@Override
+		public int getMeta() {
+			return meta;
+		}
+		
 	}
 }

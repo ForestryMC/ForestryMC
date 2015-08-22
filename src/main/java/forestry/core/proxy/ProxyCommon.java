@@ -56,7 +56,6 @@ import forestry.core.config.ForestryItem;
 import forestry.core.network.PacketCoordinates;
 import forestry.core.network.PacketFXSignal;
 import forestry.core.network.PacketIds;
-import forestry.core.render.SpriteSheet;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginManager;
 
@@ -215,7 +214,7 @@ public class ProxyCommon {
 	public void addEntitySwarmFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
 	}
 
-	public void addEntityExplodeFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
+	public void addEntityExplodeFX(World world, double d1, double d2, double d3, double f1, double f2, double f3) {
 	}
 
 	public boolean needsTagCompoundSynched(Item item) {
@@ -345,7 +344,7 @@ public class ProxyCommon {
 	public void bindTexture(ResourceLocation location) {
 	}
 
-	public void bindTexture(SpriteSheet spriteSheet) {
+	public void bindTexture() {
 	}
 
 	public EntityPlayer getPlayer() {

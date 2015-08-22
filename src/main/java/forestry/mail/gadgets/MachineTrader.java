@@ -19,8 +19,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.core.ForestryAPI;
@@ -52,9 +51,9 @@ public class MachineTrader extends TileBase {
 	@Override
 	public void openGui(EntityPlayer player, TileBase tile) {
 		if (isLinked()) {
-			player.openGui(ForestryAPI.instance, GuiId.TraderGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
+			player.openGui(ForestryAPI.instance, GuiId.TraderGUI.ordinal(), worldObj, pos.getX(), pos.getY(), pos.getZ());
 		} else {
-			player.openGui(ForestryAPI.instance, GuiId.TraderNameGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
+			player.openGui(ForestryAPI.instance, GuiId.TraderNameGUI.ordinal(), worldObj, pos.getX(), pos.getY(), pos.getZ());
 		}
 	}
 
@@ -307,7 +306,7 @@ public class MachineTrader extends TileBase {
 	/* ITRIGGERPROVIDER */
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
+	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(MailTriggers.lowPaper64);
 		res.add(MailTriggers.lowPaper32);

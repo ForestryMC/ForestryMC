@@ -11,6 +11,7 @@
 package forestry.core.gui;
 
 import java.awt.Color;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,7 +20,10 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -206,17 +210,18 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 	}
 
 	@Override
-	protected void mouseClicked(int xPos, int yPos, int mouseButton) {
+	protected void mouseClicked(int xPos, int yPos, int mouseButton) throws IOException {
 		super.mouseClicked(xPos, yPos, mouseButton);
 
 		// / Handle ledger clicks
 		ledgerManager.handleMouseClicked(xPos, yPos, mouseButton);
 		widgetManager.handleMouseClicked(xPos, yPos, mouseButton);
 	}
-
+	
 	@Override
-	protected void mouseMovedOrUp(int mouseX, int mouseY, int eventType) {
-		super.mouseMovedOrUp(mouseX, mouseY, eventType);
+	protected void mouseReleased(int mouseX, int mouseY, int eventType) {
+		super.mouseReleased(mouseX, mouseY, eventType);
+		
 
 		widgetManager.handleMouseRelease(mouseX, mouseY, eventType);
 	}
@@ -242,7 +247,7 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 	}
 
 	public boolean isMouseOverSlot(Slot par1Slot, int par2, int par3) {
-		return this.func_146978_c(par1Slot.xDisplayPosition, par1Slot.yDisplayPosition, 16, 16, par2, par3);
+		return this.isPointInRegion(par1Slot.xDisplayPosition, par1Slot.yDisplayPosition, 16, 16, par2, par3);
 	}
 
 	public void drawToolTips(ToolTip toolTips, int mouseX, int mouseY) {
@@ -404,10 +409,6 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		this.zLevel = level;
 	}
 
-	public static RenderItem getItemRenderer() {
-		return itemRender;
-	}
-
 	public int getSizeX() {
 		return xSize;
 	}
@@ -446,8 +447,8 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 		if (font == null) {
 			font = fontRendererObj;
 		}
-		itemRender.renderItemAndEffectIntoGUI(font, this.mc.getTextureManager(), stack, xPos, yPos);
-		itemRender.renderItemOverlayIntoGUI(font, this.mc.getTextureManager(), stack, xPos, yPos);
+		itemRender.renderItemAndEffectIntoGUI(stack, xPos, yPos);
+		itemRender.renderItemOverlayIntoGUI(font, stack, xPos, yPos, null);
 		this.zLevel = 0.0F;
 		itemRender.zLevel = 0.0F;
 
@@ -476,6 +477,18 @@ public abstract class GuiForestry<T extends TileForestry> extends GuiContainer i
 			return tip;
 		}
 	}
+	
+    public void drawTexturedModelRectFromIcon(int p_94065_1_, int p_94065_2_, TextureAtlasSprite p_94065_3_, int p_94065_4_, int p_94065_5_)
+    {
+    	Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldRenderer = Tessellator.getInstance().getWorldRenderer();
+        worldRenderer.startDrawingQuads();
+        worldRenderer.addVertexWithUV((double)(p_94065_1_ + 0), (double)(p_94065_2_ + p_94065_5_), (double)this.zLevel, (double)p_94065_3_.getMinU(), (double)p_94065_3_.getMaxV());
+        worldRenderer.addVertexWithUV((double)(p_94065_1_ + p_94065_4_), (double)(p_94065_2_ + p_94065_5_), (double)this.zLevel, (double)p_94065_3_.getMaxU(), (double)p_94065_3_.getMaxV());
+        worldRenderer.addVertexWithUV((double)(p_94065_1_ + p_94065_4_), (double)(p_94065_2_ + 0), (double)this.zLevel, (double)p_94065_3_.getMaxU(), (double)p_94065_3_.getMinV());
+        worldRenderer.addVertexWithUV((double)(p_94065_1_ + 0), (double)(p_94065_2_ + 0), (double)this.zLevel, (double)p_94065_3_.getMinU(), (double)p_94065_3_.getMinV());
+        tessellator.draw();
+    }
 
 	/* NEI */
 	@Override

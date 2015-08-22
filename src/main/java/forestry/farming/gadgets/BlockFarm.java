@@ -13,10 +13,11 @@ package forestry.farming.gadgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityDiggingFX;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,16 +25,18 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IVariantObject;
 import forestry.core.gadgets.BlockStructure;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.ModelManager;
 import forestry.core.render.ParticleHelper;
 import forestry.core.render.ParticleHelperCallback;
 import forestry.core.utils.StackUtils;
@@ -67,44 +70,46 @@ public class BlockFarm extends BlockStructure {
 			}
 		}
 	}
-
+	
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
-		ArrayList<ItemStack> drops = getDrops(world, x, y, z, 0, 0);
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos) {
+		IBlockState state = world.getBlockState(pos);
+		List<ItemStack> drops = getDrops(world, pos, state, 0);
 		if (drops.isEmpty()) {
-			return super.getPickBlock(target, world, x, y, z, player);
+			return super.getPickBlock(target, world, pos);
 		}
 		return drops.get(0);
 	}
-
+	
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack stack) {
-		super.onBlockPlacedBy(world, x, y, z, entityliving, stack);
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+		super.onBlockPlacedBy(world, pos, state, entityliving, stack);
 		if (!stack.hasTagCompound()) {
 			return;
 		}
 
-		TileFarm tile = (TileFarm) world.getTileEntity(x, y, z);
+		TileFarm tile = (TileFarm) world.getTileEntity(pos);
 		tile.setFarmBlock(EnumFarmBlock.getFromCompound(stack.getTagCompound()));
 	}
-
+	
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
-		int meta = world.getBlockMetadata(x, y, z);
-		if (Proxies.common.isSimulating(world) && canHarvestBlock(player, meta)) {
-			List<ItemStack> drops = getDrops(world, x, y, z, 0, 0);
+	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		IBlockState state = world.getBlockState(pos);
+		int meta = getMetaFromState(state);
+		if (Proxies.common.isSimulating(world) && canHarvestBlock(world, pos, player)) {
+			List<ItemStack> drops = getDrops(world, pos, state, 0);
 			for (ItemStack drop : drops) {
-				StackUtils.dropItemStackAsEntity(drop, world, x, y, z);
+				StackUtils.dropItemStackAsEntity(drop, world, pos);
 			}
 		}
-		return world.setBlockToAir(x, y, z);
+		return world.setBlockToAir(pos);
 	}
-
+	
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-		int meta = world.getBlockMetadata(x, y, z);
-		TileEntity tile = world.getTileEntity(x, y, z);
+		int meta = getMetaFromState(state);
+		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof TileFarm) {
 			TileFarm farm = (TileFarm) tile;
 
@@ -118,14 +123,14 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	public int getDamageValue(World world, int x, int y, int z) {
-		int meta = world.getBlockMetadata(x, y, z);
+	public int getDamageValue(World world, BlockPos pos) {
+		int meta = getMetaFromState(world.getBlockState(pos));
 		return meta != 1 ? meta : 0;
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, int metadata) {
-		switch (metadata) {
+	public TileEntity createTileEntity(World world, IBlockState state) {
+		switch (getMetaFromState(state)) {
 			case 2:
 				return new TileGearbox();
 			case 3:
@@ -141,7 +146,7 @@ public class BlockFarm extends BlockStructure {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return createTileEntity(world, meta);
+		return createTileEntity(world, getStateFromMeta(meta));
 	}
 
 	/* ICONS */
@@ -149,13 +154,6 @@ public class BlockFarm extends BlockStructure {
 	public int getRenderType() {
 		return PluginFarming.modelIdFarmBlock;
 	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerBlockIcons(IIconRegister register) {
-		EnumFarmBlock.registerIcons(register);
-	}
-
 
 	private static class ParticleCallback implements ParticleHelperCallback {
 
@@ -179,71 +177,19 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	private static final ParticleHelperCallback callback = new ParticleCallback();
-
-	@SideOnly(Side.CLIENT)
+	
 	@Override
-	public boolean addHitEffects(World worldObj, MovingObjectPosition target, EffectRenderer effectRenderer) {
-		return ParticleHelper.addHitEffects(worldObj, instance, target, effectRenderer, callback);
+	public boolean addDestroyEffects(World world, BlockPos pos, EffectRenderer effectRenderer) {
+		return ParticleHelper.addDestroyEffects(world, instance, pos.getX(), pos.getY(), pos.getZ(), getMetaFromState(world.getBlockState(pos)), effectRenderer, callback);
 	}
-
-	@SideOnly(Side.CLIENT)
+	
 	@Override
-	public boolean addDestroyEffects(World worldObj, int x, int y, int z, int meta, EffectRenderer effectRenderer) {
-		return ParticleHelper.addDestroyEffects(worldObj, instance, x, y, z, meta, effectRenderer, callback);
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIcon(int side, int metadata) {
-		return getBlockTextureFromSideAndMetadata(EnumFarmBlock.BRICK, side, metadata);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getBlockTextureFromSideAndMetadata(EnumFarmBlock type, int side, int metadata) {
-		return StackUtils.getBlock(type.getBase()).getIcon(side, type.getBase().getItemDamage());
-	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getOverlayTextureForBlock(int side, int metadata) {
-
-		EnumFarmBlock type = EnumFarmBlock.BRICK_STONE;
-		if (metadata == 0 && side == 2) {
-			return type.getIcon(TileFarm.TYPE_REVERSE);
-		} else if (metadata == 0 && (side == 0 || side == 1)) {
-			return type.getIcon(TileFarm.TYPE_TOP);
-		}
-
-		switch (metadata) {
-			case 1:
-				return type.getIcon(TileFarm.TYPE_BAND);
-			case 2:
-				return type.getIcon(TileFarm.TYPE_GEARS);
-			case 3:
-				return type.getIcon(TileFarm.TYPE_HATCH);
-			case 4:
-				return type.getIcon(TileFarm.TYPE_VALVE);
-			case 5:
-				return type.getIcon(TileFarm.TYPE_CONTROL);
-			default:
-				return type.getIcon(TileFarm.TYPE_PLAIN);
-		}
+	public boolean canConnectRedstone(IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return getMetaFromState(world.getBlockState(pos)) == 5;
 	}
 
 	@Override
-	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side) {
-		return world.getBlockMetadata(x, y, z) == 5;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		TileEntity tile = world.getTileEntity(x, y, z);
-		ItemStack base = EnumFarmBlock.BRICK_STONE.getBase();
-
-		if (tile instanceof TileFarm) {
-			base = ((TileFarm) tile).farmBlock.getBase();
-		}
-
-		return StackUtils.getBlock(base).getIcon(side, base.getItemDamage());
+	public String[] getVariants() {
+		return null;
 	}
 }

@@ -11,6 +11,7 @@
 package forestry.farming.logic;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -37,8 +38,8 @@ public class FarmableVanillaShroom extends FarmableGenericSapling {
 		if (block != Blocks.brown_mushroom_block && block != Blocks.red_mushroom_block) {
 			return null;
 		}
-
-		return new CropBlock(world, block, world.getBlockMetadata(x, y, z), new Vect(pos));
+		IBlockState state = world.getBlockState(pos);
+		return new CropBlock(world, block, state.getBlock().getMetaFromState(state), new Vect(pos));
 	}
 
 	@Override
@@ -47,8 +48,8 @@ public class FarmableVanillaShroom extends FarmableGenericSapling {
 		if (StackUtils.equals(Blocks.red_mushroom, germling)) {
 			meta = 1;
 		}
-
-		Proxies.common.addBlockPlaceEffects(world, pos, Blocks.brown_mushroom.getDefaultState());
+		
+		Proxies.common.addBlockPlaceEffects(world, pos, Blocks.brown_mushroom.getDefaultState().getBlock(), 0);
 		return ForestryBlock.mushroom.setBlock(world, pos, meta, Defaults.FLAG_BLOCK_SYNCH);
 	}
 

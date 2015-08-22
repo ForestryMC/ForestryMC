@@ -82,4 +82,9 @@ public class MatingRecipe implements IRecipe {
 		return 2;
 	}
 
+    public ItemStack[] getRemainingItems(InventoryCrafting inv)
+    {
+        return null;
+    }
+
 }

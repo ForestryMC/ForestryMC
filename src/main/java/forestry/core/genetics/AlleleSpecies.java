@@ -180,8 +180,4 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpecies {
 		isCounted = false;
 		return this;
 	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public abstract IIconProvider getIconProvider();
 }

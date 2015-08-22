@@ -30,7 +30,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -85,20 +84,20 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		}
 	}
 
-	public static final ForgeDirection[] CARDINAL_DIRECTIONS = {ForgeDirection.NORTH, ForgeDirection.EAST, ForgeDirection.SOUTH, ForgeDirection.WEST};
+	public static final EnumFacing[] CARDINAL_DIRECTIONS = {EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST};
 
-	public static ForgeDirection getLayoutDirection(ForgeDirection farmSide) {
+	public static EnumFacing getLayoutDirection(EnumFacing farmSide) {
 		switch (farmSide) {
 			case NORTH:
-				return ForgeDirection.WEST;
+				return EnumFacing.WEST;
 			case WEST:
-				return ForgeDirection.SOUTH;
+				return EnumFacing.SOUTH;
 			case SOUTH:
-				return ForgeDirection.EAST;
+				return EnumFacing.EAST;
 			case EAST:
-				return ForgeDirection.NORTH;
+				return EnumFacing.NORTH;
 			default:
-				return ForgeDirection.UNKNOWN;
+				return null;
 		}
 	}
 
@@ -122,7 +121,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	private IFarmLogic[] farmLogics = new IFarmLogic[4];
 
-	private TreeMap<ForgeDirection, List<FarmTarget>> targets;
+	private TreeMap<EnumFacing, List<FarmTarget>> targets;
 	private int allowedExtent = 0;
 	private final DelayTimer checkTimer = new DelayTimer();
 
@@ -218,18 +217,18 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	}
 
 	private void setBiomeInformation() {
-		this.biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
+		this.biome = Utils.getBiomeAt(worldObj, pos);
 		setErrorState(EnumErrorCode.OK);
 	}
 
-	private static TreeMap<ForgeDirection, List<FarmTarget>> createTargets(World world, Vect targetStart, final int allowedExtent, final int farmSizeNorthSouth, final int farmSizeEastWest) {
+	private static TreeMap<EnumFacing, List<FarmTarget>> createTargets(World world, Vect targetStart, final int allowedExtent, final int farmSizeNorthSouth, final int farmSizeEastWest) {
 
-		TreeMap<ForgeDirection, List<FarmTarget>> targets = new TreeMap<ForgeDirection, List<FarmTarget>>();
+		TreeMap<EnumFacing, List<FarmTarget>> targets = new TreeMap<EnumFacing, List<FarmTarget>>();
 
-		for (ForgeDirection farmSide : CARDINAL_DIRECTIONS) {
+		for (EnumFacing farmSide : CARDINAL_DIRECTIONS) {
 
 			int farmSize;
-			if (farmSide == ForgeDirection.NORTH || farmSide == ForgeDirection.SOUTH) {
+			if (farmSide == EnumFacing.NORTH || farmSide == EnumFacing.SOUTH) {
 				farmSize = farmSizeNorthSouth;
 			} else {
 				farmSize = farmSizeEastWest;
@@ -238,7 +237,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			// targets extend sideways in a pinwheel pattern around the farm, so they need to go a little extra distance
 			final int targetMaxLimit = allowedExtent + farmSize;
 
-			ForgeDirection layoutDirection = getLayoutDirection(farmSide);
+			EnumFacing layoutDirection = getLayoutDirection(farmSide);
 
 			Vect targetLocation = FarmHelper.getFarmMultiblockCorner(world, targetStart, farmSide, layoutDirection.getOpposite());
 			Vect firstLocation = targetLocation.add(farmSide);
@@ -275,7 +274,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	}
 
 	private void setExtents() {
-		for (ForgeDirection direction : targets.keySet()) {
+		for (EnumFacing direction : targets.keySet()) {
 			List<FarmTarget> targetsList = targets.get(direction);
 			if (!targetsList.isEmpty()) {
 				Vect groundPosition = getGroundPosition(worldObj, targetsList.get(0).getStart());
@@ -316,7 +315,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 			}
 
 			@Override
-			public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
+			public boolean canExtractItem(int slotIndex, ItemStack stack, EnumFacing side) {
 				return GuiUtil.isIndexInRange(slotIndex, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT);
 			}
 		});
@@ -328,7 +327,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	public boolean doWork() {
 		// System.out.println("Starting doWork()");
 		if (targets == null || checkTimer.delayPassed(worldObj, 400)) {
-			Vect targetStart = new Vect(xCoord, yCoord, zCoord);
+			Vect targetStart = new Vect(pos.getX(), pos.getY(), pos.getZ());
 
 			int sizeNorthSouth = FarmHelper.getFarmSizeNorthSouth(worldObj, targetStart);
 			int sizeEastWest = FarmHelper.getFarmSizeEastWest(worldObj, targetStart);
@@ -374,9 +373,9 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		// Cultivation and collection
 		FarmWorkStatus farmWorkStatus = new FarmWorkStatus();
 
-		for (Map.Entry<ForgeDirection, List<FarmTarget>> entry : targets.entrySet()) {
+		for (Map.Entry<EnumFacing, List<FarmTarget>> entry : targets.entrySet()) {
 
-			ForgeDirection farmSide = entry.getKey();
+			EnumFacing farmSide = entry.getKey();
 			IFarmLogic logic = getFarmLogic(farmSide);
 			if (logic == null) {
 				continue;
@@ -423,7 +422,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		return farmWorkStatus.didWork;
 	}
 
-	private IFarmLogic getFarmLogic(ForgeDirection direction) {
+	private IFarmLogic getFarmLogic(EnumFacing direction) {
 		int logicOrdinal = direction.ordinal() - 2;
 		if (farmLogics.length <= logicOrdinal) {
 			return null;
@@ -432,7 +431,7 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 		return farmLogics[logicOrdinal];
 	}
 
-	private boolean isCycleCanceledByListeners(IFarmLogic logic, ForgeDirection direction) {
+	private boolean isCycleCanceledByListeners(IFarmLogic logic, EnumFacing direction) {
 
 		for (IFarmListener listener : eventHandlers) {
 			if (listener.cancelTask(logic, direction)) {
@@ -489,9 +488,9 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 
 	private boolean cultivateTarget(FarmTarget target, IFarmLogic logic) {
 		Vect targetPosition = target.getStart().add(0, target.getYOffset(), 0);
-		if (logic.cultivate(targetPosition.x, targetPosition.y, targetPosition.z, target.getDirection(), target.getExtent())) {
+		if (logic.cultivate(new BlockPos(targetPosition.x, targetPosition.y, targetPosition.z), target.getDirection(), target.getExtent())) {
 			for (IFarmListener listener : eventHandlers) {
-				listener.hasCultivated(logic, targetPosition.x, targetPosition.y, targetPosition.z, target.getDirection(), target.getExtent());
+				listener.hasCultivated(logic, new BlockPos(targetPosition.x, targetPosition.y, targetPosition.z), target.getDirection(), target.getExtent());
 			}
 			return true;
 		}
@@ -510,14 +509,14 @@ public class TileFarmPlain extends TileFarm implements IFarmHousing, ISocketable
 	}
 
 	private boolean harvestTarget(FarmTarget target, IFarmLogic logic) {
-		Collection<ICrop> next = logic.harvest(target.getStart().x, target.getStart().y + target.getYOffset(), target.getStart().z, target.getDirection(), target.getExtent());
+		Collection<ICrop> next = logic.harvest(new BlockPos(target.getStart().x, target.getStart().y + target.getYOffset(), target.getStart().z), target.getDirection(), target.getExtent());
 		if (next == null || next.size() <= 0) {
 			return false;
 		}
 
 		// Let event handlers know.
 		for (IFarmListener listener : eventHandlers) {
-			listener.hasScheduledHarvest(next, logic, target.getStart().x, target.getStart().y + target.getYOffset(), target.getStart().z, target.getDirection(), target.getExtent());
+			listener.hasScheduledHarvest(next, logic, new BlockPos(target.getStart().x, target.getStart().y + target.getYOffset(), target.getStart().z), target.getDirection(), target.getExtent());
 		}
 
 		pendingCrops.addAll(next);

@@ -18,11 +18,11 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.core.ForestryAPI;
@@ -71,7 +71,7 @@ public class MachineMailbox extends TileBase implements IMailContainer {
 				held.stackSize--;
 			}
 		} else {
-			player.openGui(ForestryAPI.instance, GuiId.MailboxGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
+			player.openGui(ForestryAPI.instance, GuiId.MailboxGUI.ordinal(), player.worldObj, pos.getX(), pos.getY(), pos.getZ());
 		}
 	}
 
@@ -124,7 +124,7 @@ public class MachineMailbox extends TileBase implements IMailContainer {
 	/* ITRIGGERPROVIDER */
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
+	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(MailTriggers.triggerHasMail);
 		return res;

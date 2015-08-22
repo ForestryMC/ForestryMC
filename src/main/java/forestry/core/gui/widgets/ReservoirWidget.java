@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -18,7 +18,6 @@ import org.lwjgl.opengl.GL11;
 
 import forestry.core.gui.WidgetManager;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.SpriteSheet;
 
 public class ReservoirWidget extends TankWidget {
 
@@ -34,7 +33,7 @@ public class ReservoirWidget extends TankWidget {
 		if (contents == null || contents.amount <= 0 || contents.getFluid() == null) {
 			return;
 		}
-		IIcon liquidIcon = contents.getFluid().getIcon(contents);
+		TextureAtlasSprite liquidIcon = contents.getFluid().getIcon(contents);
 		if (liquidIcon == null) {
 			return;
 		}
@@ -44,7 +43,7 @@ public class ReservoirWidget extends TankWidget {
 			squaled = height;
 		}
 
-		Proxies.common.bindTexture(SpriteSheet.BLOCKS);
+		Proxies.common.bindTexture();
 		int start = 0;
 
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);

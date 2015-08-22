@@ -20,6 +20,7 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -268,7 +269,7 @@ public class Bee extends IndividualLiving implements IBee {
 			return EnumErrorCode.NOTDAY;
 		}
 
-		if (world.getBlockLightValue(housing.getXCoord(), housing.getYCoord() + 2, housing.getZCoord()) > Defaults.APIARY_MIN_LEVEL_LIGHT) {
+		if (world.getLightFromNeighbors(new BlockPos(housing.getCoords().getX(), housing.getCoords().getY() + 2, housing.getCoords().getZ())) > Defaults.APIARY_MIN_LEVEL_LIGHT) {
 			if (!canWorkDuringDay()) {
 				return EnumErrorCode.NOTGLOOMY;
 			}
@@ -281,7 +282,7 @@ public class Bee extends IndividualLiving implements IBee {
 		if (biome == null) {
 			return EnumErrorCode.NOSKY;
 		}
-		if (!BiomeHelper.isBiomeHellish(biome) && !world.canBlockSeeTheSky(housing.getXCoord(), housing.getYCoord() + 3, housing.getZCoord())
+		if (!BiomeHelper.isBiomeHellish(biome) && !world.canBlockSeeSky(new BlockPos(housing.getCoords().getX(), housing.getCoords().getY() + 3, housing.getCoords().getZ()))
 				&& !genome.getCaveDwelling() && !housing.isSunlightSimulated()) {
 			return EnumErrorCode.NOSKY;
 		}
@@ -387,13 +388,13 @@ public class Bee extends IndividualLiving implements IBee {
 		if (generation > 0) {
 			EnumRarity rarity;
 			if (generation >= 1000) {
-				rarity = EnumRarity.epic;
+				rarity = EnumRarity.EPIC;
 			} else if (generation >= 100) {
-				rarity = EnumRarity.rare;
+				rarity = EnumRarity.RARE;
 			} else if (generation >= 10) {
-				rarity = EnumRarity.uncommon;
+				rarity = EnumRarity.UNCOMMON;
 			} else {
-				rarity = EnumRarity.common;
+				rarity = EnumRarity.COMMON;
 			}
 
 			String generationString = rarity.rarityColor + StringUtil.localizeAndFormat("gui.beealyzer.generations", generation);
@@ -663,14 +664,14 @@ public class Bee extends IndividualLiving implements IBee {
 
 		Vect area = getArea(genome, housing);
 		Vect offset = new Vect(-area.x / 2, -area.y / 4, -area.z / 2);
-		Vect housingPos = new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord());
+		Vect housingPos = new Vect(housing.getCoords().getX(), housing.getCoords().getY(), housing.getCoords().getZ());
 
 		IIndividual pollen = null;
 
 		for (int i = 0; i < 20; i++) {
 			Vect randomPos = Vect.getRandomPositionInArea(random, area);
 			Vect blockPos = Vect.add(housingPos, randomPos, offset);
-			TileEntity tile = world.getTileEntity(blockPos.x, blockPos.y, blockPos.z);
+			TileEntity tile = world.getTileEntity(new BlockPos(blockPos.x, blockPos.y, blockPos.z));
 
 			if (tile instanceof IPollinatable) {
 				IPollinatable pitcher = (IPollinatable) tile;
@@ -678,7 +679,7 @@ public class Bee extends IndividualLiving implements IBee {
 					pollen = pitcher.getPollen();
 				}
 			} else {
-				pollen = GeneticsUtil.getErsatzPollen(world, blockPos.x, blockPos.y, blockPos.z);
+				pollen = GeneticsUtil.getErsatzPollen(world, new BlockPos(blockPos.x, blockPos.y, blockPos.z));
 			}
 
 			if (pollen != null) {
@@ -704,14 +705,14 @@ public class Bee extends IndividualLiving implements IBee {
 
 		Vect area = getArea(genome, housing);
 		Vect offset = new Vect(-area.x / 2, -area.y / 4, -area.z / 2);
-		Vect housingPos = new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord());
+		Vect housingPos = new Vect(housing.getCoords().getX(), housing.getCoords().getY(), housing.getCoords().getZ());
 
 		for (int i = 0; i < 30; i++) {
 
 			Vect randomPos = Vect.getRandomPositionInArea(random, area);
 			Vect posBlock = Vect.add(housingPos, randomPos, offset);
 
-			ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(world, posBlock.x, posBlock.y, posBlock.z);
+			ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(world, new BlockPos(posBlock.x, posBlock.y, posBlock.z));
 			if (checkPollinatable == null) {
 				continue;
 			}
@@ -723,7 +724,7 @@ public class Bee extends IndividualLiving implements IBee {
 				continue;
 			}
 
-			IPollinatable realPollinatable = GeneticsUtil.getOrCreatePollinatable(housing.getOwnerName(), world, posBlock.x, posBlock.y, posBlock.z);
+			IPollinatable realPollinatable = GeneticsUtil.getOrCreatePollinatable(housing.getOwnerName(), world, new BlockPos(posBlock.x, posBlock.y, posBlock.z));
 
 			realPollinatable.mateWith(pollen);
 			return true;

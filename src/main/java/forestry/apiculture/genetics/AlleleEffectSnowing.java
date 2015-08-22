@@ -11,10 +11,10 @@
 package forestry.apiculture.genetics;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
@@ -56,19 +56,19 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 
 			Vect randomPos = new Vect(world.rand.nextInt(area.x), world.rand.nextInt(area.y), world.rand.nextInt(area.z));
 
-			Vect posBlock = randomPos.add(new Vect(housing.getXCoord(), housing.getYCoord(), housing.getZCoord()));
+			Vect posBlock = randomPos.add(new Vect(housing.getCoords().getX(), housing.getCoords().getY(), housing.getCoords().getZ()));
 			posBlock = posBlock.add(offset);
 
 			// Put snow on the ground
-			if (!world.isSideSolid(posBlock.x, posBlock.y - 1, posBlock.z, ForgeDirection.UP, false)) {
+			if (!world.isSideSolid(new BlockPos(posBlock.x, posBlock.y - 1, posBlock.z), EnumFacing.UP, false)) {
 				continue;
 			}
 
-			if (!world.isAirBlock(posBlock.x, posBlock.y, posBlock.z)) {
+			if (!world.isAirBlock(new BlockPos(posBlock.x, posBlock.y, posBlock.z))) {
 				continue;
 			}
 
-			Proxies.common.setBlockWithNotify(world, posBlock.x, posBlock.y, posBlock.z, Blocks.snow_layer);
+			Proxies.common.setBlockWithNotify(world, new BlockPos(posBlock.x, posBlock.y, posBlock.z), Blocks.snow_layer);
 		}
 
 		return storedData;
@@ -78,7 +78,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 		if (housing.getWorld().rand.nextInt(3) == 0) {
 			int[] area = getModifiedArea(genome, housing);
-			Proxies.render.addSnowFX(housing.getWorld(), housing.getXCoord(), housing.getYCoord(), housing.getZCoord(), genome.getPrimary().getIconColour(0), area[0], area[1], area[2]);
+			Proxies.render.addSnowFX(housing.getWorld(), housing.getCoords().getX(), housing.getCoords().getY(), housing.getCoords().getZ(), genome.getPrimary().getIconColour(0), area[0], area[1], area[2]);
 		}
 		return storedData;
 	}

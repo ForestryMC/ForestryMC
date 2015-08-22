@@ -12,6 +12,7 @@ package forestry.core.commands;
 
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 
@@ -32,7 +33,7 @@ public class CommandPlugins extends SubCommand {
 	}
 
 	@Override
-	public void processSubCommand(ICommandSender sender, String[] args) {
+	public void processSubCommand(ICommandSender sender, String[] args) throws WrongUsageException {
 		if (args.length == 0) {
 			listPluginsForSender(sender);
 		} else {
@@ -75,7 +76,7 @@ public class CommandPlugins extends SubCommand {
 		}
 
 		@Override
-		public void processSubCommand(ICommandSender sender, String[] args) {
+		public void processSubCommand(ICommandSender sender, String[] args) throws CommandException {
 			if (args.length == 1) {
 				listPluginInfoForSender(sender, args[0]);
 			} else {
@@ -83,7 +84,7 @@ public class CommandPlugins extends SubCommand {
 			}
 		}
 
-		private void listPluginInfoForSender(ICommandSender sender, String plugin) {
+		private void listPluginInfoForSender(ICommandSender sender, String plugin) throws CommandException {
 			ForestryPlugin found = null;
 			for (PluginManager.Module pluginModule : PluginManager.getLoadedModules()) {
 				Plugin info = pluginModule.instance().getClass().getAnnotation(Plugin.class);

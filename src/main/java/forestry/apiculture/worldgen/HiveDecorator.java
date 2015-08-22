@@ -144,7 +144,7 @@ public class HiveDecorator {
 
 	protected boolean setHive(World world, BlockPos pos, Hive hive) {
 		Block hiveBlock = hive.getHiveBlock();
-		boolean placed = world.setBlockState(pos, hiveBlock, hive.getHiveMeta(), Defaults.FLAG_BLOCK_SYNCH);
+		boolean placed = world.setBlockState(pos, hiveBlock.getStateFromMeta(hive.getHiveMeta()), Defaults.FLAG_BLOCK_SYNCH);
 		if (!placed) {
 			return false;
 		}
@@ -154,7 +154,7 @@ public class HiveDecorator {
 			return false;
 		}
 
-		hiveBlock.onBlockAdded(world, pos);
+		hiveBlock.onBlockAdded(world, pos, world.getBlockState(pos));
 		world.markBlockForUpdate(pos);
 
 		if (!Config.generateBeehivesDebug) {

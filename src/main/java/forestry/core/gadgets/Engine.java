@@ -203,7 +203,8 @@ public abstract class Engine extends TileBase implements IEnergyConnection {
 			if (BlockUtil.isEnergyReceiver(getOrientation().getOpposite(), tile)) {
 				setOrientation(orient);
 				worldObj.notifyNeighborsOfStateChange(pos, worldObj.getBlockState(pos).getBlock());
-				worldObj.func_147479_m(pos);
+				//worldObj.func_147479_m(pos);
+				worldObj.markBlockRangeForRenderUpdate(pos, pos);
 				break;
 			}
 		}

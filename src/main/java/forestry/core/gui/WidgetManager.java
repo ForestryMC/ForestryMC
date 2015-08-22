@@ -13,6 +13,9 @@ package forestry.core.gui;
 import java.util.ArrayList;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 import org.lwjgl.opengl.GL11;
 
@@ -55,13 +58,13 @@ public class WidgetManager {
 
 	public void drawWidgets() {
 		gui.setZLevel(100.0F);
-		GuiForestry.getItemRenderer().zLevel = 100.0F;
+		Minecraft.getMinecraft().getRenderItem().zLevel = 100.0F;
 		for (Widget slot : widgets) {
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			slot.draw(0, 0);
 		}
 		gui.setZLevel(0.0F);
-		GuiForestry.getItemRenderer().zLevel = 0.0F;
+		Minecraft.getMinecraft().getRenderItem().zLevel = 0.0F;
 
 	}
 

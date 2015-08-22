@@ -156,7 +156,7 @@ public class ContainerLetter extends ContainerItemInventory {
 		EnumAddressee type = EnumAddressee.fromString(typeName);
 		IMailAddress recipient;
 		if (type == EnumAddressee.PLAYER) {
-			GameProfile gameProfile = MinecraftServer.getServer().func_152358_ax().func_152655_a(recipientName);
+			GameProfile gameProfile = MinecraftServer.getServer().getPlayerProfileCache().getGameProfileForUsername(recipientName);
 			if (gameProfile == null) {
 				gameProfile = new GameProfile(new UUID(0, 0), recipientName);
 			}

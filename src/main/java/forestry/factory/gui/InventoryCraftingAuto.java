@@ -72,9 +72,9 @@ public class InventoryCraftingAuto extends InventoryCrafting {
 		stackList[i] = itemstack;
 		eventHandler.onCraftMatrixChanged(this, i);
 	}
-
+	
 	@Override
-	public String getInventoryName() {
+	public String getCommandSenderName() {
 		return "Crafting";
 	}
 
@@ -98,11 +98,11 @@ public class InventoryCraftingAuto extends InventoryCrafting {
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer entityplayer) {
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer entityplayer) {
 	}
 
 }

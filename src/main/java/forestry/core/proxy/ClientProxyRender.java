@@ -11,7 +11,6 @@
 package forestry.core.proxy;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.world.World;
@@ -34,11 +33,6 @@ import forestry.core.render.TileRendererIndex;
 import forestry.core.utils.ForestryResource;
 
 public class ClientProxyRender extends ProxyRender {
-
-	@Override
-	public int getNextAvailableRenderId() {
-		return RenderingRegistry.getNextAvailableRenderId();
-	}
 
 	@Override
 	public boolean fancyGraphicsEnabled() {

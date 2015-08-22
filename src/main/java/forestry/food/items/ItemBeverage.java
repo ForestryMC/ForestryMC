@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.food.items;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -20,12 +20,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IVariantObject;
 import forestry.api.food.BeverageManager;
 import forestry.api.food.IBeverageEffect;
 import forestry.core.config.Config;
@@ -33,19 +32,16 @@ import forestry.core.items.ItemForestryFood;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 
-public class ItemBeverage extends ItemForestryFood {
+public class ItemBeverage extends ItemForestryFood implements IVariantObject {
 
+	private static final List<String> variants = new ArrayList<String>();
+	
 	public static class BeverageInfo {
 
 		public final String name;
 		private final String iconType;
 		public final int primaryColor;
 		public final int secondaryColor;
-
-		@SideOnly(Side.CLIENT)
-		public IIcon iconBottle;
-		@SideOnly(Side.CLIENT)
-		public IIcon iconContents;
 
 		public final int heal;
 		public final float saturation;
@@ -61,12 +57,7 @@ public class ItemBeverage extends ItemForestryFood {
 			this.heal = heal;
 			this.saturation = saturation;
 			this.isAlwaysEdible = isAlwaysEdible;
-		}
-
-		@SideOnly(Side.CLIENT)
-		public void registerIcons(IIconRegister register) {
-			iconBottle = TextureManager.getInstance().registerTex(register, "liquids/" + iconType + ".bottle");
-			iconContents = TextureManager.getInstance().registerTex(register, "liquids/" + iconType + ".contents");
+			variants.add(name);
 		}
 
 		public IBeverageEffect[] loadEffects(ItemStack stack) {
@@ -128,16 +119,15 @@ public class ItemBeverage extends ItemForestryFood {
 	public boolean getShareTag() {
 		return true;
 	}
-
+	
 	@Override
-	public ItemStack onEaten(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-
+	public ItemStack onItemUseFinish(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 		int meta = itemstack.getItemDamage();
 		BeverageInfo beverage = beverages[meta];
 		IBeverageEffect[] effects = beverage.loadEffects(itemstack);
 
 		itemstack.stackSize--;
-		entityplayer.getFoodStats().func_151686_a(this, itemstack);
+		entityplayer.getFoodStats().addStats(this, itemstack);
 		world.playSoundAtEntity(entityplayer, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
 
 		if (!Proxies.common.isSimulating(world)) {
@@ -150,19 +140,19 @@ public class ItemBeverage extends ItemForestryFood {
 
 		return itemstack;
 	}
-
+	
 	@Override
-	public int func_150905_g(ItemStack itemstack) {
-		int meta = itemstack.getItemDamage();
-		BeverageInfo beverage = beverages[meta];
-		return beverage.heal;
-	}
-
-	@Override
-	public float func_150906_h(ItemStack itemstack) {
+	public float getSaturationModifier(ItemStack itemstack) {
 		int meta = itemstack.getItemDamage();
 		BeverageInfo beverage = beverages[meta];
 		return beverage.saturation;
+	}
+	
+	@Override
+	public int getHealAmount(ItemStack itemstack) {
+		int meta = itemstack.getItemDamage();
+		BeverageInfo beverage = beverages[meta];
+		return beverage.heal;
 	}
 
 	@Override
@@ -172,7 +162,7 @@ public class ItemBeverage extends ItemForestryFood {
 
 	@Override
 	public EnumAction getItemUseAction(ItemStack itemstack) {
-		return EnumAction.drink;
+		return EnumAction.DRINK;
 	}
 
 	@Override
@@ -216,31 +206,6 @@ public class ItemBeverage extends ItemForestryFood {
 		return super.getUnlocalizedName(stack) + "." + beverages[stack.getItemDamage()].name;
 	}
 
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerIcons(IIconRegister register) {
-		for (BeverageInfo info : beverages) {
-			info.registerIcons(register);
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIconFromDamageForRenderPass(int i, int j) {
-		if (j > 0 && beverages[i].secondaryColor != 0) {
-			return beverages[i].iconBottle;
-		} else {
-			return beverages[i].iconContents;
-		}
-	}
-
-	// Return true to enable color overlay
-	@Override
-	public boolean requiresMultipleRenderPasses() {
-		return true;
-	}
-
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int j) {
 
@@ -249,6 +214,11 @@ public class ItemBeverage extends ItemForestryFood {
 		} else {
 			return beverages[itemstack.getItemDamage()].secondaryColor;
 		}
+	}
+
+	@Override
+	public String[] getVariants() {
+		return variants.toArray(new String[variants.size()]);
 	}
 
 }

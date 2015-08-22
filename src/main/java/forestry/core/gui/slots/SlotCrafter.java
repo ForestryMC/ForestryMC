@@ -12,6 +12,7 @@ package forestry.core.gui.slots;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
 
@@ -61,6 +62,7 @@ public class SlotCrafter extends SlotCrafting {
 
 	@Override
 	public void onPickupFromSlot(EntityPlayer player, ItemStack itemStack) {
+		InventoryCrafting
 		FMLCommonHandler.instance().firePlayerCraftingEvent(player, itemStack, craftMatrix);
 		this.onCrafting(itemStack, itemStack.stackSize); // handles crafting achievements, maps, and statistics
 		crafter.takenFromSlot(getSlotIndex(), true, player);

@@ -33,6 +33,11 @@ public final class VectUtil {
 	public static IBlockState getBlockState(World world, IVect position) {
 		return world.getBlockState(position.toBlockPos());
 	}
+	
+	public static int getBlockMeta(World world, IVect position) {
+		IBlockState state = getBlockState(world, position);
+		return getBlock(world, position).getMetaFromState(state);
+	}
 
 	public static Block getBlock(World world, IVect position) {
 		return getBlockState(world, position).getBlock();

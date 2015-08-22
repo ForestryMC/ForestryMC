@@ -31,7 +31,7 @@ public class GuiMailboxInfo extends Gui {
 	private final ResourceLocation textureAlert = new ForestryResource(Defaults.TEXTURE_PATH_GUI + "/mailalert.png");
 
 	public GuiMailboxInfo() {
-		fontRendererObj = Proxies.common.getClientInstance().fontRenderer;
+		fontRendererObj = Proxies.common.getClientInstance().fontRendererObj;
 	}
 
 	public void render(int x, int y) {

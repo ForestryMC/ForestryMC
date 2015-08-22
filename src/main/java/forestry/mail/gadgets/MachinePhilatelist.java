@@ -41,7 +41,7 @@ public class MachinePhilatelist extends TileBase implements IInventory {
 
 	@Override
 	public void openGui(EntityPlayer player, TileBase tile) {
-		player.openGui(ForestryAPI.instance, GuiId.PhilatelistGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
+		player.openGui(ForestryAPI.instance, GuiId.PhilatelistGUI.ordinal(), worldObj, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	// / UPDATING

@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -25,7 +25,6 @@ import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.WidgetManager;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.SpriteSheet;
 import forestry.farming.gui.ContainerFarm;
 
 /**
@@ -70,13 +69,13 @@ public class TankWidget extends Widget {
 		if (contents == null || contents.amount <= 0 || contents.getFluid() == null) {
 			return;
 		}
-		IIcon liquidIcon = contents.getFluid().getIcon(contents);
+		TextureAtlasSprite liquidIcon = contents.getFluid().getIcon(contents);
 		if (liquidIcon == null) {
 			return;
 		}
 		int squaled = (contents.amount * height) / getTank().getCapacity();
 
-		Proxies.common.bindTexture(SpriteSheet.BLOCKS);
+		Proxies.common.bindTexture();
 		int start = 0;
 
 		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);

@@ -34,7 +34,7 @@ public class CropFruit extends Crop {
 
 	@Override
 	protected boolean isCrop(Vect pos) {
-		TileEntity tile = world.getTileEntity(pos.x, pos.y, pos.z);
+		TileEntity tile = world.getTileEntity(pos.toBlockPos());
 		if (!(tile instanceof IFruitBearer)) {
 			return false;
 		}
@@ -51,13 +51,13 @@ public class CropFruit extends Crop {
 
 	@Override
 	protected Collection<ItemStack> harvestBlock(Vect pos) {
-		TileEntity tile = world.getTileEntity(pos.x, pos.y, pos.z);
+		TileEntity tile = world.getTileEntity(pos.toBlockPos());
 		if (!(tile instanceof IFruitBearer)) {
 			return new ArrayList<ItemStack>();
 		}
 
-		Proxies.common.sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.LEAF, world, pos.x, pos.y, pos.z,
-				world.getBlock(pos.x, pos.y, pos.z), 0);
+		Proxies.common.sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.LEAF, world, pos.toBlockPos(),
+				world.getBlockState(pos.toBlockPos()).getBlock(), 0);
 		return ((IFruitBearer) tile).pickFruit(null);
 	}
 

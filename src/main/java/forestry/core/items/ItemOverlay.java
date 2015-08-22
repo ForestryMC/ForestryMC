@@ -25,8 +25,10 @@ import forestry.core.config.Config;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 
-public class ItemOverlay extends ItemForestry {
-
+public class ItemOverlay extends ItemForestry implements IVariantObject {
+	
+	private static final List<String> variants = new ArrayList<String>();
+	
 	public static class OverlayInfo {
 
 		public final String name;
@@ -42,6 +44,7 @@ public class ItemOverlay extends ItemForestry {
 			this.name = name;
 			this.primaryColor = primaryColor;
 			this.secondaryColor = secondaryColor;
+			variants.add(name);
 		}
 
 		public OverlayInfo(String name, int primaryColor) {
@@ -102,6 +105,11 @@ public class ItemOverlay extends ItemForestry {
 		} else {
 			return overlays[itemstack.getItemDamage()].secondaryColor;
 		}
+	}
+	
+	@Override
+	public String[] getVariants() {
+		return variants.toArray(new String[variants.size()]);
 	}
 
 }

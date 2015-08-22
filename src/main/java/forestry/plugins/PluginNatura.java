@@ -90,19 +90,19 @@ public class PluginNatura extends ForestryPlugin {
 			ItemStack saplingWild = new ItemStack(saplingItem, 1, Defaults.WILDCARD);
 			RecipeUtil.injectLeveledRecipe(saplingWild, GameMode.getGameMode().getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
 
-			String saplingName = GameData.getItemRegistry().getNameForObject(saplingItem);
+			String saplingName = (String) GameData.getItemRegistry().getNameForObject(saplingItem);
 			FMLInterModComms.sendMessage(Defaults.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
 		}
 
-		berryBlight = GameRegistry.findItemStack(NATURA, "berryBlight", 1);
-		berryDusk = GameRegistry.findItemStack(NATURA, "berryDusk", 1);
-		berrySky = GameRegistry.findItemStack(NATURA, "berrySky", 1);
-		berrySting = GameRegistry.findItemStack(NATURA, "berrySting", 1);
-		berryRasp = GameRegistry.findItemStack(NATURA, "berryRasp", 1);
-		berryBlue = GameRegistry.findItemStack(NATURA, "berryBlue", 1);
-		berryBlack = GameRegistry.findItemStack(NATURA, "berryBlack", 1);
-		berryMalo = GameRegistry.findItemStack(NATURA, "berryMalo", 1);
-		itemBarley = GameRegistry.findItemStack(NATURA, "barleyFood", 1);
+		berryBlight = new ItemStack(GameRegistry.findItem(NATURA, "berryBlight"), 1);
+		berryDusk = new ItemStack(GameRegistry.findItem(NATURA, "berryDusk"), 1);
+		berrySky = new ItemStack(GameRegistry.findItem(NATURA, "berrySky"), 1);
+		berrySting = new ItemStack(GameRegistry.findItem(NATURA, "berrySting"), 1);
+		berryRasp = new ItemStack(GameRegistry.findItem(NATURA, "berryRasp"), 1);
+		berryBlue = new ItemStack(GameRegistry.findItem(NATURA, "berryBlue"), 1);
+		berryBlack = new ItemStack(GameRegistry.findItem(NATURA, "berryBlack"), 1);
+		berryMalo = new ItemStack(GameRegistry.findItem(NATURA, "berryMalo"), 1);
+		itemBarley = new ItemStack(GameRegistry.findItem(NATURA, "barleyFood"), 1);
 
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
 		crateRegistry.registerCrate(berryBlight, "cratedNaturaBerryBlight");
@@ -145,8 +145,8 @@ public class PluginNatura extends ForestryPlugin {
 
 	@Override
 	protected void registerRecipes() {
-		ItemStack seedBarley = GameRegistry.findItemStack(NATURA, "seedBarley", 1);
-		ItemStack seedCotton = GameRegistry.findItemStack(NATURA, "seedCotton", 1);
+		ItemStack seedBarley = new ItemStack(GameRegistry.findItem(NATURA, "seedBarley"), 1);
+		ItemStack seedCotton = new ItemStack(GameRegistry.findItem(NATURA, "seedCotton"), 1);
 
 		ArrayList<ItemStack> seedList = new ArrayList<ItemStack>();
 		if (seedBarley != null) {

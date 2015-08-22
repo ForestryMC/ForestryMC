@@ -12,8 +12,7 @@ package forestry.farming.gadgets;
 
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -36,7 +35,7 @@ public class TileValve extends TileFarm implements ILiquidTankContainer {
 
 	/* ILIQUIDTANKCONTAINER */
 	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
 		TankManager tankManager = getTankManager();
 		if (tankManager == null) {
 			return FakeTank.INSTANCE.fill(resource, doFill);
@@ -46,7 +45,7 @@ public class TileValve extends TileFarm implements ILiquidTankContainer {
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
 		TankManager tankManager = getTankManager();
 		if (tankManager == null) {
 			return null;
@@ -56,7 +55,7 @@ public class TileValve extends TileFarm implements ILiquidTankContainer {
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
 		TankManager tankManager = getTankManager();
 		if (tankManager == null) {
 			return FakeTank.INSTANCE.drain(maxDrain, doDrain);
@@ -66,7 +65,7 @@ public class TileValve extends TileFarm implements ILiquidTankContainer {
 	}
 
 	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
+	public boolean canFill(EnumFacing from, Fluid fluid) {
 		TankManager tankManager = getTankManager();
 		if (tankManager == null) {
 			return true;
@@ -76,7 +75,7 @@ public class TileValve extends TileFarm implements ILiquidTankContainer {
 	}
 
 	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+	public boolean canDrain(EnumFacing from, Fluid fluid) {
 		TankManager tankManager = getTankManager();
 		if (tankManager == null) {
 			return false;
@@ -86,7 +85,7 @@ public class TileValve extends TileFarm implements ILiquidTankContainer {
 	}
 
 	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+	public FluidTankInfo[] getTankInfo(EnumFacing from) {
 		TankManager tankManager = getTankManager();
 		if (tankManager == null) {
 			return FakeTank.INFO;

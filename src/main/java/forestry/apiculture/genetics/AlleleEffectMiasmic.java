@@ -81,11 +81,11 @@ public class AlleleEffectMiasmic extends AlleleEffectThrottled {
 		int[] area = getModifiedArea(genome, housing);
 
 		if (housing.getWorld().rand.nextBoolean()) {
-			PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getXCoord(), housing.getYCoord(),
-					housing.getZCoord(), genome.getPrimary().getIconColour(0), area[0], area[1], area[2]);
+			PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getCoords().getX(), housing.getCoords().getY(),
+					housing.getCoords().getZ(), genome.getPrimary().getIconColour(0), area[0], area[1], area[2]);
 		} else {
-			PluginApiculture.proxy.addBeeHiveFX("particles/poison", housing.getWorld(), housing.getXCoord(), housing.getYCoord(),
-					housing.getZCoord(), 0xffffff, area[0], area[1], area[2]);
+			PluginApiculture.proxy.addBeeHiveFX("particles/poison", housing.getWorld(), housing.getCoords().getX(), housing.getCoords().getY(),
+					housing.getCoords().getZ(), 0xffffff, area[0], area[1], area[2]);
 		}
 		return storedData;
 	}

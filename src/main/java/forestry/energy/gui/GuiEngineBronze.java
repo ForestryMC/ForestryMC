@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.IIcon;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -25,7 +25,6 @@ import forestry.core.gui.WidgetManager;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.SpriteSheet;
 import forestry.core.utils.StringUtil;
 import forestry.energy.gadgets.EngineBronze;
 
@@ -52,7 +51,7 @@ public class GuiEngineBronze extends GuiEngine {
 			if (fluid == null) {
 				return;
 			}
-			IIcon liquidIcon = fluid.getIcon();
+			TextureAtlasSprite liquidIcon = fluid.getIcon();
 			if (liquidIcon == null) {
 				return;
 			}
@@ -62,7 +61,7 @@ public class GuiEngineBronze extends GuiEngine {
 				squaled = height;
 			}
 
-			Proxies.common.bindTexture(SpriteSheet.BLOCKS);
+			Proxies.common.bindTexture();
 			int start = 0;
 
 			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);

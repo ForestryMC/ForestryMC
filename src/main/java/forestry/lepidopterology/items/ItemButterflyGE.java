@@ -13,14 +13,13 @@ package forestry.lepidopterology.items;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -239,6 +238,21 @@ public class ItemButterflyGE extends ItemGE {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public ModelType getModelType() {
+		return null;
+	}
+
+	@Override
+	public ItemMeshDefinition getMeshDefinition() {
+		return null;
+	}
+
+	@Override
+	public void registerModels() {
+		
 	}
 
 

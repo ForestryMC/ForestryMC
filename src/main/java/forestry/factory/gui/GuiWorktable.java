@@ -21,7 +21,6 @@ import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.WidgetManager;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
 import forestry.factory.gadgets.TileWorktable;
 
@@ -56,7 +55,7 @@ public class GuiWorktable extends GuiForestryTitled<TileWorktable> {
 
 			if (worktable.getMemory().isLocked(slotNumber)) {
 				manager.gui.setZLevel(110f);
-				Proxies.common.bindTexture(SpriteSheet.ITEMS);
+				Proxies.common.bindTexture();
 				manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos, TextureManager.getInstance().getDefault("slots/locked"), 16, 16);
 				manager.gui.setZLevel(0f);
 			}

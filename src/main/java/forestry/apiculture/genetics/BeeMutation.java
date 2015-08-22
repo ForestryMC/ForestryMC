@@ -110,7 +110,7 @@ public class BeeMutation extends Mutation implements IBeeMutation {
 			}
 		}
 
-		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenAt(housing.getXCoord(), housing.getZCoord());
+		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenerator(housing.getCoords());
 		if (biome.temperature < minTemperature || biome.temperature > maxTemperature) {
 			return 0;
 		}

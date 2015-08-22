@@ -31,6 +31,7 @@ import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.gadgets.MachineNBTDefinition;
+import forestry.core.gadgets.BlockBase.IEnumMachineDefinition;
 import forestry.core.items.ItemForestryBlock;
 import forestry.core.items.ItemNBTTile;
 import forestry.core.proxy.Proxies;
@@ -80,15 +81,7 @@ public class PluginFactory extends ForestryPlugin {
 				RecipeManagers.stillManager = new MachineStill.RecipeManager()
 		);
 
-		ForestryBlock.factoryTESR.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "factory");
-		ForestryBlock.factoryTESR.registerModel(new ItemMeshDefinition() {
-			
-			@Override
-			public ModelResourceLocation getModelLocation(ItemStack stack) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		});
+		ForestryBlock.factoryTESR.registerBlock(new BlockBase(Material.iron, true, getEnumMachineDefinition()), ItemForestryBlock.class, "factory");
 
 		BlockBase factoryTESR = ((BlockBase) ForestryBlock.factoryTESR.block());
 
@@ -172,7 +165,7 @@ public class PluginFactory extends ForestryPlugin {
 				'X', "gearTin",
 				'Y', ForestryItem.hardenedCasing)));
 
-		ForestryBlock.factoryPlain.registerBlock(new BlockBase(Material.iron), ItemNBTTile.class, "factory2");
+		ForestryBlock.factoryPlain.registerBlock(new BlockBase(Material.iron, EnumMachineDefinitionPlain.class), ItemNBTTile.class, "factory2");
 
 		BlockBase factoryPlain = ((BlockBase) ForestryBlock.factoryPlain.block());
 
@@ -458,6 +451,79 @@ public class PluginFactory extends ForestryPlugin {
 	@Override
 	public IGuiHandler getGuiHandler() {
 		return new GuiHandlerFactory();
+	}
+	
+	@Override
+	protected Class<? extends IEnumMachineDefinition> getEnumMachineDefinition() {
+		return EnumMachineDefinition.class;
+	}
+	
+	private enum EnumMachineDefinition implements IEnumMachineDefinition
+	{
+		BOTTLER(Defaults.DEFINITION_BOTTLER_META),
+		CARPENTER(Defaults.DEFINITION_CARPENTER_META),
+		CENTRIFUGE(Defaults.DEFINITION_CENTRIFUGE_META),
+		FERMENTER(Defaults.DEFINITION_FERMENTER_META),
+		MOISTENER(Defaults.DEFINITION_MOISTENER_META),
+		SQUEEZER(Defaults.DEFINITION_SQUEEZER_META),
+		STILL(Defaults.DEFINITION_STILL_META),
+		RAINMAKER(Defaults.DEFINITION_RAINMAKER_META);
+		
+		private EnumMachineDefinition(String name, int meta) {
+			this.meta = meta;
+			this.name = name;
+		}
+		
+		private EnumMachineDefinition(int meta) {
+			this.meta = meta;
+		}
+
+		private int meta;
+		private String name;
+		@Override
+		public String getName() {
+			if(name != null)
+				return name;
+			return name().toLowerCase().toLowerCase();
+		}
+
+		@Override
+		public int getMeta() {
+			return meta;
+		}
+		
+	}
+	
+	private enum EnumMachineDefinitionPlain implements IEnumMachineDefinition
+	{
+		FABRICATOR(Defaults.DEFINITION_RAINTANK_META),
+		RAINTANK(Defaults.DEFINITION_RAINTANK_META),
+		WORKTABLE(Defaults.DEFINITION_WORKTABLE_META);
+		
+		
+		private EnumMachineDefinitionPlain(String name, int meta) {
+			this.meta = meta;
+			this.name = name;
+		}
+		
+		private EnumMachineDefinitionPlain(int meta) {
+			this.meta = meta;
+		}
+
+		private int meta;
+		private String name;
+		@Override
+		public String getName() {
+			if(name != null)
+				return name;
+			return name().toLowerCase().toLowerCase();
+		}
+
+		@Override
+		public int getMeta() {
+			return meta;
+		}
+		
 	}
 
 }

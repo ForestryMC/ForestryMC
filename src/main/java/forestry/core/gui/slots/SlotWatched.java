@@ -1,9 +1,9 @@
 package forestry.core.gui.slots;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -56,10 +56,10 @@ public abstract class SlotWatched extends SlotForestry {
 		blockedTexture = ident;
 		return this;
 	}
-
-	@SideOnly(Side.CLIENT)
+	
 	@Override
-	public IIcon getBackgroundIconIndex() {
+	@SideOnly(Side.CLIENT)
+	public TextureAtlasSprite getBackgroundSprite() {
 		ItemStack stack = getStack();
 		if (!isItemValid(stack)) {
 			return TextureManager.getInstance().getDefault(blockedTexture);

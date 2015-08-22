@@ -279,4 +279,18 @@ public class ShapedRecipeCustom implements IDescriptiveRecipe {
 		CraftingManager.getInstance().getRecipeList().add(recipe);
 		return recipe;
 	}
+
+	@Override
+    public ItemStack[] getRemainingItems(InventoryCrafting inv)
+    {
+        ItemStack[] aitemstack = new ItemStack[inv.getSizeInventory()];
+
+        for (int i = 0; i < aitemstack.length; ++i)
+        {
+            ItemStack itemstack = inv.getStackInSlot(i);
+            aitemstack[i] = net.minecraftforge.common.ForgeHooks.getContainerItem(itemstack);
+        }
+
+        return aitemstack;
+    }
 }

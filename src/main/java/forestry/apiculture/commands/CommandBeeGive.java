@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -63,7 +64,7 @@ public class CommandBeeGive extends SubCommand {
 	}
 
 	@Override
-	public void processSubCommand(ICommandSender sender, String[] arguments) {
+	public void processSubCommand(ICommandSender sender, String[] arguments) throws PlayerNotFoundException, SpeciesNotFoundException, TemplateNotFoundException {
 		if (arguments.length < 2) {
 			printHelp(sender);
 			return;
@@ -99,7 +100,7 @@ public class CommandBeeGive extends SubCommand {
 		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.bee.give.given", player.getCommandSenderName(), bee.getGenome().getPrimary().getName(), beeType.getName());
 	}
 
-	private static IBeeGenome getBeeGenome(String speciesName) {
+	private static IBeeGenome getBeeGenome(String speciesName) throws SpeciesNotFoundException, TemplateNotFoundException {
 		IAlleleBeeSpecies species = null;
 
 		for (String uid : AlleleManager.alleleRegistry.getRegisteredAlleles().keySet()) {

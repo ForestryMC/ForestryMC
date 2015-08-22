@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import net.minecraft.client.gui.GuiButton;
@@ -101,7 +102,7 @@ public class GuiNaturalistInventory extends GuiForestry<TileForestry> {
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton guibutton) {
+	protected void actionPerformed(GuiButton guibutton) throws IOException {
 		super.actionPerformed(guibutton);
 
 		if (guibutton.id == 1 && pageCurrent > 0) {

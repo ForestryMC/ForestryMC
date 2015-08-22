@@ -18,6 +18,7 @@ import java.util.Map;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -131,7 +132,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 			return false;
 		}
 
-		BiomeGenBase biome = Utils.getBiomeAt(world, (int) x, (int) z);
+		BiomeGenBase biome = Utils.getBiomeAt(world, new BlockPos((int) x, (int)y, (int) z));
 		if (getGenome().getPrimary().getSpawnBiomes().size() > 0) {
 			boolean noneMatched = true;
 
@@ -162,7 +163,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		if (!canFly(world)) {
 			return false;
 		}
-		return isAcceptedEnvironment(Utils.getBiomeAt(world, (int) x, (int) z));
+		return isAcceptedEnvironment(Utils.getBiomeAt(world, new BlockPos((int) x, (int)y, (int) z)));
 	}
 
 	private boolean canFly(World world) {
@@ -174,7 +175,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 	@Override
 	public boolean isAcceptedEnvironment(World world, double x, double y, double z) {
-		return isAcceptedEnvironment(Utils.getBiomeAt(world, (int) x, (int) z));
+		return isAcceptedEnvironment(Utils.getBiomeAt(world, new BlockPos((int) x, (int)y, (int) z)));
 	}
 
 	private boolean isAcceptedEnvironment(BiomeGenBase biome) {

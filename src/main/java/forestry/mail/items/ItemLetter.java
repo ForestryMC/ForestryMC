@@ -12,19 +12,21 @@ package forestry.mail.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IMeshDefinitionObject;
+import forestry.api.core.IVariantObject;
 import forestry.api.mail.ILetter;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
@@ -35,12 +37,13 @@ import forestry.core.inventory.ItemInventory;
 import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.ModelManager;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.GuiUtil;
 import forestry.core.utils.StringUtil;
 import forestry.mail.Letter;
 
-public class ItemLetter extends ItemInventoried {
+public class ItemLetter extends ItemInventoried implements IVariantObject, IMeshDefinitionObject {
 
 	public static class LetterInventory extends ItemInventory implements IErrorSource, IHintSource {
 
@@ -119,10 +122,10 @@ public class ItemLetter extends ItemInventoried {
 		public int getSizeInventory() {
 			return letter.getSizeInventory();
 		}
-
+		
 		@Override
-		public String getInventoryName() {
-			return letter.getInventoryName();
+		public String getCommandSenderName() {
+			return letter.getCommandSenderName();
 		}
 
 		@Override
@@ -215,30 +218,7 @@ public class ItemLetter extends ItemInventoried {
 
 	/* ICONS */
 	@SideOnly(Side.CLIENT)
-	private IIcon[][] icons;
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerIcons(IIconRegister register) {
-		icons = new IIcon[3][4];
-		for (int i = 0; i < 3; i++) {
-			icons[i][0] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".fresh");
-			icons[i][1] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".stamped");
-			icons[i][2] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".opened");
-			icons[i][3] = TextureManager.getInstance().registerTex(register, "mail/letter." + i + ".emptied");
-		}
-
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIconFromDamage(int damage) {
-
-		int state = getState(damage);
-		int size = getSize(damage);
-
-		return icons[size][state];
-	}
+	private ModelResourceLocation[][] models;
 
 	public static int encodeMeta(int state, int size) {
 		int meta = size << 4;
@@ -277,6 +257,34 @@ public class ItemLetter extends ItemInventoried {
 		} else {
 			return 0;
 		}
+	}
+
+	@Override
+	public ItemMeshDefinition getMeshDefinition() {
+		return new ItemMeshDefinition() {
+			@Override
+			public ModelResourceLocation getModelLocation(ItemStack stack) {
+				if(models == null)
+				{
+					models = new ModelResourceLocation[4][4];
+					for(int i = 0;i < 3;i++)
+					{
+						models[i][0] = new ModelResourceLocation("mail/letter." + i +".fresh" , "inventory");
+						models[i][1] = new ModelResourceLocation("mail/letter." + i +".stamped" , "inventory");
+						models[i][2] = new ModelResourceLocation("mail/letter." + i +".opened" , "inventory");
+						models[i][3] = new ModelResourceLocation("mail/letter." + i +".emptied" , "inventory");
+					}
+				}
+				int state = getState(stack.getItemDamage());
+				int size = getSize(stack.getItemDamage());
+				return models[size][state];
+			}
+		};
+	}
+
+	@Override
+	public String[] getVariants() {
+		return new String[]{ "fresh", "stamped", "opened", "emptied" };
 	}
 
 }

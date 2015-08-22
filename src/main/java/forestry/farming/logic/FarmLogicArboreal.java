@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
@@ -26,7 +27,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -39,7 +39,6 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.config.ForestryBlock;
 import forestry.core.gadgets.BlockSoil;
-import forestry.core.render.SpriteSheet;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
 
@@ -77,13 +76,8 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		return Blocks.sapling.getBlockTextureFromSide(0);
-	}
-
-	@Override
-	public ResourceLocation getSpriteSheet() {
-		return SpriteSheet.BLOCKS.getLocation();
+	public TextureAtlasSprite getIcon() {
+		return getSprite("minecraft", "blocks/sapling_oak");
 	}
 
 	@Override
@@ -110,7 +104,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		Vect min = coords.add(offset);
 		Vect max = min.add(area);
 
-		AxisAlignedBB harvestBox = AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, getWorld().getHeight(), max.z);
+		AxisAlignedBB harvestBox = AxisAlignedBB.fromBounds(min.x, min.y, min.z, max.x, getWorld().getHeight(), max.z);
 		List<Entity> list = getWorld().getEntitiesWithinAABB(Entity.class, harvestBox);
 
 		for (Entity entity : list) {

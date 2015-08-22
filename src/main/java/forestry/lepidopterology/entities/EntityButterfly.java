@@ -23,10 +23,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -90,7 +91,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	public static final int EXHAUSTION_REST = 1000;
 	public static final int EXHAUSTION_CONSUMPTION = 100 * EXHAUSTION_REST;
 
-	private ChunkCoordinates flightTarget;
+	private BlockPos flightTarget;
 	private int exhaustion;
 
 	private IAlleleButterflySpecies species;
@@ -189,31 +190,31 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	}
 
 	/* DESTINATION */
-	public ChunkCoordinates getDestination() {
+	public BlockPos getDestination() {
 		return flightTarget;
 	}
 
-	public void setDestination(ChunkCoordinates destination) {
+	public void setDestination(BlockPos destination) {
 		flightTarget = destination;
 	}
 
 	@Override
-	public float getBlockPathWeight(int x, int y, int z) {
+	public float getBlockPathWeight(BlockPos pos) {
 		float weight = 0.0f;
 
-		if (!getButterfly().isAcceptedEnvironment(worldObj, x, y, z)) {
+		if (!getButterfly().isAcceptedEnvironment(worldObj, pos.getX(), pos.getY(), pos.getZ())) {
 			weight -= 15.0f;
 		}
 
-		if (!worldObj.getEntitiesWithinAABB(EntityButterfly.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1)).isEmpty()) {
+		if (!worldObj.getEntitiesWithinAABB(EntityButterfly.class, AxisAlignedBB.fromBounds(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1)).isEmpty()) {
 			weight -= 1.0f;
 		}
 
-		int depth = getFluidDepth(x, z);
+		int depth = getFluidDepth(pos);
 		if (depth > 0) {
 			weight -= 0.1f * depth;
 		} else {
-			Block block = worldObj.getBlock(x, y, z);
+			Block block = worldObj.getBlockState(pos).getBlock();
 			if (block instanceof BlockFlower) {
 				weight += 2.0f;
 			} else if (block instanceof IPlantable) {
@@ -224,8 +225,8 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 				weight += 1.0f;
 			}
 
-			block = worldObj.getBlock(x, y - 1, z);
-			if (block.isLeaves(worldObj, x, y - 1, z)) {
+			block = worldObj.getBlockState(new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())).getBlock();
+			if (block.isLeaves(worldObj, new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ()))) {
 				weight += 2.5f;
 			} else if (block instanceof BlockFence) {
 				weight += 1.0f;
@@ -234,20 +235,20 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 			}
 		}
 
-		weight += worldObj.getLightBrightness(x, y, z);
+		weight += worldObj.getLightFromNeighbors(pos);
 		return weight;
 	}
 
-	private int getFluidDepth(int x, int z) {
-		Chunk chunk = worldObj.getChunkFromBlockCoords(x, z);
-		int xx = x & 15;
-		int zz = z & 15;
+	private int getFluidDepth(BlockPos pos) {
+		Chunk chunk = worldObj.getChunkFromBlockCoords(pos);
+		int xx = pos.getX() & 15;
+		int zz = pos.getZ() & 15;
 		int depth = 0;
 		for (int y = chunk.getTopFilledSegment() + 15; y > 0; --y) {
 			Block block = chunk.getBlock(xx, y, zz);
 			if (block.getMaterial().isLiquid()) {
 				depth++;
-			} else if (!block.isAir(worldObj, x, y, z)) {
+			} else if (!block.isAir(worldObj, pos)) {
 				break;
 			}
 		}
@@ -329,9 +330,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		lastUpdate = worldObj.getTotalWorldTime();
 		return this;
 	}
-
+	
 	@Override
-	public IEntityLivingData onSpawnWithEgg(IEntityLivingData data) {
+	public IEntityLivingData onSpawnFirstTime(DifficultyInstance difficulty, IEntityLivingData data) {
 		if (Proxies.common.isSimulating(worldObj)) {
 			setIndividual(contained);
 		}
@@ -384,11 +385,6 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	}
 
 	@Override
-	protected boolean isAIEnabled() {
-		return true;
-	}
-
-	@Override
 	protected boolean canDespawn() {
 		return false;
 	}
@@ -408,7 +404,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 		if (Proxies.common.isSimulating(worldObj)) {
 			contained.getGenome().getPrimary().getRoot().getBreedingTracker(worldObj, player.getGameProfile()).registerCatch(contained);
-			StackUtils.dropItemStackAsEntity(PluginLepidopterology.butterflyInterface.getMemberStack(contained.copy(), EnumFlutterType.BUTTERFLY.ordinal()), worldObj, posX, posY, posZ);
+			StackUtils.dropItemStackAsEntity(PluginLepidopterology.butterflyInterface.getMemberStack(contained.copy(), EnumFlutterType.BUTTERFLY.ordinal()), worldObj, getPosition());
 			setDead();
 		} else {
 			player.swingItem();
@@ -420,12 +416,12 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	@Override
 	protected void dropFewItems(boolean playerKill, int lootLevel) {
 		for (ItemStack stack : contained.getLootDrop(this, playerKill, lootLevel)) {
-			StackUtils.dropItemStackAsEntity(stack, worldObj, posX, posY, posZ);
+			StackUtils.dropItemStackAsEntity(stack, worldObj, getPosition());
 		}
 
 		// Drop pollen if any
 		if (getPollen() != null) {
-			StackUtils.dropItemStackAsEntity(AlleleManager.alleleRegistry.getSpeciesRoot(getPollen().getClass()).getMemberStack(getPollen(), EnumGermlingType.POLLEN.ordinal()), worldObj, posX, posY, posZ);
+			StackUtils.dropItemStackAsEntity(AlleleManager.alleleRegistry.getSpeciesRoot(getPollen().getClass()).getMemberStack(getPollen(), EnumGermlingType.POLLEN.ordinal()), worldObj, getPosition());
 		}
 	}
 
@@ -436,7 +432,7 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
 		// Update stuff client side
 		if (!Proxies.common.isSimulating(worldObj)) {
-			if (species == null || dataWatcher.hasChanges()) {
+			if (species == null || dataWatcher.hasObjectChanged()) {
 				scale = (float) dataWatcher.getWatchableObjectInt(DATAWATCHER_ID_SCALE) / 100;
 				String uid = dataWatcher.getWatchableObjectString(DATAWATCHER_ID_SPECIES);
 				if (species == null || !species.getUID().equals(uid)) {
@@ -476,9 +472,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 		super.updateAITasks();
 
 		if (state.doesMovement && flightTarget != null) {
-			double diffX = flightTarget.posX + 0.5d - posX;
-			double diffY = flightTarget.posY + 0.1d - posY;
-			double diffZ = flightTarget.posZ + 0.5d - posZ;
+			double diffX = flightTarget.getX() + 0.5d - posX;
+			double diffY = flightTarget.getY() + 0.1d - posY;
+			double diffZ = flightTarget.getZ() + 0.5d - posZ;
 
 			motionX += (Math.signum(diffX) * 0.5d - motionX) * 0.10000000149011612d;
 			motionY += (Math.signum(diffY) * 0.699999988079071d - motionY) * 0.10000000149011612d;
@@ -498,13 +494,13 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 	protected boolean canTriggerWalking() {
 		return false;
 	}
-
+	
 	@Override
-	protected void fall(float par1) {
+	public void fall(float distance, float damageMultiplier) {
 	}
-
+	
 	@Override
-	protected void updateFallState(double par1, boolean par3) {
+	protected void updateFallState(double y, boolean onGroundIn, Block blockIn, BlockPos pos) {
 	}
 
 	@Override

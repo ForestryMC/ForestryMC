@@ -82,7 +82,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 
 	@Override
 	public void openGui(EntityPlayer player, TileBase tile) {
-		player.openGui(ForestryAPI.instance, GuiId.EngineTinGUI.ordinal(), player.worldObj, xCoord, yCoord, zCoord);
+		player.openGui(ForestryAPI.instance, GuiId.EngineTinGUI.ordinal(), player.worldObj, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	// / SAVING / LOADING
@@ -178,7 +178,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 			return;
 		}
 
-		ic2EnergySink.updateEntity();
+		ic2EnergySink.update();
 
 		super.updateServerSide();
 

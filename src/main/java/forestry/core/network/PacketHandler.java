@@ -210,7 +210,7 @@ public class PacketHandler {
 	private void onSocketUpdate(PacketSocketUpdate packet) {
 		assert FMLCommonHandler.instance().getEffectiveSide().isClient();
 
-		TileEntity tile = Proxies.common.getRenderWorld().getTileEntity(packet.posX, packet.posY, packet.posZ);
+		TileEntity tile = Proxies.common.getRenderWorld().getTileEntity(packet.pos);
 		if (!(tile instanceof ISocketable)) {
 			return;
 		}
@@ -232,7 +232,7 @@ public class PacketHandler {
 
 	private void onInventoryStack(PacketInventoryStack packet) {
 
-		TileEntity tile = Proxies.common.getRenderWorld().getTileEntity(packet.posX, packet.posY, packet.posZ);
+		TileEntity tile = Proxies.common.getRenderWorld().getTileEntity(packet.pos);
 		if (tile == null) {
 			return;
 		}
@@ -271,7 +271,7 @@ public class PacketHandler {
 	private void onAccessSwitch(PacketCoordinates packet, EntityPlayer playerEntity) {
 		assert FMLCommonHandler.instance().getEffectiveSide().isServer();
 
-		TileForestry tile = (TileForestry) playerEntity.worldObj.getTileEntity(packet.posX, packet.posY, packet.posZ);
+		TileForestry tile = (TileForestry) playerEntity.worldObj.getTileEntity(packet.pos);
 		if (tile == null) {
 			return;
 		}

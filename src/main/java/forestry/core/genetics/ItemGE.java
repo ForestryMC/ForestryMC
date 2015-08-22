@@ -19,13 +19,14 @@ import net.minecraft.util.EnumChatFormatting;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.IMeshDefinitionObject;
 import forestry.api.core.IModelObject;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
-public abstract class ItemGE extends Item {
+public abstract class ItemGE extends Item implements IModelObject, IMeshDefinitionObject {
 
 	protected ItemGE() {
 		super();
@@ -100,5 +101,8 @@ public abstract class ItemGE extends Item {
 	public int getColourFromSpecies(IAlleleSpecies species, int renderPass) {
 		return 0xffffff;
 	}
+	
+	@SideOnly(Side.CLIENT)
+	public abstract void registerModels();
 
 }

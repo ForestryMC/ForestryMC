@@ -23,10 +23,11 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
+import forestry.api.core.IVariantObject;
 import forestry.core.config.ForestryItem;
-import forestry.core.items.ItemForestryMultiPass;
+import forestry.core.items.ItemForestry;
 
-public class ItemCircuitBoard extends ItemForestryMultiPass {
+public class ItemCircuitBoard extends ItemForestry implements IVariantObject {
 
 	public ItemCircuitBoard() {
 		super();
@@ -90,6 +91,16 @@ public class ItemCircuitBoard extends ItemForestryMultiPass {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		circuitboard.writeToNBT(nbttagcompound);
 		itemstack.setTagCompound(nbttagcompound);
+	}
+	
+	@Override
+	public ModelType getModelType() {
+		return ModelType.META;
+	}
+	
+	@Override
+	public String[] getVariants() {
+		return new String[]{ "basic", "enhanced", "refined", "intricate"};
 	}
 
 }

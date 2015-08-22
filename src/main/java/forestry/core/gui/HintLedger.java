@@ -42,9 +42,9 @@ public class HintLedger extends Ledger {
 			return;
 		}
 
-		manager.minecraft.fontRenderer.drawStringWithShadow(StringUtil.localize("gui.didyouknow") + "?", x + 22, y + 8,
+		manager.minecraft.fontRendererObj.drawStringWithShadow(StringUtil.localize("gui.didyouknow") + "?", x + 22, y + 8,
 				manager.gui.fontColor.get("ledger.hint.header"));
-		manager.minecraft.fontRenderer.drawSplitString(StringUtil.localize("hints." + hints[position] + ".desc"), x + 22, y + 20, maxWidth - 28,
+		manager.minecraft.fontRendererObj.drawSplitString(StringUtil.localize("hints." + hints[position] + ".desc"), x + 22, y + 20, maxWidth - 28,
 				manager.gui.fontColor.get("ledger.hint.text"));
 
 	}
