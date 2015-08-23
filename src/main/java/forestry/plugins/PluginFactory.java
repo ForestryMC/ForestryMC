@@ -228,7 +228,7 @@ public class PluginFactory extends ForestryPlugin {
 						"W",
 						"C",
 						'B', Items.book,
-						'W', Blocks.crafting_table,
+						'W', "craftingTableWood",
 						'C', "chestWood"))
 				.setFaces(0, 1, 2, 3, 4, 4));
 

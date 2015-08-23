@@ -134,6 +134,7 @@ public class PluginCore extends ForestryPlugin {
 		OreDictionary.registerOre("blockTin", ForestryBlock.resourceStorage.getItemStack(1, 2));
 		OreDictionary.registerOre("blockBronze", ForestryBlock.resourceStorage.getItemStack(1, 3));
 		OreDictionary.registerOre("chestWood", Blocks.chest);
+		OreDictionary.registerOre("craftingTableWood", Blocks.crafting_table);
 		ForestryBlock.glass.registerBlock(new BlockStainedGlass(), ItemForestryBlock.class, "stained");
 	}
 
