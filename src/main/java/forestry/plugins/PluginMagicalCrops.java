@@ -136,6 +136,43 @@ public class PluginMagicalCrops extends ForestryPlugin {
 				"SugarCane"
 		);
 
+		ImmutableList<String> betaSeeds = ImmutableList.of(
+				"Air",
+				"Blaze",
+				"Bronze",
+				"Chicken",
+				"Coal",
+				"Copper",
+				"Cow",
+				"Creeper",
+				"Diamond",
+				"Dye",
+				"Earth",
+				"Emerald",
+				"Enderman",
+				"Experience",
+				"Fire",
+				"Ghast",
+				"Glowstone",
+				"Gold",
+				"Iron",
+				"Lapis",
+				"Minicio",
+				"Nature",
+				"Nether",
+				"Obsidian",
+				"Pig",
+				"Quartz",
+				"Redstone",
+				"Sheep",
+				"Skeleton",
+				"Slime",
+				"Spider",
+				"Tin",
+				"Water",
+				"Wither"
+		);
+
 		int seedAmount = GameMode.getGameMode().getIntegerSetting("squeezer.liquid.seed");
 
 		for (String magicSeedName : magicSeeds) {
@@ -161,6 +198,9 @@ public class PluginMagicalCrops extends ForestryPlugin {
 		for (String seedName : seeds) {
 			addRecipes("_Seeds", "_Crop", seedName, seedAmount);
 		}
+		for (String seedName : betaSeeds) {
+			addBetaRecipes("Seeds", "Crop", seedName);
+		}
 
 		Item cropProduce = GameRegistry.findItem(MagCrop, MagCrop + "_CropProduce");
 		if (cropProduce != null) {
@@ -177,6 +217,13 @@ public class PluginMagicalCrops extends ForestryPlugin {
 		if (seed != null) {
 			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{seed}, Fluids.SEEDOIL.getFluid(fluidAmount));
 		}
+		if (seed != null && crop != null && Config.isMagicalCropsSupportEnabled()) {
+			Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seed, crop, 7));
+		}
+	}
+	private static void addBetaRecipes(String seedSuffix, String cropSuffix, String name) {
+		ItemStack seed = GameRegistry.findItemStack(MagCrop, MagCrop +"_"+ name + seedSuffix, 1);
+		Block crop = GameRegistry.findBlock(MagCrop, MagCrop + "_" + name + cropSuffix);
 		if (seed != null && crop != null && Config.isMagicalCropsSupportEnabled()) {
 			Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seed, crop, 7));
 		}
