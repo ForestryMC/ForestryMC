@@ -12,32 +12,27 @@ package forestry.apiculture.gadgets;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.EnumSkyBlock;
 
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.InventoryAdapter;
 
-public class TileSwarm extends TileEntity {
+public class TileSwarm extends TileEntity implements IUpdatePlayerListBox {
 
 	public final InventoryAdapter contained = new InventoryAdapter(2, "Contained");
-
-	@Override
-	public boolean canUpdate() {
-		return true;
-	}
-
+	
 	// Hack to make sure that hives glow.
 	// TODO: remove when Mojang fixes this bug: https://bugs.mojang.com/browse/MC-3329
 	// Hives should not need to tick normally.
 	private boolean updatedLight;
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
 
 		if (worldObj.isRemote && !updatedLight && worldObj.getWorldTime() % 20 == 0) {
-			updatedLight = worldObj.updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
+			updatedLight = worldObj.checkLightFor(EnumSkyBlock.BLOCK, pos);
 		}
 	}
 

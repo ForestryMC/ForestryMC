@@ -15,8 +15,7 @@ import java.util.LinkedList;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.apiculture.IBeeGenome;
@@ -38,7 +37,7 @@ public class TileApiary extends TileBeehouse {
 
 	@Override
 	public void openGui(EntityPlayer player, TileBase tile) {
-		player.openGui(ForestryAPI.instance, GuiId.ApiaryGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
+		player.openGui(ForestryAPI.instance, GuiId.ApiaryGUI.ordinal(), worldObj, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	/* IBEEHOUSING */
@@ -248,7 +247,7 @@ public class TileApiary extends TileBeehouse {
 	/* ITRIGGERPROVIDER */
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
+	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(ApicultureTriggers.missingQueen);
 		res.add(ApicultureTriggers.missingDrone);

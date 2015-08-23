@@ -19,6 +19,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -61,8 +62,8 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 		buildingBlocks = createBuildingBlocks(random);
 	}
 
-	public ComponentVillageBeeHouse(StructureVillagePieces.Start startPiece, int componentType, Random random, StructureBoundingBox boundingBox, int coordBaseMode) {
-		super(startPiece, componentType, random, boundingBox, coordBaseMode);
+	public ComponentVillageBeeHouse(StructureVillagePieces.Start startPiece, int componentType, Random random, StructureBoundingBox boundingBox, EnumFacing side) {
+		super(startPiece, componentType, random, boundingBox, side);
 
 		isInDesert = startPiece.inDesert;
 
@@ -116,10 +117,10 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 	 }*/
 	@SuppressWarnings("rawtypes")
 	public static ComponentVillageBeeHouse buildComponent(StructureVillagePieces.Start startPiece, List par1List, Random random, int par3, int par4, int par5,
-			int par6, int par7) {
-		StructureBoundingBox bbox = StructureBoundingBox.getComponentToAddBoundingBox(par3, par4, par5, 0, 0, 0, 9, 9, 10, par6);
+			EnumFacing side, int par7) {
+		StructureBoundingBox bbox = StructureBoundingBox.func_175897_a(par3, par4, par5, 0, 0, 0, 9, 9, 10, side);
 		return canVillageGoDeeper(bbox) && StructureComponent.findIntersecting(par1List, bbox) == null ? new ComponentVillageBeeHouse(startPiece, par7, random,
-				bbox, par6) : null;
+				bbox, side) : null;
 	}
 
 	@Override
@@ -134,14 +135,14 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 			this.boundingBox.offset(0, this.averageGroundLevel - this.boundingBox.maxY + 8 - 1, 0);
 		}
 
-		this.fillWithBlocks(world, structBoundingBox, 1, 1, 1, 7, 4, 4, Blocks.air, Blocks.air, false);
-		this.fillWithBlocks(world, structBoundingBox, 2, 1, 6, 8, 4, 10, Blocks.air, Blocks.air, false);
+		this.fillWithAir(world, structBoundingBox, 1, 1, 1, 7, 4, 4);
+		this.fillWithAir(world, structBoundingBox, 2, 1, 6, 8, 4, 10);
 
 		// Garden
 		buildGarden(world, structBoundingBox);
 
 		// Garden fence
-		this.fillWithBlocks(world, structBoundingBox, 1, 1, 6, 1, 1, 10, Blocks.fence, Blocks.fence, false);
+		this.fillWithBlocks(world, structBoundingBox, 1, 1, 6, 1, 1, 10, Blocks.oak_fence, Blocks.fence, false);
 		this.fillWithBlocks(world, structBoundingBox, 8, 1, 6, 8, 1, 10, Blocks.fence, Blocks.fence, false);
 		this.fillWithBlocks(world, structBoundingBox, 2, 1, 10, 7, 1, 10, Blocks.fence, Blocks.fence, false);
 

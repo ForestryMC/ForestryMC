@@ -21,6 +21,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -34,6 +35,7 @@ import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.client.ItemModelMesherForge;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ChestGenHooks;
@@ -131,6 +133,7 @@ import forestry.apiculture.items.ItemHoneycomb;
 import forestry.apiculture.items.ItemImprinter;
 import forestry.apiculture.items.ItemWaxCast;
 import forestry.apiculture.proxy.ProxyApiculture;
+import forestry.apiculture.render.ModelHabitatLocator;
 import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveDescription;
@@ -351,7 +354,7 @@ public class PluginApiculture extends ForestryPlugin {
 			VillageHandlerApiculture villageHandler = new VillageHandlerApiculture();
 			VillagerRegistry.instance().registerVillageCreationHandler(villageHandler);
 			VillagerRegistry.instance().registerVillagerId(Defaults.ID_VILLAGER_BEEKEEPER);
-			Proxies.render.registerVillagerSkin(Defaults.ID_VILLAGER_BEEKEEPER, Defaults.TEXTURE_SKIN_BEEKPEEPER);
+			Proxies.render.registerVillagerSkin(Defaults.ID_VILLAGER_BEEKEEPER, Defaults.TEXTURE_SKIN_BEEKEEPER);
 			VillagerRegistry.instance().registerVillageTradeHandler(Defaults.ID_VILLAGER_BEEKEEPER, villageHandler);
 		}
 
@@ -1331,7 +1334,21 @@ public class PluginApiculture extends ForestryPlugin {
 		for (int i = 0; i < EntitySnowFX.icons.length; i++) {
 			EntitySnowFX.icons[i] = event.map.registerSprite(new ResourceLocation("forestry:textures/items/particles/snow." + (i + 1)));
 		}
+		ItemHabitatLocator.registerIcon(event.map);
 	}
+	
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void modelHook(ModelBakeEvent event)
+	{
+	    Object object =  event.modelRegistry.getObject(ModelHabitatLocator.modelResourceLocation);
+	    if (object instanceof IBakedModel) {
+	      IBakedModel existingModel = (IBakedModel)object;
+	      ModelHabitatLocator customModel = new ModelHabitatLocator(existingModel);
+	      event.modelRegistry.putObject(ModelHabitatLocator.modelResourceLocation, customModel);
+	    }
+	}
+	
 	
 	@Override
 	protected Class<? extends IEnumMachineDefinition> getEnumMachineDefinition() {

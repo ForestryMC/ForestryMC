@@ -56,7 +56,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 
 	@Override
 	public void openGui(EntityPlayer player) {
-		player.openGui(ForestryAPI.instance, GuiId.AlvearySwarmerGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
+		player.openGui(ForestryAPI.instance, GuiId.AlvearySwarmerGUI.ordinal(), worldObj, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	/* UPDATING */
@@ -141,8 +141,8 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 		HiveDescriptionSwarmer hiveDescription = new HiveDescriptionSwarmer(toSpawn);
 		Hive hive = new Hive(hiveDescription);
 
-		int chunkX = (xCoord + worldObj.rand.nextInt(40 * 2) - 40) / 16;
-		int chunkZ = (zCoord + worldObj.rand.nextInt(40 * 2) - 40) / 16;
+		int chunkX = (pos.getX() + worldObj.rand.nextInt(40 * 2) - 40) / 16;
+		int chunkZ = (pos.getZ() + worldObj.rand.nextInt(40 * 2) - 40) / 16;
 
 		if (HiveDecorator.instance().genHive(worldObj, worldObj.rand, chunkX, chunkZ, hive)) {
 			pendingSpawns.pop();
@@ -162,7 +162,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory {
 		boolean act = payload.shortPayload[0] > 0;
 		if (this.isActive != act) {
 			this.isActive = act;
-			worldObj.func_147479_m(xCoord, yCoord, zCoord);
+			worldObj.markBlockRangeForRenderUpdate(pos, pos);
 		}
 	}
 

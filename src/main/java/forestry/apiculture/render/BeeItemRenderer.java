@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.render;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -125,7 +126,7 @@ public class BeeItemRenderer implements IItemRenderer {
 		entity.rotationPitch = -((float) Math.atan(pitch / 40.0F)) * 20.0F;
 		entity.rotationYawHead = entity.rotationYaw;
 
-		RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, getWingYaw(bee));
+		Minecraft.getMinecraft().getRenderManager().renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, getWingYaw(bee));
 
 		GL11.glPopMatrix();
 
@@ -151,7 +152,7 @@ public class BeeItemRenderer implements IItemRenderer {
         renderBeeHalo();
         GL11.glPopMatrix();
 		 */
-
+		
 		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -171,7 +172,7 @@ public class BeeItemRenderer implements IItemRenderer {
 		entity.rotationPitch = 0;
 		entity.rotationYawHead = entity.rotationYaw;
 
-		RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, getWingYaw(bee));
+		Minecraft.getMinecraft().getRenderManager().renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, getWingYaw(bee));
 
 		GL11.glPopMatrix();
 		RenderHelper.disableStandardItemLighting();

@@ -15,6 +15,8 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityDiggingFX;
@@ -27,6 +29,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -35,6 +38,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IVariantObject;
 import forestry.core.gadgets.BlockStructure;
+import forestry.core.gadgets.BlockResourceStorageBlock.Resources;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.ModelManager;
 import forestry.core.render.ParticleHelper;
@@ -44,12 +48,40 @@ import forestry.plugins.PluginFarming;
 
 public class BlockFarm extends BlockStructure {
 
+	public final PropertyEnum META = PropertyEnum.create("meta", EnumFarmBlockMeta.class);
 	private static BlockFarm instance;
+	
+	public enum EnumFarmBlockMeta implements IStringSerializable
+	{
+		DEFAULT,
+		DEFAULT_1,
+		GEARBOX,
+		HATCH,
+		VALVE,
+		CONTROL;
+
+		public int getMeta()
+		{
+			return ordinal();
+		}
+		
+		@Override
+		public String getName() {
+			return name().toLowerCase();
+		}
+		
+	}
 
 	public BlockFarm() {
 		super(Material.rock);
 		setHardness(1.0f);
 		instance = this;
+		setDefaultState(this.blockState.getBaseState().withProperty(META, EnumFarmBlockMeta.DEFAULT));
+	}
+	
+	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, META);
 	}
 
 	@Override
@@ -69,6 +101,16 @@ public class BlockFarm extends BlockStructure {
 				list.add(stack);
 			}
 		}
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return ((EnumFarmBlockMeta)state.getValue(META)).getMeta();
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(META, meta);
 	}
 	
 	@Override
@@ -171,7 +213,14 @@ public class BlockFarm extends BlockStructure {
 
 		@SideOnly(Side.CLIENT)
 		private void setTexture(EntityDiggingFX fx, World world, int x, int y, int z, int meta) {
-			fx.setParticleIcon(instance.getIcon(world, x, y, z, 0));
+			TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
+			EnumFarmBlock base = EnumFarmBlock.BRICK_STONE;
+
+			if (tile instanceof TileFarm) {
+				base = ((TileFarm) tile).farmBlock;
+			}
+
+			fx.setParticleIcon(EnumFarmBlock.getIcon(base.ordinal()));
 		}
 
 	}

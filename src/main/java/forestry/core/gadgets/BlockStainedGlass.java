@@ -18,6 +18,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockBreakable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumDyeColor;
@@ -32,6 +33,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelObject;
 import forestry.api.core.IVariantObject;
 import forestry.core.CreativeTabForestry;
+import forestry.core.gadgets.BlockResourceStorageBlock.Resources;
 import forestry.core.render.TextureManager;
 
 public class BlockStainedGlass extends BlockBreakable implements IModelObject, IVariantObject {
@@ -43,6 +45,12 @@ public class BlockStainedGlass extends BlockBreakable implements IModelObject, I
 		setHardness(0.3F);
 		setStepSound(soundTypeGlass);
 		setCreativeTab(CreativeTabForestry.tabForestry);
+		setDefaultState(this.blockState.getBaseState().withProperty(COLOR, EnumDyeColor.WHITE));
+	}
+	
+	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, COLOR);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})

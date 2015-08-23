@@ -12,9 +12,7 @@ package forestry.arboriculture;
 
 import java.util.Locale;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -22,55 +20,30 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.core.render.TextureManager;
 
 public enum WoodType {
-	LARCH, TEAK, ACACIA, LIME,
-	CHESTNUT, WENGE, BAOBAB, SEQUOIA(4.0f),
-	KAPOK, EBONY, MAHOGANY, BALSA(1.0f),
-	WILLOW, WALNUT, GREENHEART(7.5f), CHERRY,
-	MAHOE, POPLAR, PALM, PAPAYA,
-	PINE(3.0f), PLUM, MAPLE, CITRUS,
-	GIGANTEUM(2.0f), IPE, PADAUK, COCOBOLO,
-	ZEBRAWOOD;
+	LARCH(0), TEAK(1), ACACIA(2), LIME(3),
+	CHESTNUT(0), WENGE(1), BAOBAB(2), SEQUOIA(4.0f, 3),
+	KAPOK(0), EBONY(1), MAHOGANY(2), BALSA(1.0f, 3),
+	WILLOW(0), WALNUT(1), GREENHEART(7.5f, 2), CHERRY(3),
+	MAHOE(0), POPLAR(1), PALM(2), PAPAYA(3),
+	PINE(3.0f, 0), PLUM(1), MAPLE(2), CITRUS(3),
+	GIGANTEUM(2.0f, 0), IPE(1), PADAUK(2), COCOBOLO(3),
+	ZEBRAWOOD(0);
 
 	public static final WoodType[] VALUES = values();
 	private final float hardness;
+	private final int meta;
 
-	private WoodType() {
-		this(2.0f);
+	private WoodType(int meta) {
+		this(2.0f, meta);
 	}
 
-	private WoodType(float hardness) {
+	private WoodType(float hardness, int meta) {
 		this.hardness = hardness;
+		this.meta = meta;
 	}
-
-	@SideOnly(Side.CLIENT)
-	private static IIcon[][] icons;
-
-	@SideOnly(Side.CLIENT)
-	public static void registerIcons(IIconRegister register) {
-		icons = new IIcon[3][VALUES.length];
-		for (int i = 0; i < VALUES.length; i++) {
-			WoodType woodType = VALUES[i];
-			String woodName = woodType.toString().toLowerCase(Locale.ENGLISH);
-
-			icons[0][i] = TextureManager.getInstance().registerTex(register, "wood/planks." + woodName);
-			icons[1][i] = TextureManager.getInstance().registerTex(register, "wood/bark." + woodName);
-			icons[2][i] = TextureManager.getInstance().registerTex(register, "wood/heart." + woodName);
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getPlankIcon() {
-		return icons[0][ordinal()];
-	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getBarkIcon() {
-		return icons[1][ordinal()];
-	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getHeartIcon() {
-		return icons[2][ordinal()];
+	
+	public int getMeta() {
+		return meta;
 	}
 
 	public float getHardness() {

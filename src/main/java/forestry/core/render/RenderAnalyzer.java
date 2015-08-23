@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -18,8 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
@@ -68,7 +67,7 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer implements IBlockR
 			lastTick = world.getTotalWorldTime();
 			dummyEntityItem.onUpdate();
 		}
-		customRenderItem.renderItemModel(dummyEntityItem.getEntityItem());
+		Minecraft.getMinecraft().getRenderItem().renderItemModel(dummyEntityItem.getEntityItem());
 		GL11.glPopMatrix();
 
 	}

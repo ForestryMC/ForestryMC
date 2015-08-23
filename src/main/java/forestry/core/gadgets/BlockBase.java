@@ -16,13 +16,16 @@ import java.util.List;
 import com.oracle.webservices.internal.api.message.BasePropertySet.PropertyMapEntry;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -69,6 +72,7 @@ public class BlockBase extends BlockForestry implements IVariantObject, IModelOb
 		this.enumDefinition = enumDefinition;
 		this.hasTESR = hasTESR;
 		META = PropertyEnum.create("meta", enumDefinition);
+		setDefaultState(this.blockState.getBaseState().withProperty(META, (Enum)enumDefinition.getEnumConstants()[0]));
 	}
 
 	public MachineDefinition addDefinition(MachineDefinition definition) {
@@ -87,6 +91,11 @@ public class BlockBase extends BlockForestry implements IVariantObject, IModelOb
 	public int getMetaFromState(IBlockState state) {
 		return ((IEnumMachineDefinition)state.getProperties().get(META)).getMeta();
 	}
+	
+    protected BlockState createBlockState()
+    {
+        return new BlockState(this, new IProperty[] {META});
+    }
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {

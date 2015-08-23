@@ -48,26 +48,30 @@ public enum EnumFarmBlock implements IStringSerializable {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	private static List<TextureAtlasSprite> icons;
+	private static List<TextureAtlasSprite> blockIcons;
+	
 
 	@SideOnly(Side.CLIENT)
 	public static void registerIcons(TextureMap register) {
 		TextureManager textureManager = TextureManager.getInstance();
-		icons = Arrays.asList(
-				textureManager.registerTex(register, "farm/plain"),
-				textureManager.registerTex(register, "farm/reverse"),
-				textureManager.registerTex(register, "farm/top"),
-				textureManager.registerTex(register, "farm/band"),
-				textureManager.registerTex(register, "farm/gears"),
-				textureManager.registerTex(register, "farm/hatch"),
-				textureManager.registerTex(register, "farm/valve"),
-				textureManager.registerTex(register, "farm/control")
+		blockIcons = Arrays.asList(
+				textureManager.registerTex(register, "minecraft", "blocks/stonebrick"),
+				textureManager.registerTex(register, "minecraft", "blocks/stonebrick_mossy"),
+				textureManager.registerTex(register, "minecraft", "blocks/stonebrick_cracked"),
+				textureManager.registerTex(register, "minecraft", "blocks/brick"),
+				textureManager.registerTex(register, "minecraft", "blocks/sandstone_smooth"),
+				textureManager.registerTex(register, "minecraft", "blocks/sandstone_carved"),
+				textureManager.registerTex(register, "minecraft", "blocks/nether_brick"),
+				textureManager.registerTex(register, "minecraft", "blocks/stonebrick_carved"),
+				textureManager.registerTex(register, "minecraft", "blocks/quartz_block_side"),
+				textureManager.registerTex(register, "minecraft", "blocks/quartz_block_chiseled"),
+				textureManager.registerTex(register, "minecraft", "blocks/quartz_block_lines")
 		);
 	}
 
 	@SideOnly(Side.CLIENT)
 	public static TextureAtlasSprite getIcon(int type) {
-		return icons.get(type);
+		return blockIcons.get(type);
 	}
 
 	public String getName() {

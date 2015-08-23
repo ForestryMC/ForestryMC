@@ -76,6 +76,10 @@ public class TextureManager implements ITextureManager {
 		return map.registerSprite(new ResourceLocation("forestry:textures/items/" + identifier + ".png"));
 	}
 	
+	public TextureAtlasSprite registerTex(TextureMap map, String modID, String identifier) {
+		return map.registerSprite(new ResourceLocation(modID + ":textures/" + identifier + ".png"));
+	}
+	
 	public TextureAtlasSprite getTex(TextureMap map, String identifier) {
 		return map.getTextureExtry(new ResourceLocation("forestry:textures/items/" + identifier + ".png").toString());
 	}

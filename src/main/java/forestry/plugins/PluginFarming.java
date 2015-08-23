@@ -78,8 +78,6 @@ import forestry.farming.triggers.FarmingTriggers;
 @Plugin(pluginID = "Farming", name = "Farming", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.farming.description")
 public class PluginFarming extends ForestryPlugin {
 
-	@SidedProxy(clientSide = "forestry.farming.proxy.ClientProxyFarming", serverSide = "forestry.farming.proxy.ProxyFarming")
-	public static ProxyFarming proxy;
 	public static int modelIdFarmBlock;
 	public static ItemStack farmFertilizer;
 
@@ -126,8 +124,6 @@ public class PluginFarming extends ForestryPlugin {
 		/*Item.itemsList[ForestryBlock.farm] = null;
 		 Item.itemsList[ForestryBlock.farm] = (new ItemFarmBlock(ForestryBlock.farm - 256, "ffarm"));*/
 		ForestryBlock.farm.block().setHarvestLevel("pickaxe", 0);
-
-		proxy.initializeRendering();
 
 		// Triggers
 		if (PluginManager.Module.BUILDCRAFT_STATEMENTS.isEnabled()) {

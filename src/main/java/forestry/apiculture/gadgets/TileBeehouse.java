@@ -16,6 +16,7 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -68,7 +69,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 		}
 
 		@Override
-		public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+		public boolean canExtractItem(int slotIndex, ItemStack itemstack, EnumFacing side) {
 			return GuiUtil.isIndexInRange(slotIndex, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT);
 		}
 	}
@@ -95,7 +96,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 
 	@Override
 	public void openGui(EntityPlayer player, TileBase tile) {
-		player.openGui(ForestryAPI.instance, GuiId.BeehouseGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
+		player.openGui(ForestryAPI.instance, GuiId.BeehouseGUI.ordinal(), worldObj, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	/* LOADING & SAVING */
@@ -203,9 +204,8 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 			return;
 		}
 
-		Proxies.net.sendNetworkPacket(new PacketInventoryStack(PacketIds.IINVENTORY_STACK, xCoord, yCoord, zCoord, SLOT_QUEEN, queenStack), xCoord, yCoord,
-				zCoord);
-		Proxies.net.sendNetworkPacket(new PacketTileUpdate(this), xCoord, yCoord, zCoord);
+		Proxies.net.sendNetworkPacket(new PacketInventoryStack(PacketIds.IINVENTORY_STACK, pos, SLOT_QUEEN, queenStack), pos);
+		Proxies.net.sendNetworkPacket(new PacketTileUpdate(this), pos);
 	}
 
 	/* STATE INFORMATION */
@@ -260,7 +260,7 @@ public class TileBeehouse extends TileBase implements IBeeHousing, IClimatised {
 
 	public void updateBiome() {
 		if (worldObj != null) {
-			BiomeGenBase biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
+			BiomeGenBase biome = Utils.getBiomeAt(worldObj, pos);
 			if (biome != null) {
 				this.biome = biome;
 				setErrorState(EnumErrorCode.OK);

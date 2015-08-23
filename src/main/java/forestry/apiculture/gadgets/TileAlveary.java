@@ -13,10 +13,12 @@ package forestry.apiculture.gadgets;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.Optional;
 
 import forestry.api.apiculture.IAlvearyComponent;
@@ -39,8 +41,7 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 
 	private final IStructureLogic structureLogic;
 	private boolean isMaster;
-	protected int masterX, masterZ;
-	protected int masterY = -99;
+	protected BlockPos masterPos = new BlockPos(0, -99, 0);
 	protected final int componentBlockMeta;
 
 	public TileAlveary(int componentBlockMeta) {
@@ -51,17 +52,17 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	/* UPDATING */
 	@Override
 	public void initialize() {
-		if (!ForestryBlock.alveary.isBlockEqual(worldObj, xCoord, yCoord, zCoord)) {
-			Proxies.log.info("Updating alveary block at %s/%s/%s.", xCoord, yCoord, zCoord);
-			worldObj.setBlock(xCoord, yCoord, zCoord, ForestryBlock.alveary.block(), componentBlockMeta, Defaults.FLAG_BLOCK_SYNCH);
+		if (!ForestryBlock.alveary.isBlockEqual(worldObj, pos)) {
+			Proxies.log.info("Updating alveary block at %s/%s/%s.", pos);
+			worldObj.setBlockState(pos, ForestryBlock.alveary.block().getStateFromMeta(componentBlockMeta), Defaults.FLAG_BLOCK_SYNCH);
 			validate();
-			worldObj.setTileEntity(xCoord, yCoord, zCoord, this);
+			worldObj.setTileEntity(pos, this);
 		}
 	}
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 
 		if (!Proxies.common.isSimulating(worldObj)) {
 			updateClientSide();
@@ -90,9 +91,10 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		this.isMaster = nbttagcompound.getBoolean("IsMaster");
-		this.masterX = nbttagcompound.getInteger("MasterX");
-		this.masterY = nbttagcompound.getInteger("MasterY");
-		this.masterZ = nbttagcompound.getInteger("MasterZ");
+		int masterX = nbttagcompound.getInteger("MasterX");
+		int masterY = nbttagcompound.getInteger("MasterY");
+		int masterZ = nbttagcompound.getInteger("MasterZ");
+		masterPos = new BlockPos(masterX, masterY, masterZ);
 
 		// Init for master state
 		if (isMaster) {
@@ -109,9 +111,9 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 		super.writeToNBT(nbttagcompound);
 
 		nbttagcompound.setBoolean("IsMaster", isMaster);
-		nbttagcompound.setInteger("MasterX", masterX);
-		nbttagcompound.setInteger("MasterY", masterY);
-		nbttagcompound.setInteger("MasterZ", masterZ);
+		nbttagcompound.setInteger("MasterX", masterPos.getX());
+		nbttagcompound.setInteger("MasterY", masterPos.getY());
+		nbttagcompound.setInteger("MasterZ", masterPos.getZ());
 
 		structureLogic.writeToNBT(nbttagcompound);
 	}
@@ -125,7 +127,7 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 		payload.shortPayload[0] = (short) (isMaster() ? 1 : 0);
 
 		// so the client can know if it is part of an integrated structure
-		payload.shortPayload[1] = (short) this.masterY;
+		payload.shortPayload[1] = (short) pos.getY();
 
 		return payload;
 	}
@@ -137,7 +139,8 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 		}
 
 		// so the client can know if it is part of an integrated structure
-		this.masterY = payload.shortPayload[1];
+		int masterY = payload.shortPayload[1];
+		masterPos = new BlockPos(masterPos.getX(), masterY, masterPos.getZ());
 	}
 
 	/* ITILESTRUCTURE */
@@ -164,11 +167,13 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	@Override
 	public void onStructureReset() {
 		setCentralTE(null);
-		if (worldObj.getBlockMetadata(xCoord, yCoord, zCoord) == 1) {
-			worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 0);
+		IBlockState state = worldObj.getBlockState(pos);
+		Block block = state.getBlock();
+		if (block.getMetaFromState(state) == 1) {
+			worldObj.setBlockState(pos, block.getStateFromMeta(0), 0);
 		}
 		isMaster = false;
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		worldObj.markBlockForUpdate(pos);
 	}
 
 	@Override
@@ -179,9 +184,9 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 		}
 
 		if (!isMaster()) {
-			TileEntity tile = worldObj.getTileEntity(masterX, masterY, masterZ);
+			TileEntity tile = worldObj.getTileEntity(masterPos);
 			if (tile instanceof ITileStructure) {
-				ITileStructure master = (ITileStructure) worldObj.getTileEntity(masterX, masterY, masterZ);
+				ITileStructure master = (ITileStructure) worldObj.getTileEntity(masterPos);
 				if (master.isMaster()) {
 					return master;
 				} else {
@@ -197,21 +202,18 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	}
 
 	private boolean isSameTile(TileEntity tile) {
-		return tile.xCoord == xCoord && tile.yCoord == yCoord && tile.zCoord == zCoord;
+		return pos.equals(tile.getPos());
 	}
 
 	@Override
 	public void setCentralTE(TileEntity tile) {
 		if (tile == null || tile == this || isSameTile(tile)) {
-			this.masterX = this.masterZ = 0;
-			this.masterY = -99;
+			this.masterPos = new BlockPos(0, -99, 0);
 			return;
 		}
 
 		this.isMaster = false;
-		this.masterX = tile.xCoord;
-		this.masterY = tile.yCoord;
-		this.masterZ = tile.zCoord;
+		this.masterPos = tile.getPos();
 	}
 
 	@Override
@@ -220,12 +222,12 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	}
 
 	protected boolean hasMaster() {
-		return masterY >= 0;
+		return masterPos.getY() >= 0;
 	}
 
 	@Override
 	public boolean isIntegratedIntoStructure() {
-		return isMaster || masterY >= 0;
+		return isMaster || masterPos.getY() >= 0;
 	}
 
 	@Override
@@ -271,7 +273,7 @@ public abstract class TileAlveary extends TileForestry implements IAlvearyCompon
 	/* ITRIGGERPROVIDER */
 	@Optional.Method(modid = "BuildCraftAPI|statements")
 	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
+	public Collection<ITriggerExternal> getExternalTriggers(EnumFacing side, TileEntity tile) {
 		LinkedList<ITriggerExternal> res = new LinkedList<ITriggerExternal>();
 		res.add(ApicultureTriggers.missingQueen);
 		res.add(ApicultureTriggers.missingDrone);

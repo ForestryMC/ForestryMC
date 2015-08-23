@@ -49,7 +49,7 @@ public class TileAlvearySieve extends TileAlveary implements ICrafter, IBeeListe
 
 	@Override
 	public void openGui(EntityPlayer player) {
-		player.openGui(ForestryAPI.instance, GuiId.AlvearySieveGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
+		player.openGui(ForestryAPI.instance, GuiId.AlvearySieveGUI.ordinal(), worldObj, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Override

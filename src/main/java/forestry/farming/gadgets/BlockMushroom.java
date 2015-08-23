@@ -18,6 +18,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockHugeMushroom;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -35,6 +36,7 @@ import forestry.api.core.IModelObject;
 import forestry.api.core.IVariantObject;
 import forestry.core.IItemTyped;
 import forestry.core.config.Defaults;
+import forestry.core.gadgets.BlockResourceStorageBlock.Resources;
 import forestry.core.proxy.Proxies;
 import forestry.farming.worldgen.WorldGenBigMushroom;
 
@@ -61,6 +63,12 @@ public class BlockMushroom extends BlockSapling implements IItemTyped, IVariantO
 		this.drops = new ItemStack[]{new ItemStack(Blocks.brown_mushroom), new ItemStack(Blocks.red_mushroom)};
 		setCreativeTab(null);
 		setTickRandomly(true);
+		setDefaultState(this.blockState.getBaseState().withProperty(MUSHROOM, MushroomType.BROWN));
+	}
+	
+	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, MUSHROOM);
 	}
 	
 	@Override

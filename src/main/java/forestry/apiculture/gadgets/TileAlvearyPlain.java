@@ -20,6 +20,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -78,9 +79,9 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 	@Override
 	public void openGui(EntityPlayer player) {
 		if (isMaster()) {
-			player.openGui(ForestryAPI.instance, GuiId.AlvearyGUI.ordinal(), worldObj, xCoord, yCoord, zCoord);
+			player.openGui(ForestryAPI.instance, GuiId.AlvearyGUI.ordinal(), worldObj, pos.getX(), pos.getY(), pos.getZ());
 		} else if (this.hasMaster()) {
-			player.openGui(ForestryAPI.instance, GuiId.AlvearyGUI.ordinal(), worldObj, masterX, masterY, masterZ);
+			player.openGui(ForestryAPI.instance, GuiId.AlvearyGUI.ordinal(), worldObj, masterPos.getX(), masterPos.getY(), masterPos.getZ());
 		}
 	}
 
@@ -91,7 +92,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 	}
 
 	private void setBiomeInformation() {
-		this.biome = Utils.getBiomeAt(worldObj, xCoord, zCoord);
+		this.biome = Utils.getBiomeAt(worldObj, pos);
 		setErrorState(EnumErrorCode.OK);
 	}
 
@@ -163,9 +164,9 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 		}
 
 		if (getErrorState() == EnumErrorCode.OK && updateOnInterval(50)) {
-			float f = xCoord + 0.5F;
-			float f1 = yCoord + 0.0F + (worldObj.rand.nextFloat() * 6F) / 16F;
-			float f2 = zCoord + 0.5F;
+			float f = pos.getX() + 0.5F;
+			float f1 = pos.getY() + 0.0F + (worldObj.rand.nextFloat() * 6F) / 16F;
+			float f2 = pos.getZ() + 0.5F;
 			float f3 = 0.52F;
 			float f4 = worldObj.rand.nextFloat() * 0.6F - 0.3F;
 
@@ -275,7 +276,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 			}
 
 			@Override
-			public boolean canExtractItem(int slotIndex, ItemStack itemstack, int side) {
+			public boolean canExtractItem(int slotIndex, ItemStack itemstack, EnumFacing side) {
 				return slotIndex != SLOT_QUEEN && slotIndex != SLOT_DRONE;
 			}
 		});
@@ -479,8 +480,7 @@ public class TileAlvearyPlain extends TileAlveary implements ISidedInventory, IB
 			return;
 		}
 
-		Proxies.net.sendNetworkPacket(new PacketInventoryStack(PacketIds.IINVENTORY_STACK, xCoord, yCoord, zCoord, SLOT_QUEEN, queenStack), xCoord, yCoord,
-				zCoord);
+		Proxies.net.sendNetworkPacket(new PacketInventoryStack(PacketIds.IINVENTORY_STACK,pos, SLOT_QUEEN, queenStack), pos);
 
 		for (IBeeListener eventHandler : eventHandlers) {
 			eventHandler.onQueenChange(queenStack);

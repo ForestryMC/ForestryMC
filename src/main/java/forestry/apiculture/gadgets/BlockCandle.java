@@ -16,8 +16,9 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,34 +30,48 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
-
+import forestry.api.core.IModelObject;
+import forestry.api.core.IVariantObject;
 import forestry.api.core.Tabs;
 import forestry.core.ForestryClient;
 import forestry.core.config.Defaults;
+import forestry.core.gadgets.BlockResourceStorageBlock.Resources;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.StringUtil;
 
-public class BlockCandle extends BlockTorch {
+public class BlockCandle extends BlockTorch implements IModelObject, IVariantObject {
 
+	private static final PropertyEnum STATE = PropertyEnum.create("state", State.class);
+	
+	public enum State implements IStringSerializable{
+		ON, OFF;
+
+		@Override
+		public String getName() {
+			return name();
+		}
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return ((State)state.getValue(STATE)).ordinal();
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(STATE, State.values()[meta]);
+	}
+	
 	private final ArrayList<Item> lightingItems = new ArrayList<Item>();
-
-	@SideOnly(Side.CLIENT)
-	private IIcon litStump;
-	@SideOnly(Side.CLIENT)
-	private IIcon litTip;
-	@SideOnly(Side.CLIENT)
-	private IIcon unlitStump;
-	@SideOnly(Side.CLIENT)
-	private IIcon unlitTip;
 
 	public BlockCandle() {
 		super();
@@ -67,15 +82,21 @@ public class BlockCandle extends BlockTorch {
 		lightingItems.add(Items.flint_and_steel);
 		lightingItems.add(Items.flint);
 		lightingItems.add(Item.getItemFromBlock(Blocks.torch));
+		setDefaultState(this.blockState.getBaseState().withProperty(STATE, Resources.APATITE).withProperty(FACING, EnumFacing.UP));
 	}
-
+	
 	@Override
-	public boolean hasTileEntity(int metadata) {
+	protected BlockState createBlockState() {
+		return new BlockState(this, STATE, FACING);
+	}
+	
+	@Override
+	public boolean hasTileEntity(IBlockState state) {
 		return true;
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, int metadata) {
+	public TileEntity createTileEntity(World world, IBlockState state) {
 		return new TileCandle();
 	}
 
@@ -83,51 +104,18 @@ public class BlockCandle extends BlockTorch {
 	public int getRenderType() {
 		return ForestryClient.candleRenderId;
 	}
-
-	@SideOnly(Side.CLIENT)
+	
 	@Override
-	public void registerBlockIcons(IIconRegister register) {
-		String fileBase = StringUtil.cleanBlockName(this);
-		this.blockIcon = TextureManager.getInstance().registerTex(register, "stump");
-		this.litStump = TextureManager.getInstance().registerTex(register, fileBase + "StumpLit");
-		this.litTip = TextureManager.getInstance().registerTex(register, fileBase + "TipLit");
-		this.unlitStump = TextureManager.getInstance().registerTex(register, fileBase + "StumpUnlit");
-		this.unlitTip = TextureManager.getInstance().registerTex(register, fileBase + "TipUnlit");
-	}
-
-	@Override
-	public int getLightValue(IBlockAccess world, int x, int y, int z) {
-		int meta = world.getBlockMetadata(x, y, z);
+	public int getLightValue(IBlockAccess world, BlockPos pos) {
+		int meta = getMetaFromState(world.getBlockState(pos));
 		return (isLit(meta)) ? 14 : 0;
 	}
-
-	/*@SideOnly(Side.CLIENT)
+	
 	@Override
-	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		IIcon i = this.unlitStump;
-		if (this.isLit(world.getBlockMetadata(x, y, z))) {
-			i = this.litStump;
-		}
-		return i;
-	}*/
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getTextureFromPassAndMeta(int meta, int pass) {
-		IIcon i;
-		if (pass == 0) {
-			if (isLit(meta)) {
-				i = this.litTip;
-			} else {
-				i = this.unlitTip;
-			}
-		} else {
-			if (isLit(meta)) {
-				i = this.litStump;
-			} else {
-				i = this.unlitStump;
-			}
-		}
-		return i;
+	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass) {
+		if(renderPass == 1)
+			return ((TileCandle)world.getTileEntity(pos)).getColour();
+		return super.colorMultiplier(world, pos, renderPass);
 	}
 
 	public int getColourFromItemStack(ItemStack stack) {
@@ -177,7 +165,7 @@ public class BlockCandle extends BlockTorch {
 			// Ensure a TileEntity exists. May be able to remove this in future versions.
 			TileCandle te = (TileCandle) world.getTileEntity(pos);
 			if (te == null) {
-				world.setTileEntity(pos, this.createTileEntity(world, meta));
+				world.setTileEntity(pos, this.createTileEntity(world, getStateFromMeta(meta)));
 				te = (TileCandle) world.getTileEntity(pos);
 			}
 
@@ -221,16 +209,17 @@ public class BlockCandle extends BlockTorch {
 
 		if (toggleLitState) {
 			meta = this.toggleLitStatus(meta);
-			world.setBlockMetadataWithNotify(x, y, z, meta, Defaults.FLAG_BLOCK_SYNCH | Defaults.FLAG_BLOCK_UPDATE);
+			world.setBlockState(pos, getStateFromMeta(meta), Defaults.FLAG_BLOCK_SYNCH | Defaults.FLAG_BLOCK_UPDATE);
 			flag = true;
 		}
 		return flag;
 	}
-
+	
 	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		int meta = getMetaFromState(state);
 		if (!world.isRemote) {
-			TileCandle tc = (TileCandle) world.getTileEntity(x, y, z);
+			TileCandle tc = (TileCandle) world.getTileEntity(pos);
 			int newMeta = isLit(meta) ? 1 : 0;
 			ItemStack stack = new ItemStack(this, 1, newMeta);
 			if (tc != null && tc.getColour() != 0xffffff) {
@@ -239,103 +228,101 @@ public class BlockCandle extends BlockTorch {
 				tag.setInteger(colourTagName, tc.getColour());
 				stack.setTagCompound(tag);
 			}
-			this.dropBlockAsItem(world, x, y, z, stack);
+			this.dropBlockAsItem(world, pos, state, 0);
 		}
-		super.breakBlock(world, x, y, z, block, meta);
+		super.breakBlock(world, pos, state);
 	}
-
+	
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack itemStack) {
-		TileCandle tc = (TileCandle) (world.getTileEntity(x, y, z));
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack itemStack) {
+		TileCandle tc = (TileCandle) (world.getTileEntity(pos));
 		tc.setColour(this.getColourValueFromItemStack(itemStack));
 		if (isLit(itemStack)) {
-			int meta = world.getBlockMetadata(x, y, z);
-			world.setBlockMetadataWithNotify(x, y, z, this.toggleLitStatus(meta), Defaults.FLAG_BLOCK_SYNCH | Defaults.FLAG_BLOCK_UPDATE);
+			int meta = getMetaFromState(state);
+			world.setBlockState(pos, getStateFromMeta(meta), Defaults.FLAG_BLOCK_SYNCH | Defaults.FLAG_BLOCK_UPDATE);
 		}
 	}
-
+	
 	@Override
-	public void dropBlockAsItemWithChance(World par1World, int par2, int par3, int par4, int par5, float par6, int par7) {
+	public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {
 		// Does nothing to prevent extra candles from falling.
 	}
-
+	
 	@Override
-	public void onBlockHarvested(World par1World, int par2, int par3, int par4, int par5, EntityPlayer par6EntityPlayer) {
+	public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
 		// Does nothing to prevent extra candles from falling.
 	}
-
+	
 	@Override
-	protected boolean func_150109_e(World world, int x, int y, int z) {
-		// Slightly tweaked version of BlockTorch's version to account for TE nonsense.
-		if (!this.canPlaceBlockAt(world, x, y, z)) {
-			if (world.getBlock(x, y, z) == this) {
-				world.setBlockToAir(x, y, z);
+	protected boolean checkForDrop(World world, BlockPos pos, IBlockState state) {
+		if (!this.canPlaceBlockAt(world, pos)) {
+			if (world.getBlockState(pos).getBlock() == this) {
+				world.setBlockToAir(pos);
 			}
 			return false;
 		} else {
 			return true;
 		}
 	}
-
+	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(World world, BlockPos pos, Random random) {
-		if (isLit(world.getBlockMetadata(x, y, z))) {
-			int l = world.getBlockMetadata(x, y, z) & 0x07;
-			double d0 = x + 0.5F;
-			double d1 = y + 0.7F;
-			double d2 = z + 0.5F;
+	public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rand) {
+		if (isLit(getMetaFromState(state))) {
+			int l = getMetaFromState(state) & 0x07;
+			double d0 = pos.getX() + 0.5F;
+			double d1 = pos.getY() + 0.7F;
+			double d2 = pos.getZ() + 0.5F;
 			double d3 = 0.2199999988079071D;
 			double d4 = 0.27000001072883606D;
 
 			if (l == 1) {
-				world.spawnParticle("smoke", d0 - d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
-				world.spawnParticle("flame", d0 - d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
+				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 - d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
+				world.spawnParticle(EnumParticleTypes.FLAME, d0 - d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
 			} else if (l == 2) {
-				world.spawnParticle("smoke", d0 + d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
-				world.spawnParticle("flame", d0 + d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
+				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
+				world.spawnParticle(EnumParticleTypes.FLAME, d0 + d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
 			} else if (l == 3) {
-				world.spawnParticle("smoke", d0, d1 + d3, d2 - d4, 0.0D, 0.0D, 0.0D);
-				world.spawnParticle("flame", d0, d1 + d3, d2 - d4, 0.0D, 0.0D, 0.0D);
+				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1 + d3, d2 - d4, 0.0D, 0.0D, 0.0D);
+				world.spawnParticle(EnumParticleTypes.FLAME, d0, d1 + d3, d2 - d4, 0.0D, 0.0D, 0.0D);
 			} else if (l == 4) {
-				world.spawnParticle("smoke", d0, d1 + d3, d2 + d4, 0.0D, 0.0D, 0.0D);
-				world.spawnParticle("flame", d0, d1 + d3, d2 + d4, 0.0D, 0.0D, 0.0D);
+				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1 + d3, d2 + d4, 0.0D, 0.0D, 0.0D);
+				world.spawnParticle(EnumParticleTypes.FLAME, d0, d1 + d3, d2 + d4, 0.0D, 0.0D, 0.0D);
 			} else {
-				world.spawnParticle("smoke", d0, d1, d2, 0.0D, 0.0D, 0.0D);
-				world.spawnParticle("flame", d0, d1, d2, 0.0D, 0.0D, 0.0D);
+				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+				world.spawnParticle(EnumParticleTypes.FLAME, d0, d1, d2, 0.0D, 0.0D, 0.0D);
 			}
 		}
 	}
 
 	@Override
-	protected boolean func_150108_b(World par1World, int par2, int par3, int par4, Block block) {
-		if (this.func_150109_e(par1World, par2, par3, par4)) {
-			int i1 = par1World.getBlockMetadata(par2, par3, par4) & 0x07;
+	protected boolean onNeighborChangeInternal(World world, BlockPos pos, IBlockState state) {
+		if (checkForDrop(world, pos, state)) {
+			int i1 = getMetaFromState(state) & 0x07;
 			boolean flag = false;
 
-			if (!par1World.isSideSolid(par2 - 1, par3, par4, ForgeDirection.EAST, true) && i1 == 1) {
+			if (!world.isSideSolid(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ()), EnumFacing.EAST, true) && i1 == 1) {
 				flag = true;
 			}
 
-			if (!par1World.isSideSolid(par2 + 1, par3, par4, ForgeDirection.WEST, true) && i1 == 2) {
+			if (!world.isSideSolid(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ()), EnumFacing.WEST, true) && i1 == 2) {
 				flag = true;
 			}
 
-			if (!par1World.isSideSolid(par2, par3, par4 - 1, ForgeDirection.SOUTH, true) && i1 == 3) {
+			if (!world.isSideSolid(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1), EnumFacing.SOUTH, true) && i1 == 3) {
 				flag = true;
 			}
 
-			if (!par1World.isSideSolid(par2, par3, par4 + 1, ForgeDirection.NORTH, true) && i1 == 4) {
+			if (!world.isSideSolid(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1), EnumFacing.NORTH, true) && i1 == 4) {
 				flag = true;
 			}
 
-			if (!this.canPlaceTorchOn(par1World, par2, par3 - 1, par4) && i1 == 5) {
+			if (!this.canPlaceTorchOn(world, new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())) && i1 == 5) {
 				flag = true;
 			}
 
 			if (flag) {
-				this.dropBlockAsItem(par1World, par2, par3, par4, par1World.getBlockMetadata(par2, par3, par4), 0);
-				par1World.setBlockToAir(par2, par3, par4);
+				this.dropBlockAsItem(world, pos, state, 0);
+				world.setBlockToAir(pos);
 				return true;
 			} else {
 				return false;
@@ -346,12 +333,12 @@ public class BlockCandle extends BlockTorch {
 	}
 
 	// Yes, function hiding. Go away.
-	public boolean canPlaceTorchOn(World par1World, int par2, int par3, int par4) {
-		if (World.doesBlockHaveSolidTopSurface(par1World, par2, par3, par4)) {
+	public boolean canPlaceTorchOn(World par1World, BlockPos pos) {
+		if (World.doesBlockHaveSolidTopSurface(par1World, pos)) {
 			return true;
 		} else {
-			Block block = par1World.getBlock(par2, par3, par4);
-			return block.canPlaceTorchOnTop(par1World, par2, par3, par4);
+			Block block = par1World.getBlockState(pos).getBlock();
+			return block.canPlaceTorchOnTop(par1World, pos);
 		}
 	}
 
@@ -391,6 +378,16 @@ public class BlockCandle extends BlockTorch {
 	@Override
 	public int getRenderColor(IBlockState state) {
 		return super.getRenderColor(state);
+	}
+
+	@Override
+	public String[] getVariants() {
+		return new String[]{"on", "off"};
+	}
+
+	@Override
+	public ModelType getModelType() {
+		return ModelType.META;
 	}
 
 }

@@ -46,6 +46,7 @@ import forestry.core.inventory.ItemInventory;
 import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 import forestry.core.vect.Vect;
 import forestry.plugins.PluginApiculture;
@@ -149,6 +150,7 @@ public class ItemHabitatLocator extends ItemInventoried {
 	private int searchRadiusIteration = 0;
 	private int searchAngleIteration = 0;
 	private Vect searchCenter;
+	public static TextureAtlasSprite icon;
 
 	public ItemHabitatLocator() {
 		super();
@@ -168,13 +170,10 @@ public class ItemHabitatLocator extends ItemInventoried {
 
 	/* TEXTURES */
 	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerIcons(IIconRegister register) {
-		if (register instanceof TextureMap) {
+	public static void registerIcon(TextureMap map) {
 			TextureAtlasSprite texture = new TextureHabitatLocator();
-			((TextureMap) register).setTextureEntry("forestry:biomefinder", texture);
-			itemIcon = texture;
-		}
+			map.setTextureEntry("forestry:biomefinder", texture);
+			icon = texture;
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})

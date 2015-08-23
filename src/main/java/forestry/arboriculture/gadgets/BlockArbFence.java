@@ -16,6 +16,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -35,6 +38,8 @@ import forestry.plugins.PluginArboriculture;
 
 public class BlockArbFence extends BlockFence implements IWoodTyped {
 
+	private final static PropertyEnum WOODTYPE = PropertyEnum.create("woodtype", WoodType.class);
+	
 	public static enum FenceCat {
 		CAT0, CAT1
 	}
@@ -43,7 +48,7 @@ public class BlockArbFence extends BlockFence implements IWoodTyped {
 	private final FenceCat cat;
 
 	public BlockArbFence(FenceCat cat) {
-		super("", Material.wood);
+		super(Material.wood);
 		this.cat = cat;
 		setHardness(2.0F);
 		setResistance(5.0F);
@@ -60,10 +65,25 @@ public class BlockArbFence extends BlockFence implements IWoodTyped {
 			itemList.add(new ItemStack(this, 1, i));
 		}
 	}
-
+	
 	@Override
-	public int damageDropped(int meta) {
-		return meta;
+	public int damageDropped(IBlockState state) {
+		return getMetaFromState(state);
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return ((WoodType)state.getValue(WOODTYPE)).get;
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return super.getStateFromMeta(meta);
+	}
+	
+	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, properties);
 	}
 
 	@Override

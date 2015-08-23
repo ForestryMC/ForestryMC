@@ -43,7 +43,7 @@ public class ParticleHelper {
 		}
 
 		IBlockState state = world.getBlockState(pos);
-		int meta = block.getMetaFromState(state)
+		int meta = block.getMetaFromState(state);
 
 		float b = 0.1F;
 		double px = pos.getX() + rand.nextDouble() * (block.getBlockBoundsMaxX() - block.getBlockBoundsMinX() - (b * 2.0F)) + b + block.getBlockBoundsMinX();

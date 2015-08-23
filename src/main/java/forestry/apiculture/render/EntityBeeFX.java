@@ -12,6 +12,8 @@ package forestry.apiculture.render;
 
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
 public class EntityBeeFX extends EntityFX {
@@ -51,7 +53,7 @@ public class EntityBeeFX extends EntityFX {
 	}
 
 	@Override
-	public void renderParticle(Tessellator tessellator, float f, float f1, float f2, float f3, float f4, float f5) {
+	public void renderParticle(WorldRenderer worldRenderer, Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		float minU = 0;
 		float maxU = 1;
 		float minV = 0;
@@ -69,11 +71,11 @@ public class EntityBeeFX extends EntityFX {
 		float f12 = (float) ((prevPosY + (posY - prevPosY) * f) - interpPosY);
 		float f13 = (float) ((prevPosZ + (posZ - prevPosZ) * f) - interpPosZ);
 
-		tessellator.setColorRGBA_F(particleRed, particleGreen, particleBlue, 1.0F);
-		tessellator.addVertexWithUV(f11 - f1 * f10 - f4 * f10, f12 - f2 * f10, f13 - f3 * f10 - f5 * f10, maxU, maxV);
-		tessellator.addVertexWithUV((f11 - f1 * f10) + f4 * f10, f12 + f2 * f10, (f13 - f3 * f10) + f5 * f10, maxU, minV);
-		tessellator.addVertexWithUV(f11 + f1 * f10 + f4 * f10, f12 + f2 * f10, f13 + f3 * f10 + f5 * f10, minU, minV);
-		tessellator.addVertexWithUV((f11 + f1 * f10) - f4 * f10, f12 - f2 * f10, (f13 + f3 * f10) - f5 * f10, minU, maxV);
+		worldRenderer.setColorRGBA_F(particleRed, particleGreen, particleBlue, 1.0F);
+		worldRenderer.addVertexWithUV(f11 - f1 * f10 - f4 * f10, f12 - f2 * f10, f13 - f3 * f10 - f5 * f10, maxU, maxV);
+		worldRenderer.addVertexWithUV((f11 - f1 * f10) + f4 * f10, f12 + f2 * f10, (f13 - f3 * f10) + f5 * f10, maxU, minV);
+		worldRenderer.addVertexWithUV(f11 + f1 * f10 + f4 * f10, f12 + f2 * f10, f13 + f3 * f10 + f5 * f10, minU, minV);
+		worldRenderer.addVertexWithUV((f11 + f1 * f10) - f4 * f10, f12 - f2 * f10, (f13 + f3 * f10) - f5 * f10, minU, maxV);
 	}
 
 	@Override
