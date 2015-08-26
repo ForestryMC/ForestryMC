@@ -24,6 +24,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -99,6 +100,25 @@ public class BlockBase extends BlockForestry {
 		}
 
 		return definitions.get(metadata);
+	}
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+		MachineDefinition definition = definitions.get(world.getBlockMetadata(x, y, z));
+		if (definition == null) {
+			return super.getCollisionBoundingBoxFromPool(world, x, y, z);
+		}
+		return definition.getBoundingBox(x, y, z);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
+		MachineDefinition definition = definitions.get(world.getBlockMetadata(x, y, z));
+		if (definition == null) {
+			return super.getCollisionBoundingBoxFromPool(world, x, y, z);
+		}
+		return definition.getBoundingBox(x, y, z);
 	}
 
 	/* CREATIVE INVENTORY */

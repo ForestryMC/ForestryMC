@@ -22,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -35,7 +36,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import forestry.core.interfaces.IBlockRenderer;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
-import forestry.core.render.TileRendererIndex;
 
 public class MachineDefinition {
 
@@ -46,6 +46,8 @@ public class MachineDefinition {
 	private final int meta;
 
 	public final IBlockRenderer renderer;
+	
+	private float minX, minY, minZ, maxX, maxY, maxZ;
 
 	/* CRAFTING */
 	public IRecipe[] recipes;
@@ -67,6 +69,12 @@ public class MachineDefinition {
 			faceMap[i] = 0;
 		}
 
+		minX = 0;
+		minY = 0;
+		minZ = 0;
+		maxX = 1;
+		maxY = 1;
+		maxZ = 1;
 	}
 
 	public Block getBlock() {
@@ -79,6 +87,16 @@ public class MachineDefinition {
 
 	public void setBlock(Block block) {
 		this.block = block;
+	}
+	
+	public MachineDefinition setBoundingBox(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
+		this.minX = minX;
+		this.minY = minY;
+		this.minZ = minZ;
+		this.maxX = maxX;
+		this.maxY = maxY;
+		this.maxZ = maxZ;
+		return this;
 	}
 
 	public void register() {
@@ -96,6 +114,10 @@ public class MachineDefinition {
 				CraftingManager.getInstance().getRecipeList().add(recipe);
 			}
 		}
+	}
+	
+	public AxisAlignedBB getBoundingBox(int x, int y, int z) {
+		return AxisAlignedBB.getBoundingBox(x + minX, y + minY, z + minZ, x + maxX, y + maxY, z + maxZ);
 	}
 
 	/**
