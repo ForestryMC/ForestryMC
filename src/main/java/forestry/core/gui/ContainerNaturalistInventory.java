@@ -21,6 +21,7 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
 
 	public ContainerNaturalistInventory(InventoryPlayer player, TileNaturalistChest tile, int page) {
 		super(tile, player, 18, 120);
+		tile.openInventory();
 
 		// Inventory
 		for (int x = 0; x < 5; x++) {
@@ -37,5 +38,10 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
 
 	@Override
 	public void setSelection(PacketGuiSelect packet) {
+	}
+
+	public void onContainerClosed(EntityPlayer player) {
+		super.onContainerClosed(player);
+		tile.closeInventory();
 	}
 }

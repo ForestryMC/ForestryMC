@@ -15,8 +15,6 @@ import java.util.EnumSet;
 import java.util.Locale;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.crafting.CraftingManager;
 
 import net.minecraftforge.oredict.RecipeSorter;
@@ -46,6 +44,7 @@ import forestry.core.genetics.Branch;
 import forestry.core.genetics.alleles.Allele;
 import forestry.core.items.ItemForestryBlock;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.RenderNaturalistChest;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.core.utils.Utils;
 import forestry.lepidopterology.ButterflySpawner;
@@ -85,7 +84,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 
 	@Override
 	public void preInit() {
-		ForestryBlock.lepidopterology.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "lepidopterology");
+		ForestryBlock.lepidopterology.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "lepidopterology");
 		ForestryBlock.lepidopterology.block().setCreativeTab(Tabs.tabLepidopterology);
 
 		createAlleles();
@@ -125,7 +124,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 		registerTemplates();
 
 		BlockBase lepidopterology = ((BlockBase) ForestryBlock.lepidopterology.block());
-		MachineDefinition definitionChest = lepidopterology.addDefinition((new MachineDefinition(Defaults.DEFINITION_LEPICHEST_META, "forestry.LepiChest", TileLepidopteristChest.class,
+		MachineDefinition definitionChest = lepidopterology.addDefinition(new MachineDefinition(Defaults.DEFINITION_LEPICHEST_META, "forestry.LepiChest", TileLepidopteristChest.class, new RenderNaturalistChest("lepichest"),
 				ShapedRecipeCustom.createShapedRecipe(
 						ForestryBlock.lepidopterology.getItemStack(1, Defaults.DEFINITION_LEPICHEST_META),
 						" # ",
@@ -134,7 +133,7 @@ public class PluginLepidopterology extends ForestryPlugin {
 						'#', "blockGlass",
 						'X', ForestryItem.butterflyGE.getItemStack(1, Defaults.WILDCARD),
 						'Y', "chestWood"))
-				.setFaces(0, 1, 2, 3, 4, 4, 0, 7)));
+				.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F));
 		definitionChest.register();
 
 		((ITreeRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees")).registerLeafTickHandler(new ButterflySpawner());

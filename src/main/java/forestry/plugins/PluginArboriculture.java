@@ -92,6 +92,7 @@ import forestry.core.items.ItemForestryBlock;
 import forestry.core.items.ItemFruit.EnumFruit;
 import forestry.core.network.IPacketHandler;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.RenderNaturalistChest;
 import forestry.core.utils.RecipeUtil;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.core.utils.ShapelessRecipeCustom;
@@ -183,11 +184,11 @@ public class PluginArboriculture extends ForestryPlugin {
 		ForestryBlock.pods.registerBlock(new BlockFruitPod(), ItemForestryBlock.class, "pods");
 
 		// Machines
-		ForestryBlock.arboriculture.registerBlock(new BlockBase(Material.iron), ItemForestryBlock.class, "arboriculture");
+		ForestryBlock.arboriculture.registerBlock(new BlockBase(Material.iron, true), ItemForestryBlock.class, "arboriculture");
 		ForestryBlock.arboriculture.block().setCreativeTab(Tabs.tabArboriculture);
 
 		definitionChest = ((BlockBase) ForestryBlock.arboriculture.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_ARBCHEST_META,
-				"forestry.ArbChest", TileArboristChest.class,
+				"forestry.ArbChest", TileArboristChest.class, new RenderNaturalistChest("arbchest"), 
 				ShapedRecipeCustom.createShapedRecipe(ForestryBlock.arboriculture.getItemStack(1, Defaults.DEFINITION_ARBCHEST_META),
 						" # ",
 						"XYX",
@@ -195,7 +196,7 @@ public class PluginArboriculture extends ForestryPlugin {
 						'#', "blockGlass",
 						'X', "treeSapling",
 						'Y', "chestWood"))
-				.setFaces(0, 1, 2, 3, 4, 4, 0, 7));
+				.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F));
 
 		// Init rendering
 		proxy.initializeRendering();
