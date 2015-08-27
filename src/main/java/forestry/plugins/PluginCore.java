@@ -49,7 +49,6 @@ import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.BlockResource;
 import forestry.core.gadgets.BlockResourceStorageBlock;
 import forestry.core.gadgets.BlockSoil;
-import forestry.core.gadgets.BlockStainedGlass;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.gadgets.TileEscritoire;
 import forestry.core.genetics.ClimateHelper;
@@ -135,7 +134,6 @@ public class PluginCore extends ForestryPlugin {
 		OreDictionary.registerOre("blockBronze", ForestryBlock.resourceStorage.getItemStack(1, 3));
 		OreDictionary.registerOre("chestWood", Blocks.chest);
 		OreDictionary.registerOre("craftingTableWood", Blocks.crafting_table);
-		ForestryBlock.glass.registerBlock(new BlockStainedGlass(), ItemForestryBlock.class, "stained");
 	}
 
 	@Override
