@@ -51,7 +51,6 @@ public enum ForestryBlock {
 	mushroom,
 	candle,
 	stump,
-	glass,
 	// wood items
 	planks,
 	slabs,
