@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.tileentity.TileEntity;
@@ -20,34 +18,40 @@ import net.minecraft.world.World;
 
 public class PacketCoordinates extends ForestryPacket implements ILocatedPacket {
 
-	public BlockPos pos;
+	private BlockPos pos;
 
-	public PacketCoordinates() {
+	public PacketCoordinates(DataInputStreamForestry data) throws IOException {
+		super(data);
 	}
 
-	public PacketCoordinates(int id, BlockPos pos) {
+	public PacketCoordinates(PacketId id, TileEntity tileEntity) {
+		this(id, tileEntity.getPos());
+	}
+
+	public PacketCoordinates(PacketId id, BlockPos pos) {
 		super(id);
 		this.pos = pos;
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
-
-		data.writeInt(pos.getX());
-		data.writeInt(pos.getY());
-		data.writeInt(pos.getZ());
-
+	protected void writeData(DataOutputStreamForestry data) throws IOException {
+		data.writeVarInt(pos.getX());
+		data.writeVarInt(pos.getY());
+		data.writeVarInt(pos.getZ());
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
-
-		int posX = data.readInt();
-		int posY = data.readInt();
-		int posZ = data.readInt();
+	protected void readData(DataInputStreamForestry data) throws IOException {
+		int posX = data.readVarInt();
+		int posY = data.readVarInt();
+		int posZ = data.readVarInt();
 		pos = new BlockPos(posX, posY, posZ);
-
 	}
+
+	public final BlockPos getPos() {
+		return pos;
+	}
+
 	public final int getPosX() {
 		return pos.getX();
 	}
@@ -60,13 +64,8 @@ public class PacketCoordinates extends ForestryPacket implements ILocatedPacket 
 		return pos.getZ();
 	}
 
-	public BlockPos getCoordinates() {
-		return pos;
-	}
-
 	@Override
-	public TileEntity getTarget(World world) {
+	public final TileEntity getTarget(World world) {
 		return world.getTileEntity(pos);
 	}
-
 }

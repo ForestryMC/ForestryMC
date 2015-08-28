@@ -20,10 +20,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
 import forestry.core.config.Config;
 import forestry.core.config.ForestryBlock;
-import forestry.core.proxy.Proxies;
 import forestry.core.worldgen.WorldGenMinableMeta;
 import forestry.plugins.PluginManager;
 
@@ -45,12 +43,12 @@ public class WorldGenerator implements IWorldGenerator {
 	@SubscribeEvent
 	public void populateChunk(PopulateChunkEvent.Post event) {
 		// / PLUGIN WORLD GENERATION
-		PluginManager.populateChunk(event.chunkProvider, event.world, event.rand, event.chunkX, event.chunkZ, event.hasVillageGenerated);
+		PluginManager.populateChunk(event.chunkProvider, event.world, event.rand, new BlockPos(event.chunkX, 0, event.chunkZ), event.hasVillageGenerated);
 	}
 
 	public void retroGen(Random random, int chunkX, int chunkZ, World world) {
 		generateWorld(random, chunkX, chunkZ, world);
-		PluginManager.populateChunkRetroGen(world, random, chunkX, chunkZ);
+		PluginManager.populateChunkRetroGen(world, random, new BlockPos(event.chunkX, 0, event.chunkZ));
 		world.getChunkFromChunkCoords(chunkX, chunkZ).setChunkModified();
 	}
 
@@ -72,9 +70,7 @@ public class WorldGenerator implements IWorldGenerator {
 				int randPosX = chunkX + random.nextInt(16);
 				int randPosY = random.nextInt(world.getActualHeight() - 72) + 56; // Does not generate below y = 64
 				int randPosZ = chunkZ + random.nextInt(16);
-				if (apatiteGenerator.generate(world, random, new BlockPos(randPosX, randPosY, randPosZ))) {
-					Proxies.log.finest("Generated apatite vein around %s/%s/%s", randPosX, randPosY, randPosZ);
-				}
+				apatiteGenerator.generate(world, random, new BlockPos(randPosX, randPosY, randPosZ));
 			}
 		}
 

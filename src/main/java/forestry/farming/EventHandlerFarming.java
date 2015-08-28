@@ -15,7 +15,6 @@ import net.minecraft.block.Block;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
 import forestry.core.config.ForestryBlock;
 import forestry.core.proxy.Proxies;
 import forestry.farming.gadgets.BlockMushroom;

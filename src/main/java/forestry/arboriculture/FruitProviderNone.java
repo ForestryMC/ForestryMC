@@ -12,16 +12,15 @@ package forestry.arboriculture;
 
 import java.util.HashMap;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.core.ITextureManager;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.render.TextureManager;
 
@@ -37,7 +36,7 @@ public class FruitProviderNone implements IFruitProvider {
 		}
 	}
 
-	private static HashMap<String, OverlayType> overlayTypes = new HashMap<String, OverlayType>();
+	private static final HashMap<String, OverlayType> overlayTypes = new HashMap<String, OverlayType>();
 
 	static {
 		overlayTypes.put("berries", new OverlayType("berries", (short) 1000));
@@ -50,9 +49,9 @@ public class FruitProviderNone implements IFruitProvider {
 	private final String key;
 	private final IFruitFamily family;
 
-	int ripeningPeriod = 10;
+	protected int ripeningPeriod = 10;
 
-	OverlayType overlay = null;
+	private OverlayType overlay = null;
 
 	public FruitProviderNone(String key, IFruitFamily family) {
 		this.key = key;
@@ -70,7 +69,7 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public ItemStack[] getFruits(ITreeGenome genome, World world, int x, int y, int z, int ripeningTime) {
+	public ItemStack[] getFruits(ITreeGenome genome, World world, BlockPos pos, int ripeningTime) {
 		return new ItemStack[0];
 	}
 
@@ -80,17 +79,17 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public boolean trySpawnFruitBlock(ITreeGenome genome, World world, int x, int y, int z) {
+	public boolean trySpawnFruitBlock(ITreeGenome genome, World world, BlockPos pos) {
 		return false;
 	}
 
 	@Override
-	public int getColour(ITreeGenome genome, IBlockAccess world, int x, int y, int z, int ripeningTime) {
+	public int getColour(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime) {
 		return 0xffffff;
 	}
 
 	@Override
-	public boolean markAsFruitLeaf(ITreeGenome genome, World world, int x, int y, int z) {
+	public boolean markAsFruitLeaf(ITreeGenome genome, World world, BlockPos pos) {
 		return false;
 	}
 
@@ -115,7 +114,7 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public short getIconIndex(ITreeGenome genome, IBlockAccess world, int x, int y, int z, int ripeningTime, boolean fancy) {
+	public short getIconIndex(ITreeGenome genome, IBlockAccess world, BlockPos pos, int ripeningTime, boolean fancy) {
 		if (overlay != null) {
 			return overlay.texUID;
 		} else {
@@ -123,11 +122,11 @@ public class FruitProviderNone implements IFruitProvider {
 		}
 	}
 
-	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister register) {
+	@Override
+	public void registerIcons() {
 		if (overlay != null) {
-			TextureManager.getInstance().registerTexUID(register, overlay.texUID, "leaves/fruits." + overlay.ident);
+			TextureManager.getInstance().registerTexUID(overlay.texUID, "blocks", "leaves/fruits." + overlay.ident);
 		}
 	}
 }

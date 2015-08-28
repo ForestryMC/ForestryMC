@@ -11,7 +11,6 @@
 package forestry.lepidopterology.commands;
 
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
 import net.minecraft.world.World;
 
 import forestry.core.commands.CommandHelpers;
@@ -38,7 +37,7 @@ public class CommandButterfly extends SubCommand {
 		}
 
 		@Override
-		public void processSubCommand(ICommandSender sender, String[] args) throws WrongUsageException {
+		public void processSubCommand(ICommandSender sender, String[] args) {
 			if (args.length > 1) {
 				CommandHelpers.throwWrongUsage(sender, this);
 			}

@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.lepidopterology;
 
-import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ILeafTickHandler;
@@ -23,7 +22,7 @@ import forestry.plugins.PluginLepidopterology;
 public class ButterflySpawner implements ILeafTickHandler {
 
 	@Override
-	public boolean onRandomLeafTick(ITree tree, World world, int biomeId, BlockPos pos, boolean isDestroyed) {
+	public boolean onRandomLeafTick(ITree tree, World world, int x, int y, int z, boolean isDestroyed) {
 		
 		if (world.rand.nextFloat() >= tree.getGenome().getSappiness() * tree.getGenome().getYield()) {
 			return false;
@@ -38,24 +37,24 @@ public class ButterflySpawner implements ILeafTickHandler {
 			return false;
 		}
 		
-		if (!spawn.canSpawn(world, pos.getX(), pos.getY(), pos.getZ())) {
+		if (!spawn.canSpawn(world, x, y, z)) {
 			return false;
 		}
 		
-		if (world.isAirBlock(pos.down())) {
-			attemptButterflySpawn(world, spawn, pos.getX() - 1, pos.getY(), pos.getZ());
-		} else if (world.isAirBlock(pos.up())) {
-			attemptButterflySpawn(world, spawn, pos.getX() + 1, pos.getY(), pos.getZ());
-		} else if (world.isAirBlock(pos.north())) {
-			attemptButterflySpawn(world, spawn, pos.getX(), pos.getY(), pos.getZ() - 1);
-		} else if (world.isAirBlock(pos.south())) {
-			attemptButterflySpawn(world, spawn, pos.getX(), pos.getY(), pos.getZ() + 1);
+		if (world.isAirBlock(x - 1, y, z)) {
+			attemptButterflySpawn(world, spawn, x - 1, y, z);
+		} else if (world.isAirBlock(x + 1, y, z)) {
+			attemptButterflySpawn(world, spawn, x + 1, y, z);
+		} else if (world.isAirBlock(x, y, z - 1)) {
+			attemptButterflySpawn(world, spawn, x, y, z - 1);
+		} else if (world.isAirBlock(x, y, z + 1)) {
+			attemptButterflySpawn(world, spawn, x, y, z + 1);
 		}
 		
 		return false;
 	}
 
-	private void attemptButterflySpawn(World world, IButterfly butterfly, double x, double y, double z) {
+	private static void attemptButterflySpawn(World world, IButterfly butterfly, double x, double y, double z) {
 		if (PluginLepidopterology.butterflyInterface.spawnButterflyInWorld(world, butterfly.copy(), x, y + 0.1f, z) != null) {
 			Proxies.log.finest("Spawned a butterfly '%s' at %s/%s/%s.", butterfly.getDisplayName(), x, y, z);
 		}

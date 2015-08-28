@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.energy.gadgets;
 
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -22,6 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
 import forestry.core.EnumErrorCode;
@@ -35,6 +38,8 @@ import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.interfaces.IRenderableMachine;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.Utils;
@@ -45,29 +50,21 @@ import ic2.api.energy.prefab.BasicSource;
 public class MachineGenerator extends TileBase implements ISidedInventory, ILiquidTankContainer, IRenderableMachine {
 
 	// / CONSTANTS
-	public static final short SLOT_CAN = 0;
-	public static final int maxEnergy = 30000;
+	private static final int maxEnergy = 30000;
 
-	public final FilteredTank resourceTank;
+	public static final short SLOT_CAN = 0;
+
 	private final TankManager tankManager;
+	private final FilteredTank resourceTank;
+
 	private int tickCount = 0;
 
-	protected BasicSource ic2EnergySource;
+	private BasicSource ic2EnergySource;
 
 	public MachineGenerator() {
 		setHints(Config.hints.get("generator"));
 
-		setInternalInventory(new TileInventoryAdapter(this, 1, "Items") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				if (slotIndex == SLOT_CAN) {
-					Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-					return tankManager.accepts(fluid);
-				}
-
-				return false;
-			}
-		});
+		setInternalInventory(new GeneratorInventoryAdapter(this));
 
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, FuelManager.generatorFuel.keySet());
 		tankManager = new TankManager(resourceTank);
@@ -78,7 +75,7 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.GeneratorGUI.ordinal(), player.worldObj, pos.getX(), pos.getY(), pos.getZ());
 	}
 
@@ -102,6 +99,18 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 		}
 
 		tankManager.readTanksFromNBT(nbttagcompound);
+	}
+
+	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
+		tankManager.writePacketData(data);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
+		tankManager.readPacketData(data);
 	}
 
 	@Override
@@ -133,9 +142,10 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 			}
 		}
 
+		IErrorLogic errorLogic = getErrorLogic();
+
 		// No work to be done if IC2 is unavailable.
-		if (ic2EnergySource == null) {
-			setErrorState(EnumErrorCode.NOENERGYNET);
+		if (errorLogic.setCondition(ic2EnergySource == null, EnumErrorCode.NOENERGYNET)) {
 			return;
 		}
 
@@ -157,11 +167,8 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 
 		}
 
-		if (resourceTank.getFluidAmount() <= 0) {
-			setErrorState(EnumErrorCode.NOFUEL);
-		} else {
-			setErrorState(EnumErrorCode.OK);
-		}
+		boolean hasFuel = resourceTank.getFluidAmount() > 0;
+		errorLogic.setCondition(!hasFuel, EnumErrorCode.NOFUEL);
 	}
 
 	public boolean isWorking() {
@@ -245,4 +252,19 @@ public class MachineGenerator extends TileBase implements ISidedInventory, ILiqu
 		return tankManager.getTankInfo(from);
 	}
 
+	private static class GeneratorInventoryAdapter extends TileInventoryAdapter<MachineGenerator> {
+		public GeneratorInventoryAdapter(MachineGenerator generator) {
+			super(generator, 1, "Items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_CAN) {
+				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+				return tile.tankManager.accepts(fluid);
+			}
+
+			return false;
+		}
+	}
 }

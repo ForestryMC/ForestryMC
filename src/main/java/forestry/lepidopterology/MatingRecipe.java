@@ -22,7 +22,7 @@ import forestry.plugins.PluginLepidopterology;
 public class MatingRecipe implements IRecipe {
 
 	private final ItemStack unknown;
-	ItemStack cached;
+	private ItemStack cached;
 	
 	public MatingRecipe() {
 		unknown = PluginLepidopterology.butterflyInterface.getMemberStack(PluginLepidopterology.butterflyInterface.getIndividualTemplates().get(0), EnumFlutterType.BUTTERFLY.ordinal());
@@ -81,10 +81,5 @@ public class MatingRecipe implements IRecipe {
 	public int getRecipeSize() {
 		return 2;
 	}
-
-    public ItemStack[] getRemainingItems(InventoryCrafting inv)
-    {
-        return null;
-    }
 
 }

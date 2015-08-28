@@ -10,19 +10,20 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidTank;
 
 import org.lwjgl.opengl.GL11;
 
 import forestry.api.core.IToolPipette;
+import forestry.api.core.sprite.ISprite;
+import forestry.api.core.sprite.Sprite;
 import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.gui.ContainerLiquidTanks;
-import forestry.core.gui.WidgetManager;
+import forestry.core.gui.IContainerLiquidTanks;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.proxy.Proxies;
 import forestry.farming.gui.ContainerFarm;
@@ -32,9 +33,9 @@ import forestry.farming.gui.ContainerFarm;
  */
 public class TankWidget extends Widget {
 
-	protected int overlayTexX = 176;
-	protected int overlayTexY = 0;
-	protected int slot = 0;
+	private int overlayTexX = 176;
+	private int overlayTexY = 0;
+	private int slot = 0;
 
 	public TankWidget(WidgetManager manager, int xPos, int yPos, int slot) {
 		super(manager, xPos, yPos);
@@ -48,10 +49,10 @@ public class TankWidget extends Widget {
 		return this;
 	}
 
-	public StandardTank getTank() {
+	public IFluidTank getTank() {
 		Container container = manager.gui.inventorySlots;
-		if (container instanceof ContainerLiquidTanks) {
-			return ((ContainerLiquidTanks) container).getTank(slot);
+		if (container instanceof IContainerLiquidTanks) {
+			return ((IContainerLiquidTanks) container).getTank(slot);
 		} else if (container instanceof ContainerFarm) {
 			return ((ContainerFarm) container).getTank(slot);
 		}
@@ -60,7 +61,7 @@ public class TankWidget extends Widget {
 
 	@Override
 	public void draw(int startX, int startY) {
-		StandardTank tank = getTank();
+		IFluidTank tank = getTank();
 		if (tank == null) {
 			return;
 		}
@@ -69,13 +70,12 @@ public class TankWidget extends Widget {
 		if (contents == null || contents.amount <= 0 || contents.getFluid() == null) {
 			return;
 		}
-		TextureAtlasSprite liquidIcon = contents.getFluid().getIcon(contents);
-		if (liquidIcon == null) {
+		if(contents.getFluid().getStill() == null)
 			return;
-		}
+		
 		int squaled = (contents.amount * height) / getTank().getCapacity();
 
-		Proxies.common.bindTexture();
+		Proxies.common.bindTexture(contents.getFluid().getStill());
 		int start = 0;
 
 		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
@@ -92,7 +92,7 @@ public class TankWidget extends Widget {
 				squaled = 0;
 			}
 
-			manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos + height - x - start, liquidIcon, 16, 16 - (16 - x));
+			manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos + height - x - start, 0, 0, 16, 16 - (16 - x));
 			start = start + 16;
 
 			if (x == 0 || squaled == 0) {
@@ -107,11 +107,11 @@ public class TankWidget extends Widget {
 
 	@Override
 	public ToolTip getToolTip() {
-		StandardTank tank = getTank();
-		if (tank == null) {
+		IFluidTank tank = getTank();
+		if (!(tank instanceof StandardTank)) {
 			return null;
 		}
-		return tank.getToolTip();
+		return ((StandardTank) tank).getToolTip();
 	}
 
 	@Override
@@ -122,9 +122,8 @@ public class TankWidget extends Widget {
 		}
 
 		Item held = itemstack.getItem();
-		if (held instanceof IToolPipette && manager.gui.inventorySlots instanceof ContainerLiquidTanks) {
-			((ContainerLiquidTanks) manager.gui.inventorySlots).handlePipetteClickClient(slot, manager.minecraft.thePlayer);
+		if (held instanceof IToolPipette && manager.gui.inventorySlots instanceof IContainerLiquidTanks) {
+			((IContainerLiquidTanks) manager.gui.inventorySlots).handlePipetteClickClient(slot, manager.minecraft.thePlayer);
 		}
-
 	}
 }

@@ -13,17 +13,18 @@ package forestry.lepidopterology.items;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
@@ -44,7 +45,7 @@ import forestry.plugins.PluginLepidopterology;
 
 public class ItemButterflyGE extends ItemGE {
 
-	private static Random rand = new Random();
+	private static final Random rand = new Random();
 
 	private final EnumFlutterType type;
 
@@ -238,21 +239,6 @@ public class ItemButterflyGE extends ItemGE {
 		} else {
 			return false;
 		}
-	}
-
-	@Override
-	public ModelType getModelType() {
-		return null;
-	}
-
-	@Override
-	public ItemMeshDefinition getMeshDefinition() {
-		return null;
-	}
-
-	@Override
-	public void registerModels() {
-		
 	}
 
 

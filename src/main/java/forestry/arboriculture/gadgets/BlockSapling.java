@@ -11,41 +11,49 @@
 package forestry.arboriculture.gadgets;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IAlleleTreeSpecies;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
+import forestry.arboriculture.WoodType;
+import forestry.arboriculture.items.ItemWoodBlock.WoodMeshDefinition;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
 import forestry.plugins.PluginArboriculture;
 
-public class BlockSapling extends BlockTreeContainer {
+public class BlockSapling extends BlockTreeContainer implements IGrowable, IModelRegister {
 
-	public static TileSapling getSaplingTile(IBlockAccess world, int x, int y, int z) {
-		TileEntity tile = world.getTileEntity(x, y, z);
-		if (!(tile instanceof TileSapling)) {
-			return null;
-		}
-
-		return (TileSapling) tile;
+	public static TileSapling getSaplingTile(IBlockAccess world, BlockPos pos) {
+		return Utils.getTile(world, pos, TileSapling.class);
 	}
 
 	public BlockSapling() {
@@ -54,16 +62,40 @@ public class BlockSapling extends BlockTreeContainer {
 		float factor = 0.4F;
 		setBlockBounds(0.5F - factor, 0.0F, 0.5F - factor, 0.5F + factor, factor * 2.0F, 0.5F + factor);
 		setStepSound(soundTypeGrass);
+		setDefaultState(this.blockState.getBaseState().withProperty(WOODTYPE, WoodType.LARCH));
+	}
+	
+	public static final PropertyEnum WOODTYPE = PropertyEnum.create("woodtype", WoodType.class);
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return ((WoodType)state.getValue(WOODTYPE)).ordinal();
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(WOODTYPE, WoodType.values()[meta]);
+	}
+	
+	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, new IProperty[]{WoodType.WOODTYPE});
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World var1, int meta) {
 		return new TileSapling();
 	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, new WoodMeshDefinition("sapling"));
+	}
 
 	/* COLLISION BOX */
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state) {
 		return null;
 	}
 
@@ -74,60 +106,24 @@ public class BlockSapling extends BlockTreeContainer {
 	}
 
 	@Override
-	public boolean renderAsNormalBlock() {
-		return false;
-	}
-
-	@Override
 	public int getRenderType() {
 		return PluginArboriculture.modelIdSaplings;
 	}
 
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	private static IIcon defaultIcon;
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerBlockIcons(IIconRegister register) {
-		defaultIcon = TextureManager.getInstance().registerTex(register, "germlings/sapling.treeBalsa");
-
-		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
-			if (allele instanceof IAlleleTreeSpecies) {
-				((IAlleleTreeSpecies) allele).getIconProvider().registerIcons(register);
-			}
-			if (allele instanceof IAlleleFruit) {
-				((IAlleleFruit) allele).getProvider().registerIcons(register);
-			}
-		}
-
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIcon(int side, int metadata) {
-		return defaultIcon;
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		TileSapling sapling = getSaplingTile(world, x, y, z);
-		if (sapling == null) {
-			return defaultIcon;
-		}
-
-		if (sapling.getTree() == null) {
-			return defaultIcon;
-		}
-
-		return sapling.getTree().getGenome().getPrimary().getGermlingIcon(EnumGermlingType.SAPLING, 0);
-	}
-
 	/* PLANTING */
+	
 	@Override
-	public boolean canBlockStay(World world, int x, int y, int z) {
-		TileSapling tile = getSaplingTile(world, x, y, z);
+	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
+		super.onNeighborBlockChange(world, pos, state, neighborBlock);
+		if (Proxies.common.isSimulating(world) && canSustainPlant(world, pos, null, null)) {
+			dropAsSapling(world, pos);
+			world.setBlockToAir(pos);
+		}
+	}
+	
+	@Override
+	public boolean canSustainPlant(IBlockAccess world, BlockPos pos, EnumFacing direction, IPlantable plantable) {
+		TileSapling tile = getSaplingTile(world, pos);
 		if (tile == null) {
 			return false;
 		}
@@ -135,55 +131,71 @@ public class BlockSapling extends BlockTreeContainer {
 			return false;
 		}
 
-		return tile.getTree().canStay(world, x, y, z);
-	}
-
-	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbour) {
-		super.onNeighborBlockChange(world, x, y, z, neighbour);
-		if (Proxies.common.isSimulating(world) && !this.canBlockStay(world, x, y, z)) {
-			dropAsSapling(world, x, y, z);
-			world.setBlockToAir(x, y, z);
-		}
-
+		return tile.getTree().canStay((World) world, pos);
 	}
 
 	/* REMOVING */
+	
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		return new ArrayList<ItemStack>();
 	}
-
+	
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
-		TileSapling sapling = getSaplingTile(world, x, y, z);
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+		TileSapling sapling = getSaplingTile(world, pos);
 		if (sapling == null || sapling.getTree() == null) {
 			return null;
 		}
-		return PluginArboriculture.treeInterface.getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING.ordinal());
+		return TreeManager.treeRoot.getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING.ordinal());
 	}
-
+	
 	@Override
-	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
-		if (Proxies.common.isSimulating(world) && canHarvestBlock(player, world.getBlockMetadata(x, y, z))) {
+	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		if (Proxies.common.isSimulating(world) && canHarvestBlock(world, pos, player)) {
 			if (!player.capabilities.isCreativeMode) {
-				dropAsSapling(world, x, y, z);
+				dropAsSapling(world, pos);
 			}
 		}
 
-		return world.setBlockToAir(x, y, z);
+		return world.setBlockToAir(pos);
 	}
 
-	private void dropAsSapling(World world, int x, int y, int z) {
+	private static void dropAsSapling(World world, BlockPos pos) {
 		if (!Proxies.common.isSimulating(world)) {
 			return;
 		}
 
-		TileSapling sapling = getSaplingTile(world, x, y, z);
+		TileSapling sapling = getSaplingTile(world, pos);
 		if (sapling != null && sapling.getTree() != null) {
-			ItemStack saplingStack = PluginArboriculture.treeInterface.getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING.ordinal());
-			StackUtils.dropItemStackAsEntity(saplingStack, world, x, y, z);
+			ItemStack saplingStack = TreeManager.treeRoot.getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING.ordinal());
+			StackUtils.dropItemStackAsEntity(saplingStack, world, pos.getX(), pos.getY(), pos.getZ());
 		}
 
+	}
+
+	@Override
+	/** canFertilize */
+	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient) {
+		TileSapling saplingTile = getSaplingTile(world, pos);
+		if (saplingTile != null) {
+			return saplingTile.canAcceptBoneMeal();
+		}
+		return true;
+	}
+
+	@Override
+	/** shouldFertilize */
+	public boolean canUseBonemeal(World world, Random rand, BlockPos pos, IBlockState state) {
+		return world.rand.nextFloat() < 0.45F;
+	}
+
+	@Override
+	/** fertilize */
+	public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
+		TileSapling saplingTile = getSaplingTile(world, pos);
+		if (saplingTile != null) {
+			saplingTile.tryGrow(true);
+		}
 	}
 }

@@ -10,39 +10,40 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import net.minecraft.world.World;
+
 import forestry.api.world.ITreeGenData;
 
 public class WorldGenCrescentia extends WorldGenTree {
 
 	public WorldGenCrescentia(ITreeGenData tree) {
-		super(tree);
+		super(tree, 6, 3);
 	}
 
 	@Override
-	public void generate() {
-		generateTreeTrunk(height, girth);
+	public void generate(World world) {
+		generateTreeTrunk(world, height, girth);
 
 		int leafSpawn = height + 1;
 
-		generateAdjustedCylinder(leafSpawn--, 0, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 0.5f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 0.5f, 1, leaf);
 
-		generateAdjustedCylinder(leafSpawn--, 1.9f, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 1.9f, 1, leaf);
-		if (rand.nextBoolean()) {
-			generateAdjustedCylinder(leafSpawn--, 1.9f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 1.9f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 1.9f, 1, leaf);
+		if (world.rand.nextBoolean()) {
+			generateAdjustedCylinder(world, leafSpawn--, 1.9f, 1, leaf);
 		}
 
-		generateAdjustedCylinder(leafSpawn--, 0.5f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 0.5f, 1, leaf);
 
 	}
 
 	@Override
-	public void generateTreeTrunk(int height, int girth) {
+	protected void generateTreeTrunk(World world, int height, int girth) {
 		
 		int offset = (girth - 1) / 2;
-		
-		
+
 		//Trunk generation
 		for (int x = 0; x < girth; x++) //offsets trunk in x direction
 		{
@@ -73,7 +74,7 @@ public class WorldGenCrescentia extends WorldGenTree {
 					}
 				} else { //these are center pieces
 					for (int i = 0; i < height; i++) { //grows trunk straight up in y direction to the correct height
-						addWood(x - offset, i, z - offset, EnumReplaceMode.ALL);
+						addWood(world, x - offset, i, z - offset, EnumReplaceMode.ALL);
 					}
 				}
 			}
@@ -82,28 +83,7 @@ public class WorldGenCrescentia extends WorldGenTree {
 		//End trunk generation
 		
 		//Spawn pods
-		for (int y = minPodHeight; y < height; y++) {
-			for (int x = 0; x < girth; x++) {
-				for (int z = 0; z < girth; z++) {
-
-					if ((x > 0 && x < girth) && (z > 0 && z < girth)) {
-						continue;
-					}
-
-					tree.trySpawnFruitBlock(world, startX + x + 1, startY + y, startZ + z);
-					tree.trySpawnFruitBlock(world, startX + x - 1, startY + y, startZ + z);
-					tree.trySpawnFruitBlock(world, startX + x, startY + y, startZ + z + 1);
-					tree.trySpawnFruitBlock(world, startX + x, startY + y, startZ + z - 1);
-				}
-			}
-		}
-
-		
+		generatePods(world, height, girth);
 	}
-	
-	@Override
-	public void preGenerate() {
-		height = determineHeight(6, 3);
-		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
-	}
+
 }

@@ -12,7 +12,7 @@ package forestry.core.gadgets;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.EnumFacing;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.GuiHandler;
@@ -21,31 +21,16 @@ import forestry.core.gui.IPagedInventory;
 import forestry.core.inventory.TileInventoryAdapter;
 
 public abstract class TileNaturalistChest extends TileBase implements IPagedInventory {
-
-	private static class NaturalistInventoryAdapter extends TileInventoryAdapter {
-		private final ISpeciesRoot speciesRoot;
-
-		public NaturalistInventoryAdapter(TileNaturalistChest tile, int size, String name, ISpeciesRoot speciesRoot) {
-			super(tile, size, name);
-			this.speciesRoot = speciesRoot;
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemstack) {
-			return speciesRoot.isMember(itemstack);
-		}
-	}
-
 	private final int guiID;
 
 	public TileNaturalistChest(ISpeciesRoot speciesRoot, int guiId) {
-		setInternalInventory(new NaturalistInventoryAdapter(this, 125, "Items", speciesRoot));
+		setInternalInventory(new NaturalistInventoryAdapter(this, speciesRoot));
 		setHints(Config.hints.get("apiarist.chest"));
 		this.guiID = guiId;
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, guiID, player.worldObj, pos.getX(), pos.getY(), pos.getZ());
 	}
 
@@ -54,14 +39,22 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 		player.openGui(ForestryAPI.instance, GuiHandler.encodeGuiData(guiID, page), player.worldObj, pos.getX(), pos.getY(), pos.getZ());
 	}
 
-	/* UPDATING */
-	@Override
-	public void updateServerSide() {
-	}
+	private static class NaturalistInventoryAdapter extends TileInventoryAdapter<TileNaturalistChest> {
+		private final ISpeciesRoot speciesRoot;
 
-	/* ERROR HANDLING */
-	@Override
-	public boolean throwsErrors() {
-		return false;
+		public NaturalistInventoryAdapter(TileNaturalistChest tile, ISpeciesRoot speciesRoot) {
+			super(tile, 125, "Items");
+			this.speciesRoot = speciesRoot;
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemstack) {
+			return speciesRoot.isMember(itemstack);
+		}
+
+		@Override
+		public boolean canExtractItem(int slotIndex, ItemStack stack, EnumFacing side) {
+			return true;
+		}
 	}
 }

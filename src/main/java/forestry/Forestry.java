@@ -16,7 +16,6 @@ import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -29,7 +28,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry.Type;
-
 import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.EngineCopperFuel;
 import forestry.api.fuels.FermenterFuel;
@@ -56,13 +54,14 @@ import forestry.core.utils.StringUtil;
 		modid = Defaults.MOD,
 		name = "Forestry",
 		version = Version.VERSION,
+		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
 		dependencies = "required-after:Forge@[10.13.0.1207,);"
 				+ "after:Buildcraft|Core@[6.1.7,);"
 				+ "after:ExtrabiomesXL;"
 				+ "after:BiomesOPlenty;"
 				+ "after:IC2@[2.0.140,);"
-				+ "before:UndergroundBiomes")
-//, certificateFingerprint = Version.FINGERPRINT)
+				+ "after:Natura@[2.2.0,);"
+				+ "after:HardcoreEnderExpansion;")
 public class Forestry {
 
 	@Mod.Instance(Defaults.MOD)

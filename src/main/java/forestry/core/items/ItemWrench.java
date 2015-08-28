@@ -25,7 +25,7 @@ public class ItemWrench extends ItemForestry implements IToolWrench {
 		super();
 		setHarvestLevel("wrench", 0);
 	}
-
+	
 	@Override
 	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
 		Block block = world.getBlockState(pos).getBlock();
@@ -37,12 +37,12 @@ public class ItemWrench extends ItemForestry implements IToolWrench {
 	}
 
 	@Override
-	public boolean canWrench(EntityPlayer player, BlockPos pos) {
+	public boolean canWrench(EntityPlayer player, int x, int y, int z) {
 		return true;
 	}
 
 	@Override
-	public void wrenchUsed(EntityPlayer player, BlockPos pos) {
+	public void wrenchUsed(EntityPlayer player, int x, int y, int z) {
 	}
 
 }

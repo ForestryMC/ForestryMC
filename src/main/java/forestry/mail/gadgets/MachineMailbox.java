@@ -54,7 +54,7 @@ public class MachineMailbox extends TileBase implements IMailContainer {
 
 	/* GUI */
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 
 		if (!Proxies.common.isSimulating(worldObj)) {
 			return;
@@ -64,7 +64,7 @@ public class MachineMailbox extends TileBase implements IMailContainer {
 
 		// Handle letter sending
 		if (PostManager.postRegistry.isLetter(held)) {
-			IPostalState result = this.tryDispatchLetter(held, true);
+			IPostalState result = this.tryDispatchLetter(held);
 			if (!result.isOk()) {
 				player.addChatMessage(new ChatComponentTranslation("for.chat.mail." + result.getIdentifier()));
 			} else {
@@ -79,7 +79,7 @@ public class MachineMailbox extends TileBase implements IMailContainer {
 	@Override
 	public void updateServerSide() {
 		if (!isLinked) {
-			getOrCreateMailInventory(worldObj, getOwnerProfile());
+			getOrCreateMailInventory(worldObj, getAccessHandler().getOwner());
 			isLinked = true;
 		}
 	}
@@ -94,12 +94,12 @@ public class MachineMailbox extends TileBase implements IMailContainer {
 		return PostRegistry.getOrCreatePOBox(worldObj, address);
 	}
 
-	private IPostalState tryDispatchLetter(ItemStack letterstack, boolean dispatchLetter) {
+	private IPostalState tryDispatchLetter(ItemStack letterstack) {
 		ILetter letter = PostManager.postRegistry.getLetter(letterstack);
 		IPostalState result;
 
 		if (letter != null) {
-			result = PostManager.postRegistry.getPostOffice(worldObj).lodgeLetter(worldObj, letterstack, dispatchLetter);
+			result = PostManager.postRegistry.getPostOffice(worldObj).lodgeLetter(worldObj, letterstack, true);
 		} else {
 			result = EnumDeliveryState.NOT_MAILABLE;
 		}
@@ -111,7 +111,7 @@ public class MachineMailbox extends TileBase implements IMailContainer {
 	@Override
 	public boolean hasMail() {
 
-		IInventory mailInventory = getOrCreateMailInventory(worldObj, getOwnerProfile());
+		IInventory mailInventory = getOrCreateMailInventory(worldObj, getAccessHandler().getOwner());
 		for (int i = 0; i < mailInventory.getSizeInventory(); i++) {
 			if (mailInventory.getStackInSlot(i) != null) {
 				return true;

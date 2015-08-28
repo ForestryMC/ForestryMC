@@ -12,33 +12,30 @@ package forestry.apiculture.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
+import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
+import forestry.api.core.sprite.ISprite;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
-import forestry.apiculture.genetics.Bee;
 import forestry.apiculture.genetics.BeeGenome;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.utils.StringUtil;
-import forestry.plugins.PluginApiculture;
 
 public class ItemBeeGE extends ItemGE {
 
@@ -55,7 +52,7 @@ public class ItemBeeGE extends ItemGE {
 
 	@Override
 	public IBee getIndividual(ItemStack itemstack) {
-		return new Bee(itemstack.getTagCompound());
+		return BeeManager.beeRoot.getMember(itemstack);
 	}
 
 	@Override
@@ -80,7 +77,7 @@ public class ItemBeeGE extends ItemGE {
 			return super.getItemStackDisplayName(itemstack);
 		}
 
-		IBee individual = new Bee(itemstack.getTagCompound());
+		IBee individual = BeeManager.beeRoot.getMember(itemstack);
 		String customBeeKey = "bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.", "");
 		if (StringUtil.canTranslate(customBeeKey)) {
 			return StringUtil.localize(customBeeKey);
@@ -99,7 +96,7 @@ public class ItemBeeGE extends ItemGE {
 		}
 
 		if (type != EnumBeeType.DRONE) {
-			IBee individual = new Bee(itemstack.getTagCompound());
+			IBee individual = BeeManager.beeRoot.getMember(itemstack);
 			if (individual.isNatural()) {
 				list.add(EnumChatFormatting.YELLOW + EnumChatFormatting.ITALIC.toString() + StringUtil.localize("bees.stock.pristine"));
 			} else {
@@ -123,7 +120,7 @@ public class ItemBeeGE extends ItemGE {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void addCreativeItems(List itemList, boolean hideSecrets) {
 
-		for (IIndividual individual : PluginApiculture.beeInterface.getIndividualTemplates()) {
+		for (IIndividual individual : BeeManager.beeRoot.getIndividualTemplates()) {
 			// Don't show secret bees unless ordered to.
 			if (hideSecrets && individual.isSecret() && !Config.isDebug) {
 				continue;
@@ -150,40 +147,30 @@ public class ItemBeeGE extends ItemGE {
 	@Override
 	public int getColourFromSpecies(IAlleleSpecies species, int renderPass) {
 
-		if (species != null && species instanceof IAlleleBeeSpecies) {
+		if (species instanceof IAlleleBeeSpecies) {
 			return species.getIconColour(renderPass);
 		} else {
 			return 0xffffff;
 		}
 
 	}
-	
-	@Override
+
 	@SideOnly(Side.CLIENT)
-	public void registerModels() {
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleBeeSpecies) {
-				((IAlleleBeeSpecies) allele).getModelProvider().registerModels();
+				((IAlleleBeeSpecies) allele).getModelProvider().registerModels(manager);
 			}
 		}
 	}
+	
+	/*@SideOnly(Side.CLIENT)
+	public ISprite getIconFromSpecies(IAlleleBeeSpecies species, int renderPass) {
+		if (species == null) {
+			species = (IAlleleBeeSpecies) BeeManager.beeRoot.getDefaultTemplate()[EnumBeeChromosome.SPECIES.ordinal()];
+		}
 
-	@Override
-	public ModelType getModelType() {
-		return null;
-	}
-
-	@Override
-	public ItemMeshDefinition getMeshDefinition() {
-		return new ItemMeshDefinition() {
-			
-			@Override
-			public ModelResourceLocation getModelLocation(ItemStack stack) {
-				IAlleleBeeSpecies species = (IAlleleBeeSpecies) getSpecies(stack);
-				if(species != null)
-					return species.getModel(type);
-				return null;
-			}
-		};
-	}
+		return species.getIcon(type, renderPass);
+	}*/
 }

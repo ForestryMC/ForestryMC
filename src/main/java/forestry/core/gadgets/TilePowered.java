@@ -10,34 +10,72 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
+import java.io.IOException;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.common.Optional;
 
+import forestry.api.core.IErrorLogic;
+import forestry.core.EnumErrorCode;
+import forestry.core.circuits.ISpeedUpgradable;
 import forestry.core.interfaces.IPowerHandler;
 import forestry.core.interfaces.IRenderableMachine;
-import forestry.core.proxy.Proxies;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.utils.EnumTankLevel;
 import forestry.energy.EnergyManager;
 
 import buildcraft.api.tiles.IHasWork;
 
 @Optional.Interface(iface = "buildcraft.api.tiles.IHasWork", modid = "BuildCraftAPI|tiles")
-public abstract class TilePowered extends TileBase implements IRenderableMachine, IPowerHandler, IHasWork {
+public abstract class TilePowered extends TileBase implements IRenderableMachine, IPowerHandler, IHasWork, ISpeedUpgradable {
 
-	public static final int WORK_CYCLES = 4;
+	private final EnergyManager energyManager;
 
-	protected final EnergyManager energyManager;
+	private int workCounter;
+	private int ticksPerWorkCycle;
+	private int energyPerWorkCycle;
 
-	public TilePowered(int maxTransfer, int energyPerWork, int capacity) {
-		this.energyManager = new EnergyManager(maxTransfer, energyPerWork, capacity);
+	protected float speedMultiplier = 1.0f;
+	protected float powerMultiplier = 1.0f;
+
+	// the number of work ticks that this machine has had no power
+	private int noPowerTime = 0;
+
+	protected TilePowered(int maxTransfer, int capacity, int energyPerWorkCycle) {
+		this.energyManager = new EnergyManager(maxTransfer, capacity);
 		this.energyManager.setReceiveOnly();
+
+		setEnergyPerWorkCycle(energyPerWorkCycle);
+		this.ticksPerWorkCycle = 4;
+	}
+
+	public int getWorkCounter() {
+		return workCounter;
+	}
+
+	public void setTicksPerWorkCycle(int ticksPerWorkCycle) {
+		this.ticksPerWorkCycle = ticksPerWorkCycle;
+		this.workCounter = 0;
+	}
+
+	public int getTicksPerWorkCycle() {
+		if (worldObj.isRemote) {
+			return ticksPerWorkCycle;
+		}
+		return Math.round(ticksPerWorkCycle / speedMultiplier);
+	}
+
+	public void setEnergyPerWorkCycle(int energyPerWorkCycle) {
+		this.energyPerWorkCycle = EnergyManager.scaleForDifficulty(energyPerWorkCycle);
+	}
+
+	public int getEnergyPerWorkCycle() {
+		return Math.round(energyPerWorkCycle * powerMultiplier);
 	}
 
 	/* STATE INFORMATION */
-	public abstract boolean isWorking();
-
 	public boolean hasResourcesMin(float percentage) {
 		return false;
 	}
@@ -48,32 +86,59 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 
 	public abstract boolean hasWork();
 
-	private int workCounter;
-
 	@Override
-	public void update() {
-		super.update();
-		if (!Proxies.common.isSimulating(worldObj)) {
+	protected void updateServerSide() {
+		super.updateServerSide();
+
+		// one Forestry work tick happens every 5 game ticks
+		if (!updateOnInterval(5)) {
 			return;
 		}
 
-		// Disable powered machines on a direct redstone signal
-		if (worldObj.getStrongPower(pos) >= 15) {
+		IErrorLogic errorLogic = getErrorLogic();
+
+		boolean disabled = isRedstoneActivated();
+		errorLogic.setCondition(disabled, EnumErrorCode.DISABLED);
+		if (disabled) {
 			return;
 		}
 
-		if (workCounter < WORK_CYCLES && energyManager.consumeEnergyToDoWork()) {
-			workCounter++;
+		if (!hasWork()) {
+			return;
 		}
 
-		if (workCounter >= WORK_CYCLES && updateOnInterval(5)) {
+		int ticksPerWorkCycle = getTicksPerWorkCycle();
+
+		if (workCounter < ticksPerWorkCycle) {
+			int energyPerWorkCycle = getEnergyPerWorkCycle();
+			boolean consumedEnergy = energyManager.consumeEnergyToDoWork(ticksPerWorkCycle, energyPerWorkCycle);
+			if (consumedEnergy) {
+				errorLogic.setCondition(false, EnumErrorCode.NOPOWER);
+				workCounter++;
+				noPowerTime = 0;
+			} else {
+				noPowerTime++;
+				if (noPowerTime > 4) {
+					errorLogic.setCondition(true, EnumErrorCode.NOPOWER);
+				}
+			}
+		} else {
 			if (workCycle()) {
 				workCounter = 0;
 			}
 		}
 	}
 
-	public abstract boolean workCycle();
+	protected abstract boolean workCycle();
+
+	public int getProgressScaled(int i) {
+		int ticksPerWorkCycle = getTicksPerWorkCycle();
+		if (ticksPerWorkCycle == 0) {
+			return i;
+		}
+
+		return ((ticksPerWorkCycle - workCounter) * i) / ticksPerWorkCycle;
+	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
@@ -85,6 +150,30 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		energyManager.readFromNBT(nbt);
+	}
+
+	@Override
+	public void writeGuiData(DataOutputStreamForestry data) throws IOException {
+		super.writeGuiData(data);
+		energyManager.writeData(data);
+		data.writeVarInt(workCounter);
+		data.writeVarInt(getTicksPerWorkCycle());
+	}
+
+	@Override
+	public void readGuiData(DataInputStreamForestry data) throws IOException {
+		super.readGuiData(data);
+		energyManager.readData(data);
+		workCounter = data.readVarInt();
+		ticksPerWorkCycle = data.readVarInt();
+	}
+
+	/* ISpeedUpgradable */
+	@Override
+	public void applySpeedUpgrade(double speedChange, double powerChange) {
+		speedMultiplier += speedChange;
+		powerMultiplier += powerChange;
+		workCounter = 0;
 	}
 
 	// / ADDITIONAL LIQUID HANDLING
@@ -127,30 +216,5 @@ public abstract class TilePowered extends TileBase implements IRenderableMachine
 	@Override
 	public boolean canConnectEnergy(EnumFacing from) {
 		return energyManager.canConnectEnergy(from);
-	}
-	
-	@Override
-	public int getField(int id) {
-		return 0;
-	}
-
-	@Override
-	public void setField(int id, int value) {
-		
-	}
-
-	@Override
-	public int getFieldCount() {
-		return 0;
-	}
-
-	@Override
-	public void clear() {
-		
-	}
-
-	@Override
-	public IChatComponent getDisplayName() {
-		return null;
 	}
 }

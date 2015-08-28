@@ -11,24 +11,20 @@
 package forestry.core.items;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.IVariantObject;
+import forestry.api.core.IModelManager;
 import forestry.core.config.Config;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 
-public class ItemOverlay extends ItemForestry implements IVariantObject {
-	
-	private static final List<String> variants = new ArrayList<String>();
-	
+public class ItemOverlay extends ItemForestry {
+
 	public static class OverlayInfo {
 
 		public final String name;
@@ -44,7 +40,6 @@ public class ItemOverlay extends ItemForestry implements IVariantObject {
 			this.name = name;
 			this.primaryColor = primaryColor;
 			this.secondaryColor = secondaryColor;
-			variants.add(name);
 		}
 
 		public OverlayInfo(String name, int primaryColor) {
@@ -107,9 +102,13 @@ public class ItemOverlay extends ItemForestry implements IVariantObject {
 		}
 	}
 	
+	@SideOnly(Side.CLIENT)
 	@Override
-	public String[] getVariants() {
-		return variants.toArray(new String[variants.size()]);
+	public void registerModel(Item item, IModelManager manager) {
+		for(int i = 0; i < overlays.length;i++)	
+		{
+			manager.registerItemModel(item, i, StringUtil.cleanItemName(this) + ".0");
+		}
 	}
 
 }

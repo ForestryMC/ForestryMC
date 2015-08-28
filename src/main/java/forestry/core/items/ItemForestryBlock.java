@@ -14,9 +14,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 public class ItemForestryBlock extends ItemBlock {
 
 	public ItemForestryBlock(Block block) {
@@ -28,10 +25,6 @@ public class ItemForestryBlock extends ItemBlock {
 	@Override
 	public int getMetadata(int i) {
 		return i;
-	}
-
-	public Block getBlock() {
-		return block;
 	}
 
 	@Override

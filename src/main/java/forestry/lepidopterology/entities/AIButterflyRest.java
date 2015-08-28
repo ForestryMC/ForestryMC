@@ -16,7 +16,7 @@ import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockWall;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
-import net.minecraft.util.BlockPos;
+
 import net.minecraftforge.common.IPlantable;
 
 import forestry.lepidopterology.entities.EntityButterfly.EnumButterflyState;
@@ -45,11 +45,10 @@ public class AIButterflyRest extends AIButterflyBase {
 		}
 
 		y--;
-		BlockPos pos = new BlockPos(x, y, z);
-		if (entity.worldObj.isAirBlock(pos)) {
+		if (entity.worldObj.isAirBlock(x, y, z)) {
 			return false;
 		}
-		if (entity.worldObj.getBlockState(pos).getBlock().getMaterial().isLiquid()) {
+		if (entity.worldObj.getBlock(x, y, z).getMaterial().isLiquid()) {
 			return false;
 		}
 		if (!entity.getButterfly().isAcceptedEnvironment(entity.worldObj, x, y, z)) {
@@ -83,22 +82,26 @@ public class AIButterflyRest extends AIButterflyBase {
 	}
 
 	private boolean canLand(int x, int y, int z) {
-		Block block = entity.worldObj.getBlockState(new BlockPos(x, y, z)).getBlock();
+		Block block = entity.worldObj.getBlock(x, y, z);
+		// getBlocksMovement is a bad name, allowsMovement would be a better name.
+		if (!block.getBlocksMovement(entity.worldObj, x, y, z)) {
+			return false;
+		}
 		if (isPlant(block)) {
 			return true;
 		}
-		block = entity.worldObj.getBlockState(new BlockPos(x, y - 1, z)).getBlock();
-		return isRest(block) || block.isLeaves(entity.worldObj, new BlockPos(x, y - 1, z));
+		block = entity.worldObj.getBlock(x, y - 1, z);
+		return isRest(block) || block.isLeaves(entity.worldObj, x, y - 1, z);
 	}
 
-	private boolean isRest(Block block) {
+	private static boolean isRest(Block block) {
 		if (block instanceof BlockFence) {
 			return true;
 		}
 		return block instanceof BlockWall;
 	}
 
-	private boolean isPlant(Block block) {
+	private static boolean isPlant(Block block) {
 		if (block instanceof BlockFlower) {
 			return true;
 		} else if (block instanceof IPlantable) {

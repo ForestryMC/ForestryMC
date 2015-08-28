@@ -13,13 +13,14 @@ package forestry.core.items;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelManager;
 import forestry.api.core.INBTTagable;
 import forestry.api.core.IToolPipette;
 import forestry.core.config.Defaults;
@@ -28,7 +29,7 @@ import forestry.core.utils.StringUtil;
 
 public class ItemPipette extends ItemForestry implements IToolPipette {
 
-	class PipetteContents implements INBTTagable {
+	static class PipetteContents implements INBTTagable {
 
 		FluidStack contents;
 
@@ -50,12 +51,12 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 			}
 		}
 
-		public boolean isFull(int limit) {
+		public boolean isFull() {
 			if (contents == null) {
 				return false;
 			}
 
-			return contents.fluidID > 0 && contents.amount >= limit;
+			return contents.getFluid().getID() > 0 && contents.amount >= 1000;
 		}
 
 		public void addTooltip(List<String> list) {
@@ -87,7 +88,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 	@Override
 	public boolean canPipette(ItemStack itemstack) {
 		PipetteContents contained = new PipetteContents(itemstack.getTagCompound());
-		return !contained.isFull(1000);
+		return !contained.isFull();
 	}
 
 	@Override
@@ -105,7 +106,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 				filled = liquid.amount;
 			}
 
-			contained.contents = new FluidStack(liquid.fluidID, filled);
+			contained.contents = new FluidStack(liquid, filled);
 			filled = liquid.amount;
 
 		} else {
@@ -144,11 +145,17 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 		PipetteContents contained = new PipetteContents(itemstack.getTagCompound());
 		contained.addTooltip(list);
 	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0, StringUtil.cleanItemName(this));
+	}
 
 	@Override
 	public FluidStack drain(ItemStack pipette, int maxDrain, boolean doDrain) {
 		PipetteContents contained = new PipetteContents(pipette.getTagCompound());
-		if (contained.contents == null || contained.contents.fluidID <= 0) {
+		if (contained.contents == null || contained.contents.getFluid().getID() <= 0) {
 			return null;
 		}
 
@@ -170,7 +177,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 			}
 		}
 
-		return new FluidStack(contained.contents.fluidID, drained);
+		return new FluidStack(contained.contents, drained);
 	}
 
 	@Override

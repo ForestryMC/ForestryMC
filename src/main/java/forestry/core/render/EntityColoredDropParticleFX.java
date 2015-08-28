@@ -76,7 +76,8 @@ public class EntityColoredDropParticleFX extends EntityFX {
 		Material material = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ))).getBlock().getMaterial();
 
 		if (material.isLiquid() || material.isSolid()) {
-			IBlockState state = worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)));
+			BlockPos pos = new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
+			IBlockState state = worldObj.getBlockState(pos);
 			double d0 = (double) ((float) (MathHelper.floor_double(this.posY) + 1) - BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state)));
 
 			if (this.posY < d0) {

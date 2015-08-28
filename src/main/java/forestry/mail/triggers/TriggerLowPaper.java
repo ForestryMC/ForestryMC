@@ -42,4 +42,9 @@ public class TriggerLowPaper extends Trigger {
 		return !((MachineTrader) tile).hasPaperMin(threshold);
 	}
 
+	@Override
+	public int getSheetLocation(){
+		return 0;
+	}
+
 }

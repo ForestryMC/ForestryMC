@@ -27,11 +27,11 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 
 	private static final int explosionChance = 50;
 	private static final byte defaultForce = 12;
-	private final byte indexExplosionTimer = 1;
-	private final byte indexExplosionForce = 2;
+	private static final byte indexExplosionTimer = 1;
+	private static final byte indexExplosionForce = 2;
 
-	public AlleleEffectCreeper(String uid) {
-		super(uid, "creeper", true, 20, false, true);
+	public AlleleEffectCreeper() {
+		super("creeper", true, 20, false, true);
 	}
 
 	@Override
@@ -48,21 +48,18 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 	}
 
 	@Override
-	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
 		World world = housing.getWorld();
-
-		if (isHalted(storedData, housing)) {
-			return storedData;
-		}
+		BlockPos housingCoords = housing.getPos();
 
 		// If we are already triggered, we continue the explosion sequence.
 		if (storedData.getInteger(indexExplosionTimer) > 0) {
-			progressExplosion(storedData, world, housing.getCoords());
+			progressExplosion(storedData, world, housingCoords.getX(), housingCoords.getY(), housingCoords.getZ());
 			return storedData;
 		}
 
-		AxisAlignedBB infectionBox = getBounding(genome, housing, 1.0f);
+		AxisAlignedBB infectionBox = getBounding(genome, housing);
 
 		@SuppressWarnings("rawtypes")
 		List list = world.getEntitiesWithinAABB(EntityPlayer.class, infectionBox);
@@ -95,7 +92,7 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 				continue;
 			}
 
-			world.playSoundEffect(housing.getCoords().getX(), housing.getCoords().getY(), housing.getCoords().getZ(), "mob.creeper", 4F,
+			world.playSoundEffect(housingCoords.getX(), housingCoords.getY(), housingCoords.getZ(), "mob.creeper", 4F,
 					(1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F) * 0.7F);
 			storedData.setInteger(indexExplosionTimer, 2); // Set explosion
 			// timer
@@ -104,7 +101,7 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 		return storedData;
 	}
 
-	private void progressExplosion(IEffectData storedData, World world, BlockPos pos) {
+	private static void progressExplosion(IEffectData storedData, World world, int x, int y, int z) {
 
 		int explosionTimer = storedData.getInteger(indexExplosionTimer);
 		explosionTimer--;
@@ -114,7 +111,7 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 			return;
 		}
 
-		world.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), storedData.getInteger(indexExplosionForce), false);
+		world.createExplosion(null, x, y, z, storedData.getInteger(indexExplosionForce), false);
 	}
 
 }

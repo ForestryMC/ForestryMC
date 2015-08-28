@@ -28,16 +28,17 @@ import forestry.core.interfaces.IBlockRenderer;
 
 public class RenderAnalyzer extends TileEntitySpecialRenderer implements IBlockRenderer {
 
-	private ModelAnalyzer model;
+	private final ModelAnalyzer model;
 	private final EntityItem dummyEntityItem = new EntityItem(null);
 	private long lastTick;
 
-	public RenderAnalyzer() {
+	public RenderAnalyzer(String baseTexture) {
+		this.model = new ModelAnalyzer(baseTexture);
 	}
 
-	public RenderAnalyzer(String baseTexture) {
-		this();
-		this.model = new ModelAnalyzer(baseTexture);
+	@Override
+	public void inventoryRender(double x, double y, double z) {
+		render(null, null, EnumFacing.WEST, x, y, z);
 	}
 
 	@Override

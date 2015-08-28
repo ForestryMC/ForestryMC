@@ -16,9 +16,10 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -33,8 +34,8 @@ import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.IModelObject;
-import forestry.api.core.IVariantObject;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.core.CreativeTabForestry;
 import forestry.core.IItemTyped;
 import forestry.core.config.Defaults;
@@ -46,7 +47,7 @@ import forestry.core.render.TextureManager;
 /**
  * Humus, bog earth, peat
  */
-public class BlockSoil extends Block implements IItemTyped, IVariantObject, IModelObject {
+public class BlockSoil extends Block implements IItemTyped, IModelRegister {
 
 	public static final PropertyEnum SOIL = PropertyEnum.create("soil", SoilType.class);
 	
@@ -67,13 +68,8 @@ public class BlockSoil extends Block implements IItemTyped, IVariantObject, IMod
 		setHardness(0.5f);
 		setStepSound(soundTypeGrass);
 		setCreativeTab(CreativeTabForestry.tabForestry);
+		setDefaultState(this.blockState.getBaseState().withProperty(SOIL, SoilType.values()[0]));
 	}
-
-	@Override
-	public int tickRate(World world) {
-		return 500;
-	}
-	
 	
 	@Override
 	public int getMetaFromState(IBlockState state) {
@@ -84,7 +80,17 @@ public class BlockSoil extends Block implements IItemTyped, IVariantObject, IMod
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(SOIL,  SoilType.values()[meta]);
 	}
+	
+	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, new IProperty[] {SOIL});
+	}
 
+	@Override
+	public int tickRate(World world) {
+		return 500;
+	}
+	
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
@@ -105,39 +111,40 @@ public class BlockSoil extends Block implements IItemTyped, IVariantObject, IMod
 
 	@Override
 	public int getDamageValue(World world, BlockPos pos) {
-		return (getMetaFromState(world.getBlockState(pos)) & 0x03);
+		IBlockState state = world.getBlockState(pos);
+		return getMetaFromState(state);
 	}
-
+	
 	@Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random random) {
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		if (!Proxies.common.isSimulating(world)) {
 			return;
 		}
 
-		int meta = getMetaFromState(state);
+		int meta = state.getBlock().getMetaFromState(state);
 
 		SoilType type = getTypeFromMeta(meta);
 
 		if (type == SoilType.HUMUS) {
-			updateTickHumus(world, pos, random);
+			updateTickHumus(world, pos);
 		} else if (type == SoilType.BOG_EARTH) {
-			updateTickBogEarth(world, pos, random);
+			updateTickBogEarth(world, pos);
 		}
 	}
-	
-	private void updateTickHumus(World world, BlockPos pos, Random random) {
+
+	private static void updateTickHumus(World world, BlockPos pos) {
 		if (isEnrooted(world, pos)) {
 			degradeSoil(world, pos);
 		}
 	}
 
-	private void updateTickBogEarth(World world, BlockPos pos, Random random) {
+	private static void updateTickBogEarth(World world, BlockPos pos) {
 		if (isMoistened(world, pos)) {
 			matureBog(world, pos);
 		}
 	}
 
-	private boolean isEnrooted(World world, BlockPos pos) {
+	private static boolean isEnrooted(World world, BlockPos pos) {
 
 		for (int i = -1; i < 2; i++) {
 			for (int j = -1; j < 2; j++) {
@@ -157,14 +164,14 @@ public class BlockSoil extends Block implements IItemTyped, IVariantObject, IMod
 	/**
 	 * If a tree or sapling is in the vicinity, there is a chance, that the soil will degrade.
 	 */
-	private void degradeSoil(World world, BlockPos pos) {
+	private static void degradeSoil(World world, BlockPos pos) {
 
 		if (world.rand.nextInt(140) != 0) {
 			return;
 		}
 
 		IBlockState state = world.getBlockState(pos);
-		int meta = getMetaFromState(state);
+		int meta = state.getBlock().getMetaFromState(state);
 
 		// Unpack first
 		int type = meta & 0x03;
@@ -179,12 +186,12 @@ public class BlockSoil extends Block implements IItemTyped, IVariantObject, IMod
 		if (grade >= degradeDelimiter) {
 			world.setBlockState(pos, Blocks.sand.getStateFromMeta(0), Defaults.FLAG_BLOCK_SYNCH);
 		} else {
-			world.setBlockState(pos, world.getBlockState(pos).getBlock().getStateFromMeta(meta), Defaults.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos, state.getBlock().getStateFromMeta(meta), Defaults.FLAG_BLOCK_SYNCH);
 		}
 		world.markBlockForUpdate(pos);
 	}
 
-	public static boolean isMoistened(World world, BlockPos pos) {
+	private static boolean isMoistened(World world, BlockPos pos) {
 
 		for (int i = -2; i < 3; i++) {
 			for (int j = -2; j < 3; j++) {
@@ -198,7 +205,7 @@ public class BlockSoil extends Block implements IItemTyped, IVariantObject, IMod
 		return false;
 	}
 
-	private void matureBog(World world, BlockPos pos) {
+	private static void matureBog(World world, BlockPos pos) {
 
 		if (world.rand.nextInt(13) != 0) {
 			return;
@@ -220,7 +227,7 @@ public class BlockSoil extends Block implements IItemTyped, IVariantObject, IMod
 		maturity++;
 
 		meta = (maturity << 2 | type);
-		world.setBlockState(pos, world.getBlockState(pos).getBlock().getStateFromMeta(meta), Defaults.FLAG_BLOCK_SYNCH);
+		world.setBlockState(pos, state.getBlock().getStateFromMeta(meta), Defaults.FLAG_BLOCK_SYNCH);
 		world.markBlockForUpdate(pos);
 	}
 
@@ -267,13 +274,11 @@ public class BlockSoil extends Block implements IItemTyped, IVariantObject, IMod
 	}
 
 	@Override
-	public ModelType getModelType() {
-		return ModelType.META;
-	}
-
-	@Override
-	public String[] getVariants() {
-		return new String[]{ "humus", "bog_earth", "peat" };
+	@SideOnly(Side.CLIENT)
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0, "soil/humus");
+		manager.registerItemModel(item, 1, "soil/bog");
+		manager.registerItemModel(item, 2, "soil/peat");
 	}
 
 }

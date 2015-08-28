@@ -23,11 +23,10 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
-import forestry.api.core.IVariantObject;
 import forestry.core.config.ForestryItem;
 import forestry.core.items.ItemForestry;
 
-public class ItemCircuitBoard extends ItemForestry implements IVariantObject {
+public class ItemCircuitBoard extends ItemForestry {
 
 	public ItemCircuitBoard() {
 		super();
@@ -82,7 +81,7 @@ public class ItemCircuitBoard extends ItemForestry implements IVariantObject {
 		return chipset;
 	}
 
-	public static void saveChipset(ItemStack itemstack, ICircuitBoard circuitboard) {
+	private static void saveChipset(ItemStack itemstack, ICircuitBoard circuitboard) {
 		if (circuitboard == null) {
 			itemstack.setTagCompound(null);
 			return;
@@ -91,16 +90,6 @@ public class ItemCircuitBoard extends ItemForestry implements IVariantObject {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		circuitboard.writeToNBT(nbttagcompound);
 		itemstack.setTagCompound(nbttagcompound);
-	}
-	
-	@Override
-	public ModelType getModelType() {
-		return ModelType.META;
-	}
-	
-	@Override
-	public String[] getVariants() {
-		return new String[]{ "basic", "enhanced", "refined", "intricate"};
 	}
 
 }

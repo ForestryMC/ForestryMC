@@ -14,7 +14,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -31,19 +30,6 @@ public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 	protected IButtonTextureSet texture;
 	private ToolTip toolTip;
 	private boolean useTexWidth = false;
-
-	public GuiBetterButton(int id, int x, int y, String label) {
-		this(id, x, y, 200, StandardButtonTextureSets.LARGE_BUTTON, label);
-	}
-
-	public GuiBetterButton(int id, int x, int y, int width, String label) {
-		this(id, x, y, width, StandardButtonTextureSets.LARGE_BUTTON, label);
-	}
-
-	public GuiBetterButton(int id, int x, int y, int width, IButtonTextureSet texture, String label) {
-		super(id, x, y, width, texture.getHeight(), label);
-		this.texture = texture;
-	}
 
 	public GuiBetterButton(int id, int x, int y, IButtonTextureSet texture) {
 		super(id, x, y, texture.getWidth(), texture.getHeight(), "");
@@ -63,7 +49,7 @@ public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 		return this;
 	}
 
-	public GuiBetterButton setGuiWidth(int width) {
+	public GuiBetterButton setButtonWidth(int width) {
 		this.width = width;
 		useTexWidth = false;
 		return this;
@@ -96,7 +82,7 @@ public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 		return mouseX >= xPosition && mouseY >= yPosition && mouseX < xPosition + getWidth() && mouseY < yPosition + getHeight();
 	}
 
-	protected void bindButtonTextures(Minecraft minecraft) {
+	protected static void bindButtonTextures(Minecraft minecraft) {
 		minecraft.renderEngine.bindTexture(TEXTURE);
 	}
 

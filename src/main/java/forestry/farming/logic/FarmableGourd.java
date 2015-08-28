@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -45,14 +46,15 @@ public class FarmableGourd implements IFarmable {
 
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos) {
+		IBlockState state = world.getBlockState(pos);
 		if (world.isAirBlock(pos)) {
 			return null;
 		}
 
-		if (!StackUtils.equals(world.getBlockState(pos).getBlock(), fruit)) {
+		if (!StackUtils.equals(state.getBlock(), fruit)) {
 			return null;
 		}
-		IBlockState state = world.getBlockState(pos);
+
 		if (state.getBlock().getMetaFromState(state) != fruit.getItemDamage()) {
 			return null;
 		}
@@ -72,7 +74,7 @@ public class FarmableGourd implements IFarmable {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return world.setBlockState(pos, StackUtils.getBlock(stem).getDefaultState(), Defaults.FLAG_BLOCK_SYNCH);
+		return world.setBlockState(pos, StackUtils.getBlock(stem).getStateFromMeta(0), Defaults.FLAG_BLOCK_SYNCH);
 	}
 
 }

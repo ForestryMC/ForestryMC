@@ -15,10 +15,9 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.IModelManager;
 import forestry.core.render.TextureManager;
 
 public class ItemMisc extends ItemForestry {
@@ -55,6 +54,14 @@ public class ItemMisc extends ItemForestry {
 	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
 		for (int i = 0; i < 7; i++) {
 			itemList.add(new ItemStack(this, 1, i));
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		for (int i = 0; i < definition.length; i++) {
+			manager.registerItemModel(item, i, definition[i]);
 		}
 	}
 

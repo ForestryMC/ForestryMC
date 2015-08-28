@@ -37,21 +37,20 @@ import forestry.core.config.ForestryItem;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.InvTools;
 import forestry.core.inventory.InventoryAdapter;
-import forestry.core.utils.GuiUtil;
 import forestry.core.utils.StackUtils;
+import forestry.core.utils.Utils;
 import forestry.mail.items.ItemLetter;
 
 public class TradeStation extends WorldSavedData implements ITradeStation, IInventoryAdapter {
 
 	public static class TradeStationInventory extends InventoryAdapter {
 
-		public TradeStationInventory(int size, String name) {
-			super(size, name);
+		public TradeStationInventory() {
+			super(TradeStation.SLOT_SIZE, "INV");
 		}
 		
 		@Override
 		public int[] getSlotsForFace(EnumFacing side) {
-
 			ArrayList<Integer> slots = new ArrayList<Integer>();
 
 			for (int i = SLOT_LETTERS_1; i < SLOT_LETTERS_1 + SLOT_LETTERS_COUNT; i++) {
@@ -74,12 +73,12 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 		@Override
 		public boolean canExtractItem(int slot, ItemStack itemStack, EnumFacing side) {
-			return GuiUtil.isIndexInRange(slot, SLOT_RECEIVE_BUFFER, SLOT_RECEIVE_BUFFER_COUNT);
+			return Utils.isIndexInRange(slot, SLOT_RECEIVE_BUFFER, SLOT_RECEIVE_BUFFER_COUNT);
 		}
 
 		@Override
 		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (GuiUtil.isIndexInRange(slotIndex, SLOT_SEND_BUFFER, SLOT_SEND_BUFFER_COUNT)) {
+			if (Utils.isIndexInRange(slotIndex, SLOT_SEND_BUFFER, SLOT_SEND_BUFFER_COUNT)) {
 				for (int i = 0; i < SLOT_TRADEGOOD_COUNT; i++) {
 					ItemStack tradeGood = getStackInSlot(SLOT_TRADEGOOD + i);
 					if (StackUtils.isIdenticalItem(tradeGood, itemStack)) {
@@ -87,10 +86,10 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 					}
 				}
 				return false;
-			} else if (GuiUtil.isIndexInRange(slotIndex, SLOT_LETTERS_1, SLOT_LETTERS_COUNT)) {
+			} else if (Utils.isIndexInRange(slotIndex, SLOT_LETTERS_1, SLOT_LETTERS_COUNT)) {
 				Item item = itemStack.getItem();
 				return item == Items.paper;
-			} else if (GuiUtil.isIndexInRange(slotIndex, SLOT_STAMPS_1, SLOT_STAMPS_COUNT)) {
+			} else if (Utils.isIndexInRange(slotIndex, SLOT_STAMPS_1, SLOT_STAMPS_COUNT)) {
 				Item item = itemStack.getItem();
 				return item instanceof IStamps;
 			}
@@ -113,14 +112,14 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	public static final short SLOT_RECEIVE_BUFFER_COUNT = 15;
 	public static final short SLOT_SEND_BUFFER = 30;
 	public static final short SLOT_SEND_BUFFER_COUNT = 10;
-	public static final short SLOT_SIZE = SLOT_TRADEGOOD_COUNT + SLOT_EXCHANGE_COUNT + SLOT_LETTERS_COUNT + SLOT_STAMPS_COUNT + SLOT_RECEIVE_BUFFER_COUNT + SLOT_SEND_BUFFER_COUNT;
+	public static final int SLOT_SIZE = SLOT_TRADEGOOD_COUNT + SLOT_EXCHANGE_COUNT + SLOT_LETTERS_COUNT + SLOT_STAMPS_COUNT + SLOT_RECEIVE_BUFFER_COUNT + SLOT_SEND_BUFFER_COUNT;
 
 	// / MEMBER
 	private GameProfile owner;
 	private IMailAddress address;
 	private boolean isVirtual = false;
 	private boolean isInvalid = false;
-	private final InventoryAdapter inventory = new TradeStationInventory(SLOT_SIZE, "INV");
+	private final InventoryAdapter inventory = new TradeStationInventory();
 
 	// / CONSTRUCTORS
 	public TradeStation(GameProfile owner, IMailAddress address) {
@@ -296,7 +295,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		mail.writeToNBT(nbttagcompound);
 
-		ItemStack mailstack = ForestryItem.letters.getItemStack(1, ItemLetter.encodeMeta(1, ItemLetter.getType(mail)));
+		ItemStack mailstack = ItemLetter.createStampedLetterStack(mail);
 		mailstack.setTagCompound(nbttagcompound);
 
 		IPostalState responseState = PostManager.postRegistry.getPostOffice(world).lodgeLetter(world, mailstack, doLodge);
@@ -330,7 +329,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			confirm.addStamps(ForestryItem.stamps.getItemStack(1, EnumPostage.P_1.ordinal() - 1));
 			confirm.writeToNBT(nbttagcompound);
 
-			ItemStack confirmstack = ForestryItem.letters.getItemStack(1, ItemLetter.encodeMeta(1, ItemLetter.getType(confirm)));
+			ItemStack confirmstack = ItemLetter.createStampedLetterStack(confirm);
 			confirmstack.setTagCompound(nbttagcompound);
 
 			PostManager.postRegistry.getPostOffice(world).lodgeLetter(world, confirmstack, doLodge);
@@ -352,15 +351,18 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		}
 
 		// How many orders are fillable?
-		int itemCount = 0;
+		float orderCount = 0;
 
 		for (ItemStack stack : InvTools.getStacks(inventory, SLOT_SEND_BUFFER, SLOT_SEND_BUFFER_COUNT)) {
 			if (stack != null && stack.isItemEqual(tradegood) && ItemStack.areItemStackTagsEqual(stack, tradegood)) {
-				itemCount += stack.stackSize;
+				orderCount += (stack.stackSize / (float) tradegood.stackSize);
+				if (orderCount >= max) {
+					return max;
+				}
 			}
 		}
 
-		return (int) Math.floor(itemCount / tradegood.stackSize);
+		return (int) Math.floor(orderCount);
 	}
 
 	public boolean canReceivePayment() {
@@ -620,7 +622,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	public ItemStack getStackInSlotOnClosing(int var1) {
 		return inventory.getStackInSlotOnClosing(var1);
 	}
-	
+
 	@Override
 	public String getCommandSenderName() {
 		return inventory.getCommandSenderName();
@@ -680,11 +682,6 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	@Override
-	public IInventoryAdapter configureSided(int[] sides, int[] slots) {
-		return inventory.configureSided(sides, slots);
-	}
-
-	@Override
 	public int getField(int id) {
 		return 0;
 	}
@@ -708,4 +705,5 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	public IChatComponent getDisplayName() {
 		return null;
 	}
+
 }

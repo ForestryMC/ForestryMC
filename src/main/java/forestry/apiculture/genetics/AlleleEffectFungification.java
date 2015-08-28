@@ -17,14 +17,15 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.EffectData;
+import forestry.core.vect.IVect;
 
 public class AlleleEffectFungification extends AlleleEffectThrottled {
 
-	public static final int MAX_BLOCK_FIND_TRIES = 10;
-	public static final int ENTITY_THROTTLE = 6;
+	private static final int MAX_BLOCK_FIND_TRIES = 10;
+	private static final int ENTITY_THROTTLE = 6;
 	
-	public AlleleEffectFungification(String uid) {
-		super(uid, "mycophilic", true, 10, false, false);
+	public AlleleEffectFungification() {
+		super("mycophilic", true, 10, false, false);
 	}
 
 	@Override
@@ -37,11 +38,8 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 	}
 
 	@Override
-	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		if (isHalted(storedData, housing)) {
-			return storedData;
-		}
-		
+	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+
 		doBlockEffect(genome, housing);
 		
 		int entityThrottle = storedData.getInteger(1);
@@ -58,11 +56,12 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 
 	private void doBlockEffect(IBeeGenome genome, IBeeHousing housing) {
 		World world = housing.getWorld();
-		int territorySize[] = getModifiedArea(genome, housing);
+		BlockPos housingCoordinates = housing.getPos();
+		IVect area = getModifiedArea(genome, housing);
 		
-		int blockX = getRandomOffset(world.rand, housing.getCoords().getX(), territorySize[0]);
-		int blockY = getRandomOffset(world.rand, housing.getCoords().getY(), territorySize[1]);
-		int blockZ = getRandomOffset(world.rand, housing.getCoords().getZ(), territorySize[2]);
+		int blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
+		int blockY = getRandomOffset(world.rand, housingCoordinates.getY(), area.getY());
+		int blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());
 		
 		for (int attempt = 0; attempt < MAX_BLOCK_FIND_TRIES; ++attempt) {
 			Block block = world.getBlockState(new BlockPos(blockX, blockY, blockZ)).getBlock();
@@ -73,15 +72,15 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 				doMushroomGrowth(block, world, blockX, blockY, blockZ);
 				break;
 			}
-			blockX = getRandomOffset(world.rand, housing.getCoords().getX(), territorySize[0]);
-			blockY = getRandomOffset(world.rand, housing.getCoords().getY(), territorySize[1]);
-			blockZ = getRandomOffset(world.rand, housing.getCoords().getZ(), territorySize[2]);
+			blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
+			blockY = getRandomOffset(world.rand, housingCoordinates.getY(), area.getY());
+			blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());
 		}
 
 	}
 
 	private void doEntityEffect(IBeeGenome genome, IBeeHousing housing) {
-		AxisAlignedBB aabb = this.getBounding(genome, housing, 1f);
+		AxisAlignedBB aabb = this.getBounding(genome, housing);
 		World world = housing.getWorld();
 
 		List entities = world.getEntitiesWithinAABB(EntityCow.class, aabb);
@@ -93,15 +92,15 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		}
 	}
 	
-	private int getRandomOffset(Random random, int centrePos, int offset) {
+	private static int getRandomOffset(Random random, int centrePos, int offset) {
 		return centrePos + random.nextInt(offset) - (offset / 2);
 	}
 	
-	private boolean isSuitableForMycelium(World world, Block block, int blockX, int blockY, int blockZ) {
-		return block == Blocks.grass || (block == Blocks.dirt && world.canBlockSeeSky(new BlockPos(blockX, blockY, blockZ)));
+	private static boolean isSuitableForMycelium(World world, Block block, int blockX, int blockY, int blockZ) {
+		return block == Blocks.grass || (block == Blocks.dirt && world.canSeeSky(new BlockPos(blockX, blockY, blockZ)));
 	}
 
-	private boolean isSuitableForGrowth(Block block) {
+	private static boolean isSuitableForGrowth(Block block) {
 		return block == Blocks.red_mushroom || block == Blocks.brown_mushroom;
 	}
 	
@@ -113,10 +112,10 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		mooshroom.setHealth(cow.getHealth());
 		mooshroom.renderYawOffset = cow.renderYawOffset;
 		worldObj.spawnEntityInWorld(mooshroom);
-		worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, cow.posX, cow.posY + (double) (cow.height / 2.0F), cow.posZ, 0.0D, 0.0D, 0.0D);
+		worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, cow.posX, cow.posY + (double) (cow.height / 2.0F), cow.posZ, 0.0D, 0.0D, 0.0D);
 	}
 
-	private void doMushroomGrowth(Block block, World world, int blockX, int blockY, int blockZ) {
+	private static void doMushroomGrowth(Block block, World world, int blockX, int blockY, int blockZ) {
 		WorldGenBigMushroom giantMushroomGenerator;
 
 		if (block == Blocks.brown_mushroom) {

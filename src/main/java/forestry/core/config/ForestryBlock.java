@@ -10,25 +10,18 @@
  ******************************************************************************/
 package forestry.core.config;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
+
 import net.minecraftforge.oredict.OreDictionary;
-import forestry.api.core.IMeshDefinitionObject;
-import forestry.api.core.IModelObject;
-import forestry.api.core.IModelObject.ModelType;
-import forestry.api.core.IVariantObject;
+
 import forestry.core.proxy.Proxies;
-import forestry.core.render.ModelManager;
 import forestry.plugins.PluginManager;
 import forestry.plugins.PluginManager.Stage;
 
@@ -60,33 +53,18 @@ public enum ForestryBlock {
 	candle,
 	stump,
 	glass,
-	planks1,
-	planks2,
-	fireproofPlanks1,
-	fireproofPlanks2,
-	slabs1,
-	slabs2,
-	slabs3,
-	slabs4,
-	log1,
-	log2,
-	log3,
-	log4,
-	log5,
-	log6,
-	log7,
-	log8,
-	fireproofLog1,
-	fireproofLog2,
-	fireproofLog3,
-	fireproofLog4,
-	fireproofLog5,
-	fireproofLog6,
-	fireproofLog7,
-	fireproofLog8,
-	fences1,
-	fences2,
+	// wood items
+	planks,
+	slabs,
+	logs,
+	fences,
 	stairs,
+	planksFireproof,
+	slabsFireproof,
+	logsFireproof,
+	fencesFireproof,
+	stairsFireproof,
+	// trees
 	saplingGE,
 	leaves,
 	pods,
@@ -101,7 +79,7 @@ public enum ForestryBlock {
 	factoryPlain,
 	lepidopterology;
 	private Block block;
-	
+
 	public void registerBlock(Block block, Class<? extends ItemBlock> itemClass, String name) {
 		if (!EnumSet.of(Stage.PRE_INIT).contains(PluginManager.getStage())) {
 			throw new RuntimeException("Tried to register Block outside of Pre-Init");
@@ -150,7 +128,7 @@ public enum ForestryBlock {
 		return new ItemStack(block, qty, meta);
 	}
 
-	public boolean setBlock(World world, BlockPos pos, int meta, int flag) {
-		return world.setBlockState(pos, block.getStateFromMeta(meta), flag);
+	public boolean setBlock(World world, BlockPos pos, int meta) {
+		return world.setBlockState(pos, block.getStateFromMeta(meta), Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
 	}
 }

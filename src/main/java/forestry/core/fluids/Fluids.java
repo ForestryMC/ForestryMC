@@ -11,22 +11,27 @@
 package forestry.core.fluids;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.items.ItemLiquidContainer;
+import forestry.core.render.TextureManager;
 
 import static forestry.core.items.ItemLiquidContainer.EnumContainerType;
 
@@ -324,20 +329,26 @@ public enum Fluids {
 	private final String tag;
 	private final int density, viscosity;
 	private final Color color;
+	private final ResourceLocation[] resources = new ResourceLocation[2];
 
-	private Fluids() {
+	Fluids() {
 		this(null);
 	}
 
-	private Fluids(Color color) {
+	Fluids(Color color) {
 		this(color, 1000, 1000);
 	}
 
-	private Fluids(Color color, int density, int viscosity) {
+	Fluids(Color color, int density, int viscosity) {
 		this.tag = name().toLowerCase(Locale.ENGLISH);
 		this.color = color;
 		this.density = density;
 		this.viscosity = viscosity;
+		
+		resources[0] = new ResourceLocation(Defaults.ID, "textures/blocks/liquid/" + getTag() + "_still.png");
+		if (flowTextureExists()) {
+			resources[1] = new ResourceLocation(Defaults.ID, "textures/blocks/liquid/" + getTag() + "_flow.png");
+		}
 	}
 
 	public int getTemperature() {
@@ -433,5 +444,20 @@ public enum Fluids {
 	 */
 	public void setProperties(ItemLiquidContainer liquidContainer) {
 
+	}
+
+	@SideOnly(Side.CLIENT)
+	public boolean flowTextureExists() {
+		try {
+			ResourceLocation resourceLocation = new ResourceLocation(Defaults.ID, "textures/blocks/liquid/" + getTag() + "_flow.png");
+			IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
+			return resourceManager.getResource(resourceLocation) != null;
+		} catch (java.lang.Exception e) {
+			return false;
+		}
+	}
+	
+	public ResourceLocation[] getResources() {
+		return resources;
 	}
 }

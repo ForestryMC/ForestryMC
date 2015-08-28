@@ -10,20 +10,18 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Items;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.sprite.ISprite;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
+import forestry.core.render.TextureManager;
 
 public class FarmLogicCereal extends FarmLogicCrops {
 
 	public FarmLogicCereal(IFarmHousing housing) {
-		super(housing, Farmables.farmables.get("farmWheat").toArray(new IFarmable[0]));
+		super(housing, Farmables.farmables.get("farmWheat"));
 	}
 
 	@Override
@@ -37,8 +35,8 @@ public class FarmLogicCereal extends FarmLogicCrops {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite getIcon() {
-		return getSprite("minecraft", "items/wheat");
+	public ISprite getIcon() {
+		return TextureManager.getInstance().getFarmSprite("farmLoigc", "items", "wheat");
 	}
 
 }

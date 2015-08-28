@@ -14,8 +14,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
 
+import forestry.api.core.IModelManager;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
@@ -25,23 +36,15 @@ import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.items.ItemForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.World;
 
 public class ItemResearchNote extends ItemForestry {
 
-	public static enum EnumNoteType {
+	public enum EnumNoteType {
 		NONE, MUTATION, SPECIES;
 
 		public static final EnumNoteType[] VALUES = values();
 
-		private IMutation getEncodedMutation(ISpeciesRoot root, NBTTagCompound compound) {
+		private static IMutation getEncodedMutation(ISpeciesRoot root, NBTTagCompound compound) {
 			IAllele allele0 = AlleleManager.alleleRegistry.getAllele(compound.getString("AL0"));
 			IAllele allele1 = AlleleManager.alleleRegistry.getAllele(compound.getString("AL1"));
 			if (allele0 == null || allele1 == null) {
@@ -129,16 +132,27 @@ public class ItemResearchNote extends ItemForestry {
 				}
 
 				IBreedingTracker tracker = encoded.getRoot().getBreedingTracker(world, player.getGameProfile());
-				if (tracker.isDiscovered(encoded)) {
+				if (tracker.isResearched(encoded)) {
 					player.addChatMessage(new ChatComponentTranslation("for.chat.cannotmemorizeagain"));
 					return false;
 				}
 
-				tracker.registerSpecies((IAlleleSpecies) encoded.getAllele0());
-				tracker.registerSpecies((IAlleleSpecies) encoded.getAllele1());
-				tracker.registerSpecies((IAlleleSpecies) encoded.getTemplate()[root.getKaryotypeKey().ordinal()]);
-				tracker.registerMutation(encoded);
+				IAlleleSpecies species0 = encoded.getAllele0();
+				IAlleleSpecies species1 = encoded.getAllele1();
+				IAlleleSpecies speciesResult = (IAlleleSpecies) encoded.getTemplate()[root.getKaryotypeKey().ordinal()];
+
+				tracker.registerSpecies(species0);
+				tracker.registerSpecies(species1);
+				tracker.registerSpecies(speciesResult);
+
+				tracker.researchMutation(encoded);
 				player.addChatMessage(new ChatComponentTranslation("for.chat.memorizednote"));
+
+				player.addChatMessage(new ChatComponentTranslation("for.chat.memorizednote2",
+						EnumChatFormatting.GRAY + species0.getName(),
+						EnumChatFormatting.GRAY + species1.getName(),
+						EnumChatFormatting.GREEN + speciesResult.getName()));
+
 				return true;
 			}
 

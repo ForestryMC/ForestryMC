@@ -14,21 +14,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.IIconProvider;
+import forestry.api.core.ISpriteProvider;
 import forestry.api.core.ITextureManager;
+import forestry.api.core.sprite.ISprite;
+import forestry.api.core.sprite.Sprite;
 
 @SideOnly(Side.CLIENT)
 public class TextureManager implements ITextureManager {
@@ -44,66 +39,90 @@ public class TextureManager implements ITextureManager {
 		return instance;
 	}
 
-	private final HashMap<String, TextureAtlasSprite> defaultIcons = new HashMap<String, TextureAtlasSprite>();
+	private final HashMap<String, ISprite> farmIcons = new HashMap<String, ISprite>();
+	private final HashMap<String, ISprite> defaultIcons = new HashMap<String, ISprite>();
 
-	private final TextureAtlasSprite[] textures = new TextureAtlasSprite[2048];
+	private final ISprite[] textures = new ISprite[2048];
 
-	private final ArrayList<IIconProvider> iconProvider = new ArrayList<IIconProvider>();
+	private final ArrayList<ISpriteProvider> iconProvider = new ArrayList<ISpriteProvider>();
 
 	private TextureManager() {
 	}
 
-	public void initDefaultIcons(TextureMap map) {
+	public void initDefaultIcons() {
 		String[] defaultIconNames = new String[]{"habitats/desert", "habitats/end", "habitats/forest", "habitats/hills", "habitats/jungle", "habitats/mushroom",
 				"habitats/nether", "habitats/ocean", "habitats/plains", "habitats/snow", "habitats/swamp", "habitats/taiga", "misc/access.private",
 				"misc/access.viewable", "misc/access.shared", "misc/energy", "misc/hint",
 				"analyzer/anything", "analyzer/bee", "analyzer/cave", "analyzer/closed", "analyzer/drone", "analyzer/flyer",
 				"analyzer/item", "analyzer/nocturnal", "analyzer/princess", "analyzer/pure_breed", "analyzer/pure_cave",
 				"analyzer/pure_flyer", "analyzer/pure_nocturnal", "analyzer/queen",
-				"particles/ember", "particles/flame", "particles/poison", "particles/swarm_bee", "errors/errored",
+				"particles/swarm_bee", "errors/errored",
 				"slots/blocked", "slots/blocked_2", "slots/liquid", "slots/container", "slots/locked",
 				"mail/carrier.player", "mail/carrier.trader"};
 		for (String str : defaultIconNames) {
-			defaultIcons.put(str, registerTex(map, str));
+			defaultIcons.put(str, registerTex("items", str));
 		}
 	}
 
-	public TextureAtlasSprite getDefault(String ident) {
+	public ISprite getDefault(String ident) {
 		return defaultIcons.get(ident);
 	}
 
-	public TextureAtlasSprite registerTex(TextureMap map, String identifier) {
-		return map.registerSprite(new ResourceLocation("forestry:textures/items/" + identifier + ".png"));
+	public ISprite registerTex(String modifier, String identifier) {
+		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
+		return new Sprite(map.registerSprite(new ResourceLocation("forestry:textures/" + modifier + "/" + identifier)));
 	}
 	
-	public TextureAtlasSprite registerTex(TextureMap map, String modID, String identifier) {
-		return map.registerSprite(new ResourceLocation(modID + ":textures/" + identifier + ".png"));
+	@Override
+	public ISprite getFarmSprite(String identifierSprite, String modifier, String identifier){
+		if(farmIcons.get(identifierSprite) == null)
+			return registerFarmSprite(identifierSprite, modifier, identifier);
+		return farmIcons.get(identifierSprite);
 	}
 	
-	public TextureAtlasSprite getTex(TextureMap map, String identifier) {
-		return map.getTextureExtry(new ResourceLocation("forestry:textures/items/" + identifier + ".png").toString());
+	@Override
+	public ISprite getFarmSprite(String identifierSprite, String modID, String modifier, String identifier) {
+		if(farmIcons.get(identifierSprite) == null)
+			return registerFarmSprite(identifierSprite, modID, modifier, identifier);
+		return farmIcons.get(identifierSprite);
 	}
 	
-	public TextureAtlasSprite getTex(TextureMap map, String modID, String identifier) {
-		return map.getTextureExtry(new ResourceLocation(modID + ":textures/" + identifier + ".png").toString());
+	@Override
+	public ISprite registerFarmSprite(String identifierSprite, String modifier, String identifier){
+		return farmIcons.put(identifierSprite, registerTex(modifier, identifier));
+	}
+	
+	@Override
+	public ISprite registerFarmSprite(String identifierSprite, String modID, String modifier, String identifier){
+		return farmIcons.put(identifierSprite, registerTex(modID, modifier, identifier));
+	}
+	
+	public ISprite registerTex(String modID, String modifier, String identifier) {
+		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
+		return new Sprite(map.registerSprite(new ResourceLocation(modID + ":textures/" + modifier + "/" + identifier)));
+	}
+	
+	public ResourceLocation getRL(String modifier, String identifier) {
+		return new ResourceLocation("forestry:textures/" + modifier + "/" + identifier + ".png");
 	}
 
-	public TextureAtlasSprite registerTexUID(TextureMap map, short uid, String identifier) {
-		return setTexUID(uid, registerTex(map, identifier));
+
+	public ISprite registerTexUID(short uid, String modifier, String identifier) {
+		return setTexUID(uid, registerTex(modifier, identifier));
 	}
 
-	public TextureAtlasSprite setTexUID(short uid, TextureAtlasSprite texture) {
+	public ISprite setTexUID(short uid, ISprite texture) {
 		textures[uid] = texture;
 		return texture;
 	}
 
 	@Override
-	public void registerIconProvider(IIconProvider provider) {
+	public void registerIconProvider(ISpriteProvider provider) {
 		iconProvider.add(provider);
 	}
 
 	@Override
-	public TextureAtlasSprite getIcon(short texUID) {
+	public ISprite getIcon(short texUID) {
 		if (texUID < 0) {
 			return null;
 		}
@@ -111,8 +130,8 @@ public class TextureManager implements ITextureManager {
 			return textures[texUID];
 		}
 
-		for (IIconProvider provider : iconProvider) {
-			TextureAtlasSprite retr = provider.getIcon(texUID);
+		for (ISpriteProvider provider : iconProvider) {
+			ISprite retr = provider.getIcon(texUID);
 			if (retr != null) {
 				return retr;
 			}

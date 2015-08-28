@@ -10,7 +10,11 @@
  ******************************************************************************/
 package forestry.core.utils;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -21,15 +25,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
+import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.core.config.Defaults;
 import forestry.core.inventory.InvTools;
+import forestry.core.proxy.Proxies;
 
 public class StackUtils {
 
@@ -110,54 +115,6 @@ public class StackUtils {
 		}
 
 		return added;
-
-	}
-
-	public static int addToInventory(ItemStack itemstack, IInventory inventory, boolean doAdd, int slot1, int count) {
-
-		int added = 0;
-
-		for (int i = slot1; i < slot1 + count; i++) {
-			ItemStack inventoryStack = inventory.getStackInSlot(i);
-
-			// Grab those free slots
-			if (inventoryStack == null) {
-				if (doAdd) {
-					inventory.setInventorySlotContents(i, itemstack.copy());
-				}
-				return itemstack.stackSize;
-			}
-
-			// Already full
-			if (inventoryStack.stackSize >= inventoryStack.getMaxStackSize()) {
-				continue;
-			}
-
-			// Not same type
-			if (!inventoryStack.isItemEqual(itemstack)) {
-				continue;
-			}
-
-			int space = inventoryStack.getMaxStackSize() - inventoryStack.stackSize;
-
-			// Enough space to add all
-			if (space > itemstack.stackSize - added) {
-				if (doAdd) {
-					inventoryStack.stackSize += itemstack.stackSize;
-				}
-				return itemstack.stackSize;
-				// Only part can be added
-			} else {
-				if (doAdd) {
-					inventoryStack.stackSize = inventoryStack.getMaxStackSize();
-				}
-				added += space;
-			}
-
-		}
-
-		return added;
-
 	}
 
 	/**
@@ -183,18 +140,6 @@ public class StackUtils {
 		temp.stackSize = 0;
 	}
 
-	public static boolean freeSpaceInStack(ItemStack stack, int maxSize) {
-		if (stack == null) {
-			return true;
-		}
-
-		if (stack.stackSize >= maxSize) {
-			return false;
-		}
-
-		return true;
-	}
-
 	/**
 	 * Creates a split stack of the specified amount, preserving NBT data,
 	 * without decreasing the source stack.
@@ -208,15 +153,10 @@ public class StackUtils {
 		return split;
 	}
 
-	public static ItemStack[] condenseStacks(ItemStack[] stacks) {
-		return condenseStacks(stacks, -1, false);
-	}
-
 	/**
-	 * @param maxCountedPerStack The maximum stacksize counted in a single stack. -1 for unlimited.
 	 */
-	public static ItemStack[] condenseStacks(ItemStack[] stacks, int maxCountedPerStack, boolean craftingEquivalency) {
-		ArrayList<ItemStack> condensed = new ArrayList<ItemStack>();
+	public static ItemStack[] condenseStacks(ItemStack[] stacks) {
+		List<ItemStack> condensed = new ArrayList<ItemStack>();
 
 		for (ItemStack stack : stacks) {
 			if (stack == null) {
@@ -228,18 +168,14 @@ public class StackUtils {
 
 			boolean matched = false;
 			for (ItemStack cached : condensed) {
-				if (cached.isItemEqual(stack)
-						|| (craftingEquivalency && isCraftingEquivalent(cached, stack, true, false))) {
-					cached.stackSize += maxCountedPerStack > 0 && stack.stackSize > maxCountedPerStack ? maxCountedPerStack : stack.stackSize;
+				if ((cached.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(cached, stack))) {
+					cached.stackSize += stack.stackSize;
 					matched = true;
 				}
 			}
 
 			if (!matched) {
 				ItemStack cached = stack.copy();
-				if (maxCountedPerStack > 0) {
-					cached.stackSize = maxCountedPerStack;
-				}
 				condensed.add(cached);
 			}
 
@@ -268,35 +204,31 @@ public class StackUtils {
 	 * Counts how many full sets are contained in the passed stock
 	 */
 	public static int containsSets(ItemStack[] set, ItemStack[] stock, boolean oreDictionary, boolean craftingTools) {
-		int count = 0;
+		int totalSets = 0;
 
-		ItemStack[] condensedRequired = StackUtils.condenseStacks(set, -1, oreDictionary);
-		ItemStack[] condensedOffered = StackUtils.condenseStacks(stock, -1, oreDictionary);
+		ItemStack[] condensedRequired = StackUtils.condenseStacks(set);
+		ItemStack[] condensedOffered = StackUtils.condenseStacks(stock);
 
 		for (ItemStack req : condensedRequired) {
 
-			boolean matched = false;
+			int reqCount = 0;
 			for (ItemStack offer : condensedOffered) {
-
 				if (isCraftingEquivalent(req, offer, oreDictionary, craftingTools)) {
-					matched = true;
-
 					int stackCount = (int) Math.floor(offer.stackSize / req.stackSize);
-					if (stackCount <= 0) {
-						return 0;
-					} else if (count == 0) {
-						count = stackCount;
-					} else if (count > stackCount) {
-						count = stackCount;
-					}
+					reqCount = Math.max(reqCount, stackCount);
 				}
 			}
-			if (!matched) {
+
+			if (reqCount == 0) {
 				return 0;
+			} else if (totalSets == 0) {
+				totalSets = reqCount;
+			} else if (totalSets > reqCount) {
+				totalSets = reqCount;
 			}
 		}
 
-		return count;
+		return totalSets;
 	}
 
 	/**
@@ -337,13 +269,28 @@ public class StackUtils {
 			return false;
 		}
 
+		if (base.hasTagCompound() && !base.getTagCompound().hasNoTags()) {
+			if (!ItemStack.areItemStacksEqual(base, comparison)) {
+				return false;
+			}
+		}
+
 		if (oreDictionary) {
 			int[] idsBase = OreDictionary.getOreIDs(base);
-			for (int idBase : idsBase) {
-				for (ItemStack itemstack : OreDictionary.getOres(OreDictionary.getOreName(idBase))) {
-					if (comparison.getItem() == itemstack.getItem() && (itemstack.getItemDamage() == OreDictionary.WILDCARD_VALUE || comparison.getItemDamage() == itemstack.getItemDamage())) {
-						return true;
-					}
+			Arrays.sort(idsBase);
+			int[] idsComp = OreDictionary.getOreIDs(comparison);
+			Arrays.sort(idsComp);
+
+			// check if the sorted arrays "idsBase" and "idsComp" have any ID in common.
+			int iBase = 0;
+			int iComp = 0;
+			while (iBase < idsBase.length && iComp < idsComp.length) {
+				if (idsBase[iBase] < idsComp[iComp]) {
+					iBase++;
+				} else if (idsBase[iBase] > idsComp[iComp]) {
+					iComp++;
+				} else {
+					return true;
 				}
 			}
 		}
@@ -387,7 +334,7 @@ public class StackUtils {
 		}
 	}
 
-	public static void dropItemStackAsEntity(ItemStack items, World world, BlockPos pos) {
+	public static void dropItemStackAsEntity(ItemStack items, World world, double x, double y, double z) {
 		if (items.stackSize <= 0) {
 			return;
 		}
@@ -396,7 +343,7 @@ public class StackUtils {
 		double d = (world.rand.nextFloat() * f1) + (1.0F - f1) * 0.5D;
 		double d1 = (world.rand.nextFloat() * f1) + (1.0F - f1) * 0.5D;
 		double d2 = (world.rand.nextFloat() * f1) + (1.0F - f1) * 0.5D;
-		EntityItem entityitem = new EntityItem(world, pos.getX() + d, pos.getY() + d1, pos.getZ() + d2, items);
+		EntityItem entityitem = new EntityItem(world, x + d, y + d1, z + d2, items);
 		entityitem.setPickupDelay(10);
 
 		world.spawnEntityInWorld(entityitem);
@@ -410,25 +357,11 @@ public class StackUtils {
 		return created;
 	}
 
-	public static ItemStack consumeItem(ItemStack stack) {
-		if (stack.stackSize == 1) {
-			if (stack.getItem().hasContainerItem(stack)) {
-				return stack.getItem().getContainerItem(stack);
-			} else {
-				return null;
-			}
-		} else {
-			stack.splitStack(1);
-
-			return stack;
-		}
-	}
-
 	public static Block getBlock(ItemStack stack) {
 		Item item = stack.getItem();
 
 		if (item instanceof ItemBlock) {
-			return ((ItemBlock) item).block;
+			return ((ItemBlock) item).getBlock();
 		} else {
 			return null;
 		}
@@ -440,5 +373,111 @@ public class StackUtils {
 
 	public static boolean equals(Block block, int meta, ItemStack stack) {
 		return block == getBlock(stack) && meta == stack.getItemDamage();
+	}
+
+	public static class Stack {
+		private final String name;
+		private final int meta;
+
+		public Stack(String name, int meta) {
+			this.name = name;
+			this.meta = meta;
+		}
+
+		public Item getItem() {
+			Item item = GameData.getItemRegistry().getRaw(name);
+			if (item == null) {
+				Proxies.log.warning("Failed to find item for (" + name + ") in the Forge registry.");
+			}
+			return item;
+		}
+
+		public Block getBlock() {
+			Block block = GameData.getBlockRegistry().getRaw(name);
+			if (block == null) {
+				Proxies.log.warning("Failed to find block for (" + name + ") in the Forge registry.");
+			}
+			return block;
+		}
+
+		public int getMeta() {
+			return meta;
+		}
+	}
+
+	public static List<ItemStack> parseItemStackStrings(String[] itemStackStrings, int missingMetaValue) {
+		List<Stack> stacks = parseStackStrings(itemStackStrings, missingMetaValue);
+		return getItemStacks(stacks);
+	}
+
+	public static List<ItemStack> parseItemStackStrings(String itemStackStrings, int missingMetaValue) {
+		List<Stack> stacks = parseStackStrings(itemStackStrings, missingMetaValue);
+		return getItemStacks(stacks);
+	}
+
+	private static List<ItemStack> getItemStacks(List<Stack> stacks) {
+		List<ItemStack> itemStacks = new ArrayList<ItemStack>(stacks.size());
+		for (Stack stack : stacks) {
+			Item item = stack.getItem();
+			if (item != null) {
+				int meta = stack.getMeta();
+				ItemStack itemStack = new ItemStack(item, 1, meta);
+				itemStacks.add(itemStack);
+			}
+		}
+		return itemStacks;
+	}
+
+	public static List<Stack> parseStackStrings(String itemStackStrings, int missingMetaValue) {
+		String[] parts = itemStackStrings.split("(\\s*;\\s*)+");
+		return parseStackStrings(parts, missingMetaValue);
+	}
+
+	public static List<Stack> parseStackStrings(String[] parts, int missingMetaValue) {
+
+		List<Stack> stacks = new ArrayList<Stack>();
+
+		for (String itemStackString : parts) {
+			Stack stack = parseStackString(itemStackString, missingMetaValue);
+			if (stack != null) {
+				stacks.add(stack);
+			}
+		}
+
+		return stacks;
+	}
+
+	public static Stack parseStackString(String stackString, int missingMetaValue) {
+		if (stackString == null) {
+			return null;
+		}
+
+		stackString = stackString.trim();
+		if (stackString.isEmpty()) {
+			return null;
+		}
+
+		String[] parts = stackString.split(":+");
+
+		if (parts.length != 2 && parts.length != 3) {
+			Proxies.log.warning("Stack string (" + stackString + ") isn't formatted properly. Suitable formats are <modId>:<name>, <modId>:<name>:<meta> or <modId>:<name>:*, e.g. IC2:blockWall:*");
+			return null;
+		}
+
+		String name = parts[0] + ':' + parts[1];
+		int meta;
+
+		if (parts.length == 2) {
+			meta = missingMetaValue;
+		} else {
+			try {
+				meta = parts[2].equals("*") ? OreDictionary.WILDCARD_VALUE : NumberFormat.getIntegerInstance().parse(parts[2]).intValue();
+			} catch (ParseException e) {
+				Proxies.log.warning("ItemStack string (" + stackString + ") has improperly formatted metadata. Suitable metadata are integer values or *.");
+				return null;
+			}
+		}
+
+		return new Stack(name, meta);
 	}
 }

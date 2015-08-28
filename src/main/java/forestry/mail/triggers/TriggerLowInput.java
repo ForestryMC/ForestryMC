@@ -42,4 +42,9 @@ public class TriggerLowInput extends Trigger {
 
 		return !((MachineTrader) tile).hasInputBufMin(threshold);
 	}
+
+	@Override
+	public int getSheetLocation() {
+		return 0;
+	}
 }

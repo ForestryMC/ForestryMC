@@ -14,6 +14,8 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 
+import java.util.List;
+
 import forestry.core.config.Version;
 import forestry.core.proxy.Proxies;
 

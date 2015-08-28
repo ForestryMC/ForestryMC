@@ -11,32 +11,39 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map.Entry;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.IIcon;
-
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 
 import org.lwjgl.opengl.GL11;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IApiaristTracker;
+import forestry.api.core.sprite.ISprite;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IChromosomeType;
+import forestry.api.genetics.IIndividual;
+import forestry.apiculture.genetics.BeeBranchDefinition;
+import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.items.ItemBeeGE;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
-import forestry.core.gadgets.TileForestry;
 import forestry.core.genetics.ItemGE;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.SpriteSheet;
 import forestry.core.utils.StringUtil;
 import forestry.pipes.EnumFilterType;
 import forestry.pipes.PipeItemsPropolis;
 import forestry.pipes.PipeLogicPropolis;
+import forestry.plugins.PluginAgriCraft;
 import forestry.plugins.PluginApiculture;
 
 /**
@@ -44,14 +51,14 @@ import forestry.plugins.PluginApiculture;
  *
  * @author SirSengir
  */
-public class GuiPropolisPipe<T extends TileForestry> extends GuiForestry<T> {
+public class GuiPropolisPipe extends GuiForestry<ContainerPropolisPipe, IInventory> {
 
 	class TypeFilterSlot extends Widget {
 
-		private final ForgeDirection orientation;
+		private final EnumFacing orientation;
 		private final PipeLogicPropolis logic;
 
-		public TypeFilterSlot(int x, int y, ForgeDirection orientation, PipeLogicPropolis logic) {
+		public TypeFilterSlot(int x, int y, EnumFacing orientation, PipeLogicPropolis logic) {
 			super(widgetManager, x, y);
 			this.orientation = orientation;
 			this.logic = logic;
@@ -64,7 +71,7 @@ public class GuiPropolisPipe<T extends TileForestry> extends GuiForestry<T> {
 		@Override
 		public void draw(int startX, int startY) {
 			EnumFilterType type = logic.getTypeFilter(orientation);
-			IIcon icon = null;
+			ISprite icon = null;
 			if (type != null) {
 				icon = type.getIcon();
 			}
@@ -73,8 +80,8 @@ public class GuiPropolisPipe<T extends TileForestry> extends GuiForestry<T> {
 			}
 
 			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
-			Proxies.common.bindTexture(SpriteSheet.ITEMS);
-			drawTexturedModelRectFromIcon(startX + xPos, startY + yPos, icon, 16, 16);
+			Proxies.common.bindTexture();
+			drawTexturedModelRect(startX + xPos, startY + yPos, icon, 16, 16);
 
 		}
 
@@ -103,12 +110,12 @@ public class GuiPropolisPipe<T extends TileForestry> extends GuiForestry<T> {
 	class SpeciesFilterSlot extends Widget {
 
 		private final IApiaristTracker tracker;
-		private final ForgeDirection orientation;
+		private final EnumFacing orientation;
 		private final PipeLogicPropolis logic;
 		private final int pattern;
 		private final int allele;
 
-		public SpeciesFilterSlot(IApiaristTracker tracker, int x, int y, ForgeDirection orientation, int pattern, int allele, PipeLogicPropolis logic) {
+		public SpeciesFilterSlot(IApiaristTracker tracker, int x, int y, EnumFacing orientation, int pattern, int allele, PipeLogicPropolis logic) {
 			super(widgetManager, x, y);
 			this.tracker = tracker;
 			this.orientation = orientation;
@@ -135,9 +142,9 @@ public class GuiPropolisPipe<T extends TileForestry> extends GuiForestry<T> {
 			IAlleleSpecies species = logic.getSpeciesFilter(orientation, pattern, allele);
 			GL11.glDisable(GL11.GL_LIGHTING);
 
-			for (int i = 0; i < 3; ++i) {
+			/*for (int i = 0; i < 3; ++i) {
 
-				IIcon icon = ((ItemBeeGE) ForestryItem.beeDroneGE.item()).getIconFromSpecies((IAlleleBeeSpecies) species, i);
+				ISprite icon = ((ItemBeeGE) ForestryItem.beeDroneGE.item()).getIconFromSpecies((IAlleleBeeSpecies) species, i);
 				int color = ((ItemGE) ForestryItem.beeDroneGE.item()).getColourFromSpecies(species, i);
 
 				float colorR = (color >> 16 & 255) / 255.0F;
@@ -146,10 +153,21 @@ public class GuiPropolisPipe<T extends TileForestry> extends GuiForestry<T> {
 
 				GL11.glColor4f(colorR, colorG, colorB, 1.0F);
 				// drawTexturedModalRect(startX + xPos, startY + yPos, iconIndex % 16 * 16, iconIndex / 16 * 16, 16, 16);
-				manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos, icon, 16, 16);
+				manager.gui.drawTexturedModelRect(startX + xPos, startY + yPos, icon, 16, 16);
 
+			}*/
+			for(IIndividual individual : BeeManager.beeRoot.getIndividualTemplates())
+			{
+				if(individual.getGenome().getPrimary() == species)
+				{
+					NBTTagCompound nbttagcompound = new NBTTagCompound();
+					ItemStack someStack = new ItemStack(ForestryItem.beeDroneGE.item());
+					individual.writeToNBT(nbttagcompound);
+					someStack.setTagCompound(nbttagcompound);
+					Minecraft.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(someStack, startX + xPos, startY + yPos);
+					break;
+				}
 			}
-			GL11.glEnable(GL11.GL_LIGHTING);
 
 		}
 
@@ -218,7 +236,7 @@ public class GuiPropolisPipe<T extends TileForestry> extends GuiForestry<T> {
 	private final PipeLogicPropolis pipeLogic;
 
 	public GuiPropolisPipe(EntityPlayer player, PipeItemsPropolis pipe) {
-		super(Defaults.TEXTURE_PATH_GUI + "/analyzer.png", new ContainerPropolisPipe(player.inventory, pipe));
+		super(Defaults.TEXTURE_PATH_GUI + "/analyzer.png", new ContainerPropolisPipe(player.inventory, pipe), null);
 
 		pipeLogic = pipe.pipeLogic;
 		// Request filter set update if on client
@@ -230,14 +248,16 @@ public class GuiPropolisPipe<T extends TileForestry> extends GuiForestry<T> {
 		ySize = 225;
 
 		for (int i = 0; i < 6; i++) {
-			widgetManager.add(new TypeFilterSlot(8, 18 + i * 18, ForgeDirection.values()[i], pipeLogic));
+			widgetManager.add(new TypeFilterSlot(8, 18 + i * 18, EnumFacing.values()[i], pipeLogic));
 		}
 
-		IApiaristTracker tracker = PluginApiculture.beeInterface.getBreedingTracker(player.worldObj, player.getGameProfile());
+		IApiaristTracker tracker = BeeManager.beeRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
 		for (int i = 0; i < 6; i++) {
-			for (int j = 0; j < 3; j++) {
-				for (int k = 0; k < 2; k++) {
-					widgetManager.add(new SpeciesFilterSlot(tracker, 44 + j * 45 + k * 18, 18 + i * 18, ForgeDirection.values()[i], j, k, pipeLogic));
+			for (int pattern = 0; pattern < 3; pattern++) {
+				for (int allele = 0; allele < 2; allele++) {
+					int x = 44 + pattern * 45 + allele * 18;
+					int y = 18 + i * 18;
+					widgetManager.add(new SpeciesFilterSlot(tracker, x, y, EnumFacing.values()[i], pattern, allele, pipeLogic));
 				}
 			}
 		}

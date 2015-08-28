@@ -19,6 +19,7 @@ import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
@@ -29,7 +30,6 @@ import forestry.core.commands.CommandHelpers;
 import forestry.core.commands.SpeciesNotFoundException;
 import forestry.core.commands.SubCommand;
 import forestry.core.commands.TemplateNotFoundException;
-import forestry.plugins.PluginApiculture;
 
 public class CommandBeeGive extends SubCommand {
 
@@ -88,13 +88,13 @@ public class CommandBeeGive extends SubCommand {
 			return;
 		}
 
-		IBee bee = PluginApiculture.beeInterface.getBee(player.worldObj, beeGenome);
+		IBee bee = BeeManager.beeRoot.getBee(player.worldObj, beeGenome);
 
 		if (beeType == EnumBeeType.QUEEN) {
 			bee.mate(bee);
 		}
 
-		ItemStack beeStack = PluginApiculture.beeInterface.getMemberStack(bee, beeType.ordinal());
+		ItemStack beeStack = BeeManager.beeRoot.getMemberStack(bee, beeType.ordinal());
 		player.dropPlayerItemWithRandomChoice(beeStack, true);
 
 		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.bee.give.given", player.getCommandSenderName(), bee.getGenome().getPrimary().getName(), beeType.getName());
@@ -128,13 +128,13 @@ public class CommandBeeGive extends SubCommand {
 			throw new SpeciesNotFoundException(speciesName);
 		}
 
-		IAllele[] template = PluginApiculture.beeInterface.getTemplate(species.getUID());
+		IAllele[] template = BeeManager.beeRoot.getTemplate(species.getUID());
 
 		if (template == null) {
 			throw new TemplateNotFoundException(species);
 		}
 
-		return PluginApiculture.beeInterface.templateAsGenome(template);
+		return BeeManager.beeRoot.templateAsGenome(template);
 	}
 
 	@Override
@@ -151,7 +151,7 @@ public class CommandBeeGive extends SubCommand {
 		return null;
 	}
 
-	String[] getSpecies() {
+	private static String[] getSpecies() {
 		List<String> species = new ArrayList<String>();
 
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
@@ -163,7 +163,7 @@ public class CommandBeeGive extends SubCommand {
 		return species.toArray(new String[species.size()]);
 	}
 
-	EnumBeeType getBeeType(String beeTypeName) {
+	private static EnumBeeType getBeeType(String beeTypeName) {
 		for (EnumBeeType beeType : EnumBeeType.values()) {
 			if (beeType.getName().equalsIgnoreCase(beeTypeName)) {
 				return beeType;

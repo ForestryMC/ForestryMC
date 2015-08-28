@@ -17,7 +17,7 @@ import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.factory.gadgets.MachineRaintank;
 
-public class GuiRaintank extends GuiForestryTitled<MachineRaintank> {
+public class GuiRaintank extends GuiForestryTitled<ContainerRaintank, MachineRaintank> {
 
 	public GuiRaintank(InventoryPlayer inventory, MachineRaintank tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/raintank.png", new ContainerRaintank(inventory, tile), tile);
@@ -27,7 +27,7 @@ public class GuiRaintank extends GuiForestryTitled<MachineRaintank> {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		MachineRaintank machine = tile;
+		MachineRaintank machine = inventory;
 
 		if (machine.isFilling()) {
 			int progress = machine.getFillProgressScaled(24);

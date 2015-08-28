@@ -10,8 +10,9 @@
  ******************************************************************************/
 package forestry.core.interfaces;
 
-import forestry.core.utils.EnumTankLevel;
 import net.minecraft.util.EnumFacing;
+
+import forestry.core.utils.EnumTankLevel;
 
 public interface IRenderableMachine {
 

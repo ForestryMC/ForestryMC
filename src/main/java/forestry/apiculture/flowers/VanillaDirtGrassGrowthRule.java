@@ -29,7 +29,7 @@ public class VanillaDirtGrassGrowthRule implements IFlowerGrowthRule {
 			return false;
 		}
 
-		Block ground = world.getBlockState(pos.down()).getBlock();
+		Block ground = world.getBlockState(new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())).getBlock();
 		if (ground != Blocks.dirt && ground != Blocks.grass) {
 			return false;
 		}

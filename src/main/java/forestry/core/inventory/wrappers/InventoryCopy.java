@@ -109,7 +109,7 @@ public class InventoryCopy implements IInventory {
 	public ItemStack getStackInSlotOnClosing(int slot) {
 		return orignal.getStackInSlotOnClosing(slot);
 	}
-	
+
 	@Override
 	public boolean hasCustomName() {
 		return orignal.hasCustomName();
@@ -122,26 +122,26 @@ public class InventoryCopy implements IInventory {
 
 	@Override
 	public IChatComponent getDisplayName() {
-		return null;
+		return orignal.getDisplayName();
 	}
 
 	@Override
 	public int getField(int id) {
-		return 0;
+		return orignal.getField(id);
 	}
 
 	@Override
 	public void setField(int id, int value) {
-		
+		orignal.setField(id, value);
 	}
 
 	@Override
 	public int getFieldCount() {
-		return 0;
+		return orignal.getFieldCount();
 	}
 
 	@Override
 	public void clear() {
-		
+		orignal.clear();
 	}
 }

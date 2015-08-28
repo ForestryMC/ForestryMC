@@ -12,23 +12,25 @@ package forestry.apiculture.items;
 
 import net.minecraft.item.ItemStack;
 
+import forestry.api.apiculture.DefaultBeeModifier;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IHiveFrame;
 import forestry.api.core.Tabs;
 import forestry.core.items.ItemForestry;
 
 public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 
-	private final float geneticDecay;
+	private final IBeeModifier beeModifier;
 
 	public ItemHiveFrame(int maxDamage, float geneticDecay) {
-		super();
 		setMaxStackSize(1);
 		setMaxDamage(maxDamage);
-		this.geneticDecay = geneticDecay;
 		setCreativeTab(Tabs.tabApiculture);
+
+		this.beeModifier = new HiveFrameBeeModifier(geneticDecay);
 	}
 
 	@Override
@@ -42,58 +44,25 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 	}
 
 	@Override
-	public float getTerritoryModifier(IBeeGenome genome, float currentModifier) {
-		return 1.0f;
+	public IBeeModifier getBeeModifier() {
+		return beeModifier;
 	}
 
-	@Override
-	public float getMutationModifier(IBeeGenome genome, IBeeGenome mate, float currentModifier) {
-		return 1.0f;
-	}
+	private static class HiveFrameBeeModifier extends DefaultBeeModifier {
+		private final float geneticDecay;
 
-	@Override
-	public float getLifespanModifier(IBeeGenome genome, IBeeGenome mate, float currentModifier) {
-		return 1.0f;
-	}
+		public HiveFrameBeeModifier(float geneticDecay) {
+			this.geneticDecay = geneticDecay;
+		}
 
-	@Override
-	public float getProductionModifier(IBeeGenome genome, float currentModifier) {
-		return currentModifier < 10f ? 2.0f : 1f;
-	}
+		@Override
+		public float getProductionModifier(IBeeGenome genome, float currentModifier) {
+			return (currentModifier < 10f) ? 2f : 1f;
+		}
 
-	@Override
-	public float getFloweringModifier(IBeeGenome genome, float currentModifier) {
-		return 1.0f;
+		@Override
+		public float getGeneticDecay(IBeeGenome genome, float currentModifier) {
+			return this.geneticDecay;
+		}
 	}
-
-	@Override
-	public float getGeneticDecay(IBeeGenome genome, float currentModifier) {
-		return this.geneticDecay;
-	}
-
-	@Override
-	public boolean isSealed() {
-		return false;
-	}
-
-	@Override
-	public boolean isSelfLighted() {
-		return false;
-	}
-
-	@Override
-	public boolean isSunlightSimulated() {
-		return false;
-	}
-
-	@Override
-	public boolean isHellish() {
-		return false;
-	}
-
-	@Override
-	public boolean isBookEnchantable(ItemStack itemstack1, ItemStack itemstack2) {
-		return false;
-	}
-
 }

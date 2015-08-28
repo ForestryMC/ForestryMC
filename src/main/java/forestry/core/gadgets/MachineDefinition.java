@@ -10,12 +10,10 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -27,22 +25,19 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.core.interfaces.IBlockRenderer;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
+import forestry.core.render.TileRendererIndex;
 
 public class MachineDefinition {
 
 	public final Class<? extends TileEntity> teClass;
 
-	public final String teIdent;
-	public Block block;
-	public final int meta;
+	private final String teIdent;
+	private Block block;
+	private final int meta;
 
 	public final IBlockRenderer renderer;
 
@@ -66,6 +61,14 @@ public class MachineDefinition {
 			faceMap[i] = 0;
 		}
 
+	}
+
+	public Block getBlock() {
+		return block;
+	}
+
+	public int getMeta() {
+		return meta;
 	}
 
 	public void setBlock(Block block) {
@@ -109,32 +112,12 @@ public class MachineDefinition {
 		list.add(new ItemStack(item, 1, meta));
 	}
 
-	/* BLOCK DROPS */
-	public boolean handlesDrops() {
-		return false;
-	}
-
-	public ArrayList<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		return new ArrayList<ItemStack>();
-	}
-
 	/* INTERACTION */
 	public boolean isSolidOnSide(IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return true;
 	}
-	
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float fXplayerClick, float fY, float fZ) {
-		return false;
-	}
 
-	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
-	}
-
-	public boolean removedByPlayer(World world, EntityPlayer player, BlockPos pos) {
-		return true;
-	}
-
-	public boolean canConnectRedstone(IBlockAccess world, BlockPos pos, EnumFacing side) {
+	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, EnumFacing side) {
 		return false;
 	}
 

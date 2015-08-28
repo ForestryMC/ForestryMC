@@ -11,19 +11,20 @@
 package forestry.core.inventory;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import forestry.core.gadgets.TileForestry;
+import forestry.core.interfaces.IRestrictedAccessTile;
 
-public class TileInventoryAdapter extends InventoryAdapter {
+public class TileInventoryAdapter<T extends TileEntity & IRestrictedAccessTile> extends InventoryAdapterRestricted {
 
-	private final TileForestry tile;
+	protected final T tile;
 
-	public TileInventoryAdapter(TileForestry tile, int size, String name) {
+	public TileInventoryAdapter(T tile, int size, String name) {
 		this(tile, size, name, 64);
 	}
 
-	public TileInventoryAdapter(TileForestry tile, int size, String name, int stackLimit) {
-		super(size, name, stackLimit);
+	public TileInventoryAdapter(T tile, int size, String name, int stackLimit) {
+		super(size, name, stackLimit, tile.getAccessHandler());
 		this.tile = tile;
 	}
 

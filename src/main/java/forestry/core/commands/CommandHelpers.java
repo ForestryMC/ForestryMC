@@ -21,6 +21,7 @@ import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
@@ -87,7 +88,7 @@ public class CommandHelpers {
 		throw new WrongUsageException(StringUtil.localizeAndFormat("chat.help", command.getCommandUsage(sender)));
 	}
 
-	public static void processChildCommand(ICommandSender sender, SubCommand child, String[] args) throws CommandException {
+	public static void processChildCommand(ICommandSender sender, SubCommand child, String[] args) throws PlayerNotFoundException, CommandException {
 		if (!sender.canCommandSenderUseCommand(child.getPermissionLevel(), child.getFullCommandString())) {
 			throw new WrongUsageException(StringUtil.localize("chat.command.noperms"));
 		}
@@ -127,7 +128,7 @@ public class CommandHelpers {
 		}
 	}
 
-	public static boolean processStandardCommands(ICommandSender sender, IForestryCommand command, String[] args) throws CommandException {
+	public static boolean processStandardCommands(ICommandSender sender, IForestryCommand command, String[] args) throws PlayerNotFoundException, CommandException {
 		if (args.length >= 1) {
 			if (args[0].equals("help")) {
 				command.printHelp(sender);
@@ -161,13 +162,13 @@ public class CommandHelpers {
 		return CommandBase.getListOfStringsMatchingLastWord(strings, lastWords);
 	}
 
-	public static List<String> addStandardTabCompletionOptions(IForestryCommand command, ICommandSender sender, String[] incomplete) {
+	public static List<String> addStandardTabCompletionOptions(IForestryCommand command, ICommandSender sender, String[] incomplete, BlockPos pos) {
 		if (incomplete.length > 1) {
 			String commandName = incomplete[0];
 			for (SubCommand child : command.getChildren()) {
 				if (CommandHelpers.matches(commandName, child)) {
 					String[] incompleteRemaining = Arrays.copyOfRange(incomplete, 1, incomplete.length);
-					return child.addTabCompletionOptions(sender, incompleteRemaining, sender.getPosition());
+					return child.addTabCompletionOptions(sender, incompleteRemaining, pos);
 				}
 			}
 		}

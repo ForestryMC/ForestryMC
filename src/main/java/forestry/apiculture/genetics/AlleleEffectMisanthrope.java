@@ -24,20 +24,16 @@ import forestry.core.utils.DamageSourceForestry;
 
 public class AlleleEffectMisanthrope extends AlleleEffectThrottled {
 
-	public static final DamageSource damageSourceBeeEnd = new DamageSourceForestry("bee.end");
+	private static final DamageSource damageSourceBeeEnd = new DamageSourceForestry("bee.end");
 
-	public AlleleEffectMisanthrope(String uid) {
-		super(uid, "misanthrope", true, 20, false, false);
+	public AlleleEffectMisanthrope() {
+		super("misanthrope", true, 20, false, false);
 	}
 
 	@Override
-	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
-		if (isHalted(storedData, housing)) {
-			return storedData;
-		}
-
-		AxisAlignedBB beatifyBox = getBounding(genome, housing, 1.0f);
+		AxisAlignedBB beatifyBox = getBounding(genome, housing);
 		@SuppressWarnings("rawtypes")
 		List list = housing.getWorld().getEntitiesWithinAABB(EntityPlayer.class, beatifyBox);
 

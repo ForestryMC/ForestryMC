@@ -35,7 +35,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.core.config.Defaults;
 import forestry.core.render.EntityColoredDropParticleFX;
 import forestry.core.render.TextureManager;
@@ -76,20 +75,8 @@ public class BlockForestryFluid extends BlockFluidClassic {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public boolean flowTextureExists() {
-		try {
-			ResourceLocation resourceLocation = new ResourceLocation(Defaults.ID, "textures/blocks/liquid/" + fluidName + "_flow.png");
-			IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
-			return resourceManager.getResource(resourceLocation) != null;
-		} catch (java.lang.Exception e) {
-			return false;
-		}
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rand) {
-		if (rand.nextInt(10) == 0 && World.doesBlockHaveSolidTopSurface(world, new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())) && !world.getBlockState(new BlockPos(pos.getX(), pos.getY() - 2, pos.getZ())).getBlock().getMaterial().blocksMovement()) {
+		if (rand.nextInt(10) == 0 && World.doesBlockHaveSolidTopSurface(world,new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())) && !world.getBlockState(new BlockPos(pos.getX(), pos.getY() - 2, pos.getZ())).getBlock().getMaterial().blocksMovement()) {
 			double px = (double) ((float) pos.getX() + rand.nextFloat());
 			double py = (double) pos.getY() - 1.05D;
 			double pz = (double) ((float) pos.getZ() + rand.nextFloat());
@@ -98,7 +85,7 @@ public class BlockForestryFluid extends BlockFluidClassic {
 			FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
 		}
 	}
-
+	
 	@Override
 	public boolean canDisplace(IBlockAccess world, BlockPos pos) {
 		if (world.getBlockState(pos).getBlock().getMaterial().isLiquid()) {
@@ -125,8 +112,8 @@ public class BlockForestryFluid extends BlockFluidClassic {
 		return flammability;
 	}
 
-	public boolean isFlammable(IBlockAccess world, int x, int y, int z) {
-		return flammable;
+	private static boolean isFlammable(IBlockAccess world, BlockPos pos) {
+		return world.getBlockState(pos).getBlock().isFlammable(world, pos, null);
 	}
 
 	@Override
@@ -135,7 +122,7 @@ public class BlockForestryFluid extends BlockFluidClassic {
 	}
 
 	@Override
-	public boolean isFireSource(World world, BlockPos pos, EnumFacing face) {
+	public boolean isFireSource(World world, BlockPos pos, EnumFacing side) {
 		return flammable && flammability == 0;
 	}
 
@@ -156,64 +143,63 @@ public class BlockForestryFluid extends BlockFluidClassic {
 	
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-		super.updateTick(world, pos, state, rand);
+
 		// Start fires if the fluid is lava-like
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-				if (getMaterial() == Material.lava) {
-					int rangeUp = rand.nextInt(3);
+		if (getMaterial() == Material.lava) {
+			int rangeUp = rand.nextInt(3);
 
-					for (int i = 0; i < rangeUp; ++i) {
-						x += rand.nextInt(3) - 1;
-						++y;
-						z += rand.nextInt(3) - 1;
-						Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
+			for (int i = 0; i < rangeUp; ++i) {
+				int x = pos.getX() + rand.nextInt(3) - 1;
+				int y = pos.getY() + 1;
+				int z = pos.getZ() + rand.nextInt(3) - 1;
+				pos = new BlockPos(x, y, z);
+				Block block = world.getBlockState(pos).getBlock();
 
-						if (block.getMaterial() == Material.air) {
-							if (isNeighborFlammable(world, x, y, z)) {
-								world.setBlockState(new BlockPos(x, y, z), Blocks.fire.getDefaultState());
-								return;
-							}
-						} else if (block.getMaterial().blocksMovement()) {
-							return;
-						}
-					}
-
-					if (rangeUp == 0) {
-						int startX = pos.getX();
-						int startZ = pos.getZ();
-
-						for (int i = 0; i < 3; ++i) {
-							x = startX + rand.nextInt(3) - 1;
-							z = startZ + rand.nextInt(3) - 1;
-
-							if (world.isAirBlock(new BlockPos(x, y + 1, z)) && this.isFlammable(world, x, y, z)) {
-								world.setBlockState(new BlockPos(x, y + 1, z), Blocks.fire.getDefaultState());
-							}
-						}
-					}
-				}
-
-				// explode if very flammable and near fire
-				int flammability = getFlammability(world, pos, null);
-				if (flammability > 0) {
-					// Explosion size is determined by flammability, up to size 4.
-					float explosionSize = 4F * flammability / 300F;
-					if (explosionSize > 1.0 && isNearFire(world, pos)) {
+				if (block.getMaterial() == Material.air) {
+					if (isNeighborFlammable(world, pos)) {
 						world.setBlockState(pos, Blocks.fire.getDefaultState());
-						world.newExplosion(null, pos.getX(), pos.getY(), pos.getZ(), explosionSize, true, true);
+						return;
+					}
+				} else if (block.getMaterial().blocksMovement()) {
+					return;
+				}
+			}
+
+			if (rangeUp == 0) {
+				int startX = pos.getX();
+				int startZ = pos.getZ();
+
+				for (int i = 0; i < 3; ++i) {
+					int x = startX + rand.nextInt(3) - 1;
+					int z = startZ + rand.nextInt(3) - 1;
+					pos = new BlockPos(x, pos.getY(), z);
+
+					if (world.isAirBlock(new BlockPos(x, pos.getY() + 1, z)) && isFlammable(world, pos)) {
+						world.setBlockState(new BlockPos(x, pos.getY() + 1, z), Blocks.fire.getDefaultState());
 					}
 				}
+			}
 	}
 
-	private boolean isNeighborFlammable(World world, int x, int y, int z) {
-		return isFlammable(world, x - 1, y, z) ||
-				isFlammable(world, x + 1, y, z) ||
-				isFlammable(world, x, y, z - 1) ||
-				isFlammable(world, x, y, z + 1) ||
-				isFlammable(world, x, y - 1, z) ||
-				isFlammable(world, x, y + 1, z);
+		// explode if very flammable and near fire
+		int flammability = getFlammability(world, pos, null);
+		if (flammability > 0) {
+			// Explosion size is determined by flammability, up to size 4.
+			float explosionSize = 4F * flammability / 300F;
+			if (explosionSize > 1.0 && isNearFire(world, pos)) {
+				world.setBlockState(pos, Blocks.fire.getDefaultState());
+				world.newExplosion(null, pos.getX(), pos.getY(), pos.getZ(), explosionSize, true, true);
+			}
+		}
+	}
+
+	private static boolean isNeighborFlammable(World world, BlockPos pos) {
+		return isFlammable(world, new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ())) ||
+				isFlammable(world, new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())) ||
+				isFlammable(world, new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1)) ||
+				isFlammable(world, new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1)) ||
+				isFlammable(world, new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())) ||
+				isFlammable(world, new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ()));
 	}
 
 	private boolean isNearFire(World world, BlockPos pos) {

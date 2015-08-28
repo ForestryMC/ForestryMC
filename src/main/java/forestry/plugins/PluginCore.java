@@ -52,11 +52,12 @@ import forestry.core.gadgets.BlockSoil;
 import forestry.core.gadgets.BlockStainedGlass;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.gadgets.TileEscritoire;
-import forestry.core.gadgets.BlockBase.IEnumMachineDefinition;
-import forestry.core.genetics.Allele;
-import forestry.core.genetics.AlleleRegistry;
 import forestry.core.genetics.ClimateHelper;
 import forestry.core.genetics.ItemResearchNote;
+import forestry.core.genetics.alleles.Allele;
+import forestry.core.genetics.alleles.AlleleFactory;
+import forestry.core.genetics.alleles.AlleleHelper;
+import forestry.core.genetics.alleles.AlleleRegistry;
 import forestry.core.interfaces.IPickupHandler;
 import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemArmorNaturalist;
@@ -79,10 +80,26 @@ import forestry.core.utils.ShapedRecipeCustom;
 @Plugin(pluginID = "Core", name = "Core", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.core.description")
 public class PluginCore extends ForestryPlugin {
 
-	public static MachineDefinition definitionEscritoire;
-	// ICrashCallable for highlighting certain mods during crashes.
-	public static ForestryModEnvWarningCallable crashCallable;
+	private static MachineDefinition definitionEscritoire;
+
 	public static final RootCommand rootCommand = new RootCommand();
+
+	private AlleleHelper alleleHelper;
+
+	@Override
+	protected void setupAPI() {
+		super.setupAPI();
+
+		ChipsetManager.solderManager = new ItemSolderingIron.SolderManager();
+
+		ChipsetManager.circuitRegistry = new CircuitRegistry();
+
+		AlleleRegistry alleleRegistry = new AlleleRegistry();
+		AlleleManager.alleleRegistry = alleleRegistry;
+		AlleleManager.climateHelper = new ClimateHelper();
+		AlleleManager.alleleFactory = new AlleleFactory();
+		alleleRegistry.initialize();
+	}
 
 	@Override
 	public void preInit() {
@@ -91,27 +108,16 @@ public class PluginCore extends ForestryPlugin {
 		rootCommand.addChildCommand(new CommandVersion());
 		rootCommand.addChildCommand(new CommandPlugins());
 
-		ChipsetManager.solderManager = new ItemSolderingIron.SolderManager();
+		Allele.helper = alleleHelper = new AlleleHelper();
 
-		CircuitRegistry circuitRegistry = new CircuitRegistry();
-		ChipsetManager.circuitRegistry = circuitRegistry;
-		circuitRegistry.initialize();
-
-		AlleleRegistry alleleRegistry = new AlleleRegistry();
-		AlleleManager.alleleRegistry = alleleRegistry;
-		AlleleManager.climateHelper = new ClimateHelper();
-		alleleRegistry.initialize();
-
-		Allele.initialize();
-
-		ForestryBlock.core.registerBlock(new BlockBase(Material.iron, true, getEnumMachineDefinition()), ItemForestryBlock.class, "core");
+		ForestryBlock.core.registerBlock(new BlockBase(Material.iron, true, Defaults.DEFINITION_CORE_ID), ItemForestryBlock.class, "core");
 
 		definitionEscritoire = ((BlockBase) ForestryBlock.core.block()).addDefinition(new MachineDefinition(Defaults.DEFINITION_ESCRITOIRE_META, "forestry.Escritoire", TileEscritoire.class,
 				Proxies.render.getRenderEscritoire()));
 
 		ForestryBlock.soil.registerBlock(new BlockSoil(), ItemTypedBlock.class, "soil");
-		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, ForestryBlock.soil.block().getStateFromMeta(0));
 		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, ForestryBlock.soil.block().getStateFromMeta(1));
+		ForestryBlock.soil.block().setHarvestLevel("shovel", 0, ForestryBlock.soil.block().getStateFromMeta(0));
 
 		ForestryBlock.resources.registerBlock(new BlockResource(), ItemForestryBlock.class, "resources");
 		ForestryBlock.resources.block().setHarvestLevel("pickaxe", 1);
@@ -127,7 +133,8 @@ public class PluginCore extends ForestryPlugin {
 		OreDictionary.registerOre("blockCopper", ForestryBlock.resourceStorage.getItemStack(1, 1));
 		OreDictionary.registerOre("blockTin", ForestryBlock.resourceStorage.getItemStack(1, 2));
 		OreDictionary.registerOre("blockBronze", ForestryBlock.resourceStorage.getItemStack(1, 3));
-
+		OreDictionary.registerOre("chestWood", Blocks.chest);
+		OreDictionary.registerOre("craftingTableWood", Blocks.crafting_table);
 		ForestryBlock.glass.registerBlock(new BlockStainedGlass(), ItemForestryBlock.class, "stained");
 	}
 
@@ -136,7 +143,9 @@ public class PluginCore extends ForestryPlugin {
 		super.doInit();
 
 		definitionEscritoire.register();
-		crashCallable = new ForestryModEnvWarningCallable();
+		ForestryModEnvWarningCallable.register();
+
+		alleleHelper.init();
 
 		RecipeSorter.register("forestry:shapedrecipecustom", ShapedRecipeCustom.class, RecipeSorter.Category.SHAPED, "before:minecraft:shaped");
 	}
@@ -160,7 +169,7 @@ public class PluginCore extends ForestryPlugin {
 	protected void registerItems() {
 		// / FERTILIZERS
 		ForestryItem.fertilizerBio.registerItem((new ItemForestry()), "fertilizerBio");
-		ForestryItem.fertilizerCompound.registerItem((new ItemForestry()).setBonemeal(true), "fertilizerCompound");
+		ForestryItem.fertilizerCompound.registerItem((new ItemForestry()).setBonemeal(), "fertilizerCompound");
 
 		// / GEMS
 		ForestryItem.apatite.registerItem((new ItemForestry()), "apatite");
@@ -189,7 +198,7 @@ public class PluginCore extends ForestryPlugin {
 		ForestryItem.craftingMaterial.registerItem(new ItemMisc(), "craftingMaterial");
 
 		/* ARMOR */
-		ForestryItem.naturalistHat.registerItem(new ItemArmorNaturalist(0), "naturalistHelmet");
+		ForestryItem.naturalistHat.registerItem(new ItemArmorNaturalist(), "naturalistHelmet");
 
 		// / PEAT PRODUCTION
 		ForestryItem.peat.registerItem((new ItemForestry()), "peat");
@@ -278,14 +287,6 @@ public class PluginCore extends ForestryPlugin {
 	}
 
 	@Override
-	public void postInit() {
-	}
-
-	@Override
-	protected void registerBackpackItems() {
-	}
-
-	@Override
 	protected void registerCrates() {
 		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
 		crateRegistry.registerCrate(new ItemStack(Blocks.log, 1, 0), "cratedWood");
@@ -363,7 +364,7 @@ public class PluginCore extends ForestryPlugin {
 		Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.can"), " # ", "# #", '#', "ingotTin");
 
 		// / GEARS
-		List<ItemStack> stoneGear =  OreDictionary.getOres("gearStone");
+		List<ItemStack> stoneGear = OreDictionary.getOres("gearStone");
 		Object gearCenter;
 		if (!stoneGear.isEmpty()) {
 			gearCenter = "gearStone";
@@ -381,20 +382,20 @@ public class PluginCore extends ForestryPlugin {
 		Proxies.common.addShapelessRecipe(ForestryItem.kitShovel.getItemStack(), ForestryItem.bronzeShovel, ForestryItem.carton);
 
 		/* NATURALIST'S ARMOR */
-		Proxies.common.addRecipe(ForestryItem.naturalistHat.getItemStack(), " X ", "Y Y", 'X', "ingotBronze", 'Y', Blocks.glass_pane);
+		Proxies.common.addRecipe(ForestryItem.naturalistHat.getItemStack(), " X ", "Y Y", 'X', "ingotBronze", 'Y', "paneGlass");
 
 		// / WRENCH
 		Proxies.common.addRecipe(ForestryItem.wrench.getItemStack(), "# #", " # ", " # ", '#', "ingotBronze");
 
 		// Manure and Fertilizer
 		if (GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat").stackSize > 0) {
-			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat"), " X ", "X#X", " X ", '#', Blocks.dirt, 'X', Items.wheat);
+			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.compost.wheat"), " X ", "X#X", " X ", '#', Blocks.dirt, 'X', "cropWheat");
 		}
 		if (GameMode.getGameMode().getStackSetting("recipe.output.compost.ash").stackSize > 0) {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.compost.ash"), " X ", "X#X", " X ", '#', Blocks.dirt, 'X', "dustAsh");
 		}
 		if (GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.apatite").stackSize > 0) {
-			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.apatite"), " # ", " X ", " # ", '#', Blocks.sand, 'X', "gemApatite");
+			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.apatite"), " # ", " X ", " # ", '#', "sand", 'X', "gemApatite");
 		}
 		if (GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.ash").stackSize > 0) {
 			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.fertilizer.ash"), "###", "#X#", "###", '#', "dustAsh", 'X', "gemApatite");
@@ -410,20 +411,20 @@ public class PluginCore extends ForestryPlugin {
 
 		// Bog earth
 		if (GameMode.getGameMode().getStackSetting("recipe.output.bogearth.bucket").stackSize > 0) {
-			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.bucket"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', Items.water_bucket, 'Y', Blocks.sand);
+			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.bucket"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', Items.water_bucket, 'Y', "sand");
 		}
 
 		if (GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can").stackSize > 0) {
-			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.canWater, 'Y', Blocks.sand);
-			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.waxCapsuleWater, 'Y', Blocks.sand);
-			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.refractoryWater, 'Y', Blocks.sand);
+			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.canWater, 'Y', "sand");
+			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.waxCapsuleWater, 'Y', "sand");
+			Proxies.common.addRecipe(GameMode.getGameMode().getStackSetting("recipe.output.bogearth.can"), "#Y#", "YXY", "#Y#", '#', Blocks.dirt, 'X', ForestryItem.refractoryWater, 'Y', "sand");
 		}
 
 		// Crafting Material
 		Proxies.common.addRecipe(new ItemStack(Items.string), "#", "#", "#", '#', ForestryItem.craftingMaterial.getItemStack(1, 2));
 
 		// / Pipette
-		Proxies.common.addRecipe(ForestryItem.pipette.getItemStack(), "  #", " X ", "X  ", 'X', Blocks.glass_pane, '#', new ItemStack(Blocks.wool, 1, Defaults.WILDCARD));
+		Proxies.common.addRecipe(ForestryItem.pipette.getItemStack(), "  #", " X ", "X  ", 'X', "paneGlass", '#', new ItemStack(Blocks.wool, 1, Defaults.WILDCARD));
 
 		// Storage Blocks
 		Proxies.common.addRecipe(ForestryBlock.resourceStorage.getItemStack(1, 0), "###", "###", "###", '#', "gemApatite");
@@ -451,54 +452,21 @@ public class PluginCore extends ForestryPlugin {
 
 	@Override
 	public IFuelHandler getFuelHandler() {
-		return new IFuelHandler() {
+		return new FuelHandler();
+	}
 
-			@Override
-			public int getBurnTime(ItemStack fuel) {
-				if (fuel != null && fuel.getItem() == ForestryItem.peat.item()) {
-					return 2000;
-				}
-				if (fuel != null && fuel.getItem() == ForestryItem.bituminousPeat.item()) {
-					return 4200;
-				}
+	private static class FuelHandler implements IFuelHandler {
 
-				return 0;
+		@Override
+		public int getBurnTime(ItemStack fuel) {
+			if (fuel != null && fuel.getItem() == ForestryItem.peat.item()) {
+				return 2000;
 			}
-		};
-	}
-	
-	@Override
-	protected Class<? extends IEnumMachineDefinition> getEnumMachineDefinition() {
-		return EnumMachineDefinition.class;
-	}
-	
-	private enum EnumMachineDefinition implements IEnumMachineDefinition
-	{
-		ESCRITOIRE(Defaults.DEFINITION_ESCRITOIRE_META),
-		ANALYZER(Defaults.DEFINITION_ANALYZER_META);
-		
-		private EnumMachineDefinition(String name, int meta) {
-			this.meta = meta;
-			this.name = name;
-		}
-		
-		private EnumMachineDefinition(int meta) {
-			this.meta = meta;
-		}
+			if (fuel != null && fuel.getItem() == ForestryItem.bituminousPeat.item()) {
+				return 4200;
+			}
 
-		private int meta;
-		private String name;
-		@Override
-		public String getName() {
-			if(name != null)
-				return name;
-			return name().toLowerCase().toLowerCase();
+			return 0;
 		}
-
-		@Override
-		public int getMeta() {
-			return meta;
-		}
-		
 	}
 }

@@ -13,111 +13,106 @@ package forestry.farming.logic;
 import java.util.Collection;
 import java.util.Stack;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.sprite.ISprite;
+import forestry.api.farming.FarmDirection;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
+import forestry.core.render.TextureManager;
 import forestry.core.utils.Utils;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
 
 public class FarmLogicEnder extends FarmLogicHomogeneous {
 
-    public FarmLogicEnder(IFarmHousing housing) {
-        super(housing,
-                new ItemStack[]{new ItemStack(Blocks.end_stone)},
-                new ItemStack(Blocks.end_stone),
-                Farmables.farmables.get("farmEnder").toArray(new IFarmable[0]));
+	public FarmLogicEnder(IFarmHousing housing) {
+		super(housing, new ItemStack(Blocks.end_stone), new ItemStack(Blocks.end_stone), Farmables.farmables.get("farmEnder"));
+	}
 
-    }
+	@Override
+	public String getName() {
+		return "Managed Ender Farm";
+	}
 
-    @Override
-    public String getName() {
-        return "Managed Ender Farm";
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ISprite getIcon() {
+		return TextureManager.getInstance().getFarmSprite("farmLoigc", "items", "ender_eye");
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getIcon() {
-        return getSprite("minecraft", "items/ender_eye");
-    }
+	@Override
+	public int getFertilizerConsumption() {
+		return 20;
+	}
 
-    @Override
-    public int getFertilizerConsumption() {
-        return 20;
-    }
+	@Override
+	public int getWaterConsumption(float hydrationModifier) {
+		return 0;
+	}
 
-    @Override
-    public int getWaterConsumption(float hydrationModifier) {
-        return 0;
-    }
+	@Override
+	public Collection<ItemStack> collect() {
+		return null;
+	}
 
-    @Override
-    public Collection<ItemStack> collect() {
-        return null;
-    }
+	@Override
+	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
+		World world = getWorld();
 
-    @Override
-    public Collection<ICrop> harvest(BlockPos pos, EnumFacing direction, int extent) {
-        World world = getWorld();
+		Stack<ICrop> crops = new Stack<ICrop>();
+		for (int i = 0; i < extent; i++) {
+			Vect position = translateWithOffset(pos, direction, i);
+			for (IFarmable farmable : germlings) {
+				ICrop crop = farmable.getCropAt(world, pos);
+				if (crop != null) {
+					crops.push(crop);
+				}
+			}
 
-        Stack<ICrop> crops = new Stack<ICrop>();
-        for (int i = 0; i < extent; i++) {
-            Vect position = translateWithOffset(pos.up(), direction, i);
-            for (IFarmable farmable : germlings) {
-                ICrop crop = farmable.getCropAt(world, position.toBlockPos());
-                if (crop != null) {
-                    crops.push(crop);
-                }
-            }
+		}
+		return crops;
 
-        }
-        return crops;
+	}
 
-    }
+	@Override
+	protected boolean maintainGermlings(BlockPos pos, FarmDirection direction, int extent) {
+		World world = getWorld();
 
-    @Override
-    protected boolean maintainGermlings(BlockPos pos, EnumFacing direction, int extent) {
-        World world = getWorld();
+		for (int i = 0; i < extent; i++) {
+			Vect position = translateWithOffset(pos, direction, i);
+			if (!VectUtil.isAirBlock(world, position) && !Utils.isReplaceableBlock(world, position.getPos())) {
+				continue;
+			}
 
-        for (int i = 0; i < extent; i++) {
-            Vect position = translateWithOffset(pos, direction, i);
-            if (!VectUtil.isAirBlock(world, position) && !Utils.isReplaceableBlock(world, position.toBlockPos())) {
-                continue;
-            }
+			ItemStack below = VectUtil.getAsItemStack(world, position.add(0, -1, 0));
+			if (!isAcceptedSoil(below)) {
+				continue;
+			}
 
-            ItemStack below = VectUtil.getAsItemStack(world, position.add(0, -1, 0));
-            if (!isAcceptedSoil(below)) {
-                continue;
-            }
+			return trySetCrop(position);
+		}
 
-            return trySetCrop(position);
-        }
+		return false;
+	}
 
-        return false;
-    }
+	private boolean trySetCrop(Vect position) {
+		World world = getWorld();
 
-    private boolean trySetCrop(Vect position) {
-        World world = getWorld();
+		for (IFarmable candidate : germlings) {
+			if (housing.plantGermling(candidate, world, position.getPos())) {
+				return true;
+			}
+		}
 
-        for (IFarmable candidate : germlings) {
-            if (housing.plantGermling(candidate, world, position.toBlockPos())) {
-                return true;
-            }
-        }
-
-        return false;
-    }
+		return false;
+	}
 
 }

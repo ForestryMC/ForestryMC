@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -29,128 +31,37 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBee;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorSource;
+import forestry.api.core.IErrorState;
+import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
 import forestry.api.genetics.AlleleManager;
 import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.ForestryItem;
-import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IHintSource;
 import forestry.core.inventory.ItemInventory;
 import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 import forestry.core.vect.Vect;
-import forestry.plugins.PluginApiculture;
 
 public class ItemHabitatLocator extends ItemInventoried {
 
-	public static class HabitatLocatorInventory extends ItemInventory implements IErrorSource, IHintSource {
+	private static final String iconName = "forestry:biomefinder";
 
-		private static final short SLOT_ENERGY = 2;
-		private static final short SLOT_SPECIMEN = 0;
-		private static final short SLOT_ANALYZED = 1;
-
-		public Set<BiomeGenBase> biomesToSearch = new HashSet<BiomeGenBase>();
-		private ItemHabitatLocator habitatLocator;
-
-		public HabitatLocatorInventory(ItemStack itemstack) {
-			super(ItemHabitatLocator.class, 3, itemstack);
-			this.habitatLocator = (ItemHabitatLocator) itemstack.getItem();
-		}
-
-		private boolean isEnergy(ItemStack itemstack) {
-			if (itemstack == null || itemstack.stackSize <= 0) {
-				return false;
-			}
-
-			return ForestryItem.honeyDrop.isItemEqual(itemstack) || ForestryItem.honeydew.isItemEqual(itemstack);
-		}
-
-		public void tryAnalyze() {
-
-			if (getStackInSlot(SLOT_SPECIMEN) != null) {
-				// Requires energy
-				if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
-					return;
-				}
-
-				// Decrease energy
-				decrStackSize(SLOT_ENERGY, 1);
-
-				setInventorySlotContents(SLOT_ANALYZED, getStackInSlot(SLOT_SPECIMEN));
-				setInventorySlotContents(SLOT_SPECIMEN, null);
-			}
-
-			IBee bee = PluginApiculture.beeInterface.getMember(getStackInSlot(SLOT_ANALYZED));
-
-			// No bee, abort
-			if (bee == null) {
-				return;
-			}
-
-			biomesToSearch = new HashSet<BiomeGenBase>(bee.getSuitableBiomes());
-			habitatLocator.startBiomeSearch(biomesToSearch);
-		}
-
-		@Override
-		public void markDirty() {
-			tryAnalyze();
-		}
-
-		// / IHINTSOURCE
-		@Override
-		public boolean hasHints() {
-			return Config.hints.get("habitatlocator") != null && Config.hints.get("habitatlocator").length > 0;
-		}
-
-		@Override
-		public String[] getHints() {
-			return Config.hints.get("habitatlocator");
-		}
-
-		// / IERRORSOURCE
-		@Override
-		public boolean throwsErrors() {
-			return true;
-		}
-
-		@Override
-		public EnumErrorCode getErrorState() {
-			if (PluginApiculture.beeInterface.isMember(inventoryStacks[SLOT_SPECIMEN]) && !isEnergy(getStackInSlot(SLOT_ENERGY))) {
-				return EnumErrorCode.NOHONEY;
-			}
-
-			return EnumErrorCode.OK;
-		}
-
-		@Override
-		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-			if (slotIndex == SLOT_ENERGY) {
-				Item item = itemStack.getItem();
-				return item == ForestryItem.honeydew.item() || item == ForestryItem.honeyDrop.item();
-			} else if (slotIndex == SLOT_SPECIMEN) {
-				return PluginApiculture.beeInterface.isMember(itemStack);
-			}
-			return false;
-		}
-
-	}
-
-	private Set<BiomeGenBase> biomesToSearch = new HashSet<BiomeGenBase>();
+	private Set<BiomeGenBase> targetBiomes = new HashSet<BiomeGenBase>();
 	private boolean biomeFound = false;
 	private int searchRadiusIteration = 0;
 	private int searchAngleIteration = 0;
 	private Vect searchCenter;
-	public static TextureAtlasSprite icon;
 
 	public ItemHabitatLocator() {
 		super();
@@ -170,8 +81,11 @@ public class ItemHabitatLocator extends ItemInventoried {
 
 	/* TEXTURES */
 	@SideOnly(Side.CLIENT)
+	public static TextureAtlasSprite icon;
+	
+	@SideOnly(Side.CLIENT)
 	public static void registerIcon(TextureMap map) {
-			TextureAtlasSprite texture = new TextureHabitatLocator();
+			TextureAtlasSprite texture = new TextureHabitatLocator(iconName);
 			map.setTextureEntry("forestry:biomefinder", texture);
 			icon = texture;
 	}
@@ -190,13 +104,16 @@ public class ItemHabitatLocator extends ItemInventoried {
 		list.add(StringUtil.localize("gui.humidity") + ": " + AlleleManager.climateHelper.toDisplay(humidity));
 	}
 
-	public void startBiomeSearch(Set<BiomeGenBase> biomesToSearch) {
+	private void startBiomeSearch(IBee bee, EntityPlayer player) {
 
-		this.biomesToSearch = biomesToSearch;
+		this.targetBiomes = new HashSet<BiomeGenBase>(bee.getSuitableBiomes());
 		this.searchAngleIteration = 0;
 		this.searchRadiusIteration = 0;
 		this.biomeFound = false;
-		this.searchCenter = null;
+		this.searchCenter = new Vect(player);
+
+		BiomeGenBase currentBiome = player.worldObj.getBiomeGenForCoords(searchCenter.getPos());
+		removeInvalidBiomes(currentBiome, targetBiomes);
 
 		// reset the locator coordinates
 		Proxies.common.setHabitatLocatorCoordinates(null, null);
@@ -209,14 +126,7 @@ public class ItemHabitatLocator extends ItemInventoried {
 			return;
 		}
 
-		if (this.searchCenter == null) {
-			this.searchCenter = new Vect((int) player.posX, (int) player.posY, (int) player.posZ);
-
-			BiomeGenBase currentBiome = world.getBiomeGenForCoords(searchCenter.toBlockPos());
-			removeInvalidBiomes(currentBiome, biomesToSearch);
-		}
-
-		if (biomesToSearch.isEmpty()) {
+		if (targetBiomes.isEmpty()) {
 			return;
 		}
 
@@ -225,7 +135,7 @@ public class ItemHabitatLocator extends ItemInventoried {
 			return;
 		}
 
-		BlockPos target = findNearestBiome(player, biomesToSearch);
+		BlockPos target = findNearestBiome(player, targetBiomes);
 
 		// send an update if we find the biome
 		if (target != null) {
@@ -240,14 +150,14 @@ public class ItemHabitatLocator extends ItemInventoried {
 		final int maxSearchRadiusIterations = 500;
 		final int spacing = 20;
 
-		Vect playerPos = new Vect((int) player.posX, (int) player.posY, (int) player.posZ);
+		Vect playerPos = new Vect(player);
 
 		// If we are in a valid spot, we point to ourselves.
 		BlockPos coordinates = getChunkCoordinates(playerPos, player.worldObj, biomesToSearch);
 		if (coordinates != null) {
 			searchAngleIteration = 0;
 			searchRadiusIteration = 0;
-			return playerPos.toBlockPos();
+			return new BlockPos(playerPos.getPos());
 		}
 
 		// check in a circular pattern, starting at the center and increasing radius each step
@@ -297,32 +207,32 @@ public class ItemHabitatLocator extends ItemInventoried {
 
 		BiomeGenBase biome;
 
-		biome = world.getBiomeGenForCoords(pos.toBlockPos());
+		biome = world.getBiomeGenForCoords(pos.getPos());
 		if (!biomesToSearch.contains(biome)) {
 			return null;
 		}
 
-		biome = world.getBiomeGenForCoords(new BlockPos(pos.x - minBiomeRadius, pos.y, pos.z));
+		biome = world.getBiomeGenForCoords(new BlockPos(pos.getX() - minBiomeRadius, pos.getY(), pos.getZ()));
 		if (!biomesToSearch.contains(biome)) {
 			return null;
 		}
 
-		biome = world.getBiomeGenForCoords(new BlockPos(pos.x + minBiomeRadius, pos.y, pos.z));
+		biome = world.getBiomeGenForCoords(new BlockPos(pos.getX() + minBiomeRadius,  pos.getY(), pos.getZ()));
 		if (!biomesToSearch.contains(biome)) {
 			return null;
 		}
 
-		biome = world.getBiomeGenForCoords(new BlockPos(pos.x, pos.y, pos.z - minBiomeRadius));
+		biome = world.getBiomeGenForCoords(new BlockPos(pos.getX(),  pos.getY(), pos.getZ() - minBiomeRadius));
 		if (!biomesToSearch.contains(biome)) {
 			return null;
 		}
 
-		biome = world.getBiomeGenForCoords(new BlockPos(pos.x, pos.y, pos.z + minBiomeRadius));
+		biome = world.getBiomeGenForCoords(new BlockPos(pos.getX(),  pos.getY(), pos.getZ() + minBiomeRadius));
 		if (!biomesToSearch.contains(biome)) {
 			return null;
 		}
 
-		return new BlockPos(pos.x, pos.y, pos.z);
+		return new BlockPos(pos.getPos());
 	}
 
 	private static final Set<BiomeGenBase> waterBiomes = new HashSet<BiomeGenBase>();
@@ -355,4 +265,105 @@ public class ItemHabitatLocator extends ItemInventoried {
 			biomesToSearch.removeAll(endBiomes);
 		}
 	}
+
+	public static class HabitatLocatorInventory extends ItemInventory implements IErrorSource, IHintSource {
+
+		private static final short SLOT_ENERGY = 2;
+		private static final short SLOT_SPECIMEN = 0;
+		private static final short SLOT_ANALYZED = 1;
+
+		private final ItemHabitatLocator habitatLocator;
+
+		public HabitatLocatorInventory(EntityPlayer player, ItemStack itemstack) {
+			super(player, 3, itemstack);
+			this.habitatLocator = (ItemHabitatLocator) itemstack.getItem();
+		}
+
+		private static boolean isEnergy(ItemStack itemstack) {
+			if (itemstack == null || itemstack.stackSize <= 0) {
+				return false;
+			}
+
+			return ForestryItem.honeyDrop.isItemEqual(itemstack) || ForestryItem.honeydew.isItemEqual(itemstack);
+		}
+
+		@Override
+		public void onSlotClick(EntityPlayer player) {
+
+			if (getStackInSlot(SLOT_ANALYZED) != null) {
+				if (habitatLocator.biomeFound) {
+					return;
+				}
+			} else if (getStackInSlot(SLOT_SPECIMEN) != null) {
+				// Requires energy
+				if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
+					return;
+				}
+
+				// Decrease energy
+				decrStackSize(SLOT_ENERGY, 1);
+
+				setInventorySlotContents(SLOT_ANALYZED, getStackInSlot(SLOT_SPECIMEN));
+				setInventorySlotContents(SLOT_SPECIMEN, null);
+			}
+
+			IBee bee = BeeManager.beeRoot.getMember(getStackInSlot(SLOT_ANALYZED));
+
+			// No bee, abort
+			if (bee == null) {
+				return;
+			}
+
+			habitatLocator.startBiomeSearch(bee, player);
+		}
+
+		public Set<BiomeGenBase> getBiomesToSearch() {
+			return habitatLocator.targetBiomes;
+		}
+
+		// / IHINTSOURCE
+		@Override
+		public boolean hasHints() {
+			return Config.hints.get("habitatlocator") != null && Config.hints.get("habitatlocator").length > 0;
+		}
+
+		@Override
+		public String[] getHints() {
+			return Config.hints.get("habitatlocator");
+		}
+
+		// / IERRORSOURCE
+		@Override
+		public ImmutableSet<IErrorState> getErrorStates() {
+			if (getStackInSlot(SLOT_ANALYZED) != null) {
+				return ImmutableSet.of();
+			}
+
+			ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
+
+			ItemStack specimen = getStackInSlot(SLOT_SPECIMEN);
+			if (!BeeManager.beeRoot.isMember(specimen)) {
+				errorStates.add(EnumErrorCode.NOTHINGANALYZE);
+			}
+
+			if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
+				errorStates.add(EnumErrorCode.NOHONEY);
+			}
+
+			return errorStates.build();
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_ENERGY) {
+				Item item = itemStack.getItem();
+				return item == ForestryItem.honeydew.item() || item == ForestryItem.honeyDrop.item();
+			} else if (slotIndex == SLOT_SPECIMEN) {
+				return BeeManager.beeRoot.isMember(itemStack);
+			}
+			return false;
+		}
+
+	}
+
 }

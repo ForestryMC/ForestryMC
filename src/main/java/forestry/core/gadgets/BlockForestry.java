@@ -21,18 +21,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import forestry.api.core.IModelObject;
-import forestry.api.core.IVariantObject;
+
+import com.mojang.authlib.GameProfile;
+
+import forestry.api.core.IModelRegister;
 import forestry.core.CreativeTabForestry;
 import forestry.core.interfaces.IOwnable;
+import forestry.core.interfaces.IRestrictedAccessTile;
 import forestry.core.proxy.Proxies;
-import forestry.core.utils.Utils;
 
-public abstract class BlockForestry extends BlockContainer implements IModelObject {
+public abstract class BlockForestry extends BlockContainer implements IModelRegister {
 
-	public BlockForestry(Material material) {
+	protected BlockForestry(Material material) {
 		super(material);
 		setHardness(1.5f);
 		setCreativeTab(CreativeTabForestry.tabForestry);
@@ -40,42 +41,42 @@ public abstract class BlockForestry extends BlockContainer implements IModelObje
 	
 	@Override
 	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-		IOwnable tile = (IOwnable) world.getTileEntity(pos);
-		if (!tile.isOwnable() || tile.allowsRemoval(player)) {
-			return super.removedByPlayer(world, pos, player, willHarvest);
-		} else {
-			return false;
+		TileEntity tile = world.getTileEntity(pos);
+
+		if (tile instanceof IRestrictedAccessTile) {
+			IRestrictedAccessTile restrictedAccessTile = (IRestrictedAccessTile) tile;
+			if (!restrictedAccessTile.getAccessHandler().allowsRemoval(player)) {
+				return false;
+			}
 		}
+		return super.removedByPlayer(world, pos, player, willHarvest);
 	}
 	
 	@Override
-	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityLiving, ItemStack stack) {
 		if (!Proxies.common.isSimulating(world)) {
 			return;
 		}
 
-		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof TileForestry) {
-			TileForestry tileForestry = (TileForestry) tile;
-			Utils.dropInventory(tileForestry, world, pos);
-			tileForestry.onRemoval();
-		}
-		super.breakBlock(world, pos, state);
-	}
+		if (entityLiving instanceof EntityPlayer) {
+			TileEntity tile = world.getTileEntity(pos);
 
-	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityliving, ItemStack itemstack) {
+			IOwnable ownable;
 
-		if (!Proxies.common.isSimulating(world)) {
-			return;
-		}
+			if (tile instanceof IRestrictedAccessTile) {
+				ownable = ((IRestrictedAccessTile) tile).getAccessHandler();
+			} else if (tile instanceof IOwnable) {
+				ownable = (IOwnable) tile;
+			} else {
+				return;
+			}
 
-		TileForestry tile = (TileForestry) world.getTileEntity(pos);
-		if (entityliving instanceof EntityPlayer) {
-			tile.setOwner(((EntityPlayer) entityliving));
+			EntityPlayer player = (EntityPlayer) entityLiving;
+			GameProfile gameProfile = player.getGameProfile();
+			ownable.setOwner(gameProfile);
 		}
 	}
-
+	
 	@Override
 	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block block) {
 		try {
@@ -87,11 +88,6 @@ public abstract class BlockForestry extends BlockContainer implements IModelObje
 			Proxies.log.logThrowable(Level.ERROR, "Stack Overflow Error in BlockMachine.onNeighborBlockChange()", 10, error);
 			throw error;
 		}
-	}
-	
-	@Override
-	public ModelType getModelType() {
-		return ModelType.DEFAULT;
 	}
 
 }

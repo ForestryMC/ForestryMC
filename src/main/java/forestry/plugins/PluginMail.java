@@ -15,10 +15,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.network.IGuiHandler;
-
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.EnumPostage;
 import forestry.api.mail.PostManager;
@@ -30,11 +27,9 @@ import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.gadgets.BlockBase;
 import forestry.core.gadgets.MachineDefinition;
-import forestry.core.gadgets.BlockBase.IEnumMachineDefinition;
-import forestry.core.interfaces.IOreDictionaryHandler;
-import forestry.core.interfaces.IPacketHandler;
 import forestry.core.interfaces.ISaveEventHandler;
 import forestry.core.items.ItemForestryBlock;
+import forestry.core.network.IPacketHandler;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.mail.GuiHandlerMail;
@@ -51,18 +46,24 @@ import forestry.mail.items.ItemCatalogue;
 import forestry.mail.items.ItemLetter;
 import forestry.mail.items.ItemStamps;
 import forestry.mail.items.ItemStamps.StampInfo;
-import forestry.mail.proxy.ProxyMail;
 import forestry.mail.triggers.MailTriggers;
 
 @Plugin(pluginID = "Mail", name = "Mail", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.mail.description")
 public class PluginMail extends ForestryPlugin {
 
-	@SidedProxy(clientSide = "forestry.mail.proxy.ClientProxyMail", serverSide = "forestry.mail.proxy.ProxyMail")
-	public static ProxyMail proxy;
-	public static MachineDefinition definitionMailbox;
-	public static MachineDefinition definitionTradestation;
-	public static MachineDefinition definitionPhilatelist;
-	public static StampInfo[] stampDefinitions;
+	private static MachineDefinition definitionMailbox;
+	private static MachineDefinition definitionTradestation;
+	private static MachineDefinition definitionPhilatelist;
+	private static StampInfo[] stampDefinitions;
+
+	@Override
+	protected void setupAPI() {
+		super.setupAPI();
+
+		PostManager.postRegistry = new PostRegistry();
+		PostManager.postRegistry.registerCarrier(new PostalCarrier(EnumAddressee.PLAYER));
+		PostManager.postRegistry.registerCarrier(new PostalCarrier(EnumAddressee.TRADER));
+	}
 
 	@Override
 	public void preInit() {
@@ -72,17 +73,12 @@ public class PluginMail extends ForestryPlugin {
 
 		new TickHandlerMailClient();
 
-		// Triggers
-		if (PluginManager.Module.BUILDCRAFT_STATEMENTS.isEnabled()) {
-			MailTriggers.initialize();
-		}
-
-		ForestryBlock.mail.registerBlock(new BlockBase(Material.iron, getEnumMachineDefinition()), ItemForestryBlock.class, "mail");
+		ForestryBlock.mail.registerBlock(new BlockBase(Material.iron, Defaults.DEFINITION_MAIL_ID), ItemForestryBlock.class, "mail");
 
 		ShapedRecipeCustom recipe = ShapedRecipeCustom.createShapedRecipe(ForestryBlock.mail.getItemStack(1, Defaults.DEFINITION_MAILBOX_META),
 				" # ", "#Y#", "XXX",
 				'#', "ingotTin",
-				'X', Blocks.chest,
+				'X', "chestWood",
 				'Y', ForestryItem.sturdyCasing);
 
 		BlockBase mail = ((BlockBase) ForestryBlock.mail.block());
@@ -95,7 +91,7 @@ public class PluginMail extends ForestryPlugin {
 				"#Y#",
 				"XWX",
 				'#', ForestryItem.tubes.getItemStack(1, 2),
-				'X', Blocks.chest,
+				'X', "chestWood",
 				'Y', ForestryItem.sturdyCasing,
 				'Z', ForestryItem.tubes.getItemStack(1, 3),
 				'W', ForestryItem.circuitboards.getItemStack(1, 2));
@@ -103,10 +99,11 @@ public class PluginMail extends ForestryPlugin {
 
 		definitionPhilatelist = mail.addDefinition(new MachineDefinition(Defaults.DEFINITION_PHILATELIST_META, "forestry.Philatelist", MachinePhilatelist.class)
 				.setFaces(0, 1, 2, 3, 2, 2, 0, 7));
+	}
 
-		PostManager.postRegistry = new PostRegistry();
-		PostManager.postRegistry.registerCarrier(new PostalCarrier(EnumAddressee.PLAYER));
-		PostManager.postRegistry.registerCarrier(new PostalCarrier(EnumAddressee.TRADER));
+	@Override
+	protected void registerTriggers() {
+		MailTriggers.initialize();
 	}
 
 	@Override
@@ -116,11 +113,6 @@ public class PluginMail extends ForestryPlugin {
 		definitionMailbox.register();
 		definitionTradestation.register();
 		definitionPhilatelist.register();
-	}
-
-	@Override
-	public void postInit() {
-		super.postInit();
 	}
 
 	@Override
@@ -137,9 +129,12 @@ public class PluginMail extends ForestryPlugin {
 	protected void registerItems() {
 
 		stampDefinitions = new StampInfo[]{
-				new StampInfo("1n", EnumPostage.P_1, ForestryItem.apatite, 0x4a8ca7, 0xffffff), new StampInfo("2n", EnumPostage.P_2, "ingotCopper", 0xe8c814, 0xffffff),
-				new StampInfo("5n", EnumPostage.P_5, "ingotTin", 0x9c0707, 0xffffff), new StampInfo("10n", EnumPostage.P_10, Items.gold_ingot, 0x7bd1b8, 0xffffff),
-				new StampInfo("20n", EnumPostage.P_20, Items.diamond, 0xff9031, 0xfff7dd), new StampInfo("50n", EnumPostage.P_50, Items.emerald, 0x6431d7, 0xfff7dd),
+				new StampInfo("1n", EnumPostage.P_1, ForestryItem.apatite, 0x4a8ca7, 0xffffff),
+				new StampInfo("2n", EnumPostage.P_2, "ingotCopper", 0xe8c814, 0xffffff),
+				new StampInfo("5n", EnumPostage.P_5, "ingotTin", 0x9c0707, 0xffffff),
+				new StampInfo("10n", EnumPostage.P_10, Items.gold_ingot, 0x7bd1b8, 0xffffff),
+				new StampInfo("20n", EnumPostage.P_20, Items.diamond, 0xff9031, 0xfff7dd),
+				new StampInfo("50n", EnumPostage.P_50, Items.emerald, 0x6431d7, 0xfff7dd),
 				new StampInfo("100n", EnumPostage.P_100, Items.nether_star, 0xd731ba, 0xfff7dd)}; //new StampInfo("200n", EnumPostage.P_200, Item.netherStar, 0xcd9831, 0xfff7dd)};
 
 		/* STAMPS */
@@ -150,14 +145,6 @@ public class PluginMail extends ForestryPlugin {
 
 		/* CATALOGUE */
 		ForestryItem.catalogue.registerItem(new ItemCatalogue(), "catalogue");
-	}
-
-	@Override
-	protected void registerBackpackItems() {
-	}
-
-	@Override
-	protected void registerCrates() {
 	}
 
 	@Override
@@ -203,46 +190,5 @@ public class PluginMail extends ForestryPlugin {
 	@Override
 	public ISaveEventHandler getSaveEventHandler() {
 		return new SaveEventHandlerMail();
-	}
-
-	@Override
-	public IOreDictionaryHandler getDictionaryHandler() {
-		return null;
-	}
-	
-	@Override
-	protected Class<? extends IEnumMachineDefinition> getEnumMachineDefinition() {
-		return EnumMachineDefinition.class;
-	}
-	
-	private enum EnumMachineDefinition implements IEnumMachineDefinition
-	{
-		MAILBOX(Defaults.DEFINITION_MAILBOX_META),
-		TRADESTATION(Defaults.DEFINITION_TRADESTATION_META),
-		PHILATELIST(Defaults.DEFINITION_PHILATELIST_META);
-		
-		private EnumMachineDefinition(String name, int meta) {
-			this.meta = meta;
-			this.name = name;
-		}
-		
-		private EnumMachineDefinition(int meta) {
-			this.meta = meta;
-		}
-
-		private int meta;
-		private String name;
-		@Override
-		public String getName() {
-			if(name != null)
-				return name;
-			return name().toLowerCase().toLowerCase();
-		}
-
-		@Override
-		public int getMeta() {
-			return meta;
-		}
-		
 	}
 }

@@ -19,40 +19,36 @@ import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.sprite.ISprite;
+import forestry.api.farming.FarmDirection;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.core.config.ForestryBlock;
 import forestry.core.gadgets.BlockSoil;
+import forestry.core.render.TextureManager;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
 
 public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
-	public FarmLogicArboreal(IFarmHousing housing, ItemStack[] resource, ItemStack ground, IFarmable[] germlings) {
+	public FarmLogicArboreal(IFarmHousing housing, ItemStack resource, ItemStack ground, Iterable<IFarmable> germlings) {
 		super(housing, resource, ground, germlings);
 	}
 
 	public FarmLogicArboreal(IFarmHousing housing) {
-		super(housing,
-				new ItemStack[]{new ItemStack(Blocks.dirt)},
-				ForestryBlock.soil.getItemStack(1, 0),
-				Farmables.farmables.get("farmArboreal").toArray(new IFarmable[0]));
+		super(housing, new ItemStack(Blocks.dirt), ForestryBlock.soil.getItemStack(1, 0), Farmables.farmables.get("farmArboreal"));
 	}
 
 	@Override
@@ -76,8 +72,8 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite getIcon() {
-		return getSprite("minecraft", "blocks/sapling_oak");
+	public ISprite getIcon() {
+		return TextureManager.getInstance().getFarmSprite("farmLoigc", "blocks", "sapling_oak");
 	}
 
 	@Override
@@ -104,7 +100,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		Vect min = coords.add(offset);
 		Vect max = min.add(area);
 
-		AxisAlignedBB harvestBox = AxisAlignedBB.fromBounds(min.x, min.y, min.z, max.x, getWorld().getHeight(), max.z);
+		AxisAlignedBB harvestBox = AxisAlignedBB.fromBounds(min.getX(), min.getY(), min.getZ(), max.getX(), getWorld().getHeight(), max.getZ());
 		List<Entity> list = getWorld().getEntitiesWithinAABB(Entity.class, harvestBox);
 
 		for (Entity entity : list) {
@@ -126,7 +122,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	private final HashMap<Vect, Integer> lastExtentsHarvest = new HashMap<Vect, Integer>();
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, EnumFacing direction, int extent) {
+	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
 
 		Vect start = new Vect(pos);
 		if (!lastExtentsHarvest.containsKey(start)) {
@@ -138,7 +134,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 			lastExtent = 0;
 		}
 
-		Vect position = translateWithOffset(pos.up(), direction, lastExtent);
+		Vect position = translateWithOffset(pos, direction, lastExtent);
 		Collection<ICrop> crops = getHarvestBlocks(position);
 		lastExtent++;
 		lastExtentsHarvest.put(start, lastExtent);
@@ -156,7 +152,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		// Determine what type we want to harvest.
 		IFarmable germling = null;
 		for (IFarmable germl : germlings) {
-			ICrop crop = germl.getCropAt(world, position.toBlockPos());
+			ICrop crop = germl.getCropAt(world, position.pos);
 			if (crop == null) {
 				continue;
 			}
@@ -197,14 +193,14 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		for (int i = -1; i < 2; i++) {
 			for (int j = yOffset; j < 2; j++) {
 				for (int k = -1; k < 2; k++) {
-					Vect candidate = new Vect(position.x + i, position.y + j, position.z + k);
+					Vect candidate = position.add(i, j, k);
 					if (candidate.equals(position)) {
 						continue;
 					}
-					if (Math.abs(candidate.x - start.x) > 5) {
+					if (Math.abs(candidate.pos.getX() - start.pos.getX()) > 5) {
 						continue;
 					}
-					if (Math.abs(candidate.z - start.z) > 5) {
+					if (Math.abs(candidate.pos.getZ() - start.pos.getZ()) > 5) {
 						continue;
 					}
 
@@ -213,7 +209,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 						continue;
 					}
 
-					ICrop crop = germling.getCropAt(world, candidate.toBlockPos());
+					ICrop crop = germling.getCropAt(world, candidate.pos);
 					if (crop != null) {
 						crops.push(crop);
 						candidates.add(candidate);
@@ -227,7 +223,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	protected boolean maintainGermlings(BlockPos pos, EnumFacing direction, int extent) {
+	protected boolean maintainGermlings(BlockPos pos, FarmDirection direction, int extent) {
 
 		World world = getWorld();
 
@@ -235,7 +231,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 			Vect position = translateWithOffset(pos, direction, i);
 
 			if (VectUtil.isAirBlock(world, position)) {
-				Vect soilBelowPosition = new Vect(position.x, position.y - 1, position.z);
+				Vect soilBelowPosition = new Vect(position.getX(), position.getY() - 1, position.getZ());
 				ItemStack soilBelow = VectUtil.getAsItemStack(world, soilBelowPosition);
 				if (isAcceptedSoil(soilBelow)) {
 					return plantSapling(position);
@@ -249,12 +245,17 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
 		World world = getWorld();
 		for (IFarmable candidate : germlings) {
-			if (housing.plantGermling(candidate, world, position.toBlockPos())) {
+			if (housing.plantGermling(candidate, world, position.pos)) {
 				return true;
 			}
 		}
 
 		return false;
+	}
+	
+	public static void registerSprites()
+	{
+		
 	}
 
 }

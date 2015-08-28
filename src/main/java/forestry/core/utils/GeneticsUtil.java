@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -29,43 +28,60 @@ import com.mojang.authlib.GameProfile;
 
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.IMutation;
 import forestry.api.genetics.IPollinatable;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.arboriculture.genetics.CheckPollinatable;
 import forestry.arboriculture.genetics.CheckPollinatableTree;
 import forestry.arboriculture.genetics.ICheckPollinatable;
+import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
-import forestry.plugins.PluginArboriculture;
 
 public class GeneticsUtil {
 
-	private static Set<Material> ersatzSpecimenMaterials;
+	private static Set<Block> ersatzSpecimenBlocks;
 
-	private static Set<Material> getErsatzSpecimenMaterials() {
-		if (ersatzSpecimenMaterials == null) {
-			ersatzSpecimenMaterials = new HashSet<Material>();
+	private static Set<Block> getErsatzBlocks() {
+		if (ersatzSpecimenBlocks == null) {
+			ersatzSpecimenBlocks = new HashSet<Block>();
 			for (ItemStack ersatzSpecimen : AlleleManager.ersatzSpecimen.keySet()) {
 				Block ersatzBlock = StackUtils.getBlock(ersatzSpecimen);
 				if (ersatzBlock != null) {
-					ersatzSpecimenMaterials.add(ersatzBlock.getMaterial());
+					ersatzSpecimenBlocks.add(ersatzBlock);
 				}
 			}
 		}
-		return ersatzSpecimenMaterials;
+		return ersatzSpecimenBlocks;
 	}
 
-	private static boolean isErsatzMaterial(Block block) {
-		return block != null && getErsatzSpecimenMaterials().contains(block.getMaterial());
+	private static boolean isErsatzBlock(Block block) {
+		return block != null && getErsatzBlocks().contains(block);
 	}
 
 	public static boolean hasNaturalistEye(EntityPlayer player) {
-		ItemStack armorItem = player.inventory.armorInventory[3];
-		return armorItem != null && armorItem.getItem() instanceof IArmorNaturalist
-				&& ((IArmorNaturalist) armorItem.getItem()).canSeePollination(player, armorItem, true);
+		if (player == null) {
+			return false;
+		}
+
+		ItemStack armorItemStack = player.inventory.armorInventory[3];
+		if (armorItemStack == null) {
+			return false;
+		}
+
+		Item armorItem = armorItemStack.getItem();
+		if (!(armorItem instanceof IArmorNaturalist)) {
+			return false;
+		}
+
+		IArmorNaturalist armorNaturalist = (IArmorNaturalist) armorItem;
+		return armorNaturalist.canSeePollination(player, armorItemStack, true);
 	}
 
 	public static boolean canNurse(IButterfly butterfly, World world, final BlockPos pos) {
@@ -105,10 +121,12 @@ public class GeneticsUtil {
 			return (IPollinatable) tile;
 		}
 
-		ITree pollen = getErsatzPollen(world, pos);
-		if (pollen != null) {
-			PluginArboriculture.treeInterface.setLeaves(world, pollen, owner, pos);
-			return (IPollinatable) world.getTileEntity(pos);
+		if (Config.pollinateVanillaTrees) {
+			ITree pollen = getErsatzPollen(world, pos);
+			if (pollen != null) {
+				pollen.setLeaves(world, owner, pos);
+				return (IPollinatable) world.getTileEntity(pos);
+			}
 		}
 
 		return null;
@@ -117,7 +135,7 @@ public class GeneticsUtil {
 	public static ITree getErsatzPollen(World world, final BlockPos pos) {
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
-		if (!isErsatzMaterial(block)) {
+		if (!isErsatzBlock(block)) {
 			return null;
 		}
 
@@ -129,9 +147,12 @@ public class GeneticsUtil {
 				// Treat them as decorative and don't pollinate.
 				return null;
 			}
-			meta %= 3;
+			if (block == Blocks.leaves2) {
+				meta = meta + 4; //Dark Oak and Acacia are their own leaf block, but added on the end of sapling
+			}
+			block = Blocks.sapling;
 		}
-		ItemStack itemStack = new ItemStack(block, meta);
+		ItemStack itemStack = new ItemStack(block, 1, meta);
 		IIndividual tree = getGeneticEquivalent(itemStack);
 		if (tree instanceof ITree) {
 			return (ITree) tree;
@@ -160,8 +181,34 @@ public class GeneticsUtil {
 			return null;
 		}
 
-		ItemStack ersatz = PluginArboriculture.treeInterface.getMemberStack(tree, EnumGermlingType.SAPLING.ordinal());
+		ItemStack ersatz = TreeManager.treeRoot.getMemberStack(tree, EnumGermlingType.SAPLING.ordinal());
 		ersatz.stackSize = foreign.stackSize;
 		return ersatz;
+	}
+
+	public static int getResearchComplexity(IAlleleSpecies species, IChromosomeType speciesChromosome) {
+		return 1 + getGeneticAdvancement(species, new HashSet<IAlleleSpecies>(), speciesChromosome);
+	}
+
+	private static int getGeneticAdvancement(IAlleleSpecies species, Set<IAlleleSpecies> exclude, IChromosomeType speciesChromosome) {
+		int highest = 0;
+		exclude.add(species);
+
+		for (IMutation mutation : species.getRoot().getPaths(species, speciesChromosome)) {
+			if (!exclude.contains(mutation.getAllele0())) {
+				int otherAdvance = getGeneticAdvancement(mutation.getAllele0(), exclude, speciesChromosome);
+				if (otherAdvance > highest) {
+					highest = otherAdvance;
+				}
+			}
+			if (!exclude.contains(mutation.getAllele1())) {
+				int otherAdvance = getGeneticAdvancement(mutation.getAllele1(), exclude, speciesChromosome);
+				if (otherAdvance > highest) {
+					highest = otherAdvance;
+				}
+			}
+		}
+
+		return 1 + highest;
 	}
 }

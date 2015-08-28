@@ -11,6 +11,8 @@
 package forestry.farming.logic;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -26,24 +28,25 @@ public class FarmableStacked implements IFarmable {
 
 	private final Block block;
 	private final int matureHeight;
+	private final int matureMeta;
 
-	public FarmableStacked(Block block, int matureHeight) {
+	public FarmableStacked(Block block, int matureHeight, int matureMeta) {
 		this.block = block;
 		this.matureHeight = matureHeight;
+		this.matureMeta = matureMeta;
 	}
 
 	@Override
 	public boolean isSaplingAt(World world, BlockPos pos) {
-		return world.getBlockState(pos).getBlock() == block;
+		return world.getBlockState(pos) == block;
 	}
 
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos) {
-		if (world.getBlockState(pos.up(matureHeight - 1)) != block) {
+		if (world.getBlockState(new BlockPos(pos.getX(), pos.getY() + (matureHeight - 1), pos.getZ())).getBlock() != block) {
 			return null;
 		}
-
-		return new CropBlock(world, block, 0, new Vect(pos.up(matureHeight - 1)));
+		return new CropBlock(world, block, matureMeta, new Vect(pos.getX(), pos.getY() + (matureHeight - 1), pos.getZ()));
 	}
 
 	@Override
@@ -53,7 +56,7 @@ public class FarmableStacked implements IFarmable {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return world.setBlockState(pos, block.getDefaultState(), Defaults.FLAG_BLOCK_SYNCH);
+		return world.setBlockState(pos, block.getStateFromMeta(0), Defaults.FLAG_BLOCK_SYNCH);
 	}
 
 	@Override

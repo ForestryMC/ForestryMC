@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import forestry.core.inventory.InvTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -35,7 +34,7 @@ public final class AdjacentTileCache {
 	private final TileEntity source;
 	private final Set<ICacheListener> listeners = new LinkedHashSet<ICacheListener>();
 
-	public static interface ICacheListener {
+	public interface ICacheListener {
 
 		void changed();
 
@@ -61,7 +60,7 @@ public final class AdjacentTileCache {
 		int sy = source.getPos().getY() + side.getFrontOffsetY();
 		int sz = source.getPos().getZ() + side.getFrontOffsetZ();
 		BlockPos pos = new BlockPos(sx, sy, sz);
-		if (InvTools.blockExists(sx, sy, sz, world) && world.getBlockState(pos).getBlock() != Blocks.air) {
+		if (WorldUtils.blockExists(world, pos) && world.getBlockState(pos).getBlock() != Blocks.air) {
 			return world.getTileEntity(pos);
 		}
 		return null;

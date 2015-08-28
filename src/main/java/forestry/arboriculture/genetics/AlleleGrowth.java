@@ -12,18 +12,18 @@ package forestry.arboriculture.genetics;
 
 import forestry.api.arboriculture.IAlleleGrowth;
 import forestry.api.arboriculture.IGrowthProvider;
-import forestry.core.genetics.Allele;
+import forestry.core.genetics.alleles.AlleleCategorized;
 
-public class AlleleGrowth extends Allele implements IAlleleGrowth {
+public class AlleleGrowth extends AlleleCategorized implements IAlleleGrowth {
 
 	private final IGrowthProvider provider;
 
-	public AlleleGrowth(String uid, IGrowthProvider provider) {
-		this(uid, provider, false);
+	public AlleleGrowth(String name, IGrowthProvider provider) {
+		this(name, provider, false);
 	}
 
-	public AlleleGrowth(String uid, IGrowthProvider provider, boolean isDominant) {
-		super(uid, isDominant);
+	public AlleleGrowth(String name, IGrowthProvider provider, boolean isDominant) {
+		super("forestry", "growth", name, isDominant);
 		this.provider = provider;
 	}
 

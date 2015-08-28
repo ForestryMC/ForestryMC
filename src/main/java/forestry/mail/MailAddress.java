@@ -121,7 +121,7 @@ public class MailAddress implements INBTTagable, IMailAddress {
 	public String toString() {
 		String name = getName().toLowerCase(Locale.ENGLISH);
 		if (isPlayer()) {
-			return type + "-" + name + "-" + gameProfile.getId();
+			return type + "-" + name + '-' + gameProfile.getId();
 		} else {
 			return type + "-" + name;
 		}

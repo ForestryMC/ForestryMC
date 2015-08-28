@@ -12,7 +12,6 @@ package forestry.core.render;
 
 import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

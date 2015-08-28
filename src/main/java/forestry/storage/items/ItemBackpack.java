@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -27,10 +28,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.IMeshDefinitionObject;
-import forestry.api.core.IVariantObject;
+import forestry.api.core.IModelManager;
 import forestry.api.storage.BackpackStowEvent;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
@@ -48,20 +47,20 @@ import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 import forestry.storage.BackpackMode;
 
-public class ItemBackpack extends ItemInventoried implements IMeshDefinitionObject, IVariantObject {
+public class ItemBackpack extends ItemInventoried {
 
-	private final IBackpackDefinition info;
+	private final IBackpackDefinition definition;
 	private final EnumBackpackType type;
 
-	public ItemBackpack(IBackpackDefinition info, EnumBackpackType type) {
+	public ItemBackpack(IBackpackDefinition definition, EnumBackpackType type) {
 		super();
-		this.info = info;
+		this.definition = definition;
 		this.type = type;
 		setMaxStackSize(1);
 	}
 
 	public IBackpackDefinition getDefinition() {
-		return info;
+		return definition;
 	}
 
 	/**
@@ -81,22 +80,21 @@ public class ItemBackpack extends ItemInventoried implements IMeshDefinitionObje
 		}
 
 		if (!player.isSneaking()) {
-			openGui(player, itemstack);
+			openGui(player);
 		} else {
 			switchMode(itemstack);
 		}
 		return itemstack;
 
 	}
-
+	
 	@Override
 	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
 		return getInventoryHit(world, pos, side) != null;
 	}
-
+	
 	@Override
 	public boolean onItemUseFirst(ItemStack itemstack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
-
 		if (!Proxies.common.isSimulating(world)) {
 			return false;
 		}
@@ -106,13 +104,13 @@ public class ItemBackpack extends ItemInventoried implements IMeshDefinitionObje
 			return false;
 		}
 
-		return evaluateTileHit(itemstack, player, world, pos, side, hitX, hitY, hitZ);
+		return evaluateTileHit(itemstack, player, world, pos, side);
 	}
 
-	public ItemStack tryStowing(EntityPlayer player, ItemStack backpackStack, ItemStack stack) {
+	public static ItemStack tryStowing(EntityPlayer player, ItemStack backpackStack, ItemStack stack) {
 
 		ItemBackpack backpack = ((ItemBackpack) backpackStack.getItem());
-		ItemInventory inventory = new ItemInventoryBackpack(ItemBackpack.class, backpack.getBackpackSize(), backpackStack);
+		ItemInventory inventory = new ItemInventoryBackpack(player, backpack.getBackpackSize(), backpackStack);
 		if (backpackStack.getItemDamage() == 1) {
 			return stack;
 		}
@@ -129,11 +127,10 @@ public class ItemBackpack extends ItemInventoried implements IMeshDefinitionObje
 		ItemStack remainder = InvTools.moveItemStack(stack, inventory);
 		stack.stackSize = remainder == null ? 0 : remainder.stackSize;
 
-		inventory.save();
 		return null;
 	}
 
-	private void switchMode(ItemStack itemstack) {
+	private static void switchMode(ItemStack itemstack) {
 		BackpackMode mode = getMode(itemstack);
 		int nextMode = mode.ordinal() + 1;
 		if (!Config.enableBackpackResupply && nextMode == BackpackMode.RESUPPLY.ordinal()) {
@@ -143,12 +140,12 @@ public class ItemBackpack extends ItemInventoried implements IMeshDefinitionObje
 		itemstack.setItemDamage(nextMode);
 	}
 
-	private IInventory getInventoryHit(World world, BlockPos pos, EnumFacing side) {
+	private static IInventory getInventoryHit(World world, BlockPos pos, EnumFacing side) {
 		TileEntity targeted = world.getTileEntity(pos);
 		return InvTools.getInventoryFromTile(targeted, side);
 	}
 
-	private boolean evaluateTileHit(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+	private boolean evaluateTileHit(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side) {
 
 		// Shift right-clicking on an inventory tile will attempt to transfer
 		// items contained in the backpack
@@ -162,16 +159,14 @@ public class ItemBackpack extends ItemInventoried implements IMeshDefinitionObje
 			}
 
 			// Create our own backpack inventory
-			ItemInventoryBackpack backpackInventory = new ItemInventoryBackpack(ItemBackpack.class, getBackpackSize(), stack);
+			ItemInventoryBackpack backpackInventory = new ItemInventoryBackpack(player, getBackpackSize(), stack);
 
 			BackpackMode mode = getMode(stack);
 			if (mode == BackpackMode.RECEIVE) {
-				tryChestReceive(player, backpackInventory, inventory);
+				tryChestReceive(backpackInventory, inventory);
 			} else {
 				tryChestTransfer(backpackInventory, inventory);
 			}
-
-			backpackInventory.save();
 
 			return true;
 		}
@@ -179,7 +174,7 @@ public class ItemBackpack extends ItemInventoried implements IMeshDefinitionObje
 		return false;
 	}
 
-	private void tryChestTransfer(ItemInventoryBackpack backpackInventory, IInventory target) {
+	private static void tryChestTransfer(ItemInventoryBackpack backpackInventory, IInventory target) {
 
 		for (IInvSlot slot : InventoryIterator.getIterable(backpackInventory)) {
 			ItemStack packStack = slot.getStackInSlot();
@@ -192,7 +187,7 @@ public class ItemBackpack extends ItemInventoried implements IMeshDefinitionObje
 		}
 	}
 
-	private void tryChestReceive(EntityPlayer player, ItemInventoryBackpack backpackInventory, IInventory target) {
+	private void tryChestReceive(ItemInventoryBackpack backpackInventory, IInventory target) {
 
 		for (IInvSlot slot : InventoryIterator.getIterable(target)) {
 			ItemStack targetStack = slot.getStackInSlot();
@@ -200,7 +195,7 @@ public class ItemBackpack extends ItemInventoried implements IMeshDefinitionObje
 				continue;
 			}
 
-			if (!info.isValidItem(player, targetStack)) {
+			if (!definition.isValidItem(targetStack)) {
 				continue;
 			}
 
@@ -210,7 +205,7 @@ public class ItemBackpack extends ItemInventoried implements IMeshDefinitionObje
 
 	}
 
-	public void openGui(EntityPlayer entityplayer, ItemStack itemstack) {
+	protected void openGui(EntityPlayer entityplayer) {
 		if (getBackpackSize() == Defaults.SLOTS_BACKPACK_DEFAULT) {
 			entityplayer.openGui(ForestryAPI.instance, GuiId.BackpackGUI.ordinal(), entityplayer.worldObj, (int) entityplayer.posX, (int) entityplayer.posY,
 					(int) entityplayer.posZ);
@@ -218,14 +213,6 @@ public class ItemBackpack extends ItemInventoried implements IMeshDefinitionObje
 			entityplayer.openGui(ForestryAPI.instance, GuiId.BackpackT2GUI.ordinal(), entityplayer.worldObj, (int) entityplayer.posX, (int) entityplayer.posY,
 					(int) entityplayer.posZ);
 		}
-	}
-
-	public boolean isBackpack(ItemStack stack) {
-		if (stack == null) {
-			return false;
-		}
-
-		return stack.getItem() == this;
 	}
 
 	public int getBackpackSize() {
@@ -251,30 +238,52 @@ public class ItemBackpack extends ItemInventoried implements IMeshDefinitionObje
 
 	@Override
 	public String getItemStackDisplayName(ItemStack itemstack) {
-		try {
-			return info.getName(itemstack);
-		} catch (Error e) {
-			return info.getName();
-		}
+		return definition.getName(itemstack);
 	}
 
 	/* ICONS */
 	@SideOnly(Side.CLIENT)
 	private ModelResourceLocation[][] models;
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		EnumBackpackType t = type == EnumBackpackType.APIARIST ? EnumBackpackType.T1 : type;
+		String typeTag = "backpacks/" + t.toString().toLowerCase(Locale.ENGLISH);
+		int tier = t.ordinal() - 1;	
+		models = new ModelResourceLocation[4][4];
+		models[tier][0] = new ModelResourceLocation(typeTag + "_neutral" , "inventory");
+		models[tier][1] = new ModelResourceLocation(typeTag + "_locked" , "inventory");
+		models[tier][2] = new ModelResourceLocation(typeTag + "_receive", "inventory");
+		models[tier][3] = new ModelResourceLocation(typeTag + "_resupply", "inventory");
+		manager.registerItemModel(getContainerItem(), new BackpackMeshDefinition());
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private class BackpackMeshDefinition implements ItemMeshDefinition{
+
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+			EnumBackpackType t = type == EnumBackpackType.APIARIST ? EnumBackpackType.T1 : type;
+			int tier = t.ordinal() - 1;
+			return models[tier][stack.getItemDamage()];
+		}
+		
+	}
 
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int j) {
 
 		if (j == 0) {
-			return info.getPrimaryColour();
+			return definition.getPrimaryColour();
 		} else if (j == 1) {
-			return info.getSecondaryColour();
+			return definition.getSecondaryColour();
 		} else {
 			return 0xffffff;
 		}
 	}
 
-	public static int getSlotsForType(EnumBackpackType type) {
+	private static int getSlotsForType(EnumBackpackType type) {
 		switch (type) {
 			case APIARIST:
 				return Defaults.SLOTS_BACKPACK_APIARIST;
@@ -298,31 +307,5 @@ public class ItemBackpack extends ItemInventoried implements IMeshDefinitionObje
 		} else {
 			return BackpackMode.NORMAL;
 		}
-	}
-
-	@Override
-	public ItemMeshDefinition getMeshDefinition() {
-		return new ItemMeshDefinition() {
-			@Override
-			public ModelResourceLocation getModelLocation(ItemStack stack) {
-				EnumBackpackType t = type == EnumBackpackType.APIARIST ? EnumBackpackType.T1 : type;
-				String typeTag = "backpacks/" + t.toString().toLowerCase(Locale.ENGLISH);
-				int tier = t.ordinal() - 1;
-				if(models == null)
-				{		
-					models = new ModelResourceLocation[4][4];
-					models[tier][0] = new ModelResourceLocation(typeTag + "_neutral" , "inventory");
-					models[tier][1] = new ModelResourceLocation(typeTag + "_locked" , "inventory");
-					models[tier][2] = new ModelResourceLocation(typeTag + "_receive", "inventory");
-					models[tier][3] = new ModelResourceLocation(typeTag + "_resupply", "inventory");
-				}
-				return models[tier][stack.getItemDamage()];
-			}
-		};
-	}
-	
-	@Override
-	public String[] getVariants() {
-		return new String[]{ "neutral", "locked", "receive", "resupply" };
 	}
 }

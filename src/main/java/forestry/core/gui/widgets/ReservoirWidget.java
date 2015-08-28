@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-
 import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.core.gui.WidgetManager;
+import forestry.api.core.sprite.ISprite;
+import forestry.api.core.sprite.Sprite;
 import forestry.core.proxy.Proxies;
 
 public class ReservoirWidget extends TankWidget {
@@ -33,17 +32,15 @@ public class ReservoirWidget extends TankWidget {
 		if (contents == null || contents.amount <= 0 || contents.getFluid() == null) {
 			return;
 		}
-		TextureAtlasSprite liquidIcon = contents.getFluid().getIcon(contents);
-		if (liquidIcon == null) {
+		if(contents.getFluid().getStill() == null)
 			return;
-		}
 
 		int squaled = (contents.amount * height) / getTank().getCapacity();
 		if (squaled > height) {
 			squaled = height;
 		}
 
-		Proxies.common.bindTexture();
+		Proxies.common.bindTexture(contents.getFluid().getStill());
 		int start = 0;
 
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
@@ -58,7 +55,7 @@ public class ReservoirWidget extends TankWidget {
 				squaled = 0;
 			}
 
-			manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos + height - x - start, liquidIcon, 16, 16 - (16 - x));
+			manager.gui.drawTexturedModalRect(startX + xPos, startY + yPos + height - x - start, 0, 0, 16, 16 - (16 - x));
 			start = start + 16;
 
 			if (x == 0 || squaled == 0) {

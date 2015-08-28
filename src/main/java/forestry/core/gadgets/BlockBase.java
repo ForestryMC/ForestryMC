@@ -13,83 +13,74 @@ package forestry.core.gadgets;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.oracle.webservices.internal.api.message.BasePropertySet.PropertyMapEntry;
-
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.IModelObject;
-import forestry.api.core.IVariantObject;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
+import forestry.core.circuits.ISocketable;
 import forestry.core.fluids.FluidHelper;
-import forestry.core.gadgets.BlockBase.IEnumMachineDefinition;
-import forestry.core.interfaces.IOwnable;
+import forestry.core.interfaces.IAccessHandler;
 import forestry.core.items.ItemNBTTile;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.PlayerUtil;
-import forestry.core.utils.StringUtil;
 import forestry.core.utils.Utils;
 
-public class BlockBase extends BlockForestry implements IVariantObject, IModelObject {
+public class BlockBase extends BlockForestry implements IModelRegister {
 
-	private static final List<String> variants = new ArrayList<String>();
+	public static final PropertyEnum META = PropertyEnum.create("meta", MachineDefinitionType.class);
+	
 	private final List<MachineDefinition> definitions = new ArrayList<MachineDefinition>();
 	private final boolean hasTESR;
-	private final Class<? extends IEnumMachineDefinition> enumDefinition;
-	private PropertyEnum META;
-	
-	public interface IEnumMachineDefinition extends IStringSerializable
-	{
-		int getMeta();
+	private final int definitionID;
+
+	public BlockBase(Material material, int definitionID) {
+		this(material, false, definitionID);
 	}
 
-	public BlockBase(Material material, Class<? extends IEnumMachineDefinition> enumDefinition) {
-		this(material, false, enumDefinition);
-	}
-
-	public BlockBase(Material material, boolean hasTESR, Class<? extends IEnumMachineDefinition> enumDefinition) {
+	public BlockBase(Material material, boolean hasTESR, int definitionID) {
 		super(material);
-		this.enumDefinition = enumDefinition;
+		this.definitionID = definitionID;
 		this.hasTESR = hasTESR;
-		META = PropertyEnum.create("meta", enumDefinition);
-		setDefaultState(this.blockState.getBaseState().withProperty(META, (Enum)enumDefinition.getEnumConstants()[0]));
+		setDefaultState(this.blockState.getBaseState().withProperty(META, MachineDefinitionType.getType(definitionID, 0)));
 	}
 
 	public MachineDefinition addDefinition(MachineDefinition definition) {
 		definition.setBlock(this);
 
-		while (definitions.size() <= definition.meta) {
+		while (definitions.size() <= definition.getMeta()) {
 			definitions.add(null);
 		}
 
-		variants.add(StringUtil.cleanTags(definition.teIdent));
-		definitions.set(definition.meta, definition);
+		definitions.set(definition.getMeta(), definition);
+
 		return definition;
 	}
 	
+	
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((IEnumMachineDefinition)state.getProperties().get(META)).getMeta();
+		return ((MachineDefinitionType)state.getProperties().get(META)).getMeta();
 	}
 	
     protected BlockState createBlockState()
@@ -112,13 +103,12 @@ public class BlockBase extends BlockForestry implements IVariantObject, IModelOb
 		if (hasTESR) {
 			return Proxies.common.getByBlockModelId();
 		} else {
-			return 3;
+			return 0;
 		}
 	}
 
 	private MachineDefinition getDefinition(IBlockAccess world, BlockPos pos) {
-		IBlockState state = world.getBlockState(pos);
-		return getDefinition(state.getBlock().getMetaFromState(state));
+		return getDefinition(getMetaFromState(world.getBlockState(pos)));
 	}
 
 	private MachineDefinition getDefinition(int metadata) {
@@ -162,28 +152,15 @@ public class BlockBase extends BlockForestry implements IVariantObject, IModelOb
 		return createTileEntity(world, getStateFromMeta(meta)); // TODO: refactor to just use Block, not BlockContainer
 	}
 
-	/* BLOCK DROPS */
-	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		int metadata = getMetaFromState(state);
-		if (getDefinition(metadata).handlesDrops()) {
-			return getDefinition(metadata).getDrops(world, pos, state, fortune);
-		} else {
-			return super.getDrops(world, pos, state, fortune);
-		}
-	}
-
 	/* INTERACTION */
 	@Override
 	public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
 		MachineDefinition definition = getDefinition(world, pos);
 		return definition != null && definition.isSolidOnSide(world, pos, side);
 	}
-
+	
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
-		super.onBlockPlacedBy(world, pos, state, entityliving, stack);
-
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityLiving, ItemStack stack) {
 		TileForestry tile = (TileForestry) world.getTileEntity(pos);
 
 		if (stack.getItem() instanceof ItemNBTTile && stack.hasTagCompound()) {
@@ -191,12 +168,12 @@ public class BlockBase extends BlockForestry implements IVariantObject, IModelOb
 			tile.setPos(pos);
 		}
 
-		tile.rotateAfterPlacement(world, pos, entityliving, stack);
+		tile.rotateAfterPlacement(entityLiving);
 	}
-
+	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (getDefinition(world, pos).onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ)) {
+		if (getDefinition(world, pos).onBlockActivated(world, pos, player, side)) {
 			return true;
 		}
 
@@ -209,8 +186,10 @@ public class BlockBase extends BlockForestry implements IVariantObject, IModelOb
 			return false;
 		}
 
+		IAccessHandler access = tile.getAccessHandler();
+
 		ItemStack current = player.getCurrentEquippedItem();
-		if (current != null && current.getItem() != Items.bucket && tile instanceof IFluidHandler && tile.allowsAlteration(player)) {
+		if (current != null && current.getItem() != Items.bucket && tile instanceof IFluidHandler && access.allowsAlteration(player)) {
 			if (FluidHelper.handleRightClick((IFluidHandler) tile, side, player, true, tile.canDrainWithBucket())) {
 				return true;
 			}
@@ -220,52 +199,38 @@ public class BlockBase extends BlockForestry implements IVariantObject, IModelOb
 			return true;
 		}
 
-		if (tile.allowsViewing(player)) {
-			tile.openGui(player, tile);
+		if (access.allowsViewing(player)) {
+			tile.openGui(player);
 		} else {
-			player.addChatMessage(new ChatComponentTranslation("for.chat.accesslocked", PlayerUtil.getOwnerName(tile)));
+			player.addChatMessage(new ChatComponentTranslation("for.chat.accesslocked", PlayerUtil.getOwnerName(access)));
 		}
 		return true;
 	}
-
+	
 	@Override
-	public boolean rotateBlock(World world, BlockPos pos, EnumFacing side) {
-		return getDefinition(world, pos).rotateBlock(world, pos, side);
+	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
+		return getDefinition(world, pos).rotateBlock(world, pos, axis);
 	}
-
+	
 	@Override
-	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
-		super.onBlockAdded(world, pos, state);
-		getDefinition(world, pos).onBlockAdded(world, pos, state);
-	}
-
-	@Override
-	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-
-		IOwnable tile = (IOwnable) world.getTileEntity(pos);
-		if (tile == null) {
-			return world.setBlockToAir(pos);
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		
+		if (!Proxies.common.isSimulating(world)) {
+			return;
 		}
 
-		if (tile.isOwnable() && !tile.allowsRemoval(player)) {
-			return false;
+		TileEntity tile = world.getTileEntity(pos);
+		if (tile instanceof IInventory) {
+			IInventory inventory = (IInventory) tile;
+			Utils.dropInventory(inventory, world, pos);
+			if (tile instanceof TileForestry) {
+				((TileForestry) tile).onRemoval();
+			}
+			if (tile instanceof ISocketable) {
+				Utils.dropSockets((ISocketable) tile, tile.getWorld(), tile.getPos());
+			}
 		}
-
-		if (getDefinition(world, pos).removedByPlayer(world, player, pos)) {
-			return world.setBlockToAir(pos);
-		} else {
-			return false;
-		}
-	}
-
-	@Override
-	public boolean canConnectRedstone(IBlockAccess world, BlockPos pos, EnumFacing face) {
-		IBlockState state = world.getBlockState(pos);
-		int metadata = getMetaFromState(state);
-		if (metadata >= definitions.size() || definitions.get(metadata) == null) {
-			metadata = 0;
-		}
-		return definitions.get(metadata).canConnectRedstone(world, pos, face);
+		super.breakBlock(world, pos, state);
 	}
 	
 	@Override
@@ -279,12 +244,11 @@ public class BlockBase extends BlockForestry implements IVariantObject, IModelOb
 	}
 
 	@Override
-	public ModelType getModelType() {
-		return ModelType.META;
-	}
-
-	@Override
-	public String[] getVariants() {
-		return variants.toArray(new String[variants.size()]);
+	public void registerModel(Item item, IModelManager manager) {
+		for(int i = 0; i < definitions.size();i++)
+		{
+			MachineDefinitionType type = MachineDefinitionType.getType(definitionID, i);
+			manager.registerItemModel(item, i, "definitions/" + type.name().toLowerCase());
+		}
 	}
 }

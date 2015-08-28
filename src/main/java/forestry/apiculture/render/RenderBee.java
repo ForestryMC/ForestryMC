@@ -26,7 +26,7 @@ public class RenderBee extends RenderLiving {
 		beeModel = (ModelBee) mainModel;
 	}
 
-	public void renderBee(EntityBee entity, double posX, double posY, double posZ, float par8, float par9) {
+	private void renderBee(EntityBee entity, double posX, double posY, double posZ, float par8, float par9) {
 		beeModel.setType(entity.getType());
 		this.doRender(entity, posX, posY, posZ, par8, par9);
 	}

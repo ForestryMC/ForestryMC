@@ -10,11 +10,9 @@ package forestry.pipes;
 import java.util.Locale;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.sprite.ISprite;
 import forestry.core.config.ForestryItem;
 import forestry.core.render.TextureManager;
 
@@ -37,7 +35,7 @@ public enum EnumFilterType {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
+	public ISprite getIcon() {
 		return TextureManager.getInstance().getDefault("analyzer/" + this.toString().toLowerCase(Locale.ENGLISH));
 	}
 }

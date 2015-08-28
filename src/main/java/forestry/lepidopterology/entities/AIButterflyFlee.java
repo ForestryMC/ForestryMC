@@ -39,7 +39,7 @@ public class AIButterflyFlee extends AIButterflyMovement {
 			return false;
 		}
 
-		if (player.getDistanceSq(flightTarget.getX(), flightTarget.getY(), flightTarget.getZ()) < player.getDistanceSqToEntity(entity)) {
+		if (player.getDistanceSq(flightTarget.posX, flightTarget.posY, flightTarget.posZ) < player.getDistanceSqToEntity(entity)) {
 			return false;
 		}
 

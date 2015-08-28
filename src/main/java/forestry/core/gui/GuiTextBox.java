@@ -25,8 +25,8 @@ public class GuiTextBox extends GuiTextField {
 	private int lineScroll = 0;
 	private int maxLines = 0;
 
-	public GuiTextBox(int id, FontRenderer fontRendererObj, int startX, int startY, int width, int height) {
-		super(id, fontRendererObj, startX, startY, width, height);
+	public GuiTextBox(int ID, FontRenderer fontRendererObj, int startX, int startY, int width, int height) {
+		super(ID, fontRendererObj, startX, startY, width, height);
 		this.fontRendererObj = fontRendererObj;
 		this.startX = startX;
 		this.startY = startY;

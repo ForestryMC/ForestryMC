@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -32,8 +33,9 @@ public class CropRubber extends CropBlock {
 	protected Collection<ItemStack> harvestBlock(Vect pos) {
 		Collection<ItemStack> harvested = new ArrayList<ItemStack>();
 		harvested.add(PluginIC2.resin.copy());
-		Proxies.common.addBlockDestroyEffects(world, pos.toBlockPos(), block, 0);
-		world.setBlockState(pos.toBlockPos(), block.getStateFromMeta(meta + 6), Defaults.FLAG_BLOCK_SYNCH);
+		IBlockState state = world.getBlockState(pos.pos);
+		Proxies.common.addBlockDestroyEffects(world, pos.pos, block.getStateFromMeta(0));
+		world.setBlockState(pos.pos, block.getStateFromMeta(meta + 6), Defaults.FLAG_BLOCK_SYNCH);
 		return harvested;
 	}
 

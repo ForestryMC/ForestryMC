@@ -24,10 +24,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.IModelObject;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.api.core.Tabs;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
@@ -35,13 +35,19 @@ import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.StringUtil;
 
-public class BlockStump extends BlockTorch implements IModelObject {
+public class BlockStump extends BlockTorch implements IModelRegister {
 
 	public BlockStump() {
 		super();
 		this.setHardness(0.0F);
 		this.setStepSound(soundTypeWood);
 		setCreativeTab(Tabs.tabApiculture);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -57,7 +63,7 @@ public class BlockStump extends BlockTorch implements IModelObject {
 				(held.getItem() == Items.flint_and_steel ||
 						held.getItem() == Items.flint ||
 						StackUtils.equals(Blocks.torch, held))) {
-			world.setBlockState(pos, ForestryBlock.candle.block().getStateFromMeta(state.getBlock().getMetaFromState(state)| 0x08), Defaults.FLAG_BLOCK_SYNCH);
+			world.setBlockState(pos, ForestryBlock.candle.block().getStateFromMeta(world.getBlockState(pos).getBlock().getMetaFromState(world.getBlockState(pos)) | 0x08), Defaults.FLAG_BLOCK_SYNCH);
 			TileCandle tc = new TileCandle();
 			tc.setColour(0); // default to white
 			world.setTileEntity(pos, tc);
@@ -67,19 +73,13 @@ public class BlockStump extends BlockTorch implements IModelObject {
 		return false;
 	}
 	
-	@Override
 	@SideOnly(Side.CLIENT)
+	@Override
 	public int getRenderColor(IBlockState state) {
 		return 0xee0000;
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-	}
-
-	@Override
-	public ModelType getModelType() {
-		return ModelType.DEFAULT;
 	}
 }

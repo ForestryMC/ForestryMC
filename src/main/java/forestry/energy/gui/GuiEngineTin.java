@@ -17,27 +17,38 @@ import forestry.core.gui.widgets.SocketWidget;
 import forestry.core.utils.EnumTankLevel;
 import forestry.energy.gadgets.EngineTin;
 
-public class GuiEngineTin extends GuiEngine {
+public class GuiEngineTin extends GuiEngine<ContainerEngineTin, EngineTin> {
 
 	public GuiEngineTin(InventoryPlayer inventory, EngineTin tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/electricalengine.png", new ContainerEngineTin(inventory, tile), tile);
 		widgetManager.add(new SocketWidget(this.widgetManager, 30, 40, tile, 0));
 	}
 
-	protected EngineTin getEngine() {
-		return (EngineTin) tile;
-	}
-
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		EngineTin engine = getEngine();
+		EngineTin engine = inventory;
 		int storageHeight = engine.getStorageScaled(46);
 		int storageMaxHeight = engine.getStorageScaled(100);
-		EnumTankLevel rated = engine.rateLevel(storageMaxHeight);
+		EnumTankLevel rated = rateLevel(storageMaxHeight);
 
 		drawHealthMeter(guiLeft + 74, guiTop + 25, storageHeight, rated);
+	}
+
+	private static EnumTankLevel rateLevel(int scaled) {
+
+		if (scaled < 5) {
+			return EnumTankLevel.EMPTY;
+		} else if (scaled < 30) {
+			return EnumTankLevel.LOW;
+		} else if (scaled < 60) {
+			return EnumTankLevel.MEDIUM;
+		} else if (scaled < 90) {
+			return EnumTankLevel.HIGH;
+		} else {
+			return EnumTankLevel.MAXIMUM;
+		}
 	}
 
 	private void drawHealthMeter(int x, int y, int height, EnumTankLevel rated) {

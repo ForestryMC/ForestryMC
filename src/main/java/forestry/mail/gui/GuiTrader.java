@@ -17,22 +17,17 @@ import forestry.core.gui.GuiForestry;
 import forestry.core.utils.StringUtil;
 import forestry.mail.gadgets.MachineTrader;
 
-public class GuiTrader extends GuiForestry<MachineTrader> {
-
-	private final ContainerTrader container;
+public class GuiTrader extends GuiForestry<ContainerTrader, MachineTrader> {
 
 	public GuiTrader(InventoryPlayer inventoryplayer, MachineTrader tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/mailtrader2.png", new ContainerTrader(inventoryplayer, tile), tile);
 		this.xSize = 226;
 		this.ySize = 220;
-
-		this.container = (ContainerTrader) inventorySlots;
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		String name = StringUtil.localizeTile(tile.getUnlocalizedName());
+		String name = StringUtil.localizeTile(inventory.getUnlocalizedTitle());
 		this.fontRendererObj.drawString(name, getCenteredOffset(name), 6, fontColor.get("gui.mail.text"));
 
 		String receive = StringUtil.localize("gui.mail.receive");
@@ -40,6 +35,8 @@ public class GuiTrader extends GuiForestry<MachineTrader> {
 
 		String send = StringUtil.localize("gui.mail.send");
 		this.fontRendererObj.drawString(send, getCenteredOffset(send, 70) + 51, 99, fontColor.get("gui.mail.text"));
+
+		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 	}
 
 	@Override

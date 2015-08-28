@@ -57,7 +57,7 @@ public class CommandMail extends SubCommand {
 			}
 		}
 
-		private String makeTradeListEntry(TradeStationInfo info) {
+		private static String makeTradeListEntry(TradeStationInfo info) {
 			EnumChatFormatting formatting = info.state.isOk() ? EnumChatFormatting.GREEN : EnumChatFormatting.RED;
 
 			String tradegood = "[ ? ]";

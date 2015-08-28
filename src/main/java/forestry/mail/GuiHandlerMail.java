@@ -45,6 +45,8 @@ public class GuiHandlerMail extends GuiHandlerBase {
 			return null;
 		}
 
+		
+		BlockPos pos = new BlockPos(x, y, z);
 		switch (GuiId.values()[id]) {
 			case CatalogueGUI:
 				ItemStack cata = player.getCurrentEquippedItem();
@@ -65,19 +67,19 @@ public class GuiHandlerMail extends GuiHandlerBase {
 				}
 
 				if (equipped.getItem() instanceof ItemLetter) {
-					return new GuiLetter(player, new LetterInventory(equipped));
+					return new GuiLetter(player, new LetterInventory(player, equipped));
 				} else {
 					return null;
 				}
 
 			case MailboxGUI:
-				return new GuiMailbox(player.inventory, (MachineMailbox) getTileForestry(world, new BlockPos(x, y, z)));
+				return new GuiMailbox(player.inventory, getTile(world, pos, player, MachineMailbox.class));
 			case PhilatelistGUI:
-				return new GuiPhilatelist(player.inventory, (MachinePhilatelist) getTileForestry(world, new BlockPos(x, y, z)));
+				return new GuiPhilatelist(player.inventory, getTile(world, pos, player, MachinePhilatelist.class));
 			case TraderGUI:
-				return new GuiTrader(player.inventory, (MachineTrader) getTileForestry(world, new BlockPos(x, y, z)));
+				return new GuiTrader(player.inventory, getTile(world, pos, player, MachineTrader.class));
 			case TraderNameGUI:
-				return new GuiTradeName(player.inventory, (MachineTrader) getTileForestry(world, new BlockPos(x, y, z)));
+				return new GuiTradeName(getTile(world, pos, player, MachineTrader.class));
 			default:
 				return null;
 
@@ -91,6 +93,7 @@ public class GuiHandlerMail extends GuiHandlerBase {
 			return null;
 		}
 
+		BlockPos pos = new BlockPos(x, y, z);
 		switch (GuiId.values()[id]) {
 			case CatalogueGUI:
 				ItemStack cata = player.getCurrentEquippedItem();
@@ -111,19 +114,19 @@ public class GuiHandlerMail extends GuiHandlerBase {
 				}
 
 				if (equipped.getItem() instanceof ItemLetter) {
-					return new ContainerLetter(player, new LetterInventory(equipped));
+					return new ContainerLetter(player, new LetterInventory(player, equipped));
 				} else {
 					return null;
 				}
 
 			case MailboxGUI:
-				return new ContainerMailbox(player.inventory, (MachineMailbox) getTileForestry(world, new BlockPos(x, y, z)));
+				return new ContainerMailbox(player.inventory, getTile(world, pos, player, MachineMailbox.class));
 			case PhilatelistGUI:
-				return new ContainerPhilatelist(player.inventory, (MachinePhilatelist) getTileForestry(world, new BlockPos(x, y, z)));
+				return new ContainerPhilatelist(player.inventory, getTile(world, pos, player, MachinePhilatelist.class));
 			case TraderGUI:
-				return new ContainerTrader(player.inventory, (MachineTrader) getTileForestry(world, new BlockPos(x, y, z)));
+				return new ContainerTrader(player.inventory, getTile(world, pos, player, MachineTrader.class));
 			case TraderNameGUI:
-				return new ContainerTradeName(player.inventory, (MachineTrader) getTileForestry(world, new BlockPos(x, y, z)));
+				return new ContainerTradeName(getTile(world, pos, player, MachineTrader.class));
 			default:
 				return null;
 

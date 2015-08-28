@@ -11,17 +11,20 @@
 package forestry.core.render;
 
 import forestry.api.core.ForestryAPI;
-import forestry.api.core.IMeshDefinitionObject;
 import forestry.api.core.IModelManager;
-import forestry.api.core.IModelObject;
-import forestry.api.core.IVariantObject;
-import forestry.api.core.IModelObject.ModelType;
+import forestry.api.core.IModelProvider;
+import forestry.api.core.IModelRegister;
+import forestry.core.config.ForestryBlock;
+import forestry.core.config.ForestryItem;
+import forestry.core.utils.StringUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -41,13 +44,28 @@ public class ModelManager implements IModelManager {
 	}
 	
 	@Override
-	public void registerModel(Item item, int meta, String identifier)
+	public void registerItemModel(Item item, int meta, String identifier)
 	{
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, meta,  getModelLocation(identifier));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, meta, getModelLocation(item, identifier));
+		registerVariant(item, item.getUnlocalizedName(new ItemStack(item, 1, meta)) + identifier);
 	}
 	
 	@Override
-	public void registerModel(Item item, ItemMeshDefinition definition)
+	public void registerItemModel(Item item, int meta, String modifier, String identifier)
+	{
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, meta, getModelLocation(item, modifier, identifier));
+		registerVariant(item, item.getUnlocalizedName(new ItemStack(item, 1, meta)) + identifier);
+	}
+	
+
+	@Override
+	public void registerItemModel(Item item, int meta) {
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, meta, getModelLocation(item, meta));
+		registerVariant(item, item.getUnlocalizedName(new ItemStack(item, 1, meta)));
+	}
+	
+	@Override
+	public void registerItemModel(Item item, ItemMeshDefinition definition)
 	{
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, definition);
 	}
@@ -57,61 +75,53 @@ public class ModelManager implements IModelManager {
 	{
 		ModelBakery.addVariantName(item, names);
 	}
-
+	
+	public static void registerModels()
+	{
+		for(ForestryBlock block : ForestryBlock.values())
+			if(block.block() != null)
+				if(block.block() instanceof IModelRegister)
+					((IModelRegister)block.block()).registerModel(block.item(), getInstance());
+		
+		for(ForestryItem item : ForestryItem.values())
+			if(item.item() != null)
+				if(item.item() instanceof IModelRegister)
+					((IModelRegister)item.item()).registerModel(item.item(), getInstance());
+	}
+	
 	@Override
 	public ModelResourceLocation getModelLocation(String identifier) {
-		return new ModelResourceLocation("forestry:texture/items/" + identifier, "inventory");
+		return new ModelResourceLocation("forestry:items/" + identifier, "inventory");
+	}
+
+	@Override
+	public ModelResourceLocation getModelLocation(Item item, int meta) {
+		return new ModelResourceLocation("forestry:items/" + StringUtil.cleanItemName(item) + "." + meta, "inventory");
+	}
+
+	@Override
+	public ModelResourceLocation getModelLocation(Item item, int meta, String identifier) {
+		return new ModelResourceLocation("forestry:items/" + StringUtil.cleanItemName(item) + "." + meta + identifier, "inventory");
+	}
+
+	@Override
+	public ModelResourceLocation getModelLocation(Item item, int meta, String modifier, String identifier) {
+		return new ModelResourceLocation("forestry:items/" + modifier + "/" + StringUtil.cleanItemName(item) + "." + meta + identifier, "inventory");
 	}
 	
-	public void registerItemBlockModel(Block block)
-	{
-		if(((IModelObject) block).getModelType() == ModelType.META)
-		{
-				if(block instanceof IVariantObject)
-					for(int i = 0;i < ((IVariantObject)block).getVariants().length;i++)
-					{
-						String name = ((IVariantObject)block).getVariants()[i];
-						registerModel(Item.getItemFromBlock(block), i, name);
-					}
-		}
-		else if(((IModelObject) block).getModelType() == ModelType.MESHDEFINITION && block instanceof IMeshDefinitionObject)
-		{
-			registerModel(Item.getItemFromBlock(block), ((IMeshDefinitionObject)block).getMeshDefinition());
-		}
-		else
-		{
-			registerModel(Item.getItemFromBlock(block), 0, Item.getItemFromBlock(block).getUnlocalizedName());
-		}
-		
-		if(block instanceof IVariantObject)
-			ModelBakery.addVariantName(Item.getItemFromBlock(block), ((IVariantObject)block).getVariants());
+	@Override
+	public ModelResourceLocation getModelLocation(Item item) {
+		return new ModelResourceLocation("forestry:items/" + StringUtil.cleanItemName(item), "inventory");
+	}
+
+	@Override
+	public ModelResourceLocation getModelLocation(Item item, String identifier) {
+		return new ModelResourceLocation("forestry:items/" + StringUtil.cleanItemName(item) + identifier, "inventory");
 	}
 	
-	public void registerItemModel(Item item)
-	{
-		if(DimensionManager.getWorld(0).isRemote && item instanceof IModelObject)
-		{
-			if(((IModelObject)item).getModelType() == ModelType.META)
-			{
-				if(item instanceof IVariantObject)
-					for(int i = 0;i < ((IVariantObject)item).getVariants().length;i++)
-					{
-						String name = ((IVariantObject)item).getVariants()[i];
-						registerModel(item, i, name);
-					}
-			}
-			else if(((IModelObject)item).getModelType() == ModelType.MESHDEFINITION && item instanceof IMeshDefinitionObject)
-			{
-				registerModel(item, ((IMeshDefinitionObject)item).getMeshDefinition());
-			}
-			else
-			{
-				registerModel(item, 0, item.getUnlocalizedName());
-			}
-		}
-		
-		if(item instanceof IVariantObject)
-			ModelBakery.addVariantName(item, ((IVariantObject)item).getVariants());
+	@Override
+	public ModelResourceLocation getModelLocation(Item item, String modifier, String identifier) {
+		return new ModelResourceLocation("forestry:items/" + modifier + "/" + StringUtil.cleanItemName(item) + identifier, "inventory");
 	}
 	
 }

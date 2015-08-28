@@ -45,4 +45,9 @@ public class TriggerLowResource extends Trigger {
 		return !((TilePowered) tile).hasResourcesMin(threshold);
 	}
 
+	@Override
+	public int getSheetLocation() {
+		return 0;
+	}
+
 }

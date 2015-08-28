@@ -18,19 +18,18 @@ import java.util.Set;
 import java.util.Stack;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.sprite.ISprite;
+import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
@@ -50,11 +49,11 @@ public class FarmLogicRubber extends FarmLogic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite getIcon() {
+	public ISprite getIcon() {
 		if (!inActive) {
-			return getSprite("ic2", "items/itemRubber");
+			return TextureManager.getInstance().getFarmSprite("farmLoigc", "ic2", "items", "itemRubber");
 		} else {
-			return getSprite("minecraft", "items/gunpowder");
+			return TextureManager.getInstance().getFarmSprite("farmLoigc", "items", "gunpowder");
 		}
 	}
 
@@ -89,14 +88,14 @@ public class FarmLogicRubber extends FarmLogic {
 	}
 
 	@Override
-	public boolean cultivate(BlockPos pos, EnumFacing direction, int extent) {
+	public boolean cultivate(BlockPos pos, FarmDirection direction, int extent) {
 		return false;
 	}
 
 	private final HashMap<Vect, Integer> lastExtents = new HashMap<Vect, Integer>();
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, EnumFacing direction, int extent) {
+	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
 		if (inActive) {
 			return null;
 		}
@@ -111,7 +110,7 @@ public class FarmLogicRubber extends FarmLogic {
 			lastExtent = 0;
 		}
 
-		Vect position = translateWithOffset(pos.up(), direction, lastExtent);
+		Vect position = translateWithOffset(pos, direction, lastExtent);
 		Collection<ICrop> crops = getHarvestBlocks(position);
 		lastExtent++;
 		lastExtents.put(start, lastExtent);
@@ -158,7 +157,7 @@ public class FarmLogicRubber extends FarmLogic {
 
 		// Get additional candidates to return
 		for (int j = 0; j < 2; j++) {
-			Vect candidate = new Vect(position.x, position.y + j, position.z);
+			Vect candidate = new Vect(position.getX(), position.getY() + j, position.getZ());
 			if (candidate.equals(position)) {
 				continue;
 			}

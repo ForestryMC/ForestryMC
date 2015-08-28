@@ -149,7 +149,7 @@ public class ParticleRenderer {
 		for (EntityFX particle : particles) {
 			worldRenderer.setBrightness(particle.getBrightnessForRender(partialTicks));
 
-			particle.renderParticle(worldRenderer, null, partialTicks, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY);
+			particle.renderParticle(worldRenderer, player, partialTicks, rotationX, rotationXZ, rotationZ, rotationYZ, rotationXY);
 		}
 
 		tessellator.draw();

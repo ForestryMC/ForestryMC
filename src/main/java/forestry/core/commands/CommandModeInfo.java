@@ -69,7 +69,7 @@ public class CommandModeInfo extends SubCommand {
 		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.mode.info.current", modeName, worldName);
 		CommandHelpers.sendLocalizedChatMessage(sender, "for.chat.command.forestry.mode.info.available", helpString);
 	}
-	
+
 	@Override
 	public List<String> addTabCompletionOptions(ICommandSender sender, String[] incomplete, BlockPos pos) {
 		return CommandHelpers.getListOfStringsMatchingLastWord(incomplete, modeStringArr);

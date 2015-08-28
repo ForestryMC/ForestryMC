@@ -10,97 +10,88 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.fml.common.registry.GameData;
-
 import forestry.core.proxy.Proxies;
 
-public class PacketFXSignal extends ForestryPacket {
+public class PacketFXSignal extends PacketCoordinates {
 
-	public static enum VisualFXType {
+	public enum VisualFXType {
 		NONE, BLOCK_DESTROY, SAPLING_PLACE
 	}
 
-	public static enum SoundFXType {
+	public enum SoundFXType {
 		NONE(""), BLOCK_DESTROY(""), BLOCK_PLACE(""), LEAF("step.grass"), LOG("dig.wood"), DIRT("dig.gravel");
 
 		public final String soundFile;
-		public final float volume = 1.0f;
-		public final float pitch = 1.0f;
+		public final float volume;
+		public final float pitch;
 
-		private SoundFXType(String soundFile) {
+		SoundFXType(String soundFile) {
 			this.soundFile = soundFile;
+			this.volume = 1.0f;
+			this.pitch = 1.0f;
 		}
 	}
 
 	private VisualFXType visualFX;
 	private SoundFXType soundFX;
 
-	private BlockPos pos;
-	private Block block;
-	private int meta;
+	private IBlockState state;
 
-	public PacketFXSignal() {
+	public PacketFXSignal(DataInputStreamForestry data) throws IOException {
+		super(data);
 	}
 
-	public PacketFXSignal(VisualFXType type, BlockPos pos, Block block, int meta) {
-		this(type, SoundFXType.NONE, pos, block, meta);
+	public PacketFXSignal(VisualFXType type, BlockPos pos, IBlockState state) {
+		this(type, SoundFXType.NONE, pos, state);
 	}
 
-	public PacketFXSignal(SoundFXType type, BlockPos pos, Block block, int meta) {
-		this(VisualFXType.NONE, type, pos, block, meta);
+	public PacketFXSignal(SoundFXType type, BlockPos pos, IBlockState state) {
+		this(VisualFXType.NONE, type, pos, state);
 	}
 
-	public PacketFXSignal(VisualFXType visualFX, SoundFXType soundFX, BlockPos pos, Block block, int meta) {
-		super(PacketIds.FX_SIGNAL);
+	public PacketFXSignal(VisualFXType visualFX, SoundFXType soundFX, BlockPos pos, IBlockState state) {
+		super(PacketId.FX_SIGNAL, pos);
 		this.visualFX = visualFX;
 		this.soundFX = soundFX;
-		this.pos = pos;
-		this.block = block;
-		this.meta = meta;
+		this.state = state;
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
 		data.writeShort(visualFX.ordinal());
 		data.writeShort(soundFX.ordinal());
-		data.writeInt(pos.getX());
-		data.writeInt(pos.getY());
-		data.writeInt(pos.getZ());
-		data.writeUTF((String)GameData.getBlockRegistry().getNameForObject(block));
-		data.writeInt(meta);
+		data.writeUTF(GameData.getBlockRegistry().getNameForObject(state.getBlock()).toString());
+		data.writeInt(state.getBlock().getMetaFromState(state));
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	protected void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
 		this.visualFX = VisualFXType.values()[data.readShort()];
 		this.soundFX = SoundFXType.values()[data.readShort()];
-		int xCoord = data.readInt();
-		int yCoord = data.readInt();
-		int zCoord = data.readInt();
-		pos = new BlockPos(xCoord, yCoord, zCoord);
-		this.block = GameData.getBlockRegistry().getRaw(data.readUTF());
-		this.meta = data.readInt();
+		Block block = GameData.getBlockRegistry().getRaw(data.readUTF());
+		state = block.getStateFromMeta(data.readInt());
 	}
 
 	public void executeFX() {
 		if (visualFX != VisualFXType.NONE) {
-			Proxies.common.addBlockDestroyEffects(Proxies.common.getRenderWorld(), pos, block, meta);
+			Proxies.common.addBlockDestroyEffects(Proxies.common.getRenderWorld(), getPos(), state);
 		}
 		if (soundFX != SoundFXType.NONE) {
 			if (soundFX == SoundFXType.BLOCK_DESTROY) {
-				Proxies.common.playBlockBreakSoundFX(Proxies.common.getRenderWorld(), pos, block);
+				Proxies.common.playBlockBreakSoundFX(Proxies.common.getRenderWorld(), getPos(), state);
 			} else if (soundFX == SoundFXType.BLOCK_PLACE) {
-				Proxies.common.playBlockPlaceSoundFX(Proxies.common.getRenderWorld(), pos, block);
+				Proxies.common.playBlockPlaceSoundFX(Proxies.common.getRenderWorld(), getPos(), state);
 			} else {
-				Proxies.common.playSoundFX(Proxies.common.getRenderWorld(), pos, soundFX.soundFile, soundFX.volume, soundFX.pitch);
+				Proxies.common.playSoundFX(Proxies.common.getRenderWorld(), getPosX(), getPosY(), getPosZ(), soundFX.soundFile, soundFX.volume, soundFX.pitch);
 			}
 		}
 	}
-
 }

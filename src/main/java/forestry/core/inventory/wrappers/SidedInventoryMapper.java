@@ -26,7 +26,7 @@ import net.minecraft.util.IChatComponent;
 public class SidedInventoryMapper implements ISidedInventory {
 
 	private final ISidedInventory inv;
-	private final int side;
+	private final EnumFacing side;
 	private boolean checkItems = true;
 
 	public SidedInventoryMapper(ISidedInventory inv, EnumFacing side) {
@@ -35,7 +35,7 @@ public class SidedInventoryMapper implements ISidedInventory {
 
 	public SidedInventoryMapper(ISidedInventory inv, EnumFacing side, boolean checkItems) {
 		this.inv = inv;
-		this.side = side.ordinal();
+		this.side = side;
 		this.checkItems = checkItems;
 	}
 
@@ -64,6 +64,11 @@ public class SidedInventoryMapper implements ISidedInventory {
 	}
 
 	@Override
+	public String getCommandSenderName() {
+		return inv.getCommandSenderName();
+	}
+
+	@Override
 	public int getInventoryStackLimit() {
 		return inv.getInventoryStackLimit();
 	}
@@ -79,15 +84,13 @@ public class SidedInventoryMapper implements ISidedInventory {
 	}
 
 	@Override
-	public void openInventory(EntityPlayer player) {
-		inv.openInventory(player);
+	public void openInventory(EntityPlayer entityplayer) {
+		inv.openInventory(entityplayer);
 	}
-	
-	
 
 	@Override
-	public void closeInventory(EntityPlayer player) {
-		inv.closeInventory(player);
+	public void closeInventory(EntityPlayer entityplayer) {
+		inv.closeInventory(entityplayer);
 	}
 
 	@Override
@@ -96,23 +99,28 @@ public class SidedInventoryMapper implements ISidedInventory {
 	}
 
 	@Override
+	public boolean hasCustomName() {
+		return inv.hasCustomName();
+	}
+
+	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		return !checkItems || inv.isItemValidForSlot(slot, stack);
 	}
-
+	
 	@Override
 	public int[] getSlotsForFace(EnumFacing side) {
 		return inv.getSlotsForFace(side);
 	}
 
 	@Override
-	public boolean canInsertItem(int slot, ItemStack stack, EnumFacing direction) {
-		return !checkItems || inv.canInsertItem(slot, stack, direction);
+	public boolean canInsertItem(int slot, ItemStack stack, EnumFacing s) {
+		return !checkItems || inv.canInsertItem(slot, stack, side);
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing direction) {
-		return !checkItems || inv.canExtractItem(slot, stack, direction);
+	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing s) {
+		return !checkItems || inv.canExtractItem(slot, stack, side);
 	}
 
 	@Override
@@ -127,22 +135,12 @@ public class SidedInventoryMapper implements ISidedInventory {
 
 	@Override
 	public int getFieldCount() {
-		return inv.getFieldCount();
+		return 0;
 	}
 
 	@Override
 	public void clear() {
 		inv.clear();
-	}
-
-	@Override
-	public String getCommandSenderName() {
-		return inv.getCommandSenderName();
-	}
-
-	@Override
-	public boolean hasCustomName() {
-		return inv.hasCustomName();
 	}
 
 	@Override

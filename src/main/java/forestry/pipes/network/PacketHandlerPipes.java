@@ -7,18 +7,19 @@
  ******************************************************************************/
 package forestry.pipes.network;
 
-import java.io.DataInputStream;
+import java.io.IOException;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import forestry.core.interfaces.IPacketHandler;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.ILocatedPacket;
+import forestry.core.network.IPacketHandler;
 import forestry.core.network.PacketCoordinates;
-import forestry.core.network.PacketIds;
+import forestry.core.network.PacketId;
 import forestry.core.network.PacketNBT;
-import forestry.core.network.PacketUpdate;
 import forestry.core.proxy.Proxies;
 import forestry.pipes.PipeItemsPropolis;
 import forestry.pipes.PipeLogicPropolis;
@@ -29,13 +30,8 @@ import buildcraft.transport.TileGenericPipe;
 
 public class PacketHandlerPipes implements IPacketHandler {
 
-	@SuppressWarnings("rawtypes")
-	private Pipe getPipe(World world, int x, int y, int z) {
-		TileEntity tile = world.getTileEntity(x, y, z);
-		if (tile == null) {
-			return null;
-		}
-
+	private static Pipe getPipe(World world, ILocatedPacket packet) {
+		TileEntity tile = packet.getTarget(world);
 		if (!(tile instanceof TileGenericPipe)) {
 			return null;
 		}
@@ -44,42 +40,39 @@ public class PacketHandlerPipes implements IPacketHandler {
 	}
 
 	@Override
-	public void onPacketData(int packetID, DataInputStream data, EntityPlayer player) {
+	public boolean onPacketData(PacketId packetID, DataInputStreamForestry data, EntityPlayer player) throws IOException {
 
-		try {
-			PacketUpdate packetU;
-			switch (packetID) {
-				// CLIENT
-				case PacketIds.PROP_SEND_FILTER_SET:
-					PacketNBT packetN = new PacketNBT();
-					packetN.readData(data);
-					onFilterSet(packetN);
-					break;
-
-				// SERVER
-				case PacketIds.PROP_REQUEST_FILTER_SET:
-					PacketCoordinates packetC = new PacketCoordinates();
-					packetC.readData(data);
-					onRequestFilterSet(player, packetC);
-					break;
-				case PacketIds.PROP_SEND_FILTER_CHANGE_TYPE:
-					packetU = new PacketUpdate();
-					packetU.readData(data);
-					onTypeFilterChange(player, packetU);
-					break;
-				case PacketIds.PROP_SEND_FILTER_CHANGE_GENOME:
-					packetU = new PacketUpdate();
-					packetU.readData(data);
-					onGenomeFilterChange(player, packetU);
-					break;
-
+		switch (packetID) {
+			// CLIENT
+			case PROP_SEND_FILTER_SET: {
+				PacketNBT packet = new PacketNBT(data);
+				onFilterSet(packet);
+				return true;
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
+
+			// SERVER
+			case PROP_REQUEST_FILTER_SET: {
+				PacketCoordinates packet = new PacketCoordinates(data);
+				onRequestFilterSet(player, packet);
+				return true;
+			}
+			case PROP_SEND_FILTER_CHANGE_TYPE: {
+				PacketTypeFilterChange packet = new PacketTypeFilterChange(data);
+				onTypeFilterChange(player, packet);
+				return true;
+			}
+			case PROP_SEND_FILTER_CHANGE_GENOME: {
+				PacketGenomeFilterChange packet = new PacketGenomeFilterChange(data);
+				onGenomeFilterChange(player, packet);
+				return true;
+			}
+
 		}
+
+		return false;
 	}
 
-	private void onFilterSet(PacketNBT packet) {
+	private static void onFilterSet(PacketNBT packet) {
 		Container container = Proxies.common.getClientInstance().thePlayer.openContainer;
 
 		if (container instanceof ContainerPropolisPipe) {
@@ -88,37 +81,34 @@ public class PacketHandlerPipes implements IPacketHandler {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	private void onTypeFilterChange(EntityPlayer player, PacketUpdate packet) {
+	private static void onTypeFilterChange(EntityPlayer player, PacketTypeFilterChange packet) {
 
-		Pipe pipe = getPipe(player.worldObj, packet.posX, packet.posY, packet.posZ);
+		Pipe pipe = getPipe(player.worldObj, packet);
 		if (pipe == null) {
 			return;
 		}
 
 		if (pipe instanceof PipeItemsPropolis) {
-			((PipeItemsPropolis) pipe).pipeLogic.handleTypeFilterChange(packet.payload);
+			((PipeItemsPropolis) pipe).pipeLogic.handleTypeFilterChange(packet);
 		}
 
 	}
 
-	@SuppressWarnings("rawtypes")
-	private void onGenomeFilterChange(EntityPlayer player, PacketUpdate packet) {
+	private static void onGenomeFilterChange(EntityPlayer player, PacketGenomeFilterChange packet) {
 
-		Pipe pipe = getPipe(player.worldObj, packet.posX, packet.posY, packet.posZ);
+		Pipe pipe = getPipe(player.worldObj, packet);
 		if (pipe == null) {
 			return;
 		}
 
 		if (pipe instanceof PipeItemsPropolis) {
-			((PipeItemsPropolis) pipe).pipeLogic.handleGenomeFilterChange(packet.payload);
+			((PipeItemsPropolis) pipe).pipeLogic.handleGenomeFilterChange(packet);
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	private void onRequestFilterSet(EntityPlayer player, PacketCoordinates packet) {
+	private static void onRequestFilterSet(EntityPlayer player, PacketCoordinates packet) {
 
-		Pipe pipe = getPipe(player.worldObj, packet.posX, packet.posY, packet.posZ);
+		Pipe pipe = getPipe(player.worldObj, packet);
 		if (pipe == null) {
 			return;
 		}

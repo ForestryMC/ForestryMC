@@ -42,11 +42,11 @@ public class FarmableGenericSapling implements IFarmable {
 			return false;
 		}
 
-		if (world.getBlockState(pos).getBlock() == sapling) {
+		IBlockState state = world.getBlockState(pos);
+		if (state.getBlock() == sapling) {
 			return true;
 		}
 
-		IBlockState state = world.getBlockState(pos);
 		if (saplingMeta >= 0) {
 			return state.getBlock().getMetaFromState(state) == saplingMeta;
 		} else {
@@ -61,6 +61,7 @@ public class FarmableGenericSapling implements IFarmable {
 		if (!block.isWood(world, pos)) {
 			return null;
 		}
+
 		IBlockState state = world.getBlockState(pos);
 		return new CropBlock(world, block, state.getBlock().getMetaFromState(state), new Vect(pos));
 	}
@@ -91,7 +92,7 @@ public class FarmableGenericSapling implements IFarmable {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return germling.copy().onItemUse(player, world, pos.down(), EnumFacing.UP, 0, 0, 0);
+		return germling.copy().onItemUse(player, world, new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ()), EnumFacing.DOWN, 0, 0, 0);
 	}
 
 }

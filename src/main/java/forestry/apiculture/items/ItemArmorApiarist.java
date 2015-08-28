@@ -10,18 +10,22 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import forestry.api.apiculture.IArmorApiarist;
-import forestry.api.core.IArmorNaturalist;
-import forestry.api.core.IModelObject;
-import forestry.api.core.Tabs;
-import forestry.core.config.Defaults;
-import forestry.core.config.ForestryItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
-public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArmorNaturalist, IModelObject {
+
+import forestry.api.apiculture.IArmorApiarist;
+import forestry.api.core.IArmorNaturalist;
+import forestry.api.core.Tabs;
+import forestry.core.config.Defaults;
+import forestry.core.config.ForestryItem;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StringUtil;
+
+public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArmorNaturalist {
 
 	public ItemArmorApiarist(int slot) {
 		super(ArmorMaterial.LEATHER, 0, slot);
@@ -58,52 +62,29 @@ public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArm
 		return armorType == 0;
 	}
 
-	public static boolean wearsHelmet(EntityPlayer player, String cause, boolean protect) {
-		ItemStack armorItem = player.inventory.armorInventory[3];
-		return armorItem != null && armorItem.getItem() instanceof IArmorApiarist
-				&& ((IArmorApiarist) armorItem.getItem()).protectPlayer(player, armorItem, cause, protect);
-	}
+	private static boolean isArmorApiarist(ItemStack itemStack, EntityPlayer player, String cause, boolean protect) {
+		if (itemStack == null) {
+			return false;
+		}
 
-	public static boolean wearsChest(EntityPlayer player, String cause, boolean protect) {
-		ItemStack armorItem = player.inventory.armorInventory[2];
-		return armorItem != null && armorItem.getItem() instanceof IArmorApiarist
-				&& ((IArmorApiarist) armorItem.getItem()).protectPlayer(player, armorItem, cause, protect);
-	}
+		Item item = itemStack.getItem();
+		if (!(item instanceof IArmorApiarist)) {
+			return false;
+		}
 
-	public static boolean wearsLegs(EntityPlayer player, String cause, boolean protect) {
-		ItemStack armorItem = player.inventory.armorInventory[1];
-		return armorItem != null && armorItem.getItem() instanceof IArmorApiarist
-				&& ((IArmorApiarist) armorItem.getItem()).protectPlayer(player, armorItem, cause, protect);
-	}
-
-	public static boolean wearsBoots(EntityPlayer player, String cause, boolean protect) {
-		ItemStack armorItem = player.inventory.armorInventory[0];
-		return armorItem != null && armorItem.getItem() instanceof IArmorApiarist
-				&& ((IArmorApiarist) armorItem.getItem()).protectPlayer(player, armorItem, cause, protect);
+		return ((IArmorApiarist) item).protectPlayer(player, itemStack, cause, protect);
 	}
 
 	public static int wearsItems(EntityPlayer player, String cause, boolean protect) {
 		int count = 0;
 
-		if (wearsHelmet(player, cause, protect)) {
-			count++;
-		}
-		if (wearsChest(player, cause, protect)) {
-			count++;
-		}
-		if (wearsLegs(player, cause, protect)) {
-			count++;
-		}
-		if (wearsBoots(player, cause, protect)) {
-			count++;
+		for (ItemStack armorItem : player.inventory.armorInventory) {
+			if (isArmorApiarist(armorItem, player, cause, protect)) {
+				count++;
+			}
 		}
 
 		return count;
-	}
-
-	@Override
-	public ModelType getModelType() {
-		return ModelType.DEFAULT;
 	}
 
 }

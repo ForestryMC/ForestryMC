@@ -10,14 +10,16 @@
  ******************************************************************************/
 package forestry.farming.triggers;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
-import forestry.api.core.ITileStructure;
+import forestry.api.farming.IFarmInventory;
+import forestry.core.inventory.InvTools;
 import forestry.core.triggers.Trigger;
-import forestry.farming.gadgets.TileFarmPlain;
-import forestry.farming.gadgets.TileHatch;
+import forestry.farming.multiblock.IFarmController;
+import forestry.farming.multiblock.TileHatch;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
@@ -61,17 +63,22 @@ public class TriggerLowSoil extends Trigger {
 			return false;
 		}
 
-		ITileStructure central = ((TileHatch) tile).getCentralTE();
-		if (central == null || !(central instanceof TileFarmPlain)) {
-			return false;
-		}
+		TileHatch tileHatch = (TileHatch) tile;
+		IFarmController farmController = tileHatch.getFarmController();
+		IFarmInventory farmInventory = farmController.getFarmInventory();
 
 		if (parameter == null || parameter.getItemStack() == null) {
-			return !((TileFarmPlain) central).hasResourcesAmount(threshold);
+			IInventory resourcesInventory = farmInventory.getResourcesInventory();
+			return InvTools.containsPercent(resourcesInventory, threshold);
 		} else {
 			ItemStack filter = parameter.getItemStack().copy();
 			filter.stackSize = threshold;
-			return !((TileFarmPlain) central).hasResources(new ItemStack[]{filter});
+			return farmInventory.hasResources(new ItemStack[]{filter});
 		}
+	}
+
+	@Override
+	public int getSheetLocation() {
+		return 0;
 	}
 }

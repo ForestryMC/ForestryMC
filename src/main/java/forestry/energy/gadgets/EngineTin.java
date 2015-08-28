@@ -20,18 +20,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
 import forestry.core.EnumErrorCode;
 import forestry.core.TemperatureState;
+import forestry.core.circuits.ISocketable;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.gadgets.Engine;
-import forestry.core.gadgets.TileBase;
-import forestry.core.interfaces.ISocketable;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
 import forestry.core.network.GuiId;
-import forestry.core.utils.DelayTimer;
-import forestry.core.utils.EnumTankLevel;
 import forestry.plugins.PluginIC2;
 
 import ic2.api.energy.prefab.BasicSink;
@@ -44,36 +42,25 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		public int euForCycle;
 		public int rfPerCycle;
 		public int euStorage;
-		public int euMaxAccept = 512;
 
-		public EuConfig(int euForCycle, int rfPerCycle, int euStorage) {
-			this.euForCycle = euForCycle;
-			this.rfPerCycle = rfPerCycle;
-			this.euStorage = euStorage;
+		public EuConfig() {
+			this.euForCycle = Defaults.ENGINE_TIN_EU_FOR_CYCLE;
+			this.rfPerCycle = Defaults.ENGINE_TIN_ENERGY_PER_CYCLE;
+			this.euStorage = Defaults.ENGINE_TIN_MAX_EU_STORED;
 		}
 	}
 
 	public static final short SLOT_BATTERY = 0;
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
-	private final EuConfig euConfig = new EuConfig(Defaults.ENGINE_TIN_EU_FOR_CYCLE, Defaults.ENGINE_TIN_ENERGY_PER_CYCLE, Defaults.ENGINE_TIN_MAX_EU_STORED);
+	private final EuConfig euConfig = new EuConfig();
 
-	protected BasicSink ic2EnergySink;
-
-	private final DelayTimer delayUpdateTimer = new DelayTimer();
+	private BasicSink ic2EnergySink;
 
 	public EngineTin() {
-		super(Defaults.ENGINE_TIN_HEAT_MAX, 100000, 4000);
+		super(Defaults.ENGINE_TIN_HEAT_MAX, 100000);
 		setHints(Config.hints.get("engine.tin"));
 
-		setInternalInventory(new TileInventoryAdapter(this, 1, "electrical") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				if (slotIndex == SLOT_BATTERY) {
-					return ElectricItem.manager.getCharge(itemStack) > 0;
-				}
-				return false;
-			}
-		});
+		setInternalInventory(new EngineTinInventoryAdapter(this));
 
 		if (PluginIC2.instance.isAvailable()) {
 			ic2EnergySink = new BasicSink(this, euConfig.euStorage, 3);
@@ -81,7 +68,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.EngineTinGUI.ordinal(), player.worldObj, pos.getX(), pos.getY(), pos.getZ());
 	}
 
@@ -132,7 +119,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		super.invalidate();
 	}
 
-	// / HEAT MANAGMENT
+	// / HEAT MANAGEMENT
 	@Override
 	public int dissipateHeat() {
 		if (heat <= 0) {
@@ -141,7 +128,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 
 		int loss = 0;
 
-		if (!isBurning() || !isActivated()) {
+		if (!isBurning() || !isRedstoneActivated()) {
 			loss += 1;
 		}
 
@@ -158,9 +145,9 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	public int generateHeat() {
 
 		int gain = 0;
-		if (isActivated() && isBurning()) {
+		if (isRedstoneActivated() && isBurning()) {
 			gain++;
-			if (((double) energyManager.getTotalEnergyStored() / (double) maxEnergy) > 0.5) {
+			if (((double) energyManager.getTotalEnergyStored() / (double) energyManager.getMaxEnergyStored()) > 0.5) {
 				gain++;
 			}
 		}
@@ -172,9 +159,10 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	// / WORK
 	@Override
 	public void updateServerSide() {
+		IErrorLogic errorLogic = getErrorLogic();
+
 		// No work to be done if IC2 is unavailable.
-		if (ic2EnergySink == null) {
-			setErrorState(EnumErrorCode.NOENERGYNET);
+		if (errorLogic.setCondition(ic2EnergySink == null, EnumErrorCode.NOENERGYNET)) {
 			return;
 		}
 
@@ -183,7 +171,6 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		super.updateServerSide();
 
 		if (forceCooldown) {
-			setErrorState(EnumErrorCode.FORCEDCOOLDOWN);
 			return;
 		}
 
@@ -192,15 +179,12 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		}
 
 		// Updating of gui delayed to prevent it from going crazy
-		if (!delayUpdateTimer.delayPassed(worldObj, 80)) {
+		if (!updateOnInterval(80)) {
 			return;
 		}
 
-		if (!ic2EnergySink.canUseEnergy(euConfig.euForCycle)) {
-			setErrorState(EnumErrorCode.NOFUEL);
-		} else {
-			setErrorState(EnumErrorCode.OK);
-		}
+		boolean canUseEnergy = ic2EnergySink.canUseEnergy(euConfig.euForCycle);
+		errorLogic.setCondition(!canUseEnergy, EnumErrorCode.NOFUEL);
 	}
 
 	@Override
@@ -208,7 +192,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 
 		currentOutput = 0;
 
-		if (!isActivated()) {
+		if (!isRedstoneActivated()) {
 			return;
 		}
 
@@ -220,7 +204,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	}
 
 	private void replenishFromBattery(int slot) {
-		if (!isActivated()) {
+		if (!isRedstoneActivated()) {
 			return;
 		}
 
@@ -229,7 +213,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 
 	// / STATE INFORMATION
 	@Override
-	public boolean isBurning() {
+	protected boolean isBurning() {
 		return mayBurn() && ic2EnergySink != null && ic2EnergySink.canUseEnergy(euConfig.euForCycle);
 	}
 
@@ -239,21 +223,6 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		}
 
 		return Math.min(i, (int) (ic2EnergySink.getEnergyStored() * i) / ic2EnergySink.getCapacity());
-	}
-
-	public EnumTankLevel rateLevel(int scaled) {
-
-		if (scaled < 5) {
-			return EnumTankLevel.EMPTY;
-		} else if (scaled < 30) {
-			return EnumTankLevel.LOW;
-		} else if (scaled < 60) {
-			return EnumTankLevel.MEDIUM;
-		} else if (scaled < 90) {
-			return EnumTankLevel.HIGH;
-		} else {
-			return EnumTankLevel.MAXIMUM;
-		}
 	}
 
 	// / SMP GUI
@@ -266,7 +235,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 				currentOutput = j;
 				break;
 			case 1:
-				energyManager.fromPacketInt(j);
+				energyManager.fromGuiInt(j);
 				break;
 			case 2:
 				heat = j;
@@ -283,7 +252,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 	@Override
 	public void sendGUINetworkData(Container containerEngine, ICrafting iCrafting) {
 		iCrafting.sendProgressBarUpdate(containerEngine, 0, currentOutput);
-		iCrafting.sendProgressBarUpdate(containerEngine, 1, energyManager.toPacketInt());
+		iCrafting.sendProgressBarUpdate(containerEngine, 1, energyManager.toGuiInt());
 		iCrafting.sendProgressBarUpdate(containerEngine, 2, heat);
 		if (ic2EnergySink != null) {
 			iCrafting.sendProgressBarUpdate(containerEngine, 3, (short) ic2EnergySink.getEnergyStored());
@@ -301,7 +270,7 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		}
 	}
 
-	/* ISOCKETABLE */
+	/* ISocketable */
 	@Override
 	public int getSocketCount() {
 		return sockets.getSizeInventory();
@@ -340,4 +309,17 @@ public class EngineTin extends Engine implements ISocketable, IInventory {
 		}
 	}
 
+	private static class EngineTinInventoryAdapter extends TileInventoryAdapter<EngineTin> {
+		public EngineTinInventoryAdapter(EngineTin engineTin) {
+			super(engineTin, 1, "electrical");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_BATTERY) {
+				return ElectricItem.manager.getCharge(itemStack) > 0;
+			}
+			return false;
+		}
+	}
 }

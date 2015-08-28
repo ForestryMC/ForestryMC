@@ -22,10 +22,9 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.api.arboriculture.ITree;
 import forestry.arboriculture.gadgets.ForestryBlockLeaves;
 import forestry.arboriculture.gadgets.TileLeaves;
-import forestry.arboriculture.genetics.Tree;
+import forestry.arboriculture.genetics.TreeHelper;
 import forestry.arboriculture.items.ItemLeavesBlock;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.OverlayRenderingHandler;
@@ -46,7 +45,7 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 
 		TileLeaves tile = ForestryBlockLeaves.getLeafTile(world, x, y, z);
-		if (tile == null || tile.getTree() == null) {
+		if (tile == null) {
 			return false;
 		}
 
@@ -55,9 +54,9 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 
 		// Render overlay for fruit leaves.
 		IIcon fruitIcon = tile.getFruitTexture();
-		int fruitColor = tile.getFruitColour();
 
 		if (fruitIcon != null) {
+			int fruitColor = tile.getFruitColour();
 			renderFruitOverlay(world, block, x, y, z, renderer, fruitIcon, fruitColor);
 		}
 
@@ -74,7 +73,7 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 		return PluginArboriculture.modelIdLeaves;
 	}
 
-	private boolean renderFruitOverlay(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon texture, int multiplier) {
+	private static boolean renderFruitOverlay(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon texture, int multiplier) {
 
 		float mR = (multiplier >> 16 & 255) / 255.0F;
 		float mG = (multiplier >> 8 & 255) / 255.0F;
@@ -89,7 +88,7 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 		return renderFruitOverlayWithColorMultiplier(world, block, x, y, z, mR, mG, mB, renderer, texture);
 	}
 
-	private boolean renderFruitOverlayWithColorMultiplier(IBlockAccess world, Block block, int x, int y, int z, float r, float g, float b,
+	private static boolean renderFruitOverlayWithColorMultiplier(IBlockAccess world, Block block, int x, int y, int z, float r, float g, float b,
 			RenderBlocks renderer, IIcon texture) {
 
 		int mixedBrightness = block.getMixedBrightnessForBlock(world, x, y, z);
@@ -132,47 +131,41 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 		switch (type) {
 			case ENTITY:
-				renderLeafBlock((RenderBlocks) data[0], item, 0f, 0f, 0f);
+				renderItem((RenderBlocks) data[0], item, 0f, 0f, 0f);
 				break;
 			case EQUIPPED:
 			case EQUIPPED_FIRST_PERSON:
-				renderLeafBlock((RenderBlocks) data[0], item, 0.5f, 0.5f, 0.5f);
+				renderItem((RenderBlocks) data[0], item, 0.5f, 0.5f, 0.5f);
 				break;
 			case INVENTORY:
-				renderLeafBlock((RenderBlocks) data[0], item, 0f, 0f, 0f);
+				renderItem((RenderBlocks) data[0], item, 0f, 0f, 0f);
 				break;
 			default:
 		}
 	}
 
-	private ITree getTree(ItemStack itemStack) {
-		return new Tree(itemStack.getTagCompound());
-	}
-
-	private void renderLeafBlock(RenderBlocks renderer, ItemStack itemStack, float x, float y, float z) {
+	private static void renderItem(RenderBlocks renderer, ItemStack itemStack, float x, float y, float z) {
 		Tessellator tessellator = Tessellator.instance;
 		Block block = StackUtils.getBlock(itemStack);
 
-		if (!(itemStack.getItem() instanceof ItemLeavesBlock) || !itemStack.hasTagCompound()) {
+		if (!(itemStack.getItem() instanceof ItemLeavesBlock) || block == null) {
 			return;
 		}
 
-		ITree tree = getTree(itemStack);
-		if (tree == null) {
-			return;
+		TileLeaves leaves = new TileLeaves();
+		if (itemStack.hasTagCompound()) {
+			leaves.readFromNBT(itemStack.getTagCompound());
+		} else {
+			leaves.setTree(TreeHelper.treeTemplates.get(0));
 		}
 
 		GL11.glEnable(GL11.GL_BLEND);
-
-		TileLeaves leaves = new TileLeaves();
-		leaves.setTree(tree);
-		leaves.setDecorative();
 
 		IIcon leavesIcon = leaves.getIcon(Proxies.render.fancyGraphicsEnabled());
 		if (leavesIcon == null) {
 			return;
 		}
-		int color = leaves.determineFoliageColour();
+		int color = leaves.getFoliageColour(Proxies.common.getPlayer());
 
 		float r1 = (float) (color >> 16 & 255) / 255.0F;
 		float g1 = (float) (color >> 8 & 255) / 255.0F;
@@ -218,11 +211,11 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 			return;
 		}
 
-		int fruitColor = leaves.getFruitColour();
 		IIcon fruitTexture = leaves.getFruitTexture();
 		if (fruitTexture == null) {
 			return;
 		}
+		int fruitColor = leaves.getFruitColour();
 
 		float r2 = (float) (fruitColor >> 16 & 255) / 255.0F;
 		float g2 = (float) (fruitColor >> 8 & 255) / 255.0F;

@@ -27,7 +27,7 @@ public class SlotCraftMatrix extends SlotForestry {
 		setPhantom();
 		this.eventHandler = container;
 		this.slot = i;
-		stackLimit = 1;
+		setStackLimit(1);
 	}
 
 	@Override

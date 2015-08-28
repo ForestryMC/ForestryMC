@@ -10,13 +10,11 @@ package forestry.plugins;
 import java.util.EnumSet;
 
 import net.minecraft.item.Item;
-
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.IGuiHandler;
-
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
-import forestry.core.interfaces.IPacketHandler;
+import forestry.core.network.IPacketHandler;
 import forestry.core.proxy.Proxies;
 import forestry.pipes.GuiHandlerPipes;
 import forestry.pipes.network.PacketHandlerPipes;
@@ -33,7 +31,8 @@ public class PluginPropolisPipe extends ForestryPlugin {
 
 	@Override
 	public boolean isAvailable() {
-		return Proxies.common.isModLoaded("BuildCraft|Transport");
+		return Proxies.common.isModLoaded("BuildCraft|Transport") &&
+				Proxies.common.isModLoaded("BuildCraft|Core", "[6.0, 7.0)");
 	}
 
 	@Override
@@ -62,7 +61,7 @@ public class PluginPropolisPipe extends ForestryPlugin {
 		}
 
 		proxy.initPropolisPipe();
-		proxy.registerCraftingPropolis(ForestryItem.propolis.getItemStack());
+		ProxyPipes.registerCraftingPropolis(ForestryItem.propolis.getItemStack());
 	}
 
 	@Override

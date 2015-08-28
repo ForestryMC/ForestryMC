@@ -24,10 +24,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.stats.StatList;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
@@ -38,17 +35,17 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.IModelObject;
-import forestry.api.core.IVariantObject;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.core.CreativeTabForestry;
 import forestry.core.fluids.BlockForestryFluid;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 
-public class ItemLiquidContainer extends Item implements IModelObject{
+public class ItemLiquidContainer extends Item implements IModelRegister{
 
-	public static enum EnumContainerType {
+	public enum EnumContainerType {
 		GLASS, JAR, CAN, CAPSULE, REFRACTORY, BUCKET
 	}
 
@@ -80,7 +77,7 @@ public class ItemLiquidContainer extends Item implements IModelObject{
 		return buckets.get(contents);
 	}
 
-	private int getMatchingSlot(EntityPlayer player, ItemStack stack) {
+	private static int getMatchingSlot(EntityPlayer player, ItemStack stack) {
 
 		for (int slot = 0; slot < player.inventory.mainInventory.length; slot++) {
 			ItemStack slotStack = player.inventory.getStackInSlot(slot);
@@ -102,14 +99,14 @@ public class ItemLiquidContainer extends Item implements IModelObject{
 		return -1;
 	}
 	
-    public ItemStack onItemUseFinish(ItemStack itemstack, World world, EntityPlayer entityplayer)
-    {
+	@Override
+	public ItemStack onItemUseFinish(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 		if (!isDrink) {
 			return itemstack;
 		}
 
 		itemstack.stackSize--;
-		entityplayer.getFoodStats().addStats(this.getHealAmount(), this.getSaturationModifier());
+		entityplayer.getFoodStats().addStats(healAmount, saturationModifier);
 		world.playSoundAtEntity(entityplayer, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
 		/*
 		 * if (!world.isRemote && potionId > 0 && world.rand.nextFloat() < potionEffectProbability) entityplayer.addPotionEffect(new PotionEffect(potionId,
@@ -117,7 +114,7 @@ public class ItemLiquidContainer extends Item implements IModelObject{
 		 */
 
 		return itemstack;
-    }
+	}
 
 	@Override
 	public int getMaxItemUseDuration(ItemStack itemstack) {
@@ -224,7 +221,7 @@ public class ItemLiquidContainer extends Item implements IModelObject{
 		}
 
 		int x = movingobjectposition.getBlockPos().getX();
-		int y = movingobjectposition.getBlockPos().getY();
+		int y = movingobjectposition.getBlockPos().getX();
 		int z = movingobjectposition.getBlockPos().getZ();
 
 		switch (movingobjectposition.sideHit) {
@@ -248,11 +245,12 @@ public class ItemLiquidContainer extends Item implements IModelObject{
 				break;
 		}
 
-		if (!player.canPlayerEdit(new BlockPos(x, y, z), movingobjectposition.sideHit, itemstack)) {
+		BlockPos pos = new BlockPos(x, y, z);
+		if (!player.canPlayerEdit(pos, movingobjectposition.sideHit, itemstack)) {
 			return itemstack;
 		}
 
-		if (this.tryPlaceLiquidAtPosition(world, new BlockPos(x, y, z)) && !player.capabilities.isCreativeMode) {
+		if (this.tryPlaceLiquidAtPosition(world, pos) && !player.capabilities.isCreativeMode) {
 			return new ItemStack(Items.bucket);
 		}
 
@@ -272,7 +270,7 @@ public class ItemLiquidContainer extends Item implements IModelObject{
 				// Can't put down liquids in the nether.
 				// Explode if it's flammable, evaporate otherwise.
 				if (world.provider.doesWaterVaporize() && this.contents != Blocks.flowing_lava) {
-					int flammability = contents.getFlammability(world, pos, EnumFacing.DOWN);
+					int flammability = contents.getFlammability(world, pos, null);
 					if (contents instanceof BlockForestryFluid && flammability > 0) {
 						// Explosion size is determined by flammability, up to size 4.
 						float explosionSize = 4F * flammability / 300F;
@@ -299,15 +297,6 @@ public class ItemLiquidContainer extends Item implements IModelObject{
 		}
 	}
 
-
-	public int getHealAmount() {
-		return healAmount;
-	}
-
-	public float getSaturationModifier() {
-		return saturationModifier;
-	}
-
 	public ItemLiquidContainer setDrink(int healAmount, float saturationModifier) {
 		isDrink = true;
 		this.healAmount = healAmount;
@@ -324,6 +313,14 @@ public class ItemLiquidContainer extends Item implements IModelObject{
 		return this;
 	}
 
+	/* ICONS */
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0);
+	}
+
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int j) {
 		if (j > 0 && color != null) {
@@ -335,10 +332,5 @@ public class ItemLiquidContainer extends Item implements IModelObject{
 
 	public EnumContainerType getType() {
 		return type;
-	}
-
-	@Override
-	public ModelType getModelType() {
-		return ModelType.DEFAULT;
 	}
 }

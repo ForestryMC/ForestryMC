@@ -12,115 +12,26 @@ package forestry.arboriculture.gadgets;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.Tabs;
-import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodType;
 
-public class BlockPlanks extends Block implements IWoodTyped {
+public class BlockPlanks extends BlockWood {
 
-	public static enum PlankCat {
-		CAT0, CAT1
-	}
-
-	public static final int planksPerCat = 16;
-	protected final PlankCat cat;
-
-	public BlockPlanks(PlankCat cat) {
-		this(cat, Material.wood);
-	}
-
-	protected BlockPlanks(PlankCat cat, Material material) {
-		super(material);
-		this.cat = cat;
+	public BlockPlanks(boolean fireproof) {
+		super("planks", fireproof, "planks");
 		setResistance(5.0F);
-		setStepSound(soundTypeWood);
-		setCreativeTab(Tabs.tabArboriculture);
+		setHarvestLevel("axe", 0);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		int totalWoods = WoodType.values().length;
-		int count = Math.min(totalWoods - (cat.ordinal() * planksPerCat), planksPerCat);
-		for (int i = 0; i < count; i++) {
-			itemList.add(new ItemStack(this, 1, i));
+	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List list) {
+		for (WoodType woodType : WoodType.VALUES) {
+			list.add(woodType.getPlanks(isFireproof()));
 		}
 	}
 
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerBlockIcons(IIconRegister register) {
-		WoodType.registerIcons(register);
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIcon(int side, int meta) {
-		WoodType woodType = getWoodType(meta);
-		if (woodType == null) {
-			return null;
-		}
-		return woodType.getPlankIcon();
-	}
-
-	@Override
-	public int damageDropped(int meta) {
-		return meta;
-	}
-
-	/* PROPERTIES */
-	@Override
-	public float getBlockHardness(World world, int x, int y, int z) {
-		return getWoodType(world.getBlockMetadata(x, y, z)).getHardness();
-	}
-
-	@Override
-	public boolean isWood(IBlockAccess world, int x, int y, int z) {
-		return true;
-	}
-
-	@Override
-	public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
-		return 20;
-	}
-
-	@Override
-	public boolean isFlammable(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
-		return true;
-	}
-
-	@Override
-	public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
-		return 5;
-	}
-
-	@Override
-	public WoodType getWoodType(int meta) {
-		int woodOrdinal = cat.ordinal() * planksPerCat + meta;
-		if (woodOrdinal < WoodType.VALUES.length) {
-			return WoodType.VALUES[woodOrdinal];
-		} else {
-			return null;
-		}
-	}
-
-	@Override
-	public String getBlockKind() {
-		return "planks";
-	}
 }

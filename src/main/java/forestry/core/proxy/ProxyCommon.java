@@ -24,6 +24,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.potion.Potion;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
@@ -33,6 +34,7 @@ import net.minecraft.world.WorldServer;
 
 import com.mojang.authlib.GameProfile;
 
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.API;
@@ -53,9 +55,10 @@ import forestry.core.WorldGenerator;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
+import forestry.core.multiblock.MultiblockServerTickHandler;
 import forestry.core.network.PacketCoordinates;
 import forestry.core.network.PacketFXSignal;
-import forestry.core.network.PacketIds;
+import forestry.core.network.PacketId;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginManager;
 
@@ -66,7 +69,11 @@ public class ProxyCommon {
 	}
 
 	public void registerTickHandlers(WorldGenerator worldGenerator) {
-		new TickHandlerCoreServer(worldGenerator);
+		TickHandlerCoreServer tickHandlerCoreServer = new TickHandlerCoreServer(worldGenerator);
+		FMLCommonHandler.instance().bus().register(tickHandlerCoreServer);
+		MinecraftForge.EVENT_BUS.register(tickHandlerCoreServer);
+
+		FMLCommonHandler.instance().bus().register(new MultiblockServerTickHandler());
 	}
 
 	public void registerBlock(Block block, Class<? extends ItemBlock> itemClass) {
@@ -80,6 +87,17 @@ public class ProxyCommon {
 		GameRegistry.registerItem(item, StringUtil.cleanItemName(item));
 	}
 
+
+	/**
+	 * As addRecipe, except that the recipe is injected into the front of the
+	 * crafting manager to avoid certain generic collisions. Notably, all
+	 * Forestry wood crafting into oak stairs & slabs.
+	 */
+	@SuppressWarnings("unchecked")
+	public void addPriorityRecipe(IRecipe recipe) {
+		CraftingManager.getInstance().getRecipeList().add(0, recipe);
+	}
+
 	/**
 	 * As addRecipe, except that the recipe is injected into the front of the
 	 * crafting manager to avoid certain generic collisions. Notably, all
@@ -88,7 +106,7 @@ public class ProxyCommon {
 	@SuppressWarnings("unchecked")
 	public void addPriorityRecipe(ItemStack itemstack, Object... obj) {
 		cleanRecipe(obj);
-		CraftingManager.getInstance().getRecipeList().add(0, new ShapedOreRecipe(itemstack, obj));
+		addPriorityRecipe(new ShapedOreRecipe(itemstack, obj));
 	}
 
 	/**
@@ -99,7 +117,7 @@ public class ProxyCommon {
 	@SuppressWarnings("unchecked")
 	public void addPriorityShapelessRecipe(ItemStack itemstack, Object... obj) {
 		cleanRecipe(obj);
-		CraftingManager.getInstance().getRecipeList().add(0, new ShapelessOreRecipe(itemstack, obj));
+		addPriorityRecipe(new ShapelessOreRecipe(itemstack, obj));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -144,7 +162,7 @@ public class ProxyCommon {
 
 	public void setHabitatLocatorCoordinates(Entity player, BlockPos pos) {
 		if (pos != null) {
-			Forestry.packetHandler.sendPacket(new PacketCoordinates(PacketIds.HABITAT_BIOME_POINTER, pos).getPacket(), (EntityPlayerMP) player);
+			Forestry.packetHandler.sendPacket(new PacketCoordinates(PacketId.HABITAT_BIOME_POINTER, pos).getPacket(), (EntityPlayerMP) player);
 		}
 	}
 
@@ -197,48 +215,49 @@ public class ProxyCommon {
 		return null;
 	}
 
-	public boolean setBlockWithNotify(World world, BlockPos pos, Block block) {
-		return world.setBlockState(pos, block.getStateFromMeta(0), Defaults.FLAG_BLOCK_SYNCH);
+	public boolean setBlockStateWithNotify(World world, BlockPos pos, Block block) {
+		return world.setBlockState(pos, block.getDefaultState(), Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
 	}
 
-	public void playSoundFX(World world, BlockPos pos, Block block) {
-		Proxies.net.sendNetworkPacket(new PacketFXSignal(PacketFXSignal.SoundFXType.LEAF, pos, block, 0), pos);
+	public void playSoundFX(World world, BlockPos pos, IBlockState state) {
+		Proxies.net.sendNetworkPacket(new PacketFXSignal(PacketFXSignal.SoundFXType.LEAF, pos, state), world);
 	}
 
-	public void playSoundFX(World world, BlockPos pos, String sound, float volume, float pitch) {
+	public void playSoundFX(World world, int x, int y, int z, String sound, float volume, float pitch) {
 	}
 
-	public void addEntityBiodustFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
+	public void addEntitySwarmFX(World world, double d1, double d2, double d3) {
 	}
 
-	public void addEntitySwarmFX(World world, double d1, double d2, double d3, float f1, float f2, float f3) {
+	public void addEntityExplodeFX(World world, double d1, double d2, double d3) {
 	}
 
-	public void addEntityExplodeFX(World world, double d1, double d2, double d3, double f1, double f2, double f3) {
+	public void addEntitySnowFX(World world, double d1, double d2, double d3) {
 	}
 
-	public boolean needsTagCompoundSynched(Item item) {
-		return item.getShareTag();
+	public void addEntityIgnitionFX(World world, double d1, double d2, double d3) {
 	}
 
-	public void addBlockDestroyEffects(World world, BlockPos pos, Block block, int i) {
-		sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.BLOCK_DESTROY, world, pos, block, i);
+	public void addEntityPotionFX(World world, double d1, double d2, double d3, int color) {
 	}
 
-	public void addBlockPlaceEffects(World world, BlockPos pos, Block block, int i) {
-		sendFXSignal(PacketFXSignal.VisualFXType.NONE, PacketFXSignal.SoundFXType.BLOCK_PLACE, world, pos, block, i);
+	public void addBlockDestroyEffects(World world, BlockPos pos, IBlockState state) {
+		sendFXSignal(PacketFXSignal.VisualFXType.BLOCK_DESTROY, PacketFXSignal.SoundFXType.BLOCK_DESTROY, world, pos, state);
 	}
 
-	public void playBlockBreakSoundFX(World world, BlockPos pos, Block block) {
+	public void addBlockPlaceEffects(World world, BlockPos pos, IBlockState state) {
+		sendFXSignal(PacketFXSignal.VisualFXType.NONE, PacketFXSignal.SoundFXType.BLOCK_PLACE, world, pos, state);
 	}
 
-	public void playBlockPlaceSoundFX(World world, BlockPos pos, Block block) {
+	public void playBlockBreakSoundFX(World world, BlockPos pos, IBlockState state) {
 	}
 
-	public void sendFXSignal(PacketFXSignal.VisualFXType visualFX, PacketFXSignal.SoundFXType soundFX, World world, BlockPos pos,
-			Block block, int i) {
+	public void playBlockPlaceSoundFX(World world, BlockPos pos, IBlockState state) {
+	}
+
+	public void sendFXSignal(PacketFXSignal.VisualFXType visualFX, PacketFXSignal.SoundFXType soundFX, World world, BlockPos pos, IBlockState state) {
 		if (Proxies.common.isSimulating(world)) {
-			Proxies.net.sendNetworkPacket(new PacketFXSignal(visualFX, soundFX, pos, block, i), pos);
+			Proxies.net.sendNetworkPacket(new PacketFXSignal(visualFX, soundFX, pos, state), world);
 		}
 	}
 
@@ -252,14 +271,6 @@ public class ProxyCommon {
 
 	public Minecraft getClientInstance() {
 		return FMLClientHandler.instance().getClient();
-	}
-
-	public int getBlockModelIdEngine() {
-		return 0;
-	}
-
-	public void closeGUI(EntityPlayer player) {
-		player.closeScreen();
 	}
 
 	/* DEPENDENCY HANDLING */

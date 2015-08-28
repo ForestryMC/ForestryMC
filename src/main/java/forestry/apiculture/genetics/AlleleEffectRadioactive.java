@@ -18,7 +18,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
@@ -26,37 +25,33 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.gadgets.BlockAlveary;
-import forestry.apiculture.gadgets.TileAlveary;
 import forestry.apiculture.items.ItemArmorApiarist;
+import forestry.apiculture.multiblock.TileAlveary;
 import forestry.core.utils.DamageSourceForestry;
 import forestry.core.vect.Vect;
 
 public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 
-	public static final DamageSource damageSourceBeeRadioactive = new DamageSourceForestry("bee.radioactive");
+	private static final DamageSource damageSourceBeeRadioactive = new DamageSourceForestry("bee.radioactive");
 
-	public AlleleEffectRadioactive(String uid) {
-		super(uid, "radioactive", true, 40, false, true);
+	public AlleleEffectRadioactive() {
+		super("radioactive", true, 40, false, true);
 	}
 
 	@Override
-	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
 		World world = housing.getWorld();
 
-		if (isHalted(storedData, housing)) {
-			return storedData;
-		}
-
 		int[] areaAr = genome.getTerritory();
-		Vect area = new Vect(areaAr[0] * 2, areaAr[1] * 2, areaAr[2] * 2);
-		Vect offset = new Vect(-Math.round(area.x / 2), -Math.round(area.y / 2), -Math.round(area.z / 2));
+		Vect area = new Vect(areaAr).multiply(2);
+		Vect offset = area.multiply(-1 / 2.0f);
 
 		// Radioactivity hurts players and mobs
-		Vect min = new Vect(housing.getCoords().getX() + offset.x, housing.getCoords().getY() + offset.y, housing.getCoords().getZ() + offset.z);
-		Vect max = new Vect(housing.getCoords().getX() + offset.x + area.x, housing.getCoords().getY() + offset.y + area.y, housing.getCoords().getZ() + offset.z + area.z);
+		Vect min = new Vect(housing.getPos()).add(offset);
+		Vect max = min.add(area);
 
-		AxisAlignedBB hurtBox = AxisAlignedBB.fromBounds(min.x, min.y, min.z, max.x, max.y, max.z);
+		AxisAlignedBB hurtBox = AxisAlignedBB.fromBounds(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
 
 		@SuppressWarnings("rawtypes")
 		List list = housing.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, hurtBox);
@@ -90,31 +85,32 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 		// Radioactivity destroys environment
 		for (int i = 0; i < 20; i++) {
 
-			Vect randomPos = new Vect(rand.nextInt(area.x), rand.nextInt(area.y), rand.nextInt(area.z));
+			Vect randomPos = Vect.getRandomPositionInArea(rand, area);
 
-			Vect posBlock = randomPos.add(new Vect(housing.getCoords().getX(), housing.getCoords().getY(), housing.getCoords().getZ()));
+			Vect posHousing = new Vect(housing.getPos());
+			Vect posBlock = randomPos.add(posHousing);
 			posBlock = posBlock.add(offset);
 
-			if (posBlock.y <= 1 || posBlock.y >= housing.getWorld().getActualHeight()) {
+			if (posBlock.getY() <= 1 || posBlock.getY() >= housing.getWorld().getActualHeight()) {
 				continue;
 			}
 
-			// Don't destroy ourself and blocks below us.
-			if (posBlock.x == housing.getCoords().getX() && posBlock.z == housing.getCoords().getZ() && posBlock.y <= housing.getCoords().getY()) {
+			// Don't destroy ourselves or blocks below us.
+			if (posBlock.getX() == posHousing.getX() && posBlock.getY() == posHousing.getZ() && posBlock.getZ() <= posHousing.getZ()) {
 				continue;
 			}
 
-			if (world.isAirBlock(new BlockPos(posBlock.x, posBlock.y, posBlock.z))) {
+			if (world.isAirBlock(posBlock.getPos())) {
 				continue;
 			}
 
-			Block block = world.getBlockState(new BlockPos(posBlock.x, posBlock.y, posBlock.z)).getBlock();
+			Block block = world.getBlockState(posBlock.getPos()).getBlock();
 
 			if (block instanceof BlockAlveary) {
 				continue;
 			}
 
-			TileEntity tile = world.getTileEntity(new BlockPos(posBlock.x, posBlock.y, posBlock.z));
+			TileEntity tile = world.getTileEntity(posBlock.getPos());
 			if (tile instanceof IBeeHousing) {
 				continue;
 			}
@@ -122,11 +118,11 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 				continue;
 			}
 
-			if (block.getBlockHardness(world, new BlockPos(posBlock.x, posBlock.y, posBlock.z)) < 0) {
+			if (block.getBlockHardness(world, posBlock.getPos()) < 0) {
 				continue;
 			}
 
-			world.setBlockToAir(new BlockPos(posBlock.x, posBlock.y, posBlock.z));
+			world.setBlockToAir(posBlock.getPos());
 			break;
 		}
 

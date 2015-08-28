@@ -13,6 +13,7 @@ package forestry.farming.logic;
 import java.util.Collection;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -22,8 +23,8 @@ import forestry.core.vect.Vect;
 
 public class CropBasicFruit extends Crop {
 
-	protected final Block block;
-	protected final int meta;
+	private final Block block;
+	private final int meta;
 
 	public CropBasicFruit(World world, Block block, int meta, Vect position) {
 		super(world, position);
@@ -38,9 +39,10 @@ public class CropBasicFruit extends Crop {
 
 	@Override
 	protected Collection<ItemStack> harvestBlock(Vect pos) {
-		Collection<ItemStack> harvested = block.getDrops(world, pos.toBlockPos(), block.getStateFromMeta(meta), 0);
-		Proxies.common.addBlockDestroyEffects(world, pos.toBlockPos(), block, 0);
-		world.setBlockState(pos.toBlockPos(), block.getStateFromMeta(0), Defaults.FLAG_BLOCK_SYNCH);
+		IBlockState state = world.getBlockState(pos.pos);
+		Collection<ItemStack> harvested = block.getDrops(world, pos.pos, block.getStateFromMeta(meta), 0);
+		Proxies.common.addBlockDestroyEffects(world, pos.pos, world.getBlockState(pos.pos));
+		world.setBlockState(pos.pos, block.getStateFromMeta(0), Defaults.FLAG_BLOCK_SYNCH);
 		return harvested;
 	}
 

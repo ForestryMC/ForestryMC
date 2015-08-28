@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,6 +28,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.IStillManager;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
@@ -35,11 +37,12 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.fluids.tanks.StandardTank;
-import forestry.core.gadgets.TileBase;
 import forestry.core.gadgets.TilePowered;
 import forestry.core.interfaces.ILiquidTankContainer;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.utils.EnumTankLevel;
 import forestry.core.utils.Utils;
@@ -70,11 +73,7 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		public boolean matches(FluidStack res) {
-			if (res == null) {
-				return false;
-			}
-
-			return input.isFluidEqual(res);
+			return res != null && res.containsFluid(input);
 		}
 	}
 
@@ -121,34 +120,18 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	/* MEMBER */
-	public final FilteredTank resourceTank;
-	public final FilteredTank productTank;
+	private final FilteredTank resourceTank;
+	private final FilteredTank productTank;
 	private final TankManager tankManager;
 
 	private Recipe currentRecipe;
 	private FluidStack bufferedLiquid;
-	public int distillationTime = 0;
-	public int distillationTotalTime = 0;
+	private int distillationTime = 0;
+	private int distillationTotalTime = 0;
 
 	public MachineStill() {
-		super(1100, 50, 8000);
-		setInternalInventory(new TileInventoryAdapter(this, 3, "Items") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				if (slotIndex == SLOT_RESOURCE) {
-					return FluidHelper.isEmptyContainer(itemStack);
-				} else if (slotIndex == SLOT_CAN) {
-					Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-					return resourceTank.accepts(fluid);
-				}
-				return false;
-			}
-
-			@Override
-			public boolean canExtractItem(int slotIndex, ItemStack itemstack, EnumFacing side) {
-				return slotIndex == SLOT_PRODUCT;
-			}
-		});
+		super(1100, 8000, 200);
+		setInternalInventory(new StillInventoryAdapter(this));
 		setHints(Config.hints.get("still"));
 		resourceTank = new FilteredTank(Defaults.PROCESSOR_TANK_CAPACITY, RecipeManager.recipeFluidInputs);
 		resourceTank.tankMode = StandardTank.TankMode.INPUT;
@@ -158,7 +141,7 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.StillGUI.ordinal(), player.worldObj, pos.getX(), pos.getY(), pos.getZ());
 	}
 
@@ -185,7 +168,20 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
+		tankManager.writePacketData(data);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
+		tankManager.readPacketData(data);
+	}
+
+	@Override
 	public void updateServerSide() {
+		super.updateServerSide();
 
 		if (!updateOnInterval(20)) {
 			return;
@@ -206,44 +202,39 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		checkRecipe();
-		if (getErrorState() == EnumErrorCode.NORECIPE && currentRecipe != null) {
-			setErrorState(EnumErrorCode.OK);
-		}
-
-		if (energyManager.getTotalEnergyStored() == 0) {
-			setErrorState(EnumErrorCode.NOPOWER);
-		}
 	}
 
 	@Override
 	public boolean workCycle() {
 
+		IErrorLogic errorLogic = getErrorLogic();
+
 		checkRecipe();
 
 		// Ongoing process
-		if (distillationTime > 0 && currentRecipe != null) {
+		if (distillationTime > 0 && !errorLogic.hasErrors()) {
 
 			distillationTime -= currentRecipe.input.amount;
 			productTank.fill(currentRecipe.output, true);
 
-			setErrorState(EnumErrorCode.OK);
 			return true;
 
 		} else if (currentRecipe != null) {
 
 			int resourceRequired = currentRecipe.timePerUnit * currentRecipe.input.amount;
 
-			if (productTank.fill(currentRecipe.output, false) < currentRecipe.output.amount) {
-				setErrorState(EnumErrorCode.NOSPACETANK);
-			} else if (resourceTank.getFluidAmount() < resourceRequired) {
-				setErrorState(EnumErrorCode.NORESOURCE);
-			} else {
+			boolean canFill = productTank.fill(currentRecipe.output, false) == currentRecipe.output.amount;
+			errorLogic.setCondition(!canFill, EnumErrorCode.NOSPACETANK);
+
+			boolean hasResource = resourceTank.getFluidAmount() >= resourceRequired;
+			errorLogic.setCondition(!hasResource, EnumErrorCode.NORESOURCE);
+
+			if (!errorLogic.hasErrors()) {
 				// Start next cycle if enough bio mass is available
 				distillationTime = distillationTotalTime = resourceRequired;
 				resourceTank.drain(resourceRequired, true);
-				bufferedLiquid = new FluidStack(currentRecipe.input.fluidID, resourceRequired);
+				bufferedLiquid = new FluidStack(currentRecipe.input, resourceRequired);
 
-				setErrorState(EnumErrorCode.OK);
 				return true;
 			}
 		}
@@ -252,29 +243,18 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 		return false;
 	}
 
-	public void checkRecipe() {
-		Recipe sameRec = RecipeManager.findMatchingRecipe(resourceTank.getFluid());
+	private void checkRecipe() {
+		Recipe matchingRecipe = RecipeManager.findMatchingRecipe(resourceTank.getFluid());
 
-		if (sameRec == null && bufferedLiquid != null && distillationTime > 0) {
-			sameRec = RecipeManager.findMatchingRecipe(new FluidStack(bufferedLiquid.fluidID, distillationTime));
+		if (matchingRecipe == null && bufferedLiquid != null && distillationTime > 0) {
+			matchingRecipe = RecipeManager.findMatchingRecipe(new FluidStack(bufferedLiquid, distillationTime));
 		}
 
-		if (sameRec == null) {
-			setErrorState(EnumErrorCode.NORECIPE);
+		if (currentRecipe != matchingRecipe) {
+			currentRecipe = matchingRecipe;
 		}
 
-		if (currentRecipe != sameRec) {
-			currentRecipe = sameRec;
-			resetRecipe();
-		}
-	}
-
-	private void resetRecipe() {
-	}
-
-	@Override
-	public boolean isWorking() {
-		return distillationTime > 0 || currentRecipe != null && productTank.getFluidAmount() + currentRecipe.output.amount <= Defaults.PROCESSOR_TANK_CAPACITY;
+		getErrorLogic().setCondition(currentRecipe == null, EnumErrorCode.NORECIPE);
 	}
 
 	@Override
@@ -370,4 +350,25 @@ public class MachineStill extends TilePowered implements ISidedInventory, ILiqui
 		return tankManager.getTankInfo(from);
 	}
 
+	private static class StillInventoryAdapter extends TileInventoryAdapter<MachineStill> {
+		public StillInventoryAdapter(MachineStill still) {
+			super(still, 3, "Items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_RESOURCE) {
+				return FluidHelper.isEmptyContainer(itemStack);
+			} else if (slotIndex == SLOT_CAN) {
+				Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+				return tile.resourceTank.accepts(fluid);
+			}
+			return false;
+		}
+
+		@Override
+		public boolean canExtractItem(int slotIndex, ItemStack itemstack, EnumFacing side) {
+			return slotIndex == SLOT_PRODUCT;
+		}
+	}
 }

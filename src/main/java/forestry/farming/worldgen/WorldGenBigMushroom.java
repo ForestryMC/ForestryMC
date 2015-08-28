@@ -17,6 +17,7 @@ package forestry.farming.worldgen;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -41,9 +42,6 @@ public class WorldGenBigMushroom extends WorldGenerator {
 
 	@Override
 	public boolean generate(World world, Random random, BlockPos pos) {
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
 		Block type = mushroom;
 
 		if (type == null) {
@@ -52,18 +50,18 @@ public class WorldGenBigMushroom extends WorldGenerator {
 
 		int height = random.nextInt(1) + 2;
 		boolean flag = true;
-		if (y < 1 || y + height + 1 > Defaults.WORLD_HEIGHT) {
+		if (pos.getY() < 1 || pos.getY() + height + 1 > Defaults.WORLD_HEIGHT) {
 			return false;
 		}
 
-		for (int i = y; i <= y + 1 + height; i++) {
+		for (int i = pos.getY(); i <= pos.getY() + 1 + height; i++) {
 			byte offset = 3;
-			if (i == y) {
+			if (i == pos.getY()) {
 				offset = 0;
 			}
 
-			for (int j = x - offset; j <= x + offset && flag; j++) {
-				for (int k = z - offset; k <= z + offset && flag; k++) {
+			for (int j = pos.getX() - offset; j <= pos.getX() + offset && flag; j++) {
+				for (int k = pos.getZ() - offset; k <= pos.getZ() + offset && flag; k++) {
 					if (i >= 0 && i < Defaults.WORLD_HEIGHT) {
 						Block block = world.getBlockState(new BlockPos(j, i, k)).getBlock();
 						if (!block.isAir(world, new BlockPos(j, i, k)) && block != Blocks.leaves) {
@@ -80,7 +78,7 @@ public class WorldGenBigMushroom extends WorldGenerator {
 			return false;
 		}
 
-		Block ground = world.getBlockState(new BlockPos(x, y - 1, z)).getBlock();
+		Block ground = world.getBlockState(new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())).getBlock();
 		if (ground != Blocks.mycelium) {
 			return false;
 		}
@@ -89,14 +87,14 @@ public class WorldGenBigMushroom extends WorldGenerator {
 			return false;
 		}
 
-		func_175906_a(world, new BlockPos(x, y - 1, z), Blocks.dirt);
+		func_175906_a(world, new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ()), Blocks.dirt);
 
-		int capStartY = y + height;
+		int capStartY = pos.getY() + height;
 		if (type == Blocks.red_mushroom_block) {
-			capStartY = (y + height) - 1;
+			capStartY = (pos.getY() + height) - 1;
 		}
 
-		for (int i = capStartY; i <= y + height; i++) {
+		for (int i = capStartY; i <= pos.getY() + height; i++) {
 
 			int capRad = 1;
 
@@ -104,66 +102,67 @@ public class WorldGenBigMushroom extends WorldGenerator {
 				capRad = 1;
 			}
 
-			for (int j = x - capRad; j <= x + capRad; j++) {
-				for (int k = z - capRad; k <= z + capRad; k++) {
+			for (int j = pos.getX() - capRad; j <= pos.getX() + capRad; j++) {
+				for (int k = pos.getZ() - capRad; k <= pos.getZ() + capRad; k++) {
 					int remain = 5;
-					if (j == x - capRad) {
+					if (j == pos.getX() - capRad) {
 						remain--;
 					}
 
-					if (j == x + capRad) {
+					if (j == pos.getX() + capRad) {
 						remain++;
 					}
 
-					if (k == z - capRad) {
+					if (k == pos.getZ() - capRad) {
 						remain -= 3;
 					}
 
-					if (k == z + capRad) {
+					if (k == pos.getZ() + capRad) {
 						remain += 3;
 					}
 
-					if (type == Blocks.brown_mushroom_block || i < y + height) {
+					if (type == Blocks.brown_mushroom_block || i < pos.getY() + height) {
 
-						if (j == x - (capRad - 1) && k == z - capRad) {
+						if (j == pos.getX() - (capRad - 1) && k == pos.getZ() - capRad) {
 							remain = 1;
 						}
 
-						if (j == x - capRad && k == z - (capRad - 1)) {
+						if (j == pos.getX() - capRad && k == pos.getZ() - (capRad - 1)) {
 							remain = 1;
 						}
 
-						if (j == x + (capRad - 1) && k == z - capRad) {
+						if (j == pos.getX() + (capRad - 1) && k == pos.getZ() - capRad) {
 							remain = 3;
 						}
 
-						if (j == x + capRad && k == z - (capRad - 1)) {
+						if (j == pos.getX() + capRad && k == pos.getZ() - (capRad - 1)) {
 							remain = 3;
 						}
 
-						if (j == x - (capRad - 1) && k == z + capRad) {
+						if (j == pos.getX() - (capRad - 1) && k == pos.getZ() + capRad) {
 							remain = 7;
 						}
 
-						if (j == x - capRad && k == z + (capRad - 1)) {
+						if (j == pos.getX() - capRad && k == pos.getZ() + (capRad - 1)) {
 							remain = 7;
 						}
 
-						if (j == x + (capRad - 1) && k == z + capRad) {
+						if (j == pos.getX() + (capRad - 1) && k == pos.getZ() + capRad) {
 							remain = 9;
 						}
 
-						if (j == x + capRad && k == z + (capRad - 1)) {
+						if (j == pos.getX() + capRad && k == pos.getZ() + (capRad - 1)) {
 							remain = 9;
 						}
 
 					}
-					if (remain == 5 && i < y + height) {
+					if (remain == 5 && i < pos.getY() + height) {
 						remain = 0;
 					}
 
-					if ((remain != 0 || y >= (y + height) - 1) && !world.getBlockState(new BlockPos(j, i, k)).getBlock().isOpaqueCube()) {
-						setBlockAndNotifyAdequately(world, new BlockPos(j, i, k), type.getStateFromMeta(remain));
+					if ((remain != 0 || pos.getY() >= (pos.getY() + height) - 1) && !world.getBlockState(new BlockPos(j, i, k)).getBlock().isOpaqueCube()) {
+						IBlockState state = world.getBlockState(new BlockPos(j, i, k));
+						setBlockAndNotifyAdequately(world, new BlockPos(j, i, k), state.getBlock().getStateFromMeta(remain));
 					}
 
 				}
@@ -172,9 +171,10 @@ public class WorldGenBigMushroom extends WorldGenerator {
 		}
 
 		for (int i = 0; i < height; i++) {
-			Block block = world.getBlockState(new BlockPos(x, y + i, z)).getBlock();
+			Block block = world.getBlockState(new BlockPos(pos.getX(), pos.getY() + i, pos.getZ())).getBlock();
 			if (!block.isOpaqueCube()) {
-				setBlockAndNotifyAdequately(world, new BlockPos(x, y + i, z), type.getStateFromMeta(10));
+				IBlockState state = world.getBlockState(new BlockPos(pos.getX(), pos.getY() + i, pos.getZ()));
+				setBlockAndNotifyAdequately(world, new BlockPos(pos.getX(), pos.getY() + i, pos.getZ()), state.getBlock().getStateFromMeta(10));
 			}
 		}
 

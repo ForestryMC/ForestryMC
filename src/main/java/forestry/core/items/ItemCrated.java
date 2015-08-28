@@ -10,10 +10,8 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import forestry.api.recipes.IGenericCrate;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -23,8 +21,13 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StringUtil;
 
-public class ItemCrated extends Item implements IGenericCrate {
+public class ItemCrated extends Item implements IModelRegister {
 
 	private final ItemStack contained;
 	private final boolean usesOreDict;
@@ -38,12 +41,7 @@ public class ItemCrated extends Item implements IGenericCrate {
 		return usesOreDict;
 	}
 
-	@Override
-	public void setContained(ItemStack crated, ItemStack contained) {
-	}
-
-	@Override
-	public ItemStack getContained(ItemStack crate) {
+	public ItemStack getContained() {
 		return contained;
 	}
 
@@ -59,7 +57,7 @@ public class ItemCrated extends Item implements IGenericCrate {
 			EntityItem entity = new EntityItem(world, entityplayer.posX, entityplayer.posY, entityplayer.posZ, new ItemStack(contained.getItem(), 9,
 					contained.getItemDamage()));
 			entity.setPickupDelay(40);
-			
+
 			float f1 = 0.3F;
 			entity.motionX = -MathHelper.sin((entityplayer.rotationYaw / 180F) * 3.141593F) * MathHelper.cos((entityplayer.rotationPitch / 180F) * 3.141593F)
 					* f1;
@@ -83,8 +81,33 @@ public class ItemCrated extends Item implements IGenericCrate {
 		if (contained == null) {
 			return StatCollector.translateToLocal("item.for.crate.name");
 		} else {
-			return StringUtil.localize("item.crated.adj") + " " + Proxies.common.getDisplayName(contained);
+			String containedName = Proxies.common.getDisplayName(contained);
+			return StringUtil.localizeAndFormat("item.crated.grammar", containedName);
 		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		String textureName = (contained == null) ? "crate" : "crate-filled";
+		manager.registerItemModel(item, new CreateMeshDefinition(manager));
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private class CreateMeshDefinition implements ItemMeshDefinition{
+
+		private IModelManager manager;
+		
+		public CreateMeshDefinition(IModelManager manager) {
+			this.manager = manager;
+		}
+		
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+			String textureName = (contained == null) ? "crate" : "crate-filled";
+			return manager.getModelLocation(stack.getItem(), stack.getItemDamage(), textureName);
+		}
+		
 	}
 
 }

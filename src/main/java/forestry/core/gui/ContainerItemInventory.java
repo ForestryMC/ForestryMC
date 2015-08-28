@@ -11,48 +11,49 @@
 package forestry.core.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.inventory.ItemInventory;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.StackUtils;
 
-public abstract class ContainerItemInventory extends ContainerForestry {
+public abstract class ContainerItemInventory<I extends ItemInventory> extends ContainerForestry {
 
-	protected final EntityPlayer player;
-	protected final ItemInventory inventory;
+	protected final I inventory;
 
-	public ContainerItemInventory(ItemInventory inventory, EntityPlayer player) {
-		super(inventory);
+	protected ContainerItemInventory(I inventory, InventoryPlayer playerInventory, int xInv, int yInv) {
 		this.inventory = inventory;
-		this.player = player;
+
+		addPlayerInventory(playerInventory, xInv, yInv);
 	}
 
-	protected void addSecuredSlot(IInventory other, int slot, int x, int y) {
-		ItemStack stackInSlot = other.getStackInSlot(slot);
-		if (StackUtils.isIdenticalItem(inventory.parent, stackInSlot)) {
-			addSlotToContainer(new SlotLocked(other, slot, x, y));
+	@Override
+	protected void addHotbarSlot(InventoryPlayer playerInventory, int slot, int x, int y) {
+		ItemStack stackInSlot = playerInventory.getStackInSlot(slot);
+
+		if (inventory.isParentItemInventory(stackInSlot)) {
+			addSlotToContainer(new SlotLocked(playerInventory, slot, x, y));
 		} else {
-			addSlotToContainer(new Slot(other, slot, x, y));
-		}
-	}
-
-	public void saveInventory(EntityPlayer entityplayer) {
-		if (inventory.isItemInventory) {
-			inventory.onGuiSaved(entityplayer);
+			addSlotToContainer(new Slot(playerInventory, slot, x, y));
 		}
 	}
 
 	@Override
-	public void onContainerClosed(EntityPlayer player) {
-		super.onContainerClosed(player);
-		if (!Proxies.common.isSimulating(player.worldObj)) {
-			return;
-		}
-
-		saveInventory(player);
+	protected final boolean canAccess(EntityPlayer player) {
+		return canInteractWith(player);
 	}
+
+	@Override
+	public final boolean canInteractWith(EntityPlayer entityplayer) {
+		return inventory.isUseableByPlayer(entityplayer);
+	}
+
+	@Override
+	public final ItemStack slotClick(int slotIndex, int button, int modifier, EntityPlayer player) {
+		ItemStack result = super.slotClick(slotIndex, button, modifier, player);
+		inventory.onSlotClick(player);
+		return result;
+	}
+
 }

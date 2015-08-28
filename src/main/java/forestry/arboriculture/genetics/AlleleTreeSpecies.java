@@ -11,155 +11,71 @@
 package forestry.arboriculture.genetics;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.apiculture.EnumBeeChromosome;
+import forestry.api.apiculture.EnumBeeType;
 import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.IAlleleTreeSpecies;
-import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.EnumTreeChromosome;
+import forestry.api.arboriculture.IAlleleTreeSpeciesCustom;
+import forestry.api.arboriculture.IGermlingIconProvider;
+import forestry.api.arboriculture.ILeafIconProvider;
+import forestry.api.arboriculture.ITreeGenerator;
 import forestry.api.arboriculture.ITreeRoot;
-import forestry.api.core.IIconProvider;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelProvider;
+import forestry.api.core.ISpriteProvider;
+import forestry.api.core.sprite.ISprite;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IFruitFamily;
-import forestry.api.genetics.IMutation;
-import forestry.api.world.ITreeGenData;
-import forestry.arboriculture.worldgen.WorldGenArboriculture;
-import forestry.arboriculture.worldgen.WorldGenBalsa;
-import forestry.core.config.ForestryItem;
-import forestry.core.genetics.AlleleSpecies;
+import forestry.core.genetics.alleles.AlleleSpecies;
 import forestry.core.render.TextureManager;
-import forestry.core.utils.Utils;
+import forestry.core.utils.GeneticsUtil;
 
-public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpecies, IIconProvider {
+public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeciesCustom, ISpriteProvider {
 
-	private static class LeafType {
-		public final String ident;
-		public final short fancyUID;
-		public final short plainUID;
-		public final short changedUID;
+	private final ITreeGenerator generator;
+	private final IGermlingIconProvider germlingIconProvider;
+	private final ILeafIconProvider leafIconProvider;
+	private final List<IFruitFamily> fruits = new ArrayList<IFruitFamily>();
 
-		public LeafType(String ident, short fancyUID, short plainUID, short changedUID) {
-			this.ident = ident;
-			this.fancyUID = fancyUID;
-			this.plainUID = plainUID;
-			this.changedUID = changedUID;
-		}
-	}
-
-	private static final HashMap<String, LeafType> leafTypes = new HashMap<String, LeafType>();
-
-	static {
-		leafTypes.put("deciduous", new LeafType("deciduous", (short) 10, (short) 11, (short) 12));
-		leafTypes.put("conifers", new LeafType("conifers", (short) 15, (short) 16, (short) 17));
-		leafTypes.put("jungle", new LeafType("jungle", (short) 20, (short) 21, (short) 22));
-		leafTypes.put("willow", new LeafType("willow", (short) 25, (short) 26, (short) 27));
-		leafTypes.put("maple", new LeafType("maple", (short) 30, (short) 31, (short) 32));
-		leafTypes.put("palm", new LeafType("palm", (short) 35, (short) 36, (short) 37));
-	}
-
-	private final ITreeRoot root;
-
-	private Class<? extends WorldGenArboriculture> generatorClass = WorldGenBalsa.class;
-
-	private final int primaryColour;
-	//private final int secondaryColour;
-
-	private LeafType leafType;
-
-	private int girth = 1;
 	private EnumPlantType nativeType = EnumPlantType.Plains;
-	private final ArrayList<IFruitFamily> fruits = new ArrayList<IFruitFamily>();
 
-	private final ItemStack wood;
+	public AlleleTreeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean isDominant, IClassification branch, String binomial, ILeafIconProvider leafIconProvider, IGermlingIconProvider germlingIconProvider, ITreeGenerator generator) {
+		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial, false);
 
-	public AlleleTreeSpecies(String uid, boolean isDominant, String name, IClassification branch, String binomial, int primaryColor,
-			Class<? extends WorldGenArboriculture> generator, ItemStack wood) {
-		this(uid, isDominant, name, branch, binomial, primaryColor, Utils.multiplyRGBComponents(primaryColor, 1.35f), generator, wood);
-	}
-
-	public AlleleTreeSpecies(String uid, boolean isDominant, String name, IClassification branch, String binomial, int primaryColor, int secondaryColor,
-			Class<? extends WorldGenArboriculture> generator, ItemStack wood) {
-		super(uid, isDominant, "trees.species." + name, branch, binomial);
-
-		this.root = (ITreeRoot) AlleleManager.alleleRegistry.getSpeciesRoot("rootTrees");
-		this.generatorClass = generator;
-		this.primaryColour = primaryColor;
-		//this.secondaryColour = secondaryColor;
-		leafType = leafTypes.get("deciduous");
-		this.wood = wood;
+		this.generator = generator;
+		this.germlingIconProvider = germlingIconProvider;
+		this.leafIconProvider = leafIconProvider;
 	}
 
 	@Override
 	public ITreeRoot getRoot() {
-		return root;
+		return TreeManager.treeRoot;
 	}
 
+	@Override
 	public AlleleTreeSpecies setPlantType(EnumPlantType type) {
-		this.nativeType = type;
+		nativeType = type;
 		return this;
 	}
 
-	public AlleleTreeSpecies setGirth(int girth) {
-		this.girth = girth;
-		return this;
-	}
-
+	@Override
 	public AlleleTreeSpecies addFruitFamily(IFruitFamily family) {
 		fruits.add(family);
-		return this;
-	}
-
-	public AlleleTreeSpecies setLeafIndices(String ident) {
-		leafType = leafTypes.get(ident);
-		return this;
-	}
-
-	public AlleleTreeSpecies setVanillaMap(int vanillaMeta) {
-		vanillaMap = vanillaMeta;
 		return this;
 	}
 
 	/* RESEARCH */
 	@Override
 	public int getComplexity() {
-		return 1 + getGeneticAdvancement(this, new ArrayList<IAllele>());
-	}
-
-	private int getGeneticAdvancement(IAllele species, ArrayList<IAllele> exclude) {
-
-		int own = 1;
-		int highest = 0;
-		exclude.add(species);
-
-		for (IMutation mutation : getRoot().getPaths(species, EnumBeeChromosome.SPECIES)) {
-			if (!exclude.contains(mutation.getAllele0())) {
-				int otherAdvance = getGeneticAdvancement(mutation.getAllele0(), exclude);
-				if (otherAdvance > highest) {
-					highest = otherAdvance;
-				}
-			}
-			if (!exclude.contains(mutation.getAllele1())) {
-				int otherAdvance = getGeneticAdvancement(mutation.getAllele1(), exclude);
-				if (otherAdvance > highest) {
-					highest = otherAdvance;
-				}
-			}
-		}
-
-		return own + (highest < 0 ? 0 : highest);
+		return GeneticsUtil.getResearchComplexity(this, EnumTreeChromosome.SPECIES);
 	}
 
 	/* OTHER */
@@ -169,93 +85,46 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	}
 
 	@Override
-	public ArrayList<IFruitFamily> getSuitableFruit() {
+	public List<IFruitFamily> getSuitableFruit() {
 		return fruits;
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public WorldGenerator getGenerator(ITree tree, World world, int x, int y, int z) {
-		try {
-			return generatorClass.getConstructor(new Class[]{ITreeGenData.class}).newInstance(tree);
-		} catch (Exception ex) {
-			throw new RuntimeException("Failed to instantiate generator of class " + generatorClass.getName());
-		}
-	}
-
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	@Override
-	public Class<? extends WorldGenerator>[] getGeneratorClasses() {
-		return new Class[]{generatorClass};
+	public ITreeGenerator getGenerator() {
+		return generator;
 	}
 
 	@Override
-	public short getLeafIconIndex(ITree tree, boolean fancy) {
-
-		if (!fancy) {
-			return leafType.plainUID;
-		}
-
-		if (tree.getMate() != null) {
-			return leafType.changedUID;
-		}
-
-		return leafType.fancyUID;
-	}
-
-	public AlleleTreeSpecies setGenerator(Class<? extends WorldGenArboriculture> generatorClass) {
-		this.generatorClass = generatorClass;
-		return this;
+	public ISprite getLeafIcon(boolean pollinated, boolean fancy) {
+		return leafIconProvider.getIcon(pollinated, fancy);
 	}
 
 	@Override
-	public int getLeafColour(ITree tree) {
-		//if(tree == null)
-		//	return primaryColour;
-
-		//if (tree.getMate() != null)
-		//	return secondaryColour;
-		//else
-		return primaryColour;
+	public int getLeafColour(boolean pollinated) {
+		return leafIconProvider.getColor(pollinated);
 	}
-
-	/* ICONS */
-	private int vanillaMap = -1;
 
 	@Override
 	public int getIconColour(int renderPass) {
-		if (renderPass == 0) {
-			return primaryColour;
-		}
 		return 0xffffff;
 	}
-
-	@SideOnly(Side.CLIENT)
-	private IIcon icon;
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister register) {
-		if (vanillaMap < 0) {
-			icon = TextureManager.getInstance().registerTex(register, "germlings/sapling." + uid);
-		} else {
-			icon = Blocks.sapling.getIcon(0, vanillaMap);
-		}
-		TextureManager.getInstance().registerTexUID(register, leafType.plainUID, "leaves/" + leafType.ident + ".plain");
-		TextureManager.getInstance().registerTexUID(register, leafType.changedUID, "leaves/" + leafType.ident + ".changed");
-		TextureManager.getInstance().registerTexUID(register, leafType.fancyUID, "leaves/" + leafType.ident + ".fancy");
+		germlingIconProvider.registerIcons(register);
+	}
+	
+	@Override
+	public IModelProvider getModelProvider() {
+		return null;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getGermlingIcon(EnumGermlingType type, int renderPass) {
-		if (type == EnumGermlingType.POLLEN) {
-			return ForestryItem.pollenCluster.item().getIconFromDamageForRenderPass(0, renderPass);
-		}
-
-		return icon;
+		return germlingIconProvider.getIcon(type, renderPass);
 	}
-
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -263,13 +132,12 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 		if (type == EnumGermlingType.SAPLING) {
 			return 0xFFFFFF;
 		}
-		return getLeafColour(null);
+		return getLeafColour(false);
 	}
-
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIconProvider getIconProvider() {
+	public ISpriteProvider getIconProvider() {
 		return this;
 	}
 
@@ -278,10 +146,31 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 	public IIcon getIcon(short texUID) {
 		return TextureManager.getInstance().getIcon(texUID);
 	}
+	
+	private static class ModelProvider implements IModelProvider{
 
-	@Override
-	public ItemStack[] getLogStacks() {
-		return new ItemStack[]{wood};
+		private static final ModelResourceLocation[] models = new ModelResourceLocation[EnumBeeType.values().length];
+		
+		@Override
+		public ModelResourceLocation getModel() {
+			return new ModelResourceLocation("", "inventory");
+		}
+
+		@Override
+		public void registerModels(IModelManager manager) {
+			String beeIconDir = "bees/default/";
+			for(int i = 0; i < EnumBeeType.values().length; i++)
+			{
+				EnumBeeType beeType = EnumBeeType.values()[i];
+				if (beeType == EnumBeeType.NONE) {
+					continue;
+				}
+				String beeTypeNameBase = beeIconDir + beeType.toString().toLowerCase(Locale.ENGLISH);
+				
+				models[i] = manager.getModelLocation(beeTypeNameBase);
+			}
+		}
+		
 	}
 
 }

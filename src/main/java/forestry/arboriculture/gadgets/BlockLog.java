@@ -13,82 +13,50 @@ package forestry.arboriculture.gadgets;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import forestry.api.core.Tabs;
-import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodType;
 
-public class BlockLog extends Block implements IWoodTyped {
+public class BlockLog extends BlockWood {
 
-	public enum LogCat {
-		CAT0, CAT1, CAT2, CAT3, CAT4, CAT5, CAT6, CAT7
-	}
-
-	public static final short logsPerCat = 4;
-
-	protected final LogCat cat;
-
-	public BlockLog(LogCat cat) {
-		this(cat, Material.wood);
-	}
-
-	protected BlockLog(LogCat cat, Material material) {
-		super(material);
-		this.cat = cat;
-
-		setHardness(2.0F);
+	public BlockLog(boolean fireproof) {
+		super("log", fireproof, "logs");
 		setResistance(5.0F);
-		setStepSound(soundTypeWood);
-		setCreativeTab(Tabs.tabArboriculture);
+		setHarvestLevel("axe", 0);
 	}
-
-	public static int getTypeFromMeta(int damage) {
-		return damage & 3;
-	}
-
+	
 	@Override
-	public int getRenderType() {
-		return Blocks.log.getRenderType();
-	}
-
-	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		byte radius = 4;
 		int boundary = radius + 1;
-
-		if (world.checkChunksExist(x - boundary, y - boundary, z - boundary, x + boundary, y + boundary, z + boundary)) {
+		
+		if (world.isAreaLoaded(new BlockPos(pos.getX() - boundary, pos.getY() - boundary, pos.getZ() - boundary), new BlockPos(pos.getX() + boundary, pos.getY() + boundary, pos.getZ() + boundary))) {
 			for (int i = -radius; i <= radius; ++i) {
 				for (int j = -radius; j <= radius; ++j) {
 					for (int k = -radius; k <= radius; ++k) {
-						Block neighbor = world.getBlock(x + i, y + j, z + k);
+						Block neighbor = world.getBlockState(new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k)).getBlock();
 
-						neighbor.beginLeavesDecay(world, x + i, y + j, z + k);
+						neighbor.beginLeavesDecay(world, new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k));
 					}
 				}
 			}
 		}
 	}
-
+	
 	@Override
-	public int onBlockPlaced(World world, int x, int y, int z, int side, float par6, float par7, float par8, int meta) {
-		int type = getTypeFromMeta(meta);
+	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		byte b0 = 0;
 
-		switch (side) {
+		switch (side.ordinal()) {
 			case 0:
 			case 1:
 				b0 = 0;
@@ -102,121 +70,39 @@ public class BlockLog extends Block implements IWoodTyped {
 				b0 = 4;
 		}
 
-		return type | b0;
+		return getStateFromMeta(getMetaFromState(world.getBlockState(pos)) | b0);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		int totalWoods = WoodType.values().length;
-		int count = Math.min(totalWoods - (cat.ordinal() * logsPerCat), logsPerCat);
-		for (int i = 0; i < count; i++) {
-			itemList.add(new ItemStack(this, 1, i));
+	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+		for (WoodType woodType : WoodType.VALUES) {
+			list.add(woodType.getLog(isFireproof()));
 		}
-	}
-
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerBlockIcons(IIconRegister register) {
-		WoodType.registerIcons(register);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta) {
-
-		int oriented = meta & 12;
-
-		WoodType type = getWoodType(meta);
-		if (type == null) {
-			return null;
-		}
-
-		switch (oriented) {
-			case 4:
-				if (side > 3) {
-					return type.getHeartIcon();
-				} else {
-					return type.getBarkIcon();
-				}
-			case 8:
-				if (side == 2 || side == 3) {
-					return type.getHeartIcon();
-				} else {
-					return type.getBarkIcon();
-				}
-			case 0:
-			default:
-				if (side < 2) {
-					return type.getHeartIcon();
-				} else {
-					return type.getBarkIcon();
-				}
-		}
-	}
-
-	@Override
-	public int damageDropped(int meta) {
-		return getTypeFromMeta(meta);
-	}
-
-	@Override
-	protected ItemStack createStackedBlock(int meta) {
-		return new ItemStack(this, 1, getTypeFromMeta(meta));
 	}
 
 	/* PROPERTIES */
 	@Override
-	public float getBlockHardness(World world, int x, int y, int z) {
-		return getWoodType(world.getBlockMetadata(x, y, z)).getHardness();
-	}
-
-	@Override
-	public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
-		return 20;
-	}
-
-	@Override
-	public boolean isFlammable(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
-		return true;
-	}
-
-	@Override
-	public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
-		if (face == ForgeDirection.DOWN) {
+	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
+		if (isFireproof()) {
+			return 0;
+		} else if (face == EnumFacing.DOWN) {
 			return 20;
-		} else if (face != ForgeDirection.UP) {
+		} else if (face != EnumFacing.UP) {
 			return 10;
 		} else {
 			return 5;
 		}
 	}
-
+	
 	@Override
-	public boolean canSustainLeaves(IBlockAccess world, int x, int y, int z) {
+	public boolean canSustainLeaves(IBlockAccess world, BlockPos pos) {
 		return true;
 	}
-
+	
 	@Override
-	public boolean isWood(IBlockAccess world, int x, int y, int z) {
+	public boolean isWood(IBlockAccess world, BlockPos pos) {
 		return true;
-	}
-
-	@Override
-	public WoodType getWoodType(int meta) {
-		meta = getTypeFromMeta(meta);
-		int woodOrdinal = meta + cat.ordinal() * logsPerCat;
-		if (woodOrdinal < WoodType.VALUES.length) {
-			return WoodType.VALUES[woodOrdinal];
-		} else {
-			return null;
-		}
-	}
-
-	@Override
-	public String getBlockKind() {
-		return "log";
 	}
 
 }

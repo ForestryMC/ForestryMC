@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockHugeMushroom;
 import net.minecraft.block.BlockSapling;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -30,17 +30,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.IModelObject;
-import forestry.api.core.IVariantObject;
 import forestry.core.IItemTyped;
 import forestry.core.config.Defaults;
-import forestry.core.gadgets.BlockResourceStorageBlock.Resources;
 import forestry.core.proxy.Proxies;
 import forestry.farming.worldgen.WorldGenBigMushroom;
 
-public class BlockMushroom extends BlockSapling implements IItemTyped, IVariantObject, IModelObject {
+public class BlockMushroom extends BlockSapling implements IItemTyped {
 
 	public static final PropertyEnum MUSHROOM = PropertyEnum.create("mushroom", MushroomType.class);
 	
@@ -68,7 +63,7 @@ public class BlockMushroom extends BlockSapling implements IItemTyped, IVariantO
 	
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, MUSHROOM);
+		return new BlockState(this, new IProperty[]{MUSHROOM});
 	}
 	
 	@Override
@@ -78,7 +73,7 @@ public class BlockMushroom extends BlockSapling implements IItemTyped, IVariantO
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(MUSHROOM, ModelType.values()[meta]);
+		return getDefaultState().withProperty(MUSHROOM, MushroomType.values()[meta]);
 	}
 
 	@Override
@@ -104,7 +99,7 @@ public class BlockMushroom extends BlockSapling implements IItemTyped, IVariantO
 	}
 	
 	@Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random random) {
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		if (!Proxies.common.isSimulating(world)) {
 			return;
 		}
@@ -113,7 +108,7 @@ public class BlockMushroom extends BlockSapling implements IItemTyped, IVariantO
 		MushroomType type = getTypeFromMeta(meta);
 		int maturity = meta >> 2;
 
-		tickGermling(world, pos, state, random, type, maturity);
+		tickGermling(world, pos, state, rand, type, maturity);
 	}
 
 	private void tickGermling(World world, BlockPos pos, IBlockState state, Random random, MushroomType type, int maturity) {
@@ -135,11 +130,11 @@ public class BlockMushroom extends BlockSapling implements IItemTyped, IVariantO
 	}
 	
 	@Override
-	public void generateTree(World world, BlockPos pos, IBlockState state, Random random) {
-		MushroomType type = getTypeFromMeta(state.getBlock().getMetaFromState(state));
+	public void generateTree(World world, BlockPos pos, IBlockState state, Random rand) {
+		MushroomType type = getTypeFromMeta(getMetaFromState(state));
 
 		world.setBlockToAir(pos);
-		if (!generators[type.ordinal()].generate(world, random, pos)) {
+		if (!generators[type.ordinal()].generate(world, rand, pos)) {
 			world.setBlockState(pos, getStateFromMeta(type.ordinal()), 0);
 		}
 	}
@@ -148,25 +143,6 @@ public class BlockMushroom extends BlockSapling implements IItemTyped, IVariantO
 	public MushroomType getTypeFromMeta(int meta) {
 		meta %= MushroomType.values().length;
 		return MushroomType.values()[meta];
-	}
-
-	/* ICONS */
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-		list.add(new ItemStack(item, 1, 0));
-		list.add(new ItemStack(item, 1, 1));
-	}
-
-	@Override
-	public ModelType getModelType() {
-		return ModelType.META;
-	}
-
-	@Override
-	public String[] getVariants() {
-		return new String[]{"brown", "red" };
 	}
 
 }

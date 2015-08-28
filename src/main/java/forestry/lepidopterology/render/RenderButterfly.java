@@ -10,9 +10,7 @@
  ******************************************************************************/
 package forestry.lepidopterology.render;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
@@ -24,11 +22,11 @@ public class RenderButterfly extends RenderLiving {
 	private final ModelButterfly butterflyModel;
 
 	public RenderButterfly() {
-		super(Minecraft.getMinecraft().getRenderManager(), new ModelButterfly(), 0.25f);
+		super(new ModelButterfly(), 0.25f);
 		butterflyModel = (ModelButterfly) mainModel;
 	}
 
-	public void renderButterfly(EntityButterfly entity, double x, double y, double z, float light, float partialTickTime) {
+	private void renderButterfly(EntityButterfly entity, double x, double y, double z, float light, float partialTickTime) {
 		if (!entity.isRenderable()) {
 			return;
 		}

@@ -28,31 +28,24 @@ public class WorldGenMinableMeta extends WorldGenerator {
 	private final int mineableBlockMeta;
 	private final int numberOfBlocks;
 
-	public WorldGenMinableMeta(Block block, int meta, int numberOfBlocks) {
-		mineableBlock = block;
+	public WorldGenMinableMeta(ForestryBlock block, int meta, int numberOfBlocks) {
+		mineableBlock = block.block();
 		mineableBlockMeta = meta;
 		this.numberOfBlocks = numberOfBlocks;
-	}
-
-	public WorldGenMinableMeta(ForestryBlock block, int meta, int numberOfBlocks) {
-		this(block.block(), meta, numberOfBlocks);
 	}
 
 	@Override
 	public boolean generate(World world, Random random, BlockPos pos) {
 
-		int i = pos.getX();
-		int j = pos.getY();
-		int k = pos.getZ();
 		boolean hasGenerated = false;
 
 		float randomBase = random.nextFloat() * 3.141593F;
-		double d = (i + 8) + (MathHelper.sin(randomBase) * numberOfBlocks) / 8F;
-		double d1 = (i + 8) - (MathHelper.sin(randomBase) * numberOfBlocks) / 8F;
-		double d2 = (k + 8) + (MathHelper.cos(randomBase) * numberOfBlocks) / 8F;
-		double d3 = (k + 8) - (MathHelper.cos(randomBase) * numberOfBlocks) / 8F;
-		double d4 = (j + random.nextInt(3)) - 2;
-		double d5 = (j + random.nextInt(3)) - 2;
+		double d = (pos.getX() + 8) + (MathHelper.sin(randomBase) * numberOfBlocks) / 8F;
+		double d1 = (pos.getX() + 8) - (MathHelper.sin(randomBase) * numberOfBlocks) / 8F;
+		double d2 = (pos.getZ() + 8) + (MathHelper.cos(randomBase) * numberOfBlocks) / 8F;
+		double d3 = (pos.getZ() + 8) - (MathHelper.cos(randomBase) * numberOfBlocks) / 8F;
+		double d4 = (pos.getY() + random.nextInt(3)) - 2;
+		double d5 = (pos.getY() + random.nextInt(3)) - 2;
 
 		for (int l = 0; l <= numberOfBlocks; l++) {
 			double d6 = d + ((d1 - d) * l) / numberOfBlocks;
@@ -82,8 +75,9 @@ public class WorldGenMinableMeta extends WorldGenerator {
 
 					for (int targetZ = zStart; targetZ <= zEnd; targetZ++) {
 						double d14 = ((targetZ + 0.5D) - d8) / (d10 / 2D);
-						if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && world.getBlockState(new BlockPos(targetX, targetY, targetZ)) == Blocks.stone) {
-							world.setBlockState(new BlockPos(targetX, targetY, targetZ), mineableBlock.getStateFromMeta(mineableBlockMeta), Defaults.FLAG_BLOCK_SYNCH);
+						BlockPos posNEW = new BlockPos(targetX, targetY, targetZ);
+						if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && world.getBlockState(pos).getBlock() == Blocks.stone) {
+							world.setBlockState(pos, mineableBlock.getStateFromMeta(mineableBlockMeta), Defaults.FLAG_BLOCK_SYNCH);
 							hasGenerated = true;
 						}
 					}

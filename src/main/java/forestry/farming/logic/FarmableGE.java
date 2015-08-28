@@ -39,19 +39,19 @@ public class FarmableGE implements IFarmable {
 
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos) {
-		Block block = world.getBlockState(pos).getBlock();
+		IBlockState state = world.getBlockState(pos);
+		Block block = state.getBlock();
 
 		if (!block.isWood(world, pos)) {
 			return null;
 		}
 
-		IBlockState state = world.getBlockState(pos);
-		return new CropBlock(world, block, state.getBlock().getMetaFromState(state), new Vect(pos));
+		return new CropBlock(world, block, block.getMetaFromState(state), new Vect(pos));
 	}
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return germling.copy().onItemUse(player, world, pos.down(), EnumFacing.UP, 0, 0, 0);
+		return germling.copy().onItemUse(player, world, new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ()), EnumFacing.DOWN, 0, 0, 0);
 	}
 
 	@Override

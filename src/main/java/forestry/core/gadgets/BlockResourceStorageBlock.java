@@ -1,28 +1,26 @@
 package forestry.core.gadgets;
 
-import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.IModelObject;
-import forestry.api.core.IVariantObject;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.core.CreativeTabForestry;
 import forestry.core.gadgets.BlockResourceStorageBlock.Resources;
 import forestry.core.render.TextureManager;
 
-public class BlockResourceStorageBlock extends Block implements IModelObject, IVariantObject {
+public class BlockResourceStorageBlock extends Block implements IModelRegister {
 	
 	public static final PropertyEnum RESOURCES = PropertyEnum.create("resource", Resources.class);
 	
@@ -44,13 +42,14 @@ public class BlockResourceStorageBlock extends Block implements IModelObject, IV
 		super(Material.iron);
 		setHardness(3F);
 		setResistance(5F);
+		setStepSound(soundTypeMetal);
 		setCreativeTab(CreativeTabForestry.tabForestry);
 		setDefaultState(this.blockState.getBaseState().withProperty(RESOURCES, Resources.APATITE));
 	}
 	
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, RESOURCES);
+		return new BlockState(this, new IProperty[]{RESOURCES});
 	}
 	
 	@Override
@@ -73,19 +72,17 @@ public class BlockResourceStorageBlock extends Block implements IModelObject, IV
 	}
 
 	@Override
-	public int getDamageValue(World world, BlockPos pos) {
-		IBlockState state = world.getBlockState(pos);
+	public int damageDropped(IBlockState state) {
 		return getMetaFromState(state);
 	}
-
+	
+	@SideOnly(Side.CLIENT)
 	@Override
-	public String[] getVariants() {
-		return new String[]{ "apatite", "copper", "tin", "bronze" };
-	}
-
-	@Override
-	public ModelType getModelType() {
-		return ModelType.META;
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0, "apatite");
+		manager.registerItemModel(item, 1, "copper");
+		manager.registerItemModel(item, 2, "tin");
+		manager.registerItemModel(item, 3, "bronze");
 	}
 
 }

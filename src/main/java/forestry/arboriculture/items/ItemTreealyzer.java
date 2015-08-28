@@ -16,26 +16,23 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.Tabs;
-import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
-import forestry.core.interfaces.IErrorSource;
 import forestry.core.interfaces.IHintSource;
 import forestry.core.inventory.AlyzerInventory;
 import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.GeneticsUtil;
-import forestry.plugins.PluginArboriculture;
 
 public class ItemTreealyzer extends ItemInventoried {
 
-	public static class TreealyzerInventory extends AlyzerInventory implements IErrorSource, IHintSource {
+	public static class TreealyzerInventory extends AlyzerInventory implements IHintSource {
 
 		public TreealyzerInventory(EntityPlayer player, ItemStack itemStack) {
-			super(ItemTreealyzer.class, 7, itemStack);
-			this.player = player;
+			super(player, 7, itemStack);
 		}
 
 		@Override
@@ -43,26 +40,20 @@ public class ItemTreealyzer extends ItemInventoried {
 			return GeneticsUtil.getGeneticEquivalent(itemStack) instanceof ITree;
 		}
 
-		private void tryAnalyze() {
-
-			// Analyzed slot occupied, abort
-			if (inventoryStacks[SLOT_ANALYZE_1] != null || inventoryStacks[SLOT_ANALYZE_2] != null || inventoryStacks[SLOT_ANALYZE_3] != null
-					|| inventoryStacks[SLOT_ANALYZE_4] != null || inventoryStacks[SLOT_ANALYZE_5] != null) {
-				return;
-			}
-
+		@Override
+		public void onSlotClick(EntityPlayer player) {
 			// Source slot to analyze empty
 			if (getStackInSlot(SLOT_SPECIMEN) == null) {
 				return;
 			}
 
-			if (!PluginArboriculture.treeInterface.isMember(getStackInSlot(SLOT_SPECIMEN))) {
+			if (!TreeManager.treeRoot.isMember(getStackInSlot(SLOT_SPECIMEN))) {
 				ItemStack ersatz = GeneticsUtil.convertSaplingToGeneticEquivalent(getStackInSlot(SLOT_SPECIMEN));
 				if (ersatz != null) {
 					setInventorySlotContents(SLOT_SPECIMEN, ersatz);
 				}
 			}
-			ITree tree = PluginArboriculture.treeInterface.getMember(getStackInSlot(SLOT_SPECIMEN));
+			ITree tree = TreeManager.treeRoot.getMember(getStackInSlot(SLOT_SPECIMEN));
 			// No tree, abort
 			if (tree == null) {
 				return;
@@ -78,8 +69,8 @@ public class ItemTreealyzer extends ItemInventoried {
 
 				tree.analyze();
 				if (player != null) {
-					PluginArboriculture.treeInterface.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(tree.getGenome().getPrimary());
-					PluginArboriculture.treeInterface.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(tree.getGenome().getSecondary());
+					TreeManager.treeRoot.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(tree.getGenome().getPrimary());
+					TreeManager.treeRoot.getBreedingTracker(player.worldObj, player.getGameProfile()).registerSpecies(tree.getGenome().getSecondary());
 				}
 				NBTTagCompound nbttagcompound = new NBTTagCompound();
 				tree.writeToNBT(nbttagcompound);
@@ -93,13 +84,6 @@ public class ItemTreealyzer extends ItemInventoried {
 			setInventorySlotContents(SLOT_SPECIMEN, null);
 		}
 
-		@Override
-		public void markDirty() {
-			// if (!Proxies.common.isSimulating(player.worldObj))
-			// return;
-			tryAnalyze();
-		}
-
 		// / IHINTSOURCE
 		@Override
 		public boolean hasHints() {
@@ -109,21 +93,6 @@ public class ItemTreealyzer extends ItemInventoried {
 		@Override
 		public String[] getHints() {
 			return Config.hints.get("treealyzer");
-		}
-
-		// / IERRORSOURCE
-		@Override
-		public boolean throwsErrors() {
-			return true;
-		}
-
-		@Override
-		public EnumErrorCode getErrorState() {
-			if (PluginArboriculture.treeInterface.isMember(inventoryStacks[SLOT_SPECIMEN]) && !isEnergy(getStackInSlot(SLOT_ENERGY))) {
-				return EnumErrorCode.NOHONEY;
-			}
-
-			return EnumErrorCode.OK;
 		}
 	}
 

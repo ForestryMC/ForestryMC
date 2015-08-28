@@ -14,7 +14,6 @@ import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-
 import forestry.pipes.PipeItemsPropolis;
 import forestry.plugins.PluginPropolisPipe;
 
@@ -35,7 +34,7 @@ public class ProxyPipes {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public Item createPipe(Class<? extends Pipe> clas, CreativeTabBuildCraft creativeTab) {
+	public static Item createPipe(Class<? extends Pipe> clas, CreativeTabBuildCraft creativeTab) {
 
 		return registerPipe(clas, creativeTab);
 	}
@@ -68,8 +67,7 @@ public class ProxyPipes {
 		return item;
 	}
 
-	public void registerCraftingPropolis(ItemStack resource) {
+	public static void registerCraftingPropolis(ItemStack resource) {
 		GameRegistry.addRecipe(new ItemStack(PluginPropolisPipe.pipeItemsPropolis), "#X#", '#', resource, 'X', BuildCraftTransport.pipeItemsDiamond);
-
 	}
 }

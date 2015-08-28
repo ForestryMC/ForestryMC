@@ -10,7 +10,8 @@
  ******************************************************************************/
 package forestry.food.items;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -21,10 +22,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.IVariantObject;
+import forestry.api.core.IModelManager;
 import forestry.api.food.BeverageManager;
 import forestry.api.food.IBeverageEffect;
 import forestry.core.config.Config;
@@ -32,10 +32,8 @@ import forestry.core.items.ItemForestryFood;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 
-public class ItemBeverage extends ItemForestryFood implements IVariantObject {
+public class ItemBeverage extends ItemForestryFood {
 
-	private static final List<String> variants = new ArrayList<String>();
-	
 	public static class BeverageInfo {
 
 		public final String name;
@@ -57,21 +55,20 @@ public class ItemBeverage extends ItemForestryFood implements IVariantObject {
 			this.heal = heal;
 			this.saturation = saturation;
 			this.isAlwaysEdible = isAlwaysEdible;
-			variants.add(name);
 		}
 
-		public IBeverageEffect[] loadEffects(ItemStack stack) {
-			IBeverageEffect[] effects = new IBeverageEffect[0];
+		public static List<IBeverageEffect> loadEffects(ItemStack stack) {
+			List<IBeverageEffect> effectsList = Collections.emptyList();
 
 			NBTTagCompound nbttagcompound = stack.getTagCompound();
 			if (nbttagcompound == null) {
-				return effects;
+				return effectsList;
 			}
 
 			if (nbttagcompound.hasKey("E")) {
 				int effectLength = nbttagcompound.getInteger("L");
 				NBTTagList nbttaglist = nbttagcompound.getTagList("E", 10);
-				effects = new IBeverageEffect[effectLength];
+				IBeverageEffect[] effects = new IBeverageEffect[effectLength];
 				for (int i = 0; i < nbttaglist.tagCount(); i++) {
 					NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 					byte byte0 = nbttagcompound1.getByte("S");
@@ -79,21 +76,23 @@ public class ItemBeverage extends ItemForestryFood implements IVariantObject {
 						effects[byte0] = BeverageManager.effectList[nbttagcompound1.getInteger("ID")];
 					}
 				}
+				effectsList = Arrays.asList(effects);
 			}
 
-			return effects;
+			return effectsList;
 		}
 
-		public void saveEffects(ItemStack stack, IBeverageEffect[] effects) {
+		public static void saveEffects(ItemStack stack, List<IBeverageEffect> effects) {
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
 
 			NBTTagList nbttaglist = new NBTTagList();
-			nbttagcompound.setInteger("L", effects.length);
-			for (int i = 0; i < effects.length; i++) {
-				if (effects[i] != null) {
+			nbttagcompound.setInteger("L", effects.size());
+			for (int i = 0; i < effects.size(); i++) {
+				IBeverageEffect effect = effects.get(i);
+				if (effect != null) {
 					NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 					nbttagcompound1.setByte("S", (byte) i);
-					nbttagcompound1.setInteger("ID", effects[i].getId());
+					nbttagcompound1.setInteger("ID", effect.getId());
 					nbttaglist.appendTag(nbttagcompound1);
 				}
 			}
@@ -122,9 +121,7 @@ public class ItemBeverage extends ItemForestryFood implements IVariantObject {
 	
 	@Override
 	public ItemStack onItemUseFinish(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		int meta = itemstack.getItemDamage();
-		BeverageInfo beverage = beverages[meta];
-		IBeverageEffect[] effects = beverage.loadEffects(itemstack);
+		List<IBeverageEffect> effects = BeverageInfo.loadEffects(itemstack);
 
 		itemstack.stackSize--;
 		entityplayer.getFoodStats().addStats(this, itemstack);
@@ -140,7 +137,7 @@ public class ItemBeverage extends ItemForestryFood implements IVariantObject {
 
 		return itemstack;
 	}
-	
+
 	@Override
 	public float getSaturationModifier(ItemStack itemstack) {
 		int meta = itemstack.getItemDamage();
@@ -190,9 +187,7 @@ public class ItemBeverage extends ItemForestryFood implements IVariantObject {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
-		int meta = itemstack.getItemDamage();
-		BeverageInfo beverage = beverages[meta];
-		IBeverageEffect[] effects = beverage.loadEffects(itemstack);
+		List<IBeverageEffect> effects = BeverageInfo.loadEffects(itemstack);
 
 		for (IBeverageEffect effect : effects) {
 			if (effect.getDescription() != null) {
@@ -205,6 +200,16 @@ public class ItemBeverage extends ItemForestryFood implements IVariantObject {
 	public String getUnlocalizedName(ItemStack stack) {
 		return super.getUnlocalizedName(stack) + "." + beverages[stack.getItemDamage()].name;
 	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		for(int i = 0;i < beverages.length;i++){
+			
+			BeverageInfo info = beverages[i];
+			manager.registerItemModel(item, i, info.name);
+		}
+	}
 
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int j) {
@@ -214,11 +219,6 @@ public class ItemBeverage extends ItemForestryFood implements IVariantObject {
 		} else {
 			return beverages[itemstack.getItemDamage()].secondaryColor;
 		}
-	}
-
-	@Override
-	public String[] getVariants() {
-		return variants.toArray(new String[variants.size()]);
 	}
 
 }

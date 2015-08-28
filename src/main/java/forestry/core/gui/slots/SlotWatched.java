@@ -4,10 +4,8 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import forestry.core.interfaces.ICrafter;
 import forestry.core.render.TextureManager;
 
@@ -18,7 +16,7 @@ public abstract class SlotWatched extends SlotForestry {
 	private ICrafter crafter;
 	private String blockedTexture = "slots/blocked";
 
-	public SlotWatched(IInventory inventory, int slotIndex, int xPos, int yPos) {
+	protected SlotWatched(IInventory inventory, int slotIndex, int xPos, int yPos) {
 		super(inventory, slotIndex, xPos, yPos);
 	}
 
@@ -48,7 +46,7 @@ public abstract class SlotWatched extends SlotForestry {
 	@Override
 	public void onPickupFromSlot(EntityPlayer player, ItemStack itemStack) {
 		if (crafter != null) {
-			crafter.takenFromSlot(getSlotIndex(), true, player);
+			crafter.takenFromSlot(getSlotIndex(), player);
 		}
 	}
 
@@ -57,12 +55,12 @@ public abstract class SlotWatched extends SlotForestry {
 		return this;
 	}
 	
-	@Override
 	@SideOnly(Side.CLIENT)
+	@Override
 	public TextureAtlasSprite getBackgroundSprite() {
 		ItemStack stack = getStack();
 		if (!isItemValid(stack)) {
-			return TextureManager.getInstance().getDefault(blockedTexture);
+			return TextureManager.getInstance().getDefault(blockedTexture).getSprite();
 		} else {
 			return null;
 		}

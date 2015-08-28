@@ -13,21 +13,20 @@ package forestry.farming.logic;
 import java.util.Collection;
 import java.util.Stack;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.sprite.ISprite;
+import forestry.api.farming.FarmDirection;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
+import forestry.core.render.TextureManager;
 import forestry.core.utils.Utils;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
@@ -35,10 +34,7 @@ import forestry.core.vect.VectUtil;
 public class FarmLogicInfernal extends FarmLogicHomogeneous {
 
 	public FarmLogicInfernal(IFarmHousing housing) {
-		super(housing,
-				new ItemStack[]{new ItemStack(Blocks.soul_sand)},
-				new ItemStack(Blocks.soul_sand),
-				Farmables.farmables.get("farmInfernal").toArray(new IFarmable[0]));
+		super(housing, new ItemStack(Blocks.soul_sand), new ItemStack(Blocks.soul_sand), Farmables.farmables.get("farmInfernal"));
 	}
 
 	@Override
@@ -48,8 +44,8 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite getIcon() {
-		return getSprite("minecraft", "items/netherbrick");
+	public ISprite getIcon() {
+		return TextureManager.getInstance().getFarmSprite("farmLoigc", "items", "netherbrick");
 	}
 
 	@Override
@@ -68,14 +64,14 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(BlockPos pos, EnumFacing direction, int extent) {
+	public Collection<ICrop> harvest(BlockPos pos, FarmDirection direction, int extent) {
 		World world = getWorld();
 
 		Stack<ICrop> crops = new Stack<ICrop>();
 		for (int i = 0; i < extent; i++) {
-			Vect position = translateWithOffset(pos.up(), direction, i);
+			Vect position = translateWithOffset(pos, direction, i);
 			for (IFarmable farmable : germlings) {
-				ICrop crop = farmable.getCropAt(world, position.toBlockPos());
+				ICrop crop = farmable.getCropAt(world, pos);
 				if (crop != null) {
 					crops.push(crop);
 				}
@@ -87,12 +83,12 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	protected boolean maintainGermlings(BlockPos pos, EnumFacing direction, int extent) {
+	protected boolean maintainGermlings(BlockPos pos, FarmDirection direction, int extent) {
 		World world = getWorld();
 
 		for (int i = 0; i < extent; i++) {
 			Vect position = translateWithOffset(pos, direction, i);
-			if (!VectUtil.isAirBlock(world, position) && !Utils.isReplaceableBlock(world, position.toBlockPos())) {
+			if (!VectUtil.isAirBlock(world, position) && !Utils.isReplaceableBlock(world, position.getPos())) {
 				continue;
 			}
 
@@ -111,7 +107,7 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 		World world = getWorld();
 
 		for (IFarmable candidate : germlings) {
-			if (housing.plantGermling(candidate, world, position.toBlockPos())) {
+			if (housing.plantGermling(candidate, world, position.getPos())) {
 				return true;
 			}
 		}

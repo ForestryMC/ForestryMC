@@ -10,28 +10,26 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import net.minecraft.world.World;
+
 import forestry.api.world.ITreeGenData;
 
 public class WorldGenPlum extends WorldGenTree {
 
 	public WorldGenPlum(ITreeGenData tree) {
-		super(tree);
+		super(tree, 6, 3);
 	}
 
 	@Override
-	public void generate() {
-		generateTreeTrunk(height, girth);
+	public void generate(World world) {
+		generateTreeTrunk(world, height, girth);
 
 		int yCenter = height - girth;
 		yCenter = yCenter > 2 ? yCenter : 3;
-		generateSphere(getCenteredAt(yCenter, 0), 2 + rand.nextInt(girth), leaf, EnumReplaceMode.NONE);
 
-	}
-
-	@Override
-	public void preGenerate() {
-		height = determineHeight(6, 3);
-		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
+		Vector center = getCenteredAt(yCenter, 0);
+		int radius = 2 + world.rand.nextInt(girth);
+		generateSphere(world, center, radius, leaf, EnumReplaceMode.NONE);
 	}
 
 }

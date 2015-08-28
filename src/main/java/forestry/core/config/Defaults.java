@@ -26,24 +26,12 @@ public class Defaults {
 
 	public static final int FLAG_BLOCK_UPDATE = 1;
 	public static final int FLAG_BLOCK_SYNCH = 2;
-
-	public static final int NET_MAX_UPDATE_DISTANCE = 50;
+	public static final int FLAG_BLOCK_SYNCH_AND_UPDATE = FLAG_BLOCK_UPDATE + FLAG_BLOCK_SYNCH;
 
 	public static final int BUCKET_VOLUME = 1000;
 	public static final int FLUID_PER_HONEY_DROP = 100;
 
 	public static final int[] FACINGS = {0, 1, 2, 3, 4, 5};
-	public static final int FACING_UP = 1;
-	public static final int FACING_DOWN = 0;
-	public static final int FACING_NORTH = 2;
-	public static final int FACING_SOUTH = 3;
-	public static final int FACING_WEST = 4;
-	public static final int FACING_EAST = 5;
-	public static final int[] FACING_SIDES = {FACING_NORTH, FACING_SOUTH, FACING_WEST, FACING_EAST};
-	public static final int[] FACING_NORTHSOUTH = {FACING_NORTH, FACING_SOUTH};
-	public static final int[] FACING_WESTEAST = {FACING_WEST, FACING_EAST};
-	public static final int[] FACINGS_NONE = new int[0];
-
 	public static final int[] SLOTS_NONE = new int[0];
 
 	// Textures
@@ -55,7 +43,7 @@ public class Defaults {
 	public static final String TEXTURE_APIARIST_ARMOR_PRIMARY = TEXTURE_PATH_ITEMS + "/apiarist_armor_1.png";
 	public static final String TEXTURE_APIARIST_ARMOR_SECONDARY = TEXTURE_PATH_ITEMS + "/apiarist_armor_2.png";
 	public static final String TEXTURE_NATURALIST_ARMOR_PRIMARY = TEXTURE_PATH_ITEMS + "/naturalist_armor_1.png";
-	public static final String TEXTURE_SKIN_BEEKEEPER = TEXTURE_PATH_ENTITIES + "/beekeeper.png";
+	public static final String TEXTURE_SKIN_BEEKPEEPER = TEXTURE_PATH_ENTITIES + "/beekeeper.png";
 	public static final String TEXTURE_SKIN_LUMBERJACK = TEXTURE_PATH_ENTITIES + "/lumberjack.png";
 
 	// Villagers
@@ -66,6 +54,15 @@ public class Defaults {
 	public static final String CHEST_GEN_HOOK_NATURALIST_CHEST = "naturalistChest";
 
 	// Definition IDs
+	public static final int DEFINITION_CORE_ID = 0;
+	public static final int DEFINITION_APICULTURE_ID = 1;
+	public static final int DEFINITION_ARBORICULTURE_ID = 2;
+	public static final int DEFINITION_ENERGY_ID = 3;
+	public static final int DEFINITION_FACTORY_TESR_ID = 4;
+	public static final int DEFINITION_FACTORY_Plain_ID = 5;
+	public static final int DEFINITION_LEPIDOPTEROLOGY_ID = 6;
+	public static final int DEFINITION_MAIL_ID = 7;
+	
 	public static final int DEFINITION_ANALYZER_META = 0;
 	public static final int DEFINITION_ESCRITOIRE_META = 1;
 
@@ -100,37 +97,11 @@ public class Defaults {
 
 	public static final int DEFINITION_ARBCHEST_META = 0;
 
-	// Package Ids
-	public static final int ID_PACKAGE_MACHINE_FERMENTER = 0;
-	public static final int ID_PACKAGE_MACHINE_STILL = 1;
-	public static final int ID_PACKAGE_MACHINE_BOTTLER = 2;
-	public static final int ID_PACKAGE_MACHINE_RAINTANK = 3;
-	public static final int ID_PACKAGE_MACHINE_GENERATOR = 4;
-	public static final int ID_PACKAGE_MACHINE_CARPENTER = 5;
-	public static final int ID_PACKAGE_MACHINE_MOISTENER = 6;
-	public static final int ID_PACKAGE_MACHINE_APIARY = 7;
-	public static final int ID_PACKAGE_MACHINE_CENTRIFUGE = 8;
-	public static final int ID_PACKAGE_MACHINE_SQUEEZER = 9;
-	public static final int ID_PACKAGE_MACHINE_ALVEARY = 10;
-	public static final int ID_PACKAGE_MACHINE_FABRICATOR = 11;
-
-	public static final int ID_PACKAGE_MILL_RAINMAKER = 1;
-	public static final int ID_PACKAGE_MILL_APIARIST_CHEST = 3;
-	public static final int ID_PACKAGE_MILL_ANALYZER = 4;
-	public static final int ID_PACKAGE_MILL_MAILBOX = 5;
-	public static final int ID_PACKAGE_MILL_TRADER = 6;
-	public static final int ID_PACKAGE_MILL_PHILATELIST = 7;
-
 	// Item Ids
 
 	public static final int SLOTS_BACKPACK_DEFAULT = 15;
 	public static final int SLOTS_BACKPACK_T2 = 45;
 	public static final int SLOTS_BACKPACK_APIARIST = 125;
-
-	// Bee ids
-	public static final int ID_BEE_SPECIES_REDDENED = 31;
-	public static final int ID_BEE_SPECIES_DARKENED = 32;
-	public static final int ID_BEE_SPECIES_OMEGA = 33;
 
 	// Food stuff
 	public static final int FOOD_AMBROSIA_HEAL = 8;
@@ -183,10 +154,6 @@ public class Defaults {
 	// Factory
 	public static final int PROCESSOR_TANK_CAPACITY = 10 * BUCKET_VOLUME;
 
-	public static final int MACHINE_LATENCY = 1000;
-	public static final int MACHINE_MIN_ENERGY_RECEIVED = 50;
-	public static final int MACHINE_MAX_ENERGY_RECEIVED = 400;
-	public static final int MACHINE_MIN_ACTIVATION_ENERGY = 150;
 	public static final int MACHINE_MAX_ENERGY = 5000;
 
 	public static final int RAINMAKER_RAIN_DURATION_IODINE = 10000;

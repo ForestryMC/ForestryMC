@@ -25,7 +25,9 @@ import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleFruit;
 import forestry.api.arboriculture.IAlleleGrowth;
+import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IFruitFamily;
@@ -33,13 +35,12 @@ import forestry.arboriculture.genetics.TreeGenome;
 import forestry.arboriculture.items.ItemGermlingGE;
 import forestry.arboriculture.items.ItemTreealyzer.TreealyzerInventory;
 import forestry.core.config.ForestryItem;
-import forestry.core.genetics.Allele;
-import forestry.core.genetics.AlleleBoolean;
-import forestry.core.genetics.AllelePlantType;
+import forestry.core.genetics.alleles.Allele;
+import forestry.core.genetics.alleles.AlleleBoolean;
+import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StringUtil;
-import forestry.plugins.PluginArboriculture;
 
 public class GuiTreealyzer extends GuiAlyzer {
 
@@ -49,7 +50,10 @@ public class GuiTreealyzer extends GuiAlyzer {
 		ArrayList<ItemStack> treeList = new ArrayList<ItemStack>();
 		((ItemGermlingGE) ForestryItem.sapling.item()).addCreativeItems(treeList, false);
 		for (ItemStack treeStack : treeList) {
-			iconStacks.put(TreeGenome.getSpecies(treeStack).getUID(), treeStack);
+			IAlleleTreeSpecies species = TreeGenome.getSpecies(treeStack);
+			if (species != null) {
+				iconStacks.put(species.getUID(), treeStack);
+			}
 		}
 	}
 
@@ -68,8 +72,8 @@ public class GuiTreealyzer extends GuiAlyzer {
 			if (inventory.getStackInSlot(k) == null) {
 				continue;
 			}
-			tree = PluginArboriculture.treeInterface.getMember(inventory.getStackInSlot(k));
-			treeType = PluginArboriculture.treeInterface.getType(inventory.getStackInSlot(k));
+			tree = TreeManager.treeRoot.getMember(inventory.getStackInSlot(k));
+			treeType = TreeManager.treeRoot.getType(inventory.getStackInSlot(k));
 			if (tree == null || !tree.isAnalyzed()) {
 				continue;
 			}
@@ -89,7 +93,7 @@ public class GuiTreealyzer extends GuiAlyzer {
 				drawAnalyticsPage3(tree);
 				break;
 			case 4:
-				drawAnalyticsPage4(tree);
+				drawAnalyticsPageMutations(tree);
 				break;
 			case 6:
 				drawAnalyticsPageClassification(tree);
@@ -110,28 +114,20 @@ public class GuiTreealyzer extends GuiAlyzer {
 		newLine();
 		newLine();
 
-		/*
-		IAlleleTreeSpecies primary = tree.getGenome().getPrimaryAsTree();
-		IAlleleTreeSpecies secondary = tree.getGenome().getSecondaryAsTree();
-
-		drawLine(StringUtil.localize("gui.species"), COLUMN_0);
-		drawSplitLine(primary.getName(), COLUMN_1, COLUMN_2 - COLUMN_1 - 4, tree, EnumTreeChromosome.SPECIES, false);
-		drawSplitLine(secondary.getName(), COLUMN_2, COLUMN_2 - COLUMN_1 - 4, tree, EnumTreeChromosome.SPECIES, true);
-
-		newLine();
-		newLine();*/
-
 		{
 			String customPrimaryTreeKey = "trees.custom.treealyzer." + type.getName() + "." + tree.getGenome().getPrimary().getUnlocalizedName().replace("trees.species.", "");
 			String customSecondaryTreeKey = "trees.custom.treealyzer." + type.getName() + "." + tree.getGenome().getSecondary().getUnlocalizedName().replace("trees.species.", "");
 
 			drawSpeciesRow(StringUtil.localize("gui.species"), tree, EnumTreeChromosome.SPECIES, checkCustomName(customPrimaryTreeKey), checkCustomName(customSecondaryTreeKey));
+			newLine();
 		}
-		newLine();
 
 		drawChromosomeRow(StringUtil.localize("gui.saplings"), tree, EnumTreeChromosome.FERTILITY);
+		newLineCompressed();
 		drawChromosomeRow(StringUtil.localize("gui.maturity"), tree, EnumTreeChromosome.MATURATION);
+		newLineCompressed();
 		drawChromosomeRow(StringUtil.localize("gui.height"), tree, EnumTreeChromosome.HEIGHT);
+		newLineCompressed();
 
 		IAlleleInteger activeGirth = (IAlleleInteger) tree.getGenome().getActiveAllele(EnumTreeChromosome.GIRTH);
 		IAlleleInteger inactiveGirth = (IAlleleInteger) tree.getGenome().getInactiveAllele(EnumTreeChromosome.GIRTH);
@@ -139,10 +135,12 @@ public class GuiTreealyzer extends GuiAlyzer {
 		drawLine(String.format("%sx%s", activeGirth.getValue(), activeGirth.getValue()), COLUMN_1, tree, EnumTreeChromosome.GIRTH, false);
 		drawLine(String.format("%sx%s", inactiveGirth.getValue(), inactiveGirth.getValue()), COLUMN_2, tree, EnumTreeChromosome.GIRTH, true);
 
-		newLine();
+		newLineCompressed();
 
 		drawChromosomeRow(StringUtil.localize("gui.yield"), tree, EnumTreeChromosome.YIELD);
+		newLineCompressed();
 		drawChromosomeRow(StringUtil.localize("gui.sappiness"), tree, EnumTreeChromosome.SAPPINESS);
+		newLineCompressed();
 
 		String yes = StringUtil.localize("yes");
 		String no = StringUtil.localize("no");
@@ -154,7 +152,7 @@ public class GuiTreealyzer extends GuiAlyzer {
 		drawLine(StringUtil.readableBoolean(primaryFireproof.getValue(), yes, no), COLUMN_1, tree, EnumTreeChromosome.FIREPROOF, false);
 		drawLine(StringUtil.readableBoolean(secondaryFireproof.getValue(), yes, no), COLUMN_2, tree, EnumTreeChromosome.FIREPROOF, false);
 
-		newLine();
+		newLineCompressed();
 
 		drawChromosomeRow(StringUtil.localize("gui.effect"), tree, EnumTreeChromosome.EFFECT);
 
@@ -279,15 +277,16 @@ public class GuiTreealyzer extends GuiAlyzer {
 
 		int x = COLUMN_0;
 		for (ItemStack stack : tree.getProduceList()) {
-			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, stack, (int) ((guiLeft + x) * (1 / factor)),
-					(int) ((guiTop + getLineY()) * (1 / factor)));
+			itemRender.renderItemIntoGUI(stack, guiLeft + x, guiTop + getLineY());
 			x += 18;
-			if (x > adjustToFactor(148)) {
+			if (x > 148) {
 				x = COLUMN_0;
 				newLine();
 			}
 		}
 
+		newLine();
+		newLine();
 		newLine();
 		newLine();
 
@@ -296,10 +295,9 @@ public class GuiTreealyzer extends GuiAlyzer {
 
 		x = COLUMN_0;
 		for (ItemStack stack : tree.getSpecialtyList()) {
-			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, stack, (int) ((guiLeft + x) * (1 / factor)),
-					(int) ((guiTop + getLineY()) * (1 / factor)));
+			itemRender.renderItemIntoGUI(stack, guiLeft + x, guiTop + getLineY());
 			x += 18;
-			if (x > adjustToFactor(148)) {
+			if (x > 148) {
 				x = COLUMN_0;
 				newLine();
 			}

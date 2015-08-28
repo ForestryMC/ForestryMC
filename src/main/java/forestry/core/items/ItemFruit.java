@@ -16,24 +16,32 @@ import java.util.Locale;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
+import forestry.api.core.IModelManager;
 import forestry.core.config.ForestryItem;
 import forestry.core.render.TextureManager;
 
 public class ItemFruit extends ItemForestryFood {
 
-	public static enum EnumFruit {
+	public enum EnumFruit {
 		CHERRY("cropCherry"), WALNUT("cropWalnut"), CHESTNUT("cropChestnut"), LEMON("cropLemon"), PLUM("cropPlum"), DATES("cropDate"), PAPAYA("cropPapaya");//, COCONUT("cropCoconut");
 		public static final EnumFruit[] VALUES = values();
 
 		final String oreDict;
 
-		private EnumFruit(String oreDict) {
+		EnumFruit(String oreDict) {
 			this.oreDict = oreDict;
+		}
+		
+		public static void registerModel(Item item, IModelManager manager) {
+			for(int i = 0;i < VALUES.length;i++)
+			{
+				EnumFruit fruit = VALUES[i];
+				manager.registerItemModel(item, i, fruit.name().toLowerCase());
+			}
 		}
 
 		public ItemStack getStack() {
@@ -83,6 +91,12 @@ public class ItemFruit extends ItemForestryFood {
 		}
 
 		return super.getUnlocalizedName(stack) + "." + EnumFruit.VALUES[stack.getItemDamage()].name().toLowerCase(Locale.ENGLISH);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		EnumFruit.registerModel(item, manager);
 	}
 
 }

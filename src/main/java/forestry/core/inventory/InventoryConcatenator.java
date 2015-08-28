@@ -67,6 +67,16 @@ public class InventoryConcatenator implements IInventory {
 	public void setInventorySlotContents(int slot, ItemStack stack) {
 		invMap.get(slot).setInventorySlotContents(slotMap.get(slot), stack);
 	}
+	
+	@Override
+	public String getCommandSenderName() {
+		return "";
+	}
+
+	@Override
+	public boolean hasCustomName() {
+		return false;
+	}
 
 	@Override
 	public int getInventoryStackLimit() {
@@ -93,16 +103,6 @@ public class InventoryConcatenator implements IInventory {
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		return invMap.get(slot).isItemValidForSlot(slotMap.get(slot), stack);
-	}
-
-	@Override
-	public String getCommandSenderName() {
-		return "";
-	}
-
-	@Override
-	public boolean hasCustomName() {
-		return false;
 	}
 
 	@Override

@@ -17,7 +17,7 @@ import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.ReservoirWidget;
 import forestry.factory.gadgets.MachineFabricator;
 
-public class GuiFabricator extends GuiForestryTitled<MachineFabricator> {
+public class GuiFabricator extends GuiForestryTitled<ContainerFabricator, MachineFabricator> {
 
 	public GuiFabricator(InventoryPlayer player, MachineFabricator tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/fabricator.png", new ContainerFabricator(player, tile), tile);
@@ -29,7 +29,7 @@ public class GuiFabricator extends GuiForestryTitled<MachineFabricator> {
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		MachineFabricator fabricator = tile;
+		MachineFabricator fabricator = inventory;
 		int heatScaled = fabricator.getHeatScaled(52);
 		if (heatScaled > 0) {
 			drawTexturedModalRect(guiLeft + 55, guiTop + 17 + 52 - heatScaled, 192, 52 - heatScaled, 4, heatScaled);

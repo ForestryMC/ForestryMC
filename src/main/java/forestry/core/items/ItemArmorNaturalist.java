@@ -10,18 +10,25 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import forestry.api.core.IArmorNaturalist;
-import forestry.core.CreativeTabForestry;
-import forestry.core.config.Defaults;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.IArmorNaturalist;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
+import forestry.core.CreativeTabForestry;
+import forestry.core.config.Defaults;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StringUtil;
 
-public class ItemArmorNaturalist extends ItemArmor implements IArmorNaturalist {
+public class ItemArmorNaturalist extends ItemArmor implements IArmorNaturalist, IModelRegister {
 
-	public ItemArmorNaturalist(int slot) {
-		super(ArmorMaterial.LEATHER, 0, slot);
+	public ItemArmorNaturalist() {
+		super(ArmorMaterial.LEATHER, 0, 0);
 		this.setMaxDamage(100);
 		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
@@ -29,6 +36,12 @@ public class ItemArmorNaturalist extends ItemArmor implements IArmorNaturalist {
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
 		return Defaults.ID + ":" + Defaults.TEXTURE_NATURALIST_ARMOR_PRIMARY;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0);
 	}
 
 	@Override

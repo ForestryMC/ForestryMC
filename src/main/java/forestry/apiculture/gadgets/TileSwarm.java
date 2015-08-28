@@ -22,7 +22,7 @@ import forestry.core.inventory.InventoryAdapter;
 public class TileSwarm extends TileEntity implements IUpdatePlayerListBox {
 
 	public final InventoryAdapter contained = new InventoryAdapter(2, "Contained");
-	
+
 	// Hack to make sure that hives glow.
 	// TODO: remove when Mojang fixes this bug: https://bugs.mojang.com/browse/MC-3329
 	// Hives should not need to tick normally.
@@ -38,7 +38,7 @@ public class TileSwarm extends TileEntity implements IUpdatePlayerListBox {
 
 	public TileSwarm setContained(ItemStack[] bees) {
 		for (ItemStack itemstack : bees) {
-			InvTools.addStack(contained, itemstack, false, true);
+			InvTools.addStack(contained, itemstack, true);
 		}
 
 		return this;

@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 
@@ -20,48 +19,44 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 
+import forestry.api.core.sprite.ISprite;
 import forestry.core.config.Defaults;
-import forestry.core.gui.WidgetManager;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.core.gui.widgets.Widget;
+import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 import forestry.energy.gadgets.EngineBronze;
 
-public class GuiEngineBronze extends GuiEngine {
+public class GuiEngineBronze extends GuiEngine<ContainerEngineBronze, EngineBronze> {
 
 	protected class BiogasSlot extends Widget {
 
-		private final EngineBronze engine;
-
-		public BiogasSlot(WidgetManager manager, int xPos, int yPos, EngineBronze engine) {
+		public BiogasSlot(WidgetManager manager, int xPos, int yPos) {
 			super(manager, xPos, yPos);
-			this.engine = engine;
 			this.height = 16;
 		}
 
 		@Override
 		public void draw(int startX, int startY) {
 
-			if (engine == null || engine.totalTime <= 0) {
+			if (inventory == null || inventory.totalTime <= 0) {
 				return;
 			}
 
-			Fluid fluid = FluidRegistry.getFluid(engine.currentFluidId);
+			Fluid fluid = FluidRegistry.getFluid(inventory.currentFluidId);
 			if (fluid == null) {
 				return;
 			}
-			TextureAtlasSprite liquidIcon = fluid.getIcon();
-			if (liquidIcon == null) {
+			if(fluid.getStill() == null)
 				return;
-			}
 
-			int squaled = (engine.burnTime * height) / engine.totalTime;
+			int squaled = (inventory.burnTime * height) / inventory.totalTime;
 			if (squaled > height) {
 				squaled = height;
 			}
 
-			Proxies.common.bindTexture();
+			Proxies.common.bindTexture(fluid.getStill());
 			int start = 0;
 
 			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
@@ -77,7 +72,7 @@ public class GuiEngineBronze extends GuiEngine {
 				}
 
 				// drawTexturedModalRect(startX + xPos, startY + yPos + height - x - start, imgColumn * 16, imgLine * 16, 16, 16 - (16 - x));
-				manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos + height - x - start, liquidIcon, 16, 16 - (16 - x));
+				manager.gui.drawGradientRect(startX + xPos, startY + yPos + height - x - start, 0, 0, 16, 16 - (16 - x));
 				start = start + 16;
 
 				if (x == 0 || squaled == 0) {
@@ -90,7 +85,7 @@ public class GuiEngineBronze extends GuiEngine {
 
 		@Override
 		public String getLegacyTooltip(EntityPlayer player) {
-			Fluid fluid = FluidRegistry.getFluid(engine.currentFluidId);
+			Fluid fluid = FluidRegistry.getFluid(inventory.currentFluidId);
 			if (fluid == null) {
 				return StringUtil.localize("gui.empty");
 			}
@@ -104,18 +99,14 @@ public class GuiEngineBronze extends GuiEngine {
 		widgetManager.add(new TankWidget(this.widgetManager, 89, 19, 0));
 		widgetManager.add(new TankWidget(this.widgetManager, 107, 19, 1));
 
-		widgetManager.add(new BiogasSlot(this.widgetManager, 30, 47, tile));
-	}
-
-	protected EngineBronze getEngine() {
-		return (EngineBronze) tile;
+		widgetManager.add(new BiogasSlot(this.widgetManager, 30, 47));
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		int temp = getEngine().getOperatingTemperatureScaled(16);
+		int temp = inventory.getOperatingTemperatureScaled(16);
 		if (temp > 16) {
 			temp = 16;
 		}

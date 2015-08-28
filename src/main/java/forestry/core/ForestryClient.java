@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core;
 
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
-
 import forestry.apiculture.render.BlockCandleRenderer;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.BlockRenderingHandler;
@@ -20,7 +18,6 @@ public class ForestryClient extends ForestryCore {
 
 	public static int byBlockModelId;
 	public static int candleRenderId;
-	public static int blockModelIdEngine;
 
 	@Override
 	public void init(Object basemod) {
@@ -29,7 +26,6 @@ public class ForestryClient extends ForestryCore {
 
 		byBlockModelId = Proxies.render.getNextAvailableRenderId();
 		candleRenderId = Proxies.render.getNextAvailableRenderId();
-		blockModelIdEngine = Proxies.render.getNextAvailableRenderId();
 
 		BlockRenderingHandler renderHandler = new BlockRenderingHandler();
 		RenderingRegistry.registerBlockHandler(byBlockModelId, renderHandler);

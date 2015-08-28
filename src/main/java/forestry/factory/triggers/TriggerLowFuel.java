@@ -52,4 +52,9 @@ public class TriggerLowFuel extends Trigger {
 		return false;
 	}
 
+	@Override
+	public int getSheetLocation() {
+		return 0;
+	}
+
 }

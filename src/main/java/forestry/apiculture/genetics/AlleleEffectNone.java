@@ -10,19 +10,23 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.world.World;
+import net.minecraft.util.AxisAlignedBB;
 
 import forestry.api.apiculture.IAlleleBeeEffect;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeeModifier;
 import forestry.api.genetics.IEffectData;
-import forestry.core.genetics.Allele;
+import forestry.apiculture.BeeHousingModifier;
+import forestry.core.genetics.alleles.AlleleCategorized;
+import forestry.core.vect.MutableVect;
+import forestry.core.vect.Vect;
 import forestry.plugins.PluginApiculture;
 
-public class AlleleEffectNone extends Allele implements IAlleleBeeEffect {
+public class AlleleEffectNone extends AlleleCategorized implements IAlleleBeeEffect {
 
-	public AlleleEffectNone(String uid) {
-		super(uid, true);
+	public AlleleEffectNone(String valueName, boolean isDominant) {
+		super("forestry", "effect", valueName, isDominant);
 	}
 
 	@Override
@@ -37,39 +41,47 @@ public class AlleleEffectNone extends Allele implements IAlleleBeeEffect {
 
 	@Override
 	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		return doEffect(genome, storedData, housing.getWorld(), housing.getBiomeId(), housing.getCoords().getX(), housing.getCoords().getY(), housing.getCoords().getZ());
-	}
-
-	protected IEffectData doEffect(IBeeGenome genome, IEffectData storedData, World world, int biomeid, int x, int y, int z) {
 		return storedData;
-	}
-
-	@Override
-	public String getUnlocalizedName() {
-		return "apiculture.effect.none";
 	}
 
 	@Override
 	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-
-		int[] area = genome.getTerritory();
-		area[0] *= housing.getTerritoryModifier(genome, 1f);
-		area[1] *= housing.getTerritoryModifier(genome, 1f);
-		area[2] *= housing.getTerritoryModifier(genome, 1f);
-
-		if (area[0] < 1) {
-			area[0] = 1;
-		}
-		if (area[1] < 1) {
-			area[1] = 1;
-		}
-		if (area[2] < 1) {
-			area[2] = 1;
-		}
-
-		PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getCoords().getX(), housing.getCoords().getY(),
-				housing.getCoords().getZ(), genome.getPrimary().getIconColour(0), area[0], area[1], area[2]);
+		PluginApiculture.proxy.addBeeHiveFX("particles/swarm_bee", housing.getWorld(), housing.getPos(), genome.getPrimary().getIconColour(0));
 		return storedData;
+	}
+
+	protected Vect getModifiedArea(IBeeGenome genome, IBeeHousing housing) {
+		IBeeModifier beeModifier = new BeeHousingModifier(housing);
+		float territoryModifier = beeModifier.getTerritoryModifier(genome, 1f);
+
+		MutableVect area = new MutableVect(genome.getTerritory());
+		area.multiply(territoryModifier);
+
+		if (area.getX() < 1) {
+			area.setX(1);
+		}
+		if (area.getY() < 1) {
+			area.setY(1);
+		}
+		if (area.getZ() < 1) {
+			area.setZ(1);
+		}
+
+		return new Vect(area);
+	}
+
+	protected AxisAlignedBB getBounding(IBeeGenome genome, IBeeHousing housing) {
+		IBeeModifier beeModifier = new BeeHousingModifier(housing);
+		float territoryModifier = beeModifier.getTerritoryModifier(genome, 1.0f);
+
+		MutableVect area = new MutableVect(genome.getTerritory());
+		area.multiply(territoryModifier);
+		Vect offset = new Vect(area).multiply(-1 / 2.0f);
+
+		Vect min = new Vect(housing.getPos()).add(offset);
+		Vect max = min.add(area);
+
+		return AxisAlignedBB.fromBounds(min.getX(), min.getY(), min.getY(), max.getX(), max.getY(), max.getZ());
 	}
 
 }

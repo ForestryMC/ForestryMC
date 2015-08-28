@@ -19,17 +19,15 @@ import java.util.Map.Entry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
-
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpecies;
-import forestry.api.apiculture.IAlvearyComponent;
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.apiculture.IBee;
 import forestry.api.apiculture.IBeeGenome;
@@ -38,21 +36,19 @@ import forestry.api.apiculture.IBeeMutation;
 import forestry.api.apiculture.IBeeRoot;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.apiculture.IBeekeepingMode;
-import forestry.api.core.IStructureLogic;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IMutation;
 import forestry.apiculture.BeekeepingLogic;
-import forestry.apiculture.gadgets.StructureLogicAlveary;
 import forestry.core.config.ForestryItem;
 import forestry.core.genetics.SpeciesRoot;
 import forestry.plugins.PluginApiculture;
 
 public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 
-	public static int beeSpeciesCount = -1;
+	private static int beeSpeciesCount = -1;
 	public static final String UID = "rootBees";
 
 	@Override
@@ -157,8 +153,8 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 			return false;
 		}
 
-		IBee bee = getMember(stack);
-		return bee.getMate() != null;
+		NBTTagCompound nbt = stack.getTagCompound();
+		return nbt != null && nbt.hasKey("Mate");
 	}
 
 	@Override
@@ -176,7 +172,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	}
 
 	@Override
-	public IBee getBee(IBlockAccess world, IBeeGenome genome) {
+	public IBee getBee(World world, IBeeGenome genome) {
 		return new Bee(genome);
 	}
 
@@ -207,7 +203,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	}
 
 	/* TEMPLATES */
-	public static final ArrayList<IBee> beeTemplates = new ArrayList<IBee>();
+	private static final ArrayList<IBee> beeTemplates = new ArrayList<IBee>();
 
 	@Override
 	public ArrayList<IBee> getIndividualTemplates() {
@@ -216,20 +212,20 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 
 	@Override
 	public void registerTemplate(String identifier, IAllele[] template) {
-		beeTemplates.add(new Bee(PluginApiculture.beeInterface.templateAsGenome(template)));
+		beeTemplates.add(new Bee(BeeManager.beeRoot.templateAsGenome(template)));
 		speciesTemplates.put(identifier, template);
 	}
 
 	@Override
 	public IAllele[] getDefaultTemplate() {
-		return BeeTemplates.getDefaultTemplate();
+		return BeeDefinition.FOREST.getTemplate();
 	}
 
 	/* MUTATIONS */
 	/**
 	 * List of possible mutations on species alleles.
 	 */
-	private static ArrayList<IBeeMutation> beeMutations = new ArrayList<IBeeMutation>();
+	private static final ArrayList<IBeeMutation> beeMutations = new ArrayList<IBeeMutation>();
 
 	@Override
 	public Collection<IBeeMutation> getMutations(boolean shuffle) {
@@ -255,8 +251,8 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	}
 
 	/* BREEDING MODES */
-	final ArrayList<IBeekeepingMode> beekeepingModes = new ArrayList<IBeekeepingMode>();
-	public static IBeekeepingMode activeBeekeepingMode;
+	private final ArrayList<IBeekeepingMode> beekeepingModes = new ArrayList<IBeekeepingMode>();
+	private static IBeekeepingMode activeBeekeepingMode;
 
 	@Override
 	public void resetBeekeepingMode() {
@@ -327,11 +323,6 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 	@Override
 	public IBeekeepingLogic createBeekeepingLogic(IBeeHousing housing) {
 		return new BeekeepingLogic(housing);
-	}
-
-	@Override
-	public IStructureLogic createAlvearyStructureLogic(IAlvearyComponent structure) {
-		return new StructureLogicAlveary(structure);
 	}
 
 	@Override

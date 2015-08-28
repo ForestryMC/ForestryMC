@@ -94,6 +94,11 @@ public class InventoryMapper implements IInventory {
 		inv.setInventorySlotContents(start + slot, itemstack);
 	}
 
+	@Override
+	public String getCommandSenderName() {
+		return inv.getCommandSenderName();
+	}
+
 	public void setStackSizeLimit(int limit) {
 		stackSizeLimit = limit;
 	}
@@ -127,7 +132,7 @@ public class InventoryMapper implements IInventory {
 	public ItemStack getStackInSlotOnClosing(int slot) {
 		return inv.getStackInSlotOnClosing(start + slot);
 	}
-	
+
 	@Override
 	public boolean hasCustomName() {
 		return inv.hasCustomName();
@@ -142,11 +147,6 @@ public class InventoryMapper implements IInventory {
 	}
 
 	@Override
-	public String getCommandSenderName() {
-		return inv.getCommandSenderName();
-	}
-
-	@Override
 	public IChatComponent getDisplayName() {
 		return inv.getDisplayName();
 	}
@@ -158,7 +158,7 @@ public class InventoryMapper implements IInventory {
 
 	@Override
 	public void setField(int id, int value) {
-		inv.setField(id, value);	
+		inv.setField(id, value);
 	}
 
 	@Override

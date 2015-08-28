@@ -11,20 +11,16 @@
 package forestry.core.proxy;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
-
 import forestry.core.config.Config;
 import forestry.core.gadgets.MachineDefinition;
 import forestry.core.interfaces.IBlockRenderer;
 import forestry.core.render.BlockRenderingHandler;
-import forestry.core.render.EntitySnowFX;
 import forestry.core.render.RenderEscritoire;
 import forestry.core.render.RenderMachine;
 import forestry.core.render.RenderMill;
@@ -46,7 +42,7 @@ public class ClientProxyRender extends ProxyRender {
 
 	@Override
 	public void registerTESR(MachineDefinition definition) {
-		BlockRenderingHandler.byBlockRenderer.put(new TileRendererIndex(definition.block, definition.meta), definition.renderer);
+		BlockRenderingHandler.byBlockRenderer.put(new TileRendererIndex(definition.getBlock(), definition.getMeta()), definition.renderer);
 		ClientRegistry.bindTileEntitySpecialRenderer(definition.teClass, (TileEntitySpecialRenderer) definition.renderer);
 	}
 
@@ -70,46 +66,37 @@ public class ClientProxyRender extends ProxyRender {
 		return new RenderEscritoire();
 	}
 
-	private boolean shouldSpawnParticle(World world, boolean canDisable) {
-		if (canDisable && !Config.enableParticleFX) {
+	public static boolean shouldSpawnParticle(World world) {
+		if (!Config.enableParticleFX) {
 			return false;
 		}
+
 		Minecraft mc = FMLClientHandler.instance().getClient();
 		int particleSetting = mc.gameSettings.particleSetting;
-		if (!canDisable && particleSetting > 1) {
-			particleSetting = 1;
+
+		// minimal
+		if (particleSetting == 2) {
+			return world.rand.nextInt(10) == 0;
 		}
-		if (particleSetting == 1 && world.rand.nextInt(3) == 0) {
-			particleSetting = 2;
+
+		// decreased
+		if (particleSetting == 1) {
+			return world.rand.nextInt(3) != 0;
 		}
-		if (particleSetting > 1) {
-			return false;
-		}
+
+		// all
 		return true;
 	}
 
 	@Override
-	public void addSnowFX(World world, double xCoord, double yCoord, double zCoord, int color, int areaX, int areaY, int areaZ) {
-		if (!shouldSpawnParticle(world, true)) {
-			return;
-		}
-
-		double spawnX = xCoord + world.rand.nextInt(areaX * 2) - areaX;
-		double spawnY = yCoord + world.rand.nextInt(areaY);
-		double spawnZ = zCoord + world.rand.nextInt(areaZ * 2) - areaZ;
-
-		Proxies.common.getClientInstance().effectRenderer.addEffect(new EntitySnowFX(world, spawnX, spawnY, spawnZ, 0.0f, 0.0f, 0.0f));
-	}
-
-	@Override
-	public short registerItemTexUID(TextureMap map, short uid, String ident) {
-		TextureManager.getInstance().registerTexUID(map, uid, ident);
+	public short registerItemTexUID(String modifier, short uid, String ident) {
+		TextureManager.getInstance().registerTexUID(uid, modifier, ident);
 		return uid;
 	}
 
 	@Override
-	public short registerTerrainTexUID(TextureMap map, short uid, String ident) {
-		TextureManager.getInstance().registerTexUID(map, uid, ident);
+	public short registerTerrainTexUID(String modifier, short uid, String ident) {
+		TextureManager.getInstance().registerTexUID(uid, modifier, ident);
 		return uid;
 	}
 

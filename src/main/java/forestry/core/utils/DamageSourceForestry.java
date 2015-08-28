@@ -21,7 +21,7 @@ public class DamageSourceForestry extends DamageSource {
 		super(ident);
 		setDamageBypassesArmor();
 	}
-	
+
 	@Override
 	public IChatComponent getDeathMessage(EntityLivingBase living) {
 		EntityLivingBase other = living.func_94060_bK();

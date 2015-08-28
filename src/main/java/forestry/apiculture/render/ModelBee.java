@@ -35,7 +35,7 @@ public class ModelBee extends ModelBase {
 	private final ModelRenderer crownQueen;
 	private final ModelRenderer crownPrincess;
 
-	EnumBeeType type = EnumBeeType.DRONE;
+	private EnumBeeType type = EnumBeeType.DRONE;
 
 	public ModelBee() {
 		textureWidth = 64;
@@ -154,7 +154,7 @@ public class ModelBee extends ModelBase {
 		GL11.glPopMatrix();
 	}
 
-	private void setRotation(ModelRenderer model, float x, float y, float z) {
+	private static void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;

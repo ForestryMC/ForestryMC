@@ -10,38 +10,32 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
 
 import forestry.api.world.ITreeGenData;
-import forestry.core.worldgen.BlockType;
 
 /**
  * This is a dummy and needs to be replaced with something proper.
  */
-public class WorldGenJungle extends WorldGenTree {
+public class WorldGenJungle extends WorldGenTreeVanilla {
 
 	public WorldGenJungle(ITreeGenData tree) {
 		super(tree);
 	}
 
 	@Override
-	public void generate() {
+	public void generate(World world) {
 
-		generateTreeTrunk(height, girth);
+		generateTreeTrunk(world, height, girth);
 
 		int leafSpawn = height + 1;
 
-		generateAdjustedCylinder(leafSpawn--, 0, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 0.5f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 0.5f, 1, leaf);
 
-		generateAdjustedCylinder(leafSpawn--, 1.9f, 1, leaf);
-		generateAdjustedCylinder(leafSpawn--, 1.9f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 1.9f, 1, leaf);
+		generateAdjustedCylinder(world, leafSpawn--, 1.9f, 1, leaf);
 
-	}
-
-	@Override
-	public BlockType getWood() {
-		return new BlockType(Blocks.log, 3);
 	}
 
 }

@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import forestry.api.core.IModelObject;
-import forestry.core.CreativeTabForestry;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
@@ -24,8 +19,15 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
+import forestry.api.core.sprite.ISpriteRegister;
+import forestry.core.CreativeTabForestry;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StringUtil;
 
-public class ItemForestry extends Item implements IModelObject {
+public class ItemForestry extends Item implements IModelRegister{
 
 	private boolean isBonemeal = false;
 
@@ -33,8 +35,8 @@ public class ItemForestry extends Item implements IModelObject {
 		setCreativeTab(CreativeTabForestry.tabForestry);
 	}
 
-	public ItemForestry setBonemeal(boolean isBonemeal) {
-		this.isBonemeal = isBonemeal;
+	public ItemForestry setBonemeal() {
+		this.isBonemeal = true;
 		return this;
 	}
 	
@@ -53,7 +55,7 @@ public class ItemForestry extends Item implements IModelObject {
 	}
 
 	@Override
-	public ModelType getModelType() {
-		return ModelType.DEFAULT;
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0, StringUtil.cleanItemName(this));
 	}
 }

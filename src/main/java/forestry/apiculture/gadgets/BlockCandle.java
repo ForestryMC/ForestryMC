@@ -10,14 +10,19 @@
  ******************************************************************************/
 package forestry.apiculture.gadgets;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import com.google.common.collect.ImmutableMap;
 
-import net.minecraft.block.Block;
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -30,25 +35,22 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
-import forestry.api.core.IModelObject;
-import forestry.api.core.IVariantObject;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.api.core.Tabs;
 import forestry.core.ForestryClient;
-import forestry.core.config.Defaults;
-import forestry.core.gadgets.BlockResourceStorageBlock.Resources;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
 import forestry.core.utils.StringUtil;
 
-public class BlockCandle extends BlockTorch implements IModelObject, IVariantObject {
+public class BlockCandle extends BlockTorch implements IModelRegister {
 
 	private static final PropertyEnum STATE = PropertyEnum.create("state", State.class);
 	
@@ -61,6 +63,45 @@ public class BlockCandle extends BlockTorch implements IModelObject, IVariantObj
 		}
 	}
 	
+	private static final ImmutableMap<String, Integer> colours;
+	private static final Set<Item> lightingItems;
+	public static final String colourTagName = "colour";
+
+	static {
+		colours = ImmutableMap.<String, Integer>builder()
+				.put("dyeWhite", new Color(255, 255, 255).getRGB())
+				.put("dyeOrange", new Color(219, 125, 62).getRGB())
+				.put("dyeMagenta", new Color(255, 20, 255).getRGB())
+				.put("dyeLightBlue", new Color(107, 138, 201).getRGB())
+				.put("dyeYellow", new Color(255, 255, 20).getRGB())
+				.put("dyeLime", new Color(20, 255, 20).getRGB())
+				.put("dyePink", new Color(208, 132, 153).getRGB())
+				.put("dyeGray", new Color(74, 74, 74).getRGB())
+				.put("dyeLightGray", new Color(154, 161, 161).getRGB())
+				.put("dyeCyan", new Color(20, 255, 255).getRGB())
+				.put("dyePurple", new Color(126, 61, 181).getRGB())
+				.put("dyeBlue", new Color(20, 20, 255).getRGB())
+				.put("dyeBrown", new Color(79, 50, 31).getRGB())
+				.put("dyeGreen", new Color(53, 70, 27).getRGB())
+				.put("dyeRed", new Color(150, 52, 48).getRGB())
+				.put("dyeBlack", new Color(20, 20, 20).getRGB())
+				.build();
+
+		lightingItems = new HashSet<Item>(Arrays.asList(
+				Items.flint_and_steel,
+				Items.flint,
+				Item.getItemFromBlock(Blocks.torch)
+		));
+	}
+
+	public BlockCandle() {
+		super();
+		this.setHardness(0.0F);
+		this.setStepSound(soundTypeWood);
+		setCreativeTab(Tabs.tabApiculture);
+		setDefaultState(this.blockState.getBaseState().withProperty(STATE, State.OFF).withProperty(FACING, EnumFacing.UP));
+	}
+	
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return ((State)state.getValue(STATE)).ordinal();
@@ -69,25 +110,6 @@ public class BlockCandle extends BlockTorch implements IModelObject, IVariantObj
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(STATE, State.values()[meta]);
-	}
-	
-	private final ArrayList<Item> lightingItems = new ArrayList<Item>();
-
-	public BlockCandle() {
-		super();
-		this.setHardness(0.0F);
-		this.setStepSound(soundTypeWood);
-		setCreativeTab(Tabs.tabApiculture);
-
-		lightingItems.add(Items.flint_and_steel);
-		lightingItems.add(Items.flint);
-		lightingItems.add(Item.getItemFromBlock(Blocks.torch));
-		setDefaultState(this.blockState.getBaseState().withProperty(STATE, Resources.APATITE).withProperty(FACING, EnumFacing.UP));
-	}
-	
-	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, STATE, FACING);
 	}
 	
 	@Override
@@ -104,27 +126,21 @@ public class BlockCandle extends BlockTorch implements IModelObject, IVariantObj
 	public int getRenderType() {
 		return ForestryClient.candleRenderId;
 	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0, ".off");
+		manager.registerItemModel(item, 1, ".on");
+	};
 	
 	@Override
 	public int getLightValue(IBlockAccess world, BlockPos pos) {
-		int meta = getMetaFromState(world.getBlockState(pos));
-		return (isLit(meta)) ? 14 : 0;
-	}
-	
-	@Override
-	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass) {
-		if(renderPass == 1)
-			return ((TileCandle)world.getTileEntity(pos)).getColour();
-		return super.colorMultiplier(world, pos, renderPass);
-	}
-
-	public int getColourFromItemStack(ItemStack stack) {
-		int colour = 0xffffff;
-		if (stack.hasTagCompound()) {
-			NBTTagCompound tag = stack.getTagCompound();
-			colour = (tag.getByte("red") << 16) | (tag.getByte("green") << 8) | tag.getByte("blue");
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if (tileEntity instanceof TileCandle && ((TileCandle) tileEntity).isLit()) {
+			return 14;
 		}
-		return colour;
+		return 0;
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -132,217 +148,150 @@ public class BlockCandle extends BlockTorch implements IModelObject, IVariantObj
 	public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
 		itemList.add(new ItemStack(this, 1, 0));
 	}
-
-	// Dye names correspond to colour values as below.
-	private static final String[] dyes = {"dyeWhite", "dyeOrange", "dyeMagenta", "dyeLightBlue",
-			"dyeYellow", "dyeLime", "dyePink", "dyeGray",
-			"dyeLightGray", "dyeCyan", "dyePurple", "dyeBlue",
-			"dyeBrown", "dyeGreen", "dyeRed", "dyeBlack"};
-
-	private static final int[][] colours = {{255, 255, 255}, {219, 125, 62}, {255, 20, 255}, {107, 138, 201},
-			{255, 255, 20}, {20, 255, 20}, {208, 132, 153}, {74, 74, 74},
-			{154, 161, 161}, {20, 255, 255}, {126, 61, 181}, {20, 20, 255},
-			{79, 50, 31}, {53, 70, 27}, {150, 52, 48}, {20, 20, 20}};
-
-	public static final String colourTagName = "colour";
 	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing facing, float facingX, float facingY, float facingZ) {
-		boolean flag = false;
-		int meta = state.getBlock().getMetaFromState(state);
-		boolean toggleLitState = true;
-		ItemStack held = player.getCurrentEquippedItem();
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if (!(tileEntity instanceof TileCandle)) {
+			return false;
+		}
 
-		if (!isLit(meta)) {
-			if (held == null || !lightingItems.contains(held.getItem())) {
+		TileCandle tileCandle = (TileCandle) tileEntity;
+		final boolean isLit = tileCandle.isLit();
+
+		boolean flag = false;
+		boolean toggleLitState = true;
+		ItemStack heldItem = player.getCurrentEquippedItem();
+
+		if (!isLit) {
+			if (heldItem == null || !lightingItems.contains(heldItem.getItem())) {
 				toggleLitState = false;
-			} else if (StackUtils.equals(this, held) && isLit(held)) {
+			} else if (StackUtils.equals(this, heldItem) && isLit(heldItem)) {
 				toggleLitState = true;
 			}
 		}
 
-		if (held != null) {
-			// Ensure a TileEntity exists. May be able to remove this in future versions.
-			TileCandle te = (TileCandle) world.getTileEntity(pos);
-			if (te == null) {
-				world.setTileEntity(pos, this.createTileEntity(world, getStateFromMeta(meta)));
-				te = (TileCandle) world.getTileEntity(pos);
-			}
-
-			if (StackUtils.equals(this, held)) {
-				if (!isLit(held)) {
+		if (heldItem != null) {
+			if (StackUtils.equals(this, heldItem)) {
+				if (!isLit(heldItem)) {
 					// Copy the colour of an unlit, coloured candle.
-					if (held.hasTagCompound() && held.getTagCompound().hasKey(colourTagName)) {
-						te.setColour(held.getTagCompound().getInteger(colourTagName));
+					if (heldItem.hasTagCompound() && heldItem.getTagCompound().hasKey(colourTagName)) {
+						tileCandle.setColour(heldItem.getTagCompound().getInteger(colourTagName));
 					} else {
 						// Reset to white if item has no
-						te.setColour(0xffffff);
+						tileCandle.setColour(0xffffff);
 					}
 				} else {
 					toggleLitState = true;
 				}
 				flag = true;
 			} else {
-				// Check for dye-able ness.
-				boolean matched = false;
-				for (int i = 0; i < dyes.length; ++i) {
-					for (ItemStack stack : OreDictionary.getOres(dyes[i])) {
-						if (OreDictionary.itemMatches(stack, held, true)) {
-							if (isLit(meta)) {
-								te.setColour(colours[i][0], colours[i][1], colours[i][2]);
-							} else {
-								te.addColour(colours[i][0], colours[i][1], colours[i][2]);
-							}
-							world.markBlockForUpdate(pos);
-							matched = true;
-							toggleLitState = false;
-							flag = true;
-							break;
-						}
-					}
-					if (matched) {
-						break;
-					}
+				boolean dyed = tryDye(heldItem, isLit, tileCandle);
+				if (dyed) {
+					world.markBlockForUpdate(pos);
+					toggleLitState = false;
+					flag = true;
 				}
 			}
 		}
 
 		if (toggleLitState) {
-			meta = this.toggleLitStatus(meta);
-			world.setBlockState(pos, getStateFromMeta(meta), Defaults.FLAG_BLOCK_SYNCH | Defaults.FLAG_BLOCK_UPDATE);
+			tileCandle.setLit(!isLit);
+			world.markBlockForUpdate(pos);
 			flag = true;
 		}
 		return flag;
 	}
+
+	private static boolean tryDye(ItemStack held, boolean isLit, TileCandle tileCandle) {
+		// Check for dye-able ness.
+		for (Map.Entry<String, Integer> colour : colours.entrySet()) {
+			String colourName = colour.getKey();
+			for (ItemStack stack : OreDictionary.getOres(colourName)) {
+				if (OreDictionary.itemMatches(stack, held, true)) {
+					if (isLit) {
+						tileCandle.setColour(colour.getValue());
+					} else {
+						tileCandle.addColour(colour.getValue());
+					}
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/* DROP HANDLING */
+	// Hack: 	When harvesting we need to get the drops in onBlockHarvested,
+	// 			because Mojang destroys the block and tile before calling getDrops.
+	private final ThreadLocal<ItemStack> drop = new ThreadLocal<ItemStack>();
 	
 	@Override
-	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		int meta = getMetaFromState(state);
+	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		if (!world.isRemote) {
-			TileCandle tc = (TileCandle) world.getTileEntity(pos);
-			int newMeta = isLit(meta) ? 1 : 0;
-			ItemStack stack = new ItemStack(this, 1, newMeta);
-			if (tc != null && tc.getColour() != 0xffffff) {
-				// When dropped, tag new item stack with colour. Unless it's white, then do no such thing for maximum stacking.
-				NBTTagCompound tag = new NBTTagCompound();
-				tag.setInteger(colourTagName, tc.getColour());
-				stack.setTagCompound(tag);
-			}
-			this.dropBlockAsItem(world, pos, state, 0);
-		}
-		super.breakBlock(world, pos, state);
-	}
-	
-	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack itemStack) {
-		TileCandle tc = (TileCandle) (world.getTileEntity(pos));
-		tc.setColour(this.getColourValueFromItemStack(itemStack));
-		if (isLit(itemStack)) {
-			int meta = getMetaFromState(state);
-			world.setBlockState(pos, getStateFromMeta(meta), Defaults.FLAG_BLOCK_SYNCH | Defaults.FLAG_BLOCK_UPDATE);
+			ItemStack itemStack = getCandleDrop(world, pos);
+			drop.set(itemStack);
 		}
 	}
 	
 	@Override
-	public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {
-		// Does nothing to prevent extra candles from falling.
-	}
-	
-	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
-		// Does nothing to prevent extra candles from falling.
-	}
-	
-	@Override
-	protected boolean checkForDrop(World world, BlockPos pos, IBlockState state) {
-		if (!this.canPlaceBlockAt(world, pos)) {
-			if (world.getBlockState(pos).getBlock() == this) {
-				world.setBlockToAir(pos);
-			}
-			return false;
-		} else {
-			return true;
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		ItemStack dropStack = drop.get();
+		drop.remove();
+
+		// not harvested, get drops normally
+		if (dropStack == null) {
+			dropStack = getCandleDrop((World) world, pos);
 		}
+
+		ArrayList<ItemStack> drops = new ArrayList<ItemStack>(1);
+		drops.add(dropStack);
+
+		return drops;
 	}
 	
 	@Override
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+		return getCandleDrop(world, pos);
+	}
+
+	private ItemStack getCandleDrop(World world, BlockPos pos) {
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if (!(tileEntity instanceof TileCandle)) {
+			return null;
+		}
+		TileCandle tileCandle = (TileCandle) tileEntity;
+		int colour = tileCandle.getColour();
+
+		int newMeta = tileCandle.isLit() ? 1 : 0;
+		ItemStack itemStack = new ItemStack(this, 1, newMeta);
+		if (colour != 0xffffff) {
+			// When dropped, tag new item stack with colour. Unless it's white, then do no such thing for maximum stacking.
+			NBTTagCompound tag = new NBTTagCompound();
+			tag.setInteger(colourTagName, colour);
+			itemStack.setTagCompound(tag);
+		}
+		return itemStack;
+	}
+	@Override
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack itemStack) {
+		TileCandle tileCandle = (TileCandle) (world.getTileEntity(pos));
+		int colour = getColourValueFromItemStack(itemStack);
+		boolean isLit = isLit(itemStack);
+		tileCandle.setColour(colour);
+		tileCandle.setLit(isLit);
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rand) {
-		if (isLit(getMetaFromState(state))) {
-			int l = getMetaFromState(state) & 0x07;
-			double d0 = pos.getX() + 0.5F;
-			double d1 = pos.getY() + 0.7F;
-			double d2 = pos.getZ() + 0.5F;
-			double d3 = 0.2199999988079071D;
-			double d4 = 0.27000001072883606D;
-
-			if (l == 1) {
-				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 - d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
-				world.spawnParticle(EnumParticleTypes.FLAME, d0 - d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
-			} else if (l == 2) {
-				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
-				world.spawnParticle(EnumParticleTypes.FLAME, d0 + d4, d1 + d3, d2, 0.0D, 0.0D, 0.0D);
-			} else if (l == 3) {
-				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1 + d3, d2 - d4, 0.0D, 0.0D, 0.0D);
-				world.spawnParticle(EnumParticleTypes.FLAME, d0, d1 + d3, d2 - d4, 0.0D, 0.0D, 0.0D);
-			} else if (l == 4) {
-				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1 + d3, d2 + d4, 0.0D, 0.0D, 0.0D);
-				world.spawnParticle(EnumParticleTypes.FLAME, d0, d1 + d3, d2 + d4, 0.0D, 0.0D, 0.0D);
-			} else {
-				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, 0.0D, 0.0D, 0.0D);
-				world.spawnParticle(EnumParticleTypes.FLAME, d0, d1, d2, 0.0D, 0.0D, 0.0D);
-			}
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if (tileEntity instanceof TileCandle && ((TileCandle) tileEntity).isLit()) {
+			super.randomDisplayTick(world, pos, state, rand);
 		}
 	}
 
-	@Override
-	protected boolean onNeighborChangeInternal(World world, BlockPos pos, IBlockState state) {
-		if (checkForDrop(world, pos, state)) {
-			int i1 = getMetaFromState(state) & 0x07;
-			boolean flag = false;
-
-			if (!world.isSideSolid(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ()), EnumFacing.EAST, true) && i1 == 1) {
-				flag = true;
-			}
-
-			if (!world.isSideSolid(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ()), EnumFacing.WEST, true) && i1 == 2) {
-				flag = true;
-			}
-
-			if (!world.isSideSolid(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1), EnumFacing.SOUTH, true) && i1 == 3) {
-				flag = true;
-			}
-
-			if (!world.isSideSolid(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1), EnumFacing.NORTH, true) && i1 == 4) {
-				flag = true;
-			}
-
-			if (!this.canPlaceTorchOn(world, new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())) && i1 == 5) {
-				flag = true;
-			}
-
-			if (flag) {
-				this.dropBlockAsItem(world, pos, state, 0);
-				world.setBlockToAir(pos);
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return true;
-		}
-	}
-
-	// Yes, function hiding. Go away.
-	public boolean canPlaceTorchOn(World par1World, BlockPos pos) {
-		if (World.doesBlockHaveSolidTopSurface(par1World, pos)) {
-			return true;
-		} else {
-			Block block = par1World.getBlockState(pos).getBlock();
-			return block.canPlaceTorchOnTop(par1World, pos);
-		}
-	}
-
-	protected int getColourValueFromItemStack(ItemStack itemStack) {
+	private static int getColourValueFromItemStack(ItemStack itemStack) {
 		int value = 0xffffff; // default to white.
 		if (itemStack.hasTagCompound()) {
 			NBTTagCompound tag = itemStack.getTagCompound();
@@ -353,41 +302,18 @@ public class BlockCandle extends BlockTorch implements IModelObject, IVariantObj
 		return value;
 	}
 
-	public static boolean isLit(int meta) {
-		return (meta & 0x08) > 0;
-	}
-
 	public static boolean isLit(ItemStack itemStack) {
 		return itemStack.getItemDamage() > 0;
 	}
 
-	protected int toggleLitStatus(int meta) {
-		return meta ^ 0x08;
-	}
-
-	public void addItemToLightingList(Item item) {
+	public static void addItemToLightingList(Item item) {
 		if (item == null) {
 			throw new NullPointerException();
 		}
 
-		if (!this.lightingItems.contains(item)) {
-			this.lightingItems.add(item);
+		if (!lightingItems.contains(item)) {
+			lightingItems.add(item);
 		}
-	}
-	
-	@Override
-	public int getRenderColor(IBlockState state) {
-		return super.getRenderColor(state);
-	}
-
-	@Override
-	public String[] getVariants() {
-		return new String[]{"on", "off"};
-	}
-
-	@Override
-	public ModelType getModelType() {
-		return ModelType.META;
 	}
 
 }

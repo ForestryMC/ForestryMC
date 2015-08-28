@@ -9,7 +9,6 @@
 package buildcraft.api.tools;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
 
 /***
  * Implement this interface on subclasses of Item to have that item work as a wrench for buildcraft
@@ -26,7 +25,7 @@ public interface IToolWrench {
 	 *
 	 * @return true if wrenching is allowed, false if not
 	 */
-	boolean canWrench(EntityPlayer player, BlockPos pos);
+	boolean canWrench(EntityPlayer player, int x, int y, int z);
 
 	/***
 	 * Callback after the wrench has been used. This can be used to decrease durability or for other purposes. To get the ItemStack that was used, check
@@ -37,5 +36,5 @@ public interface IToolWrench {
 	 * @param x
 	 *            ,y,z - The coordinates of the block being wrenched
 	 */
-	void wrenchUsed(EntityPlayer player, BlockPos pos);
+	void wrenchUsed(EntityPlayer player, int x, int y, int z);
 }

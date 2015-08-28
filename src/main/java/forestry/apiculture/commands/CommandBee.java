@@ -17,8 +17,8 @@ import forestry.core.commands.CommandSaveStats;
 import forestry.core.commands.ICommandModeHelper;
 import forestry.core.commands.IStatsSaveHelper;
 import forestry.core.commands.SubCommand;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.BlockPos;
 
 public class CommandBee extends SubCommand {
 
@@ -32,5 +32,25 @@ public class CommandBee extends SubCommand {
 		addChildCommand(new CommandMode(modeHelper));
 		addChildCommand(new CommandSaveStats(saveHelper, modeHelper));
 		addChildCommand(new CommandBeeGive());
+	}
+
+	@Override
+	public String getCommandName() {
+		return null;
+	}
+
+	@Override
+	public List getCommandAliases() {
+		return null;
+	}
+
+	@Override
+	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+		
+	}
+
+	@Override
+	public boolean canCommandSenderUseCommand(ICommandSender sender) {
+		return false;
 	}
 }

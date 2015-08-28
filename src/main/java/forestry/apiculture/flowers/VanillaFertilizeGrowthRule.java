@@ -21,7 +21,6 @@ import net.minecraft.world.World;
 import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
-import forestry.core.config.Defaults;
 
 public class VanillaFertilizeGrowthRule implements IFlowerGrowthRule {
 
@@ -48,7 +47,7 @@ public class VanillaFertilizeGrowthRule implements IFlowerGrowthRule {
 					groundMeta = 7;
 				}
 
-				return world.setBlockState(pos, ground.getStateFromMeta(groundMeta), Defaults.FLAG_BLOCK_SYNCH);
+				return world.setBlockState(pos, ground.getStateFromMeta(groundMeta), 2);
 			}
 		}
 

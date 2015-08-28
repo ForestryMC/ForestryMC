@@ -11,9 +11,15 @@
 package forestry.arboriculture.gadgets;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
-import forestry.plugins.PluginArboriculture;
+import forestry.api.arboriculture.ITree;
+import forestry.api.arboriculture.ITreekeepingMode;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.arboriculture.worldgen.WorldGenArboriculture;
+import forestry.core.worldgen.WorldGenBase;
 
 public class TileSapling extends TileTreeContainer {
 
@@ -41,32 +47,62 @@ public class TileSapling extends TileTreeContainer {
 		tryGrow(false);
 	}
 
-	public int tryGrow(boolean bonemealed) {
+	private static int getRequiredMaturity(World world, ITree tree) {
+		ITreekeepingMode treekeepingMode = TreeManager.treeRoot.getTreekeepingMode(world);
+		float maturationModifier = treekeepingMode.getMaturationModifier(tree.getGenome(), 1f);
+		return Math.round(tree.getRequiredMaturity() * maturationModifier);
+	}
 
-		int result = 0;
-		if (this.getTree() == null) {
-			return result;
+	public boolean canAcceptBoneMeal() {
+		ITree tree = getTree();
+
+		if (tree == null) {
+			return false;
 		}
 
-		int maturity = (int) (getTree().getRequiredMaturity() * PluginArboriculture.treeInterface.getTreekeepingMode(worldObj).getMaturationModifier(
-				getTree().getGenome(), 1f));
-
-		if (bonemealed && timesTicked < maturity) {
-			timesTicked++;
-			result = 1;
-		}
-
+		int maturity = getRequiredMaturity(worldObj, tree);
 		if (timesTicked < maturity) {
-			return result;
+			return true;
 		}
 
-		WorldGenerator generator = this.getTree().getTreeGenerator(worldObj, xCoord, yCoord, zCoord, bonemealed);
-		if (generator.generate(worldObj, worldObj.rand, xCoord, yCoord, zCoord)) {
-			PluginArboriculture.treeInterface.getBreedingTracker(worldObj, getOwnerProfile()).registerBirth(getTree());
-			return 2;
+		WorldGenerator generator = tree.getTreeGenerator(worldObj, pos, true);
+		if (generator instanceof WorldGenArboriculture) {
+			WorldGenArboriculture arboricultureGenerator = (WorldGenArboriculture) generator;
+			arboricultureGenerator.preGenerate(worldObj, pos);
+			return arboricultureGenerator.canGrow(worldObj, pos.getX(), pos.getY(), pos.getZ());
+		} else {
+			return true;
+		}
+	}
+
+	public void tryGrow(boolean bonemealed) {
+
+		ITree tree = getTree();
+
+		if (tree == null) {
+			return;
 		}
 
-		return 3;
+		int maturity = getRequiredMaturity(worldObj, tree);
+		if (timesTicked < maturity) {
+			if (bonemealed) {
+				timesTicked = maturity;
+			}
+			return;
+		}
+
+		WorldGenerator generator = tree.getTreeGenerator(worldObj, pos, bonemealed);
+		final boolean generated;
+		if (generator instanceof WorldGenBase) {
+			generated = ((WorldGenBase) generator).generate(worldObj, pos, bonemealed);
+		} else {
+			generated = generator.generate(worldObj, worldObj.rand, pos);
+		}
+
+		if (generated) {
+			IBreedingTracker breedingTracker = TreeManager.treeRoot.getBreedingTracker(worldObj, getOwner());
+			breedingTracker.registerBirth(tree);
+		}
 	}
 
 }

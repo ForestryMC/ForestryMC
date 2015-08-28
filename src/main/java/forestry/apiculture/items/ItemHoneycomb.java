@@ -17,14 +17,13 @@ import java.util.Random;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import forestry.api.core.IModelObject;
-import forestry.api.core.IVariantObject;
+
 import forestry.api.core.Tabs;
 import forestry.core.config.Config;
 import forestry.core.config.ForestryItem;
 import forestry.core.items.ItemForestry;
 
-public class ItemHoneycomb extends ItemForestry implements IModelObject{
+public class ItemHoneycomb extends ItemForestry {
 
 	private static class CombInfo {
 
@@ -45,7 +44,7 @@ public class ItemHoneycomb extends ItemForestry implements IModelObject{
 		}
 	}
 
-	public final CombInfo[] combs = new CombInfo[]{
+	private final CombInfo[] combs = new CombInfo[]{
 			new CombInfo("honey", 0xe8d56a, 0xffa12b), // 0
 			new CombInfo("cocoa", 0x674016, 0xffb62b).setIsSecret(), // 1
 			new CombInfo("simmering", 0x981919, 0xffb62b), // 2
@@ -107,12 +106,8 @@ public class ItemHoneycomb extends ItemForestry implements IModelObject{
 		}
 	}
 
-	public int getCombTypeCount() {
-		return combs.length;
-	}
-
-	public int getRandomCombType(Random random, boolean includeSecret) {
-		List<Integer> validCombs = new ArrayList<Integer>(getCombTypeCount());
+	private int getRandomCombType(Random random, boolean includeSecret) {
+		List<Integer> validCombs = new ArrayList<Integer>(combs.length);
 		for (int i = 0; i < combs.length; i++) {
 			if (!combs[i].isSecret || includeSecret) {
 				validCombs.add(i);
@@ -128,10 +123,5 @@ public class ItemHoneycomb extends ItemForestry implements IModelObject{
 
 	public static ItemStack getRandomComb(int qty, Random random, boolean includeSecret) {
 		return ForestryItem.beeComb.getItemStack(qty, ((ItemHoneycomb) ForestryItem.beeComb.item()).getRandomCombType(random, includeSecret));
-	}
-
-	@Override
-	public ModelType getModelType() {
-		return ModelType.DEFAULT;
 	}
 }

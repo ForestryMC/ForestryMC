@@ -29,7 +29,7 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
 	private final ModelBase model = new ModelBase() {
 	};
 
-	private static enum Textures {PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE}
+	private enum Textures {PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE}
 
 	private ResourceLocation[] textures;
 
@@ -92,6 +92,12 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
 	}
 
 	@Override
+	public void inventoryRender(double x, double y, double z) {
+		byte charge = 0;
+		render(0.0f, charge, EnumFacing.WEST, x, y, z);
+	}
+
+	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f, int i) {
 		Mill tile = (Mill) tileentity;
 		render(tile.progress, tile.charge, EnumFacing.WEST, d, d1, d2);
@@ -100,7 +106,6 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
 	private void render(float progress, int charge, EnumFacing orientation, double x, double y, double z) {
 
 		GL11.glPushMatrix();
-		GL11.glDisable(2896 /* GL_LIGHTING */);
 
 		GL11.glTranslatef((float) x, (float) y, (float) z);
 
@@ -189,7 +194,6 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
 		GL11.glTranslatef(-translate[0] * tfactor, translate[1] * tfactor, -translate[2] * tfactor);
 		blade2.render(factor);
 
-		GL11.glEnable(2896 /* GL_LIGHTING */);
 		GL11.glPopMatrix();
 
 	}

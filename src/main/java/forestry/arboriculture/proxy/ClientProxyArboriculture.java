@@ -13,12 +13,16 @@ package forestry.arboriculture.proxy;
 import net.minecraft.world.ColorizerFoliage;
 
 import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
+
+import cpw.mods.fml.client.registry.RenderingRegistry;
 
 import forestry.arboriculture.render.FenceRenderingHandler;
 import forestry.arboriculture.render.FruitPodRenderingHandler;
 import forestry.arboriculture.render.LeavesRenderingHandler;
+import forestry.arboriculture.render.LogItemRenderer;
+import forestry.arboriculture.render.PlankItemRenderer;
 import forestry.arboriculture.render.SaplingRenderHandler;
+import forestry.arboriculture.render.SlabItemRenderer;
 import forestry.arboriculture.render.StairItemRenderer;
 import forestry.core.config.ForestryBlock;
 import forestry.plugins.PluginArboriculture;
@@ -36,7 +40,21 @@ public class ClientProxyArboriculture extends ProxyArboriculture {
 		RenderingRegistry.registerBlockHandler(new FenceRenderingHandler());
 		RenderingRegistry.registerBlockHandler(new FruitPodRenderingHandler());
 
+		MinecraftForgeClient.registerItemRenderer(ForestryBlock.logs.item(), new LogItemRenderer());
+		MinecraftForgeClient.registerItemRenderer(ForestryBlock.logsFireproof.item(), new LogItemRenderer());
+
 		MinecraftForgeClient.registerItemRenderer(ForestryBlock.stairs.item(), new StairItemRenderer());
+		MinecraftForgeClient.registerItemRenderer(ForestryBlock.stairsFireproof.item(), new StairItemRenderer());
+
+		MinecraftForgeClient.registerItemRenderer(ForestryBlock.planks.item(), new PlankItemRenderer());
+		MinecraftForgeClient.registerItemRenderer(ForestryBlock.planksFireproof.item(), new PlankItemRenderer());
+
+		MinecraftForgeClient.registerItemRenderer(ForestryBlock.slabs.item(), new SlabItemRenderer());
+		MinecraftForgeClient.registerItemRenderer(ForestryBlock.slabsFireproof.item(), new SlabItemRenderer());
+
+		MinecraftForgeClient.registerItemRenderer(ForestryBlock.fences.item(), new FenceRenderingHandler());
+		MinecraftForgeClient.registerItemRenderer(ForestryBlock.fencesFireproof.item(), new FenceRenderingHandler());
+
 		MinecraftForgeClient.registerItemRenderer(ForestryBlock.leaves.item(), new LeavesRenderingHandler());
 	}
 

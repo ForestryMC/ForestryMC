@@ -29,7 +29,7 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.api.recipes.IGenericCrate;
+import forestry.core.items.ItemCrated;
 
 /**
  * Adapted from RenderTankCartItem by CovertJaguar <http://www.railcraft.info>
@@ -40,7 +40,7 @@ public class CrateRenderingHandler implements IItemRenderer {
 	private static final ResourceLocation ITEM_TEXTURE = TextureMap.locationItemsTexture;
 	private static final ResourceLocation GLINT_TEXTURE = new ResourceLocation("textures/misc/enchanted_item_glint.png");
 
-	public static final float PIXEL = 1.0f / 16.0f;
+	private static final float PIXEL = 1.0f / 16.0f;
 
 	private final RenderItem renderItem = new RenderItem();
 
@@ -334,8 +334,8 @@ public class CrateRenderingHandler implements IItemRenderer {
 		}
 
 		Item crateItem = crate.getItem();
-		if (crateItem instanceof IGenericCrate) {
-			return ((IGenericCrate) crateItem).getContained(crate);
+		if (crateItem instanceof ItemCrated) {
+			return ((ItemCrated) crateItem).getContained();
 		}
 		return null;
 	}

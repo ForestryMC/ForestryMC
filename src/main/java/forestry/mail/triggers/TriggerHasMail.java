@@ -12,7 +12,6 @@ package forestry.mail.triggers;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-
 import forestry.core.triggers.Trigger;
 import forestry.mail.IMailContainer;
 
@@ -33,6 +32,11 @@ public class TriggerHasMail extends Trigger {
 		}
 
 		return ((IMailContainer) tile).hasMail();
+	}
+
+	@Override
+	public int getSheetLocation() {
+		return 0;
 	}
 
 }

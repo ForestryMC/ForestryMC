@@ -38,13 +38,13 @@ public class AIButterflyMate extends AIButterflyInteract {
 			return false;
 		}
 
-		return GeneticsUtil.canNurse(entity.getButterfly(), entity.worldObj, rest);
+		return GeneticsUtil.canNurse(entity.getButterfly(), entity.worldObj, rest.posX, rest.posY, rest.posZ);
 	}
 
 	@Override
 	public void updateTask() {
 		if (continueExecuting()) {
-			IPollinatable tile = GeneticsUtil.getOrCreatePollinatable(null, entity.worldObj, rest);
+			IPollinatable tile = GeneticsUtil.getOrCreatePollinatable(null, entity.worldObj, rest.posX, rest.posY, rest.posZ);
 			if (tile instanceof IButterflyNursery) {
 				IButterflyNursery nursery = (IButterflyNursery) tile;
 				if (nursery.canNurse(entity.getButterfly())) {

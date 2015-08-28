@@ -11,17 +11,18 @@
 package forestry.core.items;
 
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.IModelObject;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.core.CreativeTabForestry;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 
-public class ItemForestryFood extends ItemFood implements IModelObject {
+public class ItemForestryFood extends ItemFood implements IModelRegister {
 
 	private boolean isDrink = false;
 
@@ -47,10 +48,11 @@ public class ItemForestryFood extends ItemFood implements IModelObject {
 		isDrink = true;
 		return this;
 	}
-	
+
+	@SideOnly(Side.CLIENT)
 	@Override
-	public ModelType getModelType() {
-		return ModelType.DEFAULT;
+	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, 0, StringUtil.cleanItemName(this));
 	}
 
 }

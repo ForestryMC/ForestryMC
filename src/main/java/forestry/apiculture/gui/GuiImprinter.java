@@ -26,15 +26,11 @@ import forestry.apiculture.items.ItemBeeGE;
 import forestry.apiculture.items.ItemImprinter.ImprinterInventory;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
-import forestry.core.gadgets.TileForestry;
 import forestry.core.gui.GuiForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
-public class GuiImprinter extends GuiForestry<TileForestry> {
-
-	private final ImprinterInventory inventory;
-	private final ContainerImprinter container;
+public class GuiImprinter extends GuiForestry<ContainerImprinter, ImprinterInventory> {
 
 	private int startX;
 	private int startY;
@@ -44,18 +40,17 @@ public class GuiImprinter extends GuiForestry<TileForestry> {
 	public GuiImprinter(InventoryPlayer inventoryplayer, ImprinterInventory inventory) {
 		super(Defaults.TEXTURE_PATH_GUI + "/imprinter.png", new ContainerImprinter(inventoryplayer, inventory), inventory);
 
-		this.inventory = inventory;
-		this.container = (ContainerImprinter) inventorySlots;
-
 		xSize = 176;
 		ySize = 185;
 
 		List<ItemStack> beeList = new ArrayList<ItemStack>();
 		((ItemBeeGE) ForestryItem.beeDroneGE.item()).addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
-			iconStacks.put(BeeGenome.getSpecies(beeStack).getUID(), beeStack);
+			IAlleleBeeSpecies species = BeeGenome.getSpecies(beeStack);
+			if (species != null) {
+				iconStacks.put(species.getUID(), beeStack);
+			}
 		}
-
 	}
 
 	@Override
@@ -86,7 +81,7 @@ public class GuiImprinter extends GuiForestry<TileForestry> {
 		RenderHelper.disableStandardItemLighting();
 	}
 
-	private int getHabitatSlotAtPosition(int i, int j) {
+	private static int getHabitatSlotAtPosition(int i, int j) {
 		int[] xPos = new int[]{12, 12};
 		int[] yPos = new int[]{32, 52};
 
@@ -112,9 +107,9 @@ public class GuiImprinter extends GuiForestry<TileForestry> {
 		}
 
 		if (k == 0) {
-			container.advanceSelection(slot, Proxies.common.getRenderWorld());
+			container.advanceSelection(slot);
 		} else {
-			container.regressSelection(slot, Proxies.common.getRenderWorld());
+			container.regressSelection(slot);
 		}
 	}
 

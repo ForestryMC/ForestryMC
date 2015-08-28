@@ -26,37 +26,25 @@ public abstract class Crop implements ICrop {
 	protected final World world;
 	protected final Vect position;
 
-	public Crop(World world, Vect position) {
+	protected Crop(World world, Vect position) {
 		this.world = world;
 		this.position = position;
 	}
 
 	protected final void setBlock(Vect position, Block block, int meta) {
-		world.setBlockState(position.toBlockPos(), block.getStateFromMeta(meta), Defaults.FLAG_BLOCK_SYNCH);
-	}
-
-	protected final void clearBlock(Vect position) {
-		world.setBlockToAir(position.toBlockPos());
-		if (world.getTileEntity(position.toBlockPos()) != null) {
-			world.setTileEntity(position.toBlockPos(), null);
-		}
+		world.setBlockState(position.pos, block.getStateFromMeta(meta), Defaults.FLAG_BLOCK_SYNCH);
 	}
 
 	protected final Block getBlock(Vect position) {
-		return world.getBlockState(position.toBlockPos()).getBlock();
+		return getBlockState(position).getBlock();
 	}
 	
 	protected final IBlockState getBlockState(Vect position) {
-		return world.getBlockState(position.toBlockPos());
+		return world.getBlockState(position.pos);
 	}
 
 	protected final int getBlockMeta(Vect position) {
-		IBlockState state = world.getBlockState(position.toBlockPos());
-		return state.getBlock().getMetaFromState(state);
-	}
-
-	protected final ItemStack getAsItemStack(Vect position) {
-		return new ItemStack(getBlock(position), 1, getBlockMeta(position));
+		return getBlock(position).getMetaFromState(getBlockState(position));
 	}
 
 	protected abstract boolean isCrop(Vect pos);

@@ -24,16 +24,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
 import forestry.core.proxy.Proxies;
 
-public class ItemForestryTool extends ItemForestry {
+public abstract class ItemForestryTool extends ItemForestry {
 
 	private final ItemStack remnants;
 	protected float efficiencyOnProperMaterial;
 	private final List<Block> blocksEffectiveAgainst;
 
-	public ItemForestryTool(Block[] blocksEffectiveAgainst, ItemStack remnants) {
+	protected ItemForestryTool(Block[] blocksEffectiveAgainst, ItemStack remnants) {
 		super();
 		this.blocksEffectiveAgainst = Arrays.asList(blocksEffectiveAgainst);
 		this.maxStackSize = 1;
@@ -72,9 +71,9 @@ public class ItemForestryTool extends ItemForestry {
 			event.entityPlayer.worldObj.spawnEntityInWorld(entity);
 		}
 	}
-
+	
 	@Override
-	public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block, BlockPos pos, EntityLivingBase entityliving) {
+	public boolean onBlockDestroyed(ItemStack itemstack, World worldIn, Block blockIn, BlockPos pos, EntityLivingBase entityliving) {
 		itemstack.damageItem(1, entityliving);
 		return true;
 	}

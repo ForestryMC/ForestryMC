@@ -16,14 +16,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityDiggingFX;
+import net.minecraft.client.particle.EntityFX;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import sun.awt.windows.WWindowPeer;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -74,14 +74,13 @@ public class ParticleHelper {
 			px = (double) pos.getX() + block.getBlockBoundsMaxX() + (double) b;
 		}
 
-		EntityDiggingFX fx = new EntityDiggingFX(world, px, py, pz, 0.0D, 0.0D, 0.0D, block, sideHit, meta);
-		fx.setParticleIcon(block.getIcon(world, x, y, z, 0));
+		EntityFX fx = effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_CRACK.getParticleID(), px, py, pz, px - pos.getX() - 0.5D, py - pos.getY() - 0.5D, pz - pos.getZ() - 0.5D, Block.getIdFromBlock(block));
 
 		if (callback != null) {
-			callback.addHitEffects(fx, world, pos.getX(), pos.getY(), pos.getZ(), meta);
+			callback.addHitEffects((EntityDiggingFX) fx, world, pos.getX(), pos.getY(), pos.getZ(), meta);
 		}
 
-		effectRenderer.addEffect(fx.applyColourMultiplier(pos.getX(), pos.getY(), pos.getZ()).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
+		effectRenderer.addEffect(((EntityDiggingFX)fx).func_174846_a(pos).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
 
 		return true;
 	}
@@ -103,8 +102,8 @@ public class ParticleHelper {
 	 * @return True to prevent vanilla break particles from spawning.
 	 */
 	@SideOnly(Side.CLIENT)
-	public static boolean addDestroyEffects(World world, Block block, int x, int y, int z, int meta, EffectRenderer effectRenderer, ParticleHelperCallback callback) {
-		if (block != world.getBlock(x, y, z)) {
+	public static boolean addDestroyEffects(World world, Block block, BlockPos pos, IBlockState state, EffectRenderer effectRenderer, ParticleHelperCallback callback) {
+		if (block != state.getBlock()) {
 			return true;
 		}
 
@@ -112,19 +111,17 @@ public class ParticleHelper {
 		for (int i = 0; i < iterations; ++i) {
 			for (int j = 0; j < iterations; ++j) {
 				for (int k = 0; k < iterations; ++k) {
-					double px = x + (i + 0.5D) / (double) iterations;
-					double py = y + (j + 0.5D) / (double) iterations;
-					double pz = z + (k + 0.5D) / (double) iterations;
-					int random = rand.nextInt(6);
-
-					EntityDiggingFX fx = new EntityDiggingFX(world, px, py, pz, px - x - 0.5D, py - y - 0.5D, pz - z - 0.5D, block, random, meta);
-					fx.setParticleIcon(block.getIcon(world, x, y, z, 0));
-
+					double px = pos.getX() + (i + 0.5D) / (double) iterations;
+					double py = pos.getY() + (j + 0.5D) / (double) iterations;
+					double pz = pos.getZ() + (k + 0.5D) / (double) iterations;
+					int random = world.rand.nextInt(6);
+					EntityFX fx = effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_CRACK.getParticleID(), px, py, pz, px - pos.getX() - 0.5D, py - pos.getY() - 0.5D, pz - pos.getZ() - 0.5D, Block.getIdFromBlock(block));
+					
 					if (callback != null) {
-						callback.addDestroyEffects(fx, world, x, y, z, meta);
+						callback.addDestroyEffects((EntityDiggingFX) fx, world, pos.getX(), pos.getY(), pos.getZ(), block.getMetaFromState(state));
 					}
 
-					effectRenderer.addEffect(fx.applyColourMultiplier(x, y, z));
+					effectRenderer.addEffect(((EntityDiggingFX)fx).func_174846_a(pos));
 				}
 			}
 		}

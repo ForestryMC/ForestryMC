@@ -10,18 +10,18 @@
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChunkCoordinates;
 
 import forestry.lepidopterology.entities.EntityButterfly.EnumButterflyState;
 
 public abstract class AIButterflyInteract extends AIButterflyBase {
 
-	protected BlockPos rest;
+	protected ChunkCoordinates rest;
 
 	private boolean canInteract = false;
 	private boolean hasInteracted = false;
 
-	public AIButterflyInteract(EntityButterfly entity) {
+	protected AIButterflyInteract(EntityButterfly entity) {
 		super(entity);
 		setMutexBits(3);
 	}
@@ -32,8 +32,8 @@ public abstract class AIButterflyInteract extends AIButterflyBase {
 			return false;
 		}
 
-		rest = new BlockPos((int) entity.posX, ((int) Math.floor(entity.posY)) - 1, (int) entity.posZ);
-		if (entity.worldObj.isAirBlock(rest)) {
+		rest = new ChunkCoordinates((int) entity.posX, ((int) Math.floor(entity.posY)) - 1, (int) entity.posZ);
+		if (entity.worldObj.isAirBlock(rest.posX, rest.posY, rest.posZ)) {
 			return false;
 		}
 

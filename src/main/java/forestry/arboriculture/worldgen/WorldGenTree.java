@@ -10,45 +10,42 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.genetics.IAlleleBoolean;
+import forestry.api.arboriculture.ITreeModifier;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.world.ITreeGenData;
-import forestry.arboriculture.gadgets.BlockFireproofLog;
-import forestry.arboriculture.gadgets.BlockLog;
-import forestry.core.config.ForestryBlock;
-import forestry.core.utils.StackUtils;
-import forestry.core.worldgen.BlockType;
-import forestry.plugins.PluginArboriculture;
 
 public abstract class WorldGenTree extends WorldGenArboriculture {
+	private static final int minHeight = 4;
+	private static final int maxHeight = 80;
+
+	private final int baseHeight;
+	private final int heightVariation;
 
 	protected int girth;
 	protected int height;
 
-	protected int minHeight = 4;
-	protected int maxHeight = 80;
-
-	public WorldGenTree(ITreeGenData tree) {
+	protected WorldGenTree(ITreeGenData tree, int baseHeight, int heightVariation) {
 		super(tree);
+		this.baseHeight = baseHeight;
+		this.heightVariation = heightVariation;
 	}
 
 	@Override
-	public void generate() {
-		generateTreeTrunk(height, girth);
+	public void generate(World world) {
+		generateTreeTrunk(world, height, girth);
 
 		int leafSpawn = height + 1;
 
-		generateAdjustedCylinder(leafSpawn--, 0, 1, leaf, EnumReplaceMode.NONE);
-		generateAdjustedCylinder(leafSpawn--, 0.5f, 1, leaf, EnumReplaceMode.NONE);
+		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf, EnumReplaceMode.NONE);
+		generateAdjustedCylinder(world, leafSpawn--, 0.5f, 1, leaf, EnumReplaceMode.NONE);
 
-		generateAdjustedCylinder(leafSpawn--, 1.9f, 1, leaf, EnumReplaceMode.NONE);
-		generateAdjustedCylinder(leafSpawn--, 1.9f, 1, leaf, EnumReplaceMode.NONE);
-
+		generateAdjustedCylinder(world, leafSpawn--, 1.9f, 1, leaf, EnumReplaceMode.NONE);
+		generateAdjustedCylinder(world, leafSpawn--, 1.9f, 1, leaf, EnumReplaceMode.NONE);
 	}
 
 	protected Vector getCenteredAt(int yCenter, int offset) {
@@ -56,68 +53,52 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 		return new Vector(cent + offset, yCenter, cent + offset);
 	}
 
-	protected void generateAdjustedCylinder(int yCenter, float radius, int height, BlockType block) {
-		generateAdjustedCylinder(yCenter, 0, radius, height, block, EnumReplaceMode.NONE);
+	protected void generateAdjustedCylinder(World world, int yCenter, float radius, int height, ITreeBlockType block) {
+		generateAdjustedCylinder(world, yCenter, 0, radius, height, block, EnumReplaceMode.SOFT);
 	}
 
-	protected void generateAdjustedCylinder(int yCenter, float radius, int height, BlockType block, EnumReplaceMode replace) {
-		generateAdjustedCylinder(yCenter, 0, radius, height, block, replace);
+	protected void generateAdjustedCylinder(World world, int yCenter, float radius, int height, ITreeBlockType block, EnumReplaceMode replace) {
+		generateAdjustedCylinder(world, yCenter, 0, radius, height, block, replace);
 	}
 
-	protected void generateAdjustedCylinder(int yCenter, int offset, float radius, int height, BlockType block, EnumReplaceMode replace) {
-		generateCylinder(getCenteredAt(yCenter, offset), radius + girth, height, block, replace);
-	}
-
-	@Override
-	public boolean canGrow() {
-		return tree.canGrow(world, startX, startY, startZ, tree.getGirth(world, startX, startY, startZ), height);
-
+	protected void generateAdjustedCylinder(World world, int yCenter, int offset, float radius, int height, ITreeBlockType block, EnumReplaceMode replace) {
+		Vector center = getCenteredAt(yCenter, offset);
+		generateCylinder(world, center, radius + girth, height, block, replace);
 	}
 
 	@Override
-	public void preGenerate() {
-		height = determineHeight(5, 2);
-		girth = determineGirth(tree.getGirth(world, startX, startY, startZ));
+	public boolean canGrow(World world, int x, int y, int z) {
+		return tree.canGrow(world, x, y, z, girth, height);
 	}
 
-	protected int determineGirth(int base) {
-		return base;
+	@Override
+	public final void preGenerate(World world, BlockPos startPos) {
+		super.preGenerate(world, startPos);
+		height = determineHeight(world, baseHeight, heightVariation);
+		girth = tree.getGirth(world, startPos);
 	}
 
-	protected int modifyByHeight(int val, int min, int max) {
-		int determined = Math.round(val * tree.getHeightModifier() * PluginArboriculture.treeInterface.getTreekeepingMode(world).getHeightModifier(null, 1f));
+	protected int modifyByHeight(World world, int val, int min, int max) {
+		ITreeModifier treeModifier = TreeManager.treeRoot.getTreekeepingMode(world);
+		int determined = Math.round(val * tree.getHeightModifier() * treeModifier.getHeightModifier(tree.getGenome(), 1f));
 		return determined < min ? min : determined > max ? max : determined;
 	}
 
-	// TODO: Get access to the tree genome for the treekeeping mode
-	protected int determineHeight(int required, int variation) {
-		int determined = Math.round((required + rand.nextInt(variation)) * tree.getHeightModifier()
-				* PluginArboriculture.treeInterface.getTreekeepingMode(world).getHeightModifier(null, 1f));
-		return determined < minHeight ? minHeight : determined > maxHeight ? maxHeight : determined;
+	private int determineHeight(World world, int required, int variation) {
+		ITreeModifier treeModifier = TreeManager.treeRoot.getTreekeepingMode(world);
+		int baseHeight = required + world.rand.nextInt(variation);
+		int height = Math.round(baseHeight * tree.getHeightModifier() * treeModifier.getHeightModifier(tree.getGenome(), 1f));
+		return height < minHeight ? minHeight : height > maxHeight ? maxHeight : height;
 	}
 
 	@Override
-	public BlockType getLeaf(GameProfile owner) {
-		return new BlockTypeLeaf(owner);
+	public TreeBlockTypeLeaf getLeaf(GameProfile owner) {
+		return new TreeBlockTypeLeaf(owner);
 	}
 
 	@Override
-	public BlockType getWood() {
-		ItemStack woodStack = tree.getGenome().getPrimary().getLogStacks()[0];
-
-		Block block = StackUtils.getBlock(woodStack);
-		int meta = woodStack.getItemDamage();
-
-		// if we have a fireproof tree, return the fireproof log
-		if (block instanceof BlockLog) {
-			IAlleleBoolean fireproof = (IAlleleBoolean) tree.getGenome().getActiveAllele(EnumTreeChromosome.FIREPROOF);
-			if (fireproof.getValue()) {
-				BlockLog blockLog = (BlockLog) block;
-				ForestryBlock fireproofLogBlock = BlockFireproofLog.getFireproofLog(blockLog);
-				return new BlockType(fireproofLogBlock.block(), meta);
-			}
-		}
-
-		return new BlockType(block, meta);
+	public ITreeBlockType getWood() {
+		return new TreeBlockTypeLog();
 	}
+
 }

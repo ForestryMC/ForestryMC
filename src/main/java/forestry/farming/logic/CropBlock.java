@@ -13,9 +13,10 @@ package forestry.farming.logic;
 import java.util.Collection;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import forestry.core.config.Defaults;
+
 import forestry.core.proxy.Proxies;
 import forestry.core.vect.Vect;
 
@@ -37,10 +38,11 @@ public class CropBlock extends Crop {
 
 	@Override
 	protected Collection<ItemStack> harvestBlock(Vect pos) {
-		Collection<ItemStack> harvested = block.getDrops(world, pos.toBlockPos(), block.getStateFromMeta(meta), 0);
-		Proxies.common.addBlockDestroyEffects(world, pos.toBlockPos(), block, 0);;
+		IBlockState state = world.getBlockState(pos.pos);
+		Collection<ItemStack> harvested = block.getDrops(world, pos.pos, state.getBlock().getStateFromMeta(meta), 0);
+		Proxies.common.addBlockDestroyEffects(world, pos.pos, state);
 		// Block.breakBlock() is called by vanilla itself, removing TEs.
-		world.setBlockToAir(pos.toBlockPos());
+		world.setBlockToAir(pos.pos);
 		return harvested;
 	}
 

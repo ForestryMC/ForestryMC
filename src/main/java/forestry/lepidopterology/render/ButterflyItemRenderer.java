@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.lepidopterology.render;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -30,7 +29,7 @@ import forestry.plugins.PluginLepidopterology;
 public class ButterflyItemRenderer implements IItemRenderer {
 
 	private final ModelButterfly model;
-	EntityButterfly entity;
+	private EntityButterfly entity;
 	
 	public ButterflyItemRenderer() {
 		model = new ModelButterfly();
@@ -71,7 +70,7 @@ public class ButterflyItemRenderer implements IItemRenderer {
 		return wingYaw;
 	}
 	
-	public static float getRegularWingYaw(float flap) {
+	private static float getRegularWingYaw(float flap) {
 		return flap < 0.5 ? 0.75f + flap : 1.75f - flap;
 	}
 	
@@ -105,7 +104,7 @@ public class ButterflyItemRenderer implements IItemRenderer {
 
 		GL11.glPushMatrix();
 
-		if (Minecraft.getMinecraft().getRenderItem().) {
+		if (RenderItem.renderInFrame) {
 			//GL11.glScalef(-2.0f, 2.0f, 2.0f);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);

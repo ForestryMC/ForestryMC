@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.energy.gadgets;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
@@ -34,13 +33,13 @@ public class EngineDefinition extends MachineDefinition {
 	public boolean isSolidOnSide(IBlockAccess world, BlockPos pos, EnumFacing side) {
 		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof Engine) {
-			return ((Engine) tile).getOrientation() == side;
+			return ((Engine) tile).getOrientation().getOpposite() == side;
 		}
 		return false;
 	}
 	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float fXplayerClick, float fY, float fZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, EnumFacing side) {
 		if (player.isSneaking()) {
 			return false;
 		}

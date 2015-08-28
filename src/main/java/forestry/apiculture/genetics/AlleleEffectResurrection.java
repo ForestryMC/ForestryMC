@@ -29,7 +29,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
@@ -72,18 +72,15 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 
 	private final List<Resurrectable> resurrectables;
 
-	public AlleleEffectResurrection(String uid, String name, List<Resurrectable> resurrectables) {
-		super(uid, name, true, 40, true, true);
+	public AlleleEffectResurrection(String name, List<Resurrectable> resurrectables) {
+		super(name, true, 40, true, true);
 		this.resurrectables = resurrectables;
 	}
 
 	@Override
-	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		if (isHalted(storedData, housing)) {
-			return storedData;
-		}
+	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
-		AxisAlignedBB bounding = getBounding(genome, housing, 1.0f);
+		AxisAlignedBB bounding = getBounding(genome, housing);
 		@SuppressWarnings("rawtypes")
 		List list = housing.getWorld().getEntitiesWithinAABB(EntityItem.class, bounding);
 
@@ -100,7 +97,7 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 			ItemStack contained = item.getEntityItem();
 			for (Resurrectable entry : resurrectables) {
 				if (StackUtils.isIdenticalItem(entry.res, contained)) {
-					Utils.spawnEntity(housing.getWorld(), entry.risen, new BlockPos(item.posX, item.posY, item.posZ));
+					Utils.spawnEntity(housing.getWorld(), entry.risen, item.posX, item.posY, item.posZ);
 					contained.stackSize--;
 					if (contained.stackSize <= 0) {
 						item.setDead();

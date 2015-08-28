@@ -21,15 +21,15 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBee;
 import forestry.apiculture.entities.EntityBee;
 import forestry.core.proxy.Proxies;
-import forestry.plugins.PluginApiculture;
 
 public class BeeItemRenderer implements IItemRenderer {
 
-	ModelBee model;
-	EntityBee entity;
+	private RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+	private EntityBee entity;
 
 	private static float getWingYaw(IBee bee) {
 		float wingYaw = 1f;
@@ -46,7 +46,7 @@ public class BeeItemRenderer implements IItemRenderer {
 		return wingYaw;
 	}
 
-	public static float getIrregularWingYaw(long flapping, float flap) {
+	private static float getIrregularWingYaw(long flapping, float flap) {
 		long irregular = flapping / 1000;
 		float wingYaw;
 
@@ -63,21 +63,21 @@ public class BeeItemRenderer implements IItemRenderer {
 		return wingYaw;
 	}
 
-	public static float getRegularWingYaw(float flap) {
+	private static float getRegularWingYaw(float flap) {
 		return flap < 0.5 ? 0.75f + flap : 1.75f - flap;
 	}
 
 	private IBee initBee(ItemStack item, boolean scaled) {
-		IBee bee = PluginApiculture.beeInterface.getMember(item);
+		IBee bee = BeeManager.beeRoot.getMember(item);
 		if (bee == null) {
-			bee = PluginApiculture.beeInterface.templateAsIndividual(PluginApiculture.beeInterface.getDefaultTemplate());
+			bee = BeeManager.beeRoot.templateAsIndividual(BeeManager.beeRoot.getDefaultTemplate());
 		}
 
 		if (entity == null) {
 			entity = new EntityBee(Proxies.common.getClientInstance().theWorld);
 		}
 		entity.setSpecies(bee.getGenome().getPrimary());
-		entity.setType(PluginApiculture.beeInterface.getType(item));
+		entity.setType(BeeManager.beeRoot.getType(item));
 		/*
 		if(scaled)
 			entity.setScale(butterfly.getSize());
@@ -126,7 +126,7 @@ public class BeeItemRenderer implements IItemRenderer {
 		entity.rotationPitch = -((float) Math.atan(pitch / 40.0F)) * 20.0F;
 		entity.rotationYawHead = entity.rotationYaw;
 
-		Minecraft.getMinecraft().getRenderManager().renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, getWingYaw(bee));
+		renderManager.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, getWingYaw(bee));
 
 		GL11.glPopMatrix();
 
@@ -152,7 +152,7 @@ public class BeeItemRenderer implements IItemRenderer {
         renderBeeHalo();
         GL11.glPopMatrix();
 		 */
-		
+
 		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -172,7 +172,7 @@ public class BeeItemRenderer implements IItemRenderer {
 		entity.rotationPitch = 0;
 		entity.rotationYawHead = entity.rotationYaw;
 
-		Minecraft.getMinecraft().getRenderManager().renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, getWingYaw(bee));
+		renderManager.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, getWingYaw(bee));
 
 		GL11.glPopMatrix();
 		RenderHelper.disableStandardItemLighting();

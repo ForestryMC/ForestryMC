@@ -10,48 +10,41 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import forestry.core.interfaces.ISocketable;
+import net.minecraft.tileentity.TileEntity;
+
+import forestry.core.circuits.ISocketable;
 
 public class PacketSocketUpdate extends PacketCoordinates {
 
-	public ItemStack[] itemstacks;
+	public ItemStack[] itemStacks;
 
-	public PacketSocketUpdate() {
+	public PacketSocketUpdate(DataInputStreamForestry data) throws IOException {
+		super(data);
 	}
 
-	public PacketSocketUpdate(int id, BlockPos pos, ISocketable tile) {
-		super(id, pos);
+	public <T extends TileEntity & ISocketable> PacketSocketUpdate(T tile) {
+		super(PacketId.SOCKET_UPDATE, tile);
 
-		itemstacks = new ItemStack[tile.getSocketCount()];
+		itemStacks = new ItemStack[tile.getSocketCount()];
 		for (int i = 0; i < tile.getSocketCount(); i++) {
-			itemstacks[i] = tile.getSocket(i);
+			itemStacks[i] = tile.getSocket(i);
 		}
 	}
 
 	@Override
-	public void writeData(DataOutputStream data) throws IOException {
+	protected void writeData(DataOutputStreamForestry data) throws IOException {
 		super.writeData(data);
 
-		data.writeShort(itemstacks.length);
-		for (ItemStack itemstack : itemstacks) {
-			writeItemStack(itemstack, data);
-		}
+		data.writeItemStacks(itemStacks);
 	}
 
 	@Override
-	public void readData(DataInputStream data) throws IOException {
+	protected void readData(DataInputStreamForestry data) throws IOException {
 		super.readData(data);
 
-		int sockets = data.readShort();
-		itemstacks = new ItemStack[sockets];
-		for (int i = 0; i < sockets; i++) {
-			itemstacks[i] = readItemStack(data);
-		}
+		itemStacks = data.readItemStacks();
 	}
 }

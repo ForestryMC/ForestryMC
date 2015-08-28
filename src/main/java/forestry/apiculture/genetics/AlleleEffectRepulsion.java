@@ -22,21 +22,18 @@ import forestry.api.genetics.IEffectData;
 
 public class AlleleEffectRepulsion extends AlleleEffectThrottled {
 
-	public AlleleEffectRepulsion(String uid) {
-		super(uid, "repulsion", false, 100, true, true);
+	public AlleleEffectRepulsion() {
+		super("repulsion", false, 100, true, true);
 	}
 
 	@Override
-	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		if (isHalted(storedData, housing)) {
+	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+
+		if (housing.getOwner() == null) {
 			return storedData;
 		}
 
-		if (housing.getOwnerName() == null) {
-			return storedData;
-		}
-
-		AxisAlignedBB hurtBox = getBounding(genome, housing, 1.0f);
+		AxisAlignedBB hurtBox = getBounding(genome, housing);
 		@SuppressWarnings("rawtypes")
 		List list = housing.getWorld().getEntitiesWithinAABB(EntityMob.class, hurtBox);
 

@@ -10,15 +10,18 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.AxisAlignedBB;
-
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
-
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
@@ -28,28 +31,39 @@ import forestry.core.proxy.Proxies;
 public class AlleleEffectPotion extends AlleleEffectThrottled {
 
 	private final Potion potion;
+	private final int potionFXColor;
 	private final boolean isBadEffect;
 	private final int duration;
+	private final float chance;
 
-	public AlleleEffectPotion(String uid, String name, boolean isDominant, Potion potion, int duration, boolean requiresWorking) {
-		super(uid, name, isDominant, 200, requiresWorking, false);
+	public AlleleEffectPotion(String name, boolean isDominant, Potion potion, int duration, int throttle, float chance) {
+		super(name, isDominant, throttle, true, false);
 		this.potion = potion;
 		this.isBadEffect = isBadEffect(potion);
 		this.duration = duration;
+		this.chance = chance;
+
+		Collection<PotionEffect> potionEffects = Collections.singleton(new PotionEffect(potion.getId(), 1, 0));
+		this.potionFXColor = PotionHelper.calcPotionLiquidColor(potionEffects);
+	}
+
+	public AlleleEffectPotion(String name, boolean isDominant, Potion potion, int duration) {
+		this(name, isDominant, potion, duration, 200, 1.0f);
 	}
 
 	@Override
-	public IEffectData doEffect(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
 
-		if (isHalted(storedData, housing)) {
-			return storedData;
-		}
-
-		AxisAlignedBB beatifyBox = getBounding(genome, housing, 1.0f);
-		List list = housing.getWorld().getEntitiesWithinAABB(EntityPlayer.class, beatifyBox);
+		World world = housing.getWorld();
+		AxisAlignedBB effectArea = getBounding(genome, housing);
+		List list = housing.getWorld().getEntitiesWithinAABB(EntityPlayer.class, effectArea);
 
 		for (Object entity : list) {
 			if (!(entity instanceof EntityPlayer)) {
+				continue;
+			}
+
+			if (world.rand.nextFloat() >= chance) {
 				continue;
 			}
 
@@ -86,4 +100,14 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 		}
 	}
 
+	@Override
+	public IEffectData doFX(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+		if (housing.getWorld().rand.nextBoolean()) {
+			super.doFX(genome, storedData, housing);
+		} else {
+			BlockPos coords = housing.getPos();
+			Proxies.common.addEntityPotionFX(housing.getWorld(), coords.getX() + 0.5, coords.getY() + 1, coords.getZ() + 0.5, potionFXColor);
+		}
+		return storedData;
+	}
 }

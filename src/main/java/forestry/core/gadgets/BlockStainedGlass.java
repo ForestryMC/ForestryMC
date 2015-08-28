@@ -10,13 +10,14 @@
  ******************************************************************************/
 package forestry.core.gadgets;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBreakable;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -24,19 +25,15 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.IModelObject;
-import forestry.api.core.IVariantObject;
+import forestry.api.core.IModelManager;
+import forestry.api.core.IModelRegister;
 import forestry.core.CreativeTabForestry;
-import forestry.core.gadgets.BlockResourceStorageBlock.Resources;
 import forestry.core.render.TextureManager;
 
-public class BlockStainedGlass extends BlockBreakable implements IModelObject, IVariantObject {
+public class BlockStainedGlass extends BlockBreakable implements IModelRegister {
 
 	public final static PropertyEnum COLOR = PropertyEnum.create("color", EnumDyeColor.class);
 	
@@ -46,11 +43,6 @@ public class BlockStainedGlass extends BlockBreakable implements IModelObject, I
 		setStepSound(soundTypeGlass);
 		setCreativeTab(CreativeTabForestry.tabForestry);
 		setDefaultState(this.blockState.getBaseState().withProperty(COLOR, EnumDyeColor.WHITE));
-	}
-	
-	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, COLOR);
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -62,6 +54,13 @@ public class BlockStainedGlass extends BlockBreakable implements IModelObject, I
 	}
 	
 	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, new IProperty[]{COLOR});
+	}
+
+	/* ICONS */
+	
+	@Override
 	public int getMetaFromState(IBlockState state) {
 		return ((EnumDyeColor)state.getValue(COLOR)).getMetadata();
 	}
@@ -70,18 +69,9 @@ public class BlockStainedGlass extends BlockBreakable implements IModelObject, I
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(COLOR, EnumDyeColor.byMetadata(meta));
 	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {
-		Block block = world.getBlockState(pos).getBlock();
-		return block != this && super.shouldSideBeRendered(world, pos, side);
-	}
-
 
 	@Override
-	public int getDamageValue(World world, BlockPos pos) {
-		IBlockState state = world.getBlockState(pos);
+	public int damageDropped(IBlockState state) {
 		return getMetaFromState(state);
 	}
 
@@ -101,18 +91,13 @@ public class BlockStainedGlass extends BlockBreakable implements IModelObject, I
 	}
 
 	@Override
-	public String[] getVariants() {
-		ArrayList<String> list = new ArrayList<String>();
-		for(EnumDyeColor dye : EnumDyeColor.values())
+	@SideOnly(Side.CLIENT)
+	public void registerModel(Item item, IModelManager manager) {
+		for(int i = 0; i < EnumDyeColor.values().length;i++)
 		{
-			list.add(dye.getUnlocalizedName());
+			EnumDyeColor color = EnumDyeColor.values()[i];
+			manager.registerItemModel(item, i, "stained/" + color.getDyeDamage());
 		}
-		return list.toArray(new String[list.size()]);
-	}
-
-	@Override
-	public ModelType getModelType() {
-		return ModelType.META;
 	}
 
 }

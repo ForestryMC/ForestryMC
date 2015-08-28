@@ -143,11 +143,11 @@ public class POBox extends WorldSavedData implements IInventory {
 	}
 
 	@Override
-	public void openInventory(EntityPlayer player) {
+	public void openInventory(EntityPlayer var1) {
 	}
 
 	@Override
-	public void closeInventory(EntityPlayer player) {
+	public void closeInventory(EntityPlayer var1) {
 	}
 
 	@Override
@@ -172,7 +172,6 @@ public class POBox extends WorldSavedData implements IInventory {
 
 	@Override
 	public void setField(int id, int value) {
-		
 	}
 
 	@Override
@@ -182,7 +181,6 @@ public class POBox extends WorldSavedData implements IInventory {
 
 	@Override
 	public void clear() {
-		
 	}
 
 }

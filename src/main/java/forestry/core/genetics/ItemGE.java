@@ -16,17 +16,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.core.IMeshDefinitionObject;
-import forestry.api.core.IModelObject;
+import forestry.api.core.IModelRegister;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 
-public abstract class ItemGE extends Item implements IModelObject, IMeshDefinitionObject {
+public abstract class ItemGE extends Item implements IModelRegister {
 
 	protected ItemGE() {
 		super();
@@ -83,8 +79,6 @@ public abstract class ItemGE extends Item implements IModelObject, IMeshDefiniti
 		}
 	}
 
-	/* ICONS */
-
 	@Override
 	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
 
@@ -101,8 +95,5 @@ public abstract class ItemGE extends Item implements IModelObject, IMeshDefiniti
 	public int getColourFromSpecies(IAlleleSpecies species, int renderPass) {
 		return 0xffffff;
 	}
-	
-	@SideOnly(Side.CLIENT)
-	public abstract void registerModels();
 
 }

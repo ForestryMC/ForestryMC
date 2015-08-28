@@ -237,15 +237,15 @@ public class Letter implements ILetter, INBTTagable {
 
 	@Override
 	public String getRecipientString() {
-		String recipientString = "";
+		StringBuilder recipientString = new StringBuilder();
 		for (IMailAddress address : recipient) {
 			if (recipientString.length() > 0) {
-				recipientString += ", ";
+				recipientString.append(", ");
 			}
-			recipientString += address.getName();
+			recipientString.append(address.getName());
 		}
 
-		return recipientString;
+		return recipientString.toString();
 	}
 
 	@Override
@@ -293,7 +293,7 @@ public class Letter implements ILetter, INBTTagable {
 	public void setInventorySlotContents(int var1, ItemStack var2) {
 		inventory.setInventorySlotContents(var1, var2);
 	}
-	
+
 	@Override
 	public String getCommandSenderName() {
 		return inventory.getCommandSenderName();
@@ -310,7 +310,7 @@ public class Letter implements ILetter, INBTTagable {
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUseableByPlayer(EntityPlayer var1) {
 		return true;
 	}
 
@@ -336,26 +336,26 @@ public class Letter implements ILetter, INBTTagable {
 
 	@Override
 	public int getField(int id) {
-		return 0;
+		return inventory.getField(id);
 	}
 
 	@Override
 	public void setField(int id, int value) {
-		
+		inventory.setField(id, value);
 	}
 
 	@Override
 	public int getFieldCount() {
-		return 0;
+		return inventory.getFieldCount();
 	}
 
 	@Override
 	public void clear() {
-		
+		inventory.clear();
 	}
 
 	@Override
 	public IChatComponent getDisplayName() {
-		return null;
+		return inventory.getDisplayName();
 	}
 }

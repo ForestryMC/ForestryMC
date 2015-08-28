@@ -13,7 +13,6 @@ package forestry.core.gui.slots;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -31,9 +30,9 @@ public class SlotOutput extends SlotWatched {
 		return false;
 	}
 	
-	@Override
 	@SideOnly(Side.CLIENT)
+	@Override
 	public TextureAtlasSprite getBackgroundSprite() {
-		return null;
+		return super.getBackgroundSprite();
 	}
 }

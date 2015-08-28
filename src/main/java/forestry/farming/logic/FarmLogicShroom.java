@@ -13,24 +13,19 @@ package forestry.farming.logic;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import forestry.api.core.sprite.ISprite;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
+import forestry.core.render.TextureManager;
 
 public class FarmLogicShroom extends FarmLogicArboreal {
 
 	public FarmLogicShroom(IFarmHousing housing) {
-		super(housing,
-				new ItemStack[]{new ItemStack(Blocks.mycelium)},
-				new ItemStack(Blocks.mycelium),
-				Farmables.farmables.get("farmShroom").toArray(new IFarmable[0]));
+		super(housing, new ItemStack(Blocks.mycelium), new ItemStack(Blocks.mycelium), Farmables.farmables.get("farmShroom"));
 		yOffset = -1;
 	}
 
@@ -45,8 +40,8 @@ public class FarmLogicShroom extends FarmLogicArboreal {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite getIcon() {
-		return getSprite("minecraft", "blocks/mushroom_red");
+	public ISprite getIcon() {
+		return TextureManager.getInstance().getFarmSprite("farmLoigc", "blocks", "mushroom_red");
 	}
 
 	@Override

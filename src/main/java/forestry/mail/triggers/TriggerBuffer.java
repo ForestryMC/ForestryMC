@@ -12,7 +12,6 @@ package forestry.mail.triggers;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-
 import forestry.core.triggers.Trigger;
 import forestry.mail.gadgets.MachineTrader;
 
@@ -41,5 +40,10 @@ public class TriggerBuffer extends Trigger {
 		}
 
 		return ((MachineTrader) tile).hasOutputBufMin(threshold);
+	}
+
+	@Override
+	public int getSheetLocation() {
+		return 0;
 	}
 }

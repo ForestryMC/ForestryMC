@@ -5,19 +5,19 @@
  ******************************************************************************/
 package forestry.core;
 
-import forestry.api.core.ErrorStateRegistry;
+import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorState;
+import forestry.api.core.ITextureManager;
+import forestry.api.core.sprite.ISprite;
+import forestry.api.core.sprite.ISpriteRegister;
 import forestry.core.config.Defaults;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.util.ResourceLocation;
+import forestry.core.render.TextureManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public enum EnumErrorCode implements IErrorState {
 
 	UNKNOWN("unknown"),
-	OK("ok"),
 	INVALIDBIOME("invalidBiome"),
 	ISRAINING("isRaining"),
 	NOTRAINING("notRaining"),
@@ -53,21 +53,23 @@ public enum EnumErrorCode implements IErrorState {
 	CIRCUITMISMATCH("circuitMismatch"),
 	NOLIQUID("noLiquid"),
 	NOPAPER("noPaper"),
-	NOSTAMPSNOPAPER("noStampsNoPaper", "noStamps"),
 	NOSUPPLIES("noSupplies", "noResource"),
 	NOTRADE("noTrade", "noResource"),
-	NOPOWER("noPower");
+	NOPOWER("noPower"),
+	NOREDSTONE("noRedstone", "disabled"), // needs redstone signal
+	DISABLED("disabledRedstone", "disabled") // disabled by redstone signal
+	;
 
 	private final String name;
 	private final String iconName;
 	@SideOnly(Side.CLIENT)
-	private TextureAtlasSprite icon;
+	private ISprite icon;
 
-	private EnumErrorCode(String name) {
+	EnumErrorCode(String name) {
 		this(name, name);
 	}
 
-	private EnumErrorCode(String name, String iconName) {
+	EnumErrorCode(String name, String iconName) {
 		this.name = name;
 		this.iconName = iconName;
 	}
@@ -84,13 +86,13 @@ public enum EnumErrorCode implements IErrorState {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(TextureMap map) {
-		icon = map.registerSprite(new ResourceLocation("forestry:textures/items/errors/" + iconName + ".png"));
+	public void registerSprite() {
+		icon = TextureManager.getInstance().registerTex("items", "errors/" + iconName);
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public TextureAtlasSprite getIcon() {
+	public ISprite getIcon() {
 		return icon;
 	}
 
@@ -106,7 +108,7 @@ public enum EnumErrorCode implements IErrorState {
 
 	public static void init() {
 		for (IErrorState code : values()) {
-			ErrorStateRegistry.registerErrorState(code);
+			ForestryAPI.errorStateRegistry.registerErrorState(code);
 		}
 	}
 }

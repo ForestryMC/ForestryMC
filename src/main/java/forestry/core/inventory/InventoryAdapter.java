@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -18,14 +20,17 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 import forestry.core.config.Defaults;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
+import forestry.core.network.IStreamable;
 import forestry.core.utils.PlainInventory;
 
 /**
  * With permission from Krapht.
  */
-public class InventoryAdapter implements IInventoryAdapter {
+public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 
-	protected final IInventory inventory;
+	private final IInventory inventory;
 	private boolean allowAutomation = true;
 
 	//private boolean debug = false;
@@ -114,10 +119,10 @@ public class InventoryAdapter implements IInventoryAdapter {
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
 		return true;
 	}
-	
+
 	@Override
 	public boolean hasCustomName() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -156,16 +161,16 @@ public class InventoryAdapter implements IInventoryAdapter {
 
 	private void configureSided() {
 		slotMap = new int[6][0];
-		InvTools.configureSided(this, Defaults.FACINGS, 0, getSizeInventory());
-	}
 
-	@Override
-	public InventoryAdapter configureSided(int[] sides, int[] slots) {
-		for (int side : sides) {
-			slotMap[side] = slots;
+		int count = getSizeInventory();
+		int[] slots = new int[count];
+		for (int i = 0; i < count; i++) {
+			slots[i] = i;
 		}
 
-		return this;
+		for (int side : Defaults.FACINGS) {
+			slotMap[side] = slots;
+		}
 	}
 
 	@Override
@@ -209,27 +214,37 @@ public class InventoryAdapter implements IInventoryAdapter {
 	}
 
 	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		data.writeInventory(inventory);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		data.readInventory(inventory);
+	}
+
+	@Override
 	public int getField(int id) {
-		return 0;
+		return inventory.getField(id);
 	}
 
 	@Override
 	public void setField(int id, int value) {
-		
+		inventory.setField(id, value);
 	}
 
 	@Override
 	public int getFieldCount() {
-		return 0;
+		return inventory.getFieldCount();
 	}
 
 	@Override
 	public void clear() {
-		
+		inventory.clear();
 	}
 
 	@Override
 	public IChatComponent getDisplayName() {
-		return null;
+		return inventory.getDisplayName();
 	}
 }

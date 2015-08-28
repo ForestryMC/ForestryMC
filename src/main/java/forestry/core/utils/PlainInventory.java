@@ -73,7 +73,7 @@ public class PlainInventory implements IInventory {
 	public void setInventorySlotContents(int slotId, ItemStack itemstack) {
 		contents[slotId] = itemstack;
 	}
-	
+
 	@Override
 	public String getCommandSenderName() {
 		return name;
@@ -97,10 +97,10 @@ public class PlainInventory implements IInventory {
 	public ItemStack getStackInSlotOnClosing(int slotIndex) {
 		return this.getStackInSlot(slotIndex);
 	}
-	
+
 	@Override
 	public boolean hasCustomName() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -109,11 +109,11 @@ public class PlainInventory implements IInventory {
 	}
 
 	@Override
-	public void openInventory(EntityPlayer player) {
+	public void openInventory(EntityPlayer entityplayer) {
 	}
 
 	@Override
-	public void closeInventory(EntityPlayer player) {
+	public void closeInventory(EntityPlayer entityplayer) {
 	}
 
 	@Override

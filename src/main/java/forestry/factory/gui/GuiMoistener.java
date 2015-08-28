@@ -17,7 +17,7 @@ import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.factory.gadgets.MachineMoistener;
 
-public class GuiMoistener extends GuiForestryTitled<MachineMoistener> {
+public class GuiMoistener extends GuiForestryTitled<ContainerMoistener, MachineMoistener> {
 
 	public GuiMoistener(InventoryPlayer inventory, MachineMoistener tile) {
 		super(Defaults.TEXTURE_PATH_GUI + "/moistener.png", new ContainerMoistener(inventory, tile), tile);
@@ -27,7 +27,7 @@ public class GuiMoistener extends GuiForestryTitled<MachineMoistener> {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		MachineMoistener machine = tile;
+		MachineMoistener machine = inventory;
 
 		// Mycelium production progress
 		if (machine.isProducing()) {

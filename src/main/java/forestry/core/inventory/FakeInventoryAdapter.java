@@ -48,12 +48,12 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	}
 
 	@Override
-	public boolean canInsertItem(int slot, ItemStack stack, EnumFacing side) {
+	public boolean canInsertItem(int p_102007_1_, ItemStack p_102007_2_, EnumFacing p_102007_3_) {
 		return false;
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
+	public boolean canExtractItem(int p_102008_1_, ItemStack p_102008_2_, EnumFacing p_102008_3_) {
 		return false;
 	}
 
@@ -83,6 +83,16 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	}
 
 	@Override
+	public String getCommandSenderName() {
+		return null;
+	}
+
+	@Override
+	public boolean hasCustomName() {
+		return false;
+	}
+
+	@Override
 	public int getInventoryStackLimit() {
 		return 0;
 	}
@@ -98,12 +108,12 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	}
 
 	@Override
-	public void openInventory(EntityPlayer player) {
+	public void openInventory(EntityPlayer p_70300_1_) {
 
 	}
 
 	@Override
-	public void closeInventory(EntityPlayer player) {
+	public void closeInventory(EntityPlayer p_70300_1_) {
 
 	}
 
@@ -120,11 +130,6 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 
-	}
-
-	@Override
-	public IInventoryAdapter configureSided(int[] sides, int[] slots) {
-		return this;
 	}
 
 	@Override
@@ -148,17 +153,8 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	}
 
 	@Override
-	public String getCommandSenderName() {
-		return null;
-	}
-
-	@Override
-	public boolean hasCustomName() {
-		return false;
-	}
-
-	@Override
 	public IChatComponent getDisplayName() {
 		return null;
 	}
+
 }

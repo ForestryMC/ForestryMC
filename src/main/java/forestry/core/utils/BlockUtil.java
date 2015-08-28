@@ -12,10 +12,9 @@ package forestry.core.utils;
 
 import java.util.ArrayList;
 
-import cofh.api.energy.IEnergyReceiver;
-import forestry.core.config.Defaults;
-import forestry.core.vect.Vect;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockCocoa;
+import net.minecraft.block.BlockLog;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -24,22 +23,29 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
+import forestry.core.config.Defaults;
+import forestry.core.gadgets.Engine;
+import forestry.core.vect.Vect;
+
+import cofh.api.energy.IEnergyConnection;
+import cofh.api.energy.IEnergyReceiver;
+
 public class BlockUtil {
 
 	public static ArrayList<ItemStack> getBlockDrops(World world, Vect posBlock) {
-		IBlockState state = world.getBlockState(new BlockPos(posBlock.x, posBlock.y, posBlock.z));
-		Block block =state.getBlock();
+		IBlockState state = world.getBlockState(posBlock.pos);
+		Block block = state.getBlock();
 
-		return (ArrayList<ItemStack>) block.getDrops(world, new BlockPos(posBlock.x, posBlock.y, posBlock.z), state, 0);
+		return (ArrayList<ItemStack>) block.getDrops(world, posBlock.pos, state, 0);
 
 	}
 
-	public static boolean isEnergyReceiver(EnumFacing side, TileEntity tile) {
-		if (!(tile instanceof IEnergyReceiver)) {
+	public static boolean isEnergyReceiverOrEngine(EnumFacing side, TileEntity tile) {
+		if (!(tile instanceof IEnergyReceiver) && !(tile instanceof Engine)) {
 			return false;
 		}
 
-		IEnergyReceiver receptor = (IEnergyReceiver) tile;
+		IEnergyConnection receptor = (IEnergyConnection) tile;
 		return receptor.canConnectEnergy(side);
 	}
 
@@ -50,7 +56,7 @@ public class BlockUtil {
 			return false;
 		}
 
-		world.setBlockState(pos, block.getStateFromMeta(direction), Defaults.FLAG_BLOCK_SYNCH);
+		world.setBlockState(pos, block.getStateFromMeta(direction), Defaults.FLAG_BLOCK_SYNCH_AND_UPDATE);
 		return true;
 	}
 

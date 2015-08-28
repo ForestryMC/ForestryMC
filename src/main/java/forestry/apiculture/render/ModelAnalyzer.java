@@ -58,7 +58,6 @@ public class ModelAnalyzer extends ModelBase {
 	public void render(EnumFacing orientation, float posX, float posY, float posZ) {
 
 		GL11.glPushMatrix();
-		GL11.glDisable(GL11.GL_LIGHTING);
 
 		GL11.glTranslatef(posX, posY, posZ);
 		float[] angle = {0, 0, 0};
@@ -107,7 +106,6 @@ public class ModelAnalyzer extends ModelBase {
 		Proxies.common.bindTexture(textures[2]);
 		tower2.render(factor);
 
-		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
 
 	}

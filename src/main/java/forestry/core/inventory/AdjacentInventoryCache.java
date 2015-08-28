@@ -17,10 +17,10 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-import forestry.core.utils.AdjacentTileCache;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import forestry.core.utils.AdjacentTileCache;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -36,6 +36,10 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
 
 	public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache) {
 		this(tile, cache, null, null);
+	}
+
+	public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache, ITileFilter filter) {
+		this(tile, cache, filter, null);
 	}
 
 	public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache, ITileFilter filter, Comparator<IInventory> sorter) {

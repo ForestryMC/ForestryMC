@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.factory.gadgets;
 
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -27,6 +29,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 
 import forestry.api.core.BiomeHelper;
 import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
 import forestry.core.EnumErrorCode;
 import forestry.core.config.Config;
 import forestry.core.config.Defaults;
@@ -36,11 +39,11 @@ import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.gadgets.TileBase;
 import forestry.core.interfaces.ILiquidTankContainer;
-import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.TileInventoryAdapter;
+import forestry.core.network.DataInputStreamForestry;
+import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.GuiId;
 import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
 
 public class MachineRaintank extends TileBase implements ISidedInventory, ILiquidTankContainer {
 
@@ -57,20 +60,7 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 	private ItemStack usedEmpty;
 
 	public MachineRaintank() {
-		setInternalInventory(new TileInventoryAdapter(this, 3, "Items") {
-			@Override
-			public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-				if (slotIndex == SLOT_RESOURCE) {
-					return FluidHelper.isFillableContainer(itemStack, Fluids.WATER.getFluid(1000));
-				}
-				return false;
-			}
-
-			@Override
-			public boolean canExtractItem(int slotIndex, ItemStack itemstack, EnumFacing side) {
-				return slotIndex == SLOT_PRODUCT;
-			}
-		});
+		setInternalInventory(new RaintankInventoryAdapter(this));
 		setHints(Config.hints.get("raintank"));
 
 		resourceTank = new FilteredTank(Defaults.RAINTANK_TANK_CAPACITY, FluidRegistry.WATER);
@@ -79,20 +69,18 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 
 	@Override
 	public void validate() {
-		// Raintanks in desert and snow biomes are useless
+		// Raintanks in desert biomes are useless
 		if (worldObj != null) {
-			BiomeGenBase biome = Utils.getBiomeAt(worldObj, pos);
-			if (!BiomeHelper.canRainOrSnow(biome)) {
-				setErrorState(EnumErrorCode.INVALIDBIOME);
-				isValidBiome = false;
-			}
+			BiomeGenBase biome = worldObj.getBiomeGenForCoordsBody(pos);
+			isValidBiome = BiomeHelper.canRainOrSnow(biome);
+			getErrorLogic().setCondition(!isValidBiome, EnumErrorCode.INVALIDBIOME);
 		}
 
 		super.validate();
 	}
 
 	@Override
-	public void openGui(EntityPlayer player, TileBase tile) {
+	public void openGui(EntityPlayer player) {
 		player.openGui(ForestryAPI.instance, GuiId.RaintankGUI.ordinal(), player.worldObj, pos.getX(), pos.getY(), pos.getZ());
 	}
 
@@ -115,38 +103,51 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 	}
 
 	@Override
+	public void writeData(DataOutputStreamForestry data) throws IOException {
+		super.writeData(data);
+		tankManager.writePacketData(data);
+	}
+
+	@Override
+	public void readData(DataInputStreamForestry data) throws IOException {
+		super.readData(data);
+		tankManager.readPacketData(data);
+	}
+
+	@Override
 	public void updateServerSide() {
 
 		if (!updateOnInterval(20)) {
 			return;
 		}
 
-		if (!isValidBiome) {
-			setErrorState(EnumErrorCode.INVALIDBIOME);
-		} else if (!worldObj.canBlockSeeSky(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ()))) {
-			setErrorState(EnumErrorCode.NOSKY);
-		} else if (!worldObj.isRaining()) {
-			setErrorState(EnumErrorCode.NOTRAINING);
-		} else {
+		IErrorLogic errorLogic = getErrorLogic();
+
+		errorLogic.setCondition(!isValidBiome, EnumErrorCode.INVALIDBIOME);
+
+		boolean hasSky = worldObj.canSeeSky(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ()));
+		errorLogic.setCondition(!hasSky, EnumErrorCode.NOSKY);
+
+		errorLogic.setCondition(!worldObj.isRaining(), EnumErrorCode.NOTRAINING);
+
+		if (!errorLogic.hasErrors()) {
 			resourceTank.fill(STACK_WATER, true);
-			setErrorState(EnumErrorCode.OK);
 		}
 		
-		IInventoryAdapter inventory = getInternalInventory();
-		if (!StackUtils.isIdenticalItem(usedEmpty, inventory.getStackInSlot(SLOT_RESOURCE))) {
+		if (!StackUtils.isIdenticalItem(usedEmpty, getStackInSlot(SLOT_RESOURCE))) {
 			fillingTime = 0;
 			usedEmpty = null;
 		}
 
 		if (usedEmpty == null) {
-			usedEmpty = inventory.getStackInSlot(SLOT_RESOURCE);
+			usedEmpty = getStackInSlot(SLOT_RESOURCE);
 		}
 
 		if (!isFilling()) {
 			tryToStartFillling();
 		} else {
 			fillingTime--;
-			if (fillingTime <= 0 && FluidHelper.fillContainers(tankManager, inventory, SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.getFluid())) {
+			if (fillingTime <= 0 && FluidHelper.fillContainers(tankManager, this, SLOT_RESOURCE, SLOT_PRODUCT, Fluids.WATER.getFluid())) {
 				fillingTime = 0;
 			}
 		}
@@ -222,4 +223,22 @@ public class MachineRaintank extends TileBase implements ISidedInventory, ILiqui
 		return tankManager.getTankInfo(from);
 	}
 
+	private static class RaintankInventoryAdapter extends TileInventoryAdapter<MachineRaintank> {
+		public RaintankInventoryAdapter(MachineRaintank raintank) {
+			super(raintank, 3, "Items");
+		}
+
+		@Override
+		public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+			if (slotIndex == SLOT_RESOURCE) {
+				return FluidHelper.isFillableContainer(itemStack, Fluids.WATER.getFluid(1000));
+			}
+			return false;
+		}
+
+		@Override
+		public boolean canExtractItem(int slotIndex, ItemStack itemstack, EnumFacing side) {
+			return slotIndex == SLOT_PRODUCT;
+		}
+	}
 }

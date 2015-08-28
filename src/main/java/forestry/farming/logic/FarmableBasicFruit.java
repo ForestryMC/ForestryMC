@@ -40,11 +40,11 @@ public class FarmableBasicFruit implements IFarmable {
 
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos) {
-		if (world.getBlockState(pos).getBlock() != block) {
+		IBlockState state = world.getBlockState(pos);
+		if (state.getBlock() != block) {
 			return null;
 		}
-		IBlockState state = world.getBlockState(pos);
-		if (block.getMetaFromState(state) != matureMeta) { //TODO Revisit in BlockState pass
+		if (state.getBlock().getMetaFromState(state) != matureMeta) {
 			return null;
 		}
 		return new CropBasicFruit(world, block, matureMeta, new Vect(pos));
@@ -57,7 +57,7 @@ public class FarmableBasicFruit implements IFarmable {
 
 	@Override
 	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, BlockPos pos) {
-		return world.setBlockState(pos, block.getDefaultState(), Defaults.FLAG_BLOCK_SYNCH);
+		return world.setBlockState(pos, block.getStateFromMeta(0), Defaults.FLAG_BLOCK_SYNCH);
 	}
 
 	@Override
