@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -48,7 +47,7 @@ public class CropBasicGrowthCraft extends Crop {
 		if (harvest.size() > 1) {
 			harvest.remove(0); //Hops have rope as first drop.
 		}
-		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, Blocks.melon_block, 0);
+		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, block, 0);
 		if (isGrape) {
 			world.setBlockToAir(pos.x, pos.y, pos.z);
 
