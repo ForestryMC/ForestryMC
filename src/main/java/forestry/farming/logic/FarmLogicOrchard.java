@@ -27,6 +27,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -53,6 +54,12 @@ public class FarmLogicOrchard extends FarmLogic {
 		ImmutableList.Builder<Block> traversalBlocksBuilder = ImmutableList.builder();
 		if (PluginManager.Module.AGRICRAFT.isEnabled()) {
 			traversalBlocksBuilder.add(Blocks.farmland);
+		}
+		if (PluginManager.Module.GROWTHCRAFT.isEnabled()) {
+			Block grapeVine = GameRegistry.findBlock("Growthcraft|Grapes", "grc.grapeVine1");
+			if (grapeVine != null) {
+				traversalBlocksBuilder.add(grapeVine);
+			}
 		}
 		if (PluginManager.Module.PLANTMEGAPACK.isEnabled()) {
 			traversalBlocksBuilder.add(Blocks.water);

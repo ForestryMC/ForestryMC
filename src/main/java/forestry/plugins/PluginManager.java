@@ -90,6 +90,7 @@ public class PluginManager {
 		CHISEL(new PluginChisel()),
 		ENDERIO(new PluginEnderIO()),
 		EXTRAUTILITIES(new PluginExtraUtilities()),
+		GROWTHCRAFT(new PluginGrowthCraft()),
 		HARVESTCRAFT(new PluginHarvestCraft()),
 		IMMERSIVEENGINEERING(new PluginImmersiveEngineering()),
 		INDUSTRIALCRAFT(new PluginIC2()),
