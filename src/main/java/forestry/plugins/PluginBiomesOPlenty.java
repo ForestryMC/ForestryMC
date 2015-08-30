@@ -132,7 +132,7 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 		Block flowers = GameRegistry.findBlock(BoP, "flowers");
 		if (flowers != null) {
 			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 0, 1.0, FlowerManager.FlowerTypeVanilla);		//Clover
-			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 1, 1.0, FlowerManager.FlowerTypeVanilla);		//Swampflower
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 1, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeMushrooms);		//Swampflower
 //			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 2, 1.0, FlowerManager.FlowerTypeNether); 		//Deathbloom
 			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 3, 1.0, FlowerManager.FlowerTypeVanilla); 	//GlowFlower
 			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 4, 1.0, FlowerManager.FlowerTypeVanilla);		//Blue Hydrangea
@@ -160,6 +160,15 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 			FlowerManager.flowerRegistry.registerPlantableFlower(flowers2, 6, 1.0, FlowerManager.FlowerTypeVanilla);	//Miner's delight
 			FlowerManager.flowerRegistry.registerPlantableFlower(flowers2, 7, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow); //Icy Iris
 			FlowerManager.flowerRegistry.registerPlantableFlower(flowers2, 8, 1.0, FlowerManager.FlowerTypeVanilla);	// Rose
+		}
+		// Toadstool 0 Portobello 1 Blue Milk cap 2 Glowshroom 3 flat mushroom 4 shadow shroom 5       'plants:12' tiny cactus
+		Block mushrooms = GameRegistry.findBlock(BoP, "mushrooms");
+		if (mushrooms != null) {
+			FlowerManager.flowerRegistry.registerPlantableFlower(mushrooms, OreDictionary.WILDCARD_VALUE, 1.0, FlowerManager.FlowerTypeMushrooms);
+		}
+		Block plants = GameRegistry.findBlock(BoP, "plants");
+		if (plants != null) {
+			FlowerManager.flowerRegistry.registerPlantableFlower(plants, 12, 1.0, FlowerManager.FlowerTypeCacti);
 		}
 	}
 
