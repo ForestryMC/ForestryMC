@@ -165,6 +165,7 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 		Block mushrooms = GameRegistry.findBlock(BoP, "mushrooms");
 		if (mushrooms != null) {
 			FlowerManager.flowerRegistry.registerPlantableFlower(mushrooms, OreDictionary.WILDCARD_VALUE, 1.0, FlowerManager.FlowerTypeMushrooms);
+			FlowerManager.flowerRegistry.registerPlantableFlower(mushrooms, 3, 1.0, FlowerManager.FlowerTypeNether);
 		}
 		Block plants = GameRegistry.findBlock(BoP, "plants");
 		if (plants != null) {
