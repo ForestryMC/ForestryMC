@@ -58,12 +58,6 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 	}
 
 	@Override
-	protected void preInit() {
-		super.preInit();
-		addFlowers();
-	}
-
-	@Override
 	public void doInit() {
 		super.doInit();
 
@@ -74,6 +68,7 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 			persimmon = new ItemStack(food, 1, 8);
 		}
 
+		addFlowers();
 		addFarmCrops();
 		addFermenterRecipes();
 		addSqueezerRecipes();
@@ -136,12 +131,35 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 	private static void addFlowers() {
 		Block flowers = GameRegistry.findBlock(BoP, "flowers");
 		if (flowers != null) {
-			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, OreDictionary.WILDCARD_VALUE, 1.0, FlowerManager.FlowerTypeVanilla);
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 0, 1.0, FlowerManager.FlowerTypeVanilla);		//Clover
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 1, 1.0, FlowerManager.FlowerTypeVanilla);		//Swampflower
+//			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 2, 1.0, FlowerManager.FlowerTypeNether); 		//Deathbloom
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 3, 1.0, FlowerManager.FlowerTypeVanilla); 	//GlowFlower
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 4, 1.0, FlowerManager.FlowerTypeVanilla);		//Blue Hydrangea
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 5, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeJungle);		//Orange Cosmos
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 6, 1.0, FlowerManager.FlowerTypeVanilla);		//Pink Daffodil
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 7, 1.0, FlowerManager.FlowerTypeVanilla);		//WildFlower
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 8, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);	//Violet
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 9, 1.0, FlowerManager.FlowerTypeVanilla);		// White Anemone
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 10, 1.0, FlowerManager.FlowerTypeVanilla);	// Waterlily
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 11, 1.0, FlowerManager.FlowerTypeVanilla);	//EnderLotus (does not actually spawn in the end)
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 12, 1.0, FlowerManager.FlowerTypeCacti);		//Bromeliad
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 13, 1.0, FlowerManager.FlowerTypeNether);		// EyeBulb
+//			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 14, 1.0, FlowerManager.FlowerTypeNether);		// Unlisted top of the eyebulb
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 15, 1.0, FlowerManager.FlowerTypeVanilla);	// Dandelion Puff
 		}
 
 		Block flowers2 = GameRegistry.findBlock(BoP, "flowers2");
 		if (flowers2 != null) {
-			FlowerManager.flowerRegistry.registerPlantableFlower(flowers2, OreDictionary.WILDCARD_VALUE, 1.0, FlowerManager.FlowerTypeVanilla);
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers2, 0, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeJungle);		//Pink Hibiscus
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers2, 1, 1.0, FlowerManager.FlowerTypeVanilla);	//Lily of the Valley
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers2, 2, 1.0, FlowerManager.FlowerTypeNether);		// Burning Blososm
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers2, 3, 1.0, FlowerManager.FlowerTypeVanilla);	// Lavender
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers2, 4, 1.0, FlowerManager.FlowerTypeVanilla);	// Goldenrod
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers2, 5, 1.0, FlowerManager.FlowerTypeVanilla);	//Bluebells
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers2, 6, 1.0, FlowerManager.FlowerTypeVanilla);	//Miner's delight
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers2, 7, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow); //Icy Iris
+			FlowerManager.flowerRegistry.registerPlantableFlower(flowers2, 8, 1.0, FlowerManager.FlowerTypeVanilla);	// Rose
 		}
 	}
 
