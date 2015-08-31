@@ -28,7 +28,7 @@ import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpeciesCustom;
-import forestry.api.arboriculture.IGermlingIconProvider;
+import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.arboriculture.ILeafIconProvider;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenerator;
@@ -42,8 +42,8 @@ import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.WoodType;
 import forestry.arboriculture.gadgets.ForestryBlockLeaves;
 import forestry.arboriculture.gadgets.TileLeaves;
-import forestry.arboriculture.render.GermlingIconProvider;
-import forestry.arboriculture.render.GermlingVanillaIconProvider;
+import forestry.arboriculture.render.GermlingModelProvider;
+import forestry.arboriculture.render.GermlingVanillaModelProvider;
 import forestry.arboriculture.render.LeafIconProvider;
 import forestry.arboriculture.worldgen.BlockTypeLog;
 import forestry.arboriculture.worldgen.WorldGenAcacia;
@@ -961,9 +961,9 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		this.branch = branch;
 
 		ILeafIconProvider leafIconProvider = new LeafIconProvider(leafType, primary, secondary);
-		IGermlingIconProvider germlingIconProvider = new GermlingVanillaIconProvider(vanillaMeta);
+		IGermlingModelProvider germlingModelProvider = new GermlingVanillaModelProvider(vanillaMeta);
 
-		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, leafIconProvider, germlingIconProvider, this);
+		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, leafIconProvider, germlingModelProvider, this);
 		this.woodType = null;
 		this.vanillaWood = vanillaWood;
 	}
@@ -977,9 +977,9 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 		this.branch = branch;
 
 		ILeafIconProvider leafIconProvider = new LeafIconProvider(leafType, primary, secondary);
-		IGermlingIconProvider germlingIconProvider = new GermlingIconProvider(uid);
+		IGermlingModelProvider germlingModelProvider = new GermlingModelProvider(uid);
 
-		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, leafIconProvider, germlingIconProvider, this);
+		this.species = TreeManager.treeFactory.createSpecies(uid, unlocalizedName, "Sengir", unlocalizedDescription, dominant, branch.getBranch(), binomial, leafIconProvider, germlingModelProvider, this);
 		this.woodType = woodType;
 		this.vanillaWood = null;
 	}

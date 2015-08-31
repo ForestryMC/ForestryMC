@@ -14,20 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
@@ -42,9 +36,7 @@ import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodType;
 import forestry.arboriculture.items.ItemWoodBlock.WoodMeshDefinition;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.ModelManager;
 import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
 
 public abstract class BlockWood extends Block implements IWoodTyped, IModelRegister {
 	
@@ -67,6 +59,12 @@ public abstract class BlockWood extends Block implements IWoodTyped, IModelRegis
 	protected BlockState createBlockState() {
 		return new BlockState(this, new IProperty[]{WoodType.WOODTYPE});
 	}
+	
+    @Override
+	public int getMetaFromState(IBlockState state)
+    {
+        return 0;
+    }
 
 	@Override
 	public final String getBlockKind() {

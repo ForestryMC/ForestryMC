@@ -24,9 +24,6 @@ import forestry.core.proxy.Proxies;
 import forestry.pipes.network.PacketGenomeFilterChange;
 import forestry.pipes.network.PacketTypeFilterChange;
 
-import buildcraft.transport.Pipe;
-import buildcraft.transport.PipeTransportItems;
-
 public class PipeLogicPropolis {
 
 	private final Pipe<PipeTransportItems> pipe;

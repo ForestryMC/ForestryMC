@@ -21,7 +21,6 @@ import net.minecraft.util.EnumChatFormatting;
 import forestry.core.circuits.ISocketable;
 import forestry.core.circuits.ISolderingIron;
 import forestry.core.circuits.ItemCircuitBoard;
-import forestry.core.gui.GuiForestry;
 import forestry.core.gui.IContainerSocketed;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.proxy.Proxies;

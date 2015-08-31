@@ -24,7 +24,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.IGuiHandler;
@@ -36,7 +35,6 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmable;
-import forestry.core.ErrorStateRegistry;
 import forestry.core.circuits.Circuit;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.config.Defaults;
@@ -44,7 +42,6 @@ import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.items.ItemTypedBlock;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.ShapedRecipeCustom;
 import forestry.farming.EventHandlerFarming;
 import forestry.farming.GuiHandlerFarming;
@@ -78,14 +75,11 @@ import forestry.farming.multiblock.TileFarmPlain;
 import forestry.farming.multiblock.TileGearbox;
 import forestry.farming.multiblock.TileHatch;
 import forestry.farming.multiblock.TileValve;
-import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.triggers.FarmingTriggers;
 
 @Plugin(pluginID = "Farming", name = "Farming", author = "SirSengir", url = Defaults.URL, unlocalizedDescription = "for.plugin.farming.description")
 public class PluginFarming extends ForestryPlugin {
 
-	@SidedProxy(clientSide = "forestry.farming.proxy.ClientProxyFarming", serverSide = "forestry.farming.proxy.ProxyFarming")
-	public static ProxyFarming proxy;
 	public static int modelIdFarmBlock;
 	public static ItemStack farmFertilizer;
 
@@ -133,8 +127,6 @@ public class PluginFarming extends ForestryPlugin {
 		/*Item.itemsList[ForestryBlock.farm] = null;
 		 Item.itemsList[ForestryBlock.farm] = (new ItemFarmBlock(ForestryBlock.farm - 256, "ffarm"));*/
 		ForestryBlock.farm.block().setHarvestLevel("pickaxe", 0);
-
-		proxy.initializeRendering();
 
 		// Layouts
 		ICircuitLayout layoutManaged = new CircuitLayout("farms.managed");

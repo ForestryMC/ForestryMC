@@ -14,8 +14,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.api.core.sprite.ISprite;
-import forestry.api.core.sprite.Sprite;
 import forestry.core.proxy.Proxies;
 
 public class ReservoirWidget extends TankWidget {

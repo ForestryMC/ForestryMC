@@ -19,15 +19,18 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
-
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.arboriculture.EnumFruitFamily;
@@ -44,7 +47,6 @@ import forestry.arboriculture.FruitProviderPod.EnumPodType;
 import forestry.arboriculture.FruitProviderRandom;
 import forestry.arboriculture.FruitProviderRipening;
 import forestry.arboriculture.GuiHandlerArboriculture;
-import forestry.arboriculture.VillageHandlerArboriculture;
 import forestry.arboriculture.WoodType;
 import forestry.arboriculture.commands.CommandTree;
 import forestry.arboriculture.gadgets.BlockArbFence;
@@ -59,7 +61,6 @@ import forestry.arboriculture.gadgets.TileArboristChest;
 import forestry.arboriculture.gadgets.TileFruitPod;
 import forestry.arboriculture.gadgets.TileLeaves;
 import forestry.arboriculture.gadgets.TileSapling;
-import forestry.arboriculture.gadgets.TileWood;
 import forestry.arboriculture.genetics.AlleleFruit;
 import forestry.arboriculture.genetics.AlleleGrowth;
 import forestry.arboriculture.genetics.AlleleLeafEffectNone;
@@ -78,8 +79,8 @@ import forestry.arboriculture.items.ItemTreealyzer;
 import forestry.arboriculture.items.ItemWoodBlock;
 import forestry.arboriculture.network.PacketHandlerArboriculture;
 import forestry.arboriculture.proxy.ProxyArboriculture;
+import forestry.arboriculture.render.LeafTexture;
 import forestry.core.GameMode;
-import forestry.core.config.Config;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
@@ -133,6 +134,8 @@ public class PluginArboriculture extends ForestryPlugin {
 	@Override
 	public void preInit() {
 		super.preInit();
+		
+		MinecraftForge.EVENT_BUS.register(this);
 
 		// Wood blocks
 		ForestryBlock.logs.registerBlock(new BlockLog(false), ItemWoodBlock.class, "logs");
@@ -218,6 +221,7 @@ public class PluginArboriculture extends ForestryPlugin {
 
 		// Commands
 		PluginCore.rootCommand.addChildCommand(new CommandTree());
+		
 	}
 
 	@Override
@@ -234,11 +238,11 @@ public class PluginArboriculture extends ForestryPlugin {
 		GameRegistry.registerTileEntity(TileFruitPod.class, "forestry.Pods");
 		definitionChest.register();
 
-		if (Config.enableVillagers) {
+		/*if (Config.enableVillagers) {
 			VillagerRegistry.instance().registerVillagerId(Defaults.ID_VILLAGER_LUMBERJACK);
 			Proxies.render.registerVillagerSkin(Defaults.ID_VILLAGER_LUMBERJACK, Defaults.TEXTURE_SKIN_LUMBERJACK);
 			VillagerRegistry.instance().registerVillageTradeHandler(Defaults.ID_VILLAGER_LUMBERJACK, new VillageHandlerArboriculture());
-		}
+		}*/
 	}
 
 	@Override
@@ -463,5 +467,11 @@ public class PluginArboriculture extends ForestryPlugin {
 
 			return 0;
 		}
+	}
+	
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void textureHook(TextureStitchEvent.Pre event) {
+		LeafTexture.registerAllIcons();
 	}
 }

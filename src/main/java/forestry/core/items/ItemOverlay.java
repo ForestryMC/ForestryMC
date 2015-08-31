@@ -20,7 +20,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelManager;
 import forestry.core.config.Config;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 
 public class ItemOverlay extends ItemForestry {

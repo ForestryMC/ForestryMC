@@ -24,7 +24,6 @@ import com.mojang.authlib.GameProfile;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IModelProvider;
-import forestry.api.core.ISpriteProvider;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpeciesCustom;
 import forestry.api.genetics.IClassification;

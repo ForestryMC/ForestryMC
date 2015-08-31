@@ -15,8 +15,6 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-import buildcraft.api.blueprints.IBuilderContext;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -50,7 +48,6 @@ import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
 import forestry.apiculture.BeeHousingModifier;
-import forestry.core.proxy.Proxies;
 import forestry.core.vect.MutableVect;
 import forestry.core.vect.Vect;
 import forestry.plugins.PluginManager;

@@ -106,7 +106,8 @@ public class ShapelessRecipeCustom implements IRecipe {
 		return product.copy();
 	}
 	
-    public ItemStack[] getRemainingItems(InventoryCrafting p_179532_1_)
+    @Override
+	public ItemStack[] getRemainingItems(InventoryCrafting p_179532_1_)
     {
         ItemStack[] aitemstack = new ItemStack[p_179532_1_.getSizeInventory()];
 

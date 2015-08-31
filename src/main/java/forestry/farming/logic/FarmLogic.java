@@ -13,10 +13,8 @@ package forestry.farming.logic;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import forestry.api.farming.FarmDirection;
@@ -35,6 +33,7 @@ public abstract class FarmLogic implements IFarmLogic {
 		this.housing = housing;
 	}
 
+	@Override
 	public FarmLogic setManual(boolean flag) {
 		isManual = flag;
 		return this;

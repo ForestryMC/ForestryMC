@@ -22,8 +22,6 @@ import forestry.api.core.IModelManager;
 import forestry.api.core.IModelRegister;
 import forestry.core.CreativeTabForestry;
 import forestry.core.config.Defaults;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
 
 public class ItemArmorNaturalist extends ItemArmor implements IArmorNaturalist, IModelRegister {
 

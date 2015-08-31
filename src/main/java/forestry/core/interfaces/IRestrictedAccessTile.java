@@ -18,6 +18,7 @@ import forestry.core.utils.EnumAccess;
 public interface IRestrictedAccessTile extends IStreamableGui {
 	IAccessHandler getAccessHandler();
 
+	@Override
 	BlockPos getPos();
 
 	void onSwitchAccess(EnumAccess oldAccess, EnumAccess newAccess);

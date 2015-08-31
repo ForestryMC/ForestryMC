@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.core;
 
-import forestry.apiculture.render.BlockCandleRenderer;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.BlockRenderingHandler;
-
 public class ForestryClient extends ForestryCore {
 
 	public static int byBlockModelId;
@@ -24,12 +20,11 @@ public class ForestryClient extends ForestryCore {
 
 		super.init(basemod);
 
-		byBlockModelId = Proxies.render.getNextAvailableRenderId();
-		candleRenderId = Proxies.render.getNextAvailableRenderId();
+		//byBlockModelId = Proxies.render.getNextAvailableRenderId();
+		//candleRenderId = Proxies.render.getNextAvailableRenderId();
 
-		BlockRenderingHandler renderHandler = new BlockRenderingHandler();
-		RenderingRegistry.registerBlockHandler(byBlockModelId, renderHandler);
-		RenderingRegistry.registerBlockHandler(candleRenderId, new BlockCandleRenderer());
+		//BlockRenderingHandler renderHandler = new BlockRenderingHandler();
+		//RenderingRegistry.registerBlockHandler(byBlockModelId, renderHandler);
 	}
 
 	@Override

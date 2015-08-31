@@ -12,6 +12,8 @@ package forestry.apiculture.items;
 
 import java.util.List;
 
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -27,7 +29,6 @@ import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
 import forestry.api.core.IModelManager;
 import forestry.api.core.Tabs;
-import forestry.api.core.sprite.ISprite;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
@@ -163,6 +164,21 @@ public class ItemBeeGE extends ItemGE {
 				((IAlleleBeeSpecies) allele).getModelProvider().registerModels(manager);
 			}
 		}
+		manager.registerItemModel(item, new BeeMeshDefinition());
+	}
+	
+	private class BeeMeshDefinition implements ItemMeshDefinition{
+
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+			IAlleleBeeSpecies species = (IAlleleBeeSpecies) getSpecies(stack);
+			if (species == null) {
+				species = (IAlleleBeeSpecies) BeeManager.beeRoot.getDefaultTemplate()[EnumBeeChromosome.SPECIES.ordinal()];
+			}
+			species.getModel(type);
+			return null;
+		}
+		
 	}
 	
 	/*@SideOnly(Side.CLIENT)

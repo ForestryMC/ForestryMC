@@ -20,8 +20,6 @@ import net.minecraftforge.fluids.IFluidTank;
 import org.lwjgl.opengl.GL11;
 
 import forestry.api.core.IToolPipette;
-import forestry.api.core.sprite.ISprite;
-import forestry.api.core.sprite.Sprite;
 import forestry.core.fluids.tanks.StandardTank;
 import forestry.core.gui.IContainerLiquidTanks;
 import forestry.core.gui.tooltips.ToolTip;

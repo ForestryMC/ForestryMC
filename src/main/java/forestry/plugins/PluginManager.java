@@ -67,7 +67,7 @@ public class PluginManager {
 
 		CORE(new PluginCore(), false),
 		FLUIDS(new PluginFluids(), false),
-
+		
 		APICULTURE(new PluginApiculture()),
 		ARBORICULTURE(new PluginArboriculture()),
 		ENERGY(new PluginEnergy()),
@@ -89,6 +89,7 @@ public class PluginManager {
 		CHISEL(new PluginChisel()),
 		ENDERIO(new PluginEnderIO()),
 		EXTRAUTILITIES(new PluginExtraUtilities()),
+		GROWTHCRAFT(new PluginGrowthCraft()),
 		HARVESTCRAFT(new PluginHarvestCraft()),
 		IMMERSIVEENGINEERING(new PluginImmersiveEngineering()),
 		INDUSTRIALCRAFT(new PluginIC2()),

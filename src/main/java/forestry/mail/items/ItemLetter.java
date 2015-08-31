@@ -37,7 +37,6 @@ import forestry.core.inventory.ItemInventory;
 import forestry.core.items.ItemInventoried;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Utils;
 import forestry.mail.Letter;

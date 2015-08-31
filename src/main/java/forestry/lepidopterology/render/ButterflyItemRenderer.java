@@ -126,11 +126,11 @@ public class ButterflyItemRenderer implements IItemRenderer {
 			GL11.glScalef(-2.0f, 2.0f, 2.0f);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(-((float) Math.atan((double) (pitch / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
+			GL11.glRotatef(-((float) Math.atan(pitch / 40.0F)) * 20.0F, 1.0F, 0.0F, 0.0F);
 
-			entity.renderYawOffset = (float) Math.atan((double) (yaw / 40.0F)) * 20.0F;
-			entity.rotationYaw = (float) Math.atan((double) (yaw / 40.0F)) * 40.0F;
-			entity.rotationPitch = -((float) Math.atan((double) (pitch / 40.0F))) * 20.0F;
+			entity.renderYawOffset = (float) Math.atan(yaw / 40.0F) * 20.0F;
+			entity.rotationYaw = (float) Math.atan(yaw / 40.0F) * 40.0F;
+			entity.rotationPitch = -((float) Math.atan(pitch / 40.0F)) * 20.0F;
 			entity.rotationYawHead = entity.rotationYaw;
 
 			RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, getWingYaw(butterfly));

@@ -23,6 +23,7 @@ public class AlleleArea extends AlleleCategorized implements IAlleleArea {
 		this.area = value;
 	}
 	
+	@Override
 	public BlockPos getValue() {
 		return area;
 	}

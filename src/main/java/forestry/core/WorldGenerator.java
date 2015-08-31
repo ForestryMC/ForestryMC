@@ -48,7 +48,7 @@ public class WorldGenerator implements IWorldGenerator {
 
 	public void retroGen(Random random, int chunkX, int chunkZ, World world) {
 		generateWorld(random, chunkX, chunkZ, world);
-		PluginManager.populateChunkRetroGen(world, random, new BlockPos(event.chunkX, 0, event.chunkZ));
+		PluginManager.populateChunkRetroGen(world, random, new BlockPos(chunkX, 0, chunkZ));
 		world.getChunkFromChunkCoords(chunkX, chunkZ).setChunkModified();
 	}
 

@@ -1,6 +1,6 @@
 package forestry.core.network;
 
-import java.io.ByteArrayInputStream;
+import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;

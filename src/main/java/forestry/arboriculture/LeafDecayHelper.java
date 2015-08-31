@@ -1,7 +1,7 @@
 package forestry.arboriculture;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockLeavesBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -13,7 +13,7 @@ public abstract class LeafDecayHelper {
 	private static final short IS_LEAVES = -2;
 	private static int[] leafDecayValues;
 
-	public static void leafDecay(BlockLeaves leaves, World world, int x, int y, int z) {
+	public static void leafDecay(BlockLeavesBase leaves, World world, int x, int y, int z) {
 		if (world.isRemote) {
 			return;
 		}

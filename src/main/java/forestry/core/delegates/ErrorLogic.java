@@ -35,10 +35,12 @@ public class ErrorLogic implements IErrorLogic {
 		return condition;
 	}
 
+	@Override
 	public final boolean contains(IErrorState state) {
 		return errorStates.contains(state);
 	}
 
+	@Override
 	public final boolean hasErrors() {
 		return errorStates.size() > 0;
 	}

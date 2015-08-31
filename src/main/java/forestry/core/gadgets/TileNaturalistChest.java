@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.GuiHandler;
+import forestry.core.GuiHandlerBase;
 import forestry.core.config.Config;
 import forestry.core.gui.IPagedInventory;
 import forestry.core.inventory.TileInventoryAdapter;
@@ -36,7 +36,7 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 
 	@Override
 	public void flipPage(EntityPlayer player, int page) {
-		player.openGui(ForestryAPI.instance, GuiHandler.encodeGuiData(guiID, page), player.worldObj, pos.getX(), pos.getY(), pos.getZ());
+		player.openGui(ForestryAPI.instance, GuiHandlerBase.encodeGuiData(guiID, page), player.worldObj, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	private static class NaturalistInventoryAdapter extends TileInventoryAdapter<TileNaturalistChest> {

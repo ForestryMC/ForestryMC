@@ -12,20 +12,16 @@ package forestry.core.render;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IModelManager;
-import forestry.api.core.IModelProvider;
 import forestry.api.core.IModelRegister;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.utils.StringUtil;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -93,6 +89,11 @@ public class ModelManager implements IModelManager {
 	public ModelResourceLocation getModelLocation(String identifier) {
 		return new ModelResourceLocation("forestry:items/" + identifier, "inventory");
 	}
+	
+	@Override
+	public ModelResourceLocation getModelLocation(String modID, String identifier) {
+		return new ModelResourceLocation(modID + ":items/" + identifier, "inventory");
+	}
 
 	@Override
 	public ModelResourceLocation getModelLocation(Item item, int meta) {
@@ -106,7 +107,7 @@ public class ModelManager implements IModelManager {
 
 	@Override
 	public ModelResourceLocation getModelLocation(Item item, int meta, String modifier, String identifier) {
-		return new ModelResourceLocation("forestry:items/" + modifier + "/" + StringUtil.cleanItemName(item) + "." + meta + identifier, "inventory");
+		return new ModelResourceLocation("forestry:items/" + modifier + "/" + identifier, "inventory");
 	}
 	
 	@Override

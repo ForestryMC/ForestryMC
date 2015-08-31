@@ -14,13 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import buildcraft.core.utils.WorldPropertyIsWood;
-import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -29,7 +24,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
@@ -42,7 +36,6 @@ import forestry.api.core.IModelRegister;
 import forestry.api.core.Tabs;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodType;
-import forestry.arboriculture.items.ItemWoodBlock;
 import forestry.arboriculture.items.ItemWoodBlock.WoodMeshDefinition;
 import forestry.core.config.ForestryBlock;
 
@@ -70,6 +63,12 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
 	protected BlockState createBlockState() {
 		return new BlockState(this, new IProperty[]{HALF, WoodType.WOODTYPE});
 	}
+	
+    @Override
+	public int getMetaFromState(IBlockState state)
+    {
+        return 0;
+    }
 	
 	@SideOnly(Side.CLIENT)
 	@Override

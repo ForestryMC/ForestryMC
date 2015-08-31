@@ -16,10 +16,8 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -27,7 +25,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
@@ -45,8 +42,6 @@ import forestry.arboriculture.items.ItemWoodBlock.WoodMeshDefinition;
 import forestry.plugins.PluginArboriculture;
 
 public class BlockArbFence extends BlockFence implements IWoodTyped, IModelRegister {
-
-	public static final PropertyEnum WOODTYPE = PropertyEnum.create("woodtype", WoodType.class);
 	private final boolean fireproof;
 
 	public BlockArbFence(boolean fireproof) {
@@ -59,8 +54,19 @@ public class BlockArbFence extends BlockFence implements IWoodTyped, IModelRegis
 		setHarvestLevel("axe", 0);
 		setStepSound(soundTypeWood);
 		setCreativeTab(Tabs.tabArboriculture);
-		setDefaultState(this.blockState.getBaseState().withProperty(NORTH, Boolean.valueOf(false)).withProperty(EAST, Boolean.valueOf(false)).withProperty(SOUTH, Boolean.valueOf(false)).withProperty(WEST, Boolean.valueOf(false)).withProperty(WOODTYPE, WoodType.LARCH));
+		setDefaultState(this.blockState.getBaseState().withProperty(NORTH, Boolean.valueOf(false)).withProperty(EAST, Boolean.valueOf(false)).withProperty(SOUTH, Boolean.valueOf(false)).withProperty(WEST, Boolean.valueOf(false)).withProperty(WoodType.WOODTYPE, WoodType.LARCH));
 	}
+	
+	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, new IProperty[]{NORTH, SOUTH, WEST, EAST, WoodType.WOODTYPE});
+	}
+	
+    @Override
+	public int getMetaFromState(IBlockState state)
+    {
+        return 0;
+    }
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override

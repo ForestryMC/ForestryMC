@@ -12,46 +12,42 @@ package forestry.arboriculture.genetics;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-
 import net.minecraft.client.resources.model.ModelResourceLocation;
 
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.api.apiculture.EnumBeeType;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleTreeSpeciesCustom;
-import forestry.api.arboriculture.IGermlingIconProvider;
+import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.arboriculture.ILeafIconProvider;
 import forestry.api.arboriculture.ITreeGenerator;
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelProvider;
-import forestry.api.core.ISpriteProvider;
 import forestry.api.core.sprite.ISprite;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.genetics.alleles.AlleleSpecies;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.GeneticsUtil;
 
-public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeciesCustom, ISpriteProvider {
+public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeciesCustom {
 
 	private final ITreeGenerator generator;
-	private final IGermlingIconProvider germlingIconProvider;
+	//private final IGermlingIconProvider germlingIconProvider;
+	private final IGermlingModelProvider germlingModelProvider;
 	private final ILeafIconProvider leafIconProvider;
 	private final List<IFruitFamily> fruits = new ArrayList<IFruitFamily>();
 
 	private EnumPlantType nativeType = EnumPlantType.Plains;
 
-	public AlleleTreeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean isDominant, IClassification branch, String binomial, ILeafIconProvider leafIconProvider, IGermlingIconProvider germlingIconProvider, ITreeGenerator generator) {
+	public AlleleTreeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean isDominant, IClassification branch, String binomial, ILeafIconProvider leafIconProvider, IGermlingModelProvider germlingModelProvider, ITreeGenerator generator) {
 		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial, false);
 
 		this.generator = generator;
-		this.germlingIconProvider = germlingIconProvider;
+		this.germlingModelProvider = germlingModelProvider;
 		this.leafIconProvider = leafIconProvider;
 	}
 
@@ -109,21 +105,21 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 		return 0xffffff;
 	}
 
-	@Override
+	/*@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister register) {
 		germlingIconProvider.registerIcons(register);
-	}
+	}*/
 	
 	@Override
 	public IModelProvider getModelProvider() {
 		return null;
 	}
+	
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getGermlingIcon(EnumGermlingType type, int renderPass) {
-		return germlingIconProvider.getIcon(type, renderPass);
+	public ModelResourceLocation getGermlingModel(EnumGermlingType type) {
+		return germlingModelProvider.getModel(type);
 	}
 
 	@Override
@@ -135,42 +131,26 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 		return getLeafColour(false);
 	}
 
-	@Override
+	/*@Override
 	@SideOnly(Side.CLIENT)
 	public ISpriteProvider getIconProvider() {
 		return this;
-	}
+	}*/
 
-	@Override
+	/*@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(short texUID) {
 		return TextureManager.getInstance().getIcon(texUID);
+	}*/
+
+	@Override
+	public ISprite getGermlingIcon(EnumGermlingType type, int renderPass) {
+		return null;
 	}
-	
-	private static class ModelProvider implements IModelProvider{
 
-		private static final ModelResourceLocation[] models = new ModelResourceLocation[EnumBeeType.values().length];
-		
-		@Override
-		public ModelResourceLocation getModel() {
-			return new ModelResourceLocation("", "inventory");
-		}
-
-		@Override
-		public void registerModels(IModelManager manager) {
-			String beeIconDir = "bees/default/";
-			for(int i = 0; i < EnumBeeType.values().length; i++)
-			{
-				EnumBeeType beeType = EnumBeeType.values()[i];
-				if (beeType == EnumBeeType.NONE) {
-					continue;
-				}
-				String beeTypeNameBase = beeIconDir + beeType.toString().toLowerCase(Locale.ENGLISH);
-				
-				models[i] = manager.getModelLocation(beeTypeNameBase);
-			}
-		}
-		
+	@Override
+	public void registerModels(IModelManager manager) {
+		germlingModelProvider.registerModels(manager);
 	}
 
 }

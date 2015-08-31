@@ -11,7 +11,6 @@
 package forestry.apiculture.multiblock;
 
 import forestry.apiculture.gadgets.BlockAlveary;
-import net.minecraft.util.IChatComponent;
 
 public class TileAlvearyFan extends TileAlvearyClimatiser {
 

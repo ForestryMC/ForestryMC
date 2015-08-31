@@ -11,12 +11,14 @@
 package forestry.energy.proxy;
 
 import forestry.core.interfaces.IBlockRenderer;
-import forestry.energy.render.RenderEngine;
+
 
 public class ClientProxyEnergy extends ProxyEnergy {
 
+	@Override
 	public IBlockRenderer getRenderDefaultEngine(String gfxBase) {
-		return new RenderEngine(gfxBase);
+		//return new RenderEngine(gfxBase);
+		return null;
 	}
 
 }

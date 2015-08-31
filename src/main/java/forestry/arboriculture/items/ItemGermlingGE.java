@@ -12,6 +12,8 @@ package forestry.arboriculture.items;
 
 import java.util.List;
 
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -124,11 +126,24 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModel(Item item, IModelManager manager) {
+		manager.registerItemModel(item, new GermlingMeshDefinition());
 		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
 			if (allele instanceof IAlleleTreeSpecies) {
-				((IAlleleTreeSpecies) allele).getModelProvider().registerModels(manager);
+				((IAlleleTreeSpecies) allele).registerModels(manager);
 			}
 		}
+	}
+	
+	private class GermlingMeshDefinition implements ItemMeshDefinition{
+		@Override
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+			IAlleleTreeSpecies treeSpecies = getSpecies(stack);
+			if (treeSpecies == null) {
+				treeSpecies = TreeDefinition.Oak.getGenome().getPrimary();
+			}
+			return treeSpecies.getGermlingModel(type);
+		}
+		
 	}
 	
 	@Override

@@ -61,6 +61,7 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 	}
 
 	/* GENERATION */
+	@Override
 	public abstract IGenome getMate();
 
 	@Override

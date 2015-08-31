@@ -19,10 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.IAlleleFruit;
-import forestry.api.core.sprite.ISprite;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IFruitBearer;
@@ -33,7 +30,6 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketTileStream;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 
 public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamable {
 

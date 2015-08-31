@@ -10,23 +10,18 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodType;
-import forestry.core.config.Defaults;
 import forestry.core.items.ItemForestryBlock;
 import forestry.core.render.ModelManager;
 import forestry.core.utils.StringUtil;
@@ -78,7 +73,7 @@ public class ItemWoodBlock extends ItemForestryBlock {
 	@Override
 	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
 		WoodType type = WoodType.getFromCompound(stack.getTagCompound());
-		newState.withProperty(WoodType.WOODTYPE, type);
+		newState = newState.withProperty(WoodType.WOODTYPE, type);
 		return super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState);
 	}
 	

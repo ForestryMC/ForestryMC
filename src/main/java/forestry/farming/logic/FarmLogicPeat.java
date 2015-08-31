@@ -24,7 +24,6 @@ import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.core.config.ForestryBlock;
-import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.BlockSoil;
 import forestry.core.render.TextureManager;
 import forestry.core.vect.Vect;
@@ -42,7 +41,7 @@ public class FarmLogicPeat extends FarmLogicWatered {
 			return true;
 		}
 
-		Block block = BlockSoil.getBlockFromItem(itemStack.getItem());
+		Block block = Block.getBlockFromItem(itemStack.getItem());
 		if (block == null || !(block instanceof BlockSoil)) {
 			return false;
 		}

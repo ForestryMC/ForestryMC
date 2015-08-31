@@ -13,7 +13,6 @@ package forestry.core.gadgets;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -83,14 +82,15 @@ public class BlockBase extends BlockForestry implements IModelRegister {
 		return ((MachineDefinitionType)state.getProperties().get(META)).getMeta();
 	}
 	
-    protected BlockState createBlockState()
+    @Override
+	protected BlockState createBlockState()
     {
         return new BlockState(this, new IProperty[] {META});
     }
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(META, meta);
+		return getDefaultState().withProperty(META,  MachineDefinitionType.getType(definitionID, meta));
 	}
 
 	@Override
@@ -247,7 +247,11 @@ public class BlockBase extends BlockForestry implements IModelRegister {
 	public void registerModel(Item item, IModelManager manager) {
 		for(int i = 0; i < definitions.size();i++)
 		{
+			if(definitions.get(i) == null)
+				return;
 			MachineDefinitionType type = MachineDefinitionType.getType(definitionID, i);
+			if(type == null)
+				return;
 			manager.registerItemModel(item, i, "definitions/" + type.name().toLowerCase());
 		}
 	}

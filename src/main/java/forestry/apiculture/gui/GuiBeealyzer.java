@@ -31,6 +31,7 @@ import forestry.core.config.ForestryItem;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
+import forestry.core.inventory.AlyzerInventory;
 import forestry.core.utils.StringUtil;
 import forestry.core.vect.Vect;
 
@@ -57,8 +58,8 @@ public class GuiBeealyzer extends GuiAlyzer {
 		IBee bee = null;
 		EnumBeeType beeType = EnumBeeType.DRONE;
 
-		for (int k = BeealyzerInventory.SLOT_SPECIMEN; k <= BeealyzerInventory.SLOT_ANALYZE_5; k++) {
-			if (k == BeealyzerInventory.SLOT_ENERGY) {
+		for (int k = AlyzerInventory.SLOT_SPECIMEN; k <= AlyzerInventory.SLOT_ANALYZE_5; k++) {
+			if (k == AlyzerInventory.SLOT_ENERGY) {
 				continue;
 			}
 

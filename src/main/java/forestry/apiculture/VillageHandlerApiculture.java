@@ -23,9 +23,6 @@ import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 
-import cpw.mods.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
-import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
-
 import forestry.api.apiculture.EnumBeeType;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.items.ItemHoneycomb;

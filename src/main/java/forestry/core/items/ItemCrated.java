@@ -24,7 +24,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelRegister;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 
 public class ItemCrated extends Item implements IModelRegister {

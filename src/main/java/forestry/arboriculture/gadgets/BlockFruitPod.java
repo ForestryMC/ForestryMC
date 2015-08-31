@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockCocoa;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,15 +25,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
-import scala.tools.ant.sabbus.Break;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelRegister;
 import forestry.arboriculture.items.ItemWoodBlock.WoodMeshDefinition;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.StackUtils;
-import forestry.plugins.PluginArboriculture;
 
 public class BlockFruitPod extends BlockCocoa implements IModelRegister {
 

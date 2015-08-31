@@ -14,10 +14,8 @@ import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Map;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
-
 import forestry.api.arboriculture.EnumLeafType;
+import forestry.api.core.sprite.ISprite;
 import forestry.core.render.TextureManager;
 
 public class LeafTexture {
@@ -33,41 +31,41 @@ public class LeafTexture {
 		return leafTextures.get(leafType);
 	}
 
-	public static void registerAllIcons(IIconRegister register) {
+	public static void registerAllIcons() {
 		for (LeafTexture leafTexture : leafTextures.values()) {
-			leafTexture.registerIcons(register);
+			leafTexture.registerIcons();
 		}
 	}
 
 	private final EnumLeafType leafType;
 
-	private IIcon plain;
-	private IIcon pollinated;
-	private IIcon fancy;
+	private ISprite plain;
+	private ISprite pollinated;
+	private ISprite fancy;
 
 	private LeafTexture(EnumLeafType enumLeafType) {
 		this.leafType = enumLeafType;
 	}
 
-	private void registerIcons(IIconRegister register) {
+	private void registerIcons() {
 		TextureManager textureManager = TextureManager.getInstance();
 
 		String ident = leafType.toString().toLowerCase(Locale.ENGLISH);
 
-		plain = textureManager.registerTex(register, "leaves/" + ident + ".plain");
-		pollinated = textureManager.registerTex(register, "leaves/" + ident + ".changed");
-		fancy = textureManager.registerTex(register, "leaves/" + ident + ".fancy");
+		plain = textureManager.registerTex("blocks", "leaves/" + ident + ".plain");
+		pollinated = textureManager.registerTex("blocks", "leaves/" + ident + ".changed");
+		fancy = textureManager.registerTex("blocks", "leaves/" + ident + ".fancy");
 	}
 
-	public IIcon getPlain() {
+	public ISprite getPlain() {
 		return plain;
 	}
 
-	public IIcon getPollinated() {
+	public ISprite getPollinated() {
 		return pollinated;
 	}
 
-	public IIcon getFancy() {
+	public ISprite getFancy() {
 		return fancy;
 	}
 }

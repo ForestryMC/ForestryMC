@@ -30,7 +30,6 @@ import forestry.api.food.IBeverageEffect;
 import forestry.core.config.Config;
 import forestry.core.items.ItemForestryFood;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 
 public class ItemBeverage extends ItemForestryFood {
 

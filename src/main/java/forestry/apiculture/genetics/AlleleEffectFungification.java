@@ -112,7 +112,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		mooshroom.setHealth(cow.getHealth());
 		mooshroom.renderYawOffset = cow.renderYawOffset;
 		worldObj.spawnEntityInWorld(mooshroom);
-		worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, cow.posX, cow.posY + (double) (cow.height / 2.0F), cow.posZ, 0.0D, 0.0D, 0.0D);
+		worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, cow.posX, cow.posY + cow.height / 2.0F, cow.posZ, 0.0D, 0.0D, 0.0D);
 	}
 
 	private static void doMushroomGrowth(Block block, World world, int blockX, int blockY, int blockZ) {

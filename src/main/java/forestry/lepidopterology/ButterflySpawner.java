@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.lepidopterology;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ILeafTickHandler;
@@ -22,7 +23,7 @@ import forestry.plugins.PluginLepidopterology;
 public class ButterflySpawner implements ILeafTickHandler {
 
 	@Override
-	public boolean onRandomLeafTick(ITree tree, World world, int x, int y, int z, boolean isDestroyed) {
+	public boolean onRandomLeafTick(ITree tree, World world, BlockPos pos, boolean isDestroyed) {
 		
 		if (world.rand.nextFloat() >= tree.getGenome().getSappiness() * tree.getGenome().getYield()) {
 			return false;
@@ -37,18 +38,18 @@ public class ButterflySpawner implements ILeafTickHandler {
 			return false;
 		}
 		
-		if (!spawn.canSpawn(world, x, y, z)) {
+		if (!spawn.canSpawn(world, pos.getX(), pos.getY(), pos.getZ())) {
 			return false;
 		}
 		
-		if (world.isAirBlock(x - 1, y, z)) {
-			attemptButterflySpawn(world, spawn, x - 1, y, z);
-		} else if (world.isAirBlock(x + 1, y, z)) {
-			attemptButterflySpawn(world, spawn, x + 1, y, z);
-		} else if (world.isAirBlock(x, y, z - 1)) {
-			attemptButterflySpawn(world, spawn, x, y, z - 1);
-		} else if (world.isAirBlock(x, y, z + 1)) {
-			attemptButterflySpawn(world, spawn, x, y, z + 1);
+		if (world.isAirBlock(new BlockPos(pos.getX() - 1, pos.getY(), pos.getZ()))) {
+			attemptButterflySpawn(world, spawn, pos.getX() - 1, pos.getY(), pos.getZ());
+		} else if (world.isAirBlock(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ()))) {
+			attemptButterflySpawn(world, spawn, pos.getX() + 1, pos.getY(), pos.getZ());
+		} else if (world.isAirBlock(new BlockPos(pos.getX(), pos.getY(), pos.getZ() - 1))) {
+			attemptButterflySpawn(world, spawn, pos.getX(), pos.getY(), pos.getZ() - 1);
+		} else if (world.isAirBlock(new BlockPos(pos.getX(), pos.getY(), pos.getZ() + 1))) {
+			attemptButterflySpawn(world, spawn,pos.getX(), pos.getY(), pos.getZ() + 1);
 		}
 		
 		return false;

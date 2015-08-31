@@ -67,7 +67,7 @@ public class EngineBronze extends Engine implements ISidedInventory, ILiquidTank
 		setInternalInventory(new EngineBronzeInventoryAdapter(this));
 
 		fuelTank = new FilteredTank(Defaults.ENGINE_TANK_CAPACITY, FuelManager.bronzeEngineFuel.keySet());
-		fuelTank.tankMode = StandardTank.TankMode.INPUT;
+		fuelTank.tankMode = StandardTank.TankMode.DEFAULT;
 		heatingTank = new FilteredTank(Defaults.ENGINE_TANK_CAPACITY, FluidRegistry.LAVA);
 		heatingTank.tankMode = StandardTank.TankMode.INPUT;
 		this.tankManager = new TankManager(fuelTank, heatingTank);

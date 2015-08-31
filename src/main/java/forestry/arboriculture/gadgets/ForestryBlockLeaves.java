@@ -12,13 +12,17 @@ package forestry.arboriculture.gadgets;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.BlockNewLeaf;
+import net.minecraft.block.BlockLeavesBase;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -34,18 +38,19 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IShearable;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mojang.authlib.GameProfile;
 
 import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.IToolGrafter;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.IModelManager;
-import forestry.api.core.IModelRegister;
 import forestry.api.core.IToolScoop;
 import forestry.api.core.Tabs;
 import forestry.api.lepidopterology.EnumFlutterType;
@@ -53,17 +58,28 @@ import forestry.api.lepidopterology.IButterfly;
 import forestry.arboriculture.LeafDecayHelper;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.items.ItemLeavesBlock;
-import forestry.arboriculture.render.LeafTexture;
+import forestry.core.gadgets.UnlistedBlockAccess;
+import forestry.core.gadgets.UnlistedBlockPos;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StackUtils;
-import forestry.core.utils.Utils;
 import forestry.plugins.PluginArboriculture;
 import forestry.plugins.PluginLepidopterology;
 
-public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProvider, IGrowable, IModelRegister {
-
+public class ForestryBlockLeaves extends BlockLeavesBase implements ITileEntityProvider, IGrowable, IShearable {
+	
 	public ForestryBlockLeaves() {
+		super(Material.leaves, false);
 		this.setCreativeTab(Tabs.tabArboriculture);
+	}
+	
+	@Override
+	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return ((IExtendedBlockState)super.getExtendedState(state, world, pos )).withProperty(UnlistedBlockPos.POS, pos).withProperty(UnlistedBlockAccess.BLOCKACCESS , world);
+	}
+	
+	@Override
+	protected BlockState createBlockState() {
+		return new ExtendedBlockState(this, new IProperty[0], new IUnlistedProperty[]{UnlistedBlockPos.POS, UnlistedBlockAccess.BLOCKACCESS});
 	}
 
 	/* TILE ENTITY */
@@ -185,7 +201,7 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 	
 	@Override
 	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
-		List<ItemStack> ret = super.onSheared(item, world, pos, fortune);
+		List<ItemStack> ret =  new ArrayList(Arrays.asList(new ItemStack(this)));
 		
 		TileLeaves leaves = getLeafTile(world, pos);
 		NBTTagCompound shearedLeavesNBT = new NBTTagCompound();
@@ -274,12 +290,6 @@ public class ForestryBlockLeaves extends BlockNewLeaf implements ITileEntityProv
 	@Override
 	public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
 		return true;
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerModel(Item item, IModelManager manager) {
-		
 	}
 
 	/* PROPERTIES */

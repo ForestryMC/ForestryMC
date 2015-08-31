@@ -11,7 +11,6 @@
 package forestry.core.fluids;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -31,8 +30,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
 import forestry.core.items.ItemLiquidContainer;
-import forestry.core.render.TextureManager;
-
 import static forestry.core.items.ItemLiquidContainer.EnumContainerType;
 
 public enum Fluids {
@@ -345,9 +342,9 @@ public enum Fluids {
 		this.density = density;
 		this.viscosity = viscosity;
 		
-		resources[0] = new ResourceLocation(Defaults.ID, "textures/blocks/liquid/" + getTag() + "_still.png");
+		resources[0] = new ResourceLocation(Defaults.ID, "blocks/liquid/" + getTag() + "_still");
 		if (flowTextureExists()) {
-			resources[1] = new ResourceLocation(Defaults.ID, "textures/blocks/liquid/" + getTag() + "_flow.png");
+			resources[1] = new ResourceLocation(Defaults.ID, "blocks/liquid/" + getTag() + "_flow");
 		}
 	}
 
@@ -449,7 +446,7 @@ public enum Fluids {
 	@SideOnly(Side.CLIENT)
 	public boolean flowTextureExists() {
 		try {
-			ResourceLocation resourceLocation = new ResourceLocation(Defaults.ID, "textures/blocks/liquid/" + getTag() + "_flow.png");
+			ResourceLocation resourceLocation = new ResourceLocation(Defaults.ID, "blocks/liquid/" + getTag() + "_flow");
 			IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
 			return resourceManager.getResource(resourceLocation) != null;
 		} catch (java.lang.Exception e) {

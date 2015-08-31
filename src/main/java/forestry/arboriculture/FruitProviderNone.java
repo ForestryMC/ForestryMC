@@ -20,7 +20,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.core.ITextureManager;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.render.TextureManager;
 

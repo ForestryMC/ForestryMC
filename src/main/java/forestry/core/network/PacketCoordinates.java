@@ -48,18 +48,22 @@ public class PacketCoordinates extends ForestryPacket implements ILocatedPacket 
 		pos = new BlockPos(posX, posY, posZ);
 	}
 
+	@Override
 	public final BlockPos getPos() {
 		return pos;
 	}
 
+	@Override
 	public final int getPosX() {
 		return pos.getX();
 	}
 
+	@Override
 	public final int getPosY() {
 		return pos.getY();
 	}
 
+	@Override
 	public final int getPosZ() {
 		return pos.getZ();
 	}

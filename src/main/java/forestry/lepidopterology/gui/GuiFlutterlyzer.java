@@ -27,6 +27,7 @@ import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
+import forestry.core.inventory.AlyzerInventory;
 import forestry.core.utils.StringUtil;
 import forestry.lepidopterology.genetics.ButterflyGenome;
 import forestry.lepidopterology.items.ItemButterflyGE;
@@ -54,8 +55,8 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 
 		int page = 0;
 		IButterfly butterfly = null;
-		for (int k = 1; k < FlutterlyzerInventory.SLOT_ANALYZE_5 + 1; k++) {
-			if (k == FlutterlyzerInventory.SLOT_ENERGY) {
+		for (int k = 1; k < AlyzerInventory.SLOT_ANALYZE_5 + 1; k++) {
+			if (k == AlyzerInventory.SLOT_ENERGY) {
 				continue;
 			}
 
@@ -233,7 +234,7 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 
 		int x = COLUMN_0;
 		for (ItemStack stack : butterfly.getGenome().getPrimary().getButterflyLoot().keySet()) {
-			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, stack, guiLeft + x, guiTop + getLineY());
+			itemRender.renderItemIntoGUI(stack, guiLeft + x, guiTop + getLineY());
 			x += 18;
 			if (x > 148) {
 				x = COLUMN_0;
@@ -249,7 +250,7 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 
 		x = COLUMN_0;
 		for (ItemStack stack : butterfly.getGenome().getPrimary().getCaterpillarLoot().keySet()) {
-			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, stack, guiLeft + x, guiTop + getLineY());
+			itemRender.renderItemIntoGUI(stack, guiLeft + x, guiTop + getLineY());
 			x += 18;
 			if (x > 148) {
 				x = COLUMN_0;

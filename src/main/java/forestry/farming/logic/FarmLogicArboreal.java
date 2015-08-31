@@ -25,7 +25,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -57,7 +56,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 			return true;
 		}
 
-		Block block = BlockSoil.getBlockFromItem(soil.getItem());
+		Block block = Block.getBlockFromItem(soil.getItem());
 		if (block == null || !(block instanceof BlockSoil)) {
 			return false;
 		}

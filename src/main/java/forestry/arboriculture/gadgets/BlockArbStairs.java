@@ -13,12 +13,9 @@ package forestry.arboriculture.gadgets;
 import java.util.ArrayList;
 import java.util.List;
 
-import buildcraft.core.utils.WorldPropertyIsWood;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -26,13 +23,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelManager;
@@ -55,14 +50,12 @@ public class BlockArbStairs extends BlockStairs implements IWoodTyped, IModelReg
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setHarvestLevel("axe", 0);
-		setDefaultState(this.blockState.getBaseState().withProperty(WOODTYPE, WoodType.LARCH).withProperty(FACING, EnumFacing.NORTH).withProperty(HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(SHAPE, BlockStairs.EnumShape.STRAIGHT));
+		setDefaultState(this.blockState.getBaseState().withProperty(WoodType.WOODTYPE, WoodType.LARCH).withProperty(FACING, EnumFacing.NORTH).withProperty(HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(SHAPE, BlockStairs.EnumShape.STRAIGHT));
 	}
-	
-	public static final PropertyEnum WOODTYPE = PropertyEnum.create("woodtype", WoodType.class);
 	
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[]{WOODTYPE, FACING, HALF, SHAPE});
+		return new BlockState(this, new IProperty[]{WoodType.WOODTYPE, FACING, HALF, SHAPE});
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})

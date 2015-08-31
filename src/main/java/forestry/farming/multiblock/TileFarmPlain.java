@@ -12,7 +12,6 @@ package forestry.farming.multiblock;
 
 import forestry.core.multiblock.MultiblockControllerBase;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.IChatComponent;
 
 public class TileFarmPlain extends TileFarm {
 

@@ -14,8 +14,6 @@ import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.world.IBlockAccess;
-
 import forestry.arboriculture.WoodType;
 
 public class BlockPlanks extends BlockWood {

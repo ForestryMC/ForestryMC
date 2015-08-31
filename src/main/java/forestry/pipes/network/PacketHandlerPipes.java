@@ -25,9 +25,6 @@ import forestry.pipes.PipeItemsPropolis;
 import forestry.pipes.PipeLogicPropolis;
 import forestry.pipes.gui.ContainerPropolisPipe;
 
-import buildcraft.transport.Pipe;
-import buildcraft.transport.TileGenericPipe;
-
 public class PacketHandlerPipes implements IPacketHandler {
 
 	private static Pipe getPipe(World world, ILocatedPacket packet) {

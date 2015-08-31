@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -145,14 +140,17 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 	}
 
+	@Override
 	public void setIsNatural(boolean flag) {
 		this.isNatural = flag;
 	}
 
+	@Override
 	public boolean isNatural() {
 		return this.isNatural;
 	}
 
+	@Override
 	public int getGeneration() {
 		return generation;
 	}

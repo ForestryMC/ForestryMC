@@ -17,7 +17,6 @@ import java.util.List;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -34,10 +33,8 @@ import forestry.api.apiculture.IHiveDrop;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
 import forestry.api.core.Tabs;
 import forestry.apiculture.MaterialBeehive;
-import forestry.apiculture.worldgen.HiveRegistry;
 import forestry.core.config.Config;
 import forestry.core.inventory.InvTools;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
 import forestry.plugins.PluginApiculture;
 

@@ -68,7 +68,7 @@ public abstract class WorldGenTree extends WorldGenArboriculture {
 
 	@Override
 	public boolean canGrow(World world, int x, int y, int z) {
-		return tree.canGrow(world, x, y, z, girth, height);
+		return tree.canGrow(world, new BlockPos(x, y, z), girth, height);
 	}
 
 	@Override

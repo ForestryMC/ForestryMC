@@ -51,6 +51,7 @@ public class MutableVect implements IVect {
 		pos = vect.getPos();
 	}
 
+	@Override
 	public MutableVect add(IVect other) {
 		int x = pos.getX() + other.getX();
 		int y = pos.getY() + other.getY();
@@ -59,6 +60,7 @@ public class MutableVect implements IVect {
 		return this;
 	}
 
+	@Override
 	public MutableVect add(int xN, int yN, int zN) {
 		int x = pos.getX() + xN;
 		int y = pos.getY() + yN;

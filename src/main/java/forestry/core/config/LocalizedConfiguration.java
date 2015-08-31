@@ -29,6 +29,7 @@ public class LocalizedConfiguration extends Configuration {
 		return super.setCategoryLanguageKey(categoryName, categoryKey);
 	}
 
+	@Override
 	public boolean getBoolean(String category, String name, boolean defaultValue, String comment) {
 		Property prop = this.get(category, name, defaultValue);
 		prop.comment = comment + " [default: " + defaultValue + "]";

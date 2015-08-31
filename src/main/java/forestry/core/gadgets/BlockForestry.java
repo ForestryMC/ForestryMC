@@ -32,7 +32,7 @@ import forestry.core.interfaces.IRestrictedAccessTile;
 import forestry.core.proxy.Proxies;
 
 public abstract class BlockForestry extends BlockContainer implements IModelRegister {
-
+	
 	protected BlockForestry(Material material) {
 		super(material);
 		setHardness(1.5f);

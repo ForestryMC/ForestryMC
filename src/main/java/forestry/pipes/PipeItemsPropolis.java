@@ -25,12 +25,6 @@ import forestry.api.genetics.IAllele;
 import forestry.core.network.GuiId;
 import forestry.core.proxy.Proxies;
 
-import buildcraft.transport.BlockGenericPipe;
-import buildcraft.transport.Pipe;
-import buildcraft.transport.PipeTransportItems;
-import buildcraft.transport.TransportConstants;
-import buildcraft.transport.pipes.events.PipeEventItem;
-
 public class PipeItemsPropolis extends Pipe<PipeTransportItems> {
 
 	public final PipeLogicPropolis pipeLogic;

@@ -12,7 +12,6 @@ package forestry.core.items;
 
 import java.awt.Color;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
@@ -41,7 +40,6 @@ import forestry.core.CreativeTabForestry;
 import forestry.core.fluids.BlockForestryFluid;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 
 public class ItemLiquidContainer extends Item implements IModelRegister{
 

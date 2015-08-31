@@ -101,7 +101,7 @@ public abstract class Utils {
 		}
 
 		IToolWrench wrench = (IToolWrench) itemstack.getItem();
-		return wrench.canWrench(player, pos.getX(), pos.getY(), pos.getZ());
+		return wrench.canWrench(player, pos);
 	}
 
 	public static void useWrench(EntityPlayer player, BlockPos pos) {
@@ -115,36 +115,7 @@ public abstract class Utils {
 			return;
 		}
 
-		((IToolWrench) itemstack.getItem()).wrenchUsed(player, pos.getX(), pos.getY(), pos.getZ());
-	}
-
-	public static boolean canWrench(EntityPlayer player, int x, int y, int z) {
-
-		ItemStack itemstack = player.getCurrentEquippedItem();
-		if (itemstack == null) {
-			return false;
-		}
-
-		if (!(itemstack.getItem() instanceof IToolWrench)) {
-			return false;
-		}
-
-		IToolWrench wrench = (IToolWrench) itemstack.getItem();
-		return wrench.canWrench(player, x, y, z);
-	}
-
-	public static void useWrench(EntityPlayer player, int x, int y, int z) {
-		ItemStack itemstack = player.getCurrentEquippedItem();
-
-		if (itemstack == null) {
-			return;
-		}
-
-		if (!(itemstack.getItem() instanceof IToolWrench)) {
-			return;
-		}
-
-		((IToolWrench) itemstack.getItem()).wrenchUsed(player, x, y, z);
+		((IToolWrench) itemstack.getItem()).wrenchUsed(player, pos);
 	}
 
 	public static EnumTankLevel rateTankLevel(int scaled) {

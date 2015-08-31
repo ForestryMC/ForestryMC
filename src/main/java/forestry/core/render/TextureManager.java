@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -64,13 +63,14 @@ public class TextureManager implements ITextureManager {
 		}
 	}
 
+	@Override
 	public ISprite getDefault(String ident) {
 		return defaultIcons.get(ident);
 	}
 
 	public ISprite registerTex(String modifier, String identifier) {
 		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
-		return new Sprite(map.registerSprite(new ResourceLocation("forestry:textures/" + modifier + "/" + identifier)));
+		return new Sprite(map.registerSprite(new ResourceLocation("forestry:" + modifier + "/" + identifier)));
 	}
 	
 	@Override
@@ -99,11 +99,11 @@ public class TextureManager implements ITextureManager {
 	
 	public ISprite registerTex(String modID, String modifier, String identifier) {
 		TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
-		return new Sprite(map.registerSprite(new ResourceLocation(modID + ":textures/" + modifier + "/" + identifier)));
+		return new Sprite(map.registerSprite(new ResourceLocation(modID + ":" + modifier + "/" + identifier)));
 	}
 	
 	public ResourceLocation getRL(String modifier, String identifier) {
-		return new ResourceLocation("forestry:textures/" + modifier + "/" + identifier + ".png");
+		return new ResourceLocation("forestry:" + modifier + "/" + identifier + ".png");
 	}
 
 

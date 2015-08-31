@@ -17,8 +17,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelRegister;
 import forestry.core.CreativeTabForestry;
-import forestry.core.gadgets.BlockResourceStorageBlock.Resources;
-import forestry.core.render.TextureManager;
 
 public class BlockResourceStorageBlock extends Block implements IModelRegister {
 	

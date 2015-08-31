@@ -24,7 +24,6 @@ import forestry.api.core.IModelManager;
 import forestry.api.core.INBTTagable;
 import forestry.api.core.IToolPipette;
 import forestry.core.config.Defaults;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
 
 public class ItemPipette extends ItemForestry implements IToolPipette {

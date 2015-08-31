@@ -26,7 +26,6 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.IModelManager;
@@ -42,7 +41,6 @@ import forestry.apiculture.multiblock.TileAlvearyStabiliser;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.core.gadgets.BlockStructure;
 import forestry.core.multiblock.MultiblockRegistry;
-import forestry.core.render.TextureManager;
 
 public class BlockAlveary extends BlockStructure {
 	
@@ -64,6 +62,7 @@ public class BlockAlveary extends BlockStructure {
 		STABILISER,
 		SIEVE;
 		
+		@Override
 		public String getName() {
 			return name().toLowerCase();
 		}
@@ -73,7 +72,7 @@ public class BlockAlveary extends BlockStructure {
 		super(new MaterialBeehive(false));
 		setHardness(1.0f);
 		setCreativeTab(Tabs.tabApiculture);
-		setDefaultState(this.blockState.getBaseState().withProperty(ALVEARYTYPE, PLAIN));
+		setDefaultState(this.blockState.getBaseState().withProperty(ALVEARYTYPE, AlvearyTypes.PLAIN));
 	}
 	
 	@Override

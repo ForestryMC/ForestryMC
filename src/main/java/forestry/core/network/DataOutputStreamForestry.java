@@ -85,8 +85,9 @@ public class DataOutputStreamForestry extends DataOutputStream {
 
 	public void writeNBTTagCompound(NBTTagCompound nbttagcompound) throws IOException {
 		if (nbttagcompound == null) {
-			writeVarInt(-1);
+			writeShort(-1);
 		} else {
+			writeShort(1);
 			CompressedStreamTools.writeCompressed(nbttagcompound, out);
 		}
 	}

@@ -34,6 +34,7 @@ public class AllelePlantType extends AlleleCategorized implements IAllelePlantTy
 		this.types = types;
 	}
 
+	@Override
 	public EnumSet<EnumPlantType> getPlantTypes() {
 		return types;
 	}

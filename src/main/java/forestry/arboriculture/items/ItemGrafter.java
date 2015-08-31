@@ -18,8 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.ForgeHooks;
-
 import forestry.api.arboriculture.IToolGrafter;
 import forestry.api.core.Tabs;
 import forestry.core.items.ItemForestry;

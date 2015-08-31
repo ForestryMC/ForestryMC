@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.proxy;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;

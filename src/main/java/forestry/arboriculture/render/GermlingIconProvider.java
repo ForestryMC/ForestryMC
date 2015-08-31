@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.render;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
-
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IGermlingIconProvider;
 import forestry.core.config.ForestryItem;

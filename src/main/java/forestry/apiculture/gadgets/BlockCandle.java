@@ -22,7 +22,9 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.block.BlockTorch;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -46,9 +48,7 @@ import forestry.api.core.IModelManager;
 import forestry.api.core.IModelRegister;
 import forestry.api.core.Tabs;
 import forestry.core.ForestryClient;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
-import forestry.core.utils.StringUtil;
 
 public class BlockCandle extends BlockTorch implements IModelRegister {
 
@@ -100,6 +100,11 @@ public class BlockCandle extends BlockTorch implements IModelRegister {
 		this.setStepSound(soundTypeWood);
 		setCreativeTab(Tabs.tabApiculture);
 		setDefaultState(this.blockState.getBaseState().withProperty(STATE, State.OFF).withProperty(FACING, EnumFacing.UP));
+	}
+	
+	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, new IProperty[]{STATE, FACING});
 	}
 	
 	@Override

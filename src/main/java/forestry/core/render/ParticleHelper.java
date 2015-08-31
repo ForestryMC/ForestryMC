@@ -51,27 +51,27 @@ public class ParticleHelper {
 		double pz = pos.getZ() + rand.nextDouble() * (block.getBlockBoundsMaxZ() - block.getBlockBoundsMinZ() - (b * 2.0F)) + b + block.getBlockBoundsMinZ();
 
 		if (sideHit == EnumFacing.DOWN) {
-			py = (double) pos.getY() + block.getBlockBoundsMinY() - (double) b;
+			py = pos.getY() + block.getBlockBoundsMinY() - b;
 		}
 
 		if (sideHit == EnumFacing.UP) {
-			py = (double) pos.getY() + block.getBlockBoundsMaxY() + (double) b;
+			py = pos.getY() + block.getBlockBoundsMaxY() + b;
 		}
 
 		if (sideHit == EnumFacing.NORTH) {
-			pz = (double) pos.getZ() + block.getBlockBoundsMinZ() - (double) b;
+			pz = pos.getZ() + block.getBlockBoundsMinZ() - b;
 		}
 
 		if (sideHit == EnumFacing.SOUTH) {
-			pz = (double) pos.getZ() + block.getBlockBoundsMaxZ() + (double) b;
+			pz = pos.getZ() + block.getBlockBoundsMaxZ() + b;
 		}
 
 		if (sideHit == EnumFacing.WEST) {
-			px = (double) pos.getX() + block.getBlockBoundsMinX() - (double) b;
+			px = pos.getX() + block.getBlockBoundsMinX() - b;
 		}
 
 		if (sideHit == EnumFacing.EAST) {
-			px = (double) pos.getX() + block.getBlockBoundsMaxX() + (double) b;
+			px = pos.getX() + block.getBlockBoundsMaxX() + b;
 		}
 
 		EntityFX fx = effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_CRACK.getParticleID(), px, py, pz, px - pos.getX() - 0.5D, py - pos.getY() - 0.5D, pz - pos.getZ() - 0.5D, Block.getIdFromBlock(block));
@@ -111,9 +111,9 @@ public class ParticleHelper {
 		for (int i = 0; i < iterations; ++i) {
 			for (int j = 0; j < iterations; ++j) {
 				for (int k = 0; k < iterations; ++k) {
-					double px = pos.getX() + (i + 0.5D) / (double) iterations;
-					double py = pos.getY() + (j + 0.5D) / (double) iterations;
-					double pz = pos.getZ() + (k + 0.5D) / (double) iterations;
+					double px = pos.getX() + (i + 0.5D) / iterations;
+					double py = pos.getY() + (j + 0.5D) / iterations;
+					double pz = pos.getZ() + (k + 0.5D) / iterations;
 					int random = world.rand.nextInt(6);
 					EntityFX fx = effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_CRACK.getParticleID(), px, py, pz, px - pos.getX() - 0.5D, py - pos.getY() - 0.5D, pz - pos.getZ() - 0.5D, Block.getIdFromBlock(block));
 					

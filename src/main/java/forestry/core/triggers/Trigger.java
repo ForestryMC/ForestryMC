@@ -10,12 +10,10 @@
  ******************************************************************************/
 package forestry.core.triggers;
 
-import forestry.api.core.ITextureManager;
 import forestry.api.core.sprite.ISprite;
 import forestry.api.core.sprite.ISpriteRegister;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

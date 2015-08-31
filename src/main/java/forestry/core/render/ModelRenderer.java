@@ -6,11 +6,10 @@ import java.util.List;
 
 import javax.vecmath.Vector3f;
 
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.IModelRenderer;
 import forestry.api.core.sprite.ISprite;
-import forestry.api.core.sprite.Sprite;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
 import net.minecraft.client.renderer.block.model.BlockPartFace;
@@ -19,16 +18,25 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelRotation;
-import net.minecraft.item.Item;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumWorldBlockLayer;
-import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.IColoredBakedQuad;
 
-public class ModelRenderer
+public class ModelRenderer implements IModelRenderer
 {
+	private static ModelRenderer instance;
+	
+	public static ModelRenderer getInstance()
+	{
+		if(instance == null)
+		{
+			instance = new ModelRenderer();
+			ForestryAPI.modleRenderer = instance;
+		}
+		return instance;
+	}
 
 	private static final class CachedModel implements IBakedModel
 	{
@@ -86,15 +94,6 @@ public class ModelRenderer
 		}
 	}
 
-	public int uvRotateBottom;
-	public int uvRotateEast;
-	public int uvRotateNorth;
-	public int uvRotateSouth;
-	public int uvRotateTop;
-	public int uvRotateWest;
-	public ISprite overrideBlockTexture;
-	public boolean renderAllFaces;
-
 	public double renderMinX;
 	public double renderMaxX;
 	
@@ -103,8 +102,8 @@ public class ModelRenderer
 	
 	public double renderMinZ;
 	public double renderMaxZ;
-
-	public IBlockAccess blockAccess;
+	
+	public ISprite overrideBlockTexture;
 	
 	CachedModel generatedModel = new CachedModel();
 
@@ -114,8 +113,8 @@ public class ModelRenderer
 	float tx=0,ty=0,tz=0;
 	final float[] defUVs = new float[] { 0, 0, 1, 1 };
 
-	public void setRenderBoundsFromBlock(
-			Block block )
+	@Override
+	public void setRenderBoundsFromBlock(Block block)
 	{
 		if ( block == null ) return;
 		
@@ -127,13 +126,8 @@ public class ModelRenderer
 		renderMaxZ = block.getBlockBoundsMaxZ();
 	}
 
-	public void setRenderBounds(
-			double d,
-			double e,
-			double f,
-			double g,
-			double h,
-			double i )
+	@Override
+	public void setRenderBounds(double d, double e, double f, double g, double h, double i )
 	{
 		renderMinX = d;
 		renderMinY = e;
@@ -145,12 +139,13 @@ public class ModelRenderer
 
 	int color = -1;
 	
-	public void setBrightness(
-			int i )
+	@Override
+	public void setBrightness(int i )
 	{
 		brightness=i;
 	}
 
+	@Override
 	public void setColorRGBA_F(
 			int r,
 			int g,
@@ -164,6 +159,7 @@ public class ModelRenderer
 				b;
 	}
 
+	@Override
 	public void setColorOpaque_I(
 			int whiteVariant )
 	{
@@ -171,6 +167,7 @@ public class ModelRenderer
 		color = //alpha << 24 |
 				whiteVariant;
 	}
+	@Override
 	public void setColorOpaque(
 			int r,
 			int g,
@@ -183,6 +180,7 @@ public class ModelRenderer
 				b;
 	}
 	
+	@Override
 	public void setColorOpaque_F(
 			int r,
 			int g,
@@ -195,10 +193,8 @@ public class ModelRenderer
 				Math.min( 0xff, Math.max( 0, b ) );
 	}
 
-	public void setColorOpaque_F(
-			float rf,
-			float bf,
-			float gf )
+	@Override
+	public void setColorOpaque_F(float rf, float bf, float gf )
 	{
 		int r = (int)( rf * 0xff );
 		int g = (int)( gf * 0xff );
@@ -210,97 +206,12 @@ public class ModelRenderer
 				Math.min( 0xff, Math.max( 0, b ) );
 	}
 
-	public ISprite getIcon(
-			ItemStack is )
-	{
-		Item it = is.getItem();
-		
-		if ( it instanceof ItemMultiPart )
-			return ( (ItemMultiPart) it).getIcon( is);
-		
-		Block blk = Block.getBlockFromItem( it );
-		
-		if ( blk != null )
-			return getIcon(blk.getStateFromMeta( is.getMetadata() ))[0];
-
-		if ( it instanceof AEBaseItem )
-		{
-			IAESprite ico = ( (AEBaseItem)it ).getIcon(is);
-			if ( ico != null ) return ico;
-		}
-		
-		return new MissingIcon( is  );
-	}
-
-
-	public ISprite[] getIcon(IBlockState state )
-	{
-		ISprite[] out = new ISprite[6];
-
-		Block blk = state.getBlock();
-		if ( blk instanceof AEBaseBlock)
-		{
-			AEBaseBlock base = (AEBaseBlock)blk;
-			for ( EnumFacing face : EnumFacing.VALUES)
-				out[face.ordinal()] = base.getIcon( face, state );
-		}
-		else
-		{
-			TextureAtlasSprite spite = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture( state );
-			if ( spite == null )
-			{
-				out[0] =  new MissingIcon( blk );
-				out[1] =  new MissingIcon( blk );
-				out[2] =  new MissingIcon( blk );
-				out[3] =  new MissingIcon( blk );
-				out[4] =  new MissingIcon( blk );
-				out[5] =  new MissingIcon( blk );
-			}
-			else
-			{
-				ISprite mySpite = new Sprite( spite );
-				out[0] =  mySpite;
-				out[1] =  mySpite;
-				out[2] =  mySpite;
-				out[3] =  mySpite;
-				out[4] =  mySpite;
-				out[5] =  mySpite;
-			}
-		}
-		
-		return out;
-	}
-
-	public ISprite[] getIcon( IBlockAccess world, BlockPos pos)
-	{
-		IBlockState state = world.getBlockState( pos );
-		Block blk = state.getBlock();
-		
-		if ( blk instanceof AEBaseBlock )
-		{
-			IAESprite[] out = new IAESprite[6];
-
-			AEBaseBlock base = (AEBaseBlock)blk;
-			for ( EnumFacing face : EnumFacing.VALUES )
-				out[face.ordinal()] = base.getIcon( world, pos, face );
-			
-			return out;
-		}
-		
-		return getIcon( state );
-	}
-
 	int point =0;
 	int brightness = -1;
 	float[][] points = new float[4][];
 	
-	public void addVertexWithUV(
-			EnumFacing face,
-			double x,
-			double y,
-			double z,
-			double u,
-			double v )
+	@Override
+	public void addVertexWithUV(EnumFacing face, double x, double y, double z, double u, double v )
 	{
 		points[point++] = new float[]{ (float)x+tx, (float)y+ty, (float)z+tz, (float)u, (float)v };
 		
@@ -347,35 +258,48 @@ public class ModelRenderer
 		}
 	}
 
-	public boolean renderStandardBlock(
-			Block block,
-			BlockPos pos )
+	@Override
+	public boolean renderStandardBlock(Block block, BlockPos pos, ISprite[] textures)
 	{
-		//setRenderBoundsFromBlock( block );
+		setRenderBoundsFromBlock(block);
 
-		ISprite[] textures = getIcon( blockAccess,pos );
-		setColorOpaque_I( 0xffffff );
+		setColorOpaque_I(0xffffff);
 
-		renderFaceXNeg( block, pos, textures[EnumFacing.WEST.ordinal()] );
-		renderFaceXPos( block, pos, textures[EnumFacing.EAST.ordinal()] );
-		renderFaceYNeg( block, pos, textures[EnumFacing.DOWN.ordinal()] );
-		renderFaceYPos( block, pos, textures[EnumFacing.UP.ordinal()] );
-		renderFaceZNeg( block, pos, textures[EnumFacing.NORTH.ordinal()] );
-		renderFaceZPos( block, pos, textures[EnumFacing.SOUTH.ordinal()] );
+		renderFaceXNeg(pos, textures[EnumFacing.WEST.ordinal()]);
+		renderFaceXPos(pos, textures[EnumFacing.EAST.ordinal()]);
+		renderFaceYNeg(pos, textures[EnumFacing.DOWN.ordinal()]);
+		renderFaceYPos(pos, textures[EnumFacing.UP.ordinal()]);
+		renderFaceZNeg(pos, textures[EnumFacing.NORTH.ordinal()]);
+		renderFaceZPos(pos, textures[EnumFacing.SOUTH.ordinal()]);
+		
+		return false;
+	}
+	
+	@Override
+	public boolean renderStandardBlock(Block block, BlockPos pos, ISprite texture) {
+		setRenderBoundsFromBlock(block);
+
+		setColorOpaque_I(0xffffff);
+
+		renderFaceXNeg(pos, texture);
+		renderFaceXPos(pos, texture);
+		renderFaceYNeg(pos, texture);
+		renderFaceYPos(pos, texture);
+		renderFaceZNeg(pos, texture);
+		renderFaceZPos(pos, texture);
 		
 		return false;
 	}
 
-	public void setTranslation(
-			int x,
-			int y,
-			int z )
+	@Override
+	public void setTranslation(int x, int y, int z )
 	{
 		tx=x;
 		ty=y;
 		tz=z;
 	}
 
+	@Override
 	public boolean isAlphaPass()
 	{
 		return MinecraftForgeClient.getRenderLayer() == EnumWorldBlockLayer.TRANSLUCENT;
@@ -386,10 +310,7 @@ public class ModelRenderer
 	public boolean flipTexture=false;
 	private List<RenderFace> faces = new ArrayList();
 	
-	private float[] getFaceUvs(
-			final EnumFacing face,
-			final Vector3f to_16,
-			final Vector3f from_16		 )
+	private float[] getFaceUvs(final EnumFacing face, final Vector3f to_16, final Vector3f from_16)
 	{
 		float from_a = 0;
 		float from_b = 0;
@@ -459,10 +380,8 @@ public class ModelRenderer
 		return afloat;
 	}
 	
-	public void renderFaceXNeg(
-			Block blk,
-			BlockPos pos,
-			ISprite lights )
+	@Override
+	public void renderFaceXNeg(BlockPos pos, ISprite lights)
 	{		
 		boolean isEdge = renderMinX < 0.0001;
 		Vector3f to = new Vector3f( (float)renderMinX* 16.0f, (float)renderMinY* 16.0f, (float)renderMinZ * 16.0f);
@@ -472,10 +391,8 @@ public class ModelRenderer
 		addFace(myFace, isEdge,to,from,defUVs,lights );
 	}
 	
-	public void renderFaceYNeg(
-			Block blk,
-			BlockPos pos,
-			ISprite lights )
+	@Override
+	public void renderFaceYNeg(BlockPos pos, ISprite lights)
 	{		
 		boolean isEdge = renderMinY < 0.0001;
 		Vector3f to = new Vector3f( (float)renderMinX* 16.0f, (float)renderMinY* 16.0f, (float)renderMinZ* 16.0f );
@@ -485,7 +402,8 @@ public class ModelRenderer
 		addFace(myFace, isEdge,to,from,defUVs, lights );
 	}
 
-	public void renderFaceZNeg(Block blk ,BlockPos pos, ISprite lights )
+	@Override
+	public void renderFaceZNeg(BlockPos pos, ISprite lights)
 	{		
 		boolean isEdge = renderMinZ < 0.0001;
 		Vector3f to = new Vector3f( (float)renderMinX* 16.0f, (float)renderMinY* 16.0f, (float)renderMinZ* 16.0f );
@@ -495,7 +413,8 @@ public class ModelRenderer
 		addFace(myFace, isEdge,to,from,defUVs, lights );
 	}
 
-	public void renderFaceYPos(Block blk, BlockPos pos, ISprite lights )
+	@Override
+	public void renderFaceYPos(BlockPos pos, ISprite lights)
 	{		
 		boolean isEdge = renderMaxY > 0.9999;
 		Vector3f to = new Vector3f( (float)renderMinX* 16.0f, (float)renderMaxY* 16.0f, (float)renderMinZ* 16.0f );
@@ -505,7 +424,8 @@ public class ModelRenderer
 		addFace(myFace, isEdge,to,from,defUVs,lights );
 	}
 
-	public void renderFaceZPos(Block blk, BlockPos pos, ISprite lights )
+	@Override
+	public void renderFaceZPos(BlockPos pos, ISprite lights)
 	{
 		boolean isEdge = renderMaxZ > 0.9999;
 		Vector3f to = new Vector3f( (float)renderMinX* 16.0f, (float)renderMinY* 16.0f, (float)renderMaxZ* 16.0f );
@@ -515,7 +435,8 @@ public class ModelRenderer
 		addFace(myFace, isEdge,to,from,defUVs,lights );
 	}
 
-	public void renderFaceXPos(Block blk, BlockPos pos, ISprite lights )
+	@Override
+	public void renderFaceXPos(BlockPos pos, ISprite lights )
 	{
 		boolean isEdge = renderMaxX > 0.9999;
 		Vector3f to = new Vector3f( (float)renderMaxX * 16.0f, (float)renderMinY* 16.0f, (float)renderMinZ* 16.0f );
@@ -525,25 +446,18 @@ public class ModelRenderer
 		addFace(myFace, isEdge,to,from,defUVs, lights );
 	}
 
-	private void addFace(
-			EnumFacing face , boolean isEdge,
-			Vector3f to,
-			Vector3f from,
-			float[] defUVs2,
-			ISprite texture )
+	private void addFace(EnumFacing face , boolean isEdge, Vector3f to, Vector3f from, float[] defUVs2, ISprite texture )
 	{
 		if ( overrideBlockTexture != null )
 			texture = overrideBlockTexture;
 		
-		faces.add(new RenderFace(face,isEdge,color,to,from,defUVs2,new IconUnwrapper(texture)));
+		faces.add(new RenderFace(face,isEdge,color,to,from,defUVs2, texture.getSprite()));
 	}
 
 	EnumFacing currentFace = EnumFacing.UP;
 	
-	public void setNormal(
-			float x,
-			float y,
-			float z )
+	@Override
+	public void setNormal(float x, float y, float z)
 	{
 		if ( x > 0.5 ) currentFace = EnumFacing.EAST;
 		if ( x < -0.5 ) currentFace = EnumFacing.WEST;
@@ -553,13 +467,14 @@ public class ModelRenderer
 		if ( z < -0.5 ) currentFace = EnumFacing.NORTH;
 	}
 
-	public void setOverrideBlockTexture(
-			ISprite object )
+	@Override
+	public void setOverrideBlockTexture(ISprite object)
 	{
 		overrideBlockTexture = object;		
 	}
 
-	public void finalizeModel( boolean Flip )
+	@Override
+	public IBakedModel finalizeModel(boolean Flip)
 	{
 		ModelRotation mr = ModelRotation.X0_Y0;
 		
@@ -582,11 +497,37 @@ public class ModelRenderer
 			else
 				this.generatedModel.getGeneralQuads().add( bf );
 		}
+		return generatedModel;
 	}
 	
-	public IBakedModel getOutput()
-	{
-		return generatedModel;
+	@Override
+	public double getRenderMinX() {
+		return renderMinX;
+	}
+	
+	@Override
+	public double getRenderMinY() {
+		return renderMinY;
+	}
+	
+	@Override
+	public double getRenderMinZ() {
+		return renderMinZ;
+	}
+	
+	@Override
+	public double getRenderMaxX() {
+		return renderMaxX;
+	}
+	
+	@Override
+	public double getRenderMaxY() {
+		return renderMaxY;
+	}
+	
+	@Override
+	public double getRenderMaxZ() {
+		return renderMaxZ;
 	}
 
 }

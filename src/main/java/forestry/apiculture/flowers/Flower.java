@@ -30,6 +30,7 @@ final class Flower implements IFlower {
 		this.weight = weight;
 	}
 
+	@Override
 	public boolean isPlantable() {
 		return this.weight != 0.0;
 	}

@@ -22,7 +22,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.core.IModelManager;
 import forestry.core.config.ForestryItem;
-import forestry.core.render.TextureManager;
 
 public class ItemFruit extends ItemForestryFood {
 

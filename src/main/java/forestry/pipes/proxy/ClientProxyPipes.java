@@ -14,8 +14,6 @@ import net.minecraftforge.client.MinecraftForgeClient;
 
 import forestry.plugins.PluginPropolisPipe;
 
-import buildcraft.transport.TransportProxyClient;
-
 public class ClientProxyPipes extends ProxyPipes {
 
 	@Override

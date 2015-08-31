@@ -11,21 +11,16 @@
 package forestry.core.fluids;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -35,9 +30,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.core.config.Defaults;
 import forestry.core.render.EntityColoredDropParticleFX;
-import forestry.core.render.TextureManager;
 
 public class BlockForestryFluid extends BlockFluidClassic {
 
@@ -74,12 +67,13 @@ public class BlockForestryFluid extends BlockFluidClassic {
 		return FluidRegistry.getFluid(fluidName);
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		if (rand.nextInt(10) == 0 && World.doesBlockHaveSolidTopSurface(world,new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())) && !world.getBlockState(new BlockPos(pos.getX(), pos.getY() - 2, pos.getZ())).getBlock().getMaterial().blocksMovement()) {
-			double px = (double) ((float) pos.getX() + rand.nextFloat());
-			double py = (double) pos.getY() - 1.05D;
-			double pz = (double) ((float) pos.getZ() + rand.nextFloat());
+			double px = pos.getX() + rand.nextFloat();
+			double py = pos.getY() - 1.05D;
+			double pz = pos.getZ() + rand.nextFloat();
 
 			EntityFX fx = new EntityColoredDropParticleFX(world, px, py, pz, color.getRed(), color.getGreen(), color.getBlue());
 			FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);

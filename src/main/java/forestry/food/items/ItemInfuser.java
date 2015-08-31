@@ -138,6 +138,7 @@ public class ItemInfuser extends ItemForestry {
 			this.mixtures.add(new Mixture(meta, ingredients, effect));
 		}
 
+		@Override
 		public boolean isIngredient(ItemStack itemstack) {
 			for (Mixture ingredient : mixtures) {
 				if (ingredient.isIngredient(itemstack)) {

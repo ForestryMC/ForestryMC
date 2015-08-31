@@ -60,6 +60,7 @@ public class GuiAlveary extends GuiForestryTitled<ContainerAlveary, TileAlvearyP
 	}
 
 	/* LEDGERS */
+	@Override
 	protected void initLedgers() {
 		super.initLedgers();
 

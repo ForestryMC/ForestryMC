@@ -40,6 +40,7 @@ import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.genetics.alleles.AllelePlantType;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
+import forestry.core.inventory.AlyzerInventory;
 import forestry.core.utils.StringUtil;
 
 public class GuiTreealyzer extends GuiAlyzer {
@@ -64,8 +65,8 @@ public class GuiTreealyzer extends GuiAlyzer {
 		int page = 0;
 		ITree tree = null;
 		EnumGermlingType treeType = EnumGermlingType.SAPLING;
-		for (int k = 1; k < TreealyzerInventory.SLOT_ANALYZE_5 + 1; k++) {
-			if (k == TreealyzerInventory.SLOT_ENERGY) {
+		for (int k = 1; k < AlyzerInventory.SLOT_ANALYZE_5 + 1; k++) {
+			if (k == AlyzerInventory.SLOT_ENERGY) {
 				continue;
 			}
 

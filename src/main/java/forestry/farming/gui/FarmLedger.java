@@ -10,9 +10,7 @@
  ******************************************************************************/
 package forestry.farming.gui;
 
-import net.minecraft.init.Items;
 import forestry.api.core.sprite.ISprite;
-import forestry.api.core.sprite.ISpriteRegister;
 import forestry.core.gui.ledgers.Ledger;
 import forestry.core.gui.ledgers.LedgerManager;
 import forestry.core.render.TextureManager;

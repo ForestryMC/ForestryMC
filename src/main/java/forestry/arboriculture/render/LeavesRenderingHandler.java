@@ -12,141 +12,28 @@ package forestry.arboriculture.render;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
-
-import net.minecraftforge.client.IItemRenderer;
-
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import org.lwjgl.opengl.GL11;
 
+import forestry.api.core.IModelRenderer;
+import forestry.api.core.sprite.ISprite;
 import forestry.arboriculture.gadgets.ForestryBlockLeaves;
 import forestry.arboriculture.gadgets.TileLeaves;
 import forestry.arboriculture.genetics.TreeHelper;
 import forestry.arboriculture.items.ItemLeavesBlock;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.OverlayRenderingHandler;
-import forestry.core.utils.StackUtils;
-import forestry.plugins.PluginArboriculture;
 
 /**
  * Ugly but serviceable renderer for leaves, taking fruits into account.
  */
-public class LeavesRenderingHandler extends OverlayRenderingHandler implements IItemRenderer {
-
+public class LeavesRenderingHandler extends OverlayRenderingHandler {
+	
 	@Override
-	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
-		// see IItemRenderer section below for inventory rendering
-	}
-
-	@Override
-	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-
-		TileLeaves tile = ForestryBlockLeaves.getLeafTile(world, x, y, z);
-		if (tile == null) {
-			return false;
-		}
-
-		// Render the plain leaf block.
-		renderer.renderStandardBlock(block, x, y, z);
-
-		// Render overlay for fruit leaves.
-		IIcon fruitIcon = tile.getFruitTexture();
-
-		if (fruitIcon != null) {
-			int fruitColor = tile.getFruitColour();
-			renderFruitOverlay(world, block, x, y, z, renderer, fruitIcon, fruitColor);
-		}
-
-		return true;
-	}
-
-	@Override
-	public boolean shouldRender3DInInventory(int modelId) {
-		return true;
-	}
-
-	@Override
-	public int getRenderId() {
-		return PluginArboriculture.modelIdLeaves;
-	}
-
-	private static boolean renderFruitOverlay(IBlockAccess world, Block block, int x, int y, int z, RenderBlocks renderer, IIcon texture, int multiplier) {
-
-		float mR = (multiplier >> 16 & 255) / 255.0F;
-		float mG = (multiplier >> 8 & 255) / 255.0F;
-		float mB = (multiplier & 255) / 255.0F;
-
-		if (EntityRenderer.anaglyphEnable) {
-			mR = (mR * 30.0F + mG * 59.0F + mB * 11.0F) / 100.0F;
-			mG = (mR * 30.0F + mG * 70.0F) / 100.0F;
-			mB = (mR * 30.0F + mB * 70.0F) / 100.0F;
-		}
-
-		return renderFruitOverlayWithColorMultiplier(world, block, x, y, z, mR, mG, mB, renderer, texture);
-	}
-
-	private static boolean renderFruitOverlayWithColorMultiplier(IBlockAccess world, Block block, int x, int y, int z, float r, float g, float b,
-			RenderBlocks renderer, IIcon texture) {
-
-		int mixedBrightness = block.getMixedBrightnessForBlock(world, x, y, z);
-
-		float adjR = 0.5f * r;
-		float adjG = 0.5f * g;
-		float adjB = 0.5f * b;
-
-		// Bottom
-		renderBottomFace(world, block, x, y, z, renderer, texture, mixedBrightness, adjR, adjG, adjB);
-		renderTopFace(world, block, x, y, z, renderer, texture, mixedBrightness, adjR, adjG, adjB);
-		renderEastFace(world, block, x, y, z, renderer, texture, mixedBrightness, adjR, adjG, adjB);
-		renderWestFace(world, block, x, y, z, renderer, texture, mixedBrightness, adjR, adjG, adjB);
-		renderNorthFace(world, block, x, y, z, renderer, texture, mixedBrightness, adjR, adjG, adjB);
-		renderSouthFace(world, block, x, y, z, renderer, texture, mixedBrightness, adjR, adjG, adjB);
-
-		return true;
-	}
-
-	/* IItemRenderer */
-	@Override
-	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		switch (type) {
-			case ENTITY:
-			case EQUIPPED_FIRST_PERSON:
-			case EQUIPPED:
-			case INVENTORY:
-				return true;
-			default:
-				return false;
-		}
-	}
-
-	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-		return true;
-	}
-
-	@Override
-	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		switch (type) {
-			case ENTITY:
-				renderItem((RenderBlocks) data[0], item, 0f, 0f, 0f);
-				break;
-			case EQUIPPED:
-			case EQUIPPED_FIRST_PERSON:
-				renderItem((RenderBlocks) data[0], item, 0.5f, 0.5f, 0.5f);
-				break;
-			case INVENTORY:
-				renderItem((RenderBlocks) data[0], item, 0f, 0f, 0f);
-				break;
-			default:
-		}
-	}
-
-	private static void renderItem(RenderBlocks renderer, ItemStack itemStack, float x, float y, float z) {
-		Tessellator tessellator = Tessellator.instance;
-		Block block = StackUtils.getBlock(itemStack);
+	public void renderInventory(Block block, ItemStack itemStack, IModelRenderer renderer, ItemRenderType type) {
 
 		if (!(itemStack.getItem() instanceof ItemLeavesBlock) || block == null) {
 			return;
@@ -161,48 +48,36 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 
 		GL11.glEnable(GL11.GL_BLEND);
 
-		IIcon leavesIcon = leaves.getIcon(Proxies.render.fancyGraphicsEnabled());
+		ISprite leavesIcon = leaves.getIcon(Proxies.render.fancyGraphicsEnabled());
 		if (leavesIcon == null) {
 			return;
 		}
 		int color = leaves.getFoliageColour(Proxies.common.getPlayer());
 
-		float r1 = (float) (color >> 16 & 255) / 255.0F;
-		float g1 = (float) (color >> 8 & 255) / 255.0F;
-		float b1 = (float) (color & 255) / 255.0F;
+		float r1 = (color >> 16 & 255) / 255.0F;
+		float g1 = (color >> 8 & 255) / 255.0F;
+		float b1 = (color & 255) / 255.0F;
 		GL11.glColor4f(r1, g1, b1, 1.0F);
 
-		GL11.glTranslatef(x, y, z);
+		GL11.glTranslatef(0, 0, 0);
 
 		block.setBlockBoundsForItemRender();
 		renderer.setRenderBoundsFromBlock(block);
 
 		GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
 		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0.0F, -1.0F, 0.0F);
-		renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, leavesIcon);
-		tessellator.draw();
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0.0F, 1.0F, 0.0F);
-		renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, leavesIcon);
-		tessellator.draw();
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0.0F, 0.0F, -1.0F);
-		renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, leavesIcon);
-		tessellator.draw();
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0.0F, 0.0F, 1.0F);
-		renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, leavesIcon);
-		tessellator.draw();
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(-1.0F, 0.0F, 0.0F);
-		renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, leavesIcon);
-		tessellator.draw();
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(1.0F, 0.0F, 0.0F);
-		renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, leavesIcon);
-		tessellator.draw();
+		renderer.setNormal(0.0F, -1.0F, 0.0F);
+		renderer.renderFaceYNeg(null, leavesIcon);
+		renderer.setNormal(0.0F, 1.0F, 0.0F);
+		renderer.renderFaceYPos(null, leavesIcon);
+		renderer.setNormal(0.0F, 0.0F, -1.0F);
+		renderer.renderFaceZNeg(null, leavesIcon);
+		renderer.setNormal(0.0F, 0.0F, 1.0F);
+		renderer.renderFaceZPos(null, leavesIcon);
+		renderer.setNormal(-1.0F, 0.0F, 0.0F);
+		renderer.renderFaceXNeg(null, leavesIcon);
+		renderer.setNormal(1.0F, 0.0F, 0.0F);
+		renderer.renderFaceXPos(null, leavesIcon);
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 
 
@@ -211,15 +86,15 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 			return;
 		}
 
-		IIcon fruitTexture = leaves.getFruitTexture();
+		ISprite fruitTexture = leaves.getFruitTexture();
 		if (fruitTexture == null) {
 			return;
 		}
 		int fruitColor = leaves.getFruitColour();
 
-		float r2 = (float) (fruitColor >> 16 & 255) / 255.0F;
-		float g2 = (float) (fruitColor >> 8 & 255) / 255.0F;
-		float b2 = (float) (fruitColor & 255) / 255.0F;
+		float r2 = (fruitColor >> 16 & 255) / 255.0F;
+		float g2 = (fruitColor >> 8 & 255) / 255.0F;
+		float b2 = (fruitColor & 255) / 255.0F;
 		GL11.glColor4f(r2, g2, b2, 1.0F);
 
 		block.setBlockBoundsForItemRender();
@@ -227,30 +102,74 @@ public class LeavesRenderingHandler extends OverlayRenderingHandler implements I
 
 		GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
 		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0.0F, -1.0F, 0.0F);
-		renderer.renderFaceYNeg(block, 0.0D, 0.0D - OVERLAY_SHIFT, 0.0D, fruitTexture);
-		tessellator.draw();
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0.0F, 1.0F, 0.0F);
-		renderer.renderFaceYPos(block, 0.0D, 0.0D + OVERLAY_SHIFT, 0.0D, fruitTexture);
-		tessellator.draw();
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0.0F, 0.0F, -1.0F);
-		renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D - OVERLAY_SHIFT, fruitTexture);
-		tessellator.draw();
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0.0F, 0.0F, 1.0F);
-		renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D + OVERLAY_SHIFT, fruitTexture);
-		tessellator.draw();
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(-1.0F, 0.0F, 0.0F);
-		renderer.renderFaceXNeg(block, 0.0D - OVERLAY_SHIFT, 0.0D, 0.0D, fruitTexture);
-		tessellator.draw();
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(1.0F, 0.0F, 0.0F);
-		renderer.renderFaceXPos(block, 0.0D + OVERLAY_SHIFT, 0.0D, 0.0D, fruitTexture);
-		tessellator.draw();
+		renderer.setNormal(0.0F, -1.0F, 0.0F);
+		renderer.renderFaceYNeg(null, fruitTexture);
+		renderer.setNormal(0.0F, 1.0F, 0.0F);
+		renderer.renderFaceYPos(null, fruitTexture);
+		renderer.setNormal(0.0F, 0.0F, -1.0F);
+		renderer.renderFaceZNeg(null, fruitTexture);
+		renderer.setNormal(0.0F, 0.0F, 1.0F);
+		renderer.renderFaceZPos(null, fruitTexture);
+		renderer.setNormal(-1.0F, 0.0F, 0.0F);
+		renderer.renderFaceXNeg(null, fruitTexture);
+		renderer.setNormal(1.0F, 0.0F, 0.0F);
+		renderer.renderFaceXPos(null, fruitTexture);
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+	}
+	
+	@Override
+	public boolean renderInWorld(Block block, IBlockAccess world, BlockPos pos, IModelRenderer renderer) {
+
+		TileLeaves tile = ForestryBlockLeaves.getLeafTile(world, pos);
+		if (tile == null) {
+			return false;
+		}
+
+		// Render the plain leaf block.
+		renderer.renderStandardBlock(block, pos, tile.getIcon(Proxies.render.fancyGraphicsEnabled()));
+
+		// Render overlay for fruit leaves.
+		ISprite fruitIcon = tile.getFruitTexture();
+
+		if (fruitIcon != null) {
+			int fruitColor = tile.getFruitColour();
+			renderFruitOverlay(world, block, pos, renderer, fruitIcon, fruitColor);
+		}
+
+		return true;
+	}
+
+	private static boolean renderFruitOverlay(IBlockAccess world, Block block, BlockPos pos, IModelRenderer renderer, ISprite texture, int multiplier) {
+
+		float mR = (multiplier >> 16 & 255) / 255.0F;
+		float mG = (multiplier >> 8 & 255) / 255.0F;
+		float mB = (multiplier & 255) / 255.0F;
+
+		if (EntityRenderer.anaglyphEnable) {
+			mR = (mR * 30.0F + mG * 59.0F + mB * 11.0F) / 100.0F;
+			mG = (mR * 30.0F + mG * 70.0F) / 100.0F;
+			mB = (mR * 30.0F + mB * 70.0F) / 100.0F;
+		}
+
+		return renderFruitOverlayWithColorMultiplier(world, block, pos, mR, mG, mB, renderer, texture);
+	}
+
+	private static boolean renderFruitOverlayWithColorMultiplier(IBlockAccess world, Block block, BlockPos pos, float r, float g, float b, IModelRenderer renderer, ISprite texture) {
+
+		int mixedBrightness = block.getMixedBrightnessForBlock(world, pos);
+
+		float adjR = 0.5f * r;
+		float adjG = 0.5f * g;
+		float adjB = 0.5f * b;
+
+		// Bottom
+		renderBottomFace(world, block, pos, renderer, texture, mixedBrightness, adjR, adjG, adjB);
+		renderTopFace(world, block, pos, renderer, texture, mixedBrightness, adjR, adjG, adjB);
+		renderEastFace(world, block, pos, renderer, texture, mixedBrightness, adjR, adjG, adjB);
+		renderWestFace(world, block, pos, renderer, texture, mixedBrightness, adjR, adjG, adjB);
+		renderNorthFace(world, block, pos, renderer, texture, mixedBrightness, adjR, adjG, adjB);
+		renderSouthFace(world, block, pos, renderer, texture, mixedBrightness, adjR, adjG, adjB);
+
+		return true;
 	}
 }

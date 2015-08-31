@@ -63,6 +63,7 @@ public abstract class ContainerLiquidTanks<T extends TileEntity & ILiquidTankCon
 		tile.getTankManager().initGuiData(this, icrafting);
 	}
 
+	@Override
 	public IFluidTank getTank(int slot) {
 		return tile.getTankManager().getTank(slot);
 	}

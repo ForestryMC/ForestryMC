@@ -44,7 +44,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -69,7 +68,6 @@ import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
 import forestry.apiculture.GuiHandlerApiculture;
 import forestry.apiculture.SaveEventHandlerApiculture;
-import forestry.apiculture.VillageHandlerApiculture;
 import forestry.apiculture.commands.CommandBee;
 import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.gadgets.BlockAlveary;
@@ -262,10 +260,10 @@ public class PluginApiculture extends ForestryPlugin {
 			ApicultureTriggers.initialize();
 		}
 
-		if (Config.enableVillagers) {
+		/*if (Config.enableVillagers) {
 			// Register village components with the Structure registry.
 			VillageHandlerApiculture.registerVillageComponents();
-		}
+		}*/
 
 		// Commands
 		PluginCore.rootCommand.addChildCommand(new CommandBee());
@@ -378,14 +376,14 @@ public class PluginApiculture extends ForestryPlugin {
 		BeeManager.villageBees[1].add(BeeDefinition.COMMON.getGenome());
 		BeeManager.villageBees[1].add(BeeDefinition.VALIANT.getGenome());
 
-		if (Config.enableVillagers) {
+		/*if (Config.enableVillagers) {
 			// Register villager stuff
 			VillageHandlerApiculture villageHandler = new VillageHandlerApiculture();
 			VillagerRegistry.instance().registerVillageCreationHandler(villageHandler);
 			VillagerRegistry.instance().registerVillagerId(Defaults.ID_VILLAGER_BEEKEEPER);
 			Proxies.render.registerVillagerSkin(Defaults.ID_VILLAGER_BEEKEEPER, Defaults.TEXTURE_SKIN_BEEKPEEPER);
 			VillagerRegistry.instance().registerVillageTradeHandler(Defaults.ID_VILLAGER_BEEKEEPER, villageHandler);
-		}
+		}*/
 
 		proxy.initializeRendering();
 	}
@@ -1089,7 +1087,7 @@ public class PluginApiculture extends ForestryPlugin {
 	public void textureHook(TextureStitchEvent.Pre event) {
 		EntitySnowFX.icons = new ISprite[3];
 		for (int i = 0; i < EntitySnowFX.icons.length; i++) {
-			EntitySnowFX.icons[i] = TextureManager.getInstance().registerTex("items", "particles/snow" + (i + 1));
+			EntitySnowFX.icons[i] = TextureManager.getInstance().registerTex("items", "particles/snow." + (i + 1));
 		}
 	}
 }

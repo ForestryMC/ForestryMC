@@ -17,13 +17,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import forestry.pipes.PipeItemsPropolis;
 import forestry.plugins.PluginPropolisPipe;
 
-import buildcraft.BuildCraftTransport;
-import buildcraft.core.CreativeTabBuildCraft;
-import buildcraft.transport.BlockGenericPipe;
-import buildcraft.transport.ItemPipe;
-import buildcraft.transport.Pipe;
-import buildcraft.transport.TransportProxy;
-
 public class ProxyPipes {
 
 	public void registerCustomItemRenderer(Item item, IItemRenderer basemod) {

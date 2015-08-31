@@ -11,7 +11,6 @@
 package forestry.core.render;
 
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumParticleTypes;
@@ -28,7 +27,7 @@ public class EntityIgnitionFX extends EntityFX {
 		this.motionX *= 0.8;
 		this.motionY *= 0.8;
 		this.motionZ *= 0.8;
-		this.motionY = (double) (this.rand.nextFloat() * 0.4F + 0.05F);
+		this.motionY = this.rand.nextFloat() * 0.4F + 0.05F;
 		this.particleRed = this.particleGreen = this.particleBlue = 1.0F;
 		this.particleScale *= (this.rand.nextFloat() / 2) + 0.3F;
 		this.ignitionParticleScale = this.particleScale;
@@ -37,6 +36,7 @@ public class EntityIgnitionFX extends EntityFX {
 		this.setParticleTextureIndex(49);
 	}
 
+	@Override
 	public int getBrightnessForRender(float p_70070_1_) {
 		int i = super.getBrightnessForRender(p_70070_1_);
 		short short1 = 240;
@@ -47,12 +47,14 @@ public class EntityIgnitionFX extends EntityFX {
 	/**
 	 * Gets how bright this entity is.
 	 */
+	@Override
 	public float getBrightness(float p_70013_1_) {
 		return 1.0F;
 	}
 
+	@Override
 	public void renderParticle(WorldRenderer p_70539_1_, Entity entity, float p_70539_2_, float p_70539_3_, float p_70539_4_, float p_70539_5_, float p_70539_6_, float p_70539_7_) {
-		float f6 = ((float) this.particleAge + p_70539_2_) / (float) this.particleMaxAge;
+		float f6 = (this.particleAge + p_70539_2_) / this.particleMaxAge;
 		this.particleScale = this.ignitionParticleScale * (1.0F - f6 * f6);
 		super.renderParticle(p_70539_1_, entity, p_70539_2_, p_70539_3_, p_70539_4_, p_70539_5_, p_70539_6_, p_70539_7_);
 	}
@@ -60,6 +62,7 @@ public class EntityIgnitionFX extends EntityFX {
 	/**
 	 * Called to update the entity's position/logic.
 	 */
+	@Override
 	public void onUpdate() {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;

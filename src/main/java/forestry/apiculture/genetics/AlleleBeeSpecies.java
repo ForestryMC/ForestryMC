@@ -30,18 +30,14 @@ import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IAlleleBeeSpeciesCustom;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.IBeeIconProvider;
 import forestry.api.apiculture.IBeeModelProvider;
 import forestry.api.apiculture.IBeeRoot;
 import forestry.api.apiculture.IJubilanceProvider;
 import forestry.api.core.IModelManager;
 import forestry.api.core.IModelProvider;
-import forestry.api.core.ISpriteProvider;
-import forestry.api.core.sprite.ISprite;
 import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IIndividual;
 import forestry.core.genetics.alleles.AlleleSpecies;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.StackUtils;
 
@@ -191,6 +187,13 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
 	public IModelProvider getModelProvider() {
 		return new BeeIconProviderWrapper(beeModelProvider);
 	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ModelResourceLocation getModel(EnumBeeType type) {
+		return beeModelProvider.getModel(type);
+	}
+
 
 	/*@SideOnly(Side.CLIENT)
 	@Override

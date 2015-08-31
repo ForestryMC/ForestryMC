@@ -17,9 +17,6 @@ import forestry.core.network.GuiId;
 import forestry.pipes.gui.ContainerPropolisPipe;
 import forestry.pipes.gui.GuiPropolisPipe;
 
-import buildcraft.transport.Pipe;
-import buildcraft.transport.TileGenericPipe;
-
 public class GuiHandlerPipes implements IGuiHandler {
 
 	@SuppressWarnings("rawtypes")

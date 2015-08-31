@@ -240,6 +240,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		return errors.size() == 0;
 	}
 
+	@Override
 	public int getProgressScaled(int i) {
 		return (analyzeTime * i) / TIME_TO_ANALYZE;
 	}

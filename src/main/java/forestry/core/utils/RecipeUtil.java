@@ -215,8 +215,8 @@ public class RecipeUtil {
 
 		if (craftIngredientCount == 2 && itemstack0.getItem() == itemstack1.getItem() && itemstack0.stackSize == 1 && itemstack1.stackSize == 1 && itemstack0.getItem().isRepairable()) {
 			Item item = itemstack0.getItem();
-			int damage0 = item.getMaxDamage() - itemstack0.getItemDamageForDisplay();
-			int damage1 = item.getMaxDamage() - itemstack1.getItemDamageForDisplay();
+			int damage0 = item.getMaxDamage() - itemstack0.getItemDamage();
+			int damage1 = item.getMaxDamage() - itemstack1.getItemDamage();
 			int repairAmount = damage0 + damage1 + item.getMaxDamage() * 5 / 100;
 			int repairedDamage = item.getMaxDamage() - repairAmount;
 

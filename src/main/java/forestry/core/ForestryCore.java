@@ -36,6 +36,7 @@ import forestry.core.config.ForestryItem;
 import forestry.core.fluids.Fluids;
 import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.proxy.Proxies;
+import forestry.core.render.ModelManager;
 import forestry.plugins.PluginManager;
 
 public class ForestryCore {
@@ -101,6 +102,7 @@ public class ForestryCore {
 		NetworkRegistry.INSTANCE.registerGuiHandler(basemod, new GuiHandler());
 
 		PluginManager.runInit();
+		ModelManager.registerModels();
 	}
 
 	public void postInit() {

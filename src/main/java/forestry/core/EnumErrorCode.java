@@ -7,9 +7,7 @@ package forestry.core;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorState;
-import forestry.api.core.ITextureManager;
 import forestry.api.core.sprite.ISprite;
-import forestry.api.core.sprite.ISpriteRegister;
 import forestry.core.config.Defaults;
 import forestry.core.render.TextureManager;
 import net.minecraftforge.fml.relauncher.Side;

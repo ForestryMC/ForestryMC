@@ -23,7 +23,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -34,7 +33,6 @@ import forestry.api.core.IModelRegister;
 import forestry.core.CreativeTabForestry;
 import forestry.core.config.ForestryItem;
 import forestry.core.gadgets.BlockResourceStorageBlock.Resources;
-import forestry.core.render.TextureManager;
 
 public class BlockResource extends Block implements IModelRegister {
 	

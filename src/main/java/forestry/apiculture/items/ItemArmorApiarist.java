@@ -22,8 +22,6 @@ import forestry.api.core.IArmorNaturalist;
 import forestry.api.core.Tabs;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryItem;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
 
 public class ItemArmorApiarist extends ItemArmor implements IArmorApiarist, IArmorNaturalist {
 

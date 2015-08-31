@@ -14,7 +14,7 @@ import java.awt.Color;
 
 import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.IAlleleTreeSpeciesCustom;
-import forestry.api.arboriculture.IGermlingIconProvider;
+import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.arboriculture.ILeafIconProvider;
 import forestry.api.arboriculture.ITreeFactory;
 import forestry.api.arboriculture.ITreeGenerator;
@@ -24,8 +24,8 @@ import forestry.arboriculture.render.LeafIconProvider;
 
 public class TreeFactory implements ITreeFactory {
 	@Override
-	public IAlleleTreeSpeciesCustom createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, ILeafIconProvider leafIconProvider, IGermlingIconProvider germlingIconProvider, ITreeGenerator generator) {
-		IAlleleTreeSpeciesCustom treeSpecies = new AlleleTreeSpecies(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, leafIconProvider, germlingIconProvider, generator);
+	public IAlleleTreeSpeciesCustom createSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean dominant, IClassification branch, String binomial, ILeafIconProvider leafIconProvider, IGermlingModelProvider germlingModleProvider, ITreeGenerator generator) {
+		IAlleleTreeSpeciesCustom treeSpecies = new AlleleTreeSpecies(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, leafIconProvider, germlingModleProvider, generator);
 		AlleleManager.alleleRegistry.registerAllele(treeSpecies);
 		return treeSpecies;
 	}

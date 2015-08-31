@@ -26,6 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import forestry.api.core.sprite.ISprite;
@@ -35,7 +36,6 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmable;
 import forestry.api.genetics.IFruitBearer;
-import forestry.core.config.ForestryItem;
 import forestry.core.render.TextureManager;
 import forestry.core.vect.Vect;
 import forestry.core.vect.VectUtil;
@@ -53,6 +53,12 @@ public class FarmLogicOrchard extends FarmLogic {
 		ImmutableList.Builder<Block> traversalBlocksBuilder = ImmutableList.builder();
 		if (PluginManager.Module.AGRICRAFT.isEnabled()) {
 			traversalBlocksBuilder.add(Blocks.farmland);
+		}
+		if (PluginManager.Module.GROWTHCRAFT.isEnabled()) {
+			Block grapeVine = GameRegistry.findBlock("Growthcraft|Grapes", "grc.grapeVine1");
+			if (grapeVine != null) {
+				traversalBlocksBuilder.add(grapeVine);
+			}
 		}
 		if (PluginManager.Module.PLANTMEGAPACK.isEnabled()) {
 			traversalBlocksBuilder.add(Blocks.water);

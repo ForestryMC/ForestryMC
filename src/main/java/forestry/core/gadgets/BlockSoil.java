@@ -42,7 +42,6 @@ import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
 import forestry.core.config.ForestryItem;
 import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 
 /**
  * Humus, bog earth, peat
@@ -250,6 +249,7 @@ public class BlockSoil extends Block implements IItemTyped, IModelRegister {
 		return false;
 	}
 
+	@Override
 	public SoilType getTypeFromMeta(int meta) {
 		int type = meta & 0x03;
 		int maturity = meta >> 2;

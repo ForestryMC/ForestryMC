@@ -11,8 +11,6 @@
 package forestry.core.gadgets;
 
 import java.util.List;
-import java.util.Locale;
-
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,9 +25,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import forestry.core.interfaces.IBlockRenderer;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
-import forestry.core.render.TileRendererIndex;
 
 public class MachineDefinition {
 
@@ -78,9 +73,6 @@ public class MachineDefinition {
 	public void register() {
 		registerTileEntity();
 		registerCrafting();
-		if (renderer != null) {
-			Proxies.render.registerTESR(this);
-		}
 	}
 
 	@SuppressWarnings("unchecked")

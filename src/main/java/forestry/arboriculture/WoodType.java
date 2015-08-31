@@ -17,11 +17,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import forestry.core.render.TextureManager;
+import net.minecraft.util.IStringSerializable;
 
-public enum WoodType {
+public enum WoodType implements IStringSerializable {
 	LARCH, TEAK, ACACIA, LIME,
 	CHESTNUT, WENGE, BAOBAB, SEQUOIA(4.0f),
 	KAPOK, EBONY, MAHOGANY, BALSA(1.0f),
@@ -179,5 +177,10 @@ public enum WoodType {
 
 	public static WoodType getRandom(Random random) {
 		return VALUES[random.nextInt(VALUES.length)];
+	}
+	
+	@Override
+	public String getName() {
+		return name().toLowerCase();
 	}
 }

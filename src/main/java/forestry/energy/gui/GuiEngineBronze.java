@@ -19,7 +19,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
 
-import forestry.api.core.sprite.ISprite;
 import forestry.core.config.Defaults;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.core.gui.widgets.Widget;

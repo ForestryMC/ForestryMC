@@ -31,9 +31,7 @@ import forestry.api.core.IModelRegister;
 import forestry.api.core.Tabs;
 import forestry.core.config.Defaults;
 import forestry.core.config.ForestryBlock;
-import forestry.core.render.TextureManager;
 import forestry.core.utils.StackUtils;
-import forestry.core.utils.StringUtil;
 
 public class BlockStump extends BlockTorch implements IModelRegister {
 

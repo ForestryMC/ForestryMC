@@ -41,12 +41,13 @@ public class EntityColoredDropParticleFX extends EntityFX {
 	/**
 	 * Called to update the entity's position/logic.
 	 */
+	@Override
 	public void onUpdate() {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
 
-		this.motionY -= (double) this.particleGravity;
+		this.motionY -= this.particleGravity;
 
 		if (this.bobTimer-- > 0) {
 			this.motionX *= 0.02D;
@@ -78,7 +79,7 @@ public class EntityColoredDropParticleFX extends EntityFX {
 		if (material.isLiquid() || material.isSolid()) {
 			BlockPos pos = new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 			IBlockState state = worldObj.getBlockState(pos);
-			double d0 = (double) ((float) (MathHelper.floor_double(this.posY) + 1) - BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state)));
+			double d0 = MathHelper.floor_double(this.posY) + 1 - BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state));
 
 			if (this.posY < d0) {
 				this.setDead();
