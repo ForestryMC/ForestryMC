@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.proxy;
 
-import forestry.core.data.AutoJsonEditor;
 import net.minecraft.world.ColorizerFoliage;
 
 public class ClientProxyArboriculture extends ProxyArboriculture {
@@ -25,7 +24,6 @@ public class ClientProxyArboriculture extends ProxyArboriculture {
 		//RenderingRegistry.registerBlockHandler(new LeavesRenderingHandler());
 
 		//MinecraftForgeClient.registerItemRenderer(ForestryBlock.leaves.item(), new LeavesRenderingHandler());
-		AutoJsonEditor.buildFiles();
 	}
 
 	@Override
